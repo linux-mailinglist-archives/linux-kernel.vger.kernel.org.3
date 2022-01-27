@@ -2,131 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B8349DCF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBA149DCD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiA0IvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:51:00 -0500
-Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net ([162.243.164.74]:34660
-        "HELO zg8tmtyylji0my4xnjqunzqa.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S231296AbiA0IvA (ORCPT
+        id S237863AbiA0Ioe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232313AbiA0Iob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:51:00 -0500
+        Thu, 27 Jan 2022 03:44:31 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0029C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:44:30 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id u5so1869568ilq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:44:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=tpBXyk58Jg
-        yZqTP47JYR0QRHkiNkU3LS/ermuUkfhN0=; b=eu07TI5cQFhMttxHVWaPT4t2rz
-        SP06Hx/ddVL2NkFLk1YRxF54ugJjBWTOMvTc2A7IUJLC2L/siZxY/c54Bdk1sf0O
-        82mIbp7rHuq1IwwD8mPK94QESot26NDwQLKraBNzjWHNKI7hpDWYU2oNB1mCcIdj
-        qipiwdJw1kvkvwYyM=
-Received: from localhost.localdomain (unknown [111.192.165.103])
-        by app2 (Coremail) with SMTP id XQUFCgCHZxjFW_JhLQZ4AA--.35395S4;
-        Thu, 27 Jan 2022 16:46:23 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
-Date:   Thu, 27 Jan 2022 16:41:05 +0800
-Message-Id: <20220127084104.3683-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yb9RPFlZXk0exJR+sY5vDAJxFIK1S93A7qEGnkdG520=;
+        b=BqnYSJD2n6g13hS3alh5y7e8Hsm7fjONivNt+k1AS/qm+C8nSQLiqvS8mjBw9htr2X
+         Uu2shtOwenkk7kRMEJIWYf5/2HG35qwr5AmQnWbkxZ+SvwFMA+j2LRsPgj12EAUAqF4/
+         0+zME0Z/T+FqPcMPi9FhFEFw9HRu5E1bfDaJluu+botSOt+goYQ45ENDd+KAFPO+3V1v
+         XkxE112G/8PUdoaJ+plMU0l6sHvnOrwneHBYbcYN+AHUk8D1tmKfYu4gL9chnMZ0DwTX
+         p6Oz2+IP2+ncghlLzEnr+cFjOkY+doub1FHbhgdf08OH/4C26VamyTf/ZFX/vGvpiM++
+         dJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yb9RPFlZXk0exJR+sY5vDAJxFIK1S93A7qEGnkdG520=;
+        b=SGO1BLsp0AWUnyzCMd5b6lly2muDFcX5LGls/UlISTDfMSLeLE6Ws/g7RZyT/3nsWR
+         UJUdbl+YdJbQybqEGxgYuHf8GuzuInjheUifav3044ZGN4XXjCnSrDAFur5tFneNVS9g
+         OfogIxc5a2EDE+ufupf8IBPoo6X3YcMRLfXdpi3K2yFyc1W7wexOlFYjttHNGrU2I4G/
+         LL6vQaILoETLSrUHtUQAJ25r5JU3NWsnvkzcpnLeAbh7yna7gqmcnB/pnKrCEl1MRTMB
+         N2XLDdaIbhOqyAI/Z5WlqhAMgHee8hhAw7J8Rc2xV8aWPR7AsY38qumTiGtnZyzVfc+O
+         7coQ==
+X-Gm-Message-State: AOAM530iedzZ93nSZUOFela3Zf64gr+tTbPAV1xU9ON+qGQYO+lYBnvS
+        SJSJkpz8gMrpUIr2706GLbMW9bcWpO2lQQ6i81IhKhv5qg==
+X-Google-Smtp-Source: ABdhPJyPog+BC4znr/2I1ICYWPtpAiJ27WV+8fFFZuamy6JoLHNpOLWgfzybJ1gJqU7mTSfaoovJapkyygorrwajgr4=
+X-Received: by 2002:a92:c54f:: with SMTP id a15mr1803035ilj.302.1643273070332;
+ Thu, 27 Jan 2022 00:44:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XQUFCgCHZxjFW_JhLQZ4AA--.35395S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47ZF4DGrW7uF4rZw47urg_yoW8tr1fpF
-        WUtFW3ZFWUtFs3ZF12kayxuF1rZ3WkJFyUG39Fqa4kZ3ZxX34jk34Yqry0vFy8CFWfuF17
-        ZF47t3W8CF1UCFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-        648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI4
-        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-        Y4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUndgADUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg0TEFKp2iospQAAsO
+References: <20220125033913.15374-1-kernelfans@gmail.com> <87wnin3hj5.mognet@arm.com>
+ <CAFgQCTvbsh5UhefhDgOu8ZdUKww6FQXw-Hxnz5mC4vs0C+WP1w@mail.gmail.com> <87tudq35a8.mognet@arm.com>
+In-Reply-To: <87tudq35a8.mognet@arm.com>
+From:   Pingfan Liu <kernelfans@gmail.com>
+Date:   Thu, 27 Jan 2022 16:44:19 +0800
+Message-ID: <CAFgQCTv_fYqtKYmn4nmXYxBMEZaCKFUQnDTRaeEkQPMBL-1amA@mail.gmail.com>
+Subject: Re: [PATCH] kexec: disable cpu hotplug until the rebooting cpu is stable
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Kexec Mailing List <kexec@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference counting issue happens in several error handling paths
-on a refcounted object "nc->dmac". In these paths, the function simply
-returns the error code, forgetting to balance the reference count of
-"nc->dmac", increased earlier by dma_request_channel(), which may
-cause refcount leaks.
+On Wed, Jan 26, 2022 at 11:06 PM Valentin Schneider
+<valentin.schneider@arm.com> wrote:
+>
+> On 26/01/22 10:45, Pingfan Liu wrote:
+> > On Wed, Jan 26, 2022 at 12:29 AM Valentin Schneider
+> > <valentin.schneider@arm.com> wrote:
+> >>
+> >> On 25/01/22 11:39, Pingfan Liu wrote:
+> >> > The following identical code piece appears in both
+> >> > migrate_to_reboot_cpu() and smp_shutdown_nonboot_cpus():
+> >> >
+> >> >       if (!cpu_online(primary_cpu))
+> >> >               primary_cpu = cpumask_first(cpu_online_mask);
+> >> >
+> >> > Although the kexec-reboot task can get through a cpu_down() on its cpu,
+> >> > this code looks a little confusing.
+> >> >
+> >> > Make things straight forward by keep cpu hotplug disabled until
+> >> > smp_shutdown_nonboot_cpus() holds cpu_add_remove_lock. By this way, the
+> >> > rebooting cpu can keep unchanged.
+> >> >
+> >>
+> >> So is this supposed to be a refactor with no change in behaviour? AFAICT it
+> >> actually does change things (and isn't necessarily clearer).
+> >>
+> > Yes, as you have seen, it does change behavior. Before this patch,
+> > there is a breakage:
+> >   migrate_to_reboot_cpu();
+> >   cpu_hotplug_enable();
+> >                                      ----------> technical, here can
+> > comes a cpu_down(this_cpu)
+> >   machine_shutdown();
+> >
+> > And this patch squeezes out this breakage.
+> >
+>
+> Ok, that's worth pointing out in the changelog.
+>
+Sure, I will update it.
 
-Fix it by decrementing the refcount of specific object in those error
-paths.
+> >> > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> >> > index 68480f731192..db4fa6b174e3 100644
+> >> > --- a/kernel/kexec_core.c
+> >> > +++ b/kernel/kexec_core.c
+> >> > @@ -1168,14 +1168,12 @@ int kernel_kexec(void)
+> >> >               kexec_in_progress = true;
+> >> >               kernel_restart_prepare("kexec reboot");
+> >> >               migrate_to_reboot_cpu();
+> >> > -
+> >> >               /*
+> >> > -              * migrate_to_reboot_cpu() disables CPU hotplug assuming that
+> >> > -              * no further code needs to use CPU hotplug (which is true in
+> >> > -              * the reboot case). However, the kexec path depends on using
+> >> > -              * CPU hotplug again; so re-enable it here.
+> >> > +              * migrate_to_reboot_cpu() disables CPU hotplug. If an arch
+> >> > +              * relies on the cpu teardown to achieve reboot, it needs to
+> >> > +              * re-enable CPU hotplug there.
+> >> >                */
+> >> > -             cpu_hotplug_enable();
+> >> > +
+> >>
+> >> Not all archs map machine_shutdown() to smp_shutdown_nonboot_cpus(), other
+> >> archs will now be missing a cpu_hotplug_enable() prior to a kexec
+> >> machine_shutdown(). That said, AFAICT none of those archs rely on the
+> >> hotplug machinery in machine_shutdown(), so it might be OK, but that's not
+> >> obvious at all.
+> >>
+> > At the first glance, it may be not obvious, but tracing down
+> > cpu_hotplug_enable() to the variable cpu_hotplug_disabled, you can
+> > find out the limited involved functions are all related to
+> > cpu_up/cpu_down.
+> >
+> > IOW, if no code path connects with the interface of cpu_up/cpu_down,
+> > then kexec-reboot will not be affected.
+> >
+>
+> That's my point, this only works if the other archs truly do not rely on
+> hotplug for machine_shutdown(), which seems to be the case but it wouldn't
+> hurt for you to double-check that and explicitely call it out in the
+> changelog.
+>
+OK, I will update the change log. BTW, besides x86, I have just
+finished the test on powerpc, both of them works fine with this patch
 
-Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
----
- drivers/mtd/nand/raw/atmel/nand-controller.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+> > And after this patch, it is more clear how to handle the following cases:
+> > arch/arm/kernel/reboot.c:94:    smp_shutdown_nonboot_cpus(reboot_cpu);
+> > arch/arm64/kernel/process.c:88: smp_shutdown_nonboot_cpus(reboot_cpu);
+> > arch/ia64/kernel/process.c:578: smp_shutdown_nonboot_cpus(reboot_cpu);
+> >
+>
+> FWIW riscv is also concerned.
 
-diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
-index f3276ee9e4fe..7003877632fb 100644
---- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	nc->mck = of_clk_get(dev->parent->of_node, 0);
- 	if (IS_ERR(nc->mck)) {
- 		dev_err(dev, "Failed to retrieve MCK clk\n");
--		return PTR_ERR(nc->mck);
-+		ret = PTR_ERR(nc->mck);
-+		goto out_release_dma;
- 	}
- 
- 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
- 	if (!np) {
- 		dev_err(dev, "Missing or invalid atmel,smc property\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_release_dma;
- 	}
- 
- 	nc->smc = syscon_node_to_regmap(np);
-@@ -2074,10 +2076,20 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	if (IS_ERR(nc->smc)) {
- 		ret = PTR_ERR(nc->smc);
- 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
--		return ret;
-+		goto out_release_dma;
- 	}
- 
- 	return 0;
-+
-+out_release_dma:
-+	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
-+		if (!IS_ERR_OR_NULL(nc->dmac)) {
-+			dma_release_channel(nc->dmac);
-+			nc->dmac = NULL;
-+		}
-+	}
-+
-+	return ret;
- }
- 
- static int
--- 
-2.25.1
+I think its current statement is right.
+arch/riscv/kernel/machine_kexec.c:135:
+smp_shutdown_nonboot_cpus(smp_processor_id());
 
+Thanks,
+
+Pingfan
+>
+> > Thanks,
+> > Pingfan

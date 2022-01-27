@@ -2,134 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D896C49D6DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE9049D6E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiA0AhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
+        id S230527AbiA0AkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbiA0Ags (ORCPT
+        with ESMTP id S229510AbiA0AkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:36:48 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55620C06175B;
-        Wed, 26 Jan 2022 16:36:48 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id k25so2186986ejp.5;
-        Wed, 26 Jan 2022 16:36:48 -0800 (PST)
+        Wed, 26 Jan 2022 19:40:01 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901E1C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:40:01 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id o10so1288901qkg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:40:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qenSIoAXZ6o9VOjrqRc2EOQyMOxrV68LqnhSggaVs6I=;
-        b=Czo+ENsmCpOPbGSPPdD9nN2KoWZnqE/IAEJ7gbZVSsPS6NR/v3zqkGBqNe/V9WVlVE
-         RfhQF5Tz/kzZpADsL4/V8tOAnHeFscEsasnOJLnP6C5Xxkg8KkcFjYrqIsXzx/7O2kee
-         uV+Jx5SNcqw77Utc0qio9q8HsG8hJVmKxXsYXacZ1lMfhhbYTlbDgG3O9dw2p4EWkERw
-         Zkj79vBK1iV/VCpWXojsHFBaWXnWZybQ/XBRxwBQUGWbL0Au/n05Ars+BdAU0dFQmwGv
-         Nk2PYphgsZlxUUpxDfNBSyYQfOd3CX73hw37DLIIOcW+W72J+zy3MYYo85sNOZN6EUC0
-         d6MA==
+        d=fireburn-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rwlNx81LiyFXyY2iciGppDMPGoQO0US7JaL+W5wXP58=;
+        b=FXix/soSwU5v3gDBYEnHIbcLiXjS+z0b2IBt1TlYAQo0DYeI+gqpxsTbKUZkHtZor8
+         kW43pCeC0nP0416RbhbheeDsWkcndx6ktLU0kiQAZlB1C/xdBdlG+WvHZqciDNDlDbXK
+         mnqKMdtgjxtcjBEf9c/9P2rRNKh0wcIYu+SlTZjj/TvzydH4I6ji7BNn0dWCLntMxEoH
+         AGh5qBdHvW7mQvH5vwouZCB0BTXncXA7u1U5phyfIYC3EZCufC2ZAvtzaYaYrSdxyCxR
+         4xHG86igYNCGA3T1zpMWsMa5IddRXhhWMzGkCtRi/qOmkc/Wvdmm4IddVrCU93nRVwGX
+         xtAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qenSIoAXZ6o9VOjrqRc2EOQyMOxrV68LqnhSggaVs6I=;
-        b=qVBeqhJs758JjEoQjputXIBSla9U2UnKHeN4Snx/bsyacSTjCnJGjVy79S2aH2BBp6
-         E6laoUta2GHl/FxvAyCKCvD8eQF3u8+scDKdiAVHcs0VYdXB8UbWP/aSGxtbyeHfIGdO
-         quQzeMt0CKNSTh4GqfqGvWwWQBu40uprBHbm7+qWrsMHWPEJBnjk7+SZQLu8GrD6JAlS
-         QEMu3hO0cQcP+5QPpVX8ButBlj0PqRogbc9PXczzQNHPQdt8o5dfWcfxVKyjFQ4W1YOc
-         o8l5QHb4j90E9MdgijKE+M7P7JCBidU3AxLWOyklTkAY/ac4IYMTda+bbSoZMTKPs02V
-         wAxw==
-X-Gm-Message-State: AOAM5304KLHI/jmR+6BF4o1jVirMQUuuR+noFg/41KwiA2QZk09UdP1i
-        jj0Pm1pELqXoew/4q5a7M5KdfICpDwk=
-X-Google-Smtp-Source: ABdhPJyB36Kzr0C+6YwvLEkXBnQfdKBZ0Ds1xbfLzopBJQQw5iRj0AVgVxxERXvaRauDU2VTDIx8fQ==
-X-Received: by 2002:a17:907:6089:: with SMTP id ht9mr998920ejc.612.1643243806756;
-        Wed, 26 Jan 2022 16:36:46 -0800 (PST)
-Received: from 127.0.0.1localhost ([85.255.234.222])
-        by smtp.gmail.com with ESMTPSA id op27sm8039235ejb.103.2022.01.26.16.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 16:36:46 -0800 (PST)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH net-next v2 10/10] ipv6: partially inline ipv6_fixup_options
-Date:   Thu, 27 Jan 2022 00:36:31 +0000
-Message-Id: <5c6bda8c6f78228fd58586a4160edcc374011a26.1643243773.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1643243772.git.asml.silence@gmail.com>
-References: <cover.1643243772.git.asml.silence@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rwlNx81LiyFXyY2iciGppDMPGoQO0US7JaL+W5wXP58=;
+        b=PZNtwXJAPtfc7OxOAaza7n3mPMXrB3bDMKwMEB44QKqF5SYvP1NQlKu0FsNv9Xxddf
+         atR2yuEFMh5wPZExLLbVed4tgzBOos23nruAJ1DzjyM7rjI/YkeRLrcxEIUbybwF6jOx
+         h7E0806qVBQiKnziig0nXttU0a6N+CpDOTe/R0mleFVwzGLt6marEoFPtinGMt+xr5NM
+         vNp2CUIbe/OaxvbMk53wjQ4tJSYJfKJt/8B2VwCSZel7s8Q+dhIgDxknxim4fzaYB+Yh
+         WphVjI80f35nkEjxC3v6dJL3z7kSeeGyD54krTbbqjbUr50CB5B4RI6xoCQRZLi+3Q5x
+         DwZQ==
+X-Gm-Message-State: AOAM532L2uszyApA7mQ3fW4KRLDjxu00kJ7QLBY4uNtXLxWF82JoQ5Lz
+        Y46frI35b1C8k+jIMC1wNFrA3E75VjdXf+orVbbZtQ==
+X-Google-Smtp-Source: ABdhPJxoJIaDg64lKmnPqG5v33p5Dj2sAajlkAuYc2b76Z34AsFMlB48cJqznS8KGBD+3fj8q2AfDNHyu/oJBJykz6k=
+X-Received: by 2002:a05:620a:1511:: with SMTP id i17mr1071037qkk.77.1643244000582;
+ Wed, 26 Jan 2022 16:40:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211123161038.48009-1-mlevitsk@redhat.com> <20220125150832.1570-1-mike@fireburn.co.uk>
+ <6f0d9b07073ca6d3657500ec076edc1ad2a3e40a.camel@redhat.com>
+ <CAHbf0-FJ0c1yAumKCnXLKKFN=tzeJxSd3HyP=dUOBgBTxVG5fw@mail.gmail.com>
+ <7809c3253a997330102b9d779206312d6b3bcaf1.camel@redhat.com>
+ <CAHbf0-F8Uemcu8FVcZvY0CPOf4kFXOcaCzWF1ZCwkpa3tyut3A@mail.gmail.com> <6cf58a4cd925726ef10481d38f9f4e8090f5023d.camel@redhat.com>
+In-Reply-To: <6cf58a4cd925726ef10481d38f9f4e8090f5023d.camel@redhat.com>
+From:   Mike Lothian <mike@fireburn.co.uk>
+Date:   Thu, 27 Jan 2022 00:39:49 +0000
+Message-ID: <CAHbf0-EY9_27Tw3v-pfwXDaTuwpsuuFqrJDKZ8C_cW+-PwXwww@mail.gmail.com>
+Subject: Re: [PATCH 0/5] iommu/amd: fixes for suspend/resume
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     dwmw@amazon.co.uk, iommu@lists.linux-foundation.org,
+        joro@8bytes.org, linux-kernel@vger.kernel.org,
+        suravee.suthikulpanit@amd.com, tglx@linutronix.de, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inline a part of ipv6_fixup_options() to avoid extra overhead on
-function call if opt is NULL.
+On Wed, 26 Jan 2022 at 10:12, Maxim Levitsky <mlevitsk@redhat.com> wrote:
+>
+> Great, your system does seem to support GA log
+> (but a patch to check if, other that assume blindly that it is supported is
+> something that should be done).
+>
+> So could you bump the LOOP_TIMEOUT like by 10x or so and see if the problem goes away?
+>
+> (that code should be rewritten to time based wait and not just blindly loop like that,
+> I also can prepare a patch for that as well).
+>
+> Best regards,
+>         Maxim Levitsky
+>
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- include/net/ipv6.h | 12 ++++++++++--
- net/ipv6/exthdrs.c |  8 ++++----
- 2 files changed, 14 insertions(+), 6 deletions(-)
+Hi
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index 5e0b56d66724..082f30256f59 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -437,8 +437,16 @@ struct ipv6_txoptions *ipv6_renew_options(struct sock *sk,
- 					  struct ipv6_txoptions *opt,
- 					  int newtype,
- 					  struct ipv6_opt_hdr *newopt);
--struct ipv6_txoptions *ipv6_fixup_options(struct ipv6_txoptions *opt_space,
--					  struct ipv6_txoptions *opt);
-+struct ipv6_txoptions *__ipv6_fixup_options(struct ipv6_txoptions *opt_space,
-+					    struct ipv6_txoptions *opt);
-+
-+static inline struct ipv6_txoptions *
-+ipv6_fixup_options(struct ipv6_txoptions *opt_space, struct ipv6_txoptions *opt)
-+{
-+	if (!opt)
-+		return NULL;
-+	return __ipv6_fixup_options(opt_space, opt);
-+}
- 
- bool ipv6_opt_accepted(const struct sock *sk, const struct sk_buff *skb,
- 		       const struct inet6_skb_parm *opt);
-diff --git a/net/ipv6/exthdrs.c b/net/ipv6/exthdrs.c
-index 77e34aec7e82..658d5eabaf7e 100644
---- a/net/ipv6/exthdrs.c
-+++ b/net/ipv6/exthdrs.c
-@@ -1344,14 +1344,14 @@ ipv6_renew_options(struct sock *sk, struct ipv6_txoptions *opt,
- 	return opt2;
- }
- 
--struct ipv6_txoptions *ipv6_fixup_options(struct ipv6_txoptions *opt_space,
--					  struct ipv6_txoptions *opt)
-+struct ipv6_txoptions *__ipv6_fixup_options(struct ipv6_txoptions *opt_space,
-+					    struct ipv6_txoptions *opt)
- {
- 	/*
- 	 * ignore the dest before srcrt unless srcrt is being included.
- 	 * --yoshfuji
- 	 */
--	if (opt && opt->dst0opt && !opt->srcrt) {
-+	if (opt->dst0opt && !opt->srcrt) {
- 		if (opt_space != opt) {
- 			memcpy(opt_space, opt, sizeof(*opt_space));
- 			opt = opt_space;
-@@ -1362,7 +1362,7 @@ struct ipv6_txoptions *ipv6_fixup_options(struct ipv6_txoptions *opt_space,
- 
- 	return opt;
- }
--EXPORT_SYMBOL_GPL(ipv6_fixup_options);
-+EXPORT_SYMBOL_GPL(__ipv6_fixup_options);
- 
- /**
-  * fl6_update_dst - update flowi destination address with info given
--- 
-2.34.1
+I've done quite a few restarts with the LOOP_TIMEOUT increased and
+I've not seen the issue since
 
+Cheers
+
+Mike

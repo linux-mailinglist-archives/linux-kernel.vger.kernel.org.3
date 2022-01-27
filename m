@@ -2,63 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D0649D826
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D892749D86F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiA0Cpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:45:39 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:32064 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiA0Cph (ORCPT
+        id S235343AbiA0Ct3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:49:29 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:55032 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231881AbiA0Ct1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:45:37 -0500
-Received: from kwepemi500019.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JklGX36yRz1FCpq;
-        Thu, 27 Jan 2022 10:41:40 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500019.china.huawei.com (7.221.188.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 27 Jan 2022 10:45:35 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 27 Jan 2022 10:45:34 +0800
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-To:     Tejun Heo <tj@kernel.org>, Ming Lei <ming.lei@redhat.com>
-CC:     <mkoutny@suse.com>, <paulmck@kernel.org>, <axboe@kernel.dk>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com> <Yd5FkuhYX9YcgQkZ@T590>
- <b416e6a6-f2c9-caf3-dacd-f937746207da@huawei.com>
- <YfF+yukISfkuc9IK@slm.duckdns.org>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <630c162b-8bdd-d87e-0d80-c7a78ea267a5@huawei.com>
-Date:   Thu, 27 Jan 2022 10:45:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 26 Jan 2022 21:49:27 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B9141F46E;
+        Thu, 27 Jan 2022 02:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643251765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7zgeLiYzUJoQQtP3ZAixzvth8UZ5GI6sC37jShYD+Pg=;
+        b=qDF0dErOQFLqixkI/i+1BahZJOIZW7oLQsnfE8Mpttq9d/W7z8HXr9UieTT8FobRX/DcnK
+        0k7UkCHp7VLB7YCQTnFqYuA6cX3Wl0Q52Sza81Nwfdu8rGxPBKXfIdmFfJ3PLKz5ccyXnc
+        SRLoRuAFYyiOKWPZ4uDN1X1+WwIcCfs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643251765;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7zgeLiYzUJoQQtP3ZAixzvth8UZ5GI6sC37jShYD+Pg=;
+        b=VZ8PyF0cOsTApVgFFYAXl4bhTOrGE0ayz0BiAfXtH993usgibLIneMqQvm6eqIm+U+xfqv
+        6HsMfDzO5pCzrJAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 360D613E46;
+        Thu, 27 Jan 2022 02:49:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dzTOOC0I8mFpLAAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 27 Jan 2022 02:49:17 +0000
+Subject: [PATCH 8/9] block/bfq-iosched.c: use "false" rather than
+ "BLK_RW_ASYNC"
+From:   NeilBrown <neilb@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Date:   Thu, 27 Jan 2022 13:46:29 +1100
+Message-ID: <164325158959.29787.11286416793279041497.stgit@noble.brown>
+In-Reply-To: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-In-Reply-To: <YfF+yukISfkuc9IK@slm.duckdns.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/01/27 1:03, Tejun Heo Ð´µÀ:
-> On Mon, Jan 24, 2022 at 11:50:11AM +0800, yukuai (C) wrote:
->> Both ways can fix the problem, which way do you prefer?
-> 
-> Ming's suggested change seems simpler, no?
+bfq_get_queue() expects a "bool" for the third arg, so pass "false"
+rather than "BLK_RW_ASYNC" which will soon be removed.
 
-Hi,
+Signed-off-by: NeilBrown <neilb@suse.de>
+---
+ block/bfq-iosched.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, if Ming don't mind, I can send a new version after Ming's
-pathset "block: don't drain file system I/O on del_gendisk".
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 0c612a911696..4e645ae1e066 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5448,7 +5448,7 @@ static void bfq_check_ioprio_change(struct bfq_io_cq *bic, struct bio *bio)
+ 	bfqq = bic_to_bfqq(bic, false);
+ 	if (bfqq) {
+ 		bfq_release_process_ref(bfqd, bfqq);
+-		bfqq = bfq_get_queue(bfqd, bio, BLK_RW_ASYNC, bic, true);
++		bfqq = bfq_get_queue(bfqd, bio, false, bic, true);
+ 		bic_set_bfqq(bic, bfqq, false);
+ 	}
+ 
 
-Thanks,
-Kuai
+

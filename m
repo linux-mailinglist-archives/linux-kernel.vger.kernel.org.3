@@ -2,140 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB4F49DFB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821F149DFA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239616AbiA0KrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:47:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:43131 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239603AbiA0Kq4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:46:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643280416; x=1674816416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m4WRoX2kA9SNWeuDQh2/irazGfRo/Pa1n41wQpvk5Y0=;
-  b=KKkvUPcDuHKzifLgUcpevdUaebA2lxxoD9GYkiNT5Eob8e6rbQGSUTu5
-   2ggumj6QN1s0/bdv9w9ZWz8PdQqyOQ5RKdXuZLrJFxC1bQjcH//omyKgV
-   Xhb2gzHAmAJDd5L3AfV3w80ekaPKewzIkt4RUjJ5LIfeA5fyUi8vJ7KHG
-   a8/LjTYP7ZLwo2GvAmRsg+1OiRnP0cEMnq9nI3f4wUwA+7xWQZZKToLaN
-   WXx5gWzjSeixIhDUvUWgxMPA1eqD0l09kZFw34oOno4lowvXoZYxzTrcA
-   YMChTILnwkZZ7fIw0nLHiuI5Z9lXSoUgEm7vQpADqQaVT8qiHEuFVePoo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234189250"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="234189250"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 02:46:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="563742823"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 02:46:53 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nD2Im-000MUm-Sz; Thu, 27 Jan 2022 10:46:52 +0000
-Date:   Thu, 27 Jan 2022 18:46:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:for-yishai 9/19]
- drivers/vfio/pci/vfio_pci_core.c:1129:10: error: use of undeclared
- identifier 'feature'; did you mean 'return'?
-Message-ID: <202201271821.gWpB1Xrq-lkp@intel.com>
+        id S239249AbiA0KqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233384AbiA0KqM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 05:46:12 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0022CC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:46:11 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c192so1573311wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:46:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:references:from:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NkxIb+P+5+H76bh6f83+7pLlqmMSsgvAiVmWl5dkrqY=;
+        b=SpMp+sRuCSmEpu3Ipx2TZyuKCfwRyDnM/JK0kN2/kolIcyDpWYisP4jcbMe3oTJ34x
+         OMXSgxwl59uvQ3b7OZEuEyRoCLuzXgSocMh90+5l0n5qYXWoVyHmCEoGJ8f0PO+/lxiQ
+         io7Bh4UdHajE07PIICHF6qzncOBVQkLtU3F/8ktxIQMcS6fFRNJKiOjjcllp4i/6a8RX
+         WNK6m5kFgD54MFHenOjsN8D9NdNA+sumDh5KPA0nbZuH966z2PXseDdu+5d3Bx8rPD2w
+         irZA1W9TSnO7N2z0TXS7jQV9RgLTK6HG/qfAFqOwzL+78w4ZLbP3twGCgJqgqqaIL4h5
+         x3nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=NkxIb+P+5+H76bh6f83+7pLlqmMSsgvAiVmWl5dkrqY=;
+        b=DNOwljSwJaBozwBvbxo13glT7OekikCAWDnfzjdKWaQvmy9ljKuVl0kJC2oKdohYk9
+         RZJY0bJdSSgTozD75KXL8TAmLgZkzJiEQ4AM9p56vXn9KxnHXJdDXvfItRwghIta2Pbp
+         IsjFN9+k76VLuQTv4xKk4UqepvUOgkTLbacMvfBPS3CgcTBd1p3TB4o6KKUiPuojjBvf
+         Qm9h1/oJBv8812P6h7ShxE9HVgf3js8zpk2ooyJq24gguODEKJUaqy1bt0nmSl2X6q/i
+         dhycSW3knST7OVaYxCXOV6cBaLz+KiQdnFicHuC03Cswh7hHYZ3i9jolXWxVzwQR3zh2
+         eDmw==
+X-Gm-Message-State: AOAM5322eH/LqsKTgG9t75D281DgZ4qb8qN10G2yO6SU+XaYvMa+0MxC
+        IcFtzTgJkittRcYqXISO8V+mtY7hda6zbg==
+X-Google-Smtp-Source: ABdhPJzo3DHV622CAx9cYAdqcbvj9NzeXAZjWl1L9efjh/UkXJP6ZQ+49u/zGuYitMDsi0zubeKw4Q==
+X-Received: by 2002:a05:600c:4e0d:: with SMTP id b13mr11204582wmq.99.1643280370135;
+        Thu, 27 Jan 2022 02:46:10 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff? ([2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff])
+        by smtp.gmail.com with ESMTPSA id o27sm5651453wms.4.2022.01.27.02.46.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 02:46:09 -0800 (PST)
+Subject: Re: [PATCH 1/3] arm64: dts: meson-gx: add ATF BL32 reserved-memory
+ region
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220126044954.19069-1-christianshewitt@gmail.com>
+ <20220126044954.19069-2-christianshewitt@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <517ef196-e622-7ed5-c3be-55ac3f054b74@baylibre.com>
+Date:   Thu, 27 Jan 2022 11:46:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220126044954.19069-2-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux for-yishai
-head:   4425468e2b7ec3b986f1ef6aa34a208bb661b2d8
-commit: a77cf53b1c02bdee0ee8bf06dc3bd92d55591c13 [9/19] vfio: Have the core code decode VFIO_DEVICE_FEATURE
-config: riscv-randconfig-r042-20220126 (https://download.01.org/0day-ci/archive/20220127/202201271821.gWpB1Xrq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f400a6012c668dfaa73462caf067ceb074e66c47)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/jgunthorpe/linux/commit/a77cf53b1c02bdee0ee8bf06dc3bd92d55591c13
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe for-yishai
-        git checkout a77cf53b1c02bdee0ee8bf06dc3bd92d55591c13
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/vfio/pci/
+On 26/01/2022 05:49, Christian Hewitt wrote:
+> Add an additional reserved memory region for the BL32 trusted firmware
+> present in many devices that boot from Amlogic vendor u-boot.
+> 
+> Suggested-by: Mateusz Krzak <kszaquitto@gmail.com>
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+> index 6b457b2c30a4..aa14ea017a61 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+> @@ -49,6 +49,12 @@
+>  			no-map;
+>  		};
+>  
+> +		/* 32 MiB reserved for ARM Trusted Firmware (BL32) */
+> +		secmon_reserved_bl32: secmon@5300000 {
+> +			reg = <0x0 0x05300000 0x0 0x2000000>;
+> +			no-map;
+> +		};
+> +
+>  		linux,cma {
+>  			compatible = "shared-dma-pool";
+>  			reusable;
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/vfio/pci/vfio_pci_core.c:1129:10: error: use of undeclared identifier 'feature'; did you mean 'return'?
-           switch (feature.flags & VFIO_DEVICE_FEATURE_MASK) {
-                   ^~~~~~~
-                   return
->> drivers/vfio/pci/vfio_pci_core.c:1129:10: error: expected expression
-   2 errors generated.
-
-
-vim +1129 drivers/vfio/pci/vfio_pci_core.c
-
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1121  
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1122  int vfio_pci_core_ioctl_feature(struct vfio_device *device, u32 flags,
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1123  				void __user *arg, size_t argsz)
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1124  {
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1125  	struct vfio_pci_core_device *vdev =
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1126  		container_of(device, struct vfio_pci_core_device, vdev);
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1127  	uuid_t uuid;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1128  
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24 @1129  	switch (feature.flags & VFIO_DEVICE_FEATURE_MASK) {
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1130  	case VFIO_DEVICE_FEATURE_PCI_VF_TOKEN:
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1131  		if (!vdev->vf_token)
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1132  			return -ENOTTY;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1133  
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1134  		/*
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1135  		 * We do not support GET of the VF Token UUID as this could
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1136  		 * expose the token of the previous device user.
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1137  		 */
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1138  		if (flags & VFIO_DEVICE_FEATURE_GET)
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1139  			return -EINVAL;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1140  
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1141  		if (flags & VFIO_DEVICE_FEATURE_PROBE)
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1142  			return 0;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1143  
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1144  		/* Don't SET unless told to do so */
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1145  		if (!(flags & VFIO_DEVICE_FEATURE_SET))
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1146  			return -EINVAL;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1147  
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1148  		if (argsz < sizeof(uuid))
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1149  			return -EINVAL;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1150  
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1151  		if (copy_from_user(&uuid, arg, sizeof(uuid)))
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1152  			return -EFAULT;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1153  
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1154  		mutex_lock(&vdev->vf_token->lock);
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1155  		uuid_copy(&vdev->vf_token->uuid, &uuid);
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1156  		mutex_unlock(&vdev->vf_token->lock);
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1157  		return 0;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1158  	default:
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1159  		return -ENOTTY;
-43eeeecc8ed5fa drivers/vfio/pci/vfio_pci.c      Alex Williamson 2020-03-24  1160  	}
-8b27ee60bfd6bb drivers/vfio/pci/vfio_pci.c      Alex Williamson 2013-09-04  1161  }
-a77cf53b1c02bd drivers/vfio/pci/vfio_pci_core.c Jason Gunthorpe 2022-01-26  1162  EXPORT_SYMBOL_GPL(vfio_pci_core_ioctl_feature);
-89e1f7d4c66d85 drivers/vfio/pci/vfio_pci.c      Alex Williamson 2012-07-31  1163  
-
-:::::: The code at line 1129 was first introduced by commit
-:::::: 43eeeecc8ed5fa05652d68032a8bfb1308ee9baa vfio: Introduce VFIO_DEVICE_FEATURE ioctl and first user
-
-:::::: TO: Alex Williamson <alex.williamson@redhat.com>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

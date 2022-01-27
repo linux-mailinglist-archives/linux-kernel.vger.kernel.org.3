@@ -2,102 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FA649EEE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D4949EEE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244240AbiA0Xf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:35:57 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:60859 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241496AbiA0Xfy (ORCPT
+        id S241508AbiA0Xfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241405AbiA0Xfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 18:35:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643326555; x=1674862555;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=joVDz8/kDfcvQwj7YtINoD9H51dhQI5sBaq3HaVkb6M=;
-  b=ElVE3Qt8ftPo8s0AZRV2cgGXtTqCkbXk+STBgvMy6BeZtEd9b5doHziK
-   FaXakV15R+xHev2xCUt/Lp9Sfj/IHr8icpPuMgoOJXPhOiKc0Dva16bPd
-   hpNjbjYOpTMGrWiLlMtoGLQrcOT+ObkNlXRSF6Lxy6FhuNrUA3HB8fGY0
-   6S2WrXE6jwhDZxIq2nnIYcBrVjBEGrgmuHlDIog2J98Y/73t7mL7ANAKO
-   bd+XYp+93efMI0nMtuWHvUo2Wjuyj6SRuPHf3dLU/DKKNp1buZlHkI6wA
-   lkeVvgVpIerxugQ7FCMTss5qF5nmP109m0b7S2/QsnD9AOsleVfBzpVnD
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,321,1635177600"; 
-   d="scan'208";a="192572181"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2022 07:35:54 +0800
-IronPort-SDR: LJ8ETRJx2zpsgyGvqU06/8fZop+nMkCInYe2ZdiMatPfiUTpbLO1/dFzHZutuGTIG1CWSiRNS+
- qS085zEIv9JKaZp6bBfAeSxADMns/UgUyT4Do4ewjSgDDOwpzUWmuxAPt2/WmHrfGFwGb7edz0
- w9S+VrD7IsBFBeSo851tm8fxYD2V1hrpeXyMKDZr9NGqFgvR3MV3ZlNN5tMb+Ln5n/XMLCFYFM
- oxMTDmBbbSqzq1l5vexujTaJXva4OXDGuCVq16mZk/mW6aRO9xIHj6CvaOjvJsfNuklWai3JDy
- lXAqIpuIwRZteAkQlMcjLxQ5
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 15:07:57 -0800
-IronPort-SDR: yfX+ejaK1TZxkn79ThqTrgWipKsMXu5YBFRVFG8034eU0r6arcT+5T1f3M8wz+VZylTxUIHXv3
- 6+NBTED+FwMsaH1w3yjz/Y0Uh8MfVn1PX9adClFZiiywT/Z3jiIpsB7hRnSygYFbNXRRKc5O94
- Cb1VGP8oBolBAWhR8llorkzM37QzD5xt5rfatDAb0+nPHpDugoizyB6ekpTVBEWyeMnfVH8Dg3
- srGfiOO8tXT0Vo63R7r9cGW0sXFhnCzSizUqwr7w7B7UAX2i6JGuF4m37YW9MyfmkDYXcVSDlc
- z2s=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 15:35:53 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JlH5h6jKVz1SVnx
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:35:52 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643326552; x=1645918553; bh=joVDz8/kDfcvQwj7YtINoD9H51dhQI5sBaq
-        3HaVkb6M=; b=Yph6A1fRi5O0ZWTcnNxQkbGTrZSJ1BLFs09kmR4Ox9OCrn2OXIp
-        Z7ehxOdOtTGkxPGFu48xw04XpmNBkJ8bUnaBnxAPOTbGG38ldLREjcUUbZUIsGM+
-        lZyFQB9DsxF++Dhyn0KIBrH8q3A7kpP2Hnr73nr1ssgah5FYH2oWif0SpWMZuESq
-        ny7gTnXrBLi9w9GjURkUicyVy5ZSA0iBzsBWmwGDILWDp/JMnwIICRV/ZT7+IyKZ
-        GREV/XIxUZK2GUVDGg6atEHQO0TTxqFCPhjOtg/iyg9YJa9iJouivuwATWCHlAxh
-        JFXvtzIMcejd4BeRgHMzSj/8rn8Gq0CF2Jg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WB6OOrDd1zW2 for <linux-kernel@vger.kernel.org>;
-        Thu, 27 Jan 2022 15:35:52 -0800 (PST)
-Received: from [10.225.163.58] (unknown [10.225.163.58])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JlH5h05sHz1RvlN;
-        Thu, 27 Jan 2022 15:35:51 -0800 (PST)
-Message-ID: <bf7d86d9-48c9-9d74-60ac-d8600f13393e@opensource.wdc.com>
-Date:   Fri, 28 Jan 2022 08:35:50 +0900
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A50FC061747
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:35:54 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id w5so3961979ilo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:35:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RYM+OoI+sRVj0DaSYGxbB41tOrylxhqAidM+/G1N3g0=;
+        b=aUmOfv6amDCIBKl7cyPdoqr3OVRCXg/GstZMqtSv+fITjqVWvfqyOq/r0cMRiImy7f
+         jbXsYP0X2iG49ox22cjU1ue9zF3rsmeyuVuo8MfW9gXAxR/U7nhC6eGB0v5bHYIi9yuY
+         gVjAWZgleK+Hx7zcLbv28glClAnV0OyI80Af8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RYM+OoI+sRVj0DaSYGxbB41tOrylxhqAidM+/G1N3g0=;
+        b=HDtqSaDj+6Jq8xPE0ZXwR8buaW6okLwhKqEHUb1Fs7+f78Ra3WK+iyq1KnXGXUDpJA
+         RNqaCQYQzf+L8FadWOoJ2cU9FdoRuXIDM4C9seAkkcdab2DGJsKuoBNxtURNX2HljoZB
+         LXOOMNWDiENRzEvl174B479bH9QmHCtRLl4S9fmly8rdcUDpT160e10JqgBy3koVNpAe
+         bmgUWzguT+xm15fP/ee+DX+IjEkqo0hjSRKHHXbMBa4kOLUCIiz2bltVi8l+V5sHwu/t
+         tWXMIHQ64QEqqL7cT3BW43K6pv73rnB1xjQDxsSV7Cw7QvhT1T4bE+xyr/+j5e73gFvG
+         o6TA==
+X-Gm-Message-State: AOAM531mLSHCR9vQgudkUNm4g5JLt9mcKHXWkpiYlYIGqKmR+7VewuE7
+        XGa3O6bMMtBVFzWKys/miiL56Q==
+X-Google-Smtp-Source: ABdhPJzY7qLxZttJ7C11awsFFi9BVO1qm82AAFY577TQWVn1v7pp1cm4kKMZYdLRWRT0HBybjT3K6A==
+X-Received: by 2002:a05:6e02:1a8d:: with SMTP id k13mr4160072ilv.257.1643326553510;
+        Thu, 27 Jan 2022 15:35:53 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:fcdb:3423:ed25:a583? ([2601:282:8200:4c:fcdb:3423:ed25:a583])
+        by smtp.gmail.com with ESMTPSA id y11sm12708870ilp.18.2022.01.27.15.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 15:35:53 -0800 (PST)
+Subject: Re: [PATCH v4] selftests/kselftest/runner.sh: Pass optional command
+ parameters in environment
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220126103230.35285-1-cristian.marussi@arm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6905ff91-c363-91b3-7240-8bb728f45c39@linuxfoundation.org>
+Date:   Thu, 27 Jan 2022 16:35:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ata: pata_atiixp: make static read-only arrays const
+In-Reply-To: <20220126103230.35285-1-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>, linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220123221622.5543-1-colin.i.king@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220123221622.5543-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 07:16, Colin Ian King wrote:
-> The static arrays pio_timings and mwdma_timings are read-only so
-> it make sense to make them const.
+On 1/26/22 3:32 AM, Cristian Marussi wrote:
+> Some testcases allow for optional commandline parameters but as of now
+> there is now way to provide such arguments to the runner script.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Add support to retrieve such optional command parameters fron environment
+> variables named so as to include the all-uppercase test executable name,
+> sanitized substituting any non-acceptable varname characters with "_",
+> following the pattern:
+> 
+> 	KSELFTEST_<UPPERCASE_SANITIZED_TEST_NAME>_ARGS="options"
+> 
+> Optional command parameters support is not available if 'tr' is not
+> installed on the test system.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v3 --> v4
+> - rebased on v5.17-rc1
+> v2 --> v3
+> - improved varname sanitation
+> v1 --> v2
+> - using env vars instead of settings file
+> - added missing varname sanitation
+> 
+> Usage examples:
+> 
+> 	KSELFTEST_RTCTEST_ARGS="/dev/rtc1" /opt/ksft_fixes/run_kselftest.sh -c rtc
+> 
+> 	KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10" /opt/ksft_fixes/run_kselftest.sh -c cpu-hotplug
+> ---
+>   tools/testing/selftests/kselftest/runner.sh | 30 ++++++++++++++++++++-
+>   1 file changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> index a9ba782d8ca0..294619ade49f 100644
+> --- a/tools/testing/selftests/kselftest/runner.sh
+> +++ b/tools/testing/selftests/kselftest/runner.sh
+> @@ -18,6 +18,8 @@ if [ -z "$BASE_DIR" ]; then
+>   	exit 1
+>   fi
+>   
+> +TR_CMD=$(command -v tr)
+> +
+>   # If Perl is unavailable, we must fall back to line-at-a-time prefixing
+>   # with sed instead of unbuffered output.
+>   tap_prefix()
+> @@ -49,6 +51,31 @@ run_one()
+>   
+>   	# Reset any "settings"-file variables.
+>   	export kselftest_timeout="$kselftest_default_timeout"
+> +
+> +	# Safe default if tr not available
+> +	kselftest_cmd_args_ref="KSELFTEST_ARGS"
+> +
+> +	# Optional arguments for this command, possibly defined as an
+> +	# environment variable built using the test executable in all
+> +	# uppercase and sanitized substituting non acceptable shell
+> +	# variable name characters with "_" as in:
+> +	#
+> +	# 	KSELFTEST_<UPPERCASE_SANITIZED_TESTNAME>_ARGS="<options>"
+> +	#
+> +	# e.g.
+> +	#
+> +	# 	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
+> +	#
+> +	# 	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
+> +	#
+> +	if [ -n "$TR_CMD" ]; then
+> +		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
+> +					$TR_CMD -d "[:blank:][:cntrl:]" | \
+> +					$TR_CMD -c "[:alnum:]_" "_" | \
+> +					$TR_CMD [:lower:] [:upper:])
+> +		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
+> +	fi
+> +
+>   	# Load per-test-directory kselftest "settings" file.
+>   	settings="$BASE_DIR/$DIR/settings"
+>   	if [ -r "$settings" ] ; then
+> @@ -69,7 +96,8 @@ run_one()
+>   		echo "# Warning: file $TEST is missing!"
+>   		echo "not ok $test_num $TEST_HDR_MSG"
+>   	else
+> -		cmd="./$BASENAME_TEST"
+> +		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
+> +		cmd="./$BASENAME_TEST $kselftest_cmd_args"
+>   		if [ ! -x "$TEST" ]; then
+>   			echo "# Warning: file $TEST is not executable"
+>   
+> 
 
-Applied to for-5.18. Thanks !
+Looks good to me. Applying to linux-kselftest next for 5.18
 
-
-
--- 
-Damien Le Moal
-Western Digital Research
+thanks,
+-- Shuah

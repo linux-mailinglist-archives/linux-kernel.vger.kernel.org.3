@@ -2,370 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5576549DE1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A7649DE17
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238714AbiA0Jdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:33:45 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:19192 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238644AbiA0Jdg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:33:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643276015; x=1674812015;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ozq+LTwpMXjth0rTIKHrkM8marZVKxy8MHKPzE4YwIs=;
-  b=Zwod3tojI8jd8fL/tO8sCswfAnx8Wl5ilYegyohCuwLCCpRmEN/cDw/S
-   PA9IzaHwoBZJni+cWGWPM4fAL+LgoZ2kSANzuj8e+5+3DuTZK8xtZiO3m
-   1c+iXpRZnTgUVa8nqij90/3JLt02+cAuGMUY89RZhRFMbg95WKulYrjIo
-   E=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 01:33:35 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:33:34 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 01:33:34 -0800
-Received: from [10.253.77.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 27 Jan
- 2022 01:33:29 -0800
-Message-ID: <25d9a681-b899-5936-868d-34f645ee40ef@quicinc.com>
-Date:   Thu, 27 Jan 2022 17:33:26 +0800
+        id S238657AbiA0Jdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:33:35 -0500
+Received: from mga05.intel.com ([192.55.52.43]:46306 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238648AbiA0Jde (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 04:33:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643276014; x=1674812014;
+  h=date:from:to:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to;
+  bh=70bvD9FchQOD0i4lLqg413fUh6fr+M8PLj6aT5wcP/A=;
+  b=Yep//h8gQivjJcqN+rzl0kTulNkCNgpCIwP03DBKLLBCt4UFqArvlAEh
+   TScKWxPNPqq6edUYefSykcZWt7o5cfXOACl0aLyBeN1U3f0sH3lGFWE4Z
+   pf5ZfR8caLdFWCfUHzn0pcQE86ZOIVc7461YMH2uCaDwyx9df9G/FwG0W
+   Ctkahkf4BfxsJ2BC2VyJuC6eMQMtQ7dFwRZ30ySy66TjcE47W/VmWMZ12
+   Obq/OAVu/SXrtCZq7ybqpnPsck8x/HVuiyo2GK3rvoQ+guTvUHSuGlsHa
+   sEHithKnj5SzSNRju28bCy9Xh421RRCmAXjtsatJRdEE3uy+HvebXw1vc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333155052"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="333155052"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:33:33 -0800
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="480224705"
+Received: from anithaha-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.224.126])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:33:32 -0800
+Date:   Thu, 27 Jan 2022 01:33:32 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
+ second map
+Message-ID: <20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-3-lucas.demarchi@intel.com>
+ <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
+ <20220127075728.ygwgorhnrwaocdqv@ldmartin-desk2>
+ <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
+ <YfJedaoeJjE3grum@phenom.ffwll.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 2/9] Coresight: Add coresight TPDM source driver
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
- <20211209141543.21314-3-quic_jinlmao@quicinc.com>
- <20211214185714.GB1549991@p14s>
- <85ad17fb-c885-831d-d841-4c6f10920355@quicinc.com>
- <CAJ9a7Vh2d79Ro72ZDsbQSVS8VrH3c+X+xo8849yGS4Z73+yq_w@mail.gmail.com>
- <20211216190223.GA78825@p14s>
- <2703bf83-3a87-e69f-2392-7e0568e91712@quicinc.com>
- <20220121171552.GA1811357@p14s>
- <24c09945-bcda-81e4-f53c-af871f696094@quicinc.com>
- <20220126153437.GA2144852@p14s>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <20220126153437.GA2144852@p14s>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+In-Reply-To: <YfJedaoeJjE3grum@phenom.ffwll.local>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/26/2022 11:34 PM, Mathieu Poirier wrote:
-> On Wed, Jan 26, 2022 at 03:07:38PM +0800, Jinlong Mao wrote:
->> Hi Mathieu,
+On Thu, Jan 27, 2022 at 09:57:25AM +0100, Daniel Vetter wrote:
+>On Thu, Jan 27, 2022 at 09:02:54AM +0100, Christian König wrote:
+>> Am 27.01.22 um 08:57 schrieb Lucas De Marchi:
+>> > On Thu, Jan 27, 2022 at 08:27:11AM +0100, Christian König wrote:
+>> > > Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
+>> > > > When dma_buf_map struct is passed around, it's useful to be able to
+>> > > > initialize a second map that takes care of reading/writing to an offset
+>> > > > of the original map.
+>> > > >
+>> > > > Add a helper that copies the struct and add the offset to the proper
+>> > > > address.
+>> > >
+>> > > Well what you propose here can lead to all kind of problems and is
+>> > > rather bad design as far as I can see.
+>> > >
+>> > > The struct dma_buf_map is only to be filled in by the exporter and
+>> > > should not be modified in this way by the importer.
+>> >
+>> > humn... not sure if I was  clear. There is no importer and exporter here.
 >>
->> Good afternoon.
+>> Yeah, and exactly that's what I'm pointing out as problem here.
 >>
->> On 1/22/2022 1:15 AM, Mathieu Poirier wrote:
->>> Hey Jinlong,
->>>
->>> On Fri, Jan 21, 2022 at 10:01:47PM +0800, Jinlong Mao wrote:
->>>> Hi Mathieu,
->>>>
->>>> Good Day.
->>>>
->>>> On 12/17/2021 3:02 AM, Mathieu Poirier wrote:
->>>>> [...]
->>>>>
->>>>>>>>> +
->>>>>>>>> +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
->>>>>>>>> +{
->>>>>>>>> +    static int traceid = TPDM_TRACE_ID_START;
->>>>>>>>> +
->>>>>>>>> +    drvdata->traceid = traceid++;
->>>>>>>>> +}
->>>>>>>> I have been specific on how to properly do this in the last revision.  Given the
->>>>>>>> above about the MAINTAINERS file, I am not sure that I will continue reviewing this set.
->>>>>>>>
->>>>>>>> There is also no need to rush another revision as I won't have the bandwidth to
->>>>>>>> process it before the holidays.
->>>>>>>>
->>>>>>>> Thanks,
->>>>>>>> Mathieu
->>>>>>> Hi Mathieu,
->>>>>>>
->>>>>>> Sorry, not addressed your previous comments here.
->>>>>>>
->>>>>>> For the trace id, each coresight component has 7 bits to store the trace
->>>>>>> id. So the trace id should be from 1 to 127 as 0 is invalid.
->>>>>> IDs 0x70 - 0x7F (`112 - 127 ) are reserved - see the ARM Coresight
->>>>>> Architecture specification v3.0
->>>>>>
->>>>> Correct
->>>>>
->>>>>>> Apart from TPDMs/STM/ETMs, we also have other coresight components in
->>>>>>> our internal device. About 80 ids are already used.
->>>>>>>
->>>>>>> Some components have fixed trace id in HW. If we use functions below to
->>>>>>> count the trace id, there will be conflict to other components.
->>>>>>>
->>>>>>> Can we use 1-15 for etm trace ids  and 16 - 127 for other coresight
->>>>>>> components ? And handle trace ids in its' own driver ?
->>>>>>>
->>>>>> This will limit systems to 15 cores - some have more!
->>>>>>
->>>>> Correct
->>>>>
->>>>>>> static inline int coresight_get_system_trace_id(int id)
->>>>>>> {
->>>>>>>             /* Start system IDs above the highest per CPU trace ID. */
->>>>>>>             return coresigth_get_trace_id(cpumask_last(cpu_possible_mask) + 1);
->>>>>>> }
->>>>> Looking at my own suggestion again this won't work since it returns the same traceID
->>>>> when called multiple times.
->>>>>
->>>>> For this patchset and _without_ taking into account internal devices that have
->>>>> their traceID set in HW:
->>>>>
->>>>> 1. Define a bitmask that is 7 bit wide.
->>>> Should it be a 128 bit wide bitmaskÂ  (0--127)?
->>> Yes, you are correct.
->>>
->>>>> 2. By default, set bits under 0x10 and between 0x70 - 0x7F.
->>>>> 3. In coresight_get_system_trace_id(), drop the @id parameter and allocate the
->>>>> first available bit after cpumask_last(cpu_possible_mask) + 1.
->>>> Should it allocate the first available bit after (cpumask_last(cpu_possible_mask) *2 ) + 0x10 ?
->>>> Return the first zero bit position as the trace id and set the bit.
->>> I need to clarify something with Mike on this - I will get back to you on
->>> Monday.
->> Do you have more comments on this ?
-> I just received clarifications on this - there is no need to continue enacting
-> the current scheme and as such reserving bits following the above formula will
-> not be needed either.  Simply assigning free traceIDs based on request will
-> work just fine.
+>> You are using the inter driver framework for something internal to the
+>> driver. That is an absolutely clear NAK!
+>>
+>> We could discuss that, but you guys are just sending around patches to do
+>> this without any consensus that this is a good idea.
 >
-> That of course is taking into account that 0x0, 0x1 and 0x70 - 0x7f are
-> reserved.  0x1 is currently used for STM and should eventually be fixed to
-> simply request a traceID the same way any other component do.  You can fix it as
-> part of this set but it is not mandatory.
+>Uh I suggested this, also we're already using dma_buf_map all over the
+>place as a convenient abstraction. So imo that's all fine, it should allow
+>drivers to simplify some code where on igpu it's in normal kernel memory
+>and on dgpu it's behind some pci bar.
 >
-> Let me know if there are things I haven't been clear on.
+>Maybe we should have a better name for that struct (and maybe also a
+>better place), but way back when we discussed that bikeshed I didn't come
+>up with anything better really.
+
+I suggest iosys_map since it abstracts access to IO and system memory.
+
 >
-> Thanks,
-> Mathieu
+>> > There is a role delegation on filling out and reading a buffer when
+>> > that buffer represents a struct layout.
+>> >
+>> > struct bla {
+>> >     int a;
+>> >     int b;
+>> >     int c;
+>> >     struct foo foo;
+>> >     struct bar bar;
+>> >     int d;
+>> > }
+>> >
+>> >
+>> > This implementation allows you to have:
+>> >
+>> >     fill_foo(struct dma_buf_map *bla_map) { ... }
+>> >     fill_bar(struct dma_buf_map *bla_map) { ... }
+>> >
+>> > and the first thing these do is to make sure the map it's pointing to
+>> > is relative to the struct it's supposed to write/read. Otherwise you're
+>> > suggesting everything to be relative to struct bla, or to do the same
+>> > I'm doing it, but IMO more prone to error:
+>> >
+>> >     struct dma_buf_map map = *bla_map;
+>> >     dma_buf_map_incr(map, offsetof(...));
+>
+>Wrt the issue at hand I think the above is perfectly fine code. The idea
+>with dma_buf_map is really that it's just a special pointer, so writing
+>the code exactly as pointer code feels best. Unfortunately you cannot make
+>them typesafe (because of C), so the code sometimes looks a bit ugly.
+>Otherwise we could do stuff like container_of and all that with
+>typechecking in the macros.
 
-Hi Mathieu,
+I had exactly this code above, but after writting quite a few patches
+using it, particularly with functions that have to write to 2 maps (see
+patch 6 for example), it felt much better to have something to
+initialize correctly from the start
 
+	struct dma_buf_map other_map = *bla_map;
+	/* poor Lucas forgetting dma_buf_map_incr(map, offsetof(...)); */
 
-Do you mean ETM sources and other sources can share the same 
-"coresight_get_trace_id" function ?
+is error prone and hard to debug since you will be reading/writting
+from/to another location rather than exploding
 
+While with the construct below
 
-int trace_id = 1;
+	other_map;
+	...
+	other_map = INITIALIZER()
 
-int coresight_get_trace_id ()
-{
- Â Â  Â trace_id += 1;
- Â Â  Â if (trace_id > 1 && trace_id < 0x70)
- Â Â  Â Â Â Â  return trace_id;
- Â Â  Â else
- Â Â  Â Â Â Â  return -EINVAL;
-}
+I can rely on the compiler complaining about uninitialized var. And
+in most of the cases I can just have this single line in the beggining of the
+function when the offset is constant:
 
-or do we still need a different function for other sources like use 
-"coresight_get_system_trace_id" ?
-Return the id from 1 and skip the ids which equeals to 
-CORESIGHT_ETM_PMU_SEED + (cpu * 2).
+	struct dma_buf_map other_map = INITIALIZER(bla_map, offsetof(..));
 
-Thanks
+Lucas De Marchi
 
-Jinlong Mao
-
->>>>> 4. Define a new function called coresight_put_system_trace_id(int id) that
->>>>> clears the bit in the mask corresponding to @id.
->>>>>
->>>>> For now that should work.
->>>>>
->>>>>>> static inline int coresight_get_trace_id(int cpu)
->>>>>>> {
->>>>>>>         /*
->>>>>>>          * A trace ID of value 0 is invalid, so let's start at some
->>>>>>>          * random value that fits in 7 bits and go from there.  Since
->>>>>>>          * the common convention is to have data trace IDs be I(N) + 1,
->>>>>>>          * set instruction trace IDs as a function of the CPU number.
->>>>>>>          */
->>>>>>>         return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
->>>>>>> }
->>>>>>>
->>>>>> This fixed relationship between cpu and trace ID is used in the perf
->>>>>> tooling to populate the elements in the perf.data file to correctly
->>>>>> allow association between CPU and trace data, and thus allow correct
->>>>>> trace decode.
->>>>> TraceIDs associated to CPUs are communicated to the perf tooling by way of the
->>>>> perf header - theoretically we should be able to change the allocation scheme
->>>>> without impacting the decoding process.
->>>>>
->>>>>> It should be possible to create another more dynamic mapping scheme -
->>>>>> but this must include a way to support the perf requirements too.
->>>>>>
->>>>> TraceIDs have been a lurking problem for as long as the subsystem has existed.
->>>>> For now what I have suggested above should be sufficient to provide an
->>>>> in-between solution that doesn't hold back this patchset.
->>>>>
->>>>> That being said, we need to start thinking about the best way to do this.  I
->>>>> will put a patchset together in the new year that aims in that direction.
->>>>>
->>>>>> Regards
->>>>>>
->>>>>> Mike
->>>>>>
->>>>>>> Thanks
->>>>>>>
->>>>>>> Jinlong Mao
->>>>>>>
->>>>>>>>> +
->>>>>>>>> +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>>>>> +{
->>>>>>>>> +    struct device *dev = &adev->dev;
->>>>>>>>> +    struct coresight_platform_data *pdata;
->>>>>>>>> +    struct tpdm_drvdata *drvdata;
->>>>>>>>> +    struct coresight_desc desc = { 0 };
->>>>>>>>> +
->>>>>>>>> +    desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
->>>>>>>>> +    if (!desc.name)
->>>>>>>>> +            return -ENOMEM;
->>>>>>>>> +    pdata = coresight_get_platform_data(dev);
->>>>>>>>> +    if (IS_ERR(pdata))
->>>>>>>>> +            return PTR_ERR(pdata);
->>>>>>>>> +    adev->dev.platform_data = pdata;
->>>>>>>>> +
->>>>>>>>> +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
->>>>>>>>> +    if (!drvdata)
->>>>>>>>> +            return -ENOMEM;
->>>>>>>>> +    drvdata->dev = &adev->dev;
->>>>>>>>> +    dev_set_drvdata(dev, drvdata);
->>>>>>>>> +
->>>>>>>>> +    drvdata->base = devm_ioremap_resource(dev, &adev->res);
->>>>>>>>> +    if (!drvdata->base)
->>>>>>>>> +            return -ENOMEM;
->>>>>>>>> +
->>>>>>>>> +    mutex_init(&drvdata->lock);
->>>>>>>>> +
->>>>>>>>> +    desc.type = CORESIGHT_DEV_TYPE_SOURCE;
->>>>>>>>> +    desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_SYS;
->>>>>>>>> +    desc.ops = &tpdm_cs_ops;
->>>>>>>>> +    desc.pdata = adev->dev.platform_data;
->>>>>>>>> +    desc.dev = &adev->dev;
->>>>>>>>> +    drvdata->csdev = coresight_register(&desc);
->>>>>>>>> +    if (IS_ERR(drvdata->csdev))
->>>>>>>>> +            return PTR_ERR(drvdata->csdev);
->>>>>>>>> +
->>>>>>>>> +    tpdm_init_default_data(drvdata);
->>>>>>>>> +    pm_runtime_put(&adev->dev);
->>>>>>>>> +
->>>>>>>>> +    return 0;
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>> +static void __exit tpdm_remove(struct amba_device *adev)
->>>>>>>>> +{
->>>>>>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
->>>>>>>>> +
->>>>>>>>> +    coresight_unregister(drvdata->csdev);
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>> +static struct amba_id tpdm_ids[] = {
->>>>>>>>> +    {
->>>>>>>>> +            .id = 0x000f0e00,
->>>>>>>>> +            .mask = 0x000fff00,
->>>>>>>>> +    },
->>>>>>>>> +    { 0, 0},
->>>>>>>>> +};
->>>>>>>>> +
->>>>>>>>> +static struct amba_driver tpdm_driver = {
->>>>>>>>> +    .drv = {
->>>>>>>>> +            .name   = "coresight-tpdm",
->>>>>>>>> +            .owner  = THIS_MODULE,
->>>>>>>>> +            .suppress_bind_attrs = true,
->>>>>>>>> +    },
->>>>>>>>> +    .probe          = tpdm_probe,
->>>>>>>>> +    .id_table       = tpdm_ids,
->>>>>>>>> +};
->>>>>>>>> +
->>>>>>>>> +module_amba_driver(tpdm_driver);
->>>>>>>>> +
->>>>>>>>> +MODULE_LICENSE("GPL v2");
->>>>>>>>> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
->>>>>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
->>>>>>>>> new file mode 100644
->>>>>>>>> index 000000000000..980ae90ff1c8
->>>>>>>>> --- /dev/null
->>>>>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
->>>>>>>>> @@ -0,0 +1,31 @@
->>>>>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>>>>>>> +/*
->>>>>>>>> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
->>>>>>>>> + */
->>>>>>>>> +
->>>>>>>>> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
->>>>>>>>> +#define _CORESIGHT_CORESIGHT_TPDM_H
->>>>>>>>> +
->>>>>>>>> +/* Default value of the traceid */
->>>>>>>>> +#define TPDM_TRACE_ID_START 128
->>>>>>>>> +
->>>>>>>>> +/**
->>>>>>>>> + * struct tpdm_drvdata - specifics associated to an TPDM component
->>>>>>>>> + * @base:       memory mapped base address for this component.
->>>>>>>>> + * @dev:        The device entity associated to this component.
->>>>>>>>> + * @csdev:      component vitals needed by the framework.
->>>>>>>>> + * @lock:       lock for the enable value.
->>>>>>>>> + * @enable:     enable status of the component.
->>>>>>>>> + * @traceid:    value of the current ID for this component.
->>>>>>>>> + */
->>>>>>>>> +
->>>>>>>>> +struct tpdm_drvdata {
->>>>>>>>> +    void __iomem            *base;
->>>>>>>>> +    struct device           *dev;
->>>>>>>>> +    struct coresight_device *csdev;
->>>>>>>>> +    struct mutex            lock;
->>>>>>>>> +    bool                    enable;
->>>>>>>>> +    int                     traceid;
->>>>>>>>> +};
->>>>>>>>> +
->>>>>>>>> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
->>>>>>>>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
->>>>>>>>> index 93a2922b7653..e48d463be63b 100644
->>>>>>>>> --- a/include/linux/coresight.h
->>>>>>>>> +++ b/include/linux/coresight.h
->>>>>>>>> @@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
->>>>>>>>>         CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
->>>>>>>>>         CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
->>>>>>>>>         CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
->>>>>>>>> +    CORESIGHT_DEV_SUBTYPE_SOURCE_SYS,
->>>>>>>>>      };
->>>>>>>>>
->>>>>>>>>      enum coresight_dev_subtype_helper {
->>>>>>>>> --
->>>>>>>>> 2.17.1
->>>>>>>>>
->>>>>> -- 
->>>>>> Mike Leach
->>>>>> Principal Engineer, ARM Ltd.
->>>>>> Manchester Design Centre. UK
+>-Daniel
+>
+>> > IMO this construct is worse because at a point in time in the function
+>> > the map was pointing to the wrong thing the function was supposed to
+>> > read/write.
+>> >
+>> > It's also useful when the function has double duty, updating a global
+>> > part of the struct and a table inside it (see example in patch 6)
+>> >
+>> > thanks
+>> > Lucas De Marchi
+>>
+>
+>-- 
+>Daniel Vetter
+>Software Engineer, Intel Corporation
+>http://blog.ffwll.ch

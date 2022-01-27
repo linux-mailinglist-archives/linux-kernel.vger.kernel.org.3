@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7536649DEB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7341F49DEBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238913AbiA0KGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S238932AbiA0KHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbiA0KG3 (ORCPT
+        with ESMTP id S231903AbiA0KH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:06:29 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B9C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:06:28 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s9so3735843wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iCPc9S/xqKutjtG576RySPC5c4MhlsxdAcWvoCriPRI=;
-        b=UXS0cNb0r6A21/Yr+t8ULc7eUWYnKfSr2Xz7F/W4kBv4PxDY2V8IiKS9AVKzoL/A4c
-         2QXelZZmI0IvcYButMcGhtQiIwQeVSto8F0tLQS/0i6E39oVBJb4ONuB1wxShRLVAjEd
-         qBQfBDs5FDzwXhh+3CWdQE+EinE2wHefcKrMA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=iCPc9S/xqKutjtG576RySPC5c4MhlsxdAcWvoCriPRI=;
-        b=MhokCDM8X7Tv/MbC5kcRhU0hAfyE6TDvqo4zmNL3m4F/ib+MMHB+u6Tggaz7ylt+lu
-         XD7QUc2fINffut/QG08RXIJniE1/cwCcwqHITRlEqCbqdu3dBgJorLMbiQuzb0um2ayl
-         xQLT33StM9atq6p6kHpjdGYpHEctAPQ4s3bJKBRqqsjBK6Ce+vy5WK7ebd/zdB4LFwjB
-         WDO1RozpxqHGl0tDydxG9+VZwewSGH+jLxzyTf6+upDNKgQbDX4thb1xHaLzYm74899x
-         yhxe8pEp3CVNzLqbLV50G8vWDKPyrqlfMi8pgtPHWYYh5XJMyUOnUYz/BTwidwNEalAU
-         jyfQ==
-X-Gm-Message-State: AOAM5317Rnf02h/SwREPlyRSBp/9nSnkHAL+9pvFRnh6hC2xJksD5cvh
-        e7o22pMz2HicJdT96kGMPqEHVQ==
-X-Google-Smtp-Source: ABdhPJxbmhEnlOI80raqLeqmBjMueB3L0ut5WVsnvXgW4cJU2nUFg7KyFIWNlDJldrhPELeM37AAEQ==
-X-Received: by 2002:adf:fe01:: with SMTP id n1mr2448712wrr.141.1643277987361;
-        Thu, 27 Jan 2022 02:06:27 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id d6sm1681780wrs.85.2022.01.27.02.06.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 02:06:26 -0800 (PST)
-Date:   Thu, 27 Jan 2022 11:06:24 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     tangmeng <tangmeng@uniontech.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        jsarha@ti.com, tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
-        Peter.Chen@nxp.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] drivers: Fix typo in comment
-Message-ID: <YfJuoHfKnwm6LmuY@phenom.ffwll.local>
-Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
-        tangmeng <tangmeng@uniontech.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, airlied@linux.ie, jsarha@ti.com,
-        tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
-        Peter.Chen@nxp.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20220127065156.22372-1-tangmeng@uniontech.com>
- <YfJCBZuc9mOZkIVJ@kroah.com>
+        Thu, 27 Jan 2022 05:07:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A26C061714;
+        Thu, 27 Jan 2022 02:07:28 -0800 (PST)
+Date:   Thu, 27 Jan 2022 11:07:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643278047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BYR/PyGx3Is3z5vyQ7uQWePnywgy3STS2Zjh/6oWB0g=;
+        b=3+jlgIGZnwa7n1WXDDDEEw2Ii2QECYNqe0NSkpNOyQa0ccXogPSRQVQlY0JP9w/VOOLbY3
+        XO4sO6UZGNagabhsBj4oKGt/QOAeK6eQ89GS/GEiC6CvsSursMfYyvzfl3fHOZ3fcYd/iE
+        /yVypAZLNeNcJLH7bd2g2JiwD8d/IOKyovEg8LuO933QoPh9y9jFUE6NvcU7XjxMuBPIHy
+        gDLKJlxyvw0iuTk1nWJxwDw/byAdRbSXMli6CDm43Ank0LGP1a6DmxdbFiwHw6q0MrvQ7v
+        IPdJouVa3nk0AUmrUgD4A8m5UX3ygaOT9gMH16Pkk8F0G+3YJm9ZdW3IsS5xow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643278047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BYR/PyGx3Is3z5vyQ7uQWePnywgy3STS2Zjh/6oWB0g=;
+        b=5zGFD1PQXG0Ly0F6dyiuD/oNCcrKyXOQdoSoXU26xwYejsI2F9UnIvYnCJJyiruCS3gzBE
+        U1LW0uCPDzDycSAQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        rcu@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mike Galbraith <efault@gmx.de>
+Subject: Re: [PATCH v3 2/4] sched: Introduce migratable()
+Message-ID: <YfJu3Z9wKOAjLuad@linutronix.de>
+References: <20210811201354.1976839-1-valentin.schneider@arm.com>
+ <20210811201354.1976839-3-valentin.schneider@arm.com>
+ <20210817170925.2jwqvgvmqab2glwu@linutronix.de>
+ <87czq573et.mognet@arm.com>
+ <YfF9I5PcZJA5532B@linutronix.de>
+ <87r18u2wr8.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YfJCBZuc9mOZkIVJ@kroah.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87r18u2wr8.mognet@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 07:56:05AM +0100, Greg KH wrote:
-> On Thu, Jan 27, 2022 at 02:51:56PM +0800, tangmeng wrote:
-> > Replace disbale with disable and replace unavaibale with unavailable.
-> > 
-> > Signed-off-by: tangmeng <tangmeng@uniontech.com>
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c | 2 +-
-> >  drivers/gpu/drm/tilcdc/tilcdc_crtc.c  | 2 +-
-> >  drivers/pcmcia/rsrc_nonstatic.c       | 2 +-
-> >  drivers/usb/chipidea/udc.c            | 2 +-
-> >  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> This needs to be broken up per-subsystem, thanks.
+On 2022-01-26 18:10:51 [+0000], Valentin Schneider wrote:
+> > | 2021-08-11 21:13 +0100 Valentin Schneider    =E2=88=99 sched: Introdu=
+ce migratable()
+> > | 2021-08-11 21:13 +0100 Valentin Schneider    =E2=88=99 arm64: mm: Mak=
+e arch_faults_on_old_pte() check for migratability
+=E2=80=A6
+> Heh, had forgotten about those - I'm happy to repost with the
+> s/migratable/is_migratable/. I also need to go back to those splats I got
+> on my emag and fix the PMU/GPIO warnings...
 
-For drm please also split it per-driver, so one patch per file you change
-here.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Now that I look at it gain, you might want to drop #1 and then #2 would
+switch to cant_migrate(). This might work=E2=80=A6
+
+Sebastian

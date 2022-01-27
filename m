@@ -2,202 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A25F149DF8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9EF49DF8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239552AbiA0Kf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:35:57 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:48121 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232813AbiA0Kf4 (ORCPT
+        id S239536AbiA0Kfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:35:40 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:50866 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232813AbiA0Kfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:35:56 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 16F5E58038C;
-        Thu, 27 Jan 2022 05:35:55 -0500 (EST)
-Received: from imap43 ([10.202.2.93])
-  by compute3.internal (MEProxy); Thu, 27 Jan 2022 05:35:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; bh=dxzJ5fUeSjprnyTxgK84tca3YXNVyE
-        W4kzNdT3N7XRs=; b=WYSm6JGlUapjy+ROB6Osl2/uNm93ldLYQEGkzRKfQWetv1
-        yB5AECNMo7sjYvVH3Y6Ng2RYZ9vq/sHX7NnAC5lkoQrfc+yVRZFn7F80Squ1/jct
-        xpLA7x6NFzCCUQAA5QbIdd1le2HIop9xy/cW7HICJ54Vww21Iw3N3NKamYwvUcEJ
-        ZHVc7mqpwiXxFbplCmLcRTgWWpjV14pdicfS4y685c3glP78TAyiyVqM08DxmVfU
-        n1XiTYPLSl3DXyDtMMrkIj2HNAqlNlNSuLI9IQGD+GDMlxu2tI21e3+7bODoUEU0
-        fosjq5PJLKLUOs9zJEQB6xZVOLtzyTsAagsop/GQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=dxzJ5fUeSjprnyTxg
-        K84tca3YXNVyEW4kzNdT3N7XRs=; b=BBQ9Y1HO5N9/5XJkaJt1E+0HhrJEx4Rwu
-        TlH7DnO0dJ47/B9tfRFEE46LHEUXH8f9QG481w4CxX6uuAUvtRgor9efAN9Fxma7
-        mm84XSfro5yYAawYC8+6XtC0rte/zPAiEfPJiWzBcNkyhAxN5hocZm14ZBKueOLf
-        YTMPmddhG1ETE+oUTuBn2+a9NPEzD1kPec/AFvcnYzSNvjCPgaUI2IAKk0M4yk6+
-        NkrWqtWy5LIafYrjevrSy+d8UlG+rlHf6mtwRp86plkdYM1Od09PSGjI7KndCKWK
-        eDhJ2VzEYMXGhj8WJ9qsRXH6aBcGj+eUMxH1rvVwQVrSKXx+pRD5Q==
-X-ME-Sender: <xms:inXyYRtKBFnbtkyc_ZSUk0s4UvK4WQ3pSBz7WPE04VzYpqd3i2nEog>
-    <xme:inXyYafrQcT3kLlk2v7mA8QcRFzllOQIkGDZWsb8eI9UUTTKHOTlNwpxBE1HF0gix
-    8TnEl54api8Dz43CR4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeefgddukecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpeetlhhishht
-    rghirhcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrth
-    htvghrnhepueffkeevheejledtueevieekleekjefhjeehudfhtdfgtdfgjeejkedvveej
-    veeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:inXyYUy4HdHQrsbzB6HyGapnUWk5HaayeuNjd-IxvfuGj2PlzrSwCQ>
-    <xmx:inXyYYMsL9BtTAkTNwQhJCucFLjecZz3lmuCLsKAlJcbEkHPtf1eTg>
-    <xmx:inXyYR9qG-UjMiwpg9a-cUVvt4rbgOmMTf5KjUMJXYQKwEcytFYtEw>
-    <xmx:i3XyYQZ0xKJ2_6Yw09xuAijegF6L1nSO5_Vl6x0HnkyQtY_ZbvOfGg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 74C71AC0E99; Thu, 27 Jan 2022 05:35:54 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4585-ga9d9773056-fm-20220113.001-ga9d97730
-Mime-Version: 1.0
-Message-Id: <6b0d3b85-a3a3-4f06-a6c1-88fa0a4113f0@www.fastmail.com>
-In-Reply-To: <1a8ee480-b066-8da9-cd63-079e07b7d88a@roeck-us.net>
-References: <20220124120027.106754-1-alistair@alistair23.me>
- <1a8ee480-b066-8da9-cd63-079e07b7d88a@roeck-us.net>
-Date:   Thu, 27 Jan 2022 20:35:33 +1000
-From:   Alistair <alistair@alistair23.me>
-To:     "Guenter Roeck" <linux@roeck-us.net>,
-        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        s.hauer@pengutronix.de, linux-watchdog@vger.kernel.org,
-        wim@linux-watchdog.org
-Cc:     devicetree@vger.kernel.org, festevam@gmail.com, linux-imx@nxp.com,
-        "Rob Herring" <robh+dt@kernel.org>, kernel@pengutronix.de
-Subject: Re: [PATCH v2] watchdog: imx2_wdg: Alow ping on suspend
-Content-Type: text/plain
+        Thu, 27 Jan 2022 05:35:38 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 256781F44F52
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643279737;
+        bh=e5seVwe3O1Ju0e2D55CC6b4M5ij69zZe37lFrDX/nWQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=g86eHbAbTwKydP+l4LMA0VIdu/Sgw7MiknoM9nX627hoPHva6fxUid3Nkgog4LWHy
+         sy1tGS6D/nWgeKt3d/quJ8P7e5/nJgLp4mpHIxNHZFZ3wpEOf77DNUYXKb9wgL76lS
+         yUOAeLG1ZIE0Iw4vtX9qQ+mHIRIZE7ZD4916qBCHZ+2YwI3Khyphy2A/tTpyTOeCfE
+         nDvHL6fpcvwcUfc1e2TIr46Sj+mgZCAPTVV2ZNnZyP31zfNlqsUZE/jWH8i2hqE/BA
+         iefHtTlhnVEgiAm0hDlkQ/E5yucDQd5cqzloskIRPlgdQAYRcNDmYSExUrtg2gWgKj
+         5UoKrjiq7kttA==
+Subject: Re: [PATCH v1, 7/8] media: uapi: Init VP9 stateless decode params
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220127025544.10854-1-yunfei.dong@mediatek.com>
+ <20220127025544.10854-8-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <07468ddd-22a8-c2a5-21fd-8468e0e77d74@collabora.com>
+Date:   Thu, 27 Jan 2022 11:35:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20220127025544.10854-8-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022, at 2:21 AM, Guenter Roeck wrote:
-> On 1/24/22 04:00, Alistair Francis wrote:
-> > The i.MX watchdog cannot be disabled by softwrae once it has been
+Il 27/01/22 03:55, Yunfei Dong ha scritto:
+> Init some of VP9 frame decode params to default value.
 > 
-> s/softwrae/software/
-> 
-> > enabled. This means that it can't be stopped before suspend.
-> > 
-> > For systems that enter low power mode this is fine, as the watchdog will
-> > be automatically stopped by hardwrae in low power mode. Not all i.MX
-> 
-> s/hardwrae/hardware/
-> 
-> > platforms support low power mode in the mainline kernel. For example the
-> > i.MX7D does not enter low power mode and so will be rebooted 2 minutes
-> > after entering freeze or mem sleep states.
-> 
-> I don't think "mem" adds any value here. Just make it sleep states.
-> 
-> > 
-> > This patch introduces a device tree property "fsl,ping-during-suspend"
-> > that can be used to enable ping on suspend support for these systems.
-> > 
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > ---
-> 
-> Change log goes here.
-> 
-> >   drivers/watchdog/imx2_wdt.c | 27 ++++++++++++++++++++-------
-> >   1 file changed, 20 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
-> > index 51bfb796898b..d0c5d47ddede 100644
-> > --- a/drivers/watchdog/imx2_wdt.c
-> > +++ b/drivers/watchdog/imx2_wdt.c
-> > @@ -66,6 +66,7 @@ struct imx2_wdt_device {
-> >   struct watchdog_device wdog;   
-> >   bool ext_reset;
-> >   bool clk_is_on;
-> 
-> I don't see the purpose of this variable. Unless I am missing something is is set
-> but never used.
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-clk_is_on is used in imx2_wdt_ping(), it disables the access if
-the clock isn't running.
+Hello Yunfei,
 
-> 
-> > + bool no_ping;
-> >   };
-> >   
-> >   static bool nowayout = WATCHDOG_NOWAYOUT;
-> > @@ -312,12 +313,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
-> >   
-> >   wdev->ext_reset = of_property_read_bool(dev->of_node,
-> >   "fsl,ext-reset-output");
-> > + /*
-> > + * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
-> > + * during suspend.
-> > + */
-> > + wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
-> 
-> This is ok as long as there is only a single chip requiring this change.
-> If there are more, the 'data' field in struct of_device_id should be used
-> instead.
+This patch is not strictly related to MediaTek SoCs, since it's
+modfying v4l2-core.
+Can you please send this patch separately?
 
-I only know of one now, so this should be fine then.
+Thanks,
+Angelo
 
-Alistair
+> ---
+>   drivers/media/v4l2-core/v4l2-ctrls-core.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> index 54abe5245dcc..b25c77b8a445 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -112,6 +112,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>   	struct v4l2_ctrl_mpeg2_picture *p_mpeg2_picture;
+>   	struct v4l2_ctrl_mpeg2_quantisation *p_mpeg2_quant;
+>   	struct v4l2_ctrl_vp8_frame *p_vp8_frame;
+> +	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
+>   	struct v4l2_ctrl_fwht_params *p_fwht_params;
+>   	void *p = ptr.p + idx * ctrl->elem_size;
+>   
+> @@ -152,6 +153,13 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>   		p_vp8_frame = p;
+>   		p_vp8_frame->num_dct_parts = 1;
+>   		break;
+> +	case V4L2_CTRL_TYPE_VP9_FRAME:
+> +		p_vp9_frame = p;
+> +		p_vp9_frame->profile = 0;
+> +		p_vp9_frame->bit_depth = 8;
+> +		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
+> +			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
+> +		break;
+>   	case V4L2_CTRL_TYPE_FWHT_PARAMS:
+>   		p_fwht_params = p;
+>   		p_fwht_params->version = V4L2_FWHT_VERSION;
+> 
 
-> 
-> >   platform_set_drvdata(pdev, wdog);
-> >   watchdog_set_drvdata(wdog, wdev);
-> >   watchdog_set_nowayout(wdog, nowayout);
-> >   watchdog_set_restart_priority(wdog, 128);
-> >   watchdog_init_timeout(wdog, timeout, dev);
-> > - watchdog_stop_ping_on_suspend(wdog);
-> > + if (wdev->no_ping)
-> > + watchdog_stop_ping_on_suspend(wdog);
-> >   
-> >   if (imx2_wdt_is_running(wdev)) {
-> >   imx2_wdt_set_timeout(wdog, wdog->timeout);
-> > @@ -366,9 +373,11 @@ static int __maybe_unused imx2_wdt_suspend(struct device *dev)
-> >   imx2_wdt_ping(wdog);
-> >   }
-> >   
-> > - clk_disable_unprepare(wdev->clk);
-> > + if (wdev->no_ping) {
-> > + clk_disable_unprepare(wdev->clk);
-> >   
-> > - wdev->clk_is_on = false;
-> > + wdev->clk_is_on = false;
-> > + }
-> >   
-> >   return 0;
-> >   }
-> > @@ -380,11 +389,14 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
-> >   struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
-> >   int ret;
-> >   
-> > - ret = clk_prepare_enable(wdev->clk);
-> > - if (ret)
-> > - return ret;
-> > + if (wdev->no_ping) {
-> > + ret = clk_prepare_enable(wdev->clk);
-> >   
-> > - wdev->clk_is_on = true;
-> > + if (ret)
-> > + return ret;
-> > +
-> > + wdev->clk_is_on = true;
-> > + }
-> >   
-> >   if (watchdog_active(wdog) && !imx2_wdt_is_running(wdev)) {
-> >   /*
-> > @@ -407,6 +419,7 @@ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
-> >   
-> >   static const struct of_device_id imx2_wdt_dt_ids[] = {
-> >   { .compatible = "fsl,imx21-wdt", },
-> > + { .compatible = "fsl,imx7d-wdt", },
-> >   { /* sentinel */ }
-> >   };
-> >   MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
-> 
-> 

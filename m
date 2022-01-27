@@ -2,156 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 130BE49E050
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2E149E052
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239771AbiA0LLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiA0LLJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:11:09 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73253C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:11:09 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v13so4042135wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q+ftSI0F0/Im74lDzb4er70a9ByF00QgQAuRt8psbLQ=;
-        b=N5Fa1T8zfl0y2EjCaDtDX+8dseudhqkFzw/Vi14SNkB/atAy/QGQLlf19t0nUpYRXr
-         P1n7AE9R37LW3Tfm/a1TXW86YKv6K0YNFmg/DKnf7HQuFb2VSyOSFbrWcYaDPgeK3yYe
-         Uz2bykGO2FQD/+wh8ZoTsqjM+kiTtXY4KplsI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=Q+ftSI0F0/Im74lDzb4er70a9ByF00QgQAuRt8psbLQ=;
-        b=tArPW8G72p27+5KMWaToaPqvs9SmRHCh5rV5hzxAUCkBnOe1f/IFtQ/uxdcPctXKeh
-         JfTiWaXRy1NCCgjFbEg7IxCt4HR9oStbN9RALefpQ8CPjfYrrTZxPz055f8mYhokRkg7
-         hEbFMzK1dcxPTKMRnDV6RI2whjzdcgFKysxdxoD+Bbd7G1acdfJP6RxlzIHAu6dHB+zG
-         ktw/NfqcFqZWyrorGbcECkuTRJDt+OHULTexW+r6RM9zOxK/PoIHDfPNnHX83qwTvhph
-         dtK+2WhZCuSEET6J1xdtm1CIj/zHm4Xeti3yLyylh4EDPWg4IexGMO6skD3z4HvGtXId
-         XI/Q==
-X-Gm-Message-State: AOAM533wxs3rxdolZPL9Fws7SvB5xKIbKY8YstT6bCDEsujV6qxYuaGF
-        r5miqy+ovvWJtDLOCoFYtPaFDA==
-X-Google-Smtp-Source: ABdhPJwAFil42wR4BzzRzMkyK3qxmmts6cgadNUMSsg5Myn0J+D62I0vtwRvYDkdPdH775qoOOP+Tg==
-X-Received: by 2002:a05:6000:1203:: with SMTP id e3mr2565698wrx.221.1643281868064;
-        Thu, 27 Jan 2022 03:11:08 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id w8sm1873068wrq.3.2022.01.27.03.11.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 03:11:07 -0800 (PST)
-Date:   Thu, 27 Jan 2022 12:11:05 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-Message-ID: <YfJ9yWW+MH8N4r4A@phenom.ffwll.local>
-Mail-Followup-To: Dmitry Vyukov <dvyukov@google.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>
-References: <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
- <YfFMSkhbvHaR0YNE@smile.fi.intel.com>
- <f6ffe9bb-8683-4061-c876-1d559267ebae@redhat.com>
- <YfFWmmJFtEB93jUi@smile.fi.intel.com>
- <3430838d-1c63-da49-b774-c5a883e7085f@redhat.com>
- <YfFZkgE3wfPXLpYA@kroah.com>
- <20220126144524.GB1951@kadam>
- <CAKMK7uGEFW4nd+W6PiT=uwSPz=pA6HKZXj6ePcdsAGiMDb3BxA@mail.gmail.com>
- <20220127062945.GC1951@kadam>
- <CACT4Y+bWMFK40o1gw6Ze7vkSKjAyBPNecjEBw+g7sMFbUZyXXA@mail.gmail.com>
+        id S239665AbiA0LLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:11:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:54800 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229484AbiA0LLe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 06:11:34 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48EDA1FB;
+        Thu, 27 Jan 2022 03:11:34 -0800 (PST)
+Received: from [10.57.39.22] (unknown [10.57.39.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9526B3F7D8;
+        Thu, 27 Jan 2022 03:11:31 -0800 (PST)
+Message-ID: <1ec258b8-c6dd-aa0f-8583-2d7667314be9@arm.com>
+Date:   Thu, 27 Jan 2022 11:11:13 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+bWMFK40o1gw6Ze7vkSKjAyBPNecjEBw+g7sMFbUZyXXA@mail.gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Andrew Kilroy <andrew.kilroy@arm.com>
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+To:     Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+ <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
+ <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
+ <5a2e29c1-2c7e-1b55-9192-62060309aeca@arm.com>
+ <12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:32:58AM +0100, Dmitry Vyukov wrote:
-> On Thu, 27 Jan 2022 at 07:30, Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > On Wed, Jan 26, 2022 at 11:31:02PM +0100, Daniel Vetter wrote:
-> > > dOn Wed, Jan 26, 2022 at 3:46 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > > >
-> > > > The other advantage of staging is the I don't think syzbot enables it.
-> > > > I guess it's easier to persuade Dmitry to ignore STAGING than it was to
-> > > > get him to disable FBDEV.  :P
-> > > >
-> > > > The memory corruption in fbdev was a real headache for everyone because
-> > > > the stack traces ended up all over the kernel.
-> > >
-> > > Uh Dmitry disabled all of FBDEV?
-> >
-> > No that's the opposite of what I meant.  STAGING is disabled in syzbot
-> > and FBDEV is enabled.
+Hi Andi,
+
+
+On 21/12/2021 14:03, Andi Kleen wrote:
 > 
-> Is there still any problem with syzbot config?
-> syzbot configs are stored here:
-> https://github.com/google/syzkaller/tree/master/dashboard/config/linux
+> On 12/20/2021 9:21 AM, Andrew Kilroy wrote:
+>>
+>> On 15/12/2021 10:52, John Garry wrote:
+>>> Hi Andrew,
+>>>
+>>>>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
+>>>>>                                                   const struct 
+>>>>> pmu_events_map *map);
+>>>>>   int metricgroup__parse_groups_test(struct evlist *evlist,
+>>>>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
+>>>>> index 1081b20f9891..57c0c5f2c6bd 100644
+>>>>> --- a/tools/perf/util/topdown.c
+>>>>> +++ b/tools/perf/util/topdown.c
+>>>>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel 
+>>>>> *leader __maybe_unused)
+>>>>>   {
+>>>>>          return false;
+>>>>>   }
+>>>>> +
+>>>>> +__weak bool arch_topdown_use_json_metrics(void)
+>>>>> +{
+>>>
+>>> AFAICS, only x86 supports topdown today and that is because they have 
+>>> special kernel topdown events exposed for the kernel CPU PMU driver. 
+>>> So other architectures - not only arm - would need rely on 
+>>> metricgroups for topdown support. So let's make this generic for all 
+>>> archs.
+>>>
+>>>> I like this extension! I've ranted in the past about weak symbols
+>>>> breaking with archives due to lazy loading [1]. In this case
+>>>> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
+>>>> and so the weak symbol has an extra chance of being linked
+>>>> incorrectly. We could add a new command line of --topdown-json to
+>>>> avoid this, but there seems little difference in doing this over just
+>>>> doing '-M TopDownL1'.
+>>>
+>>>
+>>>> Is it possible to use the json metric approach
+>>>> for when the CPU version fails?
+>>>
+>>> I think that's a good idea.
+>>>
+>>
+>>
+>> While looking into using the json metrics approach as a fallback to 
+>> the original, I noticed  there are two json metricgroups 'TopdownL1' 
+>> and 'TopDownL1' (note the case difference) on x86. Not sure if the 
+>> case difference is intentional.
+>>
+>> On skylake, 'TopdownL1' contains the four json metrics Retiring, 
+>> Bad_Speculation, Frontend_Bound, and Backend_Bound.  'TopDownL1' has 
+>> 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 'Instructions'.  I think its a 
+>> similar situation on other x86 chips.
+> 
+> 
+> There's also SMT metrics.
+> 
+> 
+> We don't want to include CoreIPC etc. by default because it would cause 
+> multiplexing in common situations.
+> 
+>>
+>> The search for those metrics by metricgroup name is case insensitive, 
+>> so it's picking up all 8 metrics when using the lookup string 
+>> 'TopDownL1'.  So the extra 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 
+>> 'Instructions' metrics would be printed as well.
+>>
+>> Not sure what the significance of the case difference might be.
+>>
+>> Should we use a different string than 'TopDownL1' as the metric group 
+>> name to search for?
+> 
+> 
+> We should probably fix the case (or just make the match case insensitive)
+> 
+> Can we just keep x86 at using the kernel metrics? On Skylake and earlier 
+> it needs different formulas and other options depending whether SMT is 
+> on or off, so it's not straight forward to express it as json directly.
+> 
 
-CONFIG_FB and CONFIG_FRAMEBUFFER_CONSOLE are set, which are the things I
-care about. The one exception is upstream-kcsan.config, which doesn't have
-fbcon enabled.
+I posted a v2 of these patches which keeps x86 only using the kernel 
+metrics.
 
-Also looking through your fbdev drivers, really the only ones you want to
-ever enable are:
-CONFIG_FB_VGA16=y
-CONFIG_FB_VESA=y
-CONFIG_FB_VIRTUAL=y
+ 
+https://lore.kernel.org/linux-perf-users/20220111150749.13365-1-andrew.kilroy@arm.com/
 
-The following isn't enabled, but I guess if you don't have EFI doesn't
-make sense, otherwise you really want it:
-CONFIG_FB_EFI=y
+Would be good to get your feedback,
 
-The below are enabled in some configs and should be ditched
-CONFIG_FB_SIMPLE=y (use CONFIG_DRM_SIMPLEDRM instead, at least on kernels that have it)
-CONFIG_FB_I740=y (you don't have this hw or I'm blown away, this last shipped 20 years ago)
-CONFIG_FB_UDL=y (use CONFIG_DRM_UDL instead)
-CONFIG_FB_UVESA=y (does modesets by calling into a userspace helper to run x86 vbios code, just don't)
-CONFIG_FB_SMSCUFX=y (if you really have these then someone should port this to drm asap)
-CONFIG_FB_CIRRUS=y (use CONFIG_DRM_CIRRUS_QEMU instead since I'm pretty sure you don't have a real cirrus pci card)
+Thanks
+Andrew
 
-Also note that the simpledrm driver will eat all the firmware fbdev
-drivers and unload them. So you need to run two configs to really cover
-both sets of drivers in all cases.
-
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch

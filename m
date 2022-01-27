@@ -2,173 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3030949E7EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD9449E7E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244085AbiA0QpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:45:09 -0500
-Received: from mga11.intel.com ([192.55.52.93]:21456 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244072AbiA0QpI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:45:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643301908; x=1674837908;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0XYCULJz8eCwunpqt4WW86gJKS6aVCwiIa+rTXc0vrY=;
-  b=YUpUQhuP2P2ONDNu4UHFwQJz3C8gKeIwbv2Vx8nQgLz/ReIXjxEID2Ky
-   0Jph+dEdAQQqGcvt0XFhWQTyWBHWg157Ti94RXIry4Z/nT61+boVAypni
-   xGsMDgaVjCz8NDhlbPnfs2y8wx8lq3S6RQEDLZhFvp4F+RlApPiRMpPod
-   petoW8eQmz5jGdW3KTw9nYhYGDm36P2kr6y1rFhqJ+dtccCT+lmaaiZze
-   etRAVh8xAjcKU2Pe3tIemI1n1SV+LgGhMM+0aQOjRuIlFLfDnjGqnlN7q
-   Lc6u9VRbUHWD+gzttJNs2IqYsujht23Skitdpch+9ccRd7KRtqe9XtWtk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="244510328"
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="244510328"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:45:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="477935447"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Jan 2022 08:45:04 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nD7tP-000MoH-LD; Thu, 27 Jan 2022 16:45:03 +0000
-Date:   Fri, 28 Jan 2022 00:44:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, djwong@kernel.org,
-        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
-        jane.chu@oracle.com
-Subject: Re: [PATCH v10 1/9] dax: Introduce holder for dax_device
-Message-ID: <202201280035.A565CZYV-lkp@intel.com>
-References: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
+        id S244056AbiA0Qoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:44:37 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:37359 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244054AbiA0Qof (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:44:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jl5z466Pgz4xcT;
+        Fri, 28 Jan 2022 03:44:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643301873;
+        bh=MX51oCd5bYSXDZe8p/UcQRq6AXgsb/XDeiec+w4Y0wY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Uao15/lhQjJwl2dipxNY9hvuxyNRyiggc/Y9TMjW0SAZVdse/rAQYvNMFyQOCQ5Nn
+         dLd1qBLsk2zmx8LMMQ81QbOj1gD9WS1w4eH1xJTOy0zApo3XztRKXo+5D2FhnSbp95
+         zx1Ught578YSy4xnNaX7k8CFUjoGPM8SNWpc6sTeAkEMhXZpK0tSvUGufq89wpjw0+
+         69vqjQvE3mnSZNLsuQ+I11Lp0Lkuvt/btise/qWipXdaAJcoekaUSQX2x1KODIC0R2
+         PZ3LmsWLfWUDie/TBpPz9535V60v9SfRmXaQs5WeM+3+KyJr/K9KWuPgO+t6pG7Gu1
+         IqizhWW5aP4sQ==
+Date:   Fri, 28 Jan 2022 03:44:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings in Linus' tree
+Message-ID: <20220128034430.77fef717@canb.auug.org.au>
+In-Reply-To: <20220127060141.GA10653@lst.de>
+References: <20220127153055.6dd9f73d@canb.auug.org.au>
+        <20220127060141.GA10653@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/03=0ATfZR7Di9qbVyibM7nu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shiyang,
+--Sig_/03=0ATfZR7Di9qbVyibM7nu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch! Perhaps something to improve:
+Hi Christoph,
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on linus/master v5.17-rc1 next-20220127]
-[cannot apply to xfs-linux/for-next hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Thu, 27 Jan 2022 07:01:41 +0100 Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Thu, Jan 27, 2022 at 03:30:55PM +1100, Stephen Rothwell wrote:
+> >=20
+> > Building Linus' tree, today's linux-next build (htmldocs) produced
+> > these warnings:
+> >=20
+> > include/linux/blkdev.h:1533: warning: Function parameter or member 'sta=
+rt_time' not described in 'bio_end_io_acct'
+> > include/linux/blkdev.h:1533: warning: Excess function parameter 'start'=
+ description in 'bio_end_io_acct'
+> >=20
+> > Introduced by commit
+> >=20
+> >   956d510ee78c ("block: add disk/bio-based accounting helpers") =20
+>=20
+> The warning looks correct, but that commit is rather old, so something
+> else must have caused it to be emitted now?
 
-url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220128/202201280035.A565CZYV-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/57669ed05e93b37d995c5247eebe218ab2058c9a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
-        git checkout 57669ed05e93b37d995c5247eebe218ab2058c9a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+Yeah, but I couldn't see anything obvious.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--=20
+Cheers,
+Stephen Rothwell
 
-All warnings (new ones prefixed by >>):
+--Sig_/03=0ATfZR7Di9qbVyibM7nu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-   In file included from mm/filemap.c:15:
->> include/linux/dax.h:73:30: warning: 'struct dax_holder_operations' declared inside parameter list will not be visible outside of this definition or declaration
-      73 |                 const struct dax_holder_operations *ops)
-         |                              ^~~~~~~~~~~~~~~~~~~~~
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHyy+4ACgkQAVBC80lX
+0GxH8ggAn7Nw74omN15x0YNxT3itr8Sm2r6A2ogQkLGg+3R7+lXaPBj5tSSJbPhY
+3OIRG+BpK/l9OcP8NOP9wLNidd6mg6qbpjD4F4Y28K94p38sXAYnCMBcMmyBVMEk
+JuLOChGb2BCaESVJkK9MTvII6kigVgSstUkzKWhb98hcJrETZ//fA44EPiM0D9Q5
+QC3ic6OkVMYPeDA22oE+lC5Uj92J6uQlMCiPcyp68xSnU+VAtPtFLlX0sDGOCu/x
+xNC+WQJNo9oe81Z5wt86QZ658G9e9+C8c/bRlk9LiD9Z+MFZSNdXQHydoFG96b5w
+U5taHJ2gYE60tTH6e2vplWZ1n85Y1w==
+=WLhG
+-----END PGP SIGNATURE-----
 
-vim +73 include/linux/dax.h
-
-    48	
-    49	void dax_register_holder(struct dax_device *dax_dev, void *holder,
-    50			const struct dax_holder_operations *ops);
-    51	void dax_unregister_holder(struct dax_device *dax_dev);
-    52	void *dax_get_holder(struct dax_device *dax_dev);
-    53	void put_dax(struct dax_device *dax_dev);
-    54	void kill_dax(struct dax_device *dax_dev);
-    55	void dax_write_cache(struct dax_device *dax_dev, bool wc);
-    56	bool dax_write_cache_enabled(struct dax_device *dax_dev);
-    57	bool dax_synchronous(struct dax_device *dax_dev);
-    58	void set_dax_synchronous(struct dax_device *dax_dev);
-    59	/*
-    60	 * Check if given mapping is supported by the file / underlying device.
-    61	 */
-    62	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
-    63						     struct dax_device *dax_dev)
-    64	{
-    65		if (!(vma->vm_flags & VM_SYNC))
-    66			return true;
-    67		if (!IS_DAX(file_inode(vma->vm_file)))
-    68			return false;
-    69		return dax_synchronous(dax_dev);
-    70	}
-    71	#else
-    72	static inline void dax_register_holder(struct dax_device *dax_dev, void *holder,
-  > 73			const struct dax_holder_operations *ops)
-    74	{
-    75	}
-    76	static inline void dax_unregister_holder(struct dax_device *dax_dev)
-    77	{
-    78	}
-    79	static inline void *dax_get_holder(struct dax_device *dax_dev)
-    80	{
-    81		return NULL;
-    82	}
-    83	static inline struct dax_device *alloc_dax(void *private,
-    84			const struct dax_operations *ops)
-    85	{
-    86		/*
-    87		 * Callers should check IS_ENABLED(CONFIG_DAX) to know if this
-    88		 * NULL is an error or expected.
-    89		 */
-    90		return NULL;
-    91	}
-    92	static inline void put_dax(struct dax_device *dax_dev)
-    93	{
-    94	}
-    95	static inline void kill_dax(struct dax_device *dax_dev)
-    96	{
-    97	}
-    98	static inline void dax_write_cache(struct dax_device *dax_dev, bool wc)
-    99	{
-   100	}
-   101	static inline bool dax_write_cache_enabled(struct dax_device *dax_dev)
-   102	{
-   103		return false;
-   104	}
-   105	static inline bool dax_synchronous(struct dax_device *dax_dev)
-   106	{
-   107		return true;
-   108	}
-   109	static inline void set_dax_synchronous(struct dax_device *dax_dev)
-   110	{
-   111	}
-   112	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
-   113					struct dax_device *dax_dev)
-   114	{
-   115		return !(vma->vm_flags & VM_SYNC);
-   116	}
-   117	#endif
-   118	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--Sig_/03=0ATfZR7Di9qbVyibM7nu--

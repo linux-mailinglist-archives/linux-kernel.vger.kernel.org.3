@@ -2,1523 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A77E49D940
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12AA49D945
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbiA0D1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 22:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiA0D1c (ORCPT
+        id S235748AbiA0Db1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 22:31:27 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:49174 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230210AbiA0Db0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 22:27:32 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1FBC06161C;
-        Wed, 26 Jan 2022 19:27:32 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id c3so1359621pls.5;
-        Wed, 26 Jan 2022 19:27:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YIlVXwhMurnNorha4NdyQHvAnqq0wwH5AzLfDOvbNyg=;
-        b=CsqryTa58Kw6zYIg9dxnVW/zgT7h+ykX3j8KXmK720G7p/Ma/51krS1dvV7rBw51aO
-         DnkeL6MM0g3M1VBRaAXJskSFaU21MCaMg49xsCAW0fHJaTYDPmHU7mxqbfpzVmoZqJDx
-         vy7UKBhJ4rPi88TaUA2O3gBALW1zUzQ4pGr3AvtrGGwUly3lYWIYrzdVXFpVSqVfUcvG
-         f70NcIgL03aVAoKMtaExjvUzjcDEu/UWZXFxv38ZoH87+YRRH6zx9BvCt3E81AH+Irnj
-         lPmOM7w+JOUjYQzFctGdfODLCjzcYqPsgRVfV0obKTzayiaNzYWkdxbwR4vRfDI+JQJk
-         gudA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YIlVXwhMurnNorha4NdyQHvAnqq0wwH5AzLfDOvbNyg=;
-        b=fFRFUjjFeAgyDUn20sNSqjb58hbIbfH7TG7vW7j89fT9Khluoe90Gg8HbyQJYmErBj
-         Ay/vbV0kiLjgyLOVshwfr0zneY+tcsswpSoZNZYEoT6+tu8dn+pDN2xAfYGCXzDiYbri
-         D5s+z2lD0SjoeDqnoyyM7bye0LHUEt/6kg2nFJ6BgCSY3Asrgpv7k5+F4Rhy/Wf0jHoH
-         HcsCQr8JlOshYMKO8R/PesVKUjH29x91QgZzlc+iIcFMs9uHx2n5ZjdqBa4ah0TwuYyq
-         zf0eJ21hp08bXLChSOEO8qCAG3BbVdmfbfN4ZOblMvuok++l76QBs9ld+0dItMvVV14T
-         xDbw==
-X-Gm-Message-State: AOAM530sF2X/hy1BeLYn4AJxEZvJEXlB5gkkyIyc/QJnI217COMklVWk
-        BFJNurtSJa8DajNpyApS5+E=
-X-Google-Smtp-Source: ABdhPJzdw16ncMEau5MSt1l4IGhT7SctNuXEHcueyPZufkjI7WWCBSet714qzXZGLGcK2RdysXVZag==
-X-Received: by 2002:a17:90b:514:: with SMTP id r20mr12087842pjz.48.1643254051366;
-        Wed, 26 Jan 2022 19:27:31 -0800 (PST)
-Received: from localhost.localdomain (61-231-106-36.dynamic-ip.hinet.net. [61.231.106.36])
-        by smtp.gmail.com with ESMTPSA id s6sm634536pjg.22.2022.01.26.19.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 19:27:31 -0800 (PST)
-From:   Joseph CHAMG <josright123@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Wed, 26 Jan 2022 22:31:26 -0500
+X-UUID: 78452bdbb89241cf88cf24a251dadbd2-20220127
+X-UUID: 78452bdbb89241cf88cf24a251dadbd2-20220127
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <chaotian.jing@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1280028667; Thu, 27 Jan 2022 11:31:15 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 27 Jan 2022 11:31:14 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 Jan
+ 2022 11:31:14 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 11:31:12 +0800
+Message-ID: <c03acbc0a259d7b7f4a313b764e4dc9a69e898fe.camel@mediatek.com>
+Subject: Re: [PATCH v5 3/3] mmc: mediatek: add support for SDIO eint IRQ
+From:   Chaotian Jing <chaotian.jing@mediatek.com>
+To:     Axe Yang <axe.yang@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Joseph CHANG <josright123@gmail.com>,
-        joseph_chang@davicom.com.tw
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        andrew@lunn.ch, leon@kernel.org
-Subject: [PATCH v14, 2/2] net: Add dm9051 driver
-Date:   Thu, 27 Jan 2022 11:27:01 +0800
-Message-Id: <20220127032701.23056-3-josright123@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220127032701.23056-1-josright123@gmail.com>
-References: <20220127032701.23056-1-josright123@gmail.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yong Mao <yong.mao@mediatek.com>
+Date:   Thu, 27 Jan 2022 11:31:12 +0800
+In-Reply-To: <20220121071942.11601-4-axe.yang@mediatek.com>
+References: <20220121071942.11601-1-axe.yang@mediatek.com>
+         <20220121071942.11601-4-axe.yang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add davicom dm9051 spi ethernet driver, The driver work for the
-device platform which has the spi master
-
-Signed-off-by: Joseph CHAMG <josright123@gmail.com>
----
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: andy Shevchenko <andy.shevchenko@gmail.com>
-
-v1-v4
-
-Test ok with raspberry pi 2 and pi 4
-
-v5
-
-swapped to phylib for phy connection tasks
-
-v6
-
-remove the redundant code that phylib has support
-
-v7
-
-read/write registers must return error code to the caller
-
-v8
-
-not parmanently set MAC by .ndo_set_mac_address
-
-v9
-
-improve the registers read/write so that error code
-return as far as possible up the call stack.
-
-v10
-
-use regmap APIs for SPI and MDIO
-
-v11
-
-use regmap_read_poll_timeout
-use corresponding regmap APIs, i.e. SPI, MDIO
-
-v12
-
-use mdiobus API instead of regmap MDIO APIs
-
-v13
-
-Simply all regmap APIs return value checked
-Clear the fifo reset report
-Eliminate redundant comments
-
-Comment that DM9051_GPR register bit 0 function for power-up
-the internal phy, if this bit is updated from 1 to 0, then the
-whole dm9051 chip registers could not be accessed within 1 ms,
-so that has mdelay(1) to wait 1 ms
-
-v14
-
-To eliminate touching PHY registers, instead take advantage of phy_start
-to have it
-Make neat to be readable exactly
-
- drivers/net/ethernet/davicom/Kconfig  |   31 +
- drivers/net/ethernet/davicom/Makefile |    1 +
- drivers/net/ethernet/davicom/dm9051.c | 1151 +++++++++++++++++++++++++
- drivers/net/ethernet/davicom/dm9051.h |  159 ++++
- 4 files changed, 1342 insertions(+)
- create mode 100644 drivers/net/ethernet/davicom/dm9051.c
- create mode 100644 drivers/net/ethernet/davicom/dm9051.h
-
-diff --git a/drivers/net/ethernet/davicom/Kconfig b/drivers/net/ethernet/davicom/Kconfig
-index 7af86b6d4150..02e0caff98e3 100644
---- a/drivers/net/ethernet/davicom/Kconfig
-+++ b/drivers/net/ethernet/davicom/Kconfig
-@@ -3,6 +3,19 @@
- # Davicom device configuration
- #
- 
-+config NET_VENDOR_DAVICOM
-+	bool "Davicom devices"
-+	default y
-+	help
-+	  If you have a network (Ethernet) card belonging to this class, say Y.
-+
-+	  Note that the answer to this question doesn't directly affect the
-+	  kernel: saying N will just cause the configurator to skip all
-+	  the questions about Davicom devices. If you say Y, you will be asked
-+	  for your specific card in the following selections.
-+
-+if NET_VENDOR_DAVICOM
-+
- config DM9000
- 	tristate "DM9000 support"
- 	depends on ARM || MIPS || COLDFIRE || NIOS2 || COMPILE_TEST
-@@ -22,3 +35,21 @@ config DM9000_FORCE_SIMPLE_PHY_POLL
- 	  bit to determine if the link is up or down instead of the more
- 	  costly MII PHY reads. Note, this will not work if the chip is
- 	  operating with an external PHY.
-+
-+config DM9051
-+	tristate "DM9051 SPI support"
-+	depends on SPI
-+	select CRC32
-+	select MDIO
-+	select PHYLIB
-+	select REGMAP_SPI
-+	help
-+	  Support for DM9051 SPI chipset.
-+
-+	  To compile this driver as a module, choose M here.  The module
-+	  will be called dm9051.
-+
-+	  The SPI mode for the host's SPI master to access DM9051 is mode
-+	  0 on the SPI bus.
-+
-+endif # NET_VENDOR_DAVICOM
-diff --git a/drivers/net/ethernet/davicom/Makefile b/drivers/net/ethernet/davicom/Makefile
-index 173c87d21076..225f85bc1f53 100644
---- a/drivers/net/ethernet/davicom/Makefile
-+++ b/drivers/net/ethernet/davicom/Makefile
-@@ -4,3 +4,4 @@
- #
- 
- obj-$(CONFIG_DM9000) += dm9000.o
-+obj-$(CONFIG_DM9051) += dm9051.o
-diff --git a/drivers/net/ethernet/davicom/dm9051.c b/drivers/net/ethernet/davicom/dm9051.c
-new file mode 100644
-index 000000000000..6a7bfb43d7d6
---- /dev/null
-+++ b/drivers/net/ethernet/davicom/dm9051.c
-@@ -0,0 +1,1151 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Davicom Semiconductor,Inc.
-+ * Davicom DM9051 SPI Fast Ethernet Linux driver
-+ */
-+
-+#include <linux/etherdevice.h>
-+#include <linux/ethtool.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
-+#include <linux/mii.h>
-+#include <linux/module.h>
-+#include <linux/netdevice.h>
-+#include <linux/phy.h>
-+#include <linux/regmap.h>
-+#include <linux/skbuff.h>
-+#include <linux/spinlock.h>
-+#include <linux/spi/spi.h>
-+#include <linux/types.h>
-+
-+#include "dm9051.h"
-+
-+#define DRVNAME_9051	"dm9051"
-+
-+/**
-+ * struct rx_ctl_mach - rx activities record
-+ * @status_err_counter: rx status error counter
-+ * @large_err_counter: rx get large packet length error counter
-+ * @fifo_rst_counter: reset operation counter
-+ *
-+ * To keep track for the driver operation statistics
-+ */
-+struct rx_ctl_mach {
-+	u16				status_err_counter;
-+	u16				large_err_counter;
-+	u16				fifo_rst_counter;
-+};
-+
-+/**
-+ * struct dm9051_rxhdr - rx packet data header
-+ * @rxpktready: lead byte is 0x01 tell a valid packet
-+ * @rxstatus: status bits for the received packet
-+ * @rxlen: packet length
-+ *
-+ * The Rx packed, entered into the FIFO memory, start with these
-+ * four bytes which is the Rx header, followed by the ethernet
-+ * packet data and ends with an appended 4-byte CRC data.
-+ * Both Rx packet and CRC data are for check purpose and finally
-+ * are dropped by this driver
-+ */
-+struct dm9051_rxhdr {
-+	u8				rxpktready;
-+	u8				rxstatus;
-+	__le16				rxlen;
-+};
-+
-+/**
-+ * struct board_info - maintain the saved data
-+ * @spidev: spi device structure
-+ * @ndev: net device structure
-+ * @mdiobus: mii bus structure
-+ * @phydev: phy device structure
-+ * @txq: tx queue structure
-+ * @regmap_dm: regmap for register read/write
-+ * @regmap_dmbulk: extra regmap for bulk read/write
-+ * @kwr_task_kw: kwr task structure
-+ * @kw: kernel thread worker structure
-+ * @kw_rxctrl: kernel thread worker structure for rx control
-+ * @kw_tx: kernel thread worker structure for transmit
-+ * @eth_pause: ethtool pause parameter structure
-+ * @spi_lockm: between threads lock structure
-+ * @reg_mutex: regmap access lock structure
-+ * @bc: rx control statistics structure
-+ * @eth_rxhdr: rx header structure
-+ * @msg_enable: message level value
-+ * @hash_table: hash table
-+ * @imr_all: to store operating imr value for register DM9051_IMR
-+ * @rcr_all: to store operating rcr value for register DM9051_RCR
-+ * @lcr_all: to store operating rcr value for register DM9051_LMCR
-+ *
-+ * The saved data variables, keep up to date for retrieval back to use
-+ */
-+struct board_info {
-+	struct spi_device		*spidev;
-+	struct net_device		*ndev;
-+	struct mii_bus			*mdiobus;
-+	struct phy_device		*phydev;
-+	struct sk_buff_head		txq;
-+	struct regmap			*regmap_dm;
-+	struct regmap			*regmap_dmbulk;
-+	struct task_struct		*kwr_task_kw;
-+	struct kthread_worker		kw;
-+	struct kthread_work		kw_rxctrl;
-+	struct kthread_work		kw_tx;
-+	struct ethtool_pauseparam	eth_pause;
-+	struct mutex			spi_lockm;
-+	struct mutex			reg_mutex;
-+	struct rx_ctl_mach		bc;
-+	struct dm9051_rxhdr		eth_rxhdr;
-+	u32				msg_enable;
-+	u16				hash_table[4];
-+	u8				imr_all;
-+	u8				rcr_all;
-+	u8				lcr_all;
-+};
-+
-+/* waiting tx-end rather than tx-req
-+ * got faster
-+ */
-+static int dm9051_map_xmitpoll(struct board_info *db)
-+{
-+	unsigned int mval;
-+	int ret;
-+
-+	ret = regmap_read_poll_timeout(db->regmap_dm, DM9051_NSR, mval,
-+				       mval & (NSR_TX2END | NSR_TX1END), 1, 20);
-+	if (ret)
-+		netdev_err(db->ndev, "timeout in checking for tx ends\n");
-+	return ret;
-+}
-+
-+static int dm9051_map_ee_phypoll(struct board_info *db)
-+{
-+	unsigned int mval;
-+	int ret;
-+
-+	ret = regmap_read_poll_timeout(db->regmap_dm, DM9051_EPCR, mval,
-+				       !(mval & EPCR_ERRE), 100, 10000);
-+	if (ret)
-+		netdev_err(db->ndev, "eeprom/phy in processing get timeout\n");
-+	return ret;
-+}
-+
-+static int dm9051_map_eeread(struct board_info *db, int offset, u8 *to)
-+{
-+	int ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPAR, offset);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPCR, EPCR_ERPRR);
-+	if (ret)
-+		return ret;
-+
-+	ret = dm9051_map_ee_phypoll(db);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_bulk_read(db->regmap_dmbulk, DM9051_EPDRL, to, 2);
-+}
-+
-+static int dm9051_map_eewrite(struct board_info *db, int offset, u8 *data)
-+{
-+	int ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPAR, offset);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_EPDRL, data, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPCR, EPCR_WEP | EPCR_ERPRW);
-+	if (ret)
-+		return ret;
-+
-+	ret = dm9051_map_ee_phypoll(db);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(db->regmap_dm, DM9051_EPCR, 0);
-+}
-+
-+static int ctrl_dm9051_phyread(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct board_info *db = context;
-+	int ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPAR, DM9051_PHY | reg);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPCR, EPCR_ERPRR | EPCR_EPOS);
-+	if (ret)
-+		return ret;
-+
-+	ret = dm9051_map_ee_phypoll(db);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
-+	if (ret)
-+		return ret;
-+
-+	/* this is a 4 bytes data, clear to zero since following regmap_bulk_read
-+	 * only fill lower 2 bytes
-+	 */
-+	*val = 0;
-+	return regmap_bulk_read(db->regmap_dmbulk, DM9051_EPDRL, val, 2);
-+}
-+
-+static int ctrl_dm9051_phywrite(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct board_info *db = context;
-+	int ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPAR, DM9051_PHY | reg);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_EPDRL, &val, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_EPCR, EPCR_EPOS | EPCR_ERPRW);
-+	if (ret)
-+		return ret;
-+
-+	ret = dm9051_map_ee_phypoll(db);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
-+}
-+
-+static int dm9051_mdiobus_read(struct mii_bus *bus, int addr, int regnum)
-+{
-+	struct board_info *db = bus->priv;
-+	unsigned int val = 0xffff;
-+	int ret;
-+
-+	if (addr == DM9051_PHY_ID) {
-+		ret = ctrl_dm9051_phyread(db, regnum, &val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return val;
-+}
-+
-+static int dm9051_mdiobus_write(struct mii_bus *bus, int addr, int regnum, u16 val)
-+{
-+	struct board_info *db = bus->priv;
-+
-+	if (addr == DM9051_PHY_ID)
-+		return ctrl_dm9051_phywrite(db, regnum, val);
-+
-+	return -ENODEV;
-+}
-+
-+/* skb buffer exhausted, just discard the received data
-+ */
-+static int dm9051_map_dumpblk(struct board_info *db, u8 reg, size_t count)
-+{
-+	struct net_device *ndev = db->ndev;
-+	unsigned int rb;
-+	int ret;
-+
-+	/* no skb buffer,
-+	 * both reg and &rb must be noinc,
-+	 * read once one byte via regmap_read
-+	 */
-+	do {
-+		ret = regmap_read(db->regmap_dm, reg, &rb);
-+		if (ret) {
-+			netif_err(db, drv, ndev, "%s: error %d dumping read reg %02x\n",
-+				  __func__, ret, reg);
-+			break;
-+		}
-+	} while (--count);
-+
-+	return ret;
-+}
-+
-+static void dm9051_reg_lock_mutex(void *dbcontext)
-+{
-+	struct board_info *db = dbcontext;
-+
-+	mutex_lock(&db->reg_mutex);
-+}
-+
-+static void dm9051_reg_unlock_mutex(void *dbcontext)
-+{
-+	struct board_info *db = dbcontext;
-+
-+	mutex_unlock(&db->reg_mutex);
-+}
-+
-+static struct regmap_config regconfigdm = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0xff,
-+	.reg_stride = 1,
-+	.cache_type = REGCACHE_NONE,
-+	.read_flag_mask = 0,
-+	.write_flag_mask = DM_SPI_WR,
-+	.val_format_endian = REGMAP_ENDIAN_LITTLE,
-+	.lock = dm9051_reg_lock_mutex, /* essential, sure for no-conflict read/write */
-+	.unlock = dm9051_reg_unlock_mutex, /* essential, sure for no-conflict read/write */
-+};
-+
-+static struct regmap_config regconfigdmbulk = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0xff,
-+	.reg_stride = 1,
-+	.cache_type = REGCACHE_NONE,
-+	.read_flag_mask = 0,
-+	.write_flag_mask = DM_SPI_WR,
-+	.val_format_endian = REGMAP_ENDIAN_LITTLE,
-+	.lock = dm9051_reg_lock_mutex, /* essential, sure for no-conflict read/write */
-+	.unlock = dm9051_reg_unlock_mutex, /* essential, sure for no-conflict read/write */
-+	.use_single_read = true,
-+	.use_single_write = true,
-+};
-+
-+static int dm9051_map_chipid(struct board_info *db)
-+{
-+	struct device *dev = &db->spidev->dev;
-+	unsigned int ret;
-+	unsigned short wid;
-+	u8 buff[6];
-+
-+	ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_VIDL, buff, 6);
-+	if (ret < 0) {
-+		netif_err(db, drv, db->ndev, "%s: error %d bulk_read reg %02x\n",
-+			  __func__, ret, DM9051_VIDL);
-+		return ret;
-+	}
-+
-+	wid = buff[3] << 8 | buff[2];
-+	if (wid != DM9051_ID) {
-+		dev_err(dev, "chipid error as %04x !\n", wid);
-+		return -ENODEV;
-+	}
-+
-+	dev_info(dev, "chip %04x found\n", wid);
-+	return 0;
-+}
-+
-+/* mac address is major from EEPROM
-+ */
-+static int dm9051_map_macaddr_init(struct net_device *ndev, struct board_info *db)
-+{
-+	u8 addr[ETH_ALEN];
-+	int ret;
-+
-+	ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_PAR, addr, ETH_ALEN);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!is_valid_ether_addr(addr)) {
-+		eth_hw_addr_random(ndev);
-+		dev_dbg(&db->spidev->dev, "Use random MAC address\n");
-+		return 0;
-+	}
-+
-+	eth_hw_addr_set(ndev, addr);
-+
-+	return 0;
-+}
-+
-+static void dm9051_handle_link_change(struct net_device *ndev)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	int lcl_adv, rmt_adv, ret;
-+	u8 fcr = 0;
-+
-+	phy_print_status(ndev->phydev);
-+
-+	/* only write pause settings to mac. since mac and phy are integrated
-+	 * together, such as link state, speed and duplex are sync already
-+	 */
-+	if (ndev->phydev->link) {
-+		if (db->eth_pause.autoneg == AUTONEG_ENABLE) {
-+			lcl_adv = linkmode_adv_to_mii_adv_t(db->phydev->advertising);
-+			rmt_adv = linkmode_adv_to_mii_adv_t(db->phydev->lp_advertising);
-+
-+			if (lcl_adv & rmt_adv & ADVERTISE_PAUSE_CAP) {
-+				db->eth_pause.rx_pause = true;
-+				db->eth_pause.tx_pause = true;
-+			}
-+		}
-+
-+		/* while both rx_pause & tx_pause
-+		 * fcr will result idenical as FCR_RXTX_ENABLE
-+		 */
-+		if (db->eth_pause.rx_pause)
-+			fcr |= FCR_BKPM | FCR_FLCE;
-+		if (db->eth_pause.tx_pause)
-+			fcr |= FCR_TXPEN;
-+
-+		ret = regmap_update_bits(db->regmap_dm, DM9051_FCR, 0xff, fcr);
-+		if (ret)
-+			netif_err(db, drv, ndev, "%s: error %d update bits reg %02x\n",
-+				  __func__, ret, DM9051_FCR);
-+	}
-+}
-+
-+/* phy connect as poll mode
-+ */
-+static int dm9051_phy_connect(struct board_info *db)
-+{
-+	char phy_id[MII_BUS_ID_SIZE + 3];
-+
-+	snprintf(phy_id, MII_BUS_ID_SIZE + 3, PHY_ID_FMT,
-+		 db->mdiobus->id, DM9051_PHY_ID);
-+
-+	db->phydev = phy_connect(db->ndev, phy_id, dm9051_handle_link_change,
-+				 PHY_INTERFACE_MODE_MII);
-+	if (IS_ERR(db->phydev))
-+		return PTR_ERR(db->phydev);
-+	return 0;
-+}
-+
-+/* ethtool-ops
-+ */
-+static void dm9051_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
-+{
-+	strscpy(info->driver, DRVNAME_9051, sizeof(info->driver));
-+}
-+
-+static void dm9051_set_msglevel(struct net_device *ndev, u32 value)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+
-+	db->msg_enable = value;
-+}
-+
-+static u32 dm9051_get_msglevel(struct net_device *ndev)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+
-+	return db->msg_enable;
-+}
-+
-+static int dm9051_get_eeprom_len(struct net_device *dev)
-+{
-+	return 128;
-+}
-+
-+static int dm9051_get_eeprom(struct net_device *ndev,
-+			     struct ethtool_eeprom *ee, u8 *data)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	int offset = ee->offset;
-+	int len = ee->len;
-+	int i, ret;
-+
-+	if ((len | offset) & 1)
-+		return -EINVAL;
-+
-+	ee->magic = DM_EEPROM_MAGIC;
-+
-+	for (i = 0; i < len; i += 2) {
-+		ret = dm9051_map_eeread(db, (offset + i) / 2, data + i);
-+		if (ret)
-+			break;
-+	}
-+	return ret;
-+}
-+
-+static int dm9051_set_eeprom(struct net_device *ndev,
-+			     struct ethtool_eeprom *ee, u8 *data)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	int offset = ee->offset;
-+	int len = ee->len;
-+	int i, ret;
-+
-+	if ((len | offset) & 1)
-+		return -EINVAL;
-+
-+	if (ee->magic != DM_EEPROM_MAGIC)
-+		return -EINVAL;
-+
-+	for (i = 0; i < len; i += 2) {
-+		ret = dm9051_map_eewrite(db, (offset + i) / 2, data + i);
-+		if (ret)
-+			break;
-+	}
-+	return ret;
-+}
-+
-+static void dm9051_get_pauseparam(struct net_device *ndev,
-+				  struct ethtool_pauseparam *pause)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+
-+	*pause = db->eth_pause;
-+}
-+
-+static int dm9051_set_pauseparam(struct net_device *ndev,
-+				 struct ethtool_pauseparam *pause)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	u8 fcr = 0;
-+	int ret;
-+
-+	db->eth_pause = *pause;
-+
-+	if (pause->autoneg)
-+		db->phydev->autoneg = AUTONEG_ENABLE;
-+	else
-+		db->phydev->autoneg = AUTONEG_DISABLE;
-+
-+	if (pause->rx_pause)
-+		fcr |= FCR_BKPM | FCR_FLCE;
-+	if (pause->tx_pause)
-+		fcr |= FCR_TXPEN;
-+
-+	ret = regmap_update_bits(db->regmap_dm, DM9051_FCR, 0xff, fcr);
-+	if (ret)
-+		netif_err(db, drv, ndev, "%s: error %d update bits reg %02x\n",
-+			  __func__, ret, DM9051_FCR);
-+	return ret;
-+}
-+
-+static const struct ethtool_ops dm9051_ethtool_ops = {
-+	.get_drvinfo = dm9051_get_drvinfo,
-+	.get_link_ksettings = phy_ethtool_get_link_ksettings,
-+	.set_link_ksettings = phy_ethtool_set_link_ksettings,
-+	.get_msglevel = dm9051_get_msglevel,
-+	.set_msglevel = dm9051_set_msglevel,
-+	.nway_reset = phy_ethtool_nway_reset,
-+	.get_link = ethtool_op_get_link,
-+	.get_eeprom_len = dm9051_get_eeprom_len,
-+	.get_eeprom = dm9051_get_eeprom,
-+	.set_eeprom = dm9051_set_eeprom,
-+	.get_pauseparam = dm9051_get_pauseparam,
-+	.set_pauseparam = dm9051_set_pauseparam,
-+};
-+
-+static int dm9051_direct_reset_code(struct board_info *db)
-+{
-+	int ret;
-+
-+	db->bc.fifo_rst_counter++;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_NCR, NCR_RST); /* NCR reset */
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(db->regmap_dm, DM9051_MBNDRY, MBNDRY_BYTE); /* MemBound */
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(db->regmap_dm, DM9051_PPCR, PPCR_PAUSE_COUNT); /* Pause Count */
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(db->regmap_dm, DM9051_LMCR, db->lcr_all); /* LEDMode1 */
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(db->regmap_dm, DM9051_INTCR, INTCR_POL_LOW); /* INTCR */
-+}
-+
-+/* reset while rx error found
-+ */
-+static int dm9051_direct_fifo_reset(struct board_info *db)
-+{
-+	struct net_device *ndev = db->ndev;
-+	u8 fcr = 0;
-+	int ret;
-+
-+	ret = dm9051_direct_reset_code(db);
-+	if (ret)
-+		return ret;
-+
-+	if (db->eth_pause.rx_pause)
-+		fcr |= FCR_BKPM | FCR_FLCE;
-+	if (db->eth_pause.tx_pause)
-+		fcr |= FCR_TXPEN;
-+
-+	ret = regmap_write(db->regmap_dm, DM9051_FCR, fcr);
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(db->regmap_dm, DM9051_IMR, db->imr_all); /* rxp to 0xc00 */
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(db->regmap_dm, DM9051_RCR, db->rcr_all); /* enable rx all */
-+	if (ret)
-+		return ret;
-+
-+	netdev_dbg(ndev, " rxstatus_Er & rxlen_Er %d, RST_c %d\n",
-+		   db->bc.status_err_counter + db->bc.large_err_counter,
-+		   db->bc.fifo_rst_counter);
-+
-+	return ret;
-+}
-+
-+/* read packets from the fifo memory
-+ * return value,
-+ *  > 0 - read packet number, caller can repeat the rx operation
-+ *    0 - no error, caller need stop further rx operation
-+ *  -EBUSY - read data error, caller escape from rx operation
-+ */
-+static int dm9051_loop_rx(struct board_info *db)
-+{
-+	struct net_device *ndev = db->ndev;
-+	unsigned int rxbyte;
-+	int ret, rxlen;
-+	struct sk_buff *skb;
-+	u8 *rdptr;
-+	int scanrr = 0;
-+
-+	do {
-+		ret = regmap_noinc_read(db->regmap_dm, DM_SPI_MRCMDX, &rxbyte, 2);
-+		if (ret) {
-+			netif_err(db, drv, ndev, "%s: error %d noinc reading reg %02x, len %d\n",
-+				  __func__, ret, DM_SPI_MRCMDX, 2);
-+			return ret;
-+		}
-+
-+		if ((rxbyte & 0xff) != DM9051_PKT_RDY)
-+			break; /* exhaust-empty */
-+
-+		ret = regmap_noinc_read(db->regmap_dm, DM_SPI_MRCMD, &db->eth_rxhdr, DM_RXHDR_SIZE);
-+		if (ret)
-+			return ret;
-+
-+		ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
-+		if (ret)
-+			return ret;
-+
-+		rxlen = le16_to_cpu(db->eth_rxhdr.rxlen);
-+		if (db->eth_rxhdr.rxstatus & RSR_ERR_BITS || rxlen > DM9051_PKT_MAX) {
-+			netdev_dbg(ndev, "rxhdr-byte (%02x)\n",
-+				   db->eth_rxhdr.rxpktready);
-+
-+			if (db->eth_rxhdr.rxstatus & RSR_ERR_BITS) {
-+				db->bc.status_err_counter++;
-+				netdev_dbg(ndev, "check rxstatus-eror (%02x)\n",
-+					   db->eth_rxhdr.rxstatus);
-+			} else {
-+				db->bc.large_err_counter++;
-+				netdev_dbg(ndev, "check rxlen large-eror (%d > %d)\n",
-+					   rxlen, DM9051_PKT_MAX);
-+			}
-+			return dm9051_direct_fifo_reset(db);
-+		}
-+
-+		skb = dev_alloc_skb(rxlen);
-+		if (!skb) {
-+			ret = dm9051_map_dumpblk(db, DM_SPI_MRCMD, rxlen);
-+			if (ret)
-+				return ret;
-+			return scanrr;
-+		}
-+
-+		rdptr = skb_put(skb, rxlen - 4);
-+		ret = regmap_noinc_read(db->regmap_dm, DM_SPI_MRCMD, rdptr, rxlen);
-+		if (ret) {
-+			dev_kfree_skb(skb);
-+			return ret;
-+		}
-+
-+		ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
-+		if (ret)
-+			return ret;
-+
-+		skb->protocol = eth_type_trans(skb, db->ndev);
-+		if (db->ndev->features & NETIF_F_RXCSUM)
-+			skb_checksum_none_assert(skb);
-+		netif_rx_ni(skb);
-+		db->ndev->stats.rx_bytes += rxlen;
-+		db->ndev->stats.rx_packets++;
-+		scanrr++;
-+	} while (!ret);
-+
-+	return scanrr;
-+}
-+
-+/* transmit a packet,
-+ * return value,
-+ *   0 - succeed
-+ *  -ETIMEDOUT - timeout error
-+ */
-+static int dm9051_single_tx(struct board_info *db, u8 *buff, unsigned int len)
-+{
-+	int ret;
-+
-+	ret = dm9051_map_xmitpoll(db);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_noinc_write(db->regmap_dm, DM_SPI_MWCMD, buff, len);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_TXPLL, &len, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	return regmap_write(db->regmap_dm, DM9051_TCR, TCR_TXREQ);
-+}
-+
-+static int dm9051_loop_tx(struct board_info *db)
-+{
-+	struct net_device *ndev = db->ndev;
-+	int ntx = 0;
-+	int ret;
-+
-+	while (!skb_queue_empty(&db->txq)) {
-+		struct sk_buff *skb;
-+
-+		skb = skb_dequeue(&db->txq);
-+		if (skb) {
-+			ntx++;
-+			ret = dm9051_single_tx(db, skb->data, skb->len);
-+			dev_kfree_skb(skb);
-+			if (ret < 0)
-+				return 0;
-+			ndev->stats.tx_bytes += skb->len;
-+			ndev->stats.tx_packets++;
-+		}
-+
-+		if (netif_queue_stopped(ndev) &&
-+		    (skb_queue_len(&db->txq) < DM9051_TX_QUE_LO_WATER))
-+			netif_wake_queue(ndev);
-+	}
-+
-+	return ntx;
-+}
-+
-+static irqreturn_t dm9051_rx_threaded_irq(int irq, void *pw)
-+{
-+	struct board_info *db = pw;
-+	int result, result_tx;
-+
-+	mutex_lock(&db->spi_lockm);
-+	if (netif_carrier_ok(db->ndev)) {
-+		result = regmap_write(db->regmap_dm, DM9051_IMR, IMR_PAR); /* disable imr */
-+		if (result)
-+			goto spi_err;
-+
-+		do {
-+			result = dm9051_loop_rx(db); /* threaded irq rx */
-+			if (result < 0)
-+				goto spi_err;
-+			result_tx = dm9051_loop_tx(db); /* more tx better performance */
-+			if (result_tx < 0)
-+				goto spi_err;
-+		} while (result > 0);
-+
-+		result = regmap_write(db->regmap_dm, DM9051_IMR, db->imr_all); /* enable imr */
-+		if (result)
-+			goto spi_err;
-+	}
-+spi_err:
-+	mutex_unlock(&db->spi_lockm);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void dm9051_tx_delay(struct kthread_work *ws)
-+{
-+	struct board_info *db = container_of(ws, struct board_info, kw_tx);
-+	int result;
-+
-+	mutex_lock(&db->spi_lockm);
-+
-+	result = dm9051_loop_tx(db);
-+	if (result < 0)
-+		netdev_err(db->ndev, "transmit packet error\n");
-+
-+	mutex_unlock(&db->spi_lockm);
-+}
-+
-+static void dm9051_rxctl_delay(struct kthread_work *ws)
-+{
-+	struct board_info *db = container_of(ws, struct board_info, kw_rxctrl);
-+	struct net_device *ndev = db->ndev;
-+	int result;
-+
-+	mutex_lock(&db->spi_lockm);
-+	result = regmap_bulk_write(db->regmap_dmbulk, DM9051_PAR, ndev->dev_addr, ETH_ALEN);
-+	if (result < 0) {
-+		netif_err(db, drv, ndev, "%s: error %d bulk writing reg %02x, len %d\n",
-+			  __func__, result, DM9051_PAR, ETH_ALEN);
-+		goto spi_err;
-+	}
-+
-+	result = regmap_bulk_write(db->regmap_dmbulk, DM9051_MAR, db->hash_table, 8);
-+	if (result < 0) {
-+		netif_err(db, drv, ndev, "%s: error %d bulk writing reg %02x, len %d\n",
-+			  __func__, result, DM9051_MAR, 8);
-+		goto spi_err;
-+	}
-+
-+	result = regmap_write(db->regmap_dm, DM9051_RCR, db->rcr_all); /* rx enable */
-+	if (result)
-+		netif_err(db, drv, ndev, "%s: error %d write reg %02x\n",
-+			  __func__, result, DM9051_RCR);
-+spi_err:
-+	mutex_unlock(&db->spi_lockm);
-+}
-+
-+static int dm9051_all_start(struct board_info *db)
-+{
-+	int ret;
-+
-+	/* GPR power on of the internal phy
-+	 */
-+	ret = regmap_write(db->regmap_dm, DM9051_GPR, 0);
-+	if (ret)
-+		return ret;
-+
-+	/* The whole dm9051 chip registers could not be accessed within 1 ms
-+	 * after above GPR power on control
-+	 */
-+	mdelay(1);
-+
-+	ret = dm9051_direct_reset_code(db);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(db->regmap_dm, DM9051_IMR, db->imr_all); /* phyup, rxp to 0xc00 */
-+}
-+
-+static int dm9051_all_stop(struct board_info *db)
-+{
-+	int ret;
-+
-+	/* GPR power off of the internal phy,
-+	 * The internal phy still could be accessed after this GPR power off control
-+	 */
-+	ret = regmap_write(db->regmap_dm, DM9051_GPR, GPR_PHY_OFF);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(db->regmap_dm, DM9051_RCR, RCR_RX_DISABLE); /* rx disable */
-+}
-+
-+/* Open network device
-+ * Called when the network device is marked active, such as a user executing
-+ * 'ifconfig up' on the device
-+ */
-+static int dm9051_open(struct net_device *ndev)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	struct spi_device *spi = db->spidev;
-+	int ret;
-+
-+	db->imr_all = IMR_PAR | IMR_PRM;
-+	db->rcr_all = RCR_DIS_LONG | RCR_DIS_CRC | RCR_RXEN;
-+	db->lcr_all = LMCR_MODE1;
-+
-+	netif_wake_queue(ndev);
-+
-+	ndev->irq = spi->irq; /* by dts */
-+	ret = request_threaded_irq(spi->irq, NULL, dm9051_rx_threaded_irq,
-+				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+				   ndev->name, db);
-+	if (ret < 0) {
-+		netdev_err(ndev, "failed to get irq\n");
-+		return ret;
-+	}
-+
-+	phy_support_sym_pause(db->phydev); /* Enable support of sym pause */
-+	phy_start(db->phydev); /* it enclose with mutex_lock/mutex_unlock */
-+
-+	ret = dm9051_all_start(db);
-+	if (ret) {
-+		phy_stop(db->phydev);
-+		free_irq(spi->irq, db);
-+		netif_stop_queue(ndev);
-+		return ret;
-+	}
-+
-+	/* init pause param FlowCtrl */
-+	db->eth_pause.rx_pause = true;
-+	db->eth_pause.tx_pause = true;
-+	db->eth_pause.autoneg = AUTONEG_DISABLE;
-+
-+	if (db->phydev->autoneg)
-+		db->eth_pause.autoneg = AUTONEG_ENABLE;
-+
-+	return 0;
-+}
-+
-+/* Close network device
-+ * Called to close down a network device which has been active. Cancel any
-+ * work, shutdown the RX and TX process and then place the chip into a low
-+ * power state while it is not being used
-+ */
-+static int dm9051_stop(struct net_device *ndev)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+
-+	phy_stop(db->phydev);
-+	free_irq(db->spidev->irq, db);
-+	netif_stop_queue(ndev);
-+
-+	return dm9051_all_stop(db);
-+}
-+
-+/* event: play a schedule starter in condition
-+ */
-+static netdev_tx_t dm9051_start_xmit(struct sk_buff *skb, struct net_device *ndev)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+
-+	skb_queue_tail(&db->txq, skb); /* add to skb */
-+	if (skb_queue_len(&db->txq) > DM9051_TX_QUE_HI_WATER)
-+		netif_stop_queue(ndev); /* enforce limit queue size */
-+
-+	kthread_queue_work(&db->kw, &db->kw_tx);
-+
-+	return NETDEV_TX_OK;
-+}
-+
-+/* event: play with a schedule starter
-+ */
-+static void dm9051_set_multicast_list_schedule(struct net_device *ndev)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	u8 rcr = RCR_DIS_LONG | RCR_DIS_CRC | RCR_RXEN;
-+	struct netdev_hw_addr *ha;
-+	u32 hash_val;
-+
-+	/* rx control */
-+	if (ndev->flags & IFF_PROMISC) {
-+		rcr |= RCR_PRMSC;
-+		netdev_dbg(ndev, "set_multicast rcr |= RCR_PRMSC, rcr= %02x\n", rcr);
-+	}
-+
-+	if (ndev->flags & IFF_ALLMULTI) {
-+		rcr |= RCR_ALL;
-+		netdev_dbg(ndev, "set_multicast rcr |= RCR_ALLMULTI, rcr= %02x\n", rcr);
-+	}
-+
-+	db->rcr_all = rcr;
-+
-+	/* broadcast address */
-+	db->hash_table[0] = 0;
-+	db->hash_table[1] = 0;
-+	db->hash_table[2] = 0;
-+	db->hash_table[3] = 0x8000;
-+
-+	/* the multicast address in Hash Table : 64 bits */
-+	netdev_for_each_mc_addr(ha, ndev) {
-+		hash_val = ether_crc_le(ETH_ALEN, ha->addr) & 0x3f;
-+		db->hash_table[hash_val / 16] |= 1U << (hash_val % 16);
-+	}
-+	kthread_queue_work(&db->kw, &db->kw_rxctrl);
-+}
-+
-+/* event: write into the mac registers and eeprom directly
-+ */
-+static int dm9051_set_mac_address(struct net_device *ndev, void *p)
-+{
-+	struct board_info *db = to_dm9051_board(ndev);
-+	int ret;
-+
-+	ret = eth_mac_addr(ndev, p);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_PAR, ndev->dev_addr, ETH_ALEN);
-+	if (ret < 0)
-+		netif_err(db, drv, ndev, "%s: error %d bulk writing reg %02x, len %d\n",
-+			  __func__, ret, DM9051_PAR, ETH_ALEN);
-+
-+	return ret;
-+}
-+
-+/* netdev-ops
-+ */
-+static const struct of_device_id dm9051_match_table[] = {
-+	{ .compatible = "davicom,dm9051", },
-+	{}
-+};
-+
-+static const struct spi_device_id dm9051_id_table[] = {
-+	{ "dm9051", 0 },
-+	{}
-+};
-+
-+static
-+const struct net_device_ops dm9051_netdev_ops = {
-+	.ndo_open = dm9051_open,
-+	.ndo_stop = dm9051_stop,
-+	.ndo_start_xmit = dm9051_start_xmit,
-+	.ndo_set_rx_mode = dm9051_set_multicast_list_schedule,
-+	.ndo_validate_addr = eth_validate_addr,
-+	.ndo_set_mac_address = dm9051_set_mac_address,
-+};
-+
-+/* probe subs
-+ */
-+static void dm9051_operation_clear(struct board_info *db)
-+{
-+	db->bc.status_err_counter = 0;
-+	db->bc.large_err_counter = 0;
-+	db->bc.fifo_rst_counter = 0;
-+}
-+
-+static void dm9051_netdev(struct net_device *ndev)
-+{
-+	ndev->mtu = 1500;
-+	ndev->if_port = IF_PORT_100BASET;
-+	ndev->netdev_ops = &dm9051_netdev_ops;
-+	ndev->ethtool_ops = &dm9051_ethtool_ops;
-+}
-+
-+static int dm9051_map_init(struct spi_device *spi, struct board_info *db)
-+{
-+	/* create two regmap instances,
-+	 * run read/write and bulk_read/bulk_write individually,
-+	 * to resolve regmap execution confliction problem
-+	 */
-+	regconfigdm.lock_arg = db;
-+	db->regmap_dm = devm_regmap_init_spi(db->spidev, &regconfigdm);
-+
-+	if (IS_ERR(db->regmap_dm))
-+		return PTR_ERR_OR_ZERO(db->regmap_dm);
-+
-+	regconfigdmbulk.lock_arg = db;
-+	db->regmap_dmbulk = devm_regmap_init_spi(db->spidev, &regconfigdmbulk);
-+
-+	if (IS_ERR(db->regmap_dmbulk))
-+		return PTR_ERR_OR_ZERO(db->regmap_dmbulk);
-+
-+	return 0;
-+}
-+
-+static int dm9051_mdio_register(struct board_info *db)
-+{
-+	struct spi_device *spi = db->spidev;
-+	int ret;
-+
-+	db->mdiobus = devm_mdiobus_alloc(&spi->dev);
-+	if (!db->mdiobus)
-+		return -ENOMEM;
-+
-+	db->mdiobus->priv = db;
-+	db->mdiobus->read = dm9051_mdiobus_read;
-+	db->mdiobus->write = dm9051_mdiobus_write;
-+	db->mdiobus->name = "dm9051-mdiobus";
-+	db->mdiobus->phy_mask = (u32)~GENMASK(1, 1);
-+	db->mdiobus->parent = &spi->dev;
-+	snprintf(db->mdiobus->id, MII_BUS_ID_SIZE,
-+		 "dm9051-%s.%u", dev_name(&spi->dev), spi->chip_select);
-+
-+	ret = devm_mdiobus_register(&spi->dev, db->mdiobus);
-+	if (ret)
-+		dev_err(&spi->dev, "Could not register MDIO bus\n");
-+
-+	return 0;
-+}
-+
-+static int dm9051_probe(struct spi_device *spi)
-+{
-+	struct device *dev = &spi->dev;
-+	struct net_device *ndev;
-+	struct board_info *db;
-+	int ret = 0;
-+
-+	ndev = devm_alloc_etherdev(dev, sizeof(struct board_info));
-+	if (!ndev)
-+		return -ENOMEM;
-+
-+	SET_NETDEV_DEV(ndev, dev);
-+	dev_set_drvdata(dev, ndev);
-+	db = netdev_priv(ndev);
-+	db->msg_enable = 0;
-+	db->spidev = spi;
-+	db->ndev = ndev;
-+	dm9051_netdev(ndev);
-+
-+	mutex_init(&db->spi_lockm);
-+	mutex_init(&db->reg_mutex);
-+
-+	kthread_init_worker(&db->kw);
-+	kthread_init_work(&db->kw_rxctrl, dm9051_rxctl_delay);
-+	kthread_init_work(&db->kw_tx, dm9051_tx_delay);
-+
-+	db->kwr_task_kw = kthread_run(kthread_worker_fn, &db->kw, "dm9051");
-+	if (IS_ERR(db->kwr_task_kw))
-+		return PTR_ERR(db->kwr_task_kw);
-+
-+	ret = dm9051_map_init(spi, db);
-+	if (ret)
-+		goto err_stopthread;
-+
-+	ret = dm9051_map_chipid(db);
-+	if (ret)
-+		goto err_stopthread;
-+
-+	ret = dm9051_map_macaddr_init(ndev, db);
-+	if (ret < 0)
-+		goto err_stopthread;
-+
-+	ret = dm9051_mdio_register(db);
-+	if (ret)
-+		goto err_stopthread;
-+
-+	ret = dm9051_phy_connect(db);
-+	if (ret)
-+		goto err_stopthread;
-+
-+	dm9051_operation_clear(db);
-+
-+	ret = devm_register_netdev(dev, ndev);
-+	if (ret) {
-+		dev_err(dev, "failed to register network device\n");
-+		kthread_stop(db->kwr_task_kw);
-+		phy_disconnect(db->phydev);
-+		return ret;
-+	}
-+
-+	skb_queue_head_init(&db->txq);
-+	return 0;
-+
-+err_stopthread:
-+	kthread_stop(db->kwr_task_kw);
-+	return ret;
-+}
-+
-+static int dm9051_drv_remove(struct spi_device *spi)
-+{
-+	struct device *dev = &spi->dev;
-+	struct net_device *ndev = dev_get_drvdata(dev);
-+	struct board_info *db = to_dm9051_board(ndev);
-+
-+	kthread_stop(db->kwr_task_kw);
-+	phy_disconnect(db->phydev);
-+
-+	return 0;
-+}
-+
-+static struct spi_driver dm9051_driver = {
-+	.driver = {
-+		.name = DRVNAME_9051,
-+		.of_match_table = dm9051_match_table,
-+	},
-+	.probe = dm9051_probe,
-+	.remove = dm9051_drv_remove,
-+	.id_table = dm9051_id_table,
-+};
-+
-+module_spi_driver(dm9051_driver);
-+
-+MODULE_AUTHOR("Joseph CHANG <joseph_chang@davicom.com.tw>");
-+MODULE_DESCRIPTION("Davicom DM9051 network SPI driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/net/ethernet/davicom/dm9051.h b/drivers/net/ethernet/davicom/dm9051.h
-new file mode 100644
-index 000000000000..5f3fc7573dbc
---- /dev/null
-+++ b/drivers/net/ethernet/davicom/dm9051.h
-@@ -0,0 +1,159 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 Davicom Semiconductor,Inc.
-+ * Davicom DM9051 SPI Fast Ethernet Linux driver
-+ */
-+
-+#ifndef _DM9051_H_
-+#define _DM9051_H_
-+
-+#include <linux/netdevice.h>
-+#include <linux/mii.h>
-+#include <linux/types.h>
-+
-+#define DM9051_ID		0x9051
-+
-+#define DM9051_NCR		0x00
-+#define DM9051_NSR		0x01
-+#define DM9051_TCR		0x02
-+#define DM9051_RCR		0x05
-+#define DM9051_BPTR		0x08
-+#define DM9051_FCR		0x0A
-+#define DM9051_EPCR		0x0B
-+#define DM9051_EPAR		0x0C
-+#define DM9051_EPDRL		0x0D
-+#define DM9051_EPDRH		0x0E
-+#define DM9051_PAR		0x10
-+#define DM9051_MAR		0x16
-+#define DM9051_GPCR		0x1E
-+#define DM9051_GPR		0x1F
-+
-+#define DM9051_VIDL		0x28
-+#define DM9051_VIDH		0x29
-+#define DM9051_PIDL		0x2A
-+#define DM9051_PIDH		0x2B
-+#define DM9051_SMCR		0x2F
-+#define	DM9051_ATCR		0x30
-+#define	DM9051_SPIBCR		0x38
-+#define DM9051_INTCR		0x39
-+#define DM9051_PPCR		0x3D
-+
-+#define DM9051_MPCR		0x55
-+#define DM9051_LMCR		0x57
-+#define DM9051_MBNDRY		0x5E
-+
-+#define DM9051_MRRL		0x74
-+#define DM9051_MRRH		0x75
-+#define DM9051_MWRL		0x7A
-+#define DM9051_MWRH		0x7B
-+#define DM9051_TXPLL		0x7C
-+#define DM9051_TXPLH		0x7D
-+#define DM9051_ISR		0x7E
-+#define DM9051_IMR		0x7F
-+
-+#define DM_SPI_MRCMDX		0x70
-+#define DM_SPI_MRCMD		0x72
-+#define DM_SPI_MWCMD		0x78
-+
-+#define DM_SPI_WR		0x80
-+
-+/* dm9051 Ethernet
-+ */
-+/* 0x00 */
-+#define NCR_WAKEEN		BIT(6)
-+#define NCR_FDX			BIT(3)
-+#define NCR_RST			BIT(0)
-+/* 0x01 */
-+#define NSR_SPEED		BIT(7)
-+#define NSR_LINKST		BIT(6)
-+#define NSR_WAKEST		BIT(5)
-+#define NSR_TX2END		BIT(3)
-+#define NSR_TX1END		BIT(2)
-+/* 0x02 */
-+#define TCR_DIS_JABBER_TIMER	BIT(6) /* for Jabber Packet support */
-+#define TCR_TXREQ		BIT(0)
-+/* 0x05 */
-+#define RCR_DIS_WATCHDOG_TIMER	BIT(6)  /* for Jabber Packet support */
-+#define RCR_DIS_LONG		BIT(5)
-+#define RCR_DIS_CRC		BIT(4)
-+#define RCR_ALL			BIT(3)
-+#define RCR_PRMSC		BIT(1)
-+#define RCR_RXEN		BIT(0)
-+#define RCR_RX_DISABLE		(RCR_DIS_LONG | RCR_DIS_CRC)
-+/* 0x06 */
-+#define RSR_RF			BIT(7)
-+#define RSR_MF			BIT(6)
-+#define RSR_LCS			BIT(5)
-+#define RSR_RWTO		BIT(4)
-+#define RSR_PLE			BIT(3)
-+#define RSR_AE			BIT(2)
-+#define RSR_CE			BIT(1)
-+#define RSR_FOE			BIT(0)
-+#define	RSR_ERR_BITS		(RSR_RF | RSR_LCS | RSR_RWTO | RSR_PLE | \
-+				 RSR_AE | RSR_CE | RSR_FOE)
-+/* 0x0A */
-+#define FCR_TXPEN		BIT(5)
-+#define FCR_BKPM		BIT(3)
-+#define FCR_FLCE		BIT(0)
-+#define FCR_RXTX_ENABLE		(FCR_TXPEN | FCR_BKPM | FCR_FLCE)
-+/* 0x0B */
-+#define EPCR_WEP		BIT(4)
-+#define EPCR_EPOS		BIT(3)
-+#define EPCR_ERPRR		BIT(2)
-+#define EPCR_ERPRW		BIT(1)
-+#define EPCR_ERRE		BIT(0)
-+/* 0x1E */
-+#define GPCR_GEP_CNTL		BIT(0)
-+/* 0x1F */
-+#define GPR_PHY_OFF		BIT(0)
-+/* 0x30 */
-+#define	ATCR_AUTO_TX		BIT(7)
-+/* 0x39 */
-+#define INTCR_POL_LOW		BIT(0)
-+#define INTCR_POL_HIGH		(0 << 0)
-+/* 0x3D */
-+/* Pause Packet Control Register - default = 1 */
-+#define PPCR_PAUSE_COUNT	0x08
-+/* 0x55 */
-+#define MPCR_RSTTX		BIT(1)
-+#define MPCR_RSTRX		BIT(0)
-+/* 0x57 */
-+/* LEDMode Control Register - LEDMode1 */
-+/* Value 0x81 : bit[7] = 1, bit[2] = 0, bit[1:0] = 01b */
-+#define LMCR_NEWMOD		BIT(7)
-+#define LMCR_TYPED1		BIT(1)
-+#define LMCR_TYPED0		BIT(0)
-+#define LMCR_MODE1		(LMCR_NEWMOD | LMCR_TYPED0)
-+/* 0x5E */
-+#define MBNDRY_BYTE		BIT(7)
-+/* 0xFE */
-+#define ISR_MBS			BIT(7)
-+#define ISR_ROOS		BIT(3)
-+#define ISR_ROS			BIT(2)
-+#define ISR_PTS			BIT(1)
-+#define ISR_PRS			BIT(0)
-+#define ISR_CLR_STATUS		(ISR_ROOS | ISR_ROS | ISR_PTS | ISR_PRS)
-+/* 0xFF */
-+#define IMR_PAR			BIT(7)
-+#define IMR_LNKCHGI		BIT(5)
-+#define IMR_PTM			BIT(1)
-+#define IMR_PRM			BIT(0)
-+
-+/* Const
-+ */
-+#define DM9051_PHY_ID			1	/* PHY id */
-+#define DM9051_PHY			0x40	/* PHY address 0x01 */
-+#define DM9051_PKT_RDY			0x01	/* Packet ready to receive */
-+#define DM9051_PKT_MAX			1536	/* Received packet max size */
-+#define DM9051_TX_QUE_HI_WATER		50
-+#define DM9051_TX_QUE_LO_WATER		25
-+#define DM_EEPROM_MAGIC			0x9051
-+
-+#define	DM_RXHDR_SIZE			sizeof(struct dm9051_rxhdr)
-+
-+static inline struct board_info *to_dm9051_board(struct net_device *ndev)
-+{
-+	return netdev_priv(ndev);
-+}
-+
-+#endif /* _DM9051_H_ */
--- 
-2.20.1
+On Fri, 2022-01-21 at 15:19 +0800, Axe Yang wrote:
+> Add support for eint IRQ when MSDC is used as an SDIO host. This
+> feature requires SDIO device support async IRQ function. With this
+> feature, SDIO host can be awakened by SDIO card in suspend state,
+> without additional pin.
+> 
+> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+> resume, switch GPIO function back to DAT1 mode then turn on clock.
+> 
+> Some device tree property should be added or modified in MSDC node
+> to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
+> are mandatory. And cap-sdio-async-irq flag is necessary since this
+> feature depends on asynchronous interrupt:
+>         &mmcX {
+>                 ...
+>                 pinctrl-names = "default", "state_uhs", "state_eint",
+>                                 "state_dat1";
+>                 ...
+>                 pinctrl-2 = <&mmc2_pins_eint>;
+>                 pinctrl-3 = <&mmc2_pins_dat1>;
+>                 ...
+>                 cap-sdio-async-irq;
+>                 ...
+>         };
+> 
+> Co-developed-by: Yong Mao <yong.mao@mediatek.com>
+> Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+Acked-by: Chaotian Jing <chaotian.jing@mediatek.com>
+> ---
+>  drivers/mmc/host/mtk-sd.c | 123 +++++++++++++++++++++++++++++++++++-
+> --
+>  1 file changed, 115 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index 65037e1d7723..f8e38228d810 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2014-2015 MediaTek Inc.
+> + * Copyright (c) 2014-2015, 2022 MediaTek Inc.
+>   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
+>   */
+>  
+> @@ -9,6 +9,7 @@
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/ioport.h>
+>  #include <linux/irq.h>
+> @@ -440,8 +441,12 @@ struct msdc_host {
+>  	struct pinctrl *pinctrl;
+>  	struct pinctrl_state *pins_default;
+>  	struct pinctrl_state *pins_uhs;
+> +	struct pinctrl_state *pins_eint;
+> +	struct pinctrl_state *pins_dat1;
+>  	struct delayed_work req_timeout;
+>  	int irq;		/* host interrupt */
+> +	int eint_irq;		/* device interrupt */
+> +	int sdio_irq_cnt;	/* irq enable cnt */
+>  	struct reset_control *reset;
+>  
+>  	struct clk *src_clk;	/* msdc source clock */
+> @@ -465,6 +470,7 @@ struct msdc_host {
+>  	bool hs400_tuning;	/* hs400 mode online tuning */
+>  	bool internal_cd;	/* Use internal card-detect logic */
+>  	bool cqhci;		/* support eMMC hw cmdq */
+> +	bool sdio_eint_ready;	/* Ready to support SDIO eint
+> interrupt */
+>  	struct msdc_save_para save_para; /* used when gate HCLK */
+>  	struct msdc_tune_para def_tune_para; /* default tune setting */
+>  	struct msdc_tune_para saved_tune_para; /* tune result of
+> CMD21/CMD19 */
+> @@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct
+> mmc_host *mmc, int enb)
+>  	__msdc_enable_sdio_irq(host, enb);
+>  	spin_unlock_irqrestore(&host->lock, flags);
+>  
+> -	if (enb)
+> -		pm_runtime_get_noresume(host->dev);
+> -	else
+> -		pm_runtime_put_noidle(host->dev);
+> +	if (mmc->card && !mmc->card->cccr.enable_async_irq) {
+> +		if (enb)
+> +			pm_runtime_get_noresume(host->dev);
+> +		else
+> +			pm_runtime_put_noidle(host->dev);
+> +	}
+>  }
+>  
+>  static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
+> @@ -2461,6 +2469,48 @@ static const struct mmc_host_ops mt_msdc_ops =
+> {
+>  	.hw_reset = msdc_hw_reset,
+>  };
+>  
+> +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
+> +{
+> +	struct msdc_host *host = dev_id;
+> +	struct mmc_host *mmc = mmc_from_priv(host);
+> +
+> +	spin_lock(&host->lock);
+> +	if (likely(host->sdio_irq_cnt > 0)) {
+> +		disable_irq_nosync(host->eint_irq);
+> +		disable_irq_wake(host->eint_irq);
+> +		host->sdio_irq_cnt--;
+> +	}
+> +	spin_unlock(&host->lock);
+> +
+> +	sdio_signal_irq(mmc);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int msdc_request_dat1_eint_irq(struct msdc_host *host)
+> +{
+> +	struct gpio_desc *desc;
+> +	int irq, ret;
+> +
+> +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
+> +	if (IS_ERR(desc))
+> +		return PTR_ERR(desc);
+> +
+> +	irq = gpiod_to_irq(desc);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	ret = devm_request_threaded_irq(host->dev, irq, NULL,
+> msdc_sdio_eint_irq,
+> +					IRQF_TRIGGER_LOW | IRQF_ONESHOT
+> | IRQF_NO_AUTOEN,
+> +					"sdio-eint", host);
+> +	if (ret)
+> +		return ret;
+> +
+> +	host->eint_irq = irq;
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct cqhci_host_ops msdc_cmdq_ops = {
+>  	.enable         = msdc_cqe_enable,
+>  	.disable        = msdc_cqe_disable,
+> @@ -2631,6 +2681,23 @@ static int msdc_drv_probe(struct
+> platform_device *pdev)
+>  		goto host_free;
+>  	}
+>  
+> +	if (!(mmc->caps2 & MMC_CAP2_NO_SDIO) && (mmc->caps2 &
+> MMC_CAP2_SDIO_ASYNC_IRQ)) {
+> +		/* Support for SDIO eint irq */
+> +		host->pins_eint = pinctrl_lookup_state(host->pinctrl,
+> "state_eint");
+> +		if (IS_ERR(host->pins_eint)) {
+> +			dev_dbg(&pdev->dev, "Cannot find pinctrl
+> eint!\n");
+> +		} else {
+> +			host->pins_dat1 = pinctrl_lookup_state(host-
+> >pinctrl, "state_dat1");
+> +			if (IS_ERR(host->pins_dat1)) {
+> +				ret = dev_err_probe(&pdev->dev,
+> PTR_ERR(host->pins_dat1),
+> +						    "Cannot find
+> pinctrl dat1!\n");
+> +				goto host_free;
+> +			}
+> +
+> +			host->sdio_eint_ready = true;
+> +		}
+> +	}
+> +
+>  	msdc_of_property_parse(pdev, host);
+>  
+>  	host->dev = &pdev->dev;
+> @@ -2722,6 +2789,16 @@ static int msdc_drv_probe(struct
+> platform_device *pdev)
+>  	if (ret)
+>  		goto release;
+>  
+> +	if (host->sdio_eint_ready) {
+> +		ret = msdc_request_dat1_eint_irq(host);
+> +		if (ret) {
+> +			dev_err(host->dev, "Failed to register data1
+> eint irq!\n");
+> +			goto release;
+> +		}
+> +
+> +		pinctrl_select_state(host->pinctrl, host->pins_dat1);
+> +	}
+> +
+>  	pm_runtime_set_active(host->dev);
+>  	pm_runtime_set_autosuspend_delay(host->dev,
+> MTK_MMC_AUTOSUSPEND_DELAY);
+>  	pm_runtime_use_autosuspend(host->dev);
+> @@ -2843,8 +2920,22 @@ static int __maybe_unused
+> msdc_runtime_suspend(struct device *dev)
+>  {
+>  	struct mmc_host *mmc = dev_get_drvdata(dev);
+>  	struct msdc_host *host = mmc_priv(mmc);
+> +	unsigned long flags;
+>  
+>  	msdc_save_reg(host);
+> +
+> +	if (host->sdio_eint_ready) {
+> +		disable_irq(host->irq);
+> +		pinctrl_select_state(host->pinctrl, host->pins_eint);
+> +		spin_lock_irqsave(&host->lock, flags);
+> +		if (host->sdio_irq_cnt == 0) {
+> +			enable_irq(host->eint_irq);
+> +			enable_irq_wake(host->eint_irq);
+> +			host->sdio_irq_cnt++;
+> +		}
+> +		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
+> +		spin_unlock_irqrestore(&host->lock, flags);
+> +	}
+>  	msdc_gate_clock(host);
+>  	return 0;
+>  }
+> @@ -2853,6 +2944,7 @@ static int __maybe_unused
+> msdc_runtime_resume(struct device *dev)
+>  {
+>  	struct mmc_host *mmc = dev_get_drvdata(dev);
+>  	struct msdc_host *host = mmc_priv(mmc);
+> +	unsigned long flags;
+>  	int ret;
+>  
+>  	ret = msdc_ungate_clock(host);
+> @@ -2860,10 +2952,25 @@ static int __maybe_unused
+> msdc_runtime_resume(struct device *dev)
+>  		return ret;
+>  
+>  	msdc_restore_reg(host);
+> +
+> +	if (host->sdio_eint_ready) {
+> +		spin_lock_irqsave(&host->lock, flags);
+> +		if (host->sdio_irq_cnt > 0) {
+> +			disable_irq_nosync(host->eint_irq);
+> +			disable_irq_wake(host->eint_irq);
+> +			host->sdio_irq_cnt--;
+> +			sdr_set_bits(host->base + SDC_CFG,
+> SDC_CFG_SDIOIDE);
+> +		} else {
+> +			sdr_clr_bits(host->base + MSDC_INTEN,
+> MSDC_INTEN_SDIOIRQ);
+> +		}
+> +		spin_unlock_irqrestore(&host->lock, flags);
+> +		pinctrl_select_state(host->pinctrl, host->pins_uhs);
+> +		enable_irq(host->irq);
+> +	}
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused msdc_suspend(struct device *dev)
+> +static int __maybe_unused msdc_suspend_noirq(struct device *dev)
+>  {
+>  	struct mmc_host *mmc = dev_get_drvdata(dev);
+>  	int ret;
+> @@ -2877,13 +2984,13 @@ static int __maybe_unused msdc_suspend(struct
+> device *dev)
+>  	return pm_runtime_force_suspend(dev);
+>  }
+>  
+> -static int __maybe_unused msdc_resume(struct device *dev)
+> +static int __maybe_unused msdc_resume_noirq(struct device *dev)
+>  {
+>  	return pm_runtime_force_resume(dev);
+>  }
+>  
+>  static const struct dev_pm_ops msdc_dev_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq,
+> msdc_resume_noirq)
+>  	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume,
+> NULL)
+>  };
+>  
 

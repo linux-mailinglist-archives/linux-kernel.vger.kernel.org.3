@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DBE49EA71
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0712E49EA73
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244527AbiA0SiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S244830AbiA0Sl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiA0SiS (ORCPT
+        with ESMTP id S237215AbiA0SlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:38:18 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2984C061714;
-        Thu, 27 Jan 2022 10:38:18 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        Thu, 27 Jan 2022 13:41:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3092C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:41:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 7D30037C;
-        Thu, 27 Jan 2022 18:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7D30037C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1643308698; bh=VSy0e4wWqMfsYR4i7qNPEXGEhCC4zwtpbTZT6TbNb2c=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=g3w7qv7/QTsmYWH7cJjp2KypLonwoXl29osGTxOQ/1806GTPjOOen9yEr0Vkin3AA
-         2Ee/N3go8KYh0Pp5ZvfCoPJ6VTAdh6c/tpV/KF2OGXHUQN3LQHJnXG6fpKZF6V47nn
-         0tREePGb7VUKIbuYH4Tbh1FlEGNC6bUc34/Ppvc4/BotWyFLOTb9NXsSm2EhSIrthu
-         mA1B0wcCMdRcOXh2OKQkJFk79BNLLs8pHz1AF2T0X8vebP6hs1BKvc6e4/1t0WhkcK
-         Pvc2e3gVz5882+Hn7OarFMP7WxjCh1KfsUg/yfGgxgPwEfvPHvXVaZK44UfUaI+p5t
-         bIxtFgE+q3dOg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Alex Shi <seakeel@gmail.com>,
-        teng sterling <sterlingteng@gmail.com>
-Cc:     yong w <yongw.pur@gmail.com>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wang.yong12@zte.com.cn,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] docs/zh_CN: Update zh_CN/accounting/delay-accounting.rst
-In-Reply-To: <CAJy-Amne22+2cApoeEAGSc7d7ppSQja7pLX6SY_3+0wr8i3Asw@mail.gmail.com>
-References: <1642003482-48935-1-git-send-email-wang.yong12@zte.com.cn>
- <CAMU9jJquKLfzLOjN3xTLHgPJFWONpeVgUDG-0vsf_8ia3r3ALQ@mail.gmail.com>
- <CAOH5QeBxnK-vOwVh9HNeu5PjMPJrHtWCyTK_y43iCbfzN+aoEg@mail.gmail.com>
- <CAOH5QeAka4QsLCOHaNK8NBp1BUFsu3HqEqiOhWOewabA58fVqw@mail.gmail.com>
- <CAMU9jJr4A0jsZGAqdOUTc-gBeshCgPAS=2Vvubs_kmsJSegzkQ@mail.gmail.com>
- <CAJy-Amne22+2cApoeEAGSc7d7ppSQja7pLX6SY_3+0wr8i3Asw@mail.gmail.com>
-Date:   Thu, 27 Jan 2022 11:38:49 -0700
-Message-ID: <87y231qb0m.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62E4161CCC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AEDC340E4;
+        Thu, 27 Jan 2022 18:41:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643308881;
+        bh=Xf/k/gcASUXDIYWT7wBXlpbc7n2efn52kakfZsVCrAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pIwBHjh5UcXHU6lWF/lWC6HTDt+N9AWkV73bbweknJu26bcl8l4stIa6rS2oKPP56
+         7oMH10l17svk9/+Gl2/1q+blINezm8bqdXpcV89wfSrH8/Y1LK08djeQ5tWaEodDUD
+         RtkwnUPAa1F3GGhcNCOP4OTtmVB0homm6V/wQ/4s=
+Date:   Thu, 27 Jan 2022 19:41:18 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hideki Yamane <henrich@iijmio-mail.jp>
+Cc:     Takashi Iwai <tiwai@suse.de>, Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/4] firmware: Add ZSTD-compressed file support
+Message-ID: <YfLnTm7L3m6jEB+4@kroah.com>
+References: <20210127154939.13288-1-tiwai@suse.de>
+ <YBGeXDTEy8myghot@kroah.com>
+ <20220128032213.c93b56aa2ea1c77e34b28290@iijmio-mail.jp>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128032213.c93b56aa2ea1c77e34b28290@iijmio-mail.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alex Shi <seakeel@gmail.com> writes:
+On Fri, Jan 28, 2022 at 03:22:13AM +0900, Hideki Yamane wrote:
+> On Wed, 27 Jan 2021 18:09:48 +0100
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote: > 
+> > > Currently, I have no idea whether any distro would use ZSTD files for
+> > > firmware files in near future, though.  That's the reason of this
+> > > patch set being an RFC for now.
+> > 
+> > Looks sane enough to me, if we have a real user, I see no reason why to
+> > not merge this.
+> 
+>  Just curious, any progress for this?
 
-> Right. The better way is asking Yang Yang to give a reviewed-by in
-> mailing list next time. Otherwise, the private tag can't give a good
-> support.
-
-Agreed with that.
-
-> for this patch. Reviewed-by: Alex Shi <alexs@kernel.org>
-
-Another nice rule of thumb: put Reviewed-by on its own line so that b4
-picks it up :)
-
-Patch applied, thanks.
-
-jon
+What is "this"?  You are responding to a year-old email message :)

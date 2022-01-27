@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B96C49E44F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1D249E44E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242258AbiA0OL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:11:57 -0500
-Received: from mail-eopbgr70070.outbound.protection.outlook.com ([40.107.7.70]:39551
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        id S242254AbiA0OLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:11:54 -0500
+Received: from mail-eopbgr60063.outbound.protection.outlook.com ([40.107.6.63]:13446
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237306AbiA0OLx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S240327AbiA0OLx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 09:11:53 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GLuuVUBYOYvtp85VH8OOwtUe4v7TfUzPK6+bJiWB1o4zSOpOpibVjCN5Cvh+9dPL9Am8aGDsKM4OaNyYsFS3J47L7zjIjDdDyMC6IkQvBlw1Af1RK/p4ybHb+JoAWm350HAibkPCBUFsqmU+cCI7TncbhEpsL/NY0E2tVK2onvp1InlzNRKSMQizPQRG5qXjSIxKeasPh01JYRhm5HVX1InikIX3EveznvNOIoH7onRq8Gv5qmyotNZfkVegHu6TWdjIZp0o41TjEcyEsQ+Xn3snK/HevSZGjy5tBLjxoH5p6w4UVZfYHyMkr6U/Hz4jnUxKMDSlO0deR0FjJe/Lcg==
+ b=iP224rJ1iKo5uebGur37zbgjPFXqTtat01jwhe5pt1wUh6c1ETpx9rFCRLHD/BtljDGOnfkNQFnLa1rRrIQH5Dp16LpdrOEr5tXKWcReKC7buGRXrxp5zKE56Vtd82oE77TGpBJDNPTzmfR2aki+zp7GfO5dxuRwE6KfnCNGZGusnaBKEvqTy9zODttKcMZmOajEa+zxULYT9AnHzjMeNzDaEAT7eqtToHD0yFqthTU3r/cm1CpuVvoTVPRfBB0FyReVq3/HlWEnebyuDrpcN8861lF34IooTCGJ/XuskGTBdK7sg2+Wm63L1/XDSoc/a0CbjEF8IQE6LTPS3ZYcdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TRc5R1X4Cvg8rNGNUpZOcSFll5ZvlXEO7Q+N5Nfr+7o=;
- b=iqtY4kHcgxzENrw08CGHEJXK4PQf8yY9IUbIUjWQlwoFax5U0+JrXbjEoZVL3+IB62edFbGoX6JE32sxHFPb3Hn/Vm5Z9iuIdmRexS50BCIeyojjgrS2fJe20uex+PH5qjnEA6cY+DnzryIMGbVw8P4A+WJHIb3xVkvhDwX6IjT2/28F+v/Qswm4FtM7jnI2o9Y8PAPk5gvXHkAr0CRopuZyU2BF/WySZG93ljaKuJgjAGLwcAIhYVuiFxyOiMHmXuxK+jl6IYL2APDpB6MfjUHh+HXChi0Y38l5S5znG0Q3YJWOwqBrf7B3dGdP9lU1MD+tKlT9rejFhT7CJrUdtg==
+ bh=WyR3Oyi57e7oEqMudDoWB9C0T2fNYhrAtyBxvI7Yu70=;
+ b=Hc/kJlIaTjuS1b+ZMN0UFTpPPCKW5tM0IECilkpK12qG/6T8VJiutM5Zor2D51g189/BKllTmxNuaQGQbSY2Edfg9KZ4EoaDUNdmhAnXw4zUGx/ERTAEpZzUUS2VQIjcTYINJCEKQiDoAZFvaTne+klk2spMBp41VHQI+K8uDx1BqkCP9N9QDWzqp1kkg4hTD1Pl2z7ChElFbCZRrAj4zS9jhB5MoeAMeYBnitWu+SoD/TIIJ6dQl68B+nV9leSQjxksMYYj7juYxr7rwHJXxUsjh0tR1dAMdRzlOsWEv+YaenHAGmn/8ZjLpmL7Ytasr7O4ajXmoTD8OlzPWGSL8w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TRc5R1X4Cvg8rNGNUpZOcSFll5ZvlXEO7Q+N5Nfr+7o=;
- b=FJGnPGgw6n4US37/gBC9xJT++Ux+EAhcHeYBVJaP7eGhO+FPljs7nctN1DFHYNE4PaHIaxF/soIVP7+R6Aiy1EmxDKdog2GZiLoqyVt1QEvHu8YctUbTw2jRILPhlmM/xJmKwXfn1vXRl4U3SkQEfaaCOSD2S5fqcG3snpD4dzM=
+ bh=WyR3Oyi57e7oEqMudDoWB9C0T2fNYhrAtyBxvI7Yu70=;
+ b=rnJmIfAc+9ChoO2VnbzaN5eX8hiKQGU7SWhFQgIpBO+g7vuaSUdroizv2aqUCr8/PtVFrziJTfPPSgaSFvHhWDnLk+f8dSc1qN4oZrRm+wCaTj/zxQpwb8q3HTxD09FoJF9LISJhrs63eylGcbt+fLfF3EbsPFmfIsMH6VQsdVg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AS8PR04MB9208.eurprd04.prod.outlook.com (2603:10a6:20b:44f::20) with
+ by AM6PR04MB4615.eurprd04.prod.outlook.com (2603:10a6:20b:24::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Thu, 27 Jan
- 2022 14:11:47 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Thu, 27 Jan
+ 2022 14:11:48 +0000
 Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
  ([fe80::f853:4e9a:7ab6:dbf7]) by VI1PR04MB4688.eurprd04.prod.outlook.com
  ([fe80::f853:4e9a:7ab6:dbf7%6]) with mapi id 15.20.4930.015; Thu, 27 Jan 2022
- 14:11:46 +0000
+ 14:11:48 +0000
 From:   Abel Vesa <abel.vesa@nxp.com>
 To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -48,11 +48,13 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Frank Li <frank.li@nxp.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: [PATCH 1/2] arm: dts: imx7: Use audio_mclk_post_div instead audio_mclk_root_clk
-Date:   Thu, 27 Jan 2022 16:10:51 +0200
-Message-Id: <20220127141052.1900174-1-abel.vesa@nxp.com>
+        linux-clk@vger.kernel.org, David Wolfe <david.wolfe@nxp.com>
+Subject: [PATCH 2/2] clk: imx: Remove audio_mclk_root_clk
+Date:   Thu, 27 Jan 2022 16:10:52 +0200
+Message-Id: <20220127141052.1900174-2-abel.vesa@nxp.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220127141052.1900174-1-abel.vesa@nxp.com>
+References: <20220127141052.1900174-1-abel.vesa@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: VI1PR08CA0178.eurprd08.prod.outlook.com
@@ -60,211 +62,82 @@ X-ClientProxiedBy: VI1PR08CA0178.eurprd08.prod.outlook.com
  (2603:10a6:803:6a::30)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56c2441e-6d44-4a1c-4f37-08d9e19ef36f
-X-MS-TrafficTypeDiagnostic: AS8PR04MB9208:EE_
-X-Microsoft-Antispam-PRVS: <AS8PR04MB9208F2FFC639BC2FF9A74885F6219@AS8PR04MB9208.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Office365-Filtering-Correlation-Id: be5d8fff-160e-4216-a76c-08d9e19ef40c
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4615:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR04MB4615F194FBA985ED3BF31696F6219@AM6PR04MB4615.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e/3OoIdLwZZR6AuyEoPFiXUBufCHec88kbr3ZTZqxxr3hmbQ5s27pskqJDv3REKT2dTYWGQcGIk8HiMAp/1R+iiONP6xlE+KxyxIj4otEyojYKz42SOqfvP8AzWxSAqp1nLImLkW7uLs5hB3nhNclc1FcUeGfadV5SuBhD2AptHglqiaVwSnDVV72y5lahl6c5HLImwVti0lyNHyz/j3uiC823zc488/vsTAV6BHuXD3qt/dbnW4jrzwoWRHbKg8xdhdmPi6a4v8VPq2n7UIvsq7Z2l6saOdzNwpe0+hjuggipH+8H5gvela5On4C4GzJ73Z9/SPx23ieoCvOs06I92geE40vl+bQRLGz6ofgeRkn0okHW1HN7wc2o1OC4Nj7Z4W5dLEo6El7o7zk9mnpbFzWznEqIbxiCFXWPrwGViRhrZtBysLexowVMZIieAx2eKYC+KBU9qbQeJfsZmbP4YjfXX/yo/cySLaJjsEc0U0CRORU0hH5w8RDIebvWWQMwlLqg/SHuD0ytb260BOGCcF5QOAF6y3IIsuJ46BM2tyaCBeogy0LkyolIfZYX2OE+SeIy6ZcKLGbyCs4Ixr30ZFi1rGTpvlcjnNWmecAnHREhFOOa2dhyXlchhCf/peGYeYnBSV/fHIsJfv1TXBO1oRnt8CutoLASHFMNQnSkeDd5XxadROyCLUWI8w6Ta+/VZyNdFOMUaxT5fqkCOTUw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(86362001)(110136005)(66946007)(83380400001)(316002)(38100700002)(52116002)(26005)(186003)(38350700002)(2616005)(6506007)(1076003)(4326008)(6666004)(66556008)(8676002)(66476007)(8936002)(508600001)(5660300002)(6512007)(6486002)(2906002)(36756003)(7416002)(44832011)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: b0Gq+NJ89bCNosec7kxlvc1okre9tBdFdY1xlLgrcvA3SnA2STZxFkzslpkTjmGIxqvtRsKCuCE9zdcWsz1nOGySx0U/JJNox39DrP80eiV6rCTXzWwcMsj8ZeYaps73hUEgNFQh74f30GGQl1/njhzNakPHvMp8VsDtg4aiQbqYnUXxNBcMaas9ut+93JBGDqW6iXKPxD/LZSA38/Ks82kBmg95I31ck6q/ENRB3V90NAA60XFOLI23tnVU6DJ6TFU9BK9h+yP7KkSy2Aqz9l2dgezzTEUe4bygfYQL/dBtPgpszIBkWYRTac8U5iEXArCXgRBG98Xk2GU5+ov6OJW3ejAJVRs9Cbr3/VmmQZadNnfF1ZkzLA5bgY7Ui0oa6GyCJjgBWv65Hb006TAz+OIBuWFwuf8WVPMXVBAYdhSoSWz/DVXoidANB50ZwEl5RgHti8iYIFvfzmVyBVl098DrqBFMIXvhoPy0PpywAcueWjIYVXKAsHNTBJEtgZ6lzaR0Or4HrpwwCOv++Ksx6uiPaUweSgq8uGhsT3A8MXuOvPawTWNvV+GOLUfHGnnVQed+PTzYyG6+QuRnbx5w99Rm3gCl+HBVB6ChOo8sVG6qIpJRLIYlMr3T3SktX43fZRSrerQyfL4mXEcIhQd32ywCtCXTLtaKIjyRYjHRNbktnPAJMitMLf/EGdS/jC6t0kDFF7g5xkeSCeVobLHT3w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(7416002)(66556008)(36756003)(316002)(54906003)(2616005)(6512007)(38350700002)(38100700002)(508600001)(5660300002)(83380400001)(1076003)(6506007)(52116002)(66946007)(6486002)(44832011)(186003)(2906002)(6666004)(26005)(8676002)(86362001)(8936002)(66476007)(110136005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zxUNcF3zaNScPAgzBr2sBVyY45/DXRuGt/ZCUq2bF9ZzTV1P3TuqipUp+8yC?=
- =?us-ascii?Q?w7G9gQgiECVICX7ZGtl4NAM/kljYsDAm/cAjJaeSAieUTxqQsBaNCCsD76rk?=
- =?us-ascii?Q?ymyNnkAh3dBEU42Nd7oFmpL+/MG4Ze0j5GoD8ki/FWg35fSFEXlskSmRieE0?=
- =?us-ascii?Q?pfR8y8v5a7sYJahqt/Bso4ZXzEbHPjHkrUAl9DlJ5gZ1Icg9J3bKgF6Wp2gi?=
- =?us-ascii?Q?G2O9lCxUca0/UVLJyR63CpNKx60y4mfaUilJRe82tuvPD6906mxnZkAGmF9k?=
- =?us-ascii?Q?/ywwNM3EE8Uql+1l8lun9YOqna1OSgMfkLM83fFVcip8ALcQ7aOfMKRQ4Ana?=
- =?us-ascii?Q?UpKx6fFwXU3ql2aY+AvrXdEkYwnwgxQ6+Jt9MtusCDGKmMCSZ53rE2GNe8DK?=
- =?us-ascii?Q?Fi2MxMv7Mo7utLYM8GLaa07bh/XotkGj3qoCoCkYjNaGn3rH2XndFRMgh/ig?=
- =?us-ascii?Q?6FZIjE3ukzw6IvIoqpasWegO9G6zre9hgFwoYnKvyNfLeDhRao3GzGEFPZPy?=
- =?us-ascii?Q?gQX/xOm02zHmXmK4Lv7xwKbQcItjx1CnsNJB1nWqbsAmJlhEC2Bh5eU1+zYm?=
- =?us-ascii?Q?COcJUaljVq7uVC5sY6waKKuIUckKmw8okp5UQAiibX89/yiMkm+cNSfsNqss?=
- =?us-ascii?Q?aHUSeIAbpg94YzYagjK3z08MjBliUryYDzkMUOH5yicMmJlJ/5bMYKEllnwa?=
- =?us-ascii?Q?kGb11DXcaMRq8Xz0l6jniw6rJPfpt4BTUMPTHRZRmbcQM1i/ResyHGMXJocR?=
- =?us-ascii?Q?aIb9O7dCGU28x2ByDVC3z+aFOdPGGxCzs49qttb2SgD9LRS0vlne2EmQ5a/N?=
- =?us-ascii?Q?kW0Z1VWF554aEBKZZJvKm8td0zmIrMZRdZeO2TSY0PN3FvT7NwAx/ELyv0wz?=
- =?us-ascii?Q?sK8yMXw4xhZ+pElEd5/WvZ1L+V6q5OwhF0mowBXrFpC8kh42+PSFjQxKdgbo?=
- =?us-ascii?Q?uFAut994ODsmX2ZoagNFriUxqacIKsjPWp/M4aG8Iy5XybaxmhDfhnV61iLn?=
- =?us-ascii?Q?X0oKu9NNqJsOuLP5WWrmnWcz2S5kYPCZ0js51pM/gom72RgahVW/UcO0Wgd2?=
- =?us-ascii?Q?oMkzkohnUet7bpsFS62JgKo0Tb6kh8GWyKq4o4pN9rMU7doKEQVwXl9tenNO?=
- =?us-ascii?Q?ueP1trvr1dqCLuCycGPl4M+E3FAK7bcyEYlFU0Ua0nIqYcn8XtH1aDmlbhQ3?=
- =?us-ascii?Q?MPesaIA/iu3RnLES3Ate7K7RHWlkLM+UeMsIBPKoBn9dMCpTYzzVHXepZDPg?=
- =?us-ascii?Q?8qxS/fWbwhU0Rs9NGBjMLHMlKQceHqTlxzou2xC/q3C3kM8Jg/F5hNpl+a14?=
- =?us-ascii?Q?kDWZuFsx/5VXRdxVjZAieJnLVad6o6TvnI8zDAYxQOv4xnFSJmTPEDrkTWcw?=
- =?us-ascii?Q?OdrOb6BWC3NY+JEvoewtxMmMJYMnVLmKgTU+GnJOyTmMzv7XQHE9NUmzwlUe?=
- =?us-ascii?Q?mhz3fDu4cvHJ1zTyh+r86FNAbQJC9sJp1tD8C6RGwtRV6fqzw7JwnVO2dBVw?=
- =?us-ascii?Q?WSDN2wxy08tGlZuYTqzjQCFaZZvLRneq+io/18E3nS1jWB1x1kBNZBz1q1Bc?=
- =?us-ascii?Q?WbDHo8TnB8V9vKvqoPkD5hHhRgZTWy8K4KaCw++Ej/a12FrznYbGF//4i5Fw?=
- =?us-ascii?Q?ZzxVozQYYsUcV4gjUCJ9F7w=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?S42fQWyQ2FrH2tX9r6LbM50yVLcLuj3gpuFSvjrxF3srgtKqbuwmMw4j7bpB?=
+ =?us-ascii?Q?ZySiDdIb/bi0P67EtBQF8gymWn0uTcx91kKkN2QLnAyB00B1ZSRFSrH3w08p?=
+ =?us-ascii?Q?l+QgDK7ywlpgyABk7Xj8uG1I1HJd+9r16i/MtZmXnw41rEsojqwhqoMUu+ZE?=
+ =?us-ascii?Q?u9utLuWp/853itXUYmChxS9IwrKDQkIQSm0elFvVWVN6+wT8um8QdXgM0PUW?=
+ =?us-ascii?Q?RkXTaAz/x1KXtBi2Mk/X+dE8w6MyCLqrypq55QKj0LCp9W9cPK6uMhNjQt4l?=
+ =?us-ascii?Q?5WIQk1o+nH++fkKMJG1Asb1Kosxao5UJQy41EfFicJMX6H+jJCZXlQoLKRuz?=
+ =?us-ascii?Q?gDyx5eKBAvSjFnxA5BPyjscPtNoBZig1OZry8GPNCpZzPpophN2bB5Itzt44?=
+ =?us-ascii?Q?TRLsS4eET2QwD7hMAabA/SViEUhlnutYehFLhy3+kzUpf6udQYHveR9gULnC?=
+ =?us-ascii?Q?JXDZBi1tNQTETgzQgWVBOy9zG6LVliQiU5O1JLB0JJKKB2gt/NIqL9vxjoln?=
+ =?us-ascii?Q?jHRAPnk6Tj/vynQqF1aGUgCAwIDSb+MTF8r4V2zlNxN3Gxj37iuPsKGnJkD8?=
+ =?us-ascii?Q?ZiIwIcZw8ZEapDZxMDKXuRWaH23Mt0CyibPKm7/Q7wsv36+GbrB1neQA8jpG?=
+ =?us-ascii?Q?5uM7xfhR00/XaAMYP/Qd2NlKp9GpDL9kZJJMMEGXlegKkghGaI9QhM87Nzkk?=
+ =?us-ascii?Q?hA5mPlrWAZ69isb/mmbwaw8V7T5Z4VkaYA/fpH6VplrGnW8cIp7ohb1cMDg5?=
+ =?us-ascii?Q?q7/rpHLXaowRSSQU5VIbuS5WGjuAkwi0Qhqom+qcA9GiAiDMUXXL29GAeVvy?=
+ =?us-ascii?Q?wK3XOJKIaTIJmHO4oTkO7sFMgX7PGIx8A6jMjPDcgUpAxjiB+OJJuL+fs/Mo?=
+ =?us-ascii?Q?lCbD2awXU9IB6SXRc9VTvLdafN9PkeJwoY9G5oqYvgb5LaLPGMwIklnLLRAr?=
+ =?us-ascii?Q?/h4yW4EQ5HWGdtOywmB86hbp71k1sdbHjE6XyxFKwI2PEA7Al9LXe/9Ky0mD?=
+ =?us-ascii?Q?gJK3sxI2jEkCUCyXfuskiI84vaEsDh4ofoiiy4YqQs8fYdxvEsMCmzmSjCci?=
+ =?us-ascii?Q?susodhLlYJ33Huc+QGPFeER90Z0tg+Ehplppny15Xy31GV4tB9sZlDVJ3Xf4?=
+ =?us-ascii?Q?R6e8GchC5UTOci1vqLBxSJ9/6lWnnvq8sZy82BygL/xsnXTp5A/r5LrHaDYE?=
+ =?us-ascii?Q?p1dphqIqy80buLa0cbQH5Rk+j1ROvJ4+rwLVHDRO5xRhVPv4DzCjDcJ22B0O?=
+ =?us-ascii?Q?n1SzUlrGmUxGo6wXpunnoII9uchNbi5KyA6+8250/qo4m/g6F0PF4YEbOGTj?=
+ =?us-ascii?Q?lu8BBfC9s5K37v4zIUL8o1XKHNQNpDYjgkmiexZgI3JiBC4koMbDWMpM6wrY?=
+ =?us-ascii?Q?o0Tao2S1u6MDEcpiI2xmCUa8M9Tp1nRxKn+sKsELB/iHuSsdnufwZpVdoQm5?=
+ =?us-ascii?Q?Q0lCMZhPkKa7sNqW/8noO8MUu8OkeqkGadPUReKpvq9MJvoKEe91S3h8OrXQ?=
+ =?us-ascii?Q?gJNSHpjuGQ0hKm1kie8GoBb+fTuaJElQXcMpTLEMy3RNWWae9N7/q57gVGiT?=
+ =?us-ascii?Q?kM1JG7N/DnqudbB/tofdoqfYgdc3ylOd0zeUYNibQugs8dZ6BRvAM/9wjQVN?=
+ =?us-ascii?Q?5Q2ED7T3qvIZ9v+rXm4CGU0=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56c2441e-6d44-4a1c-4f37-08d9e19ef36f
+X-MS-Exchange-CrossTenant-Network-Message-Id: be5d8fff-160e-4216-a76c-08d9e19ef40c
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 14:11:45.8626
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 14:11:46.8469
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c5PNfeNte9mo6q9bPmiSBCpzdY5/9KTO+yOVzp358V2ZfcBLOhgYGR3Oa0XWxrUUQFBuOlLaNO7uF7w33xy/3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9208
+X-MS-Exchange-CrossTenant-UserPrincipalName: QK+BKp8vJbw5r0YlHuEGCGcjr2DEBVNtwbLQmKu4bAzIVdk1y+hltx5Wil6OgFlamGPdxKwJUDJcYWJtzqTsFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4615
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The audio_mclk_root_clk was added as a gate with the CCGR121 (0x4790),
-but according to the reference manual, there is no such gate. Moreover,
-the consumer driver of the mentioned clock might gate it and leave
-the ECSPI2 (the true owner of that gate) hanging. So lets use the
-audio_mclk_post_div, which is the parent.
+but according to the reference manual, there is no such gate. The
+CCGR121 belongs to ECSPI2 and it is not shared.
 
+Fixes: 8f6d8094b215b57 ("ARM: imx: add imx7d clk tree support")
+Reported-by: David Wolfe <david.wolfe@nxp.com>
 Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 ---
- arch/arm/boot/dts/imx7-colibri.dtsi     | 4 ++--
- arch/arm/boot/dts/imx7-mba7.dtsi        | 2 +-
- arch/arm/boot/dts/imx7d-nitrogen7.dts   | 2 +-
- arch/arm/boot/dts/imx7d-pico-hobbit.dts | 4 ++--
- arch/arm/boot/dts/imx7d-pico-pi.dts     | 4 ++--
- arch/arm/boot/dts/imx7d-sdb.dts         | 4 ++--
- arch/arm/boot/dts/imx7s-warp.dts        | 4 ++--
- 7 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/clk/imx/clk-imx7d.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 62b771c1d5a9..f1c60b0cb143 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -40,7 +40,7 @@ simple-audio-card,cpu {
- 
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&codec>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -293,7 +293,7 @@ codec: sgtl5000@a {
- 		compatible = "fsl,sgtl5000";
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_sai1_mclk>;
- 		VDDA-supply = <&reg_module_3v3_avdd>;
-diff --git a/arch/arm/boot/dts/imx7-mba7.dtsi b/arch/arm/boot/dts/imx7-mba7.dtsi
-index 49086c6b6a0a..3df6dff7734a 100644
---- a/arch/arm/boot/dts/imx7-mba7.dtsi
-+++ b/arch/arm/boot/dts/imx7-mba7.dtsi
-@@ -302,7 +302,7 @@ &i2c2 {
- 	tlv320aic32x4: audio-codec@18 {
- 		compatible = "ti,tlv320aic32x4";
- 		reg = <0x18>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		clock-names = "mclk";
- 		ldoin-supply = <&reg_audio_3v3>;
- 		iov-supply = <&reg_audio_3v3>;
-diff --git a/arch/arm/boot/dts/imx7d-nitrogen7.dts b/arch/arm/boot/dts/imx7d-nitrogen7.dts
-index e0751e6ba3c0..a31de900139d 100644
---- a/arch/arm/boot/dts/imx7d-nitrogen7.dts
-+++ b/arch/arm/boot/dts/imx7d-nitrogen7.dts
-@@ -288,7 +288,7 @@ &i2c4 {
- 	codec: wm8960@1a {
- 		compatible = "wlf,wm8960";
- 		reg = <0x1a>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		clock-names = "mclk";
- 		wlf,shared-lrclk;
- 	};
-diff --git a/arch/arm/boot/dts/imx7d-pico-hobbit.dts b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
-index 7b2198a9372c..d917dc4f2f22 100644
---- a/arch/arm/boot/dts/imx7d-pico-hobbit.dts
-+++ b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
-@@ -31,7 +31,7 @@ simple-audio-card,cpu {
- 
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&sgtl5000>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -41,7 +41,7 @@ sgtl5000: codec@a {
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
- 		compatible = "fsl,sgtl5000";
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		VDDA-supply = <&reg_2p5v>;
- 		VDDIO-supply = <&reg_vref_1v8>;
- 	};
-diff --git a/arch/arm/boot/dts/imx7d-pico-pi.dts b/arch/arm/boot/dts/imx7d-pico-pi.dts
-index 70bea95c06d8..f263e391e24c 100644
---- a/arch/arm/boot/dts/imx7d-pico-pi.dts
-+++ b/arch/arm/boot/dts/imx7d-pico-pi.dts
-@@ -31,7 +31,7 @@ simple-audio-card,cpu {
- 
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&sgtl5000>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -41,7 +41,7 @@ sgtl5000: codec@a {
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
- 		compatible = "fsl,sgtl5000";
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		VDDA-supply = <&reg_2p5v>;
- 		VDDIO-supply = <&reg_vref_1v8>;
- 	};
-diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
-index 7813ef960f6e..f053f5122741 100644
---- a/arch/arm/boot/dts/imx7d-sdb.dts
-+++ b/arch/arm/boot/dts/imx7d-sdb.dts
-@@ -385,14 +385,14 @@ &i2c4 {
- 	codec: wm8960@1a {
- 		compatible = "wlf,wm8960";
- 		reg = <0x1a>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		clock-names = "mclk";
- 		wlf,shared-lrclk;
- 		wlf,hp-cfg = <2 2 3>;
- 		wlf,gpio-cfg = <1 3>;
- 		assigned-clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_SRC>,
- 				  <&clks IMX7D_PLL_AUDIO_POST_DIV>,
--				  <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+				  <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		assigned-clock-parents = <&clks IMX7D_PLL_AUDIO_POST_DIV>;
- 		assigned-clock-rates = <0>, <884736000>, <12288000>;
- 	};
-diff --git a/arch/arm/boot/dts/imx7s-warp.dts b/arch/arm/boot/dts/imx7s-warp.dts
-index 4f1edef06c92..e8734d218b9d 100644
---- a/arch/arm/boot/dts/imx7s-warp.dts
-+++ b/arch/arm/boot/dts/imx7s-warp.dts
-@@ -75,7 +75,7 @@ simple-audio-card,cpu {
- 
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&codec>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -232,7 +232,7 @@ codec: sgtl5000@a {
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
- 		compatible = "fsl,sgtl5000";
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_sai1_mclk>;
- 		VDDA-supply = <&vgen4_reg>;
+diff --git a/drivers/clk/imx/clk-imx7d.c b/drivers/clk/imx/clk-imx7d.c
+index c4e0f1c07192..3f6fd7ef2a68 100644
+--- a/drivers/clk/imx/clk-imx7d.c
++++ b/drivers/clk/imx/clk-imx7d.c
+@@ -849,7 +849,6 @@ static void __init imx7d_clocks_init(struct device_node *ccm_node)
+ 	hws[IMX7D_WDOG4_ROOT_CLK] = imx_clk_hw_gate4("wdog4_root_clk", "wdog_post_div", base + 0x49f0, 0);
+ 	hws[IMX7D_KPP_ROOT_CLK] = imx_clk_hw_gate4("kpp_root_clk", "ipg_root_clk", base + 0x4aa0, 0);
+ 	hws[IMX7D_CSI_MCLK_ROOT_CLK] = imx_clk_hw_gate4("csi_mclk_root_clk", "csi_mclk_post_div", base + 0x4490, 0);
+-	hws[IMX7D_AUDIO_MCLK_ROOT_CLK] = imx_clk_hw_gate4("audio_mclk_root_clk", "audio_mclk_post_div", base + 0x4790, 0);
+ 	hws[IMX7D_WRCLK_ROOT_CLK] = imx_clk_hw_gate4("wrclk_root_clk", "wrclk_post_div", base + 0x47a0, 0);
+ 	hws[IMX7D_USB_CTRL_CLK] = imx_clk_hw_gate4("usb_ctrl_clk", "ahb_root_clk", base + 0x4680, 0);
+ 	hws[IMX7D_USB_PHY1_CLK] = imx_clk_hw_gate4("usb_phy1_clk", "pll_usb1_main_clk", base + 0x46a0, 0);
 -- 
 2.31.1
 

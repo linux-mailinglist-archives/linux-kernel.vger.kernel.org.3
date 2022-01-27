@@ -2,94 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C113649DAA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A8E49DAA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiA0G3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:29:24 -0500
-Received: from mga07.intel.com ([134.134.136.100]:58431 "EHLO mga07.intel.com"
+        id S236721AbiA0G3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:29:36 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:43816 "EHLO cpanel.siel.si"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231461AbiA0G3W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:29:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643264962; x=1674800962;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JkOo36tz8YaoDuZXPsp9O8nW6ib1sRzLUQMQhkkfdUQ=;
-  b=BTN03RbvFhT+b7H0V0o1ZxLRME0MvTjWJp0P7lgHx3ynzei1VDxw6r4I
-   TKEz7Fttah+ee/HGoJoTdZ8gCwtl0r0EwMaK+txeqd1RpYivhI4HVodiL
-   feZ0Iefw2k1I+16DvUngRSrzPjcUM2ovZJkqphaMc9++LTlI1fOIrxgs6
-   BjqYJVDvEoUC1fMSm57LTzPM/DSUeO94PXZKYZyBjJhNMFYjvExKMizJC
-   FyVU69Pnyp5UT5GTulNBFspWygFY65vu88TsxLbqNf1PhsvWVuPRYsq6B
-   h+CUH1DDz/96Q1EHzOw2CxFKJ91Zu/MO2m0rdtjAhqIS2W0YaLpUHInxH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="310076972"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="310076972"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 22:29:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="618225100"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 22:29:18 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 27 Jan 2022 08:29:15 +0200
-Date:   Thu, 27 Jan 2022 08:29:15 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, koba.ko@canonical.com,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] PCI/AER: Disable AER when link is in L2/L3 ready, L2
- and L3 state
-Message-ID: <YfI7u5XSlNlx2w4I@lahna>
-References: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
- <YfEqZMUS9jyiErmF@lahna>
- <CAAd53p7H3RApEHOzJYorD9VBnaPqYRkzE2g+8hAUXRToc=jbGg@mail.gmail.com>
+        id S236716AbiA0G3d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 01:29:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=XSmT03lL5vw4WJ5VY/GJkb9j/PsbZ8y8uAL8Hac31s8=; b=LvQIvmY3hm58cspzGyaKlOlaZp
+        o6rddruBNKEnYQC5zrxe4r1mqj1tmgpDJPz9NGI82/+IZBDM2A8FPhCoaEa2B6OB8n9zL6S38sYrH
+        gDqWEkcG7PZnzfoKTAd8sLQjZDGO1DlWZeLk3rG2EY1bikQhOGiGVqMWOBoyYiTLpqtraUBYH8zOU
+        MZG3AfHwr1zpTjAywgfoILQm88IjDABquQ4Yc+pJl1Vc10UH+ZmeTFqyEhAQy4T1uXHdDwgX6T3c/
+        6oaasdNP12Mu3ypcF2/rSPWooXD3RQ3uAZMC5AMocLsqXV0D0Qe+MsfFTyDd4ReXboqpvSebsVAIW
+        aFRyc6nw==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:51234 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1nCyHa-001dey-0C; Thu, 27 Jan 2022 07:29:29 +0100
+Subject: Re: [PATCH RESEND 2/2] ARM: dts: imx6qdl: Handle unneeded
+ MFD-subdevices correctly
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        y.bas@phytec.com
+References: <20211216115529.2331475-1-andrej.picej@norik.com>
+ <20211216115529.2331475-2-andrej.picej@norik.com>
+ <20220126092741.GK4686@dragon>
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <b7ce8b9e-e11e-fe7e-bf20-41cee9ee933b@norik.com>
+Date:   Thu, 27 Jan 2022 07:29:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p7H3RApEHOzJYorD9VBnaPqYRkzE2g+8hAUXRToc=jbGg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220126092741.GK4686@dragon>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Jan 27, 2022 at 10:21:35AM +0800, Kai-Heng Feng wrote:
-> On Wed, Jan 26, 2022 at 7:03 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Jan 26, 2022 at 03:18:51PM +0800, Kai-Heng Feng wrote:
-> > > Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
-> > > hint") enables ACS, and some platforms lose its NVMe after resume from
-> > > S3:
-> > > [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
-> > > [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
-> > > [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
-> > > [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
-> > > [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
-> > > [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
-> > > [   50.947843] nvme nvme0: frozen state error detected, reset controller
-> > >
-> > > It happens right after ACS gets enabled during resume.
-> >
-> > Is this really because of the above commit of due the fact that AER
-> > "service" never implemented the PM hooks in the first place ;-)
-> 
-> >From what I can understand, all services other than PME should be
-> disabled during suspend.
-> 
-> For example, should we convert commit a697f072f5da8 ("PCI: Disable PTM
-> during suspend to save power") to PM hooks in PTM service?
 
-Yes, I think that's the right thing to do. I wonder how it was not using
-the PM hooks in the first place.
+On 26. 01. 22 10:27, Shawn Guo wrote:
+> On Thu, Dec 16, 2021 at 12:55:29PM +0100, Andrej Picej wrote:
+>> From: Yunus Bas <y.bas@phytec.de>
+>>
+>> The proper way to handle partly used MFD devices are to describe all MFD
+>> subdevices in the devicetree and disable the not used ones. This
+>> suppresses any warnings that may arise as a result.
+>>
+>> Signed-off-by: Yunus Bas <y.bas@phytec.de>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> 
+> Use subject prefix like
+> 
+>    ARM: dts: imx6qdl-phytec: ...
+> 
+> Shawn
+
+Will send a v2 with this change.
+
+Thanks.
+
+Andrej
+
+> 
+>> ---
+>>   arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi      |  5 +++++
+>>   arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi | 10 ++++++++++
+>>   2 files changed, 15 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+>> index 2ec154756bbc..3590f439adf5 100644
+>> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+>> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+>> @@ -213,6 +213,11 @@ pmic_rtc: rtc {
+>>   		da9063_wdog: wdt {
+>>   			compatible = "dlg,da9063-watchdog";
+>>   		};
+>> +
+>> +		onkey {
+>> +			compatible = "dlg,da9063-onkey";
+>> +			status = "disabled";
+>> +		};
+>>   	};
+>>   };
+>>   
+>> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+>> index 94b254bfd054..28a805384668 100644
+>> --- a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+>> +++ b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+>> @@ -116,6 +116,16 @@ watchdog {
+>>   			dlg,use-sw-pm;
+>>   		};
+>>   
+>> +		thermal {
+>> +			compatible = "dlg,da9062-thermal";
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		gpio {
+>> +			compatible = "dlg,da9062-gpio";
+>> +			status = "disabled";
+>> +		};
+>> +
+>>   		regulators {
+>>   			vdd_arm: buck1 {
+>>   				regulator-name = "vdd_arm";
+>> -- 
+>> 2.25.1
+>>

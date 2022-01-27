@@ -2,200 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E36849E005
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB2049E00A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239859AbiA0LAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:00:34 -0500
-Received: from mail-out2.in.tum.de ([131.159.0.36]:46590 "EHLO
-        mail-out2.informatik.tu-muenchen.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231951AbiA0LAc (ORCPT
+        id S239874AbiA0LAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:00:49 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:24298 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231951AbiA0LAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:00:32 -0500
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mail-out2.informatik.tu-muenchen.de (Postfix) with ESMTP id 41E8E24011C;
-        Thu, 27 Jan 2022 12:00:30 +0100 (CET)
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 3EBF6F87; Thu, 27 Jan 2022 12:00:30 +0100 (CET)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 186ECF89;
-        Thu, 27 Jan 2022 12:00:30 +0100 (CET)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 1250DF87;
-        Thu, 27 Jan 2022 12:00:30 +0100 (CET)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 0DBF74A02DB; Thu, 27 Jan 2022 12:00:30 +0100 (CET)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 135394A01EC;
-        Thu, 27 Jan 2022 12:00:28 +0100 (CET)
-        (Extended-Queue-bit xtech_ce@fff.in.tum.de)
-Date:   Thu, 27 Jan 2022 12:00:22 +0100
-From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Clarify syntactic and semantic
- dependencies
-Message-ID: <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
+        Thu, 27 Jan 2022 06:00:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643281248; x=1674817248;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Fng95TnrnpFY+4goE4+k1PeF/SO9+jopsRW0TRRLI8Y=;
+  b=pcxJnNSy4Ad/7OYUx89rqflUvFYvMspQ2gqtLfcHREg+ygjdOav/pk2t
+   I3FmxJgNMjCWy3mFo72cX2xZo7NxkAToMvBl7E/c4pdauJ4MPhPgU+itW
+   lYhWUGNx8Ssfybzb2yixNTpx+eKWAwfc6rz2K8HzwXGuwEuQo3xaqSXNi
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 03:00:48 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 03:00:47 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 27 Jan 2022 03:00:47 -0800
+Received: from [10.50.37.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 27 Jan
+ 2022 03:00:41 -0800
+Message-ID: <4471933f-3b49-708d-5573-f2b7bdf3f1c4@quicinc.com>
+Date:   Thu, 27 Jan 2022 16:30:37 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfBk265vVo4FL4MJ@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V4 4/6] arm64: dts: qcom: sc7280: Add EUD dt node and dwc3
+ connector
+Content-Language: en-CA
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <greg@kroah.com>, <robh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>
+References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+ <3ca56ffa9e4aa73f3c3f36d0edad0827ee11d953.1642768837.git.quic_schowdhu@quicinc.com>
+ <YfDOBuT/9dEEDG6/@builder.lan>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <YfDOBuT/9dEEDG6/@builder.lan>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 04:00:11PM -0500, Alan Stern wrote:
-> On Tue, Jan 25, 2022 at 05:28:19PM +0000, Paul Heidekrüger wrote:
-> > Dependencies which are purely syntactic, i.e. not semantic, might imply
-> > ordering at first glance. However, since they do not affect defined
-> > behavior, compilers are within their rights to remove such dependencies
-> > when optimizing code.
-> > 
-> > Since syntactic dependencies are not related to any kind of dependency
-> > in particular, explicitly distinguish syntactic and semantic
-> > dependencies as part of the 'A WARNING' section in explanation.txt,
-> > which gives examples of how compilers might affect the LKMM's dependency
-> > orderings in general.
-> 
-> The "A WARNING" section is a bad place to put this material, because it 
-> comes before dependencies have been introduced.  It would be better to 
-> put this at the end of the "DEPENDENCY RELATIONS: data, addr, and ctrl" 
-> section.
-> 
-> > Link: https://lore.kernel.org/all/20211102190138.GA1497378@rowland.harvard.edu/
-> > Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> > Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> > ---
-> >  .../Documentation/explanation.txt             | 25 +++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
-> > 
-> > diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> > index 5d72f3112e56..6d679e5ebdf9 100644
-> > --- a/tools/memory-model/Documentation/explanation.txt
-> > +++ b/tools/memory-model/Documentation/explanation.txt
-> > @@ -411,6 +411,31 @@ Given this version of the code, the LKMM would predict that the load
-> >  from x could be executed after the store to y.  Thus, the memory
-> >  model's original prediction could be invalidated by the compiler.
-> >  
-> > +Caution is also advised when dependencies are purely syntactic, i.e.
-> > +not semantic.  A dependency between two marked accesses is purely
-> > +syntactic iff the defined behavior of the second access is unaffected
-> > +by its dependency.
-> 
-> That's a very abstract way of describing the situation; it doesn't do a 
-> good job of getting the real idea across.  It also mixes up two separate 
-> ideas: behaviors being unaffected by a syntactic dependency and 
-> behaviors being undefined.  They should be described separately. 
 
-Many thanks for the feedback! I agree, the explanation works a lot
-better once readers have been introduced to data, addr and ctrl
-relations. 
-
-> I would prefer something along these lines...
-
-Shall I resubmit the patch with you as co-developer, or, given that it's
-arguably your work now, would you like to submit the patch yourself?
-
-Many thanks,
-Paul
-
-> ----------------------------------------
-> 
-> Here's a trick question: When is a dependency not a dependency? Answer: 
-> When it is purely syntactic rather than semantic.  We say a dependency 
-> between two accesses is purely syntactic if the second access doesn't 
-> actually depend on the result of the first.  Here is a trivial example:
-> 
-> 	r1 = READ_ONCE(x);
-> 	WRITE_ONCE(y, r1 * 0);
-> 
-> There appears to be a data dependency from the load of x to the store of 
-> y, since the value to be stored is computed from the value that was 
-> loaded.  But in fact, the value stored does not really depend on 
-> anything since it will always be 0.  Thus the data dependency is only 
-> syntactic (it appears to exist in the code) but not semantic (the second 
-> access will always be the same, regardless of the value of the first 
-> access).  Given code like this, a compiler could simply eliminate the 
-> load from x, which would certainly destroy any dependency.
-> 
-> (It's natural to object that no one in their right mind would write code 
-> like the above.  However, macro expansions can easily give rise to this 
-> sort of thing, in ways that generally are not apparent to the 
-> programmer.)
-> 
-> Another mechanism that can give rise to purely syntactic dependencies is 
-> related to the notion of "undefined behavior". Certain program behaviors 
-> are called "undefined" in the C language specification, which means that 
-> when they occur there are no guarantees at all about the outcome.  
-> Consider the following example:
-> 
-> 	int a[1];
-> 	int i;
-> 
-> 	r1 = READ_ONCE(i);
-> 	r2 = READ_ONCE(a[r1]);
-> 
-> Access beyond the end or before the beginning of an array is one kind of 
-> undefined behavior.  Therefore the compiler doesn't have to worry about 
-> what will happen if r1 is nonzero, and it can assume that r1 will always 
-> be zero without actually loading anything from i.  (If the assumption 
-> turns out to be wrong, the resulting behavior will be undefined anyway 
-> so the compiler doesn't care!)  Thus the load from i can be eliminated, 
-> breaking the address dependency.
-> 
-> The LKMM is unaware that purely syntactic dependencies are different 
-> from semantic dependencies and therefore mistakenly predicts that the 
-> accesses in the two examples above will be ordered.  This is another 
-> example of how the compiler can undermine the memory model.  Be warned.
-> 
-> ----------------------------------------
-> 
-> Alan
-> 
-> > +Compilers are aware of syntactic dependencies and are within their
-> > +rights to remove them as part of optimizations, thereby breaking any
-> > +guarantees of ordering.
-> > +
-> > +Notable cases are dependencies eliminated through constant propagation
-> > +or those where only one value leads to defined behavior as in the
-> > +following example:
-> > +
-> > +	int a[1];
-> > +	int i;
-> > +
-> > +	r1 = READ_ONCE(i);
-> > +	r2 = READ_ONCE(a[r1]);
-> > +
-> > +The formal LKMM is unaware of syntactic dependencies and therefore
-> > +predicts ordering.  However, since any other value than 0 for r1 would
-> > +result in an out-of-bounds access, which is undefined behavior, r2 is
-> > +not affected by its dependency to r1, making the above a purely
-> > +syntactic dependency.
-> > +
-> >  Another issue arises from the fact that in C, arguments to many
-> >  operators and function calls can be evaluated in any order.  For
-> >  example:
-> > -- 
-> > 2.33.1
-> > 
+On 1/26/2022 9:58 AM, Bjorn Andersson wrote:
+> On Fri 21 Jan 07:53 CST 2022, Souradeep Chowdhury wrote:
+>
+>> Add the Embedded USB Debugger(EUD) device tree node. The
+>> node contains EUD base register region and EUD mode
+>> manager register regions along with the interrupt entry.
+>> Also add the typec connector node for EUD which is attached to
+>> EUD node via port. EUD is also attached to DWC3 node via port.
+>> Also add the role-switch property to dwc3 node.
+>>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 39 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 39 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 937c2e0..daac831 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -2583,6 +2583,14 @@
+>>   				phys = <&usb_2_hsphy>;
+>>   				phy-names = "usb2-phy";
+>>   				maximum-speed = "high-speed";
+>> +				usb-role-switch;
+>> +				ports {
+>> +					port@0 {
+>> +						usb2_role_switch: endpoint {
+>> +							remote-endpoint = <&eud_ep>;
+>> +						};
+>> +					};
+>> +				};
+>>   			};
+>>   		};
+>>   
+>> @@ -2624,6 +2632,37 @@
+>>   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>>   		};
+>>   
+>> +		eud: eud@88e0000 {
+>> +			compatible = "qcom,sc7280-eud","qcom,eud";
+>> +			reg = <0 0x88e0000 0 0x2000>,
+>> +			      <0 0x88e2000 0 0x1000>;
+>> +			interrupt-parent = <&pdc>;
+>> +			interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
+> I find "interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;" cleaner
+> than having to specify both parent and interrupts.
+Ack
+>
+>> +			ports {
+>> +				port@0 {
+>> +					eud_ep: endpoint {
+>> +						remote-endpoint = <&usb2_role_switch>;
+>> +					};
+>> +				};
+>> +				port@1 {
+>> +					eud_con: endpoint {
+>> +						remote-endpoint = <&con_eud>;
+>> +					};
+>> +				};
+>> +			};
+>> +		};
+>> +
+>> +		eud_typec: connector {
+> The connector should be a child of the Type-C controller, which I know
+> differs between the various devices on this platform. So you should
+> leave &eud_con without a remote-endpoint and then fill that in for each
+> device, based on respective Type-C controller.
+>
+>
+> But beyond that, I think this design looks good now!
+Ack
+>
+> Regards,
+> Bjorn
+>
+>> +			compatible = "usb-c-connector";
+>> +			ports {
+>> +				port@0 {
+>> +					con_eud: endpoint {
+>> +						remote-endpoint = <&eud_con>;
+>> +					};
+>> +				};
+>> +			};
+>> +		};
+>> +
+>>   		nsp_noc: interconnect@a0c0000 {
+>>   			reg = <0 0x0a0c0000 0 0x10000>;
+>>   			compatible = "qcom,sc7280-nsp-noc";
+>> -- 
+>> 2.7.4
+>>

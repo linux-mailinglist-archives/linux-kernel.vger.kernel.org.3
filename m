@@ -2,272 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D286749DE90
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD41249DE8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238513AbiA0J4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:56:21 -0500
-Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:52966 "EHLO
-        progateway7-pub.mail.pro1.eigbox.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238445AbiA0J4S (ORCPT
+        id S234511AbiA0Jz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:55:58 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34638 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232024AbiA0Jz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:56:18 -0500
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 125D810048704
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:56:16 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id D1Vnn7WjXXOyfD1Vnn5SEr; Thu, 27 Jan 2022 09:56:16 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Ot6Kdwzt c=1 sm=1 tr=0 ts=61f26c40
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=tBb2bbeoAAAA:8
- a=eFWqtd3rAAAA:8 a=j6bprNooAAAA:8 a=h0uksLzaAAAA:8 a=W-_n0kkjAAAA:8
- a=NEAV23lmAAAA:8 a=HaFmDPmJAAAA:8 a=05S-CNwmhPcMlrApu-0A:9
- a=QEXdDO2ut3YA:10:nop_charset_2 a=NWVoK91CQyQA:10:nop_rescan
- a=Oj-tNtZlA1e06AYgeCfH:22 a=OmE4rGSwGH90ucjH_eFs:22 a=fS_Hu1hw59wj44055X5l:22
- a=MSi_79tMYmZZG2gvAgS0:22 a=qeNa2pbTr82C0GpJEZFS:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gZaw0aENOxZlikybDyc9C3E+mc4RSN0avqmBxmCVeRI=; b=DzG1SetqSB6t6h/87HCitFhpOj
-        7Lr6oFiMS4XICOmummWrL2RY8wcbLSJk7odpoDngEWRLbwAjtF+mSIDOmFkT/hI5qJLmBrC37qs40
-        4JcCfSI34je+PZh+Hj3zHB5tm;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51794 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nD1Vm-003JVr-R2; Thu, 27 Jan 2022 02:56:14 -0700
-Message-ID: <e865941f-8394-2a0a-3831-ab40714ab494@w6rz.net>
-Date:   Thu, 27 Jan 2022 01:56:13 -0800
+        Thu, 27 Jan 2022 04:55:57 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20R9fFmi005515;
+        Thu, 27 Jan 2022 09:55:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=v7vgdFMmlLjZ//7aqE8miSDxEZzVBEmKPW6Ytz7CoCA=;
+ b=CkpaBU0nF1n6CcaTGsYEGLnPWEq2SaMOJKspqQWXrwpU9+j9pV1t4frd1lkaKKqUrPRf
+ DDcHBN7E8KFKo+MEf6GjvKvLNFDOtdSm1ZcgvVddnjdU55hu+A+2tejiXXLVkO4rsjnM
+ 3LejFkC4i+1byf2/4XrnfNmHJPZGUJKzKTypAfrqkse1cLHEqG94Lj2J36xi6/2X45TC
+ 4TrPbI8gWBHcX3FM1ZtyZiEVUVgIPxs7kPkpIJET598tqRguBYhcgODrJtlDttzx9ivl
+ QwzAM1Aeod6DftB8QU0smCfFfRrdIGqTl5WfhKB23SOCnkCuWG5KEoJEU6h1siKVIAx6 6Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dupt030cr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 09:55:56 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20R9j2Wq017096;
+        Thu, 27 Jan 2022 09:55:55 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dupt030ca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 09:55:55 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20R9q24c019496;
+        Thu, 27 Jan 2022 09:55:53 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dr9j9nwnq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 09:55:53 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20R9tlCX42008882
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Jan 2022 09:55:47 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CDE1AE04D;
+        Thu, 27 Jan 2022 09:55:47 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2497EAE055;
+        Thu, 27 Jan 2022 09:55:46 +0000 (GMT)
+Received: from [9.171.44.35] (unknown [9.171.44.35])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Jan 2022 09:55:46 +0000 (GMT)
+Message-ID: <88d68802-56d5-849c-ae91-57c795d37250@linux.ibm.com>
+Date:   Thu, 27 Jan 2022 10:57:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
- hartid bitmap
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 07/30] s390/pci: externalize the SIC operation controls
+ and routine
 Content-Language: en-US
-To:     Atish Patra <atishp@atishpatra.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20220120090918.2646626-1-atishp@rivosinc.com>
- <20220120090918.2646626-7-atishp@rivosinc.com>
- <1AA3005C-E9C8-4E4B-900D-DD48B37CEA41@jrtc27.com>
- <CAOnJCUKJmHv2Rs3=FR3LjiZqvM5uxcVeZ3D5xRSbEeDFCeS9=Q@mail.gmail.com>
- <CAMuHMdW+ZO0=Qc8NCWujZUq=L-LZJpcd7oZo4MxRFYMmcURXVQ@mail.gmail.com>
- <CAMuHMdXq7OQJL6H7=JRnDTR6p+AD0o2Ctjn806XZQZ9PYjvepg@mail.gmail.com>
- <CAOnJCU+AVS5Js4ZXmUubTqwU5Ye-9_z8onEE1mwhvCsOXchFBg@mail.gmail.com>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <CAOnJCU+AVS5Js4ZXmUubTqwU5Ye-9_z8onEE1mwhvCsOXchFBg@mail.gmail.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-8-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-8-mjrosato@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nD1Vm-003JVr-R2
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:51794
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 11
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZFedqtx1C1NkDizt388mrvEXgpMwDMsN
+X-Proofpoint-ORIG-GUID: dqmFXFBGJwR-yL6zj2kWYrsVIvygMCIO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-27_02,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201270057
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 17:01, Atish Patra wrote:
-> On Wed, Jan 26, 2022 at 1:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> Hi Atish,
->>
->> On Wed, Jan 26, 2022 at 9:28 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>> On Wed, Jan 26, 2022 at 3:21 AM Atish Patra <atishp@atishpatra.org> wrote:
->>>> On Tue, Jan 25, 2022 at 2:26 PM Jessica Clarke <jrtc27@jrtc27.com> wrote:
->>>>> On 20 Jan 2022, at 09:09, Atish Patra <atishp@rivosinc.com> wrote:
->>>>>> Currently, SBI APIs accept a hartmask that is generated from struct
->>>>>> cpumask. Cpumask data structure can hold upto NR_CPUs value. Thus, it
->>>>>> is not the correct data structure for hartids as it can be higher
->>>>>> than NR_CPUs for platforms with sparse or discontguous hartids.
->>>>>>
->>>>>> Remove all association between hartid mask and struct cpumask.
->>>>>>
->>>>>> Reviewed-by: Anup Patel <anup@brainfault.org> (For Linux RISC-V changes)
->>>>>> Acked-by: Anup Patel <anup@brainfault.org> (For KVM RISC-V changes)
->>>>>> Signed-off-by: Atish Patra <atishp@rivosinc.com>
->>>> I am yet to reproduce it on my end.
->>>> @Geert Uytterhoeven: can you please try the below diff on your end.
->>> Unfortunately it doesn't fix the issue for me.
->>>
->>> /me debugging...
->> Found it: after this commit, the SBI_EXT_RFENCE_REMOTE_FENCE_I and
->> SBI_EXT_RFENCE_REMOTE_SFENCE_VMA ecalls are now called with
->> hmask = 0x8000000000000001 and hbase = 1 instead of hmask = 3 and
->> hbase = 0.
->>
->> cpuid 1 maps to  hartid 0
->> cpuid 0 maps to hartid 1
->>
->>      __sbi_rfence_v02:364: cpuid 1 hartid 0
->>      __sbi_rfence_v02:377: hartid 0 hbase 1
->>      hmask |= 1UL << (hartid - hbase);
->>
->> oops
->>
->>      __sbi_rfence_v02_call:303: SBI_EXT_RFENCE_REMOTE_FENCE_I hmask
->> 8000000000000001 hbase 1
->>
-> Ahh yes. hmask will be incorrect if the bootcpu(cpu 0) is a higher
-> hartid and it is trying to do a remote tlb flush/IPI
-> to lower the hartid. We should generate the hartid array before the loop.
->
-> Can you try this diff ? It seems to work for me during multiple boot
-> cycle on the unleashed.
->
-> You can find the patch here as well
-> https://github.com/atishp04/linux/commits/v5.17-rc1
->
-> --------------------------------------------------------------------------------------------------------------------------------
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index f72527fcb347..4ebeb5813edc 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -8,6 +8,8 @@
->   #include <linux/init.h>
->   #include <linux/pm.h>
->   #include <linux/reboot.h>
-> +#include <linux/sort.h>
-> +
->   #include <asm/sbi.h>
->   #include <asm/smp.h>
->
-> @@ -85,7 +87,7 @@ static unsigned long
-> __sbi_v01_cpumask_to_hartmask(const struct cpumask *cpu_mas
->    pr_warn("Unable to send any request to hartid > BITS_PER_LONG for
-> SBI v0.1\n");
->    break;
->    }
-> - hmask |= 1 << hartid;
-> + hmask |= 1UL << hartid;
->    }
->
->    return hmask;
-> @@ -160,7 +162,7 @@ static int __sbi_send_ipi_v01(const struct cpumask
-> *cpu_mask)
->   {
->    unsigned long hart_mask;
->
-> - if (!cpu_mask)
-> + if (!cpu_mask || cpumask_empty(cpu_mask))
->    cpu_mask = cpu_online_mask;
->    hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
->
-> @@ -176,7 +178,7 @@ static int __sbi_rfence_v01(int fid, const struct
-> cpumask *cpu_mask,
->    int result = 0;
->    unsigned long hart_mask;
->
-> - if (!cpu_mask)
-> + if (!cpu_mask || cpumask_empty(cpu_mask))
->    cpu_mask = cpu_online_mask;
->    hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
->
-> @@ -236,6 +238,18 @@ static int __sbi_rfence_v01(int fid, const struct
-> cpumask *cpu_mask,
->   static void sbi_set_power_off(void) {}
->   #endif /* CONFIG_RISCV_SBI_V01 */
->
-> +static int cmp_ulong(const void *A, const void *B)
-> +{
-> + const unsigned long *a = A, *b = B;
-> +
-> + if (*a < *b)
-> + return -1;
-> + else if (*a > *b)
-> + return 1;
-> + else
-> + return 0;
-> +}
-> +
->   static void __sbi_set_timer_v02(uint64_t stime_value)
->   {
->   #if __riscv_xlen == 32
-> @@ -251,13 +265,22 @@ static int __sbi_send_ipi_v02(const struct
-> cpumask *cpu_mask)
->   {
->    unsigned long hartid, cpuid, hmask = 0, hbase = 0;
->    struct sbiret ret = {0};
-> - int result;
-> + int result, index = 0, max_index = 0;
-> + unsigned long hartid_arr[NR_CPUS] = {0};
->
-> - if (!cpu_mask)
-> + if (!cpu_mask || cpumask_empty(cpu_mask))
->    cpu_mask = cpu_online_mask;
->
->    for_each_cpu(cpuid, cpu_mask) {
->    hartid = cpuid_to_hartid_map(cpuid);
-> + hartid_arr[index] = hartid;
-> + index++;
-> + }
-> +
-> + max_index = index;
-> + sort(hartid_arr, max_index, sizeof(unsigned long), cmp_ulong, NULL);
-> + for (index = 0; index < max_index; index++) {
-> + hartid = hartid_arr[index];
->    if (hmask && ((hbase + BITS_PER_LONG) <= hartid)) {
->    ret = sbi_ecall(SBI_EXT_IPI, SBI_EXT_IPI_SEND_IPI,
->    hmask, hbase, 0, 0, 0, 0);
-> @@ -345,13 +368,21 @@ static int __sbi_rfence_v02(int fid, const
-> struct cpumask *cpu_mask,
->        unsigned long arg4, unsigned long arg5)
->   {
->    unsigned long hartid, cpuid, hmask = 0, hbase = 0;
-> - int result;
-> + int result, index = 0, max_index = 0;
-> + unsigned long hartid_arr[NR_CPUS] = {0};
->
-> - if (!cpu_mask)
-> + if (!cpu_mask || cpumask_empty(cpu_mask))
->    cpu_mask = cpu_online_mask;
->
->    for_each_cpu(cpuid, cpu_mask) {
->    hartid = cpuid_to_hartid_map(cpuid);
-> + hartid_arr[index] = hartid;
-> + index++;
-> + }
-> + max_index = index;
-> + sort(hartid_arr, max_index, sizeof(unsigned long), cmp_ulong, NULL);
-> + for (index = 0; index < max_index; index++) {
-> + hartid = hartid_arr[index];
->    if (hmask && ((hbase + BITS_PER_LONG) <= hartid)) {
->    result = __sbi_rfence_v02_call(fid, hmask, hbase,
->           start, size, arg4, arg5);
->
-> --------------------------------------------------------------------------------------------------------------------------------
 
-Works good here. No systemd segfaults on Unmatched.
 
-Tested-by: Ron Economos <re@w6rz.net>
+On 1/14/22 21:31, Matthew Rosato wrote:
+> A subsequent patch will be issuing SIC from KVM -- export the necessary
+> routine and make the operation control definitions available from a header.
+> Because the routine will now be exported, let's rename __zpci_set_irq_ctrl
+> to zpci_set_irq_ctrl and get rid of the zero'd iib wrapper function of
+> the same name.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+
+
+> ---
+>   arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
+>   arch/s390/pci/pci_insn.c         |  3 ++-
+>   arch/s390/pci/pci_irq.c          | 26 ++++++++++++--------------
+>   3 files changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
+> index 61cf9531f68f..5331082fa516 100644
+> --- a/arch/s390/include/asm/pci_insn.h
+> +++ b/arch/s390/include/asm/pci_insn.h
+> @@ -98,6 +98,14 @@ struct zpci_fib {
+>   	u32 gd;
+>   } __packed __aligned(8);
+>   
+> +/* Set Interruption Controls Operation Controls  */
+> +#define	SIC_IRQ_MODE_ALL		0
+> +#define	SIC_IRQ_MODE_SINGLE		1
+> +#define	SIC_IRQ_MODE_DIRECT		4
+> +#define	SIC_IRQ_MODE_D_ALL		16
+> +#define	SIC_IRQ_MODE_D_SINGLE		17
+> +#define	SIC_IRQ_MODE_SET_CPU		18
+> +
+>   /* directed interruption information block */
+>   struct zpci_diib {
+>   	u32 : 1;
+> @@ -134,13 +142,6 @@ int __zpci_store(u64 data, u64 req, u64 offset);
+>   int zpci_store(const volatile void __iomem *addr, u64 data, unsigned long len);
+>   int __zpci_store_block(const u64 *data, u64 req, u64 offset);
+>   void zpci_barrier(void);
+> -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
+> -
+> -static inline int zpci_set_irq_ctrl(u16 ctl, u8 isc)
+> -{
+> -	union zpci_sic_iib iib = {{0}};
+> -
+> -	return __zpci_set_irq_ctrl(ctl, isc, &iib);
+> -}
+> +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
+>   
+>   #endif
+> diff --git a/arch/s390/pci/pci_insn.c b/arch/s390/pci/pci_insn.c
+> index 4dd58b196cea..2a47b3936e44 100644
+> --- a/arch/s390/pci/pci_insn.c
+> +++ b/arch/s390/pci/pci_insn.c
+> @@ -97,7 +97,7 @@ int zpci_refresh_trans(u64 fn, u64 addr, u64 range)
+>   }
+>   
+>   /* Set Interruption Controls */
+> -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
+> +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
+>   {
+>   	if (!test_facility(72))
+>   		return -EIO;
+> @@ -108,6 +108,7 @@ int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
+>   
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_GPL(zpci_set_irq_ctrl);
+>   
+>   /* PCI Load */
+>   static inline int ____pcilg(u64 *data, u64 req, u64 offset, u8 *status)
+> diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
+> index 0d0a02a9fbbf..2f675355fd0c 100644
+> --- a/arch/s390/pci/pci_irq.c
+> +++ b/arch/s390/pci/pci_irq.c
+> @@ -15,13 +15,6 @@
+>   
+>   static enum {FLOATING, DIRECTED} irq_delivery;
+>   
+> -#define	SIC_IRQ_MODE_ALL		0
+> -#define	SIC_IRQ_MODE_SINGLE		1
+> -#define	SIC_IRQ_MODE_DIRECT		4
+> -#define	SIC_IRQ_MODE_D_ALL		16
+> -#define	SIC_IRQ_MODE_D_SINGLE		17
+> -#define	SIC_IRQ_MODE_SET_CPU		18
+> -
+>   /*
+>    * summary bit vector
+>    * FLOATING - summary bit per function
+> @@ -154,6 +147,7 @@ static struct irq_chip zpci_irq_chip = {
+>   static void zpci_handle_cpu_local_irq(bool rescan)
+>   {
+>   	struct airq_iv *dibv = zpci_ibv[smp_processor_id()];
+> +	union zpci_sic_iib iib = {{0}};
+
+
+
+>   	unsigned long bit;
+>   	int irqs_on = 0;
+>   
+> @@ -165,7 +159,7 @@ static void zpci_handle_cpu_local_irq(bool rescan)
+>   				/* End of second scan with interrupts on. */
+>   				break;
+>   			/* First scan complete, reenable interrupts. */
+> -			if (zpci_set_irq_ctrl(SIC_IRQ_MODE_D_SINGLE, PCI_ISC))
+> +			if (zpci_set_irq_ctrl(SIC_IRQ_MODE_D_SINGLE, PCI_ISC, &iib))
+>   				break;
+>   			bit = 0;
+>   			continue;
+> @@ -193,6 +187,7 @@ static void zpci_handle_remote_irq(void *data)
+>   static void zpci_handle_fallback_irq(void)
+>   {
+>   	struct cpu_irq_data *cpu_data;
+> +	union zpci_sic_iib iib = {{0}};
+>   	unsigned long cpu;
+>   	int irqs_on = 0;
+>   
+> @@ -203,7 +198,7 @@ static void zpci_handle_fallback_irq(void)
+>   				/* End of second scan with interrupts on. */
+>   				break;
+>   			/* First scan complete, reenable interrupts. */
+> -			if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, PCI_ISC))
+> +			if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, PCI_ISC, &iib))
+>   				break;
+>   			cpu = 0;
+>   			continue;
+> @@ -234,6 +229,7 @@ static void zpci_directed_irq_handler(struct airq_struct *airq,
+>   static void zpci_floating_irq_handler(struct airq_struct *airq,
+>   				      struct tpi_info *tpi_info)
+>   {
+> +	union zpci_sic_iib iib = {{0}};
+>   	unsigned long si, ai;
+>   	struct airq_iv *aibv;
+>   	int irqs_on = 0;
+> @@ -247,7 +243,7 @@ static void zpci_floating_irq_handler(struct airq_struct *airq,
+>   				/* End of second scan with interrupts on. */
+>   				break;
+>   			/* First scan complete, reenable interrupts. */
+> -			if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, PCI_ISC))
+> +			if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, PCI_ISC, &iib))
+>   				break;
+>   			si = 0;
+>   			continue;
+> @@ -407,11 +403,12 @@ static struct airq_struct zpci_airq = {
+>   static void __init cpu_enable_directed_irq(void *unused)
+>   {
+>   	union zpci_sic_iib iib = {{0}};
+> +	union zpci_sic_iib ziib = {{0}};
+>   
+>   	iib.cdiib.dibv_addr = (u64) zpci_ibv[smp_processor_id()]->vector;
+>   
+> -	__zpci_set_irq_ctrl(SIC_IRQ_MODE_SET_CPU, 0, &iib);
+> -	zpci_set_irq_ctrl(SIC_IRQ_MODE_D_SINGLE, PCI_ISC);
+> +	zpci_set_irq_ctrl(SIC_IRQ_MODE_SET_CPU, 0, &iib);
+> +	zpci_set_irq_ctrl(SIC_IRQ_MODE_D_SINGLE, PCI_ISC, &ziib);
+>   }
+>   
+>   static int __init zpci_directed_irq_init(void)
+> @@ -426,7 +423,7 @@ static int __init zpci_directed_irq_init(void)
+>   	iib.diib.isc = PCI_ISC;
+>   	iib.diib.nr_cpus = num_possible_cpus();
+>   	iib.diib.disb_addr = virt_to_phys(zpci_sbv->vector);
+> -	__zpci_set_irq_ctrl(SIC_IRQ_MODE_DIRECT, 0, &iib);
+> +	zpci_set_irq_ctrl(SIC_IRQ_MODE_DIRECT, 0, &iib);
+>   
+>   	zpci_ibv = kcalloc(num_possible_cpus(), sizeof(*zpci_ibv),
+>   			   GFP_KERNEL);
+> @@ -471,6 +468,7 @@ static int __init zpci_floating_irq_init(void)
+>   
+>   int __init zpci_irq_init(void)
+>   {
+> +	union zpci_sic_iib iib = {{0}};
+>   	int rc;
+>   
+>   	irq_delivery = sclp.has_dirq ? DIRECTED : FLOATING;
+> @@ -502,7 +500,7 @@ int __init zpci_irq_init(void)
+>   	 * Enable floating IRQs (with suppression after one IRQ). When using
+>   	 * directed IRQs this enables the fallback path.
+>   	 */
+> -	zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, PCI_ISC);
+> +	zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, PCI_ISC, &iib);
+>   
+>   	return 0;
+>   out_airq:
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

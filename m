@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F36549E404
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 656B849E405
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242013AbiA0OA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S241987AbiA0OAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241055AbiA0OAO (ORCPT
+        with ESMTP id S241913AbiA0OAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:00:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56AFC061747;
-        Thu, 27 Jan 2022 06:00:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62B9461B8D;
-        Thu, 27 Jan 2022 14:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C50BAC340F0;
-        Thu, 27 Jan 2022 14:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643292012;
-        bh=DirBArJgrjkWAQ7ngqn2ezBLFz+I/u2qZpfU/RrUKzQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gaZL5jTvKrX6X+2aOXQo4/a/q8YQCBNBa/Fp6GiDlai391WuHemlcG5tjz6Sa06Of
-         In8X9UcNmH3TBy/FMh5JPZ3nVjxT22OGydccZDSBueRaaBq4ot+YZX/x41NcTnROFF
-         QRGq+lOBsAHi1p0OkDLsKJSJPa2/TNgXsVGLAReV37mpfxShmy3Wd2FOcgh/FG8PGD
-         QttQl603JcpAQH4DQx7LGQbf3fkNc3xgo1htXCzPKZPV1BIVhTw7HpNhkjO17fw5n9
-         HKvhWkVvNk3Mqq7JxltzF1Sh4J1XWFrgkGMRYi4OWQB8NoUbQaDk6CGkPe5BocblQv
-         /GuNo1dZPZCFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4B18E5D087;
-        Thu, 27 Jan 2022 14:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 27 Jan 2022 09:00:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF564C061751
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gBGITkfIunbEoV1e27SDyy1KmsKjH8Nm3KYduSoAfDA=; b=Syad0HX5ez35G0TzuGzTkI6zHj
+        O7yIRtoNzaxGhoaWeCQZEWGzT2yvDAv2xV2luitje0tfDHo9nKrAdteeUBJ7/7UpylgR2WSEbTDgf
+        V0G5EyEC2DwiSvXow+8zzfjdYGYXdi6cBmWet/DvH4joVZD7GlylS6qgFJ0SvQ3qnGhCZhH0L9Hce
+        s9csYHLrTJQNoVZcjWuTAlElBA3T0eSachBfaD+XEz3UzdaseffgxzMVwWwFC3DKUPQgEkmQqT4R9
+        bLWPFlJ/BiBV3pdi5UFYsdrCCxB+CSo1FFbn33d63a4klJ3ONFyqZM4OQ0jt0oMvLHGrGrEY/qso6
+        1jRq9STg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nD5KA-005IHE-4q; Thu, 27 Jan 2022 14:00:30 +0000
+Date:   Thu, 27 Jan 2022 14:00:30 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Karolina Drobnik <karolinadrobnik@gmail.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        mike.rapoport@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/16] tools/include: Add cache.h stub
+Message-ID: <YfKlfoKXyFZxB/UD@casper.infradead.org>
+References: <cover.1643206612.git.karolinadrobnik@gmail.com>
+ <fa6e6abc6a214f85089c8a10b8df72d0402c6166.1643206612.git.karolinadrobnik@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] nfp: nsp: Simplify array allocation
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164329201273.13469.1026660627963932938.git-patchwork-notify@kernel.org>
-Date:   Thu, 27 Jan 2022 14:00:12 +0000
-References: <af578bd3eb471b9613bcba7f714cca7e297a4620.1643214385.git.robin.murphy@arm.com>
-In-Reply-To: <af578bd3eb471b9613bcba7f714cca7e297a4620.1643214385.git.robin.murphy@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     simon.horman@corigine.com, kuba@kernel.org, davem@davemloft.net,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fa6e6abc6a214f85089c8a10b8df72d0402c6166.1643206612.git.karolinadrobnik@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Jan 27, 2022 at 02:21:24PM +0100, Karolina Drobnik wrote:
+> +++ b/tools/include/linux/cache.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _TOOLS_LINUX_CACHE_H
+> +#define _TOOLS_LINUX_CACHE_H
+> +
+> +#define L1_CACHE_SHIFT		5
+> +#define L1_CACHE_BYTES		BIT(L1_CACHE_SHIFT)
+> +
+> +#define SMP_CACHE_BYTES L1_CACHE_BYTES
+> +
+> +#endif
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 26 Jan 2022 16:30:33 +0000 you wrote:
-> Prefer kcalloc() to kzalloc(array_size()) for allocating an array.
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->  drivers/net/ethernet/netronome/nfp/nfpcore/nfp_nsp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - [net-next] nfp: nsp: Simplify array allocation
-    https://git.kernel.org/netdev/net-next/c/d9f393f468aa
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+You've added an implicit dependency on include/vdso/bits.h which seems
+unpleasant ...

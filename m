@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFF049D7E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657E649D7EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbiA0CPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:15:19 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:20863 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiA0CPR (ORCPT
+        id S234883AbiA0CRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:17:25 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:45100 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229836AbiA0CRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:15:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643249717; x=1674785717;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=koizvhqZQhyhzGOf2KY9qXoCJNHtohDiLlRaxO3HbiI=;
-  b=gjPLuk+YPHEs29kOQLJydt1PuoNyMoP92vYDknJgTN5UP1i2QslHcF6o
-   fAg95qYrUHITkJROGiOncIe4JPwpBVihWC2cDjrkn7TzSfIrf7O9EuwHT
-   PgVa8R76ugwssBwsYdkYUS/O+pIpPTrFVhChEieBqWze00ZCuKfZIag+1
-   Z9hCIQk/f58RTpKMncCWULItiR/rB5J+qHTh7vMUDsRdLpHEPnBgPCd1J
-   MhgEEQ/F5D8MaWSoYvXHFH/ChBMXwXWKYfBwGpSgMwljOSrIwBUSLmzAj
-   K/A1e3eadjtGotRGZrQwQJ5GjAguWtrXx7ntIOKIcv4fUu8mx5Hsvhvig
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,319,1635177600"; 
-   d="scan'208";a="190429261"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2022 10:15:15 +0800
-IronPort-SDR: x0lrlTbol6wn0ZI2lSNOp7jaZu3sHpZ5IkM/8kRW3D+QOlgLNOXqTTBwUQwWfyCwL3HVv+xfl1
- ZheN8pYP91TaALlQ8Jwl8Ije+vXGRJpDap/qZOS2wlNIoMlrA3K2Bhis5ori0/iTE+haRZU75I
- wBJ/IpGQnIo5F3LBBKHdwEdw+aSIh5cHBA9np9M77dr1p8aNS+1kMgmyoEA+R1mE1E0sjyp92K
- crKgpkqkGjpKmnxyFYLrwv1CKoosD3hEZFwXfQAttceam1n/rQG+9/3kNirQ28fR8PtBcfgVxD
- 7CwtVlKaV01UTKa69/qwuGmb
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 17:48:34 -0800
-IronPort-SDR: LHssMG3tyYHJclHpErBW1hKGH5xz/zgbVqLaSgE0Z7yEgiRhJ0VEqSVWcnf4SF1uVwPdqE4kjZ
- sGWRgxwiZtqbGtO6+qQQxRUvm35/7siYB08Mlg3lzzAnoRWbB8LQsNaxnHoZY0zdrnYNrCJTAJ
- WiyHyyAoYko4aGZK5hfGiEuFdQnwi/Za4YKlxEDNu1deJ9xHcaR560LH0WHsCBHfI3Hi+duKT4
- TprSxHjdW11Wej4l15YUpnlh9hBX0HiG7oBUWTUQFEkcmJDn1lf+w8MtEPcsOBG+zmELlpFyQl
- NxY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 18:15:15 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jkkh25FrKz1SVp1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:15:14 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643249714; x=1645841715; bh=koizvhqZQhyhzGOf2KY9qXoCJNHtohDiLlR
-        axO3HbiI=; b=tUtb7l5sxiIxEUHZMIQP8rrNk2igozlmTew3oldE4le3QT07xz1
-        oEECnxmKA2AS3+abbDHJasCILWb4V7r4ATs8YQ5gRoAiwGAzj+9ppF4D9cCrO3fQ
-        XSQF7xmRVwSORKlNs9977DYiEdkrgqewxDNchqFiK2AOCURhHfWVlxquonbd4wE6
-        Wr4U3QxqkX0WWSigMbJ6zjgRJ11yS6tqzuVG2Gc2X+po8DUmZBAPHt9Ntu16y6yj
-        mNFKXyX6S5T2knT9T3yTjmVG+ikN1wttb2NB4Iy5fDRiM4eq30MqjQhL9X1j5fPH
-        I3TBTTlINt+xYWNoLse4LUXt2mj3ZFhLr3w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gKtSm8-1_pKF for <linux-kernel@vger.kernel.org>;
-        Wed, 26 Jan 2022 18:15:14 -0800 (PST)
-Received: from [10.225.163.56] (unknown [10.225.163.56])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jkkh10LLVz1RvlN;
-        Wed, 26 Jan 2022 18:15:12 -0800 (PST)
-Message-ID: <f7262bda-8669-3910-9e8c-e72a68eb3325@opensource.wdc.com>
-Date:   Thu, 27 Jan 2022 11:15:11 +0900
+        Wed, 26 Jan 2022 21:17:23 -0500
+X-UUID: b4077e3a397e40c093f18109fffaeb80-20220127
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=QjvSFqDgio4ij1FhYl91UUt34DnWgW/KwRx42nXvVy8=;
+        b=WHJIHTNBFTm/cbh99hv7Zxiyl+/7Apx8dggYr4Sr+VhmzU6KQnVnBb3yx3eWLa55quiDhHLiEGmOr0JtBfZB1i7SDLpMeceSb3MVNC6XvPGSwJM/zXFQb67/0H7IFdAsSOUIkvtc+5CDUr9joYcmHOCrdRnoFpnZjGuync2cFFI=;
+X-UUID: b4077e3a397e40c093f18109fffaeb80-20220127
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1616764511; Thu, 27 Jan 2022 10:17:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 27 Jan 2022 10:17:18 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 10:17:18 +0800
+Subject: Re: [PATCH net-next v2 8/9] net: ethernet: mtk-star-emac: add support
+ for MII interface
+To:     Biao Huang <biao.huang@mediatek.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "Fabien Parent" <fparent@baylibre.com>
+CC:     Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+        "John Crispin" <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+References: <20220127015857.9868-1-biao.huang@mediatek.com>
+ <20220127015857.9868-9-biao.huang@mediatek.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <cef66664-192c-ab2f-2a3c-18c5d48b5093@mediatek.com>
+Date:   Thu, 27 Jan 2022 10:17:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ata: pata_platform: Fix a NULL pointer dereference in
- __pata_platform_probe()
+In-Reply-To: <20220127015857.9868-9-biao.huang@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, Alexander Shiyan <shc_work@mail.ru>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220124164525.53068-1-zhou1615@umn.edu>
- <578d6a7e-1488-43b9-9bfe-9c99c88da4fd@omp.ru>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <578d6a7e-1488-43b9-9bfe-9c99c88da4fd@omp.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 18:46, Sergey Shtylyov wrote:
-> On 1/24/22 7:45 PM, Zhou Qingyang wrote:
-> 
->> In __pata_platform_probe(), devm_kzalloc() is assigned to ap->ops and
->> there is a dereference of it right after that, which could introduce a
->> NULL pointer dereference bug.
->>
->> Fix this by adding a NULL check of ap->ops.
->>
->> This bug was found by a static analyzer.
->>
->> Builds with 'make allyesconfig' show no new warnings,
->> and our static analyzer no longer warns about this code.
->>
->> Fixes: f3d5e4f18dba ("ata: pata_of_platform: Allow to use 16-bit wide data transfer")
->> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> 
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+T24gMS8yNy8yMiA5OjU4IEFNLCBCaWFvIEh1YW5nIHdyb3RlOg0KPiBBZGQgc3VwcG9ydCBmb3Ig
+TUlJIGludGVyZmFjZS4NCj4gSWYgdXNlciB3YW50cyB0byB1c2UgTUlJLCBhc3NpZ24gIk1JSSIg
+dG8gInBoeS1tb2RlIiBwcm9wZXJ0eSBpbiBkdHMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBCaWFv
+IEh1YW5nIDxiaWFvLmh1YW5nQG1lZGlhdGVrLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogWWluZ2h1
+YSBQYW4gPG90X3lpbmdodWEucGFuQG1lZGlhdGVrLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9u
+ZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jIHwgMTMgKysrKysrKysrKystLQ0K
+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiAN
+Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L21lZGlhdGVrL210a19zdGFyX2Vt
+YWMuYyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L21lZGlhdGVrL210a19zdGFyX2VtYWMuYw0KPiBp
+bmRleCBkNWU5NzRlMGRiNmQuLjE2N2EwMTlmZDhmNSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9u
+ZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jDQo+ICsrKyBiL2RyaXZlcnMvbmV0
+L2V0aGVybmV0L21lZGlhdGVrL210a19zdGFyX2VtYWMuYw0KPiBAQCAtMTkzLDYgKzE5Myw3IEBA
+IHN0YXRpYyBjb25zdCBjaGFyICpjb25zdCBtdGtfc3Rhcl9jbGtfbmFtZXNbXSA9IHsgImNvcmUi
+LCAicmVnIiwgInRyYW5zIiB9Ow0KPiAgICNkZWZpbmUgTVRLX1BFUklDRkdfUkVHX05JQ19DRkcx
+X0NPTgkJMHgwM2M4DQo+ICAgI2RlZmluZSBNVEtfUEVSSUNGR19SRUdfTklDX0NGR19DT05fVjIJ
+CTB4MGMxMA0KPiAgICNkZWZpbmUgTVRLX1BFUklDRkdfUkVHX05JQ19DRkdfQ09OX0NGR19JTlRG
+CUdFTk1BU0soMywgMCkNCj4gKyNkZWZpbmUgTVRLX1BFUklDRkdfQklUX05JQ19DRkdfQ09OX01J
+SQkJMA0KPiAgICNkZWZpbmUgTVRLX1BFUklDRkdfQklUX05JQ19DRkdfQ09OX1JNSUkJMQ0KPiAg
+ICNkZWZpbmUgTVRLX1BFUklDRkdfQklUX05JQ19DRkdfQ09OX0NMSwkJQklUKDApDQo+ICAgI2Rl
+ZmluZSBNVEtfUEVSSUNGR19CSVRfTklDX0NGR19DT05fQ0xLX1YyCUJJVCg4KQ0KPiBAQCAtMTQ2
+Myw2ICsxNDY0LDcgQEAgc3RhdGljIGludCBtdGtfc3Rhcl9zZXRfdGltaW5nKHN0cnVjdCBtdGtf
+c3Rhcl9wcml2ICpwcml2KQ0KPiAgIAl1bnNpZ25lZCBpbnQgZGVsYXlfdmFsID0gMDsNCj4gICAN
+Cj4gICAJc3dpdGNoIChwcml2LT5waHlfaW50Zikgew0KPiArCWNhc2UgUEhZX0lOVEVSRkFDRV9N
+T0RFX01JSToNCj4gICAJY2FzZSBQSFlfSU5URVJGQUNFX01PREVfUk1JSToNCj4gICAJCWRlbGF5
+X3ZhbCB8PSBGSUVMRF9QUkVQKE1US19TVEFSX0JJVF9JTlZfUlhfQ0xLLCBwcml2LT5yeF9pbnYp
+Ow0KPiAgIAkJZGVsYXlfdmFsIHw9IEZJRUxEX1BSRVAoTVRLX1NUQVJfQklUX0lOVl9UWF9DTEss
+IHByaXYtPnR4X2ludik7DQo+IEBAIC0xNTQ1LDcgKzE1NDcsOCBAQCBzdGF0aWMgaW50IG10a19z
+dGFyX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAgCXJldCA9IG9mX2dl
+dF9waHlfbW9kZShvZl9ub2RlLCAmcHJpdi0+cGh5X2ludGYpOw0KPiAgIAlpZiAocmV0KSB7DQo+
+ICAgCQlyZXR1cm4gcmV0Ow0KPiAtCX0gZWxzZSBpZiAocHJpdi0+cGh5X2ludGYgIT0gUEhZX0lO
+VEVSRkFDRV9NT0RFX1JNSUkpIHsNCj4gKwl9IGVsc2UgaWYgKHByaXYtPnBoeV9pbnRmICE9IFBI
+WV9JTlRFUkZBQ0VfTU9ERV9STUlJICYmDQo+ICsJCSAgIHByaXYtPnBoeV9pbnRmICE9IFBIWV9J
+TlRFUkZBQ0VfTU9ERV9NSUkpIHsNCj4gICAJCWRldl9lcnIoZGV2LCAidW5zdXBwb3J0ZWQgcGh5
+IG1vZGU6ICVzXG4iLA0KPiAgIAkJCXBoeV9tb2Rlcyhwcml2LT5waHlfaW50ZikpOw0KPiAgIAkJ
+cmV0dXJuIC1FSU5WQUw7DQo+IEBAIC0xNjEwLDkgKzE2MTMsMTIgQEAgc3RhdGljIGludCBtdDg1
+MTZfc2V0X2ludGVyZmFjZV9tb2RlKHN0cnVjdCBuZXRfZGV2aWNlICpuZGV2KQ0KPiAgIHsNCj4g
+ICAJc3RydWN0IG10a19zdGFyX3ByaXYgKnByaXYgPSBuZXRkZXZfcHJpdihuZGV2KTsNCj4gICAJ
+c3RydWN0IGRldmljZSAqZGV2ID0gbXRrX3N0YXJfZ2V0X2Rldihwcml2KTsNCj4gLQl1bnNpZ25l
+ZCBpbnQgaW50Zl92YWwsIHJldCwgcm1paV9yeGM7DQo+ICsJdW5zaWduZWQgaW50IGludGZfdmFs
+LCByZXQsIHJtaWlfcnhjID0gMDsNCj4gICANCj4gICAJc3dpdGNoIChwcml2LT5waHlfaW50Zikg
+ew0KPiArCWNhc2UgUEhZX0lOVEVSRkFDRV9NT0RFX01JSToNCj4gKwkJaW50Zl92YWwgPSBNVEtf
+UEVSSUNGR19CSVRfTklDX0NGR19DT05fTUlJOw0KPiArCQlicmVhazsNCj4gICAJY2FzZSBQSFlf
+SU5URVJGQUNFX01PREVfUk1JSToNCj4gICAJCWludGZfdmFsID0gTVRLX1BFUklDRkdfQklUX05J
+Q19DRkdfQ09OX1JNSUk7DQo+ICAgCQlybWlpX3J4YyA9IHByaXYtPnJtaWlfcnhjID8gMCA6IE1U
+S19QRVJJQ0ZHX0JJVF9OSUNfQ0ZHX0NPTl9DTEs7DQo+IEBAIC0xNjQyLDYgKzE2NDgsOSBAQCBz
+dGF0aWMgaW50IG10ODM2NV9zZXRfaW50ZXJmYWNlX21vZGUoc3RydWN0IG5ldF9kZXZpY2UgKm5k
+ZXYpDQo+ICAgCXVuc2lnbmVkIGludCBpbnRmX3ZhbDsNCj4gICANCj4gICAJc3dpdGNoIChwcml2
+LT5waHlfaW50Zikgew0KPiArCWNhc2UgUEhZX0lOVEVSRkFDRV9NT0RFX01JSToNCj4gKwkJaW50
+Zl92YWwgPSBNVEtfUEVSSUNGR19CSVRfTklDX0NGR19DT05fTUlJOw0KPiArCQlicmVhazsNCj4g
+ICAJY2FzZSBQSFlfSU5URVJGQUNFX01PREVfUk1JSToNCj4gICAJCWludGZfdmFsID0gTVRLX1BF
+UklDRkdfQklUX05JQ19DRkdfQ09OX1JNSUk7DQo+ICAgCQlpbnRmX3ZhbCB8PSBwcml2LT5ybWlp
+X3J4YyA/IDAgOiBNVEtfUEVSSUNGR19CSVRfTklDX0NGR19DT05fQ0xLX1YyOw0KPiANCg0KUmV2
+aWV3ZWQtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRpYXRlay5jb20+DQoNClJlZ2Fy
+ZHMsDQpNYWNwYXVsIExpbg==
 
-Please see my note about the typo in the fix. I kept you RB tag. Let me
-know if that is OK.
-
-> 
-> [...]
-> 
-> MBR, Sergey
-
-
--- 
-Damien Le Moal
-Western Digital Research

@@ -2,384 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A70649DABA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8279049DABD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbiA0GcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:32:09 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:39370 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236756AbiA0GcC (ORCPT
+        id S236762AbiA0Gcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229685AbiA0Gce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:32:02 -0500
-X-UUID: 7268f9d2063a425a81e67e0e33f47f62-20220127
-X-UUID: 7268f9d2063a425a81e67e0e33f47f62-20220127
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <hui.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 337337088; Thu, 27 Jan 2022 14:31:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 27 Jan 2022 14:31:58 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Jan 2022 14:31:57 +0800
-From:   Hui-Liu Liu <hui.liu@mediatek.com>
-To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <zhiyong.tao@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
-        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <yuchen.huang@mediatek.com>, <wen.su@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 2/2] arm64: dts: mt6359: add PMIC MT6359 related nodes
-Date:   Thu, 27 Jan 2022 14:31:45 +0800
-Message-ID: <20220127063145.13413-3-hui.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220127063145.13413-1-hui.liu@mediatek.com>
-References: <20220127063145.13413-1-hui.liu@mediatek.com>
+        Thu, 27 Jan 2022 01:32:34 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B1C061714
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:32:33 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id e9so2837008ljq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:32:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hn+2ril8pqAtt7/6Z1JQegT9LE4NfpF4eSDSr3S6Kuo=;
+        b=yoJPLJc6p/zsMhYPBqvSer6vmRAMjwQNpelLD881lDqdAZoCWvvHeuhX7VsG4Anrr2
+         DjP/+uB17Zmdrwi8P1Saj3EWMVt1mtdfIZmuLItnEdy3r1BqDjQmEUrB68Bi6I/exOP2
+         JPc9lVr1SJPoYJu2qt9Slhtavi8Zwga8kyMzzI78AAiGWVVPLdVgKbXSMc6+3qVzLIw1
+         F70PYmZwnhEDsJbgV9tRs+fEJKOcp0ucB1muBDtoCsMA3WRcYqEHayBvqmGkBIRGVh/m
+         dBPCH09XTcCIXzpCUnYp7knTdu/ZMReTbf69Q+dX8pScVcKpZMBKIhm2+H37fT0vuhYt
+         bC+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hn+2ril8pqAtt7/6Z1JQegT9LE4NfpF4eSDSr3S6Kuo=;
+        b=JqtYq5m6+AbZbZxgHd8p9mK2eGN09mA9YrwC+wp9V9JCbTG6srsmmS/dFfeg9+QKCr
+         5Toe7wfZ1CDXDCxZB+ZQpBVJQRuPucq18BkLzVrbGpD22VLyBFe29ypdElHQa2ejjP5l
+         vfSh9Bdfl9wEeRjSPSjyVVPF+tNuWqYaA9wlw9BTvde5Q4ytyQbG6ThBkEbSvLISI3rh
+         DohfZiYNYdYUuZbEYZraZ21DL8w+JuGC+383fKoKgn5TV8sQdklsVtOaWlb0Gf3N/tl+
+         WOwanyUakpnMKBadKLYQjWSQI7J+6Ndj4cOwe98i6HTJfzgyxjEX2q9IYYVAJn5bNVqQ
+         iucA==
+X-Gm-Message-State: AOAM5313UYxf+ZD4iBcyVRP/L81CVcy2PAPL76wZEnx9eJneXn9mb4T+
+        KStSEE5sZszFBkFh6mxzDLl3iGyvVgUp//rRdzzBkA==
+X-Google-Smtp-Source: ABdhPJyMxVPHIEwyGfcRTB1wsGy3jRnjlmkwcLDAWwtPcJDFG8egBQZEUwGhYb2qEeY9RZ6tRP2GIF0MNLFb3L0UJQs=
+X-Received: by 2002:a05:651c:1987:: with SMTP id bx7mr1916173ljb.136.1643265152075;
+ Wed, 26 Jan 2022 22:32:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+References: <20220125162938.838382-1-jens.wiklander@linaro.org> <20220125162938.838382-8-jens.wiklander@linaro.org>
+In-Reply-To: <20220125162938.838382-8-jens.wiklander@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 27 Jan 2022 12:02:20 +0530
+Message-ID: <CAFA6WYOLRqU4m5RJGJac9AtcpD7pt9Owd7D+XN8GjWRMAPBNuw@mail.gmail.com>
+Subject: Re: [PATCH v3 07/12] optee: use driver internal tee_contex for some rpc
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        stable@vger.kernel.org, Lars Persson <larper@axis.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hui Liu <hui.liu@mediatek.com>
++Lars
 
-Add MT6359 node.
+Hi Jens,
 
-Signed-off-by: Hui Liu <hui.liu@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt6359.dtsi    | 298 ++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8192-evb.dts |   1 +
- 2 files changed, 299 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+On Tue, 25 Jan 2022 at 21:59, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>
+> Uses the new driver internal tee_context when allocating driver private
+> shared memory. This decouples the shared memory object from its original
+> tee_context. This is needed when the life time of such a memory
+> allocation outlives the client tee_context.
+>
+> Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> ---
+>  drivers/tee/optee/ffa_abi.c | 17 +++++++++--------
+>  drivers/tee/optee/smc_abi.c |  7 ++++---
+>  2 files changed, 13 insertions(+), 11 deletions(-)
+>
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-new file mode 100644
-index 000000000000..df3e822232d3
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2022 MediaTek Inc.
-+ */
-+
-+&pwrap {
-+	pmic: pmic {
-+		compatible = "mediatek,mt6359";
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+
-+		mt6359codec: mt6359codec {
-+		};
-+
-+		regulators {
-+			mt6359_vs1_buck_reg: buck_vs1 {
-+				regulator-name = "vs1";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <2200000>;
-+				regulator-enable-ramp-delay = <0>;
-+				regulator-always-on;
-+			};
-+			mt6359_vgpu11_buck_reg: buck_vgpu11 {
-+				regulator-name = "vgpu11";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vmodem_buck_reg: buck_vmodem {
-+				regulator-name = "vmodem";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1100000>;
-+				regulator-ramp-delay = <10760>;
-+				regulator-enable-ramp-delay = <200>;
-+			};
-+			mt6359_vpu_buck_reg: buck_vpu {
-+				regulator-name = "vpu";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vcore_buck_reg: buck_vcore {
-+				regulator-name = "vcore";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1300000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vs2_buck_reg: buck_vs2 {
-+				regulator-name = "vs2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1600000>;
-+				regulator-enable-ramp-delay = <0>;
-+				regulator-always-on;
-+			};
-+			mt6359_vpa_buck_reg: buck_vpa {
-+				regulator-name = "vpa";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3650000>;
-+				regulator-enable-ramp-delay = <300>;
-+			};
-+			mt6359_vproc2_buck_reg: buck_vproc2 {
-+				regulator-name = "vproc2";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vproc1_buck_reg: buck_vproc1 {
-+				regulator-name = "vproc1";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vcore_sshub_buck_reg: buck_vcore_sshub {
-+				regulator-name = "vcore_sshub";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+			};
-+			mt6359_vgpu11_sshub_buck_reg: buck_vgpu11_sshub {
-+				regulator-name = "vgpu11_sshub";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+			};
-+			mt6359_vaud18_ldo_reg: ldo_vaud18 {
-+				regulator-name = "vaud18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vsim1_ldo_reg: ldo_vsim1 {
-+				regulator-name = "vsim1";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <3100000>;
-+			};
-+			mt6359_vibr_ldo_reg: ldo_vibr {
-+				regulator-name = "vibr";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vrf12_ldo_reg: ldo_vrf12 {
-+				regulator-name = "vrf12";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1300000>;
-+			};
-+			mt6359_vusb_ldo_reg: ldo_vusb {
-+				regulator-name = "vusb";
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-enable-ramp-delay = <960>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsram_proc2_ldo_reg: ldo_vsram_proc2 {
-+				regulator-name = "vsram_proc2";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vio18_ldo_reg: ldo_vio18 {
-+				regulator-name = "vio18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+				regulator-enable-ramp-delay = <960>;
-+				regulator-always-on;
-+			};
-+			mt6359_vcamio_ldo_reg: ldo_vcamio {
-+				regulator-name = "vcamio";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+			};
-+			mt6359_vcn18_ldo_reg: ldo_vcn18 {
-+				regulator-name = "vcn18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vfe28_ldo_reg: ldo_vfe28 {
-+				regulator-name = "vfe28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+				regulator-enable-ramp-delay = <120>;
-+			};
-+			mt6359_vcn13_ldo_reg: ldo_vcn13 {
-+				regulator-name = "vcn13";
-+				regulator-min-microvolt = <900000>;
-+				regulator-max-microvolt = <1300000>;
-+			};
-+			mt6359_vcn33_1_bt_ldo_reg: ldo_vcn33_1_bt {
-+				regulator-name = "vcn33_1_bt";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vcn33_1_wifi_ldo_reg: ldo_vcn33_1_wifi {
-+				regulator-name = "vcn33_1_wifi";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vaux18_ldo_reg: ldo_vaux18 {
-+				regulator-name = "vaux18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsram_others_ldo_reg: ldo_vsram_others {
-+				regulator-name = "vsram_others";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vefuse_ldo_reg: ldo_vefuse {
-+				regulator-name = "vefuse";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <2000000>;
-+			};
-+			mt6359_vxo22_ldo_reg: ldo_vxo22 {
-+				regulator-name = "vxo22";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <2200000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vrfck_ldo_reg: ldo_vrfck {
-+				regulator-name = "vrfck";
-+				regulator-min-microvolt = <1500000>;
-+				regulator-max-microvolt = <1700000>;
-+			};
-+			mt6359_vrfck_1_ldo_reg: ldo_vrfck_1 {
-+				regulator-name = "vrfck";
-+				regulator-min-microvolt = <1240000>;
-+				regulator-max-microvolt = <1600000>;
-+			};
-+			mt6359_vbif28_ldo_reg: ldo_vbif28 {
-+				regulator-name = "vbif28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vio28_ldo_reg: ldo_vio28 {
-+				regulator-name = "vio28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vemc_ldo_reg: ldo_vemc {
-+				regulator-name = "vemc";
-+				regulator-min-microvolt = <2900000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vemc_1_ldo_reg: ldo_vemc_1 {
-+				regulator-name = "vemc";
-+				regulator-min-microvolt = <2500000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vcn33_2_bt_ldo_reg: ldo_vcn33_2_bt {
-+				regulator-name = "vcn33_2_bt";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vcn33_2_wifi_ldo_reg: ldo_vcn33_2_wifi {
-+				regulator-name = "vcn33_2_wifi";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_va12_ldo_reg: ldo_va12 {
-+				regulator-name = "va12";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1300000>;
-+				regulator-always-on;
-+			};
-+			mt6359_va09_ldo_reg: ldo_va09 {
-+				regulator-name = "va09";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+			mt6359_vrf18_ldo_reg: ldo_vrf18 {
-+				regulator-name = "vrf18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1810000>;
-+			};
-+			mt6359_vsram_md_ldo_reg: ldo_vsram_md {
-+				regulator-name = "vsram_md";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <10760>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vufs_ldo_reg: ldo_vufs {
-+				regulator-name = "vufs";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+			};
-+			mt6359_vm18_ldo_reg: ldo_vm18 {
-+				regulator-name = "vm18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vbbck_ldo_reg: ldo_vbbck {
-+				regulator-name = "vbbck";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+			mt6359_vsram_proc1_ldo_reg: ldo_vsram_proc1 {
-+				regulator-name = "vsram_proc1";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsim2_ldo_reg: ldo_vsim2 {
-+				regulator-name = "vsim2";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <3100000>;
-+			};
-+			mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
-+				regulator-name = "vsram_others_sshub";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+			};
-+		};
-+
-+		mt6359rtc: mt6359rtc {
-+			compatible = "mediatek,mt6358-rtc";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-index 0205837fa698..808be492e970 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-@@ -5,6 +5,7 @@
-  */
- /dts-v1/;
- #include "mt8192.dtsi"
-+#include "mt6359.dtsi"
- 
- / {
- 	model = "MediaTek MT8192 evaluation board";
--- 
-2.25.1
+As this commit fixes multiple issues seen earlier due to pre-allocated
+SHM cache in client's context. I think it makes sense to separate this
+as a standalone fix with few bits from patch #6 to target 5.17
+release. As otherwise it will take a long path via 5.18 and then
+backport to stable trees. In the meantime there can be other side
+effects noticed similar to one from Lars.
 
+-Sumit
+
+> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> index 954e88866968..fb7345941024 100644
+> --- a/drivers/tee/optee/ffa_abi.c
+> +++ b/drivers/tee/optee/ffa_abi.c
+> @@ -424,6 +424,7 @@ static struct tee_shm_pool *optee_ffa_shm_pool_alloc_pages(void)
+>   */
+>
+>  static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+> +                                             struct optee *optee,
+>                                               struct optee_msg_arg *arg)
+>  {
+>         struct tee_shm *shm;
+> @@ -439,7 +440,8 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+>                 shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
+>                 break;
+>         case OPTEE_RPC_SHM_TYPE_KERNEL:
+> -               shm = tee_shm_alloc_priv_buf(ctx, arg->params[0].u.value.b);
+> +               shm = tee_shm_alloc_priv_buf(optee->ctx,
+> +                                            arg->params[0].u.value.b);
+>                 break;
+>         default:
+>                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
+> @@ -492,14 +494,13 @@ static void handle_ffa_rpc_func_cmd_shm_free(struct tee_context *ctx,
+>  }
+>
+>  static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
+> +                                   struct optee *optee,
+>                                     struct optee_msg_arg *arg)
+>  {
+> -       struct optee *optee = tee_get_drvdata(ctx->teedev);
+> -
+>         arg->ret_origin = TEEC_ORIGIN_COMMS;
+>         switch (arg->cmd) {
+>         case OPTEE_RPC_CMD_SHM_ALLOC:
+> -               handle_ffa_rpc_func_cmd_shm_alloc(ctx, arg);
+> +               handle_ffa_rpc_func_cmd_shm_alloc(ctx, optee, arg);
+>                 break;
+>         case OPTEE_RPC_CMD_SHM_FREE:
+>                 handle_ffa_rpc_func_cmd_shm_free(ctx, optee, arg);
+> @@ -509,12 +510,12 @@ static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
+>         }
+>  }
+>
+> -static void optee_handle_ffa_rpc(struct tee_context *ctx, u32 cmd,
+> -                                struct optee_msg_arg *arg)
+> +static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
+> +                                u32 cmd, struct optee_msg_arg *arg)
+>  {
+>         switch (cmd) {
+>         case OPTEE_FFA_YIELDING_CALL_RETURN_RPC_CMD:
+> -               handle_ffa_rpc_func_cmd(ctx, arg);
+> +               handle_ffa_rpc_func_cmd(ctx, optee, arg);
+>                 break;
+>         case OPTEE_FFA_YIELDING_CALL_RETURN_INTERRUPT:
+>                 /* Interrupt delivered by now */
+> @@ -581,7 +582,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+>                  * above.
+>                  */
+>                 cond_resched();
+> -               optee_handle_ffa_rpc(ctx, data->data1, rpc_arg);
+> +               optee_handle_ffa_rpc(ctx, optee, data->data1, rpc_arg);
+>                 cmd = OPTEE_FFA_YIELDING_CALL_RESUME;
+>                 data->data0 = cmd;
+>                 data->data1 = 0;
+> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> index b1082a34cda2..0dc383c974a3 100644
+> --- a/drivers/tee/optee/smc_abi.c
+> +++ b/drivers/tee/optee/smc_abi.c
+> @@ -621,6 +621,7 @@ static void handle_rpc_func_cmd_shm_free(struct tee_context *ctx,
+>  }
+>
+>  static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+> +                                         struct optee *optee,
+>                                           struct optee_msg_arg *arg,
+>                                           struct optee_call_ctx *call_ctx)
+>  {
+> @@ -650,7 +651,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+>                 shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
+>                 break;
+>         case OPTEE_RPC_SHM_TYPE_KERNEL:
+> -               shm = tee_shm_alloc_priv_buf(ctx, sz);
+> +               shm = tee_shm_alloc_priv_buf(optee->ctx, sz);
+>                 break;
+>         default:
+>                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
+> @@ -746,7 +747,7 @@ static void handle_rpc_func_cmd(struct tee_context *ctx, struct optee *optee,
+>         switch (arg->cmd) {
+>         case OPTEE_RPC_CMD_SHM_ALLOC:
+>                 free_pages_list(call_ctx);
+> -               handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
+> +               handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
+>                 break;
+>         case OPTEE_RPC_CMD_SHM_FREE:
+>                 handle_rpc_func_cmd_shm_free(ctx, arg);
+> @@ -775,7 +776,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
+>
+>         switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
+>         case OPTEE_SMC_RPC_FUNC_ALLOC:
+> -               shm = tee_shm_alloc_priv_buf(ctx, param->a1);
+> +               shm = tee_shm_alloc_priv_buf(optee->ctx, param->a1);
+>                 if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
+>                         reg_pair_from_64(&param->a1, &param->a2, pa);
+>                         reg_pair_from_64(&param->a4, &param->a5,
+> --
+> 2.31.1
+>

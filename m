@@ -2,183 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E73DF49EC79
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F72449EC7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344018AbiA0U1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S1344027AbiA0U2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiA0U1s (ORCPT
+        with ESMTP id S231384AbiA0U2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:27:48 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237B9C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:27:48 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id p7so5233335edc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:27:48 -0800 (PST)
+        Thu, 27 Jan 2022 15:28:36 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786C1C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:28:36 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id s5so8586029ejx.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:28:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uQiZE2VyuneBgtPlVUPa+7lot3dvumZ8OUhp+P+Pisk=;
-        b=c3udS0AewguSXGj0fpjk/0blod+wQRlJFsXf8KlOJNO73FK2ggGMw6HehwoubLxviD
-         KmHNG1z6x6X05zwfDb2yI3KjCjysS8VKyfnse6vOHBEdLZ70Eo4X0KyRoOHoAWLMnCFU
-         svXVr9brYTWXEkKvKWbZMrM1ifulBAZizQ6lK2K3zSc6olMdefCW7YjLjRKDhEhoBBHP
-         SEf29+nV7lVTbcx17b536uXUDv50tudZB10t517JDl+zTKf3SiGF6884j4ChWVz58GdX
-         QkICQKlojYWlC7eNEwnVH+5fGPwumyCqEk2vqQ33AOoWtj7sRDjF9uQgdg+QXw6w/Ds2
-         WO7Q==
+        bh=41+S3e1G9az4hjoyIeQC86UioZgpO/adTzdGdboWJEs=;
+        b=tkxspR5jl3OqRnxMSq8JDCc/cDWEPcSLiVi0a4mJ7qF992fNUR+q3YQCA1hwakMvH+
+         /fZw1S+ki4w/7BxmAGOMfJPn4TiITIGxMr5DImnsW5S6YSFhqk8ksufG4P05yest9uUk
+         qGrWiIjJA57IzJmWodDAHMtH/1QT4MKWsasSqKoX8wNdVRNRixGZHM+4fFCcW2RrEKV4
+         Kn1WrqIBsbdeg0pTaZHEi5vt2qUL8mPlI8Q7HfMa1YxlQ85DMH1zRrHRyRrlNRGeBBml
+         K90ZH5xajUuFBiIL8XvWWR1m3ahFyvb/k3gMq0mChUO580tNN/NONhl61tYJHmChAmKD
+         ofag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uQiZE2VyuneBgtPlVUPa+7lot3dvumZ8OUhp+P+Pisk=;
-        b=nSncb0ku9PGmGr8rPLt2pZ9lX4eyOatqP22RiyoWypQsXZEM4leQY+jGOA9ODtrDZJ
-         svEn4jwg4S+dZeZP/Fh9Vkrd5rgyGpkovIlzsBFyD7QxPAQ4drmpz+Ut7vjqOQZ64QTN
-         ffSfETNGV3smC1OQtmJn3yFn3XlpxofZaD9tIQtLmApOg9M1fXixkUSLUAkOMUTJqm4x
-         3f2E1FNaKC8+6A70emV4vCLWDucXO3iy1GGpyp863F4kTn50+HKEH7HN95k7ROwxEWW6
-         MaEMgRJwKGidyvSxXsusfnPmHTZoy5YtoH52ROdYxiluncX5Ldmrd3jnV1gqn2KzzIJS
-         SWRg==
-X-Gm-Message-State: AOAM530hXhXeUcjTAf69i8MZBYE7sWK/vfiYVEGx55XY/SYWj3OxiwMd
-        lRamqICEVSuO1uLzQon3mZBqxvqwi50VZ/ubiNBTZQ==
-X-Google-Smtp-Source: ABdhPJzTfpGcj/rkTsEu64/xIaiWOn1k3wDrfH0T/ccffkuYCK2S1zUU8DcZdwfKA+HbhLwYClft3oxpezf3u1kBp6I=
-X-Received: by 2002:a50:eb46:: with SMTP id z6mr5076147edp.229.1643315266494;
- Thu, 27 Jan 2022 12:27:46 -0800 (PST)
+        bh=41+S3e1G9az4hjoyIeQC86UioZgpO/adTzdGdboWJEs=;
+        b=N1VRi6bBrlcYfmeUklx/Scb10oH9hC8TfcKG8DI9/XL28c+12KLPQtRf1GjQk1UJIb
+         aO2Bco+Bbcm050UroGdvVWBbTmPWydgDHKUN05l7NqIDCXi5w+bn3kck+StGhhutpYAj
+         67mDAKJMkFzY2wXnqwmn6NYy9bSF6XeiNai3jFlkVw0HfIVkITTnIvjZ2sseClW/RPEf
+         h3RS9ulqQrlCyHMv1Wi6ePsn+YB8jxw9O1OvzAx5SHshW0saw2IefXum0rXm8DCGUKp+
+         Yso//ZggN7lF9WZWCfjnMOi12iy4/s39yjUvUuvTEJbkNU5dzdIjk53XXbnTdxd7ae1R
+         Saew==
+X-Gm-Message-State: AOAM530iFfXlNeluBHi1xpaoKoIwzvVCcn5+Jby33aq1DmJOQ1+B65KX
+        AkAiuhwekQlm4oRLMDFh2mpqMBetmpvnJ8wSEyiXgw==
+X-Google-Smtp-Source: ABdhPJyBjlVg4LcpXCJNnPRMusqfU5Ajf+q6BnXvzgPaNAhuIT3jfgcOc9U2usc9V4RHgXKdo+PSsdqT45GXftqoTcU=
+X-Received: by 2002:a17:907:6d25:: with SMTP id sa37mr4293287ejc.202.1643315315038;
+ Thu, 27 Jan 2022 12:28:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125210011.3817742-1-dlatypov@google.com> <20220125210011.3817742-4-dlatypov@google.com>
- <CABVgOSm4EWFK5-KWto1HF3AEY9c77s5MufufXRDek3PAcWCccA@mail.gmail.com> <CAGS_qxpDGLR6=NKgxps+PXi-kyZDuyV67j6AybqTmOYOi5XqXw@mail.gmail.com>
-In-Reply-To: <CAGS_qxpDGLR6=NKgxps+PXi-kyZDuyV67j6AybqTmOYOi5XqXw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 27 Jan 2022 12:27:35 -0800
-Message-ID: <CAGS_qxqwRT9hqej_2KFWyFZ+A2DuD214BKHKD4KVd70B7X_Nkw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: factor out str constants from binary assertion structs
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+References: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
+In-Reply-To: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 27 Jan 2022 13:28:23 -0700
+Message-ID: <CANLsYkxdXFSVLEnJQTd87LqP5oootxyM3adbxvvpWSEvi5VcsA@mail.gmail.com>
+Subject: Re: [RFC PATCH] ACPI / amba: Skip creating amba device when
+ associated cpu is not online
+To:     chenxiang <chenxiang66@hisilicon.com>
+Cc:     linux@armlinux.org.uk, vkoul@kernel.org,
+        linux-arm-kernel@lists.infradead.org, Suzuki.Poulose@arm.com,
+        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:21 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Wed, Jan 26, 2022 at 7:39 PM David Gow <davidgow@google.com> wrote:
-> >
-> > On Wed, Jan 26, 2022 at 5:00 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > >
-> > > If the compiler doesn't optimize them away, each kunit assertion (use of
-> > > KUNIT_EXPECT_EQ, etc.) can use 88 bytes of stack space in the worst and
-> > > most common case. This has led to compiler warnings and a suggestion
-> > > from Linus to move data from the structs into static const's where
-> > > possible [1].
-> > >
-> > > This builds upon [2] which did so for the base struct kunit_assert type.
-> > > That only reduced sizeof(struct kunit_binary_assert) from 88 to 64.
-> > >
-> > > Given these are by far the most commonly used asserts, this patch
-> > > factors out the textual representations of the operands and comparator
-> > > into another static const, saving 16 more bytes.
-> > >
-> > > In detail, KUNIT_EXPECT_EQ(test, 2 + 2, 5) yields the following struct
-> > >   (struct kunit_binary_assert) {
-> > >     .assert = <struct kunit_assert>,
-> > >     .operation = "==",
-> > >     .left_text = "2 + 2",
-> > >     .left_value = 4,
-> > >     .right_text = "5",
-> > >     .right_value = 5,
-> > >   }
-> > > After this change
-> > >   static const struct kunit_binary_assert_text __text = {
-> > >     .operation = "==",
-> > >     .left_text = "2 + 2",
-> > >     .right_text = "5",
-> > >   };
-> > >   (struct kunit_binary_assert) {
-> > >     .assert = <struct kunit_assert>,
-> > >     .text = &__text,
-> > >     .left_value = 4,
-> > >     .right_value = 5,
-> > >   }
-> > >
-> > > This also DRYs the code a bit more since these str fields were repeated
-> > > for the string and pointer versions of kunit_binary_assert.
-> > >
-> > > Note: we could name the kunit_binary_assert_text fields left/right
-> > > instead of left_text/right_text. But that would require changing the
-> > > macros a bit since they have args called "left" and "right" which would
-> > > be substituted in `.left = #left` as `.2 + 2 = \"2 + 2\"`.
-> > >
-> > > [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
-> > > [2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-6-dlatypov@google.com/
-> > >
-> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > > ---
-> >
-> > This definitely _feels_ like it's adding a bit more complexity than
-> > would be ideal by splitting this out into a separate function, but I
-> > do agree that it's worth it.
->
-> I'll note that this was *more* of a simplification until I deduped the
-> binary macros.
-> Since we only have one macro now passing in the left/right/op strings
-> now, it doesn't look like as much of an improvement anymore.
->
-> So now the main other benefits are DRYing the assert structs.
-> And I lean towards feeling that + stack size decrease = good enough
-> reason to go ahead with the refactor.
->
-> Re complexity, here's what KUNIT_EXPECT_EQ(test, 1 + 1, 2) turns into
->
-> do {
->   typeof(1 + 1) __left = (1 + 1);
->   typeof(2) __right = (2);
->   static const struct kunit_binary_assert_text __text = {
->     .operation = "==",
->     .left_text = "1 + 1",
->     .right_text = "2",
->   };
->   do {
->     if (__builtin_expect(!!(!(__left == __right)), 0)) {
->       static const struct kunit_loc loc = {
->         .file = "lib/kunit/kunit-example-test.c",
->         .line = 29
->       };
->       struct kunit_binary_assert __assertion = {
->         .assert = { .format = kunit_binary_assert_format },
->         .text = &__text,
->         .left_value = __left,
->         .right_value = __right
->       };
->       kunit_do_failed_assertion(test, &loc, KUNIT_EXPECTATION,
->               &__assertion.assert,
->               ((void *)0));
->     }
->   } while (0);
-> } while (0);
->
-> Actually, looking at this, I realize we should probably
-> 1) move the __text decl into the if statement
+Hi Cheng,
 
-Nevermind, was a brainfart.
-We can't move that into the if, since that happens inside the
-KUNIT_ASSERTION macro and so we need to initialize __text outside of
-it.
+I am severely behind in my patch review process and as such will not
+be able to start reviewing your work before the week of February 7th.
 
-It's a bit unfortunately we need to pay the cost of initializing
-__text even when we might not use it, but that's honestly a fairly
-minimal cost and performance isn't KUnit's focus anyways.
+Thanks,
+Mathieu
 
-> 2) probably should rename loc to __loc, oops.
+On Fri, 7 Jan 2022 at 01:47, chenxiang <chenxiang66@hisilicon.com> wrote:
 >
-> I'll send out a v2 that does #1.
-> Maybe I'll include another patch that does #2 at the end of this
-> series since the source patch already got picked up into Shuah's tree.
+> From: Xiang Chen <chenxiang66@hisilicon.com>
 >
-> >
-> > I think left_text / right_text are good enough names, too: I wouldn't
-> > bother trying to make them .left/.right.
-> >
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
+> If not up all the cpus with command line "maxcpus=x", system will be
+> blocked.
+> We find that some amba devices such as ETM devices, are associated with
+> special cpus, and if the cpu is not up, the register of associated device
+> is not allowed to access. BIOS reports all the ETM device nodes and a
+> amba device is created for every ETM device, so even if one cpu is not up,
+> the amba device will still be created for the associated device, and also
+> the register of device (pid and cid) will be accessed when adding amba
+> device which will cause the issue.
+> To fix it, skip creating amba device if it is associated with a cpu which
+> is not online.
+>
+> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+> ---
+>  drivers/acpi/acpi_amba.c | 36 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
+> index ab8a4e0191b1..2369198f734b 100644
+> --- a/drivers/acpi/acpi_amba.c
+> +++ b/drivers/acpi/acpi_amba.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/ioport.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <acpi/processor.h>
+>
+>  #include "internal.h"
+>
+> @@ -45,6 +46,35 @@ static void amba_register_dummy_clk(void)
+>         clk_register_clkdev(amba_dummy_clk, "apb_pclk", NULL);
+>  }
+>
+> +static int acpi_handle_to_cpuid(acpi_handle handle)
+> +{
+> +       int cpu = -1;
+> +       struct acpi_processor *pr;
+> +
+> +       for_each_possible_cpu(cpu) {
+> +               pr = per_cpu(processors, cpu);
+> +               if (pr && pr->handle == handle)
+> +                       break;
+> +       }
+> +
+> +       return cpu;
+> +}
+> +
+> +static int acpi_dev_get_cpu(struct acpi_device *adev)
+> +{
+> +       acpi_handle cpu_handle;
+> +       acpi_status status;
+> +       int cpu;
+> +
+> +       status = acpi_get_parent(adev->handle, &cpu_handle);
+> +       if (ACPI_FAILURE(status))
+> +               return -1;
+> +       cpu = acpi_handle_to_cpuid(cpu_handle);
+> +       if (cpu >= nr_cpu_ids)
+> +               return -1;
+> +       return cpu;
+> +}
+> +
+>  static int amba_handler_attach(struct acpi_device *adev,
+>                                 const struct acpi_device_id *id)
+>  {
+> @@ -54,11 +84,17 @@ static int amba_handler_attach(struct acpi_device *adev,
+>         bool address_found = false;
+>         int irq_no = 0;
+>         int ret;
+> +       int cpu;
+>
+>         /* If the ACPI node already has a physical device attached, skip it. */
+>         if (adev->physical_node_count)
+>                 return 0;
+>
+> +       /* If the cpu associated with the device is not online, skip it. */
+> +       cpu = acpi_dev_get_cpu(adev);
+> +       if (cpu >= 0 && !cpu_online(cpu))
+> +               return 0;
+> +
+>         dev = amba_device_alloc(dev_name(&adev->dev), 0, 0);
+>         if (!dev) {
+>                 dev_err(&adev->dev, "%s(): amba_device_alloc() failed\n",
+> --
+> 2.33.0
+>

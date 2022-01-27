@@ -2,43 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD3349E0E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C02449E0EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbiA0L34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiA0L3z (ORCPT
+        id S240353AbiA0LaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:30:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35266 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229691AbiA0LaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:29:55 -0500
-Received: from biche.re (biche.re [IPv6:2607:5300:201:3100::6c88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D95CC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:29:55 -0800 (PST)
-Date:   Thu, 27 Jan 2022 12:29:48 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 biche.re 0AE2E40F64
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=biche.re; s=biche;
-        t=1643282991; bh=qt2OQlf2eNHyy4Rr7O8K2qYNm+v84dIqyVBhQttppkQ=;
+        Thu, 27 Jan 2022 06:30:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69B956181D;
+        Thu, 27 Jan 2022 11:30:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FF6C340E4;
+        Thu, 27 Jan 2022 11:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643283022;
+        bh=nuVIdVfY68a6mnwbLdAZuHokHgEveE8vKcaTX6XBEGw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sHgz6mbJvYlDHdFTCC4BSz9S6lpP3+3Y8z3pQK36ASM/CWaxmgYUpURcBFdZaIER8
-         qnL2HYrWQbFEhv7v+ib31Yu47mHSD9CF5EA0RAxi+oWn5tv0cahs89tRVt1+5Yzvz7
-         7IxObd8Ue8J7RIFWdKozjHwPVJQDiuL8CTSuvnrZpWBShWZWU8N0AgcbBYKV5C2rs/
-         TeiNxeX9DMJJVn2h7XK7J4sGKPpOyM2chtA19I1xBMC0dHZT6s0exAmlq7ZxgZWCmS
-         4V/Buhtv+j/Eaza95P82lvaX+DeY9RFFF/PRga+jNScuZsy+pPpDNmBCyXKM12MD+S
-         pfufrZzrqQrgQ==
-From:   Victorien Molle <biche@biche.re>
-To:     linux-kernel@vger.kernel.org
-Cc:     Victorien Molle <biche@biche.re>
-Subject: Re: [PATCH] KVM: x86: Add support for basic RAPL (Running Average
- Power Limit) metrics
-Message-ID: <YfKCLAdwh0LZXIDz@ultrahax>
-References: <20220109182317.1075762-1-biche@biche.re>
+        b=Q1dqbeynuM669sRodIlHVeHhf9+T2UDVfXQKK5PueOJd3P1hJvpy9m5/GkV8/dCcr
+         vsDnZGrQp1isq6/AMI9doqL5AtyWRweSycxOMBGj/74Wh4ZcPcZRY/dEGSFrAOle8Q
+         dqwJynsIhwNNC/FvOsMr9P/gjAuCLNCU5+Adb0zc=
+Date:   Thu, 27 Jan 2022 12:30:20 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
+ device tree
+Message-ID: <YfKCTG7N86yy74q+@kroah.com>
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-5-o.rempel@pengutronix.de>
+ <YfJ6lhZMAEmetdad@kroah.com>
+ <20220127112305.GC9150@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220109182317.1075762-1-biche@biche.re>
+In-Reply-To: <20220127112305.GC9150@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping https://lore.kernel.org/all/20220109182317.1075762-1-biche@biche.re/T/#u
+On Thu, Jan 27, 2022 at 12:23:05PM +0100, Oleksij Rempel wrote:
+> On Thu, Jan 27, 2022 at 11:57:26AM +0100, Greg KH wrote:
+> > On Thu, Jan 27, 2022 at 11:49:05AM +0100, Oleksij Rempel wrote:
+> > > Similar to the option to set a netdev name in device tree for switch
+> > > ports by using the property "label" in the DSA framework, this patch
+> > > adds this functionality to the usbnet infrastructure.
+> > > 
+> > > This will help to name the interfaces properly throughout supported
+> > > devices. This provides stable interface names which are useful
+> > > especially in embedded use cases.
+> > 
+> > Stable interface names are for userspace to set, not the kernel.
+> > 
+> > Why would USB care about this?  If you need something like this, get it
+> > from the USB device itself, not DT, which should have nothing to do with
+> > USB as USB is a dynamic, self-describing, bus.  Unlike DT.
+> > 
+> > So I do not think this is a good idea.
+> 
+> This is needed for embedded devices with integrated USB Ethernet
+> controller. Currently I have following use cases to solve:
+> - Board with one or multiple USB Ethernet controllers with external PHY.
+>   The PHY need devicetree to describe IRQ, clock sources, label on board, etc.
+
+The phy is for the USB controller, not the Ethernet controller, right?
+If for the ethernet controller, ugh, that's a crazy design and I would
+argue a broken one.  But whatever, DT should not be used to describe a
+USB device itself.
+
+> - Board with USB Ethernet controller with DSA switch. The USB ethernet
+>   controller is attached to the CPU port of DSA switch. In this case,
+>   DSA switch is the sub-node of the USB device.
+
+What do you mean exactly by "sub node"?  USB does not have such a term.
+
+>  The CPU port should have
+>   stable name for all device related to this product.
+
+name for who to use?  Userspace?  Or within the kernel?
+
+Naming is done by userspace, as USB is NOT determinisitic in numbering /
+naming the devices attached to it, by design.  If you need to have a
+stable name, do so in userspace please, we have loads of tools that
+already do this there today.  Let's not reinvent the wheel.
+
+> Using user space tools to name interfaces would double the maintenance
+> of similar information: DT - describing the HW + udev scripts describing
+> same HW again.
+
+Not for the network name of the device, that belongs in userspace.
+
+Do not be listing USB device ids in a DT file, that way lies madness.
+
+thanks,
+
+greg k-h

@@ -2,97 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA16149EEBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B759F49EEC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241220AbiA0XRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S241288AbiA0XSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236765AbiA0XRi (ORCPT
+        with ESMTP id S236765AbiA0XSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:17:38 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675F9C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:17:38 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id q19-20020a056830441300b0059a54d66106so4145328otv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:17:38 -0800 (PST)
+        Thu, 27 Jan 2022 18:18:10 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFABC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:18:10 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id i62so5681130ioa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:18:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZHgjzy8t853W7I+7RWJNG2X4/bJj/NvMkuBTg7rJMyI=;
-        b=lXfZj48otSZXbvvLK2IFxj2PbX/9TUU3oXrlHfV5EOgB8ydujVyzfPi/Y4WKkJVmvb
-         3kCp+UaQ3QggL6uu4AMh5+RMEtNSAL4FZeHRAjpF08d+Q6o69AGfKYdsWVx51Pr0bfMZ
-         CRK8rLd1m3YZC0XS7gMZnsZJbFLKG0EeL6vjI=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YU3GBh9IHBE3OMSvodcmRm73jpaW9CEdeSNlQSN34OY=;
+        b=OjeUhh7IGn8+mCXgL7lCH/E52D1gX3I4upcfcco/3vTf1hOLJYLhWVfxrTwznwjj1y
+         cpn2bl6KAByCU36TyK+qhnRsPv4ZAgfEFM5OeGx63YpC4p+hb1pzSr2ipg9P4LPomsO6
+         zIGCZkdwibHnnLVCy+hxTrE8BN2iLomVi62os=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZHgjzy8t853W7I+7RWJNG2X4/bJj/NvMkuBTg7rJMyI=;
-        b=b6NhEOn8meWBWdAjgRrn8Fq/J6nbUt0AeZZubOONa6SLc4Opw2dzYIKqfoKsf5mX9V
-         F7uFTeCmuS7KhdUB/BQAI92U0S3iPZh+T/wDdPM4kGKj/L+OQilXDhyU25NyK1zDR1Kf
-         RjAOeSNLitJKX1/1qVDrMrAC0/1x7JMbSWyljXx7FhtIAjdNGQ9Prko4/H0dY2wGJZlF
-         h3GStfgcIMcmZ91fF+St87TzZ1+Z0FkXeK4IpJMmFz4HVzP6FkIdw5dB2K9R1MkcuhWD
-         iDCdi46VJwDWeipy14LykPiJ8Etrzi9ASYd75tAI3fYwJnu2BF4E1HHknksn6VhsOCdo
-         R7KQ==
-X-Gm-Message-State: AOAM532jdMPxI6NbKl3O4xwGAMyacZg6FRY24dILuhxpPa7l3Ei7Tn1o
-        7mcx/+6Z9MMjm1uRPahNGCeszR5b6bgauA==
-X-Google-Smtp-Source: ABdhPJxdWnodK9cca7XUOh9b8Shg8+RALApc87AmtnRwTO8KV8r05RvKjAsEOFUNuNKRg20AJj2wXg==
-X-Received: by 2002:a9d:1ec:: with SMTP id e99mr3314372ote.376.1643325457529;
-        Thu, 27 Jan 2022 15:17:37 -0800 (PST)
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com. [209.85.161.53])
-        by smtp.gmail.com with ESMTPSA id n66sm9812570oif.35.2022.01.27.15.17.36
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YU3GBh9IHBE3OMSvodcmRm73jpaW9CEdeSNlQSN34OY=;
+        b=MhhVqpqwXmy1pW83wTVEyIgBS/Bv+e6LmI0f/Yot0SQN9JvMtLZMnnPVOSOGsbIPVF
+         8nagyKWcwb1zHQ857mGTAof2Ry24kkFMqbN2JWK7qKI1WoDAmhmcndayf6OkJ9MWnCg9
+         ZBdOPb+AqfedKr6PElnsBGRSEQOZZvxwEJIO10nd1DW8N65BpVuta6jyTID5VQ/IYUTX
+         BK2iOZg1ASsnJgV0s0QLvTlCfcrPejyx5NBTfHbMPvYbe+Csdd8fVUQIsqvuFdprcvI1
+         Fj9tN3gCXr5hFbZkSlJrrZtSVZpCTNz0/smqVo/zLKm+hNFlSEhEcy1bLDRxl6/qxspY
+         RWTA==
+X-Gm-Message-State: AOAM531qe5B3Mw1g+5SAWAvRmirjgoZ4pzjZsOrCq11pzh/TEs7FQ1g/
+        hahjMMk00X4t/B/JxsuQtkjfQg==
+X-Google-Smtp-Source: ABdhPJw9jYVqKIlD1ctjZE32jsLunfb1mDQpL96xZLCO9/NSd/StZLQZlB3fGs/hadGjgaNhE2+Lfw==
+X-Received: by 2002:a6b:dd0c:: with SMTP id f12mr3573856ioc.203.1643325490003;
+        Thu, 27 Jan 2022 15:18:10 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:fcdb:3423:ed25:a583? ([2601:282:8200:4c:fcdb:3423:ed25:a583])
+        by smtp.gmail.com with ESMTPSA id t6sm12948084iov.39.2022.01.27.15.18.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 15:17:36 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so1007289oov.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:17:36 -0800 (PST)
-X-Received: by 2002:a4a:dd86:: with SMTP id h6mr3051054oov.87.1643325456364;
- Thu, 27 Jan 2022 15:17:36 -0800 (PST)
+        Thu, 27 Jan 2022 15:18:09 -0800 (PST)
+Subject: Re: [PATCH] kselftest: Fix vdso_test_abi return status
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220126102723.23300-3-cristian.marussi@arm.com>
+ <20220126122608.54061-1-vincenzo.frascino@arm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5ea69341-73af-e741-7b5d-c161845583c9@linuxfoundation.org>
+Date:   Thu, 27 Jan 2022 16:18:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220127230727.3369358-1-briannorris@chromium.org> <20220127150615.v2.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
-In-Reply-To: <20220127150615.v2.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Thu, 27 Jan 2022 15:17:25 -0800
-X-Gmail-Original-Message-ID: <CA+ASDXOnO1EgStrynPe1uSB4T8=qNUPj+wY2y3vGs0fnEHdE0Q@mail.gmail.com>
-Message-ID: <CA+ASDXOnO1EgStrynPe1uSB4T8=qNUPj+wY2y3vGs0fnEHdE0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/15] dt-bindings: devfreq: rk3399_dmc: Deprecate
- unused/redundant properties
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Lin Huang <hl@rock-chips.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220126122608.54061-1-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 3:08 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> These DRAM configuration properties are all handled in ARM Trusted
-> Firmware (and have been since the early days of this SoC), and there are
-> no in-tree users of the DMC binding yet. It's better to just defer to
-> firmware instead of maintaining this large list of properties.
->
-> There's also some confusion about units: many of these are specified in
-> MHz, but the downstream users and driver code are treating them as Hz, I
-> believe. Rather than straighten all that out, I just drop them.
->
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+On 1/26/22 5:26 AM, Vincenzo Frascino wrote:
+> vdso_test_abi contains a batch of tests that verify the validity of the
+> vDSO ABI.
+> 
+> When a vDSO symbol is not found the relevant test is skipped reporting
+> KSFT_SKIP. All the tests return values are then added in a single
+> variable which is checked to verify failures. This approach can have
+> side effects which result in reporting the wrong kselftest exit status.
+> 
+> Fix vdso_test_abi verifying the return code of each test separately.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Reported-by: Cristian Marussi <cristian.marussi@arm.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > ---
->
-> (no changes since v1)
+>   tools/testing/selftests/vDSO/vdso_test_abi.c | 27 +++++++++++---------
+>   1 file changed, 15 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> index 3d603f1394af..3a4efb91b9b2 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> @@ -184,10 +184,12 @@ static inline int vdso_test_clock(clockid_t clock_id)
+>   	return ret0;
+>   }
+>   
+> +#define VDSO_TESTS_MAX	9
+> +
+>   int main(int argc, char **argv)
+>   {
+>   	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
+> -	int ret;
+> +	int ret[VDSO_TESTS_MAX] = {0};
+>   
+>   	if (!sysinfo_ehdr) {
+>   		printf("AT_SYSINFO_EHDR is not present!\n");
+> @@ -201,44 +203,45 @@ int main(int argc, char **argv)
+>   
+>   	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
+>   
+> -	ret = vdso_test_gettimeofday();
+> +	ret[0] = vdso_test_gettimeofday();
+>   
+>   #if _POSIX_TIMERS > 0
+>   
+>   #ifdef CLOCK_REALTIME
+> -	ret += vdso_test_clock(CLOCK_REALTIME);
+> +	ret[1] = vdso_test_clock(CLOCK_REALTIME);
+>   #endif
+>   
+>   #ifdef CLOCK_BOOTTIME
+> -	ret += vdso_test_clock(CLOCK_BOOTTIME);
+> +	ret[2] = vdso_test_clock(CLOCK_BOOTTIME);
+>   #endif
+>   
+>   #ifdef CLOCK_TAI
+> -	ret += vdso_test_clock(CLOCK_TAI);
+> +	ret[3] = vdso_test_clock(CLOCK_TAI);
+>   #endif
+>   
+>   #ifdef CLOCK_REALTIME_COARSE
+> -	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
+> +	ret[4] = vdso_test_clock(CLOCK_REALTIME_COARSE);
+>   #endif
+>   
+>   #ifdef CLOCK_MONOTONIC
+> -	ret += vdso_test_clock(CLOCK_MONOTONIC);
+> +	ret[5] = vdso_test_clock(CLOCK_MONOTONIC);
+>   #endif
+>   
+>   #ifdef CLOCK_MONOTONIC_RAW
+> -	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
+> +	ret[6] = vdso_test_clock(CLOCK_MONOTONIC_RAW);
+>   #endif
+>   
+>   #ifdef CLOCK_MONOTONIC_COARSE
+> -	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+> +	ret[7] = vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+>   #endif
+>   
+>   #endif
+>   
+> -	ret += vdso_test_time();
+> +	ret[8] = vdso_test_time();
+>   
+> -	if (ret > 0)
+> -		return KSFT_FAIL;
+> +	for (int i = 0; i < VDSO_TESTS_MAX; i++)
+> +		if (ret[i] == KSFT_FAIL)
+> +			return KSFT_FAIL;
+>   
+>   	return KSFT_PASS;
+>   }
+> 
 
-Apologies, I didn't include Rob's Reviewed-by tag on patch 2 and 3. If
-this goes for version 3, I'll include them.
+You can use the ksft_* counts interfaces for this instead of adding
+counts here. ksft_test_result_*() can be used to increment the right
+result counters and then print counts at the end.
 
-Brian
+Either if there is a failure in any of the tests it will be fail with
+clear indication on which tests failed. vdso_test_clock() test for
+example is reporting false positives by overriding the Skip return
+with a pass.
+
+thanks,
+-- Shuah
+
+
+

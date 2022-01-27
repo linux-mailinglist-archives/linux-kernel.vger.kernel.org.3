@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7842E49E9CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670F749E9D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244965AbiA0SKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245135AbiA0SJq (ORCPT
+        id S245070AbiA0SKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:10:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47058 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244940AbiA0SJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:09:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDCBC06175D;
-        Thu, 27 Jan 2022 10:09:32 -0800 (PST)
+        Thu, 27 Jan 2022 13:09:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6ADA2B820C8;
-        Thu, 27 Jan 2022 18:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9376CC340E4;
-        Thu, 27 Jan 2022 18:09:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0434161D00;
+        Thu, 27 Jan 2022 18:09:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77FEC340E4;
+        Thu, 27 Jan 2022 18:09:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643306970;
-        bh=EmDU9pBT/xPBJnM3VVz+DnGxxc7WqCOmuKLje9v9Pug=;
+        s=korg; t=1643306989;
+        bh=+FWXiszUeksTbgAqjRCIYjRqShTt5d5rJhmS/5F/rNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aetIdn9Ew+pulrCIZ9Km7apsnhUSxk8qVb0CMqajSMeR/xLyQqxagVBmu96ebt9yN
-         Xgaz+FgCyfIuI0IrU/aiPt5/ar8EjKKoGOz6JsRviNPOIUjdxwH7mQnf6xnjHuHX3w
-         shmIBbfLyumYAqUcAV2JfqCj8Mb3u2DC0KsJj2TY=
+        b=FrKpFSh+AGnymOLZzTh2CBc1xSVty2lgJltKkjOzvYEbsOnwP/6nf824XWrCL58P4
+         qPIj/WtSlXcdSOza144Hozvx8UMicpS2eNjXuY1CHBfPN88wUEWjNQ/9qItRRCZ6Vc
+         7BZwvHxg8y8+7uwpeaFlSJi0ucl+SXkWaB5sYq3Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH 4.19 3/3] select: Fix indefinitely sleeping task in poll_schedule_timeout()
-Date:   Thu, 27 Jan 2022 19:09:03 +0100
-Message-Id: <20220127180256.943514512@linuxfoundation.org>
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 5.4 03/11] pinctrl: bcm2835: Drop unused define
+Date:   Thu, 27 Jan 2022 19:09:04 +0100
+Message-Id: <20220127180258.472150189@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220127180256.837257619@linuxfoundation.org>
-References: <20220127180256.837257619@linuxfoundation.org>
+In-Reply-To: <20220127180258.362000607@linuxfoundation.org>
+References: <20220127180258.362000607@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,135 +47,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-commit 68514dacf2715d11b91ca50d88de047c086fea9c upstream.
+commit be30d5de0a5a52c6ee2cc453a51301037ab94aa upstream
 
-A task can end up indefinitely sleeping in do_select() ->
-poll_schedule_timeout() when the following race happens:
+There is no usage for this define, so drop it.
 
-  TASK1 (thread1)             TASK2                   TASK1 (thread2)
-  do_select()
-    setup poll_wqueues table
-    with 'fd'
-                              write data to 'fd'
-                                pollwake()
-                                  table->triggered = 1
-                                                      closes 'fd' thread1 is
-                                                        waiting for
-    poll_schedule_timeout()
-      - sees table->triggered
-      table->triggered = 0
-      return -EINTR
-    loop back in do_select()
-
-But at this point when TASK1 loops back, the fdget() in the setup of
-poll_wqueues fails.  So now so we never find 'fd' is ready for reading
-and sleep in poll_schedule_timeout() indefinitely.
-
-Treat an fd that got closed as a fd on which some event happened.  This
-makes sure cannot block indefinitely in do_select().
-
-Another option would be to return -EBADF in this case but that has a
-potential of subtly breaking applications that excercise this behavior
-and it happens to work for them.  So returning fd as active seems like a
-safer choice.
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-CC: stable@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Link: https://lore.kernel.org/r/1580148908-4863-2-git-send-email-stefan.wahren@i2se.com
+Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/select.c |   63 +++++++++++++++++++++++++++++++-----------------------------
- 1 file changed, 33 insertions(+), 30 deletions(-)
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/fs/select.c
-+++ b/fs/select.c
-@@ -431,9 +431,11 @@ get_max:
- 	return max;
- }
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -40,9 +40,6 @@
+ #define BCM2835_NUM_BANKS 2
+ #define BCM2835_NUM_IRQS  3
  
--#define POLLIN_SET (EPOLLRDNORM | EPOLLRDBAND | EPOLLIN | EPOLLHUP | EPOLLERR)
--#define POLLOUT_SET (EPOLLWRBAND | EPOLLWRNORM | EPOLLOUT | EPOLLERR)
--#define POLLEX_SET (EPOLLPRI)
-+#define POLLIN_SET (EPOLLRDNORM | EPOLLRDBAND | EPOLLIN | EPOLLHUP | EPOLLERR |\
-+			EPOLLNVAL)
-+#define POLLOUT_SET (EPOLLWRBAND | EPOLLWRNORM | EPOLLOUT | EPOLLERR |\
-+			 EPOLLNVAL)
-+#define POLLEX_SET (EPOLLPRI | EPOLLNVAL)
- 
- static inline void wait_key_set(poll_table *wait, unsigned long in,
- 				unsigned long out, unsigned long bit,
-@@ -500,6 +502,7 @@ static int do_select(int n, fd_set_bits
- 					break;
- 				if (!(bit & all_bits))
- 					continue;
-+				mask = EPOLLNVAL;
- 				f = fdget(i);
- 				if (f.file) {
- 					wait_key_set(wait, in, out, bit,
-@@ -507,34 +510,34 @@ static int do_select(int n, fd_set_bits
- 					mask = vfs_poll(f.file, wait);
- 
- 					fdput(f);
--					if ((mask & POLLIN_SET) && (in & bit)) {
--						res_in |= bit;
--						retval++;
--						wait->_qproc = NULL;
--					}
--					if ((mask & POLLOUT_SET) && (out & bit)) {
--						res_out |= bit;
--						retval++;
--						wait->_qproc = NULL;
--					}
--					if ((mask & POLLEX_SET) && (ex & bit)) {
--						res_ex |= bit;
--						retval++;
--						wait->_qproc = NULL;
--					}
--					/* got something, stop busy polling */
--					if (retval) {
--						can_busy_loop = false;
--						busy_flag = 0;
+-#define BCM2835_PIN_BITMAP_SZ \
+-	DIV_ROUND_UP(BCM2835_NUM_GPIOS, sizeof(unsigned long) * 8)
 -
--					/*
--					 * only remember a returned
--					 * POLL_BUSY_LOOP if we asked for it
--					 */
--					} else if (busy_flag & mask)
--						can_busy_loop = true;
--
- 				}
-+				if ((mask & POLLIN_SET) && (in & bit)) {
-+					res_in |= bit;
-+					retval++;
-+					wait->_qproc = NULL;
-+				}
-+				if ((mask & POLLOUT_SET) && (out & bit)) {
-+					res_out |= bit;
-+					retval++;
-+					wait->_qproc = NULL;
-+				}
-+				if ((mask & POLLEX_SET) && (ex & bit)) {
-+					res_ex |= bit;
-+					retval++;
-+					wait->_qproc = NULL;
-+				}
-+				/* got something, stop busy polling */
-+				if (retval) {
-+					can_busy_loop = false;
-+					busy_flag = 0;
-+
-+				/*
-+				 * only remember a returned
-+				 * POLL_BUSY_LOOP if we asked for it
-+				 */
-+				} else if (busy_flag & mask)
-+					can_busy_loop = true;
-+
- 			}
- 			if (res_in)
- 				*rinp = res_in;
+ /* GPIO register offsets */
+ #define GPFSEL0		0x0	/* Function Select */
+ #define GPSET0		0x1c	/* Pin Output Set */
 
 

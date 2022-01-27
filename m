@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C53B49D914
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0895A49D920
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235674AbiA0DPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 22:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S235709AbiA0DVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 22:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbiA0DPW (ORCPT
+        with ESMTP id S232984AbiA0DVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 22:15:22 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266DEC06161C;
-        Wed, 26 Jan 2022 19:15:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jkm1M6Rvhz4xhm;
-        Thu, 27 Jan 2022 14:15:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643253320;
-        bh=VoGoQgVDK2sZTcHuebPz+Pr+33dx2Hmpkr3lUbO3a+E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oxgSNelPS3ReDVLmUmokWFVfPgI+VWDqJLnXaDg/McpBX5rA9qW9tzTf4PfrSeKTD
-         U527BCJOCPwXekUeK9B1gEuXBTcUIssMfAW8L5I6esqgtOjTxbRTNu9/kEnWLuvNIn
-         gXkUwsdjGOXPMZBEnITJJrmosEvC7Vh/dJMq98CXBsfc5JMCan9++5x27Tx9wH7aFm
-         Qikfssw1sIMBfx4mlSloveA8gBqNwBNVR7pyJeJAVYWeZuI1bx4nZbHnZ9KIXnQw4I
-         PkmItodOg6ziJM4PUItyZPXif4H4K4vd/cSV/0knQU+ENVc210bW8JTGq0+l9XehYn
-         V+EyUNvQNkAbw==
-Date:   Thu, 27 Jan 2022 14:15:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the jc_docs tree
-Message-ID: <20220127141518.54dbb9a8@canb.auug.org.au>
+        Wed, 26 Jan 2022 22:21:03 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CFAC06161C;
+        Wed, 26 Jan 2022 19:21:03 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id l5so1793386edv.3;
+        Wed, 26 Jan 2022 19:21:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O5EXL+KCI3XHdyFnsikvunYb7cTowezqWaEb+c/SuL0=;
+        b=d8N2K/LJLwqY+C2zjTs/R6C7yI7IQBhhmXmx/NAXVUIjndMXPE+0pfGsXOH9HFF/hc
+         L5wKLZOV4GUR7L4W7unpnRI1gy4vbs71IulYvrDZyZePBbAaEoqiJOmjyd7wexbxaye8
+         T9fdFzmiFBHYkWmQoTG6pkx9ORLOHE/M9oBdkGnWzeQVNTzDDmXI7KWjfNj66C35P1El
+         w7uvBC8NVtP0eNuxdJXEjjULrQIn5ApBCHjfnYENGWq+QGqbVkVuOYLvsEfJQRuHbwJc
+         Xs/xg2FDET7Vmg0a7BIBuGJm2V0/Xr2z+cXSPAGtIyoMec3zdb/SREWiglmwo3KKzG3y
+         VlXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O5EXL+KCI3XHdyFnsikvunYb7cTowezqWaEb+c/SuL0=;
+        b=Cf6FbxT7vEmzstqXHTwG7GyRcn+vQi3hiLhSyEeMOuQLLJj/ENYH1Exmr2hRgwa3hV
+         wqwT7wWxXIjyElx1vEs9xx3m8yudkvuQRJQJD9H65hS+ohgTPgQMBVmczdRUtYh4mR4C
+         PBQw3bEgMyu1ykiOVSAmIRnHiioHr9TiiwBSaanwCz1icMuv/PWaVsLv6MSJfZ/4ZcUw
+         aa2jURm+DhHIjLrQJaeowrwxhPtiKMaGfmx/n9oc04eQMEOB9nQ1dK4SoCVXpGcH8di1
+         SrHhlfZTRXbyj8fFFL+2Wf9FJaJvY0OznrKO/JXs9rl5togUtlJ/Ca9fJNSo3BxmOtPl
+         46Ew==
+X-Gm-Message-State: AOAM531AK1zVOcL2LZV7vVA1a2Sf9DIjW+ZFHQGRO3VxU0BLbxmK+IFJ
+        YCWEAjp0TRkAdvZh+vjJlQFMuaiXMz3YuRCXUsM=
+X-Google-Smtp-Source: ABdhPJzCJfIP8APfgXtAF/HrK1KeBX/GaOn46vgOdHi5yPrmCS87Uq/OLIq8Hoeocu6d8Rei02yT0d2EQ6DJQA9M73I=
+X-Received: by 2002:a05:6402:448c:: with SMTP id er12mr1813831edb.137.1643253661540;
+ Wed, 26 Jan 2022 19:21:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TdtfE7KuZW=/xe=tmBQQ=Rm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20220126072306.3218272-1-imagedong@tencent.com> <20220126184812.32510ab4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220126184812.32510ab4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 27 Jan 2022 11:16:32 +0800
+Message-ID: <CADxym3YmFhg4eKmQBYQhu+WQTT3KgJmpq_9u0-odKwKpv3DTGw@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next] net: drop_monitor: support drop reason
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Neil Horman <nhorman@tuxdriver.com>,
+        David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/TdtfE7KuZW=/xe=tmBQQ=Rm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 27, 2022 at 10:48 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 26 Jan 2022 15:23:06 +0800 menglong8.dong@gmail.com wrote:
+> > @@ -606,12 +610,17 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+> >  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+> >                                    size_t payload_len)
+> >  {
+> > -     u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
+> > +     struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+> >       char buf[NET_DM_MAX_SYMBOL_LEN];
+> > +     enum skb_drop_reason reason;
+> >       struct nlattr *attr;
+> >       void *hdr;
+> > +     u64 pc;
+> >       int rc;
+> >
+> > +     pc = (u64)(uintptr_t)cb->pc;
+> > +     reason = cb->reason;
+> > +
+> >       hdr = genlmsg_put(msg, 0, 0, &net_drop_monitor_family, 0,
+> >                         NET_DM_CMD_PACKET_ALERT);
+> >       if (!hdr)
+> > @@ -623,6 +632,9 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+> >       if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
+> >               goto nla_put_failure;
+> >
+> > +     if (nla_put_u32(msg, NET_DM_ATTR_REASON, reason))
+>
+> Why the temporary variable instead of referring to cb->reason directly?
 
-Hi all,
+Good question......v3 is coming
 
-After merging the jc_docs tree, today's linux-next build (htmldocs)
-produced these warnings:
-
-Documentation/tools/index.rst:2: WARNING: Explicit markup ends without a bl=
-ank line; unexpected unindent.
-Documentation/tools/index.rst: WARNING: document isn't included in any toct=
-ree
-
-Introduced by commit
-
-  1ce5371ee32f ("docs: Hook the RTLA documents into the kernel docs build")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TdtfE7KuZW=/xe=tmBQQ=Rm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHyDkYACgkQAVBC80lX
-0Gx0GAf+Khbg53fV+P5qV7uQWdFVfWyDMsFDvAV28ZnFYEjY2HEXMKR1lU6/C62+
-sPtoiG5PGgQGDOPMggtYnzb2JMtICyjZkve3w/1hQ4Ks7WrZdkaeH0K82FXu3P2Y
-t/N5kHPDNndPofXT3qBdZwVYA56YYnzv9XzoYs8TBkhujamzI4BpEEBAeuthp1tT
-ILagfmsNAkUcALm8BmGh/NhB6wToFI1ND+36534ISKgNIrij1RStlMcKpCosDz81
-cGUIkmNreGBP52p9JG1Lr2kKqPi2pT8JCaql435GqxN9V9jLUAhWSKRnUaof646g
-5O9fov7KmqxIXJSw2aSgAU+GIPLQ6A==
-=3c8q
------END PGP SIGNATURE-----
-
---Sig_/TdtfE7KuZW=/xe=tmBQQ=Rm--
+>
+> > +             goto nla_put_failure;

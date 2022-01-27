@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E589649DA6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C6149DA70
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236419AbiA0GFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:05:13 -0500
-Received: from webmail.amiindia.co.in ([14.98.235.2]:61358 "EHLO
-        IMSVA.IN.MEGATRENDS.COM" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229776AbiA0GFJ (ORCPT
+        id S236429AbiA0GHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229776AbiA0GHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:05:09 -0500
-Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6952082047;
-        Thu, 27 Jan 2022 11:46:15 +0530 (IST)
-Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D13B82046;
-        Thu, 27 Jan 2022 11:46:15 +0530 (IST)
-Received: from webmail.amiindia.co.in (venus1.in.megatrends.com [10.0.0.5])
-        by IMSVA.IN.MEGATRENDS.COM (Postfix) with ESMTPS;
-        Thu, 27 Jan 2022 11:46:15 +0530 (IST)
-Received: from msgubuntu-OptiPlex-5060.in.megatrends.com (10.0.124.83) by
- VENUS1.in.megatrends.com (10.0.0.5) with Microsoft SMTP Server id 14.3.468.0;
- Thu, 27 Jan 2022 11:35:02 +0530
-From:   krishnar4 <krishnar@ami.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-hwmon@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>,
-        Deepak Kodihalli <dkodihalli@nvidia.com>,
-        Vinodhini J <vinodhinij@ami.com>,
-        Pravinash Jeyapaul <pravinashj@ami.com>,
-        Krishna Raj <krishnar@ami.com>, <linux-kernel@vger.kernel.org>,
-        Shakeeb Pasha <spasha@nvidia.com>
-Subject: [PATCH linux dev-5.15] hwmon: (pmbus) modify PSU fan_target convert value to false
-Date:   Thu, 27 Jan 2022 11:34:59 +0530
-Message-ID: <20220127060459.17310-1-krishnar@ami.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <git-send-email-krishnar@ami.com>
-References: <git-send-email-krishnar@ami.com>
+        Thu, 27 Jan 2022 01:07:22 -0500
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148DC061714
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:07:22 -0800 (PST)
+Received: by mail-vk1-xa30.google.com with SMTP id o15so1214071vki.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:07:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=BInys1GjUr//SczNrV06SUmmwPshVO7ak/x6YbQBYgQ=;
+        b=oLrEb5DtyWq2MvRdNZGX5A/M889mCp1oI0C5E1ov/vLU/m3xLwEGdkvDpnbtqgQHgv
+         ydP+zl45/gpYi247dASA71b+ijOrFVIFFETaSv6LvYWuXZeuBDZRuZ3w70ZsYaHDFGXV
+         lA5jxilKFdF6FKDiy+fFcFk2VlMNDrlUuu7LSBh02zX8I2yxjVJJNJGBoiTDeLEC+zVN
+         NcVxO3702J1+9Ly02qlwRWzNfyQgLpC5QoMvMU4Wyw8uGFezKexu0Pfztqz1dYkvKydc
+         kWOxHar0LYwg/NNsJx6Cg95hBipyHKB/Je60GTcT1cwbUe4wuOCYq3gqt+IvAOnSLJDe
+         HkqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=BInys1GjUr//SczNrV06SUmmwPshVO7ak/x6YbQBYgQ=;
+        b=MScBG2+TfjN8QHA/CgH1ALRQybVnGwpihQ9gkZJ5aUi55RYwRrY39+va65blpJxzqE
+         Gy8cB8yYM7BRTzkmNe54fmiemrAjnYix/WuWSLJdQrBklJsdSgVH7IMSJYdzp+V2iFTS
+         YdvoNj/WJtqx/nMbdyhJxRqv03zepmelI8bTiVzBZkC7t/2pZVqwTMgMnpj2vDNjT712
+         b5hRiSXL20MmtT7e4Q6iGmXd0ZJwLLqcDYtX7hclNg8pwbC/s1eeaCrRrmZxYmYYYNfu
+         YcnOaPEJrsYZVdbCnJGwymem/U0XUelamBsJECRPkCwZCvWqKrLuJk7wW42Dh33R/Toc
+         uI+A==
+X-Gm-Message-State: AOAM531b0D1wKD2yNm54w0CnFPdwt7BWa7YA4W1nhEjtuqKGXIqF5Mlo
+        1zVqicnu63HVQGSOYtyXpeQO2Og+Pid0k6p5X30=
+X-Google-Smtp-Source: ABdhPJyDnpQ+mhw34HAhpzY+Nk68K9RYIVqMqKe7z0u9d/aWVrIUAxgV8LJ+hKwHf3T2Suw4757tDGJFOdx4XA7S8bU=
+X-Received: by 2002:a1f:5486:: with SMTP id i128mr887156vkb.24.1643263641183;
+ Wed, 26 Jan 2022 22:07:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSVA-9.1.0.1817-8.6.0.1013-26114.002
-X-TM-AS-Result: No--1.662-5.0-31-10
-X-imss-scan-details: No--1.662-5.0-31-10
-X-TMASE-Version: IMSVA-9.1.0.1817-8.6.1013-26114.002
-X-TMASE-Result: 10--1.662300-10.000000
-X-TMASE-MatchedRID: 8muszqLoCjtHoOzJ1oF1dqiUivh0j2Pvljgw/8s6b3cHZBaLwEXlKGlF
-        7OhYLlctcwePA9FSeTz9k6grZ0shf9zmfZUrwTrUngIgpj8eDcBpkajQR5gb3savT21DsLD/UEh
-        Wy9W70AEnRE+fI6etkituBDgcniIfegbcIIrT/+G8mBZdhaNLqDiyY/5MU8oBTzs4VfHSjec5fl
-        oBUgk06Ga7J9YRB75owdF1Ue2Jr/JPZRTsEKEvt4pebMSk1UmKlmXPgyQocYp5E1G2nFNyeETBf
-        0diyKhk7DIVgUu7mCo=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
+Received: by 2002:a59:c8cf:0:b0:27d:2461:5ada with HTTP; Wed, 26 Jan 2022
+ 22:07:20 -0800 (PST)
+Reply-To: avamedicinemed1@gmail.com
+From:   Dr Ava Smith <brightotabor1@gmail.com>
+Date:   Wed, 26 Jan 2022 22:07:20 -0800
+Message-ID: <CALNwcOE7rvWrun2zNV+zHCXKio+CZb2R7JHZh8hfE__g1Bwyug@mail.gmail.com>
+Subject: From Dr. Ava Smith From United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Description: PSU can't use sysfs fan_target to control PSU fan duty.
-
-Signed-off-by: krishnar4 <krishnar@ami.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..a56c2e1c4079 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1889,7 +1889,7 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
- 
- 	sensor = pmbus_add_sensor(data, "fan", "target", index, page,
- 				  0xff, PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
--				  false, false, true);
-+				  false, false, false);
- 
- 	if (!sensor)
- 		return -ENOMEM;
--- 
-2.17.1
-
+Hello Dear,
+My name is Dr Ava Smith from United States.I am a French and American national
+(dual)living in the U.S and sometimes in the U.K for the Purpose of Work.
+I hope you consider my friend request and consider me worthy to be your friend.
+I will share some of my pics and more details about my self when i get
+your response
+Thanks
+With love
+Ava

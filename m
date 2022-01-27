@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 691CD49EC03
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE72F49EB71
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344022AbiA0UDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343795AbiA0UDC (ORCPT
+        id S1343513AbiA0T6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:58:52 -0500
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:34590 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343516AbiA0T6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:03:02 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C60C061747
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:03:02 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id p37so3796697pfh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:03:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=pS6oAPlQasQLltOWbX6ybr6410G9JsawVRKiZZSuto0=;
-        b=OkmBR46itpSo80eYP7SfR78XlDnMDrL9T8FDPQBDH5rBgiD3BZFfwLp2IIx2tdkHR+
-         ttRdpr4UVF+iNyhTIs3m0ikyxmU9eeIljF9uOY9Wc2sJLPWeE3QoI2R21yFiy2C4hYY7
-         qP+0Cueu8u3d84NnxZgzByglJXfgi37r0teIb2DzgVYRuND/lMRdW3Myoloks8Lc6IR2
-         a4SRgnrJi5GxFgixdCQnkHAwOVTjduufc9hxgByV58qNLUFcYCziJdvmlF2DMzSzc5Ax
-         mE1T78oc8dnShG9T0WwD8JfGPgAQnfc03kPCxAzDENXCdRj7VHYVAj942yBXtMeCxx1w
-         7inQ==
+        Thu, 27 Jan 2022 14:58:51 -0500
+Received: by mail-yb1-f175.google.com with SMTP id v186so12112855ybg.1;
+        Thu, 27 Jan 2022 11:58:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=pS6oAPlQasQLltOWbX6ybr6410G9JsawVRKiZZSuto0=;
-        b=yEZtfskgrdvohPgcpnhXfBFQgZ4UjtClA20QBo4bk9h7HsrVE1TwtC4gFIQWh1U+f1
-         5tMBISS26qUx1gWK/ivSzWFrX2I9KDTqTCsPCXagL4Q8pglJLMisW0hUduM6Uxw75B5Z
-         PbFYFef+IDU9A+kPJNwBu5ZyqANEdaxiCVHWkR4InkflyTY3vUVhk1PebmbPhdFtGnQI
-         f5d3dfW2Ac0YxVnlIKrHJ72tSI4AIpmojmMJRWkjXQW9mSyeBEXH7MVGIasSPUGJLLMh
-         Fgs4Dph6ZhYNCRX7hawyg0tsK+bvVsGqi0HnhPGCidmEobbjKGYeQWuefApTjVIgZCc0
-         ZOMg==
-X-Gm-Message-State: AOAM532i8ri4LUzufl5KMJD4anpSn49CoYCbWtunyVUO++bz5QK6P5D1
-        1cydXvr2ZmURejqBDWHNmMCwUA==
-X-Google-Smtp-Source: ABdhPJyiiccrnWius1BWTgJTa5HN7sJBk331iM3iM9Jv7+uIfjVeO2PjkPDHGJ4ZwPFA89JxLPZ6Rg==
-X-Received: by 2002:a62:8fcb:: with SMTP id n194mr4258239pfd.29.1643313782059;
-        Thu, 27 Jan 2022 12:03:02 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id s2sm20501253pgf.56.2022.01.27.12.03.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 12:03:01 -0800 (PST)
-Subject: [PATCH] RISC-V: Prevent sbi_ecall() from being inlined
-Date:   Thu, 27 Jan 2022 11:55:55 -0800
-Message-Id: <20220127195554.15705-1-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JU0YS/R/EoprgrYZtkZ8RlkD/FefqeQsRVRgpn1yuvU=;
+        b=i7ftKkI84cpQK+r4ETJXUMD8QCkIy++IBrIaaBghlZ/ZazIF2r7zXqjDBI/5+SLtFN
+         bJ395QV+AGyJ/4Fr2CzL62h+qZUz4INFD/ZvydI4UA3X1KXxO4wB0mJTiL4QTm/tcsAk
+         VmLEcTFxplXccMN2ym9b1YnBRhCvsrtGSCnxS0f9D2byyDL/Tn57QKU8/EM27FTXgb5A
+         NIR8xhEEPcDc/jSSbXnfUiUZUkbsgrlQ35ngCnYEMGUaFc6ygw0mh+LUrlu920oEDRdr
+         cS4Eh2VDyxjXpL6TKtAIgSv7T2Sd8k9q+1eP8fDVCRT/2eB7rhKlv8nFWaIfPDt3wZTg
+         yyjQ==
+X-Gm-Message-State: AOAM531S0LwZPcKeIDM0AWdz92ZLzxkr3zs7++F4U15rPOBsWkcjvOPK
+        Om+P3gBeFVM0bgQwdSdLbqaTD7S7HXC3QPqTK9o=
+X-Google-Smtp-Source: ABdhPJyz77nvWofsixr5tBR8EvQ9OmH8a4W5IGTBg9xpuKoTd8vpYKqyYrvVybZ5UficWnOVaRv+dlsHu84LGDJiqww=
+X-Received: by 2002:a25:2ac3:: with SMTP id q186mr7895749ybq.272.1643313530606;
+ Thu, 27 Jan 2022 11:58:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        anup@brainfault.org, Atish Patra <atishp@rivosinc.com>,
-        jszhang@kernel.org, vincent.chen@sifive.com, sunnanyong@huawei.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>, stable@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:         linux-riscv@lists.infradead.org
+References: <20220124164014.51658-1-zhou1615@umn.edu>
+In-Reply-To: <20220124164014.51658-1-zhou1615@umn.edu>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Jan 2022 20:58:39 +0100
+Message-ID: <CAJZ5v0iVEQVMn4K6007jUaiJ1CNhaCTePhLSBrX=mONswM98-g@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Linuxize: Fix a NULL pointer dereference in acpi_db_convert_to_package()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     Kangjie Lu <kjlu@umn.edu>, Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>, Lv Zheng <lv.zheng@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+On Mon, Jan 24, 2022 at 5:45 PM Zhou Qingyang <zhou1615@umn.edu> wrote:
+>
+> In acpi_db_convert_to_package(), the variable elements is assigned by
+> ACPI_ALLOCATE_ZEROED() and passes its address to
+> acpi_db_convert_to_object(). In that function we may have a dereference
+> of elements without checks. ACPI_ALLOCATE_ZEROED() would return NULL on
+> failure, which may lead to NULL pointer dereference.
+>
+> Fix this bug by adding a NULL check of elements.
+>
+> This bug was found by a static analyzer.
+>
+> Builds with 'make allyesconfig' show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: 995751025572 ("ACPICA: Linuxize: Export debugger files to Linux")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 
-The SBI spec defines SBI calls as following the standard calling
-convention, but we don't actually inform GCC of that when making an
-ecall.  Unfortunately this does actually manifest for the more complex
-SBI call wrappers, for example sbi_s, for example sbi_send_ipi_v02()
-uses t1.
+This is ACPICA material and so it should be submitted as a change
+against the upstream code via https://github.com/acpica/acpica
 
-This patch just marks sbi_ecall() as noinline, which implicitly enforces
-the standard calling convention.
+Thanks!
 
-Fixes : b9dcd9e41587 ("RISC-V: Add basic support for SBI v0.2")
-Cc: stable@vger.kernel.org
-Reported-by: Atish Patra <atishp@rivosinc.com>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
-This is more of a stop-gap fix than anything else, but it's small enough
-that it should be straight-forward to back port to stable.  This bug has
-existed forever, in theory, but none of this was specified in SBI-0.1
-so the backport to the introduction of 0.2 should be sufficient.
-No extant versions OpenSBI or BBL will manifest issues here, as they
-save all registers, but the spec is quite explicit so we're better off
-getting back in line sooner rather than later.
-
-There'll be some marginal performance impact here.  I'll send a
-follow-on to clean up the SBI call wrappers in a way that allows
-inlining without violating the spec, but that'll be a bigger change and
-thus isn't really suitable for stable.
----
- arch/riscv/kernel/sbi.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index f72527fcb347..7be586f5dc69 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -21,6 +21,11 @@ static int (*__sbi_rfence)(int fid, const struct cpumask *cpu_mask,
- 			   unsigned long start, unsigned long size,
- 			   unsigned long arg4, unsigned long arg5) __ro_after_init;
- 
-+/*
-+ * This ecall stub can't be inlined because we're relying on the presence of a
-+ * function call to enforce the calling convention.
-+ */
-+noinline
- struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
- 			unsigned long arg1, unsigned long arg2,
- 			unsigned long arg3, unsigned long arg4,
--- 
-2.34.1
-
+> ---
+> The analysis employs differential checking to identify inconsistent
+> security operations (e.g., checks or kfrees) between two code paths
+> and confirms that the inconsistent operations are not recovered in the
+> current function or the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+>  drivers/acpi/acpica/dbconvert.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/acpi/acpica/dbconvert.c b/drivers/acpi/acpica/dbconvert.c
+> index 2b84ac093698..8dbab6932049 100644
+> --- a/drivers/acpi/acpica/dbconvert.c
+> +++ b/drivers/acpi/acpica/dbconvert.c
+> @@ -174,6 +174,8 @@ acpi_status acpi_db_convert_to_package(char *string, union acpi_object *object)
+>         elements =
+>             ACPI_ALLOCATE_ZEROED(DB_DEFAULT_PKG_ELEMENTS *
+>                                  sizeof(union acpi_object));
+> +       if (!elements)
+> +               return (AE_NO_MEMORY);
+>
+>         this = string;
+>         for (i = 0; i < (DB_DEFAULT_PKG_ELEMENTS - 1); i++) {
+> --
+> 2.25.1
+>

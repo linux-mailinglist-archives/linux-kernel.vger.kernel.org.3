@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5250349DD02
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D2D49DD04
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238049AbiA0Ixe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:53:34 -0500
-Received: from mail-ej1-f53.google.com ([209.85.218.53]:39776 "EHLO
-        mail-ej1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbiA0IxX (ORCPT
+        id S237970AbiA0Ix4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237964AbiA0Ixy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:53:23 -0500
-Received: by mail-ej1-f53.google.com with SMTP id j2so4226764ejk.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:53:23 -0800 (PST)
+        Thu, 27 Jan 2022 03:53:54 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73718C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:53:53 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so1416339wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tAZkRS0zISR6/ST82zfNsuCXAgYUqMk5bLScTB/6bDI=;
+        b=M2+qQzGl5ciYwNaPRKcaH+tVSf8L4kyixxaYiTiyQzYJMRaxrGJqvAzPh9pSoQuSoQ
+         2sPOuNUSTE8AfL6G7MPHtlVh347cfSmcbB++PiDLTpnHKr7kime8ZjuWRKd8A3OfWMC0
+         jPtCJM4dAF0cwpdA15iMd/Pe2jUEYlqE6FHvAGE9tgTRu8GSe456ZQ5qDLV18U5dbfPA
+         Nm7IlhoKo31TQtDRkUgE5G9qohJrBADwaGvi/pW5ixTyxneJIRMADKhcaN+yfOWX6juS
+         5DeDNarNO2by+f7sc2Kq4gf0xsf3IWsFHW4baa8L4mDlnLYjbwFztYmJW5MnryEdLrHL
+         Il1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Yw/+DDZVAI1kM3jl62EkxWAhTt9qU97/TTaQLgANFqA=;
-        b=FG1WbX44Jryj/pMeYJJtXJwuqIdIP3w2zHxf+WniEGuaw+1fNq8M1s7tUW2wexKHNK
-         ivU/VXetxxd11KP7yzBd+RYGN6fDj09vMXswget/3G6GeyqbPbAI/5TpEwnjZ3MGLR5o
-         DSNbTkPdVHvHNdFnTY/R12UtqfcuvNmmjji1mUUFTN6I8Yth4u8O2/qARrbojz1eE0ws
-         Iho2kEpeXBiNjmxrZgsLo1fWh920SSZyfQTrKLQJ7tp5gNILqVUJAkgRPZ9JPKMz9Req
-         kIusB7jWJO1Nsl+UHggJugcwkgaKbuZhX1T7yxpYOAhzPVuuxj+4oCMO5/6EHDcKXjQC
-         RVIw==
-X-Gm-Message-State: AOAM530sZ1u+WWAoIvn4L5EjXzTgO5D+qoXvetQj7jPevbMOKMEFSq2e
-        odghPgYYR/r8d4QQG9GEhxnU8/a9S0k=
-X-Google-Smtp-Source: ABdhPJxR/nkchzrmyjQR0DAh0Fch7YdSctIIC56sUAj9QFTJaDNlIHcSch+FL75+Y65K4z2NQOAw8g==
-X-Received: by 2002:a17:907:94d5:: with SMTP id dn21mr2232871ejc.77.1643273602447;
-        Thu, 27 Jan 2022 00:53:22 -0800 (PST)
-Received: from localhost.localdomain (ip-85-160-47-31.eurotel.cz. [85.160.47.31])
-        by smtp.gmail.com with ESMTPSA id n11sm11029757edv.52.2022.01.27.00.53.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tAZkRS0zISR6/ST82zfNsuCXAgYUqMk5bLScTB/6bDI=;
+        b=HEqEFS7evj6K0BJdkw/EntOWb/NZXbo3l9pogiCtOX0Jo5PQfeAvUVdfRXj0k7WEB6
+         tvJdfdvzhQJwl+4SfPZ7gaank3ArnIBVzOo6vyDBtOzw/wslnllrAhdkfeWcC9xdlAru
+         eB/dHYFVDmfNPVRh2jo/gipozK7fAokoZHmaEIB6QGVH89RcvX8DSDkRP578SnLkblpH
+         NrLLZFVNmnSehuoIKrKxJTSwgFv1ZMoBe3GbBe/7u/JPy/uIjYbpXEXLP4Bf3ZUC7WzC
+         gxV28uzkmho3cYzLCFYlMOx11dWvundb8Z/L+cqbgHBCoaMT/mR9NxvDFy75bBCIqQJ7
+         /5Yw==
+X-Gm-Message-State: AOAM533U7mMGaZrvhzOv5+xh0pDOk9zirVzJRI9FPHTtkjIsktpZTjH7
+        gUIBhgEqNCALWG91m3uNmCLmMHz9zf0vsw==
+X-Google-Smtp-Source: ABdhPJwqB7j5wlrJmYrVPNjzOHlRcFxsUl14AAc9JhmKY6CqfGASXfkg+SlMJFARfIS1bO1dLK5Fmg==
+X-Received: by 2002:a1c:4d16:: with SMTP id o22mr10716698wmh.84.1643273632082;
+        Thu, 27 Jan 2022 00:53:52 -0800 (PST)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id i11sm1847204wry.102.2022.01.27.00.53.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 00:53:21 -0800 (PST)
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Nico Pache <npache@redhat.com>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        Michal Hocko <mhocko@suse.com>
-Subject: [PATCH 6/6] memcg: do not tweak node in alloc_mem_cgroup_per_node_info
-Date:   Thu, 27 Jan 2022 09:53:05 +0100
-Message-Id: <20220127085305.20890-7-mhocko@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220127085305.20890-1-mhocko@kernel.org>
-References: <20220127085305.20890-1-mhocko@kernel.org>
+        Thu, 27 Jan 2022 00:53:51 -0800 (PST)
+Date:   Thu, 27 Jan 2022 08:53:49 +0000
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com,
+        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
+        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] staging: r8188eu: remove DBG_88E calls from
+ os_dep/ioctl_linux.c
+Message-ID: <YfJdnTKa/gF9TEV5@equinox>
+References: <20220124224415.831-1-phil@philpotter.co.uk>
+ <20220124224415.831-7-phil@philpotter.co.uk>
+ <a681a562-eb41-9dc8-703a-5b235c15a3a1@gmail.com>
+ <YfCgQbFxfVZXw9Fg@equinox>
+ <b5bbe488-ac43-fd89-7c65-36bfa9c903a6@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b5bbe488-ac43-fd89-7c65-36bfa9c903a6@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yang <richard.weiyang@gmail.com>
+On Wed, Jan 26, 2022 at 01:26:08PM +0300, Pavel Skripkin wrote:
+> Hi Phillip,
+> 
+> On 1/26/22 04:13, Phillip Potter wrote:
+> 
+> [snip]
+> 
+> }
+> > > 
+> > > And here you also removes the reads. I guess, some kind of magic pattern is
+> > > used
+> > > 
+> > 
+> > So these calls are macro arguments, they would never be executed under
+> > normal circumstances anyway, unless the rtw_debug kernel module was
+> > passed in as 5 or more - it is 1 by default. The DBG_88E macro would
+> > expand during preprocessing phase to (for example):
+> > 
+> > do {
+> > 	if (5 <= GlobalDebugLevel)
+> > 		pr_info("R8188EU: " "dbg(0x450) = 0x%x\n", rtw_read32(padapter, 0x450));
+> > } while (0)
+> > 
+> > As this is never executed under normal circumstances anyway, I would say
+> > calls like these are therefore safe to remove. Happy to be convinced
+> > though :-) Many thanks.
+> > 
+> 
+> I see your point, thanks for explanation.
+> 
+> Well, in this case, you may left all reads, that are executed during normal
+> lifetime of a driver. We know, that there is at least 1 place, where read()
+> call removal can break things. Might be there are couple of other places we
+> don't know about.
+> 
+> IMHO the best thing you can do is to leave these reads and leave a comment
+> like "hey, please remove me and test". One day useless reads should be
+> anyway removed, since ideally rtw_read family must get __must_check
+> annotation + normal error handling.
+> 
 
-alloc_mem_cgroup_per_node_info is allocated for each possible node and
-this used to be a problem because not !node_online nodes didn't have
-appropriate data structure allocated. This has changed by "mm: handle
-uninitialized numa nodes gracefully" so we can drop the special casing
-here.
+Yeah, not a bad idea - I've tried to remove only those which don't look
+like they'd have side effects (such as fwstate checks etc.), but by all
+means I can put them back in with the next revision. Thanks.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Signed-off-by: Michal Hocko <mhocko@suse.com>
----
- mm/memcontrol.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 09d342c7cbd0..8b3f9eef4c65 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5067,18 +5067,8 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
- static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
- {
- 	struct mem_cgroup_per_node *pn;
--	int tmp = node;
--	/*
--	 * This routine is called against possible nodes.
--	 * But it's BUG to call kmalloc() against offline node.
--	 *
--	 * TODO: this routine can waste much memory for nodes which will
--	 *       never be onlined. It's better to use memory hotplug callback
--	 *       function.
--	 */
--	if (!node_state(node, N_NORMAL_MEMORY))
--		tmp = -1;
--	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, tmp);
-+
-+	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, node);
- 	if (!pn)
- 		return 1;
- 
--- 
-2.30.2
-
+Regards,
+Phil

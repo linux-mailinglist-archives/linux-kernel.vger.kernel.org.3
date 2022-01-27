@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0F949E938
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DAB49E933
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiA0Rj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:39:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59989 "EHLO
+        id S244729AbiA0Riz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:38:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60244 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238830AbiA0RjT (ORCPT
+        by vger.kernel.org with ESMTP id S244724AbiA0Rit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:39:19 -0500
+        Thu, 27 Jan 2022 12:38:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643305159;
+        s=mimecast20190719; t=1643305129;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=uqLSaV3CsB09wRgNJfX+VAHmFMOGF+YL37fc8a7NW3Y=;
-        b=WlJ1e7pk2uavm0kFExHRZ0iU6bqMnEruwJ2moB0Z5JO4Fq7sQP58zov9Z3kaXivvUo7puq
-        bkcjJT3lrp9V3NfvLkEy+WJ5G8Wf8o6fQdDA9MCBRlBwUkStldPGPzx+g64J9zuPfk9mN+
-        QO8CWPg0WzdhDfQcGhPDbF8Q+86Kk5s=
+         references:references; bh=bOWN9FXEc7z7mFU0QXKsnKn5eCQYgShYsehuFbTvhU8=;
+        b=RJSp7Lkh2aZ3qUgKkZ8x89rZCXbVmJshfVVxqGuZeTZAmthHRSVHFj0tmNH05VgTAnE/LU
+        OohgA8oZz5QUkbNiUJ1wzNJ3GeY5Hs4SQF7uhUKOotfk/ljgSYNdN6IgV0kzM0DMA+85+1
+        XvofLFyfHUf6AiP9IuSLmMjHLFpDrKQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-XyRGIXddNvWWMHBS88zNTw-1; Thu, 27 Jan 2022 12:39:18 -0500
-X-MC-Unique: XyRGIXddNvWWMHBS88zNTw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-232-bbIU9EO1PB-uwOKb4K6jKw-1; Thu, 27 Jan 2022 12:38:45 -0500
+X-MC-Unique: bbIU9EO1PB-uwOKb4K6jKw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A013918C8C03;
-        Thu, 27 Jan 2022 17:39:16 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B8FF100C663;
+        Thu, 27 Jan 2022 17:38:44 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 477E3838DE;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4A46D74E9A;
         Thu, 27 Jan 2022 17:38:44 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 3968E4168B9E; Thu, 27 Jan 2022 14:38:05 -0300 (-03)
-Message-ID: <20220127173206.785498087@fedora.localdomain>
+        id 3E62A417130B; Thu, 27 Jan 2022 14:38:05 -0300 (-03)
+Message-ID: <20220127173206.862057978@fedora.localdomain>
 User-Agent: quilt/0.66
-Date:   Thu, 27 Jan 2022 14:30:44 -0300
+Date:   Thu, 27 Jan 2022 14:30:45 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nitesh Lal <nilal@redhat.com>,
@@ -50,107 +50,99 @@ Cc:     Nitesh Lal <nilal@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [patch v10 07/10] task isolation: enable return to userspace processing
+Subject: [patch v10 08/10] KVM: x86: process isolation work from VM-entry code path
 References: <20220127173037.318440631@fedora.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable processing of pending task isolation work if per-CPU vmstats
-are out of sync with global vmstats.
+VM-entry code path is an entry point similar to userspace return
+when task isolation is concerned.
+
+Call isolation_exit_to_user_mode before VM-enter.
 
 Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
 ---
- include/linux/task_isolation.h |   22 +++++++++++++++++++++-
- kernel/task_isolation.c        |   13 +++++++++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
+ include/linux/entry-kvm.h |    4 +++-
+ kernel/entry/kvm.c        |   18 ++++++++++++++----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-Index: linux-2.6/include/linux/task_isolation.h
+Index: linux-2.6/kernel/entry/kvm.c
 ===================================================================
---- linux-2.6.orig/include/linux/task_isolation.h
-+++ linux-2.6/include/linux/task_isolation.h
-@@ -5,6 +5,9 @@
+--- linux-2.6.orig/kernel/entry/kvm.c
++++ linux-2.6/kernel/entry/kvm.c
+@@ -2,8 +2,11 @@
  
- #ifdef CONFIG_CPU_ISOLATION
- 
-+#include <linux/vmstat.h>
-+#include <uapi/linux/prctl.h>
-+
- struct task_isol_info {
- 	/* Which features have been configured */
- 	u64 conf_mask;
-@@ -110,7 +113,24 @@ static inline int prctl_task_isol_activa
- 
- static inline int task_isol_has_work(void)
- {
--	return 0;
-+	int cpu, ret;
-+	struct isol_info *i;
-+
-+	if (likely(current->task_isol_info == NULL))
-+		return 0;
-+
-+	i = current->task_isol_info;
-+	if (i->active_mask != ISOL_F_QUIESCE)
-+		return 0;
-+
-+	if (!(i->quiesce_mask & ISOL_F_QUIESCE_VMSTATS))
-+		return 0;
-+
-+	cpu = get_cpu();
-+	ret = per_cpu(vmstat_dirty, cpu);
-+	put_cpu();
-+
-+	return ret;
- }
- 
- #endif /* CONFIG_CPU_ISOLATION */
-Index: linux-2.6/kernel/task_isolation.c
-===================================================================
---- linux-2.6.orig/kernel/task_isolation.c
-+++ linux-2.6/kernel/task_isolation.c
-@@ -10,7 +10,6 @@
-  */
- 
- #include <linux/sched.h>
--#include <linux/task_isolation.h>
- #include <linux/prctl.h>
- #include <linux/slab.h>
- #include <linux/kobject.h>
-@@ -20,9 +19,17 @@
- #include <linux/sched/task.h>
- #include <linux/mm.h>
- #include <linux/vmstat.h>
+ #include <linux/entry-kvm.h>
+ #include <linux/kvm_host.h>
 +#include <linux/task_isolation.h>
  
- void __task_isol_exit(struct task_struct *tsk)
+-static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
++static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu,
++				   unsigned long ti_work,
++				   unsigned long task_isol_work)
  {
-+	struct task_isol_info *i;
-+
-+	i = tsk->task_isol_info;
-+	if (!i)
-+		return;
-+
-+	static_key_slow_dec(&vmstat_sync_enabled);
+ 	do {
+ 		int ret;
+@@ -25,15 +28,19 @@ static int xfer_to_guest_mode_work(struc
+ 		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
+ 		if (ret)
+ 			return ret;
++		if (task_isol_work)
++			task_isol_exit_to_user_mode();
+ 
+ 		ti_work = read_thread_flags();
+-	} while (ti_work & XFER_TO_GUEST_MODE_WORK || need_resched());
++	} while (ti_work & XFER_TO_GUEST_MODE_WORK || need_resched() ||
++		 task_isol_work);
+ 	return 0;
  }
  
- void __task_isol_free(struct task_struct *tsk)
-@@ -41,6 +48,12 @@ static struct task_isol_info *task_isol_
- 	if (unlikely(!info))
- 		return ERR_PTR(-ENOMEM);
+ int xfer_to_guest_mode_handle_work(struct kvm_vcpu *vcpu)
+ {
+ 	unsigned long ti_work;
++	unsigned long task_isol_work;
  
-+	preempt_disable();
-+	init_sync_vmstat();
-+	preempt_enable();
-+
-+	static_key_slow_inc(&vmstat_sync_enabled);
-+
- 	return info;
+ 	/*
+ 	 * This is invoked from the outer guest loop with interrupts and
+@@ -44,9 +51,9 @@ int xfer_to_guest_mode_handle_work(struc
+ 	 * to disable interrupts here.
+ 	 */
+ 	ti_work = read_thread_flags();
+-	if (!(ti_work & XFER_TO_GUEST_MODE_WORK))
++	if (!(ti_work & XFER_TO_GUEST_MODE_WORK) || task_isol_work)
+ 		return 0;
+ 
+-	return xfer_to_guest_mode_work(vcpu, ti_work);
++	return xfer_to_guest_mode_work(vcpu, ti_work, task_isol_work);
+ }
+ EXPORT_SYMBOL_GPL(xfer_to_guest_mode_handle_work);
+Index: linux-2.6/include/linux/entry-kvm.h
+===================================================================
+--- linux-2.6.orig/include/linux/entry-kvm.h
++++ linux-2.6/include/linux/entry-kvm.h
+@@ -8,6 +8,7 @@
+ #include <linux/seccomp.h>
+ #include <linux/sched.h>
+ #include <linux/tick.h>
++#include <linux/task_isolation.h>
+ 
+ /* Transfer to guest mode work */
+ #ifdef CONFIG_KVM_XFER_TO_GUEST_WORK
+@@ -76,8 +77,9 @@ static inline void xfer_to_guest_mode_pr
+ static inline bool __xfer_to_guest_mode_work_pending(void)
+ {
+ 	unsigned long ti_work = read_thread_flags();
++	unsigned long task_isol_work = task_isol_has_work();
+ 
+-	return !!(ti_work & XFER_TO_GUEST_MODE_WORK);
++	return !!((ti_work & XFER_TO_GUEST_MODE_WORK) || task_isol_work);
  }
  
+ /**
 
 

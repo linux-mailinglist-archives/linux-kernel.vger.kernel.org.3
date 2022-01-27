@@ -2,146 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC1B49EA67
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D799049EA65
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244851AbiA0SdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiA0SdW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:33:22 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC495C061714;
-        Thu, 27 Jan 2022 10:33:21 -0800 (PST)
-Date:   Fri, 28 Jan 2022 02:33:16 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643308400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SVqeRfTnsDsLypLNnH4fgggsQaxIu1PGm+k1vPPQ5XU=;
-        b=Ry8pLBkgu9CQJBV8Qrr/MymnU3+FUy8SP4qwSmI2wsw2carhgPUZ/kfCFqvvsFRogIsdMr
-        niLcZ0tYZ8cdb86fK4ID0Jwvrj/3QCvNMCaWXIZgxyIh3XxDVrqGj2tS4QnGKYnpVlCTJT
-        gHz56owtxtf9BbSd4QlziaFZkhb4/4Q=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
-        posk@posk.io, Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [RFC][PATCH v2 5/5] sched: User Mode Concurency Groups
-Message-ID: <YfLlbMZRR4ouD52O@geo.homenetwork>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.914418096@infradead.org>
- <Ye67uQa4CwUuQJVY@geo.homenetwork>
- <YfKN3+84gtaIopHW@hirez.programming.kicks-ass.net>
+        id S237457AbiA0SdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:33:07 -0500
+Received: from ms.lwn.net ([45.79.88.28]:52008 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232362AbiA0SdF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 13:33:05 -0500
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id E380137C;
+        Thu, 27 Jan 2022 18:33:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E380137C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1643308385; bh=wU1Vu5D+dAN0l9EXg3C/zuxBucv9lbkAhwlKPeVKzzg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lgUAy+WPRqbFyCgsy+OnBeV3VrLdA8XJH2j60ROycI9bEdr0vBuYNhdVuWTHtgur3
+         lrdq91v3/1Ib5gG3L9DZvaQdyF4uga5ulaIOrqJ0zpWKTKO8p7qOKJ+6t6f2CwcQx2
+         +fnEWj9ZkShNX9ISSZPPaIqJsiMFo/V0B0OOyr358HnZgbCN01Jf7fPStLkj6zqwSv
+         ZHh5Dt2Iyl3jS/SNzTvo1F+eYoOiRrOIrJeLP0hVPYfiO5v339e717X7cxvqZxgjV+
+         2cLuINC4eBQPt4j93chdTfQ8ivjHxeKFdEF9TuFPfA0duojCCxeFqD8r0WMWn2dh3G
+         joH0JSE/GoMkQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, tglx@linutronix.de,
+        mark.rutland@arm.com, paulmck@kernel.org
+Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, rcu@vger.kernel.org,
+        peterz@infradead.org, mtosatti@redhat.com, frederic@kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Subject: Re: [PATCH v4 1/2] Documentation: Fill the gaps about entry/noinstr
+ constraints
+In-Reply-To: <20220110105044.94423-1-nsaenzju@redhat.com>
+References: <20220110105044.94423-1-nsaenzju@redhat.com>
+Date:   Thu, 27 Jan 2022 11:33:36 -0700
+Message-ID: <877dalrptr.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfKN3+84gtaIopHW@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 01:19:43PM +0100, Peter Zijlstra wrote:
+Nicolas Saenz Julienne <nsaenzju@redhat.com> writes:
 
-> On Mon, Jan 24, 2022 at 10:46:17PM +0800, Tao Zhou wrote:
-> > Hi Peter,
-> > 
-> > On Thu, Jan 20, 2022 at 04:55:22PM +0100, Peter Zijlstra wrote:
-> > 
-> > [...]
-> > 
-> > > +/* pre-schedule() */
-> > > +void umcg_wq_worker_sleeping(struct task_struct *tsk)
-> > > +{
-> > > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
-> > > +	int ret;
-> > > +
-> > > +	if (!tsk->umcg_server) {
-> > > +		/*
-> > > +		 * Already blocked before, the pages are unpinned.
-> > > +		 */
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	/* Must not fault, mmap_sem might be held. */
-> > > +	pagefault_disable();
-> > > +
-> > > +	ret = umcg_update_state(tsk, self, UMCG_TASK_RUNNING, UMCG_TASK_BLOCKED);
-> > > +	if (ret == -EAGAIN) {
-> > > +		/*
-> > > +		 * Consider:
-> > > +		 *
-> > > +		 *   self->state = UMCG_TASK_RUNNABLE | UMCG_TF_COND_WAIT;
-> > > +		 *   ...
-> > > +		 *   sys_umcg_wait();
-> > > +		 *
-> > > +		 * and the '...' code doing a blocking syscall/fault. This
-> > > +		 * ensures that returns with UMCG_TASK_RUNNING, which will make
-> > 
-> > /UMCG_TASK_RUNNING/UMCG_TASK_RUNNABLE/
-> 
-> So the issue is that:
-> 
-> 	self->state = UMCG_TASK_RUNNABLE | UMCG_TF_COND_WAIT;
-> 
-> 	<#PF>
-> 	  umcg_sys_enter()
-> 	    umcg_pin_user_page()
-> 	  schedule()
-> 	    sched_submit_work()
-> 	      umcg_wq_worker_sleeping()
-> 	        umcg_update_state(tsk, self, UMCG_TASK_RUNNING, UMCG_TASK_BLOCKED) // -EAGAIN
-> 		UMCG_DIE()
-> 
-> Which is clearly not desirable.
-> 
-> So this additinoal thing ensures that:
-> 
-> 		umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_BLOCKED) // 0
-> 
-> 	  umcg_sys_exit()
-> 	    umcg_update_state(tsk, self, UMCG_TASK_BLOCKED, UMCG_TASK_RUNNABLE);
-> 	    umcg_enqueue_and_wake()
-> 
-> 	  umcg_notify_resume()
-> 	    umcg_wait()
-> 
-> 	// must be UMCG_TASK_RUNNING here
-> 	</#PF>
-> 
-> So when the pagefault finally does return, it will have:
-> UMCG_TASK_RUNNING.
-> 
-> Which will then make sys_umcg_wait() return -EAGAIN and around we go.
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> The entry/exit handling for exceptions, interrupts, syscalls and KVM is
+> not really documented except for some comments.
+>
+> Fill the gaps.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de
+> Co-developed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+>
+Both patches applied, thanks.
 
-Thank you, Peter.
-
-> > > +		 * sys_umcg_wait() return with -EAGAIN.
-> > > +		 */
-> > > +		ret = umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_BLOCKED);
-> > > +	}
-> > > +	if (ret)
-> > > +		UMCG_DIE_PF("state");
-> > > +
-> > > +	if (umcg_wake_server(tsk))
-> > > +		UMCG_DIE_PF("wake");
-> > > +
-> > > +	pagefault_enable();
-> > > +
-> > > +	/*
-> > > +	 * We're going to sleep, make sure to unpin the pages, this ensures
-> > > +	 * the pins are temporary. Also see umcg_sys_exit().
-> > > +	 */
-> > > +	umcg_unpin_pages();
-> > > +}
+jon

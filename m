@@ -2,130 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C604B49EE6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06A349EE77
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244862AbiA0XGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:06:25 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:5574 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiA0XGW (ORCPT
+        id S1343624AbiA0XIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239780AbiA0XIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:06:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643324782; x=1674860782;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QVYbW0Wb801k8+SBZmpkcQp1EgG//MCvkBVTkcz8syQ=;
-  b=D3l0wOYis5Wf3FJEr3xL4ViQGFQB3vzhgTh2fXN3l+Cso77o5E0jthW9
-   Qh85WaL+i9OaSu7I4tRLA5wsW5BUcfE1xibxwL+I0SQxnnsaVXKLmAuGf
-   NA/0762sqb1JaQYvvDodDQalb+njbRaiQ1w27GSXprGxb+oC8/8q8H8kn
-   Zq2rlMXM2+U2WnyAQNx3CmNWyMWifvSO3IwnN/bXA53zoK0RUVnh+Y0W5
-   8mJ5fKZb9Rs+VIalwZYrgvudOYfGkIf9vU67gM7H0wtOr1z77TBwvGKDz
-   D4dZpgFPWSWRjauiqj44CJ+G+PCsFfPAANdDiY60F4GbRY19MmjrMp5zb
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,321,1635177600"; 
-   d="scan'208";a="303450774"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2022 07:06:22 +0800
-IronPort-SDR: c7lREJkROl/J1qfu+fmswK/xM1ZShWHPjFhBv5n8adzjPg4ws+mj3o+QLMccQH8oj65jrP0eRY
- ZiBZFMlv7Q4Ee1yKks8PDgjh3VxApGYBi7uCTFnICmOF3noejmuUkiqdgsTdeph9MToYruWSol
- UfAc749pDOqkCRVxt7OdriB4NiIN+O0cIqGWHjW8i4QNlKU26Tn39VoGb4mwji6jzHzVxdlU7L
- 3Sy34xBzbNV6sSlJdVNkotK5v5DApssY/jg7JpC8l/qDFvSDlpaHJmm2PaE7GRX8YRCO4R23W3
- T5nmyvQrRqI9eVXjUzOsYncq
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 14:38:24 -0800
-IronPort-SDR: oP1OtRX35ET4jWZ0mRPPOhWowxzxu6xBCBhnotEQ2LpgfWR9N+hZ9bxkKFLFOgi/uhnWahUarP
- gPVzI9SdxMcJxHJyKk/hLBqJxQg7488n2r4uTFKoTR57fvJD5E0zHa4DBueC9Rp9fRQpGKp36w
- 5InjZfK3M9TYyQQIwY2K1Xd6KOJiE1k0DWIHIQEaAOkvNUJjR6lxeRD7zQDlGxUqUe1RnXlTU0
- J38fOpSS6Mgo4t30jYXhcpfFE5LwTaf2IGPYrhctFtOSd3IMPUJFrJ8eVzew2Ag6GUJHo3VBKE
- n6Q=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 15:06:22 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JlGRd2c9Wz1SVp4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:06:21 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643324780; x=1645916781; bh=QVYbW0Wb801k8+SBZmpkcQp1EgG//MCvkBV
-        Tkcz8syQ=; b=NZppG53bOl+24Lsj9ZkZKU6aOx84hgeSsENx1ySmcGKvKqbg+RW
-        WNOdcsgIogd7c4Ycq9BLCacraPcjJdt51ZtQbw83+5EM0h4G2E17AY7B72Xe6mgY
-        YNu0aK9w2SwjEW4PQqg9NyCcFo7X6srai/2Me9wF6ClI6fywzMg1iB3U3dR3PIRZ
-        d9xlTK+Smii9Jniwv7P3YG0YKNM9yB/fHfa4pJAMVmCZ5RsgoSREMKIawtHzS3mB
-        f/P06jHLnoteoNX5LX/926rW8T4EdSqBS2lId8vu0ky63SdEKaALLyKyoK9xO3BD
-        UPLjl6G02XoZNS+we+UBxIR4ZeUC7d5bzoA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id k_L5I4-81f0W for <linux-kernel@vger.kernel.org>;
-        Thu, 27 Jan 2022 15:06:20 -0800 (PST)
-Received: from [10.225.163.58] (unknown [10.225.163.58])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JlGRb1mXvz1RvlN;
-        Thu, 27 Jan 2022 15:06:19 -0800 (PST)
-Message-ID: <2d7788bc-eadd-5061-5241-fa141259bb30@opensource.wdc.com>
-Date:   Fri, 28 Jan 2022 08:06:17 +0900
+        Thu, 27 Jan 2022 18:08:25 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24386C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:08:25 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id u130so4371415pfc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/1uOFTgg0x7nxOozmt+E9oLAD0yJmH2M0jmKFxZDwp8=;
+        b=N5XEoUM5GPx0kQt4THwu9A+kK+DZR0wMVHnyygjwUG5aaFoDL+gOadyxplbQetMhe7
+         wrCn7wY6jwGkNG0PfOk50FCELTNuv5Ef6BAmJkfoYlHmzbA34qzN6oU2TbxPfDvxZ87u
+         PhwuMG6XcbV1qCtwINtTlV/2e77vS1BRriaxs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/1uOFTgg0x7nxOozmt+E9oLAD0yJmH2M0jmKFxZDwp8=;
+        b=vQD/mBSlR84zE1KEbWU14LnpK731FZdgJYRkcR9fgPkRqdSQ1dltkNx6w8PozSk/by
+         odJ3Kg9gEFh829X5VCOcz2YFkFacy/qlctFVj2wq4Nb35+0WWD+pirsvEqSzCPGYveob
+         W1DlNYAZ8hbE+UoqJQkfUX/aRk4kLKFq2fe0c5XkI8ttXypoEeP/6zZ5VZS6XbMUCvbC
+         UFi84Ku7pCVWVRgHlU+9HsCLEJq9zYTO4SetnmGuu90Bvo2JyrHGPg/D58L1MtbqPFCb
+         r/l7C5nan0XnW+jOsAc1SMfpv+iRLqURR/BJtzPQO+O5KEBuGLJ/wPAhs5yURee6xrc3
+         ir8g==
+X-Gm-Message-State: AOAM530DrgEZWw6bvFa26QEl3FwKR5X6mpUmVDG4Aj/dLJDQ472M2owb
+        +R4o2toEQ5dvu/RUKcMw6QmGJQ==
+X-Google-Smtp-Source: ABdhPJyhsxMBgopZJQ9Yzo2MIciHeAMHqFWshYvoQ8YUfc42nVNLVluvkoFoX6uSfTwD6O2dKCWxcQ==
+X-Received: by 2002:a63:6ac3:: with SMTP id f186mr4322420pgc.81.1643324904727;
+        Thu, 27 Jan 2022 15:08:24 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:723d:38a9:9e7f:3435])
+        by smtp.gmail.com with UTF8SMTPSA id b5sm20269235pgl.22.2022.01.27.15.08.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 15:08:24 -0800 (PST)
+From:   Brian Norris <briannorris@chromium.org>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v2 00/15] rk3399: Clean up and enable DDR DVFS
+Date:   Thu, 27 Jan 2022 15:07:11 -0800
+Message-Id: <20220127230727.3369358-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/3] scsi: pm8001: Fix warning for undescribed param in
- process_one_iomb()
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        Ajish.Koshy@microchip.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viswas.G@microchip.com, chenxiang66@hisilicon.com
-References: <1643289172-165636-1-git-send-email-john.garry@huawei.com>
- <1643289172-165636-2-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1643289172-165636-2-git-send-email-john.garry@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 22:12, John Garry wrote:
-> make W=1 complains of an undescribed function pararm:
-> 
-> drivers/scsi/pm8001/pm80xx_hwi.c:3938: warning: Function parameter or member 'circularQ' not described in 'process_one_iomb'
-> 
-> Fix it.
-> 
-> Reported-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->  drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> index bbf538fe15b3..ce38a2298e75 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -3931,6 +3931,7 @@ static int ssp_coalesced_comp_resp(struct pm8001_hba_info *pm8001_ha,
->  /**
->   * process_one_iomb - process one outbound Queue memory block
->   * @pm8001_ha: our hba card information
-> + * @circularQ: outbound circular queue
+This series covers 2 primary tasks:
 
-Nit: you could remove the CaMeL case here while at it :)
+1) Resubmit prior work:
 
->   * @piomb: IO message buffer
->   */
->  static void process_one_iomb(struct pm8001_hba_info *pm8001_ha,
+[RESEND PATCH v5 3/4] arm64: dts: rockchip: Enable dmc and dfi nodes on gru.
+https://lore.kernel.org/lkml/20210308233858.24741-2-daniel.lezcano@linaro.org/
+[RESEND PATCH v5 2/4] arm64: dts: rk3399: Add dfi and dmc nodes.
+https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
 
-But anyway, looks good.
+This series was partially merged a while back, but the remaining 2
+patches were blocked mostly on stylistic grounds (alpha/numerical
+ordering).
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+2) Integrate many updates, bugfixes, and clarifications that were done
+by Rockchip and Google engineers when first launching this platform.
+Many of these were not integrated in the earlier series (e.g., the OPPs
+changed before production; earlier patchsets used pre-production
+numbers).
+
+Along the way, it seemed worthwhile to convert the binding docs to a
+schema. Among other reasons, it actually helped catch several errors and
+omissions in translation between downstream device trees and the version
+that actually landed upstream.
+
+See the patches for further details.
+
+Regards,
+Brian
+
+Changes in v2:
+ - Fix yamllint issues
+ - Adapt to various review comments (use of *-hz, hyphens, node naming)
+ - Add a few new bugfixes
+ - Add some new properties (ported from downstream kernels) required for
+   stability
+ - Convert more properties from "cycles" to "nanoseconds"
+
+Brian Norris (13):
+  dt-bindings: devfreq: rk3399_dmc: Convert to YAML
+  dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant
+    properties
+  dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+  dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
+  dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
+  PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
+  PM / devfreq: rk3399_dmc: Drop excess timing properties
+  PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
+  PM / devfreq: rk3399_dmc: Support new disable-freq properties
+  PM / devfreq: rk3399_dmc: Support new *-ns properties
+  PM / devfreq: rk3399_dmc: Disable edev on remove()
+  PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
+  PM / devfreq: rk3399_dmc: Avoid static (reused) profile
+
+Lin Huang (2):
+  arm64: dts: rk3399: Add dfi and dmc nodes
+  arm64: dts: rockchip: Enable dmc and dfi nodes on gru
+
+ .../bindings/devfreq/rk3399_dmc.txt           | 212 ----------
+ .../bindings/devfreq/rk3399_dmc.yaml          | 370 ++++++++++++++++++
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |   7 +
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  12 +
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |  28 ++
+ .../boot/dts/rockchip/rk3399-op1-opp.dtsi     |  25 ++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |  19 +
+ drivers/devfreq/rk3399_dmc.c                  | 299 +++++++-------
+ 8 files changed, 595 insertions(+), 377 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+ create mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.35.0.rc0.227.g00780c9af4-goog
+

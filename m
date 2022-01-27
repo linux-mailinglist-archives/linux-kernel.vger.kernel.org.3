@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B82A49E3A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D413D49E3A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242037AbiA0Nh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241898AbiA0NfT (ORCPT
+        id S242118AbiA0NgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:36:12 -0500
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:34756 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242227AbiA0NeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:35:19 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D7AC061762
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:33:42 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id e8so4928587wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:33:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wBYBbfKnJeYUc1b/K/sTSN+3xZ7MU+5mXvQbL+YBpf0=;
-        b=cvPQcV2+PDwUikYRGtN5buRuUCbCyeHatX24qTROl5cP0nZft/HvlADmJb3FsIMn1f
-         fjLp2P9E5DTJISf+1KsyACgSb5gMrobgOnLq5ULTIgPRe/6Hn+WOg5WxW4zfAgwMMFTg
-         3/wJnwuKUpAdXO/JcEtYKbV1ImMSu7S+bn0BWxAXKTq9XPcpkjrMriBsW5KPnnpkrq7v
-         bJ5n8m/T7+/oc5kiAhuiYqB4gKE4WxMu/ngxO4aSAAYNszNC+jqwBp65Zq4QYWbTHSXs
-         EcbsRhQfQJkHf0pmYGfOfxBOYVjzYdrYI7VXZCy6fOFIPKhhB07JjOVREZaxu7GN9fT6
-         p6CQ==
+        Thu, 27 Jan 2022 08:34:03 -0500
+Received: by mail-yb1-f169.google.com with SMTP id v186so8804013ybg.1;
+        Thu, 27 Jan 2022 05:34:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wBYBbfKnJeYUc1b/K/sTSN+3xZ7MU+5mXvQbL+YBpf0=;
-        b=Qe4UUufQST3axs5RAOkOzqZz8m+oltrsJPDAIXNj3L0ied04iVD53+XRYAnkTCqdVL
-         6ORFsL/ZKY/0wIe0bq55CEuIw2lie5qdrICTs8kzv+qzDkFPQGvaAULpvA0ARgDid+5A
-         7xVuM3F6QFWjndi7NZKC3laiUEWn2dT/a+PCw/jqcj/FGanf2Sh2v8F898adQZQ3v+Kw
-         wqO1X0f+PRuyQsNca7IX9Rv9IXPmethtHjhk5l9NF+Q+uFHBZ75KYqDYoWmqP0EmSwvG
-         mPA0ZDSvDvwzqQ92Vs803jYnVyP4UUYiDEN4dsG4npMwFGzsfDvkX6hCT037Oye218tb
-         519w==
-X-Gm-Message-State: AOAM533RZkLf08I0wVeMrYbrYUIdyteJVwqsavz9Ynp8LXNYJ7NXWKjn
-        9bNGZUVz+s87WNvFSA4oQzK0Ng==
-X-Google-Smtp-Source: ABdhPJw7/2XzmcS9TsTU/CyIVS/eE4HyfQhTzGPBJzPM3C0dRA1zgz92f00V7ixt0lmnb4l9Fk/cSw==
-X-Received: by 2002:a5d:4c81:: with SMTP id z1mr3090423wrs.568.1643290421013;
-        Thu, 27 Jan 2022 05:33:41 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id w8sm2173912wrq.3.2022.01.27.05.33.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 05:33:40 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] crypto: engine: disable BH during completion
-Date:   Thu, 27 Jan 2022 13:33:32 +0000
-Message-Id: <20220127133332.4011509-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JwIU7q542/Majhq966D+41zjzGbPYbtJbtOu0ZRQ3As=;
+        b=DLPdBI7j7GtcJ6fgOGH8ILGgC/xlOaTlADW7+9eeH5x9mdQYWH7Zno7gd8nap4YFe0
+         QnMsabrKXBy6Q5pDdLgLIgBEQI930tex75iCNxyz+QmbmoKC3m6rF1LLdXarfXQg1LzW
+         oiVM+xbxMeCtJ5eA6gbdRUNEcMnxAUgbAzFSNzFomH+dDQzIVwwi1U8Hb1WSrIGT85Sx
+         NetYAkLUIxXK9uO4vmJ5rVXYnggh3KEWRuQc++Krk1ymFfeNxvutPEttk5WYi288WS5Q
+         WsUwmh1CynLl3kClhYMqYNJHTDmq8iYF/IpCzplnrm3p8yuodo2l2TFZdQal14kyH1Gs
+         A1JQ==
+X-Gm-Message-State: AOAM5333R6rzPj/LFtYDc20S0IYct2hfPKC5yN3ADLxKSAyYt+xcGVHs
+        h9RTpAThBp5GoUbwiQiq/9QlGSVRcYE5ThQs/0A=
+X-Google-Smtp-Source: ABdhPJx5o6SjJD6Sr3giZs1kpJ/iEQnMh6yOLpDp+jztp116PA4onXa6gPegmQzAF6j36v7rIaCFiiI6WAkjpYmMEs4=
+X-Received: by 2002:a25:4ac4:: with SMTP id x187mr5580851yba.466.1643290443015;
+ Thu, 27 Jan 2022 05:34:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220123091004.763775-1-ztong0001@gmail.com> <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
+ <CAJZ5v0h51v9fFrJRuaFpSn7J2UEHndEj0f3zpmw=RvgsvAhtvw@mail.gmail.com>
+ <049ccc3a-8628-3e90-a4f4-137a286b6dce@redhat.com> <CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com>
+ <994f94b2-61d3-1754-d733-732a0fb47d50@redhat.com>
+In-Reply-To: <994f94b2-61d3-1754-d733-732a0fb47d50@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Jan 2022 14:33:52 +0100
+Message-ID: <CAJZ5v0hXKJhCSKki8JHs+Q=3BWYygDNz9LLAaiVKpDvLPr6-ZA@mail.gmail.com>
+Subject: Re: acpi_get_devices() crash when acpi_disabled==true (was [PATCH v2]
+ drm/privacy-screen: honor acpi=off in detect_thinkpad_privacy_screen)
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-acpi <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing iperf over ipsec with crypto hardware sun8i-ce, I hit some
-spinlock recursion bug.
+On Thu, Jan 27, 2022 at 2:05 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 1/26/22 18:11, Rafael J. Wysocki wrote:
+> > On Wed, Jan 26, 2022 at 5:41 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> On 1/26/22 16:54, Rafael J. Wysocki wrote:
+> >>> On Wed, Jan 26, 2022 at 2:47 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>>>
+> >>>> Hi All,
+> >>>>
+> >>>> On 1/23/22 10:10, Tong Zhang wrote:
+> >>>>> when acpi=off is provided in bootarg, kernel crash with
+> >>>>>
+> >>>>> [    1.252739] BUG: kernel NULL pointer dereference, address: 0000000000000018
+> >>>>> [    1.258308] Call Trace:
+> >>>>> [    1.258490]  ? acpi_walk_namespace+0x147/0x147
+> >>>>> [    1.258770]  acpi_get_devices+0xe4/0x137
+> >>>>> [    1.258921]  ? drm_core_init+0xc0/0xc0 [drm]
+> >>>>> [    1.259108]  detect_thinkpad_privacy_screen+0x5e/0xa8 [drm]
+> >>>>> [    1.259337]  drm_privacy_screen_lookup_init+0xe/0xe85 [drm]
+> >>>>>
+> >>>>> The reason is that acpi_walk_namespace expects acpi related stuff
+> >>>>> initialized but in fact it wouldn't when acpi is set to off. In this case
+> >>>>> we should honor acpi=off in detect_thinkpad_privacy_screen().
+> >>>>>
+> >>>>> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> >>>>
+> >>>> Thank you for catching this and thank you for your patch. I was about to merge
+> >>>> this, but then I realized that this might not be the best way to fix this.
+> >>>>
+> >>>> A quick grep shows 10 acpi_get_devices() calls outside of drivers/acpi,
+> >>>> and at a first glance about half of those are missing an acpi_disabled
+> >>>> check. IMHO it would be better to simply add an acpi_disabled check to
+> >>>> acpi_get_devices() itself.
+> >>>>
+> >>>> Rafael, do you agree ?
+> >>>
+> >>> Yes, I do.
+> >>
+> >> Did you see my follow-up that that is not going to work because
+> >> acpi_get_devices() is an acpica function ?
+> >
+> > No, I didn't, but it is possible to add a wrapper doing the check
+> > around it and convert all of the users.
+>
+> Yes I did think about that. Note that I've gone ahead and pushed
+> the fix which started this to drm-misc-fixes, to resolve the crash
+> for now.
 
-This is due to crypto/crypto_engine not disabling BH when calling
-completion function.
+OK
 
-Fixes: 735d37b5424b ("crypto: engine - Introduce the block request crypto engine framework")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- crypto/crypto_engine.c | 3 +++
- 1 file changed, 3 insertions(+)
+> If we add such a wrapper we can remove a bunch of acpi_disabled checks
+> from various callers.
+>
+> > Alternatively, the ACPICA function can check acpi_gbl_root_node
+> > against NULL, like in the attached (untested) patch.
+>
+> That is probably an even better idea, as that avoids the need
+> for a wrapper altogether. So I believe that that is the best
+> solution.
 
-diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
-index fb07da9920ee..b3844f6d98a3 100644
---- a/crypto/crypto_engine.c
-+++ b/crypto/crypto_engine.c
-@@ -7,6 +7,7 @@
-  * Author: Baolin Wang <baolin.wang@linaro.org>
-  */
- 
-+#include <linux/bottom_half.h>
- #include <linux/err.h>
- #include <linux/delay.h>
- #include <linux/device.h>
-@@ -53,7 +54,9 @@ static void crypto_finalize_request(struct crypto_engine *engine,
- 				dev_err(engine->dev, "failed to unprepare request\n");
- 		}
- 	}
-+	local_bh_disable();
- 	req->complete(req, err);
-+	local_bh_enable();
- 
- 	kthread_queue_work(engine->kworker, &engine->pump_requests);
- }
--- 
-2.34.1
-
+Allright, let me cut an analogous patch for the upstream ACPICA, then.

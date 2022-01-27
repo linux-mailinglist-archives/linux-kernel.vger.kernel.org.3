@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C215E49EB38
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DB449EB3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245649AbiA0Tmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:42:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57358 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245263AbiA0Tmi (ORCPT
+        id S245685AbiA0TnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245651AbiA0TnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:42:38 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20RJcvYs004439;
-        Thu, 27 Jan 2022 19:42:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=pj1NKpQbH5pDAnBSZ6ZEh9QlXO/BiqZbqDY+xndFINQ=;
- b=ArUxI9xaJnMkc1m/ctLCFYLNYmbLq3j2EEPW4mhMbS9IlLQbC5TY9UfNjI0rROw8oi2u
- 7Nenc9Kw208aEa34ewjzCclSsBPFlk3fwTXjIHEbvEsw5Mf9A/IPg5Z2ojFaMI6CKW8L
- kj/hAWY4b6vnUz2W72pUtbiUQOD1vwG3Rkl2QU69f4BVgaJRuSGnTogXzI6KA37+VfUD
- 7aE7dUsxtatUu6TDk/yPMTijyr5M7lKvY4Qa3TxaNgrREIyycOlQLxpaTtt34tYfMd9e
- rvwjXlhUBpdZccrCAub+uelWNFBE9pxymSVFE6ei+5HiJHp6SpFnmqHMZ7AUWN5lZ7D/ gQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dv1brrc7t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 19:42:24 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20RJfDZQ012915;
-        Thu, 27 Jan 2022 19:42:23 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dv1brrc77-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 19:42:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20RJc5TI000707;
-        Thu, 27 Jan 2022 19:42:21 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dr9j9uchp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 19:42:21 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20RJgIqw44499358
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jan 2022 19:42:18 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E45C25205A;
-        Thu, 27 Jan 2022 19:42:17 +0000 (GMT)
-Received: from sig-9-65-89-165.ibm.com (unknown [9.65.89.165])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5DB0C52050;
-        Thu, 27 Jan 2022 19:42:15 +0000 (GMT)
-Message-ID: <38a2c2b2d1829e9949bd984958e880e54ae7cf5c.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 06/23] ima: Move arch_policy_entry into ima_namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Christian Brauner <brauner@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Thu, 27 Jan 2022 14:42:14 -0500
-In-Reply-To: <20220126091104.jbedxrewojcmvy3u@wittgenstein>
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
-         <20220125224645.79319-7-stefanb@linux.vnet.ibm.com>
-         <20220126091104.jbedxrewojcmvy3u@wittgenstein>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EFrkMEN0Vw9pu_-7IXT2CP4xF-M23kgt
-X-Proofpoint-ORIG-GUID: 8-dUcX1JxUB9y2GW9MGQi7Rsn0s9ApOg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 phishscore=0 bulkscore=0 adultscore=0 mlxscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201270112
+        Thu, 27 Jan 2022 14:43:01 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B3BC061714;
+        Thu, 27 Jan 2022 11:43:01 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id l5so5110444edv.3;
+        Thu, 27 Jan 2022 11:43:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jp8xtQ7vm1lf3v4x4zlRNvwWieVtrtzxWdkBdSMdKBI=;
+        b=RxZDvbu1Kusj7WLtXTZhCblHNO01QnNYl4Im+SUvXMrgEaEYyz6Nw85K2+EVtCzVF9
+         O2E7npoGniIeW4LxnTlHGfJdxRRHRp+QkF8j+7eCkNNAMrb4hViFKypKDuM1erRfvGLi
+         BCnSr5autHPdiepr8yLXu2w9MD+M2L2FS1nwoCdUoRtJ0CgYaxsr6YYD1VWIdSDnNBeU
+         5krpS5EKJ/8+5fA3J073NF2u30cxDuAHszheIO8CdGUusgXIJqiDoV7fJG41KKJLGqt3
+         OssmxhyWkGzxoWFgFvJ87Mn8Hxdfdd5te4/GYRXO7ZTGbBQBdCpGSxI42Ma43PcRmG5l
+         9swQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jp8xtQ7vm1lf3v4x4zlRNvwWieVtrtzxWdkBdSMdKBI=;
+        b=l3mOqQb4uO4GpEMbbpLmKQZJrtSap2ma6faBx799FqCZ2FlLNGTuUt2EitqW3TAiBx
+         1M+wBCv17WrKH6XqJeW7JROtKx3XaBsjfN8GeYfiPZ6HBnu4mU7tToA9fOZQAKLNwJc2
+         GTZ+EjGDBsgm8zo16wNTlSrI+CpktZNJ9V1CmqMekGRBKAS8GIV3Z8H/PHERpm3m32pR
+         EuKvcp4Ro9/XopZljRnL5JuK/hWJ5vR5a1VpiSCX99VINmZeEznexfpPYp3cdX2C0OBD
+         wdPfLv09qYdtLyDhF+c9bpua+ChPCv6QNYrF9aQM924sXQ7vnXI6WDGiFc31Yff1EfUx
+         aiHA==
+X-Gm-Message-State: AOAM533sbn6B92/MI5Z+vyOEKvE68+xKXWnyR04ZC6IG/PLwqU3Z15ni
+        LcImnqSx90tJX8hXrwOmv5qlb8Qm+fvDNQoNwB0=
+X-Google-Smtp-Source: ABdhPJxRDp56G1DTNc/iJVvUZZ1aic+K9B+k2A/2xw940jMK1KAsxC1cJr6gG791OdmD84afDgTNcTg+7RNRu0+3wLI=
+X-Received: by 2002:a05:6402:12cf:: with SMTP id k15mr4971960edx.299.1643312579791;
+ Thu, 27 Jan 2022 11:42:59 -0800 (PST)
+MIME-Version: 1.0
+References: <20220120202805.3369-1-shy828301@gmail.com> <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+ <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
+ <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com> <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
+ <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com> <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
+ <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com> <CAHbLzkqXy-W9sD5HFOK_rm_TR8uSP29b+RjKjA5zOZ+0dkqMbQ@mail.gmail.com>
+ <2a1c5bd2-cb8c-b93b-68af-de620438d19a@redhat.com>
+In-Reply-To: <2a1c5bd2-cb8c-b93b-68af-de620438d19a@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 27 Jan 2022 11:42:47 -0800
+Message-ID: <CAHbLzkongysm41LbMc1FMT8Xeg33==1rn3nUu6MTAAwKSbfv_Q@mail.gmail.com>
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jann Horn <jannh@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-26 at 10:11 +0100, Christian Brauner wrote:
-> On Tue, Jan 25, 2022 at 05:46:28PM -0500, Stefan Berger wrote:
-> > From: Stefan Berger <stefanb@linux.ibm.com>
-> > 
-> > Move the arch_policy_entry pointer into ima_namespace.
-> > 
-> > When freeing the memory set the pointer to NULL.
-> > 
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > ---
-> 
-> Only relevant for the initial imans (for now) since it is derived from a
-> boot parameter. Maybe mention this in the commit message.
+On Wed, Jan 26, 2022 at 10:54 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> >>> Just page lock or elevated page refcount could serialize against THP
+> >>> split AFAIK.
+> >>>
+> >>>>
+> >>>> But yeah, using the mapcount of a page that is not even mapped
+> >>>> (migration entry) is clearly wrong.
+> >>>>
+> >>>> To summarize: reading the mapcount on an unlocked page will easily
+> >>>> return a wrong result and the result should not be relied upon. reading
+> >>>> the mapcount of a migration entry is dangerous and certainly wrong.
+> >>>
+> >>> Depends on your usecase. Some just want to get a snapshot, just like
+> >>> smaps, they don't care.
+> >>
+> >> Right, but as discussed, even the snapshot might be slightly wrong. That
+> >> might be just fine for smaps (and I would have enjoyed a comment in the
+> >> code stating that :) ).
+> >
+> > I think that is documented already, see Documentation/filesystems/proc.rst:
+> >
+> > Note: reading /proc/PID/maps or /proc/PID/smaps is inherently racy (consistent
+> > output can be achieved only in the single read call).
+>
+> Right, but I think there is a difference between
+>
+> * Atomic values that change immediately afterwards ("this value used to
+>   be true at one point in time")
+> * Values that are unstable because we cannot read them atomically ("this
+>   value never used to be true")
+>
+> I'd assume with the documented race we actually talk about the first
+> point, but I might be just wrong.
 
-Enabling architecture specific policy rules is based on
-CONFIG_IMA_ARCH_POLICY.  As the name implies, each architecture is free
-to define their own policy rules.  For example on x86, based on the
-secure boot mode both measurement and signature verification rules are
-defined for the kexec kernel image and kernel modules. Similarly on
-powerpc, different measurement and signature verification rules for the
-kexec kernel image and kernel modules are defined based on whether
-trusted boot, secure boot, or both are enabled [2].
+I think so too.
 
-As neither kexec nor loading kernel modules are applicable, the
-architecture policy rules are limited to initial imans.
+>
+> >
+> > Of course, if the extra note is preferred in the code, I could try to
+> > add some in a separate patch.
+>
+> When staring at the (original) code I would have hoped to find something
+> like:
+>
+> /*
+>  * We use page_mapcount() to get a snapshot of the mapcount. Without
+>  * holding the page lock this snapshot can be slightly wrong as we
+>  * cannot always read the mapcount atomically. As long we hold the PT
+>  * lock, the page cannot get unmapped and it's at safe to call
+>  * page_mapcount().
+>  */
+>
+> With the addition of
+>
+> "... For unmapped pages (e.g., migration entries) we cannot guarantee
+> that, so treat the mapcount as being 1."
+>
+> But this is just my personal preference ... :) I do think the patch does
+> the right thing in regard to migration entries.
 
-[1] security/integrity/ima/ima_efi.c 
-[2] arch/powerpc/kernel/ima_arch.c
+I will prepare a patch.
 
-> 
-> Move into struct ima_namespace looks good,
-> Acked-by: Christian Brauner <brauner@kernel.org>
-
-Thanks, Christian.
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

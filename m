@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E00B949E55F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97C549E561
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242752AbiA0PDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237314AbiA0PDc (ORCPT
+        id S242757AbiA0PDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:03:50 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:44830 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233428AbiA0PDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:03:32 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C37C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:03:32 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id v74so2899135pfc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:03:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=C7e4lg+TQfiAQXzFbshw2MDjmu8fgeZdHDlpi+UGvYo=;
-        b=IcQOxoah2w7acJz2e232GpOd3VrUx3E64S+sV7uDemfCljVeAuN3WzP457onmqiQDh
-         u76szjjCW7GV6AipI7srdUWYmlM/68bIR2yp4xjNhM0YQo8yCq4AL225+l5VJKIa5S0/
-         /0Mrhq05nFY4E9v+nHU727CI3fqDyqy4b3DxGAIyiU+bXsmER10zWCok5yDH/n7gX2SZ
-         FibE55PLbZ96OrTzbmV/bmKpjnTunPNNbxIVWFHCrc7Jlo/hvORouyuNPI1cS5lww/dX
-         sjVX4BJwQSzd7CDM6Iluftc4Wib/6cfgL5rRwAcjO9BJhwPoi21Zs6X3U6YXwJflTTPm
-         XZxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C7e4lg+TQfiAQXzFbshw2MDjmu8fgeZdHDlpi+UGvYo=;
-        b=1vYuHAfvvQ03LdyX+HahnxCI5JyRaJhugQL8zM2UMbEy2ecfpSyPjeAp4LXhIcS4mc
-         Yz9HYNSKQCJ/YHK99ZwktDKpBv5ke1LeiSHKqGZeDs8w4nebSIf2W4LKx0xznfTYzGjR
-         /WHe0gHevVc1M6/5MvOdnOLQ8I6VARFir8Q1CsshMQjZa1QJGKJX3HT2pJYZa9eF0HKJ
-         4M+LuwCyT5NSJqPpvcPtT9R0jn0QNUPF0nbQe2yeIVbjiCd6MaRWRacOw2UVutOBPCoY
-         z94dhwc/9lwfCb0Jx0UZF76AfhhNJQ4EB5WBgexlvV6WuGNNzYhlIDJWWPFZvP+DMCfW
-         OwdA==
-X-Gm-Message-State: AOAM533amzhUnEKp86sSs5ZGWqMTNzxdLGrmHiWjaFW+aj32toxwhXX4
-        qmbTJhuzPptN83lUtXM3TQVygA==
-X-Google-Smtp-Source: ABdhPJxeyTfytHmnbDJ+Aaj8xg4RdWFqAQNQtZWVFA0EOzrcxwnG9kZL1+ndwFC95obPUkTU31j1Sg==
-X-Received: by 2002:aa7:8055:: with SMTP id y21mr3161629pfm.62.1643295811734;
-        Thu, 27 Jan 2022 07:03:31 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k12sm6235793pfc.107.2022.01.27.07.03.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 07:03:31 -0800 (PST)
-Date:   Thu, 27 Jan 2022 15:03:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Like Xu <likexu@tencent.com>
-Subject: Re: [PATCH 0/3] KVM: x86: XSS and XCR0 fixes
-Message-ID: <YfK0P67bo5oSPXn4@google.com>
-References: <20220126172226.2298529-1-seanjc@google.com>
- <3e978189-4c9a-53c3-31e7-c8ac1c51af31@redhat.com>
- <YfGJWNVuFYZ8kl2I@google.com>
- <f1389ace-6f5d-9f48-bb12-4835c29e6402@redhat.com>
+        Thu, 27 Jan 2022 10:03:49 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 91DB11F385;
+        Thu, 27 Jan 2022 15:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643295828; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VmFKl1JRf6VnoVBKpirJQ1wmAaQ33BFHMRqpetuEs2s=;
+        b=sJzhUBm3gnTABewOh8sswATXRhOr9WRO5dzBp3lvDZENzYItUOjodoTBkQXf/3BJmUfXo8
+        OvrqZ0j1Mi2rxRqcO/SEKIAs70a6RpOKhGDKVEOorp4A2S+5tLJ8bdmePa43FmReTwoeV3
+        hhtXqg+YDVXurCLYZFPsoFr7FONxeNI=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 338BBA3B83;
+        Thu, 27 Jan 2022 15:03:48 +0000 (UTC)
+Date:   Thu, 27 Jan 2022 16:03:46 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] printk: Drop console_sem during panic
+Message-ID: <YfK0Ugt/i8nMVOmY@alley>
+References: <20220126230236.750229-1-stephen.s.brennan@oracle.com>
+ <20220126230236.750229-5-stephen.s.brennan@oracle.com>
+ <87fsp9pm6q.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1389ace-6f5d-9f48-bb12-4835c29e6402@redhat.com>
+In-Reply-To: <87fsp9pm6q.fsf@jogness.linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022, Paolo Bonzini wrote:
-> On 1/26/22 18:48, Sean Christopherson wrote:
-> > On Wed, Jan 26, 2022, Paolo Bonzini wrote:
-> > > On 1/26/22 18:22, Sean Christopherson wrote:
-> > > > For convenience, Like's patch split up and applied on top of Xiaoyao.
-> > > > Tagged all for @stable, probably want to (retroactively?) get Xiaoyao's
-> > > > patch tagged too?
-> > > > Like Xu (2):
-> > > >     KVM: x86: Update vCPU's runtime CPUID on write to MSR_IA32_XSS
-> > > >     KVM: x86: Sync the states size with the XCR0/IA32_XSS at, any time
-> > > > 
-> > > > Xiaoyao Li (1):
-> > > >     KVM: x86: Keep MSR_IA32_XSS unchanged for INIT
-> > > > 
-> > > >    arch/x86/kvm/x86.c | 6 +++---
-> > > >    1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > 
-> > > > 
-> > > > base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
-> > > 
-> > > Queued, though I'll note that I kinda disagree with the stable@ marking of
-> > > patch 1 (and therefore with the patch order) as it has no effect in
-> > > practice.
-> > 
-> > Hmm, that's not a given, is it?  E.g. the guest can configure XSS early on and
-> > then expect the configured value to live across INIT-SIPI-SIPI.  I agree it's
-> > highly unlikely for any guest to actually do that, but I don't like assuming all
-> > guests will behave a certain way.
+On Thu 2022-01-27 10:28:53, John Ogness wrote:
+> On 2022-01-26, Stephen Brennan <stephen.s.brennan@oracle.com> wrote:
+> > --- a/kernel/printk/printk.c
+> > +++ b/kernel/printk/printk.c
+> > @@ -2759,7 +2782,7 @@ void console_unlock(void)
+> >  	 * flush, no worries.
+> >  	 */
+> >  	retry = prb_read_valid(prb, next_seq, NULL);
+> > -	if (retry && console_trylock())
+> > +	if (retry && !abandon_console_lock_in_panic() && console_trylock())
 > 
-> No, I meant in the sense that supported_xss is always zero right now, and
-> therefore so is MSR_IA32_XSS.
+> As Sergey suggested [0], I would like to see the call to
+> abandon_console_lock_in_panic() move inside console_trylock(). This will
+> help to avoid the race between NMI CPU halt and the internal sema.lock
+> spinlock.
 
-Oh, duh.
+I would prefer if it is done as a followup patch. The code in this
+patch is still needed. It helps when the non-panic CPU is busy
+with pushing many pending messages. Also it is a more conservative
+approach.
+
+Always failing console_trylock() on non-panic CPU makes sense as well.
+But it affects many more users. It is likely safe because it is
+trylock. But the entire effect is not fully clear to me. So, I suggest
+to do it in a separate patch. It might help with bisection.
+
+Best Regards,
+Petr

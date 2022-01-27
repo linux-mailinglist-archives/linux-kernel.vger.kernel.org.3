@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA0349DA5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1978A49DA50
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236346AbiA0Fy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 00:54:56 -0500
-Received: from mga04.intel.com ([192.55.52.120]:10536 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229551AbiA0Fyz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 00:54:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643262895; x=1674798895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wZNiQ5pkRxeJ8Ao6cIn34CxSJY+ary9AZNzrIwzYuZw=;
-  b=DAm4AWoVR//pENCcSmxfnRtRFFYka0wru3n9iha4lTHYWBMNStNAIpYy
-   jvwARkDpvcYeWPFrSDv3/jOvdSVlUE7RlhLENZ/XSVferQ6/PmlTSsufx
-   xDE7yi6WnR5/P/E1qZwGGuzfOA9tCnT6vPtp2bOx0wuu+q+VmnIlYCdQx
-   tRJlPILjHFC6MlmYMaBpDUxy6IIG89TVfqlIRpRF8DOTvRjlWzZL1Tisi
-   XcPCz0srr91B/8XiiXjEPTV7rSIlIiHgHb/tBJUEkQySHxqJx34ljwAA5
-   D81D53nZP1I7SS1QF6a8gr7LSMkm6NNlBQOyyJPtQbCUkJtSJdfEHFFdp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245596571"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="245596571"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 21:54:54 -0800
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="628566642"
-Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.145.56])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 26 Jan 2022 21:54:52 -0800
-Date:   Thu, 27 Jan 2022 13:39:29 +0800
-From:   Yang Zhong <yang.zhong@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, yang.zhong@intel.com
-Subject: Re: [PATCH 0/3] KVM: x86: export supported_xcr0 via UAPI
-Message-ID: <20220127053929.GA8503@yangzhon-Virtual>
-References: <20220126152210.3044876-1-pbonzini@redhat.com>
+        id S236315AbiA0FnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 00:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236304AbiA0FnA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 00:43:00 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9956BC06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:42:59 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id z20so2652725ljo.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:42:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+dTkxGYUlNJhi8u43pDWWFCeIctkqPXxzUpp/O4S0VA=;
+        b=nU20B3sS+LfpIOekeMws0AVgBv3fCRJS76MRe4s0LAuZQVhhAvtfAV5olP2ivrN59l
+         5zeRsgnktL6Gh4MkXAVpb6Bp23tNdq/1tLPjsvfLRwI3OMfBwNGsB0Jc3RvHLlPfBfnL
+         HKo9in79rxbzyxK8JtvmKzXpBgAV9ugJJTxOVzXwP7Q8+62WUgzkuWniGrg2gYPDMoBF
+         c7p1VpqVy6TN2X8A3kTEI9fSO9lZvhhZUlq7TOQeUiAolULuL+SdRceM15KyO5pjO0cH
+         7dDaCp1y9OQHXifcOULncCnTUu3T7HLzB3+F3W8CoQ+nfl+G+vpgHa76c8ugsypfL8JO
+         JlYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+dTkxGYUlNJhi8u43pDWWFCeIctkqPXxzUpp/O4S0VA=;
+        b=aQ3LbW2Ui0srUgHuGGZK+yP+Kc8hpjNM/C6SCbf5+Eqb6Pc2J92BTxcCQNaCU88LdJ
+         m+EWn174lMbY9yqwWW8zcCQPdpeyvNhx/kJT3Tph6d0cFVSV5WnCnqFIoqzCiCDhqHLJ
+         4yFYNmDku8LjQ+3KK36cAV0a827DkZkfHp9dNfuN3RQHTvkHZx47bzegeSDBCf7RY3to
+         VjN4Mms1EtU6z6lCsF+Y0qYpKswMZWQVuUBhZC4Z2mdgikWSeGp0S0D+++KB+0xC5Emf
+         NXrQVETdSiuYPBSG/s0ikuX6i/EaFnm7Vg+7suOl+3fgUEL+i+mQu/DLH8QEJWdL1kqV
+         9vOw==
+X-Gm-Message-State: AOAM533ouMOgh3+8jbXDjLTXtcIGUmTxccKXDj3o4RppzJNYWhwy0Xet
+        plcLrkmPWYELEwotDCDi6sPI0MqrxP9QBHh39g/iZw==
+X-Google-Smtp-Source: ABdhPJyjFKH1eFW8c9iG7GHHeCKkvytQDNzjWI5d62tvhNQl3Ul3xJNWa6SY4dzAjSPxwo3VLvCGUsvgjdEPz7BsWPQ=
+X-Received: by 2002:a2e:8754:: with SMTP id q20mr1764155ljj.71.1643262177779;
+ Wed, 26 Jan 2022 21:42:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126152210.3044876-1-pbonzini@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20220126203243.231822-1-dave.kleikamp@oracle.com>
+In-Reply-To: <20220126203243.231822-1-dave.kleikamp@oracle.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 27 Jan 2022 11:12:46 +0530
+Message-ID: <CAFA6WYNiWo+wrKp_=jC+g5DcXrg-JzwSqND+8wL9FFeZwGH+Kg@mail.gmail.com>
+Subject: Re: [PATCH v2] KEYS: trusted: Avoid calling null function trusted_key_exit
+To:     Dave Kleikamp <dave.kleikamp@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:22:07AM -0500, Paolo Bonzini wrote:
-> While working on the QEMU support for AMX, I noticed that there is no
-> equivalent of ARCH_GET_XCOMP_SUPP in the KVM API.  This is important
-> because KVM_GET_SUPPORTED_CPUID is meant to be passed (by simple-minded
-> VMMs) to KVM_SET_CPUID2, and therefore it cannot include any dynamic
-> xsave states that have not been enabled.  Probing the availability of
-> dynamic xsave states therefore, requires a new ioctl or arch_prctl.
-> 
-> In order to avoid moving supported_xcr0 to the kernel from the KVM
-> module just for this use, and to ensure that the value can only be
-> probed if/after the KVM module has been loaded, this series goes
-> for the former option.
-> 
-> KVM_CHECK_EXTENSION cannot be used because it only has 32 bits of
-> output; in order to limit the growth of capabilities and ioctls, the
-> series adds a /dev/kvm variant of KVM_{GET,HAS}_DEVICE_ATTR that
-> can be used in the future and by other architectures.  It then
-> implements it in x86 with just one group (0) and attribute
-> (KVM_X86_XCOMP_GUEST_SUPP).
-> 
-> The corresponding changes to the tests, in patches 1 and 3, are
-> designed so that the code will be covered (to the possible extent)
-> even when running the tests on systems that do not support AMX.
-> However, the patches have not been tested with AMX.
+On Thu, 27 Jan 2022 at 02:02, Dave Kleikamp <dave.kleikamp@oracle.com> wrote:
+>
+> If one loads and unloads the trusted module, trusted_key_exit can be
+> NULL. Call it through static_call_cond() to avoid a kernel trap.
+>
+> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+> Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> ---
+> v2 changes:
+> Header cleanup - removed empty line and cc:stable
+>  security/keys/trusted-keys/trusted_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 
-  Paolo, thanks for this patchset. I applied this patchset into latest
-  Linux release, and verified it from kvm selftest tool and Qemu side
-  (In order to verify this easily, I reused the older request permission
-   function like kvm selftest did), all work well. thanks!
+Thanks for the fix.
 
-  Yang
- 
-> Thanks,
-> 
-> Paolo
-> 
-> 
-> Paolo Bonzini (3):
->   selftests: kvm: move vm_xsave_req_perm call to amx_test
->   KVM: x86: add system attribute to retrieve full set of supported xsave
->     states
->   selftests: kvm: check dynamic bits against KVM_X86_XCOMP_GUEST_SUPP
-> 
->  Documentation/virt/kvm/api.rst                |  4 +-
->  arch/x86/include/uapi/asm/kvm.h               |  3 ++
->  arch/x86/kvm/x86.c                            | 45 +++++++++++++++++++
->  include/uapi/linux/kvm.h                      |  1 +
->  tools/arch/x86/include/uapi/asm/kvm.h         |  3 ++
->  tools/include/uapi/linux/kvm.h                |  1 +
->  .../selftests/kvm/include/kvm_util_base.h     |  1 -
->  .../selftests/kvm/include/x86_64/processor.h  |  1 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  7 ---
->  .../selftests/kvm/lib/x86_64/processor.c      | 27 ++++++++---
->  tools/testing/selftests/kvm/x86_64/amx_test.c |  2 +
->  11 files changed, 80 insertions(+), 15 deletions(-)
-> 
-> -- 
-> 2.31.1
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+
+-Sumit
+
+> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+> index d5c891d8d353..8c14e04e2112 100644
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -351,7 +351,7 @@ static int __init init_trusted(void)
+>
+>  static void __exit cleanup_trusted(void)
+>  {
+> -       static_call(trusted_key_exit)();
+> +       static_call_cond(trusted_key_exit)();
+>  }
+>
+>  late_initcall(init_trusted);
+> --
+> 2.35.0
+>

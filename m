@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B11AD49DD00
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079A749DD01
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbiA0Ixa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:53:30 -0500
-Received: from mail-ed1-f49.google.com ([209.85.208.49]:40747 "EHLO
-        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237943AbiA0IxU (ORCPT
+        id S238018AbiA0Ixc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:53:32 -0500
+Received: from mail-ej1-f51.google.com ([209.85.218.51]:45664 "EHLO
+        mail-ej1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237956AbiA0IxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:53:20 -0500
-Received: by mail-ed1-f49.google.com with SMTP id w25so1795880edt.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:53:19 -0800 (PST)
+        Thu, 27 Jan 2022 03:53:22 -0500
+Received: by mail-ej1-f51.google.com with SMTP id me13so4109894ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:53:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=o2zfZ9y8ubmSsgs0imIlAZWCHpb/2emUUUVSrMtiaz8=;
-        b=FilsinnH5AaHP3VrnfjB4T1dkHi7XVw2dVk7T9XDMmjlVpSifx5LMYykN7c8EuZ+7z
-         m62rdmVWRfGCmSc1m+334WkByTlyDFOlEyhhhPVN2heSzlpwSEbE1jg9W7rX+LsR1nwJ
-         +DvHm9Dl8QMPAYl38cg6NrT9Tr2X6TuTdNb9o5wth0nmqXbxR5m5BL07TFOo4zperxpv
-         JSeySWvzba85yWELk0S9D44sxitwtEtL6K2/Zs+hXYauyrdZ6/UvTjH4FKTRYj65P/i0
-         tkgp2U7toKBcE/xI4ep1qg526wPTEUbRVNfedZ0CzL3rL6jylrHSwOFz0bryuFuXssD/
-         lXzA==
-X-Gm-Message-State: AOAM5330L4WJD1vkXhKzOyOZDo9Dx+9QtrSVEzrbA0T6n9iawEecsY7X
-        CuqE3uMkqW6ktVnnmaVBy40=
-X-Google-Smtp-Source: ABdhPJwqBhWAjvbeH+BW4ztneuZOZmY0mmUJv1AptsP99+eWvmD466zGqb52l7t35QkusOe+F+8KHQ==
-X-Received: by 2002:a05:6402:2750:: with SMTP id z16mr2734834edd.312.1643273599208;
-        Thu, 27 Jan 2022 00:53:19 -0800 (PST)
+        bh=XTSCSWPE5HlRFNZCvz3I8p5LYXgsNZWlsLbybuNzyTQ=;
+        b=FSOW0c2P5ofKKFZsLwUQdfXsC3YuIHGSW2LK3Kec4bKBcqlFllDOOTa2HooiGKYdIU
+         aUiTrRS1XA2SuSnpX1MO/ZYRs8CsrKFBf3k7/a8gvtUFlaQQ5O7pVApG44ZQso1rvzUX
+         W8RNJMiv8zhROdHaSZSUzSpJCRE4XMALCpByxiNY2AEj0e0mx1v6QvB641nV8uwEPq8s
+         9MZx2Gk10a3KAgPJTUWtFdT8GONIoWq8Ul8p+veU0KAWrp1UK3yOhP4nKQBGaDNPIrc9
+         0QkveBPa/OgdK/05C/hWze1r12IexDtE0BQscc1yYJVLIQzgZSnQFMLAc6icwiwJQszi
+         Il9g==
+X-Gm-Message-State: AOAM5338uWgTeewRZXz7RjAeAHllSv7VFHBTNFYdBZRTq223/SHr9CUa
+        GZZA4fnv5MmXPExIGP450uI=
+X-Google-Smtp-Source: ABdhPJx5ObyDxjwZXcVYWQ4o7Bymlq1geZKx3vr/oZ+xt0Gwg0+GZ4uac6cBGWutrb83Kkr4i2ecBQ==
+X-Received: by 2002:a17:907:b01:: with SMTP id h1mr2087725ejl.728.1643273600849;
+        Thu, 27 Jan 2022 00:53:20 -0800 (PST)
 Received: from localhost.localdomain (ip-85-160-47-31.eurotel.cz. [85.160.47.31])
-        by smtp.gmail.com with ESMTPSA id n11sm11029757edv.52.2022.01.27.00.53.17
+        by smtp.gmail.com with ESMTPSA id n11sm11029757edv.52.2022.01.27.00.53.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 00:53:18 -0800 (PST)
+        Thu, 27 Jan 2022 00:53:20 -0800 (PST)
 From:   Michal Hocko <mhocko@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
@@ -47,9 +47,9 @@ Cc:     <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         Wei Yang <richard.weiyang@gmail.com>,
         Rafael Aquini <raquini@redhat.com>,
         Michal Hocko <mhocko@suse.com>
-Subject: [PATCH 4/6] mm, memory_hotplug: reorganize new pgdat initialization
-Date:   Thu, 27 Jan 2022 09:53:03 +0100
-Message-Id: <20220127085305.20890-5-mhocko@kernel.org>
+Subject: [PATCH 5/6] mm: make free_area_init_node aware of memory less nodes
+Date:   Thu, 27 Jan 2022 09:53:04 +0100
+Message-Id: <20220127085305.20890-6-mhocko@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220127085305.20890-1-mhocko@kernel.org>
 References: <20220127085305.20890-1-mhocko@kernel.org>
@@ -61,136 +61,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michal Hocko <mhocko@suse.com>
 
-When a !node_online node is brought up it needs a hotplug specific
-initialization because the node could be either uninitialized yet or it
-could have been recycled after previous hotremove. hotadd_init_pgdat is
-responsible for that.
+free_area_init_node is also called from memory less node initialization
+path (free_area_init_memoryless_node). It doesn't really make much sense
+to display the physical memory range for those nodes:
+Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
 
-Internal pgdat state is initialized at two places currently
-	- hotadd_init_pgdat
-	- free_area_init_core_hotplug
-There is no real clear cut what should go where but this patch's chosen to
-move the whole internal state initialization into free_area_init_core_hotplug.
-hotadd_init_pgdat is still responsible to pull all the parts together -
-most notably to initialize zonelists because those depend on the overall topology.
-
-This patch doesn't introduce any functional change.
+Instead be explicit that the node is memoryless:
+Initmem setup node XX as memoryless
 
 Acked-by: Rafael Aquini <raquini@redhat.com>
 Signed-off-by: Michal Hocko <mhocko@suse.com>
 ---
- include/linux/memory_hotplug.h |  2 +-
- mm/memory_hotplug.c            | 28 +++-------------------------
- mm/page_alloc.c                | 25 +++++++++++++++++++++++--
- 3 files changed, 27 insertions(+), 28 deletions(-)
+ mm/page_alloc.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-index 60f09d3ebb3d..76bf2de86def 100644
---- a/include/linux/memory_hotplug.h
-+++ b/include/linux/memory_hotplug.h
-@@ -319,7 +319,7 @@ extern void set_zone_contiguous(struct zone *zone);
- extern void clear_zone_contiguous(struct zone *zone);
- 
- #ifdef CONFIG_MEMORY_HOTPLUG
--extern void __ref free_area_init_core_hotplug(int nid);
-+extern void __ref free_area_init_core_hotplug(struct pglist_data *pgdat);
- extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
- extern int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
- extern int add_memory_resource(int nid, struct resource *resource,
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 875cdc7ffa58..ddc62f8b591f 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1166,39 +1166,16 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
- {
- 	struct pglist_data *pgdat;
- 
--	pgdat = NODE_DATA(nid);
--
- 	/*
- 	 * NODE_DATA is preallocated (free_area_init) but its internal
- 	 * state is not allocated completely. Add missing pieces.
- 	 * Completely offline nodes stay around and they just need
- 	 * reintialization.
- 	 */
--	if (pgdat->per_cpu_nodestats == &boot_nodestats) {
--		pgdat->per_cpu_nodestats =
--			alloc_percpu(struct per_cpu_nodestat);
--	} else {
--		int cpu;
--		/*
--		 * Reset the nr_zones, order and highest_zoneidx before reuse.
--		 * Note that kswapd will init kswapd_highest_zoneidx properly
--		 * when it starts in the near future.
--		 */
--		pgdat->nr_zones = 0;
--		pgdat->kswapd_order = 0;
--		pgdat->kswapd_highest_zoneidx = 0;
--		for_each_online_cpu(cpu) {
--			struct per_cpu_nodestat *p;
--
--			p = per_cpu_ptr(pgdat->per_cpu_nodestats, cpu);
--			memset(p, 0, sizeof(*p));
--		}
--	}
--
--	pgdat->node_start_pfn = 0;
-+	pgdat = NODE_DATA(nid);
- 
- 	/* init node's zones as empty zones, we don't have any present pages.*/
--	free_area_init_core_hotplug(nid);
-+	free_area_init_core_hotplug(pgdat);
- 
- 	/*
- 	 * The node we allocated has no zone fallback lists. For avoiding
-@@ -1210,6 +1187,7 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
- 	 * When memory is hot-added, all the memory is in offline state. So
- 	 * clear all zones' present_pages because they will be updated in
- 	 * online_pages() and offline_pages().
-+	 * TODO: should be in free_area_init_core_hotplug?
- 	 */
- 	reset_node_managed_pages(pgdat);
- 	reset_node_present_pages(pgdat);
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 1a05669044d3..32d0189de4c5 100644
+index 32d0189de4c5..83da2279be72 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -7506,12 +7506,33 @@ static void __meminit zone_init_internals(struct zone *zone, enum zone_type idx,
-  * NOTE: this function is only called during memory hotplug
-  */
- #ifdef CONFIG_MEMORY_HOTPLUG
--void __ref free_area_init_core_hotplug(int nid)
-+void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
- {
-+	int nid = pgdat->node_id;
- 	enum zone_type z;
--	pg_data_t *pgdat = NODE_DATA(nid);
-+	int cpu;
+@@ -7682,9 +7682,14 @@ static void __init free_area_init_node(int nid)
+ 	pgdat->node_start_pfn = start_pfn;
+ 	pgdat->per_cpu_nodestats = NULL;
  
- 	pgdat_init_internals(pgdat);
-+
-+	if (pgdat->per_cpu_nodestats == &boot_nodestats)
-+		pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
-+
-+	/*
-+	 * Reset the nr_zones, order and highest_zoneidx before reuse.
-+	 * Note that kswapd will init kswapd_highest_zoneidx properly
-+	 * when it starts in the near future.
-+	 */
-+	pgdat->nr_zones = 0;
-+	pgdat->kswapd_order = 0;
-+	pgdat->kswapd_highest_zoneidx = 0;
-+	pgdat->node_start_pfn = 0;
-+	for_each_online_cpu(cpu) {
-+		struct per_cpu_nodestat *p;
-+
-+		p = per_cpu_ptr(pgdat->per_cpu_nodestats, cpu);
-+		memset(p, 0, sizeof(*p));
+-	pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+-		(u64)start_pfn << PAGE_SHIFT,
+-		end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
++	if (start_pfn != end_pfn) {
++		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
++			(u64)start_pfn << PAGE_SHIFT,
++			end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
++	} else {
++		pr_info("Initmem setup node %d as memoryless\n", nid);
 +	}
 +
- 	for (z = 0; z < MAX_NR_ZONES; z++)
- 		zone_init_internals(&pgdat->node_zones[z], z, nid, 0);
- }
+ 	calculate_node_totalpages(pgdat, start_pfn, end_pfn);
+ 
+ 	alloc_node_mem_map(pgdat);
 -- 
 2.30.2
 

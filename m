@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25F349E7C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E756D49E7CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243940AbiA0Qlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:41:44 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:40533 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243892AbiA0Qlk (ORCPT
+        id S243986AbiA0Qls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243935AbiA0Qln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:41:40 -0500
+        Thu, 27 Jan 2022 11:41:43 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9581AC061747
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 08:41:43 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 96E26223ED;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id EF3F7223EF;
         Thu, 27 Jan 2022 17:41:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1643301699;
+        t=1643301700;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JP6sEk8Ye9HSeLSodsUhxvuoScwCGtEWcY67WHVPIzw=;
-        b=gg/AYMITFtXTOXwGMvplrT62MpkMZs69bIJf3dH+WEkvj0OZ3DJMitBXVeXcwUXpTGl00j
-        R7fVoWsFOPymql+9H/OE0Isea4jtgm1ILO3ua7NeQxHnKk85R6SP5S18LnUEUGZuib1lI2
-        I+NbFBdTwgqtudtW7nycjijAg20Cb+Y=
+        bh=dQTEDWQ6RIfy9o8kck9NRnhKASlbYsvOAuvfyda4Dbk=;
+        b=j2CFrtteb7RlK1NVCouApJ3i42knoDyzSgub6t4Rf+8bnIDvlrm5EC1PiHr+As3PeNR6/U
+        fjs6yXq9WlFlEYlcaTpqsy+pqXce1RJ6Cw27+FbLuOYjzBrr+84kfWow4gTat0dm3DG1/x
+        fObvanLb2C4B+ZC7369DmTzO+oH16kw=
 From:   Michael Walle <michael@walle.cc>
 To:     linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Li Yang <leoyang.li@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
         Sudeep Holla <Sudeep.Holla@arm.com>,
         Arnd Bergmann <arnd@arndb.de>, Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 2/7] soc: fsl: guts: remove module_exit() and fsl_guts_remove()
-Date:   Thu, 27 Jan 2022 17:41:20 +0100
-Message-Id: <20220127164125.3651285-3-michael@walle.cc>
+Subject: [PATCH v1 3/7] soc: fsl: guts: embed fsl_guts_get_svr() in probe()
+Date:   Thu, 27 Jan 2022 17:41:21 +0100
+Message-Id: <20220127164125.3651285-4-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220127164125.3651285-1-michael@walle.cc>
 References: <20220127164125.3651285-1-michael@walle.cc>
@@ -46,66 +49,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver will never be unloaded. Firstly, it is not available as a
-module, but more importantly, other drivers will depend on this one to
-apply possible chip errata.
+Move the reading of the SVR into the probe function as
+fsl_guts_get_svr() is the only user of the static guts variable and this
+lets us drop that as well as the malloc() for this variable. Also, we
+can unmap the memory region after we accessed it, which will simplify
+error handling later.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- drivers/soc/fsl/guts.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
+ drivers/soc/fsl/guts.c | 41 +++++++++++------------------------------
+ 1 file changed, 11 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
-index be18d46c7b0f..0bea43770d51 100644
+index 0bea43770d51..536377988fb4 100644
 --- a/drivers/soc/fsl/guts.c
 +++ b/drivers/soc/fsl/guts.c
-@@ -27,7 +27,6 @@ struct fsl_soc_die_attr {
+@@ -14,18 +14,12 @@
+ #include <linux/platform_device.h>
+ #include <linux/fsl/guts.h>
  
- static struct guts *guts;
+-struct guts {
+-	struct ccsr_guts __iomem *regs;
+-	bool little_endian;
+-};
+-
+ struct fsl_soc_die_attr {
+ 	char	*die;
+ 	u32	svr;
+ 	u32	mask;
+ };
+ 
+-static struct guts *guts;
  static struct soc_device_attribute soc_dev_attr;
--static struct soc_device *soc_dev;
  
  
- /* SoC die attribute definition for QorIQ platform */
-@@ -138,6 +137,7 @@ static u32 fsl_guts_get_svr(void)
+@@ -119,40 +113,28 @@ static const struct fsl_soc_die_attr *fsl_soc_die_match(
+ 	return NULL;
+ }
+ 
+-static u32 fsl_guts_get_svr(void)
+-{
+-	u32 svr = 0;
+-
+-	if (!guts || !guts->regs)
+-		return svr;
+-
+-	if (guts->little_endian)
+-		svr = ioread32(&guts->regs->svr);
+-	else
+-		svr = ioread32be(&guts->regs->svr);
+-
+-	return svr;
+-}
+-
  static int fsl_guts_probe(struct platform_device *pdev)
  {
  	struct device_node *root, *np = pdev->dev.of_node;
-+	static struct soc_device *soc_dev;
+ 	static struct soc_device *soc_dev;
  	struct device *dev = &pdev->dev;
  	const struct fsl_soc_die_attr *soc_die;
++	struct ccsr_guts __iomem *regs;
  	const char *machine = NULL;
-@@ -197,12 +197,6 @@ static int fsl_guts_probe(struct platform_device *pdev)
- 	return 0;
- }
++	bool little_endian;
+ 	u32 svr;
  
--static int fsl_guts_remove(struct platform_device *dev)
--{
--	soc_device_unregister(soc_dev);
--	return 0;
--}
--
- /*
-  * Table for matching compatible strings, for device tree
-  * guts node, for Freescale QorIQ SOCs.
-@@ -242,7 +236,6 @@ static struct platform_driver fsl_guts_driver = {
- 		.of_match_table = fsl_guts_of_match,
- 	},
- 	.probe = fsl_guts_probe,
--	.remove = fsl_guts_remove,
- };
+-	/* Initialize guts */
+-	guts = devm_kzalloc(dev, sizeof(*guts), GFP_KERNEL);
+-	if (!guts)
+-		return -ENOMEM;
++	little_endian = of_property_read_bool(np, "little-endian");
  
- static int __init fsl_guts_init(void)
-@@ -250,9 +243,3 @@ static int __init fsl_guts_init(void)
- 	return platform_driver_register(&fsl_guts_driver);
- }
- core_initcall(fsl_guts_init);
--
--static void __exit fsl_guts_exit(void)
--{
--	platform_driver_unregister(&fsl_guts_driver);
--}
--module_exit(fsl_guts_exit);
+-	guts->little_endian = of_property_read_bool(np, "little-endian");
++	regs = of_iomap(np, 0);
++	if (IS_ERR(regs))
++		return PTR_ERR(regs);
+ 
+-	guts->regs = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(guts->regs))
+-		return PTR_ERR(guts->regs);
++	if (little_endian)
++		svr = ioread32(&regs->svr);
++	else
++		svr = ioread32be(&regs->svr);
++	iounmap(regs);
+ 
+ 	/* Register soc device */
+ 	root = of_find_node_by_path("/");
+@@ -167,7 +149,6 @@ static int fsl_guts_probe(struct platform_device *pdev)
+ 	}
+ 	of_node_put(root);
+ 
+-	svr = fsl_guts_get_svr();
+ 	soc_die = fsl_soc_die_match(svr, fsl_soc_die);
+ 	if (soc_die) {
+ 		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL,
 -- 
 2.30.2
 

@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B7F49E337
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A618249E321
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241662AbiA0NSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:18:42 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4528 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241651AbiA0NSi (ORCPT
+        id S241572AbiA0NNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbiA0NNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:18:38 -0500
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jl1Nz3N3Lz688KK;
-        Thu, 27 Jan 2022 21:18:11 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 27 Jan 2022 14:18:35 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 27 Jan 2022 13:18:33 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>,
-        <Ajish.Koshy@microchip.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Viswas.G@microchip.com>, <chenxiang66@hisilicon.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH 3/3] scsi: pm8001: Fix use-after-free for aborted SSP/STP sas_task
-Date:   Thu, 27 Jan 2022 21:12:52 +0800
-Message-ID: <1643289172-165636-4-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1643289172-165636-1-git-send-email-john.garry@huawei.com>
-References: <1643289172-165636-1-git-send-email-john.garry@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+        Thu, 27 Jan 2022 08:13:46 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD57C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:13:42 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z5so2428095plg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:13:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=YXzkvLeXLi2eCYEQ5gEHtGCtSrlAhjMGW+JtDUaBg2s=;
+        b=ABvPbSjyT6rV20F/ei4kOOQ1fFDOwJMtWo/sSVF9nIHbwU6Nqceo9/hWVX96sXehSx
+         8ZsJVv3qVRw8N1xyHhNdLY/X8DD/XEoUT4H5eZ6EQG3+XZRclCPQ8IE8qdmobawqMRxr
+         r6qQQ36gH5zwgOjsTBNi3nJfE1VtJpELMqDsF+jhoJ6vL/QTPfr+jWOa7uIYPXNtNdrO
+         DTbby/kjEYxmz+tA4E1ifrjujFQVq1XjEGm8ipynyUYPmeckGnlGHqMYfJP9t83wmPlZ
+         PmEQjfbmgnLQJAnxxvqsgMBYyaz+UDI4KEuQGYUo5iFukbzekZUltwXwB/mOLK5jkSzn
+         c37g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=YXzkvLeXLi2eCYEQ5gEHtGCtSrlAhjMGW+JtDUaBg2s=;
+        b=wZxG6U72nFofFd6Ek8OdF50ibLJRLC/eXeFvgeNntcnWTFaIBN+zNK8sXqscYtmQ88
+         BJ/mrktq5miZZlrhIdgXhLVxmFlvGyi2KmyqIidTX/gwr0V5PnyEVkIzkSr4EyotLIe6
+         39oPxiohB432zPOdMcK3ndyb2PCQWKJ5le6t+NRC82B3kSs3QZU1CXcaBiodf04oZCya
+         d8L2OQMVGnVouVZ2ZOkGv5/+xqz/H2YTQX6zKmMP8Nqj7XZw6nFf6OG8M01dxNStRnab
+         ujbcYPRjTZwwqTKoObBMwOiVBmCBBUZwEM2YIiYslhBCZbtnoH72fVGa756MGRIjjVht
+         Z0Nw==
+X-Gm-Message-State: AOAM531OLYFkgvGvJVmH7NF1TOjsk9nVAwcKOyYnVlT9303KWwTURM4F
+        xFgOQXD7Unp83ATnv7EtAZY=
+X-Google-Smtp-Source: ABdhPJysbG0ubLDHAuk/vm5CAv0jg6oZWRdNVaWO0vQPW+mAPZCdMtTl6CK+a5TjP6POX6vPtKJxxg==
+X-Received: by 2002:a17:90b:17ca:: with SMTP id me10mr9860243pjb.207.1643289221704;
+        Thu, 27 Jan 2022 05:13:41 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id d9sm5683355pfl.69.2022.01.27.05.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 05:13:41 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Eric Millbrandt <emillbrandt@dekaresearch.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] ASoC: fsl: Add missing error handling in pcm030_fabric_probe
+Date:   Thu, 27 Jan 2022 13:13:34 +0000
+Message-Id: <20220127131336.30214-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YfFFWSVgnbL6ETxo@sirena.org.uk>
+References: <YfFFWSVgnbL6ETxo@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently a use-after-free may occur if a sas_task is aborted by the upper
-layer before we handle the IO completion in mpi_ssp_completion() or
-mpi_sata_completion().
+Add the missing platform_device_put() and platform_device_del()
+before return from pcm030_fabric_probe in the error handling case.
 
-In this case, the following are the two steps in handling those IO
-completions:
-- call complete() to inform the upper layer handler of completion of
-  the IO
-- release driver resources associated with the sas_task in
-  pm8001_ccb_task_free() call
-
-When complete() is called, the upper layer may free the sas_task. As such,
-we should not touch the associated sas_task afterwards, but we do so in
-the pm8001_ccb_task_free() call.
-
-Fix by swapping the complete() and pm8001_ccb_task_free() calls ordering.
-
-Signed-off-by: John Garry <john.garry@huawei.com>
+Fixes: c912fa913446 ("ASoC: fsl: register the wm9712-codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+- avoid return early before the card registration.
+---
+ sound/soc/fsl/pcm030-audio-fabric.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index ce38a2298e75..1134e86ac928 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -2185,9 +2185,9 @@ mpi_ssp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		pm8001_dbg(pm8001_ha, FAIL,
- 			   "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
- 			   t, status, ts->resp, ts->stat);
-+		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 		if (t->slow_task)
- 			complete(&t->slow_task->completion);
--		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 	} else {
- 		spin_unlock_irqrestore(&t->task_state_lock, flags);
- 		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
-@@ -2794,9 +2794,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha,
- 		pm8001_dbg(pm8001_ha, FAIL,
- 			   "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
- 			   t, status, ts->resp, ts->stat);
-+		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 		if (t->slow_task)
- 			complete(&t->slow_task->completion);
--		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 	} else {
- 		spin_unlock_irqrestore(&t->task_state_lock, flags);
- 		spin_unlock_irqrestore(&circularQ->oq_lock,
+diff --git a/sound/soc/fsl/pcm030-audio-fabric.c b/sound/soc/fsl/pcm030-audio-fabric.c
+index af3c3b90c0ac..83b4a22bf15a 100644
+--- a/sound/soc/fsl/pcm030-audio-fabric.c
++++ b/sound/soc/fsl/pcm030-audio-fabric.c
+@@ -93,16 +93,21 @@ static int pcm030_fabric_probe(struct platform_device *op)
+ 		dev_err(&op->dev, "platform_device_alloc() failed\n");
+ 
+ 	ret = platform_device_add(pdata->codec_device);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&op->dev, "platform_device_add() failed: %d\n", ret);
++		platform_device_put(pdata->codec_device);
++	}
+ 
+ 	ret = snd_soc_register_card(card);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&op->dev, "snd_soc_register_card() failed: %d\n", ret);
++		platform_device_del(pdata->codec_device);
++		platform_device_put(pdata->codec_device);
++	}
+ 
+ 	platform_set_drvdata(op, pdata);
+-
+ 	return ret;
++
+ }
+ 
+ static int pcm030_fabric_remove(struct platform_device *op)
 -- 
-2.26.2
+2.17.1
 

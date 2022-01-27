@@ -2,108 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E9E49D8B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBDC49D8C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiA0C66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:58:58 -0500
-Received: from out1.migadu.com ([91.121.223.63]:29752 "EHLO out1.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229668AbiA0C65 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:58:57 -0500
-Date:   Thu, 27 Jan 2022 11:58:45 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643252334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FYICBKJujxWP66P35sZcJvIBTEiFJq2KDSX6diI/+IM=;
-        b=Az1ZEbyCScboKvqlrja6XAt8KbS4xYUnzgksop8d1SJJjy8xueCPX/CkVH/Yr5b6xtHJ3N
-        2YNb6FUAZwZWDWaLldBwuoSMmCRv4P8AeOKIM6A9m1oyaCCGEINfRT4gTWtI1r8NmgMLj3
-        /nvobiR9Rqz8iZyDslounBWAXn6FltQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michal Hocko <mhocko@suse.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH 1/3] mm: enable MADV_DONTNEED for hugetlb mappings
-Message-ID: <20220127025845.GA3401059@u2004>
-References: <20220113180308.15610-1-mike.kravetz@oracle.com>
- <20220113180308.15610-2-mike.kravetz@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220113180308.15610-2-mike.kravetz@oracle.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+        id S231807AbiA0DFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 22:05:06 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:34389 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231251AbiA0DFE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 22:05:04 -0500
+Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220127030502epoutp02e58d4c14d064a029ef01b7d565260597~OAaBYhyL10802808028epoutp02D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:05:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220127030502epoutp02e58d4c14d064a029ef01b7d565260597~OAaBYhyL10802808028epoutp02D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643252702;
+        bh=rmq0WeKn7swhKm1q4O2Sd9F8V8oI2TUlmainr8ll46Y=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=Ik9ie0y30R8pzid3G03USLhxxEjEg8c0/4iRpqA06+NIQEg6OTxzBnYNng39uhsP7
+         hFzVct17MQoswJfn0BXv27k81jdXm/FApk3Zag+GfljgUe7TZw+Hi7lznummm8Zi9z
+         4N2lKbYeE4DYISYO2dSBK9H91llyerBNi7ICEA/U=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
+        20220127030501epcas3p16bb082ab22bb7a72d9a8afb48da5c449~OAaA-M4Rg0329203292epcas3p1B;
+        Thu, 27 Jan 2022 03:05:01 +0000 (GMT)
+Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp1.localdomain
+        (Postfix) with ESMTP id 4JklnT5Q3hz4x9Ps; Thu, 27 Jan 2022 03:05:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: [PATCH RESEND] scsi: ufs: Add checking lifetime attribute for
+ WriteBooster
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "huobean@gmail.com" <huobean@gmail.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01643252701746.JavaMail.epsvc@epcpadp3>
+Date:   Thu, 27 Jan 2022 12:00:25 +0900
+X-CMS-MailID: 20220127030025epcms2p3dccc36d5f89c6f68add690265016e8f0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220126104125epcms2p50afb250190ffc3f2dc7b16df31757c94
+References: <CGME20220126104125epcms2p50afb250190ffc3f2dc7b16df31757c94@epcms2p3>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:03:06AM -0800, Mike Kravetz wrote:
-> MADV_DONTNEED is currently disabled for hugetlb mappings.  This
-> certainly makes sense in shared file mappings as the pagecache maintains
-> a reference to the page and it will never be freed.  However, it could
-> be useful to unmap and free pages in private mappings.
-> 
-> The only thing preventing MADV_DONTNEED (and MADV_FREE) from working on
-> hugetlb mappings is a check in can_madv_lru_vma().  To allow support for
-> hugetlb mappings create and use a new routine madvise_dontneed_valid_vma()
-> that will allow hugetlb mappings.
-> 
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Because WB performs write in SLC mode, it is difficult to use WB
+infinitely.
 
-I briefly tested the patch and it seems that when calling madvise(MADV_DONTNEED)
-with the range unaligned to hugepage size (like 4kB) triggered the following crash.
-Could you double check around the address range issue?
+Vendors can set the Lifetime limit value to the device.
+If Lifetime exceeds the limit value, the device itself can disable the
+WB feature.
 
-[  220.915316] ------------[ cut here ]------------
-[  220.916792] kernel BUG at mm/hugetlb.c:4946!
-[  220.918519] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-[  220.920344] CPU: 2 PID: 1665 Comm: a.out Tainted: G            E     5.17.0-rc1-220126-1543+ #31
-[  220.930536] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-[  220.934484] RIP: 0010:__unmap_hugepage_range+0x4d6/0x580
-[  220.936443] Code: ff ff 49 c7 44 24 10 ff ff ff ff 41 80 64 24 20 83 e9 34 fd ff ff 0f 0b 49 8b 47 30 48 f7 d0 4c 85 c8 0f 84 93 fb ff ff 0f 0b <0f> 0b 48 8d 7c 24 48 83 4c 24 68 01 e8 69 b9 00 00 4c 8b 4c 24 08
-[  220.943818] RSP: 0018:ffffabe9019dfc98 EFLAGS: 00010206
-[  220.945454] RAX: 000000000000a000 RBX: ffff8a0e02253ed8 RCX: 0000000000000009
-[  220.947661] RDX: 00007f1c08000000 RSI: ffff8a0e02253ed8 RDI: ffffabe9019dfdb8
-[  220.949677] RBP: 0000000000200000 R08: 0000000000000000 R09: 00007f1c08000000
-[  220.951902] R10: 0000000000000000 R11: 0000000000000000 R12: ffffabe9019dfdb8
-[  220.954040] R13: ffffabe9019dfdb8 R14: 00007f1c08000000 R15: ffffffff9420f960
-[  220.955990] FS:  00007f1c08480540(0000) GS:ffff8a0efbc00000(0000) knlGS:0000000000000000
-[  220.958034] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  220.959517] CR2: 00007f1c0849aff8 CR3: 0000000146a52000 CR4: 00000000001506e0
-[  220.961321] Call Trace:
-[  220.961945]  <TASK>
-[  220.962535]  ? __slab_free+0xba/0x370
-[  220.963468]  ? update_load_avg+0x7e/0x5f0
-[  220.964427]  ? __cgroup_account_cputime+0x4c/0x70
-[  220.965596]  ? page_counter_uncharge+0x1d/0x30
-[  220.966733]  __unmap_hugepage_range_final+0xe/0x20
-[  220.967861]  unmap_single_vma+0xc7/0xf0
-[  220.968795]  zap_page_range+0xcc/0x130
-[  220.969619]  ? find_vma+0x73/0x80
-[  220.970378]  do_madvise.part.0+0xb65/0xea0
-[  220.971279]  ? do_sigaction+0x111/0x240
-[  220.972081]  __x64_sys_madvise+0x56/0x70
-[  220.972969]  do_syscall_64+0x3b/0x90
-[  220.973779]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  220.974883] RIP: 0033:0x7f1c083b24eb
-[  220.975632] Code: c3 48 8b 15 9f 59 0c 00 f7 d8 64 89 02 b8 ff ff ff ff eb c2 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 1c 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 6d 59 0c 00 f7 d8 64 89 01 48
-[  220.979331] RSP: 002b:00007ffe7f9bc038 EFLAGS: 00000202 ORIG_RAX: 000000000000001c
-[  220.980791] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1c083b24eb
-[  220.982162] RDX: 0000000000000004 RSI: 000000000000a000 RDI: 00007f1c08000000
-[  220.983550] RBP: 00007ffe7f9bc070 R08: 0000000000000000 R09: 0000000000000000
-[  220.984997] R10: 000000000040049c R11: 0000000000000202 R12: 00000000004010d0
-[  220.986399] R13: 00007ffe7f9bc150 R14: 0000000000000000 R15: 0000000000000000
-[  220.987765]  </TASK>
+WB feature supports "bWriteBoosterBufferLifeTimeEst (IDN = 1E)" attribute.
 
+With Lifetime exceeding the limit value,
+the current driver continuously performs the following query.
 
-Thanks,
-Naoya Horiguchi
+	- Write Flag: WB_ENABLE / DISABLE
+	- Read attr: Available Buffer Size
+	- Read attr: Current Buffer Size
+
+This patch recognizes that WriteBooster is no longer supported by the device,
+and prevent unnecessary query issues.
+
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/scsi/ufs/ufs.h    |  6 +++++
+ drivers/scsi/ufs/ufshcd.c | 52 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
+
+diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
+index 0bfdca3e648e..4a00c24a3209 100644
+--- a/drivers/scsi/ufs/ufs.h
++++ b/drivers/scsi/ufs/ufs.h
+@@ -43,6 +43,12 @@
+ /* WriteBooster buffer is available only for the logical unit from 0 to 7 */
+ #define UFS_UPIU_MAX_WB_LUN_ID	8
+ 
++/*
++ * WriteBooster buffer lifetime has a limit setted by vendor.
++ * If it is over the limit, WriteBooster feature will be disabled.
++ */
++#define UFS_WB_EXCEED_LIFETIME		0x0B
++
+ /* Well known logical unit id in LUN field of UPIU */
+ enum {
+ 	UFS_UPIU_REPORT_LUNS_WLUN	= 0x81,
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 460d2b440d2e..41d85b69fa50 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -5778,6 +5778,47 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+ 	return false;
+ }
+ 
++static void ufshcd_wb_force_disable(struct ufs_hba *hba)
++{
++	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
++		ufshcd_wb_toggle_flush(hba, false);
++
++	ufshcd_wb_toggle_flush_during_h8(hba, false);
++	ufshcd_wb_toggle(hba, false);
++	hba->caps &= ~UFSHCD_CAP_WB_EN;
++
++	dev_info(hba->dev, "%s: WB force disabled\n", __func__);
++}
++
++static bool ufshcd_is_wb_buf_lifetime_available(struct ufs_hba *hba)
++{
++	u32 lifetime;
++	int ret;
++	u8 index;
++
++	index = ufshcd_wb_get_query_index(hba);
++	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
++				      QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST,
++				      index, 0, &lifetime);
++	if (ret) {
++		dev_err(hba->dev,
++			"%s: bWriteBoosterBufferLifeTimeEst read failed %d\n",
++			__func__, ret);
++		return false;
++	}
++
++	if (lifetime == UFS_WB_EXCEED_LIFETIME) {
++		dev_err(hba->dev, "%s: WB buf lifetime is exhausted 0x%02X\n",
++			__func__, lifetime);
++		return false;
++	}
++
++	dev_dbg(hba->dev, "%s: WB buf lifetime is 0x%02X\n",
++		__func__, lifetime);
++
++	return true;
++}
++
+ static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
+ {
+ 	int ret;
+@@ -5786,6 +5827,12 @@ static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
+ 
+ 	if (!ufshcd_is_wb_allowed(hba))
+ 		return false;
++
++	if (!ufshcd_is_wb_buf_lifetime_available(hba)) {
++		ufshcd_wb_force_disable(hba);
++		return false;
++	}
++
+ 	/*
+ 	 * The ufs device needs the vcc to be ON to flush.
+ 	 * With user-space reduction enabled, it's enough to enable flush
+@@ -7486,6 +7533,7 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
+ 
+ 	if (!ufshcd_is_wb_allowed(hba))
+ 		return;
++
+ 	/*
+ 	 * Probe WB only for UFS-2.2 and UFS-3.1 (and later) devices or
+ 	 * UFS devices with quirk UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES
+@@ -7537,6 +7585,10 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
+ 		if (!d_lu_wb_buf_alloc)
+ 			goto wb_disabled;
+ 	}
++
++	if (!ufshcd_is_wb_buf_lifetime_available(hba))
++		goto wb_disabled;
++
+ 	return;
+ 
+ wb_disabled:
+-- 
+2.25.1

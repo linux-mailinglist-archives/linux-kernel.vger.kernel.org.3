@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F72449EC7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B8549EC7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344027AbiA0U2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiA0U2g (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:28:36 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786C1C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:28:36 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id s5so8586029ejx.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=41+S3e1G9az4hjoyIeQC86UioZgpO/adTzdGdboWJEs=;
-        b=tkxspR5jl3OqRnxMSq8JDCc/cDWEPcSLiVi0a4mJ7qF992fNUR+q3YQCA1hwakMvH+
-         /fZw1S+ki4w/7BxmAGOMfJPn4TiITIGxMr5DImnsW5S6YSFhqk8ksufG4P05yest9uUk
-         qGrWiIjJA57IzJmWodDAHMtH/1QT4MKWsasSqKoX8wNdVRNRixGZHM+4fFCcW2RrEKV4
-         Kn1WrqIBsbdeg0pTaZHEi5vt2qUL8mPlI8Q7HfMa1YxlQ85DMH1zRrHRyRrlNRGeBBml
-         K90ZH5xajUuFBiIL8XvWWR1m3ahFyvb/k3gMq0mChUO580tNN/NONhl61tYJHmChAmKD
-         ofag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=41+S3e1G9az4hjoyIeQC86UioZgpO/adTzdGdboWJEs=;
-        b=N1VRi6bBrlcYfmeUklx/Scb10oH9hC8TfcKG8DI9/XL28c+12KLPQtRf1GjQk1UJIb
-         aO2Bco+Bbcm050UroGdvVWBbTmPWydgDHKUN05l7NqIDCXi5w+bn3kck+StGhhutpYAj
-         67mDAKJMkFzY2wXnqwmn6NYy9bSF6XeiNai3jFlkVw0HfIVkITTnIvjZ2sseClW/RPEf
-         h3RS9ulqQrlCyHMv1Wi6ePsn+YB8jxw9O1OvzAx5SHshW0saw2IefXum0rXm8DCGUKp+
-         Yso//ZggN7lF9WZWCfjnMOi12iy4/s39yjUvUuvTEJbkNU5dzdIjk53XXbnTdxd7ae1R
-         Saew==
-X-Gm-Message-State: AOAM530iFfXlNeluBHi1xpaoKoIwzvVCcn5+Jby33aq1DmJOQ1+B65KX
-        AkAiuhwekQlm4oRLMDFh2mpqMBetmpvnJ8wSEyiXgw==
-X-Google-Smtp-Source: ABdhPJyBjlVg4LcpXCJNnPRMusqfU5Ajf+q6BnXvzgPaNAhuIT3jfgcOc9U2usc9V4RHgXKdo+PSsdqT45GXftqoTcU=
-X-Received: by 2002:a17:907:6d25:: with SMTP id sa37mr4293287ejc.202.1643315315038;
- Thu, 27 Jan 2022 12:28:35 -0800 (PST)
+        id S1344041AbiA0UaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:30:19 -0500
+Received: from mga09.intel.com ([134.134.136.24]:43685 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344035AbiA0UaS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 15:30:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643315418; x=1674851418;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c4v8+yD7oUMe/eV0x6a7gxq3YlDMZF2fW4U1hfPP3bA=;
+  b=BjqhEwCYkspqzex0Z7NsLqYsAmXcy3Pm99oDxtExeiXVIm9X4WquIraq
+   k6x0gQEWPKKbUM4WMyLa7ySFF9CoghcnVooU93XuSTpwZeLieZtVOKIyg
+   bNcXurIiN2XTWxi9mGNhXeRSgCef3s5NlXHRn//hHyu9ANDGZ0R+euVE9
+   eGHhgJIpLjKakQEq1SLnyrn3X3fiw7TUfl+v0fkKhu2sx/jtdEk1iLg3C
+   01GMw1hv4t8JtukeeWu47hyCpK6gRgqxFQRnk7ant7IvcD4hKn7KGMApm
+   L1h6CvWB92w8jt4FSyCrctjtrAKp5rA5xA3/uDIhG0aKfSXnJw/OnfuA8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246733654"
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="246733654"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 12:30:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="521382016"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Jan 2022 12:30:16 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDBPM-000N10-1d; Thu, 27 Jan 2022 20:30:16 +0000
+Date:   Fri, 28 Jan 2022 04:29:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [davidhildenbrand:single_zone 4/4] drivers/base/memory.c:648:14:
+ warning: no previous prototype for function
+ 'early_node_zone_for_memory_block'
+Message-ID: <202201280413.3HR9emiQ-lkp@intel.com>
 MIME-Version: 1.0
-References: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
-In-Reply-To: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 27 Jan 2022 13:28:23 -0700
-Message-ID: <CANLsYkxdXFSVLEnJQTd87LqP5oootxyM3adbxvvpWSEvi5VcsA@mail.gmail.com>
-Subject: Re: [RFC PATCH] ACPI / amba: Skip creating amba device when
- associated cpu is not online
-To:     chenxiang <chenxiang66@hisilicon.com>
-Cc:     linux@armlinux.org.uk, vkoul@kernel.org,
-        linux-arm-kernel@lists.infradead.org, Suzuki.Poulose@arm.com,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cheng,
+tree:   git://github.com/davidhildenbrand/linux single_zone
+head:   176a3d535903312944f7489127f520c5494bc810
+commit: 176a3d535903312944f7489127f520c5494bc810 [4/4] tmp
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220128/202201280413.3HR9emiQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/davidhildenbrand/linux/commit/176a3d535903312944f7489127f520c5494bc810
+        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
+        git fetch --no-tags davidhildenbrand single_zone
+        git checkout 176a3d535903312944f7489127f520c5494bc810
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/base/
 
-I am severely behind in my patch review process and as such will not
-be able to start reviewing your work before the week of February 7th.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Mathieu
+All warnings (new ones prefixed by >>):
 
-On Fri, 7 Jan 2022 at 01:47, chenxiang <chenxiang66@hisilicon.com> wrote:
->
-> From: Xiang Chen <chenxiang66@hisilicon.com>
->
-> If not up all the cpus with command line "maxcpus=x", system will be
-> blocked.
-> We find that some amba devices such as ETM devices, are associated with
-> special cpus, and if the cpu is not up, the register of associated device
-> is not allowed to access. BIOS reports all the ETM device nodes and a
-> amba device is created for every ETM device, so even if one cpu is not up,
-> the amba device will still be created for the associated device, and also
-> the register of device (pid and cid) will be accessed when adding amba
-> device which will cause the issue.
-> To fix it, skip creating amba device if it is associated with a cpu which
-> is not online.
->
-> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-> ---
->  drivers/acpi/acpi_amba.c | 36 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
-> index ab8a4e0191b1..2369198f734b 100644
-> --- a/drivers/acpi/acpi_amba.c
-> +++ b/drivers/acpi/acpi_amba.c
-> @@ -16,6 +16,7 @@
->  #include <linux/ioport.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <acpi/processor.h>
->
->  #include "internal.h"
->
-> @@ -45,6 +46,35 @@ static void amba_register_dummy_clk(void)
->         clk_register_clkdev(amba_dummy_clk, "apb_pclk", NULL);
->  }
->
-> +static int acpi_handle_to_cpuid(acpi_handle handle)
-> +{
-> +       int cpu = -1;
-> +       struct acpi_processor *pr;
-> +
-> +       for_each_possible_cpu(cpu) {
-> +               pr = per_cpu(processors, cpu);
-> +               if (pr && pr->handle == handle)
-> +                       break;
-> +       }
-> +
-> +       return cpu;
-> +}
-> +
-> +static int acpi_dev_get_cpu(struct acpi_device *adev)
-> +{
-> +       acpi_handle cpu_handle;
-> +       acpi_status status;
-> +       int cpu;
-> +
-> +       status = acpi_get_parent(adev->handle, &cpu_handle);
-> +       if (ACPI_FAILURE(status))
-> +               return -1;
-> +       cpu = acpi_handle_to_cpuid(cpu_handle);
-> +       if (cpu >= nr_cpu_ids)
-> +               return -1;
-> +       return cpu;
-> +}
-> +
->  static int amba_handler_attach(struct acpi_device *adev,
->                                 const struct acpi_device_id *id)
->  {
-> @@ -54,11 +84,17 @@ static int amba_handler_attach(struct acpi_device *adev,
->         bool address_found = false;
->         int irq_no = 0;
->         int ret;
-> +       int cpu;
->
->         /* If the ACPI node already has a physical device attached, skip it. */
->         if (adev->physical_node_count)
->                 return 0;
->
-> +       /* If the cpu associated with the device is not online, skip it. */
-> +       cpu = acpi_dev_get_cpu(adev);
-> +       if (cpu >= 0 && !cpu_online(cpu))
-> +               return 0;
-> +
->         dev = amba_device_alloc(dev_name(&adev->dev), 0, 0);
->         if (!dev) {
->                 dev_err(&adev->dev, "%s(): amba_device_alloc() failed\n",
-> --
-> 2.33.0
->
+>> drivers/base/memory.c:648:14: warning: no previous prototype for function 'early_node_zone_for_memory_block' [-Wmissing-prototypes]
+   struct zone *early_node_zone_for_memory_block(int nid, struct memory_block *mem)
+                ^
+   drivers/base/memory.c:648:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct zone *early_node_zone_for_memory_block(int nid, struct memory_block *mem)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/early_node_zone_for_memory_block +648 drivers/base/memory.c
+
+   647	
+ > 648	struct zone *early_node_zone_for_memory_block(int nid, struct memory_block *mem)
+   649	{
+   650		const unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
+   651		const unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
+   652	
+   653		struct zone *zone, *matching_zone = NULL;
+   654		pg_data_t *pgdat = NODE_DATA(nid);
+   655		int i;
+   656	
+   657		/*
+   658		 * This logic only works for early memory, when the applicable zones
+   659		 * already span the memory block. We don't expect overlapping zones on
+   660		 * a single node for early memory. So if we're told that some pfns
+   661		 * of a node fall into this memory block, we can assume that all node
+   662		 * zones that intersect with the memory block are actually applicable.
+   663		 * No need to look at the memmap.
+   664		 *
+   665		 * Memory hot(un)plug updates the zone manually after memory
+   666		 * onlinig/offlining succeed.
+   667		 */
+   668		for (i = 0; i < MAX_NR_ZONES; i++) {
+   669			zone = pgdat->node_zones + i;
+   670			if (!populated_zone(zone))
+   671				continue;
+   672			if (!zone_intersects(zone, start_pfn, nr_pages))
+   673				continue;
+   674			if (!matching_zone) {
+   675				matching_zone = zone;
+   676				continue;
+   677			}
+   678			/* Spans multiple zones ... */
+   679			matching_zone = NULL;
+   680			break;
+   681		}
+   682		return matching_zone;
+   683	}
+   684	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

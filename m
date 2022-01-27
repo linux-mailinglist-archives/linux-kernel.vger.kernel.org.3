@@ -2,157 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDADA49D7FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386B849D800
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbiA0CWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:22:34 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56922 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230126AbiA0CWd (ORCPT
+        id S230126AbiA0CWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:22:49 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:35086
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235050AbiA0CWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:22:33 -0500
-X-UUID: 588100a05518408f9afb97117967cfe6-20220127
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=MyLvxbLANqPP5k13DRBYkTe5b3b9ieS/h8DsHY1Vcr0=;
-        b=YxNYLiicckVfj1iOhlDtqezC9Rzwu9/q9xDQdSHMckpRuWJOotmUcBXhofzc+nJcyAfFxJujFT6O4jyAW92g/Xv9K1MmeXb3JarBh0Wg8Y72g2FyfUyr+vj7WcX6KQWfRtWj+AvMLWbWZOy+Tx/PkBEld1o29+9RMAvA/hgVO5k=;
-X-UUID: 588100a05518408f9afb97117967cfe6-20220127
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 959124286; Thu, 27 Jan 2022 10:22:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 27 Jan 2022 10:22:28 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Jan 2022 10:22:28 +0800
-Subject: Re: [PATCH net-next v2 3/9] net: ethernet: mtk-star-emac: add support
- for MT8365 SoC
-To:     Biao Huang <biao.huang@mediatek.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "Fabien Parent" <fparent@baylibre.com>
-CC:     Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-        "John Crispin" <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        <srv_heupstream@mediatek.com>
-References: <20220127015857.9868-1-biao.huang@mediatek.com>
- <20220127015857.9868-4-biao.huang@mediatek.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-Message-ID: <129fa3fc-12bc-3af6-5259-88dcddb2fd28@mediatek.com>
-Date:   Thu, 27 Jan 2022 10:22:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 26 Jan 2022 21:22:48 -0500
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id ACEB03F1E0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:22:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643250166;
+        bh=VON/Z/8bdlNSxKg/CZYPTOSTIKu2Vz6VcrvLtb84DlU=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=kWBuUG85n4C1kfpET1aN1OED57lL3fZy9kIorWk4tssmYP2PGX0677Gd7seR1GQ4l
+         eX8z7KNajU2HJ1nbsLm91exT5GD3YTFH0s4xu+Kbgy/dm7xbwFuwiGtogXuGZwfpIJ
+         HOMZwnhBa1Mag+jXGUd8fXY5ZuSHChmZkh9Go6mSCuU3p8BEkHjb4v3cgTLv16qv/i
+         OmNWsui8V/u8RJvEHjDBFoC8XmblGvIMG1awteWbWGJbbpTyWdSvAACpe79bN5MZQN
+         CjpIaS4nPTDeu7AFPF13UWQQI2W0sxWdvLgZc8sOta3ZA8gLHwBYCftHwlJNCYYSBa
+         zOfY+fctlwK5w==
+Received: by mail-oi1-f199.google.com with SMTP id bk3-20020a0568081a0300b002ce2b717413so916967oib.21
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:22:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VON/Z/8bdlNSxKg/CZYPTOSTIKu2Vz6VcrvLtb84DlU=;
+        b=AH5ZRgRZG+xEckp7vl1I+htRO794JdQZu5qMYA5vutSqibpAAfzlhFEawUAyMQdbje
+         aiCIfdDDDVfz4LJhwoONIOsc2eT47pzZQtftZKR/aQ8X0gWSsigx3QltJd2xqbu8AA4m
+         10QVifCLeVKav6+sIP0i0T18l9fl0ivhyspYz2zwd0L/r9r63gxby3UoAfRMzzFzrVnb
+         wy1GU5f8EAlR4qr+bEbmPzhTcZuM+G3mbX2+VKJ3HW8cJjAjOaFYFoKSD065MUAEDAB2
+         eIHhNvcIKkS982Qe3I+za+PM/6wlpl2NjoPR1oGEwRHVNffa+hUAWDJnVreXn446vlUU
+         xqTQ==
+X-Gm-Message-State: AOAM530tkpylOHy9i5MaSIdvXbB66sQ6r7swwXprQW6ZsGv14bhOk0Dk
+        M/WdUR9ccmutw91fFvYaiZWt4r9ezZ+ZzyAejqrJEfHcca62gDTMBRu5CUn/L6dQvh7L6DEal9y
+        oe0vJS0bNlq9xeg1v5YOgBDlJkxg92k4i9w9vsyt15XEp3F6S40QfpW6+bg==
+X-Received: by 2002:a05:6808:2087:: with SMTP id s7mr5179153oiw.21.1643250165680;
+        Wed, 26 Jan 2022 18:22:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwB+navU6gtFzHTGoJm+x+kCowK7+ulSkHm17hHbA227DyBZQFEB15yNQThEkQXUYewsy/No5viewb7ncXSxF0=
+X-Received: by 2002:a05:6808:2087:: with SMTP id s7mr5179138oiw.21.1643250165478;
+ Wed, 26 Jan 2022 18:22:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220127015857.9868-4-biao.huang@mediatek.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: base64
+References: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
+ <20220126071853.1940111-2-kai.heng.feng@canonical.com> <YfEsC94BvFwd5MLy@lahna>
+In-Reply-To: <YfEsC94BvFwd5MLy@lahna>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 27 Jan 2022 10:22:34 +0800
+Message-ID: <CAAd53p7wPZj0DTxkfoBhhhbaGWvpU4MTbJAGGNXvAjG3qw9b9Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PCI/DPC: Disable DPC when link is in L2/L3 ready, L2
+ and L3 state
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     bhelgaas@google.com, koba.ko@canonical.com,
+        Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8yNy8yMiA5OjU4IEFNLCBCaWFvIEh1YW5nIHdyb3RlOg0KPiBBZGQgRXRoZXJuZXQgZHJp
-dmVyIHN1cHBvcnQgZm9yIE1UODM2NSBTb0MuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBCaWFvIEh1
-YW5nIDxiaWFvLmh1YW5nQG1lZGlhdGVrLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogWWluZ2h1YSBQ
-YW4gPG90X3lpbmdodWEucGFuQG1lZGlhdGVrLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogRmFiaWVu
-IFBhcmVudCA8ZnBhcmVudEBiYXlsaWJyZS5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvbmV0L2V0
-aGVybmV0L21lZGlhdGVrL210a19zdGFyX2VtYWMuYyB8IDc1ICsrKysrKysrKysrKysrKystLS0N
-Cj4gICAxIGZpbGUgY2hhbmdlZCwgNjQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pDQo+
-IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJf
-ZW1hYy5jIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jDQo+
-IGluZGV4IGE4ZmJiYmNkMTg1Yi4uYTM4ODRiZWFhM2ZlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
-L25ldC9ldGhlcm5ldC9tZWRpYXRlay9tdGtfc3Rhcl9lbWFjLmMNCj4gKysrIGIvZHJpdmVycy9u
-ZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jDQo+IEBAIC0xNTEsNiArMTUxLDcg
-QEAgc3RhdGljIGNvbnN0IGNoYXIgKmNvbnN0IG10a19zdGFyX2Nsa19uYW1lc1tdID0geyAiY29y
-ZSIsICJyZWciLCAidHJhbnMiIH07DQo+ICAgI2RlZmluZSBNVEtfU1RBUl9SRUdfTUFDX0NMS19D
-T05GCQkweDAwYWMNCj4gICAjZGVmaW5lIE1US19TVEFSX01TS19NQUNfQ0xLX0NPTkYJCUdFTk1B
-U0soNywgMCkNCj4gICAjZGVmaW5lIE1US19TVEFSX0JJVF9DTEtfRElWXzEwCQkJMHgwYQ0KPiAr
-I2RlZmluZSBNVEtfU1RBUl9CSVRfQ0xLX0RJVl81MAkJCTB4MzINCj4gICANCj4gICAvKiBDb3Vu
-dGVyIHJlZ2lzdGVycy4gKi8NCj4gICAjZGVmaW5lIE1US19TVEFSX1JFR19DX1JYT0tQS1QJCQkw
-eDAxMDANCj4gQEAgLTE4Myw5ICsxODQsMTEgQEAgc3RhdGljIGNvbnN0IGNoYXIgKmNvbnN0IG10
-a19zdGFyX2Nsa19uYW1lc1tdID0geyAiY29yZSIsICJyZWciLCAidHJhbnMiIH07DQo+ICAgI2Rl
-ZmluZSBNVEtfU1RBUl9SRUdfQ19SWF9UV0lTVAkJCTB4MDIxOA0KPiAgIA0KPiAgIC8qIEV0aGVy
-bmV0IENGRyBDb250cm9sICovDQo+IC0jZGVmaW5lIE1US19QRVJJQ0ZHX1JFR19OSUNfQ0ZHX0NP
-TgkJMHgwM2M0DQo+IC0jZGVmaW5lIE1US19QRVJJQ0ZHX01TS19OSUNfQ0ZHX0NPTl9DRkdfTUlJ
-CUdFTk1BU0soMywgMCkNCj4gLSNkZWZpbmUgTVRLX1BFUklDRkdfQklUX05JQ19DRkdfQ09OX1JN
-SUkJQklUKDApDQo+ICsjZGVmaW5lIE1US19QRVJJQ0ZHX1JFR19OSUNfQ0ZHMF9DT04JCTB4MDNj
-NA0KPiArI2RlZmluZSBNVEtfUEVSSUNGR19SRUdfTklDX0NGRzFfQ09OCQkweDAzYzgNCj4gKyNk
-ZWZpbmUgTVRLX1BFUklDRkdfUkVHX05JQ19DRkdfQ09OX1YyCQkweDBjMTANCj4gKyNkZWZpbmUg
-TVRLX1BFUklDRkdfUkVHX05JQ19DRkdfQ09OX0NGR19JTlRGCUdFTk1BU0soMywgMCkNCj4gKyNk
-ZWZpbmUgTVRLX1BFUklDRkdfQklUX05JQ19DRkdfQ09OX1JNSUkJMQ0KPiAgIA0KPiAgIC8qIFJl
-cHJlc2VudHMgdGhlIGFjdHVhbCBzdHJ1Y3R1cmUgb2YgZGVzY3JpcHRvcnMgdXNlZCBieSB0aGUg
-TUFDLiBXZSBjYW4NCj4gICAgKiByZXVzZSB0aGUgc2FtZSBzdHJ1Y3R1cmUgZm9yIGJvdGggVFgg
-YW5kIFJYIC0gdGhlIGxheW91dCBpcyB0aGUgc2FtZSwgb25seQ0KPiBAQCAtMjM0LDYgKzIzNyw3
-IEBAIHN0cnVjdCBtdGtfc3Rhcl9yaW5nIHsNCj4gICB9Ow0KPiAgIA0KPiAgIHN0cnVjdCBtdGtf
-c3Rhcl9jb21wYXQgew0KPiArCWludCAoKnNldF9pbnRlcmZhY2VfbW9kZSkoc3RydWN0IG5ldF9k
-ZXZpY2UgKm5kZXYpOw0KPiAgIAl1bnNpZ25lZCBjaGFyIGJpdF9jbGtfZGl2Ow0KPiAgIH07DQo+
-ICAgDQo+IEBAIC05MDksMTMgKzkxMyw2IEBAIHN0YXRpYyB2b2lkIG10a19zdGFyX2luaXRfY29u
-ZmlnKHN0cnVjdCBtdGtfc3Rhcl9wcml2ICpwcml2KQ0KPiAgIAkJCSAgIHByaXYtPmNvbXBhdF9k
-YXRhLT5iaXRfY2xrX2Rpdik7DQo+ICAgfQ0KPiAgIA0KPiAtc3RhdGljIHZvaWQgbXRrX3N0YXJf
-c2V0X21vZGVfcm1paShzdHJ1Y3QgbXRrX3N0YXJfcHJpdiAqcHJpdikNCj4gLXsNCj4gLQlyZWdt
-YXBfdXBkYXRlX2JpdHMocHJpdi0+cGVyaWNmZywgTVRLX1BFUklDRkdfUkVHX05JQ19DRkdfQ09O
-LA0KPiAtCQkJICAgTVRLX1BFUklDRkdfTVNLX05JQ19DRkdfQ09OX0NGR19NSUksDQo+IC0JCQkg
-ICBNVEtfUEVSSUNGR19CSVRfTklDX0NGR19DT05fUk1JSSk7DQo+IC19DQo+IC0NCj4gICBzdGF0
-aWMgaW50IG10a19zdGFyX2VuYWJsZShzdHJ1Y3QgbmV0X2RldmljZSAqbmRldikNCj4gICB7DQo+
-ICAgCXN0cnVjdCBtdGtfc3Rhcl9wcml2ICpwcml2ID0gbmV0ZGV2X3ByaXYobmRldik7DQo+IEBA
-IC0xNTMxLDcgKzE1MjgsMTMgQEAgc3RhdGljIGludCBtdGtfc3Rhcl9wcm9iZShzdHJ1Y3QgcGxh
-dGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIAkJcmV0dXJuIC1FTk9ERVY7DQo+ICAgCX0NCj4gICAN
-Cj4gLQltdGtfc3Rhcl9zZXRfbW9kZV9ybWlpKHByaXYpOw0KPiArCWlmIChwcml2LT5jb21wYXRf
-ZGF0YS0+c2V0X2ludGVyZmFjZV9tb2RlKSB7DQo+ICsJCXJldCA9IHByaXYtPmNvbXBhdF9kYXRh
-LT5zZXRfaW50ZXJmYWNlX21vZGUobmRldik7DQo+ICsJCWlmIChyZXQpIHsNCj4gKwkJCWRldl9l
-cnIoZGV2LCAiRmFpbGVkIHRvIHNldCBwaHkgaW50ZXJmYWNlLCBlcnIgPSAlZFxuIiwgcmV0KTsN
-Cj4gKwkJCXJldHVybiAtRUlOVkFMOw0KPiArCQl9DQo+ICsJfQ0KPiAgIA0KPiAgIAlyZXQgPSBk
-bWFfc2V0X21hc2tfYW5kX2NvaGVyZW50KGRldiwgRE1BX0JJVF9NQVNLKDMyKSk7DQo+ICAgCWlm
-IChyZXQpIHsNCj4gQEAgLTE1NjQsMTAgKzE1NjcsNTggQEAgc3RhdGljIGludCBtdGtfc3Rhcl9w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIAlyZXR1cm4gZGV2bV9yZWdp
-c3Rlcl9uZXRkZXYoZGV2LCBuZGV2KTsNCj4gICB9DQo+ICAgDQo+ICtzdGF0aWMgaW50IG10ODUx
-Nl9zZXRfaW50ZXJmYWNlX21vZGUoc3RydWN0IG5ldF9kZXZpY2UgKm5kZXYpDQo+ICt7DQo+ICsJ
-c3RydWN0IG10a19zdGFyX3ByaXYgKnByaXYgPSBuZXRkZXZfcHJpdihuZGV2KTsNCj4gKwlzdHJ1
-Y3QgZGV2aWNlICpkZXYgPSBtdGtfc3Rhcl9nZXRfZGV2KHByaXYpOw0KPiArCXVuc2lnbmVkIGlu
-dCBpbnRmX3ZhbDsNCj4gKw0KPiArCXN3aXRjaCAocHJpdi0+cGh5X2ludGYpIHsNCj4gKwljYXNl
-IFBIWV9JTlRFUkZBQ0VfTU9ERV9STUlJOg0KPiArCQlpbnRmX3ZhbCA9IE1US19QRVJJQ0ZHX0JJ
-VF9OSUNfQ0ZHX0NPTl9STUlJOw0KPiArCQlicmVhazsNCj4gKwlkZWZhdWx0Og0KPiArCQlkZXZf
-ZXJyKGRldiwgIlRoaXMgaW50ZXJmYWNlIG5vdCBzdXBwb3J0ZWRcbiIpOw0KPiArCQlyZXR1cm4g
-LUVJTlZBTDsNCj4gKwl9DQo+ICsNCj4gKwlyZXR1cm4gcmVnbWFwX3VwZGF0ZV9iaXRzKHByaXYt
-PnBlcmljZmcsDQo+ICsJCQkJICBNVEtfUEVSSUNGR19SRUdfTklDX0NGRzBfQ09OLA0KPiArCQkJ
-CSAgTVRLX1BFUklDRkdfUkVHX05JQ19DRkdfQ09OX0NGR19JTlRGLA0KPiArCQkJCSAgaW50Zl92
-YWwpOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50IG10ODM2NV9zZXRfaW50ZXJmYWNlX21vZGUo
-c3RydWN0IG5ldF9kZXZpY2UgKm5kZXYpDQo+ICt7DQo+ICsJc3RydWN0IG10a19zdGFyX3ByaXYg
-KnByaXYgPSBuZXRkZXZfcHJpdihuZGV2KTsNCj4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYgPSBtdGtf
-c3Rhcl9nZXRfZGV2KHByaXYpOw0KPiArCXVuc2lnbmVkIGludCBpbnRmX3ZhbDsNCj4gKw0KPiAr
-CXN3aXRjaCAocHJpdi0+cGh5X2ludGYpIHsNCj4gKwljYXNlIFBIWV9JTlRFUkZBQ0VfTU9ERV9S
-TUlJOg0KPiArCQlpbnRmX3ZhbCA9IE1US19QRVJJQ0ZHX0JJVF9OSUNfQ0ZHX0NPTl9STUlJOw0K
-PiArCQlicmVhazsNCj4gKwlkZWZhdWx0Og0KPiArCQlkZXZfZXJyKGRldiwgIlRoaXMgaW50ZXJm
-YWNlIG5vdCBzdXBwb3J0ZWRcbiIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+ICsN
-Cj4gKwlyZXR1cm4gcmVnbWFwX3VwZGF0ZV9iaXRzKHByaXYtPnBlcmljZmcsDQo+ICsJCQkJICBN
-VEtfUEVSSUNGR19SRUdfTklDX0NGR19DT05fVjIsDQo+ICsJCQkJICBNVEtfUEVSSUNGR19SRUdf
-TklDX0NGR19DT05fQ0ZHX0lOVEYsDQo+ICsJCQkJICBpbnRmX3ZhbCk7DQo+ICt9DQo+ICsNCj4g
-ICBzdGF0aWMgY29uc3Qgc3RydWN0IG10a19zdGFyX2NvbXBhdCBtdGtfc3Rhcl9tdDg1MTZfY29t
-cGF0ID0gew0KPiArCS5zZXRfaW50ZXJmYWNlX21vZGUgPSBtdDg1MTZfc2V0X2ludGVyZmFjZV9t
-b2RlLA0KPiAgIAkuYml0X2Nsa19kaXYgPSBNVEtfU1RBUl9CSVRfQ0xLX0RJVl8xMCwNCj4gICB9
-Ow0KPiAgIA0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfc3Rhcl9jb21wYXQgbXRrX3N0YXJf
-bXQ4MzY1X2NvbXBhdCA9IHsNCj4gKwkuc2V0X2ludGVyZmFjZV9tb2RlID0gbXQ4MzY1X3NldF9p
-bnRlcmZhY2VfbW9kZSwNCj4gKwkuYml0X2Nsa19kaXYgPSBNVEtfU1RBUl9CSVRfQ0xLX0RJVl81
-MCwNCj4gK307DQo+ICsNCj4gICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtf
-c3Rhcl9vZl9tYXRjaFtdID0gew0KPiAgIAl7IC5jb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODUx
-Ni1ldGgiLA0KPiAgIAkgIC5kYXRhID0gJm10a19zdGFyX210ODUxNl9jb21wYXQgfSwNCj4gQEAg
-LTE1NzUsNiArMTYyNiw4IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIG10a19z
-dGFyX29mX21hdGNoW10gPSB7DQo+ICAgCSAgLmRhdGEgPSAmbXRrX3N0YXJfbXQ4NTE2X2NvbXBh
-dCB9LA0KPiAgIAl7IC5jb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE3NS1ldGgiLA0KPiAgIAkg
-IC5kYXRhID0gJm10a19zdGFyX210ODUxNl9jb21wYXQgfSwNCj4gKwl7IC5jb21wYXRpYmxlID0g
-Im1lZGlhdGVrLG10ODM2NS1ldGgiLA0KPiArCSAgLmRhdGEgPSAmbXRrX3N0YXJfbXQ4MzY1X2Nv
-bXBhdCB9LA0KPiAgIAl7IH0NCj4gICB9Ow0KPiAgIE1PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIG10
-a19zdGFyX29mX21hdGNoKTsNCj4gDQoNClJldmlld2VkLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1
-bC5saW5AbWVkaWF0ZWsuY29tPg0KDQpSZWdhcmRzLA0KTWFjcGF1bCBMaW4=
+On Wed, Jan 26, 2022 at 7:10 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Wed, Jan 26, 2022 at 03:18:52PM +0800, Kai-Heng Feng wrote:
+> > Since TLP and DLLP transmission is disabled for a Link in L2/L3 Ready,
+> > L2 and L3, and DPC depends on AER, so also disable DPC here.
+>
+> Here too I think it is good to mention that the DPC "service" never
+> implemented the PM hooks in the first place
 
+Will amend the commit message a bit.
+
+>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>
+> One minor comment below, but other than that looks good,
+>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> > ---
+> >  drivers/pci/pcie/dpc.c | 61 +++++++++++++++++++++++++++++++-----------
+> >  1 file changed, 45 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
+> > index 3e9afee02e8d1..9585c10b7c577 100644
+> > --- a/drivers/pci/pcie/dpc.c
+> > +++ b/drivers/pci/pcie/dpc.c
+> > @@ -343,13 +343,34 @@ void pci_dpc_init(struct pci_dev *pdev)
+> >       }
+> >  }
+> >
+> > +static void dpc_enable(struct pcie_device *dev)
+> > +{
+> > +     struct pci_dev *pdev = dev->port;
+> > +     u16 ctl;
+> > +
+> > +     pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
+> > +
+>
+> Drop the empty line here.
+
+OK, will do.
+
+Kai-Heng
+
+>
+> > +     ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
+> > +     pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
+> > +}
+> > +
+> > +static void dpc_disable(struct pcie_device *dev)
+> > +{
+> > +     struct pci_dev *pdev = dev->port;
+> > +     u16 ctl;
+> > +
+> > +     pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
+> > +     ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
+> > +     pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
+> > +}

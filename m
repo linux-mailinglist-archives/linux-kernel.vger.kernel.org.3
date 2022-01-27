@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D413D49E3A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1471449E3A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242118AbiA0NgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:36:12 -0500
-Received: from mail-yb1-f169.google.com ([209.85.219.169]:34756 "EHLO
-        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242227AbiA0NeD (ORCPT
+        id S242173AbiA0Ngs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:36:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40738 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242315AbiA0Nem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:34:03 -0500
-Received: by mail-yb1-f169.google.com with SMTP id v186so8804013ybg.1;
-        Thu, 27 Jan 2022 05:34:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JwIU7q542/Majhq966D+41zjzGbPYbtJbtOu0ZRQ3As=;
-        b=DLPdBI7j7GtcJ6fgOGH8ILGgC/xlOaTlADW7+9eeH5x9mdQYWH7Zno7gd8nap4YFe0
-         QnMsabrKXBy6Q5pDdLgLIgBEQI930tex75iCNxyz+QmbmoKC3m6rF1LLdXarfXQg1LzW
-         oiVM+xbxMeCtJ5eA6gbdRUNEcMnxAUgbAzFSNzFomH+dDQzIVwwi1U8Hb1WSrIGT85Sx
-         NetYAkLUIxXK9uO4vmJ5rVXYnggh3KEWRuQc++Krk1ymFfeNxvutPEttk5WYi288WS5Q
-         WsUwmh1CynLl3kClhYMqYNJHTDmq8iYF/IpCzplnrm3p8yuodo2l2TFZdQal14kyH1Gs
-         A1JQ==
-X-Gm-Message-State: AOAM5333R6rzPj/LFtYDc20S0IYct2hfPKC5yN3ADLxKSAyYt+xcGVHs
-        h9RTpAThBp5GoUbwiQiq/9QlGSVRcYE5ThQs/0A=
-X-Google-Smtp-Source: ABdhPJx5o6SjJD6Sr3giZs1kpJ/iEQnMh6yOLpDp+jztp116PA4onXa6gPegmQzAF6j36v7rIaCFiiI6WAkjpYmMEs4=
-X-Received: by 2002:a25:4ac4:: with SMTP id x187mr5580851yba.466.1643290443015;
- Thu, 27 Jan 2022 05:34:03 -0800 (PST)
+        Thu, 27 Jan 2022 08:34:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D647061BE3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF10C340E4;
+        Thu, 27 Jan 2022 13:34:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643290481;
+        bh=fd4J3Q09HA3HgoqBjZYSLSYqtMJ9HcItVk5HZwKUFBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WSPjF8La1fKzn3JBxHgUq74VUI66bXY5zHZU4m8RrxbLYFUsE2i1D8UtQiE1y0w8w
+         LzW/HL7tZqVS8oyvs7b/QYhVL4mAiq9DIDPEcb1eiP/7lDCvqGaLKmAlqUP9TR+Jvk
+         BvuOKa4yOK/Iaf/sGMAD9uScehLzNnHG3oSOAbQoaMUIUcR375WMgZWS28ubHqE7U1
+         vMUunrXFCT/P7LD2LwpuZTVs6xykNh9BT2Ro9ftBflO7J6lHtnoaptqOcBMhJVPlKf
+         R9K/KOyJ5r4ATO1zf6GN0PnyPTmx7bUb2BUytu5QZ05avLo6KVcZPKdI1NitIyqX++
+         CCHy1/GDVQmOw==
+Date:   Thu, 27 Jan 2022 15:34:32 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nico Pache <npache@redhat.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH 5/6] mm: make free_area_init_node aware of memory less
+ nodes
+Message-ID: <YfKfaIssEzcwnnY5@kernel.org>
+References: <20220127085305.20890-1-mhocko@kernel.org>
+ <20220127085305.20890-6-mhocko@kernel.org>
 MIME-Version: 1.0
-References: <20220123091004.763775-1-ztong0001@gmail.com> <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
- <CAJZ5v0h51v9fFrJRuaFpSn7J2UEHndEj0f3zpmw=RvgsvAhtvw@mail.gmail.com>
- <049ccc3a-8628-3e90-a4f4-137a286b6dce@redhat.com> <CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com>
- <994f94b2-61d3-1754-d733-732a0fb47d50@redhat.com>
-In-Reply-To: <994f94b2-61d3-1754-d733-732a0fb47d50@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Jan 2022 14:33:52 +0100
-Message-ID: <CAJZ5v0hXKJhCSKki8JHs+Q=3BWYygDNz9LLAaiVKpDvLPr6-ZA@mail.gmail.com>
-Subject: Re: acpi_get_devices() crash when acpi_disabled==true (was [PATCH v2]
- drm/privacy-screen: honor acpi=off in detect_thinkpad_privacy_screen)
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127085305.20890-6-mhocko@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 2:05 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 1/26/22 18:11, Rafael J. Wysocki wrote:
-> > On Wed, Jan 26, 2022 at 5:41 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> >>
-> >> Hi,
-> >>
-> >> On 1/26/22 16:54, Rafael J. Wysocki wrote:
-> >>> On Wed, Jan 26, 2022 at 2:47 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> >>>>
-> >>>> Hi All,
-> >>>>
-> >>>> On 1/23/22 10:10, Tong Zhang wrote:
-> >>>>> when acpi=off is provided in bootarg, kernel crash with
-> >>>>>
-> >>>>> [    1.252739] BUG: kernel NULL pointer dereference, address: 0000000000000018
-> >>>>> [    1.258308] Call Trace:
-> >>>>> [    1.258490]  ? acpi_walk_namespace+0x147/0x147
-> >>>>> [    1.258770]  acpi_get_devices+0xe4/0x137
-> >>>>> [    1.258921]  ? drm_core_init+0xc0/0xc0 [drm]
-> >>>>> [    1.259108]  detect_thinkpad_privacy_screen+0x5e/0xa8 [drm]
-> >>>>> [    1.259337]  drm_privacy_screen_lookup_init+0xe/0xe85 [drm]
-> >>>>>
-> >>>>> The reason is that acpi_walk_namespace expects acpi related stuff
-> >>>>> initialized but in fact it wouldn't when acpi is set to off. In this case
-> >>>>> we should honor acpi=off in detect_thinkpad_privacy_screen().
-> >>>>>
-> >>>>> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-> >>>>
-> >>>> Thank you for catching this and thank you for your patch. I was about to merge
-> >>>> this, but then I realized that this might not be the best way to fix this.
-> >>>>
-> >>>> A quick grep shows 10 acpi_get_devices() calls outside of drivers/acpi,
-> >>>> and at a first glance about half of those are missing an acpi_disabled
-> >>>> check. IMHO it would be better to simply add an acpi_disabled check to
-> >>>> acpi_get_devices() itself.
-> >>>>
-> >>>> Rafael, do you agree ?
-> >>>
-> >>> Yes, I do.
-> >>
-> >> Did you see my follow-up that that is not going to work because
-> >> acpi_get_devices() is an acpica function ?
-> >
-> > No, I didn't, but it is possible to add a wrapper doing the check
-> > around it and convert all of the users.
->
-> Yes I did think about that. Note that I've gone ahead and pushed
-> the fix which started this to drm-misc-fixes, to resolve the crash
-> for now.
+On Thu, Jan 27, 2022 at 09:53:04AM +0100, Michal Hocko wrote:
+> From: Michal Hocko <mhocko@suse.com>
+> 
+> free_area_init_node is also called from memory less node initialization
+> path (free_area_init_memoryless_node). It doesn't really make much sense
+> to display the physical memory range for those nodes:
+> Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
+> 
+> Instead be explicit that the node is memoryless:
+> Initmem setup node XX as memoryless
+> 
+> Acked-by: Rafael Aquini <raquini@redhat.com>
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-OK
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
-> If we add such a wrapper we can remove a bunch of acpi_disabled checks
-> from various callers.
->
-> > Alternatively, the ACPICA function can check acpi_gbl_root_node
-> > against NULL, like in the attached (untested) patch.
->
-> That is probably an even better idea, as that avoids the need
-> for a wrapper altogether. So I believe that that is the best
-> solution.
+> ---
+>  mm/page_alloc.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 32d0189de4c5..83da2279be72 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7682,9 +7682,14 @@ static void __init free_area_init_node(int nid)
+>  	pgdat->node_start_pfn = start_pfn;
+>  	pgdat->per_cpu_nodestats = NULL;
+>  
+> -	pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+> -		(u64)start_pfn << PAGE_SHIFT,
+> -		end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
+> +	if (start_pfn != end_pfn) {
+> +		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+> +			(u64)start_pfn << PAGE_SHIFT,
+> +			end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
+> +	} else {
+> +		pr_info("Initmem setup node %d as memoryless\n", nid);
+> +	}
+> +
+>  	calculate_node_totalpages(pgdat, start_pfn, end_pfn);
+>  
+>  	alloc_node_mem_map(pgdat);
+> -- 
+> 2.30.2
+> 
 
-Allright, let me cut an analogous patch for the upstream ACPICA, then.
+-- 
+Sincerely yours,
+Mike.

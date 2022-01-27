@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AB549E536
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4610649E539
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242711AbiA0Oxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbiA0Oxp (ORCPT
+        id S236398AbiA0OyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:54:24 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:38468 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232133AbiA0OyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:53:45 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB13C061714;
-        Thu, 27 Jan 2022 06:53:45 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so3209889pjb.1;
-        Thu, 27 Jan 2022 06:53:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+UlMpr+x/00nAZmm+usrq4TzMquXi1OLfmluG293i0c=;
-        b=q5j6Tn6rmBCkDC8N+sqAa8+jOiF5qIusZbX/nfXnYut83R2UZQQgLKHIHzfuYYaBH8
-         pa4n8robOaT87VJr1nt8265/IvV1M1bm+TU1qNt3ku4b3ivRqyXIh/TgRAynAytpTSUA
-         fN6EJsoIuvAUs+T7I4SfT/JH6wt8++vembIX7nVslnpoGb/CaDdPIKoymZ5ccoSPWZ1g
-         kZEwSPeRmw2ow1iX3z+3zSO6BwlGT5/xG4YK66H4mopcJA31oIlnAcJqLnjOVNx58dba
-         ee1oYHVnBgw++IPc5irH1hMyVPt3SWzfIAZUWsn9PFHBJ9AkmznSTXOkhRUmrLWr7iQw
-         X2xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+UlMpr+x/00nAZmm+usrq4TzMquXi1OLfmluG293i0c=;
-        b=aKn1Ult/5tUapEu8bUHseFWOCXO8ySIKAw52aRKBEk7xGEHm0kFxd/HhIiRDJGu7uu
-         bn7rJ5BGDWBdOGubHBlo4D4T77v20eAF2rmjzNhZ7RlGeA5FrTOlSkf84tWd5DZB0XNT
-         Cl66Yy3/Pwa7iS4jiehZG7W9rEc7e/MXM8wHGh64O/T9Uuc3BJQd9KpMjvf1qKD92SHG
-         OrfqoJ22BRR8cee3H51Ul8CIMctnRX2YYsUF38ZqDtH8eTI+Mc5r6ZFxP1KyniQ2uqjm
-         m/LcYSSAaBRj8cTCUvUDaRqtGC99VaqAborsydwSXUCdUqaFNNkwTY3ZE+N2cAIHlPVe
-         QLWw==
-X-Gm-Message-State: AOAM5330IQ8vLAint4vHDJ792UPfCjyle7q0zHXat81MZ6JUTbeaYkgs
-        kN8ISAqMXsAJ1I7rfBbixDE=
-X-Google-Smtp-Source: ABdhPJzrC3NO4OBGtr5IwrF6ZXhjL7MqS+ZnIiSHtgMfbwYivamVnYOWYKOOwsJmX1LZoEsvQ8UgEw==
-X-Received: by 2002:a17:90b:3447:: with SMTP id lj7mr4544092pjb.39.1643295224502;
-        Thu, 27 Jan 2022 06:53:44 -0800 (PST)
-Received: from paju ([116.124.119.85])
-        by smtp.gmail.com with ESMTPSA id y42sm5225308pfw.157.2022.01.27.06.53.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 06:53:44 -0800 (PST)
-Date:   Thu, 27 Jan 2022 23:53:38 +0900
-From:   Dongjin Kim <tobetter@gmail.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: meson-sm1: fix wrong GPIO domain for GPIOE_2
-Message-ID: <20220127145338.GB2417963@paju>
-References: <YfKPSvnFKOaLr74+@anyang>
- <dcb67b4e-6a46-86a6-b21f-99263cc9ff05@baylibre.com>
+        Thu, 27 Jan 2022 09:54:23 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F04DC218DF;
+        Thu, 27 Jan 2022 14:54:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643295261; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v8fWXhbyoXcazfhZo3hv5O1RuBmr1XMNYj+pSAtIS1Q=;
+        b=BgYzEH4XlP9nGQv8GoiDP1R0T9x0TU5+PNYjxGsTuPXTOc0O/MCDbwVDHY1m18+mma9RC3
+        KCzUw6JuwXWyAwkdRqq8NyvfewUFS7+9eOmNp/hPsL4rAwBm7PhrAAn6tNvpqaedYWR+LH
+        u8i3/lyUwVdhDlro16DpS2lfGJWZfRI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643295261;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v8fWXhbyoXcazfhZo3hv5O1RuBmr1XMNYj+pSAtIS1Q=;
+        b=ljw22gscG6ryGrzLVqc+LdSSJVRgkn0lrv1cKXmS5NEDQEZRo+Rzz9zGKUzU9qolDWbW5v
+        jCTRD/SYlTy66zDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C4E3213C03;
+        Thu, 27 Jan 2022 14:54:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r00TLx2y8mFsUAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 27 Jan 2022 14:54:21 +0000
+Message-ID: <7cb8a8a2-718d-6d5c-5de6-05bf990dd479@suse.de>
+Date:   Thu, 27 Jan 2022 15:54:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dcb67b4e-6a46-86a6-b21f-99263cc9ff05@baylibre.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 09/19] dma-buf-map: Add wrapper over memset
+Content-Language: en-US
+To:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        intel-gfx@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-10-lucas.demarchi@intel.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220126203702.1784589-10-lucas.demarchi@intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------qRmQ02gbb1I86kFPwqzaVpbh"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:00:11PM +0100, Neil Armstrong wrote:
-> Hi,
-> 
-> On 27/01/2022 13:25, Dongjin Kim wrote:
-> > GPIOE_2 is in AO domain and "<&gpio GPIOE_2 ...>" changes the state of
-> > GPIOZ_14 connected to INTR of 'RTL8211F' on ODROID-HC and TF_PWR_EN of
-> > 'FC8731' on BPI-M5
-> > 
-> > Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
-> > Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
-> > 
-> > Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
-> >  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi     | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> > index 212c6aa5a3b8..5751c48620ed 100644
-> > --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> > +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> > @@ -123,7 +123,7 @@ vddio_c: regulator-vddio_c {
-> >  		regulator-min-microvolt = <1800000>;
-> >  		regulator-max-microvolt = <3300000>;
-> >  
-> > -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
-> > +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
-> >  		enable-active-high;
-> >  		regulator-always-on;
-> >  
-> > diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-> > index bf29afac645f..d4349b355e4a 100644
-> > --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-> > +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-> > @@ -52,7 +52,7 @@ tf_io: gpio-regulator-tf_io {
-> >  		regulator-max-microvolt = <3300000>;
-> >  		vin-supply = <&vcc_5v>;
-> >  
-> > -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
-> > +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
-> >  		enable-active-high;
-> >  		regulator-always-on;
-> >  
-> > 
-> Thanks for the fixes,
-> can you send 2 patches fixing each files instead ?
-> 
-> Thanks,
-> Neil
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------qRmQ02gbb1I86kFPwqzaVpbh
+Content-Type: multipart/mixed; boundary="------------nI0Yh6km02ArpMTUoS57PPJq";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Lucas De Marchi <lucas.demarchi@intel.com>,
+ intel-gfx@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+Message-ID: <7cb8a8a2-718d-6d5c-5de6-05bf990dd479@suse.de>
+Subject: Re: [PATCH 09/19] dma-buf-map: Add wrapper over memset
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-10-lucas.demarchi@intel.com>
+In-Reply-To: <20220126203702.1784589-10-lucas.demarchi@intel.com>
 
-Sure.
-By the way, I would drop a fix for 'meson-sm1-odroid.dtsi' since I found a
-patch just now.
-https://patchwork.kernel.org/project/linux-amlogic/patch/20220127130537.GA187347@odroid-VirtualBox/
+--------------nI0Yh6km02ArpMTUoS57PPJq
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Thanks,
-Dongjin.
+SGkNCg0KQW0gMjYuMDEuMjIgdW0gMjE6MzYgc2NocmllYiBMdWNhcyBEZSBNYXJjaGk6DQo+
+IEp1c3QgbGlrZSBtZW1jcHlfdG9pbygpLCB0aGVyZSBpcyBhbHNvIG5lZWQgdG8gd3JpdGUg
+YSBkaXJlY3QgdmFsdWUgdG8gYQ0KPiBtZW1vcnkgYmxvY2suIEFkZCBkbWFfYnVmX21hcF9t
+ZW1zZXQoKSB0byBhYnN0cmFjdCBtZW1zZXQoKSB2cyBtZW1zZXRfaW8oKQ0KPiANCj4gQ2M6
+IE1hdHQgUm9wZXIgPG1hdHRoZXcuZC5yb3BlckBpbnRlbC5jb20+DQo+IENjOiBTdW1pdCBT
+ZW13YWwgPHN1bWl0LnNlbXdhbEBsaW5hcm8ub3JnPg0KPiBDYzogQ2hyaXN0aWFuIEvDtm5p
+ZyA8Y2hyaXN0aWFuLmtvZW5pZ0BhbWQuY29tPg0KPiBDYzogbGludXgtbWVkaWFAdmdlci5r
+ZXJuZWwub3JnDQo+IENjOiBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IENj
+OiBsaW5hcm8tbW0tc2lnQGxpc3RzLmxpbmFyby5vcmcNCj4gQ2M6IGxpbnV4LWtlcm5lbEB2
+Z2VyLmtlcm5lbC5vcmcNCj4gU2lnbmVkLW9mZi1ieTogTHVjYXMgRGUgTWFyY2hpIDxsdWNh
+cy5kZW1hcmNoaUBpbnRlbC5jb20+DQo+IC0tLQ0KPiAgIGluY2x1ZGUvbGludXgvZG1hLWJ1
+Zi1tYXAuaCB8IDE3ICsrKysrKysrKysrKysrKysrDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDE3
+IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2RtYS1i
+dWYtbWFwLmggYi9pbmNsdWRlL2xpbnV4L2RtYS1idWYtbWFwLmgNCj4gaW5kZXggMzUxNGE4
+NTlmNjI4Li5jOWZiMDQyNjRjZDAgMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgvZG1h
+LWJ1Zi1tYXAuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L2RtYS1idWYtbWFwLmgNCj4gQEAg
+LTMxNyw2ICszMTcsMjMgQEAgc3RhdGljIGlubGluZSB2b2lkIGRtYV9idWZfbWFwX21lbWNw
+eV90byhzdHJ1Y3QgZG1hX2J1Zl9tYXAgKmRzdCwgY29uc3Qgdm9pZCAqc3INCj4gICAJCW1l
+bWNweShkc3QtPnZhZGRyLCBzcmMsIGxlbik7DQo+ICAgfQ0KPiAgIA0KPiArLyoqDQo+ICsg
+KiBkbWFfYnVmX21hcF9tZW1zZXQgLSBNZW1zZXQgaW50byBkbWEtYnVmIG1hcHBpbmcNCj4g
+KyAqIEBkc3Q6CVRoZSBkbWEtYnVmIG1hcHBpbmcgc3RydWN0dXJlDQo+ICsgKiBAdmFsdWU6
+CVRoZSB2YWx1ZSB0byBzZXQNCj4gKyAqIEBsZW46CVRoZSBudW1iZXIgb2YgYnl0ZXMgdG8g
+c2V0IGluIGRzdA0KPiArICoNCj4gKyAqIFNldCB2YWx1ZSBpbiBkbWEtYnVmIG1hcHBpbmcu
+IERlcGVuZGluZyBvbiB0aGUgYnVmZmVyJ3MgbG9jYXRpb24sIHRoZSBoZWxwZXINCj4gKyAq
+IHBpY2tzIHRoZSBjb3JyZWN0IG1ldGhvZCBvZiBhY2Nlc3NpbmcgdGhlIG1lbW9yeS4NCj4g
+KyAqLw0KPiArc3RhdGljIGlubGluZSB2b2lkIGRtYV9idWZfbWFwX21lbXNldChzdHJ1Y3Qg
+ZG1hX2J1Zl9tYXAgKmRzdCwgaW50IHZhbHVlLCBzaXplX3QgbGVuKQ0KPiArew0KPiArCWlm
+IChkc3QtPmlzX2lvbWVtKQ0KPiArCQltZW1zZXRfaW8oZHN0LT52YWRkcl9pb21lbSwgdmFs
+dWUsIGxlbik7DQo+ICsJZWxzZQ0KPiArCQltZW1zZXQoZHN0LT52YWRkciwgdmFsdWUsIGxl
+bik7DQo+ICt9DQoNCk1heWJlIGFkZCBhbiBvZmZzZXQgcGFyYW1ldGVyIGhlcmUuDQoNCkJl
+c3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gKw0KPiAgIC8qKg0KPiAgICAqIGRtYV9idWZfbWFw
+X2luY3IgLSBJbmNyZW1lbnRzIHRoZSBhZGRyZXNzIHN0b3JlZCBpbiBhIGRtYS1idWYgbWFw
+cGluZw0KPiAgICAqIEBtYXA6CVRoZSBkbWEtYnVmIG1hcHBpbmcgc3RydWN0dXJlDQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+
+--------------nI0Yh6km02ArpMTUoS57PPJq--
+
+--------------qRmQ02gbb1I86kFPwqzaVpbh
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHysh0FAwAAAAAACgkQlh/E3EQov+A3
+ZxAAr5VXWQlRsbS8cSvWZ6EQYkXbTAu3e9bmzCT4dEaTn9l/lcOs50+nU1tOts6eCL57N8BpE6JL
+ALTmdjZ4uTYn5JubCyVECPZmqVH81qPPJoPHoX5moiJon+jcc7YYohAbrTS0nR5MIV/AKucZiY6f
+6SJfryLv6CcKytF+2DP7ebPyneXG5e4nyQC7ar4f839YaXcKkcmsJSFDVI6b3jwpYw7Pvv4uJ/6m
+o8SRUzSq0I+7vvtS0kuQB1SY8RHEMEr1hmw0IO5K15Eu0XIltumaATF5hbe/pikfJZRxNBjoT/6X
+g3alHMsJhKcL4GFpeZzQIhYAhO59zlrTr6GWVxOa+MSXC5K8v0YeGaHwFEMDID30qO5r22Sd+Qya
+8i7ntYy+VdcbdBf0IiLmwAVgRZdfnI1CNeV2Q+TKGAp2YUd+7re9A32gSKoWmy47788MrEzOU2UM
+S8m/xSL2Yftwdczy5UerUUCgjzT9qibXCjRrS9xXW2uUSeQvyO2tv7Mu0qPTTQODwJfVCsZVqxHR
+YKi1a4bc6voQau/OfByZr/hIaQEJzu1N7z5LeIPQsAXTnyr0+MF5T5GKfrrESODLSKl0x1vQwbpF
+6VxFzz/gcIoU0GfoLVBzoaXMdGNswoxbjBT4v3D6iNpNL7GF1MPTDDR506W6BqbfpJe4Hkgp1NsL
+jH8=
+=gmeQ
+-----END PGP SIGNATURE-----
+
+--------------qRmQ02gbb1I86kFPwqzaVpbh--

@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D257C49D78B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A36A49D78D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234623AbiA0Bmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:42:32 -0500
-Received: from mga14.intel.com ([192.55.52.115]:33561 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229816AbiA0Bma (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:42:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643247750; x=1674783750;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BpHj+YBCBBfT/oMrGQIBft5f1zxq7mXZNglyLOshXXM=;
-  b=Buwa5uuVeB87DqnuFHD2fxOmDTmvd+D+1yfcTgDAsPTHg+P5BRJMOQqI
-   cZS1rk7YxzDWUrtPUopqta5olZCrpgwQf46hR6FAdfHxxW1UP6FyH41b7
-   a0kKeDV/odWw6cyP+AXRzoQ0W2yW82WFsSUnHKzDfA1EfSVRr3PDcVjb/
-   cG23W7TPqqelRsa/ywPyrgBa0Ohn2Z3fNjyQdxypZiwCT+tma29CMQkjh
-   OMu9DoKCspKLNUtCD/fGRbaWDMce90DayfyJh49qcNX6j/TalL93vki5H
-   wJI8iKJzbSsJCb8+Wf0YioIyCDDOzygM3AxvWxar2WArYArSjLVzsGyzh
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246933887"
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="246933887"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 17:42:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="696451487"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 17:42:29 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCtnw-000LwR-OA; Thu, 27 Jan 2022 01:42:28 +0000
-Date:   Thu, 27 Jan 2022 09:41:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10
- 981/9999] arch/arm64/kvm/arm.c:1906:6: warning: no previous prototype for
- '_kvm_host_prot_finalize'
-Message-ID: <202201270944.zEo8aC9v-lkp@intel.com>
+        id S234633AbiA0Bnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229816AbiA0Bnj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 20:43:39 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE086C06161C;
+        Wed, 26 Jan 2022 17:43:38 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id e16so1303254qtq.6;
+        Wed, 26 Jan 2022 17:43:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vpuhvi+iwwE/QJLCqCMW57HZ6sTt2qlVnR80Ji3vsVM=;
+        b=goZbK1lgMDEt1j8STF+5AIilnYJGmN8M5PRSuGiZxNDKtwuoeOLQArA75Yt1RerKQf
+         /dODKUbUuQ5QLDeunk3yleLlxCZk/NeF/SNOFSrvOJYK6AKrSlQJAZamgdjEdmHxj7IQ
+         2kNKQd77WGspvToW3glpY3xblvJUZkxAOMtMsJnHgmI3ksnAGXFMnbFMm+ayBl+Co5Ke
+         qTuaa40rNxXs+j4PMYuS6HspjQiC5TlIAINxLNslos5syh29pufftwvhQOsctWaLwQsv
+         HzdVbCFi7oKdhXS4X/TS2sWkEkcT2zuV3bypDRqHtm6YPi3lcDuaz5GVV8kJjif4kfjg
+         GAFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vpuhvi+iwwE/QJLCqCMW57HZ6sTt2qlVnR80Ji3vsVM=;
+        b=Sd+GwC51Qa616WHlLIwY2L79kYkVo1bNP99JGAo6+8D/SIVQctMPetXTDu7F/YaYES
+         yx/SLUUlESaIe+bGGoQGN4+Rwl9O77A1JNuFALipJnnglYTLNCb7Ti9Cc5N2IZ+EF1GV
+         PTs/VujlG1ZfUd9DsV42fhVFJPyTq4gpNvoSIMdd1XNrFmNnsnPHiM6WEdtiyAGP43qx
+         JlIjam1bZVc7V2Lqi8TVkeIcqDddBNsuWmdKZOr53f36fGGuHrZvb/ApPpYmHkofYLkj
+         YxNSkL3JAK5aRjRz5peDKakDCgQscl3S+jnYaQFMKmzAw9h/vJUq2sjb2gQ7ASaUKgqH
+         fbLA==
+X-Gm-Message-State: AOAM530CbipcDWGMTZhJ231CNdCRwWB9tXlyapMJXW42JrfX90MTH3vK
+        DbhUWZ0fKHaNuAld2sOnOQM=
+X-Google-Smtp-Source: ABdhPJxOAWhoCeLNQFvSN1hTBE8eXYygB8AK17n3axEFf2rtfBDS8Cd0TDDOCIlCl5hYFxAJlKQCZg==
+X-Received: by 2002:a05:622a:164a:: with SMTP id y10mr1115976qtj.629.1643247818138;
+        Wed, 26 Jan 2022 17:43:38 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id h189sm597574qkc.35.2022.01.26.17.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 17:43:37 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     james.smart@broadcom.com
+Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] lpfc: Remove redundant 'flush_workqueue()' calls
+Date:   Thu, 27 Jan 2022 01:43:30 +0000
+Message-Id: <20220127014330.1185114-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quentin,
+From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
 
-FYI, the error/warning still remains.
+'destroy_workqueue()' already drains the queue before destroying it,
+so there is no need to flush it explicitly.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10
-head:   b0d13db791b8774617b72c9242a7cf49f67720b2
-commit: 68bd98a28aa622358c73420792329221c86fbe0c [981/9999] FROMLIST: KVM: arm64: Wrap the host with a stage 2
-config: arm64-buildonly-randconfig-r006-20220126 (https://download.01.org/0day-ci/archive/20220127/202201270944.zEo8aC9v-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/68bd98a28aa622358c73420792329221c86fbe0c
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10
-        git checkout 68bd98a28aa622358c73420792329221c86fbe0c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+Remove the redundant 'flush_workqueue()' calls.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kvm/arm.c:1906:6: warning: no previous prototype for '_kvm_host_prot_finalize' [-Wmissing-prototypes]
-    1906 | void _kvm_host_prot_finalize(void *discard)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/_kvm_host_prot_finalize +1906 arch/arm64/kvm/arm.c
-
-  1905	
-> 1906	void _kvm_host_prot_finalize(void *discard)
-  1907	{
-  1908		WARN_ON(kvm_call_hyp_nvhe(__pkvm_prot_finalize));
-  1909	}
-  1910	
-
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/scsi/lpfc/lpfc_init.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index a56f01f659f8..f49ff18cb252 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -8546,7 +8546,6 @@ static void
+ lpfc_unset_driver_resource_phase2(struct lpfc_hba *phba)
+ {
+ 	if (phba->wq) {
+-		flush_workqueue(phba->wq);
+ 		destroy_workqueue(phba->wq);
+ 		phba->wq = NULL;
+ 	}
+-- 
+2.25.1
+

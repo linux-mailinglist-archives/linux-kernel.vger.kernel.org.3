@@ -2,174 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5593949DB8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E80949DB8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbiA0H3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:29:02 -0500
-Received: from mail-sn1anam02on2064.outbound.protection.outlook.com ([40.107.96.64]:27715
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230389AbiA0H27 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S233963AbiA0H3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:29:00 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35382
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230054AbiA0H27 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 02:28:59 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EMEqVHbSCV+q2yGrw1K/LUpV52pUqBRajxDfRVj4cqfkCvk230TbXEkcWZzimJYKYUC1CjN1BBEtLJO1LGNMnTRp40LRk8tpTG5DAOs1W9lo6yG4IokaFLsInKq6GaIWp13vtkbfTIQEnxDkLeqsZ4gJY34rdNkFxOTcQy+dBLAUSeQwuIzGM2IC8pySKrF4H0ZN8aUSk0XK3v9T8SP47H1suTK3xq4atcbaswg+AkOp0DUdsVemqwtofNYZTqVcEgYaEXPuklPGWqv+Va/jziFxhPCGV2n1SismTXW6lgRYVl7US5VMTb/weQIw36R/dJtiLeJ6Se/5XU8Li3nK7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TntMRdGjYWPiqymQRjLf/DoDGgmnjiCSbSotezKpyVQ=;
- b=cSEUCH1jnhBrzyCsrSKFNHeLpdkAMQReX9TmCbbxty1wJjic51TJPb7Zh8e4e7Lxai6EA21zk+ab3skdC4TQcdBRavGijtmqE2EYP0Ppz5OQO1s3byELlou7Q9iWh0AhSXGbbYNq1V7XFPc0C9C9X5OzG6EToNoM9Jk1bzmvKHUS2k8/KVulbR5NtxTWbzBi3S8Auyi83UngTaEldUnWd+Pjp2oITynvxdurxH5QsyNqH4fTAqZQw1+DXZ9JDWcnvYmW0Kc9+1asTZWn0Lfbzu0I3lw03b6ep0v/SgyjxQyDwPcFbaIWueLpL85ruWVM4ZKUZ6P/OJVvUT38+gU00w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TntMRdGjYWPiqymQRjLf/DoDGgmnjiCSbSotezKpyVQ=;
- b=X7DxzkLTs12rTd4jFXmhTCmEYlbV2ORK+9gO38QG5ZXj0kPelCeltKH5zXcIhpAyyZjA8mW+Hj6WuAgDTNNhwErPO8f1vDiG/dbptJvBQ8zDkjibMnit6AOe2p0nWQ9KapRrzphfHL7AQngTQc72YwQyB3Bo1O3jXWCoZVf2iQA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (20.178.210.205) by
- DM6PR12MB2603.namprd12.prod.outlook.com (20.176.116.84) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4930.15; Thu, 27 Jan 2022 07:28:57 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d8e7:e6b0:d63c:4a21]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d8e7:e6b0:d63c:4a21%5]) with mapi id 15.20.4909.019; Thu, 27 Jan 2022
- 07:28:57 +0000
-Message-ID: <a90a0817-07b0-dd11-1bd2-236ca046821d@amd.com>
-Date:   Thu, 27 Jan 2022 08:28:51 +0100
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 210C63F1D9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643268538;
+        bh=T0Cao9EYbGyGDdTGcr1ndXwb9FVrHnyvN3eX07tx2XQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Y714sbpD24iFULa9Qa+qGGI6rS4lQFEljp7Qrkmg8mIqnJxg51tkN8wfVC+VVTZg0
+         y+Zs4fPW2wAHxXaDsEZLp3gFisvzMPTook5z7aLTDlOPRRCkcqTEVDmOXsml85ysm0
+         xtwO77/BIGnpNylQRKMotayqcWln+0j9zGuC2Eh54Nne01LNw3GitSCyRnFEGKf4iL
+         LcgmFn0ZrNhf8ElvySxmAoUnODIkEM6TA67MQjoh6ePSuc+6C9GrlUMBj9crqaJVzc
+         J99sXkojApKJa4lgij3GDpCafu5vVPG3OjOiZda9/tgna7u5yheBZ50jDqOy1D7SwL
+         4JMGgGtqgp3iA==
+Received: by mail-wr1-f71.google.com with SMTP id r27-20020adfb1db000000b001d7567e33baso698976wra.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:28:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T0Cao9EYbGyGDdTGcr1ndXwb9FVrHnyvN3eX07tx2XQ=;
+        b=X/28dpZKh2H/gOQt2vosXZyTASyQG4M2ayNyATatJuxAwL/PXmfb480q3MZRcwgMNe
+         giD0xf4ytw2PF2DDcQ0mN5G3nhPdQb2bqQrs9+s83LejgFPyflG9VtJj7pKJCF/zPY8c
+         V328yRHXjcc+sqni7XW6ZxrSEMRHn6RvqtICPF4PYf94n2vJouatTRI/kkEo2hFEwwWH
+         WloDIfG3PVwYHe7lYmgXHOr5JGnLrWYKBEfOCk4kyB5D7TtwzBgHtt/fAUC4jtfeMMKO
+         HI4v1A67IX4YM/Bf6WQy8AiW/vCqIOBwQx9lAntjDJu9GX1YBvOqUHQs1CtwZwRDxygr
+         cwBQ==
+X-Gm-Message-State: AOAM531tDnA4Itei3uqhl1u37Htp3u25LJTHHOsXPLOmdKBXbUM4WZP/
+        uWi+l+TGPK6MKVLyUW0fzf5C6+pJrwuVXo84zSa12uh4eHmC8E+shv+rBT0KFyEzmiC9Brnq9nM
+        8xyQiTx6aBL1GvTOVvD2EelbjeUCFq0GXUXnQi+Z+Ew==
+X-Received: by 2002:a5d:4709:: with SMTP id y9mr1845698wrq.613.1643268537775;
+        Wed, 26 Jan 2022 23:28:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwqClftY3Y8SR9yE9omjRxWnvEsOEI2w7cS7ER6+j2GDHexFol/gUHicZH4VStQR13iFWf6tg==
+X-Received: by 2002:a5d:4709:: with SMTP id y9mr1845674wrq.613.1643268537569;
+        Wed, 26 Jan 2022 23:28:57 -0800 (PST)
+Received: from [192.168.0.62] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id g5sm1740182wri.108.2022.01.26.23.28.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 23:28:57 -0800 (PST)
+Message-ID: <f0bd9681-c87b-a6bf-09af-05e45b0b9707@canonical.com>
+Date:   Thu, 27 Jan 2022 08:28:56 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 09/19] dma-buf-map: Add wrapper over memset
+Subject: Re: [PATCH] ASoC: dt-bindings: Centralize the 'sound-dai' definition
 Content-Language: en-US
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        intel-gfx@lists.freedesktop.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
- <20220126203702.1784589-10-lucas.demarchi@intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220126203702.1784589-10-lucas.demarchi@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM6P191CA0087.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:209:8a::28) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c5c42e0e-2ba6-49eb-659f-08d9e166ade0
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2603:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB2603FDD17F5121F16B5AF90C83219@DM6PR12MB2603.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yngiQnHTPVYvyIZ7pcvxNjxOzGhoJCVPdPCTA09AeG5Q25Z6++MSiXQm3M22z+xJv7FlRuAqQN4zjmHDIEKoKUEeL3vCmcYPFze/b4sCyJ0v3DVLrCG7QlsvFztlj0m7oE30dnNgL8JWfH+BB7d+fx7mCFmswiXctDKp9d8IJKXmEn1XI40thLixW6nY20tborDao8AkGzk+WNKJVtda0VPOoGYnqHNWvOiy00IrdgD/uWRVsIKjplgvNSOHvLTTIhO4ygrDggKsMcLN35fLA517XDIxP/MVTvFZY6JmrTZkNhndVG0aa/MlBuzY2CUvvFWXdE3LpxgCPu4tsf/r0MK0TzXMDmzINvxMoC7DoUhGxezLnLBO6uneIuasOVnCRJT/UOxTNIvMQH24edAcDAmS0P80Vq2wMrgxrFVNCk5cBvtmfnIerlVu0YkL536lqv01AMzIWR7zGBcBXi2B+sDy+AvCBUm/qRo5U2s1fsGMmvqCA8k6iVjpOlAggyMg9PRjsIl7NK1N6aORUptbAViRo1DxrIeWxZHtKiazMLHCV6mIGseIHPKbpEdulJEhKhLZrHtQLWasQMlm7vpzqLoXVkECv/SKBWSPYzX22pCmKbLOHN9wl+agr/55YdjKwK0rGM6GY6MmVy9F2Cw4LJ24gvtWk1GK8H7zfUsl8QYLLP100nFD4epxaN1j2B/KD6bxuAji4G53ZtdlvzeleRaOC3n6dp2uNciOWZ19GUIcGEUHm6aNsPtZfb0lVM9f
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(38100700002)(5660300002)(66946007)(31696002)(2906002)(66476007)(8936002)(8676002)(316002)(66556008)(6666004)(31686004)(86362001)(4326008)(508600001)(2616005)(83380400001)(6512007)(26005)(6506007)(6486002)(36756003)(186003)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SmtQSjRiYVRtY2s4Wk5wSGRqTXdudUEyZHVWYmlkWWVTQ2s3VXk2Qi8vdzRX?=
- =?utf-8?B?L1FRQW1JVU9ZU25Rc0RPSkFCeVBEclFOS1hsb0hiRSsxVFpCd0ZXZHB6RzQv?=
- =?utf-8?B?dHlMd0luYlJZUGRoaXgxOGF2WElqTi8yTTRseUc0b0ltMFNvd0FCbzUyRkZ3?=
- =?utf-8?B?NGEwNjJRajdQSGRGL20wZjNFWnRaZzRzVHZEbDFTdS82L0RMaSs2MUhCRFFI?=
- =?utf-8?B?a1U4dXpTSG9EdjV0cmxpL0QyRndSZEFONm5OWXE5SkxONTVoeVJEZWJIWFh4?=
- =?utf-8?B?UW9hREU2OWNEUEFuT1BZNEgydnZ5OTNQUjBCOEtwSkE2TTVlc3g2SWcxYkNF?=
- =?utf-8?B?UktDTnpwSktLZjBMQnVodldPM29BUi81Q0g0T25lZzhscStTdjVUS3pkMFlw?=
- =?utf-8?B?Z1hBcjREQVRrVEo3cFlTYnlYeU5IZGc1ZWxHWk5ZNnlvTHBqaW5WUDhkbmlX?=
- =?utf-8?B?Y3hFUkdrUDJjbkE5RHpSTCtyQ0hJNitVUlY0OFZNNlMwTlJuMy9RU3JZNzNs?=
- =?utf-8?B?QjRRN2xJOVJuTUsxVXpaQjBCZUt2TndhMmRJZUZCZWZ6VnJxTGhRcERwaUpv?=
- =?utf-8?B?OWNuYW12TVg2a3k5UjR0K050NEFBTW5zcDhHQ0F0WFR3N0xyRHhta1hPbjZm?=
- =?utf-8?B?d0UxRzBzSURNbjlMcUp1VE51MWZ4cDFrVHJTVXNNVXdIWU9Rb1FHd1BuUGpX?=
- =?utf-8?B?blpTMTNvYmJ6enNKdlUyT3NFUEY3VVVmQ3lnbW13S1VLSXd1RVpndVVUc3Rh?=
- =?utf-8?B?VHhhL2hYYVc0ZnJPYmhibU1iRytPNHh6Z2pWMmJIVlI0N05tOVhFTVR5ajBT?=
- =?utf-8?B?SGJQMFQ3aGZjeC90NVJCWFNZdSsvTTlneSsxdy9IK3puSmJhWTkrdERnalVl?=
- =?utf-8?B?L1V1MDhORmVwOW5rWUFtc3dtL2xHemt1RDRwWjVKcVZ6TXlqUk9zdkl4Nmtj?=
- =?utf-8?B?a2FseFZScVBWRFFWay9vQWg5OFM5cEs4eXFLNEFNMTYzeWZSYnd1Y0ZiMmZa?=
- =?utf-8?B?OHEwdzBBMGl5RVJIV0p4TWtTcGpPcWVmV2VpeHJoTm9tNmR0VGQ5VnMxY2JF?=
- =?utf-8?B?b3BHK041NXlaS293TEIrQ0JEeS9odWRvK1VuMDROSEI5M3VodUNoTEJWakRp?=
- =?utf-8?B?bXlzOXFONVRMYmZvTktYWE9yRlZyYU9QZzFwaC91aFFFTk5leFFiSDFtdkxu?=
- =?utf-8?B?ajJ2RTlrUUlnRFpyY0wwTVdNQjRpS1J0MXAwdktBcXlzSGxTUCtaMlZ4ZGZM?=
- =?utf-8?B?SzlONU1KQW9DQTJzN0JkcjVLU09tTVJ5dkxDYTRoSUJCZDBNM2x6ZmVRK3Ni?=
- =?utf-8?B?WGVkTHh1WkREYmFOWCtQYVhzSkNPZkJlOVlIZ2Fmb1Vwb2IvVWZjSFBmVlVU?=
- =?utf-8?B?WG02U0RhdFNsbWVPT1VKcExFWFpmM1hwRGdxbFAxc1F6d2hNRXBUUzRYVW5J?=
- =?utf-8?B?M3N6NEVsU1NwVVpyRmRqOFdFdFZHelFVRU1EdHNyTW5EQzF4VldGakdxNk1E?=
- =?utf-8?B?WVpMTkcyeklwU2JvTVJJc2pYb0NRbHJuS2gwSnZPNkNyN2dSeHBSbW8yby8z?=
- =?utf-8?B?SjhhZGRycGNLUnp4a2VOaG9RZGVvMFlRVUhsenJUYWoyM2VoRE1rS2ZzS1Bt?=
- =?utf-8?B?Y29uN1dGWlNFWkZMVDRxei9KZGpUSkd2MkJMNEV4YzY0ZGR1UmFVTHp4aFBy?=
- =?utf-8?B?eVhmY21mQjJtUGZsTExFcjdCSDRZbXNzTlh2dW1NNFV0eDZ1aG1VWG1NcjZP?=
- =?utf-8?B?VndGZGo5NmlWT2NyYmJNNHZtZUlUQzJyMysydHFncHpnM1VZQXVQZ0JlSjVa?=
- =?utf-8?B?dWU5b1pJL3JNdEsyY2hkYjhYb1ZzRlZNUU1KZEpIdGRldmhyelo1ODgzTU91?=
- =?utf-8?B?MC9QU28xSTBoWThQeHB4QkI0QUhselB3Nmh2a08zKzZEcmF5aHFHenhRZzA2?=
- =?utf-8?B?MEo0aS9KdTFES0FEV3MvWDh1ZC9tT2NhcEtpQmdRclF4RzhoeVFFekxOaFFm?=
- =?utf-8?B?eENhN2c5dGFMUWJvV2JXckh4bStrdkJ0YWlRZlBLZk1Vd3gxRkZ2YlpIYkQx?=
- =?utf-8?B?U1QzUS9ObGM5cFl5OWZjUThRdXljaHhtV2ltbjBuS1E3NkczcmNuenVmZnUr?=
- =?utf-8?Q?ri7U=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5c42e0e-2ba6-49eb-659f-08d9e166ade0
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 07:28:57.1588
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fJtacokKJuWFriPYq1m5zRyYb3FVEheZa+6u7AVytTQcVHKfc72gQHKUlfYhhcHm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2603
+To:     Rob Herring <robh@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rohit kumar <rohitkr@codeaurora.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jonathan Bakker <xc-racer2@live.ca>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+References: <20220126231427.1638089-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220126231427.1638089-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
-> Just like memcpy_toio(), there is also need to write a direct value to a
-> memory block. Add dma_buf_map_memset() to abstract memset() vs memset_io()
->
-> Cc: Matt Roper <matthew.d.roper@intel.com>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: Christian König <christian.koenig@amd.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+On 27/01/2022 00:14, Rob Herring wrote:
+> 'sound-dai' is a common property, but has duplicate type definitions.
+> Create a new common definition to define the type and then update all
+> the other occurrences to just define how many entries there are just
+> like other phandle+arg properties.
+> 
+> The constraints on the number of entries is based on the examples and
+> could be wrong.
+> 
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   include/linux/dma-buf-map.h | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
->
-> diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
-> index 3514a859f628..c9fb04264cd0 100644
-> --- a/include/linux/dma-buf-map.h
-> +++ b/include/linux/dma-buf-map.h
-> @@ -317,6 +317,23 @@ static inline void dma_buf_map_memcpy_to(struct dma_buf_map *dst, const void *sr
->   		memcpy(dst->vaddr, src, len);
->   }
->   
-> +/**
-> + * dma_buf_map_memset - Memset into dma-buf mapping
-> + * @dst:	The dma-buf mapping structure
-> + * @value:	The value to set
-> + * @len:	The number of bytes to set in dst
-> + *
-> + * Set value in dma-buf mapping. Depending on the buffer's location, the helper
-> + * picks the correct method of accessing the memory.
-> + */
-> +static inline void dma_buf_map_memset(struct dma_buf_map *dst, int value, size_t len)
-> +{
-> +	if (dst->is_iomem)
-> +		memset_io(dst->vaddr_iomem, value, len);
-> +	else
-> +		memset(dst->vaddr, value, len);
-> +}
-> +
+> Please ack, this depends on commit abf0fee97313 ("dt-bindings: Improve
+> phandle-array schemas") in my tree.
+> ---
+>  .../bindings/sound/amlogic,gx-sound-card.yaml |  4 ++--
+>  .../bindings/sound/google,sc7180-trogdor.yaml |  6 ++++--
+>  .../bindings/sound/imx-audio-card.yaml        |  7 +++++--
+>  .../bindings/sound/qcom,sm8250.yaml           | 10 +++++++---
+>  .../bindings/sound/samsung,aries-wm8994.yaml  |  5 +----
+>  .../bindings/sound/samsung,midas-audio.yaml   |  2 --
+>  .../bindings/sound/samsung,odroid.yaml        |  9 +++------
+>  .../devicetree/bindings/sound/sound-dai.yaml  | 20 +++++++++++++++++++
+>  8 files changed, 42 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/sound-dai.yaml
+> 
 
-Yeah, that's certainly a valid use case. But maybe directly add a 
-dma_buf_map_memset_with_offset() variant as well when that helps to 
-avoid patch #2.
 
-Regards,
-Christian.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
->   /**
->    * dma_buf_map_incr - Increments the address stored in a dma-buf mapping
->    * @map:	The dma-buf mapping structure
 
+Best regards,
+Krzysztof

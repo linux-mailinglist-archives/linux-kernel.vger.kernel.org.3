@@ -2,123 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8821349E062
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB7149E067
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbiA0LOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:14:40 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:42942
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233389AbiA0LOj (ORCPT
+        id S240053AbiA0LPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:15:23 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51374 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233389AbiA0LPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:14:39 -0500
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 958113F1CD
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:14:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643282077;
-        bh=ei0q12+pTEkVCSC3KLPxXTL3wN1Kz2V2e0OB+SXoUME=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ZVHblktjtJb4zmm6qxwYNHV/E7IVKctDR0Xi8qhJjDB9XxuUw2/ozucX3kxsw+ncb
-         Y3Xc0KKMAhz22VhYK8dx0SRyyzxfVrErXNb1H/9QWMDfBI1xxUkWFCrZ3DtQU3DdmP
-         mLAklBFPcsfBWrffkhFrObBGbJtGYvbWSwjvvB85emFAp/8e9N8tpy8jV/9sJS2nv1
-         bU6LBlOPog3l8BC4T0Ws5kkL2idbGUyURXVgFHZ89pUONKQHgpiUuWfcHKZLR6b+tK
-         1/+oKNm7LzK8Ftw3lL71MkqcG/Q4o0O5mCp9dJ89Kz3WIXKr5EpehGLeb0LjG/oVWU
-         orjXazh0AY2Gw==
-Received: by mail-ot1-f70.google.com with SMTP id m23-20020a9d6457000000b0058f6f926cabso1427574otl.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:14:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ei0q12+pTEkVCSC3KLPxXTL3wN1Kz2V2e0OB+SXoUME=;
-        b=Hr7RoffzJu8MBCdULEGQes+BpHk87snNXMgXs4W4uFTHHkbEm4hxeSIiUsNREjvj+G
-         aWMnf6Id1iv4tr9sClLTEIFFQXpm1oqqctSnERFHYGUaYFkv1Zwh0Q8US7bHOhnm7O9m
-         thK/aUCprHvPkNzRvaimxYBP1JE7o/1EXEXOJGix8+9FAk5pyeOZf5iyjWOUD9Ajq271
-         BSI/ml6f9+dV3NcGZbswDZ2GC4npluyG5Gfk5fZHn//dvSxfAAVEPxccK0SkyRY8Esed
-         9nF+0Z1axT2tkmqxMFqet2NXak7Z+LCABcDtTrGoF/18jJ5wa/AY7CYHEDL94eNA76nG
-         SaQw==
-X-Gm-Message-State: AOAM533vHl00JpJl041KS0iEsxPbIa1vPza1gA1JV1MUFbVynEFKz+xf
-        /4zqlICCkxM0wJ6A49jkqmRlhUFKK/54yyxEYurP9bXNkMtcRTDScigy8XL3v64Vnt0c6foaLZ0
-        jdo+AVGzcN9+u5SIV30/3YlmgS2bjTZwM7O+ZirZ5H2d3CWUj617EYE8TzA==
-X-Received: by 2002:a05:6808:179e:: with SMTP id bg30mr1968527oib.57.1643282076598;
-        Thu, 27 Jan 2022 03:14:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwxEE5Ap4FJ4cUst9yvbfsRQokijydzPA6OcoO6QyYWtnn1PDvaX7TZkZkLGBEICFTLx1JnuD/+0yw+QuDnNaE=
-X-Received: by 2002:a05:6808:179e:: with SMTP id bg30mr1968509oib.57.1643282076282;
- Thu, 27 Jan 2022 03:14:36 -0800 (PST)
+        Thu, 27 Jan 2022 06:15:22 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 87E5F1F4508E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643282121;
+        bh=lPBbkFX/VxEnKHj3FJ/pw/Em27NywQUGj2yt/sKz3GM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=VBr8OTzitfSr7ZA14ETCD9IX13ZKRLsa4UvjsGOg5i1PbyjX6Z7jDTuUQ12ti8Z7V
+         HQSbSGxt4ReNXMMfSPFsBLKPDSuXEJUfEK68FVQFyxOPQgmY38Y8vTCgQY3VEZ5UrN
+         lzbPZ/ssyHtq8oRiFDiMVZX+CZMO9XVVTjc3GVUEa1ym/uQJ97uwMoMXOuFKPgF7nu
+         PPJ+w7CDIA3pFHU/DjoDIuWGl11O291Bk6TLcUdzcgm8N5dNEIr4UQTODPqFkLet8L
+         ChiCzUizmOxwTYtWeI+uKEhAsFsnejt1EuNKLTFWnJi9SJ795XLq9vjhYcr79gCjug
+         5AvSH1Rslii8w==
+Subject: Re: [PATCH v4 27/35] iommu/mediatek: Remove mtk_iommu.h
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
+        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, libo.kang@mediatek.com,
+        chengci.xu@mediatek.com
+References: <20220125085634.17972-1-yong.wu@mediatek.com>
+ <20220125085634.17972-28-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <8e1847d0-7c6f-b022-999b-666cb90e9931@collabora.com>
+Date:   Thu, 27 Jan 2022 12:15:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20220127025418.1989642-1-kai.heng.feng@canonical.com> <0259955f-8bbb-1778-f234-398f1356db8b@linux.intel.com>
-In-Reply-To: <0259955f-8bbb-1778-f234-398f1356db8b@linux.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 27 Jan 2022 19:14:25 +0800
-Message-ID: <CAAd53p6+KPAJchh9Jx59Fkkj5FidSxsW0yHjLqooFjvu-Y9u7w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
- ready, L2 and L3 state
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Russell Currey <ruscur@russell.cc>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220125085634.17972-28-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 3:01 PM Lu Baolu <baolu.lu@linux.intel.com> wrote:
->
-> On 2022/1/27 10:54, Kai-Heng Feng wrote:
-> > Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
-> > hint") enables ACS, and some platforms lose its NVMe after resume from
-> > S3:
-> > [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
-> > [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
-> > [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
-> > [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
-> > [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
-> > [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
-> > [   50.947843] nvme nvme0: frozen state error detected, reset controller
-> >
-> > It happens right after ACS gets enabled during resume.
-> >
-> > There's another case, when Thunderbolt reaches D3cold:
-> > [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> > [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> > [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> > [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> > [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
-> > [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
-> > [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
-> > [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
-> >
-> > So disable AER service to avoid the noises from turning power rails
-> > on/off when the device is in low power states (D3hot and D3cold), as
-> > PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
-> > transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
-> > with aux power) and L3 (D3cold).
-> >
-> > Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=209149
-> > Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=215453
-> > Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
->
-> I don't know what this fix has to do with the commit 50310600ebda.
+Il 25/01/22 09:56, Yong Wu ha scritto:
+> Currently there is only compare_of/release_of/a suspend structure in the
+> header file. I think it is no need to keep a header file only for these.
+> Move these into the c file and rm this header file.
+> 
+> I think there should be a common helper for compare_of and release_of.
+> There is many copy in drm, it should be another topic.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>   drivers/iommu/mtk_iommu.c    | 25 ++++++++++++++++++++-
+>   drivers/iommu/mtk_iommu.h    | 42 ------------------------------------
+>   drivers/iommu/mtk_iommu_v1.c | 21 +++++++++++++++---
+>   3 files changed, 42 insertions(+), 46 deletions(-)
+>   delete mode 100644 drivers/iommu/mtk_iommu.h
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 80c1e5a75868..f88c7bb235bf 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/io.h>
+>   #include <linux/iommu.h>
+>   #include <linux/iopoll.h>
+> +#include <linux/io-pgtable.h>
+>   #include <linux/list.h>
+>   #include <linux/mfd/syscon.h>
+>   #include <linux/module.h>
+> @@ -30,7 +31,7 @@
+>   #include <asm/barrier.h>
+>   #include <soc/mediatek/smi.h>
+>   
+> -#include "mtk_iommu.h"
+> +#include <dt-bindings/memory/mtk-memory-port.h>
+>   
+>   #define REG_MMU_PT_BASE_ADDR			0x000
+>   #define MMU_PT_ADDR_MASK			GENMASK(31, 7)
+> @@ -166,6 +167,17 @@ struct mtk_iommu_iova_region {
+>   	unsigned long long	size;
+>   };
+>   
+> +struct mtk_iommu_suspend_reg {
+> +	u32			misc_ctrl;
+> +	u32			dcm_dis;
+> +	u32			ctrl_reg;
+> +	u32			int_control0;
+> +	u32			int_main_control;
+> +	u32			ivrp_paddr;
+> +	u32			vld_pa_rng;
+> +	u32			wr_len_ctrl;
+> +};
+> +
+>   struct mtk_iommu_plat_data {
+>   	enum mtk_iommu_plat			m4u_plat;
+>   	u32					flags;
+> @@ -219,6 +231,17 @@ struct mtk_iommu_domain {
+>   	struct mutex			mutex; /* Protect "data" in this structure */
+>   };
+>   
+> +/* TODO: A common helper is expected. */
+> +static inline int compare_of(struct device *dev, void *data)
+> +{
+> +	return dev->of_node == data;
+> +}
+> +
+> +static inline void release_of(struct device *dev, void *data)
+> +{
+> +	of_node_put(data);
+> +}
+> +
 
-Commit 50310600ebda only exposed the underlying issue. Do you think
-"Fixes:" tag should change to other commits?
+Since it's just one line, at this point you should also open-code these,
 
-> Commit 50310600ebda only makes sure that PCI ACS is enabled whenever
-> Intel IOMMU is on. Before this commit, PCI ACS could also be enabled
-> and result in the same problem. Or anything I missed?
+as in you can then remove the two helper functions entirely.
+So, please do that.
 
-The system in question didn't enable ACS before commit 50310600ebda.
+>   static inline int mtk_iommu_bind(struct device *dev)
+>   {
+>   	struct mtk_iommu_data *data = dev_get_drvdata(dev);
+> diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
+> deleted file mode 100644
+> index d332f9769f83..000000000000
+> --- a/drivers/iommu/mtk_iommu.h
+> +++ /dev/null
+> @@ -1,42 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - * Copyright (c) 2015-2016 MediaTek Inc.
+> - * Author: Honghui Zhang <honghui.zhang@mediatek.com>
+> - */
+> -
+> -#ifndef _MTK_IOMMU_H_
+> -#define _MTK_IOMMU_H_
+> -
+> -#include <linux/device.h>
+> -#include <linux/io.h>
+> -#include <linux/io-pgtable.h>
+> -#include <linux/iommu.h>
+> -#include <linux/spinlock.h>
+> -#include <soc/mediatek/smi.h>
+> -#include <dt-bindings/memory/mtk-memory-port.h>
+> -
+> -struct mtk_iommu_suspend_reg {
+> -	union {
+> -		u32			standard_axi_mode;/* v1 */
+> -		u32			misc_ctrl;/* v2 */
+> -	};
+> -	u32				dcm_dis;
+> -	u32				ctrl_reg;
+> -	u32				int_control0;
+> -	u32				int_main_control;
+> -	u32				ivrp_paddr;
+> -	u32				vld_pa_rng;
+> -	u32				wr_len_ctrl;
+> -};
+> -
+> -static inline int compare_of(struct device *dev, void *data)
+> -{
+> -	return dev->of_node == data;
+> -}
+> -
+> -static inline void release_of(struct device *dev, void *data)
+> -{
+> -	of_node_put(data);
+> -}
+> -
+> -#endif
+> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+> index b762a05328d4..23c3bc175153 100644
+> --- a/drivers/iommu/mtk_iommu_v1.c
+> +++ b/drivers/iommu/mtk_iommu_v1.c
+> @@ -7,7 +7,6 @@
+>    *
+>    * Based on driver/iommu/mtk_iommu.c
+>    */
+> -#include <linux/memblock.h>
+>   #include <linux/bug.h>
+>   #include <linux/clk.h>
+>   #include <linux/component.h>
+> @@ -28,10 +27,9 @@
+>   #include <linux/spinlock.h>
+>   #include <asm/barrier.h>
+>   #include <asm/dma-iommu.h>
+> -#include <linux/init.h>
+> +#include <dt-bindings/memory/mtk-memory-port.h>
+>   #include <dt-bindings/memory/mt2701-larb-port.h>
+>   #include <soc/mediatek/smi.h>
+> -#include "mtk_iommu.h"
+>   
+>   #define REG_MMU_PT_BASE_ADDR			0x000
+>   
+> @@ -87,6 +85,13 @@
+>    */
+>   #define M2701_IOMMU_PGT_SIZE			SZ_4M
+>   
+> +struct mtk_iommu_suspend_reg {
+> +	u32			standard_axi_mode;
+> +	u32			dcm_dis;
+> +	u32			ctrl_reg;
+> +	u32			int_control0;
+> +};
+> +
+>   struct mtk_iommu_data {
+>   	void __iomem			*base;
+>   	int				irq;
+> @@ -110,6 +115,16 @@ struct mtk_iommu_domain {
+>   	struct mtk_iommu_data		*data;
+>   };
+>   
+> +static inline int compare_of(struct device *dev, void *data)
+> +{
+> +	return dev->of_node == data;
+> +}
+> +
+> +static inline void release_of(struct device *dev, void *data)
+> +{
+> +	of_node_put(data);
+> +}
+> +
 
-Kai-Heng
+....And the same comment applies here too.
 
->
-> Best regards,
-> baolu
+>   static inline int mtk_iommu_bind(struct device *dev)
+>   {
+>   	struct mtk_iommu_data *data = dev_get_drvdata(dev);
+> 
+
+
+

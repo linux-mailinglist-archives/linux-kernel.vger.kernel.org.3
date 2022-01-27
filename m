@@ -2,226 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C5649D6BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E3A49D6C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiA0Aas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:30:48 -0500
-Received: from mga04.intel.com ([192.55.52.120]:1815 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230248AbiA0Aar (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:30:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643243447; x=1674779447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vGPJ+QXF3m4aGQpAZFqmKD5MYgp0/7v7TQGixCfkWUo=;
-  b=TxCHMtjFRtyhxs8VlnI4i5xu/rP+cGksxUgDKN1MjwbDhR4S1tsKwVgW
-   GbDMSfa3FKUmO4EeojiYb/PXm6XrG26UhHugOW5JkYqu/AetwEy6v5PcW
-   Hl9woBLmbvdSyvA+aGswG8FHRSdJB9WAHH2cQJJWVK8qhSV7Sgzh7wOPW
-   Gw1Ry1JusmjQzlaUFTYRfFixCLDvgOd9hUgpuyhk4PWt//tFRKQI3rD76
-   3DkZ0yXa5b2K1opUj3qCNabDSmxdEsM3PF41lHoOEEbSIoR/3ljE+HyG9
-   UFY6yWPn9juk1ygQ8ccQut+5AF8Z7pNcsM9MBvPLphtgvTh3fXgdA55Er
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245536593"
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="245536593"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 16:30:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="563592516"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 16:30:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCsgE-000Lqz-B7; Thu, 27 Jan 2022 00:30:26 +0000
-Date:   Thu, 27 Jan 2022 08:29:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonghyeon Kim <tome01@ajou.ac.kr>, dan.j.williams@intel.com
-Cc:     kbuild-all@lists.01.org, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, akpm@linux-foundation.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Jonghyeon Kim <tome01@ajou.ac.kr>
-Subject: Re: [PATCH 2/2] dax/kmem: Update spanned page stat of origin device
- node
-Message-ID: <202201270836.H8feaOM9-lkp@intel.com>
-References: <20220126170002.19754-2-tome01@ajou.ac.kr>
+        id S233908AbiA0AcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:32:11 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47348 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229724AbiA0AcK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 19:32:10 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5B74621114;
+        Thu, 27 Jan 2022 00:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643243529; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iullOb3Z+e2T0lhh1xDMAxJ/4/RT+jyxcMAIPZ1IZgs=;
+        b=NAgRhQEURd360hIYSbsXGGRw5yP1FfqvbZkytP6OOwl/Lm4Z/cpiscUnKxd/4sRC1mzdDL
+        2/8+YKYaXacbg+jwvuMZdWs1iDNx/0FKAcc3ayUgvyZF0H1wzSztgUd7C15eW9EbxPzBe7
+        yvee1bV+CHp2odSEGAgU8nJuve9ynNs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643243529;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iullOb3Z+e2T0lhh1xDMAxJ/4/RT+jyxcMAIPZ1IZgs=;
+        b=WbvBw4gQHJnfJGVuvuZtyXS9PxDOGDGLq5ACD7bBstqSyP57g3MNwJtAAzOA7DqCrafozf
+        xtkWF4xr7luYMJAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F112813E72;
+        Thu, 27 Jan 2022 00:32:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JFZ0KgXo8WHqfQAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 27 Jan 2022 00:32:05 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126170002.19754-2-tome01@ajou.ac.kr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Hugh Dickins" <hughd@google.com>
+Cc:     "Christoph Hellwig" <hch@infradead.org>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Anna Schumaker" <anna.schumaker@netapp.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Mel Gorman" <mgorman@suse.de>,
+        "David Howells" <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/23] MM: extend block-plugging to cover all swap reads
+ with read-ahead
+In-reply-to: <eeec206a-d255-a3e4-ec1e-e51a13e5118c@google.com>
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown>,
+ <164299611274.26253.13900771841681128440.stgit@noble.brown>,
+ <Ye5UzEzvN8WWMNBn@infradead.org>,
+ <164323362698.5493.8309546969459514762@noble.neil.brown.name>,
+ <eeec206a-d255-a3e4-ec1e-e51a13e5118c@google.com>
+Date:   Thu, 27 Jan 2022 11:32:02 +1100
+Message-id: <164324352246.5493.62203138362718756@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonghyeon,
+On Thu, 27 Jan 2022, Hugh Dickins wrote:
+> On Thu, 27 Jan 2022, NeilBrown wrote:
+> > On Mon, 24 Jan 2022, Christoph Hellwig wrote:
+> > > On Mon, Jan 24, 2022 at 02:48:32PM +1100, NeilBrown wrote:
+> > > > Code that does swap read-ahead uses blk_start_plug() and
+> > > > blk_finish_plug() to allow lower levels to combine multiple read-ahead
+> > > > pages into a single request, but calls blk_finish_plug() *before*
+> > > > submitting the original (non-ahead) read request.
+> > > > This missed an opportunity to combine read requests.
+> 
+> No, you're misunderstanding there.  All the necessary reads are issued
+> within the loop, between the plug and unplug: it does not skip over
+> the target page in the loop, but issues its read along with the rest.
+> 
+> But it has not kept any of those pages locked, nor even kept any
+> refcounts raised: so at the end has to look up the target page again
+> with the final read_swap_cache_async() (which also copes with the
+> highly unlikely case that the page got swapped out again meanwhile).
+> 
+....
+> 
+> I don't suppose your patch does any actual harm (beyond propagating a
+> misunderstanding), but it's certainly not a fix, and I think should
+> simply be dropped from the series.
 
-Thank you for the patch! Yet something to improve:
+Thanks - I had missed that.  The code is correct, but looks wrong (to
+me).
+I've dropped the patch, but added a comment when I add
+"swap_read_unplug()" to explain while plugging isn't needed for that
+final read_swap_cache_async().
 
-[auto build test ERROR on hnaz-mm/master]
+> 
+> (But please don't expect any comment from me on the rest:
+> SWP_FS_OPS has always been beyond my understanding.)
 
-url:    https://github.com/0day-ci/linux/commits/Jonghyeon-Kim/mm-memory_hotplug-Export-shrink-span-functions-for-zone-and-node/20220127-010219
-base:   https://github.com/hnaz/linux-mm master
-config: x86_64-randconfig-a002-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270836.H8feaOM9-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/ef33cc7f7380ddd07a3fedb42f35c1f81de401a4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jonghyeon-Kim/mm-memory_hotplug-Export-shrink-span-functions-for-zone-and-node/20220127-010219
-        git checkout ef33cc7f7380ddd07a3fedb42f35c1f81de401a4
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dax/
+:-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/dax/kmem.c: In function 'dev_dax_kmem_probe':
->> drivers/dax/kmem.c:156:42: error: 'ZONE_DEVICE' undeclared (first use in this function)
-     156 |   struct zone *zone = &pgdat->node_zones[ZONE_DEVICE];
-         |                                          ^~~~~~~~~~~
-   drivers/dax/kmem.c:156:42: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/ZONE_DEVICE +156 drivers/dax/kmem.c
-
-    44	
-    45	static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
-    46	{
-    47		struct device *dev = &dev_dax->dev;
-    48		unsigned long total_len = 0;
-    49		struct dax_kmem_data *data;
-    50		int i, rc, mapped = 0;
-    51		int numa_node;
-    52		int dev_node;
-    53	
-    54		/*
-    55		 * Ensure good NUMA information for the persistent memory.
-    56		 * Without this check, there is a risk that slow memory
-    57		 * could be mixed in a node with faster memory, causing
-    58		 * unavoidable performance issues.
-    59		 */
-    60		numa_node = dev_dax->target_node;
-    61		if (numa_node < 0) {
-    62			dev_warn(dev, "rejecting DAX region with invalid node: %d\n",
-    63					numa_node);
-    64			return -EINVAL;
-    65		}
-    66	
-    67		for (i = 0; i < dev_dax->nr_range; i++) {
-    68			struct range range;
-    69	
-    70			rc = dax_kmem_range(dev_dax, i, &range);
-    71			if (rc) {
-    72				dev_info(dev, "mapping%d: %#llx-%#llx too small after alignment\n",
-    73						i, range.start, range.end);
-    74				continue;
-    75			}
-    76			total_len += range_len(&range);
-    77		}
-    78	
-    79		if (!total_len) {
-    80			dev_warn(dev, "rejecting DAX region without any memory after alignment\n");
-    81			return -EINVAL;
-    82		}
-    83	
-    84		data = kzalloc(struct_size(data, res, dev_dax->nr_range), GFP_KERNEL);
-    85		if (!data)
-    86			return -ENOMEM;
-    87	
-    88		rc = -ENOMEM;
-    89		data->res_name = kstrdup(dev_name(dev), GFP_KERNEL);
-    90		if (!data->res_name)
-    91			goto err_res_name;
-    92	
-    93		rc = memory_group_register_static(numa_node, total_len);
-    94		if (rc < 0)
-    95			goto err_reg_mgid;
-    96		data->mgid = rc;
-    97	
-    98		for (i = 0; i < dev_dax->nr_range; i++) {
-    99			struct resource *res;
-   100			struct range range;
-   101	
-   102			rc = dax_kmem_range(dev_dax, i, &range);
-   103			if (rc)
-   104				continue;
-   105	
-   106			/* Region is permanently reserved if hotremove fails. */
-   107			res = request_mem_region(range.start, range_len(&range), data->res_name);
-   108			if (!res) {
-   109				dev_warn(dev, "mapping%d: %#llx-%#llx could not reserve region\n",
-   110						i, range.start, range.end);
-   111				/*
-   112				 * Once some memory has been onlined we can't
-   113				 * assume that it can be un-onlined safely.
-   114				 */
-   115				if (mapped)
-   116					continue;
-   117				rc = -EBUSY;
-   118				goto err_request_mem;
-   119			}
-   120			data->res[i] = res;
-   121	
-   122			/*
-   123			 * Set flags appropriate for System RAM.  Leave ..._BUSY clear
-   124			 * so that add_memory() can add a child resource.  Do not
-   125			 * inherit flags from the parent since it may set new flags
-   126			 * unknown to us that will break add_memory() below.
-   127			 */
-   128			res->flags = IORESOURCE_SYSTEM_RAM;
-   129	
-   130			/*
-   131			 * Ensure that future kexec'd kernels will not treat
-   132			 * this as RAM automatically.
-   133			 */
-   134			rc = add_memory_driver_managed(data->mgid, range.start,
-   135					range_len(&range), kmem_name, MHP_NID_IS_MGID);
-   136	
-   137			if (rc) {
-   138				dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
-   139						i, range.start, range.end);
-   140				release_resource(res);
-   141				kfree(res);
-   142				data->res[i] = NULL;
-   143				if (mapped)
-   144					continue;
-   145				goto err_request_mem;
-   146			}
-   147			mapped++;
-   148		}
-   149	
-   150		dev_set_drvdata(dev, data);
-   151	
-   152		/* Update spanned_pages of the device numa node */
-   153		dev_node = dev_to_node(dev);
-   154		if (dev_node != numa_node && dev_node < numa_node) {
-   155			struct pglist_data *pgdat = NODE_DATA(dev_node);
- > 156			struct zone *zone = &pgdat->node_zones[ZONE_DEVICE];
-   157			unsigned long start_pfn = zone->zone_start_pfn;
-   158			unsigned long nr_pages = NODE_DATA(numa_node)->node_spanned_pages;
-   159	
-   160			shrink_zone_span(zone, start_pfn, start_pfn + nr_pages);
-   161			update_pgdat_span(pgdat);
-   162		}
-   163	
-   164		return 0;
-   165	
-   166	err_request_mem:
-   167		memory_group_unregister(data->mgid);
-   168	err_reg_mgid:
-   169		kfree(data->res_name);
-   170	err_res_name:
-   171		kfree(data);
-   172		return rc;
-   173	}
-   174	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+NeilBrown

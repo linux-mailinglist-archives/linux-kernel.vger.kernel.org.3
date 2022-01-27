@@ -2,110 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A618249E321
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92A849E327
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241572AbiA0NNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiA0NNq (ORCPT
+        id S241595AbiA0NRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:17:05 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42204 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241585AbiA0NRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:13:46 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD57C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:13:42 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id z5so2428095plg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=YXzkvLeXLi2eCYEQ5gEHtGCtSrlAhjMGW+JtDUaBg2s=;
-        b=ABvPbSjyT6rV20F/ei4kOOQ1fFDOwJMtWo/sSVF9nIHbwU6Nqceo9/hWVX96sXehSx
-         8ZsJVv3qVRw8N1xyHhNdLY/X8DD/XEoUT4H5eZ6EQG3+XZRclCPQ8IE8qdmobawqMRxr
-         r6qQQ36gH5zwgOjsTBNi3nJfE1VtJpELMqDsF+jhoJ6vL/QTPfr+jWOa7uIYPXNtNdrO
-         DTbby/kjEYxmz+tA4E1ifrjujFQVq1XjEGm8ipynyUYPmeckGnlGHqMYfJP9t83wmPlZ
-         PmEQjfbmgnLQJAnxxvqsgMBYyaz+UDI4KEuQGYUo5iFukbzekZUltwXwB/mOLK5jkSzn
-         c37g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=YXzkvLeXLi2eCYEQ5gEHtGCtSrlAhjMGW+JtDUaBg2s=;
-        b=wZxG6U72nFofFd6Ek8OdF50ibLJRLC/eXeFvgeNntcnWTFaIBN+zNK8sXqscYtmQ88
-         BJ/mrktq5miZZlrhIdgXhLVxmFlvGyi2KmyqIidTX/gwr0V5PnyEVkIzkSr4EyotLIe6
-         39oPxiohB432zPOdMcK3ndyb2PCQWKJ5le6t+NRC82B3kSs3QZU1CXcaBiodf04oZCya
-         d8L2OQMVGnVouVZ2ZOkGv5/+xqz/H2YTQX6zKmMP8Nqj7XZw6nFf6OG8M01dxNStRnab
-         ujbcYPRjTZwwqTKoObBMwOiVBmCBBUZwEM2YIiYslhBCZbtnoH72fVGa756MGRIjjVht
-         Z0Nw==
-X-Gm-Message-State: AOAM531OLYFkgvGvJVmH7NF1TOjsk9nVAwcKOyYnVlT9303KWwTURM4F
-        xFgOQXD7Unp83ATnv7EtAZY=
-X-Google-Smtp-Source: ABdhPJysbG0ubLDHAuk/vm5CAv0jg6oZWRdNVaWO0vQPW+mAPZCdMtTl6CK+a5TjP6POX6vPtKJxxg==
-X-Received: by 2002:a17:90b:17ca:: with SMTP id me10mr9860243pjb.207.1643289221704;
-        Thu, 27 Jan 2022 05:13:41 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id d9sm5683355pfl.69.2022.01.27.05.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 05:13:41 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Eric Millbrandt <emillbrandt@dekaresearch.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] ASoC: fsl: Add missing error handling in pcm030_fabric_probe
-Date:   Thu, 27 Jan 2022 13:13:34 +0000
-Message-Id: <20220127131336.30214-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YfFFWSVgnbL6ETxo@sirena.org.uk>
-References: <YfFFWSVgnbL6ETxo@sirena.org.uk>
+        Thu, 27 Jan 2022 08:17:04 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20RDDSrU027765;
+        Thu, 27 Jan 2022 13:16:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=XeEMBEwWWG+dHaYo1yluoFv6fP/RuA+zAGBEUfwky5w=;
+ b=pQIYfGL9is9OvvLkJuKSaZ5N96qrrmnAtSSbEvgitpPiPN15jIPMTwMY601MRnoEze4Z
+ i9AOm9SKTu+yR6krbp4ErhzGOhIeus4uX/CNLQ9MWRZSUl9a135UfFeIfrf7xm9u4mfC
+ y71IEH/neWzn4c0Gw+K5yDvTNtW549t1n99xqO8N2qEq5cpdnNVvuJwWKPzLv1LR+HQP
+ tIDOS2SCz9VteNKwfk5qAX07w4icnObvoB5TfS4ktiXm7R3XalQtCiTYWkNANfjs0HUR
+ /Hg+7b/Xb56zgfwCXUdZayru562ka5cqzL6HsdKTG10U8VqgLBWcfbXWapjhd4o+bPs+ tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dupsuqqbx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 13:16:38 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20RDGb16008275;
+        Thu, 27 Jan 2022 13:16:38 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dupsuqqb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 13:16:37 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20RDCRVC001264;
+        Thu, 27 Jan 2022 13:16:35 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3dr96jx7ka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 13:16:35 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20RDGWaZ21496254
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Jan 2022 13:16:32 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 268F84C052;
+        Thu, 27 Jan 2022 13:16:32 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD5AD4C040;
+        Thu, 27 Jan 2022 13:16:31 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 27 Jan 2022 13:16:31 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Yinan Liu <yinan@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Sachin Sant <sachinp@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, ardb@kernel.org,
+        keescook@chromium.org, hca@linux.ibm.com
+Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
+ code-patching selftests
+References: <944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com>
+        <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
+        <20220124114548.30241947@gandalf.local.home>
+        <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
+        <YfFclROd+0/61q2d@FVFF77S0Q05N> <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
+        <yt9dy231gzae.fsf@linux.ibm.com> <YfKPmFJ2MGsem4VB@FVFF77S0Q05N>
+        <20220127074601.41a3773d@rorschach.local.home>
+        <YfKZXvB9vCN1bA1c@FVFF77S0Q05N>
+Date:   Thu, 27 Jan 2022 14:16:31 +0100
+In-Reply-To: <YfKZXvB9vCN1bA1c@FVFF77S0Q05N> (Mark Rutland's message of "Thu,
+        27 Jan 2022 13:08:46 +0000")
+Message-ID: <yt9dsft9gvyo.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1HlEL2zE9lD4mxEQU6kQxS4U-kPK0-JT
+X-Proofpoint-ORIG-GUID: l8jXR6C3cwAQe74SA6titpwuHpkUaO0p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 impostorscore=0 clxscore=1015 suspectscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201270079
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing platform_device_put() and platform_device_del()
-before return from pcm030_fabric_probe in the error handling case.
+Mark Rutland <mark.rutland@arm.com> writes:
 
-Fixes: c912fa913446 ("ASoC: fsl: register the wm9712-codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-Changes in v2:
-- avoid return early before the card registration.
----
- sound/soc/fsl/pcm030-audio-fabric.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+> On Thu, Jan 27, 2022 at 07:46:01AM -0500, Steven Rostedt wrote:
+>> On Thu, 27 Jan 2022 12:27:04 +0000
+>> Mark Rutland <mark.rutland@arm.com> wrote:
+>> 
+>> > Ah, so those non-ELF relocations for the mcount_loc table just mean "apply the
+>> > KASLR offset here", which is equivalent for all entries.
+>> > 
+>> > That makes sense, thanks!
+>> 
+>> And this is why we were having such a hard time understanding each other ;-)
+>
+> ;)
+>
+> With that in mind, I think that we understand that the build-time sort works
+> for:
+>
+> * arch/x86, becuase the non-ELF relocations for mcount_loc happen to be
+>   equivalent.
+>  
+> * arch/arm, because there's no dynamic relocaiton and the mcount_loc entries
+>   have been finalized prior to sorting.
+>
+> ... but doesn't work for anyone else (including arm64) because the ELF
+> relocations are not equivalent, and need special care that is not yet
+> implemented.
 
-diff --git a/sound/soc/fsl/pcm030-audio-fabric.c b/sound/soc/fsl/pcm030-audio-fabric.c
-index af3c3b90c0ac..83b4a22bf15a 100644
---- a/sound/soc/fsl/pcm030-audio-fabric.c
-+++ b/sound/soc/fsl/pcm030-audio-fabric.c
-@@ -93,16 +93,21 @@ static int pcm030_fabric_probe(struct platform_device *op)
- 		dev_err(&op->dev, "platform_device_alloc() failed\n");
+For s390 my idea is to just skip the addresses between __start_mcount_loc
+and __stop_mcount_loc, because for these addresses we know that they are
+64 bits wide, so we just need to add the KASLR offset.
+
+I'm thinking about something like this:
+
+diff --git a/arch/s390/boot/compressed/decompressor.h b/arch/s390/boot/compressed/decompressor.h
+index f75cc31a77dd..015d7e2e94ef 100644
+--- a/arch/s390/boot/compressed/decompressor.h
++++ b/arch/s390/boot/compressed/decompressor.h
+@@ -25,6 +25,8 @@ struct vmlinux_info {
+ 	unsigned long rela_dyn_start;
+ 	unsigned long rela_dyn_end;
+ 	unsigned long amode31_size;
++	unsigned long start_mcount_loc;
++	unsigned long stop_mcount_loc;
+ };
  
- 	ret = platform_device_add(pdata->codec_device);
--	if (ret)
-+	if (ret) {
- 		dev_err(&op->dev, "platform_device_add() failed: %d\n", ret);
-+		platform_device_put(pdata->codec_device);
-+	}
- 
- 	ret = snd_soc_register_card(card);
--	if (ret)
-+	if (ret) {
- 		dev_err(&op->dev, "snd_soc_register_card() failed: %d\n", ret);
-+		platform_device_del(pdata->codec_device);
-+		platform_device_put(pdata->codec_device);
-+	}
- 
- 	platform_set_drvdata(op, pdata);
--
- 	return ret;
-+
+ /* Symbols defined by linker scripts */
+diff --git a/arch/s390/boot/startup.c b/arch/s390/boot/startup.c
+index 1aa11a8f57dd..7bb0d88db5c6 100644
+--- a/arch/s390/boot/startup.c
++++ b/arch/s390/boot/startup.c
+@@ -88,6 +88,11 @@ static void handle_relocs(unsigned long offset)
+ 	dynsym = (Elf64_Sym *) vmlinux.dynsym_start;
+ 	for (rela = rela_start; rela < rela_end; rela++) {
+ 		loc = rela->r_offset + offset;
++		if ((loc >= vmlinux.start_mcount_loc) &&
++		    (loc < vmlinux.stop_mcount_loc)) {
++			(*(unsigned long *)loc) += offset;
++			continue;
++		}
+ 		val = rela->r_addend;
+ 		r_sym = ELF64_R_SYM(rela->r_info);
+ 		if (r_sym) {
+@@ -232,6 +237,8 @@ static void offset_vmlinux_info(unsigned long offset)
+ 	vmlinux.rela_dyn_start += offset;
+ 	vmlinux.rela_dyn_end += offset;
+ 	vmlinux.dynsym_start += offset;
++	vmlinux.start_mcount_loc += offset;
++	vmlinux.stop_mcount_loc += offset;
  }
  
- static int pcm030_fabric_remove(struct platform_device *op)
--- 
-2.17.1
+ static unsigned long reserve_amode31(unsigned long safe_addr)
+diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
+index 42c43521878f..51c773405608 100644
+--- a/arch/s390/kernel/vmlinux.lds.S
++++ b/arch/s390/kernel/vmlinux.lds.S
+@@ -213,6 +213,8 @@ SECTIONS
+ 		QUAD(__rela_dyn_start)				/* rela_dyn_start */
+ 		QUAD(__rela_dyn_end)				/* rela_dyn_end */
+ 		QUAD(_eamode31 - _samode31)			/* amode31_size */
++		QUAD(__start_mcount_loc)
++		QUAD(__stop_mcount_loc)
+ 	} :NONE
+ 
+ 	/* Debugging sections.	*/
 
+Not sure whether that would also work on power, and also not sure
+whether i missed something thinking about that. Maybe it doesn't even
+work. ;-)

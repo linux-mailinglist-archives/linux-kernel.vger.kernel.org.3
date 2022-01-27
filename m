@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 569B749EA4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C5F49EA55
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244987AbiA0SXy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Jan 2022 13:23:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:48012 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244957AbiA0SXx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:23:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D19A0113E;
-        Thu, 27 Jan 2022 10:23:52 -0800 (PST)
-Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D754F3F7D7;
-        Thu, 27 Jan 2022 10:23:49 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        rcu@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mike Galbraith <efault@gmx.de>
-Subject: Re: [PATCH v3 2/4] sched: Introduce migratable()
-In-Reply-To: <YfJu3Z9wKOAjLuad@linutronix.de>
-References: <20210811201354.1976839-1-valentin.schneider@arm.com> <20210811201354.1976839-3-valentin.schneider@arm.com> <20210817170925.2jwqvgvmqab2glwu@linutronix.de> <87czq573et.mognet@arm.com> <YfF9I5PcZJA5532B@linutronix.de> <87r18u2wr8.mognet@arm.com> <YfJu3Z9wKOAjLuad@linutronix.de>
-Date:   Thu, 27 Jan 2022 18:23:44 +0000
-Message-ID: <87o83x2g27.mognet@arm.com>
+        id S245017AbiA0SZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236144AbiA0SZi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 13:25:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F7BC061714;
+        Thu, 27 Jan 2022 10:25:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D39D661CE5;
+        Thu, 27 Jan 2022 18:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4684DC340E8;
+        Thu, 27 Jan 2022 18:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643307937;
+        bh=YT9O/J6APcutEaa2IHsPQh9rsIOe8yDex/CtLoUWWTQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=klIU8qgEVLOl3a6jRI5FM6PL7X6BU02KUVW/txCFAN9cElm3ElINcKkUXkZGccPJU
+         ZbdmaAjN/picjxZXUk3OH+nsCH3Kz2F/C96g5SxtRDLZJ/YiLRm6hzu+grhIIWUHRu
+         CuQfLNfSpfs+/MNQQm+7TCSwojVe/VEs6BvxNx8wMD77jS5bo9mGS335RVBdUmk+LG
+         T59slaqO2Qg7yxQeCx2nrFeZFInZO6VXUfUL/KYWcG8+n5AtfZC8R0Szl8wRSPnFH7
+         zd3ei4fhU+hVVzUijKhWu/HrXhT0m3ER7ke9iZVBZl86MToPxnuIsHeW5Vw7/ulhY3
+         o2W8VKvJhncpg==
+Received: by mail-qt1-f169.google.com with SMTP id y8so3212956qtn.8;
+        Thu, 27 Jan 2022 10:25:37 -0800 (PST)
+X-Gm-Message-State: AOAM532nUQES4KOnfAJrmBopu+MC8A5yzhxepD+lvk9Pj3jb6HACE2fr
+        cVHgC2Crd1OChv4A2/IvqbuDVDNeF4zVSxzJKQ==
+X-Google-Smtp-Source: ABdhPJzEs26uOUlYxkTLdr9JC10p5n/HWaaR4jaj2RGVfimzOa47NGAkfa4zr1/nKHtA7sG9QxdunJEQTH2PnkqSnu8=
+X-Received: by 2002:ac8:7f4d:: with SMTP id g13mr3858178qtk.272.1643307936365;
+ Thu, 27 Jan 2022 10:25:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+References: <ab490690-eac2-c714-1359-b4058e2f98ff@ti.com> <20220127152333.GA101708@bhelgaas>
+In-Reply-To: <20220127152333.GA101708@bhelgaas>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 27 Jan 2022 12:25:24 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+9aDzexJUaTPCY=SChqC1Ek1xL0qj-CorGjvXk=Sn20w@mail.gmail.com>
+Message-ID: <CAL_Jsq+9aDzexJUaTPCY=SChqC1Ek1xL0qj-CorGjvXk=Sn20w@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: PCI: ti,j721e: Add device id for J721S2
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Aswath Govindraju <a-govindraju@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/22 11:07, Sebastian Andrzej Siewior wrote:
-> On 2022-01-26 18:10:51 [+0000], Valentin Schneider wrote:
->> > | 2021-08-11 21:13 +0100 Valentin Schneider    ∙ sched: Introduce migratable()
->> > | 2021-08-11 21:13 +0100 Valentin Schneider    ∙ arm64: mm: Make arch_faults_on_old_pte() check for migratability
-> …
->> Heh, had forgotten about those - I'm happy to repost with the
->> s/migratable/is_migratable/. I also need to go back to those splats I got
->> on my emag and fix the PMU/GPIO warnings...
+On Thu, Jan 27, 2022 at 9:24 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Now that I look at it gain, you might want to drop #1 and then #2 would
-> switch to cant_migrate(). This might work…
+> [+cc Lorenzo, initial post
+> https://lore.kernel.org/r/20211130035608.13492-1-a-govindraju@ti.com]
 >
+> On Tue, Jan 25, 2022 at 12:06:16PM +0530, Aswath Govindraju wrote:
+> > On 30/11/21 9:26 am, Aswath Govindraju wrote:
+> > > Document the device id of J721S2 SoC.
+> > >
+> > > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> > > ---
+> > >
+> >
+> > May I know if this patch can be picked up?
+>
+> "git log Documentation/devicetree/bindings/pci/ti,j721e-pci-host.yaml"
+> says most changes to this file have been applied by Lorenzo, so I cc'd
+> him.
 
-Wasn't aware of cant_migrate(), that does look even better. Lemme give it a shot.
+I can take it if there's not other pending changes to this file for 5.18?
 
-> Sebastian
+Rob

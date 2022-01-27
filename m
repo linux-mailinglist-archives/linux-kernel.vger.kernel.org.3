@@ -2,175 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A7649DE17
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDBF49DE1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238657AbiA0Jdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:33:35 -0500
-Received: from mga05.intel.com ([192.55.52.43]:46306 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238648AbiA0Jde (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:33:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643276014; x=1674812014;
-  h=date:from:to:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to;
-  bh=70bvD9FchQOD0i4lLqg413fUh6fr+M8PLj6aT5wcP/A=;
-  b=Yep//h8gQivjJcqN+rzl0kTulNkCNgpCIwP03DBKLLBCt4UFqArvlAEh
-   TScKWxPNPqq6edUYefSykcZWt7o5cfXOACl0aLyBeN1U3f0sH3lGFWE4Z
-   pf5ZfR8caLdFWCfUHzn0pcQE86ZOIVc7461YMH2uCaDwyx9df9G/FwG0W
-   Ctkahkf4BfxsJ2BC2VyJuC6eMQMtQ7dFwRZ30ySy66TjcE47W/VmWMZ12
-   Obq/OAVu/SXrtCZq7ybqpnPsck8x/HVuiyo2GK3rvoQ+guTvUHSuGlsHa
-   sEHithKnj5SzSNRju28bCy9Xh421RRCmAXjtsatJRdEE3uy+HvebXw1vc
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333155052"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="333155052"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:33:33 -0800
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="480224705"
-Received: from anithaha-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.224.126])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:33:32 -0800
-Date:   Thu, 27 Jan 2022 01:33:32 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
- second map
-Message-ID: <20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
- <20220126203702.1784589-3-lucas.demarchi@intel.com>
- <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
- <20220127075728.ygwgorhnrwaocdqv@ldmartin-desk2>
- <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
- <YfJedaoeJjE3grum@phenom.ffwll.local>
+        id S238717AbiA0Jdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:33:46 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45600
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238660AbiA0Jdh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 04:33:37 -0500
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 04BA03F1B3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:33:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643276015;
+        bh=ab1luuZzn+rKwB0G/H73SwnYANJP++VOjHTq7jQ19wY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=j7X4ELq6R73cQTTV+KhiFFg2KIZeMEhRVhWV5UEu5HtqS4+LmdhKNFy9nLzf/3vfP
+         O2A2BVqIuhn8wDJFtcDZsqIqCwjaR7uqtYgogJAUxZw28wnSMV8a/rHc1yJgTCAI/c
+         wx3C26T6ypR51MSUnwdpNE+qVUqa9Gat2m7tWr5EFhwHyjVZIPdCx921nKh3AkPslY
+         mM0DaQ48EvEEUNIvF3eVtW3PLElJ0rD0SeFVbp7cM7KKIkpv0lRETh+EYxzBdyELh7
+         3dsIEh3sHYnoXDwhLkd1+AJ6OG5iyx1Tb4+ShWYTJK+bC0VkPPOJoFBTU1tKV2vZw0
+         7BiHQnS+0QB8A==
+Received: by mail-wm1-f69.google.com with SMTP id o194-20020a1ca5cb000000b00350b177fb22so3148995wme.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:33:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ab1luuZzn+rKwB0G/H73SwnYANJP++VOjHTq7jQ19wY=;
+        b=GrXZYcSQFgHGRl/Q9QjIE+YPdbuubzVa2iR5crEiAgjgjAvx4BBbgwIxzGZu+ORhBt
+         VEqOeh61IGJjvrhWA2aqSrAIiWp7hyZrMYTq1Tw1zF8Fk71WRmCLACyxqncT4955WutX
+         mnHZ2KsFGTUceQzA/I7lGzEOpnMtD5PEUKne4ynksIl0+Gu2Z1J+fTcJAzV4YZWYMht/
+         mljjHFB9SAwkYhSQEnx7Q+ECT9o748ESAg+weZ7SAXb9q6bVSlOTnvpxmeL9klJocTkt
+         olzEwFzl/AHk6ChQb2+MnU/MU+xm7o2X0rsUTxusXErAmwgxfFbBjH/mBkkQNHAqzZKf
+         OXJg==
+X-Gm-Message-State: AOAM531mQM8Omoco2DtsGRloL3pjqfItAGZqLYxjhDBFjJGT0XyZ+kbw
+        peFZdqyRYcFF3RJhEfRmcLUPOJ6L3h85WNTIsohnnu8nd702bCTJiMxJdKkD3jYmt7z7Ew7SOlx
+        ed4X9H3o9glKkQkS3R3a+F6iG2daNAZrOWysj1MooVg==
+X-Received: by 2002:a5d:6dac:: with SMTP id u12mr2301429wrs.410.1643276014737;
+        Thu, 27 Jan 2022 01:33:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwackDtjcmH0YUiJyk7XzFedBt6pMCl5S0pLhlnvxCHhFBKHp3Es5kkgM0yYe1bv2SYad+4QQ==
+X-Received: by 2002:a5d:6dac:: with SMTP id u12mr2301414wrs.410.1643276014525;
+        Thu, 27 Jan 2022 01:33:34 -0800 (PST)
+Received: from [192.168.0.63] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id p7sm1533601wmq.20.2022.01.27.01.33.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 01:33:34 -0800 (PST)
+Message-ID: <cb11d2e0-dd03-9a48-74f3-0a22f49f16b5@canonical.com>
+Date:   Thu, 27 Jan 2022 10:33:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfJedaoeJjE3grum@phenom.ffwll.local>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+Content-Language: en-US
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 09:57:25AM +0100, Daniel Vetter wrote:
->On Thu, Jan 27, 2022 at 09:02:54AM +0100, Christian König wrote:
->> Am 27.01.22 um 08:57 schrieb Lucas De Marchi:
->> > On Thu, Jan 27, 2022 at 08:27:11AM +0100, Christian König wrote:
->> > > Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
->> > > > When dma_buf_map struct is passed around, it's useful to be able to
->> > > > initialize a second map that takes care of reading/writing to an offset
->> > > > of the original map.
->> > > >
->> > > > Add a helper that copies the struct and add the offset to the proper
->> > > > address.
->> > >
->> > > Well what you propose here can lead to all kind of problems and is
->> > > rather bad design as far as I can see.
->> > >
->> > > The struct dma_buf_map is only to be filled in by the exporter and
->> > > should not be modified in this way by the importer.
->> >
->> > humn... not sure if I was  clear. There is no importer and exporter here.
->>
->> Yeah, and exactly that's what I'm pointing out as problem here.
->>
->> You are using the inter driver framework for something internal to the
->> driver. That is an absolutely clear NAK!
->>
->> We could discuss that, but you guys are just sending around patches to do
->> this without any consensus that this is a good idea.
->
->Uh I suggested this, also we're already using dma_buf_map all over the
->place as a convenient abstraction. So imo that's all fine, it should allow
->drivers to simplify some code where on igpu it's in normal kernel memory
->and on dgpu it's behind some pci bar.
->
->Maybe we should have a better name for that struct (and maybe also a
->better place), but way back when we discussed that bikeshed I didn't come
->up with anything better really.
+On 27/12/2021 12:29, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Second pull with DTS for ARM64, on top of previous pull.
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+> The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
+> 
+>   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
+> 
+> for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
+> 
+>   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
+> 
+> ----------------------------------------------------------------
+> Samsung DTS ARM64 changes for v5.17, part two
+> 
+> Add initial Exynos850 support and WinLink E850-96 board using it.
+> 
+> ----------------------------------------------------------------
+> Sam Protsenko (2):
+>       arm64: dts: exynos: Add initial Exynos850 SoC support
+>       arm64: dts: exynos: Add initial E850-96 board support
+> 
 
-I suggest iosys_map since it abstracts access to IO and system memory.
+I'll send all this as v5.18 material, so this pull-req can be skipped.
 
->
->> > There is a role delegation on filling out and reading a buffer when
->> > that buffer represents a struct layout.
->> >
->> > struct bla {
->> >     int a;
->> >     int b;
->> >     int c;
->> >     struct foo foo;
->> >     struct bar bar;
->> >     int d;
->> > }
->> >
->> >
->> > This implementation allows you to have:
->> >
->> >     fill_foo(struct dma_buf_map *bla_map) { ... }
->> >     fill_bar(struct dma_buf_map *bla_map) { ... }
->> >
->> > and the first thing these do is to make sure the map it's pointing to
->> > is relative to the struct it's supposed to write/read. Otherwise you're
->> > suggesting everything to be relative to struct bla, or to do the same
->> > I'm doing it, but IMO more prone to error:
->> >
->> >     struct dma_buf_map map = *bla_map;
->> >     dma_buf_map_incr(map, offsetof(...));
->
->Wrt the issue at hand I think the above is perfectly fine code. The idea
->with dma_buf_map is really that it's just a special pointer, so writing
->the code exactly as pointer code feels best. Unfortunately you cannot make
->them typesafe (because of C), so the code sometimes looks a bit ugly.
->Otherwise we could do stuff like container_of and all that with
->typechecking in the macros.
 
-I had exactly this code above, but after writting quite a few patches
-using it, particularly with functions that have to write to 2 maps (see
-patch 6 for example), it felt much better to have something to
-initialize correctly from the start
-
-	struct dma_buf_map other_map = *bla_map;
-	/* poor Lucas forgetting dma_buf_map_incr(map, offsetof(...)); */
-
-is error prone and hard to debug since you will be reading/writting
-from/to another location rather than exploding
-
-While with the construct below
-
-	other_map;
-	...
-	other_map = INITIALIZER()
-
-I can rely on the compiler complaining about uninitialized var. And
-in most of the cases I can just have this single line in the beggining of the
-function when the offset is constant:
-
-	struct dma_buf_map other_map = INITIALIZER(bla_map, offsetof(..));
-
-Lucas De Marchi
-
->-Daniel
->
->> > IMO this construct is worse because at a point in time in the function
->> > the map was pointing to the wrong thing the function was supposed to
->> > read/write.
->> >
->> > It's also useful when the function has double duty, updating a global
->> > part of the struct and a table inside it (see example in patch 6)
->> >
->> > thanks
->> > Lucas De Marchi
->>
->
->-- 
->Daniel Vetter
->Software Engineer, Intel Corporation
->http://blog.ffwll.ch
+Best regards,
+Krzysztof

@@ -2,362 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C823349E688
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0AC49E692
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242669AbiA0Pq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:46:26 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:54812 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242292AbiA0PqY (ORCPT
+        id S243139AbiA0Prb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:47:31 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45290 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243118AbiA0Pra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:46:24 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 9A6CF1F45571
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643298383;
-        bh=xdhZ7mIuhmOUfIV4ejxquCa70EjGgsF4qZseOX7OsOg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=AaggjM82DIDDw6s8SNUESEltqNgqnMvk9Q7S6N2ef9s8V4mNNtY0A2z0J6uilwY5Z
-         DsB6XQ2WO0xkaRO5U/nCoC3qTh1OXFVV/I2rN/r4mINxbROY5mPccOW5oHwI30Gmr3
-         lMoiPVpetdioicuOUHOXJqdfswGyEgxKHCo8DI2Mvu7Sz73mzKp/Tk2V/6yieMyWR5
-         nLF9BeuBC5HozBrAozCYJH4zqQOQZwhYL4XLirgrqqCys/H+Rp/x1PZVLS/5Ldy483
-         Whcdh6KMdaz5n1ZmLdwbcurco7Evm5nJwGfWgKnSxAn5xmlTq/jZ5NHeEWBcaMR9DP
-         Z/DYnNH0JHL1A==
-Subject: Re: [PATCH v3] drm/mediatek: mtk_dsi: Avoid EPROBE_DEFER loop with
- external bridge
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        andrzej.hajda@intel.com,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220127143623.123025-1-angelogioacchino.delregno@collabora.com>
- <CAAOTY__yO6Cq8qt8RSh9AX68mJEv+wWvuhY0_p-PTJ=eJD_7aA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <b8911eab-1419-60ad-ef07-25a5de365a52@collabora.com>
-Date:   Thu, 27 Jan 2022 16:46:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 27 Jan 2022 10:47:30 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C657C218D6;
+        Thu, 27 Jan 2022 15:47:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643298448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p0MPL+DhL3jOxHw5jW7mZ3UTsQS66uRpAN4U6i9kFqI=;
+        b=ePCPy2QGy+FJpY7Zx4dKSUmlsL5eYhjCNCXhUUD2tVgoScOfT85EUprw7vb7NU3i/eSemU
+        EiG/tLQ54Y22HYsyTiYuRLb+yJ8NKrO/zdcxdoPlOBTVfnUiXt4Jx4paYXRvlIXZWm3tjv
+        LknTjd0CyJlLEx9TeINXlRNZy6ws9D0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643298448;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p0MPL+DhL3jOxHw5jW7mZ3UTsQS66uRpAN4U6i9kFqI=;
+        b=qh+X5cq6Ukt+LyaXGhCqndLLc9hOe1FV2Fkw/mM2vJwHsuTpTQotjqJhSk6a68M66j1pZo
+        TdMM1Sh8Q9XCsLDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6555113BE5;
+        Thu, 27 Jan 2022 15:47:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aJDTFpC+8mHPawAAMHmgww
+        (envelope-from <ptesarik@suse.cz>); Thu, 27 Jan 2022 15:47:28 +0000
+Message-ID: <8c2f0c74-faa3-97e9-856d-36796ff3f9ce@suse.cz>
+Date:   Thu, 27 Jan 2022 16:47:21 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAAOTY__yO6Cq8qt8RSh9AX68mJEv+wWvuhY0_p-PTJ=eJD_7aA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-GB
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1643275911-19489-1-git-send-email-yangtiezhu@loongson.cn>
+From:   =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <ptesarik@suse.cz>
+Subject: Re: [RFC PATCH] kdump: Add support for crashkernel=auto
+In-Reply-To: <1643275911-19489-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------PLU5lhLbn4vpw0Pn0P6PQ8Wv"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/01/22 16:21, Chun-Kuang Hu ha scritto:
-> Hi, Angelo:
-> 
-> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 於
-> 2022年1月27日 週四 下午10:36寫道：
->>
->> DRM bridge drivers are now attaching their DSI device at probe time,
->> which requires us to register our DSI host in order to let the bridge
->> to probe: this recently started producing an endless -EPROBE_DEFER
->> loop on some machines that are using external bridges, like the
->> parade-ps8640, found on the ACER Chromebook R13.
->>
->> Now that the DSI hosts/devices probe sequence is documented, we can
->> do adjustments to the mtk_dsi driver as to both fix now and make sure
->> to avoid this situation in the future: for this, following what is
->> documented in drm_bridge.c, move the mtk_dsi component_add() to the
->> mtk_dsi_ops.attach callback and delete it in the detach callback;
->> keeping in mind that we are registering a drm_bridge for our DSI,
->> which is only used/attached if the DSI Host is bound, it wouldn't
->> make sense to keep adding our bridge at probe time (as it would
->> be useless to have it if mtk_dsi_ops.attach() fails!), so also move
->> that one to the dsi host attach function (and remove it in detach).
->>
->> Fixes: 209264a85707 ("drm/bridge: Document the probe issue with MIPI-DSI bridges")
-> 
-> The fixed tag should indicate the patch which cause the bug, but why a
-> patch just adding document would cause bug?
-> So no any patch cause bug? This patch just want to prevent a possible bug?
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------PLU5lhLbn4vpw0Pn0P6PQ8Wv
+Content-Type: multipart/mixed; boundary="------------u0pGq4q0AOLrqQFwIHl0VuVT";
+ protected-headers="v1"
+From: =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <ptesarik@suse.cz>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Baoquan He <bhe@redhat.com>,
+ Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Xuefeng Li <lixuefeng@loongson.cn>, kexec@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <8c2f0c74-faa3-97e9-856d-36796ff3f9ce@suse.cz>
+Subject: Re: [RFC PATCH] kdump: Add support for crashkernel=auto
+References: <1643275911-19489-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1643275911-19489-1-git-send-email-yangtiezhu@loongson.cn>
 
-I think you've missed my previous message on v2, so I will paste it here:
+--------------u0pGq4q0AOLrqQFwIHl0VuVT
+Content-Type: multipart/mixed; boundary="------------3ekFqAUxP6o0p4a8HjLlFRVZ"
 
-unfortunately I couldn't find a valid commit for a Fixes tag. This
-started being an issue at some point, when the DRM was changed to
-adhere to the documented probe sequence: the MediaTek DSI driver was
-not the only one that got broken/affected by these changes.
+--------------3ekFqAUxP6o0p4a8HjLlFRVZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-If you have any advice on which commit should be tagged, I'm open for
-any kind of suggestion.
+SGkgVGllemh1IFlhbmcsDQoNCkknbSBhZnJhaWQgdGhlIHdob2xlIGNvbmNlcHQgaXMgYnJv
+a2VuIGJ5IGRlc2lnbi4gU2VlIGJlbG93Lg0KDQpEbmUgMjcuIDAxLiAyMiB2IDEwOjMxIFRp
+ZXpodSBZYW5nIG5hcHNhbChhKToNCj4gU2V0IHRoZSByZXNlcnZlZCBtZW1vcnkgYXV0b21h
+dGljYWxseSBmb3IgdGhlIGNyYXNoIGtlcm5lbCBiYXNlZCBvbg0KPiBhcmNoaXRlY3R1cmUu
+DQo+IA0KPiBNb3N0IGNvZGUgb2YgdGhpcyBwYXRjaCBjb21lIGZyb206DQo+IGh0dHBzOi8v
+Z2l0bGFiLmNvbS9yZWRoYXQvY2VudG9zLXN0cmVhbS9zcmMva2VybmVsL2NlbnRvcy1zdHJl
+YW0tOC8tL3RyZWUvYzhzDQoNCkFuZCB0aGF0J3MgdGhlIHByb2JsZW0sIEkgdGhpbmsuIFRo
+ZSBzb2x1dGlvbiBtaWdodCBiZSBnb29kIGZvciB0aGlzIA0Kc3BlY2lmaWMgT1MsIGJ1dCBu
+b3QgZm9yIG90aGVycy4NCg0KPlsuLi5dDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvY3Jhc2hf
+Y29yZS5jIGIva2VybmVsL2NyYXNoX2NvcmUuYw0KPiBpbmRleCAyNTZjZjZkLi4zMmM1MWUy
+IDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvY3Jhc2hfY29yZS5jDQo+ICsrKyBiL2tlcm5lbC9j
+cmFzaF9jb3JlLmMNCj4gQEAgLTI1Miw2ICsyNTIsMjYgQEAgc3RhdGljIGludCBfX2luaXQg
+X19wYXJzZV9jcmFzaGtlcm5lbChjaGFyICpjbWRsaW5lLA0KPiAgIAlpZiAoc3VmZml4KQ0K
+PiAgIAkJcmV0dXJuIHBhcnNlX2NyYXNoa2VybmVsX3N1ZmZpeChja19jbWRsaW5lLCBjcmFz
+aF9zaXplLA0KPiAgIAkJCQlzdWZmaXgpOw0KPiArDQo+ICsJaWYgKHN0cm5jbXAoY2tfY21k
+bGluZSwgImF1dG8iLCA0KSA9PSAwKSB7DQo+ICsjaWYgZGVmaW5lZChDT05GSUdfWDg2XzY0
+KSB8fCBkZWZpbmVkKENPTkZJR19TMzkwKQ0KPiArCQlja19jbWRsaW5lID0gIjFHLTRHOjE2
+ME0sNEctNjRHOjE5Mk0sNjRHLTFUOjI1Nk0sMVQtOjUxMk0iOw0KPiArI2VsaWYgZGVmaW5l
+ZChDT05GSUdfQVJNNjQpDQo+ICsJCWNrX2NtZGxpbmUgPSAiMkctOjQ0OE0iOw0KPiArI2Vs
+aWYgZGVmaW5lZChDT05GSUdfUFBDNjQpDQo+ICsJCWNoYXIgKmZhZHVtcF9jbWRsaW5lOw0K
+PiArDQo+ICsJCWZhZHVtcF9jbWRsaW5lID0gZ2V0X2xhc3RfY3Jhc2hrZXJuZWwoY21kbGlu
+ZSwgImZhZHVtcD0iLCBOVUxMKTsNCj4gKwkJZmFkdW1wX2NtZGxpbmUgPSBmYWR1bXBfY21k
+bGluZSA/DQo+ICsJCQkJZmFkdW1wX2NtZGxpbmUgKyBzdHJsZW4oImZhZHVtcD0iKSA6IE5V
+TEw7DQo+ICsJCWlmICghZmFkdW1wX2NtZGxpbmUgfHwgKHN0cm5jbXAoZmFkdW1wX2NtZGxp
+bmUsICJvZmYiLCAzKSA9PSAwKSkNCj4gKwkJCWNrX2NtZGxpbmUgPSAiMkctNEc6Mzg0TSw0
+Ry0xNkc6NTEyTSwxNkctNjRHOjFHLDY0Ry0xMjhHOjJHLDEyOEctOjRHIjsNCj4gKwkJZWxz
+ZQ0KPiArCQkJY2tfY21kbGluZSA9ICI0Ry0xNkc6NzY4TSwxNkctNjRHOjFHLDY0Ry0xMjhH
+OjJHLDEyOEctMVQ6NEcsMVQtMlQ6NkcsMlQtNFQ6MTJHLDRULThUOjIwRyw4VC0xNlQ6MzZH
+LDE2VC0zMlQ6NjRHLDMyVC02NFQ6MTI4Ryw2NFQtOjE4MEciOw0KPiArI2VuZGlmDQo+ICsJ
+CXByX2luZm8oIlVzaW5nIGNyYXNoa2VybmVsPWF1dG8sIHRoZSBzaXplIGNob3NlbiBpcyBh
+IGJlc3QgZWZmb3J0IGVzdGltYXRpb24uXG4iKTsNCj4gKwl9DQo+ICsNCg0KSG93IGRpZCB5
+b3UgZXZlbiBhcnJpdmUgYXQgdGhlIGFib3ZlIG51bWJlcnM/IEkndmUgZG9uZSBzb21lIHJl
+c2VhcmNoIG9uIA0KdGhpcyB0b3BpYyByZWNlbnRseSAoaWUuIGR1cmluZyB0aGUgbGFzdCA3
+IHllYXJzIG9yIHNvKS4gTXkgeDg2XzY0IA0Kc3lzdGVtIHdpdGggOEcgUkFNIHJ1bm5pbmcg
+b3BlblNVU0UgTGVhcCAxNS4zIHNlZW1zIG5lZWRzIDE4OE0gZm9yIA0Kc2F2aW5nIHRvIHRo
+ZSBsb2NhbCBkaXNrLCBhbmQgMjAzTSB0byBzYXZlIG92ZXIgdGhlIG5ldHdvcmsgKHVzaW5n
+IA0KU0ZUUCkuIE15IFBQQzY0IExQQVIgd2l0aCAxNkcgUkFNIHJ1bm5pbmcgbGF0ZXN0IEJl
+dGEgb2YgU0xFUyAxNSBTUDQgDQpuZWVkcyA1ODdNLCBpLmUuIHdpdGggdGhlIGFib3ZlIG51
+bWJlcnMgaXQgbWF5IHJ1biBvdXQgb2YgbWVtb3J5IHdoaWxlIA0Kc2F2aW5nIHRoZSBkdW1w
+Lg0KDQpTaW5jZSB0aGlzIGlzIG5vdCB0aGUgZmlyc3QgdGltZSwgSSdtIHRyeWluZyB0byBl
+eHBsYWluIHRoaW5ncywgSSd2ZSANCndyaXR0ZW4gYSBibG9nIHBvc3Qgbm93Og0KDQpodHRw
+czovL3NpZ2lsbGF0dW0udGVzYXJpY2kuY3ovMjAyMi0wMS0yNy13aGF0cy13cm9uZy13aXRo
+LWNyYXNoa2VybmVsLWF1dG8uaHRtbA0KDQpIVEgNClBldHIgVGVzYXJpaw0K
+--------------3ekFqAUxP6o0p4a8HjLlFRVZ
+Content-Type: application/pgp-keys; name="OpenPGP_0xAA503BC9AE0F47A7.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xAA503BC9AE0F47A7.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-I tried to check on other drivers which got fixed for the same behavior,
-for example drm/msm, but none of them had a Fixes tag.
-When the DRM got changed to adhere to this sequence, some drm/bridge
-drivers were also changed; this has created some incompatibilities with
-some drm drivers, including drm/msm and drm/mediatek.
+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
+g1EJEk2pqnY=3D
+=3D1iCs
+-----END PGP PUBLIC KEY BLOCK-----
 
-This commit is not fixing a latent bug that was introduced in drm/mediatek
-but rather one that was induced by the new, fixed, probe flow that got
-recently documented - and to which drivers should adhere; failing to adhere
-to that will produce an endless -EPROBE_DEFER loop, due to other drivers
-(as mentioned, for example drm/bridge drivers) having been changed to use
-that probe sequence.
+--------------3ekFqAUxP6o0p4a8HjLlFRVZ--
 
+--------------u0pGq4q0AOLrqQFwIHl0VuVT--
 
-Regards,
-Angelo
+--------------PLU5lhLbn4vpw0Pn0P6PQ8Wv
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> Regards,
-> Chun-Kuang.
-> 
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
->> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
->>
->> ---
->>   drivers/gpu/drm/mediatek/mtk_dsi.c | 167 +++++++++++++++--------------
->>   1 file changed, 84 insertions(+), 83 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
->> index 5d90d2eb0019..bced4c7d668e 100644
->> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
->> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
->> @@ -786,18 +786,101 @@ void mtk_dsi_ddp_stop(struct device *dev)
->>          mtk_dsi_poweroff(dsi);
->>   }
->>
->> +static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
->> +{
->> +       int ret;
->> +
->> +       ret = drm_simple_encoder_init(drm, &dsi->encoder,
->> +                                     DRM_MODE_ENCODER_DSI);
->> +       if (ret) {
->> +               DRM_ERROR("Failed to encoder init to drm\n");
->> +               return ret;
->> +       }
->> +
->> +       dsi->encoder.possible_crtcs = mtk_drm_find_possible_crtc_by_comp(drm, dsi->host.dev);
->> +
->> +       ret = drm_bridge_attach(&dsi->encoder, &dsi->bridge, NULL,
->> +                               DRM_BRIDGE_ATTACH_NO_CONNECTOR);
->> +       if (ret)
->> +               goto err_cleanup_encoder;
->> +
->> +       dsi->connector = drm_bridge_connector_init(drm, &dsi->encoder);
->> +       if (IS_ERR(dsi->connector)) {
->> +               DRM_ERROR("Unable to create bridge connector\n");
->> +               ret = PTR_ERR(dsi->connector);
->> +               goto err_cleanup_encoder;
->> +       }
->> +       drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
->> +
->> +       return 0;
->> +
->> +err_cleanup_encoder:
->> +       drm_encoder_cleanup(&dsi->encoder);
->> +       return ret;
->> +}
->> +
->> +static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
->> +{
->> +       int ret;
->> +       struct drm_device *drm = data;
->> +       struct mtk_dsi *dsi = dev_get_drvdata(dev);
->> +
->> +       ret = mtk_dsi_encoder_init(drm, dsi);
->> +       if (ret)
->> +               return ret;
->> +
->> +       return device_reset_optional(dev);
->> +}
->> +
->> +static void mtk_dsi_unbind(struct device *dev, struct device *master,
->> +                          void *data)
->> +{
->> +       struct mtk_dsi *dsi = dev_get_drvdata(dev);
->> +
->> +       drm_encoder_cleanup(&dsi->encoder);
->> +}
->> +
->> +static const struct component_ops mtk_dsi_component_ops = {
->> +       .bind = mtk_dsi_bind,
->> +       .unbind = mtk_dsi_unbind,
->> +};
->> +
->>   static int mtk_dsi_host_attach(struct mipi_dsi_host *host,
->>                                 struct mipi_dsi_device *device)
->>   {
->>          struct mtk_dsi *dsi = host_to_dsi(host);
->> +       struct device *dev = host->dev;
->> +       int ret;
->>
->>          dsi->lanes = device->lanes;
->>          dsi->format = device->format;
->>          dsi->mode_flags = device->mode_flags;
->> +       dsi->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 0, 0);
->> +       if (IS_ERR(dsi->next_bridge))
->> +               return PTR_ERR(dsi->next_bridge);
->> +
->> +       drm_bridge_add(&dsi->bridge);
->> +
->> +       ret = component_add(host->dev, &mtk_dsi_component_ops);
->> +       if (ret) {
->> +               DRM_ERROR("failed to add dsi_host component: %d\n", ret);
->> +               drm_bridge_remove(&dsi->bridge);
->> +               return ret;
->> +       }
->>
->>          return 0;
->>   }
->>
->> +static int mtk_dsi_host_detach(struct mipi_dsi_host *host,
->> +                              struct mipi_dsi_device *device)
->> +{
->> +       struct mtk_dsi *dsi = host_to_dsi(host);
->> +
->> +       component_del(host->dev, &mtk_dsi_component_ops);
->> +       drm_bridge_remove(&dsi->bridge);
->> +       return 0;
->> +}
->> +
->>   static void mtk_dsi_wait_for_idle(struct mtk_dsi *dsi)
->>   {
->>          int ret;
->> @@ -938,73 +1021,14 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
->>
->>   static const struct mipi_dsi_host_ops mtk_dsi_ops = {
->>          .attach = mtk_dsi_host_attach,
->> +       .detach = mtk_dsi_host_detach,
->>          .transfer = mtk_dsi_host_transfer,
->>   };
->>
->> -static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
->> -{
->> -       int ret;
->> -
->> -       ret = drm_simple_encoder_init(drm, &dsi->encoder,
->> -                                     DRM_MODE_ENCODER_DSI);
->> -       if (ret) {
->> -               DRM_ERROR("Failed to encoder init to drm\n");
->> -               return ret;
->> -       }
->> -
->> -       dsi->encoder.possible_crtcs = mtk_drm_find_possible_crtc_by_comp(drm, dsi->host.dev);
->> -
->> -       ret = drm_bridge_attach(&dsi->encoder, &dsi->bridge, NULL,
->> -                               DRM_BRIDGE_ATTACH_NO_CONNECTOR);
->> -       if (ret)
->> -               goto err_cleanup_encoder;
->> -
->> -       dsi->connector = drm_bridge_connector_init(drm, &dsi->encoder);
->> -       if (IS_ERR(dsi->connector)) {
->> -               DRM_ERROR("Unable to create bridge connector\n");
->> -               ret = PTR_ERR(dsi->connector);
->> -               goto err_cleanup_encoder;
->> -       }
->> -       drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
->> -
->> -       return 0;
->> -
->> -err_cleanup_encoder:
->> -       drm_encoder_cleanup(&dsi->encoder);
->> -       return ret;
->> -}
->> -
->> -static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
->> -{
->> -       int ret;
->> -       struct drm_device *drm = data;
->> -       struct mtk_dsi *dsi = dev_get_drvdata(dev);
->> -
->> -       ret = mtk_dsi_encoder_init(drm, dsi);
->> -       if (ret)
->> -               return ret;
->> -
->> -       return device_reset_optional(dev);
->> -}
->> -
->> -static void mtk_dsi_unbind(struct device *dev, struct device *master,
->> -                          void *data)
->> -{
->> -       struct mtk_dsi *dsi = dev_get_drvdata(dev);
->> -
->> -       drm_encoder_cleanup(&dsi->encoder);
->> -}
->> -
->> -static const struct component_ops mtk_dsi_component_ops = {
->> -       .bind = mtk_dsi_bind,
->> -       .unbind = mtk_dsi_unbind,
->> -};
->> -
->>   static int mtk_dsi_probe(struct platform_device *pdev)
->>   {
->>          struct mtk_dsi *dsi;
->>          struct device *dev = &pdev->dev;
->> -       struct drm_panel *panel;
->>          struct resource *regs;
->>          int irq_num;
->>          int ret;
->> @@ -1021,19 +1045,6 @@ static int mtk_dsi_probe(struct platform_device *pdev)
->>                  return ret;
->>          }
->>
->> -       ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0,
->> -                                         &panel, &dsi->next_bridge);
->> -       if (ret)
->> -               goto err_unregister_host;
->> -
->> -       if (panel) {
->> -               dsi->next_bridge = devm_drm_panel_bridge_add(dev, panel);
->> -               if (IS_ERR(dsi->next_bridge)) {
->> -                       ret = PTR_ERR(dsi->next_bridge);
->> -                       goto err_unregister_host;
->> -               }
->> -       }
->> -
->>          dsi->driver_data = of_device_get_match_data(dev);
->>
->>          dsi->engine_clk = devm_clk_get(dev, "engine");
->> @@ -1098,14 +1109,6 @@ static int mtk_dsi_probe(struct platform_device *pdev)
->>          dsi->bridge.of_node = dev->of_node;
->>          dsi->bridge.type = DRM_MODE_CONNECTOR_DSI;
->>
->> -       drm_bridge_add(&dsi->bridge);
->> -
->> -       ret = component_add(&pdev->dev, &mtk_dsi_component_ops);
->> -       if (ret) {
->> -               dev_err(&pdev->dev, "failed to add component: %d\n", ret);
->> -               goto err_unregister_host;
->> -       }
->> -
->>          return 0;
->>
->>   err_unregister_host:
->> @@ -1118,8 +1121,6 @@ static int mtk_dsi_remove(struct platform_device *pdev)
->>          struct mtk_dsi *dsi = platform_get_drvdata(pdev);
->>
->>          mtk_output_dsi_disable(dsi);
->> -       drm_bridge_remove(&dsi->bridge);
->> -       component_del(&pdev->dev, &mtk_dsi_component_ops);
->>          mipi_dsi_host_unregister(&dsi->host);
->>
->>          return 0;
->> --
->> 2.33.1
->>
+-----BEGIN PGP SIGNATURE-----
 
+wsB5BAABCAAjFiEEHl2YIZkIo5VO2MxYqlA7ya4PR6cFAmHyvokFAwAAAAAACgkQqlA7ya4PR6c6
+PQf/QBJqU+tcsh4inQnFB+RwXMeqHqDbf4KY8NJanTeFG+wE3sULu3Y1iZs/aWuoDJS4o4UME6pH
+Kd5AYJtGn2Vwpu4iOc9XgS2ZFcpaiaG4qZXnDCxN4RIda1IGts+yK5wMrxC5NEHT4CaWkd/N2Z2H
+6gl3viotsh9/QMWQRcqTNz+1p15saNebUr0efGQKicbibsFjrX/egTdkahxncxoO0odxv01go3JE
+C2ARR7xjR7tXm281RBIlvegAlPleXcyOkyhRiRPxd/LQS92V0c63DHS8A5jXzUbHmRZ/t7TweUOT
+rhcN6pxyN+KCyU1g6MuX9ULVRkD0kStMC1p6f2/sgw==
+=AXiZ
+-----END PGP SIGNATURE-----
 
--- 
-AngeloGioacchino Del Regno
-Software Engineer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+--------------PLU5lhLbn4vpw0Pn0P6PQ8Wv--

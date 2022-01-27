@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE93549E3EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9F449E3EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239471AbiA0Nzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:55:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50544 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236903AbiA0Nzr (ORCPT
+        id S240045AbiA0N4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236903AbiA0N4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:55:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E77A8B8226E
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21BBC340E4;
-        Thu, 27 Jan 2022 13:55:44 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 08:55:43 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Sachin Sant <sachinp@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, ardb@kernel.org,
-        keescook@chromium.org, hca@linux.ibm.com
-Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
- code-patching selftests
-Message-ID: <20220127085543.200dd38e@gandalf.local.home>
-In-Reply-To: <YfKfDnbNGina2lKz@FVFF77S0Q05N>
-References: <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
-        <20220124114548.30241947@gandalf.local.home>
-        <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
-        <YfFclROd+0/61q2d@FVFF77S0Q05N>
-        <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
-        <yt9dy231gzae.fsf@linux.ibm.com>
-        <YfKPmFJ2MGsem4VB@FVFF77S0Q05N>
-        <20220127074601.41a3773d@rorschach.local.home>
-        <YfKZXvB9vCN1bA1c@FVFF77S0Q05N>
-        <yt9dsft9gvyo.fsf@linux.ibm.com>
-        <YfKfDnbNGina2lKz@FVFF77S0Q05N>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 27 Jan 2022 08:56:36 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55595C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=E9AD+rI9OWKW7gBQjNlVOBV7o12pc2DPP2BjIJ5a0lU=; b=Sy4LpHlXX/F9DEhym1b6Z0CR3S
+        v10GUiwrWU1FvDB99woTbeQ5iQmOuEixU8lKbEW9QoKv+3yZZNmmUkXgQffWsdoR+KD/4Ev1bwxMT
+        M23P2Kp+z6rzjk0oHl9sDzenaBABKh4Y+9UGwga8G7DS5LISN/MeAbGwqz7m1LVlKlC/NN2DeEkro
+        WbJtd/JtgfiGkWnc9sDKRGFodbdRdhdKU6mNbck7cBN4oI1c/2C7hYtVcQuVX01kbNhzIR6hHBC2v
+        ku1W88LcrSLyAfrBy08bgozzv3w/hhwhtlP201NYXvy9U8lrW7jIiNV3NVrdyAT5+2StI3Gh50hhH
+        Et2Vs09Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nD5GL-005I3G-RO; Thu, 27 Jan 2022 13:56:33 +0000
+Date:   Thu, 27 Jan 2022 13:56:33 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Karolina Drobnik <karolinadrobnik@gmail.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        mike.rapoport@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/16] tools/include: Update atomic.h header
+Message-ID: <YfKkkRNTA9qCmPTW@casper.infradead.org>
+References: <cover.1643206612.git.karolinadrobnik@gmail.com>
+ <bbd768fa794c68cda7888182f464411aebb65b7f.1643206612.git.karolinadrobnik@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bbd768fa794c68cda7888182f464411aebb65b7f.1643206612.git.karolinadrobnik@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 13:33:02 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
+On Thu, Jan 27, 2022 at 02:21:22PM +0100, Karolina Drobnik wrote:
+> Add atomic_long_t typedef and atomic_long_set function so they
+>  can be used in testing.
+> 
+> Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
+> ---
+>  tools/include/linux/atomic.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/include/linux/atomic.h b/tools/include/linux/atomic.h
+> index 00a6c4ca562b..5d2431889606 100644
+> --- a/tools/include/linux/atomic.h
+> +++ b/tools/include/linux/atomic.h
+> @@ -4,6 +4,10 @@
+>  
+>  #include <asm/atomic.h>
+>  
+> +typedef atomic_t atomic_long_t;
 
-> I want to get the regression fixed ASAP, so can we take a simple patch for -rc2
-> which disables the build-time sort where it's currently broken (by limiting the
-> opt-in to arm and x86), then follow-up per-architecture to re-enable it if
-> desired/safe?
+Given this:
 
-I'm going to retest my patch that makes it an opt in for just x86 and arm
-(32bit). I'll be pushing that hopefully later today. I have some other
-patches to test as well.
+typedef struct {
+        int counter;
+} atomic_t;
 
--- Steve
+your definition seems wrong.  Why not add atomic_long_t to types.h,
+adjacent to atomic_t?

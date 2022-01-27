@@ -2,174 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 095AD49DA5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD85C49DA5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbiA0F4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 00:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
+        id S236370AbiA0F5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 00:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiA0F4k (ORCPT
+        with ESMTP id S236361AbiA0F5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 00:56:40 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89004C061714
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:56:39 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id x7so3194802lfu.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:56:39 -0800 (PST)
+        Thu, 27 Jan 2022 00:57:04 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69853C061714;
+        Wed, 26 Jan 2022 21:57:03 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id n10so2146316edv.2;
+        Wed, 26 Jan 2022 21:57:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aWo9W/WInyDbr5JfxL7Bup7u3tR1b8/tTnuJ7YJQp/E=;
-        b=dIe8WmtT4h+k9PRa+NCQrvieWHmicawGJlyvjCykypB6nHPnj+hsVXuBun+m/bwgLL
-         EjAaka1ar/xN6STAB29BqbI8OxeDpNTmDL7r7RtZHDK+mWdvNvBSDcCSDJuZRFsP7PHQ
-         b+JhkwrFXrox71O05p8qR1kFRuCM4//9zXwjwLer2wH/5FdL0tAUsduHmeN+g1zu8PTE
-         EPE3CFM+HcbyiXST0gTfiCam0k6qakteakYYCPEVf5e3JKlW7sCfEjSSnY11t+Lk8T/N
-         P77KqoEEK+u60u+XVNPJrAhY1HRn+HgVh3Iu2e8PMxH6OESsutWpwJxzNvnS+0Cq0Kqj
-         ORwQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rtoTYqjQ8PbChSKR1PmaXjaY2py2OwAJLT1zQ2IW+3M=;
+        b=HHhMl6Gjxz0Qn0fJ49nRZAqDu+g/ehm7+7f2P62+EftZ3LIkhgkuyNxI+pXVcXRrBZ
+         mJlc34CNAjWW8HYZCP1vG1m1RpKZb1lhlMbH/fCJ/LR4C9CekW0SttplCbbnENZJ5RLo
+         vnVoIYiqdNWAi/OguKSvD/vgyoXRvrjbCgYYHdJbq80J0UxEcQXa8qT/FE2IBbM7In8V
+         ckXYtwn/Z0QYeGRtfVQli5CHrvuZRkm8JpZeD5J/V7hUM/GSf2DkW5ETTyOy62DMF2jI
+         1K29DTvc/VzryA95w51Ma1MaaumXxF7W2+8hkmkhcL2HhS04DQSWBEOGqDmZkdDdjCbB
+         UCug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aWo9W/WInyDbr5JfxL7Bup7u3tR1b8/tTnuJ7YJQp/E=;
-        b=VZK4pW5xZ6y8ULWAqPhsisDUOatgOrAByCRnw2T+2saq1j5KapFd1e13NHaYYUTf8L
-         wa04D3Zsby7BU1t/DpsFK8iiWdYIwfIDJ7hXGWLNTzDdxgP2Ndv6c5ot+TXT5wSSkZiD
-         QeycozfHdEGGzqpvSy1IkBnkrHZH10dJXxRvuKK1xuPLSGB/2XK+ZCsJTdQtZR7USaoA
-         D4hkgXAZRQoycr9RzmKO4p8RUQEFp99v5RpgesB9mKkxrGxglnTjibcxHm7iBR11rhc9
-         U5uxl5R5QDMu0tmTCJk+N+KPlQpLmv9PYazaUxtEUrRVu3sppEFgJTe38mANlHNAOoAQ
-         FrJQ==
-X-Gm-Message-State: AOAM5301SHmQgOuYoAPPe9NP9QbdrvHCJaFgWbq7r1cO1/njEYg4sJyu
-        P0xpb4tWMxRy7hjw6PhUvl3r8aBlWvSPRxv090xv3g==
-X-Google-Smtp-Source: ABdhPJwNDBjGsqpl/tRbz98l7hIwUvWv5WcXCbtnXgVMLOcWqaXnMoRIaexKUzuBr/qFpcxri36UbKZ7ubLsgRJNtQQ=
-X-Received: by 2002:a05:6512:3ac:: with SMTP id v12mr1849337lfp.40.1643262997883;
- Wed, 26 Jan 2022 21:56:37 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rtoTYqjQ8PbChSKR1PmaXjaY2py2OwAJLT1zQ2IW+3M=;
+        b=oRyQ1IQl89kIB5EJyb9rVmG8EqW2d7L8NrEYyZ5zPPrE1e62mPoaZ4/rcRyKOFZJmI
+         4IBd1X90zlyIZHi12n7Ixn9rDuBgBYxcKchMq/KX9fUorNxBdLDOLgMs/kxXq87V+8PJ
+         7rCbmaJp7DaTkDMftD/Jcxvy2S10ESkjGUNU+DqNKtp9ECjVu3en30YfhThtNS/jRISd
+         kvQs+uWgsHYGJLhQuPAu1A2XIepcbWf3ju1f/+gHD6+EejjBBJvRqBnvrva0gGJHu6XU
+         SX0x14RDCCEJ8zvRqkRzCsMHHWtiF66sUZclPtXXtAYhTxhAiAArlGwajZqcgHZnNRoe
+         iBGQ==
+X-Gm-Message-State: AOAM533PzOG4iE/BihM7i/RSOWE8fV/ggV7qLjvvX0YfHh3WjcDrDntR
+        Xf/pupicj18IqeAyu2eIOdQ=
+X-Google-Smtp-Source: ABdhPJz5Ch0dyPmyMf9mI+Ne9qs7BcjCptofSyeC6Yd4Bewk40Z0j2uXNyCboGiILHVradbKAh8+vQ==
+X-Received: by 2002:a05:6402:387:: with SMTP id o7mr2119776edv.253.1643263021855;
+        Wed, 26 Jan 2022 21:57:01 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id g27sm8211426ejf.108.2022.01.26.21.57.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 21:57:01 -0800 (PST)
+Message-ID: <e2479729-154a-122f-f2e0-89b62ffe2c8d@gmail.com>
+Date:   Thu, 27 Jan 2022 06:57:00 +0100
 MIME-Version: 1.0
-References: <20220125162938.838382-1-jens.wiklander@linaro.org> <20220125162938.838382-4-jens.wiklander@linaro.org>
-In-Reply-To: <20220125162938.838382-4-jens.wiklander@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 27 Jan 2022 11:26:26 +0530
-Message-ID: <CAFA6WYOT7capu1RrK57HAu_qKvG65X_C1-esw3DyD4_9LeKZSg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/12] tee: add tee_shm_alloc_user_buf()
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: add Quartz64-A pmu_io_domains
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220127010023.3169415-1-pgwipeout@gmail.com>
+ <20220127010023.3169415-3-pgwipeout@gmail.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220127010023.3169415-3-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 21:59, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> Adds a new function tee_shm_alloc_user_buf() or user mode allocations,
+Hi Peter,
 
-typo: s/or/for/
-
-> replacing passing the flags TEE_SHM_MAPPED | TEE_SHM_DMA_BUF to
-> tee_shm_alloc().
->
-> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+On 1/27/22 02:00, Peter Geis wrote:
+> Several io power domains on the Quartz64-A operate at 1.8v.
+> Add the pmu_io_domains definition to enable support for this.
+> This permits the enablement of the following features:
+> sdio - wifi support
+> sdhci - mmc-hs200-1_8v
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 > ---
->  drivers/tee/tee_core.c     |  2 +-
->  drivers/tee/tee_private.h  |  2 ++
->  drivers/tee/tee_shm.c      | 17 +++++++++++++++++
->  drivers/tee/tee_shm_pool.c |  2 +-
->  include/linux/tee_drv.h    |  2 +-
->  5 files changed, 22 insertions(+), 3 deletions(-)
->
+>  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> index d9eb92d59099..33c2c18caaa9 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> @@ -482,6 +482,19 @@ vcc_sd_h: vcc-sd-h {
+>  	};
+>  };
+>  
 
-Apart from minor comments below:
+https://files.pine64.org/doc/quartz64/Quartz64_model-A_schematic_v2.0_20210427.pdf
 
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Could you check with the IO Power Domain Map?
 
-> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
-> index 3fc426dad2df..a15812baaeb1 100644
-> --- a/drivers/tee/tee_core.c
-> +++ b/drivers/tee/tee_core.c
-> @@ -297,7 +297,7 @@ static int tee_ioctl_shm_alloc(struct tee_context *ctx,
->         if (data.flags)
->                 return -EINVAL;
->
-> -       shm = tee_shm_alloc(ctx, data.size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
-> +       shm = tee_shm_alloc_user_buf(ctx, data.size);
->         if (IS_ERR(shm))
->                 return PTR_ERR(shm);
->
-> diff --git a/drivers/tee/tee_private.h b/drivers/tee/tee_private.h
-> index e55204df31ce..e09c8aa5d967 100644
-> --- a/drivers/tee/tee_private.h
-> +++ b/drivers/tee/tee_private.h
-> @@ -68,4 +68,6 @@ void tee_device_put(struct tee_device *teedev);
->  void teedev_ctx_get(struct tee_context *ctx);
->  void teedev_ctx_put(struct tee_context *ctx);
->
-> +struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size);
+> +&pmu_io_domains {
+> +	pmuio1-supply = <&vcc3v3_pmu>;
+VCC3V3_PMU
+
+> +	pmuio2-supply = <&vcc3v3_pmu>;
+VCC3V3_PMU
+
+> +	vccio1-supply = <&vccio_acodec>;
+VCCIO_ACODEC
+
+> +	vccio2-supply = <&vcc_1v8>;
+VCC_1V8
+
+> +	vccio3-supply = <&vccio_sd>;
+VCCIO_SD
+
+> +	vccio4-supply = <&vcc_1v8>;
+==> VCC1V8_PMU
+
+> +	vccio5-supply = <&vcc_3v3>;
+==> VCC_1V8
+
+> +	vccio6-supply = <&vcc1v8_dvp>;
+VCC1V8_DVP
+
+> +	vccio7-supply = <&vcc_3v3>;
+VCC_3V3
+
+> +	status = "okay";
+> +};
 > +
->  #endif /*TEE_PRIVATE_H*/
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index 499fccba3d74..7e7e762fc1de 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -127,6 +127,23 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
->  }
->  EXPORT_SYMBOL_GPL(tee_shm_alloc);
->
-> +/**
-> + * tee_shm_alloc_user_buf() - Allocate shared memory for user space
-> + * @ctx:       Context that allocates the shared memory
-> + * @size:      Requested size of shared memory
-> + *
-> + * Memory allocated as user space shared memory is automatically freed when
-> + * the TEE file pointer is closed. The primary usage of this function is
-> + * when the TEE driver doesn't support registering ordinary user space
-> + * memory.
-> + *
-> + * @returns a pointer to 'struct tee_shm'
-> + */
-> +struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
-> +{
-> +       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
-> +}
-> +
->  /**
->   * tee_shm_alloc_kernel_buf() - Allocate shared memory for kernel buffer
->   * @ctx:       Context that allocates the shared memory
-> diff --git a/drivers/tee/tee_shm_pool.c b/drivers/tee/tee_shm_pool.c
-> index a9f9d50fd181..0e460347138a 100644
-> --- a/drivers/tee/tee_shm_pool.c
-> +++ b/drivers/tee/tee_shm_pool.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (c) 2015, Linaro Limited
-> + * Copyright (c) 2015, 2017, 2022 Linaro Limited
-
-Redundant change?
-
->   */
->  #include <linux/device.h>
->  #include <linux/dma-buf.h>
-> diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-> index 6b0f0d01ebdf..975500b2553e 100644
-> --- a/include/linux/tee_drv.h
-> +++ b/include/linux/tee_drv.h
-> @@ -1,6 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0-only */
->  /*
-> - * Copyright (c) 2015-2016, Linaro Limited
-> + * Copyright (c) 2015-2022 Linaro Limited
-
-Ditto?
-
--Sumit
-
->   */
->
->  #ifndef __TEE_DRV_H
-> --
-> 2.31.1
->
+>  &sdhci {
+>  	bus-width = <8>;
+>  	mmc-hs200-1_8v;

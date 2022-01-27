@@ -2,147 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5514949E7D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3030949E7EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243935AbiA0Qmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbiA0Qmx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:42:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9785CC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 08:42:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 303F461920
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:42:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5836AC340E4;
-        Thu, 27 Jan 2022 16:42:51 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 11:42:49 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] ftrace: Have architectures opt-in for mcount build time
- sorting
-Message-ID: <20220127114249.03b1b52b@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S244085AbiA0QpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:45:09 -0500
+Received: from mga11.intel.com ([192.55.52.93]:21456 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244072AbiA0QpI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:45:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643301908; x=1674837908;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0XYCULJz8eCwunpqt4WW86gJKS6aVCwiIa+rTXc0vrY=;
+  b=YUpUQhuP2P2ONDNu4UHFwQJz3C8gKeIwbv2Vx8nQgLz/ReIXjxEID2Ky
+   0Jph+dEdAQQqGcvt0XFhWQTyWBHWg157Ti94RXIry4Z/nT61+boVAypni
+   xGsMDgaVjCz8NDhlbPnfs2y8wx8lq3S6RQEDLZhFvp4F+RlApPiRMpPod
+   petoW8eQmz5jGdW3KTw9nYhYGDm36P2kr6y1rFhqJ+dtccCT+lmaaiZze
+   etRAVh8xAjcKU2Pe3tIemI1n1SV+LgGhMM+0aQOjRuIlFLfDnjGqnlN7q
+   Lc6u9VRbUHWD+gzttJNs2IqYsujht23Skitdpch+9ccRd7KRtqe9XtWtk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="244510328"
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="244510328"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:45:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="477935447"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 27 Jan 2022 08:45:04 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nD7tP-000MoH-LD; Thu, 27 Jan 2022 16:45:03 +0000
+Date:   Fri, 28 Jan 2022 00:44:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com
+Subject: Re: [PATCH v10 1/9] dax: Introduce holder for dax_device
+Message-ID: <202201280035.A565CZYV-lkp@intel.com>
+References: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Hi Shiyang,
 
-First S390 complained that the sorting of the mcount sections at build
-time caused the kernel to crash on their architecture. Now PowerPC is
-complaining about it too. And also ARM64 appears to be having issues.
+Thank you for the patch! Perhaps something to improve:
 
-It may be necessary to also update the relocation table for the values
-in the mcount table. Not only do we have to sort the table, but also
-update the relocations that may be applied to the items in the table.
+[auto build test WARNING on linux/master]
+[also build test WARNING on linus/master v5.17-rc1 next-20220127]
+[cannot apply to xfs-linux/for-next hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-If the system is not relocatable, then it is fine to sort, but if it is,
-some architectures may have issues (although x86 does not as it shifts all
-addresses the same).
+url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220128/202201280035.A565CZYV-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/57669ed05e93b37d995c5247eebe218ab2058c9a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+        git checkout 57669ed05e93b37d995c5247eebe218ab2058c9a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Add a HAVE_BUILDTIME_MCOUNT_SORT that an architecture can set to say it is
-safe to do the sorting at build time.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Also update the config to compile in build time sorting in the sorttable
-code in scripts/ to depend on CONFIG_BUILDTIME_MCOUNT_SORT.
+All warnings (new ones prefixed by >>):
 
-Link: https://lore.kernel.org/all/944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com/
+   In file included from mm/filemap.c:15:
+>> include/linux/dax.h:73:30: warning: 'struct dax_holder_operations' declared inside parameter list will not be visible outside of this definition or declaration
+      73 |                 const struct dax_holder_operations *ops)
+         |                              ^~~~~~~~~~~~~~~~~~~~~
 
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Yinan Liu <yinan@linux.alibaba.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: linuxppc-dev@lists.ozlabs.org
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+vim +73 include/linux/dax.h
+
+    48	
+    49	void dax_register_holder(struct dax_device *dax_dev, void *holder,
+    50			const struct dax_holder_operations *ops);
+    51	void dax_unregister_holder(struct dax_device *dax_dev);
+    52	void *dax_get_holder(struct dax_device *dax_dev);
+    53	void put_dax(struct dax_device *dax_dev);
+    54	void kill_dax(struct dax_device *dax_dev);
+    55	void dax_write_cache(struct dax_device *dax_dev, bool wc);
+    56	bool dax_write_cache_enabled(struct dax_device *dax_dev);
+    57	bool dax_synchronous(struct dax_device *dax_dev);
+    58	void set_dax_synchronous(struct dax_device *dax_dev);
+    59	/*
+    60	 * Check if given mapping is supported by the file / underlying device.
+    61	 */
+    62	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+    63						     struct dax_device *dax_dev)
+    64	{
+    65		if (!(vma->vm_flags & VM_SYNC))
+    66			return true;
+    67		if (!IS_DAX(file_inode(vma->vm_file)))
+    68			return false;
+    69		return dax_synchronous(dax_dev);
+    70	}
+    71	#else
+    72	static inline void dax_register_holder(struct dax_device *dax_dev, void *holder,
+  > 73			const struct dax_holder_operations *ops)
+    74	{
+    75	}
+    76	static inline void dax_unregister_holder(struct dax_device *dax_dev)
+    77	{
+    78	}
+    79	static inline void *dax_get_holder(struct dax_device *dax_dev)
+    80	{
+    81		return NULL;
+    82	}
+    83	static inline struct dax_device *alloc_dax(void *private,
+    84			const struct dax_operations *ops)
+    85	{
+    86		/*
+    87		 * Callers should check IS_ENABLED(CONFIG_DAX) to know if this
+    88		 * NULL is an error or expected.
+    89		 */
+    90		return NULL;
+    91	}
+    92	static inline void put_dax(struct dax_device *dax_dev)
+    93	{
+    94	}
+    95	static inline void kill_dax(struct dax_device *dax_dev)
+    96	{
+    97	}
+    98	static inline void dax_write_cache(struct dax_device *dax_dev, bool wc)
+    99	{
+   100	}
+   101	static inline bool dax_write_cache_enabled(struct dax_device *dax_dev)
+   102	{
+   103		return false;
+   104	}
+   105	static inline bool dax_synchronous(struct dax_device *dax_dev)
+   106	{
+   107		return true;
+   108	}
+   109	static inline void set_dax_synchronous(struct dax_device *dax_dev)
+   110	{
+   111	}
+   112	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+   113					struct dax_device *dax_dev)
+   114	{
+   115		return !(vma->vm_flags & VM_SYNC);
+   116	}
+   117	#endif
+   118	
+
 ---
- arch/arm/Kconfig     | 1 +
- arch/x86/Kconfig     | 1 +
- kernel/trace/Kconfig | 8 +++++++-
- scripts/Makefile     | 2 +-
- 4 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index c2724d986fa0..5256ebe57451 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -82,6 +82,7 @@ config ARM
- 	select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
- 	select HAVE_CONTEXT_TRACKING
- 	select HAVE_C_RECORDMCOUNT
-+	select HAVE_BUILDTIME_MCOUNT_SORT
- 	select HAVE_DEBUG_KMEMLEAK if !XIP_KERNEL
- 	select HAVE_DMA_CONTIGUOUS if MMU
- 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 7399327d1eff..46080dea5dba 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -186,6 +186,7 @@ config X86
- 	select HAVE_CONTEXT_TRACKING_OFFSTACK	if HAVE_CONTEXT_TRACKING
- 	select HAVE_C_RECORDMCOUNT
- 	select HAVE_OBJTOOL_MCOUNT		if STACK_VALIDATION
-+	select HAVE_BUILDTIME_MCOUNT_SORT
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 752ed89a293b..7e5b92090faa 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -70,10 +70,16 @@ config HAVE_C_RECORDMCOUNT
- 	help
- 	  C version of recordmcount available?
- 
-+config HAVE_BUILDTIME_MCOUNT_SORT
-+       bool
-+       help
-+         An architecture selects this if it sorts the mcount_loc section
-+	 at build time.
-+
- config BUILDTIME_MCOUNT_SORT
-        bool
-        default y
--       depends on BUILDTIME_TABLE_SORT && !S390
-+       depends on HAVE_BUILDTIME_MCOUNT_SORT
-        help
-          Sort the mcount_loc section at build time.
- 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index b082d2f93357..cedc1f0e21d8 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -32,7 +32,7 @@ HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
- HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
- endif
- 
--ifdef CONFIG_DYNAMIC_FTRACE
-+ifdef CONFIG_BUILDTIME_MCOUNT_SORT
- HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
- endif
- 
--- 
-2.33.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

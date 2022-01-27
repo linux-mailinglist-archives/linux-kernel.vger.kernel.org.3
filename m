@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D110749EE2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2443F49EE36
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237532AbiA0WlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 17:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S241009AbiA0Wmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 17:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiA0WlG (ORCPT
+        with ESMTP id S231520AbiA0Wmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:41:06 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C918C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:41:06 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so4036362otf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:41:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=C79nec5d4UWFoxeuqvc4pTvKWdk7yx+4+JUc6wJBQYE=;
-        b=IIkUwq5frbe8Fuxr7LiChay7jMsr50X27LAdiOIiSi6CTTvrZlPi65qZPJ5ZcAd1Ma
-         BiTTL5IgCMax9MQJEm5SMrp1iqBP895vbaQ7PzuQVDUMOnGdrEaoqwhrISUH28jJ5Pof
-         s9TH1wGmSt5TMSq6VARBdJm3eopMzgfWE3mbo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=C79nec5d4UWFoxeuqvc4pTvKWdk7yx+4+JUc6wJBQYE=;
-        b=jxQMTTAqFhUW28uJw9rULpc7mW3Apw9FZqf/VHLuWbGB/vWmCn+pzh7Aoqc1jNDbJG
-         XKO08pVVbvG/LZWyWh7odgH/OPkNjG9X1qlNtvptBp0h1MRDpZ3HaNgQURClsLa7bgJ+
-         MHxicM+IocHrPO7nhD8maoJJz4545A56HZN1Z26tBWLeU0zv22T+lxlW21DpMSIO3Sf/
-         DmsztuUa5s+R1v4wuheDUBuneE7rYzd9Db8oC5cfEAx8U9VxM0FZhkEkPZsktqIhsRMK
-         OqvG+KCvX2GZY7xa7DRsLXllIkXVsQo8DCMKjUPBLPhiFsVzvXSdTDqr2lYvrOia8T9+
-         0Xiw==
-X-Gm-Message-State: AOAM530EuFFNeI5ESl/TBvuvg9m6wMp5y4jhLs7+JRlbwhmxkGphJA59
-        MZtvrEg9lAsi/JsYG4ezocc8KjQuVBai57+ClDO25tPbi7I=
-X-Google-Smtp-Source: ABdhPJwEVMVdW2UZvQhaXtEbQBFp75r9XdNB5RKn5cJ9Z8p872vkLHsuYPuDaieQcnKb114ZraXLMuYgUbl81wcf0gs=
-X-Received: by 2002:a9d:6f06:: with SMTP id n6mr3225915otq.159.1643323265903;
- Thu, 27 Jan 2022 14:41:05 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 27 Jan 2022 14:41:05 -0800
-MIME-Version: 1.0
-In-Reply-To: <20220127210024.25597-3-quic_amelende@quicinc.com>
-References: <20220127210024.25597-1-quic_amelende@quicinc.com> <20220127210024.25597-3-quic_amelende@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 27 Jan 2022 14:41:05 -0800
-Message-ID: <CAE-0n50UzVw4wqpV1v-T3k2if+m6jv-Tx7+N2kD4O=J60zmuoA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] input: misc: pm8941-pwrkey: add support for PON
- GEN3 base addresses
-To:     Anjelique Melendez <quic_amelende@quicinc.com>,
-        dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
-        bjorn.andersson@linaro.org, skakit@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 27 Jan 2022 17:42:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B954CC061714;
+        Thu, 27 Jan 2022 14:42:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF2ADB818E6;
+        Thu, 27 Jan 2022 22:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93342C340E4;
+        Thu, 27 Jan 2022 22:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1643323352;
+        bh=ybh+vNa1e2zVCBIHmgIav4rSBCIa4tEXBrjj/Zvd9DM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lD8DNYdSP5VgdUVvLTzLs87NT6X2RUv/tVO0wVWZV57Mo8tiF+Cy9CVqnSr4Mr28N
+         /4z/vln9zP3ZnibjoeX42f/bT+EANd4Y6/PvlZ8IiaLj4IayJe8a69r3sno42DD5jQ
+         fiofeE7oSvVhmRsxcbaFoTER4oAWLDgl8zvqXutM=
+Date:   Thu, 27 Jan 2022 14:42:29 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-nilfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH 0/9] Remove remaining parts of congestions tracking
+ code.
+Message-Id: <20220127144229.a7109a508521db5e8ddda09c@linux-foundation.org>
+In-Reply-To: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Anjelique Melendez (2022-01-27 13:00:25)
-> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
-> index e0240db12d4f..7005aede4f81 100644
-> --- a/drivers/input/misc/pm8941-pwrkey.c
-> +++ b/drivers/input/misc/pm8941-pwrkey.c
-> @@ -200,15 +207,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
->                         dev_err(&pdev->dev, "failed to locate regmap\n");
->                         return -ENODEV;
->                 }
-> +       }
->
-> -               error = of_property_read_u32(parent->of_node,
-> -                                            "reg", &pwrkey->baseaddr);
-> -       } else {
-> -               error = of_property_read_u32(pdev->dev.of_node, "reg",
-> -                                            &pwrkey->baseaddr);
-> +       addr = of_get_address(regmap_node, 0, NULL, NULL);
-> +       if (!addr) {
-> +               dev_err(&pdev->dev, "reg property missing\n");
-> +               return -EINVAL;
-> +       }
-> +       pwrkey->baseaddr = be32_to_cpu(*addr);
+On Thu, 27 Jan 2022 13:46:29 +1100 NeilBrown <neilb@suse.de> wrote:
 
-Isn't this supposed to be be32_to_cpup(addr)?
+> Congestion hasn't been reliably tracked for quite some time.
+> Most MM uses of it for guiding writeback decisions were removed in 5.16.
+> Some other uses were removed in 17-rc1.
+> 
+> This series removes the remaining places that test for congestion, and
+> the few places which still set it.
+> 
+> The second patch touches a few filesystems.  I didn't think there was
+> much value in splitting this out by filesystems, but if maintainers
+> would rather I did that, I will.
+> 
+> The f2fs, cephfs, fuse, NFS, and block patches can go through the
+> respective trees proving the final patch doesn't land until after they
+> all do - so maybe it should be held for 5.18-rc2 if all the rest lands
+> by 5.18-rc1.
 
-> +
-> +       if (pwrkey->data->has_pon_pbs) {
-> +               /* PON_PBS base address is optional */
-> +               addr = of_get_address(regmap_node, 1, NULL, NULL);
-> +               if (addr)
-> +                       pwrkey->pon_pbs_baseaddr = be32_to_cpu(*addr);
+Plan B: I'll just take everything.  While collecting tested-bys and
+acked-bys from filesystem maintainers (please).
 
-Isn't this supposed to be be32_to_cpup(addr)?
-
->         }
-> -       if (error)
-> -               return error;
->
->         pwrkey->irq = platform_get_irq(pdev, 0);
->         if (pwrkey->irq < 0)

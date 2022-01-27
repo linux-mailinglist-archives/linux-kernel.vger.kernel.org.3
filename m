@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4E849E2F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B7D49E2F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241325AbiA0M7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:59:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:60228 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236419AbiA0M7q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:59:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 799F21063;
-        Thu, 27 Jan 2022 04:59:45 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.14.34])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 366E23F766;
-        Thu, 27 Jan 2022 04:59:44 -0800 (PST)
-Date:   Thu, 27 Jan 2022 12:59:31 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Yinan Liu <yinan@linux.alibaba.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
- code-patching selftests
-Message-ID: <YfKXM0wBfTh0V8+L@FVFF77S0Q05N>
-References: <944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com>
- <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
- <20220124114548.30241947@gandalf.local.home>
- <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
- <YfFclROd+0/61q2d@FVFF77S0Q05N>
- <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
- <CAMj1kXHgpr0KYx5PYO_SpqaN8Ar2kfmc9Pb-d26uaYDpjwTz9w@mail.gmail.com>
- <YfKOENgR6sLnHQmA@FVFF77S0Q05N>
- <CAMj1kXGsmK9pBmgwmMEr302eCHtL=cqs4jqM_jOiK-bLO2gQog@mail.gmail.com>
+        id S241444AbiA0NAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241433AbiA0NAP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 08:00:15 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2991C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:00:14 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso5852263wmj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:00:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:references:from:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ThKwZzEoBwxLlFAIZol3ZN4msDIng1irxNDgy0k+rvc=;
+        b=ydj0/OueVnJjO8OAlorriaqhjLQotHZJEeqmyT0xqowTtn7ESjmnqrqzKnaGS+u9c1
+         wudEpQIHBGi2/w3k4pV64TB3aHgAmXxTtheV50G9i2m7MBaDh3p6sGWSbN6BMwVsgGLi
+         YNBFgPGd29YkQdq1uztpkLgWK8jV18DISDhOa1ENmFGhpzzDRHv/qSuAOCZ2uLn4mbb/
+         PldoF15pe5iQLDtEZdA+BVU6u8Yd1Pf5wRTEpT2XYS07pXM6pnEQv/drX2fq7Iz2+wjf
+         zEcqRQm3irQ61f9WeQCR9qo/QraPkxnODk5wrQTgNbBR5ZwjKMxlK308icVc30XXAw/U
+         zmXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ThKwZzEoBwxLlFAIZol3ZN4msDIng1irxNDgy0k+rvc=;
+        b=bzEK1FHAHYAXtkpgJklv2SWTCKgE1sP44+w4ldrxEzLoNXFRLarVwgwHqJUXgUCLf/
+         k1HomqQrIxgDtMNYmi1046xJV44u25oqCqvN7KqN33jTmuSASKR2KiaLrpCqpuOybVW6
+         1Ww8n8A47n7Dz5W0mWQhPkDmtn3He8Daik9a0qYiXcVKVX0nh+b2OxL2JzI/eay2pcPa
+         hXK8Z434PswrJqZUwx53hrrJW8Yq/ziXKVKVicikVEGAwsOx4D67ymkd9LRVrK+b4VbO
+         nTJWRr5Fb2s5XVYx9IYqDQbozqmcYQujSzmgExNvxHvAJibFpq3t1tUsz4lEHS5zFL1p
+         idSQ==
+X-Gm-Message-State: AOAM530OUufTgRPJtB9YAXsCF1G1Ctlpuqt7HQd4vnH/RObQPNuqaFF+
+        yrqMN3gPgtcaejqH6K75VgO6eM1RpXdX9Q==
+X-Google-Smtp-Source: ABdhPJytoOWrwFTPO/vhPLQQlw+pOJNhOpY0awU0APR5Dw/RblEz48fpW5KA5FMrx6jC3i5IimycUQ==
+X-Received: by 2002:a05:600c:3d94:: with SMTP id bi20mr11706693wmb.14.1643288412500;
+        Thu, 27 Jan 2022 05:00:12 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff? ([2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff])
+        by smtp.gmail.com with ESMTPSA id c13sm2169441wrv.24.2022.01.27.05.00.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 05:00:12 -0800 (PST)
+Subject: Re: [PATCH] arm64: dts: meson-sm1: fix wrong GPIO domain for GPIOE_2
+To:     Dongjin Kim <tobetter@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <YfKPSvnFKOaLr74+@anyang>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <dcb67b4e-6a46-86a6-b21f-99263cc9ff05@baylibre.com>
+Date:   Thu, 27 Jan 2022 14:00:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGsmK9pBmgwmMEr302eCHtL=cqs4jqM_jOiK-bLO2gQog@mail.gmail.com>
+In-Reply-To: <YfKPSvnFKOaLr74+@anyang>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 01:22:17PM +0100, Ard Biesheuvel wrote:
-> On Thu, 27 Jan 2022 at 13:20, Mark Rutland <mark.rutland@arm.com> wrote:
-> > On Thu, Jan 27, 2022 at 01:03:34PM +0100, Ard Biesheuvel wrote:
-> >
-> > > These architectures use place-relative extables for the same reason:
-> > > place relative references are resolved at build time rather than at
-> > > runtime during relocation, making a build time sort feasible.
-> > >
-> > > arch/alpha/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/arm64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/ia64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/parisc/include/asm/uaccess.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/powerpc/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/riscv/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/s390/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > > arch/x86/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > >
-> > > Note that the swap routine becomes something like the below, given
-> > > that the relative references need to be fixed up after the entry
-> > > changes place in the sorted list.
-> > >
-> > > static void swap_ex(void *a, void *b, int size)
-> > > {
-> > >         struct exception_table_entry *x = a, *y = b, tmp;
-> > >         int delta = b - a;
-> > >
-> > >         tmp = *x;
-> > >         x->insn = y->insn + delta;
-> > >         y->insn = tmp.insn - delta;
-> > >         ...
-> > > }
-> > >
-> > > As a bonus, the resulting footprint of the table in the image is
-> > > reduced by 8x, given that every 8 byte pointer has an accompanying 24
-> > > byte RELA record, so we go from 32 bytes to 4 bytes for every call to
-> > > __gnu_mcount_mc.
-> >
-> > Absolutely -- it'd be great if we could do that for the callsite locations; the
-> > difficulty is that the entries are generated by the compiler itself, so we'd
-> > either need some build/link time processing to convert each absolute 64-bit
-> > value to a relative 32-bit offset, or new compiler options to generate those as
-> > relative offsets from the outset.
+Hi,
+
+On 27/01/2022 13:25, Dongjin Kim wrote:
+> GPIOE_2 is in AO domain and "<&gpio GPIOE_2 ...>" changes the state of
+> GPIOZ_14 connected to INTR of 'RTL8211F' on ODROID-HC and TF_PWR_EN of
+> 'FC8731' on BPI-M5
 > 
-> Don't we use scripts/recordmcount.pl for that?
-
-Not quite -- we could adjust it to do so, but today it doesn't consider
-existing mcount_loc entries, and just generates new ones where the compiler has
-generated calls to mcount, which it finds by scanning the instructions in the
-binary. Today it is not used:
-
-* On arm64 when we default to using `-fpatchable-function-entry=N`.  That makes
-  the compiler insert 2 NOPs in the function prologue, and log the location of
-  that NOP sled to a section called.  `__patchable_function_entries`. 
-
-  We need the compiler to do that since we can't reliably identify 2 NOPs in a
-  function prologue as being intended to be a patch site, as e.g. there could
-  be notrace functions where the compiler had to insert NOPs for alignment of a
-  subsequent brnach or similar.
-
-* On architectures with `-nop-mcount`. On these, it's necessary to use
-  `-mrecord-mcount` to have the compiler log the patch-site, for the same
-  reason as with `-fpatchable-function-entry`.
-
-* On architectures with `-mrecord-mcount` generally, since this avoids the
-  overhead of scanning each object.
-
-* On x86 when objtool is used.
+> Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
+> Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
+> 
+> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
+>  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> index 212c6aa5a3b8..5751c48620ed 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> @@ -123,7 +123,7 @@ vddio_c: regulator-vddio_c {
+>  		regulator-min-microvolt = <1800000>;
+>  		regulator-max-microvolt = <3300000>;
+>  
+> -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
+> +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
+>  		enable-active-high;
+>  		regulator-always-on;
+>  
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> index bf29afac645f..d4349b355e4a 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> @@ -52,7 +52,7 @@ tf_io: gpio-regulator-tf_io {
+>  		regulator-max-microvolt = <3300000>;
+>  		vin-supply = <&vcc_5v>;
+>  
+> -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
+> +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
+>  		enable-active-high;
+>  		regulator-always-on;
+>  
+> 
+Thanks for the fixes,
+can you send 2 patches fixing each files instead ?
 
 Thanks,
-Mark.
+Neil

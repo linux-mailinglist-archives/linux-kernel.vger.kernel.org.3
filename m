@@ -2,120 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3D049E0F7
+	by mail.lfdr.de (Postfix) with ESMTP id B4BDA49E0F9
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240416AbiA0Lbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:31:51 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:32125 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240384AbiA0Lbs (ORCPT
+        id S240436AbiA0Lb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:31:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55768 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240402AbiA0Lb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:31:48 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jkyym27Hmz8wgG;
-        Thu, 27 Jan 2022 19:28:48 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 27 Jan 2022 19:31:46 +0800
-Subject: Re: [PATCH 01/16] scsi: libsas: Use enum for response frame DATAPRES
- field
-To:     John Garry <john.garry@huawei.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <artur.paszkiewicz@intel.com>,
-        <jinpu.wang@cloud.ionos.com>, <Ajish.Koshy@microchip.com>
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
- <1643110372-85470-2-git-send-email-john.garry@huawei.com>
-CC:     <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
-        <Viswas.G@microchip.com>, <damien.lemoal@opensource.wdc.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <4a2986a4-8293-2a25-8ee1-109ff8aa0bc3@hisilicon.com>
-Date:   Thu, 27 Jan 2022 19:31:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Thu, 27 Jan 2022 06:31:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C266B82229
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:31:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82722C340E4;
+        Thu, 27 Jan 2022 11:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643283114;
+        bh=nUcH8znezYjW1WS7mB1iqNEDvlkOO2kpsNW6OLVyPLg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ztx6Y9DovvzvuGzel7vHJHGDf/2WMYKUp/TtGM6dlJqVZSkdwiTaIXI0/qzAYOoPE
+         OwitjAJPOFn08XJfwJG+PPZ5tTy5RTCUhTxpQ1bGNJq7qCWdfBnyNy42gq31rxnyxb
+         qe873sysQgyASv8QwKAvEqezPDxR50hUXVfhdxso=
+Date:   Thu, 27 Jan 2022 12:31:51 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Usyskin <alexander.usyskin@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/5] Add driver for GSC controller
+Message-ID: <YfKCp9zmDwp3Qz7j@kroah.com>
+References: <20220127112103.2336871-1-alexander.usyskin@intel.com>
+ <YfKCe9ALCjrUO+89@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <1643110372-85470-2-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfKCe9ALCjrUO+89@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+On Thu, Jan 27, 2022 at 12:31:07PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 27, 2022 at 01:20:58PM +0200, Alexander Usyskin wrote:
+> > GSC is a graphics system controller, it provides
+> > a chassis controller for graphics discrete cards.
+> > 
+> > There are two MEI interfaces in GSC: HECI1 and HECI2.
+> > 
+> > This series includes instantiation of the auxiliary devices for HECI2
+> > and mei-gsc auxiliary device driver that binds to the auxiliary device.
+> > 
+> > In v2 the platform device was replaced by the auxiliary device.
+> > v3 is the rebase over drm-tip to make public CI running.
+> > In v4 the not needed debug prints and empty line were removed,
+> >       'select' were replaced by 'depends on' in MEI Kconfig,
+> >       the new include file now listed in the MAINTATINERS file. 
+> > 
+> > Greg KH, please review and ACK the MEI patches after main merge window closure.
+> 
+> The merge window already closed, did you forget to update your email?
+> 
+> > We are pushing all through gfx tree as the auxiliary device belongs there.
+> 
+> I'll get to this in a week or so, please be patient.
 
+In the meantime, while you are waiting, please review other patches on
+the mailing lists to help with maintainer's workloads.
 
-在 2022/1/25 19:32, John Garry 写道:
-> As defined in table 126 of the SAS spec 1.1, use an enum for the DATAPRES
-> field, which makes reading the code easier.
->
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->   drivers/scsi/libsas/sas_task.c | 12 +++++++++---
->   1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/scsi/libsas/sas_task.c b/drivers/scsi/libsas/sas_task.c
-> index 2966ead1d421..7240fd22b154 100644
-> --- a/drivers/scsi/libsas/sas_task.c
-> +++ b/drivers/scsi/libsas/sas_task.c
-> @@ -7,6 +7,12 @@
->   #include <scsi/sas.h>
->   #include <scsi/libsas.h>
->   
-> +enum {
-> +	NO_DATA = 0,
-> +	RESPONSE_DATA = 1,
-> +	SENSE_DATA = 2,
-> +};
-> +
-
-I find that iu->datapres is also used in other drivers with 0/1/2, and 
-maybe it is worth to replace all of them with those enum.
-
-   2    290 
-/home/chenxiang/kernel_next/kernel-dev/drivers/scsi/aic94xx/aic94xx_tmf.c 
-<<<unknown>>>
-              if (ru->datapres == 1)
-5   1055 
-/home/chenxiang/kernel_next/kernel-dev/drivers/scsi/isci/request.c 
-<<<unknown>>>
-              if (datapres == 1 || datapres == 2) {
-    6   1740 
-/home/chenxiang/kernel_next/kernel-dev/drivers/scsi/isci/request.c 
-<<<unknown>>>
-              if (resp_iu->datapres == 0x01 ||
-    7   1741 
-/home/chenxiang/kernel_next/kernel-dev/drivers/scsi/isci/request.c 
-<<<unknown>>>
-                  resp_iu->datapres == 0x02) {
-  17   1641 
-/home/chenxiang/kernel_next/kernel-dev/drivers/scsi/mvsas/mv_sas.c 
-<<<unknown>>>
-              iu->datapres = 2;
-
->   /* fill task_status_struct based on SSP response frame */
->   void sas_ssp_task_response(struct device *dev, struct sas_task *task,
->   			   struct ssp_response_iu *iu)
-> @@ -15,11 +21,11 @@ void sas_ssp_task_response(struct device *dev, struct sas_task *task,
->   
->   	tstat->resp = SAS_TASK_COMPLETE;
->   
-> -	if (iu->datapres == 0)
-> +	if (iu->datapres == NO_DATA)
->   		tstat->stat = iu->status;
-> -	else if (iu->datapres == 1)
-> +	else if (iu->datapres == RESPONSE_DATA)
->   		tstat->stat = iu->resp_data[3];
-> -	else if (iu->datapres == 2) {
-> +	else if (iu->datapres == SENSE_DATA) {
->   		tstat->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		tstat->buf_valid_size =
->   			min_t(int, SAS_STATUS_BUF_SIZE,
-
-
-
+greg k-h

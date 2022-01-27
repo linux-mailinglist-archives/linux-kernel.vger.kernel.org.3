@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6737149DA4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA0349DA5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236300AbiA0FjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 00:39:22 -0500
-Received: from webmail.amiindia.co.in ([14.98.235.2]:59183 "EHLO
-        IMSVA.IN.MEGATRENDS.COM" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229801AbiA0FjU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 00:39:20 -0500
-Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EA5782047;
-        Thu, 27 Jan 2022 11:20:27 +0530 (IST)
-Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF95282046;
-        Thu, 27 Jan 2022 11:20:26 +0530 (IST)
-Received: from webmail.amiindia.co.in (venus1.in.megatrends.com [10.0.0.5])
-        by IMSVA.IN.MEGATRENDS.COM (Postfix) with ESMTPS;
-        Thu, 27 Jan 2022 11:20:26 +0530 (IST)
-Received: from msgubuntu-OptiPlex-5060.in.megatrends.com (10.0.124.83) by
- VENUS1.in.megatrends.com (10.0.0.5) with Microsoft SMTP Server id 14.3.468.0;
- Thu, 27 Jan 2022 11:09:11 +0530
-From:   krishnar4 <krishnar@ami.com>
-To:     Krishna Raj <krishnar@ami.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-hwmon@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>,
-        Deepak Kodihalli <dkodihalli@nvidia.com>,
-        Shakeeb Pasha <spasha@nvidia.com>,
-        Vinodhini J <vinodhinij@ami.com>,
-        Pravinash Jeyapaul <pravinashj@ami.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH linux dev-5.15] hwmon: (pmbus) modify PSU fan_target convert value to false
-Date:   Thu, 27 Jan 2022 11:09:08 +0530
-Message-ID: <20220127053908.16587-1-krishnar@ami.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <git-send-email-krishnar@ami.com>
-References: <git-send-email-krishnar@ami.com>
+        id S236346AbiA0Fy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 00:54:56 -0500
+Received: from mga04.intel.com ([192.55.52.120]:10536 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229551AbiA0Fyz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 00:54:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643262895; x=1674798895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wZNiQ5pkRxeJ8Ao6cIn34CxSJY+ary9AZNzrIwzYuZw=;
+  b=DAm4AWoVR//pENCcSmxfnRtRFFYka0wru3n9iha4lTHYWBMNStNAIpYy
+   jvwARkDpvcYeWPFrSDv3/jOvdSVlUE7RlhLENZ/XSVferQ6/PmlTSsufx
+   xDE7yi6WnR5/P/E1qZwGGuzfOA9tCnT6vPtp2bOx0wuu+q+VmnIlYCdQx
+   tRJlPILjHFC6MlmYMaBpDUxy6IIG89TVfqlIRpRF8DOTvRjlWzZL1Tisi
+   XcPCz0srr91B/8XiiXjEPTV7rSIlIiHgHb/tBJUEkQySHxqJx34ljwAA5
+   D81D53nZP1I7SS1QF6a8gr7LSMkm6NNlBQOyyJPtQbCUkJtSJdfEHFFdp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245596571"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="245596571"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 21:54:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="628566642"
+Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.145.56])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 26 Jan 2022 21:54:52 -0800
+Date:   Thu, 27 Jan 2022 13:39:29 +0800
+From:   Yang Zhong <yang.zhong@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, yang.zhong@intel.com
+Subject: Re: [PATCH 0/3] KVM: x86: export supported_xcr0 via UAPI
+Message-ID: <20220127053929.GA8503@yangzhon-Virtual>
+References: <20220126152210.3044876-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSVA-9.1.0.1817-8.6.0.1013-26114.002
-X-TM-AS-Result: No--1.662-5.0-31-10
-X-imss-scan-details: No--1.662-5.0-31-10
-X-TMASE-Version: IMSVA-9.1.0.1817-8.6.1013-26114.002
-X-TMASE-Result: 10--1.662300-10.000000
-X-TMASE-MatchedRID: 8muszqLoCjtHoOzJ1oF1dqiUivh0j2Pvljgw/8s6b3cHZBaLwEXlKGlF
-        7OhYLlctcwePA9FSeTz9k6grZ0shf9zmfZUrwTrUngIgpj8eDcBpkajQR5gb3savT21DsLD/UEh
-        Wy9W70AEnRE+fI6etkituBDgcniIfegbcIIrT/+G8mBZdhaNLqDiyY/5MU8oBTzs4VfHSjec5fl
-        oBUgk06Ga7J9YRB75owdF1Ue2Jr/JPZRTsEKEvt4pebMSk1UmKlmXPgyQocYp5E1G2nFNyeETBf
-        0diyKhk7DIVgUu7mCo=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126152210.3044876-1-pbonzini@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Description: PSU can't use sysfs fan_target to control PSU fan duty.
+On Wed, Jan 26, 2022 at 10:22:07AM -0500, Paolo Bonzini wrote:
+> While working on the QEMU support for AMX, I noticed that there is no
+> equivalent of ARCH_GET_XCOMP_SUPP in the KVM API.  This is important
+> because KVM_GET_SUPPORTED_CPUID is meant to be passed (by simple-minded
+> VMMs) to KVM_SET_CPUID2, and therefore it cannot include any dynamic
+> xsave states that have not been enabled.  Probing the availability of
+> dynamic xsave states therefore, requires a new ioctl or arch_prctl.
+> 
+> In order to avoid moving supported_xcr0 to the kernel from the KVM
+> module just for this use, and to ensure that the value can only be
+> probed if/after the KVM module has been loaded, this series goes
+> for the former option.
+> 
+> KVM_CHECK_EXTENSION cannot be used because it only has 32 bits of
+> output; in order to limit the growth of capabilities and ioctls, the
+> series adds a /dev/kvm variant of KVM_{GET,HAS}_DEVICE_ATTR that
+> can be used in the future and by other architectures.  It then
+> implements it in x86 with just one group (0) and attribute
+> (KVM_X86_XCOMP_GUEST_SUPP).
+> 
+> The corresponding changes to the tests, in patches 1 and 3, are
+> designed so that the code will be covered (to the possible extent)
+> even when running the tests on systems that do not support AMX.
+> However, the patches have not been tested with AMX.
+>
 
-Signed-off-by: krishnar4 <krishnar@ami.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Paolo, thanks for this patchset. I applied this patchset into latest
+  Linux release, and verified it from kvm selftest tool and Qemu side
+  (In order to verify this easily, I reused the older request permission
+   function like kvm selftest did), all work well. thanks!
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..a56c2e1c4079 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1889,7 +1889,7 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
+  Yang
  
- 	sensor = pmbus_add_sensor(data, "fan", "target", index, page,
- 				  0xff, PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
--				  false, false, true);
-+				  false, false, false);
- 
- 	if (!sensor)
- 		return -ENOMEM;
--- 
-2.17.1
-
+> Thanks,
+> 
+> Paolo
+> 
+> 
+> Paolo Bonzini (3):
+>   selftests: kvm: move vm_xsave_req_perm call to amx_test
+>   KVM: x86: add system attribute to retrieve full set of supported xsave
+>     states
+>   selftests: kvm: check dynamic bits against KVM_X86_XCOMP_GUEST_SUPP
+> 
+>  Documentation/virt/kvm/api.rst                |  4 +-
+>  arch/x86/include/uapi/asm/kvm.h               |  3 ++
+>  arch/x86/kvm/x86.c                            | 45 +++++++++++++++++++
+>  include/uapi/linux/kvm.h                      |  1 +
+>  tools/arch/x86/include/uapi/asm/kvm.h         |  3 ++
+>  tools/include/uapi/linux/kvm.h                |  1 +
+>  .../selftests/kvm/include/kvm_util_base.h     |  1 -
+>  .../selftests/kvm/include/x86_64/processor.h  |  1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  7 ---
+>  .../selftests/kvm/lib/x86_64/processor.c      | 27 ++++++++---
+>  tools/testing/selftests/kvm/x86_64/amx_test.c |  2 +
+>  11 files changed, 80 insertions(+), 15 deletions(-)
+> 
+> -- 
+> 2.31.1

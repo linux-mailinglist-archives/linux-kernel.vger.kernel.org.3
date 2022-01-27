@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FE749D97E
+	by mail.lfdr.de (Postfix) with ESMTP id DF45349D97F
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiA0Dyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 22:54:43 -0500
-Received: from mga02.intel.com ([134.134.136.20]:16355 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229481AbiA0Dym (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 22:54:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643255682; x=1674791682;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KPw8yO4Xf+nA0vZ+fMeG2WSHNunzuatFdNoyVmmnL4U=;
-  b=IzGXfXy4kb9xX/dQKUXfV2o7bz/UAefMZ0EdU8bi2uZurpmfUGuvP3f9
-   va7DHZ0JzFvkc0dSZy89nZdrWvjrOqEXRzjuUrXS5mBQtEC6EWtKETqaY
-   26ZCxJjtXJmTNxD3f+wTjrcNFzK+hWQGhyS+zOmsbKx7k0XdvBVeUFtyt
-   oi54Gv0IaqWCeD3HzhSzwelYtuSz+fCvx3Yz48Wd4qkJGiPHJefvdTAwC
-   GiQYhFgx3n/UOvwzeYGCc417a3ZefOqOYic/dUJN11Q+oWJg3kTTVqMiL
-   o8j31cwhGQgeji1QxLTdz/CZ9ZD9CYMwKxWMxnhF0hqVCCHc84DjHQ6WG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234115005"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="234115005"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 19:54:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="495590087"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2022 19:54:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCvrr-000M4F-7x; Thu, 27 Jan 2022 03:54:39 +0000
-Date:   Thu, 27 Jan 2022 11:54:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kelly Rossmoyer <krossmo@google.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android11-kiwi-5.4
- 2422/9999] kernel/power/wakeup_reason.c:199:6: sparse: sparse: symbol
- '__log_abort_or_abnormal_wake' was not declared. Should it be static?
-Message-ID: <202201271124.vYu1IFCz-lkp@intel.com>
+        id S235907AbiA0DzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 22:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235900AbiA0DzM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 22:55:12 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B87C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:55:12 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id y27so1546437pfa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DTqfZ2Khk7i2kR4no5ocp1ILc6jfOZz5DYWh2ODagWE=;
+        b=MH2eKxmRFX4O+qEUS8Am3et6XBzmvFyvO3vPi9LdnJ2AtT6fXfJlVlzV1ZffvPQJwX
+         M6Xxx08py7d7hgQ4oreeQ6EgnR7jQ74d2wPBFRBdFDdkfAoREnePLNXmcfkt6zes0lry
+         1sQCri5olxkom5chwTWGs9rpcbtsZB5rpNEqBTRb6sglq0teeV9EVLP8hJQpJYnk7pbV
+         FFOo8K3/5Q96jsv5K1o4azXkUOaYHsYzGspl9tSNjxHH8YK99eOM7bltdgE+rM2W4ge/
+         1ZsI3q3IqagPUJjJHMynb823aerCHzoPpFYM19bnpUua1QAWbdspav9sdQVZZihn/0kd
+         EF1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DTqfZ2Khk7i2kR4no5ocp1ILc6jfOZz5DYWh2ODagWE=;
+        b=h+LaTU/SfaWuwOTTT1wc5vak4MW0pAKLXrwgoj4kHSB9fV0jo0XM8wSyiq4uN0UfQN
+         zWDBJJYDSvxosPB/JBOsRmnp5mNKyigLIXBr/FnKU2u6KQQ1PtIFL4VqkhkIh/mjTTmk
+         VOl/pNvVSfTfQhKYbt0dqhuM4np+pIW7offTfPpDPvMC2pHPKgAO8tikTVQJi3ng1cKo
+         yc9LgVG9y7TUFHuR31+hSnqgRV8jz0iT4hqC16Qebhiseu5xChspm3rHs028lsW+6+Gu
+         QFXlDz7HrcCwX/fqmJ6hbF3kLe4b/aM1uKUnj5/6RFcShZRhVWOqy6R2uOadur9/N3HC
+         BWzA==
+X-Gm-Message-State: AOAM5305hyFECKlsULGg6TSngAbV1pV0vGngPtvGkZGoxBhTKnO+de4t
+        zxw+z42cgwrQe0milAOODP0=
+X-Google-Smtp-Source: ABdhPJzZBk15HQ8kvib9OppnvSfRL9zj6j34lSbuGB6DOfYGpAplTAF7Gxb1cKMM44WIHj9sWl+8rQ==
+X-Received: by 2002:a63:f34a:: with SMTP id t10mr1448682pgj.189.1643255711573;
+        Wed, 26 Jan 2022 19:55:11 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id z13sm237264pfh.45.2022.01.26.19.55.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 19:55:10 -0800 (PST)
+Message-ID: <c7b80842-1e30-8a25-933c-da8658a91287@gmail.com>
+Date:   Wed, 26 Jan 2022 19:55:09 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/4] Broadcom STB PM PSCI extensions
+Content-Language: en-US
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220122035421.4086618-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220122035421.4086618-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android11-kiwi-5.4
-head:   7d1d5848183bd1d9086d0572f9af431d3ded407f
-commit: 189ced91cd7b0e440b0be876406fd36313a11c3f [2422/9999] ANDROID: power: wakeup_reason: wake reason enhancements
-config: i386-randconfig-s001-20220124 (https://download.01.org/0day-ci/archive/20220127/202201271124.vYu1IFCz-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/189ced91cd7b0e440b0be876406fd36313a11c3f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android11-kiwi-5.4
-        git checkout 189ced91cd7b0e440b0be876406fd36313a11c3f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/power/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/power/wakeup_reason.c:199:6: sparse: sparse: symbol '__log_abort_or_abnormal_wake' was not declared. Should it be static?
-   kernel/power/wakeup_reason.c:378:12: sparse: sparse: symbol 'wakeup_reason_init' was not declared. Should it be static?
+On 1/21/2022 7:54 PM, Florian Fainelli wrote:
+> Hi all,
+> 
+> This patch series contains the Broadcom STB PSCI extensions which adds
+> some additional functions on top of the existing standard PSCI interface
+> which is the reason for having the driver implement a custom
+> suspend_ops.
+> 
+> These platforms have traditionally supported a mode that is akin to
+> ACPI's S2 with the CPU in WFI and all of the chip being clock gated
+> which is entered with "echo standby > /sys/power/state". Additional a
+> true suspend to DRAM as defined in ACPI by S3 is implemented with "echo
+> mem > /sys/power/state".
+> 
+> These platforms also may have an external Broadcom PMIC chip which can
+> cause the SoC to be powercycled assuming that we communicate that intent
+> via a vendor specific PSCI SYSTEM_RESET2.
+> 
+> Since it is desirable to get any new functionality added to the kernel
+> to be loadable as a module as part of shipping said products in a Google
+> Kernel Image (GKI) environment, we need to export a couple of symbols from
+> drivers/firmware/psci/psci.c.
+> 
+> Thanks for your feedback.
 
-vim +/__log_abort_or_abnormal_wake +199 kernel/power/wakeup_reason.c
+I will be sending a v2 addressing the kbuild robot failures reported but 
+would prefer to get some feedback first so it can be addressed 
+simultaneously. Thanks!
 
-   198	
- > 199	void __log_abort_or_abnormal_wake(bool abort, const char *fmt, va_list args)
-   200	{
-   201		unsigned long flags;
-   202	
-   203		spin_lock_irqsave(&wakeup_reason_lock, flags);
-   204	
-   205		/* Suspend abort or abnormal wake reason has already been logged. */
-   206		if (suspend_abort || abnormal_wake) {
-   207			spin_unlock_irqrestore(&wakeup_reason_lock, flags);
-   208			return;
-   209		}
-   210	
-   211		suspend_abort = abort;
-   212		abnormal_wake = !abort;
-   213		vsnprintf(non_irq_wake_reason, MAX_SUSPEND_ABORT_LEN, fmt, args);
-   214	
-   215		spin_unlock_irqrestore(&wakeup_reason_lock, flags);
-   216	}
-   217	
+> 
+> Florian Fainelli (4):
+>    firmware: psci: Export a couple of suspend symbols
+>    soc: bcm: brcmstb: Make legacy PM code depend on !ARM_PSCI_FW
+>    soc: bcm: brcmstb: Added support for PSCI system suspend operations
+>    Documentation: ABI: Document Broadcom STB PSCI firmware files
+> 
+>   .../ABI/testing/sysfs-firmware-brcmstb        |  16 +
+>   drivers/firmware/psci/psci.c                  |   9 +-
+>   drivers/soc/bcm/brcmstb/Kconfig               |   4 +-
+>   drivers/soc/bcm/brcmstb/pm/Makefile           |   3 +
+>   drivers/soc/bcm/brcmstb/pm/pm-psci.c          | 315 ++++++++++++++++++
+>   include/linux/psci.h                          |   2 +
+>   include/linux/soc/brcmstb/brcmstb-smccc.h     |  84 +++++
+>   7 files changed, 430 insertions(+), 3 deletions(-)
+>   create mode 100644 Documentation/ABI/testing/sysfs-firmware-brcmstb
+>   create mode 100644 drivers/soc/bcm/brcmstb/pm/pm-psci.c
+>   create mode 100644 include/linux/soc/brcmstb/brcmstb-smccc.h
+> 
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Florian

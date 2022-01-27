@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23F249DF06
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051FA49DEF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239127AbiA0KSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:18:21 -0500
-Received: from azure-sdnproxy.icoremail.net ([52.237.72.81]:46682 "HELO
-        azure-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S239078AbiA0KSN (ORCPT
+        id S235017AbiA0KPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229967AbiA0KPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:18:13 -0500
+        Thu, 27 Jan 2022 05:15:17 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A0FC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:15:17 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u15so3807651wrt.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:15:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:In-Reply-To:References; bh=i96PtU2b97HIAJDX/tnEFGz4Lk
-        5BQrwuZTTW9wIWac4=; b=ZJwuybT2anQaR5ULWwyWG9E2X9ukRso2e+vDWkJgEf
-        PZQnQKHTQ+IV8+gmmeHJoA9H3qILMOyIhWw5H+/+0AAyqRwSKal6sw62fww33H2a
-        ra3j60oRo1fzCC0RfE6hWfIonVKK+Egm8EgODEBKkzpRP6a4h6lR7iKiKR/DwTiq
-        Y=
-Received: from localhost (unknown [10.129.21.144])
-        by front02 (Coremail) with SMTP id 54FpogCHeKR9cPJhttbWAA--.21700S2;
-        Thu, 27 Jan 2022 18:14:22 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch, mwen@igalia.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH v2] drm/v3d: fix missing unlock
-Date:   Thu, 27 Jan 2022 02:14:20 -0800
-Message-Id: <1643278460-100473-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20220126205726.phfikh7kn3lks5ib@mail.igalia.com>
-References: <20220126205726.phfikh7kn3lks5ib@mail.igalia.com>
-X-CM-TRANSID: 54FpogCHeKR9cPJhttbWAA--.21700S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr43tw17Aw4fGryrWF1DAwb_yoW8Xw4Upr
-        WkX3sFvrWrJFW0939rAFn5u348W3W29a18GF97A398Xws0yr47Wa15CryUA34UCr1xGFW5
-        tF1Ygay0va4UAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF
-        04k20xvE74AGY7Cv6cx26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwETBlPy7uIL1QAAsk
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8x6kPB0xVxvNejSKMZ4lJYgA9YR5Lh9WkR/5tdJIkCM=;
+        b=XZHGxUK6B9Khgh5lHZ0qT6x4NI+VjhHIWKeoUY2ORPZtc9Or2eUdDfW/4x356Trv73
+         NPX2VyrICKJuD9frvOQNByTBq4dRuw6HGrHRhrQ5HBAZOKKDl2RyqSXSBsNqI9PZOxAa
+         K1uS6HrW3U3sR6hxINfGPeIZ/NSLmHwVFdA+/fGmdkbHaqaxOc6jYlTgOW3ailtkIsC9
+         g/QbMj8DnoBfKKAqsjLFZHlB4esTvWbU79CSvDf4l8fNj7RYMQvpP/Spl9HVyKXMmP+V
+         RFjSxtV+UVdcsCIvccrW39UwICeZ4cfUcuU8FQH1U88J88cFyR0WVXM2VNyaJUlNHUZP
+         dnjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=8x6kPB0xVxvNejSKMZ4lJYgA9YR5Lh9WkR/5tdJIkCM=;
+        b=pVlbhIsiAvcJhRqtS2lCA4dZv0xjN0Dc0nkC6XjdtC6m0o9pg4+NwPe8LlwvnAXWfw
+         ZdHeGJ88ARHOXPcQ44K7ZIJ09NFOsz+0JcPG4X3BgZ8HiC/lkTWEgizlqyAp3D/59UDl
+         Xlf2R967b+QG9JSGeFfbXK3flRVt/DxOh+0vLtZOgM2ZBFNavISFQNQQKuWyzRDCKEw4
+         Sk0fgHCmmC3uuJFnr41VlNOVadUL6K+aagUzE1/BaQOOt6HHnt56ZmmsrT+MkJ0l5Ema
+         SNcljaClXpaxiE9YPywauWZiIoLuZb4IxRQ8d+V8RXKHJMqfjqbwqFpatDspH88bcrcp
+         JgSg==
+X-Gm-Message-State: AOAM533jPy/ghXwhtzdFAiLTnlfumpsUa71H1P/vBr6PO2U86qCMhkWo
+        vJk2EU0OpAeo1uRmRznrORurZiw79KGsew==
+X-Google-Smtp-Source: ABdhPJynl6tia3B2Ag73l8mApp8aa4NGQ/NkhFAo6L6qBbWEicXINtupPkEG7I+fIR2znCUpa5tpyA==
+X-Received: by 2002:a5d:408e:: with SMTP id o14mr2374145wrp.83.1643278515238;
+        Thu, 27 Jan 2022 02:15:15 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff? ([2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff])
+        by smtp.gmail.com with ESMTPSA id 16sm1539461wmj.12.2022.01.27.02.15.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 02:15:14 -0800 (PST)
+Subject: Re: [PATCH] arm64: dts: meson-sm1-odroid: use correct enable-gpio pin
+ for tf-io regulator
+To:     Lutz Koschorreck <theleks@ko-hh.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220126234325.GA7363@odroid-VirtualBox>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <651adde5-4887-4701-5183-6a35a443574c@baylibre.com>
+Date:   Thu, 27 Jan 2022 11:15:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220126234325.GA7363@odroid-VirtualBox>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[why]
-Unlock is needed on the error handling path to prevent dead lock.
-v3d_submit_cl_ioctl and v3d_submit_csd_ioctl is missing unlock.
+Hi,
 
-[how]
-Fix this by change goto target on the error handling path.
-As unlock is handle in fail_unreserve, i keep the failures
-handling around there. So the goto targets a place between
-`fail_unreserve:` and `fail:`.
+On 27/01/2022 00:43, Lutz Koschorreck wrote:
+> The interrupt pin of the external ethernet phy is used, instead of the
+> enable-gpio pin of the tf-io regulator. The GPIOE_2 pin is located in
+> the gpio_ao bank.
+> Using open drain prevents reboot issues.
+> 
+> This causes phy interrupt problems at system startup.
+> [   76.645190] irq 36: nobody cared (try booting with the "irqpoll" option)
+> [   76.649617] CPU: 0 PID: 1416 Comm: irq/36-0.0:00 Not tainted 5.16.0 #2
+> [   76.649629] Hardware name: Hardkernel ODROID-HC4 (DT)
+> [   76.649635] Call trace:
+> [   76.649638]  dump_backtrace+0x0/0x1c8
+> [   76.649658]  show_stack+0x14/0x60
+> [   76.649667]  dump_stack_lvl+0x64/0x7c
+> [   76.649676]  dump_stack+0x14/0x2c
+> [   76.649683]  __report_bad_irq+0x38/0xe8
+> [   76.649695]  note_interrupt+0x220/0x3a0
+> [   76.649704]  handle_irq_event_percpu+0x58/0x88
+> [   76.649713]  handle_irq_event+0x44/0xd8
+> [   76.649721]  handle_fasteoi_irq+0xa8/0x130
+> [   76.649730]  generic_handle_domain_irq+0x38/0x58
+> [   76.649738]  gic_handle_irq+0x9c/0xb8
+> [   76.649747]  call_on_irq_stack+0x28/0x38
+> [   76.649755]  do_interrupt_handler+0x7c/0x80
+> [   76.649763]  el1_interrupt+0x34/0x80
+> [   76.649772]  el1h_64_irq_handler+0x14/0x20
+> [   76.649781]  el1h_64_irq+0x74/0x78
+> [   76.649788]  irq_finalize_oneshot.part.56+0x68/0xf8
+> [   76.649796]  irq_thread_fn+0x5c/0x98
+> [   76.649804]  irq_thread+0x13c/0x260
+> [   76.649812]  kthread+0x144/0x178
+> [   76.649822]  ret_from_fork+0x10/0x20
+> [   76.649830] handlers:
+> [   76.653170] [<0000000025a6cd31>] irq_default_primary_handler threaded [<0000000093580eb7>] phy_interrupt
+> [   76.661256] Disabling IRQ #36
+> 
+> Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
+> 
+> Signed-off-by: Lutz Koschorreck <theleks@ko-hh.de>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> index 0bd1e98a0eef..ddb1b345397f 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> @@ -48,7 +48,7 @@ tf_io: gpio-regulator-tf_io {
+>  		regulator-max-microvolt = <3300000>;
+>  		vin-supply = <&vcc_5v>;
+>  
+> -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
+> +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/gpu/drm/v3d/v3d_gem.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Wow, indeed it's not the right GPIO chip... my bad.
 
-diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
-index c7ed2e1..d9c7b39 100644
---- a/drivers/gpu/drm/v3d/v3d_gem.c
-+++ b/drivers/gpu/drm/v3d/v3d_gem.c
-@@ -798,7 +798,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *data,
- 
- 		if (!render->base.perfmon) {
- 			ret = -ENOENT;
--			goto fail;
-+			goto v3d_unlock;
- 		}
- 	}
- 
-@@ -847,6 +847,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *data,
- 
- fail_unreserve:
- 	mutex_unlock(&v3d->sched_lock);
-+v3d_unlock:
- 	drm_gem_unlock_reservations(last_job->bo,
- 				    last_job->bo_count, &acquire_ctx);
- fail:
-@@ -1027,7 +1028,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *data,
- 						     args->perfmon_id);
- 		if (!job->base.perfmon) {
- 			ret = -ENOENT;
--			goto fail;
-+			goto v3d_unlock;
- 		}
- 	}
- 
-@@ -1056,6 +1057,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *data,
- 
- fail_unreserve:
- 	mutex_unlock(&v3d->sched_lock);
-+v3d_unlock:
- 	drm_gem_unlock_reservations(clean_job->bo, clean_job->bo_count,
- 				    &acquire_ctx);
- fail:
--- 
-2.7.4
+>  		enable-active-high;
+>  		regulator-always-on;
+>  
+
+Concerning the GPIO_OPEN_DRAIN, it's right since the line has a pull-up, does it really fix reboot issues ?
+
+Anyway, can you split the changes ? First for gpio_ao, second for GPIO_OPEN_DRAIN ?
+
+Neil
 

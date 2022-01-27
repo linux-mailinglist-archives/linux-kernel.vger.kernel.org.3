@@ -2,92 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CF449E9FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF30349EA2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245510AbiA0SLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:11:19 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:54622 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244950AbiA0SKp (ORCPT
+        id S245457AbiA0SMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:12:37 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:45676 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245617AbiA0SLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:10:45 -0500
-Received: from callcc.thunk.org (static-74-43-95-34.fnd.frontiernet.net [74.43.95.34])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 20RIAF2r014158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 13:10:17 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 64CBB420385; Thu, 27 Jan 2022 13:10:15 -0500 (EST)
-Date:   Thu, 27 Jan 2022 13:10:15 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wander Costa <wcosta@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
-Message-ID: <YfLgB/WsQcePTXlQ@mit.edu>
-References: <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
- <f451e67d-adb9-01e8-bd11-bf7804863b4b@kernel.org>
- <8e57400f-d6a8-bd42-6214-fca1fe37a972@kernel.org>
- <11ec4350-b890-4949-cf8f-bc62d530d64f@nvidia.com>
- <CAAq0SU=9R3Y_SAdM+HaqavzWBRd1Li-b5bnZZLd5Opfgd0vnkQ@mail.gmail.com>
- <fa42a60c-954a-acc0-3962-f00427153f78@nvidia.com>
- <YfArHDfrVHw7ApDx@smile.fi.intel.com>
- <YfArWaKJ13+OC/7w@smile.fi.intel.com>
- <CAAq0SU=U3UY+DUdd1fjj25Yt_QZriShZTSFTsq5B4tPnOYhQvQ@mail.gmail.com>
- <YfELyq5AmxiZxjme@kroah.com>
+        Thu, 27 Jan 2022 13:11:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643307109; x=1674843109;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=FdW+3XOlJ+0fgLrgyEWrXgNEBmSSsSV3d6HeRGSVQo4=;
+  b=SZgzDToBF/lK8bdjGD8kUNtrBQ+NVu8FXdAZaGOfNobVj6oGNsg8qG6H
+   +lBAlqfJomlzr/DOBCJk70ZWJVukr/YcyJh3yWqTMjm4GCqc358dELE7R
+   EA7jSOBGlMMDda9A5lLShF+TDMIvxDxOXxeK8fgxC6dtMRthL9EvVcm+7
+   c=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 27 Jan 2022 10:11:49 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 10:11:48 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 27 Jan 2022 10:11:48 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 27 Jan
+ 2022 10:11:45 -0800
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH v5] drivers: thermal: clear all mitigation when thermal zone is disabled
+Date:   Thu, 27 Jan 2022 23:41:33 +0530
+Message-ID: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfELyq5AmxiZxjme@kroah.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 09:52:26AM +0100, Greg Kroah-Hartman wrote:
-> 
-> Let me revert this for now.  And no new config options please, this
-> should "just work".
+Whenever a thermal zone is in trip violated state, there is a chance
+that the same thermal zone mode can be disabled either via
+thermal core API or via thermal zone sysfs. Once it is disabled,
+the framework bails out any re-evaluation of thermal zone. It leads
+to a case where if it is already in mitigation state, it will stay
+the same state forever.
 
-I'm not sure the commit is actually worth the extra complexity, to be
-honest.  The reason for the FIFO is to improve interrupt latency, and
-in the console write path, we're busy looping.  There is something
-seriously wrong serial port of the HP Proliant DL380 Gen 9.  Per the
-commit description for 5021d709b31b: ("tty: serial: Use fifo in 8250
-console driver"), on the "fast machine" (read: the one with a
-propertly working serial port), we were getting over 10 KB/s without
-the patch.  And on the "slow machine" it was getting only 2.5 KB/s,
-and with the patch it only improved things by 25% (so only 3.1 KB/s).
+To avoid above mentioned issue, add support to bind/unbind
+governor from thermal zone during thermal zone mode change request
+and clear all existing throttling in governor unbind_from_tz()
+callback.
 
-I assume what must be going on is this machine is emulating the UART
-and is extremely slow to set the Trasmitter Holding Register Empty
-(THRE) bit after the UART is finished sending the byte out the serial
-port.
+Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+---
+ drivers/thermal/gov_power_allocator.c |  3 +++
+ drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
+ drivers/thermal/thermal_core.c        | 31 +++++++++++++++++++++++++++----
+ 3 files changed, 56 insertions(+), 4 deletions(-)
 
-So we're adding a lot of complexity for what is obviously broken
-hardware, and we risk breaking the serial console for other machines
-with a properly implemented serial port.  How common are UART's which
-are broken in this way?  Is it unique to the HP Proliant DL380 Gen 9?
-Or is a common misimplementation which is unfortunately quite common?
-If it's the former, maybe the FIFO hack should only be done via a
-quirk?
-
-If it's really the case that the HP Proliant's nasty performance is
-due to a badly implemented emulation layer, is there any way to do
-better, perhaps via a more direct path to the serial port?  Or is the
-problem that the serial port on this motherboard is connected via some
-super-slow internal path and it would be faster if you could talk to
-it directly via a UEFI call, or some other mechanism?  Whether it's
-2.5 KB/s or 3.1 KB/s, it's really quite pathetic....
-
-     	      	     	   	       - Ted
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 13e3757..9ff0c5f 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -696,6 +696,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+ 
+ 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+ 
++	tz->passive = 0;
++	allow_maximum_power(tz, true);
++
+ 	if (params->allocated_tzp) {
+ 		kfree(tz->tzp);
+ 		tz->tzp = NULL;
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 12acb12..2d2186b 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -168,6 +168,31 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ }
+ 
+ /**
++ * step_wise_unbind() - unbind the step_wise governor to a thermal zone
++ * @tz:	thermal zone to unbind it to
++ *
++ * Clear all previous throttling and reset passive counter.
++ *
++ */
++static void step_wise_unbind(struct thermal_zone_device *tz)
++{
++	struct thermal_instance *instance;
++
++	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
++
++	mutex_lock(&tz->lock);
++	tz->passive = 0;
++	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
++		instance->initialized = false;
++		instance->target = THERMAL_NO_TARGET;
++		mutex_lock(&instance->cdev->lock);
++		__thermal_cdev_update(instance->cdev);
++		mutex_unlock(&instance->cdev->lock);
++	}
++	mutex_unlock(&tz->lock);
++}
++
++/**
+  * step_wise_throttle - throttles devices associated with the given zone
+  * @tz: thermal_zone_device
+  * @trip: trip point index
+@@ -196,6 +221,7 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
+ 
+ static struct thermal_governor thermal_gov_step_wise = {
+ 	.name		= "step_wise",
++	.unbind_from_tz	= step_wise_unbind,
+ 	.throttle	= step_wise_throttle,
+ };
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 82654dc..34726d3 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -274,6 +274,26 @@ static int __init thermal_register_governors(void)
+ 	return ret;
+ }
+ 
++static void thermal_governor_attach(struct thermal_zone_device *tz)
++{
++	mutex_lock(&thermal_governor_lock);
++	if (tz->governor && tz->governor->bind_to_tz) {
++		if (tz->governor->bind_to_tz(tz))
++			dev_err(&tz->device,
++				"governor %s failed to bind to thermal zone %s\n",
++				tz->governor->name, tz->type);
++	}
++	mutex_unlock(&thermal_governor_lock);
++}
++
++static void thermal_governor_detach(struct thermal_zone_device *tz)
++{
++	mutex_lock(&thermal_governor_lock);
++	if (tz->governor && tz->governor->unbind_from_tz)
++		tz->governor->unbind_from_tz(tz);
++	mutex_unlock(&thermal_governor_lock);
++}
++
+ /*
+  * Zone update section: main control loop applied to each zone while monitoring
+  *
+@@ -449,12 +469,15 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+ 
+ 	mutex_unlock(&tz->lock);
+ 
+-	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+-
+-	if (mode == THERMAL_DEVICE_ENABLED)
++	if (mode == THERMAL_DEVICE_ENABLED) {
++		thermal_governor_attach(tz);
++		thermal_zone_device_init(tz);
++		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 		thermal_notify_tz_enable(tz->id);
+-	else
++	} else {
++		thermal_governor_detach(tz);
+ 		thermal_notify_tz_disable(tz->id);
++	}
+ 
+ 	return ret;
+ }

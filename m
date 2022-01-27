@@ -2,268 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F398A49E2E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E8A49E2E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236859AbiA0M4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:56:00 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:32126 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiA0M4A (ORCPT
+        id S239741AbiA0M4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbiA0M4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:56:00 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jl0qs2nGfz8wYh;
-        Thu, 27 Jan 2022 20:52:57 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 27 Jan 2022 20:55:55 +0800
-Subject: Re: [PATCH 06/16] scsi: libsas: Add sas_task.tmf
-To:     John Garry <john.garry@huawei.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <artur.paszkiewicz@intel.com>,
-        <jinpu.wang@cloud.ionos.com>, <Ajish.Koshy@microchip.com>
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
- <1643110372-85470-7-git-send-email-john.garry@huawei.com>
-CC:     <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
-        <Viswas.G@microchip.com>, <damien.lemoal@opensource.wdc.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <e349aedb-71ad-8bf2-d3c3-920a83a56eae@hisilicon.com>
-Date:   Thu, 27 Jan 2022 20:55:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Thu, 27 Jan 2022 07:56:48 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE3FC061714;
+        Thu, 27 Jan 2022 04:56:48 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id v74so2573274pfc.1;
+        Thu, 27 Jan 2022 04:56:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bN3bUFRZXrk//hUp6oGC5VwqyBMF+T+sfn+CobUILhA=;
+        b=XN7Xa3VoAP9PYd0VgWsdh+L87Ah3nZTSXjX7XpfTyEu4Qb4p0EJJ7shQqkj3NZY2Tc
+         UGAneYSgYSZB1c4+LSfDtycBmLVeYIcq0X61jsMsHk3zv2k7qG2SE4c4psC/9DAQpDng
+         RgvYlDdxGk1W4fXQ1ptpTbnswLamRid6rUMWZ+2qWZptsHi5Dy/sta1AqV7+P/p0y3F0
+         VlAmX+9bPC55dwcbr81N1PgsJ/XTsgHnV9eHpsp/gB2LzZFIXlHl+R/ZV9jXc9FPlARj
+         FYNZ+0uDCMGPyz1BoY4gaPEF+3pykJX2Uby7xp4nix8LdUzbLhaAHJlvqoJ6cDn1R2KM
+         fZew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bN3bUFRZXrk//hUp6oGC5VwqyBMF+T+sfn+CobUILhA=;
+        b=LAuKat37UBrNnBp2FN4SfVPV1x2X4Kipze5sn8m0tB9zC2IU3ZgjJr57cQ8uKCMlFM
+         S1RZlw+VGrPE1r8tdxOwX4ym40ueXt1BfxkWuE9K0a6Uj2dI1Wi1UbKVVVTB0C6qm7hb
+         dYk+WrgV9aIEZTU2EHtE1CZ7t+3zWf32ean5PU1wUwp80WKfjp3qxnqPVr5deLaFwv+k
+         jWmr+N2S/YYhCB1BfkyNgVY8vvS4rAJxxly/jRhplPJYyAetMrOdoIuuUQK17V0/26eY
+         /UIDtHrih9c6VnejHxNJ5WRWL/lv/Ae6Fc/R2dRiIvaq1+1zkUkBVmyw0JSrRwLHVDzx
+         ge3g==
+X-Gm-Message-State: AOAM5333Luz9MlDrW5eqOsY0p8dbs9wix1SRKVfpX/OCDIEGfN2Rf5MJ
+        zWYH7x2MAvPPYrbjeCiv8rlxY5PwtAvJ41E5
+X-Google-Smtp-Source: ABdhPJwniT4/NwPUyBYhUkZCDwZIc1OaOvjz4dtioHI8nfv9ZIMlCwICvZjJgJwscUkJY/BU+lLACA==
+X-Received: by 2002:a63:96:: with SMTP id 144mr2652343pga.383.1643288207807;
+        Thu, 27 Jan 2022 04:56:47 -0800 (PST)
+Received: from gmail.com ([2400:2410:93a3:bc00:d205:ec9:b1c6:b9ee])
+        by smtp.gmail.com with ESMTPSA id 20sm18937021pgz.59.2022.01.27.04.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 04:56:47 -0800 (PST)
+Date:   Thu, 27 Jan 2022 21:56:43 +0900
+From:   Akira Kawata <akirakawata1@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        lukas.bulwahn@gmail.com, kernel test robot <lkp@intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+Message-ID: <20220127125643.cifk2ihnbnxo5wcl@gmail.com>
+References: <20211212232414.1402199-1-akirakawata1@gmail.com>
+ <20211212232414.1402199-2-akirakawata1@gmail.com>
+ <202201261955.F86F391@keescook>
 MIME-Version: 1.0
-In-Reply-To: <1643110372-85470-7-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201261955.F86F391@keescook>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 26, 2022 at 09:01:30PM -0800, Kees Cook wrote:
+> On Mon, Dec 13, 2021 at 08:24:11AM +0900, Akira Kawata wrote:
+> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=197921
+> > 
+> > As pointed out in the discussion of buglink, we cannot calculate AT_PHDR
+> > as the sum of load_addr and exec->e_phoff.
+> > 
+> > : The AT_PHDR of ELF auxiliary vectors should point to the memory address
+> > : of program header. But binfmt_elf.c calculates this address as follows:
+> > :
+> > : NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
+> > :
+> > : which is wrong since e_phoff is the file offset of program header and
+> > : load_addr is the memory base address from PT_LOAD entry.
+> > :
+> > : The ld.so uses AT_PHDR as the memory address of program header. In normal
+> > : case, since the e_phoff is usually 64 and in the first PT_LOAD region, it
+> > : is the correct program header address.
+> > :
+> > : But if the address of program header isn't equal to the first PT_LOAD
+> > : address + e_phoff (e.g.  Put the program header in other non-consecutive
+> > : PT_LOAD region), ld.so will try to read program header from wrong address
+> > : then crash or use incorrect program header.
+> > 
+> > This is because exec->e_phoff
+> > is the offset of PHDRs in the file and the address of PHDRs in the
+> > memory may differ from it. This patch fixes the bug by calculating the
+> > address of program headers from PT_LOADs directly.
+> > 
+> > Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > ---
+> >  fs/binfmt_elf.c | 20 ++++++++++++++------
+> >  1 file changed, 14 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> > index beeb1247b5c4..828e88841cb4 100644
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -170,8 +170,8 @@ static int padzero(unsigned long elf_bss)
+> >  
+> >  static int
+> >  create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+> > -		unsigned long load_addr, unsigned long interp_load_addr,
+> > -		unsigned long e_entry)
+> > +		unsigned long interp_load_addr,
+> > +		unsigned long e_entry, unsigned long phdr_addr)
+> >  {
+> >  	struct mm_struct *mm = current->mm;
+> >  	unsigned long p = bprm->p;
+> > @@ -257,7 +257,7 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+> >  	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
+> >  	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
+> >  	NEW_AUX_ENT(AT_CLKTCK, CLOCKS_PER_SEC);
+> > -	NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
+> > +	NEW_AUX_ENT(AT_PHDR, phdr_addr);
+> >  	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
+> >  	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
+> >  	NEW_AUX_ENT(AT_BASE, interp_load_addr);
+> > @@ -822,7 +822,7 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
+> >  static int load_elf_binary(struct linux_binprm *bprm)
+> >  {
+> >  	struct file *interpreter = NULL; /* to shut gcc up */
+> > - 	unsigned long load_addr = 0, load_bias = 0;
+> > +	unsigned long load_addr, load_bias = 0, phdr_addr = 0;
+> >  	int load_addr_set = 0;
+> >  	unsigned long error;
+> >  	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
+> > @@ -1168,6 +1168,13 @@ static int load_elf_binary(struct linux_binprm *bprm)
+> >  				reloc_func_desc = load_bias;
+> >  			}
+> >  		}
+> > +
+> > +		if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
+> > +		    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
+> > +			phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
+> > +				    elf_ppnt->p_vaddr;
+> > +		}
+> 
+> This chunk could really use a comment above it. Maybe something like:
+> 
+> /*
+>  * Figure out which segment in the file contains the Program
+>  * Header table, and map to the associated memory address.
+>  */
 
+Thank you. It looks good to me. I made v5 which contains it.
 
-ÔÚ 2022/1/25 19:32, John Garry Ð´µÀ:
-> Add a pointer to a sas_tmf_task to the sas_task struct, as this will be
-> used when the common LLDD TMF code is factored out.
+> 
+> Some additional thoughts:
+> 
+> 1) The ELF spec says e_phoff is 0 if there's no program header table.
+> 
+> The old code would just pass the load_addr as a result. This patch will
+> now retain the same result (phdr_addr defaults to 0). I wonder if there
+> is a bug in this behavior, though? (To be addressed in a different patch
+> if needed...)
 >
-> Also set it for the LLDDs to store per-sas_task TMF info.
->
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->   drivers/scsi/hisi_sas/hisi_sas_main.c | 25 +++++++++---------------
->   drivers/scsi/mvsas/mv_sas.c           | 15 ++++++--------
->   drivers/scsi/pm8001/pm8001_sas.c      | 28 ++++++++++-----------------
->   include/scsi/libsas.h                 |  1 +
->   4 files changed, 26 insertions(+), 43 deletions(-)
->
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index db6f8ea7864d..4f146aa50423 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -400,8 +400,7 @@ void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
->   			   struct hisi_sas_slot *slot,
->   			   struct hisi_sas_dq *dq,
->   			   struct hisi_sas_device *sas_dev,
-> -			   struct hisi_sas_internal_abort *abort,
-> -			   struct sas_tmf_task *tmf)
-> +			   struct hisi_sas_internal_abort *abort)
->   {
->   	struct hisi_sas_cmd_hdr *cmd_hdr_base;
->   	int dlvry_queue_slot, dlvry_queue;
-> @@ -427,8 +426,6 @@ void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
->   	cmd_hdr_base = hisi_hba->cmd_hdr[dlvry_queue];
->   	slot->cmd_hdr = &cmd_hdr_base[dlvry_queue_slot];
->   
-> -	slot->tmf = tmf;
-> -	slot->is_internal = tmf;
 
-In kernel 5.17-rc1(with above two lines on), it seems there is a issue 
-for ata disk reset command as tmf = null while it is internal command.
+It is better to return NULL from load_elf_phdrs when e_phoff == 0, I
+think.
 
->   	task->lldd_task = slot;
->   
->   	memset(slot->cmd_hdr, 0, sizeof(struct hisi_sas_cmd_hdr));
-> @@ -471,8 +468,7 @@ void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
->   	spin_unlock(&dq->lock);
->   }
->   
-> -static int hisi_sas_task_exec(struct sas_task *task, gfp_t gfp_flags,
-> -			      struct sas_tmf_task *tmf)
-> +static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   {
->   	int n_elem = 0, n_elem_dif = 0, n_elem_req = 0;
->   	struct domain_device *device = task->dev;
-> @@ -583,11 +579,11 @@ static int hisi_sas_task_exec(struct sas_task *task, gfp_t gfp_flags,
->   	slot->task = task;
->   	slot->port = port;
->   
-> -	slot->tmf = tmf;
-> -	slot->is_internal = tmf;
-> +	slot->tmf = task->tmf;
-> +	slot->is_internal = task->tmf;
->   
->   	/* protect task_prep and start_delivery sequence */
-> -	hisi_sas_task_deliver(hisi_hba, slot, dq, sas_dev, NULL, tmf);
-> +	hisi_sas_task_deliver(hisi_hba, slot, dq, sas_dev, NULL);
->   
->   	return 0;
->   
-> @@ -1115,11 +1111,6 @@ static void hisi_sas_dev_gone(struct domain_device *device)
->   	up(&hisi_hba->sem);
->   }
->   
-> -static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
-> -{
-> -	return hisi_sas_task_exec(task, gfp_flags, NULL);
-> -}
-> -
->   static int hisi_sas_phy_set_linkrate(struct hisi_hba *hisi_hba, int phy_no,
->   			struct sas_phy_linkrates *r)
->   {
-> @@ -1273,7 +1264,9 @@ static int hisi_sas_exec_internal_tmf_task(struct domain_device *device,
->   		task->slow_task->timer.expires = jiffies + TASK_TIMEOUT;
->   		add_timer(&task->slow_task->timer);
->   
-> -		res = hisi_sas_task_exec(task, GFP_KERNEL, tmf);
-> +		task->tmf = tmf;
-> +
-> +		res = hisi_sas_queue_command(task, GFP_KERNEL);
->   		if (res) {
->   			del_timer_sync(&task->slow_task->timer);
->   			dev_err(dev, "abort tmf: executing internal task failed: %d\n",
-> @@ -2054,7 +2047,7 @@ hisi_sas_internal_abort_task_exec(struct hisi_hba *hisi_hba, int device_id,
->   	slot->port = port;
->   	slot->is_internal = true;
->   
-> -	hisi_sas_task_deliver(hisi_hba, slot, dq, sas_dev, abort, NULL);
-> +	hisi_sas_task_deliver(hisi_hba, slot, dq, sas_dev, abort);
->   
->   	return 0;
->   
-> diff --git a/drivers/scsi/mvsas/mv_sas.c b/drivers/scsi/mvsas/mv_sas.c
-> index 22bffaaf2eb0..5105d55eb00c 100644
-> --- a/drivers/scsi/mvsas/mv_sas.c
-> +++ b/drivers/scsi/mvsas/mv_sas.c
-> @@ -840,14 +840,14 @@ static int mvs_task_prep(struct sas_task *task, struct mvs_info *mvi, int is_tmf
->   	return rc;
->   }
->   
-> -static int mvs_task_exec(struct sas_task *task, gfp_t gfp_flags,
-> -				struct completion *completion, int is_tmf,
-> -				struct sas_tmf_task *tmf)
-> +int mvs_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   {
->   	struct mvs_info *mvi = NULL;
->   	u32 rc = 0;
->   	u32 pass = 0;
->   	unsigned long flags = 0;
-> +	struct sas_tmf_task *tmf = task->tmf;
-> +	int is_tmf = !!task->tmf;
->   
->   	mvi = ((struct mvs_device *)task->dev->lldd_dev)->mvi_info;
->   
-> @@ -864,11 +864,6 @@ static int mvs_task_exec(struct sas_task *task, gfp_t gfp_flags,
->   	return rc;
->   }
->   
-> -int mvs_queue_command(struct sas_task *task, gfp_t gfp_flags)
-> -{
-> -	return mvs_task_exec(task, gfp_flags, NULL, 0, NULL);
-> -}
-> -
->   static void mvs_slot_free(struct mvs_info *mvi, u32 rx_desc)
->   {
->   	u32 slot_idx = rx_desc & RXQ_SLOT_MASK;
-> @@ -1300,7 +1295,9 @@ static int mvs_exec_internal_tmf_task(struct domain_device *dev,
->   		task->slow_task->timer.expires = jiffies + MVS_TASK_TIMEOUT*HZ;
->   		add_timer(&task->slow_task->timer);
->   
-> -		res = mvs_task_exec(task, GFP_KERNEL, NULL, 1, tmf);
-> +		task->tmf = tmf;
-> +
-> +		res = mvs_queue_command(task, GFP_KERNEL);
->   
->   		if (res) {
->   			del_timer(&task->slow_task->timer);
-> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-> index 0a3701d97549..323b172243b8 100644
-> --- a/drivers/scsi/pm8001/pm8001_sas.c
-> +++ b/drivers/scsi/pm8001/pm8001_sas.c
-> @@ -371,15 +371,14 @@ static int sas_find_local_port_id(struct domain_device *dev)
->   
->   #define DEV_IS_GONE(pm8001_dev)	\
->   	((!pm8001_dev || (pm8001_dev->dev_type == SAS_PHY_UNUSED)))
-> +
->   /**
-> -  * pm8001_task_exec - queue the task(ssp, smp && ata) to the hardware.
-> +  * pm8001_queue_command - register for upper layer used, all IO commands sent
-> +  * to HBA are from this interface.
->     * @task: the task to be execute.
-> -  * @gfp_flags: gfp_flags.
-> -  * @is_tmf: if it is task management task.
-> -  * @tmf: the task management IU
-> +  * @gfp_flags: gfp_flags
->     */
-> -static int pm8001_task_exec(struct sas_task *task,
-> -	gfp_t gfp_flags, int is_tmf, struct sas_tmf_task *tmf)
-> +int pm8001_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   {
->   	struct domain_device *dev = task->dev;
->   	struct pm8001_hba_info *pm8001_ha;
-> @@ -390,6 +389,8 @@ static int pm8001_task_exec(struct sas_task *task,
->   	u32 tag = 0xdeadbeef, rc = 0, n_elem = 0;
->   	unsigned long flags = 0;
->   	enum sas_protocol task_proto = t->task_proto;
-> +	struct sas_tmf_task *tmf = task->tmf;
-> +	int is_tmf = !!task->tmf;
->   
->   	if (!dev->port) {
->   		struct task_status_struct *tsm = &t->task_status;
-> @@ -507,17 +508,6 @@ static int pm8001_task_exec(struct sas_task *task,
->   	return rc;
->   }
->   
-> -/**
-> -  * pm8001_queue_command - register for upper layer used, all IO commands sent
-> -  * to HBA are from this interface.
-> -  * @task: the task to be execute.
-> -  * @gfp_flags: gfp_flags
-> -  */
-> -int pm8001_queue_command(struct sas_task *task, gfp_t gfp_flags)
-> -{
-> -	return pm8001_task_exec(task, gfp_flags, 0, NULL);
-> -}
-> -
->   /**
->     * pm8001_ccb_task_free - free the sg for ssp and smp command, free the ccb.
->     * @pm8001_ha: our hba card information
-> @@ -752,7 +742,9 @@ static int pm8001_exec_internal_tmf_task(struct domain_device *dev,
->   		task->slow_task->timer.expires = jiffies + PM8001_TASK_TIMEOUT*HZ;
->   		add_timer(&task->slow_task->timer);
->   
-> -		res = pm8001_task_exec(task, GFP_KERNEL, 1, tmf);
-> +		task->tmf = tmf;
-> +
-> +		res = pm8001_queue_command(task, GFP_KERNEL);
->   
->   		if (res) {
->   			del_timer(&task->slow_task->timer);
-> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-> index 30b9afec1e1d..802b4e04e3a1 100644
-> --- a/include/scsi/libsas.h
-> +++ b/include/scsi/libsas.h
-> @@ -611,6 +611,7 @@ struct sas_task {
->   	void   *lldd_task;	  /* for use by LLDDs */
->   	void   *uldd_task;
->   	struct sas_task_slow *slow_task;
-> +	struct sas_tmf_task *tmf;
->   };
->   
->   struct sas_task_slow {
+> 2) This finds any matching segment, not just PT_PHDR, which is good,
+> since PT_PHDR isn't strictly required.
+> 
+> > +
+> >  		k = elf_ppnt->p_vaddr;
+> >  		if ((elf_ppnt->p_flags & PF_X) && k < start_code)
+> >  			start_code = k;
+> > @@ -1203,6 +1210,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+> >  	}
+> >  
+> >  	e_entry = elf_ex->e_entry + load_bias;
+> > +	phdr_addr += load_bias;
+> >  	elf_bss += load_bias;
+> >  	elf_brk += load_bias;
+> >  	start_code += load_bias;
+> > @@ -1266,8 +1274,8 @@ static int load_elf_binary(struct linux_binprm *bprm)
+> >  		goto out;
+> >  #endif /* ARCH_HAS_SETUP_ADDITIONAL_PAGES */
+> >  
+> > -	retval = create_elf_tables(bprm, elf_ex,
+> > -			  load_addr, interp_load_addr, e_entry);
+> > +	retval = create_elf_tables(bprm, elf_ex, interp_load_addr,
+> > +				   e_entry, phdr_addr);
+> >  	if (retval < 0)
+> >  		goto out;
+> 
+> Looks good!
+> 
+> Acked-by: Kees Cook <keescook@chromium.org>
+> 
+> -- 
+> Kees Cook
 
+Thank you for your review.
+
+Akira Kawata

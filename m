@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1730749E827
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2104449E82E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244205AbiA0QzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:55:25 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55474 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244184AbiA0QzP (ORCPT
+        id S244226AbiA0Q4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:56:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36854 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbiA0Q4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:55:15 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id F0AA71F45773
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643302511;
-        bh=IR+hQ8nqc1s+bwqn1CYzGcqjYCZ5s+1Hg5YXxfgNCQU=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=odNleAWbEY6jGmxSQn9iWLi2MUGZyGk724Fafc4iDxJKp+kM6B2kom4xY+VaWrFjK
-         4qb41sQh+pkg9w9aFlznhFLsG/jJE6CJPHWaHuYuLsRb4bpLRjtcdTbkYzJuo2WNND
-         8zNX9Nh1xCS+f+hvM9PPjL8VKKyFna4x3iPV16Etfk0w+9ugpOGtsazFYNKIJsli6G
-         aqFohSNsW++R6wPYGtcUrt636TUtOTdeROPbRE0vVNuwUA5QUzRcXAHERYBkXgIyZJ
-         OjZwbEwN87EBmapx5Cx6+kH7rrOBLw/Lh4G50yERR45GDAwfI/Dbwql6cUV1g4oOmb
-         TwXJS6d+XkkJA==
-Message-ID: <329a935a-1c12-c5f8-1467-e6a6e98c9c24@collabora.com>
-Date:   Thu, 27 Jan 2022 21:55:03 +0500
+        Thu, 27 Jan 2022 11:56:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0590AB800E2;
+        Thu, 27 Jan 2022 16:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8B8C340E4;
+        Thu, 27 Jan 2022 16:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643302588;
+        bh=Jbbt90GOScnUkca96ukAtB0TEYFj51dYwo1DO4Rum0s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oOnw0x/alJ+ho6f0ec8wuvxvo+ON2SwStZQNk4Z/kIs99P7+vMIBiC5LpUsHsY+0K
+         p4PyoVSDtL3sRD+obH6dyEo5QEamQznXpOA0hwaQ/Dd53MX6nL7euiOkwQko+JZtNE
+         AMXfKPbIC9WPgz0cMGYm0iFCkHOjMYOAFk+mLyxILf6zyOtlIC3mNgfdgskIr7kLjj
+         J/FkEam5mfZFJoUd9hfArJyBZAosejauzDBHaAQWo1/OwA1IHzHuKT5XxuNhFtoDd7
+         j4Hw2/RCLTJ8gpHGXKc2zOBWuU84LeOCIsiSFiKuWXIQCq/6rY0ZcnruwzOVPM/rke
+         mbbxhf7UEKehg==
+Date:   Thu, 27 Jan 2022 08:56:27 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
+Message-ID: <20220127085627.70b31e30@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <YfK9uV0BviEiemDi@lunn.ch>
+References: <20220127110742.922752-1-o.rempel@pengutronix.de>
+        <YfK9uV0BviEiemDi@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com, Eric Biederman <ebiederm@xmission.com>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/exec: Remove pipe from TEST_GEN_FILES
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-References: <20220127163346.653546-1-usama.anjum@collabora.com>
- <202201270844.660E5394C@keescook>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <202201270844.660E5394C@keescook>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/27/22 9:45 PM, Kees Cook wrote:
-> On Thu, Jan 27, 2022 at 09:33:45PM +0500, Muhammad Usama Anjum wrote:
->> pipe named FIFO special file is being created in execveat.c to perform
->> some tests. Makefile doesn't need to do anything with the pipe. When it
->> isn't found, Makefile generates the following build error:
->>
->> make: *** No rule to make target '/linux_mainline/tools/testing/selftests/exec/pipe', needed by 'all'.  Stop.
+On Thu, 27 Jan 2022 16:43:53 +0100 Andrew Lunn wrote:
+> On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
+> > The weakest link of usbnet devices is the USB cable. Currently there is
+> > no way to automatically detect cable related issues except of analyzing
+> > kernel log, which would differ depending on the USB host controller.
+> > 
+> > The Ethernet packet counter could potentially show evidence of some USB
+> > related issues, but can be Ethernet related problem as well.  
 > 
-> Ah, good catch. However, I think this should be moved to EXTRA_CLEAN instead of
-> only removed from TEST_GEN_FILES. (i.e. "pipe" is created by
-> tools/testing/selftests/exec/execveat.c and should be removed.
-Hi,
+> I don't know the usbnet drivers very well. A quick look suggests they
+> don't support statistics via ethtool -S. So you could make use of that
+> to return statistics about USB error events.
 
-Thank you. tools/testing/selftests/exec/execveat.c creates pipe file and
-removes it after performing the test on it. I've looked at the code path
-between creation and deletion of this file. It'll always be removed
-automatically. So we shouldn't add it to EXTRA_CLEAN.
+On using devlink health - it is great when you want to attach some extra
+info to the error report. If you're just counting different types of
+errors seems like an overkill.
 
-Thanks,
-Usama
+> However, GregKH point still stands, maybe such statistics should be
+> made for all USB devices, and be available in /sys/bus/usb/devices/*

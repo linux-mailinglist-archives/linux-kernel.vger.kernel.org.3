@@ -2,119 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 309C549DD2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8360C49DD33
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238126AbiA0JBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:01:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:50524 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiA0JBe (ORCPT
+        id S238153AbiA0JCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238144AbiA0JCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:01:34 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 87ABA1F882;
-        Thu, 27 Jan 2022 09:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643274093; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uf6L1U20L42jQ06xefiKuwA7v4ertkV/8P81jUSoYis=;
-        b=VqCRighSWgCkUFJuLikNgA17cNUdoQJUUMG40XffnG266MZ4zbi84gI2NlZBRuFTgJEaa0
-        fELyOdxO5Leeh+/wwz6VwxGtf+BdohVQUq4AQrdEgo3ph2A2b9/RzhSfnndwAtTjMobW1X
-        RTKbzaqsHULmA3qdggTQzuSflnpTVG0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643274093;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uf6L1U20L42jQ06xefiKuwA7v4ertkV/8P81jUSoYis=;
-        b=vGIapNrOTT3gC/AXlc2MXAoxBVjNtZ5L1hGxECi4SW4qf5MejumWnp/9gYGPfVvWB+VRLl
-        rSXoTgEUWwhr6uAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B85E313CFB;
-        Thu, 27 Jan 2022 09:01:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7cJPK2xf8mFaEwAAMHmgww
-        (envelope-from <jroedel@suse.de>); Thu, 27 Jan 2022 09:01:32 +0000
-Date:   Thu, 27 Jan 2022 10:01:31 +0100
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Thu, 27 Jan 2022 04:02:30 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF75C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:30 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id d12-20020a17090a628c00b001b4f47e2f51so6918270pjj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NOr8pePWI+bJZ/oa++rpCFf9EpUKVjAXphwkR7CQVj4=;
+        b=bqpl+VmnL4zn6FZ2t+qWfFzRvZTpzNcwwVlrsoIm6qABHP+3ui3yH+ggMWymZQNXHU
+         8Gm4yFd/IBGoS4x8xsiBq+0UJDmjUz2MjNOcNBHxeXsVGUL3ULWGVsFAWdqSRSfrB78z
+         YnRlweQDuiJvd1SB0/rWod5eUVZvuPtslmEWEHrXXU+HOvvd+5j2an/hACuR8ALlGEPB
+         k174wF9pRRKIYQfynuSSr5ykmp4wa8C+hrQTtzRW63Gf+zOhjIoI6ITrdHE5awq73plW
+         pUo+ZnbLuDaAvRz/mq3JAOCIn6EAg5swaGVg7pmWDprIDfCH7XoimT8W2LAdO3mf+z01
+         k+7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NOr8pePWI+bJZ/oa++rpCFf9EpUKVjAXphwkR7CQVj4=;
+        b=h8kLCsl46H7nBc4wPKuhFM6Ku8ynoLMT+4QqmczLJN2vWhKVsZ32z9KpahHLWdxqi9
+         6hkIWNyEe5Yxhf6aL4DO7qbDQKOFSWbcVJu0EMZr3k6mHfLkHUUy/s53+NKJcai30vg2
+         RaA3s4Zh9O6I0EGTNGFcuNfa6YpoKQbOfZ0bFC8YytvwKqHfgycIHrO6m0+KFbyLMyJF
+         p6EiQ9u2fY6j2njFpXSA+d9uwapfPdzzfepaztlHuib2x+8iyU72ip82LR7jYiMc34C6
+         qUX7Xfl90fmF9WU7qWu5eUsCboLnkEHlVo6Rwsy6KeV401vcTQs6nNrxyi6T678g/WE8
+         Lvrw==
+X-Gm-Message-State: AOAM533Nml2uu3dV1OirLD2lb6xt47YKAPhDQ0q6V/cDxlJWvVHbMzAu
+        CfmikT2HEaedxiRtMFCrUZByOcryzw==
+X-Google-Smtp-Source: ABdhPJz0QpYxbPpTnkIgWlwr9AaijSub8zFBYNU/QsBUvRPB2SpOczpG2ksYXjXPcJ3XKCW3sxiDOA==
+X-Received: by 2002:a17:90b:4ad1:: with SMTP id mh17mr3151428pjb.135.1643274149303;
+        Thu, 27 Jan 2022 01:02:29 -0800 (PST)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id v17sm4614165pfm.10.2022.01.27.01.02.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 01:02:28 -0800 (PST)
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pingfan Liu <kernelfans@gmail.com>,
         Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        David Rientjes <rientjes@google.com>,
-        Cfir Cohen <cfir@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Martin Radev <martin.b.radev@gmail.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 08/12] x86/sev: Park APs on AP Jump Table with GHCB
- protocol version 2
-Message-ID: <YfJfa955Pkg1y6Gv@suse.de>
-References: <20210913155603.28383-1-joro@8bytes.org>
- <20210913155603.28383-9-joro@8bytes.org>
- <YY6XQfmvmpmUiIGj@zn.tnic>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>, kexec@lists.infradead.org
+Subject: [PATCHv2] kexec: disable cpu hotplug until the rebooting cpu is stable
+Date:   Thu, 27 Jan 2022 17:02:15 +0800
+Message-Id: <20220127090215.32000-1-kernelfans@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YY6XQfmvmpmUiIGj@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 05:33:05PM +0100, Borislav Petkov wrote:
-> On Mon, Sep 13, 2021 at 05:55:59PM +0200, Joerg Roedel wrote:
-> > +		     "ljmpl	*%0" : :
-> > +		     "m" (real_mode_header->sev_real_ap_park_asm),
-> > +		     "b" (sev_es_jump_table_pa >> 4));
-> 
-> In any case, this asm needs comments: why those regs, why
-> sev_es_jump_table_pa >> 4 in rbx (I found later in the patch why) and so
-> on.
+The following identical code piece appears in both
+migrate_to_reboot_cpu() and smp_shutdown_nonboot_cpus():
 
-Turned out the jump_table_pa is not used in asm code anymore. It was a
-left-over from a previous version of the patch, it is removed now.
+	if (!cpu_online(primary_cpu))
+		primary_cpu = cpumask_first(cpu_online_mask);
 
-> > +SYM_INNER_LABEL(sev_ap_park_paging_off, SYM_L_GLOBAL)
-> 
-> Global symbol but used only in this file. .L-prefix then?
+This is due to a breakage like the following:
+   migrate_to_reboot_cpu();
+   cpu_hotplug_enable();
+                          --> comes a cpu_down(this_cpu) on other cpu
+   machine_shutdown();
 
-It needs to be a global symbol so the pa_ variant can be generated.
+Although the kexec-reboot task can get through a cpu_down() on its cpu,
+this code looks a little confusing.
 
-Regards,
+Make things straight forward by keeping cpu hotplug disabled until
+smp_shutdown_nonboot_cpus() holds cpu_add_remove_lock. By this way, the
+breakage is squashed out and the rebooting cpu can keep unchanged.
 
--- 
-Jörg Rödel
-jroedel@suse.de
+Note: this patch only affects the kexec-reboot on arches, which rely on
+cpu hotplug mechanism.
 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
+Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Vincent Donnefort <vincent.donnefort@arm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: YueHaibing <yuehaibing@huawei.com>
+Cc: Baokun Li <libaokun1@huawei.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: kexec@lists.infradead.org
+To: linux-kernel@vger.kernel.org
+---
+v1 -> v2:
+ improve commit log
+
+ kernel/cpu.c        | 16 ++++++++++------
+ kernel/kexec_core.c | 10 ++++------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 9c92147f0812..87bdf21de950 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1240,20 +1240,24 @@ int remove_cpu(unsigned int cpu)
+ }
+ EXPORT_SYMBOL_GPL(remove_cpu);
  
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
++/* primary_cpu keeps unchanged after migrate_to_reboot_cpu() */
+ void smp_shutdown_nonboot_cpus(unsigned int primary_cpu)
+ {
+ 	unsigned int cpu;
+ 	int error;
+ 
++	/*
++	 * Block other cpu hotplug event, so primary_cpu is always online if
++	 * it is not touched by us
++	 */
+ 	cpu_maps_update_begin();
+-
+ 	/*
+-	 * Make certain the cpu I'm about to reboot on is online.
+-	 *
+-	 * This is inline to what migrate_to_reboot_cpu() already do.
++	 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
++	 * no further code needs to use CPU hotplug (which is true in
++	 * the reboot case). However, the kexec path depends on using
++	 * CPU hotplug again; so re-enable it here.
+ 	 */
+-	if (!cpu_online(primary_cpu))
+-		primary_cpu = cpumask_first(cpu_online_mask);
++	__cpu_hotplug_enable();
+ 
+ 	for_each_online_cpu(cpu) {
+ 		if (cpu == primary_cpu)
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 68480f731192..db4fa6b174e3 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -1168,14 +1168,12 @@ int kernel_kexec(void)
+ 		kexec_in_progress = true;
+ 		kernel_restart_prepare("kexec reboot");
+ 		migrate_to_reboot_cpu();
+-
+ 		/*
+-		 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
+-		 * no further code needs to use CPU hotplug (which is true in
+-		 * the reboot case). However, the kexec path depends on using
+-		 * CPU hotplug again; so re-enable it here.
++		 * migrate_to_reboot_cpu() disables CPU hotplug. If an arch
++		 * relies on the cpu teardown to achieve reboot, it needs to
++		 * re-enable CPU hotplug there.
+ 		 */
+-		cpu_hotplug_enable();
++
+ 		pr_notice("Starting new kernel\n");
+ 		machine_shutdown();
+ 	}
+-- 
+2.31.1
 

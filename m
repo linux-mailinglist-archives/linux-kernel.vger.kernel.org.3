@@ -2,171 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3313549DD32
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD3749DD47
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238131AbiA0JC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S238180AbiA0JFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiA0JCW (ORCPT
+        with ESMTP id S234573AbiA0JFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:02:22 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B04C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:22 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id o30-20020a05600c511e00b0034f4c3186f4so5382324wms.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:21 -0800 (PST)
+        Thu, 27 Jan 2022 04:05:37 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F45CC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:05:37 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l25so3366787wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:05:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2eUp5BPA7UfOIln4xH7CwxT1Ma80FeWymOHUn7zCIP4=;
-        b=dyrPXO7cE4gGhdr62w9NB2LQs7tCfPqXlS9wZhcNJ3LBFuWW5npKrGGN8Cazq8NJot
-         BxyCmogAv1xf8upzj44O4tbQ1nXye5DqAz4KDKa+WFj0vpjF4FS5UUA4i8UW94oJvPyC
-         l+syOL5kJlAvG+sdasXA5o4s4EboxOAc+MtoQ=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=rjtR56dfdnTjyM6bjm66t58wWtukpooj/ecEV7qKFFU=;
+        b=RINGYWmdOJjRmzG/N3Nc3K8o+ujsn7QBQ5I5V9tMGZRL5nET7TcPqyT9oOIOrZGDgA
+         yjEdEZtN0UlnVj9CLMpEXhXrKEI2nbsOW6QV/zKK0aLY8mCp3fYA72DSBBdLxKzSrw6M
+         qsw0avSCZ5aQY66yJBw3HZZ6E3iTNkLLFNwlroAXGsNcKwrO8uYutF9EscY1Dw8WB8lj
+         7rHCojLlMQ05VcA5jovZImiweY2YVDzKumB2r8gZB/PSSkNIp7zbiPnIywND0RKO4YvU
+         YlRcyxCQEvjKxIQheHHNM4q5JRrRXDmqF+y04W756RgsaelM0vNFX2Yqny+wvSTdRC7g
+         qJog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=2eUp5BPA7UfOIln4xH7CwxT1Ma80FeWymOHUn7zCIP4=;
-        b=oV0wcYLUzAfMk8pBUp2cbIYtQdEqJAum5xr4SxN2A/plemNDmT02W+cujVGVPjl2Bh
-         aP8KwYbOVgrah2n33kJ+hAZ7i8hqI/QI9zb35In0IorvLzM/pE3c9gHgjWoDaZq9wtgb
-         YaC/RCpxPWoWM3S37JoHFbG7ZUouPoGYQYlWLEXhu4NMUwR+dsib6YUfE7AAKDlWdZy+
-         /VGLcyklsau7lJSkGJNS/DKz/MOi2IBAjoGvqEJuaNYaXC47qJrB32fN+X2qYVZ7zATR
-         pK6zrbxf1jRB1SpKntNfnzmi17gQisIG2xlkMsV/WQFWwpJW9x1W1G3LaeE4QHLS0ZRN
-         v+/w==
-X-Gm-Message-State: AOAM530z3BAM0J2Oh7YVHtM7/dyY93dLg6OjCbcV26DniIbkq5bZ4g+8
-        cMh4odi4WGlp/pJJF5+iT2rs6g==
-X-Google-Smtp-Source: ABdhPJx7pri2h0SYfqbY/4LaK5La7Uq+0ogxt1MTcUVnBBIqjx46Tng5d79ruBwDVjMRf43CzcKvZw==
-X-Received: by 2002:a05:600c:1994:: with SMTP id t20mr5336216wmq.124.1643274140526;
-        Thu, 27 Jan 2022 01:02:20 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id r8sm1595758wrx.2.2022.01.27.01.02.19
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=rjtR56dfdnTjyM6bjm66t58wWtukpooj/ecEV7qKFFU=;
+        b=0dD8ohkv7VVnQEYb3Av40lsFQwNKrfYdIoNxd7TxdWzEVFIdVial/8KYsKJ1fMR24U
+         VGbnCW96nm3JIywRvUNwd7YKsSH/+MSctJCcMO56d4BqHpNOT69ZfuwBzktzfGN/3VlM
+         AlGi7feKoOG8VsMxXfuf0FlFSkXInrSQuGPW5VYHz+OshDJx0NBFBO6yhhGx74INxZg3
+         7i48U1QUFB6GjUOo9z3rGzG3MM1CwHh7qQ7SYPJdLlPfF9K60KnQXZ3h2zQrTAhD1YVa
+         zBdl3kW9659IKWgdImDUEyDzfK7LTCNXtZWbOU0CMFcSVeahK/sGVF2OsC5/P9mNMdvr
+         4FCg==
+X-Gm-Message-State: AOAM531wp2De7J+Fxq1GXtQc4tPw9l4jbdIJ4oLwFUtjDixB6f+8Lq3+
+        N7Em373KOYUM43SU7zZ0d29MeQ==
+X-Google-Smtp-Source: ABdhPJwPXj2TGvVrDtoZmyvAc/oT6t1ERUujcirvOS6XEJszUThggTk+2eO5mXwRJ/mazVI3JS/s+A==
+X-Received: by 2002:a5d:660b:: with SMTP id n11mr2162313wru.78.1643274335733;
+        Thu, 27 Jan 2022 01:05:35 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id g5sm2022495wri.108.2022.01.27.01.05.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 01:02:19 -0800 (PST)
-Date:   Thu, 27 Jan 2022 10:02:18 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Matthew Brost <matthew.brost@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH 01/19] dma-buf-map: Add read/write helpers
-Message-ID: <YfJfmitYfbqIgqqC@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
- <20220126203702.1784589-2-lucas.demarchi@intel.com>
- <91bfa9d4-99fc-767e-5ba2-a2643cf585f5@amd.com>
- <20220127073637.GA17282@jons-linux-dev-box>
- <0f948558-6f31-fd81-5349-38ab21379f86@amd.com>
+        Thu, 27 Jan 2022 01:05:35 -0800 (PST)
+References: <20220126231427.1638089-1-robh@kernel.org>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rohit kumar <rohitkr@codeaurora.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jonathan Bakker <xc-racer2@live.ca>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] ASoC: dt-bindings: Centralize the 'sound-dai' definition
+Date:   Thu, 27 Jan 2022 10:00:53 +0100
+In-reply-to: <20220126231427.1638089-1-robh@kernel.org>
+Message-ID: <1jtudp1rc1.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f948558-6f31-fd81-5349-38ab21379f86@amd.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 08:59:36AM +0100, Christian König wrote:
-> Am 27.01.22 um 08:36 schrieb Matthew Brost:
-> > [SNIP]
-> > > >    /**
-> > > >     * dma_buf_map_memcpy_to - Memcpy into dma-buf mapping
-> > > >     * @dst:	The dma-buf mapping structure
-> > > > @@ -263,4 +304,44 @@ static inline void dma_buf_map_incr(struct dma_buf_map *map, size_t incr)
-> > > >    		map->vaddr += incr;
-> > > >    }
-> > > > +/**
-> > > > + * dma_buf_map_read_field - Read struct member from dma-buf mapping with
-> > > > + * arbitrary size and handling un-aligned accesses
-> > > > + *
-> > > > + * @map__:	The dma-buf mapping structure
-> > > > + * @type__:	The struct to be used containing the field to read
-> > > > + * @field__:	Member from struct we want to read
-> > > > + *
-> > > > + * Read a value from dma-buf mapping calculating the offset and size: this assumes
-> > > > + * the dma-buf mapping is aligned with a a struct type__. A single u8, u16, u32
-> > > > + * or u64 can be read, based on the offset and size of type__.field__.
-> > > > + */
-> > > > +#define dma_buf_map_read_field(map__, type__, field__) ({				\
-> > > > +	type__ *t__;									\
-> > > > +	typeof(t__->field__) val__;							\
-> > > > +	dma_buf_map_memcpy_from_offset(&val__, map__, offsetof(type__, field__),	\
-> > > > +				       sizeof(t__->field__));				\
-> > > > +	val__;										\
-> > > > +})
-> > > > +
-> > > > +/**
-> > > > + * dma_buf_map_write_field - Write struct member to the dma-buf mapping with
-> > > > + * arbitrary size and handling un-aligned accesses
-> > > > + *
-> > > > + * @map__:	The dma-buf mapping structure
-> > > > + * @type__:	The struct to be used containing the field to write
-> > > > + * @field__:	Member from struct we want to write
-> > > > + * @val__:	Value to be written
-> > > > + *
-> > > > + * Write a value to the dma-buf mapping calculating the offset and size.
-> > > > + * A single u8, u16, u32 or u64 can be written based on the offset and size of
-> > > > + * type__.field__.
-> > > > + */
-> > > > +#define dma_buf_map_write_field(map__, type__, field__, val__) ({			\
-> > > > +	type__ *t__;									\
-> > > > +	typeof(t__->field__) val____ = val__;						\
-> > > > +	dma_buf_map_memcpy_to_offset(map__, offsetof(type__, field__),			\
-> > > > +				     &val____, sizeof(t__->field__));			\
-> > > > +})
-> > > > +
-> > > Uff well that absolutely looks like overkill to me.
-> > > 
-> > Hold on...
-> > 
-> > > That's a rather special use case as far as I can see and I think we should
-> > > only have this in the common framework if more than one driver is using it.
-> > > 
-> > I disagree, this is rather elegant.
-> > 
-> > The i915 can't be the *only* driver that defines a struct which
-> > describes the layout of a dma_buf object.
-> 
-> That's not the problem, amdgpu as well as nouveau are doing that as well.
-> The problem is DMA-buf is a buffer sharing framework between drivers.
-> 
-> In other words which importer is supposed to use this with a DMA-buf
-> exported by another device?
-> 
-> > IMO this base macro allows *all* other drivers to build on this write
-> > directly to fields in structures those drivers have defined.
-> 
-> Exactly that's the point. This is something drivers should absolutely *NOT*
-> do.
-> 
-> That are driver internals and it is extremely questionable to move this into
-> the common framework.
 
-See my other reply.
+On Wed 26 Jan 2022 at 17:14, Rob Herring <robh@kernel.org> wrote:
 
-This is about struct dma_buf_map, which is just a tagged pointer.
+> 'sound-dai' is a common property, but has duplicate type definitions.
+> Create a new common definition to define the type and then update all
+> the other occurrences to just define how many entries there are just
+> like other phandle+arg properties.
+>
+> The constraints on the number of entries is based on the examples and
+> could be wrong.
+>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Please ack, this depends on commit abf0fee97313 ("dt-bindings: Improve
+> phandle-array schemas") in my tree.
+> ---
+>  .../bindings/sound/amlogic,gx-sound-card.yaml |  4 ++--
+>  .../bindings/sound/google,sc7180-trogdor.yaml |  6 ++++--
+>  .../bindings/sound/imx-audio-card.yaml        |  7 +++++--
+>  .../bindings/sound/qcom,sm8250.yaml           | 10 +++++++---
+>  .../bindings/sound/samsung,aries-wm8994.yaml  |  5 +----
+>  .../bindings/sound/samsung,midas-audio.yaml   |  2 --
+>  .../bindings/sound/samsung,odroid.yaml        |  9 +++------
+>  .../devicetree/bindings/sound/sound-dai.yaml  | 20 +++++++++++++++++++
+>  8 files changed, 42 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/sound-dai.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml b/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml
+> index 2e35aeaa8781..8b5be4b92f35 100644
+> --- a/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml
+> +++ b/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml
+> @@ -57,7 +57,7 @@ patternProperties:
+>            rate
+>  
+>        sound-dai:
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+> +        maxItems: 1
+>          description: phandle of the CPU DAI
+>  
+>      patternProperties:
+> @@ -71,7 +71,7 @@ patternProperties:
+>  
+>          properties:
+>            sound-dai:
+> -            $ref: /schemas/types.yaml#/definitions/phandle-array
+> +            maxItems: 1
 
-Which happens to be used by the dma_buf cross-driver interface, but it's
-also used plenty internally in buffer allocation helpers, fbdev,
-everything else. And it was _meant_ to be used like that - this thing is
-my idea, I know :-)
+No min or max here. Links may have more than one codec.
 
-I guess we could move/rename it, but like I said I really don't have any
-good ideas. Got some?
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Ex:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dts#n158
+
+>              description: phandle of the codec DAI
+>  
+>          required:
+> diff --git a/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml b/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml
+> index 837e3faa63a9..233caa0ade87 100644
+> --- a/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml
+> +++ b/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml
+> @@ -62,13 +62,15 @@ patternProperties:
+>          description: Holds subnode which indicates cpu dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            maxItems: 1
+>  
+>        codec:
+>          description: Holds subnode which indicates codec dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            maxItems: 1
+>  
+>      required:
+>        - link-name
+> diff --git a/Documentation/devicetree/bindings/sound/imx-audio-card.yaml b/Documentation/devicetree/bindings/sound/imx-audio-card.yaml
+> index d1816dd061cf..bb3a435722c7 100644
+> --- a/Documentation/devicetree/bindings/sound/imx-audio-card.yaml
+> +++ b/Documentation/devicetree/bindings/sound/imx-audio-card.yaml
+> @@ -59,13 +59,16 @@ patternProperties:
+>          description: Holds subnode which indicates cpu dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            maxItems: 1
+>  
+>        codec:
+>          description: Holds subnode which indicates codec dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            minItems: 1
+> +            maxItems: 2
+>  
+>        fsl,mclk-equal-bclk:
+>          description: Indicates mclk can be equal to bclk, especially for sai interface
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+> index 4bfda04b4608..4ecd4080bb96 100644
+> --- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+> +++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+> @@ -69,19 +69,23 @@ patternProperties:
+>          description: Holds subnode which indicates cpu dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            maxItems: 1
+>  
+>        platform:
+>          description: Holds subnode which indicates platform dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            maxItems: 1
+>  
+>        codec:
+>          description: Holds subnode which indicates codec dai.
+>          type: object
+>          properties:
+> -          sound-dai: true
+> +          sound-dai:
+> +            minItems: 1
+> +            maxItems: 4
+>  
+>      required:
+>        - link-name
+> diff --git a/Documentation/devicetree/bindings/sound/samsung,aries-wm8994.yaml b/Documentation/devicetree/bindings/sound/samsung,aries-wm8994.yaml
+> index eb487ed3ca3b..4ffa275b3c49 100644
+> --- a/Documentation/devicetree/bindings/sound/samsung,aries-wm8994.yaml
+> +++ b/Documentation/devicetree/bindings/sound/samsung,aries-wm8994.yaml
+> @@ -27,9 +27,6 @@ properties:
+>        sound-dai:
+>          minItems: 2
+>          maxItems: 2
+> -        items:
+> -          maxItems: 1
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+>          description: |
+>            phandles to the I2S controller and bluetooth codec,
+>            in that order
+> @@ -38,7 +35,7 @@ properties:
+>      type: object
+>      properties:
+>        sound-dai:
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+> +        maxItems: 1
+>          description: phandle to the WM8994 CODEC
+>  
+>    samsung,audio-routing:
+> diff --git a/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml b/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml
+> index 095775c598fa..ec50bcb4af5f 100644
+> --- a/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml
+> +++ b/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml
+> @@ -21,7 +21,6 @@ properties:
+>      type: object
+>      properties:
+>        sound-dai:
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+>          maxItems: 1
+>          description: phandle to the I2S controller
+>      required:
+> @@ -31,7 +30,6 @@ properties:
+>      type: object
+>      properties:
+>        sound-dai:
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+>          maxItems: 1
+>          description: phandle to the WM1811 CODEC
+>      required:
+> diff --git a/Documentation/devicetree/bindings/sound/samsung,odroid.yaml b/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
+> index e8122bc87362..db2513f3e168 100644
+> --- a/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
+> +++ b/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
+> @@ -37,18 +37,15 @@ properties:
+>      type: object
+>      properties:
+>        sound-dai:
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+>          description: phandles to the I2S controllers
+>  
+>    codec:
+>      type: object
+>      properties:
+>        sound-dai:
+> -        $ref: /schemas/types.yaml#/definitions/phandle-array
+> -        description: |
+> -          List of phandles to the CODEC nodes,
+> -          first entry must be corresponding to the MAX98090 CODEC and
+> -          the second entry must be the phandle of the HDMI IP block node.
+> +        items:
+> +          - description: phandle of the MAX98090 CODEC
+> +          - description: phandle of the HDMI IP block node
+>  
+>    samsung,audio-routing:
+>      $ref: /schemas/types.yaml#/definitions/non-unique-string-array
+> diff --git a/Documentation/devicetree/bindings/sound/sound-dai.yaml b/Documentation/devicetree/bindings/sound/sound-dai.yaml
+> new file mode 100644
+> index 000000000000..61c6f7abc4e7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/sound-dai.yaml
+> @@ -0,0 +1,20 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/sound-dai.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Digital Audio Interface consumer Device Tree Bindings
+> +
+> +maintainers:
+> +  - Rob Herring <robh@kernel.org>
+> +
+> +select: true
+> +
+> +properties:
+> +  sound-dai:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: A phandle plus args to digital audio interface provider(s)
+> +
+> +additionalProperties: true
+> +...
+

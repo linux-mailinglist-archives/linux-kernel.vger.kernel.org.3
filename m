@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C6549D933
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283DE49D936
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbiA0D0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 22:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S235723AbiA0D0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 22:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235585AbiA0D0I (ORCPT
+        with ESMTP id S235734AbiA0D0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 22:26:08 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C913C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:26:08 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id k17so1423637plk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:26:08 -0800 (PST)
+        Wed, 26 Jan 2022 22:26:16 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECE5C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:26:16 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id v3so1121191pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:26:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=emJGgAZKsXHfbFDFmzqJm+vf0jLHKtmm1jh15gidIuc=;
-        b=INAvcROfrUBBxfcEHa4GOL58R5CqSKk73+AcncbMRxk6vIdER/muBwmOVz7Alh2zrF
-         ksmuPXiHJrfYC9BysjY+IkOsMUcYkIm8gieWJdNzilKRXVhqt3QTVdS0R53qNkI5X8n/
-         BbKUCzXl8L0SzZFt1BPtyCApK2ce2YuK7Rm7BGMlo1+x/+HEdMr8kE4rPkZaRG7kvuqN
-         VlP6h6/XKx/4vqmDRLjexXzIJpSvaHahMizDzj0kfS5PLkLYWQOtZeFpry+NXcgOO4BC
-         fcyFxirEDPEI1r5wqb93sm6NP/6Fs72qaeSBdNTP06tykOEkj1mCLrnfjkT/qAW9nOOo
-         mDZw==
+        bh=UXgGm9s9WWnJocR1csEpEoFP0RYkPEhnyAgndhDwtjc=;
+        b=O4KjoPSuQDZNGBWdQmitA/kZxO0YlbnND4cNyWdlyu4NQbK+BjberWp7inGyjYEFJK
+         V6JfMoxtuIZkIBnyKTfo0YDRqThLerNVvqa+K1pSkgZZvEcRMTgu3/Fla5GeW5IktNNn
+         Bijtm9oz/pYUb5wZ8jBAPSSs4k9N9koKFTfDDcGFPBvT1f6aT69SbDPqjCIOCXPuxmTu
+         3zWG6DCftxpuLhT0mrnB7Ni8jRvM2RLA+4slw5oHeDn0lLA7Qm21MGiq0iFX+UpbBapn
+         fzZcajgCC/wg3/Mw4zbuNAa0nNAWO80t/e4VHG2oUY2aJnDbWbkuoV/5ZDfxq5gVqZdt
+         hdmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=emJGgAZKsXHfbFDFmzqJm+vf0jLHKtmm1jh15gidIuc=;
-        b=4p8DxisHc4VCTb8bmkX9CpV0rJwSWbXUaerB5lYKqD4ir0pWnbwb/FfLZFXiH9s6kF
-         VK+QQscziDrEeKWgPHQgoNNA9spC2qdu5aA5KUryJfMb5SdtcHNuIX7D+b4o8B3qGi81
-         aCpCgL5v16eN4qfH88r49LtJnn9bIAnBC1sCJ7z9YRhixS6TPwkX29t1Y6RQeb1zmmjr
-         HrZELwTYmeXIg5Z1YBrcmVvmD3RI97Wel6AiRxw4APOU/o/P6fGru77l54NcnNx6mjA3
-         b6avCxuvUKAvHeyR/mcG7OGu/k/MiOP9RNB/JYMxzDQ+DeMILCPcfNzEYuWMpLXcMLPi
-         bjvQ==
-X-Gm-Message-State: AOAM531LnSJt80Aj2aZD+jeIWhu4DZBTg3XBOlfZ92YreXjebytycvRu
-        42knlfrePW+N9PDrJsX3fGmcKg==
-X-Google-Smtp-Source: ABdhPJw8vOgqPrHYaIFjHOHDtzomHyPlMOKBVVvXUrYiedbQLuzFiihIHlxPcejPdgoW7kbcn7Huvg==
-X-Received: by 2002:a17:90b:354f:: with SMTP id lt15mr11999702pjb.83.1643253967894;
-        Wed, 26 Jan 2022 19:26:07 -0800 (PST)
+        bh=UXgGm9s9WWnJocR1csEpEoFP0RYkPEhnyAgndhDwtjc=;
+        b=yJMyuIQZXWQX+6N+SqRwP6mvp96GBP9nWlBiNFbo3w5mj9Ek9lLLGv6MXGHOixUkJA
+         YdRCcaYnliYZOqlbi1OswZWzMpABpVdwcBLWkWdaDDMwZDnJO/uz2Kihr7xBngYRPM4t
+         pKUb43SkbEJvJYyGgta47Mk8Q+YjcFh0zasJREYeivySyHxHtsg+50bSwJ4dzX3mHWLp
+         5/htD5N/4Mrq0EJLshucfKN6nU55ZHWTzcR9xsPcd32bUzV2t81cUAZ0/Tk58STO5Fe5
+         QzinZweYhBLMZ0KZH/BVSVwd1kT/T2RR9w3HZDer4rfr9v2hUOrHFlzGFuNB6QlLSVP7
+         t4Hg==
+X-Gm-Message-State: AOAM532wr2UkfqxvHejYa9eeJ2Lk7fnAN2JOZLvVHvXml78RAWtfTGk+
+        tpVAMqfZZqTAK/vptH2LRlE7wg==
+X-Google-Smtp-Source: ABdhPJysmgOujAl45WjONf68QQ5jRzvfCobqxGtGJ8Z511kMtGA4DmksGOLMeNbJRLJFDxAUzyr1Nw==
+X-Received: by 2002:a63:2c07:: with SMTP id s7mr1356397pgs.181.1643253975979;
+        Wed, 26 Jan 2022 19:26:15 -0800 (PST)
 Received: from aqua.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id t15sm4203111pjy.17.2022.01.26.19.26.00
+        by smtp.gmail.com with ESMTPSA id t15sm4203111pjy.17.2022.01.26.19.26.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 19:26:07 -0800 (PST)
+        Wed, 26 Jan 2022 19:26:15 -0800 (PST)
 From:   Tomohito Esaki <etom@igel.co.jp>
 To:     dri-devel@lists.freedesktop.org
 Cc:     Alex Deucher <alexander.deucher@amd.com>,
@@ -79,9 +79,9 @@ Cc:     Alex Deucher <alexander.deucher@amd.com>,
         Tomohito Esaki <etom@igel.co.jp>,
         Damian Hobson-Garcia <dhobsong@igel.co.jp>,
         Takanari Hayama <taki@igel.co.jp>
-Subject: [RFC PATCH v5 2/3] drm: add support modifiers for drivers whose planes only support linear layout
-Date:   Thu, 27 Jan 2022 12:25:38 +0900
-Message-Id: <20220127032539.9929-3-etom@igel.co.jp>
+Subject: [RFC PATCH v5 3/3] drm: remove allow_fb_modifiers
+Date:   Thu, 27 Jan 2022 12:25:39 +0900
+Message-Id: <20220127032539.9929-4-etom@igel.co.jp>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220127032539.9929-1-etom@igel.co.jp>
 References: <20220127032539.9929-1-etom@igel.co.jp>
@@ -91,87 +91,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LINEAR modifier is advertised as default if a driver doesn't specify
-modifiers.
+The allow_fb_modifiers flag is unnecessary since it has been replaced
+with fb_modifiers_not_supported flag.
 
 Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
 ---
- drivers/gpu/drm/drm_plane.c | 23 +++++++++++++----------
- include/drm/drm_plane.h     |  3 +++
- 2 files changed, 16 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/selftests/test-drm_framebuffer.c |  1 -
+ include/drm/drm_mode_config.h                    | 16 ----------------
+ 2 files changed, 17 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
-index deeec60a3315..bf0daa8d9bbd 100644
---- a/drivers/gpu/drm/drm_plane.c
-+++ b/drivers/gpu/drm/drm_plane.c
-@@ -237,6 +237,9 @@ static int __drm_universal_plane_init(struct drm_device *dev,
- 				      const char *name, va_list ap)
- {
- 	struct drm_mode_config *config = &dev->mode_config;
-+	static const uint64_t default_modifiers[] = {
-+		DRM_FORMAT_MOD_LINEAR,
-+	};
- 	unsigned int format_modifier_count = 0;
- 	int ret;
+diff --git a/drivers/gpu/drm/selftests/test-drm_framebuffer.c b/drivers/gpu/drm/selftests/test-drm_framebuffer.c
+index 61b44d3a6a61..f6d66285c5fc 100644
+--- a/drivers/gpu/drm/selftests/test-drm_framebuffer.c
++++ b/drivers/gpu/drm/selftests/test-drm_framebuffer.c
+@@ -323,7 +323,6 @@ static struct drm_device mock_drm_device = {
+ 		.max_width = MAX_WIDTH,
+ 		.min_height = MIN_HEIGHT,
+ 		.max_height = MAX_HEIGHT,
+-		.allow_fb_modifiers = true,
+ 		.funcs = &mock_config_funcs,
+ 	},
+ };
+diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+index 4a93dac91cf9..6b5e01295348 100644
+--- a/include/drm/drm_mode_config.h
++++ b/include/drm/drm_mode_config.h
+@@ -917,22 +917,6 @@ struct drm_mode_config {
+ 	 */
+ 	bool async_page_flip;
  
-@@ -277,16 +280,16 @@ static int __drm_universal_plane_init(struct drm_device *dev,
- 
- 		while (*temp_modifiers++ != DRM_FORMAT_MOD_INVALID)
- 			format_modifier_count++;
-+	} else {
-+		if (!dev->mode_config.fb_modifiers_not_supported) {
-+			format_modifiers = default_modifiers;
-+			format_modifier_count = ARRAY_SIZE(default_modifiers);
-+		}
- 	}
- 
- 	/* autoset the cap and check for consistency across all planes */
--	if (format_modifier_count) {
--		drm_WARN_ON(dev, !config->allow_fb_modifiers &&
--			    !list_empty(&config->plane_list));
--		config->allow_fb_modifiers = true;
--	} else {
--		drm_WARN_ON(dev, config->allow_fb_modifiers);
--	}
-+	drm_WARN_ON(dev, config->fb_modifiers_not_supported &&
-+				format_modifier_count);
- 
- 	plane->modifier_count = format_modifier_count;
- 	plane->modifiers = kmalloc_array(format_modifier_count,
-@@ -341,7 +344,7 @@ static int __drm_universal_plane_init(struct drm_device *dev,
- 		drm_object_attach_property(&plane->base, config->prop_src_h, 0);
- 	}
- 
--	if (config->allow_fb_modifiers)
-+	if (format_modifier_count)
- 		create_in_format_blob(dev, plane);
- 
- 	return 0;
-@@ -368,8 +371,8 @@ static int __drm_universal_plane_init(struct drm_device *dev,
-  * drm_universal_plane_init() to let the DRM managed resource infrastructure
-  * take care of cleanup and deallocation.
-  *
-- * Drivers supporting modifiers must set @format_modifiers on all their planes,
-- * even those that only support DRM_FORMAT_MOD_LINEAR.
-+ * Drivers that only support the DRM_FORMAT_MOD_LINEAR modifier support may set
-+ * @format_modifiers to NULL. The plane will advertise the linear modifier.
-  *
-  * Returns:
-  * Zero on success, error code on failure.
-diff --git a/include/drm/drm_plane.h b/include/drm/drm_plane.h
-index 0c1102dc4d88..a0390b6ad3b4 100644
---- a/include/drm/drm_plane.h
-+++ b/include/drm/drm_plane.h
-@@ -803,6 +803,9 @@ void *__drmm_universal_plane_alloc(struct drm_device *dev,
-  *
-  * The @drm_plane_funcs.destroy hook must be NULL.
-  *
-+ * Drivers that only support the DRM_FORMAT_MOD_LINEAR modifier support may set
-+ * @format_modifiers to NULL. The plane will advertise the linear modifier.
-+ *
-  * Returns:
-  * Pointer to new plane, or ERR_PTR on failure.
-  */
+-	/**
+-	 * @allow_fb_modifiers:
+-	 *
+-	 * Whether the driver supports fb modifiers in the ADDFB2.1 ioctl call.
+-	 * Note that drivers should not set this directly, it is automatically
+-	 * set in drm_universal_plane_init().
+-	 *
+-	 * IMPORTANT:
+-	 *
+-	 * If this is set the driver must fill out the full implicit modifier
+-	 * information in their &drm_mode_config_funcs.fb_create hook for legacy
+-	 * userspace which does not set modifiers. Otherwise the GETFB2 ioctl is
+-	 * broken for modifier aware userspace.
+-	 */
+-	bool allow_fb_modifiers;
+-
+ 	/**
+ 	 * @fb_modifiers_not_supported:
+ 	 *
 -- 
 2.25.1
 

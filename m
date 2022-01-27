@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43C949D67F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA55049D681
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbiA0ABL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S229589AbiA0ABS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiA0ABF (ORCPT
+        with ESMTP id S233602AbiA0ABP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:01:05 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3B7C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:01:05 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id e16so754755pgn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:01:05 -0800 (PST)
+        Wed, 26 Jan 2022 19:01:15 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FD7C061757;
+        Wed, 26 Jan 2022 16:01:14 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id u130so1123441pfc.2;
+        Wed, 26 Jan 2022 16:01:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=unP+2twZA3OrVPx6WNOyb6deG2PSgw9+yCmy5oJ8xpI=;
-        b=eQ+L5Z9MjBgl9fcq2aI541HzzDd54dfAmQydkM9kd67azeHklB6Kv+aNlVhuljfgI1
-         pvqgsePHr21yuCsdkInOOxn++Wk3e9mxySrnVV5CR4aV7/5aX3ctMREqXv/FqFvj7N1c
-         bMy/3rhaZdKZb0L9TFeq26yCj7M9UNMjrUlq7BaSFbrCcZ9ZNyIfz9H1jtVWPb6UYnqk
-         ap7j6od/GwHBGQgx4V2qNf8Wl4qEIKRzic6vID2EQNaOwHDfQb7msqyPeL8kmYMeLvpy
-         spoN7+X7S2eG+LeDFkHdL+Y9dDbHILe6UJnCXD7Hfb6MfE2Lj87UKzsYwmWnKt4rf4GC
-         tOig==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lJg34UXavo+BCA7CJbZaK2UMuPsocHL4tImngrho0Cw=;
+        b=DzOwhAFAqsmZE8JYLDDnJes5OALer0ARpR6/Wl08rkeNbGjzAqxvWZn/0QKeQiUAi3
+         c6q1lc87oouSG94PVNTPEMQJnY6O0jk79naLBftevX+KYl5BBR4SAbtqd2Nl1W+IIgrm
+         Y4Exjv7B+9rzqzIQeNxcpiai63RP0oLLN/rmgCqa9pFiilNyu9tqLs3cveVReQY2TXB3
+         eCBw2DJXqNJ6Zc/ezeDYGSLOPO9BCPAS8AD2rZC57ZpeXM+c8Yxb9eTPgMb1Haue7A14
+         /wRf2yJgiHw/Z0UULaKSpJPP9x2Rykwjmw5XjXsw1lLgm16xnPl65d6DAyjuFhghEW5B
+         SPAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=unP+2twZA3OrVPx6WNOyb6deG2PSgw9+yCmy5oJ8xpI=;
-        b=qMpjjlsIvKxR6HfX0OjoXhCEsqY+fNGxuiVz1f6JkY9Aa052J+k/fbrOkXaT/3wWG8
-         bvc3avGeMTPxuOAw2sAYDT9aqAezOeWzNgggzFXpSt0wbdfsYZ260UX27VQ1WMfSi3PA
-         OL6hh7b57nLrNYBPSUJbrvwQcuE7HBWDy9pwT8DUYJ2XUs0n4YVINBTGOe86llMcnxD+
-         PxWhnqG6P0jV9cHXDa1xUzurRM/xWCV8Obpn3siAwdrAniiB1plamBuib8aW6szd4duc
-         fuTiLplxKmnENwAGMbEfp1ullxsCV24F4uVb/gxqrfTdsAtCNoJI8rlFVPzQleIpZzbv
-         pzow==
-X-Gm-Message-State: AOAM531pxRDHhoTlIJsAeY/3WPodRa8BcbxA1FuRJRaxIiHtXgwhiyi+
-        mBmuclwu0Tt4lkOjxfP1JFE=
-X-Google-Smtp-Source: ABdhPJz72cD96I4xpifE84yjtY7n9KXt/vhDJ0z0byTrV7S3r5Jd4tbNJZAfnnnZ+sGJQMqDN5h9/A==
-X-Received: by 2002:a63:844a:: with SMTP id k71mr836232pgd.559.1643241664703;
-        Wed, 26 Jan 2022 16:01:04 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:e94:fba2:6768:ac75])
-        by smtp.gmail.com with ESMTPSA id t24sm3545546pfg.92.2022.01.26.16.01.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lJg34UXavo+BCA7CJbZaK2UMuPsocHL4tImngrho0Cw=;
+        b=G4OjPbwfqOlBljfyVruh5/wT+SXSjsZbbOJl0aH/X/14AsKwMC0aDYlFmGrB4cYWIv
+         qUlxU9VVyeaqMFdVGr8WS8yupl74pgJB3anhriMd1BQfbP/EFKLXhYw0yC0sDDNYJVfq
+         wHQUD/6EO2PeGfsAc9X6T9wODUehdL27E67tYwtFYvJWrwibOHaH/zrjqQHq0Ai99Zz3
+         N/NUTfDo8UUcEej6sHkShOvWPM/1hRvDmqBpQTYZcIQNeyuOgdgtijL7is1CXH9Q9UOB
+         FVC0xvZCweQmicG5pbV8kG/2OBXcp3cY7IanYyNwpJt6b6Azt+gPe/25e76iDnFnbEtr
+         DJHQ==
+X-Gm-Message-State: AOAM5327csxCH5Bw/adGoYWrAmbmzmRlAZg1FSpVIm2uX6EgEAiLWYps
+        yj8wrjN7INT8IR2JSgC/Kbs=
+X-Google-Smtp-Source: ABdhPJx6XxFGHOcuTGOvCwpS9bcS4x7uyZ8hAU0+dQS1s0A9vw/uNd/pBD9T2FB6J+jgs/6JqCqLIA==
+X-Received: by 2002:a05:6a00:984:: with SMTP id u4mr822601pfg.67.1643241673776;
+        Wed, 26 Jan 2022 16:01:13 -0800 (PST)
+Received: from localhost.localdomain (192.243.120.23.16clouds.com. [192.243.120.23])
+        by smtp.gmail.com with ESMTPSA id g5sm306510pjj.36.2022.01.26.16.01.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 16:01:04 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>
-Subject: [PATCH 6/6] perf lock: Carefully combine lock stats for discarded entries
-Date:   Wed, 26 Jan 2022 16:00:50 -0800
-Message-Id: <20220127000050.3011493-7-namhyung@kernel.org>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-In-Reply-To: <20220127000050.3011493-1-namhyung@kernel.org>
-References: <20220127000050.3011493-1-namhyung@kernel.org>
+        Wed, 26 Jan 2022 16:01:13 -0800 (PST)
+From:   davidcomponentone@gmail.com
+To:     jejb@linux.ibm.com
+Cc:     davidcomponentone@gmail.com, martin.petersen@oracle.com,
+        yang.guang5@zte.com.cn, yuyufen@huawei.com,
+        thunder.leizhen@huawei.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] scsi: mvsas: replace snprintf with sysfs_emit
+Date:   Thu, 27 Jan 2022 08:00:59 +0800
+Message-Id: <c1711f7cf251730a8ceb5bdfc313bf85662b3395.1643182948.git.yang.guang5@zte.com.cn>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stats from discarded entries should be omitted.  But a lock class may
-have both good and bad entries.  If the first entry was bad, we can
-zero-fill the stats and only add good stats if any.  The entry can
-remove the discard state if it finds a good entry later.
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+coccinelle report:
+./drivers/scsi/mvsas/mv_init.c:699:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/mvsas/mv_init.c:747:8-16:
+WARNING: use scnprintf or sprintf
+
+Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- tools/perf/builtin-lock.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/scsi/mvsas/mv_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index bbfeba79426a..57b9ebd7118a 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -295,6 +295,9 @@ static void combine_lock_stats(struct lock_stat *st)
- 			ret = !!st->name - !!p->name;
- 
- 		if (ret == 0) {
-+			if (st->discard)
-+				goto out;
-+
- 			p->nr_acquired += st->nr_acquired;
- 			p->nr_contended += st->nr_contended;
- 			p->wait_time_total += st->wait_time_total;
-@@ -307,6 +310,10 @@ static void combine_lock_stats(struct lock_stat *st)
- 			if (p->wait_time_max < st->wait_time_max)
- 				p->wait_time_max = st->wait_time_max;
- 
-+			/* now it got a new !discard record */
-+			p->discard = 0;
-+
-+out:
- 			st->combined = 1;
- 			return;
- 		}
-@@ -319,6 +326,15 @@ static void combine_lock_stats(struct lock_stat *st)
- 
- 	rb_link_node(&st->rb, parent, rb);
- 	rb_insert_color(&st->rb, &sorted);
-+
-+	if (st->discard) {
-+		st->nr_acquired = 0;
-+		st->nr_contended = 0;
-+		st->wait_time_total = 0;
-+		st->avg_wait_time = 0;
-+		st->wait_time_min = ULLONG_MAX;
-+		st->wait_time_max = 0;
-+	}
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index dcae2d4464f9..44df7c03aab8 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -696,7 +696,7 @@ static struct pci_driver mvs_pci_driver = {
+ static ssize_t driver_version_show(struct device *cdev,
+ 				   struct device_attribute *attr, char *buffer)
+ {
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", DRV_VERSION);
++	return sysfs_emit(buffer, "%s\n", DRV_VERSION);
  }
  
- static void insert_to_result(struct lock_stat *st,
+ static DEVICE_ATTR_RO(driver_version);
+@@ -744,7 +744,7 @@ static ssize_t interrupt_coalescing_store(struct device *cdev,
+ static ssize_t interrupt_coalescing_show(struct device *cdev,
+ 					 struct device_attribute *attr, char *buffer)
+ {
+-	return snprintf(buffer, PAGE_SIZE, "%d\n", interrupt_coalescing);
++	return sysfs_emit(buffer, "%d\n", interrupt_coalescing);
+ }
+ 
+ static DEVICE_ATTR_RW(interrupt_coalescing);
 -- 
-2.35.0.rc0.227.g00780c9af4-goog
+2.30.2
 

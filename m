@@ -2,245 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C327249DC47
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D1349DC4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiA0ILz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:11:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21819 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229752AbiA0ILx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:11:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643271113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZuylhvZW6x86a+V3ZnUj04ytdDhKjPy9bvsW6hie+MI=;
-        b=Kt5wGyI5MnrYoHdF5ikQOeDTYhJX4R6HXzvkdGh2EN3rYDonr7mu6Okd54U37KFyGTCuU/
-        ELBU2WGiN/kHyiaBlMM9aKR7SjIXxLIRET29EGlP+k2S4Onil+r3rw/XFfn0jL3FVOfHhK
-        rUUYB92FoVXerIobRLBFhlM66wTMT04=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-6DwqADtxOB2J_3I0aXDLaA-1; Thu, 27 Jan 2022 03:11:51 -0500
-X-MC-Unique: 6DwqADtxOB2J_3I0aXDLaA-1
-Received: by mail-pg1-f200.google.com with SMTP id p6-20020a63ab06000000b0033fcc84d4f6so1124448pgf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:11:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZuylhvZW6x86a+V3ZnUj04ytdDhKjPy9bvsW6hie+MI=;
-        b=CYPli+gT71rtKEVkgoBk2jPoIAGB6PyK/pie7WL/7OWAfpAFPGcZ5QnJHElp1pk21f
-         ou1vLm07H0d6IYCDhoxAcTe8L+WBEcSRbnI/u4ViLaRBPyOoiGTgZutkfqhn03LlFdz2
-         KFrTckxBSuZKz534tO9FN9yYqAuT8Hn6H3FFaS5KMbIRX7K88z1RnJjnWQHk7+HxNY6W
-         L6v567CxPFSrES3ohV8u/hbcb4jakUXJ209Q0O5TQl2TcLQ9ZQuNvwJAR+jez7B9upCd
-         8aisgVwZgii9MvbglklCxqwKoBx6Zv6l/fIbYyb4462El8TZ3HxEdY1EI2qBRmc1LXI1
-         zduA==
-X-Gm-Message-State: AOAM532jb7zZx94nHz4YPHdtJYcu0Z8/eLZ/ZyQz8YFoGwXgck+fZAWC
-        CbAGqRQObZLMFy5tttnGAy2JNG+gnR8K4cRvOHY5Oh+AL565MAnZRpZkgzoAbwX7kTWZ8h+BgIh
-        l5gY6l/578IAf6VBr9ocTXa4x
-X-Received: by 2002:a17:902:c406:: with SMTP id k6mr2860118plk.96.1643271110823;
-        Thu, 27 Jan 2022 00:11:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypuog472VkiNADz94IYec37oeQ0JMAbX9TfSK1gaeX1KWEh/IsZjnP5oH8QAPttv41Px2E6g==
-X-Received: by 2002:a17:902:c406:: with SMTP id k6mr2860100plk.96.1643271110503;
-        Thu, 27 Jan 2022 00:11:50 -0800 (PST)
-Received: from [10.72.13.129] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id m11sm18368079pgb.15.2022.01.27.00.11.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 00:11:49 -0800 (PST)
-Message-ID: <6ef76a28-4836-cb55-cb4c-b9d0c5fac95e@redhat.com>
-Date:   Thu, 27 Jan 2022 16:11:45 +0800
+        id S231712AbiA0IMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:12:35 -0500
+Received: from mail-mw2nam12on2065.outbound.protection.outlook.com ([40.107.244.65]:11328
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229752AbiA0IMc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 03:12:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bQw+C4WH3y3ETdHNGwbJOiWTaV3p6YaiOjH9kMEKJnAW0lFDcg2fkiuaCiIYtl7KUBB2cW3qRzSIRGoidRhCyq8woD2i6xuubT8yqE1P8P0CYW7y/8vkkT+pg8hzRyNOHj1YjF8bCuImcQZNOnDMW0AElAGlMfbyNxps3pjYTl9lalnoBMy14QXr/ZxF09w3Fg/cEUUAfcX5Xf/BdfulAmNlDzLt42eCGFlhUzXS8tk2KrBQva+q2AV7X1yWe1gjPpRVlBPo4Dq0Z/SDnSJ8htZ8JEQZx/CIC9/257B/7ZDHrkpPcO2/vuWpJOhfazzEBnIfo1ehgNO5p8oPpL17+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jh9TCz3iFOh/ApI0XX1g+ZZmNLLLQ+GbZ9QKhmiw+bg=;
+ b=LA7SJq/AjIiIg/WiXHbXsWgn2GHvqg02IIKAxbq3/pGNeumYD7eUZ1UTrkro9W+WJCvhXg0ReUIFlCGgqG1XYuvbT0CiJipbduDycqhHpibmdqpSFYRODnRLUQo/343SfUpuAN4bAh2RCHGqU50gZeAntky+YL33bRf9C1YuEzPXbqLXnFAI7eBXlOprOWFaU3vOe++Z/i+De8AniB6hTFp8W1s+fR1Cend+SiOz8haGqlkZ16WMwwQo3REIbB0CaRINHmNkQOIguu47FRufaSIJ2t7+sBW2qLO7R+MiiPn3+8bC6HR6/ZaTC4rjjzB/8AWW2wdY7Q/h0kpmieCMvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jh9TCz3iFOh/ApI0XX1g+ZZmNLLLQ+GbZ9QKhmiw+bg=;
+ b=bmaIFX91iV9zTX9uDKhHnY/LiG+36ITxuKAvXmY/MV8VvWihdcUcii2JcvPdN7e56pHTOT9dw5bI7VSCfJgaDMowswJMp1UxdQ6lPGkmePyCPMkRNeTqfRBTXSZ/XrWJR3lfYV8PAyk/WoQzIClUkwiWt0nX/2ZHFStTnykP6OE=
+Received: from DS7PR03CA0347.namprd03.prod.outlook.com (2603:10b6:8:55::6) by
+ MN2PR12MB3376.namprd12.prod.outlook.com (2603:10b6:208:c2::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4930.15; Thu, 27 Jan 2022 08:12:28 +0000
+Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:55:cafe::c1) by DS7PR03CA0347.outlook.office365.com
+ (2603:10b6:8:55::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
+ Transport; Thu, 27 Jan 2022 08:12:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4930.15 via Frontend Transport; Thu, 27 Jan 2022 08:12:27 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 27 Jan
+ 2022 02:12:26 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 27 Jan
+ 2022 00:12:26 -0800
+Received: from tsunglin-chrome.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 27 Jan 2022 02:12:21 -0600
+From:   RyanLin <Tsung-Hua.Lin@amd.com>
+To:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
+        <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+        <David1.Zhou@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <seanpaul@chromium.org>, <bas@basnieuwenhuizen.nl>,
+        <nicholas.kazlauskas@amd.com>, <sashal@kernel.org>,
+        <markyacoub@google.com>, <victorchengchi.lu@amd.com>,
+        <ching-shih.li@amd.corp-partner.google.com>,
+        <Rodrigo.Siqueira@amd.com>, <ddavenport@chromium.org>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     RyanLin <Tsung-Hua.Lin@amd.com>
+Subject: [PATCH] drm/amdgpu: fix that issue that the number of the crtc of the 3250c is not correct
+Date:   Thu, 27 Jan 2022 16:12:37 +0800
+Message-ID: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/4] drivers/net/virtio_net: Added RSS hash report.
-Content-Language: en-US
-To:     Andrew Melnychenko <andrew@daynix.com>, netdev@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        mst@redhat.com
-Cc:     yan@daynix.com, yuri.benditovich@daynix.com
-References: <20220117080009.3055012-1-andrew@daynix.com>
- <20220117080009.3055012-4-andrew@daynix.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220117080009.3055012-4-andrew@daynix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 357192b1-04d4-465d-d038-08d9e16cc1dd
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3376:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB337630A79EBD801964351B8AB2219@MN2PR12MB3376.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: g98iE5nMf/xkIttcupMHt6o1vwQ0qqFq8H5mPAlSOSCs6UxlVjg3XJ2PMTX02fpeWWWBDOORPcEkZ8PDxny1Jl3u3pkw4c7iKUA3GVCs5AUu6Z237oGOCz7M3qYg7VTEnZOZg9ypFi+nDfvY8SRz6XYe3ZtVwHRF4VQtLZmh7PthwAeVj0L7+WqAmkVu/cCdFPtZep77vf3RAh5aLh+MbY9Ks5J1GuIidQQoXo8NNz3l3kS2D8tNW/aH/9sKWrT4tn7GDiEwMQxDis1nDgktOxN1GiPpQqoG8eIVrOAGxTCkFnNQygkFBEBxEptYhw/Ni2nhV57KiAHraY0EbSZsaPaOrQ62n4CGqdWmqypvwbdK/YGwYsd8xCySkxx7iFe1sWUHCdRHoaMDEmfDpFHNtQYb/w2PSAUWlNdZXySFW0FxSztYsSOQDZzaRNLcmHS76V0Rgx3r/QwYREZ8hvgC5Eu6gIl5IfjvEatHIVeAUAFC4fLMDIW8HEQrZlSg7Y5/lsZHBxaedK1MrzoiPGVntoGi/hCXHWLzIS93HqqY2nHYm10ueQ6WuNuWYUvBlEMT5DrftsL1ERA8+yzRIq536sX4hcQPy7BRGw6qkFbXnTyfDpj2lN9wJji/hKzOGh/eq30r4uQOXfOUSAQBJ8uKvnKgRzswNsbtCJk9N/yOhX5bGBkIo+TLSfVFpQAaOymcgA5Ch8x0N41I2KfEvXdtbOn/yY9Oo8eTXNnJcJHO150=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(36860700001)(36756003)(508600001)(2906002)(921005)(2616005)(110136005)(47076005)(81166007)(356005)(82310400004)(8936002)(8676002)(4326008)(336012)(426003)(316002)(70206006)(70586007)(83380400001)(1076003)(86362001)(26005)(6666004)(186003)(7696005)(7416002)(40460700003)(5660300002)(36900700001)(20210929001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 08:12:27.3799
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 357192b1-04d4-465d-d038-08d9e16cc1dd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3376
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Why]
+External displays take priority over internal display when there are fewer 
+display controllers than displays.
 
-在 2022/1/17 下午4:00, Andrew Melnychenko 写道:
-> Added features for RSS hash report.
-> If hash is provided - it sets to skb.
-> Added checks if rss and/or hash are enabled together.
->
-> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
-> ---
->   drivers/net/virtio_net.c | 58 ++++++++++++++++++++++++++++++++--------
->   1 file changed, 47 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 9aae11cb568e..2c61f96ce3e6 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -227,6 +227,7 @@ struct virtnet_info {
->   
->   	/* Host supports rss and/or hash report */
->   	bool has_rss;
-> +	bool has_rss_hash_report;
->   	u8 rss_key_size;
->   	u16 rss_indir_table_size;
->   	u32 rss_hash_types_supported;
-> @@ -420,7 +421,9 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
->   	hdr_p = p;
->   
->   	hdr_len = vi->hdr_len;
-> -	if (vi->mergeable_rx_bufs)
-> +	if (vi->has_rss_hash_report)
-> +		hdr_padded_len = sizeof(struct virtio_net_hdr_v1_hash);
+[How]
+The root cause is because of that number of the crtc is not correct.
+The number of the crtc on the 3250c is 3, but on the 3500c is 4.
+On the source code, we can see that number of the crtc has been fixed at 4.
+Needs to set the num_crtc to 3 for 3250c platform.
 
+Signed-off-by: RyanLin <Tsung-Hua.Lin@amd.com>
+Change-Id: I837df7101cc4849d2c3021fd529b4061edab4bb1
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-This seems wrong, add_recvbuf_big() will always try to use sizeof(struct 
-padded_vnet_hdr).
-
-This can be tested by disabling mrg_rxbuf.
-
-
-> +	else if (vi->mergeable_rx_bufs)
->   		hdr_padded_len = sizeof(*hdr);
->   	else
->   		hdr_padded_len = sizeof(struct padded_vnet_hdr);
-> @@ -1156,6 +1159,8 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
->   	struct net_device *dev = vi->dev;
->   	struct sk_buff *skb;
->   	struct virtio_net_hdr_mrg_rxbuf *hdr;
-> +	struct virtio_net_hdr_v1_hash *hdr_hash;
-> +	enum pkt_hash_types rss_hash_type;
->   
->   	if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
->   		pr_debug("%s: short packet %i\n", dev->name, len);
-> @@ -1182,6 +1187,29 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
->   		return;
->   
->   	hdr = skb_vnet_hdr(skb);
-> +	if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report) {
-> +		hdr_hash = (struct virtio_net_hdr_v1_hash *)(hdr);
-> +
-> +		switch (hdr_hash->hash_report) {
-> +		case VIRTIO_NET_HASH_REPORT_TCPv4:
-> +		case VIRTIO_NET_HASH_REPORT_UDPv4:
-> +		case VIRTIO_NET_HASH_REPORT_TCPv6:
-> +		case VIRTIO_NET_HASH_REPORT_UDPv6:
-> +		case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
-> +		case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
-> +			rss_hash_type = PKT_HASH_TYPE_L4;
-> +			break;
-> +		case VIRTIO_NET_HASH_REPORT_IPv4:
-> +		case VIRTIO_NET_HASH_REPORT_IPv6:
-> +		case VIRTIO_NET_HASH_REPORT_IPv6_EX:
-> +			rss_hash_type = PKT_HASH_TYPE_L3;
-> +			break;
-> +		case VIRTIO_NET_HASH_REPORT_NONE:
-> +		default:
-> +			rss_hash_type = PKT_HASH_TYPE_NONE;
-> +		}
-> +		skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
-> +	}
->   
->   	if (hdr->hdr.flags & VIRTIO_NET_HDR_F_DATA_VALID)
->   		skb->ip_summed = CHECKSUM_UNNECESSARY;
-> @@ -2232,7 +2260,8 @@ static bool virtnet_commit_rss_command(struct virtnet_info *vi)
->   	sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
->   
->   	if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
-> -				  VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
-> +				  vi->has_rss ? VIRTIO_NET_CTRL_MQ_RSS_CONFIG
-> +				  : VIRTIO_NET_CTRL_MQ_HASH_CONFIG, sgs)) {
->   		dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
->   		return false;
->   	}
-> @@ -3230,6 +3259,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
->   	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
->   			     "VIRTIO_NET_F_CTRL_VQ") ||
->   	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS,
-> +			     "VIRTIO_NET_F_CTRL_VQ") ||
-> +	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
->   			     "VIRTIO_NET_F_CTRL_VQ"))) {
->   		return false;
->   	}
-> @@ -3365,16 +3396,18 @@ static int virtnet_probe(struct virtio_device *vdev)
->   	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
->   		vi->mergeable_rx_bufs = true;
->   
-> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
-> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT))
-> +		vi->has_rss_hash_report = true;
-> +
-> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
->   		vi->has_rss = true;
-> +
-> +	if (vi->has_rss || vi->has_rss_hash_report) {
->   		vi->rss_indir_table_size =
->   			virtio_cread16(vdev, offsetof(struct virtio_net_config,
-> -						      rss_max_indirection_table_length));
-> +					rss_max_indirection_table_length));
-
-
-Unnecessary changes.
-
-
->   		vi->rss_key_size =
->   			virtio_cread8(vdev, offsetof(struct virtio_net_config, rss_max_key_size));
-> -	}
-> -
-> -	if (vi->has_rss) {
-
-
-This can be squashed into previous patch.
-
-Thanks
-
-
->   		vi->rss_hash_types_supported =
->   		    virtio_cread32(vdev, offsetof(struct virtio_net_config, supported_hash_types));
->   		vi->rss_hash_types_supported &=
-> @@ -3384,8 +3417,11 @@ static int virtnet_probe(struct virtio_device *vdev)
->   
->   		dev->hw_features |= NETIF_F_RXHASH;
->   	}
-> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
-> -	    virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> +
-> +	if (vi->has_rss_hash_report)
-> +		vi->hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-> +	else if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
-> +		 virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
->   		vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
->   	else
->   		vi->hdr_len = sizeof(struct virtio_net_hdr);
-> @@ -3452,7 +3488,7 @@ static int virtnet_probe(struct virtio_device *vdev)
->   		}
->   	}
->   
-> -	if (vi->has_rss)
-> +	if (vi->has_rss || vi->has_rss_hash_report)
->   		virtnet_init_default_rss(vi);
->   
->   	err = register_netdev(dev);
-> @@ -3587,7 +3623,7 @@ static struct virtio_device_id id_table[] = {
->   	VIRTIO_NET_F_CTRL_MAC_ADDR, \
->   	VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
->   	VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
-> -	VIRTIO_NET_F_RSS
-> +	VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT
->   
->   static unsigned int features[] = {
->   	VIRTNET_FEATURES,
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 40c91b448f7d..dbeef7b57a9b 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -2738,9 +2738,15 @@ static int dm_early_init(void *handle)
+ 		break;
+ #if defined(CONFIG_DRM_AMD_DC_DCN1_0)
+ 	case CHIP_RAVEN:
+-		adev->mode_info.num_crtc = 4;
+-		adev->mode_info.num_hpd = 4;
+-		adev->mode_info.num_dig = 4;
++		if (adev->rev_id >= 8) { //chip_name = "raven2";
++			adev->mode_info.num_crtc = 3;
++			adev->mode_info.num_hpd = 3;
++			adev->mode_info.num_dig = 3;
++		} else {
++			adev->mode_info.num_crtc = 4;
++			adev->mode_info.num_hpd = 4;
++			adev->mode_info.num_dig = 4;
++		}
+ 		break;
+ #endif
+ #if defined(CONFIG_DRM_AMD_DC_DCN2_0)
+-- 
+2.25.1
 

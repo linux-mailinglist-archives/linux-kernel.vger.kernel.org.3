@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE6749EB23
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F27B49EB24
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239696AbiA0TfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:35:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34070 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiA0TfP (ORCPT
+        id S239788AbiA0Tfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229639AbiA0Tfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:35:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 323BE61DE7;
-        Thu, 27 Jan 2022 19:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6163DC340E4;
-        Thu, 27 Jan 2022 19:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643312114;
-        bh=xjDuYL44PRCV60j88JUn8U44NjVGqHmowB7jXW8PlMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kDW9jvfe+ZIWLeUMcHMbmxdnXkNwekVDfxS9Gr0DxQ6wXjSlKJW7sjpxdHC6OJt3q
-         neuKfJiXNSECbbY/rnCUQtwXWcewcrWs73g3d26OiVEiVeUl50e2vrT7I728SfQHJm
-         0smyF1GeLHct7C/yBKONgSL2Kn+hHLWiQRhLz7YJVkxZGv0fCFlwv85L/3qCfPk1nl
-         cyrSLUs9MaGNwmMfCJxVcXFHYnTFHa88pc0982KDz4YUt6ZYBdAiAMyvWmgMd6ACcK
-         JzAwkOuhaJy9DA4mu5Jj1huUxgeZckEMTC4m5n7LvEdFlslZ3Viblsu1WIH7tcy1gu
-         VjmFrf7Yoka6w==
-Date:   Thu, 27 Jan 2022 11:35:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        stefanb@linux.ibm.com, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
- signatures (alternative)
-Message-ID: <YfLz8NftvbZtKvLT@sol.localdomain>
-References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
+        Thu, 27 Jan 2022 14:35:43 -0500
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D30C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:35:43 -0800 (PST)
+Received: by mail-vs1-xe44.google.com with SMTP id r20so284375vsn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:35:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=CnehUZwQrYVBpmc2ighYqjEhs4i4jCzhX9nHmTruo5A=;
+        b=OtuGpBTPxxSJJYBaFHWrDVwcc3L99ZBuCOs3Z+YLIOyQgCsMOERror4r2YPLDg3eRI
+         L2DvOuf/gBazbHwt2OT1glfloDHwuntdGdFkQLEbQPID0d+HqLnnlzNVm4aW11K0OPKp
+         cJSQeXgKyXfNe10Dpi3FNU9eXSXF1sIFczkrgRKoGvAAgWZD1xbHdscXIFnqZoYUl11w
+         Q9deXLkdXIWEm8XR8cdt4hcdxZzPAgTiolaOZE5JNGUQmY4eo1RBMEhH0afd4t0UPBoY
+         1o4CZSQ1aX/faCuX75rnbONG2nusfQu1cbjlOWzorhVpC9EwJPxnA8ehxHVelCiZu61h
+         TTVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=CnehUZwQrYVBpmc2ighYqjEhs4i4jCzhX9nHmTruo5A=;
+        b=4tKn/6pmEbkD2HIUpPc2/NKvLfFkgeWXU6vmgJFxiN6jbOJgShdvCoPjRMJZIn4Xc2
+         u4FhM2BWMreIiN31i1Bj3HoYJyA8CTzmToaCmmSbfDHAku9BWCTkI3bHpKHhAITUd1n7
+         Ey49GKSniYnEkhv6r5tlOPyKST4mT5k+N+OpFAdkyOFm7FF6o3mgjEQxTBwmstti4ZUQ
+         xnHDuhj8HijCSeMDjREQLllO3dr8TJ4Kuyh0mXEee0RbHtyY62jrQhSlj7rh3N2JuUL9
+         anCiqk6WotU3fhpicQg/9d8qXrgNTdOZG7sOVe27PgXRpzGhHQQ+gKHyHd8gKi0BC6Ao
+         3dLw==
+X-Gm-Message-State: AOAM530dqPhX/ZeSOhZU5E1JOsR23M+7q+3GSa2WQiBKvzjqwQ/TWNd+
+        EKwu8rt9Q2v43tmCA4sEk8ZiF6Dyv4LjVVVl0+A=
+X-Google-Smtp-Source: ABdhPJwR8dyvdcHk9v2e/vmI5mKFu6tWFKVYrrH30JUc4+xgdEOfaN1eOe1FuIio0SlHv8UhJTDfpeZe49oAdqcW+Ds=
+X-Received: by 2002:a05:6102:3310:: with SMTP id v16mr2218256vsc.56.1643312142160;
+ Thu, 27 Jan 2022 11:35:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127184614.2837938-1-roberto.sassu@huawei.com>
+Received: by 2002:a05:6130:39f:0:0:0:0 with HTTP; Thu, 27 Jan 2022 11:35:41
+ -0800 (PST)
+Reply-To: werinammawussi@gmail.com
+From:   Werinam Mawussi <mredwinmorris986@gmail.com>
+Date:   Thu, 27 Jan 2022 20:35:41 +0100
+Message-ID: <CAM7JAv=m6vWgWEK6F+Wz=0sR=q9N7ErWZZwM0fuku_p6eOwB2Q@mail.gmail.com>
+Subject: Important Notification
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 07:46:09PM +0100, Roberto Sassu wrote:
-> I wanted to propose a different approach for handling fsverity digests and
-> signatures, compared to:
-> 
-> https://lore.kernel.org/linux-integrity/20220126000658.138345-1-zohar@linux.ibm.com/
-> 
-> In the original proposal, a new signature version has been introduced (v3)
-> to allow the possibility of signing the digest of a more flexible data
-> structure, ima_file_id, which could also include the fsverity file digest.
-> 
-> While the new signature type would be sufficient to handle fsverity file
-> digests, the problem is that its format would not be compatible with the
-> signature format supported by the built-in verification module in fsverity.
-> The rpm package manager already has an extension to include fsverity
-> signatures, with the existing format, in the RPM header.
-> 
-> Given that the fsverity signature is in the PKCS#7 format, IMA has already
-> the capability of handling it with the existing code, more specifically the
-> modsig code. It would be sufficient to provide to modsig the correct data
-> to avoid introducing a new signature format.
+I am bringing this notice to your attention in respect of the death of
+a  client of mine that has the same surname as you and his fund valued
+at  $19.9M to be paid to you.contact me at werinammawussi@gmail.com
+for more details.
 
-I think it would be best to get people moved off of the fs-verity built-in
-signatures, rather than further extend the use of it.  PKCS#7 is a pretty
-terrible signature format.  The IMA one is better, though it's unfortunate that
-IMA still relies on X.509 for keys.
-
-- Eric
+Yours Sincerely,
+Werinam Mawussi,
+Attorney At Law.

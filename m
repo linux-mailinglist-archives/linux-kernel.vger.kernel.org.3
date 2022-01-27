@@ -2,153 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD1449DD6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A84F349DD72
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238249AbiA0JLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:11:46 -0500
-Received: from mail1.bemta34.messagelabs.com ([195.245.231.2]:11426 "EHLO
-        mail1.bemta34.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231837AbiA0JLn (ORCPT
+        id S238315AbiA0JMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:12:49 -0500
+Received: from smtpbguseast1.qq.com ([54.204.34.129]:47276 "EHLO
+        smtpbguseast1.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238299AbiA0JMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:11:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1643274702; i=@fujitsu.com;
-        bh=TTJx396secFY4TWVsYG79piD7SwRnYamK3ghI0u+wu8=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=J62BY87SA+i4WxUnhEk4b8lgokPBfHhS5tDEm0svJES832gE1yMHoNM8B8y8oU37j
-         7IxVsJ98E3rYRaTD/u4P4OI4Cd3M90uRSo5x0yljSvgnKrWU8+SOyQZSyUFI6uE6aZ
-         1uxfwbdTPQLVOMR3qJZpFKXQvt+pWWDgBzbqX8W5H/wUOZTOR8Fr21imwe5w/BmGzN
-         CejNZcKAqhA5eOVpY+DCa6eAz3LFnbPTxbN6bALbujOdXY9XGJfo/FqcwJdb17ssBO
-         6sUR5mnH0eCHYmGD4Q860RDas2QihhnTvipMU6tHdodQsqZJKalUOpLMZqag4bAZDN
-         hbUrj1CjA8rjQ==
-Received: from [100.115.34.7] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-a.eu-west-2.aws.ess.symcld.net id 91/4A-12680-EC162F16; Thu, 27 Jan 2022 09:11:42 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRWlGSWpSXmKPExsViZ8MRons28VO
-  iwf7v2haXd81hs5h+5z2bxa1P/BY/bt1gsdg7fRmrA6vHnWt72Dz2z13D7nFmwRF2j8+b5AJY
-  olgz85LyKxJYM3p3rWUsmC9U8WTDVaYGxmn8XYxcHEICLxklmmbvYIZw9jBK7Fr1k72LkZODT
-  UBT4lnnAmYQW0TASWLj1W5GEJtZoE5i077PbF2MHBzCAn4SDWtUQEwWAVWJfRsSQSp4BTwkvv
-  x9zAZiSwgoSEx5+B5sCqeAp8S9vafZIVa1MEr0tncwQzQISpyc+YQFYryExMEXL5ghmhUlLnV
-  8Y4SwKyRmzWpjmsDIPwtJyywkLQsYmVYxWicVZaZnlOQmZuboGhoY6BoamuoaW+oaGRjoJVbp
-  JuqlluqWpxaX6BrpJZYX66UWF+sVV+Ym56To5aWWbGIEhnVKsfqJHYxPV/7UO8QoycGkJMq7x
-  PxTohBfUn5KZUZicUZ8UWlOavEhRhkODiUJ3vxYoJxgUWp6akVaZg4wxmDSEhw8SiK8fglAad
-  7igsTc4sx0iNQpRkUpcV43kIQASCKjNA+uDRbXlxhlpYR5GRkYGIR4ClKLcjNLUOVfMYpzMCo
-  J86aBTOHJzCuBm/4KaDET0OLf59+BLC5JREhJNTApWa9onJqzkXll16K3Ux34jtYt5n3SUHm4
-  j3WjqneDcFjpwqIg9xdeJwW+1boniojNK2Yw3ZazvDUwzzJ7x4dNJSIar4r+8adXbFub8XyF2
-  c5CmTWW9wRNS2dleq/9etdu4r/MW6pudzY0uqi7LvOZe3Zv7iFRrqWTkzOurm3fzW6r6MB1P/
-  Dsue2nujua9rEL/ea/UNZ1NElGs2e1bFXg/j1zyz47Ouu+PfVIy2NTl079NOHjZ/sOp2/9v9+
-  R87v97Hm7d9abem+TiBf4NulTpluHJ1eD66QtXxU8WVaJrBQqvHbAaAdH8awDi9eHJMhcDf8c
-  r8U2b4V33m8HzStt87XWhJv0ancF5obdN1FiKc5INNRiLipOBACQ3EBnZgMAAA==
-X-Env-Sender: xuyang2018.jy@fujitsu.com
-X-Msg-Ref: server-24.tower-571.messagelabs.com!1643274701!215!1
-X-Originating-IP: [62.60.8.84]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.81.7; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 28723 invoked from network); 27 Jan 2022 09:11:41 -0000
-Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
-  by server-24.tower-571.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Jan 2022 09:11:41 -0000
-Received: from R01UKEXCASM126.r01.fujitsu.local ([10.183.43.178])
-        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id 20R9BXxU019758
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
-        Thu, 27 Jan 2022 09:11:41 GMT
-Received: from localhost.localdomain (10.167.220.84) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.26; Thu, 27 Jan 2022 09:11:36 +0000
-From:   Yang Xu <xuyang2018.jy@fujitsu.com>
-To:     <linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <naresh.kamboju@linaro.org>,
-        <pvorel@suse.cz>, Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: [PATCH v2 2/3] selftests/zram01.sh: Fix compression ratio calculation
+        Thu, 27 Jan 2022 04:12:39 -0500
+X-QQ-mid: bizesmtp54t1643274737tnh7xl4d
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 27 Jan 2022 17:12:11 +0800 (CST)
+X-QQ-SSF: 0140000000200090E000C00A0000000
+X-QQ-FEAT: F3yR32iATbjWw3acDtsfp2HLqnilxm49/4xuiIAVnD3g9W5QKpqaUyV3Lkk6W
+        GRHy/Z/TKb4rTYjEmDW/4bTNTdYtPjiVTdxpR3fJkmD5jxHf55vczWMU1TKeLG+bS2qg34p
+        oXrvYyWnob/at2T9ngNQV+dHympfswqSoQLwtmOwDlZ4N58gZh+A+1FBUpfJSk2aQX9AFAq
+        6BcI1OWr/5nv8fuVRU4bSdtYiTlwYBIbH7YnbjB/Sh7m4ZXbdKG9HZhd4kcFD7Miact+6gP
+        beikY47ZSxYMJ9tMuVcAIrZxqhYSln7ymbG4ntqkxzPwI/+Z1At6Kd/GL23LxJIzVkcRZnk
+        oLYqJ4J/hEIwOLDpaM/Q91vzWiAvM5Z9Us9A37dR66jYSdju+I=
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH v2] scsi: sr: Improve the judgment statement
 Date:   Thu, 27 Jan 2022 17:11:36 +0800
-Message-ID: <1643274697-3393-2-git-send-email-xuyang2018.jy@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1643274697-3393-1-git-send-email-xuyang2018.jy@fujitsu.com>
-References: <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
- <1643274697-3393-1-git-send-email-xuyang2018.jy@fujitsu.com>
+Message-Id: <20220127091136.9658-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.220.84]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-zram01 uses `free -m` to measure zram memory usage. The results are no
-sense because they are polluted by all running processes on the system.
+The previous code has a less-than-perfect usage of judgment syntax.
 
-We Should only calculate the free memory delta for the current process.
-So use the third field of /sys/block/zram<id>/mm_stat to measure memory
-usage instead. The file is available since kernel 4.1.
+When the med->media_event_code value is equal to 2 or 3, the same
+value is returned, so it would be better to combine the implementation
+statements when the med->media_event_code value is equal to 2 or 3.
 
-orig_data_size(first): uncompressed size of data stored in this disk.
-compr_data_size(second): compressed size of data stored in this disk
-mem_used_total(third): the amount of memory allocated for this disk
+Moreover, when a variable is equal to multiple values, it is better
+to use a switch judgment statement.
 
-Also remove useless zram cleanup call in zram_fill_fs and so we don't
-need to cleanup zram twice if fails.
-
-Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
 ---
-fix this ie the fowlloing ltp patch does
-https://github.com/linux-test-project/ltp/commit/7310e235
- tools/testing/selftests/zram/zram01.sh | 30 +++++++-------------------
- 1 file changed, 8 insertions(+), 22 deletions(-)
+ drivers/scsi/sr.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
-index 114863d9fb87..e9e9eb777e2c 100755
---- a/tools/testing/selftests/zram/zram01.sh
-+++ b/tools/testing/selftests/zram/zram01.sh
-@@ -33,8 +33,6 @@ zram_algs="lzo"
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index f925b1f1f9ad..610baa630067 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -222,12 +222,16 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
+ 	if (eh->nea || eh->notification_class != 0x4)
+ 		return 0;
  
- zram_fill_fs()
- {
--	local mem_free0=$(free -m | awk 'NR==2 {print $4}')
--
- 	for i in $(seq 0 $(($dev_num - 1))); do
- 		echo "fill zram$i..."
- 		local b=0
-@@ -45,29 +43,17 @@ zram_fill_fs()
- 			b=$(($b + 1))
- 		done
- 		echo "zram$i can be filled with '$b' KB"
--	done
- 
--	local mem_free1=$(free -m | awk 'NR==2 {print $4}')
--	local used_mem=$(($mem_free0 - $mem_free1))
-+		local mem_used_total=`awk '{print $3}' "/sys/block/zram$i/mm_stat"`
-+		local v=$((100 * 1024 * $b / $mem_used_total))
-+		if [ "$v" -lt 100 ]; then
-+			 echo "FAIL compression ratio: 0.$v:1"
-+			 ERR_CODE=-1
-+			 return
-+		fi
- 
--	local total_size=0
--	for sm in $zram_sizes; do
--		local s=$(echo $sm | sed 's/M//')
--		total_size=$(($total_size + $s))
-+		echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
- 	done
--
--	echo "zram used ${used_mem}M, zram disk sizes ${total_size}M"
--
--	local v=$((100 * $total_size / $used_mem))
--
--	if [ "$v" -lt 100 ]; then
--		echo "FAIL compression ratio: 0.$v:1"
--		ERR_CODE=-1
--		zram_cleanup
--		return
--	fi
--
--	echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
+-	if (med->media_event_code == 1)
++	switch (med->media_event_code) {
++	case 1:
+ 		return DISK_EVENT_EJECT_REQUEST;
+-	else if (med->media_event_code == 2)
+-		return DISK_EVENT_MEDIA_CHANGE;
+-	else if (med->media_event_code == 3)
++	case 2:
++	case 3:
+ 		return DISK_EVENT_MEDIA_CHANGE;
++	default:
++		break;
++	}
++
+ 	return 0;
  }
  
- check_prereqs
 -- 
-2.23.0
+2.20.1
+
+
 

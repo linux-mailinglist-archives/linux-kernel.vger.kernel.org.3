@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1F849EAF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8824549EAFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245490AbiA0TSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiA0TSn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:18:43 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60CC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:18:43 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id h14so11641286ybe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:18:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=howett-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aC48KH6V3XmmrT5/w0oKx66CGk7WIL8m2w7STuh0meQ=;
-        b=XMu4tnK4KcSZ1cna9kqFgZQ/Lg2E2brBZoo2IG6n2aXNSOHuY8m9o+dKKynxoHbdLb
-         OlkQ4LRByKDvLab29KtkAU/Eh2gYrhNCiFWjntCYXNglgHgiuKG2fllcuQiSRoZcT4wX
-         HdQpnxTlkiwmDhzyggWAUnEJ4E0Thv8ltMqc1u3URsFVjfxDFsFpiWXiVpPXuVckB3SY
-         r5Q//XxkPXdHKXfSHzCp0Km9iOPfKwOyyRRPmhVsbMtIv0FWZb+NPw3UcFqIuM/vven8
-         sGAHUBDNQ3DjICuBcb2XyKgQmpzQSpx3PWjcw9Sp1AUgY9sKGHs2jzpstgQ/OczCYsOO
-         6bgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aC48KH6V3XmmrT5/w0oKx66CGk7WIL8m2w7STuh0meQ=;
-        b=gfzXGLbPlI9wnmzocA6xnXIQosrTWlCUG6123xwtrAaTe70A8GIrVY7JeOq1RuEGmP
-         KBRWwC3VSZ/DIPnspTG9kVISf3weUAlcGjntE5mzhTmbwjMdiS/dw2h3BGPqqvHGXBh5
-         t4QFm7HcZgy62NP3/QGWMUm0i7mKLFCM0wTKWHMIV3BsCXW8+8kJbTl3nnM5shWeiKj6
-         xoRf8fQWDQRKQzBcMZC+EJ5OU+Fj9VW3YCWuKCxWtO//ABUYUW85ZnDpxEos+5QaJQiX
-         dXv/hyQYF0yIViWKN+OnsT8K0pbZMxU40mLjXwZaTrV2bQocDHJSoOgXsbrKtA8R9/8z
-         MQdA==
-X-Gm-Message-State: AOAM531QVV92Ng2Kx1d9uP05I9FdFoHNfYx9Goo1LiUvZ8yR/5VCiJvh
-        DH+PqrQErqHWK82wsGG5g3WWx2PRFwUuSBKZ4mzKNw==
-X-Google-Smtp-Source: ABdhPJxK1x+ykwISdwoZ+vrCN4Ztz3s7awgLGueodNCqxDFjDiC/Eh2khNlRmO7T1/XCN8eKLbeHAB/Frha2qGh8Plc=
-X-Received: by 2002:a05:6902:154c:: with SMTP id r12mr8040586ybu.674.1643311122667;
- Thu, 27 Jan 2022 11:18:42 -0800 (PST)
+        id S245157AbiA0TY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:24:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:51600 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232674AbiA0TY5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 14:24:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E67E0113E;
+        Thu, 27 Jan 2022 11:24:56 -0800 (PST)
+Received: from e113632-lin.cambridge.arm.com (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ED4243F7D7;
+        Thu, 27 Jan 2022 11:24:53 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rt-users@vger.kernel.org
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mike Galbraith <efault@gmx.de>
+Subject: [PATCH v4] arm64: mm: Make arch_faults_on_old_pte() check for migratability
+Date:   Thu, 27 Jan 2022 19:24:37 +0000
+Message-Id: <20220127192437.1192957-1-valentin.schneider@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220126180020.15873-1-dustin@howett.net> <20220126180020.15873-3-dustin@howett.net>
- <YfLqloFQpF7bURGi@chromium.org>
-In-Reply-To: <YfLqloFQpF7bURGi@chromium.org>
-From:   Dustin Howett <dustin@howett.net>
-Date:   Thu, 27 Jan 2022 13:18:31 -0600
-Message-ID: <CA+BfgNKS_uGZVh5K=O5Q-Brj-wWyg+gn1Nx4-Gr5OVb46ZFi=A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_lpcs: reserve the MEC LPC
- I/O ports first
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Michael Niksa <michael.niksa@live.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:55 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Hi Dustin,
->
-> I can't find this update in the EC code base [1]. Is there any reason
-> you are not adding this, or is the change in flight (or in some other
-> location)?
->
-> [1] https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/main/include/ec_commands.h
->
+arch_faults_on_old_pte() relies on the calling context being
+non-preemptible. CONFIG_PREEMPT_RT turns the PTE lock into a sleepable
+spinlock, which doesn't disable preemption once acquired, triggering the
+warning in arch_faults_on_old_pte().
 
-Hey Prashant,
+It does however disable migration, ensuring the task remains on the same
+CPU during the entirety of the critical section, making the read of
+cpu_has_hw_af() safe and stable.
 
-The host communication adapters in the EC repo don't support the MEC
-protocol at all,
-so it did not seem necessary to bring these changes over. I'd be happy
-to do so, of
-course, if that is desirable.
+Make arch_faults_on_old_pte() check cant_migrate() instead of preemptible().
 
-My understanding (well, my guess) is that protocol support was never
-added because
-it is already implemented here in cros_ec_lpcs. Userland I/O port
-access is(?) less desirable
-than having this driver handle it.
+Suggested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Link: https://lore.kernel.org/r/20210811201354.1976839-5-valentin.schneider@arm.com
+---
+v3 -> v4: Dropped migratable(), reuse cant_migrate() (Sebastian)
+---
+ arch/arm64/include/asm/pgtable.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-d
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index c4ba047a82d2..3caf6346ea95 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -1001,7 +1001,8 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+  */
+ static inline bool arch_faults_on_old_pte(void)
+ {
+-	WARN_ON(preemptible());
++	/* The register read below requires a stable CPU to make any sense */
++	cant_migrate();
+ 
+ 	return !cpu_has_hw_af();
+ }
+-- 
+2.25.1
 
-> Thanks,
->
-> -Prashant

@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDDF49EA58
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255DC49EA5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240476AbiA0S10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:27:26 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:32912 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbiA0S1Y (ORCPT
+        id S234087AbiA0S3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:29:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31522 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231827AbiA0S3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:27:24 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EED2B210E4;
-        Thu, 27 Jan 2022 18:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643308043; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 27 Jan 2022 13:29:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643308152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zk2r/XrL2I9M2jio/MO73dxCfXi5kcNty76XDbfCA04=;
-        b=kaCevPFOebUrYtZIeSsQl/Nenll/xKHVI9d26xNpP2Jv/gtiEK40/Qw4N4a6RK0iQlwo9G
-        IRnTWdg2dHxScobVExZ1f12j6cBKSeKLR/UHAxa09Xo+bhpjPWfKEYjIyZesXCpGGzfoeH
-        Yl4x7QGS3XMe7kto4Rofoe0GSn6EwVA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643308043;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zk2r/XrL2I9M2jio/MO73dxCfXi5kcNty76XDbfCA04=;
-        b=ekdcCIxU79QmWvRUkgubRlAQ7C5usaznvpUOk5HdZGr9FAns2IyCl6TfpBoAZAiFuBAxxU
-        0rjqXJEqMV0FzeDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 912EC13D4F;
-        Thu, 27 Jan 2022 18:27:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pSyYIgvk8mFoOQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 27 Jan 2022 18:27:23 +0000
-Message-ID: <b7f580cb-84f7-5c78-5f68-7ab8f67b0811@suse.cz>
-Date:   Thu, 27 Jan 2022 19:27:23 +0100
+        bh=VOwmBaoQYc9ipxJsD5Xp8lQm0++NvPyuGzOAK0NnjAs=;
+        b=V74EcNmaaPHYsO1/s1k2oeuAZhaCZul6uOzaYN5K4Ajy2leissLK7L01+6mleVIOUvBFXF
+        atIEkAT44PFtnVLMWekAT8cVtt754Pv+8TVj5SN2Od9qdProAGxaUdZl7sJf/ctrWES0RJ
+        a21aZIzEYkLNfefhDTYeYdrhu8uVCkk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-266-5F4esgkaMiK3kBuBdLVqVg-1; Thu, 27 Jan 2022 13:29:11 -0500
+X-MC-Unique: 5F4esgkaMiK3kBuBdLVqVg-1
+Received: by mail-wm1-f71.google.com with SMTP id q71-20020a1ca74a000000b003507f38e330so4519175wme.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:29:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VOwmBaoQYc9ipxJsD5Xp8lQm0++NvPyuGzOAK0NnjAs=;
+        b=pz+Vt6dr1qgnB65OlEzBTsdp0pAVHeGT9J+lu8Py1vKNQ4j+MetWXF8h2G0TB+sj7Z
+         hcA9yYlMtxLdQVFUFKbXIl9aAIqjWCNUqy4x50B8USbDNBEQq6/ffmZzM6mrr1PQKVcv
+         UOg8maeevF8yS8Xs+m5yKCZl7EnqGkbZmhJF6klEnV3VcWouRoeE3N4fbfEHcHSVbpol
+         1jKEvPy/LgLVtG8DnO10yFmsmmckTnzrUQV9MouybyOPXBb/I5ilYwOXtp3DOf4AFrB5
+         9Ctllbf5KnNbCZGiUT5akJqDcDlIoT/lL2CToVATABJ0sQ7KiZIUqhsle/N8qOTmhP1j
+         Xtog==
+X-Gm-Message-State: AOAM530gn1yYlsQm3CqJCcUJ0l3eoPpRnl9eZCZzxpXnjmeeg3O5bzUK
+        hpVhGwuX8692jiYFqyHQlzr/Px/q5YjPr6tuakvsVuUrJlinKXJ1ouBQ8EozF2WigaE+5oO2lKi
+        dwTnZC4vGlotMMOJdFGYOnz5M1jr0wYpnd15t4FWLmSXX2LqS3DlMWvq0bt89fMU7N94RB8S50b
+        8=
+X-Received: by 2002:adf:90ec:: with SMTP id i99mr4246373wri.484.1643308150421;
+        Thu, 27 Jan 2022 10:29:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWB8J69usKDani3SgGZH67M+S5JrzOq9AWvBqm+JPvJVzt8o/DJlUEg++S01dqSOe3YsZ/fA==
+X-Received: by 2002:adf:90ec:: with SMTP id i99mr4246313wri.484.1643308150088;
+        Thu, 27 Jan 2022 10:29:10 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id a3sm3391827wri.89.2022.01.27.10.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 10:29:09 -0800 (PST)
+Message-ID: <c5948761-c031-f9a4-2459-37bb5b40fda9@redhat.com>
+Date:   Thu, 27 Jan 2022 19:29:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/9] mm: add overflow and underflow checks for
- page->_refcount
+Subject: Re: [PATCH v2 00/37] drm: Make drivers to honour the nomodeset
+ parameter
 Content-Language: en-US
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        william.kucharski@oracle.com,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        schmitzmic@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, Hugh Dickins <hughd@google.com>
-References: <20220126183429.1840447-1-pasha.tatashin@soleen.com>
- <20220126183429.1840447-2-pasha.tatashin@soleen.com>
- <YfGZ/0hhkqVeX04p@casper.infradead.org>
- <CA+CK2bDHkOQbTrK=GbsGbojAj_6gaAX_8w3cBCd_LWqXt--yZA@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CA+CK2bDHkOQbTrK=GbsGbojAj_6gaAX_8w3cBCd_LWqXt--yZA@mail.gmail.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        "James (Qian) Wang" <james.qian.wang@arm.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Alison Wang <alison.wang@nxp.com>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Edmund Dea <edmund.j.dea@intel.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Inki Dae <inki.dae@samsung.com>, Joel Stanley <joel@jms.id.au>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sandy Huang <hjc@rock-chips.com>, Sean Paul <sean@poorly.run>,
+        Stefan Agner <stefan@agner.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+References: <20211217003752.3946210-1-javierm@redhat.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20211217003752.3946210-1-javierm@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 20:22, Pasha Tatashin wrote:
-> On Wed, Jan 26, 2022 at 1:59 PM Matthew Wilcox <willy@infradead.org> wrote:
->>
->> On Wed, Jan 26, 2022 at 06:34:21PM +0000, Pasha Tatashin wrote:
->> > The problems with page->_refcount are hard to debug, because usually
->> > when they are detected, the damage has occurred a long time ago. Yet,
->> > the problems with invalid page refcount may be catastrophic and lead to
->> > memory corruptions.
->> >
->> > Reduce the scope of when the _refcount problems manifest themselves by
->> > adding checks for underflows and overflows into functions that modify
->> > _refcount.
->>
->> If you're chasing a bug like this, presumably you turn on page
->> tracepoints.  So could we reduce the cost of this by putting the
->> VM_BUG_ON_PAGE parts into __page_ref_mod() et al?  Yes, we'd need to
->> change the arguments to those functions to pass in old & new, but that
->> should be a cheap change compared to embedding the VM_BUG_ON_PAGE.
+On 12/17/21 01:37, Javier Martinez Canillas wrote:
+> The nomodeset kernel command line parameter is used to prevent the KMS/DRM
+> drivers to be registered/probed. But only a few drivers implement support
+> for this and most DRM drivers just ignore it.
 > 
-> This is not only about chasing a bug. This also about preventing
-> memory corruption and information leaking that are caused by ref_count
-> bugs from happening.
+> This patch series is a v2 to make DRM drivers to honour nomodeset. It is
+> posted as separate patches to make easier for drivers maintainers to ack
+> or pick them independently at their own pace.
+> 
 
-So you mean it like a security hardening feature, not just debugging? To me
-it's dubious to put security hardening under CONFIG_DEBUG_VM. I think it's
-just Fedora that uses DEBUG_VM in general production kernels?
+Pushed the remaining of the drivers patches from this set to drm-misc-next.
 
-> Several months ago a memory corruption bug was discovered by accident:
-> an engineer was studying a process core from a production system and
-> noticed that some memory does not look like it belongs to the original
-> process. We tried to manually reproduce that bug but failed. However,
-> later analysis by our team, explained that the problem occured due to
-> ref_count bug in Linux, and the bug itself was root caused and fixed
-> (mentioned in the cover letter).  This work would have prevented
-> similar ref_count bugs from yielding to the memory corruption
-> situation.
-> 
-> Pasha
-> 
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

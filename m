@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FACA49E59D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B83049E5A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242857AbiA0PRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:17:01 -0500
-Received: from out28-221.mail.aliyun.com ([115.124.28.221]:49212 "EHLO
-        out28-221.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242844AbiA0PRA (ORCPT
+        id S242871AbiA0PRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:17:04 -0500
+Received: from out29-99.mail.aliyun.com ([115.124.29.99]:36760 "EHLO
+        out29-99.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242847AbiA0PRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:17:00 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.847046|0.8261247;CH=green;DM=|SPAM|false|;DS=CONTINUE|ham_system_inform|0.0212515-0.000109326-0.978639;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=icenowy@nucleisys.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.Mj85Oz4_1643296614;
-Received: from ice-e5v2.lan(mailfrom:icenowy@nucleisys.com fp:SMTPD_---.Mj85Oz4_1643296614)
+        Thu, 27 Jan 2022 10:17:02 -0500
+X-Alimail-AntiSpam: AC=SUSPECT;BC=0.6349558|-1;BR=01201311R141b1;CH=blue;DM=|SUSPECT|false|;DS=CONTINUE|ham_system_inform|0.0327302-0.00826224-0.959008;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=icenowy@nucleisys.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.Mj85OzO_1643296617;
+Received: from ice-e5v2.lan(mailfrom:icenowy@nucleisys.com fp:SMTPD_---.Mj85OzO_1643296617)
           by smtp.aliyun-inc.com(33.45.46.134);
-          Thu, 27 Jan 2022 23:16:56 +0800
+          Thu, 27 Jan 2022 23:16:58 +0800
 From:   Icenowy Zheng <icenowy@nucleisys.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -24,9 +24,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, Icenowy Zheng <icenowy@nucleisys.com>
-Subject: [PATCH 01/12] dt-bindings: vendor-prefixes: add Nuclei
-Date:   Thu, 27 Jan 2022 23:16:36 +0800
-Message-Id: <20220127151647.2375449-2-icenowy@nucleisys.com>
+Subject: [PATCH 02/12] RISC-V: add Nuclei SoC Kconfig option
+Date:   Thu, 27 Jan 2022 23:16:37 +0800
+Message-Id: <20220127151647.2375449-3-icenowy@nucleisys.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220127151647.2375449-1-icenowy@nucleisys.com>
 References: <20220127151647.2375449-1-icenowy@nucleisys.com>
@@ -36,28 +36,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nuclei System Technology is a RISC-V CPU IP core vendor.
+As a CPU core vendor, Nuclei has some "DemoSoCs" that uses Nuclei CPU
+cores and modified peripherals from Hummingbird E203.
 
-Add vendor prefix for it.
+Add a Kconfig option for this.
 
 Signed-off-by: Icenowy Zheng <icenowy@nucleisys.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/riscv/Kconfig.socs | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 294093d45a23..8d786367b093 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -842,6 +842,8 @@ patternProperties:
-     description: Nordic Semiconductor
-   "^novtech,.*":
-     description: NovTech, Inc.
-+  "^nuclei,.*":
-+    description: Nuclei System Technology
-   "^nutsboard,.*":
-     description: NutsBoard
-   "^nuvoton,.*":
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 6ec44a22278a..e4488ac8c72b 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -7,6 +7,12 @@ config SOC_MICROCHIP_POLARFIRE
+ 	help
+ 	  This enables support for Microchip PolarFire SoC platforms.
+ 
++config SOC_NUCLEI
++	bool "Nuclei SoCs"
++	select SIFIVE_PLIC
++	help
++	  This enables support for Nuclei SoC platform hardware.
++
+ config SOC_SIFIVE
+ 	bool "SiFive SoCs"
+ 	select SERIAL_SIFIVE if TTY
 -- 
 2.30.2
 

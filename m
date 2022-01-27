@@ -2,218 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539E049D8C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E119249D8C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 04:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiA0DF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 22:05:56 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:35876 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiA0DF4 (ORCPT
+        id S232442AbiA0DGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 22:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232213AbiA0DGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 22:05:56 -0500
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JklnV6ZyDzccj6;
-        Thu, 27 Jan 2022 11:05:02 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 27 Jan 2022 11:05:53 +0800
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <song.bao.hua@hisilicon.com>, <guodong.xu@linaro.org>
-Subject: Re: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Tim Chen <tim.c.chen@linux.intel.com>,
-        Yicong Yang <yangyicong@hisilicon.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <gautham.shenoy@amd.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220126080947.4529-1-yangyicong@hisilicon.com>
- <20220126080947.4529-3-yangyicong@hisilicon.com>
- <f2617aa806df6d64718a7cb5b41bafe593bccda3.camel@linux.intel.com>
- <b793e565-670d-cc66-6947-7d927ebcb8b3@huawei.com>
- <95f82bf3524289bfbcaeee6e83b6dac48ed07f25.camel@linux.intel.com>
- <62bbdd77f70f7b46a044685668e33fb031812c38.camel@linux.intel.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <4d4099d8-e890-9e56-c395-5f521d98081a@huawei.com>
-Date:   Thu, 27 Jan 2022 11:05:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 26 Jan 2022 22:06:30 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFA2C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:06:30 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id q75so1063114pgq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 19:06:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xYVfPUL0HT1HfQJFKeNSl4bObGkqhbPgG9tLiL2+h0I=;
+        b=SevtvM6HXv4iELfguL2woPmkXMhHim46mAMmEMP0q6swAdgF3maZrrxh7ag/mAqgtQ
+         fs0kaH8z4VsggKzgszjxuUkMbKcs4jS0Or+6m8POYqNVdFGvDiSQv7INQEh8MxDaxFgG
+         ceM0M/Q6a7lvHOtxEkys7RebrKO+MbZww0SG0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xYVfPUL0HT1HfQJFKeNSl4bObGkqhbPgG9tLiL2+h0I=;
+        b=k40pXQse9ky8cjL6FZT9Lz0OR1PLZeh3JAiAdX706Mc1eGsxQ2qKIIL02PjXfgUxFN
+         SwS3jF2f4Yd/OjjODjp8ZvNCZmxRnb2Px5MACgZavGOeepm+r1SznpVSxUr6IeoYCe6/
+         C9K36BEtLAnL0y4CMm3S33CgoerIbGm20UZuNnMix5+npRmVNMDsIoROnOEO4hg6YC2E
+         ZedoBZulsfi5dw8iuu6G5fcPcFe655Sx7Kz6Lnlc1xc/icCbXbBNll9CGGoyzKrqE3Ed
+         0KbmYlcwUK9lebQI4VlPJqP61GJu4ZgQAzzF1KbkzXERG+FtqVsHNPtulbrwxAI2K3/1
+         QBfg==
+X-Gm-Message-State: AOAM533F2/uQZipikSDf9KizyepY4hAXtMiKPQibA22DOL+n+7ArZQrL
+        Yrse1e+HaxH0SAN0jDyOLRNE/uftbP0DeQ==
+X-Google-Smtp-Source: ABdhPJxNgTkHGV0XJmVs+u0EOP88+mW/sUh/5JAiRbI/CRrRnDtWpSf/IZyBLhy76fCDUJwpYVNiKA==
+X-Received: by 2002:a63:c51:: with SMTP id 17mr1307984pgm.491.1643252790168;
+        Wed, 26 Jan 2022 19:06:30 -0800 (PST)
+Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v13sm3316200pfi.201.2022.01.26.19.06.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 19:06:29 -0800 (PST)
+Date:   Thu, 27 Jan 2022 03:06:28 +0000
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        bleung@google.com
+Subject: Re: [PATCH] MAINTAINERS: platform-chrome: Add new
+ chrome-platform@lists.linux.dev list
+Message-ID: <YfIMNC2zE2kyhSuP@chromium.org>
+References: <20220126222233.2852280-1-bleung@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <62bbdd77f70f7b46a044685668e33fb031812c38.camel@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126222233.2852280-1-bleung@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/27 10:36, Tim Chen wrote:
-> On Wed, 2022-01-26 at 18:30 -0800, Tim Chen wrote:
->> On Thu, 2022-01-27 at 10:02 +0800, Yicong Yang wrote:
->>> On 2022/1/27 9:14, Tim Chen wrote:
->>>> On Wed, 2022-01-26 at 16:09 +0800, Yicong Yang wrote:
->>>>> From: Barry Song <song.bao.hua@hisilicon.com>
->>>>>
->>>>> For platforms having clusters like Kunpeng920, CPUs within the
->>>>> same
->>>>> cluster have lower latency when synchronizing and accessing
->>>>> shared
->>>>> resources like cache. Thus, this patch tries to find an idle
->>>>> cpu
->>>>> within the cluster of the target CPU before scanning the whole
->>>>> LLC
->>>>> to gain lower latency.
->>>>>
->>>>> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so
->>>>> this
->>>>> patch doesn't consider SMT for this moment.
->>>>>
->>>>> Testing has been done on Kunpeng920 by pinning tasks to one
->>>>> numa
->>>>> and two numa. On Kunpeng920, Each numa has 8 clusters and each
->>>>> cluster has 4 CPUs.
->>>>>
->>>>> With this patch, We noticed enhancement on tbench within one
->>>>> numa or cross two numa.
->>>>>
->>>>> On numa 0:
->>>>>                             5.17-rc1                patched
->>>>> Hmean     1        324.73 (   0.00%)      378.01 *  16.41%*
->>>>> Hmean     2        645.36 (   0.00%)      754.63 *  16.93%*
->>>>> Hmean     4       1302.09 (   0.00%)     1507.54 *  15.78%*
->>>>> Hmean     8       2612.03 (   0.00%)     2982.57 *  14.19%*
->>>>> Hmean     16      5307.12 (   0.00%)     5886.66 *  10.92%*
->>>>> Hmean     32      9354.22 (   0.00%)     9908.13 *   5.92%*
->>>>> Hmean     64      7240.35 (   0.00%)     7278.78 *   0.53%*
->>>>> Hmean     128     6186.40 (   0.00%)     6187.85 (   0.02%)
->>>>>
->>>>> On numa 0-1:
->>>>>                             5.17-rc1                patched
->>>>> Hmean     1        320.01 (   0.00%)      378.44 *  18.26%*
->>>>> Hmean     2        643.85 (   0.00%)      752.52 *  16.88%*
->>>>> Hmean     4       1287.36 (   0.00%)     1505.62 *  16.95%*
->>>>> Hmean     8       2564.60 (   0.00%)     2955.29 *  15.23%*
->>>>> Hmean     16      5195.69 (   0.00%)     5814.74 *  11.91%*
->>>>> Hmean     32      9769.16 (   0.00%)    10872.63 *  11.30%*
->>>>> Hmean     64     15952.50 (   0.00%)    17281.98 *   8.33%*
->>>>> Hmean     128    13113.77 (   0.00%)    13895.20 *   5.96%*
->>>>> Hmean     256    10997.59 (   0.00%)    11244.69 *   2.25%*
->>>>> Hmean     512    14623.60 (   0.00%)    15526.25 *   6.17%*
->>>>>
->>>>> This will also help to improve the MySQL. With MySQL server
->>>>> running on numa 0 and client running on numa 1, both QPS and
->>>>> latency is imporved on read-write case:
->>>>>                         5.17-rc1        patched
->>>>> QPS-16threads        143333.2633    145077.4033(+1.22%)
->>>>> QPS-24threads        195085.9367    202719.6133(+3.91%)
->>>>> QPS-32threads        241165.6867      249020.74(+3.26%)
->>>>> QPS-64threads        244586.8433    253387.7567(+3.60%)
->>>>> avg-lat-16threads           2.23           2.19(+1.19%)
->>>>> avg-lat-24threads           2.46           2.36(+3.79%)
->>>>> avg-lat-36threads           2.66           2.57(+3.26%)
->>>>> avg-lat-64threads           5.23           5.05(+3.44%)
->>>>>
->>>>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
->>>>> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
->>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>>>> ---
->>>>>  kernel/sched/fair.c | 46
->>>>> +++++++++++++++++++++++++++++++++++++++++
->>>>> ----
->>>>>  1 file changed, 42 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>>> index 5146163bfabb..2f84a933aedd 100644
->>>>> --- a/kernel/sched/fair.c
->>>>> +++ b/kernel/sched/fair.c
->>>>> @@ -6262,12 +6262,46 @@ static inline int
->>>>> select_idle_smt(struct
->>>>> task_struct *p, struct sched_domain *sd
->>>>>  
->>>>>  #endif /* CONFIG_SCHED_SMT */
->>>>>  
->>>>> +#ifdef CONFIG_SCHED_CLUSTER
->>>>> +/*
->>>>> + * Scan the cluster domain for idle CPUs and clear cluster
->>>>> cpumask
->>>>> after scanning
->>>>> + */
->>>>> +static inline int scan_cluster(struct task_struct *p, int
->>>>> prev_cpu,
->>>>> int target)
->>>>> +{
->>>>> +	struct cpumask *cpus =
->>>>> this_cpu_cpumask_var_ptr(select_idle_mask);
->>>>> +	struct sched_domain *sd =
->>>>> rcu_dereference(per_cpu(sd_cluster,
->>>>> target));
->>>>> +	int cpu, idle_cpu;
->>>>> +
->>>>> +	/* TODO: Support SMT case while a machine with both
->>>>> cluster and
->>>>> SMT born */
->>>>
->>>> This is probably a clearer comment
->>>>
->>>> 	/* TODO: Support SMT system with cluster topology */
->>>>
->>>>> +	if (!sched_smt_active() && sd) {
->>>>> +		for_each_cpu_and(cpu, cpus,
->>>>> sched_domain_span(sd)) {
->>>>> +			idle_cpu = __select_idle_cpu(cpu, p);
->>>>>   */
->>>>> -static int select_idle_cpu(struct task_struct *p, struct
->>>>> sched_domain *sd, bool has_idle_core, int target)
->>>>> +static int select_idle_cpu(struct task_struct *p, struct
->>>>> sched_domain *sd, bool has_idle_core, int prev_cpu, int target)
->>>>>  {
->>>>>  	struct cpumask *cpus =
->>>>> this_cpu_cpumask_var_ptr(select_idle_mask);
->>>>>  	int i, cpu, idle_cpu = -1, nr = INT_MAX;
->>>>> @@ -6282,6 +6316,10 @@ static int select_idle_cpu(struct
->>>>> task_struct
->>>>> *p, struct sched_domain *sd, bool
->>>>>  
->>>>>  	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->>>>>  
->>>>> +	idle_cpu = scan_cluster(p, prev_cpu, target);
->>>>
->>>> Shouldn't "cpus" from 
->>>>
->>>> cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->>>>
->>>> be passed to scan_cluster, to make sure that the cpu returned is 
->>>> in the affinity mask of the task? I don't see p->cpus_ptr
->>>> being checked in scan_cluster to make sure the cpu found is in
->>>> the
->>>> affinity mask.
->>>>
->>>
->>> The cpus scanned in scan_cluster() is the intersection of
->>> select_idle_mask and sched_domain_span(cluster_sd), and
->>> we limited the select_idle_mask in the tasks' affinity mask
->>> before we enter scan_cluster() here.
->>
->> Ah, I missed the fact that cpus point to the select_idle_mask.
->>
-> 
-> I think it will be easier to read the code if you pass "cpus" directly
-> to scan cluster, rather than making this implicit, and having this
-> assignment 
-> 
-> *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> 
-> again in scan_cluster.
+Hi Benson,
 
-sure. It does look more readable and I think we can change to that. :)
+On Jan 26 14:22, Benson Leung wrote:
+> Signed-off-by: Benson Leung <bleung@chromium.org>
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
 
-Thanks.
+> ---
+>  MAINTAINERS | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ea3e6c914384..cad7b0fff9f4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4537,6 +4537,7 @@ F:	drivers/input/touchscreen/chipone_icn8505.c
+>  
+>  CHROME HARDWARE PLATFORM SUPPORT
+>  M:	Benson Leung <bleung@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+>  S:	Maintained
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
+>  F:	drivers/platform/chrome/
+> @@ -4544,6 +4545,7 @@ F:	drivers/platform/chrome/
+>  CHROMEOS EC CODEC DRIVER
+>  M:	Cheng-Yi Chiang <cychiang@chromium.org>
+>  R:	Guenter Roeck <groeck@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+>  F:	sound/soc/codecs/cros_ec_codec.*
+> @@ -4551,6 +4553,7 @@ F:	sound/soc/codecs/cros_ec_codec.*
+>  CHROMEOS EC SUBDRIVERS
+>  M:	Benson Leung <bleung@chromium.org>
+>  R:	Guenter Roeck <groeck@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+>  S:	Maintained
+>  F:	drivers/power/supply/cros_usbpd-charger.c
+>  N:	cros_ec
+> @@ -4558,11 +4561,13 @@ N:	cros-ec
+>  
+>  CHROMEOS EC USB TYPE-C DRIVER
+>  M:	Prashant Malani <pmalani@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+>  S:	Maintained
+>  F:	drivers/platform/chrome/cros_ec_typec.c
+>  
+>  CHROMEOS EC USB PD NOTIFY DRIVER
+>  M:	Prashant Malani <pmalani@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+>  S:	Maintained
+>  F:	drivers/platform/chrome/cros_usbpd_notify.c
+>  F:	include/linux/platform_data/cros_usbpd_notify.h
+> -- 
+> 2.35.0.rc0.227.g00780c9af4-goog
+> 

@@ -2,139 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8954F49E2B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7246049E285
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241361AbiA0MmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241403AbiA0MmS (ORCPT
+        id S241285AbiA0MlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:41:13 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:29866 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241211AbiA0MlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:42:18 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB4AC061748;
-        Thu, 27 Jan 2022 04:42:18 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so2826678pja.2;
-        Thu, 27 Jan 2022 04:42:18 -0800 (PST)
+        Thu, 27 Jan 2022 07:41:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=65lHAvgIrvaTDpQ8E/8HtbPHAXdF5rPPGyXj5G9Napk=;
-        b=m5J49hSw3xUMpmLDf2fGSGxn0Q5aRF+lgicWZiT0ciapljFaf3uFyfr3KGlNMEzvMU
-         6HoVCtvRqf/ZO9VNeQM33Giktu8Ps6mZ+LRhzrs1yraKtt+HdckINvUVNFf/LCcGF8V6
-         YsvjpvUO/M/yek54njRaDuCT3kIPmEvS1uHqe5RNdkA3sW8au6yjnodbmd1gP1gAe6wS
-         yMvdsjfdnHfg8tXckyudtjcLNKUjHJXWHo5mKRAJLD6HSCJ87Si3yGRmMIdve5e+wDOc
-         oNd185layb+NCUlQhllLguOuaoLe51JQRXFcujR4pBxsf8Fbh09BESiSppD24VrsyPu8
-         FIKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=65lHAvgIrvaTDpQ8E/8HtbPHAXdF5rPPGyXj5G9Napk=;
-        b=E+eweg//mN8euUx4n7EXrPCbum2WgLIDp8LtywiT6TumlMXF4/9QWoUPg+bvwQodcr
-         OzT8AgcFaW1LvBkeprDaUNgA5gi9ZFnqoXcpt7zXRqaviX5QBbJD5N6Igl2cnfl1pD9F
-         epLUfWe7l1+tN1OcKRuvQ2mD2FhPMl9nz1vfUlvaz/Ak8pOALkqsgba66b1tDBP/XTTq
-         HU+fFj80ejhvBVF6QDeMkksyNraEMlA4XopVG1sldGwhy1ZR+fFjTPxnF3wRTyGP0yBp
-         9wOher9lMcBtXjcCowMa5nzL4qSh/swyOVeShdRbgG4cmypRZAQ3o1kXaFoM8WHN4Pcv
-         ZqsA==
-X-Gm-Message-State: AOAM531w3TcP53rqce+J3A0EBNvIYo84QfYEXKaTuYKvadd7P7jF6aJ1
-        lSlSaewlD7zUqCAF9S0M2Y4=
-X-Google-Smtp-Source: ABdhPJwTsY+xzKtPDG+leiEAflZIAbiOUmbhEMGb937hqpADqlAhicEQTyVFFRJGC6s3+v4DBGpGYA==
-X-Received: by 2002:a17:902:9306:: with SMTP id bc6mr3266618plb.93.1643287337888;
-        Thu, 27 Jan 2022 04:42:17 -0800 (PST)
-Received: from localhost.localdomain ([2400:2410:93a3:bc00:d205:ec9:b1c6:b9ee])
-        by smtp.gmail.com with ESMTPSA id m38sm19071298pgl.64.2022.01.27.04.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 04:42:17 -0800 (PST)
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        viro@zeniv.linux.org.uk, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, lukas.bulwahn@gmail.com
-Cc:     akirakawata1@gmail.com, Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] fs/binfmt_elf: Refactor load_elf_binary function
-Date:   Thu, 27 Jan 2022 21:40:17 +0900
-Message-Id: <20220127124014.338760-3-akirakawata1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220127124014.338760-1-akirakawata1@gmail.com>
-References: <20220127124014.338760-1-akirakawata1@gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643287268; x=1674823268;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ZqKlu4CuQ8DC1yfQEo5A/CfHIV3YO7XgLioVJtilO2A=;
+  b=kiAQZ4e+0YXA20Tcs5zdPjp+6KlxfltTZlQwTs9RQ2p7gFhKsGrgPI/t
+   3dFxY4AiWQhuxwJRuetPTdwDzQDvmpCJzg64GRTTF30bQUCCBqwv04RyY
+   SSQQuuI/ApoMWqiIsjoouvVEfD5D56Hz6pmWv9nitZSBSyyR8qiRmpyTL
+   U=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 04:41:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 04:41:08 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 27 Jan 2022 04:41:07 -0800
+Received: from mpubbise-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 27 Jan 2022 04:41:03 -0800
+From:   Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <swboyd@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_sibis@quicinc.com>,
+        <kuabhs@chromium.org>, <quic_pillair@quicinc.com>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+Subject: [PATCH v9] arm64: dts: qcom: sc7280: Add WPSS remoteproc node
+Date:   Thu, 27 Jan 2022 18:10:48 +0530
+Message-ID: <1643287248-1092-1-git-send-email-quic_mpubbise@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I delete load_addr because it is not used anymore. And I rename
-load_addr_set to first_pt_load because it is used only to capture the
-first iteration of the loop.
+From: Rakesh Pillai <quic_pillair@quicinc.com>
 
-Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
-Acked-by: Kees Cook <keescook@chromium.org>
+Add the WPSS remoteproc node in dts for
+PIL loading.
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Rakesh Pillai <quic_pillair@quicinc.com>
+Signed-off-by: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
 ---
- fs/binfmt_elf.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Changes from v8:
+- Enable remoteproc_wpss from sc7280-idp.dtsi as the change is common for IDP and IDP2
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index d120ab03795f..3218ebfde409 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -822,8 +822,8 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- static int load_elf_binary(struct linux_binprm *bprm)
- {
- 	struct file *interpreter = NULL; /* to shut gcc up */
--	unsigned long load_addr, load_bias = 0, phdr_addr = 0;
--	int load_addr_set = 0;
-+	unsigned long load_bias = 0, phdr_addr = 0;
-+	int first_pt_load = 1;
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
- 	struct elf_phdr *elf_property_phdata = NULL;
-@@ -1073,12 +1073,12 @@ static int load_elf_binary(struct linux_binprm *bprm)
+Changes from v7:
+- Remove wpss_mem from reserved memory. Its part of board dtsi.
+
+Changes from v6:
+- Swap the oder of two properties in wpss_mem reserved memory
+
+Changes from v5:
+- Update the clock names
+
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  4 +++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 51 ++++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index a146d0d..7287e51 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -634,3 +634,7 @@
+ 		bias-pull-up;
+ 	};
+ };
++
++&remoteproc_wpss {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 937c2e0..e7c0745 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -2603,6 +2603,57 @@
+ 			status = "disabled";
+ 		};
  
- 		vaddr = elf_ppnt->p_vaddr;
- 		/*
--		 * The first time through the loop, load_addr_set is false:
-+		 * The first time through the loop, first_pt_load is true:
- 		 * layout will be calculated. Once set, use MAP_FIXED since
- 		 * we know we've already safely mapped the entire region with
- 		 * MAP_FIXED_NOREPLACE in the once-per-binary logic following.
- 		 */
--		if (load_addr_set) {
-+		if (!first_pt_load) {
- 			elf_flags |= MAP_FIXED;
- 		} else if (elf_ex->e_type == ET_EXEC) {
- 			/*
-@@ -1138,10 +1138,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 
- 		/*
- 		 * Calculate the entire size of the ELF mapping (total_size).
--		 * (Note that load_addr_set is set to true later once the
-+		 * (Note that first_pt_load is set to false later once the
- 		 * initial mapping is performed.)
- 		 */
--		if (!load_addr_set) {
-+		if (first_pt_load) {
- 			total_size = total_mapping_size(elf_phdata,
- 							elf_ex->e_phnum);
- 			if (!total_size) {
-@@ -1158,13 +1158,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			goto out_free_dentry;
- 		}
- 
--		if (!load_addr_set) {
--			load_addr_set = 1;
--			load_addr = (elf_ppnt->p_vaddr - elf_ppnt->p_offset);
-+		if (first_pt_load) {
-+			first_pt_load = 0;
- 			if (elf_ex->e_type == ET_DYN) {
- 				load_bias += error -
- 				             ELF_PAGESTART(load_bias + vaddr);
--				load_addr += load_bias;
- 				reloc_func_desc = load_bias;
- 			}
- 		}
++		remoteproc_wpss: remoteproc@8a00000 {
++			compatible = "qcom,sc7280-wpss-pil";
++			reg = <0 0x08a00000 0 0x10000>;
++
++			interrupts-extended = <&intc GIC_SPI 587 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "wdog", "fatal", "ready", "handover",
++					  "stop-ack", "shutdown-ack";
++
++			clocks = <&gcc GCC_WPSS_AHB_BDG_MST_CLK>,
++				 <&gcc GCC_WPSS_AHB_CLK>,
++				 <&gcc GCC_WPSS_RSCP_CLK>,
++				 <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "ahb_bdg", "ahb",
++				      "rscp", "xo";
++
++			power-domains = <&rpmhpd SC7280_CX>,
++					<&rpmhpd SC7280_MX>;
++			power-domain-names = "cx", "mx";
++
++			memory-region = <&wpss_mem>;
++
++			qcom,qmp = <&aoss_qmp>;
++
++			qcom,smem-states = <&wpss_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
++
++			resets = <&aoss_reset AOSS_CC_WCSS_RESTART>,
++				 <&pdc_reset PDC_WPSS_SYNC_RESET>;
++			reset-names = "restart", "pdc_sync";
++
++			qcom,halt-regs = <&tcsr_mutex 0x37000>;
++
++			status = "disabled";
++
++			glink-edge {
++				interrupts-extended = <&ipcc IPCC_CLIENT_WPSS
++							     IPCC_MPROC_SIGNAL_GLINK_QMP
++							     IRQ_TYPE_EDGE_RISING>;
++				mboxes = <&ipcc IPCC_CLIENT_WPSS
++						IPCC_MPROC_SIGNAL_GLINK_QMP>;
++
++				label = "wpss";
++				qcom,remote-pid = <13>;
++			};
++		};
++
+ 		dc_noc: interconnect@90e0000 {
+ 			reg = <0 0x090e0000 0 0x5080>;
+ 			compatible = "qcom,sc7280-dc-noc";
 -- 
-2.25.1
+2.7.4
 

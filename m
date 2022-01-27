@@ -2,249 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB7149E067
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E7949E06D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240053AbiA0LPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:15:23 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51374 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiA0LPW (ORCPT
+        id S240074AbiA0LPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239929AbiA0LPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:15:22 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 87E5F1F4508E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643282121;
-        bh=lPBbkFX/VxEnKHj3FJ/pw/Em27NywQUGj2yt/sKz3GM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=VBr8OTzitfSr7ZA14ETCD9IX13ZKRLsa4UvjsGOg5i1PbyjX6Z7jDTuUQ12ti8Z7V
-         HQSbSGxt4ReNXMMfSPFsBLKPDSuXEJUfEK68FVQFyxOPQgmY38Y8vTCgQY3VEZ5UrN
-         lzbPZ/ssyHtq8oRiFDiMVZX+CZMO9XVVTjc3GVUEa1ym/uQJ97uwMoMXOuFKPgF7nu
-         PPJ+w7CDIA3pFHU/DjoDIuWGl11O291Bk6TLcUdzcgm8N5dNEIr4UQTODPqFkLet8L
-         ChiCzUizmOxwTYtWeI+uKEhAsFsnejt1EuNKLTFWnJi9SJ795XLq9vjhYcr79gCjug
-         5AvSH1Rslii8w==
-Subject: Re: [PATCH v4 27/35] iommu/mediatek: Remove mtk_iommu.h
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Thu, 27 Jan 2022 06:15:45 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1E7C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:15:45 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id c23so4107382wrb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AqCQ3Cv7kubS972WRmyqz9Ovn66XN6I/kVUjqRm07dI=;
+        b=FTCageDzja7MDHvfCdCrAWTT1F+s07YyGIVA7XEv4aLKB2thbXHqzqoYf2B1gCt55v
+         FPdI0kwpmhullu7lusRBsFROrm+KGgOqAtkHTjjbNhm6h5D9+3Ne1tFsyO728iltINTl
+         dBQs0alpeVpfV3Ha9RCcABOFdXRj9F9nclZzHbGfx/nZgyAVj22++a7xGi+3VV6O+50e
+         YlO6CPOAiBrbTNpl7iW6UryfHdGsLmrXnjHP5ob91ye0kIvslaoJHzzvOTBaqn/RosYg
+         tF9a1eLC1+aX8lSTzRPeyy00PR6DzazDjd+e9EaH2EA5Y4Nck7tI0AegXRpMNS2yhmF1
+         WXLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AqCQ3Cv7kubS972WRmyqz9Ovn66XN6I/kVUjqRm07dI=;
+        b=vvJUKTCcuhmtEW/k0JqcrnvVcmWfyqfHTjgwfhTI9L7fRA8nZ1Y4tUGuRfqhhDpHMb
+         ikJOrMJ0YIJMJgcWlWstFS7/tLn9LKgaB9303DTz8knbM/0UqqwKcFyFRPew7MScc30V
+         +GGaXpg7KIrHy8xNbZXX8+iv/2pLx1LZ9a8WG8SieARdnMob+lizRNLWG4kkH4AdWjn6
+         xqo+MyZgxBMlh8p2rkaNdBsbRT9RVGcprStae33WJZ95k56/oVlgQj5jEH0Rbi0x8sRx
+         HjePE2vFLje2OMhXuPp2RgP4g6wzIsv1YCpOW5LuBxqWqu+Tx3NMjQKNWEMgCd1tZ03a
+         j+FQ==
+X-Gm-Message-State: AOAM530ZTETuKSGEck9C3sgCnQQnmJo6Ol0DlI8tqWAHPpTa9ETSx6+D
+        1fP+ZzfgsCT+ipSSCNcx1frmgA==
+X-Google-Smtp-Source: ABdhPJwjpkby8GQSoY8fsnnpW0eosHE4KMSv6I6bmTxLodSfB9LUCloN8JxTHyEdgsOEm+5ExtPVTQ==
+X-Received: by 2002:adf:d1ef:: with SMTP id g15mr2661269wrd.418.1643282143753;
+        Thu, 27 Jan 2022 03:15:43 -0800 (PST)
+Received: from localhost.localdomain ([2a01:cb19:8b2c:5e00:7d3d:d638:46ec:78dd])
+        by smtp.gmail.com with ESMTPSA id r7sm5956311wma.39.2022.01.27.03.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 03:15:43 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fengping Yu <fengping.yu@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>
+Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
-        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
-        yf.wang@mediatek.com, libo.kang@mediatek.com,
-        chengci.xu@mediatek.com
-References: <20220125085634.17972-1-yong.wu@mediatek.com>
- <20220125085634.17972-28-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <8e1847d0-7c6f-b022-999b-666cb90e9931@collabora.com>
-Date:   Thu, 27 Jan 2022 12:15:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v20 0/3] Add matrix keypad driver support for Mediatek SoCs
+Date:   Thu, 27 Jan 2022 12:15:23 +0100
+Message-Id: <20220127111526.3716689-1-mkorpershoek@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20220125085634.17972-28-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/01/22 09:56, Yong Wu ha scritto:
-> Currently there is only compare_of/release_of/a suspend structure in the
-> header file. I think it is no need to keep a header file only for these.
-> Move these into the c file and rm this header file.
-> 
-> I think there should be a common helper for compare_of and release_of.
-> There is many copy in drm, it should be another topic.
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->   drivers/iommu/mtk_iommu.c    | 25 ++++++++++++++++++++-
->   drivers/iommu/mtk_iommu.h    | 42 ------------------------------------
->   drivers/iommu/mtk_iommu_v1.c | 21 +++++++++++++++---
->   3 files changed, 42 insertions(+), 46 deletions(-)
->   delete mode 100644 drivers/iommu/mtk_iommu.h
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 80c1e5a75868..f88c7bb235bf 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -14,6 +14,7 @@
->   #include <linux/io.h>
->   #include <linux/iommu.h>
->   #include <linux/iopoll.h>
-> +#include <linux/io-pgtable.h>
->   #include <linux/list.h>
->   #include <linux/mfd/syscon.h>
->   #include <linux/module.h>
-> @@ -30,7 +31,7 @@
->   #include <asm/barrier.h>
->   #include <soc/mediatek/smi.h>
->   
-> -#include "mtk_iommu.h"
-> +#include <dt-bindings/memory/mtk-memory-port.h>
->   
->   #define REG_MMU_PT_BASE_ADDR			0x000
->   #define MMU_PT_ADDR_MASK			GENMASK(31, 7)
-> @@ -166,6 +167,17 @@ struct mtk_iommu_iova_region {
->   	unsigned long long	size;
->   };
->   
-> +struct mtk_iommu_suspend_reg {
-> +	u32			misc_ctrl;
-> +	u32			dcm_dis;
-> +	u32			ctrl_reg;
-> +	u32			int_control0;
-> +	u32			int_main_control;
-> +	u32			ivrp_paddr;
-> +	u32			vld_pa_rng;
-> +	u32			wr_len_ctrl;
-> +};
-> +
->   struct mtk_iommu_plat_data {
->   	enum mtk_iommu_plat			m4u_plat;
->   	u32					flags;
-> @@ -219,6 +231,17 @@ struct mtk_iommu_domain {
->   	struct mutex			mutex; /* Protect "data" in this structure */
->   };
->   
-> +/* TODO: A common helper is expected. */
-> +static inline int compare_of(struct device *dev, void *data)
-> +{
-> +	return dev->of_node == data;
-> +}
-> +
-> +static inline void release_of(struct device *dev, void *data)
-> +{
-> +	of_node_put(data);
-> +}
-> +
+Dear all,
 
-Since it's just one line, at this point you should also open-code these,
+This is a follow-up on an abandoned series, see [1]
 
-as in you can then remove the two helper functions entirely.
-So, please do that.
+Since Dmitry seemed generally happy with the driver, I applied his rename
+recommendations.
 
->   static inline int mtk_iommu_bind(struct device *dev)
->   {
->   	struct mtk_iommu_data *data = dev_get_drvdata(dev);
-> diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
-> deleted file mode 100644
-> index d332f9769f83..000000000000
-> --- a/drivers/iommu/mtk_iommu.h
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-only */
-> -/*
-> - * Copyright (c) 2015-2016 MediaTek Inc.
-> - * Author: Honghui Zhang <honghui.zhang@mediatek.com>
-> - */
-> -
-> -#ifndef _MTK_IOMMU_H_
-> -#define _MTK_IOMMU_H_
-> -
-> -#include <linux/device.h>
-> -#include <linux/io.h>
-> -#include <linux/io-pgtable.h>
-> -#include <linux/iommu.h>
-> -#include <linux/spinlock.h>
-> -#include <soc/mediatek/smi.h>
-> -#include <dt-bindings/memory/mtk-memory-port.h>
-> -
-> -struct mtk_iommu_suspend_reg {
-> -	union {
-> -		u32			standard_axi_mode;/* v1 */
-> -		u32			misc_ctrl;/* v2 */
-> -	};
-> -	u32				dcm_dis;
-> -	u32				ctrl_reg;
-> -	u32				int_control0;
-> -	u32				int_main_control;
-> -	u32				ivrp_paddr;
-> -	u32				vld_pa_rng;
-> -	u32				wr_len_ctrl;
-> -};
-> -
-> -static inline int compare_of(struct device *dev, void *data)
-> -{
-> -	return dev->of_node == data;
-> -}
-> -
-> -static inline void release_of(struct device *dev, void *data)
-> -{
-> -	of_node_put(data);
-> -}
-> -
-> -#endif
-> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-> index b762a05328d4..23c3bc175153 100644
-> --- a/drivers/iommu/mtk_iommu_v1.c
-> +++ b/drivers/iommu/mtk_iommu_v1.c
-> @@ -7,7 +7,6 @@
->    *
->    * Based on driver/iommu/mtk_iommu.c
->    */
-> -#include <linux/memblock.h>
->   #include <linux/bug.h>
->   #include <linux/clk.h>
->   #include <linux/component.h>
-> @@ -28,10 +27,9 @@
->   #include <linux/spinlock.h>
->   #include <asm/barrier.h>
->   #include <asm/dma-iommu.h>
-> -#include <linux/init.h>
-> +#include <dt-bindings/memory/mtk-memory-port.h>
->   #include <dt-bindings/memory/mt2701-larb-port.h>
->   #include <soc/mediatek/smi.h>
-> -#include "mtk_iommu.h"
->   
->   #define REG_MMU_PT_BASE_ADDR			0x000
->   
-> @@ -87,6 +85,13 @@
->    */
->   #define M2701_IOMMU_PGT_SIZE			SZ_4M
->   
-> +struct mtk_iommu_suspend_reg {
-> +	u32			standard_axi_mode;
-> +	u32			dcm_dis;
-> +	u32			ctrl_reg;
-> +	u32			int_control0;
-> +};
-> +
->   struct mtk_iommu_data {
->   	void __iomem			*base;
->   	int				irq;
-> @@ -110,6 +115,16 @@ struct mtk_iommu_domain {
->   	struct mtk_iommu_data		*data;
->   };
->   
-> +static inline int compare_of(struct device *dev, void *data)
-> +{
-> +	return dev->of_node == data;
-> +}
-> +
-> +static inline void release_of(struct device *dev, void *data)
-> +{
-> +	of_node_put(data);
-> +}
-> +
+Thus, I have made the following:
 
-....And the same comment applies here too.
+* All Reviewed-By: tags were kept
+* Applied Marco's Reviewed-By: on the bindings (since he approved v10)
+* Fengping is still the maintainer since he is the original author of this driver
 
->   static inline int mtk_iommu_bind(struct device *dev)
->   {
->   	struct mtk_iommu_data *data = dev_get_drvdata(dev);
-> 
+Please tell me if you would rather have me do things differently.
+
+[1] https://lore.kernel.org/all/20200909072159.14888-1-fengping.yu@mediatek.com/
+
+v19 -> v20:
+bindings: use dual license
+bindings: fixed 2 indentation issues found by yamllint
+bindings: drop clock-names description
+bindings: use standard keyboard node name for example
+bindings: use default: keyword for default values
+use debounce-delay-ms property instead of mediatek,debounce-us
+
+fengping.yu (3):
+  dt-bindings: input: Add bindings for Mediatek matrix keypad
+  Input: mt6779-keypad - Add MediaTek keypad driver
+  arm64: defconfig: Add CONFIG_KEYBOARD_MT6779=m
+
+ .../input/mediatek,mt6779-keypad.yaml         |  77 +++++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/input/keyboard/Kconfig                |  12 +
+ drivers/input/keyboard/Makefile               |   1 +
+ drivers/input/keyboard/mt6779-keypad.c        | 218 ++++++++++++++++++
+ 5 files changed, 309 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
+ create mode 100644 drivers/input/keyboard/mt6779-keypad.c
 
 
+base-commit: 87a0b2fafc09766d8c55461a18345a1cfb10a7fe
+-- 
+2.32.0
 

@@ -2,106 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F56F49DE46
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D421A49DE56
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238743AbiA0JmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:42:08 -0500
-Received: from mga05.intel.com ([192.55.52.43]:47056 "EHLO mga05.intel.com"
+        id S238785AbiA0Jo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:44:57 -0500
+Received: from mga09.intel.com ([134.134.136.24]:36813 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238735AbiA0JmH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:42:07 -0500
+        id S238818AbiA0Jox (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 04:44:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643276527; x=1674812527;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=djY3xch7vPOo6t9rLWfXPw5PY5fSqNMg5UzbPQHL0bc=;
-  b=Fr5gtKAf4egwCp/ODryu8C4mpCG5mmbFIlN+R7vX09BQd9Qo8KtJ/RNi
-   p0CcQZ0fvsWFYsSDkjuHW4B00l8n9F8h0rD4tFMMGUmRKTNnJibkHI8u5
-   /5++fNmgi5+eE/PjZcag2P/J59BiZJ8erRA63kIBquOP7wigtFAaNNiK0
-   V0/e52a7Jvg2Q64bxaZZcjVu5s2x1aUXF/P/UefFplZ17EC4YvrQHLP7H
-   HJW+2OsSt8WHKZWtqPiawoWosEO+BzWrXfy8nSvI+fjDWT4jg33BOXo8T
-   SBdidxnv7DKDEx3Z4wcVejJaOVxaECmPqqy/1oNsyURsWydgc0r19x2FQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333156716"
+  t=1643276693; x=1674812693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GBYvIZcsiJMxHaFpT+Xr97H7ksdyXVDdjbcAU2Jnhhw=;
+  b=Kt9TiLxK+sr+W4ra//e/ACCf1KohkuDPqAcytIfneIGyvpOHmmHJAJui
+   1WqJCDXCiT9eSD9f1mDArsc2QFITNzLNBZYIraQ4SzGg2myd08coSHsUD
+   CZrvWlWbFYu6btebQcgsMNf3g+lUkDMce6j+JVCu7tfF0W/zjNlqyugQ5
+   RDeRampBdcteQ0DTRlWWF0R78lDX/eEcox/XgBDIv3vNzCC5rMxgkRf+K
+   zjT5V0RVkZbUZ/NXuQOeQfPDrg/3eWQSlwx1E/7AmmMJxLyptcMDCnMyq
+   qC4W5wjOLjRkNlUHU0hIe6RHuu+cxkj40V24YhFLpuUfEprpdGRo3+Mho
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246580237"
 X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="333156716"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:42:04 -0800
+   d="scan'208";a="246580237"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:44:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="563725468"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 01:42:01 -0800
-To:     Hongyu Xie <xiehongyu1@kylinos.cn>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        125707942@qq.com, stable@vger.kernel.org
-References: <20220126094126.923798-1-xy521521@gmail.com>
- <YfEZFtf9K8pFC8Mw@kroah.com>
- <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
- <YfEnbRW3oU0ouGqH@kroah.com>
- <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
- of function xhci_check_args
-Message-ID: <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
-Date:   Thu, 27 Jan 2022 11:43:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+   d="scan'208";a="618268754"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Jan 2022 01:44:50 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nD1Kk-000MQP-86; Thu, 27 Jan 2022 09:44:50 +0000
+Date:   Thu, 27 Jan 2022 17:44:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ben Widawsky <ben.widawsky@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [cxl:preview 48/60] drivers/cxl/core/region.c:119:37: warning:
+ format '%llx' expects argument of type 'long long unsigned int', but
+ argument 3 has type 'resource_size_t' {aka 'unsigned int'}
+Message-ID: <202201271653.C879dFKr-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.1.2022 14.49, Hongyu Xie wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+head:   41c2d219a2c8e14de644f4e953e0c57402c3e884
+commit: 99fd0afb6e1b21f8de1179f39f491347b6f3f04d [48/60] cxl/region: Introduce concept of region configuration
+config: csky-randconfig-p002-20220126 (https://download.01.org/0day-ci/archive/20220127/202201271653.C879dFKr-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=99fd0afb6e1b21f8de1179f39f491347b6f3f04d
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl preview
+        git checkout 99fd0afb6e1b21f8de1179f39f491347b6f3f04d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash drivers/cxl/core/
 
->> Anyway, why is this unique to this one driver?  Why does it not show up
->> for any other driver?
-> The whole thing is not about a particular driver. The thing is xhci_urb_enqueue shouldn't change the return value of xhci_check_args from -ENODEV to -EINVAL. Many other drivers only check if the return value of xchi_check_args is <= 0.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Agree, lets return -ENODEV when appropriate.
+All warnings (new ones prefixed by >>):
 
->>
->>> The whole point is, if xhci_check_args returns value A, xhci_urb_enqueque
->>> shouldn't return any
->>> other value, because that will change some driver's behavior(like r8152.c).
->> But you are changing how the code currently works.  Are you sure you
->> want to have this "succeed" if this is on a root hub?
-> Yes, I'm changing how the code currently works but not on a root hub.
->>
->>> 2."So if 0 is returned, you will now return that here, is that ok?
->>> That is a change in functionality.
->>> But this can only ever be the case for a root hub, is that ok?"
->>>
->>> It's the same logic, but now xhci_urb_enqueue can return -ENODEV if xHC is
->>> halted.
->>> If it happens on a root hub,  xhci_urb_enqueue won't be called.
->>>
->>> 3."Again, this means all is good?  Why is this being called for a root hub?"
->>>
->>> It is the same logic with the old one, but now xhci_check_streams_endpoint
->>> can return -ENODEV if xHC is halted.
->> This still feels wrong to me, but I'll let the maintainer decide, as I
->> don't understand why a root hub is special here.
-> 
-> Thanks please. usb_submit_urb will call usb_hcd_submit_urb. And usb_hcd_submit_urb will call rh_urb_enqueue if it's on a root hub instead of calling hcd->driver->urb_enqueue(which is xhci_urb_enqueue in this case).
+   drivers/cxl/core/region.c: In function 'offset_show':
+>> drivers/cxl/core/region.c:119:37: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+     119 |         return sysfs_emit(buf, "%#llx\n",
+         |                                 ~~~~^
+         |                                     |
+         |                                     long long unsigned int
+         |                                 %#x
+     120 |                           cxld->platform_res.start - cxlr->res->start);
+         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                    |
+         |                                                    resource_size_t {aka unsigned int}
 
-xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
-should continue to return -EINVAL 
 
-xhci_check_args() should be rewritten later, but first we want a targeted fix
-that can go to stable.
+vim +119 drivers/cxl/core/region.c
 
-Your original patch would be ok after following modification:
-if (ret <= 0)
-	return ret ? ret : -EINVAL;
+   109	
+   110	static ssize_t offset_show(struct device *dev, struct device_attribute *attr,
+   111				   char *buf)
+   112	{
+   113		struct cxl_decoder *cxld = to_cxl_decoder(dev->parent);
+   114		struct cxl_region *cxlr = to_cxl_region(dev);
+   115	
+   116		if (!cxlr->res)
+   117			return sysfs_emit(buf, "\n");
+   118	
+ > 119		return sysfs_emit(buf, "%#llx\n",
+   120				  cxld->platform_res.start - cxlr->res->start);
+   121	}
+   122	static DEVICE_ATTR_RO(offset);
+   123	
 
-Thanks
--Mathias
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87EE49E939
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0F949E938
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiA0Rj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:39:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40118 "EHLO
+        id S232243AbiA0Rj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:39:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59989 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235235AbiA0Rja (ORCPT
+        by vger.kernel.org with ESMTP id S238830AbiA0RjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:39:30 -0500
+        Thu, 27 Jan 2022 12:39:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643305170;
+        s=mimecast20190719; t=1643305159;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=s2uJHTxV0kjOnPj0MXRaRsjIAEH5JAk/yTHqjzyAM+U=;
-        b=DLyb8hAzgSMEH4HtNfpA8pSAJGUFq6rZaszhNl6lrMeqzUTuPoPyaOnjyAetGYoKUYHf6w
-        t0xRrGmRihZpWc7cuxo+/8Zwi98UOlhSnbLDD3PZ7AzdxRgNZshBoYYVkmschvSvbzbLd4
-        CB9Iys9SDpZu1mzMv77NDri8NYuD0mQ=
+         references:references; bh=uqLSaV3CsB09wRgNJfX+VAHmFMOGF+YL37fc8a7NW3Y=;
+        b=WlJ1e7pk2uavm0kFExHRZ0iU6bqMnEruwJ2moB0Z5JO4Fq7sQP58zov9Z3kaXivvUo7puq
+        bkcjJT3lrp9V3NfvLkEy+WJ5G8Wf8o6fQdDA9MCBRlBwUkStldPGPzx+g64J9zuPfk9mN+
+        QO8CWPg0WzdhDfQcGhPDbF8Q+86Kk5s=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-258-kh4tJbSWMc-w8-oVbLRbYw-1; Thu, 27 Jan 2022 12:39:26 -0500
-X-MC-Unique: kh4tJbSWMc-w8-oVbLRbYw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-389-XyRGIXddNvWWMHBS88zNTw-1; Thu, 27 Jan 2022 12:39:18 -0500
+X-MC-Unique: XyRGIXddNvWWMHBS88zNTw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B91884DA46;
-        Thu, 27 Jan 2022 17:39:25 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A013918C8C03;
+        Thu, 27 Jan 2022 17:39:16 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 077DA753EB;
-        Thu, 27 Jan 2022 17:38:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 477E3838DE;
+        Thu, 27 Jan 2022 17:38:44 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 3435641692C7; Thu, 27 Jan 2022 14:38:05 -0300 (-03)
-Message-ID: <20220127173206.717789040@fedora.localdomain>
+        id 3968E4168B9E; Thu, 27 Jan 2022 14:38:05 -0300 (-03)
+Message-ID: <20220127173206.785498087@fedora.localdomain>
 User-Agent: quilt/0.66
-Date:   Thu, 27 Jan 2022 14:30:43 -0300
+Date:   Thu, 27 Jan 2022 14:30:44 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nitesh Lal <nilal@redhat.com>,
@@ -50,160 +50,107 @@ Cc:     Nitesh Lal <nilal@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [patch v10 06/10] task isolation: sync vmstats conditional on changes
+Subject: [patch v10 07/10] task isolation: enable return to userspace processing
 References: <20220127173037.318440631@fedora.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than syncing VM-stats on every return to userspace
-(or VM-entry), keep track of changes through a per-CPU bool.
-
-This improves performance when enabling task isolated
-for vcpu VMs.
+Enable processing of pending task isolation work if per-CPU vmstats
+are out of sync with global vmstats.
 
 Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
 ---
- include/linux/vmstat.h |   13 ++++++++++++-
- mm/vmstat.c            |   29 ++++++++++++++++++++++++++++-
- 2 files changed, 40 insertions(+), 2 deletions(-)
+ include/linux/task_isolation.h |   22 +++++++++++++++++++++-
+ kernel/task_isolation.c        |   13 +++++++++++++
+ 2 files changed, 34 insertions(+), 1 deletion(-)
 
-Index: linux-2.6/include/linux/vmstat.h
+Index: linux-2.6/include/linux/task_isolation.h
 ===================================================================
---- linux-2.6.orig/include/linux/vmstat.h
-+++ linux-2.6/include/linux/vmstat.h
-@@ -22,7 +22,18 @@ int sysctl_vm_numa_stat_handler(struct c
- #endif
+--- linux-2.6.orig/include/linux/task_isolation.h
++++ linux-2.6/include/linux/task_isolation.h
+@@ -5,6 +5,9 @@
  
- #ifdef CONFIG_SMP
--void sync_vmstat(void);
-+DECLARE_PER_CPU_ALIGNED(bool, vmstat_dirty);
+ #ifdef CONFIG_CPU_ISOLATION
+ 
++#include <linux/vmstat.h>
++#include <uapi/linux/prctl.h>
 +
-+extern struct static_key vmstat_sync_enabled;
-+
-+void __sync_vmstat(void);
-+static inline void sync_vmstat(void)
-+{
-+	if (static_key_false(&vmstat_sync_enabled))
-+		__sync_vmstat();
-+}
-+
-+void init_sync_vmstat(void);
- #else
- static inline void sync_vmstat(void)
+ struct task_isol_info {
+ 	/* Which features have been configured */
+ 	u64 conf_mask;
+@@ -110,7 +113,24 @@ static inline int prctl_task_isol_activa
+ 
+ static inline int task_isol_has_work(void)
  {
-Index: linux-2.6/mm/vmstat.c
-===================================================================
---- linux-2.6.orig/mm/vmstat.c
-+++ linux-2.6/mm/vmstat.c
-@@ -334,6 +334,24 @@ void set_pgdat_percpu_threshold(pg_data_
- 	}
+-	return 0;
++	int cpu, ret;
++	struct isol_info *i;
++
++	if (likely(current->task_isol_info == NULL))
++		return 0;
++
++	i = current->task_isol_info;
++	if (i->active_mask != ISOL_F_QUIESCE)
++		return 0;
++
++	if (!(i->quiesce_mask & ISOL_F_QUIESCE_VMSTATS))
++		return 0;
++
++	cpu = get_cpu();
++	ret = per_cpu(vmstat_dirty, cpu);
++	put_cpu();
++
++	return ret;
  }
  
-+struct static_key vmstat_sync_enabled;
-+DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
+ #endif /* CONFIG_CPU_ISOLATION */
+Index: linux-2.6/kernel/task_isolation.c
+===================================================================
+--- linux-2.6.orig/kernel/task_isolation.c
++++ linux-2.6/kernel/task_isolation.c
+@@ -10,7 +10,6 @@
+  */
+ 
+ #include <linux/sched.h>
+-#include <linux/task_isolation.h>
+ #include <linux/prctl.h>
+ #include <linux/slab.h>
+ #include <linux/kobject.h>
+@@ -20,9 +19,17 @@
+ #include <linux/sched/task.h>
+ #include <linux/mm.h>
+ #include <linux/vmstat.h>
++#include <linux/task_isolation.h>
+ 
+ void __task_isol_exit(struct task_struct *tsk)
+ {
++	struct task_isol_info *i;
 +
-+static inline void mark_vmstat_dirty(void)
-+{
-+	if (!static_key_false(&vmstat_sync_enabled))
++	i = tsk->task_isol_info;
++	if (!i)
 +		return;
 +
-+	raw_cpu_write(vmstat_dirty, true);
-+}
++	static_key_slow_dec(&vmstat_sync_enabled);
+ }
+ 
+ void __task_isol_free(struct task_struct *tsk)
+@@ -41,6 +48,12 @@ static struct task_isol_info *task_isol_
+ 	if (unlikely(!info))
+ 		return ERR_PTR(-ENOMEM);
+ 
++	preempt_disable();
++	init_sync_vmstat();
++	preempt_enable();
 +
-+void init_sync_vmstat(void)
-+{
-+	raw_cpu_write(vmstat_dirty, true);
-+}
++	static_key_slow_inc(&vmstat_sync_enabled);
 +
-+EXPORT_SYMBOL_GPL(vmstat_dirty);
-+
- /*
-  * For use when we know that interrupts are disabled,
-  * or when we know that preemption is disabled and that
-@@ -366,6 +384,7 @@ void __mod_zone_page_state(struct zone *
- 		x = 0;
- 	}
- 	__this_cpu_write(*p, x);
-+	mark_vmstat_dirty();
- 
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
- 		preempt_enable();
-@@ -404,6 +423,7 @@ void __mod_node_page_state(struct pglist
- 		x = 0;
- 	}
- 	__this_cpu_write(*p, x);
-+	mark_vmstat_dirty();
- 
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
- 		preempt_enable();
-@@ -602,6 +622,7 @@ static inline void mod_zone_state(struct
- 
- 	if (z)
- 		zone_page_state_add(z, zone, item);
-+	mark_vmstat_dirty();
+ 	return info;
  }
  
- void mod_zone_page_state(struct zone *zone, enum zone_stat_item item,
-@@ -670,6 +691,7 @@ static inline void mod_node_state(struct
- 
- 	if (z)
- 		node_page_state_add(z, pgdat, item);
-+	mark_vmstat_dirty();
- }
- 
- void mod_node_page_state(struct pglist_data *pgdat, enum node_stat_item item,
-@@ -1087,6 +1109,7 @@ static void fill_contig_page_info(struct
- 			info->free_blocks_suitable += blocks <<
- 						(order - suitable_order);
- 	}
-+	mark_vmstat_dirty();
- }
- 
- /*
-@@ -1443,6 +1466,7 @@ static void walk_zones_in_node(struct se
- 		if (!nolock)
- 			spin_unlock_irqrestore(&zone->lock, flags);
- 	}
-+	mark_vmstat_dirty();
- }
- #endif
- 
-@@ -1512,6 +1536,7 @@ static void pagetypeinfo_showfree_print(
- 		}
- 		seq_putc(m, '\n');
- 	}
-+	mark_vmstat_dirty();
- }
- 
- /* Print out the free pages at each order for each migatetype */
-@@ -1932,6 +1957,7 @@ static void vmstat_update(struct work_st
- 				this_cpu_ptr(&vmstat_work),
- 				round_jiffies_relative(sysctl_stat_interval));
- 	}
-+	mark_vmstat_dirty();
- }
- 
- /*
-@@ -2018,13 +2044,14 @@ static void vmstat_shepherd(struct work_
- 		round_jiffies_relative(sysctl_stat_interval));
- }
- 
--void sync_vmstat(void)
-+void __sync_vmstat(void)
- {
- 	int cpu;
- 
- 	cpu = get_cpu();
- 
- 	refresh_cpu_vm_stats(false);
-+	raw_cpu_write(vmstat_dirty, false);
- 	put_cpu();
- 
- 	/*
 
 

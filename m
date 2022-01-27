@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D55C49D850
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7467349D87B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235384AbiA0CsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S235435AbiA0CuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235350AbiA0CsO (ORCPT
+        with ESMTP id S230395AbiA0CuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:48:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C981C06161C;
-        Wed, 26 Jan 2022 18:48:14 -0800 (PST)
+        Wed, 26 Jan 2022 21:50:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CC1C06161C;
+        Wed, 26 Jan 2022 18:50:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 372AA61514;
-        Thu, 27 Jan 2022 02:48:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DC2C340E7;
-        Thu, 27 Jan 2022 02:48:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10099B82103;
+        Thu, 27 Jan 2022 02:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B4E35C340EE;
+        Thu, 27 Jan 2022 02:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643251693;
-        bh=5ubN8J9eTXlOAhRffuZB09n0xdyHwozsE4Im9F3XpJI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qw1ms4SAHiuikXXf0p7hg0HuCWFa4DrxLBg0GA9v0kJlia9WRMp3tqy8pF/RRdXNX
-         yoxHSHgwI+fqNkylOl4jhNfJ4vMnQPeb6ZEamF9yh2nOtMueZhg9fX5oRcjj7C+8Vj
-         Q6j66Gj9v3NDyBtsXBqIYemCTjOV3Jy4rBx8vM0o0AC1PQptpmvQUduHUJFsQpu4v7
-         RfO5j79eHRQLsx8ogkC98dl1ueB8g+l3CJ0XHT2OlFtDcirUH6wL/TYWyr18M0aaMf
-         m6+vJnsjaPTgZh7VzGnJ6o6JOzqaZ/Q3IhfKYpFbco/IonAkUFRrdqBAJOPJzMkXXp
-         u5Tw2WyKw8FkA==
-Date:   Wed, 26 Jan 2022 18:48:12 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dsahern@kernel.org,
-        rostedt@goodmis.org, Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH v2 net-next] net: drop_monitor: support drop reason
-Message-ID: <20220126184812.32510ab4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220126072306.3218272-1-imagedong@tencent.com>
-References: <20220126072306.3218272-1-imagedong@tencent.com>
+        s=k20201202; t=1643251810;
+        bh=Y3MYvAiBCC1wc1DbKUkBuH4UzeOVTQqcSkKJeZC7tmg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Yg4oe3SgOjTSkxtLTVCSa0DRIqjBvigFmzv3CVwIYOylhbaikTLyH1131MVFYiaB0
+         /S9dl0SsMgbWrW7B5Qpc/N2Ntyp/klceNgkAcw8HUQm6EsmVtrvLkADh57U3jXjRL+
+         N/lrFtxjjxX2mj0nzq5z3vLFQysxN/GxtPVkmeApASj/7YLh2ZzoaCkGb5bU/oFQDm
+         psUwAwgOcQi/tVvTyLl0IBik7BThryNCAp6IZVYLmCECPL615pz90GtQhE4zyrJpxM
+         8DQADDoGdYE6IqvOPEEOBH4Ljhihg4xTF6HjffIkZbUmmEh3pRAIRHDRKo48lksS9E
+         vv/ysEP3nMHgg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A30B9E5D084;
+        Thu, 27 Jan 2022 02:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: ethernet: cortina: permit to set mac address in DT
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164325181066.16805.3054747911337839049.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Jan 2022 02:50:10 +0000
+References: <20220125210811.54350-1-clabbe@baylibre.com>
+In-Reply-To: <20220125210811.54350-1-clabbe@baylibre.com>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linus.walleij@linaro.org,
+        ulli.kroll@googlemail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 15:23:06 +0800 menglong8.dong@gmail.com wrote:
-> @@ -606,12 +610,17 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
->  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
->  				     size_t payload_len)
->  {
-> -	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
-> +	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
->  	char buf[NET_DM_MAX_SYMBOL_LEN];
-> +	enum skb_drop_reason reason;
->  	struct nlattr *attr;
->  	void *hdr;
-> +	u64 pc;
->  	int rc;
->  
-> +	pc = (u64)(uintptr_t)cb->pc;
-> +	reason = cb->reason;
-> +
->  	hdr = genlmsg_put(msg, 0, 0, &net_drop_monitor_family, 0,
->  			  NET_DM_CMD_PACKET_ALERT);
->  	if (!hdr)
-> @@ -623,6 +632,9 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
->  	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
->  		goto nla_put_failure;
->  
-> +	if (nla_put_u32(msg, NET_DM_ATTR_REASON, reason))
+Hello:
 
-Why the temporary variable instead of referring to cb->reason directly?
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> +		goto nla_put_failure;
+On Tue, 25 Jan 2022 21:08:11 +0000 you wrote:
+> Add ability of setting mac address in DT for cortina ethernet driver.
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Changes since v1:
+> - fixed reverse christmas tree of the mac variable
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] net: ethernet: cortina: permit to set mac address in DT
+    https://git.kernel.org/netdev/net-next/c/15f75fd31932
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

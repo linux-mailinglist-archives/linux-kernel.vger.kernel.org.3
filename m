@@ -2,138 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3240F49E241
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F065D49E244
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241101AbiA0MWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbiA0MWb (ORCPT
+        id S241110AbiA0MWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:22:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56879 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231201AbiA0MWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:22:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB3EC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:22:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1C56619FE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:22:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5576AC36AE2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643286150;
-        bh=VONGN8gwVV5fAPg5evut1IyWHTHY4WB+eJ9aI5siPLQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ThUHhQpHzezsBRgkqSGLeGrHTpX4y1HXCDJh7WjodyPHvfSf1LfujpT6SUREL1eTN
-         T9Vz8PzwnBJOhLH7a2GdCpUzgD8GVmoirho6KQjLGNxAHEvRg4NUT+8+2rE3QHBQOR
-         6R2G7NSvNXIPgmbhFz1P73ZVsnitABCBygNB1HgSjxmNhLbRzHpLtYFoekokKi4IS/
-         oe0wiLQkirc2Vjld7eUpytvi1PU9Vy0dxSOi23lv6upu2GLOqYyzAJ9C3pWoZXvzhK
-         vna+RCgCXMG/MzYqihFITcj9ZGLGCi5+fQNBKggvtJPbK1c3ATj9d/peh4H2f/G0JO
-         I6lz/gnT2sxVQ==
-Received: by mail-wr1-f45.google.com with SMTP id m14so4196099wrg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:22:30 -0800 (PST)
-X-Gm-Message-State: AOAM533JyTAkp2UFbo27lOHMNC+Xs4S/5v/xr0m6YZn35II8j0Y23EN+
-        kG7B/ysmoakrAk40zmpH7T6xmkbMc6BtfiXWF9w=
-X-Google-Smtp-Source: ABdhPJxxvswEQ3V77CQZybAvJmdUjKALZP7g0AfmzEH6CCanqxQRgzk0qTVYBszKKkJZ+ApEELX5+Y+BqCxIYr3sxp0=
-X-Received: by 2002:a05:6000:15ca:: with SMTP id y10mr2722249wry.417.1643286148547;
- Thu, 27 Jan 2022 04:22:28 -0800 (PST)
+        Thu, 27 Jan 2022 07:22:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643286171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nxOgqVaBtovwOha3ZcVtcrq82KpILnkAf73efsykbq0=;
+        b=JtNYiRixN9WqSC35fGTmecZaM8IeR4NCkqCj8XZRKeVtI1vaLpRrDTdXIFVgoWqF1Qt8CC
+        URfK65cqqzGDLsNQxrirWvju8pscALU2NFunQd1k1aYTKwEkB+vKriHvFUqTOUHabXu7+T
+        UOEfJDFSWCrO5drSeToYIAHU2bZezak=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-AmMQJFBvN2G8l6BtcGtqvQ-1; Thu, 27 Jan 2022 07:22:50 -0500
+X-MC-Unique: AmMQJFBvN2G8l6BtcGtqvQ-1
+Received: by mail-ej1-f72.google.com with SMTP id rl11-20020a170907216b00b006b73a611c1aso1229616ejb.22
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:22:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=nxOgqVaBtovwOha3ZcVtcrq82KpILnkAf73efsykbq0=;
+        b=ppRgpWaZMCSLC8xV8Wi2HAfTBY0fL7FSD7Cra/0iZcyA4HDplEFm+QCDyFp6yptRJm
+         +8nGRcT8l6DB8WgnLoXCPMFO4nHo/pH8SB8/5oriC08diejcb4+iKgvUScB7JfcNIPaR
+         jfXK4bDVBsEKJlbUgo80SgSbX7r1Kas4R+YPh0oT5YopqSMFEtxkraKaVmw6IJYdPku+
+         pF/vpkzFMjmg7w4TpoQsJsK7n3bXYW2C57FVGEFCGKkoZkxznv6ZOSJecTQh2pZ2HaNK
+         2hfJR5LaXmwAVTTPkplnapXNhzMhaWKdlkCoFHgbXk1Z+xzyHcuHlZxtbFlK0pOux9bn
+         HUKQ==
+X-Gm-Message-State: AOAM5303Hbsl4uAWHspdEIZUxlcX1v4KfqsoNpqca7sD5iQ5cDCHFfew
+        UUvWtabEYohhdaFqCZ560WtZw0swI+SjuW5Cyn/HwKSMryMACnC9XLNeh/qQ4xU3lrb8BkTId2F
+        g0WopsZqEI6EfDTWEhjyQUYvJ
+X-Received: by 2002:a17:907:1c1c:: with SMTP id nc28mr2649060ejc.651.1643286168896;
+        Thu, 27 Jan 2022 04:22:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzNVn0jnbx1OlPtjBvgMoVu5Kvzo5GMcACdQCd0LC5App747E8g74+qlOMI13AN7LLmriq46Q==
+X-Received: by 2002:a17:907:1c1c:: with SMTP id nc28mr2649050ejc.651.1643286168698;
+        Thu, 27 Jan 2022 04:22:48 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70d:8300:4812:9d4f:6cd8:7f47? (p200300cbc70d830048129d4f6cd87f47.dip0.t-ipconnect.de. [2003:cb:c70d:8300:4812:9d4f:6cd8:7f47])
+        by smtp.gmail.com with ESMTPSA id gg14sm8654976ejb.159.2022.01.27.04.22.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 04:22:48 -0800 (PST)
+Message-ID: <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com>
+Date:   Thu, 27 Jan 2022 13:22:47 +0100
 MIME-Version: 1.0
-References: <944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com>
- <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com> <20220124114548.30241947@gandalf.local.home>
- <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com> <YfFclROd+0/61q2d@FVFF77S0Q05N>
- <YfKGKWW5UfZ15kCW@FVFF77S0Q05N> <CAMj1kXHgpr0KYx5PYO_SpqaN8Ar2kfmc9Pb-d26uaYDpjwTz9w@mail.gmail.com>
- <YfKOENgR6sLnHQmA@FVFF77S0Q05N>
-In-Reply-To: <YfKOENgR6sLnHQmA@FVFF77S0Q05N>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 27 Jan 2022 13:22:17 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGsmK9pBmgwmMEr302eCHtL=cqs4jqM_jOiK-bLO2gQog@mail.gmail.com>
-Message-ID: <CAMj1kXGsmK9pBmgwmMEr302eCHtL=cqs4jqM_jOiK-bLO2gQog@mail.gmail.com>
-Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
- code-patching selftests
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Yinan Liu <yinan@linux.alibaba.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Jianyong Wu <Jianyong.Wu@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <Catalin.Marinas@arm.com>
+Cc:     Justin He <Justin.He@arm.com>, "will@kernel.org" <will@kernel.org>,
+        Anshuman Khandual <Anshuman.Khandual@arm.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
+References: <20211216082812.165387-1-jianyong.wu@arm.com>
+ <YdXdjcJ7jbnkFsqp@arm.com>
+ <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <YdcRLohx777jzWah@arm.com>
+ <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <YdgZJ/mBG+BCxmEv@arm.com>
+ <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
+ <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com>
+ <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
+ <3e6513f9-77ca-79e5-d185-7e9a11ec7689@redhat.com>
+ <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <65fdd873-1f93-56e3-c7a5-98d621c5dbd8@redhat.com>
+ <7eb4bc77-c1db-99c4-4c77-ae9ddd159abb@redhat.com>
+ <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
+ mapping
+In-Reply-To: <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 at 13:20, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Thu, Jan 27, 2022 at 01:03:34PM +0100, Ard Biesheuvel wrote:
-> > On Thu, 27 Jan 2022 at 12:47, Mark Rutland <mark.rutland@arm.com> wrote:
-> > >
-> > > [adding LKML so this is easier for others to find]
-> > >
-> > > If anyone wants to follow the thread from the start, it's at:
-> > >
-> > >   https://lore.kernel.org/linuxppc-dev/944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com/
-> > >
-> > > Ard, I was under the impression that the 32-bit arm kernel was (virtually)
-> > > relocatable, but I couldn't spot where, and suspect I'm mistaken. Do you know
-> > > whether it currently does any boot-time dynamic relocation?
-> >
-> > No, it does not.
->
-> Thanks for comfirming!
->
-> So 32-bit arm should be able to opt into the build-time sort as-is.
->
-> > > Steve asked for a bit more detail on IRC, so the below is an attempt to explain
-> > > what's actually going on here.
-> > >
-> > > The short answer is that relocatable kernels (e.g. those with KASLR support)
-> > > need to handle the kernel being loaded at (somewhat) arbitrary virtual
-> > > addresses. Even where code can be position-independent, any pointers in the
-> > > kernel image (e.g. the contents of the mcount_loc table) need to be updated to
-> > > account for the specific VA the kernel was loaded at -- arch code does this
-> > > early at boot time by applying dynamic (ELF) relocations.
-> >
-> > These architectures use place-relative extables for the same reason:
-> > place relative references are resolved at build time rather than at
-> > runtime during relocation, making a build time sort feasible.
-> >
-> > arch/alpha/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/arm64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/ia64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/parisc/include/asm/uaccess.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/powerpc/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/riscv/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/s390/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> > arch/x86/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
-> >
-> > Note that the swap routine becomes something like the below, given
-> > that the relative references need to be fixed up after the entry
-> > changes place in the sorted list.
-> >
-> > static void swap_ex(void *a, void *b, int size)
-> > {
-> >         struct exception_table_entry *x = a, *y = b, tmp;
-> >         int delta = b - a;
-> >
-> >         tmp = *x;
-> >         x->insn = y->insn + delta;
-> >         y->insn = tmp.insn - delta;
-> >         ...
-> > }
-> >
-> > As a bonus, the resulting footprint of the table in the image is
-> > reduced by 8x, given that every 8 byte pointer has an accompanying 24
-> > byte RELA record, so we go from 32 bytes to 4 bytes for every call to
-> > __gnu_mcount_mc.
->
-> Absolutely -- it'd be great if we could do that for the callsite locations; the
-> difficulty is that the entries are generated by the compiler itself, so we'd
-> either need some build/link time processing to convert each absolute 64-bit
-> value to a relative 32-bit offset, or new compiler options to generate those as
-> relative offsets from the outset.
->
+> 
+> Yes, system_state can roughly separate these callers of __create_pgd_mapping. When system_state > SYSTEM_BOOTING we can add the lock.
+> Thus, I have the following change:
+> 
+> static DEFINE_SPINLOCK(swapper_pgdir_lock);
+> +static DEFINE_MUTEX(fixmap_lock);
+> 
+>  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+>  {
+> @@ -329,6 +330,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>         }
+>         BUG_ON(p4d_bad(p4d));
+> 
+> +       if (system_state > SYSTEM_BOOTING)
 
-Don't we use scripts/recordmcount.pl for that?
+As there is nothing smaller than SYSTEM_BOOTING, you can use
+	if (system_state != SYSTEM_BOOTING)
+
+...
+
+> 
+> It seems work and somehow simper. But I don't know if it is reasonable to do this. So, any idea? @Ard Biesheuvel  @Catalin Marinas 
+
+It's worth looking at kernel/notifier.c, e.g.,
+blocking_notifier_chain_register()
+
+if (unlikely(system_state == SYSTEM_BOOTING))
+	return notifier_chain_register(&nh->head, n);
+
+down_write(&nh->rwsem);
+ret = notifier_chain_register(&nh->head, n);
+up_write(&nh->rwsem);
+
+
+
+If we decide to go down that path, we should make sure to add a comment like
+
+/*
+ * No need for locking during early boot. And it doesn't work as
+ * expected with KASLR enabled where we might clear BSS twice.
+ */
+
+-- 
+Thanks,
+
+David / dhildenb
+

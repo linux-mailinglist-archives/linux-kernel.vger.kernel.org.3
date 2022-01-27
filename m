@@ -2,87 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA1149EAA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C4949EAA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244987AbiA0SyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S245155AbiA0SzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiA0SyC (ORCPT
+        with ESMTP id S232813AbiA0SzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:54:02 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B3DC061714;
-        Thu, 27 Jan 2022 10:54:02 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 076B237C;
-        Thu, 27 Jan 2022 18:54:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 076B237C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1643309642; bh=jtk/KW+m1IYL06hk5WX5d6y8yOstM3j8jRuf438cZ5w=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=LfYJQ5qH671bolRDkVUx5Jka9GmV8s9BWDtBhu5ot9FYvIJ//RLhKItmYhoaOu4LP
-         YUiUC9WsmK1wZ+PP7mJemvWQjDs2CvwrONLllC21Sf/Q97OL5DjmTdStL0ACgTYbcM
-         tmoEqhbvmClTDWAOL2cmjHb6BjaUmnnBRiWBQVhH1UrWtIaOvOQlJpVClq2Q1LN/Y8
-         L5z0RlGz6s5H2BBh77TiHDqu12WMeiUUh61uP/DbatrVigc3ILU1+edVEE8klFs0A3
-         fXWdnxgNpnT3MT1KjyoWv/qbTsAe1jYuYMqcLE4LC/uHrnXvooRBkOYlOBjpsIUDzM
-         1WfM3vb6nSHDQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Florian Eckert <fe@dev.tdt.de>
-Subject: Re: [PATCH v2 1/1] docs: process: submitting-patches: Clarify the
- Reported-by usage
-In-Reply-To: <1e2e99f6-e9bf-7d93-9629-3d70275c77f4@infradead.org>
-References: <20220127163258.48482-1-andriy.shevchenko@linux.intel.com>
- <1e2e99f6-e9bf-7d93-9629-3d70275c77f4@infradead.org>
-Date:   Thu, 27 Jan 2022 11:54:33 -0700
-Message-ID: <87h79pqaae.fsf@meer.lwn.net>
+        Thu, 27 Jan 2022 13:55:20 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5215AC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:55:20 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d18so3330692plg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:55:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i/MCKCRermQ8vi6MOXf6MR66Z5FkR3u2o5119ZS5a6Q=;
+        b=e3YUdOr+jqqCxNmoUBJo2597dKZ6YdbXbjobvAnHXqW2rRxOqXdmpJlnXZqtwi0amM
+         Iv1CTOP7QOZnnrLwakSmmLOkP6tEUXPSXOJfXqobJwZFXejpwspoODOOnkTOZ4djkuFo
+         KVXYiVnHimpRVkh/QR0t/72xZjb2sA6NmschE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i/MCKCRermQ8vi6MOXf6MR66Z5FkR3u2o5119ZS5a6Q=;
+        b=mzZuUU3B/WrMeNGe2jNW9TiqDsKpOWhkNzTKW1TVvjT7vZgX5THrMWx6/H6028wdDg
+         unndIZxROL6qM+jS/C8QobKfAPMCj92Wz0dSGLblB/7+M0j19YwJs8okEXRurt/nu6YA
+         id1bcVXgv4BS+RX2Djs/yhDM/hiEo0ODLIO+ff76mH5NY8AcAgOqg+Ddb0bzE94DqMQr
+         ZUQJ7xW6Qik/6piFRBuI5DlazDQz7ZsxqSRCJUZqNwb9Oo8OvmaplEkVMUxnAxt2IkIs
+         2uUKlP9f5uEF1LIb4wngmBscB8Rs9uL+DTxRMpTJWL0sL/nEx6y1PdWntN/IUwzaWBin
+         yfgQ==
+X-Gm-Message-State: AOAM5319Ev3gMoNDvqES6dyV+NBRTzcrwQB0JmyjDmPNS7zS367eeUST
+        zNfd66vjIq2LnDHZnXWxq1KCkbjsFXR7pA==
+X-Google-Smtp-Source: ABdhPJw0/czNKbXQkjF1ey1tmATcqujbpsvEFZ3zbgsiN3pfXuyd7QGrDLMxka9URrsGMR24jL6luA==
+X-Received: by 2002:a17:902:8f93:: with SMTP id z19mr2717338plo.69.1643309719779;
+        Thu, 27 Jan 2022 10:55:19 -0800 (PST)
+Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id pi1sm85014pjb.10.2022.01.27.10.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 10:55:19 -0800 (PST)
+Date:   Thu, 27 Jan 2022 18:55:18 +0000
+From:   Prashant Malani <pmalani@chromium.org>
+To:     "Dustin L. Howett" <dustin@howett.net>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Michael Niksa <michael.niksa@live.com>
+Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_lpcs: reserve the MEC
+ LPC I/O ports first
+Message-ID: <YfLqloFQpF7bURGi@chromium.org>
+References: <20220126180020.15873-1-dustin@howett.net>
+ <20220126180020.15873-3-dustin@howett.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126180020.15873-3-dustin@howett.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+Hi Dustin,
 
-> On 1/27/22 08:32, Andy Shevchenko wrote:
->> It's unclear from "Submitting Patches" documentation that Reported-by
->> is not supposed to be used against new features. (It's more clear
->> in the section 5.4 "Patch formatting and changelogs" of the "A guide
->> to the Kernel Development Process", where it suggests that change
->> should fix something existing in the kernel. Clarify the Reported-by
->> usage in the "Submitting Patches".
->> 
->> Reported-by: Florian Eckert <fe@dev.tdt.de>
->> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> ---
->> v2: rephrased as suggested by Jonathan
->>  Documentation/process/submitting-patches.rst | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
->> index 31ea120ce531..fb496b2ebfd3 100644
->> --- a/Documentation/process/submitting-patches.rst
->> +++ b/Documentation/process/submitting-patches.rst
->> @@ -495,7 +495,8 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
->>  The Reported-by tag gives credit to people who find bugs and report them and it
->>  hopefully inspires them to help us again in the future.  Please note that if
->>  the bug was reported in private, then ask for permission first before using the
->> -Reported-by tag.
->> +Reported-by tag. The tag is intended for bugs; please do not use it to credit
->> +feature requests.
->>  
->
-> LGTM.
-> Although it could refer to Suggested-by.  :)
->
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+On Jan 26 12:00, Dustin L. Howett wrote:
+> Some ChromeOS EC devices (such as the Framework Laptop) only map I/O
+> ports 0x800-0x807. Making the larger reservation required by the non-MEC
+> LPC (the 0xFF ports for the memory map, and the 0xFF ports for the
+> parameter region) is non-viable on these devices.
+> 
+> Since we probe the MEC EC first, we can get away with a smaller
+> reservation that covers the MEC EC ports. If we fall back to classic
+> LPC, we can grow the reservation to cover the memory map and the
+> parameter region.
+> 
+> This patch also fixes an issue where we would interact with I/O ports
+> 0x800-0x807 without first making a reservation.
+> 
+> Signed-off-by: Dustin L. Howett <dustin@howett.net>
+> ---
+>  drivers/platform/chrome/cros_ec_lpc.c         | 39 ++++++++++++-------
+>  .../linux/platform_data/cros_ec_commands.h    |  4 ++
+>  2 files changed, 30 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+> index 458eb59db2ff..06fdfe365710 100644
+> --- a/drivers/platform/chrome/cros_ec_lpc.c
+> +++ b/drivers/platform/chrome/cros_ec_lpc.c
+> @@ -341,9 +341,14 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
+>  	u8 buf[2];
+>  	int irq, ret;
+>  
+> -	if (!devm_request_region(dev, EC_LPC_ADDR_MEMMAP, EC_MEMMAP_SIZE,
+> -				 dev_name(dev))) {
+> -		dev_err(dev, "couldn't reserve memmap region\n");
+> +	/*
+> +	 * The Framework Laptop (and possibly other non-ChromeOS devices)
+> +	 * only exposes the eight I/O ports that are required for the Microchip EC.
+> +	 * Requesting a larger reservation will fail.
+> +	 */
+> +	if (!devm_request_region(dev, EC_HOST_CMD_REGION0,
+> +				 EC_HOST_CMD_MEC_REGION_SIZE, dev_name(dev))) {
+> +		dev_err(dev, "couldn't reserve MEC region\n");
+>  		return -EBUSY;
+>  	}
+>  
+> @@ -357,6 +362,12 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
+>  	cros_ec_lpc_ops.write = cros_ec_lpc_mec_write_bytes;
+>  	cros_ec_lpc_ops.read(EC_LPC_ADDR_MEMMAP + EC_MEMMAP_ID, 2, buf);
+>  	if (buf[0] != 'E' || buf[1] != 'C') {
+> +		if (!devm_request_region(dev, EC_LPC_ADDR_MEMMAP, EC_MEMMAP_SIZE,
+> +					 dev_name(dev))) {
+> +			dev_err(dev, "couldn't reserve memmap region\n");
+> +			return -EBUSY;
+> +		}
+> +
+>  		/* Re-assign read/write operations for the non MEC variant */
+>  		cros_ec_lpc_ops.read = cros_ec_lpc_read_bytes;
+>  		cros_ec_lpc_ops.write = cros_ec_lpc_write_bytes;
+> @@ -366,17 +377,19 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
+>  			dev_err(dev, "EC ID not detected\n");
+>  			return -ENODEV;
+>  		}
+> -	}
+>  
+> -	if (!devm_request_region(dev, EC_HOST_CMD_REGION0,
+> -				 EC_HOST_CMD_REGION_SIZE, dev_name(dev))) {
+> -		dev_err(dev, "couldn't reserve region0\n");
+> -		return -EBUSY;
+> -	}
+> -	if (!devm_request_region(dev, EC_HOST_CMD_REGION1,
+> -				 EC_HOST_CMD_REGION_SIZE, dev_name(dev))) {
+> -		dev_err(dev, "couldn't reserve region1\n");
+> -		return -EBUSY;
+> +		/* Reserve the remaining I/O ports required by the non-MEC protocol. */
+> +		if (!devm_request_region(dev, EC_HOST_CMD_REGION0 + EC_HOST_CMD_MEC_REGION_SIZE,
+> +					 EC_HOST_CMD_REGION_SIZE - EC_HOST_CMD_MEC_REGION_SIZE,
+> +					 dev_name(dev))) {
+> +			dev_err(dev, "couldn't reserve remainder of region0\n");
+> +			return -EBUSY;
+> +		}
+> +		if (!devm_request_region(dev, EC_HOST_CMD_REGION1,
+> +					 EC_HOST_CMD_REGION_SIZE, dev_name(dev))) {
+> +			dev_err(dev, "couldn't reserve region1\n");
+> +			return -EBUSY;
+> +		}
+>  	}
+>  
+>  	ec_dev = devm_kzalloc(dev, sizeof(*ec_dev), GFP_KERNEL);
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+> index 271bd87bff0a..a85b1176e6c0 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -55,6 +55,10 @@
+>  #define EC_HOST_CMD_REGION0    0x800
+>  #define EC_HOST_CMD_REGION1    0x880
+>  #define EC_HOST_CMD_REGION_SIZE 0x80
+> +/*
+> + * Other machines report only the region spanned by the Microchip MEC EC.
+> + */
+> +#define EC_HOST_CMD_MEC_REGION_SIZE 0x08
+I can't find this update in the EC code base [1]. Is there any reason
+you are not adding this, or is the change in flight (or in some other
+location)?
 
-Applied, thanks.
+[1] https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/main/include/ec_commands.h
 
-jon
+Thanks,
+
+-Prashant

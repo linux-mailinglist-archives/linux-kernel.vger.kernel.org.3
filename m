@@ -2,130 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D8A49ED3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D270E49ED49
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344223AbiA0VLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 16:11:54 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:36195 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1344178AbiA0VLu (ORCPT
+        id S234964AbiA0VQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 16:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231293AbiA0VQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:11:50 -0500
-Received: (qmail 185924 invoked by uid 1000); 27 Jan 2022 16:11:48 -0500
-Date:   Thu, 27 Jan 2022 16:11:48 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: [PATCH] tools/memory-model: Explain syntactic and semantic
- dependencies
-Message-ID: <YfMKlLInsK0Qr77f@rowland.harvard.edu>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
- <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
- <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
- <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
+        Thu, 27 Jan 2022 16:16:11 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A02C061747
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:16:11 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id e81so8437709oia.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:16:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=GDZUYkuMWQBBmOo2XxTmMtqXTiUx1YCMjMuFT8hErgI=;
+        b=nwwb4fDuAam8HugRq7o7PNevR2WOWA9NCIKlQgWDvUmcTsZwDOAJagX02ZreUo2Kd7
+         lrZI0xYGyeMV0rC/EenrDhUfiyBLrv1ZM9EK1rPa7CkxWYUfyOI9SZOjIseO4AFUCkZp
+         9mMllhyXPZgnnGu/KIcdLB4t6MvxXW0eWYEg8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=GDZUYkuMWQBBmOo2XxTmMtqXTiUx1YCMjMuFT8hErgI=;
+        b=JWx1B79CeKjQZVnDlWbC1ltGAagj2liqFfboP3pbzaZn2HX0q1mINtWcWCjI9PoVox
+         bDmzWZVLctWAQl+PRxtFVUNJD+Ga6Hdfhqrc5u+KWzLzNcXXO16NS1YGgOdMca633Zmo
+         25cVc1GI2JMU4CcwGCHyx1xkyVJybhjXDPFjTXwRsEkHHdWnaVtmGfsCfyLhYqxIA1wm
+         lKQ8OBznehR8moyiIVFxATKsvWEE2PAd1XjWnuBOsqNaw19QJqnfEY7lA+tFNa3gX7db
+         b2WFNX17plfMF16VFRP5cMMPl8KUy326n848BFlsmAt7wOECICl+jtD3NPYfe0MGU29P
+         beAg==
+X-Gm-Message-State: AOAM530C23Tqc6UwN9DzIpRWL/dBBKYxYYUC/YOT7X+CYdRreqmu9LSI
+        dD9sWbgcMRcxiIJhXujf/LSTBd3vgU7zE+No0WinVA==
+X-Google-Smtp-Source: ABdhPJwpc/YwbbOc6yye7rnotRaw1CCiHfJYsaO86ExMtKVQwkqbYf6ZiHO3kw25LE+yUwjAmj3G+7/HA+lyV7vqz6M=
+X-Received: by 2002:a05:6808:190f:: with SMTP id bf15mr8219469oib.40.1643318170990;
+ Thu, 27 Jan 2022 13:16:10 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Jan 2022 13:16:10 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
+In-Reply-To: <YfC5i2jR5N+pmHoZ@ripper>
+References: <20220125224422.544381-1-dianders@chromium.org>
+ <20220125144316.v2.5.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
+ <CAE-0n528Bxdj+DKhi2Lan4qR_=4KHD7A1Zkr15tmu+MchryJ1A@mail.gmail.com>
+ <CAD=FV=UcpKaLQ31CGKUnaNnZcYnM4N_t8VC43FPGktoYDiMfsw@mail.gmail.com> <YfC5i2jR5N+pmHoZ@ripper>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 27 Jan 2022 13:16:10 -0800
+Message-ID: <CAE-0n50sX9-0MxcpF+3Rwqm75jSw5=aNwdsitLwE2sEA69jLJw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sc7280: Add herobrine-r1
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        kgodara@codeaurora.org, Matthias Kaehlcke <mka@chromium.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Prasad Malisetty <pmaliset@codeaurora.org>,
+        quic_rjendra@quicinc.com, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Heidekrüger pointed out that the Linux Kernel Memory Model
-documentation doesn't mention the distinction between syntactic and
-semantic dependencies.  This is an important difference, because the
-compiler can easily break dependencies that are only syntactic, not
-semantic.
+Quoting Bjorn Andersson (2022-01-25 19:01:31)
+> On Tue 25 Jan 15:46 PST 2022, Doug Anderson wrote:
+>
+> > Hi,
+> >
+> > On Tue, Jan 25, 2022 at 2:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Douglas Anderson (2022-01-25 14:44:22)
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> > > > new file mode 100644
+> > > > index 000000000000..f95273052da0
+> > > > --- /dev/null
+> > > > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> > > > @@ -0,0 +1,313 @@
+> > > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > > > +/*
+> > > > + * Google Herobrine board device tree source
+> > > > + *
+> > > > + * Copyright 2022 Google LLC.
+> > > > + */
+> > > > +
+> > > > +/dts-v1/;
+> > > > +
+> > > > +#include "sc7280-herobrine.dtsi"
+> > > > +
+> > > > +/ {
+> > > > +       model = "Google Herobrine (rev1+)";
+> > > > +       compatible = "google,herobrine", "qcom,sc7280";
+> > >
+> > > Can we stop adding "qcom,sc7280" to the board compatible string? It
+> > > looks out of place. It's the compatible for the SoC and should really be
+> > > the compatible for the /soc node.
+> >
+> > I don't have any objections, but I feel like this is the type of thing
+> > I'd like Bjorn to have the final say on. What say you, Bjorn?
+> >
+>
+> One practical case I can think of right away, where this matters is in
+> cpufreq-dt-plat.c where we blocklist qcom,sc7280.
+>
+> I don't know if we rely on this in any other places, but I'm not keen on
+> seeing a bunch of board-specific compatibles sprinkled throughout the
+> implementation - it's annoying enough having to add each platform to
+> these drivers.
 
-This patch adds a few paragraphs to the LKMM documentation explaining
-these issues and illustrating how they can matter.
+Looking at sc7180, grep only shows cpufreq-dt-plat.c
 
-Suggested-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+ $ git grep qcom,sc7180\" -- drivers
+ drivers/cpufreq/cpufreq-dt-platdev.c:   { .compatible = "qcom,sc7180", },
 
----
+Simplest solution would be to look at / and /soc for a compatible
+string.
 
+ $ git grep -W 'soc[^:]*{' -- arch/arm*/boot/dts/ | grep compatible |
+grep -v "simple-bus"
 
-[as1970]
+doesn't show many hits. The first hit is "ti,omap-infra" which is
+actually inside an soc node, but even then I don't see anything that
+matches the cpufreq-dt-plat.c lists.
 
+----8<-----
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c
+b/drivers/cpufreq/cpufreq-dt-platdev.c
+index ca1d103ec449..32bfe453f8b4 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -179,25 +179,29 @@ static bool __init cpu0_node_has_opp_v2_prop(void)
+ static int __init cpufreq_dt_platdev_init(void)
+ {
+ 	struct device_node *np = of_find_node_by_path("/");
++	struct device_node *soc_np = of_find_node_by_path("/soc");
+ 	const struct of_device_id *match;
+ 	const void *data = NULL;
 
- tools/memory-model/Documentation/explanation.txt |   47 +++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+-	if (!np)
++	if (!np && !soc_np)
+ 		return -ENODEV;
 
-Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-===================================================================
---- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-+++ usb-devel/tools/memory-model/Documentation/explanation.txt
-@@ -485,6 +485,53 @@ have R ->po X.  It wouldn't make sense f
- somehow on a value that doesn't get loaded from shared memory until
- later in the code!
- 
-+Here's a trick question: When is a dependency not a dependency?  Answer:
-+When it is purely syntactic rather than semantic.  We say a dependency
-+between two accesses is purely syntactic if the second access doesn't
-+actually depend on the result of the first.  Here is a trivial example:
-+
-+	r1 = READ_ONCE(x);
-+	WRITE_ONCE(y, r1 * 0);
-+
-+There appears to be a data dependency from the load of x to the store of
-+y, since the value to be stored is computed from the value that was
-+loaded.  But in fact, the value stored does not really depend on
-+anything since it will always be 0.  Thus the data dependency is only
-+syntactic (it appears to exist in the code) but not semantic (the second
-+access will always be the same, regardless of the value of the first
-+access).  Given code like this, a compiler could simply eliminate the
-+load from x, which would certainly destroy any dependency.
-+
-+(It's natural to object that no one in their right mind would write code
-+like the above.  However, macro expansions can easily give rise to this
-+sort of thing, in ways that generally are not apparent to the
-+programmer.)
-+
-+Another mechanism that can give rise to purely syntactic dependencies is
-+related to the notion of "undefined behavior".  Certain program behaviors
-+are called "undefined" in the C language specification, which means that
-+when they occur there are no guarantees at all about the outcome.
-+Consider the following example:
-+
-+	int a[1];
-+	int i;
-+
-+	r1 = READ_ONCE(i);
-+	r2 = READ_ONCE(a[r1]);
-+
-+Access beyond the end or before the beginning of an array is one kind of
-+undefined behavior.  Therefore the compiler doesn't have to worry about
-+what will happen if r1 is nonzero, and it can assume that r1 will always
-+be zero without actually loading anything from i.  (If the assumption
-+turns out to be wrong, the resulting behavior will be undefined anyway
-+so the compiler doesn't care!)  Thus the load from i can be eliminated,
-+breaking the address dependency.
-+
-+The LKMM is unaware that purely syntactic dependencies are different
-+from semantic dependencies and therefore mistakenly predicts that the
-+accesses in the two examples above will be ordered.  This is another
-+example of how the compiler can undermine the memory model.  Be warned.
-+
- 
- THE READS-FROM RELATION: rf, rfi, and rfe
- -----------------------------------------
+ 	match = of_match_node(allowlist, np);
+-	if (match) {
++	if (match || (match = of_match_node(allowlist, soc_np))) {
+ 		data = match->data;
+ 		goto create_pdev;
+ 	}
+
+-	if (cpu0_node_has_opp_v2_prop() && !of_match_node(blocklist, np))
++	if (cpu0_node_has_opp_v2_prop() && !of_match_node(blocklist, np) &&
++	    !of_match_node(blocklist, soc_np))
+ 		goto create_pdev;
+
++	of_node_put(soc_np);
+ 	of_node_put(np);
+ 	return -ENODEV;
+
+ create_pdev:
++	of_node_put(soc_np);
+ 	of_node_put(np);
+ 	return PTR_ERR_OR_ZERO(platform_device_register_data(NULL, "cpufreq-dt",
+ 			       -1, data,

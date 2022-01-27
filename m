@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4677A49EAB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD5949EABD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245295AbiA0TAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237859AbiA0TAa (ORCPT
+        id S239602AbiA0TCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:02:20 -0500
+Received: from mail-yb1-f174.google.com ([209.85.219.174]:41967 "EHLO
+        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238995AbiA0TCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:00:30 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7980FC061714;
-        Thu, 27 Jan 2022 11:00:29 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id l24-20020a17090aec1800b001b55738f633so5670951pjy.1;
-        Thu, 27 Jan 2022 11:00:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uRLexRpb9NelNiVGqfMgolCZ78f60NSyet3pFs6d3Pg=;
-        b=FkAzntIgwhm8m4oWmGZjsaLNwFb7UtxG+srvFSw7AEBfqxpVZJV+vYZuK+dfG9vCnf
-         zo5HEXZ91jQxTqVHROXJMHpr3Frdp+kNJt2d7Ti8hhhygANsEBC04A2rlekgtp6vITyh
-         IaHPqG8rJGdRib201Ns4S3D4mM6TAhT67XD2GF7L7AUxxRk/sV4K2UmmuWq3xdRWzr5H
-         w3pxdDl+0tmbg7Pa9Ppqet+o8nVAgzQXmuIYPWtKRSaDJF43lcdd1e5nmtaEDkp72Eoy
-         jg5jeIqOARVOeVtILPI4CFYHayWGRaVooF2BnO9SsZs5emlWy8zP2Tia80qmkSrPQ1q2
-         spoQ==
+        Thu, 27 Jan 2022 14:02:19 -0500
+Received: by mail-yb1-f174.google.com with SMTP id g14so11572527ybs.8;
+        Thu, 27 Jan 2022 11:02:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uRLexRpb9NelNiVGqfMgolCZ78f60NSyet3pFs6d3Pg=;
-        b=UPNYTGe1DRDL9P80OsM5T7/+o6+ts3UwUTgFQAC8WFpykEoqbP6BvkKx5RLMtAdRmt
-         QLSwW1BNERvVCduGyl11t/A1yI7XUpYnL4dziZKZyK178cCD+vsuQbbw4ycoziYa14qI
-         2G7BJrvHQ54irUrTh1lXX4tKsoK+THxWeEEg6EJCjrCc4felu1FpH3xHvg/z0TAhEi5r
-         JDKsEBn3uHAi//2BQNkt67c5Fgje7RE9u4qk0Upf265OZm94E8idkAJMiDP0Em/gdK9C
-         k/PSPO5tkfma4r88vXTMHd6uqzE8qoq53J8xSdjG8KzLRvzu0IQ4whZOlBDPxEq1ivD1
-         C40A==
-X-Gm-Message-State: AOAM5318ZdddDl+IWHGxgaunu1bRcvhG2SoYSpvgIyXJe+UHZsFNQtQe
-        0WfFROjtek+ba8U32gck1zQ=
-X-Google-Smtp-Source: ABdhPJytgVqvLKRtS7rHVTqKKlzR8yr3ODjHvqRl94ovs8n7iRPAsLNH9nO6I+AcMxAEBEAllHTd6w==
-X-Received: by 2002:a17:902:f54b:: with SMTP id h11mr4631851plf.91.1643310028976;
-        Thu, 27 Jan 2022 11:00:28 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g5sm76578pjj.36.2022.01.27.11.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 11:00:28 -0800 (PST)
-Message-ID: <788eebf8-cec8-e3a1-cbe5-fa494a32dfa8@gmail.com>
-Date:   Thu, 27 Jan 2022 11:00:26 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oZ+muMxsYAdOfLFCfYelUSEsPZYYdxDi6dVCQc7XtEo=;
+        b=iEv4a7slcmntQU698Y8QAPK4Q8RNk1ObPSD6D+UqFsNt35HzAdQ+MeY8r/aqXj1rTS
+         uJiM5PWFTq7sRHvMGud2k80+EEE9eU9fG3ESSnZ1wujbGfaa9FO6E+bwoOHNa51aEoTy
+         N/1AlmC2vFaAAtItQqAgkpSwBAdFonVyy21tPCaOvxE8KkoxvuTyEFVZQUlrTAn8dy4n
+         aTT7wVVIiiel8NB71XnVJNVpxory23i8hd5XbUMoRyEWUtJnrREow8itQPGiqA7R/VrF
+         LJomre2Ft1DPItC6Dg08zFALj9HfJBu4eeqY4w+xf7sx8bIVgugo70X7y3GHCexMFabL
+         dS+A==
+X-Gm-Message-State: AOAM532Wgcwm5iZSF4IWHZ+p9SKOuqh5XNrNGghrxxLh1VyU+yywcYZk
+        NF291u+5VDsu3JqLwf6s+hR9B1lobBmhWOebERM=
+X-Google-Smtp-Source: ABdhPJwwuxh+M4WNtLnUTBMcxZ4UlZ/mbrCOF3BFwwbMrVAKbA9jwi4/N4qiIr/DrG4bB3Ls48sOKRNYl5cxrLmFhb8=
+X-Received: by 2002:a25:c102:: with SMTP id r2mr8103463ybf.330.1643310138759;
+ Thu, 27 Jan 2022 11:02:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.4 00/11] 5.4.175-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com
-References: <20220127180258.362000607@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220127180258.362000607@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+ <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
+In-Reply-To: <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Jan 2022 20:02:07 +0100
+Message-ID: <CAJZ5v0gybg+Wk+008UBFnm2WqrxowOarhst9Eh+91BN823mqNA@mail.gmail.com>
+Subject: Re: [Bug] nvme blocks PC10 since v5.15 - bisected
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>, Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        m.heingbecker@googlemail.com,
+        linux-nvme <linux-nvme@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 21, 2022 at 10:09 PM Keith Busch <kbusch@kernel.org> wrote:
+>
+> On Fri, Jan 21, 2022 at 08:00:49PM +0100, Rafael J. Wysocki wrote:
+> > Hi Keith,
+> >
+> > It is reported that the following commit
+> >
+> > commit e5ad96f388b765fe6b52f64f37e910c0ba4f3de7
+> > Author: Keith Busch <kbusch@kernel.org>
+> > Date:   Tue Jul 27 09:40:44 2021 -0700
+> >
+> >    nvme-pci: disable hmb on idle suspend
+> >
+> >    An idle suspend may or may not disable host memory access from devices
+> >    placed in low power mode. Either way, it should always be safe to
+> >    disable the host memory buffer prior to entering the low power mode, and
+> >    this should also always be faster than a full device shutdown.
+> >
+> >    Signed-off-by: Keith Busch <kbusch@kernel.org>
+> >    Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+> >    Signed-off-by: Christoph Hellwig <hch@lst.de>
+> >
+> > is the source of a serious power regression occurring since 5.15
+> > (please see https://bugzilla.kernel.org/show_bug.cgi?id=215467).
+> >
+> > After this commit, the SoC on the affected system cannot enter
+> > C-states deeper than PC2 while suspended to idle which basically
+> > defeats the purpose of suspending.
+> >
+> > What may be happening is that nvme_disable_prepare_reset() that is not
+> > called any more in the ndev->nr_host_mem_descs case somehow causes the
+> > LTR of the device to change to "no requirement" which allows deeper
+> > C-states to be entered.
+> >
+> > Can you have a look at this, please?
+>
+> I thought platforms that wanted full device shutdown  behaviour would
+> always set acpi_storage_d3. Is that not happening here?
 
+Evidently, it isn't.
 
-On 1/27/2022 10:09 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.175 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.175-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Also that flag is about putting the device into D3, which need not be
+necessary as long as the LTR is set to "don't care".

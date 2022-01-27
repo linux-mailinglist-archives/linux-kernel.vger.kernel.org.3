@@ -2,177 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F66049EEDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A4649EEDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239508AbiA0XdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbiA0XdR (ORCPT
+        id S240404AbiA0XfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:35:23 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:19292 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230083AbiA0XfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:33:17 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E24BC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:33:17 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id z131so3672594pgz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:33:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=pITh0ffjadrUQOaU2KwCuZyyLPNTIW84DGhaNVnbVqw=;
-        b=Q7NtIHy4Hxp5NgKGxUh60134j+g5dctZA3EsK+hPi3Pe9Vp/2/wwA2Eob4c8d7J0I4
-         ND1ViXWiZGyMdB+NDyuZZZX5vVc+QMiRVSjf6Gn1uchpPEFWIp/sZDKzTmyOgouUk/rX
-         VQadx6vORLFxIz91QvmBcFE3M6yIaIO/SglMIGuoFP/4NUqZ5T9zc3N7Kn8n/h4uwHts
-         zOYSS+ewSqKKAYiI2UPNooQFWu8QwqaCVhzMfiygHV7GQ0deAlGAvOVHEnSJp4I8Gbsv
-         PmEctop8YVISDxI8rS7vFnvwGEjFyZlQS033mcz9hVbEdGnVIXmaohevHIuSp5n6Kq8e
-         QZKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pITh0ffjadrUQOaU2KwCuZyyLPNTIW84DGhaNVnbVqw=;
-        b=MN/cWfm6f3vU4E/hd5E0h1gXCIuv4yLwZv62Fso1fcxH32eLvJW2PZGXljcALZqFNX
-         J/Bmh3rw7Oa8/UvnTIR4vwa2x0bQX+Io88+rJp10Wn6fpMIjBZZZqx0zzhWvc8gNAnTR
-         XMfFTjFNqFj1i/d0xCHBBmc2c1edEaGz6gs9ZjirNVs0oBy3GPSEcY3xLtoaZaDvK6Xz
-         uEMnHd18ui7LJhdcOLAQsvBjn+fFiscx9dQ2kgmhMEPQwonZ01QFh9G8/A467qbVr5ds
-         HELYkRFPLZsI6eT3xDZqHmbisEwkB7/ErJau2Cj92CqydjRDGP8HrY6h7B3OwurtiYPU
-         BCvw==
-X-Gm-Message-State: AOAM533l9K/kKtjqpwwrN/MK8zihw0N21cu4H0CuH+oWpGxXqMdFW45S
-        eRYYG++AP8ty8/E+YP3yZfQyRA==
-X-Google-Smtp-Source: ABdhPJwFU98JcQ0OAm4YbgoIGxfgDdE/Z28f64GtL1o7Gr6yY6tlbjG9r5yjHmX66IuBD9wFeMrOGA==
-X-Received: by 2002:a05:6a00:a16:: with SMTP id p22mr5043763pfh.40.1643326396809;
-        Thu, 27 Jan 2022 15:33:16 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q11sm3604085pfk.149.2022.01.27.15.33.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 15:33:16 -0800 (PST)
-Date:   Thu, 27 Jan 2022 23:33:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
-        posk@posk.io, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [RFC][PATCH v2 4/5] x86/uaccess: Implement
- unsafe_try_cmpxchg_user()
-Message-ID: <YfMruK8/1izZ2VHS@google.com>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.852009966@infradead.org>
- <YfIAsHQv5Q84fOqO@google.com>
- <YfI9Y5l0fQAKuJav@google.com>
- <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net>
+        Thu, 27 Jan 2022 18:35:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1643326487; x=1674862487;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lIn9F6tbU5dCL18U1bWkAMrNx14lJRwzgnQRoH+z5lM=;
+  b=iGABwD9RwPgKgLUA67dK67x+UtGrOyL3IOb6JzxJ1rmozS2jeoVadnW5
+   hal+N+b5eMlXo8LXYq05MWN3RaRuXwBtIJfTVTe+0cUUVJeX7Wpzto5Jc
+   ZRlq/iM9OSz9ATZ5rQlUgAKdYmzfFvKjyqUyReTGmu1YC0sgVKL+mIzA/
+   gVjEy7C/U5IWr5zCGGXoP5vSMJk9MUzAVEoTNx2C33S9sJftu14kNpZ5P
+   ZIzz9tx9TBDJVpkkKXgIwEwYVdxG86Aqcxvh+69fBVFDcs/5kkyhm0ga5
+   Jr0ivHv22rYltO3JDnShjfTudRR1nqsDz0WeTxa6KdTz+B+imJmHKV8lD
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,321,1635177600"; 
+   d="scan'208";a="196377337"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2022 07:34:47 +0800
+IronPort-SDR: eO43qR/Hmfwho97Vb0tZt+A/959xlf+HV9U77lK4bpV0CWUNr8JFucoOOc3ZJl/9YaPd27ue51
+ ASdiRy3SH35S6eB7evCeknd4hhmCPhCVMAf31JafKxC0iewW33Y8pUFQbOXXZ2inzrdaAXacaF
+ zIrqOArT8gMbzwvdxXMU0qO2zdLknPkzwq7nHa7Xl2Z587cumh72tvyiTDoi+gd7bEdHksJUQo
+ iXCOz7kcB15jUa443UIObk3tDt0hnfAwtU2LqsUqraYvivAz4ClwnMd3gZTsE8o7xPXS0tI2lf
+ 2aWXjjj1dJ3pCg5xUU73+S9e
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 15:08:39 -0800
+IronPort-SDR: ilwA5vm9MopicazocIJIXD2AGQsir8dgBjxCXelH00nf7DOzE8o+fj+v38u0jBK6xczIgu1UPx
+ ulE7ZlZ00d2cwB0bp7uhn1IM8fWBzsHKe1u93JtUMyc9kcnILje8u6rCIJQMvcbIk9fZAXWohJ
+ JKKp7HTccAmtxa5kGT1WPJJKpJ3N2YsAhveiLqNx5hXi9oHegFnT2DB2gBuEjkJlXruPr7On50
+ sgdnIpmvr/8KolsylCnb5SghdJt4sY5nJ+m+yR73YkbR4Z/FEa10rUARn2JLt8Jr/jN+eONoVx
+ YyM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 15:35:22 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JlH550NsZz1Rwrw
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:35:21 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1643326520; x=1645918521; bh=lIn9F6tbU5dCL18U1bWkAMrNx14lJRwzgnQ
+        RoH+z5lM=; b=lPB+JmN9H2LqGIWiz6dWXQTL8sxMYqXJBysXCdxv63nlGPdk0tE
+        Dbt2enVTwCnTltabzktzOlxRQbF4llCXvfctzgCtyWFuGF8H+C+w5fquGK8Q6+ti
+        ONaNOCdjYO+NZqZjjOVhcDtmf21HjQWYJXYpI1ko7OmSFpTwQTmqTDCHdHLdOcoB
+        VSlf5w9u61wY5c/OWsg92kUqGy6LOsNfl/64lzVt/qS+bEaHbp90lIy6LFj0YjTS
+        K5D3/UElJkm4YAsgZgqTLlreahxcQczwe756V2NbzvpCQO8INpYYi1tel/VUDOWT
+        OA8owGFPIU1qT6LowbHX3DVHMWhx4NAeQlQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2gfW2acTbbw2 for <linux-kernel@vger.kernel.org>;
+        Thu, 27 Jan 2022 15:35:20 -0800 (PST)
+Received: from [10.225.163.58] (unknown [10.225.163.58])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JlH532nmqz1RvlN;
+        Thu, 27 Jan 2022 15:35:19 -0800 (PST)
+Message-ID: <1f29cbb4-9887-d2e9-20a3-af1ae9c3c599@opensource.wdc.com>
+Date:   Fri, 28 Jan 2022 08:35:17 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ata: pata_platform: Make use of platform_get_mem_or_io()
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-ide@vger.kernel.org
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20220117020134.3279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220117020134.3279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Nick
-
-On Thu, Jan 27, 2022, Peter Zijlstra wrote:
-> On Thu, Jan 27, 2022 at 06:36:19AM +0000, Sean Christopherson wrote:
-> > On Thu, Jan 27, 2022, Sean Christopherson wrote:
-> > > Doh, I should have specified that KVM needs 8-byte CMPXCHG on 32-bit kernels due
-> > > to using it to atomically update guest PAE PTEs and LTR descriptors (yay).
-> > > 
-> > > Also, KVM's use case isn't a tight loop, how gross would it be to add a slightly
-> > > less unsafe version that does __uaccess_begin_nospec()?  KVM pre-checks the address
-> > > way ahead of time, so the access_ok() check can be omitted.  Alternatively, KVM
-> > > could add its own macro, but that seems a little silly.  E.g. somethign like this,
-> > > though I don't think this is correct
-> > 
-> > *sigh*
-> > 
-> > Finally realized I forgot to add back the page offset after converting from guest
-> > page frame to host virtual address.  Anyways, this is what I ended up with, will
-> > test more tomorrow.
+On 1/17/22 11:01, Lad Prabhakar wrote:
+> Make use of platform_get_mem_or_io() to simplify the code.
 > 
-> Looks about right :-) (famous last words etc..)
+> While at it, drop use of unlikely() from pata_platform_probe()
+> as it isn't a hotpath.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> ---
+> Hi All,
+> 
+> This patch is part of series [1]. Just sending this lone patch
+> for now.
+> 
+> [1] http://patchwork.ozlabs.org/project/linux-ide/list/?series=278349
+> 
+> Cheers,
+> Prabhakar
 
-And it was right, but clang-13 ruined the party :-/
-
-clang barfs on asm goto with a "+m" input/output.  Change the "+m" to "=m" and
-clang is happy.  Remove usage of the label, clang is happy.
-
-I tried a bunch of different variants to see if anything would squeak by, but
-clang found a way to die on everything I threw at it.
-
-$ clang --version
-
-  Debian clang version 13.0.0-9+build1
-  Target: x86_64-pc-linux-gnu
-  Thread model: posix
-  InstalledDir: /usr/bin
-
-As written, with a named label param, clang yields:
-
-  $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
-  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
-  int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
-                            ^
-  <stdin>:1:29: error: unknown token in expression
-  <inline asm>:1:9: note: instantiated into assembly here
-          .long () - .
-               ^
-  2 errors generated.
-
-While clang is perfectly happy switching "+m" to "=m":
-
-  $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "=m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
-
-Referencing the label with a numbered param yields either the original error:
-
-  $ echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
-  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
-  int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
-                            ^
-  <stdin>:1:29: error: unknown token in expression
-  <inline asm>:1:9: note: instantiated into assembly here
-          .long () - .
-                 ^
-   2 errors generated.
-
-Bumping the param number (more below) yields a different error (I tried defining
-tmp1, that didn't work :-) ).
-
-  $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
-  error: Undefined temporary symbol .Ltmp1
-  1 error generated.
-
-Regarding the param number, gcc also appears to have a goof with asm goto and "+m",
-but bumping the param number in that case remedies its woes.
-
-  $echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
-  <stdin>: In function ‘foo’:
-  <stdin>:1:19: error: invalid 'asm': '%l' operand isn't a label
-
-  $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
+Applied to for-5.18. Thanks !
 
 
-So my immediate question: how do we want to we deal with this in the kernel?  Keeping
-in mind that I'd really like to send this to stable@ to fix the KVM mess.
-
-I can think of few options that are varying degrees of gross.
-
-  1) Use a more complex sequence for probing CC_HAS_ASM_GOTO_OUTPUT.
-
-  2) Use an output-only "=m" operand.
-
-  3) Use an input register param.
-
-Option #1 has the obvious downside of the fancier asm goto for  __get_user_asm()
-and friends being collateral damage.  The biggest benefit is it'd reduce the
-likelihood of someone else having to debug similar errors, which was quite painful.
-
-Options #2 and #3 are quite gross, but I _think_ would be ok since the sequence
-is tagged as clobbering memory anyways?
+-- 
+Damien Le Moal
+Western Digital Research

@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D7E49E157
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A85049E158
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240664AbiA0LnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:43:11 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:33306 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240666AbiA0LnK (ORCPT
+        id S240685AbiA0LnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:43:13 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:43608 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231156AbiA0LnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:43:10 -0500
-X-UUID: a8193240ab8547b0a76e0344327fdd2b-20220127
-X-UUID: a8193240ab8547b0a76e0344327fdd2b-20220127
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        Thu, 27 Jan 2022 06:43:11 -0500
+X-UUID: c9a578e5bc4244349a8ecbbe48f7d35a-20220127
+X-UUID: c9a578e5bc4244349a8ecbbe48f7d35a-20220127
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 410029040; Thu, 27 Jan 2022 19:43:05 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs10n2.mediatek.inc
- (172.21.101.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3; Thu, 27 Jan 2022
- 19:43:04 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 555331898; Thu, 27 Jan 2022 19:43:09 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs10n1.mediatek.inc
+ (172.21.101.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.15; Thu, 27 Jan
+ 2022 19:43:08 +0800
 Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
  MTKCAS36.mediatek.inc (172.27.4.170) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 27 Jan 2022 19:43:03 +0800
+ 15.0.1497.2 via Frontend Transport; Thu, 27 Jan 2022 19:43:07 +0800
 From:   <xinlei.lee@mediatek.com>
 To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
         <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>
@@ -33,9 +33,9 @@ CC:     <dri-devel@lists.freedesktop.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <srv_heupstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
         <jitao.shi@mediatek.com>, xinlei lee <xinlei.lee@mediatek.com>
-Subject: [v1,1/3] dt-bindings: display: mediatek: dsi: add documentation for MT8186 SoC
-Date:   Thu, 27 Jan 2022 19:42:51 +0800
-Message-ID: <1643283773-7081-2-git-send-email-xinlei.lee@mediatek.com>
+Subject: [v1,2/3] drm/mediatek: Add mt8186 dsi compatible to mtk_dsi.c
+Date:   Thu, 27 Jan 2022 19:42:52 +0800
+Message-ID: <1643283773-7081-3-git-send-email-xinlei.lee@mediatek.com>
 X-Mailer: git-send-email 2.6.4
 In-Reply-To: <1643283773-7081-1-git-send-email-xinlei.lee@mediatek.com>
 References: <1643283773-7081-1-git-send-email-xinlei.lee@mediatek.com>
@@ -48,26 +48,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xinlei lee <xinlei.lee@mediatek.com>
 
-Add binding documentation for the MT8186 SoC.
+Add the compatible of mt8186-dsi because we use different cmdq addresses in mt8186.
 
 Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
 ---
- Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-index 36b0145..c82b8b2 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-+++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-@@ -7,7 +7,7 @@ channel output.
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index e91b3ff..62af60d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -1151,6 +1151,12 @@ static const struct mtk_dsi_driver_data mt8183_dsi_driver_data = {
+ 	.has_size_ctl = true,
+ };
  
- Required properties:
- - compatible: "mediatek,<chip>-dsi"
--- the supported chips are mt2701, mt7623, mt8167, mt8173 and mt8183.
-+- the supported chips are mt2701, mt7623, mt8167, mt8173, mt8183 and mt8186.
- - reg: Physical base address and length of the controller's registers
- - interrupts: The interrupt signal from the function block.
- - clocks: device clocks
++static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
++	.reg_cmdq_off = 0xd00,
++	.has_shadow_ctl = true,
++	.has_size_ctl = true,
++};
++
+ static const struct of_device_id mtk_dsi_of_match[] = {
+ 	{ .compatible = "mediatek,mt2701-dsi",
+ 	  .data = &mt2701_dsi_driver_data },
+@@ -1158,6 +1164,8 @@ static const struct of_device_id mtk_dsi_of_match[] = {
+ 	  .data = &mt8173_dsi_driver_data },
+ 	{ .compatible = "mediatek,mt8183-dsi",
+ 	  .data = &mt8183_dsi_driver_data },
++	{ .compatible = "mediatek,mt8186-dsi",
++	  .data = &mt8186_dsi_driver_data },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
 -- 
 2.6.4
 

@@ -2,120 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF71F49EDC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BDA49EDD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236410AbiA0Vwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 16:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S243016AbiA0VxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 16:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbiA0Vw3 (ORCPT
+        with ESMTP id S234469AbiA0VxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:52:29 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56476C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:52:29 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id a88-20020a25a1e1000000b00615c588ab22so8559697ybi.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:52:29 -0800 (PST)
+        Thu, 27 Jan 2022 16:53:02 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EC9C061714;
+        Thu, 27 Jan 2022 13:53:02 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id c24so5668582edy.4;
+        Thu, 27 Jan 2022 13:53:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=JPoXnQxk1ka8IPJ0XT1Jbys/cgKi0K3dUrFoxr2hH90=;
-        b=AREOSaMxAUumJURgukoWmMtb4bSG3MUzjwZxH13PkmDxsGa4jqih87mtx1VOca+FO+
-         uYfHoElnx0xbW8dtx76lzBMyitQ0SijCqOknlvCAYkHaMqlRry/XHIoVCp3rwviHZSgZ
-         5bveJRUoYiigwe3v4MKWOwS9NCpzHJJjxEGjdTYRWDJl5jmezh5cQiG+2mffhKOSMUqF
-         rtAjR5XdiS4w+O+XH6sUTpQKhZdlVKpUhzwT3iKLMIn95BmULQpHT24yxyrbe8UemQ3u
-         /tq+IrAs3bU4yw3U9ZmFGuvxd1BtW3icneIalGq5YrU884YGNAhO4EP48UUd30aYuBd6
-         69og==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d5LRRB0uqm/WR5U/+eN4GjzzHTNXrtcy+Y+FfjmNOg8=;
+        b=MCqfRrjSHkuK7W6k74FWNoXR16maAPl8kP2eOeRYCZ6qOuOm0Gg64dYj471IEp8QPN
+         J5zMO0GKccZY6MfQ+mxBTG9rK1+8HBnz2daAqonONnN4R+uzHYY//fwzjxB+cWjNzLyN
+         OP9zpuSvLXq6nnzxMqVow4bhR9Tv544ZkQKBqyEs9Zke7PQYPnuxdu8D0rqmFaJX+JvQ
+         0UaOsh2Bp/CT5Vwzcpnz2ecpwFaPmD1TPqfDAFuTo2zlTA2l8IaRZ05Oh3LydUiozvAz
+         obrM43ZGdBza30K8kVNpiLt8Fj9GSQIwCldizBURlN4UYHBYp+HDun1sLm3UYDHcENo2
+         FM2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=JPoXnQxk1ka8IPJ0XT1Jbys/cgKi0K3dUrFoxr2hH90=;
-        b=tTGHgSN3ybYYATqzFXp6zMwecAPHvbfHb/WoXXC+pxQzQAITULXsY8lCxunrMV82t3
-         6iNo78cjaSv43Om/AZnOXQ/Dr+ZCXGM0IVYrGKtkCtExPl3FTE6hKpPCx2A2dA/oHCTh
-         ERD52VVYdKQ6n/tdEXVQuWd85z4m3Kd48mYCuyF97UN5eHL6tNOUj1+mDDyxlJwcfCLP
-         1w+YwXQ+HQZ6DilF7NFHl1YHdUE9A8AilurMfiovREf4eJJaY/GH5KaoFeq/hp6IUZxX
-         CrxmEiK2RXmrBazeDupK/E79cCczu1nQ24LGQ8x9yVnTY5mJKkpC69VBUSxM+4zMKhdt
-         eLEg==
-X-Gm-Message-State: AOAM530a/bzXFIsAuCcsjIHmOQk3rC+QR5q7qYNrYwRTKqnzuLqluPc/
-        cL5iwbsRUr65a85MEueNwO3wfwUSN0IYvw==
-X-Google-Smtp-Source: ABdhPJzBGtnLv/y52L2vEZJ97rm4iMHe/jYh76HL0wmgaI1BonlqwJGG8ueykRayA1mNwbDWnLuCJ5DjNAhFWQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5484:2aa:f5f4:a1e0])
- (user=dlatypov job=sendgmr) by 2002:a81:23d1:: with SMTP id
- j200mr0ywj.471.1643320347735; Thu, 27 Jan 2022 13:52:27 -0800 (PST)
-Date:   Thu, 27 Jan 2022 13:52:22 -0800
-Message-Id: <20220127215222.159049-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH] kunit: cleanup assertion macro internal variables
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d5LRRB0uqm/WR5U/+eN4GjzzHTNXrtcy+Y+FfjmNOg8=;
+        b=7XRQMsOC/gXPUdCC54dikbmBci0+jZeH2uN3kGdyFNxN4spOPqv28Dg13ZxR5U5cR5
+         TPqrKFIyBouQzMUlK8nozhGJQzfc+uxe8kFhe0jWUVb4/joaQWHJdPa31OeJzqaVUxKn
+         cYpvZdMg5/WfXg8GHe/89TlwiRI4+pbx8B/AUF7tDvox6/5bUrJda1EzyMO0ubJOcu6d
+         rh23SgTO7EtBCsa92KpbvtPyEaLG79QMZn//nsVkm9AYwyLqruSScDMvby/y1K4c7gjg
+         UMCz7CEYUXxrBZE9akZ0/7/BnbGTf5NFnPhN4Gjxzjr7u/OcnzeM5E5m0X+FnY7VqYUW
+         Th2A==
+X-Gm-Message-State: AOAM533lgPTVVTn8BnefNnwwLM73d0CxWdKjo3uuMx4QyOfpU9GU00w+
+        9TfzBMMZeGXUpCvEf81j5GLUH8i3tvvTROgekHS2cdBgIWk=
+X-Google-Smtp-Source: ABdhPJzc2dhIVgVmPkviLDO7e/v7aguAYMhH6I/AnZjWb6ofb0HEACO5XoaOdWIFSiDLVLEy7t3jP4Hk+rLeNCv4ahU=
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr5413186edd.290.1643320380653;
+ Thu, 27 Jan 2022 13:53:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20220108005533.947787-1-martin.blumenstingl@googlemail.com>
+ <423f474e15c948eda4db5bc9a50fd391@realtek.com> <CAFBinCBVEndU0t-6d5atE31OFYHzPyk7pOe78v0XrrFWcBec9w@mail.gmail.com>
+ <5ef8ab4f78e448df9f823385d0daed88@realtek.com>
+In-Reply-To: <5ef8ab4f78e448df9f823385d0daed88@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 27 Jan 2022 22:52:49 +0100
+Message-ID: <CAFBinCDjfKK3+WOXP2xbcAK-KToWof+kSzoxYztqRcc=7T1eyg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
+To:     Pkshih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ed Swierk <eswierk@gh.st>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the operands should be tagged `const`.
-We're only assigning them to variables so that we can compare them (e.g.
-check if left == right, etc.) and avoid evaluating expressions multiple
-times.
+Hi Ping-Ke,
 
-There's no need for them to be mutable.
+On Mon, Jan 24, 2022 at 3:59 AM Pkshih <pkshih@realtek.com> wrote:
+[...]
+> > It seems to me that we should avoid using the mutex version of
+> > ieee80211_iterate_*() because it can lead to more of these issues. So
+> > from my point of view the general idea of the code from your attached
+> > patch looks good. That said, I'm still very new to mac80211/cfg80211
+> > so I'm also interested in other's opinions.
+> >
+>
+> The attached patch can work "mostly", because both callers of iterate() and
+> ::remove_interface hold rtwdev->mutex. Theoretically, the exception is a caller
+> forks another work to iterate() between leaving ::remove_interface and mac80211
+> doesn't yet free the vif, but the work executes after mac80211 free the vif.
+> This will lead use-after-free, but I'm not sure if this scenario will happen.
+> I need time to dig this, or you can help to do this.
+>
+> To avoid this, we can add a flag to struct rtw_vif, and set this flag
+> when ::remove_interface. Then, only collect vif without this flag into list
+> when we use iterate_actiom().
+>
+> As well as ieee80211_sta can do similar fix.
+>
+> > > So, I add wrappers to iterate rtw_iterate_stas() and rtw_iterate_vifs() that
+> > > use _atomic version to collect sta and vif, and use list_for_each() to iterate.
+> > > Reference code is attached, and I'm still thinking if we can have better method.
+> > With "better method" do you mean something like in patch #2 from this
+> > series (using unsigned int num_si and struct rtw_sta_info
+> > *si[RTW_MAX_MAC_ID_NUM] inside the iter_data) are you thinking of a
+> > better way in general?
+> >
+>
+> I would like a straight method, for example, we can have another version of
+> ieee80211_iterate_xxx() and do things in iterator, like original, so we just
+> need to change the code slightly.
+>
+> Initially, I have an idea we can hold driver lock, like rtwdev->mutex, in both
+> places where we use ieee80211_iterate_() and remove sta or vif. Hopefully,
+> this can ensure it's safe to run iterator without other locks. Then, we can
+> define another ieee80211_iterate_() version with a drv_lock argument, like
+>
+> #define ieee80211_iterate_active_interfaces_drv_lock(hw, iter_flags, iterator, data, drv_lock) \
+> while (0) {     \
+>         lockdep_assert_wiphy(drv_lock); \
+>         ieee80211_iterate_active_interfaces_no_lock(hw, iter_flags, iterator, data); \
+> }
+>
+> The driv_lock argument can avoid user forgetting to hold a lock, and we need
+> a helper of no_lock version:
+>
+> void ieee80211_iterate_active_interfaces_no_lock(
+>         struct ieee80211_hw *hw, u32 iter_flags,
+>         void (*iterator)(void *data, u8 *mac,
+>                          struct ieee80211_vif *vif),
+>         void *data)
+> {
+>         struct ieee80211_local *local = hw_to_local(hw);
+>
+>         __iterate_interfaces(local, iter_flags | IEEE80211_IFACE_ITER_ACTIVE,
+>                              iterator, data);
+> }
+>
+> However, as I mentioned theoretically it is not safe entirely.
+>
+> So, I think the easiest way is to maintains the vif/sta lists in driver when
+> ::{add,remove }_interface/::sta_{add,remove}, and hold rtwdev->mutex lock to
+> access these lists. But, Johannes pointed out this is not a good idea [1].
+Thank you for this detailed explanation! I appreciate that you took
+the time to clearly explain this.
 
-Also rename the helper variable `loc` to `__loc` like we do with
-`__assertion` and `__strs` to avoid potential name collisions with user
-code.
+For the sta use-case I thought about adding a dedicated rwlock
+(include/linux/rwlock.h) for rtw_dev->mac_id_map.
+rtw_sta_{add,remove} would take a write-lock.
+rtw_iterate_stas() takes the read-lock (the lock would be acquired
+before calling into ieee80211_iterate_...). Additionally
+rtw_iterate_stas() needs to check if the station is still valid
+according to mac_id_map - if not: skip/ignore it for that iteration.
+This could be combined with your
+0001-rtw88-use-atomic-to-collect-stas-and-does-iterators.patch.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
-Note: this patch is based on top of
-https://lore.kernel.org/all/20220125210011.3817742-4-dlatypov@google.com/
-There is no semantic dependency between the patches, but they touch
-adjacent lines.
----
- include/kunit/test.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+For the interface use-case it's not clear to me how this works at all.
+rtw_ops_add_interface() has (in a simplified view):
+    u8 port = 0;
+    // the port variable is never changed
+    rtwvif->port = port;
+    rtwvif->conf = &rtw_vif_port[port];
+    rtw_info(rtwdev, "start vif %pM on port %d\n", vif->addr, rtwvif->port);
+How do multiple interfaces (vifs) work in rtw88 if the port is always
+zero? Is some kind of tracking of the used ports missing (similar to
+how we track the used station IDs - also called mac_id - in
+rtw_dev->mac_id_map)?
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 088ff394ae94..00b9ff7783ab 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -779,10 +779,10 @@ void kunit_do_failed_assertion(struct kunit *test,
- 
- #define KUNIT_ASSERTION(test, assert_type, pass, assert_class, INITIALIZER, fmt, ...) do { \
- 	if (unlikely(!(pass))) {					       \
--		static const struct kunit_loc loc = KUNIT_CURRENT_LOC;	       \
-+		static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;       \
- 		struct assert_class __assertion = INITIALIZER;		       \
- 		kunit_do_failed_assertion(test,				       \
--					  &loc,				       \
-+					  &__loc,			       \
- 					  assert_type,			       \
- 					  &__assertion.assert,		       \
- 					  fmt,				       \
-@@ -872,8 +872,8 @@ void kunit_do_failed_assertion(struct kunit *test,
- 				    fmt,				       \
- 				    ...)				       \
- do {									       \
--	typeof(left) __left = (left);					       \
--	typeof(right) __right = (right);				       \
-+	const typeof(left) __left = (left);				       \
-+	const typeof(right) __right = (right);				       \
- 	static const struct kunit_binary_assert_text __text = {		       \
- 		.operation = #op,					       \
- 		.left_text = #left,					       \
-@@ -956,7 +956,7 @@ do {									       \
- 						fmt,			       \
- 						...)			       \
- do {									       \
--	typeof(ptr) __ptr = (ptr);					       \
-+	const typeof(ptr) __ptr = (ptr);				       \
- 									       \
- 	KUNIT_ASSERTION(test,						       \
- 			assert_type,					       \
--- 
-2.35.0.rc2.247.g8bbb082509-goog
 
+Thank you again and best regards,
+Martin

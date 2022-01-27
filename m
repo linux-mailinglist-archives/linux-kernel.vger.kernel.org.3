@@ -2,67 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424F949D68F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C6A49D694
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbiA0AHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:07:45 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:56598 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233418AbiA0AHh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:07:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=J0yHmzr7Bes1AQyZcP7Txq+9cpESQjph6YFpeH3l8Ug=; b=0VDrWO+BT42h67xlYtGTodPhBo
-        VmN6BdIbOVDuzY6vALbfR19NYqiT9lxjVT2sIvV8U/kMoBh7dJWTzFLffNTH3069NyKrXPPLKaces
-        GS9qFfMIp+Gv8lg6qQbBZ7361KQTmg2wzHZLQikJpFqyDRadtm3Yhk7FuMkXRbLPGNF8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nCsK1-002sZ3-V0; Thu, 27 Jan 2022 01:07:29 +0100
-Date:   Thu, 27 Jan 2022 01:07:29 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
-        tdas@codeaurora.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, bjorn.andersson@linaro.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH 5/8] arm64: dts: qcom: sa8155p-adp: Enable ethernet node
-Message-ID: <YfHiQYkeQYwjl3G7@lunn.ch>
-References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
- <20220126221725.710167-6-bhupesh.sharma@linaro.org>
+        id S233741AbiA0ALq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230265AbiA0ALp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 19:11:45 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0AAC06161C;
+        Wed, 26 Jan 2022 16:11:45 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id q19-20020a056830441300b0059a54d66106so986319otv.0;
+        Wed, 26 Jan 2022 16:11:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R01Ruz4LeNlNh/YHEYTcUp58EClPFOIswB4tZCRStoc=;
+        b=GhXbEACZKZw8Q5AtNL+ZEkKcrOhs5i9vrofrZTDlk6xcMUFZPiCRtwLZfyQj8xPnkx
+         RnHD3GCpd/8pHk/pciRMgJlyyfhYKXRrSa73TqjyNwJMSPT6pZTYMqAtVYPiPH8jAOWy
+         z3jAlxS51eKRseBncMvwxPY14Y2MUxAdtgpHkcQzpTlo8G3BBLv/3faRhEPlOhpu625v
+         JCM4ZnrvuGe0UO3+V2yrekJWN5Q3WHZa9svC3GfM4k5ULlmOrCplUn92bFbWabz12WFf
+         3bdAnRWHjulJ6P77EPf19p7Qflth46iJbWXdGELiuzd67PofbPO5y00qPXW9V/GVI4yJ
+         WpJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=R01Ruz4LeNlNh/YHEYTcUp58EClPFOIswB4tZCRStoc=;
+        b=Mh+hm9RMjQ8wMhRNLXp0kyLm+5T9VExmGSZMWXVe/QZSv891om05lelkHQgYbHNUKG
+         QaaIb7Ax6V2mcnGT8LRjfnwZUCLRctIVcYjArvP9RLiP3j/2NgbqrGfp0gcj/8HMxQBd
+         pUXIMJS2e+WcQyVNQfB1B52v1XB8hbDeLLCTjds/UVguYFkBCaDPLYw3cTtBAvwZWUii
+         j1jjp5S2Jqjk/6O7tnQn7FCbgAFncRbfREfex518X6oQvurGSJT4rEu6Ngab9MagASPV
+         etxyWGW9tsBI5hDg7yzyQ8jgSwu+5BEBJ08kOcNjZ2fxleP7AmpS1V1NjO3QY9TX0RuM
+         3fhQ==
+X-Gm-Message-State: AOAM532/WhB24x38rdQreMCxKOHztTVph7awWZQJJB88Cw9MGldF8UgK
+        YID3fLfnzyhf79cXFKEy3Ng=
+X-Google-Smtp-Source: ABdhPJzku5jrfCkKN9XBttkwmXsQzwyZWxaC+5wPIe7dcoapxnJECHmkiunZ8tt4G6iiFREyC1ElRg==
+X-Received: by 2002:a05:6830:3105:: with SMTP id b5mr767593ots.68.1643242304684;
+        Wed, 26 Jan 2022 16:11:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p26sm6136818oth.14.2022.01.26.16.11.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 16:11:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 26 Jan 2022 16:11:42 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 000/114] 4.4.300-rc1 review
+Message-ID: <20220127001142.GA630606@roeck-us.net>
+References: <20220124183927.095545464@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126221725.710167-6-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +&ethernet {
-> +	status = "okay";
-> +
-> +	snps,reset-gpio = <&tlmm 79 GPIO_ACTIVE_LOW>;
-> +	snps,reset-active-low;
-> +	snps,reset-delays-us = <0 11000 70000>;
-> +
-> +	snps,ptp-ref-clk-rate = <250000000>;
-> +	snps,ptp-req-clk-rate = <96000000>;
-> +
-> +	snps,mtl-rx-config = <&mtl_rx_setup>;
-> +	snps,mtl-tx-config = <&mtl_tx_setup>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&ethernet_defaults>;
-> +
-> +	phy-handle = <&rgmii_phy>;
-> +	phy-mode = "rgmii";
+On Mon, Jan 24, 2022 at 07:41:35PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.4.300 release.
+> There are 114 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> Anything received after that time might be too late.
+> 
 
-Where are the rgmii delays being added for this board?
+Build results:
+	total: 160 pass: 160 fail: 0
+Qemu test results:
+	total: 342 pass: 342 fail: 0
 
-      Andrew
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

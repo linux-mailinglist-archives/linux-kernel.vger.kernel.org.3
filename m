@@ -2,466 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF06C49E49E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8335049E4A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242373AbiA0O3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242365AbiA0O3w (ORCPT
+        id S242393AbiA0OcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:32:06 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:51934 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242326AbiA0OcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:29:52 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E70C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:29:52 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id t9so4543617lji.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:29:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UCp9KW85LE6gAO65oFXb40wsOCrDtvn6bWjiYpWGWpQ=;
-        b=Zcny0MPkPYQaYdnaama27HJzTSgg4DvvSzLTTJpxpcGefGSvy0i6BpsM6SOviPG5IV
-         ziQq6SzXhGjDqqbTxn+bR7iXyoIZs9teUBkdxoACaX34XpL/D21JHBIIwSjxUXl6I8/U
-         sHC7aqQntkeLJnfdkhkIBVcrVQ3zobbc1xWtxZV6nAzmJyJodlGsbl6Dq/NYXjjkTTo0
-         ECKsh17QxmAvCpUd/u+sIpMhyw8uGflIbH7VYs6SOX656AlrqF7RpMCY+CCnCQbpK4n8
-         yF0697/jRYtsysShpx+a9e49UB+7GzbgXjsvNW/8aBGshybjLobNpOHW7JaijVqcLt43
-         bC/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UCp9KW85LE6gAO65oFXb40wsOCrDtvn6bWjiYpWGWpQ=;
-        b=0jbiUwSbA53MdL6wfxC7VoMTDhrv4mmEH1j/tETh9HVjkun1LBLbwaWpkodfBH5BWR
-         2zWrzc02ImIxCUz21MIYnOw0ERv/x4xQYTJYf5vRbDxVQlDH/VwxQqsWARV4eztahvCT
-         ywQeS/gPLnejHXf1QKibHzf/24HOBXfZcYj9rg0WPO8UtwEjyx4NGsfZDXJZxX3iwVKw
-         lK7G152oQHTHWEoeao6JFWVRCEmNjja22IZXJOWEBjIl4U6jd5isgeCEqGnOaPgj9eVy
-         vKandhnGXAsLzixEyskFGvHno1G6YyDGmML5UlQWVzGinNF1p+dTCsZ27YnnCJyhfxc7
-         7ivg==
-X-Gm-Message-State: AOAM532lmxi+767tceSso1O71S74iTB/9MyjQRVB3LMe1R6Q4Z6DihbG
-        tR9rFcm3pwLuDTPi8aOQlgYETBaw0oVQWQ==
-X-Google-Smtp-Source: ABdhPJwMPPi2UBzZzrPqiTH1ZgTzF13Q6EbjtyAQQQdXHG1tecqR5koblnF/wjCgu+iermFH4xcVTw==
-X-Received: by 2002:a05:651c:105b:: with SMTP id x27mr2910151ljm.7.1643293789975;
-        Thu, 27 Jan 2022 06:29:49 -0800 (PST)
-Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id b12sm1381230lfj.228.2022.01.27.06.29.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 06:29:49 -0800 (PST)
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Lars Persson <Lars.Persson@axis.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lars Persson <larper@axis.com>, stable@vger.kernel.org
-Subject: [PATCH] optee: use driver internal tee_contex for some rpc
-Date:   Thu, 27 Jan 2022 15:29:39 +0100
-Message-Id: <20220127142939.1734912-1-jens.wiklander@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        Thu, 27 Jan 2022 09:32:05 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20R93Bh4025426;
+        Thu, 27 Jan 2022 06:31:43 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=QQTgeHHj15E+sa6ZI8G2oZA4pgyatYPT04r5cHpj0tA=;
+ b=eFo7+5tBophhJADHWVEwmq+FaXldPZ04QRXRfDqGYiyqxQjUQY337NIiT3rYcGUV5eD0
+ J0FweCA3PBROYbB5aGl17baNduWhtN7Dy/5zRQ/5fcQZb8c5I8t44kRTFxZMGQc8UBCL
+ zw60pKk3CKKR3HSrdq98rtLYvF++pHcvyNe2MWxGrGd3jMrCiSDYnDbdNHedmMoKGbze
+ 3dtd2+LKjnId9luVjkeuXRVOVd7odB8uk2ThEWUAjETj3eT/CH5pWiI+HjTNTiT634T/
+ NfxwXlzWne/GNYkuKOiGICVtRkMk13bsUe5DM4LS1hNiTjDD+PwRs4Z0XbExJmDQXjI6 DA== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3dujtnsq7c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 06:31:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JMtVlD8i2NZ5Z6BZkvVNQ6B9Lq8O9AoyPbiaN+D0Lc5C5iikLrFNlgZwZk48jx5nIxbchSgh2QJsesUzThZIO2OEbvvb38KJ9Gk6DOTGoqyPpqka5viDbeu8j0ysKB0iYZozMHdyjaVqlpq71q4PePUrxfYuo3xUdkkH6ODt3qHmdeiRMXePKVnKKsduss0CFCybF+EyUIx4BFqdWzZfaJ1ixhHHZ1uwxaMuiMVKkNfnlT7w6QLnsEPt6t+OkCzl3H4sPiQKGQ+wP6g518RUV8DgrL7AdwcQx3gkyR5WRcPN+5gg+W/mMLkJAcRs+ht/sgEgndvpPCgziKZowPfzuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QQTgeHHj15E+sa6ZI8G2oZA4pgyatYPT04r5cHpj0tA=;
+ b=Zyz0ZjO7TCGqVCFSyGVVtOAr0pyCU+ztviOZWflnffeGoKJ4SBMvpQEgXZFyzm2YD38mA3n/ZnDgoQ7p9Ye7kvx3HtO2cD0C/JK0Xc39iAlf2IIqU0nGbxlX6oQ69J7GCSWqd4rQhFztKDLEV4uM8+cFwFkbabl04x4SGTDwleBFtwyteKPXHnEK9yTdVKui4M2HDUCwtbiPAZxDOXUWKT3/7T2hPdbBqBIadN5BfdzGYQqrPdOOHQmUDDpWlTwNU2YhDDlHPgeznqiM1c5i+licVssMp/x9UXh2YC9VghjCTl97pBwqPxLH2/fwQrCyeOt37FMNzd9/Yl2yJ0H64w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 64.207.220.244) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=cadence.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=cadence.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QQTgeHHj15E+sa6ZI8G2oZA4pgyatYPT04r5cHpj0tA=;
+ b=Nhk/V2lnuFp/HZ/BCMSi/c1fZ63aOFGIvrpal83/EV+4+hGZi1jgSlmdO39NcAToJ77Rng/Jf2XQDhcbIlrUhobZsgibsygZWuROd0urt8q5HnKACeVRCXYI26ockzic6rklcyl7sbSXaQ/NwxSATvs56d5UgbWeFgJR+w1kHxQ=
+Received: from BN7PR06CA0067.namprd06.prod.outlook.com (2603:10b6:408:34::44)
+ by BYAPR07MB5992.namprd07.prod.outlook.com (2603:10b6:a03:130::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Thu, 27 Jan
+ 2022 14:31:38 +0000
+Received: from BN8NAM12FT017.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::a4) by BN7PR06CA0067.outlook.office365.com
+ (2603:10b6:408:34::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
+ Transport; Thu, 27 Jan 2022 14:31:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 64.207.220.244)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 64.207.220.244 as permitted sender) receiver=protection.outlook.com;
+ client-ip=64.207.220.244; helo=wcmailrelayl01.cadence.com;
+Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
+ BN8NAM12FT017.mail.protection.outlook.com (10.13.182.170) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4951.5 via Frontend Transport; Thu, 27 Jan 2022 14:31:36 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 20REVXgT179338
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=OK);
+        Thu, 27 Jan 2022 06:31:34 -0800
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu4.global.cadence.com (10.160.110.201) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 27 Jan 2022 15:31:21 +0100
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2
+ via Frontend Transport; Thu, 27 Jan 2022 15:31:21 +0100
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 20REU0ff023522;
+        Thu, 27 Jan 2022 15:30:32 +0100
+Received: (from sjakhade@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 20RETwcT023505;
+        Thu, 27 Jan 2022 15:29:58 +0100
+From:   Swapnil Jakhade <sjakhade@cadence.com>
+To:     <vkoul@kernel.org>, <kishon@ti.com>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     <mparab@cadence.com>, <sjakhade@cadence.com>,
+        <a-govindraju@ti.com>, <r-ravikumar@ti.com>
+Subject: [PATCH 0/4] PHY: Add multilink DP support in Cadence Torrent PHY driver
+Date:   Thu, 27 Jan 2022 15:29:54 +0100
+Message-ID: <20220127142958.23465-1-sjakhade@cadence.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 957faa58-edbe-419f-005d-08d9e1a1b932
+X-MS-TrafficTypeDiagnostic: BYAPR07MB5992:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR07MB59929BB54609C1FBBAD1DAC7C5219@BYAPR07MB5992.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vZtdmpfziIkuvpLC71UbklzNJsMrzKCa0uqPxj6WsS8yRDWl83JES/SHn1MFp7PsjbWQuFfpOwZOG5k92jeZieLWKXZVW3H1eOmo6RXoNfaPXjUCaJUtZhzTn2+84MXlNwt/CPx0P4j1JlVpt3HRe+v+3rIGPm3Kx2dw3Z2+A2tgeMw03XSDecNeU/xKEQnvTMoTEnUUTlgA/jpTFUPzsS7OADUjvBLhegTYjIJDajF5hZbF1Qlto3LnCCFNw92MlkJR/vGQezysQFXE2Tra20w9Ud56E39jbfTBd1VopJiw8bt94yV1gEmoavEkNxq/EmrQ9HFIgpEuYNMKMOdKdHWnJn4oxEi9sglU75hi5bDm7oE9O5DCnJIBoppFHue43fJg/JHTIwkLrLYbT/pKCseOQ9NoWb8CmJw4C4j3hTPztcIYCzWXWNCjOYIChtdl6q04/URf2tGcZiujmvIXSxWVAgvAhqgybH4FsxI7djHD7ikmNSELr9wXjBrHMFg/wXOEwut3LCB7pid0gqjuXE8Clms59dkkl51t2CA1aANY8XJzW7L7N6VMepHwex5VuDAJ68vo1gNsCfniwt16xyy9dXHVwaXTxug8ldeLuNkjmBz8VoTFbCl5UbsAZSIOG6hpJwAHppazSZQdVe6Sj7g0x+hWpUy0ZX4kcJVcKXeHIy0yC0NF7LQsdkeVA0FitgmrANqLzmJQmBiEYBwqmuw0yWmVpf6bKjW7p1FM11D57ignUZ61sMDgCVm8c/xAu6Uq5hSshqLq73x9MRg7XPNI96LZLpX3PGo8L/jqadu9+BgeYrGlOUfuGurbWx8aP+pkRMlGU7F+E2IzaGMvWA==
+X-Forefront-Antispam-Report: CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(4636009)(36092001)(46966006)(36840700001)(40470700004)(8936002)(508600001)(8676002)(42186006)(81166007)(1076003)(54906003)(356005)(336012)(316002)(2616005)(40460700003)(6666004)(36756003)(86362001)(36860700001)(4326008)(47076005)(2906002)(5660300002)(4744005)(83380400001)(110136005)(26005)(70206006)(186003)(426003)(70586007)(82310400004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 14:31:36.1119
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 957faa58-edbe-419f-005d-08d9e1a1b932
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT017.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5992
+X-Proofpoint-GUID: RK1IqgnoXJMLABR3hc4GyaBkEVS54hvY
+X-Proofpoint-ORIG-GUID: RK1IqgnoXJMLABR3hc4GyaBkEVS54hvY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 mlxlogscore=680 bulkscore=0 adultscore=0 clxscore=1011
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201270088
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a driver private tee_context by moving the tee_context in struct
-optee_notif to struct optee. This tee_context was previously used when
-doing internal calls to secure world to deliver notification.
+This patch series adds support for multilink multiprotocol DisplayPort
+configurations in Cadence Torrent PHY driver. Following configurations
+are supported:
+(1) PCIe + DP
+(2) USB + DP
 
-The new driver internal tee_context is now also when allocating driver
-private shared memory. This decouples the shared memory object from its
-original tee_context. This is needed when the life time of such a memory
-allocation outlives the client tee_context.
+The changes have been validated on TI J721S2 platform.
 
-This patch fixes the problem described below:
+Swapnil Jakhade (4):
+  phy: cadence-torrent: Add function to get PLL to be configured for DP
+  phy: cadence-torrent: Prepare driver for multilink DP support
+  phy: cadence-torrent: Add PCIe + DP multilink configuration for 100MHz
+    refclk
+  phy: cadence-torrent: Add USB + DP multilink configuration
 
-The addition of a shutdown hook by commit f25889f93184 ("optee: fix tee out
-of memory failure seen during kexec reboot") introduced a kernel shutdown
-regression that can be triggered after running the OP-TEE xtest suites.
+ drivers/phy/cadence/phy-cadence-torrent.c | 727 ++++++++++++++++------
+ 1 file changed, 532 insertions(+), 195 deletions(-)
 
-Once the shutdown hook is called it is not possible to communicate any more
-with the supplicant process because the system is not scheduling task any
-longer. Thus if the optee driver shutdown path receives a supplicant RPC
-request from the OP-TEE we will deadlock the kernel's shutdown.
-
-Fixes: f25889f93184 ("optee: fix tee out of memory failure seen during kexec reboot")
-Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
-Reported-by: Lars Persson <larper@axis.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
----
-
-This patch is from "optee: add driver private tee_context" and "optee: use
-driver internal tee_contex for some rpc" in [1] combined into one patch for
-easier tracking. It turned out that those two patches fixes reported
-problem so I'm breaking out this from the patchset in order to target it
-for the v5.17.
-
-[1] https://lore.kernel.org/lkml/20220125162938.838382-1-jens.wiklander@linaro.org/
-
- drivers/tee/optee/core.c          |  1 +
- drivers/tee/optee/ffa_abi.c       | 77 +++++++++++++++++--------------
- drivers/tee/optee/optee_private.h |  5 +-
- drivers/tee/optee/smc_abi.c       | 48 +++++++------------
- 4 files changed, 64 insertions(+), 67 deletions(-)
-
-diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-index 1ca320885fad..17a6f51d3089 100644
---- a/drivers/tee/optee/core.c
-+++ b/drivers/tee/optee/core.c
-@@ -158,6 +158,7 @@ void optee_remove_common(struct optee *optee)
- 	optee_unregister_devices();
- 
- 	optee_notif_uninit(optee);
-+	teedev_close_context(optee->ctx);
- 	/*
- 	 * The two devices have to be unregistered before we can free the
- 	 * other resources.
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index 20a1b1a3d965..545f61af1248 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -424,6 +424,7 @@ static struct tee_shm_pool_mgr *optee_ffa_shm_pool_alloc_pages(void)
-  */
- 
- static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-+					      struct optee *optee,
- 					      struct optee_msg_arg *arg)
- {
- 	struct tee_shm *shm;
-@@ -439,7 +440,7 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
- 		shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
- 		break;
- 	case OPTEE_RPC_SHM_TYPE_KERNEL:
--		shm = tee_shm_alloc(ctx, arg->params[0].u.value.b,
-+		shm = tee_shm_alloc(optee->ctx, arg->params[0].u.value.b,
- 				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
- 		break;
- 	default:
-@@ -493,14 +494,13 @@ static void handle_ffa_rpc_func_cmd_shm_free(struct tee_context *ctx,
- }
- 
- static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
-+				    struct optee *optee,
- 				    struct optee_msg_arg *arg)
- {
--	struct optee *optee = tee_get_drvdata(ctx->teedev);
--
- 	arg->ret_origin = TEEC_ORIGIN_COMMS;
- 	switch (arg->cmd) {
- 	case OPTEE_RPC_CMD_SHM_ALLOC:
--		handle_ffa_rpc_func_cmd_shm_alloc(ctx, arg);
-+		handle_ffa_rpc_func_cmd_shm_alloc(ctx, optee, arg);
- 		break;
- 	case OPTEE_RPC_CMD_SHM_FREE:
- 		handle_ffa_rpc_func_cmd_shm_free(ctx, optee, arg);
-@@ -510,12 +510,12 @@ static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
- 	}
- }
- 
--static void optee_handle_ffa_rpc(struct tee_context *ctx, u32 cmd,
--				 struct optee_msg_arg *arg)
-+static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
-+				 u32 cmd, struct optee_msg_arg *arg)
- {
- 	switch (cmd) {
- 	case OPTEE_FFA_YIELDING_CALL_RETURN_RPC_CMD:
--		handle_ffa_rpc_func_cmd(ctx, arg);
-+		handle_ffa_rpc_func_cmd(ctx, optee, arg);
- 		break;
- 	case OPTEE_FFA_YIELDING_CALL_RETURN_INTERRUPT:
- 		/* Interrupt delivered by now */
-@@ -582,7 +582,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- 		 * above.
- 		 */
- 		cond_resched();
--		optee_handle_ffa_rpc(ctx, data->data1, rpc_arg);
-+		optee_handle_ffa_rpc(ctx, optee, data->data1, rpc_arg);
- 		cmd = OPTEE_FFA_YIELDING_CALL_RESUME;
- 		data->data0 = cmd;
- 		data->data1 = 0;
-@@ -793,7 +793,9 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
- {
- 	const struct ffa_dev_ops *ffa_ops;
- 	unsigned int rpc_arg_count;
-+	struct tee_shm_pool *pool;
- 	struct tee_device *teedev;
-+	struct tee_context *ctx;
- 	struct optee *optee;
- 	int rc;
- 
-@@ -813,12 +815,12 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
- 	if (!optee)
- 		return -ENOMEM;
- 
--	optee->pool = optee_ffa_config_dyn_shm();
--	if (IS_ERR(optee->pool)) {
--		rc = PTR_ERR(optee->pool);
--		optee->pool = NULL;
--		goto err;
-+	pool = optee_ffa_config_dyn_shm();
-+	if (IS_ERR(pool)) {
-+		rc = PTR_ERR(pool);
-+		goto err_free_optee;
- 	}
-+	optee->pool = pool;
- 
- 	optee->ops = &optee_ffa_ops;
- 	optee->ffa.ffa_dev = ffa_dev;
-@@ -829,7 +831,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
- 				  optee);
- 	if (IS_ERR(teedev)) {
- 		rc = PTR_ERR(teedev);
--		goto err;
-+		goto err_free_pool;
- 	}
- 	optee->teedev = teedev;
- 
-@@ -837,50 +839,57 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
- 				  optee);
- 	if (IS_ERR(teedev)) {
- 		rc = PTR_ERR(teedev);
--		goto err;
-+		goto err_unreg_teedev;
- 	}
- 	optee->supp_teedev = teedev;
- 
- 	rc = tee_device_register(optee->teedev);
- 	if (rc)
--		goto err;
-+		goto err_unreg_supp_teedev;
- 
- 	rc = tee_device_register(optee->supp_teedev);
- 	if (rc)
--		goto err;
-+		goto err_unreg_supp_teedev;
- 
- 	rc = rhashtable_init(&optee->ffa.global_ids, &shm_rhash_params);
- 	if (rc)
--		goto err;
-+		goto err_unreg_supp_teedev;
- 	mutex_init(&optee->ffa.mutex);
- 	mutex_init(&optee->call_queue.mutex);
- 	INIT_LIST_HEAD(&optee->call_queue.waiters);
- 	optee_supp_init(&optee->supp);
- 	ffa_dev_set_drvdata(ffa_dev, optee);
-+	ctx = teedev_open(optee->teedev);
-+	if (IS_ERR(ctx))
-+		goto err_rhashtable_free;
-+	optee->ctx = ctx;
- 	rc = optee_notif_init(optee, OPTEE_DEFAULT_MAX_NOTIF_VALUE);
--	if (rc) {
--		optee_ffa_remove(ffa_dev);
--		return rc;
--	}
-+	if (rc)
-+		goto err_close_ctx;
- 
- 	rc = optee_enumerate_devices(PTA_CMD_GET_DEVICES);
--	if (rc) {
--		optee_ffa_remove(ffa_dev);
--		return rc;
--	}
-+	if (rc)
-+		goto err_unregister_devices;
- 
- 	pr_info("initialized driver\n");
- 	return 0;
--err:
--	/*
--	 * tee_device_unregister() is safe to call even if the
--	 * devices hasn't been registered with
--	 * tee_device_register() yet.
--	 */
-+
-+err_unregister_devices:
-+	optee_unregister_devices();
-+	optee_notif_uninit(optee);
-+err_close_ctx:
-+	teedev_close_context(ctx);
-+err_rhashtable_free:
-+	rhashtable_free_and_destroy(&optee->ffa.global_ids, rh_free_fn, NULL);
-+	optee_supp_uninit(&optee->supp);
-+	mutex_destroy(&optee->call_queue.mutex);
-+err_unreg_supp_teedev:
- 	tee_device_unregister(optee->supp_teedev);
-+err_unreg_teedev:
- 	tee_device_unregister(optee->teedev);
--	if (optee->pool)
--		tee_shm_pool_free(optee->pool);
-+err_free_pool:
-+	tee_shm_pool_free(pool);
-+err_free_optee:
- 	kfree(optee);
- 	return rc;
- }
-diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index 46f74ab07c7e..92bc47bef95f 100644
---- a/drivers/tee/optee/optee_private.h
-+++ b/drivers/tee/optee/optee_private.h
-@@ -53,7 +53,6 @@ struct optee_call_queue {
- 
- struct optee_notif {
- 	u_int max_key;
--	struct tee_context *ctx;
- 	/* Serializes access to the elements below in this struct */
- 	spinlock_t lock;
- 	struct list_head db;
-@@ -134,9 +133,10 @@ struct optee_ops {
- /**
-  * struct optee - main service struct
-  * @supp_teedev:	supplicant device
-+ * @teedev:		client device
-  * @ops:		internal callbacks for different ways to reach secure
-  *			world
-- * @teedev:		client device
-+ * @ctx:		driver internal TEE context
-  * @smc:		specific to SMC ABI
-  * @ffa:		specific to FF-A ABI
-  * @call_queue:		queue of threads waiting to call @invoke_fn
-@@ -152,6 +152,7 @@ struct optee {
- 	struct tee_device *supp_teedev;
- 	struct tee_device *teedev;
- 	const struct optee_ops *ops;
-+	struct tee_context *ctx;
- 	union {
- 		struct optee_smc smc;
- 		struct optee_ffa ffa;
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index 449d6a72d289..bacd1a1d79ee 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -622,6 +622,7 @@ static void handle_rpc_func_cmd_shm_free(struct tee_context *ctx,
- }
- 
- static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-+					  struct optee *optee,
- 					  struct optee_msg_arg *arg,
- 					  struct optee_call_ctx *call_ctx)
- {
-@@ -651,7 +652,8 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
- 		shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
- 		break;
- 	case OPTEE_RPC_SHM_TYPE_KERNEL:
--		shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
-+		shm = tee_shm_alloc(optee->ctx, sz,
-+				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
- 		break;
- 	default:
- 		arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-@@ -747,7 +749,7 @@ static void handle_rpc_func_cmd(struct tee_context *ctx, struct optee *optee,
- 	switch (arg->cmd) {
- 	case OPTEE_RPC_CMD_SHM_ALLOC:
- 		free_pages_list(call_ctx);
--		handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
-+		handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
- 		break;
- 	case OPTEE_RPC_CMD_SHM_FREE:
- 		handle_rpc_func_cmd_shm_free(ctx, arg);
-@@ -776,7 +778,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
- 
- 	switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
- 	case OPTEE_SMC_RPC_FUNC_ALLOC:
--		shm = tee_shm_alloc(ctx, param->a1,
-+		shm = tee_shm_alloc(optee->ctx, param->a1,
- 				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
- 		if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
- 			reg_pair_from_64(&param->a1, &param->a2, pa);
-@@ -954,57 +956,34 @@ static irqreturn_t notif_irq_thread_fn(int irq, void *dev_id)
- {
- 	struct optee *optee = dev_id;
- 
--	optee_smc_do_bottom_half(optee->notif.ctx);
-+	optee_smc_do_bottom_half(optee->ctx);
- 
- 	return IRQ_HANDLED;
- }
- 
- static int optee_smc_notif_init_irq(struct optee *optee, u_int irq)
- {
--	struct tee_context *ctx;
- 	int rc;
- 
--	ctx = teedev_open(optee->teedev);
--	if (IS_ERR(ctx))
--		return PTR_ERR(ctx);
--
--	optee->notif.ctx = ctx;
- 	rc = request_threaded_irq(irq, notif_irq_handler,
- 				  notif_irq_thread_fn,
- 				  0, "optee_notification", optee);
- 	if (rc)
--		goto err_close_ctx;
-+		return rc;
- 
- 	optee->smc.notif_irq = irq;
- 
- 	return 0;
--
--err_close_ctx:
--	teedev_close_context(optee->notif.ctx);
--	optee->notif.ctx = NULL;
--
--	return rc;
- }
- 
- static void optee_smc_notif_uninit_irq(struct optee *optee)
- {
--	if (optee->notif.ctx) {
--		optee_smc_stop_async_notif(optee->notif.ctx);
-+	if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_ASYNC_NOTIF) {
-+		optee_smc_stop_async_notif(optee->ctx);
- 		if (optee->smc.notif_irq) {
- 			free_irq(optee->smc.notif_irq, optee);
- 			irq_dispose_mapping(optee->smc.notif_irq);
- 		}
--
--		/*
--		 * The thread normally working with optee->notif.ctx was
--		 * stopped with free_irq() above.
--		 *
--		 * Note we're not using teedev_close_context() or
--		 * tee_client_close_context() since we have already called
--		 * tee_device_put() while initializing to avoid a circular
--		 * reference counting.
--		 */
--		teedev_close_context(optee->notif.ctx);
- 	}
- }
- 
-@@ -1366,6 +1345,7 @@ static int optee_probe(struct platform_device *pdev)
- 	struct optee *optee = NULL;
- 	void *memremaped_shm = NULL;
- 	struct tee_device *teedev;
-+	struct tee_context *ctx;
- 	u32 max_notif_value;
- 	u32 sec_caps;
- 	int rc;
-@@ -1446,9 +1426,13 @@ static int optee_probe(struct platform_device *pdev)
- 	optee->pool = pool;
- 
- 	platform_set_drvdata(pdev, optee);
-+	ctx = teedev_open(optee->teedev);
-+	if (IS_ERR(ctx))
-+		goto err_supp_uninit;
-+	optee->ctx = ctx;
- 	rc = optee_notif_init(optee, max_notif_value);
- 	if (rc)
--		goto err_supp_uninit;
-+		goto err_close_ctx;
- 
- 	if (sec_caps & OPTEE_SMC_SEC_CAP_ASYNC_NOTIF) {
- 		unsigned int irq;
-@@ -1496,6 +1480,8 @@ static int optee_probe(struct platform_device *pdev)
- 	optee_unregister_devices();
- err_notif_uninit:
- 	optee_notif_uninit(optee);
-+err_close_ctx:
-+	teedev_close_context(ctx);
- err_supp_uninit:
- 	optee_supp_uninit(&optee->supp);
- 	mutex_destroy(&optee->call_queue.mutex);
 -- 
-2.31.1
+2.34.1
 

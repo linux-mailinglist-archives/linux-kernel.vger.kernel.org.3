@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 496E249EA00
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173CA49E9FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245549AbiA0SL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245265AbiA0SKw (ORCPT
+        id S245341AbiA0SLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:11:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59078 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245072AbiA0SKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:10:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04561C061770;
-        Thu, 27 Jan 2022 10:10:43 -0800 (PST)
+        Thu, 27 Jan 2022 13:10:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A1EA61CFF;
-        Thu, 27 Jan 2022 18:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781BAC340E4;
-        Thu, 27 Jan 2022 18:10:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94025B821DA;
+        Thu, 27 Jan 2022 18:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA87CC340E4;
+        Thu, 27 Jan 2022 18:10:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643307042;
-        bh=hnC+WHQSB5Y9GOv0QCFpDjFeMVtgDx2Tl+exIvMj6zU=;
+        s=korg; t=1643307045;
+        bh=mCAJxU3jO5M7PSY1plEfvQEcBEGUr0FRugNSXX+uX3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TWiGXjli1K5Ea4HAZkutb1oOAegblvCULFe+x7EH22dn2VOI5kLs/wdXDTNdb5+u6
-         L0lAupkp8NcNvLR3lEbZNvyLjpws0ivHZIX1w/JjD7Aev8LwQk8PSiff+XIp4yVpnm
-         XFjr9ECSEvAlkoSZ1ZWrDcX+aqWI+beiYkqcTtTU=
+        b=bU3JRDi7XDlKRgCk4myXjpo4yHnbCNB0k83C3pKntxym3hawLNQQVV1cKZPkfs/Bj
+         mZLtWr7cUxgjOU+VtRaqrf2it5j/pV6lJM6QMxRqVNR9lRetkCLH0XsA+4XRD8zC/E
+         rLwPJNoTVImUPXjEkhw1EYNy4oXfT8J0INhq5zKA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH 5.15 10/12] select: Fix indefinitely sleeping task in poll_schedule_timeout()
-Date:   Thu, 27 Jan 2022 19:09:34 +0100
-Message-Id: <20220127180259.429012496@linuxfoundation.org>
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 5.15 11/12] drm/amdgpu: Use correct VIEWPORT_DIMENSION for DCN2
+Date:   Thu, 27 Jan 2022 19:09:35 +0100
+Message-Id: <20220127180259.458001336@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
 References: <20220127180259.078563735@linuxfoundation.org>
@@ -49,135 +48,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Harry Wentland <harry.wentland@amd.com>
 
-commit 68514dacf2715d11b91ca50d88de047c086fea9c upstream.
+commit dc5d4aff2e99c312df8abbe1ee9a731d2913bc1b upstream.
 
-A task can end up indefinitely sleeping in do_select() ->
-poll_schedule_timeout() when the following race happens:
+For some reason this file isn't using the appropriate register
+headers for DCN headers, which means that on DCN2 we're getting
+the VIEWPORT_DIMENSION offset wrong.
 
-  TASK1 (thread1)             TASK2                   TASK1 (thread2)
-  do_select()
-    setup poll_wqueues table
-    with 'fd'
-                              write data to 'fd'
-                                pollwake()
-                                  table->triggered = 1
-                                                      closes 'fd' thread1 is
-                                                        waiting for
-    poll_schedule_timeout()
-      - sees table->triggered
-      table->triggered = 0
-      return -EINTR
-    loop back in do_select()
+This means that we're not correctly carving out the framebuffer
+memory correctly for a framebuffer allocated by EFI and
+therefore see corruption when loading amdgpu before the display
+driver takes over control of the framebuffer scanout.
 
-But at this point when TASK1 loops back, the fdget() in the setup of
-poll_wqueues fails.  So now so we never find 'fd' is ready for reading
-and sleep in poll_schedule_timeout() indefinitely.
+Fix this by checking the DCE_HWIP and picking the correct offset
+accordingly.
 
-Treat an fd that got closed as a fd on which some event happened.  This
-makes sure cannot block indefinitely in do_select().
+Long-term we should expose this info from DC as GMC shouldn't
+need to know about DCN registers.
 
-Another option would be to return -EBADF in this case but that has a
-potential of subtly breaking applications that excercise this behavior
-and it happens to work for them.  So returning fd as active seems like a
-safer choice.
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-CC: stable@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Harry Wentland <harry.wentland@amd.com>
+Reviewed-by: Huang Rui <ray.huang@amd.com>
+Acked-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- fs/select.c |   63 +++++++++++++++++++++++++++++++-----------------------------
- 1 file changed, 33 insertions(+), 30 deletions(-)
 
---- a/fs/select.c
-+++ b/fs/select.c
-@@ -458,9 +458,11 @@ get_max:
- 	return max;
- }
+---
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+@@ -72,6 +72,9 @@
+ #define mmDCHUBBUB_SDPIF_MMIO_CNTRL_0                                                                  0x049d
+ #define mmDCHUBBUB_SDPIF_MMIO_CNTRL_0_BASE_IDX                                                         2
  
--#define POLLIN_SET (EPOLLRDNORM | EPOLLRDBAND | EPOLLIN | EPOLLHUP | EPOLLERR)
--#define POLLOUT_SET (EPOLLWRBAND | EPOLLWRNORM | EPOLLOUT | EPOLLERR)
--#define POLLEX_SET (EPOLLPRI)
-+#define POLLIN_SET (EPOLLRDNORM | EPOLLRDBAND | EPOLLIN | EPOLLHUP | EPOLLERR |\
-+			EPOLLNVAL)
-+#define POLLOUT_SET (EPOLLWRBAND | EPOLLWRNORM | EPOLLOUT | EPOLLERR |\
-+			 EPOLLNVAL)
-+#define POLLEX_SET (EPOLLPRI | EPOLLNVAL)
- 
- static inline void wait_key_set(poll_table *wait, unsigned long in,
- 				unsigned long out, unsigned long bit,
-@@ -527,6 +529,7 @@ static int do_select(int n, fd_set_bits
- 					break;
- 				if (!(bit & all_bits))
- 					continue;
-+				mask = EPOLLNVAL;
- 				f = fdget(i);
- 				if (f.file) {
- 					wait_key_set(wait, in, out, bit,
-@@ -534,34 +537,34 @@ static int do_select(int n, fd_set_bits
- 					mask = vfs_poll(f.file, wait);
- 
- 					fdput(f);
--					if ((mask & POLLIN_SET) && (in & bit)) {
--						res_in |= bit;
--						retval++;
--						wait->_qproc = NULL;
--					}
--					if ((mask & POLLOUT_SET) && (out & bit)) {
--						res_out |= bit;
--						retval++;
--						wait->_qproc = NULL;
--					}
--					if ((mask & POLLEX_SET) && (ex & bit)) {
--						res_ex |= bit;
--						retval++;
--						wait->_qproc = NULL;
--					}
--					/* got something, stop busy polling */
--					if (retval) {
--						can_busy_loop = false;
--						busy_flag = 0;
--
--					/*
--					 * only remember a returned
--					 * POLL_BUSY_LOOP if we asked for it
--					 */
--					} else if (busy_flag & mask)
--						can_busy_loop = true;
--
- 				}
-+				if ((mask & POLLIN_SET) && (in & bit)) {
-+					res_in |= bit;
-+					retval++;
-+					wait->_qproc = NULL;
-+				}
-+				if ((mask & POLLOUT_SET) && (out & bit)) {
-+					res_out |= bit;
-+					retval++;
-+					wait->_qproc = NULL;
-+				}
-+				if ((mask & POLLEX_SET) && (ex & bit)) {
-+					res_ex |= bit;
-+					retval++;
-+					wait->_qproc = NULL;
-+				}
-+				/* got something, stop busy polling */
-+				if (retval) {
-+					can_busy_loop = false;
-+					busy_flag = 0;
++#define mmHUBP0_DCSURF_PRI_VIEWPORT_DIMENSION_DCN2                                                          0x05ea
++#define mmHUBP0_DCSURF_PRI_VIEWPORT_DIMENSION_DCN2_BASE_IDX                                                 2
 +
-+				/*
-+				 * only remember a returned
-+				 * POLL_BUSY_LOOP if we asked for it
-+				 */
-+				} else if (busy_flag & mask)
-+					can_busy_loop = true;
+ 
+ static const char *gfxhub_client_ids[] = {
+ 	"CB",
+@@ -1103,6 +1106,8 @@ static unsigned gmc_v9_0_get_vbios_fb_si
+ 	u32 d1vga_control = RREG32_SOC15(DCE, 0, mmD1VGA_CONTROL);
+ 	unsigned size;
+ 
++	/* TODO move to DC so GMC doesn't need to hard-code DCN registers */
 +
- 			}
- 			if (res_in)
- 				*rinp = res_in;
+ 	if (REG_GET_FIELD(d1vga_control, D1VGA_CONTROL, D1VGA_MODE_ENABLE)) {
+ 		size = AMDGPU_VBIOS_VGA_ALLOCATION;
+ 	} else {
+@@ -1110,11 +1115,18 @@ static unsigned gmc_v9_0_get_vbios_fb_si
+ 
+ 		switch (adev->asic_type) {
+ 		case CHIP_RAVEN:
+-		case CHIP_RENOIR:
+ 			viewport = RREG32_SOC15(DCE, 0, mmHUBP0_DCSURF_PRI_VIEWPORT_DIMENSION);
+ 			size = (REG_GET_FIELD(viewport,
+ 					      HUBP0_DCSURF_PRI_VIEWPORT_DIMENSION, PRI_VIEWPORT_HEIGHT) *
+ 				REG_GET_FIELD(viewport,
++					      HUBP0_DCSURF_PRI_VIEWPORT_DIMENSION, PRI_VIEWPORT_WIDTH) *
++				4);
++			break;
++		case CHIP_RENOIR:
++			viewport = RREG32_SOC15(DCE, 0, mmHUBP0_DCSURF_PRI_VIEWPORT_DIMENSION_DCN2);
++			size = (REG_GET_FIELD(viewport,
++					      HUBP0_DCSURF_PRI_VIEWPORT_DIMENSION, PRI_VIEWPORT_HEIGHT) *
++				REG_GET_FIELD(viewport,
+ 					      HUBP0_DCSURF_PRI_VIEWPORT_DIMENSION, PRI_VIEWPORT_WIDTH) *
+ 				4);
+ 			break;
 
 

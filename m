@@ -2,98 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6EC49D677
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1636F49D678
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiA0AAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S232835AbiA0AA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiA0AAC (ORCPT
+        with ESMTP id S229589AbiA0AAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:00:02 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B76C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:00:02 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id u11so978739plh.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:00:02 -0800 (PST)
+        Wed, 26 Jan 2022 19:00:54 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F03C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:00:54 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id q75so746378pgq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:00:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DwrekoWwD7S8yj0PWXXec9UCQ3/KKV/tBb2QonKO67w=;
-        b=B7sSz9g57GHF8TphX5iKf/ReceRtURdiZA257rxyFhPEJ2GeUmj34TjbX8UnzDaFUs
-         Dn0/XCD9N5x9fawmkAjfCNtft7zD8ix2w2zLHJ6jpbeC07CPW2SGrexilsMvkZwju4hc
-         IuISRG/sx1OpZo7RhodjbGyfx+DdIdhX/G9IU=
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ukC9JWwYdJ1xBJrCXHc/X7oHrRuyFj4FwK9ABYn20tU=;
+        b=jLynsdArWMeWSIVBinDqHBOaXHYxdpM5XsQit9+yz8ZsKGy1oLkzM3JZMyONbzl11N
+         ZsdjL3NfFP228tUeBTtY0N2ZsNGdvGaOgpK+cNC64CEJguyBI9blSw8lSAFAOhXOpBq2
+         SSTdQtMTS7evRZGtBr7GRO5qYWb3i/5JS4KV30Gv5NZwgqd3rVtDu+wLgsxcb5dTp2PY
+         mRpi+kT5wHcVL/XfWjqWYXnSTsXdpfT8XXbh2zASSqoiSjSb5ib7aOuYPvqmVIkUV4q5
+         LD8gUZ+0RQK1qaVvTjFDM1g1cUEzLxDwU89HuAFb+LnEPt16mB/xQtOGIxq8GJ8glcFo
+         5Igw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DwrekoWwD7S8yj0PWXXec9UCQ3/KKV/tBb2QonKO67w=;
-        b=E24tyNaOB+02F0c5vqPP0WAGUAkIkZWr6gDXrHQtYR83aN7WtJ3/Q547AHPb/+f1i9
-         HpHkvwqXo5ZnVWPUiIBGyIdPfdUMvNg+4ytwmZxKr49/SSxEdNo1KE2ut+tQL6PuEORB
-         hKfQh4TTGNsUinBhHTAtxMtoig3+Mk8MqO6RgeWp9LneAMc/2KbMZ5KMUKQcGLTfH1r0
-         +CMOtn//u4k41cTHGrNWe3uReDi2cxgaRu+JXEUAHOPfBwu8l+cNrMTd5mifKg2DPiWZ
-         WHC4rV6aD6MkDxglpZwFHNDfly94y87s9bIVkBgkxzA5gK42qNQws7KtCKzM1frYC/o7
-         mThw==
-X-Gm-Message-State: AOAM530hb5jhqfhBaX33ROFIGF/Qv2mxevtRZ6XkeJeuYxxKWOo7bI21
-        8usDhJtJDAYH3luFjX/BQyR4lA==
-X-Google-Smtp-Source: ABdhPJydBVK1iwsHQRv5UqG9Dei82q+wALz8ZjL9Brp25yjLU800blqVmmdsxJY+Kw5WRFzjAwpSwA==
-X-Received: by 2002:a17:902:c409:: with SMTP id k9mr1083833plk.132.1643241601975;
-        Wed, 26 Jan 2022 16:00:01 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q17sm3265766pfk.108.2022.01.26.16.00.01
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ukC9JWwYdJ1xBJrCXHc/X7oHrRuyFj4FwK9ABYn20tU=;
+        b=eUjMvboaJEh00R7gmi4PU4MI1EjlbtYWzdy9dJis7UfbMV/XO2v8oFNILEuTayUa79
+         2xYu9OHglpdDKdHTPhbk+OK0hLyDrc2AtfzBXjinA8Ai3/lAoHSIMZWQOEYiUXx0a7ci
+         c5cJmRCHFrpezhEOIu/qGszwPzRwcSxLOSuKHD5pfQSfO3/yAsUBrsv35W3NjTkKlzoU
+         ytdFss0aZXQcXsVg45bOJg91szoa5mKY4AIIaG0UYCgs5H78JduDv9iBSUpUDGp85g9y
+         +QyoLqjvID2OCuCBQts8KXM8SNbNLu1zH+QpQfHBaY+uXLL5zb664vfrsvuWhoiuLGkl
+         cXgw==
+X-Gm-Message-State: AOAM531UnzssFGErUSyUCLHIRXvsliExzbMQ/f/Sqw5ocW/SxM5nTa00
+        Ujwlz3rG2ra4cm3bPsYQA/A=
+X-Google-Smtp-Source: ABdhPJxhYxfxcK6wQ51MblyDWAnVhcMj9cYRDssmOpyr3yuBSR88NpmYoIVE8CplioJlZL3TkmThrw==
+X-Received: by 2002:a65:6492:: with SMTP id e18mr861359pgv.329.1643241653609;
+        Wed, 26 Jan 2022 16:00:53 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:e94:fba2:6768:ac75])
+        by smtp.gmail.com with ESMTPSA id t24sm3545546pfg.92.2022.01.26.16.00.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 16:00:01 -0800 (PST)
-Date:   Wed, 26 Jan 2022 16:00:01 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     ariadne@dereferenced.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, ebiederm@xmission.com,
-        viro@zeniv.linux.org.uk
-Subject: Re: [PATCH] fs/exec: require argv[0] presence in do_execveat_common()
-Message-ID: <202201261558.DAA974162@keescook>
-References: <YfFigbwhImLQqQsQ@localhost.localdomain>
+        Wed, 26 Jan 2022 16:00:52 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>
+Subject: [PATCHSET 0/6] perf lock: Random updates for the locking analysis (v2)
+Date:   Wed, 26 Jan 2022 16:00:44 -0800
+Message-Id: <20220127000050.3011493-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfFigbwhImLQqQsQ@localhost.localdomain>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 06:02:25PM +0300, Alexey Dobriyan wrote:
-> >	execve("...", NULL, NULL);
-> 
-> I personally wrote a program which relies on execve(NULL) to succeed.
-> It wasn't an exploit, it was test program against IMA-like kernel
-> "only whitelisted executables can run" feature.
-> 
-> Test copies and "corrupts" itself by appending \0 to the end, then tries
-> to reexec itself with execve("/proc/self/exe", NULL, NULL);
-> main() if run with argc==0 exits with specific error code.
-> 
-> Appending \0 breaks checksum so working kernel protection scheme must
-> not allow it, therefore if execve(NULL) succeeded, than the parent
-> process doing test hard fails.
-> 
-> Also appending \0 doesn't break ELF structure. In other words,
-> if executable A is working (and it is working because it is running)
-> then A||\0 is valid executable as well and will run too.
-> 
-> This is independent from filesystem layout, libc, kernel, dynamic
-> libraries, compile options and what not.
-> 
-> Now QNX doesn't allow execve(NULL) and I don't remember if I changed it
-> to the next simplest variant and I don't work anymore at that company,
-> so I can't check :^)
-> 
-> 	execve("/proc/self/exe", (char*[]){"Alexey", NULL}, NULL);
+Hello,
 
-One of the various suggestions was to inject { path, NULL } when argc=0.
+I have some updates in the perf lock command (focused on 'report').
+The main change is to add -c (or --combine-locks) option to aggregate
+results based on lock class name.
 
-Given that execve(path, NULL, ...) is being used at least a little,
-hopefully there is nothing that depends on argc==0... :P
+ * changes from v1)
+  - rebased onto recent acme/perf/core
+  - add Jiri's Acked-by
 
+Without this option, the result deals with lock addresses so instances
+in the same lock class will have separate entries like below:
+
+  # perf lock report
+                  Name   acquired  contended   avg wait (ns) total wait (ns)   max wait (ns)   min wait (ns) 
+
+         rcu_read_lock     251225          0               0               0               0               0 
+   &(ei->i_block_re...       8731          0               0               0               0               0 
+   &sb->s_type->i_l...       8731          0               0               0               0               0 
+   hrtimer_bases.lo...       5261          0               0               0               0               0 
+   hrtimer_bases.lo...       2626          0               0               0               0               0 
+   hrtimer_bases.lo...       1953          0               0               0               0               0 
+   hrtimer_bases.lo...       1382          0               0               0               0               0 
+   cpu_hotplug_lock...       1350          0               0               0               0               0 
+   hrtimer_bases.lo...       1273          0               0               0               0               0 
+   hrtimer_bases.lo...       1269          0               0               0               0               0 
+   hrtimer_bases.lo...       1198          0               0               0               0               0 
+   hrtimer_bases.lo...       1116          0               0               0               0               0 
+           &base->lock       1109          0               0               0               0               0 
+   hrtimer_bases.lo...       1067          0               0               0               0               0 
+   hrtimer_bases.lo...       1052          0               0               0               0               0 
+   hrtimer_bases.lo...        957          0               0               0               0               0 
+   hrtimer_bases.lo...        948          0               0               0               0               0 
+          css_set_lock        791          0               0               0               0               0 
+   hrtimer_bases.lo...        752          0               0               0               0               0 
+   &lruvec->lru_loc...        747          5           11254           56272           18317            1412 
+   hrtimer_bases.lo...        738          0               0               0               0               0 
+   &newf->file_lock...        706         15            1025           15388            2279             618 
+   hrtimer_bases.lo...        702          0               0               0               0               0 
+   hrtimer_bases.lo...        694          0               0               0               0               0 
+  ...
+
+With -c option, the hrtimer_bases.lock would be combined into a single
+entry.  Also note that the lock names are correctly displayed now.
+
+  # perf lock report -c
+                  Name   acquired  contended   avg wait (ns) total wait (ns)   max wait (ns)   min wait (ns) 
+  
+         rcu_read_lock     251225          0               0               0               0               0 
+    hrtimer_bases.lock      39449          0               0               0               0               0 
+   &sb->s_type->i_l...      10301          1             662             662             662             662 
+      ptlock_ptr(page)      10173          2             701            1402             760             642 
+   &(ei->i_block_re...       8732          0               0               0               0               0 
+           &base->lock       6705          0               0               0               0               0 
+           &p->pi_lock       5549          0               0               0               0               0 
+   &dentry->d_lockr...       5010          4            1274            5097            1844             789 
+             &ep->lock       2750          0               0               0               0               0 
+   &(__futex_data.q...       2331          0               0               0               0               0 
+                (null)       1878          0               0               0               0               0 
+      cpu_hotplug_lock       1350          0               0               0               0               0 
+      &____s->seqcount       1349          0               0               0               0               0 
+      &newf->file_lock       1001         15            1025           15388            2279             618 
+  ...
+
+Maybe we can make it default later (with a config and --no-combine-locks).
+
+You can get it from 'perf/lock-combine-v2' branch at
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (6):
+  perf lock: Convert lockhash_table to use hlist
+  perf lock: Change type of lock_stat->addr to u64
+  perf lock: Sort map info based on class name
+  perf lock: Fix lock name length check for printing
+  perf lock: Add -c/--combine-locks option
+  perf lock: Carefully combine lock stats for discarded entries
+
+ tools/perf/Documentation/perf-lock.txt |   4 +
+ tools/perf/builtin-lock.c              | 155 +++++++++++++++++++------
+ 2 files changed, 124 insertions(+), 35 deletions(-)
+
+
+base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
 -- 
-Kees Cook
+2.35.0.rc0.227.g00780c9af4-goog
+

@@ -2,132 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 915F149EEA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0A049EE73
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344567AbiA0XJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344555AbiA0XIz (ORCPT
+        id S244973AbiA0XID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:08:03 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:27044 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236513AbiA0XIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:08:55 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E401EC061768
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:08:54 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so9266940pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Go5UOmrJA+s7smi2h52lD2tDLTL92TO4mF/3kSWc9Mw=;
-        b=BD2hpR7jg+O2kVPF1qJXnuIpWgp1ScyjuAwtsYLAXOQDA3zbUFoCnVJJqrfqpylj9I
-         WkldlnM7rS/nrlYZPEzyeNmMen8h5zRRumXIFqTs1NeKmEQvzAbFd1RxgdxH6oG+WCK3
-         A4qUAHhNqs6bC9yAGwD49KrJgLsgRsUQsKBig=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Go5UOmrJA+s7smi2h52lD2tDLTL92TO4mF/3kSWc9Mw=;
-        b=kIUQ0HY5IplySaG4pOaTDrwJCv7F4ni01486NTXydxphIvhXxNRsw1bjaad1tEja7N
-         9LGR10+hX+G1f9MemDIers2WFqezTYi4QGQpDKpdpeJ2zeDHf/UC1bPDD00tSj5Hhuu9
-         snWud0YedUebQ8ogerxLazjNtnHFCHZPyE7On1yiFVnfnH9A61q/vbsXX0EmLc9eoEhl
-         EKa7NGf1lb+T8PYF0/vr9bDqMF4HrPLhRiZslFWevE5JdP769fWSjM3RkqqjnDTq3/vT
-         jk1uUq+W49ntJWcqdNwUZgkgtbz0fIMwKYHrTZz6FNQq0UPF4u827uJMcMqLuIsZo0o4
-         61Xg==
-X-Gm-Message-State: AOAM533OJoiEr0Why3nW9yCHBZTtnY0WqceBWYCE+x2OvoOijAqtxZJe
-        Zw6vmIfCQZ6EES1oIa2GsPGTaQ==
-X-Google-Smtp-Source: ABdhPJzC64/S0pZWwwbAFZsH3pw2HjjqvrdmyZAjA0v0ob2Yy/chyC08JNhUoQmIoBfblbLksdOALg==
-X-Received: by 2002:a17:902:d4c5:: with SMTP id o5mr5877723plg.116.1643324934496;
-        Thu, 27 Jan 2022 15:08:54 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:723d:38a9:9e7f:3435])
-        by smtp.gmail.com with UTF8SMTPSA id 17sm7074374pfl.175.2022.01.27.15.08.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 15:08:53 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Lin Huang <hl@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Derek Basehore <dbasehore@chromium.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2 15/15] PM / devfreq: rk3399_dmc: Avoid static (reused) profile
-Date:   Thu, 27 Jan 2022 15:07:26 -0800
-Message-Id: <20220127150615.v2.15.I8d71e9555aca1fa7e532d22dd1ef27976f21799d@changeid>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-In-Reply-To: <20220127230727.3369358-1-briannorris@chromium.org>
-References: <20220127230727.3369358-1-briannorris@chromium.org>
+        Thu, 27 Jan 2022 18:08:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1643324882; x=1674860882;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RIc1G0jfMqESjsX/4a2c2KpqW6LjEkfd3i3QcfNLq/g=;
+  b=S0MGmVmzzX1yz2cLFCmngi5Hio9Zv3cVJbyG2d3kVfjXn6p5MlkpDkYH
+   vZntUb8BONWndJaSYN1ucgCLiWy3ebxBfeeMUDfiBDjxJG7W0R/wnywQJ
+   47l3f5i/3Lm/ILd0CjXssLUvDInc6hK+mZ6oBz0RZUib6bFN7kxI8wRHW
+   poqPFmbNf8SNpbO4ixa8/8ox2bX56qw7LhbhXI0Jj/rWIHFLXKclQxgek
+   M3GRdZj5oYfzphWHjKlifyK4lI5RndkWCHODiMQa65axVuGB6w9AMs1WK
+   RDe7ziVKOkywwpB46JkeD/PkdluDi6Rk5gCJur6Dh00VGS56+wXdOoEDo
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,321,1635177600"; 
+   d="scan'208";a="190525324"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2022 07:08:01 +0800
+IronPort-SDR: +XBjZvEBIa1A9pV2GM/XwazOS4ZBCBfZzas4C3ey2+TTVupWit3JgfFX3Joo34J78gZXRCeBFs
+ JelndTl8nuSOyNzhHaonqoePGBdJGF1qHKvGqPD7qv/FDmpf8xm3FnioQ/MuPTBwOLOtN+fZpH
+ 3fv7pWlpkicJB3589fQMnxDBA5ppza03kr+ooGp1z4zt95NyaAsanZnTHhiRj3fuF8d9AUDzoL
+ N+YzrnsTsEsfCVNdpHgnWnckwgptVUy2ZFgB5TMFcOefHQOA7hfEGUeZLLoHxE0G7aYn4wZJM7
+ EFnjhgeDtaLsZSfWIsVmcUXO
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 14:40:04 -0800
+IronPort-SDR: rcGeXFVH4e8oCA4qfbZq3Nx1u2BXlGXVFFR7AMgt2TJYztVIYe+obyEhY1bnFnUIFIorKJbKgG
+ 6XNl12e1q7F6sD+Mvs0S4+VFJRTUrqG965EZ/iSVGYrcoogZdgpT/nlRuC7mswcGxUAd+NmNGN
+ y4z7Xi9gZFbx3pfmniv/3zn41fQ/84wfiMG5N//0b5x91lr/FSQDA0DoLY5ValASAMPEmlXL1s
+ 6yvNJeybOXLBbC477gFgswYXTzdIbo0FYo93OertlvWVapMHXne//M+CwglXSZMa0+I/Qt3xDa
+ Z8s=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 15:08:01 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JlGTY0nQ9z1SVp4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:08:01 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1643324880; x=1645916881; bh=RIc1G0jfMqESjsX/4a2c2KpqW6LjEkfd3i3
+        QcfNLq/g=; b=I+8FNWGWJ/4MlV/z/th2/1EineZqntzCdjD1+SdzBRZmleDIasU
+        bDQHm2D3NYjKWvvl7CP3MGFkpk50BSKIdgdpnDDD2k5ag+1jVp/eA7j0i8a6w59z
+        ooUI+8JdH3Df02k9FxqaRt/DZp4KFOrK03D0VTm+psD1UCCZ5jmlNDll9dKF6Bn+
+        rpVGWQ3hj3eHNz/juwNltJAuRiZFSHsXqL/lo/5+cVViCYFI6ttU2yc/TNrvF1He
+        0CaT/njGqMqyEl7WmRJXWbOact3UD1oxAc2gtOSca0ice30aYLMyt6ak+SAqWbd8
+        rbs6ZBWWS5OFBv5v6vtPbF2uLe8WfREwEuw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wW8hFouotPJ8 for <linux-kernel@vger.kernel.org>;
+        Thu, 27 Jan 2022 15:08:00 -0800 (PST)
+Received: from [10.225.163.58] (unknown [10.225.163.58])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JlGTW0WqXz1RvlN;
+        Thu, 27 Jan 2022 15:07:58 -0800 (PST)
+Message-ID: <6e698ebf-e592-dd44-95a2-8d86416277f7@opensource.wdc.com>
+Date:   Fri, 28 Jan 2022 08:07:57 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] scsi: pm8001: Fix use-after-free for aborted TMF
+ sas_task
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        Ajish.Koshy@microchip.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viswas.G@microchip.com, chenxiang66@hisilicon.com
+References: <1643289172-165636-1-git-send-email-john.garry@huawei.com>
+ <1643289172-165636-3-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1643289172-165636-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This static struct can get reused if the device gets removed/reprobed,
-and that causes use-after-free in its ->freq_table.
+On 1/27/22 22:12, John Garry wrote:
+> Currently a use-after-free may occur if a TMF sas_task is aborted before
+> we handle the IO completion in mpi_ssp_completion(). The abort occurs due
+> to timeout.
+> 
+> When the timeout occurs, the SAS_TASK_STATE_ABORTED flag is set and the
+> sas_task is freed in pm8001_exec_internal_tmf_task().
+> 
+> However, if the IO completion occurs later, the IO completion still thinks
+> that the sas_task is available. Fix this by clearing the ccb->task if
+> the TMF times out - the IO completion handler does nothing if this pointer
+> is cleared.
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+> 
+> Note: For hisi_sas driver we already do something similar. However there
+> we also flush the completion queue interrupt to ensure that there is no
+> race in clearing the task pointer. Please advise if/how something similar
+> can be done here.
+> 
+>  drivers/scsi/pm8001/pm8001_sas.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index 160ee8b228c9..32edda3e55c6 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -769,8 +769,13 @@ static int pm8001_exec_internal_tmf_task(struct domain_device *dev,
+>  		res = -TMF_RESP_FUNC_FAILED;
+>  		/* Even TMF timed out, return direct. */
+>  		if (task->task_state_flags & SAS_TASK_STATE_ABORTED) {
+> +			struct pm8001_ccb_info *ccb = task->lldd_task;
+> +
+>  			pm8001_dbg(pm8001_ha, FAIL, "TMF task[%x]timeout.\n",
+>  				   tmf->tmf);
+> +
+> +			if (ccb)
+> +				ccb->task = NULL;
+>  			goto ex_err;
+>  		}
+>  
 
-Let's just move the struct to our dynamic allocation.
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
-Changes in v2:
- - New patch
-
- drivers/devfreq/rk3399_dmc.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 9615658d04ae..e494d1497d60 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -38,6 +38,7 @@
- struct rk3399_dmcfreq {
- 	struct device *dev;
- 	struct devfreq *devfreq;
-+	struct devfreq_dev_profile profile;
- 	struct devfreq_simple_ondemand_data ondemand_data;
- 	struct clk *dmc_clk;
- 	struct devfreq_event_dev *edev;
-@@ -228,13 +229,6 @@ static int rk3399_dmcfreq_get_cur_freq(struct device *dev, unsigned long *freq)
- 	return 0;
- }
- 
--static struct devfreq_dev_profile rk3399_devfreq_dmc_profile = {
--	.polling_ms	= 200,
--	.target		= rk3399_dmcfreq_target,
--	.get_dev_status	= rk3399_dmcfreq_get_dev_status,
--	.get_cur_freq	= rk3399_dmcfreq_get_cur_freq,
--};
--
- static __maybe_unused int rk3399_dmcfreq_suspend(struct device *dev)
- {
- 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(dev);
-@@ -422,10 +416,16 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 	data->volt = dev_pm_opp_get_voltage(opp);
- 	dev_pm_opp_put(opp);
- 
--	rk3399_devfreq_dmc_profile.initial_freq = data->rate;
-+	data->profile = (struct devfreq_dev_profile) {
-+		.polling_ms	= 200,
-+		.target		= rk3399_dmcfreq_target,
-+		.get_dev_status	= rk3399_dmcfreq_get_dev_status,
-+		.get_cur_freq	= rk3399_dmcfreq_get_cur_freq,
-+		.initial_freq	= data->rate,
-+	};
- 
- 	data->devfreq = devm_devfreq_add_device(dev,
--					   &rk3399_devfreq_dmc_profile,
-+					   &data->profile,
- 					   DEVFREQ_GOV_SIMPLE_ONDEMAND,
- 					   &data->ondemand_data);
- 	if (IS_ERR(data->devfreq)) {
 -- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+Damien Le Moal
+Western Digital Research

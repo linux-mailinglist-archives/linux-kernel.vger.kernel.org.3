@@ -2,115 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8D349DC7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB4549DC86
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237743AbiA0IZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:25:52 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57940 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiA0IZu (ORCPT
+        id S237756AbiA0I0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:26:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51816 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231513AbiA0I0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:25:50 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 97F941F782;
-        Thu, 27 Jan 2022 08:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643271949; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 27 Jan 2022 03:26:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643271978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9Q0FkSQmm1fWntRs1C5a+2X1IC7ibgX3XsHWMAzrK8A=;
-        b=d29mOoQK93zcDc6AY8VZqcYav5jp45qVch2NDpZxg5up8oPsZtZz9iZd0+LwB8l7Bqv8TY
-        YB9TQdlzSXwxRuhbKWYaZQZGGFNBcIf/hdxTgwq/hG0Wk0YdHZ/TTdHlrN79DatiOy5Rou
-        fGkimGB+7UI2sAfmcjwFZyC7OfUzo6k=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5285CA3B81;
-        Thu, 27 Jan 2022 08:25:49 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 09:25:48 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Manfred Spraul <manfred@colorfullife.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
-        shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
-        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
-        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
-        1vier1@web.de, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
- spinlocks
-Message-ID: <YfJXDDeDwZuBxs13@dhcp22.suse.cz>
-References: <20211222194828.15320-1-manfred@colorfullife.com>
- <20220126185340.58f88e8e1b153b6650c83270@linux-foundation.org>
- <c658f8c5-a808-f2f1-2e1e-cfb68dd19d6a@colorfullife.com>
+        bh=NPZpEk9tAlF/9TYdHvnoR4LLaJ/T4+GkuS6a0bKM6ZY=;
+        b=eJlodbCnBiZ7jJa+vo/BBMw2dqr4xfTcQy0PzGE5jOga8BYgR/0+vnusqC6L1EVNvjYa8/
+        YbZtZFaXbm0Ip5/LJ7tV7Jbc1k5JoZsd+Uq90HW1Ntr1oZQlcXyw/1xYNw+VSFZO6HA+VQ
+        7VEolbgjIxmEat1ds1YhCGf94/0OUv8=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-413-GDXuklN7NfWGJAAwIKCNvw-1; Thu, 27 Jan 2022 03:26:14 -0500
+X-MC-Unique: GDXuklN7NfWGJAAwIKCNvw-1
+Received: by mail-pf1-f199.google.com with SMTP id z20-20020aa791d4000000b004bd024eaf19so1229122pfa.16
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:26:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NPZpEk9tAlF/9TYdHvnoR4LLaJ/T4+GkuS6a0bKM6ZY=;
+        b=LtbH4yMmuQq85RubA+Z67+KtgBnr7EigF/1+THRQzI80BHMEi/x2Ojw617dXnWcwQ4
+         zKpdN0qHmLPA+WXacObun/MMUNXwIzefNbo/0yB7IVjApl1lWp7Qq53NBQAh51IAN0vZ
+         UUchZs8vN1yWmsP3vWYKlYv6ONuJHgv4sCT8ZHsMmGU68ijJpXYkG6UfAu80V9wnEwa9
+         GHVAwtI+JW2ONS9EP3FUxqzHgYgln8qLVUG1VvncSDhTJZBmpBuHEjDseDSAzlUAZker
+         fcs0dLSr4+vOqX4MuD6AI9XoW1RuySMp0+XCtR1p2Ss1s7wHMAhUOOOWuGjBD+jRI3YQ
+         sA2A==
+X-Gm-Message-State: AOAM5317eCBE83y4lUwwROraXHRmCQX0YaumwV2rnOcRvjaT5AfU2raS
+        XVyUawPxC2J4ma/Q2QQ4memek/ywQ07aCIKt7cBPlawoCxPLHCPWk4jsrT3ee625egA5LkRa65T
+        e1DoNAOp+d6MaAdnERcQfoxe/
+X-Received: by 2002:a17:90b:4b83:: with SMTP id lr3mr12923217pjb.42.1643271973621;
+        Thu, 27 Jan 2022 00:26:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxgdc/o7y6Ezn5wb5v88KfeYn2L3mr1v3k4YeB6Heq9fEXuUbTvnqLgME9ezyVe/hgVzmKzfA==
+X-Received: by 2002:a17:90b:4b83:: with SMTP id lr3mr12923196pjb.42.1643271973314;
+        Thu, 27 Jan 2022 00:26:13 -0800 (PST)
+Received: from [10.72.13.129] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k21sm4675088pff.33.2022.01.27.00.26.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 00:26:12 -0800 (PST)
+Message-ID: <67ab707b-b2a1-9efe-df1a-777893dc7099@redhat.com>
+Date:   Thu, 27 Jan 2022 16:26:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c658f8c5-a808-f2f1-2e1e-cfb68dd19d6a@colorfullife.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/4] drivers/net/virtio_net: Added RSS hash report
+ control.
+Content-Language: en-US
+To:     Andrew Melnychenko <andrew@daynix.com>, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        mst@redhat.com
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+References: <20220117080009.3055012-1-andrew@daynix.com>
+ <20220117080009.3055012-5-andrew@daynix.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220117080009.3055012-5-andrew@daynix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 27-01-22 06:59:50, Manfred Spraul wrote:
-> Hi Andrew,
-> 
-> On 1/27/22 03:53, Andrew Morton wrote:
-> > On Wed, 22 Dec 2021 20:48:28 +0100 Manfred Spraul <manfred@colorfullife.com> wrote:
-> > 
-> > > One codepath in find_alloc_undo() calls kvfree() while holding a spinlock.
-> > > Since vfree() can sleep this is a bug.
-> > > 
-> > > Previously, the code path used kfree(), and kfree() is safe to be called
-> > > while holding a spinlock.
-> > > 
-> > > Minghao proposed to fix this by updating find_alloc_undo().
-> > > 
-> > > Alternate proposal to fix this: Instead of changing find_alloc_undo(),
-> > > change kvfree() so that the same rules as for kfree() apply:
-> > > Having different rules for kfree() and kvfree() just asks for bugs.
-> > > 
-> > > Disadvantage: Releasing vmalloc'ed memory will be delayed a bit.
-> > I know we've been around this loop a bunch of times and deferring was
-> > considered.   But I forget the conclusion.  IIRC, mhocko was involved?
-> 
-> I do not remember a mail from mhocko.
 
-I do not remember either.
+在 2022/1/17 下午4:00, Andrew Melnychenko 写道:
+> Now it's possible to control supported hashflows.
+> Added hashflow set/get callbacks.
+> Also, disabling RXH_IP_SRC/DST for TCP would disable then for UDP.
+> TCP and UDP supports only:
+> ethtool -U eth0 rx-flow-hash tcp4 sd
+>      RXH_IP_SRC + RXH_IP_DST
+> ethtool -U eth0 rx-flow-hash tcp4 sdfn
+>      RXH_IP_SRC + RXH_IP_DST + RXH_L4_B_0_1 + RXH_L4_B_2_3
+>
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
 
-> 
-> Shakeel proposed to use the approach from Chi.
-> 
-> Decision: https://marc.info/?l=linux-kernel&m=164132032717757&w=2
 
-And I would agree with Shakeel and go with the original change to the
-ipc code. That is trivial and without any other side effects like this
-one. I bet nobody has evaluated what the undconditional deferred freeing
-has. At least changelog doesn't really dive into that more than a very
-vague statement that this will happen.
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-> With Reviewed-by:
-> 
-> https://marc.info/?l=linux-kernel&m=164132744522325&w=2
-> > > --- a/mm/util.c
-> > > +++ b/mm/util.c
-> > > @@ -610,12 +610,12 @@ EXPORT_SYMBOL(kvmalloc_node);
-> > >    * It is slightly more efficient to use kfree() or vfree() if you are certain
-> > >    * that you know which one to use.
-> > >    *
-> > > - * Context: Either preemptible task context or not-NMI interrupt.
-> > > + * Context: Any context except NMI interrupt.
-> > >    */
-> > >   void kvfree(const void *addr)
-> > >   {
-> > >   	if (is_vmalloc_addr(addr))
-> > > -		vfree(addr);
-> > > +		vfree_atomic(addr);
-> > >   	else
-> > >   		kfree(addr);
-> > >   }
-> 
 
--- 
-Michal Hocko
-SUSE Labs
+> ---
+>   drivers/net/virtio_net.c | 141 ++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 140 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 2c61f96ce3e6..f837d3257eb6 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -231,6 +231,7 @@ struct virtnet_info {
+>   	u8 rss_key_size;
+>   	u16 rss_indir_table_size;
+>   	u32 rss_hash_types_supported;
+> +	u32 rss_hash_types_saved;
+>   
+>   	/* Has control virtqueue */
+>   	bool has_cvq;
+> @@ -2274,6 +2275,7 @@ static void virtnet_init_default_rss(struct virtnet_info *vi)
+>   	int i = 0;
+>   
+>   	vi->ctrl->rss.hash_types = vi->rss_hash_types_supported;
+> +	vi->rss_hash_types_saved = vi->rss_hash_types_supported;
+>   	vi->ctrl->rss.indirection_table_mask = vi->rss_indir_table_size - 1;
+>   	vi->ctrl->rss.unclassified_queue = 0;
+>   
+> @@ -2288,6 +2290,121 @@ static void virtnet_init_default_rss(struct virtnet_info *vi)
+>   	netdev_rss_key_fill(vi->ctrl->rss.key, vi->rss_key_size);
+>   }
+>   
+> +static void virtnet_get_hashflow(const struct virtnet_info *vi, struct ethtool_rxnfc *info)
+> +{
+> +	info->data = 0;
+> +	switch (info->flow_type) {
+> +	case TCP_V4_FLOW:
+> +		if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_TCPv4) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST |
+> +						 RXH_L4_B_0_1 | RXH_L4_B_2_3;
+> +		} else if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_IPv4) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST;
+> +		}
+> +		break;
+> +	case TCP_V6_FLOW:
+> +		if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_TCPv6) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST |
+> +						 RXH_L4_B_0_1 | RXH_L4_B_2_3;
+> +		} else if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_IPv6) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST;
+> +		}
+> +		break;
+> +	case UDP_V4_FLOW:
+> +		if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_UDPv4) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST |
+> +						 RXH_L4_B_0_1 | RXH_L4_B_2_3;
+> +		} else if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_IPv4) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST;
+> +		}
+> +		break;
+> +	case UDP_V6_FLOW:
+> +		if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_UDPv6) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST |
+> +						 RXH_L4_B_0_1 | RXH_L4_B_2_3;
+> +		} else if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_IPv6) {
+> +			info->data = RXH_IP_SRC | RXH_IP_DST;
+> +		}
+> +		break;
+> +	case IPV4_FLOW:
+> +		if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_IPv4)
+> +			info->data = RXH_IP_SRC | RXH_IP_DST;
+> +
+> +		break;
+> +	case IPV6_FLOW:
+> +		if (vi->rss_hash_types_saved & VIRTIO_NET_RSS_HASH_TYPE_IPv6)
+> +			info->data = RXH_IP_SRC | RXH_IP_DST;
+> +
+> +		break;
+> +	default:
+> +		info->data = 0;
+> +		break;
+> +	}
+> +}
+> +
+> +static bool virtnet_set_hashflow(struct virtnet_info *vi, struct ethtool_rxnfc *info)
+> +{
+> +	u32 new_hashtypes = vi->rss_hash_types_saved;
+> +	bool is_disable = info->data & RXH_DISCARD;
+> +	bool is_l4 = info->data == (RXH_IP_SRC | RXH_IP_DST | RXH_L4_B_0_1 | RXH_L4_B_2_3);
+> +
+> +	/* supports only 'sd', 'sdfn' and 'r' */
+> +	if (!((info->data == (RXH_IP_SRC | RXH_IP_DST)) | is_l4 | is_disable))
+> +		return false;
+> +
+> +	switch (info->flow_type) {
+> +	case TCP_V4_FLOW:
+> +		new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv4 | VIRTIO_NET_RSS_HASH_TYPE_TCPv4);
+> +		if (!is_disable)
+> +			new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv4
+> +				| (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_TCPv4 : 0);
+> +		break;
+> +	case UDP_V4_FLOW:
+> +		new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv4 | VIRTIO_NET_RSS_HASH_TYPE_UDPv4);
+> +		if (!is_disable)
+> +			new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv4
+> +				| (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_UDPv4 : 0);
+> +		break;
+> +	case IPV4_FLOW:
+> +		new_hashtypes &= ~VIRTIO_NET_RSS_HASH_TYPE_IPv4;
+> +		if (!is_disable)
+> +			new_hashtypes = VIRTIO_NET_RSS_HASH_TYPE_IPv4;
+> +		break;
+> +	case TCP_V6_FLOW:
+> +		new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv6 | VIRTIO_NET_RSS_HASH_TYPE_TCPv6);
+> +		if (!is_disable)
+> +			new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv6
+> +				| (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_TCPv6 : 0);
+> +		break;
+> +	case UDP_V6_FLOW:
+> +		new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv6 | VIRTIO_NET_RSS_HASH_TYPE_UDPv6);
+> +		if (!is_disable)
+> +			new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv6
+> +				| (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_UDPv6 : 0);
+> +		break;
+> +	case IPV6_FLOW:
+> +		new_hashtypes &= ~VIRTIO_NET_RSS_HASH_TYPE_IPv6;
+> +		if (!is_disable)
+> +			new_hashtypes = VIRTIO_NET_RSS_HASH_TYPE_IPv6;
+> +		break;
+> +	default:
+> +		/* unsupported flow */
+> +		return false;
+> +	}
+> +
+> +	/* if unsupported hashtype was set */
+> +	if (new_hashtypes != (new_hashtypes & vi->rss_hash_types_supported))
+> +		return false;
+> +
+> +	if (new_hashtypes != vi->rss_hash_types_saved) {
+> +		vi->rss_hash_types_saved = new_hashtypes;
+> +		vi->ctrl->rss.hash_types = vi->rss_hash_types_saved;
+> +		if (vi->dev->features & NETIF_F_RXHASH)
+> +			return virtnet_commit_rss_command(vi);
+> +	}
+> +
+> +	return true;
+> +}
+>   
+>   static void virtnet_get_drvinfo(struct net_device *dev,
+>   				struct ethtool_drvinfo *info)
+> @@ -2573,6 +2690,27 @@ static int virtnet_get_rxnfc(struct net_device *dev, struct ethtool_rxnfc *info,
+>   	switch (info->cmd) {
+>   	case ETHTOOL_GRXRINGS:
+>   		info->data = vi->curr_queue_pairs;
+> +		break;
+> +	case ETHTOOL_GRXFH:
+> +		virtnet_get_hashflow(vi, info);
+> +		break;
+> +	default:
+> +		rc = -EOPNOTSUPP;
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+> +static int virtnet_set_rxnfc(struct net_device *dev, struct ethtool_rxnfc *info)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +	int rc = 0;
+> +
+> +	switch (info->cmd) {
+> +	case ETHTOOL_SRXFH:
+> +		if (!virtnet_set_hashflow(vi, info))
+> +			rc = -EINVAL;
+> +
+>   		break;
+>   	default:
+>   		rc = -EOPNOTSUPP;
+> @@ -2601,6 +2739,7 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
+>   	.get_rxfh = virtnet_get_rxfh,
+>   	.set_rxfh = virtnet_set_rxfh,
+>   	.get_rxnfc = virtnet_get_rxnfc,
+> +	.set_rxnfc = virtnet_set_rxnfc,
+>   };
+>   
+>   static void virtnet_freeze_down(struct virtio_device *vdev)
+> @@ -2855,7 +2994,7 @@ static int virtnet_set_features(struct net_device *dev,
+>   
+>   	if ((dev->features ^ features) & NETIF_F_RXHASH) {
+>   		if (features & NETIF_F_RXHASH)
+> -			vi->ctrl->rss.hash_types = vi->rss_hash_types_supported;
+> +			vi->ctrl->rss.hash_types = vi->rss_hash_types_saved;
+>   		else
+>   			vi->ctrl->rss.hash_types = VIRTIO_NET_HASH_REPORT_NONE;
+>   
+

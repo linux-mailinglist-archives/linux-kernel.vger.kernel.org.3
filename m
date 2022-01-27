@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 929D649E0F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96DC49E0F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240381AbiA0Lbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S240386AbiA0Lbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiA0Lbn (ORCPT
+        with ESMTP id S229691AbiA0Lbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:31:43 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F230BC061714;
-        Thu, 27 Jan 2022 03:31:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=B9zmfILtAtminki6w4+yjCQ5l4pbQADmPtKrAzTYH0w=; b=Twp1gVOJUcDy3nTRbzUSTOJtyl
-        cj/wRD6XfneVeqBqoBdUFbF1rA2NzHL6nhAzXZ7JBjeP0KV3i6Z+C68ngWr7JJXvTNsY2CKuEB60U
-        kRgLJ9TYHqJQKSzOwqnKDqHAXbAqUVOM25T+/HuE2ORpkthl6hjPIa37Arqu9M4FS6Tm5c+4Rp+i2
-        iNc04hVgmrVg1nz6ENmcATFcC56qzXG7HK8vrF54OztD1YCxYbpyRQw6omjNzeKKwWPxjjw71kaUv
-        vtS4sK2vs5UoSvQigZZynnhcfzC5Z50ePxR4isLVwIiRJxkQGdaTAYZmSfUxLSl7DJF0KSbn87xJu
-        uxn9PERA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nD2zp-0049P9-EN; Thu, 27 Jan 2022 11:31:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EF83D300268;
-        Thu, 27 Jan 2022 12:31:18 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D512A201C21AE; Thu, 27 Jan 2022 12:31:18 +0100 (CET)
-Date:   Thu, 27 Jan 2022 12:31:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Kyle Huey <me@kylehuey.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Robert O'Callahan <rocallahan@gmail.com>,
-        Keno Fischer <keno@juliacomputing.com>
-Subject: Re: [PATCH] x86/perf: Default freeze_on_smi on for Comet Lake and
- later.
-Message-ID: <YfKChjX61OW4CkYm@hirez.programming.kicks-ass.net>
-References: <20220122072644.92292-1-khuey@kylehuey.com>
- <878929bb-39e7-f1b1-a6a2-f6057517058f@citrix.com>
+        Thu, 27 Jan 2022 06:31:49 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D26C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:31:48 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso5670330wmh.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:31:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hkClxaa+2C8a0Gjj8wVr84ck/Y/nk6VOxGU9yJzk5zg=;
+        b=LiJaUPMq92a9bfWZNpvKXwGghvP4zSBcAMDzeZ/ReWu44m0+N68+ddiTjdr8P02zXx
+         zaH+11MhDX1nAmKSJIcan2E3OYlZzK6odIWYyzvDS+K83UQ/qJ4v4DJDbLTFOHFhGkWT
+         RizQFMxXQrQ3WuwfTgWdmBr6i5ncNvUlw8Me0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=hkClxaa+2C8a0Gjj8wVr84ck/Y/nk6VOxGU9yJzk5zg=;
+        b=XtBa+YYXhUEFdcBHhNnlzDnM9NUI+fW65T4bcHHrvihleqxdQMO77QT3k/f34YBsdD
+         6v12cdRdFk+NDFX/TCEhbHaQAf6Mtsz4oX1s6FxqbjDcdrRXY36twTiKoCaEPqH64pa0
+         uks/2sR5VM+O+oCYh+8iOI1mMyxE/2iIAjS4yoxs6LPe8Zc12RYioim0ssxSkrBsAOQY
+         UGmK0Nhao7lhLgNfduuSp9WCHIYr+/RJ9yZ22Tkb3z3x6D7oPeR3TyAYjr55t1Y9sGIs
+         JgOtptHLpsC/me0SDy8jG3UnFPqVoB+2TGA+zm+a7RDCc8ulZmVPTkoRxp+Ed5Jc6uRh
+         KLCQ==
+X-Gm-Message-State: AOAM532Yx7dccKrhPUiJbXKMMEhnnk2ILGgD6ZyZA1AiUhHvuD0rPYMn
+        KfkT+QkK1qHbeth8zotc/MqYig==
+X-Google-Smtp-Source: ABdhPJzsSgHQc4/Sisg9p2IJQo1l/N+Y/KjTBTOmd8sk+y5btszDk60YCnmxc1l3iGgHjdXMSGgnwg==
+X-Received: by 2002:a1c:7903:: with SMTP id l3mr2780924wme.43.1643283107438;
+        Thu, 27 Jan 2022 03:31:47 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id 5sm2288561wrb.113.2022.01.27.03.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 03:31:46 -0800 (PST)
+Date:   Thu, 27 Jan 2022 12:31:44 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pekka Paalanen <pekka.paalanen@collabora.co.uk>
+Subject: Re: [PATCH] drm/doc: Add section in the introduction page about
+ learning material
+Message-ID: <YfKCoOk2sxDzHVXv@phenom.ffwll.local>
+Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pekka Paalanen <pekka.paalanen@collabora.co.uk>
+References: <20220127082058.434421-1-javierm@redhat.com>
+ <c99a7784-7ac4-e305-1a06-dfb514a409ff@suse.de>
+ <b305cb36-1a09-c990-a3e6-98d420c62e3a@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <878929bb-39e7-f1b1-a6a2-f6057517058f@citrix.com>
+In-Reply-To: <b305cb36-1a09-c990-a3e6-98d420c62e3a@redhat.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:22:23AM +0000, Andrew Cooper wrote:
-
-> Frankly, it is an error that FREEZE_WHILE_SMM is under the kernels
-> control, and not SMM's control.  After all, it's SMM handling all the
-> UEFI secrets/etc.
+On Thu, Jan 27, 2022 at 11:50:30AM +0100, Javier Martinez Canillas wrote:
+> Hello Thomas,
 > 
-> Linux ought to set FREEZE_WHILE_SMM unilaterally, because most kernel
-> profiling probably won't want interference from SMM.  Root can always
-> disable FREEZE_WHILE_SMM if profiling is really wanted.
+> On 1/27/22 10:18, Thomas Zimmermann wrote:
+> > Hi Javier,
+> > 
+> > thanks for this patch.
+> > 
+> > Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >
 > 
-> I'm not sure if anything can be done on pre-FREEZE_WHILE_SMM CPUs.  Nor
-> AMD CPUs which are also gaining CPL3 SMM logic, and don't appear to have
-> any equivalent functionality.
+> Thanks!
+>  
+> > Find some ideas for consideration below.
+> > 
+> 
+> [snip]
+> 
+> >> +
+> >> +Learning material
+> >> +=================
+> > 
+> > Maybe 'External References'.
+> >
+> 
+> Agreed, I'll change it.
+> 
+> >> +
+> >> +Since the Linux DRM layer supports complex graphics devices, it can be quite
+> >> +overwhelming for newcomers to get familiar with all the needed concepts and
+> >> +learn the subsystem's internals.
+> > 
+> > It sounds a bit intimdating to me. Can we give it a positive spin?
+> >
+> 
+> Pekka also had reservations about this paragraph, so I think that will just
+> drop it. The goal of having this section was to ease the learning curve but
+> the way I worded it may reinforce the perception that DRM is hard to learn.
+> 
+> > IMHO we could add a separate section that talks about complexity and 
+> > provides guidelines about how to deal with it:  trivial HW? use simple 
+> > pipe;  dedicated VRAM? try TTM;  awkward color formats?  see 
+> > drm_format_helper.c
+> >
+> 
+> Indeed. And we can add such section as a follow-up. Maybe referring to some
+> of the drivers in drivers/gpu/drm/tiny.
 
-Which suggests something like this?
+Do we have a talk anywhere for tiny?
 
----
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index c91434056c29..5874fa088630 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4703,6 +4703,19 @@ static __initconst const struct x86_pmu intel_pmu = {
- 	.lbr_read		= intel_pmu_lbr_read_64,
- 	.lbr_save		= intel_pmu_lbr_save,
- 	.lbr_restore		= intel_pmu_lbr_restore,
-+
-+	/*
-+	 * SMM has access to all 4 rings and while traditionally SMM code only
-+	 * ran in CPL0, newer firmware is starting to make use of CPL3 in SMM.
-+	 *
-+	 * Since the EVENTSEL.{USR,OS} CPL filtering makes no distinction
-+	 * between SMM or not, this results in what should be pure userspace
-+	 * counters including SMM data.
-+	 *
-+	 * This is a clear privilege issue, therefore globally disable
-+	 * counting SMM by default.
-+	 */
-+	.attr_freeze_on_smi	= 1,
- };
- 
- static __init void intel_clovertown_quirk(void)
+Otherwise I think it'd be good to just add a paragraph about "hey tiny
+exists" and maybe link to fbdev helpers and simple pipe helpers to get
+people started with the right entry points for simple drivers.
+
+And make it clear that the above pile of links is more for general
+overview and if you don't yet know what exactly it is you need.
+
+Also I guess for this year's xdc I really need to volunteer someone to do
+a drm/tiny intro :-)
+
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

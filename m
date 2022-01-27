@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652E849EE42
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE4749EE47
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244561AbiA0Wtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 17:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S234377AbiA0Wwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 17:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiA0Wtx (ORCPT
+        with ESMTP id S229932AbiA0Wwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:49:53 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFC7C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:49:53 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id h12so4723805pjq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:49:53 -0800 (PST)
+        Thu, 27 Jan 2022 17:52:39 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A46C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:52:38 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id 15so3849993ilg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:52:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k+xO8EqLFUCui4EksMPBTtUzqUy69IME3pxskdaGT84=;
-        b=S/3NlMq/VzH6n8N/3ItPaKj87TfCkln/Xpf2ZWUcGIww2DDgYlXdWKPg0qHfB9n7s4
-         xdOiXsftmKSBycWFZkjTPVNWlFtY1Zf5COYn/bwEUt7AaInIQxQRuj0To48lViySlErr
-         KHE25WkSTam4RCChpke3fQtwBFMDfTfzQgEF92epl5Q1jV5Qo7gtwTjo3GhqYuVG2mrV
-         AGY9ZkM7jBHnHO1cpXN/E9CaSLinbz2ctsREOUw+jnvInnrMznwRbPxiUgTjrTf058uz
-         k5XaSUIDXVaUr7O1YWP1A7ms0N/RNfNHek0VY5lsH9FUySwzHcTT4pg9L33Etx9ukjH2
-         SYgg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s4m0SuB5V0XSaTQ7c/s3zbcks9iRovaFLAZKKzHJ6sA=;
+        b=PvzFJ1kh7JMWTPx40W7TtP9h89jsbeJHVz3JjOkCI8WC/xdjDeZpd5OSFCtYRA2T5b
+         fp/lrIwwGzYFl9xWj5HtUCN0Db9Aclio5MA0bPk68P8LFqSpZL3D8+pIRgPED1CvrYkj
+         PaueJkVBaHxQ3rbH2a8xNvbu0F8C1JzbObGrU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k+xO8EqLFUCui4EksMPBTtUzqUy69IME3pxskdaGT84=;
-        b=qxusmjFGxCytBak7/Oahr/mbPD2s8QVFOP1NJeS7A9ZRvh2js6xUmCN2SYYc0h98KZ
-         9m9TnATWEeWkcSZ8gbMJjOIxEG4XV2SJGRSp7M0rB6m7j0YH4wPC3f/CMGVwI5qfJUAO
-         MYvxeoqnEtCuTDFv3t5mo07dxDBCFq+cboxXhwTBivjd9oEBFaBZDeeVkSWaKBYqUx+j
-         YbsbTLz/0B0XgUSQ4ijsogRn7NpL1i/7+T3Z3BWZJ92/xcg8zywhHzk1ErFvBUn5ksjf
-         498iTTRedxfHZXqqwMYJsNVMkEuNCvRh44HAKLxm6HpP4zRxHBOyNtLM9sfF5WOydQD/
-         48XA==
-X-Gm-Message-State: AOAM533Ol1rMXp1joN7V4Zj0VSaZwBkTeBOmnSPgTFOCOSSKiUDq13KF
-        8lcwSvIa1Sob+qqWfQLflOGNiD7SjZwQb/JyFqP6LA==
-X-Google-Smtp-Source: ABdhPJzHixJG/xXB3xwpj3793Z17iaq6LfTsT5F2gkjyLAl6ZDQgwQE9zFs+Zx3q+fX/aMrEm2pow6J2TZZv0OWaIp8=
-X-Received: by 2002:a17:90b:4a82:: with SMTP id lp2mr6552523pjb.179.1643323792568;
- Thu, 27 Jan 2022 14:49:52 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s4m0SuB5V0XSaTQ7c/s3zbcks9iRovaFLAZKKzHJ6sA=;
+        b=hh+TzZN1e1aCyP73B7Yg53fggJ79PzLL535Sj8DYl3HlDqne7Sj1zT5Mo6lCHtyAco
+         uShPicSMdpb4vI88Mjykgq7GD52WNnbEQomMfg3vfozMiuMBufroiZJIO7taF/xTgPm/
+         E8f4sOaYY807j8ZwtVNmzEJG3QDZGDywE9FcQ/cCP2u4sgz+4e4UwWnh5mByKOHPMWEM
+         xQfiRYSn2N6WFyRawQPmENW5IZAR0C4boZ7nCtfUqm0aGYqkCJBQqB8+3/wpnCqPy214
+         +YmeGBYMvRsK9qi3JfzMYqBRx9a7nNmAQ/U+FSExsEM7RNcWM116TJrzjW9ZR4bw7Vpc
+         a3sw==
+X-Gm-Message-State: AOAM5333S8LsscJ9ovl/hLwjDFqFL48P8h9SH0444Eo/n+4bqKvnB3uc
+        IuXPENQxg7RD2wSaMX4fvd/5LQ==
+X-Google-Smtp-Source: ABdhPJwTEO2adHqgnDAv0UCrrD/gmOsue8B+UNLBfkQjtNM4/AFGK/mQ0ET4LOGwVDJrRnz958OeKw==
+X-Received: by 2002:a92:d84f:: with SMTP id h15mr4204137ilq.96.1643323958193;
+        Thu, 27 Jan 2022 14:52:38 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id n23sm7022315ioo.55.2022.01.27.14.52.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 14:52:37 -0800 (PST)
+Subject: Re: [PATCH] selftests: futex: Use variable MAKE instead of make
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Bamvor Jian Zhang <bamvor.zhangjian@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220127174447.754605-1-usama.anjum@collabora.com>
+ <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b5b90951-f528-cd47-e6a1-e38c0de58070@linuxfoundation.org>
+Date:   Thu, 27 Jan 2022 15:52:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20211215001812.9006-1-tharvey@gateworks.com> <20220126090739.GH4686@dragon>
-In-Reply-To: <20220126090739.GH4686@dragon>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 27 Jan 2022 14:49:41 -0800
-Message-ID: <CAJ+vNU3Xj-b2BSc_6MQrtrh-G=5dMdMmw0S8EtujVz_7FvkQ0w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8m{m,n}_venice*: add gpio-line-names
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 1:07 AM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Tue, Dec 14, 2021 at 04:18:12PM -0800, Tim Harvey wrote:
-> > Add gpio-line-names for the various GPIO's used on Gateworks Venice
-> > boards. Note that these GPIO's are typically 'configured' in Boot
-> > Firmware via gpio-hog therefore we only configure line names to keep the
-> > boot firmware configuration from changing on kernel init.
-> >
-> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
->
-> It doesn't apply to my imx/dt64 branch.  Could you rebase?
->
+On 1/27/22 11:09 AM, André Almeida wrote:
+> Hi Usama,
+> 
+> Às 14:44 de 27/01/22, Muhammad Usama Anjum escreveu:
+>> Recursive make commands should always use the variable MAKE, not the
+>> explicit command name ‘make’. This has benefits and removes the
+>> following warning when multiple jobs are used for the build:
+>>
+>> make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+>>
+>> Fixes: a8ba798bc8ec ("selftests: enable O and KBUILD_OUTPUT")
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> Thanks for the patch!
+> 
+> Reviewed-by: André Almeida <andrealmeid@collabora.com>
+> 
 
-Shawn,
+Thank you for the patch. Applied to linux-kselftest fixes for rc3
 
-Sure, I'll try to submit another version within a couple of days.
-
-Did you happen to see 'arm64: dts: imx8mm-venice*: add PCIe support'
-[1]? It seems to have been archived for some reason and it may have to
-be rebased after I re-post this one unless you can take that now.
-
-Best Regards,
-
-Tim
-[1] - https://patchwork.kernel.org/project/linux-arm-kernel/patch/20211216164149.13333-1-tharvey@gateworks.com/
+thanks,
+-- Shuah

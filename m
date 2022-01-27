@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 602DF49EE29
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D110749EE2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbiA0Wj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 17:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S237532AbiA0WlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 17:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiA0WjZ (ORCPT
+        with ESMTP id S231520AbiA0WlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:39:25 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A69C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:39:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=huzZ2QGJecRKdg+K0K2zU9hS+JR+Iha4VJtCOeMYbS8=; b=Foa/egyURXw2P8f4N1yEOQT8B+
-        ul7ZW1HG6YV1jkVrn3SbIFHNWCgDCezoff7JBJ+mnsiVvoATA1+OOKFs3c4ie3itT0Lymn4QbEEML
-        ioqY8Euw0uKN2qzfZWMFt9MhrIJGYF8wSnURwaqBYM5IUSWZLNwGYCchmhSrDJZi+3KMUavl+b0cv
-        akymDbu+Xq+slndmmfvkWBwUMWscJvIFB7SmBWSpTVphi2UDa6eJ4GaXWXBya8TM8+qyaGtxg6Rsi
-        WeCyArwcxwLNnmvFT4Zkz89fyKfEWI5reB3XKY+NbC2ueWtAlg1VjZoClvwTe0UoTBWHFe5BfVfvC
-        +7+SLjTw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDDQG-005jk6-Vm; Thu, 27 Jan 2022 22:39:21 +0000
-Message-ID: <aa0b1b37-de0b-c859-5d9b-9de406c770b9@infradead.org>
-Date:   Thu, 27 Jan 2022 14:39:17 -0800
+        Thu, 27 Jan 2022 17:41:06 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C918C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:41:06 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so4036362otf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:41:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=C79nec5d4UWFoxeuqvc4pTvKWdk7yx+4+JUc6wJBQYE=;
+        b=IIkUwq5frbe8Fuxr7LiChay7jMsr50X27LAdiOIiSi6CTTvrZlPi65qZPJ5ZcAd1Ma
+         BiTTL5IgCMax9MQJEm5SMrp1iqBP895vbaQ7PzuQVDUMOnGdrEaoqwhrISUH28jJ5Pof
+         s9TH1wGmSt5TMSq6VARBdJm3eopMzgfWE3mbo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=C79nec5d4UWFoxeuqvc4pTvKWdk7yx+4+JUc6wJBQYE=;
+        b=jxQMTTAqFhUW28uJw9rULpc7mW3Apw9FZqf/VHLuWbGB/vWmCn+pzh7Aoqc1jNDbJG
+         XKO08pVVbvG/LZWyWh7odgH/OPkNjG9X1qlNtvptBp0h1MRDpZ3HaNgQURClsLa7bgJ+
+         MHxicM+IocHrPO7nhD8maoJJz4545A56HZN1Z26tBWLeU0zv22T+lxlW21DpMSIO3Sf/
+         DmsztuUa5s+R1v4wuheDUBuneE7rYzd9Db8oC5cfEAx8U9VxM0FZhkEkPZsktqIhsRMK
+         OqvG+KCvX2GZY7xa7DRsLXllIkXVsQo8DCMKjUPBLPhiFsVzvXSdTDqr2lYvrOia8T9+
+         0Xiw==
+X-Gm-Message-State: AOAM530EuFFNeI5ESl/TBvuvg9m6wMp5y4jhLs7+JRlbwhmxkGphJA59
+        MZtvrEg9lAsi/JsYG4ezocc8KjQuVBai57+ClDO25tPbi7I=
+X-Google-Smtp-Source: ABdhPJwEVMVdW2UZvQhaXtEbQBFp75r9XdNB5RKn5cJ9Z8p872vkLHsuYPuDaieQcnKb114ZraXLMuYgUbl81wcf0gs=
+X-Received: by 2002:a9d:6f06:: with SMTP id n6mr3225915otq.159.1643323265903;
+ Thu, 27 Jan 2022 14:41:05 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Jan 2022 14:41:05 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] drivers/misc: add transfer ioctl for HPS
-Content-Language: en-US
-To:     =?UTF-8?B?U2FtaSBLecO2c3RpbMOk?= <skyostil@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     dtor@chromium.org, evanbenn@chromium.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-References: <20220127083545.1020423-1-skyostil@chromium.org>
- <20220127083545.1020423-3-skyostil@chromium.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220127083545.1020423-3-skyostil@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127210024.25597-3-quic_amelende@quicinc.com>
+References: <20220127210024.25597-1-quic_amelende@quicinc.com> <20220127210024.25597-3-quic_amelende@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 27 Jan 2022 14:41:05 -0800
+Message-ID: <CAE-0n50UzVw4wqpV1v-T3k2if+m6jv-Tx7+N2kD4O=J60zmuoA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] input: misc: pm8941-pwrkey: add support for PON
+ GEN3 base addresses
+To:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
+        bjorn.andersson@linaro.org, skakit@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Anjelique Melendez (2022-01-27 13:00:25)
+> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
+> index e0240db12d4f..7005aede4f81 100644
+> --- a/drivers/input/misc/pm8941-pwrkey.c
+> +++ b/drivers/input/misc/pm8941-pwrkey.c
+> @@ -200,15 +207,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>                         dev_err(&pdev->dev, "failed to locate regmap\n");
+>                         return -ENODEV;
+>                 }
+> +       }
+>
+> -               error = of_property_read_u32(parent->of_node,
+> -                                            "reg", &pwrkey->baseaddr);
+> -       } else {
+> -               error = of_property_read_u32(pdev->dev.of_node, "reg",
+> -                                            &pwrkey->baseaddr);
+> +       addr = of_get_address(regmap_node, 0, NULL, NULL);
+> +       if (!addr) {
+> +               dev_err(&pdev->dev, "reg property missing\n");
+> +               return -EINVAL;
+> +       }
+> +       pwrkey->baseaddr = be32_to_cpu(*addr);
 
+Isn't this supposed to be be32_to_cpup(addr)?
 
-On 1/27/22 00:35, Sami Kyöstilä wrote:
-> This patch adds an ioctl operation for sending and receiving data from
-> the ChromeOS snooping protection sensor (a.k.a., HPS). This allows
-> userspace programs to perform a combined read/write I2C transaction
-> through a single syscall.
-> 
-> The I2C wire protocol for the device is documented at:
-> 
-> https://chromium.googlesource.com/chromiumos/platform/hps-firmware/+/
-> refs/heads/main/docs/host_device_i2c_protocol.md
-> 
-> Signed-off-by: Sami Kyöstilä <skyostil@chromium.org>
-> ---
-> 
->  MAINTAINERS              |  1 +
->  drivers/misc/hps-i2c.c   | 81 ++++++++++++++++++++++++++++++++++++++++
->  include/uapi/linux/hps.h | 20 ++++++++++
->  3 files changed, 102 insertions(+)
->  create mode 100644 include/uapi/linux/hps.h
-> 
-
-Hi--
-
-If your next patch version continues to use an ioctl, its magic "number"
-('h') should be documented in Documentation/userspace-api/ioctl/ioctl-number.rst.
-
-thanks.
-
-> diff --git a/include/uapi/linux/hps.h b/include/uapi/linux/hps.h
-> new file mode 100644
-> index 000000000000..2c1bd174cd02
-> --- /dev/null
-> +++ b/include/uapi/linux/hps.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> +/*
-> + *  Copyright 2022 Google LLC.
-> + */
 > +
-> +#ifndef _UAPI_HPS_H
-> +#define _UAPI_HPS_H
-> +
-> +#include <linux/types.h>
-> +
-> +#define HPS_IOC_TRANSFER	_IOWR('h', 0x01, struct hps_transfer_ioctl_data)
-> +
-> +struct hps_transfer_ioctl_data {
-> +	__u32 isize;			/* Number of bytes to send */
-> +	unsigned char __user *ibuf;	/* Input buffer */
-> +	__u32 osize;			/* Number of bytes to receive */
-> +	unsigned char __user *obuf;	/* Output buffer */
-> +};
-> +
-> +#endif /* _UAPI_HPS_H */
+> +       if (pwrkey->data->has_pon_pbs) {
+> +               /* PON_PBS base address is optional */
+> +               addr = of_get_address(regmap_node, 1, NULL, NULL);
+> +               if (addr)
+> +                       pwrkey->pon_pbs_baseaddr = be32_to_cpu(*addr);
 
--- 
-~Randy
+Isn't this supposed to be be32_to_cpup(addr)?
+
+>         }
+> -       if (error)
+> -               return error;
+>
+>         pwrkey->irq = platform_get_irq(pdev, 0);
+>         if (pwrkey->irq < 0)

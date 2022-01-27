@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D892749D86F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDB349D844
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235343AbiA0Ct3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:49:29 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55032 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiA0Ct1 (ORCPT
+        id S235260AbiA0Crx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:47:53 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:55138 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235311AbiA0Cru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:49:27 -0500
+        Wed, 26 Jan 2022 21:47:50 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B9141F46E;
-        Thu, 27 Jan 2022 02:49:25 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2D50621901;
+        Thu, 27 Jan 2022 02:47:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643251765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1643251668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7zgeLiYzUJoQQtP3ZAixzvth8UZ5GI6sC37jShYD+Pg=;
-        b=qDF0dErOQFLqixkI/i+1BahZJOIZW7oLQsnfE8Mpttq9d/W7z8HXr9UieTT8FobRX/DcnK
-        0k7UkCHp7VLB7YCQTnFqYuA6cX3Wl0Q52Sza81Nwfdu8rGxPBKXfIdmFfJ3PLKz5ccyXnc
-        SRLoRuAFYyiOKWPZ4uDN1X1+WwIcCfs=
+        bh=M8NYMcBcZD8GUv0cDvsP1eePtGigG8J8np/yV6nLjQQ=;
+        b=lpTMtDdgzXu6IXlWF2Cla7JZeA4O6IZP0tjrp8fZaU7ivDos+PHoL/XQMfCABF+bEfNOP4
+        asGZxs7WKvGfhEBJWG6JTtSILEhDDfyUZDxdz3isEFlXeNYP4t4z60IMGMWtpxXKM9DXAB
+        qZWJthZJaYv1R8Swu1zG6SDpKtDJcMw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643251765;
+        s=susede2_ed25519; t=1643251668;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7zgeLiYzUJoQQtP3ZAixzvth8UZ5GI6sC37jShYD+Pg=;
-        b=VZ8PyF0cOsTApVgFFYAXl4bhTOrGE0ayz0BiAfXtH993usgibLIneMqQvm6eqIm+U+xfqv
-        6HsMfDzO5pCzrJAw==
+        bh=M8NYMcBcZD8GUv0cDvsP1eePtGigG8J8np/yV6nLjQQ=;
+        b=GajJ1CW7bGmknt+eypyqRIr6NQ5RkVudFMz7+fbL2W6FyuUKWG82yY6INCh5zJBg+nHfCU
+        1tfjV2LY/eskY2DQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 360D613E46;
-        Thu, 27 Jan 2022 02:49:17 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5662613E46;
+        Thu, 27 Jan 2022 02:47:40 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id dzTOOC0I8mFpLAAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 27 Jan 2022 02:49:17 +0000
-Subject: [PATCH 8/9] block/bfq-iosched.c: use "false" rather than
- "BLK_RW_ASYNC"
+        id 1653BcwH8mHgKwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 27 Jan 2022 02:47:40 +0000
+Subject: [PATCH 3/9] f2fs: change retry waiting for
+ f2fs_write_single_data_page()
 From:   NeilBrown <neilb@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
@@ -68,7 +68,7 @@ Cc:     linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
         ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
         linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
 Date:   Thu, 27 Jan 2022 13:46:29 +1100
-Message-ID: <164325158959.29787.11286416793279041497.stgit@noble.brown>
+Message-ID: <164325158956.29787.7016948342209980097.stgit@noble.brown>
 In-Reply-To: <164325106958.29787.4865219843242892726.stgit@noble.brown>
 References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -79,26 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bfq_get_queue() expects a "bool" for the third arg, so pass "false"
-rather than "BLK_RW_ASYNC" which will soon be removed.
+f2fs_write_single_data_page() can return -EAGAIN if it cannot get
+the cp_rwsem lock - it holds a page lock and so cannot wait for it.
+
+Some code which calls f2fs_write_single_data_page() use
+congestion_wait() and then tries again.  congestion_wait() doesn't do
+anything useful as congestion is no longer tracked.  So this is just a
+simple sleep.
+
+A better approach is it wait until the cp_rwsem lock can be taken - then
+try again.  There is certainly no point trying again *before* the lock
+can be taken.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- block/bfq-iosched.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/f2fs/compress.c |    6 +++---
+ fs/f2fs/data.c     |    9 ++++++---
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 0c612a911696..4e645ae1e066 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5448,7 +5448,7 @@ static void bfq_check_ioprio_change(struct bfq_io_cq *bic, struct bio *bio)
- 	bfqq = bic_to_bfqq(bic, false);
- 	if (bfqq) {
- 		bfq_release_process_ref(bfqd, bfqq);
--		bfqq = bfq_get_queue(bfqd, bio, BLK_RW_ASYNC, bic, true);
-+		bfqq = bfq_get_queue(bfqd, bio, false, bic, true);
- 		bic_set_bfqq(bic, bfqq, false);
- 	}
- 
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index d0c3aeba5945..58ff7f4b296c 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -1505,9 +1505,9 @@ static int f2fs_write_raw_pages(struct compress_ctx *cc,
+ 				if (IS_NOQUOTA(cc->inode))
+ 					return 0;
+ 				ret = 0;
+-				cond_resched();
+-				congestion_wait(BLK_RW_ASYNC,
+-						DEFAULT_IO_TIMEOUT);
++				/* Wait until we can get the lock, then try again. */
++				f2fs_lock_op(F2FS_I_SB(cc->inode));
++				f2fs_unlock_op(F2FS_I_SB(cc->inode));
+ 				goto retry_write;
+ 			}
+ 			return ret;
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 8c417864c66a..1d2341163e2c 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3047,9 +3047,12 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 				} else if (ret == -EAGAIN) {
+ 					ret = 0;
+ 					if (wbc->sync_mode == WB_SYNC_ALL) {
+-						cond_resched();
+-						congestion_wait(BLK_RW_ASYNC,
+-							DEFAULT_IO_TIMEOUT);
++						/* Wait until we can get the
++						 * lock, then try again.
++						 */
++						f2fs_lock_op(F2FS_I_SB(mapping->host));
++						f2fs_unlock_op(F2FS_I_SB(mapping->host));
++
+ 						goto retry_write;
+ 					}
+ 					goto next;
 
 

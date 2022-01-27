@@ -2,68 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2104449E82E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A4849E837
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244226AbiA0Q4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:56:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36854 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiA0Q4b (ORCPT
+        id S244234AbiA0Q6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229861AbiA0Q6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:56:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0590AB800E2;
-        Thu, 27 Jan 2022 16:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8B8C340E4;
-        Thu, 27 Jan 2022 16:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643302588;
-        bh=Jbbt90GOScnUkca96ukAtB0TEYFj51dYwo1DO4Rum0s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oOnw0x/alJ+ho6f0ec8wuvxvo+ON2SwStZQNk4Z/kIs99P7+vMIBiC5LpUsHsY+0K
-         p4PyoVSDtL3sRD+obH6dyEo5QEamQznXpOA0hwaQ/Dd53MX6nL7euiOkwQko+JZtNE
-         AMXfKPbIC9WPgz0cMGYm0iFCkHOjMYOAFk+mLyxILf6zyOtlIC3mNgfdgskIr7kLjj
-         J/FkEam5mfZFJoUd9hfArJyBZAosejauzDBHaAQWo1/OwA1IHzHuKT5XxuNhFtoDd7
-         j4Hw2/RCLTJ8gpHGXKc2zOBWuU84LeOCIsiSFiKuWXIQCq/6rY0ZcnruwzOVPM/rke
-         mbbxhf7UEKehg==
-Date:   Thu, 27 Jan 2022 08:56:27 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
-Message-ID: <20220127085627.70b31e30@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <YfK9uV0BviEiemDi@lunn.ch>
-References: <20220127110742.922752-1-o.rempel@pengutronix.de>
-        <YfK9uV0BviEiemDi@lunn.ch>
+        Thu, 27 Jan 2022 11:58:43 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68659C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 08:58:43 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id w21so5860437uan.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 08:58:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NLme/433a58T3gIWlGpAxVQvTCuWVACc4YberEGmNIo=;
+        b=n4tu/+nNP4sEfAGdjNkGA8312svbJGWvOq3ODIrTp+85ZWThNRiIQcmPRAHPFMEGcZ
+         AnpTvSveHY8Ol4KruPifGwItn9RrKCgy5t8tgQC36XoC7fvtg7UDWNx2psvGwUNtmiOw
+         eFfco4CV2kzR2PzJA6JhfGPBoOe9JlFtXeaC7sBwAAKCUf70Yf0NzMkc0AxD2mBnunmx
+         R1eWgyBf5ebB8zWi+qOlGykYFGt/4HY/vT3ZO7dsKkMfrwoVE7XCRWwgGDLeNWO18SMC
+         Sw4N8+PGicSF4dXqP4KCOtwLwHRGmRUYz23MQd7ke9InPniZEFQ46ngW5ZpLtVu7efJ0
+         y8RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NLme/433a58T3gIWlGpAxVQvTCuWVACc4YberEGmNIo=;
+        b=gvGAEVJcSJMiuae12/FrEVNcXRZ+RQLmhWnh9C5ED9T5VtngCjC7nenH2JJyTbv63I
+         wycfZsMef3bGWO2lTsEQwdCdkUxK+cnq5+W7pLQHlFObHLxNil5DAAfy33W3HqeDs08a
+         4ZqXdmzXBSVEHYa6aNVYySknVXJgPrQkN2A/7WK0KJRJbaxNrAV9ipbUazAwoxTZda1O
+         8TiDQh8RY7GtW7k27OrtaHXV+D8f5l0XZKtGpGLwxKI6Zn82lbXv+da70wkzD56zHdZq
+         6NwaNkVk0DYTpbkxdg4H9hYk5JbdKDJtFa5HTB6eTO1eRrmrvVgbYiUJYxTmRWnBRtNg
+         IEeQ==
+X-Gm-Message-State: AOAM531ey6BjVXgr8CnpLZoFm50SDy2aJvNQx65y33VadCQe5/f/25MQ
+        wLYW1iSiiXr2keBtO4guzVdd3qrUj9lDfk34JNPDYA==
+X-Google-Smtp-Source: ABdhPJzwFTP8csKGvfIkyuRmgp50a7Rns//kBNw/6IfQvYWQsGNmGo4LNmG4xqeN7TBOaXBMw4coKQzECPGabRB9MzM=
+X-Received: by 2002:a67:c094:: with SMTP id x20mr1948297vsi.57.1643302722493;
+ Thu, 27 Jan 2022 08:58:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com> <cb11d2e0-dd03-9a48-74f3-0a22f49f16b5@canonical.com>
+In-Reply-To: <cb11d2e0-dd03-9a48-74f3-0a22f49f16b5@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Thu, 27 Jan 2022 18:58:30 +0200
+Message-ID: <CAPLW+4=Hj-vamn5EoV-SmB5JwEbuik9hF2XuhB+tU11GwXPQdg@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 16:43:53 +0100 Andrew Lunn wrote:
-> On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
-> > The weakest link of usbnet devices is the USB cable. Currently there is
-> > no way to automatically detect cable related issues except of analyzing
-> > kernel log, which would differ depending on the USB host controller.
-> > 
-> > The Ethernet packet counter could potentially show evidence of some USB
-> > related issues, but can be Ethernet related problem as well.  
-> 
-> I don't know the usbnet drivers very well. A quick look suggests they
-> don't support statistics via ethtool -S. So you could make use of that
-> to return statistics about USB error events.
+On Thu, 27 Jan 2022 at 11:33, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 27/12/2021 12:29, Krzysztof Kozlowski wrote:
+> > Hi,
+> >
+> > Second pull with DTS for ARM64, on top of previous pull.
+> >
+> > Best regards,
+> > Krzysztof
+> >
+> >
+> > The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
+> >
+> >   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
+> >
+> > are available in the Git repository at:
+> >
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
+> >
+> > for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
+> >
+> >   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
+> >
+> > ----------------------------------------------------------------
+> > Samsung DTS ARM64 changes for v5.17, part two
+> >
+> > Add initial Exynos850 support and WinLink E850-96 board using it.
+> >
+> > ----------------------------------------------------------------
+> > Sam Protsenko (2):
+> >       arm64: dts: exynos: Add initial Exynos850 SoC support
+> >       arm64: dts: exynos: Add initial E850-96 board support
+> >
+>
+> I'll send all this as v5.18 material, so this pull-req can be skipped.
+>
 
-On using devlink health - it is great when you want to attach some extra
-info to the error report. If you're just counting different types of
-errors seems like an overkill.
+Krzysztof,
 
-> However, GregKH point still stands, maybe such statistics should be
-> made for all USB devices, and be available in /sys/bus/usb/devices/*
+As clock changes are merged in mainline now, do you want me to re-send
+those two dts patches using corresponding clock constants, instead of
+hard-coded numbers?
+
+>
+> Best regards,
+> Krzysztof

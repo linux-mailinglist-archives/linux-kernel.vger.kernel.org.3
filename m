@@ -2,200 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC2B49DE41
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600A249DE43
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238709AbiA0Jlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiA0Jls (ORCPT
+        id S238730AbiA0Jl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:41:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52770 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238725AbiA0Jl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:41:48 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228A7C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:41:48 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id v74so2162877pfc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:41:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ajou.ac.kr; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FwGYXa/4Ke/nl7w6rwwFT93Jqd/KRsceKw3bmpTizd0=;
-        b=c7f7zsHi9kFYEI3DLIcZJNkTZ6mwWpT5jJzA3XquJWSc3nVDPyVjgD2LDaCRl2f49L
-         E8jlbenDE0bp4V7semQXNIXUMfqgcbPy4QzrW1xm3E1yq4f80G0IKO2ZnQJGUKgAEqKN
-         VXG0hltwq4W/ZVrupfCfQ+uI3sCzmcdEzRr4E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FwGYXa/4Ke/nl7w6rwwFT93Jqd/KRsceKw3bmpTizd0=;
-        b=Fzh7bdWWuiZKcWrcyqOoPVHFNJRcsou9Yz9aA4btIW5wMnUN1jjXpyMZ0+33+lbQut
-         1V7mJMolE+7BAwmIBX+3hvFTUrh937pAnxl3dYTsLX2wmR5BSnGbkLVOf6Q5tsOw7O6w
-         XhmO3bhdcaDlhq2sZg5iVKWh+6DC81bcY4ih3nQhD0l5bMwGbv7V0A6Kab+id1q50oJO
-         9uf1sCV7+8GOpcPAVHIL2bnvK5DL78SZzf/CUYOkMI1q07xJqJYLqO++tjAsn1QiAa61
-         nVl/4mDKD68BImG+E5xKaWY3kdTdDhhKShzLCwalYPu5HWltmjxC8sftkSpEzQi96jQH
-         kRpg==
-X-Gm-Message-State: AOAM531Xx591JubLV/lRZnWsxmP7gxzRQjF26B+GaXSh3E8psH7njc9+
-        QsUxYAv23pt0Jo5V4O6QQ0SkOQ==
-X-Google-Smtp-Source: ABdhPJyqApfUm7sSZ0dQD2FVycwOL7CDbEG0tcN66TiQouXhJL6YT0Y3ygdGR6HPOBbUNgizsWukrw==
-X-Received: by 2002:a63:d54:: with SMTP id 20mr2276891pgn.442.1643276507407;
-        Thu, 27 Jan 2022 01:41:47 -0800 (PST)
-Received: from swarm08 ([210.107.197.32])
-        by smtp.gmail.com with ESMTPSA id t17sm5695302pgm.69.2022.01.27.01.41.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 27 Jan 2022 01:41:46 -0800 (PST)
-Date:   Thu, 27 Jan 2022 18:41:42 +0900
-From:   Jonghyeon Kim <tome01@ajou.ac.kr>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, akpm@linux-foundation.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 1/2] mm/memory_hotplug: Export shrink span functions for
- zone and node
-Message-ID: <20220127094142.GA31409@swarm08>
-References: <20220126170002.19754-1-tome01@ajou.ac.kr>
- <5d02ea0e-aca6-a64b-23de-bc9307572d17@redhat.com>
+        Thu, 27 Jan 2022 04:41:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643276516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZyJ4J5e+3GKlvkcYQ+urtekvThyzHXZ6mJY5flPNI2w=;
+        b=Vd5sZ3dC7/pYBaGh+bF1xyrJq48A3qZZlBSQRvNx7JgVIy6XXx1EfCzkBHtcRJzjMMAoUJ
+        t1pyPjjVGGQ3/mFoAMnjD53hTW+xESWPYOEuqMI2aID0CUU/Hah4ZuxVD2WA9FzCMpWtyl
+        8JqBRJWi3B7QsASuT6NuSDR4uHHHZBs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-401-Z12YeTdsM2i_9Q-z2YbW8A-1; Thu, 27 Jan 2022 04:41:50 -0500
+X-MC-Unique: Z12YeTdsM2i_9Q-z2YbW8A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 78C56814514;
+        Thu, 27 Jan 2022 09:41:48 +0000 (UTC)
+Received: from localhost (ovpn-13-51.pek2.redhat.com [10.72.13.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7B911105915D;
+        Thu, 27 Jan 2022 09:41:47 +0000 (UTC)
+Date:   Thu, 27 Jan 2022 17:41:44 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>, kexec@lists.infradead.org
+Subject: Re: [PATCHv2] kexec: disable cpu hotplug until the rebooting cpu is
+ stable
+Message-ID: <20220127094144.GC13508@MiWiFi-R3L-srv>
+References: <20220127090215.32000-1-kernelfans@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5d02ea0e-aca6-a64b-23de-bc9307572d17@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20220127090215.32000-1-kernelfans@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 06:04:50PM +0100, David Hildenbrand wrote:
-> On 26.01.22 18:00, Jonghyeon Kim wrote:
-> > Export shrink_zone_span() and update_pgdat_span() functions to head
-> > file. We need to update real number of spanned pages for NUMA nodes and
-> > zones when we add memory device node such as device dax memory.
-> > 
+Hi Pingfan,
+
+On 01/27/22 at 05:02pm, Pingfan Liu wrote:
+> The following identical code piece appears in both
+> migrate_to_reboot_cpu() and smp_shutdown_nonboot_cpus():
 > 
-> Can you elaborate a bit more what you intend to fix?
+> 	if (!cpu_online(primary_cpu))
+> 		primary_cpu = cpumask_first(cpu_online_mask);
 > 
-> Memory onlining/offlining is reponsible for updating the node/zone span,
-> and that's triggered when the dax/kmem mamory gets onlined/offlined.
+> This is due to a breakage like the following:
+>    migrate_to_reboot_cpu();
+>    cpu_hotplug_enable();
+>                           --> comes a cpu_down(this_cpu) on other cpu
+>    machine_shutdown();
 > 
-Sure, sorry for the lack of explanation of the intended fix.
-
-Before onlining nvdimm memory using dax(devdax or fsdax), these memory belong to
-cpu NUMA nodes, which extends span pages of node/zone as a ZONE_DEVICE. So there
-is no problem because node/zone contain these additional non-visible memory
-devices to the system.
-But, if we online dax-memory, zone[ZONE_DEVICE] of CPU NUMA node is hot-plugged
-to new NUMA node(but CPU-less). I think there is no need to hold
-zone[ZONE_DEVICE] pages on the original node.
-
-Additionally, spanned pages are also used to calculate the end pfn of a node.
-Thus, it is needed to maintain accurate page stats for node/zone.
-
-My machine contains two CPU-socket consisting of DRAM and Intel DCPMM
-(DC persistent memory modules) with App-Direct mode.
-
-Below are my test results.
-
-Before memory onlining:
-
-	# ndctl create-namespace --mode=devdax
-	# ndctl create-namespace --mode=devdax
-	# cat /proc/zoneinfo | grep -E "Node|spanned" | paste - -
-	Node 0, zone      DMA	        spanned  4095
-	Node 0, zone    DMA32	        spanned  1044480
-	Node 0, zone   Normal	        spanned  7864320
-	Node 0, zone  Movable	        spanned  0
-	Node 0, zone   Device	        spanned  66060288
-	Node 1, zone      DMA	        spanned  0
-	Node 1, zone    DMA32	        spanned  0
-	Node 1, zone   Normal	        spanned  8388608
-	Node 1, zone  Movable	        spanned  0
-	Node 1, zone   Device	        spanned  66060288
-
-After memory onlining:
-
-	# daxctl reconfigure-device --mode=system-ram --no-online dax0.0
-	# daxctl reconfigure-device --mode=system-ram --no-online dax1.0
-
-	# cat /proc/zoneinfo | grep -E "Node|spanned" | paste - -
-	Node 0, zone      DMA	        spanned  4095
-	Node 0, zone    DMA32	        spanned  1044480
-	Node 0, zone   Normal	        spanned  7864320
-	Node 0, zone  Movable	        spanned  0
-	Node 0, zone   Device	        spanned  66060288
-	Node 1, zone      DMA	        spanned  0
-	Node 1, zone    DMA32	        spanned  0
-	Node 1, zone   Normal	        spanned  8388608
-	Node 1, zone  Movable	        spanned  0
-	Node 1, zone   Device	        spanned  66060288
-	Node 2, zone      DMA	        spanned  0
-	Node 2, zone    DMA32	        spanned  0
-	Node 2, zone   Normal	        spanned  65011712
-	Node 2, zone  Movable	        spanned  0
-	Node 2, zone   Device	        spanned  0
-	Node 3, zone      DMA	        spanned  0
-	Node 3, zone    DMA32	        spanned  0
-	Node 3, zone   Normal	        spanned  65011712
-	Node 3, zone  Movable	        spanned  0
-	Node 3, zone   Device	        spanned  0
-
-As we can see, Node 0 and 1 still have zone_device pages after memory onlining.
-This causes problem that Node 0 and Node 2 have same end of pfn values, also 
-Node 1 and Node 3 have same problem.
-
-> > Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
-> > ---
-> >  include/linux/memory_hotplug.h | 3 +++
-> >  mm/memory_hotplug.c            | 6 ++++--
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> > index be48e003a518..25c7f60c317e 100644
-> > --- a/include/linux/memory_hotplug.h
-> > +++ b/include/linux/memory_hotplug.h
-> > @@ -337,6 +337,9 @@ extern void move_pfn_range_to_zone(struct zone *zone, unsigned long start_pfn,
-> >  extern void remove_pfn_range_from_zone(struct zone *zone,
-> >  				       unsigned long start_pfn,
-> >  				       unsigned long nr_pages);
-> > +extern void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
-> > +			     unsigned long end_pfn);
-> > +extern void update_pgdat_span(struct pglist_data *pgdat);
-> >  extern bool is_memblock_offlined(struct memory_block *mem);
-> >  extern int sparse_add_section(int nid, unsigned long pfn,
-> >  		unsigned long nr_pages, struct vmem_altmap *altmap);
-> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> > index 2a9627dc784c..38f46a9ef853 100644
-> > --- a/mm/memory_hotplug.c
-> > +++ b/mm/memory_hotplug.c
-> > @@ -389,7 +389,7 @@ static unsigned long find_biggest_section_pfn(int nid, struct zone *zone,
-> >  	return 0;
-> >  }
-> >  
-> > -static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
-> > +void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
-> >  			     unsigned long end_pfn)
-> >  {
-> >  	unsigned long pfn;
-> > @@ -428,8 +428,9 @@ static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
-> >  		}
-> >  	}
-> >  }
-> > +EXPORT_SYMBOL_GPL(shrink_zone_span);
+> Although the kexec-reboot task can get through a cpu_down() on its cpu,
+> this code looks a little confusing.
 > 
-> Exporting both as symbols feels very wrong. This is memory
-> onlining/offlining internal stuff.
+> Make things straight forward by keeping cpu hotplug disabled until
+> smp_shutdown_nonboot_cpus() holds cpu_add_remove_lock. By this way, the
+> breakage is squashed out and the rebooting cpu can keep unchanged.
 
-I agree with you that your comment. I will find another approach to avoid
-directly using onlining/offlining internal stuff while updating node/zone span.
+If I didn't go through code wrongly, you may miss the x86 case.
+Several ARCHes do call smp_shutdown_nonboot_cpus() in machine_shutdown()
+in kexec reboot code path, while x86 doesn't. If I am right, you may
+need reconsider if this patch is needed or need be adjustd.
+
+Are you optimizing code path, or you meet a real problem? I haven't
+checked v1, but I also didn't see it's told in patch log which case it
+is.
 
 
-Thanks,
-Jonghyeon
 > 
+> Note: this patch only affects the kexec-reboot on arches, which rely on
+> cpu hotplug mechanism.
 > 
+> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Vincent Donnefort <vincent.donnefort@arm.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: YueHaibing <yuehaibing@huawei.com>
+> Cc: Baokun Li <libaokun1@huawei.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: kexec@lists.infradead.org
+> To: linux-kernel@vger.kernel.org
+> ---
+> v1 -> v2:
+>  improve commit log
 > 
+>  kernel/cpu.c        | 16 ++++++++++------
+>  kernel/kexec_core.c | 10 ++++------
+>  2 files changed, 14 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 9c92147f0812..87bdf21de950 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -1240,20 +1240,24 @@ int remove_cpu(unsigned int cpu)
+>  }
+>  EXPORT_SYMBOL_GPL(remove_cpu);
+>  
+> +/* primary_cpu keeps unchanged after migrate_to_reboot_cpu() */
+>  void smp_shutdown_nonboot_cpus(unsigned int primary_cpu)
+>  {
+>  	unsigned int cpu;
+>  	int error;
+>  
+> +	/*
+> +	 * Block other cpu hotplug event, so primary_cpu is always online if
+> +	 * it is not touched by us
+> +	 */
+>  	cpu_maps_update_begin();
+> -
+>  	/*
+> -	 * Make certain the cpu I'm about to reboot on is online.
+> -	 *
+> -	 * This is inline to what migrate_to_reboot_cpu() already do.
+> +	 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
+> +	 * no further code needs to use CPU hotplug (which is true in
+> +	 * the reboot case). However, the kexec path depends on using
+> +	 * CPU hotplug again; so re-enable it here.
+>  	 */
+> -	if (!cpu_online(primary_cpu))
+> -		primary_cpu = cpumask_first(cpu_online_mask);
+> +	__cpu_hotplug_enable();
+>  
+>  	for_each_online_cpu(cpu) {
+>  		if (cpu == primary_cpu)
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 68480f731192..db4fa6b174e3 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1168,14 +1168,12 @@ int kernel_kexec(void)
+>  		kexec_in_progress = true;
+>  		kernel_restart_prepare("kexec reboot");
+>  		migrate_to_reboot_cpu();
+> -
+>  		/*
+> -		 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
+> -		 * no further code needs to use CPU hotplug (which is true in
+> -		 * the reboot case). However, the kexec path depends on using
+> -		 * CPU hotplug again; so re-enable it here.
+> +		 * migrate_to_reboot_cpu() disables CPU hotplug. If an arch
+> +		 * relies on the cpu teardown to achieve reboot, it needs to
+> +		 * re-enable CPU hotplug there.
+>  		 */
+> -		cpu_hotplug_enable();
+> +
+>  		pr_notice("Starting new kernel\n");
+>  		machine_shutdown();
+>  	}
 > -- 
-> Thanks,
+> 2.31.1
 > 
-> David / dhildenb
-> 
+

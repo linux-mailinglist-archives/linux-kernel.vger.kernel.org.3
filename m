@@ -2,120 +2,421 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D64349F7D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501FF49F7D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348033AbiA1LIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:08:32 -0500
-Received: from mga12.intel.com ([192.55.52.136]:58221 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348026AbiA1LIS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:08:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643368098; x=1674904098;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fDZOKESPgVeaUsBhwCohnVG42X85+ylvqRZHNE4n3ww=;
-  b=j9Uz7QhgPCSdRr7LKTBl8aHMnev8y+B16eEy9SAMgd2NhBnhXeE8vc1W
-   iVQY/RG4Jk5/3G8/7s7d8NoQdg/uNx1Yq2SccLba9EIZ5t1TtWdRz6K4P
-   oEtiJdIt437Gc/2k/CyNw9SVH714WBGL8BSWOOf9nYsut7Tfnxh4rt2Bl
-   OIfJb2nELqyJhFiVlYmJPwx9+47j+Y36JzyixVprKXyva+S7+dzFU4iv7
-   Mb6nZ243oXx4gXkROFRYqf7wfarvcHCY9zMz1uAaZqW6njVQT+BPIgvAQ
-   eGEo018Jyy12U3uODVG8Jk9BH85grP0xQhPCF571oq/8QZt95J0FjsGuI
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227079537"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="227079537"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 03:08:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="697060468"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2022 03:08:14 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDP6z-000Nld-Kh; Fri, 28 Jan 2022 11:08:13 +0000
-Date:   Fri, 28 Jan 2022 19:07:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 94/94]
- kernel/rcu/srcutree.c:313:6: warning: no previous prototype for function
- 'spin_lock_irqsave_ssp_contention'
-Message-ID: <202201281920.PD1buizH-lkp@intel.com>
+        id S1348016AbiA1LII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:08:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48472 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244104AbiA1LIG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:08:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643368086;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r/Z89cDjHpntAHUD/RSb3guWlLGmU+c1d1Z61HpvZ50=;
+        b=UkPnP3h2J7+RCf/rNNCulBU9MttB3/Kqgxljmva3Un02NVjhWxixJ/LuD8lhCgfjlKozXm
+        teoRiyP8k5nD5WvYcDxnlUV6cb82Ezq/aGEw3dnYh2aHgImZVgCvbx4smRHWclmQK/pJGp
+        dfYFnGSQuSGxWn2tOM0zxxZPSmoloCM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-15-MG5rN4g_PGmiVJU1Jx7V7A-1; Fri, 28 Jan 2022 06:08:04 -0500
+X-MC-Unique: MG5rN4g_PGmiVJU1Jx7V7A-1
+Received: by mail-wm1-f70.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so5714476wmb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:08:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=r/Z89cDjHpntAHUD/RSb3guWlLGmU+c1d1Z61HpvZ50=;
+        b=al7hs6hIWlu2eOGpLmmpitA4By5mfN0rC3kdc1xhaFnFvCxokr/vCNn/U3ffHMvW+b
+         HzpicQTzfPN/ka6p/0qp3Xg2mRJX+xL03xcQR5kp/G4TI3h7p4iOfpPT/maKp+j7/0tc
+         Umq9Nmc+plnOAaBLthSxa1G1Oi1IF8QH5BkMMY5HTEm23vYg9zjc9CI7DtVIkWwbtNCn
+         9Y2B2TkPlZYwqo1dC/wJ7ogFR8fW4vrv9xiq00y4RCiDxa3x/xLmqZQM0lTYvoT8mBwe
+         CNqnBC6UUVUVnZQZRvIDMARYiByw3wv4xDPSlyjJFczbsD3l6r+mmbCvWy03OUVqXd06
+         KM+A==
+X-Gm-Message-State: AOAM533fWhkLGmgZGsIVJZS7DjALmktmCuWLEUaFDtMBUsxCDXl3+5ei
+        /iohblDSdo6fcviZi1MLiy2b1ZCwHfBXnvi1MMEYa8E+tOWmymW/ljq2Bf0nS4l4jExVyCWWjal
+        cwqL5KE+AFYx29OZy6iI43f40
+X-Received: by 2002:a1c:cc07:: with SMTP id h7mr15956179wmb.50.1643368083571;
+        Fri, 28 Jan 2022 03:08:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyGSxkD+x/HGNqu62fVuWQR5UvYZe4M0tfmZqqbG2QMxvuo6OHoohmnOIdvXtTCKrBrWjPbew==
+X-Received: by 2002:a1c:cc07:: with SMTP id h7mr15956149wmb.50.1643368083223;
+        Fri, 28 Jan 2022 03:08:03 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:5c00:522f:9bcd:24a0:cd70? (p200300cbc70e5c00522f9bcd24a0cd70.dip0.t-ipconnect.de. [2003:cb:c70e:5c00:522f:9bcd:24a0:cd70])
+        by smtp.gmail.com with ESMTPSA id n10sm1621775wmr.25.2022.01.28.03.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 03:08:02 -0800 (PST)
+Message-ID: <99e39466-513b-6db9-6b3a-f40e68997cec@redhat.com>
+Date:   Fri, 28 Jan 2022 12:08:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
+Content-Language: en-US
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bharata B Rao <bharata@amd.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-4-nikunj@amd.com>
+ <99248ffb-2c7c-ba25-5d56-2c577e58da4c@redhat.com>
+ <c7918558-4eb3-0592-f3e1-9a1c4f36f7c0@amd.com>
+ <ef8dcee4-8ce7-cb91-6938-feb39f0bdaba@redhat.com>
+ <bd8e94d6-e2fd-16a9-273e-c2563af235df@amd.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <bd8e94d6-e2fd-16a9-273e-c2563af235df@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-head:   903a93309e5a59497d3c178cabb67ecc6c843a69
-commit: 903a93309e5a59497d3c178cabb67ecc6c843a69 [94/94] srcu: Add contention-triggered addition of srcu_node tree
-config: arm-s5pv210_defconfig (https://download.01.org/0day-ci/archive/20220128/202201281920.PD1buizH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/903a93309e5a59497d3c178cabb67ecc6c843a69
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
-        git checkout 903a93309e5a59497d3c178cabb67ecc6c843a69
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/rcu/
+On 28.01.22 12:04, Nikunj A. Dadhania wrote:
+> On 1/28/2022 1:57 PM, David Hildenbrand wrote:
+>> On 28.01.22 07:57, Nikunj A. Dadhania wrote:
+>>> On 1/26/2022 4:16 PM, David Hildenbrand wrote:
+>>>> On 18.01.22 12:06, Nikunj A Dadhania wrote:
+>>>>> Use the memslot metadata to store the pinned data along with the pfns.
+>>>>> This improves the SEV guest startup time from O(n) to a constant by
+>>>>> deferring guest page pinning until the pages are used to satisfy nested
+>>>>> page faults. The page reference will be dropped in the memslot free
+>>>>> path.
+>>>>>
+>>>>> Remove the enc_region structure definition and the code which did
+>>>>> upfront pinning, as they are no longer needed in view of the demand
+>>>>> pinning support.
+>>>>>
+>>>>> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
+>>>>> since qemu is dependent on this API.
+>>>>>
+>>>>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>>>>> ---
+>>>>>  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
+>>>>>  arch/x86/kvm/svm/svm.c |   1 +
+>>>>>  arch/x86/kvm/svm/svm.h |   3 +-
+>>>>>  3 files changed, 81 insertions(+), 131 deletions(-)
+>>>>>
+>>>>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>>>>> index d972ab4956d4..a962bed97a0b 100644
+>>>>> --- a/arch/x86/kvm/svm/sev.c
+>>>>> +++ b/arch/x86/kvm/svm/sev.c
+>>>>> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
+>>>>>  static unsigned long *sev_asid_bitmap;
+>>>>>  static unsigned long *sev_reclaim_asid_bitmap;
+>>>>>  
+>>>>> -struct enc_region {
+>>>>> -	struct list_head list;
+>>>>> -	unsigned long npages;
+>>>>> -	struct page **pages;
+>>>>> -	unsigned long uaddr;
+>>>>> -	unsigned long size;
+>>>>> -};
+>>>>> -
+>>>>>  /* Called with the sev_bitmap_lock held, or on shutdown  */
+>>>>>  static int sev_flush_asids(int min_asid, int max_asid)
+>>>>>  {
+>>>>> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>>  	if (ret)
+>>>>>  		goto e_free;
+>>>>>  
+>>>>> -	INIT_LIST_HEAD(&sev->regions_list);
+>>>>> -
+>>>>>  	return 0;
+>>>>>  
+>>>>>  e_free:
+>>>>> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+>>>>>  	src->handle = 0;
+>>>>>  	src->pages_locked = 0;
+>>>>>  	src->enc_context_owner = NULL;
+>>>>> -
+>>>>> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+>>>>>  }
+>>>>>  
+>>>>>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+>>>>> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
+>>>>>  int svm_register_enc_region(struct kvm *kvm,
+>>>>>  			    struct kvm_enc_region *range)
+>>>>>  {
+>>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>> -	struct enc_region *region;
+>>>>> -	int ret = 0;
+>>>>> -
+>>>>> -	if (!sev_guest(kvm))
+>>>>> -		return -ENOTTY;
+>>>>> -
+>>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+>>>>> -	if (is_mirroring_enc_context(kvm))
+>>>>> -		return -EINVAL;
+>>>>> -
+>>>>> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
+>>>>> -		return -EINVAL;
+>>>>> -
+>>>>> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
+>>>>> -	if (!region)
+>>>>> -		return -ENOMEM;
+>>>>> -
+>>>>> -	mutex_lock(&kvm->lock);
+>>>>> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
+>>>>> -	if (IS_ERR(region->pages)) {
+>>>>> -		ret = PTR_ERR(region->pages);
+>>>>> -		mutex_unlock(&kvm->lock);
+>>>>> -		goto e_free;
+>>>>> -	}
+>>>>> -
+>>>>> -	region->uaddr = range->addr;
+>>>>> -	region->size = range->size;
+>>>>> -
+>>>>> -	list_add_tail(&region->list, &sev->regions_list);
+>>>>> -	mutex_unlock(&kvm->lock);
+>>>>> -
+>>>>> -	/*
+>>>>> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
+>>>>> -	 * or vice versa for this memory range. Lets make sure caches are
+>>>>> -	 * flushed to ensure that guest data gets written into memory with
+>>>>> -	 * correct C-bit.
+>>>>> -	 */
+>>>>> -	sev_clflush_pages(region->pages, region->npages);
+>>>>> -
+>>>>> -	return ret;
+>>>>> -
+>>>>> -e_free:
+>>>>> -	kfree(region);
+>>>>> -	return ret;
+>>>>> -}
+>>>>> -
+>>>>> -static struct enc_region *
+>>>>> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
+>>>>> -{
+>>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>> -	struct list_head *head = &sev->regions_list;
+>>>>> -	struct enc_region *i;
+>>>>> -
+>>>>> -	list_for_each_entry(i, head, list) {
+>>>>> -		if (i->uaddr == range->addr &&
+>>>>> -		    i->size == range->size)
+>>>>> -			return i;
+>>>>> -	}
+>>>>> -
+>>>>> -	return NULL;
+>>>>> -}
+>>>>> -
+>>>>> -static void __unregister_enc_region_locked(struct kvm *kvm,
+>>>>> -					   struct enc_region *region)
+>>>>> -{
+>>>>> -	sev_unpin_memory(kvm, region->pages, region->npages);
+>>>>> -	list_del(&region->list);
+>>>>> -	kfree(region);
+>>>>> +	return 0;
+>>>>>  }
+>>>>>  
+>>>>>  int svm_unregister_enc_region(struct kvm *kvm,
+>>>>>  			      struct kvm_enc_region *range)
+>>>>>  {
+>>>>> -	struct enc_region *region;
+>>>>> -	int ret;
+>>>>> -
+>>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+>>>>> -	if (is_mirroring_enc_context(kvm))
+>>>>> -		return -EINVAL;
+>>>>> -
+>>>>> -	mutex_lock(&kvm->lock);
+>>>>> -
+>>>>> -	if (!sev_guest(kvm)) {
+>>>>> -		ret = -ENOTTY;
+>>>>> -		goto failed;
+>>>>> -	}
+>>>>> -
+>>>>> -	region = find_enc_region(kvm, range);
+>>>>> -	if (!region) {
+>>>>> -		ret = -EINVAL;
+>>>>> -		goto failed;
+>>>>> -	}
+>>>>> -
+>>>>> -	/*
+>>>>> -	 * Ensure that all guest tagged cache entries are flushed before
+>>>>> -	 * releasing the pages back to the system for use. CLFLUSH will
+>>>>> -	 * not do this, so issue a WBINVD.
+>>>>> -	 */
+>>>>> -	wbinvd_on_all_cpus();
+>>>>> -
+>>>>> -	__unregister_enc_region_locked(kvm, region);
+>>>>> -
+>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>  	return 0;
+>>>>> -
+>>>>> -failed:
+>>>>> -	mutex_unlock(&kvm->lock);
+>>>>> -	return ret;
+>>>>>  }
+>>>>>  
+>>>>>  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>  	mirror_sev->fd = source_sev->fd;
+>>>>>  	mirror_sev->es_active = source_sev->es_active;
+>>>>>  	mirror_sev->handle = source_sev->handle;
+>>>>> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
+>>>>>  	ret = 0;
+>>>>>  
+>>>>>  	/*
+>>>>> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>  void sev_vm_destroy(struct kvm *kvm)
+>>>>>  {
+>>>>>  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>> -	struct list_head *head = &sev->regions_list;
+>>>>> -	struct list_head *pos, *q;
+>>>>>  
+>>>>>  	WARN_ON(sev->num_mirrored_vms);
+>>>>>  
+>>>>> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
+>>>>>  	 */
+>>>>>  	wbinvd_on_all_cpus();
+>>>>>  
+>>>>> -	/*
+>>>>> -	 * if userspace was terminated before unregistering the memory regions
+>>>>> -	 * then lets unpin all the registered memory.
+>>>>> -	 */
+>>>>> -	if (!list_empty(head)) {
+>>>>> -		list_for_each_safe(pos, q, head) {
+>>>>> -			__unregister_enc_region_locked(kvm,
+>>>>> -				list_entry(pos, struct enc_region, list));
+>>>>> -			cond_resched();
+>>>>> -		}
+>>>>> -	}
+>>>>> -
+>>>>>  	sev_unbind_asid(kvm, sev->handle);
+>>>>>  	sev_asid_free(sev);
+>>>>>  }
+>>>>> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
+>>>>>  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
+>>>>>  }
+>>>>>  
+>>>>> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+>>>>> +		  kvm_pfn_t pfn)
+>>>>> +{
+>>>>> +	struct kvm_arch_memory_slot *aslot;
+>>>>> +	struct kvm_memory_slot *slot;
+>>>>> +	gfn_t rel_gfn, pin_pfn;
+>>>>> +	unsigned long npages;
+>>>>> +	kvm_pfn_t old_pfn;
+>>>>> +	int i;
+>>>>> +
+>>>>> +	if (!sev_guest(kvm))
+>>>>> +		return;
+>>>>> +
+>>>>> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
+>>>>> +		return;
+>>>>> +
+>>>>> +	/* Tested till 1GB pages */
+>>>>> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
+>>>>> +		return;
+>>>>> +
+>>>>> +	slot = gfn_to_memslot(kvm, gfn);
+>>>>> +	if (!slot || !slot->arch.pfns)
+>>>>> +		return;
+>>>>> +
+>>>>> +	/*
+>>>>> +	 * Use relative gfn index within the memslot for the bitmap as well as
+>>>>> +	 * the pfns array
+>>>>> +	 */
+>>>>> +	rel_gfn = gfn - slot->base_gfn;
+>>>>> +	aslot = &slot->arch;
+>>>>> +	pin_pfn = pfn;
+>>>>> +	npages = KVM_PAGES_PER_HPAGE(level);
+>>>>> +
+>>>>> +	/* Pin the page, KVM doesn't yet support page migration. */
+>>>>> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
+>>>>> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
+>>>>> +			old_pfn = aslot->pfns[rel_gfn];
+>>>>> +			if (old_pfn == pin_pfn)
+>>>>> +				continue;
+>>>>> +
+>>>>> +			put_page(pfn_to_page(old_pfn));
+>>>>> +		}
+>>>>> +
+>>>>> +		set_bit(rel_gfn, aslot->pinned_bitmap);
+>>>>> +		aslot->pfns[rel_gfn] = pin_pfn;
+>>>>> +		get_page(pfn_to_page(pin_pfn));
+>>>>
+>>>>
+>>>> I assume this is to replace KVM_MEMORY_ENCRYPT_REG_REGION, which ends up
+>>>> calling svm_register_enc_region()->sev_pin_memory(), correct?
+>>>
+>>> Yes, that is correct.
+>>>>
+>>>> sev_pin_memory() correctly checks the RLIMIT_MEMLOCK and uses
+>>>> pin_user_pages_fast().
+>>>>
+>>>> I have to strongly assume that sev_pin_memory() is *wrong* as is because
+>>>> it's supposed to supply FOLL_LONGTERM -- after all we're pinning these
+>>>> pages possibly forever.
+>>>>
+>>>>
+>>>> I might be wrong but
+>>>>
+>>>> 1. You are missing the RLIMIT_MEMLOCK check
+>>>
+>>> Yes, I will add this check during the enc_region registration.
+>>>
+>>>> 2. get_page() is the wong way of long-term pinning a page. You would
+>>>> have to mimic what pin_user_pages_fast(FOLL_LONGTERM) does to eventually
+>>>> get it right (e.g., migrate the page off of MIGRATE_CMA or ZONE_MOVABLE).
+>>>
+>>> Let me go through this and I will come back. Thanks for pointing this out.
+>>
+>> I asusme the "issue" is that KVM uses mmu notifier and does a simple
+>> get_user_pages() to obtain the references, to drop the reference when
+>> the entry is invalidated via a mmu notifier call. So once you intent to
+>> long-term pin, it's already to late.
+>>
+>> If you could teach KVM to do a long-term pin when stumbling over these
+>> special encrypted memory regions (requires a proper matching
+>> unpin_user_pages() call from KVM), then you could "take over" that pin
+>> by get_page(), and let KVM do the ordinary put_page(), while you would
+>> do the unpin_user_pages().
+>>
+> 
+> The fault path looks like this in KVM x86 mmu code:
+> 
+> direct_page_fault()
+> -> kvm_faultin_pfn()
+>    -> __gfn_to_pfn_memslot()
+>       -> hva_to_pfn()
+>          -> hva_to_pfn_{slow,fast}()
+>             -> get_user_pages_*()      <<<<==== This is where the
+>                                                 reference is taken
+> 
+> Next step is to create the mappings which is done in below functions:
+> 
+> -> kvm_tdp_mmu_map() / __direct_map()
+> 
+>    -> Within this function (patch 1/6), I call sev_pin_spte to take an extra 
+>       reference to pin it using get_page. 
+> 
+>       Is it possible to use pin_user_pages(FOLL_LONGTERM) here? Wouldn't that 
+>       be equivalent to "take over" solution that you are suggesting?
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The issue is that pin_user_pages(FOLL_LONGTERM) might have to migrate
+the page, which will fail if there is already an additional reference
+from get_user_pages_*().
 
-All warnings (new ones prefixed by >>):
+-- 
+Thanks,
 
->> kernel/rcu/srcutree.c:313:6: warning: no previous prototype for function 'spin_lock_irqsave_ssp_contention' [-Wmissing-prototypes]
-   void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-        ^
-   kernel/rcu/srcutree.c:313:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-   ^
-   static 
-   1 warning generated.
+David / dhildenb
 
-
-vim +/spin_lock_irqsave_ssp_contention +313 kernel/rcu/srcutree.c
-
-   306	
-   307	/*
-   308	 * Acquire the specified srcu_struct structure's ->lock, but check for
-   309	 * excessive contention, which results in initiation of a transition
-   310	 * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-   311	 * parameter permits this.
-   312	 */
- > 313	void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-   314	{
-   315		unsigned long j;
-   316	
-   317		if (spin_trylock_irqsave_rcu_node(ssp, *flags))
-   318			return;
-   319		spin_lock_irqsave_rcu_node(ssp, *flags);
-   320		if (!(convert_to_big & 0x10) || ssp->srcu_size_state)
-   321			return;
-   322		j = jiffies;
-   323		if (ssp->srcu_size_jiffies != j) {
-   324			ssp->srcu_size_jiffies = j;
-   325			ssp->srcu_n_lock_retries = 0;
-   326		}
-   327		if (++ssp->srcu_n_lock_retries <= small_contention_lim)
-   328			return;
-   329		__srcu_transition_to_big(ssp);
-   330	}
-   331	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

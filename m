@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C3849F191
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C520D49F14F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiA1C5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:57:02 -0500
-Received: from mga17.intel.com ([192.55.52.151]:38587 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229811AbiA1C5B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:57:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643338621; x=1674874621;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=lQzpVBgtczAn5sAewXENYJpIAUiWWZKcbyftWJFiTnk=;
-  b=ehMl2PURoXyAUIkUlgHTDB9BfqLsE4sspvkPQVACKG3fMoT1qSWUKllw
-   2CjWsx9+Rpb/sGPje+6nsSQOjezlC7QUoVik6ZsK9Nva+NxDPFoB8Liyj
-   ZFtJsuBfCIbmv8OZ1AaLXYS+MwUKNBXxfxvA0fcQ3PaWbPYxMbv8mX3hz
-   qf5Alo7q3jUg415JJtnPD6g6weBww45mXJwG/kGFXNYETs2BoJGiukWrJ
-   Tv3GAK5BrdXHbwfJjZcHkGNAceX3ztWz1KdFa7dnTD+fw1zS59zBeNvi9
-   UNB+x8HPkTCXo3Ddd5F5ByVfqnEgBm2FkLqcpt+UdA8zETFZedAREtipE
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227699932"
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="227699932"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:54:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="535953637"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 27 Jan 2022 18:54:10 -0800
-Cc:     baolu.lu@linux.intel.com, bhelgaas@google.com,
-        mika.westerberg@linux.intel.com, koba.ko@canonical.com,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
- ready, L2 and L3 state
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <20220127025418.1989642-1-kai.heng.feng@canonical.com>
- <0259955f-8bbb-1778-f234-398f1356db8b@linux.intel.com>
- <CAAd53p6+KPAJchh9Jx59Fkkj5FidSxsW0yHjLqooFjvu-Y9u7w@mail.gmail.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <11891652-40c6-f111-46b7-e96d1729815e@linux.intel.com>
-Date:   Fri, 28 Jan 2022 10:53:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1345556AbiA1Cx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241793AbiA1Cx0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 21:53:26 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBB8C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:53:26 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id c6so14530803ybk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NZSEsahTaMIlSofqaMZHvrGxDpUIJ7LxbR4idGwpdew=;
+        b=GjOTsPDJ93PhRReYYYL5QaX/G6LbckIbbxfENXB+nMNkcnTfI82ElvaQVQwxLvvZ8o
+         YawOPfZq8G5hKWVpPaGU9INFBQKv69tO4uEZKc2RlHGxPpli1b7YP8NAN0hvCcbEgitg
+         SJltmsme+M2ycoqwgoTxSLyVDnWgBClMZkltzZlLLD5UlIdwAVQickOtQUyWfN5Q6C5p
+         jw4cGjqzevSZDW3T/vwInaescNrnv8quUqOTBuD9rAGYqe9gjedAYmKuK6TONv/CCDXL
+         E4e8nqyX7E9moZPTFBM+IAEcyHTm52WokhjjCJAQ7kmj8JXCfqbQUKG3ONH4hDp70gRl
+         fEgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NZSEsahTaMIlSofqaMZHvrGxDpUIJ7LxbR4idGwpdew=;
+        b=xKLbXWA+pLj1sHwsmE1hJq3HNWQmZR6OAM9cNrvyBn6Ke1aSh1bJwZHmgnkRkq/ROj
+         8h9xpVOCxfsulxBUW2a8uNTNraM+onoOMdzjL6xez/P45qtp/+1mhfDnVtzugu3HMiv8
+         lispQGwGlqJNwHUmn3HWQM6HBYRG63BX1Xm7SmxSx34nTv0f+WI4ZbbdUbUyi6+FA/wa
+         ngRxsfUj3wNk75fRfPX7RTuGHILzo2qwChK99qOj1Kd2ucnTuhL5uFycwrUQmSmaM7p3
+         fqSHel4ZfmSvMlLNUWErHsGCjI1MFK1myNxXdLJQ1Sae9L9gZlOLBrs8ZgnxbSLEQBz4
+         Q+jA==
+X-Gm-Message-State: AOAM532sWdYuYLZIn12N+SKQ4yP8/eef/130e2SXhE2jsVzPEUR5feLL
+        KEkNdSKTN77ks7nmtQ5qSMR9hHCwBRDTn0VNlvcwXv371tQ8fw==
+X-Google-Smtp-Source: ABdhPJzf7c9PkzJz25VZAlwf3/CGlrXvPil3n5mlFwSgExkN4czsiChb2H83zO+Cy9bJb04apCSkp5l8W+EjiV959uQ=
+X-Received: by 2002:a25:d80f:: with SMTP id p15mr10191044ybg.753.1643338405485;
+ Thu, 27 Jan 2022 18:53:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAAd53p6+KPAJchh9Jx59Fkkj5FidSxsW0yHjLqooFjvu-Y9u7w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220128014303.2334568-1-jannh@google.com> <CANn89iKWaERfs1iW8jVyRZT8K1LwWM9efiRsx8E1U3CDT39dyw@mail.gmail.com>
+ <CAG48ez0sXEjePefCthFdhDskCFhgcnrecEn2jFfteaqa2qwDnQ@mail.gmail.com>
+ <CANn89iKmCYq+WBu_S4OvKOXqRSagTg=t8xKq0WC_Rrw+TpKsbw@mail.gmail.com> <CAG48ez2wyQwc5XMKKw8835-4t6+x=X3kPY_CPUqZeh=xQ2krqQ@mail.gmail.com>
+In-Reply-To: <CAG48ez2wyQwc5XMKKw8835-4t6+x=X3kPY_CPUqZeh=xQ2krqQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 27 Jan 2022 18:53:14 -0800
+Message-ID: <CANn89iKVQBDoAwx+yuJ0P0OAV59bav_abh87BA6n7JuzMKMtCQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: dev: Detect dev_hold() after netdev_wait_allrefs()
+To:     Jann Horn <jannh@google.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 7:14 PM, Kai-Heng Feng wrote:
-> On Thu, Jan 27, 2022 at 3:01 PM Lu Baolu <baolu.lu@linux.intel.com> wrote:
->>
->> On 2022/1/27 10:54, Kai-Heng Feng wrote:
->>> Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
->>> hint") enables ACS, and some platforms lose its NVMe after resume from
->>> S3:
->>> [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
->>> [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
->>> [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
->>> [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
->>> [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
->>> [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
->>> [   50.947843] nvme nvme0: frozen state error detected, reset controller
->>>
->>> It happens right after ACS gets enabled during resume.
->>>
->>> There's another case, when Thunderbolt reaches D3cold:
->>> [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
->>> [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
->>> [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
->>> [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
->>> [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
->>> [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
->>> [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
->>> [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
->>>
->>> So disable AER service to avoid the noises from turning power rails
->>> on/off when the device is in low power states (D3hot and D3cold), as
->>> PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
->>> transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
->>> with aux power) and L3 (D3cold).
->>>
->>> Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=209149
->>> Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=215453
->>> Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
->>
->> I don't know what this fix has to do with the commit 50310600ebda.
-> 
-> Commit 50310600ebda only exposed the underlying issue. Do you think
-> "Fixes:" tag should change to other commits?
-> 
->> Commit 50310600ebda only makes sure that PCI ACS is enabled whenever
->> Intel IOMMU is on. Before this commit, PCI ACS could also be enabled
->> and result in the same problem. Or anything I missed?
-> 
-> The system in question didn't enable ACS before commit 50310600ebda.
+On Thu, Jan 27, 2022 at 6:48 PM Jann Horn <jannh@google.com> wrote:
 
-This commit exposed the issue on your configuration doesn't mean the
-fix should be back ported as far as that commit. I believe if you add
-intel-iommu=on in the kernel parameter, the issue still exists even you
-revert commit 50310600ebda or checkout a tag before it.
+> When someone is using NET_DEV_REFCNT_TRACKER for slow debugging, they
+> should also be able to take the performance hit of
+> CONFIG_PCPU_DEV_REFCNT and rely on the normal increment-from-zero
+> detection of the generic refcount code, right? (Maybe
+> NET_DEV_REFCNT_TRACKER should depend on !CONFIG_PCPU_DEV_REFCNT?)
 
-Best regards,
-baolu
+NET_DEV_REFCNT_TRACKER is not slow, I think it has neglectable cost really.
+(I could not see any difference in my tests)
+
+Also getting a trap at the exact moment of the buggy dev_hold_track()
+is somewhat better than after-fact checking.
+
+In your case, linkwatch_add_event() already uses dev_hold_track() so
+my proposal would detect the issue right away.
+
+>
+> My intent with the extra check in free_netdev() was to get some
+> limited detection for production systems that don't use
+> NET_DEV_REFCNT_TRACKER.
+
+Understood

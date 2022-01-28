@@ -2,161 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BC249FA53
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3514849FA56
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241370AbiA1NHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:07:05 -0500
-Received: from mail-bmxind01olkn2015.outbound.protection.outlook.com ([40.92.103.15]:39397
-        "EHLO IND01-BMX-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241271AbiA1NHB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:07:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z4FQmP2iYMfmj1yPuYKbKkxocykd3k97tH4tB1cjaWGnOZiQBCg787+k1sOORXKao9pSOpf9oP3MPKoNRbMy0MRAW16WCcAja+I2HS0Ou9MYaFRoooG2AjzxpU5x1lKOPd5kzmm0ZgCpnd8+zP7wvhH311iWZPI3jlynttSaVLds3Uw1wz9W2t9Gj7Rn2oi4p9fwGJAVwDwz9LxQBdnrCico8DxYg/1QGJ3FOc1lOvR8h8patoVjWIWLBCwOteVGy/dIXst3qccfu+Y9YE0TC4C4sYhkyr1xHkWnVA6gxQQjKqPm98Rvj9gYuHLnz8FhZHpsIE5cWioySo8neWio+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A2ZExjoW34sgF/TwvBqBC44+D3GoC6RmkMLsG70b6gI=;
- b=CUgEC9qxcLT1Ifbj3n1XA4cOi/h5wRtVeR+Q6RWWS0A88i7aw0UToZwf5hGazcAwWBXs1GSW+FcpnGNfU08EWW1lhwxiCUJwtoZvoxLHMjgZb1P+eowbKhscjmnB27Fe8rfCzzvLAG1+FUl536eBM7lwCOWGuXI110FOHgTVyo7NGkt86AFhBO3udqkTX8fWrWlOzKwdVkXySf1CLbYsSXZ1EEZCXPleEWQalSFtWeLvN5KTnEQtUYAbl571WNSRDX5u7pit71CP2w7e3oZ8HE/wkPskxqHN7L8rGIjtqpk2E8+j/IljebQZs1t696kOqr9moPIbouC7NUaklGUmVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A2ZExjoW34sgF/TwvBqBC44+D3GoC6RmkMLsG70b6gI=;
- b=mrYIxsyJRN9M7IiKf3gbZwEQuo65VnR0TDpuN0tgx/4yTUa/jKsXLDAo4+kjlEU3yOfClRhc/Qw9JzcyK7iCQcxA+j4p2vs3JDXftPBaPJKveXtguMe2rvEeoeKNfjPILldxDHRlX2DdAdf/Zt758nq+f3eEOF31TvHVYatIZ7pO7SVWW57fsIi6SCC388dsvXdj4EctBenTng6dQOfdrEJbe/JUrVYOUcwG7bTmxbbbkt5IZPTYN1e4AW7A6+MO6/PACeVG9SJw6YRAWvFIqQEgMMEa7se/JsjNwHuh7EfgDbP04WvK1ul+7uUbkPci9Rnl09TDORVqBAVtejQIKg==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by MA1PR01MB0922.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:4::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Fri, 28 Jan
- 2022 13:06:53 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4930.018; Fri, 28 Jan 2022
- 13:06:53 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Alex Deucher <alexdeucher@gmail.com>
-CC:     "harry.wentland@amd.com" <harry.wentland@amd.com>,
-        "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
-        "Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
-        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Felix.Kuehling@amd.com" <Felix.Kuehling@amd.com>,
-        "evan.quan@amd.com" <evan.quan@amd.com>,
-        "stylon.wang@amd.com" <stylon.wang@amd.com>,
-        "wesley.chalmers@amd.com" <wesley.chalmers@amd.com>,
-        "qingqing.zhuo@amd.com" <qingqing.zhuo@amd.com>,
-        "George.Shen@amd.com" <George.Shen@amd.com>,
-        "roman.li@amd.com" <roman.li@amd.com>,
-        "solomon.chiu@amd.com" <solomon.chiu@amd.com>,
-        "Aurabindo.Pillai@amd.com" <Aurabindo.Pillai@amd.com>,
-        "wayne.lin@amd.com" <wayne.lin@amd.com>,
-        "mikita.lipski@amd.com" <mikita.lipski@amd.com>,
-        "Bhawanpreet.Lakha@amd.com" <Bhawanpreet.Lakha@amd.com>,
-        "agustin.gutierrez@amd.com" <agustin.gutierrez@amd.com>,
-        "pavle.kotarac@amd.com" <pavle.kotarac@amd.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Subject: Re: [PATCH RESEND] drm/amd/display: Force link_rate as LINK_RATE_RBR2
- for 2018 15" Apple Retina panels
-Thread-Topic: [PATCH RESEND] drm/amd/display: Force link_rate as
- LINK_RATE_RBR2 for 2018 15" Apple Retina panels
-Thread-Index: AQHYEqhR1816ln+3EEa6OAaxWUF3K6x3I2yAgAFHGAA=
-Date:   Fri, 28 Jan 2022 13:06:52 +0000
-Message-ID: <58B7B0D4-BA3B-43EA-9F54-06CCEB7EF833@live.com>
-References: <139A7689-463E-4AD9-A2D1-A9969C3958D0@live.com>
- <CADnq5_OLpgEJjpN5y9b3gNwCmvdfNTA=puUv8UjOCDH96JgvOQ@mail.gmail.com>
-In-Reply-To: <CADnq5_OLpgEJjpN5y9b3gNwCmvdfNTA=puUv8UjOCDH96JgvOQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [eidEl9RmdL3hF4WaWmS5ZbBbI6BJsScK1fPFEI3gPFZumzP9MSFT70y+cB2vipVPPWHxl++SRzo=]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 44ddf1d0-f382-4aee-ed9c-08d9e25f0de0
-x-ms-traffictypediagnostic: MA1PR01MB0922:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zSnDS0aYGFfuawS+aNDo3MFcEsfQrrsGRu5ZO3ndrYJVYGux2EndxcCGo5uBt0iOP4my38VWfYq94YvqhjAwe8a+P73KcfK+aleevQNh0F54HKcVpD75qHzfUcTdnN6tEF3AhY2CP4z7TQK6XMH74g+iLrWTwO4n8vkSvaG5pOFnzGIm5/UwpOdEYeZaqMC4Hd67OpU/fcrtlPqgHiWk0CaQy7wCQ0O9dUS4LkVBCIUO4oFfZSI7qNLX8QPXbC1TBFR/ZPqt0Y+HHk2snFoJfhA58HfIRVbWcWVr6/ufMHG0HQcR0klj9Ky8NFsD0vtqFowZqKK8twwxO1a0+7JaQdLqRtR8Xq7GDhccYdpn6D+35PMuRBgP+Hw8KFFxNx0k93LouH9vqnGjtPHiDzqfupzcT3ZRQ1aMFTNRIFpwVaXbupGEmDkfJ081itrCLi0PKsEnbO0xFaSd1EbbcAMcByNhWq+oWBgB+Cm1nDzXWu3NkYMWLEj5bsdZ5K4UcId05umIaR+h9YQKlj5Hyr+f/7WENwK8Djfa5pW8NkkLW+9YgYU7txnpUzMMLhC6Gc9MWcvVP2FhojOaDqC9DIbNEQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wklw1xV6g/pJ/4sw27E5i/OBESb1TVqI7c30C/ETRZfXWOjWh2C2U3imCbXa?=
- =?us-ascii?Q?jS92etS7L2NGc6r4PamXpTxT6eMgzTNEsu2O2D2nhZ1ify9cTphEyzcGTv8/?=
- =?us-ascii?Q?j7gZRqRSMTHwFGQaS/Om7ze7fdOgprdyPm6Gt9Xlt3lj/ifIE06hksBmOANn?=
- =?us-ascii?Q?NTvGHnUd3MXuO26rKCC7PNoI8eS+lLc1XsF2GY5Mm8dqeqO4AqOdANiYPcES?=
- =?us-ascii?Q?BYn1DJepIcjM+Amz5VOnvlApMml8POnj1F2inmFWt/31cP71f6OwFCa/arQN?=
- =?us-ascii?Q?yFwuHUFaGs4adaRy4fuWM3crn417wCSNINrRJXePQZZyZYu92fv+JhrR5Og6?=
- =?us-ascii?Q?M3P4voiAIScMB6lCqX4G7Y4JQAJGJi1AhcUlXCZKT8Vo4We1VFAh/6e9Mwgb?=
- =?us-ascii?Q?R+k1cyE8gvZPfL14PFhi2447ouVvAGDJbv8P8/34L4De5nogGVVo15VE+DT8?=
- =?us-ascii?Q?PdM4fFFg/exOgmhajPzksbtnvQqdlikpiu+wPCrfCmiG/ulUgzOyW5cjNRKU?=
- =?us-ascii?Q?FIz+m/aivQAjyuUfB5R2Fk07a2V/IY7KW33qBAR89rIB8qzhsbFvTlFyGqXk?=
- =?us-ascii?Q?++oaUwIXe+bM9UUpkxSMowCoAugJHaODfp+9KrtViTFFSgwwWDy5mPVpwnC1?=
- =?us-ascii?Q?JwswC7KqpVoxPnYND58tVHZxvafNpyEmjOmnRgn6gWEkWcZgPtEoOwF0loBD?=
- =?us-ascii?Q?VNbeoJhPj18GWC1+MJP2pA+u8rY7wOXaQA/Py7ygdJqbDw2R0RNFiZbBPHrp?=
- =?us-ascii?Q?dO/RdTa4jQQBi4M0FE523q43SXZYE6cP04EVyuRZx/yypbhVxhUTsOxmX87R?=
- =?us-ascii?Q?/x7W5EqECaYwdOkPm1LHv8hRK6mbMaoFFX1fQn+41vMMiwJKC+lDutTi9INN?=
- =?us-ascii?Q?VNfXUVEGNAn0nH4QMbykF0TvRLJrKXQcKHR2Sr0Li8i6lkKeHR+PCSzEzvg6?=
- =?us-ascii?Q?4/K6ivo8gp9wVrHWHHW78ieeFy3sjSudinTHggyReQwBJHtubb9l1uNvJ1fA?=
- =?us-ascii?Q?sRvAthKQkZlGK2GOQA2aVscm/g2ZdH9U6IKOlPmDsq8GZdU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <80DD295AF16D9242B3A66CE4F8990ABC@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S241623AbiA1NHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241408AbiA1NHL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 08:07:11 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B49C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:07:11 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id r65so18173960ybc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:07:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YgGxwqesxYhk+GrHgJnKwpv75Cf0zbWqGe6zVs0QN+M=;
+        b=cNBEtVx5FT1+KykCzEe9T2FFs9AIQBumaxy53+2enGDqLWGuhatShrWWnhC49Jy9xw
+         VmTHspZqGebuddH4NHpFewL2UtFVBpApT3VtMcKLUIBuB/WhObXIS47vBZw4v3RpZ/HM
+         q5of2qbhTXbKMMRrGBrJEwq9vP20jD9Q+OBNWFLYgvH+Bm4JCrCO2xlDtTR217dtey2i
+         kuaKb7v1zs6oPJeRtzhyGmy3hR+bFGpG3lR36aJXckQNlP4uqZRLDN0mhpFpZCE81jEg
+         ImcsFQXJCnKDW4AzBbhzX+Ajy1vnY2eqn+d9RADdGcZGQHfk43bOCwvVKr3QM2jXvMGF
+         yH7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YgGxwqesxYhk+GrHgJnKwpv75Cf0zbWqGe6zVs0QN+M=;
+        b=P5ZMNOxYSTxHgnXmj4Ls0eyeH5OwRckPlkpc/PBR9DepS5/YjaWMbMl+27Jru8qIse
+         /yEVMRROZVwJBNwRYoYlv9qT6e+aq+WAXYBj0bp5aq3ZLepTBiq1J0sdZ8JmGHus9/66
+         oIMiIYmtT8i9pk6+HgD1/ZRHLUe/DWNEppwfv2Jta2mpCLGgZdnolI0we1bgQvmH7zhz
+         urNcyU82lwsj9IJyPp9/jeR2S7kXb8tT087EYQUZYprIfM00E+MC91p6zUpp2oUUt66I
+         Ak7XqkwsXKAMI+ynms66dBlNpqiOx3aEOxA/Z55/TCEQPs0GvXLJdhR2D8twCtFLlP2E
+         YHOg==
+X-Gm-Message-State: AOAM531H3kzdteINYgcK70R782lYELxK60kjmNmKoub+vGqqdMQItQf3
+        f+S9OxmTkJYKZSDo8lxFf/s0qiknj5oV52D1EfFe1A==
+X-Google-Smtp-Source: ABdhPJzb57UArYumAtcFeFp1C6yIxpu8it15t9WtSxwl45jhC2s8WeqrPkgaWoXnmz9TXVUA2MkZKhDWx0uFxL1ECgM=
+X-Received: by 2002:a25:bb4d:: with SMTP id b13mr12751188ybk.129.1643375230778;
+ Fri, 28 Jan 2022 05:07:10 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44ddf1d0-f382-4aee-ed9c-08d9e25f0de0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2022 13:06:52.8345
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PR01MB0922
+References: <20220128100815.3231551-1-anders.roxell@linaro.org> <c6beb8a8-ecf3-1c17-f685-f5e69cd6265a@csgroup.eu>
+In-Reply-To: <c6beb8a8-ecf3-1c17-f685-f5e69cd6265a@csgroup.eu>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 28 Jan 2022 14:07:00 +0100
+Message-ID: <CADYN=9L=RB2AoBNU6Cfy2UKyznJy+oo0aPvapHp-v1f12uVs-A@mail.gmail.com>
+Subject: Re: [PATCHv2] powerpc: mm: radix_tlb: rearrange the if-else block
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 28 Jan 2022 at 11:14, Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 28/01/2022 =C3=A0 11:08, Anders Roxell a =C3=A9crit :
+> > Clang warns:
+> >
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' =
+is uninitialized when used here [-Werror,-Wuninitialized]
+> >                                  __tlbiel_va_range(hstart, hend, pid,
+> >                                                    ^~~~~~
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the vari=
+able 'hstart' to silence this warning
+> >                  unsigned long hstart, hend;
+> >                                      ^
+> >                                       =3D 0
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is=
+ uninitialized when used here [-Werror,-Wuninitialized]
+> >                                  __tlbiel_va_range(hstart, hend, pid,
+> >                                                            ^~~~
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the vari=
+able 'hend' to silence this warning
+> >                  unsigned long hstart, hend;
+> >                                            ^
+> >                                             =3D 0
+> > 2 errors generated.
+> >
+> > Rework the 'if (IS_ENABLE(CONFIG_TRANSPARENT_HUGEPAGE))' so hstart/hend
+> > always gets initialized, this will silence the warnings. That will also
+> > simplify the 'else' path. Clang is getting confused with these warnings=
+,
+> > but the warnings is a false-positive.
+> >
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> > ---
+> >   arch/powerpc/mm/book3s64/radix_tlb.c | 9 +++------
+> >   1 file changed, 3 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/boo=
+k3s64/radix_tlb.c
+> > index 7724af19ed7e..7d65965a0688 100644
+> > --- a/arch/powerpc/mm/book3s64/radix_tlb.c
+> > +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+> > @@ -1174,12 +1174,9 @@ static inline void __radix__flush_tlb_range(stru=
+ct mm_struct *mm,
+> >               bool hflush =3D false;
+>
+> You should then remove the default initialisation of hflush to false
+> which has become pointless.
+>
+> With that fixed,
+>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Hi Alex
+Thank you for the review.
+I will send a v3 shortly with that fixed.
 
-> On 27-Jan-2022, at 11:06 PM, Alex Deucher <alexdeucher@gmail.com> wrote:
->=20
-> C style comments please.
-Shall be fixed in v2
->  I'll let one of the display guys comment on
-> the rest of the patch.  Seems reasonable, we have a similar quirk for
-> the Apple MBP 2017 15" Retina panel later in this function.  Could you
-> move this next to the other quirk?
-I guess moving it next to the other quirk may break the functionality of th=
-is quirk, cause the MBP 2018 one involves stuff regarding firmware revision=
- as well. The original patch applies the quirk after the following lines of=
- the code :-
-
-=09
-	core_link_read_dpcd(
-		link,
-		DP_SINK_HW_REVISION_START,
-		(uint8_t *)&dp_hw_fw_revision,
-		sizeof(dp_hw_fw_revision));
-
-	link->dpcd_caps.sink_hw_revision =3D
-		dp_hw_fw_revision.ieee_hw_rev;
-
-	memmove(
-		link->dpcd_caps.sink_fw_revision,
-		dp_hw_fw_revision.ieee_fw_rev,
-		sizeof(dp_hw_fw_revision.ieee_fw_rev));
-
-Which seem to related to the firmware stuff. Moving it along with the 2017 =
-quirk doesn't sound right to me, as this shall move the quirk BEFORE these =
-lines of code instead. Maybe the author also knowingly added the quirk afte=
-r these lines of code?
-
-As a workaround, could we move the 2017 quirk later, instead of moving the =
-2018 quirk before? This sounds more logical to me.
-
-Regards
-Aditya
+Cheers,
+Anders

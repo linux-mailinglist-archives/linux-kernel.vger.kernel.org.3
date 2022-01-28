@@ -2,143 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DDA49F123
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2635049F12C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345489AbiA1Cj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:39:56 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.228]:43064 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241710AbiA1Cjy (ORCPT
+        id S1345499AbiA1Clt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:41:49 -0500
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:20782 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241696AbiA1Clr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:39:54 -0500
-HMM_SOURCE_IP: 172.18.0.188:52266.46694565
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.39 (unknown [172.18.0.188])
-        by chinatelecom.cn (HERMES) with SMTP id 4F92E280177;
-        Fri, 28 Jan 2022 10:39:42 +0800 (CST)
-X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.188])
-        by app0023 with ESMTP id a9e64b333e9c4f4eb3b632d49f176d02 for j.vosburgh@gmail.com;
-        Fri, 28 Jan 2022 10:39:49 CST
-X-Transaction-ID: a9e64b333e9c4f4eb3b632d49f176d02
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.188
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jay.vosburgh@canonical.com, nikolay@nvidia.com,
-        huyd12@chinatelecom.cn, sunshouxin@chinatelecom.cn
-Subject: [PATCH v10] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
-Date:   Thu, 27 Jan 2022 21:39:16 -0500
-Message-Id: <20220128023916.100071-1-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Thu, 27 Jan 2022 21:41:47 -0500
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 20S2fY8X008122;
+        Fri, 28 Jan 2022 11:41:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 20S2fY8X008122
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1643337694;
+        bh=4JwARZdKVo3l5mCIOwcu21mpuSYlPGM/jXChU9Tmvv8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lMJ1QSht7dX1owf3nll55YpxS/G/4siojSVe7w7p2iLOjEA5y0bMCCqyjSJUN/54B
+         +eSlP9dCRjPQUnQd3pqwf3YCEEtCw+z/shb0W6gc2VZT4iOj8Kxeg/j+pXouSgNUjs
+         B8oxA1r5s9CiIsu3waOEi6UawlRbFKmYdCSjCTub2bIzh9fh+/JDV2Uz+NQ4XOSoKC
+         lD0X3ilOn6GUkg0CjTtQ4EB4CAq/rOIiT+SzHTrkKxH1sPyK37BKuZJeaai8uHJu6S
+         hhD+LSPmPrRt5zH0pevbvO9ztWegM52QpkEoxZ3LWd4Q8UPHPOZgqSZHfr2yXA0iT/
+         AXH44hL8KcwtQ==
+X-Nifty-SrcIP: [209.85.216.45]
+Received: by mail-pj1-f45.google.com with SMTP id d5so5161591pjk.5;
+        Thu, 27 Jan 2022 18:41:34 -0800 (PST)
+X-Gm-Message-State: AOAM533WE2OgiQsewbJZXxBa0Lu0n8DGYHp/J7JO2FiHfZRkWFtc8krV
+        FstK4jae3NaRXdcDKdDabGfeE8f8PQkj2NneJ0Y=
+X-Google-Smtp-Source: ABdhPJy1GiKZizyfLYhMezNIV1ytKYsoKKMkU59dG1DjFD/iKFc6IodPKJ/Y/ET9SfcyfEuczaNspQfIJ50T03XKddU=
+X-Received: by 2002:a17:90b:1647:: with SMTP id il7mr9537952pjb.119.1643337693823;
+ Thu, 27 Jan 2022 18:41:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+In-Reply-To: <20220112224342.958358-1-quic_eberman@quicinc.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 28 Jan 2022 11:40:56 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ4wXjLfz_+6QeT06tKr_2Pan0qtxf=adKQtCNagZ+5wQ@mail.gmail.com>
+Message-ID: <CAK7LNAQ4wXjLfz_+6QeT06tKr_2Pan0qtxf=adKQtCNagZ+5wQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Add environment variables for userprogs flags
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ipv6 neighbor solicitation and advertisement messages
-isn't handled gracefully in bond6 driver, we can see packet
-drop due to inconsistency between mac address in the option
-message and source MAC .
+(+CC: Arnd)
 
-Another examples is ipv6 neighbor solicitation and advertisement
-messages from VM via tap attached to host bridge, the src mac
-might be changed through balance-alb mode, but it is not synced
-with Link-layer address in the option message.
+On Thu, Jan 13, 2022 at 7:44 AM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>
+> Allow additional arguments be passed to userprogs compilation.
+> Reproducible clang builds need to provide a sysroot and gcc path to
+> ensure same toolchain is used across hosts. KCFLAGS is not currently
+> used for any user programs compilation, so add new USERCFLAGS and
+> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+>
+> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
+> an environment where a user sysroot is not specifically available.
+> Currently, Clang might automatically detect GCC installation on hosts
+> which have it installed to a default location in /. With addition of
+> these environment variables, our build environment can do like
+> "--sysroot=/dev/null" to force sysroot detection to fail.
+>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
 
-The patch implements bond6's tx handle for ipv6 neighbor
-solicitation and advertisement messages.
 
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
----
-v9->v10:
-- add IPv6 header pull in alb_determine_nd.
-- combine bond_xmit_alb_slave_get's IPv6 header
-pull with alb_determine_nd's
----
- drivers/net/bonding/bond_alb.c | 40 ++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
+> --- a/usr/include/Makefile
+> +++ b/usr/include/Makefile
+> @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+>  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+>  UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+>
+> +# USERCFLAGS might contain sysroot location for CC
+> +UAPI_CFLAGS += $(USERCFLAGS)
+>
 
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-index 533e476988f2..d9da6eb7f5c2 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -1269,6 +1269,37 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
- 	return res;
- }
- 
-+/* determine if the packet is NA or NS */
-+static bool __alb_determine_nd(struct icmp6hdr *hdr)
-+{
-+	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-+	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
-+{
-+	struct ipv6hdr *ip6hdr;
-+	struct icmp6hdr *hdr;
-+
-+	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
-+		return true;
-+
-+	ip6hdr = ipv6_hdr(skb);
-+	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
-+		if (!pskb_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
-+			return true;
-+
-+		hdr = icmp6_hdr(skb);
-+		return __alb_determine_nd(hdr);
-+	}
-+
-+	return false;
-+}
-+
- /************************ exported alb functions ************************/
- 
- int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
-@@ -1348,8 +1379,11 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
- 	/* Do not TX balance any multicast or broadcast */
- 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
- 		switch (skb->protocol) {
--		case htons(ETH_P_IP):
- 		case htons(ETH_P_IPV6):
-+			if (alb_determine_nd(skb, bond))
-+				break;
-+			fallthrough;
-+		case htons(ETH_P_IP):
- 			hash_index = bond_xmit_hash(bond, skb);
- 			if (bond->params.tlb_dynamic_lb) {
- 				tx_slave = tlb_choose_channel(bond,
-@@ -1432,10 +1466,12 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
- 			break;
- 		}
- 
--		if (!pskb_network_may_pull(skb, sizeof(*ip6hdr))) {
-+		if (alb_determine_nd(skb, bond)) {
- 			do_tx_balance = false;
- 			break;
- 		}
-+
-+		/* The IPv6 header is pulled by alb_determine_nd */
- 		/* Additionally, DAD probes should not be tx-balanced as that
- 		 * will lead to false positives for duplicate addresses and
- 		 * prevent address configuration from working.
+I am OK with this patch, but I was not sure with this line.
 
-base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+Initially, I thought exported UAPI headers should be self-contained.
+In other words, we should be able to compile-test them without
+relying on compiler or libc headers.
+
+Is this achievable or not?
+
+I think Arnd is an expert in this area.
+I hope some input from him.
+
+
+
+
+
+ +
+>  override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+>
+>  # The following are excluded for now because they fail to build.
+> --
+> 2.25.1
+>
+
+
 -- 
-2.27.0
-
+Best Regards
+Masahiro Yamada

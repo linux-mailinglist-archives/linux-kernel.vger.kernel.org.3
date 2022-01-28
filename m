@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7FD49FC08
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E488849FC03
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349445AbiA1OqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:46:24 -0500
-Received: from mga01.intel.com ([192.55.52.88]:15609 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349429AbiA1OqV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:46:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643381181; x=1674917181;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gngqOiUeR2m46p7MVs22OwqlK1CJHBbYd0zK1GE/vrQ=;
-  b=Xm9soSbJM/vpwWUgXDp7Ygrjfs+WU9ZRp3K/NvDs9gKkxdZEX+rMt8qX
-   FQYmEStwQk3jnNpc/6W1b+zjM75MhT9bHFBiz6AUOiIea6cr+CqPr+03z
-   hMdthx+eIwyeU2vnTg1u7ffqeiXM8vFb3B21tjQG2gUTIclvWn6mQ1VOY
-   bP8jTyvft4XT9WZteyV6URTc1ghkfDLuYqBx915h2irZp77gU+5lMkTNR
-   8Th4ymdea5tR9E74u/wESG85oFs9PCHDxuaeNv5M1gqH0zYGK54k9iYSS
-   5ExFV3Omi0F2dkTgGb4zw5JF/CiSAshiOvH8rgwSXkIf+XDv/8jmo8Hnw
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="271592687"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="271592687"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:46:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="478305093"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:46:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nDSV0-00FRfY-Ko;
-        Fri, 28 Jan 2022 16:45:14 +0200
-Date:   Fri, 28 Jan 2022 16:45:14 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc:     linus.walleij@linaro.org, michal.simek@xilinx.com,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "pinctrl: zynqmp: Unify pin naming"
-Message-ID: <YfQBemA3bCz0FdYS@smile.fi.intel.com>
-References: <20220127194602.21987-1-gerhard@engleder-embedded.com>
+        id S1349417AbiA1OpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349414AbiA1OpV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 09:45:21 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29911C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:45:21 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id v3so5411010pgc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:45:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=tHZMd140zpIEoj2CecnDxVRiFeDUjbUC1wxqPW+oecg=;
+        b=FgCuhEx0mkvM7saXOLOVMI1MIOyEj5vw3bcRnIuyWTYKhrkW+5bCVLOMQ/VchCGjEE
+         SVzPxfw5nFI5+p3BLT9mptUsuaoS21kI1r6kJwKtFs2BmfSALC+TJe1e6WM5onQqnhbG
+         Pd3KR3+SY7V7OPFQQ9h4TJnW5/dBIHbzjuYJf040JZbZG+ClOIDFW3uUY3yN6rHn+oiC
+         P2ZdxxnCStjQ57ZOGVd4o5+H9yaLhpLYI1xf91xU/Eir5iEDxiskNhFH0wH6mQWtlCG8
+         e6iXpYihbDomILqZ/1ePLK8ooOug8iYFDb03bohpV9fdaWr4f/lQZrlIO8QKDTm1XB1L
+         FDUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=tHZMd140zpIEoj2CecnDxVRiFeDUjbUC1wxqPW+oecg=;
+        b=dMZCjZsNnC3/quKTiEXn1P1JArdQfset4I2FUfR4tZS35vNxY43p8x905vyeUWp1bD
+         sWXlRNaY2Lz9lN6Zy8qZN0e1NFKlz8l3/vTYAEeX772pLIxjcibz7sR1Z/CegrmncwCX
+         7HrMBvGlGSZUZoE2Ebt/8ci55cLauILCd2+vwpyY4Pa4cS+e1IUsCUPT/oelx410+v5d
+         6EjKeB1Z+2F8DVCtzqQ5pShMXgYQhWXJDlRWFqrhjDynoW0MKOvRGAi+f0iLKOpDscAT
+         /gMh0zSfjF+A225zXr536E965w8dstwon7XSUZEKy0DuDvU3RHfKtmzPKVgY0tSM7ldG
+         ON8g==
+X-Gm-Message-State: AOAM530tcSTqR5ubLUOC7IHEm+mkGl3TXqEassiNKw6vHgSxS+Zw8doa
+        DURiSIMTrsdyiPr9katuY6aN8Q==
+X-Google-Smtp-Source: ABdhPJyJtofyeIzj6pV3Ak8U+4WgL1YeQg6Ft+maZoiVI4RvqGB5wBOxqHxxconuZVKUqhAOv64WiA==
+X-Received: by 2002:a63:2c01:: with SMTP id s1mr1312797pgs.309.1643381120588;
+        Fri, 28 Jan 2022 06:45:20 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id x187sm11238798pgx.10.2022.01.28.06.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 06:45:20 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Yu Kuai <yukuai3@huawei.com>, paolo.valente@linaro.org,
+        jack@suse.cz, tj@kernel.org
+Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
+        yi.zhang@huawei.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20211231032354.793092-1-yukuai3@huawei.com>
+References: <20211231032354.793092-1-yukuai3@huawei.com>
+Subject: Re: [PATCH v2 0/3] block, bfq: minor cleanup and fix
+Message-Id: <164338111974.263985.3933987922467783334.b4-ty@kernel.dk>
+Date:   Fri, 28 Jan 2022 07:45:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127194602.21987-1-gerhard@engleder-embedded.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 08:46:02PM +0100, Gerhard Engleder wrote:
-> From: Gerhard Engleder <gerhard@engleder-embedded.com>
-
-Thanks for your report, my comments below.
-
-> This reverts commit 54784ff24971ed5bd3f1056edce998148709d0a7.
+On Fri, 31 Dec 2021 11:23:51 +0800, Yu Kuai wrote:
+> Chagnes in v2:
+>  - add comment in patch 2
+>  - remove patch 4, since the problem do not exist.
 > 
-> This patch changes the pin names from "MIO%d" to "MIO-%d", but all dts
-> in arch/arm64/boot/dts/xilinx still use the old name. As a result my
-> ZCU104 has no output on serial terminal and is not reachable over
-> network.
+> Yu Kuai (3):
+>   block, bfq: cleanup bfq_bfqq_to_bfqg()
+>   block, bfq: avoid moving bfqq to it's parent bfqg
+>   block, bfq: don't move oom_bfqq
+> 
+> [...]
 
-And question here again, is the pin names ABI or not?
-If it's an ABI, then it should be clarified in the documentation.
-Otherwise, I'm wondering how this even may break anything.
+Applied, thanks!
 
+[1/3] block, bfq: cleanup bfq_bfqq_to_bfqg()
+      commit: a9c77f6ec0b566439182a10b64dd3e60a0408849
+[2/3] block, bfq: avoid moving bfqq to it's parent bfqg
+      commit: 36ad7fe0ec7485ee435f7a40452c7a58598779d4
+[3/3] block, bfq: don't move oom_bfqq
+      commit: a0b98e6fba18a40aa9672cc3e0abf980456f3ae6
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
+Jens Axboe
 
 

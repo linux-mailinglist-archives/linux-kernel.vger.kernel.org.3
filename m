@@ -2,108 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D82049F83D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2D649F83F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbiA1LYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbiA1LYk (ORCPT
+        id S232502AbiA1LYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:24:44 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35040 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232001AbiA1LYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:24:40 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6719C061747
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:24:40 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so4945485pjq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MuWXa/dKeqGYD0Uv835NnGzX3ZFfUYNI8MH1vd0SUz0=;
-        b=EJpUCkcd+r5r2AiIM2NRsEH+zuMJdDorQZuoPjgBDWTHW+XGXvJZMzc5c236FdkISz
-         8FzYgvJTwBNOzbhdM0BUdIA2+CHiybdOYb5+u3g+9/kbf+S8j4EXLgg2T6N/02vVEnkA
-         vBgXQVLIGTGm/g7tRFDYxyssWdda+DP/I15PI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MuWXa/dKeqGYD0Uv835NnGzX3ZFfUYNI8MH1vd0SUz0=;
-        b=GtgdALQ7P8YSdv+ug5cSYbHCm/NuR6UrohmjT//4irZRA97uLmyy4ZYvBkGf8Ty/dU
-         5TfOIB9cfnE7Nhn68Lmx79MklLYntYVPOn+6QrRGzzRkGmYDa54ng44EFtqgBBhcrqRb
-         ZwMGdgEDBvi10sJ0oIyhHtbiwaxVSmLjazt/QcSVyF9z8BbmkEwqduQV40KmmLvIVbPY
-         C3VE7Z0d+2Yj873hp1WLFAvKH5uz8Pp2ilIp8yZGZb0PAkt44pzQiyyKwPSFOyR790IN
-         aBbEQgx/Uo7kAyh8QTVkwiUtYGlhDYKjzWiEct5+qNLf1Gg9VidGhlWbC9AK1RKFVuII
-         eOtg==
-X-Gm-Message-State: AOAM532jXUj2QQ8dG4FW+oxgD9OzyHIZdXmEhI0zdSfS2fcZeb5cXz9X
-        GBxiuFNmYhIkxu8RXgx/VyWy+g==
-X-Google-Smtp-Source: ABdhPJz9vaeT420x071ltTwUhJu7VUM9ha6We1vBjrZ11JSKseHhyHknNxQDrjtEVpPRo5iBau+kTQ==
-X-Received: by 2002:a17:90b:4f49:: with SMTP id pj9mr19168988pjb.211.1643369080062;
-        Fri, 28 Jan 2022 03:24:40 -0800 (PST)
-Received: from adf6a34bf206 ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id k12sm9394044pfc.107.2022.01.28.03.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 03:24:39 -0800 (PST)
-Date:   Fri, 28 Jan 2022 11:24:32 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Vyacheslav Bocharov <adeep@lexina.in>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 0/2] Bluetooth: hci_h5: btrtl: Add support for
- RTL8822CS hci_ver 0x08
-Message-ID: <20220128112432.GA28@adf6a34bf206>
-References: <20220126073905.3637841-1-adeep@lexina.in>
- <9CE136E5-3BEC-42CB-8A19-644E2B4D0D10@holtmann.org>
+        Fri, 28 Jan 2022 06:24:43 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 8F8FB1F45E36
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643369081;
+        bh=0k7m4FzJK9kWdB+O7Oupf24TMSbU+LrZcmczneKKqYw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=foypQJZUcowKwZvoWoFVnS8Pa0v1JsBVzCKMZXvhFJDtP6otexkH5mcoNNTbg8x11
+         PudWzCMVB96QIsy7XcuQ0zAQtXef27XJjk4k/ZRI0PrGIJPrzMQmmk38vf/oA7CWuz
+         y3wWars4VIPLSLLt1vdzyIajv1QLKFuEWtm/LEU4Fe4g1Tq+xZ5kgBeoqMwmnZfMYP
+         J/r6Q46Ipb1QWpNf+QO4nTb/f+OeV/SjaYiGutjXnJEKPIjVBUja1AvBXovBpU3xti
+         8FY5IwILZLUcBMRQ0WuwCOGHalqP2AwwfUIqHUcpDU0ZqA83k4mf8TxXtbohhth5LS
+         WuzqTfwgBUOIg==
+Message-ID: <71662f4c-2b76-31d6-be3b-2ac267e9ea82@collabora.com>
+Date:   Fri, 28 Jan 2022 16:24:34 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9CE136E5-3BEC-42CB-8A19-644E2B4D0D10@holtmann.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martin Kaiser <martin@kaiser.cx>, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rt8188eu: Remove dead code
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220128111954.1028121-1-usama.anjum@collabora.com>
+ <20220128112315.GF1951@kadam>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220128112315.GF1951@kadam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:40:38PM +0100, Marcel Holtmann wrote:
-> Hi Vyacheslav,
-> 
-> > Add a variation of RTL8822CS with hci_ver = 0x08. This is fully similar
-> > to RTL8822CS with hci_ver = 0x0a observed on the Tanix TX6 Android set-top
-> > box and JetHome JetHub H1.
-> > 
-> > While testing the RTL8822CS SDIO WiFi/BT adapter, I found that in some
-> > cases the kernel could not initialize it. However, manually resetting the
-> > adapter via gpio allows it to start correctly.
-> > Apparently at system start the adapter is in an undefined state (including
-> > the unknown state of gpio after starting uboot). A forced reset helps to
-> > initialize the adapter in most cases. Experimentally it was found that
-> > 100ms is enough to reset.
-> > So, add power reset via enable-gpios in h5_btrtl_open function.
-> > 
-> > Changes from v6..v4:
-> > - fix patch description
-> > Changes from v3:
-> > - add has_msft_ext option
-> > Changes from v2:
-> > - align the patches for bluetooth-next
-> > Changes from v1:
-> > - remove Signed-off-by chbgdn <chbgdn@gmail.com> as not reachable
-> > 
-> > Vyacheslav Bocharov (2):
-> >  Bluetooth: btrtl: Add support for RTL8822C hci_ver 0x08
-> >  Bluetooth: hci_h5: Add power reset via gpio in h5_btrtl_open
-> > 
-> > drivers/bluetooth/btrtl.c  | 8 ++++++++
-> > drivers/bluetooth/hci_h5.c | 5 +++++
-> > 2 files changed, 13 insertions(+)
-> 
-> both patches have been applied to bluetooth-next tree.
 
-Thanks Marcel and Vyacheslav
 
-> Regards
+
+On 1/28/22 4:23 PM, Dan Carpenter wrote:
+> On Fri, Jan 28, 2022 at 04:19:54PM +0500, Muhammad Usama Anjum wrote:
+>> rtStatus is _SUCCESS when the execution reaches this if condition.
+>> Remove the dead code.
+>>
+>> Fixes: 67396d2dfef3 ("staging: r8188eu: merge ODM_ConfigBBWithHeaderFile with its callers")
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > 
-> Marcel
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 > 
+> What checker warned about this?
+Coverity

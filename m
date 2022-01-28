@@ -2,66 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0051349F0F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF7E49F0F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345346AbiA1C25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S1345348AbiA1CaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345339AbiA1C24 (ORCPT
+        with ESMTP id S241037AbiA1CaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:28:56 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE35AC061747
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:28:55 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id jx6so11182952ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:28:55 -0800 (PST)
+        Thu, 27 Jan 2022 21:30:12 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E26EC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:30:12 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id g14so14311251ybs.8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:30:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=16SejWaddN5elghTmeHnExoVbYnHRduusQDg4zcIJJA=;
-        b=OLWD5Vhsy9y8d+PdzXpwCYwPUmq7igKT9WLvrQJKlJcc9ssXjEyuQ76gf/6DHoyqmg
-         jb894QG7ehD+4wfVW+XSVQ0ZsO5aw3USNe356jA9FVC1IVlWcAAvLGXvrggsig1FdZrr
-         oO7vqae72G9McaMGToTDhalsrVgVbwXlySZQHPYvsFXfpAAKpI0tYybbGvhal+qbj4RX
-         Z1JyTlJzNgjP0DJHLw05TIUyEm/+PLtQ02V0VZE3DSymjIYWj43dF4LFX3JzrQfGKQyw
-         OAbaUDqWo3e4k2t7IPfHXbzQC0+H5LncuennzcCVrxkomyzDuRSyemyNGOD1F3T7016X
-         WPpg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DamQHfcfzoASoILm7XiX5cq6CR5MirC/axqcdaKZru8=;
+        b=i5pCtfIMsiigWJD7tXVJjlFvSir95TsPd2f/wfNZ7UnizIAK8p5N5YfX4mSoLL9Fv+
+         KEZKqGLZqCqMkvBwGwiIctxvFmeycsC9C76WOUWE9cFU6XUPjT6Ew+a39kOQsUGK92+i
+         zKYIsg1VZAI5D1BO3EFzncW8LNNKkTF+eSebbVxje6vbgI8q3YYmZOakQ9CCoAP2MDn7
+         b0yiR2VHCgKJp0Q3TGnQfQFoDNqEUMBhGPo3WPavflTE/eqyyPiICe5GAdI3X6e/i525
+         Q4OlcMbYMr/31ZdmcQEcF/G4B+21Yn+sfP4B7gO5mK3LaOnp2DKsr8gLgaN9hWTXHT/W
+         Qj9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=16SejWaddN5elghTmeHnExoVbYnHRduusQDg4zcIJJA=;
-        b=Qlxek/vcr1CJpojBJqq3UJqxFh3XQj7FKkgDPe+VQwrojA0VFoMZU2DoBBLde7U4lP
-         rDpKdl7zZbf2+DOwJbVPO32Xy1ts8THk1wSC7W5w7T0OSgtMc54Tosdpj1cQwkvqw3lb
-         YYved6KCijdzeB+/1FzubP6s5ri6iKf+N8AATl9yfSheeGbrOty3ADF7Iz/gQWrG5icG
-         9ajWV4TmnV5g7ds/qJUFQ46qHuCNDnRrW3n+Tdd0lWa4AkTubFIOn1xh2XXizy0THhTA
-         xfAb2JOCZTSG86vrxRdBkPGUM55ic1WfCqfLkiTM6ho7OPXTS+RloM4kud9AkkTQCGQx
-         m49Q==
-X-Gm-Message-State: AOAM532RgDO2JHUFX4bsaaU76c+we0Qe7vvY+j7QDX7g/KEjEyEFyOfk
-        ESl4pVh18ve0wF+/3KYIVT6PxPt8kilv8bD7y18=
-X-Google-Smtp-Source: ABdhPJyTyCMuOfvTAiDO/girHh4u21WSCbuJhMVIdc+IQy6KLPZCW/ziB4NCNYac0prJTwdsgMKnMA2/Ou192b8yxHo=
-X-Received: by 2002:a17:906:6a26:: with SMTP id qw38mr5521048ejc.560.1643336934171;
- Thu, 27 Jan 2022 18:28:54 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DamQHfcfzoASoILm7XiX5cq6CR5MirC/axqcdaKZru8=;
+        b=zkiJgi3lhazrU5dC/xFRIwO4dtSeBkjgziW74xqeBqCTpb0GGbH8INWQy8X+809cIs
+         pCTE+WdRfcmvlM43CPyVKHf4/nRmGvG8fyQsIXd1joQ2BomOJX9ukDZ3iEaOezQ0/plE
+         cSrk1oW7U4bU60leU9BfE0E8vUV03fls91x78dnWiFlczrTiITP0oRy8Japgeu7rgj7q
+         Joo/+u4MBmZ8PW8OT/Yuvre9FkakZxWzkJykfoMZ6HUiRJJ2RbvX4M8QJWpmiofWv3Ie
+         oB6Ffjn7ATdlNHjPyQFxA5/5d050fLaPoIuvZMcWJuCpVx5NnHhVjrHjUIPFuc7vF+44
+         7gXA==
+X-Gm-Message-State: AOAM531W522G/PeYPi6EvoUmaj8WIMSXCCiRJmKkei9hjeFIKYAVlk0H
+        Ri9ZN1Ctt4xE41dXENa9ZrxnPgEZQUBZHzXiKKuvIQ==
+X-Google-Smtp-Source: ABdhPJx0WDYGuW8NyYrZWYUmYbRLJ4MjGYQsafMXy/Rgq/znTvBWVgE/qBEVbn9LpIURHoLqG50QlQwxWh1y7xcftxo=
+X-Received: by 2002:a25:d80f:: with SMTP id p15mr10098925ybg.753.1643337011182;
+ Thu, 27 Jan 2022 18:30:11 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a54:3186:0:0:0:0:0 with HTTP; Thu, 27 Jan 2022 18:28:53
- -0800 (PST)
-Reply-To: michellederoma422@gmail.com
-From:   Info Firm <infofirm449@gmail.com>
-Date:   Fri, 28 Jan 2022 04:28:53 +0200
-Message-ID: <CAD_YcxshgvZ8p5uBAP+KQ1VC=43=z90xdOtMkDFAjJ6rAmB4AA@mail.gmail.com>
-Subject: URGENT REPLY FROM YOU
-To:     undisclosed-recipients:;
+References: <20220128014303.2334568-1-jannh@google.com> <CANn89iKWaERfs1iW8jVyRZT8K1LwWM9efiRsx8E1U3CDT39dyw@mail.gmail.com>
+ <CAG48ez0sXEjePefCthFdhDskCFhgcnrecEn2jFfteaqa2qwDnQ@mail.gmail.com>
+ <20220127182219.1da582f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CANn89i+k4tiyQtb6fh8USDjhZGVwdx1puh8cr9NcDQECbvJvdg@mail.gmail.com> <CAG48ez3rhgWhELfeuTiTVNk5GP2hbzWZE2SE+-jmHPZxxg1hJQ@mail.gmail.com>
+In-Reply-To: <CAG48ez3rhgWhELfeuTiTVNk5GP2hbzWZE2SE+-jmHPZxxg1hJQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 27 Jan 2022 18:30:00 -0800
+Message-ID: <CANn89i+h-eQtPH=6dObjXO+k6WLc8vNo3MCjzmE4+4LLj2NYzw@mail.gmail.com>
+Subject: Re: [PATCH net] net: dev: Detect dev_hold() after netdev_wait_allrefs()
+To:     Jann Horn <jannh@google.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings compliments of the season, How are you doing. I have emailed
-you earlier on without any response from you. I want you to make use
-of this $640,000 donation o restore hope to families and individuals
-that the pandemic wrecked in your area. offer from me to you. Kindly
-get back to me to my official email. for more details:
-michellederoma422@gmail.com
+On Thu, Jan 27, 2022 at 6:27 PM Jann Horn <jannh@google.com> wrote:
+>
+> I like that idea... but this_cpu_dec()/this_cpu_inc() use GS-relative
+> addressing, at least on X86-64, so NULL might make things worse, I
+> think? /proc/kallsyms on my machine starts with:
+>
+> 0000000000000000 A fixed_percpu_data
+> 0000000000000000 A __per_cpu_start
+> 0000000000001000 A cpu_debug_store
+> 0000000000002000 A irq_stack_backing_store
+> 0000000000006000 A cpu_tss_rw
+> 000000000000b000 A gdt_page
+> 000000000000c000 A exception_stacks
+> 0000000000010000 A entry_stack_storage
+> 0000000000011000 A espfix_waddr
+>
+> So we'd probably need some different placeholder instead of NULL to
+> actually crash...
 
-Sincerely,
+Orthogonal problem, maybe we should make sure the first page of
+per-cpu data is un-mapped.

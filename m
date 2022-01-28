@@ -2,212 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2599949F195
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6340F49F12D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237063AbiA1C5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:57:34 -0500
-Received: from mga17.intel.com ([192.55.52.151]:38657 "EHLO mga17.intel.com"
+        id S1345507AbiA1CmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:42:06 -0500
+Received: from mga14.intel.com ([192.55.52.115]:3811 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229811AbiA1C5c (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:57:32 -0500
+        id S241696AbiA1CmF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 21:42:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643338652; x=1674874652;
+  t=1643337725; x=1674873725;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sbB5DbFwgn6MZ3jXJtvL/bQpgxlHMv6s1gejhPlpnDk=;
-  b=hy9s5xoU9xB7zy/2hBqgwtzkb8rcN74l5spzaRdRCCs7Gh7Y7OjfsY0P
-   qZxq0wJzly0MngIGFeWbakV2z4M2Z40ETgCG26X8rbA+xdCfWOFEnGNfG
-   GQ/hFDC6Mg3FjJs71gPb2S/+R+CUVIv2YZNpbt+N24gJgzHep27klMFKC
-   Q0ma2qqODEHyx/X+AYqaV1gDAhaUrOE6PZ68S6ngmVZnomQnd/lSFOM4X
-   RwqAJ0pUV0TPqYWDNGwEe/1rHFxSVCXvTxNr3ygTBjmKYLGswV9iK/MaJ
-   v0CmxAuY7dyKnM9tmzCznoS6VA8fCRV3Eii1WSgB4ddPtJJbepPqDdDW/
+   mime-version:in-reply-to;
+  bh=qJGD54+z4s9uimUk4jVCMGmOmDNCKMZ5udJCxiNXpGY=;
+  b=I5pvLefs1Y9bdUIq9J39wwpJlzzYFW2Xah+Q3xoE8/uWr4BlvEkWmJTE
+   +y8j9N2WKuPECJna10wLtigUb/omA53NRXysmhYY+VYtsB1BlY3vmooDj
+   6mLKXzP8r9zAQjRGw7pkbuGlypHj77KN27fsJkpAdBGyGhQCLqr+DVByz
+   n65mtZE2hl2TJFzwYvrp+nt8zubVNT3WV6474291WmAXxZSyZzugK5dYO
+   faCEPT9F3460bhTPlNWGe2t0CWq0aztcDp3XFw794nZ35IKO+gFE6TV5n
+   CrDZh2W+gck//UJztqf++zM3RBNk9Q8gFCEHS8I/4ph6IBpbJT8YfLB4Z
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227700251"
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247247720"
 X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="227700251"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:56:58 -0800
+   d="scan'208";a="247247720"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:42:05 -0800
 X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="535955362"
-Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.145.56])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 27 Jan 2022 18:56:55 -0800
-Date:   Fri, 28 Jan 2022 10:41:32 +0800
-From:   Yang Zhong <yang.zhong@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, yang.zhong@intel.com
-Subject: Re: [PATCH 2/3] KVM: x86: add system attribute to retrieve full set
- of supported xsave states
-Message-ID: <20220128024132.GA10089@yangzhon-Virtual>
-References: <20220126152210.3044876-1-pbonzini@redhat.com>
- <20220126152210.3044876-3-pbonzini@redhat.com>
- <YfK71pSnmtpnSJQ8@google.com>
+   d="scan'208";a="769962897"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:42:05 -0800
+Date:   Thu, 27 Jan 2022 18:42:00 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YfNVBzN67rSu/QcE@otcwcpicx3.sc.intel.com>
+References: <20211217220136.2762116-1-fenghua.yu@intel.com>
+ <20211217220136.2762116-6-fenghua.yu@intel.com>
+ <87ee4w6g1n.ffs@tglx>
+ <87bl006fdb.ffs@tglx>
+ <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
+ <878rv46eg3.ffs@tglx>
+ <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
+ <87k0em4lu9.ffs@tglx>
+ <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
+ <8735la41qb.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfK71pSnmtpnSJQ8@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <8735la41qb.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 03:35:50PM +0000, Sean Christopherson wrote:
-> On Wed, Jan 26, 2022, Paolo Bonzini wrote:
-> > +static int kvm_x86_dev_get_attr(struct kvm_device_attr *attr)
-> > +{
-> > +	if (attr->group)
-> > +		return -ENXIO;
-> > +
-> > +	switch (attr->attr) {
-> > +	case KVM_X86_XCOMP_GUEST_SUPP:
-> > +		if (put_user(supported_xcr0, (u64 __user *)attr->addr))
-> 
-> Deja vu[*].
-> 
->   arch/x86/kvm/x86.c: In function ‘kvm_x86_dev_get_attr’:
->   arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
->         |                                              ^
->   arch/x86/include/asm/uaccess.h:221:31: note: in definition of macro ‘do_put_user_call’
->     221 |         register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);           \
->         |                               ^~~
->   arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
->    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
->         |                     ^~~~~~~~
->   arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
->         |                                              ^
->   arch/x86/include/asm/uaccess.h:223:21: note: in definition of macro ‘do_put_user_call’
->     223 |         __ptr_pu = (ptr);                                               \
->         |                     ^~~
->   arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
->    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
->         |                     ^~~~~~~~
->   arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
->         |                                              ^
->   arch/x86/include/asm/uaccess.h:230:45: note: in definition of macro ‘do_put_user_call’
->     230 |                        [size] "i" (sizeof(*(ptr)))                      \
->         |                                             ^~~
->   arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
->    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
-> 
-> Given that we're collectively 2 for 2 in mishandling {g,s}et_attr(), what about
-> a prep pacth like so?  Compile tested only...
->
+Hi, Thomas,
 
-  Sean, It's strange that I could not find those issues in my last day's build.
-  
-  My build environment:
-  #make -v
-  GNU Make 4.3
-  
-  # gcc -v
-  gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
+On Wed, Jan 26, 2022 at 10:38:04PM +0100, Thomas Gleixner wrote:
+> On Wed, Jan 26 2022 at 09:36, Fenghua Yu wrote:
+> > On Wed, Jan 26, 2022 at 03:23:42PM +0100, Thomas Gleixner wrote:
+> >> On Tue, Jan 25 2022 at 07:18, Fenghua Yu wrote:
+> >> While looking at ioasid_put() usage I tripped over the following UAF
+> >> issue:
+> >> 
+> >> --- a/drivers/iommu/intel/iommu.c
+> >> +++ b/drivers/iommu/intel/iommu.c
+> >> @@ -4817,8 +4817,10 @@ static int aux_domain_add_dev(struct dma
+> >>  	auxiliary_unlink_device(domain, dev);
+> >>  link_failed:
+> >>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+> >> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> >> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+> >>  		ioasid_put(domain->default_pasid);
+> >> +		domain->default_pasid = INVALID_IOASID;
+> >> +	}
+> >>  
+> >>  	return ret;
+> >>  }
+> >> @@ -4847,8 +4849,10 @@ static void aux_domain_remove_dev(struct
+> >>  
+> >>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+> >>  
+> >> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> >> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+> >>  		ioasid_put(domain->default_pasid);
+> >> +		domain->default_pasid = INVALID_IOASID;
+> >> +	}
+> >>  }
+> >>  
+> >>  static int prepare_domain_attach_device(struct iommu_domain *domain,
+> >
+> > The above patch fixes an existing issue. I will put it in a separate patch,
+> > right?
+> 
+> Correct.
+> 
+> > It cannot be applied cleanly to the upstream tree. Do you want me to base
+> > the above patch (and the whole patch set) to the upstream tree or a specific
+> > tip branch?
+> 
+> Against Linus tree please so that the bugfix applies.
+> 
+> > I will fold the following patch into patch #5. The patch #11 (the doc patch)
+> > also needs to remove one paragraph talking about refcount.
+> >
+> > So I will send the whole patch set with the following changes:
+> > 1. One new bug fix patch (the above patch)
 
-  I will apply your extra patch to check again, thanks!
-  
+When I study your above aux_domain bug fix path, I find more aux_domain bugs.
+But then I find aux_domain will be completely removed because all aux_domain
+related callbacks are not called and are dead code (no wonder there are
+so many bugs in aux_domain). Please see this series: https://lore.kernel.org/linux-iommu/20220124071103.2097118-4-baolu.lu@linux.intel.com/
+For the series, Baolu confirms that he is "pretty sure that should be part
+of v5.18". And I don't find the series calls any IOASID function after
+removing the aux_domain code.
 
-  Yang
+So that means we don't need to fix those issues in the dead aux_domain
+code any more because it will be completely removed in 5.18, right?
 
- 
-> From: Sean Christopherson <seanjc@google.com>
-> Date: Thu, 27 Jan 2022 07:31:53 -0800
-> Subject: [PATCH] KVM: x86: Add a helper to retrieve userspace address from
->  kvm_device_attr
+If you agree, I will not include the aux_domain fix patch or any other
+aux_domain fix patches in the up-coming v3. Is that OK?
+
+> > 2. Updated patch #5 (with the following patch folded)
+
+I will still change ioasid_put() in the aux_domain callbacks to ioasid_free()
+in patch #5. So compilation will pass. Baolu's series will remove
+the entire aux_domain code in 5.18.
+
+> > 3. Updated patch #11 (removing refcount description)
 > 
-> Add a helper to handle converting the u64 userspace address embedded in
-> struct kvm_device_attr into a userspace pointer, it's all too easy to
-> forget the intermediate "unsigned long" cast as well as the truncation
-> check.
+> Looks good.
 > 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/x86.c | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 8033eca6f3a1..67836f7c71f5 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4335,14 +4335,28 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	return r;
->  }
-> 
-> +static inline void __user *kvm_get_attr_addr(struct kvm_device_attr *attr)
-> +{
-> +	void __user *uaddr = (void __user*)(unsigned long)attr->addr;
-> +
-> +	if ((u64)(unsigned long)uaddr != attr->addr)
-> +		return ERR_PTR(-EFAULT);
-> +	return uaddr;
-> +}
-> +
->  static int kvm_x86_dev_get_attr(struct kvm_device_attr *attr)
->  {
-> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
-> +
->  	if (attr->group)
->  		return -ENXIO;
-> 
-> +	if (IS_ERR(uaddr))
-> +		return PTR_ERR(uaddr);
-> +
->  	switch (attr->attr) {
->  	case KVM_X86_XCOMP_GUEST_SUPP:
-> -		if (put_user(supported_xcr0, (u64 __user *)attr->addr))
-> +		if (put_user(supported_xcr0, uaddr))
->  			return -EFAULT;
->  		return 0;
->  	default:
-> @@ -5070,11 +5084,11 @@ static int kvm_arch_tsc_has_attr(struct kvm_vcpu *vcpu,
->  static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
->  				 struct kvm_device_attr *attr)
->  {
-> -	u64 __user *uaddr = (u64 __user *)(unsigned long)attr->addr;
-> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
->  	int r;
-> 
-> -	if ((u64)(unsigned long)uaddr != attr->addr)
-> -		return -EFAULT;
-> +	if (IS_ERR(uaddr))
-> +		return PTR_ERR(uaddr);
-> 
->  	switch (attr->attr) {
->  	case KVM_VCPU_TSC_OFFSET:
-> @@ -5093,12 +5107,12 @@ static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
->  static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
->  				 struct kvm_device_attr *attr)
->  {
-> -	u64 __user *uaddr = (u64 __user *)(unsigned long)attr->addr;
-> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
->  	struct kvm *kvm = vcpu->kvm;
->  	int r;
-> 
-> -	if ((u64)(unsigned long)uaddr != attr->addr)
-> -		return -EFAULT;
-> +	if (IS_ERR(uaddr))
-> +		return PTR_ERR(uaddr);
-> 
->  	switch (attr->attr) {
->  	case KVM_VCPU_TSC_OFFSET: {
-> --
-> 
-> 
-> 
-> [*] https://lore.kernel.org/all/20211007231647.3553604-1-seanjc@google.com
-> 
-> 
-> > +			return -EFAULT;
-> > +		return 0;
-> > +	default:
-> > +		return -ENXIO;
-> > +		break;
-> > +	}
-> > +}
-> > +
+
+Thanks.
+
+-Fenghua

@@ -2,73 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CAD49FB01
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9B449FAFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242640AbiA1Not (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:44:49 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4545 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242206AbiA1Nor (ORCPT
+        id S239706AbiA1Noa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230092AbiA1NoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:44:47 -0500
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jldr412C6z67Z9J;
-        Fri, 28 Jan 2022 21:40:20 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 14:44:45 +0100
-Received: from [10.47.26.192] (10.47.26.192) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 28 Jan
- 2022 13:44:44 +0000
-Subject: Re: [RFC PATCH v2 1/5] perf stat: Implement --topdown with metrics
-To:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>, <irogers@google.com>, <ak@linux.intel.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>
-References: <4fefb1bc-49b2-bc5b-23cd-cd8fabe8c588@huawei.com>
- <20220111150749.13365-1-andrew.kilroy@arm.com>
- <20220111150749.13365-2-andrew.kilroy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <70433fdc-831e-8afa-68c3-6d75a4f8c75a@huawei.com>
-Date:   Fri, 28 Jan 2022 13:44:08 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 28 Jan 2022 08:44:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF13C061714;
+        Fri, 28 Jan 2022 05:44:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=66KUqfGLKCCNfUmx01Wi6r7gGMm9QxBTDybB4Toi49o=; b=l+n+LtEfP4LjwSALB4NpmCbGtZ
+        W7f4AsugfZTwtz8tI8KheXuJEEu7WtXqFod3hu0vctGYF73d+UHPSUOAxroh8SoRjD7p8E33qOhlf
+        FgJMneZem2cPQiTAJQhPlQnQVbDf97QNCqLw32JdGmw3eplgcHWN/Ci5VjWVVjNl8iXhIryxvAvzj
+        Hsom1U6iqzsVb9dlLE/cTDLuMgnH7z65d8EufrqcZll/TwC8OfL4vr1Xzf4q3AqWRS7PpuSs0yK5m
+        0UTr39f58PSMHkITvgN4+Z3oBvtyFYmoCBFMVlvn/OURbc/Ckk+hHrVNYZFzD7ZJqQBiMB7RCyPgu
+        XmxZec9A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDRY4-006Rrg-Ou; Fri, 28 Jan 2022 13:44:20 +0000
+Date:   Fri, 28 Jan 2022 13:44:20 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Eckert <fe@dev.tdt.de>
+Subject: Re: [PATCH v1 1/1] docs: process: submitting-patches: Clarify the
+ Reported-by usage
+Message-ID: <YfPzNNvK8Sy8YmGW@casper.infradead.org>
+References: <20220127155334.47154-1-andriy.shevchenko@linux.intel.com>
+ <87o83xrwk9.fsf@meer.lwn.net>
 MIME-Version: 1.0
-In-Reply-To: <20220111150749.13365-2-andrew.kilroy@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.26.192]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o83xrwk9.fsf@meer.lwn.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 15:07, Andrew Kilroy wrote:
->   }
-> +
-> +bool topdown_can_use_json_metrics(void)
+On Thu, Jan 27, 2022 at 09:08:06AM -0700, Jonathan Corbet wrote:
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> 
+> > It's unclear from "Submitting Patches" documentation that Reported-by
+> > is not supposed to be used against new features. (It's more clear
+> > in the section 5.4 "Patch formatting and changelogs" of the "A guide
+> > to the Kernel Development Process", where it suggests that change
+> > should fix something existing in the kernel. Clarify the Reported-by
+> > usage in the "Submitting Patches".
+> >
+> > Reported-by: Florian Eckert <fe@dev.tdt.de>
+> 
+> You're sure this added documentation isn't a new feature that shouldn't
+> have a Reported-by? :)
+> 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >  Documentation/process/submitting-patches.rst | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> > index 31ea120ce531..24c1a5565385 100644
+> > --- a/Documentation/process/submitting-patches.rst
+> > +++ b/Documentation/process/submitting-patches.rst
+> > @@ -495,7 +495,8 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
+> >  The Reported-by tag gives credit to people who find bugs and report them and it
+> >  hopefully inspires them to help us again in the future.  Please note that if
+> >  the bug was reported in private, then ask for permission first before using the
+> > -Reported-by tag.
+> > +Reported-by tag. A new feature can't be reported since there is no code in the
+> > +kernel to fix.
+> 
+> How about instead something like "Reported-by is intended for bugs;
+> please do not use it to credit feature requests"?
 
-nit: maybe topdown_can_use_metricgroups() could be better
+I think this misunderstands the problem that Andy is trying to fix.
 
-> +{
-> +#if defined(__aarch64__)
-> +	return true;
-> +#else
-> +	return false;
-> +#endif
+The situation: I write a patch.  I post it for review.  A bot does
+something and finds a bug (could be compile-error, could be boot
+problem).  That bot sends a bug report with a suggestion to add
+Reported-by:.  That suggestion is inappropriate because the bug never
+made it upstream, so it looks like the bot reported the "problem"
+that the patch "fixes".
 
-it might be worth just having !x86, just that is prob too much forward 
-looking
+It's not unique to "new feature" patches.  If I'm fixing a bug and
+my fix also contains a bug spotted by a bot, adding Reported-by
+makes it look like the bot spotted the original bug, rather than
+spotting a bug in the fix.
 
-> +}
-> +
-
+The best thing to do in this case is nothing.  Do not credit the bot.
+Maybe add a Checked-by:, but that would be a new trailer and I really
+don't think we need a new kind of trailer to get wrong.

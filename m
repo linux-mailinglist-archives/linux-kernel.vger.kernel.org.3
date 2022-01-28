@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0C349F010
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4250649F014
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345178AbiA1AyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S1345242AbiA1AyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344876AbiA1Axm (ORCPT
+        with ESMTP id S1344973AbiA1Axm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 19:53:42 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2212C06176A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:32 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id a12-20020a056a001d0c00b004cc283b2e30so2371515pfx.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:32 -0800 (PST)
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CE8C061770
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:34 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id f60-20020a17090a704200b001b51d88e887so3623585pjk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=x674bgr4MZ+skXJdAJ4IMcJE6zqdTys8wAdZyd8Nm7s=;
-        b=MPEcECl11PxoOnqqo0qf9ICGM2jqXYqMVBnuE2gK1BlYeWxvV+QXMZKJVQv6bePA4E
-         WLIsWupIl59bhG5lkmRT4sOaI47B4Xr13k2qB8PBfYYl3lTm8+JhKI0W4/riv7LUNMm/
-         gdnFQHMhnKgZy5eUBeIMUq3UJhrZznIMrhXvbWT1w9ei1x+4E2bX04p+IyzYwlskDNan
-         nXZ/MTAW2uPGqnlcHUe8o7D/OeeLkJq11vMS/nBpxLPHcj34aElLU4AvQ22dVwgMQq0z
-         wz0/fW2jEpjQSTFJoRtipNgvoX/oKFqZox6NKO58CjIUbuf0qlOUYXEnkfktPamqehCB
-         RO3Q==
+        bh=JgW9MKcGIQjIHi99tqvfeFUZw8kv5Qh9J0/QV1SIB0I=;
+        b=Xf8M2HCj214PlyvAKWtn6cw2QMhNw1MZulRM3NvGFSnbF+QTRwKel/uYGe9qidQvw8
+         81Aa/76ztI3Ij8WUX4EG9SDYS3wat+bBFhzt04IlgfoQnRoKbRhidgTKELm6donSmr2y
+         pir9YKUOaEs3EFqFIAVxSYo+oj1NC1+HoLAINJBNVYV8mqFrtm+2y0UTusAgPk5w90ZC
+         E9CvqEaQYDh0cgLT3ONUoN1Pj6wXWM4m6prk/x7avtv1T2H8sDbIzjfPDuZ54UI7sb0M
+         aeUXNg+e8bBci7ZmJz2UFlti91xRXyIwoVHtN2IEKcmpCqzV+mVD6RbWyQELhlXtFod+
+         1k8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=x674bgr4MZ+skXJdAJ4IMcJE6zqdTys8wAdZyd8Nm7s=;
-        b=2xhVvjgWQ683vm9IMREKdEgTgOUsB8o8OS+5dX4aDbuD73aFp5Alx0Vfc+l8/fLbJ3
-         pc7dAe+OLw8bQ+AKSfee+ksFEeg04ECwhFFBoUxfHihP+bKpsOzgnZq2Jujf0HlmQZsK
-         rKfl03gIgZ2gC0Rk+axqh5/wNQxe99IPKyG72RsLJdiI30IlMBDk014TZQR6YEuP6bCz
-         8GhZbZAxmZKzFUaOGnpM6xFPtHyFqo5f+sT3scnZKvv/bGIZdzJ7sPmB8WCEIu+8VbM+
-         SUFHxFOO0l1YyJFsA8ykpm9euKrCcnXiRDF2XIpSMLRf2dR3k78WmJYFRs7hZiL1N4d7
-         lX0A==
-X-Gm-Message-State: AOAM533nSJ3mdMaqt0AhweTOJ6b6HGXRCmHJ8AfQ+BYTbZrnc1v884WI
-        Kt+l8RTU9y7u4Rokbojr6Ft0U77el7I=
-X-Google-Smtp-Source: ABdhPJxptEsAjn9h/p8f0/AdKS7H6bYnE+p9asF58tkLi5VDCWmzUezpj1P96i2zYP4oN03onEMjY9Kwo3k=
+        bh=JgW9MKcGIQjIHi99tqvfeFUZw8kv5Qh9J0/QV1SIB0I=;
+        b=7GPuenAX3Ov82QJ8jnj0asc7pYcf3/GRGWXRK+P5Y8XgQ86PgEvsLe63BtfVwsuSFn
+         nfkridHs4sS1o/ZfhZshbR8LpLoJXDVkj4sECxqbseN3Kpbm874slcMWqp4C0rmkhTQA
+         FvxOwzPx+FtTIcRDlISthoY7QDxIIUFDqPL4UrkD6+dhVneMY9rMGrNA/EdG1mR11How
+         +YRBxMRnaP51T+9YBDPIC6kXScLn+u0JOCpJEk8JiVUh9ww5hs/99NtFACRN6QUP9uUo
+         BECwlf6Cv63bVYNMjiGisEegU1CNGvukinEJ09WZcmoGJL44nHjLRcqkkgR6ITToJnIK
+         yQKQ==
+X-Gm-Message-State: AOAM533PZLhzYdkkKJ3T6sPM3S6pI3/NahxqzYbeyIzFBjegHwF+zS/p
+        43v4irD8O1zRXh7tnw3WnX00bwTC+3c=
+X-Google-Smtp-Source: ABdhPJznlzPCYb9PPVlSs01EBkBxvfgOIlYdAeaD8HA+E5wkfz4Alwy9eGFxzc7Q5mWuEGglBvOR3t1r1dc=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:9c5:: with SMTP id
- 63mr16817690pjo.144.1643331212060; Thu, 27 Jan 2022 16:53:32 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1a50:: with SMTP id
+ h16mr3291030pfv.74.1643331213878; Thu, 27 Jan 2022 16:53:33 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 28 Jan 2022 00:51:57 +0000
+Date:   Fri, 28 Jan 2022 00:51:58 +0000
 In-Reply-To: <20220128005208.4008533-1-seanjc@google.com>
-Message-Id: <20220128005208.4008533-12-seanjc@google.com>
+Message-Id: <20220128005208.4008533-13-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220128005208.4008533-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 11/22] KVM: x86: Use static_call() for copy/move encryption
- context ioctls()
+Subject: [PATCH 12/22] KVM: x86: Allow different macros for APICv, CVM, and
+ Hyper-V kvm_x86_ops
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -67,65 +67,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define and use static_call()s for .vm_{copy,move}_enc_context_from(),
-mostly so that the op is defined in kvm-x86-ops.h.  This will allow using
-KVM_X86_OP in vendor code to wire up the implementation.  Any performance
-gains eeked out by using static_call() is a happy bonus and not the
-primary motiviation.
+Introduce optional macros for defining APICv, Confidental VM (a.k.a. so
+called memory encryption), and Hyper-V kvm_x86_ops.  Specialized macros
+will allow vendor code to easily apply a single pattern when wiring up
+implementations, e.g. SVM using "sev" for Confidential VMs and AVIC for
+APICv, and VMX currently doesn't support any Condifential VM hooks.
 
-Opportunistically refactor the code to reduce indentation and keep line
-lengths reasonable, and to be consistent when wrapping versus running
-a bit over the 80 char soft limit.
+Bundling also adds a small amount of self-documentation to the various
+hooks in kvm-x86-ops.h.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm-x86-ops.h |  2 ++
- arch/x86/kvm/x86.c                 | 17 ++++++++++-------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ arch/x86/include/asm/kvm-x86-ops.h | 74 +++++++++++++++++++-----------
+ 1 file changed, 48 insertions(+), 26 deletions(-)
 
 diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index eb93aa439d61..4ee046e60c34 100644
+index 4ee046e60c34..cb3af3a55317 100644
 --- a/arch/x86/include/asm/kvm-x86-ops.h
 +++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -110,6 +110,8 @@ KVM_X86_OP(enable_smi_window)
- KVM_X86_OP(mem_enc_op)
- KVM_X86_OP(mem_enc_reg_region)
- KVM_X86_OP(mem_enc_unreg_region)
-+KVM_X86_OP(vm_copy_enc_context_from)
-+KVM_X86_OP(vm_move_enc_context_from)
+@@ -4,8 +4,24 @@ BUILD_BUG_ON(1)
+ #endif
+ 
+ /*
+- * Invoke KVM_X86_OP() on all functions in struct kvm_x86_ops, e.g. to generate
+- * static_call declarations, definitions and updates.
++ * APICv, Hyper-V, and Confidential VM macros are optional, redirect to the
++ * standard ops macro if the caller didn't define a type-specific variant.
++ */
++#ifndef KVM_X86_APICV_OP
++#define KVM_X86_APICV_OP KVM_X86_OP
++#endif
++
++#ifndef KVM_X86_HYPERV_OP
++#define KVM_X86_HYPERV_OP KVM_X86_OP
++#endif
++
++#ifndef KVM_X86_CVM_OP
++#define KVM_X86_CVM_OP KVM_X86_OP
++#endif
++
++/*
++ * Invoke the appropriate macro on all functions in struct kvm_x86_ops, e.g. to
++ * generate static_call declarations, definitions and updates.
+  */
+ KVM_X86_OP(hardware_enable)
+ KVM_X86_OP(hardware_disable)
+@@ -30,7 +46,6 @@ KVM_X86_OP(get_cpl)
+ KVM_X86_OP(set_segment)
+ KVM_X86_OP(get_cs_db_l_bits)
+ KVM_X86_OP(set_cr0)
+-KVM_X86_OP(post_set_cr3)
+ KVM_X86_OP(is_valid_cr4)
+ KVM_X86_OP(set_cr4)
+ KVM_X86_OP(set_efer)
+@@ -46,8 +61,6 @@ KVM_X86_OP(set_rflags)
+ KVM_X86_OP(get_if_flag)
+ KVM_X86_OP(flush_tlb_all)
+ KVM_X86_OP(flush_tlb_current)
+-KVM_X86_OP(tlb_remote_flush)
+-KVM_X86_OP(tlb_remote_flush_with_range)
+ KVM_X86_OP(flush_tlb_gva)
+ KVM_X86_OP(flush_tlb_guest)
+ KVM_X86_OP(vcpu_pre_run)
+@@ -69,16 +82,7 @@ KVM_X86_OP(set_nmi_mask)
+ KVM_X86_OP(enable_nmi_window)
+ KVM_X86_OP(enable_irq_window)
+ KVM_X86_OP(update_cr8_intercept)
+-KVM_X86_OP(check_apicv_inhibit_reasons)
+-KVM_X86_OP(refresh_apicv_exec_ctrl)
+-KVM_X86_OP(hwapic_irr_update)
+-KVM_X86_OP(hwapic_isr_update)
+-KVM_X86_OP(guest_apic_has_interrupt)
+-KVM_X86_OP(load_eoi_exitmap)
+-KVM_X86_OP(set_virtual_apic_mode)
+-KVM_X86_OP(set_apic_access_page_addr)
+ KVM_X86_OP(deliver_interrupt)
+-KVM_X86_OP(sync_pir_to_irr)
+ KVM_X86_OP(set_tss_addr)
+ KVM_X86_OP(set_identity_map_addr)
+ KVM_X86_OP(get_mt_mask)
+@@ -94,12 +98,6 @@ KVM_X86_OP(handle_exit_irqoff)
+ KVM_X86_OP(request_immediate_exit)
+ KVM_X86_OP(sched_in)
+ KVM_X86_OP(update_cpu_dirty_logging)
+-KVM_X86_OP(vcpu_blocking)
+-KVM_X86_OP(vcpu_unblocking)
+-KVM_X86_OP(pi_update_irte)
+-KVM_X86_OP(pi_start_assignment)
+-KVM_X86_OP(apicv_post_state_restore)
+-KVM_X86_OP(dy_apicv_has_pending_interrupt)
+ KVM_X86_OP(set_hv_timer)
+ KVM_X86_OP(cancel_hv_timer)
+ KVM_X86_OP(setup_mce)
+@@ -107,18 +105,42 @@ KVM_X86_OP(smi_allowed)
+ KVM_X86_OP(enter_smm)
+ KVM_X86_OP(leave_smm)
+ KVM_X86_OP(enable_smi_window)
+-KVM_X86_OP(mem_enc_op)
+-KVM_X86_OP(mem_enc_reg_region)
+-KVM_X86_OP(mem_enc_unreg_region)
+-KVM_X86_OP(vm_copy_enc_context_from)
+-KVM_X86_OP(vm_move_enc_context_from)
  KVM_X86_OP(get_msr_feature)
  KVM_X86_OP(can_emulate_instruction)
  KVM_X86_OP(apic_init_signal_blocked)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a8ea1b212267..580a2adaec7c 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5958,15 +5958,18 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- #endif
- 	case KVM_CAP_VM_COPY_ENC_CONTEXT_FROM:
- 		r = -EINVAL;
--		if (kvm_x86_ops.vm_copy_enc_context_from)
--			r = kvm_x86_ops.vm_copy_enc_context_from(kvm, cap->args[0]);
--		return r;
-+		if (!kvm_x86_ops.vm_copy_enc_context_from)
-+			break;
+-KVM_X86_OP(enable_direct_tlbflush)
+ KVM_X86_OP(migrate_timers)
+ KVM_X86_OP(msr_filter_changed)
+ KVM_X86_OP(complete_emulated_msr)
+ KVM_X86_OP(vcpu_deliver_sipi_vector)
+ 
++KVM_X86_APICV_OP(check_apicv_inhibit_reasons)
++KVM_X86_APICV_OP(refresh_apicv_exec_ctrl)
++KVM_X86_APICV_OP(load_eoi_exitmap)
++KVM_X86_APICV_OP(set_virtual_apic_mode)
++KVM_X86_APICV_OP(set_apic_access_page_addr)
++KVM_X86_APICV_OP(sync_pir_to_irr)
++KVM_X86_APICV_OP(hwapic_irr_update)
++KVM_X86_APICV_OP(hwapic_isr_update)
++KVM_X86_APICV_OP(guest_apic_has_interrupt)
++KVM_X86_APICV_OP(vcpu_blocking)
++KVM_X86_APICV_OP(vcpu_unblocking)
++KVM_X86_APICV_OP(pi_update_irte)
++KVM_X86_APICV_OP(pi_start_assignment)
++KVM_X86_APICV_OP(apicv_post_state_restore)
++KVM_X86_APICV_OP(dy_apicv_has_pending_interrupt)
 +
-+		r = static_call(kvm_x86_vm_copy_enc_context_from)(kvm, cap->args[0]);
-+		break;
- 	case KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM:
- 		r = -EINVAL;
--		if (kvm_x86_ops.vm_move_enc_context_from)
--			r = kvm_x86_ops.vm_move_enc_context_from(
--				kvm, cap->args[0]);
--		return r;
-+		if (!kvm_x86_ops.vm_move_enc_context_from)
-+			break;
++KVM_X86_HYPERV_OP(tlb_remote_flush)
++KVM_X86_HYPERV_OP(tlb_remote_flush_with_range)
++KVM_X86_HYPERV_OP(enable_direct_tlbflush)
 +
-+		r = static_call(kvm_x86_vm_move_enc_context_from)(kvm, cap->args[0]);
-+		break;
- 	case KVM_CAP_EXIT_HYPERCALL:
- 		if (cap->args[0] & ~KVM_EXIT_HYPERCALL_VALID_MASK) {
- 			r = -EINVAL;
++KVM_X86_CVM_OP(mem_enc_op)
++KVM_X86_CVM_OP(mem_enc_reg_region)
++KVM_X86_CVM_OP(mem_enc_unreg_region)
++KVM_X86_CVM_OP(vm_copy_enc_context_from)
++KVM_X86_CVM_OP(vm_move_enc_context_from)
++KVM_X86_CVM_OP(post_set_cr3)
++
++#undef KVM_X86_APICV_OP
++#undef KVM_X86_HYPERV_OP
++#undef KVM_X86_CVM_OP
+ #undef KVM_X86_OP
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

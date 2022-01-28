@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F91D49FBAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9422349FBAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349163AbiA1OaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:30:12 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51188 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiA1OaL (ORCPT
+        id S1349166AbiA1ObO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232446AbiA1ObM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:30:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E60861E01;
-        Fri, 28 Jan 2022 14:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 735D0C340E6;
-        Fri, 28 Jan 2022 14:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643380210;
-        bh=zzgUTbKru7JboFcmHQ9V+BrizFopS8lz1g5MEzPE/tA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GL2aWND2pUdNRiakgo0skfdZIrKEflYA4+iqV97dlCUYSGTeEsv6uR99gSMK8/szu
-         6eWk0gFm6a4WStz3xCgW24NjItNuVYj3M4McnyGsSImUSyxrCBR0HZbRetueaLcIZA
-         2laYs1DBP+CGNkNYYmmEkp/vCVTAtNpRLl3PxDk8E807oFOsEIooFYu+1IYSMxVI5W
-         psJqKHRg/XMmt4s4wErORaCD2JAlnzBdqwIwtwXCtl4qpckvoRGXPw9KfgbKD5M2fm
-         F1Q0Rkw+XDsw4IHwk5zulwkmW3eqR5lhjPyiO0+JcJ5ngaOwiKyT26R3gQ4BKk4Zg1
-         uUhLXuIUipRBA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52F02E5D084;
-        Fri, 28 Jan 2022 14:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Jan 2022 09:31:12 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856D7C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:31:12 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id z7so5545047ilb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:31:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=C4xMgyj4PqtHIb3s8cThAMh+Lh46iAIWuvrZD5QJYRk=;
+        b=meqn8q3qmMhmPn7IHm22UydlMZsrXm+9hvsOeMI1iRsrsRx7XB8lCSlYsxIt9xmar1
+         B8D4H3QswMrnOFa9JiWgcYTHgYFogl4JKKtU7a+owPCu0H7ZWukuGQ9pk8dhoRcLPoKX
+         jW73S37bs0HQtK2I4KiKUK9UQJ0AUGkjXa0Klz45SaR5IQ/ENGnRpijaoHVqAUz69LsD
+         BNyHD/v52LZEVxQybYcqq0P7SvVN3+bfiONv7TBFQOM4izLNacb0FiLvomxDDF28PcYT
+         5448gBoWUOK7bZKsYQljCeVhh9E/VetVvK9zusF42vGOjATpV6fomcGMlN+csFVknEY3
+         tcNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=C4xMgyj4PqtHIb3s8cThAMh+Lh46iAIWuvrZD5QJYRk=;
+        b=Ln4L1HYLjpfD4VirL6oL45JSdr5EbTzCc4LKPwUV50SiPI+D81+rVkYdeFdN4Ae3be
+         P5DtAiH6GxjjjM6MlVDUfmx8pz/5LKCFj7ZQRl+pDFJNykVSdZS+a9YJHMOaXe2YbGQv
+         91ar1SU5e4qYwbitg+nxs6UO/ezmiKjm5cBRFOHDHLJS81xp++hEIg+VxC91yxW4zxpb
+         bJNykx3d2mWsv8rs+pTXprvlEEC4TEm7qGRKchGF360KrmTAhn5TqcJMa6Sx1Kl7mXpP
+         ++iOy67O4QjHHHsMh0aZyskJAWi2LOx83DV0HbtIFvai4pAP/X8fHEjaWJ+k9FvbfulS
+         mA7w==
+X-Gm-Message-State: AOAM531H+Jg32y+h7OQa5pHMc/nFZX9mnVawkuQPfOCR0lcBwBAQiWIA
+        h2fvv0vYL7w3dXNDzRNM923Xsu+8163FbOfrTyU=
+X-Google-Smtp-Source: ABdhPJwIlR6QN9gEUt1QNafiQQTvcQbmWu08ts4aZeBcJTm4pDBxxahXyN4sFFtFPWtttwLRSghwwFtcZSKYlvs6Lpc=
+X-Received: by 2002:a05:6e02:1564:: with SMTP id k4mr6165356ilu.63.1643380271899;
+ Fri, 28 Jan 2022 06:31:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/1] net: stmmac: dwmac-visconti: Avoid updating hardware
- register for unexpected speed requst
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164338021033.15816.13738860195654864475.git-patchwork-notify@kernel.org>
-Date:   Fri, 28 Jan 2022 14:30:10 +0000
-References: <20220127121714.22915-1-yuji2.ishikawa@toshiba.co.jp>
-In-Reply-To: <20220127121714.22915-1-yuji2.ishikawa@toshiba.co.jp>
-To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc:     davem@davemloft.net, kuba@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@st.com, joabreu@synopsys.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp
+From:   Paul Mulders <justinkb@gmail.com>
+Date:   Fri, 28 Jan 2022 15:31:01 +0100
+Message-ID: <CAOn50SK+g+gqxBiuHACfv=a0SjSnmdeGbC=LQyniHsZZApvF0A@mail.gmail.com>
+Subject: Re: BUG: [PATCH v2] isoc: mediatek: Check for error clk pointer
+To:     justinkb@gmail.com
+Cc:     broonie@kernel.org, frank-w@public-files.de,
+        gregkh@linuxfoundation.org, jiasheng@iscas.ac.cn,
+        lgirdwood@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 27 Jan 2022 21:17:13 +0900 you wrote:
-> Function visconti_eth_fix_mac_speed() should not change a register when an unexpected speed value is passed.
-> 
-> Yuji Ishikawa (1):
->   net: stmmac: dwmac-visconti: No change to ETHER_CLOCK_SEL for
->     unexpected speed request.
-> 
->  drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-
-Here is the summary with links:
-  - [1/1] net: stmmac: dwmac-visconti: No change to ETHER_CLOCK_SEL for unexpected speed request.
-    https://git.kernel.org/netdev/net/c/928d6fe996f6
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Correction: the "(so no mm block)" should be after "and MT7622
+doesn't", not before.

@@ -2,112 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 151B149F9A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4528649F9A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348587AbiA1Mjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:39:53 -0500
-Received: from mout.gmx.net ([212.227.15.15]:39881 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230134AbiA1Mjv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:39:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643373585;
-        bh=6tE2NcFalnAQCMAQKJi17/BdflSRtMX2plkpM36ZVsY=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=XejTKHw3N2+ugkSzdIXF1nzVGk12heobJzYcCb37GndxHprmkkJtSxAlOm49tbeSi
-         Oax1O7oPDU0u2P/TSzIrnl3AimYh3ZKkPNfoHoAldONCXEt4Zvkj57XjgeggdOVzIr
-         el9wEQZ0YXlkhm3jbj1Kf+y8n46Pww+IlEdpZ2EI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1N8XTv-1m8w1R0JyT-014Toy; Fri, 28
- Jan 2022 13:39:44 +0100
-Message-ID: <cef3023e-121d-ad30-8b30-cf71c2da8d4e@gmx.com>
-Date:   Fri, 28 Jan 2022 20:39:38 +0800
+        id S1348606AbiA1Mj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:39:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55757 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348560AbiA1Mjy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 07:39:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643373593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XLdIy983W00HY23HijSjN7Dj8OaLX+kcdPFkbzmAAbQ=;
+        b=VNPaYnQgfOgedBbULORcVXFcaErsb72/pHha23aKMZVvWc0HeVUIQ43cwBP1xQvyfq7v+1
+        axCXa7oJpo4MlVwKjEEIe98eHNTqAAOafRpGoXTNASVDUkNBbZNq4tONwRjNxZpHOpbOk9
+        KFj+fyz0gLFVG4L/Q5KMRc5mCbZx5oU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-299-QPbxzhJ0McmChJXD6fh1MA-1; Fri, 28 Jan 2022 07:39:50 -0500
+X-MC-Unique: QPbxzhJ0McmChJXD6fh1MA-1
+Received: by mail-ed1-f72.google.com with SMTP id b26-20020a056402139a00b004094fddbbdfso2995694edv.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 04:39:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XLdIy983W00HY23HijSjN7Dj8OaLX+kcdPFkbzmAAbQ=;
+        b=Np03DXNzi+Q7R0gMH1/i8z6rXltcfTW0jV9Wc3OR9VtNrPrH8lQxL9qOtCeAB4mmAQ
+         RULn9vdEjo6Fkta/BEC4tP+JDJNaDeq2u3bRr28tztYJKezAjIAicYIjerYT5D7ofgql
+         LvVArQROLw7gVzoYyelYVKQ9pVx+/kzWDDMW8CemB40pdckSIjQ/tB8et5jaVsK+XbVS
+         n7nH5b9JcW0Ijrl9Hpwwm7tzPauP5mRsAEZTn7caNjixYmeT8eIMFEDIjr5IJVW+J90A
+         RS5ESLQ7Qb//MhTAjSIGLtJ9uKuhIXVvuX/7OiGMR+u9X34K89GwYYIzEA+PALRfVGXm
+         PdyA==
+X-Gm-Message-State: AOAM530oSAFdfU6ba1FbnOKb1o2H/iujRwONYjw/FGGgq04Wz+1nupIl
+        vRZNwi9Uk9eAGnaHZSZWfeK2DZw6badHWsIOxpC30rTF1hbfbG6eshuzQS1nFaufo9bK+H5pZBD
+        KZWB+eE0Y99zXdsy1wnWkN9+i
+X-Received: by 2002:aa7:d799:: with SMTP id s25mr7885087edq.272.1643373589390;
+        Fri, 28 Jan 2022 04:39:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx24fxwd87A17OyboBva44f+bn420kREB83IoTX6XY5R1S3dYOyCYPwMJDB+SRMkrWzyxZHfA==
+X-Received: by 2002:aa7:d799:: with SMTP id s25mr7885074edq.272.1643373589175;
+        Fri, 28 Jan 2022 04:39:49 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id gj10sm5543335ejb.192.2022.01.28.04.39.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 04:39:48 -0800 (PST)
+Message-ID: <86b78fe0-7123-4534-6aaf-12bd30463665@redhat.com>
+Date:   Fri, 28 Jan 2022 13:39:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] btrfs: initialize offset early
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 0/5] KVM: nVMX: Fix Windows 11 + WSL2 + Enlightened
+ VMCS
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>
-Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220128123558.1223205-1-usama.anjum@collabora.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20220128123558.1223205-1-usama.anjum@collabora.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220112170134.1904308-1-vkuznets@redhat.com>
+ <87k0exktsx.fsf@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87k0exktsx.fsf@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:na70Jhk/B47GVbtehEvOD7CSXF2+qUHcD01PG8oUcdetjJW6+SK
- 3u5q2WFEvlzCV0R5YfFAb2xoOxz/UIv7RqK9T9qR9zB3symgZRhxnNub7oYDFsbObjxQZiX
- 8P4N9dO8vERdKyCRQwq1a+XnRcP8Jc4wBSpUwkeiJf4sqaxCCOGxlBqPZH8yvPDSfSwTSCP
- ijq6LonCCo9n2q3ej2/sQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jpSJIOG3HPQ=:ooIdLKh4KcX0a8WMDIqRzq
- m7+QtsGeNUqzX2n0ezyqU3o9u9t3AMYATWtXN0B9tavjW0gt62UMmI/Fs4MY4t27fhDXLeLw4
- BfM1uuZdw/pfdIjUEAIMmt63BTcAmwBMNzQHRtuWVnuzUuTLB00uqqQXHGbonlJKSTTJHtuLu
- 4PlgPhssqXiS4NJ+FkKEekY9MGwdLihkQoff467BtgoPWVtK9da1iRT4Yv4cCS7cMGM2lCvb4
- iNyXdi5HI6vRioeo6re1RIPxsCgw6iNANrf2mF9gZqBHefQyF2Js3/4+EQaOOaUBILRRqme8T
- HYfeYfY2Iiyus2snHDmFYLpqBBSB/58xKux8+2heUW/eg1khU05bphtLTqIiDMAgkHrf3VjWR
- poVZZDVvUDy3cfNgUBIhudeSaoIXBk8ZsAPVM8WC3BMVx2+NlIjdeVEtnLx9WHZCzmYFYrDRb
- 8rqz+7tne6/ghO90QeGt+/cWoELYT4J++2EKVjQ5C7ePVLZEY77/40zoUZUlMEI1nqzVgrpcU
- QIJ97sMu4dZLVjct7TjDKjoL1XsINW3D7OGCSAEgqF8NgaAREQ7mftheLeAmE55mKehz1EfL6
- JRViLlFxMv2OabM3hjMj0HguCOjp2wDEEm+0QvkBqG/6xKqcOanRvcwmSN+aamMhqibWQU21H
- H2idY4H97ikTD2Pk45B9Rc+AxQs5D+qSEl5KPcwN2WvJR+qEbbVDzmj8x9OPHWawN/uCjfKqG
- 0nwQSw6kKPFwNzdkosA1ii44FJ2rrOBNEuS1ReDybHaksBm/ux/H/BbT1nkJN/BHAx5tivXVX
- 135NzdD768fT7pOwPFjktcXyTVGQyVyEBrjT6e4ZWaqF8vaD5ytRM3yEiq1YusJKMZKHRX/O9
- 7HcUt0Pgk9c8RfpQQSBXVpuR+Hynnn1oFr9Ou0iEvFjcVg+a59S+70rlsssIvHWtOiaSVOJPP
- Om++DPqxUS2CFC49IWJP3M/H19ckx1KTapbdw4awUIq2A3z1UWS4uDfZJ5Uh8Akvjy67g0Dd1
- Wfu++2sEfbuPBHpXjg6hOxTKhREKt6Jd3XAIs+YgZEGA/dsafn9H8HQ0nitbHzWPEv5P/NdbQ
- URLXc3009sjqLg=
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/18/22 15:22, Vitaly Kuznetsov wrote:
+> Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+> 
+>> Changes since v2 [Sean]:
+>> - Tweak a comment in PATCH5.
+>> - Add Reviewed-by: tags to PATCHes 3 and 5.
+>>
+>> Original description:
+>>
+>> Windows 11 with enabled Hyper-V role doesn't boot on KVM when Enlightened
+>> VMCS interface is provided to it. The observed behavior doesn't conform to
+>> Hyper-V TLFS. In particular, I'm observing 'VMREAD' instructions trying to
+>> access field 0x4404 ("VM-exit interruption information"). TLFS, however, is
+>> very clear this should not be happening:
+>>
+>> "Any VMREAD or VMWRITE instructions while an enlightened VMCS is active is
+>> unsupported and can result in unexpected behavior."
+>>
+>> Microsoft confirms this is a bug in Hyper-V which is supposed to get fixed
+>> eventually. For the time being, implement a workaround in KVM allowing
+>> VMREAD instructions to read from the currently loaded Enlightened VMCS.
+>>
+>> Patches 1-2 are unrelated fixes to VMX feature MSR filtering when eVMCS is
+>> enabled. Patches 3 and 4 are preparatory changes, patch 5 implements the
+>> workaround.
+>>
+> 
+> Paolo,
+> 
+> would it be possible to pick this up for 5.17? Technically, this is a
+> "fix", even if the bug itself is not in KVM)
 
+Yes, it is.  I have queued the patch, and feel free to send a 5.16 
+backport too.
 
-On 2022/1/28 20:35, Muhammad Usama Anjum wrote:
-> Jump to out label can happen before offset is initialized. offset is
-> being used in code after out label. initialize offset early to cater
-> this case.
->
-> Fixes: 585f784357d8 ("btrfs: use scrub_simple_mirror() to handle RAID56 =
-data stripe scrub")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Paolo
 
-Thanks for the fix.
-
-Although the patch is only in misc-next, and due to another triggered
-ASSERT(), the series will be reworked soon.
-
-Thanks,
-Qu
-
-> ---
->   fs/btrfs/scrub.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-> index 26bbe93c3aa3c..3ace9766527ba 100644
-> --- a/fs/btrfs/scrub.c
-> +++ b/fs/btrfs/scrub.c
-> @@ -3530,7 +3530,7 @@ static noinline_for_stack int scrub_stripe(struct =
-scrub_ctx *sctx,
->   	u64 logic_end;
->   	u64 physical_end;
->   	u64 increment;	/* The logical increment after finishing one stripe */
-> -	u64 offset;	/* Offset inside the chunk */
-> +	u64 offset =3D 0;	/* Offset inside the chunk */
->   	u64 stripe_logical;
->   	u64 stripe_end;
->
-> @@ -3602,7 +3602,6 @@ static noinline_for_stack int scrub_stripe(struct =
-scrub_ctx *sctx,
->   	ASSERT(map->type & BTRFS_BLOCK_GROUP_RAID56_MASK);
->
->   	physical =3D map->stripes[stripe_index].physical;
-> -	offset =3D 0;
->   	nstripes =3D div64_u64(dev_extent_len, map->stripe_len);
->   	get_raid56_logic_offset(physical, stripe_index, map, &offset, NULL);
->   	increment =3D map->stripe_len * nr_data_stripes(map);

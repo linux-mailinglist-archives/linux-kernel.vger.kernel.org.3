@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4296E49F1ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DECA49F1EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345818AbiA1Dlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S1345823AbiA1DnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241873AbiA1Dll (ORCPT
+        with ESMTP id S231289AbiA1DnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:41:41 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39107C061714;
-        Thu, 27 Jan 2022 19:41:41 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id p125so4113362pga.2;
-        Thu, 27 Jan 2022 19:41:41 -0800 (PST)
+        Thu, 27 Jan 2022 22:43:05 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9FFC061714;
+        Thu, 27 Jan 2022 19:43:05 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id r144so6209289iod.9;
+        Thu, 27 Jan 2022 19:43:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=GEDrQnS2PQp0kCcJ4PzWq//Eov06fv7g6bwFtYZ+45I=;
-        b=lWjDr4T3y968IJ3MRsdCHsaWaUxUbZWxjXJxunvhiLDc9KFkBchkFsiYTkY2dG8bJr
-         GgZxXe5HkLsqGdwnk4bM5s5WD4KUWvj1Hz3/5mMz552LhXKzRjP/O5HPoMhROCLfsKwB
-         yl6EOoLNLcTWTAwOKmNOn4GwZXfP6yzNE7PN9CctYARsoFcGgvlikMmqw5Iu6cuR8+O0
-         88FSCCbKl8c7pUyDioTCxdvBYojfP0bCbvYC7eJdD54F299ID3dvU/Np8P12SOoZ5CsD
-         ZglD/K80eHPZSh5CwHXDTyN/AkiqJ+O49sqgGli/48ZpeT/aq547zszhp3XEh7Rfug3T
-         sahg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fEeC00YZEKtaMEvnvsES3LOa4ntiyaf7LZhFOYs3mwA=;
+        b=cGVIb30a2ofqveaSazvsol9VT3z5u7suLZF5H/C/1plXhq7KFMxmfpH7cTJKhpDlvh
+         s1YWuCiTvJ2SEpkUhX48EXZiWZk+pX82VxFDCyEYtPqO2JbJEc4KvyDv+0a5VE4ieMBO
+         bxAGM1B4sxxjh4XyhJuVS44T8mFjWiUIKeyEDqRD17TsWfVXRyl9a9yy5U4ayr1RC6Fo
+         uNEt2nKvIDBEeOVDXAXOEsZruBysI9Wztv32csPLl9sQpDQt1ZWbjuZRsKdQO9sZCOYb
+         Ny0dOHQsjkeZtyY+KxBAAPa8T3fAjcvlhAV+h4X5lzeF+YaC06GVhY1S4EyAM1rWRtLO
+         pfiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=GEDrQnS2PQp0kCcJ4PzWq//Eov06fv7g6bwFtYZ+45I=;
-        b=58dH92PnxMI7b95NxovmAgcskstyOzb5B4nApwbxCankIkiQ3o7bu69PgcO4idUE0j
-         o3VbUfENyaFKUyZOvgBSniwtleMeCR47E/YQHRQ27LxMYe0B463Gmp60hh3hE7h71rgD
-         S5vmFRCur5miQulQHvt/TXxX12CbMGN33gQh7cgXZHMFNdfIplOgxKL9hCCjNx/vw4v9
-         k5BBeEYGD8IEGNIAsSjDSjrfxbJyMdIl9kv42TgmyLGpS8vbOXgbTlwUxD2ZFjl9IObc
-         zbczXC1xxw9GsLzA9djgagiyumEKd0zq4yhSpemmSAWDl6UO5fuNUpU2j6a1tyTL9zIV
-         xOZA==
-X-Gm-Message-State: AOAM530XN/gnpwgz8opS53fbeE0IN01vENa8dUEE991Rz6CRT61/u56L
-        VuKolS7XonucPfJOF9fcsW5fGlUy0/7pj8mrCwPrPDXV
-X-Google-Smtp-Source: ABdhPJwbhcwL1OBXdUvoiaYEdhlijoHI8NJzyaEK+ZFPRvfSAndEv1yF95YXXqm75fyPs6018HcEeDQuctzy1cqo5dM=
-X-Received: by 2002:a65:6b90:: with SMTP id d16mr4998473pgw.129.1643341300522;
- Thu, 27 Jan 2022 19:41:40 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fEeC00YZEKtaMEvnvsES3LOa4ntiyaf7LZhFOYs3mwA=;
+        b=I8Guu3blo87A7ZKipae+g9Qc5YVFTuTseyFHnI629iey6Kg61eQ2YSIdEycb7mEZc0
+         PZcsB4O8T6J7ZPxwtHDl3WomKG2sXxU6mWLdyvU+yDJsOpvBA5cJXFBC66Ky0Y6XoJyr
+         hbMs9ZvM3NZp/Ccknzlrya/43EINgVQSF1yoxH7F2AC2jdMnjK+Oxez7FHdwc+UZeG33
+         cwviKL1y6VhNN6GN6wiJARDODNW7OGFRil+N0u2mOor+DJhHHr/LqY51WgwVeixzUJyl
+         vlRd4O5UG3fcTbryN4G5uoq6M+w+IF/GhMqFfH/UlQtr8MkDFG9dozqM3lAovCT6uhhT
+         hbDA==
+X-Gm-Message-State: AOAM533NIj0gfWEjWm0YDjL3GeHPOuzqtE0mnpv3kScGaHAErK8rJhMg
+        bKJTzMeOPeHglOoGHvQytbvVoGYDtQghtvdgfp0=
+X-Google-Smtp-Source: ABdhPJwj6fP1tLpQ2aUqt0hrqlpXUJO8aZobJmU5jeOkSf1eN5ylbgZu9llVb4DR/1aPutJ2I7gYC92qRsJ2l6E+FuI=
+X-Received: by 2002:a02:6988:: with SMTP id e130mr3623894jac.120.1643341384617;
+ Thu, 27 Jan 2022 19:43:04 -0800 (PST)
 MIME-Version: 1.0
-From:   jagath jogj <jagathjog1996@gmail.com>
-Date:   Fri, 28 Jan 2022 09:11:28 +0530
-Message-ID: <CAM+2Eu+G2YK-O4ioYCBTJOs9VV9k5fVfQSii+m3kcyouJRg_vA@mail.gmail.com>
-Subject: IIO Device Driver for Maxim DS3502 potentiometer
-To:     jic23@kernel.org, lars@metafoo.de,
-        andriy.shevchenko@linux.intel.com, aardelean@deviqon.com
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220127180258.892788582@linuxfoundation.org>
+In-Reply-To: <20220127180258.892788582@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Thu, 27 Jan 2022 20:42:53 -0700
+Message-ID: <CAFU3qoaRESfpS5gk-RSXUL+WABgPeMuk+3qPQxuvx9pQ2x_6SQ@mail.gmail.com>
+Subject: Re: [PATCH 5.16 0/9] 5.16.4-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jan 27, 2022 at 12:13 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.4 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.4-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I have a Maxim DS3502 potentiometer breakout and I have written an IIO
-driver for learning purposes and tested with Raspberry pi and wanted
-to send patches of the driver for the IIO sub-system.
+Hi Greg,
 
-Can I send the patches for DS3502 POT for review?
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-The setup used to write driver
-Raspberry pi 3b
-DS3502 breakout board
-Raspberry pi latest kernel branch - https://github.com/raspberrypi/linux
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
-Regards,
-Jagath
+     Total time: 0.441 [sec]
+
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 7.131 [sec]
+
+       7.131623 usecs/op
+         140220 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

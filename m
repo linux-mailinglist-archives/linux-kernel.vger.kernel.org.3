@@ -2,128 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514849FA56
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE7E49FA57
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241623AbiA1NHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241408AbiA1NHL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:07:11 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B49C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:07:11 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id r65so18173960ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:07:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YgGxwqesxYhk+GrHgJnKwpv75Cf0zbWqGe6zVs0QN+M=;
-        b=cNBEtVx5FT1+KykCzEe9T2FFs9AIQBumaxy53+2enGDqLWGuhatShrWWnhC49Jy9xw
-         VmTHspZqGebuddH4NHpFewL2UtFVBpApT3VtMcKLUIBuB/WhObXIS47vBZw4v3RpZ/HM
-         q5of2qbhTXbKMMRrGBrJEwq9vP20jD9Q+OBNWFLYgvH+Bm4JCrCO2xlDtTR217dtey2i
-         kuaKb7v1zs6oPJeRtzhyGmy3hR+bFGpG3lR36aJXckQNlP4uqZRLDN0mhpFpZCE81jEg
-         ImcsFQXJCnKDW4AzBbhzX+Ajy1vnY2eqn+d9RADdGcZGQHfk43bOCwvVKr3QM2jXvMGF
-         yH7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YgGxwqesxYhk+GrHgJnKwpv75Cf0zbWqGe6zVs0QN+M=;
-        b=P5ZMNOxYSTxHgnXmj4Ls0eyeH5OwRckPlkpc/PBR9DepS5/YjaWMbMl+27Jru8qIse
-         /yEVMRROZVwJBNwRYoYlv9qT6e+aq+WAXYBj0bp5aq3ZLepTBiq1J0sdZ8JmGHus9/66
-         oIMiIYmtT8i9pk6+HgD1/ZRHLUe/DWNEppwfv2Jta2mpCLGgZdnolI0we1bgQvmH7zhz
-         urNcyU82lwsj9IJyPp9/jeR2S7kXb8tT087EYQUZYprIfM00E+MC91p6zUpp2oUUt66I
-         Ak7XqkwsXKAMI+ynms66dBlNpqiOx3aEOxA/Z55/TCEQPs0GvXLJdhR2D8twCtFLlP2E
-         YHOg==
-X-Gm-Message-State: AOAM531H3kzdteINYgcK70R782lYELxK60kjmNmKoub+vGqqdMQItQf3
-        f+S9OxmTkJYKZSDo8lxFf/s0qiknj5oV52D1EfFe1A==
-X-Google-Smtp-Source: ABdhPJzb57UArYumAtcFeFp1C6yIxpu8it15t9WtSxwl45jhC2s8WeqrPkgaWoXnmz9TXVUA2MkZKhDWx0uFxL1ECgM=
-X-Received: by 2002:a25:bb4d:: with SMTP id b13mr12751188ybk.129.1643375230778;
- Fri, 28 Jan 2022 05:07:10 -0800 (PST)
+        id S241711AbiA1NHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:07:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:43040 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241382AbiA1NHM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 08:07:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 613471396;
+        Fri, 28 Jan 2022 05:07:11 -0800 (PST)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A29A3F766;
+        Fri, 28 Jan 2022 05:07:10 -0800 (PST)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     vincenzo.frascino@arm.com, Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v3] kselftest: Fix vdso_test_abi return status
+Date:   Fri, 28 Jan 2022 13:07:01 +0000
+Message-Id: <20220128130701.17511-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220128100815.3231551-1-anders.roxell@linaro.org> <c6beb8a8-ecf3-1c17-f685-f5e69cd6265a@csgroup.eu>
-In-Reply-To: <c6beb8a8-ecf3-1c17-f685-f5e69cd6265a@csgroup.eu>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 28 Jan 2022 14:07:00 +0100
-Message-ID: <CADYN=9L=RB2AoBNU6Cfy2UKyznJy+oo0aPvapHp-v1f12uVs-A@mail.gmail.com>
-Subject: Re: [PATCHv2] powerpc: mm: radix_tlb: rearrange the if-else block
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 at 11:14, Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 28/01/2022 =C3=A0 11:08, Anders Roxell a =C3=A9crit :
-> > Clang warns:
-> >
-> > arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' =
-is uninitialized when used here [-Werror,-Wuninitialized]
-> >                                  __tlbiel_va_range(hstart, hend, pid,
-> >                                                    ^~~~~~
-> > arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the vari=
-able 'hstart' to silence this warning
-> >                  unsigned long hstart, hend;
-> >                                      ^
-> >                                       =3D 0
-> > arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is=
- uninitialized when used here [-Werror,-Wuninitialized]
-> >                                  __tlbiel_va_range(hstart, hend, pid,
-> >                                                            ^~~~
-> > arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the vari=
-able 'hend' to silence this warning
-> >                  unsigned long hstart, hend;
-> >                                            ^
-> >                                             =3D 0
-> > 2 errors generated.
-> >
-> > Rework the 'if (IS_ENABLE(CONFIG_TRANSPARENT_HUGEPAGE))' so hstart/hend
-> > always gets initialized, this will silence the warnings. That will also
-> > simplify the 'else' path. Clang is getting confused with these warnings=
-,
-> > but the warnings is a false-positive.
-> >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> > ---
-> >   arch/powerpc/mm/book3s64/radix_tlb.c | 9 +++------
-> >   1 file changed, 3 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/boo=
-k3s64/radix_tlb.c
-> > index 7724af19ed7e..7d65965a0688 100644
-> > --- a/arch/powerpc/mm/book3s64/radix_tlb.c
-> > +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
-> > @@ -1174,12 +1174,9 @@ static inline void __radix__flush_tlb_range(stru=
-ct mm_struct *mm,
-> >               bool hflush =3D false;
->
-> You should then remove the default initialisation of hflush to false
-> which has become pointless.
->
-> With that fixed,
->
-> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+vdso_test_abi contains a batch of tests that verify the validity of the
+vDSO ABI.
 
-Thank you for the review.
-I will send a v3 shortly with that fixed.
+When a vDSO symbol is not found the relevant test is skipped reporting
+KSFT_SKIP. All the tests return values are then added in a single
+variable which is checked to verify failures. This approach can have
+side effects which result in reporting the wrong kselftest exit status.
 
-Cheers,
-Anders
+Fix vdso_test_abi verifying the return code of each test separately.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Reported-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
+ tools/testing/selftests/vDSO/vdso_test_abi.c | 135 +++++++++----------
+ 1 file changed, 62 insertions(+), 73 deletions(-)
+
+diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+index 3d603f1394af..d670d5b2a626 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_abi.c
++++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+@@ -33,110 +33,114 @@ typedef long (*vdso_clock_gettime_t)(clockid_t clk_id, struct timespec *ts);
+ typedef long (*vdso_clock_getres_t)(clockid_t clk_id, struct timespec *ts);
+ typedef time_t (*vdso_time_t)(time_t *t);
+ 
+-static int vdso_test_gettimeofday(void)
++#define VDSO_TEST_PASS_MSG()	"\n%s(): PASS\n", __func__
++#define VDSO_TEST_FAIL_MSG(x)	"\n%s(): %s FAIL\n", __func__, x
++#define VDSO_TEST_SKIP_MSG(x)	"\n%s(): SKIP: Could not find %s\n", __func__, x
++
++static void vdso_test_gettimeofday(void)
+ {
+ 	/* Find gettimeofday. */
+ 	vdso_gettimeofday_t vdso_gettimeofday =
+ 		(vdso_gettimeofday_t)vdso_sym(version, name[0]);
+ 
+ 	if (!vdso_gettimeofday) {
+-		printf("Could not find %s\n", name[0]);
+-		return KSFT_SKIP;
++		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[0]));
++		return;
+ 	}
+ 
+ 	struct timeval tv;
+ 	long ret = vdso_gettimeofday(&tv, 0);
+ 
+ 	if (ret == 0) {
+-		printf("The time is %lld.%06lld\n",
+-		       (long long)tv.tv_sec, (long long)tv.tv_usec);
++		ksft_print_msg("The time is %lld.%06lld\n",
++			       (long long)tv.tv_sec, (long long)tv.tv_usec);
++		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
+ 	} else {
+-		printf("%s failed\n", name[0]);
+-		return KSFT_FAIL;
++		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[0]));
+ 	}
+-
+-	return KSFT_PASS;
+ }
+ 
+-static int vdso_test_clock_gettime(clockid_t clk_id)
++static void vdso_test_clock_gettime(clockid_t clk_id)
+ {
+ 	/* Find clock_gettime. */
+ 	vdso_clock_gettime_t vdso_clock_gettime =
+ 		(vdso_clock_gettime_t)vdso_sym(version, name[1]);
+ 
+ 	if (!vdso_clock_gettime) {
+-		printf("Could not find %s\n", name[1]);
+-		return KSFT_SKIP;
++		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[1]));
++		return;
+ 	}
+ 
+ 	struct timespec ts;
+ 	long ret = vdso_clock_gettime(clk_id, &ts);
+ 
+ 	if (ret == 0) {
+-		printf("The time is %lld.%06lld\n",
+-		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
++		ksft_print_msg("The time is %lld.%06lld\n",
++			       (long long)ts.tv_sec, (long long)ts.tv_nsec);
++		ksft_test_result_pass(VDSO_TEST_PASS_MSG());;
+ 	} else {
+-		printf("%s failed\n", name[1]);
+-		return KSFT_FAIL;
++		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[1]));
+ 	}
+-
+-	return KSFT_PASS;
+ }
+ 
+-static int vdso_test_time(void)
++static void vdso_test_time(void)
+ {
+ 	/* Find time. */
+ 	vdso_time_t vdso_time =
+ 		(vdso_time_t)vdso_sym(version, name[2]);
+ 
+ 	if (!vdso_time) {
+-		printf("Could not find %s\n", name[2]);
+-		return KSFT_SKIP;
++		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[2]));
++		return;
+ 	}
+ 
+ 	long ret = vdso_time(NULL);
+ 
+ 	if (ret > 0) {
+-		printf("The time in hours since January 1, 1970 is %lld\n",
++		ksft_print_msg("The time in hours since January 1, 1970 is %lld\n",
+ 				(long long)(ret / 3600));
++		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
+ 	} else {
+-		printf("%s failed\n", name[2]);
+-		return KSFT_FAIL;
++		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[2]));
+ 	}
+-
+-	return KSFT_PASS;
+ }
+ 
+-static int vdso_test_clock_getres(clockid_t clk_id)
++static void vdso_test_clock_getres(clockid_t clk_id)
+ {
++	int clock_getres_fail = 0;
++
+ 	/* Find clock_getres. */
+ 	vdso_clock_getres_t vdso_clock_getres =
+ 		(vdso_clock_getres_t)vdso_sym(version, name[3]);
+ 
+ 	if (!vdso_clock_getres) {
+-		printf("Could not find %s\n", name[3]);
+-		return KSFT_SKIP;
++		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[3]));
++		return;
+ 	}
+ 
+ 	struct timespec ts, sys_ts;
+ 	long ret = vdso_clock_getres(clk_id, &ts);
+ 
+ 	if (ret == 0) {
+-		printf("The resolution is %lld %lld\n",
+-		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
++		ksft_print_msg("The vdso resolution is %lld %lld\n",
++			       (long long)ts.tv_sec, (long long)ts.tv_nsec);
+ 	} else {
+-		printf("%s failed\n", name[3]);
+-		return KSFT_FAIL;
++		clock_getres_fail++;
+ 	}
+ 
+ 	ret = syscall(SYS_clock_getres, clk_id, &sys_ts);
+ 
+-	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec)) {
+-		printf("%s failed\n", name[3]);
+-		return KSFT_FAIL;
+-	}
++	ksft_print_msg("The syscall resolution is %lld %lld\n",
++			(long long)sys_ts.tv_sec, (long long)sys_ts.tv_nsec);
+ 
+-	return KSFT_PASS;
++	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec))
++		clock_getres_fail++;
++
++	if (clock_getres_fail > 0) {
++		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[3]));
++	} else {
++		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
++	}
+ }
+ 
+ const char *vdso_clock_name[12] = {
+@@ -158,36 +162,23 @@ const char *vdso_clock_name[12] = {
+  * This function calls vdso_test_clock_gettime and vdso_test_clock_getres
+  * with different values for clock_id.
+  */
+-static inline int vdso_test_clock(clockid_t clock_id)
++static inline void vdso_test_clock(clockid_t clock_id)
+ {
+-	int ret0, ret1;
+-
+-	ret0 = vdso_test_clock_gettime(clock_id);
+-	/* A skipped test is considered passed */
+-	if (ret0 == KSFT_SKIP)
+-		ret0 = KSFT_PASS;
+-
+-	ret1 = vdso_test_clock_getres(clock_id);
+-	/* A skipped test is considered passed */
+-	if (ret1 == KSFT_SKIP)
+-		ret1 = KSFT_PASS;
++	ksft_print_msg("\nclock_id: %s\n", vdso_clock_name[clock_id]);
+ 
+-	ret0 += ret1;
++	vdso_test_clock_gettime(clock_id);
+ 
+-	printf("clock_id: %s", vdso_clock_name[clock_id]);
+-
+-	if (ret0 > 0)
+-		printf(" [FAIL]\n");
+-	else
+-		printf(" [PASS]\n");
+-
+-	return ret0;
++	vdso_test_clock_getres(clock_id);
+ }
+ 
++#define VDSO_TEST_PLAN	16
++
+ int main(int argc, char **argv)
+ {
+ 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
+-	int ret;
++
++	ksft_print_header();
++	ksft_set_plan(VDSO_TEST_PLAN);
+ 
+ 	if (!sysinfo_ehdr) {
+ 		printf("AT_SYSINFO_EHDR is not present!\n");
+@@ -201,44 +192,42 @@ int main(int argc, char **argv)
+ 
+ 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
+ 
+-	ret = vdso_test_gettimeofday();
++	vdso_test_gettimeofday();
+ 
+ #if _POSIX_TIMERS > 0
+ 
+ #ifdef CLOCK_REALTIME
+-	ret += vdso_test_clock(CLOCK_REALTIME);
++	vdso_test_clock(CLOCK_REALTIME);
+ #endif
+ 
+ #ifdef CLOCK_BOOTTIME
+-	ret += vdso_test_clock(CLOCK_BOOTTIME);
++	vdso_test_clock(CLOCK_BOOTTIME);
+ #endif
+ 
+ #ifdef CLOCK_TAI
+-	ret += vdso_test_clock(CLOCK_TAI);
++	vdso_test_clock(CLOCK_TAI);
+ #endif
+ 
+ #ifdef CLOCK_REALTIME_COARSE
+-	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
++	vdso_test_clock(CLOCK_REALTIME_COARSE);
+ #endif
+ 
+ #ifdef CLOCK_MONOTONIC
+-	ret += vdso_test_clock(CLOCK_MONOTONIC);
++	vdso_test_clock(CLOCK_MONOTONIC);
+ #endif
+ 
+ #ifdef CLOCK_MONOTONIC_RAW
+-	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
++	vdso_test_clock(CLOCK_MONOTONIC_RAW);
+ #endif
+ 
+ #ifdef CLOCK_MONOTONIC_COARSE
+-	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
++	vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+ #endif
+ 
+ #endif
+ 
+-	ret += vdso_test_time();
+-
+-	if (ret > 0)
+-		return KSFT_FAIL;
++	vdso_test_time();
+ 
+-	return KSFT_PASS;
++	ksft_print_cnts();
++	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
+ }
+-- 
+2.34.1
+

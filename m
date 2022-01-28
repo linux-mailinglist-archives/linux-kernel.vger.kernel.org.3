@@ -2,109 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B668D49FFDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949D649FFE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244075AbiA1SAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:00:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26218 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235275AbiA1SAA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:00:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643392799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u+Hmwc9+6O6R90bO9i51djyWsBTgueZPwQigGIkzQcY=;
-        b=F4skjyGf/l4LzaJQ7R4iBqESqcW6YAq/mnf16jij3kkXz29kpeXVAw3bC0/WnRHZKk4eqp
-        ghqL78vwjb/RCDfDxPwwghAVtheIeixhqxpQ5K94LWKOwXux/aM9QzYIVp8wFfQHaP1NI1
-        KUwaZdhk3il+5LY7o+7QVZsIj7XSJXc=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-01fRe9lmOkGrm9b6M9o4cw-1; Fri, 28 Jan 2022 12:59:58 -0500
-X-MC-Unique: 01fRe9lmOkGrm9b6M9o4cw-1
-Received: by mail-oo1-f72.google.com with SMTP id x10-20020a4ab90a000000b002eacf86f7cdso3537835ooo.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 09:59:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=u+Hmwc9+6O6R90bO9i51djyWsBTgueZPwQigGIkzQcY=;
-        b=KkokuwKpw3enlqj41PEWQqGq/FyXq4QY+jmI09h5wU9f5FGXXWavE/Xd1cX9EANe3p
-         zUzcfiR50h/C9Xw1EzkIx4Bdsnfyh8U3q2lAVyRKkyNw5StCe7pqs5AC/P9URpM0SV7k
-         T7O2Y0NyorjqyGRcjosQC52JrGokFWYpWy2YmeaH4RZohyKOK3IAgUdfx4znFWeB03rR
-         AoUooGKUxhfYwyzJ5FUagbsnAttZAOie1qWobTowE6WufLX/wr0+x0wlEyhqMFOvRnv1
-         oZfW2p+wYW+safRk0zBYKooRBRs2M+mKfhnMj9mOiNZKPR99yLTKTloxc1bHvilNAMQB
-         gteg==
-X-Gm-Message-State: AOAM530WSWXgIm5JRLiWIFacefVwnS4sfIxvX/R4T2ZSFYCMKMAJ4aNQ
-        g2YFvyFgRCl5YkEzEU9i44XAY8JTNI9VW61PC+KFft6Gp0D0tTlulRJxdKlI78yNJKkoGrK+g+T
-        TMZKQmBFjhXfCN4Eu/CEttZeT
-X-Received: by 2002:a05:6830:1091:: with SMTP id y17mr5517932oto.251.1643392798032;
-        Fri, 28 Jan 2022 09:59:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7tzvwbAnDL33am0wCZlnAvRFJbSDVAbo5b1w5J/mtfZ8VVd+wV4q4yxN0XRiY8J66auWK3w==
-X-Received: by 2002:a05:6830:1091:: with SMTP id y17mr5517919oto.251.1643392797859;
-        Fri, 28 Jan 2022 09:59:57 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id l19sm4578463ooa.7.2022.01.28.09.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 09:59:57 -0800 (PST)
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220127151945.1244439-1-trix@redhat.com>
- <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-Date:   Fri, 28 Jan 2022 09:59:54 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S1346531AbiA1SAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:00:33 -0500
+Received: from mga18.intel.com ([134.134.136.126]:55165 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343650AbiA1SA2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 13:00:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643392828; x=1674928828;
+  h=message-id:date:mime-version:to:references:from:subject:
+   in-reply-to:content-transfer-encoding;
+  bh=/kAMO9UCCWELpL95wHGY0j+eTJs2CMOTU7egNKfSooU=;
+  b=aDdwCAiNnLmCzHbPQpR5OwJUjIbkqWOHIz+xyvNZOiUde5qGQX4bgLbK
+   DgDVz/zZhK4AuESECaDBSscVaL1tWJ+ydTYgQOwNxemAFYIIGNg3A2spt
+   UZaMQeDxbCOW75zUC6tRa81oM/zOEQDhFpQ05pX4s7YhoAdxy0gFSV8hZ
+   3+6r6VanEGFzxeulwyHE2jhVgsyDE0GiQUg00OzaCFNkxzLlPFt3bPlTl
+   UMzF3jmqafvj0D+d/OLvve9Y+ZFKaTEorx78fd8/fBboOMQi2IXd7jqWV
+   mk1kvTLyiy37qKVqwyybFMuDRJT2qVlYQRkCqvvljGst13TzVlFyqBNYw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="230744973"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="230744973"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:00:26 -0800
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="697167028"
+Received: from zhenkuny-mobl2.amr.corp.intel.com (HELO [10.209.84.59]) ([10.209.84.59])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:00:26 -0800
+Message-ID: <a7ef2455-ede5-2238-639b-b3a66842a04b@intel.com>
+Date:   Fri, 28 Jan 2022 10:00:23 -0800
 MIME-Version: 1.0
-In-Reply-To: <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.2
 Content-Language: en-US
+To:     Brent Spillner <spillner@acm.org>, bhelgaas@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <YfQpy5yGGqY8T0wW@jupiter.dyndns.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] arch:x86:pci:irq.c: Improve log message when IRQ cannot
+ be identified
+In-Reply-To: <YfQpy5yGGqY8T0wW@jupiter.dyndns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please fix up that subject.  We don't tend to use ":" to separate
+things.  Second, the prefix isn't a filename.  It's really a subsystem.
+ Take a look at:
 
-On 1/28/22 9:42 AM, Bart Van Assche wrote:
-> On 1/27/22 07:19, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> checkpatch reports several hundred formatting errors.
->> Run these files through clang-format and knock off
->> some of them.
->
-> Isn't this the kind of patches that carries more risk than value? 
-> Additionally, this patch conflicts with a patch series that I plan to 
-> post soon.
->
-> Thanks,
+	git log arch/x86/pci/irq.c
 
-I have dropped this patch.
+for some other examples.
 
-Long term, it would be good have a reliable way to automatically fix 
-either new files or really broken old files.
+On 1/28/22 09:37, Brent Spillner wrote:
+> The existing code always suggests trying the pci=biosirq kernel
+> parameter, but this option is only recognized when CONFIG_PCI_BIOS is
+> set, which in turn depends on CONFIG_X86_32, so it is never appropriate
+> on x86_64.
+> 
+> The new version tries to form a more useful message when pci=biosirq is
+> not available, including by suggesting different acpi= options if
+> appropriate (probably the most common cause of failed IRQ discovery).
+> 
+> See arch/x86/pci/common.c:535 for the interpretation of pci=biosirq, and
+> arch/x86/Kconfig:2633 for the dependencies of CONFIG_PCI_BIOS.
 
-So you could do two patches, first would be fixing formatting problems 
-and second would new stuff.
+Shockingly enough, that parameter is in the documentation:
 
-As it is your new patch will have to both for now.
+	Documentation/admin-guide/kernel-parameters.txt
 
-Tom
+and double-shockingly, it's even called out as X86-32-only:
 
->
->
-> Bart.
->
+	biosirq		[X86-32] Use PCI BIOS calls to get the interrupt
 
+Given that, do we really need to refer to the line numbers of the
+implementation which will probably be stale by the time this is merged
+anyway?
+
+>  arch/x86/pci/irq.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
+> index 97b63e35e152..bc4aaaa74832 100644
+> --- a/arch/x86/pci/irq.c
+> +++ b/arch/x86/pci/irq.c
+> @@ -1522,7 +1522,21 @@ static int pirq_enable_irq(struct pci_dev *dev)
+>  		} else if (pci_probe & PCI_BIOS_IRQ_SCAN)
+>  			msg = "";
+>  		else
+> +#ifdef CONFIG_PCI_BIOS
+>  			msg = "; please try using pci=biosirq";
+> +#else
+> +			/* pci=biosirq is not a valid option */
+> +#ifdef CONFIG_ACPI
+> +			if (acpi_noirq)
+> +				msg = "; consider removing acpi=noirq";
+> +			else
+> +#endif
+> +				msg = "; recommend verifying UEFI/BIOS IRQ options"
+> +#ifndef CONFIG_ACPI
+> +					" or enabling ACPI"
+> +#endif
+> +					;
+> +#endif
+
+Any chance you could make that, um, a bit more readable?  It's OK to add
+brackets to the else{} for readability even if they're not *strictly*
+necessary.
+
+It might also be nice to use
+
+	if (IS_ENABLED(CONFIG_FOO))
+		...
+
+rather than the #ifdefs.
+
+I'd also be perfectly OK having two different strings rather than
+relying on string concatenation and the #ifdefs.
+
+Is the "or enabling ACPI" message really necessary?

@@ -2,93 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A160F49FE8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC3B49FE8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350369AbiA1Q7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S1350388AbiA1RAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 12:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245576AbiA1Q7s (ORCPT
+        with ESMTP id S245576AbiA1RAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:59:48 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD50C061714;
-        Fri, 28 Jan 2022 08:59:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 660761F46376
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643389187;
-        bh=zsFOqNJXl1POjN770OSH/AQ4HY1FlkWlk167Y5ylJlI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=LgxMYS1GnF1HKHlWvC7pamz/kp8UyaHru3kXZzji+FL/DZ06HizwWldfi/lB17xts
-         3yDjqhn/H5jxjTl3Rs+Kv6dn2ohhqI0y65vTA0rDy1HbUtY8UEYXi9dTJ0KnTPTtt4
-         kzwUQZBbbg1bwb7j1apphwPTQzJyg7TYQEjSioqC2NKGBS+Q7R/HjuJiVDySyRewJM
-         g/JdAPTaqDbXaTcl+krXqhlGrSThU/YYsnwHCTLzoqgffkswZmAVIjHFMPOFBI1Gvr
-         lxKSOf+PmopiNVbRiQYQrU5v4dFcraIEbSV5iJkVO5yefYHsyGVE/SsF810kafr0QD
-         tAwajJvnaBvPg==
-Message-ID: <d7686623-c5ab-ce2a-386c-f35ec167ca81@collabora.com>
-Date:   Fri, 28 Jan 2022 21:59:39 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Remove checks for validity of dev
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-References: <20220128125913.1291533-1-usama.anjum@collabora.com>
- <6c0335ca-eb16-b4de-1f2c-8bdc82219b57@roeck-us.net>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <6c0335ca-eb16-b4de-1f2c-8bdc82219b57@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Fri, 28 Jan 2022 12:00:02 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9783C061714;
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id g20so5664516pgn.10;
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=+C9vX6xCDqvkQ70Y80+HH81TrwKxhCYxQC092GOuFQc=;
+        b=QBncfqMh62y6OfBYS1O3hAMenwW5HA6+1y1SzVQ8DuwIlu81PHahMSu4lYyNz92mqw
+         VCF7g1LAZaC1G/HAkQZ4nlqC38oR1+hl9oZCpz0EZu0pyV810arjgJuBtUeVgjReBUfA
+         Suk1P9W7f+nF9D6eDIpEd8ePa5w5+54TPqPLIZJx6x1xDwDkJsUxOFa2WeL35XZ8FdKE
+         Vi59dpo1/2lfCuBKe6zmlb+X+TQ8Cmm1gnnQdjfbHDoJKHVBcUY/dzKqoFAOGq6E+1Rp
+         jLEwgtp1hN1j5oJGw/+gWFoDsQoa1B6DLDgeYQ39Xad30AuOTG2oZP27qUl6AoSFBX6g
+         uAcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+C9vX6xCDqvkQ70Y80+HH81TrwKxhCYxQC092GOuFQc=;
+        b=tcMA3LvsLl3MIHCCJCeCMkFycGhsmBfhawl6cUJaGz4cnUqYWDRHMaPgQAgVesuzko
+         FgjmekiW6MXPjzJcD8RirW5GTastb0BIj2t+ICRSspt2oaR/HWrIMM/rA+wxEFP+Cyq/
+         7OnQdWY5H9Yys+j1dFS4zUos4hMb4PaIElqjcw6fuNKT35i2Qsq9trGkxcOYGvlzEsX/
+         u2BEphPK5AgF9yvf2appfq68sfjmMdxSsqy1u58eD9vdax2E8MFNYvdLisa6PAtyPEpw
+         nMVqSKm8aBfF/YBJ488UZCdAnjdT/YkHGi9AEDHaUGaU+w1z1rcjPF6ehMW6ZWWC6pRy
+         6pHg==
+X-Gm-Message-State: AOAM532k2rq6iWR8FhFTuzepJvjbteWH2TSW3wv7meG10t1qMkv1KuJx
+        dR71GzVuk3XB4V8NWSFtLEbPcRgXBj7SMhBseL4=
+X-Google-Smtp-Source: ABdhPJyB6CItxjnOMvt+FRSBG50hnskVKlJqSjGYtvtldH72NRe7B+pKu96pHf8ZvXRDUBG3VfvtFA==
+X-Received: by 2002:a63:e704:: with SMTP id b4mr7235174pgi.315.1643389202302;
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id o21sm22261791pgl.19.2022.01.28.09.00.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, linux-tegra@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] spi: tegra210-quad: Fix missin IRQ check in tegra_qspi_probe
+Date:   Fri, 28 Jan 2022 16:59:56 +0000
+Message-Id: <20220128165956.27821-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 8:05 PM, Guenter Roeck wrote:
-> On 1/28/22 04:59, Muhammad Usama Anjum wrote:
->> dev is being dereferenced in device_property_present() which means that
->> it is valid. Don't check its validity again and simplify the code.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>   drivers/hwmon/hwmon.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->> index e36ea82da1474..aec32abd0a89f 100644
->> --- a/drivers/hwmon/hwmon.c
->> +++ b/drivers/hwmon/hwmon.c
->> @@ -822,7 +822,7 @@ __hwmon_device_register(struct device *dev, const
->> char *name, void *drvdata,
->>       hwdev->name = name;
->>       hdev->class = &hwmon_class;
->>       hdev->parent = dev;
->> -    hdev->of_node = dev ? dev->of_node : NULL;
->> +    hdev->of_node = dev->of_node;
->>       hwdev->chip = chip;
->>       dev_set_drvdata(hdev, drvdata);
->>       dev_set_name(hdev, HWMON_ID_FORMAT, id);
->> @@ -834,7 +834,7 @@ __hwmon_device_register(struct device *dev, const
->> char *name, void *drvdata,
->>         INIT_LIST_HEAD(&hwdev->tzdata);
->>   -    if (dev && dev->of_node && chip && chip->ops->read &&
->> +    if (dev->of_node && chip && chip->ops->read &&
->>           chip->info[0]->type == hwmon_chip &&
->>           (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
->>           err = hwmon_thermal_register_sensors(hdev);
-> 
-> Wrong fix, sorry. While I would love to make dev mandatory, the function
-> is called with dev == NULL from at least one place, and the check is
-> (still)
-> needed. Even if/when it is removed we would have to add an early check
-> and return -EINVAL if it is NULL.
-> 
-Thank you for the reply. I've looked at the code again. You are correct.
+This func misses checking for platform_get_irq()'s call and may passes the
+negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
+causing it to fail with -EINVAL, overriding an original error code.
+Stop calling request_threaded_irq() with invalid IRQ #s.
 
-> Guenter
+Fixes: 921fc1838fb0 ("spi: tegra210-quad: Add support for Tegra210 QSPI controller")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/spi/spi-tegra210-quad.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+index ce1bdb4767ea..cb00ac2fc7d8 100644
+--- a/drivers/spi/spi-tegra210-quad.c
++++ b/drivers/spi/spi-tegra210-quad.c
+@@ -1240,6 +1240,8 @@ static int tegra_qspi_probe(struct platform_device *pdev)
+ 
+ 	tqspi->phys = r->start;
+ 	qspi_irq = platform_get_irq(pdev, 0);
++	if (qspi_irq < 0)
++		return qspi_irq;
+ 	tqspi->irq = qspi_irq;
+ 
+ 	tqspi->clk = devm_clk_get(&pdev->dev, "qspi");
+-- 
+2.17.1
+

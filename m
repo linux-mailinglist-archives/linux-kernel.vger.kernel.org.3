@@ -2,159 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D63FB49F459
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3337349F45A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346805AbiA1H3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:29:41 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:61640 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346799AbiA1H3j (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:29:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643354979; x=1674890979;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZGcuH87Cwn7NyyRqG7ZxtYxzEEkANIYIdOtWtks7Iv4=;
-  b=SGHuiHhyodhT2aSU04GxNPCSYj4ShScTbkLjuQOSEXlAGCDc8dMaMG/7
-   fqST/dJnfIxWb4ZaS9+6tMNV2zKE+7eKxxAPpdLtfpum4SiXdVoinEGPT
-   XJl3y7kKMkUpuBtN1wXBMxZ9TDd61ypC5h7k7xEjU8YOrvvbUV2qfOKKI
-   4=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 27 Jan 2022 23:29:39 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:29:38 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:29:38 -0800
-Received: from [10.50.57.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 27 Jan
- 2022 23:29:34 -0800
-Message-ID: <8f0d544f-ea79-9fab-9579-7bdfed6dcf1b@quicinc.com>
-Date:   Fri, 28 Jan 2022 12:59:29 +0530
+        id S1346809AbiA1Hay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:30:54 -0500
+Received: from mga04.intel.com ([192.55.52.120]:11836 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242692AbiA1Hax (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 02:30:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643355053; x=1674891053;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=4s/YY4fDv/OF06n6oNWa+SaeSxVS4e1wXdQ0vMdNYqs=;
+  b=V2Fd9IMvg12PDfqdPTZ0QdiXxybTuTab85JS53byMnpdQ0w75UD7wnaQ
+   /MS6loi/4q39j+D/SsA10Ow5mm0w+C46ppXobHMAuTHiPu2I2w5f0T5fT
+   jzOPdWbToosJUFjuuu/hJhPCdJM7OGnjbcEMa9GLh/Qtkq67MunAzarDa
+   M0DG/P+sGbmGgwIGGIz5g6IHCkYRSd/JriO4CT0e5g4b8egl9VPi4+Iy/
+   d1YBCszh+nHklwPxltiE9u3hl96F3702EGPw9d6pEozeESrKNGehT50t5
+   xZQsEhuXqEB2fa1OAVzyLX7MQrrzw2U6ZX5pNn/Hb0r6DcAiEMKq4eLCa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="245908944"
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="245908944"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:30:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="618639528"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:30:51 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Rik van Riel <riel@surriel.com>
+Subject: Re: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for
+ memory tiering system
+References: <20220128023842.1946583-1-ying.huang@intel.com>
+        <20220128052345.GA618915@linux.vnet.ibm.com>
+Date:   Fri, 28 Jan 2022 15:30:50 +0800
+In-Reply-To: <20220128052345.GA618915@linux.vnet.ibm.com> (Srikar Dronamraju's
+        message of "Fri, 28 Jan 2022 10:53:45 +0530")
+Message-ID: <87czkctiz9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCH 2/9] soc: qcom: llcc: Update the logic for version info
- extraction
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1643353154.git.quic_saipraka@quicinc.com>
- <e311b16376329b9e9483fed8ae910a31d0f7bcba.1643353154.git.quic_saipraka@quicinc.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <e311b16376329b9e9483fed8ae910a31d0f7bcba.1643353154.git.quic_saipraka@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/2022 12:39 PM, Sai Prakash Ranjan wrote:
-> LLCC HW version info is made up of major, branch, minor and echo
-> version bits each of which are 8bits. Several features in newer
-> LLCC HW are based on the full version rather than just major or
-> minor versions such as write-subcache enable which is applicable
-> for versions greater than v2.0.0.0 and upcoming write-subcache
-> cacheable for SM8450 SoC which is only present in versions v2.1.0.0
-> and later, so it makes it easier and cleaner to just directly
-> compare with the full version than adding additional major/branch/
-> minor/echo version checks. So remove the earlier major version check
-> and add full version check for those features.
+Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
+
+> * Huang Ying <ying.huang@intel.com> [2022-01-28 10:38:41]:
 >
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> ---
->   drivers/soc/qcom/llcc-qcom.c       | 9 ++++-----
->   include/linux/soc/qcom/llcc-qcom.h | 4 ++--
->   2 files changed, 6 insertions(+), 7 deletions(-)
+>> 
+>> One possible fix is to ignore CPU-less nodes when detecting NUMA
+>> topology type in init_numa_topology_type().  That works well for the
+>> example system.  Is it good in general for any system with CPU-less
+>> nodes?
+>> 
 >
-> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> index b3a34f117a7c..a06764f16023 100644
-> --- a/drivers/soc/qcom/llcc-qcom.c
-> +++ b/drivers/soc/qcom/llcc-qcom.c
-> @@ -37,7 +37,6 @@
->   #define CACHE_LINE_SIZE_SHIFT         6
->   
->   #define LLCC_COMMON_HW_INFO           0x00030000
-> -#define LLCC_MAJOR_VERSION_MASK       GENMASK(31, 24)
->   
->   #define LLCC_COMMON_STATUS0           0x0003000c
->   #define LLCC_LB_CNT_MASK              GENMASK(31, 28)
-> @@ -55,6 +54,8 @@
->   
->   #define BANK_OFFSET_STRIDE	      0x80000
->   
-> +#define LLCC_VERSION_2_0_0_0          0x02000000
-> +
->   /**
->    * struct llcc_slice_config - Data associated with the llcc slice
->    * @usecase_id: Unique id for the client's use case
-> @@ -504,7 +505,7 @@ static int _qcom_llcc_cfg_program(const struct llcc_slice_config *config,
->   			return ret;
->   	}
->   
-> -	if (drv_data->major_version == 2) {
-> +	if (drv_data->version >= LLCC_VERSION_2_0_0_0) {
->   		u32 wren;
->   
->   		wren = config->write_scid_en << config->slice_id;
-> @@ -598,13 +599,11 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->   		goto err;
->   	}
->   
-> -	/* Extract major version of the IP */
-> +	/* Extract version of the IP */
->   	ret = regmap_read(drv_data->bcast_regmap, LLCC_COMMON_HW_INFO, &version);
->   	if (ret)
->   		goto err;
->   
-> -	drv_data->major_version = FIELD_GET(LLCC_MAJOR_VERSION_MASK, version);
-> -
+> A CPUless node at the time online doesn't necessarily mean a CPUless node
+> for the entire boot. For example: On PowerVM Lpars, aka powerpc systems,
+> some of the nodes may start as CPUless nodes and then CPUS may get
+> populated/hotplugged on them.
 
-Sorry, I missed assigning version info to drv_data here in this version. 
-I am sending a v2 with the fix.
+Got it!
 
-Thanks,
-Sai
+> Hence I am not sure if adding a check for CPUless nodes at node online may
+> work for such systems.
 
->   	ret = regmap_read(drv_data->regmap, LLCC_COMMON_STATUS0,
->   						&num_banks);
->   	if (ret)
-> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
-> index 9e8fd92c96b7..beecf00b707d 100644
-> --- a/include/linux/soc/qcom/llcc-qcom.h
-> +++ b/include/linux/soc/qcom/llcc-qcom.h
-> @@ -83,7 +83,7 @@ struct llcc_edac_reg_data {
->    * @bitmap: Bit map to track the active slice ids
->    * @offsets: Pointer to the bank offsets array
->    * @ecc_irq: interrupt for llcc cache error detection and reporting
-> - * @major_version: Indicates the LLCC major version
-> + * @version: Indicates the LLCC version
->    */
->   struct llcc_drv_data {
->   	struct regmap *regmap;
-> @@ -96,7 +96,7 @@ struct llcc_drv_data {
->   	unsigned long *bitmap;
->   	u32 *offsets;
->   	int ecc_irq;
-> -	u32 major_version;
-> +	u32 version;
->   };
->   
->   #if IS_ENABLED(CONFIG_QCOM_LLCC)
+How about something as below?
 
+Best Regards,
+Huang, Ying
 
+-----------------------8<-----------------------------
+
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index d201a7052a29..733e8bd930b4 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1737,7 +1737,13 @@ static void init_numa_topology_type(void)
+ 	}
+ 
+ 	for_each_online_node(a) {
++		if (!node_state(a, N_CPU))
++			continue;
++
+ 		for_each_online_node(b) {
++			if (!node_state(b, N_CPU))
++				continue;
++
+ 			/* Find two nodes furthest removed from each other. */
+ 			if (node_distance(a, b) < n)
+ 				continue;
+@@ -1849,6 +1855,13 @@ void sched_init_numa(void)
+ 
+ 			sched_domains_numa_masks[i][j] = mask;
+ 
++			/*
++			 * The mask will be initialized when the first CPU of
++			 * the node is onlined.
++			 */
++			if (!node_state(j, N_CPU))
++				continue;
++
+ 			for_each_node(k) {
+ 				/*
+ 				 * Distance information can be unreliable for
+@@ -1919,8 +1932,10 @@ void sched_init_numa(void)
+ 		return;
+ 
+ 	bitmap_zero(sched_numa_onlined_nodes, nr_node_ids);
+-	for_each_online_node(i)
+-		bitmap_set(sched_numa_onlined_nodes, i, 1);
++	for_each_online_node(i) {
++		if (node_state(i, N_CPU))
++			bitmap_set(sched_numa_onlined_nodes, i, 1);
++	}
+ }
+ 
+ static void __sched_domains_numa_masks_set(unsigned int node)
+@@ -1928,7 +1943,7 @@ static void __sched_domains_numa_masks_set(unsigned int node)
+ 	int i, j;
+ 
+ 	/*
+-	 * NUMA masks are not built for offline nodes in sched_init_numa().
++	 * NUMA masks are not built for offline/CPU-less nodes in sched_init_numa().
+ 	 * Thus, when a CPU of a never-onlined-before node gets plugged in,
+ 	 * adding that new CPU to the right NUMA masks is not sufficient: the
+ 	 * masks of that CPU's node must also be updated.

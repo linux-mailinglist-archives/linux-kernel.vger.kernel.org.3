@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3972849FAC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EECD49FADA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348874AbiA1Nd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:33:57 -0500
-Received: from elvis.franken.de ([193.175.24.41]:44030 "EHLO elvis.franken.de"
+        id S1348996AbiA1NfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:35:11 -0500
+Received: from mx.socionext.com ([202.248.49.38]:5514 "EHLO mx.socionext.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241847AbiA1Ndz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:33:55 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nDRNy-0004tH-00; Fri, 28 Jan 2022 14:33:54 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 84173C1D30; Fri, 28 Jan 2022 14:33:45 +0100 (CET)
-Date:   Fri, 28 Jan 2022 14:33:45 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v5.17
-Message-ID: <20220128133345.GA10829@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1348945AbiA1NfI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 08:35:08 -0500
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 28 Jan 2022 22:35:06 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 7A10A2006E83;
+        Fri, 28 Jan 2022 22:35:06 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 28 Jan 2022 22:35:06 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id BE95BC1E22;
+        Fri, 28 Jan 2022 22:35:05 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 0/3] pinctrl: uniphier: Add some more pinmux settings
+Date:   Fri, 28 Jan 2022 22:35:00 +0900
+Message-Id: <1643376903-18623-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+This series includes changes to audio I/O pinmux settings and addition
+to USB device pinmux settings.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+- Divide audio I/O pinmux groups so that 1/2/4ch can be specified.
+  The audio I/O function is available for LD11, LD20, PXs2 and PXs3 SoCs.
+  In addition, add the missing pinmux settings for PXs2.
 
-are available in the Git repository at:
+- Add USB device pinmux settings. The USB device function is available
+  for PXs2 and PXs3 SoCs.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_1
+---
+Changes since v1:
+- Remove the line of the nonexistent function
 
-for you to fetch changes up to fa62f39dc7e25fc16371b958ac59b9a6fd260bea:
+Kunihiko Hayashi (3):
+  pinctrl: uniphier: Add missing audio pinmux settings for PXs2 SoC
+  pinctrl: uniphier: Divide pinmux group to support 1ch and 2ch I2S
+  pinctrl: uniphier: Add USB device pinmux settings
 
-  MIPS: Fix build error due to PTR used in more places (2022-01-27 09:04:19 +0100)
-
-----------------------------------------------------------------
-- build fix for allmodconfig
-
-----------------------------------------------------------------
-Thomas Bogendoerfer (1):
-      MIPS: Fix build error due to PTR used in more places
-
- arch/mips/include/asm/asm.h            |   4 +-
- arch/mips/include/asm/ftrace.h         |   4 +-
- arch/mips/include/asm/r4kcache.h       |   4 +-
- arch/mips/include/asm/unaligned-emul.h | 176 ++++++++++++++++-----------------
- arch/mips/kernel/mips-r2-to-r6-emul.c  | 104 +++++++++----------
- arch/mips/kernel/r2300_fpu.S           |   6 +-
- arch/mips/kernel/r4k_fpu.S             |   2 +-
- arch/mips/kernel/relocate_kernel.S     |  22 ++---
- arch/mips/kernel/scall32-o32.S         |  10 +-
- arch/mips/kernel/scall64-n32.S         |   2 +-
- arch/mips/kernel/scall64-n64.S         |   2 +-
- arch/mips/kernel/scall64-o32.S         |  10 +-
- arch/mips/kernel/syscall.c             |   8 +-
- arch/mips/lib/csum_partial.S           |   4 +-
- arch/mips/lib/memcpy.S                 |   4 +-
- arch/mips/lib/memset.S                 |   2 +-
- arch/mips/lib/strncpy_user.S           |   4 +-
- arch/mips/lib/strnlen_user.S           |   2 +-
- 18 files changed, 185 insertions(+), 185 deletions(-)
+ drivers/pinctrl/uniphier/pinctrl-uniphier-ld11.c | 26 +++++++---
+ drivers/pinctrl/uniphier/pinctrl-uniphier-ld20.c | 64 ++++++++++++++++++------
+ drivers/pinctrl/uniphier/pinctrl-uniphier-pxs2.c | 62 +++++++++++++++++++----
+ drivers/pinctrl/uniphier/pinctrl-uniphier-pxs3.c | 62 +++++++++++++++++------
+ 4 files changed, 171 insertions(+), 43 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.7.4
+

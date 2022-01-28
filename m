@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 182FF49F8DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA0049F8E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348272AbiA1MGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:06:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242285AbiA1MGU (ORCPT
+        id S1348296AbiA1MHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:07:25 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59814 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231315AbiA1MHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:06:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F5AC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 04:06:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D44561AB8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:06:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E625DC340E0;
-        Fri, 28 Jan 2022 12:06:18 +0000 (UTC)
-Date:   Fri, 28 Jan 2022 12:06:15 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [arm64] kernel boot slowdown in v5.10.19 -> v5.10.42 update
-Message-ID: <YfPcNy3JcnwuJNMx@arm.com>
-References: <9a34ee9b-0ede-30a6-0898-d32fe81d5b0c@linux.microsoft.com>
+        Fri, 28 Jan 2022 07:07:24 -0500
+X-UUID: 686009ec37ba427bb52f2eeb8bb912f7-20220128
+X-UUID: 686009ec37ba427bb52f2eeb8bb912f7-20220128
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 39610135; Fri, 28 Jan 2022 20:07:21 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 28 Jan 2022 20:07:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
+ 2022 20:07:20 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 28 Jan 2022 20:07:19 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+Subject: [PATCH v1, 0/4] add display support for mediatek SOC MT8186
+Date:   Fri, 28 Jan 2022 20:07:14 +0800
+Message-ID: <20220128120718.30545-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a34ee9b-0ede-30a6-0898-d32fe81d5b0c@linux.microsoft.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 03:03:48PM -0800, Vijay Balakrishna wrote:
-> We noticed 150ms kernel boot slowdown back in June, 2021, when moving from
-> v5.10.19 to v5.10.42.  This on a 8GB SoC.  Only recently we investigated
-> this issue and found the regression is introduced by a change in map_mem()
-> (paging_init() -> map_mem() -> __map_memblock(), in particular "map all the
-> memory banks" for loop) by patch
-> 
-> 2687275a5843d1089687f08fc64eb3f3b026a169
-> arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required
-> 
-> above is a follow up to
-> 
-> 0a30c53573b07d5561457e41fb0ab046cd857da5
-> arm64: mm: Move reserve_crashkernel() into mem_init())
-> 
-> which deferred crashkernel reservation into mem_init().
-> 
-> The ~150ms slowdown disappears on booting without "crashkernel=.." on kernel
-> command-line.
 
-Is CONFIG_RODATA_FULL_DEFAULT_ENABLED set in your config file? It may
-cause the same slowdown. I suspect it's because we end up mapping the
-RAM at the page granularity so more loops and slightly higher TLB
-pressure. Not sure we can do much about.
+Yongqiang Niu (4):
+  soc: mediatek: mmsys: Add mt8186 mmsys routing table
+  soc: mediatek: add mtk mutex support for MT8186
+  drm/mediatek: split postmask component
+  drm/mediatek: add mt8186 display support
+
+ drivers/gpu/drm/mediatek/Makefile            |   1 +
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h      |   8 +
+ drivers/gpu/drm/mediatek/mtk_disp_postmask.c | 155 +++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c  |  30 +---
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c       |  41 +++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h       |   1 +
+ drivers/soc/mediatek/mt8186-mmsys.h          | 113 ++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.c             |  11 ++
+ drivers/soc/mediatek/mtk-mutex.c             |  45 ++++++
+ 9 files changed, 378 insertions(+), 27 deletions(-)
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_postmask.c
+ create mode 100644 drivers/soc/mediatek/mt8186-mmsys.h
 
 -- 
-Catalin
+2.25.1
+

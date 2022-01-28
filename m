@@ -2,126 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCA249F972
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DB149F976
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348480AbiA1Mcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiA1Mcj (ORCPT
+        id S1348420AbiA1MeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:34:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28307 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244677AbiA1MeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:32:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C18C061714;
-        Fri, 28 Jan 2022 04:32:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 685B961B08;
-        Fri, 28 Jan 2022 12:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5ADAC340E0;
-        Fri, 28 Jan 2022 12:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643373158;
-        bh=mqbTy9CsLz7Cz2KBshUwDl4dlexueqKy20esKjv4qhM=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=eou5gWcQ/FRrzLFCDXr5vWv4vCocX6fM1uLc7tO0L/2pISGj6RbfXXQ75VCkoe9Xr
-         0MaC4up0j6UWNaqSAMWaeHqPsD+kne0V4z3qAHv2HR2/rMlJQStk8vpiA4ozqtMXyE
-         ET/M+tYxABzRBYdc0W+fyvN1G8TlMuGOZFI1UvfaF8/7M1XgVEp6fdxMVvIuFG+ZVF
-         JQv8n8//oedwUDGV74VKIl2aHlqmcasFJCNePlnTkSEhuasOUlMgedo0SXFe51fUgR
-         Z8QDZv85zHTWPuSCXwBEKQeas/fz5FguxrSzPIXdD8ZkY6H0qRiYKUw90+fbbDWDXs
-         QU4Bj0sUVqHng==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Jan 2022 07:34:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643373240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7D5MGxvNeSIaDmzU5U2LWtJYI/+mf3HB+SUBlSno+yM=;
+        b=PNo3vRu40NzFP2dCqwW/MUZZ/040AadGuG+ePPcdEQkL2jt7HOj1osbMjDu4SEbwEdKZau
+        O3ou0B5ANqPJtqMqBf0NvpiLkgHgPSjd8Rb0BjfDXKdFDzyA53hbzk+JmQ1KZo/2rUeUz8
+        BG4cLfMCJKNNelw2cp/9QSMc/FWpzSU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-Csqm_TPZOtiXfj4JOrCXeA-1; Fri, 28 Jan 2022 07:33:59 -0500
+X-MC-Unique: Csqm_TPZOtiXfj4JOrCXeA-1
+Received: by mail-ed1-f70.google.com with SMTP id k10-20020a50cb8a000000b00403c8326f2aso2991850edi.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 04:33:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7D5MGxvNeSIaDmzU5U2LWtJYI/+mf3HB+SUBlSno+yM=;
+        b=PXN+vbTdI9m57GS15uWsmYivrungFgChjJcWDjGfsJUXvUlOoSJ3v5Lonc7hYMcKAG
+         bzINJpnD01lq7yHEIKlsF9aWnigXP6HpPTVd9l1DAWwe3VwCPhV7600o4cWAFpK970Kn
+         ca8q3hdtwInBSSfRGzvko5uuzTl4aFPN6DDyF4WJLHQhHYC0sWsyNUZ+723vtGc1z4Ug
+         zn8DA2XfZgsp0vFz7A+JFC/fcfqIxtu2waYfxsj9KosmyXQtAhnpoIb0N5UQpcBBjTYE
+         jjG26MndHaPUdpNGUx32Z4eI91WJpF1JXDIW+5TUdKhxSetTxA6dmhel70KnzLQdBnE9
+         Ioyg==
+X-Gm-Message-State: AOAM530+4SiXIAxEYXmq0W7Zj0pqbMiTQkjKZcYZWUCMDUn1Ub/eEjmY
+        PsB8wuBUcH0YkWzRkByjsW1EYVzSH6rd+UYTnradQDcOMpwAKUqEl7usUmdd7h4KoP/0ZOdJ22r
+        81D7/THDNymn0/B8BvuhhM/br
+X-Received: by 2002:a05:6402:190d:: with SMTP id e13mr8080147edz.38.1643373237930;
+        Fri, 28 Jan 2022 04:33:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy52Rs6964KyARBdJjsJHusFiyPA0f3U/obO2pyNjstmroPfcuRrjSDtYQ9uiKJa9zVif1K5Q==
+X-Received: by 2002:a05:6402:190d:: with SMTP id e13mr8080116edz.38.1643373237627;
+        Fri, 28 Jan 2022 04:33:57 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id p12sm9913497ejd.180.2022.01.28.04.33.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 04:33:56 -0800 (PST)
+Message-ID: <abfd32df-b882-a1eb-b2a0-389fd6a68fac@redhat.com>
+Date:   Fri, 28 Jan 2022 13:33:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] ath9k_htc: fix uninit value bugs
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220115122733.11160-1-paskripkin@gmail.com>
-References: <20220115122733.11160-1-paskripkin@gmail.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     ath9k-devel@qca.qualcomm.com, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com,
-        vasanth@atheros.com, Sujith.Manoharan@atheros.com,
-        senthilkumar@atheros.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164337315159.4876.15861801637015517784.kvalo@kernel.org>
-Date:   Fri, 28 Jan 2022 12:32:35 +0000 (UTC)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/3] KVM: x86: add system attribute to retrieve full set
+ of supported xsave states
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        yang.zhong@intel.com
+References: <20220126152210.3044876-1-pbonzini@redhat.com>
+ <20220126152210.3044876-3-pbonzini@redhat.com> <YfK71pSnmtpnSJQ8@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YfK71pSnmtpnSJQ8@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavel Skripkin <paskripkin@gmail.com> wrote:
+On 1/27/22 16:35, Sean Christopherson wrote:
+> On Wed, Jan 26, 2022, Paolo Bonzini wrote:
+>> +static int kvm_x86_dev_get_attr(struct kvm_device_attr *attr)
+>> +{
+>> +	if (attr->group)
+>> +		return -ENXIO;
+>> +
+>> +	switch (attr->attr) {
+>> +	case KVM_X86_XCOMP_GUEST_SUPP:
+>> +		if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+> 
+> Deja vu[*].
+> 
+>    arch/x86/kvm/x86.c: In function ‘kvm_x86_dev_get_attr’:
+>    arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>     4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>          |                                              ^
+>    arch/x86/include/asm/uaccess.h:221:31: note: in definition of macro ‘do_put_user_call’
+>      221 |         register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);           \
+>          |                               ^~~
+>    arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
+>     4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>          |                     ^~~~~~~~
+>    arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>     4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>          |                                              ^
+>    arch/x86/include/asm/uaccess.h:223:21: note: in definition of macro ‘do_put_user_call’
+>      223 |         __ptr_pu = (ptr);                                               \
+>          |                     ^~~
+>    arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
+>     4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>          |                     ^~~~~~~~
+>    arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>     4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>          |                                              ^
+>    arch/x86/include/asm/uaccess.h:230:45: note: in definition of macro ‘do_put_user_call’
+>      230 |                        [size] "i" (sizeof(*(ptr)))                      \
+>          |                                             ^~~
+>    arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
+>     4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+> 
+> Given that we're collectively 2 for 2 in mishandling {g,s}et_attr(), what about
+> a prep pacth like so?  Compile tested only...
+> 
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Thu, 27 Jan 2022 07:31:53 -0800
+> Subject: [PATCH] KVM: x86: Add a helper to retrieve userspace address from
+>   kvm_device_attr
+> 
+> Add a helper to handle converting the u64 userspace address embedded in
+> struct kvm_device_attr into a userspace pointer, it's all too easy to
+> forget the intermediate "unsigned long" cast as well as the truncation
+> check.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/kvm/x86.c | 28 +++++++++++++++++++++-------
+>   1 file changed, 21 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 8033eca6f3a1..67836f7c71f5 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4335,14 +4335,28 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	return r;
+>   }
+> 
+> +static inline void __user *kvm_get_attr_addr(struct kvm_device_attr *attr)
+> +{
+> +	void __user *uaddr = (void __user*)(unsigned long)attr->addr;
+> +
+> +	if ((u64)(unsigned long)uaddr != attr->addr)
+> +		return ERR_PTR(-EFAULT);
+> +	return uaddr;
+> +}
+> +
+>   static int kvm_x86_dev_get_attr(struct kvm_device_attr *attr)
+>   {
+> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
+> +
+>   	if (attr->group)
+>   		return -ENXIO;
+> 
+> +	if (IS_ERR(uaddr))
+> +		return PTR_ERR(uaddr);
+> +
+>   	switch (attr->attr) {
+>   	case KVM_X86_XCOMP_GUEST_SUPP:
+> -		if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+> +		if (put_user(supported_xcr0, uaddr))
+>   			return -EFAULT;
+>   		return 0;
+>   	default:
+> @@ -5070,11 +5084,11 @@ static int kvm_arch_tsc_has_attr(struct kvm_vcpu *vcpu,
+>   static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
+>   				 struct kvm_device_attr *attr)
+>   {
+> -	u64 __user *uaddr = (u64 __user *)(unsigned long)attr->addr;
+> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
+>   	int r;
+> 
+> -	if ((u64)(unsigned long)uaddr != attr->addr)
+> -		return -EFAULT;
+> +	if (IS_ERR(uaddr))
+> +		return PTR_ERR(uaddr);
+> 
+>   	switch (attr->attr) {
+>   	case KVM_VCPU_TSC_OFFSET:
+> @@ -5093,12 +5107,12 @@ static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
+>   static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
+>   				 struct kvm_device_attr *attr)
+>   {
+> -	u64 __user *uaddr = (u64 __user *)(unsigned long)attr->addr;
+> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
+>   	struct kvm *kvm = vcpu->kvm;
+>   	int r;
+> 
+> -	if ((u64)(unsigned long)uaddr != attr->addr)
+> -		return -EFAULT;
+> +	if (IS_ERR(uaddr))
+> +		return PTR_ERR(uaddr);
+> 
+>   	switch (attr->attr) {
+>   	case KVM_VCPU_TSC_OFFSET: {
+> --
+> 
 
-> Syzbot reported 2 KMSAN bugs in ath9k. All of them are caused by missing
-> field initialization.
-> 
-> In htc_connect_service() svc_meta_len and pad are not initialized. Based
-> on code it looks like in current skb there is no service data, so simply
-> initialize svc_meta_len to 0.
-> 
-> htc_issue_send() does not initialize htc_frame_hdr::control array. Based
-> on firmware code, it will initialize it by itself, so simply zero whole
-> array to make KMSAN happy
-> 
-> Fail logs:
-> 
-> BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
->  usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
->  hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
->  hif_usb_send+0x5f0/0x16f0 drivers/net/wireless/ath/ath9k/hif_usb.c:479
->  htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
->  htc_connect_service+0x143e/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:275
-> ...
-> 
-> Uninit was created at:
->  slab_post_alloc_hook mm/slab.h:524 [inline]
->  slab_alloc_node mm/slub.c:3251 [inline]
->  __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
->  kmalloc_reserve net/core/skbuff.c:354 [inline]
->  __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
->  alloc_skb include/linux/skbuff.h:1126 [inline]
->  htc_connect_service+0x1029/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:258
-> ...
-> 
-> Bytes 4-7 of 18 are uninitialized
-> Memory access of size 18 starts at ffff888027377e00
-> 
-> BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
->  usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
->  hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
->  hif_usb_send+0x5f0/0x16f0 drivers/net/wireless/ath/ath9k/hif_usb.c:479
->  htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
->  htc_connect_service+0x143e/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:275
-> ...
-> 
-> Uninit was created at:
->  slab_post_alloc_hook mm/slab.h:524 [inline]
->  slab_alloc_node mm/slub.c:3251 [inline]
->  __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
->  kmalloc_reserve net/core/skbuff.c:354 [inline]
->  __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
->  alloc_skb include/linux/skbuff.h:1126 [inline]
->  htc_connect_service+0x1029/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:258
-> ...
-> 
-> Bytes 16-17 of 18 are uninitialized
-> Memory access of size 18 starts at ffff888027377e00
-> 
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-by: syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Nice, I applied it.
 
-Patch applied to ath-next branch of ath.git, thanks.
-
-d1e0df1c57bd ath9k_htc: fix uninit value bugs
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220115122733.11160-1-paskripkin@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Paolo
 

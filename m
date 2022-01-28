@@ -2,174 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D8C49F905
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782D249F90F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348339AbiA1MQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:16:28 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:35996 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234483AbiA1MQ1 (ORCPT
+        id S1348381AbiA1MTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243048AbiA1MTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:16:27 -0500
-Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 28 Jan
- 2022 20:16:26 +0800
-Message-ID: <e87b40f0-140e-0521-b861-7481cfc1507d@amlogic.com>
-Date:   Fri, 28 Jan 2022 20:16:26 +0800
+        Fri, 28 Jan 2022 07:19:12 -0500
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318DCC061714;
+        Fri, 28 Jan 2022 04:19:12 -0800 (PST)
+Received: from [IPV6:2a01:e0a:255:1000:3124:3dac:d662:6a32] (unknown [IPv6:2a01:e0a:255:1000:3124:3dac:d662:6a32])
+        (Authenticated sender: duncan.sands@free.fr)
+        by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3BF0E7802CE;
+        Fri, 28 Jan 2022 13:19:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1643372349;
+        bh=3L95F8XCRFzMRvjD9lkd7vEXaFEh+figQSC1zy0PMAo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R3hHWeb/x/FYlGZmhpiVGc1cJUhGrYQp31Oxxz8hU7ueiBupPlJ9rI81TN9hHsow5
+         TXVqSuTjPWeKBljSmFzydR5+QtArOCws+c2lFuheA+UwwoOo109tBjtoFdC8qtGvBe
+         wnrddCuwjZhf3OxXBxVrN+KDR0gaqpf5+VDob6WsN04l8kJcDZjKRRkCjTLMYld1Dx
+         pZFbntJ0ffBD7S8oRxx2Ml7F0qP/gRbWuOCGiz2mlnmITYFljLmEAbKK7cFJ24W//Q
+         RXtHuEWiPFY3Ut8GfKUmk35BQp5Vz2Qsj5HoFaJmLUmOaguo4o36mexFInFvz7uFPd
+         xeMheu3Z35nKg==
+Message-ID: <a9b867e5-3728-7815-43da-3e6dddf214f2@free.fr>
+Date:   Fri, 28 Jan 2022 13:19:04 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 1/2] mtd: rawnand: meson: discard the common MMC sub
- clock framework
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] usb: atm: Make use of the helper macro kthread_run()
 Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20220128113237.39996-1-liang.yang@amlogic.com>
- <20220128113237.39996-2-liang.yang@amlogic.com>
- <20220128124036.25fe0539@xps13>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <20220128124036.25fe0539@xps13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.28.39.106]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
+To:     Yin Xiujiang <yinxiujiang@kylinos.cn>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220127074744.845537-1-yinxiujiang@kylinos.cn>
+From:   Duncan Sands <duncan.sands@free.fr>
+In-Reply-To: <20220127074744.845537-1-yinxiujiang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel,
+Hi Yin Xiujiang, please see my earlier reply to Cai Huoqing for the same patch 
+below.  Did you do the analysis?
 
-Thanks for the review and quick response.
+>>         instance->thread = t;
+>> -    wake_up_process(t);
+> 
+> doesn't this mean that the thread may now start running before instance->thread has been assigned?  It's not clear to me what race conditions this may open up, if any (I haven't looked at the code in a long time), but it does need to be carefully analyzed.  So I can't sign off on this as it stands.
 
-On 2022/1/28 19:40, Miquel Raynal wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Hi Liang,
-> 
-> liang.yang@amlogic.com wrote on Fri, 28 Jan 2022 19:32:36 +0800:
-> 
->> EMMC and NAND has the same clock control register named 'SD_EMMC_CLOCK' which is
-> 
-> have
-ok
-> 
->> defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider and
->> bit6~7 is the mux for fix pll and xtal.
-> 
->> Previously a common MMC sub clock framework is implemented and shared by EMMC and
-> 
-> I believe you meant that this hasa already been contributed? I would
-> then rephrase with:
-> 
-> A common MMC and NAND sub-clock has been implemented and can be used by
-> the eMMC and NAND controller (which are mutually exclusive anyway).
-> 
-> Let's use this new clock.
-ok. thanks
-> 
->> NAND, but that is coupling the EMMC and NAND, although EMMC and NAND is mutually
->> exclusive.
->>
->> Change-Id: Ibeb4c7ff886f5886aac4d6c664d7bbd1b1bcb997
-> 
-> No change Ids.
-ok. i will delete next version.
-> 
->> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
->> ---
->>   drivers/mtd/nand/raw/meson_nand.c | 161 +++++++++++++++++-------------
->>   1 file changed, 89 insertions(+), 72 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->> index ac3be92872d0..f6a3d5c2ea1c 100644
->> --- a/drivers/mtd/nand/raw/meson_nand.c
->> +++ b/drivers/mtd/nand/raw/meson_nand.c
->> @@ -2,7 +2,7 @@
->>   /*
->>    * Amlogic Meson Nand Flash Controller Driver
->>    *
->> - * Copyright (c) 2018 Amlogic, inc.
->> + * Copyright (c) 2018-2021 Amlogic, inc.
-> 
-> Please don't.
-> 
->>    * Author: Liang Yang <liang.yang@amlogic.com>
->>    */
->>   
->> @@ -10,6 +10,7 @@
->>   #include <linux/dma-mapping.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/clk.h>
->> +#include <linux/clk-provider.h>
->>   #include <linux/mtd/rawnand.h>
->>   #include <linux/mtd/mtd.h>
->>   #include <linux/mfd/syscon.h>
->> @@ -19,6 +20,7 @@
->>   #include <linux/iopoll.h>
->>   #include <linux/of.h>
->>   #include <linux/of_device.h>
->> +#include <linux/of_address.h>
->>   #include <linux/sched/task_stack.h>
->>   
->>   #define NFC_REG_CMD		0x00
->> @@ -104,6 +106,9 @@
->>   
->>   #define PER_INFO_BYTE		8
->>   
->> +#define CLK_DIV_SHIFT		0
->> +#define CLK_DIV_WIDTH		6
->> +
->>   struct meson_nfc_nand_chip {
->>   	struct list_head node;
->>   	struct nand_chip nand;
->> @@ -151,15 +156,17 @@ struct meson_nfc {
->>   	struct nand_controller controller;
->>   	struct clk *core_clk;
->>   	struct clk *device_clk;
->> -	struct clk *phase_tx;
->> -	struct clk *phase_rx;
->> +	struct clk *nand_clk;
->> +	struct clk_divider nand_divider;
->>   
->>   	unsigned long clk_rate;
->>   	u32 bus_timing;
->>   
->>   	struct device *dev;
->> -	void __iomem *reg_base;
->> -	struct regmap *reg_clk;
->> +	struct {
->> +		void __iomem *reg_base;
->> +		void __iomem *sd_emmc_clock;
->> +	} res;
-> 
-> Please split your commit: first the mechanical changes, then the use of
-> the new area or something like that.
-> 
-> Otherwise there are too many lines changed, I can't spot where it is
-> interesting.
+Best wishes, Duncan.
 
-ok. i will split it next version. thanks.
+On 27/01/2022 08:47, Yin Xiujiang wrote:
+> Repalce kthread_create/wake_up_process() with kthread_run()
+> to simplify the code.
+> 
+> Signed-off-by: Yin Xiujiang <yinxiujiang@kylinos.cn>
+> ---
+>   drivers/usb/atm/usbatm.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
+> index e3a49d837609..24ba739a85e0 100644
+> --- a/drivers/usb/atm/usbatm.c
+> +++ b/drivers/usb/atm/usbatm.c
+> @@ -976,7 +976,7 @@ static int usbatm_heavy_init(struct usbatm_data *instance)
+>   {
+>   	struct task_struct *t;
+>   
+> -	t = kthread_create(usbatm_do_heavy_init, instance, "%s",
+> +	t = kthread_run(usbatm_do_heavy_init, instance, "%s",
+>   			instance->driver->driver_name);
+>   	if (IS_ERR(t)) {
+>   		usb_err(instance, "%s: failed to create kernel_thread (%ld)!\n",
+> @@ -985,7 +985,6 @@ static int usbatm_heavy_init(struct usbatm_data *instance)
+>   	}
+>   
+>   	instance->thread = t;
+> -	wake_up_process(t);
+>   	wait_for_completion(&instance->thread_started);
+>   
+>   	return 0;
 
-> 
-> Thanks,
-> Miquèl
-> 
-> .

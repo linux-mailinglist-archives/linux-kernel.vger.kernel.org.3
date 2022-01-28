@@ -2,83 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ACE49F66B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F089F49F670
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347632AbiA1JcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:32:19 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:32129 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347643AbiA1JcH (ORCPT
+        id S1347643AbiA1Jd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:33:26 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49182 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233524AbiA1JdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:32:07 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JlXG93hMtz8wd5;
-        Fri, 28 Jan 2022 17:29:05 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 17:32:04 +0800
-Message-ID: <aff671e4-6cff-d5d2-69c4-874ebd8bf54b@huawei.com>
-Date:   Fri, 28 Jan 2022 17:32:04 +0800
+        Fri, 28 Jan 2022 04:33:24 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C6B141F391;
+        Fri, 28 Jan 2022 09:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643362403; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=19rdc9fC7OG7HfBbMoAIsFnL4L+cUkADDhTafKdET6c=;
+        b=RInwmZvWbgVMLnMH51JHnANWAw7cXsX14o7/QhqaYzJtBsZmqn1COEyjtajDeH1jB+Qfkr
+        ASLurfTbuxnySTrctt8jBG85QhmGfvc6V8dcjBZKFrTUWrCoPeOO7pnymfhsEiiNcFCNBq
+        sx6BLjN726WH70hcxc5D26XBdhbX6ug=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643362403;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=19rdc9fC7OG7HfBbMoAIsFnL4L+cUkADDhTafKdET6c=;
+        b=81Tgjq/GP1E5NWyz96lCWDHgH4hU6RHCJurMJ1eGtjOEEfcWzWjF7vt5pZMH//9vzmXna8
+        /PiPrDxck5wI5lBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3B4313A1E;
+        Fri, 28 Jan 2022 09:33:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XfPfJmO482GFfAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 28 Jan 2022 09:33:23 +0000
+Message-ID: <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
+Date:   Fri, 28 Jan 2022 10:33:21 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
- ima_hash=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
+ kernel parameter
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        wangweiyang <wangweiyang2@huawei.com>,
-        Xiujianfeng <xiujianfeng@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-References: <20220125090237.120357-1-guozihua@huawei.com>
- <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
- <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
- <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
- <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
- <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
- <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
- <6f0890f135b61c41d81b03bf084ebab1b3e551e1.camel@linux.ibm.com>
- <220a8c9f3ab34f2183c0a88941c145d0@huawei.com>
- <df7fffa1-2068-cb0c-e43e-141ccd125b39@huawei.com>
- <4626844528c5accb70a57870168091e002affb36.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <4626844528c5accb70a57870168091e002affb36.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20211217003752.3946210-1-javierm@redhat.com>
+ <20211217003752.3946210-32-javierm@redhat.com>
+ <164336121612.533872.1685181669511488706@Monstersaurus>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <164336121612.533872.1685181669511488706@Monstersaurus>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------WcWEE0BvNATjTbVKE5mv0Sym"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------WcWEE0BvNATjTbVKE5mv0Sym
+Content-Type: multipart/mixed; boundary="------------4SYgJhcNfw7DJI8TljF4abc5";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Message-ID: <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
+Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
+ kernel parameter
+References: <20211217003752.3946210-1-javierm@redhat.com>
+ <20211217003752.3946210-32-javierm@redhat.com>
+ <164336121612.533872.1685181669511488706@Monstersaurus>
+In-Reply-To: <164336121612.533872.1685181669511488706@Monstersaurus>
 
+--------------4SYgJhcNfw7DJI8TljF4abc5
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 2022/1/27 20:18, Mimi Zohar wrote:
-> On Thu, 2022-01-27 at 14:35 +0800, Guozihua (Scott) wrote:
-> 
->>
->> I understand that the solution proposed here is to decommission template
->> "ima" and potentially removing related algo checks altogether?
-> 
-> Eventually we might decide to do that, but right now we just want to
-> address not being able to set "ima_template" after setting "ima_hash".
-> 
-> thanks,
-> 
-> Mimi
-> 
-> 
-> .
+SGkNCg0KQW0gMjguMDEuMjIgdW0gMTA6MTMgc2NocmllYiBLaWVyYW4gQmluZ2hhbToNCj4g
+SGkgSmF2aWVyLA0KPiANCj4gUXVvdGluZyBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgKDIw
+MjEtMTItMTcgMDA6Mzc6NDYpDQo+PiBBY2NvcmRpbmcgdG8gZGlzYWJsZSBEb2N1bWVudGF0
+aW9uL2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dCwgdGhpcw0KPj4gcGFyYW1l
+dGVyIGNhbiBiZSB1c2VkIHRvIGRpc2FibGUga2VybmVsIG1vZGVzZXR0aW5nLg0KPj4NCj4+
+IERSTSBkcml2ZXJzIHdpbGwgbm90IHBlcmZvcm0gZGlzcGxheS1tb2RlIGNoYW5nZXMgb3Ig
+YWNjZWxlcmF0ZWQgcmVuZGVyaW5nDQo+PiBhbmQgb25seSB0aGUgc3lzdGVtIGZyYW1lYnVm
+ZmVyIHdpbGwgYmUgYXZhaWxhYmxlIGlmIGl0IHdhcyBzZXQtdXAuDQo+IA0KPiBXaGF0IGlz
+IHRoZSAnc3lzdGVtIGZyYW1lYnVmZmVyJyBpbiB0aGlzIGluc3RhbmNlPyBSZWFkaW5nDQo+
+IGh0dHBzOi8vd3d3Lmtlcm5lbC5vcmcvZG9jL0RvY3VtZW50YXRpb24vYWRtaW4tZ3VpZGUv
+a2VybmVsLXBhcmFtZXRlcnMudHh0DQo+IGl0IHNvdW5kcyBsaWtlIHRoYXQgbWVhbnMgYW55
+dGhpbmcgYWxyZWFkeSBzZXQgdXAgYnkgdGhlIGJvb3Rsb2FkZXIuDQoNCkV4YWN0bHkgdGhp
+cy4NCg0KPiANCj4+IEJ1dCBvbmx5IGEgZmV3IERSTSBkcml2ZXJzIGN1cnJlbnRseSBjaGVj
+ayBmb3Igbm9tb2Rlc2V0LCBtYWtlIHRoaXMgZHJpdmVyDQo+PiB0byBhbHNvIHN1cHBvcnQg
+dGhlIGNvbW1hbmQgbGluZSBwYXJhbWV0ZXIuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogSmF2
+aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQo+PiAtLS0NCj4+
+DQo+PiAobm8gY2hhbmdlcyBzaW5jZSB2MSkNCj4+DQo+PiAgIGRyaXZlcnMvZ3B1L2RybS9y
+Y2FyLWR1L3JjYXJfZHVfZHJ2LmMgfCAzICsrKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMyBp
+bnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9yY2Fy
+LWR1L3JjYXJfZHVfZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0vcmNhci1kdS9yY2FyX2R1X2Ry
+di5jDQo+PiBpbmRleCA1YTgxMzFlZjgxZDUuLjk4MmU0NTAyMzNlZCAxMDA2NDQNCj4+IC0t
+LSBhL2RyaXZlcnMvZ3B1L2RybS9yY2FyLWR1L3JjYXJfZHVfZHJ2LmMNCj4+ICsrKyBiL2Ry
+aXZlcnMvZ3B1L2RybS9yY2FyLWR1L3JjYXJfZHVfZHJ2LmMNCj4+IEBAIC03MDEsNiArNzAx
+LDkgQEAgc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgcmNhcl9kdV9wbGF0Zm9ybV9k
+cml2ZXIgPSB7DQo+PiAgIA0KPj4gICBzdGF0aWMgaW50IF9faW5pdCByY2FyX2R1X2luaXQo
+dm9pZCkNCj4+ICAgew0KPj4gKyAgICAgICBpZiAoZHJtX2Zpcm13YXJlX2RyaXZlcnNfb25s
+eSgpKQ0KPj4gKyAgICAgICAgICAgICAgIHJldHVybiAtRU5PREVWOw0KPj4gKw0KPiANCj4g
+VGhpcyB3aWxsIGNvbXBsZXRlbHkgZGlzYWJsZSBhbGwgY29udHJvbCBvZiB0aGUgZGlzcGxh
+eSBkZXZpY2Ugd2hlbg0KPiBub21vZGVzZXQgaXMgZW5hYmxlZC4NCj4gDQo+IElzIHRoZXJl
+IGFueSByZXF1aXJlbWVudCBmb3IgdXMgdG8gc3VwcG9ydCBvdXRwdXR0aW5nIHRvIHRoZSBk
+aXNwbGF5IGlmDQo+IGl0IHdhcyBwcmV2aW91c2x5IHNldCB1cD8gcHJlc3VtYWJseSB3aXRo
+b3V0IHNldHRpbmcgb3IgY2hhbmdpbmcgYW55DQo+IG1vZGVzLCBidXQgc2ltcGx5IGFsbG93
+aW5nIHRoZSBleGlzdGluZyBmcmFtZSB0byBiZSB1cGRhdGVkPw0KDQpUaGVyZSdzIG5vIHJl
+cXVpcmVtZW50IGZvciB5b3VyIGRyaXZlci4gV2UganVzdCB3YW50IGEgcGFyYW1ldGVyIHdo
+ZXJlIA0Kd2UgY2FuIGNvbnZlbmllbnRseSBkaXNhYmxlIG1vc3Qgb2YgRFJNJ3MgZHJpdmVy
+cyBhbmQgcmVkdWNlIGl0IHRvIGEgDQptaW5pbXVtLiBIZWxwcyBkaXN0cmlidXRpb25zIHRv
+IHByb3ZpZGUgYSBzaW1wbGUgZmFsbGJhY2sgbW9kZS4gIE1vc3QgDQpQQ0ktYmFzZWQgZHJp
+dmVycyBhbHJlYWR5IHN1cHBvcnQgdGhhdC4gTm93IHdlJ3JlIGFkZGVkIGl0IHRvIHRoZSBv
+dGhlciANCmRyaXZlcnMgYXMgd2VsbC4NCg0KPiANCj4gSSB0aGluayB0aGUgaW1wbGljYXRp
+b24gaXMgdGhhdCAnZmlybXdhcmUgZHJpdmVycycgd291bGQgbWVhbiBhIGRpc3BsYXkNCj4g
+Y291bGQgYmUgdXBkYXRlZCB0aHJvdWdoIHNvbWUgZmlybXdhcmUgaW50ZXJmYWNlLCB3aGlj
+aCB3ZSB3b24ndCBoYXZlDQo+IC4uLiBzbyBpdCBzZWVtcyByZWFzb25hYmxlIHRvIGFjY2Vw
+dCB0aGF0IHRoaXMgd2hvbGUgZHJpdmVyIGNhbiBiZQ0KPiBkaXNhYmxlZCBpbiB0aGF0IGlu
+c3RhbmNlLg0KDQpJdCBjYW5ub3QgYmUgJ21vZGUtc2V0dGVkJy4gV2UgZ2V0IGEgcHJlLWNv
+bmZpZ3VyZWQgZnJhbWVidWZmZXIgZnJvbSB0aGUgDQpmaXJtd2FyZSBvciBib290bG9hZGVy
+LiBXaGF0ZXZlciB3ZSBkcmF3IHRoZXJlIHNob3dzIHVwIG9uIHRoZSBzY3JlZW4uDQoNCkJl
+c3QgcmVnYXJkcw0KVGhvbWFzDQoNCg0KPiANCj4gUmVhZGluZyB5b3VyIG1haWwgdGhhdCBi
+cm91Z2h0IHRoaXMgdGhyZWFkIHVwIGluIG15IGluYm94LCBJIHRoaW5rDQo+IHlvdSd2ZSBh
+bHJlYWR5IGhpdCBtZXJnZSBvbiB0aGlzLCBzbyBkb24ndCB3b3JyeSBhYm91dCBhZGRpbmcg
+YSB0YWcgaW4NCj4gdGhhdCBpbnN0YW5jZSwgYnV0IEkgdGhpbmsgdGhpcyBpcyBvay4NCj4g
+DQo+IFJldmlld2VkLWJ5OiBLaWVyYW4gQmluZ2hhbSA8a2llcmFuLmJpbmdoYW0rcmVuZXNh
+c0BpZGVhc29uYm9hcmQuY29tPg0KPiANCj4+ICAgICAgICAgIHJjYXJfZHVfb2ZfaW5pdChy
+Y2FyX2R1X29mX3RhYmxlKTsNCj4+ICAgDQo+PiAgICAgICAgICByZXR1cm4gcGxhdGZvcm1f
+ZHJpdmVyX3JlZ2lzdGVyKCZyY2FyX2R1X3BsYXRmb3JtX2RyaXZlcik7DQo+PiAtLSANCj4+
+IDIuMzMuMQ0KPj4NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhm
+ZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7D
+vHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Sure! I would come up with a solution.
+--------------4SYgJhcNfw7DJI8TljF4abc5--
 
--- 
-Best
-GUO Zihua
+--------------WcWEE0BvNATjTbVKE5mv0Sym
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHzuGEFAwAAAAAACgkQlh/E3EQov+A4
+XA/8CwTXIOXYE0E1nFFlvnPK4n1G3cjF6xnhl2TFVJMxDxl5ZHec2icG5D1t9aZDgqiCoy5GpMl4
+rTapoY8GFWNOPksP0XOiOBD3/B8mmBE/saR6OlqtJgsFAVZ0P6WZVFJJiQCCosqFhH0tZqujQfGB
+Fsc8UaqoFH7tsU3P4Ek78Mth9KSFJmQe+CRluLbnlsm9HWcWC9QKmB1EKj+QuK4DtWhfHiAx+qwl
+AB7DGFopiYqh9CGYgy6PSRT14epSXS8vtaquuzGah0N+/BgxZSDwy72PG4QzQUp83UjcItoTPDAS
+ifGqu1hYd2ncRvCFeUAUw7oF+J3p8QHPPPEecHZGplKfytSG1sioBmnXKqfa2D0abrkke2zsxSDj
+LNznOpL7VKg3s3EYXawoHD/MZme3synLELw4Jxf0fEPRL6Zodw3oRHrkIg7heZ0+nzlD3A0ShTNO
+5zA8tZwTGyYyxF+A7XaoEjW6m1531cN/nQKWpK8dCuCpP0OjjnUShHaDiL5RKCmgn8lrPaTfgpM1
+A5BchoNba7m/HENyM0Qfr3nam3ZdB0T8IBN8ssHXD9EyFdBQ6Ts6D7nB0DhTM3aJeIVx6YDsM1oZ
+l5whqDkq7/L7fVPWBfDawKByPMXATRluLgUlFY3i6CyHwnIEV7mdj3brv1zykdPde+Ne+W3+asWn
+jz0=
+=UR3B
+-----END PGP SIGNATURE-----
+
+--------------WcWEE0BvNATjTbVKE5mv0Sym--

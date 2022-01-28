@@ -2,111 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE82F49F7F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A2549F800
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348085AbiA1LKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S1348033AbiA1LMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244239AbiA1LKl (ORCPT
+        with ESMTP id S1348016AbiA1LMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:10:41 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C6C061714;
-        Fri, 28 Jan 2022 03:10:41 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d18so5608715plg.2;
-        Fri, 28 Jan 2022 03:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lpTrB1w23BF+6DdwaMHxzpTYFKzu4pd5U9VeSzFiuIk=;
-        b=TEa5rKjcEAzmYaI8wm9Q8shd5d//zVYo+GOFi0bjEUmFAQQk5c4kszeX+FiVZ6U8lT
-         HOvbO3+0T+Etk2lWwVJYdu8+4UGtManVzfTlNIA2vq/4qIUWFq37I0+gw8Ahi4xNI1sM
-         +uOfNU2at/xQdgTxhQcV3eZNh5iePI1ZHqAr8lBGP8ZkqzWpoZ/DRTePHWW+t1wWEQB7
-         CQLWg/RbpT6QMvbwH69fNtTFdki4k+FVq5iYOQkx+NJVJQJiYVsIIi00GuYz95apJIXy
-         LL1chaId7hbhoPXE1iyV1ytsMqMbGXLm3xppAJ8W/9yIdtZoVm2f0lkqrRxTwVwAvGO/
-         kajw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lpTrB1w23BF+6DdwaMHxzpTYFKzu4pd5U9VeSzFiuIk=;
-        b=7JbuqkCY9azNrzGnp24sUVECC8jiIOmUKnDa6Q0DPGDV8jzSSvc7v5vIYuevOm3w7Q
-         tIgSU/SPgr71yk4DEvUfsGHaNfb1ohhYTysj6n20Za/ijep54dWnsU0QyokRRNf7SJbZ
-         sGKvpJTdJkaH4vp5CXRNwMkKcXtZ727lrBHbFxgTFb7zGaMY7UfdWcMSWDEt1BYABaQ/
-         xCxHwK9a0rg6lOrwTJXFacViJ2m7gXhDmpVH1aFr9QYbybEvCAWnTHCTjwPawPZBh64J
-         djvQzCdMxYGRF7Ah0CBOUwrOSNCxnRR6lirudodjsJAfmiaSddzJAZ0zCWaz6I+Iy6A/
-         14cg==
-X-Gm-Message-State: AOAM531ssg//eXRUkFANGlV3PYnmi9sOhTtMx+bSnH6Zl4E9LIDB2SC7
-        fqFm7RVYD+aR3/ayprasecw=
-X-Google-Smtp-Source: ABdhPJyOvOGiB3YatvCcD4+nTrrJ7xiYRe6nG5qS1A/UKHW4RWfqd58+hQ1Bs8dyF7NHZLQohQoILg==
-X-Received: by 2002:a17:90b:1e45:: with SMTP id pi5mr7409150pjb.237.1643368240594;
-        Fri, 28 Jan 2022 03:10:40 -0800 (PST)
-Received: from gmail.com ([2400:2410:93a3:bc00:7019:fa7:ccfe:b136])
-        by smtp.gmail.com with ESMTPSA id g9sm5566280pgi.84.2022.01.28.03.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 03:10:39 -0800 (PST)
-Date:   Fri, 28 Jan 2022 20:10:34 +0900
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        lukas.bulwahn@gmail.com, kernel test robot <lkp@intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-Message-ID: <20220128111034.jf3i4arhahfwwd6n@gmail.com>
-References: <20211212232414.1402199-1-akirakawata1@gmail.com>
- <20211212232414.1402199-2-akirakawata1@gmail.com>
- <202201261955.F86F391@keescook>
- <20220127125643.cifk2ihnbnxo5wcl@gmail.com>
- <202201270816.5030A2A4B5@keescook>
+        Fri, 28 Jan 2022 06:12:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57739C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:12:43 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nDPBH-0000zH-Ic; Fri, 28 Jan 2022 12:12:39 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nDPBG-00Be8S-D7; Fri, 28 Jan 2022 12:12:38 +0100
+Date:   Fri, 28 Jan 2022 12:12:38 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
+Message-ID: <YfPPpkGjL2vcv4oH@pengutronix.de>
+References: <20220127110742.922752-1-o.rempel@pengutronix.de>
+ <YfJ+ceEzvzMM1JsW@kroah.com>
+ <20220127123152.GF9150@pengutronix.de>
+ <YfKcqcq4Ii1qu2+8@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202201270816.5030A2A4B5@keescook>
+In-Reply-To: <YfKcqcq4Ii1qu2+8@kroah.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:08:10 up 92 days, 17:35, 116 users,  load average: 1.73, 2.96,
+ 9.10
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 08:23:51AM -0800, Kees Cook wrote:
-> On Thu, Jan 27, 2022 at 09:56:43PM +0900, Akira Kawata wrote:
-> > On Wed, Jan 26, 2022 at 09:01:30PM -0800, Kees Cook wrote:
-> > > [...]
-> > > 1) The ELF spec says e_phoff is 0 if there's no program header table.
+On Thu, Jan 27, 2022 at 02:22:49PM +0100, Greg KH wrote:
+> On Thu, Jan 27, 2022 at 01:31:52PM +0100, Oleksij Rempel wrote:
+> > On Thu, Jan 27, 2022 at 12:13:53PM +0100, Greg KH wrote:
+> > > On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
+> > > > The weakest link of usbnet devices is the USB cable.
 > > > 
-> > > The old code would just pass the load_addr as a result. This patch will
-> > > now retain the same result (phdr_addr defaults to 0). I wonder if there
-> > > is a bug in this behavior, though? (To be addressed in a different patch
-> > > if needed...)
-> > >
+> > > The weakest link of any USB device is the cable, why is this somehow
+> > > special to usbnet devices?
+> > > 
+> > > > Currently there is
+> > > > no way to automatically detect cable related issues except of analyzing
+> > > > kernel log, which would differ depending on the USB host controller.
+> > > > 
+> > > > The Ethernet packet counter could potentially show evidence of some USB
+> > > > related issues, but can be Ethernet related problem as well.
+> > > > 
+> > > > To provide generic way to detect USB issues or HW issues on different
+> > > > levels we need to make use of devlink.
+> > > 
+> > > Please make this generic to all USB devices, usbnet is not special here
+> > > at all.
 > > 
-> > It is better to return NULL from load_elf_phdrs when e_phoff == 0, I
-> > think.
+> > Ok. I'll need some help. What is the best place to attach devlink
+> > registration in the USB subsystem and the places to attach health
+> > reporters?
 > 
-> Yeah, right now it just returns a pointer to file offset 0.
-> 
-> I also wonder if we should sanity-check e_phoff vs PT_PHDR? Right now
-> Linux ignores PT_PHDR. Should we reject loading when e_phoff != PT_PHDR
-> file offset? (And I wonder if there are "broken" binaries right now that
-> have bad PT_PHDR segments that have gone unnoticed...)
+> You tell us, you are the one that thinks this needs to be reported to
+> userspace. What is only being reported in kernel logs that userspace
+> somehow needs to see?  And what will userspace do with that information?
 
-I agree that unnoticed broken binaries exist. I checked glibc rtld and
-there is no check of e_phoff != PT_PHDR file offset.
+The user space should get an event in case there is a problem with the
+USB transfers, i.e. the URB status is != 0.
 
-> 
-> And now I'm thinking about the excellent ELF loading analysis at:
-> https://nathanotterness.com/2021/10/tiny_elf_modernized.html
-> 
-> ;)
+The use space then can decide if the USB device needs to be reset, power
+cycled and so on.
 
-I think you have interested in https://shinh.skr.jp/obf/bingolf.html
-also.
+What about calling a to-be-written devlink function that reports the USB
+status if the URB status is not 0:
 
-> 
-> -- 
-> Kees Cook
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index d0f45600b669..a90134854f32 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1648,6 +1648,8 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	usb_unanchor_urb(urb);
+ 	if (likely(status == 0))
+ 		usb_led_activity(USB_LED_EVENT_HOST);
++	else
++		devlink_report_usb_status(urb, status);
+ 
+ 	/* pass ownership to the completion handler */
+ 	urb->status = status;
 
-Akira Kawata
+Regards,
+Oleksij & Marc
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

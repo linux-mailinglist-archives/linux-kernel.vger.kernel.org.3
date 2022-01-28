@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E3149F5E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4A749F5EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiA1JFF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Jan 2022 04:05:05 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4537 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbiA1JFE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:05:04 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JlWfJ32hPz67tnp;
-        Fri, 28 Jan 2022 17:01:28 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 10:05:01 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Fri, 28 Jan 2022 10:05:01 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "stefanb@linux.ibm.com" <stefanb@linux.ibm.com>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
- signatures (alternative)
-Thread-Topic: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
- signatures (alternative)
-Thread-Index: AQHYE64xQMi+Kgkov0iDDqwbxhwgiax3MeAAgAABPQCAAOKyQA==
-Date:   Fri, 28 Jan 2022 09:05:01 +0000
-Message-ID: <d122893c426f44aa95d5168773b60b9d@huawei.com>
-References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
- <YfLz8NftvbZtKvLT@sol.localdomain> <YfL0+q/ekv4H8lZg@sol.localdomain>
-In-Reply-To: <YfL0+q/ekv4H8lZg@sol.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S237929AbiA1JGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:06:12 -0500
+Received: from mga01.intel.com ([192.55.52.88]:58006 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231806AbiA1JGL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 04:06:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643360771; x=1674896771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ErjsXDgw1zcYUyJCH4F/5Es1o0tzYO07CJyPW7u/PWQ=;
+  b=gMgaShS5GG6tfHfDVnQ73jSi0He5BtP3XCjSLDgyWhleIOQ6ytIM8AN8
+   YfT0I26RtD5s0xu1QIb3JDtxaQ6jIJc7dFYJhTPTIJz/0SLMoy/HwkzMa
+   VMncnT7hb+LcB7zUxOOiQIezs+eKaQkIMKNMMHnp1jlXazvzaSmru3z35
+   MwLEyQwm64A2dkSvo9YYWyrtguSgUlTFvc0LIqw0NumDucFhc2A0O2njr
+   7//cyfF0iXsDADor37uSMa5pdtDSs5gnk7P0OppQj0rvPscDfcqIGcAq9
+   RZsltNkN7GuKdh+2HLrRGwuiZFPKPl6OPeT4O3zwhqVXfgTP5Y7C+2cHN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="271543133"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="271543133"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:06:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="496076015"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 01:06:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDNCo-000NgL-JB; Fri, 28 Jan 2022 09:06:06 +0000
+Date:   Fri, 28 Jan 2022 17:05:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        john.stultz@linaro.org, sboyd@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, tangmeng <tangmeng@uniontech.com>
+Subject: Re: [PATCH] kernel/time: move timer sysctls to its own file
+Message-ID: <202201281620.Rwng44TW-lkp@intel.com>
+References: <20220128065505.16685-1-tangmeng@uniontech.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128065505.16685-1-tangmeng@uniontech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Eric Biggers [mailto:ebiggers@kernel.org]
-> Sent: Thursday, January 27, 2022 8:40 PM
-> On Thu, Jan 27, 2022 at 11:35:12AM -0800, Eric Biggers wrote:
-> > On Thu, Jan 27, 2022 at 07:46:09PM +0100, Roberto Sassu wrote:
-> > > I wanted to propose a different approach for handling fsverity digests and
-> > > signatures, compared to:
-> > >
-> > > https://lore.kernel.org/linux-integrity/20220126000658.138345-1-
-> zohar@linux.ibm.com/
-> > >
-> > > In the original proposal, a new signature version has been introduced (v3)
-> > > to allow the possibility of signing the digest of a more flexible data
-> > > structure, ima_file_id, which could also include the fsverity file digest.
-> > >
-> > > While the new signature type would be sufficient to handle fsverity file
-> > > digests, the problem is that its format would not be compatible with the
-> > > signature format supported by the built-in verification module in fsverity.
-> > > The rpm package manager already has an extension to include fsverity
-> > > signatures, with the existing format, in the RPM header.
-> > >
-> > > Given that the fsverity signature is in the PKCS#7 format, IMA has already
-> > > the capability of handling it with the existing code, more specifically the
-> > > modsig code. It would be sufficient to provide to modsig the correct data
-> > > to avoid introducing a new signature format.
-> >
-> > I think it would be best to get people moved off of the fs-verity built-in
-> > signatures, rather than further extend the use of it.  PKCS#7 is a pretty
-> > terrible signature format.  The IMA one is better, though it's unfortunate that
-> > IMA still relies on X.509 for keys.
-> 
-> Note, the only reason that support for fs-verity built-in signatures was added
-> to RPM is that people didn't want to use IMA:
-> https://lore.kernel.org/linux-fscrypt/b49b4367-51e7-f62a-6209-
-> b46a6880824b@gmail.com
-> 
-> If people are going to use IMA anyway, then there would be no point.
+Hi tangmeng,
 
-Hi Eric
+Thank you for the patch! Yet something to improve:
 
-I thought that the solution I came with could satisfy multiple needs.
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc1 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-For people that don't want to use IMA, they could still continue
-to use the existing signature format, and wait for an LSM that
-satisfy their needs. They also have the option to migrate to the
-new signature format you are defining. But will those people be
-willing to switch to something IMA-specific?
+url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220128-145647
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: arc-randconfig-r012-20220128 (https://download.01.org/0day-ci/archive/20220128/202201281620.Rwng44TW-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/5b925ed59a284ee735fd46cb2afa74858509887b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220128-145647
+        git checkout 5b925ed59a284ee735fd46cb2afa74858509887b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash kernel/time/
 
-For people that use IMA, they could benefit from the effort
-of people creating packages with the original fsverity signature.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For people that are skeptical about IMA, they could be interested
-in trying the full solution, which would probably be more easily
-available if the efforts from both sides converge.
+All errors (new ones prefixed by >>):
 
-If, as you say, you have concerns about the existing signature
-format, wouldn't it be better that you address them from the
-fsverity side, so that all users of fsverity can benefit from it?
+   kernel/time/timer.c: In function 'init_timers':
+>> kernel/time/timer.c:2047:9: error: implicit declaration of function 'timer_sysctl_init'; did you mean 'sysctl_init'? [-Werror=implicit-function-declaration]
+    2047 |         timer_sysctl_init();
+         |         ^~~~~~~~~~~~~~~~~
+         |         sysctl_init
+   In file included from include/linux/perf_event.h:25,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/time/timer.c:35:
+   At top level:
+   arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' defined but not used [-Wunused-const-variable=]
+     126 | static const unsigned int arc_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
+         |                           ^~~~~~~~~~~~~~~~~
+   arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' defined but not used [-Wunused-const-variable=]
+      91 | static const char * const arc_pmu_ev_hw_map[] = {
+         |                           ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Currently, fsverity hashes the formatted digest whose format
-is FSVerity<digest algo><digest size><digest>. Couldn't IMA
-hash the same data as well?
 
-An idea could be to always sign the formatted digest, and have
-a selector for the signature format: IMA, PKCS#7 or PGP.
+vim +2047 kernel/time/timer.c
 
-Thanks
+  2041	
+  2042	void __init init_timers(void)
+  2043	{
+  2044		init_timer_cpus();
+  2045		posix_cputimers_init_work();
+  2046		open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
+> 2047		timer_sysctl_init();
+  2048	}
+  2049	
 
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

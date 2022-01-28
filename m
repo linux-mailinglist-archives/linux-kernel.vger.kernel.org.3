@@ -2,71 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2119849FFEE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D55049FFF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350431AbiA1SGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:06:42 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:60702 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349942AbiA1SGj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:06:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=vie3/PM7S4hVbkPSRtFZY3hP76QHnHKvCYyA6kNV6dY=; b=WIuD13vxJKoUJ4eVgvTbTJ6ut+
-        oAA80qW/+ZPzm03ymjDkmcDM3VyXhXp1Mosqldq2SObNh/kpPt4ESYvjzNU+6j831GaYkNXE1YTCo
-        3TPDnSv9Aei2ejqrcrGbrjfoad4D3cRAjRgABBSRWBXLo4khZX+QSU6broixrELOgGVY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nDVdn-003D2u-VR; Fri, 28 Jan 2022 19:06:31 +0100
-Date:   Fri, 28 Jan 2022 19:06:31 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Aaron Ma <aaron.ma@canonical.com>, Mario.Limonciello@amd.com,
-        kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH v3] net: usb: r8152: Add MAC passthrough support for
- RTL8153BL
-Message-ID: <YfQwpy1Kkz3wheTi@lunn.ch>
-References: <20220127100109.12979-1-aaron.ma@canonical.com>
- <20220128043207.14599-1-aaron.ma@canonical.com>
- <20220128092103.1fa2a661@md1za8fc.ad001.siemens.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128092103.1fa2a661@md1za8fc.ad001.siemens.net>
+        id S1350499AbiA1SIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343786AbiA1SIg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 13:08:36 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02D2C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:08:36 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id a12-20020a056a001d0c00b004cc283b2e30so3894169pfx.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=Bkh14uDfsUEA7TaMl1B9+mcSAPEw6C1dcoCn17WX2mk=;
+        b=htaCe6/Ry2WEninDH8j56q3piuFRWMolFY+yTFOaAvPfztfZh/Jb1AZsVtEFeOH8kB
+         HTgF/YsUNo0Zkke4Q0vNEw/caFYVPCDFYZaBEY7XCtwrSHQOZ/SiUg0dEAh4UqmxoLEe
+         qjtQD842ouu/DNZ7pBAKPH3fJ4Z5JNzZZ6NF0CPPkS+vsEfbVqIV88CTnROKYOHfj9Lc
+         o/cYaAHoSAzaetXGpWVk+bEOBprZa0+wtm+No/x4RU7Pir9gHC+XdwZItK3xChERMcFN
+         3I6fCGgVa99Buc7Hm2+IISuusAz6zjRX1EyTRrJ+DVABb82jlsHwWbo2eQ5La0XB67cu
+         H8rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=Bkh14uDfsUEA7TaMl1B9+mcSAPEw6C1dcoCn17WX2mk=;
+        b=xyTY/6e+X/sFkUbvkomjbk9Fyu0WppBj3cPddt4HdicaPHARfHLt/1cdm6BUq4j8Pl
+         g3WiduLHJm8+ZjEiHrH2J+wzBdsQqnj5TH0mvkdnm/6yti/cS+pnib8NOJZ+OVUP9agw
+         TlWCiM1eVBEdgrEnZAAzVgL0Gc+ijuL1POWjyaNDkmsNzwrDhS7Sz8yaORXDExNU2ZED
+         uv95KgaGkDCPc8yMWCyZhGwjDddVr6RVYLbWtFFbahgXn00kAdTShZ9hAU+eRSMLjhtH
+         VjBBRKrMqBXvD7eaIR6fiuPNdPMeB3bl77sNbVGlP7S6msRDgb/S7oChQ6xZIdJR/YxQ
+         hAUg==
+X-Gm-Message-State: AOAM533Har4Anfz5rBwX9urPFcqG3fOMNuiKncqUblpH1H7ZklFf8EE5
+        n8mjdCup7pXmxGnryEMt86qsGxTWNTlxTQ==
+X-Google-Smtp-Source: ABdhPJxozWl/q130pZf0vssYeO8OQ+Hn/gc+8p+rHkGK1UNAuYRK4d6XPubCE9NMK00kLqp8AoyJs/JKE0FElQ==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a17:902:c40c:: with SMTP id
+ k12mr8724245plk.93.1643393316094; Fri, 28 Jan 2022 10:08:36 -0800 (PST)
+Date:   Fri, 28 Jan 2022 18:08:32 +0000
+Message-Id: <20220128180832.2329149-1-wonchung@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH v3] ACPI: device_sysfs: Add sysfs support for _PLD
+From:   Won Chung <wonchung@google.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Won Chung <wonchung@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 09:21:03AM +0100, Henning Schild wrote:
-> I am still very much against any patches in that direction. The feature
-> as the vendors envision it does not seem to be really understood or
-> even explained.
-> Just narrowing down the device matching caters for vendor lock-in and
-> confusion when that pass through is happening and when not. And seems
-> to lead to unmaintainable spaghetti-code. 
-> People that use this very dock today will see an unexpected mac-change
-> once they update to a kernel with this patch applied.
+When ACPI table includes _PLD fields for a device, create a new file
+(pld) in sysfs to share _PLD fields.
 
-I've not yet been convinced by replies that the proposed code really
-does only match the given dock, and not random USB dongles. To be
-convinced i would probably like to see code which positively
-identifies the dock, and that the USB device is on the correct port of
-the USB hub within the dock. I doubt you can actually do that in a
-sane way inside an Ethernet driver. As you say, it will likely lead to
-unmaintainable spaghetti-code.
+Signed-off-by: Won Chung <wonchung@google.com>
+---
+ Documentation/ABI/testing/sysfs-bus-acpi | 53 ++++++++++++++++++++++++
+ drivers/acpi/device_sysfs.c              | 42 +++++++++++++++++++
+ 2 files changed, 95 insertions(+)
 
-I also don't really think the vendor would be keen on adding code
-which they know will get reverted as soon as it is shown to cause a
-regression.
+diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/ABI/t=
+esting/sysfs-bus-acpi
+index 58abacf59b2a..3a9c6a4f4603 100644
+--- a/Documentation/ABI/testing/sysfs-bus-acpi
++++ b/Documentation/ABI/testing/sysfs-bus-acpi
+@@ -96,3 +96,56 @@ Description:
+ 		hardware, if the _HRV control method is present.  It is mostly
+ 		useful for non-PCI devices because lspci can list the hardware
+ 		version for PCI devices.
++
++What:		/sys/bus/acpi/devices/.../pld
++Date:		Jan, 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		This attribute contains the output of the device object's
++		_PLD control method, if present. This information provides
++		details on physical location of a port.
++
++		Description on each _PLD field from ACPI specification:
++
++		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++		GROUP_TOKEN	Unique numerical value identifying a group.
++		GROUP_POSITION	Identifies this device connection point=E2=80=99s
++				position in the group.
++		USER_VISIBLE	Set if the device connection point can be
++				seen by the user without disassembly.
++		DOCK		Set if the device connection point resides
++				in a docking station or port replicator.
++		BAY		Set if describing a device in a bay or if
++				device connection point is a bay.
++		LID		Set if this device connection point resides
++				on the lid of laptop system.
++		PANEL		Describes which panel surface of the system=E2=80=99s
++				housing the device connection point resides on:
++				0 - Top
++				1 - Bottom
++				2 - Left
++				3 - Right
++				4 - Front
++				5 - Back
++				6 - Unknown (Vertical Position and Horizontal
++				Position will be ignored)
++		HORIZONTAL_	0 - Left
++		POSITION	1 - Center
++				2 - Right
++		VERTICAL_	0 - Upper
++		POSITION	1 - Center
++				2 - Lower
++		SHAPE		Describes the shape of the device connection
++				point.
++				0 - Round
++				1 - Oval
++				2 - Square
++				3 - Vertical Rectangle
++				4 - Horizontal Rectangle
++				5 - Vertical Trapezoid
++				6 - Horizontal Trapezoid
++				7 - Unknown - Shape rendered as a Rectangle
++				with dotted lines
++				8 - Chamfered
++				15:9 - Reserved
++		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+index d5d6403ba07b..8d4df5fb1c45 100644
+--- a/drivers/acpi/device_sysfs.c
++++ b/drivers/acpi/device_sysfs.c
+@@ -509,6 +509,40 @@ static ssize_t status_show(struct device *dev, struct =
+device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(status);
+=20
++static ssize_t pld_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct acpi_device *acpi_dev =3D to_acpi_device(dev);
++	acpi_status status;
++	struct acpi_pld_info *pld;
++
++	status =3D acpi_get_physical_device_location(acpi_dev->handle, &pld);
++	if (ACPI_FAILURE(status))
++		return -ENODEV;
++
++	return sprintf(buf, "GROUP_TOKEN=3D%u\n"
++		"GROUP_POSITION=3D%u\n"
++		"USER_VISIBLE=3D%u\n"
++		"DOCK=3D%u\n"
++		"BAY=3D%u\n"
++		"LID=3D%u\n"
++		"PANEL=3D%u\n"
++		"HORIZONTAL_POSITION=3D%u\n"
++		"VERTICAL_POSITION=3D%u\n"
++		"SHAPE=3D%u\n",
++		pld->group_token,
++		pld->group_position,
++		pld->user_visible,
++		pld->dock,
++		pld->bay,
++		pld->lid,
++		pld->panel,
++		pld->horizontal_position,
++		pld->vertical_position,
++		pld->shape);
++}
++static DEVICE_ATTR_RO(pld);
++
+ /**
+  * acpi_device_setup_files - Create sysfs attributes of an ACPI device.
+  * @dev: ACPI device object.
+@@ -595,6 +629,12 @@ int acpi_device_setup_files(struct acpi_device *dev)
+ 						    &dev_attr_real_power_state);
+ 	}
+=20
++	if (acpi_has_method(dev->handle, "_PLD")) {
++		result =3D device_create_file(&dev->dev, &dev_attr_pld);
++		if (result)
++			goto end;
++	}
++
+ 	acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
+=20
+ end:
+@@ -645,4 +685,6 @@ void acpi_device_remove_files(struct acpi_device *dev)
+ 		device_remove_file(&dev->dev, &dev_attr_status);
+ 	if (dev->handle)
+ 		device_remove_file(&dev->dev, &dev_attr_path);
++	if (acpi_has_method(dev->handle, "_PLD"))
++		device_remove_file(&dev->dev, &dev_attr_pld);
+ }
+--=20
+2.35.0.rc2.247.g8bbb082509-goog
 
-So i would prefer to NACK this, and push it to udev rules where you
-have a complete picture of the hardware and really can identify with
-100% certainty it really is the docks NIC.
-
-   Andrew

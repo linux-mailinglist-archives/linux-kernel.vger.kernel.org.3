@@ -2,118 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C95049F36E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22D849F370
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346360AbiA1GSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346347AbiA1GSy (ORCPT
+        id S1346373AbiA1GTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:19:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23607 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346369AbiA1GTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:18:54 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEDEC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:18:54 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id m11so7656327edi.13
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:18:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yFLcWL3wX5JaPY+f6874i39mL+yX89VQGClimCfIyOo=;
-        b=QZWjuNgXqs/vw6fCwwQiNjeKFhsEDRgn5oncd3dqBQfIRYQMsKCfBDuTFU1/Abwyud
-         Wzcuyubs8Jum6GaZE73JoRcTyODomaJvxBW+UfVBt1KCTBleHkWycogXHw/5OZZJe1Nq
-         9PCBBZR8QtRvb08+12Oi7p88WxjuqWDvxq2BElLJpU2lXoy2TM7LJj4fWJ5nBJCutXK0
-         M0evGGJHYL7bV7m9b8qvVGoou5cGK4ZY+O21wxGf87lnFHsjW26f6pavx2lzwYvm1ldX
-         v763IBpQJJlrROXry70+Ta0zKPXu4budn+iH9LV0NAxXZYhpp1R2wbE6KhLS10sjE9jc
-         hRqQ==
+        Fri, 28 Jan 2022 01:19:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643350774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RToFXIUfsXCiLH3IYE93p3Ce7kkEvmZK7yXFyS7R3rs=;
+        b=KQgQ2qEHyie7dMI+3qGEqZhKXim9UdUcA0TBFFdKcxZhc7959yvyYGjXxXtV0l/ZDsLWci
+        JVai95K6TUu1aw3HLV2mh5BV5GOV3+GkW15/9+ExCbVZ7DDNgvWWyxR3YgfHISdzOFcPYM
+        TEinYfP9xSYRTg9tTJ6x7Vjf1iJbmgs=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-vmx-9WCoNcqJBDp5AEzU2w-1; Fri, 28 Jan 2022 01:19:33 -0500
+X-MC-Unique: vmx-9WCoNcqJBDp5AEzU2w-1
+Received: by mail-pf1-f200.google.com with SMTP id v3-20020a622f03000000b004c412d02ca3so2975711pfv.20
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:19:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yFLcWL3wX5JaPY+f6874i39mL+yX89VQGClimCfIyOo=;
-        b=5YN7Ws1cObAxqln73hTLBxlaVH4wenfTPY3fzUAZ5V5rLg3ky4fdhEJLICZeHc21+x
-         VO3StWVjVy02CAbe77p6/6QFpJ64i+ckEqAnC5OkbWCScbOBZfjIATypNpKtSFWQRAkf
-         k7PfWDUqvsSTQbSL8en/OzBSpRhx37MTOKF73HHaHD/lfGNqWoBEwoaltVYWYJ04Row1
-         kd7jwtD58uBrpzgSqqKr+1DZcHpmKMlIZX0J48BhjiX2C1xUII06omYpRjPVKm4HmY2Y
-         /SJ5PfoA+BmDC64cIXkl+Vd3kMXTlCprQguUt9uERevWo5USTM0gv7lUqPzbaheRlED7
-         Rn3w==
-X-Gm-Message-State: AOAM530JLDfPbTXzh3lCWIiiMkZMp4uErsL4bLDb6TxecwgdtAH760aG
-        CIFJBEPifhKWLjfzYXc+VpY7FDwJ+TYSzMNpiVGNvQ==
-X-Google-Smtp-Source: ABdhPJyNqvFZil11Z3ZC5MYW4lNLKxpyY3IUTyZ/WYUUYvWG1mMt4G3rinKGBYFBJFf2yupTLQXMcjX26igmMvI+AIU=
-X-Received: by 2002:aa7:da4b:: with SMTP id w11mr6786109eds.118.1643350733042;
- Thu, 27 Jan 2022 22:18:53 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RToFXIUfsXCiLH3IYE93p3Ce7kkEvmZK7yXFyS7R3rs=;
+        b=hhfuuMcI/0iW35vO1/c5MK+8UzcGz5Vo8mt7aTfAOYbDZlA7tlmB7IbrXtxNP9DuKr
+         SOGrTd7eocvvH20p4BNY3IRG9HqGUSr5ptt9EYDMpkuC8UVvktazBWyrdcKj7ItFZavA
+         mmLxKRUvW3mtZk+aajWmnet4mqo/yByQmaSvMfv36m4JstWr9qLEQLQFoi4xoCVy45Cq
+         w4Z0+SvBEGrDtNm6/iF5V3LnCNcrN9y4HHgrEu7jtTJB3ge+pQ7/BPUekmMkb2F5oLvE
+         y39+DYLLOJuUbKpL4U0H5tbPXkN/l7+usmgfkq8PqOtFo0bP3oiWPYnME6mQprasHHhn
+         4mDw==
+X-Gm-Message-State: AOAM533T4d45ypgbzGvftFkNLDT82zJ1DzH21PHPYacPrDeCbQI6fmKR
+        tKaRnMnQyv2OFD5a3mXe0FzZdSmLI1HjnkGbORd3b8toykJfT7s6mjuhoYAOCypLmf2KWQ9miSN
+        3sKQv94Gd8RZKdOWZUN71ScDP
+X-Received: by 2002:a17:902:ce8d:: with SMTP id f13mr6747635plg.142.1643350767492;
+        Thu, 27 Jan 2022 22:19:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRaHK4URjqYNa73vAYGcVE+xtCjMwOyQ/++59IxtYTc4ppN/5o14unYbibM6qPH8lw/S7jkg==
+X-Received: by 2002:a17:902:ce8d:: with SMTP id f13mr6747619plg.142.1643350767226;
+        Thu, 27 Jan 2022 22:19:27 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.75])
+        by smtp.gmail.com with ESMTPSA id p17sm3241049pfo.11.2022.01.27.22.19.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 27 Jan 2022 22:19:26 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: [PATCH v2] mm: Fix invalid page pointer returned with FOLL_PIN gups
+Date:   Fri, 28 Jan 2022 14:19:18 +0800
+Message-Id: <20220128061918.20121-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <1643289172-165636-1-git-send-email-john.garry@huawei.com> <1643289172-165636-4-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1643289172-165636-4-git-send-email-john.garry@huawei.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Fri, 28 Jan 2022 07:18:42 +0100
-Message-ID: <CAMGffE=uPMWRHUv_TZz+HtwtxevMN4JH891OgarwThVkRT0cQg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] scsi: pm8001: Fix use-after-free for aborted SSP/STP sas_task
-To:     John Garry <john.garry@huawei.com>
-Cc:     jinpu.wang@ionos.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, damien.lemoal@opensource.wdc.com,
-        Ajish.Koshy@microchip.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Viswas.G@microchip.com,
-        chenxiang66@hisilicon.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 2:18 PM John Garry <john.garry@huawei.com> wrote:
->
-> Currently a use-after-free may occur if a sas_task is aborted by the upper
-> layer before we handle the IO completion in mpi_ssp_completion() or
-> mpi_sata_completion().
->
-> In this case, the following are the two steps in handling those IO
-> completions:
-> - call complete() to inform the upper layer handler of completion of
->   the IO
-> - release driver resources associated with the sas_task in
->   pm8001_ccb_task_free() call
->
-> When complete() is called, the upper layer may free the sas_task. As such,
-> we should not touch the associated sas_task afterwards, but we do so in
-> the pm8001_ccb_task_free() call.
->
-> Fix by swapping the complete() and pm8001_ccb_task_free() calls ordering.
->
-> Signed-off-by: John Garry <john.garry@huawei.com>
-Thx John!
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-> ---
->  drivers/scsi/pm8001/pm80xx_hwi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> index ce38a2298e75..1134e86ac928 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -2185,9 +2185,9 @@ mpi_ssp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->                 pm8001_dbg(pm8001_ha, FAIL,
->                            "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
->                            t, status, ts->resp, ts->stat);
-> +               pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
->                 if (t->slow_task)
->                         complete(&t->slow_task->completion);
-> -               pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
->         } else {
->                 spin_unlock_irqrestore(&t->task_state_lock, flags);
->                 pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
-> @@ -2794,9 +2794,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha,
->                 pm8001_dbg(pm8001_ha, FAIL,
->                            "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
->                            t, status, ts->resp, ts->stat);
-> +               pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
->                 if (t->slow_task)
->                         complete(&t->slow_task->completion);
-> -               pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
->         } else {
->                 spin_unlock_irqrestore(&t->task_state_lock, flags);
->                 spin_unlock_irqrestore(&circularQ->oq_lock,
-> --
-> 2.26.2
->
+Alex reported invalid page pointer returned with pin_user_pages_remote() from
+vfio after upstream commit 4b6c33b32296 ("vfio/type1: Prepare for batched
+pinning with struct vfio_batch").  This problem breaks NVIDIA vfio mdev.
+
+It turns out that it's not the fault of the vfio commit; however after vfio
+switches to a full page buffer to store the page pointers it starts to expose
+the problem easier.
+
+The problem is for VM_PFNMAP vmas we should normally fail with an -EFAULT then
+vfio will carry on to handle the MMIO regions.  However when the bug triggered,
+follow_page_mask() returned -EEXIST for such a page, which will jump over the
+current page, leaving that entry in **pages untouched.  However the caller is
+not aware of it, hence the caller will reference the page as usual even if the
+pointer data can be anything.
+
+We had that -EEXIST logic since commit 1027e4436b6a ("mm: make GUP handle pfn
+mapping unless FOLL_GET is requested") which seems very reasonable.  It could
+be that when we reworked GUP with FOLL_PIN we could have overlooked that
+special path in commit 3faa52c03f44 ("mm/gup: track FOLL_PIN pages"), even if
+that commit rightfully touched up follow_devmap_pud() on checking FOLL_PIN when
+it needs to return an -EEXIST.
+
+Attaching the Fixes to the FOLL_PIN rework commit, as it happened later than
+1027e4436b6a.
+
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Fixes: 3faa52c03f44 ("mm/gup: track FOLL_PIN pages")
+Reported-by: Alex Williamson <alex.williamson@redhat.com>
+Debugged-by: Alex Williamson <alex.williamson@redhat.com>
+Tested-by: Alex Williamson <alex.williamson@redhat.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+v2:
+- Drop the WARN_ON_ONCE() [Jason, John]
+- Add Alex's Tested-by too, as after dropping the WARN_ON_ONCE() then the patch
+  is exactly the one that Alex helped on bug verification, hence very safe to
+  grant the credit alongside.
+---
+ mm/gup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/gup.c b/mm/gup.c
+index f0af462ac1e2..65575ae3602f 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -440,7 +440,7 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+ 		pte_t *pte, unsigned int flags)
+ {
+ 	/* No page to get reference */
+-	if (flags & FOLL_GET)
++	if (flags & (FOLL_GET | FOLL_PIN))
+ 		return -EFAULT;
+ 
+ 	if (flags & FOLL_TOUCH) {
+-- 
+2.32.0
+

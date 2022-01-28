@@ -2,70 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D375C4A00C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E9F4A00CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350897AbiA1TUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 14:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S1350712AbiA1TXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 14:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350879AbiA1TUp (ORCPT
+        with ESMTP id S229968AbiA1TXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 14:20:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DF6C061714;
-        Fri, 28 Jan 2022 11:20:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6F3FB826EA;
-        Fri, 28 Jan 2022 19:20:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC77AC340E7;
-        Fri, 28 Jan 2022 19:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643397642;
-        bh=7sRkAAw9Yg5eEaEDz/4DdtSYTtwMEyuPQdQ6JclzmM4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=u+rAy8iX5iDr0KE3bWPi4YqoOeGgr+8C0eGPom7XO4ELCOjEiBkjhWVBlqrAYeVTY
-         u7GikVqEABPOzXdRtti9izREMpBt1AEe79YrU19rAq85S5GSTr3317N2iHCrwCd+mq
-         513PqlkB4aEXHJxV8LmEdvI0lXDVDcDxr0lBKDtOzQNF9TxBwVjXKEpWvPqgxE3eR0
-         A/e29h7Io/wABvUId91CGWyD3/Mcwm2swExIK2wpPZ5NsRZm0kH+RVrQMzJTn8dNnm
-         ufUHBMjxbTM6c11JshC1BROv6aAIXOHYB8u6/hR9qsb4oAUikJDZ9hLdHFSGpFPpca
-         h4PihEu6Aqo7Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C096F6079F;
-        Fri, 28 Jan 2022 19:20:42 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 5.17-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ebd76be7c06fd3f8f888094fb2dd8e138fe97b33.camel@HansenPartnership.com>
-References: <ebd76be7c06fd3f8f888094fb2dd8e138fe97b33.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ebd76be7c06fd3f8f888094fb2dd8e138fe97b33.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 4db09593af0b0b4d7d4805ebb3273df51d7cc30d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 169387e2aa291a4e3cb856053730fe99d6cec06f
-Message-Id: <164339764263.2973.8302135137345133481.pr-tracker-bot@kernel.org>
-Date:   Fri, 28 Jan 2022 19:20:42 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Fri, 28 Jan 2022 14:23:16 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DE4C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 11:23:15 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id b186so7998569oif.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 11:23:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FV7ijIEFX2KU+OD0295yjVLA5VTPNJCCnKWoIm2Gjp4=;
+        b=iUhb6agjSx5jWLGzq34eJlbUvULhpyoMpZvDkEsoxstrF4eu/dpf+iBl1XU5kgk8aL
+         IPkShYjKV81JID3tUiedmh883nQgZEokqG4xYr6we7aM7Qwy987TTfEcxqzTtgrWV01b
+         3pd6vfxchYqCI4GEhVvGCaOytpoGXI7dJutuDIH2ut7l+FA5zBjn/N4vbdSqqrARDXzj
+         lg8FV7l1TFsOXcPdPqmV7Y3v0SDO1DBe5wcw5tq5L2yOXPpv4M2+DLC+C8LEHBvRvFmA
+         UiWEZMeuoMA6HFzPM8ZOxQxH2iqVX1YuXmonv3B4SUuRN0d/hB1njPXkv2+Zhd1Tx4tj
+         Np9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FV7ijIEFX2KU+OD0295yjVLA5VTPNJCCnKWoIm2Gjp4=;
+        b=7XmI72apmq5Y0zOndZ0knRzQMz6s06xYleTSGLCCthMlvXwFQNn4IATT2/NMrNoAbp
+         vjLfVj52woPe+SWoKGaeFH2rrxY2uvBxN0DE6cW3OdTf4yQwk8ERBxVGhIpGoA5amxNx
+         yhxF4sq/LPrNr8nE0gZhDD41C89KPAgNmklhByhP8x9k4s75NTn2S5qbPXE+SPqHdOZm
+         WVZ6aEsjFDgLd0Y5jzEpu5eEUJ1yonvAwMexR0kRIoMcfPfFlYArP+DihglpKxbIT7ld
+         0oVK/Vqzw82Nwld+JkWiYN67ELCKD2e1m5pyaqvInbgscFkNC8/ClSSw2yLjJqlp/4Oc
+         j4FA==
+X-Gm-Message-State: AOAM530ZxRCPOerUb/oDy/0zXhJenGKzJU760y56Zah1ljfOP0IHEmDz
+        piESJaH8Ju75NwoYAJ7spEXHW0ERulkHbrr0Qm8ZkQ==
+X-Google-Smtp-Source: ABdhPJx4KbdjBP/JlGZxxFynPzlG6BGWoGP9FURjIW3s4gYN+KMRGy0s5GJQzfCA6XqqYcNlRHgCMhNEuf2hknIeSys=
+X-Received: by 2002:aca:2b16:: with SMTP id i22mr9759910oik.128.1643397794720;
+ Fri, 28 Jan 2022 11:23:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20220128114446.740575-1-elver@google.com> <20220128114446.740575-2-elver@google.com>
+ <202201281058.83EC9565@keescook>
+In-Reply-To: <202201281058.83EC9565@keescook>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 28 Jan 2022 20:23:02 +0100
+Message-ID: <CANpmjNNaQ=06PfmPudBsLG7r9RsFXYo-NQR4CSM=iO11LFSHKw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] stack: Constrain stack offset randomization with
+ Clang builds
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 28 Jan 2022 12:14:52 -0500:
+On Fri, 28 Jan 2022 at 20:10, Kees Cook <keescook@chromium.org> wrote:
+[...]
+> >       2. Architectures adding add_random_kstack_offset() to syscall
+> >          entry implemented in C require them to be 'noinstr' (e.g. see
+> >          x86 and s390). The potential problem here is that a call to
+> >          memset may occur, which is not noinstr.
+[...]
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
+> >       bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
+> >       default y
+> >       depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+> > +     depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
+>
+> This makes it _unavailable_ for folks with Clang < 14, which seems
+> too strong, especially since it's run-time off by default. I'd prefer
+> dropping this hunk and adding some language to the _DEFAULT help noting
+> the specific performance impact on Clang < 14.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+You're right, if it was only about performance. But there's the
+correctness issue with ARCH_WANTS_NOINSTR architectures, where we
+really shouldn't emit a call. In those cases, even if compiled in,
+enabling the feature may cause trouble.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/169387e2aa291a4e3cb856053730fe99d6cec06f
+That's how this got on my radar in the first place (the objtool warnings).
 
-Thank you!
+So my proposal is to add another "|| !ARCH_WANTS_NO_INSTR", and add
+the performance note to the help text for the !ARCH_WANTS_NO_INSTR
+case if Clang < 14.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Is that reasonable?
+
+Sadly both arm64 and x86 are ARCH_WANTS_NO_INSTR. :-/
+
+> >       help
+> >         The kernel stack offset can be randomized (after pt_regs) by
+> >         roughly 5 bits of entropy, frustrating memory corruption
+> > diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
+> > index 91f1b990a3c3..5c711d73ed10 100644
+> > --- a/include/linux/randomize_kstack.h
+> > +++ b/include/linux/randomize_kstack.h
+> > @@ -17,8 +17,18 @@ DECLARE_PER_CPU(u32, kstack_offset);
+> >   * alignment. Also, since this use is being explicitly masked to a max of
+> >   * 10 bits, stack-clash style attacks are unlikely. For more details see
+> >   * "VLAs" in Documentation/process/deprecated.rst
+> > + *
+> > + * The normal alloca() can be initialized with INIT_STACK_ALL. Initializing the
+> > + * unused area on each syscall entry is expensive, and generating an implicit
+> > + * call to memset() may also be problematic (such as in noinstr functions).
+> > + * Therefore, if the compiler provides it, use the "uninitialized" variant.
+>
+> Can you include the note that GCC doesn't initialize its alloca()?
+
+I'm guessing this won't change any time soon, so probably adding it in
+the code comment is ok.
+
+Thanks,
+-- Marco

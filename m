@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7FA49FE08
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA7149FE0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245358AbiA1Q1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S245611AbiA1Q3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239651AbiA1Q1G (ORCPT
+        with ESMTP id S231221AbiA1Q3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:27:06 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F20C061714;
-        Fri, 28 Jan 2022 08:27:05 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i30so6571656pfk.8;
-        Fri, 28 Jan 2022 08:27:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=bWZgK4gENKweviGq61XA/rmJYJGiVtxyhw5iXYJLZoY=;
-        b=PECSZQYAYXkD3mMKIZKiVyZGl77cqLWt6A4lEn55N+rFQURGeKq8jaqXr4gW1LO378
-         cnTWHmJyCVjtk8NFNxYiYEtNGxWgJZrDKvAwk2g8nWTVx/T/UQ/mC2IRk05UIE3RfIeI
-         EdhXh0LMYwv1IzXfWS+UXnJurltqMC/W+4bDbzulXzbdnCWLf1E+vgTwFN6rPVl3DKpu
-         eVCRgEdr70hJczKvvrapBPBsHGIEVx8EGS5DFFn2KzSrN/plkN7Cw33QaqJi9TKja64y
-         InjkSWqU700p4wNcPuaonz5iO9r8ILwU+/hYnTH+oWStiEDADgPWoes5nk67hueEA3NR
-         eS4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bWZgK4gENKweviGq61XA/rmJYJGiVtxyhw5iXYJLZoY=;
-        b=PGPMFGwdQK4dJE4elZimyFnj6y5044oYvV2ymEGtu2BCY3VpGkI5JVG9YTPtfDCIQZ
-         ShQD1bc0yJx8I7DYqGlJ1PxOHHGTQrx1OO94mZr9hQc89FR4uN83TS2alnk/qiqLrxNY
-         4157UOEPyhbW0H+jc31phxr9jFsv+geVnSczS7VmitZPQEZ6qG23LfUtvWLmC9gTFY1Z
-         KudspjfVtefEUhvzXqP7ynrYp24mzgUprbUQZPhw3ANjHfeMb11Yc/SMBcQnayn2JPal
-         XIiRLYWktQ6rKDXGXwqH/uuONEEmDsBEVR6FkHJE0aevCP63mS8/EOZCBKAlhL09T9n0
-         BufA==
-X-Gm-Message-State: AOAM530Vgxso2NQgiUtRAtU63tVQOtLb8eWd139zfo92CTSqkcpMBson
-        tMwUi7HbESf6nWyMlUCkh4w=
-X-Google-Smtp-Source: ABdhPJzHRxTaT1hQsyB8qF99mucheQrXgRw6cPvCMRIof35jPGSennqfsXHmoVidCMujs6Fu/M9nZg==
-X-Received: by 2002:a05:6a00:a1f:: with SMTP id p31mr280079pfh.40.1643387225240;
-        Fri, 28 Jan 2022 08:27:05 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id n186sm2588815pfn.91.2022.01.28.08.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:27:04 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] dmaengine: k3dma: Add missing IRQ check in k3_dma_probe
-Date:   Fri, 28 Jan 2022 16:26:59 +0000
-Message-Id: <20220128162659.14227-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 28 Jan 2022 11:29:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C21C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:29:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8948561EE0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:29:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33BAC340E6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:29:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CIBNIxAP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643387339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HO9B6AQD9lhtTNqYreWDbICBEhJE9ur8i2dfTih+tHU=;
+        b=CIBNIxAPQM2eCdTK8k/3cBsl/z2fbSw/8xR9uT8598k4f5xaNBQvqyNXpVE8DqdgVZKXZ3
+        qy8PKeMwm+CMz5MM6NLBCqv8Baf20Y9INe13tDTs9IDv4lzJj1ig06iU3h0dEhAq+n9E5j
+        3q5P8nQMZSfUPYiXTZ1FJnZeeN21u4I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 835cb781 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 28 Jan 2022 16:28:59 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id k31so20097110ybj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:28:59 -0800 (PST)
+X-Gm-Message-State: AOAM532/Si7RxDsEie4urdmDi5aVCEnmrjvdjZlG6RAu8SctOVoIb4dT
+        Z4vhRJMXThSjbJAflhmk2zeqOwm8kbb+K65GaHg=
+X-Google-Smtp-Source: ABdhPJwHJSqim1eChQeFVNv7DjxALppZZR6DCq8GZ2fMKkhrHRwkzyC9HESBcw6m481Y6mE99h1tgc11wobLFb6O84Q=
+X-Received: by 2002:a25:2284:: with SMTP id i126mr12674192ybi.245.1643387338043;
+ Fri, 28 Jan 2022 08:28:58 -0800 (PST)
+MIME-Version: 1.0
+References: <YfMa0QgsjCVdRAvJ@latitude> <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+ <YfOqsOiNfURyvFRX@linutronix.de> <CAHmME9qBj2gL=spp3AUEo-Ri4r0KQq-KrR-f6dG++xXQvzcA7A@mail.gmail.com>
+ <YfQXgaAyBBEYSspV@linutronix.de>
+In-Reply-To: <YfQXgaAyBBEYSspV@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 28 Jan 2022 17:28:47 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qhdRbFT26beStH3JYLiE0mpAZz-jp1jJsJdJNZKFpbvA@mail.gmail.com>
+Message-ID: <CAHmME9qhdRbFT26beStH3JYLiE0mpAZz-jp1jJsJdJNZKFpbvA@mail.gmail.com>
+Subject: Re: "BUG: Invalid wait context" in invalidate_batched_entropy
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This check misses checking for  platform_get_irq()'s call and may passes
-the negative error codes to devm_request_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
-Stop calling devm_request_irq() with invalid IRQ #s.
+Hi Sebastian,
 
-Fixes: 8e6152bc660e ("dmaengine: Add hisilicon k3 DMA engine driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/dma/k3dma.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Fri, Jan 28, 2022 at 5:19 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> Correct. You must not acquire a spinlock_t while holding a
+> raw_spinlock_t. This is because on PREEMPT_RT the spinlock_t is a
+> sleeping lock while raw_spinlock_t disables preemption/ interrupts and
+> sleeping is not possible.
+>         Documentation/locking/locktypes.rst
+>
+> On non-PREEMPT both lock types (spinlock_t & raw_spinlock_t) behave in
+> the same way but lockdep can tell them apart with
+> CONFIG_PROVE_RAW_LOCK_NESTING=y and show code that is problematic on RT.
 
-diff --git a/drivers/dma/k3dma.c b/drivers/dma/k3dma.c
-index ecdaada95120..3c2c44efc8f6 100644
---- a/drivers/dma/k3dma.c
-+++ b/drivers/dma/k3dma.c
-@@ -878,6 +878,8 @@ static int k3_dma_probe(struct platform_device *op)
- 	}
- 
- 	irq = platform_get_irq(op, 0);
-+	if (irq < 0)
-+		return irq;
- 	ret = devm_request_irq(&op->dev, irq,
- 			k3_dma_int_handler, 0, DRIVER_NAME, d);
- 	if (ret)
--- 
-2.17.1
+Gotcha. Surely, then, Andy's patch at least goes some of the way
+toward fixing this, since it outright _removes_ a spinlock_t. There is
+still the other spinlock_t that you want removed, I realize, though
+this doesn't appear to be the one from Jonathan's bug report. It
+sounds like Andy's patch might be one side of the fix, and your patch
+the other?
 
+Jason

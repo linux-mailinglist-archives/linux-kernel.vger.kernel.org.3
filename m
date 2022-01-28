@@ -2,141 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A75649FEB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE37F49FEA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350471AbiA1RKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 12:10:36 -0500
-Received: from mga02.intel.com ([134.134.136.20]:45625 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245716AbiA1RKf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 12:10:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643389835; x=1674925835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kgXvkvGlDf1JVTYkFL7dYdiuifP4CeQljPpc6IyMVvA=;
-  b=lkE8sOiCpd6XsO4+ra6Otx5s2W7PFeLkj3a9q7l7Ke3TGuYmezd/qJg4
-   dLQySUy9tHAQj/lZamklZkT5vWuKU+G9rzd9l/5pW2Uuozu5/5Qz3QRZb
-   yuQ+nn4oqF8qQBRV2sFtBHNYT3ONZbWc+Xk4QofWQVRAIS/RCLsGsRKFu
-   llXBLfonq9ZiukJ/tw+6171Y+JInM1fPSmB61prhz4kOZ16EAxI1imbgO
-   Pa+1tGL8b4qdUY7EvahWBAQrvuiYWyHASdeHMqeLirH3TcPQZ8RYmdHvk
-   cIhJQ9oPMYqJOkdCiB0iPhgW2X0v0zNsYsODHi9IrnHkWhQygmN1iGgyc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="234543267"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="234543267"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 09:06:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="533563875"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jan 2022 09:06:38 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDUhq-000O76-4k; Fri, 28 Jan 2022 17:06:38 +0000
-Date:   Sat, 29 Jan 2022 01:06:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     zhanglianjie <zhanglianjie@uniontech.com>, keescook@chromium.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, yzaikin@google.com,
-        mcgrof@kernel.org, akpm@linux-foundation.org,
-        zhanglianjie <zhanglianjie@uniontech.com>
-Subject: Re: [PATCH] mm: move page-writeback sysctls to is own file
-Message-ID: <202201290141.GDKdUC72-lkp@intel.com>
-References: <20220128091901.18074-1-zhanglianjie@uniontech.com>
+        id S1350440AbiA1RHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 12:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245669AbiA1RHy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 12:07:54 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B717C061714;
+        Fri, 28 Jan 2022 09:07:54 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id ADBB31F4077C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643389673;
+        bh=2xFNiO6fHDHvRM3tapKHLsYU7C7r1NhK4zVmOUghfCE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Nwgn/t3yPevwc+QMOee9BE3udvMx3HsLC2z6iuM3Uq0Y3ce6lPVjevczDXYE1xVVs
+         Xl/ZRFFrEv+iBexE6jFPJxEa9NwGL32JCA5R+MlzKNOvl+4KhiMdMrKEiEeWNzAZjq
+         sqA3UoILhalDrutVLIdnJMni1fepuo9Ev9PQlUJUe9Nb7QT7PZjYJKsmbH5NjUgLpg
+         wb1pcQC6bAjUStGxTdSCUttcqqcOnF6MKwI8eEoIxLAZAbBr6rdB+jlIo8WIzbk3H/
+         4rb49pRgXp8F50LxOP347ilePuLB7YXWRvNm1l74L2Z25hObVhq9mbLA+Wu/sn8scC
+         48jolvItzDYPQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org (open list:MEDIA DRIVERS FOR FREESCALE IMX),
+        linux-staging@lists.linux.dev (open list:STAGING SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list),
+        mkl@pengutronix.de
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernel-janitors@vger.kernel.org
+Subject: [PATCH V2] media: imx: imx8mq-mipi_csi2: Remove unneeded code
+Date:   Fri, 28 Jan 2022 22:07:22 +0500
+Message-Id: <20220128170722.1624767-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128091901.18074-1-zhanglianjie@uniontech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi zhanglianjie,
+ret is constant in imx8mq_mipi_csi_pm_suspend(). This function cannot
+return error. Remove the return variable. Simplify other functions which
+are using this function.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc1 next-20220128]
-[cannot apply to hnaz-mm/master linux/master kees/for-next/pstore]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/zhanglianjie/mm-move-page-writeback-sysctls-to-is-own-file/20220128-172052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 23a46422c56144939c091c76cf389aa863ce9c18
-config: arm64-buildonly-randconfig-r005-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290141.GDKdUC72-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/d24502aa729978894feb2de10481cd139ae5bb42
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review zhanglianjie/mm-move-page-writeback-sysctls-to-is-own-file/20220128-172052
-        git checkout d24502aa729978894feb2de10481cd139ae5bb42
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   mm/page-writeback.c:509:5: warning: no previous prototype for function 'dirty_background_ratio_handler' [-Wmissing-prototypes]
-   int dirty_background_ratio_handler(struct ctl_table *table, int write,
-       ^
-   mm/page-writeback.c:509:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dirty_background_ratio_handler(struct ctl_table *table, int write,
-   ^
-   static 
-   mm/page-writeback.c:520:5: warning: no previous prototype for function 'dirty_background_bytes_handler' [-Wmissing-prototypes]
-   int dirty_background_bytes_handler(struct ctl_table *table, int write,
-       ^
-   mm/page-writeback.c:520:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dirty_background_bytes_handler(struct ctl_table *table, int write,
-   ^
-   static 
-   mm/page-writeback.c:531:5: warning: no previous prototype for function 'dirty_ratio_handler' [-Wmissing-prototypes]
-   int dirty_ratio_handler(struct ctl_table *table, int write, void *buffer,
-       ^
-   mm/page-writeback.c:531:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dirty_ratio_handler(struct ctl_table *table, int write, void *buffer,
-   ^
-   static 
-   mm/page-writeback.c:545:5: warning: no previous prototype for function 'dirty_bytes_handler' [-Wmissing-prototypes]
-   int dirty_bytes_handler(struct ctl_table *table, int write,
-       ^
-   mm/page-writeback.c:545:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dirty_bytes_handler(struct ctl_table *table, int write,
-   ^
-   static 
-   mm/page-writeback.c:2002:5: warning: no previous prototype for function 'dirty_writeback_centisecs_handler' [-Wmissing-prototypes]
-   int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
-       ^
-   mm/page-writeback.c:2002:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
-   ^
-   static 
->> mm/page-writeback.c:93:28: warning: unused variable 'dirty_bytes_min' [-Wunused-const-variable]
-   static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-                              ^
-   6 warnings generated.
-
-
-vim +/dirty_bytes_min +93 mm/page-writeback.c
-
-    91	
-    92	/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
-  > 93	static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-    94	
-
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in V2:
+Removed fixes tag
+---
+ drivers/staging/media/imx/imx8mq-mipi-csi2.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+index 3b9fa75efac6b..c992b845e63d1 100644
+--- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
++++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+@@ -693,11 +693,10 @@ static int imx8mq_mipi_csi_async_register(struct csi_state *state)
+  * Suspend/resume
+  */
+ 
+-static int imx8mq_mipi_csi_pm_suspend(struct device *dev)
++static void imx8mq_mipi_csi_pm_suspend(struct device *dev)
+ {
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+-	int ret = 0;
+ 
+ 	mutex_lock(&state->lock);
+ 
+@@ -708,8 +707,6 @@ static int imx8mq_mipi_csi_pm_suspend(struct device *dev)
+ 	}
+ 
+ 	mutex_unlock(&state->lock);
+-
+-	return ret ? -EAGAIN : 0;
+ }
+ 
+ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
+@@ -742,15 +739,12 @@ static int __maybe_unused imx8mq_mipi_csi_suspend(struct device *dev)
+ {
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+-	int ret;
+ 
+-	ret = imx8mq_mipi_csi_pm_suspend(dev);
+-	if (ret)
+-		return ret;
++	imx8mq_mipi_csi_pm_suspend(dev);
+ 
+ 	state->state |= ST_SUSPENDED;
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int __maybe_unused imx8mq_mipi_csi_resume(struct device *dev)
+@@ -770,9 +764,7 @@ static int __maybe_unused imx8mq_mipi_csi_runtime_suspend(struct device *dev)
+ 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+ 	int ret;
+ 
+-	ret = imx8mq_mipi_csi_pm_suspend(dev);
+-	if (ret)
+-		return ret;
++	imx8mq_mipi_csi_pm_suspend(dev);
+ 
+ 	ret = icc_set_bw(state->icc_path, 0, 0);
+ 	if (ret)
+-- 
+2.30.2
+

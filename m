@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A62649F200
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 655A449F21F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345869AbiA1Dt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:49:26 -0500
-Received: from mailgw.kylinos.cn ([123.150.8.42]:40173 "EHLO nksmu.kylinos.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1345802AbiA1DtZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:49:25 -0500
-X-UUID: facb723e0da54eb09d073fef8ee6ec25-20220128
-X-CPASD-INFO: 70958ec4a68e43d3a33cd22ff1ff1fb9
-        @gIBzVWWXkWSNVnqxg3avbYFkY5OUXlK1qGuGll-
-        WjlmVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3hnJzVWiTkw==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: 70958ec4a68e43d3a33cd22ff1ff1fb9
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:143.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:198.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CF
-        OB:0.0,SPC:0.0,SIG:-5,AUF:13,DUF:32000,ACD:177,DCD:279,SL:0,AG:0,CFC:0.231,CF
-        SR:0.192,UAT:0,RAF:2,VERSION:2.3.4
-X-CPASD-ID: facb723e0da54eb09d073fef8ee6ec25-20220128
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1, 1
-X-UUID: facb723e0da54eb09d073fef8ee6ec25-20220128
-X-User: xiehongyu1@kylinos.cn
-Received: from [172.20.4.10] [(116.128.244.169)] by nksmu.kylinos.cn
-        (envelope-from <xiehongyu1@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1692616607; Fri, 28 Jan 2022 12:01:59 +0800
-Message-ID: <ce40f4cd-a110-80b1-f766-e94dd8cedc7e@kylinos.cn>
-Date:   Fri, 28 Jan 2022 11:48:34 +0800
+        id S1345932AbiA1DzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:55:03 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:40692 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1345889AbiA1Dy5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 22:54:57 -0500
+X-UUID: 88e879716cbf42399dbd58bcfe02dd7c-20220128
+X-UUID: 88e879716cbf42399dbd58bcfe02dd7c-20220128
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1917609676; Fri, 28 Jan 2022 11:54:45 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 28 Jan 2022 11:54:43 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
+ 2022 11:54:43 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 28 Jan 2022 11:54:41 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2, 0/7] support mt8195 decoder
+Date:   Fri, 28 Jan 2022 11:54:33 +0800
+Message-ID: <20220128035440.24533-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
- of function xhci_check_args
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        125707942@qq.com, stable@vger.kernel.org
-References: <20220126094126.923798-1-xy521521@gmail.com>
- <YfEZFtf9K8pFC8Mw@kroah.com>
- <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
- <YfEnbRW3oU0ouGqH@kroah.com>
- <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
- <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
-From:   =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
-In-Reply-To: <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,
+Firstly, add mt8195 soc lat hardware and compatible, then add documents.
+For vp8 only support MM21 mode, H264/vp9 support MT21C, need to separate
+them. Lastly, enable H264 inner racing mode to reduce hardware latency.
 
-On 2022/1/27 17:43, Mathias Nyman wrote:
-> On 26.1.2022 14.49, Hongyu Xie wrote:
->
->>> Anyway, why is this unique to this one driver?  Why does it not show up
->>> for any other driver?
->> The whole thing is not about a particular driver. The thing is xhci_urb_enqueue shouldn't change the return value of xhci_check_args from -ENODEV to -EINVAL. Many other drivers only check if the return value of xchi_check_args is <= 0.
-> Agree, lets return -ENODEV when appropriate.
->
->>>> The whole point is, if xhci_check_args returns value A, xhci_urb_enqueque
->>>> shouldn't return any
->>>> other value, because that will change some driver's behavior(like r8152.c).
->>> But you are changing how the code currently works.  Are you sure you
->>> want to have this "succeed" if this is on a root hub?
->> Yes, I'm changing how the code currently works but not on a root hub.
->>>> 2."So if 0 is returned, you will now return that here, is that ok?
->>>> That is a change in functionality.
->>>> But this can only ever be the case for a root hub, is that ok?"
->>>>
->>>> It's the same logic, but now xhci_urb_enqueue can return -ENODEV if xHC is
->>>> halted.
->>>> If it happens on a root hub,  xhci_urb_enqueue won't be called.
->>>>
->>>> 3."Again, this means all is good?  Why is this being called for a root hub?"
->>>>
->>>> It is the same logic with the old one, but now xhci_check_streams_endpoint
->>>> can return -ENODEV if xHC is halted.
->>> This still feels wrong to me, but I'll let the maintainer decide, as I
->>> don't understand why a root hub is special here.
->> Thanks please. usb_submit_urb will call usb_hcd_submit_urb. And usb_hcd_submit_urb will call rh_urb_enqueue if it's on a root hub instead of calling hcd->driver->urb_enqueue(which is xhci_urb_enqueue in this case).
-> xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
-> should continue to return -EINVAL
+Patch 1~4 add mt8195 soc lat hardware and compatible, then add documents.
+Patch 5 using different format for different codecs.
+Patch 6 prevent kernel crash when scp reboot.
+Patch 7 enable H264 inner racing mode to reduce hardware latency.
+---
+This patch depends on "support mt8186 decoder"[1]
 
-xhci_urb_enqueue() won't be called for roothub urbs, only for none 
-roothub urbs(see usb_hcd_submit_urb()).
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220122075606.19373-1-yunfei.dong@mediatek.com
+---
+changed with v1:
+- separate "Init VP9 stateless decode params" patch and remove it to another one.
+- add reviewed-by in patch v3/v4/v6
+---
+Tinghan Shen (1):
+  media: mtk-vcodec: prevent kernel crash when scp ipi timeout
 
-So xhci_urb_enqueue() will not get 0 from xhci_check_args().
+Yunfei Dong (6):
+  dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for lat soc
+  media: mtk-vcodec: Add to support lat soc hardware
+  dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for mt8195
+  media: mtk-vcodec: Adds compatible for mt8195
+  media: mtk-vcodec: Different codec using different capture format
+  media: mtk-vcodec: Add to support H264 inner racing mode
 
-Still return -EINVAL if xhci_check_args() returns 0 in xhci_urb_enqueue()?
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 50 +++++++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      | 41 +++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  8 +++
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   | 12 +++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.h   |  2 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 50 +++++++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      | 11 ++++
+ .../mtk-vcodec/vdec/vdec_h264_req_multi_if.c  | 23 +++++++--
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |  5 ++
+ 9 files changed, 194 insertions(+), 8 deletions(-)
 
->
-> xhci_check_args() should be rewritten later, but first we want a targeted fix
-> that can go to stable.
->
-> Your original patch would be ok after following modification:
-> if (ret <= 0)
-> 	return ret ? ret : -EINVAL;
+-- 
+2.25.1
 
-I have two questions:
-
-     1) Why return -EINVAL for roothub urbs?
-
-     2) Should I change all the return statements about 
-xhci_check_args() in drivers/usb/host/xhci.c?
-
-     There are 6 of them.
-
->
-> Thanks
-> -Mathias

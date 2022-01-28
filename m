@@ -2,118 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AFE49FDCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2651249FDCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349979AbiA1QPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
+        id S1349984AbiA1QQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349962AbiA1QPu (ORCPT
+        with ESMTP id S1349907AbiA1QQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:15:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0717C061714;
-        Fri, 28 Jan 2022 08:15:50 -0800 (PST)
+        Fri, 28 Jan 2022 11:16:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8528C061714;
+        Fri, 28 Jan 2022 08:16:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F510B80D79;
-        Fri, 28 Jan 2022 16:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC36C340E0;
-        Fri, 28 Jan 2022 16:15:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5825261EE0;
+        Fri, 28 Jan 2022 16:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B0CC340EE;
+        Fri, 28 Jan 2022 16:16:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643386548;
-        bh=cDuSg+CrlslaXesh3qz8z39IshhsZtN6MoZi6F8K0xk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=u7segef+gdncKpEQohgwHgIhGqvbnUFBifeTtUFV4ZygoDyYKVuVBB1xLa+u8dghY
-         JG0few1oVaOtJlHk7++1ERnoM2DnjGmZy5yLLSfxuzjz9jSkNgVHAREodlMIrZhyMj
-         40yI84Andy6qnYfiG5JNiMiz6b0sHAh5LvOXxBwUQIQDmDbQMqoxyjZpH2V8hf6Ehe
-         +h6YsLxwxK/F5wGMPFPJwEeWxnio35tF2EGaSPJHnDpjdqiD1L6MVFfvKh6AanrVvB
-         3w/AvnGsjDRCfsUW+dtDJAgXaPEtwzJrQDxAFFU0RHDxSG/Bvu8zexVuydM6m7I2Qz
-         8RODnJbK9Cq/A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A19145C098D; Fri, 28 Jan 2022 08:15:47 -0800 (PST)
-Date:   Fri, 28 Jan 2022 08:15:47 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, hca@linux.ibm.com,
-        linux-s390@vger.kernel.org
-Subject: Re: ftrace hangs waiting for rcu
-Message-ID: <20220128161547.GL4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220127114249.03b1b52b@gandalf.local.home>
- <YfLjIOlGfFmbh1Zv@FVFF77S0Q05N>
- <yt9dy231yq90.fsf_-_@linux.ibm.com>
- <YfQCohKWJg9H+uID@FVFF77S0Q05N>
- <yt9dee4rn8q7.fsf@linux.ibm.com>
- <YfQVzba5thVs+qap@FVFF77S0Q05N>
+        s=k20201202; t=1643386600;
+        bh=twyXXahotKEoQfmaYn1h+KsXQwihA+utJqMl4tH15xw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EKhz84YKGeYvLYJAh9FKwsG+aQ5RnBr38r/qXMsLK0n1hI+7A15jXcgdAWsZ5BGQY
+         8jK90V47bmRw1jhW1tiU4cVDvkmR4C8Q9W4IdkAJLKKhY3z/tncG+pSaz4i+JJgCYB
+         1ksPqmKGnVrdMFjK7BdAm1TUFKmswNNmEmvFB/6rgP3JUePnKrI1OntoOc6wlXwZin
+         oMW66Uev9vG71z6NjvA2HIyOEoULKTpQlCYw7dHBQnW0LycrPLL+B/B1wRjm//3/rp
+         5EpoCACAStTDt48U0ThBQKTFLW2koPLcbmrVFiZzrcnN+cUhgsnzvU66TJG8hWThW7
+         mcyUCOab/Y+jQ==
+Received: by mail-ed1-f46.google.com with SMTP id u18so10735911edt.6;
+        Fri, 28 Jan 2022 08:16:40 -0800 (PST)
+X-Gm-Message-State: AOAM532CPzNoAgZj5pGgFn9nHDWYLcYwlVM0Qp1uOF8a4kS3Dckfr5CG
+        vayylsszBIT0xHx3Z/C5l8UsZPLxcuQX6J3bwA==
+X-Google-Smtp-Source: ABdhPJwGpnjATrAeAngi76DFgmj/fwwOS16yT8Wf6ZJqCxqqPJvUVz6TtZPtDgZbsbXMHnLQcDmGxUKSLksz+XyTO90=
+X-Received: by 2002:aa7:dac5:: with SMTP id x5mr8757587eds.254.1643386599011;
+ Fri, 28 Jan 2022 08:16:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfQVzba5thVs+qap@FVFF77S0Q05N>
+References: <20220128120718.30545-1-yongqiang.niu@mediatek.com> <20220128120718.30545-2-yongqiang.niu@mediatek.com>
+In-Reply-To: <20220128120718.30545-2-yongqiang.niu@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Sat, 29 Jan 2022 00:16:28 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-V2A5SqQ5XGh54QfLYAtue1_Uita=J0osdFC1hLnRP2g@mail.gmail.com>
+Message-ID: <CAAOTY_-V2A5SqQ5XGh54QfLYAtue1_Uita=J0osdFC1hLnRP2g@mail.gmail.com>
+Subject: Re: [PATCH v1, 1/4] soc: mediatek: mmsys: Add mt8186 mmsys routing table
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:11:57PM +0000, Mark Rutland wrote:
-> On Fri, Jan 28, 2022 at 05:08:48PM +0100, Sven Schnelle wrote:
-> > Hi Mark,
-> > 
-> > Mark Rutland <mark.rutland@arm.com> writes:
-> > 
-> > > On arm64 I bisected this down to:
-> > >
-> > >   7a30871b6a27de1a ("rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic queue selection")
-> > >
-> > > Which was going wrong because ilog2() rounds down, and so the shift was wrong
-> > > for any nr_cpus that was not a power-of-two. Paul had already fixed that in
-> > > rcu-next, and just sent a pull request to Linus:
-> > >
-> > >   https://lore.kernel.org/lkml/20220128143251.GA2398275@paulmck-ThinkPad-P17-Gen-1/
-> > >
-> > > With that applied, I no longer see these hangs.
-> > >
-> > > Does your s390 test machine have a non-power-of-two nr_cpus, and does that fix
-> > > the issue for you?
-> > 
-> > We noticed the PR from Paul and are currently testing the fix. So far
-> > it's looking good. The configuration where we have seen the hang is a
-> > bit unusual:
-> > 
-> > - 16 physical CPUs on the kvm host
-> > - 248 logical CPUs inside kvm
-> 
-> Aha! 248 is notably *NOT* a power of two, and in this case the shift would be
-> wrong (ilog2() would give 7, when we need a shift of 8).
-> 
-> So I suspect you're hitting the same issue as I was.
+Hi, Yongqiang:
 
-And apparently no one runs -next on systems having a non-power-of-two
-number of CPUs.  ;-)
+Yongqiang Niu <yongqiang.niu@mediatek.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=
+=8828=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:07=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> mt8186 routing registers is different with other Soc
+>
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> ---
+>  drivers/soc/mediatek/mt8186-mmsys.h | 113 ++++++++++++++++++++++++++++
+>  drivers/soc/mediatek/mtk-mmsys.c    |  11 +++
+>  2 files changed, 124 insertions(+)
+>  create mode 100644 drivers/soc/mediatek/mt8186-mmsys.h
+>
+> diff --git a/drivers/soc/mediatek/mt8186-mmsys.h b/drivers/soc/mediatek/m=
+t8186-mmsys.h
+> new file mode 100644
+> index 000000000000..7de329f2d729
+> --- /dev/null
+> +++ b/drivers/soc/mediatek/mt8186-mmsys.h
+> @@ -0,0 +1,113 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef __SOC_MEDIATEK_MT8186_MMSYS_H
+> +#define __SOC_MEDIATEK_MT8186_MMSYS_H
+> +
+> +#define MT8186_MMSYS_OVL_CON                   0xF04
+> +#define MT8186_MMSYS_OVL0_CON_MASK                     0x3
+> +#define MT8186_MMSYS_OVL0_2L_CON_MASK                  0xC
+> +#define MT8186_OVL0_GO_BLEND                           BIT(0)
+> +#define MT8186_OVL0_GO_BG                              BIT(1)
+> +#define MT8186_OVL0_2L_GO_BLEND                                BIT(2)
+> +#define MT8186_OVL0_2L_GO_BG                           BIT(3)
+> +#define MT8186_DISP_RDMA0_SOUT_SEL             0xF0C
+> +#define MT8186_RDMA0_SOUT_SEL_MASK                     0xF
+> +#define MT8186_RDMA0_SOUT_TO_DSI0                      (0)
+> +#define MT8186_RDMA0_SOUT_TO_COLOR0                    (1)
+> +#define MT8186_RDMA0_SOUT_TO_DPI0                      (2)
+> +#define MT8186_DISP_OVL0_2L_MOUT_EN            0xF14
+> +#define MT8186_OVL0_2L_MOUT_EN_MASK                    0xF
+> +#define MT8186_OVL0_2L_MOUT_TO_RDMA0                   BIT(0)
+> +#define MT8186_OVL0_2L_MOUT_TO_RDMA1                   BIT(3)
+> +#define MT8186_DISP_OVL0_MOUT_EN               0xF18
+> +#define MT8186_OVL0_MOUT_EN_MASK                       0xF
+> +#define MT8186_OVL0_MOUT_TO_RDMA0                      BIT(0)
+> +#define MT8186_OVL0_MOUT_TO_RDMA1                      BIT(3)
+> +#define MT8186_DISP_DITHER0_MOUT_EN            0xF20
+> +#define MT8186_DITHER0_MOUT_EN_MASK                    0xF
+> +#define MT8186_DITHER0_MOUT_TO_DSI0                    BIT(0)
+> +#define MT8186_DITHER0_MOUT_TO_RDMA1                   BIT(2)
+> +#define MT8186_DITHER0_MOUT_TO_DPI0                    BIT(3)
+> +#define MT8186_DISP_RDMA0_SEL_IN               0xF28
+> +#define MT8186_RDMA0_SEL_IN_MASK                       0xF
+> +#define MT8186_RDMA0_FROM_OVL0                         0
+> +#define MT8186_RDMA0_FROM_OVL0_2L                      2
+> +#define MT8186_DISP_DSI0_SEL_IN                        0xF30
+> +#define MT8186_DSI0_SEL_IN_MASK                                0xF
+> +#define MT8186_DSI0_FROM_RDMA0                         0
+> +#define MT8186_DSI0_FROM_DITHER0                       1
+> +#define MT8186_DSI0_FROM_RDMA1                         2
+> +#define MT8186_DISP_RDMA1_MOUT_EN              0xF3C
+> +#define MT8186_RDMA1_MOUT_EN_MASK                      0xF
+> +#define MT8186_RDMA1_MOUT_TO_DPI0_SEL                  BIT(0)
+> +#define MT8186_RDMA1_MOUT_TO_DSI0_SEL                  BIT(2)
+> +#define MT8186_DISP_RDMA1_SEL_IN               0xF40
+> +#define MT8186_RDMA1_SEL_IN_MASK                       0xF
+> +#define MT8186_RDMA1_FROM_OVL0                         0
+> +#define MT8186_RDMA1_FROM_OVL0_2L                      2
+> +#define MT8186_RDMA1_FROM_DITHER0                      3
+> +#define MT8186_DISP_DPI0_SEL_IN                        0xF44
+> +#define MT8186_DPI0_SEL_IN_MASK                                0xF
+> +#define MT8186_DPI0_FROM_RDMA1                         0
+> +#define MT8186_DPI0_FROM_DITHER0                       1
+> +#define MT8186_DPI0_FROM_RDMA0                         2
+> +
+> +static const struct mtk_mmsys_routes mmsys_mt8186_routing_table[] =3D {
+> +       {
+> +               DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
+> +               MT8186_DISP_OVL0_MOUT_EN, MT8186_OVL0_MOUT_EN_MASK,
+> +               MT8186_OVL0_MOUT_TO_RDMA0
+> +       },
+> +       {
+> +               DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
+> +               MT8186_DISP_RDMA0_SEL_IN, MT8186_RDMA0_SEL_IN_MASK,
+> +               MT8186_RDMA0_FROM_OVL0
+> +       },
+> +       {
+> +               DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
+> +               MT8186_MMSYS_OVL_CON, MT8186_MMSYS_OVL0_CON_MASK,
+> +               MT8186_OVL0_GO_BLEND
+> +       },
+> +       {
+> +               DDP_COMPONENT_RDMA0, DDP_COMPONENT_COLOR0,
+> +               MT8186_DISP_RDMA0_SOUT_SEL, MT8186_RDMA0_SOUT_SEL_MASK,
+> +               MT8186_RDMA0_SOUT_TO_COLOR0
+> +       },
+> +       {
+> +               DDP_COMPONENT_DITHER, DDP_COMPONENT_DSI0,
+> +               MT8186_DISP_DITHER0_MOUT_EN, MT8186_DITHER0_MOUT_EN_MASK,
+> +               MT8186_DITHER0_MOUT_TO_DSI0,
+> +       },
+> +       {
+> +               DDP_COMPONENT_DITHER, DDP_COMPONENT_DSI0,
+> +               MT8186_DISP_DSI0_SEL_IN, MT8186_DSI0_SEL_IN_MASK,
+> +               MT8186_DSI0_FROM_DITHER0
+> +       },
+> +       {
+> +               DDP_COMPONENT_OVL_2L0, DDP_COMPONENT_RDMA1,
+> +               MT8186_DISP_OVL0_2L_MOUT_EN, MT8186_OVL0_2L_MOUT_EN_MASK,
+> +               MT8186_OVL0_2L_MOUT_TO_RDMA1
+> +       },
+> +       {
+> +               DDP_COMPONENT_OVL_2L0, DDP_COMPONENT_RDMA1,
+> +               MT8186_DISP_RDMA1_SEL_IN, MT8186_RDMA1_SEL_IN_MASK,
+> +               MT8186_RDMA1_FROM_OVL0_2L
+> +       },
+> +       {
+> +               DDP_COMPONENT_OVL_2L0, DDP_COMPONENT_RDMA1,
+> +               MT8186_MMSYS_OVL_CON, MT8186_MMSYS_OVL0_2L_CON_MASK,
+> +               MT8186_OVL0_2L_GO_BLEND
+> +       },
+> +       {
+> +               DDP_COMPONENT_RDMA1, DDP_COMPONENT_DPI0,
+> +               MT8186_DISP_RDMA1_MOUT_EN, MT8186_RDMA1_MOUT_EN_MASK,
+> +               MT8186_RDMA1_MOUT_TO_DPI0_SEL
+> +       },
+> +       {
+> +               DDP_COMPONENT_RDMA1, DDP_COMPONENT_DPI0,
+> +               MT8186_DISP_DPI0_SEL_IN, MT8186_DPI0_SEL_IN_MASK,
+> +               MT8186_DPI0_FROM_RDMA1
+> +       },
+> +};
+> +
+> +#endif /* __SOC_MEDIATEK_MT8186_MMSYS_H */
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-=
+mmsys.c
+> index 1e448f1ffefb..0da25069ffb3 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -15,6 +15,7 @@
+>  #include "mtk-mmsys.h"
+>  #include "mt8167-mmsys.h"
+>  #include "mt8183-mmsys.h"
+> +#include "mt8186-mmsys.h"
+>  #include "mt8192-mmsys.h"
+>  #include "mt8365-mmsys.h"
+>
+> @@ -56,6 +57,12 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys=
+_driver_data =3D {
+>         .num_routes =3D ARRAY_SIZE(mmsys_mt8183_routing_table),
+>  };
+>
+> +static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data =3D {
+> +       .clk_driver =3D "clk-mt8186-mm",
+> +       .routes =3D mmsys_mt8186_routing_table,
+> +       .num_routes =3D ARRAY_SIZE(mmsys_mt8186_routing_table),
+> +};
+> +
+>  static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data =3D {
+>         .clk_driver =3D "clk-mt8192-mm",
+>         .routes =3D mmsys_mt8192_routing_table,
+> @@ -242,6 +249,10 @@ static const struct of_device_id of_match_mtk_mmsys[=
+] =3D {
+>                 .compatible =3D "mediatek,mt8183-mmsys",
+>                 .data =3D &mt8183_mmsys_driver_data,
+>         },
+> +       {
+> +               .compatible =3D "mediatek,mt8186-mmsys",
 
-							Thanx, Paul
+Add "mediatek,mt8186-mmsys" to binding document.
 
-> Thanks,
-> Mark.
-> 
-> > - debug kernel both on the host and kvm guest
-> > 
-> > So things are likely a bit slow in the kvm guest. Interesting is that
-> > the number of CPUs is even. But maybe RCU sees an odd number of CPUs
-> > and gets confused before all cpus are brought up. Have to read code/test
-> > to see whether that could be possible.
-> > 
-> > Thanks for investigating!
-> > Sven
+Regards,
+Chun-Kuang.
+
+> +               .data =3D &mt8186_mmsys_driver_data,
+> +       },
+>         {
+>                 .compatible =3D "mediatek,mt8192-mmsys",
+>                 .data =3D &mt8192_mmsys_driver_data,
+> --
+> 2.25.1
+>

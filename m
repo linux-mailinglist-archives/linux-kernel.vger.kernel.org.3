@@ -2,190 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA994A0283
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC76C4A0280
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351288AbiA1VEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:04:22 -0500
-Received: from mga09.intel.com ([134.134.136.24]:39330 "EHLO mga09.intel.com"
+        id S1349917AbiA1VEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:04:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:32648 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344421AbiA1VEG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:04:06 -0500
+        id S231409AbiA1VEE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 16:04:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643403846; x=1674939846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rRQi5U4fNXjd7il7SklJ7fYxH9Jsm7zneoJJFyQiclk=;
-  b=E7JtnfaPJN3dIl7ZnWGHHKLGz/ZokWP3w3O9pj5392Es6rMxe2xngtZJ
-   YdDleVJW9F5Gqg3HFvq1tSjxsaN01lMlSVuqagns3sdLvP0xch/VuYEtw
-   1y4SybVcflw5Woh7k+qyxBNFN4R7FpwHLqKJwl6OovEInUkaS9ircgR9E
-   p+oOToc6XsC4AewjnOMkHh3uq8my1yfqBVr7tn87XIc9PjXfEfJHwG2IW
-   vF29wJRKu4gUr2o2jCq4c3425M3s6hHRjN7rINjGbkRDeZyVNA2NG6ICw
-   XjjBK7mXfuwZyjcsFQdjfu0Z6cvZlTrHR1s4sue5IFYSABUuK2fgqqaTq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="246969200"
+  t=1643403844; x=1674939844;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ASgkFYwwTRZanrw0AK9YosZcIFPeg1uJvPc0GqPq9/E=;
+  b=VGh2sH5jYiaj0sPTJOjA8cbKvA6o9eVRo2r9Yj8QhX0N1MpjqQ9WEEJ3
+   onXi5lnih3BXWT9TpL1kF63D5LOx52ozVVsdmyhwMd191SocgDyO7S5Og
+   F0Fy4KyFneP8dMeGGgWnPFli/z5Xdvksav+skXYS+nKF+6FxSUpXVpncw
+   UIrgY0Hxvml9uDLCFCB7G71pVJyO9qv5+XsKLMuE/oGX9QBvMvxYRmLql
+   Pd0v18duwHTJVIiF6VrguBod4QN49HgtRjOCPUHSrnymBo5zggtiJ0mbB
+   3c1bf7zpiBK4Z6Y+Kp0GRANcViardsHnJvxxRhu/MQzNXpzHbvqtV33LR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307926877"
 X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="246969200"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:04:05 -0800
+   d="scan'208";a="307926877"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:04:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="629247635"
+   d="scan'208";a="496249913"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2022 13:04:02 -0800
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 13:04:02 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nDYPZ-000OJP-OP; Fri, 28 Jan 2022 21:04:01 +0000
-Date:   Sat, 29 Jan 2022 05:03:21 +0800
+        id 1nDYPZ-000OJV-Sm; Fri, 28 Jan 2022 21:04:01 +0000
+Date:   Sat, 29 Jan 2022 05:03:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, luciano.coelho@intel.com
-Cc:     kbuild-all@lists.01.org, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, trix@redhat.com, johannes.berg@intel.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] dvm: use struct_size over open coded arithmetic
-Message-ID: <202201290256.JxMfdzDu-lkp@intel.com>
-References: <20220128080206.1211452-1-chi.minghao@zte.com.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: arch/mips/kvm/vz.c:1552: warning: expecting prototype for
+ kvm_trap_vz_handle_cop_unusuable(). Prototype was for
+ kvm_trap_vz_handle_cop_unusable() instead
+Message-ID: <202201290312.Zn2lLZub-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128080206.1211452-1-chi.minghao@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Thomas,
 
-Thank you for the patch! Yet something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/dvm-use-struct_size-over-open-coded-arithmetic/20220128-160349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 23a46422c56144939c091c76cf389aa863ce9c18
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220129/202201290256.JxMfdzDu-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   145d9b498fc827b79c1260b4caa29a8e59d4c2b9
+commit: 45c7e8af4a5e3f0bea4ac209eea34118dd57ac64 MIPS: Remove KVM_TE support
+date:   11 months ago
+config: mips-malta_kvm_defconfig (https://download.01.org/0day-ci/archive/20220129/202201290312.Zn2lLZub-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6ce283968f032a338616dbe570097f1639a66b75
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/dvm-use-struct_size-over-open-coded-arithmetic/20220128-160349
-        git checkout 6ce283968f032a338616dbe570097f1639a66b75
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45c7e8af4a5e3f0bea4ac209eea34118dd57ac64
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 45c7e8af4a5e3f0bea4ac209eea34118dd57ac64
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/mm.h:30,
-                    from arch/arm/include/asm/cacheflush.h:10,
-                    from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from include/linux/if_ether.h:19,
-                    from include/linux/etherdevice.h:20,
-                    from drivers/net/wireless/intel/iwlwifi/dvm/rx.c:12:
-   drivers/net/wireless/intel/iwlwifi/dvm/rx.c: In function 'iwlagn_rx_noa_notification':
->> include/linux/overflow.h:194:32: error: invalid type argument of '->' (have 'struct iwl_wipan_noa_data')
-     194 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                ^~
-   drivers/net/wireless/intel/iwlwifi/dvm/rx.c:918:36: note: in expansion of macro 'struct_size'
-     918 |                 new_data = kmalloc(struct_size(*new_data, data, len), GFP_ATOMIC);
-         |                                    ^~~~~~~~~~~
-   In file included from include/linux/container_of.h:5,
-                    from include/linux/kernel.h:21,
-                    from include/linux/skbuff.h:13,
-                    from include/linux/if_ether.h:19,
-                    from include/linux/etherdevice.h:20,
-                    from drivers/net/wireless/intel/iwlwifi/dvm/rx.c:12:
-   include/linux/overflow.h:194:63: error: invalid type argument of '->' (have 'struct iwl_wipan_noa_data')
-     194 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                                               ^~
-   include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                              ^
-   include/linux/compiler.h:258:51: note: in expansion of macro '__same_type'
-     258 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                                                   ^~~~~~~~~~~
-   include/linux/overflow.h:194:44: note: in expansion of macro '__must_be_array'
-     194 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                            ^~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/dvm/rx.c:918:36: note: in expansion of macro 'struct_size'
-     918 |                 new_data = kmalloc(struct_size(*new_data, data, len), GFP_ATOMIC);
-         |                                    ^~~~~~~~~~~
-   include/linux/overflow.h:194:63: error: invalid type argument of '->' (have 'struct iwl_wipan_noa_data')
-     194 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                                               ^~
-   include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                              ^
-   include/linux/compiler.h:258:51: note: in expansion of macro '__same_type'
-     258 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                                                   ^~~~~~~~~~~
-   include/linux/overflow.h:194:44: note: in expansion of macro '__must_be_array'
-     194 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                            ^~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/dvm/rx.c:918:36: note: in expansion of macro 'struct_size'
-     918 |                 new_data = kmalloc(struct_size(*new_data, data, len), GFP_ATOMIC);
-         |                                    ^~~~~~~~~~~
-   include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                   ^
-   include/linux/compiler.h:258:33: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
-     258 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                                 ^~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:44: note: in expansion of macro '__must_be_array'
-     194 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                            ^~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/dvm/rx.c:918:36: note: in expansion of macro 'struct_size'
-     918 |                 new_data = kmalloc(struct_size(*new_data, data, len), GFP_ATOMIC);
-         |                                    ^~~~~~~~~~~
-   In file included from include/linux/mm.h:30,
-                    from arch/arm/include/asm/cacheflush.h:10,
-                    from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from include/linux/if_ether.h:19,
-                    from include/linux/etherdevice.h:20,
-                    from drivers/net/wireless/intel/iwlwifi/dvm/rx.c:12:
->> include/linux/overflow.h:195:28: error: invalid type argument of unary '*' (have 'struct iwl_wipan_noa_data')
-     195 |                     sizeof(*(p)))
-         |                            ^~~~
-   drivers/net/wireless/intel/iwlwifi/dvm/rx.c:918:36: note: in expansion of macro 'struct_size'
-     918 |                 new_data = kmalloc(struct_size(*new_data, data, len), GFP_ATOMIC);
-         |                                    ^~~~~~~~~~~
+   arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_compare' not described in '_kvm_vz_save_htimer'
+   arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_cause' not described in '_kvm_vz_save_htimer'
+   arch/mips/kvm/vz.c:471: warning: Excess function parameter 'compare' description in '_kvm_vz_save_htimer'
+   arch/mips/kvm/vz.c:471: warning: Excess function parameter 'cause' description in '_kvm_vz_save_htimer'
+>> arch/mips/kvm/vz.c:1552: warning: expecting prototype for kvm_trap_vz_handle_cop_unusuable(). Prototype was for kvm_trap_vz_handle_cop_unusable() instead
 
 
-vim +194 include/linux/overflow.h
+vim +1552 arch/mips/kvm/vz.c
 
-610b15c50e86eb Kees Cook           2018-05-07  180  
-610b15c50e86eb Kees Cook           2018-05-07  181  /**
-610b15c50e86eb Kees Cook           2018-05-07  182   * struct_size() - Calculate size of structure with trailing array.
-610b15c50e86eb Kees Cook           2018-05-07  183   * @p: Pointer to the structure.
-610b15c50e86eb Kees Cook           2018-05-07  184   * @member: Name of the array member.
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  185   * @count: Number of elements in the array.
-610b15c50e86eb Kees Cook           2018-05-07  186   *
-610b15c50e86eb Kees Cook           2018-05-07  187   * Calculates size of memory needed for structure @p followed by an
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  188   * array of @count number of @member elements.
-610b15c50e86eb Kees Cook           2018-05-07  189   *
-610b15c50e86eb Kees Cook           2018-05-07  190   * Return: number of bytes needed or SIZE_MAX on overflow.
-610b15c50e86eb Kees Cook           2018-05-07  191   */
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  192  #define struct_size(p, member, count)					\
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  193  	__ab_c_size(count,						\
-610b15c50e86eb Kees Cook           2018-05-07 @194  		    sizeof(*(p)->member) + __must_be_array((p)->member),\
-610b15c50e86eb Kees Cook           2018-05-07 @195  		    sizeof(*(p)))
-610b15c50e86eb Kees Cook           2018-05-07  196  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1543  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1544  /**
+c992a4f6a9b0a3 James Hogan   2017-03-14  1545   * kvm_trap_vz_handle_cop_unusuable() - Guest used unusable coprocessor.
+c992a4f6a9b0a3 James Hogan   2017-03-14  1546   * @vcpu:	Virtual CPU context.
+c992a4f6a9b0a3 James Hogan   2017-03-14  1547   *
+c992a4f6a9b0a3 James Hogan   2017-03-14  1548   * Handle when the guest attempts to use a coprocessor which hasn't been allowed
+c992a4f6a9b0a3 James Hogan   2017-03-14  1549   * by the root context.
+c992a4f6a9b0a3 James Hogan   2017-03-14  1550   */
+c992a4f6a9b0a3 James Hogan   2017-03-14  1551  static int kvm_trap_vz_handle_cop_unusable(struct kvm_vcpu *vcpu)
+c992a4f6a9b0a3 James Hogan   2017-03-14 @1552  {
+c992a4f6a9b0a3 James Hogan   2017-03-14  1553  	u32 cause = vcpu->arch.host_cp0_cause;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1554  	enum emulation_result er = EMULATE_FAIL;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1555  	int ret = RESUME_GUEST;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1556  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1557  	if (((cause & CAUSEF_CE) >> CAUSEB_CE) == 1) {
+c992a4f6a9b0a3 James Hogan   2017-03-14  1558  		/*
+c992a4f6a9b0a3 James Hogan   2017-03-14  1559  		 * If guest FPU not present, the FPU operation should have been
+c992a4f6a9b0a3 James Hogan   2017-03-14  1560  		 * treated as a reserved instruction!
+c992a4f6a9b0a3 James Hogan   2017-03-14  1561  		 * If FPU already in use, we shouldn't get this at all.
+c992a4f6a9b0a3 James Hogan   2017-03-14  1562  		 */
+c992a4f6a9b0a3 James Hogan   2017-03-14  1563  		if (WARN_ON(!kvm_mips_guest_has_fpu(&vcpu->arch) ||
+c992a4f6a9b0a3 James Hogan   2017-03-14  1564  			    vcpu->arch.aux_inuse & KVM_MIPS_AUX_FPU)) {
+c992a4f6a9b0a3 James Hogan   2017-03-14  1565  			preempt_enable();
+c992a4f6a9b0a3 James Hogan   2017-03-14  1566  			return EMULATE_FAIL;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1567  		}
+c992a4f6a9b0a3 James Hogan   2017-03-14  1568  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1569  		kvm_own_fpu(vcpu);
+c992a4f6a9b0a3 James Hogan   2017-03-14  1570  		er = EMULATE_DONE;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1571  	}
+c992a4f6a9b0a3 James Hogan   2017-03-14  1572  	/* other coprocessors not handled */
+c992a4f6a9b0a3 James Hogan   2017-03-14  1573  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1574  	switch (er) {
+c992a4f6a9b0a3 James Hogan   2017-03-14  1575  	case EMULATE_DONE:
+c992a4f6a9b0a3 James Hogan   2017-03-14  1576  		ret = RESUME_GUEST;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1577  		break;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1578  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1579  	case EMULATE_FAIL:
+c34b26b98caca4 Tianjia Zhang 2020-06-23  1580  		vcpu->run->exit_reason = KVM_EXIT_INTERNAL_ERROR;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1581  		ret = RESUME_HOST;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1582  		break;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1583  
+c992a4f6a9b0a3 James Hogan   2017-03-14  1584  	default:
+c992a4f6a9b0a3 James Hogan   2017-03-14  1585  		BUG();
+c992a4f6a9b0a3 James Hogan   2017-03-14  1586  	}
+c992a4f6a9b0a3 James Hogan   2017-03-14  1587  	return ret;
+c992a4f6a9b0a3 James Hogan   2017-03-14  1588  }
+c992a4f6a9b0a3 James Hogan   2017-03-14  1589  
+
+:::::: The code at line 1552 was first introduced by commit
+:::::: c992a4f6a9b0a37c8bd7dfc727ecc3fed125c16b KVM: MIPS: Implement VZ support
+
+:::::: TO: James Hogan <james.hogan@imgtec.com>
+:::::: CC: James Hogan <james.hogan@imgtec.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

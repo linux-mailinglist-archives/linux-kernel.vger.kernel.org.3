@@ -2,89 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD1349F7D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C24D49F7D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348014AbiA1LFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S1347980AbiA1LHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348006AbiA1LFh (ORCPT
+        with ESMTP id S244104AbiA1LHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:05:37 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2234CC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:05:37 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id a25so8463623lji.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:05:37 -0800 (PST)
+        Fri, 28 Jan 2022 06:07:39 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26DAC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:07:38 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id d8so5495021qvv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:07:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=W6NOesChZuwW+0urMmtMeZ98ITEecm90pqAZ1qyy3yA=;
-        b=ouTGjraeJg14bd41iw0LYrvvVO9rX/SUMnntEOZL2Uy+1OGgywIb4ZUvVySFvjhMHp
-         oUMUe9dS9FVyPIrQlQoVKr2LDSlWwd1/SEl8SL0qgvBVSZGyUfOrgDyGeLKUVJ32ZW+2
-         uk4c+Ccpdhg6iQe7eB0ComjUHjcw5oCBztI5+59/3DC6mNhUR+zw7FDaz7XbF8IyaNai
-         6Kog/OakGGDU5+o5UsroqOLduR9LtMSu0pPp4bV3IWIHCd17GLu/oOapsJxhmgoslIjW
-         ST9xSZwqFl/nEsAKJr3xsbt9AS28A2TDG7OadrxJeKx7EacQlyKoQtLanDdwDd9SZuU1
-         Hgbw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ULUrk69qcn5bFl97vvUutVoUrX8FjA4cU31+0l28hP8=;
+        b=FkiXUUAgcFlHY/JxnQ6/MF78iwkckry2PHyEBLMTKbEjgAR9gNRMs6WAlql3SJLAhR
+         tsO8a93ubTq7TVALLxtDG1z0t2tFrRycUjtjXWcIy2dfEiEp2ISTtXcH5WJor0XRxdH+
+         PLtaPsSYVIDcaFRc7+vEw0czyOrYDE9etr8fN66XOStiPTpjElgdC2K5dEqG81mwJe6e
+         Hnfv7cXybS7rBsYClippB7nGiXsV41fecopHNQ1M1nWKAHGhGci0mLginqXUPAzurhqY
+         sOke047xjymDRXYu+VXkhypj22zDS5qFFrfXlyO1CeDBgr7SK0jqRtemmG1F7842IfQY
+         9b/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=W6NOesChZuwW+0urMmtMeZ98ITEecm90pqAZ1qyy3yA=;
-        b=Ju0St1MWghe1nvYgi6WQOvMWksoFgylXGVYXNI9KnOBAozFASQZ/4q5cKsJ238IrWT
-         xB1Q5HDs3SEy0Akot9IL3D5wBZcd2FVbG42cv1SWiGqkgGR6DzMS/6qemDSQXoJULWat
-         7JxO8Z7m+HCyuuR5l17P7+Ad+rbjvUxvnGoc9AiG8T1y1K8AMmhBo2yubeo5gSoLvZe+
-         Gg2667Ywyrr/53GJPer8MM30RlU4dfNh2cURo+rBIcXFS/SO5Jd9x8mBfo6jsygWs4Sk
-         BUMdtRSvNbps4mZzGuxQXCwzVW1SDiri4Whf3KwUglOZNxLWSl4iE+FOstN5d8CQoABt
-         oXVw==
-X-Gm-Message-State: AOAM531/xppc3y0rS+X1VvNO/RZ6PwcJ8276peGn+5l9lFzLv4UAxKs5
-        Ol3nB8tsLhQ/pPizuq3F1rE=
-X-Google-Smtp-Source: ABdhPJzLrsJjH1icU0xvOMufiM3MyvLuJ9O/dhS2MiFtuLc9k15ISguOjY5depMRiXoXpp9z4/XBFw==
-X-Received: by 2002:a05:651c:23c:: with SMTP id z28mr5630107ljn.525.1643367935515;
-        Fri, 28 Jan 2022 03:05:35 -0800 (PST)
-Received: from [10.3.154.43] (staticline-31-183-166-172.toya.net.pl. [31.183.166.172])
-        by smtp.gmail.com with ESMTPSA id q14sm746466lfm.120.2022.01.28.03.05.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ULUrk69qcn5bFl97vvUutVoUrX8FjA4cU31+0l28hP8=;
+        b=hMe2iszgU1sWg2UvBzjRd3hDj8mvP3S8jKR4t3pi5zkkMRT8ZA0mXaLCovqqe8154J
+         KAzXYQYPvnXU0eo8fCal9gm5RWkcSYTdPQNql+BgKwUerV8ENqJTrq1Svj9NGADJAjUw
+         RqSldYCJEQ1ziideNv3KmX9CNhhU2MRWwo/R7sGbyhiHiGrewS6pvL5UfVbZmjOcmqgT
+         Nce8JK5RaCu+6TTjax14fAu7Og75+ZWaMcGddjYSJjfEL0nlVEgpz8f4zfEguiOVWlMd
+         E3YPJIIDN9QMG6K1pkc7dpjd0d5W4B7a7syWx22o0t2As0DNBlKTHoN/U1i0lP6zXI+O
+         j18Q==
+X-Gm-Message-State: AOAM530xzzMXPGQ7XX0ZhDQ2IAOeFdfHtsxiC3GYY7SvPS0svv67NPXz
+        TNfvzPsFmw9hPiQYnuQ9LuM=
+X-Google-Smtp-Source: ABdhPJzT8zpjKW5X0jkQnrOh4ThPKeSPA2ufw5DOwMIz/g4gY4oJHm92pDB35pXFm3IpkAbJ9mBZqg==
+X-Received: by 2002:ad4:5ca5:: with SMTP id q5mr6334667qvh.105.1643368058049;
+        Fri, 28 Jan 2022 03:07:38 -0800 (PST)
+Received: from WRT-WX9.. ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id s4sm3173608qko.113.2022.01.28.03.07.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 03:05:34 -0800 (PST)
-Message-ID: <b40726f9c70671bbd1a4c25dad723329f38a1ee2.camel@gmail.com>
-Subject: Re: [PATCH 03/16] tools/include: Add _RET_IP_ and math definitions
- to kernel.h
-From:   Karolina Drobnik <karolinadrobnik@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        mike.rapoport@gmail.com, linux-kernel@vger.kernel.org
-Date:   Fri, 28 Jan 2022 12:05:33 +0100
-In-Reply-To: <YfKkGga3QKDwFdHJ@casper.infradead.org>
-References: <cover.1643206612.git.karolinadrobnik@gmail.com>
-         <5baa036aadb6436c7c36589ce591baaf827aec0b.1643206612.git.karolinadrobnik@gmail.com>
-         <YfKkGga3QKDwFdHJ@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Fri, 28 Jan 2022 03:07:37 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Changbin Du <changbin.du@gmail.com>
+Subject: [LAST RESEND PATCH] irq: in_irq() cleanup
+Date:   Fri, 28 Jan 2022 19:07:27 +0800
+Message-Id: <20220128110727.5110-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-27 at 13:54 +0000, Matthew Wilcox wrote:
-> On Thu, Jan 27, 2022 at 02:21:21PM +0100, Karolina Drobnik wrote:
-> > Add max_t, min_t and clamp functions, together with _RET_IP_
-> > definition, so they can be used in testing.
-> 
-> Rather than adding our own definitions of min/max/clamp, have
-> you considered using #include "../../../include/linux/minmax.h"?
+Replace the obsolete and ambiguos macro in_irq() with new
+macro in_hardirq().
 
-I tried doing it in the very beginning and couldn't get it to compile.
-Now, I see it's because in minmax.h we use __UNIQUE_ID, which is
-undefined because of "#ifdef __KERNEL__" in include/linux/compiler.h.
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+---
+ kernel/irq/irqdesc.c |  4 ++--
+ kernel/softirq.c     | 10 +++++-----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-> In my experience reusing this kind of "leaf" header works out
-> better than duplicating it.
-
-I like this approach as well, and I tried to use it in other memblock
-headers. Still, as it's not that straightforward here, and I went for
-duplication.
-
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 2267e6527db3..6167d32e27da 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -640,7 +640,7 @@ int handle_irq_desc(struct irq_desc *desc)
+ 		return -EINVAL;
+ 
+ 	data = irq_desc_get_irq_data(desc);
+-	if (WARN_ON_ONCE(!in_irq() && handle_enforce_irqctx(data)))
++	if (WARN_ON_ONCE(!in_hardirq() && handle_enforce_irqctx(data)))
+ 		return -EPERM;
+ 
+ 	generic_handle_irq_desc(desc);
+@@ -676,7 +676,7 @@ EXPORT_SYMBOL_GPL(generic_handle_irq);
+  */
+ int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
+ {
+-	WARN_ON_ONCE(!in_irq());
++	WARN_ON_ONCE(!in_hardirq());
+ 	return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
+ }
+ EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 41f470929e99..fac801815554 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -222,7 +222,7 @@ void __local_bh_enable_ip(unsigned long ip, unsigned int cnt)
+ 	u32 pending;
+ 	int curcnt;
+ 
+-	WARN_ON_ONCE(in_irq());
++	WARN_ON_ONCE(in_hardirq());
+ 	lockdep_assert_irqs_enabled();
+ 
+ 	local_irq_save(flags);
+@@ -305,7 +305,7 @@ void __local_bh_disable_ip(unsigned long ip, unsigned int cnt)
+ {
+ 	unsigned long flags;
+ 
+-	WARN_ON_ONCE(in_irq());
++	WARN_ON_ONCE(in_hardirq());
+ 
+ 	raw_local_irq_save(flags);
+ 	/*
+@@ -352,14 +352,14 @@ static void __local_bh_enable(unsigned int cnt)
+  */
+ void _local_bh_enable(void)
+ {
+-	WARN_ON_ONCE(in_irq());
++	WARN_ON_ONCE(in_hardirq());
+ 	__local_bh_enable(SOFTIRQ_DISABLE_OFFSET);
+ }
+ EXPORT_SYMBOL(_local_bh_enable);
+ 
+ void __local_bh_enable_ip(unsigned long ip, unsigned int cnt)
+ {
+-	WARN_ON_ONCE(in_irq());
++	WARN_ON_ONCE(in_hardirq());
+ 	lockdep_assert_irqs_enabled();
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	local_irq_disable();
+@@ -618,7 +618,7 @@ static inline void tick_irq_exit(void)
+ 
+ 	/* Make sure that timer wheel updates are propagated */
+ 	if ((idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
+-		if (!in_irq())
++		if (!in_hardirq())
+ 			tick_nohz_irq_exit();
+ 	}
+ #endif
+-- 
+2.32.0
 

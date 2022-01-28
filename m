@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC1C49F7E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8302F49F7EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244201AbiA1LJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348021AbiA1LI6 (ORCPT
+        id S1348080AbiA1LJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:09:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24414 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238642AbiA1LJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:08:58 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E061C06175A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:08:45 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id z20so8477153ljo.6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:08:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=TWsCKvI4zd2Yvd/FoP0pl7cOYWslt5CbLizlPinunqQ=;
-        b=RhZQGDTkI5bXthLfduiDdSZsAb07HOY2S4nSgWDXigOvqySn6wGmpzb2wrGQYa9Uji
-         OUUwEmzeSkRqt6TkKfS+FJudwmZjN45xgPBARnlevRJMoktBIPQiZzeCtTK4lCbV8jGF
-         cQr20sbkeInCoKb56YJuaOajI9CaAF4VWq4jKh10QyxgfAEPA2+kTL2FUaozwedF1wFN
-         nd47L2s+Y8g5WzJ7WCUHAP2BDaSa6doMX5TrxFUF0mczT+S4siRmICl6vHBOgYd07LHD
-         ZALrZ5BPwj56oVhP/9ez28fIUlE7osJlv08VncNv2MItzZvmlkN73pK8elR12he9uYpK
-         WPMQ==
+        Fri, 28 Jan 2022 06:09:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643368149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=35G0EZH/o9dD2crtrnjLKHLlwbAMq77uRxgBW+YN2gA=;
+        b=BQEkv8S6mM3zkeWHZMmBR2u9CELc+3S+p6HDdiO248GOLo53LPGbJkdwSvb6Cc3a7o96fd
+        yrm7J5FsS3OD1/3ZDIkMiq853lhIemsQlh55gz80qilpv74m284v/CRAL1O9XZ7E9OsPNy
+        4dcFkEJ3pJDGp/3OmGu3cuVdVeczzrs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-FP1g3hS1PgadjIn5JFmPxQ-1; Fri, 28 Jan 2022 06:09:07 -0500
+X-MC-Unique: FP1g3hS1PgadjIn5JFmPxQ-1
+Received: by mail-wm1-f71.google.com with SMTP id f7-20020a1cc907000000b0034b63f314ccso2805389wmb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:09:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=TWsCKvI4zd2Yvd/FoP0pl7cOYWslt5CbLizlPinunqQ=;
-        b=ObqPGelm38tq6/+FUGKVTYyeAbarnJDV/bluY5jqmzbBHxZ7c5W3DGl4tsjmlgiYFh
-         5evO57p6oCWuyXrfSwwix3Jrx5gfLZhPsfZ3+mUGxPPMCXTf9c5+LHjsfZMbpaaw36XN
-         aveInE+sz2PiEcxMMX7qhaCf00kOePGlKa5YQz0QH2Yg5r0ko+J5SBPkOIo08iNXSG8q
-         6POCGiHvVz7GCe01m/7idJHlY+ifOMz+hX7F5iJybMBhwrXqY9CIwCPntJ40H10fpD8V
-         I2uCTdThjYXoV7a2/vB6jMbFrjretE0ybiwknq9GHgZojJZ2m1gnFlz6G0mnpskhNEHV
-         h2/g==
-X-Gm-Message-State: AOAM5307H8eRggDMs5NFKuq2GmmoeSJ5HO/fTPdE/T/onukKDgqSb+5G
-        S03S/NhZE3ZT+iNQi/Aru5Y=
-X-Google-Smtp-Source: ABdhPJxQdVaJeg71e3xwVwpibjLIg0VANBxt46fAilmtbumxeYl5dng1EZ8heHAX/9Ki8D9GNvpmdA==
-X-Received: by 2002:a2e:7116:: with SMTP id m22mr5700534ljc.67.1643368123795;
-        Fri, 28 Jan 2022 03:08:43 -0800 (PST)
-Received: from [10.3.154.43] (staticline-31-183-166-172.toya.net.pl. [31.183.166.172])
-        by smtp.gmail.com with ESMTPSA id u12sm1964299lfl.188.2022.01.28.03.08.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 03:08:43 -0800 (PST)
-Message-ID: <885bc2ae065a6d37b1b528cec986b453c220140c.camel@gmail.com>
-Subject: Re: [PATCH 04/16] tools/include: Update atomic.h header
-From:   Karolina Drobnik <karolinadrobnik@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        mike.rapoport@gmail.com, linux-kernel@vger.kernel.org
-Date:   Fri, 28 Jan 2022 12:08:42 +0100
-In-Reply-To: <YfKkkRNTA9qCmPTW@casper.infradead.org>
-References: <cover.1643206612.git.karolinadrobnik@gmail.com>
-         <bbd768fa794c68cda7888182f464411aebb65b7f.1643206612.git.karolinadrobnik@gmail.com>
-         <YfKkkRNTA9qCmPTW@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=35G0EZH/o9dD2crtrnjLKHLlwbAMq77uRxgBW+YN2gA=;
+        b=v5N7JM/cRDk4AMXIc/l//MiQ8xTlyRPB3UwWZ2kzCNuUCI3vNs3X31P9BkBT60CNkA
+         vuYLwYzdTMkVm6zQp6JsNXm6uEzOv3iXgQbcAVXSG5kZd2dEszl9kIpXG54U1IFM4RT9
+         tdnldREa0H9RoBwNedpuT/4SmXN+ESJYtEiYaVqh8msqhi14BbbQ/gGJkj6MKRXSIUYJ
+         jnoPeX08T+/PjNXq+zzk+Jjvt9eg5PqIOxqe0rfVYTslO4eCXVhpABIH3BnxgfpZeZCk
+         fwFdz1/XFZV/i4vS8UoN1ghFPV8uQMqngZHAZVSeRDu7AzSE7FQq1zksG2whMvJWyepP
+         gY3w==
+X-Gm-Message-State: AOAM531sRgYb0UTLlJwp10kkXwpxQv53OPw/dkVrpMfohWBAjMxl3fmn
+        3VHd1P2lgCiF+eA9Ya6kcEdWWljFABDESmxRAE1yK/vxnbG7h4xiFJOR/vRnVZJYUGOqXGpeoWR
+        MM3mxchTdRC0QGvAw7nPPwTiu
+X-Received: by 2002:a05:600c:2948:: with SMTP id n8mr7006475wmd.61.1643368146525;
+        Fri, 28 Jan 2022 03:09:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyK3G/FxIBrsORiLFoh6WUx871HJXkDD26z2CbztjoHQ9dhXPymdoC9rR9lW4k1VOIwEQjifw==
+X-Received: by 2002:a05:600c:2948:: with SMTP id n8mr7006453wmd.61.1643368146276;
+        Fri, 28 Jan 2022 03:09:06 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m25sm1594570wml.47.2022.01.28.03.09.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 03:09:05 -0800 (PST)
+Message-ID: <9ae2c7ba-133e-7c6f-190b-97158f241c7f@redhat.com>
+Date:   Fri, 28 Jan 2022 12:09:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
+ kernel parameter
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211217003752.3946210-1-javierm@redhat.com>
+ <20211217003752.3946210-32-javierm@redhat.com>
+ <164336121612.533872.1685181669511488706@Monstersaurus>
+ <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
+ <YfPGnfly3GOAOlfp@pendragon.ideasonboard.com>
+ <584f1343-b285-bf8e-e48c-764c2a56bce3@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <584f1343-b285-bf8e-e48c-764c2a56bce3@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-27 at 13:56 +0000, Matthew Wilcox wrote:
-> On Thu, Jan 27, 2022 at 02:21:22PM +0100, Karolina Drobnik wrote:
-> > Add atomic_long_t typedef and atomic_long_set function so they
-> >  can be used in testing.
-> > 
-> > Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
-> > ---
-> >  tools/include/linux/atomic.h | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/tools/include/linux/atomic.h
-> > b/tools/include/linux/atomic.h
-> > index 00a6c4ca562b..5d2431889606 100644
-> > --- a/tools/include/linux/atomic.h
-> > +++ b/tools/include/linux/atomic.h
-> > @@ -4,6 +4,10 @@
-> >  
-> >  #include <asm/atomic.h>
-> >  
-> > +typedef atomic_t atomic_long_t;
-> 
-> Given this:
-> 
-> typedef struct {
->         int counter;
-> } atomic_t;
-> 
-> your definition seems wrong.  Why not add atomic_long_t to types.h,
-> adjacent to atomic_t?
+On 1/28/22 11:46, Thomas Zimmermann wrote:
+> Am 28.01.22 um 11:34 schrieb Laurent Pinchart:
 
-Hmm, that sounds like a better idea. Will do that, thank you.
+[snip]
+
+>>>
+>>> It cannot be 'mode-setted'. We get a pre-configured framebuffer from the
+>>> firmware or bootloader. Whatever we draw there shows up on the screen.
+>>
+>> I doubt that's going to work as you expect, clocks and regulators will
+>> get disabled at boot if not used by any driver.
+> 
+> Simpledrm and simplefb attach to these firmware framebuffers. Both 
+> drivers look at the device tree nodes to acquire the relevant clocks and 
+> regulators.
+>
+
+Laurent is correct that in some cases it might be an issue. For example, if
+a SystemReady ES image is booted using the U-boot EFI stub instead of bootz.
+
+In this case the system will be presented as EFI and the firmware framebuffer
+just taken from the EFI GOP. There won't be any Device Tree node describing
+the clocks, regulators, etc that are required for the framebuffer to work.
+
+The user then will have to pass clk_ignore_unused, pd_ignore_unused and maybe
+other cmdline params (or even hack a DT to set regulator-always-on for needed
+regulators).
+
+But that is also true if the user wants to disable the real DRM driver with
+modprobe.blacklist=rcar-du-drm.
+
+What this patch does is just to make all DRM drivers consistent and honour the
+nomodeset param (whose name is really misleading but we can't change that).
+
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

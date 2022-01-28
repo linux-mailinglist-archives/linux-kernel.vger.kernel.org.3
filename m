@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A40249F6E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559C049F6E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243320AbiA1KMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbiA1KMD (ORCPT
+        id S244437AbiA1KMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:12:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36314 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243748AbiA1KM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:12:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A382C061714;
-        Fri, 28 Jan 2022 02:12:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 28 Jan 2022 05:12:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643364749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vrB8wKd/YuQDRzVLBwG4KgSFnRULjzQXEtQgJ4S5oNc=;
+        b=I0SqErYooRrn5ZBOHjHEs3SmIxrzzELlo3jWXNvrVQgSxqqE1TWZDSBSDRE9NtHCjsbZ++
+        5bRB2q5WwynoZBNaaG+y7uTstdSL4mWrTdNuLMZjWTBaeHjaeToBUelQajXoetempl1+ux
+        4Vg3FjNqJOL6pdRIsH5rMaNJ7hCwloA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-339-O80TzOU3MMC2GBxfNuzNFA-1; Fri, 28 Jan 2022 05:12:24 -0500
+X-MC-Unique: O80TzOU3MMC2GBxfNuzNFA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28FC261E35;
-        Fri, 28 Jan 2022 10:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6C8C340E0;
-        Fri, 28 Jan 2022 10:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643364722;
-        bh=6rQJDoEfOTyNhnq1L4xauHiwGg7CtJuOe5wXI7Bu8mo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uVh5tmzNHmEgqhEx2EJvWW1anevruUpbGT5vx7qQHVweuxdOCK5RPdpDpXlQgy8eJ
-         ZJOY0xPDe0o1/LQKEYZqgGNYikmnroEVnsnwtzZNXi0Sa9iuTrNbs62dp688F1iNyL
-         qErpfsIqfduXy/igLYR2pPjulHvA00AfUOpcfTNg=
-Date:   Fri, 28 Jan 2022 11:11:59 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ata: pata_platform: Fix a NULL pointer dereference in
- __pata_platform_probe()
-Message-ID: <YfPBb4gHDkr76xPT@kroah.com>
-References: <20220124164525.53068-1-zhou1615@umn.edu>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 84E102F45;
+        Fri, 28 Jan 2022 10:12:22 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DBEC260C41;
+        Fri, 28 Jan 2022 10:12:20 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220128074731.1623738-1-hch@lst.de>
+References: <20220128074731.1623738-1-hch@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Subject: Re: [PATCH v2] fs: rename S_KERNEL_FILE
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124164525.53068-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <918224.1643364739.1@warthog.procyon.org.uk>
+Date:   Fri, 28 Jan 2022 10:12:19 +0000
+Message-ID: <918225.1643364739@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 12:45:25AM +0800, Zhou Qingyang wrote:
-> In __pata_platform_probe(), devm_kzalloc() is assigned to ap->ops and
-> there is a dereference of it right after that, which could introduce a
-> NULL pointer dereference bug.
-> 
-> Fix this by adding a NULL check of ap->ops.
-> 
-> This bug was found by a static analyzer.
-> 
-> Builds with 'make allyesconfig' show no new warnings,
-> and our static analyzer no longer warns about this code.
-> 
-> Fixes: f3d5e4f18dba ("ata: pata_of_platform: Allow to use 16-bit wide data transfer")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
+Christoph Hellwig <hch@lst.de> wrote:
 
-As stated in the past, please do not make contributions to the Linux
-kernel until umn.edu has properly resolved its development issues.
+> S_KERNEL_FILE is grossly misnamed.  We have plenty of files hold
 
-> The analysis employs differential checking to identify inconsistent 
-> security operations (e.g., checks or kfrees) between two code paths 
-> and confirms that the inconsistent operations are not recovered in the
-> current function or the callers, so they constitute bugs. 
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
->  drivers/ata/pata_platform.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
-> index 028329428b75..021ef9cbcbc1 100644
-> --- a/drivers/ata/pata_platform.c
-> +++ b/drivers/ata/pata_platform.c
-> @@ -128,6 +128,8 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
->  	ap = host->ports[0];
->  
->  	ap->ops = devm_kzalloc(dev, sizeof(*ap->ops), GFP_KERNEL);
-> +	if (ap->ops)
-> +		return -ENOMEM;
+"held".
 
-This change seems to leak memory.  Damien, please revert it.
+> open by the kernel kernel using filp_open.
 
-thanks,
+You said "kernel" twice.
 
-greg k-h
+And so what?  Cachefiles holds files open by filp_open - but it can only do so
+temporarily otherwise EMFILE/ENFILE and OOMs start to become a serious problem
+because it could end up holding thousands of files open (one or two of the
+xfstests cause this to happen).
+
+Further, holding the file open *doesn't* prevent cachefilesd from trying to
+cull the file to make space whilst it's "in use".
+
+Yet further, I'm not holding the directories that form the cache layout open
+with filp_open at all - I'm not reading them, so that would just be a waste of
+resources - but I really don't want cachefilesd culling them because it sees
+they're empty but cachefiles is holding them ready.
+
+> This flag OTOH signals the inode as being a special snowflake that
+> cachefiles holds onto that can't be unlinked because of ..., erm, pixie
+> dust.
+
+Really?  I presume you read the explanation I gave of the races that are a
+consequence of splitting the driver between the kernel and userspace?  I could
+avoid them - or at least mitigate them - by keeping my own list of all the
+inodes in use by cachefiles so that cachefilesd can query it.  I did, in fact,
+use to have such a list, but the core kernel already has such lists and the
+facilities to translate pathnames into internal objects, so my stuff ought to
+be redundant - all I need is one inode flag.
+
+Further, that inode flag can be shared with anyone else who wants to do
+something similar.  It's just an "I'm using this" lock.  There's no particular
+reason to limit its use to cachefiles.  In fact, it is better if it is then
+shared so that in the unlikely event that two drivers try to use the same
+file, an error will occur.
+
+I do use it to defend cachefiles against itself also.  In the event that
+there's a bug or a race and it tries to reuse its own cache - particularly
+with something like NFS that can have multiple superblocks for the same
+source, just with different I/O parameters, for example - this can lead to
+data corruption.  I try to defend against it in fscache also, but there can be
+delayed effects due to object finalisation being done in the background after
+fscache has returned to the netfs.
+
+Now, I do think there's an argument to be made for splitting the flag into
+two, as I advanced in a proposed patch.  One piece would just be an "I'm using
+this", the other would be a "don't delete this" flag.  Both are of potential
+use to other drivers.
+
+I take it you'd prefer this to be done a different way?
+
+David
+

@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB71A4A00DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883844A00E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350940AbiA1T3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 14:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiA1T3c (ORCPT
+        id S1350954AbiA1TaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 14:30:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58401 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232590AbiA1TaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 14:29:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480B6C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 11:29:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 28 Jan 2022 14:30:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643398217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SEZKuudk9FTI+7yAy64FaqZEcUXfR8+t/aDwSXBZQrU=;
+        b=RmK5kGNH+YRigtBIZxnjRepmfjwXmVPaoP7flO4Wb6bgE4G9prXvLEyonWw8TM54pveyx7
+        USX97sPnUPVcToJhwgvDrWgLTjYzpmOKvxpV2xGu0+9za2krkn0c8fis6iHvOOMW+Gms5O
+        OS6BnHkPdHb70QKdt3DN+FCfaH94sGw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-yybfL9f6PuOsydIGP4KB2A-1; Fri, 28 Jan 2022 14:30:13 -0500
+X-MC-Unique: yybfL9f6PuOsydIGP4KB2A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D98EF61D42
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 19:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8977C340E7;
-        Fri, 28 Jan 2022 19:29:29 +0000 (UTC)
-Date:   Fri, 28 Jan 2022 19:29:26 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Lang Yu <lang.yu@amd.com>
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] mm/kmemleak: Avoid scanning potential huge holes
-Message-ID: <YfREFu1sAJ+Yn6jy@arm.com>
-References: <20211108140029.721144-1-lang.yu@amd.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5A665100C662;
+        Fri, 28 Jan 2022 19:30:11 +0000 (UTC)
+Received: from emerald.lyude.net (unknown [10.22.11.89])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 888275D6B1;
+        Fri, 28 Jan 2022 19:30:00 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     nouveau@lists.freedesktop.org
+Cc:     dri-devel@lists.freedesktop.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Zhou Qingyang <zhou1615@umn.edu>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] Revert "drm/nouveau/acr: Fix undefined behavior in nvkm_acr_hsfw_load_bl()"
+Date:   Fri, 28 Jan 2022 14:29:50 -0500
+Message-Id: <20220128192951.626532-1-lyude@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108140029.721144-1-lang.yu@amd.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 10:00:29PM +0800, Lang Yu wrote:
-> When using devm_request_free_mem_region() and devm_memremap_pages()
-> to add ZONE_DEVICE memory, if requested free mem region's end pfn
-> were huge(e.g., 0x400000000), the node_end_pfn() will be also huge
-> (see move_pfn_range_to_zone()). Thus it creates a huge hole between
-> node_start_pfn() and node_end_pfn().
-> 
-> We found on some AMD APUs, amdkfd requested such a free mem region
-> and created a huge hole. In such a case, following code snippet was
-> just doing busy test_bit() looping on the huge hole.
-> 
-> for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-> 	struct page *page = pfn_to_online_page(pfn);
-> 		if (!page)
-> 			continue;
-> 	...
-> }
-> 
-> So we got a soft lockup:
-> 
-> watchdog: BUG: soft lockup - CPU#6 stuck for 26s! [bash:1221]
-> CPU: 6 PID: 1221 Comm: bash Not tainted 5.15.0-custom #1
-> RIP: 0010:pfn_to_online_page+0x5/0xd0
-> Call Trace:
->   ? kmemleak_scan+0x16a/0x440
->   kmemleak_write+0x306/0x3a0
->   ? common_file_perm+0x72/0x170
->   full_proxy_write+0x5c/0x90
->   vfs_write+0xb9/0x260
->   ksys_write+0x67/0xe0
->   __x64_sys_write+0x1a/0x20
->   do_syscall_64+0x3b/0xc0
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> I did some tests with the patch.
-> 
-> (1) amdgpu module unloaded
-> 
-> before the patch:
-> 
-> real    0m0.976s
-> user    0m0.000s
-> sys     0m0.968s
-> 
-> after the patch:
-> 
-> real    0m0.981s
-> user    0m0.000s
-> sys     0m0.973s
-> 
-> (2) amdgpu module loaded
-> 
-> before the patch:
-> 
-> real    0m35.365s
-> user    0m0.000s
-> sys     0m35.354s
-> 
-> after the patch:
-> 
-> real    0m1.049s
-> user    0m0.000s
-> sys     0m1.042s
-> 
-> v2:
-> - Only scan pages belonging to the zone.(David Hildenbrand)
-> - Use __maybe_unused to make compilers happy.
-> 
-> Signed-off-by: Lang Yu <lang.yu@amd.com>
+This reverts commit 2343bcdb4747d4f418a4daf2e898b94f86c24a59.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Unfortunately, as Greg pointed out I totally missed the fact that this
+patch came from a umn.edu patch. umn.edu is still banned from contributing
+to the Linux kernel, so let's revert this for the time being. I'll
+re-evaluate this fix myself later and send another fix if this ends up
+being valid.
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Karol Herbst <kherbst@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+index a6ea89a5d51a..667fa016496e 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+@@ -142,12 +142,11 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const char *name, int ver,
+ 
+ 	hsfw->imem_size = desc->code_size;
+ 	hsfw->imem_tag = desc->start_tag;
+-	hsfw->imem = kmemdup(data + desc->code_off, desc->code_size, GFP_KERNEL);
++	hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
++	memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
++
+ 	nvkm_firmware_put(fw);
+-	if (!hsfw->imem)
+-		return -ENOMEM;
+-	else
+-		return 0;
++	return 0;
+ }
+ 
+ int
+-- 
+2.34.1
+

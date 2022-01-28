@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D9949F39D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1645A49F39C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346479AbiA1G1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:27:50 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:60622 "EHLO fornost.hmeau.com"
+        id S1346469AbiA1G1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:27:49 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:60620 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346464AbiA1G1r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1346462AbiA1G1r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Jan 2022 01:27:47 -0500
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1nDKjP-0001EQ-Bt; Fri, 28 Jan 2022 17:27:36 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 28 Jan 2022 17:27:35 +1100
-Date:   Fri, 28 Jan 2022 17:27:35 +1100
+        id 1nDKjY-0001Ek-Rt; Fri, 28 Jan 2022 17:27:45 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 28 Jan 2022 17:27:44 +1100
+Date:   Fri, 28 Jan 2022 17:27:44 +1100
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Shijith Thotton <sthotton@marvell.com>
-Cc:     arno@natisbad.org, bbrezillon@kernel.org, sthotton@marvell.com,
-        linux-crypto@vger.kernel.org, jerinj@marvell.com,
-        sgoutham@marvell.com, schalla@marvell.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: octeontx2: select CONFIG_NET_DEVLINK
-Message-ID: <YfOM1+ydDpsbV09r@gondor.apana.org.au>
+To:     Kai Ye <yekai13@huawei.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangzhou1@hisilicon.com
+Subject: Re: [PATCH v3 0/5] crypto: hisilicon - some misc bugfix for SEC
+ engine
+Message-ID: <YfOM4EHwMQHRxq+c@gondor.apana.org.au>
+References: <20220122081312.29121-1-yekai13@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <41b2f0754d958e2659a88e4c8d005267ef428302.1642763325.git.sthotton@marvell.com>
-X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
+In-Reply-To: <20220122081312.29121-1-yekai13@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shijith Thotton <sthotton@marvell.com> wrote:
-> OcteonTX2 CPT driver will fail to link without devlink support.
+On Sat, Jan 22, 2022 at 04:13:07PM +0800, Kai Ye wrote:
+> some misc bugfix for SEC engine.
 > 
-> aarch64-linux-gnu-ld: otx2_cpt_devlink.o: in function `otx2_cpt_dl_egrp_delete':
-> otx2_cpt_devlink.c:18: undefined reference to `devlink_priv'
-> aarch64-linux-gnu-ld: otx2_cpt_devlink.o: in function `otx2_cpt_dl_egrp_create':
-> otx2_cpt_devlink.c:9: undefined reference to `devlink_priv'
-> aarch64-linux-gnu-ld: otx2_cpt_devlink.o: in function `otx2_cpt_dl_uc_info':
-> otx2_cpt_devlink.c:27: undefined reference to `devlink_priv'
+> changes v1->v2:
+> 	add rate limited for printing messages.
+> changes v2->v3:
+> 	modify the second patch.
 > 
-> Fixes: fed8f4d5f946 ("crypto: octeontx2 - parameters for custom engine groups")
+> Kai Ye (5):
+>   crypto: hisilicon/sec - fixup icv checking enabled on Kunpeng 930
+>   crypto: hisilicon/sec - add some comments for soft fallback
+>   crypto: hisilicon/sec - fix the max length of AAD for the CCM mode
+>   crypto: hisilicon/sec - fix the CTR mode BD configuration
+>   crypto: hisilicon/sec - use the correct print format
 > 
-> Signed-off-by: Shijith Thotton <sthotton@marvell.com>
-> ---
-> drivers/crypto/marvell/Kconfig | 1 +
-> 1 file changed, 1 insertion(+)
+>  drivers/crypto/hisilicon/sec2/sec_crypto.c | 27 +++++++++++++++-------
+>  drivers/crypto/hisilicon/sec2/sec_crypto.h |  6 +++--
+>  2 files changed, 23 insertions(+), 10 deletions(-)
 
-Patch applied.  Thanks.
+All applied.  Thanks.
 -- 
 Email: Herbert Xu <herbert@gondor.apana.org.au>
 Home Page: http://gondor.apana.org.au/~herbert/

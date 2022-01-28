@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B4149FB8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B378249FB8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349068AbiA1OVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S1349075AbiA1OWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349046AbiA1OVm (ORCPT
+        with ESMTP id S244873AbiA1OWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:21:42 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C4EC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:21:41 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id h16so5914773qvk.10
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:21:41 -0800 (PST)
+        Fri, 28 Jan 2022 09:22:37 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943BEC061714;
+        Fri, 28 Jan 2022 06:22:37 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id h21so11170342wrb.8;
+        Fri, 28 Jan 2022 06:22:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=makDagrHRlU7vaXpIkbBqsJmR2imX/hQ0vT1IyZGbe8=;
-        b=hagW1D3vrAXgmIdAaPuyb0ZYpBBI5GPj5cGf4t4VMPl2Hby0LDAfvZWMHlJD4RNPqz
-         udQ6uMwMCSFght7z8OXaOlANPe89fBH+JadGzhs2iy3sYKIgrM8DNT9kykuob784vNJb
-         /Y/FgIYpTCK+z7cKXzoYjO1GyqMmNfC0h5hNyGY73VQ5CoPXpXPP9nyVMuQ4vWD+VQga
-         0hYXfzvwCLnChzgjp4NqFihb4T9f8dI0raxoWaXnXY+5G5GDrUXCHtUcKwBORYZObA9Y
-         YPaqcPq/4bzPj+zORYsBg7/S7b+i2mhRoE+TwNrxyzVcDs3wf6ttmJBlILKVUF4beVAI
-         0u4w==
+        bh=JqRzFU3NTGaxRCA92BfkWdnqAUoHImOhqbYAAukL/WA=;
+        b=CPd86gzw5vDG8e3dfC98RsYhQCjpLk76/QV+NaHGJQ3IfZC4FkflbJgRpCSQaojcyb
+         Nu4Wo7x+p7NWc7YpYSOIN3FGIHjbuiitrmy3yxTQQ7LDee5Egst8KO+uLxv2eoVfD9QT
+         ULTn3O4b6ujUTZGuG201D0sluLZRrZTGCqqiIta5Uq8jO1nAUT8X0XhzsTuV9F4MgFHO
+         XPk0nEyMprAf/3SwRu9z1SULebl2A/wglW4U8DeBQaqhwDdO0wUVA4ZDM87kmxpozIij
+         FNN2PW4+4Y9XxaTG0CehdqUTgM5V+E1d++lacIQI8v2KC2ooWvgVzPSYKhId/Mblvtui
+         OVtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=makDagrHRlU7vaXpIkbBqsJmR2imX/hQ0vT1IyZGbe8=;
-        b=SMfURLX+aHBbPCKicMoDF2hJ1dRtrgG2ZEtiqRnMFL2KwkvyVDgqStFcscWlDCLz+k
-         QpgksGgLauzQ2XpT4oxYUMFMOUV6GLKH/1PtUs4hqjIzyTkg6NcOLlP+mYPx37OGayqc
-         lnNrIviW1zqQMLFPUlnJEIedulGn3vqXrNEil1EGuB7LwSo5R116aovM07DglupT0LKw
-         48pfFqjpeCP47yFs5NvyXZmlEA7L0fK8NmdhG7lIWnuEGCEARcVsyc304MlJ0UR7DSTe
-         qhslYxST2mt2V2gMBaDWMRS+oIBAk6j9mqoZcj2tXAXsCSxMhkJczxbs8szBBvz/7MPg
-         o85w==
-X-Gm-Message-State: AOAM531Gmn0ijNVCeqPytBleUYC+yS1DKukiZwWqDSFxtp4rsy/oCz90
-        BAMfongeW65WciffdPQ/4Dtnkw==
-X-Google-Smtp-Source: ABdhPJw4cx6/r5UFZ4KcHMvTw88cPD84uAemPNZJJIK7lCC9YLt9fXRF4PueHdJDgL+a1AuPlHcoPg==
-X-Received: by 2002:a05:6214:519a:: with SMTP id kl26mr7027757qvb.68.1643379700472;
-        Fri, 28 Jan 2022 06:21:40 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id o4sm3070925qtw.53.2022.01.28.06.21.39
+        bh=JqRzFU3NTGaxRCA92BfkWdnqAUoHImOhqbYAAukL/WA=;
+        b=nEDvQcgUBcqhL1Mua20cHGzOLX0CmAoZXpuuszetAk0X7wdwwlmEbGuOIb9i+Z3sCj
+         sAQiGU/ua5A+esAVcLkaTI1y5owzZ4Q5Rws24CfEF3NzPYDW8HwhEY45Cs77Q2kEpXMJ
+         4AUdXhZ0i+g5zwu3aNXFGymEaG+ZYKwjCls6kEbnKRBvzILSL8onJRfBytQU3FrsgYD9
+         in92nL5OstAeLyfMXkze6mO0+IeiIJ5jzEOf6Cce+0aZeqqF6JqRxmLFEFNcdGK68xhT
+         V/uDOIAxZjK+QFGb2x0LipYzzDdBJ7Oy6bJj0rl04kH1ZjMYeeuE/Nf62h7sfoQjSajl
+         AYUA==
+X-Gm-Message-State: AOAM5330uMGZhTKtk1YqT4N8xutfD5c4auEqSs3HQfoyykFKEgdj5yKc
+        kD+ZxszS1JA6HVx6jEtCaQo=
+X-Google-Smtp-Source: ABdhPJwdMzo9hv8rwPvTwETuZlhc9M5WtrrznhyCgNe9Nx+siLH/uQ6HBTw9LK6PHcpRClpwV1hibw==
+X-Received: by 2002:a5d:588c:: with SMTP id n12mr7377461wrf.386.1643379756041;
+        Fri, 28 Jan 2022 06:22:36 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id w6sm2003187wmi.15.2022.01.28.06.22.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 06:21:39 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nDS8A-007UXM-Bu; Fri, 28 Jan 2022 10:21:38 -0400
-Date:   Fri, 28 Jan 2022 10:21:38 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Alex Sierra <alex.sierra@amd.com>
-Subject: Re: [PATCH v5 02/24] mm: remove extra ZONE_DEVICE struct page
- refcount
-Message-ID: <20220128142138.GU8034@ziepe.ca>
-References: <20220128002614.6136-1-logang@deltatee.com>
- <20220128002614.6136-3-logang@deltatee.com>
+        Fri, 28 Jan 2022 06:22:35 -0800 (PST)
+Date:   Fri, 28 Jan 2022 14:22:33 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH 4.19 0/3] 4.19.227-rc1 review
+Message-ID: <YfP8KbSXrqL4HIMl@debian>
+References: <20220127180256.837257619@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128002614.6136-3-logang@deltatee.com>
+In-Reply-To: <20220127180256.837257619@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 05:25:52PM -0700, Logan Gunthorpe wrote:
-> From: Ralph Campbell <rcampbell@nvidia.com>
-> 
-> ZONE_DEVICE struct pages have an extra reference count that complicates the
-> code for put_page() and several places in the kernel that need to check the
-> reference count to see that a page is not being used (gup, compaction,
-> migration, etc.). Clean up the code so the reference count doesn't need to
-> be treated specially for ZONE_DEVICE.
-> 
-> [logang: dropped no longer used section from mm.h including
->  page_is_devmap_managed, rebased on v5.17-rc1 (possibly poorly)]
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-> Signed-off-by: Alex Sierra <alex.sierra@amd.com>
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/powerpc/kvm/book3s_hv_uvmem.c     |  2 +-
->  drivers/gpu/drm/nouveau/nouveau_dmem.c |  2 +-
->  fs/dax.c                               |  4 +-
->  include/linux/dax.h                    |  2 +-
->  include/linux/memremap.h               |  7 +--
->  include/linux/mm.h                     | 44 ----------------
->  lib/test_hmm.c                         |  2 +-
->  mm/internal.h                          |  8 +++
->  mm/memcontrol.c                        |  6 +--
->  mm/memremap.c                          | 70 +++++++-------------------
->  mm/migrate.c                           |  5 --
->  mm/page_alloc.c                        |  3 ++
->  mm/swap.c                              | 45 ++---------------
->  13 files changed, 46 insertions(+), 154 deletions(-)
+Hi Greg,
 
-This patch still can't be applied until the FSDAX issues are solved,
-right? See my remarks the last time it was posted..
+On Thu, Jan 27, 2022 at 07:09:00PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.227 release.
+> There are 3 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
 
-Jason
+Build test:
+mips (gcc version 11.2.1 20220121): 63 configs -> no failure
+arm (gcc version 11.2.1 20220121): 116 configs -> no new failure
+arm64 (gcc version 11.2.1 20220121): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/664
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

@@ -2,138 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B23549F603
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B5449F605
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347510AbiA1JJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:09:45 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4538 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347477AbiA1JJn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:09:43 -0500
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JlWlh0fLrz67xNW;
-        Fri, 28 Jan 2022 17:06:08 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 10:09:41 +0100
-Received: from [10.47.26.192] (10.47.26.192) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 28 Jan
- 2022 09:09:40 +0000
-Subject: Re: [PATCH 00/16] scsi: libsas and users: Factor out LLDD TMF code
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
-        <chenxiang66@hisilicon.com>, <Ajish.Koshy@microchip.com>
-CC:     <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
-        <Viswas.G@microchip.com>
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
- <1893d9ef-042b-af3b-74ea-dd4d0210c493@opensource.wdc.com>
- <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
- <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <a2de1656-b1ec-2fb7-caab-657e27dacb48@huawei.com>
-Date:   Fri, 28 Jan 2022 09:09:03 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
-MIME-Version: 1.0
-In-Reply-To: <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        id S1347495AbiA1JKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:10:11 -0500
+Received: from mail-mw2nam12on2086.outbound.protection.outlook.com ([40.107.244.86]:5920
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234281AbiA1JKK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 04:10:10 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KPmV3JlEUgpOPsYm+VblF5zB4O/0psqZOuP4AHNStU9aL9WQkk8a2d7NMDdsQIp+KBH314LnDrwcaKoRcSl2OxkVKL93OG/5Q9I3BT7InSPejppRyZyz7VoH/dOPa5EwLfrdCOywvN03QqgtL1WUazH2pIKm7m7pqZaZfVasWnnPhH2mWaWSa8Mrna9fuG843EQXWZGlSLsabkCEZS8A1/zOSUMfLQmW4pw5vtM10JdCQoroObLWvc1DXW9QUeO7UplADvILQJAfmLdgZeGy1J1lNNVykvAD93AcjUxpMcFWKvUxbWbI16Dc/xy/qv09o1w4FsXo2dw7z0GB8JL38A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pB0nQxy1R6X21k7NxUtn2dp60RZTs88uxLhvISkJCgM=;
+ b=jggy7L8zyxjyInoW/EdaYo8b32LbbHdGolNORu5BDtoxSbMh9lshRiiAGM62l5YRESOZ5wP7dUeNCzRzhom5wI2WzgDe4es1QGypJJkluuODp39IWWhcrQsMCoLbcTI63fc6PdsTzOVijaVb1WSJefxTDYIeCjvEN4Xvaw4Nkpp9PQU9eUWtKmE5volJKmuEB50FFMP8/bhD7KYY9FZnJbAGJ9xJdf4zWzl8iLCTYJIeEMUYgK61Tou+qsiEeQwbg4SXGBKLZMV5cGmgKDPxqFd4tg3NDzto7RGSHDCxtWHDGZ6BgnXOMBjzotuPGhDcKbLboAXFjXMrT1qLlWl8Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pB0nQxy1R6X21k7NxUtn2dp60RZTs88uxLhvISkJCgM=;
+ b=B4jjDcFk/f26gPR/kupCzaR1j3aFs/lNHPmIcNu0ithFKhfuHJb2IO2mwApg5tDkOyolXFn9Nnp6YuJ8uWTQyfWBdKpcpGPJqpOAFkw5+HGj0Mb5r1NvMbgsaQmQ3tvYAxo2Y47ANkaystC7OvZBrHuC7f/5UyOQdDzrFrBil+YUJB6pj+55aCJTyqlJB7iFdGU42PeVr1k4k51W6zBdZLE0oqdhfMIKI9W63IZfS7/AZj6+QqosL6aL1YaDzDMAurSyucCICBPvrUQDB67Iwtk24InlYuVmFtSZfX7VQvxV5N2jSg16JujK4AueKOohOTP1yJnZ+tz0p2tZeFG+hA==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by DM4PR12MB5230.namprd12.prod.outlook.com (2603:10b6:5:399::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Fri, 28 Jan
+ 2022 09:10:09 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35%4]) with mapi id 15.20.4930.018; Fri, 28 Jan 2022
+ 09:10:09 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] block: fix boolreturn.cocci warning
+Thread-Topic: [PATCH] block: fix boolreturn.cocci warning
+Thread-Index: AQHYFABy9WvinVQI60OYkByTtGY3bKx4JbGA
+Date:   Fri, 28 Jan 2022 09:10:09 +0000
+Message-ID: <4c3e0a8f-5c53-6978-420c-cac0701fb0dc@nvidia.com>
+References: <20220128043454.68927-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220128043454.68927-1-jiapeng.chong@linux.alibaba.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.26.192]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 66bbd767-ff68-49c8-289f-08d9e23dfbf2
+x-ms-traffictypediagnostic: DM4PR12MB5230:EE_
+x-microsoft-antispam-prvs: <DM4PR12MB52300E876FE902CAAA24A5F2A3229@DM4PR12MB5230.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1169;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WJ9GOhY2tVH8UNnKj31oVZ267OtGyc2gwH9pTRuIkhJlhtzptnxadWO3tCnbJ+nzH6kt/Pcd8xJuoO/389Ef0zmsxnNsJpT00ndVjQMYCPQn+COwD64XE2T9LrLjZqD1fu4mrlgNhBMLIPQJON/fAQZ45s+aGtdlXubyR75rA4lUOpPOa8QsyDPwe8sk0hHO7Xf2M78UrSp203KQ+XYTY6i2YIHeVwcvHG9DBTqpLLiCEHGPr/30QuKeS1Fk53AibpSSwjvav6RiCiNNP54kjjmUb8uoBteBVLxhq5spVqTmYrBgc1LhVyeY9GJGTwzFR5D5IW3FDu6+8xgooXadk9imnmHWfXWr0+N6zEtF8RJZUauyxZcXVWSLv0kFG6r+Kio6PGM1ZwMmmR04kE01NT4XoPhQEv3I5C/ow/pNmvzz3o31BXnaaXnlgVVPEt/wLy6+JYjriSG1uRbPne0sbwgB+A/wRliCnx/tQKU5iw7mTj7X2uU4O+urxXdX5pV9zG2T6WAYJDjU+EDMtei4e6o3vj4ih1vXwJPjxRCaIoz/jPD/mSgzNDtb2H+TAycx738/Xu83fq0Smccpq3P+g1a8tvs552kjMP86v8/PEPaMlPCsLSx9SOAZAT2dUpl1i2BASGCGfh94nPdLaF6CRPNFxTNM0rvYyWM/rklUdWw7ZaRdOQNxMd3eceFYPeuWZ2cXUOaF5QHcGzc0vF2iAdwSApokYS7NBXFtPCctF6EcHNcZXDORrhAGKq5Ms2iHW1UkDRbEu5Hq7jDSxKUvaw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(64756008)(31686004)(8676002)(8936002)(4326008)(86362001)(66556008)(71200400001)(66446008)(66476007)(66946007)(6506007)(316002)(91956017)(5660300002)(36756003)(38070700005)(6486002)(508600001)(53546011)(31696002)(54906003)(110136005)(38100700002)(2906002)(6512007)(122000001)(83380400001)(2616005)(4744005)(26005)(186003)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnJyTmtwMEx2MVFLZnE2cm9CTnlNVWhVblBqNjVYNUdFbjhGclptTnFoTUJJ?=
+ =?utf-8?B?SHRkbHBMay9XUEZNbGZVTjJYYmx6bFBzUW9BeEhVb1Jrby96Z1dJVmtqTnow?=
+ =?utf-8?B?eTVUZ0E4YURxSE5ueTlMYVdRek9WL0lGZTY0Vy9CeWlnMXlWVGkySkoxOWVo?=
+ =?utf-8?B?MWRyak9qMndlaHUvTlhCTisxbDhxQ2pMTmxkV1lDVG5GeU4xVzRsRlZzMCtj?=
+ =?utf-8?B?OVh5Nm9PUmsvVFlpQUF4R1E5Y3lpdjVGcGZKb0grQVdJS2VGYXg2eSsrODFw?=
+ =?utf-8?B?QThjSmtVSCtnOW9mNWNaTk9KeVFJc2RCTzRXZEFBVjJ3YWJyVzNSSVdSaVFH?=
+ =?utf-8?B?QU5lVnBYTEc2azhQZ0NvN1hEck4zUytVZGhnMWRzQXBWSjFNRlB4K0hLdWY3?=
+ =?utf-8?B?ME1LbitxZnZrZ0tOaE5zNGhhSTlFN3ROVGJTcWdVZDJndFZpZGNNbWVGTUpI?=
+ =?utf-8?B?aEVXMTlGbG96UGtZZ0hpbVhLRnVVdUxzVktSRTBXd2RMRDNBTnYvOGdqUG50?=
+ =?utf-8?B?L0lyRmk3VXI5S0pQdS95aFVPQlNrQ1QwSTFHdVprQmozdGZTWmpiMDYwblRy?=
+ =?utf-8?B?Q2x4bm1PTXFmQy9VMTMvTjFjN1dSQU5NM0w4YzU2OU9EWW9OY0FkUWtzckZz?=
+ =?utf-8?B?TEhLczJDR0F5T1UraFN4aGdMK2QvUGZ2c2JZZGtwWk5Pc0lNS3Q5WDNucjg2?=
+ =?utf-8?B?aDhrT29jVVc3Y0s3T1F4dmdPbDBveGs3OHpGYmw4bWkxTHBuYnpNSEErMlVG?=
+ =?utf-8?B?bTZyUjEzS1NNYS80TFB0cCthd1NCT05GRGFTT1dDVWJNR3FuL01RODdoZDEw?=
+ =?utf-8?B?bURLWFpNYjdTMkpuSlphVFFNTVFQNWd6TVBVak0ybWlpOHlVVDhqam9NeTNI?=
+ =?utf-8?B?N0E4eHFLRTAxNFp3TGtyblJCZUhhSGpMMDg3MktZUUZybEp1QlNlQlIrT014?=
+ =?utf-8?B?K1QrN09WYnBsa2p0UXhqZitEVHMvMzVWN29PVllibGlFWlNaU3JIYjI5eXZy?=
+ =?utf-8?B?QVJnRWFXdGErYVp5bEdCdnFPVEZlNE9lTy9HZGQ2MEsvbkF4U0pyRithbGkx?=
+ =?utf-8?B?M05KaHM0d0w3MWZpU2JBaVVZd0dCTVFvME9oY1J0NjVzNmc0bVh4bGFWdG8x?=
+ =?utf-8?B?U1VsNTRIZHk1MmZEWXUxcTNpMElFVkRBK0NvTHA1NkpzUksxUFd6T1JScHJM?=
+ =?utf-8?B?cldSM3p0WFJPeXZ3cFFEdjdZUURSTzdkYi9CQzJ0YmhiVENScVVRZjRkanJo?=
+ =?utf-8?B?RHFNUHdDLzIvSkw1VUF5Y0ZpUHFYZnYxNm54Q1VDcndOZGN1NnBUeHFMMnZv?=
+ =?utf-8?B?VGl4VnA1WGp3V3o5dkpRWDcrcUR0cDVaL2s2L0l4S0hrZGptQmdkcUtzWW9N?=
+ =?utf-8?B?VGVpd2dXMm5nT3gxQzFhQ2dvQW51T2VzOURjVnk5RzVCN1cwWVhnSXlLZzJI?=
+ =?utf-8?B?OFl0THN1ZXdYVFB2Q2NmUFlaS3dOSGppbDduUURURVcveFM0Ymx6OHNiT2Jr?=
+ =?utf-8?B?RDhDVjN3NnArVXZlNnNTRWJwUmtxdDF0ai9KbmcxM0VpZnFvWHdnbGI0d2tC?=
+ =?utf-8?B?U0pITFpmN0V2ZWFpM0l4S05KQnZja290NWtramkvdUpaWm13L0cwSmFRRXI2?=
+ =?utf-8?B?ZldMZnVsSlRsMHRvSTVwVlhSRTBSVE1zV3doY1N2NnpCMFFsUlVLMTdTWXNH?=
+ =?utf-8?B?MmFZN3ZoT3VwTnk2WVloeTlHb3d3QkxrNW5vNEE5ODFWZ0xUb1liRHhHQmNL?=
+ =?utf-8?B?T2lHNEp6ZkZQa0I1YkxSQUhmMkRieWtRa0RxblF6R1ptV25KOWN1M1ZzSC9C?=
+ =?utf-8?B?cGhJSUNYWFZoS3cvRTJCUnVkNnVINXU2QXBlZUdVVmNidmV4WTZlV0JCZ1V6?=
+ =?utf-8?B?aTZEWXVPZnJ6ZFBReTNDM3ZML3hEWTJGOWhveFc5WjJXTzFhKzJwVmNVaS80?=
+ =?utf-8?B?M3RGT1N5Y3BaTWpiRnBLaDNWMnVObWlYdU41a3BDN1piVmg5RFhZY1VnR0pv?=
+ =?utf-8?B?Sld6YWhiekpZUWRTNFlnQmhXZEMwa3l2RXBVRzU3N0ZGMlJIZ3pnZ1kwNkdr?=
+ =?utf-8?B?WU5NN0c3a0NZeUczeEpsVlBhckFzWEJ3Mmdwa1pNdzkzM1ZYVEZGQi90WXlp?=
+ =?utf-8?B?a09GeFV6aFRtV05DYUdEdXFGd1JRNStYTHYvQWlkSTdrMklneHBaS3FiZjJo?=
+ =?utf-8?B?SWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9FAADBFA028A924ABE501C77F6853AA1@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66bbd767-ff68-49c8-289f-08d9e23dfbf2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2022 09:10:09.6844
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NASVviNnZ3ynC9k1CsvL4Ticog2ULj8A68PKeDVIfXHsyN3UpDegoY3q3cRrO26jso+OIoCjWnppyTTjhMAyLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5230
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/01/2022 06:37, Damien Le Moal wrote:
-
-Hi Damien,
-
->> However using this same adapter type on my arm64 system has error
->> handling kick in almost straight away - and the handling looks sane. A
->> silver lining, I suppose ..
-> I ran some more tests. In particular, I ran libzbc compliance tests on a
-> 20TB SMR drives. All tests pass with 5.17-rc1, but after applying your
-> series, I see command timeout that take forever to recover from, with
-> the drive revalidation failing after that.
-> 
-> [  385.102073] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
-> [  385.108026] sas: sas_scsi_find_task: aborting task 0x000000007068ed73
-> [  405.561099] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
-> timeout.
-> [  405.568236] sas: sas_scsi_find_task: task 0x000000007068ed73 is aborted
-> [  405.574930] sas: sas_eh_handle_sas_errors: task 0x000000007068ed73 is
-> aborted
-> [  411.192602] ata21.00: qc timeout (cmd 0xec)
-> [  431.672122] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
-> timeout.
-> [  431.679282] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-> [  431.685544] ata21.00: revalidation failed (errno=-5)
-> [  441.911948] ata21.00: qc timeout (cmd 0xec)
-> [  462.391545] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
-> timeout.
-> [  462.398696] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-> [  462.404992] ata21.00: revalidation failed (errno=-5)
-> [  492.598769] ata21.00: qc timeout (cmd 0xec)
-> ...
-> 
-> So there is a problem. Need to dig into this. I see this issue only with
-> libzbc passthrough tests. fio runs with libaio are fine.
-
-Thanks for the notice. I think that I also saw a hang, but, IIRC, it 
-happened on mainline for me - but it's hard to know if I broke something 
-if it is already broke in another way. That is why I wanted this card 
-working properly...
-
-Anyway, I will investigate more.
-
-> 
->>> And sparse/make C=1 complains about:
->>>
->>> drivers/scsi/libsas/sas_port.c:77:13: warning: context imbalance in
->>> 'sas_form_port' - different lock contexts for basic block
->> I think it's talking about the port->phy_list_lock usage - it prob
->> doesn't like segments where we fall out a loop with the lock held (which
->> was grabbed in the loop). Anyway it looks ok. Maybe we can improve this.
->>
->>> But I have not checked if it is something that your series touch.
->>>
->>> And there is a ton of complaints about __le32 use in the pm80xx code...
->>> I can try to have a look at these if you want, on top of your series.
->> I really need to get make C=1 working for me - it segfaults in any env I
->> have:(
-> I now have a 12 patch series that fixes*all*  the sparse warnings. Some
-> of the fixes were trivial, but most of them are simply hard bugs with
-> the handling of le32 struct field values. There is no way that this
-> driver is working as-is on big-endian machines. Some calculations are
-> actually done using cpu_to_le32() values !
-
-Great, I'll have a look when you send them.
-
-> 
-> But even though these fixes should have essentially no effect on
-> little-endian x86_64, with my series applied, I see the same command
-> timeout problem as with your libsas update, and both series together
-> result in the same timeout issue too.
-> 
-> So it looks like "fixing" the code actually is revealing some other bug
-> that was previously hidden... This will take some time to debug.
-> 
-> Another problem I noticed: doing "rmmod pm80xx; modprobe pm80xx" result
-> in a failure of device scans. I get loops of "link is slow to respond
-> ->reset". For the above tests, I had to reboot every time I changed the
-> driver module code. Another thing to look at.
-
-Sounds odd, I would expect everything runs from afresh when insmod.
-
-Thanks,
-John
+T24gMS8yNy8yMiA4OjM0IFBNLCBKaWFwZW5nIENob25nIHdyb3RlOg0KPiBFeHRlcm5hbCBlbWFp
+bDogVXNlIGNhdXRpb24gb3BlbmluZyBsaW5rcyBvciBhdHRhY2htZW50cw0KPiANCj4gDQo+IFJl
+dHVybiBzdGF0ZW1lbnRzIGluIGZ1bmN0aW9ucyByZXR1cm5pbmcgYm9vbCBzaG91bGQgdXNlIHRy
+dWUvZmFsc2UNCj4gaW5zdGVhZCBvZiAxLzAuDQo+IA0KPiAuL2Jsb2NrL2Jpby5jOjEwODE6OS0x
+MDogV0FSTklORzogcmV0dXJuIG9mIDAvMSBpbiBmdW5jdGlvbg0KPiAnYmlvX2FkZF9mb2xpbycg
+d2l0aCByZXR1cm4gdHlwZSBib29sLg0KPiANCj4gUmVwb3J0ZWQtYnk6IEFiYWNpIFJvYm90IDxh
+YmFjaUBsaW51eC5hbGliYWJhLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSmlhcGVuZyBDaG9uZyA8
+amlhcGVuZy5jaG9uZ0BsaW51eC5hbGliYWJhLmNvbT4NCj4gLS0tDQoNCkdvb2QgY2F0Y2gsIGxv
+b2tzIGdvb2QuDQoNClJldmlld2VkLWJ5OiBDaGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEu
+Y29tPg0KDQo=

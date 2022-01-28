@@ -2,66 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2D649F83F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946EA49F841
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbiA1LYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:24:44 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35040 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbiA1LYn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:24:43 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 8F8FB1F45E36
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643369081;
-        bh=0k7m4FzJK9kWdB+O7Oupf24TMSbU+LrZcmczneKKqYw=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=foypQJZUcowKwZvoWoFVnS8Pa0v1JsBVzCKMZXvhFJDtP6otexkH5mcoNNTbg8x11
-         PudWzCMVB96QIsy7XcuQ0zAQtXef27XJjk4k/ZRI0PrGIJPrzMQmmk38vf/oA7CWuz
-         y3wWars4VIPLSLLt1vdzyIajv1QLKFuEWtm/LEU4Fe4g1Tq+xZ5kgBeoqMwmnZfMYP
-         J/r6Q46Ipb1QWpNf+QO4nTb/f+OeV/SjaYiGutjXnJEKPIjVBUja1AvBXovBpU3xti
-         8FY5IwILZLUcBMRQ0WuwCOGHalqP2AwwfUIqHUcpDU0ZqA83k4mf8TxXtbohhth5LS
-         WuzqTfwgBUOIg==
-Message-ID: <71662f4c-2b76-31d6-be3b-2ac267e9ea82@collabora.com>
-Date:   Fri, 28 Jan 2022 16:24:34 +0500
+        id S233513AbiA1LZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:25:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:37750 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232001AbiA1LZ2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:25:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F1FD113E;
+        Fri, 28 Jan 2022 03:25:28 -0800 (PST)
+Received: from [10.57.86.86] (unknown [10.57.86.86])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE14D3F766;
+        Fri, 28 Jan 2022 03:25:25 -0800 (PST)
+Message-ID: <25b85560-dd95-2569-d1bc-872902d6343f@arm.com>
+Date:   Fri, 28 Jan 2022 11:25:24 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Martin Kaiser <martin@kaiser.cx>, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rt8188eu: Remove dead code
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220128111954.1028121-1-usama.anjum@collabora.com>
- <20220128112315.GF1951@kadam>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220128112315.GF1951@kadam>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH v2 3/6] perf cs-etm: Update deduction of TRCCONFIGR
+ register for branch broadcast
+To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org, leo.yan@linaro.com,
+        mike.leach@linaro.org
+Cc:     Leo Yan <leo.yan@linaro.org>, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220113091056.1297982-1-james.clark@arm.com>
+ <20220113091056.1297982-4-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220113091056.1297982-4-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-
-On 1/28/22 4:23 PM, Dan Carpenter wrote:
-> On Fri, Jan 28, 2022 at 04:19:54PM +0500, Muhammad Usama Anjum wrote:
->> rtStatus is _SUCCESS when the execution reaches this if condition.
->> Remove the dead code.
->>
->> Fixes: 67396d2dfef3 ("staging: r8188eu: merge ODM_ConfigBBWithHeaderFile with its callers")
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+On 13/01/2022 09:10, James Clark wrote:
+> Now that a config flag for branch broadcast has been added, take it into
+> account when trying to deduce what the driver would have programmed the
+> TRCCONFIGR register to.
 > 
-> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   tools/include/linux/coresight-pmu.h | 2 ++
+>   tools/perf/arch/arm/util/cs-etm.c   | 3 +++
+>   2 files changed, 5 insertions(+)
 > 
-> What checker warned about this?
-Coverity
+> diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
+> index 4ac5c081af93..6c2fd6cc5a98 100644
+> --- a/tools/include/linux/coresight-pmu.h
+> +++ b/tools/include/linux/coresight-pmu.h
+> @@ -18,6 +18,7 @@
+>    * ETMv3.5/PTM doesn't define ETMCR config bits with prefix "ETM3_" and
+>    * directly use below macros as config bits.
+>    */
+> +#define ETM_OPT_BRANCH_BROADCAST 8
+>   #define ETM_OPT_CYCACC		12
+>   #define ETM_OPT_CTXTID		14
+>   #define ETM_OPT_CTXTID2		15
+> @@ -25,6 +26,7 @@
+>   #define ETM_OPT_RETSTK		29
+>   
+>   /* ETMv4 CONFIGR programming bits for the ETM OPTs */
+> +#define ETM4_CFG_BIT_BB         3
+>   #define ETM4_CFG_BIT_CYCACC	4
+>   #define ETM4_CFG_BIT_CTXTID	6
+>   #define ETM4_CFG_BIT_VMID	7
+> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+> index 293a23bf8be3..c7ef4e9b4a3a 100644
+> --- a/tools/perf/arch/arm/util/cs-etm.c
+> +++ b/tools/perf/arch/arm/util/cs-etm.c
+> @@ -527,6 +527,9 @@ static u64 cs_etmv4_get_config(struct auxtrace_record *itr)
+>   	if (config_opts & BIT(ETM_OPT_CTXTID2))
+>   		config |= BIT(ETM4_CFG_BIT_VMID) |
+>   			  BIT(ETM4_CFG_BIT_VMID_OPT);
+> +	if (config_opts & BIT(ETM_OPT_BRANCH_BROADCAST))
+> +		config |= BIT(ETM4_CFG_BIT_BB);
+> +
+>   	return config;
+
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+
+>   }
+>   
+

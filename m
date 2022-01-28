@@ -2,102 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A958949F1E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6BB49F1E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345799AbiA1DaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:30:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51273 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345795AbiA1DaV (ORCPT
+        id S1345802AbiA1DgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241873AbiA1Df7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:30:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643340620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yWI4mSyMPfEGNDG7ZY+imHKSZHJZA8c9YX1u5t0lQ5c=;
-        b=S8sefC62Uq6+Ut+/P0ummX4oJBnBbxW3uTNs8ET8CB5eQssnbuwMKuxbu+0xP/97ApXxVE
-        8o/luiYjzbQW+XBpasnHUPNSlTPRdGNw7YO9M1dLPBd5gQ4ViFsuFYWD2rs3YR0ni5M0X6
-        aucQW/m02t2bMRUJRzsyjJKQp73ZhBY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-8hocAmG_PreHTmHkwqlJdw-1; Thu, 27 Jan 2022 22:30:19 -0500
-X-MC-Unique: 8hocAmG_PreHTmHkwqlJdw-1
-Received: by mail-wm1-f69.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso2342305wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 19:30:18 -0800 (PST)
+        Thu, 27 Jan 2022 22:35:59 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2054FC061714;
+        Thu, 27 Jan 2022 19:35:59 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id k17so14704278ybk.6;
+        Thu, 27 Jan 2022 19:35:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+/kTnhBKtQ4o1xU7csKjZQb7FX9UZE3p6kbMBAjh3Wk=;
+        b=q8HRTGri4vkoWtkJFLbHs8ttvag2rveoJCuratu/swm4Zcj91Ls95siFkpHsin2rfM
+         m4or96fvnCLRAwoERvupN0taFx8Yww/YcDLdrOEACf0HMjddQA03W1sWjijLW+k5fxqP
+         uzURCDZmFAYOHUIpu5naivflJt4Eq1ZeTLsDSL29XzuEFGxPNkutMUVmP8OE/zEzcabm
+         NbVR8BbuTaJivFn/J990vVKqXBs1wAFh73y2HufyntxvX4EnreUwWaZvVfPU+gXsA2zy
+         KoswOrND7SNcaEWhZzslnywyz2J/GzU2a2+CgoptFx9Lm412DAj5/IyCNS6OtviKZEGY
+         Yafw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yWI4mSyMPfEGNDG7ZY+imHKSZHJZA8c9YX1u5t0lQ5c=;
-        b=PNa0CyAhULLbNlh1kzlSq3mD0soCS7B8iBExm5CnqmK0VBAIHOHDyx0E41sXcZlFhp
-         if2PolvDWjvEshL024mEQ0kuSEsdyesPafq7jgGQut630ral7lIbb6jWhT27Yx0JavO/
-         cpDePu2JpvJwX6RUZ0bvv1wyrrnvCvYRlLb3s4hmLU6kQr1rqKuetY7U/wPW9g9+plt8
-         219VpKlGK+IyE6byv0XFcXfOt34a58y6VPGcoghcYrKd3vL/waNZfJWzJUn8lUHQ37Ps
-         yjJoGjMg+6bxNRh2mLUsv+QuaJThjF6gI4NG5Dol/Ak3sVYvAiPajMttdtm7DyCy5Kly
-         Y8SA==
-X-Gm-Message-State: AOAM533B8YrfviERPjQAMYJD5FlRabdAKLeP0OQW8bI2nKO/+Z8Be8bi
-        Uh3rdccghw/+68rFr6deUl6YzpfA59ao5Ja6LvZnTgInWa99JXbvymBshJnvAHG7AuM5Wr8hZTU
-        I+pp49wXO773W/FVy0srbMMaR
-X-Received: by 2002:a5d:4dc6:: with SMTP id f6mr5255758wru.255.1643340617835;
-        Thu, 27 Jan 2022 19:30:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4fygcXEjGmyBwc0eSz9VlZ7/dhPCinB97oCLxm3a5TE3y78GbubhUfyHuwvXqmbn6pcAA7Q==
-X-Received: by 2002:a5d:4dc6:: with SMTP id f6mr5255746wru.255.1643340617661;
-        Thu, 27 Jan 2022 19:30:17 -0800 (PST)
-Received: from xz-m1.local ([64.64.123.9])
-        by smtp.gmail.com with ESMTPSA id v5sm835287wmh.19.2022.01.27.19.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 19:30:17 -0800 (PST)
-Date:   Fri, 28 Jan 2022 11:30:10 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH] mm: Fix invalid page pointer returned with FOLL_PIN gups
-Message-ID: <YfNjQhpxmWEeswkb@xz-m1.local>
-References: <20220125033700.69705-1-peterx@redhat.com>
- <f5400544-f602-0bb4-5cb1-5ac682e41974@nvidia.com>
- <20220127004206.GP8034@ziepe.ca>
- <YfJjhop3senAUjue@xz-m1.local>
- <20220127152538.GQ8034@ziepe.ca>
- <YfNIjqPpty0YkLJP@xz-m1.local>
- <313e02c7-c116-3fe3-6747-d9e1b58ba2bb@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+/kTnhBKtQ4o1xU7csKjZQb7FX9UZE3p6kbMBAjh3Wk=;
+        b=XoR+iUOuNS3icskQdzt5O1LJ7U/LLahoEl+en6JlQFH5fkpo6shBKhvzGcyCxKNqVe
+         iUEeBdHpMfvyHeDmcSFQNL7yxAk+VylrDMpj7ZIYD4NZNMfdsE7M1CU1l4yRSTiBcIyy
+         ABDPuCga6vOXJ91UUKv9igIAX6LXCXSKvIV6S2vNnXyvUEnnT99WK+1A7iP/mmXv5v5Q
+         qeWcO8r2mWr9RsZdBiPgmjFnzEnbicZTkFvx0N2tkrKBjrdlc70DViJQjjroj1kIE8kC
+         2tA9eEe9uS0ZjasoPVg2cXc+gs5RiANGAcyLJcm2tIIfSM51mx1YV9pC5V8dd7T2ArjB
+         jbcQ==
+X-Gm-Message-State: AOAM531Mt4Iodrxngre+RJqp2FD0UwRbeyatHJHBhzgwnAocQu8PjONO
+        hmJ3rG2V9/TjJkcnkKcom44DlEY/7t4L9fKN3CpK8y2jYoc=
+X-Google-Smtp-Source: ABdhPJxn1B/pmprpk4xW1dtRGM2DfPjyfNF6kOlXx77LtURWiamxAX/bHf9jB7Pu4Aa4cusykGUESCOeq9jIaIJNAfc=
+X-Received: by 2002:a05:6902:1205:: with SMTP id s5mr11602929ybu.676.1643340958221;
+ Thu, 27 Jan 2022 19:35:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <313e02c7-c116-3fe3-6747-d9e1b58ba2bb@nvidia.com>
+References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
+ <1641979444-11661-3-git-send-email-hammerh0314@gmail.com> <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
+ <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com>
+ <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org> <CAOX-t57KZb0hNDuhPsabkmkf_qOOLqyH3yuvkHP6UNwhLodWDg@mail.gmail.com>
+ <2cde3ff0-5180-7c1e-82fd-7b58e41d462a@kernel.org> <CAOX-t573QkixRC7xa1KUOYXfL12Q+Ltxph9rX7V8tm2BMoqxgA@mail.gmail.com>
+ <YfFQ7v4dXPMV7ypw@kroah.com>
+In-Reply-To: <YfFQ7v4dXPMV7ypw@kroah.com>
+From:   hammer hsieh <hammerh0314@gmail.com>
+Date:   Fri, 28 Jan 2022 11:36:10 +0800
+Message-ID: <CAOX-t54bRS0_kgg2DVoF3p8fx9VJh7xbyoTFcnAHnimLv40WbQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 06:32:27PM -0800, John Hubbard wrote:
-> What you are missing is that other people are potentially writing code
-> that we haven't seen yet, and that code may use follow_page_mask(). The
-> idea, therefore, is to make it a good building block.
+Hi, Greg KH:
 
-Yes, actually that's why I attached the WARN_ON_ONCE() since when people do add
-that new code they'll quickly discover before posting, as long as they'll still
-test the patch..
+I review all driver again.
+I think only startup and shutdown not good.
+I will modify like below.
+If you are ok, I will submit next patch.
 
-Then people may even start to wonder whether we should rework -EEXIST if
-necessary, and IMHO that's the better place for a rework, not within the bugfix
-here.
+static int sunplus_startup(struct uart_port *port)
+{
+        unsigned long flags;
+        unsigned int isc;
+        int ret;
 
-Please check the email I replied to Jason.  I hope both of you would agree that
-I can repost with the fix only but drop the WARN_ON_ONCE(), or any explicit
-suggestion on how we should move forward with the fix would be welcomed.
+        ret =3D request_irq(port->irq, sunplus_uart_irq, 0, "sunplus_uart",=
+ port);
+        if (ret)
+                return ret;
 
-Thanks,
+        spin_lock_irqsave(&port->lock, flags);
 
--- 
-Peter Xu
+        isc =3D readl(port->membase + SUP_UART_ISC); //add this line
+        isc |=3D SUP_UART_ISC_RXM;
+        writel(isc, port->membase + SUP_UART_ISC);
 
+        spin_unlock_irqrestore(&port->lock, flags);
+
+        return 0;
+}
+
+static void sunplus_shutdown(struct uart_port *port)
+{
+        unsigned long flags;
+        unsigned int isc;
+
+        spin_lock_irqsave(&port->lock, flags);
+
+        isc =3D readl(port->membase + SUP_UART_ISC); //add this line
+        isc &=3D ~(SUP_UART_ISC_RXM | SUP_UART_ISC_TXM); //add this line
+        writel(isc, port->membase + SUP_UART_ISC); //modify this line
+
+        spin_unlock_irqrestore(&port->lock, flags);
+
+        free_irq(port->irq, port);
+}
+
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B41=E6=9C=8826=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=889:47=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Fri, Jan 14, 2022 at 10:22:56AM +0800, hammer hsieh wrote:
+> > Jiri Slaby <jirislaby@kernel.org> =E6=96=BC 2022=E5=B9=B41=E6=9C=8813=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:12=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> > >
+> > > On 13. 01. 22, 11:56, hammer hsieh wrote:
+> > > >> Could you explain me what posted write is and how does it not matt=
+er in
+> > > >> this case?
+> > > >>
+> > > >
+> > > > Each UART ISC register contains
+> > >
+> > > No, you still don't follow what I write. Use your favorite web search
+> > > for "posted write" and/or consult with your HW team.
+> > >
+> >
+> > Maybe this time, we are on the same page.
+> > Our SP7021 chipset is designed on ARM Cortex-A7 Quad core.
+> > Register Access through AMBA(AXI bus), and it is non-cached.
+> >
+> > Did you mean
+> > case1 have concern about "posted write", and you want to know why it no=
+t matter?
+> > case2 will be safer?
+> >
+> > Case1 :
+> > spin_lock_irq_save()
+> > writel(0, target register)
+> > spin_unlock_irqrestore()
+>
+> A lock does not mean that your write made it to the device.  Please talk
+> to the hardware designers to properly determine how to correctly write
+> to the hardware and "know" that the write succeeded or not.  This driver
+> does not seem to take that into consideration at all.
+>
+> thanks,
+>
+> greg k-h

@@ -2,142 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45D149FD37
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DB449FD1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349741AbiA1P4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:56:02 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:40303 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349718AbiA1P4B (ORCPT
+        id S1349694AbiA1PvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349686AbiA1PvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:56:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643384996;
-    s=strato-dkim-0002; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=FbbK5BCqwc+LVSOODivmoMY7VA5yrwUnCl/SUOH2vUk=;
-    b=FYm+mIGjvMuxIoWGb4E8SJnLihAlEBBxtcdxXp55elBwEY4A6sAolUt+rDPK9UxlCo
-    ZI11nop0nQwfkl5DlPVitY6M/5DeCYyItwF6OO95XAHZto1BAhWqdstwYaUjTaJ3Vn+C
-    QEF2k3EEC6S8iPAFs2J4vwosklPuPQr/4EpfEneRBxDI3VEDqNXIa8xvWON4rCzNUN+I
-    vtDQ45hu2wc4zeLpdHFdfShijxwvmRw16WKBifpC8St7Xg6/cmxumj0pV4vOP3J4Tu3x
-    uzCgMCZLaMYaaQn+w2hs1QgjcnpHWOcw/99WZ478v+JUNe06qEsvOgTBP7cudrgaapgg
-    hBXA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXvSOeuZzLM="
-X-RZG-CLASS-ID: mo00
-Received: from tauon.chronox.de
-    by smtp.strato.de (RZmta 47.38.0 DYNA|AUTH)
-    with ESMTPSA id v5f65ay0SFntwxY
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 28 Jan 2022 16:49:55 +0100 (CET)
-From:   Stephan Mueller <smueller@chronox.de>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Nicolai Stange <nstange@suse.de>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
-        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
-Subject: Re: [v2 PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)
-Date:   Fri, 28 Jan 2022 16:49:54 +0100
-Message-ID: <1738803.My4pmAdfGn@tauon.chronox.de>
-In-Reply-To: <87v8y4dk1c.fsf@suse.de>
-References: <20211209090358.28231-1-nstange@suse.de> <YeFWnscvXtv73KBl@gondor.apana.org.au> <87v8y4dk1c.fsf@suse.de>
+        Fri, 28 Jan 2022 10:51:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E63C061714;
+        Fri, 28 Jan 2022 07:50:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9592AB80D5F;
+        Fri, 28 Jan 2022 15:50:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C049C340E6;
+        Fri, 28 Jan 2022 15:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643385057;
+        bh=dHqKFVDo8/TjjOkINPkqqECV8kHJmc9ubDxhkDsKCRA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UIgn+uYaIcZnrR3GGRYpPs9PW6Z1jWKIYs0QDXBkwYkumMfftCcyJFOPvS1SHGgY9
+         TSbIG/p3kqKO1Xu80pNP/vh0TLex+Fw7YNdDY+AGe0c2DzHy2kwWTRnbZKzRJCUwCz
+         KayXZKOHERpEOvHwSeSMCCTuIGIGuH3j1ATxeaOs=
+Date:   Fri, 28 Jan 2022 16:50:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Zhou Qingyang <zhou1615@umn.edu>, kjlu@umn.edu,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] clk: imx: Fix a NULL pointer dereference in
+ imx_register_uart_clocks()
+Message-ID: <YfQQ3iQhSxCiUQ2U@kroah.com>
+References: <20220124165206.55059-1-zhou1615@umn.edu>
+ <YfPCdPuoB3RYgzL8@kroah.com>
+ <CAHCN7x+bvC70Y18j8tvSVZNjwipYu3xTvFo=AjKvYnmaucBiGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHCN7x+bvC70Y18j8tvSVZNjwipYu3xTvFo=AjKvYnmaucBiGg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 28. Januar 2022, 15:14:39 CET schrieb Nicolai Stange:
+On Fri, Jan 28, 2022 at 07:47:06AM -0600, Adam Ford wrote:
+> On Fri, Jan 28, 2022 at 4:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Jan 25, 2022 at 12:52:06AM +0800, Zhou Qingyang wrote:
+> > > In imx_register_uart_clocks(), the global variable imx_uart_clocks is
+> > > assigned by kcalloc() and there is a dereference of in the next for loop,
+> > > which could introduce a NULL pointer dereference on failure of kcalloc().
+> > >
+> > > Fix this by adding a NULL check of imx_uart_clocks.
+> > >
+> > > This bug was found by a static analyzer.
+> > >
+> > > Builds with 'make allyesconfig' show no new warnings,
+> > > and our static analyzer no longer warns about this code.
+> > >
+> > > Fixes: 379c9a24cc23 ("clk: imx: Fix reparenting of UARTs not associated with stdout")
+> > > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> > > ---
+> > > The analysis employs differential checking to identify inconsistent
+> > > security operations (e.g., checks or kfrees) between two code paths
+> > > and confirms that the inconsistent operations are not recovered in the
+> > > current function or the callers, so they constitute bugs.
+> > >
+> > > Note that, as a bug found by static analysis, it can be a false
+> > > positive or hard to trigger. Multiple researchers have cross-reviewed
+> > > the bug.
+> > >
+> > >  drivers/clk/imx/clk.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
+> > > index 7cc669934253..99249ab361d2 100644
+> > > --- a/drivers/clk/imx/clk.c
+> > > +++ b/drivers/clk/imx/clk.c
+> > > @@ -173,6 +173,8 @@ void imx_register_uart_clocks(unsigned int clk_count)
+> > >               int i;
+> > >
+> > >               imx_uart_clocks = kcalloc(clk_count, sizeof(struct clk *), GFP_KERNEL);
+> > > +             if (!imx_uart_clocks)
+> > > +                     return;
+> > >
+> > >               if (!of_stdout)
+> > >                       return;
+> > > --
+> > > 2.25.1
+> > >
+> >
+> > As stated before, umn.edu is still not allowed to contribute to the
+> > Linux kernel.  Please work with your administration to resolve this
+> > issue.
+> 
+> Greg,
+> 
+> In the interest of safety, I believe this patch is reasonable.
 
-Hi Nicolai,
+How can kcalloc really fail here?  Seriously, this is an impossible
+thing to happen in real-world situations, you have to have special
+fault-injection tooling to ever hit this in a system that is not just
+frozen due to other problems.
 
-> Herbert Xu <herbert@gondor.apana.org.au> writes:
-> > On Fri, Jan 14, 2022 at 10:09:02AM +0100, Nicolai Stange wrote:
-> >> This looks all good to me, but as !->fips_allowed tests aren't skipped
-> >> over anymore now, it would perhaps make sense to make their failure
-> >> non-fatal in FIPS mode. Because in FIPS mode a failure could mean a
-> >> panic and some of the existing TVs might not pass because of e.g. some
-> >> key length checks or so active only for fips_enabled...
-> > 
-> > You mean a buggy non-FIPS algorithm that fails when tested in
-> > FIPS mode?  I guess we could skip the panic in that case if
-> > everyone is happy with that.  Stephan?
-> 
-> One more thing I just realized: dracut's fips module ([1]) modprobes
-> tcrypt (*) and failure is considered fatal, i.e. the system would not
-> boot up.
-> 
-> First of all this would mean that tcrypt_test() needs to ignore
-> -ECANCELED return values from alg_test() in FIPS mode, in addition to
-> the -EINVAL it is already prepared for.
-> 
-> However, chances are that some of the !fips_allowed algorithms looped
-> over by tcrypt are not available (i.e. not enabled at build time) and as
-> this change here makes alg_test() to unconditionally attempt a test
-> execution now, this would fail with -ENOENT AFAICS.
-> 
-> One way to work around this is to make tcrypt_test() to ignore -ENOENT
-> in addition to -EINVAL and -ECANCELED.
-> 
-> It might be undesirable though that the test executions triggered from
-> tcrypt would still instantiate/load a ton of !fips_allowed algorithms at
-> boot, most of which will effectively be inaccessible (because they're
-> not used as FIPS_INTERNAL arguments to fips_allowed == 1 template
-> instances).
-> 
-> So how about making alg_test() to skip the !fips_allowed tests in FIPS
-> mode as before, but to return -ECANCELED and eventually set
-> FIPS_INTERNAL as implemented with this patch here.
-> 
-> This would imply that FIPS_INTERNAL algorithms by themselves remain
-> untested, but I think this might be Ok as they would be usable only as
-> template arguments in fips_allowed instantiations. That is, they will
-> still receive some form of testing when the larger construction they're
-> part of gets tested.
-> 
-> For example, going with the "dh" example, where "dh" and "ffdhe3072(dh)"
-> would have fips_allowed unset and set respecively, ffdhe3072(dh) as
-> a whole would get tested, but not the "dh" argument individually.
-> 
-> Stephan, would this approach work from a FIPS 140-3 perspective?
+> I
+> wrote the original patch that is being fixed by this.  Would it be
+> acceptable if I submitted the same patch with "suggested-by"
+> associated with Zhou @ umn.edu?  I want to give credit where credit is
+> due while still maintaining the rule that patches are not actually
+> being accepted by umn.edu.
 
-Are we sure that we always will have power-up tests of the compound algorithms 
-when we disable the lower-level algorithm testing?
+If you think this really is needed, then yes, feel free to rewrite it.
 
-For example, consider the DH work you are preparing: we currently have a self 
-test for dh - which then will be marked as FIPS_INTERNAL and not executed. 
-Would we now have self tests for modpXXX(dh) or ffdheXXX(dh)? If not, how 
-would it be guaranteed that DH is tested?
+But rewrite it to be correct.  As it is, this is not correct.  If an
+error happens because we are out of memory, actually handle that and do
+not just return as if everything worked properly like this patch is
+doing here.
 
-The important part is that the algorithm testing is guaranteed. I see a number 
-of alg_test_null in testmgr.c. I see the potential that some algorithms do not 
-get tested at all when we skip FIPS_INTERNAL algorithms.
+The "suggestion" here is incorrect, which is the big problem here.
+Whatever tool this group is using is wrong, and as a few people have
+hinted to me offline, maybe they are just still messing around with us
+and seeing how we behave.  Personally, I'm starting to get mad.
 
-From a FIPS perspective it is permissible that compound algo power up tests 
-are claimed to cover respective lower-level algos.
+thanks,
 
-> 
-> Thanks!
-> 
-> Nicolai
-> 
-> [1]
-> https://git.kernel.org/pub/scm/boot/dracut/dracut.git/tree/modules.d/01fips
-> /fips.sh#n106 (*) I'm not sure why this is being done, but it is what it is.
-
-
-Ciao
-Stephan
-
-
+greg k-h

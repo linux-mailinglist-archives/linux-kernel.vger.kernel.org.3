@@ -2,94 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ACA49FE71
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471FD49FE73
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350341AbiA1Qwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S1350343AbiA1QxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350319AbiA1Qwo (ORCPT
+        with ESMTP id S1350319AbiA1QxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:52:44 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D2EC061714;
-        Fri, 28 Jan 2022 08:52:44 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id k17so6562276plk.0;
-        Fri, 28 Jan 2022 08:52:44 -0800 (PST)
+        Fri, 28 Jan 2022 11:53:19 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C27C061714;
+        Fri, 28 Jan 2022 08:53:19 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id d10so17895482eje.10;
+        Fri, 28 Jan 2022 08:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=BTwHUa1RWCsQXFr28TUnMkGh0jWJXQC2xD9hGrZO8SM=;
-        b=qHcbaqTXTTWI+hpQpFpkoHjFxR9YTcdZu8PAdYe63XWywHBRFMMh8ZJeJcUpPU6a9l
-         ukrgFjyBBqtbVe/c7wb3kL7laYKWOuHBIAqtWOhJWHx8QRKkYyrlxUVBCf4e1TeV+FVK
-         xSdNlVad8yxkZzjIv9wQjqSPy30AVykprdUihJ/uXx/AiEf/B5dpS5n7U2xp/Z3GQT/Q
-         T7y3wLRN8VKN5Rnti3AwbssqfNvFOewdsLecPNt7m6E3VhrwWrQgon6iJrL8yVeDDyF2
-         6A4juq0Uq7vhAZHnSUP2Hg6781iaQCpvM7c8Y4SZyevc3H8wvorBuQI7I6lXVeySby5i
-         2GXg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BLJFT4AhBocD6kHHT+suS0eJkn3pPtgeNyCXLqLIpak=;
+        b=eXWnQezlzjgM85qsZszg2oBXIDeFvSRt24xoZNoEeaT02DL98kW6vYQmfrS77uf+ck
+         73j/FMVrXvBV0t9/NOXyQild2tI4WGX8LDLVemr0lyO49SRXaerhke2s3D69BJNjvCE6
+         EkeqgY43aO97+R6xHwHtbrc9e11d3/+UMkt6snjEgmt0taXrCSuA2GuPd4pHy1hNB7I+
+         JTGxPnrpmZS0GWmVAx+zeXJM22AXimC3Ot09+82+1KRP1Boz6rvwfZKcSeUJ3JefUBHG
+         ODRGdKMPEWfT57hTNdkNbbhNDpIZ4q6j3j//lxvpy07jrisIO7uQj0TNdx6y12/EJM16
+         S38A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=BTwHUa1RWCsQXFr28TUnMkGh0jWJXQC2xD9hGrZO8SM=;
-        b=GkJkMb4NUQDgu8Esj0wK1oA3KlhTVmIGiH4WmH+SsZppAVJzKXjX2wDtA+s78BiyJA
-         e+xO99X+I1BR3Aitsq3givWppt9wIj7CDKH5nzxtW5ZZ4Z8N8Nbf9E0PKfBLrJBIa9im
-         T6V8RfwfBp1QmQqNUVDhC6ByajVkVpUJYUQUqiTom7ylASdfKZO3C81fP2ctbUxV2luW
-         qJ1uY9LD2G5h4Gr1/wfghFRPsK/itED0UubmUPKYh3Oiy4tfkZ2alYZmfBiOfC0SMkXO
-         fvsa5TmxM1s+6Y/TD79ExKGlcSYHxuYfz2KYpZV7bFBuRyDQi+NSHs7bfUOxTlURQwkR
-         sktQ==
-X-Gm-Message-State: AOAM530m/bo7dd+H/wytsVFWYaVsfxPLkNKcDQl32UP+0frEeRZUfRk4
-        9gqhTd7a2yOvqeNxR+QXijtl+8iT3ksce9SaW7U=
-X-Google-Smtp-Source: ABdhPJwtjxg2rwlV8T8wjqiA81JrSYaZVYeKbshSSl/7neoZEMYuj1M5w4AKdET9sA/iyQQ+U4JPKg==
-X-Received: by 2002:a17:90b:4d82:: with SMTP id oj2mr20734075pjb.170.1643388764018;
-        Fri, 28 Jan 2022 08:52:44 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id w8sm4975178pfu.128.2022.01.28.08.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:52:43 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Stephen Warren <swarren@nvidia.com>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] spi: tegra114: Add missing IRQ check in tegra_spi_probe
-Date:   Fri, 28 Jan 2022 16:52:38 +0000
-Message-Id: <20220128165238.25615-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BLJFT4AhBocD6kHHT+suS0eJkn3pPtgeNyCXLqLIpak=;
+        b=X8x8o6T+8UhkbXC5dW4xqqpLRkzPr0pYvoi2/CmWnuPUnMInFvmSm1wU/z2gkcr1SG
+         4BE7+DIxeJs1U2CDuAHKqZl/Ax5cAae4lDCJIY07I4zMPptlhYz/SGa8vEre5ZvkcIAX
+         xNhOCpRKyYHK3GWjp0EwT5GVseJ+5Vb3G/I91sD2hPWglNEmlRQknMp0WpX7xSEfI9NV
+         n20Ov1y+vzNciDevtnk34lEoUQzNor4u8Sx3IyguNXdmSGjxuKiEcTSW5EpHHlFcnHyV
+         OkhxnUns26X51gariCBBDlK98rMLC0RAM3iqachxXjpuFWuYXcFglIRYBzWqApz6NLrD
+         4Ueg==
+X-Gm-Message-State: AOAM5311qG/pzKWZURnCGfyzaxqwWQlHI86QCC8/rElsxcf7mNImnFH8
+        rnnZ7LVVyeP0Osr+UjFTxMOp5EOJETiH5Lt/8p8=
+X-Google-Smtp-Source: ABdhPJyQPlCRIBkgo1TAzlQctDBPEi8rIwNs5vVeYsSwaXGWzQ4dqp3N/HFI29N2DS1PrkdvwWQNnykEMmK1wRcsKK4=
+X-Received: by 2002:a17:907:3d94:: with SMTP id he20mr7753163ejc.637.1643388797473;
+ Fri, 28 Jan 2022 08:53:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20220120202805.3369-1-shy828301@gmail.com> <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+ <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
+ <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com> <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
+ <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com> <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
+ <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com> <CAHbLzkqXy-W9sD5HFOK_rm_TR8uSP29b+RjKjA5zOZ+0dkqMbQ@mail.gmail.com>
+ <2a1c5bd2-cb8c-b93b-68af-de620438d19a@redhat.com> <CAHbLzkrQiQyh=36fOtqcODU3RO92jBVxU0o7wU8PyHJ_83LjiQ@mail.gmail.com>
+ <8c0430e5-fecb-3eda-3d40-e94caa8cbd78@redhat.com>
+In-Reply-To: <8c0430e5-fecb-3eda-3d40-e94caa8cbd78@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 28 Jan 2022 08:53:05 -0800
+Message-ID: <CAHbLzkpyShTYkSfUMsBPohm0eGvBhvmDmRNKUUWJk3wqh+nrkQ@mail.gmail.com>
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jann Horn <jannh@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This func misses checking for platform_get_irq()'s call and may passes the
-negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
-Stop calling request_threaded_irq() with invalid IRQ #s.
+On Fri, Jan 28, 2022 at 12:02 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 27.01.22 22:16, Yang Shi wrote:
+> > On Wed, Jan 26, 2022 at 10:54 AM David Hildenbrand <david@redhat.com> wrote:
+> >>
+> >>>>> Just page lock or elevated page refcount could serialize against THP
+> >>>>> split AFAIK.
+> >>>>>
+> >>>>>>
+> >>>>>> But yeah, using the mapcount of a page that is not even mapped
+> >>>>>> (migration entry) is clearly wrong.
+> >>>>>>
+> >>>>>> To summarize: reading the mapcount on an unlocked page will easily
+> >>>>>> return a wrong result and the result should not be relied upon. reading
+> >>>>>> the mapcount of a migration entry is dangerous and certainly wrong.
+> >>>>>
+> >>>>> Depends on your usecase. Some just want to get a snapshot, just like
+> >>>>> smaps, they don't care.
+> >>>>
+> >>>> Right, but as discussed, even the snapshot might be slightly wrong. That
+> >>>> might be just fine for smaps (and I would have enjoyed a comment in the
+> >>>> code stating that :) ).
+> >>>
+> >>> I think that is documented already, see Documentation/filesystems/proc.rst:
+> >>>
+> >>> Note: reading /proc/PID/maps or /proc/PID/smaps is inherently racy (consistent
+> >>> output can be achieved only in the single read call).
+> >>
+> >> Right, but I think there is a difference between
+> >>
+> >> * Atomic values that change immediately afterwards ("this value used to
+> >>   be true at one point in time")
+> >> * Values that are unstable because we cannot read them atomically ("this
+> >>   value never used to be true")
+> >>
+> >> I'd assume with the documented race we actually talk about the first
+> >> point, but I might be just wrong.
+> >>
+> >>>
+> >>> Of course, if the extra note is preferred in the code, I could try to
+> >>> add some in a separate patch.
+> >>
+> >> When staring at the (original) code I would have hoped to find something
+> >> like:
+> >>
+> >> /*
+> >>  * We use page_mapcount() to get a snapshot of the mapcount. Without
+> >>  * holding the page lock this snapshot can be slightly wrong as we
+> >>  * cannot always read the mapcount atomically. As long we hold the PT
+> >>  * lock, the page cannot get unmapped and it's at safe to call
+> >>  * page_mapcount().
+> >>  */
+> >>
+> >> With the addition of
+> >>
+> >> "... For unmapped pages (e.g., migration entries) we cannot guarantee
+> >> that, so treat the mapcount as being 1."
+> >
+> > It seems a little bit confusing to me, it is not safe to call with PTL
+> > held either, right? I'd like to rephrase the note to:
+>
+> The implication that could have been spelled out is that only a mapped
+> page can get unmapped. (I know, there are some weird migration entries
+> nowadays ...)
 
-Fixes: f333a331adfa ("spi/tegra114: add spi driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/spi/spi-tegra114.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Yes, I see your point. Just felt "only a mapped page can get unmapped"
+sounds not that straightforward (just my personal feeling). How's
+about "It is not safe to call page_mapcount() even with PTL held if
+the page is not mapped, especially for migration entries".
 
-diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
-index e9de1d958bbd..8f345247a8c3 100644
---- a/drivers/spi/spi-tegra114.c
-+++ b/drivers/spi/spi-tegra114.c
-@@ -1352,6 +1352,10 @@ static int tegra_spi_probe(struct platform_device *pdev)
- 	tspi->phys = r->start;
- 
- 	spi_irq = platform_get_irq(pdev, 0);
-+	if (spi_irq < 0) {
-+		ret = spi_irq;
-+		goto exit_free_master;
-+	}
- 	tspi->irq = spi_irq;
- 
- 	tspi->clk = devm_clk_get(&pdev->dev, "spi");
--- 
-2.17.1
-
+>
+> /*
+>  * We use page_mapcount() to get a snapshot of the mapcount. Without
+>  * holding the page lock this snapshot can be slightly wrong as we
+>  * cannot always read the mapcount atomically. As long we hold the PT
+>  * lock, a mapped page cannot get unmapped and it's at safe to call
+>  * page_mapcount(). Especially for migration entries, it's not safe to
+>  * call page_mapcount(), so we treat the mapcount as being 1.
+>  */
+>
+>
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

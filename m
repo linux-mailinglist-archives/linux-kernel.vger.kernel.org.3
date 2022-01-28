@@ -2,186 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DE649F5DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6253349F5DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbiA1JDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:03:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27706 "EHLO
+        id S235710AbiA1JD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:03:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21830 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236195AbiA1JDa (ORCPT
+        by vger.kernel.org with ESMTP id S230179AbiA1JDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:03:30 -0500
+        Fri, 28 Jan 2022 04:03:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643360609;
+        s=mimecast20190719; t=1643360604;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XCYM+IqJr0NFevLxvsCw0V8lGLw4f7ESZlzKqk6nbbk=;
-        b=IX+Q3TCJe5atFXqTK1mi1bDl81ywMTk+w0CzcVfuJtFIFAkS8sCYXapxgImIgP2QQF0D3W
-        cOgBejaud4sstm1cD44kP+2J47UJJYfjgwRIDKkjgLDYK6+esGf5udDm3TkqlzZDzF4msU
-        zhdU07aqCp+tyzNR4iy5l1X1AJGxv4M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=k6fRFZaCxJ9/sKr7eukzgsxP2eZihqtSLhrBXhP7zxA=;
+        b=GfDddd73q9tt9uPHozJOcVxY51iVwyDXqkMZbqw2DArnLJJsGLv9iQlVS7peL+adRJ0JzJ
+        LhlTCqHaUZP8mwaIcKJNhCefRer3fGEbBDm9586Wm/CZbTah/GV79ousSYMExEeuV+weXV
+        zxKaXqf776jnH/WWz9/PHrzY6kuhQIE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-121-ECnkCWsuNT23-QgxaB_e_g-1; Fri, 28 Jan 2022 04:03:24 -0500
-X-MC-Unique: ECnkCWsuNT23-QgxaB_e_g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A194C83DD22;
-        Fri, 28 Jan 2022 09:03:21 +0000 (UTC)
-Received: from localhost (ovpn-12-152.pek2.redhat.com [10.72.12.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2814C4DC3A;
-        Fri, 28 Jan 2022 09:03:13 +0000 (UTC)
-Date:   Fri, 28 Jan 2022 17:03:11 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "anton@enomsg.org" <anton@enomsg.org>,
-        "ccross@android.com" <ccross@android.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Message-ID: <20220128090311.GA27201@MiWiFi-R3L-srv>
-References: <20220114183046.428796-1-gpiccoli@igalia.com>
- <20220119071318.GA4977@MiWiFi-R3L-srv>
- <YegytkfED+QI56Y8@alley>
- <20220120085115.GB18398@MiWiFi-R3L-srv>
- <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
- <20220121023119.GB4579@MiWiFi-R3L-srv>
- <MWHPR21MB1593A32A3433F5F262796FCFD75B9@MWHPR21MB1593.namprd21.prod.outlook.com>
- <20220122043351.GA2596@MiWiFi-R3L-srv>
- <MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com>
+ us-mta-237-7hb1BxDBOG6N-c7CHq0Vhw-1; Fri, 28 Jan 2022 04:03:23 -0500
+X-MC-Unique: 7hb1BxDBOG6N-c7CHq0Vhw-1
+Received: by mail-ed1-f72.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so2732376edb.23
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:03:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=k6fRFZaCxJ9/sKr7eukzgsxP2eZihqtSLhrBXhP7zxA=;
+        b=gdTnXDtnEqBbXZVO/+zwTahiwn/XRwTVVC0sDa/sELirZp8/iBYXOh+zQHCDnRa99P
+         ySYrjovato7DIxb+6IsW3ZjPr6o+NSjXLaZ8l+VOZMtavfBXstIciCwuMhqF8p8mp/P4
+         kdxV013p6BgYqgoo2Q2/35md6z781449s3I13YXdPDkDyqNafX5MrDLa3PDmjxPKpXNe
+         tIGZ2CK7HSZg4HdOoueDK0jzYMMEcPaEm/MPAKfy46BIqqFdcreIn6Z/f2dASYPc/XdL
+         ukf95P3QHL5tdNYlt4YaMNSMIuqfoIGHdw+aO4Vbc7sG8AtoAcQpFhQVKsXglvppNYGo
+         wmcw==
+X-Gm-Message-State: AOAM5310VWO07m7ogv3J36X5YlKbvByIUwcocad1UU8kEw3lW+F3So/d
+        lXBiEyU1wxJ3oXFN3KOud8mxPEZrEx6fScuBV+taZpv9/XJjrm9LYkVg7Xavd37e4qyuRL0h+94
+        m5nIxnbOoBaV0o2oTTlcl9joO
+X-Received: by 2002:aa7:d313:: with SMTP id p19mr7550079edq.380.1643360601822;
+        Fri, 28 Jan 2022 01:03:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzwLTfB+FQpW/Kh46RzIU62HlxvCR6hkBiYhxXWrkOPDyzrf6sUvdJ0chSBKeGemvbFZzeuFw==
+X-Received: by 2002:aa7:d313:: with SMTP id p19mr7550062edq.380.1643360601598;
+        Fri, 28 Jan 2022 01:03:21 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:5c00:522f:9bcd:24a0:cd70? (p200300cbc70e5c00522f9bcd24a0cd70.dip0.t-ipconnect.de. [2003:cb:c70e:5c00:522f:9bcd:24a0:cd70])
+        by smtp.gmail.com with ESMTPSA id u12sm12634499edq.8.2022.01.28.01.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 01:03:21 -0800 (PST)
+Message-ID: <847ceb80-d379-b704-8b47-0d662468370b@redhat.com>
+Date:   Fri, 28 Jan 2022 10:03:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 3/4] mm: Change zap_details.zap_mapping into even_cows
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+References: <20220128045412.18695-1-peterx@redhat.com>
+ <20220128045412.18695-4-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220128045412.18695-4-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/24/22 at 04:57pm, Michael Kelley (LINUX) wrote:
-> From: Baoquan He <bhe@redhat.com> Sent: Friday, January 21, 2022 8:34 PM
-> > 
-> > On 01/21/22 at 03:00pm, Michael Kelley (LINUX) wrote:
-> > > From: Baoquan He <bhe@redhat.com> Sent: Thursday, January 20, 2022 6:31 PM
-> > > >
-> > > > On 01/20/22 at 06:36pm, Guilherme G. Piccoli wrote:
-> > > > > Hi Baoquan, some comments inline below:
-> > > > >
-> > > > > On 20/01/2022 05:51, Baoquan He wrote:
+On 28.01.22 05:54, Peter Xu wrote:
+> Currently we have a zap_mapping pointer maintained in zap_details, when it is
+> specified we only want to zap the pages that has the same mapping with what the
+> caller has specified.
 > 
-> [snip]
+> But what we want to do is actually simpler: we want to skip zapping
+> private (COW-ed) pages in some cases.  We can refer to unmap_mapping_pages()
+> callers where we could have passed in different even_cows values.  The other
+> user is unmap_mapping_folio() where we always want to skip private pages.
 > 
-> > > > > Do you think it should be necessary?
-> > > > > How about if we allow users to just "panic_print" with or without the
-> > > > > "crash_kexec_post_notifiers", then we pursue Petr suggestion of
-> > > > > refactoring the panic notifiers? So, after this future refactor, we
-> > > > > might have a much clear code.
-> > > >
-> > > > I haven't read Petr's reply in another panic notifier filter thread. For
-> > > > panic notifier, it's only enforced to use on HyperV platform, excepto of
-> > > > that, users need to explicitly add "crash_kexec_post_notifiers=1" to enable
-> > > > it. And we got bug report on the HyperV issue. In our internal discussion,
-> > > > we strongly suggest HyperV dev to change the default enablement, instead
-> > > > leave it to user to decide.
-> > > >
-> > >
-> > > Regarding Hyper-V:   Invoking the Hyper-V notifier prior to running the
-> > > kdump kernel is necessary for correctness.  During initial boot of the
-> > > main kernel, the Hyper-V and VMbus code in Linux sets up several guest
-> > > physical memory pages that are shared with Hyper-V, and that Hyper-V
-> > > may write to.   A VMbus connection is also established. Before kexec'ing
-> > > into the kdump kernel, the sharing of these pages must be rescinded
-> > > and the VMbus connection must be terminated.   If this isn't done, the
-> > > kdump kernel will see strange memory overwrites if these shared guest
-> > > physical memory pages get used for something else.
-> > >
-> > > I hope we've found and fixed all the problems where the Hyper-V
-> > > notifier could get hung.  Unfortunately, the Hyper-V interfaces were
-> > > designed long ago without the Linux kexec scenario in mind, and they
-> > > don't provide a simple way to reset everything except by doing a
-> > > reboot that goes back through the virtual BIOS/UEFI.  So the Hyper-V
-> > > notifier code is more complicated than would be desirable, and in
-> > > particular, terminating the VMbus connection is tricky.
-> > >
-> > > This has been an evolving area of understanding.  It's only been the last
-> > > couple of years that we've fully understood the implications of these
-> > > shared memory pages on the kexec/kdump scenario and what it takes
-> > > to reset everything so the kexec'ed kernel will work.
-> > 
-> > Glad to know these background details, thx, Michael. While from the
-> > commit which introduced it and the code comment above code, I thought
-> > Hyper-V wants to collect data before crash dump. If this is the true,
-> > it might be helpful to add these in commit log or add as code comment,
-> > and also help to defend you when people question it.
-> > 
-> > int __init hv_common_init(void)
-> > {
-> >         int i;
-> > 
-> >         /*
-> >          * Hyper-V expects to get crash register data or kmsg when
-> >          * crash enlightment is available and system crashes. Set
-> >          * crash_kexec_post_notifiers to be true to make sure that
-> >          * calling crash enlightment interface before running kdump
-> >          * kernel.
-> >          */
-> >         if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE)
-> >                 crash_kexec_post_notifiers = true;
-> > 
-> > 	......
-> > }
+> According to Hugh, we used a mapping pointer for historical reason, as
+> explained here:
 > 
-> In the Azure cloud, collecting data before crash dumps is a motivation
-> as well for setting crash_kexec_post_notifiers to true.   That way as
-> cloud operator we can see broad failure trends, and in specific cases
-> customers often expect the cloud operator to be able to provide info
-> about a problem even if they have taken a kdump.  Where did you
-> envision adding a comment in the code to help clarify these intentions?
+>   https://lore.kernel.org/lkml/391aa58d-ce84-9d4-d68d-d98a9c533255@google.com/
 > 
-> I looked at the code again, and should revise my previous comments
-> somewhat.   The Hyper-V resets that I described indeed must be done
-> prior to kexec'ing the kdump kernel.   Most such resets are actually
-> done via __crash_kexec() -> machine_crash_shutdown(), not via the
-> panic notifier. However, the Hyper-V panic notifier must terminate the
-> VMbus connection, because that must be done even if kdump is not
-> being invoked.  See commit 74347a99e73.
-> 
-> Most of the hangs seen in getting into the kdump kernel on Hyper-V/Azure 
-> were probably due to the machine_crash_shutdown() path, and not due
-> to running the panic notifiers prior to kexec'ing the kdump kernel.  The
-> exception is terminating the VMbus connection, which had problems that
-> are hopefully now fixed because of adding a timeout.
-Thanks for detailed information.
+> Quotting partly from Hugh:
 
-So I can understand the status as:
-===
-Hyper-V needed panic_notifier to execute before __crash_kexec() in
-the past, because VMbus connection need be terminated, that's done in
-commit 74347a99e73 as a workaround when panic happened, whether kdump is
-enabled or not. But now, the VMbus connection termination is not needed
-anymore since it's fixed by adding a timeout on Hyper-V.
+s/Quotting/Quoting/
 
-Then, in the current kernel, panic_notifier is taken to execute on Hyper-V
-by default just because of one reason, Hyper-V wants to collect data
-before crash dump. The data collecting is motivate by trying to see
-broad failure trends as cloud operator on Azure cloud, and in specific
-cases providing info to customer even if they have taken vmcore.
-===
+> 
+>   Which raises the question again of why I did not just use a boolean flag
+>   there originally: aah, I think I've found why.  In those days there was a
+>   horrible "optimization", for better performance on some benchmark I guess,
+>   which when you read from /dev/zero into a private mapping, would map the zero
+>   page there (look up read_zero_pagealigned() and zeromap_page_range() if you
+>   dare).  So there was another category of page to be skipped along with the
+>   anon COWs, and I didn't want multiple tests in the zap loop, so checking
+>   check_mapping against page->mapping did both.  I think nowadays you could do
+>   it by checking for PageAnon page (or genuine swap entry) instead.
+> 
+> This patch replaced the zap_details.zap_mapping pointer into the even_cows
+> boolean, then we check it against PageAnon.
+> 
+> Suggested-by: Hugh Dickins <hughd@google.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  mm/memory.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 14d8428ff4db..ffa8c7dfe9ad 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1309,8 +1309,8 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+>   * Parameter block passed down to zap_pte_range in exceptional cases.
+>   */
+>  struct zap_details {
+> -	struct address_space *zap_mapping;	/* Check page->mapping if set */
+>  	struct folio *single_folio;	/* Locked folio to be unmapped */
+> +	bool even_cows;			/* Zap COWed private pages too? */
+>  };
+>  
+>  /* Whether we should zap all COWed (private) pages too */
+> @@ -1321,13 +1321,10 @@ static inline bool should_zap_cows(struct zap_details *details)
+>  		return true;
+>  
+>  	/* Or, we zap COWed pages only if the caller wants to */
+> -	return !details->zap_mapping;
+> +	return details->even_cows;
+>  }
+>  
+> -/*
+> - * We set details->zap_mapping when we want to unmap shared but keep private
+> - * pages. Return true if we should zap this page, false otherwise.
+> - */
+> +/* Decides whether we should zap this page with the page pointer specified */
+>  static inline bool should_zap_page(struct zap_details *details, struct page *page)
+>  {
+>  	/* If we can make a decision without *page.. */
+> @@ -1338,7 +1335,8 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
+>  	if (!page)
+>  		return true;
+>  
+> -	return details->zap_mapping == page_rmapping(page);
+> +	/* Otherwise we should only zap non-anon pages */
+> +	return !PageAnon(page);
+>  }
+>  
+>  static unsigned long zap_pte_range(struct mmu_gather *tlb,
+> @@ -3403,7 +3401,7 @@ void unmap_mapping_folio(struct folio *folio)
+>  	first_index = folio->index;
+>  	last_index = folio->index + folio_nr_pages(folio) - 1;
+>  
+> -	details.zap_mapping = mapping;
+> +	details.even_cows = false;
 
-Do I get it right?
+Already initialized to 0 via struct zap_details details = { };
+
+We could think about
+
+struct zap_details details = {
+	.single_folio = folio,
+};
+
+>  	details.single_folio = folio;
+>  
+>  	i_mmap_lock_write(mapping);
+> @@ -3432,7 +3430,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
+>  	pgoff_t	first_index = start;
+>  	pgoff_t	last_index = start + nr - 1;
+>  
+> -	details.zap_mapping = even_cows ? NULL : mapping;
+> +	details.even_cows = even_cows;
+>  	if (last_index < first_index)
+>  		last_index = ULONG_MAX;
+>  
+
+Eventually
+
+struct zap_details details = {
+	.even_cows = even_cows,
+};
+
+-- 
+Thanks,
+
+David / dhildenb
 

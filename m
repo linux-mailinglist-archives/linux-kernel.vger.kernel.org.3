@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CDD49F2A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D62D49F2A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346110AbiA1Eyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 23:54:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54532 "EHLO
+        id S1346073AbiA1Eys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 23:54:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25297 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346117AbiA1Eyi (ORCPT
+        by vger.kernel.org with ESMTP id S1346126AbiA1Eyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 23:54:38 -0500
+        Thu, 27 Jan 2022 23:54:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643345677;
+        s=mimecast20190719; t=1643345683;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X4WXHh7pV56dMHSpF/O5K7LVTClsvKIQ79sBisfSRRA=;
-        b=i77TYSfjBOLuBN4uUTRu2JUpJ8vizn3/zzMfbLJDrgDnS6p88pgRKKmQ5Odwxp6oqiOHd7
-        YxUeiDj6e4RRGsf9vVgI4Ty2/4OQEjDR7m/GeJUAoLfOO6y4xXKr/8JZETevPycFx5iiGR
-        hOGzR6LU+3JvCLIRH/+DVw2sc6OzHTo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=H1DVV/S8YSQjtZLKWoD0HN3kRcNDUylmDF/rAE9teCo=;
+        b=MC1wQej2vHJ4/VAf8obkkL8dhWBqIY0Mwkb5qx+9JM0HQgE/IbtQpZoXwtiM3bN8YiIKgr
+        8uUKh5P1gKP5qi+Bjp736ERaWbMJZ2mlrMHxmJF+LJUN8KUWzXgMscDkKgg8MiAOhRp8wp
+        axDPX3T4XjsRV/s0tpMKAguaI+WTg/g=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-339-Qxdr3tMyNoqy4XvnRmZgNw-1; Thu, 27 Jan 2022 23:54:35 -0500
-X-MC-Unique: Qxdr3tMyNoqy4XvnRmZgNw-1
-Received: by mail-wr1-f71.google.com with SMTP id z1-20020adfbbc1000000b001df54394cebso950626wrg.20
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 20:54:35 -0800 (PST)
+ us-mta-22-hD0wDvE9PKW2tP0zzm0ayg-1; Thu, 27 Jan 2022 23:54:41 -0500
+X-MC-Unique: hD0wDvE9PKW2tP0zzm0ayg-1
+Received: by mail-wm1-f72.google.com with SMTP id w5-20020a1cf605000000b0034b8cb1f55eso5330921wmc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 20:54:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X4WXHh7pV56dMHSpF/O5K7LVTClsvKIQ79sBisfSRRA=;
-        b=cCmoZktTlOzYSzkvrzCE1i6ZV431k3bSTmp9E2zZhKVs930VQW6w+asJA+Xd5N28F4
-         AIAdfRIqYiadIbsQhvwAX4wBezIdo/+yA/iX222NNs9ZZ+QhqeD0LLqyw8l30tXCkWdC
-         EBrOk4vQqCddkN6rivBrI19fOmmSCvJ/CsR7r4u8pRb53eYQ+6DmYOAesEEUVNYzpqD8
-         F+1/27XVCA8ti9u2C+ycnUuJ7soXtnpiIusJfzPFmR7ZN4wH+bfMASDdOz3dAcDESY1G
-         R158yiBP6a0sIW1fg9Hgb4tJjldqS7pXnuRpLigkzqPAx+qxMCurwL3vBLeXllncMx5P
-         Lu6w==
-X-Gm-Message-State: AOAM530/Qf45/FprWtauxxDAhC88QR6hl5M4/F0XMdgFAJELCxuLVFjU
-        OLoJTzu+eV7bb1FSTa3PCg47XFFSg7U2Dc74wiErjDtKcvGN8ZaiES3M4mPTDpzBG3+ZC46JHRU
-        TNZhT9ob6kkPAzX6UJcF+ISWS
-X-Received: by 2002:a1c:a90d:: with SMTP id s13mr5787849wme.32.1643345674572;
-        Thu, 27 Jan 2022 20:54:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzUZOPum7MMLETcw25d/iBx+n7SScJ596aZWjbvcjraz7IAo8lenVlYxR/jtIOkJT4M5mmwpg==
-X-Received: by 2002:a1c:a90d:: with SMTP id s13mr5787840wme.32.1643345674342;
-        Thu, 27 Jan 2022 20:54:34 -0800 (PST)
+        bh=H1DVV/S8YSQjtZLKWoD0HN3kRcNDUylmDF/rAE9teCo=;
+        b=41OcEc1O86WdWwef3taKcLQEbI8gu0I12y1UekoKg33ej6Rxxd73K1y0jQbyEslEPo
+         +uggv7AlUjM6MZKheO5HYmFEUCvXO753C2BjAFg9zxiee6p9WKEcS3o/90wEp29isA+n
+         Brh/Y7+wtN5hCkOpDXQe7qbDSC/fmARXTIKM/7N0/MmnBtjnRPGjbc/by/ysZAqSPBJj
+         8VCShnHLZAYe9s0sYJ/Vq0FDlV+RlAbmgc1nQwCy+HF4cQRM5qzsqglgc6qn6koF8uAg
+         erwdpa5Lk14nM6I7538fpMtBJ+sJ8H8AVpJjSg+rXL7E6FqSMprGZfH4bTJDWCOLIWAN
+         TetA==
+X-Gm-Message-State: AOAM533G+ujdTjhfRvI+cyoaBruintpYJb8TINFG6eNwCDfXkPPJjhaV
+        bp4rqiCLpm5hCcx8Xtlg39MGzJ/JGDRCyE7X/tlDuUy5vhvnmOQDpawonbrVi5sskfZQb4t9KCG
+        caG2ZQ1YaHreHFS1tjyx2qyr6
+X-Received: by 2002:a1c:2b06:: with SMTP id r6mr14345442wmr.4.1643345680337;
+        Thu, 27 Jan 2022 20:54:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxSmguUCLAJc3uPMchWo2O4qWDyEBL0Tp/mOd4YhtXSNiPDsTt43pf61km0GV/X6qLuqocw1g==
+X-Received: by 2002:a1c:2b06:: with SMTP id r6mr14345423wmr.4.1643345680044;
+        Thu, 27 Jan 2022 20:54:40 -0800 (PST)
 Received: from localhost.localdomain ([64.64.123.9])
-        by smtp.gmail.com with ESMTPSA id i13sm814014wrf.3.2022.01.27.20.54.29
+        by smtp.gmail.com with ESMTPSA id i13sm814014wrf.3.2022.01.27.20.54.34
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 27 Jan 2022 20:54:34 -0800 (PST)
+        Thu, 27 Jan 2022 20:54:39 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     peterx@redhat.com, Alistair Popple <apopple@nvidia.com>,
@@ -64,9 +64,9 @@ Cc:     peterx@redhat.com, Alistair Popple <apopple@nvidia.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         Yang Shi <shy828301@gmail.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: [PATCH v3 2/4] mm: Rename zap_skip_check_mapping() to should_zap_page()
-Date:   Fri, 28 Jan 2022 12:54:10 +0800
-Message-Id: <20220128045412.18695-3-peterx@redhat.com>
+Subject: [PATCH v3 3/4] mm: Change zap_details.zap_mapping into even_cows
+Date:   Fri, 28 Jan 2022 12:54:11 +0800
+Message-Id: <20220128045412.18695-4-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220128045412.18695-1-peterx@redhat.com>
 References: <20220128045412.18695-1-peterx@redhat.com>
@@ -76,72 +76,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous name is against the natural way people think.  Invert the meaning
-and also the return value.  No functional change intended.
+Currently we have a zap_mapping pointer maintained in zap_details, when it is
+specified we only want to zap the pages that has the same mapping with what the
+caller has specified.
+
+But what we want to do is actually simpler: we want to skip zapping
+private (COW-ed) pages in some cases.  We can refer to unmap_mapping_pages()
+callers where we could have passed in different even_cows values.  The other
+user is unmap_mapping_folio() where we always want to skip private pages.
+
+According to Hugh, we used a mapping pointer for historical reason, as
+explained here:
+
+  https://lore.kernel.org/lkml/391aa58d-ce84-9d4-d68d-d98a9c533255@google.com/
+
+Quotting partly from Hugh:
+
+  Which raises the question again of why I did not just use a boolean flag
+  there originally: aah, I think I've found why.  In those days there was a
+  horrible "optimization", for better performance on some benchmark I guess,
+  which when you read from /dev/zero into a private mapping, would map the zero
+  page there (look up read_zero_pagealigned() and zeromap_page_range() if you
+  dare).  So there was another category of page to be skipped along with the
+  anon COWs, and I didn't want multiple tests in the zap loop, so checking
+  check_mapping against page->mapping did both.  I think nowadays you could do
+  it by checking for PageAnon page (or genuine swap entry) instead.
+
+This patch replaced the zap_details.zap_mapping pointer into the even_cows
+boolean, then we check it against PageAnon.
 
 Suggested-by: Hugh Dickins <hughd@google.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/memory.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ mm/memory.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
 diff --git a/mm/memory.c b/mm/memory.c
-index 4bfeaca7cbc7..14d8428ff4db 100644
+index 14d8428ff4db..ffa8c7dfe9ad 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -1326,20 +1326,19 @@ static inline bool should_zap_cows(struct zap_details *details)
- 
- /*
-  * We set details->zap_mapping when we want to unmap shared but keep private
-- * pages. Return true if skip zapping this page, false otherwise.
-+ * pages. Return true if we should zap this page, false otherwise.
+@@ -1309,8 +1309,8 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+  * Parameter block passed down to zap_pte_range in exceptional cases.
   */
--static inline bool
--zap_skip_check_mapping(struct zap_details *details, struct page *page)
-+static inline bool should_zap_page(struct zap_details *details, struct page *page)
+ struct zap_details {
+-	struct address_space *zap_mapping;	/* Check page->mapping if set */
+ 	struct folio *single_folio;	/* Locked folio to be unmapped */
++	bool even_cows;			/* Zap COWed private pages too? */
+ };
+ 
+ /* Whether we should zap all COWed (private) pages too */
+@@ -1321,13 +1321,10 @@ static inline bool should_zap_cows(struct zap_details *details)
+ 		return true;
+ 
+ 	/* Or, we zap COWed pages only if the caller wants to */
+-	return !details->zap_mapping;
++	return details->even_cows;
+ }
+ 
+-/*
+- * We set details->zap_mapping when we want to unmap shared but keep private
+- * pages. Return true if we should zap this page, false otherwise.
+- */
++/* Decides whether we should zap this page with the page pointer specified */
+ static inline bool should_zap_page(struct zap_details *details, struct page *page)
  {
  	/* If we can make a decision without *page.. */
- 	if (should_zap_cows(details))
--		return false;
-+		return true;
- 
- 	/* E.g. zero page */
+@@ -1338,7 +1335,8 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
  	if (!page)
--		return false;
-+		return true;
+ 		return true;
  
--	return details->zap_mapping != page_rmapping(page);
-+	return details->zap_mapping == page_rmapping(page);
+-	return details->zap_mapping == page_rmapping(page);
++	/* Otherwise we should only zap non-anon pages */
++	return !PageAnon(page);
  }
  
  static unsigned long zap_pte_range(struct mmu_gather *tlb,
-@@ -1374,7 +1373,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			struct page *page;
+@@ -3403,7 +3401,7 @@ void unmap_mapping_folio(struct folio *folio)
+ 	first_index = folio->index;
+ 	last_index = folio->index + folio_nr_pages(folio) - 1;
  
- 			page = vm_normal_page(vma, addr, ptent);
--			if (unlikely(zap_skip_check_mapping(details, page)))
-+			if (unlikely(!should_zap_page(details, page)))
- 				continue;
- 			ptent = ptep_get_and_clear_full(mm, addr, pte,
- 							tlb->fullmm);
-@@ -1408,7 +1407,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 		    is_device_exclusive_entry(entry)) {
- 			struct page *page = pfn_swap_entry_to_page(entry);
+-	details.zap_mapping = mapping;
++	details.even_cows = false;
+ 	details.single_folio = folio;
  
--			if (unlikely(zap_skip_check_mapping(details, page)))
-+			if (unlikely(!should_zap_page(details, page)))
- 				continue;
- 			pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
- 			rss[mm_counter(page)]--;
-@@ -1433,7 +1432,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			struct page *page;
+ 	i_mmap_lock_write(mapping);
+@@ -3432,7 +3430,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
+ 	pgoff_t	first_index = start;
+ 	pgoff_t	last_index = start + nr - 1;
  
- 			page = pfn_swap_entry_to_page(entry);
--			if (zap_skip_check_mapping(details, page))
-+			if (!should_zap_page(details, page))
- 				continue;
- 			rss[mm_counter(page)]--;
- 		} else if (is_hwpoison_entry(entry)) {
+-	details.zap_mapping = even_cows ? NULL : mapping;
++	details.even_cows = even_cows;
+ 	if (last_index < first_index)
+ 		last_index = ULONG_MAX;
+ 
 -- 
 2.32.0
 

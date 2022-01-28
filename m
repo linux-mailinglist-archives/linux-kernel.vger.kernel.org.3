@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C1E4A0477
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 335ED4A047C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344841AbiA1XrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 18:47:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:46890 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344508AbiA1XrE (ORCPT
+        id S1351805AbiA1XrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 18:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347866AbiA1XrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:47:04 -0500
+        Fri, 28 Jan 2022 18:47:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552D9C06174A;
+        Fri, 28 Jan 2022 15:47:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 93CB2CE27E0;
-        Fri, 28 Jan 2022 23:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1611DC340E8;
-        Fri, 28 Jan 2022 23:46:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA17961F31;
+        Fri, 28 Jan 2022 23:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02819C340E7;
+        Fri, 28 Jan 2022 23:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643413620;
-        bh=YbZLwG+eJY1ZimQ3PDJ414ftXS0oYjH5t+IwvoH0++s=;
+        s=k20201202; t=1643413630;
+        bh=iNytjglSwIU8s0+h6erELVVSV91M1C1VRXtxDVxTAac=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=H6N+qa02zvveNZcva5WhrGiGfFlJ66Cb6+yfRLYilkduh+hulF7T0OeTu/hburMzI
-         yri78rLL6daKW9gr8X08EibZESI18/IBpN1Pbc1hUchVwsl9f1LfyCo1WFwktqwb8/
-         WhMvDqfjoXFeMWDKTJAFvPq07d9H9J95VdV4XpgahRGHn8cMJcF4WTXB1tus4t4Uh1
-         5GnvTRmAL9qKEWspIPzel0cYJTWOmOhQW3fmKwYGPfuBHC5T3VxISuz3I97zsJVC+N
-         KJ0PrtCoVJ9qsR9tTbUB13DANVzaUtP5ujdmoAOK3ZTdma0dMi9TkcPU5eWB2rSYik
-         XmBrYqh7uuWpQ==
+        b=s4r58rKCpAZku+KAwDpt6mdrvCK13XEAitBqpT9R3cb3LDZy7wri6BuXyPHq3s81o
+         x2kOReJ4kjwUQ4PuJe6GxOVGwvzs9tSUdwROMoXFAFdz4nPX4LRtt9pPZPcKoZEJUy
+         jI+AamI5iB8S2eY+6YnYWM9yKQ2qrwA20iHpIeYyeRZC6f3CVBbmqPaL6GvqLXpzop
+         q7jQ18fhWalMot6OvOHphHHTdfL7DizgqBvB/0ALIXc/MaZJgSkixrD8S1kZ/1s8L0
+         KGKeJBTiPgNHfo33AXlecs0Keng1mMlUzjWlCoarbMeScwpT3/AEFW2LcN+quFJMVg
+         0j581gynUOX8A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Brian Norris <briannorris@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        David Airlie <airlied@linux.ie>
-Cc:     linux-kernel@vger.kernel.org, Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lin Huang <hl@rock-chips.com>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org
-In-Reply-To: <20220114230209.4091727-1-briannorris@chromium.org>
-References: <20220114230209.4091727-1-briannorris@chromium.org>
-Subject: Re: (subset) [PATCH v2 0/3] (Re)enable DP/HDMI audio for RK3399 Gru
-Message-Id: <164341361780.694709.13259283241590347085.b4-ty@kernel.org>
-Date:   Fri, 28 Jan 2022 23:46:57 +0000
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <1b14e4ce91a33c16b2c655389c728071a9c9aa2e.1641643601.git.christophe.jaillet@wanadoo.fr>
+References: <1b14e4ce91a33c16b2c655389c728071a9c9aa2e.1641643601.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: qcom: geni: Simplify DMA setting
+Message-Id: <164341362873.694916.2694684212503292812.b4-ty@kernel.org>
+Date:   Fri, 28 Jan 2022 23:47:08 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,29 +49,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 15:02:06 -0800, Brian Norris wrote:
-> This series fixes DP/HDMI audio for RK3399 Gru systems.
+On Sat, 8 Jan 2022 13:07:54 +0100, Christophe JAILLET wrote:
+> As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
 > 
-> First, there was a regression with the switch to SPDIF. Patch 1 can be
-> taken separately as a regression fix if desired. But it's not quite so
-> useful (at least on Chrome OS systems) without the second part.
+> Simplify code and remove some dead code accordingly.
 > 
-> Second, jack detection was never upstreamed, because the hdmi-codec
-> dependencies were still being worked out when this platform was first
-> supported.
+> [1]: https://lkml.org/lkml/2021/6/7/398
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[2/3] drm/rockchip: cdn-dp: Support HDMI codec plug-change callback
-      commit: 9da1467b49ad6c02840e8f331c5da69f6a5bdb2e
-[3/3] ASoC: rk3399_gru_sound: Wire up DP jack detection
-      commit: 6a8bc4b68ca0c6ef73518b692c00b7e1e010d056
+[1/1] spi: qcom: geni: Simplify DMA setting
+      commit: bef8c5fdf50b573351571e94525800c41d9830f2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

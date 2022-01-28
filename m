@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D6D49FCB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1A449FCB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345924AbiA1PUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:20:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50770 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245039AbiA1PUM (ORCPT
+        id S1346589AbiA1PV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245039AbiA1PV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:20:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB16260DF0;
-        Fri, 28 Jan 2022 15:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 36417C340EF;
-        Fri, 28 Jan 2022 15:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643383211;
-        bh=ex6whZix80c3R/+yIzxHpxb+HxTwZBN82khwzKcw/as=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DfdOh8tq6w4FuRI+0yZN0xJHiV+YIHDU5X91yKeSHXDmOeCjcscC8s0T3AW6t6LR4
-         EtSsbOcuKQEeWrzf4jCJU0C3Jcc4kFcIsm4seTtewqKyKaqfbW2/9Nw11e8Gy8qvAN
-         YnpcXOtO5yNjCUfIAO2RYgUifpuv8Sj2/2qpN0Se5foe1cNSYWaehO1x/apl6iWxq2
-         ILNm79vDaqEqr4E4x0kxHOdbDjzodY3YgldYj1ZW7NQpOdIhvmjbsbMe4lyACOn3nk
-         pHmblx+BZMybodRVZlQr3gbRJEuQQgRM2ybAkImyTbky5n1NZLTW7cqN7TSTOTsys/
-         md+4vAEHo4UqA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23129E5D087;
-        Fri, 28 Jan 2022 15:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Jan 2022 10:21:56 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8466C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:21:56 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id c189so5787105qkg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:21:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sXDhGu9GO+2x7oeDXdjJk9+Khk66FD4cDaSrxJDPkgQ=;
+        b=Ye+Jk2yJquDBLp8LprPQrJBQdOyqQmIavIAudC7Jo+Z8qLzg2KN/Cl8zNHin9h9k25
+         UvuaJxmZidqK71a6+gdYibjoQGKMCJpojtjIQ4QPePRKwDJaITA31o6Llo/B7zqdYueB
+         L2N4d6Cm2XcWc5vw8ISevauEG+SToOAVB3wWjDwF/qik79Xr/hmb+Nh3+vpypi6f2oCV
+         nI2ikry+opEUL2NQImKYYfBWoKqD0ltg9NSuJBLIvYVzseLkTthDQuUyp2i1sciFZLaR
+         YwdLpvg/V57PiOQVQSUw3rMKUEyinWHZoEl6h0nqMow0sZlFCu22kW8Zl1I8gtSm7iv8
+         MuKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sXDhGu9GO+2x7oeDXdjJk9+Khk66FD4cDaSrxJDPkgQ=;
+        b=6hvj87KxSZcKFbw47Vv09NQ0xaTZqWIHLllbui7ZG+Mk3D7ZW/v/Y9HhjSQiKgChFn
+         KM+Y2IJTvQ57O5knrgU3TBMQCRY8uclOiXQPDV0lDRycS7A8NnsLRnhWuX17plCdKccZ
+         KxXcrwyX3RYct6YVqF9ym4dWTxA5g81lgniqYx+4EmOke6ZBajz4Us0fNLKHlaixMoDh
+         HQnpg47JEsQloBjtAJT3WSNxpID9uSjtesVIlIA6WtWj14eCAqlnyh+hSRIYh8JfGruB
+         OZn2N+H+QZ3M+5cnlwU7AcsLDAEMvLIRprAXYrcf/K+EHF/PZTnc9uwFt8dWgfWcTvnl
+         VnoA==
+X-Gm-Message-State: AOAM533v0ZU4HE9Njx2G90X/Bv82Nm8WcTOA5bQKo4qkWogCWDCSjDQp
+        kvBqZZIz5JZ7iBV40wMmUsno7/Izw4T/Hy7C
+X-Google-Smtp-Source: ABdhPJxv1mdf78ujD+RNvg6CT0H+GTKSKjgvzoPABwxeAxNLIDDUs/3Y1SQ9xD2eSW0m0/elkJS61Q==
+X-Received: by 2002:a05:620a:71b:: with SMTP id 27mr5974535qkc.474.1643383315857;
+        Fri, 28 Jan 2022 07:21:55 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id m16sm3575782qkp.90.2022.01.28.07.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 07:21:55 -0800 (PST)
+Date:   Fri, 28 Jan 2022 23:21:47 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] kallsyms: ignore local block labels generated by compiler
+Message-ID: <20220128152147.mwjkf45z72qwdikq@mail.google.com>
+References: <20220128105746.2459-1-changbin.du@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: stmmac: dwmac-sun8i: make clk really gated
- during rpm suspended
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164338321113.8810.8058423675917516702.git-patchwork-notify@kernel.org>
-Date:   Fri, 28 Jan 2022 15:20:11 +0000
-References: <20220128145213.2454-1-jszhang@kernel.org>
-In-Reply-To: <20220128145213.2454-1-jszhang@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
-        mcoquelin.stm32@gmail.com, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, netdev@vger.kernel.org,
-        linux-sunxi@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128105746.2459-1-changbin.du@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 28 Jan 2022 22:52:13 +0800 you wrote:
-> Currently, the dwmac-sun8i's stmmaceth clk isn't disabled even if the
-> the device has been runtime suspended. The reason is the driver gets
-> the "stmmaceth" clk as tx_clk and enabling it during probe. But
-> there's no other usage of tx_clk except preparing and enabling, so
-> we can remove tx_clk and its usage then rely on the common routine
-> stmmac_probe_config_dt() to prepare and enable the stmmaceth clk
-> during driver initialization, and benefit from the runtime pm feature
-> after probed.
+On Fri, Jan 28, 2022 at 06:57:46PM +0800, Changbin Du wrote:
+> The llvm compiler can generate lots of local block labels and they might
+> overlap with C defined symbols. So let's ignore such local labels.
 > 
-> [...]
+> Before this change, dumpstack shows a local symbol for epc:
+> [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
+> [    0.040452][    T0]  ra : restore_all+0x12/0x6e
+> 
+> After this change, the C defined symbol is shown which is expected:
+> [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
+> [    0.036567][    T0]  ra : restore_all+0x12/0x6e
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  scripts/kallsyms.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 54ad86d13784..5f4be9d72a32 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -108,6 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
+>  	/* Symbol names that begin with the following are ignored.*/
+>  	static const char * const ignored_prefixes[] = {
+>  		"$",			/* local symbols for ARM, MIPS, etc. */
+> +		".LBB",			/* local block labels generated by compiler */
+I aslo found many symbols like '.Ltmpxxx', '.L__unnamed_xx'. So should we just
+ignore all symbols prefixed by '.L'?
 
-Here is the summary with links:
-  - [net-next] net: stmmac: dwmac-sun8i: make clk really gated during rpm suspended
-    https://git.kernel.org/netdev/net-next/c/b76bbb34dc80
+>  		".LASANPC",		/* s390 kasan local symbols */
+>  		"__crc_",		/* modversions */
+>  		"__efistub_",		/* arm64 EFI stub namespace */
+> -- 
+> 2.32.0
+> 
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Cheers,
+Changbin Du

@@ -2,111 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4871B4A043D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F144A0443
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347616AbiA1XaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 18:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S1347866AbiA1XfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 18:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344459AbiA1X37 (ORCPT
+        with ESMTP id S230352AbiA1XfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:29:59 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A9FC06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:29:59 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id t14so11120309ljh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:29:58 -0800 (PST)
+        Fri, 28 Jan 2022 18:35:04 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2974FC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:35:04 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id s18so9666759ioa.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:35:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=i321YKyDsRK0btGUb/fjVY8h2mIEqZCos2XNM/JjnFw=;
-        b=qFMSnkB/pzMTJLJplSHVcYU1saiukEFW8xraxGaLExeC1AAMl0n2XMcm3aoEEMiTwM
-         zji2oSEuFStGWrzkFqZN6yDr0YU+xA/eTp+CxveOXQwqGT9SNlR8e2cc4piZ8M+whbE9
-         4p7ziIwZuLxqCrPE1kb7dj/GuKurAUe1PVIUIlppAoEZwuNz/XDcgbtTzfpHLcXsMNwy
-         N332MH6mSy0h0ZWARDyEUQUd5IfR1E/OmQsj/p+pwg5/KQ2+bprFYelA+1314ThJE1CN
-         zGNsK6KSztz7tg6Yc0sE0T4rHKUiVq5ln3jH5fvedRRT4MKrLj9RvA7MjBxHclujUOL8
-         20FA==
+        bh=JpxTvdtKkLVFIRueCOXz6q3rm9liXhmMzUpLMlmCnLU=;
+        b=g7/+yn+1wuV/EnT2ud8bvqTF+w10NI6OEzAsSl22TTd5ghnv4EncSe/8gGllBy0rVZ
+         Q62XSk5EQ6GfQwP0muWw+uvAAXSc31tPIev3WiOaXTLLtnYW9pnVG+LlI1Bd1Jl6eo9L
+         1LCDO3Z0/zb7TtpfkucaBFtyVTqZG+PxbqpM8/Ww+Pc7kh7yBeJ+/wqOCiJtb5NyL9Hh
+         x03Ifmpv6zWzidSFG/zSX/BFFT3X7uVVF2B0o2xDbLOruEgDl0uOXk439QUGaKnFYSr+
+         xhexMcQqGzNUo2DbX3ttUiEH90YR3qvrsXF7WRt42klLthjuw6ylUIHqVb1eg2t7uNcZ
+         T8iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=i321YKyDsRK0btGUb/fjVY8h2mIEqZCos2XNM/JjnFw=;
-        b=noJpMEqkuZQ+Ci3BtiKYZedkcYS3gR/riYqUh8Hu+82fp7uZqcEcS5PBoEb9csCivV
-         jekhHYci8wEaErr0YNeKoanP2A3zjvcpcTsQi7StN7zh+5XS2tcYOAGCfUR5GyZbS3Dq
-         CObtd+CW4caQGqP+ZVHedAusQS/udxgmtNa36BYSnZIfF5RghH1WCiduabd61sNiNV8s
-         EUGs+dZUJqSxVWpZMkJlNPrCO9c5T+V5i2Fbpb6YD4oU7Yu/JPCvty0R9OnZcHrSm85H
-         mAM0j178pXZJWv3BbCrijEitvk13DZ4llOrSpf0MbGm/ZBzywHs94WLSfk/3jx+GxEMV
-         eoWA==
-X-Gm-Message-State: AOAM533A3b3GsFH8eEP8+J79q90FO9FP1NTmLbyxMWn8Zl19eY5sVBIj
-        gUXLhynCaezCTlnLSDAh3QwbJKNnSAJDaZf9V0nATXS4ud/T4w==
-X-Google-Smtp-Source: ABdhPJyEmbWFCdyMKn2hzT4GP9wF9nEf2Sld8Uyy7Us3WjksoEfiWszRlnIzTxTDiMhM9MtZqBF4MKyjE0pnac0nsxQ=
-X-Received: by 2002:a2e:bd15:: with SMTP id n21mr7203379ljq.128.1643412596849;
- Fri, 28 Jan 2022 15:29:56 -0800 (PST)
+        bh=JpxTvdtKkLVFIRueCOXz6q3rm9liXhmMzUpLMlmCnLU=;
+        b=zGwIdZ9IEjAwXVbPy1je1+CvHJtJveuIMkfLEGaoRHeutXp+mEWbOijmFMHAyS8HqC
+         EUolUyp7hUHAStcHQzL5fL2DDTiSWHHWzwtyBh6Jy8Xi2ekrJe6cKY53b3P7iu1I4U+m
+         YB06AFnnjti1VtF8TZWMjoR8fK8upCtFBywXIK4gV0w2wDIt/pqbi5+kIYoBwDx2/Rml
+         JrAEI+q7v3jTb+nmZgPbeSipP4EkXYtLa4DyGpTIThd2TXHT4YU248DhdszdVQkRDRzV
+         8gLqYSAiUC+EwkQYZr7fhCZCFLgSZ/o/osN25I4ZH1yOvQxIczVuTWVPsRE445cYnkY7
+         4xCg==
+X-Gm-Message-State: AOAM531qXwIszo6Yq8FIs/sfd6vor4VUQay1yAlDqfmix1v21geJ+hml
+        OXyDgGcxPNc7LC4R8MF0vIygsgwComyLMKcjQM9kgQ==
+X-Google-Smtp-Source: ABdhPJwWUB5cbdyBGAqxyMyGHOnbfYZPcT4OjPCpBoMeE03TcdvaUaIgTMJv3osnClnOWBdt7NXijWYqK9dvzOoSVoc=
+X-Received: by 2002:a6b:bf81:: with SMTP id p123mr6645468iof.171.1643412903171;
+ Fri, 28 Jan 2022 15:35:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20220112224342.958358-1-quic_eberman@quicinc.com>
- <20220128220841.3222637-1-quic_eberman@quicinc.com> <20220128224528.f7ejzw55t6kfefmm@google.com>
- <CAKwvOd=Ab+GWNzSC6eaDWTVDF6gJQ9fDDMT3hep-DzhrEA6DpQ@mail.gmail.com> <094ab4eb-b877-2a14-d6c8-1d9e28335d7d@quicinc.com>
-In-Reply-To: <094ab4eb-b877-2a14-d6c8-1d9e28335d7d@quicinc.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 28 Jan 2022 15:29:44 -0800
-Message-ID: <CAKwvOd=J=84vad_cR06NFDauMXbXsC2o=X4RbPj2cqA1280D=A@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Add environment variables for userprogs flags
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Matthias Maennich <maennich@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Fangrui Song <maskray@google.com>
+References: <20220128222605.66828-1-mike.kravetz@oracle.com> <20220128222605.66828-4-mike.kravetz@oracle.com>
+In-Reply-To: <20220128222605.66828-4-mike.kravetz@oracle.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 28 Jan 2022 15:34:27 -0800
+Message-ID: <CAJHvVcgjJNN81bAhsANccqsdYv3Xt5rMxH6i=JtHxijch55WFQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] userfaultfd/selftests: enable huegtlb remap and
+ remove event testing
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Linux MM <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 3:26 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
->
->
->
-> On 1/28/2022 2:49 PM, Nick Desaulniers wrote:
-> >   On Fri, Jan 28, 2022 at 2:45 PM Fangrui Song <maskray@google.com> wrote:
-> >>
-> >> On 2022-01-28, Elliot Berman wrote:
-> >>> Allow additional arguments be passed to userprogs compilation.
-> >>> Reproducible clang builds need to provide a sysroot and gcc path to
-> >>> ensure same toolchain is used across hosts. KCFLAGS is not currently
-> >>> used for any user programs compilation, so add new USERCFLAGS and
-> >>> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
-> >>>
-> >>> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
-> >>> an environment where a user sysroot is not specifically available.
-> >>> Currently, Clang might automatically detect GCC installation on hosts
-> >>> which have it installed to a default location in /. With addition of
-> >>> these environment variables, you can specify flags such as:
-> >>>
-> >>> $ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
-> >>>
-> >>> to force sysroot detection to fail.
-> >>
-> >> -Wl,--sysroot=/dev/null => --sysroot
-> >>
-> >> As I mentioned in
-> >> https://lore.kernel.org/all/20220128031549.w5a4bilxbkppagfu@google.com/
-> >> -Wl,--sysroot=/dev/null does not suppress search paths like -L/lib .
-> >
-> > In that case, Elliot, can you please test whether USERLDFLAGS is
-> > necessary to be specified AT ALL? Maybe we can drop that addition from
-> > this patch if so?
->
-> USERLDFLAGS as --sysroot=/dev/null isn't necessary and not needed for
-> the Android kernel usecase. I've included here since we have HOSTLDFLAGS
-> and LDFLAGS for host programs and kernel respectively.
->
+Besides the help text, looks correct to me. I applied the patches and
+ran the userfaultfd selftests, and everything seems to work properly.
 
-Ok, for symmetry it's ok to keep HOSTLDFLAGS, consider dropping it
-from the "example" in the commit message. The note about -Wl, prefixes
-exists in the docs now which is good enough for me.
--- 
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+
+On Fri, Jan 28, 2022 at 2:26 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> With MADV_DONTNEED support added to hugetlb mappings, mremap testing
+> can also be enabled for hugetlb.
+>
+> Modify the tests to use madvise MADV_DONTNEED and MADV_REMOVE instead of
+> fallocate hole puch for releasing hugetlb pages.
+>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  tools/testing/selftests/vm/userfaultfd.c | 67 ++++++++++++------------
+>  1 file changed, 34 insertions(+), 33 deletions(-)
+>
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index d3fd24f9fae8..f5578ef85560 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -88,7 +88,6 @@ static bool test_uffdio_minor = false;
+>  static bool map_shared;
+>  static int shm_fd;
+>  static int huge_fd;
+> -static char *huge_fd_off0;
+>  static unsigned long long *count_verify;
+>  static int uffd = -1;
+>  static int uffd_flags, finished, *pipefd;
+> @@ -124,9 +123,9 @@ const char *examples =
+>      "./userfaultfd anon 100 99999\n\n"
+>      "# Run share memory test on 1GiB region with 99 bounces:\n"
+>      "./userfaultfd shmem 1000 99\n\n"
+> -    "# Run hugetlb memory test on 256MiB region with 50 bounces (using /dev/hugepages/hugefile):\n"
+> +    "# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
+>      "./userfaultfd hugetlb 256 50 /dev/hugepages/hugefile\n\n"
+
+We should remove the path from the line above here as well, right?
+Since for the hugetlb test type, we now just MAP_ANONYMOUS |
+MAP_HUGETLB, we don't open a file descriptor.
+
+> -    "# Run the same hugetlb test but using shmem:\n"
+> +    "# Run the same hugetlb test but using shared file:\n"
+>      "./userfaultfd hugetlb_shared 256 50 /dev/hugepages/hugefile\n\n"
+>      "# 10MiB-~6GiB 999 bounces anonymous test, "
+>      "continue forever unless an error triggers\n"
+> @@ -223,10 +222,13 @@ static void noop_alias_mapping(__u64 *start, size_t len, unsigned long offset)
+>
+>  static void hugetlb_release_pages(char *rel_area)
+>  {
+> -       if (fallocate(huge_fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> -                     rel_area == huge_fd_off0 ? 0 : nr_pages * page_size,
+> -                     nr_pages * page_size))
+> -               err("fallocate() failed");
+> +       if (!map_shared) {
+> +               if (madvise(rel_area, nr_pages * page_size, MADV_DONTNEED))
+> +                       err("madvise(MADV_DONTNEED) failed");
+> +       } else {
+> +               if (madvise(rel_area, nr_pages * page_size, MADV_REMOVE))
+> +                       err("madvise(MADV_REMOVE) failed");
+> +       }
+>  }
+>
+>  static void hugetlb_allocate_area(void **alloc_area)
+> @@ -234,26 +236,37 @@ static void hugetlb_allocate_area(void **alloc_area)
+>         void *area_alias = NULL;
+>         char **alloc_area_alias;
+>
+> -       *alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+> -                          (map_shared ? MAP_SHARED : MAP_PRIVATE) |
+> -                          MAP_HUGETLB |
+> -                          (*alloc_area == area_src ? 0 : MAP_NORESERVE),
+> -                          huge_fd, *alloc_area == area_src ? 0 :
+> -                          nr_pages * page_size);
+> +       if (!map_shared)
+> +               *alloc_area = mmap(NULL,
+> +                       nr_pages * page_size,
+> +                       PROT_READ | PROT_WRITE,
+> +                       MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB |
+> +                               (*alloc_area == area_src ? 0 : MAP_NORESERVE),
+> +                       -1,
+> +                       0);
+> +       else
+> +               *alloc_area = mmap(NULL,
+> +                       nr_pages * page_size,
+> +                       PROT_READ | PROT_WRITE,
+> +                       MAP_SHARED |
+> +                               (*alloc_area == area_src ? 0 : MAP_NORESERVE),
+> +                       huge_fd,
+> +                       *alloc_area == area_src ? 0 : nr_pages * page_size);
+>         if (*alloc_area == MAP_FAILED)
+>                 err("mmap of hugetlbfs file failed");
+>
+>         if (map_shared) {
+> -               area_alias = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+> -                                 MAP_SHARED | MAP_HUGETLB,
+> -                                 huge_fd, *alloc_area == area_src ? 0 :
+> -                                 nr_pages * page_size);
+> +               area_alias = mmap(NULL,
+> +                       nr_pages * page_size,
+> +                       PROT_READ | PROT_WRITE,
+> +                       MAP_SHARED,
+> +                       huge_fd,
+> +                       *alloc_area == area_src ? 0 : nr_pages * page_size);
+>                 if (area_alias == MAP_FAILED)
+>                         err("mmap of hugetlb file alias failed");
+>         }
+>
+>         if (*alloc_area == area_src) {
+> -               huge_fd_off0 = *alloc_area;
+>                 alloc_area_alias = &area_src_alias;
+>         } else {
+>                 alloc_area_alias = &area_dst_alias;
+> @@ -266,12 +279,7 @@ static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset
+>  {
+>         if (!map_shared)
+>                 return;
+> -       /*
+> -        * We can't zap just the pagetable with hugetlbfs because
+> -        * MADV_DONTEED won't work. So exercise -EEXIST on a alias
+> -        * mapping where the pagetables are not established initially,
+> -        * this way we'll exercise the -EEXEC at the fs level.
+> -        */
+> +
+>         *start = (unsigned long) area_dst_alias + offset;
+>  }
+>
+> @@ -424,7 +432,6 @@ static void uffd_test_ctx_clear(void)
+>                 uffd = -1;
+>         }
+>
+> -       huge_fd_off0 = NULL;
+>         munmap_area((void **)&area_src);
+>         munmap_area((void **)&area_src_alias);
+>         munmap_area((void **)&area_dst);
+> @@ -922,10 +929,7 @@ static int faulting_process(int signal_test)
+>         struct sigaction act;
+>         unsigned long signalled = 0;
+>
+> -       if (test_type != TEST_HUGETLB)
+> -               split_nr_pages = (nr_pages + 1) / 2;
+> -       else
+> -               split_nr_pages = nr_pages;
+> +       split_nr_pages = (nr_pages + 1) / 2;
+>
+>         if (signal_test) {
+>                 sigbuf = &jbuf;
+> @@ -982,9 +986,6 @@ static int faulting_process(int signal_test)
+>         if (signal_test)
+>                 return signalled != split_nr_pages;
+>
+> -       if (test_type == TEST_HUGETLB)
+> -               return 0;
+> -
+>         area_dst = mremap(area_dst, nr_pages * page_size,  nr_pages * page_size,
+>                           MREMAP_MAYMOVE | MREMAP_FIXED, area_src);
+>         if (area_dst == MAP_FAILED)
+> @@ -1667,7 +1668,7 @@ int main(int argc, char **argv)
+>         }
+>         nr_pages = nr_pages_per_cpu * nr_cpus;
+>
+> -       if (test_type == TEST_HUGETLB) {
+> +       if (test_type == TEST_HUGETLB && map_shared) {
+>                 if (argc < 5)
+>                         usage();
+>                 huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
+> --
+> 2.34.1
+>

@@ -2,184 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB72349FC6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E57949FC6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349231AbiA1PGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240215AbiA1PGo (ORCPT
+        id S1344084AbiA1PJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:09:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34934 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232320AbiA1PJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:06:44 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A16C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:06:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=w0bbA2wx4VLIy7p5KNHMCRGCljhsQ9ND3jOuThJZUKU=; b=ZrnYrLOu+882dYBAZoJyPAbF9g
-        lPCb3s9wVPJoPXy9LA4dD/m/DZzKhD7/aI+khha2YTytW8dSj5UYHL+5WCdm5MgfLSXmz6j73E6GZ
-        Z+2AzhaDRJ0PtSoB44Dt961ZhJC5qrr9MQlR/1NjuyHUhdeDqvIOz1hdbW+N8z+LHgxkFy4RXCdjl
-        WALw4h6KIMhEN0kukuiLOGlfpjXg7J3mIjJEjrT63Nt5BW1UFX/7aQSefRLX9EGU3TMvo+kIASLW3
-        dJNpaPSRqjfoheNg1DeSNMoUqfvuirJrd4P/zbmUkD8Z42V9xAsuQiYBkEsDhWXk0mIDPpqgtcgRT
-        5+ktbyeQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDSpb-004aN0-Qo; Fri, 28 Jan 2022 15:06:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 009BC30002E;
-        Fri, 28 Jan 2022 16:06:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A3C112142D5EA; Fri, 28 Jan 2022 16:06:30 +0100 (CET)
-Date:   Fri, 28 Jan 2022 16:06:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for
- memory tiering system
-Message-ID: <YfQGdqQy/VrEU32N@hirez.programming.kicks-ass.net>
-References: <20220128023842.1946583-1-ying.huang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128023842.1946583-1-ying.huang@intel.com>
+        Fri, 28 Jan 2022 10:09:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D85FB82613;
+        Fri, 28 Jan 2022 15:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BF0C340E0;
+        Fri, 28 Jan 2022 15:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643382592;
+        bh=BhSk2oPgIVJBVLRSfsk3+K/dzHQvwqKlSD+wl/eXM9c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FbzaI0HDHGIaA30B64poJ6Ghz1KSJGBZo7K12e1IZX2zLrYYyk+QoEWqtzAFy1JSG
+         unae1i6DhrrQfGY2ZtnKYF62z43nwzfTCYKD1aLVzdorKloBqBqU3m28wDpQ9NOt2w
+         DfjkLubi5kwWB428sGiu8DDGdiQAGG6tOXWwXiwwIGXT4Fv8ny+xskV61MlSj24hgk
+         2s7fUXQyNGRr8a7f0R9P8NVb+hRhMEDoDUjJP0bTk0V7RiziB+6vbDuve5shTjy63C
+         ojnrZ/1WqSBZMvrJ2T4O5DiMD95/IuLXy+EYeBhCO+upPtxARcgHmSbvRQueWHd2/7
+         Q2lePsRAFimKw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nDSso-003qPI-F4; Fri, 28 Jan 2022 15:09:50 +0000
+Date:   Fri, 28 Jan 2022 15:09:49 +0000
+Message-ID: <87o83v6gn6.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "qizhong.cheng" <qizhong.cheng@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRz?= =?UTF-8?B?a2k=?= 
+        <kw@linux.com>, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        chuanjia.liu@mediatek.com,
+        Srikanth Thokala <srikanth.thokala@intel.com>,
+        Pratyush Anand <pratyush.anand@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
+In-Reply-To: <20220128131250.GA200007@bhelgaas>
+References: <87r18s5jbn.wl-maz@kernel.org>
+        <20220128131250.GA200007@bhelgaas>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: helgaas@kernel.org, qizhong.cheng@mediatek.com, ryder.lee@mediatek.com, jianjun.wang@mediatek.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com, srikanth.thokala@intel.com, pratyush.anand@gmail.com, thomas.petazzoni@bootlin.com, pali@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:38:41AM +0800, Huang Ying wrote:
->  kernel/sched/topology.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+On Fri, 28 Jan 2022 13:12:50 +0000,
+Bjorn Helgaas <helgaas@kernel.org> wrote:
 > 
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 9f26e6b651fe..ba975a29d444 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -1738,7 +1738,13 @@ void init_numa_topology_type(void)
->  	}
->  
->  	for_each_online_node(a) {
-> +		if (!node_state(a, N_CPU))
-> +			continue;
-> +
->  		for_each_online_node(b) {
-> +			if (!node_state(b, N_CPU))
-> +				continue;
-> +
->  			/* Find two nodes furthest removed from each other. */
->  			if (node_distance(a, b) < n)
->  				continue;
+> On Fri, Jan 28, 2022 at 08:57:16AM +0000, Marc Zyngier wrote:
+> > On Thu, 27 Jan 2022 21:21:00 +0000,
+> > Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> Thanks a lot for taking a look at these, Marc!  Is there anything we
+> can do to make all these drivers/pci/controller/* drivers more
+> consistent and easier to review?  I found it very difficult to look
+> across all of them and find similar design patterns.
 
-I think you forgot some.. by not skipping CPU-less nodes in
-sched_init_numa() the whole premise of init_numa_topology_type() goes
-out the window as well, by virtue of getting sched_domains_numa_levels
-and sched_max_numa_distance wrong.
+It looks to me that a number of them are just wrapping the same
+underlying IP block, most likely the DW controller (this looks to be
+the case for at least the first two).
 
-Did I get them all?
+They probably all use different register and bit offsets, but it
+should be possible to write a library abstracting all these details
+and have a common handling for most of them. This would certainly go a
+long way in making things more solid.
 
-Do we want something like:
+	M.
 
-#define for_each_possible_cpu_node(n)	for (n = 0; n < nr_node_ids; n++) if (!node_state(n, N_CPU)) continue; else
-#define for_each_online_cpu_node(n)	for_each_online_node(n) if (!node_state(n, N_CPU)) continue; else
-
-To clean that up?
-
----
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1684,8 +1684,12 @@ static void sched_numa_warn(const char *
- 
- 	for (i = 0; i < nr_node_ids; i++) {
- 		printk(KERN_WARNING "  ");
--		for (j = 0; j < nr_node_ids; j++)
--			printk(KERN_CONT "%02d ", node_distance(i,j));
-+		for (j = 0; j < nr_node_ids; j++) {
-+			if (!node_state(i, N_CPU) || !node_state(j, N_CPU))
-+				printk(KERN_CONT "(%02d) ", node_distance(i,j));
-+			else
-+				printk(KERN_CONT " %02d  ", node_distance(i,j));
-+		}
- 		printk(KERN_CONT "\n");
- 	}
- 	printk(KERN_WARNING "\n");
-@@ -1737,7 +1741,13 @@ static void init_numa_topology_type(void
- 	}
- 
- 	for_each_online_node(a) {
-+		if (!node_state(a, N_CPU))
-+			continue;
-+
- 		for_each_online_node(b) {
-+			if (!node_state(b, N_CPU))
-+				continue;
-+
- 			/* Find two nodes furthest removed from each other. */
- 			if (node_distance(a, b) < n)
- 				continue;
-@@ -1756,6 +1766,9 @@ static void init_numa_topology_type(void
- 			return;
- 		}
- 	}
-+
-+	pr_err("Failed to find a NUMA topology type, defaulting to DIRECT\n");
-+	sched_numa_topology_type = NUMA_DIRECT;
- }
- 
- 
-@@ -1778,9 +1791,15 @@ void sched_init_numa(void)
- 
- 	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
- 	for (i = 0; i < nr_node_ids; i++) {
-+		if (!node_state(i, N_CPU))
-+			continue;
-+
- 		for (j = 0; j < nr_node_ids; j++) {
- 			int distance = node_distance(i, j);
- 
-+			if (!node_state(j, N_CPU))
-+				continue;
-+
- 			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
- 				sched_numa_warn("Invalid distance value range");
- 				return;
-@@ -1863,6 +1882,12 @@ void sched_init_numa(void)
- 				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
- 					sched_numa_warn("Node-distance not symmetric");
- 
-+				if (!node_state(j, N_CPU))
-+					continue;
-+
-+				if (!node_state(j, N_CPU))
-+					continue;
-+
- 				if (node_distance(j, k) > sched_domains_numa_distance[i])
- 					continue;
- 
-@@ -1943,6 +1968,9 @@ static void __sched_domains_numa_masks_s
- 			if (!node_online(j) || node == j)
- 				continue;
- 
-+			if (!node_state(j, N_CPU))
-+				continue;
-+
- 			if (node_distance(j, node) > sched_domains_numa_distance[i])
- 				continue;
- 
-@@ -1974,6 +2002,9 @@ void sched_domains_numa_masks_set(unsign
- 			if (!node_online(j))
- 				continue;
- 
-+			if (!node_state(j, N_CPU))
-+				continue;
-+
- 			/* Set ourselves in the remote node's masks */
- 			if (node_distance(j, node) <= sched_domains_numa_distance[i])
- 				cpumask_set_cpu(cpu, sched_domains_numa_masks[i][j]);
+-- 
+Without deviation from the norm, progress is not possible.

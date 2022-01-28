@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E78A49FB22
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2929C49FB2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235208AbiA1N6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:58:33 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:43218 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231741AbiA1N6c (ORCPT
+        id S245187AbiA1ODW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238986AbiA1ODV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:58:32 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20SB53ff008036;
-        Fri, 28 Jan 2022 05:58:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=dpHLngKpzeSUefPC+0h4EN3iJnANrfkMo9Dxfn4BYrI=;
- b=kr85X4gV9SaMMjyF0ZVhjgslFHntjRqIf3ATl1JygFuOc95vZDUdtnlNYpKHPAYnVHPC
- F0QSP6J7gFVAI3M+sw/62X/y9h5el5CtwR4DYKT3gJ72asoHsa8ZnqJ08gdweswj6V0X
- Y6GfA3pfVocAbr4Tj2yyll80NvVfSbQC8zSfQvD3LkiMnSssFEdXpD9a7oySRJKGdazr
- XfxAJNHJQ+0TytXWQx7HBRdMd0uH4hmGgxwrqKd+Jb4xjbDWNMA4OxunsGjdb0Tf7KYv
- 5odonp0Emo2FDYtrqnZNS+ixRpXUtKO1fzsXbjoUzF3U2f9WE1x8PBHBV8xf+bY+df1p 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dusebmugt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 05:58:23 -0800
-Received: from m0045851.ppops.net (m0045851.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 20SDqAnB004714;
-        Fri, 28 Jan 2022 05:58:22 -0800
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dusebmugn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 05:58:22 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
- 2022 05:58:20 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 28 Jan 2022 05:58:20 -0800
-Received: from localhost.localdomain (unknown [10.28.34.29])
-        by maili.marvell.com (Postfix) with ESMTP id 724323F706F;
-        Fri, 28 Jan 2022 05:58:15 -0800 (PST)
-From:   Shijith Thotton <sthotton@marvell.com>
-To:     Arnaud Ebalard <arno@natisbad.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Boris Brezillon <bbrezillon@kernel.org>
-CC:     Shijith Thotton <sthotton@marvell.com>,
-        <linux-crypto@vger.kernel.org>, <jerinj@marvell.com>,
-        <sgoutham@marvell.com>, <anoobj@marvell.com>,
-        "Srujana Challa" <schalla@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Ovidiu Panait" <ovidiu.panait@windriver.com>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Suheil Chandran <schandran@marvell.com>,
-        Lukasz Bartosik <lbartosik@marvell.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] crypto: octeontx2: remove CONFIG_DM_CRYPT check
-Date:   Fri, 28 Jan 2022 19:27:42 +0530
-Message-ID: <2ea465e8bde7f4d03757ae398d38f62a350dd28c.1643378034.git.sthotton@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3ef09bf0c4adf7bc33f01f60cb8ce96e8f77b58c.1642786900.git.sthotton@marvell.com>
-References: <3ef09bf0c4adf7bc33f01f60cb8ce96e8f77b58c.1642786900.git.sthotton@marvell.com>
+        Fri, 28 Jan 2022 09:03:21 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577B7C061714;
+        Fri, 28 Jan 2022 06:03:21 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id s5so16403176ejx.2;
+        Fri, 28 Jan 2022 06:03:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1LJkgBxQZGz+DBCDqTCv/zlH6Pf6EPJaEcwYrjb9pWI=;
+        b=J5JhoCWcxWO7nN7IEpEBYaQzLhmcZpmAIVyRqe6sm45L7acqIKxsXW/mE29spAU3UN
+         yuGsRZnGQQZEM3PFzAfP8ric79ObM7f69lRlimzVuSmYrRafJpAfy8NHi4eh3rKKW15P
+         SjdfbfH0YUJGG405tVNPbMpInHh0izSvR18GsXoqMpc6wnNUMTfOGWsHdsFQO8k8CWRr
+         bGfyBBa1xBS3byorg1zARbW0dQ5zpszNET8vkVl6+/NQ2x1iI2Q48+njzcoYh6Eh+dlE
+         36syofIRL27r6YJ4PdDzie8Uc133DkoDzGomYvdobj3L8LKzdvA8pwKc/+rM5mw1/eE2
+         Fzvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1LJkgBxQZGz+DBCDqTCv/zlH6Pf6EPJaEcwYrjb9pWI=;
+        b=OmQlxaC4YrnPLK2vbiMX2r/BUD4UjLQtGyrGBBpu4IWGitfQKXSgCpr1QE/DeITgSa
+         TV56qzJO3dTmOWgurZc0EaB/OsuYaBILCBNkJ0PdclQ25pdJ/gK6adxgh/vQ3za2xGte
+         Q2KLRsGgKm0sme39mzAKju7ooyfsK6TyCAvbf4IHAHlqrB+oCXTjXQ9+XhU6gxJuoYh9
+         z/fJK5P374lg4ZGxI8ERt/830Ab9Gnxhimoz+kpCeVgm/hSdhQLJaXJlazLjWT/lBwvC
+         kGE4neWgJYKF2dfdJKP/DFmKMWIjJzDmQGgAZ6QI+Md+c76gJbzoMFPuSdsMqUTfOrhv
+         gXFg==
+X-Gm-Message-State: AOAM531u8rf26EhfT+qf4dx0FORhPIPoCbNJb6MFVeBhusGdf70+32uJ
+        epHMDGPyN/+b7X9iC2bvcwrrCnKX9XWkAvYiYac=
+X-Google-Smtp-Source: ABdhPJwDNhPs1YDqEHAdWX84zLhRjEXZ+jIj1Fk6pGf01xg1LP+H0kz88ItE8Gkigt8fi+9typWdCYl8rVFF4VPEwis=
+X-Received: by 2002:a17:907:94d5:: with SMTP id dn21mr7325773ejc.77.1643378599791;
+ Fri, 28 Jan 2022 06:03:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: uu0_W5SP2KJD5K_e5La4MF_ZAQtB5Kx_
-X-Proofpoint-GUID: m9vOcveRtMH810eaaRkxxo3sKUaOzXZS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_04,2022-01-27_01,2021-12-02_01
+References: <20220128055604.2077738-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20220128055604.2077738-1-kai.heng.feng@canonical.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 28 Jan 2022 16:01:42 +0200
+Message-ID: <CAHp75Vcz01FwHUF5NAUhn4mfTgzoHBMEBkqPbfPHU=tNr_9Zdw@mail.gmail.com>
+Subject: Re: [PATCH v2] Input: adxl34x: Add ACPI HID table
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-input <linux-input@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No issues were found while using the driver with dm-crypt enabled. So
-CONFIG_DM_CRYPT check in the driver can be removed.
+On Fri, Jan 28, 2022 at 7:56 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> x86 boards may use ACPI HID "ADS0345" for adxl34x device.
 
-This also fixes the NULL pointer dereference in driver release if
-CONFIG_DM_CRYPT is enabled.
+the adxl34x
 
-...
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-...
-Call trace:
- crypto_unregister_alg+0x68/0xfc
- crypto_unregister_skciphers+0x44/0x60
- otx2_cpt_crypto_exit+0x100/0x1a0
- otx2_cptvf_remove+0xf8/0x200
- pci_device_remove+0x3c/0xd4
- __device_release_driver+0x188/0x234
- device_release_driver+0x2c/0x4c
-...
+> Analog replied:
+> "ADS034X is not a valid PNP ID. ADS0345 would be.
+> I'm not aware that this ID is already taken.
+> Feel free to submit a mainline Linux input mailing list patch."
+>
+> So add an ACPI match table for that accordingly.
 
-Fixes: 6f03f0e8b6c8 ("crypto: octeontx2 - register with linux crypto framework")
-Signed-off-by: Shijith Thotton <sthotton@marvell.com>
----
- .../crypto/marvell/octeontx2/otx2_cptvf_algs.c  | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Thanks!
 
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-index 2748a3327e39..f8f8542ce3e4 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-@@ -1634,16 +1634,13 @@ static inline int cpt_register_algs(void)
- {
- 	int i, err = 0;
- 
--	if (!IS_ENABLED(CONFIG_DM_CRYPT)) {
--		for (i = 0; i < ARRAY_SIZE(otx2_cpt_skciphers); i++)
--			otx2_cpt_skciphers[i].base.cra_flags &=
--							~CRYPTO_ALG_DEAD;
--
--		err = crypto_register_skciphers(otx2_cpt_skciphers,
--						ARRAY_SIZE(otx2_cpt_skciphers));
--		if (err)
--			return err;
--	}
-+	for (i = 0; i < ARRAY_SIZE(otx2_cpt_skciphers); i++)
-+		otx2_cpt_skciphers[i].base.cra_flags &= ~CRYPTO_ALG_DEAD;
-+
-+	err = crypto_register_skciphers(otx2_cpt_skciphers,
-+					ARRAY_SIZE(otx2_cpt_skciphers));
-+	if (err)
-+		return err;
- 
- 	for (i = 0; i < ARRAY_SIZE(otx2_cpt_aeads); i++)
- 		otx2_cpt_aeads[i].base.cra_flags &= ~CRYPTO_ALG_DEAD;
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v2:
+>  - Drop ACPI_PTR()
+>  - Drop redundant empty line and comma
+>  - Add info from vendor
+>
+>  drivers/input/misc/adxl34x-i2c.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/input/misc/adxl34x-i2c.c b/drivers/input/misc/adxl34x-i2c.c
+> index a3b5f88d2bd16..b9af581cde800 100644
+> --- a/drivers/input/misc/adxl34x-i2c.c
+> +++ b/drivers/input/misc/adxl34x-i2c.c
+> @@ -155,11 +155,18 @@ static const struct of_device_id adxl34x_of_id[] = {
+>
+>  MODULE_DEVICE_TABLE(of, adxl34x_of_id);
+>
+> +static const struct acpi_device_id adxl34x_acpi_match[] = {
+> +       { "ADS0345" },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, adxl34x_acpi_match);
+> +
+>  static struct i2c_driver adxl34x_driver = {
+>         .driver = {
+>                 .name = "adxl34x",
+>                 .pm = &adxl34x_i2c_pm,
+>                 .of_match_table = adxl34x_of_id,
+> +               .acpi_match_table = adxl34x_acpi_match,
+>         },
+>         .probe    = adxl34x_i2c_probe,
+>         .remove   = adxl34x_i2c_remove,
+> --
+> 2.33.1
+>
+
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

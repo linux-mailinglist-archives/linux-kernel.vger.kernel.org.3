@@ -2,103 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA15949FCD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E5449FCD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349540AbiA1P3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S1349562AbiA1P3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234845AbiA1P3p (ORCPT
+        with ESMTP id S1349550AbiA1P3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:29:45 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB02C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:29:45 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id ah7so17184167ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:29:45 -0800 (PST)
+        Fri, 28 Jan 2022 10:29:50 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE2DC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:29:50 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id g11so6161499qvu.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:29:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gxZkJu6FJ69bUcRomzpMRNHdLaWf54dm0ETw8AtKvx8=;
-        b=So6o0O3EKbkumlI5+MgQMzwWKJ5FpvRMc9FuQT5kamJ66YIjlvVFqwjQBD70urH8XB
-         LtMEIWUNv1IX4UE0D/pCJMqKpsuB2hAkbCm+9MZ7OvotY9rp9gAZF0d4Xb67aKS4M2X4
-         iOEkaNTwbTXj0v5LBFtCz0CI75kIFtLZW8U1fFqfsFHjJUQucI5ooyDtezYGmKXRyTmW
-         XLqPoDoSmkFrKlTW86wAHvOHQQucs60uY017cniOy/mBPZPtq9ovWzU2oHYq7KguK4Cu
-         7abpQOQrqrddnlSaxIpe1kkE4TKVxndmZ4C30rB5oxBhfYFhEuC3HU+y/RrQjUETo5Un
-         GboQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CSl2ozcmK5vQmYT5NCTW7Ai/PaWfN2v+NSUoqmah+A8=;
+        b=FJH5uIAxTQM8O59a+3eYNLA7MIl2VXZdu1Ls3a0q13RPtU8l8XeD2Ln20sWLsa1KEw
+         ErpwSzzd/dvP5kaq9bR87xrhD5k9T5D3LS24Wzfv0bDCHY8IGjgJ3/jqrpLsShFPwnZf
+         s2SEnCIr7rf4+M9Dyh54dwWY6IZGLVyethy+lAk4SkXIKzsnfwhm9VDFuMobyWKrZ5WJ
+         Zm+bbHHE7qcit3vSQVHzhnQAfXoGfL2vmSQ52TYK49RsXl/r8NfykLpiwZzz4H3aAhQL
+         y0w+QscTCqxZvzLB4jHfjGWXi61I9u8YowD5Euj4jxncsHDFQuSMBHEiDGoy7rZLQIz1
+         ny7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gxZkJu6FJ69bUcRomzpMRNHdLaWf54dm0ETw8AtKvx8=;
-        b=a14d/lmlvwl8UHhhWQb8UaMZkDSp70Fkx554FArWzurYqv1GEZvjLfVTXfnVeg/O2J
-         dJ5xRYzgmYaopgUrTrpwebsYqdA5LbPt9h7NWDBEAhYqi7XC+3fsiRMg2b1Ra+JnEyEs
-         5NNSTT84beYwTw6wAdmU0znLj220Aebp4pkcJ3npv4AsKbLMz1heaXjarZzFrT+S5wHI
-         N1vSlHgy4xf2YmuSBuxhohPDP2+dq48BQP+dxGo2Imxzkg9ExhQ8MX8Cx42wuNJ0Qyjj
-         LHk+415nH9isuLT4aA2MhRqfGN0HOhkPbfGJ/Ob36qpFXws8dbbaU8BW6EHXkh+MJgWw
-         9Z4A==
-X-Gm-Message-State: AOAM533lW5XArRt9BALrHI07eiJPHh1UgGRL7dc0qHsjS2sc05TawIcG
-        zEnsFGSUU4dhxxpmyBUoOyBiILR2tuH8e2+SsNKNErTX+JI=
-X-Google-Smtp-Source: ABdhPJwsAaQcZjDQVHohsHPPSptw72Y4I0oHkVDRgCxlZ6yLH4qLrNIY8lkMZ3AIm4AJMt1LUgPylEwnc4BPZ3uqp2s=
-X-Received: by 2002:a17:906:6a0a:: with SMTP id qw10mr7262623ejc.564.1643383783955;
- Fri, 28 Jan 2022 07:29:43 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CSl2ozcmK5vQmYT5NCTW7Ai/PaWfN2v+NSUoqmah+A8=;
+        b=baH39fnhUhXjiY8r3R4TehvhFLs7udZ2+R1ApiWWuwwaDsT8lON2EDWU9K9um2neXl
+         FHGkAO7UNKWqGLpOsUeTC5y2mlL+hjHTdqq8jwkmjnhCCZA/5dRkDKN3mq43rjuzvq3C
+         jRRochWuudh0u7hHae69sCtNumIHKM6yE7zKq0wzJ3STk5zcm0cI1AvaZrIBRliSefA0
+         +jarVN3+LC+SJkmPkmE/Jz0XNFw08b6wAsrcmm6zI2XDszl8s1SGp1d/Gff/smJaY4cq
+         iQDJpbLBhnYFy+aXbjuWImlQUAo/x7ponRSKInH5UCUU2uYddPK7W58Y/TChClbWj/fV
+         nbXA==
+X-Gm-Message-State: AOAM530ECa/JB213az/Zi/PEPAjKuYYGRIOyb+NMXQcK9lGtCFbN66um
+        64pUzolw0gMnnUFmsvDLZrQ=
+X-Google-Smtp-Source: ABdhPJx2D4vFcc3WaNsxX3fdUzR9zquDZDLejQkoNd5LrGIWifupQR2VaDiHtqSOypg0woYUHrHDwQ==
+X-Received: by 2002:a05:6214:4011:: with SMTP id kd17mr7272985qvb.45.1643383789737;
+        Fri, 28 Jan 2022 07:29:49 -0800 (PST)
+Received: from WRT-WX9.. ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id bs16sm385231qkb.69.2022.01.28.07.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 07:29:49 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH] riscv: fix oops caused by irq on/off tracer
+Date:   Fri, 28 Jan 2022 23:29:39 +0800
+Message-Id: <20220128152939.99544-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <1643120437-14352-1-git-send-email-anshuman.khandual@arm.com>
- <20220127202220.GA2191206@p14s> <YfPKvsw+fOsJvSm7@arm.com>
-In-Reply-To: <YfPKvsw+fOsJvSm7@arm.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 28 Jan 2022 08:29:32 -0700
-Message-ID: <CANLsYkwOdYsFwmp+tBazJetivFdJU=y8NEp=sz8mFH3s__pzkg@mail.gmail.com>
-Subject: Re: [PATCH V3 RESEND 0/7] coresight: trbe: Workaround Cortex-A510 erratas
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        Suzuki Poulose <Suzuki.Poulose@arm.com>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 at 03:51, Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> Hi Mathieu,
->
-> On Thu, Jan 27, 2022 at 01:22:20PM -0700, Mathieu Poirier wrote:
-> > On Tue, Jan 25, 2022 at 07:50:30PM +0530, Anshuman Khandual wrote:
-> > > Anshuman Khandual (7):
-> > >   arm64: Add Cortex-A510 CPU part definition
-> > >   arm64: errata: Add detection for TRBE ignored system register writes
-> > >   arm64: errata: Add detection for TRBE invalid prohibited states
-> > >   arm64: errata: Add detection for TRBE trace data corruption
-> > >   coresight: trbe: Work around the ignored system register writes
-> > >   coresight: trbe: Work around the invalid prohibited states
-> > >   coresight: trbe: Work around the trace data corruption
-> > >
-> > >  Documentation/arm64/silicon-errata.rst       |   6 +
-> > >  arch/arm64/Kconfig                           |  59 ++++++++++
-> > >  arch/arm64/include/asm/cputype.h             |   2 +
-> > >  arch/arm64/kernel/cpu_errata.c               |  27 +++++
-> > >  arch/arm64/tools/cpucaps                     |   3 +
-> > >  drivers/hwtracing/coresight/coresight-trbe.c | 114 ++++++++++++++-----
-> > >  drivers/hwtracing/coresight/coresight-trbe.h |   8 --
-> > >  7 files changed, 183 insertions(+), 36 deletions(-)
-> >
-> > I have applied this set and sent a pull request to Catalin for the arm64
-> > portion.
->
-> Well, I'm happy for the whole series to go in via Greg's tree or however
-> the coresight patches go in (that's why I acked them). The last three
-> patches depend on the first four, so you might as well send them all
-> together. I'd split the series only if there's a conflict with the arm64
-> tree (I haven't checked).
->
+The trace_hardirqs_on/off requires at least two parent call frames.
+If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
+could trigger memory access fault.
 
-Very well - thanks for the follow up.
+[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+[    0.041925][    T0] Oops [#1]
+[    0.042063][    T0] Modules linked in:
+[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+[    0.044601][    T0]  ra : restore_all+0x12/0x6e
+[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
 
-> --
-> Catalin
+To fix above issue, here we add one extra level wrapper so they can be
+safely called by low level entry code.
+
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+---
+ arch/riscv/kernel/Makefile    |  2 ++
+ arch/riscv/kernel/entry.S     | 10 +++++-----
+ arch/riscv/kernel/trace_irq.c | 24 ++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 5 deletions(-)
+ create mode 100644 arch/riscv/kernel/trace_irq.c
+
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 612556faa527..ffc87e76b1dd 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+ obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+ 
++obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
++
+ obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+ obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index ed29e9c8f660..d6a46ed0bf05 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -108,7 +108,7 @@ _save_context:
+ .option pop
+ 
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+@@ -143,7 +143,7 @@ skip_context_tracking:
+ 	li t0, EXC_BREAKPOINT
+ 	beq s4, t0, 1f
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ #endif
+ 	csrs CSR_STATUS, SR_IE
+ 
+@@ -234,7 +234,7 @@ ret_from_exception:
+ 	REG_L s0, PT_STATUS(sp)
+ 	csrc CSR_STATUS, SR_IE
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ #ifdef CONFIG_RISCV_M_MODE
+ 	/* the MPP value is too large to be used as an immediate arg for addi */
+@@ -270,10 +270,10 @@ restore_all:
+ 	REG_L s1, PT_STATUS(sp)
+ 	andi t0, s1, SR_PIE
+ 	beqz t0, 1f
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ 	j 2f
+ 1:
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ 2:
+ #endif
+ 	REG_L a0, PT_STATUS(sp)
+diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
+new file mode 100644
+index 000000000000..090fd82064e3
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++
++#include <linux/irqflags.h>
++#include <linux/kprobes.h>
++
++/**
++ * trace_hardirqs_on/off requires at least two parent call frames. Here we add
++ * one extra level so they can be safely called by low level entry code.
++ */
++
++void __trace_hardirqs_on(void)
++{
++	trace_hardirqs_on();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_on);
++
++void __trace_hardirqs_off(void)
++{
++	trace_hardirqs_off();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_off);
+-- 
+2.32.0
+

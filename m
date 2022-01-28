@@ -2,208 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCF049F11C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FB949F120
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345460AbiA1CiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345452AbiA1Ch7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:37:59 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069D7C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:37:59 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id z37-20020a056a001da500b004c74e3fd644so2668101pfw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:37:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Tx91uzRklLUZsIGK6wpPBgEZN67pGca2y2X/Cf0r4s0=;
-        b=c2Fwu+ijB/lJQVEG2CcXr/o64uO33R9F+A4ozcUrSOMK2qCTO9m7/d9t/fgFkzWOi+
-         yE7BZGkaFba8hFusCWoP5ZYtBeKUQPJrSmgWwAb0f+IB1pBhIbQ+A4aIhsSYp0BAA8+R
-         Qcl64n/iVHvA9oDtmMS9gSGiWo2dYsk7VXbJC9NoIcUbAHXEwYQgAkyNrKl1Spbg+6mr
-         bphN9mnO0wlU3mwd1f32XpIKyG5v4AlJ3beQ+gLmgn5svmvqjnmB4z5NmvjzqoMHtVg1
-         ubB74peFREjNzvvVWT0aBxhlmTHLisxms/znuRcpYlcwXU/9Tgw2nqVBaM3Q1WqDBurO
-         d1SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Tx91uzRklLUZsIGK6wpPBgEZN67pGca2y2X/Cf0r4s0=;
-        b=aAfy/o6Boptlz4UFgdPfCtaFeqs0vsr/SFNA8QozyaZEeS4o8ZMGVM5l90XYHKyxcR
-         ES4bPCtJoPHjFfXv5str448y/9MHnvZMrVoBehk5T9v7WIiTyx9ahmIH4QzpKNN9MUDe
-         Wm6qLfcDBwECdAwizBOQjzxA8c1rV9vo7cwE2+dUve7iSFyBKZrY03uG/ZAN5lZK/m61
-         dDdYI0iM7TsrDNwE7CyudO+grpDrb6lYMmYxGKB/y84cehW3Xl0NnHFdSOweUMTjd5km
-         MFW40GPqUzzqqxcnTLhTrSTdvdpQIsYsVYOklaKabzfnh0eJO3Jqp134ovW3JUu3fQCa
-         GllQ==
-X-Gm-Message-State: AOAM533hI6Egd5itG7uAtndzr3UnRrtHljhgmtr4fDOAIx0sd0chvkXi
-        hLwHjEjOafl/7Dg5yJONF3wxUwNd493O+w==
-X-Google-Smtp-Source: ABdhPJxjteEi7YryfGCT4sjW6oKYz1W4HfbCKEU8ZNQaI72C6U64V/sdJZ3UsCVNmr8G5kuVk03pG8stidL93w==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:aa7:8b13:: with SMTP id
- f19mr6097173pfd.62.1643337478516; Thu, 27 Jan 2022 18:37:58 -0800 (PST)
-Date:   Fri, 28 Jan 2022 02:37:54 +0000
-Message-Id: <20220128023754.2235811-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v2] ACPI: device_sysfs: Add sysfs support for _PLD
-From:   Won Chung <wonchung@google.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Won Chung <wonchung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1345463AbiA1Ci6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:38:58 -0500
+Received: from mga17.intel.com ([192.55.52.151]:37426 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345465AbiA1Ci5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 21:38:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643337537; x=1674873537;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZAjjcmhuOaaXdqxTd5rahvmgFZbpbazWoCOMo86/akU=;
+  b=Wg4ETTbxuPjjIvQ1+kxIm+Ze39qLnPINTUdS20A5iR+JnaidnFNS1wIk
+   d3bzJMk5n69tdQN6kUU9UDeH9D9WZRBcSEoFCTwfUgGqbYk/aESa7TBDX
+   0G0bqYrcrp2kHOy5cpVqGwWPdVTfx2AuSXA5dWjiy/EBsOL9dzjGxrNx5
+   D1OcBr08pmoO4YIzKA6mrxYrgI+0M7Xu5RVDQ6yz/9Q9v8QJqsHkmCri/
+   +MV5peZpRwM4U5uOC/eWiaf6ToxgJd/GqJHGyepuQhWGtxFgtWtuOBYqq
+   xUaIOwms0c6ftPNw9ZuxnL3yvLjITWUMUYqcUhmgbYrWNwaSM+UUzlJYP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227696930"
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="227696930"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:38:57 -0800
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="535948896"
+Received: from yhuang6-desk2.sh.intel.com ([10.239.13.11])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:38:55 -0800
+From:   Huang Ying <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>, Mel Gorman <mgorman@suse.de>
+Cc:     linux-kernel@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for memory tiering system
+Date:   Fri, 28 Jan 2022 10:38:41 +0800
+Message-Id: <20220128023842.1946583-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ACPI table includes _PLD fields for a device, create a new file
-(pld) in sysfs to share _PLD fields.
+With the advent of various new memory types, such as Intel Optane
+DCPMM, some machines will have multiple types of memory, e.g. DRAM and
+PMEM (persistent memory).  The memory subsystem of these machines can
+be called memory tiering system, because the performance of the
+different types of memory are different.
 
-Signed-off-by: Won Chung <wonchung@google.com>
+After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
+for use like normal RAM"), the PMEM could be used as the
+cost-effective volatile memory in separate NUMA nodes.  In a typical
+memory tiering system, there are CPUs, DRAM and PMEM in each physical
+NUMA node.  The CPUs and the DRAM will be put in one logical node,
+while the PMEM will be put in another (faked) logical node.
+
+For example, the ACPI SLIT of one such system is as follows,
+
+[000h 0000   4]                    Signature : "SLIT"    [System Locality Information Table]
+[004h 0004   4]                 Table Length : 0000042C
+[008h 0008   1]                     Revision : 01
+[009h 0009   1]                     Checksum : 59
+[00Ah 0010   6]                       Oem ID : "XXXX"
+[010h 0016   8]                 Oem Table ID : "XXXXXXX"
+[018h 0024   4]                 Oem Revision : 00000001
+[01Ch 0028   4]              Asl Compiler ID : "INTL"
+[020h 0032   4]        Asl Compiler Revision : 20091013
+
+[024h 0036   8]                   Localities : 0000000000000004
+[02Ch 0044   4]                 Locality   0 : 0A 15 11 1C
+[030h 0048   4]                 Locality   1 : 15 0A 1C 11
+[034h 0052   4]                 Locality   2 : 11 1C 0A 1C
+[038h 0056   4]                 Locality   3 : 1C 11 1C 0A
+
+While the `numactl -H` output is as follows,
+
+available: 4 nodes (0-3)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+node 0 size: 64136 MB
+node 0 free: 5981 MB
+node 1 cpus: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95
+node 1 size: 64466 MB
+node 1 free: 10415 MB
+node 2 cpus:
+node 2 size: 253952 MB
+node 2 free: 253920 MB
+node 3 cpus:
+node 3 size: 253952 MB
+node 3 free: 253951 MB
+node distances:
+node   0   1   2   3
+  0:  10  21  17  28
+  1:  21  10  28  17
+  2:  17  28  10  28
+  3:  28  17  28  10
+
+In this system, there are only 2 sockets.  In each memory controller,
+both DRAM and PMEM DIMMs are installed.  Although the physical NUMA
+topology is simple, the logical NUMA topology becomes a little
+complex.  Because both the distance(0, 1) and distance (1, 3) are less
+than the distance (0, 3), it appears that node 1 sits between node 0
+and node 3.  And the whole system appears to be a glueless mesh NUMA
+topology type.  But it's definitely not, there is even no CPU in node 3.
+
+This isn't a practical problem now yet.  Because the PMEM nodes (node
+2 and node 3 in example system) are offlined by default during system
+boot.  So init_numa_topology_type() called during system boot will
+ignore them and set sched_numa_topology_type to be NUMA_DIRECT.  And
+init_numa_topology_type() is only called at runtime when a CPU of a
+never-onlined-before node gets plugged in.  And there's no CPU in the
+PMEM nodes.  But it appears better to fix this to make the code more
+robust.
+
+To test the potential problem.  We have used a debug patch to call
+init_numa_topology_type() when the PMEM node is onlined (in
+__set_migration_target_nodes()).  And it's verified that
+sched_numa_topology_type will be set to NUMA_GLUELESS_MESH with the
+debug patch.
+
+One possible fix is to ignore CPU-less nodes when detecting NUMA
+topology type in init_numa_topology_type().  That works well for the
+example system.  Is it good in general for any system with CPU-less
+nodes?
+
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
 ---
- Documentation/ABI/testing/sysfs-bus-acpi | 53 ++++++++++++++++++++++++
- drivers/acpi/device_sysfs.c              | 42 +++++++++++++++++++
- 2 files changed, 95 insertions(+)
+ kernel/sched/topology.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/ABI/t=
-esting/sysfs-bus-acpi
-index 58abacf59b2a..3a9c6a4f4603 100644
---- a/Documentation/ABI/testing/sysfs-bus-acpi
-+++ b/Documentation/ABI/testing/sysfs-bus-acpi
-@@ -96,3 +96,56 @@ Description:
- 		hardware, if the _HRV control method is present.  It is mostly
- 		useful for non-PCI devices because lspci can list the hardware
- 		version for PCI devices.
-+
-+What:		/sys/bus/acpi/devices/.../pld
-+Date:		Jan, 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		This attribute contains the output of the device object's
-+		_PLD control method, if present. This information provides
-+		details on physical location of a port.
-+
-+		Description on each _PLD field from ACPI specification:
-+
-+		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+		GROUP_TOKEN	Unique numerical value identifying a group.
-+		GROUP_POSITION	Identifies this device connection point=E2=80=99s
-+				position in the group.
-+		USER_VISIBLE	Set if the device connection point can be
-+				seen by the user without disassembly.
-+		DOCK		Set if the device connection point resides
-+				in a docking station or port replicator.
-+		BAY		Set if describing a device in a bay or if
-+				device connection point is a bay.
-+		LID		Set if this device connection point resides
-+				on the lid of laptop system.
-+		PANEL		Describes which panel surface of the system=E2=80=99s
-+				housing the device connection point resides on:
-+				0 - Top
-+				1 - Bottom
-+				2 - Left
-+				3 - Right
-+				4 - Front
-+				5 - Back
-+				6 - Unknown (Vertical Position and Horizontal
-+				Position will be ignored)
-+		HORIZONTAL_	0 - Left
-+		POSITION	1 - Center
-+				2 - Right
-+		VERTICAL_	0 - Upper
-+		POSITION	1 - Center
-+				2 - Lower
-+		SHAPE		Describes the shape of the device connection
-+				point.
-+				0 - Round
-+				1 - Oval
-+				2 - Square
-+				3 - Vertical Rectangle
-+				4 - Horizontal Rectangle
-+				5 - Vertical Trapezoid
-+				6 - Horizontal Trapezoid
-+				7 - Unknown - Shape rendered as a Rectangle
-+				with dotted lines
-+				8 - Chamfered
-+				15:9 - Reserved
-+		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-index d5d6403ba07b..8d4df5fb1c45 100644
---- a/drivers/acpi/device_sysfs.c
-+++ b/drivers/acpi/device_sysfs.c
-@@ -509,6 +509,40 @@ static ssize_t status_show(struct device *dev, struct =
-device_attribute *attr,
- }
- static DEVICE_ATTR_RO(status);
-=20
-+static ssize_t pld_show(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct acpi_device *acpi_dev =3D to_acpi_device(dev);
-+	acpi_status status;
-+	struct acpi_pld_info *pld;
-+
-+	status =3D acpi_get_physical_device_location(acpi_dev->handle, &pld);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+
-+	return sprintf(buf, "GROUP_TOKEN=3D%u\n"
-+		"GROUP_POSITION=3D%u\n"
-+		"USER_VISIBLE=3D%u\n"
-+		"DOCK=3D%u\n"
-+		"BAY=3D%u\n"
-+		"LID=3D%u\n"
-+		"PANEL=3D%u\n"
-+		"HORIZONTAL_POSITION=3D%u\n"
-+		"VERTICAL_POSITION=3D%u\n"
-+		"SHAPE=3D%u\n",
-+		pld->group_token,
-+		pld->group_position,
-+		pld->user_visible,
-+		pld->dock,
-+		pld->bay,
-+		pld->lid,
-+		pld->panel,
-+		pld->horizontal_position,
-+		pld->vertical_position,
-+		pld->shape);
-+}
-+static DEVICE_ATTR_RO(pld);
-+
- /**
-  * acpi_device_setup_files - Create sysfs attributes of an ACPI device.
-  * @dev: ACPI device object.
-@@ -595,6 +629,12 @@ int acpi_device_setup_files(struct acpi_device *dev)
- 						    &dev_attr_real_power_state);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 9f26e6b651fe..ba975a29d444 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1738,7 +1738,13 @@ void init_numa_topology_type(void)
  	}
-=20
-+	if (acpi_has_method(dev->handle, "_PLD")) {
-+		result =3D device_create_file(&dev->dev, &dev_attr_pld);
-+		if (result)
-+			goto end;
-+	}
+ 
+ 	for_each_online_node(a) {
++		if (!node_state(a, N_CPU))
++			continue;
 +
- 	acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
-=20
- end:
-@@ -645,4 +685,6 @@ void acpi_device_remove_files(struct acpi_device *dev)
- 		device_remove_file(&dev->dev, &dev_attr_status);
- 	if (dev->handle)
- 		device_remove_file(&dev->dev, &dev_attr_path);
-+	if (acpi_has_method(dev->handle, "_PLD"))
-+		device_remove_file(&dev->dev, &dev_attr_pld);
- }
---=20
-2.35.0.rc0.227.g00780c9af4-goog
+ 		for_each_online_node(b) {
++			if (!node_state(b, N_CPU))
++				continue;
++
+ 			/* Find two nodes furthest removed from each other. */
+ 			if (node_distance(a, b) < n)
+ 				continue;
+-- 
+2.30.2
 

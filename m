@@ -2,107 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1204A02F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D854A02F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351497AbiA1VhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:37:07 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:34544 "EHLO vps-vb.mhejs.net"
+        id S1351420AbiA1Vg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:36:58 -0500
+Received: from mga01.intel.com ([192.55.52.88]:49477 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347668AbiA1VhF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:37:05 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1nDYvI-0008TI-5c; Fri, 28 Jan 2022 22:36:48 +0100
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Michal Hocko <mhocko@suse.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Fix rmap allocation for very large memslots
-Date:   Fri, 28 Jan 2022 22:36:42 +0100
-Message-Id: <1acaee7fa7ef7ab91e51f4417572b099caf2f400.1643405658.git.maciej.szmigiero@oracle.com>
-X-Mailer: git-send-email 2.34.1
+        id S1351339AbiA1Vg5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 16:36:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643405817; x=1674941817;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=O8+qYYMChKDPm5y7l8O6pu2vDB8trFOrTiRzdfkKn6E=;
+  b=U8ayN15FKvmbFj6t10Jw+XcOc1vdG7vW5bHxnQ0JniD7yMxR10q7rc24
+   VP89Ry/SyJTV5WNkj3QmbJ1qBlP8y1Lk/bw1x1Xxyf9FWVCI5OsIeuTXp
+   zm3+5BIIabuOToOnkwuVXNB2GT8PC00PtwTY5IdfyivA/JxXsHFFp4Gj6
+   l8tgIg8CB+mA/Wmd3AMaFpqrXvGIWetlBDUKeypcCDGLKZPCQaWLlopFA
+   ROeeGgbLTcmiTnpJ4eOf/Ckkc2SBCR12rxhBxH22/bDo4Zk8dB/YBNySr
+   TDTMztddjXh3Ig9OKs8+CwoLYBkZCCTJd5NXQDspiHaEqZqI5yeWXz+7R
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="271663561"
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="271663561"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:36:57 -0800
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="697225168"
+Received: from zhenkuny-mobl2.amr.corp.intel.com (HELO [10.209.84.59]) ([10.209.84.59])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:36:56 -0800
+Message-ID: <8f820849-6940-4271-e678-1ae037cdfb64@intel.com>
+Date:   Fri, 28 Jan 2022 13:36:53 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.2
+Content-Language: en-US
+To:     Brent Spillner <spillner@acm.org>
+Cc:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YfQpy5yGGqY8T0wW@jupiter.dyndns.org>
+ <a7ef2455-ede5-2238-639b-b3a66842a04b@intel.com>
+ <CAGwJgaNa2u8vmxsnaSdpSH+ZO0e2GCYObSwC+j03843gXQ_vwg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] arch:x86:pci:irq.c: Improve log message when IRQ cannot
+ be identified
+In-Reply-To: <CAGwJgaNa2u8vmxsnaSdpSH+ZO0e2GCYObSwC+j03843gXQ_vwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+On 1/28/22 12:48, Brent Spillner wrote:
+> It seems like the multiline string literal is your main pain point--- would
+> 
+> +#ifdef CONFIG_ACPI
+> +                       if (acpi_noirq)
+> +                               msg = "; consider removing acpi=noirq";
+> +                       else
+> +                               msg = "; recommend verifying UEFI/BIOS
+> IRQ options";
+> +#else
+> +                       msg = "; recommend verifying UEFI/BIOS IRQ
+> options or enabling ACPI";
+> +#endif
+> 
+> be OK without going to IS_ENABLED()?  (Personally, I think the #ifdef
+> style is more readable.)
 
-Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") has
-forbidden using kvmalloc() to make allocations larger than INT_MAX (2 GiB).
+I think that's _better_ than what was in the patch.  But, even with it,
+I still think the #ifdef mess borders on unreadable.
 
-Unfortunately, adding a memslot exceeding 1 TiB in size will result in rmap
-code trying to make an allocation exceeding this limit.
-Besides failing this allocation, such operation will also trigger a
-WARN_ON_ONCE() added by the aforementioned commit.
-
-Since we probably still want to use kernel slab for small rmap allocations
-let's only redirect such oversized allocations to vmalloc.
-
-A possible alternative would be to add some kind of a __GFP_LARGE flag to
-skip the INT_MAX check behind kvmalloc(), however this will impact the
-common kernel memory allocation code, not just KVM.
-
-Fixes: a7c3e901a4 ("mm: introduce kv[mz]alloc helpers")
-Cc: stable@vger.kernel.org
-Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
----
- arch/x86/kvm/x86.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8033eca6f3a1..c64bac8614c7 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11806,24 +11806,36 @@ void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
- 
- int memslot_rmap_alloc(struct kvm_memory_slot *slot, unsigned long npages)
- {
--	const int sz = sizeof(*slot->arch.rmap[0]);
-+	const size_t sz = sizeof(*slot->arch.rmap[0]);
- 	int i;
- 
- 	for (i = 0; i < KVM_NR_PAGE_SIZES; ++i) {
- 		int level = i + 1;
--		int lpages = __kvm_mmu_slot_lpages(slot, npages, level);
-+		size_t lpages = __kvm_mmu_slot_lpages(slot, npages, level);
-+		size_t rmap_size;
- 
- 		if (slot->arch.rmap[i])
- 			continue;
- 
--		slot->arch.rmap[i] = kvcalloc(lpages, sz, GFP_KERNEL_ACCOUNT);
--		if (!slot->arch.rmap[i]) {
--			memslot_rmap_free(slot);
--			return -ENOMEM;
--		}
-+		if (unlikely(check_mul_overflow(lpages, sz, &rmap_size)))
-+			goto ret_fail;
-+
-+		/* kvzalloc() only allows sizes up to INT_MAX */
-+		if (unlikely(rmap_size > INT_MAX))
-+			slot->arch.rmap[i] = __vmalloc(rmap_size,
-+						       GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-+		else
-+			slot->arch.rmap[i] = kvzalloc(rmap_size, GFP_KERNEL_ACCOUNT);
-+
-+		if (!slot->arch.rmap[i])
-+			goto ret_fail;
- 	}
- 
- 	return 0;
-+
-+ret_fail:
-+	memslot_rmap_free(slot);
-+	return -ENOMEM;
- }
- 
- static int kvm_alloc_memslot_metadata(struct kvm *kvm,
+But, if Bjorn likes it, then go for it. :)

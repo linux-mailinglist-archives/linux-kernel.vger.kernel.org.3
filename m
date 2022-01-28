@@ -2,155 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6BB49F1E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF7C49F1EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345802AbiA1DgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241873AbiA1Df7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:35:59 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2054FC061714;
-        Thu, 27 Jan 2022 19:35:59 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id k17so14704278ybk.6;
-        Thu, 27 Jan 2022 19:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+/kTnhBKtQ4o1xU7csKjZQb7FX9UZE3p6kbMBAjh3Wk=;
-        b=q8HRTGri4vkoWtkJFLbHs8ttvag2rveoJCuratu/swm4Zcj91Ls95siFkpHsin2rfM
-         m4or96fvnCLRAwoERvupN0taFx8Yww/YcDLdrOEACf0HMjddQA03W1sWjijLW+k5fxqP
-         uzURCDZmFAYOHUIpu5naivflJt4Eq1ZeTLsDSL29XzuEFGxPNkutMUVmP8OE/zEzcabm
-         NbVR8BbuTaJivFn/J990vVKqXBs1wAFh73y2HufyntxvX4EnreUwWaZvVfPU+gXsA2zy
-         KoswOrND7SNcaEWhZzslnywyz2J/GzU2a2+CgoptFx9Lm412DAj5/IyCNS6OtviKZEGY
-         Yafw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+/kTnhBKtQ4o1xU7csKjZQb7FX9UZE3p6kbMBAjh3Wk=;
-        b=XoR+iUOuNS3icskQdzt5O1LJ7U/LLahoEl+en6JlQFH5fkpo6shBKhvzGcyCxKNqVe
-         iUEeBdHpMfvyHeDmcSFQNL7yxAk+VylrDMpj7ZIYD4NZNMfdsE7M1CU1l4yRSTiBcIyy
-         ABDPuCga6vOXJ91UUKv9igIAX6LXCXSKvIV6S2vNnXyvUEnnT99WK+1A7iP/mmXv5v5Q
-         qeWcO8r2mWr9RsZdBiPgmjFnzEnbicZTkFvx0N2tkrKBjrdlc70DViJQjjroj1kIE8kC
-         2tA9eEe9uS0ZjasoPVg2cXc+gs5RiANGAcyLJcm2tIIfSM51mx1YV9pC5V8dd7T2ArjB
-         jbcQ==
-X-Gm-Message-State: AOAM531Mt4Iodrxngre+RJqp2FD0UwRbeyatHJHBhzgwnAocQu8PjONO
-        hmJ3rG2V9/TjJkcnkKcom44DlEY/7t4L9fKN3CpK8y2jYoc=
-X-Google-Smtp-Source: ABdhPJxn1B/pmprpk4xW1dtRGM2DfPjyfNF6kOlXx77LtURWiamxAX/bHf9jB7Pu4Aa4cusykGUESCOeq9jIaIJNAfc=
-X-Received: by 2002:a05:6902:1205:: with SMTP id s5mr11602929ybu.676.1643340958221;
- Thu, 27 Jan 2022 19:35:58 -0800 (PST)
+        id S1345805AbiA1DiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:38:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:44322 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241873AbiA1DiT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 22:38:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0BAB113E;
+        Thu, 27 Jan 2022 19:38:18 -0800 (PST)
+Received: from [10.163.44.75] (unknown [10.163.44.75])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB3733F793;
+        Thu, 27 Jan 2022 19:38:14 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [RFC V1 03/11] arm64/perf: Update struct arm_pmu for BRBE
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+ <1642998653-21377-4-git-send-email-anshuman.khandual@arm.com>
+ <YfF+APV2vew5AloE@robh.at.kernel.org>
+Message-ID: <c3804290-bdb1-d1eb-3526-9b0ce4c8e8b1@arm.com>
+Date:   Fri, 28 Jan 2022 09:08:20 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
- <1641979444-11661-3-git-send-email-hammerh0314@gmail.com> <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
- <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com>
- <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org> <CAOX-t57KZb0hNDuhPsabkmkf_qOOLqyH3yuvkHP6UNwhLodWDg@mail.gmail.com>
- <2cde3ff0-5180-7c1e-82fd-7b58e41d462a@kernel.org> <CAOX-t573QkixRC7xa1KUOYXfL12Q+Ltxph9rX7V8tm2BMoqxgA@mail.gmail.com>
- <YfFQ7v4dXPMV7ypw@kroah.com>
-In-Reply-To: <YfFQ7v4dXPMV7ypw@kroah.com>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Fri, 28 Jan 2022 11:36:10 +0800
-Message-ID: <CAOX-t54bRS0_kgg2DVoF3p8fx9VJh7xbyoTFcnAHnimLv40WbQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YfF+APV2vew5AloE@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Greg KH:
 
-I review all driver again.
-I think only startup and shutdown not good.
-I will modify like below.
-If you are ok, I will submit next patch.
 
-static int sunplus_startup(struct uart_port *port)
-{
-        unsigned long flags;
-        unsigned int isc;
-        int ret;
+On 1/26/22 10:29 PM, Rob Herring wrote:
+> On Mon, Jan 24, 2022 at 10:00:45AM +0530, Anshuman Khandual wrote:
+>> This updates struct arm_pmu to include all required helpers that will drive
+> 
+>>From submitting-patches.rst:
+> 
+> Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+> instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+> to do frotz", as if you are giving orders to the codebase to change
+> its behaviour.
 
-        ret =3D request_irq(port->irq, sunplus_uart_irq, 0, "sunplus_uart",=
- port);
-        if (ret)
-                return ret;
+s/This updates struct arm_pmu to/Update struct arm_pmu to/ should address
+this problem I guess. Although the difference here seems very subtle :)
 
-        spin_lock_irqsave(&port->lock, flags);
+> 
+>> BRBE functionality for a given PMU implementation. These are the following.
+> 
+> Don't describe what the change is, one can read the diff for that. 
 
-        isc =3D readl(port->membase + SUP_UART_ISC); //add this line
-        isc |=3D SUP_UART_ISC_RXM;
-        writel(isc, port->membase + SUP_UART_ISC);
+Sure, though was trying just to enumerate a potential driver's functional
+responsibilities.
 
-        spin_unlock_irqrestore(&port->lock, flags);
+> Answer why it is needed.
 
-        return 0;
-}
+Sure.
 
-static void sunplus_shutdown(struct uart_port *port)
-{
-        unsigned long flags;
-        unsigned int isc;
+> 
+> One thing to answer in the commit msg is why we need the hooks here.  
+> Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
+> an armv8 specific feature is the right approach? I don't recall 
+> reaching that conclusion.
 
-        spin_lock_irqsave(&port->lock, flags);
+Although it might be possible to have this implementation embedded in
+the existing armv8 PMU implementation, I still believe that the BRBE
+functionalities abstracted out at the arm_pmu level with a separate
+config option is cleaner, easier to follow and to maintain as well.
 
-        isc =3D readl(port->membase + SUP_UART_ISC); //add this line
-        isc &=3D ~(SUP_UART_ISC_RXM | SUP_UART_ISC_TXM); //add this line
-        writel(isc, port->membase + SUP_UART_ISC); //modify this line
+Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+might not fit seamlessly, when tried to be embedded via existing arm_pmu
+helpers in the armv8 implementation.
 
-        spin_unlock_irqrestore(&port->lock, flags);
+Nonetheless if arm_pmu based additional BRBE helpers is absolutely a no
+go for folks here in general, will explore arm64 based implementation.
 
-        free_irq(port->irq, port);
-}
+> 
+>>
+>> - brbe_filter	: Convert perf event filters into BRBE HW filters
+>> - brbe_probe	: Probe BRBE HW and capture its attributes
+>> - brbe_enable	: Enable BRBE HW with a given config
+>> - brbe_disable	: Disable BRBE HW
+>> - brbe_read	: Read BRBE buffer for captured branch records
+>> - brbe_reset	: Reset BRBE buffer
+>> - brbe_supported: Whether BRBE is supported or not
+> 
+> The function names seem pretty self-explanatory, but the text is needed, 
+> shouldn't it be in the struct declaration.
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B41=E6=9C=8826=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=889:47=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, Jan 14, 2022 at 10:22:56AM +0800, hammer hsieh wrote:
-> > Jiri Slaby <jirislaby@kernel.org> =E6=96=BC 2022=E5=B9=B41=E6=9C=8813=
-=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:12=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > >
-> > > On 13. 01. 22, 11:56, hammer hsieh wrote:
-> > > >> Could you explain me what posted write is and how does it not matt=
-er in
-> > > >> this case?
-> > > >>
-> > > >
-> > > > Each UART ISC register contains
-> > >
-> > > No, you still don't follow what I write. Use your favorite web search
-> > > for "posted write" and/or consult with your HW team.
-> > >
-> >
-> > Maybe this time, we are on the same page.
-> > Our SP7021 chipset is designed on ARM Cortex-A7 Quad core.
-> > Register Access through AMBA(AXI bus), and it is non-cached.
-> >
-> > Did you mean
-> > case1 have concern about "posted write", and you want to know why it no=
-t matter?
-> > case2 will be safer?
-> >
-> > Case1 :
-> > spin_lock_irq_save()
-> > writel(0, target register)
-> > spin_unlock_irqrestore()
->
-> A lock does not mean that your write made it to the device.  Please talk
-> to the hardware designers to properly determine how to correctly write
-> to the hardware and "know" that the write succeeded or not.  This driver
-> does not seem to take that into consideration at all.
->
-> thanks,
->
-> greg k-h
+Sure, sounds good. Will move there.
+
+> 
+> I'm not really a fan of patches adding dead code. That's not any less to 
+> review. Restructuring with 'no functional change' OTOH is helpful in 
+> reviewing.
+
+Restructuring without functional change clarifies the purpose better.
+Besides this is more relevant in this context where the functions will
+be provided by a separate (and also detached) driver implementation.
+
+>> A BRBE driver implementation needs to provide these functionalities.
+>>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-perf-users@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  arch/arm64/kernel/perf_event.c | 36 ++++++++++++++++++++++++++++++++++
+>>  include/linux/perf/arm_pmu.h   |  7 +++++++
+>>  2 files changed, 43 insertions(+)
+>>
+>> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+>> index cab678ed6618..f6a47036b0b4 100644
+>> --- a/arch/arm64/kernel/perf_event.c
+>> +++ b/arch/arm64/kernel/perf_event.c
+>> @@ -1015,6 +1015,35 @@ static int armv8pmu_filter_match(struct perf_event *event)
+>>  	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
+>>  }
+>>  
+>> +static void armv8pmu_brbe_filter(struct pmu_hw_events *hw_event, struct perf_event *event)
+>> +{
+>> +}
+>> +
+>> +static void armv8pmu_brbe_enable(struct pmu_hw_events *hw_event)
+>> +{
+>> +}
+>> +
+>> +static void armv8pmu_brbe_disable(struct pmu_hw_events *hw_event)
+>> +{
+>> +}
+>> +
+>> +static void armv8pmu_brbe_read(struct pmu_hw_events *hw_event, struct perf_event *event)
+>> +{
+>> +}
+>> +
+>> +static void armv8pmu_brbe_probe(struct pmu_hw_events *hw_event)
+>> +{
+>> +}
+>> +
+>> +static void armv8pmu_brbe_reset(struct pmu_hw_events *hw_event)
+>> +{
+>> +}
+>> +
+>> +static bool armv8pmu_brbe_supported(struct perf_event *event)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>>  static void armv8pmu_reset(void *info)
+>>  {
+>>  	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
+>> @@ -1247,6 +1276,13 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
+>>  
+>>  	cpu_pmu->pmu.event_idx		= armv8pmu_user_event_idx;
+>>  
+>> +	cpu_pmu->brbe_filter		= armv8pmu_brbe_filter;
+>> +	cpu_pmu->brbe_enable		= armv8pmu_brbe_enable;
+>> +	cpu_pmu->brbe_disable		= armv8pmu_brbe_disable;
+>> +	cpu_pmu->brbe_read		= armv8pmu_brbe_read;
+>> +	cpu_pmu->brbe_probe		= armv8pmu_brbe_probe;
+>> +	cpu_pmu->brbe_reset		= armv8pmu_brbe_reset;
+>> +	cpu_pmu->brbe_supported		= armv8pmu_brbe_supported;
+>>  	cpu_pmu->name			= name;
+>>  	cpu_pmu->map_event		= map_event;
+>>  	cpu_pmu->attr_groups[ARMPMU_ATTR_GROUP_EVENTS] = events ?
+>> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+>> index 2512e2f9cd4e..c0dd0d6c5883 100644
+>> --- a/include/linux/perf/arm_pmu.h
+>> +++ b/include/linux/perf/arm_pmu.h
+>> @@ -98,6 +98,13 @@ struct arm_pmu {
+>>  	void		(*reset)(void *);
+>>  	int		(*map_event)(struct perf_event *event);
+>>  	int		(*filter_match)(struct perf_event *event);
+>> +	void		(*brbe_filter)(struct pmu_hw_events *hw_events, struct perf_event *event);
+>> +	void		(*brbe_probe)(struct pmu_hw_events *hw_events);
+>> +	void		(*brbe_enable)(struct pmu_hw_events *hw_events);
+>> +	void		(*brbe_disable)(struct pmu_hw_events *hw_events);
+>> +	void		(*brbe_read)(struct pmu_hw_events *hw_events, struct perf_event *event);
+>> +	void		(*brbe_reset)(struct pmu_hw_events *hw_events);
+>> +	bool		(*brbe_supported)(struct perf_event *event);
+>>  	int		num_events;
+>>  	bool		secure_access; /* 32-bit ARM only */
+>>  #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
+>> -- 
+>> 2.25.1
+>>
+>>

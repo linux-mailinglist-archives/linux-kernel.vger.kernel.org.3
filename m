@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A300349F75B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A6849F75F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiA1Kea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:34:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30242 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231618AbiA1Ke0 (ORCPT
+        id S229908AbiA1KgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:36:04 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4542 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229462AbiA1KgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:34:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643366065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Quc4skgWQnhYb+89AvQYjxil+ByV/pBG/nU7QFXNosI=;
-        b=OmMl5+uKVGJe6Q4mJIUEzw2+Fbal5hzB1t/awcfjDE0l7KffIsVzZTONK6HQzBUuLdqKX1
-        SURJf6cCslomkuc10zr99u0x2Eex528oXZOyjl21Xe2DRh0zO4uAC8/n55jdaFPzZj80Ap
-        EmCPYyeHYKGMR/OXij+dXPAU31gNYLQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-gM9IMD9IOuKE_VIN-ADfgw-1; Fri, 28 Jan 2022 05:34:22 -0500
-X-MC-Unique: gM9IMD9IOuKE_VIN-ADfgw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 180CD1083F61;
-        Fri, 28 Jan 2022 10:34:21 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.193.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C790A7B6D5;
-        Fri, 28 Jan 2022 10:34:18 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     linux-hyperv@vger.kernel.org, Wei Liu <wei.liu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH 2/2] Drivers: hv: Compare cpumasks and not their weights in init_vp_index()
-Date:   Fri, 28 Jan 2022 11:34:12 +0100
-Message-Id: <20220128103412.3033736-3-vkuznets@redhat.com>
-In-Reply-To: <20220128103412.3033736-1-vkuznets@redhat.com>
-References: <20220128103412.3033736-1-vkuznets@redhat.com>
+        Fri, 28 Jan 2022 05:36:04 -0500
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JlYfK20Qjz6892T;
+        Fri, 28 Jan 2022 18:31:37 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 28 Jan 2022 11:36:02 +0100
+Received: from localhost (10.47.76.156) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 28 Jan
+ 2022 10:36:01 +0000
+Date:   Fri, 28 Jan 2022 10:35:54 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     jagath jogj <jagathjog1996@gmail.com>
+CC:     <jic23@kernel.org>, <lars@metafoo.de>,
+        <andriy.shevchenko@linux.intel.com>, <aardelean@deviqon.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: IIO Device Driver for Maxim DS3502 potentiometer
+Message-ID: <20220128103554.000028ff@Huawei.com>
+In-Reply-To: <CAM+2Eu+G2YK-O4ioYCBTJOs9VV9k5fVfQSii+m3kcyouJRg_vA@mail.gmail.com>
+References: <CAM+2Eu+G2YK-O4ioYCBTJOs9VV9k5fVfQSii+m3kcyouJRg_vA@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.76.156]
+X-ClientProxiedBy: lhreml731-chm.china.huawei.com (10.201.108.82) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The condition is supposed to check whether 'allocated_mask' got fully
-exhausted, i.e. there's no free CPU on the NUMA node left so we have
-to use one of the already used CPUs. As only bits which correspond
-to CPUs from 'cpumask_of_node(numa_node)' get set in 'allocated_mask',
-checking for the equal weights is technically correct but not obvious.
-Let's compare cpumasks directly.
+On Fri, 28 Jan 2022 09:11:28 +0530
+jagath jogj <jagathjog1996@gmail.com> wrote:
 
-No functional change intended.
+> Hello,
+> 
+> I have a Maxim DS3502 potentiometer breakout and I have written an IIO
+> driver for learning purposes and tested with Raspberry pi and wanted
+> to send patches of the driver for the IIO sub-system.
+> 
+> Can I send the patches for DS3502 POT for review?
+> 
+> The setup used to write driver
+> Raspberry pi 3b
+> DS3502 breakout board
+> Raspberry pi latest kernel branch - https://github.com/raspberrypi/linux
+> 
+> Regards,
+> Jagath
 
-Suggested-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- drivers/hv/channel_mgmt.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Hi Jagath,
 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 52cf6ae525e9..26d269ba947c 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -762,8 +762,7 @@ static void init_vp_index(struct vmbus_channel *channel)
- 		}
- 		allocated_mask = &hv_context.hv_numa_map[numa_node];
- 
--		if (cpumask_weight(allocated_mask) ==
--		    cpumask_weight(cpumask_of_node(numa_node))) {
-+		if (cpumask_equal(allocated_mask, cpumask_of_node(numa_node))) {
- 			/*
- 			 * We have cycled through all the CPUs in the node;
- 			 * reset the allocated map.
--- 
-2.34.1
+Welcome to IIO.
 
+Absolutely on sending the patches for review.
+You'll need to rebase them on latest mainline from kernel.org
+(pick a tagged version which would currently be 5.17-rc1_
+
+and then follow the documentation for how to submit a patch in
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+
+Feel free to ask if you have any questions about the process.
+
+Looking forwards to seeing your code.
+
+Thanks,
+
+Jonathan

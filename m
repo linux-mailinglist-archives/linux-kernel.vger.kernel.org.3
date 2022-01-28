@@ -2,132 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 869064A032A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1502D4A0328
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351644AbiA1VtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiA1VtE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:49:04 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CE4C061714;
-        Fri, 28 Jan 2022 13:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=rdH4gPd9NKdul5JzpYbJ81Fm1LwzMC9aJDXsx9B1P/E=; b=UzM9Dq2q8f37vTT3qITG0V/iZa
-        HV5oEL9BVEc7vCvdhPcCEC5vH6DwcXO63voA/1nCJ1EoIoTZuHjvUMWoh9o+J8DFBLIMSEitdVhrb
-        eW6h8Tzu/efpnBAEZQdorELqeVQFW9/lQAESxzMAlBYr7hf4wT0DJAOxJTRaPHBzpeuP6r0KpJfeN
-        IDRZMU84k4Oy1QY/W6bUF+z7LZVM4zO1zs2S6pCOE2JDroM26UW0rEU1bTUNO4CiICvfH4mGvzayp
-        rX7Hn1krX3+5LedqVouqrkVmUJZIAaM+j4lAPLnnOxHcp7zH+eNsvz0FDCviSmk3rfu4trHNcW403
-        mrmxpqag==;
-Received: from [2001:8b0:10b:1:5540:e506:9c75:1303] (helo=[IPv6:::1])
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDZ6Y-004fC9-QD; Fri, 28 Jan 2022 21:48:29 +0000
-Date:   Fri, 28 Jan 2022 21:48:26 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
-        "luolongjun@huawei.com" <luolongjun@huawei.com>,
-        "hejingxian@huawei.com" <hejingxian@huawei.com>
-Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YfRi2sY0hVfri5eR@google.com>
-References: <761c1552-0ca0-403b-3461-8426198180d0@amd.com> <ca0751c864570015ffe4d8cccdc94e0a5ef3086d.camel@infradead.org> <b13eac6c-ea87-aef9-437f-7266be2e2031@amd.com> <721484e0fa719e99f9b8f13e67de05033dd7cc86.camel@infradead.org> <1401c5a1-c8a2-cca1-e548-cab143f59d8f@amd.com> <2bfb13ed5d565ab09bd794f69a6ef2b1b75e507a.camel@infradead.org> <b798bcef-d750-ce42-986c-0d11d0bb47b0@amd.com> <41e63d89f1b2debc0280f243d7c8c3212e9499ee.camel@infradead.org> <c3dbd3b9-accf-bc28-f808-1d842d642309@amd.com> <7e92a196e67b1bfa37c1e61a789f2b75a735c06f.camel@infradead.org> <YfRi2sY0hVfri5eR@google.com>
-Message-ID: <76B609E5-0203-4F2A-9348-4E88DC72AAF6@infradead.org>
+        id S1351634AbiA1Vsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:48:45 -0500
+Received: from mga17.intel.com ([192.55.52.151]:39922 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344099AbiA1Vso (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 16:48:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643406524; x=1674942524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c3DfHy4UfybaUGWpZe7ypxB5nT4Kqu/2JshXAhBJsV8=;
+  b=HrDrs84centBUNzyaRIZGRsBkeuygfZ5e5K1odfzgEk8FV3bVrnNzb1t
+   rSgufc4gAo9y270xnsiZ43vfJWnFTspJU9LYXuuMnPhcE2SLbSISSOGMV
+   LaUTN1c0BiNB4vZ5YJ2clvvRY3n/vBTTVffuGv+DzodxZqBYbl1jJi9dD
+   9k9bXAdrg0J6TSy6aOKvpTPSGeVKBmKe+E3h/W6Sb/rJ762t5H3+elvF+
+   HukCx4U5UXorcEYC6NU1dDHyxXD0/khSvJd+hjesPd8fd51CQ4/hVfKDd
+   2FW/iLWp0w2unpvXh4nXF9epoon1hHJaQYszT7EcppPp3HlXR6dt2Ofpr
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="227871425"
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="227871425"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:48:44 -0800
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="536304846"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:48:43 -0800
+Date:   Fri, 28 Jan 2022 13:48:43 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH 2/2] mm/page_owner: Dump memcg information
+Message-ID: <20220128214843.GJ785175@iweiny-DESK2.sc.intel.com>
+References: <20220128195642.416743-1-longman@redhat.com>
+ <20220128195642.416743-3-longman@redhat.com>
+ <20220128212249.GI785175@iweiny-DESK2.sc.intel.com>
+ <e14e8c96-b2e3-cb57-2c35-284116798225@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e14e8c96-b2e3-cb57-2c35-284116798225@redhat.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 28, 2022 at 04:31:07PM -0500, Waiman Long wrote:
+> On 1/28/22 16:22, Ira Weiny wrote:
+> > On Fri, Jan 28, 2022 at 02:56:42PM -0500, Waiman Long wrote:
+> > > It was found that a number of offlined memcgs were not freed because
+> > > they were pinned by some charged pages that were present. Even "echo
+> > > 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
+> > > offlined but not freed memcgs tend to increase in number over time with
+> > > the side effect that percpu memory consumption as shown in /proc/meminfo
+> > > also increases over time.
+> > > 
+> > > In order to find out more information about those pages that pin
+> > > offlined memcgs, the page_owner feature is extended to dump memory
+> > > cgroup information especially whether the cgroup is offlined or not.
+> > > 
+> > > Signed-off-by: Waiman Long <longman@redhat.com>
+> > > ---
+> > >   mm/page_owner.c | 28 ++++++++++++++++++++++++++++
+> > >   1 file changed, 28 insertions(+)
+> > > 
+> > > diff --git a/mm/page_owner.c b/mm/page_owner.c
+> > > index c52ce9d6bc3b..e5d8c642296b 100644
+> > > --- a/mm/page_owner.c
+> > > +++ b/mm/page_owner.c
+> > > @@ -10,6 +10,7 @@
+> > >   #include <linux/migrate.h>
+> > >   #include <linux/stackdepot.h>
+> > >   #include <linux/seq_file.h>
+> > > +#include <linux/memcontrol.h>
+> > >   #include <linux/sched/clock.h>
+> > >   #include "internal.h"
+> > > @@ -339,6 +340,7 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+> > >   		depot_stack_handle_t handle)
+> > >   {
+> > >   	int ret = 0, pageblock_mt, page_mt;
+> > > +	unsigned long __maybe_unused memcg_data;
+> > >   	char *kbuf;
+> > >   	count = min_t(size_t, count, PAGE_SIZE);
+> > > @@ -371,6 +373,32 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+> > >   			"Page has been migrated, last migrate reason: %s\n",
+> > >   			migrate_reason_names[page_owner->last_migrate_reason]);
+> > > +#ifdef CONFIG_MEMCG
+> > > +	/*
+> > > +	 * Look for memcg information and print it out
+> > > +	 */
+> > > +	memcg_data = READ_ONCE(page->memcg_data);
+> > > +	if (memcg_data) {
+> > > +		struct mem_cgroup *memcg = page_memcg_check(page);
+> > > +		bool onlined;
+> > > +		char name[80];
+> > > +
+> > > +		if (memcg_data & MEMCG_DATA_OBJCGS)
+> > > +			SNPRINTF(kbuf, count, ret, err, "Slab cache page\n");
+> > > +
+> > > +		if (!memcg)
+> > > +			goto copy_out;
+> > > +
+> > > +		onlined = (memcg->css.flags & CSS_ONLINE);
+> > > +		cgroup_name(memcg->css.cgroup, name, sizeof(name) - 1);
+> > > +		SNPRINTF(kbuf, count, ret, err, "Charged %sto %smemcg %s\n",
+> >                                                          ^^^
+> > 						Extra specifier?
+> > 
+> > Did this compile without warnings?
+> 
+> Yes, there was no warning.
 
+But isn't that an extra specifier?
 
-On 28 January 2022 21:40:42 GMT, Sean Christopherson <seanjc@google=2Ecom>=
- wrote:
->On Fri, Jan 28, 2022, David Woodhouse wrote:
->> On Fri, 2021-12-17 at 14:55 -0600, Tom Lendacky wrote:
->> > On 12/17/21 2:13 PM, David Woodhouse wrote:
->> > > On Fri, 2021-12-17 at 13:46 -0600, Tom Lendacky wrote:
->> > > > There's no WARN or PANIC, just a reset=2E I can look to try and c=
-apture some
->> > > > KVM trace data if that would help=2E If so, let me know what even=
-ts you'd
->> > > > like captured=2E
->> > >=20
->> > >=20
->> > > Could start with just kvm_run_exit?
->> > >=20
->> > > Reason 8 would be KVM_EXIT_SHUTDOWN and would potentially indicate =
-a
->> > > triple fault=2E
->> >=20
->> > qemu-system-x86-24093   [005] =2E=2E=2E=2E=2E  1601=2E759486: kvm_exi=
-t: vcpu 112 reason shutdown rip 0xffffffff81070574 info1 0x0000000000000000=
- info2 0x0000000000000000 intr_info 0x80000b08 error_code 0x00000000
->> >=20
->> > # addr2line -e woodhouse-build-x86_64/vmlinux 0xffffffff81070574
->> > /root/kernels/woodhouse-build-x86_64/=2E/arch/x86/include/asm/desc=2E=
-h:272
->> >=20
->> > Which is: asm volatile("ltr %w0"::"q" (GDT_ENTRY_TSS*8));
->>=20
->> So, I remain utterly bemused by this, and the Milan *guests* I have
->> access to can't even kexec with a stock kernel; that is also "too fast"
->> and they take a triple fault during the bringup in much the same way =
-=E2=80=94
->> even without my parallel patches, and even going back to fairly old
->> kernels=2E
->>=20
->> I wasn't able to follow up with raw serial output during the bringup to
->> pinpoint precisely where it happens, because the VM would tear itself
->> down in response to the triple fault without actually flushing the last
->> virtual serial output :)
->>=20
->> It would be really useful to get access to a suitable host where I can
->> spawn this in qemu and watch it fail=2E I am suspecting a chip-specific
->> quirk or bug at this point=2E
->
->Nope=2E  You missed a spot=2E  This also reproduces on a sufficiently lar=
-ge Intel
->system (and Milan)=2E  initial_gs gets overwritten by common_cpu_up(), wh=
-ich leads
->to a CPU getting the wrong MSR_GS_BASE and then the wrong raw_smp_process=
-or_id(),
->resulting in cpu_init_exception_handling() stuffing the wrong GDT and lea=
-ving a
->NULL TR descriptor for itself=2E
->
->You also have a lurking bug in the x2APIC ID handling=2E  Stripping the b=
-oot flags
->from the prescribed APICID needs to happen before retrieving the x2APIC I=
-D from
->CPUID, otherwise bits 31:16 of the ID will be lost=2E
->
->You owe me two beers ;-)
+Ira
 
-Oh Sean, I love you=2E
-
-Thanks=2E
-
-Will update and retest and resend=2E
+> 
+> Cheers,
+> Longmna
+> 
+> > Ira
+> > 
+> > > +			PageMemcgKmem(page) ? "(via objcg) " : "",
+> > > +			onlined ? "" : "offlined ", name);
+> > > +	}
+> > > +
+> > > +copy_out:
+> > > +#endif
+> > > +
+> > >   	SNPRINTF(kbuf, count, ret, err, "\n");
+> > >   	if (copy_to_user(buf, kbuf, ret))
+> > > -- 
+> > > 2.27.0
+> > > 
+> > > 
+> 

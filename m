@@ -2,81 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D6F49F9B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D50949F9C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348631AbiA1MmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235668AbiA1MmL (ORCPT
+        id S1348636AbiA1Mpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:45:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50164 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229956AbiA1Mpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:42:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599BEC061714;
-        Fri, 28 Jan 2022 04:42:11 -0800 (PST)
+        Fri, 28 Jan 2022 07:45:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9F6761B9F;
-        Fri, 28 Jan 2022 12:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 020FDC340E0;
-        Fri, 28 Jan 2022 12:42:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF0BE61B47;
+        Fri, 28 Jan 2022 12:45:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C11C340E0;
+        Fri, 28 Jan 2022 12:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643373730;
-        bh=wUt7Lpv1ipKqJDvhHGWAjln9cnXm1I4jIhfmigOT+f0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XXx0fuchgarQKfN1TwtXWoLv0qRHQG9XgBqVx2cCrIGnPPBz5e6GzXpYfRXjsPcrZ
-         sMFDj+ismMZ+Cr33Wji66LdLve8fFwBIe/GX7uqFLSP5B9bBFNnVxwREnjwdmH12/N
-         9/YoNapQS6dPuFvPfZhu0BJn5LF+V2cgYs8zuYiVjqtP4tu2x2U/VMeAgMOuplbNs3
-         MGHK9HdOcZ8YvX01wfEeNUmafmB2y4d4crzETAU+5sq0idbr8FW9SqP2671RzG4SFb
-         6+lKTEWq67rhdmS+NrlLYYZZAox2U8avBWj4d6Oop+mxOMmDkFJj4wAc+FWHESLsm2
-         HsAkGhksydPEQ==
-Date:   Fri, 28 Jan 2022 12:42:04 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/2] ASoC: ops: fix signedness bug in snd_soc_put_volsw()
-Message-ID: <YfPknO6si9CpotgS@sirena.org.uk>
-References: <20220128112007.GA24806@kili>
+        s=k20201202; t=1643373950;
+        bh=vMCWcrlcdbFbw6ZhRTSMH5G249xb37QrpyMQTC2Ih8s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OApe1TM9xyUHQMFD6k9FG6o9kh88o2dbdqSEGbm5wq5/qqM5JnhJFTZNaAG/OoevL
+         B51+tarWCZpS/wrJc4n3EK/qeZAo3/0q9InRVDCRcQ46ZibrXrySDoUS0iX5VAZGJZ
+         2SsMMvYDp37uKklaalMXs5QbfHBQfyTMoGG8HKvXokzoAcJsvCgN5Z1HLStrtn247A
+         5HaAnpPSZTEmO5ns0li5yaHEsQGLBmQQXlrjvPPA0OMa3/YGNqdv0h5BkoeZN+lXfA
+         0pkwmUhRjmbZWykw/ud+qo2GpbNlQlgEK21LfFKtmDGmCoXpjbJ/Iv1rcHug0GcZcL
+         wEOxCHwsY/dPg==
+Date:   Fri, 28 Jan 2022 13:45:40 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, Joerg Roedel <jroedel@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Evan Green <evgreen@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>, <youlin.pei@mediatek.com>,
+        Matthias Kaehlcke <mka@chromium.org>, <anan.sun@mediatek.com>,
+        <yi.kuo@mediatek.com>, <acourbot@chromium.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        "Dafna Hirschfeld" <dafna.hirschfeld@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        <anthony.huang@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v10 02/13] iommu/mediatek-v1: Free the existed fwspec if
+ the master dev already has
+Message-ID: <20220128134540.00c6c380@coco.lan>
+In-Reply-To: <20220128134055.720bb43c@coco.lan>
+References: <20220117070510.17642-1-yong.wu@mediatek.com>
+        <20220117070510.17642-3-yong.wu@mediatek.com>
+        <20220128134055.720bb43c@coco.lan>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jOCcIIG5A6qPTuKn"
-Content-Disposition: inline
-In-Reply-To: <20220128112007.GA24806@kili>
-X-Cookie: Torque is cheap.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Fri, 28 Jan 2022 13:40:55 +0100
+Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
 
---jOCcIIG5A6qPTuKn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Hi Matthias/Yong,
+> 
+> Are you ok if this patch gets merged via the media tree together with the
+> remaining series, or do you prefer to apply it via SoC tree instead?
 
-On Fri, Jan 28, 2022 at 02:20:07PM +0300, Dan Carpenter wrote:
-> The "val" and "val2" variables need to signed for the checking to work
-> as intended.
+Same questions for other patches touching files outside drivers/media
+on this pull request:
 
-This means that the helpers won't support controls that use the top bit
-of a 32 bit register.
+	https://patchwork.kernel.org/project/linux-mediatek/patch/7af52d61-47c7-581d-62ed-76a7f8315b16@xs4all.nl/
 
---jOCcIIG5A6qPTuKn
-Content-Type: application/pgp-signature; name="signature.asc"
+Like those:
+	0004-0013-iommu-mediatek-v1-Free-the-existed-fwspec-if-the-mas.patch
+	0005-0013-iommu-mediatek-Return-ENODEV-if-the-device-is-NULL.patch
+	0006-0013-iommu-mediatek-Add-probe_defer-for-smi-larb.patch
+	0007-0013-iommu-mediatek-Add-device_link-between-the-consumer-.patch
 
------BEGIN PGP SIGNATURE-----
+Regards,
+Mauro
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHz5JsACgkQJNaLcl1U
-h9DaKgf/cTmyNoSTqkw9Z3Ey0dOvYM7t57pbtbOZ0g5wy0D/1tX/fClL/peSKXGU
-60vA83fZ9RnX561xmKWv3E5Tqwj0+DK589nth2LcuJcSaZn0jyPgETF19uaXkACU
-aJ8QkIIlNT3OkVDgbAN0QYqSuL9TCBhsOGR6eaBwbG8NsoPrphIPae/RBBn/z1Jv
-IQGG1dcjervKJPw3bK7tzrdytvLnn8jqwMEkycxcxzrO7kw5vk2Dfu7vOzBLi2bt
-y3cDSD+87ybKxsEt92XZZrSOey79pKIj7kCDB1k0LuLNB5hlSdiQfbfXt/PTB3ws
-op+pdqiC8o5GDfLooYthOkZYHU/rSQ==
-=2D81
------END PGP SIGNATURE-----
+> 
+> Regards,
+> Mauro
+> 
+> 
+> Em Mon, 17 Jan 2022 15:04:59 +0800
+> Yong Wu <yong.wu@mediatek.com> escreveu:
+> 
+> > When the iommu master device enters of_iommu_xlate, the ops may be
+> > NULL(iommu dev is defered), then it will initialize the fwspec here:
+> > 
+> > [<c0c9c5bc>] (dev_iommu_fwspec_set) from [<c06bda80>]
+> > (iommu_fwspec_init+0xbc/0xd4)
+> > [<c06bd9c4>] (iommu_fwspec_init) from [<c06c0db4>]
+> > (of_iommu_xlate+0x7c/0x12c)
+> > [<c06c0d38>] (of_iommu_xlate) from [<c06c10e8>]
+> > (of_iommu_configure+0x144/0x1e8)
+> > 
+> > BUT the mtk_iommu_v1.c only supports arm32, the probing flow still is a bit
+> > weird. We always expect create the fwspec internally. otherwise it will
+> > enter here and return fail.
+> > 
+> > static int mtk_iommu_create_mapping(struct device *dev,
+> > 				    struct of_phandle_args *args)
+> > {
+> >         ...
+> > 	if (!fwspec) {
+> > 	        ....
+> > 	} else if (dev_iommu_fwspec_get(dev)->ops != &mtk_iommu_ops) {  
+> >                 >>>>>>>>>>Enter here. return fail.<<<<<<<<<<<<    
+> > 		return -EINVAL;
+> > 	}
+> > 	...
+> > }
+> > 
+> > Thus, Free the existed fwspec if the master device already has fwspec.
+> > 
+> > This issue is reported at:
+> > https://lore.kernel.org/linux-mediatek/trinity-7d9ebdc9-4849-4d93-bfb5-429dcb4ee449-1626253158870@3c-app-gmx-bs01/
+> > 
+> > Reported-by: Frank Wunderlich <frank-w@public-files.de>
+> > Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
+> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > Acked-by: Joerg Roedel <jroedel@suse.de>
+> > Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/iommu/mtk_iommu_v1.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+> > index be22fcf988ce..1467ba1e4417 100644
+> > --- a/drivers/iommu/mtk_iommu_v1.c
+> > +++ b/drivers/iommu/mtk_iommu_v1.c
+> > @@ -425,6 +425,15 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+> >  	struct mtk_iommu_data *data;
+> >  	int err, idx = 0;
+> >  
+> > +	/*
+> > +	 * In the deferred case, free the existed fwspec.
+> > +	 * Always initialize the fwspec internally.
+> > +	 */
+> > +	if (fwspec) {
+> > +		iommu_fwspec_free(dev);
+> > +		fwspec = dev_iommu_fwspec_get(dev);
+> > +	}
+> > +
+> >  	while (!of_parse_phandle_with_args(dev->of_node, "iommus",
+> >  					   "#iommu-cells",
+> >  					   idx, &iommu_spec)) {  
+> 
+> 
+> 
+> Thanks,
+> Mauro
 
---jOCcIIG5A6qPTuKn--
+
+
+Thanks,
+Mauro

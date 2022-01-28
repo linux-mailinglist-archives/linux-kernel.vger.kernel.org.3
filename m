@@ -2,93 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E659549F4B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DAE49F49B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347118AbiA1Hsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:48:46 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:46720 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347076AbiA1HsX (ORCPT
+        id S1346990AbiA1Hrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346853AbiA1Hrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:48:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643356104; x=1674892104;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7kckOmRKyq54j2yB6AzUrEcAKcHonOPFGbtH7xzTgzQ=;
-  b=yGyRgtcK8zzjG5L41v8ZUDgHgNWlbcwwn+Pcr/7dblH3VK50JzhlN4nh
-   KiWNcTjSQCzVSkFk1pU6jwEG34/o6aD+RG5pm7AE+3p/2sgErHNLIhf+a
-   Ickr64R3YUCEMYdluwiWIpmOqlYRK+EIBWJ1uPZh4d6Qwl8aO4supRwCL
-   8=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 27 Jan 2022 23:48:23 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:48:23 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:48:23 -0800
-Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:48:18 -0800
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Prasad <quic_psodagud@quicinc.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Subject: [PATCHv2 9/9] arm64: dts: qcom: sm8450: Add LLCC/system-cache-controller node
-Date:   Fri, 28 Jan 2022 13:17:16 +0530
-Message-ID: <7995d003b77d5e066658af5b2cfa22ccb40b6cf7.1643355594.git.quic_saipraka@quicinc.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1643355594.git.quic_saipraka@quicinc.com>
-References: <cover.1643355594.git.quic_saipraka@quicinc.com>
+        Fri, 28 Jan 2022 02:47:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78217C06173B;
+        Thu, 27 Jan 2022 23:47:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=u8U0/Ai5mbQzGHpMhOzTxk2dLwnQvDLgWPnPvMcwTlA=; b=oqnQD992oMMsoVP2DYTG8sHVk/
+        Oxf214lSUukxCU1DjtlMOsUsh31Aa9sSIsDtcfKE+tmzK8XSWJof8Yyy+4ZwKhEejcqae1CDROjqA
+        zxdNl6BSBmyiL8rgq7NfvH6ZyN2nJDWnDA+ftM5ULiS+AKfPMACXuw+anwE4HfJDJlx6w9NTad0VR
+        zR2fqiOYed9wlHBKzycsbnYzTOOYxEVJ5QMEmgUe8922Re7d+4LK4KqEhJKuChAPM8OaNSR/9DktO
+        McB1DnXCbPyZ+GQM5J4Jsc5MAFqqzMfhyj2gUFu8EWb0rXtmZsXk61IfjF7ePZJzrXcxsZGuSU/nN
+        +Ns0bUMA==;
+Received: from [2001:4bb8:180:4c4c:73e:e8c7:4199:32d7] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDLyn-000rEN-TG; Fri, 28 Jan 2022 07:47:34 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
+        dhowells@redhat.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH v2] fs: rename S_KERNEL_FILE
+Date:   Fri, 28 Jan 2022 08:47:31 +0100
+Message-Id: <20220128074731.1623738-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a DT node for Last level cache (aka. system cache) controller
-which provides control over the last level cache present on SM8450
-SoC.
+S_KERNEL_FILE is grossly misnamed.  We have plenty of files hold open by
+the kernel kernel using filp_open.  This flag OTOH signals the inode as
+being a special snowflake that cachefiles holds onto that can't be
+unlinked because of ..., erm, pixie dust.  So clearly mark it as such.
 
-Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 10c25ad2d0c7..5a3d050b94f7 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1102,6 +1102,13 @@ usb_1_dwc3: usb@a600000 {
- 				phy-names = "usb2-phy", "usb3-phy";
- 			};
- 		};
-+
-+		system-cache-controller@19200000 {
-+			compatible = "qcom,sm8450-llcc";
-+			reg = <0 0x19200000 0 0x580000>, <0 0x19a00000 0 0x80000>;
-+			reg-names = "llcc_base", "llcc_broadcast_base";
-+			interrupts = <GIC_SPI 266 IRQ_TYPE_LEVEL_HIGH>;
-+		};
- 	};
+Changes since v1:
+ - fix commit message typos
+
+ fs/cachefiles/namei.c | 12 ++++++------
+ fs/namei.c            |  2 +-
+ include/linux/fs.h    |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
+index 9bd692870617c..599dc13a7d9ab 100644
+--- a/fs/cachefiles/namei.c
++++ b/fs/cachefiles/namei.c
+@@ -20,8 +20,8 @@ static bool __cachefiles_mark_inode_in_use(struct cachefiles_object *object,
+ 	struct inode *inode = d_backing_inode(dentry);
+ 	bool can_use = false;
  
- 	timer {
+-	if (!(inode->i_flags & S_KERNEL_FILE)) {
+-		inode->i_flags |= S_KERNEL_FILE;
++	if (!(inode->i_flags & S_CACHEFILE)) {
++		inode->i_flags |= S_CACHEFILE;
+ 		trace_cachefiles_mark_active(object, inode);
+ 		can_use = true;
+ 	} else {
+@@ -51,7 +51,7 @@ static void __cachefiles_unmark_inode_in_use(struct cachefiles_object *object,
+ {
+ 	struct inode *inode = d_backing_inode(dentry);
+ 
+-	inode->i_flags &= ~S_KERNEL_FILE;
++	inode->i_flags &= ~S_CACHEFILE;
+ 	trace_cachefiles_mark_inactive(object, inode);
+ }
+ 
+@@ -742,7 +742,7 @@ static struct dentry *cachefiles_lookup_for_cull(struct cachefiles_cache *cache,
+ 		goto lookup_error;
+ 	if (d_is_negative(victim))
+ 		goto lookup_put;
+-	if (d_inode(victim)->i_flags & S_KERNEL_FILE)
++	if (d_inode(victim)->i_flags & S_CACHEFILE)
+ 		goto lookup_busy;
+ 	return victim;
+ 
+@@ -789,11 +789,11 @@ int cachefiles_cull(struct cachefiles_cache *cache, struct dentry *dir,
+ 	/* check to see if someone is using this object */
+ 	inode = d_inode(victim);
+ 	inode_lock(inode);
+-	if (inode->i_flags & S_KERNEL_FILE) {
++	if (inode->i_flags & S_CACHEFILE) {
+ 		ret = -EBUSY;
+ 	} else {
+ 		/* Stop the cache from picking it back up */
+-		inode->i_flags |= S_KERNEL_FILE;
++		inode->i_flags |= S_CACHEFILE;
+ 		ret = 0;
+ 	}
+ 	inode_unlock(inode);
+diff --git a/fs/namei.c b/fs/namei.c
+index d81f04f8d8188..7402277ecc1f5 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3959,7 +3959,7 @@ int vfs_rmdir(struct user_namespace *mnt_userns, struct inode *dir,
+ 
+ 	error = -EBUSY;
+ 	if (is_local_mountpoint(dentry) ||
+-	    (dentry->d_inode->i_flags & S_KERNEL_FILE))
++	    (dentry->d_inode->i_flags & S_CACHEFILE))
+ 		goto out;
+ 
+ 	error = security_inode_rmdir(dir, dentry);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index c8510da6cc6dc..099d7e03d46e6 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2173,7 +2173,7 @@ struct super_operations {
+ #define S_ENCRYPTED	(1 << 14) /* Encrypted file (using fs/crypto/) */
+ #define S_CASEFOLD	(1 << 15) /* Casefolded file */
+ #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
+-#define S_KERNEL_FILE	(1 << 17) /* File is in use by the kernel (eg. fs/cachefiles) */
++#define S_CACHEFILE	(1 << 17) /* In use as cachefile, can't be unlinked */
+ 
+ /*
+  * Note that nosuid etc flags are inode-specific: setting some file-system
 -- 
-2.33.1
+2.30.2
 

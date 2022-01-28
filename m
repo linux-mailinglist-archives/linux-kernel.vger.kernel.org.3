@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9762F4A0236
+	by mail.lfdr.de (Postfix) with ESMTP id 293284A0235
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351618AbiA1UlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S1351479AbiA1UlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351329AbiA1Uj4 (ORCPT
+        with ESMTP id S1351343AbiA1Uj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:39:56 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008FCC061748
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:55 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id u130so7211002pfc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:55 -0800 (PST)
+        Fri, 28 Jan 2022 15:39:58 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A77C061749
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:57 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so6172865pjq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jkp5lO4JPGuhfIXrwkaqpIbB4x+b/JAJMjSbaxdyHLA=;
-        b=ROgivARGyotirjNWqZx+Ry0hCgKtR2sBEDfB6K2EMzKxcZgjUKhyDaUB/9ExOvcpfd
-         MOZUSpHA1POiU/yjzZSTdPa9QZyFyaNEo0CD9MJ0i+q6RFpE1TeUmA1IfGs9OvH+dI2/
-         eNTId9RUqhsDkcEj9KnfoGfXN3AthuaMdTWESbaUgvZzlyE4kt4P9p4RzAOV1o0aGwl1
-         tSHUCsFxRIb1kzNazM5CTMT5aH/ohpfZACLsVCpGvnzYhE0VNYXQKaC+5B1jAPSIjYb3
-         aUkMmT562876yqfchdmZe645R9LL2fqV3XyYgVszBMcmplXtBHLmZwmQMHXe0uevEJZX
-         AVPg==
+        bh=X5ESwBG6b6i8YhyGmxv/0fv/Q3LnACC0URr3jF91X2A=;
+        b=iYmzpNKUB+T1KgiTlY8iN4WQBCiTqcfAWm+z84/sPor3C7bmf7+mUMiaTRG/oND6FB
+         BDR9JWd1CbK3BIi2W55gBn584SnlQSJy2RO1H4MST8WWIaipkIGxlqG12dkujRdNcFxZ
+         KVtEiHX0S4w+LiE/IkqQyXDa75IuUyBFuFfGpy0rTWjOXJT0/dAmGDtXBelwtdxRgoRg
+         5JNre7akcL5OT7jdA0/I2j63+hAqG6fS1fV5BZyRjHdTjqrM2wd7UWq8HYgRP/cGazty
+         JevFy+nRYeGvx7wTj72M+ONS+LxyMbXR9EqvmxGlEgYTxUi/uHG0Hj4QAuIMUTqNjWkx
+         uzwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=jkp5lO4JPGuhfIXrwkaqpIbB4x+b/JAJMjSbaxdyHLA=;
-        b=sl7mLuWJ7fftynUEEf1iFjQcV3I1ju+kS6eQ+UUByKQYyvexm9WeDxQ+hJFcxmiLbw
-         S6LA8Dya2Bc3yDUeJsP/VA6bWFcHJ/yUVN/UmoMVhG0cAzcTT3eAsYyYNDOrV6aWAXFF
-         qloilJHVGSrAn+Deid+GiGjcPhD2+8uhH0ZxTok1tBu5DUtf74z9isO+aHfKFNWFTMHm
-         wvToC7gd/X/Lz83NW8ruhp1gXeRIlchVclDlTgB9DD/NMBPEjrRfyMpbtFUDbzN/A0p1
-         Mhu0z/VYyB0SamLpo5kOi858vxPrGY4CusSdBhcALaNEBO3HCaMjsdJDl4MaiA9IcCic
-         Io7Q==
-X-Gm-Message-State: AOAM533uULKOfdDrBJrCZH5RpXXxSCDHc+q7l3m7wJ5f1jzd+xu78Sdw
-        wurWEg0+Sc5pR0BlCrXhVno=
-X-Google-Smtp-Source: ABdhPJxMrZoxUZMZkxs65ZEX6aRxbbQCYbNVZmKGPMHDJ0xezO2JSVryQ02nrKGGTBhXv/siM447cg==
-X-Received: by 2002:a63:174c:: with SMTP id 12mr7737819pgx.425.1643402395197;
-        Fri, 28 Jan 2022 12:39:55 -0800 (PST)
+        bh=X5ESwBG6b6i8YhyGmxv/0fv/Q3LnACC0URr3jF91X2A=;
+        b=b859edkUltVFbDc7pdbpx6ioX8z6OVMwsuF6J2JCOphkTSnlT0XPaMKX0aPC0Fl4aw
+         QGhFmuD1wdJIOUmL6qmqP0MegIEollquvJrfrqVxJ8yfj1wo2rR+ua85kd3rpBnT3YgK
+         zIYybIN7mU1keok5dAJb7/R6ULgk/Yz3A9SQx5gZX7wnkMgGVYWagHspBekvVtVAUfim
+         z987eVImvMVlcjXvVCYyC8HbnJ0KIri4pz5C4KiFCJcjH/T3rouWIJE4dC4V3zWm1pa3
+         NLXW84mKyPgnNpRlxMPCzTH3j6blsHJFiEfe2Le5FHJA+e5bDzBaY0b+sF6pVHGASclq
+         zE9A==
+X-Gm-Message-State: AOAM530/gs4cSh6HZppxLRKkHSEbAKb17YUMntQEcKroQMvo374RPH3g
+        +A2V9SRSweRomDU/2A5mfyDpdBH+tG4=
+X-Google-Smtp-Source: ABdhPJzAS2fSWsX/31YAia8UJG3e+/r/1gwfUk5/Kk1CegWUYeuwMBko3o1v5L4NS/lRYdlQSPgXzg==
+X-Received: by 2002:a17:903:1042:: with SMTP id f2mr10635037plc.115.1643402396610;
+        Fri, 28 Jan 2022 12:39:56 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:f13b:bc2c:fac:4a86])
-        by smtp.gmail.com with ESMTPSA id k3sm11235428pfu.180.2022.01.28.12.39.54
+        by smtp.gmail.com with ESMTPSA id k3sm11235428pfu.180.2022.01.28.12.39.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 12:39:54 -0800 (PST)
+        Fri, 28 Jan 2022 12:39:55 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Andi Kleen <ak@linux.intel.com>,
         Ian Rogers <irogers@google.com>
-Subject: [PATCH 2/3] perf inject: Try chroot directory when reading build-id
-Date:   Fri, 28 Jan 2022 12:39:49 -0800
-Message-Id: <20220128203950.3371061-3-namhyung@kernel.org>
+Subject: [PATCH 3/3] perf annotate: Try chroot filename for objdump
+Date:   Fri, 28 Jan 2022 12:39:50 -0800
+Message-Id: <20220128203950.3371061-4-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
 In-Reply-To: <20220128203950.3371061-1-namhyung@kernel.org>
 References: <20220128203950.3371061-1-namhyung@kernel.org>
@@ -69,43 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When reading build-id from a DSO, it should consider if it's from a
-chroot task.  In that case, the path is different so it needs to
-prepend the root directory to access the file correctly.
+Likewise, it should use a proper name in case the task runs under
+chroot.  The child_process.err was needed to set to -1 to show error
+messages properly in TUI.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-inject.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/perf/util/annotate.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index fbf43a454cba..3be581abbdb6 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -25,6 +25,7 @@
- #include "util/synthetic-events.h"
- #include "util/thread.h"
- #include "util/namespaces.h"
-+#include "util/util.h"
- 
- #include <linux/err.h>
- #include <subcmd/parse-options.h>
-@@ -550,6 +551,15 @@ static int dso__read_build_id(struct dso *dso)
- 	nsinfo__mountns_enter(dso->nsinfo, &nsc);
- 	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
- 		dso->has_build_id = true;
-+	else if (dso->nsinfo) {
-+		char *new_name;
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 01900689dc00..e4c641b240df 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -33,6 +33,7 @@
+ #include "string2.h"
+ #include "util/event.h"
+ #include "arch/common.h"
++#include "namespaces.h"
+ #include <regex.h>
+ #include <pthread.h>
+ #include <linux/bitops.h>
+@@ -1696,6 +1697,15 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ 		 * DSO is the same as when 'perf record' ran.
+ 		 */
+ 		__symbol__join_symfs(filename, filename_size, dso->long_name);
 +
-+		new_name = filename_with_chroot(dso->nsinfo->pid,
-+						dso->long_name);
-+		if (new_name && filename__read_build_id(new_name, &dso->bid) > 0)
-+			dso->has_build_id = true;
-+		free(new_name);
-+	}
- 	nsinfo__mountns_exit(&nsc);
++		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
++			char *new_name = filename_with_chroot(dso->nsinfo->pid,
++							      filename);
++			if (new_name) {
++				strlcpy(filename, new_name, filename_size);
++				free(new_name);
++			}
++		}
+ 	}
  
- 	return dso->has_build_id ? 0 : -1;
+ 	free(build_id_path);
+@@ -2036,6 +2046,7 @@ static int symbol__disassemble(struct symbol *sym, struct annotate_args *args)
+ 	memset(&objdump_process, 0, sizeof(objdump_process));
+ 	objdump_process.argv = objdump_argv;
+ 	objdump_process.out = -1;
++	objdump_process.err = -1;
+ 	if (start_command(&objdump_process)) {
+ 		pr_err("Failure starting to run %s\n", command);
+ 		err = -1;
 -- 
 2.35.0.rc2.247.g8bbb082509-goog
 

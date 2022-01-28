@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 163D349F021
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD64749F01D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345073AbiA1AyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
+        id S1345332AbiA1AyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345042AbiA1Axx (ORCPT
+        with ESMTP id S1345051AbiA1Axy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 19:53:53 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAB2C06174E
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:41 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id v8-20020a17090a778800b001b2e6d08cd1so2855198pjk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:41 -0800 (PST)
+        Thu, 27 Jan 2022 19:53:54 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB31C061758
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:42 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id x1-20020a17090ab00100b001b380b8ed35so2853111pjq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=1vh1VvZNhhnSubMCarnsOOQ5sYO+DptkQEoJu+SV9JY=;
-        b=Kr+fuAc5ZPitCBM3g3XiW8CsMou2XI88siFZXSY12stQOkRkSiv37ClwtffG0QeePP
-         +WpTTNt4HAzZ6sFLTbyEln7C+a6mMQKabtVoarqk48EDEWwWikx8Xu62FmczNgyYQTj4
-         VZGQJHnWadtfHRj+elbAze5Npy0Mb4a2gVH4RVtk4VPYyL6q3eDRlKVasu6DImWGxBwa
-         bHIRl+Knx3XkHvey+nWhLbAjCrcOu3iTm/Ludl8fmxU5VrjqCjnzTPfgFdk+4xZS1vsu
-         876zdw4Xw1ooQKps6dgf5iU+8Nhr0zAcPFyBnWmU8+rxdg4SnFlrTkiwOfz/JVahoKbY
-         EYkQ==
+        bh=noH9rc43NtcZZk3qKXNAM68WagyoFBJqh2/OYWzzfPU=;
+        b=tPUaKMnIg2K86mUTwaL+noJBuc8zQTKSlcBDAq7cGRCmkzbgoMWo3lKRW9jH9Vw0hG
+         mSQ53Y5dDDhFoXXDcfoKceDkHi6UnTY5xv9fRtaEE4Dt10tTl4Ne5kTUUnTWyiYp8Ido
+         VfD3s07xyStDdnjUvEV3lzb67QSHfEA/xqmozOiDsK01KULTy9x6fbZ521r8Dp42ZQ1S
+         qIdMITmRSPk8vsUhPS4LYeJEl8+Op3kQtH13HhifHQO/QbMUqvTD82vlJ5OMBslY2pxY
+         kTea3f0utvsdMi0aCg6aIuN/jf8/Q9vmW6sTrVXefu9TSu2JR3RfdrjwSGH5BMTru9Ca
+         qkPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=1vh1VvZNhhnSubMCarnsOOQ5sYO+DptkQEoJu+SV9JY=;
-        b=44nBAraj4pvAfKCMTLF6A+gkplwwo+xlL1QvJhejD2Je/2qImSwsD8+ZN5MrBI8dxi
-         B2QDKFWOqgPrSsk9nA/sohBtQ4wdzZXKJchpPPrBQVDgDUdU/2uQLugeUfvNUs3LhlIM
-         pDA0Vf7o2i4OBYIjfuvr+Fse4wo5xPTNAxaxt2j4geg1Z0JOd9mhB+UMv4jiaqYVVBWO
-         xuSnSy1l6vF4JNCuiKVpfaxENIeyLSeJIuZNRNfVqmrWP/2xUcHJWBlkNI9z5OVoB1MQ
-         GOpp3wtkFna5rL9mhPdtfjQNz6cmAmcsZT3idwFDHIEDbubw+onQzknfkN66dALAcX9L
-         LlbA==
-X-Gm-Message-State: AOAM530Mwjc2lFfPdWTye63lrzo1wsRb/zAuR9wNfkSCCE5Xhw4fCE3G
-        bmjUru0gTDt5rTPfD4nLN50OYNDDxWU=
-X-Google-Smtp-Source: ABdhPJwTMAcCNpEASRZ8M0zDEAr02qtTm+qXF8X/FzAwXCV1T4TqMnuylsdUjEg3UkvfWRQpF1ZoxxFTso4=
+        bh=noH9rc43NtcZZk3qKXNAM68WagyoFBJqh2/OYWzzfPU=;
+        b=D3yz4ndOiweZtak6/z7jNKySjn8Wod/afdhJtMI+itrKlhQMsahDlut8lFNmgLXflz
+         V/7feKABpDsMjo+TVhXlIkbIaU1ZqAOhEnt6By/RNfYlk7YT1yNVNb/62zpPtwLWk0CF
+         7io6ewG0Ov+zlCrRIRBrnQaN3vLPiVH80AYVHYzrRGeGQnY3ZJvlknvuTU2r2CPLpofj
+         5CS7bRKdYgiaXyXWEGu4ySVj+bCnVQCOP4f0Fa9LG3kUI/YR+5lV5/GSvedORaqI7N4w
+         DM9q0qJQXfug7D7UltQHCmMRhv3/jGnXpW5F9TZZeyvNm47LT/1Y2RWiS2ktJZYZSg48
+         o/lQ==
+X-Gm-Message-State: AOAM530YHtMjR4R4yI3WPXfo9lduTbKxygecQqaNdV05xC3gZDX5cmFY
+        6Z+blbFARCRj0jcw03DrwikYCC9R9jA=
+X-Google-Smtp-Source: ABdhPJyr6LlxPKDUE8fsLXXo5l1/1ZdCXWljHyCpawtXxfcExphqhBvD2MToVMzZUnc1PH+jzCcY8eh7qoc=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:d48e:: with SMTP id
- c14mr5713568plg.79.1643331220698; Thu, 27 Jan 2022 16:53:40 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:15d6:: with SMTP id
+ o22mr5788714pfu.35.1643331222083; Thu, 27 Jan 2022 16:53:42 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 28 Jan 2022 00:52:02 +0000
+Date:   Fri, 28 Jan 2022 00:52:03 +0000
 In-Reply-To: <20220128005208.4008533-1-seanjc@google.com>
-Message-Id: <20220128005208.4008533-17-seanjc@google.com>
+Message-Id: <20220128005208.4008533-18-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220128005208.4008533-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 16/22] KVM: SVM: Rename svm_flush_tlb() to svm_flush_tlb_current()
+Subject: [PATCH 17/22] KVM: SVM: Remove unused MAX_INST_SIZE #define
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -66,79 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename svm_flush_tlb() to svm_flush_tlb_current() so that at least one of
-the flushing operations in svm_x86_ops can be filled via kvm-x86-ops.h,
-and to document the scope of the flush (specifically that it doesn't
-flush "all").
-
-Opportunistically make svm_tlb_flush_current(), was svm_flush_tlb(),
-static.
+Remove SVM's MAX_INST_SIZE, which has long since been obsoleted by the
+common MAX_INSN_SIZE.  Note, the latter's "insn" is also the generally
+preferred abbreviation of instruction.
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/svm.c | 12 +++++++-----
- arch/x86/kvm/svm/svm.h |  1 -
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ arch/x86/kvm/svm/svm.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index fda09a6ea3ba..5382710ba106 100644
+index 5382710ba106..87e136b81991 100644
 --- a/arch/x86/kvm/svm/svm.c
 +++ b/arch/x86/kvm/svm/svm.c
-@@ -265,6 +265,8 @@ u32 svm_msrpm_offset(u32 msr)
- 
- #define MAX_INST_SIZE 15
- 
-+static void svm_flush_tlb_current(struct kvm_vcpu *vcpu);
-+
- static int get_npt_level(void)
- {
- #ifdef CONFIG_X86_64
-@@ -1654,7 +1656,7 @@ void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
- 	unsigned long old_cr4 = vcpu->arch.cr4;
- 
- 	if (npt_enabled && ((old_cr4 ^ cr4) & X86_CR4_PGE))
--		svm_flush_tlb(vcpu);
-+		svm_flush_tlb_current(vcpu);
- 
- 	vcpu->arch.cr4 = cr4;
- 	if (!npt_enabled)
-@@ -3489,7 +3491,7 @@ static int svm_set_identity_map_addr(struct kvm *kvm, u64 ident_addr)
- 	return 0;
+@@ -263,8 +263,6 @@ u32 svm_msrpm_offset(u32 msr)
+ 	return MSR_INVALID;
  }
  
--void svm_flush_tlb(struct kvm_vcpu *vcpu)
-+static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
+-#define MAX_INST_SIZE 15
+-
+ static void svm_flush_tlb_current(struct kvm_vcpu *vcpu);
  
-@@ -4512,10 +4514,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.set_rflags = svm_set_rflags,
- 	.get_if_flag = svm_get_if_flag,
- 
--	.flush_tlb_all = svm_flush_tlb,
--	.flush_tlb_current = svm_flush_tlb,
-+	.flush_tlb_all = svm_flush_tlb_current,
-+	.flush_tlb_current = svm_flush_tlb_current,
- 	.flush_tlb_gva = svm_flush_tlb_gva,
--	.flush_tlb_guest = svm_flush_tlb,
-+	.flush_tlb_guest = svm_flush_tlb_current,
- 
- 	.vcpu_pre_run = svm_vcpu_pre_run,
- 	.vcpu_run = svm_vcpu_run,
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index baa5435f1bde..16ad5fa128f4 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -480,7 +480,6 @@ void svm_vcpu_free_msrpm(u32 *msrpm);
- int svm_set_efer(struct kvm_vcpu *vcpu, u64 efer);
- void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0);
- void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4);
--void svm_flush_tlb(struct kvm_vcpu *vcpu);
- void disable_nmi_singlestep(struct vcpu_svm *svm);
- bool svm_smi_blocked(struct kvm_vcpu *vcpu);
- bool svm_nmi_blocked(struct kvm_vcpu *vcpu);
+ static int get_npt_level(void)
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

@@ -2,237 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F144A0443
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B674A044A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347866AbiA1XfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 18:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S1350594AbiA1XjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 18:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiA1XfE (ORCPT
+        with ESMTP id S230352AbiA1XjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:35:04 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2974FC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:35:04 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id s18so9666759ioa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:35:04 -0800 (PST)
+        Fri, 28 Jan 2022 18:39:13 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29239C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:39:13 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id o10so6830732ilh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:39:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JpxTvdtKkLVFIRueCOXz6q3rm9liXhmMzUpLMlmCnLU=;
-        b=g7/+yn+1wuV/EnT2ud8bvqTF+w10NI6OEzAsSl22TTd5ghnv4EncSe/8gGllBy0rVZ
-         Q62XSk5EQ6GfQwP0muWw+uvAAXSc31tPIev3WiOaXTLLtnYW9pnVG+LlI1Bd1Jl6eo9L
-         1LCDO3Z0/zb7TtpfkucaBFtyVTqZG+PxbqpM8/Ww+Pc7kh7yBeJ+/wqOCiJtb5NyL9Hh
-         x03Ifmpv6zWzidSFG/zSX/BFFT3X7uVVF2B0o2xDbLOruEgDl0uOXk439QUGaKnFYSr+
-         xhexMcQqGzNUo2DbX3ttUiEH90YR3qvrsXF7WRt42klLthjuw6ylUIHqVb1eg2t7uNcZ
-         T8iQ==
+        bh=sSoeKVGmRxEg8tOZhtYJB1etT9XFRjTuGXZeWmf9w+0=;
+        b=BrzznfTryT3w3P6cPNQ0V/uOTme8La+zktEYxT20NRFBO3X+DJr/13ALQCWj1Kjyhv
+         kdYEazcEfZ2K80oPUrpsaOejDKXTyfJ/EQziUZMJ0UG8uQM2ZLk3jlHrpmyvku+M93P3
+         RSu9mWImS4H9hkJx9QVC4Zlh2TfQunT92dYf2YZaS+7Ar8ydhtk4wagLlsyMG3itdzNL
+         ELHTGA+1KaZN7AOxrPxSgVPWS9PDz2+xdYNdZCCfyFWmJbw6e3qwx257066LmAnxUIKM
+         bbjKk6V4pV0y3ohZb7F5kD9l+gVXQKA9Qrsw3mWEUDPxN6s3mimOTDsm3ZRLSQwnNYT2
+         Xxng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JpxTvdtKkLVFIRueCOXz6q3rm9liXhmMzUpLMlmCnLU=;
-        b=zGwIdZ9IEjAwXVbPy1je1+CvHJtJveuIMkfLEGaoRHeutXp+mEWbOijmFMHAyS8HqC
-         EUolUyp7hUHAStcHQzL5fL2DDTiSWHHWzwtyBh6Jy8Xi2ekrJe6cKY53b3P7iu1I4U+m
-         YB06AFnnjti1VtF8TZWMjoR8fK8upCtFBywXIK4gV0w2wDIt/pqbi5+kIYoBwDx2/Rml
-         JrAEI+q7v3jTb+nmZgPbeSipP4EkXYtLa4DyGpTIThd2TXHT4YU248DhdszdVQkRDRzV
-         8gLqYSAiUC+EwkQYZr7fhCZCFLgSZ/o/osN25I4ZH1yOvQxIczVuTWVPsRE445cYnkY7
-         4xCg==
-X-Gm-Message-State: AOAM531qXwIszo6Yq8FIs/sfd6vor4VUQay1yAlDqfmix1v21geJ+hml
-        OXyDgGcxPNc7LC4R8MF0vIygsgwComyLMKcjQM9kgQ==
-X-Google-Smtp-Source: ABdhPJwWUB5cbdyBGAqxyMyGHOnbfYZPcT4OjPCpBoMeE03TcdvaUaIgTMJv3osnClnOWBdt7NXijWYqK9dvzOoSVoc=
-X-Received: by 2002:a6b:bf81:: with SMTP id p123mr6645468iof.171.1643412903171;
- Fri, 28 Jan 2022 15:35:03 -0800 (PST)
+        bh=sSoeKVGmRxEg8tOZhtYJB1etT9XFRjTuGXZeWmf9w+0=;
+        b=6xjIbwxOyeT3T0BNZJpHl6AEhMvcdV249Q8UtOMd7MxC6J/FAIEqhu8OGYnnMY/iSC
+         89ySW/aKsycNX86XcIO5rcAnrGsoYOb7c6ArxGVhQcbBGsQ+T3zh8g4T54k7e6dOKwaP
+         Jzjk71Wd4xlG5e3oalqiLjSNBdoheNaCNrn43rn+4Y7Iigpak6Pel4PL8qdUQpgH7jtE
+         R/03DFydIZ/NlWa1vaZJlDfJaqaeOxk9TWxyret9GuURk14SYB97xLk0genHbU8O8r2j
+         gH09DIy8l0hvwml5HLNW+yxgdUcWSHZEC9ROUle5YlIg/BT23dF9PvvO8euZqbnLZ+g/
+         TTmQ==
+X-Gm-Message-State: AOAM531nKSxoWQ0hceo5FOzDZCYhaBiMqgA4XiWjLwtxH19ByXyDI53C
+        JLhj+aVr/cMsyWR6gz0omIwoP0NLQIDv/UNP54jG8Q==
+X-Google-Smtp-Source: ABdhPJzG9F2/sgqDm1NImlbDTFl47M9Ma89dENPnxqzo/P9DxBAwz4qYv5vPd1DbQABP8qx/rII/w3+smiTQooixux8=
+X-Received: by 2002:a05:6e02:19c5:: with SMTP id r5mr5209733ill.164.1643413152318;
+ Fri, 28 Jan 2022 15:39:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220128222605.66828-1-mike.kravetz@oracle.com> <20220128222605.66828-4-mike.kravetz@oracle.com>
-In-Reply-To: <20220128222605.66828-4-mike.kravetz@oracle.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 28 Jan 2022 15:34:27 -0800
-Message-ID: <CAJHvVcgjJNN81bAhsANccqsdYv3Xt5rMxH6i=JtHxijch55WFQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] userfaultfd/selftests: enable huegtlb remap and
- remove event testing
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Linux MM <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+References: <20220126183637.1840960-1-pasha.tatashin@soleen.com> <20220126183637.1840960-5-pasha.tatashin@soleen.com>
+In-Reply-To: <20220126183637.1840960-5-pasha.tatashin@soleen.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Fri, 28 Jan 2022 15:39:01 -0800
+Message-ID: <CAAPL-u-yo4LuFdudYMEccUYTOMpvnqEjzMZRjOhUBkR4t=BSDw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] mm/page_table_check: check entries at pmd levels
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, Greg Thelen <gthelen@google.com>,
+        mingo@redhat.com, will@kernel.org, rppt@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
+        songmuchun@bytedance.com, qydwhotmail@gmail.com,
+        Hugh Dickins <hughd@google.com>, Zi Yan <ziy@nvidia.com>,
+        anshuman.khandual@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Besides the help text, looks correct to me. I applied the patches and
-ran the userfaultfd selftests, and everything seems to work properly.
-
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
-
-On Fri, Jan 28, 2022 at 2:26 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Wed, Jan 26, 2022 at 10:36 AM Pasha Tatashin
+<pasha.tatashin@soleen.com> wrote:
 >
-> With MADV_DONTNEED support added to hugetlb mappings, mremap testing
-> can also be enabled for hugetlb.
+> syzbot detected a case where the page table counters were not properly
+> updated.
 >
-> Modify the tests to use madvise MADV_DONTNEED and MADV_REMOVE instead of
-> fallocate hole puch for releasing hugetlb pages.
+> syzkaller login:  ------------[ cut here ]------------
+> kernel BUG at mm/page_table_check.c:162!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 3099 Comm: pasha Not tainted 5.16.0+ #48
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO4
+> RIP: 0010:__page_table_check_zero+0x159/0x1a0
+> Code: 7d 3a b2 ff 45 39 f5 74 2a e8 43 38 b2 ff 4d 85 e4 01
+> RSP: 0018:ffff888010667418 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000
+> RDX: ffff88800cea8680 RSI: ffffffff81becaf9 RDI: 0000000003
+> RBP: ffff888010667450 R08: 0000000000000001 R09: 0000000000
+> R10: ffffffff81becaab R11: 0000000000000001 R12: ffff888008
+> R13: 0000000000000001 R14: 0000000000000200 R15: dffffc0000
+> FS:  0000000000000000(0000) GS:ffff888035e00000(0000) knlG0
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffd875cad00 CR3: 00000000094ce000 CR4: 0000000000
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000
+> Call Trace:
+>  <TASK>
+>  free_pcp_prepare+0x3be/0xaa0
+>  free_unref_page+0x1c/0x650
+>  ? trace_hardirqs_on+0x6a/0x1d0
+>  free_compound_page+0xec/0x130
+>  free_transhuge_page+0x1be/0x260
+>  __put_compound_page+0x90/0xd0
+>  release_pages+0x54c/0x1060
+>  ? filemap_remove_folio+0x161/0x210
+>  ? lock_downgrade+0x720/0x720
+>  ? __put_page+0x150/0x150
+>  ? filemap_free_folio+0x164/0x350
+>  __pagevec_release+0x7c/0x110
+>  shmem_undo_range+0x85e/0x1250
+> ...
 >
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> The repro involved having a huge page that is split due to uprobe event
+> temporarily replacing one of the pages in the huge page. Later the huge
+> page was combined again, but the counters were off, as the PTE level
+> was not properly updated.
+>
+> Make sure that when PMD is cleared and prior to freeing the level the
+> PTEs are updated.
+>
+> Fixes: df4e817b7108 ("mm: page table check")
+>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > ---
->  tools/testing/selftests/vm/userfaultfd.c | 67 ++++++++++++------------
->  1 file changed, 34 insertions(+), 33 deletions(-)
+>  include/linux/page_table_check.h | 18 ++++++++++++++++++
+>  mm/khugepaged.c                  |  3 +++
+>  mm/page_table_check.c            | 21 +++++++++++++++++++++
+>  3 files changed, 42 insertions(+)
 >
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index d3fd24f9fae8..f5578ef85560 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -88,7 +88,6 @@ static bool test_uffdio_minor = false;
->  static bool map_shared;
->  static int shm_fd;
->  static int huge_fd;
-> -static char *huge_fd_off0;
->  static unsigned long long *count_verify;
->  static int uffd = -1;
->  static int uffd_flags, finished, *pipefd;
-> @@ -124,9 +123,9 @@ const char *examples =
->      "./userfaultfd anon 100 99999\n\n"
->      "# Run share memory test on 1GiB region with 99 bounces:\n"
->      "./userfaultfd shmem 1000 99\n\n"
-> -    "# Run hugetlb memory test on 256MiB region with 50 bounces (using /dev/hugepages/hugefile):\n"
-> +    "# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
->      "./userfaultfd hugetlb 256 50 /dev/hugepages/hugefile\n\n"
-
-We should remove the path from the line above here as well, right?
-Since for the hugetlb test type, we now just MAP_ANONYMOUS |
-MAP_HUGETLB, we don't open a file descriptor.
-
-> -    "# Run the same hugetlb test but using shmem:\n"
-> +    "# Run the same hugetlb test but using shared file:\n"
->      "./userfaultfd hugetlb_shared 256 50 /dev/hugepages/hugefile\n\n"
->      "# 10MiB-~6GiB 999 bounces anonymous test, "
->      "continue forever unless an error triggers\n"
-> @@ -223,10 +222,13 @@ static void noop_alias_mapping(__u64 *start, size_t len, unsigned long offset)
+> diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+> index 38cace1da7b6..e88bbe37727b 100644
+> --- a/include/linux/page_table_check.h
+> +++ b/include/linux/page_table_check.h
+> @@ -26,6 +26,8 @@ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+>                                 pmd_t *pmdp, pmd_t pmd);
+>  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+>                                 pud_t *pudp, pud_t pud);
+> +void __page_table_check_pmd_clear_full(struct mm_struct *mm, unsigned long addr,
+> +                                      pmd_t pmd);
 >
->  static void hugetlb_release_pages(char *rel_area)
+>  static inline void page_table_check_alloc(struct page *page, unsigned int order)
 >  {
-> -       if (fallocate(huge_fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-> -                     rel_area == huge_fd_off0 ? 0 : nr_pages * page_size,
-> -                     nr_pages * page_size))
-> -               err("fallocate() failed");
-> +       if (!map_shared) {
-> +               if (madvise(rel_area, nr_pages * page_size, MADV_DONTNEED))
-> +                       err("madvise(MADV_DONTNEED) failed");
-> +       } else {
-> +               if (madvise(rel_area, nr_pages * page_size, MADV_REMOVE))
-> +                       err("madvise(MADV_REMOVE) failed");
-> +       }
+> @@ -100,6 +102,16 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
+>         __page_table_check_pud_set(mm, addr, pudp, pud);
 >  }
 >
->  static void hugetlb_allocate_area(void **alloc_area)
-> @@ -234,26 +236,37 @@ static void hugetlb_allocate_area(void **alloc_area)
->         void *area_alias = NULL;
->         char **alloc_area_alias;
->
-> -       *alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
-> -                          (map_shared ? MAP_SHARED : MAP_PRIVATE) |
-> -                          MAP_HUGETLB |
-> -                          (*alloc_area == area_src ? 0 : MAP_NORESERVE),
-> -                          huge_fd, *alloc_area == area_src ? 0 :
-> -                          nr_pages * page_size);
-> +       if (!map_shared)
-> +               *alloc_area = mmap(NULL,
-> +                       nr_pages * page_size,
-> +                       PROT_READ | PROT_WRITE,
-> +                       MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB |
-> +                               (*alloc_area == area_src ? 0 : MAP_NORESERVE),
-> +                       -1,
-> +                       0);
-> +       else
-> +               *alloc_area = mmap(NULL,
-> +                       nr_pages * page_size,
-> +                       PROT_READ | PROT_WRITE,
-> +                       MAP_SHARED |
-> +                               (*alloc_area == area_src ? 0 : MAP_NORESERVE),
-> +                       huge_fd,
-> +                       *alloc_area == area_src ? 0 : nr_pages * page_size);
->         if (*alloc_area == MAP_FAILED)
->                 err("mmap of hugetlbfs file failed");
->
->         if (map_shared) {
-> -               area_alias = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
-> -                                 MAP_SHARED | MAP_HUGETLB,
-> -                                 huge_fd, *alloc_area == area_src ? 0 :
-> -                                 nr_pages * page_size);
-> +               area_alias = mmap(NULL,
-> +                       nr_pages * page_size,
-> +                       PROT_READ | PROT_WRITE,
-> +                       MAP_SHARED,
-> +                       huge_fd,
-> +                       *alloc_area == area_src ? 0 : nr_pages * page_size);
->                 if (area_alias == MAP_FAILED)
->                         err("mmap of hugetlb file alias failed");
->         }
->
->         if (*alloc_area == area_src) {
-> -               huge_fd_off0 = *alloc_area;
->                 alloc_area_alias = &area_src_alias;
->         } else {
->                 alloc_area_alias = &area_dst_alias;
-> @@ -266,12 +279,7 @@ static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset
->  {
->         if (!map_shared)
->                 return;
-> -       /*
-> -        * We can't zap just the pagetable with hugetlbfs because
-> -        * MADV_DONTEED won't work. So exercise -EEXIST on a alias
-> -        * mapping where the pagetables are not established initially,
-> -        * this way we'll exercise the -EEXEC at the fs level.
-> -        */
+> +static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
+> +                                                  unsigned long addr,
+> +                                                  pmd_t pmd)
+> +{
+> +       if (static_branch_likely(&page_table_check_disabled))
+> +               return;
 > +
->         *start = (unsigned long) area_dst_alias + offset;
+> +       __page_table_check_pmd_clear_full(mm, addr, pmd);
+> +}
+> +
+>  #else
+>
+>  static inline void page_table_check_alloc(struct page *page, unsigned int order)
+> @@ -143,5 +155,11 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
+>  {
 >  }
 >
-> @@ -424,7 +432,6 @@ static void uffd_test_ctx_clear(void)
->                 uffd = -1;
+> +static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
+> +                                                  unsigned long addr,
+> +                                                  pmd_t pmd)
+> +{
+> +}
+> +
+>  #endif /* CONFIG_PAGE_TABLE_CHECK */
+>  #endif /* __LINUX_PAGE_TABLE_CHECK_H */
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 30e59e4af272..d84977c6dc0d 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/hashtable.h>
+>  #include <linux/userfaultfd_k.h>
+>  #include <linux/page_idle.h>
+> +#include <linux/page_table_check.h>
+>  #include <linux/swapops.h>
+>  #include <linux/shmem_fs.h>
+>
+> @@ -1422,10 +1423,12 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+>         spinlock_t *ptl;
+>         pmd_t pmd;
+>
+> +       mmap_assert_write_locked(mm);
+>         ptl = pmd_lock(vma->vm_mm, pmdp);
+>         pmd = pmdp_collapse_flush(vma, addr, pmdp);
+>         spin_unlock(ptl);
+>         mm_dec_nr_ptes(mm);
+> +       page_table_check_pmd_clear_full(mm, addr, pmd);
+
+pmdp_collapse_flush() already calls page_table_check_pmd_clear() via
+pmdp_huge_get_and_clean().  Both pmdp_table_check_pmd_clear() and
+page_table_check_pmd_clear_full() can call
+__page_table_check_pmd_clear(). If that happens, then the page table
+check counters can be messed up.  Certainly, there is no bug here
+because the pmd is not huge and __page_table_check_pmd_clear() should
+be skipped in both calls. But it would be better to avoid this
+unnecessary subtlety by renaming page_table_check_pmd_clear_full() to
+page_table_check_clear_pte_range() and not calling
+__page_table_check_pmd_clear() there.  To make the code even more
+clear, __page_table_check_pmd_clear() can also be renamed as
+__page_table_check_huge_pmd_clear() (similar for its callers).
+
+>         pte_free(mm, pmd_pgtable(pmd));
+>  }
+>
+> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> index c61d7ebe13b1..251f95a808b4 100644
+> --- a/mm/page_table_check.c
+> +++ b/mm/page_table_check.c
+> @@ -247,3 +247,24 @@ void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
 >         }
->
-> -       huge_fd_off0 = NULL;
->         munmap_area((void **)&area_src);
->         munmap_area((void **)&area_src_alias);
->         munmap_area((void **)&area_dst);
-> @@ -922,10 +929,7 @@ static int faulting_process(int signal_test)
->         struct sigaction act;
->         unsigned long signalled = 0;
->
-> -       if (test_type != TEST_HUGETLB)
-> -               split_nr_pages = (nr_pages + 1) / 2;
-> -       else
-> -               split_nr_pages = nr_pages;
-> +       split_nr_pages = (nr_pages + 1) / 2;
->
->         if (signal_test) {
->                 sigbuf = &jbuf;
-> @@ -982,9 +986,6 @@ static int faulting_process(int signal_test)
->         if (signal_test)
->                 return signalled != split_nr_pages;
->
-> -       if (test_type == TEST_HUGETLB)
-> -               return 0;
-> -
->         area_dst = mremap(area_dst, nr_pages * page_size,  nr_pages * page_size,
->                           MREMAP_MAYMOVE | MREMAP_FIXED, area_src);
->         if (area_dst == MAP_FAILED)
-> @@ -1667,7 +1668,7 @@ int main(int argc, char **argv)
->         }
->         nr_pages = nr_pages_per_cpu * nr_cpus;
->
-> -       if (test_type == TEST_HUGETLB) {
-> +       if (test_type == TEST_HUGETLB && map_shared) {
->                 if (argc < 5)
->                         usage();
->                 huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
+>  }
+>  EXPORT_SYMBOL(__page_table_check_pud_set);
+> +
+> +void __page_table_check_pmd_clear_full(struct mm_struct *mm, unsigned long addr,
+> +                                      pmd_t pmd)
+> +{
+> +       if (&init_mm == mm)
+> +               return;
+> +
+> +       if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
+> +               pte_t *ptep = pte_offset_map(&pmd, addr);
+> +               unsigned long i;
+> +
+> +               pte_unmap(ptep);
+> +               for (i = 0; i < PTRS_PER_PTE; i++) {
+> +                       __page_table_check_pte_clear(mm, addr, *ptep);
+> +                       addr += PAGE_SIZE;
+> +                       ptep++;
+> +               }
+> +       } else {
+> +               __page_table_check_pmd_clear(mm, addr, pmd);
+> +       }
+> +}
 > --
-> 2.34.1
+> 2.35.0.rc0.227.g00780c9af4-goog
 >

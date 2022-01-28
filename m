@@ -2,116 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 559C049F6E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CA449F6EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244437AbiA1KMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:12:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36314 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243748AbiA1KM3 (ORCPT
+        id S244839AbiA1KNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:13:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37538 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244542AbiA1KNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:12:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643364749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vrB8wKd/YuQDRzVLBwG4KgSFnRULjzQXEtQgJ4S5oNc=;
-        b=I0SqErYooRrn5ZBOHjHEs3SmIxrzzELlo3jWXNvrVQgSxqqE1TWZDSBSDRE9NtHCjsbZ++
-        5bRB2q5WwynoZBNaaG+y7uTstdSL4mWrTdNuLMZjWTBaeHjaeToBUelQajXoetempl1+ux
-        4Vg3FjNqJOL6pdRIsH5rMaNJ7hCwloA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-339-O80TzOU3MMC2GBxfNuzNFA-1; Fri, 28 Jan 2022 05:12:24 -0500
-X-MC-Unique: O80TzOU3MMC2GBxfNuzNFA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 28 Jan 2022 05:13:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 84E102F45;
-        Fri, 28 Jan 2022 10:12:22 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DBEC260C41;
-        Fri, 28 Jan 2022 10:12:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220128074731.1623738-1-hch@lst.de>
-References: <20220128074731.1623738-1-hch@lst.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Subject: Re: [PATCH v2] fs: rename S_KERNEL_FILE
+        by ams.source.kernel.org (Postfix) with ESMTPS id E136CB818E0;
+        Fri, 28 Jan 2022 10:13:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358F4C340E0;
+        Fri, 28 Jan 2022 10:13:10 +0000 (UTC)
+Message-ID: <040ba85c-6cdd-8053-30ed-194548d23a18@xs4all.nl>
+Date:   Fri, 28 Jan 2022 11:13:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <918224.1643364739.1@warthog.procyon.org.uk>
-Date:   Fri, 28 Jan 2022 10:12:19 +0000
-Message-ID: <918225.1643364739@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] media: s5p-mfc: set V4L2_BUF_FLAG_LAST flag on final
+ buffer
+Content-Language: en-US
+To:     Andriy Gelman <andriy.gelman@gmail.com>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        Kamil Debski <kamil@wypas.org>,
+        Jeongtae Park <jtp.park@samsung.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200502194052.485-1-andriy.gelman@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20200502194052.485-1-andriy.gelman@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@lst.de> wrote:
+Hi all,
 
-> S_KERNEL_FILE is grossly misnamed.  We have plenty of files hold
+I'm going through a bunch of (very) old patches in my patchwork TODO list
+that for one reason or another I never processed. This patch is one of
+them.
 
-"held".
+I don't feel comfortable merging this, given the follow-ups that were posted.
 
-> open by the kernel kernel using filp_open.
+If someone wants to get this in anyway, then please make a new patch. I'm
+marking it as 'Changes Requested' in patchwork.
 
-You said "kernel" twice.
+Regards,
 
-And so what?  Cachefiles holds files open by filp_open - but it can only do so
-temporarily otherwise EMFILE/ENFILE and OOMs start to become a serious problem
-because it could end up holding thousands of files open (one or two of the
-xfstests cause this to happen).
+	Hans
 
-Further, holding the file open *doesn't* prevent cachefilesd from trying to
-cull the file to make space whilst it's "in use".
-
-Yet further, I'm not holding the directories that form the cache layout open
-with filp_open at all - I'm not reading them, so that would just be a waste of
-resources - but I really don't want cachefilesd culling them because it sees
-they're empty but cachefiles is holding them ready.
-
-> This flag OTOH signals the inode as being a special snowflake that
-> cachefiles holds onto that can't be unlinked because of ..., erm, pixie
-> dust.
-
-Really?  I presume you read the explanation I gave of the races that are a
-consequence of splitting the driver between the kernel and userspace?  I could
-avoid them - or at least mitigate them - by keeping my own list of all the
-inodes in use by cachefiles so that cachefilesd can query it.  I did, in fact,
-use to have such a list, but the core kernel already has such lists and the
-facilities to translate pathnames into internal objects, so my stuff ought to
-be redundant - all I need is one inode flag.
-
-Further, that inode flag can be shared with anyone else who wants to do
-something similar.  It's just an "I'm using this" lock.  There's no particular
-reason to limit its use to cachefiles.  In fact, it is better if it is then
-shared so that in the unlikely event that two drivers try to use the same
-file, an error will occur.
-
-I do use it to defend cachefiles against itself also.  In the event that
-there's a bug or a race and it tries to reuse its own cache - particularly
-with something like NFS that can have multiple superblocks for the same
-source, just with different I/O parameters, for example - this can lead to
-data corruption.  I try to defend against it in fscache also, but there can be
-delayed effects due to object finalisation being done in the background after
-fscache has returned to the netfs.
-
-Now, I do think there's an argument to be made for splitting the flag into
-two, as I advanced in a proposed patch.  One piece would just be an "I'm using
-this", the other would be a "don't delete this" flag.  Both are of potential
-use to other drivers.
-
-I take it you'd prefer this to be done a different way?
-
-David
+On 02/05/2020 21:40, Andriy Gelman wrote:
+> From: Andriy Gelman <andriy.gelman@gmail.com>
+> 
+> As per V4L2 api, the final buffer should set V4L2_BUF_FLAG_LAST flag.
+> 
+> Signed-off-by: Andriy Gelman <andriy.gelman@gmail.com>
+> ---
+>  drivers/media/platform/s5p-mfc/s5p_mfc.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+> index 5c2a23b953a4..b3d9b3a523fe 100644
+> --- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
+> +++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+> @@ -614,6 +614,7 @@ static void s5p_mfc_handle_stream_complete(struct s5p_mfc_ctx *ctx)
+>  		list_del(&mb_entry->list);
+>  		ctx->dst_queue_cnt--;
+>  		vb2_set_plane_payload(&mb_entry->b->vb2_buf, 0, 0);
+> +		mb_entry->b->flags |= V4L2_BUF_FLAG_LAST;
+>  		vb2_buffer_done(&mb_entry->b->vb2_buf, VB2_BUF_STATE_DONE);
+>  	}
+>  
 

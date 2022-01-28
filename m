@@ -2,164 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CCF4A044B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40454A046B
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351771AbiA1XkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 18:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiA1Xj4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:39:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9826DC061714;
-        Fri, 28 Jan 2022 15:39:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53A66B82722;
-        Fri, 28 Jan 2022 23:39:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12791C340E7;
-        Fri, 28 Jan 2022 23:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643413194;
-        bh=dbo13IaVnDONaIM/h10XQiZJNrjWSPXPYq8sfpbm3og=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hZDXtal+sMueHz/5BxJqZ4+b+pWx1r5OCD6YdTC3VdDH+3fGa0l+xx9bIr/xxuBCj
-         lzDgNVh6trcQLS0i0zdycX4fil9dtqr/rM2DGhdbKqhAnoT9ZLX94vXDKHEmnJnUt1
-         nLYItAP3Njnuf2WAKaF6qZbl/ZSvVgYsGsx4fn5oCV0u7mMsGWUEfXLoxG/ehuvVgt
-         eys1CPxBxFzrc+KtPqgs/AeFqOYl/quID4VM0kFckcHZOLHqr4D79JK41WrR1KXhTL
-         9VkvnDVMRSwn7nA8qm4psiH1deabhXh7M8zLe4ijhG31IYPaDDk6WC7ciMUE2VJJiJ
-         zsHxYeXH7KOSw==
-Date:   Fri, 28 Jan 2022 16:39:49 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Isabella Basso <isabbasso@riseup.net>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Kconfig.debug: Make DEBUG_INFO always default=n
-Message-ID: <YfR+xXcTYvHooTc0@dev-arch.archlinux-ax161>
-References: <20220128214131.580131-1-keescook@chromium.org>
+        id S1344508AbiA1XlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 18:41:06 -0500
+Received: from mga06.intel.com ([134.134.136.31]:42619 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230352AbiA1XlE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 18:41:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643413264; x=1674949264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nf2qFgTJ6fU4pbmhpPpUz4DEKZhXCEzLYp+lk4cBfBw=;
+  b=ghpDxoVk8dWi1gn0nqeUFD6khzIp3E3x5JmZ4WwOPh0hmYvbsukHp4ly
+   p5BPA57DKpfY+e6ckeWA39UjU+rU/7b410s2FnlmiXodHw/Qc+buK9pxd
+   tHlcn8U6ngtyV/mnNNfBUr5zLNPZLX62GbQim0+6iKiPEaEChxhxhiTEG
+   mPvpT61xbApC45/4Lkk4L3djl5meSyBfVnvuek7LekEjiRTxVSZXnKuvG
+   bq1EdR5AKlF/rNpiqmeAdnoEd8C2tBo6TK04L/6IihmyNwNi6sMhnCQcG
+   uqXWbs/fItEnY06mb5MNW/SxeDMw9hQ/i+GFeJKQByy+pZ5juUQSUaYRl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307947244"
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="307947244"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:41:04 -0800
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="536332950"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:41:03 -0800
+Date:   Fri, 28 Jan 2022 15:41:03 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 09/44] x86/pkeys: Enable PKS on cpus which support it
+Message-ID: <20220128234103.GL785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-10-ira.weiny@intel.com>
+ <f9db9626-de92-65a4-57f1-cf94511dd137@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128214131.580131-1-keescook@chromium.org>
+In-Reply-To: <f9db9626-de92-65a4-57f1-cf94511dd137@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 01:41:31PM -0800, Kees Cook wrote:
-> While trying to make sure CONFIG_DEBUG_INFO wasn't set for COMPILE_TEST,
-> I ordered the choices incorrectly to retain the prior default=n state.
-> Move DEBUG_INFO_NONE to the top so that the default choice is disabled,
-> and remove the "if COMPILE_TEST" as it is now redundant.
+On Fri, Jan 28, 2022 at 03:18:29PM -0800, Dave Hansen wrote:
+> On 1/27/22 09:54, ira.weiny@intel.com wrote:
+> > Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
+> > specific, manipulation of permission restrictions on supervisor page
+> > mappings.  It uses the same mechanism of Protection Keys as those on
+> > User mappings but applies that mechanism to supervisor mappings using a
+> > supervisor specific MSR.
+> > 
+> > Bit 24 of CR4 is used to enable the feature by software.  Define
+> > pks_setup() to be called when PKS is configured.
 > 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://lore.kernel.org/lkml/YfRY6+CaQxX7O8vF@dev-arch.archlinux-ax161
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-Another fallout of the original change is that defconfigs that do enable
-CONFIG_DEBUG_INFO without any of the DWARF version configs will not have
-debug info anymore.
-
-Mainline:
-
-$ make -sj$(nproc) ARCH=arm64 LLVM=1 mrproper defconfig && rg DEBUG_INFO .config
-9296:CONFIG_DEBUG_INFO=y
-9297:CONFIG_DEBUG_INFO_REDUCED=y
-9298:# CONFIG_DEBUG_INFO_COMPRESSED is not set
-9299:# CONFIG_DEBUG_INFO_SPLIT is not set
-9300:CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-9301:# CONFIG_DEBUG_INFO_DWARF4 is not set
-9302:# CONFIG_DEBUG_INFO_DWARF5 is not set
-
-next-20220128:
-
-$ make -sj$(nproc) ARCH=arm64 LLVM=1 mrproper defconfig && rg DEBUG_INFO .config
-9299:CONFIG_DEBUG_INFO=y
-9300:CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-9301:# CONFIG_DEBUG_INFO_DWARF4 is not set
-9302:# CONFIG_DEBUG_INFO_DWARF5 is not set
-9303:# CONFIG_DEBUG_INFO_NONE is not set
-9304:CONFIG_DEBUG_INFO_REDUCED=y
-9305:# CONFIG_DEBUG_INFO_COMPRESSED is not set
-9306:# CONFIG_DEBUG_INFO_SPLIT is not set
-
-next-20220128 + this patch:
-
-$ make -sj$(nproc) ARCH=arm64 LLVM=1 mrproper defconfig && rg DEBUG_INFO .config
-9299:CONFIG_DEBUG_INFO_NONE=y
-9300:# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
-9301:# CONFIG_DEBUG_INFO_DWARF4 is not set
-9302:# CONFIG_DEBUG_INFO_DWARF5 is not set
-
-I guess there is not really a way around that other than having people
-regenerate their defconfigs (which should really be done each release
-anyways) since DEBUG_INFO is no longer a user selectable symbol and it
-is probably better to have this choice default to no debug info rather
-than debug info. Is there any precedent to updating defconfigs due to a
-change like this or some other way to let people know about it?
-
-Cheers,
-Nathan
-
-> ---
-> Andrew, this is a fix for kconfigdebug-make-debug_info-selectable-from-a-choice.patch
-> ---
->  lib/Kconfig.debug | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+> Again, no need to specify the bit numbers.  We have it in the code. :)
+> At most, just say something like:
 > 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a7b657d67318..a1262358d55a 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -234,7 +234,6 @@ config DEBUG_INFO
->  choice
->  	prompt "Debug information"
->  	depends on DEBUG_KERNEL
-> -	default DEBUG_INFO_NONE if COMPILE_TEST
->  	help
->  	  Selecting something other than "None" results in a kernel image
->  	  that will include debugging info resulting in a larger kernel image.
-> @@ -245,6 +244,12 @@ choice
->  	  Choose which version of DWARF debug info to emit. If unsure,
->  	  select "Toolchain default".
->  
-> +config DEBUG_INFO_NONE
-> +	bool "Disable debug information"
-> +	help
-> +	  Do not build the kernel with debugging information, which will
-> +	  result in a faster and smaller build.
-> +
->  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  	bool "Rely on the toolchain's implicit default DWARF version"
->  	select DEBUG_INFO
-> @@ -283,12 +288,6 @@ config DEBUG_INFO_DWARF5
->  	  config if they rely on tooling that has not yet been updated to
->  	  support DWARF Version 5.
->  
-> -config DEBUG_INFO_NONE
-> -	bool "Disable debug information"
-> -	help
-> -	  Do not build the kernel with debugging information, which will
-> -	  result in a faster and smaller build.
-> -
->  endchoice # "Debug information"
->  
->  if DEBUG_INFO
-> -- 
-> 2.30.2
+> 	PKS is enabled by a new bit in a control register.
+> or
+> 	PKS is enabled by a new bit in CR4.
+> 
+> > Initially, pks_setup() initializes the per-cpu MSR with 0 to enable all
+> > access on all pkeys.
+> 
+> Why not just make it restrictive to start out?  That's what we do for PKU.
+
+This maintains compatibility with the code prior to this patch.  Ie no
+restrictions on kernel mappings.
+
+I'll place the default value patch before this one and use it in this patch.
+
+> 
+> > asm/pks.h is added as a new file to store new
+> > internal functions and structures such as pks_setup().
+> 
+> One writing nit: try to speak in active voice.
+> 
+> Passive: "Foo is added"
+> Active: "Add foo"
+> 
+> It actually makes thing shorter and easier to read:
+> 
+> 	Add asm/pks.h to store new internal functions and structures
+> 	such as pks_setup().
+
+Ok.  I'll update the commit message.
+
+> 
+> > diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
+> > index bcba3c643e63..191c574b2390 100644
+> > --- a/arch/x86/include/uapi/asm/processor-flags.h
+> > +++ b/arch/x86/include/uapi/asm/processor-flags.h
+> > @@ -130,6 +130,8 @@
+> >  #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
+> >  #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
+> >  #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
+> > +#define X86_CR4_PKS_BIT		24 /* enable Protection Keys for Supervisor */
+> > +#define X86_CR4_PKS		_BITUL(X86_CR4_PKS_BIT)
+> >  
+> >  /*
+> >   * x86-64 Task Priority Register, CR8
+> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> > index 7b8382c11788..83c1abce7d93 100644
+> > --- a/arch/x86/kernel/cpu/common.c
+> > +++ b/arch/x86/kernel/cpu/common.c
+> > @@ -59,6 +59,7 @@
+> >  #include <asm/cpu_device_id.h>
+> >  #include <asm/uv/uv.h>
+> >  #include <asm/sigframe.h>
+> > +#include <asm/pks.h>
+> >  
+> >  #include "cpu.h"
+> >  
+> > @@ -1632,6 +1633,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+> >  
+> >  	x86_init_rdrand(c);
+> >  	setup_pku(c);
+> > +	pks_setup();
+> >  
+> >  	/*
+> >  	 * Clear/Set all flags overridden by options, need do it
+> > diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+> > index cf12d8bf122b..02629219e683 100644
+> > --- a/arch/x86/mm/pkeys.c
+> > +++ b/arch/x86/mm/pkeys.c
+> > @@ -206,3 +206,19 @@ u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
+> >  	pkval &= ~(PKEY_ACCESS_MASK << shift);
+> >  	return pkval | accessbits << shift;
+> >  }
+> > +
+> > +#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
+> > +
+> > +/*
+> > + * PKS is independent of PKU and either or both may be supported on a CPU.
+> > + */
+> > +void pks_setup(void)
+> > +{
+> > +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
+> > +		return;
+> > +
+> > +	wrmsrl(MSR_IA32_PKRS, 0);
+> 
+> This probably needs a one-line comment about what it's doing.  As a
+> general rule, I'd much rather have a one-sentence note in a code comment
+> than in the changelog.
+
+Fair enough,
+Ira
+
+> 
+> > +	cr4_set_bits(X86_CR4_PKS);
+> > +}
+> > +
+> > +#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
 > 

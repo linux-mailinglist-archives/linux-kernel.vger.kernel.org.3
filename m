@@ -2,176 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0E449FC4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BABE949FC2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346684AbiA1O77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S242044AbiA1Oxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiA1O7w (ORCPT
+        with ESMTP id S231773AbiA1Oxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:59:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26059C061714;
-        Fri, 28 Jan 2022 06:59:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D25BCB824FE;
-        Fri, 28 Jan 2022 14:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E653EC340E0;
-        Fri, 28 Jan 2022 14:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643381989;
-        bh=/uP5vvPUBDipAzrUPDGSTlRiO2kQLT1St7WxjZjMoZk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KaCJ79tkFQvlEpR301IzypviUYVubfPBjlOsca0nvdWG1Xn7aOKyWYO8nu+VHoOxq
-         z+7LbBCCoKKEoPiWkRzH7JvrtP/2RAr/8+tDGtKD1qjEs6ugWYyL2q8E5WvSMPRbuH
-         nVgt0gWpzAeqcjncb3w8WOh4EPmSsiC6YChX/bcEZpHX1hbcNehVJSUj1yk35f0+eD
-         BFBwIiUW7+cqgIzbMfoJTmuRom0tnBpATDnijlDpURSy40q8JWlFzHXqnBZaHN1Ngg
-         dfzl4tqGb9+fIWYKA289jDwwy8eA16SESsXYAUPhRMFWd6yBIbaclE5ycpq1M00KvA
-         EPczk6P2rUXkQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: stmmac: dwmac-sun8i: make clk really gated during rpm suspended
-Date:   Fri, 28 Jan 2022 22:52:13 +0800
-Message-Id: <20220128145213.2454-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 28 Jan 2022 09:53:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154DDC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:53:46 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643381623;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C5w2S5ndYwVItVkiDPg/uT/UFko3VOhpELYHRGKacXU=;
+        b=LFOjhaqC5qvgSmaAH2KNicSXyl3qeriZ/Gj0IQOoWMWNe4v28oznoIF43IiHE0hhxjd4pf
+        Dp0SDui1xtKckdpveuc/8T8ybHkXnLDZIR6DFQW0s/b1vSLKuIJ9kSTqQ8TBY23jW6LVGt
+        DHUEPv55YkuVVdstdaDU13BUaeb1itS4WUj2Pr0XQ3D7Q0wvLxjguI6VYi3F/x4LOvLDYt
+        PF4VvIMrXt0sTvyMKURsjt1wlCvm1vmU4AzRXd45wcmaDcjKm7Ce/ZtjpHCHu7Ph9IaiFp
+        h+393lQsyi1qViC4Ll9U2p27LHRbZIm3h9sWyqdC9ACvINqSuQdlxLIx/4AluA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643381623;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C5w2S5ndYwVItVkiDPg/uT/UFko3VOhpELYHRGKacXU=;
+        b=r7H3xY7nCZjmcsVrwvUy6GaO5T8z2QBOTJ/TnVehHwHwFxDF2NmH291HC3ZYSLHtC8DAvx
+        AgDGj7XNHAFaklBA==
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+In-Reply-To: <YfNVBzN67rSu/QcE@otcwcpicx3.sc.intel.com>
+References: <20211217220136.2762116-1-fenghua.yu@intel.com>
+ <20211217220136.2762116-6-fenghua.yu@intel.com> <87ee4w6g1n.ffs@tglx>
+ <87bl006fdb.ffs@tglx> <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
+ <878rv46eg3.ffs@tglx> <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
+ <87k0em4lu9.ffs@tglx> <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
+ <8735la41qb.ffs@tglx> <YfNVBzN67rSu/QcE@otcwcpicx3.sc.intel.com>
+Date:   Fri, 28 Jan 2022 15:53:42 +0100
+Message-ID: <87zgnf29op.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the dwmac-sun8i's stmmaceth clk isn't disabled even if the
-the device has been runtime suspended. The reason is the driver gets
-the "stmmaceth" clk as tx_clk and enabling it during probe. But
-there's no other usage of tx_clk except preparing and enabling, so
-we can remove tx_clk and its usage then rely on the common routine
-stmmac_probe_config_dt() to prepare and enable the stmmaceth clk
-during driver initialization, and benefit from the runtime pm feature
-after probed.
+On Thu, Jan 27 2022 at 18:42, Fenghua Yu wrote:
+> On Wed, Jan 26, 2022 at 10:38:04PM +0100, Thomas Gleixner wrote:
+>> Against Linus tree please so that the bugfix applies.
+>> 
+>> > I will fold the following patch into patch #5. The patch #11 (the doc patch)
+>> > also needs to remove one paragraph talking about refcount.
+>> >
+>> > So I will send the whole patch set with the following changes:
+>> > 1. One new bug fix patch (the above patch)
+>
+> When I study your above aux_domain bug fix path, I find more aux_domain bugs.
+> But then I find aux_domain will be completely removed because all aux_domain
+> related callbacks are not called and are dead code (no wonder there are
+> so many bugs in aux_domain). Please see this series: https://lore.kernel.org/linux-iommu/20220124071103.2097118-4-baolu.lu@linux.intel.com/
+> For the series, Baolu confirms that he is "pretty sure that should be part
+> of v5.18". And I don't find the series calls any IOASID function after
+> removing the aux_domain code.
+>
+> So that means we don't need to fix those issues in the dead aux_domain
+> code any more because it will be completely removed in 5.18, right?
+>
+> If you agree, I will not include the aux_domain fix patch or any other
+> aux_domain fix patches in the up-coming v3. Is that OK?
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 30 +++++++------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-index 09644ab0d87a..f86cc83003f2 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-@@ -16,6 +16,7 @@
- #include <linux/of_net.h>
- #include <linux/phy.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
- #include <linux/regmap.h>
- #include <linux/stmmac.h>
-@@ -57,7 +58,6 @@ struct emac_variant {
- };
- 
- /* struct sunxi_priv_data - hold all sunxi private data
-- * @tx_clk:	reference to MAC TX clock
-  * @ephy_clk:	reference to the optional EPHY clock for the internal PHY
-  * @regulator:	reference to the optional regulator
-  * @rst_ephy:	reference to the optional EPHY reset for the internal PHY
-@@ -68,7 +68,6 @@ struct emac_variant {
-  * @mux_handle:	Internal pointer used by mdio-mux lib
-  */
- struct sunxi_priv_data {
--	struct clk *tx_clk;
- 	struct clk *ephy_clk;
- 	struct regulator *regulator;
- 	struct reset_control *rst_ephy;
-@@ -579,22 +578,14 @@ static int sun8i_dwmac_init(struct platform_device *pdev, void *priv)
- 		}
- 	}
- 
--	ret = clk_prepare_enable(gmac->tx_clk);
--	if (ret) {
--		dev_err(&pdev->dev, "Could not enable AHB clock\n");
--		goto err_disable_regulator;
--	}
--
- 	if (gmac->use_internal_phy) {
- 		ret = sun8i_dwmac_power_internal_phy(netdev_priv(ndev));
- 		if (ret)
--			goto err_disable_clk;
-+			goto err_disable_regulator;
- 	}
- 
- 	return 0;
- 
--err_disable_clk:
--	clk_disable_unprepare(gmac->tx_clk);
- err_disable_regulator:
- 	if (gmac->regulator)
- 		regulator_disable(gmac->regulator);
-@@ -1043,8 +1034,6 @@ static void sun8i_dwmac_exit(struct platform_device *pdev, void *priv)
- 	if (gmac->variant->soc_has_internal_phy)
- 		sun8i_dwmac_unpower_internal_phy(gmac);
- 
--	clk_disable_unprepare(gmac->tx_clk);
--
- 	if (gmac->regulator)
- 		regulator_disable(gmac->regulator);
- }
-@@ -1167,12 +1156,6 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	gmac->tx_clk = devm_clk_get(dev, "stmmaceth");
--	if (IS_ERR(gmac->tx_clk)) {
--		dev_err(dev, "Could not get TX clock\n");
--		return PTR_ERR(gmac->tx_clk);
--	}
--
- 	/* Optional regulator for PHY */
- 	gmac->regulator = devm_regulator_get_optional(dev, "phy");
- 	if (IS_ERR(gmac->regulator)) {
-@@ -1254,6 +1237,12 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
- 	ndev = dev_get_drvdata(&pdev->dev);
- 	priv = netdev_priv(ndev);
- 
-+	/* the MAC is runtime suspended after stmmac_dvr_probe(), so we
-+	 * need to ensure the MAC resume back before other operations such
-+	 * as reset.
-+	 */
-+	pm_runtime_get_sync(&pdev->dev);
-+
- 	/* The mux must be registered after parent MDIO
- 	 * so after stmmac_dvr_probe()
- 	 */
-@@ -1272,12 +1261,15 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
- 			goto dwmac_remove;
- 	}
- 
-+	pm_runtime_put(&pdev->dev);
-+
- 	return 0;
- 
- dwmac_mux:
- 	reset_control_put(gmac->rst_ephy);
- 	clk_put(gmac->ephy_clk);
- dwmac_remove:
-+	pm_runtime_put_noidle(&pdev->dev);
- 	stmmac_dvr_remove(&pdev->dev);
- dwmac_exit:
- 	sun8i_dwmac_exit(pdev, gmac);
--- 
-2.34.1
+Fair enough.
 

@@ -2,133 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3314A01CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D98B4A01E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242880AbiA1UZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:25:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58708 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbiA1UZ4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:25:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FAD0B825E4;
-        Fri, 28 Jan 2022 20:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D38DC340E7;
-        Fri, 28 Jan 2022 20:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643401554;
-        bh=Ph1OyR1ecXlZ+Bdc35dZNoDYirpUuMYM5Ao7nVsb3XM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ly2c+WcC64vuUxS2yM7Ja9KzeZG3/gUJ1Me66weZMQ9tFKcHzxHs7/lLFpT77b8do
-         Ir05XW4W+FHR3B1mQY7Gd8MxBksc1AJAX+tvMO4CasGVPWPXsY5GWvzZ2ilV5abDN/
-         iuuNU3qDhYhTQhPH3AxCcGFSF3qNyNSGQe2Rk2PiRzvxmTeVzSEUCBVoZNtAYF/wGW
-         qG2q0AJWQJgSZbZA3ohuhCyltyY/t9lzl13gDj300WdUwZLDNW7ByoQi88vLJHCbrO
-         qUjnD+wlaAR4+lSUktSgQ7tAwfdPOqjJODrv0cW+KT9AFqOsPy/25wtcl6nF9Fu1z1
-         qaH2bknZ/h+8g==
-Date:   Fri, 28 Jan 2022 12:25:52 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "stefanb@linux.ibm.com" <stefanb@linux.ibm.com>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
- signatures (alternative)
-Message-ID: <YfRRUBZpQv2Hi1sL@sol.localdomain>
-References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
- <YfLz8NftvbZtKvLT@sol.localdomain>
- <YfL0+q/ekv4H8lZg@sol.localdomain>
- <d122893c426f44aa95d5168773b60b9d@huawei.com>
+        id S1351183AbiA1U3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:29:25 -0500
+Received: from mga02.intel.com ([134.134.136.20]:61402 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351159AbiA1U3W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 15:29:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643401762; x=1674937762;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=v7Qgm78mQ7173GgCb2BV6zkS0u7NYuuELpPc4hyi3zk=;
+  b=YZGxGN3Vy4kfsQSQEcRlyifBrkOa7SiZbAl3/H0a4qbnLjvva9IbrlaG
+   HOO+xyMORj9a3993sxZQ3gO+j+o0rE1dUu4bmT31DTB/bKOYmF3WfHR6B
+   hsFlc3FnClEgOVrqTxW0/5J7GRdQ+8IApEwi2+BP9qWw+s4v+VJMbCZYX
+   8/IrCUaBvXeQ6+xf6GN8KhxuqhHXWQ4VeTgcJv1/90Crq2O2JJOXA/+Mc
+   JoLPPwI/ucqCurHSfFBhbdodclXnE4h6UIwyijGt5q4/LPYfVp5p16pIr
+   DkXT32Z5L6QIrSLkpnWuPn5i43MvDlPsd0UTvHxpfeTMM5I2XeRZlKFeP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="234577999"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="234577999"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:29:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="618827686"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2022 12:29:20 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Ashok Raj" <ashok.raj@intel.com>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>
+Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v3 00/11] Re-enable ENQCMD and PASID MSR
+Date:   Fri, 28 Jan 2022 12:28:54 -0800
+Message-Id: <20220128202905.2274672-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d122893c426f44aa95d5168773b60b9d@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 09:05:01AM +0000, Roberto Sassu wrote:
-> > From: Eric Biggers [mailto:ebiggers@kernel.org]
-> > Sent: Thursday, January 27, 2022 8:40 PM
-> > On Thu, Jan 27, 2022 at 11:35:12AM -0800, Eric Biggers wrote:
-> > > On Thu, Jan 27, 2022 at 07:46:09PM +0100, Roberto Sassu wrote:
-> > > > I wanted to propose a different approach for handling fsverity digests and
-> > > > signatures, compared to:
-> > > >
-> > > > https://lore.kernel.org/linux-integrity/20220126000658.138345-1-
-> > zohar@linux.ibm.com/
-> > > >
-> > > > In the original proposal, a new signature version has been introduced (v3)
-> > > > to allow the possibility of signing the digest of a more flexible data
-> > > > structure, ima_file_id, which could also include the fsverity file digest.
-> > > >
-> > > > While the new signature type would be sufficient to handle fsverity file
-> > > > digests, the problem is that its format would not be compatible with the
-> > > > signature format supported by the built-in verification module in fsverity.
-> > > > The rpm package manager already has an extension to include fsverity
-> > > > signatures, with the existing format, in the RPM header.
-> > > >
-> > > > Given that the fsverity signature is in the PKCS#7 format, IMA has already
-> > > > the capability of handling it with the existing code, more specifically the
-> > > > modsig code. It would be sufficient to provide to modsig the correct data
-> > > > to avoid introducing a new signature format.
-> > >
-> > > I think it would be best to get people moved off of the fs-verity built-in
-> > > signatures, rather than further extend the use of it.  PKCS#7 is a pretty
-> > > terrible signature format.  The IMA one is better, though it's unfortunate that
-> > > IMA still relies on X.509 for keys.
-> > 
-> > Note, the only reason that support for fs-verity built-in signatures was added
-> > to RPM is that people didn't want to use IMA:
-> > https://lore.kernel.org/linux-fscrypt/b49b4367-51e7-f62a-6209-
-> > b46a6880824b@gmail.com
-> > 
-> > If people are going to use IMA anyway, then there would be no point.
-> 
-> Hi Eric
-> 
-> I thought that the solution I came with could satisfy multiple needs.
-> 
-> For people that don't want to use IMA, they could still continue
-> to use the existing signature format, and wait for an LSM that
-> satisfy their needs. They also have the option to migrate to the
-> new signature format you are defining. But will those people be
-> willing to switch to something IMA-specific?
-> 
-> For people that use IMA, they could benefit from the effort
-> of people creating packages with the original fsverity signature.
-> 
-> For people that are skeptical about IMA, they could be interested
-> in trying the full solution, which would probably be more easily
-> available if the efforts from both sides converge.
-> 
-> If, as you say, you have concerns about the existing signature
-> format, wouldn't it be better that you address them from the
-> fsverity side, so that all users of fsverity can benefit from it?
-> 
-> Currently, fsverity hashes the formatted digest whose format
-> is FSVerity<digest algo><digest size><digest>. Couldn't IMA
-> hash the same data as well?
-> 
-> An idea could be to always sign the formatted digest, and have
-> a selector for the signature format: IMA, PKCS#7 or PGP.
+Problems in the old code to manage SVM (Shared Virtual Memory) devices
+and the PASID (Process Address Space ID) led to that code being
+disabled.
 
-Adding support for the new IMA signature format to fsverity_verify_signature()
-*might* make sense.  (When I added this code, my understanding was that it was
-just verifying signatures the way the kernel usually verifies signatures.  I
-don't think I realized there was a more direct, PKCS#7-less way to do it and
-that IMA used that way.)  However, it would be better to use this as an
-opportunity to move people off of the built-in signatures entirely, either by
-switching to a full userspace solution or by switching to IMA.
+Subsequent discussions resulted in a far simpler approach:
 
-Part of the problem with IMA is that no one wants to use it because it has
-terrible documentation.  It sounds like it's really complicated, and tied to
-specific TCG standards and to TPMs.  I think if it was documented better, people
-would find it more attractive and wouldn't be trying to avoid it at all costs.
+1) PASID life cycle is from first allocation by a process until that
+   process exits.
+2) All tasks begin with PASID disabled
+3) The #GP fault handler tries to fix faulting ENQCMD instructions very
+   early (thus avoiding complexities of the XSAVE infrastructure)
 
-- Eric
+Change Log:
+v3:
+- Rename mm_pasid_get() to mm_pasid_set() in patch #5 (Thomas).
+- Remove ioasid_get() because it's not used any more when the IOASID
+  is freed on mm exit in patch #5 (Thomas).
+- Remove PASID's refcount exercise in ioasid_put() and rename
+  ioasid_put() to ioasid_free() in patch #5 and #11 (Thomas).
+- Add Acked-by: Josh Poimboeuf <jpoimboe@redhat.com> in patch #10.
+
+v2 can be found at https://lore.kernel.org/lkml/20211217220136.2762116-1-fenghua.yu@intel.com/
+
+v2:
+- Free PASID on mm exit instead of in exit(2) or unbind() (Thomas, AndyL,
+  PeterZ)
+- Directly write IA32_PASID MSR in fixup while local IRQ is still disabled
+  (Thomas)
+- Simplify handling ENQCMD in objtool (PeterZ and Josh)
+- Define mm_pasid_get(), mm_pasid_drop(), and mm_pasid_init() in mm and
+  call the functions from IOMMU (Dave Hansen).
+- A few changes in the #GP fixup function (Dave Hansen, Tony Luck).
+- Initial PASID value is changed to INVALID_PASID (Ashok Raj and
+  Jacob Pan).
+- Add mm_pasid_init(), mm_pasid_get(), and mm_pasid_drop() functions in mm.
+  So the mm's PASID operations are generic for both X86 and ARM
+  (Dave Hansen).
+- Rename CONFIG_IOMMU_SVA_LIB to more useful and accurate
+  CONFIG_IOMMU_SVA
+- Use CONFIG_IOMMU_SVA for PASID processing condition (Jacob)
+- The patch that cleans up old update_pasid() function is in upstream
+  now (commit: 00ecd5401349 "iommu/vt-d: Clean up unused PASID updating
+  functions") and therefore it's removed from this version.
+
+v1 can be found at https://lore.kernel.org/lkml/20210920192349.2602141-1-fenghua.yu@intel.com/T/#md6d542091da1d1159eda0a44a16e57d0c0dfb209
+
+Fenghua Yu (10):
+  iommu/sva: Rename CONFIG_IOMMU_SVA_LIB to CONFIG_IOMMU_SVA
+  mm: Change CONFIG option for mm->pasid field
+  iommu/ioasid: Introduce a helper to check for valid PASIDs
+  kernel/fork: Initialize mm's PASID
+  iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm
+    exit
+  x86/fpu: Clear PASID when copying fpstate
+  x86/traps: Demand-populate PASID MSR via #GP
+  x86/cpufeatures: Re-enable ENQCMD
+  tools/objtool: Check for use of the ENQCMD instruction in the kernel
+  docs: x86: Change documentation for SVA (Shared Virtual Addressing)
+
+Peter Zijlstra (1):
+  sched: Define and initialize a flag to identify valid PASID in the
+    task
+
+ Documentation/x86/sva.rst                     | 53 ++++++++++++++----
+ arch/x86/include/asm/disabled-features.h      |  7 ++-
+ arch/x86/kernel/fpu/core.c                    |  7 +++
+ arch/x86/kernel/traps.c                       | 55 +++++++++++++++++++
+ drivers/iommu/Kconfig                         |  6 +-
+ drivers/iommu/Makefile                        |  2 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  5 +-
+ drivers/iommu/intel/Kconfig                   |  2 +-
+ drivers/iommu/intel/iommu.c                   |  4 +-
+ drivers/iommu/intel/svm.c                     |  9 ---
+ drivers/iommu/ioasid.c                        | 38 ++-----------
+ drivers/iommu/iommu-sva-lib.c                 | 39 ++++---------
+ drivers/iommu/iommu-sva-lib.h                 |  7 +--
+ include/linux/ioasid.h                        | 21 +++----
+ include/linux/mm_types.h                      |  2 +-
+ include/linux/sched.h                         |  3 +
+ include/linux/sched/mm.h                      | 26 +++++++++
+ kernel/fork.c                                 | 15 +++--
+ mm/init-mm.c                                  |  4 ++
+ tools/objtool/arch/x86/decode.c               | 11 +++-
+ 20 files changed, 197 insertions(+), 119 deletions(-)
+
+-- 
+2.35.0
+

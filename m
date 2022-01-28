@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287DF4A03EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 23:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B434A03EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 23:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348997AbiA1Wt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 17:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S1351100AbiA1Wti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 17:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242147AbiA1WtR (ORCPT
+        with ESMTP id S1348293AbiA1Wt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 17:49:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86843C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 14:49:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C8A61F09
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 22:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13BC3C340E7;
-        Fri, 28 Jan 2022 22:49:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JT3dASoC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643410154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=k0/oajVcobGvb9YEN4Q2cDXAoaOwdD7CFJ2oFLDWlf0=;
-        b=JT3dASoCkjkeEdxvSDDCFwO9cgjfidJfEIIxYH9YqaFsonFqKYQaSwg846Kwizr27G+r6Q
-        Yw18AyM9+K3ZGsC9Si07+3RONcV/GlcCl62LH944Dr7RD+HQ6yAhbceFCUdnippKK8PeaM
-        QUf01T3py6H3qlWDuun4MStKsNTG90E=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 25bea80d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 28 Jan 2022 22:49:14 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, tytso@mit.edu,
-        linux@dominikbrodowski.net
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: wake up /dev/random writers after zap
-Date:   Fri, 28 Jan 2022 23:49:06 +0100
-Message-Id: <20220128224906.104235-1-Jason@zx2c4.com>
+        Fri, 28 Jan 2022 17:49:29 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00D0C061747
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 14:49:28 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x11so14667906lfa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 14:49:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ga12vASgQepzopTf7itk5qo6jciiWvEYo54yaueBv/k=;
+        b=ocuHiLSMSPTflZxrNNESvCIQ9i+7KDA5CgbR62QaQKXXDLgjYsHYlv8V7w7m89YSBv
+         uqDFU8pu0wkTuGojbwMOm4xC4j81ouCZqMQUv4ylul1TzqWYa5Ej6sz/dpO4Xx6Tk5av
+         UXItrbB9Ml1gsjXRDAWJ85uAnmftgLgl+I/3ZPdhD7ISL1Rx/oofWx6I5gZvy0O+ebnd
+         CCtov4e6Wjt3VZbONDqtD2zgyJK7ekvkOfRukUUMmiEIf1WPwG/vQtQg51YleVk2+yru
+         vtbMsL+rLA3DMH7e2gqooF1lNdWj9PV5SMlT604dQ55IYytTAWSziScWu9bvSVp9McF6
+         OPmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ga12vASgQepzopTf7itk5qo6jciiWvEYo54yaueBv/k=;
+        b=QorpWZaqE8SzCH7eyr36FEa/BJz28/HJLAN2Q2sBATtJIWWAi6Zj03zsZDggF3Ri9d
+         HXhfYIFsSbEnf2Sy+c906gOQu0DvRpqOzwTl+LJwikAEYrQ9tqPl2+8yBOZb5Xx0voNE
+         p/9ca2otudqK7srTswZrpbGXPkp4tX5fxtoE9FczzufadkEA5Q0eTyMKD29UpLgYoX0Y
+         lLdVGuI0UzAvx4zBRtU6LqCPpOiiN+5v+ESuc/WSEdmOw1i9tHOtWveQ/pbgMycEqcLf
+         tuZFl71B73xGxhSlhB1dHEchHhLeMxC9jCOLVsk1Ebi0/8ZrscZsLYw1VE/JRlIzEy3R
+         hSOw==
+X-Gm-Message-State: AOAM531Ax41pQslY8E5fS6lux4zzev4/D5liDZrsrTO5Hfi52eNx37+y
+        ogIaBOAVbyhuaQkub3MQUUuzvZK8PAgzx3srHEQRPs3u5hTHQA==
+X-Google-Smtp-Source: ABdhPJzaJFI+R0ILoPy/Efjd+HHvfSdGQyGuwezXUpAsCFmnl8paU8d50L8ZlP2AF/lXoKPXGH4nExxQp3vxfXwFFHg=
+X-Received: by 2002:a05:6512:3ba5:: with SMTP id g37mr7601124lfv.651.1643410166929;
+ Fri, 28 Jan 2022 14:49:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+ <20220128220841.3222637-1-quic_eberman@quicinc.com> <20220128224528.f7ejzw55t6kfefmm@google.com>
+In-Reply-To: <20220128224528.f7ejzw55t6kfefmm@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 28 Jan 2022 14:49:15 -0800
+Message-ID: <CAKwvOd=Ab+GWNzSC6eaDWTVDF6gJQ9fDDMT3hep-DzhrEA6DpQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Add environment variables for userprogs flags
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Matthias Maennich <maennich@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When account() is called, and the amount of entropy dips below
-random_write_wakeup_bits, we wake up the random writers, so that they
-can write some more in. However, the RNDZAPENTCNT/RNDCLEARPOOL ioctl
-sets the entropy count to zero -- a potential reduction just like
-account() -- but does not unblock writers. This commit adds the missing
-logic to that ioctl to unblock waiting writers.
+ On Fri, Jan 28, 2022 at 2:45 PM Fangrui Song <maskray@google.com> wrote:
+>
+> On 2022-01-28, Elliot Berman wrote:
+> >Allow additional arguments be passed to userprogs compilation.
+> >Reproducible clang builds need to provide a sysroot and gcc path to
+> >ensure same toolchain is used across hosts. KCFLAGS is not currently
+> >used for any user programs compilation, so add new USERCFLAGS and
+> >USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+> >
+> >Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
+> >an environment where a user sysroot is not specifically available.
+> >Currently, Clang might automatically detect GCC installation on hosts
+> >which have it installed to a default location in /. With addition of
+> >these environment variables, you can specify flags such as:
+> >
+> >$ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
+> >
+> >to force sysroot detection to fail.
+>
+> -Wl,--sysroot=/dev/null => --sysroot
+>
+> As I mentioned in
+> https://lore.kernel.org/all/20220128031549.w5a4bilxbkppagfu@google.com/
+> -Wl,--sysroot=/dev/null does not suppress search paths like -L/lib .
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 6919837fe4e9..d4111220bbb0 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1856,7 +1856,10 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
- 		 */
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
--		input_pool.entropy_count = 0;
-+		if (xchg(&input_pool.entropy_count, 0) && random_write_wakeup_bits) {
-+			wake_up_interruptible(&random_write_wait);
-+			kill_fasync(&fasync, SIGIO, POLL_OUT);
-+		}
- 		return 0;
- 	case RNDRESEEDCRNG:
- 		if (!capable(CAP_SYS_ADMIN))
+In that case, Elliot, can you please test whether USERLDFLAGS is
+necessary to be specified AT ALL? Maybe we can drop that addition from
+this patch if so?
 -- 
-2.35.0
-
+Thanks,
+~Nick Desaulniers

@@ -2,217 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1484A0305
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F784A0307
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbiA1Vkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S1343826AbiA1Vlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238634AbiA1Vkr (ORCPT
+        with ESMTP id S238634AbiA1Vle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:40:47 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14899C061747
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:40:47 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id i65so7333716pfc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:40:47 -0800 (PST)
+        Fri, 28 Jan 2022 16:41:34 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F240C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:41:34 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so6268657pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:41:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=k6jLROMjFao7umAdNdU2nps7DNd/2hCKqNaRX+GNrNE=;
-        b=pOYMyVsviS5ZXyX7QpGw6+81A8UaDif16k7CLTQFrvekf8dwrkBhGLAWdz93ScVtOu
-         WMnDA2tm/ZDx7NT4hH8D/wd3r/3ErWY8XEErncthtxDnP/u9tNqoFOAEgc+0PPU2BJi2
-         n+M2JJO5eDxOGM6u+sFuk6CAapVGxZuYUp/vh0JHmvgNjNfxun9dnMJoJopoU1rGVGJ8
-         4S3p0HKBn8N6qFb+mHlD4p6yJ4iwqGMZkmGm7jODd0R1VotNaJJQTkA/qFyXVTme98Az
-         9kXNWt1Giuo9RQEEEapqrs4qhvm4WVPV3X5mTU+69VWMFb+xqjd/FXkBBgMByFvYHn2U
-         axAw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3wXlxO8ivxh19lX0NUWVIj5SKVX6xM1bt7/6ivcawkI=;
+        b=oaKziv6vTJhWuDvXhdfjGZVLHKZ7L83vnVgyfI1+9l/jD7sXBS4r7CUk8PrAOaF54E
+         epgiy7APhyZWhgKMr/MBLD6P2x6Cmj0RNCqWb0nXyoqbATE91TzVh02Lr6uOrCV85QGS
+         Lr2dE/lBl5NP+xz5eIbm4Pk5LJNr4MpcOFPOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=k6jLROMjFao7umAdNdU2nps7DNd/2hCKqNaRX+GNrNE=;
-        b=XiBkrd49tx95pGGbxSxH03KaT8mFarT0Xra2JdRm1DEt+fdKHkAJUZ7/tuuWge/az2
-         ZfjSKRT71xW4hO0AT5sW1wqWxKes1m3NOTbJzILpLhZKMPi16Ci3S6rdlz6HohnbrvaD
-         kHmMxw279DEIoPXTxkc6NGEiSYp8cDh++2y4MehUxBVXDSX2BIuCX+MZMDUSPGf6suyf
-         TNot8lMOvAC52numFtnpGkPQ7HBlX0hMuqGU15bShJjL1NasZq56eP6G4F4xipCuZHjv
-         sRKpjWf4/XgVDQRXEHP0qySNtnnWXtQZLVUZ7fYwy5jdmzPoXbH2qRUv96c3HSuX+nk+
-         HW2Q==
-X-Gm-Message-State: AOAM531bXD6yacwNKuQVOK8VHMi6aGjOxHhHpB6xmKdHMGkFbGuYuXXM
-        nsgoES3Y/j3se18TvxlHtwUO/A==
-X-Google-Smtp-Source: ABdhPJzXoBblVcuVDnL1lifFneIqQS9ZvH4X/NVw99B5JBvAaq0FNjqEHxxVES3PMPWNKxnlAGqtBQ==
-X-Received: by 2002:a63:2a92:: with SMTP id q140mr8072875pgq.379.1643406046304;
-        Fri, 28 Jan 2022 13:40:46 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u16sm10756333pfg.192.2022.01.28.13.40.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3wXlxO8ivxh19lX0NUWVIj5SKVX6xM1bt7/6ivcawkI=;
+        b=vpvKyKznV8XppIr3eUt4Qlwmlg1kNIBlT+XP2bBwIz+O+lpy4yXRnjURm5sLCeneZc
+         SbfkA+tOvrhVOBLEmaGv2SaKMqZjKJHgPuI+uqfqCtODgow17uittzaMU4yxeQD7rmNy
+         FStWF2gQLNF7qX2MbTRSxl114fnCNNMlWAL+E2tt2HyHjOemPZ+ofNJKm9/tHQlrwbnI
+         klq78yOXYW4lKxsIczolaQTeOnRku5sx0uaxHQBa+OV+UanL5B550sdn3x8hxldo7Rcd
+         0bdDLicP2d24d5pq4iL1aZfTjZ3NnCANck+Xy//EOCSKzTbjIzr8kYD/YIH77WLBwqVo
+         Lwcg==
+X-Gm-Message-State: AOAM531RZOKORIB2brDwTK9p2FC2QpSbz4Ek/7K6MMU9Eh6ecAngehXG
+        i7ZnU4wHpTocFHw52mWrliyLDg==
+X-Google-Smtp-Source: ABdhPJz/fgfsI4xLVm3DEvsoPHm+vtuTG0j/blq9GjI1DbhuSDmGKszKc7oySUS+0SZfLJxZpj/t5A==
+X-Received: by 2002:a17:902:a5c1:: with SMTP id t1mr10890722plq.106.1643406093578;
+        Fri, 28 Jan 2022 13:41:33 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id rj1sm3460112pjb.49.2022.01.28.13.41.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 13:40:45 -0800 (PST)
-Date:   Fri, 28 Jan 2022 21:40:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
-        "luolongjun@huawei.com" <luolongjun@huawei.com>,
-        "hejingxian@huawei.com" <hejingxian@huawei.com>
-Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
-Message-ID: <YfRi2sY0hVfri5eR@google.com>
-References: <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
- <ca0751c864570015ffe4d8cccdc94e0a5ef3086d.camel@infradead.org>
- <b13eac6c-ea87-aef9-437f-7266be2e2031@amd.com>
- <721484e0fa719e99f9b8f13e67de05033dd7cc86.camel@infradead.org>
- <1401c5a1-c8a2-cca1-e548-cab143f59d8f@amd.com>
- <2bfb13ed5d565ab09bd794f69a6ef2b1b75e507a.camel@infradead.org>
- <b798bcef-d750-ce42-986c-0d11d0bb47b0@amd.com>
- <41e63d89f1b2debc0280f243d7c8c3212e9499ee.camel@infradead.org>
- <c3dbd3b9-accf-bc28-f808-1d842d642309@amd.com>
- <7e92a196e67b1bfa37c1e61a789f2b75a735c06f.camel@infradead.org>
+        Fri, 28 Jan 2022 13:41:33 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Isabella Basso <isabbasso@riseup.net>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] Kconfig.debug: Make DEBUG_INFO always default=n
+Date:   Fri, 28 Jan 2022 13:41:31 -0800
+Message-Id: <20220128214131.580131-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2150; h=from:subject; bh=s9N1b3JvxLd7oL7UEPREgGNdTUKoGAUWw3SiLd7haIE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh9GMLirleATojwN3w57Xd5078WAD6SduT1rPt5nHf EBZlc2+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfRjCwAKCRCJcvTf3G3AJl31D/ 9ft+lnP5M4ywaWKG9O5qM3gN9sPC7U6rj3pBTCI3T9DcMj+hNqsExa3v9nqxtx35MG+vmzfqhSisa0 ouiA9NrfacD8srxm+etJSmTPdjxu8x4XuesC/avRPeuazGXTwm1W0kizYnBXLjbT6ZNoFJ/TGQKqfI 5fZWRb407xFVfYmcdcCRmsU8z40c0XaTXD/pSbXWHK4dZsy9sYeJPkFBy2btTFB/WVBYBxpoX9yzM8 0CqjseXHvuYkxfjAqYMhJWozZEW9OBHmNjDT43exDBNwfHOo+viIc8cRQbFYGFcW2YEs15G7C5/qQH IMyxcmYIFoiZIkrEDYosigQExBoVIEXg8v+76M+B1GVcyt9Wp3mCoxqOmGOP3PBL4AIkPzoI9IPVvJ O0UP/nWg3Slu8guiRmGSQsIADBMSFjWKzy3K9f55THnW6SOyjO8OPkZGsV550X90RlDh63try++a38 19MJTobH+EGJJHCBTiERWwKnCa+wuvwYY19T4wRZVrOHFuRHsUDiyA8tuD2xsStAsJZhfRv9wg5hYG HpbrRozX/XPcOtqscWXqbDCKUETeHBgZczVz2wrEf8mt7zMjEcNT+OUKoOr4Xdw2km2tfySmAPDTQG IbUks5MlGWA0d0D+uQR5/R6svXYL3b6Zh1nXThDJFyGPyLMggEjEIu+KkHeA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7e92a196e67b1bfa37c1e61a789f2b75a735c06f.camel@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022, David Woodhouse wrote:
-> On Fri, 2021-12-17 at 14:55 -0600, Tom Lendacky wrote:
-> > On 12/17/21 2:13 PM, David Woodhouse wrote:
-> > > On Fri, 2021-12-17 at 13:46 -0600, Tom Lendacky wrote:
-> > > > There's no WARN or PANIC, just a reset. I can look to try and capture some
-> > > > KVM trace data if that would help. If so, let me know what events you'd
-> > > > like captured.
-> > > 
-> > > 
-> > > Could start with just kvm_run_exit?
-> > > 
-> > > Reason 8 would be KVM_EXIT_SHUTDOWN and would potentially indicate a
-> > > triple fault.
-> > 
-> > qemu-system-x86-24093   [005] .....  1601.759486: kvm_exit: vcpu 112 reason shutdown rip 0xffffffff81070574 info1 0x0000000000000000 info2 0x0000000000000000 intr_info 0x80000b08 error_code 0x00000000
-> > 
-> > # addr2line -e woodhouse-build-x86_64/vmlinux 0xffffffff81070574
-> > /root/kernels/woodhouse-build-x86_64/./arch/x86/include/asm/desc.h:272
-> > 
-> > Which is: asm volatile("ltr %w0"::"q" (GDT_ENTRY_TSS*8));
-> 
-> So, I remain utterly bemused by this, and the Milan *guests* I have
-> access to can't even kexec with a stock kernel; that is also "too fast"
-> and they take a triple fault during the bringup in much the same way —
-> even without my parallel patches, and even going back to fairly old
-> kernels.
-> 
-> I wasn't able to follow up with raw serial output during the bringup to
-> pinpoint precisely where it happens, because the VM would tear itself
-> down in response to the triple fault without actually flushing the last
-> virtual serial output :)
-> 
-> It would be really useful to get access to a suitable host where I can
-> spawn this in qemu and watch it fail. I am suspecting a chip-specific
-> quirk or bug at this point.
+While trying to make sure CONFIG_DEBUG_INFO wasn't set for COMPILE_TEST,
+I ordered the choices incorrectly to retain the prior default=n state.
+Move DEBUG_INFO_NONE to the top so that the default choice is disabled,
+and remove the "if COMPILE_TEST" as it is now redundant.
 
-Nope.  You missed a spot.  This also reproduces on a sufficiently large Intel
-system (and Milan).  initial_gs gets overwritten by common_cpu_up(), which leads
-to a CPU getting the wrong MSR_GS_BASE and then the wrong raw_smp_processor_id(),
-resulting in cpu_init_exception_handling() stuffing the wrong GDT and leaving a
-NULL TR descriptor for itself.
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/lkml/YfRY6+CaQxX7O8vF@dev-arch.archlinux-ax161
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Andrew, this is a fix for kconfigdebug-make-debug_info-selectable-from-a-choice.patch
+---
+ lib/Kconfig.debug | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-You also have a lurking bug in the x2APIC ID handling.  Stripping the boot flags
-from the prescribed APICID needs to happen before retrieving the x2APIC ID from
-CPUID, otherwise bits 31:16 of the ID will be lost.
-
-You owe me two beers ;-)
-
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index dcdf49a137d6..23df88c86a0e 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -208,11 +208,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
-         * in smpboot_control:
-         * Bit 0-15     APICID if STARTUP_USE_CPUID_0B is not set
-         * Bit 16       Secondary boot flag
--        * Bit 17       Parallel boot flag
-+        * Bit 17       Parallel boot flag (STARTUP_USE_CPUID_0B)
-         */
-        testl   $STARTUP_USE_CPUID_0B, %eax
--       jz      .Lsetup_AP
-+       jnz     .Luse_cpuid_0b
-+       andl    $0xFFFF, %eax
-+       jmp     .Lsetup_AP
-
-+.Luse_cpuid_0b:
-        mov     $0x0B, %eax
-        xorl    %ecx, %ecx
-        cpuid
-@@ -220,7 +223,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
-
- .Lsetup_AP:
-        /* EAX contains the APICID of the current CPU */
--       andl    $0xFFFF, %eax
-        xorl    %ecx, %ecx
-        leaq    cpuid_to_apicid(%rip), %rbx
-
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 04f5c8de5606..e7fda406f39a 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1093,6 +1093,17 @@ wakeup_cpu_via_init_nmi(int cpu, unsigned long start_ip, int apicid,
-        return boot_error;
- }
-
-+static bool do_parallel_bringup = true;
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index a7b657d67318..a1262358d55a 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -234,7 +234,6 @@ config DEBUG_INFO
+ choice
+ 	prompt "Debug information"
+ 	depends on DEBUG_KERNEL
+-	default DEBUG_INFO_NONE if COMPILE_TEST
+ 	help
+ 	  Selecting something other than "None" results in a kernel image
+ 	  that will include debugging info resulting in a larger kernel image.
+@@ -245,6 +244,12 @@ choice
+ 	  Choose which version of DWARF debug info to emit. If unsure,
+ 	  select "Toolchain default".
+ 
++config DEBUG_INFO_NONE
++	bool "Disable debug information"
++	help
++	  Do not build the kernel with debugging information, which will
++	  result in a faster and smaller build.
 +
-+static int __init no_parallel_bringup(char *str)
-+{
-+       do_parallel_bringup = false;
-+
-+       return 0;
-+}
-+early_param("no_parallel_bringup", no_parallel_bringup);
-+
-+
- int common_cpu_up(unsigned int cpu, struct task_struct *idle)
- {
-        int ret;
-@@ -1112,7 +1123,8 @@ int common_cpu_up(unsigned int cpu, struct task_struct *idle)
-        /* Stack for startup_32 can be just as for start_secondary onwards */
-        per_cpu(cpu_current_top_of_stack, cpu) = task_top_of_stack(idle);
- #else
--       initial_gs = per_cpu_offset(cpu);
-+       if (!do_parallel_bringup)
-+               initial_gs = per_cpu_offset(cpu);
- #endif
-        return 0;
- }
-@@ -1336,16 +1348,6 @@ int do_cpu_up(unsigned int cpu, struct task_struct *tidle)
-        return ret;
- }
-
--static bool do_parallel_bringup = true;
+ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ 	bool "Rely on the toolchain's implicit default DWARF version"
+ 	select DEBUG_INFO
+@@ -283,12 +288,6 @@ config DEBUG_INFO_DWARF5
+ 	  config if they rely on tooling that has not yet been updated to
+ 	  support DWARF Version 5.
+ 
+-config DEBUG_INFO_NONE
+-	bool "Disable debug information"
+-	help
+-	  Do not build the kernel with debugging information, which will
+-	  result in a faster and smaller build.
 -
--static int __init no_parallel_bringup(char *str)
--{
--       do_parallel_bringup = false;
--
--       return 0;
--}
--early_param("no_parallel_bringup", no_parallel_bringup);
--
- int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
-        int ret;
+ endchoice # "Debug information"
+ 
+ if DEBUG_INFO
+-- 
+2.30.2
 

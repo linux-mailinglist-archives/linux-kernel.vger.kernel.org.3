@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BED49FB1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ECB49FB18
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240958AbiA1Nyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiA1Nyu (ORCPT
+        id S237662AbiA1Nyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:54:33 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:34873 "EHLO
+        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232774AbiA1Nyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:54:50 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67605C06173B;
-        Fri, 28 Jan 2022 05:54:50 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ah7so16283284ejc.4;
-        Fri, 28 Jan 2022 05:54:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W+HVO9pfWKvtQNPEDK/I430Md9WsgnnHul3CbcaOVZQ=;
-        b=Z2ELedQwJYz39tK4+PNoaYeMbVIHl7NAlHepJHX0f7jqb5+GMp+mf1tg2GNnP7C1WZ
-         AHvHlEcwz6rBoSieI4EmTZ6u1n6KIDvT7iNSLfNhbXSiIqVqAljN/0AyE2MO2RgRV563
-         n4/nSeaaWcguzSZUJlyZ8Lp2FqktAq8YkOW1btwKrlF8BceAf7vV06B91ouOZUW2OBdG
-         KuFaS1Cn6qs+j4shaT3eVGbo5pbU91z/JjDScOfI5eHu7Hg/ChZqtKAZUgoo4qUSFFvZ
-         cOiGLb+EvRHD4Rt15nI2IUiKiyOzV70Hm0IDPILXk66hlPiYCoBuM61WPjVDmj/6ixQb
-         prUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W+HVO9pfWKvtQNPEDK/I430Md9WsgnnHul3CbcaOVZQ=;
-        b=H0rRRCXtzP+ZpIGJbzWU+BB/YNpISS4AdZQ50SAU8w4G+sdSFK3PcZzHZsXsgaABgz
-         QAPW9bNvteLHGZlf+cIPd5AgSaOq2pWgIW8kljupLPfrh/kjopxLdWTqW31DYY7aFHnE
-         77uhPWbbFtKILJV+YJKlpTPzIubLyM5wDDkIzd7RZIvWnq/GyCBcIrI7ArXch5FhQbMz
-         K7y2yWxmEPhAamRrB85crMiXR7vHkZI6TQ4HrhfVnuFCCDz5K/g7otnapTaoZrICVGue
-         nbJbN65InOwud0N50mVHlpPSbX9FRI+U7WyuWwlOGFrOS460qcV70o2IX3yXCumE5q+n
-         z7DA==
-X-Gm-Message-State: AOAM533JAOSLuY4Lq0Kobn/991+BpL7aWIQk88gQ6Rfid4nz+TML1Toe
-        ILWjVLenWHk77IdqUF0EOJtYll8t18h73qYRECs=
-X-Google-Smtp-Source: ABdhPJyxCcBk99rUQp6U3SzpQdyerpPcALccJkGIBAlJSRaoWZdv2CoAwgPjTfHSCh/AG6gJHd0h1//AZ6QidA+nU+A=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr6852057ejo.636.1643378088706;
- Fri, 28 Jan 2022 05:54:48 -0800 (PST)
+        Fri, 28 Jan 2022 08:54:32 -0500
+Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id D93148032FBA
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:54:31 +0000 (UTC)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 301C61003BE02
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:54:31 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id DRhunK7JK2s5dDRhunzPwd; Fri, 28 Jan 2022 13:54:31 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=BOh2EHcG c=1 sm=1 tr=0 ts=61f3f597
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=U4_wLaSDwdVF22gBXvgA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ox6JJNhG9ib98sEZW2gK85YbeDqfQLKuvNf4lK7WR9E=; b=BhEyABq7JEUtUIBJld1GUl/UM4
+        ucL65b1uevgSzaxE4goEDZkC+bIfRexwGYtcD6e8zQEgOvQMNTVd2na7tiibvCJM988Jd5WyizwF9
+        IbU88zv0sNDRdRd2jBCcM0vPe;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:52012 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nDRhu-0037UC-99; Fri, 28 Jan 2022 06:54:30 -0700
+Message-ID: <1feb90c2-58c7-8a8d-e9ef-4f2f687d76a1@w6rz.net>
+Date:   Fri, 28 Jan 2022 05:54:28 -0800
 MIME-Version: 1.0
-References: <20220128042054.2062060-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220128042054.2062060-1-kai.heng.feng@canonical.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 28 Jan 2022 15:53:11 +0200
-Message-ID: <CAHp75VfC873djcc4Z2+HhzR8z3Uaute3g0Fgr1dvOs_v=gD3Lw@mail.gmail.com>
-Subject: Re: [PATCH v3] iio: humidity: hdc100x: Add ACPI HID table
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Your Name <you@example.com>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 0/9] 5.16.4-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com
+References: <20220127180258.892788582@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220127180258.892788582@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nDRhu-0037UC-99
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:52012
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 12
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 6:21 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
+On 1/27/22 10:09, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.4 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> x86 boards may use ACPI HID "TXNW1010" for the hdc100x device.
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
 >
-> TI told us "The ACPI ID for TI is: https://uefi.org/node/1028 (TXNW),
-> therefore it would most likely be appropriate to use TXNW1010."
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-So, they basically agree on using it, did I get it right?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> So add an ACPI match table for that accordingly.
+Tested-by: Ron Economos <re@w6rz.net>
 
-Assuming TI is aware of the ID,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v3:
->  - Add info from vendor
->  - Drop redundant line and comma.
->  - Wording change.
->
-> v2:
->  - Change the ID to follow ACPI Spec
->  - Add __maybe_unused to avoid compiler warning
->
->  drivers/iio/humidity/hdc100x.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
-> index 9e0fce917ce4c..47f8e8ef56d68 100644
-> --- a/drivers/iio/humidity/hdc100x.c
-> +++ b/drivers/iio/humidity/hdc100x.c
-> @@ -417,10 +417,17 @@ static const struct of_device_id hdc100x_dt_ids[] = {
->  };
->  MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
->
-> +static const struct acpi_device_id hdc100x_acpi_match[] = {
-> +       { "TXNW1010" },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
-> +
->  static struct i2c_driver hdc100x_driver = {
->         .driver = {
->                 .name   = "hdc100x",
->                 .of_match_table = hdc100x_dt_ids,
-> +               .acpi_match_table = hdc100x_acpi_match,
->         },
->         .probe = hdc100x_probe,
->         .id_table = hdc100x_id,
-> --
-> 2.33.1
->
-
-
--- 
-With Best Regards,
-Andy Shevchenko

@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 706ED49F32B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8A849F32E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346246AbiA1Fyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 00:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        id S1346253AbiA1Fz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 00:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346225AbiA1Fyn (ORCPT
+        with ESMTP id S1346225AbiA1Fzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 00:54:43 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74196C061714;
-        Thu, 27 Jan 2022 21:54:43 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so4805114otf.1;
-        Thu, 27 Jan 2022 21:54:43 -0800 (PST)
+        Fri, 28 Jan 2022 00:55:55 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937BDC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 21:55:55 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id om4-20020a17090b3a8400b001b633bebd2dso2156045pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 21:55:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5iUJxIm11wuHAjAk/U9qyVK8Q1/8AM34mvlFMQ0jz4o=;
-        b=KRSAJ86fpotWcMMhPUusYEY+q06d7as4lj5/hcbJt1raSYhIvkAZaU19dkaL485lMr
-         sBNeNnVBau4qvFPu7wa8kaAy4SjiyyO2p4P3vXtBp0pIm7Ko2O5ZwutvWFqd7BwF72ol
-         yFnHAB8ZyI45av3Yhlo/EYPkViFldnAiaT+HkovsEYbBy64+TJzdY1zMksT66Wt4OYZ7
-         jmLzYEHHpjTNm10vk5hM8BgB1rYIp/Hd6Oh49UsbnRRLMjbROlhNiCqYGmsC7b1bGLUN
-         d1OgxkkWkKreXYkkHHEl+Iq+76tqocApLUcPlzPm/rwo7ic9CzlruR6nca1GEepxYuLf
-         mOXQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F975QErmCld1Ry9Jimo+ayxozR8wtzOzvEEKrRrpHg8=;
+        b=L2nrqU6OX1MI4KSXx7NJ/SkQBxlZBNIo7laKBrnx9b3waVP1kL6DCVyiGkt9CSLmxf
+         xKRmcR15LcftGWX6psPkwD5R298inZVp9A0WeQc4emgywYRJg9W9/m4CG77JaMYW+3Do
+         rQPfqpNq+YW+rwPv2uOTs0FX+iOVmCWplvaqY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=5iUJxIm11wuHAjAk/U9qyVK8Q1/8AM34mvlFMQ0jz4o=;
-        b=nGYOAekLOWtAZPh/dgKvX9zpJ+Zq+LueS4AHxwLu3F7aUpghNnpb4WXLlV8GkII9gQ
-         CQExFOfN/0twY/+mtGi1ly6tegfyYJMAkB6gJHuxkGJgpxj6I5xg9oOyM4O9eT1syTzo
-         pL1n97MDQDcprgyDjWHTKXAezq59H3y0tL5GqtolcuJ08R9gRUateElkPTyBTEitjZL4
-         kBgRBiopG3LQRaZsreEf7dn8tbqyLHZCYFhPUNpKg3ENksilAJpdLzrvjTqdx7nN3Uos
-         x4wMtZTw2/6WO5hcEYTbGoquzHqg0vYw7q7x6BwLFbZ8uvX77jm6fPYylJddAp0wk9cb
-         7ihQ==
-X-Gm-Message-State: AOAM532W6zTX3OnhUZ7AnOlF8LQJWaDMz3ACvGBHTlmcZnXqhcIknT9X
-        bgEW+SQeR/9kFJcAhLwyb2OJZGZiqmi4lw==
-X-Google-Smtp-Source: ABdhPJwf9vtCL5ExNiA9UPs7QW/7lgXdB/HZmMOEwRB1zbVDepF5m+ckMxZ51vjWndG8rSWGM/ZxOA==
-X-Received: by 2002:a05:6830:1153:: with SMTP id x19mr3831256otq.321.1643349282858;
-        Thu, 27 Jan 2022 21:54:42 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n22sm9902538ooq.27.2022.01.27.21.54.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F975QErmCld1Ry9Jimo+ayxozR8wtzOzvEEKrRrpHg8=;
+        b=yvMaxpQqTJp18YNxHjUI796EzYoQcwBIKFtYonn0FZLiaSE40fwbBu75SKYBO+pzM7
+         tdBpsT3TSUGcax5enLNjy+FkyFW21o+Qj7qWar9m7iH9d1fSrd2yV0VmlSvAlQoEg5k5
+         zEagAM+UU+UH7q/H1MneF/PXQU1hdS8NRKmH2iHcQnxU8GiQ8vzJ/qWThHdJPksFC9z+
+         E9jkVTke1zjzqNggXwWOd2UVuTR4+QsRiz7uOqprDCtjHf6nA5j5TuC4lHVBh18T1VSI
+         mR29vlHEsWzFmFhv04iOpb6Xm6pVqTVDST6MQ4DNPqyjnTQK1UGSc3VMhzu/GpTA8vZ3
+         74XQ==
+X-Gm-Message-State: AOAM531r4bIci1C1iskvjc8cXfpEIJmWoNUyyJsP3GGA4UHPCm9z7/NQ
+        pjARSQ1UuErFUlSXPw0EayCOPA==
+X-Google-Smtp-Source: ABdhPJxh2Vdwi60f3eQnzNYyLGToNkDAsatZ5aGmyd8d4hIdQ3Pu9BJSGUEdT9TbehrZS9IShmRmwQ==
+X-Received: by 2002:a17:902:7c17:: with SMTP id x23mr7259148pll.123.1643349355127;
+        Thu, 27 Jan 2022 21:55:55 -0800 (PST)
+Received: from google.com ([2401:fa00:8f:203:434a:300b:6887:c7e6])
+        by smtp.gmail.com with ESMTPSA id k3sm8248221pfu.180.2022.01.27.21.55.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 21:54:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.17-rc2
-Date:   Thu, 27 Jan 2022 21:54:40 -0800
-Message-Id: <20220128055440.3947883-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        Thu, 27 Jan 2022 21:55:54 -0800 (PST)
+Date:   Fri, 28 Jan 2022 14:55:49 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] printk: Drop console_sem during panic
+Message-ID: <YfOFZfPKsKBJszq7@google.com>
+References: <20220126230236.750229-1-stephen.s.brennan@oracle.com>
+ <20220126230236.750229-5-stephen.s.brennan@oracle.com>
+ <87fsp9pm6q.fsf@jogness.linutronix.de>
+ <YfK0Ugt/i8nMVOmY@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfK0Ugt/i8nMVOmY@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On (22/01/27 16:03), Petr Mladek wrote:
+> On Thu 2022-01-27 10:28:53, John Ogness wrote:
+> > On 2022-01-26, Stephen Brennan <stephen.s.brennan@oracle.com> wrote:
+> > > --- a/kernel/printk/printk.c
+> > > +++ b/kernel/printk/printk.c
+> > > @@ -2759,7 +2782,7 @@ void console_unlock(void)
+> > >  	 * flush, no worries.
+> > >  	 */
+> > >  	retry = prb_read_valid(prb, next_seq, NULL);
+> > > -	if (retry && console_trylock())
+> > > +	if (retry && !abandon_console_lock_in_panic() && console_trylock())
+> > 
+> > As Sergey suggested [0], I would like to see the call to
+> > abandon_console_lock_in_panic() move inside console_trylock(). This will
+> > help to avoid the race between NMI CPU halt and the internal sema.lock
+> > spinlock.
 
-Please pull hwmon fixes for Linux v5.17-rc2 from signed tag:
+Thanks John.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
+> I would prefer if it is done as a followup patch. The code in this
+> patch is still needed. It helps when the non-panic CPU is busy
+> with pushing many pending messages. Also it is a more conservative
+> approach.
 
-Thanks,
-Guenter
-------
+No objections. This series fixes issue at hand, so conservative approach
+makes sense.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.17-rc2
-
-for you to fetch changes up to 79da533d3cc717ccc05ddbd3190da8a72bc2408b:
-
-  hwmon: (nct6775) Fix crash in clear_caseopen (2022-01-24 14:32:47 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v5.17-rc2
-
-- Fix crash in nct6775 driver
-- Prevent divide by zero in adt7470 driver
-- Fix conditional compile warning in pmbus/ir38064 driver
-- Various minor fixes in lm90 driver
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      hwmon: (adt7470) Prevent divide by zero in adt7470_fan_write()
-
-Guenter Roeck (8):
-      hwmon: (lm90) Reduce maximum conversion rate for G781
-      hwmon: (lm90) Re-enable interrupts after alert clears
-      hwmon: (lm90) Mark alert as broken for MAX6654
-      hwmon: (lm90) Mark alert as broken for MAX6680
-      hwmon: (lm90) Mark alert as broken for MAX6646/6647/6649
-      hwmon: (lm90) Fix sysfs and udev notifications
-      hwmon: (pmbus/ir38064) Mark ir38064_of_match as __maybe_unused
-      hwmon: (nct6775) Fix crash in clear_caseopen
-
- drivers/hwmon/adt7470.c       |  3 +++
- drivers/hwmon/lm90.c          | 21 +++++++++++----------
- drivers/hwmon/nct6775.c       |  6 +++---
- drivers/hwmon/pmbus/ir38064.c |  2 +-
- 4 files changed, 18 insertions(+), 14 deletions(-)
+On the other hand, we are at -rc1 and it seems like a very good time to
+discuss/look into/work on/etc. solution for the remaining cases/races/etc.

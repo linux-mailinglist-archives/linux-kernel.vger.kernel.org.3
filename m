@@ -2,327 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F04949F61D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3937949F61E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347557AbiA1JTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:19:19 -0500
-Received: from smtpbg701.qq.com ([203.205.195.86]:38050 "EHLO
-        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238113AbiA1JTM (ORCPT
+        id S1347571AbiA1JTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:19:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53226 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243305AbiA1JTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:19:12 -0500
-X-QQ-mid: bizesmtp48t1643361547txi0jrvp
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 28 Jan 2022 17:19:02 +0800 (CST)
-X-QQ-SSF: 0140000000200090G000000A0000000
-X-QQ-FEAT: k0yT7W7BRd2ZmwTTnaWGbh7rPhSq+8u3jtmCr0YpIkNl/WJ2am9aGH0ZtSCAN
-        fzmPeZvz5cjwzFkokz8U/r3e7MOGinmTGOM5zJ2aC7ygs7Xq7zPB+dG5r0rYZmIG9lQs6Pg
-        ZchFEtJxiXQJY3JgT7i6qwEHsxYUS2cCvSFIQkCwcedbe/y4jU1+JnH/cYxhJTujUx7dj2h
-        mcFqfI1EidTVKrvb3tLXjf1R1WqnxZAz5ykm+mMtbgq6YW1lr9tu5gLB/hWntQm0Q0Vg00U
-        ojYinTUGXglVoDAUT2AAU+5kwk1/mKsRn3GBfalayQiCdIPfWqAtMe0+zApXAVicHNrfTki
-        XmxqWUqZRPxUXPIvi5olb/tF/c3PYrHbZ3PhLBC
-X-QQ-GoodBg: 1
-From:   zhanglianjie <zhanglianjie@uniontech.com>
-To:     keescook@chromium.org
-Cc:     linux-kernel@vger.kernel.org, yzaikin@google.com,
-        mcgrof@kernel.org, akpm@linux-foundation.org,
-        zhanglianjie <zhanglianjie@uniontech.com>
-Subject: [PATCH] mm: move page-writeback sysctls to is own file
-Date:   Fri, 28 Jan 2022 17:19:01 +0800
-Message-Id: <20220128091901.18074-1-zhanglianjie@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 28 Jan 2022 04:19:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA2D161DEC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 09:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A52C340E0;
+        Fri, 28 Jan 2022 09:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643361571;
+        bh=e89zJ3Ks+YExihx0aEw7Bds3ZPThb/EP79+HngEmJ48=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D2L9Am09fB8oibP9EhX69yytO/hj6is5BMjpQ1S2ybFVmp7N2VSIj1uc2NMjgZcch
+         h9VAeXaYw/+0dritYst/fPSvLIcazB2Asr9tIFgfHxQuc5atTonZYLYsv2C0+VbR4R
+         /DdBDgnLspoDe+2qFauTO1LYhELd0K2+IZdJkKr4tVuWSiCbXMBu12RSufyXljFPC2
+         RswzPu3WWSQRBlvgf9yjozC3szB86AZhwUQgiXa9ts+T20DRsQZSETBg0dyAmZbQhG
+         Du4PsQlGLRZyZvcELxc8uWx5wEYMr5n6FZZ4qZcT0DsgCwfOMm2hjvhwmjRd/YXYzu
+         Bv81/ijI48C3A==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: don't check IPU policy during file defragment
+Date:   Fri, 28 Jan 2022 17:19:20 +0800
+Message-Id: <20220128091920.1556480-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-dishes, this makes it very difficult to maintain.
+Once IPU policy is enabled in some cases:
+a) f2fs forces to use F2FS_IPU_FORCE in a small-sized volume
+b) user configures IPU policy via sysfs
 
-To help with this maintenance let's start by moving sysctls to places
-where they actually belong.  The proc sysctl maintainers do not want to
-know what sysctl knobs you wish to add for your own piece of code, we
-just care about the core logic.
+Then we may fail to defragment file via ioctl due to IPU policy check,
+it doesn't make sense, so let's change to use IPU policy for common
+data writeback, rather than for specific data writeback, e.g. GC,
+defragment, and so on.
 
-So move the page-writeback sysctls to its own file.
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/data.c | 15 ++++++++++-----
+ fs/f2fs/f2fs.h |  3 ++-
+ fs/f2fs/file.c | 17 ++++++++++-------
+ 3 files changed, 22 insertions(+), 13 deletions(-)
 
-Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
-
-diff --git a/include/linux/writeback.h b/include/linux/writeback.h
-index fec248ab1fec..dc2b94e6a94f 100644
---- a/include/linux/writeback.h
-+++ b/include/linux/writeback.h
-@@ -345,28 +345,13 @@ void wb_domain_exit(struct wb_domain *dom);
- extern struct wb_domain global_wb_domain;
-
- /* These are exported to sysctl. */
--extern int dirty_background_ratio;
--extern unsigned long dirty_background_bytes;
--extern int vm_dirty_ratio;
--extern unsigned long vm_dirty_bytes;
- extern unsigned int dirty_writeback_interval;
- extern unsigned int dirty_expire_interval;
- extern unsigned int dirtytime_expire_interval;
--extern int vm_highmem_is_dirtyable;
- extern int laptop_mode;
-
--int dirty_background_ratio_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *lenp, loff_t *ppos);
--int dirty_background_bytes_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *lenp, loff_t *ppos);
--int dirty_ratio_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *lenp, loff_t *ppos);
--int dirty_bytes_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *lenp, loff_t *ppos);
- int dirtytime_interval_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *lenp, loff_t *ppos);
--int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *lenp, loff_t *ppos);
-
- void global_dirty_limits(unsigned long *pbackground, unsigned long *pdirty);
- unsigned long wb_calc_thresh(struct bdi_writeback *wb, unsigned long thresh);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 5ae443b2882e..34371bcb8ffa 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -100,8 +100,6 @@
- static const int six_hundred_forty_kb = 640 * 1024;
- #endif
-
--/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
--static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-
- static const int ngroups_max = NGROUPS_MAX;
- static const int cap_last_cap = CAP_LAST_CAP;
-@@ -2401,55 +2399,6 @@ static struct ctl_table vm_table[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= SYSCTL_ZERO,
- 	},
--	{
--		.procname	= "dirty_background_ratio",
--		.data		= &dirty_background_ratio,
--		.maxlen		= sizeof(dirty_background_ratio),
--		.mode		= 0644,
--		.proc_handler	= dirty_background_ratio_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE_HUNDRED,
--	},
--	{
--		.procname	= "dirty_background_bytes",
--		.data		= &dirty_background_bytes,
--		.maxlen		= sizeof(dirty_background_bytes),
--		.mode		= 0644,
--		.proc_handler	= dirty_background_bytes_handler,
--		.extra1		= SYSCTL_LONG_ONE,
--	},
--	{
--		.procname	= "dirty_ratio",
--		.data		= &vm_dirty_ratio,
--		.maxlen		= sizeof(vm_dirty_ratio),
--		.mode		= 0644,
--		.proc_handler	= dirty_ratio_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE_HUNDRED,
--	},
--	{
--		.procname	= "dirty_bytes",
--		.data		= &vm_dirty_bytes,
--		.maxlen		= sizeof(vm_dirty_bytes),
--		.mode		= 0644,
--		.proc_handler	= dirty_bytes_handler,
--		.extra1		= (void *)&dirty_bytes_min,
--	},
--	{
--		.procname	= "dirty_writeback_centisecs",
--		.data		= &dirty_writeback_interval,
--		.maxlen		= sizeof(dirty_writeback_interval),
--		.mode		= 0644,
--		.proc_handler	= dirty_writeback_centisecs_handler,
--	},
--	{
--		.procname	= "dirty_expire_centisecs",
--		.data		= &dirty_expire_interval,
--		.maxlen		= sizeof(dirty_expire_interval),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--	},
- 	{
- 		.procname	= "dirtytime_expire_seconds",
- 		.data		= &dirtytime_expire_interval,
-@@ -2621,13 +2570,6 @@ static struct ctl_table vm_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 	},
- #endif
--	{
--		.procname	= "laptop_mode",
--		.data		= &laptop_mode,
--		.maxlen		= sizeof(laptop_mode),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_jiffies,
--	},
- 	{
- 		.procname	= "vfs_cache_pressure",
- 		.data		= &sysctl_vfs_cache_pressure,
-@@ -2725,17 +2667,6 @@ static struct ctl_table vm_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 	},
- #endif
--#ifdef CONFIG_HIGHMEM
--	{
--		.procname	= "highmem_is_dirtyable",
--		.data		= &vm_highmem_is_dirtyable,
--		.maxlen		= sizeof(vm_highmem_is_dirtyable),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
--#endif
- #ifdef CONFIG_MEMORY_FAILURE
- 	{
- 		.procname	= "memory_failure_early_kill",
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 91d163f8d36b..9ffe81ec08b9 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -70,30 +70,33 @@ static long ratelimit_pages = 32;
- /*
-  * Start background writeback (via writeback threads) at this percentage
-  */
--int dirty_background_ratio = 10;
-+static int dirty_background_ratio = 10;
-
- /*
-  * dirty_background_bytes starts at 0 (disabled) so that it is a function of
-  * dirty_background_ratio * the amount of dirtyable memory
-  */
--unsigned long dirty_background_bytes;
-+static unsigned long dirty_background_bytes;
-
- /*
-  * free highmem will not be subtracted from the total free memory
-  * for calculating free ratios if vm_highmem_is_dirtyable is true
-  */
--int vm_highmem_is_dirtyable;
-+static int vm_highmem_is_dirtyable;
-
- /*
-  * The generator of dirty data starts writeback at this percentage
-  */
--int vm_dirty_ratio = 20;
-+static int vm_dirty_ratio = 20;
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 0f124e8de1d4..bce7ecac8976 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2530,6 +2530,9 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
+ 	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+ 		return true;
+ 
++	if (is_inode_flag_set(inode, FI_DEFRAG_PROCESS))
++		return true;
 +
-+/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
-+static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-
- /*
-  * vm_dirty_bytes starts at 0 (disabled) so that it is a function of
-  * vm_dirty_ratio * the amount of dirtyable memory
-  */
--unsigned long vm_dirty_bytes;
-+static unsigned long vm_dirty_bytes;
-
- /*
-  * The interval between `kupdate'-style writebacks
-@@ -2081,6 +2084,79 @@ static int page_writeback_cpu_online(unsigned int cpu)
- 	return 0;
- }
-
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table vm_page_writeback_sysctls[] = {
-+    {
-+        .procname   = "dirty_background_ratio",
-+        .data       = &dirty_background_ratio,
-+        .maxlen     = sizeof(dirty_background_ratio),
-+        .mode       = 0644,
-+        .proc_handler   = dirty_background_ratio_handler,
-+        .extra1     = SYSCTL_ZERO,
-+        .extra2     = SYSCTL_ONE_HUNDRED,
-+    },
-+    {
-+        .procname   = "dirty_background_bytes",
-+        .data       = &dirty_background_bytes,
-+        .maxlen     = sizeof(dirty_background_bytes),
-+        .mode       = 0644,
-+        .proc_handler   = dirty_background_bytes_handler,
-+        .extra1     = SYSCTL_LONG_ONE,
-+    },
-+    {
-+        .procname   = "dirty_ratio",
-+        .data       = &vm_dirty_ratio,
-+        .maxlen     = sizeof(vm_dirty_ratio),
-+        .mode       = 0644,
-+        .proc_handler   = dirty_ratio_handler,
-+        .extra1     = SYSCTL_ZERO,
-+        .extra2     = SYSCTL_ONE_HUNDRED,
-+    },
-+    {
-+        .procname   = "dirty_bytes",
-+        .data       = &vm_dirty_bytes,
-+        .maxlen     = sizeof(vm_dirty_bytes),
-+        .mode       = 0644,
-+        .proc_handler   = dirty_bytes_handler,
-+        .extra1     = (void *)&dirty_bytes_min,
-+    },
-+    {
-+        .procname   = "dirty_writeback_centisecs",
-+        .data       = &dirty_writeback_interval,
-+        .maxlen     = sizeof(dirty_writeback_interval),
-+        .mode       = 0644,
-+        .proc_handler   = dirty_writeback_centisecs_handler,
-+    },
-+    {
-+        .procname   = "dirty_expire_centisecs",
-+        .data       = &dirty_expire_interval,
-+        .maxlen     = sizeof(dirty_expire_interval),
-+        .mode       = 0644,
-+        .proc_handler   = proc_dointvec_minmax,
-+        .extra1     = SYSCTL_ZERO,
-+    },
-+#ifdef CONFIG_HIGHMEM
-+	{
-+		.procname	= "highmem_is_dirtyable",
-+		.data		= &vm_highmem_is_dirtyable,
-+		.maxlen		= sizeof(vm_highmem_is_dirtyable),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
-+#endif
-+	{
-+		.procname	= "laptop_mode",
-+		.data		= &laptop_mode,
-+		.maxlen		= sizeof(laptop_mode),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_jiffies,
-+	},
-+	{}
-+};
-+#endif
+ 	if (fio) {
+ 		if (page_private_gcing(fio->page))
+ 			return true;
+@@ -3154,8 +3157,8 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+ 			f2fs_available_free_memory(sbi, DIRTY_DENTS))
+ 		goto skip_write;
+ 
+-	/* skip writing during file defragment */
+-	if (is_inode_flag_set(inode, FI_DO_DEFRAG))
++	/* skip writing in file defragment preparing stage */
++	if (is_inode_flag_set(inode, FI_DEFRAG_PREPARE))
+ 		goto skip_write;
+ 
+ 	trace_f2fs_writepages(mapping->host, wbc, DATA);
+@@ -3733,7 +3736,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 		f2fs_allocate_new_section(sbi, CURSEG_COLD_DATA_PINNED, false);
+ 		f2fs_unlock_op(sbi);
+ 
+-		set_inode_flag(inode, FI_DO_DEFRAG);
++		set_inode_flag(inode, FI_DEFRAG_PREPARE);
+ 
+ 		for (blkofs = 0; blkofs < blk_per_sec; blkofs++) {
+ 			struct page *page;
+@@ -3750,9 +3753,11 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 			f2fs_put_page(page, 1);
+ 		}
+ 
+-		clear_inode_flag(inode, FI_DO_DEFRAG);
++		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+ 
++		set_inode_flag(inode, FI_DEFRAG_PROCESS);
+ 		ret = filemap_fdatawrite(inode->i_mapping);
++		clear_inode_flag(inode, FI_DEFRAG_PROCESS);
+ 
+ 		f2fs_up_write(&sbi->pin_sem);
+ 
+@@ -3761,7 +3766,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 	}
+ 
+ done:
+-	clear_inode_flag(inode, FI_DO_DEFRAG);
++	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+ 	clear_inode_flag(inode, FI_ALIGNED_WRITE);
+ 
+ 	filemap_invalidate_unlock(inode->i_mapping);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 8178a9152e49..4b905059a81e 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -733,7 +733,8 @@ enum {
+ 	FI_DROP_CACHE,		/* drop dirty page cache */
+ 	FI_DATA_EXIST,		/* indicate data exists */
+ 	FI_INLINE_DOTS,		/* indicate inline dot dentries */
+-	FI_DO_DEFRAG,		/* indicate defragment is running */
++	FI_DEFRAG_PREPARE,	/* indicate defragment is preparing */
++	FI_DEFRAG_PROCESS,	/* indicate defragment is processing */
+ 	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
+ 	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
+ 	FI_HOT_DATA,		/* indicate file is hot */
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 6ccdd6e347e2..696f4a175228 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2559,10 +2559,6 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 	bool fragmented = false;
+ 	int err;
+ 
+-	/* if in-place-update policy is enabled, don't waste time here */
+-	if (f2fs_should_update_inplace(inode, NULL))
+-		return -EINVAL;
+-
+ 	pg_start = range->start >> PAGE_SHIFT;
+ 	pg_end = (range->start + range->len) >> PAGE_SHIFT;
+ 
+@@ -2570,6 +2566,11 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 
+ 	inode_lock(inode);
+ 
++	if (f2fs_is_pinned_file(inode)) {
++		err = -EINVAL;
++		goto out;
++	}
 +
- /*
-  * Called early on to tune the page writeback dirty limits.
-  *
-@@ -2105,6 +2181,9 @@ void __init page_writeback_init(void)
- 			  page_writeback_cpu_online, NULL);
- 	cpuhp_setup_state(CPUHP_MM_WRITEBACK_DEAD, "mm/writeback:dead", NULL,
- 			  page_writeback_cpu_online);
-+#ifdef CONFIG_SYSCTL
-+	register_sysctl_init("vm", vm_page_writeback_sysctls);
-+#endif
- }
-
- /**
---
-2.20.1
-
-
+ 	/* writeback all dirty pages in the range */
+ 	err = filemap_write_and_wait_range(inode->i_mapping, range->start,
+ 						range->start + range->len - 1);
+@@ -2651,7 +2652,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 			goto check;
+ 		}
+ 
+-		set_inode_flag(inode, FI_DO_DEFRAG);
++		set_inode_flag(inode, FI_DEFRAG_PREPARE);
+ 
+ 		idx = map.m_lblk;
+ 		while (idx < map.m_lblk + map.m_len && cnt < blk_per_seg) {
+@@ -2676,14 +2677,16 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 		if (map.m_lblk < pg_end && cnt < blk_per_seg)
+ 			goto do_map;
+ 
+-		clear_inode_flag(inode, FI_DO_DEFRAG);
++		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+ 
++		set_inode_flag(inode, FI_DEFRAG_PROCESS);
+ 		err = filemap_fdatawrite(inode->i_mapping);
++		clear_inode_flag(inode, FI_DEFRAG_PROCESS);
+ 		if (err)
+ 			goto out;
+ 	}
+ clear_out:
+-	clear_inode_flag(inode, FI_DO_DEFRAG);
++	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+ out:
+ 	inode_unlock(inode);
+ 	if (!err)
+-- 
+2.25.1
 

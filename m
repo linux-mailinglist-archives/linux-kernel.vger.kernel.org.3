@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4712B4A02F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076C44A02FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351555AbiA1VhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S1351533AbiA1ViX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351511AbiA1VhJ (ORCPT
+        with ESMTP id S1351565AbiA1Vhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:37:09 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDB7C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:37:08 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id j2so20128841ejk.6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CUuoA1H1xCLa0a1bVW4NlOMKpUawKO6N9kfvmo3RGOM=;
-        b=U4gZi4VClu3Fy3b0MUuy+OH+FPtbaikctEYX0ZAeCHxIky1wQ3Bv9sLZYdRg3sg8jn
-         gQ1TXW9cQQmRIce4Ur/I/oZRJXONbWQcitCi62NNG88NPyiRR+VM+o4JLs4Dq6pKlLfV
-         AcoEjvvNLllQuFcBUmosqPuyp+bqe3K28zBRwUKVQwN21sapCudCqhEcwXysEXBsV7MM
-         sqaSGvuY3gaejvqSaltDVaWFAfdhdJzBPwug1N3YFxZG1jE3HY3ZSB96jaV2sot9rL4T
-         Lk2G8s1Xc7Kjce44nsgXExVd/IwlbhuqsTeJYKLhn2asN1FSNCIKYWjURZbpdZ/y/6m3
-         +bww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CUuoA1H1xCLa0a1bVW4NlOMKpUawKO6N9kfvmo3RGOM=;
-        b=OJpYIa/aek0zPCc58HIFc7BBxibkIk9vojit+dxQoaNaq6Xe8IcD/lDhI6FKhyWv6Q
-         /MFZelURl6+6Bw/+dmKsUCE4g/BXoCYSBOhKsXNFt/428OJ0TJWi18EyssffqeOSFLTq
-         Dry70hryH6BCnB2Ge8IHvEvBMPZxw8kJ1+T8qZZfosv/tDLrJje+TGIjCE++2Vs77FbN
-         HR6kWN3iNo1O8z3sT82JDAUbHjah3QtLdlP4PSxj8qXP3wPls1fBbt5dKlcP7SUPWrpi
-         fLQjChPs38/4An1qiAU3UI+4plljHt4Ao2IuY4MjafoR1HXbXzpEk+ZA+veDYkjP1MzM
-         2G6g==
-X-Gm-Message-State: AOAM532pfRSukP4mZTwnCr9qhfklKhcBmgbj4bj8k0B2d/hLeRgIwqP1
-        pFj6fUiWhyQ9psD1SAKIAh4ekQvT/onIRWzWirnW93o7qV9paA==
-X-Google-Smtp-Source: ABdhPJxVAzum5yLTwHC5et+cUTTSy3/uTZLz/Hrr/hiuqjfdxn1Bg2Sxql6rOIt5SPVlxQ+oLnZsJk3HnWnNlRZVAGo=
-X-Received: by 2002:a17:906:794f:: with SMTP id l15mr8765287ejo.75.1643405827189;
- Fri, 28 Jan 2022 13:37:07 -0800 (PST)
+        Fri, 28 Jan 2022 16:37:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7207AC061714;
+        Fri, 28 Jan 2022 13:37:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C07FAB826FE;
+        Fri, 28 Jan 2022 21:37:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C791BC340E7;
+        Fri, 28 Jan 2022 21:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643405853;
+        bh=R+Q6eh/Eo5YhcURqSA1GIHIoTBiBBkzzXbRVGgnkcds=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ko9eqru+xslWUM6l4TVKkq0H8vKPm1/TJYqFh34hvlXP1CJkLLGJ2DqiiPTbdZbhR
+         LvNfWwqcCtWyqQr4ep1RYxE0mTR8qI2Re99D9w3D5RWIIjLSkvX3RHgHCOtZomYUaM
+         thkNkCCWZ4+I806oxLwXIAL+c7OqF8TeGU3DuQRBJQ76W2gYID/Fl0Fkgvtj1F89k0
+         Z/WlXGtIfrEsXnWEUZcvlqVvLVU0ES3la/JzxAs9uYjurqvSvPoyxDs6LhPT4JCATv
+         xhpjWF6tD3jRWMgv0vjTPN3nPpEhon7P0YskGsMaAlK9AX7M1Gx4sgtJY5u15AjuP4
+         GF2XK7CNw4vxw==
+Date:   Fri, 28 Jan 2022 22:37:29 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PULL REQUEST] immutable branch "i2c-alert-for-acpi-20220128"
+Message-ID: <YfRiGR3AT8tzyweG@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
 MIME-Version: 1.0
-References: <20220127215222.159049-1-dlatypov@google.com> <CAFd5g47imcBAPNqrX+ZpmVzw8mgaPiBX_ip0euFAgmTA3cxitA@mail.gmail.com>
-In-Reply-To: <CAFd5g47imcBAPNqrX+ZpmVzw8mgaPiBX_ip0euFAgmTA3cxitA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 28 Jan 2022 13:36:55 -0800
-Message-ID: <CAGS_qxoSn16TgDUvQTUpamu1xzY85Cbqy7Qg94fyKwjE4jw7Fg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: cleanup assertion macro internal variables
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0CTTa1tr2HhYkIae"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 1:21 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Thu, Jan 27, 2022 at 4:52 PM Daniel Latypov <dlatypov@google.com> wrot=
-e:
-> >
-> > All the operands should be tagged `const`.
-> > We're only assigning them to variables so that we can compare them (e.g=
-.
-> > check if left =3D=3D right, etc.) and avoid evaluating expressions mult=
-iple
-> > times.
-> >
-> > There's no need for them to be mutable.
->
-> Agreed.
->
-> > Also rename the helper variable `loc` to `__loc` like we do with
-> > `__assertion` and `__strs` to avoid potential name collisions with user
-> > code.
->
-> Probably not necessary since we create a new code block (we are inside
-> of an if-statement, do-while-loop, etc), but I don't really care
-> either way.
 
-You're totally right that this doesn't matter with our current macros.
+--0CTTa1tr2HhYkIae
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-given
-int loc =3D 42;
-KUNIT_EXPECT_TRUE(test, loc);
-KUNIT_EXPECT_EQ(test, loc, 42);
+Rafael,
 
-becomes
-do {
-        if (__builtin_expect(!!(!(!!(loc) =3D=3D !!true)), 0)) {
-                /* we don't use the operands in here, so `loc` is fine */
-                static const struct kunit_loc loc =3D {
-                        .file =3D "lib/kunit/kunit-example-test.c", .line =
-=3D 25
-                };
-...
-do {
-        typeof(loc) __left =3D (loc);
-        typeof(42) __right =3D (42);
-        do {
-                /* We never reference the expression again, so `loc` is fin=
-e */
-                if (__builtin_expect(!!(!(__left =3D=3D __right)), 0)) {
-                        static const struct kunit_loc loc =3D {
-                                .file =3D "lib/kunit/kunit-example-test.c",
-                                .line =3D 24
-                        };
+here is an immutable branch containing the patches to support SMBus
+Alert with ACPI. Maybe you need it.
 
-But reminder: this was *not* the case until very recently.
-Sau we didn't have my earlier patch to move the `if(!(passed))` check
-into the macro.
-Then we'd have issues, e.g.
-../lib/kunit/kunit-example-test.c: In function =E2=80=98example_simple_test=
-=E2=80=99:
-../include/kunit/test.h:828:26: error: wrong type argument to unary
-exclamation mark
-  828 |                         !!(condition) =3D=3D !!expected_true,
-                \
-      |
-...
-../lib/kunit/kunit-example-test.c:25:9: note: in expansion of macro
-=E2=80=98KUNIT_EXPECT_TRUE=E2=80=99
-   25 |         KUNIT_EXPECT_TRUE(test, loc);
-      |         ^~~~~~~~~~~~~~~~~
+Thanks,
 
-So being defensive here lets us change up our implementation more freely.
+   Wolfram
 
->
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
->
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/alert-for-acpi
+
+for you to fetch changes up to a263a84088f689bf0c1552a510b25d0bcc45fcae:
+
+  i2c: smbus: Use device_*() functions instead of of_*() (2022-01-28 21:56:34 +0100)
+
+----------------------------------------------------------------
+Akhil R (3):
+      device property: Add fwnode_irq_get_byname
+      docs: firmware-guide: ACPI: Add named interrupt doc
+      i2c: smbus: Use device_*() functions instead of of_*()
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (3):
+      (Rev.) i2c: smbus: Use device_*() functions instead of of_*()
+      (Rev.) docs: firmware-guide: ACPI: Add named interrupt doc
+      (Rev.) device property: Add fwnode_irq_get_byname
+
+ Documentation/firmware-guide/acpi/enumeration.rst | 39 +++++++++++++++++++++++
+ drivers/base/property.c                           | 29 +++++++++++++++++
+ drivers/i2c/i2c-core-base.c                       |  2 +-
+ drivers/i2c/i2c-core-smbus.c                      | 11 ++++---
+ drivers/i2c/i2c-smbus.c                           |  5 +--
+ include/linux/i2c-smbus.h                         |  6 ++--
+ include/linux/property.h                          |  1 +
+ 7 files changed, 82 insertions(+), 11 deletions(-)
+
+--0CTTa1tr2HhYkIae
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmH0YhUACgkQFA3kzBSg
+KbYw1RAAjUV+Pj4oKA2AvFU7FdD5ZjkB9+GB5uQmdHkTRGF30g43QyXyIHfmlMFS
+4KQrKya4W6JDnOIPUn70n+kMKLIX5+Sgt7D10Y2BHWTL/1czVtR0NvWCvbjH82RT
++pcJZBW031gUuBBo77QU0/Qr9lJM0rLHS1qElWPKDUN93wSbZ282OCbh+DptxpGT
+L9sDi2n6tScs42P/WG/nMYw2vy5+Tf8w2q3kW1f2J8yuk33n/o5ZRnLgwtCgLHFi
+z9E29uJdIhGU5ONKgd6/3jAMa6zmzwPvEMLL0ZZ9IuDvE0oL2KmLzC6hcpXVc3lL
+k1E4eSCMKUS4dgolQfc7VAkFnvp+M+2dX7LeO9zUii5o+R96HT/aykaOgn+sEvo6
+HSLaAueEunY62khzup5uVwD0GQjv0tSmQhhEAbVPV/GBpl/n7ehtqYlmjnzY8LNM
+p/6XzLPof1uQs8C3f8o5nnGuEl9PU/IrcGAgCnbm0Y5eWw2fqMlQPgqvr3nLdj2R
+mhuu6NDorYezgUGMqqkCbqVsqRvMjWZkhT+wOkKh/LY1048X02L9LzhtVAm/zSc/
+ZqFqnQbwFbke2TgbqozLZaIk20jLPKWwxDGMIeKx6/8Vcht+z31UnwoR3uD0cW5m
+VQ+N1CJRKdgfqgFyGGDnBFKJLXTbovbhrRA75JSJiQ0Es6mlwcY=
+=3pxa
+-----END PGP SIGNATURE-----
+
+--0CTTa1tr2HhYkIae--

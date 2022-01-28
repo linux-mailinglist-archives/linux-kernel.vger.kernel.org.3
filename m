@@ -2,63 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E8749FBDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E18C49FBE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349344AbiA1Oh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
+        id S1349349AbiA1OkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349378AbiA1Ohx (ORCPT
+        with ESMTP id S245244AbiA1OkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:37:53 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1F9C061714;
-        Fri, 28 Jan 2022 06:37:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6/tqkDCZHAhUA6Pgzhrdj6aflFqIsB1t/60EdxYL26A=; b=kfqTzMcYLeCxCfj0kM6yMOqHoi
-        +pNC/+IgEbKvxSTwQ9KtdUIFM2gXH3sTBzClug9h24MYw4QhPMAn2rN0bta5/xbTporgpSYN8bjC9
-        NtDrEYlKE98LUVyZtbS7E9sVxAl0BMaxY6TuzxNyVOFW+6ATC5UGXbDV8jhu3SxNTrIC+VVBtXZ9W
-        9biGi7uU3TcNv42dCcSSmu8hsDbcgq4hIo0A8Uq0fd5LvB0CyeOTPhyxJfDIaaL23x+W16zTm2VzP
-        eulJhZT2kVOpvqyJiedTefGX6sCsUSysoSwzt8mz8MzMy58+lWXumE+49CvtePdgjy9VfqnPenyT/
-        f1ezjCDw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDSNV-004Zzy-8c; Fri, 28 Jan 2022 14:37:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A90433002C5;
-        Fri, 28 Jan 2022 15:37:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2EC672142D5E2; Fri, 28 Jan 2022 15:37:26 +0100 (CET)
-Date:   Fri, 28 Jan 2022 15:37:26 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhen Ni <nizhen@uniontech.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] sched: move autogroup sysctls into its own file
-Message-ID: <YfP/pquU1Zho+4gA@hirez.programming.kicks-ass.net>
-References: <20220128095025.8745-1-nizhen@uniontech.com>
+        Fri, 28 Jan 2022 09:40:00 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E404C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:40:00 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso11134170pjv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:40:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Da56eqCpT5eZsQ7VAU7ez+0LQLRQGKjBHCcbtfBfsaE=;
+        b=tDNLTzTMcPDvlgGiFjaQKZbSzVTdJd/meI7qSMDnPyqBjqeVZrKQapeK/+vPZoaj7F
+         dDpqXSGisnPYBbUr3TRoDmLL/RJGUYQVvOVt8ifHsR4A2PHH7Dk67VSYXGVFDjGuqDI5
+         kQxAFS0+AajErsU+0ylf8/VTB2iEiKEE/FVc4N5cuXITUGCzqqXP+35f3B+6dWT90k1f
+         te4R3rshoEYzC6k+jV7CIv6iar7hGaN7QqbGkhatoDA6CxAb65z/oAJ3PYJYP8ZFeSKQ
+         NPoeFj7DXC4Gg2tea95DQENygBck01PKXTedXkSd37ICVpcdzp/C3E4PWRdiDuLH71Uq
+         h+7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Da56eqCpT5eZsQ7VAU7ez+0LQLRQGKjBHCcbtfBfsaE=;
+        b=NLMOftI3cmT8suM/GO5j+i9YE9cOhSNLrsd3qIw4tUrt6xaGeYiJk8xX8AoTSeIxFe
+         6YBkqxWZQsah++ZHp+3anFKLNzL7oqcEaI2hlLXCAh1WVJriyQKc5ZpPTspce+A4BPik
+         oslug7bkctbAy2vYtXhlrsXvhSAB06ICrglfhOKEy7runXMjRkHQoE9MOdNO2Zy1ejHM
+         qXYaoaxT0xBpjxvb5xwI1DL4BmKq557qNEvpInY6TCwSYuWyX5KdLUWDf2pTbdox/nM9
+         2WonDHT0SEGEwO12PvSv/wIEaAaEbKAVahiunMMlisbOdmv2YNXz+vDz24pemtFnnE0V
+         PrwQ==
+X-Gm-Message-State: AOAM532HL0ZzpEKlQThsrRdnea7sHQk7PSNyCyxitvBXU671IWlNFNo0
+        p1crqxrHuFOvAPnN7Fa8cJxIWYVwAvkum0o75WvnOQ==
+X-Google-Smtp-Source: ABdhPJxIwXQ7ZpbUhLKW21kmDek5BCkLgMLBW/fdro2nwuivp4xixQ6F3zIy0pd4EGju2h/70DOhqhyE/VmftplT4x8=
+X-Received: by 2002:a17:903:24d:: with SMTP id j13mr8457420plh.145.1643380800014;
+ Fri, 28 Jan 2022 06:40:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128095025.8745-1-nizhen@uniontech.com>
+References: <20220120001621.705352-3-jsd@semihalf.com> <202201202353.tVXCQlqh-lkp@intel.com>
+ <YemXXCsy4lBsCmDx@smile.fi.intel.com>
+In-Reply-To: <YemXXCsy4lBsCmDx@smile.fi.intel.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Fri, 28 Jan 2022 15:39:49 +0100
+Message-ID: <CAOtMz3NE8iOE9KBMP+MVC71mkFWwsiQyjJGs+5Nct3diR2k-HA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        kbuild-all@lists.01.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 05:50:25PM +0800, Zhen Ni wrote:
-> move autogroup sysctls to autogroup.c and use the new
-> register_sysctl_init() to register the sysctl interface.
-> 
-> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+czw., 20 sty 2022 o 18:12 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
+>
+> On Thu, Jan 20, 2022 at 11:33:05PM +0800, kernel test robot wrote:
+>
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    drivers/i2c/busses/i2c-designware-amdpsp.c: In function 'psp_send_cm=
+d':
+> > >> drivers/i2c/busses/i2c-designware-amdpsp.c:130:2: error: implicit de=
+claration of function 'writeq'; did you mean 'writel'? [-Werror=3Dimplicit-=
+function-declaration]
+> >      130 |  writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_add=
+r);
+> >          |  ^~~~~~
+> >          |  writel
+> >    cc1: some warnings being treated as errors
+>
+> Adding io-64-nonatomic-lo-hi.h after io.h should fix this.
 
-Thanks!
+Correct, thanks! Actually io.h is directly included from
+io-64-nonatomic-lo-hi.h.
+
+Best Regards,
+Jan
+
+
+>
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>

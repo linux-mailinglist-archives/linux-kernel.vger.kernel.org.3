@@ -2,72 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2061449FBA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37AE49FBA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349147AbiA1O1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S1349151AbiA1O3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiA1O1C (ORCPT
+        with ESMTP id S232446AbiA1O3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:27:02 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB09C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:27:02 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id p63so7046779iod.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:27:02 -0800 (PST)
+        Fri, 28 Jan 2022 09:29:09 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A21C061714;
+        Fri, 28 Jan 2022 06:29:09 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4210382wme.0;
+        Fri, 28 Jan 2022 06:29:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=1bnORB1wkruXjbPQsxwiOmxlipkYRK0gZn3m0VjNnds=;
-        b=SUn5DhBkNrcBlytCHFJFy16BnTHHKOlrENp0Y4zwHCYFlFKQNIuiGomBzHMtZ+qAsi
-         OBLc2BCaiODyaZlss5gLV8wm+Pbf65SzlM2pwCZtbwvhUFboozN0ECuNvBeBR9FO4FLD
-         MfjI83r5SfoI6MNqGB+UFjXcLfeNF7J0xy53IVdQunfF01HtaV6yzucwe0yk/QVeLkdC
-         WCgwxRWn7tiFrNm/hq9JYG+bb1gT4EwE+Z4HHFvjt/6KnsLFOm94bQ038m7b6oww7/do
-         ShqyuaaRY7ejMQwFR+q9UnfTaNZ4h9go1C5gTTYENFb+VOIl4F/gJAkTiEgxwodMuT7Z
-         2RAw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cBSmv6ogb1cxiwO45LAPv1J5ovdz5y9xPUc2j3/AZeY=;
+        b=CuWJuLyc6hZWPi10EE0eOFSkOZZCYkXImgtkRZpUaw7VImcl8LuS1ZDPiVfI3FGbvU
+         kbyqx5ocCX+DEg3REQOw1Qe57WtFn4JJVkTulQyhc6mgSZQKpsrt/VvvmJyYA3v6GJ/g
+         lXI/9Gn0PFl1AHYCMsJxiLR7AvhhtQJ9O48nRWnkPmpa+8n0y4kKUmUpVxi6pzbamCjy
+         53J99lwhXFZBzImsDKTImK0pv8srfveMU7/glZPR7lGxSs4MqtOipW+1H9lMt7nspgWa
+         WnwaRAy1lgOCv3qGrt5hqIz4jj/vlusxi7aPjvBYAuaI352e6PpQg/57Uxewyblfcj3c
+         myJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1bnORB1wkruXjbPQsxwiOmxlipkYRK0gZn3m0VjNnds=;
-        b=Th95q6OjlphyafoU9l7kf3MMtsVmaH6+49HUCTiRiMYzIeUHgc6kaA76wMZxsIwZAP
-         OmkawT4FLHnLcW4bI+SAdK14yz6BILa6zxRtMacNuJQS+ZzsjwLw3MvhZWlavYzlPK2W
-         fcj8j73oe6DrOUpnEU37K6JWUSlP8U5GJJYKe6zyeXe8n60IFnLIPsIAbriYBc01I/p2
-         /qyw88XAjbbXhZns/ICBkMylJ6Qfuo6pbvcUHqgOTb2W26+PUQ2sDfXPI6sbhtUSxL8h
-         59PwRXlpiV6HoYaYpM9872dCwK1P1+uQPqjAkWalR4V8OPcnbqf24wWpnqpqzVBK6Hcq
-         V5hQ==
-X-Gm-Message-State: AOAM5327DyS2Q9yEQ6bTd3rPPLgGgmftm3T6JKGpjuz42T7pFHJO+fci
-        LfvFUcdvuTC7qqZTIO48U1UkdDsiYr8LkJLfqkU=
-X-Google-Smtp-Source: ABdhPJzd8keAgM79DYn7n5v3WjsKD74dnSWWSrq330nhqT0U0c7r5t4OGDflnZvo76hcpMuIexbijpFuoZz75hJO6VM=
-X-Received: by 2002:a05:6602:2209:: with SMTP id n9mr5413049ion.106.1643380021757;
- Fri, 28 Jan 2022 06:27:01 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cBSmv6ogb1cxiwO45LAPv1J5ovdz5y9xPUc2j3/AZeY=;
+        b=v24ubdIN5YC11xGEEaEWcq3X6u7Aei712r5G8z8v1TWuHm39wPjplrZHn8lB3/QGnd
+         xGTQukYIN1ZP1IfpnIV7ZnLhrqxcAHq1ITWKyJwKynecao7FWJBqdTRCWb+/BctI5FuZ
+         JKraR9xf0xoDXVVuTRzQdRsrgtSf7AGr2aqAVym+UePYAOY7Rfsst6ntRDKbn5xaYyON
+         xIxLHr/eaAx36QiOPQzg6+Cis5xdVjiaEjxow+qqLA37o0EF65npqr7iM/Gl7HKzEf8E
+         3TEEs0W7Kh3n8fGBgVoSg/vfN1z6LqC+ZtJwDsDJV5gXwOhQTzvFXhC/a3HHoM8k1Ygd
+         BxsA==
+X-Gm-Message-State: AOAM532l1OaEd9VdZgNHZX9MMefiUnswRQY2xv2Bp2V4FlB33hHGm36j
+        B0vOorrjTtNKUSspZOftW5s=
+X-Google-Smtp-Source: ABdhPJymsXJu3dPTiIpIW1Di6atglsnzDkCxFVcyTEm5EVMM/m2gt/4JdaZU5jWR9wywus94/vWalA==
+X-Received: by 2002:a7b:cbda:: with SMTP id n26mr16464409wmi.76.1643380147986;
+        Fri, 28 Jan 2022 06:29:07 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id l4sm5507162wrs.6.2022.01.28.06.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 06:29:07 -0800 (PST)
+Date:   Fri, 28 Jan 2022 14:29:05 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH 5.15 00/12] 5.15.18-rc1 review
+Message-ID: <YfP9sVf9skXfXfH1@debian>
+References: <20220127180259.078563735@linuxfoundation.org>
 MIME-Version: 1.0
-From:   Paul Mulders <justinkb@gmail.com>
-Date:   Fri, 28 Jan 2022 15:26:51 +0100
-Message-ID: <CAOn50SJrdS+uRnJ=e1vrb6n5e1TSWLBiLDdZe=7tSCXRVwtTjQ@mail.gmail.com>
-Subject: Re: BUG: [PATCH v2] isoc: mediatek: Check for error clk pointer
-To:     frank-w@public-files.de
-Cc:     broonie@kernel.org, gregkh@linuxfoundation.org,
-        jiasheng@iscas.ac.cn, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I guess this breaks all MT7622 SoCs since it'll prematurely exit
-init_clks (and subsequently init_scp) completely once devm_clk_get
-fails to get a reference to the mm clock producer (which happens to be
-the first one tried). This is because MT7623 has a GPU (so no mm
-clock) and MT7622 doesn't, and as a result the other clock producer
-pointers never get initialized (and other stuff in init_scp after
-returning from the error never happens).
+Hi Greg,
 
-The patch seems fundamentally flawed, I guess it was either not tested
-at all, or only tested on a MT7623. The initialization functions seem
-designed with the idea that it's ok if some clocks aren't present, so
-stopping the initialization when one of them isn't present seems
-wrong. (For example, there is also a MT7622B variant of the MT7622
-which probably also lacks some clocks MT7622(A) does have).
+On Thu, Jan 27, 2022 at 07:09:24PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.18 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+
+Build test:
+mips (gcc version 11.2.1 20220121): 62 configs -> no new failure
+arm (gcc version 11.2.1 20220121): 100 configs -> no new failure
+arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/667
+[2]. https://openqa.qa.codethink.co.uk/tests/671
+[3]. https://openqa.qa.codethink.co.uk/tests/672
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

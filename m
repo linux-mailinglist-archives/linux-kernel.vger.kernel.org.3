@@ -2,201 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6253349F5DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF58749F5DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbiA1JD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:03:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21830 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230179AbiA1JDY (ORCPT
+        id S236121AbiA1JDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:03:31 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:31250 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235560AbiA1JD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:03:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643360604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k6fRFZaCxJ9/sKr7eukzgsxP2eZihqtSLhrBXhP7zxA=;
-        b=GfDddd73q9tt9uPHozJOcVxY51iVwyDXqkMZbqw2DArnLJJsGLv9iQlVS7peL+adRJ0JzJ
-        LhlTCqHaUZP8mwaIcKJNhCefRer3fGEbBDm9586Wm/CZbTah/GV79ousSYMExEeuV+weXV
-        zxKaXqf776jnH/WWz9/PHrzY6kuhQIE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-237-7hb1BxDBOG6N-c7CHq0Vhw-1; Fri, 28 Jan 2022 04:03:23 -0500
-X-MC-Unique: 7hb1BxDBOG6N-c7CHq0Vhw-1
-Received: by mail-ed1-f72.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so2732376edb.23
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:03:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=k6fRFZaCxJ9/sKr7eukzgsxP2eZihqtSLhrBXhP7zxA=;
-        b=gdTnXDtnEqBbXZVO/+zwTahiwn/XRwTVVC0sDa/sELirZp8/iBYXOh+zQHCDnRa99P
-         ySYrjovato7DIxb+6IsW3ZjPr6o+NSjXLaZ8l+VOZMtavfBXstIciCwuMhqF8p8mp/P4
-         kdxV013p6BgYqgoo2Q2/35md6z781449s3I13YXdPDkDyqNafX5MrDLa3PDmjxPKpXNe
-         tIGZ2CK7HSZg4HdOoueDK0jzYMMEcPaEm/MPAKfy46BIqqFdcreIn6Z/f2dASYPc/XdL
-         ukf95P3QHL5tdNYlt4YaMNSMIuqfoIGHdw+aO4Vbc7sG8AtoAcQpFhQVKsXglvppNYGo
-         wmcw==
-X-Gm-Message-State: AOAM5310VWO07m7ogv3J36X5YlKbvByIUwcocad1UU8kEw3lW+F3So/d
-        lXBiEyU1wxJ3oXFN3KOud8mxPEZrEx6fScuBV+taZpv9/XJjrm9LYkVg7Xavd37e4qyuRL0h+94
-        m5nIxnbOoBaV0o2oTTlcl9joO
-X-Received: by 2002:aa7:d313:: with SMTP id p19mr7550079edq.380.1643360601822;
-        Fri, 28 Jan 2022 01:03:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzwLTfB+FQpW/Kh46RzIU62HlxvCR6hkBiYhxXWrkOPDyzrf6sUvdJ0chSBKeGemvbFZzeuFw==
-X-Received: by 2002:aa7:d313:: with SMTP id p19mr7550062edq.380.1643360601598;
-        Fri, 28 Jan 2022 01:03:21 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5c00:522f:9bcd:24a0:cd70? (p200300cbc70e5c00522f9bcd24a0cd70.dip0.t-ipconnect.de. [2003:cb:c70e:5c00:522f:9bcd:24a0:cd70])
-        by smtp.gmail.com with ESMTPSA id u12sm12634499edq.8.2022.01.28.01.03.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 01:03:21 -0800 (PST)
-Message-ID: <847ceb80-d379-b704-8b47-0d662468370b@redhat.com>
-Date:   Fri, 28 Jan 2022 10:03:20 +0100
+        Fri, 28 Jan 2022 04:03:28 -0500
+Received: from dggeme752-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JlWgb0MQpzbkCc;
+        Fri, 28 Jan 2022 17:02:35 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by dggeme752-chm.china.huawei.com
+ (10.3.19.98) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Fri, 28
+ Jan 2022 17:03:26 +0800
+From:   h00486469 <hewenliang4@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <punit.agrawal@arm.com>, <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <hewenliang4@huawei.com>, <hejingxian@huawei.com>
+Subject: [PATCH] arm64: fix slab-out-of-bounds in emulation_proc_handler when accessing concurrently
+Date:   Fri, 28 Jan 2022 17:03:24 +0800
+Message-ID: <20220128090324.2727688-1-hewenliang4@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 3/4] mm: Change zap_details.zap_mapping into even_cows
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-References: <20220128045412.18695-1-peterx@redhat.com>
- <20220128045412.18695-4-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220128045412.18695-4-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme752-chm.china.huawei.com (10.3.19.98)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.01.22 05:54, Peter Xu wrote:
-> Currently we have a zap_mapping pointer maintained in zap_details, when it is
-> specified we only want to zap the pages that has the same mapping with what the
-> caller has specified.
-> 
-> But what we want to do is actually simpler: we want to skip zapping
-> private (COW-ed) pages in some cases.  We can refer to unmap_mapping_pages()
-> callers where we could have passed in different even_cows values.  The other
-> user is unmap_mapping_folio() where we always want to skip private pages.
-> 
-> According to Hugh, we used a mapping pointer for historical reason, as
-> explained here:
-> 
->   https://lore.kernel.org/lkml/391aa58d-ce84-9d4-d68d-d98a9c533255@google.com/
-> 
-> Quotting partly from Hugh:
+From: hewenliang <hewenliang4@huawei.com>
 
-s/Quotting/Quoting/
+SAN reports an issue of slab-out-of-bounds in emulation_proc_handler
+when we try to read/write the interfaces in /proc/sys/abi concurrently.
+So we need to add emulation_proc_lock to protect table->data and insn
+from data corruption in emulation_proc_handler.
 
-> 
->   Which raises the question again of why I did not just use a boolean flag
->   there originally: aah, I think I've found why.  In those days there was a
->   horrible "optimization", for better performance on some benchmark I guess,
->   which when you read from /dev/zero into a private mapping, would map the zero
->   page there (look up read_zero_pagealigned() and zeromap_page_range() if you
->   dare).  So there was another category of page to be skipped along with the
->   anon COWs, and I didn't want multiple tests in the zap loop, so checking
->   check_mapping against page->mapping did both.  I think nowadays you could do
->   it by checking for PageAnon page (or genuine swap entry) instead.
-> 
-> This patch replaced the zap_details.zap_mapping pointer into the even_cows
-> boolean, then we check it against PageAnon.
-> 
-> Suggested-by: Hugh Dickins <hughd@google.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  mm/memory.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 14d8428ff4db..ffa8c7dfe9ad 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1309,8 +1309,8 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
->   * Parameter block passed down to zap_pte_range in exceptional cases.
->   */
->  struct zap_details {
-> -	struct address_space *zap_mapping;	/* Check page->mapping if set */
->  	struct folio *single_folio;	/* Locked folio to be unmapped */
-> +	bool even_cows;			/* Zap COWed private pages too? */
->  };
->  
->  /* Whether we should zap all COWed (private) pages too */
-> @@ -1321,13 +1321,10 @@ static inline bool should_zap_cows(struct zap_details *details)
->  		return true;
->  
->  	/* Or, we zap COWed pages only if the caller wants to */
-> -	return !details->zap_mapping;
-> +	return details->even_cows;
->  }
->  
-> -/*
-> - * We set details->zap_mapping when we want to unmap shared but keep private
-> - * pages. Return true if we should zap this page, false otherwise.
-> - */
-> +/* Decides whether we should zap this page with the page pointer specified */
->  static inline bool should_zap_page(struct zap_details *details, struct page *page)
->  {
->  	/* If we can make a decision without *page.. */
-> @@ -1338,7 +1335,8 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
->  	if (!page)
->  		return true;
->  
-> -	return details->zap_mapping == page_rmapping(page);
-> +	/* Otherwise we should only zap non-anon pages */
-> +	return !PageAnon(page);
->  }
->  
->  static unsigned long zap_pte_range(struct mmu_gather *tlb,
-> @@ -3403,7 +3401,7 @@ void unmap_mapping_folio(struct folio *folio)
->  	first_index = folio->index;
->  	last_index = folio->index + folio_nr_pages(folio) - 1;
->  
-> -	details.zap_mapping = mapping;
-> +	details.even_cows = false;
+The stack is follows:
+Call trace:
+ dump_backtrace+0x0/0x310
+ show_stack+0x28/0x38
+ dump_stack+0xec/0x15c
+ print_address_description+0x68/0x2d0
+ kasan_report+0x130/0x2f0
+ __asan_load4+0x88/0xb0
+ emulation_proc_handler+0x58/0x158
+ proc_sys_call_handler+0x1dc/0x228
+ proc_sys_read+0x44/0x58
+ __vfs_read+0xe0/0x320
+ vfs_read+0xbc/0x1c0
+ __arm64_sys_read+0x50/0x60
+ el0_svc_common+0xc8/0x2b8
+ el0_svc_handler+0xf8/0x160
+ el0_svc+0x10/0x218
 
-Already initialized to 0 via struct zap_details details = { };
+Allocated by task 1:
+ kasan_kmalloc+0xe0/0x190
+ kmem_cache_alloc_trace+0x18c/0x418
+ register_insn_emulation+0x4c/0x2b0
+ armv8_deprecated_init+0x40/0x108
+ do_one_initcall+0xb4/0x508
+ kernel_init_freeable+0x7d0/0x8e0
+ kernel_init+0x20/0x1a8
+ ret_from_fork+0x10/0x18
 
-We could think about
+Mmeory state around the buggy address:
+>ffff8026dacf0b00: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
 
-struct zap_details details = {
-	.single_folio = folio,
-};
+Fixes: 587064b610c7 ("arm64: Add framework for legacy instruction emulation")
+Signed-off-by: hewenliang <hewenliang4@huawei.com>
+Signed-off-by: hejingxian <hejingxian@huawei.com>
+Signed-off-by: fulin <fulin@huawei.com>
+---
+ arch/arm64/kernel/armv8_deprecated.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
->  	details.single_folio = folio;
->  
->  	i_mmap_lock_write(mapping);
-> @@ -3432,7 +3430,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
->  	pgoff_t	first_index = start;
->  	pgoff_t	last_index = start + nr - 1;
->  
-> -	details.zap_mapping = even_cows ? NULL : mapping;
-> +	details.even_cows = even_cows;
->  	if (last_index < first_index)
->  		last_index = ULONG_MAX;
->  
-
-Eventually
-
-struct zap_details details = {
-	.even_cows = even_cows,
-};
-
+diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+index 6875a16b09d2..d2ac483b0dd8 100644
+--- a/arch/arm64/kernel/armv8_deprecated.c
++++ b/arch/arm64/kernel/armv8_deprecated.c
+@@ -59,6 +59,7 @@ struct insn_emulation {
+ static LIST_HEAD(insn_emulation);
+ static int nr_insn_emulated __initdata;
+ static DEFINE_RAW_SPINLOCK(insn_emulation_lock);
++static DEFINE_MUTEX(emulation_proc_lock);
+ 
+ static void register_emulation_hooks(struct insn_emulation_ops *ops)
+ {
+@@ -207,9 +208,12 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 				  loff_t *ppos)
+ {
+ 	int ret = 0;
+-	struct insn_emulation *insn = (struct insn_emulation *) table->data;
+-	enum insn_emulation_mode prev_mode = insn->current_mode;
++	struct insn_emulation *insn;
++	enum insn_emulation_mode prev_mode;
+ 
++	mutex_lock(&emulation_proc_lock);
++	insn = (struct insn_emulation *) table->data;
++	prev_mode = insn->current_mode;
+ 	table->data = &insn->current_mode;
+ 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ 
+@@ -224,6 +228,7 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 	}
+ ret:
+ 	table->data = insn;
++	mutex_unlock(&emulation_proc_lock);
+ 	return ret;
+ }
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.27.0
 

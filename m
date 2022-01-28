@@ -2,145 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEEA49F5BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D688349F5C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiA1I4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA1I4n (ORCPT
+        id S230320AbiA1I5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:57:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41558 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbiA1I5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:56:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F647C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:56:43 -0800 (PST)
+        Fri, 28 Jan 2022 03:57:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B80BB824EF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B317AC340E0;
-        Fri, 28 Jan 2022 08:56:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 440B961DB4;
+        Fri, 28 Jan 2022 08:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A508EC340E0;
+        Fri, 28 Jan 2022 08:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643360200;
-        bh=L0e4NOI8iG8yDPknydOzu7XKjt3ExbCSSt6U9t2mwlE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pdortB5pJt7xqL4W8flMRwt4+3nBc6nX2GmXa31LWVMwz3ZEucgJaChv2CTimRTDq
-         dLWleVTLlmb8shrU97yRAOCl0NSvhsIq2n3rfhH61EcT/BNao1tStg9QSvYQqrlQm+
-         W+Md3VSLEBn6uB3Wf/kV+Fjq+8qkkluMCjKbnWgrVaz3PWbamdRz4+t9pGe3mgs3uB
-         kQZ0tOdni1n8dZBafj+mqXM/6COPoShqg3tBMl3AKdqbk8PzbMoT4MWdccUR8NWwB7
-         ZTuFA2hhP9LJXgWnKjQaAIFV1Uc828CkgXrDZuzYEImSXnJ+aYSoMRsPANEjrkB+FF
-         sBq144hBLoqeA==
-Date:   Fri, 28 Jan 2022 16:56:34 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] firmware: imx: add get resource owner api
-Message-ID: <20220128085633.GG4686@dragon>
-References: <20220111032147.342012-1-peng.fan@oss.nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111032147.342012-1-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        s=k20201202; t=1643360239;
+        bh=eA0GRKE5jNFxledJDISs9E2n145awy0LOLWI3Kj0OCw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hfnsg/b/fnzfO7W3HdljYTzrlb2uSKZmWuNmXxQxBjBzTF4/87QiwUfhBOrUqcQ9o
+         VqEpBVJ/09By38KslCaSZifpWNtzGRrqT45RbhqLwii/m0Ve4CMGsEk1YGj62kQ88y
+         Te0x0ARTckdiSvT1Be6JX4lYnidxJvX3ceXUi/Csn+xeebovSgHtaiqQF0+pzCyf+5
+         zT4AgmPr6dH0hYgSdc8kPg6pYsU7P877Gkc1fdKVjATVVBfFesDB/1L9PQ480J5MrB
+         xfL5EjeMNo1drRYV1uYTG0Iqr8bmMqj7aljAsGvNS/gNE0I9zjBy0Us89b2NHJGt69
+         9Y5CvGzyJFhgg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nDN4H-003lDg-8T; Fri, 28 Jan 2022 08:57:17 +0000
+Date:   Fri, 28 Jan 2022 08:57:16 +0000
+Message-ID: <87r18s5jbn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "qizhong.cheng" <qizhong.cheng@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRz?= =?UTF-8?B?a2k=?= 
+        <kw@linux.com>, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        chuanjia.liu@mediatek.com,
+        Srikanth Thokala <srikanth.thokala@intel.com>,
+        Pratyush Anand <pratyush.anand@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
+In-Reply-To: <20220127212100.GA102267@bhelgaas>
+References: <d78b45e461b204d375830217d0d27ffdd97cedd3.camel@mediatek.com>
+        <20220127212100.GA102267@bhelgaas>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: helgaas@kernel.org, qizhong.cheng@mediatek.com, ryder.lee@mediatek.com, jianjun.wang@mediatek.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com, srikanth.thokala@intel.com, pratyush.anand@gmail.com, thomas.petazzoni@bootlin.com, pali@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:21:47AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Thu, 27 Jan 2022 21:21:00 +0000,
+Bjorn Helgaas <helgaas@kernel.org> wrote:
 > 
-> Add resource owner management API, this API could be used to check
-> whether M4 is under control of Linux.
+> [+cc Srikanth, Pratyush, Thomas, Pali, Ryder, Jianjun]
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/firmware/imx/rm.c           | 45 +++++++++++++++++++++++++++++
->  include/linux/firmware/imx/svc/rm.h |  5 ++++
->  2 files changed, 50 insertions(+)
+> On Wed, Jan 26, 2022 at 11:37:58AM +0800, qizhong.cheng wrote:
+> > On Tue, 2022-01-25 at 17:21 +0000, Marc Zyngier wrote:
+> > > On 2022-01-25 16:57, Bjorn Helgaas wrote:
+> > > > On Sun, Jan 23, 2022 at 11:33:06AM +0800, qizhong cheng wrote:
+> > > > > As an edge-triggered interrupts, its interrupt status should
+> > > > > be cleared before dispatch to the handler of device.
+> > > > 
+> > > > I'm not an IRQ expert, but the reasoning that "we should clear
+> > > > the MSI interrupt status before dispatching the handler because
+> > > > MSI is an edge-triggered interrupt" doesn't seem completely
+> > > > convincing because your code will now look like this:
+> > > > 
+> > > >   /* Clear the INTx */
+> > > >   writel(1 << bit, port->base + PCIE_INT_STATUS);
+> > > >   generic_handle_domain_irq(port->irq_domain, bit - INTX_SHIFT);
+> > > >   ...
+> > > > 
+> > > >   /* Clear MSI interrupt status */
+> > > >   writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+> > > >   generic_handle_domain_irq(port->inner_domain, bit);
+> > > > 
+> > > > You clear interrupt status before dispatching the handler for
+> > > > *both* level-triggered INTx interrupts and edge-triggered MSI
+> > > > interrupts.
+> > > > 
+> > > > So it doesn't seem that simply being edge-triggered is the
+> > > > critical factor here.
+> > > 
+> > > This is the usual problem with these half-baked implementations.
+> > > The signalling to the primary interrupt controller is level, as
+> > > they take a multitude of input and (crucially) latch the MSI
+> > > edges. Effectively, this is an edge-to-level converter, with all
+> > > the problems that this creates.
+> > > 
+> > > By clearing the status *after* the handling, you lose edges that
+> > > have been received and coalesced after the read of the status
+> > > register. By clearing it *before*, you are acknowledging the
+> > > interrupts early, and allowing them to be coalesced independently
+> > > of the ones that have been received earlier.
+> > > 
+> > > This is however mostly an educated guess. Someone with access to
+> > > the TRM should verify this.
+> > 
+> > Yes, as Maz said, we save the edge-interrupt status so that it
+> > becomes a level-interrupt. This is similar to an edge-to-level
+> > converter, so we need to clear it *before*. We found this problem
+> > through a lot of experiments and tested this patch.
 > 
-> diff --git a/drivers/firmware/imx/rm.c b/drivers/firmware/imx/rm.c
-> index a12db6ff323b..3c3605f98123 100644
-> --- a/drivers/firmware/imx/rm.c
-> +++ b/drivers/firmware/imx/rm.c
-> @@ -43,3 +43,48 @@ bool imx_sc_rm_is_resource_owned(struct imx_sc_ipc *ipc, u16 resource)
->  	return hdr->func;
->  }
->  EXPORT_SYMBOL(imx_sc_rm_is_resource_owned);
-> +
-> +/*
-> + * This function get @resource partition number
-> + *
-> + * @param[in]     ipc         IPC handle
-> + * @param[in]     resource    resource the control is associated with
-> + * @param[out]    pt          pointer to return the partition number
-> + *
-> + * @return Returns 0 for success and < 0 for errors.
-> + */
+> I thought there might be other host controllers with similar design,
+> so I looked at all the other drivers and tried to figure out whether
+> any others had similar problems.
+> 
+> The ones below look suspicious to me because they all clear some sort
+> of status register *after* handling an MSI.  Can you guys take a look
+> and make sure they are working correctly?
+> 
+>   keembay_pcie_msi_irq_handler
+>     status = readl(pcie->apb_base + PCIE_REGS_INTERRUPT_STATUS)
+>     if (status & MSI_CTRL_INT)
+>       dw_handle_msi_irq
+> 	generic_handle_domain_irq
+>       writel(status, pcie->apb_base + PCIE_REGS_INTERRUPT_STATUS)
+> 
+>   spear13xx_pcie_irq_handler
+>     status = readl(&app_reg->int_sts)
+>     if (status & MSI_CTRL_INT)
+>       dw_handle_msi_irq
+> 	generic_handle_domain_irq
+>     writel(status, &app_reg->int_clr)
 
-Shouldn't the documentation be put right above the function?
+I think these two are fine.
 
-Shawn
+The top level interrupt is only a level signal that the is something
+to process. The only thing that is unclear is what the effect of
+writing to that status register if MSIs are pending at that point. A
+sane implementation would just ignore the write.
 
-> +struct imx_sc_msg_rm_get_resource_owner {
-> +	struct imx_sc_rpc_msg hdr;
-> +	union {
-> +		struct {
-> +			u16 resource;
-> +		} req;
-> +		struct {
-> +			u8 val;
-> +		} resp;
-> +	} data;
-> +} __packed __aligned(4);
-> +
-> +int imx_sc_rm_get_resource_owner(struct imx_sc_ipc *ipc, u16 resource, u8 *pt)
-> +{
-> +	struct imx_sc_msg_rm_get_resource_owner msg;
-> +	struct imx_sc_rpc_msg *hdr = &msg.hdr;
-> +	int ret;
-> +
-> +	hdr->ver = IMX_SC_RPC_VERSION;
-> +	hdr->svc = IMX_SC_RPC_SVC_RM;
-> +	hdr->func = IMX_SC_RM_FUNC_GET_RESOURCE_OWNER;
-> +	hdr->size = 2;
-> +
-> +	msg.data.req.resource = resource;
-> +
-> +	ret = imx_scu_call_rpc(ipc, &msg, true);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (pt)
-> +		*pt = msg.data.resp.val;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(imx_sc_rm_get_resource_owner);
-> diff --git a/include/linux/firmware/imx/svc/rm.h b/include/linux/firmware/imx/svc/rm.h
-> index 456b6a59d29b..ff481b23ea36 100644
-> --- a/include/linux/firmware/imx/svc/rm.h
-> +++ b/include/linux/firmware/imx/svc/rm.h
-> @@ -59,11 +59,16 @@ enum imx_sc_rm_func {
->  
->  #if IS_ENABLED(CONFIG_IMX_SCU)
->  bool imx_sc_rm_is_resource_owned(struct imx_sc_ipc *ipc, u16 resource);
-> +int imx_sc_rm_get_resource_owner(struct imx_sc_ipc *ipc, u16 resource, u8 *pt);
->  #else
->  static inline bool
->  imx_sc_rm_is_resource_owned(struct imx_sc_ipc *ipc, u16 resource)
->  {
->  	return true;
->  }
-> +static inline int imx_sc_rm_get_resource_owner(struct imx_sc_ipc *ipc, u16 resource, u8 *pt)
-> +{
-> +	return -ENOTSUPP;
-> +}
->  #endif
->  #endif
-> -- 
-> 2.25.1
+The actual processing is done in dw_handle_msi_irq(), reading the
+PCIE_MSI_INTR0_STATUS register. This same register is then used to Ack
+the interrupt, one bit at a time, as interrupts are handled (see
+dw_pci_bottom_ack). Ack taking place before the handling, it makes it
+safe for edge delivery.
+
 > 
+>   advk_pcie_handle_int
+>     isr0_status = advk_readl(pcie, PCIE_ISR0_REG)
+>     if (isr0_status & PCIE_ISR0_MSI_INT_PENDING)
+>       advk_pcie_handle_msi
+>         advk_readl(pcie, PCIE_MSI_STATUS_REG)
+> 	advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG)
+> 	generic_handle_irq
+> 	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING, PCIE_ISR0_REG)
+
+Same thing, I guess. It is just that the Ack has been open-coded.
+
+>
+>   mtk_pcie_irq_handler
+>     status = readl_relaxed(pcie->base + PCIE_INT_STATUS_REG)
+>     for_each_set_bit_from(irq_bit, &status, ...)
+>       mtk_pcie_msi_handler
+>         generic_handle_domain_irq
+>       writel_relaxed(BIT(irq_bit), pcie->base + PCIE_INT_STATUS_REG)
+
+Similar thing. The PCIE_MSI_SET_STATUS register is read first, and
+then written back in the ack callback.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

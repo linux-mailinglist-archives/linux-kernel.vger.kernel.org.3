@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B2549F434
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB4549F43B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242833AbiA1HRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:17:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52004 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiA1HRE (ORCPT
+        id S242878AbiA1HSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:18:04 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:21490 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230226AbiA1HSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:17:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FFA2B824C0;
-        Fri, 28 Jan 2022 07:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A656DC340E0;
-        Fri, 28 Jan 2022 07:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643354222;
-        bh=+CQJj+Wy3FyhSrLEQk/MoP9KSnO3ECMLEzZsREv0YV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U0RXEHZmQYrEOPIZ8T9JblN8HxHUbsBq9lYybraKlnLmvNw4CmQOJP7o1ZHF4pVHS
-         byDvoCAIUMMHQ1J9DHwhkDM4C4r6Qj6jWYkslT1jQmINiqHMUEpkNre2SFwQq6Ov03
-         f73drERTeNKmbGVB8ldMK92USjuiM53p8dUhR0YA=
-Date:   Fri, 28 Jan 2022 08:16:59 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>, linux-fbdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Noralf Tronnes <notro@tronnes.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 2/5] staging: fbtft: Deduplicate driver registration
- macros
-Message-ID: <YfOYa/vX8cYKQxgo@kroah.com>
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-3-u.kleine-koenig@pengutronix.de>
- <20220127213607.xbggvbm454u7qfid@pengutronix.de>
+        Fri, 28 Jan 2022 02:18:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643354283; x=1674890283;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=K+Uv8pmoiitwbzIuGduDNaut2mMU/wE30++d5+B9hSQ=;
+  b=sT2Hgk5/l1ZpyAwTF/fyauVnyYuDbNlZwzWt6qnp0Qa/hwFzTjrdCRAZ
+   tSN96TdSw0lYTtKwPqbXs5n3Bna089KuPC96U6a08ZqFUrf1GCD3heFon
+   isUsGE2HYkZtemrfbjhR7/GqIfd+F9b/yO0Lhu0eF+5aCtdhhlYCKYal9
+   eM7MXLVfybiEy7E/eEAFNrsrSSqvVGjjymCaXCW0MQeWmPsXyhFPxhc/A
+   kBwQdk1nSgMSCD+Rm50zpogshX7kSvNEgZcL+/687VpgU4llVVUumlc9k
+   ap7XXUeEBufykYe/phjNRaB6iaJUc/K6haaK7El0VgtVwFcxpQOrYsxyF
+   A==;
+IronPort-SDR: 5N8rWxNHDZ5OQXBnq36Wf4it0+f8lxYfM96DKaDFgUqftlpn8Kj5zSU6xWdYTgh79L+GlLbMWE
+ Rk9vNFmXXpWMBXSi0Qyqp0Stx2yUnt2kTVKrTJf7iyBJ1NqiQeHJdMC7YhbIuEt9kfdjFlsVdV
+ WbsUwR5Jd89nIRbd9wYBte6mH1FTgMZoAkwFn4OZHhSBqqlTqEqP2J4MRXVmLyY1aqMeIxpE8o
+ 9Ft6ieCHni0bsuHDZL+9VTlvkJUzIGXXgO7BmtqE7lbf5XPh8ZwDnJ+NdmO4kktNyLyqRfStvP
+ KaWkB00f8OEQ4jlfrgb3ENHI
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="83968551"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jan 2022 00:18:03 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 28 Jan 2022 00:18:02 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 28 Jan 2022 00:17:57 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <tudor.ambarus@microchip.com>
+CC:     <UNGLinuxDriver@microchip.com>, <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>
+Subject: [PATCH v2] crypto: atmel: add support for AES and SHA IPs available on lan966x SoC
+Date:   Fri, 28 Jan 2022 12:47:55 +0530
+Message-ID: <20220128071755.25277-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220127213607.xbggvbm454u7qfid@pengutronix.de>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 10:36:07PM +0100, Uwe Kleine-König wrote:
-> Hello Greg,
-> 
-> On Sun, Jan 23, 2022 at 06:51:58PM +0100, Uwe Kleine-König wrote:
-> > The two macros FBTFT_REGISTER_DRIVER and FBTFT_REGISTER_SPI_DRIVER
-> > contain quite some duplication: Both define an spi driver and an of device
-> > table and the differences are quite subtle.
-> > 
-> > So create two new macros and use both twice.
-> > 
-> > Link: https://lore.kernel.org/r/20220118181338.207943-2-u.kleine-koenig@pengutronix.de
-> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> You picked this patch into your staging-next branch, I guess from the
-> original submission. Not sure how Mark wants to continue with the series
-> from this thread, but at least my plan was that he will create an
-> immutable branch on top of 5.17-rc2 (assuming 5.17-rc2 will contain
-> "staging: fbtft: Fix error path in fbtft_driver_module_init()") with the
-> remaining 4 patches in this series.
+This patch adds support for hardware version of AES and SHA IPs
+available on lan966x SoC.
 
-That's fine, I can pull from that.
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+---
+v1 -> v2:
+- Removed fallthrough line, as it is not required.
 
-> In a private mail you agreed to this procedure, but this didn't stop you
-> taking this patch?! What is your plan here? The obvious (to me) options
-> are:
-> 
->  - Delay this series until after the next merge window.
->  - You back out this patch from staging-next and ack here for Mark to
->    apply it to an immutable branch.
->  - You keep this patch in staging-next and still ack here for Mark to
->    apply it to an immutable branch. Then the patch would be included
->    twice.
+ drivers/crypto/atmel-aes.c | 1 +
+ drivers/crypto/atmel-sha.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-Included twice is fine, or I can revert it in the staging tree.
+diff --git a/drivers/crypto/atmel-aes.c b/drivers/crypto/atmel-aes.c
+index fe0558403191..f72c6b3e4ad8 100644
+--- a/drivers/crypto/atmel-aes.c
++++ b/drivers/crypto/atmel-aes.c
+@@ -2509,6 +2509,7 @@ static void atmel_aes_get_cap(struct atmel_aes_dev *dd)
+ 
+ 	/* keep only major version number */
+ 	switch (dd->hw_version & 0xff0) {
++	case 0x700:
+ 	case 0x500:
+ 		dd->caps.has_dualbuff = 1;
+ 		dd->caps.has_cfb64 = 1;
+diff --git a/drivers/crypto/atmel-sha.c b/drivers/crypto/atmel-sha.c
+index 1b13f601fd95..d1628112dacc 100644
+--- a/drivers/crypto/atmel-sha.c
++++ b/drivers/crypto/atmel-sha.c
+@@ -2508,6 +2508,7 @@ static void atmel_sha_get_cap(struct atmel_sha_dev *dd)
+ 
+ 	/* keep only major version number */
+ 	switch (dd->hw_version & 0xff0) {
++	case 0x700:
+ 	case 0x510:
+ 		dd->caps.has_dma = 1;
+ 		dd->caps.has_dualbuff = 1;
+-- 
+2.17.1
 
-Don't let staging tree issues prevent you from doing real work in the
-other part of the kernel, I can manage merges and other issues like this
-very easily.
-
-thanks,
-
-greg k-h

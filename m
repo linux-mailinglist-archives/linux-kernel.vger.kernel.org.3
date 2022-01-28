@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944F849F4E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042E649F4E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347161AbiA1IG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:06:27 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:30317 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237542AbiA1IGZ (ORCPT
+        id S1347175AbiA1IHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237542AbiA1IHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:06:25 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JlVPl04PVzbk7m;
-        Fri, 28 Jan 2022 16:05:31 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Fri, 28 Jan 2022 16:06:22 +0800
-Subject: Re: [PATCH 06/16] scsi: libsas: Add sas_task.tmf
-To:     John Garry <john.garry@huawei.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "artur.paszkiewicz@intel.com" <artur.paszkiewicz@intel.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "Ajish.Koshy@microchip.com" <Ajish.Koshy@microchip.com>
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
- <1643110372-85470-7-git-send-email-john.garry@huawei.com>
- <e349aedb-71ad-8bf2-d3c3-920a83a56eae@hisilicon.com>
- <6b31c696-9808-764b-489b-4d2de91051b9@huawei.com>
-CC:     yanaijie <yanaijie@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        "liuqi (BA)" <liuqi115@huawei.com>,
-        "Viswas.G@microchip.com" <Viswas.G@microchip.com>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <b2f04325-f116-8fb4-b8c8-313e19c18ea4@hisilicon.com>
-Date:   Fri, 28 Jan 2022 16:06:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Fri, 28 Jan 2022 03:07:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8BDC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:07:21 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nDMHn-0008MM-VU; Fri, 28 Jan 2022 09:07:12 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1FB97258C1;
+        Fri, 28 Jan 2022 08:07:10 +0000 (UTC)
+Date:   Fri, 28 Jan 2022 09:07:04 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
+Message-ID: <20220128080704.ns5fzbyn72wfoqmx@pengutronix.de>
+References: <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
+ <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
+ <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
+ <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
+ <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
+ <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
+ <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
+ <d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com>
+ <97339463-b357-3e0e-1cbf-c66415c08129@hartkopp.net>
+ <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
 MIME-Version: 1.0
-In-Reply-To: <6b31c696-9808-764b-489b-4d2de91051b9@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="okf44ik46sxcmcxb"
+Content-Disposition: inline
+In-Reply-To: <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--okf44ik46sxcmcxb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-在 2022/1/28 0:01, John Garry 写道:
-> On 27/01/2022 12:55, chenxiang (M) wrote:
->>> -    slot->tmf = tmf;
->>> -    slot->is_internal = tmf;
->> In kernel 5.17-rc1(with above two lines on), it seems there is a issue
->> for ata disk reset command as tmf = null while it is internal command.
->
-> ok, thanks for the notice. Would this fix it:
+On 28.01.2022 08:56:19, Oliver Hartkopp wrote:
+> I've seen the frame processing sometimes freezes for one second when
+> stressing the isotp_rcv() from multiple sources. This finally freezes
+> the entire softirq which is either not good and not needed as we only
+> need to fix this race for stress tests - and not for real world usage
+> that does not create this case.
 
-Yes, it should fix it, and i just notice that it seems solve the issue 
-in the last patch of this patchset (including this fix in the last patch).
+Hmmm, this doesn't sound good. Can you test with LOCKDEP enabled?
 
->
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c 
-> b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index a05ec7aece5a..0e12c9329ee5 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -427,8 +427,6 @@ void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
->      cmd_hdr_base = hisi_hba->cmd_hdr[dlvry_queue];
->      slot->cmd_hdr = &cmd_hdr_base[dlvry_queue_slot];
->
-> -    slot->tmf = tmf;
-> -    slot->is_internal = tmf;
->      task->lldd_task = slot;
->
->      memset(slot->cmd_hdr, 0, sizeof(struct hisi_sas_cmd_hdr));
-> @@ -1380,12 +1378,13 @@ static int hisi_sas_softreset_ata_disk(struct 
-> domain_device *device)
->      struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
->      struct device *dev = hisi_hba->dev;
->      int s = sizeof(struct host_to_dev_fis);
-> +    struct hisi_sas_tmf_task tmf = {};
->
->      ata_for_each_link(link, ap, EDGE) {
->          int pmp = sata_srst_pmp(link);
->
->          hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
-> -        rc = hisi_sas_exec_internal_tmf_task(device, fis, s, NULL);
-> +        rc = hisi_sas_exec_internal_tmf_task(device, fis, s, &tmf);
->          if (rc != TMF_RESP_FUNC_COMPLETE)
->              break;
->      }
-> @@ -1396,7 +1395,7 @@ static int hisi_sas_softreset_ata_disk(struct 
-> domain_device *device)
->
->              hisi_sas_fill_ata_reset_cmd(link->device, 0, pmp, fis);
->              rc = hisi_sas_exec_internal_tmf_task(device, fis,
-> -                                 s, NULL);
-> +                                 s, &tmf);
->              if (rc != TMF_RESP_FUNC_COMPLETE)
->                  dev_err(dev, "ata disk %016llx de-reset failed\n",
->                      SAS_ADDR(device->sas_addr));
->
->>
->>>        task->lldd_task = slot;
->
->
->
-> .
->
+>=20
+> Therefore I created a V2 patch which uses the spin_trylock() to simply dr=
+op
+> the incomming frame in the race condition.
+>=20
+> https://lore.kernel.org/linux-can/20220128074327.52229-1-socketcan@hartko=
+pp.net/T/
+>=20
+> Please take a look, if it also fixes the issue in your test setup.
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--okf44ik46sxcmcxb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHzpCUACgkQqclaivrt
+76keTwf8DTeqV+BuWMfRr0sG/Kf+YqVkvDMJEAp9BOhrDmAB6eGQJT+NMkuSbxTm
+gSKhG19jokryR+ASqS6HEyO9AOa/A+bRi10fB2rGaL8dh0uuOgLkQ0SavIF3cmRg
+ngWB0m8SpNuNXsVlC9sW3+oS8wAZWRq4Rqm17oT+clPWfkWOCYK4cYa8kgggUJxr
+Wv6T88+Px5s6A5T1vJuWgmdpor+kRwd8XqQAuo5Co/FSS+9/8XDqTCeojq78I0Rj
+4U1GqShTYups/UBgAQbQ8my8hg2YKVtcYMlCEMpceL5bXwpJCA75P3DIrJbp6jO0
+2UdFQmbulB0gcl6MYbA/X3bdhcIN7w==
+=WjFN
+-----END PGP SIGNATURE-----
+
+--okf44ik46sxcmcxb--

@@ -2,146 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE7F49F5BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEEA49F5BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiA1I42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:56:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41160 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA1I41 (ORCPT
+        id S233652AbiA1I4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:56:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbiA1I4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:56:27 -0500
+        Fri, 28 Jan 2022 03:56:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F647C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:56:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6D1D61DA1;
-        Fri, 28 Jan 2022 08:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B747C340E0;
-        Fri, 28 Jan 2022 08:56:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B80BB824EF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:56:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B317AC340E0;
+        Fri, 28 Jan 2022 08:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643360186;
-        bh=nmpe7nogaTvdubctIwwawVdMI9ZoBq5WqV4ZfNn8rx8=;
+        s=k20201202; t=1643360200;
+        bh=L0e4NOI8iG8yDPknydOzu7XKjt3ExbCSSt6U9t2mwlE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fNkzJWSr05Kni4e9a6Gi8iS86I6Y+xKD4TCUBUudzs1VuNBrXMRsS/0IHHpeoayLO
-         s14bBQpfNVHrc71iIZp9eSDdOytEECV987X26Km575N486Ql2OrM2a+ScE4VFg34w3
-         zJmgGoWNkrBOOXK30LSuYZ7aOWVYFibrsWjXM0XZSogbWvTspS3sVEJjbJJ5gu48rC
-         5+3E5QILB/1Z0UKv/su3LgBUj2o3r79VRFhWyAmwwIB4D7oxYNQir7AkrZ8yAj4Bda
-         DQdKsGC8/YHJoBznLZQPUevkSBEqyBHIiYDymONdHyEQ1JpWOvgXEY3Zv5u2CzmOjz
-         7btnhZD2fIT7w==
-Date:   Fri, 28 Jan 2022 09:56:16 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] pidfd: fix test failure due to stack overflow on some
- arches
-Message-ID: <20220128085616.tnsowlg5iff6ofm4@wittgenstein>
-References: <20220127212951.3604667-1-axelrasmussen@google.com>
+        b=pdortB5pJt7xqL4W8flMRwt4+3nBc6nX2GmXa31LWVMwz3ZEucgJaChv2CTimRTDq
+         dLWleVTLlmb8shrU97yRAOCl0NSvhsIq2n3rfhH61EcT/BNao1tStg9QSvYQqrlQm+
+         W+Md3VSLEBn6uB3Wf/kV+Fjq+8qkkluMCjKbnWgrVaz3PWbamdRz4+t9pGe3mgs3uB
+         kQZ0tOdni1n8dZBafj+mqXM/6COPoShqg3tBMl3AKdqbk8PzbMoT4MWdccUR8NWwB7
+         ZTuFA2hhP9LJXgWnKjQaAIFV1Uc828CkgXrDZuzYEImSXnJ+aYSoMRsPANEjrkB+FF
+         sBq144hBLoqeA==
+Date:   Fri, 28 Jan 2022 16:56:34 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] firmware: imx: add get resource owner api
+Message-ID: <20220128085633.GG4686@dragon>
+References: <20220111032147.342012-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220127212951.3604667-1-axelrasmussen@google.com>
+In-Reply-To: <20220111032147.342012-1-peng.fan@oss.nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 01:29:51PM -0800, Axel Rasmussen wrote:
-> When running the pidfd_fdinfo_test on arm64, it fails for me. After some
-> digging, the reason is that the child exits due to SIGBUS, because it
-> overflows the 1024 byte stack we've reserved for it.
+On Tue, Jan 11, 2022 at 11:21:47AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> To fix the issue, increase the stack size to 8192 bytes (this number is
-> somewhat arbitrary, and was arrived at through experimentation -- I kept
-> doubling until the failure no longer occurred).
+> Add resource owner management API, this API could be used to check
+> whether M4 is under control of Linux.
 > 
-> Also, let's make the issue easier to debug. wait_for_pid() returns an
-> ambiguous value: it may return -1 in all of these cases:
-> 
-> 1. waitpid() itself returned -1
-> 2. waitpid() returned success, but we found !WIFEXITED(status).
-> 3. The child process exited, but it did so with a -1 exit code.
-> 
-> There's no way for the caller to tell the difference. So, at least log
-> which occurred, so the test runner can debug things.
-> 
-> While debugging this, I found that we had !WIFEXITED(), because the
-> child exited due to a signal. This seems like a reasonably common case,
-> so also print out whether or not we have WIFSIGNALED(), and the
-> associated WTERMSIG() (if any). This lets us see the SIGBUS I'm fixing
-> clearly when it occurs.
-> 
-> Finally, I'm suspicious of allocating the child's stack on our stack.
-> man clone(2) suggests that the correct way to do this is with mmap(),
-> and in particular by setting MAP_STACK. So, switch to doing it that way
-> instead.
-
-Heh, yes. :)
-
-commit 99c3a000279919cc4875c9dfa9c3ebb41ed8773e
-Author: Michael Kerrisk <mtk.manpages@gmail.com>
-Date:   Thu Nov 14 12:19:21 2019 +0100
-
-    clone.2: Allocate child's stack using mmap(2) rather than malloc(3)
-
-    Christian Brauner suggested mmap(MAP_STACKED), rather than
-    malloc(), as the canonical way of allocating a stack for the
-    child of clone(), and Jann Horn noted some reasons why:
-
-        Not on Linux, but on OpenBSD, they do use MAP_STACK now
-        AFAIK; this was announced here:
-        <http://openbsd-archive.7691.n7.nabble.com/stack-register-checking-td338238.html>.
-        Basically they periodically check whether the userspace
-        stack pointer points into a MAP_STACK region, and if not,
-        they kill the process. So even if it's a no-op on Linux, it
-        might make sense to advise people to use the flag to improve
-        portability? I'm not sure if that's something that belongs
-        in Linux manpages.
-
-        Another reason against malloc() is that when setting up
-        thread stacks in proper, reliable software, you'll probably
-        want to place a guard page (in other words, a 4K PROT_NONE
-        VMA) at the bottom of the stack to reliably catch stack
-        overflows; and you probably don't want to do that with
-        malloc, in particular with non-page-aligned allocations.
-
-    And the OpenBSD 6.5 manual pages says:
-
-        MAP_STACK
-            Indicate that the mapping is used as a stack. This
-            flag must be used in combination with MAP_ANON and
-            MAP_PRIVATE.
-
-    And I then noticed that MAP_STACK seems already to be on
-    FreeBSD for a long time:
-
-        MAP_STACK
-            Map the area as a stack.  MAP_ANON is implied.
-            Offset should be 0, fd must be -1, and prot should
-            include at least PROT_READ and PROT_WRITE.  This
-            option creates a memory region that grows to at
-            most len bytes in size, starting from the stack
-            top and growing down.  The stack top is the start‐
-            ing address returned by the call, plus len bytes.
-            The bottom of the stack at maximum growth is the
-            starting address returned by the call.
-
-            The entire area is reserved from the point of view
-            of other mmap() calls, even if not faulted in yet.
-
-    Reported-by: Jann Horn <jannh@google.com>
-    Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
-    Signed-off-by: Michael Kerrisk <mtk.manpages@gmail.com>
-
-
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
+>  drivers/firmware/imx/rm.c           | 45 +++++++++++++++++++++++++++++
+>  include/linux/firmware/imx/svc/rm.h |  5 ++++
+>  2 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/firmware/imx/rm.c b/drivers/firmware/imx/rm.c
+> index a12db6ff323b..3c3605f98123 100644
+> --- a/drivers/firmware/imx/rm.c
+> +++ b/drivers/firmware/imx/rm.c
+> @@ -43,3 +43,48 @@ bool imx_sc_rm_is_resource_owned(struct imx_sc_ipc *ipc, u16 resource)
+>  	return hdr->func;
+>  }
+>  EXPORT_SYMBOL(imx_sc_rm_is_resource_owned);
+> +
+> +/*
+> + * This function get @resource partition number
+> + *
+> + * @param[in]     ipc         IPC handle
+> + * @param[in]     resource    resource the control is associated with
+> + * @param[out]    pt          pointer to return the partition number
+> + *
+> + * @return Returns 0 for success and < 0 for errors.
+> + */
 
-Yeah, stack handling - especially with legacy clone() - is yucky on the
-best of days. Thank you for the fix.
+Shouldn't the documentation be put right above the function?
 
-Acked-by: Christian Brauner <brauner@kernel.org>
+Shawn
+
+> +struct imx_sc_msg_rm_get_resource_owner {
+> +	struct imx_sc_rpc_msg hdr;
+> +	union {
+> +		struct {
+> +			u16 resource;
+> +		} req;
+> +		struct {
+> +			u8 val;
+> +		} resp;
+> +	} data;
+> +} __packed __aligned(4);
+> +
+> +int imx_sc_rm_get_resource_owner(struct imx_sc_ipc *ipc, u16 resource, u8 *pt)
+> +{
+> +	struct imx_sc_msg_rm_get_resource_owner msg;
+> +	struct imx_sc_rpc_msg *hdr = &msg.hdr;
+> +	int ret;
+> +
+> +	hdr->ver = IMX_SC_RPC_VERSION;
+> +	hdr->svc = IMX_SC_RPC_SVC_RM;
+> +	hdr->func = IMX_SC_RM_FUNC_GET_RESOURCE_OWNER;
+> +	hdr->size = 2;
+> +
+> +	msg.data.req.resource = resource;
+> +
+> +	ret = imx_scu_call_rpc(ipc, &msg, true);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (pt)
+> +		*pt = msg.data.resp.val;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(imx_sc_rm_get_resource_owner);
+> diff --git a/include/linux/firmware/imx/svc/rm.h b/include/linux/firmware/imx/svc/rm.h
+> index 456b6a59d29b..ff481b23ea36 100644
+> --- a/include/linux/firmware/imx/svc/rm.h
+> +++ b/include/linux/firmware/imx/svc/rm.h
+> @@ -59,11 +59,16 @@ enum imx_sc_rm_func {
+>  
+>  #if IS_ENABLED(CONFIG_IMX_SCU)
+>  bool imx_sc_rm_is_resource_owned(struct imx_sc_ipc *ipc, u16 resource);
+> +int imx_sc_rm_get_resource_owner(struct imx_sc_ipc *ipc, u16 resource, u8 *pt);
+>  #else
+>  static inline bool
+>  imx_sc_rm_is_resource_owned(struct imx_sc_ipc *ipc, u16 resource)
+>  {
+>  	return true;
+>  }
+> +static inline int imx_sc_rm_get_resource_owner(struct imx_sc_ipc *ipc, u16 resource, u8 *pt)
+> +{
+> +	return -ENOTSUPP;
+> +}
+>  #endif
+>  #endif
+> -- 
+> 2.25.1
+> 

@@ -2,156 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9213C49FE61
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E95049FE62
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350169AbiA1QvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S1350302AbiA1QvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245358AbiA1QvJ (ORCPT
+        with ESMTP id S1350150AbiA1QvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:51:09 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E1FC061714;
-        Fri, 28 Jan 2022 08:51:08 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id e17so9874246ljk.5;
-        Fri, 28 Jan 2022 08:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=edh+gQ6yhY/He+pkxj+P6wGsnjq947gdpUu4H2TBVdE=;
-        b=fGm/ro4/78ymjqHneLtVbXUu5402zkPY1bFHqqzCx+Yo3aBYFmWwSxmlvGkl1AmJ8F
-         ZfZeTgAPcBg9rrHVIGj60Im2LaJJLU17uYsbuAaOZBVt1cWcnwBupUYe8e3ptPmfeEPP
-         t829cK/Rsszn+SWUTnbP/AfmqE3gu4Q9hD6ZuRQva7F3JOoxKwJv7ho+gIpzbcLZ5xW6
-         9lBvLcFX7bDdDMRIFFg7bZ7qsBethY/za/FpdlJZlrP30XkMfy5zkEdXj8nlskQ7YcCE
-         YqLgnM2rp+9QJLfbg5BGc+vDKaXl14/K8wOfaykU40vcStDW8Q+jE6Y95ZaatrpV4VXS
-         6AJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=edh+gQ6yhY/He+pkxj+P6wGsnjq947gdpUu4H2TBVdE=;
-        b=6OHC5FPsRRuhwRVOe+qEgISQGzIL7zzrB1UtQ/LBpIJtQPMMF2WTPRgn5F2Ws9RqUw
-         J/UPUXnKMjO8SM9VOF3YOaLBIxs2jC5BQ0ahh46fv5wUmBUE4dwTPEV8pZy2SO3PwsYn
-         0zeSAb3Jd1Cb6GivbMJGrNJ2K1AzYgMq+mCfCbl5bKAwTSjyBO4jJe4R4ZjBONGCa7jm
-         AveL6SOHCY2SIPdpYhF426bZpAAA92CscfzaloJWWOFF5EC780HAVBkkb2TCMXRbo5EP
-         H8YVTyeF0Ta6XMwdhN7nyXCNbFgXNUDeKzGGZH5hoe6Bh2amD2TSPy4bCykQFFERwgsW
-         DVYA==
-X-Gm-Message-State: AOAM531e6tNIjrjyHLiw4F6ktYD+mIFfyuqRNQMtyDORXNpOjTI8Jw/M
-        VCMQgfPFJICkuYe7DgQtdVU=
-X-Google-Smtp-Source: ABdhPJz/OcViveQ0LwJLqY3AeuyjpR4X6Gu2AdYbyM9OmMmIoEyJAfrdnySrgfovLQlv2IShWHAWkA==
-X-Received: by 2002:a2e:a361:: with SMTP id i1mr6354533ljn.146.1643388667100;
-        Fri, 28 Jan 2022 08:51:07 -0800 (PST)
-Received: from localhost ([46.188.51.186])
-        by smtp.gmail.com with ESMTPSA id j29sm2010104lfk.285.2022.01.28.08.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:51:06 -0800 (PST)
-Date:   Fri, 28 Jan 2022 19:50:58 +0300
-From:   Alexander Fomichev <fomichev.ru@gmail.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux@yadro.com,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
- changes
-Message-ID: <20220128165058.zxyrnd7nzr4hlks2@yadro.com>
-References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
- <20220112170512.GO3301@suse.de>
- <20220117081905.a4pwglxqj7dqpyql@yadro.com>
- <20220117102701.GQ3301@suse.de>
- <20220118020448.2399-1-hdanton@sina.com>
- <20220121101217.2849-1-hdanton@sina.com>
- <20220122233314.2999-1-hdanton@sina.com>
+        Fri, 28 Jan 2022 11:51:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C75C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:51:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C65CEB82657
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D319C340E0;
+        Fri, 28 Jan 2022 16:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643388668;
+        bh=vqwjh0qM+UtpuS8YB1k8P2rC7R/IlLOJ/WcGHHj7opw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NqPzWMwMa6LBiJ9hGIoCAoqa8WX8+/p0zHbV0r4LBuUVeN33LBxnX3akkOi1kF/e3
+         3tmuta+RXCz6256pVYh4JvESqs745LKPfk5Uj/F83Z37JBEG4dzi1uQLRBpisqD3qd
+         pFY0uDJwaemiBUYJLc5+e/EEuGSPzJymi8m1v1whwFBb8HxnjtpdpLs6qG8aylbqyB
+         riyV+k/j1xUxc14nC+qDJ0S+fA9373tdGdY1nnBkm+k24AIL5F6ueuLtSkXYFThynw
+         TY3TSvXa2I4LE56JeIJSy9sfyFsP77Ysk/g4bFNd7GlGfB/J/vqX/Z62P54Avf7Qrs
+         Ih0xxBVZ/lm1g==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     hdanton@sina.com, Dani Liberman <dliberman@habana.ai>
+Subject: [PATCH v2] habanalabs: fix race when waiting on encaps signal
+Date:   Fri, 28 Jan 2022 18:50:58 +0200
+Message-Id: <20220128165058.2797574-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220122233314.2999-1-hdanton@sina.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 07:33:14AM +0800, Hillf Danton wrote:
-> 
-> Lets put pieces together based on the data collected.
-> 
-> 1, No irq migration was observed.
-> 
-> 2, Your patch that produced the highest iops fo far
-> 
-> -----< 5.15.8-ioat-ptdma-dirty-fix+ >-----
-> [ 6183.356549] dmatest: Added 1 threads using dma0chan0
-> [ 6187.868237] dmatest: Started 1 threads using dma0chan0
-> [ 6187.887389] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 52753.74 iops 3376239 KB/s (0)
-> [ 6201.913154] dmatest: Added 1 threads using dma0chan0
-> [ 6204.701340] dmatest: Started 1 threads using dma0chan0
-> [ 6204.720490] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 52614.96 iops 3367357 KB/s (0)
-> [ 6285.114603] dmatest: Added 1 threads using dma0chan0
-> [ 6287.031875] dmatest: Started 1 threads using dma0chan0
-> [ 6287.050278] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 54939.01 iops 3516097 KB/s (0)
-> -----< end >-----
-> 
-> 
-> -       if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
-> -               return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
-> +       if (available_idle_cpu(this_cpu))
-> +               return this_cpu;
-> 
-> prefers this cpu if it is idle regardless of cache affinity.
-> 
-> This implies task migration to the cpu that handled irq.
-> 
-> 3, Given this cpu is different from the prev cpu in addition to no irq
-> migration, the tested task was bouncing between the two cpus, with one
-> more question rising, why was task migrated off from the irq-handling cpu?
-> 
-> Despite no evidence, I bet no bounce occurred given iops observed.
-> 
+From: Dani Liberman <dliberman@habana.ai>
 
-IMHO, your assumptions are correct.
-I've added CPU number counters on every step of dmatest. It reveals that
-test task migration between (at least 2) CPUs occurs in even one thread
-mode. Below is for vanilla 5.15.8 kernel:
+Scenario:
+1. CS which is part of encaps signal has been completed and now
+executing kref_put to its encaps signal handle. The refcount of the
+handle decremented to 0, and called the encaps signal handle
+release function - hl_encaps_handle_do_release.
 
------< threads_per_chan=1 >-----
-[19449.557950] dmatest: Added 1 threads using dma0chan0
-[19469.238180] dmatest: Started 1 threads using dma0chan0
-[19469.253962] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 65291.19 iops 4178636 KB/s (0)
-[19469.253973] dmatest: CPUs hit: #52:417 #63:583  (times)
------< end >-----
+2. At this point the user starts waiting on the signal, and finds the
+encaps signal handle in the handlers list and increment the habdle
+refcount to 1.
 
-Note that IRQ handler runs on CPU #52 in this environment.
+3. Immediately after, hl_encaps_handle_do_release removed the handle
+from the list and free its memory.
 
-In 4 thread mode the task migrates even more aggressively:
+4. Wait function using the handle although it has been freed.
 
------< threads_per_chan=4 >-----
-[19355.460227] dmatest: Added 4 threads using dma0chan0
-[19359.841182] dmatest: Started 4 threads using dma0chan0
-[19359.860447] dmatest: dma0chan0-copy3: summary 1000 tests, 0 failures 53908.35 iops 3450134 KB/s (0)
-[19359.860451] dmatest: dma0chan0-copy2: summary 1000 tests, 0 failures 54179.98 iops 3467519 KB/s (0)
-[19359.860456] dmatest: CPUs hit: #50:1000  (times)
-[19359.860459] dmatest: CPUs hit: #17:1000  (times)
-[19359.860459] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 54048.21 iops 3459085 KB/s (0)
-[19359.860466] dmatest: CPUs hit: #31:1000  (times)
-[19359.861420] dmatest: dma0chan0-copy1: summary 1000 tests, 0 failures 51466.80 iops 3293875 KB/s (0)
-[19359.861425] dmatest: CPUs hit: #30:213 #48:556 #52:231  (times)
------< end >-----
+This scenario caused the slab area which was previously allocated
+for the handle to be poison overwritten which triggered kernel bug
+the next time the OS needed to allocate this slab.
 
-On the other hand, for dirty-patched kernel task doesn't migrate:
+Fixed by getting the refcount of the handle only in case it is not
+zero.
 
------< patched threads_per_chan=1 >-----
-[ 2100.142002] dmatest: Added 1 threads using dma0chan0
-[ 2102.359727] dmatest: Started 1 threads using dma0chan0
-[ 2102.373594] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 76173.06 iops 4875076 KB/s (0)
-[ 2102.373600] dmatest: CPUs hit: #49:1000  (times)
------< end >-----
+Signed-off-by: Dani Liberman <dliberman@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+v2:
+ - Use kref_get_unless_zero() instead of kref_get() and then checking
+   if the value is not 0.
 
-IRQ handler runs on CPU #49 in this case.
+ drivers/misc/habanalabs/common/command_submission.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Although in 4 thread mode the task still migrates. I think we should
-consider such scenario as non-relevant for this isue.
-
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index 0ea9a73e4aa5..ba5215b77852 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -2063,13 +2063,16 @@ static int cs_ioctl_signal_wait(struct hl_fpriv *hpriv, enum hl_cs_type cs_type,
+ 			idp = &ctx->sig_mgr.handles;
+ 			idr_for_each_entry(idp, encaps_sig_hdl, id) {
+ 				if (encaps_sig_hdl->cs_seq == signal_seq) {
+-					handle_found = true;
+-					/* get refcount to protect removing
+-					 * this handle from idr, needed when
+-					 * multiple wait cs are used with offset
++					/* get refcount to protect removing this handle from idr,
++					 * needed when multiple wait cs are used with offset
+ 					 * to wait on reserved encaps signals.
++					 * Since kref_put of this handle is executed outside the
++					 * current lock, it is possible that the handle refcount
++					 * is 0 but it yet to be removed from the list. In this
++					 * case need to consider the handle as not valid.
+ 					 */
+-					kref_get(&encaps_sig_hdl->refcount);
++					if (kref_get_unless_zero(&encaps_sig_hdl->refcount))
++						handle_found = true;
+ 					break;
+ 				}
+ 			}
 -- 
-Regards,
-  Alexander
+2.25.1
+

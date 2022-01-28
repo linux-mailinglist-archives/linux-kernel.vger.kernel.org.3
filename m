@@ -2,135 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22D849F370
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A0749F374
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346373AbiA1GTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:19:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23607 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346369AbiA1GTe (ORCPT
+        id S1346383AbiA1GVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242352AbiA1GVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:19:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643350774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RToFXIUfsXCiLH3IYE93p3Ce7kkEvmZK7yXFyS7R3rs=;
-        b=KQgQ2qEHyie7dMI+3qGEqZhKXim9UdUcA0TBFFdKcxZhc7959yvyYGjXxXtV0l/ZDsLWci
-        JVai95K6TUu1aw3HLV2mh5BV5GOV3+GkW15/9+ExCbVZ7DDNgvWWyxR3YgfHISdzOFcPYM
-        TEinYfP9xSYRTg9tTJ6x7Vjf1iJbmgs=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-vmx-9WCoNcqJBDp5AEzU2w-1; Fri, 28 Jan 2022 01:19:33 -0500
-X-MC-Unique: vmx-9WCoNcqJBDp5AEzU2w-1
-Received: by mail-pf1-f200.google.com with SMTP id v3-20020a622f03000000b004c412d02ca3so2975711pfv.20
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:19:28 -0800 (PST)
+        Fri, 28 Jan 2022 01:21:00 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6385C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:20:59 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so10104513pju.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:20:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=271wWJNHEiR0TyjR6rdEh0lmclJBwJawzmgXlEO7GdQ=;
+        b=K/owWhHPPyLJ8e+RTAdifuqw1Lts5+MANTWlvDIYkiTrB5w9F0VIq/dnPYOhla27mU
+         m6uuch5zox6BpJu9pJHKPLc7B/fMXAqI5FjxVgZ9I4igwo0gSVjJd7leEQwkYNLvdI/N
+         /R9UICyBTEgWmPRts1CX3zp0pDocz7rFzhEpa7F4KcikqsQlT+ilCyw3e8kDFdH8bIKR
+         bWY30IiweqWvltlcJqjv+Ab0X6RV651Np9r4CF8WkTJGmM3spNEfFDofpbYFvQDRD5Xz
+         XrwTc9fPpfE4KKtPb06YBOKnzGqTFzw/SviZ1rtmWKgjSXxOhYPaHRM9qTYdyOIvZJmm
+         noEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RToFXIUfsXCiLH3IYE93p3Ce7kkEvmZK7yXFyS7R3rs=;
-        b=hhfuuMcI/0iW35vO1/c5MK+8UzcGz5Vo8mt7aTfAOYbDZlA7tlmB7IbrXtxNP9DuKr
-         SOGrTd7eocvvH20p4BNY3IRG9HqGUSr5ptt9EYDMpkuC8UVvktazBWyrdcKj7ItFZavA
-         mmLxKRUvW3mtZk+aajWmnet4mqo/yByQmaSvMfv36m4JstWr9qLEQLQFoi4xoCVy45Cq
-         w4Z0+SvBEGrDtNm6/iF5V3LnCNcrN9y4HHgrEu7jtTJB3ge+pQ7/BPUekmMkb2F5oLvE
-         y39+DYLLOJuUbKpL4U0H5tbPXkN/l7+usmgfkq8PqOtFo0bP3oiWPYnME6mQprasHHhn
-         4mDw==
-X-Gm-Message-State: AOAM533T4d45ypgbzGvftFkNLDT82zJ1DzH21PHPYacPrDeCbQI6fmKR
-        tKaRnMnQyv2OFD5a3mXe0FzZdSmLI1HjnkGbORd3b8toykJfT7s6mjuhoYAOCypLmf2KWQ9miSN
-        3sKQv94Gd8RZKdOWZUN71ScDP
-X-Received: by 2002:a17:902:ce8d:: with SMTP id f13mr6747635plg.142.1643350767492;
-        Thu, 27 Jan 2022 22:19:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwRaHK4URjqYNa73vAYGcVE+xtCjMwOyQ/++59IxtYTc4ppN/5o14unYbibM6qPH8lw/S7jkg==
-X-Received: by 2002:a17:902:ce8d:: with SMTP id f13mr6747619plg.142.1643350767226;
-        Thu, 27 Jan 2022 22:19:27 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.75])
-        by smtp.gmail.com with ESMTPSA id p17sm3241049pfo.11.2022.01.27.22.19.22
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 27 Jan 2022 22:19:26 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: [PATCH v2] mm: Fix invalid page pointer returned with FOLL_PIN gups
-Date:   Fri, 28 Jan 2022 14:19:18 +0800
-Message-Id: <20220128061918.20121-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=271wWJNHEiR0TyjR6rdEh0lmclJBwJawzmgXlEO7GdQ=;
+        b=vqO59SMo85X97Bk6toRKDNDs9t3xMR11bGnXnIctogz/3phe+Pu3QPvdGP9YHUcOvs
+         BNEvmgMd3lVqoJ42LRcFXaZ6KamBWt2HeWOvmHaSAEKDg5mNEnOVmfdhql9GR4T2EdQV
+         Ogvd9+3uQ1yT3Ry50BuMSsbLXqnQ7nRjsprIX6hEn1mkQ8WVeenp7lsMyj91rHEgpFXc
+         yPzNESZ9DuAHPMKUztvR4h2rvGibHVmnfQEUWbvLRFfCZfFaUg201YiYvB8WDE0LM2Fb
+         JKitsO+F57wlUXD0+FxONGy9mckBx7NWVmE/9Cou1SGktV7zYWbHgUiDGb8T8tkgkLur
+         slSw==
+X-Gm-Message-State: AOAM533GZ1VKBnu1MXYtgFnbiU908SguVpoWtdKpMkq557BvPQL+8F8B
+        wb2BDkuX1WV28PCWDjM9PPBxUTXoQPEfYQ==
+X-Google-Smtp-Source: ABdhPJwM9MkDOQDrYBBBBLkVESeUIF5gas7EuZ7Ruwc+VeNecD0F6v94vSN/m2QiBXG+Asyjr0O5TA==
+X-Received: by 2002:a17:902:ea0f:: with SMTP id s15mr6710101plg.118.1643350858994;
+        Thu, 27 Jan 2022 22:20:58 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:7713:237d:48f3:f690])
+        by smtp.gmail.com with ESMTPSA id ha21sm1135807pjb.48.2022.01.27.22.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 22:20:57 -0800 (PST)
+Date:   Thu, 27 Jan 2022 22:20:52 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
+        <chrome-platform@lists.linux.dev>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Make try power role
+ optional
+Message-ID: <YfOLRBGmwGKwCksR@google.com>
+References: <20220127191659.3560810-1-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DXB3UyVkHi0h/pnn"
+Content-Disposition: inline
+In-Reply-To: <20220127191659.3560810-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alex reported invalid page pointer returned with pin_user_pages_remote() from
-vfio after upstream commit 4b6c33b32296 ("vfio/type1: Prepare for batched
-pinning with struct vfio_batch").  This problem breaks NVIDIA vfio mdev.
 
-It turns out that it's not the fault of the vfio commit; however after vfio
-switches to a full page buffer to store the page pointers it starts to expose
-the problem easier.
+--DXB3UyVkHi0h/pnn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The problem is for VM_PFNMAP vmas we should normally fail with an -EFAULT then
-vfio will carry on to handle the MMIO regions.  However when the bug triggered,
-follow_page_mask() returned -EEXIST for such a page, which will jump over the
-current page, leaving that entry in **pages untouched.  However the caller is
-not aware of it, hence the caller will reference the page as usual even if the
-pointer data can be anything.
+Hi Prashant,
 
-We had that -EEXIST logic since commit 1027e4436b6a ("mm: make GUP handle pfn
-mapping unless FOLL_GET is requested") which seems very reasonable.  It could
-be that when we reworked GUP with FOLL_PIN we could have overlooked that
-special path in commit 3faa52c03f44 ("mm/gup: track FOLL_PIN pages"), even if
-that commit rightfully touched up follow_devmap_pud() on checking FOLL_PIN when
-it needs to return an -EEXIST.
+On Thu, Jan 27, 2022 at 07:16:59PM +0000, Prashant Malani wrote:
+> Some boards prefer not to specify a try-power-role. Update the port
+> property parsing logic to not error out in case a try-power-role is not
+> specified.
+>=20
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Attaching the Fixes to the FOLL_PIN rework commit, as it happened later than
-1027e4436b6a.
+This looks good to me.
 
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Jérôme Glisse <jglisse@redhat.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Fixes: 3faa52c03f44 ("mm/gup: track FOLL_PIN pages")
-Reported-by: Alex Williamson <alex.williamson@redhat.com>
-Debugged-by: Alex Williamson <alex.williamson@redhat.com>
-Tested-by: Alex Williamson <alex.williamson@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
-v2:
-- Drop the WARN_ON_ONCE() [Jason, John]
-- Add Alex's Tested-by too, as after dropping the WARN_ON_ONCE() then the patch
-  is exactly the one that Alex helped on bug verification, hence very safe to
-  grant the credit alongside.
----
- mm/gup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Heikki, if this usage of TYPEC_NO_PREFERRED_ROLE looks good to you, I can
+merge it.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index f0af462ac1e2..65575ae3602f 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -440,7 +440,7 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
- 		pte_t *pte, unsigned int flags)
- {
- 	/* No page to get reference */
--	if (flags & FOLL_GET)
-+	if (flags & (FOLL_GET | FOLL_PIN))
- 		return -EFAULT;
- 
- 	if (flags & FOLL_TOUCH) {
--- 
-2.32.0
+Benson
 
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index 5de0bfb0bc4d..ee12658009e5 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -115,17 +115,18 @@ static int cros_typec_parse_port_props(struct typec=
+_capability *cap,
+>  		return ret;
+>  	cap->data =3D ret;
+> =20
+> +	/* Try-power-role is optional. */
+>  	ret =3D fwnode_property_read_string(fwnode, "try-power-role", &buf);
+>  	if (ret) {
+> -		dev_err(dev, "try-power-role not found: %d\n", ret);
+> -		return ret;
+> +		dev_warn(dev, "try-power-role not found: %d\n", ret);
+> +		cap->prefer_role =3D TYPEC_NO_PREFERRED_ROLE;
+> +	} else {
+> +		ret =3D typec_find_power_role(buf);
+> +		if (ret < 0)
+> +			return ret;
+> +		cap->prefer_role =3D ret;
+>  	}
+> =20
+> -	ret =3D typec_find_power_role(buf);
+> -	if (ret < 0)
+> -		return ret;
+> -	cap->prefer_role =3D ret;
+> -
+>  	cap->fwnode =3D fwnode;
+> =20
+>  	return 0;
+> --=20
+> 2.35.0.rc0.227.g00780c9af4-goog
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--DXB3UyVkHi0h/pnn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYfOLRAAKCRBzbaomhzOw
+wr3iAQD/4S0peXsqQPgEW97XtZgI0CWsqWPDzkEiLGb1GzRVRAD/beUy77nVEHUn
+TvwKDo2LAlHrBFbVWaThHWLRSIFB1gU=
+=+z/0
+-----END PGP SIGNATURE-----
+
+--DXB3UyVkHi0h/pnn--

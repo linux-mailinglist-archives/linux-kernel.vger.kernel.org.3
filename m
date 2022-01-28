@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF3E49F4DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9430D49F4EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347148AbiA1IEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S1347185AbiA1IIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:08:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiA1IEj (ORCPT
+        with ESMTP id S1347184AbiA1II2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:04:39 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE057C061714;
-        Fri, 28 Jan 2022 00:04:38 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id y17so4539762qtx.9;
-        Fri, 28 Jan 2022 00:04:38 -0800 (PST)
+        Fri, 28 Jan 2022 03:08:28 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C092C06173B;
+        Fri, 28 Jan 2022 00:08:28 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id b4so305278qvf.0;
+        Fri, 28 Jan 2022 00:08:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3TT5bHFkruxbVd2ktp2QQbLXvdZSrdDVPPNEsULjQf8=;
-        b=eaLzwa9Kslys8dp2UL461qM6t3WgE7Bfc5PK217VTpcTfKKbK3d0cEbymTYH01R/GH
-         QHX92kd8N35181AMIaJ31faLpMYXkAnZZw42QfZacVMnn/n5K0masi8UIy/lGzGti75X
-         stLgR7sZrGvcM2jziAg+L5S06eoPCAWX77HzXlRJxTSvjTy9mgqwXB2lgnDa7WS30Tm5
-         ErJcAVqUZ3f/C/7+nbMAosLmw38xJ4e+1yMnRE1wLSP3b8ZgO8WGHAi3cTAd4vzhtrdZ
-         iFKP0d3sUwJPPyI59NoNZUiH4tQrdWY3kVrHCaf80L+On6QsROPxsAyMLM99KSl8wcdn
-         ZT6g==
+        bh=dUdMR4tvElt5mBvJJ0cqJizhQUejWTE0aS2LwZH55CA=;
+        b=nfDGaJmSoY3l6qtGDWVlwd64W5N/3tV3yLE9028Px0ZqpEzJEUIKTKXgEtmYazP5Zw
+         6NvL75F5QdSCXIpLrhsRsaTw5bqy3NUgEWZklIJxd9ab9yKICbQimA/jnHSqTjoRrWN2
+         KFuxmP+7Kp8uyO+HjfPfoNSEvUIEA4ubocyBylmABlrszO8oDx32nx6DOi9S3OQbxfDF
+         VNDXJxVGizC/K+LoSQ5NFUGsragZnX5chXvNickE7ez20DIszQhi50lF0ofg2khxZ2ya
+         tI+OGnDcICID/opGIW/qFVa0nFqjIUuuDAxlXiSsKsvk4lFxTzVx73zNzag4xZRpj+sF
+         0ARQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3TT5bHFkruxbVd2ktp2QQbLXvdZSrdDVPPNEsULjQf8=;
-        b=vIOF2yMsCKW3XpaXRWSJspHr4wxEF+eiQsTj8a/n59F+W5eywhAS86xyEdAx0tn15g
-         YksvA3yilW6XiXHqfYHxsH8Ilp5qcKuNkFEyEbZCjr6Z3GnICaq8vNfxq12L2wPbljXS
-         WMxhYPas9p964IwhpBV/10n+TBWgnUJ/oprvDj2dLn5koKRd8n3ogdKd6ZKDB3k1D+Kh
-         xi3I+0kZWO3CHZMzCzGCJxgrBs4E6CdvjwiwHo3+CBQmATLbmn/KcYgfdAof8FO2rhU1
-         H1aWwqITyDCa7raf5sx8m9Wk2vy/qU0xX7tYMTRRSZ06HKjXmkY9TICA+sYRUsqFiAGL
-         Y7ww==
-X-Gm-Message-State: AOAM531FMZNOqHmX0juyDeaAVDE195Rf2FEfKEuqNoK7+fl3AZUVoO8/
-        FR/J5qnJA1Sa760sH5G8mO5p2mSoAkI=
-X-Google-Smtp-Source: ABdhPJy8Dm/EfYX+j0uTQdaKcdWk7EsyXceDYatXLLNPMDv32jBEQEzCKxba6h7EKqO9GYeGcnxpDQ==
-X-Received: by 2002:a05:622a:1042:: with SMTP id f2mr5333187qte.231.1643357077913;
-        Fri, 28 Jan 2022 00:04:37 -0800 (PST)
+        bh=dUdMR4tvElt5mBvJJ0cqJizhQUejWTE0aS2LwZH55CA=;
+        b=FDazPfCMkcHdRbDR1RDq/MSu2fl/4RMRnmYyZWBdY9zmc4DNlrUBf2MeuZ+pNcGER2
+         jgrYeu1KMb7R9Y1Trd4EsMGk9oXg+tM8fYdnm1IKx01vZSZYX66qGOlEb58HuCXHY+iq
+         thoPxz3c7pULzclj1EkRpwkGO5cav0vZETQ+JtEMsA8fc5HqrH9teisVvamsafE4r68M
+         34+8cYMNavDm61RIJy+Si1j25PD2q304y01JbP7uE4OzoQHdxCldxbxL1IBdx66MKsUK
+         llb4qLKyUCHxKEXOl/XdXpYYvbdMaqEXvYCWNqADPlmojpDr/Qq/VFxjcz/anOrA12hy
+         cKKA==
+X-Gm-Message-State: AOAM531O0DWBGmB/fwEauPmPZyCKc/XO7n45buUPyUq/mIvHTAG/xy6M
+        P6gVGKIH650oJ6X19RcSdwo=
+X-Google-Smtp-Source: ABdhPJzPjjZUaMNtuhBqEvMsApIAGW4WDkZ2E/yGdpB7oU/dn7HNHjHjuMC5QaQ73tNJUkama0wq2A==
+X-Received: by 2002:a05:6214:4009:: with SMTP id kd9mr6589645qvb.53.1643357307878;
+        Fri, 28 Jan 2022 00:08:27 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 195sm2780348qkf.30.2022.01.28.00.04.35
+        by smtp.gmail.com with ESMTPSA id y5sm2682749qkj.28.2022.01.28.00.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 00:04:37 -0800 (PST)
+        Fri, 28 Jan 2022 00:08:27 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] wcn36xx: use struct_size over open coded arithmetic
-Date:   Fri, 28 Jan 2022 08:04:30 +0000
-Message-Id: <20220128080430.1211593-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] net/802: use struct_size over open coded arithmetic
+Date:   Fri, 28 Jan 2022 08:05:41 +0000
+Message-Id: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,10 +69,12 @@ From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 Replace zero-length array with flexible-array member and make use
 of the struct_size() helper in kmalloc(). For example:
 
-struct wcn36xx_hal_ind_msg {
-	struct list_head list;
-	size_t msg_len;
-	u8 msg[];
+struct garp_attr {
+	struct rb_node			node;
+	enum garp_applicant_state	state;
+	u8				type;
+	u8				dlen;
+	unsigned char			data[];
 };
 
 Make use of the struct_size() helper instead of an open-coded version
@@ -82,22 +83,36 @@ in order to avoid any potential type mistakes.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- drivers/net/wireless/ath/wcn36xx/smd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/802/garp.c | 2 +-
+ net/802/mrp.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
-index caeb68901326..16036881542f 100644
---- a/drivers/net/wireless/ath/wcn36xx/smd.c
-+++ b/drivers/net/wireless/ath/wcn36xx/smd.c
-@@ -3347,7 +3347,7 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
- 	case WCN36XX_HAL_DELETE_STA_CONTEXT_IND:
- 	case WCN36XX_HAL_PRINT_REG_INFO_IND:
- 	case WCN36XX_HAL_SCAN_OFFLOAD_IND:
--		msg_ind = kmalloc(sizeof(*msg_ind) + len, GFP_ATOMIC);
-+		msg_ind = kmalloc(struct_size(*msg_ind, msg, len), GFP_ATOMIC);
- 		if (!msg_ind) {
- 			wcn36xx_err("Run out of memory while handling SMD_EVENT (%d)\n",
- 				    msg_header->msg_type);
+diff --git a/net/802/garp.c b/net/802/garp.c
+index f6012f8e59f0..746763a76f83 100644
+--- a/net/802/garp.c
++++ b/net/802/garp.c
+@@ -184,7 +184,7 @@ static struct garp_attr *garp_attr_create(struct garp_applicant *app,
+ 			return attr;
+ 		}
+ 	}
+-	attr = kmalloc(sizeof(*attr) + len, GFP_ATOMIC);
++	attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+ 	if (!attr)
+ 		return attr;
+ 	attr->state = GARP_APPLICANT_VO;
+diff --git a/net/802/mrp.c b/net/802/mrp.c
+index 35e04cc5390c..ce3f1b610a3f 100644
+--- a/net/802/mrp.c
++++ b/net/802/mrp.c
+@@ -273,7 +273,7 @@ static struct mrp_attr *mrp_attr_create(struct mrp_applicant *app,
+ 			return attr;
+ 		}
+ 	}
+-	attr = kmalloc(sizeof(*attr) + len, GFP_ATOMIC);
++	attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
+ 	if (!attr)
+ 		return attr;
+ 	attr->state = MRP_APPLICANT_VO;
 -- 
 2.25.1
 

@@ -2,129 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA554A0147
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57A44A0152
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344191AbiA1T7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 14:59:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21255 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232875AbiA1T7r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 14:59:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643399986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H/RNAVREYoMWWmbXyD7JmCQPxXU0h1w7hHfP+VKDHWk=;
-        b=NEYVWR3jmEfEYpocz++QJ1myCHqTKU6dnF8fooM6PzDBbKsLRLn1oWmsO5h44F7uEh+1Di
-        sqoGWl5ZUOjGOtwm3KiIGevISkOIqm1HIBxTcOtKmSynPXvbFtJcSMrGj+pTkrMrtlImy3
-        lrk0sV1uRpElc/pV2g5hflm0rGLoyZE=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-5P-rWOVNMGim8psllq9Z0w-1; Fri, 28 Jan 2022 14:59:45 -0500
-X-MC-Unique: 5P-rWOVNMGim8psllq9Z0w-1
-Received: by mail-qt1-f198.google.com with SMTP id y1-20020ac87041000000b002c3db9c25f8so5389050qtm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 11:59:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=H/RNAVREYoMWWmbXyD7JmCQPxXU0h1w7hHfP+VKDHWk=;
-        b=u+M/ZdoqLB6Yl9k2wRptQRF/hDGbI81xsKdDqWq1muBD5ybSmra5XMI3hYJI9ox67E
-         MyB4OBNZFOlkpkucI5xlSu0IbkA0hEQvut5ZilUVkdXvTFECIUhLFRC3BtnAZVLInTa1
-         5eqF4boHfkiFy2LzfSLKQxHffSyNfQicg/usiFb5tiDvopEjPjt9R/UNRqPQ+jvsGsCE
-         V2MNL5W1kdmyoB0ySX2AcrMTYZS7bPftNFtoUEqlLGUFoQ6cRPAXkeI3oppaGM5iD9o4
-         nF80pVaWej/kdIQid4CeiwTyBw/jFDxUzgfAr7On8CVKs7Y6jGaP/bJD6W6AqF9pPAyh
-         39Ag==
-X-Gm-Message-State: AOAM532crraetqFiwOf045SvDbwg+oJiXx3YvV2nIwU9f9UF/6W2RVbs
-        irhs0/wTcfV7YHNxcP2Xg82dD6gvXstGZ0yU3SsikCdrze/rzp1MIwdOc9nGpb6E8XG2dcCLgd2
-        WfCMikYyyA0X+Kj4oVnY6GCG9
-X-Received: by 2002:a05:620a:1a9e:: with SMTP id bl30mr4658852qkb.122.1643399984960;
-        Fri, 28 Jan 2022 11:59:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxMVL7Ee01ALwRBPd6MwzSYTHv1qXAtOUO9d/6kaeBi6vEJvalGNdFdHO2BgIzYtQiTAwBaxQ==
-X-Received: by 2002:a05:620a:1a9e:: with SMTP id bl30mr4658847qkb.122.1643399984791;
-        Fri, 28 Jan 2022 11:59:44 -0800 (PST)
-Received: from [192.168.8.138] (pool-98-118-105-43.bstnma.ftas.verizon.net. [98.118.105.43])
-        by smtp.gmail.com with ESMTPSA id m4sm3868731qkp.117.2022.01.28.11.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 11:59:44 -0800 (PST)
-Message-ID: <8a01bf1d367a702cd41e6cb1281294e82a48f541.camel@redhat.com>
-Subject: Re: [PATCH] Revert "drm/nouveau/acr: Fix undefined behavior in
- nvkm_acr_hsfw_load_bl()"
-From:   Lyude Paul <lyude@redhat.com>
-To:     nouveau@lists.freedesktop.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Zhou Qingyang <zhou1615@umn.edu>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Fri, 28 Jan 2022 14:59:42 -0500
-In-Reply-To: <20220128192951.626532-1-lyude@redhat.com>
-References: <20220128192951.626532-1-lyude@redhat.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        id S1351029AbiA1UCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:02:24 -0500
+Received: from mga04.intel.com ([192.55.52.120]:18956 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245650AbiA1UCX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 15:02:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643400143; x=1674936143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XDrmYnVBSiMMmYRQWtq8crV165wPH0HVJ543wkoAGpE=;
+  b=AlanSKm6BigKPsRV7IGKgQzOwj1LCIs64KwPWSbbmb683QLSv1O1UETg
+   dhzUYvwTBjtlMXs0E7uxERz00xOU3JJxLfK1M/SB+OX4I9jM+bAKDvkGn
+   NbDto4B22/iDOmEkYGs892jM/cSh+g4KRUD8+RaZG37Fwd8J3Foi+G4as
+   59cxQOIZF68Cundh9nB2cfzQoKYPYkRIgcJ6q/fMWwBkrdFw7BKKCBo7n
+   x68XJmNhNbnJQftrDx8aD5pv8Snd3eXcVxX3Xve1CDi8c1fBsKaGJLa0g
+   sUJ8HpkGujsz56dUtIVOCdeNhRDgEWN01CZpAx2KvUltNMgjyouPHWvZW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="246030520"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="246030520"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:01:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="564300747"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:01:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nDXQ7-00FYoH-Jd;
+        Fri, 28 Jan 2022 22:00:31 +0200
+Date:   Fri, 28 Jan 2022 22:00:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v3 8/8] i2c: i801: convert to use common P2SB accessor
+Message-ID: <YfRLX/37xv1Sk5G5@smile.fi.intel.com>
+References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
+ <20211221181526.53798-9-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221181526.53798-9-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-on further reconsideration: Self-NAKing this. I don't see any issues with
-those patches.
+On Tue, Dec 21, 2021 at 08:15:26PM +0200, Andy Shevchenko wrote:
+> Since we have a common P2SB accessor in tree we may use it instead of
+> open coded variants.
+> 
+> Replace custom code by pci_p2sb_bar() call.
 
-On Fri, 2022-01-28 at 14:29 -0500, Lyude Paul wrote:
-> This reverts commit 2343bcdb4747d4f418a4daf2e898b94f86c24a59.
-> 
-> Unfortunately, as Greg pointed out I totally missed the fact that this
-> patch came from a umn.edu patch. umn.edu is still banned from contributing
-> to the Linux kernel, so let's revert this for the time being. I'll
-> re-evaluate this fix myself later and send another fix if this ends up
-> being valid.
-> 
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
-> Cc: Greg KH <gregkh@linuxfoundation.org>
-> Cc: Ben Skeggs <bskeggs@redhat.com>
-> Cc: Karol Herbst <kherbst@redhat.com>
-> ---
->  drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-> b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-> index a6ea89a5d51a..667fa016496e 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-> @@ -142,12 +142,11 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const char
-> *name, int ver,
->  
->         hsfw->imem_size = desc->code_size;
->         hsfw->imem_tag = desc->start_tag;
-> -       hsfw->imem = kmemdup(data + desc->code_off, desc->code_size,
-> GFP_KERNEL);
-> +       hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
-> +       memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
-> +
->         nvkm_firmware_put(fw);
-> -       if (!hsfw->imem)
-> -               return -ENOMEM;
-> -       else
-> -               return 0;
-> +       return 0;
->  }
->  
->  int
+Wolfram, does this change makes sense to you?
+Can you give your tag or comment?
 
 -- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+With Best Regards,
+Andy Shevchenko
+
 

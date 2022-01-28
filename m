@@ -2,127 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E17F34A02F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1204A02F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351476AbiA1VgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:36:20 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:32826 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351431AbiA1VgS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:36:18 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E19E31F385;
-        Fri, 28 Jan 2022 21:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643405774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NLILDfYIewMcTAbJZc9mPjKMlBqDlqhTsKM2N1uM+Vw=;
-        b=taayjmIQ/dw3pRt7LXMXgV+h3N2iGR9k6iWV1POVgUTfQy7v0b53WKl6W7epBEuQeWPNId
-        2nS5W8Zz+JDvOI2H2O325FIcHt7vLtCdfAuhacvrf751M2nGilH84Y1DtEW6P5pWfmkFXk
-        3R+tAum3D39BD7myqsYNPl0uf7Iudaw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643405774;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NLILDfYIewMcTAbJZc9mPjKMlBqDlqhTsKM2N1uM+Vw=;
-        b=24PK3VAQmVA51Rx99IGbDGj51tJod8UX27xeq8Emd3IiwsHonr+XB9p01yVh4lqGGFRKKK
-        qudbZz9CfGjnNuAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1BAB613AA1;
-        Fri, 28 Jan 2022 21:36:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fu7bMcdh9GHRawAAMHmgww
-        (envelope-from <neilb@suse.de>); Fri, 28 Jan 2022 21:36:07 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        id S1351497AbiA1VhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:37:07 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:34544 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347668AbiA1VhF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 16:37:05 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nDYvI-0008TI-5c; Fri, 28 Jan 2022 22:36:48 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Michal Hocko <mhocko@suse.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Fix rmap allocation for very large memslots
+Date:   Fri, 28 Jan 2022 22:36:42 +0100
+Message-Id: <1acaee7fa7ef7ab91e51f4417572b099caf2f400.1643405658.git.maciej.szmigiero@oracle.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Miklos Szeredi" <miklos@szeredi.hu>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Jaegeuk Kim" <jaegeuk@kernel.org>, "Chao Yu" <chao@kernel.org>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "Ilya Dryomov" <idryomov@gmail.com>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna.schumaker@netapp.com>,
-        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        "Philipp Reisner" <philipp.reisner@linbit.com>,
-        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        "Jens Axboe" <axboe@kernel.dk>, "linux-mm" <linux-mm@kvack.org>,
-        linux-nilfs@vger.kernel.org,
-        "Linux NFS list" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        "Ext4" <linux-ext4@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH 1/9] Remove inode_congested()
-In-reply-to: <CAJfpegt-igF8HqsDUcMzfU0jYv8WpofLy0Uv0YnXLzsfx=tkGg@mail.gmail.com>
-References: <164325106958.29787.4865219843242892726.stgit@noble.brown>,
- <164325158954.29787.7856652136298668100.stgit@noble.brown>,
- <CAJfpegt-igF8HqsDUcMzfU0jYv8WpofLy0Uv0YnXLzsfx=tkGg@mail.gmail.com>
-Date:   Sat, 29 Jan 2022 08:36:02 +1100
-Message-id: <164340576289.5493.5784848964540459557@noble.neil.brown.name>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022, Miklos Szeredi wrote:
-> On Thu, 27 Jan 2022 at 03:47, NeilBrown <neilb@suse.de> wrote:
-> >
-> > inode_congested() reports if the backing-device for the inode is
-> > congested.  Few bdi report congestion any more, only ceph, fuse, and
-> > nfs.  Having support just for those is unlikely to be useful.
-> >
-> > The places which test inode_congested() or it variants like
-> > inode_write_congested(), avoid initiating IO if congestion is present.
-> > We now have to rely on other places in the stack to back off, or abort
-> > requests - we already do for everything except these 3 filesystems.
-> >
-> > So remove inode_congested() and related functions, and remove the call
-> > sites, assuming that inode_congested() always returns 'false'.
-> 
-> Looks to me this is going to "break" fuse; e.g. readahead path will go
-> ahead and try to submit more requests, even if the queue is getting
-> congested.   In this case the readahead submission will eventually
-> block, which is counterproductive.
-> 
-> I think we should *first* make sure all call sites are substituted
-> with appropriate mechanisms in the affected filesystems and as a last
-> step remove the superfluous bdi congestion mechanism.
-> 
-> You are saying that all fs except these three already have such
-> mechanisms in place, right?  Can you elaborate on that?
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-Not much.  I haven't looked into how other filesystems cope, I just know
-that they must because no other filesystem ever has a congested bdi
-(with one or two minor exceptions, like filesystems over drbd).
+Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") has
+forbidden using kvmalloc() to make allocations larger than INT_MAX (2 GiB).
 
-Surely read-ahead should never block.  If it hits congestion, the
-read-ahead request should simply fail.  block-based filesystems seem to
-set REQ_RAHEAD which might get mapped to REQ_FAILFAST_MASK, though I
-don't know how that is ultimately used.
+Unfortunately, adding a memslot exceeding 1 TiB in size will result in rmap
+code trying to make an allocation exceeding this limit.
+Besides failing this allocation, such operation will also trigger a
+WARN_ON_ONCE() added by the aforementioned commit.
 
-Maybe fuse and others should continue to track 'congestion' and reject
-read-ahead requests when congested.
-Maybe also skip WB_SYNC_NONE writes..
+Since we probably still want to use kernel slab for small rmap allocations
+let's only redirect such oversized allocations to vmalloc.
 
-Or maybe this doesn't really matter in practice...  I wonder if we can
-measure the usefulness of congestion.
+A possible alternative would be to add some kind of a __GFP_LARGE flag to
+skip the INT_MAX check behind kvmalloc(), however this will impact the
+common kernel memory allocation code, not just KVM.
 
-Thanks,
-NeilBrown
+Fixes: a7c3e901a4 ("mm: introduce kv[mz]alloc helpers")
+Cc: stable@vger.kernel.org
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+---
+ arch/x86/kvm/x86.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 8033eca6f3a1..c64bac8614c7 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11806,24 +11806,36 @@ void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
+ 
+ int memslot_rmap_alloc(struct kvm_memory_slot *slot, unsigned long npages)
+ {
+-	const int sz = sizeof(*slot->arch.rmap[0]);
++	const size_t sz = sizeof(*slot->arch.rmap[0]);
+ 	int i;
+ 
+ 	for (i = 0; i < KVM_NR_PAGE_SIZES; ++i) {
+ 		int level = i + 1;
+-		int lpages = __kvm_mmu_slot_lpages(slot, npages, level);
++		size_t lpages = __kvm_mmu_slot_lpages(slot, npages, level);
++		size_t rmap_size;
+ 
+ 		if (slot->arch.rmap[i])
+ 			continue;
+ 
+-		slot->arch.rmap[i] = kvcalloc(lpages, sz, GFP_KERNEL_ACCOUNT);
+-		if (!slot->arch.rmap[i]) {
+-			memslot_rmap_free(slot);
+-			return -ENOMEM;
+-		}
++		if (unlikely(check_mul_overflow(lpages, sz, &rmap_size)))
++			goto ret_fail;
++
++		/* kvzalloc() only allows sizes up to INT_MAX */
++		if (unlikely(rmap_size > INT_MAX))
++			slot->arch.rmap[i] = __vmalloc(rmap_size,
++						       GFP_KERNEL_ACCOUNT | __GFP_ZERO);
++		else
++			slot->arch.rmap[i] = kvzalloc(rmap_size, GFP_KERNEL_ACCOUNT);
++
++		if (!slot->arch.rmap[i])
++			goto ret_fail;
+ 	}
+ 
+ 	return 0;
++
++ret_fail:
++	memslot_rmap_free(slot);
++	return -ENOMEM;
+ }
+ 
+ static int kvm_alloc_memslot_metadata(struct kvm *kvm,

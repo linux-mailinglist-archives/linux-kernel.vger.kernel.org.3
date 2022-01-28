@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495AE49FA68
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0CE49FA6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244062AbiA1NQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S244253AbiA1NRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbiA1NQg (ORCPT
+        with ESMTP id S241822AbiA1NRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:16:36 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F04C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:16:36 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id u15so10857429wrt.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:16:36 -0800 (PST)
+        Fri, 28 Jan 2022 08:17:18 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBFDC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:17:18 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id e2so10886036wra.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:17:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BHcagqEkqEykMyyD1xqLGjKIFp6BT1eCL4LXbv7aRtk=;
-        b=z1z4u2VR4nMLNcfMJQxbE378w1Bkvo+bQ12eM82xrKedNFu09LNRo7PtbYC1YT/sKn
-         BMKP/Se1i9xSMY3zMzepRXR0gXeNa/6MbH1tu+aJ+TBwTVxyp75vMC7XPnyfwKglLeIS
-         eXMvLY2mQvN/3j6RtTuOnVRdBsRMJFbzLDgl5xu5U4X2tQEaYKd3zQzGUlGOUC5pHrCp
-         tpp5Z79F3+lSJ3VVbaJw5YGBStBUYTmVM85JmZbmf9nu7mj+gQmVkEttd78esru7agde
-         ej3MhA+QzWmuSD6ZHxv2SrfivSYAXHflcMXgQTiHjAhNUTxfA1VHL3HPqHAog/Q2k+nO
-         NgIA==
+        bh=zRE6cP7pvi+ZI23Vg5Fh1CMwZmc7C8MWpMozO16RBzU=;
+        b=8KM029J1OvRaJgPHOipEGOIcRfssg6B2NfpFNu8YWmSFDgkd9wWf+IJ66xVDuR43n3
+         2+D8zdvVWoQ82hebXyvz6dirPC7Ek+lXA1x+TlEfAyd6br1C0uwLt1e98xEzEGvyT0fY
+         8JTK9LEH9iYiJvTjwAAeNgHzm3M5OKfLZ8gcDzbf4wKVnixs82hUZiBRDTB290dvE7sO
+         541MWF+TQExtk9I6p9OjDMGaI4wtmR+HmrGLEI+kq46EU/6Ab3QlK2EJZGdaKwtE7uZE
+         KneFJaj7Rh1Ep3zxWxGtuRQ6lXtfDjOIEai6LlotHYT8H8yrtJV5iIH5hCNKlvFtusdT
+         9CwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BHcagqEkqEykMyyD1xqLGjKIFp6BT1eCL4LXbv7aRtk=;
-        b=MdsHXGH+P3nzipPac0ewc//PIxYfAJFyZzuuBQEQTODwZYBgpcYWUfU88XVUXKlms+
-         ijUVWPFQT6Bd0UTJ+vFrwkHC5mZvFD4MlKBkPe7qnBVs3FE59a+uak57kVj3nvBricli
-         fTIfXeMJlVkjsrV9Ny2xxlIzKRC4CmGiAgtnn9NU5e8N1tr/hZ+7YKcEqdzVbtoHa8iJ
-         +tzkqe+iYcynGnIoJrbgR+5eBP7VCXOuS5G1Dluq4j7QbuvVhom1ab5fi68nAtp+m4LH
-         A/m3mxqMuuT+4LxE/aRO9MnjeZ5rSKZugN/kT4+pLYGRdHPDThq5tnvET2yv0DW/kmuv
-         g5jQ==
-X-Gm-Message-State: AOAM533V+A7fr0Dat88529ZA8zoBZA/YcLk3qujX/HkK4Y9K+uZEc0iX
-        ZVPHd/GW656+aLRc5b/KM3PfaGLlEjLnJZNg50x2qw==
-X-Google-Smtp-Source: ABdhPJzA3jkPCbW0m1A2rMkTINirAStcdud8umRS8/GKCdo23UjL6ZBvlx5/0/v4gLHlo2udk8QVh6ji0A7krqXzCYs=
-X-Received: by 2002:a05:6000:387:: with SMTP id u7mr7204296wrf.214.1643375794752;
- Fri, 28 Jan 2022 05:16:34 -0800 (PST)
+        bh=zRE6cP7pvi+ZI23Vg5Fh1CMwZmc7C8MWpMozO16RBzU=;
+        b=yRk3ex2sb4E7JqP1M+v+0Wu5sxuNShzwFhVAjL+8gM7pC00aMpb9QWCXLf30k8twIU
+         tjZwMnsa0nGwVzsvM176p7ER8GShScxU/iPU/XXVF93rTRYH8ED2QLriFcMljCAVJqnl
+         IV/43nrIO/3F1yScPwOSSwvYVjgdamWLQq48YgZwcY+67ai5DqH39XcYB6Vt4duGALel
+         GxUVFsY/bwM368qMxCe6WzYqXdznFI+4oHGCfMv0lsZHm6TZtha2mdSliULNwgCBidB/
+         fvkAilfmMJpWV7CVtqNm7cpmVAEzcGYIMFlZWYQgBgwBcAbPZetbwTXXxl/VMOI1lcud
+         TRsA==
+X-Gm-Message-State: AOAM533qXDrMTTpz5kEIVYSVNqKarD4NdKqzseNjRcblIIupG3gw/aiM
+        9avMjiBT5HdL3YRjO2U1qlNJ6PtKHtp+BBLt5UTFYcVW2G8=
+X-Google-Smtp-Source: ABdhPJx0eAbfLbLIvSsOEMT0A5qjXLBP5J080JzYr7ucrMaAqfFeIyIpQaz8SMiXg4gtlqNBVlVuQi8VmjgUIugP5jw=
+X-Received: by 2002:a05:6000:1e0a:: with SMTP id bj10mr7007651wrb.313.1643375837116;
+ Fri, 28 Jan 2022 05:17:17 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1643360652.git.geert@linux-m68k.org> <e6a4c5b20d2acb52125d7d6e6c7e3694d7cb182c.1643360652.git.geert@linux-m68k.org>
-In-Reply-To: <e6a4c5b20d2acb52125d7d6e6c7e3694d7cb182c.1643360652.git.geert@linux-m68k.org>
+References: <cover.1643360652.git.geert@linux-m68k.org> <62bf4ee6613550c07a99d4bd226ab0d33acae4c4.1643360652.git.geert@linux-m68k.org>
+In-Reply-To: <62bf4ee6613550c07a99d4bd226ab0d33acae4c4.1643360652.git.geert@linux-m68k.org>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 28 Jan 2022 18:46:23 +0530
-Message-ID: <CAAhSdy1+aWmNZJxxDS+tVHeOjGdLH6ALXLp4X6+tgZu+HS1d9g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: timer: sifive, clint: Fix number of interrupts
+Date:   Fri, 28 Jan 2022 18:47:06 +0530
+Message-ID: <CAAhSdy139fUCYdTm=Ge4GhXt2WxnV3ngGHY2RVie4+k1yQnEKQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] dt-bindings: timer: sifive, clint: Group interrupt tuples
 To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -69,15 +69,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Jan 28, 2022 at 2:37 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> The number of interrupts lacks an upper bound, thus assuming one,
-> causing properly grouped "interrupts-extended" properties to be flagged
-> as an error by "make dtbs_check".
->
-> Fix this by adding the missing "maxItems", using the architectural
-> maximum of 4095 interrupts.
+> To improve human readability and enable automatic validation, the tuples
+> in "interrupts-extended" properties should be grouped using angle
+> brackets.
 >
 > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Looks good to me.
 
@@ -88,30 +85,36 @@ Anup
 
 > ---
 > v4:
->   - Use architectural maximum instead of practical maximum of 10,
+>   - Add Reviewed-by (this time for real ;-),
 >
 > v3:
->   - Add Acked-by,
+>   - Add Reviewed-by,
 >
 > v2:
->   - Split in two patches,
->   - Improve patch description and document limit rationale.
+>   - Split in two patches.
 > ---
->  Documentation/devicetree/bindings/timer/sifive,clint.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/timer/sifive,clint.yaml | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
 > diff --git a/Documentation/devicetree/bindings/timer/sifive,clint.yaml b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> index 8d5f4687add9e81e..fe4b73c3f269fc0f 100644
+> index fe4b73c3f269fc0f..e64f46339079fa3f 100644
 > --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
 > +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> @@ -44,6 +44,7 @@ properties:
->
->    interrupts-extended:
->      minItems: 1
-> +    maxItems: 4095
->
->  additionalProperties: false
->
+> @@ -57,10 +57,10 @@ examples:
+>    - |
+>      timer@2000000 {
+>        compatible = "sifive,fu540-c000-clint", "sifive,clint0";
+> -      interrupts-extended = <&cpu1intc 3 &cpu1intc 7
+> -                             &cpu2intc 3 &cpu2intc 7
+> -                             &cpu3intc 3 &cpu3intc 7
+> -                             &cpu4intc 3 &cpu4intc 7>;
+> +      interrupts-extended = <&cpu1intc 3>, <&cpu1intc 7>,
+> +                            <&cpu2intc 3>, <&cpu2intc 7>,
+> +                            <&cpu3intc 3>, <&cpu3intc 7>,
+> +                            <&cpu4intc 3>, <&cpu4intc 7>;
+>         reg = <0x2000000 0x10000>;
+>      };
+>  ...
 > --
 > 2.25.1
 >

@@ -2,139 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4DA49F1E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A958949F1E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345789AbiA1DaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:30:10 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58638
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345589AbiA1DaJ (ORCPT
+        id S1345799AbiA1DaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:30:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51273 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345795AbiA1DaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:30:09 -0500
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DA4D04004A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:30:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643340607;
-        bh=o1I8UaIYrM6dC/0Rd0QRoVtyxyLa0HoViEvgtP4OM7I=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=nO5Y//XoBV+zNQYzMG8F9jNmJkui9O+/Cssc0Wltivpqo5x4By6tmVM7LBcd+rMl6
-         MnQpukQqOw9X8FBmcpq/cIbXVgoj5UAP8pHyIlkAgHSPlDSBDi/dw/vMAnddXbwnwe
-         61IgiU1OT5lKDJg+OL9Vo3ss1adKX+WCakDJrH83MSHgQl2QXiHRj6p1mCBUh7RoVd
-         TvO+AHBS/UfQ1wqPpHjzEetjs0nKb1wSivtH0ch1W491DmlQTp9PWQ95Q+fFSVYK4u
-         Wa1JElgtRYWw7BBjthmb2KvCnHq2pJTh15M7Gjcc58boe0r25tnNPeYss8hTqLPyJY
-         ugCJL1p0DCS4A==
-Received: by mail-oo1-f71.google.com with SMTP id n30-20020a4a611e000000b002e519f04f8cso2677869ooc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 19:30:07 -0800 (PST)
+        Thu, 27 Jan 2022 22:30:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643340620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yWI4mSyMPfEGNDG7ZY+imHKSZHJZA8c9YX1u5t0lQ5c=;
+        b=S8sefC62Uq6+Ut+/P0ummX4oJBnBbxW3uTNs8ET8CB5eQssnbuwMKuxbu+0xP/97ApXxVE
+        8o/luiYjzbQW+XBpasnHUPNSlTPRdGNw7YO9M1dLPBd5gQ4ViFsuFYWD2rs3YR0ni5M0X6
+        aucQW/m02t2bMRUJRzsyjJKQp73ZhBY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-138-8hocAmG_PreHTmHkwqlJdw-1; Thu, 27 Jan 2022 22:30:19 -0500
+X-MC-Unique: 8hocAmG_PreHTmHkwqlJdw-1
+Received: by mail-wm1-f69.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso2342305wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 19:30:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o1I8UaIYrM6dC/0Rd0QRoVtyxyLa0HoViEvgtP4OM7I=;
-        b=idWxHLoHKBqzRv7ILrWj926AR1KYBfQ24tmA2+Zr9b21zlUjUMlPYaCFw/JL7KHw4q
-         H5pcy1tEGgtGpHhFcFBI9zhDV7ORKAYAS8HASzVl0PTipy54FAZfrS+Ug2Hj+pcAGdhm
-         TcBSIJ+CV3bpGLYfl6SN4InJTjJbjR+QqlbQimq/ZUlVWUlEv7wRxfY30iPKwqpS7ds/
-         lHX8g73hM6Ipn0Nkc1pLvAXIv0+KVw/ICVbU4V/JsiHD2x/+Ye2N5C7TK5IBit2JzZXa
-         uCkN+bA+2ZBKT782nnQWhH/Anhe9Hm650n4uTIdC9RsmpY0wB1IVS8VmDVmAriL/d8ps
-         Oekg==
-X-Gm-Message-State: AOAM531/gyhIa27Py/lkQ9xhta6j6G2gEdbMt9gRM2RHY+mOnMSKbJ9+
-        vbKQ1+cQTldwGlxsrIArdHi2mqm3G0tYQag3zsoy/p3G0W8MXDIeyL+cAoLCv/EJihxTZ2TJg3Q
-        8IaYi5m4XrVCl/0Wa43fQ0g6isjpWMK05dyyu3RGwQ7eyhjiBu25ET/e/4Q==
-X-Received: by 2002:a05:6808:191a:: with SMTP id bf26mr9172613oib.111.1643340606601;
-        Thu, 27 Jan 2022 19:30:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz1jv4J88ak1rDj6mbh78ua15nyVyq1aqhXCtXon2huqpabC8PnLCHWXFERGI5wRDEfkfYL3kiys1HJTFSdoOQ=
-X-Received: by 2002:a05:6808:191a:: with SMTP id bf26mr9172601oib.111.1643340606215;
- Thu, 27 Jan 2022 19:30:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yWI4mSyMPfEGNDG7ZY+imHKSZHJZA8c9YX1u5t0lQ5c=;
+        b=PNa0CyAhULLbNlh1kzlSq3mD0soCS7B8iBExm5CnqmK0VBAIHOHDyx0E41sXcZlFhp
+         if2PolvDWjvEshL024mEQ0kuSEsdyesPafq7jgGQut630ral7lIbb6jWhT27Yx0JavO/
+         cpDePu2JpvJwX6RUZ0bvv1wyrrnvCvYRlLb3s4hmLU6kQr1rqKuetY7U/wPW9g9+plt8
+         219VpKlGK+IyE6byv0XFcXfOt34a58y6VPGcoghcYrKd3vL/waNZfJWzJUn8lUHQ37Ps
+         yjJoGjMg+6bxNRh2mLUsv+QuaJThjF6gI4NG5Dol/Ak3sVYvAiPajMttdtm7DyCy5Kly
+         Y8SA==
+X-Gm-Message-State: AOAM533B8YrfviERPjQAMYJD5FlRabdAKLeP0OQW8bI2nKO/+Z8Be8bi
+        Uh3rdccghw/+68rFr6deUl6YzpfA59ao5Ja6LvZnTgInWa99JXbvymBshJnvAHG7AuM5Wr8hZTU
+        I+pp49wXO773W/FVy0srbMMaR
+X-Received: by 2002:a5d:4dc6:: with SMTP id f6mr5255758wru.255.1643340617835;
+        Thu, 27 Jan 2022 19:30:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw4fygcXEjGmyBwc0eSz9VlZ7/dhPCinB97oCLxm3a5TE3y78GbubhUfyHuwvXqmbn6pcAA7Q==
+X-Received: by 2002:a5d:4dc6:: with SMTP id f6mr5255746wru.255.1643340617661;
+        Thu, 27 Jan 2022 19:30:17 -0800 (PST)
+Received: from xz-m1.local ([64.64.123.9])
+        by smtp.gmail.com with ESMTPSA id v5sm835287wmh.19.2022.01.27.19.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 19:30:17 -0800 (PST)
+Date:   Fri, 28 Jan 2022 11:30:10 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: [PATCH] mm: Fix invalid page pointer returned with FOLL_PIN gups
+Message-ID: <YfNjQhpxmWEeswkb@xz-m1.local>
+References: <20220125033700.69705-1-peterx@redhat.com>
+ <f5400544-f602-0bb4-5cb1-5ac682e41974@nvidia.com>
+ <20220127004206.GP8034@ziepe.ca>
+ <YfJjhop3senAUjue@xz-m1.local>
+ <20220127152538.GQ8034@ziepe.ca>
+ <YfNIjqPpty0YkLJP@xz-m1.local>
+ <313e02c7-c116-3fe3-6747-d9e1b58ba2bb@nvidia.com>
 MIME-Version: 1.0
-References: <20220127025418.1989642-1-kai.heng.feng@canonical.com>
- <0259955f-8bbb-1778-f234-398f1356db8b@linux.intel.com> <CAAd53p6+KPAJchh9Jx59Fkkj5FidSxsW0yHjLqooFjvu-Y9u7w@mail.gmail.com>
- <11891652-40c6-f111-46b7-e96d1729815e@linux.intel.com>
-In-Reply-To: <11891652-40c6-f111-46b7-e96d1729815e@linux.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 28 Jan 2022 11:29:54 +0800
-Message-ID: <CAAd53p5rNFBK8t7bK_Jdds2c4dXpWtEb10iTtsc4zQEjGrf-Pg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
- ready, L2 and L3 state
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Russell Currey <ruscur@russell.cc>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <313e02c7-c116-3fe3-6747-d9e1b58ba2bb@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:57 AM Lu Baolu <baolu.lu@linux.intel.com> wrote:
->
-> On 1/27/22 7:14 PM, Kai-Heng Feng wrote:
-> > On Thu, Jan 27, 2022 at 3:01 PM Lu Baolu <baolu.lu@linux.intel.com> wrote:
-> >>
-> >> On 2022/1/27 10:54, Kai-Heng Feng wrote:
-> >>> Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
-> >>> hint") enables ACS, and some platforms lose its NVMe after resume from
-> >>> S3:
-> >>> [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
-> >>> [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
-> >>> [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
-> >>> [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
-> >>> [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
-> >>> [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
-> >>> [   50.947843] nvme nvme0: frozen state error detected, reset controller
-> >>>
-> >>> It happens right after ACS gets enabled during resume.
-> >>>
-> >>> There's another case, when Thunderbolt reaches D3cold:
-> >>> [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> >>> [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> >>> [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> >>> [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> >>> [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
-> >>> [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
-> >>> [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
-> >>> [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
-> >>>
-> >>> So disable AER service to avoid the noises from turning power rails
-> >>> on/off when the device is in low power states (D3hot and D3cold), as
-> >>> PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
-> >>> transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
-> >>> with aux power) and L3 (D3cold).
-> >>>
-> >>> Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=209149
-> >>> Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=215453
-> >>> Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
-> >>
-> >> I don't know what this fix has to do with the commit 50310600ebda.
-> >
-> > Commit 50310600ebda only exposed the underlying issue. Do you think
-> > "Fixes:" tag should change to other commits?
-> >
-> >> Commit 50310600ebda only makes sure that PCI ACS is enabled whenever
-> >> Intel IOMMU is on. Before this commit, PCI ACS could also be enabled
-> >> and result in the same problem. Or anything I missed?
-> >
-> > The system in question didn't enable ACS before commit 50310600ebda.
->
-> This commit exposed the issue on your configuration doesn't mean the
-> fix should be back ported as far as that commit. I believe if you add
-> intel-iommu=on in the kernel parameter, the issue still exists even you
-> revert commit 50310600ebda or checkout a tag before it.
+On Thu, Jan 27, 2022 at 06:32:27PM -0800, John Hubbard wrote:
+> What you are missing is that other people are potentially writing code
+> that we haven't seen yet, and that code may use follow_page_mask(). The
+> idea, therefore, is to make it a good building block.
 
-That's true.
+Yes, actually that's why I attached the WARN_ON_ONCE() since when people do add
+that new code they'll quickly discover before posting, as long as they'll still
+test the patch..
 
-I guess it's better to drop the "Fixes:" tag.
+Then people may even start to wonder whether we should rework -EEXIST if
+necessary, and IMHO that's the better place for a rework, not within the bugfix
+here.
 
-Bjorn, should I send another version of it?
+Please check the email I replied to Jason.  I hope both of you would agree that
+I can repost with the fix only but drop the WARN_ON_ONCE(), or any explicit
+suggestion on how we should move forward with the fix would be welcomed.
 
-Kai-Heng
+Thanks,
 
->
-> Best regards,
-> baolu
+-- 
+Peter Xu
+

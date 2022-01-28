@@ -2,42 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B828449FA7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A624149FA80
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348777AbiA1NTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244833AbiA1NTI (ORCPT
+        id S1348857AbiA1NTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:19:23 -0500
+Received: from server.lespinasse.org ([63.205.204.226]:54401 "EHLO
+        server.lespinasse.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245035AbiA1NTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Jan 2022 08:19:08 -0500
-X-Greylist: delayed 539 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Jan 2022 05:19:07 PST
-Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7193C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
  d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-52-ed;
  t=1643375406; h=from : to : cc : subject : date : message-id :
  in-reply-to : references : mime-version : content-transfer-encoding :
- from; bh=60KVsRSybg58S5Bq7/6VWRR0Ob54Rjhy19T2JOiOHJE=;
- b=M7pzfh5ZrllwylgwXDFgMgUOxk+x0CQXf6B5IVcHP6kNbiwFEwwKpkHsAzgcdMs6ciQ+K
- 40+M0hVJhJPDMYlCA==
+ from; bh=Y2k4uPVeoJirwL08p+/VJjxEhsePEHeg9Wr+pPi/UaM=;
+ b=WVJsEvoRqkBk1wBf/PQvT+xODXvkJZ2W/KdNjDE+io9o82HbpdsxP3huXOEqePeoiipqa
+ 4ZiZYFmKjNnl0n6DQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
  i=@lespinasse.org; q=dns/txt; s=srv-52-rsa; t=1643375406; h=from : to
  : cc : subject : date : message-id : in-reply-to : references :
  mime-version : content-transfer-encoding : from;
- bh=60KVsRSybg58S5Bq7/6VWRR0Ob54Rjhy19T2JOiOHJE=;
- b=hH+5ulWntN/qZ08GjZofRdKqO2OeOaAGUxe42j5ciL7Bjfd4AWn2kXvECpD0Tk1kLuQim
- pXNlIDBs0nLbih3vTu1Xmftjg+LmMrBFYRCGmnBJXw+5vZdhI3IEbAvdi8t/VIWjDGOIWvb
- VK/0trH9WTTtLQsjBsY0lG/KIFr00ZEXA0HIUrpP7HHkEFIFaJjWppZIzD16uxbHJw/3rti
- LymDIcnLEYmmKHELb7Bb3LM2Q3tDBAZ1TqK6ebvJCW9rjIgkV5aWyrvSy/xo6LiJO1+KsYu
- PgxAcY2i2izS6gADabfEHywhVuqppThEPWfhOrm+GR6Sg4NMiy43Uk41aLmA==
-Received: from zeus.lespinasse.org (zeus.lespinasse.org [10.0.0.150])
-        by server.lespinasse.org (Postfix) with ESMTPS id CEF33160942;
+ bh=Y2k4uPVeoJirwL08p+/VJjxEhsePEHeg9Wr+pPi/UaM=;
+ b=vSQ8s0/J8zRmO0ii8kp4Dal6J6g7+90+5Tg8FB0H2IdHKfFKMNcbY4uu/b23/wp85T5aM
+ pOnoLkegyz82Ymv86cgI3Mob1ZWkjQNPdDjPdfSgstcziSsUGjmhsQLiAN4Oq3KjFDqih0C
+ akrA6ZElzAceI7GfqcA/Hx3uB4xgwNGlh4eo+ViqOgSTp0ckD0tcvXWGE2eciaPmXCP7mpw
+ cGEv2SmbXGevETiQwcjSC3/R20Z7R6KHdPlCkgiUFqy7JfGWasujKkQIZwyeKPSD4jS+ymv
+ FfkyfV9r8+INSo2NieNZfKcM0gOcwiJ1e5tDXPb88krQfhDssX28SUscD+QA==
+Received: from zeus.lespinasse.org (zeus.lespinasse.org [IPv6:fd00::150:0])
+        by server.lespinasse.org (Postfix) with ESMTPS id DAEF516094C;
         Fri, 28 Jan 2022 05:10:06 -0800 (PST)
 Received: by zeus.lespinasse.org (Postfix, from userid 1000)
-        id C2D5D1FF74; Fri, 28 Jan 2022 05:10:06 -0800 (PST)
+        id C5D6220328; Fri, 28 Jan 2022 05:10:06 -0800 (PST)
 From:   Michel Lespinasse <michel@lespinasse.org>
 To:     Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
@@ -59,9 +55,9 @@ Cc:     kernel-team@fb.com, Laurent Dufour <ldufour@linux.ibm.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Andy Lutomirski <luto@kernel.org>,
         Michel Lespinasse <michel@lespinasse.org>
-Subject: [PATCH v2 01/35] mm: export dump_mm
-Date:   Fri, 28 Jan 2022 05:09:32 -0800
-Message-Id: <20220128131006.67712-2-michel@lespinasse.org>
+Subject: [PATCH v2 02/35] mmap locking API: mmap_lock_is_contended returns a bool
+Date:   Fri, 28 Jan 2022 05:09:33 -0800
+Message-Id: <20220128131006.67712-3-michel@lespinasse.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220128131006.67712-1-michel@lespinasse.org>
 References: <20220128131006.67712-1-michel@lespinasse.org>
@@ -71,26 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is necessary in order to allow VM_BUG_ON_MM to be used in modules
-(I encountered the issue when adding VM_BUG_ON_MM in mmap locking functions).
+Change mmap_lock_is_contended to return a bool value, rather than an
+int which the callers are then supposed to interpret as a bool. This
+is to ensure consistency with other mmap lock API functions (such as
+the trylock functions).
 
 Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
 ---
- mm/debug.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/mmap_lock.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/debug.c b/mm/debug.c
-index bc9ac87f0e08..40d3f358b75c 100644
---- a/mm/debug.c
-+++ b/mm/debug.c
-@@ -220,6 +220,7 @@ void dump_mm(const struct mm_struct *mm)
- 		mm->def_flags, &mm->def_flags
- 	);
+diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+index 96e113e23d04..db9785e11274 100644
+--- a/include/linux/mmap_lock.h
++++ b/include/linux/mmap_lock.h
+@@ -162,9 +162,9 @@ static inline void mmap_assert_write_locked(struct mm_struct *mm)
+ 	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
  }
-+EXPORT_SYMBOL(dump_mm);
  
- static bool page_init_poisoning __read_mostly = true;
+-static inline int mmap_lock_is_contended(struct mm_struct *mm)
++static inline bool mmap_lock_is_contended(struct mm_struct *mm)
+ {
+-	return rwsem_is_contended(&mm->mmap_lock);
++	return rwsem_is_contended(&mm->mmap_lock) != 0;
+ }
  
+ #endif /* _LINUX_MMAP_LOCK_H */
 -- 
 2.20.1
 

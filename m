@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C1C49FA7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE38749FA8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348786AbiA1NTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244752AbiA1NTI (ORCPT
+        id S1349013AbiA1NTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:19:51 -0500
+Received: from server.lespinasse.org ([63.205.204.226]:48179 "EHLO
+        server.lespinasse.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348649AbiA1NTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:19:08 -0500
-Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB370C061747
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:19:07 -0800 (PST)
+        Fri, 28 Jan 2022 08:19:09 -0500
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
  d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-52-ed;
  t=1643375407; h=from : to : cc : subject : date : message-id :
  in-reply-to : references : mime-version : content-transfer-encoding :
- from; bh=N1S1NesGU6Y8f8q9IeGf50c8McugHmVCalVHP9Er6AE=;
- b=G3mnG6iArJ3iUlnv5jmCwGBZSi4ZmZNvZum1Io0mtaiwsYz/3xaJREVHKG9TcE9hCnOxk
- eVwcUhjl24gy00cDA==
+ from; bh=RYRG+RuiDLezST/iL383W/LGMqkq0+0jM8HYaFAclmo=;
+ b=BuXQmxj+3qKNjh5SRNWcL7LLU2E6uJfm8wDD99iZdIdaSW/+achmhWRJVgL+JEBSZlC3j
+ OnYzFu0fiC/xuMuCw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
  i=@lespinasse.org; q=dns/txt; s=srv-52-rsa; t=1643375407; h=from : to
  : cc : subject : date : message-id : in-reply-to : references :
  mime-version : content-transfer-encoding : from;
- bh=N1S1NesGU6Y8f8q9IeGf50c8McugHmVCalVHP9Er6AE=;
- b=NdoeJxId3UHckIXu3hAFoxtvDqiwDvgJJSGGpoR05QXlMP89KsXW0W+ABD8b/gYA0BhuF
- Mz98ld9u1J576DPaXDTCzvCNgYfR16gNyveBozyLnxl41FS5UKO/RMnGzdj/+9sMR94QUI/
- /M5pshUxt3Oy4+uAL7EUNI195zLs+k05K4+MxeagX7bMTPd41C9gmqMf300MOIpeyNtBJai
- 3Ll/zt6OghuoLMkBvzux0MFzo8De6dNhImoV4VxrB+Zc1ap1bi4fpFoqsn6xXahNmU4U9fb
- vCcVuMqB4jx8MrwgeiRxeLbkVXdEzv1b7akE/LEXnrI1ONHHlFu9tlWe7kRQ==
+ bh=RYRG+RuiDLezST/iL383W/LGMqkq0+0jM8HYaFAclmo=;
+ b=qovUC5kJOR5SWthTEplixMntG75b2ioozUwSL1SQG2/I0QJfwaCZaveagDAT3SvSW0OSo
+ 6X0lpayd1t0B+kOvU58pqxi9AQbq1ypQ+MZGGH5jHAQ4/gHtj2w/h3oJKA6hx9FfutTN6iN
+ ElE7OO3KTJ2Pt7uN9B7GQWgevhaeA7H6hD5CK/Du826mUrGPxsz8Y4Gdy/k4jllcQptecR0
+ MHxHVeMRIICOAatbkGkWnCUhM2foKHhMqtb6BvJyajBZ2un2PPReaDo5NWn04xCJ3YS6POX
+ bZFxXLLebTvnUTbza7nsPMPSu2xdDGldD3WgCUazwyK3bAS3tC1QN90SxKbg==
 Received: from zeus.lespinasse.org (zeus.lespinasse.org [IPv6:fd00::150:0])
-        by server.lespinasse.org (Postfix) with ESMTPS id 0F8FE160985;
+        by server.lespinasse.org (Postfix) with ESMTPS id 14FC516098E;
         Fri, 28 Jan 2022 05:10:07 -0800 (PST)
 Received: by zeus.lespinasse.org (Postfix, from userid 1000)
-        id E9CD020330; Fri, 28 Jan 2022 05:10:06 -0800 (PST)
+        id ECAE620478; Fri, 28 Jan 2022 05:10:06 -0800 (PST)
 From:   Michel Lespinasse <michel@lespinasse.org>
 To:     Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
@@ -58,9 +55,9 @@ Cc:     kernel-team@fb.com, Laurent Dufour <ldufour@linux.ibm.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Andy Lutomirski <luto@kernel.org>,
         Michel Lespinasse <michel@lespinasse.org>
-Subject: [PATCH v2 15/35] mm: refactor __handle_mm_fault() / handle_pte_fault()
-Date:   Fri, 28 Jan 2022 05:09:46 -0800
-Message-Id: <20220128131006.67712-16-michel@lespinasse.org>
+Subject: [PATCH v2 16/35] mm: implement speculative handling in __handle_mm_fault().
+Date:   Fri, 28 Jan 2022 05:09:47 -0800
+Message-Id: <20220128131006.67712-17-michel@lespinasse.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220128131006.67712-1-michel@lespinasse.org>
 References: <20220128131006.67712-1-michel@lespinasse.org>
@@ -70,149 +67,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the code that initializes vmf->pte and vmf->orig_pte from
-handle_pte_fault() to its single call site in __handle_mm_fault().
-
-This ensures vmf->pte is now initialized together with the higher levels
-of the page table hierarchy. This also prepares for speculative page fault
-handling, where the entire page table walk (higher levels down to ptes)
-needs special care in the speculative case.
+The speculative path calls speculative_page_walk_begin() before walking
+the page table tree to prevent page table reclamation. The logic is
+otherwise similar to the non-speculative path, but with additional
+restrictions: in the speculative path, we do not handle huge pages or
+wiring new pages tables.
 
 Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
 ---
- mm/memory.c | 98 ++++++++++++++++++++++++++---------------------------
- 1 file changed, 49 insertions(+), 49 deletions(-)
+ include/linux/mm.h |  6 ++++
+ mm/memory.c        | 77 ++++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 81 insertions(+), 2 deletions(-)
 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6f7712179503..2e2122bd3da3 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -483,6 +483,10 @@ struct vm_fault {
+ 	};
+ 	enum fault_flag flags;		/* FAULT_FLAG_xxx flags
+ 					 * XXX: should really be 'const' */
++#ifdef CONFIG_SPECULATIVE_PAGE_FAULT
++	unsigned long seq;
++	pmd_t orig_pmd;
++#endif
+ 	pmd_t *pmd;			/* Pointer to pmd entry matching
+ 					 * the 'address' */
+ 	pud_t *pud;			/* Pointer to pud entry matching
+@@ -490,9 +494,11 @@ struct vm_fault {
+ 					 */
+ 	union {
+ 		pte_t orig_pte;		/* Value of PTE at the time of fault */
++#ifndef CONFIG_SPECULATIVE_PAGE_FAULT
+ 		pmd_t orig_pmd;		/* Value of PMD at the time of fault,
+ 					 * used by PMD fault only.
+ 					 */
++#endif
+ 	};
+ 
+ 	struct page *cow_page;		/* Page handler may use for COW fault */
 diff --git a/mm/memory.c b/mm/memory.c
-index 663952d14bad..37a4b92bd4bf 100644
+index 37a4b92bd4bf..d0db10bd5bee 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -3769,7 +3769,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	if (pte_alloc(vma->vm_mm, vmf->pmd))
- 		return VM_FAULT_OOM;
- 
--	/* See comment in handle_pte_fault() */
-+	/* See comment in __handle_mm_fault() */
- 	if (unlikely(pmd_trans_unstable(vmf->pmd)))
- 		return 0;
- 
-@@ -4062,7 +4062,7 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
- 			return VM_FAULT_OOM;
- 	}
- 
--	/* See comment in handle_pte_fault() */
-+	/* See comment in __handle_mm_fault() */
- 	if (pmd_devmap_trans_unstable(vmf->pmd))
- 		return 0;
- 
-@@ -4527,53 +4527,6 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+@@ -4581,7 +4581,7 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+  * return value.  See filemap_fault() and __folio_lock_or_retry().
+  */
+ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+-		unsigned long address, unsigned int flags)
++		unsigned long address, unsigned int flags, unsigned long seq)
  {
- 	pte_t entry;
+ 	struct vm_fault vmf = {
+ 		.vma = vma,
+@@ -4596,6 +4596,79 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 	p4d_t *p4d;
+ 	vm_fault_t ret;
  
--	if (unlikely(pmd_none(*vmf->pmd))) {
--		/*
--		 * Leave __pte_alloc() until later: because vm_ops->fault may
--		 * want to allocate huge page, and if we expose page table
--		 * for an instant, it will be difficult to retract from
--		 * concurrent faults and from rmap lookups.
--		 */
--		vmf->pte = NULL;
--	} else {
--		/*
--		 * If a huge pmd materialized under us just retry later.  Use
--		 * pmd_trans_unstable() via pmd_devmap_trans_unstable() instead
--		 * of pmd_trans_huge() to ensure the pmd didn't become
--		 * pmd_trans_huge under us and then back to pmd_none, as a
--		 * result of MADV_DONTNEED running immediately after a huge pmd
--		 * fault in a different thread of this mm, in turn leading to a
--		 * misleading pmd_trans_huge() retval. All we have to ensure is
--		 * that it is a regular pmd that we can walk with
--		 * pte_offset_map() and we can do that through an atomic read
--		 * in C, which is what pmd_trans_unstable() provides.
--		 */
--		if (pmd_devmap_trans_unstable(vmf->pmd))
--			return 0;
--		/*
--		 * A regular pmd is established and it can't morph into a huge
--		 * pmd from under us anymore at this point because we hold the
--		 * mmap_lock read mode and khugepaged takes it in write mode.
--		 * So now it's safe to run pte_offset_map().
--		 */
--		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
--		vmf->orig_pte = *vmf->pte;
--
--		/*
--		 * some architectures can have larger ptes than wordsize,
--		 * e.g.ppc44x-defconfig has CONFIG_PTE_64BIT=y and
--		 * CONFIG_32BIT=y, so READ_ONCE cannot guarantee atomic
--		 * accesses.  The code below just needs a consistent view
--		 * for the ifs and we later double check anyway with the
--		 * ptl lock held. So here a barrier will do.
--		 */
--		barrier();
--		if (pte_none(vmf->orig_pte)) {
--			pte_unmap(vmf->pte);
--			vmf->pte = NULL;
--		}
--	}
--
- 	if (!vmf->pte) {
- 		if (vma_is_anonymous(vmf->vma))
- 			return do_anonymous_page(vmf);
-@@ -4713,6 +4666,53 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
- 		}
- 	}
- 
-+	if (unlikely(pmd_none(*vmf.pmd))) {
-+		/*
-+		 * Leave __pte_alloc() until later: because vm_ops->fault may
-+		 * want to allocate huge page, and if we expose page table
-+		 * for an instant, it will be difficult to retract from
-+		 * concurrent faults and from rmap lookups.
-+		 */
-+		vmf.pte = NULL;
-+	} else {
-+		/*
-+		 * If a huge pmd materialized under us just retry later.  Use
-+		 * pmd_trans_unstable() via pmd_devmap_trans_unstable() instead
-+		 * of pmd_trans_huge() to ensure the pmd didn't become
-+		 * pmd_trans_huge under us and then back to pmd_none, as a
-+		 * result of MADV_DONTNEED running immediately after a huge pmd
-+		 * fault in a different thread of this mm, in turn leading to a
-+		 * misleading pmd_trans_huge() retval. All we have to ensure is
-+		 * that it is a regular pmd that we can walk with
-+		 * pte_offset_map() and we can do that through an atomic read
-+		 * in C, which is what pmd_trans_unstable() provides.
-+		 */
-+		if (pmd_devmap_trans_unstable(vmf.pmd))
-+			return 0;
-+		/*
-+		 * A regular pmd is established and it can't morph into a huge
-+		 * pmd from under us anymore at this point because we hold the
-+		 * mmap_lock read mode and khugepaged takes it in write mode.
-+		 * So now it's safe to run pte_offset_map().
-+		 */
-+		vmf.pte = pte_offset_map(vmf.pmd, vmf.address);
-+		vmf.orig_pte = *vmf.pte;
++#ifdef CONFIG_SPECULATIVE_PAGE_FAULT
++	if (flags & FAULT_FLAG_SPECULATIVE) {
++		pgd_t pgdval;
++		p4d_t p4dval;
++		pud_t pudval;
++
++		vmf.seq = seq;
++
++		speculative_page_walk_begin();
++		pgd = pgd_offset(mm, address);
++		pgdval = READ_ONCE(*pgd);
++		if (pgd_none(pgdval) || unlikely(pgd_bad(pgdval)))
++			goto spf_fail;
++
++		p4d = p4d_offset(pgd, address);
++		p4dval = READ_ONCE(*p4d);
++		if (p4d_none(p4dval) || unlikely(p4d_bad(p4dval)))
++			goto spf_fail;
++
++		vmf.pud = pud_offset(p4d, address);
++		pudval = READ_ONCE(*vmf.pud);
++		if (pud_none(pudval) || unlikely(pud_bad(pudval)) ||
++		    unlikely(pud_trans_huge(pudval)) ||
++		    unlikely(pud_devmap(pudval)))
++			goto spf_fail;
++
++		vmf.pmd = pmd_offset(vmf.pud, address);
++		vmf.orig_pmd = READ_ONCE(*vmf.pmd);
 +
 +		/*
-+		 * some architectures can have larger ptes than wordsize,
-+		 * e.g.ppc44x-defconfig has CONFIG_PTE_64BIT=y and
-+		 * CONFIG_32BIT=y, so READ_ONCE cannot guarantee atomic
-+		 * accesses.  The code below just needs a consistent view
-+		 * for the ifs and we later double check anyway with the
-+		 * ptl lock held. So here a barrier will do.
++		 * pmd_none could mean that a hugepage collapse is in
++		 * progress in our back as collapse_huge_page() mark
++		 * it before invalidating the pte (which is done once
++		 * the IPI is catched by all CPU and we have interrupt
++		 * disabled).  For this reason we cannot handle THP in
++		 * a speculative way since we can't safely identify an
++		 * in progress collapse operation done in our back on
++		 * that PMD.
 +		 */
++		if (unlikely(pmd_none(vmf.orig_pmd) ||
++			     is_swap_pmd(vmf.orig_pmd) ||
++			     pmd_trans_huge(vmf.orig_pmd) ||
++			     pmd_devmap(vmf.orig_pmd)))
++			goto spf_fail;
++
++		/*
++		 * The above does not allocate/instantiate page-tables because
++		 * doing so would lead to the possibility of instantiating
++		 * page-tables after free_pgtables() -- and consequently
++		 * leaking them.
++		 *
++		 * The result is that we take at least one non-speculative
++		 * fault per PMD in order to instantiate it.
++		 */
++
++		vmf.pte = pte_offset_map(vmf.pmd, address);
++		vmf.orig_pte = READ_ONCE(*vmf.pte);
 +		barrier();
 +		if (pte_none(vmf.orig_pte)) {
 +			pte_unmap(vmf.pte);
 +			vmf.pte = NULL;
 +		}
-+	}
 +
- 	return handle_pte_fault(&vmf);
- }
++		speculative_page_walk_end();
++
++		return handle_pte_fault(&vmf);
++
++	spf_fail:
++		speculative_page_walk_end();
++		return VM_FAULT_RETRY;
++	}
++#endif	/* CONFIG_SPECULATIVE_PAGE_FAULT */
++
+ 	pgd = pgd_offset(mm, address);
+ 	p4d = p4d_alloc(mm, pgd, address);
+ 	if (!p4d)
+@@ -4815,7 +4888,7 @@ vm_fault_t do_handle_mm_fault(struct vm_area_struct *vma,
+ 	if (unlikely(is_vm_hugetlb_page(vma)))
+ 		ret = hugetlb_fault(vma->vm_mm, vma, address, flags);
+ 	else
+-		ret = __handle_mm_fault(vma, address, flags);
++		ret = __handle_mm_fault(vma, address, flags, seq);
  
+ 	if (flags & FAULT_FLAG_USER) {
+ 		mem_cgroup_exit_user_fault();
 -- 
 2.20.1
 

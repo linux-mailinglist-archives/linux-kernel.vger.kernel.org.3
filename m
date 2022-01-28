@@ -2,190 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC9F49F3C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A584F49F3C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242672AbiA1GhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:37:20 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:56702 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238164AbiA1GhT (ORCPT
+        id S1346550AbiA1GiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:38:01 -0500
+Received: from esa.hc3962-90.iphmx.com ([216.71.142.165]:25489 "EHLO
+        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234373AbiA1GiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:37:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643351839; x=1674887839;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=f0aF2YEl6Gt/wfhd0sYDp8dpaOwGv98M9EizSp2BmQQ=;
-  b=YA+ZG7jr2Oyw4Dq89ooxf1HWAGss85JuH9LQfUdLc4W2MKOUH4yGiLpe
-   /d0siUBosyx1S1nRuRNGbc3JW7JfTnvbIg82eugs2zQ6d2GGTHw7PdgZk
-   SsO4h3BCyvvQfsc0Vh7XlYFOmrTDIGLq2/MjdO2J/dw19tSqmnvVkvnvv
-   gLUjsunlHzD/tJJaNHqGJc/0GRn42Cg16iZBoNoVJ4jNTn8MpoVyU6C3r
-   H6oolQruaHayLRdOsriL8wkL6+MHfpOKMeAgy2JmERh3GoXo7kXgwi6Ky
-   n57Fnt0cZ3S+Ewy6i7mBuP2VZ3c/PSW1oiKYCkyrMexHGmSIzDtvng92K
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,322,1635177600"; 
-   d="scan'208";a="191604890"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2022 14:37:18 +0800
-IronPort-SDR: 3nBG/efeQOInlrGmte0/CdAMu019dhG+FssHcxM3m1JGYRz9MhRP/BVXzVId1lcvkf1/dVS0ci
- 9WlVe9WdfpKu2/f0x8Sz16MvNrm5AxBFa2WKLy37yqEVL4fTAV8Hb2hAICYk9EEbsZGpTSqeDx
- 5rkh6EUzYKiOc5bVo3xfDLRCiiqLAWgGFzS617sdFdH+upy0KOx36SR1O1//8mgHVR8K+5V3iu
- a+H4y72ojvqpSnnY+R/+W7YP5TbjcvFFhe924roYliqYmd5oWD4ECOhwwJBY+Hc1cskwSvF9Xy
- 5mnZR1OdPtTd6c1H1rdnFzbI
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 22:09:22 -0800
-IronPort-SDR: bwVTF43FIm2Cp1S4rMtm2ymCzeQNbnudFSqy85mEgGyFfGFDmPL33nBc/uFRki4LPsNHbGbeS4
- em5zAplTnyxrAkBrv9uBVlyMgOh0xKWY8+aU/3Rg1RvFU3iSdIqZf2ypJNUu/DpOdmVq+S5ovy
- JgJwroIbIbUpgOmJe7znVVwvDw25AAc7cFmjhbIxCw/e3jqKmqLbiH2d3cLW8JlONrbCXYQFMa
- gwWgcgn+LFCr+Fr+D4g7UPnlARkOB4YUPMSmi0hLgGm419LeGzZJwR7hbbzwiR9nc8Figryh19
- B6w=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 22:37:18 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JlSRy0Lvzz1SVp1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:37:18 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643351836; x=1645943837; bh=f0aF2YEl6Gt/wfhd0sYDp8dpaOwGv98M9Ei
-        zSp2BmQQ=; b=XEi1HUevJFY1ebQbnLto/b104r8EQiiVKHCfIY19aA33c+unTOv
-        WjWYNoPYoUu8Qj+2mlsCzEaNbKP7bcz23LCZ3eN/HTAUdGK7Rs9Z8Hh+krOaZ0/U
-        L5y834TR/uGVlT7Wqb8Qk9l6N7xNd/5Fn2zK0yivroQUAqmo2GlvNymFyv3vnOYf
-        A39qH502asHYRioyeQOOQLagcmhTOAEGmiapUlqzc98SRbyc36IX6bc1DgeG6yl7
-        B5vXLeUEFPLdbE+Dtq/Lto24/MsDIgW1cPKTyo79R04n8/GGQbGaxw4yxAPnip+a
-        lOgaFlPpAI0y7qoOEGOW630qBTB8Tiwqfbw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nCYpzNniNCmL for <linux-kernel@vger.kernel.org>;
-        Thu, 27 Jan 2022 22:37:16 -0800 (PST)
-Received: from [10.225.163.58] (unknown [10.225.163.58])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JlSRt5W1bz1RvlN;
-        Thu, 27 Jan 2022 22:37:14 -0800 (PST)
-Message-ID: <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
-Date:   Fri, 28 Jan 2022 15:37:13 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 00/16] scsi: libsas and users: Factor out LLDD TMF code
+        Fri, 28 Jan 2022 01:38:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1643351880; x=1643956680;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=cGgcmR6o734dU8J2C3MPlL06MtOdDGu94FQQ3WkPFsM=;
+  b=FnYds+qGuHOiz8L8WpxvMZ19TpDwVhoF51JHMSsfKL/A+GOsNu7/YUSw
+   o7ERPSkHvL4t/4eQTxoYY7GVQKENXeW995CIAiWIb1Ub6FPZ3sPCw8ILZ
+   CI7oXaZFwKEvsOppqYq63PfsWHatxs9BHGfWLJ3dkfbLsZsn87dza/c5g
+   Q=;
+Received: from mail-dm6nam12lp2173.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.173])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:37:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q0I4YI5HCGStIyHvmdpiWBhFWQ9Mncv0i2ntDdVNzqoNA9vlFiQMRJYc5AfoW0dEk6d5bgLirbrQDMEBE/dFlw/34XwL+k9BsMbXuCTo4oND89HmT6PnqZn1ZXpCxl09MVwUN0ofe4jyiqhZeVFhOo70fePZpDLQouUrwC9NDQJPKakZ/cOOiGX8Hog2DtDTU75495J0hVzS32zUdVt32n1UscgSYuNU3SlgGfqeoI1O+DObzECuN6LPKfPS84ImFc2IP6hidvSdmBi1nKI10zsrqIn1HG326YY6xVnQGwG/zM01TBq13rhCCF7tWBQ7zEJ0ay0lJJoKKxLyOKbk5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cGgcmR6o734dU8J2C3MPlL06MtOdDGu94FQQ3WkPFsM=;
+ b=V80Al9u3kJ2kS+SIiR8ZAK+Rv670wAnTpiJIaMkuHHgkU+xphwfGa3eu3kMLTVzoqDbK5zp8KSLcLNUghpwFgS7oZvIffEG5kr7X+MOGkiWhBSil5ge9+zk244wrUzcNnUkksRf6w5ipbD+SCuhs+nXU203XcL+0Uvl2O73GMybXLIG5VHCC4cVcK9ykCtixTgExSQXHzEDoQhBNPXAxSPmSau69tSOObV3V3lGoORTklaDV8GkXCXSeO77AgbLXqRwdh95nxcVg3S9uMd/MN2gAJNLKiMPuOebz/FeuBEWK43+vhYNusBIrLy20EPf8DAAGwrssg7tX/RqSvIjd6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from SJ0PR02MB8449.namprd02.prod.outlook.com (2603:10b6:a03:3f5::8)
+ by DM6PR02MB6795.namprd02.prod.outlook.com (2603:10b6:5:21b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Fri, 28 Jan
+ 2022 06:37:55 +0000
+Received: from SJ0PR02MB8449.namprd02.prod.outlook.com
+ ([fe80::481d:88c5:eab3:21c7]) by SJ0PR02MB8449.namprd02.prod.outlook.com
+ ([fe80::481d:88c5:eab3:21c7%5]) with mapi id 15.20.4909.019; Fri, 28 Jan 2022
+ 06:37:54 +0000
+From:   "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
+To:     Michael Walle <michael@walle.cc>,
+        "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
+CC:     "dianders@chromium.org" <dianders@chromium.org>,
+        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stummala@codeaurora.org" <stummala@codeaurora.org>,
+        "vbadigan@codeaurora.org" <vbadigan@codeaurora.org>,
+        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
+        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
+        "sartgarg@codeaurora.org" <sartgarg@codeaurora.org>
+Subject: RE: [PATCH V4] mtd: spi-nor: winbond: Add support for winbond chip
+Thread-Topic: [PATCH V4] mtd: spi-nor: winbond: Add support for winbond chip
+Thread-Index: AQHYDePakDL0XfUSukOExyL3iAAZlaxrtgUAgAgw3CCAAASCgIAEG+HA
+Date:   Fri, 28 Jan 2022 06:37:54 +0000
+Message-ID: <SJ0PR02MB844910CF4F8034D2FD27E882CD229@SJ0PR02MB8449.namprd02.prod.outlook.com>
+References: <1642672491-30067-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ <db1d17bbdcf7af2b8b58f6e7fa82062c@walle.cc>
+ <SJ0PR02MB8449372A38A34EC5FAC16765CD5F9@SJ0PR02MB8449.namprd02.prod.outlook.com>
+ <ce590c8dc41c64bc56d9c241f4c7dd9a@walle.cc>
+In-Reply-To: <ce590c8dc41c64bc56d9c241f4c7dd9a@walle.cc>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, artur.paszkiewicz@intel.com,
-        jinpu.wang@cloud.ionos.com, chenxiang66@hisilicon.com,
-        Ajish.Koshy@microchip.com
-Cc:     yanaijie@huawei.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, liuqi115@huawei.com, Viswas.G@microchip.com
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
- <1893d9ef-042b-af3b-74ea-dd4d0210c493@opensource.wdc.com>
- <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: de90d52d-44b2-45ec-a810-08d9e228b720
+x-ms-traffictypediagnostic: DM6PR02MB6795:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR02MB679517938EC7A376A87B6241B1229@DM6PR02MB6795.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DxbYcKfzGZkznYnIsPLH/4IecEmIFgVvW9AkHh9mnf9i6VaXLY9h7KwC9V8SWt+Uhqjk7AlFZEFNK/GvKiGVMylhHZdeG8FBVb60BVx5+z4pldyBOnkQnbRTLpk2BzWoGBrovNGj596kDqK3zQja8//FygK+udDr1Pu57nSdmIl9l9JF51sHS+VpOO0GOr15AyJsdlyPQppIngcMl4buraT0qNDLp65lq3JzbFModNYU87yCRceqThqfczU/pv09vNXzqlmoNWCimbuWv4sVFfMWZGCinv/WGx4xX4APmGqjsCDuFQV4X+gn50cHJEipCKTKkPZq0sN7JTgdtrKQO+lCdUwh47z9liei281O1msQoYLlm4gcXTHfPbOR2pqxdVjzoLOxrsWKjaggDZQAGqQhWxYrN6lQDEFaYSwC3XL96uA3qWh2kcro5xmW64f9RxVsb0RfF3gpOJ36XvqbaLR7hnNrvESFWrss/AUrcGYCHx+cPvRrHX8M5KHInYkqZyAOTZcxgtpj0unh3Jx5aQGj813tIT/0ez9Wz1q69sCekdbyUN4Lo6HBN972C0uC+e6YHbJW8lwDSh0kVzEbtENiZk+kJImCOr5C7bVXMgZpd31Xa9jYPuGYGc5vxTQmXAedr6U6giLTOgrpYU086xh+nP7ED4WerhR71HFIDrBcL3MN7tilkoCPy0e+RBwUwGqAQ5tpdJcVttk1QAYv45xm1ctO2cbGTLjDz9a3VAvZq3Doh9GXggQx1aMjgA+YhT9XWOzWTDEgGi8YYO9CMVzc/K8vqb+NX7cBHlTCKxs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB8449.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(186003)(26005)(38070700005)(33656002)(55016003)(122000001)(7696005)(6506007)(2906002)(53546011)(71200400001)(66446008)(66476007)(316002)(64756008)(66946007)(4326008)(66556008)(52536014)(110136005)(508600001)(54906003)(8676002)(7416002)(966005)(76116006)(83380400001)(86362001)(5660300002)(9686003)(8936002)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5UoMauyig934xQmiuEa5YqFz0I2Mfp5Cf/lTsLYAh6pj+H1+ABcvlLW2XrAK?=
+ =?us-ascii?Q?adTB5+i5L/Cc0gz8G8EXp6h+qZMJQ7EDdOok70knxPM+nY33Hj0Z+ZU03zqc?=
+ =?us-ascii?Q?NWXLewlOb8E0js2pXRffEn15O4dfyrKjN0G38FzmPDoH/L0Ou8QS383wKuqL?=
+ =?us-ascii?Q?GlyNG6mVELh7NvwP7fs5XDkyMAsNI27XB1uueC8CIh3dIVWQqYPxm2pGeeVD?=
+ =?us-ascii?Q?8KscohXKuQRJ+G9GpkxiccsB4CpqoxW72OS4DzbNR0MyOvhNEsCD68HpHMPE?=
+ =?us-ascii?Q?71pePfjPF17eoVNYeqdJEKRFkIWWKxecgEJGW+fgMp1hYjmQkU8S9E0YK9uQ?=
+ =?us-ascii?Q?6O3amzBf/DuGy+pMt41v7tS8b5rPB+FsZ/vj9RrWrpdrWmFVb9Cc7CRQ4S90?=
+ =?us-ascii?Q?opoJ/cM/SifeED4pkzr7FmnR1NIxreJVJ/fskuEXmXC/oCrBHQJKT9vosz7g?=
+ =?us-ascii?Q?n0HuLnqc9d+I5CM9akra/oWK2oKlndQoGYx/p/Ek5cgIdXQHRZnBLYcnH/77?=
+ =?us-ascii?Q?947l/x1I4xLP2RL38kmBiAmMiJC1N4GySTP69bDEybRKFXxhIJcJ/afi6MhY?=
+ =?us-ascii?Q?PjWTLf88zGVp/DJ3ymS5k7psti/jWGWQgAX5+T4xpwraykVKZCvU6joPrdom?=
+ =?us-ascii?Q?w5JVgkzl20PmF3Znawm4jHkgFcddO8nHPhNUaVShW041ixyEl2n4tYcWBLXu?=
+ =?us-ascii?Q?W7DSTeAFtrPKj0mJ1sRXXz/qbBs5bcuCulvifFx1cIkIeYkAv2S72Mx9MceV?=
+ =?us-ascii?Q?ICqAQ/M0+iMWavXZtNg3UhyrYjjYNpKEIPkFP9M0PjKRN9fe5D7wCyGeFV7+?=
+ =?us-ascii?Q?tDohs2MsRggLNOuLhkO6zMGFCAz5tYNpZX12wtRvTGwY7re8Wc+0CKMB0Xkt?=
+ =?us-ascii?Q?GX6YM1pMKdz8wigWappL6NNvlz0JCFq6S4BH7O/901JNem5b7F6Tx23opamq?=
+ =?us-ascii?Q?7Ff7phZkSZstR0F0DIm9D6P5E1Oi1/F4yX0DpEl8LnwhEYcmyiibfSG3kDvl?=
+ =?us-ascii?Q?wkIYpSBYJbiXiEmKOn+2DnClM71Q82V+mIepWboHCuUTBvoOaN3xzWS6cTsX?=
+ =?us-ascii?Q?UUmIuTlPLTeHNjbl7MccAfYJLqlR9NH7NTey+HkHQ4gZQf/7uoBfa+njIMbi?=
+ =?us-ascii?Q?FZktu6F3DRrdQmhjnti3ZwLd7OSchlV68SGCrc+l+p1yR/ZkY0+kFbvL8ZN5?=
+ =?us-ascii?Q?ny2nJL0IzOHv2z50davQKFUeKtKIKEkosqzdUwN+pAD9VuPKL/RhWa9upguf?=
+ =?us-ascii?Q?RbbOE+v90btIpaMcm14mv3oM30Z/RPyL+zPPNBciQ3me8asK+lOCBnK+tNEo?=
+ =?us-ascii?Q?UUdClPBeRtoVpZmNaZ+OwzAOmx2lwvD3Ojdf50buV1VMt5hG19XF+N+0nNh3?=
+ =?us-ascii?Q?Ovd6e9FF+mP5NOgXw0vWeWCEYYGT4KeKOWlaMkr9L1qYEpFEHRYn8B/8+iGk?=
+ =?us-ascii?Q?6v94JoWhk4wZwKm3PM5QBrwMCxtoHa6gnh4HRd0XqkU/0DTwtMccTDhvnXBc?=
+ =?us-ascii?Q?UClXmXuv62P4XbMywakR8oQubxBpYbjpDSG25jMiCYRu+SrsNqK5F8XhGNIn?=
+ =?us-ascii?Q?u86oUbFETuHB3HYNg0gnbfpbu/qgBgZZCwCMIslBMXJQr0KSexGaVFavA+HA?=
+ =?us-ascii?Q?UUsJ/iiV5JAQLqcOAR3OPcZZuJFh1sNSz66RfsBVYpHUQLOxpKqgMVIQmhUw?=
+ =?us-ascii?Q?9CUvwA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB8449.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: de90d52d-44b2-45ec-a810-08d9e228b720
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2022 06:37:54.7326
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Cp4npxPBAoZdoyrkUI9x0Ztp2/fnXRPzv15KMGzIEC0IugmPCGQtzg37r8+G/d2+UFotqUMiUOYbuazTuj+pEsMFF5GqJylUCrMDbAJfH9k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6795
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 19:17, John Garry wrote:
-> On 27/01/2022 06:37, Damien Le Moal wrote:
-> 
-> Hi Damien,
-> 
->> I did some light testing of this series (boot + some fio runs) and
->> everything looks good using my "ATTO Technology, Inc. ExpressSAS 12Gb/s
->> SAS/SATA HBA (rev 06)" HBA (x86_64 host).
-> 
-> Yeah, unfortunately these steps prob won't exercise much of the code 
-> changes here since I figure error handling would not kick in.
-> 
-> However using this same adapter type on my arm64 system has error 
-> handling kick in almost straight away - and the handling looks sane. A 
-> silver lining, I suppose ..
+HI,
 
-I ran some more tests. In particular, I ran libzbc compliance tests on a
-20TB SMR drives. All tests pass with 5.17-rc1, but after applying your
-series, I see command timeout that take forever to recover from, with
-the drive revalidation failing after that.
+Sure thanks for the info .. will add the change and test it.
 
-[  385.102073] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
-[  385.108026] sas: sas_scsi_find_task: aborting task 0x000000007068ed73
-[  405.561099] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
-timeout.
-[  405.568236] sas: sas_scsi_find_task: task 0x000000007068ed73 is aborted
-[  405.574930] sas: sas_eh_handle_sas_errors: task 0x000000007068ed73 is
-aborted
-[  411.192602] ata21.00: qc timeout (cmd 0xec)
-[  431.672122] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
-timeout.
-[  431.679282] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-[  431.685544] ata21.00: revalidation failed (errno=-5)
-[  441.911948] ata21.00: qc timeout (cmd 0xec)
-[  462.391545] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
-timeout.
-[  462.398696] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-[  462.404992] ata21.00: revalidation failed (errno=-5)
-[  492.598769] ata21.00: qc timeout (cmd 0xec)
-...
+Thanks,
+Sajida
+-----Original Message-----
+From: Michael Walle <michael@walle.cc>=20
+Sent: Tuesday, January 25, 2022 9:23 PM
+To: Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@quicinc.com>
+Cc: dianders@chromium.org; tudor.ambarus@microchip.com; p.yadav@ti.com; miq=
+uel.raynal@bootlin.com; richard@nod.at; vigneshr@ti.com; linux-mtd@lists.in=
+fradead.org; linux-kernel@vger.kernel.org; stummala@codeaurora.org; vbadiga=
+n@codeaurora.org; Ram Prakash Gupta (QUIC) <quic_rampraka@quicinc.com>; Pra=
+deep Pragallapati (QUIC) <quic_pragalla@quicinc.com>; sartgarg@codeaurora.o=
+rg
+Subject: Re: [PATCH V4] mtd: spi-nor: winbond: Add support for winbond chip
 
-So there is a problem. Need to dig into this. I see this issue only with
-libzbc passthrough tests. fio runs with libaio are fine.
+Hi,
 
->> And sparse/make C=1 complains about:
->>
->> drivers/scsi/libsas/sas_port.c:77:13: warning: context imbalance in
->> 'sas_form_port' - different lock contexts for basic block
-> 
-> I think it's talking about the port->phy_list_lock usage - it prob 
-> doesn't like segments where we fall out a loop with the lock held (which 
-> was grabbed in the loop). Anyway it looks ok. Maybe we can improve this.
-> 
->>
->> But I have not checked if it is something that your series touch.
->>
->> And there is a ton of complaints about __le32 use in the pm80xx code...
->> I can try to have a look at these if you want, on top of your series.
-> 
-> I really need to get make C=1 working for me - it segfaults in any env I 
-> have :(
+Am 2022-01-25 16:36, schrieb Sajida Bhanu (Temp) (QUIC):
+> Am 2022-01-20 10:54, schrieb Shaik Sajida Bhanu:
+>> Add support for winbond W25Q512NW-IM chip.
+>>=20
+>> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+>> Reviewed-by: Doug Anderson <dianders@chromium.org>
+>> ---
+>>=20
+>> Changes since V1:
+>> 	- Added space before name of the flash part as suggested by Doug.
+>>=20
+>> Changes since V2:
+>> 	- Updated chip name as w25q512nwm as suggested by Doug.
+>>=20
+>> Changes since V3:
+>> 	- Updated flash_info flags passing according to below patch
+>=20
+> Thanks!
+>=20
+> Please note, that you also have to supply a SFDP dump, see [1].
+>=20
+>> https://lore.kernel.org/all/20211207140254.87681-7-tudor.ambarus@microch=
+ip.com/
+>> 	 As suggested by Tudor Ambarus.
+>> ---
+>>  drivers/mtd/spi-nor/winbond.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>=20
+>> diff --git a/drivers/mtd/spi-nor/winbond.c=20
+>> b/drivers/mtd/spi-nor/winbond.c index 675f32c..c4be225 100644
+>> --- a/drivers/mtd/spi-nor/winbond.c
+>> +++ b/drivers/mtd/spi-nor/winbond.c
+>> @@ -124,6 +124,10 @@ static const struct flash_info winbond_parts[] =3D=
+=20
+>> {
+>>  	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024)
+>>  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ |
+>>  			      SPI_NOR_DUAL_READ) },
+>> +	{ "w25q512nwm", INFO(0xef8020, 0, 64 * 1024, 1024)
+>> +		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
+>> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+>> +			      SPI_NOR_QUAD_READ) },
+>=20
+> Could you try adding OTP_INFO(256, 3, 0x1000, 0x1000), this should=20
+> enable OTP support. Could you please test this using the=20
+> flash_otp_{dump,info,erase,write} tools and add that line?
+>=20
+> I've checked ID duplications, because there is the w25qNNjw series.
+> There doesn't seem to exist a w25q512jw, so we are safe for now. There=20
+> is only a w25q512jv and it has the id 0xef4020.
+>=20
+> fun fact.. the w25q512nwm describes the OTP lock bit for the first OTP=20
+> region (the one which is not documented and I've found out that its=20
+> used for storing the SFDP) as SFDP lock bit. See ch "7.1.1 Security=20
+> Register Lock Bits (LB3, LB2, LB1, SFDP Lock bit)". So we finally have=20
+> evidence :)
+>=20
+> -michael
+>=20
+> Hi,
+>=20
+> Thanks for the review..
+>=20
+> Can you please share the documentation about OTP_INFO=20
+> settings(Advantages etc..) if any.
 
-I now have a 12 patch series that fixes *all* the sparse warnings. Some
-of the fixes were trivial, but most of them are simply hard bugs with
-the handling of le32 struct field values. There is no way that this
-driver is working as-is on big-endian machines. Some calculations are
-actually done using cpu_to_le32() values !
+I would like to see support for OTP right from the start, and because you h=
+ave that specific flash chip, you are in the position to test it :)
 
-But even though these fixes should have essentially no effect on
-little-endian x86_64, with my series applied, I see the same command
-timeout problem as with your libsas update, and both series together
-result in the same timeout issue too.
+With this line (it should already be exact that line I provided, I checked =
+the datasheet), you just enable access to a seperate OTP memory inside that=
+ flash. The datasheet calls them Security Registers, you can have a look th=
+ere.
 
-So it looks like "fixing" the code actually is revealing some other bug
-that was previously hidden... This will take some time to debug.
+> Can you please share more info on
+> flash_otp_{dump,info,erase,write} tools.
 
-Another problem I noticed: doing "rmmod pm80xx; modprobe pm80xx" result
-in a failure of device scans. I get loops of "link is slow to respond
-->reset". For the above tests, I had to reboot every time I changed the
-driver module code. Another thing to look at.
+What do you mean? You can find these tools in the mtd-utils package or at h=
+ttp://www.linux-mtd.infradead.org/ (couldn't check, website seems to be dow=
+n for me at least).
 
-Will try to spend some more time on this next week.
+You should make sure to have the latest version, which has a bugfix for the=
+ flash_otp_dump and only newer versions have the flash_otp_erase tool.
 
-Cheers.
+Examples:
 
+# flash_otp_dump -u /dev/mtd0 0
+OTP user data for /dev/mtd0
+0x0000: 56 01 55 53 44 30 47 30 30 30 32 00 00 00 00 00
+0x0010: 00 00 a0 a5 5c 6b 62 7b ff ff ff ff ff ff ff ff
+0x0020: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+0x0030: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+0x0040: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff [..]
 
-> 
-> Thanks,
-> John
+# flash_otp_info -u /dev/mtd0
+Number of OTP user blocks on /dev/mtd0: 3 block  0:  offset =3D 0x0000  siz=
+e =3D 256 bytes  [locked] block  1:  offset =3D 0x0100  size =3D 256 bytes =
+ [unlocked] block  2:  offset =3D 0x0200  size =3D 256 bytes  [unlocked]
 
+# echo -n hello world | flash_otp_write -u /dev/mtd0 0x100 Writing OTP user=
+ data on /dev/mtd0 at offset 0x100 Wrote 11 bytes of OTP user data
 
--- 
-Damien Le Moal
-Western Digital Research
+# flash_otp_dump -u /dev/mtd0 0x100
+OTP user data for /dev/mtd0
+0x0100: 68 65 6c 6c 6f 20 77 6f 72 6c 64 ff ff ff ff ff
+0x0110: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+0x0120: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff [..]
+
+# flash_otp_erase -u /dev/mtd0 0x100 0x200 # flash_otp_dump -u /dev/mtd0 0x=
+100 OTP user data for /dev/mtd0
+0x0100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+0x0110: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+0x0120: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff [..]
+
+For completeness, there is also flash_otp_lock, but that is not reversible =
+and you'd lock the OTP area forever.
+
+HTH,
+-michael

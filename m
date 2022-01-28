@@ -2,120 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3B849FD2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE95A49FD3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349717AbiA1Pzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:55:40 -0500
-Received: from mga12.intel.com ([192.55.52.136]:15366 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239060AbiA1Pzj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:55:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643385339; x=1674921339;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tMFh88oOv4njvacRP3WgZ4WpJIw1jYw9JQiDlZ3hgEY=;
-  b=m73U7x3uYQCJzg6/wVDocPETHi5kRlgF04I1sq1A0BECKz0gjIpzKFXD
-   3qGIlwp1IESpcu27v8ORo+adTx8/9Igmd7lnEuGnr7UgpFB67nk19pwHK
-   +zIPUP1wNlSi4jBLbJwvKYWwOhVwp7xMSi+PD582LMTpD/G4HeAD7kk8O
-   lZ1h3VXqxrD7w3H6RDRRWF751Ddl17j0gVmgIyZ8Esy0F/gNPqXcrZ2Dl
-   jd6yQIWifs1MbRs78yBjGeTe0/Kv7z5Y4+QcaNAkkr2CclGx+b9vj3gJv
-   n/UUtD94+fdIJFS0ecFDqUp4NkKXg4TmGzlBuydzP4UonrEV6R/t1pYra
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227121789"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="227121789"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 07:55:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="480777733"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jan 2022 07:55:37 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDTb6-000O3O-5O; Fri, 28 Jan 2022 15:55:36 +0000
-Date:   Fri, 28 Jan 2022 23:55:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:memperf_test_v1 7/7] memperf_test.c:undefined reference to
- `__udivdi3'
-Message-ID: <202201282324.f40yinlV-lkp@intel.com>
+        id S1349753AbiA1P5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:57:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43052 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349744AbiA1P5o (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 10:57:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51E9961EA8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAB5C340EE
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643385463;
+        bh=IQ8hvyw1pDAvDp94xvG8YbiEIf7ZBPJyDu22r8ISfVw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VNz1du+TBjld4PhPZ+jkdPNJiAVgrFEcCQMeV1IqW4tQxuagjbz750OUKZYNO9Wqe
+         5Ramldm2aALYNHOqEtVoUe/KzJ+9j2fGR2FHzVonemL+LT3wGtyfYuZ6CteNb1hqTF
+         OXI2GJLwBTYodJGgenkJ6c2FIYeid+gulDzFkbqEcdM9UXwjgYV+Aow9Dm0eumZinc
+         Ns4nKSiQ0vomivo5dR6fLv+zTujyFIhazzVts2vMEKKYc+krpOzL8M7yY5gLfh66s4
+         7w0URWeLM3EXoEIfmJupi3xQTR4hPuaX1NsYY+SJIt0fUn0KJJJHkR7/jetdjWLdEV
+         8j7gPnfuljTGg==
+Received: by mail-ej1-f45.google.com with SMTP id ka4so17346858ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:57:43 -0800 (PST)
+X-Gm-Message-State: AOAM533SKy2xg2m/6aX51KQZxlhCtxqoeephHpzy+i7kHG8uogpDhzq0
+        d6b8pzjiBlbx8wn43eKojQT6SchfJRB+tuLnGA==
+X-Google-Smtp-Source: ABdhPJyMCW3ZK9Ri660QNZ9AOmvNSPBp9tIK7lI4yHvpk7o6D/w1vWVHsyn828J7qAojrYyUdg5EKyBrHHxW5i1lJ8U=
+X-Received: by 2002:a17:907:3ea8:: with SMTP id hs40mr7443689ejc.48.1643385461799;
+ Fri, 28 Jan 2022 07:57:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220127143623.123025-1-angelogioacchino.delregno@collabora.com>
+ <CAAOTY__yO6Cq8qt8RSh9AX68mJEv+wWvuhY0_p-PTJ=eJD_7aA@mail.gmail.com>
+ <b8911eab-1419-60ad-ef07-25a5de365a52@collabora.com> <ddb05e08-f81a-11f9-8091-9af0c57e687d@collabora.com>
+In-Reply-To: <ddb05e08-f81a-11f9-8091-9af0c57e687d@collabora.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Fri, 28 Jan 2022 23:57:30 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_8ZPmUEizdVEOWb26FV+3qpndk=t1N2vYyFCd4K2RM0Nw@mail.gmail.com>
+Message-ID: <CAAOTY_8ZPmUEizdVEOWb26FV+3qpndk=t1N2vYyFCd4K2RM0Nw@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/mediatek: mtk_dsi: Avoid EPROBE_DEFER loop with
+ external bridge
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        andrzej.hajda@intel.com,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git memperf_test_v1
-head:   ad86979ac717673ec1647f1148a5c7cd214a1f39
-commit: ad86979ac717673ec1647f1148a5c7cd214a1f39 [7/7] lib: Add memperf test
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220128/202201282324.f40yinlV-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/ad86979ac717673ec1647f1148a5c7cd214a1f39
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel memperf_test_v1
-        git checkout ad86979ac717673ec1647f1148a5c7cd214a1f39
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
+=BC
+2022=E5=B9=B41=E6=9C=8828=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:1=
+3=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Il 27/01/22 16:46, AngeloGioacchino Del Regno ha scritto:
+> > Il 27/01/22 16:21, Chun-Kuang Hu ha scritto:
+> >> Hi, Angelo:
+> >>
+> >> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =
+=E6=96=BC
+> >> 2022=E5=B9=B41=E6=9C=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=
+=8810:36=E5=AF=AB=E9=81=93=EF=BC=9A
+> >>>
+> >>> DRM bridge drivers are now attaching their DSI device at probe time,
+> >>> which requires us to register our DSI host in order to let the bridge
+> >>> to probe: this recently started producing an endless -EPROBE_DEFER
+> >>> loop on some machines that are using external bridges, like the
+> >>> parade-ps8640, found on the ACER Chromebook R13.
+> >>>
+> >>> Now that the DSI hosts/devices probe sequence is documented, we can
+> >>> do adjustments to the mtk_dsi driver as to both fix now and make sure
+> >>> to avoid this situation in the future: for this, following what is
+> >>> documented in drm_bridge.c, move the mtk_dsi component_add() to the
+> >>> mtk_dsi_ops.attach callback and delete it in the detach callback;
+> >>> keeping in mind that we are registering a drm_bridge for our DSI,
+> >>> which is only used/attached if the DSI Host is bound, it wouldn't
+> >>> make sense to keep adding our bridge at probe time (as it would
+> >>> be useless to have it if mtk_dsi_ops.attach() fails!), so also move
+> >>> that one to the dsi host attach function (and remove it in detach).
+> >>>
+> >>> Fixes: 209264a85707 ("drm/bridge: Document the probe issue with MIPI-=
+DSI bridges")
+> >>
+> >> The fixed tag should indicate the patch which cause the bug, but why a
+> >> patch just adding document would cause bug?
+> >> So no any patch cause bug? This patch just want to prevent a possible =
+bug?
+> >>
+> >
+> > I think you've missed my previous message on v2, so I will paste it her=
+e:
+> >
+> > unfortunately I couldn't find a valid commit for a Fixes tag. This
+> > started being an issue at some point, when the DRM was changed to
+> > adhere to the documented probe sequence: the MediaTek DSI driver was
+> > not the only one that got broken/affected by these changes.
+> >
+> > If you have any advice on which commit should be tagged, I'm open for
+> > any kind of suggestion.
+> >
+> >
+> > I tried to check on other drivers which got fixed for the same behavior=
+,
+> > for example drm/msm, but none of them had a Fixes tag.
+> > When the DRM got changed to adhere to this sequence, some drm/bridge
+> > drivers were also changed; this has created some incompatibilities with
+> > some drm drivers, including drm/msm and drm/mediatek.
+> >
+> > This commit is not fixing a latent bug that was introduced in drm/media=
+tek
+> > but rather one that was induced by the new, fixed, probe flow that got
+> > recently documented - and to which drivers should adhere; failing to ad=
+here
+> > to that will produce an endless -EPROBE_DEFER loop, due to other driver=
+s
+> > (as mentioned, for example drm/bridge drivers) having been changed to u=
+se
+> > that probe sequence.
+> >
+> >
+> > Regards,
+> > Angelo
+> >
+>
+> I've been thinking about another solution to this issue.
+>
+> Would it be fine if I send a v4 that removes the Fixes tag, but adds the =
+following?
+>
+> Cc: stable@kernel.org # v5.15+
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It's ok to me. According to the documented format [1], I think this should =
+be
 
-All error/warnings (new ones prefixed by >>):
+Cc: <stable@vger.kernel.org> # 5.15.x
 
-   m68k-linux-ld: lib/memperf_test.o: in function `memcpy_memmove_perf_test':
->> memperf_test.c:(.init.text+0x1b4): undefined reference to `__udivdi3'
-   m68k-linux-ld: lib/memperf_test.o: in function `memperf_test_init':
-   memperf_test.c:(.init.text+0x3ac): undefined reference to `__udivdi3'
-   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
---
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/mm_types_task.h:13,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from lib/memperf_test.c:3:
-   lib/memperf_test.c: In function 'memcpy_memmove_perf_test':
->> lib/memperf_test.c:76:32: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wformat=]
-      76 |                         printk("memperf: %s(dst+%d, src+%d), distance %lu: %llu Mb/s\n",
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      77 |                                 (cpy) ? "memcpy" : "memmove", i, j,
-      78 |                                 (j - i) % sizeof(long), mbps);
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~
-         |                                         |
-         |                                         unsigned int
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   lib/memperf_test.c:76:25: note: in expansion of macro 'printk'
-      76 |                         printk("memperf: %s(dst+%d, src+%d), distance %lu: %llu Mb/s\n",
-         |                         ^~~~~~
-   lib/memperf_test.c:76:73: note: format string is defined here
-      76 |                         printk("memperf: %s(dst+%d, src+%d), distance %lu: %llu Mb/s\n",
-         |                                                                       ~~^
-         |                                                                         |
-         |                                                                         long unsigned int
-         |                                                                       %u
+[1] https://www.kernel.org/doc/html/v5.16/process/stable-kernel-rules.html
 
+Regards,
+Chun-Kuang.
+
+>
+> >> Regards,
+> >> Chun-Kuang.
+> >>
+> >>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@=
+collabora.com>
+> >>> Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> >>> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+> >>>
+> >>> ---
+> >>>   drivers/gpu/drm/mediatek/mtk_dsi.c | 167 +++++++++++++++-----------=
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >>>   1 file changed, 84 insertions(+), 83 deletions(-)
+> >>>
+>
+>
+> --
+> AngeloGioacchino Del Regno
+> Software Engineer
+>
+> Collabora Ltd.
+> Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+> Registered in England & Wales, no. 5513718

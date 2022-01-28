@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBE849EFE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6850F49EFE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344663AbiA1AiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S1344672AbiA1Ai0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241595AbiA1AiS (ORCPT
+        with ESMTP id S241685AbiA1AiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 19:38:18 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5346BC061714;
-        Thu, 27 Jan 2022 16:38:18 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id k14so3938373qtq.10;
-        Thu, 27 Jan 2022 16:38:18 -0800 (PST)
+        Thu, 27 Jan 2022 19:38:19 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33203C061749;
+        Thu, 27 Jan 2022 16:38:19 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id k9so4397369qvv.9;
+        Thu, 27 Jan 2022 16:38:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=U0ZtMbfGNf5bI/1AePHt7T+pCQPNUqP752Ba3r+02dM=;
-        b=ky3S5f7lhADSWWb9ST7r5M95iARgFNUMQiSs99hEtWaw9Cp2LuMvM2peP/BugzC8Qt
-         hL9HrtWe8moyMoNhZNvQiBjznS0tyEp0+rY8HYfYN3VoUS9cBnnKNVKYMZvPiwqJ3hic
-         rb+I9nYH8h0r66PhJaB8YPjBF9DzPXWTqulCSkokuNa48FoUim3pIGSCvAdRruR0m7or
-         ZEFoVTctqzAl3Jqh0xysji9bV1mN4IQwTUN8w0vgoz9hC+t+leeHidi4OkC03NIkFhF6
-         WMPV9PjfvLSKgDZRSQ/1m6rui25WgB5iCND4dEom4YN5aYnGka/J8MzSpBSV/2uSjfvw
-         hwSg==
+        bh=j2PLycvcW6dLTZ8kcMY5iFXYAkkFP3UnZiWjf1YUPQ4=;
+        b=qei5y1xK5AiiFqzeJefi3veSDhVeTBnZu8kMBlXneKUPa8tac/pYCkuigqyB6dU8po
+         jo6xLloKFqPXGZTlJEzi+nNm9P4AFCGOnAKG2pG3GUjrRjJ2J61K4UEiUj4QJz739dZg
+         UnpeXicZpoOkOSftq78cDX4rMTR38Tnoog8YEVHVTEhDrdwvPllI8QZM+kKjGt4O4FLO
+         tdh9wcNQLAB4Au3XCe3+8ZtLAM0fwd5ibfwz7VGdd1mWF5rMDW8A/c6QJfFue0GcXUs2
+         Ji7/dRmJ1PpHOuYqxm/yiEuRA2vB67e8c02i+YQN30MIacjrkFnKjCmFubKYmo+q6ggl
+         /YXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=U0ZtMbfGNf5bI/1AePHt7T+pCQPNUqP752Ba3r+02dM=;
-        b=75pljKZn7xxl+fqETECsICeU5NGkHHJr7+FiJQYAgCOuEa8nEH2wwghWncm7Q8EE9i
-         9zWrzylcVAPiTVKuGKLR6rBC2gHkrrCyhfTSnKlE7x1tY7hcDpwz5j+lKu8Sge9/nFp7
-         kGkQ7UhL1KtDf7kiSK8HRcyMkRX4XP//ALgowpPqefBA8Az4rt0Nu6xSD7xkKK0sdgqF
-         08zNlCF1clPyiGP4H5sPHdX+9LH/HrNXMuTe6QAYy8lMUVhLK3R9Z1vuCuNbmuVCxKB+
-         sxNyaNFaphYRypYGYbk3CkyrmZeRGxXIAyaGXfPFvPYYpIvmHWjIO80Q4IF8wFBLjzsD
-         /vRg==
-X-Gm-Message-State: AOAM532wZsUnvcrZq+6Y3TWxY3BFK5I2ssDUQImps9j8gCuHzaHBWyK2
-        QewXwh69KaynrBeMcQ4+kM4=
-X-Google-Smtp-Source: ABdhPJwRZPAqYv4oJNy1fNafX2Qj6lvpf2KHx++EeZKTn31dh+x8Mtfsyq8oYEbbM/XWJw5lq3VWrw==
-X-Received: by 2002:ac8:5e0d:: with SMTP id h13mr4763623qtx.97.1643330297428;
-        Thu, 27 Jan 2022 16:38:17 -0800 (PST)
+        bh=j2PLycvcW6dLTZ8kcMY5iFXYAkkFP3UnZiWjf1YUPQ4=;
+        b=PRMbAhI8tBrHu29i8HWnvMxIbGLb3j6TlnJGBB1uUm1iELAXhHleSq0U1GQCUBb9KU
+         j4wviePu/vwdYI4PW16vfjXf/L3uNltEBXXOlEMvAIuVlN4wBof578qF+GmvMdEPLqKq
+         sKTjZp4Azb4UPOVY39ONedWdQ0fiSCwwc/fVrFsQWs6BrTooQcFdKJSgOh6DFmBR8Ktx
+         qh4xoxz/b6TLzGbAS1rfkti4/ZHZJ4R/auFKGUP/HlFLu3qRO2j3+lG4lmlTonbzpBOs
+         WIH1mmE8GARvQeYk69xRMhIJEA/WjHvsWaUWpD7D4AcyzGe9N1wE09Z5cCfiA1Jz7mXv
+         1bLA==
+X-Gm-Message-State: AOAM532VH+FdPu5xA9nbbkQ9L7zw7st4SED5+LVvFSA+tRHVdtFt8IH8
+        +tsOlXMIys/nae3uxZE+xqjRwUVpqsVpDw==
+X-Google-Smtp-Source: ABdhPJyR73xdepexciUgvlSA/jSq2GFvHyyuqvrAYyMxkwDfo1QZ7VBQCxZ2wWUgM/C9GfryivNEPA==
+X-Received: by 2002:a05:6214:1d2e:: with SMTP id f14mr5730571qvd.2.1643330298334;
+        Thu, 27 Jan 2022 16:38:18 -0800 (PST)
 Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
-        by smtp.gmail.com with ESMTPSA id t1sm2142883qtc.48.2022.01.27.16.38.16
+        by smtp.gmail.com with ESMTPSA id t1sm2142883qtc.48.2022.01.27.16.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 16:38:17 -0800 (PST)
+        Thu, 27 Jan 2022 16:38:18 -0800 (PST)
 From:   Peter Geis <pgwipeout@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
 Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
-Date:   Thu, 27 Jan 2022 19:38:07 -0500
-Message-Id: <20220128003809.3291407-4-pgwipeout@gmail.com>
+Subject: [PATCH v2 4/4] arm64: dts: rockchip: add Quartz64-A con40 hardware
+Date:   Thu, 27 Jan 2022 19:38:08 -0500
+Message-Id: <20220128003809.3291407-5-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220128003809.3291407-1-pgwipeout@gmail.com>
 References: <20220128003809.3291407-1-pgwipeout@gmail.com>
@@ -65,97 +65,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sdmmc1 node on Quartz64-A supports the optional wifi module from
-Pine64.
-Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi support on
-the Quartz64-A.
+The Quartz64-A has a 40 pin connector that exposes various functions.
+Annotate the functions exposed in the device tree.
+Enable i2c3, which is pulled up to vcc_3v3 on board.
+
+The following functions are currently exposed:
+i2c3
+spi1
+uart2
+uart0
+spdif
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
-
-Changelog:
-v2:
-- drop status = "okay" from sdio_pwrseq
-- drop disable-wp from sdmmc1
-- move reset-gpios to be alphabetical in sdio_pwrseq
-
----
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index 33c2c18caaa9..c5a79046a9d0 100644
+index c5a79046a9d0..d3dc60ff60dd 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -91,6 +91,17 @@ simple-audio-card,codec {
- 		};
+@@ -449,6 +449,14 @@ regulator-state-mem {
  	};
- 
-+	sdio_pwrseq: sdio-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		clocks = <&rk817 1>;
-+		clock-names = "ext_clock";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_enable_h>;
-+		post-power-on-delay-ms = <100>;
-+		power-off-delay-us = <5000000>;
-+		reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
-+	};
-+
- 	vcc12v_dcin: vcc12v_dcin {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc12v_dcin";
-@@ -147,6 +158,17 @@ vcc_sys: vcc_sys {
- 		regulator-max-microvolt = <4400000>;
- 		vin-supply = <&vbus>;
- 	};
-+
-+	/* sourced from vcc_sys, sdio module operates internally at 3.3v */
-+	vcc_wl: vcc_wl {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_wl";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_sys>;
-+	};
  };
  
- &cpu0 {
-@@ -475,6 +497,12 @@ pmic_int_l: pmic-int-l {
- 		};
- 	};
- 
-+	sdio-pwrseq {
-+		wifi_enable_h: wifi-enable-h {
-+			rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	vcc_sd {
- 		vcc_sd_h: vcc-sd-h {
- 			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -516,6 +544,21 @@ &sdmmc0 {
- 	status = "okay";
- };
- 
-+&sdmmc1 {
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	cap-sdio-irq;
-+	keep-power-in-suspend;
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+	non-removable;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
-+	sd-uhs-sdr104;
-+	vmmc-supply = <&vcc_wl>;
-+	vqmmc-supply = <&vcc_1v8>;
++/* i2c3 is exposed on con40
++ * pin 3 - i2c3_sda_m0, pullup to vcc_3v3
++ * pin 5 - i2c3_scl_m0, pullup to vcc_3v3
++ */
++&i2c3 {
 +	status = "okay";
 +};
 +
+ &i2s1_8ch {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2s1m0_sclktx
+@@ -559,10 +567,17 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++/* spdif is exposed on con40 pin 18 */
  &spdif {
+ 	status = "okay";
+ };
+ 
++/* spi1 is exposed on con40
++ * pin 11 - spi1_mosi_m1
++ * pin 13 - spi1_miso_m1
++ * pin 15 - spi1_clk_m1
++ * pin 17 - spi1_cs0_m1
++ */
+ &spi1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi1m1_cs0 &spi1m1_pins>;
+@@ -576,6 +591,10 @@ &tsadc {
+ 	status = "okay";
+ };
+ 
++/* uart0 is exposed on con40
++ * pin 12 - uart0_tx
++ * pin 14 - uart0_rx
++ */
+ &uart0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart0_xfer>;
+@@ -602,6 +621,10 @@ bluetooth {
+ 	};
+ };
+ 
++/* uart2 is exposed on con40
++ * pin 8 - uart2_tx_m0_debug
++ * pin 10 - uart2_rx_m0_debug
++ */
+ &uart2 {
  	status = "okay";
  };
 -- 

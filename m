@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4772149F585
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C1049F58B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243304AbiA1Inh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:43:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        id S243345AbiA1Iow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243118AbiA1Inh (ORCPT
+        with ESMTP id S243118AbiA1Iov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:43:37 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2A7C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:43:36 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id bi36so197721vkb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:43:36 -0800 (PST)
+        Fri, 28 Jan 2022 03:44:51 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2095C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:44:50 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id f17so9513032wrx.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:44:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ftcw1vD9z1Mq6YJKReviY0KJR4CI2yGzMz8ANHP/I3Q=;
-        b=DaL++O/y2Y7K/mFSHLxd+/ipObnIwivSwqec5hzr+O7nR3IWz0+rgZjyoIuHnvruZH
-         +XTJFg2x/QwMZI1XUYYGx6V46KVoc5rfTLvNEdzTs6Xt6ilTJIkCjgNfJLfsdoky77ym
-         DRbltg/ujxUjNDTP7IOJul5WCs/DIrPbGxrT5Y7+HGBIk3jBxhQjnQ1Gg9wX41tJBjhO
-         j+n5v/ascBEcd/+qPST8sdfk36/H0NjFdq1lMBXW6ajVNzh3n3ZgwRqswreYtoOpcv2R
-         JhDE4eUUP5Yj/kbxf0OlD63UxtajK1C6FEiMIrgX0pSycEKCirDU4ibmbFs8TDqwMN9N
-         /i9w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=cIaNBMx7IdzP699KauIlrjluaHc1E9JkACiB9Gtq4Bs=;
+        b=SX64XqQ5G6XVFLW17qHA87jx8sD/QYtO4xKej5z7I1qSar/bk0izQfqFV/DjTJJVql
+         fOjl1nkz+snrIHhGJASANG/o7jvjEzDt/gtC1T8nW7dGCu/zkfwtcKaXcZ/KdGyeP13h
+         M9eqilQZSBsEDBondyuqY1jlNO/EgJeerJiTRqtUeVR2mLasbQTh3nFsoTyrbZpLxnS9
+         H1Lb7b4KECUAli/OQ8emLj52Hh39zOckXNWsCKnZNvLp/2RpqaYQsVKP9BAk99gdqJss
+         L+3uJej78NvVNgKo3clZzaZD05ii8e37XK6wTf8o3Mb5BqZbI63C5K34Eij6RgTXOkfQ
+         jHEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ftcw1vD9z1Mq6YJKReviY0KJR4CI2yGzMz8ANHP/I3Q=;
-        b=bs+zRKo0KvHTSDU0nbWcLWQEwYkuooO1S9CQpi//l1qHrHSrOj7sIseRAnYLxsgRCi
-         kNzl8U/rrpNbPjfHG8dtDPryR/YBbv2oGxedylMHlyu79vSZQsEMBEZXDKhihvsSX5+M
-         /l5bAhIHld0C41AVM0a8OTkiC6nhZNGmW0bRAO+AlmLHNjdUprIVMDdoCIu03OP/6TN4
-         FbmFIwEuA5GZrSIfJL/07K3Vt5CebILRz9MVrjlUGk9jjUjllCbxh2ekeSMQwj5FCduM
-         O4QH2vM5nsCCWLa5bcEGWy12K11KkXForx/wxlvWPpS66THvqAAv6JvHY8DIxAQ+QvxZ
-         ntJg==
-X-Gm-Message-State: AOAM531pNanm4HmvvsPCW3du6JL4Z58iPmEqd0ca4k5FiethC3WVG2UW
-        Hs2CxlKHHA0iSXv4ex2kisS6XLWiLrbwK5tfje7e9A==
-X-Google-Smtp-Source: ABdhPJwmfhOAGP+BJwxRCZrzMfuOrJeVWS+4bKrkTmVCbPNw6FPwVvetSBth5KxLaOdV4nl10Dmlyn516F+PfW/83g8=
-X-Received: by 2002:a05:6122:a26:: with SMTP id 38mr3325568vkn.23.1643359415840;
- Fri, 28 Jan 2022 00:43:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cIaNBMx7IdzP699KauIlrjluaHc1E9JkACiB9Gtq4Bs=;
+        b=qmc51159IfH8A57gK368MVJ1lS8lQhqLRURKG3OLlhcDPaeVmSxb4QQpL1X8upN6Yf
+         +GQzAtQFr9xQk5KAuKcUpJ3yAOxahcMBt4EvpS3GzLHDIXU/eOHsQSCqRw+FfSZWLJnP
+         5ebA2E3KGKa7R9ACkRZRWEf68mwWA63WAbJ2Z1+LOvN30HHsQdQRYhNq58IxVWoBN2sL
+         Sc+bTOMlgtwXL7Y/8XGBKshTebTsuRXYf3Cbaj1e7RwbBUF+UJxD0S1EgFDssW/gVfHk
+         ssDwDTTtAWvSsx4Ai+ibTIRh/Kgnl/a/ACPLZdZ7Dwh9cm7ii/o0EYqabJd2019JPEvU
+         xx7g==
+X-Gm-Message-State: AOAM530p0xD2sXdqyR2WeXQRor31FpQTMly5ANkqmVx6v7oiV0YvyQHo
+        th7Fb7CdNW8OlMXJA+2uUvjp9A==
+X-Google-Smtp-Source: ABdhPJzeYlGcAbO3qbM1+9qlvsWjeZd75PDVx1TVHtmLMx0EUtDp4Ri2asMbfOlDC9ori9jdCVbxSg==
+X-Received: by 2002:a05:6000:168e:: with SMTP id y14mr411721wrd.51.1643359489380;
+        Fri, 28 Jan 2022 00:44:49 -0800 (PST)
+Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
+        by smtp.gmail.com with ESMTPSA id 5sm5031758wrb.113.2022.01.28.00.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 00:44:49 -0800 (PST)
+Date:   Fri, 28 Jan 2022 08:44:47 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Michael Walle <michael@walle.cc>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/3] mfd: simple-mfd-i2c: add compatible string for
+ LS1028A-QDS FPGA
+Message-ID: <YfOs/wkylwMgsepj@google.com>
+References: <20220127172105.4085950-1-vladimir.oltean@nxp.com>
+ <20220127172105.4085950-2-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
-References: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
- <20220128045522.3505336-1-zichar.zhang@linaro.org> <YfOUzZ4scTZAWnxl@kroah.com>
-In-Reply-To: <YfOUzZ4scTZAWnxl@kroah.com>
-From:   Zichar Zhang <zichar.zhang@linaro.org>
-Date:   Fri, 28 Jan 2022 16:43:25 +0800
-Message-ID: <CAE9iGohVRCPJeokpU97Hb5opKxUxHAVbKZp8t7Bhg30550Yfmg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] [RFC] wakeup_reason: Add infrastructure to log and
- report why the system resumed from suspend.
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     john.stultz@linaro.org, krossmo@google.com, lee.jones@linaro.org,
-        len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, nayakvij@google.com, pavel@ucw.cz,
-        rafael@kernel.org, sumit.semwal@linaro.org, amit.pundir@linaro.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127172105.4085950-2-vladimir.oltean@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, I'll do that and resend to this email thread.
+On Thu, 27 Jan 2022, Vladimir Oltean wrote:
 
-On Fri, 28 Jan 2022 at 15:01, Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Jan 28, 2022 at 12:55:22PM +0800, Zichar Zhang wrote:
-> >
-> > Signed-off-by: Zichar Zhang <zichar.zhang@linaro.org>
-> > Change-Id: Id70f3cbec15f24ea999d7f643e9589be9c047f2b
->
-> Please always run checkpatch.pl on your submissions so that you do not
-> get people asking you to run checkpatch.pl on your submissions.
->
-> thanks,
->
-> greg k-h
+> As Michael mentions in the description of commit 3abee4579484 ("mfd: Add
+> simple regmap based I2C driver"), "If a device wants to use this as its
+> MFD core driver, it has to add an individual compatible string."
+> 
+> The QIXIS FPGA on the LS1028A-QDS boards has a similar purpose to the
+> Kontron SL28 CPLD: it deals with board power-on reset timing, muxing,
+> etc.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+>  drivers/mfd/simple-mfd-i2c.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

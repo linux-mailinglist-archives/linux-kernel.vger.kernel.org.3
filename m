@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC96449F414
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F51F49F417
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346667AbiA1HKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:10:21 -0500
+        id S1346674AbiA1HK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:10:27 -0500
 Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:29254 "EHLO
         alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346666AbiA1HKU (ORCPT
+        by vger.kernel.org with ESMTP id S1346666AbiA1HKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:10:20 -0500
+        Fri, 28 Jan 2022 02:10:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643353820; x=1674889820;
+  t=1643353825; x=1674889825;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pnspT/Kc6Z5RJVw54MZcH2gecSWgp1vXocikfDmDifQ=;
-  b=CfQaNhgnsbi0waI5iZfyat5i9SBeYF2Q8OeKQZ3iGpx0subqDdfOTrpi
-   cIvObM2DXMZJfhC7txFw1y9agmOkFIbBJrY8nETUbXK8YGlm09LWPS367
-   OIUPvzOIRkQtPAR52Ftvp+5E3QQ3shVpGe24mE3+4By1oOYpH586fXNqW
-   s=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jan 2022 23:10:19 -0800
+  bh=B3jIxh/VReGXCnnKjt4ZvVQmPhFcUA+BLGS5UUptUXE=;
+  b=e3b/xnj3U7Vi3/LBLqF7xn8L2nP5jPVV/3xY8L/88DfIdc1/CFpbAf9U
+   AtrYnkGoksEEXHwpkjx4e7KpPEGcbiTFFAlaTu1VDOKXXz4apDxbJ4ja1
+   4cNPdyTL+KQgTfl0Fn/wR3qaDnpz4CDcpZAYJlqIDuQXn2eKHMvsaNOOz
+   o=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jan 2022 23:10:25 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:10:19 -0800
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:10:25 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:10:18 -0800
+ 15.2.922.19; Thu, 27 Jan 2022 23:10:24 -0800
 Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:10:14 -0800
+ 15.2.922.19; Thu, 27 Jan 2022 23:10:20 -0800
 From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -45,9 +45,9 @@ CC:     <devicetree@vger.kernel.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Rajendra Nayak <quic_rjendra@quicinc.com>,
         Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Subject: [PATCH 2/9] soc: qcom: llcc: Update the logic for version info extraction
-Date:   Fri, 28 Jan 2022 12:39:26 +0530
-Message-ID: <e311b16376329b9e9483fed8ae910a31d0f7bcba.1643353154.git.quic_saipraka@quicinc.com>
+Subject: [PATCH 3/9] soc: qcom: llcc: Add write-cache cacheable support
+Date:   Fri, 28 Jan 2022 12:39:27 +0530
+Message-ID: <e533680b3976330115fc5bd49f4c99440eda6a69.1643353154.git.quic_saipraka@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1643353154.git.quic_saipraka@quicinc.com>
 References: <cover.1643353154.git.quic_saipraka@quicinc.com>
@@ -61,90 +61,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LLCC HW version info is made up of major, branch, minor and echo
-version bits each of which are 8bits. Several features in newer
-LLCC HW are based on the full version rather than just major or
-minor versions such as write-subcache enable which is applicable
-for versions greater than v2.0.0.0 and upcoming write-subcache
-cacheable for SM8450 SoC which is only present in versions v2.1.0.0
-and later, so it makes it easier and cleaner to just directly
-compare with the full version than adding additional major/branch/
-minor/echo version checks. So remove the earlier major version check
-and add full version check for those features.
+Newer SoCs with LLCC IP version 2.1.0 and later support write
+sub-cache cacheable feature. Use a separate llcc_slice_config member
+"write_scid_cacheable_en" to identify this feature and program
+LLCC_TRP_SCID_WRSC_CACHEABLE_EN register to enable it.
 
 Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 ---
- drivers/soc/qcom/llcc-qcom.c       | 9 ++++-----
- include/linux/soc/qcom/llcc-qcom.h | 4 ++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ drivers/soc/qcom/llcc-qcom.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index b3a34f117a7c..a06764f16023 100644
+index a06764f16023..79fce5a2ff06 100644
 --- a/drivers/soc/qcom/llcc-qcom.c
 +++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -37,7 +37,6 @@
- #define CACHE_LINE_SIZE_SHIFT         6
- 
- #define LLCC_COMMON_HW_INFO           0x00030000
--#define LLCC_MAJOR_VERSION_MASK       GENMASK(31, 24)
- 
- #define LLCC_COMMON_STATUS0           0x0003000c
- #define LLCC_LB_CNT_MASK              GENMASK(31, 28)
-@@ -55,6 +54,8 @@
+@@ -51,10 +51,12 @@
+ #define LLCC_TRP_SCID_DIS_CAP_ALLOC   0x21f00
+ #define LLCC_TRP_PCB_ACT              0x21f04
+ #define LLCC_TRP_WRSC_EN              0x21f20
++#define LLCC_TRP_WRSC_CACHEABLE_EN    0x21f2c
  
  #define BANK_OFFSET_STRIDE	      0x80000
  
-+#define LLCC_VERSION_2_0_0_0          0x02000000
-+
+ #define LLCC_VERSION_2_0_0_0          0x02000000
++#define LLCC_VERSION_2_1_0_0          0x02010000
+ 
  /**
   * struct llcc_slice_config - Data associated with the llcc slice
-  * @usecase_id: Unique id for the client's use case
-@@ -504,7 +505,7 @@ static int _qcom_llcc_cfg_program(const struct llcc_slice_config *config,
+@@ -80,6 +82,8 @@
+  *               collapse.
+  * @activate_on_init: Activate the slice immediately after it is programmed
+  * @write_scid_en: Bit enables write cache support for a given scid.
++ * @write_scid_cacheable_en: Enables write cache cacheable support for a
++ *			     given scid (not supported on v2 or older hardware).
+  */
+ struct llcc_slice_config {
+ 	u32 usecase_id;
+@@ -95,6 +99,7 @@ struct llcc_slice_config {
+ 	bool retain_on_pc;
+ 	bool activate_on_init;
+ 	bool write_scid_en;
++	bool write_scid_cacheable_en;
+ };
+ 
+ struct qcom_llcc_config {
+@@ -515,6 +520,16 @@ static int _qcom_llcc_cfg_program(const struct llcc_slice_config *config,
  			return ret;
  	}
  
--	if (drv_data->major_version == 2) {
-+	if (drv_data->version >= LLCC_VERSION_2_0_0_0) {
- 		u32 wren;
- 
- 		wren = config->write_scid_en << config->slice_id;
-@@ -598,13 +599,11 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 
--	/* Extract major version of the IP */
-+	/* Extract version of the IP */
- 	ret = regmap_read(drv_data->bcast_regmap, LLCC_COMMON_HW_INFO, &version);
- 	if (ret)
- 		goto err;
- 
--	drv_data->major_version = FIELD_GET(LLCC_MAJOR_VERSION_MASK, version);
--
- 	ret = regmap_read(drv_data->regmap, LLCC_COMMON_STATUS0,
- 						&num_banks);
- 	if (ret)
-diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
-index 9e8fd92c96b7..beecf00b707d 100644
---- a/include/linux/soc/qcom/llcc-qcom.h
-+++ b/include/linux/soc/qcom/llcc-qcom.h
-@@ -83,7 +83,7 @@ struct llcc_edac_reg_data {
-  * @bitmap: Bit map to track the active slice ids
-  * @offsets: Pointer to the bank offsets array
-  * @ecc_irq: interrupt for llcc cache error detection and reporting
-- * @major_version: Indicates the LLCC major version
-+ * @version: Indicates the LLCC version
-  */
- struct llcc_drv_data {
- 	struct regmap *regmap;
-@@ -96,7 +96,7 @@ struct llcc_drv_data {
- 	unsigned long *bitmap;
- 	u32 *offsets;
- 	int ecc_irq;
--	u32 major_version;
-+	u32 version;
- };
- 
- #if IS_ENABLED(CONFIG_QCOM_LLCC)
++	if (drv_data->version >= LLCC_VERSION_2_1_0_0) {
++		u32 wr_cache_en;
++
++		wr_cache_en = config->write_scid_cacheable_en << config->slice_id;
++		ret = regmap_update_bits(drv_data->bcast_regmap, LLCC_TRP_WRSC_CACHEABLE_EN,
++					 BIT(config->slice_id), wr_cache_en);
++		if (ret)
++			return ret;
++	}
++
+ 	if (config->activate_on_init) {
+ 		desc.slice_id = config->slice_id;
+ 		ret = llcc_slice_activate(&desc);
 -- 
 2.33.1
 

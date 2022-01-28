@@ -2,63 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D015A49FE75
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B274D49FE81
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350319AbiA1QyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:54:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:53998 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245711AbiA1QyL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:54:11 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 610E0113E;
-        Fri, 28 Jan 2022 08:54:11 -0800 (PST)
-Received: from [10.57.68.47] (unknown [10.57.68.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 934F93F793;
-        Fri, 28 Jan 2022 08:54:09 -0800 (PST)
-Message-ID: <c05c2217-3fc3-63a0-b332-004603315f84@arm.com>
-Date:   Fri, 28 Jan 2022 16:54:02 +0000
+        id S1350354AbiA1Q6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245611AbiA1Q6D (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 11:58:03 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31594C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:58:03 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id g10so3772603vss.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=posk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RQ49Pm+NuV21ZdxRaCCTPqWR9V7O6HMPgYzi6Se2cCk=;
+        b=YMmOGsPKN/42+Y8geSgWOMJpClWLqd6H1k/dnva47Y4FJqcSxZqKOSoezxMWfLmSCV
+         QU5l9N/E/hLka91qBRtoUNzREjrVdSNWxESYfPQvlb1SXxa3esUhuGSfiqddyfBAHk8F
+         fYg8AGyY2GB58T+yLQQre3Ng8izZdDxRIDspURJTIf+zdmhEc3L1YejetUc0VNSN5HgZ
+         1haR5ZaaFNezLoP8Si2/hgUTmDL2tagY10vye8EMr2VtFtuk9LeiKi+zt0x7y2Xdtilp
+         6q+9PHSjWoilbJDKGpaSbKIQeV6jOgpa7yIoOdftYg2OGkQok4QGZ2S2SX9uE7dlUNou
+         +W0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RQ49Pm+NuV21ZdxRaCCTPqWR9V7O6HMPgYzi6Se2cCk=;
+        b=4CULCuOGq92wtSMarDKfW2JRvGdQm8uiyyB8Qty1h8BBhOa/8Ao84JlMpiJZxVpKHs
+         zYRDRbLYx7S1fcS64QO3p1rcZBpQs8X+Myf6waFMqwN9IRaqeCJhBBlpWuf0qvtn0nP+
+         FxOFJe3KFjht02euuxIbw6lP0qQqKaD304dmv1AURmpL6OxLiEqwDQqalVRMBnALmTTH
+         4lwOOBWuaqnbOnJKL5BW44splxXXVp+48kGr3Ir5WTjntPEX/FNCKKfgwrnh2kRM6OgL
+         +ATrq8a5HvjfkGgKXlrZ0g4E7e/n9JjX8e0B8oIUFsDu+YnRJgLO5UvAjFDIs690q3+L
+         tc1A==
+X-Gm-Message-State: AOAM530deGeAXSCZXx5K1EDUXEzTktGncJ/Ba/OrZUztBtFpRHpuuleG
+        xepVsigHQkXoQWr1FUEm+g3P0nABkxWm5XN32iKn+w==
+X-Google-Smtp-Source: ABdhPJwEGsw4vp/T4oYUuh6vSmSOMK5nv6anNu4o4p3jwd/0S7IoP3HapEHFTFg4WkNiZeIdCl+IYio7/ZBZt5C+b3E=
+X-Received: by 2002:a67:c205:: with SMTP id i5mr3971465vsj.6.1643389082319;
+ Fri, 28 Jan 2022 08:58:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] iommu/iova: Separate out rcache init
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>
-Cc:     "xieyongji@bytedance.com" <xieyongji@bytedance.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linuxarm <linuxarm@huawei.com>
-References: <1643205319-51669-1-git-send-email-john.garry@huawei.com>
- <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
- <5ac3a678-3126-edd9-cb23-72c05f3dcd34@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <5ac3a678-3126-edd9-cb23-72c05f3dcd34@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <1211272108.4257.1643246572499.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1211272108.4257.1643246572499.JavaMail.zimbra@efficios.com>
+From:   Peter Oskolkov <posk@posk.io>
+Date:   Fri, 28 Jan 2022 08:57:53 -0800
+Message-ID: <CAFTs51UsQgZkc-Xg3XaBvxssVCyfA=JCS4npBGBAeWJK0yUOuw@mail.gmail.com>
+Subject: Re: rseq vcpu_id ideas
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Paul Turner <pjt@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michael Jeanson <mjeanson@efficios.com>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Chris Kennelly <ckennelly@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-28 11:32, John Garry wrote:
-> On 26/01/2022 17:00, Robin Murphy wrote:
->> As above, I vote for just forward-declaring the free routine in iova.c
->> and keeping it entirely private.
-> 
-> BTW, speaking of forward declarations, it's possible to remove all the 
-> forward declarations in iova.c now that the FQ code is gone - but with a 
-> good bit of rearranging. However I am not sure how much people care 
-> about that or whether the code layout is sane...
+On Wed, Jan 26, 2022 at 5:22 PM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> Hi Paul,
+>
+> I remember our LPC discussions about your virtual cpu ids ideas, and noticed some tcmalloc code
+> with "prototype" fields for vcpu_id and numa node id
+> (https://github.com/google/tcmalloc/blob/master/tcmalloc/internal/linux_syscall_support.h#L34).
+>
+> I'm currently toying with ideas very close to vcpu_ids to solve issues with overzealous
+> memory allocation for LTTng-UST (user-space tracer) in use-cases where containers use few
+> cores.
+>
+> My current thinking is that we could use your vcpu_id idea, but apply it on a per-pid-namespace
+> basis rather than per-process. We may have to be clever with NUMA as well to ensure good NUMA
+> locality.
+>
+> Do you have any thought about this, and perhaps some prototype rseq extension code you could
+> share as a starting point ?
 
-Indeed, I was very tempted to raise the question there of whether there 
-was any more cleanup or refactoring that could be done to justify 
-collecting all the rcache code together at the top of iova.c. But in the 
-end I didn't, so my opinion still remains a secret...
+We've been using rseq vcpu extensions in production for more than a
+year, with good results. We have a perfect use case, though: wide
+machines (hundreds of CPUs) with many narrow processes (restricted to
+a small number of CPUs). Our extension can be configured to either do
+a "flat" vcpu accounting, or a "per numa node" vcpu accounting. We
+currently only use "flat" accounting, I guess because most of our
+processes are affined to a single numa node.
 
-Robin.
+I plan to post the code to the list after the UMCG saga comes to a
+clear resolution.
+
+>
+> Thanks,
+>
+> Mathieu
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com

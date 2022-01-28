@@ -2,173 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EED949F7F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE82F49F7F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348078AbiA1LJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:09:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:36970 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348034AbiA1LJx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:09:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B2F912FC;
-        Fri, 28 Jan 2022 03:09:53 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.45.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 85AC03F766;
-        Fri, 28 Jan 2022 03:09:48 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
+        id S1348085AbiA1LKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:10:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244239AbiA1LKl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:10:41 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C6C061714;
+        Fri, 28 Jan 2022 03:10:41 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d18so5608715plg.2;
+        Fri, 28 Jan 2022 03:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lpTrB1w23BF+6DdwaMHxzpTYFKzu4pd5U9VeSzFiuIk=;
+        b=TEa5rKjcEAzmYaI8wm9Q8shd5d//zVYo+GOFi0bjEUmFAQQk5c4kszeX+FiVZ6U8lT
+         HOvbO3+0T+Etk2lWwVJYdu8+4UGtManVzfTlNIA2vq/4qIUWFq37I0+gw8Ahi4xNI1sM
+         +uOfNU2at/xQdgTxhQcV3eZNh5iePI1ZHqAr8lBGP8ZkqzWpoZ/DRTePHWW+t1wWEQB7
+         CQLWg/RbpT6QMvbwH69fNtTFdki4k+FVq5iYOQkx+NJVJQJiYVsIIi00GuYz95apJIXy
+         LL1chaId7hbhoPXE1iyV1ytsMqMbGXLm3xppAJ8W/9yIdtZoVm2f0lkqrRxTwVwAvGO/
+         kajw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lpTrB1w23BF+6DdwaMHxzpTYFKzu4pd5U9VeSzFiuIk=;
+        b=7JbuqkCY9azNrzGnp24sUVECC8jiIOmUKnDa6Q0DPGDV8jzSSvc7v5vIYuevOm3w7Q
+         tIgSU/SPgr71yk4DEvUfsGHaNfb1ohhYTysj6n20Za/ijep54dWnsU0QyokRRNf7SJbZ
+         sGKvpJTdJkaH4vp5CXRNwMkKcXtZ727lrBHbFxgTFb7zGaMY7UfdWcMSWDEt1BYABaQ/
+         xCxHwK9a0rg6lOrwTJXFacViJ2m7gXhDmpVH1aFr9QYbybEvCAWnTHCTjwPawPZBh64J
+         djvQzCdMxYGRF7Ah0CBOUwrOSNCxnRR6lirudodjsJAfmiaSddzJAZ0zCWaz6I+Iy6A/
+         14cg==
+X-Gm-Message-State: AOAM531ssg//eXRUkFANGlV3PYnmi9sOhTtMx+bSnH6Zl4E9LIDB2SC7
+        fqFm7RVYD+aR3/ayprasecw=
+X-Google-Smtp-Source: ABdhPJyOvOGiB3YatvCcD4+nTrrJ7xiYRe6nG5qS1A/UKHW4RWfqd58+hQ1Bs8dyF7NHZLQohQoILg==
+X-Received: by 2002:a17:90b:1e45:: with SMTP id pi5mr7409150pjb.237.1643368240594;
+        Fri, 28 Jan 2022 03:10:40 -0800 (PST)
+Received: from gmail.com ([2400:2410:93a3:bc00:7019:fa7:ccfe:b136])
+        by smtp.gmail.com with ESMTPSA id g9sm5566280pgi.84.2022.01.28.03.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 03:10:39 -0800 (PST)
+Date:   Fri, 28 Jan 2022 20:10:34 +0900
+From:   Akira Kawata <akirakawata1@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        lukas.bulwahn@gmail.com, kernel test robot <lkp@intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V3 2/2] mm/migration: Add trace events for base page and HugeTLB migrations
-Date:   Fri, 28 Jan 2022 16:39:42 +0530
-Message-Id: <1643368182-9588-3-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643368182-9588-1-git-send-email-anshuman.khandual@arm.com>
-References: <1643368182-9588-1-git-send-email-anshuman.khandual@arm.com>
+Subject: Re: [PATCH v4 1/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+Message-ID: <20220128111034.jf3i4arhahfwwd6n@gmail.com>
+References: <20211212232414.1402199-1-akirakawata1@gmail.com>
+ <20211212232414.1402199-2-akirakawata1@gmail.com>
+ <202201261955.F86F391@keescook>
+ <20220127125643.cifk2ihnbnxo5wcl@gmail.com>
+ <202201270816.5030A2A4B5@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201270816.5030A2A4B5@keescook>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds two trace events for base page and HugeTLB page migrations. These
-events, closely follow the implementation details like setting and removing
-of PTE migration entries, which are essential operations for migration. The
-new CREATE_TRACE_POINTS in <mm/rmap.c> covers both <events/migration.h> and
-<events/tlb.h> based trace events. Hence drop redundant CREATE_TRACE_POINTS
-from other places which could have otherwise conflicted during build.
+On Thu, Jan 27, 2022 at 08:23:51AM -0800, Kees Cook wrote:
+> On Thu, Jan 27, 2022 at 09:56:43PM +0900, Akira Kawata wrote:
+> > On Wed, Jan 26, 2022 at 09:01:30PM -0800, Kees Cook wrote:
+> > > [...]
+> > > 1) The ELF spec says e_phoff is 0 if there's no program header table.
+> > > 
+> > > The old code would just pass the load_addr as a result. This patch will
+> > > now retain the same result (phdr_addr defaults to 0). I wonder if there
+> > > is a bug in this behavior, though? (To be addressed in a different patch
+> > > if needed...)
+> > >
+> > 
+> > It is better to return NULL from load_elf_phdrs when e_phoff == 0, I
+> > think.
+> 
+> Yeah, right now it just returns a pointer to file offset 0.
+> 
+> I also wonder if we should sanity-check e_phoff vs PT_PHDR? Right now
+> Linux ignores PT_PHDR. Should we reject loading when e_phoff != PT_PHDR
+> file offset? (And I wonder if there are "broken" binaries right now that
+> have bad PT_PHDR segments that have gone unnoticed...)
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/x86/mm/init.c             |  1 -
- include/trace/events/migrate.h | 31 +++++++++++++++++++++++++++++++
- mm/migrate.c                   |  4 +++-
- mm/rmap.c                      |  6 ++++++
- 4 files changed, 40 insertions(+), 2 deletions(-)
+I agree that unnoticed broken binaries exist. I checked glibc rtld and
+there is no check of e_phoff != PT_PHDR file offset.
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index 4ba024d5b63a..d8cfce221275 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -31,7 +31,6 @@
-  * We need to define the tracepoints somewhere, and tlb.c
-  * is only compiled when SMP=y.
-  */
--#define CREATE_TRACE_POINTS
- #include <trace/events/tlb.h>
- 
- #include "mm_internal.h"
-diff --git a/include/trace/events/migrate.h b/include/trace/events/migrate.h
-index 779f3fad9ecd..061b5128f335 100644
---- a/include/trace/events/migrate.h
-+++ b/include/trace/events/migrate.h
-@@ -105,6 +105,37 @@ TRACE_EVENT(mm_migrate_pages_start,
- 		  __print_symbolic(__entry->reason, MIGRATE_REASON))
- );
- 
-+DECLARE_EVENT_CLASS(migration_pte,
-+
-+		TP_PROTO(unsigned long addr, unsigned long pte, int order),
-+
-+		TP_ARGS(addr, pte, order),
-+
-+		TP_STRUCT__entry(
-+			__field(unsigned long, addr)
-+			__field(unsigned long, pte)
-+			__field(int, order)
-+		),
-+
-+		TP_fast_assign(
-+			__entry->addr = addr;
-+			__entry->pte = pte;
-+			__entry->order = order;
-+		),
-+
-+		TP_printk("addr=%lx, pte=%lx order=%d", __entry->addr, __entry->pte, __entry->order)
-+);
-+
-+DEFINE_EVENT(migration_pte, set_migration_pte,
-+	TP_PROTO(unsigned long addr, unsigned long pte, int order),
-+	TP_ARGS(addr, pte, order)
-+);
-+
-+DEFINE_EVENT(migration_pte, remove_migration_pte,
-+	TP_PROTO(unsigned long addr, unsigned long pte, int order),
-+	TP_ARGS(addr, pte, order)
-+);
-+
- #endif /* _TRACE_MIGRATE_H */
- 
- /* This part must be outside protection */
-diff --git a/mm/migrate.c b/mm/migrate.c
-index c7da064b4781..79e3a553923a 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -54,7 +54,6 @@
- 
- #include <asm/tlbflush.h>
- 
--#define CREATE_TRACE_POINTS
- #include <trace/events/migrate.h>
- 
- #include "internal.h"
-@@ -257,6 +256,9 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
- 		if (PageTransHuge(page) && PageMlocked(page))
- 			clear_page_mlock(page);
- 
-+		trace_remove_migration_pte(pvmw.address, pte_val(pte),
-+					   compound_order(new));
-+
- 		/* No need to invalidate - it was non-present before */
- 		update_mmu_cache(vma, pvmw.address, pvmw.pte);
- 	}
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 6a1e8c7f6213..cae1c46440d6 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -76,7 +76,9 @@
- 
- #include <asm/tlbflush.h>
- 
-+#define CREATE_TRACE_POINTS
- #include <trace/events/tlb.h>
-+#include <trace/events/migrate.h>
- 
- #include "internal.h"
- 
-@@ -1861,6 +1863,8 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
- 			if (pte_swp_uffd_wp(pteval))
- 				swp_pte = pte_swp_mkuffd_wp(swp_pte);
- 			set_pte_at(mm, pvmw.address, pvmw.pte, swp_pte);
-+			trace_set_migration_pte(pvmw.address, pte_val(swp_pte),
-+						compound_order(page));
- 			/*
- 			 * No need to invalidate here it will synchronize on
- 			 * against the special swap migration pte.
-@@ -1929,6 +1933,8 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
- 			if (pte_uffd_wp(pteval))
- 				swp_pte = pte_swp_mkuffd_wp(swp_pte);
- 			set_pte_at(mm, address, pvmw.pte, swp_pte);
-+			trace_set_migration_pte(address, pte_val(swp_pte),
-+						compound_order(page));
- 			/*
- 			 * No need to invalidate here it will synchronize on
- 			 * against the special swap migration pte.
--- 
-2.25.1
+> 
+> And now I'm thinking about the excellent ELF loading analysis at:
+> https://nathanotterness.com/2021/10/tiny_elf_modernized.html
+> 
+> ;)
 
+I think you have interested in https://shinh.skr.jp/obf/bingolf.html
+also.
+
+> 
+> -- 
+> Kees Cook
+
+Akira Kawata

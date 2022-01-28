@@ -2,124 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5761F49F67E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EF949F687
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347630AbiA1JiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:38:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40719 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243717AbiA1JiE (ORCPT
+        id S1347666AbiA1JjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:39:14 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:37408 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235076AbiA1JjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:38:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643362683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bm7yntnZphNntlIzJBi7dLNf0/Xc6WFVcDglxuX1l/s=;
-        b=aFTWP+WHhD7wEd7pzcmPON/wed9pvTsnpBLYhEZo0FyfuZE6lfS/QQkpKwBU6F+RmGh9vN
-        6oPjdfEGRTz/zo/2+LdgoC2FHZo5tG0vUOlGcPtIJ2yHIUuJWctenctvSDFR+Umfa/ulWg
-        YxZ2GjFPgS7HP130HQn0FAZ8oZgsPFA=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-y75UnmHaNvKf6FbG6m9BBg-1; Fri, 28 Jan 2022 04:38:00 -0500
-X-MC-Unique: y75UnmHaNvKf6FbG6m9BBg-1
-Received: by mail-ej1-f72.google.com with SMTP id i21-20020a1709063c5500b006b4c7308c19so2612043ejg.14
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:38:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bm7yntnZphNntlIzJBi7dLNf0/Xc6WFVcDglxuX1l/s=;
-        b=UtL1qSKknTjkP5snfaUvgV79UOKvLiWuEi/ZZyPCZ1t/+Se1wpCbNMsUwuv0Y0hYBi
-         qIs5SIOOFfCziEHCi28p1lkD2CXrZOUyYRo8mvRaHTDxuhqKCTwoW9iiqnOnjV6Gnikn
-         ejCSQRP2KKT/RaZ015PLD8lReCK8fJYMl9GmAf2sDRSG7v2OURXQIGnEplJcinMIUel5
-         M4iQSMJvZuc2M0d2N21QWADf1oAd/bKJEzoP3SFSWxrW0hgFIiNPoYT+tYATC8uh5lYi
-         gkbulns7Drd6BvCHLqt7qwK/tIffMDmudJyGoaEt5GOUROeuY8pC6lkVll0JNHIv6WPk
-         aUyQ==
-X-Gm-Message-State: AOAM533hbKRKKIBex08u1VYMZDC8rD8UaCQKFxaM1rP7huv7owhJ1K7b
-        utfC1BrBSR4QXkgJz+hIDXa9jprjkM8sIe8sAoAFk76MdRrMVMcb2uG94TIj5q/WFQt6kLvjlMv
-        ojFsgWTIldslgzrVvFvvgCq6/
-X-Received: by 2002:a05:6402:1d56:: with SMTP id dz22mr7685166edb.82.1643362679814;
-        Fri, 28 Jan 2022 01:37:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKe5ZRNHAS83VQrBS/4wBXr4dcTtl5PfFvJSOQogMXJPMGg8ZrekzVaiQ6a5cLAX7JhbRYjQ==
-X-Received: by 2002:a05:6402:1d56:: with SMTP id dz22mr7685135edb.82.1643362679610;
-        Fri, 28 Jan 2022 01:37:59 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id v14sm9782631ejy.77.2022.01.28.01.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 01:37:58 -0800 (PST)
-Date:   Fri, 28 Jan 2022 10:37:56 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/9] ftrace: Add ftrace_set_filter_ips function
-Message-ID: <YfO5dLsrdRlN7D62@krava>
-References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
- <164311270629.1933078.4596694198103138848.stgit@devnote2>
- <20220125110659.2cc8df29@gandalf.local.home>
- <YfApT8uAoCODPAGu@krava>
- <20220128110523.de0e36317a34d48b793a7f6b@kernel.org>
+        Fri, 28 Jan 2022 04:39:13 -0500
+X-UUID: e9dc301affb34158a208a53be4e13ed2-20220128
+X-UUID: e9dc301affb34158a208a53be4e13ed2-20220128
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 506976823; Fri, 28 Jan 2022 17:39:09 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 28 Jan 2022 17:39:08 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 28 Jan 2022 17:39:07 +0800
+Message-ID: <01cc69cdf7773962140c01fe37b12ab2c9491c25.camel@mediatek.com>
+Subject: Re: [PATCH 2/2] iommu/mediatek: Add mt8186 iommu support
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>, <xueqi.zhang@mediatek.com>,
+        <yen-chang.chen@mediatek.com>, <mingyuan.ma@mediatek.com>,
+        <yf.wang@mediatek.com>, <libo.kang@mediatek.com>,
+        <chengci.xu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Date:   Fri, 28 Jan 2022 17:39:06 +0800
+In-Reply-To: <b52a1df8-58f4-baa2-cfb6-9c56244caa0f@collabora.com>
+References: <20220125093244.18230-1-yong.wu@mediatek.com>
+         <20220125093244.18230-3-yong.wu@mediatek.com>
+         <b52a1df8-58f4-baa2-cfb6-9c56244caa0f@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128110523.de0e36317a34d48b793a7f6b@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:05:23AM +0900, Masami Hiramatsu wrote:
+On Thu, 2022-01-27 at 12:28 +0100, AngeloGioacchino Del Regno wrote:
+> Il 25/01/22 10:32, Yong Wu ha scritto:
+> > Add mt8186 iommu supports.
+> > 
+> > Signed-off-by: Anan Sun <anan.sun@mediatek.com>
+> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > ---
+> >   drivers/iommu/mtk_iommu.c | 17 +++++++++++++++++
+> >   1 file changed, 17 insertions(+)
 
-SNIP
+[snip]
+
+> >   static const struct mtk_iommu_plat_data mt8192_data = {
+> >   	.m4u_plat       = M4U_MT8192,
+> >   	.flags          = HAS_BCLK | HAS_SUB_COMM_2BITS |
+> > OUT_ORDER_WR_EN |
+> > @@ -1470,6 +1486,7 @@ static const struct of_device_id
+> > mtk_iommu_of_ids[] = {
+> >   	{ .compatible = "mediatek,mt8167-m4u", .data = &mt8167_data},
+> >   	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
+> >   	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
+> > +	{ .compatible = "mediatek,mt8186-iommu-mm", .data =
+> > &mt8186_data_mm},
+> 
+> Hello!
+> 
+> Is there any particular reason why this compatible is not
+> "mediatek,mt8186-m4u"?
+
+There is no special reason. In the previous SoC, We only support MM
+IOMMU, it was called by "m4u". In the lastest SoC, We have the other
+types IOMMU, like for INFRA masters and APU, thus they are called "mm
+iommu", "infra iommu" and "apu iommu". Of course, "m4u" means "mm
+iommu".
 
 > 
-> So, I wrote a below change for the next version. Is that OK for you?
+> Thanks,
+> Angelo
 > 
-> Thank you,
+> >   	{ .compatible = "mediatek,mt8192-m4u", .data = &mt8192_data},
+> >   	{ .compatible = "mediatek,mt8195-iommu-infra", .data =
+> > &mt8195_data_infra},
+> >   	{ .compatible = "mediatek,mt8195-iommu-vdo",   .data =
+> > &mt8195_data_vdo},
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index f305e18f699f..a28b1bdb234a 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -4985,8 +4985,13 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
->  
->  	for (i = 0; i < cnt; i++) {
->  		err = __ftrace_match_addr(hash, ips[i], remove);
-> -		if (err)
-> +		if (err) {
-> +			/*
-> +			 * This expects the @hash is a temporary hash and if this
-> +			 * fails the caller must free the @hash.
-> +			 */
->  			return err;
-> +		}
->  	}
->  	return 0;
->  }
-> @@ -5649,7 +5654,7 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
->  EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
->  
->  /**
-> - * ftrace_set_filter_ips - set a functions to filter on in ftrace by addresses
-> + * ftrace_set_filter_ips - set functions to filter on in ftrace by addresses
->   * @ops - the ops to set the filter with
->   * @ips - the array of addresses to add to or remove from the filter.
->   * @cnt - the number of addresses in @ips
-
-looks good, thanks
-
-jirka
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
 

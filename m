@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9AB49FFF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D6B49FFFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347163AbiA1SKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
+        id S243237AbiA1SRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238554AbiA1SKx (ORCPT
+        with ESMTP id S233898AbiA1SRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:10:53 -0500
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608BBC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:10:53 -0800 (PST)
-Received: by mail-vk1-xa41.google.com with SMTP id bi36so1158776vkb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:10:53 -0800 (PST)
+        Fri, 28 Jan 2022 13:17:19 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57C2C061714;
+        Fri, 28 Jan 2022 10:17:18 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id h7so18792107ejf.1;
+        Fri, 28 Jan 2022 10:17:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=azTJ2ueDHuBPvZbgitgBJ2I62eWMH6Ph+BEkNa8gKyY=;
-        b=RsfBoZHuI1EvzYxibqeqVsmGfLBUXC7smpJJJ26DGATSVku45gUqW8o7NQUkh2cDRQ
-         XPfjbrM9fZY0iGjjDx0M+y5fCu8noRUGWCAP44JeFDF8FN1KDBJt4cXzcmcziJ9bxeJf
-         qXsskn3Fd1+Fa5iJGt4TePiDdYU9QyD9E6Gp6vZ9PeoQH/mfukzrj3lUxXrFl/dpimGC
-         wV623XQRHyvEViCA4mPPO4yGWG24PGVWn09KE1Kmu6VNMnmC9sratWgZEjNuetzDT52J
-         QDWvCoFrZj3omSF/EHu1Qs1XpsK7tPNA5yWU9JGIY5VdbVh/5g5k8bgMwyEWhd0rjR+V
-         YWMg==
+        bh=J8O3rGjC38oQUzyX/XJmlUBZVdUYy2/jQimRxEDGlr8=;
+        b=es7Bpri9Zwuwrxwo/wQ5YeVCjf59sgdN8no2PZlAC12u9GKRQbhzFix9s/7Tb6fdSp
+         JA+iNskxWfQdytT7+KKdx+b8pWuXNfswSFoCaL334qfvivPaGm9m++LPP2sjna8KOkKn
+         9copo2gJ0m7huB6j/mThrCh+ilbkzjwVvuRCmPgz5nQB87xw8HAkJMw6RpGcT1I5OqnM
+         6oDMAVTYdJ68J5vwgNuJsrEx2QZzTFpedSf25b93T3IX7KsB2mAXzQzHbmfHjxROJaDo
+         0hE86RrZAXo2E6p01eKT+Pk8DiZyY8gQamnHn6gy+9FNXI0I9hDEG0hne3iQhjqa7hPx
+         uxGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=azTJ2ueDHuBPvZbgitgBJ2I62eWMH6Ph+BEkNa8gKyY=;
-        b=z5pdGFDkv55kHWbJ/3mc6BvfTrF0+izDspG8h3Jgwu67TYvO+vTGekd4etkxZTJvbd
-         6TNMmtGfuHGBGFWHYsM9u3qdhyDCvcdiiJkV6H38KZHfcbKujtOaTzapJyN5jDZF1Nu3
-         KrjGZ+ivN/QP2U7TvhlhGoJE1D1jMouCPCHq7Na9yzcVYfzuVIWF9D2PpW8uWFsYXFuN
-         Xd4v3EBj0pXqIkFL7I3pwqrT+aKsQI9eYGea8xzWLE+IqDLxEj7KrDJ6/TOuRRTkmR7+
-         0lv9l2QCYxeMGkgxTkxIt86bbXRS6BycQh26m8P1aa6JUiGtg8mjHyYZjOtS0TlPBrO+
-         Ok0A==
-X-Gm-Message-State: AOAM532NRExw4047hHeCH6ococ6eSpgj8oysx5Rqb59F3qwodI3CVPOV
-        XrpJlq0g+dhkSz1mE06OYPT9gB4FEW2WWpPyGis=
-X-Google-Smtp-Source: ABdhPJzOplg6ThTpz4b8zHjtp5XlLK88dxR4xONoZ5COAK0DKojffS0ftwGSks/RjZGHsCMxfWVPr0IMKlaXoXue52A=
-X-Received: by 2002:a05:6122:116f:: with SMTP id q15mr4439374vko.22.1643393452423;
- Fri, 28 Jan 2022 10:10:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J8O3rGjC38oQUzyX/XJmlUBZVdUYy2/jQimRxEDGlr8=;
+        b=f+WyX+Afa0kFwYdn2DlBJ2H2KWBU2elOjRZr5K3ghF84JGYiVwvHpq+o4nk3VBUi+N
+         xfAT93PS0UPvKfiMqsnfk4FpW7TqbrbuXn3RYfzixdmBuvebj3bt4ImePUsOnBS3CTOP
+         WNdlinI6nhXZl5zaExo6z1ELK2PZN8W+2tDgVEINXwzAGsGDB6Yi8nhNMYgvwlfbJSV1
+         mn/4tGjoR1n1gVQKEeKIKFom+M4kBcGENgvh6w/5M98Rew+XbROnIdyty1CxoLrY5WSA
+         dQaP1+FVe9B4s0EhkbEojEVQzACgqhsGbSBkwHg/n7WXkFp2D18Ew4KHdZC057gaL1zz
+         O4iw==
+X-Gm-Message-State: AOAM533EY0lwS9HN4EaSAXGS1qAJoJQHFMou4nt0uJIpNYInOD8uEh4i
+        98Aws43RialjnZaWgL2tyRkXJ6EyEho=
+X-Google-Smtp-Source: ABdhPJyztTf8rpQnXUP4NO3iVfHd+BWSxR+UryNk4UFhdIZDpbvghmKsn5AGHz9dbYBjdiqyJMdrIw==
+X-Received: by 2002:a17:907:3f9f:: with SMTP id hr31mr7736927ejc.584.1643393837012;
+        Fri, 28 Jan 2022 10:17:17 -0800 (PST)
+Received: from tom-desktop.station (net-188-217-50-123.cust.vodafonedsl.it. [188.217.50.123])
+        by smtp.gmail.com with ESMTPSA id m13sm10219615eja.160.2022.01.28.10.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 10:17:16 -0800 (PST)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     tomm.merciai@gmail.com, linuxfancy@googlegroups.com,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: usb251xb: add boost-up property support
+Date:   Fri, 28 Jan 2022 19:17:13 +0100
+Message-Id: <20220128181713.96856-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: millasmith3250@gmail.com
-Sender: lindahuigea7@gmail.com
-Received: by 2002:ab0:3309:0:0:0:0:0 with HTTP; Fri, 28 Jan 2022 10:10:52
- -0800 (PST)
-From:   "Ms. Milla Smith" <millasth804@gmail.com>
-Date:   Fri, 28 Jan 2022 10:10:52 -0800
-X-Google-Sender-Auth: bdntEinTC2pDi-9Oju6v9r4afoE
-Message-ID: <CAAjJ7WoShLoMRQsW7QZenL6t6CkeFM-mdCbnrRw9QVZZLZqamg@mail.gmail.com>
-Subject: compensation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+Add support for boost-up register of usb251xb hub.
+boost-up property control USB electrical drive strength
+This register can be set:
 
-I am sorry, but happy to inform you about my success in getting those
-funds transferred under the cooperation of a new partner from Vietnam.
-Though, I I tried my best to involve you in the business, but
-everything changed completely. Presently, I am in Vietnam for
-investment projects with my own share of the total sum. Meanwhile, I
-didn't forget your past efforts and attempts to assist me in
-transferring those funds despite that it failed us somehow.
+ - Normal mode -> 0x00
+ - Low         -> 0x01
+ - Medium      -> 0x10
+ - High        -> 0x11
 
-Now contact my secretary in Burkina Faso. Her name is Ms. Milla Smith.
-Her email address is  millasmith3250@gmail.com
+(Normal Default)
 
-Ask her to send you the total sum of $850,000.00 which I kept for your
-compensation over the past efforts and attempts to assist me in this
-matter. I appreciated your efforts at that time very much. So feel
-free and contact my secretary Ms. Milla Smith and instruct her where
-to send the amount to you. Please, do let me know immediately you
-receive it so that wecan share joy after all the sufferings at that
-time.
+References:
+ - http://www.mouser.com/catalog/specsheets/2514.pdf p29
 
-At the moment, I=E2=80=99m very busy here. Because of the investment projec=
-ts
-which I and my new partner are having at hand. Finally, remember that
-I had forwarded instructions to the secretary on your behalf to
-receive that money. So, feel free and get in touch with Ms. Milla
-Smith.
+Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+---
+Changes since v1:
+ - Fix patch as suggested by RLeitner
 
-Extend my greetings to your family.
+Changes since v2:
+ - Fix commit body as suggested by Shtylyov
+ - Fix commit msg
+ - Fix patch as suggested by RLeitner and Shtylyov
 
+ drivers/usb/misc/usb251xb.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
+diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+index 507deef1f709..04c4e3fed094 100644
+--- a/drivers/usb/misc/usb251xb.c
++++ b/drivers/usb/misc/usb251xb.c
+@@ -543,6 +543,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+ 		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+ 
++	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
++		hub->boost_up = USB251XB_DEF_BOOST_UP;
++
+ 	cproperty_char = of_get_property(np, "manufacturer", NULL);
+ 	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
+ 		sizeof(str));
+@@ -584,7 +587,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	 * may be as soon as needed.
+ 	 */
+ 	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
+-	hub->boost_up = USB251XB_DEF_BOOST_UP;
+ 	hub->boost_57 = USB251XB_DEF_BOOST_57;
+ 	hub->boost_14 = USB251XB_DEF_BOOST_14;
+ 	hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
+-- 
+2.25.1
 
-Yours brother
-Mr. Abu Salam
-Greetings from Vietnam

@@ -2,89 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA2149FCBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6411D49FCC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349065AbiA1PY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245268AbiA1PY1 (ORCPT
+        id S1349411AbiA1P0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:26:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48554 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232396AbiA1P0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:24:27 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011DAC061714;
-        Fri, 28 Jan 2022 07:24:27 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id d188so8121088iof.7;
-        Fri, 28 Jan 2022 07:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F3f+nKFjcCkx7vPE/hRl6V7lq9dcKuTW80D9yE8CSto=;
-        b=DTAFDsIiD03g9kO+vUXAc3AEWeyDlatqfHYEwOuRX4RQ8OLkSFLBGZZQbNVBTrKTal
-         P/8jAPiap4R5Tl5MRkP0FRuoE5RjMLaHYMmwOSoPbrmjlxu888P0EH+WAjqtiisAw5+A
-         cBquXsaDLrcVJRw8bnIinEgfhreeNbO2XZMEH13zvtlaEybgUmuwzVIigwvolT72DiOE
-         mBCmGwUpeH9w1vwayB5QlvSRTIJCW3nXjZCnySyE8Mz09In5/JfEyRdar7dAsKi3BQLe
-         WeROjZlY/YRaFhEPb6clA2p4+Ce83AHKqwBk7Px4r5qu9YNXyK4Nn3GOp3BwutyQ6vMh
-         kgKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F3f+nKFjcCkx7vPE/hRl6V7lq9dcKuTW80D9yE8CSto=;
-        b=ImWuutgtcc6CfFFQQ/KQbz1qJB7scsqXW8te+rXL90Wg7BV4r6ChXHOGR8/FUhWH93
-         T1kmV9mwgTpQoucFcA0XTH1ye/Kkgl0LKFHYV2CrvggtKMBEQKsBRzq7mnC7vhHUUly2
-         2xTBQF36m//CX+johW79gItOo4piqzeu+D9a2s0FDkwRniZTOXhME8JhszGwCMlyseAm
-         XYhPywMJzcH7lbFhaOnMNKhPQ2hCCuEJEFRz8l2Fh8F8re+Ebzd4Jq0QJVZC8p8lMrwI
-         xYIo850Q4NMDD1pVmYjtZ+zmRj/ILVEDs1bgNBhPb/ZhSjO2DgSrGHdKpWQtknK0Nbik
-         dHQQ==
-X-Gm-Message-State: AOAM533PIXQoJfi7mVh8aBnBRGgukhQbKP78De4sJkOj2nT7LVFFkH1V
-        GkRnJVnDqRJgWozD3EHMqYWR6FpmG7Daswi/XyU=
-X-Google-Smtp-Source: ABdhPJw8QSC335yxDSlN+ePXg6XZsLitEpZm5RasLgPviD2XPBI4/C8/6ZvqmHLH2FrXgni+yv9ELxOcF71IaYbMLvs=
-X-Received: by 2002:a02:b0c3:: with SMTP id w3mr5129229jah.1.1643383466450;
- Fri, 28 Jan 2022 07:24:26 -0800 (PST)
+        Fri, 28 Jan 2022 10:26:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643383592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5TByn2+H7Z/Q1nf1GVCZH5w6HMAy4Lol4pqxeNfQkI8=;
+        b=HtUO4OrNdT+FDnrW3pgYOpj1XWmQ2GN8BXSvIo2WHm9kWKO64E00t/NDxyrEoBKWsFkX/A
+        Z3O+P1TevUSARy7Tlc9zuuAFOfsAdPx1oexzTMAxhCY1zPi+GRH4pytK60jmuyBGEQM1jU
+        CVHg3JLRDz6Z/GQWxEVRLQojSJlZL0s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-TPK6_5vpODm541tbgA5WSA-1; Fri, 28 Jan 2022 10:26:29 -0500
+X-MC-Unique: TPK6_5vpODm541tbgA5WSA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A695100CCC2;
+        Fri, 28 Jan 2022 15:26:28 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.193.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F01307CAD6;
+        Fri, 28 Jan 2022 15:26:21 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH v1 0/2] drivers/base/memory: determine and store zone for single-zone memory blocks
+Date:   Fri, 28 Jan 2022 16:26:18 +0100
+Message-Id: <20220128152620.168715-1-david@redhat.com>
 MIME-Version: 1.0
-References: <CAOQ4uxhRS3MGEnCUDcsB1RL0d1Oy0g0Rzm75hVFAJw2dJ7uKSA@mail.gmail.com>
- <20220128074731.1623738-1-hch@lst.de> <918225.1643364739@warthog.procyon.org.uk>
- <922909.1643369759@warthog.procyon.org.uk> <YfPs4hpWtFziiO2c@zeniv-ca.linux.org.uk>
-In-Reply-To: <YfPs4hpWtFziiO2c@zeniv-ca.linux.org.uk>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Fri, 28 Jan 2022 17:24:15 +0200
-Message-ID: <CAOQ4uxhMBZBE1dBZJ6S5MfhCNCZ2NdDpzuQyR7rp4J6gyp6p_Q@mail.gmail.com>
-Subject: Re: [PATCH v2] fs: rename S_KERNEL_FILE
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 3:17 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Fri, Jan 28, 2022 at 11:35:59AM +0000, David Howells wrote:
->
-> > > Whether deny rmdir should have its own flag or not I don't know,
-> > > but from ovl POV I *think* it should not be a problem to deny rmdir
-> > > for the ovl upper/work dirs as long as ovl is mounted(?).
-> >
-> > What's the consequence of someone rearranging the directories directly in the
-> > contributing dirs whilst there's an overlay over them?
->
-> "Don't do it, then - presumably the kernel won't panic, but don't expect it to
-> try and invent nice semantics for the crap you are trying to pull"
+This is based on v5.17-rc1 and:
+* [PATCH v1] drivers/base/memory: add memory block to memory group
+  after registration succeeded [1]
+* [PATCH RFC v1] drivers/base/node: consolidate node device subsystem
+  initialization in node_dev_init() [2]
 
-IIUC, I think that is the point Dave was trying to make.
-Nothing good can come out of allowing users to manipulate the overlay
-upper/work dirs, so denying rmdir on those dirs that are already marked
-with the OVL_INUSE flag is probably not a bad idea anyway, so ovl
-and cachefiles could potentially use the same flag with same semantics.
+--
 
-Thanks,
-Amir.
+I remember talking to Michal in the past about removing
+test_pages_in_a_zone(), which we use for:
+* verifying that a memory block we intend to offline is really only managed
+  by a single zone. We don't support offlining of memory blocks that are
+  managed by multiple zones (e.g., multiple nodes, DMA and DMA32)
+* exposing that zone to user space via
+  /sys/devices/system/memory/memory*/valid_zones
+
+Now that I identified some more cases where test_pages_in_a_zone() might
+go wrong, and we received an UBSAN report (see patch #3), let's get rid of
+this PFN walker.
+
+So instead of detecting the zone at runtime with test_pages_in_a_zone() by
+scanning the memmap, let's determine and remember for each memory block
+if it's managed by a single zone. The stored zone can then be used for
+the above two cases, avoiding a manual lookup using test_pages_in_a_zone().
+
+This avoids eventually stumbling over uninitialized memmaps in corner
+cases, especially when ZONE_DEVICE ranges partly fall into memory block
+(that are responsible for managing System RAM).
+
+Handling memory onlining is easy, because we online to exactly one zone.
+Handling boot memory is more tricky, because we want to avoid scanning
+all zones of all nodes to detect possible zones that overlap with the
+physical memory region of interest. Fortunately, we already have code that
+determines the applicable nodes for a memory block, to create sysfs links
+-- we'll hook into that.
+
+Patch #1 is a simple cleanup I had laying around for a longer time.
+Patch #2 contains the main logic to remove test_pages_in_a_zone() and
+further details.
+
+In theory, we could do without [2], however, with a consolidated node
+device initialization logic it's easier to verify that we actually have the
+information we need (NIDs for memory blocks) around at the right time and
+before anything else might rely on it.
+
+[1] https://lkml.kernel.org/r/20220128144540.153902-1-david@redhat.com
+[2] https://lkml.kernel.org/r/20220128151540.164759-1-david@redhat.com
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+
+David Hildenbrand (2):
+  drivers/base/node: rename link_mem_sections() to
+    register_memory_block_under_node()
+  drivers/base/memory: determine and store zone for single-zone memory
+    blocks
+
+ drivers/base/memory.c          | 92 ++++++++++++++++++++++++++++++++--
+ drivers/base/node.c            | 18 +++----
+ include/linux/memory.h         | 13 +++++
+ include/linux/memory_hotplug.h |  6 +--
+ include/linux/node.h           | 16 +++---
+ mm/memory_hotplug.c            | 58 ++++-----------------
+ 6 files changed, 127 insertions(+), 76 deletions(-)
+
+-- 
+2.34.1
+

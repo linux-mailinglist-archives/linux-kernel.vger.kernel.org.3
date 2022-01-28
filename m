@@ -2,124 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DFD49F081
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E2049F089
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345042AbiA1B1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 20:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345028AbiA1B05 (ORCPT
+        id S1345080AbiA1B1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 20:27:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58702 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345081AbiA1B1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 20:26:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13B6C061714;
-        Thu, 27 Jan 2022 17:26:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 27 Jan 2022 20:27:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JlKYk3xXtz4xcP;
-        Fri, 28 Jan 2022 12:26:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643333211;
-        bh=aAjIfzo4A4A8Ms6f79436CT8Pjp3tnjPz5RVwJRWUl4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=T4dNhqKAJlS++pVWE5mLP3PgpMsgUOiswE+0ST5YT4nRzcpRAPJbBXFyOw2Nnsj85
-         HgvcCKFgQ3/q+RllMYtq6NODPsGtw0F3YsQqM85VTf+LToUtDY/9QVb0RBvxtjqUBX
-         zmJs406UtSn7NYvKuC7Y61s53vwaLoCe8kEStRdOqtiKgcU+GMn8mcX6ldN1ogGHyt
-         uYk5YYsqDy6V4/TSitiM8cS0oWCNQExrkCgjMvrUmbqxJ9+EKoNP1LYl1TyxvsSibe
-         ZgBCQnkHtsVsz8xZGliNph8CEMMTLQ+P5vxiYqtgB5yacXdsmZfUMFYzXF3XAG5Vjf
-         ohHJ/pIdqEBhQ==
-Date:   Fri, 28 Jan 2022 12:26:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Heidelberg <david@ixit.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Subject: linux-next: manual merge of the phy-next tree with the qcom tree
-Message-ID: <20220128122648.4c94b120@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E777B82403;
+        Fri, 28 Jan 2022 01:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E36C340E4;
+        Fri, 28 Jan 2022 01:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643333263;
+        bh=1DLj8KHTHp8d5WdiUPuZOplV4Q5vuq4iZQ+JC0nHJ2k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sifa83s71AP+NEqGPXQ/5S92TYI3+oItVpDEaB/zM4U7IG/Phqxl7cKbkNTJMCcdM
+         bf///GlSxnROcERpWqOJnBvLcEP8+e3lzDeKQqcmZ/oJD1Qb71s+egXTZ208pOABI/
+         1ISVx27fNyNNEZ9DW/iPyLY1kzgw+HmRiGu0SsshajEzgLlW4n7gBCh+2fg9TR31Iy
+         COwN/6oumyYRY/WJcIb1/4aEMsCAekeXJa2V806YdfIaZOgwmVd2vQ6VivQad+AtRE
+         oOcOafl34matWgXYicLVuS/pcR46n+6v3OMDvqbEl6vWVFuCfyIfLi+xNUmB50k+at
+         Mloh98egdQ82Q==
+Date:   Thu, 27 Jan 2022 17:27:40 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Chao Yu <chao@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-nilfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH 4/9] f2f2: replace some congestion_wait() calls with
+ io_schedule_timeout()
+Message-ID: <YfNGjMZWrlJURRuR@google.com>
+References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+ <164325158957.29787.2116312603613564596.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w_kT3C5hUF/k4IEMS76OfXG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164325158957.29787.2116312603613564596.stgit@noble.brown>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/w_kT3C5hUF/k4IEMS76OfXG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+I saw some missing cases. Could you please consider this instead?
+And, please fix "f2f2:" to "f2fs:".
 
-Hi all,
-
-Today's linux-next merge of the phy-next tree got a conflict in:
-
-  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
-
-between commit:
-
-  c04421c68fd4 ("dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 compatible")
-
-from the qcom tree and commit:
-
-  e7393b60a14f ("dt-bindings: phy: convert Qualcomm USB HS phy to yaml")
-
-from the phy-next tree.
-
-I fixed it up (I removed the file and added the following merge fix patch)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 28 Jan 2022 12:24:35 +1100
-Subject: [PATCH] merge fix for "dt-bindings: phy: qcom,usb-hs-phy: add MSM8=
-226 compatible"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ fs/f2fs/compress.c |  4 +---
+ fs/f2fs/data.c     | 13 ++++++-------
+ fs/f2fs/f2fs.h     |  6 ++++++
+ fs/f2fs/segment.c  |  8 +++-----
+ fs/f2fs/super.c    |  6 ++----
+ 5 files changed, 18 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/D=
-ocumentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-index a60386bd19b2..e23e5590eaa3 100644
---- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-@@ -38,6 +38,7 @@ properties:
-     items:
-       - enum:
-           - qcom,usb-hs-phy-apq8064
-+          - qcom,usb-hs-phy-msm8226
-           - qcom,usb-hs-phy-msm8916
-           - qcom,usb-hs-phy-msm8974
-       - const: qcom,usb-hs-phy
---=20
-2.34.1
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index 67bac2792e57..6b22d407a4a4 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -1505,9 +1505,7 @@ static int f2fs_write_raw_pages(struct compress_ctx *cc,
+ 				if (IS_NOQUOTA(cc->inode))
+ 					return 0;
+ 				ret = 0;
+-				cond_resched();
+-				congestion_wait(BLK_RW_ASYNC,
+-						DEFAULT_IO_TIMEOUT);
++				f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ 				goto retry_write;
+ 			}
+ 			return ret;
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 0f124e8de1d4..c9285c88cb85 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3046,13 +3046,12 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 					goto next;
+ 				} else if (ret == -EAGAIN) {
+ 					ret = 0;
+-					if (wbc->sync_mode == WB_SYNC_ALL) {
+-						cond_resched();
+-						congestion_wait(BLK_RW_ASYNC,
+-							DEFAULT_IO_TIMEOUT);
+-						goto retry_write;
+-					}
+-					goto next;
++					if (wbc->sync_mode != WB_SYNC_ALL)
++						goto next;
++
++					f2fs_io_schedule_timeout(
++						DEFAULT_IO_TIMEOUT);
++					goto retry_write;
+ 				}
+ 				done_index = page->index + 1;
+ 				done = 1;
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 6ddb98ff0b7c..dbd650a5a8fc 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4501,6 +4501,12 @@ static inline bool f2fs_block_unit_discard(struct f2fs_sb_info *sbi)
+ 	return F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_BLOCK;
+ }
+ 
++static inline void f2fs_io_schedule_timeout(long timeout)
++{
++	set_current_state(TASK_UNINTERRUPTIBLE);
++	io_schedule_timeout(timeout);
++}
++
+ #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+ #define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+ 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 56211e201d51..885b27d7e491 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -313,8 +313,7 @@ void f2fs_drop_inmem_pages_all(struct f2fs_sb_info *sbi, bool gc_failure)
+ skip:
+ 		iput(inode);
+ 	}
+-	congestion_wait(BLK_RW_ASYNC, DEFAULT_IO_TIMEOUT);
+-	cond_resched();
++	f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ 	if (gc_failure) {
+ 		if (++looped >= count)
+ 			return;
+@@ -803,8 +802,7 @@ int f2fs_flush_device_cache(struct f2fs_sb_info *sbi)
+ 		do {
+ 			ret = __submit_flush_wait(sbi, FDEV(i).bdev);
+ 			if (ret)
+-				congestion_wait(BLK_RW_ASYNC,
+-						DEFAULT_IO_TIMEOUT);
++				f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ 		} while (ret && --count);
+ 
+ 		if (ret) {
+@@ -3137,7 +3135,7 @@ static unsigned int __issue_discard_cmd_range(struct f2fs_sb_info *sbi,
+ 			blk_finish_plug(&plug);
+ 			mutex_unlock(&dcc->cmd_lock);
+ 			trimmed += __wait_all_discard_cmd(sbi, NULL);
+-			congestion_wait(BLK_RW_ASYNC, DEFAULT_IO_TIMEOUT);
++			f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ 			goto next;
+ 		}
+ skip:
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 9af6c20532ec..f484a839fc52 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -2135,8 +2135,7 @@ static void f2fs_enable_checkpoint(struct f2fs_sb_info *sbi)
+ 	/* we should flush all the data to keep data consistency */
+ 	do {
+ 		sync_inodes_sb(sbi->sb);
+-		cond_resched();
+-		congestion_wait(BLK_RW_ASYNC, DEFAULT_IO_TIMEOUT);
++		f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ 	} while (get_pages(sbi, F2FS_DIRTY_DATA) && retry--);
+ 
+ 	if (unlikely(retry < 0))
+@@ -2504,8 +2503,7 @@ static ssize_t f2fs_quota_write(struct super_block *sb, int type,
+ 							&page, &fsdata);
+ 		if (unlikely(err)) {
+ 			if (err == -ENOMEM) {
+-				congestion_wait(BLK_RW_ASYNC,
+-						DEFAULT_IO_TIMEOUT);
++				f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ 				goto retry;
+ 			}
+ 			set_sbi_flag(F2FS_SB(sb), SBI_QUOTA_NEED_REPAIR);
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/w_kT3C5hUF/k4IEMS76OfXG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHzRlkACgkQAVBC80lX
-0GyvaQf+I9MlD4vJKF09tucOeyLLHDL+1mmbhnNv98y/LZ868F89eI1LdrFeIV3+
-cSjVjPLVbQDyX+Jro05mLy/IUg3DiPWByp+HY8CWji0eGTP0veiaV60pDdl7b4if
-jHP5dnVrcIB5CCGlyilXJEl2gZF6ACAzgi2IiUXg1kPsVGtXlSwkLihC/eiKPD8J
-RGi+B3tMV0FLBg5DjoT9Mg8Zjnd9XRSCQINt8F/aK46OwgWp18vizJmpTnPY4/dy
-OtcOWlyGAHy0DcUqQBKNnHfDp7Ao3+nzRPXHTq7ZzlnjWyrE5GiybXo//GDEK1CU
-Hq5q5zuFtBU2T6w0vRw8+4oIk7MeGA==
-=diR3
------END PGP SIGNATURE-----
-
---Sig_/w_kT3C5hUF/k4IEMS76OfXG--

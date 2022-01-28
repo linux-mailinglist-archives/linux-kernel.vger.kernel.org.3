@@ -2,162 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B228B49F3CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5B049F3CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346565AbiA1GpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S1346575AbiA1Gpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbiA1GpD (ORCPT
+        with ESMTP id S233328AbiA1Gpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:45:03 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6FBC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:45:03 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so4873264otp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:45:03 -0800 (PST)
+        Fri, 28 Jan 2022 01:45:52 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1ABC061714;
+        Thu, 27 Jan 2022 22:45:52 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id e16so4422679pgn.4;
+        Thu, 27 Jan 2022 22:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Xk+4cliWQ8pKs4/H9QbNIvJzjxoe0JvtSnu86eAs+0=;
-        b=sIvai0pLLwJ9w4NB1MoADJyrAGiPV0/20B6pBBp7Ff+aX15M7nHLfTxFwVhjhtonYU
-         TbNxZSQ8CZJ1+YdNgCmymBIKbdZcJsXjpnLPRJ/pIzo0BsnIw4C0L8SGuJufIL3ln6xv
-         IkXdIfatAe6ivIBV2fmOvyXTz7BRUSHKSbiHx4Pu4y2kH3DU32t2jIhJjgAvxdpvMt7s
-         7gPJnjKmZA9hTSIWopMqc84wJzJEnMbTjqVrgCjfNULZ5qws0UHG9gfueX/MSbbqUjkB
-         N39srS8ePQl44gORjhNbPhj6Twgwb46yJj1UwrFJkT2in4B8xN/YsGmfau3La1aL7dCH
-         Vx3A==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nAT0rA7FuN5R5gzA7OzYDlUSNocIbJl3rW+ZNBQo+cs=;
+        b=Q+WJHrqm0dxKubz8iQtDX0jja7JPSO/PUnLBb674+lFtSPX1SlBaTYA4TrKjqhEaBE
+         clsRcx+EMkyl7GknBmZWV/xLFBi2zeXaQV2lIapQjWz2+7PwH1PCUjhdebOo0IwDbXn6
+         QKEvyeBHac8WrsMA1Wc7NNxXerm5FnpZKyiVZ3FTQplVlp1ZIQVi1B/VCmYQsXRnXLXb
+         tK7DO4njYc7xOp9IcAPPwYhmnoEhOC3VDCSu8BB8ffci/+UjGEX1Wyv2l8+tqPhX+qBc
+         xrhl9Gpss1IenOE4ukc8DqTWJNIY6+kSyHo4wnto8TDdNA4tNEVrYlENvy1+tDmSouKp
+         K+gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Xk+4cliWQ8pKs4/H9QbNIvJzjxoe0JvtSnu86eAs+0=;
-        b=XX2y32Zgipb/KRyU4yk/DEZnITDmr0PoscWYTJlQwtCc5mkyhHvdcaIhLWIw26QiqF
-         9L9xeHhkMgQ8J5M/Y2mhguRVFRZO3OVfjpXeH46ePDy6OCDcYh+132HG7GE3ZrBLYaPL
-         ASnB6bpZ5Wf9UczaeyhSE7/OJYloNcZlrLJezlU8lIBToET7lPT3N44LH+7bGt00BWzN
-         Xr8/C9+rXnHctJpwueHkiYMZOtJQmxVXBZnnp3rmcan9ZRR2Df7jB4yuTw4d2b5VD6Qz
-         /pKs6NbCz5uiu1XXaHezPCADbTZem5qMNlx0vQVvzV0ANeYhWavlDjwQpw37irFl/h6N
-         S88g==
-X-Gm-Message-State: AOAM530AKsJMArMYVpfz7STkjHmWIv8e9umvkyg3ILlf01/sweQbWe0A
-        KKjWCjzSrNL6BETnDHrnduwgdNXPCwMc1EwUwdILkQ==
-X-Google-Smtp-Source: ABdhPJxhCLiJ7LbyK5GGviBZBgWC0bU3tqekXzNeyiuQJzIua7JBV+3R5GRhCZz+4IIwXzMzdThiZYwhgLoYI0niSfs=
-X-Received: by 2002:a9d:6319:: with SMTP id q25mr3982948otk.137.1643352302180;
- Thu, 27 Jan 2022 22:45:02 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nAT0rA7FuN5R5gzA7OzYDlUSNocIbJl3rW+ZNBQo+cs=;
+        b=hbklTjOqCXan8t8oLWOoIwggtpD7hPras67SiAoZ2GNVuPamah+LqEDfxRoL4a//pl
+         a0T6NPWYInGiMvpOJNauXbQ9OZz9gKouvdS/9IvNhldjvzP2rQxJaZaIF9Pspk3KFS46
+         YdgyzRyTyNDLz/wMNicBcBJPsp7aKGBt3M/d8wAMKgF4t8WncsRtxgp+9/EtbAyi09IL
+         g6FTvCG+b3Qjm1mDi7ztcVuqLAjoEyjriwpZQAM487JC2+9ny6c5MA7OGIdgWEsCAo/u
+         h8WzpxC9Nj23Syjj3/ZDjYWczg6cQXrmTOyuGOHkkwW2YgbjO49lySm+m5r4YRCZCjdL
+         MSFw==
+X-Gm-Message-State: AOAM531zQEGtvhC5tmUNNjvpBWNrhOmHYnm6LUzq+phwsH0I6LICy27o
+        iC6INNt+IMsx1uV/JH1mMv0=
+X-Google-Smtp-Source: ABdhPJzTjTxfGbqgUKCfPOMF7mIZ9h2+EjKi+mD8oMuJNw1SztmhFDWEY61eMSa7OWHuvFJYlrU7fA==
+X-Received: by 2002:a62:e304:: with SMTP id g4mr6984551pfh.61.1643352351965;
+        Thu, 27 Jan 2022 22:45:51 -0800 (PST)
+Received: from localhost.localdomain (61-231-106-36.dynamic-ip.hinet.net. [61.231.106.36])
+        by smtp.gmail.com with ESMTPSA id f8sm5460009pfv.24.2022.01.27.22.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 22:45:51 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        andrew@lunn.ch, leon@kernel.org
+Subject: [PATCH v15, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Fri, 28 Jan 2022 14:45:30 +0800
+Message-Id: <20220128064532.2654-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220128000752.2322591-1-jannh@google.com>
-In-Reply-To: <20220128000752.2322591-1-jannh@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 28 Jan 2022 07:44:50 +0100
-Message-ID: <CACT4Y+aF7xQiPCxN8YsqsYWwotyWr+hy-F+OiBPSFDJ0EswN1A@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/csum: Add KASAN/KCSAN instrumentation
-To:     Jann Horn <jannh@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        kasan-dev@googlegroups.com, Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 at 01:08, Jann Horn <jannh@google.com> wrote:
->
-> In the optimized X86 version of the copy-with-checksum helpers, use
-> instrument_*() before accessing buffers from assembly code so that KASAN
-> and KCSAN don't have blind spots there.
->
-> Signed-off-by: Jann Horn <jannh@google.com>
+DM9051 is a spi interface chip,
+need cs/mosi/miso/clock with an interrupt gpio pin
 
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+Joseph CHAMG (1):
+  net: Add dm9051 driver
 
-Thanks
+JosephCHANG (1):
+  yaml: Add dm9051 SPI network yaml file
 
-> ---
->
-> Notes:
->     v2: use instrument_copy_{from,to}_user instead of instrument_{read,write}
->         where appropriate (dvyukov)
->
->  arch/x86/lib/csum-partial_64.c  | 3 +++
->  arch/x86/lib/csum-wrappers_64.c | 9 +++++++++
->  2 files changed, 12 insertions(+)
->
-> diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
-> index 1f8a8f895173..8b0c353cd212 100644
-> --- a/arch/x86/lib/csum-partial_64.c
-> +++ b/arch/x86/lib/csum-partial_64.c
-> @@ -8,6 +8,7 @@
->
->  #include <linux/compiler.h>
->  #include <linux/export.h>
-> +#include <linux/instrumented.h>
->  #include <asm/checksum.h>
->  #include <asm/word-at-a-time.h>
->
-> @@ -37,6 +38,8 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
->         u64 temp64 = (__force u64)sum;
->         unsigned odd, result;
->
-> +       instrument_read(buff, len);
-> +
->         odd = 1 & (unsigned long) buff;
->         if (unlikely(odd)) {
->                 if (unlikely(len == 0))
-> diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
-> index 189344924a2b..c44973b8f255 100644
-> --- a/arch/x86/lib/csum-wrappers_64.c
-> +++ b/arch/x86/lib/csum-wrappers_64.c
-> @@ -6,6 +6,8 @@
->   */
->  #include <asm/checksum.h>
->  #include <linux/export.h>
-> +#include <linux/in6.h>
-> +#include <linux/instrumented.h>
->  #include <linux/uaccess.h>
->  #include <asm/smap.h>
->
-> @@ -26,6 +28,7 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
->         __wsum sum;
->
->         might_sleep();
-> +       instrument_copy_from_user(dst, src, len);
->         if (!user_access_begin(src, len))
->                 return 0;
->         sum = csum_partial_copy_generic((__force const void *)src, dst, len);
-> @@ -51,6 +54,7 @@ csum_and_copy_to_user(const void *src, void __user *dst, int len)
->         __wsum sum;
->
->         might_sleep();
-> +       instrument_copy_to_user(dst, src, len);
->         if (!user_access_begin(dst, len))
->                 return 0;
->         sum = csum_partial_copy_generic(src, (void __force *)dst, len);
-> @@ -71,6 +75,8 @@ EXPORT_SYMBOL(csum_and_copy_to_user);
->  __wsum
->  csum_partial_copy_nocheck(const void *src, void *dst, int len)
->  {
-> +       instrument_write(dst, len);
-> +       instrument_read(src, len);
->         return csum_partial_copy_generic(src, dst, len);
->  }
->  EXPORT_SYMBOL(csum_partial_copy_nocheck);
-> @@ -81,6 +87,9 @@ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
->  {
->         __u64 rest, sum64;
->
-> +       instrument_read(saddr, sizeof(*saddr));
-> +       instrument_read(daddr, sizeof(*daddr));
-> +
->         rest = (__force __u64)htonl(len) + (__force __u64)htons(proto) +
->                 (__force __u64)sum;
->
->
-> base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
-> --
-> 2.35.0.rc0.227.g00780c9af4-goog
->
+ .../bindings/net/davicom,dm9051.yaml          |   62 +
+ drivers/net/ethernet/davicom/Kconfig          |   31 +
+ drivers/net/ethernet/davicom/Makefile         |    1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 1162 +++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         |  159 +++
+ 5 files changed, 1415 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
+
+
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
+-- 
+2.20.1
+

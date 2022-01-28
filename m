@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C520D49F14F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB47349F15A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345556AbiA1Cx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        id S1345574AbiA1Cyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241793AbiA1Cx0 (ORCPT
+        with ESMTP id S1345558AbiA1Cyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:53:26 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBB8C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:53:26 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id c6so14530803ybk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:53:26 -0800 (PST)
+        Thu, 27 Jan 2022 21:54:49 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E0EC061748
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:54:48 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id y23so9720789oia.13
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NZSEsahTaMIlSofqaMZHvrGxDpUIJ7LxbR4idGwpdew=;
-        b=GjOTsPDJ93PhRReYYYL5QaX/G6LbckIbbxfENXB+nMNkcnTfI82ElvaQVQwxLvvZ8o
-         YawOPfZq8G5hKWVpPaGU9INFBQKv69tO4uEZKc2RlHGxPpli1b7YP8NAN0hvCcbEgitg
-         SJltmsme+M2ycoqwgoTxSLyVDnWgBClMZkltzZlLLD5UlIdwAVQickOtQUyWfN5Q6C5p
-         jw4cGjqzevSZDW3T/vwInaescNrnv8quUqOTBuD9rAGYqe9gjedAYmKuK6TONv/CCDXL
-         E4e8nqyX7E9moZPTFBM+IAEcyHTm52WokhjjCJAQ7kmj8JXCfqbQUKG3ONH4hDp70gRl
-         fEgg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MZ09zZh43E7tXHG2E2Vwc7ofHsJ1Ii8TO5MAW1mVCYs=;
+        b=iB9OiZ4cinZKQh/bcru3DdlB/I71TE1CqGYnR/p7p/v2yZ6MUXp/nyKnPB1+pPr5qi
+         +PJPUzpysmF7dPC9BSRuaof/HUBGhQUbvQ0pihtQenwL05yStj+j4+WTaf3BeclOPMvg
+         u36N+8puui43wjUPsZTyLHPbOEF1xHw3CTuBunE7xjZdSYNTO/ylCmiM3qE2VubF6Dzi
+         ftDsP08UM24H7J5XGN8HUtp3Md41o8PC3CWaui8OJZniTVBIjPvfCWUiFfdOm68XXiaa
+         GcqQn+OL9KhFOhoa/lTRpqt4ty8nETnC0SCS5eO4sKcdJJ1CzWFwu5A3FGXh+cmued+2
+         rbXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NZSEsahTaMIlSofqaMZHvrGxDpUIJ7LxbR4idGwpdew=;
-        b=xKLbXWA+pLj1sHwsmE1hJq3HNWQmZR6OAM9cNrvyBn6Ke1aSh1bJwZHmgnkRkq/ROj
-         8h9xpVOCxfsulxBUW2a8uNTNraM+onoOMdzjL6xez/P45qtp/+1mhfDnVtzugu3HMiv8
-         lispQGwGlqJNwHUmn3HWQM6HBYRG63BX1Xm7SmxSx34nTv0f+WI4ZbbdUbUyi6+FA/wa
-         ngRxsfUj3wNk75fRfPX7RTuGHILzo2qwChK99qOj1Kd2ucnTuhL5uFycwrUQmSmaM7p3
-         fqSHel4ZfmSvMlLNUWErHsGCjI1MFK1myNxXdLJQ1Sae9L9gZlOLBrs8ZgnxbSLEQBz4
-         Q+jA==
-X-Gm-Message-State: AOAM532sWdYuYLZIn12N+SKQ4yP8/eef/130e2SXhE2jsVzPEUR5feLL
-        KEkNdSKTN77ks7nmtQ5qSMR9hHCwBRDTn0VNlvcwXv371tQ8fw==
-X-Google-Smtp-Source: ABdhPJzf7c9PkzJz25VZAlwf3/CGlrXvPil3n5mlFwSgExkN4czsiChb2H83zO+Cy9bJb04apCSkp5l8W+EjiV959uQ=
-X-Received: by 2002:a25:d80f:: with SMTP id p15mr10191044ybg.753.1643338405485;
- Thu, 27 Jan 2022 18:53:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MZ09zZh43E7tXHG2E2Vwc7ofHsJ1Ii8TO5MAW1mVCYs=;
+        b=l4fEi1oiBxalpNitsRipozUjkibRaHKMWOsMbhbZboBi4NgNDCR17N6tJN/Hj8j+Dy
+         ejCtRt2nz+0qaoXEcAFq1UHT5XtyqwWv4p6CbaI0inbbB0oPT7M50XC3EFmoMi2XVlbm
+         ijk53wKflEmNF9Qa4jiLJvDawJTpjJfp8GgjOEOPI+2qRShGp5hwDYkGoiqNYhfDfTj6
+         1jSEslAo83tSSRY5QxOCVQe3cNIfHTTi5jpBxvIfW4QGfCfWhyFQxMIrtULsYjaQOFKC
+         +JD4XBY6Pp5j6z4Sz/hXkNRAKhmBOlx5PPfRSaCcdSQJ5qYGeMLMCvw8ajkroZSbMyIl
+         gU5A==
+X-Gm-Message-State: AOAM532crff06I06QNfoP7oY3Mhe+SZXMl3rc+RO8XvjfxIKTUtpnTza
+        0TrZlL9vxp6ZjRpPooFk8ok/lA==
+X-Google-Smtp-Source: ABdhPJybAvO6DTbzDHaecPZUsiIVi2CiXN2nWgFYKmsusfyc7bgjUp+NUJLXjUsWUhlSrluUTR8gPA==
+X-Received: by 2002:a54:4785:: with SMTP id o5mr4093778oic.96.1643338487825;
+        Thu, 27 Jan 2022 18:54:47 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id k6sm5677352oop.28.2022.01.27.18.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 18:54:47 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/13] soc: qcom: mdt_loader: Support Qualcomm SM8450
+Date:   Thu, 27 Jan 2022 18:55:00 -0800
+Message-Id: <20220128025513.97188-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220128014303.2334568-1-jannh@google.com> <CANn89iKWaERfs1iW8jVyRZT8K1LwWM9efiRsx8E1U3CDT39dyw@mail.gmail.com>
- <CAG48ez0sXEjePefCthFdhDskCFhgcnrecEn2jFfteaqa2qwDnQ@mail.gmail.com>
- <CANn89iKmCYq+WBu_S4OvKOXqRSagTg=t8xKq0WC_Rrw+TpKsbw@mail.gmail.com> <CAG48ez2wyQwc5XMKKw8835-4t6+x=X3kPY_CPUqZeh=xQ2krqQ@mail.gmail.com>
-In-Reply-To: <CAG48ez2wyQwc5XMKKw8835-4t6+x=X3kPY_CPUqZeh=xQ2krqQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 27 Jan 2022 18:53:14 -0800
-Message-ID: <CANn89iKVQBDoAwx+yuJ0P0OAV59bav_abh87BA6n7JuzMKMtCQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: dev: Detect dev_hold() after netdev_wait_allrefs()
-To:     Jann Horn <jannh@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 6:48 PM Jann Horn <jannh@google.com> wrote:
+The Qualcomm SM8450 platform comes with both some smaller changes in the
+firmware packaging and a new requirement to hold onto the metadata buffer until
+PAS auth_and_reset has been completed.
 
-> When someone is using NET_DEV_REFCNT_TRACKER for slow debugging, they
-> should also be able to take the performance hit of
-> CONFIG_PCPU_DEV_REFCNT and rely on the normal increment-from-zero
-> detection of the generic refcount code, right? (Maybe
-> NET_DEV_REFCNT_TRACKER should depend on !CONFIG_PCPU_DEV_REFCNT?)
+Extend the PAS api and rework the mdt_loader to meet these new requirements,
+then wire this up with the PAS remoteproc driver and finally add the SM8450
+remoteproc instances.
 
-NET_DEV_REFCNT_TRACKER is not slow, I think it has neglectable cost really.
-(I could not see any difference in my tests)
+Bjorn Andersson (13):
+  firmware: qcom: scm: Introduce pas_metadata context
+  soc: qcom: mdt_loader: Split out split-file-loader
+  soc: qcom: mdt_loader: Allow hash segment to be split out
+  soc: qcom: mdt_loader: Allow hash to reside in any segment
+  soc: qcom: mdt_loader: Extend check for split firmware
+  soc: qcom: mdt_loader: Reorder parts of __qcom_mdt_load()
+  soc: qcom: mdt_loader: Always invoke PAS mem_setup
+  soc: qcom: mdt_loader: Extract PAS operations
+  remoteproc: qcom: pas: Carry PAS metadata context
+  dt-bindings: remoteproc: qcom: pas: Add SM8450 PAS compatibles
+  remoteproc: qcom: pas: Add SM8450 remoteproc support
+  arm64: dts: qcom: sm8450: Add remoteproc enablers and instances
+  arm64: dts: qcom: sm8450-qrd: Enable remoteproc instances
 
-Also getting a trap at the exact moment of the buggy dev_hold_track()
-is somewhat better than after-fact checking.
+ .../bindings/remoteproc/qcom,adsp.yaml        |  16 +
+ arch/arm64/boot/dts/qcom/sm8450-qrd.dts       |  20 ++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          | 297 ++++++++++++++++++
+ drivers/firmware/qcom_scm.c                   |  39 ++-
+ drivers/remoteproc/qcom_q6v5_mss.c            |   7 +-
+ drivers/remoteproc/qcom_q6v5_pas.c            |  36 ++-
+ drivers/soc/qcom/mdt_loader.c                 | 232 +++++++++-----
+ include/linux/qcom_scm.h                      |  10 +-
+ include/linux/soc/qcom/mdt_loader.h           |  17 +-
+ 9 files changed, 579 insertions(+), 95 deletions(-)
 
-In your case, linkwatch_add_event() already uses dev_hold_track() so
-my proposal would detect the issue right away.
+-- 
+2.33.1
 
->
-> My intent with the extra check in free_netdev() was to get some
-> limited detection for production systems that don't use
-> NET_DEV_REFCNT_TRACKER.
-
-Understood

@@ -2,169 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F40454A046B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAA34A0484
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344508AbiA1XlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 18:41:06 -0500
-Received: from mga06.intel.com ([134.134.136.31]:42619 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230352AbiA1XlE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:41:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643413264; x=1674949264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nf2qFgTJ6fU4pbmhpPpUz4DEKZhXCEzLYp+lk4cBfBw=;
-  b=ghpDxoVk8dWi1gn0nqeUFD6khzIp3E3x5JmZ4WwOPh0hmYvbsukHp4ly
-   p5BPA57DKpfY+e6ckeWA39UjU+rU/7b410s2FnlmiXodHw/Qc+buK9pxd
-   tHlcn8U6ngtyV/mnNNfBUr5zLNPZLX62GbQim0+6iKiPEaEChxhxhiTEG
-   mPvpT61xbApC45/4Lkk4L3djl5meSyBfVnvuek7LekEjiRTxVSZXnKuvG
-   bq1EdR5AKlF/rNpiqmeAdnoEd8C2tBo6TK04L/6IihmyNwNi6sMhnCQcG
-   uqXWbs/fItEnY06mb5MNW/SxeDMw9hQ/i+GFeJKQByy+pZ5juUQSUaYRl
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307947244"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="307947244"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:41:04 -0800
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="536332950"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:41:03 -0800
-Date:   Fri, 28 Jan 2022 15:41:03 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 09/44] x86/pkeys: Enable PKS on cpus which support it
-Message-ID: <20220128234103.GL785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-10-ira.weiny@intel.com>
- <f9db9626-de92-65a4-57f1-cf94511dd137@intel.com>
+        id S1351831AbiA1Xs2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Jan 2022 18:48:28 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46474 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351826AbiA1XsZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 18:48:25 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20SKw1oM006582
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:48:25 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dv3m9r4d2-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:48:24 -0800
+Received: from twshared22811.39.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 28 Jan 2022 15:48:23 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 2D2E928E02EFC; Fri, 28 Jan 2022 15:45:21 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        <iii@linux.ibm.com>, Song Liu <song@kernel.org>
+Subject: [PATCH v7 bpf-next 0/9] bpf_prog_pack allocator
+Date:   Fri, 28 Jan 2022 15:45:08 -0800
+Message-ID: <20220128234517.3503701-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9db9626-de92-65a4-57f1-cf94511dd137@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: VRd7rKfdbMUrqsm2ZXrd67D5-0aIgg8z
+X-Proofpoint-GUID: VRd7rKfdbMUrqsm2ZXrd67D5-0aIgg8z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-28_08,2022-01-28_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 bulkscore=0 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 mlxlogscore=640 phishscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0 clxscore=1034
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201280129
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 03:18:29PM -0800, Dave Hansen wrote:
-> On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> > Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
-> > specific, manipulation of permission restrictions on supervisor page
-> > mappings.  It uses the same mechanism of Protection Keys as those on
-> > User mappings but applies that mechanism to supervisor mappings using a
-> > supervisor specific MSR.
-> > 
-> > Bit 24 of CR4 is used to enable the feature by software.  Define
-> > pks_setup() to be called when PKS is configured.
-> 
-> Again, no need to specify the bit numbers.  We have it in the code. :)
-> At most, just say something like:
-> 
-> 	PKS is enabled by a new bit in a control register.
-> or
-> 	PKS is enabled by a new bit in CR4.
-> 
-> > Initially, pks_setup() initializes the per-cpu MSR with 0 to enable all
-> > access on all pkeys.
-> 
-> Why not just make it restrictive to start out?  That's what we do for PKU.
+Changes v6 => v7:
+1. Redesign the interface between generic and arch logic, based on feedback
+   from Alexei and Ilya.
+2. Split 6/7 of v6 to 7/9 and 8/9 in v7, for cleaner logic.
+3. Add bpf_arch_text_copy in 6/9.
 
-This maintains compatibility with the code prior to this patch.  Ie no
-restrictions on kernel mappings.
+Changes v5 => v6:
+1. Make jit_hole_buffer 128 byte long. Only fill the first and last 128
+   bytes of header with INT3. (Alexei)
+2. Use kvmalloc for temporary buffer. (Alexei)
+3. Rename tmp_header/tmp_image => rw_header/rw_image. Remove tmp_image from
+   x64_jit_data. (Alexei)
+4. Change fall back round_up_to in bpf_jit_binary_alloc_pack() from
+   BPF_PROG_MAX_PACK_PROG_SIZE to PAGE_SIZE.
 
-I'll place the default value patch before this one and use it in this patch.
+Changes v4 => v5:
+1. Do not use atomic64 for bpf_jit_current. (Alexei)
 
-> 
-> > asm/pks.h is added as a new file to store new
-> > internal functions and structures such as pks_setup().
-> 
-> One writing nit: try to speak in active voice.
-> 
-> Passive: "Foo is added"
-> Active: "Add foo"
-> 
-> It actually makes thing shorter and easier to read:
-> 
-> 	Add asm/pks.h to store new internal functions and structures
-> 	such as pks_setup().
+Changes v3 => v4:
+1. Rename text_poke_jit() => text_poke_copy(). (Peter)
+2. Change comment style. (Peter)
 
-Ok.  I'll update the commit message.
+Changes v2 => v3:
+1. Fix tailcall.
 
-> 
-> > diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
-> > index bcba3c643e63..191c574b2390 100644
-> > --- a/arch/x86/include/uapi/asm/processor-flags.h
-> > +++ b/arch/x86/include/uapi/asm/processor-flags.h
-> > @@ -130,6 +130,8 @@
-> >  #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
-> >  #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
-> >  #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
-> > +#define X86_CR4_PKS_BIT		24 /* enable Protection Keys for Supervisor */
-> > +#define X86_CR4_PKS		_BITUL(X86_CR4_PKS_BIT)
-> >  
-> >  /*
-> >   * x86-64 Task Priority Register, CR8
-> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> > index 7b8382c11788..83c1abce7d93 100644
-> > --- a/arch/x86/kernel/cpu/common.c
-> > +++ b/arch/x86/kernel/cpu/common.c
-> > @@ -59,6 +59,7 @@
-> >  #include <asm/cpu_device_id.h>
-> >  #include <asm/uv/uv.h>
-> >  #include <asm/sigframe.h>
-> > +#include <asm/pks.h>
-> >  
-> >  #include "cpu.h"
-> >  
-> > @@ -1632,6 +1633,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
-> >  
-> >  	x86_init_rdrand(c);
-> >  	setup_pku(c);
-> > +	pks_setup();
-> >  
-> >  	/*
-> >  	 * Clear/Set all flags overridden by options, need do it
-> > diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-> > index cf12d8bf122b..02629219e683 100644
-> > --- a/arch/x86/mm/pkeys.c
-> > +++ b/arch/x86/mm/pkeys.c
-> > @@ -206,3 +206,19 @@ u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
-> >  	pkval &= ~(PKEY_ACCESS_MASK << shift);
-> >  	return pkval | accessbits << shift;
-> >  }
-> > +
-> > +#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
-> > +
-> > +/*
-> > + * PKS is independent of PKU and either or both may be supported on a CPU.
-> > + */
-> > +void pks_setup(void)
-> > +{
-> > +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> > +		return;
-> > +
-> > +	wrmsrl(MSR_IA32_PKRS, 0);
-> 
-> This probably needs a one-line comment about what it's doing.  As a
-> general rule, I'd much rather have a one-sentence note in a code comment
-> than in the changelog.
+Changes v1 => v2:
+1. Use text_poke instead of writing through linear mapping. (Peter)
+2. Avoid making changes to non-x86_64 code.
 
-Fair enough,
-Ira
+Most BPF programs are small, but they consume a page each. For systems
+with busy traffic and many BPF programs, this could also add significant
+pressure to instruction TLB.
 
-> 
-> > +	cr4_set_bits(X86_CR4_PKS);
-> > +}
-> > +
-> > +#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
-> 
+This set tries to solve this problem with customized allocator that pack
+multiple programs into a huge page.
+
+Patches 1-6 prepare the work. Patch 7 contains key logic of bpf_prog_pack
+allocator. Patch 8 contains bpf_jit_binary_pack_alloc logic on top of
+bpf_prog_pack allocator. Patch 9 uses this allocator in x86_64 jit.
+
+Song Liu (9):
+  x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
+  bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
+  bpf: use size instead of pages in bpf_binary_header
+  bpf: use prog->jited_len in  bpf_prog_ksym_set_addr()
+  x86/alternative: introduce text_poke_copy
+  bpf: introduce bpf_arch_text_copy
+  bpf: introduce bpf_prog_pack allocator
+  bpf: introduce bpf_jit_binary_pack_[alloc|finalize|free]
+  bpf, x86_64: use bpf_jit_binary_pack_alloc
+
+ arch/x86/Kconfig                     |   1 +
+ arch/x86/include/asm/text-patching.h |   1 +
+ arch/x86/kernel/alternative.c        |  32 ++++
+ arch/x86/net/bpf_jit_comp.c          |  66 ++++---
+ include/linux/bpf.h                  |   7 +-
+ include/linux/filter.h               |  27 +--
+ kernel/bpf/core.c                    | 269 +++++++++++++++++++++++++--
+ kernel/bpf/trampoline.c              |   6 +-
+ 8 files changed, 346 insertions(+), 63 deletions(-)
+
+--
+2.30.2

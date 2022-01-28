@@ -2,178 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 641864A02A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DDE4A02A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350634AbiA1VXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:23:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58676 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243744AbiA1VXD (ORCPT
+        id S240952AbiA1V0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232623AbiA1V0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:23:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643404982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hvrb/vy89ZNYuwBLWpFtg9jTrt+DtAEe9H5nZb7p2Ts=;
-        b=G997xVP6dOHFI3Dqtez/fBYGuFLDUojcU/gzOgVu/XU651vIcG5fPhwhWd0llKaUlvFOeQ
-        SQoUiTT1r/F7JG6qQUdoyGwR0H6IsjEEMH3uYGIhzu7qgCwMm7xHRfDHnTvQILTy9O6v30
-        m8De1S8kTzscTnx+8xkHKQkGw4TVeHI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-8F_YfrERNuiFEiWvU914Kg-1; Fri, 28 Jan 2022 16:22:59 -0500
-X-MC-Unique: 8F_YfrERNuiFEiWvU914Kg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32C901006AA8;
-        Fri, 28 Jan 2022 21:22:57 +0000 (UTC)
-Received: from [10.22.33.1] (unknown [10.22.33.1])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F01564E2A1;
-        Fri, 28 Jan 2022 21:22:55 +0000 (UTC)
-Message-ID: <2b68eb66-db17-a8a2-2a07-48b8584da841@redhat.com>
-Date:   Fri, 28 Jan 2022 16:22:55 -0500
+        Fri, 28 Jan 2022 16:26:08 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C25FC061714;
+        Fri, 28 Jan 2022 13:26:08 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id o11so7637648pjf.0;
+        Fri, 28 Jan 2022 13:26:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=cfMRAmoR1rDJZPsZIg2Mf9Md2XIapwAEopIEQIY7W8o=;
+        b=D/F0HH3RAZHiHTuozAEIgdDuk7xHYPKxs8Vsjpdy/MFb1HGPaFzlxZb8fCK4DdpA8y
+         pI45IeTGmWtsXn4dIC4UhI8jozVDWvoR+1B0XR/i5lZbVC8jHYh7vs45sQxt4r0iRhtJ
+         l2GxQmIkfwFexUzY10Weo1sC04Y334JFLOTIGroXmvc+ic+mUqpxZAXCbYzE/u3M8QBo
+         njNyaDcokUOJ6Dy5OY+Zc5CRNOc9mA6k80CI5QeI2UXk8udpMWloPkXMBTFHUfAxHe5k
+         nsqPYWSxJ3Ga/azdEdsaIFTfQJW78K3dc3tAuRx++vURQpeh4rYNNc6m1GBHG/dvQYjt
+         Hf2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=cfMRAmoR1rDJZPsZIg2Mf9Md2XIapwAEopIEQIY7W8o=;
+        b=IKpjN3pj0qH8sJ7yrqkAa6ym+NVcec57azWskxtnsJ05pH2f2LJGlQsu9tl/k6y9BR
+         2QVEHrUNpDHGnqv3/cuWPnQsnwpNaVxOaEWubAofJZJssQ1EEffIWd0I+4Am/AwTH/2i
+         XvHQvLonXUP8nz3zmoVVtdxzdt77s007bKxydrSU7Ocp1E+XHqzVmXnqnFqhnWJ5HHvu
+         +ociCAICC9w6IBsdDRIn4RFGdfJoUXaCrnrG0bj2d39wIrgg7YNfj16YcY0CpqcG8SYS
+         DiwL0qhMlUrm+6Hm1H7SgdXX3G4Q2qwLM61EUO3Sjf4klD2AjuDTpQ/Uny2CAZCVHY67
+         o/qw==
+X-Gm-Message-State: AOAM532i+rXZYtEVBMnBRzEpSuLIQ6rWr2pqav3jdxJsucMw4zqQ2S82
+        ID1Xxxv6kIzEOYNLe9jkrmA=
+X-Google-Smtp-Source: ABdhPJw2AbvTvknknuXeuDh9LX3olrj3jJ7bS4VvE9PCD9vElbzT59DmeU04zqG8l/DJMEQy7+q2ig==
+X-Received: by 2002:a17:902:ecd0:: with SMTP id a16mr9965255plh.64.1643405167909;
+        Fri, 28 Jan 2022 13:26:07 -0800 (PST)
+Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
+        by smtp.gmail.com with ESMTPSA id u18sm10656761pfk.14.2022.01.28.13.26.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jan 2022 13:26:07 -0800 (PST)
+Subject: Re: [PATCH] m68k: mm: Remove check for VM_IO to fix deferred I/O
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org
+References: <20220128173006.1713210-1-geert@linux-m68k.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Finn Thain <fthain@linux-m68k.org>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <b1cd50eb-e476-b4bd-0b2f-b4a8699660f6@gmail.com>
+Date:   Sat, 29 Jan 2022 10:26:01 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/2] mm/page_owner: Introduce SNPRINTF() macro that
- includes length error check
-Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Rafael Aquini <aquini@redhat.com>
-References: <20220128195642.416743-1-longman@redhat.com>
- <20220128195642.416743-2-longman@redhat.com>
- <20220128211848.GH785175@iweiny-DESK2.sc.intel.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220128211848.GH785175@iweiny-DESK2.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220128173006.1713210-1-geert@linux-m68k.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
-On 1/28/22 16:18, Ira Weiny wrote:
-> On Fri, Jan 28, 2022 at 02:56:41PM -0500, Waiman Long wrote:
->> In print_page_owner(), there is a repetitive check after each snprintf()
->> to make sure that the final length is less than the buffer size. Simplify
->> the code and make it easier to read by embedding the buffer length
->> check and increment inside the macro.
-> This does not follow the kernel coding style of not putting control flow
-> statements in macros.[1]
+for hwregs_present(), the exception fixup will handle any access error 
+(through send_fault_sig()), so this should continue to work.
 
-OK, fair enough. I can remove the macro and repost the patch.
+Why the special handling of VM_IO pages? Maybe hp300 had marked all IO 
+register pages VM_IO to distinguish IO faults from VM faults...
+
+The only other area I can imagine this might have an impact is the Mac's 
+pseudo-DMA - FInn might want to give this some testing.
 
 Cheers,
-Longman
 
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   mm/page_owner.c | 50 +++++++++++++++++++++++--------------------------
->>   1 file changed, 23 insertions(+), 27 deletions(-)
-> And in the end you only saved 4 lines of code to read...  Not worth it IMO.
->
-> Ira
->
-> [1] https://www.kernel.org/doc/html/v4.17/process/coding-style.html
->
->> diff --git a/mm/page_owner.c b/mm/page_owner.c
->> index 99e360df9465..c52ce9d6bc3b 100644
->> --- a/mm/page_owner.c
->> +++ b/mm/page_owner.c
->> @@ -325,12 +325,20 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
->>   	seq_putc(m, '\n');
->>   }
->>   
->> +#define SNPRINTF(_buf, _size, _len, _err, _fmt, ...)			\
->> +	do {								\
->> +		_len += snprintf(_buf + _len, _size - _len, _fmt,	\
->> +				 ##__VA_ARGS__);			\
->> +		if (_len >= _size)					\
->> +			goto _err;					\
->> +	} while (0)
->> +
->>   static ssize_t
->>   print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->>   		struct page *page, struct page_owner *page_owner,
->>   		depot_stack_handle_t handle)
->>   {
->> -	int ret, pageblock_mt, page_mt;
->> +	int ret = 0, pageblock_mt, page_mt;
->>   	char *kbuf;
->>   
->>   	count = min_t(size_t, count, PAGE_SIZE);
->> @@ -338,44 +346,32 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->>   	if (!kbuf)
->>   		return -ENOMEM;
->>   
->> -	ret = snprintf(kbuf, count,
->> -			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
->> -			page_owner->order, page_owner->gfp_mask,
->> -			&page_owner->gfp_mask, page_owner->pid,
->> -			page_owner->ts_nsec, page_owner->free_ts_nsec);
->> -
->> -	if (ret >= count)
->> -		goto err;
->> +	SNPRINTF(kbuf, count, ret, err,
->> +		"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
->> +		page_owner->order, page_owner->gfp_mask,
->> +		&page_owner->gfp_mask, page_owner->pid,
->> +		page_owner->ts_nsec, page_owner->free_ts_nsec);
->>   
->>   	/* Print information relevant to grouping pages by mobility */
->>   	pageblock_mt = get_pageblock_migratetype(page);
->>   	page_mt  = gfp_migratetype(page_owner->gfp_mask);
->> -	ret += snprintf(kbuf + ret, count - ret,
->> -			"PFN %lu type %s Block %lu type %s Flags %pGp\n",
->> -			pfn,
->> -			migratetype_names[page_mt],
->> -			pfn >> pageblock_order,
->> -			migratetype_names[pageblock_mt],
->> -			&page->flags);
->> -
->> -	if (ret >= count)
->> -		goto err;
->> +	SNPRINTF(kbuf, count, ret, err,
->> +		"PFN %lu type %s Block %lu type %s Flags %pGp\n",
->> +		pfn, migratetype_names[page_mt],
->> +		pfn >> pageblock_order,
->> +		migratetype_names[pageblock_mt],
->> +		&page->flags);
->>   
->>   	ret += stack_depot_snprint(handle, kbuf + ret, count - ret, 0);
->>   	if (ret >= count)
->>   		goto err;
->>   
->> -	if (page_owner->last_migrate_reason != -1) {
->> -		ret += snprintf(kbuf + ret, count - ret,
->> +	if (page_owner->last_migrate_reason != -1)
->> +		SNPRINTF(kbuf, count, ret, err,
->>   			"Page has been migrated, last migrate reason: %s\n",
->>   			migrate_reason_names[page_owner->last_migrate_reason]);
->> -		if (ret >= count)
->> -			goto err;
->> -	}
->>   
->> -	ret += snprintf(kbuf + ret, count - ret, "\n");
->> -	if (ret >= count)
->> -		goto err;
->> +	SNPRINTF(kbuf, count, ret, err, "\n");
->>   
->>   	if (copy_to_user(buf, kbuf, ret))
->>   		ret = -EFAULT;
->> -- 
->> 2.27.0
->>
->>
+	Michael
 
+
+Am 29.01.2022 um 06:30 schrieb Geert Uytterhoeven:
+> When an application accesses a mapped frame buffer backed by deferred
+> I/O, it receives a segmentation fault.  Fix this by removing the check
+> for VM_IO in do_page_fault().
+>
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> This check was never present in a fault handler on any other
+> architecture than m68k.
+> Some digging revealed that it was added in v2.1.106, but I couldn't find
+> an email with a patch adding it.  That same kernel version extended the
+> use of the hwreg_present() helper to HP9000/300, so the check might have
+> been needed there, perhaps only during development?
+> The Atari kernel relies heavily on hwreg_present() (both the success and
+> failure cases), and these still work, at least on ARAnyM.
+> ---
+>  arch/m68k/mm/fault.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/m68k/mm/fault.c b/arch/m68k/mm/fault.c
+> index 1493cf5eac1e7a39..71aa9f6315dc8028 100644
+> --- a/arch/m68k/mm/fault.c
+> +++ b/arch/m68k/mm/fault.c
+> @@ -93,8 +93,6 @@ int do_page_fault(struct pt_regs *regs, unsigned long address,
+>  	vma = find_vma(mm, address);
+>  	if (!vma)
+>  		goto map_err;
+> -	if (vma->vm_flags & VM_IO)
+> -		goto acc_err;
+>  	if (vma->vm_start <= address)
+>  		goto good_area;
+>  	if (!(vma->vm_flags & VM_GROWSDOWN))
+>

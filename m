@@ -2,120 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB1E49FD09
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B42F49FD0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349658AbiA1Po4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:44:56 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9956 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232764AbiA1Poz (ORCPT
+        id S1349670AbiA1Po6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:44:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37160 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232764AbiA1Po5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:44:55 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SFDpa3031444;
-        Fri, 28 Jan 2022 15:44:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HIjjE1zlk9hEiC0Q3Em9Eron0a2ojY4ey5mwMzrssTA=;
- b=AZvXwxHFbpOJc300X4PkhvsvbRHQy77Oetru7vXXf4nDqBElZ2MQYkU6XP0Pw1IjCD2e
- LTMDatgqJGadvO/EIYXdnT2tTs26dmZOKRlDiJTq04LbFUa3eN8oj1oBpoUWcLJpDCD5
- ioGX+4wOEsGqBggksPVRoEYe0olwSIyV/CzlxwFqiNp8NSlHJlumgn+7mxWUC/sPCO+2
- zFgbzc5diPkPvPX/8iR92hbsLhfJSAeZdaVDMOWKG602MFXZBlvW9sdSMVUwObb0P7v3
- GXWJsDvYm3O+IFbWgUPOddnw8mLe/+1DPHKaWYb6U3Zww0/+CeIDbsANIYUzZpZbeYqe BA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvfuvvv2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:44:36 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SFE3Zo000696;
-        Fri, 28 Jan 2022 15:44:35 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvfuvvv21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:44:35 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SFgk8q003430;
-        Fri, 28 Jan 2022 15:44:34 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01wdc.us.ibm.com with ESMTP id 3dr9jcca2s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:44:34 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SFiWRY13631844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jan 2022 15:44:33 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6555AE060;
-        Fri, 28 Jan 2022 15:44:32 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F6F1AE05C;
-        Fri, 28 Jan 2022 15:44:32 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jan 2022 15:44:32 +0000 (GMT)
-Message-ID: <be31137d-57d9-24f7-01f6-f33080dd4bba@linux.ibm.com>
-Date:   Fri, 28 Jan 2022 10:44:32 -0500
+        Fri, 28 Jan 2022 10:44:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D8660DD5;
+        Fri, 28 Jan 2022 15:44:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27F4C340E0;
+        Fri, 28 Jan 2022 15:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643384696;
+        bh=tBLay+o+eLrzKqcv6juJyl5BpntLLfH1nmE4tQVkqOI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y/G5V8Pvgkh6qVfEMzR5GQbkaMA4nl/3Tx5R5Wbxt/AJbXHo3nyc8ivxe1gkQCgno
+         a5PwXkKvRyTfJUAIYbswanYXF15XWDyUz0EXiwiFjPs+Nip2ykPYcbmvsR4hJPpF4a
+         6+rJm15brN+3A8EY/3P8TgJq1c2N7UH6WQMCJjGSRdMoHCsWkhfixNTotVuwzROgLD
+         pUF7dSFbOLtvtU3SLIhOzhwoDdjfYDowZy5ZfXwleqbPLbCA5PAC7YyaMRm6MvltCi
+         IgqmQ3XuTcnuG/QyHE+QvqVQomBX3KaZiuiWkTYsUaDyNpu+911BswVX0L8hvXUEEr
+         uoB4xjcPIFAvg==
+Date:   Fri, 28 Jan 2022 07:44:54 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Biao Huang <biao.huang@mediatek.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Fabien Parent <fparent@baylibre.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: Re: [PATCH net-next v2 9/9] net: ethernet: mtk-star-emac: separate
+ tx/rx handling with two NAPIs
+Message-ID: <20220128074454.46d0ca29@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <2bdb6c9b5ec90b6c606b7db8c13f8acb34910b36.camel@mediatek.com>
+References: <20220127015857.9868-1-biao.huang@mediatek.com>
+        <20220127015857.9868-10-biao.huang@mediatek.com>
+        <20220127194338.01722b3c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <2bdb6c9b5ec90b6c606b7db8c13f8acb34910b36.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 09/23] ima: Move some IMA policy and filesystem related
- variables into ima_namespace
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-10-stefanb@linux.vnet.ibm.com>
- <1af8f2155730c38dcd510016fe82bc90e4acee39.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <1af8f2155730c38dcd510016fe82bc90e4acee39.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oNMoqWvway8KQY33qhrPQazP4sPzp6Oy
-X-Proofpoint-ORIG-GUID: rw6ih2xvEdCfMfu60-sFJd6gAZT630mO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_04,2022-01-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 clxscore=1015 priorityscore=1501 suspectscore=0 adultscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201280097
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 28 Jan 2022 15:05:27 +0800 Biao Huang wrote:
+> > > + * Description : this is the driver interrupt service routine.
+> > > + * it mainly handles:
+> > > + *  1. tx complete interrupt for frame transmission.
+> > > + *  2. rx complete interrupt for frame reception.
+> > > + *  3. MAC Management Counter interrupt to avoid counter overflow.
+> > >   */
+> > >  static irqreturn_t mtk_star_handle_irq(int irq, void *data)
+> > >  {
+> > > -	struct mtk_star_priv *priv;
+> > > -	struct net_device *ndev;
+> > > +	struct net_device *ndev = data;
+> > > +	struct mtk_star_priv *priv = netdev_priv(ndev);
+> > > +	unsigned int intr_status = mtk_star_intr_ack_all(priv);
+> > > +	unsigned long flags = 0;
+> > > +
+> > > +	if (intr_status & MTK_STAR_BIT_INT_STS_FNRC) {
+> > > +		if (napi_schedule_prep(&priv->rx_napi)) {
+> > > +			spin_lock_irqsave(&priv->lock, flags);
+> > > +			/* mask Rx Complete interrupt */
+> > > +			mtk_star_disable_dma_irq(priv, true, false);
+> > > +			spin_unlock_irqrestore(&priv->lock, flags);
+> > > +			__napi_schedule_irqoff(&priv->rx_napi);
+> > > +		}
+> > > +	}
+> > >  
+> > > -	ndev = data;
+> > > -	priv = netdev_priv(ndev);
+> > > +	if (intr_status & MTK_STAR_BIT_INT_STS_TNTC) {
+> > > +		if (napi_schedule_prep(&priv->tx_napi)) {
+> > > +			spin_lock_irqsave(&priv->lock, flags);
+> > > +			/* mask Tx Complete interrupt */
+> > > +			mtk_star_disable_dma_irq(priv, false, true);
+> > > +			spin_unlock_irqrestore(&priv->lock, flags);
+> > > +			__napi_schedule_irqoff(&priv->tx_napi);
+> > > +		}
+> > > +	}  
+> > 
+> > Seems a little wasteful to retake the same lock twice if two IRQ
+> > sources fire at the same time.  
+> The TX/RX irq control bits are in the same register,
+> but they are triggered independently.
+> So it seems necessary to protect the register
+> access with a spin lock.
 
-On 1/27/22 17:30, Mimi Zohar wrote:
-> On Tue, 2022-01-25 at 17:46 -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Move the ima_write_mutex, ima_fs_flag, and valid_policy variables into
->> ima_namespace. This way each IMA namespace can set those variables
->> independently.
-> This patch description needs to be expanded a bit, indicating why
-> they're being moved together.  These flags are needed when loading a
-> policy. Please also update the "struct ima_namespace" comment.
+This is what I meant:
 
-I'll extend the above sentence like this:
+rx = (status & RX) && napi_schedule_prep(rx_napi);
+tx = (status & TX) && napi_schedule_prep(tx_napi);
 
-... those variables independently in its instance of securityfs.
+if (rx || tx) {
+	spin_lock()
+	disable_irq(priv, rx, tx);	
+	spin_unlock();
+	if (rx)
+		__napi_schedule_irqoff(rx_napi)
+	if (tx)
+		__napi_schedule_irqoff(tx_napi)
+}
 
-    Stefan
+> > >  	desc_data.dma_addr = mtk_star_dma_map_tx(priv, skb);
+> > >  	if (dma_mapping_error(dev, desc_data.dma_addr))
+> > > @@ -1050,18 +1103,10 @@ static int
+> > > mtk_star_netdev_start_xmit(struct sk_buff *skb,
+> > >  
+> > >  	desc_data.skb = skb;
+> > >  	desc_data.len = skb->len;
+> > > -
+> > > -	spin_lock_bh(&priv->lock);
+> > > 
+> > >  	mtk_star_ring_push_head_tx(ring, &desc_data);
+> > >  
+> > >  	netdev_sent_queue(ndev, skb->len);
+> > >  
+> > > -	if (mtk_star_ring_full(ring))
+> > > -		netif_stop_queue(ndev);  
+> > 
+> > Are you stopping the queue in advance somewhere else now? Did you
+> > only
+> > test this with BQL enabled? Only place that stops the ring also
+> > prints
+> > a loud warning now AFAICS..  
+> No.
+> 
+> We modify the ring full condition, and will not invoke netif_stop_queue
+> if queue is already stopped.
 
->
-> thanks,
->
-> Mimi
->
+I don't understand what you're saying.
+
+> Test pass no matter whether BQL is enabled or disabled.
+> 
+> It's much safer to judge queue is full or not at the beginning of
+> start_xmit() to avoid invalid setting.
+
+Drivers are expected to stop their queues at the end of xmit routine if
+the ring can't accommodate another frame. It's more efficient to stop
+the queues early than have to put skbs already dequeued from the qdisc
+layer back into the qdiscs.

@@ -2,158 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD5C49F89E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3820C49F8A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348214AbiA1Lp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348196AbiA1Lpz (ORCPT
+        id S239216AbiA1LqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:46:20 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.227]:48082 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237302AbiA1LqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:45:55 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52D5C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:45:54 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so5782830wme.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=wFWaeqF62cKOElQQL7pp3r58nzR0TbsroVad70HicBs=;
-        b=fEJYvnHuyG464XI/DpthcQvizr2SjMlBfEuvtx0cNBlSwi5tg6ICnFeqdOsPNED6Zf
-         GURh9bBjH6WhPfTpSMj10rpf+j3KbZ29fEi3pNHCYpTiGF6NicIK1sHx9zvobpNuTZKr
-         RMsEu4Vsw02ns5ISGzKxbqUr3vT01QKV9KfWiWQh1gkXADLxOSboWbzG3t6he2cyHQWd
-         m4KT2O6UVO+Svo1P3pFm5Gq4v1YYmasEn6PZdQuD7VF3TETsfNoEcYcJM+If7j5ZoHbf
-         MsyfoGf2XG4pobrNWRnB2JgKpHfRgXIzp9hKRor6fqv0nUNWl1+qo6QlR6zpygSogVM7
-         SjpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=wFWaeqF62cKOElQQL7pp3r58nzR0TbsroVad70HicBs=;
-        b=wAGCmLUZc7eCjuQUhExWGRvSO6s4xQXPp/rFcKhZI3CRF2utSfOO4nqHp5h7cB/mgn
-         TEKY4K4t5WnLy75/Y+MVu7LqsI65TUFWH0O0e8SzYKCjhH9g3PzArJWs64EjxyCHKiN/
-         dblrNEDQfo8S+BpPsy/umqVv6QGcU4QubmI9HGCYcjzuyzt6dK+PUTqPsc/BOYlqSvyO
-         CI4qCCIygAnQSWg3kg9scKnY65eLKYrsn053mlV8Mb5TwiLahv2C0p/JktDUzQEJDGjL
-         feDS/AmgYhbzxL7UOMmo3zhVG6bYbI6dPTsoaiuHfYxDBJ87XUu77NXpkQWD1yD6J/WR
-         fQIQ==
-X-Gm-Message-State: AOAM531igkBsqNmusowRSfszEiIAR63eH36g+QT8IUC+9874jbfJIL9Y
-        FkO5kwLCCiJjTifFj535kzV+WATYIA==
-X-Google-Smtp-Source: ABdhPJx44f6kvLfpYvENtZmEAzR9e4OqkWxLPW+gcw36fp+t/y8ql2nvEXc1QN6+Jb02aVpEMnyozdKZ1A==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:f088:5245:7f91:d730])
- (user=elver job=sendgmr) by 2002:a05:600c:4e0d:: with SMTP id
- b13mr7191313wmq.188.1643370353320; Fri, 28 Jan 2022 03:45:53 -0800 (PST)
-Date:   Fri, 28 Jan 2022 12:44:46 +0100
-In-Reply-To: <20220128114446.740575-1-elver@google.com>
-Message-Id: <20220128114446.740575-2-elver@google.com>
-Mime-Version: 1.0
-References: <20220128114446.740575-1-elver@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 2/2] stack: Constrain stack offset randomization with Clang builds
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 28 Jan 2022 06:46:19 -0500
+HMM_SOURCE_IP: 172.18.0.48:42312.634890243
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-112.38.63.33 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id 38D2928008D;
+        Fri, 28 Jan 2022 19:46:06 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id e97e0b239a5d42dd90dd67afb5d394c4 for kuba@kernel.org;
+        Fri, 28 Jan 2022 19:46:12 CST
+X-Transaction-ID: e97e0b239a5d42dd90dd67afb5d394c4
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+Message-ID: <85c5f9d7-ac78-509e-a1c4-4cb86544f423@chinatelecom.cn>
+Date:   Fri, 28 Jan 2022 19:46:05 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10] net: bonding: Add support for IPV6 ns/na to
+ balance-alb/balance-tlb mode
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jay.vosburgh@canonical.com,
+        nikolay@nvidia.com, huyd12@chinatelecom.cn
+References: <20220125142418.96167-1-sunshouxin@chinatelecom.cn>
+ <20220127184722.60cdb806@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
+In-Reply-To: <20220127184722.60cdb806@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All supported versions of Clang perform auto-init of __builtin_alloca()
-when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
 
-add_random_kstack_offset() uses __builtin_alloca() to add a stack
-offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-enabled, add_random_kstack_offset() will auto-init that unused portion
-of the stack used to add an offset.
+Thanks your comment, I'll adjust it and send out v11 soon.
 
-There are several problems with this:
 
-	1. These offsets can be as large as 1023 bytes. Performing
-	   memset() on them isn't exactly cheap, and this is done on
-	   every syscall entry.
-
-	2. Architectures adding add_random_kstack_offset() to syscall
-	   entry implemented in C require them to be 'noinstr' (e.g. see
-	   x86 and s390). The potential problem here is that a call to
-	   memset may occur, which is not noinstr.
-
-A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-
- | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
- | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
- | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
- | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-
-Clang 14 (unreleased) will introduce a way to skip alloca initialization
-via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
-
-Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
-auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
-__builtin_alloca_uninitialized() if the compiler provides it, as is done
-by Clang 14.
-
-Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
-Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
-Signed-off-by: Marco Elver <elver@google.com>
----
- arch/Kconfig                     |  1 +
- include/linux/randomize_kstack.h | 14 ++++++++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 2cde48d9b77c..c5b50bfe31c1 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
- 	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
- 	default y
- 	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-+	depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
- 	help
- 	  The kernel stack offset can be randomized (after pt_regs) by
- 	  roughly 5 bits of entropy, frustrating memory corruption
-diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
-index 91f1b990a3c3..5c711d73ed10 100644
---- a/include/linux/randomize_kstack.h
-+++ b/include/linux/randomize_kstack.h
-@@ -17,8 +17,18 @@ DECLARE_PER_CPU(u32, kstack_offset);
-  * alignment. Also, since this use is being explicitly masked to a max of
-  * 10 bits, stack-clash style attacks are unlikely. For more details see
-  * "VLAs" in Documentation/process/deprecated.rst
-+ *
-+ * The normal alloca() can be initialized with INIT_STACK_ALL. Initializing the
-+ * unused area on each syscall entry is expensive, and generating an implicit
-+ * call to memset() may also be problematic (such as in noinstr functions).
-+ * Therefore, if the compiler provides it, use the "uninitialized" variant.
-  */
--void *__builtin_alloca(size_t size);
-+#if __has_builtin(__builtin_alloca_uninitialized)
-+#define __kstack_alloca __builtin_alloca_uninitialized
-+#else
-+#define __kstack_alloca __builtin_alloca
-+#endif
-+
- /*
-  * Use, at most, 10 bits of entropy. We explicitly cap this to keep the
-  * "VLA" from being unbounded (see above). 10 bits leaves enough room for
-@@ -37,7 +47,7 @@ void *__builtin_alloca(size_t size);
- 	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
- 				&randomize_kstack_offset)) {		\
- 		u32 offset = raw_cpu_read(kstack_offset);		\
--		u8 *ptr = __builtin_alloca(KSTACK_OFFSET_MAX(offset));	\
-+		u8 *ptr = __kstack_alloca(KSTACK_OFFSET_MAX(offset));	\
- 		/* Keep allocation even after "ptr" loses scope. */	\
- 		asm volatile("" :: "r"(ptr) : "memory");		\
- 	}								\
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+在 2022/1/28 10:47, Jakub Kicinski 写道:
+> On Tue, 25 Jan 2022 09:24:18 -0500 Sun Shouxin wrote:
+>> +/* determine if the packet is NA or NS */
+>> +static bool __alb_determine_nd(struct icmp6hdr *hdr)
+>> +{
+>> +	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
+>> +	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
+>> +		return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>> +static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
+>> +{
+>> +	struct ipv6hdr *ip6hdr;
+>> +	struct icmp6hdr *hdr;
+>> +
+>> +	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
+>> +		return true;
+>> +
+>> +	ip6hdr = ipv6_hdr(skb);
+>> +	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
+> 	if (ip6hdr->nexthdr != IPPROTO_ICMPV6)
+> 		return false;
+>
+> This way there's no need to indent the rest of the function.
+>
+>> +		if (!pskb_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
+> What happened to the _network part? pskb_network_may_pull(), right?
+>
+>> +			return true;
+>> +
+>> +		hdr = icmp6_hdr(skb);
+>> +		return __alb_determine_nd(hdr);
+> Why create a full helper for this condition? Why not just:
+>
+> 	return hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
+> 	       hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION;
+>
+>
+>> +	}
+>> +
+>> +	return false;
+>> +}

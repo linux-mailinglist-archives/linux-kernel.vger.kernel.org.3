@@ -2,56 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F9949F84B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BF849F84C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbiA1L0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:26:31 -0500
-Received: from foss.arm.com ([217.140.110.172]:37828 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234386AbiA1L0a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:26:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94601113E;
-        Fri, 28 Jan 2022 03:26:29 -0800 (PST)
-Received: from [10.57.86.86] (unknown [10.57.86.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 138D73F766;
-        Fri, 28 Jan 2022 03:26:26 -0800 (PST)
-Message-ID: <e84cf689-10a5-c63f-b574-9da682da034e@arm.com>
-Date:   Fri, 28 Jan 2022 11:26:25 +0000
+        id S235701AbiA1L1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235607AbiA1L1Q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:27:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D2C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:27:16 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nDPPL-0003CI-EI; Fri, 28 Jan 2022 12:27:11 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nDPPG-00CeA2-HH; Fri, 28 Jan 2022 12:27:06 +0100
+Date:   Fri, 28 Jan 2022 12:27:06 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
+Message-ID: <YfPTCmMDlXD1UHx9@pengutronix.de>
+References: <20220127110742.922752-1-o.rempel@pengutronix.de>
+ <YfJ+ceEzvzMM1JsW@kroah.com>
+ <YfLPvF6pmcL1UG2f@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v2 4/6] Documentation: coresight: Turn numbered
- subsections into real subsections
-To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org, leo.yan@linaro.com,
-        mike.leach@linaro.org
-Cc:     Leo Yan <leo.yan@linaro.org>, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20220113091056.1297982-1-james.clark@arm.com>
- <20220113091056.1297982-5-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220113091056.1297982-5-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YfLPvF6pmcL1UG2f@rowland.harvard.edu>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:12:48 up 92 days, 17:40, 116 users,  load average: 0.32, 1.33,
+ 6.79
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 09:10, James Clark wrote:
-> This is to allow them to be referenced in a later commit. There was
-> also a mistake where sysFS was introduced as section 2, but numbered
-> as section 1. And vice versa for 'Using perf framework'. This can't
-> happen with unnumbered sections.
+On Thu, Jan 27, 2022 at 12:00:44PM -0500, Alan Stern wrote:
+> On Thu, Jan 27, 2022 at 12:13:53PM +0100, Greg KH wrote:
+> > On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
+> > > The weakest link of usbnet devices is the USB cable.
+> > 
+> > The weakest link of any USB device is the cable, why is this somehow
+> > special to usbnet devices?
+> > 
+> > > Currently there is
+> > > no way to automatically detect cable related issues except of analyzing
+> > > kernel log, which would differ depending on the USB host controller.
+> > > 
+> > > The Ethernet packet counter could potentially show evidence of some USB
+> > > related issues, but can be Ethernet related problem as well.
+> > > 
+> > > To provide generic way to detect USB issues or HW issues on different
+> > > levels we need to make use of devlink.
+> > 
+> > Please make this generic to all USB devices, usbnet is not special here
+> > at all.
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
+> Even more basic question: How is the kernel supposed to tell the 
+> difference between a USB issue and a HW issue?  That is, by what 
+> criterion do you decide which category a particular issue falls under?
 
-Looks good to me
+In case of networking device, from user space perspective, we have a
+communication issue with some external device over the Ethernet.
+So, depending on the health state of following chain:
+cpu->hcd->USB cable->ethernet_controller->ethernet_cable-<...
 
+We need to decide what to do, and what can be done automatically by
+device itself, for example Mars rover :) The user space should get as
+much information as possible what's going on in the system, to decide
+the proper measures to fix or mitigate the problem. System designers
+usually (hopefully) find out during testing what URB status and IP
+uplink status for that hardware means and how to fix that.
+
+Regards,
+Oleksij & Marc
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

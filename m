@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1A449FCB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575CC49FCBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346589AbiA1PV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S1348753AbiA1PWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245039AbiA1PV4 (ORCPT
+        with ESMTP id S1347367AbiA1PWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:21:56 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8466C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:21:56 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id c189so5787105qkg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:21:56 -0800 (PST)
+        Fri, 28 Jan 2022 10:22:06 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4717C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:22:05 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id g14so19391230ybs.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:22:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sXDhGu9GO+2x7oeDXdjJk9+Khk66FD4cDaSrxJDPkgQ=;
-        b=Ye+Jk2yJquDBLp8LprPQrJBQdOyqQmIavIAudC7Jo+Z8qLzg2KN/Cl8zNHin9h9k25
-         UvuaJxmZidqK71a6+gdYibjoQGKMCJpojtjIQ4QPePRKwDJaITA31o6Llo/B7zqdYueB
-         L2N4d6Cm2XcWc5vw8ISevauEG+SToOAVB3wWjDwF/qik79Xr/hmb+Nh3+vpypi6f2oCV
-         nI2ikry+opEUL2NQImKYYfBWoKqD0ltg9NSuJBLIvYVzseLkTthDQuUyp2i1sciFZLaR
-         YwdLpvg/V57PiOQVQSUw3rMKUEyinWHZoEl6h0nqMow0sZlFCu22kW8Zl1I8gtSm7iv8
-         MuKQ==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=c0bMUQoFH3ZTxFaTaemDlxzYbHvdAzHC2nzZEJKopYc=;
+        b=vOtjAj3afwTNgPbxyhcR3Hfa+GiQ6QAsRxL8xr40RJ9lRbkH/grIlYw1SelsmfpJ/b
+         vgkR2VWtRWHZZ6a2Y6Bw1Qc7Q8Aj8FvQerJai8zazSoDMWrYkCVlgnh/xESHKdmbV603
+         gtV3LTBuUGk5k+n14VWKg+sm/piMtA6rXQTdEYbcZ/cIAwb9EJ/+e/hrGxxvHiCc7dRx
+         C9jQsgLwi90iBnAvP81FuVXUTsYKv5cHk1sHLThjG4goI8z77BFIpdxakkSfoFDz8Gv5
+         wbkiW2nGzCJ5q/yCHz6/OSuuPS2VF+hCwgsN5PrmhlfCzljhhppEPOQ+WST7M+J2+aAj
+         or/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sXDhGu9GO+2x7oeDXdjJk9+Khk66FD4cDaSrxJDPkgQ=;
-        b=6hvj87KxSZcKFbw47Vv09NQ0xaTZqWIHLllbui7ZG+Mk3D7ZW/v/Y9HhjSQiKgChFn
-         KM+Y2IJTvQ57O5knrgU3TBMQCRY8uclOiXQPDV0lDRycS7A8NnsLRnhWuX17plCdKccZ
-         KxXcrwyX3RYct6YVqF9ym4dWTxA5g81lgniqYx+4EmOke6ZBajz4Us0fNLKHlaixMoDh
-         HQnpg47JEsQloBjtAJT3WSNxpID9uSjtesVIlIA6WtWj14eCAqlnyh+hSRIYh8JfGruB
-         OZn2N+H+QZ3M+5cnlwU7AcsLDAEMvLIRprAXYrcf/K+EHF/PZTnc9uwFt8dWgfWcTvnl
-         VnoA==
-X-Gm-Message-State: AOAM533v0ZU4HE9Njx2G90X/Bv82Nm8WcTOA5bQKo4qkWogCWDCSjDQp
-        kvBqZZIz5JZ7iBV40wMmUsno7/Izw4T/Hy7C
-X-Google-Smtp-Source: ABdhPJxv1mdf78ujD+RNvg6CT0H+GTKSKjgvzoPABwxeAxNLIDDUs/3Y1SQ9xD2eSW0m0/elkJS61Q==
-X-Received: by 2002:a05:620a:71b:: with SMTP id 27mr5974535qkc.474.1643383315857;
-        Fri, 28 Jan 2022 07:21:55 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id m16sm3575782qkp.90.2022.01.28.07.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 07:21:55 -0800 (PST)
-Date:   Fri, 28 Jan 2022 23:21:47 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] kallsyms: ignore local block labels generated by compiler
-Message-ID: <20220128152147.mwjkf45z72qwdikq@mail.google.com>
-References: <20220128105746.2459-1-changbin.du@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=c0bMUQoFH3ZTxFaTaemDlxzYbHvdAzHC2nzZEJKopYc=;
+        b=5Asv/I0Pu9M+yAPRB89a+NJKLc1CVWgduLkiTgp4lqCtWAjkJqFIYcdX2/YR8eoNMM
+         p9sqcaildT7lKAAiSQdFrtN0EJka0A4vAxv5zrt/lCvUyJSu6eE4do40T6px2KnWvAcP
+         PaFNMYwXrwhL4pcejBv7UzRHglG/WWGvI0IWmNvTD10GOZZVmV52eG0BzugWZefL/ebN
+         w44pYJtstZ2FKT4cdeBu6bMakq2dA1b4HKjc0MDL6vJqSyBGFuP4XCLdRuolAkxR5DZ3
+         I+S9bO/mUV9opX1htWP0jjd69Cqk6RRX+JrgeuYmzXdqUN7ACN0SaE2I1xlnGOjmfDDG
+         CrrQ==
+X-Gm-Message-State: AOAM532MKlW8NuNXgDpt7GXxoc/xvz+1gI0X3WjLM/XP5ukVdG/RrPji
+        zHtz6i2ZFbnFWD8XYBb2VlVTmK+gltZIcH/bmY1URkvWA7NQ7A==
+X-Google-Smtp-Source: ABdhPJyphE2C6kSYX+SJNpMHAuwxAeeAyukV8u13NW0rzBM5OZMDKVkzogZfLgT1QJ8jq3/Djm6d7uzMgiDcMawR6YU=
+X-Received: by 2002:a25:5143:: with SMTP id f64mr14250846ybb.520.1643383324177;
+ Fri, 28 Jan 2022 07:22:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128105746.2459-1-changbin.du@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 28 Jan 2022 20:51:53 +0530
+Message-ID: <CA+G9fYvxxc4o5UjRfHVgmcaTN1ijxXX8e=OTP4t7PbRENmVBsQ@mail.gmail.com>
+Subject: [next] arch/arm/kernel/setup.c:1028:63: error: 'SECTION_SIZE' undeclared
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        rmk+kernel@armlinux.org.uk, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 06:57:46PM +0800, Changbin Du wrote:
-> The llvm compiler can generate lots of local block labels and they might
-> overlap with C defined symbols. So let's ignore such local labels.
-> 
-> Before this change, dumpstack shows a local symbol for epc:
-> [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-> [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-> [    0.040452][    T0]  ra : restore_all+0x12/0x6e
-> 
-> After this change, the C defined symbol is shown which is expected:
-> [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-> [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-> [    0.036567][    T0]  ra : restore_all+0x12/0x6e
-> 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  scripts/kallsyms.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 54ad86d13784..5f4be9d72a32 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -108,6 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
->  	/* Symbol names that begin with the following are ignored.*/
->  	static const char * const ignored_prefixes[] = {
->  		"$",			/* local symbols for ARM, MIPS, etc. */
-> +		".LBB",			/* local block labels generated by compiler */
-I aslo found many symbols like '.Ltmpxxx', '.L__unnamed_xx'. So should we just
-ignore all symbols prefixed by '.L'?
+Following build errors noticed on Linux next 20220128 arm with tinyconfig.
 
->  		".LASANPC",		/* s390 kasan local symbols */
->  		"__crc_",		/* modversions */
->  		"__efistub_",		/* arm64 EFI stub namespace */
-> -- 
-> 2.32.0
-> 
+make --silent --keep-going --jobs=8 \
+   ARCH=arm \
+   CROSS_COMPILE=arm-linux-gnueabihf- \
+   'CC=sccache arm-linux-gnueabihf-gcc' \
+   'HOSTCC=sccache gcc'
 
--- 
-Cheers,
-Changbin Du
+arch/arm/kernel/setup.c: In function 'reserve_crashkernel':
+arch/arm/kernel/setup.c:1028:63: error: 'SECTION_SIZE' undeclared
+(first use in this function); did you mean 'SECTIONS_SHIFT'?
+ 1028 |                 start = memblock_phys_alloc_range(crash_size,
+SECTION_SIZE,
+      |
+^~~~~~~~~~~~
+      |
+SECTIONS_SHIFT
+arch/arm/kernel/setup.c:1028:63: note: each undeclared identifier is
+reported only once for each function it appears in
+make[3]: *** [scripts/Makefile.build:289: arch/arm/kernel/setup.o] Error 1
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+meta data:
+-----------
+    git describe: next-20220128
+    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+    git_sha: b605fdc54c2b28c30ef06d9db99282d8a32ae4be
+    target_arch: arm
+    kconfig: tinyconfig
+    toolchain: gcc-11
+
+Build log:
+-------------
+https://builds.tuxbuild.com/24JPvTrXx7HvkQtxoIXqZtZoZkA/
+
+Steps to reproduce:
+--------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig tinyconfig
+
+--
+Linaro LKFT
+https://lkft.linaro.org

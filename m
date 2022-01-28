@@ -2,110 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E2849FC69
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB72349FC6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349185AbiA1PFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S1349231AbiA1PGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240215AbiA1PFD (ORCPT
+        with ESMTP id S240215AbiA1PGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:05:03 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8986BC061714;
-        Fri, 28 Jan 2022 07:05:03 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id q186so12784890oih.8;
-        Fri, 28 Jan 2022 07:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cRkzWM8NeL3N7R1U1Fg4vj5Gf+jJ9eTY6cn4OX+5KNM=;
-        b=Lfbq+cGJpYtNeAE7/5LpPV891KqhMKy9UNpnstWTTz0OPv4tbncwlxhJL4PyIcfQfq
-         OQj8cfH1o9vIv230l11/kwi97CMFlDsNY7qG4B1uJux91qYzu0YlPaBJhcn8L7lM7/2I
-         JIIBcQp2WguZv9+cyFlAReZ/LaE67tYeTiASPAnyBZrMrJg55UPaHFvAIlnprrdTepkj
-         97QmywP6VzdY/tLJrOCPArtU2wiIu+nQEBvZn73jpAFjR4vucAljxZ5Fw7iQmqmtHs/L
-         RZvmkFnkRJRaiuE9vyPTNCJneHkaN//+PwtDLkaklwTOwsNPMdPtZEFivjQyYQhku9ec
-         XoEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cRkzWM8NeL3N7R1U1Fg4vj5Gf+jJ9eTY6cn4OX+5KNM=;
-        b=NK3keoUvIKcnNdPKmu7JaXnu5y8Xf/BybrnYjZ8zO1IXMe15ovmrdz8B6k9IkL8+IP
-         0LHCtrTB6g6xwiONuC/JhT21SF8+fSsmmz7w64BRHEv3k1FZxKj6iW1476XlqIzSC4Cu
-         7JGZdCtdbG2KHtI0wgI3UZ8wdlerFxcUtymIQs+WeiyULn14r1OVRNktJnvPN4JVj960
-         0OLzPYHWdiUdFbuzagfR1Ks2bnD1pRT2AB5zORbg4t/nUGjrZGj1THL7mtv5bXz4YWFc
-         QDCCsj5059F8dyFZSk61dpkYgBXEIA7r1YCNu1OO+02fFMs5aMb8n9Py1rnZOBE5N9HY
-         kndA==
-X-Gm-Message-State: AOAM533DllU/9O3YS7wLMCuoh9U9KB5aVMO9u9az9wyeXz49AtdL62LC
-        xouVQ24z/EPq51FkEeWImfDbl91WkR90SA==
-X-Google-Smtp-Source: ABdhPJxvO6lQWFvZ4fUaUQrzfe80kveQHpcR2480QCQIoyU/sxHMzpiRnJugWQQviUdNekrVx5v7zg==
-X-Received: by 2002:a54:4e94:: with SMTP id c20mr5604662oiy.132.1643382302903;
-        Fri, 28 Jan 2022 07:05:02 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j3sm6798811oig.37.2022.01.28.07.05.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 07:05:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6c0335ca-eb16-b4de-1f2c-8bdc82219b57@roeck-us.net>
-Date:   Fri, 28 Jan 2022 07:05:00 -0800
+        Fri, 28 Jan 2022 10:06:44 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A16C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:06:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=w0bbA2wx4VLIy7p5KNHMCRGCljhsQ9ND3jOuThJZUKU=; b=ZrnYrLOu+882dYBAZoJyPAbF9g
+        lPCb3s9wVPJoPXy9LA4dD/m/DZzKhD7/aI+khha2YTytW8dSj5UYHL+5WCdm5MgfLSXmz6j73E6GZ
+        Z+2AzhaDRJ0PtSoB44Dt961ZhJC5qrr9MQlR/1NjuyHUhdeDqvIOz1hdbW+N8z+LHgxkFy4RXCdjl
+        WALw4h6KIMhEN0kukuiLOGlfpjXg7J3mIjJEjrT63Nt5BW1UFX/7aQSefRLX9EGU3TMvo+kIASLW3
+        dJNpaPSRqjfoheNg1DeSNMoUqfvuirJrd4P/zbmUkD8Z42V9xAsuQiYBkEsDhWXk0mIDPpqgtcgRT
+        5+ktbyeQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDSpb-004aN0-Qo; Fri, 28 Jan 2022 15:06:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 009BC30002E;
+        Fri, 28 Jan 2022 16:06:30 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A3C112142D5EA; Fri, 28 Jan 2022 16:06:30 +0100 (CET)
+Date:   Fri, 28 Jan 2022 16:06:30 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for
+ memory tiering system
+Message-ID: <YfQGdqQy/VrEU32N@hirez.programming.kicks-ass.net>
+References: <20220128023842.1946583-1-ying.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] hwmon: Remove checks for validity of dev
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220128125913.1291533-1-usama.anjum@collabora.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220128125913.1291533-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128023842.1946583-1-ying.huang@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 04:59, Muhammad Usama Anjum wrote:
-> dev is being dereferenced in device_property_present() which means that
-> it is valid. Don't check its validity again and simplify the code.
+On Fri, Jan 28, 2022 at 10:38:41AM +0800, Huang Ying wrote:
+>  kernel/sched/topology.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   drivers/hwmon/hwmon.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index e36ea82da1474..aec32abd0a89f 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -822,7 +822,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->   	hwdev->name = name;
->   	hdev->class = &hwmon_class;
->   	hdev->parent = dev;
-> -	hdev->of_node = dev ? dev->of_node : NULL;
-> +	hdev->of_node = dev->of_node;
->   	hwdev->chip = chip;
->   	dev_set_drvdata(hdev, drvdata);
->   	dev_set_name(hdev, HWMON_ID_FORMAT, id);
-> @@ -834,7 +834,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->   
->   	INIT_LIST_HEAD(&hwdev->tzdata);
->   
-> -	if (dev && dev->of_node && chip && chip->ops->read &&
-> +	if (dev->of_node && chip && chip->ops->read &&
->   	    chip->info[0]->type == hwmon_chip &&
->   	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
->   		err = hwmon_thermal_register_sensors(hdev);
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index 9f26e6b651fe..ba975a29d444 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -1738,7 +1738,13 @@ void init_numa_topology_type(void)
+>  	}
+>  
+>  	for_each_online_node(a) {
+> +		if (!node_state(a, N_CPU))
+> +			continue;
+> +
+>  		for_each_online_node(b) {
+> +			if (!node_state(b, N_CPU))
+> +				continue;
+> +
+>  			/* Find two nodes furthest removed from each other. */
+>  			if (node_distance(a, b) < n)
+>  				continue;
 
-Wrong fix, sorry. While I would love to make dev mandatory, the function
-is called with dev == NULL from at least one place, and the check is (still)
-needed. Even if/when it is removed we would have to add an early check
-and return -EINVAL if it is NULL.
+I think you forgot some.. by not skipping CPU-less nodes in
+sched_init_numa() the whole premise of init_numa_topology_type() goes
+out the window as well, by virtue of getting sched_domains_numa_levels
+and sched_max_numa_distance wrong.
 
-Guenter
+Did I get them all?
+
+Do we want something like:
+
+#define for_each_possible_cpu_node(n)	for (n = 0; n < nr_node_ids; n++) if (!node_state(n, N_CPU)) continue; else
+#define for_each_online_cpu_node(n)	for_each_online_node(n) if (!node_state(n, N_CPU)) continue; else
+
+To clean that up?
+
+---
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1684,8 +1684,12 @@ static void sched_numa_warn(const char *
+ 
+ 	for (i = 0; i < nr_node_ids; i++) {
+ 		printk(KERN_WARNING "  ");
+-		for (j = 0; j < nr_node_ids; j++)
+-			printk(KERN_CONT "%02d ", node_distance(i,j));
++		for (j = 0; j < nr_node_ids; j++) {
++			if (!node_state(i, N_CPU) || !node_state(j, N_CPU))
++				printk(KERN_CONT "(%02d) ", node_distance(i,j));
++			else
++				printk(KERN_CONT " %02d  ", node_distance(i,j));
++		}
+ 		printk(KERN_CONT "\n");
+ 	}
+ 	printk(KERN_WARNING "\n");
+@@ -1737,7 +1741,13 @@ static void init_numa_topology_type(void
+ 	}
+ 
+ 	for_each_online_node(a) {
++		if (!node_state(a, N_CPU))
++			continue;
++
+ 		for_each_online_node(b) {
++			if (!node_state(b, N_CPU))
++				continue;
++
+ 			/* Find two nodes furthest removed from each other. */
+ 			if (node_distance(a, b) < n)
+ 				continue;
+@@ -1756,6 +1766,9 @@ static void init_numa_topology_type(void
+ 			return;
+ 		}
+ 	}
++
++	pr_err("Failed to find a NUMA topology type, defaulting to DIRECT\n");
++	sched_numa_topology_type = NUMA_DIRECT;
+ }
+ 
+ 
+@@ -1778,9 +1791,15 @@ void sched_init_numa(void)
+ 
+ 	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
+ 	for (i = 0; i < nr_node_ids; i++) {
++		if (!node_state(i, N_CPU))
++			continue;
++
+ 		for (j = 0; j < nr_node_ids; j++) {
+ 			int distance = node_distance(i, j);
+ 
++			if (!node_state(j, N_CPU))
++				continue;
++
+ 			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
+ 				sched_numa_warn("Invalid distance value range");
+ 				return;
+@@ -1863,6 +1882,12 @@ void sched_init_numa(void)
+ 				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
+ 					sched_numa_warn("Node-distance not symmetric");
+ 
++				if (!node_state(j, N_CPU))
++					continue;
++
++				if (!node_state(j, N_CPU))
++					continue;
++
+ 				if (node_distance(j, k) > sched_domains_numa_distance[i])
+ 					continue;
+ 
+@@ -1943,6 +1968,9 @@ static void __sched_domains_numa_masks_s
+ 			if (!node_online(j) || node == j)
+ 				continue;
+ 
++			if (!node_state(j, N_CPU))
++				continue;
++
+ 			if (node_distance(j, node) > sched_domains_numa_distance[i])
+ 				continue;
+ 
+@@ -1974,6 +2002,9 @@ void sched_domains_numa_masks_set(unsign
+ 			if (!node_online(j))
+ 				continue;
+ 
++			if (!node_state(j, N_CPU))
++				continue;
++
+ 			/* Set ourselves in the remote node's masks */
+ 			if (node_distance(j, node) <= sched_domains_numa_distance[i])
+ 				cpumask_set_cpu(cpu, sched_domains_numa_masks[i][j]);

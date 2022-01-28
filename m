@@ -2,186 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311C049FDD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906B749FDD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349992AbiA1QRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349986AbiA1QRa (ORCPT
+        id S1349998AbiA1QSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:18:20 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30834 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235638AbiA1QSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:17:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40A5C061714;
-        Fri, 28 Jan 2022 08:17:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C94DB82025;
-        Fri, 28 Jan 2022 16:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E6DEC36AE2;
-        Fri, 28 Jan 2022 16:17:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643386647;
-        bh=nxlbZsy8Q2SWe4ga/LjTbDUaRa0eP0r7WRbq2+PkVTY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RuD7sdvoMr8QES3FX3rcpoeDNwdSeUFh+KgUSLBbBnwUafMuhGbKt4ORG1zA2Jhc5
-         tRlHNjal9W7TDfURiSmz/y13RRHv62GwB5XUc0+XpkUzlYQ+0w3OIGF1DiD09fAfuu
-         H7+0LKem2Abml7fczXH9hmZpi7XOX5HhLaD+3hRaXrHk5/jqNnsIURjaALX42JyY/1
-         5kwGuByVxdOWIi/TO59MBMrxbSmpJ/SYJetO3WYE6tk77vDVU3oMsWVfj8gIwywmLN
-         jpdxHNTvz1+dRBNPqF6QooLBCDaOtnqYvxknH/4bAgebDaZq6hF+MLlxBhmgupZESO
-         InfSyk+Huhipg==
-Received: by mail-ej1-f46.google.com with SMTP id s5so17660839ejx.2;
-        Fri, 28 Jan 2022 08:17:27 -0800 (PST)
-X-Gm-Message-State: AOAM530/4sNfjSkBPKI1WUw7RvbYH+mbYOiVLCywOJ1MrSpZDCgQ8RPp
-        pXhBVUhY1sMFKwlJHN3EFEtHWvlxCf/cGWIPSA==
-X-Google-Smtp-Source: ABdhPJzz/zS18PKPnGfN2lJ5LGsaFhGr63+K2uD0+MpyUIjLiLR/MhzdXve5JhwlZTgH8V40vRYcpsvrvhSVcEIyRXs=
-X-Received: by 2002:a17:907:a089:: with SMTP id hu9mr7611025ejc.680.1643386645417;
- Fri, 28 Jan 2022 08:17:25 -0800 (PST)
+        Fri, 28 Jan 2022 11:18:18 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SFofX8030052;
+        Fri, 28 Jan 2022 16:17:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=WIIEnY4LQjNNxPmo8R0V8UME5jMvyPgAX65kRzl76DE=;
+ b=sEpNqsY6iohNXVKa0ENno++Xz7TAgntaSy7RompeOswHByMidzv92b8BM+VSPiDR1xDz
+ RJ3H5z4cfbfgNeIv9lK0ghlCl84ejUfU3u7NiULdzdCiMz7D53tKz9bEFQKYCt9DSezV
+ GoGP1UqUdPipIJ51tro+Te7VsYUWr0wlL75m0GkFYw8mNouM60cd5P6EBctcZx82csYM
+ Z5B9+JFxJY1VS6X5uqPJ2G6cxIZzfJhQuyqzZcVjOr4ik9/s0qwO+IS8gETrUwPt2hja
+ YHWp5lpZOuwxXttWbCZA7dmRbRAHzH/YscyzJzHsjgjoUy4MDeMCsuA6n/DEqGLmcnaR KA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvh61up2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 16:17:42 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SFrJSh018510;
+        Fri, 28 Jan 2022 16:17:41 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvh61up1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 16:17:41 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SGEC6U032075;
+        Fri, 28 Jan 2022 16:17:39 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dr9ja373e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 16:17:39 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SGHX7n38011174
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Jan 2022 16:17:33 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1525AE055;
+        Fri, 28 Jan 2022 16:17:33 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D677AE045;
+        Fri, 28 Jan 2022 16:17:33 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 28 Jan 2022 16:17:33 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yinan Liu <yinan@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, hca@linux.ibm.com,
+        linux-s390@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: ftrace hangs waiting for rcu
+References: <20220127114249.03b1b52b@gandalf.local.home>
+        <YfLjIOlGfFmbh1Zv@FVFF77S0Q05N> <yt9dy231yq90.fsf_-_@linux.ibm.com>
+        <YfQCohKWJg9H+uID@FVFF77S0Q05N> <yt9dee4rn8q7.fsf@linux.ibm.com>
+        <YfQVzba5thVs+qap@FVFF77S0Q05N>
+Date:   Fri, 28 Jan 2022 17:17:32 +0100
+In-Reply-To: <YfQVzba5thVs+qap@FVFF77S0Q05N> (Mark Rutland's message of "Fri,
+        28 Jan 2022 16:11:57 +0000")
+Message-ID: <yt9da6ffn8bn.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-References: <20220128120718.30545-1-yongqiang.niu@mediatek.com> <20220128120718.30545-3-yongqiang.niu@mediatek.com>
-In-Reply-To: <20220128120718.30545-3-yongqiang.niu@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sat, 29 Jan 2022 00:17:14 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-qXrE+5ej2YUFCqrMmuNvRzcQtnyJPoSUD5O9N5fgs1A@mail.gmail.com>
-Message-ID: <CAAOTY_-qXrE+5ej2YUFCqrMmuNvRzcQtnyJPoSUD5O9N5fgs1A@mail.gmail.com>
-Subject: Re: [PATCH v1, 2/4] soc: mediatek: add mtk mutex support for MT8186
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: u8O8FusVp6nn3H4y_5Ekm_czzhxm816Q
+X-Proofpoint-ORIG-GUID: jYcgQy5HdrGbbLk3NI1FNR-A0FeeLH0u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-28_05,2022-01-28_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=948
+ lowpriorityscore=0 malwarescore=0 adultscore=0 impostorscore=0
+ suspectscore=0 spamscore=0 priorityscore=1501 mlxscore=0 clxscore=1015
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201280101
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yongqiang:
+Hi Mark,
 
-Yongqiang Niu <yongqiang.niu@mediatek.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=
-=8828=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:07=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> Add mtk mutex support for MT8186 SoC.
->
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-> ---
->  drivers/soc/mediatek/mtk-mutex.c | 45 ++++++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-=
-mutex.c
-> index 2ca55bb5a8be..ebd95fd0f36e 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -26,6 +26,23 @@
->
->  #define INT_MUTEX                              BIT(1)
->
-> +#define MT8186_MUTEX_MOD_DISP_OVL0             0
-> +#define MT8186_MUTEX_MOD_DISP_OVL0_2L          1
-> +#define MT8186_MUTEX_MOD_DISP_RDMA0            2
-> +#define MT8186_MUTEX_MOD_DISP_COLOR0           4
-> +#define MT8186_MUTEX_MOD_DISP_CCORR0           5
-> +#define MT8186_MUTEX_MOD_DISP_AAL0             7
-> +#define MT8186_MUTEX_MOD_DISP_GAMMA0           8
-> +#define MT8186_MUTEX_MOD_DISP_POSTMASK0                9
-> +#define MT8186_MUTEX_MOD_DISP_DITHER0          10
-> +#define MT8186_MUTEX_MOD_DISP_RDMA1            17
-> +
-> +#define MT8186_MUTEX_SOF_SINGLE_MODE 0
-> +#define MT8186_MUTEX_SOF_DSI0 1
-> +#define MT8186_MUTEX_SOF_DPI0 2
-> +#define MT8186_MUTEX_EOF_DSI0 (MT8186_MUTEX_SOF_DSI0 << 6)
-> +#define MT8186_MUTEX_EOF_DPI0 (MT8186_MUTEX_SOF_DPI0 << 6)
-> +
->  #define MT8167_MUTEX_MOD_DISP_PWM              1
->  #define MT8167_MUTEX_MOD_DISP_OVL0             6
->  #define MT8167_MUTEX_MOD_DISP_OVL1             7
-> @@ -226,6 +243,19 @@ static const unsigned int mt8183_mutex_mod[DDP_COMPO=
-NENT_ID_MAX] =3D {
->         [DDP_COMPONENT_WDMA0] =3D MT8183_MUTEX_MOD_DISP_WDMA0,
->  };
->
-> +static const unsigned int mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] =3D {
-> +       [DDP_COMPONENT_AAL0] =3D MT8186_MUTEX_MOD_DISP_AAL0,
-> +       [DDP_COMPONENT_CCORR] =3D MT8186_MUTEX_MOD_DISP_CCORR0,
-> +       [DDP_COMPONENT_COLOR0] =3D MT8186_MUTEX_MOD_DISP_COLOR0,
-> +       [DDP_COMPONENT_DITHER] =3D MT8186_MUTEX_MOD_DISP_DITHER0,
-> +       [DDP_COMPONENT_GAMMA] =3D MT8186_MUTEX_MOD_DISP_GAMMA0,
-> +       [DDP_COMPONENT_OVL0] =3D MT8186_MUTEX_MOD_DISP_OVL0,
-> +       [DDP_COMPONENT_OVL_2L0] =3D MT8186_MUTEX_MOD_DISP_OVL0_2L,
-> +       [DDP_COMPONENT_POSTMASK0] =3D MT8186_MUTEX_MOD_DISP_POSTMASK0,
-> +       [DDP_COMPONENT_RDMA0] =3D MT8186_MUTEX_MOD_DISP_RDMA0,
-> +       [DDP_COMPONENT_RDMA1] =3D MT8186_MUTEX_MOD_DISP_RDMA1,
-> +};
-> +
->  static const unsigned int mt8192_mutex_mod[DDP_COMPONENT_ID_MAX] =3D {
->         [DDP_COMPONENT_AAL0] =3D MT8192_MUTEX_MOD_DISP_AAL0,
->         [DDP_COMPONENT_CCORR] =3D MT8192_MUTEX_MOD_DISP_CCORR0,
-> @@ -264,6 +294,12 @@ static const unsigned int mt8183_mutex_sof[MUTEX_SOF=
-_DSI3 + 1] =3D {
->         [MUTEX_SOF_DPI0] =3D MT8183_MUTEX_SOF_DPI0 | MT8183_MUTEX_EOF_DPI=
-0,
->  };
->
-> +static const unsigned int mt8186_mutex_sof[MUTEX_SOF_DSI3 + 1] =3D {
-> +       [MUTEX_SOF_SINGLE_MODE] =3D MUTEX_SOF_SINGLE_MODE,
-> +       [MUTEX_SOF_DSI0] =3D MT8186_MUTEX_SOF_DSI0 | MT8186_MUTEX_EOF_DSI=
-0,
-> +       [MUTEX_SOF_DPI0] =3D MT8186_MUTEX_SOF_DPI0 | MT8186_MUTEX_EOF_DPI=
-0,
-> +};
-> +
->  static const struct mtk_mutex_data mt2701_mutex_driver_data =3D {
->         .mutex_mod =3D mt2701_mutex_mod,
->         .mutex_sof =3D mt2712_mutex_sof,
-> @@ -301,6 +337,13 @@ static const struct mtk_mutex_data mt8183_mutex_driv=
-er_data =3D {
->         .no_clk =3D true,
->  };
->
-> +static const struct mtk_mutex_data mt8186_mutex_driver_data =3D {
-> +       .mutex_mod =3D mt8186_mutex_mod,
-> +       .mutex_sof =3D mt8186_mutex_sof,
-> +       .mutex_mod_reg =3D MT8183_MUTEX0_MOD0,
-> +       .mutex_sof_reg =3D MT8183_MUTEX0_SOF0,
-> +};
-> +
->  static const struct mtk_mutex_data mt8192_mutex_driver_data =3D {
->         .mutex_mod =3D mt8192_mutex_mod,
->         .mutex_sof =3D mt8183_mutex_sof,
-> @@ -540,6 +583,8 @@ static const struct of_device_id mutex_driver_dt_matc=
-h[] =3D {
->           .data =3D &mt8173_mutex_driver_data},
->         { .compatible =3D "mediatek,mt8183-disp-mutex",
->           .data =3D &mt8183_mutex_driver_data},
-> +       { .compatible =3D "mediatek,mt8186-disp-mutex",
+Mark Rutland <mark.rutland@arm.com> writes:
 
-Add "mediatek,mt8186-disp-mutex" to binding document.
-
-Regards,
-Chun-Kuang.
-
-> +       .data =3D &mt8186_mutex_driver_data},
->         { .compatible =3D "mediatek,mt8192-disp-mutex",
->           .data =3D &mt8192_mutex_driver_data},
->         {},
-> --
-> 2.25.1
+> On Fri, Jan 28, 2022 at 05:08:48PM +0100, Sven Schnelle wrote:
+>> We noticed the PR from Paul and are currently testing the fix. So far
+>> it's looking good. The configuration where we have seen the hang is a
+>> bit unusual:
+>> 
+>> - 16 physical CPUs on the kvm host
+>> - 248 logical CPUs inside kvm
 >
+> Aha! 248 is notably *NOT* a power of two, and in this case the shift would be
+> wrong (ilog2() would give 7, when we need a shift of 8).
+>
+> So I suspect you're hitting the same issue as I was.
+
+Argh, indeed! I somehow changed 'power of two' to 'odd number' in my
+head. I guess it's time for the weekend. :-)
+
+Thanks!

@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BEC49F1A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC2549F1A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241963AbiA1DHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:07:53 -0500
-Received: from mga11.intel.com ([192.55.52.93]:9240 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237367AbiA1DHw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:07:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643339272; x=1674875272;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gFys88Ras/M0GvUvSWtNndTF06hqIqj+FzN0F3BrYyg=;
-  b=ZA9FsGWT1SWk+IVmi/vFrEDYDXjA4lCwVw42/E8Lg0qvfsljYdi/hcxJ
-   QyMWOo+Bp4svxk/yl7+1nytjNR2Tw0hYkp3jJ3d8PQXbGlWOEU2VeQnOn
-   JUuqBNxIPyNzKbIhS4gG5hRWzB8w/4TUwsWGdIeLlT+6upW+lFJY2USHz
-   a2UJuOYA2nxVqbNr34P0RAxzzy3MLFgd8FiZmRNZn4aWUqhOAaX4Xm5BJ
-   Yuiq3dCBzchzedPOqIhh54UgN29f12mMHPVjLd0baOwTZO5b5kYmVyZ1n
-   GZq3zhdVFqL0QFLeUqb5MvVn0YsQRfkkmRXi170UBb+tl8gZTQZO0q7CW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="244632205"
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="244632205"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 19:07:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="618576061"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jan 2022 19:07:51 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDHc6-000NMx-Cs; Fri, 28 Jan 2022 03:07:50 +0000
-Date:   Fri, 28 Jan 2022 11:07:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom Zanussi <zanussi@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [zanussi-trace:ftrace/misc-bugfixes-v1 7/7]
- kernel/trace/trace_events_synth.c:65:9: warning: 'strncpy' output truncated
- before terminating nul copying as many bytes from a string as its length
-Message-ID: <202201281113.KBRwLvOv-lkp@intel.com>
+        id S242172AbiA1DKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:10:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237367AbiA1DKL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 22:10:11 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58138C061714;
+        Thu, 27 Jan 2022 19:10:11 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id p37so4860458pfh.4;
+        Thu, 27 Jan 2022 19:10:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WT+dzScPHjtxOJeWm6NnhEPv2pwUS3Z5EerJCwhXQik=;
+        b=af1u/TXU0N7BN38F5MXSj84y4pWSuuedJRa1100L6dMPupNd51yioCaeHDJVuMHFkD
+         EsApslg2/SUrpVrWb62xxGV6L34Q8lYglgn53DdqcmaUtnj6QBA4CRr9VlV5SzGR5yki
+         7WXPQNGnCPUIijN+tn8c7sDTCRtjZqra1m8Nzpdrh3rRlx2Oj96kOXfWZtKYZe65HByb
+         t8+Kce8p4uu7PNRvbmRo27jccwB6EqA/MHFzLoE/1QZQf0Ks9nizz5H28AW+Pr/3phu9
+         Vie+PjaRFcAUJ3z9YfkB25XOvOYcZIKWT3+sKjHrq8CMg4VZroiD+kj6glyHEMkXBOsH
+         9SUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WT+dzScPHjtxOJeWm6NnhEPv2pwUS3Z5EerJCwhXQik=;
+        b=dCOleoQZ7RjaxIjo3ck9C68KovyQPTcvlIs7DJt4EedAscMiqDPza1bLL70k+zSsTI
+         87XbNRebLFLZFu8r27quQZnuGvU/qhb+SoQPmby42Mrv5u4oCmcnBC0xbaEu0OlLtW5S
+         RbI7SxzdCcgrB8/NEf4Q6HeUjqc9S3jO8kOBahjHG63lqHwEuK4PWHhdKI2R+gpYznJ6
+         1Ls3TLki+TixCo7trzvplG26+9pqMfOpUzjvyXwBfN+QzVwlvM2OG/do8BzL6bLavBR5
+         BIHBC/3SB/0S20aIE4jZibeBmusqYJntEa5SZBjRAzX2POZuN1bY8t1nDyVirE4V0oFm
+         Z7qg==
+X-Gm-Message-State: AOAM532nKs4A5aZgzejMCCS6YtgKp+QYmbERTqwB2cUKTJoTJz83AB2U
+        MQxuqRbaGq7hTAR4sh4J8EE=
+X-Google-Smtp-Source: ABdhPJwQDer5PJOkJoaN2aMrSnQ9FZczxjhSUlJAI2U3G65+Riz1Qmk/PSnDfsJ7s5KEZZXfzbjZHg==
+X-Received: by 2002:a62:dd16:: with SMTP id w22mr6306015pff.56.1643339410717;
+        Thu, 27 Jan 2022 19:10:10 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id n35sm19447181pgb.25.2022.01.27.19.10.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 19:10:10 -0800 (PST)
+Message-ID: <45fcc4c5-5267-de3a-0f98-968220ca30ba@gmail.com>
+Date:   Thu, 27 Jan 2022 19:10:08 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 0/9] 5.16.4-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com
+References: <20220127180258.892788582@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220127180258.892788582@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git ftrace/misc-bugfixes-v1
-head:   a291c672d6e1d7f557d9e15a5ac3f0b446e29dcd
-commit: a291c672d6e1d7f557d9e15a5ac3f0b446e29dcd [7/7] tracing: Remove size restriction on synthetic event cmd error logging
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220128/202201281113.KBRwLvOv-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git/commit/?id=a291c672d6e1d7f557d9e15a5ac3f0b446e29dcd
-        git remote add zanussi-trace https://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git
-        git fetch --no-tags zanussi-trace ftrace/misc-bugfixes-v1
-        git checkout a291c672d6e1d7f557d9e15a5ac3f0b446e29dcd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash kernel/trace/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/trace/trace_events_synth.c: In function 'last_cmd_set':
->> kernel/trace/trace_events_synth.c:65:9: warning: 'strncpy' output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
-      65 |         strncpy(last_cmd, str, strlen(str));
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/strncpy +65 kernel/trace/trace_events_synth.c
+On 1/27/2022 10:09 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.4 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-    54	
-    55	static void last_cmd_set(const char *str)
-    56	{
-    57		if (!str)
-    58			return;
-    59	
-    60		kfree(last_cmd);
-    61		last_cmd = kzalloc(strlen(str) + 1, GFP_KERNEL);
-    62		if (!last_cmd)
-    63			return;
-    64	
-  > 65		strncpy(last_cmd, str, strlen(str));
-    66	}
-    67	
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

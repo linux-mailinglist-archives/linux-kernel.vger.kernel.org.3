@@ -2,68 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7328949F3DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FAB49F3DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346403AbiA1Gy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:54:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiA1Gy2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:54:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6A3C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:54:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17AAA61AEC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18DAC340E0;
-        Fri, 28 Jan 2022 06:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643352866;
-        bh=ikLQPNsjf8L/3fYTx8FkHATsPixNTMoEy1VsDndjwq4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bngk/iVyTHY88J6pTD/RyS3mrKYOaYJdv7GGfJ0AcTKfZzoW3ENAREq7ljObDyahr
-         MObrnUNZcCaN3V94n/IpPJr+mPt3dOm18wNO2o0mLqlcmhZXqgtLqGzAVESgkPUc0f
-         p7TJLOOtAat24lVMrPrQL9fX5AF5AkBl3kbT7QkM=
-Date:   Fri, 28 Jan 2022 07:54:22 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hideki Yamane <henrich@iijmio-mail.jp>
-Cc:     Takashi Iwai <tiwai@suse.de>, Luis Chamberlain <mcgrof@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/4] firmware: Add ZSTD-compressed file support
-Message-ID: <YfOTHj8oRoxdhX6c@kroah.com>
-References: <20210127154939.13288-1-tiwai@suse.de>
- <YBGeXDTEy8myghot@kroah.com>
- <20220128032213.c93b56aa2ea1c77e34b28290@iijmio-mail.jp>
- <YfLnTm7L3m6jEB+4@kroah.com>
- <20220128093335.e8d01f21c4b930c30f77e08a@iijmio-mail.jp>
+        id S1346479AbiA1GzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:55:20 -0500
+Received: from smtpbg516.qq.com ([203.205.250.54]:49854 "EHLO smtpbg516.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234071AbiA1GzT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 01:55:19 -0500
+X-QQ-mid: bizesmtp41t1643352913th5emuoc
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 28 Jan 2022 14:55:06 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000B00A0000000
+X-QQ-FEAT: FXvDfBZI5O6u18t8KgF9w8gE4/WINuNZiWc0PrPj2/BDg8uDHDj6kQWpGYPbt
+        rXArt00Bvuje+9mNzjVhMd7uDg7YvsCYbcc0zoA01bC/yvEhm8p/tH+jE9rMizS3w7p/laT
+        NfIUVzye5I8uanNNfCFgwuOjPzci/oRJiusrNuaNfciiIxsFh81MCMMaxufdnJhyCt6m92O
+        Pdd1z271ZPLk/UOl6cC+ZwtBGoeendGmiwP/VvlRlOXHYqp36MQ7nmJoSxhyPyrCxnAKU1g
+        Z4AtAV8Rm58h4/N2BB+IRuAUuZP3cu6+UdsaDcjTHJlLV1PBqQiD94oG+sjLOC7ZG8rJcRx
+        gi1LNa21gzWlS1iR1K9tbERLuYi7Q==
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH] kernel/time: move timer sysctls to its own file
+Date:   Fri, 28 Jan 2022 14:55:05 +0800
+Message-Id: <20220128065505.16685-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128093335.e8d01f21c4b930c30f77e08a@iijmio-mail.jp>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 09:33:35AM +0900, Hideki Yamane wrote:
-> On Thu, 27 Jan 2022 19:41:18 +0100
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > What is "this"?  You are responding to a year-old email message :)
-> 
->  Oh, yes, sorry.
-> 
->  What's the status for adding "ZSTD-compressed file support" for loading
->  firmware feature config FW_LOADER_COMPRESS in drivers/base/firmware_loader/Kconfig
->  has still XZ_DEC only, where should I check to know its progress?
+This moves the kernel/timer/timer.c respective sysctls to its own file.
 
-If you need this feature, take the patches and rebase them to the latest
-kernel tree and submit them for inclusion.
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ include/linux/timer.h |  4 ----
+ kernel/sysctl.c       | 11 -----------
+ kernel/time/timer.c   | 27 +++++++++++++++++++++++++--
+ 3 files changed, 25 insertions(+), 17 deletions(-)
 
-thanks,
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..793b6b7c5a3e 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -198,10 +198,6 @@ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
+ 
+ #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+ struct ctl_table;
+-
+-extern unsigned int sysctl_timer_migration;
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos);
+ #endif
+ 
+ unsigned long __round_jiffies(unsigned long j, int cpu);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..d6d133423e5d 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2292,17 +2292,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	{
+-		.procname	= "timer_migration",
+-		.data		= &sysctl_timer_migration,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= timer_migration_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_BPF_SYSCALL
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..e7ee3c2484c6 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -223,7 +223,7 @@ static void timer_update_keys(struct work_struct *work);
+ static DECLARE_WORK(timer_update_work, timer_update_keys);
+ 
+ #ifdef CONFIG_SMP
+-unsigned int sysctl_timer_migration = 1;
++static unsigned int sysctl_timer_migration = 1;
+ 
+ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+ 
+@@ -251,7 +251,21 @@ void timers_update_nohz(void)
+ 	schedule_work(&timer_update_work);
+ }
+ 
+-int timer_migration_handler(struct ctl_table *table, int write,
++#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
++static struct ctl_table timer_sysctl[] = {
++	{
++		.procname       = "timer_migration",
++		.data           = &sysctl_timer_migration,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = timer_migration_handler,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static int timer_migration_handler(struct ctl_table *table, int write,
+ 			    void *buffer, size_t *lenp, loff_t *ppos)
+ {
+ 	int ret;
+@@ -264,6 +278,14 @@ int timer_migration_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static int __init timer_sysctl_init(void)
++{
++	register_sysctl_init("kerneli/timer", timer_sysctl);
++	return 0;
++}
++#else
++#define timer_sysctl_init() do { } while (0)
++#endif
+ static inline bool is_timers_nohz_active(void)
+ {
+ 	return static_branch_unlikely(&timers_nohz_active);
+@@ -2022,6 +2044,7 @@ void __init init_timers(void)
+ 	init_timer_cpus();
+ 	posix_cputimers_init_work();
+ 	open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
++	timer_sysctl_init();
+ }
+ 
+ /**
+-- 
+2.20.1
 
-greg k-h
+
+
+

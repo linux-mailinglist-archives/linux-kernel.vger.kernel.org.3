@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A54DC49F163
+	by mail.lfdr.de (Postfix) with ESMTP id EEFEB49F164
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345601AbiA1Cyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S1345611AbiA1Cyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345578AbiA1Cyu (ORCPT
+        with ESMTP id S1345586AbiA1Cyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:54:50 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D34C061748
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:54:50 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id e81so9808270oia.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:54:50 -0800 (PST)
+        Thu, 27 Jan 2022 21:54:51 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BE9C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:54:51 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s9so9754425oib.11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:54:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LcpZYrTZZbyun9fAq1Z6HAHR568TtSyO3q30sHVzyrg=;
-        b=aYSSUv4UrsBBLlwEVb1eeQr+5jS54ssOzcW8avbJ5FO94VoNFTqfnrYEvomA4zBPrq
-         100BfiCNYfaFRZ5cQl3LjONgOLbPzRBSJt1P4/FU5IbiEEw0/7KkfqKxatcUymT7Sl2k
-         InsKwRHGmIJazeR5DDO854gM9otPSqWbD6kxWw4YZi8NCoKdtIeLQpi811LKRUpnPFZw
-         5iceGaHP47f7IfSDz4zjd3zQAUVY7BtuIO/mdIIAZFWbKe8zsEncemfLdC/CUQm5X9Z2
-         r5AWYdLc866bNtEMwh0q6dl4eqKEpDQG+fmsGtZJ5UXXfP0/s9MeC3vdUwCGIfZ6G1h7
-         UvEQ==
+        bh=vOanCSySDZmTUn1LqqVwq/prLxQXPGe2dFE2HwY+tRc=;
+        b=Bq+ONCJneuMbBHf9kxpPG8WmOD0Eb1dgbQOsFxyeZVMHyHoT+uYByqwCu0VdaMoiR0
+         qMlL9UJ6lBs6YeNlQFj59L9cyvI826WQHIslfarIm7TSropMPQL5GN2vLkXpk4v7HS6X
+         zqdJ1pCMJvgTkG7zFFfH6LEW0X+mbA+FB22pxTH7mtd0rRwsRyAtHoOfcnKMjwt5gHuN
+         nXtY3uGJFRM1iowAUg4mOIKY+YX/XxQbUwZ2qn+q0bLAeMbkQcL0o72vlUd8jtjoVlxT
+         PYEtMr7SkvHGF/2vtsyY0qXHml4TfeGhniBVngKFWon2pDM/P5TmSBjOZf1Lndklsr1M
+         2y3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LcpZYrTZZbyun9fAq1Z6HAHR568TtSyO3q30sHVzyrg=;
-        b=OR558dENGQgYKS8F25uGfdEGeEezZBYJFcAfVC6VpGMmCV/i0pp8NdrnCK6uosp37+
-         a2ZRnEHjCkGLtiHPlrChlseutcr4Q6MLNQgmHanAUj9dyCa9jFvZmL0Fncxp4IIwZmk+
-         u5N2RujG5PiOi7F71/VjBq6qe9UHRbZGAs39fr1CkMGd4rBV5bVSw+WwPXABDnEkRo1B
-         l/jVw4i6WH+1JUTTIykpM6MtPS/Mrj2N+3WKtSYKdI6VG/7NrX2I33FVyQgsJItSe2S5
-         A/tZM/EHOJwdat28bnV+j957y7yvtK65gsBkNAAzlVhR9OvRsRPL8cYc+Kfm8cXM4bt6
-         BTfw==
-X-Gm-Message-State: AOAM532zhxX7/jVSV+lX/KhBolm93FAcCpdd1h3IdaTWeg/1/FsrqR1Z
-        ACWz51ooWFMTaLRRmSUON39JRw==
-X-Google-Smtp-Source: ABdhPJxXwAaYsLOeIwMHxNTMOEbWkKRk+eRrG+gSkgetkIek43FJ1geKBCagLXAC030j4XbR5JzpZg==
-X-Received: by 2002:a05:6808:14c9:: with SMTP id f9mr2977531oiw.251.1643338489702;
-        Thu, 27 Jan 2022 18:54:49 -0800 (PST)
+        bh=vOanCSySDZmTUn1LqqVwq/prLxQXPGe2dFE2HwY+tRc=;
+        b=0Yy5NuVDAJU11piW5AnPwBSxcORl712v26jM1QifUMdHlJLsY3zAL+KcgdQpG0Gx1x
+         lEwpfSLJBFuHvyLIZrZwQjll96yHNI8Ti4Ey3dCc2wSgS9bWb8c/ef8YCJz4F4NiOW9b
+         6IwLOBwic2liFQRErsT6JI1VUM/bJyHtTeS8a9fkVqHi5aP+s01RdsXI1fUXyKFedyOy
+         l9EJIc43GyvMr+wkALbnd2Z4cfC8DrD+EIFeNPuCAAaVFsfIrEuyWy9kVcXmUP5tZ8f1
+         EV/WOms4u3bUTlPMtI7yIfhlOW2MwBoEIBtg3fcuKEEo7iptYmLa8w9nV8Y/xfwOcxXY
+         lTbg==
+X-Gm-Message-State: AOAM530Kh8Qgtapa+W/RfXp4rtBicM9WyK+f2uJEjk2SpYLeaBENmhTs
+        rBcIOZZzjEiivBabh5LgmF5BtQ==
+X-Google-Smtp-Source: ABdhPJwQw+JC6FRgLIV2UEMFwTOJiyKWKfSvMfln22ofFJ5qYzvyNpIpNppTEJbt0Fu5RqnXuVgk7g==
+X-Received: by 2002:a05:6808:201d:: with SMTP id q29mr9195342oiw.247.1643338490629;
+        Thu, 27 Jan 2022 18:54:50 -0800 (PST)
 Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id k6sm5677352oop.28.2022.01.27.18.54.48
+        by smtp.gmail.com with ESMTPSA id k6sm5677352oop.28.2022.01.27.18.54.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 18:54:49 -0800 (PST)
+        Thu, 27 Jan 2022 18:54:50 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 02/13] soc: qcom: mdt_loader: Split out split-file-loader
-Date:   Thu, 27 Jan 2022 18:55:02 -0800
-Message-Id: <20220128025513.97188-3-bjorn.andersson@linaro.org>
+Subject: [PATCH 03/13] soc: qcom: mdt_loader: Allow hash segment to be split out
+Date:   Thu, 27 Jan 2022 18:55:03 -0800
+Message-Id: <20220128025513.97188-4-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220128025513.97188-1-bjorn.andersson@linaro.org>
 References: <20220128025513.97188-1-bjorn.andersson@linaro.org>
@@ -66,141 +66,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spotted in a SM8450 device, the hash metadata segment is split out in a
-separate .bNN file which means that the logic for loading split out
-segmenents needs to be duplicated in qcom_mdt_read_metadata().
+It's been observed that some firmware found in a Qualcomm SM8450 device
+has the hash table in a separate .bNN file. Use the newly extracted
+helper function to load this segment from the separate file, if it's
+determined that the hashes are not part of the already loaded firmware.
 
-Split out the existing logic to a helper function that can be used in
-both code paths.
+In order to do this, the function needs access to the firmware basename
+and to provide more useful error messages a struct device to associate
+the errors with.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/soc/qcom/mdt_loader.c | 72 ++++++++++++++++++++---------------
- 1 file changed, 41 insertions(+), 31 deletions(-)
+ drivers/remoteproc/qcom_q6v5_mss.c  |  7 ++++---
+ drivers/soc/qcom/mdt_loader.c       | 29 +++++++++++++++++++++--------
+ include/linux/soc/qcom/mdt_loader.h |  6 ++++--
+ 3 files changed, 29 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index b00586db5391..c9e5bdfac371 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -31,6 +31,44 @@ static bool mdt_phdr_valid(const struct elf32_phdr *phdr)
- 	return true;
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index 43ea8455546c..a2c231a17b2b 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -928,7 +928,8 @@ static void q6v5proc_halt_axi_port(struct q6v5 *qproc,
+ 	regmap_write(halt_map, offset + AXI_HALTREQ_REG, 0);
  }
  
-+static ssize_t mdt_load_split_segment(void *ptr, const struct elf32_phdr *phdrs,
-+				      unsigned int segment, const char *fw_name,
-+				      struct device *dev)
-+{
-+	const struct elf32_phdr *phdr = &phdrs[segment];
-+	const struct firmware *seg_fw;
-+	char *seg_name;
-+	ssize_t ret;
-+
-+	if (strlen(fw_name) < 4)
-+		return -EINVAL;
-+
-+	seg_name = kstrdup(fw_name, GFP_KERNEL);
-+	if (!seg_name)
-+		return -ENOMEM;
-+
-+	sprintf(seg_name + strlen(fw_name) - 3, "b%02d", segment);
-+	ret = request_firmware_into_buf(&seg_fw, seg_name, dev,
-+					ptr, phdr->p_filesz);
-+	if (ret) {
-+		dev_err(dev, "error %zd loading %s\n", ret, seg_name);
-+		kfree(seg_name);
-+		return ret;
-+	}
-+
-+	if (seg_fw->size != phdr->p_filesz) {
-+		dev_err(dev,
-+			"failed to load segment %d from truncated file %s\n",
-+			segment, seg_name);
-+		ret = -EINVAL;
-+	}
-+
-+	release_firmware(seg_fw);
-+	kfree(seg_name);
-+
-+	return ret;
-+}
-+
- /**
-  * qcom_mdt_get_size() - acquire size of the memory region needed to load mdt
-  * @fw:		firmware object for the mdt file
-@@ -127,22 +165,19 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len)
- EXPORT_SYMBOL_GPL(qcom_mdt_read_metadata);
+-static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw)
++static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
++				const char *fw_name)
+ {
+ 	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
+ 	dma_addr_t phys;
+@@ -939,7 +940,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw)
+ 	void *ptr;
+ 	int ret;
  
- static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
--			   const char *firmware, int pas_id, void *mem_region,
-+			   const char *fw_name, int pas_id, void *mem_region,
- 			   phys_addr_t mem_phys, size_t mem_size,
- 			   phys_addr_t *reloc_base, bool pas_init)
+-	metadata = qcom_mdt_read_metadata(fw, &size);
++	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
+ 	if (IS_ERR(metadata))
+ 		return PTR_ERR(metadata);
+ 
+@@ -1289,7 +1290,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+ 	/* Initialize the RMB validator */
+ 	writel(0, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
+ 
+-	ret = q6v5_mpss_init_image(qproc, fw);
++	ret = q6v5_mpss_init_image(qproc, fw, qproc->hexagon_mdt_image);
+ 	if (ret)
+ 		goto release_firmware;
+ 
+diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
+index c9e5bdfac371..4372d8e38b29 100644
+--- a/drivers/soc/qcom/mdt_loader.c
++++ b/drivers/soc/qcom/mdt_loader.c
+@@ -121,13 +121,15 @@ EXPORT_SYMBOL_GPL(qcom_mdt_get_size);
+  *
+  * Return: pointer to data, or ERR_PTR()
+  */
+-void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len)
++void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
++			     const char *fw_name, struct device *dev)
  {
  	const struct elf32_phdr *phdrs;
- 	const struct elf32_phdr *phdr;
  	const struct elf32_hdr *ehdr;
--	const struct firmware *seg_fw;
- 	phys_addr_t mem_reloc;
- 	phys_addr_t min_addr = PHYS_ADDR_MAX;
- 	phys_addr_t max_addr = 0;
- 	size_t metadata_len;
--	size_t fw_name_len;
- 	ssize_t offset;
- 	void *metadata;
--	char *fw_name;
- 	bool relocate = false;
- 	void *ptr;
- 	int ret = 0;
-@@ -154,14 +189,6 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 	size_t hash_offset;
+ 	size_t hash_size;
+ 	size_t ehdr_size;
++	ssize_t ret;
+ 	void *data;
+ 
  	ehdr = (struct elf32_hdr *)fw->data;
+@@ -149,14 +151,25 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len)
+ 	if (!data)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	/* Is the header and hash already packed */
+-	if (ehdr_size + hash_size == fw->size)
++	/* Copy ELF header */
++	memcpy(data, fw->data, ehdr_size);
++
++	if (ehdr_size + hash_size == fw->size) {
++		/* Firmware is split and hash is packed following the ELF header */
+ 		hash_offset = phdrs[0].p_filesz;
+-	else
++		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
++	} else if (phdrs[1].p_offset + hash_size <= fw->size) {
++		/* Hash is in its own segment, but within the loaded file */
+ 		hash_offset = phdrs[1].p_offset;
+-
+-	memcpy(data, fw->data, ehdr_size);
+-	memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
++		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
++	} else {
++		/* Hash is in its own segment, beyond the loaded file */
++		ret = mdt_load_split_segment(data + ehdr_size, phdrs, 1, fw_name, dev);
++		if (ret) {
++			kfree(data);
++			return ERR_PTR(ret);
++		}
++	}
+ 
+ 	*data_len = ehdr_size + hash_size;
+ 
+@@ -190,7 +203,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
  	phdrs = (struct elf32_phdr *)(ehdr + 1);
  
--	fw_name_len = strlen(firmware);
--	if (fw_name_len <= 4)
--		return -EINVAL;
--
--	fw_name = kstrdup(firmware, GFP_KERNEL);
--	if (!fw_name)
--		return -ENOMEM;
--
  	if (pas_init) {
- 		metadata = qcom_mdt_read_metadata(fw, &metadata_len);
+-		metadata = qcom_mdt_read_metadata(fw, &metadata_len);
++		metadata = qcom_mdt_read_metadata(fw, &metadata_len, fw_name, dev);
  		if (IS_ERR(metadata)) {
-@@ -258,25 +285,9 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 			memcpy(ptr, fw->data + phdr->p_offset, phdr->p_filesz);
- 		} else if (phdr->p_filesz) {
- 			/* Firmware not large enough, load split-out segments */
--			sprintf(fw_name + fw_name_len - 3, "b%02d", i);
--			ret = request_firmware_into_buf(&seg_fw, fw_name, dev,
--							ptr, phdr->p_filesz);
--			if (ret) {
--				dev_err(dev, "error %d loading %s\n",
--					ret, fw_name);
-+			ret = mdt_load_split_segment(ptr, phdrs, i, fw_name, dev);
-+			if (ret)
- 				break;
--			}
--
--			if (seg_fw->size != phdr->p_filesz) {
--				dev_err(dev,
--					"failed to load segment %d from truncated file %s\n",
--					i, fw_name);
--				release_firmware(seg_fw);
--				ret = -EINVAL;
--				break;
--			}
--
--			release_firmware(seg_fw);
- 		}
+ 			ret = PTR_ERR(metadata);
+ 			dev_err(dev, "error %d reading firmware %s metadata\n",
+diff --git a/include/linux/soc/qcom/mdt_loader.h b/include/linux/soc/qcom/mdt_loader.h
+index afd47217996b..46bdb7bace9a 100644
+--- a/include/linux/soc/qcom/mdt_loader.h
++++ b/include/linux/soc/qcom/mdt_loader.h
+@@ -23,7 +23,8 @@ int qcom_mdt_load_no_init(struct device *dev, const struct firmware *fw,
+ 			  const char *fw_name, int pas_id, void *mem_region,
+ 			  phys_addr_t mem_phys, size_t mem_size,
+ 			  phys_addr_t *reloc_base);
+-void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len);
++void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
++			     const char *fw_name, struct device *dev);
  
- 		if (phdr->p_memsz > phdr->p_filesz)
-@@ -287,7 +298,6 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 		*reloc_base = mem_reloc;
+ #else /* !IS_ENABLED(CONFIG_QCOM_MDT_LOADER) */
  
- out:
--	kfree(fw_name);
+@@ -51,7 +52,8 @@ static inline int qcom_mdt_load_no_init(struct device *dev,
+ }
  
- 	return ret;
+ static inline void *qcom_mdt_read_metadata(const struct firmware *fw,
+-					   size_t *data_len)
++					   size_t *data_len, const char *fw_name,
++					   struct device *dev)
+ {
+ 	return ERR_PTR(-ENODEV);
  }
 -- 
 2.33.1

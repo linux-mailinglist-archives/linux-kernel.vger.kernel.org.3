@@ -2,178 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E83749F729
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDC349F72B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347783AbiA1KTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:19:30 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:38144 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346985AbiA1KT2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:19:28 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nDOLk-0005uy-4f; Fri, 28 Jan 2022 11:19:24 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     robh@kernel.org, lukasz.luba@arm.com, arnd@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-Subject: Re: [PATCH v7 5/5] rockchip/soc/drivers: Add DTPM description for rk3399
-Date:   Fri, 28 Jan 2022 11:19:22 +0100
-Message-ID: <48865702.Mx8J7aE1p6@diego>
-In-Reply-To: <20220125171809.1273269-6-daniel.lezcano@linaro.org>
-References: <20220125171809.1273269-1-daniel.lezcano@linaro.org> <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+        id S1347786AbiA1KTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:19:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57838 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244125AbiA1KTm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 05:19:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F3EF61DE2;
+        Fri, 28 Jan 2022 10:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0060BC340E0;
+        Fri, 28 Jan 2022 10:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643365179;
+        bh=ZH9rmx9Q+0dQimBRliRAOB9/hhg4360bakM3y/qowXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hwNamkS7wIAp2FbQaa2QHXrxJPmY7SNK5dJs3Y+ExSLnnsF84KiiCbegD9Xf3FnmV
+         mFjQwl+hHWuGsQilhg+3P/Guwqv0PGaZ44ISK9RWy1ewK9zS/GW+oqZeBtW3NPRnlD
+         ICKQ5jgjVT8t5dqc0vH+Hc20Bnl05ZSXSLhQZ0G0=
+Date:   Fri, 28 Jan 2022 11:19:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Benoit Parrot <bparrot@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ti-vpe: cal: Fix a NULL pointer dereference in
+ cal_ctx_v4l2_init_formats()
+Message-ID: <YfPDOOtlGPRfp3Vo@kroah.com>
+References: <20220124172001.62457-1-zhou1615@umn.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124172001.62457-1-zhou1615@umn.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 25. Januar 2022, 18:18:09 CET schrieb Daniel Lezcano:
-> The DTPM framework does support now the hierarchy description.
+On Tue, Jan 25, 2022 at 01:20:01AM +0800, Zhou Qingyang wrote:
+> In cal_ctx_v4l2_init_formats(), devm_kzalloc() is assigned to fw and there
+> is a dereference of it after that, which could lead to NULL pointer
+> dereference on failure of devm_kzalloc().
 > 
-> The platform specific code can call the hierarchy creation function
-> with an array of struct dtpm_node pointing to their parent.
+> Fix this bug by adding a NULL check of ctx->active_fmt.
 > 
-> This patch provides a description of the big / Little CPUs and the
-> GPU and tie them together under a virtual 'package' name. Only rk3399 is
-> described now.
+> This bug was found by a static analyzer.
 > 
-> The description could be extended in the future with the memory
-> controller with devfreq.
+> Builds with 'make allyesconfig' show no new warnings,
+> and our static analyzer no longer warns about this code.
 > 
-> The description is always a module and it describes the soft
-> dependencies. The userspace has to load the softdeps module in the
-> right order.
+> Fixes: 7168155002cf ("media: ti-vpe: cal: Move format handling to cal.c and expose helpers")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> --
+> The analysis employs differential checking to identify inconsistent 
+> security operations (e.g., checks or kfrees) between two code paths 
+> and confirms that the inconsistent operations are not recovered in the
+> current function or the callers, so they constitute bugs. 
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/soc/rockchip/Kconfig  |  8 +++++
->  drivers/soc/rockchip/Makefile |  1 +
->  drivers/soc/rockchip/dtpm.c   | 59 +++++++++++++++++++++++++++++++++++
->  3 files changed, 68 insertions(+)
->  create mode 100644 drivers/soc/rockchip/dtpm.c
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
 > 
-> diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-> index 25eb2c1e31bb..6dc017f02431 100644
-> --- a/drivers/soc/rockchip/Kconfig
-> +++ b/drivers/soc/rockchip/Kconfig
-> @@ -34,4 +34,12 @@ config ROCKCHIP_PM_DOMAINS
+>  drivers/media/platform/ti-vpe/cal-video.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+> index 7799da1cc261..3e936a2ca36c 100644
+> --- a/drivers/media/platform/ti-vpe/cal-video.c
+> +++ b/drivers/media/platform/ti-vpe/cal-video.c
+> @@ -823,6 +823,9 @@ static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
+>  	/* Enumerate sub device formats and enable all matching local formats */
+>  	ctx->active_fmt = devm_kcalloc(ctx->cal->dev, cal_num_formats,
+>  				       sizeof(*ctx->active_fmt), GFP_KERNEL);
+> +	if (!ctx->active_fmt)
+> +		return -ENOMEM;
+> +
+>  	ctx->num_active_fmt = 0;
 >  
->            If unsure, say N.
->  
-> +config ROCKCHIP_DTPM
-> +	tristate "Rockchip DTPM hierarchy"
-> +	depends on DTPM && DRM_PANFROST && m
-> +	help
-> +	 Describe the hierarchy for the Dynamic Thermal Power
-> +	 Management tree on this platform. That will create all the
-> +	 power capping capable devices.
-> +
->  endif
-> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-> index 875032f7344e..05f31a4e743c 100644
-> --- a/drivers/soc/rockchip/Makefile
-> +++ b/drivers/soc/rockchip/Makefile
-> @@ -5,3 +5,4 @@
->  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
->  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
->  obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
-> +obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
-> diff --git a/drivers/soc/rockchip/dtpm.c b/drivers/soc/rockchip/dtpm.c
-> new file mode 100644
-> index 000000000000..0b73a9cba954
-> --- /dev/null
-> +++ b/drivers/soc/rockchip/dtpm.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2021 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * DTPM hierarchy description
-> + */
-> +#include <linux/dtpm.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
-
-The driver is tristate so buildable as module but uses __initdata.
-As it depends on panfrost (which also can be a module) you
-probably want a "__initdata_or_module" here .
-
-
-> +	[0]{ .name = "rk3399",
-> +	     .type = DTPM_NODE_VIRTUAL },
-> +	[1]{ .name = "package",
-> +	     .type = DTPM_NODE_VIRTUAL,
-> +	     .parent = &rk3399_hierarchy[0] },
-> +	[2]{ .name = "/cpus/cpu@0",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[3]{ .name = "/cpus/cpu@1",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[4]{ .name = "/cpus/cpu@2",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[5]{ .name = "/cpus/cpu@3",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[6]{ .name = "/cpus/cpu@100",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[7]{ .name = "/cpus/cpu@101",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[8]{ .name = "/gpu@ff9a0000",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[9]{ },
-
-hmm, do we want a "/* sentinel */" inside the empty last entry?
-I think that is pretty common to denote the "this one is the last entry"
-of a dynamic list ;-)
-
-> +};
-> +
-> +static struct of_device_id __initdata rockchip_dtpm_match_table[] = {
-> +        { .compatible = "rockchip,rk3399", .data = rk3399_hierarchy },
-> +        {},
-> +};
-> +
-> +static int __init rockchip_dtpm_init(void)
-> +{
-> +	return dtpm_create_hierarchy(rockchip_dtpm_match_table);
-> +}
-> +module_init(rockchip_dtpm_init);
-
-Just for my understanding what happens on driver unload?
-
-
-Thanks
-Heiko
-
-> +
-> +MODULE_SOFTDEP("pre: panfrost cpufreq-dt");
-> +MODULE_DESCRIPTION("Rockchip DTPM driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:dtpm");
-> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
+>  	for (j = 0, i = 0; ; ++j) {
+> -- 
+> 2.25.1
 > 
 
-
-
+As stated before, umn.edu is still not allowed to contribute to the
+Linux kernel.  Please work with your administration to resolve this
+issue.
 

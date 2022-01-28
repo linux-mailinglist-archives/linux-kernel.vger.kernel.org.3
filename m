@@ -2,230 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FAE49F9B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C961E49F9AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348624AbiA1MlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:41:25 -0500
-Received: from mga03.intel.com ([134.134.136.65]:25642 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237505AbiA1MlX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:41:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643373683; x=1674909683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ztdVh+NZZ18Z6P1Aq48jKG/tZtlC6UcWlAOA5hHHMBE=;
-  b=VNEDUQg+GzWPgkLlXCYQvn76Xc5E8jQ0y9eQ2eRMFHuKFGoDEpdJlBuC
-   qeBwG8g+oKLpZ0yxIpNle/9FBwBWlVEeqZqfz8TCTHaVp68P39UmKn9aN
-   eY74dNI0YfKXyXq4PptkN4RFbh84Flna7HyangtzDuUWqbYKbz9VkYOIl
-   pLDFNoMAC3iKwBZl9+Mb5HWyvFNGy85Na9iBXqVV4nkHYAi/dtNVCc5rl
-   cdpXpxcwU3ASPWBxOQCGjvCn8jUVzwVdM1qH33DOWF65IcvqspSC/JadF
-   k3Sta5Qdxmgh7b1gDNjoaBwj6K63hT+rfZUpB/DHm6IcCDiJQGheOzhHj
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247060504"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="247060504"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:41:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="536118366"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 28 Jan 2022 04:41:20 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDQZ6-000Nrp-32; Fri, 28 Jan 2022 12:41:20 +0000
-Date:   Fri, 28 Jan 2022 20:40:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, davem@davemloft.net
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] net/802: use struct_size over open coded arithmetic
-Message-ID: <202201282017.0TQvVTtf-lkp@intel.com>
-References: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
+        id S1348614AbiA1MlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237505AbiA1MlH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 07:41:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE9C061714;
+        Fri, 28 Jan 2022 04:41:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ACE2619B9;
+        Fri, 28 Jan 2022 12:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA84CC340E6;
+        Fri, 28 Jan 2022 12:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643373666;
+        bh=QTzghuuSPtxJUTuUKx+W2/InQdxW15PSFwUv7VwUABw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fDDCmQCAaMcJEavgtcJqwJ2QJDBq3pXRsPPc/l3by+2yESxDGmW5Kc9OAQqn3MlGS
+         9u8Jv1ppUGuCND2rokmY9SaMNtaybtUEWIbP9oXZ0jFRJDx82sG3zyppd2O0w9G76o
+         Uf6erkYS+tgPQeVG5Z4aajPuWDNl06NAHpm7V+osyHiEA1BafH1iqrwBRt4Nwh5f7b
+         wTP3ylF7iEUpGtGw+XjQr3MkFPOrG30hsWP/p9VE+pXFzTebvsbCxultxHFmtTO7Ho
+         qvm2eN+tw7ziwQofhdfjUSM4ZDTzEncDr5Kmwnm/HUP8sHcsjZTVNARCCP6qFvyT/z
+         eHYTGTk6Yk5gg==
+Date:   Fri, 28 Jan 2022 13:40:55 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, Joerg Roedel <jroedel@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Evan Green <evgreen@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>, <youlin.pei@mediatek.com>,
+        Matthias Kaehlcke <mka@chromium.org>, <anan.sun@mediatek.com>,
+        <yi.kuo@mediatek.com>, <acourbot@chromium.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        "Dafna Hirschfeld" <dafna.hirschfeld@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        <anthony.huang@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v10 02/13] iommu/mediatek-v1: Free the existed fwspec if
+ the master dev already has
+Message-ID: <20220128134055.720bb43c@coco.lan>
+In-Reply-To: <20220117070510.17642-3-yong.wu@mediatek.com>
+References: <20220117070510.17642-1-yong.wu@mediatek.com>
+        <20220117070510.17642-3-yong.wu@mediatek.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Matthias/Yong,
 
-Thank you for the patch! Yet something to improve:
+Are you ok if this patch gets merged via the media tree together with the
+remaining series, or do you prefer to apply it via SoC tree instead?
 
-[auto build test ERROR on net-next/master]
-[also build test ERROR on net/master horms-ipvs/master linus/master v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/net-802-use-struct_size-over-open-coded-arithmetic/20220128-160925
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 72d044e4bfa6bd9096536e2e1c62aecfe1a525e4
-config: riscv-randconfig-r042-20220124 (https://download.01.org/0day-ci/archive/20220128/202201282017.0TQvVTtf-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/9b64e5078d3d779fc56432d43129479f63996c74
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/net-802-use-struct_size-over-open-coded-arithmetic/20220128-160925
-        git checkout 9b64e5078d3d779fc56432d43129479f63996c74
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/wireless/ath/wcn36xx/ net/802/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/802/garp.c:187:17: error: member reference type 'struct garp_attr' is not a pointer; did you mean to use '.'?
-           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:18: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                               ~~~^
->> net/802/garp.c:187:17: error: indirection requires pointer operand ('unsigned char[]' invalid)
-           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:14: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                              ^~~~~~~~~~~~
->> net/802/garp.c:187:17: error: member reference type 'struct garp_attr' is not a pointer; did you mean to use '.'?
-           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-   include/linux/compiler.h:258:59: note: expanded from macro '__must_be_array'
-   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler_types.h:287:63: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                 ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-                                                                ^
->> net/802/garp.c:187:17: error: member reference type 'struct garp_attr' is not a pointer; did you mean to use '.'?
-           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-   include/linux/compiler.h:258:65: note: expanded from macro '__must_be_array'
-   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/compiler_types.h:287:74: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                            ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-                                                                ^
->> net/802/garp.c:187:17: error: indirection requires pointer operand ('struct garp_attr' invalid)
-           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:195:14: note: expanded from macro 'struct_size'
-                       sizeof(*(p)))
-                              ^~~~
-   5 errors generated.
---
->> net/802/mrp.c:276:17: error: member reference type 'struct mrp_attr' is not a pointer; did you mean to use '.'?
-           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:18: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                               ~~~^
->> net/802/mrp.c:276:17: error: indirection requires pointer operand ('unsigned char[]' invalid)
-           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:14: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                              ^~~~~~~~~~~~
->> net/802/mrp.c:276:17: error: member reference type 'struct mrp_attr' is not a pointer; did you mean to use '.'?
-           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-   include/linux/compiler.h:258:59: note: expanded from macro '__must_be_array'
-   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler_types.h:287:63: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                 ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-                                                                ^
->> net/802/mrp.c:276:17: error: member reference type 'struct mrp_attr' is not a pointer; did you mean to use '.'?
-           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
-                       sizeof(*(p)->member) + __must_be_array((p)->member),\
-                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-   include/linux/compiler.h:258:65: note: expanded from macro '__must_be_array'
-   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/compiler_types.h:287:74: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                            ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-                                                                ^
->> net/802/mrp.c:276:17: error: indirection requires pointer operand ('struct mrp_attr' invalid)
-           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:195:14: note: expanded from macro 'struct_size'
-                       sizeof(*(p)))
-                              ^~~~
-   5 errors generated.
+Regards,
+Mauro
 
 
-vim +187 net/802/garp.c
+Em Mon, 17 Jan 2022 15:04:59 +0800
+Yong Wu <yong.wu@mediatek.com> escreveu:
 
-   166	
-   167	static struct garp_attr *garp_attr_create(struct garp_applicant *app,
-   168						  const void *data, u8 len, u8 type)
-   169	{
-   170		struct rb_node *parent = NULL, **p = &app->gid.rb_node;
-   171		struct garp_attr *attr;
-   172		int d;
-   173	
-   174		while (*p) {
-   175			parent = *p;
-   176			attr = rb_entry(parent, struct garp_attr, node);
-   177			d = garp_attr_cmp(attr, data, len, type);
-   178			if (d > 0)
-   179				p = &parent->rb_left;
-   180			else if (d < 0)
-   181				p = &parent->rb_right;
-   182			else {
-   183				/* The attribute already exists; re-use it. */
-   184				return attr;
-   185			}
-   186		}
- > 187		attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
-   188		if (!attr)
-   189			return attr;
-   190		attr->state = GARP_APPLICANT_VO;
-   191		attr->type  = type;
-   192		attr->dlen  = len;
-   193		memcpy(attr->data, data, len);
-   194	
-   195		rb_link_node(&attr->node, parent, p);
-   196		rb_insert_color(&attr->node, &app->gid);
-   197		return attr;
-   198	}
-   199	
+> When the iommu master device enters of_iommu_xlate, the ops may be
+> NULL(iommu dev is defered), then it will initialize the fwspec here:
+> 
+> [<c0c9c5bc>] (dev_iommu_fwspec_set) from [<c06bda80>]
+> (iommu_fwspec_init+0xbc/0xd4)
+> [<c06bd9c4>] (iommu_fwspec_init) from [<c06c0db4>]
+> (of_iommu_xlate+0x7c/0x12c)
+> [<c06c0d38>] (of_iommu_xlate) from [<c06c10e8>]
+> (of_iommu_configure+0x144/0x1e8)
+> 
+> BUT the mtk_iommu_v1.c only supports arm32, the probing flow still is a bit
+> weird. We always expect create the fwspec internally. otherwise it will
+> enter here and return fail.
+> 
+> static int mtk_iommu_create_mapping(struct device *dev,
+> 				    struct of_phandle_args *args)
+> {
+>         ...
+> 	if (!fwspec) {
+> 	        ....
+> 	} else if (dev_iommu_fwspec_get(dev)->ops != &mtk_iommu_ops) {
+>                 >>>>>>>>>>Enter here. return fail.<<<<<<<<<<<<  
+> 		return -EINVAL;
+> 	}
+> 	...
+> }
+> 
+> Thus, Free the existed fwspec if the master device already has fwspec.
+> 
+> This issue is reported at:
+> https://lore.kernel.org/linux-mediatek/trinity-7d9ebdc9-4849-4d93-bfb5-429dcb4ee449-1626253158870@3c-app-gmx-bs01/
+> 
+> Reported-by: Frank Wunderlich <frank-w@public-files.de>
+> Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> Acked-by: Joerg Roedel <jroedel@suse.de>
+> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/iommu/mtk_iommu_v1.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+> index be22fcf988ce..1467ba1e4417 100644
+> --- a/drivers/iommu/mtk_iommu_v1.c
+> +++ b/drivers/iommu/mtk_iommu_v1.c
+> @@ -425,6 +425,15 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+>  	struct mtk_iommu_data *data;
+>  	int err, idx = 0;
+>  
+> +	/*
+> +	 * In the deferred case, free the existed fwspec.
+> +	 * Always initialize the fwspec internally.
+> +	 */
+> +	if (fwspec) {
+> +		iommu_fwspec_free(dev);
+> +		fwspec = dev_iommu_fwspec_get(dev);
+> +	}
+> +
+>  	while (!of_parse_phandle_with_args(dev->of_node, "iommus",
+>  					   "#iommu-cells",
+>  					   idx, &iommu_spec)) {
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+Thanks,
+Mauro

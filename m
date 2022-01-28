@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA4E49F85B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C333849F858
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbiA1LdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:33:00 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4544 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236647AbiA1Lc5 (ORCPT
+        id S236240AbiA1Lcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:32:53 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:19633 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235774AbiA1Lcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:32:57 -0500
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JlZvw5n9Sz67w0f;
-        Fri, 28 Jan 2022 19:28:28 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 12:32:53 +0100
-Received: from [10.47.26.192] (10.47.26.192) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 28 Jan
- 2022 11:32:52 +0000
-Subject: Re: [PATCH] iommu/iova: Separate out rcache init
-To:     Robin Murphy <robin.murphy@arm.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>
-CC:     "xieyongji@bytedance.com" <xieyongji@bytedance.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linuxarm <linuxarm@huawei.com>
-References: <1643205319-51669-1-git-send-email-john.garry@huawei.com>
- <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <5ac3a678-3126-edd9-cb23-72c05f3dcd34@huawei.com>
-Date:   Fri, 28 Jan 2022 11:32:16 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 28 Jan 2022 06:32:41 -0500
+Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 28 Jan 2022
+ 19:32:39 +0800
+From:   Liang Yang <liang.yang@amlogic.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/2] refine the NFC clock framework
+Date:   Fri, 28 Jan 2022 19:32:35 +0800
+Message-ID: <20220128113237.39996-1-liang.yang@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.26.192]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.21]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2022 17:00, Robin Murphy wrote:
-> As above, I vote for just forward-declaring the free routine in iova.c
-> and keeping it entirely private.
+Background firstly, 
+EMMC and NAND has the same clock control register named 'SD_EMMC_CLOCK' which is
+defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider and
+bit6~7 is the mux for fix pll and xtal.
+Previously a common MMC sub clock framework is implemented and shared by EMMC and
+NAND, but that is coupling the EMMC and NAND, although EMMC and NAND is mutually
+exclusive. see the link:
+[https://lore.kernel.org/all/1jy23226sa.fsf@starbuckisacylon.baylibre.com/]
+Now we plan to abandon common mmc sub clock framework and recovery the series.
 
-BTW, speaking of forward declarations, it's possible to remove all the 
-forward declarations in iova.c now that the FQ code is gone - but with a 
-good bit of rearranging. However I am not sure how much people care 
-about that or whether the code layout is sane...
+Changes since v1 [2]
+ - use clk_parent_data instead of parent_names
+ - define a reg resource instead of sd_emmc_c_clkc 
+ 
+[1]
+https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+Liang Yang (2):
+  mtd: rawnand: meson: discard the common MMC sub clock framework
+  dt-bindings: nand: meson: refine Amlogic NAND controller driver
+
+ .../bindings/mtd/amlogic,meson-nand.txt       |  60 -------
+ .../bindings/mtd/amlogic,meson-nand.yaml      |  70 ++++++++
+ drivers/mtd/nand/raw/meson_nand.c             | 161 ++++++++++--------
+ 3 files changed, 159 insertions(+), 132 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+
+-- 
+2.34.1
+

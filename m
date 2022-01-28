@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DDA49F837
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B63E849F83B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiA1LXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:23:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35418 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiA1LXj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:23:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8A6DB8253F;
-        Fri, 28 Jan 2022 11:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57C4C340E0;
-        Fri, 28 Jan 2022 11:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643369016;
-        bh=mChaVS62VRMHxG9WuKRILek2xzuVDIFdda4zjzrKGug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lfWbvoHuVgVw8qF5T7BF7/vfDR862M47wwOioeKxyj0dNh+oKPkWjZi103G8axr4N
-         E0oMhWORR0EynMfo+F4e3sQHT6qdO37gLlFT3DcI9NAKVIXnDlgHlH/rEI6uxPkdca
-         hAwpASLOJ8ujfLF4xzzbsH2KSNYC+I9EyK4rl9DE=
-Date:   Fri, 28 Jan 2022 12:23:33 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
-Message-ID: <YfPSNSHwTLZBv7me@kroah.com>
-References: <20220127110742.922752-1-o.rempel@pengutronix.de>
- <YfJ+ceEzvzMM1JsW@kroah.com>
- <20220127123152.GF9150@pengutronix.de>
- <YfKcqcq4Ii1qu2+8@kroah.com>
- <YfPPpkGjL2vcv4oH@pengutronix.de>
+        id S231962AbiA1LY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:24:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:37672 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231689AbiA1LYS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:24:18 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5332C113E;
+        Fri, 28 Jan 2022 03:24:18 -0800 (PST)
+Received: from [10.57.86.86] (unknown [10.57.86.86])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C28993F766;
+        Fri, 28 Jan 2022 03:24:15 -0800 (PST)
+Message-ID: <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com>
+Date:   Fri, 28 Jan 2022 11:24:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfPPpkGjL2vcv4oH@pengutronix.de>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH v2 2/6] coresight: Fail to open with return stacks if they
+ are unavailable
+To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org, leo.yan@linaro.com,
+        mike.leach@linaro.org
+Cc:     Leo Yan <leo.yan@linaro.org>, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220113091056.1297982-1-james.clark@arm.com>
+ <20220113091056.1297982-3-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220113091056.1297982-3-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 12:12:38PM +0100, Oleksij Rempel wrote:
-> On Thu, Jan 27, 2022 at 02:22:49PM +0100, Greg KH wrote:
-> > On Thu, Jan 27, 2022 at 01:31:52PM +0100, Oleksij Rempel wrote:
-> > > On Thu, Jan 27, 2022 at 12:13:53PM +0100, Greg KH wrote:
-> > > > On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
-> > > > > The weakest link of usbnet devices is the USB cable.
-> > > > 
-> > > > The weakest link of any USB device is the cable, why is this somehow
-> > > > special to usbnet devices?
-> > > > 
-> > > > > Currently there is
-> > > > > no way to automatically detect cable related issues except of analyzing
-> > > > > kernel log, which would differ depending on the USB host controller.
-> > > > > 
-> > > > > The Ethernet packet counter could potentially show evidence of some USB
-> > > > > related issues, but can be Ethernet related problem as well.
-> > > > > 
-> > > > > To provide generic way to detect USB issues or HW issues on different
-> > > > > levels we need to make use of devlink.
-> > > > 
-> > > > Please make this generic to all USB devices, usbnet is not special here
-> > > > at all.
-> > > 
-> > > Ok. I'll need some help. What is the best place to attach devlink
-> > > registration in the USB subsystem and the places to attach health
-> > > reporters?
-> > 
-> > You tell us, you are the one that thinks this needs to be reported to
-> > userspace. What is only being reported in kernel logs that userspace
-> > somehow needs to see?  And what will userspace do with that information?
+Hi James
+
+On 13/01/2022 09:10, James Clark wrote:
+> Maintain consistency with the other options by failing to open when they
+> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
+> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
+> requested but not supported by hardware.
+
+Looking at this again (with similar comment to the Branch Broadcast),
+won't it disable using retstack on all CPUs, even when some of them
+support it ?
+
+i.e., CPU0 - supports retstack, CPU1 - doesn't
+
+A perf run with retstack will fail, as CPU1 doesn't support it (even
+though we advertise it, unconditionally).
+
+So, if we ignore the failure, this would still allow CPU0 to use
+the feature and as long as the OpenCSD is able to decode the trace
+we should ignore the failure ?
+
+I think we may also need to tune the etm4x_enable_hw() to skip
+updating the TRCCONFIGR with features not supported by the ETM
+
+Suzuki
+
+
 > 
-> The user space should get an event in case there is a problem with the
-> USB transfers, i.e. the URB status is != 0.
-
-That's pretty brave, lots of things can have a urb status of != 0 in
-semi-normal operation, have you tried this?
-
-> The use space then can decide if the USB device needs to be reset, power
-> cycled and so on.
+> The consequence of not doing this is that the user may not be
+> aware that they are not enabling the feature as it is silently disabled.
 > 
-> What about calling a to-be-written devlink function that reports the USB
-> status if the URB status is not 0:
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
+>   1 file changed, 9 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index d0f45600b669..a90134854f32 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1648,6 +1648,8 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
->  	usb_unanchor_urb(urb);
->  	if (likely(status == 0))
->  		usb_led_activity(USB_LED_EVENT_HOST);
-> +	else
-> +		devlink_report_usb_status(urb, status);
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 04669ecc0efa..a93c1a5fe045 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+>   	}
+>   
+>   	/* return stack - enable if selected and supported */
+> -	if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
+> -		/* bit[12], Return stack enable bit */
+> -		config->cfg |= BIT(12);
+> -
+> +	if (attr->config & BIT(ETM_OPT_RETSTK)) {
+> +		if (!drvdata->retstack) {
+> +			ret = -EINVAL;
+> +			goto out;
+> +		} else {
+> +			/* bit[12], Return stack enable bit */
+> +			config->cfg |= BIT(12);
+> +		}
+> +	}
+>   	/*
+>   	 * Set any selected configuration and preset.
+>   	 *
 
-Try it and do lots of transfers, device additions and removals and other
-things and let us know what it reports.
-
-thanks,
-
-greg k-h

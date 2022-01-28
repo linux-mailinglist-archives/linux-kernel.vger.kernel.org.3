@@ -2,130 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA7F49F6C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1F949F6CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242623AbiA1J6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:58:50 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:41003 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237775AbiA1J6t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:58:49 -0500
-Received: from [192.168.0.2] (ip5f5aecde.dynamic.kabel-deutschland.de [95.90.236.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 64FCE61EA1923;
-        Fri, 28 Jan 2022 10:58:46 +0100 (CET)
-Message-ID: <d9c4e80e-87ca-9e68-f97d-d2c709e54ff3@molgen.mpg.de>
-Date:   Fri, 28 Jan 2022 10:58:45 +0100
+        id S239433AbiA1KDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237493AbiA1KDM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 05:03:12 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABF6C061747
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 02:03:12 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso7818946wmj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 02:03:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=vQHl1kKziPP//RPPVFscaIeYrQPiD/BKe7PC4j8ax6c=;
+        b=Fzv1T+rGFotkDidQaBLfjgeshzec1rdrJugreJ4E4ER511twVIjRsOWbmAmgAJhSjH
+         soAr9SxHMN2Xd4icay0VOiQTdwpi3tz3SKBN/fxILgf7SD50gxPSUZraeQSsfgeQBO9V
+         DcZ3rReVzhtCSf7rJ7QT7dWsvh8/pFCQroSXhYUEzn04XvlVonYA4PD+9GHrmRcD7krF
+         ERhZuKgCrhUFpyQ6g7pNA5XYtNK6hYzhqRzujjb0YtEL9lqv9De3qaGgo2ya/1uWGHR2
+         Zx+3EkM+VvtQ+Elu29Bzbqgp+vR1468RQhMEwCCIdI1c1c1JhN8qxFW2kYDS4nFmRwxp
+         CE2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=vQHl1kKziPP//RPPVFscaIeYrQPiD/BKe7PC4j8ax6c=;
+        b=jszRjIsfhjt7Y8mRAwH86L+bsztUGPzKtWHpNyADVnF9/IwSAl9/PKUwM8qIa5LYCJ
+         6glp92v4BDUGrqjp8NdGjFMFlAMKImlVs0kK0Yhb6wvgxotdOhB5xxBxYW0yOEBnWm8W
+         NalPgevuX+ZousYgFIhpZG2vRgceQ5nE396wVOmTjG08yoyATKGRgxQ/iiRzOHxF+oJ5
+         hRLglKJ7P+XjN8NzvfG2yCp3LQtNBPS5goruUkvNsYdNQnZI4NFaeh7VZE2+4S1LuFFg
+         ZrgsCtSHKEcVv6L4zqefwukVk38iQaC2mjxw5BNUBF9jYybyellWetqVYwjHKe593jFu
+         Zkxg==
+X-Gm-Message-State: AOAM531XOEHfJxSm3w57A43jN6xzBDr7pLfndJdMGQKGXGbCV/8jfkNm
+        N+IdytW7SAnlZ6OQvASwD3AGdA==
+X-Google-Smtp-Source: ABdhPJyVqxevH/KOBMCOHMp1EH4UYJ2z6Ysjjih/WI63AVmR57PKiAmJIQN3MQ9MQW35Da3EV7C4KA==
+X-Received: by 2002:a7b:c350:: with SMTP id l16mr6542037wmj.146.1643364190814;
+        Fri, 28 Jan 2022 02:03:10 -0800 (PST)
+Received: from localhost ([2a01:cb1a:7d:5d4:c222:c6fc:1de7:17bc])
+        by smtp.gmail.com with ESMTPSA id e10sm5407686wrq.53.2022.01.28.02.03.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 02:03:10 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fengping Yu <fengping.yu@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 2/3] Input: mt6779-keypad - Add MediaTek keypad driver
+In-Reply-To: <YfK4UcuCfF7JfI7H@smile.fi.intel.com>
+References: <20220127111526.3716689-1-mkorpershoek@baylibre.com>
+ <20220127111526.3716689-3-mkorpershoek@baylibre.com>
+ <YfK4UcuCfF7JfI7H@smile.fi.intel.com>
+Date:   Fri, 28 Jan 2022 11:03:08 +0100
+Message-ID: <87v8y4p483.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] ata: ahci: Skip 200 ms debounce delay for Marvell
- 88SE9235
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220127233527.445659-1-pmenzel@molgen.mpg.de>
- <1ef3e995-3f61-ef53-0d5e-03bb41a52624@opensource.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <1ef3e995-3f61-ef53-0d5e-03bb41a52624@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Damien,
+On Thu, Jan 27, 2022 at 17:20, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
+> On Thu, Jan 27, 2022 at 12:15:25PM +0100, Mattijs Korpershoek wrote:
+>> From: "fengping.yu" <fengping.yu@mediatek.com>
+>> 
+>> This patch adds matrix keypad support for Mediatek SoCs.
+>
+> Some comments which may be addressed now or in the follow-up patch(es).
+> Up to you.
+Hi Andy,
+Thank you for your review and your suggestions.
 
-Thank you for the quick reply.
+>
+> ...
+>
+>> +static const struct regmap_config mt6779_keypad_regmap_cfg = {
+>> +	.reg_bits = 32,
+>> +	.val_bits = 32,
+>
+>> +	.reg_stride = sizeof(u32),
+>
+> I'm wondering if we need this when we have reg_bits = 32 already.
 
+Per my understanding, .reg_stride is mainly used to check for invalid register
+addresses in regmap_{read,write}():
 
-Am 28.01.22 um 00:40 schrieb Damien Le Moal:
-> On 1/28/22 08:35, Paul Menzel wrote:
->> The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
->> not needed for the Marvell 88SE9235.
->>
->>      $ lspci -nn -s 0021:0e:00.0
->>      0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Ltd. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11)
->>
->> So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
->>
->> Without this patch (with 200 ms delay):
->>
->>      [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000100 irq 39
->>      [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000180 irq 39
->>      [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000200 irq 39
->>      [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000280 irq 39
->>      […]
->>      [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
->>      [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
->>      [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.841796] ata2.00: configured for UDMA/133
->>      [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.846043] ata1.00: configured for UDMA/133
->>
->> With patch (no delay):
->>
->>      [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000100 irq 39
->>      [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000180 irq 39
->>      [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000200 irq 39
->>      [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000280 irq 39
->>      […]
->>      [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
->>      [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
->>      [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.900070] ata1.00: configured for UDMA/133
->>      [    3.900166] ata2.00: configured for UDMA/133
->>
->> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->> ---
->>   drivers/ata/ahci.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
->> index ab5811ef5a53..edca4e8fd44e 100644
->> --- a/drivers/ata/ahci.c
->> +++ b/drivers/ata/ahci.c
->> @@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] = {
->>   	  .driver_data = board_ahci_yes_fbs },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
->>   	  .driver_data = board_ahci_yes_fbs },
->> +	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
->> +	  .driver_data = board_ahci_no_debounce_delay },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 642L */
->>   	  .driver_data = board_ahci_yes_fbs },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 644L */
-> 
-> Looks good. But for the commit message, instead of the dmesg copy-paste,
-> could you simply write the gains in terms of shortened scan time ? That
-> would make it easier to understand the benefits of the patch.
+    if (!IS_ALIGNED(reg, map->reg_stride))
+            return -EINVAL;
 
-I can do:
+If .reg_stride is not set, regmap core will default it to 1.
+It's not computed from reg_bits.
 
-> Tested on IBM S822LC with current Linux 5.17-rc1, and the 200 ms is
-> gone, and the drives are still detected.
-I would still like to keep the Linux logs, as then it’s clear what I 
-tested with (drives), and what ports were populated.
+So I think we still need it.
+>
+>> +	.max_register = 36,
+>> +};
+>
+> ...
+>
+>> +	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
+>> +		     (debounce * 32) & MTK_KPD_DEBOUNCE_MASK);
+>
+> I'm wondering if << 5 is more specific to show that the value
+> is based on 2^5 units.
 
-> Also, there is no need for the lspci output.
+The datasheet I've seen states: "De-bounce time = KP_DEBOUNCE / 32ms"
+But rewriting it as 1 << 5 seems reasonable as well:
+regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
+            (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
 
-In my opinion, it prooves I used the correct PCI vendor and device 
-codes, and also shows the revision number of the device I tested with.
+I don't have any preference on this one.
+If I have to send a v21, I will rewrite it using (1 << 5)
 
+>
+> ...
+>
+>> +	error = devm_add_action_or_reset(&pdev->dev, mt6779_keypad_clk_disable, keypad->clk);
+>
+> You have this long line...
+>
+>> +	error = devm_request_threaded_irq(&pdev->dev, irq,
+>> +					  NULL, mt6779_keypad_irq_handler,
+>> +					  IRQF_ONESHOT,
+>> +					  MTK_KPD_NAME, keypad);
+>
+> ...at the same time you may reduce LOCs here...
+Ack. will join lines to reduce LOCs if I have to send v21.
+>
+>> +	if (error) {
+>> +		dev_err(&pdev->dev, "Failed to request IRQ#%d:%d\n",
+>> +			irq, error);
+>
+> ...and here.
+Ack. will join lines to reduce LOCs if I have to send v21.
 
-Kind regards,
-
-Paul
+>
+>> +		return error;
+>> +	}
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko

@@ -2,163 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E67014A01E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDA24A01D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351213AbiA1U30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:29:26 -0500
-Received: from mga02.intel.com ([134.134.136.20]:61402 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351179AbiA1U3X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:29:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643401763; x=1674937763;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qX917cPwwlO8dZZek3e7j9ci/IfNoJH+hK5O82lWRfk=;
-  b=lWK/UtObQ4wVEdYtHdBwGWWLbfuEsZLiTJTTlQpHNS/J8yt4AZCqc40O
-   yAc6oJzcfUVl7DBx7aXZ1WylchoHNx3cCkIGYqYBj60LkBLyt0L8TMF9V
-   YCFqy+tYWzh8HaRPhUBCpXly7JAzKip1fPT7Y/OIx09GHCimg9VSgoZyV
-   w+HjUs/ezar+qOE8se59CIe2ajYAuguc51s34oVTjrR7Q6ynEJyN02F6T
-   /Bzo7cVc12wodUgeM9/p3D0CvPBigQWXOQYEf9w+dbz/19t9aceaIS/ll
-   02vJfhtIOWZV9HvnT3k7FHynsCfjhePG2GKSaeqztnFpToD1QE9LyqjjW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="234578000"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="234578000"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:29:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="618827688"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2022 12:29:21 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Ashok Raj" <ashok.raj@intel.com>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>
-Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 01/11] iommu/sva: Rename CONFIG_IOMMU_SVA_LIB to CONFIG_IOMMU_SVA
-Date:   Fri, 28 Jan 2022 12:28:55 -0800
-Message-Id: <20220128202905.2274672-2-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220128202905.2274672-1-fenghua.yu@intel.com>
-References: <20220128202905.2274672-1-fenghua.yu@intel.com>
+        id S1345541AbiA1U3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:29:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54985 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232469AbiA1U3M (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 15:29:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643401752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/R+jUAO4Zdq+RoAvmdtDhiLJNzkXYPpweQSqLQO/lto=;
+        b=FCz9RshPwYf0bqP9+3eb4R0TW3f8Mr8XNImsC3f0qZ7d9SceGa4C/2UdQ1Fobu9GmkcI5M
+        pTcGgFC6lmFUH3BPTeKLtcCvxw/sr7rqK9SJcUBQxgjw+3zgpbRnEOXV/41YyK7pTpTaZ+
+        F6wvyReqHhEqR3me2mM4S+l1r1O72Rw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-67-4fDoml85Pk2hZ_OUQCpw6A-1; Fri, 28 Jan 2022 15:29:10 -0500
+X-MC-Unique: 4fDoml85Pk2hZ_OUQCpw6A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A7108143E5;
+        Fri, 28 Jan 2022 20:29:09 +0000 (UTC)
+Received: from vbendel-laptop-2020.redhat.com (unknown [10.40.195.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0D235E26B;
+        Fri, 28 Jan 2022 20:29:06 +0000 (UTC)
+From:   vbendel@redhat.com
+To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org
+Cc:     omosnace@redhat.com, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vratislav Bendel <vbendel@redhat.com>
+Subject: [PATCH 0/3] selinux: Fix and clean policydb->cond_list error paths 
+Date:   Fri, 28 Jan 2022 21:28:55 +0100
+Message-Id: <20220128202858.96935-1-vbendel@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This CONFIG option originally only referred to the Shared
-Virtual Address (SVA) library. But it is now also used for
-non-library portions of code.
+There are two users of policydb->cond_list: cond_read_list()
+and duplicate_policydb_cond_list(). If any of them gets an error,
+usually an -ENOMEM, the error-path-cleanup *_destroy() functions
+get called twice: firstly from these two and secondly from
+the caller functions' error paths.
 
-Drop the "_LIB" suffix so that there is just one configuration
-options for all code relating to SVA.
+In case such -ENOMEM happens while assigning cond_node data, i.e.
+while ->cond_list_len is already non-zero, it leads to inappropriate
+dereferencing of policydb->cond_list[] data in the second called
+cond_list_destroy() from the caller functions' error paths, resulting
+with:
+- NULL pointer deref from cond_read_list();
+- use-after-free + double-free from duplicate_policydb_cond_list().
+(the cond_read_list() manages to set ->cond_list to NULL)
 
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
-v2:
-- Add this patch for more meaningful name CONFIG_IOMMU_SVA
+Patch 1/3 simply makes the error behavior consistent by always setting
+->cond_list to NULL.
 
- drivers/iommu/Kconfig         | 6 +++---
- drivers/iommu/Makefile        | 2 +-
- drivers/iommu/intel/Kconfig   | 2 +-
- drivers/iommu/iommu-sva-lib.h | 6 +++---
- 4 files changed, 8 insertions(+), 8 deletions(-)
+Patch 2/3 fixes the actual bug by resetting ->cond_list_len to 0,
+so any subsequent cond_list_destroy() calls would become noop.
 
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index 3eb68fa1b8cc..c79a0df090c0 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -144,8 +144,8 @@ config IOMMU_DMA
- 	select IRQ_MSI_IOMMU
- 	select NEED_SG_DMA_LENGTH
- 
--# Shared Virtual Addressing library
--config IOMMU_SVA_LIB
-+# Shared Virtual Addressing
-+config IOMMU_SVA
- 	bool
- 	select IOASID
- 
-@@ -379,7 +379,7 @@ config ARM_SMMU_V3
- config ARM_SMMU_V3_SVA
- 	bool "Shared Virtual Addressing support for the ARM SMMUv3"
- 	depends on ARM_SMMU_V3
--	select IOMMU_SVA_LIB
-+	select IOMMU_SVA
- 	select MMU_NOTIFIER
- 	help
- 	  Support for sharing process address spaces with devices using the
-diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-index bc7f730edbb0..44475a9b3eea 100644
---- a/drivers/iommu/Makefile
-+++ b/drivers/iommu/Makefile
-@@ -27,6 +27,6 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
- obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
- obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
- obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
--obj-$(CONFIG_IOMMU_SVA_LIB) += iommu-sva-lib.o io-pgfault.o
-+obj-$(CONFIG_IOMMU_SVA) += iommu-sva-lib.o io-pgfault.o
- obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
- obj-$(CONFIG_APPLE_DART) += apple-dart.o
-diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
-index 247d0f2d5fdf..39a06d245f12 100644
---- a/drivers/iommu/intel/Kconfig
-+++ b/drivers/iommu/intel/Kconfig
-@@ -52,7 +52,7 @@ config INTEL_IOMMU_SVM
- 	select PCI_PRI
- 	select MMU_NOTIFIER
- 	select IOASID
--	select IOMMU_SVA_LIB
-+	select IOMMU_SVA
- 	help
- 	  Shared Virtual Memory (SVM) provides a facility for devices
- 	  to access DMA resources through process address space by
-diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva-lib.h
-index 031155010ca8..95dc3ebc1928 100644
---- a/drivers/iommu/iommu-sva-lib.h
-+++ b/drivers/iommu/iommu-sva-lib.h
-@@ -17,7 +17,7 @@ struct device;
- struct iommu_fault;
- struct iopf_queue;
- 
--#ifdef CONFIG_IOMMU_SVA_LIB
-+#ifdef CONFIG_IOMMU_SVA
- int iommu_queue_iopf(struct iommu_fault *fault, void *cookie);
- 
- int iopf_queue_add_device(struct iopf_queue *queue, struct device *dev);
-@@ -28,7 +28,7 @@ struct iopf_queue *iopf_queue_alloc(const char *name);
- void iopf_queue_free(struct iopf_queue *queue);
- int iopf_queue_discard_partial(struct iopf_queue *queue);
- 
--#else /* CONFIG_IOMMU_SVA_LIB */
-+#else /* CONFIG_IOMMU_SVA */
- static inline int iommu_queue_iopf(struct iommu_fault *fault, void *cookie)
- {
- 	return -ENODEV;
-@@ -64,5 +64,5 @@ static inline int iopf_queue_discard_partial(struct iopf_queue *queue)
- {
- 	return -ENODEV;
- }
--#endif /* CONFIG_IOMMU_SVA_LIB */
-+#endif /* CONFIG_IOMMU_SVA */
- #endif /* _IOMMU_SVA_LIB_H */
--- 
-2.35.0
+Patch 3/3 cleans up the duplicate *_destroy calls on these error paths,
+albeit it's a bit questionable and I'm looking for feedback on it:
+- on one hand the idea is that the caller functions call the *_destroy()
+bits anyway, hence removing duplicate efforts (which also fixes the bug,
+but I'd still prefer to apply patches 1 and 2 regardless);
+- on the other hand it's appropriate and more bug-proof for a function
+to clean everything it allocated on error.
+Hence I'm looking forward to seeing what approach the upstream would find
+more appropriate.
+
+Signed-off-by: Vratislav Bendel <vbendel@redhat.com>
+
 

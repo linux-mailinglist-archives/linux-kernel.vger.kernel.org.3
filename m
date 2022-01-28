@@ -2,191 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E5449FCD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7208149FCD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349562AbiA1P3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349550AbiA1P3u (ORCPT
+        id S1349565AbiA1Pai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:30:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33396 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349549AbiA1Pah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:29:50 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE2DC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:29:50 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id g11so6161499qvu.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:29:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CSl2ozcmK5vQmYT5NCTW7Ai/PaWfN2v+NSUoqmah+A8=;
-        b=FJH5uIAxTQM8O59a+3eYNLA7MIl2VXZdu1Ls3a0q13RPtU8l8XeD2Ln20sWLsa1KEw
-         ErpwSzzd/dvP5kaq9bR87xrhD5k9T5D3LS24Wzfv0bDCHY8IGjgJ3/jqrpLsShFPwnZf
-         s2SEnCIr7rf4+M9Dyh54dwWY6IZGLVyethy+lAk4SkXIKzsnfwhm9VDFuMobyWKrZ5WJ
-         Zm+bbHHE7qcit3vSQVHzhnQAfXoGfL2vmSQ52TYK49RsXl/r8NfykLpiwZzz4H3aAhQL
-         y0w+QscTCqxZvzLB4jHfjGWXi61I9u8YowD5Euj4jxncsHDFQuSMBHEiDGoy7rZLQIz1
-         ny7g==
+        Fri, 28 Jan 2022 10:30:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643383836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R1MzpLEHNt998Fp+0Cju8ZrRTa2fyOAxv9mE2xz2mj8=;
+        b=RHCWMW/M80xhF6VAmDFK9fitsDJxxnM3wnsaF79bbSMisX8fwMzm1bk+tPquR9uORVHjTc
+        0NDlFeZhnCxo04d1Zw9T5TgSxGwzf8Dq1vKQTL5iy/KBE7NqejNIknYHX5uSslUkbJ6WGb
+        JnezzaM0jBbGhj0AF669oPbbHkZc4tY=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-cJn6qmtYPCGS7kgdcdFd_w-1; Fri, 28 Jan 2022 10:30:35 -0500
+X-MC-Unique: cJn6qmtYPCGS7kgdcdFd_w-1
+Received: by mail-oo1-f72.google.com with SMTP id a7-20020a4ad5c7000000b002dacfc3d40cso3325080oot.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:30:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CSl2ozcmK5vQmYT5NCTW7Ai/PaWfN2v+NSUoqmah+A8=;
-        b=baH39fnhUhXjiY8r3R4TehvhFLs7udZ2+R1ApiWWuwwaDsT8lON2EDWU9K9um2neXl
-         FHGkAO7UNKWqGLpOsUeTC5y2mlL+hjHTdqq8jwkmjnhCCZA/5dRkDKN3mq43rjuzvq3C
-         jRRochWuudh0u7hHae69sCtNumIHKM6yE7zKq0wzJ3STk5zcm0cI1AvaZrIBRliSefA0
-         +jarVN3+LC+SJkmPkmE/Jz0XNFw08b6wAsrcmm6zI2XDszl8s1SGp1d/Gff/smJaY4cq
-         iQDJpbLBhnYFy+aXbjuWImlQUAo/x7ponRSKInH5UCUU2uYddPK7W58Y/TChClbWj/fV
-         nbXA==
-X-Gm-Message-State: AOAM530ECa/JB213az/Zi/PEPAjKuYYGRIOyb+NMXQcK9lGtCFbN66um
-        64pUzolw0gMnnUFmsvDLZrQ=
-X-Google-Smtp-Source: ABdhPJx2D4vFcc3WaNsxX3fdUzR9zquDZDLejQkoNd5LrGIWifupQR2VaDiHtqSOypg0woYUHrHDwQ==
-X-Received: by 2002:a05:6214:4011:: with SMTP id kd17mr7272985qvb.45.1643383789737;
-        Fri, 28 Jan 2022 07:29:49 -0800 (PST)
-Received: from WRT-WX9.. ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id bs16sm385231qkb.69.2022.01.28.07.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 07:29:49 -0800 (PST)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH] riscv: fix oops caused by irq on/off tracer
-Date:   Fri, 28 Jan 2022 23:29:39 +0800
-Message-Id: <20220128152939.99544-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=R1MzpLEHNt998Fp+0Cju8ZrRTa2fyOAxv9mE2xz2mj8=;
+        b=j0q1Un2orT7dSxfVWgPR16xWsJRdClPrtb9HbtflGM7Vn3vxfet6E7/gLJGMQlVyBs
+         aUvIMc84EdAr9N4YFpR7kJyBP5t2hvMR1Je7fbVqok024YOb3lrAyYyAIo6QNbHZB4jd
+         0dcqNeCGQkGMNyUfjM+iw8JlCwcaQVVS5e7HwRCwppqbow7xkwYrkhZ0tobMFO9KohJn
+         MvqckN+rdzG1BW/waKQ60xnZoYYnM1K6FO4oh5ex42/hoaGoGdvnxTqcgFdWU4WKt5Bb
+         Joy9it3+iL8sa7s7MPy+fmpJT4pmMtdKuY24nMcbeTbYi9zOvCDjjnA7pruIzZNd2kzq
+         JOiw==
+X-Gm-Message-State: AOAM533ktk3Pk8wfEhosUOTAjiH5xkeTvyRI+FAvZnuS2MhCgu+zT3Dx
+        SYoPMKqpcYue7Y5tdUQRdDQG+RdJG0tdlewqy0FyEwUsKgfPhftZm7Iz4SjBQF/IYQzoeIVkzTc
+        rzq80+CQEwB8yk4YTmwba1ZgL
+X-Received: by 2002:a9d:69c1:: with SMTP id v1mr5199551oto.134.1643383834425;
+        Fri, 28 Jan 2022 07:30:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwrc2gAf4ubCCj0EwhXokMaa2jqu7rpkjWiv6FEjBV/7u+RmiWHylH0XXldFnbrntjxa/Fp/Q==
+X-Received: by 2002:a9d:69c1:: with SMTP id v1mr5199538oto.134.1643383834219;
+        Fri, 28 Jan 2022 07:30:34 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id ay14sm13152476oib.5.2022.01.28.07.30.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 07:30:33 -0800 (PST)
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To:     Joe Perches <joe@perches.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Finn Thain <fthain@linux-m68k.org>,
+        Miguel Ojeda <ojeda@kernel.org>
+Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, nathan@kernel.org,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220127151945.1244439-1-trix@redhat.com>
+ <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+ <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+ <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
+ <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
+ <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com>
+ <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
+Date:   Fri, 28 Jan 2022 07:30:31 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The trace_hardirqs_on/off requires at least two parent call frames.
-If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
-could trigger memory access fault.
 
-[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-[    0.041925][    T0] Oops [#1]
-[    0.042063][    T0] Modules linked in:
-[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-[    0.044601][    T0]  ra : restore_all+0x12/0x6e
-[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
+On 1/28/22 12:41 AM, Joe Perches wrote:
+> On Thu, 2022-01-27 at 21:31 -0800, Tom Rix wrote:
+>> On 1/27/22 6:43 PM, Joe Perches wrote:
+>>> On Thu, 2022-01-27 at 16:32 -0800, Tom Rix wrote:
+>>>> On 1/27/22 2:47 PM, Nick Desaulniers wrote:
+>>>>> + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
+>>>>> These criticisms are worth reviewing.
+>>>>>
+>>>>> On Thu, Jan 27, 2022 at 2:38 PM Finn Thain <fthain@linux-m68k.org> wrote:
+>>>>>> On Thu, 27 Jan 2022, trix@redhat.com wrote:
+>>>>>>
+>>>>>>> From: Tom Rix <trix@redhat.com>
+>>>>>>>
+>>>>>>> checkpatch reports several hundred formatting errors. Run these files
+>>>>>>> through clang-format and knock off some of them.
+>>>>>>>
+>>>>>> That method seems like a good recipe for endless churn unless checkpatch
+>>>>>> and clang-format really agree about these style rules.
+>>>>>>
+>>>>>> Why use checkpatch to assess code style, if we could simply diff the
+>>>>>> existing source with the output from clang-format... but it seems that
+>>>>>> clang-format harms readability, makes indentation errors and uses
+>>>>>> inconsistent style rules. Some examples:
+>>>> Problems with clang-format should be fixed, I'll take a look.
+>>>>
+>>>> I was reviewing this file for another isseue and could not get past how
+>>>> horredously bad it was and really did not want to manually fix the 400+
+>>>> formatting errors.  I will drop this patch and use the use these files
+>>>> to verify the .clang-format .
+>>> I think this is more an issue with clang-format than with checkpatch.
+>>>
+>>> If you have specific issues with what checkpatch reports for this
+>>> file (or any other file), let me know.
+>> Yes, I agree. Its a clang-format problem.
+>>
+>> I will be looking to minimize the .clang-format settings to only those
+>> that agree with checkpatch.
+>>
+>> Then add settings back in later if their problems can be worked out.
+> Another option would be to use:
+>
+> 	./scripts/checkpatch.pl -f --fix[-inplace] [--types=<list>] <files>
+>
+> where types is an optional list of specific things to change
+>
+> see:
+> 	./scripts/checkpatch.pl --list-types --verbose
+>
+> to show the possible types.
+>
+> Only some of these types can be changed with --fix or --fix-inplace
+>
+> If using checkpatch to change formatting, it sometimes can be useful
+> to run checkpatch --fix multiple times on the same file as a
+> checkpatch --fix can create a change than checkpatch will suggest
+> should itself be fixed.
+>
+> Of course another option is to do nothing as many will complain,
+> sometimes senselessly, about 'churn'.
 
-To fix above issue, here we add one extra level wrapper so they can be
-safely called by low level entry code.
+A testsuite for the fixers may help with churn
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
----
- arch/riscv/kernel/Makefile    |  2 ++
- arch/riscv/kernel/entry.S     | 10 +++++-----
- arch/riscv/kernel/trace_irq.c | 24 ++++++++++++++++++++++++
- 3 files changed, 31 insertions(+), 5 deletions(-)
- create mode 100644 arch/riscv/kernel/trace_irq.c
+Any interest or thought on organization ?
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 612556faa527..ffc87e76b1dd 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
- obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
- obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
- 
-+obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
-+
- obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
- obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
- obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ed29e9c8f660..d6a46ed0bf05 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -108,7 +108,7 @@ _save_context:
- .option pop
- 
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- #endif
- 
- #ifdef CONFIG_CONTEXT_TRACKING
-@@ -143,7 +143,7 @@ skip_context_tracking:
- 	li t0, EXC_BREAKPOINT
- 	beq s4, t0, 1f
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_on
-+	call __trace_hardirqs_on
- #endif
- 	csrs CSR_STATUS, SR_IE
- 
-@@ -234,7 +234,7 @@ ret_from_exception:
- 	REG_L s0, PT_STATUS(sp)
- 	csrc CSR_STATUS, SR_IE
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- #endif
- #ifdef CONFIG_RISCV_M_MODE
- 	/* the MPP value is too large to be used as an immediate arg for addi */
-@@ -270,10 +270,10 @@ restore_all:
- 	REG_L s1, PT_STATUS(sp)
- 	andi t0, s1, SR_PIE
- 	beqz t0, 1f
--	call trace_hardirqs_on
-+	call __trace_hardirqs_on
- 	j 2f
- 1:
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- 2:
- #endif
- 	REG_L a0, PT_STATUS(sp)
-diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-new file mode 100644
-index 000000000000..090fd82064e3
---- /dev/null
-+++ b/arch/riscv/kernel/trace_irq.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-+ */
-+
-+#include <linux/irqflags.h>
-+#include <linux/kprobes.h>
-+
-+/**
-+ * trace_hardirqs_on/off requires at least two parent call frames. Here we add
-+ * one extra level so they can be safely called by low level entry code.
-+ */
-+
-+void __trace_hardirqs_on(void)
-+{
-+	trace_hardirqs_on();
-+}
-+NOKPROBE_SYMBOL(__trace_hardirqs_on);
-+
-+void __trace_hardirqs_off(void)
-+{
-+	trace_hardirqs_off();
-+}
-+NOKPROBE_SYMBOL(__trace_hardirqs_off);
--- 
-2.32.0
+I can take stab at one.
+
+Tom
+
+>
+>
+>
 

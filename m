@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37AE49FBA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F91D49FBAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349151AbiA1O3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiA1O3J (ORCPT
+        id S1349163AbiA1OaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:30:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51188 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232446AbiA1OaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:29:09 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A21C061714;
-        Fri, 28 Jan 2022 06:29:09 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4210382wme.0;
-        Fri, 28 Jan 2022 06:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cBSmv6ogb1cxiwO45LAPv1J5ovdz5y9xPUc2j3/AZeY=;
-        b=CuWJuLyc6hZWPi10EE0eOFSkOZZCYkXImgtkRZpUaw7VImcl8LuS1ZDPiVfI3FGbvU
-         kbyqx5ocCX+DEg3REQOw1Qe57WtFn4JJVkTulQyhc6mgSZQKpsrt/VvvmJyYA3v6GJ/g
-         lXI/9Gn0PFl1AHYCMsJxiLR7AvhhtQJ9O48nRWnkPmpa+8n0y4kKUmUpVxi6pzbamCjy
-         53J99lwhXFZBzImsDKTImK0pv8srfveMU7/glZPR7lGxSs4MqtOipW+1H9lMt7nspgWa
-         WnwaRAy1lgOCv3qGrt5hqIz4jj/vlusxi7aPjvBYAuaI352e6PpQg/57Uxewyblfcj3c
-         myJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cBSmv6ogb1cxiwO45LAPv1J5ovdz5y9xPUc2j3/AZeY=;
-        b=v24ubdIN5YC11xGEEaEWcq3X6u7Aei712r5G8z8v1TWuHm39wPjplrZHn8lB3/QGnd
-         xGTQukYIN1ZP1IfpnIV7ZnLhrqxcAHq1ITWKyJwKynecao7FWJBqdTRCWb+/BctI5FuZ
-         JKraR9xf0xoDXVVuTRzQdRsrgtSf7AGr2aqAVym+UePYAOY7Rfsst6ntRDKbn5xaYyON
-         xIxLHr/eaAx36QiOPQzg6+Cis5xdVjiaEjxow+qqLA37o0EF65npqr7iM/Gl7HKzEf8E
-         3TEEs0W7Kh3n8fGBgVoSg/vfN1z6LqC+ZtJwDsDJV5gXwOhQTzvFXhC/a3HHoM8k1Ygd
-         BxsA==
-X-Gm-Message-State: AOAM532l1OaEd9VdZgNHZX9MMefiUnswRQY2xv2Bp2V4FlB33hHGm36j
-        B0vOorrjTtNKUSspZOftW5s=
-X-Google-Smtp-Source: ABdhPJymsXJu3dPTiIpIW1Di6atglsnzDkCxFVcyTEm5EVMM/m2gt/4JdaZU5jWR9wywus94/vWalA==
-X-Received: by 2002:a7b:cbda:: with SMTP id n26mr16464409wmi.76.1643380147986;
-        Fri, 28 Jan 2022 06:29:07 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id l4sm5507162wrs.6.2022.01.28.06.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 06:29:07 -0800 (PST)
-Date:   Fri, 28 Jan 2022 14:29:05 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com
-Subject: Re: [PATCH 5.15 00/12] 5.15.18-rc1 review
-Message-ID: <YfP9sVf9skXfXfH1@debian>
-References: <20220127180259.078563735@linuxfoundation.org>
+        Fri, 28 Jan 2022 09:30:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E60861E01;
+        Fri, 28 Jan 2022 14:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 735D0C340E6;
+        Fri, 28 Jan 2022 14:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643380210;
+        bh=zzgUTbKru7JboFcmHQ9V+BrizFopS8lz1g5MEzPE/tA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GL2aWND2pUdNRiakgo0skfdZIrKEflYA4+iqV97dlCUYSGTeEsv6uR99gSMK8/szu
+         6eWk0gFm6a4WStz3xCgW24NjItNuVYj3M4McnyGsSImUSyxrCBR0HZbRetueaLcIZA
+         2laYs1DBP+CGNkNYYmmEkp/vCVTAtNpRLl3PxDk8E807oFOsEIooFYu+1IYSMxVI5W
+         psJqKHRg/XMmt4s4wErORaCD2JAlnzBdqwIwtwXCtl4qpckvoRGXPw9KfgbKD5M2fm
+         F1Q0Rkw+XDsw4IHwk5zulwkmW3eqR5lhjPyiO0+JcJ5ngaOwiKyT26R3gQ4BKk4Zg1
+         uUhLXuIUipRBA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52F02E5D084;
+        Fri, 28 Jan 2022 14:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/1] net: stmmac: dwmac-visconti: Avoid updating hardware
+ register for unexpected speed requst
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164338021033.15816.13738860195654864475.git-patchwork-notify@kernel.org>
+Date:   Fri, 28 Jan 2022 14:30:10 +0000
+References: <20220127121714.22915-1-yuji2.ishikawa@toshiba.co.jp>
+In-Reply-To: <20220127121714.22915-1-yuji2.ishikawa@toshiba.co.jp>
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Cc:     davem@davemloft.net, kuba@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@st.com, joabreu@synopsys.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hello:
 
-On Thu, Jan 27, 2022 at 07:09:24PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.18 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 27 Jan 2022 21:17:13 +0900 you wrote:
+> Function visconti_eth_fix_mac_speed() should not change a register when an unexpected speed value is passed.
 > 
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
+> Yuji Ishikawa (1):
+>   net: stmmac: dwmac-visconti: No change to ETHER_CLOCK_SEL for
+>     unexpected speed request.
+> 
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 
-Build test:
-mips (gcc version 11.2.1 20220121): 62 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+Here is the summary with links:
+  - [1/1] net: stmmac: dwmac-visconti: No change to ETHER_CLOCK_SEL for unexpected speed request.
+    https://git.kernel.org/netdev/net/c/928d6fe996f6
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[1]. https://openqa.qa.codethink.co.uk/tests/667
-[2]. https://openqa.qa.codethink.co.uk/tests/671
-[3]. https://openqa.qa.codethink.co.uk/tests/672
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

@@ -2,68 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8FD49F4CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C7749F4D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347118AbiA1IB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S1347139AbiA1ICV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242915AbiA1IBz (ORCPT
+        with ESMTP id S1347134AbiA1ICU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:01:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111E0C061714;
-        Fri, 28 Jan 2022 00:01:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A491A61D2B;
-        Fri, 28 Jan 2022 08:01:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 179FBC340E8;
-        Fri, 28 Jan 2022 08:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643356914;
-        bh=OjCmcRObEmogx6SH4Qut1KQ549pRZmSJtfj70AU6IGg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NzfDkCXVScPbr1kgkZ9H+biirqI43oD2WmA89DNgrAAxYcYo6qfspdef3FQ7Seauf
-         5dE4mp89EvhxwkMnVPX7WEyTaRSYU0ka6o71kS19NZuUodS6L5Z5VjQfqt8Xh0lyP/
-         KHrDOKIBeRFvS+fY4JQtpQNH62DUTD82o+LkpKH3BAerZDsevnxyCzBy8KD0pJHTyN
-         DnupO2CRNZ0JSbNuJG9NV/3M9r3n0/nIcozkw6Z9Ar4O0BbRzxt/XSzmSdGzXm/Mba
-         xPBBncuvk3zZHCiVqRWKxb1OqNegp3JLn4niZIqron0oLGx/GGbyrrO3pRn8B3WNvJ
-         en0/MfSVvj7qw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 050C9F60799;
-        Fri, 28 Jan 2022 08:01:54 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v5.17-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220128055440.3947883-1-linux@roeck-us.net>
-References: <20220128055440.3947883-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220128055440.3947883-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
-X-PR-Tracked-Commit-Id: 79da533d3cc717ccc05ddbd3190da8a72bc2408b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 374630e3f94efc8184a727694276088f52bcc3d1
-Message-Id: <164335691401.26371.6391816821881752961.pr-tracker-bot@kernel.org>
-Date:   Fri, 28 Jan 2022 08:01:54 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        Fri, 28 Jan 2022 03:02:20 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5D1C061714;
+        Fri, 28 Jan 2022 00:02:20 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id k4so5142363qvt.6;
+        Fri, 28 Jan 2022 00:02:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yW5QG4rrD+/B7qft18hixZxkbtsm5e7Opd0+mp8n/tQ=;
+        b=ZQ5KH9rsnCvPqVlpfKt2Dl+27bHWqwXcMC9s80qKI8UZvoetp+9Vs47sQ6feBKXhZ5
+         zgO0IGj6dcDES6niuOwQbvlqFzlS1ljzVFK6kblwxoLCLNzqrzcmgs6Pkd26u1opzEnd
+         6eloov3mwrLv3gMcZqhGfAJvLuGaiqG7QU/oOppaICT6x+Yt3VUOoiRH07vVsC0x4bWt
+         Fp2SoGIs5TBUF/EKe7Q3IqTAiTX63mhzha9Fk3dmOLKNqLjHLY8KmgSGGsbYT/wqcRF5
+         w2D8bYnhp8Z8Ja36ykln6g/ni6m1aKi1h1P2ca5lZEEmq1mvloKkJ+l+ovLCDGPBbmyd
+         ZDLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yW5QG4rrD+/B7qft18hixZxkbtsm5e7Opd0+mp8n/tQ=;
+        b=YMn95Pw1x1zhjY66CYLpciGRWIWtSo6QIoGbDM3QBelv/yku72du5fAxJ3HE58lii3
+         C0EZIkm+g0x53vjxiKZ6emylxdrqo5nBcnn5XzCkC2g1dyuSH6w4OH8L0n2Mou5FW7uM
+         byCYqRdk0ci5Ewd0wO2TkbXgKOtQVuYjkiMPWRt4eoJBmLr7OvFAn6qDRRBXlloYMGEb
+         1lDrQhSph3cKnorm2Sgng5NpHLGTXOae3onZ+09yOVrXPcM0grkLS8eR447kA6Yy7YZ1
+         H97ZoGNT06BDyW0fPdf7xIUc8s0U2+pl8cXgRGYpGBpskWqj1QsvZJlWdNc1SpcyQVO0
+         999A==
+X-Gm-Message-State: AOAM530u+saTFRkJMUFIVTCUpoFl8Al+YpUQ5oxLGTw1OGD/6xS5GuRD
+        1Z9kfdma19zvtM8n6YKwFSs=
+X-Google-Smtp-Source: ABdhPJzbPCyORNv0otx9NukxaXsWEZhHv/AeIerNzf5LU2/lH/Ffr/tPr0UsC5suG5HSgJY0a6cU2A==
+X-Received: by 2002:a05:6214:300c:: with SMTP id ke12mr6236897qvb.56.1643356939934;
+        Fri, 28 Jan 2022 00:02:19 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c4sm2814908qkp.0.2022.01.28.00.02.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 00:02:19 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     luciano.coelho@intel.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        trix@redhat.com, johannes.berg@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] dvm: use struct_size over open coded arithmetic
+Date:   Fri, 28 Jan 2022 08:02:06 +0000
+Message-Id: <20220128080206.1211452-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 27 Jan 2022 21:54:40 -0800:
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
+Replace zero-length array with flexible-array member and make use
+of the struct_size() helper in kmalloc(). For example:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/374630e3f94efc8184a727694276088f52bcc3d1
+struct iwl_wipan_noa_data {
+	...
+	u8 data[];
+};
 
-Thank you!
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+---
+ drivers/net/wireless/intel/iwlwifi/dvm/rx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/rx.c b/drivers/net/wireless/intel/iwlwifi/dvm/rx.c
+index db0c41bbeb0e..d0d842b25b86 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/rx.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/rx.c
+@@ -915,7 +915,7 @@ static void iwlagn_rx_noa_notification(struct iwl_priv *priv,
+ 		len += 1 + 2;
+ 		copylen += 1 + 2;
+ 
+-		new_data = kmalloc(sizeof(*new_data) + len, GFP_ATOMIC);
++		new_data = kmalloc(struct_size(*new_data, data, len), GFP_ATOMIC);
+ 		if (new_data) {
+ 			new_data->length = len;
+ 			new_data->data[0] = WLAN_EID_VENDOR_SPECIFIC;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
+

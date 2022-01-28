@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256484A0253
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220954A025D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239360AbiA1Uwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S240302AbiA1Uy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbiA1Uwr (ORCPT
+        with ESMTP id S239235AbiA1Uyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:52:47 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8E4C061714;
-        Fri, 28 Jan 2022 12:52:46 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bu18so14176090lfb.5;
-        Fri, 28 Jan 2022 12:52:46 -0800 (PST)
+        Fri, 28 Jan 2022 15:54:54 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42719C061714;
+        Fri, 28 Jan 2022 12:54:54 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id a8so7224068pfa.6;
+        Fri, 28 Jan 2022 12:54:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FxgoJ87HkOo4Sya7mWsI9Jkjvlhv0yv3YR69qNwYcgY=;
-        b=FASeYDqXNB7SNFPPSMjeNYgeeX65/uG3+UKBDXjBMIjiwA71UcIShrtJzoOijUNBxW
-         fd62G9kbA7ttoa4DPaUbg9B3M0xvk3MkVH8AiT6DgmjNm1Y4iBai0RrA9FhIhmqG7M24
-         5TO0XK0nW31E5zHyvFpgUbLsc/5VYC2Mq+0L8lj0YOEaiHdKUv8JN4O4ZSjmn5KCPF0b
-         OVobR2UcqH6/tjRleXAThquVCIrGv5qOLlGDjkSqBDzfICN6P4cbwWCYLo+sFFieDNXC
-         uaSGYsnWKU1WcHpHRI16xwMD03y1GYYOk9VHsP41ov5dN3AKBXv4ttrysDMlPsDuIa8C
-         u0dA==
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=ambBcbrixqPyjx7tGTI/ftZLjdBWOR5lpCRheJYyAlg=;
+        b=qYopsGEuAbpYshUNQC/Kclt7bsmDI7MySchY4F8hWYyaXdDdmTHhg3gc2pwATVznGh
+         QQSjwPgM8waduTwEpmRQGPPn8h08KXDATqCv4jcy8Y08XVkFZjQ4aw+02T7pmo3nbD7F
+         GRveSXMAX2PLB5Qpopz4RAyGEf4sDz7OwK70UInlvEmDOOZYE7hIv9kIhwNjTANr6j+h
+         B8tI21Sxm4JvrD5FLr6KOnmnruXHyXAEc7ntELxcWzAlx2p4AeZf549IbRHXeB84ZT5Q
+         7i/69ka4zovBnA4RJdQFH4MhiJ/IDqOc9A1STcTwteANrm2wRqd77wfKiC284K+zptED
+         ryQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
          :content-transfer-encoding;
-        bh=FxgoJ87HkOo4Sya7mWsI9Jkjvlhv0yv3YR69qNwYcgY=;
-        b=c68TFuTzXGkuGQ4gLN26F3doZp69OuF6ODH7jmz+qH2/U6MyY0v1T2ZnI6cqQuTjCN
-         /Colzg2rABaNpVkD4GG94Ru0ToR0huM/Bw4qf/sOvXEqSlXK10uT6YpQq0TFBgMsec2c
-         o1GQmwBelhHl1I7NkohN8EWGJxGLUK++7L6KF7sVZEbfLWp5AyeH2HJuuJ8OScF0yDfW
-         XDveDO8MOQyQnnkbsLcRqfe9YplhQNWhayMgo9Sqv8nR457kB0rBV+BeMMOxmnd2BvrV
-         2daJsXyA/yy3q9WLDtyLC7x9mH6bm+CRee5oqVTz+a1Wu2aLHeLg7i9lU7cUT26y1i6p
-         ScdA==
-X-Gm-Message-State: AOAM533uQl2yT4IieP5mUU4o/DAm2GraBfUjTI7jnNLWNR7srt+l7saQ
-        lJyongi+fd9WsBSFz2FNwsY=
-X-Google-Smtp-Source: ABdhPJyljK+IMPeEvoQrkr8pES9R2ymfkjp48tGYsn/vuifjCmeWhNCPgqE8CaO/iUAYRBR04YeWWA==
-X-Received: by 2002:ac2:5604:: with SMTP id v4mr7184599lfd.284.1643403164687;
-        Fri, 28 Jan 2022 12:52:44 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.225.90])
-        by smtp.gmail.com with ESMTPSA id z13sm2651546lft.92.2022.01.28.12.52.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 12:52:44 -0800 (PST)
-Message-ID: <0647fd91-f0a7-4cf7-4f80-cd5dc3f2f6a2@gmail.com>
-Date:   Fri, 28 Jan 2022 23:52:42 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ath9k_htc: fix uninit value bugs
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     ath9k-devel@qca.qualcomm.com, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com,
-        vasanth@atheros.com, Sujith.Manoharan@atheros.com,
-        senthilkumar@atheros.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
-References: <20220115122733.11160-1-paskripkin@gmail.com>
- <164337315159.4876.15861801637015517784.kvalo@kernel.org>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <164337315159.4876.15861801637015517784.kvalo@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        bh=ambBcbrixqPyjx7tGTI/ftZLjdBWOR5lpCRheJYyAlg=;
+        b=ipK3BqSR/cTUvITHsMgITII9sXD4LkvM/q6NNUA71MWalFfVoTvRs1wVEQ4ppRkm29
+         k1f6d9spdnAZmctyouLcunj7rw6pwOD6CghqMcqRvao74WWr0owb3B6qC7O3EW6n71eY
+         SUmku9Me32nv4elz6A/jeD6zcdNnCFmPz56qpQJUPxTO84J3NXvm8a+tE3Xfl3061e0S
+         qq3wtOJJpPuhE5JyL9rUbKTXkZHaw4llr4ycZi/BP0wsHv4+fWKT6I16oAA1BXhNScP0
+         nVQFEC1Dk1uvAuJqguz7yzq7XDEQ6EyvzYwPoqk0HtVizEFA8D9I2KdXZF+m/SdkYAqs
+         vgsw==
+X-Gm-Message-State: AOAM533fxseuj1zm2SD0chbaGoPcSCJSK2/+vf0D1LyH67q6dM4GPLvG
+        9aTpfGmPBFLJntjHfGQPuYnV907G4iB4CEpNts0=
+X-Google-Smtp-Source: ABdhPJwTd6D5G3WmVfbeTqeJ2r3J1wx9YjIlETFcw7xDa/qlQqTGGujlZOTw4neKQhaFjKuTOP4xMA==
+X-Received: by 2002:a63:90c1:: with SMTP id a184mr8011294pge.246.1643403292538;
+        Fri, 28 Jan 2022 12:54:52 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
+        by smtp.gmail.com with ESMTPSA id 8sm3218765pji.4.2022.01.28.12.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 12:54:51 -0800 (PST)
+Message-ID: <61f4581b.1c69fb81.c89a3.94c9@mx.google.com>
+Date:   Fri, 28 Jan 2022 12:54:51 -0800 (PST)
+X-Google-Original-Date: Fri, 28 Jan 2022 20:54:45 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220127180258.131170405@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 0/6] 5.10.95-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalle,
-
-On 1/28/22 15:32, Kalle Valo wrote:
->> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
->> Reported-by: syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
->> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
->> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+On Thu, 27 Jan 2022 19:09:16 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.95 release.
+> There are 6 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Patch applied to ath-next branch of ath.git, thanks.
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
 > 
-> d1e0df1c57bd ath9k_htc: fix uninit value bugs
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.95-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 > 
 
-Thanks, Kalle! Can you also, please, check out this one too :)
-Quite old, but syzbot is getting mad with this bug (like 20k hits). Thanks!
+5.10.95-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-
-https://lore.kernel.org/all/20210922164204.32680-1-paskripkin@gmail.com/
-
-
-
-
-With regards,
-Pavel Skripkin

@@ -2,168 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B98ED4A0298
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DB44A029A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbiA1VTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:19:02 -0500
-Received: from mga06.intel.com ([134.134.136.31]:33674 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235133AbiA1VTB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:19:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643404741; x=1674940741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JuYGt4SS9apu8yRIPO2cO3Qb/Yp2GBDdA0yZrl2jfbQ=;
-  b=DBm3GbI7tHMnd8ixyFX4a2tm413KvLKYa6bX4u7r67PAwSDAFSDtaq03
-   J4agsvToZEwTml+OWwDe6ZddFdkNg5HVc1ThnhhhwOFIbUGwYrS6awuVV
-   QweT2yR5PFXxNkVw3xtgQzyhRtpoJHttZae2voKpersh7SLUIOKyzi2TA
-   TCqA+qyOU2dpTuWGiUg5/3N+q73MoNIWC5wvn1W7IM/nWiJ0frmRSxTGy
-   a8FEMA11V7WE3ppZ6JH3+FoFWyBYickSMXNAG85JC8cU7JDatM5/IflEh
-   PVtPZbVw74GV9m02x8FllPQKIAD35MuDjUVWmsRIGY/rvkfTfhxwV0tfg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307928890"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="307928890"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:18:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="480867661"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:18:48 -0800
-Date:   Fri, 28 Jan 2022 13:18:48 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH 1/2] mm/page_owner: Introduce SNPRINTF() macro that
- includes length error check
-Message-ID: <20220128211848.GH785175@iweiny-DESK2.sc.intel.com>
-References: <20220128195642.416743-1-longman@redhat.com>
- <20220128195642.416743-2-longman@redhat.com>
+        id S242880AbiA1VT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240672AbiA1VTy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 16:19:54 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780F1C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:19:54 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id ah7so20130122ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7lZ8ffNlvdrvmT96h8/DlPx1/riHLrWMluhYkp5LYp8=;
+        b=WPJyhTdgPV3Sykuapr6GtS6LgbfAH6PC27FjN8jYgQuo5QUlp5+ug2+Hk+fIo5DI3z
+         HCvaadpIgU4KhTvB0y4Hu++cXJ01Y24EI+Ie6Tk0xUInrFr3ceYyGbzHUm6vO/pinP84
+         ntLGJcYZ6ZSJ2VGZ6Tzo3Nn/jjHF2Cd1iIQDRT4gmkKcEKNMQzqcfgRxMBWfnphibPVp
+         xR7e0PL3WO5a62HRLkPc9nXuAo/JubYtcwQjubNwfLz84R2vjQ8hQhfhbvectYh5ZQmS
+         MW40oNJ331TtmVOns2bXlhFJPnaipOppQR9I5MbWuxmqPH+6CrBxgozpjXDC02Wt2JDL
+         xq4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7lZ8ffNlvdrvmT96h8/DlPx1/riHLrWMluhYkp5LYp8=;
+        b=C6YUxKUaUI4RYmCvSm2p0gi2dBFa2FKhliMit7FUApeS+WXv/rjSXwNMuyiqst0UY2
+         OeEzp+7fvSgyvmbar2m7+uxQlIg2KM5cjolFqMrq9zFlGMUCrJ+MeWQ6MAuOedzoCYYH
+         DVjHYwVE4b9/NxHWJ3qFKoqNEFGoIiDEQXeTIlnhvMU2Zg6i9yIQueDd9yByL39fAByZ
+         /54zgP1xzKJwWyotQCAXhI5uT817QjaPp8bP8su7Yy4qCBNM0/sGh6Tn84JY46lGTaAv
+         dAeETNolEkKeWdqGQ2iHaDzeiXCfT9lC87MAqHBTb82Q5anZ9YKJLwFVu7HcIEabyQuw
+         91jQ==
+X-Gm-Message-State: AOAM533XSOJWoTt9Jun/wog7HPYiIthycfdfQJtx9xcflaD+OFaXILUi
+        2TSg9DcsSA3u6+eHqTnOwcYNfUdyvA54yV6rip2YIg==
+X-Google-Smtp-Source: ABdhPJyN4c24gPx4RQUkT1Ozabx/C+LhtygJLfsnEItjLywNDAiXGe/yWuDotYfPg/j+EYuUbmeLcSEcxwToKLQZBKQ=
+X-Received: by 2002:a17:906:794f:: with SMTP id l15mr8720055ejo.75.1643404792858;
+ Fri, 28 Jan 2022 13:19:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128195642.416743-2-longman@redhat.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <20211013191320.2490913-1-dlatypov@google.com> <CAFd5g47=aO3e8d4_GGcgY9BK43Z0Oo6SGD-2e5rJDp5r3k4XXQ@mail.gmail.com>
+ <CAGS_qxoziNGNVpsUfvUfOReADY0PdriV2gJJ7+LUzzd+7BU-Ow@mail.gmail.com> <0f85025124359304c8a2a97d007b66d5655645c1.camel@codeconstruct.com.au>
+In-Reply-To: <0f85025124359304c8a2a97d007b66d5655645c1.camel@codeconstruct.com.au>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 28 Jan 2022 13:19:41 -0800
+Message-ID: <CAGS_qxpvX74vnAGhC=TAxFy1NT3mXB0S3AHUZvK2FA59hDijxA@mail.gmail.com>
+Subject: Re: [RFC PATCH] kunit: flatten kunit_suite*** to kunit_suite** in executor
+To:     Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 02:56:41PM -0500, Waiman Long wrote:
-> In print_page_owner(), there is a repetitive check after each snprintf()
-> to make sure that the final length is less than the buffer size. Simplify
-> the code and make it easier to read by embedding the buffer length
-> check and increment inside the macro.
+On Wed, Oct 13, 2021 at 6:55 PM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
+> Resulting in the .kunit_test_suites section just being a set of
+> contiguous pointers to struct kunit_suite. We get the number of suites
+> from the section size.
 
-This does not follow the kernel coding style of not putting control flow
-statements in macros.[1]
+<snip>
 
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  mm/page_owner.c | 50 +++++++++++++++++++++++--------------------------
->  1 file changed, 23 insertions(+), 27 deletions(-)
+>
+> That was my thinking, anyway. I think it probably makes sense to do that
+> cleanup after the section patch, as that means we don't need any
+> post-processing on the suites arrays.
 
-And in the end you only saved 4 lines of code to read...  Not worth it IMO.
+To be honest, I'm actually tempted to pay the cost of postprocessing
+and proposing a change like this for real.
+Going from kunit_suite*** to ** shaves off a lot of code from the unit
+test and the filtering code path.
 
-Ira
+Specifically I'm thinking this can go into the kunit branch,
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
+Then when we have the series reworking modules, one of two things can happen.
+1. if we get to kunit_suite** with null-terminated arrays, fixing the
+executor just means dropping the post-processing step.
+2. If we get to kunit_suite* as mentioned above, then there'll be a
+bit more work, but not as much.
 
-[1] https://www.kernel.org/doc/html/v4.17/process/coding-style.html
+Alternatively, I can wait and send you an updated version of this
+patch to include at the start of your series like
+PATCH 1/x: this patch with post-processing, using either * or **
+...
+PATCH x/x: final rework, and drop the postprocessing
 
-> 
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 99e360df9465..c52ce9d6bc3b 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -325,12 +325,20 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
->  	seq_putc(m, '\n');
->  }
->  
-> +#define SNPRINTF(_buf, _size, _len, _err, _fmt, ...)			\
-> +	do {								\
-> +		_len += snprintf(_buf + _len, _size - _len, _fmt,	\
-> +				 ##__VA_ARGS__);			\
-> +		if (_len >= _size)					\
-> +			goto _err;					\
-> +	} while (0)
-> +
->  static ssize_t
->  print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->  		struct page *page, struct page_owner *page_owner,
->  		depot_stack_handle_t handle)
->  {
-> -	int ret, pageblock_mt, page_mt;
-> +	int ret = 0, pageblock_mt, page_mt;
->  	char *kbuf;
->  
->  	count = min_t(size_t, count, PAGE_SIZE);
-> @@ -338,44 +346,32 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->  	if (!kbuf)
->  		return -ENOMEM;
->  
-> -	ret = snprintf(kbuf, count,
-> -			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
-> -			page_owner->order, page_owner->gfp_mask,
-> -			&page_owner->gfp_mask, page_owner->pid,
-> -			page_owner->ts_nsec, page_owner->free_ts_nsec);
-> -
-> -	if (ret >= count)
-> -		goto err;
-> +	SNPRINTF(kbuf, count, ret, err,
-> +		"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
-> +		page_owner->order, page_owner->gfp_mask,
-> +		&page_owner->gfp_mask, page_owner->pid,
-> +		page_owner->ts_nsec, page_owner->free_ts_nsec);
->  
->  	/* Print information relevant to grouping pages by mobility */
->  	pageblock_mt = get_pageblock_migratetype(page);
->  	page_mt  = gfp_migratetype(page_owner->gfp_mask);
-> -	ret += snprintf(kbuf + ret, count - ret,
-> -			"PFN %lu type %s Block %lu type %s Flags %pGp\n",
-> -			pfn,
-> -			migratetype_names[page_mt],
-> -			pfn >> pageblock_order,
-> -			migratetype_names[pageblock_mt],
-> -			&page->flags);
-> -
-> -	if (ret >= count)
-> -		goto err;
-> +	SNPRINTF(kbuf, count, ret, err,
-> +		"PFN %lu type %s Block %lu type %s Flags %pGp\n",
-> +		pfn, migratetype_names[page_mt],
-> +		pfn >> pageblock_order,
-> +		migratetype_names[pageblock_mt],
-> +		&page->flags);
->  
->  	ret += stack_depot_snprint(handle, kbuf + ret, count - ret, 0);
->  	if (ret >= count)
->  		goto err;
->  
-> -	if (page_owner->last_migrate_reason != -1) {
-> -		ret += snprintf(kbuf + ret, count - ret,
-> +	if (page_owner->last_migrate_reason != -1)
-> +		SNPRINTF(kbuf, count, ret, err,
->  			"Page has been migrated, last migrate reason: %s\n",
->  			migrate_reason_names[page_owner->last_migrate_reason]);
-> -		if (ret >= count)
-> -			goto err;
-> -	}
->  
-> -	ret += snprintf(kbuf + ret, count - ret, "\n");
-> -	if (ret >= count)
-> -		goto err;
-> +	SNPRINTF(kbuf, count, ret, err, "\n");
->  
->  	if (copy_to_user(buf, kbuf, ret))
->  		ret = -EFAULT;
-> -- 
-> 2.27.0
-> 
-> 
+It's just that the prospect of submitting a patch that reduces so much
+code makes me eager to try and get it submitted :)
+Brendan and David seem ok with paying the bit of runtime overhead for
+post-processing, esp. if we time it so this patch lands in the same
+Linux release as the module rework.
+But I can hold off if it'll make your life more difficult.
+
+>
+> Cheers,
+>
+>
+> Jeremy

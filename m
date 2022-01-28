@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E44E349FC7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE0349FC85
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349516AbiA1PKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S240473AbiA1PMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349504AbiA1PKU (ORCPT
+        with ESMTP id S231818AbiA1PMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:10:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A38BC06173B;
-        Fri, 28 Jan 2022 07:10:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E7494CE26B8;
-        Fri, 28 Jan 2022 15:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 597C9C340F7;
-        Fri, 28 Jan 2022 15:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643382617;
-        bh=XPp8QlBC8+NBkO5LdYVNcNqgl/cTHEgNVfKwDN1oOrc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HNdycBX9bx9Rf1C6OFG/l9O0RKrrt1H1VUufS4zWNbo0fkOZ4x+gAwKs4FI9lrahP
-         JYFvlq8cZPeOJMxtDaAXR8W113kyN+jHCXmaMp8SBBTrINGRxxZEgFye7P8l+O8mSd
-         GH9Kgjt/ZNoQE21/QxrIsY5IWle1vGP/AHwXUqOxIApyMUGxwevGkfn96fKwtoxkwn
-         RkYSxakr23h8q/AP0RVM4uw07MhoNBr3hgC1sB5miRTSv/TNmIPoadP3WP8AelznEg
-         Hz30YwjHNX8ZW/QvSkCXSkvI2jl5Jm3rNry+/bmejIzrhrW1OjQn8D1ii78RqX7Q/y
-         IU6XxRGe5X1TQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 423AFE6BB30;
-        Fri, 28 Jan 2022 15:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Jan 2022 10:12:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC69C061714;
+        Fri, 28 Jan 2022 07:12:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KyI69O45ehxmAwW9fv0/0osW50iJDw/JIdPZTiNNAzg=; b=26Gu36fCTUmYN60362r3RhqdKh
+        YcL881BVqXKsYL2Qr+vF/OwMMxr01K2qvoGltiUpef1W13xfm1nhUUz0e/+VvZrjwXFo2snUkfr1v
+        uzCK9rPtfqi1dPoJy2rH90zfcMwIJp9yAUoU7aShZ792EaPe1fKrmHvi7fbeWEiKxQO06qH7SN+EZ
+        /viBOV7OYdkD5IRw2dirUjL3vjl9XVyS44k98DFUAYUllEgkIM3cxLBJrK2LhMZUHFMiK+gI7IgKc
+        4A0bzopTN+x4JvaMz16tNmzh47Jev3Ykil7VGZvIMtbVlx2VZg954lX02nXlcClspMXDbGcMIiz2C
+        lOPGHlSQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDSvc-002fAw-Ca; Fri, 28 Jan 2022 15:12:44 +0000
+Date:   Fri, 28 Jan 2022 07:12:44 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     tangmeng <tangmeng@uniontech.com>
+Cc:     tglx@linutronix.de, keescook@chromium.org, yzaikin@google.com,
+        john.stultz@linaro.org, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] kernel/time: move timer sysctls to its own file
+Message-ID: <YfQH7K1rKnFoY3pk@bombadil.infradead.org>
+References: <20220128065505.16685-1-tangmeng@uniontech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] net/fsl: xgmac_mdio: Fix spelling mistake "frequecy" ->
- "frequency"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164338261725.2420.15157207073443007637.git-patchwork-notify@kernel.org>
-Date:   Fri, 28 Jan 2022 15:10:17 +0000
-References: <20220128092531.7455-1-colin.i.king@gmail.com>
-In-Reply-To: <20220128092531.7455-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128065505.16685-1-tangmeng@uniontech.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 28 Jan 2022 09:25:31 +0000 you wrote:
-> There is a spelling mistake in a dev_err message. Fix it.
+On Fri, Jan 28, 2022 at 02:55:05PM +0800, tangmeng wrote:
+> This moves the kernel/timer/timer.c respective sysctls to its own file.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: tangmeng <tangmeng@uniontech.com>
 > ---
->  drivers/net/ethernet/freescale/xgmac_mdio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> +static int __init timer_sysctl_init(void)
+> +{
+> +	register_sysctl_init("kerneli/timer", timer_sysctl);
+> +	return 0;
+> +}
+> +#else
 
-Here is the summary with links:
-  - [next] net/fsl: xgmac_mdio: Fix spelling mistake "frequecy" -> "frequency"
-    https://git.kernel.org/netdev/net-next/c/34a79c5dca4a
+You mean kernel/timer right?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+ Luis

@@ -2,107 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD5949FD00
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6537D49FD06
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349639AbiA1Pmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S1349646AbiA1Po0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349629AbiA1Pmx (ORCPT
+        with ESMTP id S232764AbiA1PoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:42:53 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837A3C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:42:53 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id om4-20020a17090b3a8400b001b633bebd2dso3432743pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=8cQiGIW7LrGAvgSo7SrwK7BDrdq6t9tzSMhHudcU/rs=;
-        b=cU5U0mO08WxFQS7m8O7fIDlpMlElcqhBbIXtvbv/0BX3a18uy6Og8Z95GVemMqvRJB
-         Se7mIrefKld7NWk3xoHo5/t91eTSkWAZhj/1wSGFSoQLFhhQhAm6kYyuaD0eqWwbfPmw
-         zmWtJiKcMN7DO5+9JDJIVI8CVVmfW5YsKpzh+obD/n8WePb7kM6uzmxNStCEvwjMJivb
-         23yAEUSIx/rsz/AAcH6spyAKUZ/Gn3TiSFqhgA1rvBHervyLwrKNb9pbMWUR6LEftZLW
-         TMcMhRPoJ9lyRlHjDIQtLoKOgmATRVSyvewMCjAgunRr8G/6pc5iYV9Ja+IxP62mpnKT
-         t6+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8cQiGIW7LrGAvgSo7SrwK7BDrdq6t9tzSMhHudcU/rs=;
-        b=L7LzKGstN7nRlxWshCFbUSgLyro4/OgLujxSS+7LdNmHipexV/WFAAMAHnqol/fbiN
-         D223sa+O0YV3RnV4o9zT++OpoY+GRpNHT81Bz9rVic5WBCGofx6SuuafAhaBo8cZzo4J
-         TjnwNdPsJHd2Z7D5YkxAhUmgWkD5f1OFZxmuV6ecOA3TkntB0xfegrF+6WrYP5CcNn8L
-         q2JympRZTJwQ5IuUEba2eUlYKXI5qtb+Wpp3/J2yymyop4EMvAmSnsI4E/UxlfsKbIuK
-         Yj3MpY7LhQlfUvxhlBht23WpixVWygGkHafdp7oC8Uc5p4UfAuk1Ou+nsgOgPCX19CdX
-         fNgQ==
-X-Gm-Message-State: AOAM531SH6B0S9c80EZrNVekcP7iRpQq3OVEIgUwBDaPdKngxFKrLu07
-        BlpabLblNPA0e21cjOu1pBZ0Hg==
-X-Google-Smtp-Source: ABdhPJzGCRvVnPAS0yk1YsryL/2cBsLsN12clibk4RleUoV/vt2H4rWeK6zEg423wLzTB2+/HFvuZA==
-X-Received: by 2002:a17:903:4053:: with SMTP id n19mr9357650pla.37.1643384572865;
-        Fri, 28 Jan 2022 07:42:52 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t14sm2880879pjd.6.2022.01.28.07.42.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 07:42:52 -0800 (PST)
-Date:   Fri, 28 Jan 2022 15:42:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH 01/22] KVM: x86: Drop unnecessary and confusing
- KVM_X86_OP_NULL macro
-Message-ID: <YfQO+ADS1wnefoSr@google.com>
-References: <20220128005208.4008533-1-seanjc@google.com>
- <20220128005208.4008533-2-seanjc@google.com>
- <152db376-b0f3-3102-233c-a0dbb4011d0c@redhat.com>
+        Fri, 28 Jan 2022 10:44:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C939C061714;
+        Fri, 28 Jan 2022 07:44:25 -0800 (PST)
+Date:   Fri, 28 Jan 2022 16:44:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643384664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y2SzC0yUOVfIVcM+MxRaqK8qU1jwTL1syaAIVFYo+U0=;
+        b=QmtA4LlqGWJnBQPatE0PIf4JTssg9DE3CLbOwclIVW7Q1YDxY7tgqPjedICyozn/IfzzAY
+        /V3FBVO8KCerpCOqeTj4XV13IW1fj2nRVKkxkIMW+ezTwnl62bjHqjMrFgauK+5MKicKT7
+        xpiPoFgsl1u8Zxr9fDgefE9cvpaDZjxyXEXroTTCClMI3gVxpA24V4a4LFPoefrVZLvn76
+        /MaLeY1d/5RWW9K5Wn8/Y2fEqAMGSw4C7J6Nw6YZQvkVCq72GoUy3/dM9AmOXRJRDPudnT
+        zf4skOdSgPEmRXTwzY5Tmj2ITU7IRr6ax1WEfB7DlOS9Be+8XW5zreTufwgZ2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643384664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y2SzC0yUOVfIVcM+MxRaqK8qU1jwTL1syaAIVFYo+U0=;
+        b=AiQa3oW5xtiOzJegxYWsSUSqEfGfhVkkPMhXBQLQymtKKBxh0sqBtHgpoEweIlpXYnvyra
+        NRj2/1jFMMf/bgCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] random: remove batched entropy locking
+Message-ID: <YfQPVp8TULSq3V+l@linutronix.de>
+References: <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+ <20220128153344.34211-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <152db376-b0f3-3102-233c-a0dbb4011d0c@redhat.com>
+In-Reply-To: <20220128153344.34211-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022, Paolo Bonzini wrote:
-> On 1/28/22 01:51, Sean Christopherson wrote:
-> > Drop KVM_X86_OP_NULL, which is superfluous and confusing.  The macro is
-> > just a "pass-through" to KVM_X86_OP; it was added with the intent of
-> > actually using it in the future, but that obviously never happened.  The
-> > name is confusing because its intended use was to provide a way for
-> > vendor implementations to specify a NULL pointer, and even if it were
-> > used, wouldn't necessarily be synonymous with declaring a kvm_x86_op as
-> > DEFINE_STATIC_CALL_NULL.
-> > 
-> > Lastly, actually using KVM_X86_OP_NULL as intended isn't a maintanable
-> > approach, e.g. bleeds vendor details into common x86 code, and would
-> > either be prone to bit rot or would require modifying common x86 code
-> > when modifying a vendor implementation.
+On 2022-01-28 16:33:44 [+0100], Jason A. Donenfeld wrote:
+> From: Andy Lutomirski <luto@kernel.org>
 > 
-> I have some patches that redefine KVM_X86_OP_NULL as "must be used with
-> static_call_cond".  That's a more interesting definition, as it can be used
-> to WARN if KVM_X86_OP is used with a NULL function pointer.
+> We don't need spinlocks to protect batched entropy -- all we need
+> is a little bit of care. This should fix up the following splat that
+> Jonathan received with a PROVE_LOCKING=y/PROVE_RAW_LOCK_NESTING=y
+> kernel:
 
-I'm skeptical that will actually work well and be maintainble.  E.g. sync_pir_to_ir()
-must be explicitly check for NULL in apic_has_interrupt_for_ppr(), forcing that path
-to do static_call_cond() will be odd.  Ditto for ops that are wired up to ioctl()s,
-e.g. the confidential VM stuff, and for ops that are guarded by other stuff, e.g. the
-hypervisor timer.
+NO. Could we please look at my RANDOM patches first?
+This affects PREEMPT_RT. There is no need to stuff this in and tag it
+stable.
 
-Actually, it won't just be odd, it will be impossible to disallow NULL a pointer
-for KVM_X86_OP and require static_call_cond() for KVM_X86_OP_NULL.  static_call_cond()
-forces the return to "void", so any path that returns a value needs to be manually
-guarded and can't use static_call_cond(), e.g.
+I can repost my rebased patched if there no objection.
+This patch invokes extract_crng() with disabled interrupts so we didn't
+gain anything IMHO.
 
-arch/x86/kvm/x86.c: In function ‘kvm_arch_vm_ioctl’:
-arch/x86/kvm/x86.c:6450:19: error: void value not ignored as it ought to be
- 6450 |                 r = static_call_cond(kvm_x86_mem_enc_ioctl)(kvm, argp);
-      |                   ^
+Sebastian

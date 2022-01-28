@@ -2,288 +2,595 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAD149F4EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AB849F4F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347197AbiA1IK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:10:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44936 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239770AbiA1IK0 (ORCPT
+        id S1347201AbiA1IL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:11:28 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:37372 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231590AbiA1ILY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:10:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643357425;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9BTHMVGsJ7UkwNidKj3HfXk9KjvNa/KnCKclIZ3WtIA=;
-        b=RRklE8vFIMRntMpdlXr4XsVC0ZeCz+vFwvr0aAtWVzm3DepreIapgAj8QDzGj5ED+QtHdL
-        +YSSVcUVSFMH43pq/boUbp5II75xClMuRD0sxycs0WgO7zVXIIQNKiw/lhqdSqB4IDO18w
-        GDoUwi1zqveqhtXaYzn4DZXCw6n0RZA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-372-wce93gAJNnqgFKz5qgpKXQ-1; Fri, 28 Jan 2022 03:10:24 -0500
-X-MC-Unique: wce93gAJNnqgFKz5qgpKXQ-1
-Received: by mail-wm1-f71.google.com with SMTP id l20-20020a05600c1d1400b0035153bf34c3so2769025wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:10:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=9BTHMVGsJ7UkwNidKj3HfXk9KjvNa/KnCKclIZ3WtIA=;
-        b=7ryFjFTaDtqBTygrHRkkc/9V+tpeNsY7I5y0DGeKWJ99iIjVK83BwVQm4FCXpqtZB9
-         hlUmV+1Gkqd7kU9KU926XO3efY30ReT3aso5DUy6NtPugN/rb8R2j5SltRxXQsb19kjs
-         T+EVGDCnr4QsvUSqhko/LU8fUDVKCyQNw0NjUtbcqohvlp1pBEri3MTarJKhYqA4FVNx
-         2LqqVNMMCuG/s0cKWnett3VAyVcg3+B+XjsCKjQbOLLI49m/eVjD6SZqH5ZM3VguCM50
-         CDjIsetUkZRHleN6JxkAvQsosS7+0EBfzhDZOJygusz+V2r6u9P4oS4wbGW5iIVJhPoM
-         WSDg==
-X-Gm-Message-State: AOAM532Vcrt5xcc5zCqqpXbpWMdeoKoVUIpyCRb3cztCmT5+u9ujnlzt
-        XNR66LXtc8ZzUAqOkSGfX0Pq5X2DJ3sLk+vhNl/AlrG3huZJvSmWoxP29Kh789ryEua92vCxxbz
-        HtGFtJpFxKrxqQztv6jT3voR6
-X-Received: by 2002:adf:d1e4:: with SMTP id g4mr462684wrd.711.1643357422653;
-        Fri, 28 Jan 2022 00:10:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxI3cTtGlz3LUSUWuyTSNxCS7CetxFxgYUVV3GbbFM92EX8r9T2sLFd/1K+d8EpIH4y7aFliQ==
-X-Received: by 2002:adf:d1e4:: with SMTP id g4mr462665wrd.711.1643357422351;
-        Fri, 28 Jan 2022 00:10:22 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5c00:522f:9bcd:24a0:cd70? (p200300cbc70e5c00522f9bcd24a0cd70.dip0.t-ipconnect.de. [2003:cb:c70e:5c00:522f:9bcd:24a0:cd70])
-        by smtp.gmail.com with ESMTPSA id n13sm4093040wrm.68.2022.01.28.00.10.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 00:10:21 -0800 (PST)
-Message-ID: <df613a5e-bf32-a03e-e06f-5dcb3444c3d4@redhat.com>
-Date:   Fri, 28 Jan 2022 09:10:21 +0100
+        Fri, 28 Jan 2022 03:11:24 -0500
+X-UUID: 9e99c8539b5d48cfbd80cdeb2537f49d-20220128
+X-UUID: 9e99c8539b5d48cfbd80cdeb2537f49d-20220128
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1531267180; Fri, 28 Jan 2022 16:11:21 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 28 Jan 2022 16:11:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
+ 2022 16:11:19 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 28 Jan 2022 16:11:18 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     <dri-devel@lists.freedesktop.org>
+CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        "James Wang" <james.qian.wang@arm.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        <iommu@lists.linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        <linux-kernel@vger.kernel.org>, "Joerg Roedel" <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-mediatek@lists.infradead.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <srv_heupstream@mediatek.com>, Rob Clark <robdclark@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>
+Subject: [RFC PATCH] component: Add common helpers for compare/release functions
+Date:   Fri, 28 Jan 2022 16:11:01 +0800
+Message-ID: <20220128081101.27837-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Jonghyeon Kim <tome01@ajou.ac.kr>
-Cc:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, akpm@linux-foundation.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220126170002.19754-1-tome01@ajou.ac.kr>
- <5d02ea0e-aca6-a64b-23de-bc9307572d17@redhat.com>
- <20220127094142.GA31409@swarm08>
- <696b782f-0b50-9861-a34d-cf750d4244bd@redhat.com>
- <20220128041959.GA20345@swarm08>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/2] mm/memory_hotplug: Export shrink span functions for
- zone and node
-In-Reply-To: <20220128041959.GA20345@swarm08>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.01.22 05:19, Jonghyeon Kim wrote:
-> On Thu, Jan 27, 2022 at 10:54:23AM +0100, David Hildenbrand wrote:
->> On 27.01.22 10:41, Jonghyeon Kim wrote:
->>> On Wed, Jan 26, 2022 at 06:04:50PM +0100, David Hildenbrand wrote:
->>>> On 26.01.22 18:00, Jonghyeon Kim wrote:
->>>>> Export shrink_zone_span() and update_pgdat_span() functions to head
->>>>> file. We need to update real number of spanned pages for NUMA nodes and
->>>>> zones when we add memory device node such as device dax memory.
->>>>>
->>>>
->>>> Can you elaborate a bit more what you intend to fix?
->>>>
->>>> Memory onlining/offlining is reponsible for updating the node/zone span,
->>>> and that's triggered when the dax/kmem mamory gets onlined/offlined.
->>>>
->>> Sure, sorry for the lack of explanation of the intended fix.
->>>
->>> Before onlining nvdimm memory using dax(devdax or fsdax), these memory belong to
->>> cpu NUMA nodes, which extends span pages of node/zone as a ZONE_DEVICE. So there
->>> is no problem because node/zone contain these additional non-visible memory
->>> devices to the system.
->>> But, if we online dax-memory, zone[ZONE_DEVICE] of CPU NUMA node is hot-plugged
->>> to new NUMA node(but CPU-less). I think there is no need to hold
->>> zone[ZONE_DEVICE] pages on the original node.
->>>
->>> Additionally, spanned pages are also used to calculate the end pfn of a node.
->>> Thus, it is needed to maintain accurate page stats for node/zone.
->>>
->>> My machine contains two CPU-socket consisting of DRAM and Intel DCPMM
->>> (DC persistent memory modules) with App-Direct mode.
->>>
->>> Below are my test results.
->>>
->>> Before memory onlining:
->>>
->>> 	# ndctl create-namespace --mode=devdax
->>> 	# ndctl create-namespace --mode=devdax
->>> 	# cat /proc/zoneinfo | grep -E "Node|spanned" | paste - -
->>> 	Node 0, zone      DMA	        spanned  4095
->>> 	Node 0, zone    DMA32	        spanned  1044480
->>> 	Node 0, zone   Normal	        spanned  7864320
->>> 	Node 0, zone  Movable	        spanned  0
->>> 	Node 0, zone   Device	        spanned  66060288
->>> 	Node 1, zone      DMA	        spanned  0
->>> 	Node 1, zone    DMA32	        spanned  0
->>> 	Node 1, zone   Normal	        spanned  8388608
->>> 	Node 1, zone  Movable	        spanned  0
->>> 	Node 1, zone   Device	        spanned  66060288
->>>
->>> After memory onlining:
->>>
->>> 	# daxctl reconfigure-device --mode=system-ram --no-online dax0.0
->>> 	# daxctl reconfigure-device --mode=system-ram --no-online dax1.0
->>>
->>> 	# cat /proc/zoneinfo | grep -E "Node|spanned" | paste - -
->>> 	Node 0, zone      DMA	        spanned  4095
->>> 	Node 0, zone    DMA32	        spanned  1044480
->>> 	Node 0, zone   Normal	        spanned  7864320
->>> 	Node 0, zone  Movable	        spanned  0
->>> 	Node 0, zone   Device	        spanned  66060288
->>> 	Node 1, zone      DMA	        spanned  0
->>> 	Node 1, zone    DMA32	        spanned  0
->>> 	Node 1, zone   Normal	        spanned  8388608
->>> 	Node 1, zone  Movable	        spanned  0
->>> 	Node 1, zone   Device	        spanned  66060288
->>> 	Node 2, zone      DMA	        spanned  0
->>> 	Node 2, zone    DMA32	        spanned  0
->>> 	Node 2, zone   Normal	        spanned  65011712
->>> 	Node 2, zone  Movable	        spanned  0
->>> 	Node 2, zone   Device	        spanned  0
->>> 	Node 3, zone      DMA	        spanned  0
->>> 	Node 3, zone    DMA32	        spanned  0
->>> 	Node 3, zone   Normal	        spanned  65011712
->>> 	Node 3, zone  Movable	        spanned  0
->>> 	Node 3, zone   Device	        spanned  0
->>>
->>> As we can see, Node 0 and 1 still have zone_device pages after memory onlining.
->>> This causes problem that Node 0 and Node 2 have same end of pfn values, also 
->>> Node 1 and Node 3 have same problem.
->>
->> Thanks for the information, that makes it clearer.
->>
->> While this unfortunate, the node/zone span is something fairly
->> unreliable/unusable for user space. Nodes and zones can overlap just easily.
->>
->> What counts are present/managed pages in the node/zone.
->>
->> So at least I don't count this as something that "needs fixing",
->> it's more something that's nice to handle better if easily possible.
->>
->> See below.
->>
->>>
->>>>> Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
->>>>> ---
->>>>>  include/linux/memory_hotplug.h | 3 +++
->>>>>  mm/memory_hotplug.c            | 6 ++++--
->>>>>  2 files changed, 7 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
->>>>> index be48e003a518..25c7f60c317e 100644
->>>>> --- a/include/linux/memory_hotplug.h
->>>>> +++ b/include/linux/memory_hotplug.h
->>>>> @@ -337,6 +337,9 @@ extern void move_pfn_range_to_zone(struct zone *zone, unsigned long start_pfn,
->>>>>  extern void remove_pfn_range_from_zone(struct zone *zone,
->>>>>  				       unsigned long start_pfn,
->>>>>  				       unsigned long nr_pages);
->>>>> +extern void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
->>>>> +			     unsigned long end_pfn);
->>>>> +extern void update_pgdat_span(struct pglist_data *pgdat);
->>>>>  extern bool is_memblock_offlined(struct memory_block *mem);
->>>>>  extern int sparse_add_section(int nid, unsigned long pfn,
->>>>>  		unsigned long nr_pages, struct vmem_altmap *altmap);
->>>>> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
->>>>> index 2a9627dc784c..38f46a9ef853 100644
->>>>> --- a/mm/memory_hotplug.c
->>>>> +++ b/mm/memory_hotplug.c
->>>>> @@ -389,7 +389,7 @@ static unsigned long find_biggest_section_pfn(int nid, struct zone *zone,
->>>>>  	return 0;
->>>>>  }
->>>>>  
->>>>> -static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
->>>>> +void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
->>>>>  			     unsigned long end_pfn)
->>>>>  {
->>>>>  	unsigned long pfn;
->>>>> @@ -428,8 +428,9 @@ static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
->>>>>  		}
->>>>>  	}
->>>>>  }
->>>>> +EXPORT_SYMBOL_GPL(shrink_zone_span);
->>>>
->>>> Exporting both as symbols feels very wrong. This is memory
->>>> onlining/offlining internal stuff.
->>>
->>> I agree with you that your comment. I will find another approach to avoid
->>> directly using onlining/offlining internal stuff while updating node/zone span.
->>
->> IIRC, to handle what you intend to handle properly want to look into teaching
->> remove_pfn_range_from_zone() to handle zone_is_zone_device().
->>
->> There is a big fat comment:
->>
->> 	/*
->> 	 * Zone shrinking code cannot properly deal with ZONE_DEVICE. So
->> 	 * we will not try to shrink the zones - which is okay as
->> 	 * set_zone_contiguous() cannot deal with ZONE_DEVICE either way.
->> 	 */
->> 	if (zone_is_zone_device(zone))
->> 		return;
->>
->>
->> Similarly, try_offline_node() spells this out:
->>
->> 	/*
->> 	 * If the node still spans pages (especially ZONE_DEVICE), don't
->> 	 * offline it. A node spans memory after move_pfn_range_to_zone(),
->> 	 * e.g., after the memory block was onlined.
->> 	 */
->> 	if (pgdat->node_spanned_pages)
->> 		return;
->>
->>
->> So once you handle remove_pfn_range_from_zone() cleanly, you'll cleanly handle
->> try_offline_node() implicitly.
->>
->> Trying to update the node span manually without teaching node/zone shrinking code how to
->> handle ZONE_DEVICE properly is just a hack that will only sometimes work. Especially, it
->> won't work if the range of interest is still surrounded by other ranges.
->>
-> 
-> Thanks for your pointing out, I missed those comments.
-> I will keep trying to handle node/zone span updating process.
+The component requires the compare/release functions, there are so many
+copy in current kernel. Just define three common helpers for them.
+No functional change.
 
-The only safe thing right now for on ZONE_DEVICE in
-remove_pfn_range_from_zone() would be removing the given range from the
-start/end of the zone range, but we must not scan using the existing
-functions.
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+---
+Base on v5.17-rc1
+---
+ .../gpu/drm/arm/display/komeda/komeda_drv.c    |  5 -----
+ drivers/gpu/drm/arm/hdlcd_drv.c                |  7 +------
+ drivers/gpu/drm/armada/armada_drv.c            |  5 -----
+ drivers/gpu/drm/drm_of.c                       |  8 +-------
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c          |  7 -------
+ drivers/gpu/drm/exynos/exynos_drm_drv.c        |  5 -----
+ .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c    |  5 -----
+ drivers/gpu/drm/imx/imx-drm-core.c             |  4 ++--
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c      |  5 -----
+ drivers/gpu/drm/mcde/mcde_drv.c                |  7 +------
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c         |  5 -----
+ drivers/gpu/drm/meson/meson_drv.c              |  8 --------
+ drivers/gpu/drm/msm/msm_drv.c                  |  9 ---------
+ drivers/gpu/drm/omapdrm/dss/dss.c              |  8 +-------
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c    |  5 -----
+ drivers/gpu/drm/sti/sti_drv.c                  |  5 -----
+ drivers/gpu/drm/sun4i/sun4i_drv.c              |  9 ---------
+ drivers/gpu/drm/vc4/vc4_drv.c                  |  5 -----
+ drivers/iommu/mtk_iommu.h                      | 10 ----------
+ drivers/power/supply/ab8500_charger.c          |  8 +-------
+ drivers/video/fbdev/omap2/omapfb/dss/dss.c     |  8 +-------
+ include/linux/component.h                      | 18 ++++++++++++++++++
+ sound/soc/codecs/wcd938x.c                     | 16 ++--------------
+ 23 files changed, 28 insertions(+), 144 deletions(-)
 
-As soon as we start actual *scanning* via find_smallest...
-find_biggest... in shrink_zone_span() we would mistakenly skip other
-ZONE_DEVICE ranges and mess up.
-
-Assume you would have a ZONE_DEVICE layout like
-
-[  DEV 0 | Hole | DEV 1 | Hole | DEV 2 ]
-
-What we actually want to do when removing
-
-* DEV 0 is scanning low->high until we find DEV 1
-* DEV 1 is doing nothing, because we cannot shrink
-* DEV 2 is scanning high -> low until we find DEV 1
-
-
-I assume we'd want to call in shrink_zone_span() two new functions for
-ZONE_DEVICE:
-find_smallest_zone_device_pfn
-find_biggest_zone_device_pfn
-
-Which would be able to do exactly that scanning, eventually, using
-get_dev_pagemap() or some similar source of information.
-
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+index e7933930a657..fe5b97107417 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+@@ -92,11 +92,6 @@ static const struct component_master_ops komeda_master_ops = {
+ 	.unbind	= komeda_unbind,
+ };
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static void komeda_add_slave(struct device *master,
+ 			     struct component_match **match,
+ 			     struct device_node *np,
+diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
+index 479c2422a2e0..36d84c439df8 100644
+--- a/drivers/gpu/drm/arm/hdlcd_drv.c
++++ b/drivers/gpu/drm/arm/hdlcd_drv.c
+@@ -372,11 +372,6 @@ static const struct component_master_ops hdlcd_master_ops = {
+ 	.unbind		= hdlcd_drm_unbind,
+ };
+ 
+-static int compare_dev(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int hdlcd_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *port;
+@@ -387,7 +382,7 @@ static int hdlcd_probe(struct platform_device *pdev)
+ 	if (!port)
+ 		return -ENODEV;
+ 
+-	drm_of_component_match_add(&pdev->dev, &match, compare_dev, port);
++	drm_of_component_match_add(&pdev->dev, &match, compare_of, port);
+ 	of_node_put(port);
+ 
+ 	return component_master_add_with_match(&pdev->dev, &hdlcd_master_ops,
+diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
+index 8e3e98f13db4..9edc4912c1a0 100644
+--- a/drivers/gpu/drm/armada/armada_drv.c
++++ b/drivers/gpu/drm/armada/armada_drv.c
+@@ -177,11 +177,6 @@ static void armada_drm_unbind(struct device *dev)
+ 	drm_mm_takedown(&priv->linear);
+ }
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int compare_dev_name(struct device *dev, void *data)
+ {
+ 	const char *name = data;
+diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+index 59d368ea006b..f958f48f8ba4 100644
+--- a/drivers/gpu/drm/drm_of.c
++++ b/drivers/gpu/drm/drm_of.c
+@@ -18,11 +18,6 @@
+  * properties.
+  */
+ 
+-static void drm_release_of(struct device *dev, void *data)
+-{
+-	of_node_put(data);
+-}
+-
+ /**
+  * drm_of_crtc_port_mask - find the mask of a registered CRTC by port OF node
+  * @dev: DRM device
+@@ -94,8 +89,7 @@ void drm_of_component_match_add(struct device *master,
+ 				struct device_node *node)
+ {
+ 	of_node_get(node);
+-	component_match_add_release(master, matchptr, drm_release_of,
+-				    compare, node);
++	component_match_add_release(master, matchptr, release_of, compare, node);
+ }
+ EXPORT_SYMBOL_GPL(drm_of_component_match_add);
+ 
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+index 0b756ecb1bc2..15351e26ab00 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+@@ -574,13 +574,6 @@ static const struct component_master_ops etnaviv_master_ops = {
+ 	.unbind = etnaviv_unbind,
+ };
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	struct device_node *np = data;
+-
+-	return dev->of_node == np;
+-}
+-
+ static int compare_str(struct device *dev, void *data)
+ {
+ 	return !strcmp(dev_name(dev), data);
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_drv.c b/drivers/gpu/drm/exynos/exynos_drm_drv.c
+index 9743b6b17447..97f6bc69bee3 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_drv.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_drv.c
+@@ -212,11 +212,6 @@ static struct exynos_drm_driver_info exynos_drm_drivers[] = {
+ 	}
+ };
+ 
+-static int compare_dev(struct device *dev, void *data)
+-{
+-	return dev == (struct device *)data;
+-}
+-
+ static struct component_match *exynos_drm_match_add(struct device *dev)
+ {
+ 	struct component_match *match = NULL;
+diff --git a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+index 98ae9a48f3fe..8cc6e13e46af 100644
+--- a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
++++ b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+@@ -203,11 +203,6 @@ static int kirin_drm_kms_init(struct drm_device *dev,
+ 	return ret;
+ }
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int kirin_drm_kms_cleanup(struct drm_device *dev)
+ {
+ 	drm_kms_helper_poll_fini(dev);
+diff --git a/drivers/gpu/drm/imx/imx-drm-core.c b/drivers/gpu/drm/imx/imx-drm-core.c
+index cb685fe2039b..11b5c0fae045 100644
+--- a/drivers/gpu/drm/imx/imx-drm-core.c
++++ b/drivers/gpu/drm/imx/imx-drm-core.c
+@@ -176,7 +176,7 @@ static const struct drm_driver imx_drm_driver = {
+ 	.patchlevel		= 0,
+ };
+ 
+-static int compare_of(struct device *dev, void *data)
++static int imx_compare_of(struct device *dev, void *data)
+ {
+ 	struct device_node *np = data;
+ 
+@@ -286,7 +286,7 @@ static const struct component_master_ops imx_drm_ops = {
+ 
+ static int imx_drm_platform_probe(struct platform_device *pdev)
+ {
+-	int ret = drm_of_component_probe(&pdev->dev, compare_of, &imx_drm_ops);
++	int ret = drm_of_component_probe(&pdev->dev, imx_compare_of, &imx_drm_ops);
+ 
+ 	if (!ret)
+ 		ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index b4943a56be09..194abab14ffe 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -1322,11 +1322,6 @@ static int ingenic_drm_bind_with_components(struct device *dev)
+ 	return ingenic_drm_bind(dev, true);
+ }
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static void ingenic_drm_unbind(struct device *dev)
+ {
+ 	struct ingenic_drm *priv = dev_get_drvdata(dev);
+diff --git a/drivers/gpu/drm/mcde/mcde_drv.c b/drivers/gpu/drm/mcde/mcde_drv.c
+index 5b5afc6aaf8e..015690b6d308 100644
+--- a/drivers/gpu/drm/mcde/mcde_drv.c
++++ b/drivers/gpu/drm/mcde/mcde_drv.c
+@@ -265,11 +265,6 @@ static struct platform_driver *const mcde_component_drivers[] = {
+ 	&mcde_dsi_driver,
+ };
+ 
+-static int mcde_compare_dev(struct device *dev, void *data)
+-{
+-	return dev == data;
+-}
+-
+ static int mcde_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -399,7 +394,7 @@ static int mcde_probe(struct platform_device *pdev)
+ 
+ 		while ((d = platform_find_device_by_driver(p, drv))) {
+ 			put_device(p);
+-			component_match_add(dev, &match, mcde_compare_dev, d);
++			component_match_add(dev, &match, compare_dev, d);
+ 			p = d;
+ 		}
+ 		put_device(p);
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index 56ff8c57ef8f..72586983ec1d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -369,11 +369,6 @@ static const struct drm_driver mtk_drm_driver = {
+ 	.minor = DRIVER_MINOR,
+ };
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int mtk_drm_bind(struct device *dev)
+ {
+ 	struct mtk_drm_private *private = dev_get_drvdata(dev);
+diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
+index 80f1d439841a..b68631d16eb3 100644
+--- a/drivers/gpu/drm/meson/meson_drv.c
++++ b/drivers/gpu/drm/meson/meson_drv.c
+@@ -423,14 +423,6 @@ static int __maybe_unused meson_drv_pm_resume(struct device *dev)
+ 	return drm_mode_config_helper_resume(priv->drm);
+ }
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	DRM_DEBUG_DRIVER("Comparing of node %pOF with %pOF\n",
+-			 dev->of_node, data);
+-
+-	return dev->of_node == data;
+-}
+-
+ static void meson_drv_shutdown(struct platform_device *pdev)
+ {
+ 	struct meson_drm *priv = dev_get_drvdata(&pdev->dev);
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index ad35a5d94053..6250327b1eda 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -1173,15 +1173,6 @@ static const struct dev_pm_ops msm_pm_ops = {
+  * Componentized driver support:
+  */
+ 
+-/*
+- * NOTE: duplication of the same code as exynos or imx (or probably any other).
+- * so probably some room for some helpers
+- */
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /*
+  * Identify what components need to be added by parsing what remote-endpoints
+  * our MDP output ports are connected to. In the case of LVDS on MDP4, there
+diff --git a/drivers/gpu/drm/omapdrm/dss/dss.c b/drivers/gpu/drm/omapdrm/dss/dss.c
+index 69b3e15b9356..5216000c7657 100644
+--- a/drivers/gpu/drm/omapdrm/dss/dss.c
++++ b/drivers/gpu/drm/omapdrm/dss/dss.c
+@@ -1344,12 +1344,6 @@ static const struct component_master_ops dss_component_ops = {
+ 	.unbind = dss_unbind,
+ };
+ 
+-static int dss_component_compare(struct device *dev, void *data)
+-{
+-	struct device *child = data;
+-	return dev == child;
+-}
+-
+ struct dss_component_match_data {
+ 	struct device *dev;
+ 	struct component_match **match;
+@@ -1379,7 +1373,7 @@ static int dss_add_child_component(struct device *dev, void *data)
+ 		return device_for_each_child(dev, cmatch,
+ 					     dss_add_child_component);
+ 
+-	component_match_add(cmatch->dev, match, dss_component_compare, dev);
++	component_match_add(cmatch->dev, match, compare_dev, dev);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+index bec207de4544..276e41168bd0 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+@@ -290,11 +290,6 @@ int rockchip_drm_endpoint_is_subdriver(struct device_node *ep)
+ 	return false;
+ }
+ 
+-static int compare_dev(struct device *dev, void *data)
+-{
+-	return dev == (struct device *)data;
+-}
+-
+ static void rockchip_drm_match_remove(struct device *dev)
+ {
+ 	struct device_link *link;
+diff --git a/drivers/gpu/drm/sti/sti_drv.c b/drivers/gpu/drm/sti/sti_drv.c
+index c7efb43b83ee..3c3294c2100d 100644
+--- a/drivers/gpu/drm/sti/sti_drv.c
++++ b/drivers/gpu/drm/sti/sti_drv.c
+@@ -144,11 +144,6 @@ static const struct drm_driver sti_driver = {
+ 	.minor = DRIVER_MINOR,
+ };
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int sti_init(struct drm_device *ddev)
+ {
+ 	struct sti_private *private;
+diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
+index b630614b3d72..de26c1448486 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_drv.c
++++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+@@ -201,15 +201,6 @@ static bool sun4i_drv_node_is_tcon_top(struct device_node *node)
+ 		!!of_match_node(sun8i_tcon_top_of_table, node);
+ }
+ 
+-static int compare_of(struct device *dev, void *data)
+-{
+-	DRM_DEBUG_DRIVER("Comparing of node %pOF with %pOF\n",
+-			 dev->of_node,
+-			 data);
+-
+-	return dev->of_node == data;
+-}
+-
+ /*
+  * The encoder drivers use drm_of_find_possible_crtcs to get upstream
+  * crtcs from the device tree using of_graph. For the results to be
+diff --git a/drivers/gpu/drm/vc4/vc4_drv.c b/drivers/gpu/drm/vc4/vc4_drv.c
+index 16abc3a3d601..43474107a4f2 100644
+--- a/drivers/gpu/drm/vc4/vc4_drv.c
++++ b/drivers/gpu/drm/vc4/vc4_drv.c
+@@ -187,11 +187,6 @@ static struct drm_driver vc4_drm_driver = {
+ 	.patchlevel = DRIVER_PATCHLEVEL,
+ };
+ 
+-static int compare_dev(struct device *dev, void *data)
+-{
+-	return dev == data;
+-}
+-
+ static void vc4_match_add_drivers(struct device *dev,
+ 				  struct component_match **match,
+ 				  struct platform_driver *const *drivers,
+diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
+index f81fa8862ed0..b742432220c5 100644
+--- a/drivers/iommu/mtk_iommu.h
++++ b/drivers/iommu/mtk_iommu.h
+@@ -84,16 +84,6 @@ struct mtk_iommu_data {
+ 	struct mtk_smi_larb_iommu	larb_imu[MTK_LARB_NR_MAX];
+ };
+ 
+-static inline int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+-static inline void release_of(struct device *dev, void *data)
+-{
+-	of_node_put(data);
+-}
+-
+ static inline int mtk_iommu_bind(struct device *dev)
+ {
+ 	struct mtk_iommu_data *data = dev_get_drvdata(dev);
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index ce074c018dcb..248dfd8aec19 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -3414,11 +3414,6 @@ static struct platform_driver *const ab8500_charger_component_drivers[] = {
+ 	&ab8500_chargalg_driver,
+ };
+ 
+-static int ab8500_charger_compare_dev(struct device *dev, void *data)
+-{
+-	return dev == data;
+-}
+-
+ static int ab8500_charger_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -3657,8 +3652,7 @@ static int ab8500_charger_probe(struct platform_device *pdev)
+ 
+ 		while ((d = platform_find_device_by_driver(p, drv))) {
+ 			put_device(p);
+-			component_match_add(dev, &match,
+-					    ab8500_charger_compare_dev, d);
++			component_match_add(dev, &match, compare_dev, d);
+ 			p = d;
+ 		}
+ 		put_device(p);
+diff --git a/drivers/video/fbdev/omap2/omapfb/dss/dss.c b/drivers/video/fbdev/omap2/omapfb/dss/dss.c
+index a6b1c1598040..328aa5d86f1a 100644
+--- a/drivers/video/fbdev/omap2/omapfb/dss/dss.c
++++ b/drivers/video/fbdev/omap2/omapfb/dss/dss.c
+@@ -1193,12 +1193,6 @@ static const struct component_master_ops dss_component_ops = {
+ 	.unbind = dss_unbind,
+ };
+ 
+-static int dss_component_compare(struct device *dev, void *data)
+-{
+-	struct device *child = data;
+-	return dev == child;
+-}
+-
+ static int dss_add_child_component(struct device *dev, void *data)
+ {
+ 	struct component_match **match = data;
+@@ -1212,7 +1206,7 @@ static int dss_add_child_component(struct device *dev, void *data)
+ 	if (strstr(dev_name(dev), "rfbi"))
+ 		return 0;
+ 
+-	component_match_add(dev->parent, match, dss_component_compare, dev);
++	component_match_add(dev->parent, match, compare_dev, dev);
+ 
+ 	return 0;
+ }
+diff --git a/include/linux/component.h b/include/linux/component.h
+index 16de18f473d7..5a7468ea827c 100644
+--- a/include/linux/component.h
++++ b/include/linux/component.h
+@@ -2,6 +2,8 @@
+ #ifndef COMPONENT_H
+ #define COMPONENT_H
+ 
++#include <linux/device.h>
++#include <linux/of.h>
+ #include <linux/stddef.h>
+ 
+ 
+@@ -82,6 +84,22 @@ struct component_master_ops {
+ 	void (*unbind)(struct device *master);
+ };
+ 
++/* A set common helpers for compare/release functions */
++static inline int compare_of(struct device *dev, void *data)
++{
++	return dev->of_node == data;
++}
++
++static inline void release_of(struct device *dev, void *data)
++{
++	of_node_put(data);
++}
++
++static inline int compare_dev(struct device *dev, void *data)
++{
++	return dev == data;
++}
++
+ void component_master_del(struct device *,
+ 	const struct component_master_ops *);
+ 
+diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+index eff200a07d9f..992132cbfb9f 100644
+--- a/sound/soc/codecs/wcd938x.c
++++ b/sound/soc/codecs/wcd938x.c
+@@ -4417,16 +4417,6 @@ static const struct component_master_ops wcd938x_comp_ops = {
+ 	.unbind = wcd938x_unbind,
+ };
+ 
+-static int wcd938x_compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+-static void wcd938x_release_of(struct device *dev, void *data)
+-{
+-	of_node_put(data);
+-}
+-
+ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+ 					struct device *dev,
+ 					struct component_match **matchptr)
+@@ -4442,8 +4432,7 @@ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+ 	}
+ 
+ 	of_node_get(wcd938x->rxnode);
+-	component_match_add_release(dev, matchptr, wcd938x_release_of,
+-				    wcd938x_compare_of,	wcd938x->rxnode);
++	component_match_add_release(dev, matchptr, release_of, compare_of, wcd938x->rxnode);
+ 
+ 	wcd938x->txnode = of_parse_phandle(np, "qcom,tx-device", 0);
+ 	if (!wcd938x->txnode) {
+@@ -4451,8 +4440,7 @@ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+ 		return -ENODEV;
+ 	}
+ 	of_node_get(wcd938x->txnode);
+-	component_match_add_release(dev, matchptr, wcd938x_release_of,
+-				    wcd938x_compare_of,	wcd938x->txnode);
++	component_match_add_release(dev, matchptr, release_of, compare_of, wcd938x->txnode);
+ 	return 0;
+ }
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.18.0
 

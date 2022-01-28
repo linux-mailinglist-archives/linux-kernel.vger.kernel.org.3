@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E488849FC03
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1467249FC05
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349417AbiA1OpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349414AbiA1OpV (ORCPT
+        id S1349427AbiA1OqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:46:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47120 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349400AbiA1OqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:45:21 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29911C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:45:21 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id v3so5411010pgc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:45:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=tHZMd140zpIEoj2CecnDxVRiFeDUjbUC1wxqPW+oecg=;
-        b=FgCuhEx0mkvM7saXOLOVMI1MIOyEj5vw3bcRnIuyWTYKhrkW+5bCVLOMQ/VchCGjEE
-         SVzPxfw5nFI5+p3BLT9mptUsuaoS21kI1r6kJwKtFs2BmfSALC+TJe1e6WM5onQqnhbG
-         Pd3KR3+SY7V7OPFQQ9h4TJnW5/dBIHbzjuYJf040JZbZG+ClOIDFW3uUY3yN6rHn+oiC
-         P2ZdxxnCStjQ57ZOGVd4o5+H9yaLhpLYI1xf91xU/Eir5iEDxiskNhFH0wH6mQWtlCG8
-         e6iXpYihbDomILqZ/1ePLK8ooOug8iYFDb03bohpV9fdaWr4f/lQZrlIO8QKDTm1XB1L
-         FDUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=tHZMd140zpIEoj2CecnDxVRiFeDUjbUC1wxqPW+oecg=;
-        b=dMZCjZsNnC3/quKTiEXn1P1JArdQfset4I2FUfR4tZS35vNxY43p8x905vyeUWp1bD
-         sWXlRNaY2Lz9lN6Zy8qZN0e1NFKlz8l3/vTYAEeX772pLIxjcibz7sR1Z/CegrmncwCX
-         7HrMBvGlGSZUZoE2Ebt/8ci55cLauILCd2+vwpyY4Pa4cS+e1IUsCUPT/oelx410+v5d
-         6EjKeB1Z+2F8DVCtzqQ5pShMXgYQhWXJDlRWFqrhjDynoW0MKOvRGAi+f0iLKOpDscAT
-         /gMh0zSfjF+A225zXr536E965w8dstwon7XSUZEKy0DuDvU3RHfKtmzPKVgY0tSM7ldG
-         ON8g==
-X-Gm-Message-State: AOAM530tcSTqR5ubLUOC7IHEm+mkGl3TXqEassiNKw6vHgSxS+Zw8doa
-        DURiSIMTrsdyiPr9katuY6aN8Q==
-X-Google-Smtp-Source: ABdhPJyJtofyeIzj6pV3Ak8U+4WgL1YeQg6Ft+maZoiVI4RvqGB5wBOxqHxxconuZVKUqhAOv64WiA==
-X-Received: by 2002:a63:2c01:: with SMTP id s1mr1312797pgs.309.1643381120588;
-        Fri, 28 Jan 2022 06:45:20 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id x187sm11238798pgx.10.2022.01.28.06.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 06:45:20 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Yu Kuai <yukuai3@huawei.com>, paolo.valente@linaro.org,
-        jack@suse.cz, tj@kernel.org
-Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        yi.zhang@huawei.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20211231032354.793092-1-yukuai3@huawei.com>
-References: <20211231032354.793092-1-yukuai3@huawei.com>
-Subject: Re: [PATCH v2 0/3] block, bfq: minor cleanup and fix
-Message-Id: <164338111974.263985.3933987922467783334.b4-ty@kernel.dk>
-Date:   Fri, 28 Jan 2022 07:45:19 -0700
+        Fri, 28 Jan 2022 09:46:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643381160;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HFyK9YSPqzN8UFNpZeb69roURTWWg8qSsNbo2x59knA=;
+        b=XqXACsWfg+QtuDhFZqX2yw2l+3eWHtSuezIjJ1CQZjURYwFBgzeiTRxq3tpsFHhEsr93r3
+        phvyzEVr43j8uEEAScZeAO/qhy8eP+gmIhnoTrw46LeAey85pNrIiOwLMCiAKQhvQ4RXtO
+        yNs2KQ0ydkYKz6HTCMzOvtUVoyWDnjY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-0TLvl7ZXOlOCj-4oqSTr-g-1; Fri, 28 Jan 2022 09:45:55 -0500
+X-MC-Unique: 0TLvl7ZXOlOCj-4oqSTr-g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BC69C814246;
+        Fri, 28 Jan 2022 14:45:53 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.193.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D923C7B9E3;
+        Fri, 28 Jan 2022 14:45:41 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH v1] drivers/base/memory: add memory block to memory group after registration succeeded
+Date:   Fri, 28 Jan 2022 15:45:40 +0100
+Message-Id: <20220128144540.153902-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Dec 2021 11:23:51 +0800, Yu Kuai wrote:
-> Chagnes in v2:
->  - add comment in patch 2
->  - remove patch 4, since the problem do not exist.
-> 
-> Yu Kuai (3):
->   block, bfq: cleanup bfq_bfqq_to_bfqg()
->   block, bfq: avoid moving bfqq to it's parent bfqg
->   block, bfq: don't move oom_bfqq
-> 
-> [...]
+If register_memory() fails, we freed the memory block but already added
+the memory block to the group list, not good. Let's defer adding the
+block to the memory group to after registering the memory block device.
 
-Applied, thanks!
+We do handle it properly during unregister_memory(), but that's not
+called when the registration fails.
 
-[1/3] block, bfq: cleanup bfq_bfqq_to_bfqg()
-      commit: a9c77f6ec0b566439182a10b64dd3e60a0408849
-[2/3] block, bfq: avoid moving bfqq to it's parent bfqg
-      commit: 36ad7fe0ec7485ee435f7a40452c7a58598779d4
-[3/3] block, bfq: don't move oom_bfqq
-      commit: a0b98e6fba18a40aa9672cc3e0abf980456f3ae6
+Fixes: 028fc57a1c36 ("drivers/base/memory: introduce "memory groups" to logically group memory blocks")
+Cc: stable@vger.kernel.org # v5.15+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ drivers/base/memory.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Best regards,
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index 365cd4a7f239..60c38f9cf1a7 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -663,14 +663,16 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
+ 	mem->nr_vmemmap_pages = nr_vmemmap_pages;
+ 	INIT_LIST_HEAD(&mem->group_next);
+ 
++	ret = register_memory(mem);
++	if (ret)
++		return ret;
++
+ 	if (group) {
+ 		mem->group = group;
+ 		list_add(&mem->group_next, &group->memory_blocks);
+ 	}
+ 
+-	ret = register_memory(mem);
+-
+-	return ret;
++	return 0;
+ }
+ 
+ static int add_memory_block(unsigned long base_section_nr)
 -- 
-Jens Axboe
-
+2.34.1
 

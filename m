@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DB549F1C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC8B49F1CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345712AbiA1DXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:23:41 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:46482 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1345661AbiA1DXj (ORCPT
+        id S1345742AbiA1DZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235704AbiA1DZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:23:39 -0500
-X-UUID: fd7f82c684c845a486f90e22294f715f-20220128
-X-UUID: fd7f82c684c845a486f90e22294f715f-20220128
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1175534248; Fri, 28 Jan 2022 11:23:35 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 28 Jan 2022 11:23:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
- 2022 11:23:33 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 28 Jan 2022 11:23:31 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH] media: uapi: Init VP9 stateless decode params
-Date:   Fri, 28 Jan 2022 11:23:30 +0800
-Message-ID: <20220128032330.24045-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 27 Jan 2022 22:25:30 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DA2C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 19:25:29 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id s185so9944211oie.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 19:25:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ty87z8mPFCHS0MY8zzrtuvTZ6oO3QjVwryu3eYeSmWE=;
+        b=aA4k4kzFiuRhBh0BXgbfcuq9ufCLBzxhy1n0nwDOnZXENDHrVV3z+4G5d/GWGxhcNM
+         pMKBbjQ5jFw18zS67w5KowD3E5kf/fEq8XhfTJx89V3aiCZxVVotsCtsqnNxMLte11Zf
+         +Kxy/ppfbleRr3MmklXr1SaofYtbx+INtlz5zAPzbHrOiM2so7lpUmN6Y5nh0HfwpIli
+         n9VqUgU9ftpDJg5XbaLIuJs8cuvmPTFA9fRLAwicE2mCLRaMinnky3xL+4Q5P6NZ/wuf
+         Bcd3aoXHFsfkdpOrjukeRMi8AD/yBy0SmGQPBj25ODZQLQoyM+8SqEzlFhlOQ+sxDQmw
+         Ikng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ty87z8mPFCHS0MY8zzrtuvTZ6oO3QjVwryu3eYeSmWE=;
+        b=uNd1wvtmd2NYwjHOeIx7LKKzf4aYveSGQUgV7jPfDTI8q1UZzzappv0Xa8BPqL+gWN
+         MiIdokocnWLoRhvkgcphlTASFQFu+adBeE43rT+OZb/uX75cvxFkL3ow5tGYH32iDBST
+         /X8s1tZmTIPe1TdeVhTgSKtZPPn6QcD0PcgXw0loQvkzmqToqyiBFtA5PrMQ36JjGWyV
+         wl6UElnl3dM/1blA1xVc7tFzN81TVy5vu40Qc2d71yI5ynNlVKfS9mKvIE/bkGC4Cd3c
+         0ybcL91zG4folDaO5GCkt8Cpx7ocaICFug3Y1bKTMJW7OEgLKQwuvMghvhDUZ7jZw9oP
+         OC7A==
+X-Gm-Message-State: AOAM530/1yoZHPb3jJCUT9P/zyF0PeGGImUhxdJUxoovL1AZqIsOCr6E
+        LvEpoJBALJFaJdYOwJyxHbrYdQ==
+X-Google-Smtp-Source: ABdhPJw9dlFq8qPZGHIulSa2/+LOOD2gAlQuQmCu96B//4BKOIXSHLybARCtI4aZqIubJ3AWVEq1OQ==
+X-Received: by 2002:aca:a88f:: with SMTP id r137mr4169824oie.51.1643340329274;
+        Thu, 27 Jan 2022 19:25:29 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id l63sm5447242oia.2.2022.01.27.19.25.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 19:25:28 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 1/2] cpufreq: Reintroduce ready() callback
+Date:   Thu, 27 Jan 2022 19:25:53 -0800
+Message-Id: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Init some of VP9 frame decode params to default value.
+This effectively revert '4bf8e582119e ("cpufreq: Remove ready()
+callback")' (except the Chinese translation), in order to reintroduce
+the ready callback.
 
-Fixes: b88dbe38dca8 ("media: uapi: Add VP9 stateless decoder controls")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+This is needed in order to be able to leave the thermal pressure
+interrupts in the Qualcomm CPUfreq driver disabled during
+initialization, so that it doesn't fire while related_cpus are still 0.
+
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 54abe5245dcc..b25c77b8a445 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -112,6 +112,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_mpeg2_picture *p_mpeg2_picture;
- 	struct v4l2_ctrl_mpeg2_quantisation *p_mpeg2_quant;
- 	struct v4l2_ctrl_vp8_frame *p_vp8_frame;
-+	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
- 	struct v4l2_ctrl_fwht_params *p_fwht_params;
- 	void *p = ptr.p + idx * ctrl->elem_size;
+Changes since v1:
+- New patch
+
+ Documentation/cpu-freq/cpu-drivers.rst | 3 +++
+ drivers/cpufreq/cpufreq.c              | 4 ++++
+ include/linux/cpufreq.h                | 3 +++
+ 3 files changed, 10 insertions(+)
+
+diff --git a/Documentation/cpu-freq/cpu-drivers.rst b/Documentation/cpu-freq/cpu-drivers.rst
+index 3b32336a7803..d84ededb66f9 100644
+--- a/Documentation/cpu-freq/cpu-drivers.rst
++++ b/Documentation/cpu-freq/cpu-drivers.rst
+@@ -75,6 +75,9 @@ And optionally
+  .resume - A pointer to a per-policy resume function which is called
+  with interrupts disabled and _before_ the governor is started again.
  
-@@ -152,6 +153,13 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		p_vp8_frame = p;
- 		p_vp8_frame->num_dct_parts = 1;
- 		break;
-+	case V4L2_CTRL_TYPE_VP9_FRAME:
-+		p_vp9_frame = p;
-+		p_vp9_frame->profile = 0;
-+		p_vp9_frame->bit_depth = 8;
-+		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
-+			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
-+		break;
- 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
- 		p_fwht_params = p;
- 		p_fwht_params->version = V4L2_FWHT_VERSION;
++ .ready - A pointer to a per-policy ready function which is called after
++ the policy is fully initialized.
++
+  .attr - A pointer to a NULL-terminated list of "struct freq_attr" which
+  allow to export values to sysfs.
+ 
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index b8d95536ee22..80f535cc8a75 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1518,6 +1518,10 @@ static int cpufreq_online(unsigned int cpu)
+ 
+ 	kobject_uevent(&policy->kobj, KOBJ_ADD);
+ 
++	/* Callback for handling stuff after policy is ready */
++	if (cpufreq_driver->ready)
++		cpufreq_driver->ready(policy);
++
+ 	if (cpufreq_thermal_control_enabled(cpufreq_driver))
+ 		policy->cdev = of_cpufreq_cooling_register(policy);
+ 
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 1ab29e61b078..3522a272b74d 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -382,6 +382,9 @@ struct cpufreq_driver {
+ 	int		(*suspend)(struct cpufreq_policy *policy);
+ 	int		(*resume)(struct cpufreq_policy *policy);
+ 
++	/* Will be called after the driver is fully initialized */
++	void		(*ready)(struct cpufreq_policy *policy);
++
+ 	struct freq_attr **attr;
+ 
+ 	/* platform specific boost support code */
 -- 
-2.25.1
+2.33.1
 

@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DDE4A02A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F37454A02A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240952AbiA1V0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S1343738AbiA1V10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbiA1V0I (ORCPT
+        with ESMTP id S244758AbiA1V1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:26:08 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C25FC061714;
-        Fri, 28 Jan 2022 13:26:08 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id o11so7637648pjf.0;
-        Fri, 28 Jan 2022 13:26:08 -0800 (PST)
+        Fri, 28 Jan 2022 16:27:24 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7FBC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:27:24 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o11so7641600pjf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 13:27:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=cfMRAmoR1rDJZPsZIg2Mf9Md2XIapwAEopIEQIY7W8o=;
-        b=D/F0HH3RAZHiHTuozAEIgdDuk7xHYPKxs8Vsjpdy/MFb1HGPaFzlxZb8fCK4DdpA8y
-         pI45IeTGmWtsXn4dIC4UhI8jozVDWvoR+1B0XR/i5lZbVC8jHYh7vs45sQxt4r0iRhtJ
-         l2GxQmIkfwFexUzY10Weo1sC04Y334JFLOTIGroXmvc+ic+mUqpxZAXCbYzE/u3M8QBo
-         njNyaDcokUOJ6Dy5OY+Zc5CRNOc9mA6k80CI5QeI2UXk8udpMWloPkXMBTFHUfAxHe5k
-         nsqPYWSxJ3Ga/azdEdsaIFTfQJW78K3dc3tAuRx++vURQpeh4rYNNc6m1GBHG/dvQYjt
-         Hf2A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BstT/Nbt3MI2dru2W9T6xWAwyUw0xClca5K9dP8OMlI=;
+        b=iBrSApDLmp0ob8yP+f6nZttYwwTgQD6Z6ydFvMo0ZIWknm3IhYzIiDlMRP4PT7Pnsr
+         DVNwGnS9VhpW9fAJNzyNpvDgOCk909OhTnDW9oJDeTtpCLpG0cD5T47tDNJlNFR7FWms
+         MT7Z/COaK6wwhvAZg+L0jwnP+qXkLGebvPcBxHV6l8uAYyHfyFa/3Jtv/SkBZkoOT2e4
+         Zec4M1yLGbWKmb+SNcL/GubTuEVnvk7rkBRjGkirz08RRoTWhbpG4eaIT4PZdDzzg2rA
+         MfxZ2B8qi+FpcI1ikwwvdIPA1YOn2XZT3GTkaXrBq7N1lvmOgtH4vYKKIe0BS7lMK3Va
+         uS7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=cfMRAmoR1rDJZPsZIg2Mf9Md2XIapwAEopIEQIY7W8o=;
-        b=IKpjN3pj0qH8sJ7yrqkAa6ym+NVcec57azWskxtnsJ05pH2f2LJGlQsu9tl/k6y9BR
-         2QVEHrUNpDHGnqv3/cuWPnQsnwpNaVxOaEWubAofJZJssQ1EEffIWd0I+4Am/AwTH/2i
-         XvHQvLonXUP8nz3zmoVVtdxzdt77s007bKxydrSU7Ocp1E+XHqzVmXnqnFqhnWJ5HHvu
-         +ociCAICC9w6IBsdDRIn4RFGdfJoUXaCrnrG0bj2d39wIrgg7YNfj16YcY0CpqcG8SYS
-         DiwL0qhMlUrm+6Hm1H7SgdXX3G4Q2qwLM61EUO3Sjf4klD2AjuDTpQ/Uny2CAZCVHY67
-         o/qw==
-X-Gm-Message-State: AOAM532i+rXZYtEVBMnBRzEpSuLIQ6rWr2pqav3jdxJsucMw4zqQ2S82
-        ID1Xxxv6kIzEOYNLe9jkrmA=
-X-Google-Smtp-Source: ABdhPJw2AbvTvknknuXeuDh9LX3olrj3jJ7bS4VvE9PCD9vElbzT59DmeU04zqG8l/DJMEQy7+q2ig==
-X-Received: by 2002:a17:902:ecd0:: with SMTP id a16mr9965255plh.64.1643405167909;
-        Fri, 28 Jan 2022 13:26:07 -0800 (PST)
-Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
-        by smtp.gmail.com with ESMTPSA id u18sm10656761pfk.14.2022.01.28.13.26.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 28 Jan 2022 13:26:07 -0800 (PST)
-Subject: Re: [PATCH] m68k: mm: Remove check for VM_IO to fix deferred I/O
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org
-References: <20220128173006.1713210-1-geert@linux-m68k.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Finn Thain <fthain@linux-m68k.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <b1cd50eb-e476-b4bd-0b2f-b4a8699660f6@gmail.com>
-Date:   Sat, 29 Jan 2022 10:26:01 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BstT/Nbt3MI2dru2W9T6xWAwyUw0xClca5K9dP8OMlI=;
+        b=FCtUxt+hbDRZoY747ST2IUIU1keQS+awQKLR6KK+w0SHfRG0Igij5lXr4XQNMq8UsR
+         l131Sk8z4dofnMl89UMr0fNdUlUUmDZLsoZSL0ay3YbOJVYMgFveIM0QT5tyXANjcSAZ
+         ffFtD62in7gx4I4bpWmhVYqRob58WE68KnSed/dgT52OsRgFV2UgrCqdAYQWNOKKSDRG
+         JTveXhbYGkvizjPkUdnfWhAYj6fypeUaHtk0BA5v939baGZvqGeFIh6n+9F1aQYaxEQ/
+         VuvkqdZ+4kXpVQzWADLPmX34kX5/pYBeOHeKFM1XpgBxFgLGBAx19M0Txi0WgeABAGIU
+         QI0w==
+X-Gm-Message-State: AOAM531TEowEQc8cnbbKI8l90C3bGBac+GJgnDQl/ImS8CZ4aQyZuAAU
+        L5vvYwxT1fTlSVxBpehqv9TU7dHRrnT4F8Ft8AC47BvBwWsg8UKk
+X-Google-Smtp-Source: ABdhPJx7NwvP5XlHjebOh7PFpV+CrZSWAcRC9Nb8gN4ufJz0/29/ZJjy4h4crUGtUR0qUrzyAOADMD0d679g06NRs1Y=
+X-Received: by 2002:a17:903:187:: with SMTP id z7mr10311618plg.123.1643405243887;
+ Fri, 28 Jan 2022 13:27:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220128173006.1713210-1-geert@linux-m68k.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211013191320.2490913-1-dlatypov@google.com> <CAFd5g47=aO3e8d4_GGcgY9BK43Z0Oo6SGD-2e5rJDp5r3k4XXQ@mail.gmail.com>
+ <CAGS_qxoziNGNVpsUfvUfOReADY0PdriV2gJJ7+LUzzd+7BU-Ow@mail.gmail.com>
+ <0f85025124359304c8a2a97d007b66d5655645c1.camel@codeconstruct.com.au> <CAGS_qxpvX74vnAGhC=TAxFy1NT3mXB0S3AHUZvK2FA59hDijxA@mail.gmail.com>
+In-Reply-To: <CAGS_qxpvX74vnAGhC=TAxFy1NT3mXB0S3AHUZvK2FA59hDijxA@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 28 Jan 2022 16:27:12 -0500
+Message-ID: <CAFd5g47mYnqyu0DBJmxHjVcdTfc5ig-X6P9wu4bLYw+FhqaYCQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] kunit: flatten kunit_suite*** to kunit_suite** in executor
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Jeremy Kerr <jk@codeconstruct.com.au>, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-for hwregs_present(), the exception fixup will handle any access error 
-(through send_fault_sig()), so this should continue to work.
-
-Why the special handling of VM_IO pages? Maybe hp300 had marked all IO 
-register pages VM_IO to distinguish IO faults from VM faults...
-
-The only other area I can imagine this might have an impact is the Mac's 
-pseudo-DMA - FInn might want to give this some testing.
-
-Cheers,
-
-	Michael
-
-
-Am 29.01.2022 um 06:30 schrieb Geert Uytterhoeven:
-> When an application accesses a mapped frame buffer backed by deferred
-> I/O, it receives a segmentation fault.  Fix this by removing the check
-> for VM_IO in do_page_fault().
+On Fri, Jan 28, 2022 at 4:19 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> This check was never present in a fault handler on any other
-> architecture than m68k.
-> Some digging revealed that it was added in v2.1.106, but I couldn't find
-> an email with a patch adding it.  That same kernel version extended the
-> use of the hwreg_present() helper to HP9000/300, so the check might have
-> been needed there, perhaps only during development?
-> The Atari kernel relies heavily on hwreg_present() (both the success and
-> failure cases), and these still work, at least on ARAnyM.
-> ---
->  arch/m68k/mm/fault.c | 2 --
->  1 file changed, 2 deletions(-)
+> On Wed, Oct 13, 2021 at 6:55 PM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
+> > Resulting in the .kunit_test_suites section just being a set of
+> > contiguous pointers to struct kunit_suite. We get the number of suites
+> > from the section size.
 >
-> diff --git a/arch/m68k/mm/fault.c b/arch/m68k/mm/fault.c
-> index 1493cf5eac1e7a39..71aa9f6315dc8028 100644
-> --- a/arch/m68k/mm/fault.c
-> +++ b/arch/m68k/mm/fault.c
-> @@ -93,8 +93,6 @@ int do_page_fault(struct pt_regs *regs, unsigned long address,
->  	vma = find_vma(mm, address);
->  	if (!vma)
->  		goto map_err;
-> -	if (vma->vm_flags & VM_IO)
-> -		goto acc_err;
->  	if (vma->vm_start <= address)
->  		goto good_area;
->  	if (!(vma->vm_flags & VM_GROWSDOWN))
+> <snip>
 >
+> >
+> > That was my thinking, anyway. I think it probably makes sense to do that
+> > cleanup after the section patch, as that means we don't need any
+> > post-processing on the suites arrays.
+>
+> To be honest, I'm actually tempted to pay the cost of postprocessing
+> and proposing a change like this for real.
+> Going from kunit_suite*** to ** shaves off a lot of code from the unit
+> test and the filtering code path.
+>
+> Specifically I'm thinking this can go into the kunit branch,
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
+> Then when we have the series reworking modules, one of two things can happen.
+> 1. if we get to kunit_suite** with null-terminated arrays, fixing the
+> executor just means dropping the post-processing step.
+> 2. If we get to kunit_suite* as mentioned above, then there'll be a
+> bit more work, but not as much.
+>
+> Alternatively, I can wait and send you an updated version of this
+> patch to include at the start of your series like
+> PATCH 1/x: this patch with post-processing, using either * or **
+> ...
+> PATCH x/x: final rework, and drop the postprocessing
+>
+> It's just that the prospect of submitting a patch that reduces so much
+> code makes me eager to try and get it submitted :)
+
+I agree. Honestly, just changing the type signature from `struct
+kunit_suite * const * const *` to `struct kunit_suite * const *` in
+the suite_set struct sells me on this. I missed this before, but now
+that I am aware of this, I would like to see it go in soon.
+
+> Brendan and David seem ok with paying the bit of runtime overhead for
+> post-processing, esp. if we time it so this patch lands in the same
+
+I'm absolutely fine with it. We are nowhere near the point where that
+matters at all.
+
+> Linux release as the module rework.
+> But I can hold off if it'll make your life more difficult.
+
+Also agree. I am excited to see Jeremy's new module code. I don't want
+to make his life any harder than it already is ;-)
+
+> >
+> > Cheers,
+> >
+> >
+> > Jeremy

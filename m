@@ -2,132 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E967C49F1DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4DA49F1E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345784AbiA1D35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:29:57 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56444 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236369AbiA1D3z (ORCPT
+        id S1345789AbiA1DaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:30:10 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58638
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345589AbiA1DaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:29:55 -0500
-X-UUID: b58cd72e861f4f87a52553ba73bac302-20220128
-X-UUID: b58cd72e861f4f87a52553ba73bac302-20220128
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 421102729; Fri, 28 Jan 2022 11:29:51 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 28 Jan 2022 11:29:50 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
- 2022 11:29:49 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 28 Jan 2022 11:29:48 +0800
-Message-ID: <f1a722ca06545c8fcb23707356b889e7c963ea7a.camel@mediatek.com>
-Subject: Re: [PATCH v1, 7/8] media: uapi: Init VP9 stateless decode params
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        "Tiffany Lin" <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 28 Jan 2022 11:29:48 +0800
-In-Reply-To: <07468ddd-22a8-c2a5-21fd-8468e0e77d74@collabora.com>
-References: <20220127025544.10854-1-yunfei.dong@mediatek.com>
-         <20220127025544.10854-8-yunfei.dong@mediatek.com>
-         <07468ddd-22a8-c2a5-21fd-8468e0e77d74@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 27 Jan 2022 22:30:09 -0500
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DA4D04004A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643340607;
+        bh=o1I8UaIYrM6dC/0Rd0QRoVtyxyLa0HoViEvgtP4OM7I=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=nO5Y//XoBV+zNQYzMG8F9jNmJkui9O+/Cssc0Wltivpqo5x4By6tmVM7LBcd+rMl6
+         MnQpukQqOw9X8FBmcpq/cIbXVgoj5UAP8pHyIlkAgHSPlDSBDi/dw/vMAnddXbwnwe
+         61IgiU1OT5lKDJg+OL9Vo3ss1adKX+WCakDJrH83MSHgQl2QXiHRj6p1mCBUh7RoVd
+         TvO+AHBS/UfQ1wqPpHjzEetjs0nKb1wSivtH0ch1W491DmlQTp9PWQ95Q+fFSVYK4u
+         Wa1JElgtRYWw7BBjthmb2KvCnHq2pJTh15M7Gjcc58boe0r25tnNPeYss8hTqLPyJY
+         ugCJL1p0DCS4A==
+Received: by mail-oo1-f71.google.com with SMTP id n30-20020a4a611e000000b002e519f04f8cso2677869ooc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 19:30:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o1I8UaIYrM6dC/0Rd0QRoVtyxyLa0HoViEvgtP4OM7I=;
+        b=idWxHLoHKBqzRv7ILrWj926AR1KYBfQ24tmA2+Zr9b21zlUjUMlPYaCFw/JL7KHw4q
+         H5pcy1tEGgtGpHhFcFBI9zhDV7ORKAYAS8HASzVl0PTipy54FAZfrS+Ug2Hj+pcAGdhm
+         TcBSIJ+CV3bpGLYfl6SN4InJTjJbjR+QqlbQimq/ZUlVWUlEv7wRxfY30iPKwqpS7ds/
+         lHX8g73hM6Ipn0Nkc1pLvAXIv0+KVw/ICVbU4V/JsiHD2x/+Ye2N5C7TK5IBit2JzZXa
+         uCkN+bA+2ZBKT782nnQWhH/Anhe9Hm650n4uTIdC9RsmpY0wB1IVS8VmDVmAriL/d8ps
+         Oekg==
+X-Gm-Message-State: AOAM531/gyhIa27Py/lkQ9xhta6j6G2gEdbMt9gRM2RHY+mOnMSKbJ9+
+        vbKQ1+cQTldwGlxsrIArdHi2mqm3G0tYQag3zsoy/p3G0W8MXDIeyL+cAoLCv/EJihxTZ2TJg3Q
+        8IaYi5m4XrVCl/0Wa43fQ0g6isjpWMK05dyyu3RGwQ7eyhjiBu25ET/e/4Q==
+X-Received: by 2002:a05:6808:191a:: with SMTP id bf26mr9172613oib.111.1643340606601;
+        Thu, 27 Jan 2022 19:30:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz1jv4J88ak1rDj6mbh78ua15nyVyq1aqhXCtXon2huqpabC8PnLCHWXFERGI5wRDEfkfYL3kiys1HJTFSdoOQ=
+X-Received: by 2002:a05:6808:191a:: with SMTP id bf26mr9172601oib.111.1643340606215;
+ Thu, 27 Jan 2022 19:30:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+References: <20220127025418.1989642-1-kai.heng.feng@canonical.com>
+ <0259955f-8bbb-1778-f234-398f1356db8b@linux.intel.com> <CAAd53p6+KPAJchh9Jx59Fkkj5FidSxsW0yHjLqooFjvu-Y9u7w@mail.gmail.com>
+ <11891652-40c6-f111-46b7-e96d1729815e@linux.intel.com>
+In-Reply-To: <11891652-40c6-f111-46b7-e96d1729815e@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 28 Jan 2022 11:29:54 +0800
+Message-ID: <CAAd53p5rNFBK8t7bK_Jdds2c4dXpWtEb10iTtsc4zQEjGrf-Pg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
+ ready, L2 and L3 state
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
+        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
+On Fri, Jan 28, 2022 at 10:57 AM Lu Baolu <baolu.lu@linux.intel.com> wrote:
+>
+> On 1/27/22 7:14 PM, Kai-Heng Feng wrote:
+> > On Thu, Jan 27, 2022 at 3:01 PM Lu Baolu <baolu.lu@linux.intel.com> wrote:
+> >>
+> >> On 2022/1/27 10:54, Kai-Heng Feng wrote:
+> >>> Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
+> >>> hint") enables ACS, and some platforms lose its NVMe after resume from
+> >>> S3:
+> >>> [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
+> >>> [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
+> >>> [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
+> >>> [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
+> >>> [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
+> >>> [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
+> >>> [   50.947843] nvme nvme0: frozen state error detected, reset controller
+> >>>
+> >>> It happens right after ACS gets enabled during resume.
+> >>>
+> >>> There's another case, when Thunderbolt reaches D3cold:
+> >>> [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> >>> [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> >>> [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> >>> [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> >>> [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> >>> [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+> >>> [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
+> >>> [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
+> >>>
+> >>> So disable AER service to avoid the noises from turning power rails
+> >>> on/off when the device is in low power states (D3hot and D3cold), as
+> >>> PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
+> >>> transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
+> >>> with aux power) and L3 (D3cold).
+> >>>
+> >>> Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=209149
+> >>> Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> >>> Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
+> >>
+> >> I don't know what this fix has to do with the commit 50310600ebda.
+> >
+> > Commit 50310600ebda only exposed the underlying issue. Do you think
+> > "Fixes:" tag should change to other commits?
+> >
+> >> Commit 50310600ebda only makes sure that PCI ACS is enabled whenever
+> >> Intel IOMMU is on. Before this commit, PCI ACS could also be enabled
+> >> and result in the same problem. Or anything I missed?
+> >
+> > The system in question didn't enable ACS before commit 50310600ebda.
+>
+> This commit exposed the issue on your configuration doesn't mean the
+> fix should be back ported as far as that commit. I believe if you add
+> intel-iommu=on in the kernel parameter, the issue still exists even you
+> revert commit 50310600ebda or checkout a tag before it.
 
-Thanks for your suggestion,
+That's true.
 
-Separate this patch with mt8195 support, and sent it again.
-On Thu, 2022-01-27 at 11:35 +0100, AngeloGioacchino Del Regno wrote:
-> Il 27/01/22 03:55, Yunfei Dong ha scritto:
-> > Init some of VP9 frame decode params to default value.
-> > 
-> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> 
-> Hello Yunfei,
-> 
-> This patch is not strictly related to MediaTek SoCs, since it's
-> modfying v4l2-core.
-> Can you please send this patch separately?
-> 
-> Thanks,
-> Angelo
-> 
-Best Regards,
-Yunfei Dong
-> > ---
-> >   drivers/media/v4l2-core/v4l2-ctrls-core.c | 8 ++++++++
-> >   1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> > b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> > index 54abe5245dcc..b25c77b8a445 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> > @@ -112,6 +112,7 @@ static void std_init_compound(const struct
-> > v4l2_ctrl *ctrl, u32 idx,
-> >   	struct v4l2_ctrl_mpeg2_picture *p_mpeg2_picture;
-> >   	struct v4l2_ctrl_mpeg2_quantisation *p_mpeg2_quant;
-> >   	struct v4l2_ctrl_vp8_frame *p_vp8_frame;
-> > +	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
-> >   	struct v4l2_ctrl_fwht_params *p_fwht_params;
-> >   	void *p = ptr.p + idx * ctrl->elem_size;
-> >   
-> > @@ -152,6 +153,13 @@ static void std_init_compound(const struct
-> > v4l2_ctrl *ctrl, u32 idx,
-> >   		p_vp8_frame = p;
-> >   		p_vp8_frame->num_dct_parts = 1;
-> >   		break;
-> > +	case V4L2_CTRL_TYPE_VP9_FRAME:
-> > +		p_vp9_frame = p;
-> > +		p_vp9_frame->profile = 0;
-> > +		p_vp9_frame->bit_depth = 8;
-> > +		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING
-> > |
-> > +			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
-> > +		break;
-> >   	case V4L2_CTRL_TYPE_FWHT_PARAMS:
-> >   		p_fwht_params = p;
-> >   		p_fwht_params->version = V4L2_FWHT_VERSION;
-> > 
-> 
-> 
+I guess it's better to drop the "Fixes:" tag.
 
+Bjorn, should I send another version of it?
+
+Kai-Heng
+
+>
+> Best regards,
+> baolu

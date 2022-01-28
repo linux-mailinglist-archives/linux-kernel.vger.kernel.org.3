@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4121749F4AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2010F49F4AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347166AbiA1HsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:48:12 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:52498 "EHLO
+        id S1347074AbiA1HsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:48:23 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:52504 "EHLO
         alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347133AbiA1HsD (ORCPT
+        by vger.kernel.org with ESMTP id S1347088AbiA1HsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:48:03 -0500
+        Fri, 28 Jan 2022 02:48:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643356083; x=1674892083;
+  t=1643356088; x=1674892088;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FuMS/gNFBKv28stWoin9OwyiS0Xk2ooMLcf5DdQ/QNM=;
-  b=GF5aOcCeuGDe21bu56nrUj51WiQMV9xMtFaqJDBguUx7B+W5Y/UFv432
-   G0/7xH1GJxkBxkeuqCzpHunS/IlkoXYCnDUZsuTyjMFcrY2vpPRN9LAxD
-   tQ4M21cdA/afdBxT3jbdcjz1hj5QPHdIgdCugJlbKtadYhqOuJMBMnGdE
-   I=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 23:48:02 -0800
+  bh=e9N939L5bTT/411X3QULr7Ra4GvC9w/0f6usLMuRsYo=;
+  b=hSRgNMbx6fIBYXzpdCqNsjbJtF0GXBeZNNEzbko2S4Mk1FQtgFmchv8L
+   nuY9yDbQxXSexvV0JETsNHUGhG9owi6qIOvrmVyXOXvn1LBH9CC2t25Gn
+   6WnWnfDdPSUQq41jjtuI/6IQDnamtN1G3LtYqL7uemjc/xRwO3Q+Lcncx
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 23:48:08 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:48:02 -0800
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:48:07 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:48:02 -0800
+ 15.2.922.19; Thu, 27 Jan 2022 23:48:07 -0800
 Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 23:47:57 -0800
+ 15.2.922.19; Thu, 27 Jan 2022 23:48:03 -0800
 From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -46,9 +46,9 @@ CC:     <devicetree@vger.kernel.org>,
         Rajendra Nayak <quic_rjendra@quicinc.com>,
         Prasad <quic_psodagud@quicinc.com>,
         Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Subject: [PATCHv2 5/9] soc: qcom: llcc: Update register offsets for newer LLCC HW
-Date:   Fri, 28 Jan 2022 13:17:12 +0530
-Message-ID: <c655d16d945aef2d7fc8e7c212f3e1c58a84eb95.1643355594.git.quic_saipraka@quicinc.com>
+Subject: [PATCHv2 6/9] soc: qcom: llcc: Add configuration data for SM8450 SoC
+Date:   Fri, 28 Jan 2022 13:17:13 +0530
+Message-ID: <fec944cb8f2a4a70785903c6bfec629c6f31b6a4.1643355594.git.quic_saipraka@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1643355594.git.quic_saipraka@quicinc.com>
 References: <cover.1643355594.git.quic_saipraka@quicinc.com>
@@ -62,139 +62,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer LLCC HW have different register offsets for several registers,
-currently of which LLCC hardware info and status are used to identify
-the LLCC version information and other data. So use separate table to
-keep track of these register offsets which vary by different LLCC HW
-versions and eases any future addition in variations of register offsets
-for newer hardware.
+Add LLCC configuration data for SM8450 SoC.
 
 Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 ---
- drivers/soc/qcom/llcc-qcom.c | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ drivers/soc/qcom/llcc-qcom.c       | 34 ++++++++++++++++++++++++++++++
+ include/linux/soc/qcom/llcc-qcom.h |  5 +++++
+ 2 files changed, 39 insertions(+)
 
 diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index a791213a99e0..ea93740cc671 100644
+index ea93740cc671..53816e66d877 100644
 --- a/drivers/soc/qcom/llcc-qcom.c
 +++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -36,9 +36,6 @@
- 
- #define CACHE_LINE_SIZE_SHIFT         6
- 
--#define LLCC_COMMON_HW_INFO           0x00030000
--
--#define LLCC_COMMON_STATUS0           0x0003000c
- #define LLCC_LB_CNT_MASK              GENMASK(31, 28)
- #define LLCC_LB_CNT_SHIFT             28
- 
-@@ -106,6 +103,12 @@ struct qcom_llcc_config {
- 	const struct llcc_slice_config *sct_data;
- 	int size;
- 	bool need_llcc_cfg;
-+	const u32 *reg_offset;
-+};
-+
-+enum llcc_reg_offset {
-+	LLCC_COMMON_HW_INFO,
-+	LLCC_COMMON_STATUS0,
- };
- 
- static const struct llcc_slice_config sc7180_data[] =  {
-@@ -223,46 +226,63 @@ static const struct llcc_slice_config sm8350_data[] =  {
+@@ -226,6 +226,32 @@ static const struct llcc_slice_config sm8350_data[] =  {
  	{ LLCC_CPUHWT,   5, 512,   1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 1 },
  };
  
-+static const u32 llcc_v1_2_reg_offset[] = {
-+	[LLCC_COMMON_HW_INFO]	= 0x00030000,
-+	[LLCC_COMMON_STATUS0]	= 0x0003000c,
++static const struct llcc_slice_config sm8450_data[] =  {
++	{LLCC_CPUSS,     1, 3072, 1, 0, 0xFFFF, 0x0,   0, 0, 0, 1, 1, 0, 0 },
++	{LLCC_VIDSC0,    2,  512, 3, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_AUDIO,     6, 1024, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 0, 0, 0, 0 },
++	{LLCC_MDMHPGRW,  7, 1024, 3, 0, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_MODHW,     9, 1024, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_CMPT,     10, 4096, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_GPUHTW,   11,  512, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_GPU,      12, 2048, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 1, 0 },
++	{LLCC_MMUHWT,   13,  768, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 0, 1, 0, 0 },
++	{LLCC_DISP,     16, 4096, 2, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_MDMPNG,   21, 1024, 1, 1, 0xF000, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_AUDHW,    22, 1024, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 0, 0, 0, 0 },
++	{LLCC_CVP,      28,  256, 3, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_MODPE,    29,   64, 1, 1, 0xF000, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_APTCM,    30, 1024, 3, 1, 0x0,    0xF0,  1, 0, 0, 1, 0, 0, 0 },
++	{LLCC_WRCACHE,  31,  512, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 0, 1, 0, 0 },
++	{LLCC_CVPFW,    17,  512, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_CPUSS1,    3, 1024, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_CAMEXP0,   4,  256, 3, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_CPUMTE,   23,  256, 1, 1, 0x0FFF, 0x0,   0, 0, 0, 0, 1, 0, 0 },
++	{LLCC_CPUHWT,    5,  512, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 1, 0, 0 },
++	{LLCC_CAMEXP1,  27,  256, 3, 1, 0xFFFF, 0x0,   0, 0, 0, 1, 0, 0, 0 },
++	{LLCC_AENPU,     8, 2048, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 0, 0, 0, 0 },
 +};
 +
-+static const u32 llcc_v21_reg_offset[] = {
-+	[LLCC_COMMON_HW_INFO]	= 0x00034000,
-+	[LLCC_COMMON_STATUS0]	= 0x0003400c,
+ static const u32 llcc_v1_2_reg_offset[] = {
+ 	[LLCC_COMMON_HW_INFO]	= 0x00030000,
+ 	[LLCC_COMMON_STATUS0]	= 0x0003000c,
+@@ -285,6 +311,13 @@ static const struct qcom_llcc_config sm8350_cfg = {
+ 	.reg_offset	= llcc_v1_2_reg_offset,
+ };
+ 
++static const struct qcom_llcc_config sm8450_cfg = {
++	.sct_data       = sm8450_data,
++	.size           = ARRAY_SIZE(sm8450_data),
++	.need_llcc_cfg	= true,
++	.reg_offset	= llcc_v21_reg_offset,
 +};
 +
- static const struct qcom_llcc_config sc7180_cfg = {
- 	.sct_data	= sc7180_data,
- 	.size		= ARRAY_SIZE(sc7180_data),
- 	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
- static const struct qcom_llcc_config sc7280_cfg = {
- 	.sct_data	= sc7280_data,
- 	.size		= ARRAY_SIZE(sc7280_data),
- 	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
- static const struct qcom_llcc_config sdm845_cfg = {
- 	.sct_data	= sdm845_data,
- 	.size		= ARRAY_SIZE(sdm845_data),
- 	.need_llcc_cfg	= false,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
- static const struct qcom_llcc_config sm6350_cfg = {
- 	.sct_data	= sm6350_data,
- 	.size		= ARRAY_SIZE(sm6350_data),
- 	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
- static const struct qcom_llcc_config sm8150_cfg = {
- 	.sct_data       = sm8150_data,
- 	.size           = ARRAY_SIZE(sm8150_data),
- 	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
- static const struct qcom_llcc_config sm8250_cfg = {
- 	.sct_data       = sm8250_data,
- 	.size           = ARRAY_SIZE(sm8250_data),
- 	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
- static const struct qcom_llcc_config sm8350_cfg = {
- 	.sct_data       = sm8350_data,
- 	.size           = ARRAY_SIZE(sm8350_data),
- 	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
  static struct llcc_drv_data *drv_data = (void *) -EPROBE_DEFER;
-@@ -618,15 +638,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 		goto err;
- 	}
  
-+	cfg = of_device_get_match_data(&pdev->dev);
-+
- 	/* Extract version of the IP */
--	ret = regmap_read(drv_data->bcast_regmap, LLCC_COMMON_HW_INFO, &version);
-+	ret = regmap_read(drv_data->bcast_regmap, cfg->reg_offset[LLCC_COMMON_HW_INFO],
-+			  &version);
- 	if (ret)
- 		goto err;
+ /**
+@@ -714,6 +747,7 @@ static const struct of_device_id qcom_llcc_of_match[] = {
+ 	{ .compatible = "qcom,sm8150-llcc", .data = &sm8150_cfg },
+ 	{ .compatible = "qcom,sm8250-llcc", .data = &sm8250_cfg },
+ 	{ .compatible = "qcom,sm8350-llcc", .data = &sm8350_cfg },
++	{ .compatible = "qcom,sm8450-llcc", .data = &sm8450_cfg },
+ 	{ }
+ };
  
- 	drv_data->version = version;
+diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
+index beecf00b707d..0bc21ee58fac 100644
+--- a/include/linux/soc/qcom/llcc-qcom.h
++++ b/include/linux/soc/qcom/llcc-qcom.h
+@@ -35,7 +35,12 @@
+ #define LLCC_WRCACHE     31
+ #define LLCC_CVPFW       32
+ #define LLCC_CPUSS1      33
++#define LLCC_CAMEXP0     34
++#define LLCC_CPUMTE      35
+ #define LLCC_CPUHWT      36
++#define LLCC_MDMCLAD2    37
++#define LLCC_CAMEXP1     38
++#define LLCC_AENPU       45
  
--	ret = regmap_read(drv_data->regmap, LLCC_COMMON_STATUS0,
--						&num_banks);
-+	ret = regmap_read(drv_data->regmap, cfg->reg_offset[LLCC_COMMON_STATUS0],
-+			  &num_banks);
- 	if (ret)
- 		goto err;
- 
-@@ -634,7 +657,6 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 	num_banks >>= LLCC_LB_CNT_SHIFT;
- 	drv_data->num_banks = num_banks;
- 
--	cfg = of_device_get_match_data(&pdev->dev);
- 	llcc_cfg = cfg->sct_data;
- 	sz = cfg->size;
- 
+ /**
+  * struct llcc_slice_desc - Cache slice descriptor
 -- 
 2.33.1
 

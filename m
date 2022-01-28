@@ -2,65 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 097C249F6F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EA549F6F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343700AbiA1KPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245304AbiA1KPv (ORCPT
+        id S1344577AbiA1KQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:16:29 -0500
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:45715 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245304AbiA1KQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:15:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DA3C06173B;
-        Fri, 28 Jan 2022 02:15:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94186B82513;
-        Fri, 28 Jan 2022 10:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D49C340E0;
-        Fri, 28 Jan 2022 10:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643364948;
-        bh=IqKsdmtcoXo/YK7JT1TZuG90bj1qq6VQtmMzxkz+FMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=omBwj6mD3mH/GbRAnTQUeMsxfwAJgoUyiZZaXRFctu2JMoqe0g6qVeHoQpZzhyM1F
-         CQyzEkG9/DoO9HqB8FMCR4BqSuwU0CAP1JKXpAZGIDHliKG7VK71C6KlwBuDI48Bq9
-         m4XRvSQw6v3BvlvdUOXfh84WwMRZ/jrt5eItW+ok=
-Date:   Fri, 28 Jan 2022 11:15:45 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
+        Fri, 28 Jan 2022 05:16:20 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 5CFAA2B00254;
+        Fri, 28 Jan 2022 05:16:15 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 28 Jan 2022 05:16:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=IfghC/MuIyj/3FnI1U3LySUJn+GqmbGV5a+ZVg
+        4yeGU=; b=PuOi3yd5H2bnIYyTDUNPqtI4Ok30DMI4/rqZJT176vTeKLfBWT4WYP
+        Qp79elG98CXgFBeIe1X6yswsN5/LW4XWO0tkTr2AtgPDAo3CPLC+AGTpPHwcU5hY
+        W9fAhLcUXM+M30z0SaLN6u1qQLnENo9nFpx9ws7v+q9aKRuhsoYRYce49BarUtGX
+        g4ZYKF9U36DUdkXilfZBfQ1zYZK6wU+fQgi3+IbS+GKIjw2+/QH7LwAXYG53Ah3Y
+        +yEb8mZneIWC3eTfdFCuWNtiJlCwahxtf/ug0oHWku/qBY89+bUcpjWPwfPxLmvJ
+        AeDG7yHi7S/AyWuwAZpByps2T1SwWsjQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=IfghC/MuIyj/3FnI1
+        U3LySUJn+GqmbGV5a+ZVg4yeGU=; b=L/sBsLlMJS6QJ91CSKL8tsUhH4CeFCMm4
+        iybU19a8rBfhMmPsllb2zb80MR9bjVAQCc9ZJJJXdtAu4GAH590HkE/rVU+26wHi
+        hMyOOi+d+a50f03HS9ILdqXETuIMVJ3pC1Ew0QnNv3KpohvWCXWEMLAxtyQ+e1IV
+        dulUBxwsIsIlExPfmxc8MjPfM5hGJ2RqLJPkZLUiV7neaCoDjXi4mOgzwBu3ibZx
+        d5rM8E0jxHRZHJ+whXSC++bYm1qRCjZb6SDubHQzxWhoAoj6x2vy7vKpz0z1oIjX
+        WsMounuQjlrmxLAPeZrAomhRQkJtGCLB6A52PxDcD4QJfcFAlU/Bw==
+X-ME-Sender: <xms:bsLzYXR-p5ZK5McLCAKIIFMXOBjgNDUqjizI5LJB2YUsxWJ-Jll5RQ>
+    <xme:bsLzYYwr0xMOJvODLgdFJ4BkMkWaeSx6li6BPS7UzFJ86YCb81wraSYftFI6LsiuR
+    pPYAn2LmHBtYw>
+X-ME-Received: <xmr:bsLzYc2qea4QRUWXxVf6vngBnjqkgMyrUA720BfTwet_BpVRwexV9N_ZJiJWejiwWAiLVsxg3CZhexbUbvElkAMNRrozldzP>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeehgddufecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:bsLzYXBTIRkYSNwSbWwZoQ2gojShfFwIDI7dOub6HXT9_6eA-0TvRg>
+    <xmx:bsLzYQjrquv-HflKsutfyTzHXW26H6HzCtyJYGDsAisjIAmucLCoxQ>
+    <xmx:bsLzYbreNQOyzsoEzDUkfbbsx8d_rytLqmEz3Vy9vkaFV7po-Kxt3w>
+    <xmx:bsLzYfonIznhl6vlSODB3FJA4ul6TFLupAmBPpZ6r4LfET6Man5YBO-wOVE>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 28 Jan 2022 05:16:13 -0500 (EST)
+Date:   Fri, 28 Jan 2022 11:16:10 +0100
+From:   Greg KH <greg@kroah.com>
 To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Lv Zheng <lv.zheng@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ACPI: OSL: Fix a NULL pointer dereference in
- extlog_init().
-Message-ID: <YfPCURbOtpGqekyi@kroah.com>
-References: <20220124164134.52046-1-zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] brcmfmac: Fix a wild pointer dereference bug in
+ brcmf_chip_recognition()
+Message-ID: <YfPCahElneup1DJS@kroah.com>
+References: <20220124164847.54002-1-zhou1615@umn.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124164134.52046-1-zhou1615@umn.edu>
+In-Reply-To: <20220124164847.54002-1-zhou1615@umn.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 12:41:34AM +0800, Zhou Qingyang wrote:
-> In extlog_init(), acpi_os_map_iomem() is assigned to extlog_l1_hdr and
-> there is a dereference of it through l1_head. on the failure of
-> acpi_os_map_iomem(), the return value of it could be NULL, which may
-> introduce a NULL pointer dereference.
+On Tue, Jan 25, 2022 at 12:48:45AM +0800, Zhou Qingyang wrote:
+> In brcmf_chip_recognition(), the return value of brcmf_chip_add_core()
+> is assigned to core and is passed to brcmf_chip_sb_corerev(). In
+> brcmf_chip_sb_corerev(), there exists dereference of core without check.
+> the return value of brcmf_chip_add_core() could be ERR_PTR on failure of
+> allocation, which could lead to a NULL pointer dereference bug.
 > 
-> Fix this bug by adding a NULL check of extlog_l1_hdr.
+> Fix this bug by adding IS_ERR check for every variable core.
 > 
 > This bug was found by a static analyzer.
 > 
 > Builds with 'make allyesconfig' show no new warnings,
-> and our static analyzer no longer warns about this code.
+> and our static analyzer no longer warns about this code
 > 
-> Fixes: a238317ce818 ("ACPI: Clean up acpi_os_map/unmap_memory() to eliminate __iomem.")
+> Fixes: cb7cf7be9eba ("brcmfmac: make chip related functions host interface independent")
 > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 > ---
 > The analysis employs differential checking to identify inconsistent 
@@ -72,9 +114,9 @@ On Tue, Jan 25, 2022 at 12:41:34AM +0800, Zhou Qingyang wrote:
 > positive or hard to trigger. Multiple researchers have cross-reviewed
 > the bug.
 
-Then all of their names need to be on the commit.
-
-Also, as stated before, umn.edu is still not allowed to contribute to
-the Linux kernel.  Please work with your administration to resolve this
+As stated before, umn.edu is still not allowed to contribute to the
+Linux kernel.  Please work with your administration to resolve this
 issue.
+
+
 

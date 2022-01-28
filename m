@@ -2,315 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E96449F95B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A4949F966
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244719AbiA1M1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:27:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:40738 "EHLO foss.arm.com"
+        id S1348473AbiA1MbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:31:23 -0500
+Received: from mga03.intel.com ([134.134.136.65]:25085 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229568AbiA1M1y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:27:54 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DFB011D4;
-        Fri, 28 Jan 2022 04:27:54 -0800 (PST)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 386463F766;
-        Fri, 28 Jan 2022 04:27:53 -0800 (PST)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     vincenzo.frascino@arm.com, Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH v2] kselftest: Fix vdso_test_abi return status
-Date:   Fri, 28 Jan 2022 12:27:44 +0000
-Message-Id: <20220128122744.17248-1-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.34.1
+        id S1348447AbiA1MbW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 07:31:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643373082; x=1674909082;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0hgtHcXWkT4mXYTnIOz0FL8Ag79iS4KwXPEHaBfTZH0=;
+  b=jVx3BiFs/PsGYnnSmR5HpkiCGYIRdG1POGbA4aCfFvtPCKZaIBgEVkiG
+   t13GpLLiW/iEob7F8O3bxQIqm1wlJOxmXf2Mr/HyNog0WidYrIGNIy8EI
+   oQZQKcVu0I88qXd7UstzQzI78WRxE4xrU6JCHPcb9ckxBi4B9Ga0qyxAh
+   /KW+luARB3wOYnWlUEGNi2WPSf4xgCMBKEpUbE64f9k14J87RebEof7mU
+   R/9vn/qs+EVqE6OWjPX0zBkcwwKopK2HLcyxvHUE14bykt1MKZ5pLKaif
+   igS/a4Wgax7v9JWeu3yiNJIC+p7j9iGigQWyYKKZcQ1Y1mRoXyTKF3nbU
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247059199"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="247059199"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:31:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="770098068"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2022 04:31:20 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDQPP-000Nr6-LT; Fri, 28 Jan 2022 12:31:19 +0000
+Date:   Fri, 28 Jan 2022 20:30:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/mm/ptdump/hashpagetable.c:264:29: sparse: sparse:
+ restricted __be64 degrades to integer
+Message-ID: <202201282005.bbjaq1tc-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vdso_test_abi contains a batch of tests that verify the validity of the
-vDSO ABI.
+Hi Christophe,
 
-When a vDSO symbol is not found the relevant test is skipped reporting
-KSFT_SKIP. All the tests return values are then added in a single
-variable which is checked to verify failures. This approach can have
-side effects which result in reporting the wrong kselftest exit status.
+First bad commit (maybe != root cause):
 
-Fix vdso_test_abi verifying the return code of each test separately.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   23a46422c56144939c091c76cf389aa863ce9c18
+commit: e084728393a58e7fdafeee2e6b20e0faff09b557 powerpc/ptdump: Convert powerpc to GENERIC_PTDUMP
+date:   5 months ago
+config: powerpc64-randconfig-s032-20220128 (https://download.01.org/0day-ci/archive/20220128/202201282005.bbjaq1tc-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e084728393a58e7fdafeee2e6b20e0faff09b557
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e084728393a58e7fdafeee2e6b20e0faff09b557
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/ptdump/
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Reported-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/powerpc/mm/ptdump/hashpagetable.c:264:29: sparse: sparse: restricted __be64 degrades to integer
+   arch/powerpc/mm/ptdump/hashpagetable.c:265:49: sparse: sparse: restricted __be64 degrades to integer
+>> arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] v @@
+   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse:     expected unsigned long long [usertype]
+   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse:     got restricted __be64 [usertype] v
+>> arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] r @@
+   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse:     expected unsigned long long [usertype]
+   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse:     got restricted __be64 [usertype] r
+
+vim +264 arch/powerpc/mm/ptdump/hashpagetable.c
+
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  238  
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  239  static int pseries_find(unsigned long ea, int psize, bool primary, u64 *v, u64 *r)
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  240  {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  241  	struct hash_pte ptes[4];
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  242  	unsigned long vsid, vpn, hash, hpte_group, want_v;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  243  	int i, j, ssize = mmu_kernel_ssize;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  244  	long lpar_rc = 0;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  245  	unsigned long shift = mmu_psize_defs[psize].shift;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  246  
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  247  	/* calculate hash */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  248  	vsid = get_kernel_vsid(ea, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  249  	vpn  = hpt_vpn(ea, vsid, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  250  	hash = hpt_hash(vpn, shift, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  251  	want_v = hpte_encode_avpn(vpn, psize, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  252  
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  253  	/* to check in the secondary hash table, we invert the hash */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  254  	if (!primary)
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  255  		hash = ~hash;
+1531cff44b5bb3 arch/powerpc/mm/dump_hashpagetable.c   Aneesh Kumar K.V 2018-06-29  256  	hpte_group = (hash & htab_hash_mask) * HPTES_PER_GROUP;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  257  	/* see if we can find an entry in the hpte with this hash */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  258  	for (i = 0; i < HPTES_PER_GROUP; i += 4, hpte_group += 4) {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  259  		lpar_rc = plpar_pte_read_4(0, hpte_group, (void *)ptes);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  260  
+7c466b0807960e arch/powerpc/mm/ptdump/hashpagetable.c Christophe Leroy 2020-06-15  261  		if (lpar_rc)
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  262  			continue;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  263  		for (j = 0; j < 4; j++) {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @264  			if (HPTE_V_COMPARE(ptes[j].v, want_v) &&
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  265  					(ptes[j].v & HPTE_V_VALID)) {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  266  				/* HPTE matches */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @267  				*v = ptes[j].v;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @268  				*r = ptes[j].r;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  269  				return 0;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  270  			}
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  271  		}
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  272  	}
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  273  	return -1;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  274  }
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  275  
+
+:::::: The code at line 264 was first introduced by commit
+:::::: 1515ab932156257afd8a5864506dab80f63ff38b powerpc/mm: Dump hash table
+
+:::::: TO: Rashmica Gupta <rashmicy@gmail.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
 ---
- tools/testing/selftests/vDSO/vdso_test_abi.c | 143 ++++++++-----------
- 1 file changed, 62 insertions(+), 81 deletions(-)
-
-diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-index 3d603f1394af..3e4dd47e404e 100644
---- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-@@ -33,110 +33,106 @@ typedef long (*vdso_clock_gettime_t)(clockid_t clk_id, struct timespec *ts);
- typedef long (*vdso_clock_getres_t)(clockid_t clk_id, struct timespec *ts);
- typedef time_t (*vdso_time_t)(time_t *t);
- 
--static int vdso_test_gettimeofday(void)
-+#define VDSO_TEST_PASS_MSG()	"\n%s(): PASS\n", __func__
-+#define VDSO_TEST_FAIL_MSG(x)	"\n%s(): %s FAIL\n", __func__, x
-+#define VDSO_TEST_SKIP_MSG(x)	"\n%s(): SKIP: Could not find %s\n", __func__, x
-+
-+static void vdso_test_gettimeofday(void)
- {
- 	/* Find gettimeofday. */
- 	vdso_gettimeofday_t vdso_gettimeofday =
- 		(vdso_gettimeofday_t)vdso_sym(version, name[0]);
- 
--	if (!vdso_gettimeofday) {
--		printf("Could not find %s\n", name[0]);
--		return KSFT_SKIP;
--	}
-+	if (!vdso_gettimeofday)
-+		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[0]));
- 
- 	struct timeval tv;
- 	long ret = vdso_gettimeofday(&tv, 0);
- 
- 	if (ret == 0) {
--		printf("The time is %lld.%06lld\n",
--		       (long long)tv.tv_sec, (long long)tv.tv_usec);
-+		ksft_print_msg("The time is %lld.%06lld\n",
-+			       (long long)tv.tv_sec, (long long)tv.tv_usec);
-+		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
- 	} else {
--		printf("%s failed\n", name[0]);
--		return KSFT_FAIL;
-+		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[0]));
- 	}
--
--	return KSFT_PASS;
- }
- 
--static int vdso_test_clock_gettime(clockid_t clk_id)
-+static void vdso_test_clock_gettime(clockid_t clk_id)
- {
- 	/* Find clock_gettime. */
- 	vdso_clock_gettime_t vdso_clock_gettime =
- 		(vdso_clock_gettime_t)vdso_sym(version, name[1]);
- 
--	if (!vdso_clock_gettime) {
--		printf("Could not find %s\n", name[1]);
--		return KSFT_SKIP;
--	}
-+	if (!vdso_clock_gettime)
-+		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[1]));
- 
- 	struct timespec ts;
- 	long ret = vdso_clock_gettime(clk_id, &ts);
- 
- 	if (ret == 0) {
--		printf("The time is %lld.%06lld\n",
--		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
-+		ksft_print_msg("The time is %lld.%06lld\n",
-+			       (long long)ts.tv_sec, (long long)ts.tv_nsec);
-+		ksft_test_result_pass(VDSO_TEST_PASS_MSG());;
- 	} else {
--		printf("%s failed\n", name[1]);
--		return KSFT_FAIL;
-+		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[1]));
- 	}
--
--	return KSFT_PASS;
- }
- 
--static int vdso_test_time(void)
-+static void vdso_test_time(void)
- {
- 	/* Find time. */
- 	vdso_time_t vdso_time =
- 		(vdso_time_t)vdso_sym(version, name[2]);
- 
--	if (!vdso_time) {
--		printf("Could not find %s\n", name[2]);
--		return KSFT_SKIP;
--	}
-+	if (!vdso_time)
-+		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[2]));
- 
- 	long ret = vdso_time(NULL);
- 
- 	if (ret > 0) {
--		printf("The time in hours since January 1, 1970 is %lld\n",
-+		ksft_print_msg("The time in hours since January 1, 1970 is %lld\n",
- 				(long long)(ret / 3600));
-+		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
- 	} else {
--		printf("%s failed\n", name[2]);
--		return KSFT_FAIL;
-+		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[2]));
- 	}
--
--	return KSFT_PASS;
- }
- 
--static int vdso_test_clock_getres(clockid_t clk_id)
-+static void vdso_test_clock_getres(clockid_t clk_id)
- {
-+	int clock_getres_fail = 0;
-+
- 	/* Find clock_getres. */
- 	vdso_clock_getres_t vdso_clock_getres =
- 		(vdso_clock_getres_t)vdso_sym(version, name[3]);
- 
--	if (!vdso_clock_getres) {
--		printf("Could not find %s\n", name[3]);
--		return KSFT_SKIP;
--	}
-+	if (!vdso_clock_getres)
-+		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[3]));
- 
- 	struct timespec ts, sys_ts;
- 	long ret = vdso_clock_getres(clk_id, &ts);
- 
- 	if (ret == 0) {
--		printf("The resolution is %lld %lld\n",
--		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
-+		ksft_print_msg("The vdso resolution is %lld %lld\n",
-+			       (long long)ts.tv_sec, (long long)ts.tv_nsec);
- 	} else {
--		printf("%s failed\n", name[3]);
--		return KSFT_FAIL;
-+		clock_getres_fail++;
- 	}
- 
- 	ret = syscall(SYS_clock_getres, clk_id, &sys_ts);
- 
--	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec)) {
--		printf("%s failed\n", name[3]);
--		return KSFT_FAIL;
--	}
-+	ksft_print_msg("The syscall resolution is %lld %lld\n",
-+			(long long)sys_ts.tv_sec, (long long)sys_ts.tv_nsec);
-+
-+	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec))
-+		clock_getres_fail++;
- 
--	return KSFT_PASS;
-+	if (clock_getres_fail > 0) {
-+		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[3]));
-+	} else {
-+		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
-+	}
- }
- 
- const char *vdso_clock_name[12] = {
-@@ -158,36 +154,23 @@ const char *vdso_clock_name[12] = {
-  * This function calls vdso_test_clock_gettime and vdso_test_clock_getres
-  * with different values for clock_id.
-  */
--static inline int vdso_test_clock(clockid_t clock_id)
-+static inline void vdso_test_clock(clockid_t clock_id)
- {
--	int ret0, ret1;
--
--	ret0 = vdso_test_clock_gettime(clock_id);
--	/* A skipped test is considered passed */
--	if (ret0 == KSFT_SKIP)
--		ret0 = KSFT_PASS;
-+	ksft_print_msg("\nclock_id: %s\n", vdso_clock_name[clock_id]);
- 
--	ret1 = vdso_test_clock_getres(clock_id);
--	/* A skipped test is considered passed */
--	if (ret1 == KSFT_SKIP)
--		ret1 = KSFT_PASS;
-+	vdso_test_clock_gettime(clock_id);
- 
--	ret0 += ret1;
--
--	printf("clock_id: %s", vdso_clock_name[clock_id]);
--
--	if (ret0 > 0)
--		printf(" [FAIL]\n");
--	else
--		printf(" [PASS]\n");
--
--	return ret0;
-+	vdso_test_clock_getres(clock_id);
- }
- 
-+#define VDSO_TEST_PLAN	16
-+
- int main(int argc, char **argv)
- {
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
--	int ret;
-+
-+	ksft_print_header();
-+	ksft_set_plan(VDSO_TEST_PLAN);
- 
- 	if (!sysinfo_ehdr) {
- 		printf("AT_SYSINFO_EHDR is not present!\n");
-@@ -201,44 +184,42 @@ int main(int argc, char **argv)
- 
- 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
- 
--	ret = vdso_test_gettimeofday();
-+	vdso_test_gettimeofday();
- 
- #if _POSIX_TIMERS > 0
- 
- #ifdef CLOCK_REALTIME
--	ret += vdso_test_clock(CLOCK_REALTIME);
-+	vdso_test_clock(CLOCK_REALTIME);
- #endif
- 
- #ifdef CLOCK_BOOTTIME
--	ret += vdso_test_clock(CLOCK_BOOTTIME);
-+	vdso_test_clock(CLOCK_BOOTTIME);
- #endif
- 
- #ifdef CLOCK_TAI
--	ret += vdso_test_clock(CLOCK_TAI);
-+	vdso_test_clock(CLOCK_TAI);
- #endif
- 
- #ifdef CLOCK_REALTIME_COARSE
--	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
-+	vdso_test_clock(CLOCK_REALTIME_COARSE);
- #endif
- 
- #ifdef CLOCK_MONOTONIC
--	ret += vdso_test_clock(CLOCK_MONOTONIC);
-+	vdso_test_clock(CLOCK_MONOTONIC);
- #endif
- 
- #ifdef CLOCK_MONOTONIC_RAW
--	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
-+	vdso_test_clock(CLOCK_MONOTONIC_RAW);
- #endif
- 
- #ifdef CLOCK_MONOTONIC_COARSE
--	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
-+	vdso_test_clock(CLOCK_MONOTONIC_COARSE);
- #endif
- 
- #endif
- 
--	ret += vdso_test_time();
--
--	if (ret > 0)
--		return KSFT_FAIL;
-+	vdso_test_time();
- 
--	return KSFT_PASS;
-+	ksft_print_cnts();
-+	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
- }
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

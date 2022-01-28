@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF084A001C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23EC4A002F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350550AbiA1Sac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S1350585AbiA1Sed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343763AbiA1SaZ (ORCPT
+        with ESMTP id S229827AbiA1Se3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:30:25 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0776FC061747
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:30:24 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id q186so13908039oih.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=255BVw7+Ht0b8sdVHt7ws2Ve8e5tAHnc/nipGjdYGp0=;
-        b=EEJpZtCHAcUPBVHDEt8/8j6Y06vhmk5k14Knz6haNa+/3HpxiSqJBPz46ecBlEdFWD
-         +Axw3MHdAC35prQcjEwCZj914HYtKUhRfdd8ZUBcyA9MhYCKgEntbaWmC5xmurfMMn1G
-         ass2HtUTa2wzYB6TOLbHG84Th8SSWeT/h2eOF/UoskJmoQD4WLBjzxLtFPiqY+LL8Yy3
-         zVRBXghfCdStwW9b4O4X7ScE1FgwmDgF6JJaqNJJhco8FyoIur76yEr5PyxyJW+52sym
-         2gBXcVAItfbioHCR4g628wY4QQj10oyFAIZA72JH2wZP5hhBq1W8HWiRGnmt7csEp62g
-         fXOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=255BVw7+Ht0b8sdVHt7ws2Ve8e5tAHnc/nipGjdYGp0=;
-        b=AnRJC8LSnB3dWbzTBtnzqiOjkNkGaXOClDaIbYChtlbhxI+6unTZeZVn2ouNzev5Mb
-         3Mom8ru++buem05ZTohUzgHKv7uoFwoBVdysIOBv7+yLHGWiPRuY3U4GbHB87Lq1kSJ1
-         QyORrNgXWq1Synzzf2yaQGAnihtzAsGs6EVVbhfV5857nzSCraqMmFZYDyBSSM5ID7Fq
-         Ijd09q2o1huzUBFvsGinP/P+IFeGAqYyvU0qb05weNobragPjZTpbUT5vmDFm15P2Jr4
-         nn5j6edJEudOWVCvi5TaA2ErzOeG0LXDWq8aoI4StioHGG+CY5y2I3q5M+DvsUYon+Vf
-         k1Ow==
-X-Gm-Message-State: AOAM531NG+Iy9s680lC5MwCyXnR67xGTFxJDKORny3swS50fNpILs+Vj
-        1PeC3byIJFBg23TXX3cVmfq+XA==
-X-Google-Smtp-Source: ABdhPJw3fgunIiMqXvsJlYsQB6YNJPusV5AEIDPjrkMWBztd7tGWvDrzSr4LAkUaCP1vZjbS3zX6HQ==
-X-Received: by 2002:a05:6808:2214:: with SMTP id bd20mr8376062oib.159.1643394624296;
-        Fri, 28 Jan 2022 10:30:24 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id s3sm8272427otg.67.2022.01.28.10.30.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 10:30:23 -0800 (PST)
-Date:   Fri, 28 Jan 2022 10:30:48 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH v2 2/2] cpufreq: qcom-hw: Delay enabling throttle_irq
-Message-ID: <YfQ2WEiqV30PGNrt@ripper>
-References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
- <20220128032554.155132-2-bjorn.andersson@linaro.org>
- <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
+        Fri, 28 Jan 2022 13:34:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA07AC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:34:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47D2761CEC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 18:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C665BC340EA;
+        Fri, 28 Jan 2022 18:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643394868;
+        bh=qc2srDJ/Tr/4ioZ7NvjqTJDjb9MXIJRHw3QP9k8RdMM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u5OjJY5X3oKqZEg+u4pRnQLY6p6bUrZUtD3XGdF5VuT+Ig+6nkvSCPF2JzFnxFFj+
+         HYTNj4Vpxq+xe4R8rVScMZdLvYAYxnjpqQNEZEisUuPZOiHLkqIrlGr61D5UYIF2IY
+         YI7Nfrd2YctZE9ohtuwiJ61n7viksHkGEA4/Yv04RnX/OdGDk8ncasrqx1vzVxRHgx
+         pX0ZgK9ZOaVMtXBJVIqXv6CfEd3trjfyCQTw+pIKeTnn1pOpqZu7nyoJNlwtC1T2zp
+         kSSdj7/RSzN8tEVKPOPYaYPVp1FuvUf7yPK0/8D4jKOqzanG+AC3q6Op2kQ91nZ+bB
+         ZD1xTZ5dVFEug==
+Date:   Fri, 28 Jan 2022 19:34:23 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Mathias Krause <minipli@grsecurity.net>,
+        Linux Containers <containers@lists.linux.dev>
+Subject: Re: [GIT PULL] ucount rlimit fixes for v5.17-rc2
+Message-ID: <20220128183423.d5z7v46opgphrbdb@wittgenstein>
+References: <871r0rss9q.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
+In-Reply-To: <871r0rss9q.fsf@email.froward.int.ebiederm.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 28 Jan 02:39 PST 2022, Lukasz Luba wrote:
-
+On Fri, Jan 28, 2022 at 11:07:45AM -0600, Eric W. Biederman wrote:
+> 
+> Linus,
+> 
+> Please pull the ucount-rlimit-fixes-for-v5.17-rc2 branch from the git tree:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-fixes-for-v5.17-rc2
+>   HEAD: f9d87929d451d3e649699d0f1d74f71f77ad38f5 ucount:  Make get_ucount a safe get_user replacement
 > 
 > 
-> On 1/28/22 3:25 AM, Bjorn Andersson wrote:
-> > In the event that the SoC is under thermal pressure while booting it's
-> > possible for the dcvs notification to happen inbetween the cpufreq
-> > framework calling init and it actually updating the policy's
-> > related_cpus cpumask.
-> > 
-> > Prior to the introduction of the thermal pressure update helper an empty
-> > cpumask would simply result in the thermal pressure of no cpus being
-> > updated, but the new code will attempt to dereference an invalid per_cpu
-> > variable.
+> From: "Eric W. Biederman" <ebiederm@xmission.com>
+> Date: Mon, 24 Jan 2022 12:46:50 -0600
+> Subject: [PATCH] ucount:  Make get_ucount a safe get_user replacement
 > 
-> Just to confirm, is that per-cpu var the 'policy->related_cpus' in this
-> driver?
+> When the ucount code was refactored to create get_ucount it was missed
+> that some of the contexts in which a rlimit is kept elevated can be
+> the only reference to the user/ucount in the system.
 > 
-
-Correct, we boot under thermal pressure, so the interrupt fires before
-we return from "init", which means that related_cpus is still 0.
-
-> > 
-> > Avoid this problem by using the newly reintroduced "ready" callback, to
-> > postpone enabling the IRQ until the related_cpus cpumask is filled in.
-> > 
-> > Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
+> Ordinary ucount references exist in places that also have a reference
+> to the user namspace, but in POSIX message queues, the SysV shm code,
+> and the SIGPENDING code there is no independent user namespace
+> reference.
 > 
-> You have 'Fixes' tagging here, which might be picked by the stable tree.
-> The code uses the reverted callback .ready(), which might be missing
-> there (since patch 1/2 doesn't have tagging). This patch looks like a
-> proper fix for the root cause.
+> Inspection of the the user_namespace show no instance of circular
+> references between struct ucounts and the user_namespace.  So
+> hold a reference from struct ucount to it's user_namespace to
+> resolve this problem.
 > 
+> Link: https://lore.kernel.org/lkml/YZV7Z+yXbsx9p3JN@fixkernel.com/
+> Reported-by: Qian Cai <quic_qiancai@quicinc.com>
+> Reported-by: Mathias Krause <minipli@grsecurity.net>
+> Tested-by: Mathias Krause <minipli@grsecurity.net>
+> Reviewed-by: Mathias Krause <minipli@grsecurity.net>
+> Reviewed-by: Alexey Gladkov <legion@kernel.org>
+> Fixes: d64696905554 ("Reimplement RLIMIT_SIGPENDING on top of ucounts")
+> Fixes: 6e52a9f0532f ("Reimplement RLIMIT_MSGQUEUE on top of ucounts")
+> Fixes: d7c9e99aee48 ("Reimplement RLIMIT_MEMLOCK on top of ucounts")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
 
-Yes, the pair would need to be picked up.
+Hey,
 
-> Anyway, I'm going to send a patch, which adds a check for null cpumask
-> in the topology_update_thermal_pressure()
-> It was removed after the review comments:
-> https://lore.kernel.org/linux-pm/20211028054459.dve6s2my2tq7odem@vireshk-i7/
+Please ensure that next time a security issue is reported to
+security@kernel.org for userns such as this UAF that the pull request
+that gets sent to fix this issue Ccs the containers development list.
+
+This whole ucount conversion has been quite problematic so far. And
+that's not the problem, bugs happen. But fixes for bugs that were
+reported as security issues should at least have visibility on the right
+lists so people don't go and get pinged about them on Twitter [1].
+
+A Cc for the oss-security list would've also sufficed where most of us
+are subscribed. None of this is pleasant, I very much sympathise.
+Thanks for fixing this, and thanks to Mathias for the report.
+
+[1]: https://twitter.com/grsecurity/status/1487119590425600005
+
+
+>  kernel/ucount.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-
-I attempted that in v1:
-https://lore.kernel.org/all/20220118185612.2067031-2-bjorn.andersson@linaro.org/
-
-And while patch 1 is broken, I think Greg and Sudeep made it clear that
-they didn't want a condition to guard against the caller passing cpus of
-0.
-
-That's why I in v2 reverted to postpone the thermal pressure IRQ until
-cpufreq is "ready".
-
-Regards,
-Bjorn
-
-> I'll also push that change for the stable tree.
+> diff --git a/kernel/ucount.c b/kernel/ucount.c
+> index 7b32c356ebc5..65b597431c86 100644
+> --- a/kernel/ucount.c
+> +++ b/kernel/ucount.c
+> @@ -190,6 +190,7 @@ struct ucounts *alloc_ucounts(struct user_namespace *ns, kuid_t uid)
+>  			kfree(new);
+>  		} else {
+>  			hlist_add_head(&new->node, hashent);
+> +			get_user_ns(new->ns);
+>  			spin_unlock_irq(&ucounts_lock);
+>  			return new;
+>  		}
+> @@ -210,6 +211,7 @@ void put_ucounts(struct ucounts *ucounts)
+>  	if (atomic_dec_and_lock_irqsave(&ucounts->count, &ucounts_lock, flags)) {
+>  		hlist_del_init(&ucounts->node);
+>  		spin_unlock_irqrestore(&ucounts_lock, flags);
+> +		put_user_ns(ucounts->ns);
+>  		kfree(ucounts);
+>  	}
+>  }
+> -- 
+> 2.29.2
 > 
-> Regards,
-> Lukasz
+> eric
+> 

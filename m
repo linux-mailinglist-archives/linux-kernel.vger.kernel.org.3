@@ -2,140 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A4949F966
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9256A49F95E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348473AbiA1MbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:31:23 -0500
-Received: from mga03.intel.com ([134.134.136.65]:25085 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348447AbiA1MbW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:31:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643373082; x=1674909082;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0hgtHcXWkT4mXYTnIOz0FL8Ag79iS4KwXPEHaBfTZH0=;
-  b=jVx3BiFs/PsGYnnSmR5HpkiCGYIRdG1POGbA4aCfFvtPCKZaIBgEVkiG
-   t13GpLLiW/iEob7F8O3bxQIqm1wlJOxmXf2Mr/HyNog0WidYrIGNIy8EI
-   oQZQKcVu0I88qXd7UstzQzI78WRxE4xrU6JCHPcb9ckxBi4B9Ga0qyxAh
-   /KW+luARB3wOYnWlUEGNi2WPSf4xgCMBKEpUbE64f9k14J87RebEof7mU
-   R/9vn/qs+EVqE6OWjPX0zBkcwwKopK2HLcyxvHUE14bykt1MKZ5pLKaif
-   igS/a4Wgax7v9JWeu3yiNJIC+p7j9iGigQWyYKKZcQ1Y1mRoXyTKF3nbU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247059199"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="247059199"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:31:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="770098068"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2022 04:31:20 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDQPP-000Nr6-LT; Fri, 28 Jan 2022 12:31:19 +0000
-Date:   Fri, 28 Jan 2022 20:30:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: arch/powerpc/mm/ptdump/hashpagetable.c:264:29: sparse: sparse:
- restricted __be64 degrades to integer
-Message-ID: <202201282005.bbjaq1tc-lkp@intel.com>
+        id S1348381AbiA1MbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:31:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40542 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229568AbiA1MbG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 07:31:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643373065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XIRDUYVVBIv4oABEPDHoK/N//51UTD6HqpxDkdZpS2Q=;
+        b=bAt/JJgFyM0R+AUe8QIg0PpbNp4rBH6GiWqEaeaK04+8EbDqMQtxp5thQK2yXJ8Njb5Y8f
+        5qJQBNfcAKjGhJtkdjoqaK9H4C8McNzBcyxzcQ+4/91L/IbfpPjM9+jXm6OwUnEn8bB7TR
+        6AyoqhqQJ4+bYJekOmVduz1yGvA59gA=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-Xtk46rxHPTibWYwzftUzqw-1; Fri, 28 Jan 2022 07:31:04 -0500
+X-MC-Unique: Xtk46rxHPTibWYwzftUzqw-1
+Received: by mail-ed1-f71.google.com with SMTP id w3-20020a50c443000000b0040696821132so2955606edf.22
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 04:31:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XIRDUYVVBIv4oABEPDHoK/N//51UTD6HqpxDkdZpS2Q=;
+        b=ac/tpE/lsAu5KBGA+i8xKe1gJpvxzrKNZpMqDveGGXPP0Idy6vcyGlVdDxMx04kNUs
+         kqyybC1xz/haB8licmfV0C0UqUoiLrynPhKjWCMV8GfXS7oG1jcfgjg+q5oFliVhDKWi
+         wQoGJnfJ+qaUJ3p+hU5QcIlN8Hwal3TPtwHfd2dwPxhHtFydgRRkLWGEdnD1mz4PBaJ1
+         6LBasjZHmr5d71GMwtDWWgAYhDDd881ZMITW9CyRFQet8p+BiHl1Ym+YDfifmH56dhpP
+         Afn/vTBI81a9SqHzM01jRsXapWQ7AJ6lDG1RSKOAmSERRPXTSQtecPQLDYhVXj1mfaGS
+         MOfQ==
+X-Gm-Message-State: AOAM530RUvl3ANhfkR7lWe49hG7nodD6+GPaMNXQ5XBvAZmlMImI17Hc
+        WwtBDDZjeKeYxLaiVO8xc2L0eFtgd1zGb3AsDxmmFoVVIBVg55Q7DLNNALMTWXrMq9ophQ50Y9V
+        JRSON3e8DGH7qv4KDTgkPEPZypNAYSVJdBKtjmcJh
+X-Received: by 2002:a17:907:1b1a:: with SMTP id mp26mr6704322ejc.450.1643373062516;
+        Fri, 28 Jan 2022 04:31:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyvjyELGFxOKKskpejzb2JP1D9Jfa6SMOyCUQiGyJQjx+SNJ8mteW7mUFRCEu3JrdCTAqBI9cdGrOOA1I7u5dE=
+X-Received: by 2002:a17:907:1b1a:: with SMTP id mp26mr6704304ejc.450.1643373062272;
+ Fri, 28 Jan 2022 04:31:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <YfMpk7DM9zA7NfmI@debian>
+In-Reply-To: <YfMpk7DM9zA7NfmI@debian>
+From:   Wander Costa <wcosta@redhat.com>
+Date:   Fri, 28 Jan 2022 09:30:50 -0300
+Message-ID: <CAAq0SUnNtS8b3419egw-WVH8ic+MxH8oQELm1K0s4iqt8pYKnQ@mail.gmail.com>
+Subject: Re: Regression with 5021d709b31b ("tty: serial: Use fifo in 8250
+ console driver")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Thu, Jan 27, 2022 at 8:24 PM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi Wander,
+>
+> Not sure if this has been reported before but since last few weeks I am
+> seeing a problem with the rpi4 serial port on my test setup. The initial
+> boot message will be completely garbled as you can see at:
+> https://lava.qa.codethink.co.uk/scheduler/job/543#L380.
+> The last good boot was https://lava.qa.codethink.co.uk/scheduler/job/540#L390.
+>
+> The bisect log:
+>
+> # bad: [455e73a07f6e288b0061dfcf4fcf54fa9fe06458] Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+> # good: [7e7b69654724c72bd3219b71f58937845dca0b2b] Merge tag 'dma-mapping-5.17' of git://git.infradead.org/users/hch/dma-mapping
+> git bisect start '455e73a07f6e288b0061dfcf4fcf54fa9fe06458' '7e7b69654724c72bd3219b71f58937845dca0b2b'
+> # bad: [342465f5337f7bd5b8bd3b6f939ac12b620cbb43] Merge tag 'tty-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+> git bisect bad 342465f5337f7bd5b8bd3b6f939ac12b620cbb43
+> # good: [6dc69d3d0d18d587ab9d809fe060ba4417cf0279] Merge tag 'driver-core-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core
+> git bisect good 6dc69d3d0d18d587ab9d809fe060ba4417cf0279
+> # good: [e269f7acdc53623769da31135f60afeb3a65eaff] staging: r8188eu: remove the private ioctl "wps_assoc_req_ie"
+> git bisect good e269f7acdc53623769da31135f60afeb3a65eaff
+> # bad: [ad234e2bac274a43c9fa540bde8cd9f0c627b71f] tty: serial: meson: Drop the legacy compatible strings and clock code
+> git bisect bad ad234e2bac274a43c9fa540bde8cd9f0c627b71f
+> # good: [c66453ce8af8bac78a72ba4e21fd9a86720127d7] tty: fix kernel-doc in n_tty.c
+> git bisect good c66453ce8af8bac78a72ba4e21fd9a86720127d7
+> # good: [0882b473b084df31288003b3bee974aabac9dcf9] tty: serial: samsung: Enable console as module
+> git bisect good 0882b473b084df31288003b3bee974aabac9dcf9
+> # bad: [b4a29b94804c4774f22555651296b838df6ec0e4] serial: 8250: Move Alpha-specific quirk out of the core
+> git bisect bad b4a29b94804c4774f22555651296b838df6ec0e4
+> # good: [e822b4973f49015e1c6f63b91c8641ed9bfaf229] tty/ldsem: Fix syntax errors in comments
+> git bisect good e822b4973f49015e1c6f63b91c8641ed9bfaf229
+> # good: [fb09d0ac07725b442b32dbf53f0ab0bea54804e9] tty: Fix the keyboard led light display problem
+> git bisect good fb09d0ac07725b442b32dbf53f0ab0bea54804e9
+> # bad: [5021d709b31b8a14317998a33cbc78be0de9ab30] tty: serial: Use fifo in 8250 console driver
+> git bisect bad 5021d709b31b8a14317998a33cbc78be0de9ab30
+> # good: [adbfddc757aec1ed54ccb35c4a7ca9170df827e0] docs/driver-api: Replace a comma in the n_gsm.rst with a double colon
+> git bisect good adbfddc757aec1ed54ccb35c4a7ca9170df827e0
+> # first bad commit: [5021d709b31b8a14317998a33cbc78be0de9ab30] tty: serial: Use fifo in 8250 console driver
+>
+> And, indeed reverting 5021d709b31b ("tty: serial: Use fifo in 8250 console
+> driver") on top of 23a46422c561 ("Merge tag 'net-5.17-rc2' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net") fixes the problem
+> for me.
+>
+> This is seen on every boot and I will be happy to test any patch.
+>
 
-First bad commit (maybe != root cause):
+Hi Sudip,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   23a46422c56144939c091c76cf389aa863ce9c18
-commit: e084728393a58e7fdafeee2e6b20e0faff09b557 powerpc/ptdump: Convert powerpc to GENERIC_PTDUMP
-date:   5 months ago
-config: powerpc64-randconfig-s032-20220128 (https://download.01.org/0day-ci/archive/20220128/202201282005.bbjaq1tc-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e084728393a58e7fdafeee2e6b20e0faff09b557
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e084728393a58e7fdafeee2e6b20e0faff09b557
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/ptdump/
+Thanks for the report. As Greg said, the patch has been reverted. In
+the meantime, could you please apply this patch and report if the
+problem still happens:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+diff --git a/drivers/tty/serial/8250/8250_port.c
+b/drivers/tty/serial/8250/8250_port.c
+index 2abb3de11a48..d3a93e5d55f7 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -3343,7 +3343,7 @@ static void serial8250_console_fifo_write(struct
+uart_8250_port *up,
+ {
+        int i;
+        const char *end = s + count;
+-       unsigned int fifosize = up->port.fifosize;
++       unsigned int fifosize = up->tx_loadsz;
+        bool cr_sent = false;
+
+        while (s != end) {
+@@ -3409,8 +3409,8 @@ void serial8250_console_write(struct
+uart_8250_port *up, const char *s,
+        }
+
+        use_fifo = (up->capabilities & UART_CAP_FIFO) &&
+-               port->fifosize > 1 &&
+-               (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO) &&
++               up->tx_loadsz > 1 &&
++               (up->fcr & UART_FCR_ENABLE_FIFO) &&
+                /*
+                 * After we put a data in the fifo, the controller will send
+                 * it regardless of the CTS state. Therefore, only use fifo
 
 
-sparse warnings: (new ones prefixed by >>)
->> arch/powerpc/mm/ptdump/hashpagetable.c:264:29: sparse: sparse: restricted __be64 degrades to integer
-   arch/powerpc/mm/ptdump/hashpagetable.c:265:49: sparse: sparse: restricted __be64 degrades to integer
->> arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] v @@
-   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse:     expected unsigned long long [usertype]
-   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse:     got restricted __be64 [usertype] v
->> arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] r @@
-   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse:     expected unsigned long long [usertype]
-   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse:     got restricted __be64 [usertype] r
+>
+> --
+> Regards
+> Sudip
+>
 
-vim +264 arch/powerpc/mm/ptdump/hashpagetable.c
-
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  238  
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  239  static int pseries_find(unsigned long ea, int psize, bool primary, u64 *v, u64 *r)
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  240  {
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  241  	struct hash_pte ptes[4];
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  242  	unsigned long vsid, vpn, hash, hpte_group, want_v;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  243  	int i, j, ssize = mmu_kernel_ssize;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  244  	long lpar_rc = 0;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  245  	unsigned long shift = mmu_psize_defs[psize].shift;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  246  
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  247  	/* calculate hash */
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  248  	vsid = get_kernel_vsid(ea, ssize);
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  249  	vpn  = hpt_vpn(ea, vsid, ssize);
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  250  	hash = hpt_hash(vpn, shift, ssize);
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  251  	want_v = hpte_encode_avpn(vpn, psize, ssize);
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  252  
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  253  	/* to check in the secondary hash table, we invert the hash */
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  254  	if (!primary)
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  255  		hash = ~hash;
-1531cff44b5bb3 arch/powerpc/mm/dump_hashpagetable.c   Aneesh Kumar K.V 2018-06-29  256  	hpte_group = (hash & htab_hash_mask) * HPTES_PER_GROUP;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  257  	/* see if we can find an entry in the hpte with this hash */
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  258  	for (i = 0; i < HPTES_PER_GROUP; i += 4, hpte_group += 4) {
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  259  		lpar_rc = plpar_pte_read_4(0, hpte_group, (void *)ptes);
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  260  
-7c466b0807960e arch/powerpc/mm/ptdump/hashpagetable.c Christophe Leroy 2020-06-15  261  		if (lpar_rc)
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  262  			continue;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  263  		for (j = 0; j < 4; j++) {
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @264  			if (HPTE_V_COMPARE(ptes[j].v, want_v) &&
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  265  					(ptes[j].v & HPTE_V_VALID)) {
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  266  				/* HPTE matches */
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @267  				*v = ptes[j].v;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @268  				*r = ptes[j].r;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  269  				return 0;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  270  			}
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  271  		}
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  272  	}
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  273  	return -1;
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  274  }
-1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  275  
-
-:::::: The code at line 264 was first introduced by commit
-:::::: 1515ab932156257afd8a5864506dab80f63ff38b powerpc/mm: Dump hash table
-
-:::::: TO: Rashmica Gupta <rashmicy@gmail.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

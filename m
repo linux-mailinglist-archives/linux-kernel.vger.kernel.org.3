@@ -2,151 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B4749F862
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447EC49F864
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbiA1LhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S237378AbiA1LiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbiA1LhT (ORCPT
+        with ESMTP id S236998AbiA1LiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:37:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6939C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:37:18 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CB2D3471;
-        Fri, 28 Jan 2022 12:37:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643369836;
-        bh=CeJvR4ORKUeBh5O+rhMxUG+pi4kilih9I+hEF4f+sfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pXqX/EEQBJ5wwHO+8ucas+fjPqY3Vx+/MzDt4QJsxninA72AQfzWsM4TYjC0T3Aeg
-         Xfir9WqpRKJO9XAXJ1uXZVGLx7+KtbLKmDEHXFUDb5TZt19Ttm11DkXBlg7wB7ci5j
-         N3ZALuwl7lUx34szuUmUHwVfgttancuCFHVEMxC0=
-Date:   Fri, 28 Jan 2022 13:36:54 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
- kernel parameter
-Message-ID: <YfPVVtWoW23xiP/g@pendragon.ideasonboard.com>
-References: <20211217003752.3946210-1-javierm@redhat.com>
- <20211217003752.3946210-32-javierm@redhat.com>
- <164336121612.533872.1685181669511488706@Monstersaurus>
- <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
- <YfPGnfly3GOAOlfp@pendragon.ideasonboard.com>
- <584f1343-b285-bf8e-e48c-764c2a56bce3@suse.de>
- <YfPN0fLfvWFC6mha@pendragon.ideasonboard.com>
- <1b1a5dc1-e3cd-c7ce-426b-cc330ae3ed81@suse.de>
+        Fri, 28 Jan 2022 06:38:24 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E54CC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:38:24 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 23so17551993ybf.7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:38:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oQ5s0T8kS0O7cDsVNaD75NNx+JQisRNysvdNyX8OTIQ=;
+        b=kNNyjtFGM8aNqZ7leMkYWDjfeYjOe+ql0/yN5cwCy5j0Mvjp7bBWnjKn6GYI8Fl0n+
+         z2kwd1quJcIVyEp3vJFpSR+HVlBvfZXbuibn6I0Ihy8uZQEhOOoRAyldr66+GA1G70gh
+         bvgiLO3ozg20vPkrb9YXozTTTZJLMFSL6YEWsa4/uqoV+cKvssROyTfw2leQlGa/LX6U
+         sHgYxIifmgxHJigiQCT0tnVuaeDgewPu/Zoh1WrW//K7V/yJ9q0Gvyg18ft+lpTsC7+S
+         964RkDkMTrLX26DzIpsUbwEjtjrIDbbnHXZhIsUZe5wXnTiFUEJBrc5X+bTxJWRW9WCU
+         h51g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oQ5s0T8kS0O7cDsVNaD75NNx+JQisRNysvdNyX8OTIQ=;
+        b=f9+Dj6RHAEw/5aVHS2trLGZbiwFc0DiUGuZDn3uDcTik9FjRxa+FaKieVPnWZ3CgOM
+         qtY8mv+t4LGqAFIXkW3UOeQl6Gac+DckZUNJEz9i+IGnFRPkqF59N2+cAsYWpP6ao3LH
+         mDFC5d/QCnk8CiuhBxzLxWOIEshqT86NMBQD/NxbxlQ7sNVDpXp7TkA3w//SwXBLn3N9
+         Hlf+7PAzE+D3DbPx/KggSbt4H73LEYQ60JOckiJSehfJRFKMiwI7m4uId/8yi/u3fIfs
+         jfGvKrqMyHlFFHclm7HO3ySZhUYhRk9S9yJC58K4zYA4Awdh01iaefUyGugdXVFY4KBl
+         iV6g==
+X-Gm-Message-State: AOAM530dLRnrzBujvbiCIvbYL4LMLm713qX4KDdKjnKit8yS+ECQuQ3a
+        hnwQQdxkCvsQ7K9GFq6kd+uaqlDCPsyh5Z85yOEfWw==
+X-Google-Smtp-Source: ABdhPJxaDzQR1NTvecMwVrka8of4rYbeNcMr1QpLf0DAg2mDM/y1ANt/9RD+bov9+2q8/4PSv6hkDXcNN/MVbbNCD8s=
+X-Received: by 2002:a25:5143:: with SMTP id f64mr12951957ybb.520.1643369903499;
+ Fri, 28 Jan 2022 03:38:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1b1a5dc1-e3cd-c7ce-426b-cc330ae3ed81@suse.de>
+References: <20220127180258.362000607@linuxfoundation.org>
+In-Reply-To: <20220127180258.362000607@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 28 Jan 2022 17:08:12 +0530
+Message-ID: <CA+G9fYvdOyz-UyUnQSXy2M7jOOXCoO=3e5YqLQ4Ec3ULv7DNvg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/11] 5.4.175-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Thu, 27 Jan 2022 at 23:40, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.175 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.175-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Fri, Jan 28, 2022 at 12:26:03PM +0100, Thomas Zimmermann wrote:
-> Am 28.01.22 um 12:04 schrieb Laurent Pinchart:
-> > On Fri, Jan 28, 2022 at 11:46:49AM +0100, Thomas Zimmermann wrote:
-> >> Am 28.01.22 um 11:34 schrieb Laurent Pinchart:
-> >>> On Fri, Jan 28, 2022 at 10:33:21AM +0100, Thomas Zimmermann wrote:
-> >>>> Am 28.01.22 um 10:13 schrieb Kieran Bingham:
-> >>>>> Quoting Javier Martinez Canillas (2021-12-17 00:37:46)
-> >>>>>> According to disable Documentation/admin-guide/kernel-parameters.txt, this
-> >>>>>> parameter can be used to disable kernel modesetting.
-> >>>>>>
-> >>>>>> DRM drivers will not perform display-mode changes or accelerated rendering
-> >>>>>> and only the system framebuffer will be available if it was set-up.
-> >>>>>
-> >>>>> What is the 'system framebuffer' in this instance? Reading
-> >>>>> https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt
-> >>>>> it sounds like that means anything already set up by the bootloader.
-> >>>>
-> >>>> Exactly this.
-> >>>>
-> >>>>>> But only a few DRM drivers currently check for nomodeset, make this driver
-> >>>>>> to also support the command line parameter.
-> >>>>>>
-> >>>>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >>>>>> ---
-> >>>>>>
-> >>>>>> (no changes since v1)
-> >>>>>>
-> >>>>>>     drivers/gpu/drm/rcar-du/rcar_du_drv.c | 3 +++
-> >>>>>>     1 file changed, 3 insertions(+)
-> >>>>>>
-> >>>>>> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> >>>>>> index 5a8131ef81d5..982e450233ed 100644
-> >>>>>> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> >>>>>> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> >>>>>> @@ -701,6 +701,9 @@ static struct platform_driver rcar_du_platform_driver = {
-> >>>>>>     
-> >>>>>>     static int __init rcar_du_init(void)
-> >>>>>>     {
-> >>>>>> +       if (drm_firmware_drivers_only())
-> >>>>>> +               return -ENODEV;
-> >>>>>> +
-> >>>>>
-> >>>>> This will completely disable all control of the display device when
-> >>>>> nomodeset is enabled.
-> >>>>>
-> >>>>> Is there any requirement for us to support outputting to the display if
-> >>>>> it was previously set up? presumably without setting or changing any
-> >>>>> modes, but simply allowing the existing frame to be updated?
-> >>>>
-> >>>> There's no requirement for your driver. We just want a parameter where
-> >>>> we can conveniently disable most of DRM's drivers and reduce it to a
-> >>>> minimum. Helps distributions to provide a simple fallback mode.  Most
-> >>>> PCI-based drivers already support that. Now we're added it to the other
-> >>>> drivers as well.
-> >>>>
-> >>>>>
-> >>>>> I think the implication is that 'firmware drivers' would mean a display
-> >>>>> could be updated through some firmware interface, which we won't have
-> >>>>> ... so it seems reasonable to accept that this whole driver can be
-> >>>>> disabled in that instance.
-> >>>>
-> >>>> It cannot be 'mode-setted'. We get a pre-configured framebuffer from the
-> >>>> firmware or bootloader. Whatever we draw there shows up on the screen.
-> >>>
-> >>> I doubt that's going to work as you expect, clocks and regulators will
-> >>> get disabled at boot if not used by any driver.
-> >>
-> >> Simpledrm and simplefb attach to these firmware framebuffers. Both
-> >> drivers look at the device tree nodes to acquire the relevant clocks and
-> >> regulators.
-> > 
-> > How about clocks and regulators for the ancillary devices, such as
-> > encoders, or in the R-Car case, the external composer handled by the
-> > vsp1 driver (in drivers/media/platform/vsp1) ?
-> > 
-> > This approach may work fine on x86 desktop systems, but for ARM-based
-> > devices, the situation is usually more complex.
-> 
-> Well, in that case the problem has always been there. We don't make it 
-> worse.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-What's the point of adding nomodeset support in those drivers then, if
-it's known not to work ?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> >>>>> Reading your mail that brought this thread up in my inbox, I think
-> >>>>> you've already hit merge on this, so don't worry about adding a tag in
-> >>>>> that instance, but I think this is ok.
-> >>>>>
-> >>>>> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> >>>>>
-> >>>>>>            rcar_du_of_init(rcar_du_of_table);
-> >>>>>>     
-> >>>>>>            return platform_driver_register(&rcar_du_platform_driver);
+## Build
+* kernel: 5.4.175-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: aa3124a3444fd7cfa588271ffdc7d3cb77131142
+* git describe: v5.4.174-12-gaa3124a3444f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+74-12-gaa3124a3444f
 
--- 
-Regards,
+## Test Regressions (compared to v5.4.173-317-gb9fb58c8fa63)
+No test regressions found.
 
-Laurent Pinchart
+## Metric Regressions (compared to v5.4.173-317-gb9fb58c8fa63)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.173-317-gb9fb58c8fa63)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.173-317-gb9fb58c8fa63)
+No metric fixes found.
+
+## Test result summary
+total: 60336, pass: 50071, fail: 423, skip: 9268, xfail: 574
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 258 total, 258 passed, 0 failed
+* arm64: 36 total, 31 passed, 5 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 20 total, 20 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 36 total, 36 passed, 0 failed
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

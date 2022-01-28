@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1D449FD84
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DB449FD7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349989AbiA1QC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:02:28 -0500
-Received: from mout.perfora.net ([74.208.4.196]:59719 "EHLO mout.perfora.net"
+        id S1349866AbiA1QCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:02:15 -0500
+Received: from mout.perfora.net ([74.208.4.197]:46979 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349922AbiA1QCO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:02:14 -0500
+        id S1349873AbiA1QCD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 11:02:03 -0500
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Mapv2-1myhhP094k-00KN5f;
- Fri, 28 Jan 2022 17:01:41 +0100
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MXanQ-1miDYX42pq-00WUZr;
+ Fri, 28 Jan 2022 17:01:44 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Song Liu <songliubraving@fb.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 06/12] arm64: defconfig: enable bpf/cgroup firewalling
-Date:   Fri, 28 Jan 2022 17:00:54 +0100
-Message-Id: <20220128160100.1228537-7-marcel@ziswiler.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 07/12] arm64: defconfig: enable imx8m pcie phy driver
+Date:   Fri, 28 Jan 2022 17:00:55 +0100
+Message-Id: <20220128160100.1228537-8-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220128160100.1228537-1-marcel@ziswiler.com>
 References: <20220128160100.1228537-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:lCyq7oT7xqkY7LNjfnI4x8Dtx3qyHtYLHe/llVnaOPQ9aTb3oFD
- k7Njrij81UMQ8unFiEyyQKZykXjSl+cCV7nM95h9lS1tJ6S76ux7awBi3bnfUFtUKxEDBvL
- zDGFPa1AQPGeq55JtT1LsPBB9AunhQQbXyZDTiUT0LrKXvVkD+fAjQWe3CQpwDF1DCqY8OD
- 9aR4ciQASawMpCUUoOqwg==
+X-Provags-ID: V03:K1:qdVeKON3tDfhHPbSloapjtGC/AyacnrjYeFxYON3deJItLA+NmD
+ iOiDgksmRjp0Vn66F87GkrmFGKN5q+A2V6MQeTf4FlHuGTo/GemD9gol5h3tHqR8pF4uorj
+ j/GPL8HJoGECshia9RhqrWBZAmwPHGEQli4mPz1fUuxy6Idgf0/02KjOpfCTuIHRjlEYa0A
+ llrlgAHIZ1xqqTTI2/ojQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gog9tXXFDu0=:E+27g7MTVjhtkr46XDmsWf
- PMNNDnpFawiYo9JM/d11URftIcgVdVK6sIS2K6Md4ANQmdvMWZ977ePg4cGOMDFpkYDYTHU6F
- ZbOTrAFp4drUONmikUZJaHptR791HiPbWBpSFzXyUMdKwi+EblXpvv/oGMoWoTUnmTETCq4SY
- Sa0d4jLefO74IDzDoVPBluI07hYy0bqpxUw4DBHcvLzuovMvsCe9qK6g4toM86IZ7qEWXjyER
- JXYxlYeybrPTuwssSDEp8BKbEbSZoZQ7eDS3cnf4bgqhRcE60FQ5vIssmjE1mMEw5wDQawnHp
- mgTnPaNIszfeyad7vMB1IxtzKRAXTUuuZE+p4ASDWK5iCd2r3nkxCMLFZIcOaKFqX09naeFSz
- ndGGB7a9Yx+0A0p+efa0+mxoI/d+0IY/1v4jN1aKvpQWKgRln3Bfvn/jcUVXfo9Go/j4396ps
- infDFx9PUv+al4PUvHTO1RWhPwrcMvUMaluNjFpqLirz0zBKbf+f5Na+S5PySUBHFCJjoTa40
- apN0ydTQLy9ChrwyGJNGv4vKeFG8fieQqhi3Sf0bbvme4gHVC1Whr4Cw7Cg9RQEmb/J7aL9cs
- MZBU8F20zznozQ3cEMabZYws+zHd/7pw1Ay5P5jOPh0UfLH1zGNUEzTdTRjzN2vNU5iA4/NFS
- NueGGBlP1ZZsEIUGq6sjpoZLbjvjY7ZgjE+umSmN08oQIywqMRw8hRAp/ehMK+Ve98hs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3P5/YaAgiPc=:CamSGoDhZO9mRdOcVonv57
+ +7aZ1qg5+6ygdaGfDilHpdD/mEXLigpjKwNVfGGiKnGe5ufks8Pr5iO3eoa4g3PML6mx6GD37
+ uBAXvHcqQIuUdNLKgSk9/JT5o0ZcZIWub7ZG3wpJAcl3ej7SrK/n1+Iv+zYd3AJwfC3z9wL5F
+ D93R9L27i1vkLQ8ez034aycMjMjlLr54FKHJQ+U9mZaze0Ec9X6b+OzIR1ynmIbg6JBWZJ3dU
+ kJivKk314x0pQJEhaYOFAVYyV4Bn0VAWmDsJ+81jNfNF0pNTp3djn+hiHy8lgzGGgCuV+mtww
+ EQuZo07qZ9Aox2qlx5WVUnAWpvWul6fQ5mLKYIVGXQNuLceTy2ZOHborT1+BxYYdw2byr8NS7
+ ks6KZbUd2PKNmW0j7XB659KQPZgOHpDeYiFJCocxORbiAL2BqPd6BaijMnLTVUz2XUTfiBjhT
+ vgI5JERXlV8N7XjILcpfvkk4yDGUF4tohTzOznCDErBnvNmtgnlJJzo5luXb0oNzRVcRuyI5+
+ IVy7uBIeT21HQTDts1Rie3wnRWtbmmJ3MYGXmna3936zNU7vl8rjy4rxw2/TBwoYDyuvnTRLK
+ xaW2xb1YjsPzKU3P0ozPW3FSL4DMOskJhd+FGmUp1Sn8OH/S0EhfMA7nBLrY0ixODOMbTpkzT
+ 145F912CH03SkrEprVFErmk+I3YItxD+wG0dCRB/DitltXPiwwP5eCKjhjjowczyBGK+JCjS4
+ BCMY34JD5SQxImaM
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This avoids the following systemd warning:
-
-[    2.618538] systemd[1]: system-getty.slice: unit configures an IP
- firewall, but the local system does not support BPF/cgroup firewalling.
-[    2.630916] systemd[1]: (This warning is only shown for the first
- unit using IP firewalling.)
+This enables the i.MX 8M PCIe PHY driver (CONFIG_PHY_FSL_IMX8M_PCIE)
+required for PCIe functionality.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 ---
 
 Changes in v3:
-- Add Krzysztof's reviewed-by tag.
+- New patch enabling imx8m pcie phy driver in arm64 defconfig.
 
-Changes in v2:
-- Add Song's acked-by tag.
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 530ad076b5cb..444fec9ec73a 100644
+index 444fec9ec73a..0fed8477e72e 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -3,6 +3,7 @@ CONFIG_POSIX_MQUEUE=y
- CONFIG_AUDIT=y
- CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_BPF_JIT=y
- CONFIG_PREEMPT=y
- CONFIG_IRQ_TIME_ACCOUNTING=y
-@@ -22,6 +23,7 @@ CONFIG_CPUSETS=y
- CONFIG_CGROUP_DEVICE=y
- CONFIG_CGROUP_CPUACCT=y
- CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
- CONFIG_USER_NS=y
- CONFIG_SCHED_AUTOGROUP=y
- CONFIG_BLK_DEV_INITRD=y
+@@ -1121,6 +1121,7 @@ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
++CONFIG_PHY_FSL_IMX8M_PCIE=y
+ CONFIG_PHY_HI6220_USB=y
+ CONFIG_PHY_HISTB_COMBPHY=y
+ CONFIG_PHY_HISI_INNO_USB2=y
 -- 
 2.33.1
 

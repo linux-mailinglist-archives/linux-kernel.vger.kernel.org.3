@@ -2,157 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1F949F6CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA7149F6CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239433AbiA1KDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237493AbiA1KDM (ORCPT
+        id S240824AbiA1KEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:04:12 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:48694 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237493AbiA1KEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:03:12 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABF6C061747
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 02:03:12 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso7818946wmj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 02:03:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=vQHl1kKziPP//RPPVFscaIeYrQPiD/BKe7PC4j8ax6c=;
-        b=Fzv1T+rGFotkDidQaBLfjgeshzec1rdrJugreJ4E4ER511twVIjRsOWbmAmgAJhSjH
-         soAr9SxHMN2Xd4icay0VOiQTdwpi3tz3SKBN/fxILgf7SD50gxPSUZraeQSsfgeQBO9V
-         DcZ3rReVzhtCSf7rJ7QT7dWsvh8/pFCQroSXhYUEzn04XvlVonYA4PD+9GHrmRcD7krF
-         ERhZuKgCrhUFpyQ6g7pNA5XYtNK6hYzhqRzujjb0YtEL9lqv9De3qaGgo2ya/1uWGHR2
-         Zx+3EkM+VvtQ+Elu29Bzbqgp+vR1468RQhMEwCCIdI1c1c1JhN8qxFW2kYDS4nFmRwxp
-         CE2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=vQHl1kKziPP//RPPVFscaIeYrQPiD/BKe7PC4j8ax6c=;
-        b=jszRjIsfhjt7Y8mRAwH86L+bsztUGPzKtWHpNyADVnF9/IwSAl9/PKUwM8qIa5LYCJ
-         6glp92v4BDUGrqjp8NdGjFMFlAMKImlVs0kK0Yhb6wvgxotdOhB5xxBxYW0yOEBnWm8W
-         NalPgevuX+ZousYgFIhpZG2vRgceQ5nE396wVOmTjG08yoyATKGRgxQ/iiRzOHxF+oJ5
-         hRLglKJ7P+XjN8NzvfG2yCp3LQtNBPS5goruUkvNsYdNQnZI4NFaeh7VZE2+4S1LuFFg
-         ZrgsCtSHKEcVv6L4zqefwukVk38iQaC2mjxw5BNUBF9jYybyellWetqVYwjHKe593jFu
-         Zkxg==
-X-Gm-Message-State: AOAM531XOEHfJxSm3w57A43jN6xzBDr7pLfndJdMGQKGXGbCV/8jfkNm
-        N+IdytW7SAnlZ6OQvASwD3AGdA==
-X-Google-Smtp-Source: ABdhPJyVqxevH/KOBMCOHMp1EH4UYJ2z6Ysjjih/WI63AVmR57PKiAmJIQN3MQ9MQW35Da3EV7C4KA==
-X-Received: by 2002:a7b:c350:: with SMTP id l16mr6542037wmj.146.1643364190814;
-        Fri, 28 Jan 2022 02:03:10 -0800 (PST)
-Received: from localhost ([2a01:cb1a:7d:5d4:c222:c6fc:1de7:17bc])
-        by smtp.gmail.com with ESMTPSA id e10sm5407686wrq.53.2022.01.28.02.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 02:03:10 -0800 (PST)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Fengping Yu <fengping.yu@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 2/3] Input: mt6779-keypad - Add MediaTek keypad driver
-In-Reply-To: <YfK4UcuCfF7JfI7H@smile.fi.intel.com>
-References: <20220127111526.3716689-1-mkorpershoek@baylibre.com>
- <20220127111526.3716689-3-mkorpershoek@baylibre.com>
- <YfK4UcuCfF7JfI7H@smile.fi.intel.com>
-Date:   Fri, 28 Jan 2022 11:03:08 +0100
-Message-ID: <87v8y4p483.fsf@baylibre.com>
+        Fri, 28 Jan 2022 05:04:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1643364249; x=1674900249;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VHAVogYDyw22JTHOt2TtkKyQMqwG0z2oVJZeVnq1/LM=;
+  b=H6ZRAG+MWe+B2hnSVCerNm4clxSl9++WTVtgvZAqXEv/AQ4SwkLuCQSI
+   po3GETZYzmmMzPC5G8muf7LMg2uZEbMAAqOoFU/tQH5voccQRRWvsFYc7
+   JIy+aWevWZn0PHXE3o9aDFStcTr3JhHYOg4aP+c+71m5P7kqwl604G5Te
+   wqQXJxxu0rbnfYULql/VfFJ8HodIZ67Pb5S1CZCcRX0dcEtQp2QKl9GSc
+   6OckC/1py++88UKqlGQwTosbvkPuEn3eAgtMFsh3ytBE01eXQ+QCVlpSI
+   mS5Y3yJ9SlvkFPy1xLY0S3/CKakEr2HC24kbHbXzAcOeHm1WsqkxHOAd0
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,323,1635177600"; 
+   d="scan'208";a="196425456"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2022 18:04:09 +0800
+IronPort-SDR: Q4ssH77w1M3LXCvXALFMHjxbRAmGv1hBkDE6pOopI6OYj9M2sLWegUbrDEsNZOfRmEPW9PK4fu
+ ASQUIVdC+mLH58W3IsSuNPNoFZW0+zPQ6c0BWNINu/8kLY23okVuxGvj/kaF7t2sAxO6dQ6Fux
+ BGKbCASnWAdzWN9DVrr3jBukFJHtyA4rGz2JOyJ2IYWbUARl608kB0wio0YlxTgkhRL7lL62yL
+ m3WfNTO5diG/DVUBHHyYNbKRrdQG4ke420pRgLjdL8hH1oafja6OcqHNbLE1FsngNusDDKeNRy
+ UD0R7jw57K5R9DOj86Dxp8dK
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:37:26 -0800
+IronPort-SDR: q0TDLOhbH6xrbxdTS6jiuTEbXxFMSMYMqIhF1+18cRhgCckdGICi2krEOer/fiXdn827w5xMq6
+ d/9gS37N5RF08hqEE51Ep/sdra4dLkIpsasBcF45/Ry7f7GjA4ub3xnhQ4wDNSNSCKBXAcF0bl
+ LnyGJ0yYxkjvJaSt0MDk74jgUvrIiZvkjDzkaVgfy4b4UHzInGgjpM/KFkNdJHJ1CkYr1zlKZ+
+ YKzKtDHmcsfZUyisrOlicTVo8zyCexrw6/oWRYmuSSpq8I92O3c8UnPc/aUlFNSvGOmCWETeKa
+ 4Hk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 02:04:10 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JlY2f0YN5z1SHwl
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 02:04:10 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1643364249; x=1645956250; bh=VHAVogYDyw22JTHOt2TtkKyQMqwG0z2oVJZ
+        eVnq1/LM=; b=E0UKMTPjtALp3woJU4iYluBfw3Bfg/wPsP6e14Kbu6/Jzk+A0r7
+        i+borCzkJTqqyeDCoOgeVHw6LtPFRlXi/VDILqgawLJCMYsxRxsF2RLncoexxH+0
+        mCFaXOo8YIqrH5leOqGw/QbnPZ3QgOwCgvm68YyHG+yoHb1jCUOVyz5qBb/Furwv
+        iJNlSxAg+E4AGFRFwqPLsyTa5doAvT5AwGx0YwNOSS/z25Kg1v5FLzx9uH85GcJo
+        jsKqMfjThJ0QWe74mbs56YozMStRzZHgsFZejTMN0HWXlWgVJIh8b7vxoCmNqisB
+        bTrFqt+Oj0/60IL8tscZuixohbHAp9PqMJQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id oPNovAKjYgiH for <linux-kernel@vger.kernel.org>;
+        Fri, 28 Jan 2022 02:04:09 -0800 (PST)
+Received: from [10.225.163.58] (unknown [10.225.163.58])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JlY2d0rs0z1RvlN;
+        Fri, 28 Jan 2022 02:04:08 -0800 (PST)
+Message-ID: <0f358fbf-81c2-290e-ca75-d2d28e26a711@opensource.wdc.com>
+Date:   Fri, 28 Jan 2022 19:04:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ata: ahci: Skip 200 ms debounce delay for Marvell
+ 88SE9235
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220127233527.445659-1-pmenzel@molgen.mpg.de>
+ <1ef3e995-3f61-ef53-0d5e-03bb41a52624@opensource.wdc.com>
+ <d9c4e80e-87ca-9e68-f97d-d2c709e54ff3@molgen.mpg.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <d9c4e80e-87ca-9e68-f97d-d2c709e54ff3@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 17:20, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On 1/28/22 18:58, Paul Menzel wrote:
+> Dear Damien,
+>=20
+>=20
+> Thank you for the quick reply.
+>=20
+>=20
+> Am 28.01.22 um 00:40 schrieb Damien Le Moal:
+>> On 1/28/22 08:35, Paul Menzel wrote:
+>>> The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
+>>> not needed for the Marvell 88SE9235.
+>>>
+>>>      $ lspci -nn -s 0021:0e:00.0
+>>>      0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Lt=
+d. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11=
+)
+>>>
+>>> So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
+>>>
+>>> Without this patch (with 200 ms delay):
+>>>
+>>>      [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3fe881000100 irq 39
+>>>      [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3fe881000180 irq 39
+>>>      [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3fe881000200 irq 39
+>>>      [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3fe881000280 irq 39
+>>>      [=E2=80=A6]
+>>>      [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
+>>>      [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
+>>>      [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl=
+ 300)
+>>>      [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00L=
+Y265IBM, BE33, max UDMA/133
+>>>      [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
+depth 32), AA
+>>>      [    3.841796] ata2.00: configured for UDMA/133
+>>>      [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl=
+ 300)
+>>>      [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00L=
+Y265IBM, BE33, max UDMA/133
+>>>      [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
+depth 32), AA
+>>>      [    3.846043] ata1.00: configured for UDMA/133
+>>>
+>>> With patch (no delay):
+>>>
+>>>      [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3f e881000100 irq 39
+>>>      [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3f e881000180 irq 39
+>>>      [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3f e881000200 irq 39
+>>>      [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000=
+ port 0x3f e881000280 irq 39
+>>>      [=E2=80=A6]
+>>>      [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
+>>>      [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
+>>>      [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl=
+ 300)
+>>>      [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl=
+ 300)
+>>>      [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00L=
+Y265IBM, BE33, max UDMA/133
+>>>      [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00L=
+Y265IBM, BE33, max UDMA/133
+>>>      [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
+depth 32), AA
+>>>      [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
+depth 32), AA
+>>>      [    3.900070] ata1.00: configured for UDMA/133
+>>>      [    3.900166] ata2.00: configured for UDMA/133
+>>>
+>>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>>> ---
+>>>   drivers/ata/ahci.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+>>> index ab5811ef5a53..edca4e8fd44e 100644
+>>> --- a/drivers/ata/ahci.c
+>>> +++ b/drivers/ata/ahci.c
+>>> @@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] =
+=3D {
+>>>   	  .driver_data =3D board_ahci_yes_fbs },
+>>>   	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
+>>>   	  .driver_data =3D board_ahci_yes_fbs },
+>>> +	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
+>>> +	  .driver_data =3D board_ahci_no_debounce_delay },
+>>>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 6=
+42L */
+>>>   	  .driver_data =3D board_ahci_yes_fbs },
+>>>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 6=
+44L */
+>>
+>> Looks good. But for the commit message, instead of the dmesg copy-past=
+e,
+>> could you simply write the gains in terms of shortened scan time ? Tha=
+t
+>> would make it easier to understand the benefits of the patch.
+>=20
+> I can do:
+>=20
+>> Tested on IBM S822LC with current Linux 5.17-rc1, and the 200 ms is
+>> gone, and the drives are still detected.
+> I would still like to keep the Linux logs, as then it=E2=80=99s clear w=
+hat I=20
+> tested with (drives), and what ports were populated.
 
-> On Thu, Jan 27, 2022 at 12:15:25PM +0100, Mattijs Korpershoek wrote:
->> From: "fengping.yu" <fengping.yu@mediatek.com>
->> 
->> This patch adds matrix keypad support for Mediatek SoCs.
->
-> Some comments which may be addressed now or in the follow-up patch(es).
-> Up to you.
-Hi Andy,
-Thank you for your review and your suggestions.
+OK. Keep the dmesg log if you want, but add the summary. Something like:
 
->
-> ...
->
->> +static const struct regmap_config mt6779_keypad_regmap_cfg = {
->> +	.reg_bits = 32,
->> +	.val_bits = 32,
->
->> +	.reg_stride = sizeof(u32),
->
-> I'm wondering if we need this when we have reg_bits = 32 already.
+Without this patch (with 200 ms delay): device probe takes X ms
 
-Per my understanding, .reg_stride is mainly used to check for invalid register
-addresses in regmap_{read,write}():
+<dmesg>
 
-    if (!IS_ALIGNED(reg, map->reg_stride))
-            return -EINVAL;
+With patch (no delay): device probe takes Y ms
 
-If .reg_stride is not set, regmap core will default it to 1.
-It's not computed from reg_bits.
+<dmesg>
 
-So I think we still need it.
->
->> +	.max_register = 36,
->> +};
->
-> ...
->
->> +	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
->> +		     (debounce * 32) & MTK_KPD_DEBOUNCE_MASK);
->
-> I'm wondering if << 5 is more specific to show that the value
-> is based on 2^5 units.
+>=20
+>> Also, there is no need for the lspci output.
+>=20
+> In my opinion, it prooves I used the correct PCI vendor and device=20
+> codes, and also shows the revision number of the device I tested with.
 
-The datasheet I've seen states: "De-bounce time = KP_DEBOUNCE / 32ms"
-But rewriting it as 1 << 5 seems reasonable as well:
-regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
-            (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
+Fine.
 
-I don't have any preference on this one.
-If I have to send a v21, I will rewrite it using (1 << 5)
+>=20
+>=20
+> Kind regards,
+>=20
+> Paul
 
->
-> ...
->
->> +	error = devm_add_action_or_reset(&pdev->dev, mt6779_keypad_clk_disable, keypad->clk);
->
-> You have this long line...
->
->> +	error = devm_request_threaded_irq(&pdev->dev, irq,
->> +					  NULL, mt6779_keypad_irq_handler,
->> +					  IRQF_ONESHOT,
->> +					  MTK_KPD_NAME, keypad);
->
-> ...at the same time you may reduce LOCs here...
-Ack. will join lines to reduce LOCs if I have to send v21.
->
->> +	if (error) {
->> +		dev_err(&pdev->dev, "Failed to request IRQ#%d:%d\n",
->> +			irq, error);
->
-> ...and here.
-Ack. will join lines to reduce LOCs if I have to send v21.
 
->
->> +		return error;
->> +	}
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+--=20
+Damien Le Moal
+Western Digital Research

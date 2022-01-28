@@ -2,177 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15EA649F5A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9738D49F5AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347397AbiA1Iws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:52:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34248 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238669AbiA1Iwg (ORCPT
+        id S1347422AbiA1Ix3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:53:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60882 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347361AbiA1Ix1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:52:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8637B824F3;
-        Fri, 28 Jan 2022 08:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58E4C340E8;
-        Fri, 28 Jan 2022 08:52:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643359953;
-        bh=A4ZIq4YD54mut6tILAfqK6qkKR21qOF5XKfRj9haV7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CRAb5TSqgtbYl/IuvBdAeio42OQkKV8HONQvLbracpULCcVf4ckEOQIbGpEy89J0y
-         Zyn508vIY/LKWJ/gTeXV1neO5E4LYN+y8aSu52Yzlr5bksmAye+T3h8/+vHfR8WSO0
-         CL2shUlnt0Xwoj4sB3n0oJ9TmcvYZPhgYb9oEKGtzKQknZnVtC4sXOVUivG+h8RC6E
-         t3rDMlLGsG5VPY7IdKsbx9lKnQGH231ls8WgalFLUDLpBZuQt2QpmwW34FGv+Jkp4/
-         8VGzOzi+aBYIleGYPrdjQRnhPpdkGn2bx1Cgg9o+asYslsEXSCFaO8VwkzvwAl02fl
-         3MaBw8qE9fawg==
-Date:   Fri, 28 Jan 2022 09:52:24 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, Florian Weimer <fw@deneb.enyo.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>,
+        Fri, 28 Jan 2022 03:53:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643360006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1ui+9um5xfQ0oHtLsJggPNkOjXF3dvpzwJbYCtfSP3w=;
+        b=MJzLXeRBtlwg1B/i9P7pkd9h0RvB1/va0Rs2qXdlZfn+c6pWOwoawqU5yTDBf7Q7TFTyJv
+        yvS0zLKzHV6lHhSBbYNIfd3WcJ7by/+qkzXKmlwyDIIXXq4yS+Z+YYD9vjhZB8FAMqWzBk
+        tgwmr0pTZEogCBYbd/L9yjl1GXM7pEI=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-281-f4ql-72lNMu1srBNnjSGAw-1; Fri, 28 Jan 2022 03:53:24 -0500
+X-MC-Unique: f4ql-72lNMu1srBNnjSGAw-1
+Received: by mail-pg1-f200.google.com with SMTP id r9-20020a6560c9000000b00343fa9529e5so3033229pgv.18
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:53:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1ui+9um5xfQ0oHtLsJggPNkOjXF3dvpzwJbYCtfSP3w=;
+        b=pti/71XRw8CcI4wYseJ3yQBaGtFHbTrgCSLkU3guswlDKB6xChABT+jZFjyTfW5UKs
+         6Uj870Z3yZ9WpOV/PqdVbnKY+0IfmQ3K0R9OrXIgvwYhzNTqxoT36zVbGEy98tlDJTDK
+         yWofWcq6+fXYna3IrFCwRTe5/4u1sF8xJlZvMhaaX5QqZFO24RW3qDDG6Plj8MKcDVBC
+         p2ObX02sNU0oYPIYQCb6Zi6BD62wC66vkvHhSwPl9ipCMefr253hcmytN4kyckwIUwxR
+         KsYbhau8v4aTd+iBvoJu9vjcj1Us7xTxaLZEZsvue4o5G36ApXQfZaHzy6mVGsoRPW8E
+         vfRQ==
+X-Gm-Message-State: AOAM530WFpvu2dUDbMfWDDgIixjKY4z1lNBRvKFQq9LCRxEZfOSVCisH
+        njFjCRb95yJ6sEDEUsZVcj59WYiSpwdPUZX19h7vdXKp63+YbbehxOo+eq3WchgEVDCK2SqjwAb
+        rS3psMCZADIIRiqYxTD1OJvrb
+X-Received: by 2002:a63:d503:: with SMTP id c3mr5901441pgg.159.1643360002957;
+        Fri, 28 Jan 2022 00:53:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxu2JzxEwlkerHoOsLf2Vu4nsUK8VZ/RXYifDboeZnYi1KRcw8RePI89Nq5PXGEO9KbiLZ2rg==
+X-Received: by 2002:a63:d503:: with SMTP id c3mr5901415pgg.159.1643360002581;
+        Fri, 28 Jan 2022 00:53:22 -0800 (PST)
+Received: from xz-m1.local ([94.177.118.75])
+        by smtp.gmail.com with ESMTPSA id bf23sm1651107pjb.52.2022.01.28.00.53.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 00:53:22 -0800 (PST)
+Date:   Fri, 28 Jan 2022 16:53:15 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Alistair Popple <apopple@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andi Kleen <andi@firstfloor.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ben Maurer <bmaurer@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>
-Subject: Re: [RFC PATCH v2] rseq: Remove broken uapi field layout on 32-bit
- little endian
-Message-ID: <20220128085224.twfwxz4ttxnaeweo@wittgenstein>
-References: <1116876795.2062.1643223596536.JavaMail.zimbra@efficios.com>
- <20220127152720.25898-1-mathieu.desnoyers@efficios.com>
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: Re: [PATCH v3 2/4] mm: Rename zap_skip_check_mapping() to
+ should_zap_page()
+Message-ID: <YfOu+4ugmx39KWPF@xz-m1.local>
+References: <20220128045412.18695-1-peterx@redhat.com>
+ <20220128045412.18695-3-peterx@redhat.com>
+ <eb415c6d-8ae3-1fa4-9c36-efe4231fd8ad@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220127152720.25898-1-mathieu.desnoyers@efficios.com>
+In-Reply-To: <eb415c6d-8ae3-1fa4-9c36-efe4231fd8ad@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 10:27:20AM -0500, Mathieu Desnoyers wrote:
-> The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
-> entirely wrong on 32-bit little endian: a preprocessor logic mistake
-> wrongly uses the big endian field layout on 32-bit little endian
-> architectures.
+On Fri, Jan 28, 2022 at 09:16:07AM +0100, David Hildenbrand wrote:
+> On 28.01.22 05:54, Peter Xu wrote:
+> > The previous name is against the natural way people think.  Invert the meaning
+> > and also the return value.  No functional change intended.
+> > 
+> > Suggested-by: Hugh Dickins <hughd@google.com>
 > 
-> Fortunately, those ptr32 accessors were never used within the kernel,
-> and only meant as a convenience for user-space.
-> 
-> Remove those and replace the whole rseq_cs union by a __u64 type, as
-> this is the only thing really needed to express the ABI. Document how
-> 32-bit architectures are meant to interact with this field.
-> 
-> Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update includes")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Florian Weimer <fw@deneb.enyo.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: linux-api@vger.kernel.org
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Andy Lutomirski <luto@amacapital.net>
-> Cc: Dave Watson <davejwatson@fb.com>
-> Cc: Paul Turner <pjt@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Russell King <linux@arm.linux.org.uk>
-> Cc: "H . Peter Anvin" <hpa@zytor.com>
-> Cc: Andi Kleen <andi@firstfloor.org>
-> Cc: Christian Brauner <christian.brauner@ubuntu.com>
-> Cc: Ben Maurer <bmaurer@fb.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will.deacon@arm.com>
-> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Joel Fernandes <joelaf@google.com>
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> ---
+> Could have sworn it was me :P
 
-Looks way cleaner now! Fwiw,
-Acked-by: Christian Brauner <brauner@kernel.org>
+Yeah it's possible. :)
 
->  include/uapi/linux/rseq.h | 20 ++++----------------
->  kernel/rseq.c             |  8 ++++----
->  2 files changed, 8 insertions(+), 20 deletions(-)
+I'll add both of you in the next version if there is.
+
 > 
-> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-> index 9a402fdb60e9..77ee207623a9 100644
-> --- a/include/uapi/linux/rseq.h
-> +++ b/include/uapi/linux/rseq.h
-> @@ -105,23 +105,11 @@ struct rseq {
->  	 * Read and set by the kernel. Set by user-space with single-copy
->  	 * atomicity semantics. This field should only be updated by the
->  	 * thread which registered this data structure. Aligned on 64-bit.
-> +	 *
-> +	 * 32-bit architectures should update the low order bits of the
-> +	 * rseq_cs field, leaving the high order bits initialized to 0.
->  	 */
-> -	union {
-> -		__u64 ptr64;
-> -#ifdef __LP64__
-> -		__u64 ptr;
-> -#else
-> -		struct {
-> -#if (defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN)) || defined(__BIG_ENDIAN)
-> -			__u32 padding;		/* Initialized to zero. */
-> -			__u32 ptr32;
-> -#else /* LITTLE */
-> -			__u32 ptr32;
-> -			__u32 padding;		/* Initialized to zero. */
-> -#endif /* ENDIAN */
-> -		} ptr;
-> -#endif
-> -	} rseq_cs;
-> +	__u64 rseq_cs;
->  
->  	/*
->  	 * Restartable sequences flags field.
-> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> index 6d45ac3dae7f..97ac20b4f738 100644
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -128,10 +128,10 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
->  	int ret;
->  
->  #ifdef CONFIG_64BIT
-> -	if (get_user(ptr, &t->rseq->rseq_cs.ptr64))
-> +	if (get_user(ptr, &t->rseq->rseq_cs))
->  		return -EFAULT;
->  #else
-> -	if (copy_from_user(&ptr, &t->rseq->rseq_cs.ptr64, sizeof(ptr)))
-> +	if (copy_from_user(&ptr, &t->rseq->rseq_cs, sizeof(ptr)))
->  		return -EFAULT;
->  #endif
->  	if (!ptr) {
-> @@ -217,9 +217,9 @@ static int clear_rseq_cs(struct task_struct *t)
->  	 * Set rseq_cs to NULL.
->  	 */
->  #ifdef CONFIG_64BIT
-> -	return put_user(0UL, &t->rseq->rseq_cs.ptr64);
-> +	return put_user(0UL, &t->rseq->rseq_cs);
->  #else
-> -	if (clear_user(&t->rseq->rseq_cs.ptr64, sizeof(t->rseq->rseq_cs.ptr64)))
-> +	if (clear_user(&t->rseq->rseq_cs, sizeof(t->rseq->rseq_cs)))
->  		return -EFAULT;
->  	return 0;
->  #endif
-> -- 
-> 2.17.1
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
 > 
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+
+Thanks,
+
+-- 
+Peter Xu
+

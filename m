@@ -2,151 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4B149F5C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D16B49F5CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiA1I6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:58:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36444 "EHLO
+        id S231432AbiA1I7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:59:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37208 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA1I6G (ORCPT
+        with ESMTP id S229783AbiA1I7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:58:06 -0500
+        Fri, 28 Jan 2022 03:59:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C870B824EA;
-        Fri, 28 Jan 2022 08:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E563C340E6;
-        Fri, 28 Jan 2022 08:58:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33B0DB81FAF;
+        Fri, 28 Jan 2022 08:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB77C340E0;
+        Fri, 28 Jan 2022 08:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643360284;
-        bh=VybN4pzch65oeAi5HDL+8lwtT0cmSDE01H8knqAz1I4=;
+        s=k20201202; t=1643360360;
+        bh=4yoIqw9LowZS2I5hqAuu9FXS3iDVuLfMLkYxabIfN3s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eenZ5YRl7LyQLTevsJfI1fCgyoQtVIXJR5MbbBTleOdl/EtGMroCvwYxgxEqnx1Vp
-         GAGWMZoDRevJBqn1HGs52PgOPYagQ1nCVGKaoBEBjwvnkEfY6MWsn4Nw64ohiS4bbg
-         4jy7S30AUDvZt1qd1cZcbAmKwKUiZ4kYzRfJM3eupsLGcyWuwlGeLofphxG6E6z77/
-         hUk1gUrMmO4b8jLyqCH1hzend12wNy83S20a+xoS9tLYcEwYVnx2ww4+W7mMcS1VPZ
-         zGk2Hhzr07GZkB64mKNr2RYQAdfEGjCyiDeGXY614sira832gTeO/D4W33i9KU79SC
-         9rGxhdl/xCbYg==
-Date:   Fri, 28 Jan 2022 09:57:59 +0100
+        b=V9O3Rw6Yi9ioAukX1sLBaj5znyUeQor8eTFi7o6GL2cFW6MW3hxhqWsYdgsC8PTSt
+         CMEYdsrVzS+4LGHxIU0nVIx/JKQ61qH8YHJ7a984Y98o9VG+0pOH7FK9YemnRXJ/0s
+         iC3nwD7w2xeZTszhKGsrEErR9nGbzuY/HGeKTS950N+8EuooBuU+PIiuIWdFneULnw
+         z29XSKB19Do4wg/EgF0Ca9uWKQTRzI9AcD4oGuTjTnVWsJiHHqPyLgBcUc2dsQr2NO
+         zTIUubnlDiv7gobh9x80n2m/pIEZtpkeahYEGg2RflVIvSr/yvQKWe0Um83W0MFRs4
+         gEgozztsrO0HQ==
+Date:   Fri, 28 Jan 2022 09:59:14 +0100
 From:   Christian Brauner <brauner@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-Message-ID: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-References: <20220127221115.3731388-1-axelrasmussen@google.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Brauner <christian@brauner.io>,
+        James Morris <jmorris@namei.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzbot <syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH v2] LSM: general protection fault in legacy_parse_param
+Message-ID: <20220128085914.rxrz7qt3uk7fp67d@wittgenstein>
+References: <018a9bb4-accb-c19a-5b0a-fde22f4bc822.ref@schaufler-ca.com>
+ <018a9bb4-accb-c19a-5b0a-fde22f4bc822@schaufler-ca.com>
+ <20211012103243.xumzerhvhklqrovj@wittgenstein>
+ <d15f9647-f67e-2d61-d7bd-c364f4288287@schaufler-ca.com>
+ <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
+ <a19e0338-5240-4a6d-aecf-145539aecbce@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220127221115.3731388-1-axelrasmussen@google.com>
+In-Reply-To: <a19e0338-5240-4a6d-aecf-145539aecbce@schaufler-ca.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
-> These are some trivial fixups, which were needed to build the tests with
-> clang and -Werror. The following issues are fixed:
+On Thu, Jan 27, 2022 at 08:51:44AM -0800, Casey Schaufler wrote:
+> The usual LSM hook "bail on fail" scheme doesn't work for cases where
+> a security module may return an error code indicating that it does not
+> recognize an input.  In this particular case Smack sees a mount option
+> that it recognizes, and returns 0. A call to a BPF hook follows, which
+> returns -ENOPARAM, which confuses the caller because Smack has processed
+> its data.
 > 
-> - Remove various unused variables.
-> - In child_poll_leader_exit_test, clang isn't smart enough to realize
->   syscall(SYS_exit, 0) won't return, so it complains we never return
->   from a non-void function. Add an extra exit(0) to appease it.
-> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
->   uninitialized, if we have !use_waitpid. Initialize it to zero to get
->   the right behavior in that case.
+> The SELinux hook incorrectly returns 1 on success. There was a time
+> when this was correct, however the current expectation is that it
+> return 0 on success. This is repaired.
 > 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 > ---
 
-Thanks!
-(Fwiw, all those tests should also be ported to use the TEST_*() harness
-infra. Currently it's an annoying mix.)
+Looks good,
 Acked-by: Christian Brauner <brauner@kernel.org>
-
->  tools/testing/selftests/clone3/clone3.c    | 2 --
->  tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
->  tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> index 076cf4325f78..cd4582129c7d 100644
-> --- a/tools/testing/selftests/clone3/clone3.c
-> +++ b/tools/testing/selftests/clone3/clone3.c
-> @@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
->  
->  int main(int argc, char *argv[])
->  {
-> -	pid_t pid;
-> -
->  	uid_t uid = getuid();
->  
->  	ksft_print_header();
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index 529eb700ac26..9a2d64901d59 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
->  {
->  	int pid, pidfd = 0;
->  	int status, ret;
-> -	pthread_t t1;
->  	time_t prog_start = time(NULL);
->  	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
->  
-> @@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
->  	 */
->  	*child_exit_secs = time(NULL);
->  	syscall(SYS_exit, 0);
-> +	/* Never reached, but appeases compiler thinking we should return. */
-> +	exit(0);
->  }
->  
->  static void test_pidfd_poll_leader_exit(int use_waitpid)
->  {
->  	int pid, pidfd = 0;
-> -	int status, ret;
-> -	time_t prog_start = time(NULL);
-> +	int status, ret = 0;
->  	const char *test_name = "pidfd_poll check for premature notification on non-empty"
->  				"group leader exit";
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-> index be2943f072f6..17999e082aa7 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-> @@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->  
->  TEST(wait_simple)
->  {
-> -	int pidfd = -1, status = 0;
-> +	int pidfd = -1;
->  	pid_t parent_tid = -1;
->  	struct clone_args args = {
->  		.parent_tid = ptr_to_u64(&parent_tid),
-> @@ -47,7 +47,6 @@ TEST(wait_simple)
->  		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
->  		.exit_signal = SIGCHLD,
->  	};
-> -	int ret;
->  	pid_t pid;
->  	siginfo_t info = {
->  		.si_signo = 0,
-> @@ -88,7 +87,7 @@ TEST(wait_simple)
->  
->  TEST(wait_states)
->  {
-> -	int pidfd = -1, status = 0;
-> +	int pidfd = -1;
->  	pid_t parent_tid = -1;
->  	struct clone_args args = {
->  		.parent_tid = ptr_to_u64(&parent_tid),
-> -- 
-> 2.35.0.rc2.247.g8bbb082509-goog
-> 

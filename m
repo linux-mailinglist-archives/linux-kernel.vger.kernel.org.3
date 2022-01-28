@@ -2,205 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E2949F85C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688B349F85F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbiA1Ldd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:33:33 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:19937 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiA1Lda (ORCPT
+        id S236347AbiA1LgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:36:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30957 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232502AbiA1LgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:33:30 -0500
-Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 28 Jan 2022
- 19:33:29 +0800
-From:   Liang Yang <liang.yang@amlogic.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-mtd@lists.infradead.org>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] dt-bindings: nand: meson: refine Amlogic NAND controller driver
-Date:   Fri, 28 Jan 2022 19:32:37 +0800
-Message-ID: <20220128113237.39996-3-liang.yang@amlogic.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220128113237.39996-1-liang.yang@amlogic.com>
-References: <20220128113237.39996-1-liang.yang@amlogic.com>
+        Fri, 28 Jan 2022 06:36:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643369767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/CVVmOo6bqPNMUWhv3lZL5OSdXdWuhtjBkekxnbtZx4=;
+        b=SRWaS4AdL2cQlYx+3umbqXjCI9RZdgYNWOlT41iwGydt4a2zV9lAUgQ0je2TGwl0Qz9s4Z
+        mHQcfjxuZjYk75yFFgF1n8/mUDrAeQ3ZMu+O6sJru1qah8Aat+166EcR7lEvW9C/cIIPZ/
+        6a//cVvJghgfUB5loN11MNvucJSPN9Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-9VLdvSs6OGyUhthgrzXNVA-1; Fri, 28 Jan 2022 06:36:04 -0500
+X-MC-Unique: 9VLdvSs6OGyUhthgrzXNVA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CB50D1091DA3;
+        Fri, 28 Jan 2022 11:36:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A99166E3B;
+        Fri, 28 Jan 2022 11:36:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAOQ4uxhRS3MGEnCUDcsB1RL0d1Oy0g0Rzm75hVFAJw2dJ7uKSA@mail.gmail.com>
+References: <CAOQ4uxhRS3MGEnCUDcsB1RL0d1Oy0g0Rzm75hVFAJw2dJ7uKSA@mail.gmail.com> <20220128074731.1623738-1-hch@lst.de> <918225.1643364739@warthog.procyon.org.uk>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     dhowells@redhat.com, Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: [PATCH v2] fs: rename S_KERNEL_FILE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.21]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <922908.1643369759.1@warthog.procyon.org.uk>
+Date:   Fri, 28 Jan 2022 11:35:59 +0000
+Message-ID: <922909.1643369759@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-convert txt to yaml and refine the meson NFC clock document.
+Amir Goldstein <amir73il@gmail.com> wrote:
 
-Signed-off-by: Liang Yang <liang.yang@amlogic.com>
----
- .../bindings/mtd/amlogic,meson-nand.txt       | 60 ----------------
- .../bindings/mtd/amlogic,meson-nand.yaml      | 70 +++++++++++++++++++
- 2 files changed, 70 insertions(+), 60 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
- create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+> Good idea, but then the helpers to set the flag should not be internal
+> to cachefiles and the locking semantics should be clear.
 
-diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-deleted file mode 100644
-index 5794ab1147c1..000000000000
---- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-+++ /dev/null
-@@ -1,60 +0,0 @@
--Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
--
--This file documents the properties in addition to those available in
--the MTD NAND bindings.
--
--Required properties:
--- compatible : contains one of:
--  - "amlogic,meson-gxl-nfc"
--  - "amlogic,meson-axg-nfc"
--- clocks     :
--	A list of phandle + clock-specifier pairs for the clocks listed
--	in clock-names.
--
--- clock-names: Should contain the following:
--	"core" - NFC module gate clock
--	"device" - device clock from eMMC sub clock controller
--	"rx" - rx clock phase
--	"tx" - tx clock phase
--
--- amlogic,mmc-syscon	: Required for NAND clocks, it's shared with SD/eMMC
--				controller port C
--
--Optional children nodes:
--Children nodes represent the available nand chips.
--
--Other properties:
--see Documentation/devicetree/bindings/mtd/nand-controller.yaml for generic bindings.
--
--Example demonstrate on AXG SoC:
--
--	sd_emmc_c_clkc: mmc@7000 {
--		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
--		reg = <0x0 0x7000 0x0 0x800>;
--	};
--
--	nand-controller@7800 {
--		compatible = "amlogic,meson-axg-nfc";
--		reg = <0x0 0x7800 0x0 0x100>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
--
--		clocks = <&clkc CLKID_SD_EMMC_C>,
--			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
--			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
--			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
--		clock-names = "core", "device", "rx", "tx";
--		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
--
--		pinctrl-names = "default";
--		pinctrl-0 = <&nand_pins>;
--
--		nand@0 {
--			reg = <0>;
--			#address-cells = <1>;
--			#size-cells = <1>;
--
--			nand-on-flash-bbt;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
-new file mode 100644
-index 000000000000..671f0a8fdc7c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
-+
-+maintainers:
-+  - liang.yang@amlogic.com
-+
-+properties:
-+  compatible:
-+    enum:
-+      - "amlogic,meson-gxl-nfc"
-+      - "amlogic,meson-axg-nfc"
-+
-+  reg:
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: "core", "device"
-+
-+  "#clock-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    nand-controller@7800 {
-+	compatible = "amlogic,meson-axg-nfc";
-+	reg = <0x0 0x7800 0x0 0x100>,
-+	      <0x0 0x7000 0x0 0x1>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
-+
-+	clocks = <&clkc CLKID_SD_EMMC_C>,
-+		<&clkc CLKID_FCLK_DIV2>;
-+	clock-names = "core", "device";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&nand_pins>;
-+
-+	nand@0 {
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		nand-on-flash-bbt;
-+	};
-+     };
-+
-+...
-\ No newline at end of file
--- 
-2.34.1
+I could move them out, at least partially.  They do log some information
+that's private to cachefiles through the tracepoint, but it's just one number
+and could be passed in as a parameter.  I could move the tracepoint to
+somewhere more generic.
+
+> FYI, overlayfs already takes an "exclusive lock" on upper/work dir
+> among all ovl instances.
+> 
+> How do you feel about hoisting ovl_inuse_* helpers to fs.h
+> and rename s/I_OVL_INUSE/I_EXCL_INUSE?
+
+Fine by me.  Sharing a cache with or through an overlay would make for very
+fun coherency management.
+
+> Whether deny rmdir should have its own flag or not I don't know,
+> but from ovl POV I *think* it should not be a problem to deny rmdir
+> for the ovl upper/work dirs as long as ovl is mounted(?).
+
+What's the consequence of someone rearranging the directories directly in the
+contributing dirs whilst there's an overlay over them?
+
+> Another problem with generic deny of rmdir is that users getting
+> EBUSY have no way to figure out the reason.
+> At least for a specific subsystem (i.e. cachefiles) users should be able
+> to check if the denied dir is in the subsystem's inventory(?)
+
+I could add a tracepoint for that.  It could form a set with the cachefiles
+tracepoints if I move those out too.
+
+David
 

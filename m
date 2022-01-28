@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A1749FE30
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4E549FE32
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350191AbiA1Qgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:36:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:53162 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350187AbiA1Qgx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:36:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DC75113E;
-        Fri, 28 Jan 2022 08:36:52 -0800 (PST)
-Received: from [10.57.68.47] (unknown [10.57.68.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C06223F793;
-        Fri, 28 Jan 2022 08:36:51 -0800 (PST)
-Message-ID: <ed9cb725-334a-ace4-9bae-03b9d310f824@arm.com>
-Date:   Fri, 28 Jan 2022 16:36:46 +0000
+        id S1350218AbiA1Qh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:37:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38284 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350198AbiA1QhO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 11:37:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C1260A37;
+        Fri, 28 Jan 2022 16:37:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E01C340E7;
+        Fri, 28 Jan 2022 16:37:12 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WPFDHaST"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643387830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=guMFLMofiqe5xiQ2BRsEVmO5w5+mC76cL6WiryePP2M=;
+        b=WPFDHaSTuo9cwPUupNClF1shvSf/TIevVpkraCRUH76k02rT29m2qByqhBfQEsIyhmcJRl
+        nBLgcMHUwfHVN3F55umgCkvQkOXM01TFoM7VXMDBMGNKo0oMMe/fKeuKKoXhQ2psiO1hEH
+        JOf9xDGK+UQNaBH2GjHFBponi4zHdGw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 87c3a824 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 28 Jan 2022 16:37:10 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id g14so20060351ybs.8;
+        Fri, 28 Jan 2022 08:37:10 -0800 (PST)
+X-Gm-Message-State: AOAM531G8xB1LijkHOqTguMwtjoViu76odh3lojCVazlBVmtJqWTSqx7
+        e8ePGxirtCwFyzm41++lq0qp7hHK0ldUwUg7cB4=
+X-Google-Smtp-Source: ABdhPJy1iWCC+Hxhg7PgyfiasJi3h1JaHkK5F4sYfUNJqUKwZaOS7KLWZ5w7OUg3uouEzt6KRyGZxjOdxsqI2MakiA4=
+X-Received: by 2002:a05:6902:1501:: with SMTP id q1mr14890230ybu.638.1643387828559;
+ Fri, 28 Jan 2022 08:37:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] iommu: Fix some W=1 warnings
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <1643366673-26803-1-git-send-email-john.garry@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1643366673-26803-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+ <20220128153344.34211-1-Jason@zx2c4.com> <YfQPVp8TULSq3V+l@linutronix.de>
+ <CAHmME9pmdeLBKJbTaVQv-z9J81qKA=R4uoZ1DeXABy6Lt3bXuA@mail.gmail.com> <YfQWlM9b4l2IO43l@linutronix.de>
+In-Reply-To: <YfQWlM9b4l2IO43l@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 28 Jan 2022 17:36:57 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pmGAAsUf4bLABB6oCDqDxVZBcQzADiDoA8ZD2s5n_1LQ@mail.gmail.com>
+Message-ID: <CAHmME9pmGAAsUf4bLABB6oCDqDxVZBcQzADiDoA8ZD2s5n_1LQ@mail.gmail.com>
+Subject: Re: [PATCH] random: remove batched entropy locking
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-28 10:44, John Garry wrote:
-> The code is mostly free of W=1 warning, so fix the following:
-> 
-> drivers/iommu/iommu.c:996: warning: expecting prototype for iommu_group_for_each_dev(). Prototype was for __iommu_group_for_each_dev() instead
-> drivers/iommu/iommu.c:3048: warning: Function parameter or member 'drvdata' not described in 'iommu_sva_bind_device'
-> drivers/iommu/ioasid.c:354: warning: Function parameter or member 'ioasid' not described in 'ioasid_get'
-> drivers/iommu/omap-iommu.c:1098: warning: expecting prototype for omap_iommu_suspend_prepare(). Prototype was for omap_iommu_prepare() instead
+Hi Sebastian,
 
-Certainly no harm in keeping the documentation up to date!
+I wrote in my last message, "I don't think that thread needs to spill
+over here, though," but clearly you disagreed, which is fine I guess.
+Replies inline below:
 
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+On Fri, Jan 28, 2022 at 5:15 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> > I did, and my reply is here:
+> > https://lore.kernel.org/lkml/CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com/
+> >
+> > I was hoping for a series that addresses these issues. As I mentioned
+> > before, I'm not super keen on deferring that processing in a
+> > conditional case and having multiple entry ways into that same
+> > functionality. I don't think that's worth it, especially if your
+> > actual concern is just userspace calling RNDADDTOENTCNT too often
+> > (which can be safely ratelimited). I don't think that thread needs to
+>
+> And what do you do in ratelimiting?
 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> 
-> diff --git a/drivers/iommu/ioasid.c b/drivers/iommu/ioasid.c
-> index 50ee27bbd04e..06fee7416816 100644
-> --- a/drivers/iommu/ioasid.c
-> +++ b/drivers/iommu/ioasid.c
-> @@ -349,6 +349,7 @@ EXPORT_SYMBOL_GPL(ioasid_alloc);
->   
->   /**
->    * ioasid_get - obtain a reference to the IOASID
-> + * @ioasid: the ID to get
->    */
->   void ioasid_get(ioasid_t ioasid)
->   {
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 8b86406b7162..75741ce748d5 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -980,17 +980,6 @@ static int iommu_group_device_count(struct iommu_group *group)
->   	return ret;
->   }
->   
-> -/**
-> - * iommu_group_for_each_dev - iterate over each device in the group
-> - * @group: the group
-> - * @data: caller opaque data to be passed to callback function
-> - * @fn: caller supplied callback function
-> - *
-> - * This function is called by group users to iterate over group devices.
-> - * Callers should hold a reference count to the group during callback.
-> - * The group->mutex is held across callbacks, which will block calls to
-> - * iommu_group_add/remove_device.
-> - */
->   static int __iommu_group_for_each_dev(struct iommu_group *group, void *data,
->   				      int (*fn)(struct device *, void *))
->   {
-> @@ -1005,7 +994,17 @@ static int __iommu_group_for_each_dev(struct iommu_group *group, void *data,
->   	return ret;
->   }
->   
-> -
-> +/**
-> + * iommu_group_for_each_dev - iterate over each device in the group
-> + * @group: the group
-> + * @data: caller opaque data to be passed to callback function
-> + * @fn: caller supplied callback function
-> + *
-> + * This function is called by group users to iterate over group devices.
-> + * Callers should hold a reference count to the group during callback.
-> + * The group->mutex is held across callbacks, which will block calls to
-> + * iommu_group_add/remove_device.
-> + */
->   int iommu_group_for_each_dev(struct iommu_group *group, void *data,
->   			     int (*fn)(struct device *, void *))
->   {
-> @@ -3032,6 +3031,7 @@ EXPORT_SYMBOL_GPL(iommu_aux_get_pasid);
->    * iommu_sva_bind_device() - Bind a process address space to a device
->    * @dev: the device
->    * @mm: the mm to bind, caller must hold a reference to it
-> + * @drvdata: opaque data pointer to pass to bind callback
->    *
->    * Create a bond between device and address space, allowing the device to access
->    * the mm using the returned PASID. If a bond already exists between @device and
-> diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-> index 91749654fd49..980e4af3f06b 100644
-> --- a/drivers/iommu/omap-iommu.c
-> +++ b/drivers/iommu/omap-iommu.c
-> @@ -1085,7 +1085,7 @@ static __maybe_unused int omap_iommu_runtime_resume(struct device *dev)
->   }
->   
->   /**
-> - * omap_iommu_suspend_prepare - prepare() dev_pm_ops implementation
-> + * omap_iommu_prepare - prepare() dev_pm_ops implementation
->    * @dev:	iommu device
->    *
->    * This function performs the necessary checks to determine if the IOMMU
+If I'm understanding the RT issue correctly, the problem is that
+userspace can `for (;;) iotl(...);`, and the high frequency of ioctls
+then increases the average latency of interrupts to a level beyond the
+requirements for RT. The idea of ratelimiting the ioctl would be so
+that userspace is throttled from calling it too often, so that the
+average latency isn't increased.
+
+> As I explained, you get 20 that
+> "enter" and the following are block. The first 20 are already
+> problematic and you need a plan-B for those that can't enter.
+> So I suggested a mutex_t around the ioctl() which would act as a rate
+> limiting. You did not not follow up on that idea.
+
+A mutex_t would be fine I think? I'd like to see what this looks like
+in code, but conceptually I don't see why not.
+
+> Please ignore Jonathan report for now. As I tried to explain: This
+> lockdep report shows a serious problem on PREEMPT_RT. There is _no_ need
+> to be concerned on a non-PREEMPT_RT kernel. But it should be addressed.
+> If this gets merged as-is then thanks to the stable tag it will get
+> backported (again no change for !RT) and will collide with PREEMPT_RT
+> patch. And as I mentioned, the locking is not working on PREEMPT_RT.
+
+Gotcha, okay, that makes sense. It sounds like Andy's patch and your
+patch might both be part of the same non-stable-marked coin for
+cutting down on locks in the IRQ path.
+
+[Relatedly, I've been doing a bit of research on other ways to cut
+down the amount of processing we're doing in the IRQ path, such as
+<https://xn--4db.cc/K4zqXPh8/diff>. This is really not ready to go,
+and I'm not ready to have a discussion on the crypto there (please,
+nobody comment on the crypto there yet; I'll be really annoyed), but
+the general gist is that I think it might be possible to reduce the
+number of cycles spent in IRQ with some nice new tricks.]
+
+Jason

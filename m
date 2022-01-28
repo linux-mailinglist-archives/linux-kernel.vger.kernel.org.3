@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F44649F31E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3FB49F31F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346194AbiA1Fo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 00:44:26 -0500
-Received: from foss.arm.com ([217.140.110.172]:49540 "EHLO foss.arm.com"
+        id S1346209AbiA1Fog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 00:44:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:49560 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346216AbiA1FoZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 00:44:25 -0500
+        id S233798AbiA1Fob (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 00:44:31 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABEEE113E;
-        Thu, 27 Jan 2022 21:44:24 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25BED12FC;
+        Thu, 27 Jan 2022 21:44:31 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.44.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9D8D83F766;
-        Thu, 27 Jan 2022 21:44:18 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7BE3D3F766;
+        Thu, 27 Jan 2022 21:44:25 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
@@ -29,9 +29,9 @@ Cc:     robh@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Will Deacon <will@kernel.org>
-Subject: [PATCH 1/2] perf: Add more generic branch types
-Date:   Fri, 28 Jan 2022 11:14:12 +0530
-Message-Id: <1643348653-24367-2-git-send-email-anshuman.khandual@arm.com>
+Subject: [PATCH 2/2] perf: Expand perf_branch_entry.type
+Date:   Fri, 28 Jan 2022 11:14:13 +0530
+Message-Id: <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
 References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
@@ -39,9 +39,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This expands generic branch type classification by adding some more entries
-, that can still be represented with the existing 4 bit 'type' field. While
-here this also updates the x86 implementation with these new branch types.
+Current perf_branch_entry.type is a 4 bits field just enough to accommodate
+16 generic branch types. This is insufficient to accommodate platforms like
+arm64 which has much more branch types. Lets just expands this field into a
+6 bits one, which can now hold 64 generic branch types. This also adds more
+generic branch types.
 
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -56,79 +58,102 @@ Cc: linux-perf-users@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/x86/events/intel/lbr.c           | 4 ++--
- include/uapi/linux/perf_event.h       | 5 +++++
- tools/include/uapi/linux/perf_event.h | 5 +++++
- tools/perf/util/branch.c              | 7 ++++++-
- 4 files changed, 18 insertions(+), 3 deletions(-)
+ include/uapi/linux/perf_event.h       | 10 ++++++++--
+ tools/include/uapi/linux/perf_event.h | 10 ++++++++--
+ tools/perf/util/branch.c              |  8 +++++++-
+ tools/perf/util/branch.h              |  4 ++--
+ 4 files changed, 25 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 8043213b75a5..9f86fac8c6a5 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1336,10 +1336,10 @@ static int branch_map[X86_BR_TYPE_MAP_MAX] = {
- 	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
- 	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
- 	PERF_BR_UNKNOWN,	/* X86_BR_INT */
--	PERF_BR_UNKNOWN,	/* X86_BR_IRET */
-+	PERF_BR_EXPT_RET,	/* X86_BR_IRET */
- 	PERF_BR_COND,		/* X86_BR_JCC */
- 	PERF_BR_UNCOND,		/* X86_BR_JMP */
--	PERF_BR_UNKNOWN,	/* X86_BR_IRQ */
-+	PERF_BR_IRQ,		/* X86_BR_IRQ */
- 	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
- 	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
- 	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
 diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index 1b65042ab1db..b91d0f575d0c 100644
+index b91d0f575d0c..361fdc6b87a0 100644
 --- a/include/uapi/linux/perf_event.h
 +++ b/include/uapi/linux/perf_event.h
-@@ -251,6 +251,11 @@ enum {
- 	PERF_BR_SYSRET		= 8,	/* syscall return */
- 	PERF_BR_COND_CALL	= 9,	/* conditional function call */
- 	PERF_BR_COND_RET	= 10,	/* conditional function return */
-+	PERF_BR_EXPT_RET	= 11,	/* exception return */
-+	PERF_BR_IRQ		= 12,	/* irq */
-+	PERF_BR_FIQ		= 13,	/* fiq */
-+	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
-+	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+@@ -256,6 +256,12 @@ enum {
+ 	PERF_BR_FIQ		= 13,	/* fiq */
+ 	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+ 	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
++	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
++	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
++	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
++	PERF_BR_FAULT_DATA	= 19,	/* data fault */
++	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
++	PERF_BR_SERROR		= 21,	/* system error */
  	PERF_BR_MAX,
  };
  
+@@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+ 		in_tx:1,    /* in transaction */
+ 		abort:1,    /* transaction abort */
+ 		cycles:16,  /* cycle count to last branch */
+-		type:4,     /* branch type */
+-		reserved:40;
++		type:6,     /* branch type */
++		reserved:38;
+ };
+ 
+ union perf_sample_weight {
 diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 4cd39aaccbe7..1882054e8684 100644
+index 1882054e8684..9a82b8aaed93 100644
 --- a/tools/include/uapi/linux/perf_event.h
 +++ b/tools/include/uapi/linux/perf_event.h
-@@ -251,6 +251,11 @@ enum {
- 	PERF_BR_SYSRET		= 8,	/* syscall return */
- 	PERF_BR_COND_CALL	= 9,	/* conditional function call */
- 	PERF_BR_COND_RET	= 10,	/* conditional function return */
-+	PERF_BR_EXPT_RET	= 11,	/* exception return */
-+	PERF_BR_IRQ		= 12,	/* irq */
-+	PERF_BR_FIQ		= 13,	/* fiq */
-+	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
-+	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+@@ -256,6 +256,12 @@ enum {
+ 	PERF_BR_FIQ		= 13,	/* fiq */
+ 	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+ 	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
++	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
++	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
++	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
++	PERF_BR_FAULT_DATA	= 19,	/* data fault */
++	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
++	PERF_BR_SERROR		= 21,	/* system error */
  	PERF_BR_MAX,
  };
  
+@@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+ 		in_tx:1,    /* in transaction */
+ 		abort:1,    /* transaction abort */
+ 		cycles:16,  /* cycle count to last branch */
+-		type:4,     /* branch type */
+-		reserved:40;
++		type:6,     /* branch type */
++		reserved:38;
+ };
+ 
+ union perf_sample_weight {
 diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index 2285b1eb3128..74e5e67b1779 100644
+index 74e5e67b1779..1e216ea2e2a8 100644
 --- a/tools/perf/util/branch.c
 +++ b/tools/perf/util/branch.c
-@@ -49,7 +49,12 @@ const char *branch_type_name(int type)
- 		"SYSCALL",
- 		"SYSRET",
- 		"COND_CALL",
--		"COND_RET"
-+		"COND_RET",
-+		"EXPT_RET",
-+		"IRQ",
-+		"FIQ",
-+		"DEBUG_HALT",
-+		"DEBUG_EXIT"
+@@ -54,7 +54,13 @@ const char *branch_type_name(int type)
+ 		"IRQ",
+ 		"FIQ",
+ 		"DEBUG_HALT",
+-		"DEBUG_EXIT"
++		"DEBUG_EXIT",
++		"DEBUG_INST",
++		"DEBUG_DATA",
++		"FAULT_ALGN",
++		"FAULT_DATA",
++		"FAULT_INST",
++		"SERROR"
  	};
  
  	if (type >= 0 && type < PERF_BR_MAX)
+diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
+index 17b2ccc61094..875d99abdc36 100644
+--- a/tools/perf/util/branch.h
++++ b/tools/perf/util/branch.h
+@@ -23,8 +23,8 @@ struct branch_flags {
+ 			u64 in_tx:1;
+ 			u64 abort:1;
+ 			u64 cycles:16;
+-			u64 type:4;
+-			u64 reserved:40;
++			u64 type:6;
++			u64 reserved:38;
+ 		};
+ 	};
+ };
 -- 
 2.25.1
 

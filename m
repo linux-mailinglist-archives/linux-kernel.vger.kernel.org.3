@@ -2,94 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D0E4A040F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91F14A041A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 00:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244564AbiA1XFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 18:05:47 -0500
-Received: from mga07.intel.com ([134.134.136.100]:45265 "EHLO mga07.intel.com"
+        id S1344371AbiA1XKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 18:10:01 -0500
+Received: from mout.gmx.net ([212.227.17.21]:42117 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241816AbiA1XFl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:05:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643411141; x=1674947141;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=AIvUvS81DfKAf+cWFUoQoNAn7ZSmlY1td647YN0yrAw=;
-  b=dGj07XLdCfxPp28xQAWqqXnG+pTreZRtZT7IeHRitYer8RFxunz+TTQd
-   270w+QBIrucFgf5LPCZ5pmbDk70VdWxB5ymdTexL/7iFn4G+RH7uif2z2
-   Q9He5XxQakHX7R2EGm5szg9ZEd6553iXnQzv5X/TwYNYZzNi+VSDoL1Zz
-   BNATnlNSsxZGIxTMCUWnagsuYRpvQObeoRGsEl28FMISXKokQBTtrAcyl
-   cSV+Cikya5CxjMgrjWphUurCJ3N+31z5rk2EOfhLqdvV4MQeu3Oyb9JEg
-   HOWU/EysoL8isVcjrcG8ByMk+1ZAqI29U75zhx2fOHnGvVRwOR6OMWuvk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="310525683"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="310525683"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:05:39 -0800
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="697244952"
-Received: from zhenkuny-mobl2.amr.corp.intel.com (HELO [10.209.84.59]) ([10.209.84.59])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:05:39 -0800
-Message-ID: <63950211-4244-3f85-0fb3-eb5a38d4ed50@intel.com>
-Date:   Fri, 28 Jan 2022 15:05:36 -0800
+        id S243573AbiA1XKA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 18:10:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643411398;
+        bh=nKOgNNjjbb6iRRpllOw9CofNg19QrVk3e0lNK8nkpmA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=CbTgmQzercNn4ovhqp2FVGVWr0fSzwDDzZLmxXYcvLWcIjQVwpS09PwOTmTo/XIlD
+         UefV02XMytSHycwvNNRQrsvBmQiZ2Z+RUtSkZx/kSf6EwEj7btWn3hujlts4hH9Akt
+         lw13e2UbGx51BenEa+L8HXfO/epc7h/IxbX6G6v8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([89.0.80.162]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRCKC-1mqOf400Dk-00N9H3; Sat, 29
+ Jan 2022 00:09:58 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: [PATCH 0/4] clk drivers: Terminate clk_div_table with sentinel element
+Date:   Sat, 29 Jan 2022 00:09:18 +0100
+Message-Id: <20220128230922.2047140-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.2
-Content-Language: en-US
-To:     ira.weiny@intel.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-8-ira.weiny@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH V8 07/44] x86/pkeys: Add PKS CPU feature bit
-In-Reply-To: <20220127175505.851391-8-ira.weiny@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tbVADY7hTofNy/iKkkZ/jbRLr1vGtv/6YJWw2FH6bg/7syrKjZf
+ QCmPQ+w52QP43UQoIcRKpE1QdThN1G3L6w/fLsdGTQy3Os8KYtwWNvnk57bzMf58ov95fjB
+ 5FYeIZD5abMkmXjDaBClBv6WxBbCgINREU9Yf+48aFuWNX1jGbZNcwyfBOrb437oyFVN2Uj
+ h6F1XMhGJzAZ/RuNmLC0g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Rzwj+X1v+Fs=:W5+WGgXirIxBZKI7vrk48j
+ rwrlQkAP9vIUUVZ5jXIElpayL+SkldFNErLH4QYIP+9EsqkILY1Rd5MW0LVH4oJwWRiwVLucx
+ EvKRQOy0ynyaErqB3N1c8GQdqT1T5/q1cJEi19SMIGAnvBuvNqK1s1hVnIIEgJ7Xre6BKFBEE
+ YzJGum3N1L9dAQz4yb7+8MYILFvoxR5JANdlKpsvl9N5SfPmQWjAIeQ6b31awvPe1VV4XLQcp
+ VH2v2EVyvxupg/bJi8/Yp3hY5IXgTRCQDJEKEN6MnwnfmJW+4d9atXqgLBWQq2fn7PeJS8M/Z
+ LyiopGYh3SGLi8P7eFLwvcCKe31lzXDbykQiRovCY1qMRkEuk/H5+mES+IuszIAr2YtVLAFjY
+ hdZc68Uec/h7KdIWoTghJvmiEQZT9wHHjY1VPOHN+xC7VhLlmPrADChlfVBbupjOlq9jXjgU5
+ V9wN7EEILUwLlwTKI3WJy6QnejtsWsjBHVWZA8cB8N9KzGV7pe6YPgAuLi4PQN2zcGiG75pnu
+ ByXlBLj7EkWv8M12KV/2l94GXzrslhrRxSKiRRwybAvfJ1dzEzH5imyHgzslK9re2r+tppv1N
+ r5RyzTb6UGY9XxgdLuwJwXFOaQcK1CRnbTiIbtJI/qCxmJlxjE7y/z0TdpsGUtUr++2mYaOFp
+ sZ996inDXQMbd20J05e6JpAJG5GalfFA1Y6ld6ZtaT7n8Ihf3/1v9AGk7cD1Yud0WaqHhrtZt
+ G23mzPDQQDj6Rgb7GyM+1cZMzzutb0GL+XnJpx4pYl/6QxpBgG0SaYiBolAefwAkpojO9s/SV
+ 3P9jPkD46/y/aH2aiVKab1cetsHSMns2U71A0ZbXvBL1nRO5wO0JOzxsMHo00+2kPpKq++YNe
+ hKaR6qcCRfMIcbTuMukgzbv+4yGoqbnA0ztWxWyNES/GWjXDaEJU1oiZt/B1FSW4+iKr48nrk
+ okN2Hho6qFCPBtlPYcbJIXrveIxWOYKO9fNrsTFBV0CKnstpfzMoIcPBezH87uXck8Qmc1Y8Q
+ mJWOpfqB5CQ+8FYPpM04ej42JpriL/0l01tGEvMm0X0cawXtZB7GKYxILslue+urR1QQyID9C
+ 7rYvHg+ZSGm/q0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
-> specific, manipulation of permission restrictions on supervisor page
+I noticed that some of the clk_div_tables in different drivers are not
+terminated with a sentinel element. This may cause the code in
+clk-divider.c to read garbage that happens to be beyond the end.
 
-Nit: should be "hardware-thread-specific".
+This patchset fixed all instances of this bug that I could find, except
+for a case in drivers/phy/ti/phy-j721e-wiz.c that is already fixed in
+linux-next:
+  https://lore.kernel.org/lkml/20220117110108.4117-1-kishon@ti.com/
 
-> mappings.  It uses the same mechanism of Protection Keys as those on
-> User mappings but applies that mechanism to supervisor mappings using a
-> supervisor specific MSR.
+Jonathan Neusch=C3=A4fer (4):
+  clk: actions: Terminate clk_div_table with sentinel element
+  clk: loongson1: Terminate clk_div_table with sentinel element
+  clk: hisilicon: Terminate clk_div_table with sentinel element
+  clk: clps711x: Terminate clk_div_table with sentinel element
 
-"supervisor-specific"
+ drivers/clk/actions/owl-s700.c         | 1 +
+ drivers/clk/actions/owl-s900.c         | 4 ++--
+ drivers/clk/clk-clps711x.c             | 2 ++
+ drivers/clk/hisilicon/clk-hi3559a.c    | 4 ++--
+ drivers/clk/loongson1/clk-loongson1c.c | 1 +
+ 5 files changed, 8 insertions(+), 4 deletions(-)
 
-	Memory Protection Keys (pkeys) provides a mechanism for
-	enforcing page-based protections, but without requiring
-	modification of the page tables when an application changes
-	protection domains.
+=2D-
+2.34.1
 
-	The kernel currently supports the pkeys for userspace (PKU)
-	architecture.  That architecture has been extended to
-	additionally support supervisor mappings.  The supervisor
-	support is referred to as PKS.
-
-I probably wouldn't mention the MSR unless you want to say:
-
-	The main difference between PKU and PKS is that PKS does not
-	introduce any new instructions to write to its register.  The
-	register is exposed as a normal MSR and is accessed with the
-	normal MSR instructions.
-
-
-> The CPU indicates support for PKS in bit 31 of the ECX register after a
-> cpuid instruction.
-
-I'd just remove this sentence.  We don't need to rehash each tiny morsel
-of the architecture in a commit message.

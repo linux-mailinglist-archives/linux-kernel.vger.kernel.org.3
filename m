@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F200749FF9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D46C49FFAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343627AbiA1RfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 12:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S1350810AbiA1Rgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 12:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245539AbiA1RfG (ORCPT
+        with ESMTP id S1350378AbiA1RgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 12:35:06 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0331C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 09:35:06 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id c188so8634752iof.6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 09:35:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ooRaQahwlszy2jxWEsQ38+6ol3WBy3QdqHWpkG1atKA=;
-        b=CJJPmBPPrNEVxXfAcJO5dgSvYGDpY4Nub6/hiB5x4NgO2LMQuQRhjlFP43kEQpCFCC
-         nuiwxM9Be5tgMNM0rNobOtwnJRcoBGwzNRs5Gyzo9kUBT1qHuQlmcoKLI2C06Ffkv4FM
-         2bIVm8As7WoR74mKgjpzywfZRvHj0h/H2ojsw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ooRaQahwlszy2jxWEsQ38+6ol3WBy3QdqHWpkG1atKA=;
-        b=Q3RjEmJ6tWZliQUbbRojDNH/HJQWgBa9fP2JlERKlfwa6MxV6Cb2tzs6v7k+8sU/tZ
-         NsNEgeuisRsPhTRosbkMAtt0mgaKuYM84PPWSrq0J5jQphYaK/OToI152dj60nla9lQV
-         pzcJQ7QQFqTF5Wbhg0nRZQk38hjzVlChknpuuIjGmJ3CanXiuuXCdGEO2mOcm4HRt5/l
-         mheu9fKfjRoHEnNqlHNkOHvJpxZbN89isYN+o1WwgYCfthxNVirzSCeec58B6Z+TmxN+
-         TMf5YTc3p+orzXB/NXKedzqlOVthOWM49icdF3GM5b/lbIFI7UNiDtFdVifgTAKNeiBj
-         tGVQ==
-X-Gm-Message-State: AOAM532v+2Po51ENcmZf0IEMbs4norWR2b7JDv36q7VuXZXvXTjWZmWT
-        iqJ54LydE7yGgAbCRw1tFl63Dbz+FrfPcA==
-X-Google-Smtp-Source: ABdhPJyNmvaCT5yBvmYFewlDRugKPX6g0ozFAAlv/PqPHRPF4+uoK/ZXUhTd5nofVDVe93L3bj4BCA==
-X-Received: by 2002:a05:6638:38a0:: with SMTP id b32mr3822730jav.228.1643391306233;
-        Fri, 28 Jan 2022 09:35:06 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c24sm6051767ioh.40.2022.01.28.09.35.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 09:35:06 -0800 (PST)
-Subject: Re: [PATCH v3] kselftest: Fix vdso_test_abi return status
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220128130701.17511-1-vincenzo.frascino@arm.com>
- <20220128144451.GC5776@e120937-lin>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <82d59ef7-39a1-c1f7-2746-f4fc19593add@linuxfoundation.org>
-Date:   Fri, 28 Jan 2022 10:35:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220128144451.GC5776@e120937-lin>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Fri, 28 Jan 2022 12:36:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8E4C061747;
+        Fri, 28 Jan 2022 09:35:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1AE51B82693;
+        Fri, 28 Jan 2022 17:35:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E391DC340E6;
+        Fri, 28 Jan 2022 17:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643391353;
+        bh=Yz79Qm6Yh91Wg11rYV44FmGH5cq9wa7CHYyPzQZ+EAs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=RMeTCKgws5ANrXVSJFv5s5SPPnv9ZAytJwQmbBE4CfBtsShTmzAzwjyPed6itmGW3
+         O2pp9ECNAC4W2Afj5utZq2QXPa0LrIjbwImsOcDTKTTrR+UULDoWOKbi88CA6pWXC3
+         cMLHYw348NyI1OlB06RIMvSddAlhkRWI7cV6Ek6JcLOyUD6/LUcEUTUPPeyS/YcaoE
+         JP73Rc0fmfy+QCWw81Sxas1VyMlVsGKdUiJCQMylT2ipCNvy+MvIC0aY16hjaThFA5
+         /2shr3vuT6wSLbRe8mkdYrX25KUmzqA2d8+gjbZvZLCwOB8tv6OyP1wByEMIHvIkF8
+         xWsoCyIC6i1Qg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2FEFF6079F;
+        Fri, 28 Jan 2022 17:35:53 +0000 (UTC)
+Subject: Re: [GIT PULL] KVM fixes for Linux 5.17-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220128130019.4123266-1-pbonzini@redhat.com>
+References: <20220128130019.4123266-1-pbonzini@redhat.com>
+X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220128130019.4123266-1-pbonzini@redhat.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+X-PR-Tracked-Commit-Id: 17179d0068b20413de2355f84c75a93740257e20
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3cd7cd8a62e6f4b81e8429db7afcb11cc155ea3c
+Message-Id: <164339135385.16649.2507165916091160487.pr-tracker-bot@kernel.org>
+Date:   Fri, 28 Jan 2022 17:35:53 +0000
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 7:44 AM, Cristian Marussi wrote:
-> On Fri, Jan 28, 2022 at 01:07:01PM +0000, Vincenzo Frascino wrote:
->> vdso_test_abi contains a batch of tests that verify the validity of the
->> vDSO ABI.
->>
->> When a vDSO symbol is not found the relevant test is skipped reporting
->> KSFT_SKIP. All the tests return values are then added in a single
->> variable which is checked to verify failures. This approach can have
->> side effects which result in reporting the wrong kselftest exit status.
->>
->> Fix vdso_test_abi verifying the return code of each test separately.
->>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Andy Lutomirski <luto@kernel.org>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Reported-by: Cristian Marussi <cristian.marussi@arm.com>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->> ---
-> 
-> Hi,
-> 
-> LGTM.
-> 
-> Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-> 
-> Thanks,
-> Cristian
+The pull request you sent on Fri, 28 Jan 2022 08:00:19 -0500:
 
-Thank you both. Will queue this up for 5.17 rc3.
+> https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-thanks,
--- Shuah
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3cd7cd8a62e6f4b81e8429db7afcb11cc155ea3c
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

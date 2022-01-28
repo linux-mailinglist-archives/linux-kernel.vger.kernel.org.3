@@ -2,160 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC2449F6B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122CE49F6BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347751AbiA1JzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:55:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33391 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232772AbiA1JzF (ORCPT
+        id S1347773AbiA1Jz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347766AbiA1Jz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:55:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643363704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ylz87V1WG45yYtILZ9U05QYarg4IApL3yG/h/CzZXDg=;
-        b=H+30CHhBO3o0cbCjQcsmOgTn0WLk6tZO3C01D82dp3q6/yxkm/qisEIp/Mc+oqpoAXIy04
-        tt50z6p6qh/NxWmAA2Tu5OpNx1TzF5DHiu96mX/lKmjJ8f0E++Qe79Qar1ixqr29/ycnbp
-        7JNUM2BlEt5XjTsT1eFoNB8inRFfRZU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-d1wyb-A4OSuyJHaLwyQ4Ow-1; Fri, 28 Jan 2022 04:55:03 -0500
-X-MC-Unique: d1wyb-A4OSuyJHaLwyQ4Ow-1
-Received: by mail-wm1-f71.google.com with SMTP id z2-20020a05600c220200b0034d2eb95f27so2744981wml.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:55:03 -0800 (PST)
+        Fri, 28 Jan 2022 04:55:57 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBEFC061747
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:55:56 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id c190-20020a1c9ac7000000b0035081bc722dso3665262wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:55:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9OcTQzGa35kRYA8wkuNpPKhajo2EEIRQ92GCwJmiBbs=;
+        b=OKzgZ+Qew+4rwieXFFdzliUThMTozaLlZNrIZD9v1UtC/eCM7/HIzyc97uViD69IlC
+         t7dcWSD7HDCp0rc5PduUFd0KOvlY/6SChiC4MrQrOIRYItrGh0AOD7p34Vybt+0wSzDv
+         QFVyG3cqCqVDg2vy3ApKlga0BSpY0hkGO4vd10LcGy1e2X8y/xxwpMXZGhXqWIIh483H
+         OKPnyOPtMRy0SwyMLy9NstU7w2JsHfZjsAp1KcmedjpqPCZmkakt1KhyiIyTTYhjPNt0
+         9+cIWHZRuCaOCcNie5P3vSpV+bJhReEwKtZlnq9m8dzDKWZv9HhJdQEjgFUkyG9Uw/u7
+         ayJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Ylz87V1WG45yYtILZ9U05QYarg4IApL3yG/h/CzZXDg=;
-        b=aXAr75YdSUvkHMW6l6NCdSipMqDZVMJBxZVSxfUTm3c/fRXgjmaxAxAoZjpP0PDBvB
-         Ps+VTMPbp8mxBk7KOlUCMA0mN2yvVdoe+KRaCMQKFvYdhHl9iJpdZ1jWfJ/I5d2C2NQe
-         tq84FDLaYWgbxOnKUY1gwJkQJglYTunSUW/NasthyglFO+wKNdaXkkAnxjfXMUVKZiNA
-         p6DxrsUQo+O98r6f6uZfFeGaw/nEomWE/rjFcGNBOftm7MJFzoNKae4w7VaeVvTjKENa
-         ojkfC3NaD3ozYcxKh66R3FEd428u4x1N3gre8X716RBUOoDWEuzEXq5t9KLUNw2r/GYS
-         S5xw==
-X-Gm-Message-State: AOAM531UZs0jyigO6P/+w+AZSRxf4sneyoIpLz5a1byDTcrsffZBp+j/
-        oexlwgSLiCW8/rOZkDvTA6TdoSB2cvO6hdEYZ0eUFjqu4pXmTeRrnolFwDc4hdprsfHuOYqvf7i
-        0wu51SvfLo5a5wirRBrygtFRw
-X-Received: by 2002:a5d:4205:: with SMTP id n5mr6324453wrq.479.1643363702379;
-        Fri, 28 Jan 2022 01:55:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzLum6pte96pf8j4lks4HqDl2FTk5t1ERYShrc8FV8j9dMFbmCX/cqz6Z/mfrBEG7A5whbDIg==
-X-Received: by 2002:a5d:4205:: with SMTP id n5mr6324431wrq.479.1643363702152;
-        Fri, 28 Jan 2022 01:55:02 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5c00:522f:9bcd:24a0:cd70? (p200300cbc70e5c00522f9bcd24a0cd70.dip0.t-ipconnect.de. [2003:cb:c70e:5c00:522f:9bcd:24a0:cd70])
-        by smtp.gmail.com with ESMTPSA id n26sm1671855wms.13.2022.01.28.01.55.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 01:55:01 -0800 (PST)
-Message-ID: <2ddd0a26-33fd-9cde-3501-f0584bbffefc@redhat.com>
-Date:   Fri, 28 Jan 2022 10:55:00 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9OcTQzGa35kRYA8wkuNpPKhajo2EEIRQ92GCwJmiBbs=;
+        b=hrgx25dDv4TpM0E/2YfjzEObr0AeFwsi3qDfuZT0l2kKGIN9qK9vctB+wEYbvs4s8g
+         rw5HPfiy3uZt7Vmv7D+q1p/nrYCxYzhn4aoX9eUwXCiAPNgaJ8GuQGHEBjMeQnfiBMRn
+         RPfy3D5PyT5rnPhoGRoSZ3SoAd6wFZmT8QT4uYAQexKGjsAbIIG9PF/o1CUFKNhscu0K
+         UryHxFuEdxhxxuxb4yZzExI2ZG742dI0Kd0itzKPSDo5slryPDXsizyE9524cKHYjngu
+         cI3kPmTART9tZHG0/WmEIxsoq548Sgm+GmduT1aU44PZAWHO+lmPkenma1WDDO/s0Asz
+         7d5w==
+X-Gm-Message-State: AOAM531knuI8jrBH5HqRM8A8tAN8SKrK0J7D2HuRheUAnCVDbtCihBa+
+        0gBTPTCO28PHXcW14XKZYRKW8w==
+X-Google-Smtp-Source: ABdhPJysznJTYs5X/q0fgqi/MbF+pd7Zm0F6oR4XCtNJ0BNgC1nwC/hhTAUF8qQs3EvmJ9WrWsrlww==
+X-Received: by 2002:a05:600c:4fd2:: with SMTP id o18mr6688322wmq.152.1643363755476;
+        Fri, 28 Jan 2022 01:55:55 -0800 (PST)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id t5sm4353423wrw.92.2022.01.28.01.55.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 01:55:54 -0800 (PST)
+Date:   Fri, 28 Jan 2022 09:55:32 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Pavel Machek <pavel@denx.de>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as
+ untrusted
+Message-ID: <YfO9lPJe0RuVyxFf@myrica>
+References: <20220120000409.2706549-1-rajatja@google.com>
+ <20220121214117.GA1154852@bhelgaas>
+ <Ye5GvQbFKo+CFtRb@lahna>
+ <Ye/X7E2dKb+zem34@lahna>
+ <Ye/btvA1rLB2rp02@kroah.com>
+ <Ye/zTHR5aCG58z87@lahna>
+ <CAJZ5v0gitdeEAxcgSoB1=VHA9FnRdCtmUqA_cN_f1a2yFRDghQ@mail.gmail.com>
+ <CACK8Z6H2DLTJgxgS3pcvfOh=5S8cxEMKvwEPfB9zoVf1g2H_UQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220113180308.15610-1-mike.kravetz@oracle.com>
- <b476e461-aba9-e92b-d392-270029ab6b18@redhat.com>
- <21242c94-6748-b76d-f38e-5ac140c6117b@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 0/3] Add hugetlb MADV_DONTNEED support
-In-Reply-To: <21242c94-6748-b76d-f38e-5ac140c6117b@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACK8Z6H2DLTJgxgS3pcvfOh=5S8cxEMKvwEPfB9zoVf1g2H_UQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.01.22 18:55, Mike Kravetz wrote:
-> On 1/27/22 03:57, David Hildenbrand wrote:
->> On 13.01.22 19:03, Mike Kravetz wrote:
->>> Userfaultfd selftests for hugetlb does not perform UFFD_EVENT_REMAP
->>> testing.  However, mremap support was recently added in commit
->>> 550a7d60bd5e ("mm, hugepages: add mremap() support for hugepage backed
->>> vma").  While attempting to enable mremap support in the test, it was
->>> discovered that the mremap test indirectly depends on MADV_DONTNEED.
->>>
->>> hugetlb does not support MADV_DONTNEED.  However, the only thing
->>> preventing support is a check in can_madv_lru_vma().  Simply removing
->>> the check will enable support.
->>>
->>> This is sent as a RFC because there is no existing use case calling
->>> for hugetlb MADV_DONTNEED support except possibly the userfaultfd test.
->>> However, adding support makes sense as it is fairly trivial and brings
->>> hugetlb functionality more in line with 'normal' memory.
->>>
->>
->> Just a note:
->>
->> QEMU doesn't use huge anonymous memory directly (MAP_ANON | MAP_HUGE...)
->> but instead always goes either via hugetlbfs or via memfd. 
->>
->> For MAP_PRIVATE hugetlb mappings, fallocate(FALLOC_FL_PUNCH_HOLE) seems
->> to get the job done (IOW: also discards private anon pages). See the
->> comments in the QEMU code below. I remember that that is somewhat
->> inconsistent. For ordinary MAP_PRIVATE mapped files I remember that we
->> always need fallocate(FALLOC_FL_PUNCH_HOLE) + madvise(QEMU_MADV_DONTNEED)
->> to make sure
->>
->> a) All file pages are removed
->> b) All private anon pages are removed
->>
->> IIRC hugetlbfs really is different in that regard, but maybe other fs
->> behave similarly.
+On Thu, Jan 27, 2022 at 02:26:07PM -0800, Rajat Jain wrote:
+> > > > And shouldn't this be an ACPI standard?
+> > >
+> > > Probably should or some supplemental doc but not sure how easy these
+> > > "properties" can be added there to be honest.
 > 
-> Yes it is really different.  And, some might even consider that a bug?
-> Imagine if those private anon (COW) pages contain important data.  They
-> could be unmapped/freed by some other process that has write access to
-> the hugetlb file on which the private mapping is based.
-
-Right, that's also what I once worried about in QEMU code. But then I
-realized that any kind of fallocate(FALLOC_FL_PUNCH_HOLE) on a file
-shared by multiple parties mapped MAP_PRIVATE might be bogus already.
-
-Assume you have a VM running with MAP_SHARED on a file. The file
-contains the VM memory state. Assume you pause the VM and want to
-convert it into 2 instances that will continue running independently
-based on the captured file state.
-
-You'd have to MAP_PRIVATE the file such that both VMs start with the
-original state and only see their modifications.
-
-... but if one process decides to fallocate(FALLOC_FL_PUNCH_HOLE), for
-example, due to memory ballooning, even a page that's still shared by
-both processes (!COW), you'd corrupt the other VM.
-
-So my assumption is that MAP_PRIVATE in combination with
-fallocate(FALLOC_FL_PUNCH_HOLE) on a file mapped by more than one
-process is just bogus already.
-
+> AIUI, the principal comment I have received here is that this property
+> needs to be documented somewhere. I agree.
 > 
-> I believe this same issue exists for hugetlbfs ftruncate.  When fallocate
-> hole punch support was added, it was based on the ftruncate functionality.
+> Rafael, do you know if this new property can be added to the ACPI
+> spec, and if so, how to do so? I'm happy to initiate a process if
+> someone can point me to, I just hope that publishing a new property to
+> the ACPI does not have to block this patch.
 > 
-> I am hesitant to change the behavior of hugetlb hole punch or truncate
-> as people may be relying on that behavior today.  Your QEMU example is
-> one such case.
+> The other option I was thinking of was to use the same property name
+> (say "untrusted-device") for both ACPI and device tree platforms, and
+> document it in Documentation/devicetree/bindings/pci/pci.txt along
+> with others. Since there are other properties there that seem to be
+> used similarly (Mika highlighted some below), perhaps that is an
+> acceptable solution?
+> 
+> I had one last question on the property name itself. I was trying to
+> understand why a property might have 2 names i.e. "external-facing"
+> for DT and "ExternalFacingPort" in ACPI?
 
-Yes, I assume we're stuck with that.
+I picked "external-facing" for DT to be consistent with other device tree
+property names. There doesn't seem to be any CamelCase in device trees
+[1], so we should probably keep that convention for new properties as
+well. The internal device_property could use the DT name and the ACPI name
+can be different. We do something similar with properties "pasid-num-bits"
+and "dma-can-stall" which are extracted from the IORT table in
+iort_named_component_init()
 
--- 
 Thanks,
+Jean
 
-David / dhildenb
+[1] git grep "\<[A-Z][,a-zA-Z0-9]\+ =" -- '*.dts'
 
+> Are there any naming
+> convention requirements that require ACPI and DT property names to be
+> different? Is "untrusted-device" an acceptable ACPI property name?
+> 
+> Thanks & Best Regards,
+> 
+> Rajat

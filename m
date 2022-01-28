@@ -2,130 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB13149F334
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B433E49F37D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346265AbiA1F7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 00:59:52 -0500
-Received: from mga04.intel.com ([192.55.52.120]:17301 "EHLO mga04.intel.com"
+        id S1346376AbiA1GXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:23:06 -0500
+Received: from mga05.intel.com ([192.55.52.43]:59204 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235697AbiA1F7v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 00:59:51 -0500
+        id S230048AbiA1GXF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 01:23:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643349591; x=1674885591;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Y9j8XokzjsNGd2nOqWcvF1wdvX3sTQQLglF93VDFjPA=;
-  b=V2qh4zX9+zbaDP8od/+S1uq0X1ZdKwo42IlbkJVs2v2B92YUlw57ZP3I
-   tNKRw3sfYbOeQ15XbhLOjMdiToE2Xvw+H0VCMH6QOk4FWXgu+I3MHvJBG
-   6xbhO3PuiqkPdE8xTi5SwQoHlJ1VPYjP8GuOPg62eLDgw/ioJ6bom0AtF
-   F4/GEEdWW/c0dN1G1KZqlAQ7gPNtXZl+mAKvqwnpbfy07riX/R+Ajtkhm
-   jIaawgHz82UaVaf3AgMcJ573c9KjXQ9SiP3EsOHpoSnFbX2bo5loT4gZc
-   I1qQDtSrIDGMqiKELvzQadScxG68drQwiKwE1VOHnDJp3Ca3zpGv83Aic
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="245894986"
+  t=1643350985; x=1674886985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=6irQ78t5n9MzVfcySSYal2d+bHS5atM4R3TKuen5qig=;
+  b=Fi2oNL/bR6lmK03rP/BZ3629zZNXl/dTngY7fus/t3wcmZYl+VVu52QI
+   Phf3l9b6EWfL++v2XkYW+M038vk0KAIfmQskq4cfOZud+cLJMk/0Z0NzI
+   hKlv270SOrfPipxTVJS7i9LfsSDYY8CuOhQq5uwq8BPN87YNo4ZLFcMhk
+   pOy5fLye7Pkxo0lTrhuhLy1HSsIuipTo+2jfjMCu7f1L03Ojp+8klvvle
+   LGvD968U1q7cPu30jXwG0ir+FmnTmDFpnCOh7WRfDLR/rR1/4pQQpaPIr
+   j2XZjQhPU3ZzqM6MpmfqadHKUYsDgWr2D7fIlxlBby4/tRUTUeDp966x8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="333409267"
 X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="245894986"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 21:59:51 -0800
+   d="scan'208";a="333409267"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 22:23:04 -0800
 X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="536004956"
-Received: from yhuang6-desk2.sh.intel.com ([10.239.13.11])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 21:59:48 -0800
-From:   Huang Ying <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Zi Yan <ziy@nvidia.com>, Oscar Salvador <osalvador@suse.de>,
-        Yang Shi <shy828301@gmail.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
-        Xunlei Pang <xlpang@linux.alibaba.com>
-Subject: [PATCH] mm,migrate: fix establishing demotion target
-Date:   Fri, 28 Jan 2022 13:59:40 +0800
-Message-Id: <20220128055940.1792614-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
+   d="scan'208";a="480621957"
+Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.145.56])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 27 Jan 2022 22:23:03 -0800
+Date:   Fri, 28 Jan 2022 14:07:40 +0800
+From:   Yang Zhong <yang.zhong@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, yang.zhong@intel.com
+Subject: Re: [PATCH 2/3] KVM: x86: add system attribute to retrieve full set
+ of supported xsave states
+Message-ID: <20220128060740.GB10089@yangzhon-Virtual>
+References: <20220126152210.3044876-1-pbonzini@redhat.com>
+ <20220126152210.3044876-3-pbonzini@redhat.com>
+ <YfK71pSnmtpnSJQ8@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfK71pSnmtpnSJQ8@google.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit ac16ec835314 ("mm: migrate: support multiple target nodes
-demotion"), after the first demotion target node is found, we will
-continue to check the next candidate obtained via
-find_next_best_node().  This is to find all demotion target nodes with
-same NUMA distance.  But one side effect of find_next_best_node() is
-that the candidate node returned will be set in "used" parameter, even
-if the candidate node isn't passed in the following NUMA distance
-checking, the candidate node will not be used as demotion target node
-for the following nodes.  For example, for system as follows,
+On Thu, Jan 27, 2022 at 03:35:50PM +0000, Sean Christopherson wrote:
+> On Wed, Jan 26, 2022, Paolo Bonzini wrote:
+> > +static int kvm_x86_dev_get_attr(struct kvm_device_attr *attr)
+> > +{
+> > +	if (attr->group)
+> > +		return -ENXIO;
+> > +
+> > +	switch (attr->attr) {
+> > +	case KVM_X86_XCOMP_GUEST_SUPP:
+> > +		if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+> 
+> Deja vu[*].
+> 
+>   arch/x86/kvm/x86.c: In function ‘kvm_x86_dev_get_attr’:
+>   arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>         |                                              ^
+>   arch/x86/include/asm/uaccess.h:221:31: note: in definition of macro ‘do_put_user_call’
+>     221 |         register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);           \
+>         |                               ^~~
+>   arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
+>    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>         |                     ^~~~~~~~
+>   arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>         |                                              ^
+>   arch/x86/include/asm/uaccess.h:223:21: note: in definition of macro ‘do_put_user_call’
+>     223 |         __ptr_pu = (ptr);                                               \
+>         |                     ^~~
+>   arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
+>    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>         |                     ^~~~~~~~
+>   arch/x86/kvm/x86.c:4345:46: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+>         |                                              ^
+>   arch/x86/include/asm/uaccess.h:230:45: note: in definition of macro ‘do_put_user_call’
+>     230 |                        [size] "i" (sizeof(*(ptr)))                      \
+>         |                                             ^~~
+>   arch/x86/kvm/x86.c:4345:21: note: in expansion of macro ‘put_user’
+>    4345 |                 if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+> 
+> Given that we're collectively 2 for 2 in mishandling {g,s}et_attr(), what about
+> a prep pacth like so?  Compile tested only...
+>
 
-node distances:
-node   0   1   2   3
-  0:  10  21  17  28
-  1:  21  10  28  17
-  2:  17  28  10  28
-  3:  28  17  28  10
+  Just found those issues are from 32bit kernel build, thanks!
+  
+  I applied below patch, and did AMX functions test, this patch work well with AMX.
 
-when we establish demotion target node for node 0, in the first round
-node 2 is added to the demotion target node set.  Then in the second
-round, node 3 is checked and failed because distance(0, 3) >
-distance(0, 2).  But node 3 is set in "used" nodemask too.  When we
-establish demotion target node for node 1, there is no available node.
-This is wrong, node 3 should be set as the demotion target of node 1.
+  Thanks!
+  Yang
 
-To fix this, if the candidate node is failed to pass the distance
-checking, it will be cleared in "used" nodemask.  So that it can be
-used for the following node.
-
-The bug can be reproduced and fixed with this patch on a 2 socket
-server machine with DRAM and PMEM.
-
-Fixes: ac16ec835314 ("mm: migrate: support multiple target nodes demotion")
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-Cc: Xunlei Pang <xlpang@linux.alibaba.com>
----
- mm/migrate.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index c7da064b4781..e8a6933af68d 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -3082,18 +3082,21 @@ static int establish_migrate_target(int node, nodemask_t *used,
- 	if (best_distance != -1) {
- 		val = node_distance(node, migration_target);
- 		if (val > best_distance)
--			return NUMA_NO_NODE;
-+			goto out_clear;
- 	}
  
- 	index = nd->nr;
- 	if (WARN_ONCE(index >= DEMOTION_TARGET_NODES,
- 		      "Exceeds maximum demotion target nodes\n"))
--		return NUMA_NO_NODE;
-+		goto out_clear;
- 
- 	nd->nodes[index] = migration_target;
- 	nd->nr++;
- 
- 	return migration_target;
-+out_clear:
-+	node_clear(migration_target, *used);
-+	return NUMA_NO_NODE;
- }
- 
- /*
--- 
-2.30.2
-
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Thu, 27 Jan 2022 07:31:53 -0800
+> Subject: [PATCH] KVM: x86: Add a helper to retrieve userspace address from
+>  kvm_device_attr
+> 
+> Add a helper to handle converting the u64 userspace address embedded in
+> struct kvm_device_attr into a userspace pointer, it's all too easy to
+> forget the intermediate "unsigned long" cast as well as the truncation
+> check.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 28 +++++++++++++++++++++-------
+>  1 file changed, 21 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 8033eca6f3a1..67836f7c71f5 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4335,14 +4335,28 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	return r;
+>  }
+> 
+> +static inline void __user *kvm_get_attr_addr(struct kvm_device_attr *attr)
+> +{
+> +	void __user *uaddr = (void __user*)(unsigned long)attr->addr;
+> +
+> +	if ((u64)(unsigned long)uaddr != attr->addr)
+> +		return ERR_PTR(-EFAULT);
+> +	return uaddr;
+> +}
+> +
+>  static int kvm_x86_dev_get_attr(struct kvm_device_attr *attr)
+>  {
+> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
+> +
+>  	if (attr->group)
+>  		return -ENXIO;
+> 
+> +	if (IS_ERR(uaddr))
+> +		return PTR_ERR(uaddr);
+> +
+>  	switch (attr->attr) {
+>  	case KVM_X86_XCOMP_GUEST_SUPP:
+> -		if (put_user(supported_xcr0, (u64 __user *)attr->addr))
+> +		if (put_user(supported_xcr0, uaddr))
+>  			return -EFAULT;
+>  		return 0;
+>  	default:
+> @@ -5070,11 +5084,11 @@ static int kvm_arch_tsc_has_attr(struct kvm_vcpu *vcpu,
+>  static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
+>  				 struct kvm_device_attr *attr)
+>  {
+> -	u64 __user *uaddr = (u64 __user *)(unsigned long)attr->addr;
+> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
+>  	int r;
+> 
+> -	if ((u64)(unsigned long)uaddr != attr->addr)
+> -		return -EFAULT;
+> +	if (IS_ERR(uaddr))
+> +		return PTR_ERR(uaddr);
+> 
+>  	switch (attr->attr) {
+>  	case KVM_VCPU_TSC_OFFSET:
+> @@ -5093,12 +5107,12 @@ static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
+>  static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
+>  				 struct kvm_device_attr *attr)
+>  {
+> -	u64 __user *uaddr = (u64 __user *)(unsigned long)attr->addr;
+> +	u64 __user *uaddr = kvm_get_attr_addr(attr);
+>  	struct kvm *kvm = vcpu->kvm;
+>  	int r;
+> 
+> -	if ((u64)(unsigned long)uaddr != attr->addr)
+> -		return -EFAULT;
+> +	if (IS_ERR(uaddr))
+> +		return PTR_ERR(uaddr);
+> 
+>  	switch (attr->attr) {
+>  	case KVM_VCPU_TSC_OFFSET: {
+> --
+> 
+> 
+> 
+> [*] https://lore.kernel.org/all/20211007231647.3553604-1-seanjc@google.com
+> 
+> 
+> > +			return -EFAULT;
+> > +		return 0;
+> > +	default:
+> > +		return -ENXIO;
+> > +		break;
+> > +	}
+> > +}
+> > +

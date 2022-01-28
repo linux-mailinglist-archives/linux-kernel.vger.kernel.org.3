@@ -2,174 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4964A024B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256484A0253
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbiA1UtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S239360AbiA1Uwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbiA1UtG (ORCPT
+        with ESMTP id S236318AbiA1Uwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:49:06 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6711DC061747
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:49:06 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso5238441wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:49:06 -0800 (PST)
+        Fri, 28 Jan 2022 15:52:47 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8E4C061714;
+        Fri, 28 Jan 2022 12:52:46 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bu18so14176090lfb.5;
+        Fri, 28 Jan 2022 12:52:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ESpslK+beLC9Gzg3G2enDgpikVrsMthhnTttwFurZUU=;
-        b=RP0QkJu8mO0x6vjhFhpMD0CnzenWOihV+I6CsFJCVRy1BUBlML6BMv5TM79Q6UwVzV
-         Q49gSU5/RYQINK6HLaS5CXWV3+8gDGaSMWIHm/ccFn/BRCXaIOpv10z43Agz3ChPuvul
-         3RXA5KAwqmXE6cdaADXIegXtdIqwlWYcpe0SLKrVgRMwzPUc9X9C08MF/UzWhBd3dG8i
-         S3T72uFAR+EnJuBdZm1HYdzgaIvKDCI52JDclgzSjeiNiC2MNQqVCcPUi9qr8nU46E4S
-         GGjiWSElUEP+4eoS2KPXkIJ5BuboqXsCAWqTi4pWs/QmGi02kjrzhXRoAGYb+fygo8c3
-         DXUg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FxgoJ87HkOo4Sya7mWsI9Jkjvlhv0yv3YR69qNwYcgY=;
+        b=FASeYDqXNB7SNFPPSMjeNYgeeX65/uG3+UKBDXjBMIjiwA71UcIShrtJzoOijUNBxW
+         fd62G9kbA7ttoa4DPaUbg9B3M0xvk3MkVH8AiT6DgmjNm1Y4iBai0RrA9FhIhmqG7M24
+         5TO0XK0nW31E5zHyvFpgUbLsc/5VYC2Mq+0L8lj0YOEaiHdKUv8JN4O4ZSjmn5KCPF0b
+         OVobR2UcqH6/tjRleXAThquVCIrGv5qOLlGDjkSqBDzfICN6P4cbwWCYLo+sFFieDNXC
+         uaSGYsnWKU1WcHpHRI16xwMD03y1GYYOk9VHsP41ov5dN3AKBXv4ttrysDMlPsDuIa8C
+         u0dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ESpslK+beLC9Gzg3G2enDgpikVrsMthhnTttwFurZUU=;
-        b=H6CydvPCqwupjE9m8NzTLtl2sD1IEP+5ry+b4TfMImu9XaCgBJcd+88RJnlpWhZQV0
-         CkhzjxCemQsHi2ob89MyGTiq+1rlhYTskU6Rb7EQHtKfFkvucdDIXVJQMh2J17nAw144
-         LciZP3i/wvj6OWcVnNkqns50K1NhnWFiNbIo+OcHeDcX71rZzJZTiC91Xs84tJsBr+Rk
-         LobXnb3sghrWSC3nwaIlAjHXnnLnzSXu8Vgei66q39lPiojHxwf3xltUwTkbt+Rh7AEK
-         6fa4D8+vu9KIoyLLJjkg/YK+stM+w9pPvAbvC2KxoEFoMnR3pUqfnZpZEGjeo3TiS6/B
-         HFiw==
-X-Gm-Message-State: AOAM531ZXoVxX8ceHae8kZAaMFsDW6Z5OT08FdwqBIZHc/L40Z8I2Zcp
-        25qJji+uLoAzU+PoagPSf7LUnQ==
-X-Google-Smtp-Source: ABdhPJyRLqDpTjXu1yxfsjJq5ifIjnvy4f+FrKjjZCvZEITvEPBmieIMqU1Z4SOsk40t9IJp++Qv3w==
-X-Received: by 2002:a05:600c:4f8d:: with SMTP id n13mr17088213wmq.45.1643402944959;
-        Fri, 28 Jan 2022 12:49:04 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id l10sm5453398wrz.20.2022.01.28.12.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 12:49:04 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     linux@roeck-us.net, robh+dt@kernel.org, linus.walleij@linaro.org,
-        wim@linux-watchdog.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
-Date:   Fri, 28 Jan 2022 20:48:56 +0000
-Message-Id: <20220128204856.494643-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        bh=FxgoJ87HkOo4Sya7mWsI9Jkjvlhv0yv3YR69qNwYcgY=;
+        b=c68TFuTzXGkuGQ4gLN26F3doZp69OuF6ODH7jmz+qH2/U6MyY0v1T2ZnI6cqQuTjCN
+         /Colzg2rABaNpVkD4GG94Ru0ToR0huM/Bw4qf/sOvXEqSlXK10uT6YpQq0TFBgMsec2c
+         o1GQmwBelhHl1I7NkohN8EWGJxGLUK++7L6KF7sVZEbfLWp5AyeH2HJuuJ8OScF0yDfW
+         XDveDO8MOQyQnnkbsLcRqfe9YplhQNWhayMgo9Sqv8nR457kB0rBV+BeMMOxmnd2BvrV
+         2daJsXyA/yy3q9WLDtyLC7x9mH6bm+CRee5oqVTz+a1Wu2aLHeLg7i9lU7cUT26y1i6p
+         ScdA==
+X-Gm-Message-State: AOAM533uQl2yT4IieP5mUU4o/DAm2GraBfUjTI7jnNLWNR7srt+l7saQ
+        lJyongi+fd9WsBSFz2FNwsY=
+X-Google-Smtp-Source: ABdhPJyljK+IMPeEvoQrkr8pES9R2ymfkjp48tGYsn/vuifjCmeWhNCPgqE8CaO/iUAYRBR04YeWWA==
+X-Received: by 2002:ac2:5604:: with SMTP id v4mr7184599lfd.284.1643403164687;
+        Fri, 28 Jan 2022 12:52:44 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.225.90])
+        by smtp.gmail.com with ESMTPSA id z13sm2651546lft.92.2022.01.28.12.52.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 12:52:44 -0800 (PST)
+Message-ID: <0647fd91-f0a7-4cf7-4f80-cd5dc3f2f6a2@gmail.com>
+Date:   Fri, 28 Jan 2022 23:52:42 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ath9k_htc: fix uninit value bugs
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     ath9k-devel@qca.qualcomm.com, kvalo@codeaurora.org,
+        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com,
+        vasanth@atheros.com, Sujith.Manoharan@atheros.com,
+        senthilkumar@atheros.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
+References: <20220115122733.11160-1-paskripkin@gmail.com>
+ <164337315159.4876.15861801637015517784.kvalo@kernel.org>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <164337315159.4876.15861801637015517784.kvalo@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converts watchdog/faraday,ftwdt010.txt to yaml.
-This permits to detect missing properties like clocks and resets or
-compatible like moxa,moxart-watchdog.
+Hi Kalle,
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
- .../bindings/watchdog/faraday,ftwdt010.yaml   | 60 +++++++++++++++++++
- 2 files changed, 60 insertions(+), 22 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+On 1/28/22 15:32, Kalle Valo wrote:
+>> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+>> Reported-by: syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
+>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> 
+> Patch applied to ath-next branch of ath.git, thanks.
+> 
+> d1e0df1c57bd ath9k_htc: fix uninit value bugs
+> 
 
-diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-deleted file mode 100644
-index 9ecdb502e605..000000000000
---- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Faraday Technology FTWDT010 watchdog
--
--This is an IP part from Faraday Technology found in the Gemini
--SoCs and others.
--
--Required properties:
--- compatible : must be one of
--  "faraday,ftwdt010"
--  "cortina,gemini-watchdog", "faraday,ftwdt010"
--- reg : shall contain base register location and length
--- interrupts : shall contain the interrupt for the watchdog
--
--Optional properties:
--- timeout-sec : the default watchdog timeout in seconds.
--
--Example:
--
--watchdog@41000000 {
--	compatible = "faraday,ftwdt010";
--	reg = <0x41000000 0x1000>;
--	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-new file mode 100644
-index 000000000000..377529b21267
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Faraday Technology FTWDT010 watchdog
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description: |
-+  This is an IP part from Faraday Technology found in the Gemini
-+  SoCs and others.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: "faraday,ftwdt010"
-+      - items:
-+          - const: "cortina,gemini-watchdog"
-+          - const: "faraday,ftwdt010"
-+      - items:
-+          - const: "moxa,moxart-watchdog"
-+          - const: "faraday,ftwdt010"
-+  reg:
-+    maxItems: 1
-+  resets:
-+    maxItems: 1
-+  clocks:
-+    maxItems: 1
-+  clock-names:
-+    const: PCLK
-+  interrupts:
-+    maxItems: 1
-+  timeout-sec:
-+    description: the default watchdog timeout in seconds.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    watchdog@41000000 {
-+      compatible = "faraday,ftwdt010";
-+      reg = <0x41000000 0x1000>;
-+      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+  - |
-+    watchdog: watchdog@98500000 {
-+      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
-+      reg = <0x98500000 0x10>;
-+      clocks = <&clk_apb>;
-+      clock-names = "PCLK";
-+    };
-+...
--- 
-2.34.1
+Thanks, Kalle! Can you also, please, check out this one too :)
+Quite old, but syzbot is getting mad with this bug (like 20k hits). Thanks!
 
+
+https://lore.kernel.org/all/20210922164204.32680-1-paskripkin@gmail.com/
+
+
+
+
+With regards,
+Pavel Skripkin

@@ -2,139 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E255B49F0A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28F749F0AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344672AbiA1Bnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 20:43:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35652 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiA1Bnd (ORCPT
+        id S1345159AbiA1Bow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 20:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345144AbiA1Bov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 20:43:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93F95B82104
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:43:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5EE5C340E5;
-        Fri, 28 Jan 2022 01:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643334211;
-        bh=TkowqnMfrmwTAcJsGdAvnwq3afg44JpFf1XwkrSPxKo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hk6QOu3rIsQHhDpi2BCWY+cWfyR/YNeg4e14onaDxvIPcbSf2AGlf6qAnUhxUskl2
-         1iIsNbwPzfnA/Ttdlirbmi3GsOJdNzX7LuUfl88RP6Sq7tn2yQpQZDJ4SBijNbAmU3
-         IK3JxXuC997DZTyXuJRHX0S+0aA2EYth82qNVwAOjQj44AZSiNXG2LoDiXUl8vg9Sp
-         YotnMNzAgoaTGyed/vkSusyudJwKrdsNx+4K9MfN+2m6LDwlTSthZZHj2WDNsjTrQ+
-         +cL1+ehElCCAzQYHLYZ/hiM7XIqKT7VUWB3T+tGAU++CQqPVBfIAfwluMRpSMsojwF
-         gIEn1fqnm5ZLA==
-Message-ID: <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
-Date:   Fri, 28 Jan 2022 09:43:27 +0800
+        Thu, 27 Jan 2022 20:44:51 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE92C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:44:51 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id c24so6649165edy.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iYXIIUyrLfzJaPeKZf3W/sgGrDvN0wMAV7bAC7WPD3M=;
+        b=1KTeQNu1m8qReF3FsqMysxKY1VxJzC4sYVTjAyHhsq+a1vlVLpM2YLsiNMZS0x3wXm
+         Y0VJVuyXs9YWnnBcgzbPTYFgF617dw+mg/0Eb3g9Wmao8ObSTU2P1ITppGOx1iXWCCpw
+         0DSwoAM6EKzCh3OJQA0PwxS1xJElPjgoBpclzHHZokRNXUmNdMN6JkPqR/Nala+VLtYB
+         suqI6XxfkTZARJ+9S/b/C7d0dRPHa6UJ5D2iXTSQBpTd0NDRsxKzGiVG4SZaeKbEonVc
+         Phanfy++vHctLte9yA7dBz+90Od82cx10pUo7k7Rz6AUjPn1YAIe5KVF5O17qkw0J7FX
+         xj8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iYXIIUyrLfzJaPeKZf3W/sgGrDvN0wMAV7bAC7WPD3M=;
+        b=ONeDB26NMwLymkCIsVy93RRjfes8agVYyY7B4V8dYuOLylXaaWQsxZCgDkpA1v9mXA
+         YWoF4POk29u3MtZkY6zqGI7cVG6/ikXUZxv4CF/n+JggpSi03eyQo9GQfbXmFcxAQT9S
+         p3pXzD21/14ZPmtmMESDTxNHW9CllP1f4oMs4LLFUWsALep7l/jiKZmVbBJIUNceGTPJ
+         QQmafXD6HE3hUrKv/lKPgVMEtrAVagLMPqZJ05KhoozTDmn71kBfEBBtmaUrPyPbJax9
+         veVpyQSr/H51CvlCsFUVN7j3cbo8M4J/YA0X3tO7YypVnh4YF7g1ikh42GZzws6N3bbe
+         9QCg==
+X-Gm-Message-State: AOAM532Ew2O9xoKKIWq78OHtFLZMk6ZSQrvqFyj1qy5oP/zH5Kxb2hnE
+        4h0prAjdDNmywB/vpZQ70hmaWtQMdE8A0u+IY/yz
+X-Google-Smtp-Source: ABdhPJzjF/RplyACj/w8hLgXo1uknB2oGFSxj5v5sDp4f/gCdMO3xDPCBYlF1V1ov4ADLrAbCjCk2M9vJHrSvIe79xk=
+X-Received: by 2002:a05:6402:2683:: with SMTP id w3mr6080257edd.405.1643334289633;
+ Thu, 27 Jan 2022 17:44:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] f2fs: fix to avoid potential deadlock
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>,
-        Jing Xia <jing.xia@unisoc.com>
-References: <20220127054449.24711-1-chao@kernel.org>
- <YfMVxzdhat01ca7m@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YfMVxzdhat01ca7m@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <018a9bb4-accb-c19a-5b0a-fde22f4bc822.ref@schaufler-ca.com>
+ <018a9bb4-accb-c19a-5b0a-fde22f4bc822@schaufler-ca.com> <20211012103243.xumzerhvhklqrovj@wittgenstein>
+ <d15f9647-f67e-2d61-d7bd-c364f4288287@schaufler-ca.com> <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
+ <a19e0338-5240-4a6d-aecf-145539aecbce@schaufler-ca.com> <3daaf037-2e67-e939-805f-57a61d67f7b8@namei.org>
+In-Reply-To: <3daaf037-2e67-e939-805f-57a61d67f7b8@namei.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 27 Jan 2022 20:44:38 -0500
+Message-ID: <CAHC9VhSt+c6QksHef=kx3dN_ouVZG0_a6FERzXs2-uzKmyE_zg@mail.gmail.com>
+Subject: Re: [PATCH v2] LSM: general protection fault in legacy_parse_param
+To:     James Morris <jmorris@namei.org>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Brauner <christian@brauner.io>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzbot <syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/28 5:59, Jaegeuk Kim wrote:
-> On 01/27, Chao Yu wrote:
->> Quoted from Jing Xia's report, there is a potential deadlock may happen
->> between kworker and checkpoint as below:
->>
->> [T:writeback]				[T:checkpoint]
->> - wb_writeback
->>   - blk_start_plug
->> bio contains NodeA was plugged in writeback threads
-> 
-> I'm still trying to understand more precisely. So, how is it possible to
-> have bio having node write in this current context?
+On Thu, Jan 27, 2022 at 12:46 PM James Morris <jmorris@namei.org> wrote:
+> On Thu, 27 Jan 2022, Casey Schaufler wrote:
+>
+> > The usual LSM hook "bail on fail" scheme doesn't work for cases where
+> > a security module may return an error code indicating that it does not
+> > recognize an input.  In this particular case Smack sees a mount option
+> > that it recognizes, and returns 0. A call to a BPF hook follows, which
+> > returns -ENOPARAM, which confuses the caller because Smack has processed
+> > its data.
+> >
+> > The SELinux hook incorrectly returns 1 on success. There was a time
+> > when this was correct, however the current expectation is that it
+> > return 0 on success. This is repaired.
+> >
+> > Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
+> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>
+>
+> Acked-by: James Morris <jamorris@linux.microsoft.com>
 
-IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
-during writebacking node_inode's data page (which should be node page)?
+Looks good to me too, thanks Casey.  Since James' already ACK'd it, I
+went ahead and pulled this into selinux/next.
 
-Thanks,
+> > ---
+> >  security/security.c      | 17 +++++++++++++++--
+> >  security/selinux/hooks.c |  5 ++---
+> >  2 files changed, 17 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/security/security.c b/security/security.c
+> > index 3d4eb474f35b..e649c8691be2 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -884,9 +884,22 @@ int security_fs_context_dup(struct fs_context *fc, struct
+> > fs_context *src_fc)
+> >       return call_int_hook(fs_context_dup, 0, fc, src_fc);
+> >  }
+> >
+> > -int security_fs_context_parse_param(struct fs_context *fc, struct
+> > fs_parameter *param)
+> > +int security_fs_context_parse_param(struct fs_context *fc,
+> > +                                 struct fs_parameter *param)
+> >  {
+> > -     return call_int_hook(fs_context_parse_param, -ENOPARAM, fc, param);
+> > +     struct security_hook_list *hp;
+> > +     int trc;
+> > +     int rc = -ENOPARAM;
+> > +
+> > +     hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
+> > +                          list) {
+> > +             trc = hp->hook.fs_context_parse_param(fc, param);
+> > +             if (trc == 0)
+> > +                     rc = 0;
+> > +             else if (trc != -ENOPARAM)
+> > +                     return trc;
+> > +     }
+> > +     return rc;
+> >  }
+> >
+> >  int security_sb_alloc(struct super_block *sb)
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 5b6895e4fc29..371f67a37f9a 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -2860,10 +2860,9 @@ static int selinux_fs_context_parse_param(struct
+> > fs_context *fc,
+> >               return opt;
+> >
+> >       rc = selinux_add_opt(opt, param->string, &fc->security);
+> > -     if (!rc) {
+> > +     if (!rc)
+> >               param->string = NULL;
+> > -             rc = 1;
+> > -     }
+> > +
+> >       return rc;
+> >  }
 
-> 
->> 					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
->> 					 - f2fs_write_data_pages
->> 					  - f2fs_write_single_data_page -- write last dirty page
->> 					   - f2fs_do_write_data_page
->> 					    - set_page_writeback  -- clear page dirty flag and
->> 					    PAGECACHE_TAG_DIRTY tag in radix tree
->> 					    - f2fs_outplace_write_data
->> 					     - f2fs_update_data_blkaddr
->> 					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
->> 					   - inode_dec_dirty_pages
->>   - writeback_sb_inodes
->>    - writeback_single_inode
->>     - do_writepages
->>      - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
->>       - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
->>    - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
->>   - blk_finish_plug
->>
->> Let's try to avoid deadlock condition by forcing unplugging previous bio via
->> blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
->> due to valid sbi->wb_sync_req[DATA/NODE].
->>
->> Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
->> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
->> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
->> Signed-off-by: Chao Yu <chao@kernel.org>
->> ---
->>   fs/f2fs/data.c | 6 +++++-
->>   fs/f2fs/node.c | 6 +++++-
->>   2 files changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->> index 76d6fe7b0c8f..932a4c81acaf 100644
->> --- a/fs/f2fs/data.c
->> +++ b/fs/f2fs/data.c
->> @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
->>   	/* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
->>   	if (wbc->sync_mode == WB_SYNC_ALL)
->>   		atomic_inc(&sbi->wb_sync_req[DATA]);
->> -	else if (atomic_read(&sbi->wb_sync_req[DATA]))
->> +	else if (atomic_read(&sbi->wb_sync_req[DATA])) {
->> +		/* to avoid potential deadlock */
->> +		if (current->plug)
->> +			blk_finish_plug(current->plug);
->>   		goto skip_write;
->> +	}
->>   
->>   	if (__should_serialize_io(inode, wbc)) {
->>   		mutex_lock(&sbi->writepages);
->> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
->> index 556fcd8457f3..69c6bcaf5aae 100644
->> --- a/fs/f2fs/node.c
->> +++ b/fs/f2fs/node.c
->> @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
->>   
->>   	if (wbc->sync_mode == WB_SYNC_ALL)
->>   		atomic_inc(&sbi->wb_sync_req[NODE]);
->> -	else if (atomic_read(&sbi->wb_sync_req[NODE]))
->> +	else if (atomic_read(&sbi->wb_sync_req[NODE])) {
->> +		/* to avoid potential deadlock */
->> +		if (current->plug)
->> +			blk_finish_plug(current->plug);
->>   		goto skip_write;
->> +	}
->>   
->>   	trace_f2fs_writepages(mapping->host, wbc, NODE);
->>   
->> -- 
->> 2.32.0
+-- 
+paul-moore.com

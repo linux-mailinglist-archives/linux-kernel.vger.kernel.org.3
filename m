@@ -2,190 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 031BB4A034A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 23:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF924A0356
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 23:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346887AbiA1WJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 17:09:30 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:59488 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229608AbiA1WJ1 (ORCPT
+        id S242019AbiA1WOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 17:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230408AbiA1WOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 17:09:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643407767; x=1674943767;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PhNwraqeNzBQCp3DlOoO6HsTUs5QilywxZOxmi80nbQ=;
-  b=bBqOeiF+oe/owAWV87fNZyb4beKqzmYUGGynwOL/Fr0u/y/sN97TDozB
-   xCcgLuLcTDnL2UlAbiiQOG7s5TVebyODkfKaqL0sEeRJO8oiU/wpRAEmu
-   QO2OdtVqLFOZ1wUW5sZ2CxmJA3QtPBJYYvi2TGqk42huuA8E3AXJmBUDc
-   U=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jan 2022 14:09:26 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 14:09:26 -0800
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 28 Jan 2022 14:09:26 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Michal Marek <michal.lkml@markovi.net>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Matthias Maennich <maennich@google.com>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: [PATCH v2] kbuild: Add environment variables for userprogs flags
-Date:   Fri, 28 Jan 2022 14:08:41 -0800
-Message-ID: <20220128220841.3222637-1-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220112224342.958358-1-quic_eberman@quicinc.com>
-References: 
+        Fri, 28 Jan 2022 17:14:09 -0500
+X-Greylist: delayed 321 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Jan 2022 14:14:08 PST
+Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54C7C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 14:14:08 -0800 (PST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-53-ed;
+ t=1643407726; h=date : from : to : cc : subject : message-id :
+ references : mime-version : content-type : in-reply-to : from;
+ bh=MgiqllyeJOK6ke8ALz34tVMuWcndkNzeGKveDDtwgdU=;
+ b=LoO/GOsvakR3vVPtL+fRsQHD5oCcmLVBOF5LsweZ1jLDYs5y13zouTA654R9b9ZuXNPs9
+ pgSs7ASuPkI6vtADw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
+ i=@lespinasse.org; q=dns/txt; s=srv-53-rsa; t=1643407726; h=date :
+ from : to : cc : subject : message-id : references : mime-version :
+ content-type : in-reply-to : from;
+ bh=MgiqllyeJOK6ke8ALz34tVMuWcndkNzeGKveDDtwgdU=;
+ b=ig7DDtU3eMmcYVw8h1wL5+iURSLHTLgFEtFd7x47OQ/jtrSuN/GIQ9qK4P3gSNpWXbUop
+ xUWT5xTJM7bKmTUrtPDVslUjcCmYfRYDDtSTFK6Rw8tuCJAx6thziim7BP1XCsXXTRk69g7
+ wxkQvl/KfZ0ZDmOXKhnaiXowSDBDVb83JV5WWRqmOwYY20h5BWXumkKuenhv1QnJAsqTUB5
+ oBSOJ0rlIdPrDzV0ghe4tcGIpiTF+asNbc+390tLJRuU16VdtmNR3O4iiWifroHYc/tEI3L
+ 0gFfSp5HNEsAQeiVx/HK2W5y47oziP6pP+haTgv0wMWhwDW5s6kQwVV/080A==
+Received: by server.lespinasse.org (Postfix, from userid 1000)
+        id 3EF7F16094C; Fri, 28 Jan 2022 14:08:46 -0800 (PST)
+Date:   Fri, 28 Jan 2022 14:08:46 -0800
+From:   Michel Lespinasse <michel@lespinasse.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Michel Lespinasse <michel@lespinasse.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel-team@fb.com,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Jerome Glisse <jglisse@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Subject: Re: [PATCH v2 18/35] mm: implement speculative handling in
+ do_anonymous_page()
+Message-ID: <20220128220846.GA18863@lespinasse.org>
+References: <20220128131006.67712-19-michel@lespinasse.org>
+ <202201290445.uKuWeLmf-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201290445.uKuWeLmf-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow additional arguments be passed to userprogs compilation.
-Reproducible clang builds need to provide a sysroot and gcc path to
-ensure same toolchain is used across hosts. KCFLAGS is not currently
-used for any user programs compilation, so add new USERCFLAGS and
-USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+On Sat, Jan 29, 2022 at 05:03:53AM +0800, kernel test robot wrote:
+> >> mm/memory.c:3876:20: warning: variable 'vmf' is uninitialized when used within its own initialization [-Wuninitialized]
+>            if (!pte_map_lock(vmf)) {
+>                 ~~~~~~~~~~~~~^~~~
+>    include/linux/mm.h:3418:25: note: expanded from macro 'pte_map_lock'
+>            struct vm_fault *vmf = __vmf;                                   \
+>                             ~~~   ^~~~~
+>    1 warning generated.
 
-Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
-an environment where a user sysroot is not specifically available.
-Currently, Clang might automatically detect GCC installation on hosts
-which have it installed to a default location in /. With addition of
-these environment variables, you can specify flags such as:
+Ah, that's interesting - this works with gcc, but breaks with clang.
 
-$ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
+The following amended patch should fix this:
+(I only added underscores to the pte_map_lock and pte_spinlock macros)
 
-to force sysroot detection to fail.
+------------------------------------ 8< ---------------------------------
 
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+mm: add pte_map_lock() and pte_spinlock()
 
-Changes since v1: Addressed minor nits from Nick
+pte_map_lock() and pte_spinlock() are used by fault handlers to ensure
+the pte is mapped and locked before they commit the faulted page to the
+mm's address space at the end of the fault.
+
+The functions differ in their preconditions; pte_map_lock() expects
+the pte to be unmapped prior to the call, while pte_spinlock() expects
+it to be already mapped.
+
+In the speculative fault case, the functions verify, after locking the pte,
+that the mmap sequence count has not changed since the start of the fault,
+and thus that no mmap lock writers have been running concurrently with
+the fault. After that point the page table lock serializes any further
+races with concurrent mmap lock writers.
+
+If the mmap sequence count check fails, both functions will return false
+with the pte being left unmapped and unlocked.
+
+Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
 ---
- Documentation/kbuild/kbuild.rst    | 9 +++++++++
- Documentation/kbuild/makefiles.rst | 2 ++
- Makefile                           | 9 ++++++---
- init/Kconfig                       | 8 ++++----
- usr/include/Makefile               | 3 +++
- 5 files changed, 24 insertions(+), 7 deletions(-)
+ include/linux/mm.h | 38 ++++++++++++++++++++++++++
+ mm/memory.c        | 66 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
 
-diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-index 2d1fc03d346e..3e7467b19c8f 100644
---- a/Documentation/kbuild/kbuild.rst
-+++ b/Documentation/kbuild/kbuild.rst
-@@ -77,6 +77,15 @@ HOSTLDLIBS
- ----------
- Additional libraries to link against when building host programs.
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 2e2122bd3da3..80894db6f01a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3394,5 +3394,43 @@ madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+ }
+ #endif
  
-+USERCFLAGS
-+----------
-+Additional options used for $(CC) when compiling userprogs.
++#ifdef CONFIG_MMU
++#ifdef CONFIG_SPECULATIVE_PAGE_FAULT
 +
-+USERLDFLAGS
-+----------
-+Additional options used for $(LD) when linking userprogs. userprogs are linked
-+with CC, so $(USERLDFLAGS) should include "-Wl," prefix as applicable.
++bool __pte_map_lock(struct vm_fault *vmf);
 +
- KBUILD_KCONFIG
- --------------
- Set the top-level Kconfig file to the value of this environment
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-index b008b90b92c9..39fb70f59429 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -982,6 +982,8 @@ The syntax is quite similar. The difference is to use "userprogs" instead of
- 
- 	When linking bpfilter_umh, it will be passed the extra option -static.
- 
-+	From command line, USERCFLAGS and USERLDFLAGS will also be used (See kbuild.rst)
++static inline bool pte_map_lock(struct vm_fault *vmf)
++{
++	VM_BUG_ON(vmf->pte);
++	return __pte_map_lock(vmf);
++}
 +
- 5.4 When userspace programs are actually built
- ----------------------------------------------
- 
-diff --git a/Makefile b/Makefile
-index 45278d508d81..8a2324e6bda8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -431,15 +431,17 @@ HOSTCC	= gcc
- HOSTCXX	= g++
- endif
- 
--export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
--			      -O2 -fomit-frame-pointer -std=gnu89
--export KBUILD_USERLDFLAGS :=
-+KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-+		     -O2 -fomit-frame-pointer -std=gnu89
-+KBUILD_USERLDFLAGS := $(USERLDFLAGS)
- 
- KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
- KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
- KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
- KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
- 
-+KBUILD_USERCFLAGS   += $(USERCFLAGS)
++static inline bool pte_spinlock(struct vm_fault *vmf)
++{
++	VM_BUG_ON(!vmf->pte);
++	return __pte_map_lock(vmf);
++}
 +
- # Make variables (CC, etc...)
- CPP		= $(CC) -E
- ifneq ($(LLVM),)
-@@ -530,6 +532,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
- export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
- export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
- export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
-+export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
- 
- export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
- export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
-diff --git a/init/Kconfig b/init/Kconfig
-index f2ae41e6717f..164706c38e8b 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -62,13 +62,13 @@ config LLD_VERSION
- 
- config CC_CAN_LINK
- 	bool
--	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
--	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
-+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
-+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
- 
- config CC_CAN_LINK_STATIC
- 	bool
--	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
--	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
-+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
-+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
- 
- config CC_HAS_ASM_GOTO
- 	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 1c2ae1368079..6a8c7dd9ccaf 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
- # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
- UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
- 
-+# USERCFLAGS might contain sysroot location for CC
-+UAPI_CFLAGS += $(USERCFLAGS)
++#else	/* !CONFIG_SPECULATIVE_PAGE_FAULT */
 +
- override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
++#define pte_map_lock(____vmf)						\
++({									\
++	struct vm_fault *__vmf = ____vmf;				\
++	__vmf->pte = pte_offset_map_lock(__vmf->vma->vm_mm, __vmf->pmd,	\
++					 __vmf->address, &__vmf->ptl);	\
++	true;								\
++})
++
++#define pte_spinlock(____vmf)						\
++({									\
++	struct vm_fault *__vmf = ____vmf;				\
++	__vmf->ptl = pte_lockptr(__vmf->vma->vm_mm, __vmf->pmd);	\
++	spin_lock(__vmf->ptl);						\
++	true;								\
++})
++
++#endif	/* CONFIG_SPECULATIVE_PAGE_FAULT */
++#endif	/* CONFIG_MMU */
++
+ #endif /* __KERNEL__ */
+ #endif /* _LINUX_MM_H */
+diff --git a/mm/memory.c b/mm/memory.c
+index d0db10bd5bee..1ce837e47395 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2745,6 +2745,72 @@ EXPORT_SYMBOL_GPL(apply_to_existing_page_range);
+ #define speculative_page_walk_end()   local_irq_enable()
+ #endif
  
- # The following are excluded for now because they fail to build.
++bool __pte_map_lock(struct vm_fault *vmf)
++{
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	pmd_t pmdval;
++#endif
++	pte_t *pte = vmf->pte;
++	spinlock_t *ptl;
++
++	if (!(vmf->flags & FAULT_FLAG_SPECULATIVE)) {
++		vmf->ptl = pte_lockptr(vmf->vma->vm_mm, vmf->pmd);
++		if (!pte)
++			vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
++		spin_lock(vmf->ptl);
++		return true;
++	}
++
++	speculative_page_walk_begin();
++	if (!mmap_seq_read_check(vmf->vma->vm_mm, vmf->seq))
++		goto fail;
++	/*
++	 * The mmap sequence count check guarantees that the page
++	 * tables are still valid at that point, and
++	 * speculative_page_walk_begin() ensures that they stay around.
++	 */
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	/*
++	 * We check if the pmd value is still the same to ensure that there
++	 * is not a huge collapse operation in progress in our back.
++	 */
++	pmdval = READ_ONCE(*vmf->pmd);
++	if (!pmd_same(pmdval, vmf->orig_pmd))
++		goto fail;
++#endif
++	ptl = pte_lockptr(vmf->vma->vm_mm, vmf->pmd);
++	if (!pte)
++		pte = pte_offset_map(vmf->pmd, vmf->address);
++	/*
++	 * Try locking the page table.
++	 *
++	 * Note that we might race against zap_pte_range() which
++	 * invalidates TLBs while holding the page table lock.
++	 * We are still under the speculative_page_walk_begin() section,
++	 * and zap_pte_range() could thus deadlock with us if we tried
++	 * using spin_lock() here.
++	 *
++	 * We also don't want to retry until spin_trylock() succeeds,
++	 * because of the starvation potential against a stream of lockers.
++	 */
++	if (unlikely(!spin_trylock(ptl)))
++		goto fail;
++	if (!mmap_seq_read_check(vmf->vma->vm_mm, vmf->seq))
++		goto unlock_fail;
++	speculative_page_walk_end();
++	vmf->pte = pte;
++	vmf->ptl = ptl;
++	return true;
++
++unlock_fail:
++	spin_unlock(ptl);
++fail:
++	if (pte)
++		pte_unmap(pte);
++	speculative_page_walk_end();
++	return false;
++}
++
+ #endif	/* CONFIG_SPECULATIVE_PAGE_FAULT */
+ 
+ /*
 -- 
-2.25.1
+2.20.1
 

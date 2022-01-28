@@ -2,220 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 146D749F0B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9BD49F0B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345164AbiA1BrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 20:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S1345173AbiA1Bvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 20:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235404AbiA1BrV (ORCPT
+        with ESMTP id S244433AbiA1Bvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 20:47:21 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9667AC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:47:20 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id a8so10653947ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:47:20 -0800 (PST)
+        Thu, 27 Jan 2022 20:51:53 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE4EC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:51:53 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id p27so8853148lfa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:51:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=V0cjl1ygvMZTU8IsBNMqY3QLwdA/2X7ytI4Oe8O1ZsE=;
-        b=VfY0mqoAeJ6pwM2nCCc1n0IXtPATIH0t1JxwCzpK9RQFv77yYY7m7E4wqz/+7G2vZD
-         bZAZbs39epUh02d2qBhekQDUgDoTIpdVhLEh7QQJEH19ELXa1z9zwnuXyL0zdoC4r9xo
-         SuH0WHsW10OdlEkzFyM92z9squlr/w9jXKoVGb+ZSZYcNpfOM/B1j4vSGBDUMLZQed99
-         wjB8ovVAE1z2h2omS+J8cHNRDToLRqDc3f3XMhpQsFevxnGWG9xVjLUrQTNtKf0aH8vW
-         MmUMZ5yIsB/+tHDLQ3Sd0Dm00efhX2PNCa/kjsFk1nGxxFwPMapYrIODsPpFqkUBYOol
-         htQw==
+        d=google.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=sWjNh2W0k8aJoofcO0dRSIIhxPuCA1JHHTuxfdhHitc=;
+        b=PQoDowfYFiG7x0sDRzKzcTZnkiY0sOzbx3Z+C6yUy4nBMsNPMgGorToRCS65AlyPLs
+         bE542TTfCJWSefj3RdTb4zy8gjoo2/AHygBdnxFoaFgdahLXGLpU6WyXeUXabzlCVid0
+         GqwFL/a/TE59OChQ6saxc1RVOw0lDVdHau1sTkK7f+1qIC2f7yL/ihDandRY3Nionvwz
+         KfHcw34Wrt6ZkY1KZ7GJIHjxsHzlrD3cFLRPtMSCLpjedw71zOwr1IFnZa8K9XKqqoMr
+         sABPFR5mcXbVRVlcEKi7qzomyvpP1Om7DcA1Qmed7oBA7JUNb0evLDcYOAj3ZbeX2WUa
+         wnjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=V0cjl1ygvMZTU8IsBNMqY3QLwdA/2X7ytI4Oe8O1ZsE=;
-        b=EODg/N9P1/OEY3PZRq10ByNQQpEcRsgDuSRquyNMQuBGPcV/MC7LabC6hJ1xgh1t2C
-         eg7H6oGBMg1XCZ2vzBpxs3nLf9eTMyBhela77241GYvuNz1mJY2DceExkDuvcDBUPfj7
-         vLiZaYZu34nouJN6TWo4M3p/HZ9xMZrGrCjgB7wo63wwHCahfH9DpKjkElmzq9swQ141
-         nqfG313zRhiyRe6g9NCjkkPH2b+XgKKSnN52O4yJ5YFECLpKTRnbp5S888nDzHYGfedR
-         Pzwvf/89ayURr7H1kFHKkorRzBMfRMGX7cbk24KvEZo7n2X18I27wZg4zLvGumnn2U4Q
-         RKwA==
-X-Gm-Message-State: AOAM531iGl36oicLbCNUJDKzaxonUP6AfzvMMHdfx6GqR6f0wpisTTXx
-        Zgx0dQXdXfoFrU2jYD+1UPm5wCBipPoZhkDUzkJZ
-X-Google-Smtp-Source: ABdhPJwCuk7Q91A40pglP5RK4LzbfGEY7S4Y1paT5rqTW07Jisx7QtQXrE8Uq1xNwQ8zjOCnCh3ZOdtfRJ0LWirpcx4=
-X-Received: by 2002:a17:907:7f29:: with SMTP id qf41mr5069085ejc.12.1643334439141;
- Thu, 27 Jan 2022 17:47:19 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=sWjNh2W0k8aJoofcO0dRSIIhxPuCA1JHHTuxfdhHitc=;
+        b=KGjIxOcfNr2L/vgR1PuZ/GhHePMHl7rLx6IWegPlXyJRQHX2eS8aY7cFhh/GkNzwok
+         +zQe8YKOxCdTcK2PWIfRqTGKctOtYw0/i29PsLdz/3F/nh96ZwU8nFpCEc3csxAE1WtX
+         hVoH/KBuvpTISsXLzr2vqIyXrdzFgUOr0dFV0DfwFUfqMSG4AvvyCghdGRkaG0hGzdb4
+         RUoUFDXHYoyXa5mXPi4D24DStXMW7rgL3tGN4l6VqP6EtUWin9y4W5CUwr4ibhcAINf7
+         KYantJk3GZ78qMSPVYQ0u/1PcKJOoFxylQ59f0tS4KLfkfOwoyaXrrTMqkzdOSpGgAB3
+         iOQQ==
+X-Gm-Message-State: AOAM531v0HsjZJHZRXMZwuzSwNsv/6964jl3lp3rEC30A+wPOQgDXo0G
+        KWHKWcWFoZFI73yf107kKebhc+yJ0kDt02WSp6HPug==
+X-Google-Smtp-Source: ABdhPJx24zP/u8QPQoI1dY+zw4a2lXlUkCiutabhsmOgyULj6gvGXTP3ImPsvbfprJ0NykvKhxrYiNJEv3jtN3H9EhE=
+X-Received: by 2002:a05:6512:3e07:: with SMTP id i7mr2786252lfv.283.1643334711241;
+ Thu, 27 Jan 2022 17:51:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125145931.56831-1-cgzones@googlemail.com>
- <CAHC9VhTCf4L9rif-+7gTK64JoUiDv28DFwS1vUsvzv8rG+JCuQ@mail.gmail.com> <8ea4d17a-f2fd-b6a5-b988-0edbc63022f6@ieee.org>
-In-Reply-To: <8ea4d17a-f2fd-b6a5-b988-0edbc63022f6@ieee.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 27 Jan 2022 20:47:08 -0500
-Message-ID: <CAHC9VhQE4B89ybnGooy599CVoA7aLd06jUkSZoWAYZWgD=BT8A@mail.gmail.com>
-Subject: Re: [RFC PATCH] selinux: split no transition execve check
-To:     Chris PeBenito <pebenito@ieee.org>
-Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Xiong Zhenwu <xiong.zhenwu@zte.com.cn>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 28 Jan 2022 02:51:24 +0100
+Message-ID: <CAG48ez0MHBbENX5gCdHAUXZ7h7s20LnepBF-pa5M=7Bi-jZrEA@mail.gmail.com>
+Subject: [BUG] net_device UAF: linkwatch_fire_event() calls dev_hold() after
+ netdev_wait_allrefs() is done
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 8:42 AM Chris PeBenito <pebenito@ieee.org> wrote:
-> On 1/26/22 17:51, Paul Moore wrote:
-> > On Tue, Jan 25, 2022 at 9:59 AM Christian G=C3=B6ttsche
-> > <cgzones@googlemail.com> wrote:
-> >>
-> >> In case a setuid or setgid binary is mislabeled with a generic context=
-,
-> >> either via a policy mistake or a move by the distribution package,
-> >> executing it will be checked by the file permission execute_no_trans o=
-n
-> >> the generic file context (e.g. bin_t).  The setuid(2)/setgid(2) syscal=
-l
-> >> within will then be checked against the unchanged caller process
-> >> context, which might have been granted the capability permission setui=
-d/
-> >> setgid to initially drop privileges.  To avoid that scenario split the
-> >> execute_no_trans permission in case of a setuid/setgid binary into a n=
-ew
-> >> permission execute_sxid_no_trans.
-> >>
-> >> For backward compatibility this behavior is contained in a new policy
-> >> capability.
-> >>
-> >> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> >> ---
-> >>   security/selinux/hooks.c                   | 9 ++++++++-
-> >>   security/selinux/include/classmap.h        | 2 +-
-> >>   security/selinux/include/policycap.h       | 1 +
-> >>   security/selinux/include/policycap_names.h | 3 ++-
-> >>   security/selinux/include/security.h        | 8 ++++++++
-> >>   5 files changed, 20 insertions(+), 3 deletions(-)
-> >
-> > Adding the refpolicy list to this thread as their opinion seems
-> > particularly relevant to this discussion.
-> >
-> > FWIW, this looks reasonable to me but I would like to hear what others
-> > have to say.
->
-> I think this a band-aid to cover up the real problem, which is the mislab=
-eled files.
+Hi!
 
-It's hard to disagree with that, and the kernel is probably the wrong
-place to apply a band-aid unless it is the only option left.
+I stumbled over a (fairly hard to hit, I think?) UAF that can be
+triggered through a race condition when a USB network adapter that
+uses the driver drivers/net/usb/ax88179_178a.c is disconnected while
+ax88179_link_reset() is running (called from usbnet_deferred_kevent(),
+running on the system_wq).
 
-> >> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> >> index 5b6895e4fc29..b825fee39a70 100644
-> >> --- a/security/selinux/hooks.c
-> >> +++ b/security/selinux/hooks.c
-> >> @@ -2348,9 +2348,16 @@ static int selinux_bprm_creds_for_exec(struct l=
-inux_binprm *bprm)
-> >>          ad.u.file =3D bprm->file;
-> >>
-> >>          if (new_tsec->sid =3D=3D old_tsec->sid) {
-> >> +               u32 perm;
-> >> +
-> >> +               if (selinux_policycap_execute_sxid_no_trans() && is_sx=
-id(inode->i_mode))
-> >> +                       perm =3D FILE__EXECUTE_SXID_NO_TRANS;
-> >> +               else
-> >> +                       perm =3D FILE__EXECUTE_NO_TRANS;
-> >> +
-> >>                  rc =3D avc_has_perm(&selinux_state,
-> >>                                    old_tsec->sid, isec->sid,
-> >> -                                 SECCLASS_FILE, FILE__EXECUTE_NO_TRAN=
-S, &ad);
-> >> +                                 SECCLASS_FILE, perm, &ad);
-> >>                  if (rc)
-> >>                          return rc;
-> >>          } else {
-> >> diff --git a/security/selinux/include/classmap.h b/security/selinux/in=
-clude/classmap.h
-> >> index 35aac62a662e..53a1eeeb86fb 100644
-> >> --- a/security/selinux/include/classmap.h
-> >> +++ b/security/selinux/include/classmap.h
-> >> @@ -65,7 +65,7 @@ struct security_class_mapping secclass_map[] =3D {
-> >>              "quotaget", "watch", NULL } },
-> >>          { "file",
-> >>            { COMMON_FILE_PERMS,
-> >> -           "execute_no_trans", "entrypoint", NULL } },
-> >> +           "execute_no_trans", "entrypoint", "execute_sxid_no_trans",=
- NULL } },
-> >>          { "dir",
-> >>            { COMMON_FILE_PERMS, "add_name", "remove_name",
-> >>              "reparent", "search", "rmdir", NULL } },
-> >> diff --git a/security/selinux/include/policycap.h b/security/selinux/i=
-nclude/policycap.h
-> >> index 2ec038efbb03..23929dc3e1db 100644
-> >> --- a/security/selinux/include/policycap.h
-> >> +++ b/security/selinux/include/policycap.h
-> >> @@ -11,6 +11,7 @@ enum {
-> >>          POLICYDB_CAPABILITY_CGROUPSECLABEL,
-> >>          POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION,
-> >>          POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS,
-> >> +       POLICYDB_CAPABILITY_EXECUTE_SXID_NO_TRANS,
-> >>          __POLICYDB_CAPABILITY_MAX
-> >>   };
-> >>   #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
-> >> diff --git a/security/selinux/include/policycap_names.h b/security/sel=
-inux/include/policycap_names.h
-> >> index b89289f092c9..4c014c2cf352 100644
-> >> --- a/security/selinux/include/policycap_names.h
-> >> +++ b/security/selinux/include/policycap_names.h
-> >> @@ -12,7 +12,8 @@ const char *selinux_policycap_names[__POLICYDB_CAPAB=
-ILITY_MAX] =3D {
-> >>          "always_check_network",
-> >>          "cgroup_seclabel",
-> >>          "nnp_nosuid_transition",
-> >> -       "genfs_seclabel_symlinks"
-> >> +       "genfs_seclabel_symlinks",
-> >> +       "execute_sxid_no_trans",
-> >>   };
-> >>
-> >>   #endif /* _SELINUX_POLICYCAP_NAMES_H_ */
-> >> diff --git a/security/selinux/include/security.h b/security/selinux/in=
-clude/security.h
-> >> index ac0ece01305a..ab95241b6b7b 100644
-> >> --- a/security/selinux/include/security.h
-> >> +++ b/security/selinux/include/security.h
-> >> @@ -219,6 +219,14 @@ static inline bool selinux_policycap_genfs_seclab=
-el_symlinks(void)
-> >>          return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_GENFS_S=
-ECLABEL_SYMLINKS]);
-> >>   }
-> >>
-> >> +static inline bool selinux_policycap_execute_sxid_no_trans(void)
-> >> +{
-> >> +       struct selinux_state *state =3D &selinux_state;
-> >> +
-> >> +       return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_EXECUTE_=
-SXID_NO_TRANS]);
-> >> +}
-> >> +
-> >> +
-> >>   struct selinux_policy_convert_data;
-> >>
-> >>   struct selinux_load_state {
-> >> --
-> >> 2.34.1
-> >>
-> >
-> >
->
->
-> --
-> Chris PeBenito
+The problem is essentially that linkwatch_fire_event(), called by a
+workqueue item, calls dev_hold() when the device has already gone
+through netdev_wait_allrefs(), meaning dev_hold() has no effect
+anymore. That happens with the following stack:
 
+  linkwatch_fire_event+0x14b/0x180
+  netif_carrier_on+0x70/0xc0
+  ax88179_link_reset+0x2f7/0x490
+  usbnet_deferred_kevent+0x3b1/0x900
+  process_one_work+0x91d/0x15d0
+  worker_thread+0x57b/0x1240
+  kthread+0x2a5/0x350
+  ret_from_fork+0x22/0x30
 
+The symptom of this race is that KASAN reports a use-after-free later
+on in __linkwatch_run_queue(), because the freed netdev was still
+queued up on the lweventlist list. (KASAN report is appended at the
+end of this mail.)
 
---=20
-paul-moore.com
+Looking through
+https://lore.kernel.org/netdev/?q=__linkwatch_run_queue+syzbot , it
+looks like syzbot has also found some crashes with the same symptom in
+the past? Though I can't easily tell whether it's actually the same
+bug...
+
+The following race between usbnet_deferred_kevent() (running
+EVENT_LINK_RESET work) and usbnet_disconnect() triggers the bug:
+
+ - USB network adapter notifies about link going up (ax88179_status())
+ - ax88179_status() -> usbnet_link_change(..., 1, 1) queues
+EVENT_LINK_RESET work
+ - system_wq starts executing EVENT_LINK_RESET work, it runs up to
+   the call to netif_carrier_on() in ax88179_link_reset()
+ - USB hub signals that the USB network adapter has been disconnected
+ - usbnet_disconnect() calls unregister_netdev(),
+   which goes through netdev_wait_allrefs()
+[from this point on, dev_hold() doesn't work anymore]
+ - EVENT_LINK_RESET work continues, calls
+   netif_carrier_on()->linkwatch_fire_event()->linkwatch_add_event(),
+   which does dev_hold() (without effect) and places the device on lweventlist
+
+After that, cleanup continues and the net_device gets freed while its
+refcount is elevated.
+
+I'm not sure what the right fix for this is.
+
+Is the bug that usbnet_disconnect() should be stopping &dev->kevent
+before calling unregister_netdev()?
+Or is the bug that ax88179_link_reset() doesn't take some kind of lock
+and re-check that the netdev is still alive?
+Or should netif_carrier_on() be doing that?
+Or is it the responsibility of the linkwatch code to check whether the
+netdev is already going away?
+
+If you think having a proper reproducer for this would help, I can
+also put that together, but it's ugly and involves /dev/raw-gadget
+(for emulating a USB device) and patching delays into the kernel...
+
+==================== ASAN crash ====================
+
+BUG: KASAN: use-after-free in __linkwatch_run_queue
+(./include/linux/list.h:442 ./include/linux/list.h:484
+net/core/link_watch.c:203)
+Write of size 8 at addr ffff888013c52580 by task kworker/1:0/949
+
+CPU: 1 PID: 949 Comm: kworker/1:0 Tainted: G        W
+5.16.0-10660-g0c947b893d69-dirty #900
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+Workqueue: events linkwatch_event
+Call Trace:
+ <TASK>
+dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
+print_address_description.constprop.0 (mm/kasan/report.c:256)
+kasan_report.cold (mm/kasan/report.c:443 mm/kasan/report.c:459)
+__linkwatch_run_queue (./include/linux/list.h:442
+./include/linux/list.h:484 net/core/link_watch.c:203)
+linkwatch_event (net/core/link_watch.c:264)
+process_one_work (kernel/workqueue.c:2312)
+worker_thread (./include/linux/list.h:284 kernel/workqueue.c:2455)
+kthread (kernel/kthread.c:359)
+ret_from_fork (arch/x86/entry/entry_64.S:301)
+ </TASK>
+
+Allocated by task 29:
+kasan_save_stack (mm/kasan/common.c:38)
+__kasan_kmalloc (mm/kasan/common.c:46 mm/kasan/common.c:437
+mm/kasan/common.c:516 mm/kasan/common.c:525)
+kvmalloc_node (mm/util.c:586)
+alloc_netdev_mqs (net/core/dev.c:10158)    // allocated type: struct net_device
+usbnet_probe (drivers/net/usb/usbnet.c:1695)
+usb_probe_interface (drivers/usb/core/driver.c:397)
+really_probe.part.0 (drivers/base/dd.c:517 drivers/base/dd.c:596)
+__driver_probe_device (drivers/base/dd.c:558 drivers/base/dd.c:752)
+driver_probe_device (drivers/base/dd.c:782)
+__device_attach_driver (drivers/base/dd.c:903)
+bus_for_each_drv (drivers/base/bus.c:385 drivers/base/bus.c:426)
+__device_attach (drivers/base/dd.c:970)
+bus_probe_device (drivers/base/bus.c:489)
+device_add (drivers/base/core.c:3412)
+usb_set_configuration (drivers/usb/core/message.c:2171)
+usb_generic_driver_probe (drivers/usb/core/generic.c:239)
+usb_probe_device (drivers/usb/core/driver.c:293)
+really_probe.part.0 (drivers/base/dd.c:517 drivers/base/dd.c:596)
+__driver_probe_device (drivers/base/dd.c:558 drivers/base/dd.c:752)
+driver_probe_device (drivers/base/dd.c:782)
+__device_attach_driver (drivers/base/dd.c:903)
+bus_for_each_drv (drivers/base/bus.c:385 drivers/base/bus.c:426)
+__device_attach (drivers/base/dd.c:970)
+bus_probe_device (drivers/base/bus.c:489)
+device_add (drivers/base/core.c:3412)
+usb_new_device.cold (drivers/usb/core/hub.c:2566)
+hub_event (drivers/usb/core/hub.c:5358 drivers/usb/core/hub.c:5502
+drivers/usb/core/hub.c:5660 drivers/usb/core/hub.c:5742)
+process_one_work (kernel/workqueue.c:2312)
+worker_thread (./include/linux/list.h:284 kernel/workqueue.c:2455)
+kthread (kernel/kthread.c:359)
+ret_from_fork (arch/x86/entry/entry_64.S:301)
+
+Freed by task 29:
+kasan_save_stack (mm/kasan/common.c:38)
+kasan_set_track (mm/kasan/common.c:46)
+kasan_set_free_info (mm/kasan/generic.c:372)
+__kasan_slab_free (mm/kasan/common.c:369 mm/kasan/common.c:329
+mm/kasan/common.c:375)
+kfree (mm/slub.c:1754 mm/slub.c:3509 mm/slub.c:4562)
+device_release (drivers/base/core.c:2234)
+kobject_put (lib/kobject.c:709 lib/kobject.c:736
+./include/linux/kref.h:65 lib/kobject.c:753)
+usb_unbind_interface (drivers/usb/core/driver.c:461)
+__device_release_driver (drivers/base/dd.c:1206)
+device_release_driver (./include/linux/device.h:782
+drivers/base/dd.c:1047 drivers/base/dd.c:1239 drivers/base/dd.c:1260)
+bus_remove_device (drivers/base/bus.c:530 (discriminator 3))
+device_del (drivers/base/core.c:3593)
+usb_disable_device (drivers/usb/core/message.c:1409 (discriminator 2))
+usb_disconnect.cold (drivers/usb/core/hub.c:2229)
+hub_event (drivers/usb/core/hub.c:5208 drivers/usb/core/hub.c:5502
+drivers/usb/core/hub.c:5660 drivers/usb/core/hub.c:5742)
+process_one_work (kernel/workqueue.c:2312)
+worker_thread (./include/linux/list.h:284 kernel/workqueue.c:2455)
+kthread (kernel/kthread.c:359)
+ret_from_fork (arch/x86/entry/entry_64.S:301)
+
+Last potentially related work creation:
+kasan_save_stack (mm/kasan/common.c:38)
+__kasan_record_aux_stack (mm/kasan/generic.c:348)
+insert_work (./include/linux/instrumented.h:71
+./include/asm-generic/bitops/instrumented-non-atomic.h:134
+kernel/workqueue.c:630 kernel/workqueue.c:637 kernel/workqueue.c:1371)
+__queue_work (kernel/workqueue.c:1537)
+queue_work_on (kernel/workqueue.c:1563)
+ax88179_status (drivers/net/usb/ax88179_178a.c:353
+drivers/net/usb/ax88179_178a.c:338)
+intr_complete (./include/linux/instrumented.h:71 (discriminator 1)
+./include/asm-generic/bitops/instrumented-non-atomic.h:134
+(discriminator 1) ./include/linux/netdevice.h:3388 (discriminator 1)
+drivers/net/usb/lan78xx.c:4205 (discriminator 1))
+__usb_hcd_giveback_urb (drivers/usb/core/hcd.c:1666)
+dummy_timer (./include/linux/spinlock.h:349
+drivers/usb/gadget/udc/dummy_hcd.c:1988)
+call_timer_fn (./include/linux/instrumented.h:71
+./include/linux/atomic/atomic-instrumented.h:27
+./include/linux/jump_label.h:266 ./include/linux/jump_label.h:276
+./include/trace/events/timer.h:125 kernel/time/timer.c:1422)
+__run_timers.part.0 (kernel/time/timer.c:1467 kernel/time/timer.c:1734)
+run_timer_softirq (kernel/time/timer.c:1749)
+__do_softirq (./include/linux/instrumented.h:71
+./include/linux/atomic/atomic-instrumented.h:27
+./include/linux/jump_label.h:266 ./include/linux/jump_label.h:276
+./include/trace/events/irq.h:142 kernel/softirq.c:559)
+
+Second to last potentially related work creation:
+kasan_save_stack (mm/kasan/common.c:38)
+__kasan_record_aux_stack (mm/kasan/generic.c:348)
+insert_work (./include/linux/instrumented.h:71
+./include/asm-generic/bitops/instrumented-non-atomic.h:134
+kernel/workqueue.c:630 kernel/workqueue.c:637 kernel/workqueue.c:1371)
+__queue_work (kernel/workqueue.c:1537)
+queue_work_on (kernel/workqueue.c:1563)
+ax88179_reset (drivers/net/usb/ax88179_178a.c:1635)
+usbnet_open (drivers/net/usb/usbnet.c:894 (discriminator 1))
+__dev_open (net/core/dev.c:1407)
+__dev_change_flags (net/core/dev.c:8139)
+dev_change_flags (net/core/dev.c:8210)
+do_setlink (net/core/rtnetlink.c:2729)
+__rtnl_newlink (net/core/rtnetlink.c:3412)
+rtnl_newlink (net/core/rtnetlink.c:3528)
+rtnetlink_rcv_msg (net/core/rtnetlink.c:5592)
+netlink_rcv_skb (net/netlink/af_netlink.c:2494)
+netlink_unicast (net/netlink/af_netlink.c:1318 net/netlink/af_netlink.c:1343)
+netlink_sendmsg (net/netlink/af_netlink.c:1919)
+sock_sendmsg (net/socket.c:705 net/socket.c:725)
+____sys_sendmsg (net/socket.c:2413)
+___sys_sendmsg (net/socket.c:2469)
+__sys_sendmsg (./include/linux/file.h:32 net/socket.c:2498)
+do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
+
+The buggy address belongs to the object at ffff888013c52000
+ which belongs to the cache kmalloc-8k of size 8192
+The buggy address is located 1408 bytes inside of
+ 8192-byte region [ffff888013c52000, ffff888013c54000)

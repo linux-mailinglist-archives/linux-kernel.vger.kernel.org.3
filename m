@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DAE49F49B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C838649F4B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346990AbiA1Hrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346853AbiA1Hrh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:47:37 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78217C06173B;
-        Thu, 27 Jan 2022 23:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=u8U0/Ai5mbQzGHpMhOzTxk2dLwnQvDLgWPnPvMcwTlA=; b=oqnQD992oMMsoVP2DYTG8sHVk/
-        Oxf214lSUukxCU1DjtlMOsUsh31Aa9sSIsDtcfKE+tmzK8XSWJof8Yyy+4ZwKhEejcqae1CDROjqA
-        zxdNl6BSBmyiL8rgq7NfvH6ZyN2nJDWnDA+ftM5ULiS+AKfPMACXuw+anwE4HfJDJlx6w9NTad0VR
-        zR2fqiOYed9wlHBKzycsbnYzTOOYxEVJ5QMEmgUe8922Re7d+4LK4KqEhJKuChAPM8OaNSR/9DktO
-        McB1DnXCbPyZ+GQM5J4Jsc5MAFqqzMfhyj2gUFu8EWb0rXtmZsXk61IfjF7ePZJzrXcxsZGuSU/nN
-        +Ns0bUMA==;
-Received: from [2001:4bb8:180:4c4c:73e:e8c7:4199:32d7] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDLyn-000rEN-TG; Fri, 28 Jan 2022 07:47:34 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
-        dhowells@redhat.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH v2] fs: rename S_KERNEL_FILE
-Date:   Fri, 28 Jan 2022 08:47:31 +0100
-Message-Id: <20220128074731.1623738-1-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
+        id S1347086AbiA1HtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:49:03 -0500
+Received: from mga04.intel.com ([192.55.52.120]:13161 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243077AbiA1Hsv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 02:48:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643356131; x=1674892131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yA9I1TVBAWLRwxa+kG83/UciNiFWOt5jTTLojABMHJc=;
+  b=Hhu+Kw+mPXfXIHz19qz9thMoPF0gyxQP4SpeBcZG4THqproq5YZPF4ks
+   qDf9fhpvonXqMdct9BXAZRJQlCxIMtETgFycaEmQfnxMyfKfchyziHHWa
+   vUdF3gGylf/YZ70PPH/Omqpz4ekYVfbLyKDoIEdJUk3WT0oZkXYzhmDuN
+   N87GOhzAJBxe4ZCJe1czyrq16coK2W8iMlzVDxECKdVyRyB8URWStTE1U
+   /3p4BvzGav3Msl8RWkLBoxbavzu1cedbORNhSKzrE97IeXt4WjNlpLKti
+   h2GRuVpY36hhuZeWoInJ6kSdav+C/U8cQ4IAlEMbPA7CWWi/iuPi/kbER
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="245912884"
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="245912884"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:48:50 -0800
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="581776906"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:48:43 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 28 Jan 2022 09:48:41 +0200
+Date:   Fri, 28 Jan 2022 09:48:41 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as
+ untrusted
+Message-ID: <YfOf2X7Snm7cvDRV@lahna>
+References: <20220120000409.2706549-1-rajatja@google.com>
+ <20220121214117.GA1154852@bhelgaas>
+ <Ye5GvQbFKo+CFtRb@lahna>
+ <Ye/X7E2dKb+zem34@lahna>
+ <Ye/btvA1rLB2rp02@kroah.com>
+ <Ye/zTHR5aCG58z87@lahna>
+ <CAJZ5v0gitdeEAxcgSoB1=VHA9FnRdCtmUqA_cN_f1a2yFRDghQ@mail.gmail.com>
+ <CACK8Z6H2DLTJgxgS3pcvfOh=5S8cxEMKvwEPfB9zoVf1g2H_UQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACK8Z6H2DLTJgxgS3pcvfOh=5S8cxEMKvwEPfB9zoVf1g2H_UQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-S_KERNEL_FILE is grossly misnamed.  We have plenty of files hold open by
-the kernel kernel using filp_open.  This flag OTOH signals the inode as
-being a special snowflake that cachefiles holds onto that can't be
-unlinked because of ..., erm, pixie dust.  So clearly mark it as such.
+Hi,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
----
+On Thu, Jan 27, 2022 at 02:26:07PM -0800, Rajat Jain wrote:
+> Hello Rafael, Bjorn, Mika, Dmitry, Greg,
+> 
+> Thanks a lot for your comments.
+> 
+> On Tue, Jan 25, 2022 at 6:45 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, Jan 25, 2022 at 1:55 PM Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > >
+> > > On Tue, Jan 25, 2022 at 12:15:02PM +0100, Greg Kroah-Hartman wrote:
+> > > > On Tue, Jan 25, 2022 at 12:58:52PM +0200, Mika Westerberg wrote:
+> > > > > On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
+> > > > > > > > This patch introduces a new "UntrustedDevice" property that can be used
+> > > > > > > > by the firmware to mark any device as untrusted.
+> > > > > >
+> > > > > > I think this new property should be documented somewhere too (also
+> > > > > > explain when to use it instead of ExternalFacingPort). If not in the
+> > > > > > next ACPI spec or some supplemental doc then perhaps in the DT bindings
+> > > > > > under Documentation/devicetree/bindings.
+> > > > >
+> > > > > Actually Microsoft has similar already:
+> > > > >
+> > > > > https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+> > > > >
+> > > > > I think we should use that too here.
+> 
+> But because this property also applies to a root port (only), it only
+> helps if the device is downstream a PCIe root port. In our case, we
+> have an internal (wifi) device 00:14.3 (sits on the internal PCI bus
+> 0), so cannot use this.
 
-Changes since v1:
- - fix commit message typos
-
- fs/cachefiles/namei.c | 12 ++++++------
- fs/namei.c            |  2 +-
- include/linux/fs.h    |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
-index 9bd692870617c..599dc13a7d9ab 100644
---- a/fs/cachefiles/namei.c
-+++ b/fs/cachefiles/namei.c
-@@ -20,8 +20,8 @@ static bool __cachefiles_mark_inode_in_use(struct cachefiles_object *object,
- 	struct inode *inode = d_backing_inode(dentry);
- 	bool can_use = false;
- 
--	if (!(inode->i_flags & S_KERNEL_FILE)) {
--		inode->i_flags |= S_KERNEL_FILE;
-+	if (!(inode->i_flags & S_CACHEFILE)) {
-+		inode->i_flags |= S_CACHEFILE;
- 		trace_cachefiles_mark_active(object, inode);
- 		can_use = true;
- 	} else {
-@@ -51,7 +51,7 @@ static void __cachefiles_unmark_inode_in_use(struct cachefiles_object *object,
- {
- 	struct inode *inode = d_backing_inode(dentry);
- 
--	inode->i_flags &= ~S_KERNEL_FILE;
-+	inode->i_flags &= ~S_CACHEFILE;
- 	trace_cachefiles_mark_inactive(object, inode);
- }
- 
-@@ -742,7 +742,7 @@ static struct dentry *cachefiles_lookup_for_cull(struct cachefiles_cache *cache,
- 		goto lookup_error;
- 	if (d_is_negative(victim))
- 		goto lookup_put;
--	if (d_inode(victim)->i_flags & S_KERNEL_FILE)
-+	if (d_inode(victim)->i_flags & S_CACHEFILE)
- 		goto lookup_busy;
- 	return victim;
- 
-@@ -789,11 +789,11 @@ int cachefiles_cull(struct cachefiles_cache *cache, struct dentry *dir,
- 	/* check to see if someone is using this object */
- 	inode = d_inode(victim);
- 	inode_lock(inode);
--	if (inode->i_flags & S_KERNEL_FILE) {
-+	if (inode->i_flags & S_CACHEFILE) {
- 		ret = -EBUSY;
- 	} else {
- 		/* Stop the cache from picking it back up */
--		inode->i_flags |= S_KERNEL_FILE;
-+		inode->i_flags |= S_CACHEFILE;
- 		ret = 0;
- 	}
- 	inode_unlock(inode);
-diff --git a/fs/namei.c b/fs/namei.c
-index d81f04f8d8188..7402277ecc1f5 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3959,7 +3959,7 @@ int vfs_rmdir(struct user_namespace *mnt_userns, struct inode *dir,
- 
- 	error = -EBUSY;
- 	if (is_local_mountpoint(dentry) ||
--	    (dentry->d_inode->i_flags & S_KERNEL_FILE))
-+	    (dentry->d_inode->i_flags & S_CACHEFILE))
- 		goto out;
- 
- 	error = security_inode_rmdir(dir, dentry);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c8510da6cc6dc..099d7e03d46e6 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2173,7 +2173,7 @@ struct super_operations {
- #define S_ENCRYPTED	(1 << 14) /* Encrypted file (using fs/crypto/) */
- #define S_CASEFOLD	(1 << 15) /* Casefolded file */
- #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
--#define S_KERNEL_FILE	(1 << 17) /* File is in use by the kernel (eg. fs/cachefiles) */
-+#define S_CACHEFILE	(1 << 17) /* In use as cachefile, can't be unlinked */
- 
- /*
-  * Note that nosuid etc flags are inode-specific: setting some file-system
--- 
-2.30.2
-
+Right. I wonder if we can expand it to cover all internal devices, not
+just PCIe root ports? We anyways need to support that property so does
+not make much sense to me to invent yet another that does pretty much
+the same thing.

@@ -2,101 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C02749F754
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2896549F75C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347887AbiA1Kcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347878AbiA1Kcy (ORCPT
+        id S233440AbiA1Kec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:34:32 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:38006 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232120AbiA1Ke2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:32:54 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DDFC061747;
-        Fri, 28 Jan 2022 02:32:54 -0800 (PST)
+        Fri, 28 Jan 2022 05:34:28 -0500
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7FA23471;
-        Fri, 28 Jan 2022 11:32:51 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6A6D3B9C;
+        Fri, 28 Jan 2022 11:34:26 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643365971;
-        bh=QVy9zl0W8jMMsuagrjFHi3f0S0j/21GAM2lTr0325W0=;
+        s=mail; t=1643366066;
+        bh=SjngVim/bAf9eBc4Da9VVdDH4QW1J82EoUqAY4mOegc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OeUrFGsKU4F+E6XXqPJtoup86EbTlroJpYbUqeD5i+PX4+dXjEb7W9340/J4SIcHd
-         T37s/gyVQQei5Dn+UprtOlaaFCdjISEtPNMZQVcYMGwPMcPQ+b26YTkac5DKDejO2u
-         cEgyqZu4Auv8KCmFfYgT5K8vk6CnArkU8ZvSAVsI=
-Date:   Fri, 28 Jan 2022 12:32:30 +0200
+        b=iIqVB+7jiNvEi7UPEfL67GXviPPO5/o3PB4DBuzEpg9fSbb0AATxZL2mqIDQQcANj
+         v8v6AmI/srfB2KUotIg5IvS35m/GHPvurjFIJ/DRqeC88pmKvnGJq1JNfpGDtYVANf
+         zvAnZ2+TEMafOBeJESYCAfNJMA7aGxI2yv4UD+ac=
+Date:   Fri, 28 Jan 2022 12:34:05 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zhou Qingyang <zhou1615@umn.edu>, kjlu@umn.edu,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: ti-vpe: cal: Fix a NULL pointer dereference in
- cal_ctx_v4l2_init_formats()
-Message-ID: <YfPGPssBW5l1r8ew@pendragon.ideasonboard.com>
-References: <20220124172001.62457-1-zhou1615@umn.edu>
- <YfPDOOtlGPRfp3Vo@kroah.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
+ kernel parameter
+Message-ID: <YfPGnfly3GOAOlfp@pendragon.ideasonboard.com>
+References: <20211217003752.3946210-1-javierm@redhat.com>
+ <20211217003752.3946210-32-javierm@redhat.com>
+ <164336121612.533872.1685181669511488706@Monstersaurus>
+ <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YfPDOOtlGPRfp3Vo@kroah.com>
+In-Reply-To: <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Thomas,
 
-On Fri, Jan 28, 2022 at 11:19:36AM +0100, Greg KH wrote:
-> On Tue, Jan 25, 2022 at 01:20:01AM +0800, Zhou Qingyang wrote:
-> > In cal_ctx_v4l2_init_formats(), devm_kzalloc() is assigned to fw and there
-> > is a dereference of it after that, which could lead to NULL pointer
-> > dereference on failure of devm_kzalloc().
+On Fri, Jan 28, 2022 at 10:33:21AM +0100, Thomas Zimmermann wrote:
+> Am 28.01.22 um 10:13 schrieb Kieran Bingham:
+> > Quoting Javier Martinez Canillas (2021-12-17 00:37:46)
+> >> According to disable Documentation/admin-guide/kernel-parameters.txt, this
+> >> parameter can be used to disable kernel modesetting.
+> >>
+> >> DRM drivers will not perform display-mode changes or accelerated rendering
+> >> and only the system framebuffer will be available if it was set-up.
 > > 
-> > Fix this bug by adding a NULL check of ctx->active_fmt.
-> > 
-> > This bug was found by a static analyzer.
-> > 
-> > Builds with 'make allyesconfig' show no new warnings,
-> > and our static analyzer no longer warns about this code.
-> > 
-> > Fixes: 7168155002cf ("media: ti-vpe: cal: Move format handling to cal.c and expose helpers")
-> > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> > --
-> > The analysis employs differential checking to identify inconsistent 
-> > security operations (e.g., checks or kfrees) between two code paths 
-> > and confirms that the inconsistent operations are not recovered in the
-> > current function or the callers, so they constitute bugs. 
-> > 
-> > Note that, as a bug found by static analysis, it can be a false
-> > positive or hard to trigger. Multiple researchers have cross-reviewed
-> > the bug.
-> > 
-> >  drivers/media/platform/ti-vpe/cal-video.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-> > index 7799da1cc261..3e936a2ca36c 100644
-> > --- a/drivers/media/platform/ti-vpe/cal-video.c
-> > +++ b/drivers/media/platform/ti-vpe/cal-video.c
-> > @@ -823,6 +823,9 @@ static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
-> >  	/* Enumerate sub device formats and enable all matching local formats */
-> >  	ctx->active_fmt = devm_kcalloc(ctx->cal->dev, cal_num_formats,
-> >  				       sizeof(*ctx->active_fmt), GFP_KERNEL);
-> > +	if (!ctx->active_fmt)
-> > +		return -ENOMEM;
-> > +
-> >  	ctx->num_active_fmt = 0;
-> >  
-> >  	for (j = 0, i = 0; ; ++j) {
+> > What is the 'system framebuffer' in this instance? Reading
+> > https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt
+> > it sounds like that means anything already set up by the bootloader.
 > 
-> As stated before, umn.edu is still not allowed to contribute to the
-> Linux kernel.  Please work with your administration to resolve this
-> issue.
+> Exactly this.
+> 
+> >> But only a few DRM drivers currently check for nomodeset, make this driver
+> >> to also support the command line parameter.
+> >>
+> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> >> ---
+> >>
+> >> (no changes since v1)
+> >>
+> >>   drivers/gpu/drm/rcar-du/rcar_du_drv.c | 3 +++
+> >>   1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> >> index 5a8131ef81d5..982e450233ed 100644
+> >> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> >> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> >> @@ -701,6 +701,9 @@ static struct platform_driver rcar_du_platform_driver = {
+> >>   
+> >>   static int __init rcar_du_init(void)
+> >>   {
+> >> +       if (drm_firmware_drivers_only())
+> >> +               return -ENODEV;
+> >> +
+> > 
+> > This will completely disable all control of the display device when
+> > nomodeset is enabled.
+> > 
+> > Is there any requirement for us to support outputting to the display if
+> > it was previously set up? presumably without setting or changing any
+> > modes, but simply allowing the existing frame to be updated?
+> 
+> There's no requirement for your driver. We just want a parameter where 
+> we can conveniently disable most of DRM's drivers and reduce it to a 
+> minimum. Helps distributions to provide a simple fallback mode.  Most 
+> PCI-based drivers already support that. Now we're added it to the other 
+> drivers as well.
+> 
+> > 
+> > I think the implication is that 'firmware drivers' would mean a display
+> > could be updated through some firmware interface, which we won't have
+> > ... so it seems reasonable to accept that this whole driver can be
+> > disabled in that instance.
+> 
+> It cannot be 'mode-setted'. We get a pre-configured framebuffer from the 
+> firmware or bootloader. Whatever we draw there shows up on the screen.
 
-I thought this had been resolved, my bad. I can drop the patch, but it
-fixes a real bug (although unlikely). Should I re-author this fix ?
+I doubt that's going to work as you expect, clocks and regulators will
+get disabled at boot if not used by any driver.
+
+> > Reading your mail that brought this thread up in my inbox, I think
+> > you've already hit merge on this, so don't worry about adding a tag in
+> > that instance, but I think this is ok.
+> > 
+> > Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> > 
+> >>          rcar_du_of_init(rcar_du_of_table);
+> >>   
+> >>          return platform_driver_register(&rcar_du_platform_driver);
 
 -- 
 Regards,

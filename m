@@ -2,141 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DB449FD1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A946049FD28
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349694AbiA1PvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S1349710AbiA1PyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349686AbiA1PvA (ORCPT
+        with ESMTP id S243235AbiA1PyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:51:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E63C061714;
-        Fri, 28 Jan 2022 07:50:59 -0800 (PST)
+        Fri, 28 Jan 2022 10:54:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDF2C061714;
+        Fri, 28 Jan 2022 07:54:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9592AB80D5F;
-        Fri, 28 Jan 2022 15:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C049C340E6;
-        Fri, 28 Jan 2022 15:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643385057;
-        bh=dHqKFVDo8/TjjOkINPkqqECV8kHJmc9ubDxhkDsKCRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UIgn+uYaIcZnrR3GGRYpPs9PW6Z1jWKIYs0QDXBkwYkumMfftCcyJFOPvS1SHGgY9
-         TSbIG/p3kqKO1Xu80pNP/vh0TLex+Fw7YNdDY+AGe0c2DzHy2kwWTRnbZKzRJCUwCz
-         KayXZKOHERpEOvHwSeSMCCTuIGIGuH3j1ATxeaOs=
-Date:   Fri, 28 Jan 2022 16:50:54 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Zhou Qingyang <zhou1615@umn.edu>, kjlu@umn.edu,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clk: imx: Fix a NULL pointer dereference in
- imx_register_uart_clocks()
-Message-ID: <YfQQ3iQhSxCiUQ2U@kroah.com>
-References: <20220124165206.55059-1-zhou1615@umn.edu>
- <YfPCdPuoB3RYgzL8@kroah.com>
- <CAHCN7x+bvC70Y18j8tvSVZNjwipYu3xTvFo=AjKvYnmaucBiGg@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 802E760EE2;
+        Fri, 28 Jan 2022 15:54:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9402CC340EA;
+        Fri, 28 Jan 2022 15:54:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EKRHKL+b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643385259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IrsMD9OsKnJJ5L2qqq1WV5CMlphc6Ingdz/kQiF3QcQ=;
+        b=EKRHKL+bbc7MI4YgCyb3InTqglzkXHpilwRMb/jA71BbCD70Izf+VA5yL9jE+xB445nS1p
+        4+zpnSDTATTfRj9nno35fxSKgUf6Or1nY0EAW4lU0de7DdYokzkfe6lq3LmfEgWr1zfwuL
+        JeimoivF/QDg0F3i3ewBtUFLkh/SqOc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 416aa0ab (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 28 Jan 2022 15:54:19 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id r65so19629923ybc.11;
+        Fri, 28 Jan 2022 07:54:18 -0800 (PST)
+X-Gm-Message-State: AOAM532RgbxPWqXkNTV0V/ZU6LNoshsHoZbOhJVxZ/kFTO9WXgR79kT4
+        e6T9IGz/Lad19yVjcXqa+iB6b2ereOeE9AOrwUU=
+X-Google-Smtp-Source: ABdhPJwQEp72NgKzBtMW8AWhE5kN/yjyXnCzJm7PZHhYkzLlNhnifjowLdZ+skVQ3dDAKPtVT+GCbcsj5iIZNIhTMNc=
+X-Received: by 2002:a25:bd08:: with SMTP id f8mr5998167ybk.121.1643385257209;
+ Fri, 28 Jan 2022 07:54:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHCN7x+bvC70Y18j8tvSVZNjwipYu3xTvFo=AjKvYnmaucBiGg@mail.gmail.com>
+References: <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+ <20220128153344.34211-1-Jason@zx2c4.com> <YfQPVp8TULSq3V+l@linutronix.de>
+In-Reply-To: <YfQPVp8TULSq3V+l@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 28 Jan 2022 16:54:06 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pmdeLBKJbTaVQv-z9J81qKA=R4uoZ1DeXABy6Lt3bXuA@mail.gmail.com>
+Message-ID: <CAHmME9pmdeLBKJbTaVQv-z9J81qKA=R4uoZ1DeXABy6Lt3bXuA@mail.gmail.com>
+Subject: Re: [PATCH] random: remove batched entropy locking
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 07:47:06AM -0600, Adam Ford wrote:
-> On Fri, Jan 28, 2022 at 4:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Jan 25, 2022 at 12:52:06AM +0800, Zhou Qingyang wrote:
-> > > In imx_register_uart_clocks(), the global variable imx_uart_clocks is
-> > > assigned by kcalloc() and there is a dereference of in the next for loop,
-> > > which could introduce a NULL pointer dereference on failure of kcalloc().
-> > >
-> > > Fix this by adding a NULL check of imx_uart_clocks.
-> > >
-> > > This bug was found by a static analyzer.
-> > >
-> > > Builds with 'make allyesconfig' show no new warnings,
-> > > and our static analyzer no longer warns about this code.
-> > >
-> > > Fixes: 379c9a24cc23 ("clk: imx: Fix reparenting of UARTs not associated with stdout")
-> > > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> > > ---
-> > > The analysis employs differential checking to identify inconsistent
-> > > security operations (e.g., checks or kfrees) between two code paths
-> > > and confirms that the inconsistent operations are not recovered in the
-> > > current function or the callers, so they constitute bugs.
-> > >
-> > > Note that, as a bug found by static analysis, it can be a false
-> > > positive or hard to trigger. Multiple researchers have cross-reviewed
-> > > the bug.
-> > >
-> > >  drivers/clk/imx/clk.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
-> > > index 7cc669934253..99249ab361d2 100644
-> > > --- a/drivers/clk/imx/clk.c
-> > > +++ b/drivers/clk/imx/clk.c
-> > > @@ -173,6 +173,8 @@ void imx_register_uart_clocks(unsigned int clk_count)
-> > >               int i;
-> > >
-> > >               imx_uart_clocks = kcalloc(clk_count, sizeof(struct clk *), GFP_KERNEL);
-> > > +             if (!imx_uart_clocks)
-> > > +                     return;
-> > >
-> > >               if (!of_stdout)
-> > >                       return;
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > As stated before, umn.edu is still not allowed to contribute to the
-> > Linux kernel.  Please work with your administration to resolve this
-> > issue.
-> 
-> Greg,
-> 
-> In the interest of safety, I believe this patch is reasonable.
+Hi Sebastian,
 
-How can kcalloc really fail here?  Seriously, this is an impossible
-thing to happen in real-world situations, you have to have special
-fault-injection tooling to ever hit this in a system that is not just
-frozen due to other problems.
+On Fri, Jan 28, 2022 at 4:44 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> NO. Could we please look at my RANDOM patches first?
+> I can repost my rebased patched if there no objection.
 
-> I
-> wrote the original patch that is being fixed by this.  Would it be
-> acceptable if I submitted the same patch with "suggested-by"
-> associated with Zhou @ umn.edu?  I want to give credit where credit is
-> due while still maintaining the rule that patches are not actually
-> being accepted by umn.edu.
+I did, and my reply is here:
+https://lore.kernel.org/lkml/CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com/
 
-If you think this really is needed, then yes, feel free to rewrite it.
+I was hoping for a series that addresses these issues. As I mentioned
+before, I'm not super keen on deferring that processing in a
+conditional case and having multiple entry ways into that same
+functionality. I don't think that's worth it, especially if your
+actual concern is just userspace calling RNDADDTOENTCNT too often
+(which can be safely ratelimited). I don't think that thread needs to
+spill over here, though, so feel free to follow up with a v+1 on that
+series and I'll happily take a look. Alternatively, if you'd like to
+approach this by providing a patch for Jonathan's issue, that makes
+sense too. So far, the things in front of me are: 1) your patchset
+from last month that has unresolved issues, and 2) Andy's thing, which
+maybe will solve the problem (or it won't?). A third alternative from
+you would be most welcome too.
 
-But rewrite it to be correct.  As it is, this is not correct.  If an
-error happens because we are out of memory, actually handle that and do
-not just return as if everything worked properly like this patch is
-doing here.
-
-The "suggestion" here is incorrect, which is the big problem here.
-Whatever tool this group is using is wrong, and as a few people have
-hinted to me offline, maybe they are just still messing around with us
-and seeing how we behave.  Personally, I'm starting to get mad.
-
-thanks,
-
-greg k-h
+Jason

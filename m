@@ -2,114 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD1749FE9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAD949FE9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350191AbiA1RFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 12:05:15 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:46279 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236809AbiA1RFO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 12:05:14 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id D12C7200007;
-        Fri, 28 Jan 2022 17:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643389513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JFYyWikS9axvsLIq/lr15Z5P7RuvOnwGkrjHaVqpdzk=;
-        b=nKIwLDcNWWekb0xu+t4Ec/Rc6hwdVh7jaVHRsNGrdAHrOeMjtBPMClo7FhR+EzfOusLVBe
-        XQcQO29r1lFyBlMK2lu+STgJYPJsKtY1k4exJaxtIKSxzBmCcuIRsx2852YzATYbjc86JP
-        qjVk/p33u8bEJyjWUA+QBEPqD/Oq4KXJ8D6abXywOSftYXf26KFw45/ao+0U9H9sUruSm5
-        3kBI+Vmk5E1KRjMp6eMe+3KZ/nLre7dQGt+UGhaR6ZM+ZgteErF5OuMJIVmiTj2kl86eba
-        Fv+kC7uPl/mTCYsI7g1QLyBvtl2Ac61s2Ea2IrFQiEb+rvI0bU4DEbJ/3XalpA==
-Date:   Fri, 28 Jan 2022 18:05:10 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [mtd:spi-mem-ecc 29/29] drivers/spi/spi-mxic.c:688: undefined
- reference to `nand_ecc_unregister_on_host_hw_engine'
-Message-ID: <20220128180510.51d304ea@xps13>
-In-Reply-To: <202201282024.dNzYfD56-lkp@intel.com>
-References: <202201282024.dNzYfD56-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1350416AbiA1RFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 12:05:21 -0500
+Received: from mail-mw2nam12on2051.outbound.protection.outlook.com ([40.107.244.51]:23520
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1350271AbiA1RFT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 12:05:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TEsInna54KZJIKWz0ffmHG0QQKABONUC30fk3T52t03jGI2kBykkWqxcxvNo/UKCMKATq+M9V8qnp1kBgGqTiS6q9twdBwqxOHbD+eOooKl+VtcN18KPbt5RGSuBNUSLa1yRYyLlIz7WTEvfiZ63OK/0JYWXzUpGATS3XRqT6qQyA5EpqiYxDP482QUJkA/25/K6Flx3ANHVK32v/Mb48JiPYfq78p5ultgs/KsxZBcAZGJHwZXLR+8KfBOlUmTIlQrTbIuxU/qbzrGPh9pxXMwKYeD1vfobWZaz12FInKc8YdCZW/HbLCd7ktRo7Fq3KhYofJaoZQhQ9IWHV8RINg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LcYwWB26iTQe4wGP3OniAVDwzyc6yVgAZuVGyPrlZ0o=;
+ b=hHhKXM+gzcdBg+Ls4vA1Ro0UIrCjcHFjQKI0OXM2e4ORNk0arFYO8kyOu6JmZh86VembinhYjpMoOPBxm/ajn2flDapeXetjLoPJDTHC1mOCKbFnBfcv7gpUaShvz2ylGvnrNKIFz5KeMbrLgpjx8O1W6UVH6p64xGJGck6u23PepDGYmRld1eTSGcu4H/98r6BrkBNHppKJZi0U/e2/WjJRJLlNUU+SthREoMVZXY2ZAjK9UTFDrHLOggasH21vZ5DaTyMvXQaNMn2XicCgWw6hcjmFn+9NB1FxsWUqJggbv00BZsyyprUZRxmG4B+09aTD5+YWOHS4ibfDfFtSKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LcYwWB26iTQe4wGP3OniAVDwzyc6yVgAZuVGyPrlZ0o=;
+ b=LhIv8zNRz6TNy7POwVleoUwkC1ZVkmhZAC0lwSMCkGbtq2zk1IOnSKTFR/szIVfmRIcc5EOAL9ocorXRWiEZs/NCfKpOUkeoDxtYDVjAz2I3+aa/zJOTBntbxoeZbWneijcoApvzzIAvl1rbRuNsL3s0EEDtRpfi1g7lXJoaTPHbIzNKDfyScDZ1v4sAroHPbprg2UXHppxh9fKBYEOQO0hW4H9VbJLFbibbew90vURULqcJaJH81DQWYlUG0q8aZ5GKJQm2Fv9+Msg4Y6a4EZsvqzFdeoxKyiEBsh2ZNfQhUVUyKEW+F3BLY6lbApqTa6hNabp3Ze13Wcrp6BXycw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BYAPR12MB2776.namprd12.prod.outlook.com (2603:10b6:a03:67::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.14; Fri, 28 Jan
+ 2022 17:05:18 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4930.020; Fri, 28 Jan 2022
+ 17:05:18 +0000
+Date:   Fri, 28 Jan 2022 13:05:16 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH rdma-next] RDMA/mlx5: Delete get_num_static_uars function
+Message-ID: <20220128170516.GA1884437@nvidia.com>
+References: <11d78568c3c6ba588ee8465e0d10d96145fc825c.1642960830.git.leonro@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11d78568c3c6ba588ee8465e0d10d96145fc825c.1642960830.git.leonro@nvidia.com>
+X-ClientProxiedBy: BL1PR13CA0396.namprd13.prod.outlook.com
+ (2603:10b6:208:2c2::11) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36b1a5a8-f551-441d-9fa8-08d9e2805c32
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2776:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB277696DE57A41FB32636E6DAC2229@BYAPR12MB2776.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yL9Nwh1orRMcPOgqJ/BnwJPjw1vx+v5jxhZhsnb8DvUGpAVKWCW3ZQTH6nKaLVRPVuTiOsNn/FuPri936I/BsKXLCzi85c0Oi/ZMFbhpeKqkNKkWZaQ4cq828HAZbWv2n+rgONEZE3WpQArzQ/QIG1VcS+beBTt9aJsCtbzAkA3zIiT4rGVNERiWvf6AZBfV8FOe5b2w8bmwXfXVeDYmBnPiQb42l43U2hiQaiT2DTmJXrSGp2rEAJ8nFJRi/qiKH16+FOxgv5z/nuqVFeWOeYiDONvvDk/172lo0qghwjdoNWOE18RaEkdUxAp+PYFY8If+xRGofetY68LoKeXzPg5vrLYGXUB/coz4FPTDWXWjVqEaLALmb/i4Pitsbha9Q4Fj1RSX0kmOD/j1vfCRrfViJMnJFR1ojT5vMw2jCW/Jb0wVVvkIZ5J/oHH1apjGe0ey4wPsLVsZVey1Svl4Yhogdamf9pujO+iVY3h2ccbLPu+SMlzaekPOW8Phs6WKt8C1Ak5k2w9jHpsQcql2Q0sIeEiLDrG80TgS7PDsjnSPQbHf6Ti4zCs4/WbQkT46ETZz/DiKMAdy6rEBo11f35yJw/bTmXzxjirU91LIECmRGHl+pK6QNXT9MOSeEtEfse1M4p4IlD3/hqEqU4jYQA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6916009)(6506007)(5660300002)(4326008)(6512007)(8676002)(2616005)(38100700002)(83380400001)(4744005)(66476007)(508600001)(6486002)(33656002)(26005)(86362001)(66946007)(1076003)(2906002)(186003)(8936002)(66556008)(316002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yD/NrFe+23Uufieu9sIA4O3KhiMP1fX6LJ58LVzkePT901dXQbuIIz/jrjIk?=
+ =?us-ascii?Q?HvtrsQXNdvEfMwEbCoOsjFxrvet7q2NTQwGv5VSWX4QHSJIOW1s5OZUe6pl6?=
+ =?us-ascii?Q?VqCLdGRDMS8FzAm3nreOEZUf7JkuLUdF8JvvnoqNKlma01oHRDr+Bj3zmjPd?=
+ =?us-ascii?Q?v873rDSaOO1PqT5YYt6zPFD4zUOmhvesQB478X/nTdQ71BYE6yRFmgzwSfo8?=
+ =?us-ascii?Q?nItFFfRKgSzHDDpmj9LQB15fm5rI7KYhU6EWCaQgt70LNHlfc2BFeUrjMLPK?=
+ =?us-ascii?Q?mwJ7CXHTgSd+YCQjTLECH77Scsj41VlC64m3Nw6+US7z+iYjxztFbcURED6y?=
+ =?us-ascii?Q?DoLDtQiJNwcActJGJ4MiUHQx/tTKOB6OlRoakvfg8r6FcCQlEx5k8SMLy+8k?=
+ =?us-ascii?Q?VWSylovFiFMTCHRGVEMPrFIx/wsLlMhrYKN+lCmng8Bx5+cwVRwUFSg1RjLE?=
+ =?us-ascii?Q?lhgcXXUlkMCQCrKZUPmZ6c8L8A6j961a336MhgKd4JCPQ5NB/pYgwzBTaWLa?=
+ =?us-ascii?Q?ZqUnMRm2MMhrSvtKfA1SpXUwzdflgaFwsNJLdENvzFLmQ0K2oov4ntvj7BXt?=
+ =?us-ascii?Q?RRjzw+QU+juCn79hpLkXyoSpNev1rfxmEYNKXy1fohBeTJqjTL8bsRgymbfa?=
+ =?us-ascii?Q?KZrYBQ73UEyzxalQfIDvGWs9zkZVQJ0c1USkTUBtOwW4Bskf1+EBJ2IafL47?=
+ =?us-ascii?Q?cG6OjyCDq1763KdAWAlQL6wJ86inKXohgu3vy4mEZzgQE4vJoGSII2XGmSHU?=
+ =?us-ascii?Q?f6cYyhSxP5wNdRN9pmY3VeSBu3W5EdZR02d/nVOzUnPbu4ZRHEQn4AztgYVh?=
+ =?us-ascii?Q?509FL1iWzzrdZ7uTGOQZuxXgTyqhszMlSz2Dq4JWR2pCH1XRGWQJ4OwmZ5xC?=
+ =?us-ascii?Q?x5P1Nkrs0lKbRnP/14gcjPSLIQfYi5TKTIhsULGN9wH6ucvQoIhOz9p8LuCw?=
+ =?us-ascii?Q?S9tLq86khFKEwPaalEw/cZgst+kOPs5crkp2w/Fhdh3gZzGHd+jx0IDGnHIb?=
+ =?us-ascii?Q?8wnqho88GVwb3TygvmSiKkPluql5yDXFYnv4NP8rZhOBd2JPeOGeYtcOsriK?=
+ =?us-ascii?Q?D4edFFgFz4qVlmdKOy/DyYC2eN7KYGCtCyfDD5d3PxarImoKTT8xXNlgYA3F?=
+ =?us-ascii?Q?ma9Au79gMQYMJJ0iABmj3Gm9lha+Wowv6WVoqHBh3baDI+IrWPypVYwDqsZG?=
+ =?us-ascii?Q?UBN6a1l00vQKeSvyT3elW+JIhN/doqQAfczmM7/zNiDswHMk/OIB3XC1rho5?=
+ =?us-ascii?Q?oOiE1ZN4ZXrsdOao5EZFB3AiSuhzpBWY8BZNjc4VPyNP8enVr+Pm2PM5mCLi?=
+ =?us-ascii?Q?hFNteejFwVqXS+Xspx8FxL1Z3iKvTKMjuV2rcJqMrwqMkc5WaJPxRkdwWR+p?=
+ =?us-ascii?Q?yMdztBVgtRfDr68qF8I6Z2WNlEaSc4OJgu26T11/aHEgTd4ygyHl+eUCkjys?=
+ =?us-ascii?Q?aGvsoVvVrjPd7tssbV3do7Cis7Ki4rCu5haffe946QHJXmYIaqCFeV7se1l8?=
+ =?us-ascii?Q?XAqFV758i7BoTSem1BrB3xS6VXYNVrV6UjOV4dHQ05L+Sythpbxfq9eAolHr?=
+ =?us-ascii?Q?9lhq2UfL+aUv6Q9w/2w=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36b1a5a8-f551-441d-9fa8-08d9e2805c32
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2022 17:05:18.1398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: phPkoFdVHZJLPO1c6ILk2wf9nhFGX6jmI9lGeiv7mu5lBkRRIT6TR2islFukTQ4l
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2776
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-lkp@intel.com wrote on Fri, 28 Jan 2022 21:01:33 +0800:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi=
--mem-ecc
-> head:   493b08141c0086ddb2126179cca7a8a7936b3582
-> commit: 493b08141c0086ddb2126179cca7a8a7936b3582 [29/29] spi: mxic: Add s=
-upport for pipelined ECC operations
-> config: i386-randconfig-a014-20210930 (https://download.01.org/0day-ci/ar=
-chive/20220128/202201282024.dNzYfD56-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> reproduce (this is a W=3D1 build):
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/c=
-ommit/?id=3D493b08141c0086ddb2126179cca7a8a7936b3582
->         git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/mtd/linux.git
->         git fetch --no-tags mtd spi-mem-ecc
->         git checkout 493b08141c0086ddb2126179cca7a8a7936b3582
->         # save the config file to linux build tree
->         mkdir build_dir
->         make W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->    ld: drivers/spi/spi-mxic.o: in function `mxic_spi_mem_ecc_remove':
-> >> drivers/spi/spi-mxic.c:688: undefined reference to `nand_ecc_unregiste=
-r_on_host_hw_engine' =20
-
-Today I learned that unlike "depends on", "select" does not enforce any
-type (y or m), which can lead to the following situation:
-
-SPI_MXIC=3Dy expects the NAND symbols to be built statically
-SPI_MXIC depends on MTD_NAND_ECC
-MTD_NAND_ECC selects MTD_NAND_CORE
-In this case MTD_NAND_CORE=3Dm is "valid" but will trigger link errors
-such as the one below.
-
-The problem does not directly come from that patchset but more on
-the way dependencies are described under drivers/mtd/nand/. I will fix
-this in another patch and apply it right before merging this series on
-top of the spi-mem-ecc branch to avoid any further reports.
-
->=20
->=20
-> vim +688 drivers/spi/spi-mxic.c
->=20
->    683=09
->    684	static void mxic_spi_mem_ecc_remove(struct mxic_spi *mxic)
->    685	{
->    686		if (mxic->ecc.pipelined_engine) {
->    687			mxic_ecc_put_pipelined_engine(mxic->ecc.pipelined_engine);
->  > 688			nand_ecc_unregister_on_host_hw_engine(mxic->ecc.pipelined_engine=
-); =20
->    689		}
->    690	}
->    691=09
->=20
+On Sun, Jan 23, 2022 at 08:00:48PM +0200, Leon Romanovsky wrote:
+> From: Leon Romanovsky <leonro@nvidia.com>
+> 
+> There is no need to keep get_num_static_uars in the headers file
+> as it is not shared and used only once.
+> 
+> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 > ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  drivers/infiniband/hw/mlx5/mlx5_ib.h | 6 ------
+>  drivers/infiniband/hw/mlx5/qp.c      | 3 ++-
+>  2 files changed, 2 insertions(+), 7 deletions(-)
 
+Applied to for-next, thanks
 
-Thanks,
-Miqu=C3=A8l
+Jason

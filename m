@@ -2,216 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E867B49F2CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA78449F2F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238199AbiA1FQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 00:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbiA1FQJ (ORCPT
+        id S241695AbiA1FYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 00:24:07 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60194 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231458AbiA1FYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 00:16:09 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3BBC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 21:16:09 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id e28so5124798pfj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 21:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Xy7V1RKBgPy7ej3aLewZ5fgpZQ6691qdKaJczzqlNHk=;
-        b=dvy7Hfy2AHdOXqtC7FdYxoxNBYCQzybLnMezlpbU7QfAVQ94QYX7yYbzPaX4ZM99aa
-         JGTaixtkYrNUgotaWxqqyRofLShMxqEjk4rlkyGfzntMnDprBkc5c76+8oDm835SA6Gs
-         rL+x0Bkz+dD/OLxKax+lWYebU1P+JkSxNJTT8vrlLwJtOVbzIN5v7OWTnPJBttegPugO
-         FV6mPeqs51H88DF5LBRHkc2a+Fhhu0ldsNGOwPi/kk1LWGwO2Nf0sNZXyMYfNU2b735I
-         djNR59SP7DmpBilvPJAAqvWfmbCixzOOPSuPHhOiCzHB9ATSCnef3wMrY/NG6KdMbat9
-         pdUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Xy7V1RKBgPy7ej3aLewZ5fgpZQ6691qdKaJczzqlNHk=;
-        b=uoj18li5TbzUD9ZgXkvKYGF1UvI6Mb3JefERbcbKZuXGeFoPCzEen/q46uzpMmZrSl
-         GEDtT2kA53J/H01W0XbhJW01zebJW7mvIHQnwt0llU9VPXKsKwK/uGpbshxendLPc6nE
-         1uMx7yV+mmshB0O3PrWIatE3JBis3LrUAhQQZnWG5WaVkQKJVOyOOW1xGfEUR9FpR1HP
-         lXjqxhceZMe4xzQ79daqrPmmByT7l61RpGo2MN7e+eoxEoKPw6VoH6KsEh/BCPsEnLMn
-         XMPhIkpStiUPTF3wCbPdJS3+MfzkNeHk4KLl+LOY+vu8w1Ck0ICdaHisKDY6cKUpDBCV
-         WJKQ==
-X-Gm-Message-State: AOAM5300O5pXZfUFK2e5kkmGPohZSoESlwHIw4TYXpVLbjFyolL10S9O
-        OfwK3yq5ulmENBARDlrmFHmxMw==
-X-Google-Smtp-Source: ABdhPJwcDyOeN54f5ywguadGTIVI8TcNaRt3WmrVCPE7jF6+vI+RUWxhwFLhAJHDtO7JUAZ3sRrvBA==
-X-Received: by 2002:a63:f650:: with SMTP id u16mr5337290pgj.2.1643346968484;
-        Thu, 27 Jan 2022 21:16:08 -0800 (PST)
-Received: from sunil-ThinkPad-T490 ([49.206.3.187])
-        by smtp.gmail.com with ESMTPSA id b22sm7617198pfl.121.2022.01.27.21.16.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 21:16:08 -0800 (PST)
-Date:   Fri, 28 Jan 2022 10:46:00 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Heinrich Schuchardt <xypron.glpk@gmx.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Abner Chang <abner.chang@hpe.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>
-Subject: Re: [RFC PATCH 1/1] riscv/efi_stub: Add support for
- RISCV_EFI_BOOT_PROTOCOL
-Message-ID: <20220128051600.GB5018@sunil-ThinkPad-T490>
-References: <20220126110615.33371-1-sunilvl@ventanamicro.com>
- <20220126110615.33371-2-sunilvl@ventanamicro.com>
- <667AE324-A8D2-41ED-B9DF-62750F3C2574@gmx.de>
+        Fri, 28 Jan 2022 00:24:05 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20S4gVeN021001;
+        Fri, 28 Jan 2022 05:23:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=N8c6f9rrM/7nONQTPrGqnOSST8MztLJ9N5JYV+zxdGs=;
+ b=ncpPzwDca4czHjb6h6QnI77DLS1AqrSfaKigJDMu1Mlq5CzTYvK73PSaG2WlciKhsKhE
+ v4hU+waWsPoY1xK1JSAJB3xEVDRl6oJx9Rq5mhxVGn6WKFOB7iKwb8z0wJFWThagKDeq
+ x99KDtij89eItyEO1gc67BFuAJTr4xR8iJoxDrfOhGx/gY6Hp4c54KF9cT6Nw/v3H4bU
+ xr+KteoVVyNkQh8MuM0i1AJmq21wMC35EXf4+07lyOG8f0w614M8icHXrYcWFbycm0pu
+ HujI25cv+jOg7YPUOQmdbae5WYgCFOWgRaZKHdDpomq8MoTQa5d6Yvp4W/glARnF1mnz cA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dv9purjtv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 05:23:53 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20S4x8ip012621;
+        Fri, 28 Jan 2022 05:23:52 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dv9purjta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 05:23:52 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20S5MIxG023963;
+        Fri, 28 Jan 2022 05:23:50 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3dr9ja3qkp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 05:23:50 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20S5Nmb744630430
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Jan 2022 05:23:48 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6EB7AE04D;
+        Fri, 28 Jan 2022 05:23:47 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B02BAE059;
+        Fri, 28 Jan 2022 05:23:46 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Fri, 28 Jan 2022 05:23:45 +0000 (GMT)
+Date:   Fri, 28 Jan 2022 10:53:45 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Rik van Riel <riel@surriel.com>
+Subject: Re: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for
+ memory tiering system
+Message-ID: <20220128052345.GA618915@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20220128023842.1946583-1-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <667AE324-A8D2-41ED-B9DF-62750F3C2574@gmx.de>
+In-Reply-To: <20220128023842.1946583-1-ying.huang@intel.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vS33TxzT8d0NU51wZOkmmFCK4CmChOJG
+X-Proofpoint-ORIG-GUID: paZdJlyaX5HVqwiOyc6dU3bWc3_1rHTX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-27_06,2022-01-27_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ spamscore=0 phishscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1011 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201280029
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 08:47:35AM +0100, Heinrich Schuchardt wrote:
-> Am 26. Januar 2022 12:06:15 MEZ schrieb Sunil V L <sunilvl@ventanamicro.com>:
-> >This patch adds the support for getting the boot hart ID in
-> >Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL.
-> 
-> It would be helpful to add a link to the spec in the commit message and maybe a comment that this protocol is needed for the ACPI use case.
-
-Sure. Will add.
+* Huang Ying <ying.huang@intel.com> [2022-01-28 10:38:41]:
 
 > 
-> >
-> >Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> >---
-> > drivers/firmware/efi/libstub/efistub.h    | 15 ++++++++++++
-> > drivers/firmware/efi/libstub/riscv-stub.c | 28 ++++++++++++++++++++---
-> > include/linux/efi.h                       |  1 +
-> > 3 files changed, 41 insertions(+), 3 deletions(-)
-> >
-> >diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> >index edb77b0621ea..0428f8816942 100644
-> >--- a/drivers/firmware/efi/libstub/efistub.h
-> >+++ b/drivers/firmware/efi/libstub/efistub.h
-> >@@ -720,6 +720,21 @@ union efi_tcg2_protocol {
-> > 	} mixed_mode;
-> > };
-> > 
-> >+typedef union riscv_efi_boot_protocol riscv_efi_boot_protocol_t;
-> >+
-> >+union riscv_efi_boot_protocol {
-> >+	struct {
-> >+		u64 revision;
-> >+		efi_status_t (__efiapi *get_boot_hartid)(
-> >+							 riscv_efi_boot_protocol_t *,
-> >+							 size_t *);
+> One possible fix is to ignore CPU-less nodes when detecting NUMA
+> topology type in init_numa_topology_type().  That works well for the
+> example system.  Is it good in general for any system with CPU-less
+> nodes?
 > 
-> I prefer to have parameter names for readability
 
-Sure. Will add.
+A CPUless node at the time online doesn't necessarily mean a CPUless node
+for the entire boot. For example: On PowerVM Lpars, aka powerpc systems,
+some of the nodes may start as CPUless nodes and then CPUS may get
+populated/hotplugged on them.
 
-> 
-> According to the platform specification mhartid is MXLEN wide. UINTN (size_t) is SXLEN wide. 
-> 
-> Does this have any implications on how we define the protocol?
+Hence I am not sure if adding a check for CPUless nodes at node online may
+work for such systems.
 
-I don't think so. EFI and kernel will be at same privilige level. So, it
-is not really an issue for this protocol. 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rik van Riel <riel@surriel.com>
+> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+> ---
+>  kernel/sched/topology.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-But when MXLEN > SXLEN (ex: 64 vs 32), then implementation need to
-ensure hartid value is 32 bit only so that when it is passed from M-mode
-firmware to S-mode, it gets correct value. But again this is not an
-issue from this EFI protocol perspective.
-
-> 
-> >+	};
-> >+	struct {
-> >+		u32 revision;
-> >+		u32 get_boot_hartid;>+	} mixed_mode;
-> >+};
-> >+
-> > typedef union efi_load_file_protocol efi_load_file_protocol_t;
-> > typedef union efi_load_file_protocol efi_load_file2_protocol_t;
-> > 
-> >diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> >index 380e4e251399..c7add4eb5453 100644
-> >--- a/drivers/firmware/efi/libstub/riscv-stub.c
-> >+++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> >@@ -46,12 +46,34 @@ static u32 get_boot_hartid_from_fdt(void)
-> > 	return fdt32_to_cpu(*prop);
-> > }
-> > 
-> >+static u32 get_boot_hartid_from_efi(void)
-> >+{
-> 
-> The returned value must be UINTN /size_t like the protocol. This width must be carried to the legacy entry point of Linux.
-> 
-> >+	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-> >+	efi_status_t status;
-> >+	riscv_efi_boot_protocol_t *boot_protocol;
-> >+	size_t boot_hart_id;
-> >+
-> >+	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-> >+			     (void **)&boot_protocol);
-> >+	if (status == EFI_SUCCESS) {
-> >+		status = efi_call_proto(boot_protocol,
-> >+					get_boot_hartid, &boot_hart_id);
-> >+		if (status == EFI_SUCCESS) {
-> >+			return (u32)boot_hart_id;
-> >+		}
-> >+	}
-> >+	return U32_MAX;
-> 
-> U32_MAX is a legal value for the hart id.
-
-Yeah. This is an existing issue in get_boot_hartid_from_fdt() for which
-I have sent a fix patch. Once that gets accepted, I will fix
-get_boot_hartid_from_efi() and send RFC V2 patch.
-
-> 
-> >+}
-> >+
-> > efi_status_t check_platform_features(void)
-> > {
-> >-	hartid = get_boot_hartid_from_fdt();
-> >+	hartid = get_boot_hartid_from_efi();
-> > 	if (hartid == U32_MAX) {
-> >-		efi_err("/chosen/boot-hartid missing or invalid!\n");
-> >-		return EFI_UNSUPPORTED;
-> >+		hartid = get_boot_hartid_from_fdt();
-> >+		if (hartid == U32_MAX) {
-> 
-> U32_MAX is a legal value for the hart id. Please, separate status and value.
-
-Will fix it.
-
-Thank you very much for the feedback.
-Sunil
-
-> 
-> Best regards
-> 
-> Heinrich
-> 
-> >+			efi_err("/chosen/boot-hartid missing or invalid!\n");
-> >+			return EFI_UNSUPPORTED;
-> >+		}
-> > 	}
-> > 	return EFI_SUCCESS;
-> > }
-> >diff --git a/include/linux/efi.h b/include/linux/efi.h
-> >index ccd4d3f91c98..9822c730207c 100644
-> >--- a/include/linux/efi.h
-> >+++ b/include/linux/efi.h
-> >@@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
-> > #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
-> > #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
-> > #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-> >+#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
-> > #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
-> > #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
-> > #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
-> 
+-- 
+Thanks and Regards
+Srikar Dronamraju

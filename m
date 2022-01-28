@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA36349F7B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A63049F7B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347958AbiA1K6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:58:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49924 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242852AbiA1K6X (ORCPT
+        id S1347965AbiA1K7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:59:14 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53134 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347960AbiA1K7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:58:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 28 Jan 2022 05:59:12 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FCF561DFF;
-        Fri, 28 Jan 2022 10:58:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF14CC340E0;
-        Fri, 28 Jan 2022 10:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643367502;
-        bh=+zWMkFDrZZM+qbNwpezGJFJ66XZ2aI38VXsj6i5zjVc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=n2GH3c7VO+JatCdg0jYNo1RcnnnE6Tof8QDipRbmPk+HfcvlbFNLW3SMyMW3v9xDR
-         XvcyPjQ+zoBMaFiIKbF/tqUDjVspc1G6LJwMKY4DtoSJ2KXnm/6PcxgIbMDlaMVZXi
-         pb2+obmFd/8+yM0m5/GQrVyAKczJMz9xx29t4vVYf6gfmpiVY+kpqH13W7lmOVz5VY
-         VW19GXitDz+VslMV9LqEoIE2wjWWnUmWV9G550P5RpLY/K7VmgePVtnpx7ceTzmX/J
-         pQfwOpWyooISOPvAVxAcrCNdf/ZYURJx1w+rki4YAv7LBw6X1mzp5ceEXPFVJWonmp
-         lNnYMldKZd+6A==
-Message-ID: <e5bee4a3e8a7c860d447fe74d5cf2d1846e8600d.camel@kernel.org>
-Subject: Re: [PATCH 0/4] cifs: Use fscache I/O again after the rewrite
- disabled it
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>,
-        Steve French <smfrench@gmail.com>
-Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-cifs@vger.kernel.org, linux-cachefs@redhat.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 28 Jan 2022 05:58:20 -0500
-In-Reply-To: <164329930161.843658.7387773437540491743.stgit@warthog.procyon.org.uk>
-References: <164329930161.843658.7387773437540491743.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1F002210FF;
+        Fri, 28 Jan 2022 10:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643367551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pystFP2vYov3Vxc1Z0w9mC7AIsr505xEnFkEvj9rtUo=;
+        b=b7haf79VaENWYUVb0knzQk0KLlXqxGpK0QId3C/l7HDU1UNOY2d16lv3dTsgjMfopBnAT6
+        fwoU4XUdV2OMIFHswkx4ab68+38zITTBbgmGNGi+ySzZu+8qXgDqnSrIzjKaf3/Y1WOIlm
+        RxVo5fiOG6I1btYAyAs8caKjSolbU8w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643367551;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pystFP2vYov3Vxc1Z0w9mC7AIsr505xEnFkEvj9rtUo=;
+        b=JXjeXSTLQdTJH1OjYQBlxze3Q5zgZvWr3/x5Rd9VBOLwU7W4J31ya9R318khDDLeh/HfZc
+        IRxoGpNfMCcFdLBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0CF9E13A83;
+        Fri, 28 Jan 2022 10:59:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QFfzAn/M82F/KwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Fri, 28 Jan 2022 10:59:11 +0000
 MIME-Version: 1.0
+Date:   Fri, 28 Jan 2022 11:59:10 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Nico Pache <npache@redhat.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH 5/6] mm: make free_area_init_node aware of memory less
+ nodes
+In-Reply-To: <20220127085305.20890-6-mhocko@kernel.org>
+References: <20220127085305.20890-1-mhocko@kernel.org>
+ <20220127085305.20890-6-mhocko@kernel.org>
+User-Agent: Roundcube Webmail
+Message-ID: <78ba9df432cb860275e295806f9d7f01@suse.de>
+X-Sender: osalvador@suse.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-27 at 16:01 +0000, David Howells wrote:
-> Hi Steve,
+On 2022-01-27 09:53, Michal Hocko wrote:
+> From: Michal Hocko <mhocko@suse.com>
 > 
-> Here are some patches to make cifs actually do I/O to the cache after it
-> got disabled in the fscache rewrite[1] plus a warning fix that you might
-> want to detach and take separately:
+> free_area_init_node is also called from memory less node initialization
+> path (free_area_init_memoryless_node). It doesn't really make much 
+> sense
+> to display the physical memory range for those nodes:
+> Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
 > 
->  (1) Fix a kernel doc warning.
+> Instead be explicit that the node is memoryless:
+> Initmem setup node XX as memoryless
 > 
->  (2) Change cifs from using ->readpages() to using ->readahead().
-> 
->  (3) Provide a netfs cache op to query for the presence of data in the
->      cache.[*]
-> 
->  (4) Make ->readahead() call
-> 
-> The patches can be found here also:
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-rewrite
-> 
-> David
-> 
-> [*] Ideally, we would use the netfslib read helpers, but it's probably better
->     to roll iterators down into cifs's I/O layer before doing that[2].
-> 
-> Link: https://lore.kernel.org/r/164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk/ [1]
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-experimental [2]
-> 
-> ---
-> David Howells (4):
->       Fix a warning about a malformed kernel doc comment in cifs by removing the
->       cifs: Transition from ->readpages() to ->readahead()
->       netfs, cachefiles: Add a method to query presence of data in the cache
->       cifs: Implement cache I/O by accessing the cache directly
-> 
-> 
->  Documentation/filesystems/netfs_library.rst |  16 ++
->  fs/cachefiles/io.c                          |  59 ++++++
->  fs/cifs/connect.c                           |   2 +-
->  fs/cifs/file.c                              | 221 ++++++++------------
->  fs/cifs/fscache.c                           | 126 +++++++++--
->  fs/cifs/fscache.h                           |  79 ++++---
->  include/linux/netfs.h                       |   7 +
->  7 files changed, 322 insertions(+), 188 deletions(-)
-> 
-> 
+> Acked-by: Rafael Aquini <raquini@redhat.com>
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-Acked-by: Jeff Layton <jlayton@kernel.org>
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+
+
+-- 
+Oscar Salvador
+SUSE Labs

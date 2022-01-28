@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7683A49FBED
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8E949FBEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349375AbiA1OoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:44:09 -0500
-Received: from mga12.intel.com ([192.55.52.136]:9044 "EHLO mga12.intel.com"
+        id S1349327AbiA1Oob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:44:31 -0500
+Received: from mga06.intel.com ([134.134.136.31]:1049 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239527AbiA1OoH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:44:07 -0500
+        id S1349091AbiA1Oo3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 09:44:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643381047; x=1674917047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=03BCVhQWgRy3l9VLGQsE2lheSMUyT2B9E/jISlaxeCk=;
-  b=Ijm+VgcGcoOLKZrfcIM305g0+8mQD/26OJ1IRZyC2tQQf9mkVU/4XGXW
-   PkNGgVP1aUslykEJ6aV1r7/Zv2LYxW1ea0lXpb+O57It4GLeSOvRgkmyk
-   q4Dm1BWYezs7GLpsVJD4WnkxrtneQ5XNkHS3Q2R+Gh37GAPr8IVhqM+qK
-   5Olh8/D6nLFJJMQvLG9Ro2uM3gaJ03/7qZX1qMbXsplrc2uW15ncw30Vb
-   HO5IFzogOseO3WpVuidFgL+yEyUHMMNng41LOkbnQTw570EyYf83H0oNZ
-   kxbGFbM+aJOo0ZujWVo+L1I5QDi8yEdFBiJSXjia/e+i2U9YEEPpza1Dr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227108150"
+  t=1643381069; x=1674917069;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9MubXPOrZMSDvuDAk4wR9yXEG5Ff3JUogxZoDw218Ag=;
+  b=ApYxAwcepOdTxcRZcEtwu2fKfF/w8BNz4XyXGmuCDjdkSAkvaI3Kocbk
+   5/JaDnOiM+q5jI/VsDG6KeV9AVR8O3q19nAjSpINngFFsi1M+YUT5AFRq
+   J6GnKMP1wfyTJCVD9XaHxDGX7LSEZIo1fwMgK+momCtRFni3Sj16xJ2mA
+   2Z3HbVNZbD62gmk+pbHMqKrS9Onm5QXjc4VXMxWRNoJDrlY9q6Zhicd3p
+   WlZ2NIMrJhlo5acVUSFGk3jVaUbog2Z0oPCKdgDWQ/CgepOyDNJy6mDNl
+   7SdvtrKaPUGdV+suAlSORP8jTfakrqRrAbpwkBvQHaPlaraGKc5ceL76F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307846274"
 X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="227108150"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:44:07 -0800
+   d="scan'208";a="307846274"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:44:28 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="496149565"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:44:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nDSSq-00FRde-5w;
-        Fri, 28 Jan 2022 16:43:00 +0200
-Date:   Fri, 28 Jan 2022 16:42:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     jagath jogj <jagathjog1996@gmail.com>, jic23@kernel.org,
-        lars@metafoo.de, aardelean@deviqon.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: IIO Device Driver for Maxim DS3502 potentiometer
-Message-ID: <YfQA8wRpauq058WK@smile.fi.intel.com>
-References: <CAM+2Eu+G2YK-O4ioYCBTJOs9VV9k5fVfQSii+m3kcyouJRg_vA@mail.gmail.com>
- <20220128103554.000028ff@Huawei.com>
+   d="scan'208";a="618739123"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2022 06:44:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDSUD-000NzG-US; Fri, 28 Jan 2022 14:44:25 +0000
+Date:   Fri, 28 Jan 2022 22:43:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 2786/2952] arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier
+ 'smccc_trng_available'
+Message-ID: <202201282248.FsZz69z1-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128103554.000028ff@Huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:35:54AM +0000, Jonathan Cameron wrote:
-> On Fri, 28 Jan 2022 09:11:28 +0530
-> jagath jogj <jagathjog1996@gmail.com> wrote:
-> 
-> > Hello,
-> > 
-> > I have a Maxim DS3502 potentiometer breakout and I have written an IIO
-> > driver for learning purposes and tested with Raspberry pi and wanted
-> > to send patches of the driver for the IIO sub-system.
-> > 
-> > Can I send the patches for DS3502 POT for review?
-> > 
-> > The setup used to write driver
-> > Raspberry pi 3b
-> > DS3502 breakout board
-> > Raspberry pi latest kernel branch - https://github.com/raspberrypi/linux
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   0eaf0db549770f64aa4a81fa6361ad40e42c99f9
+commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/2952] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
+config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220128/202201282248.FsZz69z1-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> Welcome to IIO.
-> 
-> Absolutely on sending the patches for review.
-> You'll need to rebase them on latest mainline from kernel.org
-> (pick a tagged version which would currently be 5.17-rc1_
-> 
-> and then follow the documentation for how to submit a patch in
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> Feel free to ask if you have any questions about the process.
-> 
-> Looking forwards to seeing your code.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Agree with Jonathan.
+All errors (new ones prefixed by >>):
 
-One remark though, can you double check that drivers/iio/potentiometer
-doesn't have any similar driver that can be expanded (usually it can be
-done by analyzing a register file of the devices, like register offsets
-and their meanings or bit fields)?
-
--- 
-With Best Regards,
-Andy Shevchenko
+>> arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier 'smccc_trng_available'
+           kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
+                                                ^
+   1 error generated.
 
 
+vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
+
+  1997	
+  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
+  1999	{
+  2000		void *addr = phys_to_virt(hyp_mem_base);
+  2001		int ret;
+  2002	
+  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
+  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
+  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
+  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
+  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
+  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
+  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
+> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
+  2012	
+  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
+  2014		if (ret)
+  2015			return ret;
+  2016	
+  2017		ret = init_stage2_iommu();
+  2018		if (ret < 0)
+  2019			return ret;
+  2020	
+  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
+  2022		if (ret)
+  2023			return ret;
+  2024	
+  2025		free_hyp_pgds();
+  2026	
+  2027		return 0;
+  2028	}
+  2029	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

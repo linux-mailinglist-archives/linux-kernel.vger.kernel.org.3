@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0DF49F57A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4772149F585
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242669AbiA1Ilc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:41:32 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:32071 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243195AbiA1Il2 (ORCPT
+        id S243304AbiA1Inh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243118AbiA1Inh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:41:28 -0500
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JlW6d65NRz1FClW;
-        Fri, 28 Jan 2022 16:37:29 +0800 (CST)
-Received: from [10.174.178.134] (10.174.178.134) by
- canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 16:41:26 +0800
-Subject: Re: [QUESTION] Question about 'epoll: do not insert into poll queues
- until all,sanity checks are done'
-To:     yebin <yebin10@huawei.com>, <viro@zeniv.linux.org.uk>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <yeweihua4@huawei.com>
-References: <61F29CE1.5010500@huawei.com> <61F3504C.8060001@huawei.com>
-From:   Zhang Yi <yi.zhang@huawei.com>
-Message-ID: <5e19830c-8653-e575-78db-ddcfc76839cc@huawei.com>
-Date:   Fri, 28 Jan 2022 16:41:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 28 Jan 2022 03:43:37 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2A7C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:43:36 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id bi36so197721vkb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ftcw1vD9z1Mq6YJKReviY0KJR4CI2yGzMz8ANHP/I3Q=;
+        b=DaL++O/y2Y7K/mFSHLxd+/ipObnIwivSwqec5hzr+O7nR3IWz0+rgZjyoIuHnvruZH
+         +XTJFg2x/QwMZI1XUYYGx6V46KVoc5rfTLvNEdzTs6Xt6ilTJIkCjgNfJLfsdoky77ym
+         DRbltg/ujxUjNDTP7IOJul5WCs/DIrPbGxrT5Y7+HGBIk3jBxhQjnQ1Gg9wX41tJBjhO
+         j+n5v/ascBEcd/+qPST8sdfk36/H0NjFdq1lMBXW6ajVNzh3n3ZgwRqswreYtoOpcv2R
+         JhDE4eUUP5Yj/kbxf0OlD63UxtajK1C6FEiMIrgX0pSycEKCirDU4ibmbFs8TDqwMN9N
+         /i9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ftcw1vD9z1Mq6YJKReviY0KJR4CI2yGzMz8ANHP/I3Q=;
+        b=bs+zRKo0KvHTSDU0nbWcLWQEwYkuooO1S9CQpi//l1qHrHSrOj7sIseRAnYLxsgRCi
+         kNzl8U/rrpNbPjfHG8dtDPryR/YBbv2oGxedylMHlyu79vSZQsEMBEZXDKhihvsSX5+M
+         /l5bAhIHld0C41AVM0a8OTkiC6nhZNGmW0bRAO+AlmLHNjdUprIVMDdoCIu03OP/6TN4
+         FbmFIwEuA5GZrSIfJL/07K3Vt5CebILRz9MVrjlUGk9jjUjllCbxh2ekeSMQwj5FCduM
+         O4QH2vM5nsCCWLa5bcEGWy12K11KkXForx/wxlvWPpS66THvqAAv6JvHY8DIxAQ+QvxZ
+         ntJg==
+X-Gm-Message-State: AOAM531pNanm4HmvvsPCW3du6JL4Z58iPmEqd0ca4k5FiethC3WVG2UW
+        Hs2CxlKHHA0iSXv4ex2kisS6XLWiLrbwK5tfje7e9A==
+X-Google-Smtp-Source: ABdhPJwmfhOAGP+BJwxRCZrzMfuOrJeVWS+4bKrkTmVCbPNw6FPwVvetSBth5KxLaOdV4nl10Dmlyn516F+PfW/83g8=
+X-Received: by 2002:a05:6122:a26:: with SMTP id 38mr3325568vkn.23.1643359415840;
+ Fri, 28 Jan 2022 00:43:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <61F3504C.8060001@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.134]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
+References: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+ <20220128045522.3505336-1-zichar.zhang@linaro.org> <YfOUzZ4scTZAWnxl@kroah.com>
+In-Reply-To: <YfOUzZ4scTZAWnxl@kroah.com>
+From:   Zichar Zhang <zichar.zhang@linaro.org>
+Date:   Fri, 28 Jan 2022 16:43:25 +0800
+Message-ID: <CAE9iGohVRCPJeokpU97Hb5opKxUxHAVbKZp8t7Bhg30550Yfmg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] [RFC] wakeup_reason: Add infrastructure to log and
+ report why the system resumed from suspend.
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     john.stultz@linaro.org, krossmo@google.com, lee.jones@linaro.org,
+        len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, nayakvij@google.com, pavel@ucw.cz,
+        rafael@kernel.org, sumit.semwal@linaro.org, amit.pundir@linaro.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC linux-kernel@vger.kernel.org and linux-fsdevel@vger.kernel.org mail list.
+Sorry, I'll do that and resend to this email thread.
 
-On 2022/1/28 10:09, yebin wrote:
-> Hi, AL.
-> I'm sorry to bother you.
-> Now there is a CVE(CVE-2021-39634) which discription is "In fs/eventpoll.c, there is a possible use after free".
-> The information disclosed now shows that fix patch is "epoll: do not insert into poll queues until all
-> sanity checks are done" which you submitted.
-> According to the patch modification, I reverse analyze how to generate use-after-free .After analysis for several days,
-> I tried to reproduce it, but I didn't find any use-after-free.
-> Do you have any suggestions for the use-after-free described by CVE-2021-39634?
+On Fri, 28 Jan 2022 at 15:01, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Jan 28, 2022 at 12:55:22PM +0800, Zichar Zhang wrote:
+> >
+> > Signed-off-by: Zichar Zhang <zichar.zhang@linaro.org>
+> > Change-Id: Id70f3cbec15f24ea999d7f643e9589be9c047f2b
+>
+> Please always run checkpatch.pl on your submissions so that you do not
+> get people asking you to run checkpatch.pl on your submissions.
+>
+> thanks,
+>
+> greg k-h

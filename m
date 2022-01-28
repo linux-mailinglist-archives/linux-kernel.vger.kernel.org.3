@@ -2,121 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA0349FD42
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2F149FD4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349762AbiA1P5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:57:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52788 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349747AbiA1P5p (ORCPT
+        id S1349777AbiA1P6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:58:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231145AbiA1P6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:57:45 -0500
+        Fri, 28 Jan 2022 10:58:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCC6C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 07:58:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86140B82631;
-        Fri, 28 Jan 2022 15:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8B6C340E0;
-        Fri, 28 Jan 2022 15:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643385463;
-        bh=HxfghqYGsV9ZUEzoeXtV56IKJEAqQCNdNJCaF8Gxu2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q+nIC3Xo0qNPuWNJeyMwBz+j8Rgt5DpPGZpXFLZjML69rnU1V8dsTWLugxpBBe4Sj
-         i2xAzpjeTe3YCEpjcvzRyNbRdswmG8OWYJhQrxOjBUH9aWk53j+4AANhxN4WfSI45H
-         Fn2rRcDLeqsftAd3fd0bttDdN/JGgtTDMh8xGeqc=
-Date:   Fri, 28 Jan 2022 16:57:40 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Zhou Qingyang <zhou1615@umn.edu>, kjlu@umn.edu,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ata: pata_platform: Fix a NULL pointer dereference in
- __pata_platform_probe()
-Message-ID: <YfQSdJgi4x5hN3Ee@kroah.com>
-References: <20220124164525.53068-1-zhou1615@umn.edu>
- <YfPBb4gHDkr76xPT@kroah.com>
- <3621c7db-0b73-d7eb-f987-45ec59a6c738@opensource.wdc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC8161EAF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 15:58:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A0D4C340E7;
+        Fri, 28 Jan 2022 15:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643385517;
+        bh=I6A4BBJmtFNGYfY78duMBHkLQCr0djtkeEScL1vltss=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=uxFmIBryjr1ZV/KyebvQMJQU+bWY32fswAF28YtL/G/IHgGGWI/hlsqjnfWZ6+8gO
+         E2z+rs3/R1ES+fCALYc2CsCDNuhzXJlyqQLUDe7rX5cvzpGJIx21TFd3B3EEmYyKyY
+         AtodREZQ21a1bDt4Jy+/0TvrrTUtDEeT+BUZNLB6zXjsRwSd+RJhGghhUYRGZRn4b8
+         wRMH5oBmqIyqFCYECp4BNmtI+XR9wsMPPOEr1ULJFELfmbAXtockQw2/lnZmeTjITn
+         ryoE50AVvLXJJBKveUrnPg8sOMc8ReGYBB8ocurmVlIX7GH8R0ucXmJk3KXHCZqosy
+         Wftc6pCTjL2+w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, tiwai@suse.com,
+        alsa-devel@alsa-project.org, perex@perex.cz, lgirdwood@gmail.com,
+        quic_srivasam@quicinc.com, pierre-louis.bossart@linux.intel.com
+In-Reply-To: <20220126113549.8853-1-srinivas.kandagatla@linaro.org>
+References: <20220126113549.8853-1-srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 0/4] ASoC: qcom: fixes for Qualcomm codecs and q6apm
+Message-Id: <164338551575.1711238.8376590607688196814.b4-ty@kernel.org>
+Date:   Fri, 28 Jan 2022 15:58:35 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3621c7db-0b73-d7eb-f987-45ec59a6c738@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 08:50:04PM +0900, Damien Le Moal wrote:
-> On 1/28/22 19:11, Greg KH wrote:
-> > On Tue, Jan 25, 2022 at 12:45:25AM +0800, Zhou Qingyang wrote:
-> >> In __pata_platform_probe(), devm_kzalloc() is assigned to ap->ops and
-> >> there is a dereference of it right after that, which could introduce a
-> >> NULL pointer dereference bug.
-> >>
-> >> Fix this by adding a NULL check of ap->ops.
-> >>
-> >> This bug was found by a static analyzer.
-> >>
-> >> Builds with 'make allyesconfig' show no new warnings,
-> >> and our static analyzer no longer warns about this code.
-> >>
-> >> Fixes: f3d5e4f18dba ("ata: pata_of_platform: Allow to use 16-bit wide data transfer")
-> >> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> >> ---
-> > 
-> > As stated in the past, please do not make contributions to the Linux
-> > kernel until umn.edu has properly resolved its development issues.
+On Wed, 26 Jan 2022 11:35:45 +0000, Srinivas Kandagatla wrote:
+> Some recent testing found few issues with wcd938x and lpass-tx codec drivers.
+> WCD938x was accessing array out of boundaries resulting in corruption and
+> system crashes along with not handling kcontrol put return values correctly
+> and rx-macro had incorrect sidetone registers offsets. One final fix in q6apm
+> to add a check if graph started before stopping it.
 > 
-> Aouch. My apologies. I forgot about this. Thank you for the reminder.
 > 
-> > 
-> >> The analysis employs differential checking to identify inconsistent 
-> >> security operations (e.g., checks or kfrees) between two code paths 
-> >> and confirms that the inconsistent operations are not recovered in the
-> >> current function or the callers, so they constitute bugs. 
-> >>
-> >> Note that, as a bug found by static analysis, it can be a false
-> >> positive or hard to trigger. Multiple researchers have cross-reviewed
-> >> the bug.
-> >>
-> >>  drivers/ata/pata_platform.c | 2 ++
-> >>  1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
-> >> index 028329428b75..021ef9cbcbc1 100644
-> >> --- a/drivers/ata/pata_platform.c
-> >> +++ b/drivers/ata/pata_platform.c
-> >> @@ -128,6 +128,8 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
-> >>  	ap = host->ports[0];
-> >>  
-> >>  	ap->ops = devm_kzalloc(dev, sizeof(*ap->ops), GFP_KERNEL);
-> >> +	if (ap->ops)
-> >> +		return -ENOMEM;
-> > 
-> > This change seems to leak memory.  Damien, please revert it.
-> 
-> I fixed the patch when applying, so there is no leak.
+> [...]
 
-Really?  What happened to the memory that ata_host_alloc() created above
-this call?  How is that freed?
+Applied to
 
-> This is a genuine (potential) bug fix.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-linus
 
-As I tell others, how can kmalloc() ever fail here, so odd of this being
-a real bugfix are so low it's not funny.  So take these types of
-cleanups as a last-resort only after you have strongly validated that
-they are correct.  The current group of people trying to do these fixes
-have a horrible track-record and are getting things wrong way more than
-they should be.  And so it is worse having code that "looks" correct vs.
-something that is "obviously we need to handle this some day".
+Thanks!
 
-> Must I revert ?
+[1/4] ASoC: codecs: wcd938x: fix incorrect used of portid
+      commit: c5c1546a654f613e291a7c5d6f3660fc1eb6d0c7
+[2/4] ASoC: codecs: lpass-rx-macro: fix sidetone register offsets
+      commit: fca041a3ab70a099a6d5519ecb689b6279bd04f3
+[3/4] ASoC: codecs: wcd938x: fix return value of mixer put function
+      commit: bd2347fd67d8da0fa76296507cc556da0a233bcb
+[4/4] ASoC: qdsp6: q6apm-dai: only stop graphs that are started
+      commit: 8f2e5c65ec7534cce6d315fccf2c3aef023f68f0
 
-If it's buggy you should, see my above question about ata_host_alloc(),
-is there a cleanup path somewhere that I am missing?
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-thanks,
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-greg k-h
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

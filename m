@@ -2,198 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F0E4A0290
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B98ED4A0298
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351086AbiA1VLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:11:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50964 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230151AbiA1VLx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:11:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643404312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kl8+hZCih6hFrtPcq+y44yJja7mQTiBvhEFz2HD3rIc=;
-        b=MsLIaUDi0DNPdKUpyKr9u7naukNocsntNyuR3r5QKgVzN0dQSKTrCzUfb9S208L77mi7Nm
-        v1dp1f+9+R2ZL683ac/h9LB6WmhHz0ku4BSFZXpyiH+Rs2Ny0Dk6883njk7HU9bYyq3t8T
-        xtN/PGmgcLDhfT01rAgdqpDKvGewZ5A=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-FC5CJJmQPCSoTVo_UCHjmA-1; Fri, 28 Jan 2022 16:11:46 -0500
-X-MC-Unique: FC5CJJmQPCSoTVo_UCHjmA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3973C851A03;
-        Fri, 28 Jan 2022 21:11:44 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.8.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B6D6C519BF;
-        Fri, 28 Jan 2022 21:11:41 +0000 (UTC)
-Date:   Fri, 28 Jan 2022 16:11:39 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        id S240281AbiA1VTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:19:02 -0500
+Received: from mga06.intel.com ([134.134.136.31]:33674 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235133AbiA1VTB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 16:19:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643404741; x=1674940741;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JuYGt4SS9apu8yRIPO2cO3Qb/Yp2GBDdA0yZrl2jfbQ=;
+  b=DBm3GbI7tHMnd8ixyFX4a2tm413KvLKYa6bX4u7r67PAwSDAFSDtaq03
+   J4agsvToZEwTml+OWwDe6ZddFdkNg5HVc1ThnhhhwOFIbUGwYrS6awuVV
+   QweT2yR5PFXxNkVw3xtgQzyhRtpoJHttZae2voKpersh7SLUIOKyzi2TA
+   TCqA+qyOU2dpTuWGiUg5/3N+q73MoNIWC5wvn1W7IM/nWiJ0frmRSxTGy
+   a8FEMA11V7WE3ppZ6JH3+FoFWyBYickSMXNAG85JC8cU7JDatM5/IflEh
+   PVtPZbVw74GV9m02x8FllPQKIAD35MuDjUVWmsRIGY/rvkfTfhxwV0tfg
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307928890"
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="307928890"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:18:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="480867661"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 13:18:48 -0800
+Date:   Fri, 28 Jan 2022 13:18:48 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ftrace: Have architectures opt-in for mcount build time
- sorting
-Message-ID: <YfRcC/ggq90jw7Uc@redhat.com>
-References: <20220127114249.03b1b52b@gandalf.local.home>
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH 1/2] mm/page_owner: Introduce SNPRINTF() macro that
+ includes length error check
+Message-ID: <20220128211848.GH785175@iweiny-DESK2.sc.intel.com>
+References: <20220128195642.416743-1-longman@redhat.com>
+ <20220128195642.416743-2-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127114249.03b1b52b@gandalf.local.home>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20220128195642.416743-2-longman@redhat.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:42:49AM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->
-> First S390 complained that the sorting of the mcount sections at build
-> time caused the kernel to crash on their architecture. Now PowerPC is
-> complaining about it too. And also ARM64 appears to be having issues.
->
-> It may be necessary to also update the relocation table for the values
-> in the mcount table. Not only do we have to sort the table, but also
-> update the relocations that may be applied to the items in the table.
->
-> If the system is not relocatable, then it is fine to sort, but if it is,
-> some architectures may have issues (although x86 does not as it shifts all
-> addresses the same).
->
-> Add a HAVE_BUILDTIME_MCOUNT_SORT that an architecture can set to say it is
-> safe to do the sorting at build time.
->
-> Also update the config to compile in build time sorting in the sorttable
-> code in scripts/ to depend on CONFIG_BUILDTIME_MCOUNT_SORT.
->
-> Link: https://lore.kernel.org/all/944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com/
->
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Yinan Liu <yinan@linux.alibaba.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-> Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-> Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+On Fri, Jan 28, 2022 at 02:56:41PM -0500, Waiman Long wrote:
+> In print_page_owner(), there is a repetitive check after each snprintf()
+> to make sure that the final length is less than the buffer size. Simplify
+> the code and make it easier to read by embedding the buffer length
+> check and increment inside the macro.
+
+This does not follow the kernel coding style of not putting control flow
+statements in macros.[1]
+
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
->  arch/arm/Kconfig     | 1 +
->  arch/x86/Kconfig     | 1 +
->  kernel/trace/Kconfig | 8 +++++++-
->  scripts/Makefile     | 2 +-
->  4 files changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index c2724d986fa0..5256ebe57451 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -82,6 +82,7 @@ config ARM
->  	select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
->  	select HAVE_CONTEXT_TRACKING
->  	select HAVE_C_RECORDMCOUNT
-> +	select HAVE_BUILDTIME_MCOUNT_SORT
->  	select HAVE_DEBUG_KMEMLEAK if !XIP_KERNEL
->  	select HAVE_DMA_CONTIGUOUS if MMU
->  	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 7399327d1eff..46080dea5dba 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -186,6 +186,7 @@ config X86
->  	select HAVE_CONTEXT_TRACKING_OFFSTACK	if HAVE_CONTEXT_TRACKING
->  	select HAVE_C_RECORDMCOUNT
->  	select HAVE_OBJTOOL_MCOUNT		if STACK_VALIDATION
-> +	select HAVE_BUILDTIME_MCOUNT_SORT
->  	select HAVE_DEBUG_KMEMLEAK
->  	select HAVE_DMA_CONTIGUOUS
->  	select HAVE_DYNAMIC_FTRACE
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index 752ed89a293b..7e5b92090faa 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -70,10 +70,16 @@ config HAVE_C_RECORDMCOUNT
->  	help
->  	  C version of recordmcount available?
->
-> +config HAVE_BUILDTIME_MCOUNT_SORT
-> +       bool
-> +       help
-> +         An architecture selects this if it sorts the mcount_loc section
-> +	 at build time.
+>  mm/page_owner.c | 50 +++++++++++++++++++++++--------------------------
+>  1 file changed, 23 insertions(+), 27 deletions(-)
+
+And in the end you only saved 4 lines of code to read...  Not worth it IMO.
+
+Ira
+
+[1] https://www.kernel.org/doc/html/v4.17/process/coding-style.html
+
+> 
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index 99e360df9465..c52ce9d6bc3b 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -325,12 +325,20 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
+>  	seq_putc(m, '\n');
+>  }
+>  
+> +#define SNPRINTF(_buf, _size, _len, _err, _fmt, ...)			\
+> +	do {								\
+> +		_len += snprintf(_buf + _len, _size - _len, _fmt,	\
+> +				 ##__VA_ARGS__);			\
+> +		if (_len >= _size)					\
+> +			goto _err;					\
+> +	} while (0)
 > +
->  config BUILDTIME_MCOUNT_SORT
->         bool
->         default y
-> -       depends on BUILDTIME_TABLE_SORT && !S390
-> +       depends on HAVE_BUILDTIME_MCOUNT_SORT
->         help
->           Sort the mcount_loc section at build time.
->
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index b082d2f93357..cedc1f0e21d8 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -32,7 +32,7 @@ HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
->  HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
->  endif
->
-> -ifdef CONFIG_DYNAMIC_FTRACE
-> +ifdef CONFIG_BUILDTIME_MCOUNT_SORT
->  HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
->  endif
->
-> --
-> 2.33.0
->
-
-Hi Steve,
-
-I just finished bisecting what is probably the same problem... when
-running the livepatch selftests for 5.17-rc1, x86_64 passes, but I kept
-getting errors like this on ppc64le:
-
-  kernel: livepatch: enabling patch 'test_klp_livepatch'
-  kernel: livepatch: failed to find location for function 'cmdline_proc_show'
-  kernel: livepatch: failed to patch object 'vmlinux'
-  kernel: livepatch: failed to enable patch 'test_klp_livepatch'
-  kernel: livepatch: 'test_klp_livepatch': unpatching complete
-
-which means klp_get_ftrace_location() / ftrace_location_range() hit a
-problem with that function.
-
-The bisect finally landed on:
-
-  72b3942a173c387b27860ba1069636726e208777 is the first bad commit
-  commit 72b3942a173c387b27860ba1069636726e208777
-  Author: Yinan Liu <yinan@linux.alibaba.com>
-  Date:   Sun Dec 12 19:33:58 2021 +0800
-
-      scripts: ftrace - move the sort-processing in ftrace_init
-
-and I can confirm that your updates today in "[for-linus][PATCH 00/10]
-tracing: Fixes for 5.17-rc1" fix or avoid the issue.  I just wanted to
-add my report in case this adds any future complications for mcount
-build time sorting.  Let me know if any additional tests would be
-helpful.
-
-Regards,
-
--- Joe
-
+>  static ssize_t
+>  print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  		struct page *page, struct page_owner *page_owner,
+>  		depot_stack_handle_t handle)
+>  {
+> -	int ret, pageblock_mt, page_mt;
+> +	int ret = 0, pageblock_mt, page_mt;
+>  	char *kbuf;
+>  
+>  	count = min_t(size_t, count, PAGE_SIZE);
+> @@ -338,44 +346,32 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  	if (!kbuf)
+>  		return -ENOMEM;
+>  
+> -	ret = snprintf(kbuf, count,
+> -			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
+> -			page_owner->order, page_owner->gfp_mask,
+> -			&page_owner->gfp_mask, page_owner->pid,
+> -			page_owner->ts_nsec, page_owner->free_ts_nsec);
+> -
+> -	if (ret >= count)
+> -		goto err;
+> +	SNPRINTF(kbuf, count, ret, err,
+> +		"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
+> +		page_owner->order, page_owner->gfp_mask,
+> +		&page_owner->gfp_mask, page_owner->pid,
+> +		page_owner->ts_nsec, page_owner->free_ts_nsec);
+>  
+>  	/* Print information relevant to grouping pages by mobility */
+>  	pageblock_mt = get_pageblock_migratetype(page);
+>  	page_mt  = gfp_migratetype(page_owner->gfp_mask);
+> -	ret += snprintf(kbuf + ret, count - ret,
+> -			"PFN %lu type %s Block %lu type %s Flags %pGp\n",
+> -			pfn,
+> -			migratetype_names[page_mt],
+> -			pfn >> pageblock_order,
+> -			migratetype_names[pageblock_mt],
+> -			&page->flags);
+> -
+> -	if (ret >= count)
+> -		goto err;
+> +	SNPRINTF(kbuf, count, ret, err,
+> +		"PFN %lu type %s Block %lu type %s Flags %pGp\n",
+> +		pfn, migratetype_names[page_mt],
+> +		pfn >> pageblock_order,
+> +		migratetype_names[pageblock_mt],
+> +		&page->flags);
+>  
+>  	ret += stack_depot_snprint(handle, kbuf + ret, count - ret, 0);
+>  	if (ret >= count)
+>  		goto err;
+>  
+> -	if (page_owner->last_migrate_reason != -1) {
+> -		ret += snprintf(kbuf + ret, count - ret,
+> +	if (page_owner->last_migrate_reason != -1)
+> +		SNPRINTF(kbuf, count, ret, err,
+>  			"Page has been migrated, last migrate reason: %s\n",
+>  			migrate_reason_names[page_owner->last_migrate_reason]);
+> -		if (ret >= count)
+> -			goto err;
+> -	}
+>  
+> -	ret += snprintf(kbuf + ret, count - ret, "\n");
+> -	if (ret >= count)
+> -		goto err;
+> +	SNPRINTF(kbuf, count, ret, err, "\n");
+>  
+>  	if (copy_to_user(buf, kbuf, ret))
+>  		ret = -EFAULT;
+> -- 
+> 2.27.0
+> 
+> 

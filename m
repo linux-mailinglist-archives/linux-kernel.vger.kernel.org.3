@@ -2,181 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED20849FA1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439F849FA1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348741AbiA1MvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:51:25 -0500
-Received: from mga06.intel.com ([134.134.136.31]:56684 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348747AbiA1MvX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:51:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643374283; x=1674910283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2MSnnwmn8vkD3zNXwCEuoiVTvH47x4daX/oVgUn/RIA=;
-  b=Y4wEBw/zhFZBofrymw0XuJNYdYF3WUgYes4YWwt3DEIEwf6RCoOXNXlh
-   liohZmdcAgAF+ZunyHhqq7Pxmekioopfg454Ssgh/fqRNHJGkbAZapKeV
-   F8FRivdNss4FC0TQgO+gn1D0UsusxHMqV75P1xCeK46ZBV8e67W65CBk0
-   blih8NiZJJ625hw+hrgauqyjikS0f8Fq3QTLBH5zNK3qWye8Mu6u6LD4L
-   aG3OYMucgN2caM12Ei/Xp5Cd32yfDZYVBhS8XjiVv3sW0CANpVEaGxefs
-   KHecm65iQgDsAqF8WWl7L7TFymdhvu28mtN/eEyha4U5ZwXPpk6QiT74N
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307829398"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="307829398"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:51:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="478276861"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2022 04:51:20 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDQim-000NsP-8Z; Fri, 28 Jan 2022 12:51:20 +0000
-Date:   Fri, 28 Jan 2022 20:51:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, davem@davemloft.net
-Cc:     kbuild-all@lists.01.org, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] net/802: use struct_size over open coded arithmetic
-Message-ID: <202201282010.gkSF8kZF-lkp@intel.com>
-References: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
+        id S244878AbiA1MxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:53:18 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:44958 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231817AbiA1MxQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 07:53:16 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F0B451F385;
+        Fri, 28 Jan 2022 12:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643374396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=My8yUIslN3g83ByWIBUrZ3wkCDsy1wmwr/8wCba+DW0=;
+        b=2uvxxewpgIYlCM2Y50+yYIfQscccjxuGkFd+mWNMCI/t2TOPdDBbkfVFORgh9ltV2Edjpy
+        HJfLZOBk8yvhvfm9trHm5FtVVvXvIdl/jAppk6jT5bvQp9S/GenH5w42whEr1PKA8zVx/p
+        MXydr6Kla31FEFhTQDXBUOhUx/RWdPg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643374396;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=My8yUIslN3g83ByWIBUrZ3wkCDsy1wmwr/8wCba+DW0=;
+        b=wBXKexbbo4poemZ1IAY7YMfO7uaeClm6X7OmEJUF9sdwkcth0nsw1rRlN72CyWtWE0Yg9Y
+        DpK2+DcgfZNBeHCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85F1813ABF;
+        Fri, 28 Jan 2022 12:53:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zLP2Hzvn82H6awAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 28 Jan 2022 12:53:15 +0000
+Message-ID: <595b8e80-96c0-dab6-5d13-652f0a0e40ec@suse.cz>
+Date:   Fri, 28 Jan 2022 13:53:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
+        Nadav Amit <nadav.amit@gmail.com>
+References: <20220126095557.32392-1-david@redhat.com>
+ <20220126095557.32392-2-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH RFC v2 1/9] mm: optimize do_wp_page() for exclusive pages
+ in the swapcache
+In-Reply-To: <20220126095557.32392-2-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 1/26/22 10:55, David Hildenbrand wrote:
+> Liang Zhang reported [1] that the current COW logic in do_wp_page() is
+> sub-optimal when it comes to swap+read fault+write fault of anonymous
+> pages that have a single user, visible via a performance degradation in
+> the redis benchmark. Something similar was previously reported [2] by
+> Nadav with a simple reproducer.
 
-Thank you for the patch! Yet something to improve:
+Can we make the description more self-contained? I.e. describe that
+sub-optimal COW means we copy when it's not necessary, and this can happen
+if swap-out is followed by a swap-in for read and a then a write fault
+(IIUC), because the swap cache reference increases page_count()...
 
-[auto build test ERROR on net-next/master]
-[also build test ERROR on net/master horms-ipvs/master linus/master v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Let's optimize for pages that have been added to the swapcache but only
+> have an exclusive owner. Try removing the swapcache reference if there is
+> hope that we're the exclusive user.
 
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/net-802-use-struct_size-over-open-coded-arithmetic/20220128-160925
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 72d044e4bfa6bd9096536e2e1c62aecfe1a525e4
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220128/202201282010.gkSF8kZF-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/9b64e5078d3d779fc56432d43129479f63996c74
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/net-802-use-struct_size-over-open-coded-arithmetic/20220128-160925
-        git checkout 9b64e5078d3d779fc56432d43129479f63996c74
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Can we expect any downside for reclaim efficiency due to the more aggressive
+removal from swapcache? Probably not, as we are doing the removal when the
+page is about to get dirty, so we wouldn't be able to reuse any previously
+swapped out content anyway. Maybe it's even beneficial?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> We will fail removing the swapcache reference in two scenarios:
+> (1) There are additional swap entries referencing the page: copying
+>     instead of reusing is the right thing to do.
+> (2) The page is under writeback: theoretically we might be able to reuse
+>     in some cases, however, we cannot remove the additional reference
+>     and will have to copy.
+> 
+> Further, we might have additional references from the LRU pagevecs,
+> which will force us to copy instead of being able to reuse. We'll try
+> handling such references for some scenarios next. Concurrent writeback
+> cannot be handled easily and we'll always have to copy.
+> 
+> While at it, remove the superfluous page_mapcount() check: it's
+> implicitly covered by the page_count() for ordinary anon pages.
+> 
+> [1] https://lkml.kernel.org/r/20220113140318.11117-1-zhangliang5@huawei.com
+> [2] https://lkml.kernel.org/r/0480D692-D9B2-429A-9A88-9BBA1331AC3A@gmail.com
+> 
+> Reported-by: Liang Zhang <zhangliang5@huawei.com>
+> Reported-by: Nadav Amit <nadav.amit@gmail.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-All errors (new ones prefixed by >>):
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-   In file included from include/linux/mm.h:30,
-                    from arch/x86/include/asm/cacheflush.h:5,
-                    from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from net/802/mrp.c:12:
-   net/802/mrp.c: In function 'mrp_attr_create':
->> include/linux/overflow.h:194:18: error: invalid type argument of '->' (have 'struct mrp_attr')
-     194 |       sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                  ^~
-   net/802/mrp.c:276:17: note: in expansion of macro 'struct_size'
-     276 |  attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-         |                 ^~~~~~~~~~~
-   In file included from include/linux/container_of.h:5,
-                    from include/linux/kernel.h:21,
-                    from net/802/mrp.c:10:
-   include/linux/overflow.h:194:49: error: invalid type argument of '->' (have 'struct mrp_attr')
-     194 |       sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                                 ^~
-   include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                              ^
-   include/linux/compiler.h:258:46: note: in expansion of macro '__same_type'
-     258 | #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                                              ^~~~~~~~~~~
-   include/linux/overflow.h:194:30: note: in expansion of macro '__must_be_array'
-     194 |       sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                              ^~~~~~~~~~~~~~~
-   net/802/mrp.c:276:17: note: in expansion of macro 'struct_size'
-     276 |  attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-         |                 ^~~~~~~~~~~
-   include/linux/overflow.h:194:49: error: invalid type argument of '->' (have 'struct mrp_attr')
-     194 |       sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                                                 ^~
-   include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                              ^
-   include/linux/compiler.h:258:46: note: in expansion of macro '__same_type'
-     258 | #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                                              ^~~~~~~~~~~
-   include/linux/overflow.h:194:30: note: in expansion of macro '__must_be_array'
-     194 |       sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                              ^~~~~~~~~~~~~~~
-   net/802/mrp.c:276:17: note: in expansion of macro 'struct_size'
-     276 |  attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-         |                 ^~~~~~~~~~~
-   include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                   ^
-   include/linux/compiler.h:258:28: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
-     258 | #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                            ^~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:194:30: note: in expansion of macro '__must_be_array'
-     194 |       sizeof(*(p)->member) + __must_be_array((p)->member),\
-         |                              ^~~~~~~~~~~~~~~
-   net/802/mrp.c:276:17: note: in expansion of macro 'struct_size'
-     276 |  attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-         |                 ^~~~~~~~~~~
-   In file included from include/linux/mm.h:30,
-                    from arch/x86/include/asm/cacheflush.h:5,
-                    from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from net/802/mrp.c:12:
->> include/linux/overflow.h:195:14: error: invalid type argument of unary '*' (have 'struct mrp_attr')
-     195 |       sizeof(*(p)))
-         |              ^~~~
-   net/802/mrp.c:276:17: note: in expansion of macro 'struct_size'
-     276 |  attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
-         |                 ^~~~~~~~~~~
+> ---
+>  mm/memory.c | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index c125c4969913..bcd3b7c50891 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3291,19 +3291,27 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>  	if (PageAnon(vmf->page)) {
+>  		struct page *page = vmf->page;
+>  
+> -		/* PageKsm() doesn't necessarily raise the page refcount */
+> -		if (PageKsm(page) || page_count(page) != 1)
+> +		/*
+> +		 * We have to verify under page lock: these early checks are
+> +		 * just an optimization to avoid locking the page and freeing
+> +		 * the swapcache if there is little hope that we can reuse.
+> +		 *
+> +		 * PageKsm() doesn't necessarily raise the page refcount.
+> +		 */
+> +		if (PageKsm(page) || page_count(page) > 1 + PageSwapCache(page))
+>  			goto copy;
+>  		if (!trylock_page(page))
+>  			goto copy;
+> -		if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
+> +		if (PageSwapCache(page))
+> +			try_to_free_swap(page);
+> +		if (PageKsm(page) || page_count(page) != 1) {
+>  			unlock_page(page);
+>  			goto copy;
+>  		}
+>  		/*
+> -		 * Ok, we've got the only map reference, and the only
+> -		 * page count reference, and the page is locked,
+> -		 * it's dark out, and we're wearing sunglasses. Hit it.
+> +		 * Ok, we've got the only page reference from our mapping
+> +		 * and the page is locked, it's dark out, and we're wearing
+> +		 * sunglasses. Hit it.
+>  		 */
+>  		unlock_page(page);
+>  		wp_page_reuse(vmf);
 
-
-vim +194 include/linux/overflow.h
-
-610b15c50e86eb Kees Cook           2018-05-07  180  
-610b15c50e86eb Kees Cook           2018-05-07  181  /**
-610b15c50e86eb Kees Cook           2018-05-07  182   * struct_size() - Calculate size of structure with trailing array.
-610b15c50e86eb Kees Cook           2018-05-07  183   * @p: Pointer to the structure.
-610b15c50e86eb Kees Cook           2018-05-07  184   * @member: Name of the array member.
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  185   * @count: Number of elements in the array.
-610b15c50e86eb Kees Cook           2018-05-07  186   *
-610b15c50e86eb Kees Cook           2018-05-07  187   * Calculates size of memory needed for structure @p followed by an
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  188   * array of @count number of @member elements.
-610b15c50e86eb Kees Cook           2018-05-07  189   *
-610b15c50e86eb Kees Cook           2018-05-07  190   * Return: number of bytes needed or SIZE_MAX on overflow.
-610b15c50e86eb Kees Cook           2018-05-07  191   */
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  192  #define struct_size(p, member, count)					\
-b19d57d0f3cc6f Gustavo A. R. Silva 2020-06-08  193  	__ab_c_size(count,						\
-610b15c50e86eb Kees Cook           2018-05-07 @194  		    sizeof(*(p)->member) + __must_be_array((p)->member),\
-610b15c50e86eb Kees Cook           2018-05-07 @195  		    sizeof(*(p)))
-610b15c50e86eb Kees Cook           2018-05-07  196  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 410B549F08B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E91B949F096
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345095AbiA1B3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 20:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345062AbiA1B3L (ORCPT
+        id S1345108AbiA1Bei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 20:34:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60976 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236055AbiA1Beh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 20:29:11 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF055C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:29:10 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id m25so3356729qka.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 17:29:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5MuhFyXxprlDzjgBfY4SUp98IZlrtgh5jEf/cbf1kqw=;
-        b=SyRFp09HmzHalG1FIA+Fq+Hm+swq2ZzFLKUzeWnAOCLCwcjL9jz5WesrXWl+yQjzC7
-         xcFJi4t6RsjuVSnyRAYfIFwyi1RXMTrJ8GCnBoNC4SODOMus7j1CzeMq2HGXZaY73S5b
-         Ezhq/ds9Neu8/0yeP5AGbG7Rd8csPnvqxw0csvT4fed2/tJx6zMeJefIcONm3e5gp11q
-         l9g7yL0OUgqwPIE0lTJ0qSu3J8rByX9LtADn4dQL/9E+lOoe9gt4l5n/XHa+cLRlneZ2
-         cCIyptq51gFTUE4bzhit8hMr1TLWoLRs9Cvd7KXKyQCO3bOqEStZluREe6oBu7A7y2uT
-         +TOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5MuhFyXxprlDzjgBfY4SUp98IZlrtgh5jEf/cbf1kqw=;
-        b=QauIi5m0cIjXKSWnaQigHkhkqke9RZF+NkZkWjIVctJobMEKCpwWs5eETpYzfujr3V
-         Ky3qewMJJaI2QQb8CiKqNWIRRk7Qdm7BNUaj8SyEPQ9eDq0EVNBCgmc6nkqUSBgjWlJO
-         9JhZv/j9APipXMM3cXrGjhXvf9ItOzQY78iR/saovUZefxyhFpkUIS1kuesddHctiHuQ
-         n7LRZZyZu4bTcGNg4Ai0sTvzBka5g1yhNA9SNMtRnS8m0jDnR40xyPi3rp7FOFWJ2ElA
-         5JSTZo/nURMg3fHrUaSsQ1MSUYj8Gz1VTBio89R3yPs4CNaXZw/yKq++qtNNxtlfw8tU
-         FgFA==
-X-Gm-Message-State: AOAM5303tPKt0xnhygZTZutYr3S+fF0GzB8bok8IabI3W3YKsNQ9fuQv
-        Td3Q/OWfAjzVSzqdwFJc5F4PfM0UbgWDeA==
-X-Google-Smtp-Source: ABdhPJyPu3XYPF6AF1OinsqUVUgQwg3b9qlZ1mnjDyW1GpEVQP3XP4y+uJNwGdRbklmNZ5JU8ZKY5A==
-X-Received: by 2002:a05:620a:248b:: with SMTP id i11mr4522385qkn.431.1643333350045;
-        Thu, 27 Jan 2022 17:29:10 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id bm23sm2372608qkb.25.2022.01.27.17.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 17:29:09 -0800 (PST)
-Date:   Thu, 27 Jan 2022 20:29:08 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] psi: Treat ksm swapping in copy as memstall
-Message-ID: <YfNG5KAog6fI0kYu@cmpxchg.org>
-References: <20220116152150.859520-1-yang.yang29@zte.com.cn>
- <YeVdvVVBvrXH5U0L@cmpxchg.org>
- <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
- <YegK7+oKFG8EPRp9@cmpxchg.org>
- <61ea820f.1c69fb81.e79d5.09c9@mx.google.com>
+        Thu, 27 Jan 2022 20:34:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48E0AB8241E;
+        Fri, 28 Jan 2022 01:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A24C340E4;
+        Fri, 28 Jan 2022 01:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643333674;
+        bh=syJ8YNq0jFqssCN+Fpn6CejIFER0XxHyJW+5cZh7qQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r4MmK2L91UnUY3Ju+lob6pGYrfuC4tFQze7/UdZcwtg0my1bI0HYZ/EGzcR2/0eYh
+         5qWQkXkz6GQ99yyiTKsnnZ4hM95RpS6f7bdJAM5P56admAP3hc/ZCtXKNCnRVkrgES
+         v2zuReXf7omP1BD/F2BPe0mg+8tbNoZzsZhdyhFKiYcIFiKTzLCcaIL+zbZB+jgKI2
+         HaKelY2L0Vg6ndyDgX/aggsEHmYplzWVSHFk3KYEO4hj0B99GHfDlJ8bPCc2gICQtz
+         XRdKz8lPe2Sew/3rSqRIVIUhmZZ9ob0Va5c0yw/atKn6Dw4IaoROTNoyJVls08WLFV
+         3jQ5xdJOfRU/w==
+Date:   Thu, 27 Jan 2022 17:34:31 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Chao Yu <chao@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-nilfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH 3/9] f2fs: change retry waiting for
+ f2fs_write_single_data_page()
+Message-ID: <YfNIJxirDBO/pcQQ@google.com>
+References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+ <164325158956.29787.7016948342209980097.stgit@noble.brown>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <61ea820f.1c69fb81.e79d5.09c9@mx.google.com>
+In-Reply-To: <164325158956.29787.7016948342209980097.stgit@noble.brown>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 09:51:08AM +0000, CGEL wrote:
->  Wed, Jan 19, 2022 at 07:58:23AM -0500, Johannes Weiner wrote:
-> > On Wed, Jan 19, 2022 at 06:13:54AM +0000, CGEL wrote:
-> > > I did a test, when we use zram, it takes longer time for ksm copying than
-> > > swap_readpage(). Ksm copying average takes 147263ns, swap_readpage()
-> > > average takes 55639ns. So I think this patch is reasonable.
-> > 
-> > Ok, that sounds reasonable to me as well. Please add the
-> > PageWorkingset() check and resubmit the patch. Thanks!
-> I am a litte confused about adding PageWorkingset(), since I
-> think ksm_might_need_to_copy() memstall is like swap_readpage()
-> memstall and swap_readpage() doesn't add PageWorkingset().
+On 01/27, NeilBrown wrote:
+> f2fs_write_single_data_page() can return -EAGAIN if it cannot get
+> the cp_rwsem lock - it holds a page lock and so cannot wait for it.
+> 
+> Some code which calls f2fs_write_single_data_page() use
+> congestion_wait() and then tries again.  congestion_wait() doesn't do
+> anything useful as congestion is no longer tracked.  So this is just a
+> simple sleep.
+> 
+> A better approach is it wait until the cp_rwsem lock can be taken - then
+> try again.  There is certainly no point trying again *before* the lock
+> can be taken.
+> 
+> Signed-off-by: NeilBrown <neilb@suse.de>
+> ---
+>  fs/f2fs/compress.c |    6 +++---
+>  fs/f2fs/data.c     |    9 ++++++---
+>  2 files changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+> index d0c3aeba5945..58ff7f4b296c 100644
+> --- a/fs/f2fs/compress.c
+> +++ b/fs/f2fs/compress.c
+> @@ -1505,9 +1505,9 @@ static int f2fs_write_raw_pages(struct compress_ctx *cc,
+>  				if (IS_NOQUOTA(cc->inode))
+>  					return 0;
+>  				ret = 0;
+> -				cond_resched();
+> -				congestion_wait(BLK_RW_ASYNC,
+> -						DEFAULT_IO_TIMEOUT);
+> +				/* Wait until we can get the lock, then try again. */
+> +				f2fs_lock_op(F2FS_I_SB(cc->inode));
+> +				f2fs_unlock_op(F2FS_I_SB(cc->inode));
 
-That's actually a bug! It should do that.
+Since checkpoint uses down_write(cp_rwsem), I'm not sure the write path is safe
+and needs to wait for checkpoint. Can we just do io_schedule_timeout()?
 
-That psi_memstall_enter() in swap_readpage() was added by commit
-937790699be9c8100e5358625e7dfa8b32bd33f2. It's for catching the
-scenarios that don't go through submit_bio(). When you look at
-submit_bio(), it counts stalls only if we have workingset pages:
-
-	/*
-	 * If we're reading data that is part of the userspace workingset, count
-	 * submission time as memory stall.  When the device is congested, or
-	 * the submitting cgroup IO-throttled, submission can be a significant
-	 * part of overall IO time.
-	 */
-	if (unlikely(bio_op(bio) == REQ_OP_READ &&
-	    bio_flagged(bio, BIO_WORKINGSET))) {
-		unsigned long pflags;
-
-		psi_memstall_enter(&pflags);
-		submit_bio_noacct(bio);
-		psi_memstall_leave(&pflags);
-		return;
-	}
-
-I hope that clarifies it. I'll send a patch to fix up swap_readpage().
-
-Thanks
+>  				goto retry_write;
+>  			}
+>  			return ret;
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index 8c417864c66a..1d2341163e2c 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -3047,9 +3047,12 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  				} else if (ret == -EAGAIN) {
+>  					ret = 0;
+>  					if (wbc->sync_mode == WB_SYNC_ALL) {
+> -						cond_resched();
+> -						congestion_wait(BLK_RW_ASYNC,
+> -							DEFAULT_IO_TIMEOUT);
+> +						/* Wait until we can get the
+> +						 * lock, then try again.
+> +						 */
+> +						f2fs_lock_op(F2FS_I_SB(mapping->host));
+> +						f2fs_unlock_op(F2FS_I_SB(mapping->host));
+> +
+>  						goto retry_write;
+>  					}
+>  					goto next;
+> 

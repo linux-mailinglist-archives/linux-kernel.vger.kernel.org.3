@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D3C49F329
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706ED49F32B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346238AbiA1Fxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 00:53:51 -0500
-Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:57872 "EHLO
-        progateway7-pub.mail.pro1.eigbox.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1346225AbiA1Fxu (ORCPT
+        id S1346246AbiA1Fyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 00:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346225AbiA1Fyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 00:53:50 -0500
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 74E851004720B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 05:53:49 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id DKCinSqazwm8iDKCjnSRXz; Fri, 28 Jan 2022 05:53:49 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=61f384ed
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=U4_wLaSDwdVF22gBXvgA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i/LOFeycrcvZXALy5IUDPvl2mFdNhrEfW+xaqoFC1Xo=; b=cPfDFzCuDiUVb0tyNEUfEDhF+1
-        P4wi5RMyY3EcE8On/iML9Hxfzvg7qRz0BBiapOr7eVCWM9jUSbZpN1x7yZcXwz5++kspo3quJx3VZ
-        ipLhvApTOveXpQD59gOEjS05l;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51840 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nDKCi-003pnH-I0; Thu, 27 Jan 2022 22:53:48 -0700
-Message-ID: <e5619bbd-b58a-1019-5961-3e0f7f2b0ac2@w6rz.net>
-Date:   Thu, 27 Jan 2022 21:53:46 -0800
+        Fri, 28 Jan 2022 00:54:43 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74196C061714;
+        Thu, 27 Jan 2022 21:54:43 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so4805114otf.1;
+        Thu, 27 Jan 2022 21:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5iUJxIm11wuHAjAk/U9qyVK8Q1/8AM34mvlFMQ0jz4o=;
+        b=KRSAJ86fpotWcMMhPUusYEY+q06d7as4lj5/hcbJt1raSYhIvkAZaU19dkaL485lMr
+         sBNeNnVBau4qvFPu7wa8kaAy4SjiyyO2p4P3vXtBp0pIm7Ko2O5ZwutvWFqd7BwF72ol
+         yFnHAB8ZyI45av3Yhlo/EYPkViFldnAiaT+HkovsEYbBy64+TJzdY1zMksT66Wt4OYZ7
+         jmLzYEHHpjTNm10vk5hM8BgB1rYIp/Hd6Oh49UsbnRRLMjbROlhNiCqYGmsC7b1bGLUN
+         d1OgxkkWkKreXYkkHHEl+Iq+76tqocApLUcPlzPm/rwo7ic9CzlruR6nca1GEepxYuLf
+         mOXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=5iUJxIm11wuHAjAk/U9qyVK8Q1/8AM34mvlFMQ0jz4o=;
+        b=nGYOAekLOWtAZPh/dgKvX9zpJ+Zq+LueS4AHxwLu3F7aUpghNnpb4WXLlV8GkII9gQ
+         CQExFOfN/0twY/+mtGi1ly6tegfyYJMAkB6gJHuxkGJgpxj6I5xg9oOyM4O9eT1syTzo
+         pL1n97MDQDcprgyDjWHTKXAezq59H3y0tL5GqtolcuJ08R9gRUateElkPTyBTEitjZL4
+         kBgRBiopG3LQRaZsreEf7dn8tbqyLHZCYFhPUNpKg3ENksilAJpdLzrvjTqdx7nN3Uos
+         x4wMtZTw2/6WO5hcEYTbGoquzHqg0vYw7q7x6BwLFbZ8uvX77jm6fPYylJddAp0wk9cb
+         7ihQ==
+X-Gm-Message-State: AOAM532W6zTX3OnhUZ7AnOlF8LQJWaDMz3ACvGBHTlmcZnXqhcIknT9X
+        bgEW+SQeR/9kFJcAhLwyb2OJZGZiqmi4lw==
+X-Google-Smtp-Source: ABdhPJwf9vtCL5ExNiA9UPs7QW/7lgXdB/HZmMOEwRB1zbVDepF5m+ckMxZ51vjWndG8rSWGM/ZxOA==
+X-Received: by 2002:a05:6830:1153:: with SMTP id x19mr3831256otq.321.1643349282858;
+        Thu, 27 Jan 2022 21:54:42 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n22sm9902538ooq.27.2022.01.27.21.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 21:54:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.17-rc2
+Date:   Thu, 27 Jan 2022 21:54:40 -0800
+Message-Id: <20220128055440.3947883-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 00/12] 5.15.18-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com
-References: <20220127180259.078563735@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nDKCi-003pnH-I0
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:51840
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 12
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 10:09, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.18 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.18-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi Linus,
 
-Tested-by: Ron Economos <re@w6rz.net>
+Please pull hwmon fixes for Linux v5.17-rc2 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
+
+Thanks,
+Guenter
+------
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.17-rc2
+
+for you to fetch changes up to 79da533d3cc717ccc05ddbd3190da8a72bc2408b:
+
+  hwmon: (nct6775) Fix crash in clear_caseopen (2022-01-24 14:32:47 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.17-rc2
+
+- Fix crash in nct6775 driver
+- Prevent divide by zero in adt7470 driver
+- Fix conditional compile warning in pmbus/ir38064 driver
+- Various minor fixes in lm90 driver
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      hwmon: (adt7470) Prevent divide by zero in adt7470_fan_write()
+
+Guenter Roeck (8):
+      hwmon: (lm90) Reduce maximum conversion rate for G781
+      hwmon: (lm90) Re-enable interrupts after alert clears
+      hwmon: (lm90) Mark alert as broken for MAX6654
+      hwmon: (lm90) Mark alert as broken for MAX6680
+      hwmon: (lm90) Mark alert as broken for MAX6646/6647/6649
+      hwmon: (lm90) Fix sysfs and udev notifications
+      hwmon: (pmbus/ir38064) Mark ir38064_of_match as __maybe_unused
+      hwmon: (nct6775) Fix crash in clear_caseopen
+
+ drivers/hwmon/adt7470.c       |  3 +++
+ drivers/hwmon/lm90.c          | 21 +++++++++++----------
+ drivers/hwmon/nct6775.c       |  6 +++---
+ drivers/hwmon/pmbus/ir38064.c |  2 +-
+ 4 files changed, 18 insertions(+), 14 deletions(-)

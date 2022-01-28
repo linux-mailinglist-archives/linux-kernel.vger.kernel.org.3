@@ -2,158 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3FB49F31F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BACD49F322
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 06:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346209AbiA1Fog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 00:44:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:49560 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233798AbiA1Fob (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 00:44:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25BED12FC;
-        Thu, 27 Jan 2022 21:44:31 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.44.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7BE3D3F766;
-        Thu, 27 Jan 2022 21:44:25 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     robh@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH 2/2] perf: Expand perf_branch_entry.type
-Date:   Fri, 28 Jan 2022 11:14:13 +0530
-Message-Id: <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
-References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
+        id S1346215AbiA1Fqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 00:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233266AbiA1Fqs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 00:46:48 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F60C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 21:46:47 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id u18so7540432edt.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 21:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=mbJSZf5gy3hnyEih7mJYLas+iYsAiaEKBB/Kw4odm/E=;
+        b=QZbulDzwCneylQ0114C9HfTxud0AsgoQ1Hg5Bv/k9Txy6YovJzwW7C+EeyYFuZgyKd
+         txDPU+os/xnqIQQ1aSj9UJ/FMbqkujm0T2Xpz5kpyzjqcmp79u/efHCjQzxAuweoRkIU
+         e3fMweaW+oIqlJQXjUGqIiyVgGnnNqErfK8Q8Ce7dmPFfSM42yZsFRktntsA4bvp1jOp
+         hVv0dW3KDmcVfiz0LRawn/oKaKVAn2PENe95j7Bk4VYTHmj+NW8h1rfe+eeS+SoWBqk6
+         TAOoJvCN6QtAvI8eByREctK1DFoJP0GnHkRENK6UFH3LsWV6KoFeb1QUJgCHpnjTAS2f
+         eB6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=mbJSZf5gy3hnyEih7mJYLas+iYsAiaEKBB/Kw4odm/E=;
+        b=3TvAWY/vLICmgVnZinJddMYoun1ajaq7VIOV2m1JP39QgFgH7l8tc85oN4gqIb3J6m
+         QBic7CBQGX81T2eCPleO9euZlbpm+EtGX1lF972owt5Pdi0jiR6Q1E12N/awvp8PvOXx
+         T09gXkD9bQNzteQFtNkvUujSfJmvJ8dO9/g8/BX8iDTF8dZkXyMyzWP/Iu6pz15uWWT5
+         KhsVp6o0Y9doiPV5/msWM8Wh12CwoM49qs4kcYTbjF/2JWVVeZgKS8FhcdC/zpvZZ7MA
+         ZHen/kjN3Q9ukqaBEIb9cTASOnOkfNzWePwAVGhJqwLacAcmmXxxlEnWh4tggbv6RKTF
+         RtRA==
+X-Gm-Message-State: AOAM532G/jBuBVmfIcbOyk7OWSXtdyL8uGdFOdwHNVbLjj+rki6K8L4S
+        UZP/odwfNgVWspNwDX4ocS31to3SviW7vlXoPmLjXW5C5cg=
+X-Google-Smtp-Source: ABdhPJwWFnYpwYuXrY3zZeNzTujZuUl5wDXmSHqgW2G24jYHMGcMA0MMOn4ZXsQ2Z6HIOgDH1yZ3GObCkt+nR1qS6gA=
+X-Received: by 2002:a50:e616:: with SMTP id y22mr6613760edm.277.1643348806229;
+ Thu, 27 Jan 2022 21:46:46 -0800 (PST)
+MIME-Version: 1.0
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 28 Jan 2022 15:46:35 +1000
+Message-ID: <CAPM=9tweQ-RgLm5oewCYqVzRuiQ6cSQrb2yzVYP_537V67pdDQ@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.17-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current perf_branch_entry.type is a 4 bits field just enough to accommodate
-16 generic branch types. This is insufficient to accommodate platforms like
-arm64 which has much more branch types. Lets just expands this field into a
-6 bits one, which can now hold 64 generic branch types. This also adds more
-generic branch types.
+Hi Linus,
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- include/uapi/linux/perf_event.h       | 10 ++++++++--
- tools/include/uapi/linux/perf_event.h | 10 ++++++++--
- tools/perf/util/branch.c              |  8 +++++++-
- tools/perf/util/branch.h              |  4 ++--
- 4 files changed, 25 insertions(+), 7 deletions(-)
+This week's regular normal fixes. amdgpu and msm make up the bulk of
+it, with a scattering of fixes elsewhere.
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index b91d0f575d0c..361fdc6b87a0 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -256,6 +256,12 @@ enum {
- 	PERF_BR_FIQ		= 13,	/* fiq */
- 	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
- 	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
-+	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
-+	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
-+	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
-+	PERF_BR_FAULT_DATA	= 19,	/* data fault */
-+	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
-+	PERF_BR_SERROR		= 21,	/* system error */
- 	PERF_BR_MAX,
- };
- 
-@@ -1370,8 +1376,8 @@ struct perf_branch_entry {
- 		in_tx:1,    /* in transaction */
- 		abort:1,    /* transaction abort */
- 		cycles:16,  /* cycle count to last branch */
--		type:4,     /* branch type */
--		reserved:40;
-+		type:6,     /* branch type */
-+		reserved:38;
- };
- 
- union perf_sample_weight {
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 1882054e8684..9a82b8aaed93 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -256,6 +256,12 @@ enum {
- 	PERF_BR_FIQ		= 13,	/* fiq */
- 	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
- 	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
-+	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
-+	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
-+	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
-+	PERF_BR_FAULT_DATA	= 19,	/* data fault */
-+	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
-+	PERF_BR_SERROR		= 21,	/* system error */
- 	PERF_BR_MAX,
- };
- 
-@@ -1370,8 +1376,8 @@ struct perf_branch_entry {
- 		in_tx:1,    /* in transaction */
- 		abort:1,    /* transaction abort */
- 		cycles:16,  /* cycle count to last branch */
--		type:4,     /* branch type */
--		reserved:40;
-+		type:6,     /* branch type */
-+		reserved:38;
- };
- 
- union perf_sample_weight {
-diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index 74e5e67b1779..1e216ea2e2a8 100644
---- a/tools/perf/util/branch.c
-+++ b/tools/perf/util/branch.c
-@@ -54,7 +54,13 @@ const char *branch_type_name(int type)
- 		"IRQ",
- 		"FIQ",
- 		"DEBUG_HALT",
--		"DEBUG_EXIT"
-+		"DEBUG_EXIT",
-+		"DEBUG_INST",
-+		"DEBUG_DATA",
-+		"FAULT_ALGN",
-+		"FAULT_DATA",
-+		"FAULT_INST",
-+		"SERROR"
- 	};
- 
- 	if (type >= 0 && type < PERF_BR_MAX)
-diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
-index 17b2ccc61094..875d99abdc36 100644
---- a/tools/perf/util/branch.h
-+++ b/tools/perf/util/branch.h
-@@ -23,8 +23,8 @@ struct branch_flags {
- 			u64 in_tx:1;
- 			u64 abort:1;
- 			u64 cycles:16;
--			u64 type:4;
--			u64 reserved:40;
-+			u64 type:6;
-+			u64 reserved:38;
- 		};
- 	};
- };
--- 
-2.25.1
+Dave.
 
+drm-fixes-2022-01-28:
+drm fixes for 5.17-rc2
+
+atomic:
+- fix CRTC handling during modeset
+
+privacy-screen:
+- honor acpi=3Doff
+
+ttm:
+- build fix for um
+
+panel:
+- add orientation quirk for 1NetBook OneXPlayer
+
+amdgpu:
+- Proper fix for otg synchronization logic regression
+- DCN3.01 fixes
+- Filter out secondary radeon PCI IDs
+- udelay fixes
+- Fix a memory leak in an error path
+
+msm:
+- parameter check fixes
+- put_device balancing
+- idle/suspend fixes
+
+etnaviv:
+- relax submit size checks
+
+vc4:
+- fix potential deadlock in DSI code
+
+ast:
+- revert 1600x900 mode change
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07=
+:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-01-28
+
+for you to fetch changes up to db5aa1497d02e7770e40dd0d1bfcb4ea0b0d3906:
+
+  Merge tag 'amd-drm-fixes-5.17-2022-01-26' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2022-01-28
+14:59:44 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.17-rc2
+
+atomic:
+- fix CRTC handling during modeset
+
+privcy-screen:
+- honor acpi=3Doff
+
+ttm:
+- build fix for um
+
+panel:
+- add oreientation quirk for 1NetBook OneXPlayer
+
+amdgpu:
+- Proper fix for otg synchronization logic regression
+- DCN3.01 fixes
+- Filter out secondary radeon PCI IDs
+- udelay fixes
+- Fix a memory leak in an error path
+
+msm:
+- parameter check fixes
+- put_device balancing
+- idle/suspend fixes
+
+etnaviv:
+- relax submit size checks
+
+vc4:
+- fix potential deadlock in DSI code
+
+ast:
+- revert 1600x900 mode change
+
+----------------------------------------------------------------
+Alex Deucher (3):
+      drm/amdgpu: filter out radeon secondary ids as well
+      drm/amdgpu/display: adjust msleep limit in
+dp_wait_for_training_aux_rd_interval
+      drm/amdgpu/display: use msleep rather than udelay for long delays
+
+Bas Nieuwenhuizen (3):
+      drm/amd/display: Fix FP start/end for dcn30_internal_validate_bw.
+      drm/amd/display: Wrap dcn301_calculate_wm_and_dlg for FPU.
+      drm/amdgpu/display: Remove t_srx_delay_us.
+
+Dave Airlie (6):
+      Revert "drm/ast: Support 1600x900 with 108MHz PCLK"
+      Merge tag 'drm-misc-next-fixes-2022-01-21' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-01-27' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-msm-fixes-2022-01-25' of
+https://gitlab.freedesktop.org/drm/msm into drm-fixes
+      Merge branch 'etnaviv/fixes' of
+https://git.pengutronix.de/git/lst/linux into drm-fixes
+      Merge tag 'amd-drm-fixes-5.17-2022-01-26' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+
+Jos=C3=A9 Exp=C3=B3sito (2):
+      drm/msm/dpu: invalid parameter check in dpu_setup_dspp_pcc
+      drm/msm/dsi: invalid parameter check in msm_dsi_phy_enable
+
+Lucas Stach (1):
+      drm/etnaviv: relax submit size limits
+
+Manasi Navare (1):
+      drm/atomic: Add the crtc to affected crtc only if uapi.enable =3D tru=
+e
+
+Meenakshikumar Somasundaram (1):
+      drm/amd/display: Fix for otg synchronization logic
+
+Miaoqian Lin (2):
+      drm/msm/dsi: Fix missing put_device() call in dsi_get_phy
+      drm/msm/hdmi: Fix missing put_device() call in msm_hdmi_get_phy
+
+Padmanabha Srinivasaiah (1):
+      drm/vc4: Fix deadlock on DSI device attach error
+
+Raymond Jay Golo (1):
+      drm: panel-orientation-quirks: Add quirk for the 1Netbook OneXPlayer
+
+Rob Clark (3):
+      drm/msm/a6xx: Add missing suspend_count increment
+      drm/msm/gpu: Wait for idle before suspending
+      drm/msm/gpu: Cancel idle/boost work on suspend
+
+Thomas Zimmermann (1):
+      Merge drm/drm-fixes into drm-misc-fixes
+
+Tong Zhang (1):
+      drm/privacy-screen: honor acpi=3Doff in detect_thinkpad_privacy_scree=
+n
+
+Xianting Tian (1):
+      drm/msm: Fix wrong size calculation
+
+Yang Li (1):
+      drm/msm: remove variable set but not used
+
+Zhan Liu (2):
+      drm/amd/display: Correct MPC split policy for DCN301
+      drm/amd/display: change FIFO reset condition to embedded display only
+
+Zhou Qingyang (1):
+      drm/amd/display/dc/calcs/dce_calcs: Fix a memleak in calculate_bandwi=
+dth()
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            | 81 ++++++++++++++++++=
+++++
+ drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c   |  4 +-
+ drivers/gpu/drm/amd/display/dc/calcs/dcn_calcs.c   |  1 -
+ drivers/gpu/drm/amd/display/dc/core/dc.c           | 40 +++++++----
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   |  6 +-
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c  | 54 +++++++++++++++
+ drivers/gpu/drm/amd/display/dc/dc.h                |  1 +
+ .../amd/display/dc/dce110/dce110_hw_sequencer.c    | 10 ++-
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |  4 +-
+ .../drm/amd/display/dc/dcn301/dcn301_resource.c    | 13 +++-
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |  3 +
+ .../display/dc/dml/dcn20/display_rq_dlg_calc_20.c  |  2 -
+ .../dc/dml/dcn20/display_rq_dlg_calc_20v2.c        |  2 -
+ .../display/dc/dml/dcn21/display_rq_dlg_calc_21.c  |  2 -
+ .../display/dc/dml/dcn30/display_rq_dlg_calc_30.c  |  2 -
+ .../gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c |  2 +-
+ .../gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.h |  2 +-
+ .../drm/amd/display/dc/dml/display_mode_structs.h  |  1 -
+ .../amd/display/dc/dml/display_rq_dlg_helpers.c    |  3 -
+ .../amd/display/dc/dml/dml1_display_rq_dlg_calc.c  |  4 --
+ drivers/gpu/drm/amd/display/dc/inc/core_types.h    |  1 +
+ drivers/gpu/drm/amd/display/dc/inc/resource.h      | 11 +++
+ drivers/gpu/drm/ast/ast_tables.h                   |  2 -
+ drivers/gpu/drm/drm_atomic.c                       | 12 ++--
+ drivers/gpu/drm/drm_panel_orientation_quirks.c     | 12 ++++
+ drivers/gpu/drm/drm_privacy_screen_x86.c           |  3 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c       |  4 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c              |  2 +
+ drivers/gpu/drm/msm/adreno/adreno_device.c         | 18 +++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c        | 11 ++-
+ drivers/gpu/drm/msm/dsi/dsi.c                      |  7 +-
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c              |  4 +-
+ drivers/gpu/drm/msm/hdmi/hdmi.c                    |  7 +-
+ drivers/gpu/drm/msm/msm_drv.c                      |  5 +-
+ drivers/gpu/drm/msm/msm_gpu.c                      |  3 +
+ drivers/gpu/drm/msm/msm_gpu.h                      |  3 +
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c              | 21 +++++-
+ drivers/gpu/drm/vc4/vc4_dsi.c                      | 14 ++--
+ 38 files changed, 307 insertions(+), 70 deletions(-)

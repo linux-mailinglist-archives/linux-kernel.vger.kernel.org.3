@@ -2,100 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D8549F3A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A759149F3B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346504AbiA1G3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:29:16 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:59108 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242495AbiA1G3G (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:29:06 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D31C21101;
-        Fri, 28 Jan 2022 06:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643351345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xpapT37KcxaYOeeQYt+sGcIsazRv7BTtatupftedrF0=;
-        b=jOIkTwXv8I/BNPcVaUZMccPLMdv7gYAcODw3KAsgpoZi3HbCyu+UzuoaCrgTBTfUx7RO6a
-        8G/7Z0FRbD8ncn4CZQRF+hNelwTjHKj+i2xzIqSBSgj6N167UPwE9wW2Eo0PNRBY1WYPs1
-        9STYjKzmKUvIKQhu8dhmgZszLhJQWFc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643351345;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xpapT37KcxaYOeeQYt+sGcIsazRv7BTtatupftedrF0=;
-        b=fRLo7kpURe7NYcJahmFg5gZfZCivitQUKm75iwXxaJJ0+gRNvm0D8C6fTOQJzVSDlIViri
-        seKhrDL40QzkXKDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DA0F13780;
-        Fri, 28 Jan 2022 06:29:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QYCPGjGN82G3MQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Fri, 28 Jan 2022 06:29:05 +0000
+        id S242511AbiA1GaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:30:12 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:60628 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231443AbiA1GaJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 01:30:09 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nDKkx-0001Jr-1S; Fri, 28 Jan 2022 17:29:12 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 28 Jan 2022 17:29:10 +1100
+Date:   Fri, 28 Jan 2022 17:29:10 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
+        mirq-linux@rere.qmqm.pl, gregkh@linuxfoundation.org,
+        peterz@infradead.org, David.Laight@aculab.com, joe@perches.com,
+        dennis@kernel.org, kernel@esmil.dk, npiggin@gmail.com,
+        matti.vaittinen@fi.rohmeurope.com, aklimov@redhat.com,
+        linux-kernel@vger.kernel.org, steffen.klassert@secunet.com,
+        daniel.m.jordan@oracle.com, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH 21/54] kernel: replace cpumask_weight with cpumask_empty
+ in padata.c
+Message-ID: <YfONNmDkwcKK+Ik2@gondor.apana.org.au>
 MIME-Version: 1.0
-Date:   Fri, 28 Jan 2022 07:29:05 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Nico Pache <npache@redhat.com>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH 3/6] mm, memory_hotplug: drop arch_free_nodedata
-In-Reply-To: <20220127085305.20890-4-mhocko@kernel.org>
-References: <20220127085305.20890-1-mhocko@kernel.org>
- <20220127085305.20890-4-mhocko@kernel.org>
-User-Agent: Roundcube Webmail
-Message-ID: <51a7daf7815d000ac0fdb57755a054b2@suse.de>
-X-Sender: osalvador@suse.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123183925.1052919-22-yury.norov@gmail.com>
+X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-27 09:53, Michal Hocko wrote:
-> From: Michal Hocko <mhocko@suse.com>
+Yury Norov <yury.norov@gmail.com> wrote:
+> padata_do_parallel() calls cpumask_weight() to check if any bit of a
+> given cpumask is set. We can do it more efficiently with cpumask_empty()
+> because cpumask_empty() stops traversing the cpumask as soon as it finds
+> first set bit, while cpumask_weight() counts all bits unconditionally.
 > 
-> Prior to "mm: handle uninitialized numa nodes gracefully" memory 
-> hotplug
-> used to allocate pgdat when memory has been added to a node
-> (hotadd_init_pgdat) arch_free_nodedata has been only used in the
-> failure path because once the pgdat is exported (to be visible
-> by NODA_DATA(nid)) it cannot really be freed because there is no
-> synchronization available for that.
-> 
-> pgdat is allocated for each possible nodes now so the memory hotplug
-> doesn't need to do the ever use arch_free_nodedata so drop it.
-> 
-> This patch doesn't introduce any functional change.
-> 
-> Acked-by: Rafael Aquini <raquini@redhat.com>
-> Signed-off-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+> kernel/padata.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-
+Patch applied.  Thanks.
 -- 
-Oscar Salvador
-SUSE Labs
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

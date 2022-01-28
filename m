@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67F24A02E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17F34A02F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 22:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351429AbiA1VgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 16:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbiA1Vfy (ORCPT
+        id S1351476AbiA1VgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 16:36:20 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:32826 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351431AbiA1VgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:35:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B36BC061714;
-        Fri, 28 Jan 2022 13:35:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 28 Jan 2022 16:36:18 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B19761EB5;
-        Fri, 28 Jan 2022 21:35:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01502C340E7;
-        Fri, 28 Jan 2022 21:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643405753;
-        bh=42Qlj6xxhCnL3R9b8NONtGh7XV3bcSG/WVeh9CE2QwY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nb4DsVRBFeiNPpDc9Zkl1OK9ealVU63qREhEjKh8AmcM0TtI8l6DdPfZNKH2ynQP3
-         0i+ZHz949fGq/zCE+dec/fpK4GQlcNxlCu+yjsCfBNKcFEiPVeEHme41ALFI5cDgZx
-         ksNHMUzw8YBRYVN2UfU/8SBaojZZevgQ9RbXv607ijzjBra53DuXJeC/M+qPlnwf3j
-         e2EnimBA0XN42BlV00TEzuOLh52IcxYBC9gqnaeRT1BVjZskNvKG7qEo77lHoQU1lG
-         SimqParRPUDL2LJjgF/RwH6nukhw1D7fTdnADi2ynNPVacM2raT6aRB4UKsceL7rqU
-         3dQPKVx2iv6hA==
-Date:   Fri, 28 Jan 2022 13:35:51 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        andrew@lunn.ch, leon@kernel.org
-Subject: Re: [PATCH v15, 2/2] net: Add dm9051 driver
-Message-ID: <20220128133551.55c09fca@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220128064532.2654-3-josright123@gmail.com>
-References: <20220128064532.2654-1-josright123@gmail.com>
-        <20220128064532.2654-3-josright123@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E19E31F385;
+        Fri, 28 Jan 2022 21:36:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643405774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NLILDfYIewMcTAbJZc9mPjKMlBqDlqhTsKM2N1uM+Vw=;
+        b=taayjmIQ/dw3pRt7LXMXgV+h3N2iGR9k6iWV1POVgUTfQy7v0b53WKl6W7epBEuQeWPNId
+        2nS5W8Zz+JDvOI2H2O325FIcHt7vLtCdfAuhacvrf751M2nGilH84Y1DtEW6P5pWfmkFXk
+        3R+tAum3D39BD7myqsYNPl0uf7Iudaw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643405774;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NLILDfYIewMcTAbJZc9mPjKMlBqDlqhTsKM2N1uM+Vw=;
+        b=24PK3VAQmVA51Rx99IGbDGj51tJod8UX27xeq8Emd3IiwsHonr+XB9p01yVh4lqGGFRKKK
+        qudbZz9CfGjnNuAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1BAB613AA1;
+        Fri, 28 Jan 2022 21:36:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fu7bMcdh9GHRawAAMHmgww
+        (envelope-from <neilb@suse.de>); Fri, 28 Jan 2022 21:36:07 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Miklos Szeredi" <miklos@szeredi.hu>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Jaegeuk Kim" <jaegeuk@kernel.org>, "Chao Yu" <chao@kernel.org>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "Ilya Dryomov" <idryomov@gmail.com>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Anna Schumaker" <anna.schumaker@netapp.com>,
+        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        "Philipp Reisner" <philipp.reisner@linbit.com>,
+        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
+        "Paolo Valente" <paolo.valente@linaro.org>,
+        "Jens Axboe" <axboe@kernel.dk>, "linux-mm" <linux-mm@kvack.org>,
+        linux-nilfs@vger.kernel.org,
+        "Linux NFS list" <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        "Ext4" <linux-ext4@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH 1/9] Remove inode_congested()
+In-reply-to: <CAJfpegt-igF8HqsDUcMzfU0jYv8WpofLy0Uv0YnXLzsfx=tkGg@mail.gmail.com>
+References: <164325106958.29787.4865219843242892726.stgit@noble.brown>,
+ <164325158954.29787.7856652136298668100.stgit@noble.brown>,
+ <CAJfpegt-igF8HqsDUcMzfU0jYv8WpofLy0Uv0YnXLzsfx=tkGg@mail.gmail.com>
+Date:   Sat, 29 Jan 2022 08:36:02 +1100
+Message-id: <164340576289.5493.5784848964540459557@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 14:45:32 +0800 Joseph CHAMG wrote:
-> +/* Open network device
-> + * Called when the network device is marked active, such as a user executing
-> + * 'ifconfig up' on the device
-> + */
-> +static int dm9051_open(struct net_device *ndev)
-> +{
-> +	struct board_info *db = to_dm9051_board(ndev);
-> +	struct spi_device *spi = db->spidev;
-> +	int ret;
-> +
-> +	db->imr_all = IMR_PAR | IMR_PRM;
-> +	db->rcr_all = RCR_DIS_LONG | RCR_DIS_CRC | RCR_RXEN;
-> +	db->lcr_all = LMCR_MODE1;
-> +
-> +	netif_wake_queue(ndev);
+On Fri, 28 Jan 2022, Miklos Szeredi wrote:
+> On Thu, 27 Jan 2022 at 03:47, NeilBrown <neilb@suse.de> wrote:
+> >
+> > inode_congested() reports if the backing-device for the inode is
+> > congested.  Few bdi report congestion any more, only ceph, fuse, and
+> > nfs.  Having support just for those is unlikely to be useful.
+> >
+> > The places which test inode_congested() or it variants like
+> > inode_write_congested(), avoid initiating IO if congestion is present.
+> > We now have to rely on other places in the stack to back off, or abort
+> > requests - we already do for everything except these 3 filesystems.
+> >
+> > So remove inode_congested() and related functions, and remove the call
+> > sites, assuming that inode_congested() always returns 'false'.
+> 
+> Looks to me this is going to "break" fuse; e.g. readahead path will go
+> ahead and try to submit more requests, even if the queue is getting
+> congested.   In this case the readahead submission will eventually
+> block, which is counterproductive.
+> 
+> I think we should *first* make sure all call sites are substituted
+> with appropriate mechanisms in the affected filesystems and as a last
+> step remove the superfluous bdi congestion mechanism.
+> 
+> You are saying that all fs except these three already have such
+> mechanisms in place, right?  Can you elaborate on that?
 
-This should be last, after the device is actually ready to transmit.
+Not much.  I haven't looked into how other filesystems cope, I just know
+that they must because no other filesystem ever has a congested bdi
+(with one or two minor exceptions, like filesystems over drbd).
 
-> +	ndev->irq = spi->irq; /* by dts */
-> +	ret = request_threaded_irq(spi->irq, NULL, dm9051_rx_threaded_irq,
-> +				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> +				   ndev->name, db);
-> +	if (ret < 0) {
-> +		netdev_err(ndev, "failed to get irq\n");
-> +		return ret;
-> +	}
-> +
-> +	phy_support_sym_pause(db->phydev); /* Enable support of sym pause */
-> +	phy_start(db->phydev); /* it enclose with mutex_lock/mutex_unlock */
-> +
-> +	ret = dm9051_all_start(db);
-> +	if (ret) {
-> +		phy_stop(db->phydev);
-> +		free_irq(spi->irq, db);
-> +		netif_stop_queue(ndev);
-> +		return ret;
-> +	}
-> +
-> +	/* init pause param FlowCtrl */
-> +	db->eth_pause.rx_pause = true;
-> +	db->eth_pause.tx_pause = true;
-> +	db->eth_pause.autoneg = AUTONEG_DISABLE;
-> +
-> +	if (db->phydev->autoneg)
-> +		db->eth_pause.autoneg = AUTONEG_ENABLE;
-> +
-> +	return 0;
-> +}
-> +
-> +/* Close network device
-> + * Called to close down a network device which has been active. Cancel any
-> + * work, shutdown the RX and TX process and then place the chip into a low
-> + * power state while it is not being used
-> + */
-> +static int dm9051_stop(struct net_device *ndev)
-> +{
-> +	struct board_info *db = to_dm9051_board(ndev);
-> +
-> +	phy_stop(db->phydev);
-> +	free_irq(db->spidev->irq, db);
-> +	netif_stop_queue(ndev);
+Surely read-ahead should never block.  If it hits congestion, the
+read-ahead request should simply fail.  block-based filesystems seem to
+set REQ_RAHEAD which might get mapped to REQ_FAILFAST_MASK, though I
+don't know how that is ultimately used.
 
-I don't see anything draining &db->txq when the worker is stopped.
-It should probably be drained here, after the queue is stopped.
+Maybe fuse and others should continue to track 'congestion' and reject
+read-ahead requests when congested.
+Maybe also skip WB_SYNC_NONE writes..
 
-> +	return dm9051_all_stop(db);
-> +}
+Or maybe this doesn't really matter in practice...  I wonder if we can
+measure the usefulness of congestion.
+
+Thanks,
+NeilBrown

@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7AC49F6FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C59D49F701
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347296AbiA1KRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344262AbiA1KQt (ORCPT
+        id S1347768AbiA1KRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:17:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39134 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345222AbiA1KQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:16:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D42C061748;
-        Fri, 28 Jan 2022 02:16:48 -0800 (PST)
+        Fri, 28 Jan 2022 05:16:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAB12B82515;
-        Fri, 28 Jan 2022 10:16:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB6E0C340E0;
-        Fri, 28 Jan 2022 10:16:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10DAEB8250F;
+        Fri, 28 Jan 2022 10:16:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B971C340EB;
+        Fri, 28 Jan 2022 10:16:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643365006;
-        bh=aXFKQLcOD29T44S1AVz7fr49JBJ8TW2u/0pXBUvdriE=;
+        s=korg; t=1643365012;
+        bh=L1Ekx2OO3TF2p45CkBw+hlZqHckVYlcP5aDSAh4JfqE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y/EzRTWPRRDo9rnpTwxgH9Ov8siBFtU/hiXGLTQmD/9Ilseo/Zh5m3NzN0UoSTU3b
-         5zl+bqcvOkann15pczsI1kqYEamXAUQLzAv2kr2JGuDsoWnJER073lqvZBbBi7gnow
-         s2IPaDuG6WKtqJIapqr1JREI4Fx1W/2fKkd54zN8=
-Date:   Fri, 28 Jan 2022 11:16:43 +0100
+        b=fHCFDZxMW561/OdD+iu0QHkKIw1maK5XNk2YsZ1PqmE8GRcF6AWxmMGJL1QQu3SC/
+         OVn7QpMRevsvNvWhvVcUZbjDsimxOCK+P+Q8zZJ/sIYW+H8SsFjxllLXIdmee1HPJd
+         XkHLppmUxniry02AbQDgK/oLPj+VMc8B4fmiL5i8=
+Date:   Fri, 28 Jan 2022 11:16:49 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Zhou Qingyang <zhou1615@umn.edu>
 Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Michael Schimek <mschimek@gmx.at>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: bttv: Fix a NULL pointer dereference in
- setup_window_lock()
-Message-ID: <YfPCi3qijRdnHJFo@kroah.com>
-References: <20220124170515.58519-1-zhou1615@umn.edu>
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: media/pci: Fix a NULL pointer dereference in
+ cx23885_417_register()
+Message-ID: <YfPCkRuJzmLbNxSY@kroah.com>
+References: <20220124170611.58864-1-zhou1615@umn.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124170515.58519-1-zhou1615@umn.edu>
+In-Reply-To: <20220124170611.58864-1-zhou1615@umn.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 01:05:13AM +0800, Zhou Qingyang wrote:
-> In setup_window_lock(), the return value of videobuf_sg_alloc() is
-> assigned to variable new and there is a dereference of it after
-> that. the return value of videobuf_sg_alloc() could be NULL on
+On Tue, Jan 25, 2022 at 01:06:10AM +0800, Zhou Qingyang wrote:
+> In cx23885_417_register(), the return value of cx23885_video_dev_alloc() 
+> is assigned to dev->v4l_device() and there is a dereference of it after
+> that. the return value of cx23885_video_dev_alloc() could be NULL on 
 > failure of allocation, which could lead to a NULL pointer dereference.
 > 
-> Fix this bug by adding a NULL check of new.
+> Fix this bug by adding a NULL check of dev->v4l_device.
 > 
 > This bug was found by a static analyzer.
 > 
 > Builds with 'make allyesconfig' show no new warnings,
 > and our static analyzer no longer warns about this code.
 > 
-> Fixes: e5bd0260e7d3 ("V4L/DVB (5077): Bttv cropping support")
+> Fixes: 453afdd9ce33 ("[media] cx23885: convert to vb2")
 > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 > ---
 > The analysis employs differential checking to identify inconsistent 
@@ -75,22 +69,22 @@ On Tue, Jan 25, 2022 at 01:05:13AM +0800, Zhou Qingyang wrote:
 > positive or hard to trigger. Multiple researchers have cross-reviewed
 > the bug.
 > 
->  drivers/media/pci/bt8xx/bttv-driver.c | 2 ++
+>  drivers/media/pci/cx23885/cx23885-417.c | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-> index 8cc9bec43688..6338f98d845d 100644
-> --- a/drivers/media/pci/bt8xx/bttv-driver.c
-> +++ b/drivers/media/pci/bt8xx/bttv-driver.c
-> @@ -2182,6 +2182,8 @@ static int setup_window_lock(struct bttv_fh *fh, struct bttv *btv,
->  		struct bttv_buffer *new;
->  
->  		new = videobuf_sg_alloc(sizeof(*new));
-> +		if (!new)
-> +			return -ENOMEM;
->  		new->crop = btv->crop[!!fh->do_crop].rect;
->  		bttv_overlay_risc(btv, &fh->ov, fh->ovfmt, new);
->  		retval = bttv_switch_overlay(btv,fh,new);
+> diff --git a/drivers/media/pci/cx23885/cx23885-417.c b/drivers/media/pci/cx23885/cx23885-417.c
+> index 434677bd4ad1..fcc9c1117ed1 100644
+> --- a/drivers/media/pci/cx23885/cx23885-417.c
+> +++ b/drivers/media/pci/cx23885/cx23885-417.c
+> @@ -1521,6 +1521,8 @@ int cx23885_417_register(struct cx23885_dev *dev)
+>  	/* Allocate and initialize V4L video device */
+>  	dev->v4l_device = cx23885_video_dev_alloc(tsport,
+>  		dev->pci, &cx23885_mpeg_template, "mpeg");
+> +	if (!dev->v4l_device)
+> +		return -ENOMEM;
+>  	q = &dev->vb2_mpegq;
+>  	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+>  	q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF | VB2_READ;
 > -- 
 > 2.25.1
 > 

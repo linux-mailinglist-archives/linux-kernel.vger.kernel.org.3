@@ -2,178 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F7049F6AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E819A49F6B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243693AbiA1JwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:52:02 -0500
-Received: from mout.gmx.net ([212.227.17.21]:50783 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234467AbiA1Jv7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:51:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643363480;
-        bh=TPm0es0o9GmkaIbJI5sgB+eRvpsormzXxZrC4jIKTwY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lw8G5GaLn6m2QNtkRoIScx2SKGN30S81ZWJDBEAvqHol7wLMADSPTCNaKiwLHHa4O
-         yEHHjbHckvABmviqXTIoMeIX6G/PervaFjP1DgIG3ujfPYfpQ7Fjo3PVdko1lyiOT6
-         uw8zSDqPIWYsPfpsP9/U7Pb0KYU9ZqQIYNtN9mkU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.74.59] ([80.245.74.59]) by web-mail.gmx.net
- (3c-app-gmx-bap33.server.lan [172.19.172.103]) (via HTTP); Fri, 28 Jan 2022
- 10:51:20 +0100
-MIME-Version: 1.0
-Message-ID: <trinity-2a727d96-0335-4d03-8f30-e22a0e10112d-1643363480085@3c-app-gmx-bap33>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: BUG: [PATCH v2] isoc: mediatek: Check for error clk pointer
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 28 Jan 2022 10:51:20 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20211222015157.1025853-1-jiasheng@iscas.ac.cn>
-References: <20211222015157.1025853-1-jiasheng@iscas.ac.cn>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:5h7BNj62fEnFWuBGgJlWmE9InsvDnOykP7ue9uqjDMLptSe0QHnMcounJfEE9MJdF6lie
- GfPFaYaaeP5J5pb7cQdcPiOHcNwWRc1vIIIQjBJUgdM0uQJBZZawPLwLZNxpvFdU6GudHFPEIGTa
- qu9BibcQzpim3q3qHX2iftPI4Q1C8sfknaU1RKD52ooqIhzkfTyiEU4NFH0DezSxuTsK72Fp673E
- b1A3n8acWPEowD9CCvasp/UeEmFiD+0on/twbGABspQGLZ/z4vSbV1z4GcIIi2Z1eP8QbhlOHJpV
- x8=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:laLppHjiiv0=:1YylzN7l3dOnakxZjTaemI
- dkC4SoeTguf1/WgtEqSllmCf3LKOE/kvv8fsBW8/coIlSp6Yei0JrLdlTI0+8nelFNOI3I9bu
- ePa38/iwhGxicL0XexExeFVJUh/3w7yjWAImSROqQABc03+ZfxWbPvQ9yWpOYpKRH+O7fxA3k
- n6UhHsok+Q2PoJu+a5fTHspML6XKP9La8izbWwngNU/H2oEL2QktmGSFOpQDZNtASA2LajeHi
- TPkuN2Zd+hhWrbohdcqaOVCFmRPds2I6wVZaNQ1eZY+KkAOZpDpsYWL6mgqUpsUiAV57LDGof
- OcddGd1K/r7Pe7rT3QGlj5iPquXYqmOJcU1TFr1q72SzkkPQH9oNT4o8J75b6AAeMMSRg3lii
- wwNHk6oHTskcfNhzye5bEOtbE9n3rYvkMhPvbU2ZIw4DZszAfZodKiFoIaGGtalzDsHaD6zK2
- DI4Z2ymML4zjrMv1HJt+hl7K+6KSA8PttWdBA1WTAoVJZJKNdUcuiuZ46Qy6QaVA0FOO10yTP
- PsGGpCPfhurgEyvKGR0OkCvUNwTokBRhlCE26OVsPo5b7F+Us73j+atqplsVIdLn0a+KRn1cw
- b6ZQqQaMEsvCR0zHhY5/TVY9KSmgbg8WiK3JVe6GtWyoDPfb+7CDoC22zdUufAIWXPGyygGRT
- bkHLTCPglixIe5KGGznCcj6FChS1J4lU9P1FiltSqAzvOCf7dAAroP6jrgKFqIs4xKFvb0mAz
- HYP5tI/jQfYIjjwgUNbNGcQCeJfE/Daag/GcvcOqM6xW+J6wQjKNVJGI4dtEbx780LYblAjr7
- Vxcfzl/
+        id S1347743AbiA1JyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:54:05 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:46904 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232772AbiA1JyE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 04:54:04 -0500
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20S5IJup002682;
+        Fri, 28 Jan 2022 01:54:00 -0800
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dusebm7fg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 01:54:00 -0800
+Received: from m0045851.ppops.net (m0045851.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 20S9r98L019248;
+        Fri, 28 Jan 2022 01:54:00 -0800
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2049.outbound.protection.outlook.com [104.47.56.49])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dusebm7fe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 01:53:59 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K4G/UB8QHuOUr4CZIxoZYp9bzeOwKFy1Ppn4D4ZOnfhEciSUpoC8dHdp5AHac+20q/p/jJsgNekoXHfv4b1SeCO+plEd5AYVCxkw71HndFx9o+pnneGDPpj3CK6IdnrYtgm8b5sWUp39W/pryWUQnaONKa6sgLgaD8rm20PFsq0K+xiVJm/CVzbbwjxI3Db2/MuvTH56AgC5aG0XNnpOR/sFnHoWVjD8jp9Xogo2VQsDdFCTtNeYEMqkLKRqHcaU+2WEXAZLoORPKempmG4+x4jt1IGa/ZYvdOZioEwUjC3EyoGP+0eJhOH8+0OoaJ0Qws6Ll6OGLW2+5K+cfjIQew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2ZXdcTJyTohWtY+wOsvGzjLh4KLisMd67TeS/cJni3E=;
+ b=eBvHfnwyK0FKGikR/uA9cK+7f0H/tlGkhm2Rlv/ktrmbA2gYTCARBhHKNqOmguPeGqDck8zHhKArjor8OyBbXaksLNWe2TruZEegI1d0gcTm1HhmZsbLzrZwMRls6SeYX28uRhYwCDlOrywJzbTF2ILhiMylf7o4hqitNhZUo6+V/27DVIUECDKgHvWeWvWmIR16b0hIgqgYrJMuRzsaonDBqQnxdPnfw2PsqLU/xgQnFwilzG+I6JwSbIwx6nvdW7C08Tvn23SFWYrZ0f/FrLJ9j3PtxN5HSfqiFaKWDmr1RmZRswuz01oT6pGbr3l4n1/Ld9vVIp1O8yqr27OYYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2ZXdcTJyTohWtY+wOsvGzjLh4KLisMd67TeS/cJni3E=;
+ b=Ul4kbZyQWav/kpDS6J6BYanRG63PwgnzyVi2+qkpC67bsncL94sbtHHYpQyquwquUyPLVuhkIeAnVK4MYpk4RovBKh/ZI/csHDvx96xNxCvf6o1+Zjb+hv2FEMguXeNKkKPSdrYfCOkCr4WR5zCre+eK2Al5BqGVk0f5n0dOk2M=
+Received: from DM6PR18MB3034.namprd18.prod.outlook.com (2603:10b6:5:18c::32)
+ by BN6PR18MB1524.namprd18.prod.outlook.com (2603:10b6:404:128::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Fri, 28 Jan
+ 2022 09:53:55 +0000
+Received: from DM6PR18MB3034.namprd18.prod.outlook.com
+ ([fe80::bdc7:54c4:7093:290c]) by DM6PR18MB3034.namprd18.prod.outlook.com
+ ([fe80::bdc7:54c4:7093:290c%5]) with mapi id 15.20.4930.018; Fri, 28 Jan 2022
+ 09:53:55 +0000
+From:   Saurav Kashyap <skashyap@marvell.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+CC:     Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] [PATCH] scsi: bnx2fc: Fix typo in comments
+Thread-Topic: [EXT] [PATCH] scsi: bnx2fc: Fix typo in comments
+Thread-Index: AQHYFBCzfBOZoh7C7kmTS7uNqlwzlqx4MaGg
+Date:   Fri, 28 Jan 2022 09:53:55 +0000
+Message-ID: <DM6PR18MB3034488BB32D01EDF3C4303ED2229@DM6PR18MB3034.namprd18.prod.outlook.com>
+References: <20220128063101.6953-1-cai.huoqing@linux.dev>
+In-Reply-To: <20220128063101.6953-1-cai.huoqing@linux.dev>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 34a837fa-2851-4586-314d-08d9e24418d2
+x-ms-traffictypediagnostic: BN6PR18MB1524:EE_
+x-microsoft-antispam-prvs: <BN6PR18MB15247D47269704974B7598AED2229@BN6PR18MB1524.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2449;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vLNwqV8SwqmKAEFw8a5C5xNJuDDmbqAs+aF8rC2Ru+G7VGYmbeiZT6i4alg++0fuS1HYF/e+KR97pzpINszukx5dMuIALUlyYO22s/QzKyB2fS7ZWuq3gJOuluLReyTeywAmCWx01u3BFkOOjQPJpcDL/SfvHwamC8ahh50bOgRYvAvmhugci9T52spVWqgO8/9IDW93d9N8cWKxFwiw/bV4npsVXAGrfAxa7dqTi45N/i6R4zqrooFrw4APy/coiCcEgNhdArKTxhmO6kIMHESV/oVY+bIGjRyrHl1gxakT5Zr0m6Dbh+eZGa22DMgm7gtoHLF70msacsC7wmqJHpBU3FcTgawR+fyYR71H+PLpIri01cfS1tmfRmQz29pOxGyvJQ6VY424o13tzg98yfpD+Cjg1TLIhFpO1d+FzG+EWH5wrzBW16eOHTEjoOMHZhV1cyXzk6iu7Lhtvx6Qp8zl4kxwEmxU0O+f6CZG90wV87Ao9uC/E5/lbCJoKLBYSUi7iWnYM6H0h3aIS8Nj0WsXKzmCc9OT/Q3zrZGhUmpikeS0UcEmrSbomxO8G7mtFlMJt7alBjG7m3IfJtBNnlSBhuvY9JbTYGZ2ndwXJ07SlUhBhPNSTCxfuHX+Y6juR6HArkx4uREaBIfZ8WMvYPgxUr4wkh3eZM7VRF2k4nNq1d6JSj2fef5yE5ozcIUjw1G0pjvfDE8oOc9nkhXZSA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR18MB3034.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(83380400001)(122000001)(26005)(33656002)(508600001)(2906002)(6506007)(9686003)(55016003)(7696005)(64756008)(5660300002)(38070700005)(8936002)(8676002)(52536014)(54906003)(6916009)(316002)(86362001)(38100700002)(71200400001)(66476007)(66946007)(53546011)(66446008)(76116006)(66556008)(4326008)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KRPTpC4Sjnv4/GFIeEiPbxhbqqdLptzx1ZbRNuWD09kvfmeykR8lXDu0Vk0u?=
+ =?us-ascii?Q?P+Oubmfypu5SRu//RqAEvXfmNxyVCmiAd+Bgg+7NPpPvpDiy5VzyVLU/umZV?=
+ =?us-ascii?Q?vArK710Freuxa+FAai2MOQWwaJgtwFJ0mrVTaY+bPdfR9UiTOGduTkWzBlgK?=
+ =?us-ascii?Q?ALZLigANuk2xfaLYSLK/EyqcGGEr7g7RFE/lkc2KrwfUQQn0k0XDnDAe0p8q?=
+ =?us-ascii?Q?1F10vPAnQtdfSapDZEkv+AMZHqMtlwfOl9Cc2FUD2y6s04E4DvYUcwbI85cm?=
+ =?us-ascii?Q?39aCOp4EaMsqEBUjpAEReljtica0sMo//L8CbqQNbFwavMwQ4WjO1uF0+fvt?=
+ =?us-ascii?Q?dvPxjHFQuk5IyKZ1CxFDqsqFz6dc3XllbH49m5QomvekguRq4Itau2pXWspW?=
+ =?us-ascii?Q?NoX/q2dgBElhNt28VgpOwL0MF3Vu+6KfWNtxe40AANJpAfaq+E+i4BpKVxHV?=
+ =?us-ascii?Q?oWjIvGeU/7mY9F0L7e3dQwpuiLGNRB/Nj2si/rd3T4SB04XEISs1QBKOkAJL?=
+ =?us-ascii?Q?5HM8CrejbLMCr3jJ38kJfUDyBoHP/5W1kqQit8+zEh5pvFrPZ0/PIl3eAm/2?=
+ =?us-ascii?Q?dnDTJYSfU5LI5hhhpc283lxs/OwoSJy3wBEqiAerursCP9jRtIPHg8uJqYrH?=
+ =?us-ascii?Q?JALEX/suqWQMv7aXMJG+mvTP0Ld0u6S2+ZaNKVfEM9IeDxcdbYUktXbI26NJ?=
+ =?us-ascii?Q?Q4whCX2QTRGsggooB6jZib3gAg1rjjAXmgnVVr4YWyr2K8tae71dJJBjc9qO?=
+ =?us-ascii?Q?UIbJUvyNndqh9TZmjm888oXxVnOlLv0LXCSuNJCLJoCVY6RGiHLQybS9t6nd?=
+ =?us-ascii?Q?7rR0sBslZPui2FR9wXwP0vHFS6mL6v/R0ts/05atwryE+NsE505JwN+0sRk2?=
+ =?us-ascii?Q?l2K7pSSqu8oBk15DQ26TLk9bAQ4Zw4Z2fUuvIkxyPfw24VCzsK11hBQhqCba?=
+ =?us-ascii?Q?GA/smGo0MjMCGrLzLAyTmTaESH5+3U+CYU7nqfS/gYH9X/mz1wdvTPftfUpk?=
+ =?us-ascii?Q?DNFQxJ+f9QjJ15H6rdpWFrfOCkyT1PpbDgRpCejta76CMCZcjDKiFLeFh+Tn?=
+ =?us-ascii?Q?dAtH8b0mkCYD9o0J8b+x+0g0++fuh/T3U6ivdRu/XNO7pe2DF07ZypIbwqCS?=
+ =?us-ascii?Q?7VRQhATwD7ECgpKo35WG2eGZSY6jVwnI600DMKFN/wKndJg+eNL77x9eIQkA?=
+ =?us-ascii?Q?d8uIqQ/Z3OxGTrmBA4cjs6BmBR7EsON8N9ZmtXtxl0DOzj4xbaNeElgg0lhP?=
+ =?us-ascii?Q?GY8P8NJaYQ7c1OGJ1+de0rbBXsr8a6ZlErfNID3rr7DwezQKnmYyjUBavgGE?=
+ =?us-ascii?Q?TWRcTvgJ4j5BFU86QBJRzAkd2ek7mio1xZiIJcHqAIp54QesVweyD/T2pU3t?=
+ =?us-ascii?Q?1li20N3zloLXMWlFt/zdBRBxTRyFH/2JlIXXY8piDA3N0qst06+Ca0Zr9xTw?=
+ =?us-ascii?Q?eyA9uhHQWrmhlEcqqNHPH54wyCtwYRdafISh0W758hnrDvS9crM99iSn+Ka6?=
+ =?us-ascii?Q?I1QtEdosFqqSO/u22WXdZhAYkT6CQOxUh9pw8K+YG0f2k/jXBeGpGj4KPBwX?=
+ =?us-ascii?Q?XIeGM89bVp0ng3pVTKFQlHBj/o4A0zBpVC1jopogC9aPrGSbnr+UpK5PgJ70?=
+ =?us-ascii?Q?yZ4hRE5FjisAAclA1lwLhc4=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR18MB3034.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34a837fa-2851-4586-314d-08d9e24418d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2022 09:53:55.0780
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: A+HIIkpduTj8QsSqDphtFZPvJeAHVvX/PQrK6BPZVPpoz64aOCPGDlj6+PY0pDnxSyiyOF4rhZdxKs5SbYt+Aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR18MB1524
+X-Proofpoint-ORIG-GUID: 1zumJIscjZnYF4cLKYoHDVptAkSYTSiJ
+X-Proofpoint-GUID: nrH8lYeUgOddtdVwHi9rsG2idXxJhPvh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-28_01,2022-01-27_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Cai Huoqing,
 
-this commit is merged in 5.17-rc1 and breaks scpsys on mt7622/bananapi R64
-
-mtk-scpsys: probe of 10006000.power-controller failed with error -2
-
-at least ethernet is affected (i guess usb,sata,btif,... too, but not chec=
-ked), as gmacs do not get probed as depency of it
-
-after reverting this commit it is working again.
-
-have not yet digged deeper into it why it is failing, but maybe author has=
- an idea
-
-regards Frank
-
-> Gesendet: Mittwoch, 22. Dezember 2021 um 02:51 Uhr
-> Von: "Jiasheng Jiang" <jiasheng@iscas.ac.cn>
-> An: matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead=
-.org, linux-kernel@vger.kernel.org, "Jiasheng Jiang" <jiasheng@iscas.ac.cn=
->
-> Betreff: [PATCH v2] isoc: mediatek: Check for error clk pointer
->
-> On Wed, Dec 22, 2021 at 01:57:15AM +0800, Mark Brown wrote:
-> >> +	for (i =3D CLK_NONE + 1; i < CLK_MAX; i++) {
-> >>  		clk[i] =3D devm_clk_get(&pdev->dev, clk_names[i]);
-> >> +		if (IS_ERR(clk[i]))
-> >> +			return PTR_ERR(clk[i]);
-> >
-> > This now pays attention to the error code here which is good but...
-> >
-> >> -	init_clks(pdev, clk);
-> >> +	ret =3D init_clks(pdev, clk);
-> >> +	if (ret)
-> >> +		return ERR_PTR(-ENOMEM);
-> >
-> > ...then discards it here with a random most likely inappropriate error
-> > code.
->
-> Yes, you are right and now the return code depending on the
-> init_clks().
->
-> Fixes: 6078c651947a ("soc: mediatek: Refine scpsys to support multiple p=
-latform")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> -----Original Message-----
+> From: Cai Huoqing <cai.huoqing@linux.dev>
+> Sent: Friday, January 28, 2022 12:01 PM
+> To: cai.huoqing@linux.dev
+> Cc: Saurav Kashyap <skashyap@marvell.com>; Javed Hasan
+> <jhasan@marvell.com>; GR-QLogic-Storage-Upstream <GR-QLogic-Storage-
+> Upstream@marvell.com>; James E.J. Bottomley <jejb@linux.ibm.com>; Martin
+> K. Petersen <martin.petersen@oracle.com>; linux-scsi@vger.kernel.org; lin=
+ux-
+> kernel@vger.kernel.org
+> Subject: [EXT] [PATCH] scsi: bnx2fc: Fix typo in comments
+>=20
+> External Email
+>=20
+> ----------------------------------------------------------------------
+> Replace 'Offlaod' with 'Offload'.
+>=20
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 > ---
-> Changelog:
->
-> v1 -> v2
->
-> *Change 1. Change the return code.
-> ---
->  drivers/soc/mediatek/mtk-scpsys.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mt=
-k-scpsys.c
-> index ca75b14931ec..670cc82d17dc 100644
-> --- a/drivers/soc/mediatek/mtk-scpsys.c
-> +++ b/drivers/soc/mediatek/mtk-scpsys.c
-> @@ -411,12 +411,17 @@ static int scpsys_power_off(struct generic_pm_doma=
-in *genpd)
->  	return ret;
->  }
->
-> -static void init_clks(struct platform_device *pdev, struct clk **clk)
-> +static int init_clks(struct platform_device *pdev, struct clk **clk)
->  {
->  	int i;
->
-> -	for (i =3D CLK_NONE + 1; i < CLK_MAX; i++)
-> +	for (i =3D CLK_NONE + 1; i < CLK_MAX; i++) {
->  		clk[i] =3D devm_clk_get(&pdev->dev, clk_names[i]);
-> +		if (IS_ERR(clk[i]))
-> +			return PTR_ERR(clk[i]);
-> +	}
-> +
-> +	return 0;
->  }
->
->  static struct scp *init_scp(struct platform_device *pdev,
-> @@ -426,7 +431,7 @@ static struct scp *init_scp(struct platform_device *=
-pdev,
->  {
->  	struct genpd_onecell_data *pd_data;
->  	struct resource *res;
-> -	int i, j;
-> +	int i, j, ret;
->  	struct scp *scp;
->  	struct clk *clk[CLK_MAX];
->
-> @@ -481,7 +486,9 @@ static struct scp *init_scp(struct platform_device *=
-pdev,
->
->  	pd_data->num_domains =3D num;
->
-> -	init_clks(pdev, clk);
-> +	ret =3D init_clks(pdev, clk);
-> +	if (ret)
-> +		return ERR_PTR(ret);
->
->  	for (i =3D 0; i < num; i++) {
->  		struct scp_domain *scpd =3D &scp->domains[i];
+>  drivers/scsi/bnx2fc/bnx2fc_tgt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/scsi/bnx2fc/bnx2fc_tgt.c b/drivers/scsi/bnx2fc/bnx2f=
+c_tgt.c
+> index 9200b718085c..2c246e80c1c4 100644
+> --- a/drivers/scsi/bnx2fc/bnx2fc_tgt.c
+> +++ b/drivers/scsi/bnx2fc/bnx2fc_tgt.c
+> @@ -482,7 +482,7 @@ void bnx2fc_rport_event_handler(struct fc_lport
+> *lport,
+>  		}
+>=20
+>  		/*
+> -		 * Offlaod process is protected with hba mutex.
+> +		 * Offload process is protected with hba mutex.
+>  		 * Use the same mutex_lock for upload process too
+>  		 */
+>  		mutex_lock(&hba->hba_mutex);
 > --
+
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
+
+
 > 2.25.1
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
->
+

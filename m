@@ -2,111 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EF949F687
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE10B49F68A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347666AbiA1JjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:39:14 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:37408 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235076AbiA1JjN (ORCPT
+        id S1347672AbiA1Jjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243799AbiA1Jjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:39:13 -0500
-X-UUID: e9dc301affb34158a208a53be4e13ed2-20220128
-X-UUID: e9dc301affb34158a208a53be4e13ed2-20220128
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 506976823; Fri, 28 Jan 2022 17:39:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 28 Jan 2022 17:39:08 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 28 Jan 2022 17:39:07 +0800
-Message-ID: <01cc69cdf7773962140c01fe37b12ab2c9491c25.camel@mediatek.com>
-Subject: Re: [PATCH 2/2] iommu/mediatek: Add mt8186 iommu support
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
-        <anan.sun@mediatek.com>, <xueqi.zhang@mediatek.com>,
-        <yen-chang.chen@mediatek.com>, <mingyuan.ma@mediatek.com>,
-        <yf.wang@mediatek.com>, <libo.kang@mediatek.com>,
-        <chengci.xu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>
-Date:   Fri, 28 Jan 2022 17:39:06 +0800
-In-Reply-To: <b52a1df8-58f4-baa2-cfb6-9c56244caa0f@collabora.com>
-References: <20220125093244.18230-1-yong.wu@mediatek.com>
-         <20220125093244.18230-3-yong.wu@mediatek.com>
-         <b52a1df8-58f4-baa2-cfb6-9c56244caa0f@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 28 Jan 2022 04:39:33 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AB4C061714;
+        Fri, 28 Jan 2022 01:39:32 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id d188so6987855iof.7;
+        Fri, 28 Jan 2022 01:39:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mOWNK48mEIZNTEIU7X2S+zCbDX4zoirQGUmKxIAmRuY=;
+        b=dYsqpb0VN19LiiHn0Ftk9MiBf8mLuwmItMaty3MbxyFbZsMAprnM3GLwYQMQizXEde
+         OXUdAouUsM70Dc4jnK61YRQjw3xCjt2tyvts4oByrKh8WeBqLuW/0zMEhjo5zJjn/maz
+         2gqEuVK9StCfUcp0QWSBnaMkrJpBmIDqrIAvDjqgo33CVzzKz49I07l1H/emAMyU/CFf
+         Ep/7ufX3WJdoBL9KGTvqzN7NAg77FAo8WeSLjjf1Vz5sC3mDPUWoNfiiyA/IvyRml2Ki
+         w5SXy/DhkQZhKnJ9YCkkBLIM0uXaxiz56Cz/skvyda28JMRfIBuA1dXf0LiBFsmHbTjM
+         eckA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mOWNK48mEIZNTEIU7X2S+zCbDX4zoirQGUmKxIAmRuY=;
+        b=fiX18102lf5fpk4c2cSMThhQx++ZUfdFF3MjX3Me7gfe9q1fmaiZ2/BIivZmuQUGR8
+         gwd3nWq58nNs5IOwXw+eKZPZY8igZXyZi1VrV/MTu/MZT1isvvAHbdpDtiMrAjbR0zu3
+         COisBZnZUnN4YNcCOZyr73kL5XNRn7+bLiTEpOBxeeNlc0EXTG/Nr6+r6CRN/Le1FonW
+         LUmIFYFWtOXPGyg7oX9ki2yA2e5DG2b+K3fFuygcgwhr1x9k8lUP3wbWSc+pJdiGP5i1
+         9riWlLCQE/wbBpLpW9Fb5+KAsAiYHXSbWYxI9mxynthkz3lmLBbG/3sNlHz1BI/lSjFr
+         aFzw==
+X-Gm-Message-State: AOAM533+9QptSnq0tdNjfiJva4NRLNcXGAWdSEB89ZpKik7Jq3PETziW
+        PhR6n5SPNrKF+nrjln3Gm3V00VzJhnvM0Azhhis=
+X-Google-Smtp-Source: ABdhPJyRd+01JR5slNdfK/hcvj1Z2MmaGnoA6OcUp5mGkvnMhpK2nOyd9h65xhRei/JqMCZ7vgEv9TSAUFET9ewfa1A=
+X-Received: by 2002:a05:6638:380f:: with SMTP id i15mr3355679jav.308.1643362772321;
+ Fri, 28 Jan 2022 01:39:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+References: <20220127151945.1244439-1-trix@redhat.com> <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+ <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+In-Reply-To: <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 28 Jan 2022 10:39:21 +0100
+Message-ID: <CANiq72mjngfR8-y9B_yHXVXpm5zFOo1dP=nNd-j+Ge8RtoEfTA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Finn Thain <fthain@linux-m68k.org>,
+        Miguel Ojeda <ojeda@kernel.org>, Tom Rix <trix@redhat.com>,
+        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
+        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-27 at 12:28 +0100, AngeloGioacchino Del Regno wrote:
-> Il 25/01/22 10:32, Yong Wu ha scritto:
-> > Add mt8186 iommu supports.
-> > 
-> > Signed-off-by: Anan Sun <anan.sun@mediatek.com>
-> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> > ---
-> >   drivers/iommu/mtk_iommu.c | 17 +++++++++++++++++
-> >   1 file changed, 17 insertions(+)
+On Thu, Jan 27, 2022 at 11:47 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
+> These criticisms are worth reviewing.
 
-[snip]
+Indeed, thanks Nick. In my upgrade to clang-format 11 (from the
+current clang-format 4), I will check whether some of these improve.
 
-> >   static const struct mtk_iommu_plat_data mt8192_data = {
-> >   	.m4u_plat       = M4U_MT8192,
-> >   	.flags          = HAS_BCLK | HAS_SUB_COMM_2BITS |
-> > OUT_ORDER_WR_EN |
-> > @@ -1470,6 +1486,7 @@ static const struct of_device_id
-> > mtk_iommu_of_ids[] = {
-> >   	{ .compatible = "mediatek,mt8167-m4u", .data = &mt8167_data},
-> >   	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
-> >   	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
-> > +	{ .compatible = "mediatek,mt8186-iommu-mm", .data =
-> > &mt8186_data_mm},
-> 
-> Hello!
-> 
-> Is there any particular reason why this compatible is not
-> "mediatek,mt8186-m4u"?
-
-There is no special reason. In the previous SoC, We only support MM
-IOMMU, it was called by "m4u". In the lastest SoC, We have the other
-types IOMMU, like for INFRA masters and APU, thus they are called "mm
-iommu", "infra iommu" and "apu iommu". Of course, "m4u" means "mm
-iommu".
-
-> 
-> Thanks,
-> Angelo
-> 
-> >   	{ .compatible = "mediatek,mt8192-m4u", .data = &mt8192_data},
-> >   	{ .compatible = "mediatek,mt8195-iommu-infra", .data =
-> > &mt8195_data_infra},
-> >   	{ .compatible = "mediatek,mt8195-iommu-vdo",   .data =
-> > &mt8195_data_vdo},
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
-
+Cheers,
+Miguel

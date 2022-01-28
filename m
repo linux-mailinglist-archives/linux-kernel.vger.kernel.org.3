@@ -2,84 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7BE49F539
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5846449F53C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347361AbiA1IfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:35:01 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:41760 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiA1Ie7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:34:59 -0500
-Date:   Fri, 28 Jan 2022 09:34:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643358898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mznfj1fiPKTxFf7vYfwMEGCtvJ9wyttqXLSgdsx8nRA=;
-        b=BCrujvZBSCpf2xna9fz8CLrwsuLZ5hpooBVbum1LBX25zjvELu0ZsoZ253ceQPEXMN8Kvi
-        sqzdZUnLxnGYNZAO/CgBXiCdqfc3i60YX3JSMjjGryGSX7EQZycBzQf9sSSf4zSXySule+
-        +S/lIBltqiPfMaeR2tpllMyMUYUcf5fTdeb6CL1dSJgrv3MZPjTrzmSZPRdimWhVa/1UzM
-        AQC8pCFEu+7DGdY4ys9aV4jXCDdrZ0sNUiO+TKe9hCmyBOPsof2gtDlltesRmbCWa+e3mS
-        q0CGhNcaX7EzhyI0m1eccf4luHkeN1Kn0eYPSD+3dNF0PSq9GeC05T38KpBkaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643358898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mznfj1fiPKTxFf7vYfwMEGCtvJ9wyttqXLSgdsx8nRA=;
-        b=QSzHDGAI/DVypc2Th4gX1TX2xv1rmt64a7FnUgtSVLPgZOqLDhH4pawMVIJvqvQyn+h8O5
-        GrCmraSp5DSp8JBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: "BUG: Invalid wait context" in invalidate_batched_entropy
-Message-ID: <YfOqsOiNfURyvFRX@linutronix.de>
-References: <YfMa0QgsjCVdRAvJ@latitude>
- <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+        id S1347350AbiA1IgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:36:13 -0500
+Received: from mga17.intel.com ([192.55.52.151]:52647 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232312AbiA1IgL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 03:36:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643358971; x=1674894971;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DLXlxavituReAC9ZkCslfVsSA1lC0SNjLHAttdTUiQs=;
+  b=JUt/EqbRTeRcdIzIyni2oqbbChsa41WAIAxB1pHNy+YAcGSN6NUkh8Jk
+   UMzU0L194CMvJdkbNJ8JkLleqhHnTg6e056hdnW0eQTeleOD8YHdhNPdh
+   B4lbFqUgS++YJDyJZF1ViAGebfY0kxgmJhxgPv0h5ypJwBy17JIfz5iNC
+   /3WAN25Qq9Ut4bpNduAM1DMZOJ49IZK/Dw8MO7/oo4tATVst1LDMQdD92
+   YNRNS6UoGZ3jpTtV5sohj0DLsbs3F/pqCL69+TO2kKb01B49EPfFVwRj0
+   7DbNsC4GasBOCNgfbr418Q61h9z9IJpaZOmVruPlJcURgLIaUTzNv1R6r
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227749348"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="227749348"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="581788712"
+Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:10 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        daniel.vetter@ffwll.ch, airlied@linux.ie, lyude@redhat.com,
+        tzimmermann@suse.de, linux-media@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Subject: [PATCH 00/14] Rename dma-buf-map
+Date:   Fri, 28 Jan 2022 00:36:12 -0800
+Message-Id: <20220128083626.3012259-1-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-27 23:26:32 [+0100], Jason A. Donenfeld wrote:
-> Hi Jonathan,
-Hi Jason,
+Motivation for this started in
+https://lore.kernel.org/lkml/20220126203702.1784589-1-lucas.demarchi@intel.com/
+when trying to extend the dma-buf-map API to cover new use cases: help a
+single driver with allocations and sharing code paths for IO and system
+memory. I'm leaving the API additions aside and first renaming the
+interface as requested.
 
-> Thanks for the report. I'll try to reproduce this and see what's going on.
-> 
-> I'm emailing back right away, though, so that I can CC in Andy
-> Lutomirski, who I know has been sitting on a stack of patches that fix
-> up (actually, remove) the locking, so this might be one path to fixing
-> this.
+There are already some users in tree outside the context of dma-buf
+importer/exporter. So before extending the API, let's dissociate it from
+dma-buf.
 
-This report is due to CONFIG_PROVE_LOCKING=y _and_
-CONFIG_PROVE_RAW_LOCK_NESTING=y. It reports a nesting problem
-(raw_spinlock_t -> spinlock_t lock ordering) which becomes a real
-problem on PREEMPT_RT.
+The iosys-map.h is introduced in the first patch in a way that allows
+the conversion of each driver to happen separately. After all the
+conversions are done we can remove the old one, which is the last patch.
+Another possible way is to squash everything and merge together,
+but I believe this would make much harder for review.
 
-I've been testing my old series on top of 5.17-rc1. With blake2 the
-numbers lowered a little. I'm gettin 3-6us on average and 16-26us
-worstcase and with NUMA it still goes up to 40-50us.
-If you still object the previous approach and neither tglx/peterz
-disagree we could try making the lock raw_spinlock_t and add a mutex_t
-around the userspace interface to lower the lock contention. But even
-then we need to find a way to move the crng init part (crng_fast_load())
-out of the hard-IRQ.
+The conversion was done with the following semantic patch:
 
-> Thanks,
-> Jason
+	@r1@
+	@@
+	- struct dma_buf_map
+	+ struct iosys_map
 
-Sebastian
+	@r2@
+	@@
+	(
+	- DMA_BUF_MAP_INIT_VADDR
+	+ IOSYS_MAP_INIT_VADDR
+	|
+	- dma_buf_map_set_vaddr
+	+ iosys_map_set_vaddr
+	|
+	- dma_buf_map_set_vaddr_iomem
+	+ iosys_map_set_vaddr_iomem
+	|
+	- dma_buf_map_is_equal
+	+ iosys_map_is_equal
+	|
+	- dma_buf_map_is_null
+	+ iosys_map_is_null
+	|
+	- dma_buf_map_is_set
+	+ iosys_map_is_set
+	|
+	- dma_buf_map_clear
+	+ iosys_map_clear
+	|
+	- dma_buf_map_memcpy_to
+	+ iosys_map_memcpy_to
+	|
+	- dma_buf_map_incr
+	+ iosys_map_incr
+	)
+
+	@@
+	@@
+	- #include <linux/dma-buf-map.h>
+	+ #include <linux/iosys-map.h>
+
+and then some files had their includes adjusted so we can build
+everything on each commit in this series. Also some comments were update
+to remove mentions to dma-buf-map. Simply doing a sed to rename didn't
+work as dma-buf has some APIs using the dma_buf_map prefix.
+
+Once finalized, I think most of this, if not all, could go through the
+drm-misc-next branch. I split i915, msm, nouveau, and radeon in their
+own patches in case it's preferred to take those through their own
+trees.
+
+Lucas De Marchi
+
+Lucas De Marchi (14):
+  iosys-map: Introduce renamed dma-buf-map
+  misc: fastrpc: Replace dma-buf-map with iosys-map
+  dma-buf: Replace dma-buf-map with iosys-map
+  media: Replace dma-buf-map with iosys-map
+  drm/ttm: Replace dma-buf-map with iosys-map
+  drm: Replace dma-buf-map with iosys-map in drivers
+  drm/i915: Replace dma-buf-map with iosys-map
+  drm/msm: Replace dma-buf-map with iosys-map
+  drm/nouveau: Replace dma-buf-map with iosys-map
+  drm/tegra: Replace dma-buf-map with iosys-map
+  drm/radeon: Replace dma-buf-map with iosys-map
+  drm: Replace dma-buf-map with iosys-map in common code
+  Documentation: Refer to iosys-map instead of dma-buf-map
+  dma-buf-map: Remove API in favor of iosys-map
+
+ Documentation/driver-api/dma-buf.rst          |   4 +-
+ Documentation/gpu/todo.rst                    |  20 +-
+ MAINTAINERS                                   |   2 +-
+ drivers/dma-buf/dma-buf.c                     |  22 +-
+ drivers/dma-buf/heaps/cma_heap.c              |  10 +-
+ drivers/dma-buf/heaps/system_heap.c           |  10 +-
+ drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
+ drivers/gpu/drm/ast/ast_mode.c                |   8 +-
+ drivers/gpu/drm/drm_cache.c                   |  18 +-
+ drivers/gpu/drm/drm_client.c                  |   9 +-
+ drivers/gpu/drm/drm_fb_helper.c               |  12 +-
+ drivers/gpu/drm/drm_gem.c                     |  12 +-
+ drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
+ drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
+ drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
+ drivers/gpu/drm/drm_internal.h                |   6 +-
+ drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
+ drivers/gpu/drm/drm_prime.c                   |   4 +-
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
+ drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
+ drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
+ .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
+ drivers/gpu/drm/lima/lima_gem.c               |   3 +-
+ drivers/gpu/drm/lima/lima_sched.c             |   4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
+ drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
+ drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
+ drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
+ drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
+ drivers/gpu/drm/nouveau/nouveau_gem.c         |   2 +
+ drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
+ drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
+ drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
+ drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
+ drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
+ drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
+ drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
+ drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
+ drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
+ drivers/gpu/drm/tegra/gem.c                   |  10 +-
+ drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
+ drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
+ drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
+ drivers/gpu/drm/ttm/ttm_resource.c            |  26 +-
+ drivers/gpu/drm/ttm/ttm_tt.c                  |   6 +-
+ drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
+ drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
+ drivers/gpu/drm/virtio/virtgpu_prime.c        |   1 +
+ drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
+ drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
+ drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
+ drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
+ drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
+ drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
+ .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
+ .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
+ .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
+ drivers/misc/fastrpc.c                        |   4 +-
+ include/drm/drm_cache.h                       |   6 +-
+ include/drm/drm_client.h                      |   7 +-
+ include/drm/drm_gem.h                         |   6 +-
+ include/drm/drm_gem_atomic_helper.h           |   6 +-
+ include/drm/drm_gem_cma_helper.h              |   6 +-
+ include/drm/drm_gem_framebuffer_helper.h      |   8 +-
+ include/drm/drm_gem_shmem_helper.h            |  12 +-
+ include/drm/drm_gem_ttm_helper.h              |   6 +-
+ include/drm/drm_gem_vram_helper.h             |   9 +-
+ include/drm/drm_prime.h                       |   6 +-
+ include/drm/ttm/ttm_bo_api.h                  |  10 +-
+ include/drm/ttm/ttm_kmap_iter.h               |  10 +-
+ include/drm/ttm/ttm_resource.h                |   6 +-
+ include/linux/dma-buf-map.h                   | 266 ------------------
+ include/linux/dma-buf.h                       |  12 +-
+ include/linux/iosys-map.h                     | 257 +++++++++++++++++
+ 80 files changed, 579 insertions(+), 552 deletions(-)
+ delete mode 100644 include/linux/dma-buf-map.h
+ create mode 100644 include/linux/iosys-map.h
+
+-- 
+2.35.0
+

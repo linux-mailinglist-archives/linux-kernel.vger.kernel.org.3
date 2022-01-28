@@ -2,191 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4E249FC64
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E2849FC69
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348748AbiA1PDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:03:41 -0500
-Received: from mail-dm6nam10on2071.outbound.protection.outlook.com ([40.107.93.71]:39488
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1346152AbiA1PDd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:03:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=joqd0eIIaHAd6wR7GUGnuUQaWWcjY+i8jGZf0N1ZRsqJIwHE0Lpi4K/wYFDWpLP5RKWMRQYCbypouXkTQgcTN5Y/KP1rJ4bq4yCO9/srBji1ymnBzRRk3Tf1LUZfODmgXz4dKIDZJgRtvVM6dU3N0l0Gki7Hm/fkuY9ZUAkJnAWQ7KdhSUS1qo8GPEoNuI+RPkUWXGp0F3dY90GQsjiJO5FYFUa4nb+FU//wAeiDESg8kgPu3LvvgzzqbF1stFb4ChP9lCECYGHNXXYPgSCNmPsQ/kGnQxN1yiZNlXUtE2zBhkXO0s+OHtWzOI9xhGbO9YhsptREfhVy8oaZ012Kjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MMpktnw7oCNJk0klvmlV2RQOmhKQ3B4AZgXLwNYeMIg=;
- b=T2hbeaWoX1q1F4IAjum9ggB6sYNnuU2+C0kFXc6j6VLkA/fNm9anDcLsZMojeWBT1tsFQOveT7YztPJi4WtsM6v3aWrwzwWYi8oW2hHX8JnahVlzcwD48LhBZwwhaEXCHYhIlaeB3mL4tDfLwTDUe/4HGbJ3HusYIIwvh4+qAjHdnf205kLx99opYr4+pjJMkCxVWaUWUkPrU21Advp2ys1v7FSzN8RQ8UdKxQY9rApJmu0vvcpK9NA0ztklc5ovCEILocK9cfgtcf7h/jHcKfKAf0pdZfNTVLjgVBR4EbWRL4CB0Mp8doeBRDm1ZB+wVWcv/9uPhpt+xW6uuZsnig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MMpktnw7oCNJk0klvmlV2RQOmhKQ3B4AZgXLwNYeMIg=;
- b=da4ruht2SiodA2obcs0ckhrDSxHWxZ/VEVPum5XNfA3IroVOgNNrAj9NCCX0Kq8yoLdXC6+/y8CHmpIW5LmqVSPcExqLtJ4B36Oxr/kdwBtNYpC82t6xOZ250TvgyEwYxcG2eoPI+wOn1JDx0Iofz6b3UarJjfY4i8eSLDVJLj0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by DM6PR12MB2908.namprd12.prod.outlook.com (2603:10b6:5:185::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Fri, 28 Jan
- 2022 15:03:31 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::dd4b:b67b:1688:b52]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::dd4b:b67b:1688:b52%9]) with mapi id 15.20.4930.017; Fri, 28 Jan 2022
- 15:03:28 +0000
-Message-ID: <0932bbf6-409e-0d3e-2824-b33914033f81@amd.com>
-Date:   Fri, 28 Jan 2022 10:03:08 -0500
+        id S1349185AbiA1PFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240215AbiA1PFD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 10:05:03 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8986BC061714;
+        Fri, 28 Jan 2022 07:05:03 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id q186so12784890oih.8;
+        Fri, 28 Jan 2022 07:05:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cRkzWM8NeL3N7R1U1Fg4vj5Gf+jJ9eTY6cn4OX+5KNM=;
+        b=Lfbq+cGJpYtNeAE7/5LpPV891KqhMKy9UNpnstWTTz0OPv4tbncwlxhJL4PyIcfQfq
+         OQj8cfH1o9vIv230l11/kwi97CMFlDsNY7qG4B1uJux91qYzu0YlPaBJhcn8L7lM7/2I
+         JIIBcQp2WguZv9+cyFlAReZ/LaE67tYeTiASPAnyBZrMrJg55UPaHFvAIlnprrdTepkj
+         97QmywP6VzdY/tLJrOCPArtU2wiIu+nQEBvZn73jpAFjR4vucAljxZ5Fw7iQmqmtHs/L
+         RZvmkFnkRJRaiuE9vyPTNCJneHkaN//+PwtDLkaklwTOwsNPMdPtZEFivjQyYQhku9ec
+         XoEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cRkzWM8NeL3N7R1U1Fg4vj5Gf+jJ9eTY6cn4OX+5KNM=;
+        b=NK3keoUvIKcnNdPKmu7JaXnu5y8Xf/BybrnYjZ8zO1IXMe15ovmrdz8B6k9IkL8+IP
+         0LHCtrTB6g6xwiONuC/JhT21SF8+fSsmmz7w64BRHEv3k1FZxKj6iW1476XlqIzSC4Cu
+         7JGZdCtdbG2KHtI0wgI3UZ8wdlerFxcUtymIQs+WeiyULn14r1OVRNktJnvPN4JVj960
+         0OLzPYHWdiUdFbuzagfR1Ks2bnD1pRT2AB5zORbg4t/nUGjrZGj1THL7mtv5bXz4YWFc
+         QDCCsj5059F8dyFZSk61dpkYgBXEIA7r1YCNu1OO+02fFMs5aMb8n9Py1rnZOBE5N9HY
+         kndA==
+X-Gm-Message-State: AOAM533DllU/9O3YS7wLMCuoh9U9KB5aVMO9u9az9wyeXz49AtdL62LC
+        xouVQ24z/EPq51FkEeWImfDbl91WkR90SA==
+X-Google-Smtp-Source: ABdhPJxvO6lQWFvZ4fUaUQrzfe80kveQHpcR2480QCQIoyU/sxHMzpiRnJugWQQviUdNekrVx5v7zg==
+X-Received: by 2002:a54:4e94:: with SMTP id c20mr5604662oiy.132.1643382302903;
+        Fri, 28 Jan 2022 07:05:02 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j3sm6798811oig.37.2022.01.28.07.05.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 07:05:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6c0335ca-eb16-b4de-1f2c-8bdc82219b57@roeck-us.net>
+Date:   Fri, 28 Jan 2022 07:05:00 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH RESEND] drm/amd/display: Force link_rate as LINK_RATE_RBR2
- for 2018 15" Apple Retina panels
+Subject: Re: [PATCH] hwmon: Remove checks for validity of dev
 Content-Language: en-US
-To:     Aditya Garg <gargaditya08@live.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     "harry.wentland@amd.com" <harry.wentland@amd.com>,
-        "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
-        "Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
-        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Felix.Kuehling@amd.com" <Felix.Kuehling@amd.com>,
-        "evan.quan@amd.com" <evan.quan@amd.com>,
-        "stylon.wang@amd.com" <stylon.wang@amd.com>,
-        "wesley.chalmers@amd.com" <wesley.chalmers@amd.com>,
-        "qingqing.zhuo@amd.com" <qingqing.zhuo@amd.com>,
-        "George.Shen@amd.com" <George.Shen@amd.com>,
-        "roman.li@amd.com" <roman.li@amd.com>,
-        "solomon.chiu@amd.com" <solomon.chiu@amd.com>,
-        "Aurabindo.Pillai@amd.com" <Aurabindo.Pillai@amd.com>,
-        "wayne.lin@amd.com" <wayne.lin@amd.com>,
-        "mikita.lipski@amd.com" <mikita.lipski@amd.com>,
-        "Bhawanpreet.Lakha@amd.com" <Bhawanpreet.Lakha@amd.com>,
-        "agustin.gutierrez@amd.com" <agustin.gutierrez@amd.com>,
-        "pavle.kotarac@amd.com" <pavle.kotarac@amd.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-References: <139A7689-463E-4AD9-A2D1-A9969C3958D0@live.com>
- <CADnq5_OLpgEJjpN5y9b3gNwCmvdfNTA=puUv8UjOCDH96JgvOQ@mail.gmail.com>
- <58B7B0D4-BA3B-43EA-9F54-06CCEB7EF833@live.com>
-From:   Harry Wentland <hwentlan@amd.com>
-In-Reply-To: <58B7B0D4-BA3B-43EA-9F54-06CCEB7EF833@live.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220128125913.1291533-1-usama.anjum@collabora.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220128125913.1291533-1-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR08CA0025.namprd08.prod.outlook.com
- (2603:10b6:208:239::30) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 187ef551-a837-40a2-6117-08d9e26f56a2
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2908:EE_
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR12MB2908B4FFF9A2BC1E830755F08C229@DM6PR12MB2908.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 93yzbUPCv14ZT0MXODJ0dzyXMjV8ZcM6t2Nrm+aaesxBX26DqVrUy4nCYHPvBt+VrszW4suNzoO56Xl5UsilT3V5lPdAxCnSEQOiMhEeIFXQ9wQgRqxJmoqKFUnU7aHwdabOu6CLgLrWstI/JxcU9dc8yINsoJqre4z99uKz/hdLHzRYS/kSk1AP20cjDF4jWl0dOhcWd/ak3ArRiF85215qtmGFQ405TxuzUUe/GOCaLNVJCPl+g0busGM9aBTjAre4RyJqLDO0O1FLstUbne2AU1kVFw/3a1mkwcrzVGvqNAfyBX04q+OnMffB9fMNCB7UCoYKDNp/FvmfooXBN8aDK89coO8IuychG9mUSJeBHqL0KBe1N/KqsR9M0D1s2cRFoBMS0c8inWNpFsrvOiEiDJ4O6Rli31Y0oQQ8umewPcfGOFyo3AVqKBqY0SJ5iEP7dxdOR6tcx+6LEr/ToFAn8XnYBCLVq5sLXjCXkE6qrJytet7uoMaukyNnnQGheeTK+wVY5jEuOM6J8lHlh5iw0sTPUADU3oF/KomIb0o/LmDRL7WCIhQ3sjeUQkYwpSdN146Uf/Ydj6ZpQusyLtikNY/gi4V9933mBb+M+Y4mdDJj7kztGEmLxbZ3AZ/wESBLcq0vwfOPT7x7h+GXwVzq+VB4Fci6CFg7NKw+5MapQSIhGApk5bC72jFyiifaaZA5a7mJWNeKmsigyhb3miXsT8SD6nDAenOcacr+CSCcihoaaCbZ2Rjy6lQD5yD7qcE4pULSWMqDEshYWeKUnw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(47660400002)(2616005)(54906003)(6512007)(31686004)(36756003)(2906002)(6486002)(110136005)(5660300002)(508600001)(31696002)(38100700002)(26005)(316002)(6666004)(186003)(66476007)(66946007)(66556008)(4326008)(6506007)(8936002)(8676002)(53546011)(46800400005)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVFzNWYveXpVZXBGbzRkL1A4cW5CVndxQVBjMFdBWGFLc29MWG1aNjdKSXZZ?=
- =?utf-8?B?NXhMMlFTTUdvSFJpV0phNXpGbGhLcjI5RmxPRGY4ZXRKbittQ21YcHk5YnZ1?=
- =?utf-8?B?QjdQd2NKUnRGRUR5d0MzMlZnV0RPaWtCZDI3SG9BSFBNNmMreHlBeHM3M1pk?=
- =?utf-8?B?S3RqZmUxbysxOHlUWnVPd0RpdWJ4eVdGaTRmWUE4WU8yQ1ZyMU1nNmxKUUF1?=
- =?utf-8?B?cHhqcGJEakZ5R1M4WkF2S1ZZTGphVXlmQUx6SXlJNVRsclJ2ZTVjSXd6VHFs?=
- =?utf-8?B?azBXYnFGZ0JvdmwvOUxIL1NFRGNDT0FIcjMvbTFvclQycDhnczZSU0VZYUd0?=
- =?utf-8?B?SlIxK0RSZFRtd3EySnlIdUNLSURnNFRHNUZQQmptVmhybnBBWko0MmtxdE9w?=
- =?utf-8?B?OC9iTFNUTSt1RjRVY2c5WnNNWVVvQTUzYWZ6amhqRFEvQ1QwS2tzNTAwV2ZS?=
- =?utf-8?B?T2xXWENsWjY4VTE2ZTd4Z2cwR244Qys4UkZHVStmcHRTZVhJeEk4d1dvZytV?=
- =?utf-8?B?MnVXcnlxRVZCU25YdDlHT09YeW5iMWNLcGRMRWZMTzFsQ01lajB5WU85NlJ4?=
- =?utf-8?B?Mmt5aFdwT01wUWRsbkFVeHZmQmFZalN4YytMMVZZd0V1OHVNVHUwbkQrZlNG?=
- =?utf-8?B?ekxXajVNaElZVzMyYUVFMDZvSnBmR2swZ1JmejhYV3ZBcDNYZUdNVTBwZUxt?=
- =?utf-8?B?UVgwcDM4YisrN2hlRnhoVlJNOTNHOEY4T3lLQ0VGdC82RWlYcWp1cU1Sbm5X?=
- =?utf-8?B?SDF5Q2J3NGs0VUpQcDgvbThxVkorNzlKWUN6UVhETlZ6ekhNNWQzY1Q2eEdO?=
- =?utf-8?B?NWZsMDhtY3ZmNmR0TkpFY09sNmVVazczdzdQQVVwWWZmcmJFWC9uK1VIZmtK?=
- =?utf-8?B?Y1V5Z1N3aWE4Nnd1K0RFdmltUHRYRkhGOTZZSDR0ZUxBTkIvV09xaDdwRjZX?=
- =?utf-8?B?Uk1oSGpCT2c3aHRvMzFmUjhKR09hTDZTS29ZZnNGOXhjd3ZFZ2xuRmFoWndW?=
- =?utf-8?B?YlBPTDE5b2Z4dW1uMzYycW1xUzBZNjRrSkFMT1ZOcEdiYk5NWHZCSXY1SHhp?=
- =?utf-8?B?SVBhZzZORDlYM0dYdHNVYko4UkF0VFc0NUZvYUErUXdRdGxnQWhSM2pLaHdW?=
- =?utf-8?B?UXk1LzlGNUt4RHZsT0FEVjZzTGJwcXk4VEhhRlZUYjhDUHo4bExOd0VhQUtj?=
- =?utf-8?B?cEltMGNiT3FCVXIxMXRPZHVKRDJzc0Z1akc0d1RJSDRPd3RpNm1MS2VKa1FR?=
- =?utf-8?B?bVpRZm5ybUh4MXlhdGd6dm5ibm45eDlMMXVESGZJRjVsZUcxL3JwdUY1U2xx?=
- =?utf-8?B?cmJac3BqZldMMEJiMC9tMGlkTmZkMmV2QmdUK3VtMGlCdHNoUS9NRGxRQmh1?=
- =?utf-8?B?S0NHME1HaWY1QVdYaEtYODdVZHJWNVF0blFUb0Zud3V3NjlXVmxpM3hZckI2?=
- =?utf-8?B?WXBDK2FYRHlGOTZpM2RMc3NiZmFrbUhKR2tVdnNVdDlKalpGbUxEeXlSM1F0?=
- =?utf-8?B?UG9WbEsvNWFwK0Z5TGtVNm1MRElobEdacUNmMjNNZE1Nc1NHdTlPcHlaakNt?=
- =?utf-8?B?cG5sbGRUSis4U2xiZFlXSXFvL3JxMVBGNGRxRzRGRUQyRHZJcytKNXhHd1Fa?=
- =?utf-8?B?eUlkT1ZOSXhiS21FNDVxUngwMWwrZ1gyZE1iUk4yYXdSVVVkdkhxRU1iejhh?=
- =?utf-8?B?c1MxYmpjTndpTG0rNFUrSDlzNzhEaWplNy94eHBzSnFrS1RJTGdscFRkaUlj?=
- =?utf-8?B?YkdmTXRoV1pzV21PbTc4YnJCZi9tWXVlSm1EeDBpcWw0cEJmTlFVNEI3VnQ1?=
- =?utf-8?B?VmJhSkRNNHd3WFpGajRBRzRDYW1tUUhxbFhIZ3g5b295YVoyMjUwQndtZ1NR?=
- =?utf-8?B?VzQ1aVJpb0xSQVVpRXlSOGJPaWhUY3dtVm9ZRnZ3Z3RCUTFpZ2pQR3pNVkFo?=
- =?utf-8?B?eTh0WFdqNEhkb0JnRi9KR2hVYXlkNnUza2JFUW80NVFXWjRkaWxpZUdXMldN?=
- =?utf-8?B?a0t0aVI3Mk5pM0FFeEZ6a3h1b09EUzNSeU5iRmttSlc2OG5XaTdYcjVNLy9i?=
- =?utf-8?B?elZZVFVQamFHY0xidnh1WThMV2J1OHhuRG1sd2FzdllHU0hROTVBdklwLzhV?=
- =?utf-8?B?ZmdzYTZSbllUYkU1aUNNVFd5bmE4eWNtNTl1SkFBVUE5bHJNQTljVzhabkhZ?=
- =?utf-8?Q?y2hLZ+pqz4pjNZj48/hZFPc=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 187ef551-a837-40a2-6117-08d9e26f56a2
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2022 15:03:28.2072
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m2OpNeA9HHP04ZFyGqW3qlaaCoJXHBVJjaSS4aJxaxW3JrgMJTqCOfwfQiEe4/hk8UtzmjvCLpIavmaL6BD46A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2908
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/28/22 04:59, Muhammad Usama Anjum wrote:
+> dev is being dereferenced in device_property_present() which means that
+> it is valid. Don't check its validity again and simplify the code.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   drivers/hwmon/hwmon.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index e36ea82da1474..aec32abd0a89f 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -822,7 +822,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>   	hwdev->name = name;
+>   	hdev->class = &hwmon_class;
+>   	hdev->parent = dev;
+> -	hdev->of_node = dev ? dev->of_node : NULL;
+> +	hdev->of_node = dev->of_node;
+>   	hwdev->chip = chip;
+>   	dev_set_drvdata(hdev, drvdata);
+>   	dev_set_name(hdev, HWMON_ID_FORMAT, id);
+> @@ -834,7 +834,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>   
+>   	INIT_LIST_HEAD(&hwdev->tzdata);
+>   
+> -	if (dev && dev->of_node && chip && chip->ops->read &&
+> +	if (dev->of_node && chip && chip->ops->read &&
+>   	    chip->info[0]->type == hwmon_chip &&
+>   	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+>   		err = hwmon_thermal_register_sensors(hdev);
 
+Wrong fix, sorry. While I would love to make dev mandatory, the function
+is called with dev == NULL from at least one place, and the check is (still)
+needed. Even if/when it is removed we would have to add an early check
+and return -EINVAL if it is NULL.
 
-On 1/28/22 08:06, Aditya Garg wrote:
-> 
-> Hi Alex
-> 
->> On 27-Jan-2022, at 11:06 PM, Alex Deucher <alexdeucher@gmail.com> wrote:
->>
->> C style comments please.
-> Shall be fixed in v2
->>   I'll let one of the display guys comment on
->> the rest of the patch.  Seems reasonable, we have a similar quirk for
->> the Apple MBP 2017 15" Retina panel later in this function.  Could you
->> move this next to the other quirk?
-> I guess moving it next to the other quirk may break the functionality of this quirk, cause the MBP 2018 one involves stuff regarding firmware revision as well. The original patch applies the quirk after the following lines of the code :-
-> 
-> 	
-> 	core_link_read_dpcd(
-> 		link,
-> 		DP_SINK_HW_REVISION_START,
-> 		(uint8_t *)&dp_hw_fw_revision,
-> 		sizeof(dp_hw_fw_revision));
-> 
-> 	link->dpcd_caps.sink_hw_revision =
-> 		dp_hw_fw_revision.ieee_hw_rev;
-> 
-> 	memmove(
-> 		link->dpcd_caps.sink_fw_revision,
-> 		dp_hw_fw_revision.ieee_fw_rev,
-> 		sizeof(dp_hw_fw_revision.ieee_fw_rev));
-> 
-> Which seem to related to the firmware stuff. Moving it along with the 2017 quirk doesn't sound right to me, as this shall move the quirk BEFORE these lines of code instead. Maybe the author also knowingly added the quirk after these lines of code?
-> 
-> As a workaround, could we move the 2017 quirk later, instead of moving the 2018 quirk before? This sounds more logical to me.
-> 
-
-I think either leaving the 2017 quirk in its original place or moving it 
-down works. I don't have a strong preference.
-
-With the comment style addressed this patch is
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
-> Regards
-> Aditya
+Guenter

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D7549F00D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A03349F00E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345115AbiA1Ax6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
+        id S1344929AbiA1AyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344844AbiA1Axl (ORCPT
+        with ESMTP id S1344859AbiA1Axl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 19:53:41 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619D3C061749
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:29 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id r3-20020a634403000000b0034dea886e0aso2353901pga.21
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:29 -0800 (PST)
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015CDC061768
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:31 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id i6-20020a626d06000000b004c0abfd53b3so2464208pfc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=XZfdfe5GuGm3RtP1jRjs71xAECkK02JG77i8V+SPhgY=;
-        b=fLi9UoMtBQY+5NnVWk1/LbWEFc66cLYpS/U8lPFBMQRbsdgHjVaZzWNIBDbl0JqBff
-         dDy1n+xJfvOz8vbj+6KuGvmkF+U6wwIdry9D/40FPi+N5koa3hMqqLR5jemkMeTGw0jo
-         IDyYteQCPYKpRlAES9YFLxHDF+FFvKSyjqV2GVbxwg4689veOdLJXhDkWFszDQTNBhcH
-         XrX5U4lMV/B8sQGc3NRta4aJCohFPbKEM6bkdmMeALfPI74m/r9Q6TprrkARCF1zWIsM
-         Y1YKtLA/dMZElji6XTOthHX4qGFEt/kVcVstJJ50mH56BgEnhYe2cSTiUsWGj1Rs9lRG
-         UnRg==
+        bh=ADtLnC7rC8gu4V3bqeDUD4mAscpBUdWqwAs1PraRCkw=;
+        b=psBjtOn9J3Eh3Pc/Ropdvm/BqO87KA3r+8yOwYWROS23VFm73VLstZCUXjP/dFRh8F
+         8ERZZ2QL+QUFnFMuuObpzcU/ekomsr9qzaElPaq7dW1KmvYjIZXrUfWwNCdAXjDCX63/
+         IoNOJAow/rQCZHMeFBP0P6WR/WxLXjmR5hseiFjx2utGWmQ0yapCh5sC/utnNUIXywgU
+         ychZGErvItyZZZPpHjs90XKvs5DZCcbWSxxek9qogRhY+n0mMX+NHoDr7ycekmCEpUqs
+         sZFzHI2nvqdF6SK58p0wdaqv9vm+gbdog+pBj77Hufu+UOZp/21JYkK1+poMKoah3Ipe
+         dltw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=XZfdfe5GuGm3RtP1jRjs71xAECkK02JG77i8V+SPhgY=;
-        b=26RDCySZaUZcbOxVOOCcvP6wAOSuZAHKu5Ls7Kdm+ZfvPXVY8vh42AJTrtG20Kp4ly
-         K4uF5BTufmLcWTpx4Gh8X9RywCilylDc1tujqdcurprfdI/+iewswT/Ty78LDBfpLSBN
-         KE/3ejCvL3aVMLLZK69UZiiXXzL1WT7GRKEnQ4/klAi44wHMRjeQfvaUvCTAK+WopS+r
-         inmE5WfK2hp3OzZkpkoDt6j8ldG9DTOmklmSqbv1NFijr+yLgngg5HPmNMvktdOVcpEa
-         eRLZloAZ4Nzsz6mOSckS1lwB2fkJf9BdDqExZMI1BN2N8yFhqy8SZcKzIdwddIFJzchh
-         IJ5g==
-X-Gm-Message-State: AOAM532kg07OfY+5SEagqX0nntIyXzMMfFG9hUpuCqPNAymUr2wUEbAJ
-        XbTDUv6o0LAUIAkWmFoy/QLC19CZYQc=
-X-Google-Smtp-Source: ABdhPJxsZetChpy8Z4l8tP/qGFSveiiGe0+jG2DjXVNvHspUVM9gdS0zRinWI1bET9voX2MWzyCWWquS6v0=
+        bh=ADtLnC7rC8gu4V3bqeDUD4mAscpBUdWqwAs1PraRCkw=;
+        b=gAvOf0w/exHkT0Gn1rdEkrL9CarjoawQ6gavZfe5lax+8i1yp8LLmt6EqbortoA8k0
+         7axz5HLKWW9mmcwfuvAaAqX8GmwfeyuWsfG7zyvowUzgTDXPS6SqJwuY4RY9+UBxKsv3
+         Nk+CcZirJiYZO2otgpFNQ+uNYYbaY+BR6wHM5SN48ntEKnmtGJgagrxk0UbCT0DkFIKe
+         hvpvLu7ohyoaHQWiFRkk4u7lHvJnrIOY6MpNAosox3ndcFMvGlkupWryI93Hq3zEbTWE
+         BOov+8sLhTP+lEnDy1/AdHGI1BUecEpLuDlpCdf8jPr763e8rdb77v6Hz+jN8AixLwW7
+         vh3g==
+X-Gm-Message-State: AOAM530PUtcJ/sV/frUV8IgDX8gyKeyKAR1beSQLAnuZ8rE2wuURfjSE
+        qwIr5HUjQcNTgaIbgGeiCKTdtAIeIXg=
+X-Google-Smtp-Source: ABdhPJxLkLHu14NSMGZzCeuyo/Vu0/MjIaw4sO4tBzYj/s5KmDF1uOoQ4pjBoMP+0a4xo9D/1ErkClxjx1w=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:4ad2:: with SMTP id
- mh18mr16905329pjb.51.1643331208942; Thu, 27 Jan 2022 16:53:28 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:903:22d1:: with SMTP id
+ y17mr5969171plg.107.1643331210493; Thu, 27 Jan 2022 16:53:30 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 28 Jan 2022 00:51:55 +0000
+Date:   Fri, 28 Jan 2022 00:51:56 +0000
 In-Reply-To: <20220128005208.4008533-1-seanjc@google.com>
-Message-Id: <20220128005208.4008533-10-seanjc@google.com>
+Message-Id: <20220128005208.4008533-11-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220128005208.4008533-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 09/22] KVM: x86: Uninline and export hv_track_root_tdp()
+Subject: [PATCH 10/22] KVM: x86: Unexport kvm_x86_ops
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -66,68 +66,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uninline and export Hyper-V's hv_track_root_tdp(), which is (somewhat
-indirectly) the last remaining reference to kvm_x86_ops from vendor
-modules, i.e. will allow unexporting kvm_x86_ops.  Reloading the TDP PGD
-isn't the fastest of paths, hv_track_root_tdp() isn't exactly tiny, and
-disallowing vendor code from accessing kvm_x86_ops provides nice-to-have
-encapsulation of common x86 code (and of Hyper-V code for that matter).
+Drop the export of kvm_x86_ops now it is no longer referenced by SVM or
+VMX.  Disallowing access to kvm_x86_ops is very desirable as it prevents
+vendor code from incorrectly modifying hooks after they have been set by
+kvm_arch_hardware_setup(), and more importantly after each function's
+associated static_call key has been updated.
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/kvm_onhyperv.c | 14 ++++++++++++++
- arch/x86/kvm/kvm_onhyperv.h | 14 +-------------
- 2 files changed, 15 insertions(+), 13 deletions(-)
+ arch/x86/kvm/x86.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/x86/kvm/kvm_onhyperv.c b/arch/x86/kvm/kvm_onhyperv.c
-index b469f45e3fe4..ee4f696a0782 100644
---- a/arch/x86/kvm/kvm_onhyperv.c
-+++ b/arch/x86/kvm/kvm_onhyperv.c
-@@ -92,3 +92,17 @@ int hv_remote_flush_tlb(struct kvm *kvm)
- 	return hv_remote_flush_tlb_with_range(kvm, NULL);
- }
- EXPORT_SYMBOL_GPL(hv_remote_flush_tlb);
-+
-+void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
-+{
-+	struct kvm_arch *kvm_arch = &vcpu->kvm->arch;
-+
-+	if (kvm_x86_ops.tlb_remote_flush == hv_remote_flush_tlb) {
-+		spin_lock(&kvm_arch->hv_root_tdp_lock);
-+		vcpu->arch.hv_root_tdp = root_tdp;
-+		if (root_tdp != kvm_arch->hv_root_tdp)
-+			kvm_arch->hv_root_tdp = INVALID_PAGE;
-+		spin_unlock(&kvm_arch->hv_root_tdp_lock);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(hv_track_root_tdp);
-diff --git a/arch/x86/kvm/kvm_onhyperv.h b/arch/x86/kvm/kvm_onhyperv.h
-index 1c67abf2eba9..287e98ef9df3 100644
---- a/arch/x86/kvm/kvm_onhyperv.h
-+++ b/arch/x86/kvm/kvm_onhyperv.h
-@@ -10,19 +10,7 @@
- int hv_remote_flush_tlb_with_range(struct kvm *kvm,
- 		struct kvm_tlb_range *range);
- int hv_remote_flush_tlb(struct kvm *kvm);
--
--static inline void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
--{
--	struct kvm_arch *kvm_arch = &vcpu->kvm->arch;
--
--	if (kvm_x86_ops.tlb_remote_flush == hv_remote_flush_tlb) {
--		spin_lock(&kvm_arch->hv_root_tdp_lock);
--		vcpu->arch.hv_root_tdp = root_tdp;
--		if (root_tdp != kvm_arch->hv_root_tdp)
--			kvm_arch->hv_root_tdp = INVALID_PAGE;
--		spin_unlock(&kvm_arch->hv_root_tdp_lock);
--	}
--}
-+void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp);
- #else /* !CONFIG_HYPERV */
- static inline void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
- {
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index cc14f79c446c..a8ea1b212267 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -124,7 +124,6 @@ static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
+ static void __get_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
+ 
+ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+-EXPORT_SYMBOL_GPL(kvm_x86_ops);
+ 
+ #define KVM_X86_OP(func)					     \
+ 	DEFINE_STATIC_CALL_NULL(kvm_x86_##func,			     \
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

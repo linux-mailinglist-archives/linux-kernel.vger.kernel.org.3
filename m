@@ -2,164 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C18C49F528
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7BE49F539
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347319AbiA1IeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:34:08 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:36260 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiA1IeH (ORCPT
+        id S1347361AbiA1IfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:35:01 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:41760 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232312AbiA1Ie7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:34:07 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2ADF821100;
-        Fri, 28 Jan 2022 08:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643358846; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 28 Jan 2022 03:34:59 -0500
+Date:   Fri, 28 Jan 2022 09:34:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643358898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Mqq6/1K5Z07dZlfumrnft39HapgqP5bCcIjcLq2oulU=;
-        b=SWETHrW/LxhkzVFKP3689p6y9pCGa34HBldSN45JYS4l/YRhAbXV/qLVm8H4/XLEDJx7Nc
-        q+EGZZcMMluzQcSezBVsvF4F6Ql9pfwW43RbLbS2FhkQ8seW4HzWJZkgLfrr25ZdTQb0zC
-        pmj+qhYlkodQG5AaJevt6rUUM48Ynpo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643358846;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=Mznfj1fiPKTxFf7vYfwMEGCtvJ9wyttqXLSgdsx8nRA=;
+        b=BCrujvZBSCpf2xna9fz8CLrwsuLZ5hpooBVbum1LBX25zjvELu0ZsoZ253ceQPEXMN8Kvi
+        sqzdZUnLxnGYNZAO/CgBXiCdqfc3i60YX3JSMjjGryGSX7EQZycBzQf9sSSf4zSXySule+
+        +S/lIBltqiPfMaeR2tpllMyMUYUcf5fTdeb6CL1dSJgrv3MZPjTrzmSZPRdimWhVa/1UzM
+        AQC8pCFEu+7DGdY4ys9aV4jXCDdrZ0sNUiO+TKe9hCmyBOPsof2gtDlltesRmbCWa+e3mS
+        q0CGhNcaX7EzhyI0m1eccf4luHkeN1Kn0eYPSD+3dNF0PSq9GeC05T38KpBkaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643358898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Mqq6/1K5Z07dZlfumrnft39HapgqP5bCcIjcLq2oulU=;
-        b=BI3ihQORjCMHjmpcGopsCZtaH7e7JTg7g31qKovAjVMGgO9vI+5ioFJpJyHuJMap8ZiGhS
-        bczXn03Ko3nfkEBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EC40813AF2;
-        Fri, 28 Jan 2022 08:34:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id c3k3OH2q82HOXgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 28 Jan 2022 08:34:05 +0000
-Message-ID: <5cb9453b-c507-4afa-9d48-1efcfb60be46@suse.de>
-Date:   Fri, 28 Jan 2022 09:34:05 +0100
+        bh=Mznfj1fiPKTxFf7vYfwMEGCtvJ9wyttqXLSgdsx8nRA=;
+        b=QSzHDGAI/DVypc2Th4gX1TX2xv1rmt64a7FnUgtSVLPgZOqLDhH4pawMVIJvqvQyn+h8O5
+        GrCmraSp5DSp8JBA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: "BUG: Invalid wait context" in invalidate_batched_entropy
+Message-ID: <YfOqsOiNfURyvFRX@linutronix.de>
+References: <YfMa0QgsjCVdRAvJ@latitude>
+ <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
- second map
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
- <20220126203702.1784589-3-lucas.demarchi@intel.com>
- <b7a3fe1d-3b85-cb7e-19cf-1611ff4f3c9e@suse.de>
- <20220127155913.vt7a74zmsglghzom@ldmartin-desk2>
- <f033228e-c914-efb0-534c-41fc3344f272@suse.de>
-In-Reply-To: <f033228e-c914-efb0-534c-41fc3344f272@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------wrkStvEPag0Mu6brdyvA0nI1"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------wrkStvEPag0Mu6brdyvA0nI1
-Content-Type: multipart/mixed; boundary="------------Rw0on2vsWNVSOyjdXQvrHDck";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- linux-media@vger.kernel.org
-Message-ID: <5cb9453b-c507-4afa-9d48-1efcfb60be46@suse.de>
-Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
- second map
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
- <20220126203702.1784589-3-lucas.demarchi@intel.com>
- <b7a3fe1d-3b85-cb7e-19cf-1611ff4f3c9e@suse.de>
- <20220127155913.vt7a74zmsglghzom@ldmartin-desk2>
- <f033228e-c914-efb0-534c-41fc3344f272@suse.de>
-In-Reply-To: <f033228e-c914-efb0-534c-41fc3344f272@suse.de>
+On 2022-01-27 23:26:32 [+0100], Jason A. Donenfeld wrote:
+> Hi Jonathan,
+Hi Jason,
 
---------------Rw0on2vsWNVSOyjdXQvrHDck
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> Thanks for the report. I'll try to reproduce this and see what's going on.
+> 
+> I'm emailing back right away, though, so that I can CC in Andy
+> Lutomirski, who I know has been sitting on a stack of patches that fix
+> up (actually, remove) the locking, so this might be one path to fixing
+> this.
 
-SGkNCg0KQW0gMjguMDEuMjIgdW0gMDk6MTUgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
-Ci4uLg0KPiANCj4+DQo+PiBXaGlsZSB3aXRoIHRoZSBjb25zdHJ1Y3QgYmVsb3cNCj4+DQo+
-PiDCoMKgwqDCoMKgwqDCoMKgIG90aGVyX21hcDsNCj4+IMKgwqDCoMKgwqDCoMKgwqAgLi4u
-DQo+PiDCoMKgwqDCoMKgwqDCoMKgIG90aGVyX21hcCA9IElOSVRJQUxJWkVSKCkNCj4+DQo+
-PiBJIGNhbiByZWx5IG9uIHRoZSBjb21waWxlciBjb21wbGFpbmluZyBhYm91dCB1bmluaXRp
-YWxpemVkIHZhci4gQW5kDQo+PiBpbiBtb3N0IG9mIHRoZSBjYXNlcyBJIGNhbiBqdXN0IGhh
-dmUgdGhpcyBzaW5nbGUgbGluZSBpbiB0aGUgYmVnZ2luaW5nIA0KPj4gb2YgdGhlDQo+PiBm
-dW5jdGlvbiB3aGVuIHRoZSBvZmZzZXQgaXMgY29uc3RhbnQ6DQo+Pg0KPj4gwqDCoMKgwqDC
-oMKgwqDCoCBzdHJ1Y3QgZG1hX2J1Zl9tYXAgb3RoZXJfbWFwID0gSU5JVElBTElaRVIoYmxh
-X21hcCwgDQo+PiBvZmZzZXRvZiguLikpOw0KPj4NCj4+DQo+PiBUaGlzIGlzIHVzZWZ1bCB3
-aGVuIHlvdSBoYXZlIHNldmVyYWwgc21hbGwgZnVuY3Rpb25zIGluIGNoYXJnZSBvZg0KPj4g
-dXBkYXRpbmcvcmVhZGluZyBpbm5lciBzdHJ1Y3QgbWVtYmVycy4NCj4gDQo+IFlvdSB3b24n
-dCBuZWVkIGFuIGV4dHJhIHZhcmlhYmxlIG9yIHRoZSBpbml0aWFsaXplciBtYWNybyBpZiB5
-b3UgYWRkIGFuIA0KPiBvZmZzZXQgcGFyYW1ldGVyIHRvIGRtYV9idWZfbWVtY3B5X3tmcm9t
-LHRvfS7CoCBTaW1wbGUgcGFzcyBvZmZzZXRvZiguLikgDQo+IHRvIHRoYXQgcGFyYW1ldGVy
-IGFuZCBpdCB3aWxsIGRvIHRoZSByaWdodCB0aGluZy4NCj4gDQo+IEl0IGF2b2lkcyB0aGUg
-cHJvYmxlbXMgb2YgdGhlIGN1cnJlbnQgbWFjcm8gYW5kIGlzIGV2ZW4gbW9yZSBmbGV4aWJs
-ZS4gDQo+IE9uIHRvcCBvZiB0aGF0LCB5b3UgY2FuIGJ1aWxkIHdoYXRldmVyIGNvbnZlbmll
-bmNlIG1hY3JvcyB5b3UgbmVlZCBmb3IgDQo+IGk5MTUuDQoNCkFuZCBtYXliZSBwdXQgYWxs
-IGNoYW5nZXMgdG8gdGhlIGRtYV9idWZfbWFwIGludGVyZmFjZSBpbnRvIGEgc2luZ2xlIA0K
-cGF0Y2guIEl0IG1ha2VzIGl0IGVhc2llciB0byByZXZpZXcgYW5kIGRpc2N1c3MuDQoNCkJl
-c3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEJlc3QgcmVnYXJkcw0KPiBUaG9tYXMNCj4g
-DQo+Pg0KPj4+DQo+Pj4gSSd2ZSBhbHNvIGJlZW4gdmVyeSBjYXJlZnVsIHRvIGRpc3Rpbmd1
-aXNoIGJldHdlZW4gLnZhZGRyIGFuZCANCj4+PiAudmFkZHJfaW9tZW0sIGV2ZW4gaW4gcGxh
-Y2VzIHdoZXJlIEkgd291bGRuJ3QgaGF2ZSB0by4gVGhpcyBtYWNybyANCj4+PiBicmVha3Mg
-dGhlIGFzc3VtcHRpb24uDQo+Pg0KPj4gVGhhdCdzIG9uZSByZWFzb24gSSB0aGluayBpZiB3
-ZSBoYXZlIHRoaXMgbWFjcm8sIGl0IHNob3VsZCBiZSBpbiB0aGUNCj4+IGRtYV9idWZfbWFw
-LmggaGVhZGVyIChvciB3aGF0ZXZlciB3ZSByZW5hbWUgdGhlc2UgQVBJcyB0bykuIEl0J3Mg
-dGhlDQo+PiBvbmx5IHBsYWNlIHdoZXJlIHdlIGNhbiBzYWZlbHkgYWRkIGNvZGUgdGhhdCBy
-ZWxpZXMgb24gdGhlIGltcGxlbWVudGF0aW9uDQo+PiBvZiB0aGUgInByaXZhdGUiIGZpZWxk
-cyBpbiBzdHJ1Y3QgZG1hX2J1Zl9tYXAuDQo+Pg0KPj4gTHVjYXMgRGUgTWFyY2hpDQo+Pg0K
-Pj4+DQo+Pj4gQmVzdCByZWdhcmRzDQo+Pj4gVGhvbWFzDQo+Pj4NCj4+Pj4gwqAvKioNCj4+
-Pj4gwqAgKiBkbWFfYnVmX21hcF9zZXRfdmFkZHIgLSBTZXRzIGEgZG1hLWJ1ZiBtYXBwaW5n
-IHN0cnVjdHVyZSB0byBhbiANCj4+Pj4gYWRkcmVzcyBpbiBzeXN0ZW0gbWVtb3J5DQo+Pj4+
-IMKgICogQG1hcDrCoMKgwqAgVGhlIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmUNCj4+Pg0K
-Pj4+IC0tIA0KPj4+IFRob21hcyBaaW1tZXJtYW5uDQo+Pj4gR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KPj4+IFNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KPj4+
-IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KPj4+IChIUkIgMzY4
-MDksIEFHIE7DvHJuYmVyZykNCj4+PiBHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo+
-Pg0KPj4NCj4+DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
-ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
-eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
-TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+This report is due to CONFIG_PROVE_LOCKING=y _and_
+CONFIG_PROVE_RAW_LOCK_NESTING=y. It reports a nesting problem
+(raw_spinlock_t -> spinlock_t lock ordering) which becomes a real
+problem on PREEMPT_RT.
 
---------------Rw0on2vsWNVSOyjdXQvrHDck--
+I've been testing my old series on top of 5.17-rc1. With blake2 the
+numbers lowered a little. I'm gettin 3-6us on average and 16-26us
+worstcase and with NUMA it still goes up to 40-50us.
+If you still object the previous approach and neither tglx/peterz
+disagree we could try making the lock raw_spinlock_t and add a mutex_t
+around the userspace interface to lower the lock contention. But even
+then we need to find a way to move the crng init part (crng_fast_load())
+out of the hard-IRQ.
 
---------------wrkStvEPag0Mu6brdyvA0nI1
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> Thanks,
+> Jason
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHzqn0FAwAAAAAACgkQlh/E3EQov+Ba
-UQ//Y9rvX2ubfy6HXJP+dB719uVMRVzF68mbf9tty43qVNVHMvfMfSgKMDMYJHXyHpD9tm4bgsIg
-gP7fA7gyP+MLgG9qdUtuSizHcE+NNDept6NV4AVYUXTHXWKMtPANhVsW+8UMiyLfGWg2Vg0dOiNN
-ShebkBRlDGRs3I+m3FYGpyIi6LpnVsmLAHMcN3p2/Dg1NALX6xmM8K9kaS2LQwIEGNFponRQ0z5R
-BXd7ZttJHpBk5NJ2KC2WcMygQcE/s3F8WWi41zYq0sH2neRTUDmEjWdpkRL4iHoi342mKB3LM2Uc
-47Bh+I1Fdgdto2k/tVgOtrfiN9Bo05H2GuHKhSPbkBPcZJf6RVzAnqsauHRIsEoeTcCEEHj7JS2L
-6etQ0oBcycIyXpAzhqE49h7IK4bvhj46X4QJMYlsNQ2pcWP/DW4SWfCwIg1uM4jpgUW/VYSQLcah
-/KSHyAjOVGM6VQUn2JvFr2GRMASM/i7ZX0MsvawPz0+jbZRkgRRO/ClDAlUSYJSOESWZX/+VrsED
-tLpuZWgFxFCUzoep5HNcs2KlS6RxpB4wZsywAQfUUKeOBjOkRglmoe7MN/Wped0xOkG8LCV4RKrg
-SRlEJCsUDWyLQYzqxdFVKDCERDjB087q4rTUOXUd4tC2WcdD+OnkAPumNYip+h56aWsZVK4K+MP3
-Cs8=
-=RPZb
------END PGP SIGNATURE-----
-
---------------wrkStvEPag0Mu6brdyvA0nI1--
+Sebastian

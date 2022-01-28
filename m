@@ -2,111 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A40849F56A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CCD49F56E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347564AbiA1IhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:37:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243171AbiA1Igl (ORCPT
+        id S238024AbiA1Iim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:38:42 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:46228 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231660AbiA1Iik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:36:41 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02525C061751
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:36:41 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id q145-20020a4a3397000000b002e85c7234b1so1291092ooq.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 00:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dlVldSaQlH4t9NEwC5BJsEDZ+tVQfSlVuaFbSGbnynU=;
-        b=GlqQSupVUbJsQqeS0RNPjonpzLoOH5zB66C9gpbcqeBD2zoXkgl85gMKZMf/m4rOFx
-         8sU3o7jrNS7IZqfg+ce8xDjgpDz6v3vgS+mVrATuhQnTSjBlXBTdjnpVkVK8LfL6Obqc
-         j3RDF0QlS68pLW/Nc1n4crioKoyKJRR+zadnVtlcnsDsLSidsvf8pXXkB/JifYkkuDzc
-         uxYyg4N+Wz7UX0PM6sv/x99xoVnxT/Qj2u3UMSYoUbTwf4J1vYDTNPYqajV8VG3Ku+Yj
-         1//tzifYJqX79bj5VYa46UameZze8aJPOVUl8dO5xwkcEwBknZP/Ss1fjWc2gNb102DE
-         ix2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dlVldSaQlH4t9NEwC5BJsEDZ+tVQfSlVuaFbSGbnynU=;
-        b=MHQkcwY3QahjyJWw1wMNvYHMmVKvJ+RUW6pxLYuvQ/OwLqnlZIPe8LYYJDZE/0QCpM
-         wf4KczQaVVtYSZac9yVTfJh55OArXF40KJKZRUllrAssT7aB/Nfpmb6TagWaI4m9q5TL
-         QxaOjLXg0pf6y11dj6nqdxqNQA0GSZvjcQGmx6/lxk01PoA6d9fTPv+eXeFMiF9aC3ch
-         NwKGC4HREzWRjAlT79epFK3mzm933tckfVfTH62QpJHEmF2L8xj6p+XSUDS8LqJYp+Sb
-         FhyyXlSqrAYZ9aV+l7NuHF3l87sAfbsgFvDMTtDQI+f+0iwNxu4lhVDiehJ+W3CxDIzO
-         E/Iw==
-X-Gm-Message-State: AOAM532nrHPnBUJsGxipmrMH/rOesvdYt6gGlRCuRmnIWdy3ABZzQdGY
-        CUkmoY9chu/5blfWoitFXa/5dQ==
-X-Google-Smtp-Source: ABdhPJzXtnHET6jvGK73tLcdq7BSTd9anw1mJoWiv6ss36LfRT6NGLqUqlXglkszW3Oj3gJqWIqGCw==
-X-Received: by 2002:a4a:e0d8:: with SMTP id e24mr3770200oot.56.1643359000373;
-        Fri, 28 Jan 2022 00:36:40 -0800 (PST)
-Received: from [192.168.11.51] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id a8sm2463920otj.47.2022.01.28.00.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 00:36:39 -0800 (PST)
-Message-ID: <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
-Date:   Fri, 28 Jan 2022 02:36:38 -0600
+        Fri, 28 Jan 2022 03:38:40 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V31junr_1643359118;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V31junr_1643359118)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 28 Jan 2022 16:38:38 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] crypto: tcrypt - remove all multibuffer ahash tests
+Date:   Fri, 28 Jan 2022 16:38:35 +0800
+Message-Id: <20220128083835.13890-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v10 6/6] usb: dwc3: qcom: Enable the interrupts during
- probe
-Content-Language: en-US
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com
-References: <1642398248-21753-1-git-send-email-quic_c_sanm@quicinc.com>
- <1642398248-21753-7-git-send-email-quic_c_sanm@quicinc.com>
- <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
- <20220118095255.GB11385@hu-pkondeti-hyd.qualcomm.com>
- <78c90e46-666b-bc9b-235d-ae4c69e19929@quicinc.com>
- <601cdc74-392f-dd4f-7ea0-8e65c6b6d7e2@quicinc.com>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <601cdc74-392f-dd4f-7ea0-8e65c6b6d7e2@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandeep,
+The multibuffer algorithms was removed already in 2018, so it is
+necessary to clear the test code left by tcrypt.
 
-On 1/25/22 3:17 AM, Sandeep Maheswaram wrote:
-> Hi Steev,
->
->> I didn't face any such issue with devices connected.
->>
->> I think this is because I used IRQ_TYPE_EDGE_BOTH in device tree and 
->> Steev has IRQ_TYPE_LEVEL_HIGH in his device tree.
->>
->> When i changed to IRQ_TYPE_LEVEL_HIGH I also observed a storm of 
->> interrupts in my device though it booted .
->>
->> Regards
->>
->> Sandeep
->>
-> Can you try with IRQ_TYPE_EDGE_BOTH in your device tree and see if you 
-> are getting the issue.
->
-> Regards
->
-> Sandeep
->
-I just tested here, changing both of the IRQ_TYPE_LEVEL_HIGH in the 
-yoga's dts to EDGE_BOTH and I still do not get a booting system.
+Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ crypto/tcrypt.c | 224 ------------------------------------------------
+ 1 file changed, 224 deletions(-)
 
--- Steev
+diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
+index 82b5eef2246a..2a808e843de5 100644
+--- a/crypto/tcrypt.c
++++ b/crypto/tcrypt.c
+@@ -724,200 +724,6 @@ static inline int do_one_ahash_op(struct ahash_request *req, int ret)
+ 	return crypto_wait_req(ret, wait);
+ }
+ 
+-struct test_mb_ahash_data {
+-	struct scatterlist sg[XBUFSIZE];
+-	char result[64];
+-	struct ahash_request *req;
+-	struct crypto_wait wait;
+-	char *xbuf[XBUFSIZE];
+-};
+-
+-static inline int do_mult_ahash_op(struct test_mb_ahash_data *data, u32 num_mb,
+-				   int *rc)
+-{
+-	int i, err = 0;
+-
+-	/* Fire up a bunch of concurrent requests */
+-	for (i = 0; i < num_mb; i++)
+-		rc[i] = crypto_ahash_digest(data[i].req);
+-
+-	/* Wait for all requests to finish */
+-	for (i = 0; i < num_mb; i++) {
+-		rc[i] = crypto_wait_req(rc[i], &data[i].wait);
+-
+-		if (rc[i]) {
+-			pr_info("concurrent request %d error %d\n", i, rc[i]);
+-			err = rc[i];
+-		}
+-	}
+-
+-	return err;
+-}
+-
+-static int test_mb_ahash_jiffies(struct test_mb_ahash_data *data, int blen,
+-				 int secs, u32 num_mb)
+-{
+-	unsigned long start, end;
+-	int bcount;
+-	int ret = 0;
+-	int *rc;
+-
+-	rc = kcalloc(num_mb, sizeof(*rc), GFP_KERNEL);
+-	if (!rc)
+-		return -ENOMEM;
+-
+-	for (start = jiffies, end = start + secs * HZ, bcount = 0;
+-	     time_before(jiffies, end); bcount++) {
+-		ret = do_mult_ahash_op(data, num_mb, rc);
+-		if (ret)
+-			goto out;
+-	}
+-
+-	pr_cont("%d operations in %d seconds (%llu bytes)\n",
+-		bcount * num_mb, secs, (u64)bcount * blen * num_mb);
+-
+-out:
+-	kfree(rc);
+-	return ret;
+-}
+-
+-static int test_mb_ahash_cycles(struct test_mb_ahash_data *data, int blen,
+-				u32 num_mb)
+-{
+-	unsigned long cycles = 0;
+-	int ret = 0;
+-	int i;
+-	int *rc;
+-
+-	rc = kcalloc(num_mb, sizeof(*rc), GFP_KERNEL);
+-	if (!rc)
+-		return -ENOMEM;
+-
+-	/* Warm-up run. */
+-	for (i = 0; i < 4; i++) {
+-		ret = do_mult_ahash_op(data, num_mb, rc);
+-		if (ret)
+-			goto out;
+-	}
+-
+-	/* The real thing. */
+-	for (i = 0; i < 8; i++) {
+-		cycles_t start, end;
+-
+-		start = get_cycles();
+-		ret = do_mult_ahash_op(data, num_mb, rc);
+-		end = get_cycles();
+-
+-		if (ret)
+-			goto out;
+-
+-		cycles += end - start;
+-	}
+-
+-	pr_cont("1 operation in %lu cycles (%d bytes)\n",
+-		(cycles + 4) / (8 * num_mb), blen);
+-
+-out:
+-	kfree(rc);
+-	return ret;
+-}
+-
+-static void test_mb_ahash_speed(const char *algo, unsigned int secs,
+-				struct hash_speed *speed, u32 num_mb)
+-{
+-	struct test_mb_ahash_data *data;
+-	struct crypto_ahash *tfm;
+-	unsigned int i, j, k;
+-	int ret;
+-
+-	data = kcalloc(num_mb, sizeof(*data), GFP_KERNEL);
+-	if (!data)
+-		return;
+-
+-	tfm = crypto_alloc_ahash(algo, 0, 0);
+-	if (IS_ERR(tfm)) {
+-		pr_err("failed to load transform for %s: %ld\n",
+-			algo, PTR_ERR(tfm));
+-		goto free_data;
+-	}
+-
+-	for (i = 0; i < num_mb; ++i) {
+-		if (testmgr_alloc_buf(data[i].xbuf))
+-			goto out;
+-
+-		crypto_init_wait(&data[i].wait);
+-
+-		data[i].req = ahash_request_alloc(tfm, GFP_KERNEL);
+-		if (!data[i].req) {
+-			pr_err("alg: hash: Failed to allocate request for %s\n",
+-			       algo);
+-			goto out;
+-		}
+-
+-		ahash_request_set_callback(data[i].req, 0, crypto_req_done,
+-					   &data[i].wait);
+-
+-		sg_init_table(data[i].sg, XBUFSIZE);
+-		for (j = 0; j < XBUFSIZE; j++) {
+-			sg_set_buf(data[i].sg + j, data[i].xbuf[j], PAGE_SIZE);
+-			memset(data[i].xbuf[j], 0xff, PAGE_SIZE);
+-		}
+-	}
+-
+-	pr_info("\ntesting speed of multibuffer %s (%s)\n", algo,
+-		get_driver_name(crypto_ahash, tfm));
+-
+-	for (i = 0; speed[i].blen != 0; i++) {
+-		/* For some reason this only tests digests. */
+-		if (speed[i].blen != speed[i].plen)
+-			continue;
+-
+-		if (speed[i].blen > XBUFSIZE * PAGE_SIZE) {
+-			pr_err("template (%u) too big for tvmem (%lu)\n",
+-			       speed[i].blen, XBUFSIZE * PAGE_SIZE);
+-			goto out;
+-		}
+-
+-		if (klen)
+-			crypto_ahash_setkey(tfm, tvmem[0], klen);
+-
+-		for (k = 0; k < num_mb; k++)
+-			ahash_request_set_crypt(data[k].req, data[k].sg,
+-						data[k].result, speed[i].blen);
+-
+-		pr_info("test%3u "
+-			"(%5u byte blocks,%5u bytes per update,%4u updates): ",
+-			i, speed[i].blen, speed[i].plen,
+-			speed[i].blen / speed[i].plen);
+-
+-		if (secs) {
+-			ret = test_mb_ahash_jiffies(data, speed[i].blen, secs,
+-						    num_mb);
+-			cond_resched();
+-		} else {
+-			ret = test_mb_ahash_cycles(data, speed[i].blen, num_mb);
+-		}
+-
+-
+-		if (ret) {
+-			pr_err("At least one hashing failed ret=%d\n", ret);
+-			break;
+-		}
+-	}
+-
+-out:
+-	for (k = 0; k < num_mb; ++k)
+-		ahash_request_free(data[k].req);
+-
+-	for (k = 0; k < num_mb; ++k)
+-		testmgr_free_buf(data[k].xbuf);
+-
+-	crypto_free_ahash(tfm);
+-
+-free_data:
+-	kfree(data);
+-}
+-
+ static int test_ahash_jiffies_digest(struct ahash_request *req, int blen,
+ 				     char *out, int secs)
+ {
+@@ -2574,36 +2380,6 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
+ 		test_ahash_speed("sm3", sec, generic_hash_speed_template);
+ 		if (mode > 400 && mode < 500) break;
+ 		fallthrough;
+-	case 450:
+-		test_mb_ahash_speed("sha1", sec, generic_hash_speed_template,
+-				    num_mb);
+-		if (mode > 400 && mode < 500) break;
+-		fallthrough;
+-	case 451:
+-		test_mb_ahash_speed("sha256", sec, generic_hash_speed_template,
+-				    num_mb);
+-		if (mode > 400 && mode < 500) break;
+-		fallthrough;
+-	case 452:
+-		test_mb_ahash_speed("sha512", sec, generic_hash_speed_template,
+-				    num_mb);
+-		if (mode > 400 && mode < 500) break;
+-		fallthrough;
+-	case 453:
+-		test_mb_ahash_speed("sm3", sec, generic_hash_speed_template,
+-				    num_mb);
+-		if (mode > 400 && mode < 500) break;
+-		fallthrough;
+-	case 454:
+-		test_mb_ahash_speed("streebog256", sec,
+-				    generic_hash_speed_template, num_mb);
+-		if (mode > 400 && mode < 500) break;
+-		fallthrough;
+-	case 455:
+-		test_mb_ahash_speed("streebog512", sec,
+-				    generic_hash_speed_template, num_mb);
+-		if (mode > 400 && mode < 500) break;
+-		fallthrough;
+ 	case 499:
+ 		break;
+ 
+-- 
+2.34.1
 

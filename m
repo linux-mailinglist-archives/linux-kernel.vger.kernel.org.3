@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A246749F3C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D3E49F3C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346556AbiA1Gi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:38:27 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:58806 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234373AbiA1GiZ (ORCPT
+        id S1346561AbiA1Gk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:40:29 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:32069 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234373AbiA1Gk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:38:25 -0500
-X-UUID: 3cee5282e0f4416380f3153d6e4bb05a-20220128
-X-UUID: 3cee5282e0f4416380f3153d6e4bb05a-20220128
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 539038571; Fri, 28 Jan 2022 14:38:22 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 28 Jan 2022 14:38:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
- 2022 14:38:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 28 Jan 2022 14:38:20 +0800
-Message-ID: <10f4a1a11759f2b2a2d322f9d4f17c3159f9769a.camel@mediatek.com>
-Subject: Re: [RFC PATCH 2/2] drm/mediatek: add mtk8195 hdmi display driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-Date:   Fri, 28 Jan 2022 14:38:20 +0800
-In-Reply-To: <20211108000847.14320-3-granquet@baylibre.com>
-References: <20211108000847.14320-1-granquet@baylibre.com>
-         <20211108000847.14320-3-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 28 Jan 2022 01:40:27 -0500
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JlSR107Q5z1FCyK;
+        Fri, 28 Jan 2022 14:36:29 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 28 Jan 2022 14:40:25 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <mgorman@techsingularity.net>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <mgorman@suse.de>,
+        <linux-kernel@vger.kernel.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <song.bao.hua@hisilicon.com>, <prime.zeng@huawei.com>,
+        <yangyicong@hisilicon.com>, <linuxarm@huawei.com>,
+        <21cnbao@gmail.com>
+Subject: [PATCH v2] sched/fair: Clear target from cpus to scan in select_idle_cpu
+Date:   Fri, 28 Jan 2022 14:39:06 +0800
+Message-ID: <20220128063906.1845-1-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Guillaume:
+Commit 56498cfb045d noticed that "When select_idle_cpu starts scanning for
+an idle CPU, it starts with a target CPU that has already been checked
+by select_idle_sibling. This patch starts with the next CPU instead."
+It only changed the scanning start cpu to target + 1 but still leave
+the target in the scanning cpumask. The target still have a chance to be
+checked in the last turn. Fix this by clear the target from the cpus
+to scan.
 
-On Mon, 2021-11-08 at 01:08 +0100, Guillaume Ranquet wrote:
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Change-Id: I6399dec26cfe56a338c2ca96989cb7cbd14e292b
-> ---
->  drivers/gpu/drm/mediatek/Kconfig              |    9 +
->  drivers/gpu/drm/mediatek/Makefile             |    2 +
->  drivers/gpu/drm/mediatek/mtk_hdmi_common.c    |  219 +-
->  drivers/gpu/drm/mediatek/mtk_hdmi_common.h    |   24 +-
->  drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c    | 1835
-> +++++++++++++++++
->  drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.h    |   26 +
->  .../gpu/drm/mediatek/mtk_mt8195_hdmi_ddc.c    |  530 +++++
->  .../gpu/drm/mediatek/mtk_mt8195_hdmi_ddc.h    |   20 +
->  .../gpu/drm/mediatek/mtk_mt8195_hdmi_regs.h   |  329 +++
->  9 files changed, 2932 insertions(+), 62 deletions(-)
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.h
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_mt8195_hdmi_ddc.c
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_mt8195_hdmi_ddc.h
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_mt8195_hdmi_regs.h
-> 
-> diff --git a/drivers/gpu/drm/mediatek/Kconfig
-> b/drivers/gpu/drm/mediatek/Kconfig
-> index 0df75bceb74e..76cc402cbd75 100644
-> --- a/drivers/gpu/drm/mediatek/Kconfig
-> +++ b/drivers/gpu/drm/mediatek/Kconfig
-> @@ -31,3 +31,12 @@ config DRM_MEDIATEK_HDMI
->  	help
->  	  DRM/KMS HDMI driver for Mediatek SoCs
+Mel Gorman worries bit clear will introduce expensive cost so I
+tested hackbench on a 2P Skylake server which shows no obvious
+performance degradation.
 
-[snip]
+hackbench-process-pipes
+                           5.17-rc1                 patched
+Amean     1        0.3332 (   0.00%)      0.3392 *  -1.80%*
+Amean     4        0.9536 (   0.00%)      0.9192 *   3.61%*
+Amean     7        1.3382 (   0.00%)      1.3226 *   1.17%*
+Amean     12       2.1286 (   0.00%)      2.1132 *   0.72%*
+Amean     21       3.9210 (   0.00%)      3.8996 *   0.55%*
+Amean     30       6.9853 (   0.00%)      6.6562 *   4.71%*
+Amean     48      12.5749 (   0.00%)     12.3100 *   2.11%*
+Amean     79      17.2422 (   0.00%)     17.1231 *   0.69%*
+Amean     110     21.8868 (   0.00%)     21.6772 *   0.96%*
+Amean     141     26.9521 (   0.00%)     27.0702 *  -0.44%*
+Amean     160     30.5096 (   0.00%)     30.3971 *   0.37%*
 
-> +
-> +static int mtk_hdmi_ddc_xfer(struct i2c_adapter *adapter, struct
-> i2c_msg *msgs,
-> +			     int num)
-> +{
-> +	struct mtk_hdmi_ddc *ddc = adapter->algo_data;
-> +	struct device *dev = adapter->dev.parent;
-> +	int ret;
-> +	int i;
-> +
-> +	if (!ddc)
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < num; i++) {
-> +		struct i2c_msg *msg = &msgs[i];
-> +
-> +		if (msg->flags & I2C_M_RD)
-> +			ret = fg_ddc_data_read(ddc, msg->addr, msg-
-> >buf[0],
-> +					    (msg->len), &msg->buf[0]);
-> +		else
-> +			ret = fg_ddc_data_write(ddc, msg->addr, msg-
-> >buf[0],
-> +					     (msg->len - 1), &msg-
-> >buf[1]);
+Fixes: 56498cfb045d ("sched/fair: Avoid a second scan of target in select_idle_cpu")
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+Change since v1:
+- add test in the commit
+Link:https://lore.kernel.org/lkml/20211124085401.14411-1-yangyicong@hisilicon.com/
 
-Why do you use msg->buf[1]? In mt8173 hdmi ddc driver,
-mtk_hdmi_ddc_write_msg() just use msg->buf[0]. If using msg->buf[1] is
-advance function, separate this advance function to another patch.
+ kernel/sched/fair.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-CK
-
-> +
-> +		if (ret <= 0)
-> +			goto xfer_end;
-> +	}
-> +
-> +	return i;
-> +
-> +xfer_end:
-> +	dev_err(dev, "ddc failed! : %d\n", ret);
-> +	return ret;
-> +}
-> +
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 5146163bfabb..6b8bf86f5eff 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6281,6 +6281,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ 		return -1;
+ 
+ 	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
++	cpumask_clear_cpu(target, cpus);
+ 
+ 	if (sched_feat(SIS_PROP) && !has_idle_core) {
+ 		u64 avg_cost, avg_idle, span_avg;
+-- 
+2.24.0
 

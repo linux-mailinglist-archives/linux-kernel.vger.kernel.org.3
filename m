@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0F149F5BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE7F49F5BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243447AbiA1Izm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:55:42 -0500
-Received: from mail-vs1-f54.google.com ([209.85.217.54]:46835 "EHLO
-        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiA1Izl (ORCPT
+        id S232481AbiA1I42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:56:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41160 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbiA1I41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:55:41 -0500
-Received: by mail-vs1-f54.google.com with SMTP id u14so2164229vsg.13;
-        Fri, 28 Jan 2022 00:55:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uy2MrDkccIj156ALaICyk+fvYR4qhgIfiYRgdsCeDKk=;
-        b=DBF/s0H3OlBr/RVXCVw7KWjgDNdi0fY2a4gi/La2oZqYBCtvPqeP6CJXMSsOpI3X5i
-         7MpeJXw1tvJcg1178txTmnFuYsPuJU7uq6SaQbal7JENdkDkKsj8iw6T1hOgnQv8ka2d
-         tXeLREhT30I8T4QEHt1EgPyuxmcjxYknVL1JkBBt1L/EfH2imEtQx9e6iGWTCaaB/cSS
-         RaM3btBABb8Z7TgF2yfSkd4TjGeqtszm4DIg53ShSgnEwbmGsrua9okHKZZxRilRI/Lf
-         n2LDdxfELE5c3sBhlGxX0x52nQiU87Bazmhh7bJpHL5bycW8GNBUQZV/8u3P0T6HJZBH
-         ukOQ==
-X-Gm-Message-State: AOAM531+CqWX/27iaHEHR3fycJVO19vKRIoEHcq+UsF2lidbbw5AMpZ/
-        kOMp5p1e6r01jpjVDBEC64SF8Vfya9lQDDF5
-X-Google-Smtp-Source: ABdhPJzYlhJecRr1rupI2SCCDWtvHAJG4AYAJDiOe4M7Dt5ET7YXI60M6blE1vrbxpRGtleZ+bddew==
-X-Received: by 2002:a67:cb87:: with SMTP id h7mr3518145vsl.67.1643360141032;
-        Fri, 28 Jan 2022 00:55:41 -0800 (PST)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
-        by smtp.gmail.com with ESMTPSA id r11sm2073140uaw.7.2022.01.28.00.55.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 00:55:40 -0800 (PST)
-Received: by mail-vs1-f51.google.com with SMTP id v62so2171505vsv.4;
-        Fri, 28 Jan 2022 00:55:39 -0800 (PST)
-X-Received: by 2002:a67:a401:: with SMTP id n1mr3329515vse.38.1643360139371;
- Fri, 28 Jan 2022 00:55:39 -0800 (PST)
+        Fri, 28 Jan 2022 03:56:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6D1D61DA1;
+        Fri, 28 Jan 2022 08:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B747C340E0;
+        Fri, 28 Jan 2022 08:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643360186;
+        bh=nmpe7nogaTvdubctIwwawVdMI9ZoBq5WqV4ZfNn8rx8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fNkzJWSr05Kni4e9a6Gi8iS86I6Y+xKD4TCUBUudzs1VuNBrXMRsS/0IHHpeoayLO
+         s14bBQpfNVHrc71iIZp9eSDdOytEECV987X26Km575N486Ql2OrM2a+ScE4VFg34w3
+         zJmgGoWNkrBOOXK30LSuYZ7aOWVYFibrsWjXM0XZSogbWvTspS3sVEJjbJJ5gu48rC
+         5+3E5QILB/1Z0UKv/su3LgBUj2o3r79VRFhWyAmwwIB4D7oxYNQir7AkrZ8yAj4Bda
+         DQdKsGC8/YHJoBznLZQPUevkSBEqyBHIiYDymONdHyEQ1JpWOvgXEY3Zv5u2CzmOjz
+         7btnhZD2fIT7w==
+Date:   Fri, 28 Jan 2022 09:56:16 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] pidfd: fix test failure due to stack overflow on some
+ arches
+Message-ID: <20220128085616.tnsowlg5iff6ofm4@wittgenstein>
+References: <20220127212951.3604667-1-axelrasmussen@google.com>
 MIME-Version: 1.0
-References: <20220120090918.2646626-1-atishp@rivosinc.com> <20220120090918.2646626-7-atishp@rivosinc.com>
- <1AA3005C-E9C8-4E4B-900D-DD48B37CEA41@jrtc27.com> <CAOnJCUKJmHv2Rs3=FR3LjiZqvM5uxcVeZ3D5xRSbEeDFCeS9=Q@mail.gmail.com>
- <CAMuHMdW+ZO0=Qc8NCWujZUq=L-LZJpcd7oZo4MxRFYMmcURXVQ@mail.gmail.com>
- <CAMuHMdXq7OQJL6H7=JRnDTR6p+AD0o2Ctjn806XZQZ9PYjvepg@mail.gmail.com>
- <CAOnJCU+AVS5Js4ZXmUubTqwU5Ye-9_z8onEE1mwhvCsOXchFBg@mail.gmail.com>
- <CAMuHMdWsX-Pg3B1=KRf9hz1JrPAbydBrANTXg4q5CFJCqHJAoA@mail.gmail.com>
- <CAOnJCU+U0xmw-_yTEUo9ZXO5pvoJ6VCGu+jjU-Sa2MnhcAha6Q@mail.gmail.com> <CAMuHMdXLjjgD7j_5cm8qdL63m1SoB90O9j7YMYYrpXaH79hwJQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXLjjgD7j_5cm8qdL63m1SoB90O9j7YMYYrpXaH79hwJQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Jan 2022 09:55:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWgReJmBsZtY7mamnD7FkxaVX0uV2NgJNO1cFcUf8u3HA@mail.gmail.com>
-Message-ID: <CAMuHMdWgReJmBsZtY7mamnD7FkxaVX0uV2NgJNO1cFcUf8u3HA@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
- hartid bitmap
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127212951.3604667-1-axelrasmussen@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 9:39 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Fri, Jan 28, 2022 at 1:13 AM Atish Patra <atishp@atishpatra.org> wrote:
-> > On Thu, Jan 27, 2022 at 12:48 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >> What about shifting hmask and adjusting hbase if a hartid is
-> >> lower than the current hbase?
-> >
-> > That will probably work for current systems but it will fail when we have hartid > 64.
-> > The below logic as it assumes that the hartids are in order. We can have a situation
-> > where a two consecutive cpuid belong to hartids that require two invocations of sbi call
-> > because the number of harts exceeds BITS_PER_LONG.
->
-> If the number of harts exceeds BITS_PER_LONG, you always need multiple
-> calls, right?
->
-> I think the below (gmail-whitespace-damaged diff) should work:
->
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -249,7 +249,7 @@ static void __sbi_set_timer_v02(uint64_t stime_value)
->
->  static int __sbi_send_ipi_v02(const struct cpumask *cpu_mask)
->  {
-> -       unsigned long hartid, cpuid, hmask = 0, hbase = 0;
-> +       unsigned long hartid, cpuid, hmask = 0, hbase = 0, htop = 0;
->         struct sbiret ret = {0};
->         int result;
->
-> @@ -258,16 +258,27 @@ static int __sbi_send_ipi_v02(const struct
-> cpumask *cpu_mask)
->
->         for_each_cpu(cpuid, cpu_mask) {
->                 hartid = cpuid_to_hartid_map(cpuid);
-> -               if (hmask &&
-> -                   (hartid < hbase || hartid >= hbase + BITS_PER_LONG)) {
+On Thu, Jan 27, 2022 at 01:29:51PM -0800, Axel Rasmussen wrote:
+> When running the pidfd_fdinfo_test on arm64, it fails for me. After some
+> digging, the reason is that the child exits due to SIGBUS, because it
+> overflows the 1024 byte stack we've reserved for it.
+> 
+> To fix the issue, increase the stack size to 8192 bytes (this number is
+> somewhat arbitrary, and was arrived at through experimentation -- I kept
+> doubling until the failure no longer occurred).
+> 
+> Also, let's make the issue easier to debug. wait_for_pid() returns an
+> ambiguous value: it may return -1 in all of these cases:
+> 
+> 1. waitpid() itself returned -1
+> 2. waitpid() returned success, but we found !WIFEXITED(status).
+> 3. The child process exited, but it did so with a -1 exit code.
+> 
+> There's no way for the caller to tell the difference. So, at least log
+> which occurred, so the test runner can debug things.
+> 
+> While debugging this, I found that we had !WIFEXITED(), because the
+> child exited due to a signal. This seems like a reasonably common case,
+> so also print out whether or not we have WIFSIGNALED(), and the
+> associated WTERMSIG() (if any). This lets us see the SIGBUS I'm fixing
+> clearly when it occurs.
+> 
+> Finally, I'm suspicious of allocating the child's stack on our stack.
+> man clone(2) suggests that the correct way to do this is with mmap(),
+> and in particular by setting MAP_STACK. So, switch to doing it that way
+> instead.
 
-Oops, I actually sent the diff against the simpler solution below,
-not against the current code, but I guess you get the idea.
-I can send a proper patch when agreed.
+Heh, yes. :)
 
-Gr{oetje,eeting}s,
+commit 99c3a000279919cc4875c9dfa9c3ebb41ed8773e
+Author: Michael Kerrisk <mtk.manpages@gmail.com>
+Date:   Thu Nov 14 12:19:21 2019 +0100
 
-                        Geert
+    clone.2: Allocate child's stack using mmap(2) rather than malloc(3)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+    Christian Brauner suggested mmap(MAP_STACKED), rather than
+    malloc(), as the canonical way of allocating a stack for the
+    child of clone(), and Jann Horn noted some reasons why:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+        Not on Linux, but on OpenBSD, they do use MAP_STACK now
+        AFAIK; this was announced here:
+        <http://openbsd-archive.7691.n7.nabble.com/stack-register-checking-td338238.html>.
+        Basically they periodically check whether the userspace
+        stack pointer points into a MAP_STACK region, and if not,
+        they kill the process. So even if it's a no-op on Linux, it
+        might make sense to advise people to use the flag to improve
+        portability? I'm not sure if that's something that belongs
+        in Linux manpages.
+
+        Another reason against malloc() is that when setting up
+        thread stacks in proper, reliable software, you'll probably
+        want to place a guard page (in other words, a 4K PROT_NONE
+        VMA) at the bottom of the stack to reliably catch stack
+        overflows; and you probably don't want to do that with
+        malloc, in particular with non-page-aligned allocations.
+
+    And the OpenBSD 6.5 manual pages says:
+
+        MAP_STACK
+            Indicate that the mapping is used as a stack. This
+            flag must be used in combination with MAP_ANON and
+            MAP_PRIVATE.
+
+    And I then noticed that MAP_STACK seems already to be on
+    FreeBSD for a long time:
+
+        MAP_STACK
+            Map the area as a stack.  MAP_ANON is implied.
+            Offset should be 0, fd must be -1, and prot should
+            include at least PROT_READ and PROT_WRITE.  This
+            option creates a memory region that grows to at
+            most len bytes in size, starting from the stack
+            top and growing down.  The stack top is the start‐
+            ing address returned by the call, plus len bytes.
+            The bottom of the stack at maximum growth is the
+            starting address returned by the call.
+
+            The entire area is reserved from the point of view
+            of other mmap() calls, even if not faulted in yet.
+
+    Reported-by: Jann Horn <jannh@google.com>
+    Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
+    Signed-off-by: Michael Kerrisk <mtk.manpages@gmail.com>
+
+
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+
+Yeah, stack handling - especially with legacy clone() - is yucky on the
+best of days. Thank you for the fix.
+
+Acked-by: Christian Brauner <brauner@kernel.org>

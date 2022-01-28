@@ -2,208 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2923449F0CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A92D49F0CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345211AbiA1CEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S1345221AbiA1CFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbiA1CEp (ORCPT
+        with ESMTP id S235461AbiA1CFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:04:45 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D74FC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:04:45 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id q3-20020a638c43000000b0034c9c0fb2d2so2465160pgn.22
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:04:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=FeJS7xf34VelIfEIwGcvGlgB4HQ0+TQ7oDm/G0cg3j4=;
-        b=V38I5IXvAVsd9JVD80yoRyJW6Pf10TuFm56SoAZze3hb1mvIvZfsJQGcUg4SK6TchS
-         KL8gkeAT1pgPue7tV7rqV+We0D8ZqGuwU9MfuGxLLunY8mG8pIr4MXjcIuE12SIBkay2
-         5CLoBVagvPrS7JgPNCknaZdLDu/MIXonVy6g7DbNAphd8Unlp8kekDLrv4izLdkSEGau
-         aDCQ836wGMRV7GTIx3y1TfmJSwjqkpRDmf/6UjZV7Vx/EEt/tlKFQGl/lpGNvRIDzcSd
-         F9/MPSCOySOixd1tjoOJbmtP8UtthuNdxupf1uoBCSIi5r+XoYdlnTPUmPgT56c7xVxn
-         ZW4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=FeJS7xf34VelIfEIwGcvGlgB4HQ0+TQ7oDm/G0cg3j4=;
-        b=Cr8NIF7PzOs7o2oUh9ikUqeaQkVCkFiMVMJSJkkVJAmPlimfcckeA4gBV2cx/VT9Oa
-         Trjqs1DSkEaizzzTFrpaeRSMI2w8HZ4H5WwsTalZUZXorAH25YKJj+f/AcJBrrSpucZg
-         8rAJJ7COIXt+Ahep8ccy1LhNirGqrJEtqGewMn2YgS+slCoDbHg1OURKQJY6W7oXZOel
-         tlDcBf0cQlAo/zFYryennsSc3wW0b+4fjSwtcXPJFmJAUfn4CRM7aYHJWVC5I62xYmDN
-         /WmRGPFlzeCG+y8fpw9Lkbroqiab7msS5VlhsUky90hB7HqW0QuCLTjhll4bzDZrfWZZ
-         XYQQ==
-X-Gm-Message-State: AOAM533uoIfouevfokCntjLIm1LwlAjkgq4LE+t7WAGjHTI0hq4D971K
-        XgoKLhAxPm6PBvjjG2Cfgp/pwcuXDhDtAQ==
-X-Google-Smtp-Source: ABdhPJzGX6hXmrDqGw+VRA7LFG5A502XPfTa59uuk2IThV3XuJP6xGBU8E8RN/G7tSynUt3MxeiU7lcOj27UPQ==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a05:6a00:98d:: with SMTP id
- u13mr5481190pfg.83.1643335484634; Thu, 27 Jan 2022 18:04:44 -0800 (PST)
-Date:   Fri, 28 Jan 2022 02:04:39 +0000
-Message-Id: <20220128020439.2232698-1-wonchung@google.com>
+        Thu, 27 Jan 2022 21:05:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8570CC061714;
+        Thu, 27 Jan 2022 18:05:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46577B8241F;
+        Fri, 28 Jan 2022 02:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6D5C340E5;
+        Fri, 28 Jan 2022 02:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643335530;
+        bh=H0rwTxzxbzLWGDz4SbAOCgeCMcGp1dobsc6sNArg19M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e+oA/NCl6QRJofHlgD5vvd5xXbHYr4qfUdSgkljV9Fgn89Ee6fcpGKHhtuAkw3uN5
+         vPTiL+445ULGsxf8xwENYpxnnTYatvHLDNH4v3sPsgC0+UW56ARRGipihSXmGzQnxT
+         4tLQ8B2V64c/qtmR8Qgcog6J5RP7vfPnzbnBS/1nXlaBKK3i7di5Gk2cINNpyWV7wv
+         STaeDTWVB7ouB4uoBBIZp73yUzcqpKNFzPx9EubETzXvwMi7q9Mc3gvCH+twrDWqk5
+         FWFd2yU5uha52Axa4GhfLvqhLh57vDvOwiyIH6LVPbg5ua+C8AAraFII9YOn60xkId
+         2Tc3srfCOzoLw==
+Date:   Fri, 28 Jan 2022 11:05:23 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 1/9] ftrace: Add ftrace_set_filter_ips function
+Message-Id: <20220128110523.de0e36317a34d48b793a7f6b@kernel.org>
+In-Reply-To: <YfApT8uAoCODPAGu@krava>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        <164311270629.1933078.4596694198103138848.stgit@devnote2>
+        <20220125110659.2cc8df29@gandalf.local.home>
+        <YfApT8uAoCODPAGu@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v2] ACPI: device_sysfs: Add sysfs support for _PLD
-From:   Won Chung <wonchung@google.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Won Chung <wonchung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ACPI table includes _PLD fields for a device, create a new file
-(pld) in sysfs to share _PLD fields.
+Hi Jiri,
 
-Signed-off-by: Won Chung <wonchung@google.com>
----
- Documentation/ABI/testing/sysfs-bus-acpi | 53 ++++++++++++++++++++++++
- drivers/acpi/device_sysfs.c              | 42 +++++++++++++++++++
- 2 files changed, 95 insertions(+)
+On Tue, 25 Jan 2022 17:46:07 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/ABI/t=
-esting/sysfs-bus-acpi
-index 58abacf59b2a..7f4544c9d563 100644
---- a/Documentation/ABI/testing/sysfs-bus-acpi
-+++ b/Documentation/ABI/testing/sysfs-bus-acpi
-@@ -96,3 +96,56 @@ Description:
- 		hardware, if the _HRV control method is present.  It is mostly
- 		useful for non-PCI devices because lspci can list the hardware
- 		version for PCI devices.
-+
-+What:		/sys/bus/acpi/devices/.../pld
-+Date:		Jan, 2022
-+Contact:	Rafael J. Wysocki <rjw@rjwysocki.net>
-+Description:
-+		This attribute contains the output of the device object's
-+		_PLD control method, if present. This information provides
-+		details on physical location of a port.
-+
-+		Description on each _PLD field from ACPI specification:
-+
-+		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+		GROUP_TOKEN	Unique numerical value identifying a group.
-+		GROUP_POSITION	Identifies this device connection point=E2=80=99s
-+				position in the group.
-+		USER_VISIBLE	Set if the device connection point can be
-+				seen by the user without disassembly.
-+		DOCK		Set if the device connection point resides
-+				in a docking station or port replicator.
-+		BAY		Set if describing a device in a bay or if
-+				device connection point is a bay.
-+		LID		Set if this device connection point resides
-+				on the lid of laptop system.
-+		PANEL		Describes which panel surface of the system=E2=80=99s
-+				housing the device connection point resides on:
-+				0 - Top
-+				1 - Bottom
-+				2 - Left
-+				3 - Right
-+				4 - Front
-+				5 - Back
-+				6 - Unknown (Vertical Position and Horizontal
-+				Position will be ignored)
-+		HORIZONTAL_	0 - Left
-+		POSITION	1 - Center
-+				2 - Right
-+		VERTICAL_	0 - Upper
-+		POSITION	1 - Center
-+				2 - Lower
-+		SHAPE		Describes the shape of the device connection
-+				point.
-+				0 - Round
-+				1 - Oval
-+				2 - Square
-+				3 - Vertical Rectangle
-+				4 - Horizontal Rectangle
-+				5 - Vertical Trapezoid
-+				6 - Horizontal Trapezoid
-+				7 - Unknown - Shape rendered as a Rectangle
-+				with dotted lines
-+				8 - Chamfered
-+				15:9 - Reserved
-+		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-index d5d6403ba07b..8d4df5fb1c45 100644
---- a/drivers/acpi/device_sysfs.c
-+++ b/drivers/acpi/device_sysfs.c
-@@ -509,6 +509,40 @@ static ssize_t status_show(struct device *dev, struct =
-device_attribute *attr,
- }
- static DEVICE_ATTR_RO(status);
-=20
-+static ssize_t pld_show(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct acpi_device *acpi_dev =3D to_acpi_device(dev);
-+	acpi_status status;
-+	struct acpi_pld_info *pld;
-+
-+	status =3D acpi_get_physical_device_location(acpi_dev->handle, &pld);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+
-+	return sprintf(buf, "GROUP_TOKEN=3D%u\n"
-+		"GROUP_POSITION=3D%u\n"
-+		"USER_VISIBLE=3D%u\n"
-+		"DOCK=3D%u\n"
-+		"BAY=3D%u\n"
-+		"LID=3D%u\n"
-+		"PANEL=3D%u\n"
-+		"HORIZONTAL_POSITION=3D%u\n"
-+		"VERTICAL_POSITION=3D%u\n"
-+		"SHAPE=3D%u\n",
-+		pld->group_token,
-+		pld->group_position,
-+		pld->user_visible,
-+		pld->dock,
-+		pld->bay,
-+		pld->lid,
-+		pld->panel,
-+		pld->horizontal_position,
-+		pld->vertical_position,
-+		pld->shape);
-+}
-+static DEVICE_ATTR_RO(pld);
-+
- /**
-  * acpi_device_setup_files - Create sysfs attributes of an ACPI device.
-  * @dev: ACPI device object.
-@@ -595,6 +629,12 @@ int acpi_device_setup_files(struct acpi_device *dev)
- 						    &dev_attr_real_power_state);
+> On Tue, Jan 25, 2022 at 11:06:59AM -0500, Steven Rostedt wrote:
+> 
+> SNIP
+> 
+> > > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> > > index be5f6b32a012..39350aa38649 100644
+> > > --- a/kernel/trace/ftrace.c
+> > > +++ b/kernel/trace/ftrace.c
+> > > @@ -4958,7 +4958,7 @@ ftrace_notrace_write(struct file *file, const char __user *ubuf,
+> > >  }
+> > >  
+> > >  static int
+> > > -ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
+> > > +__ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
+> > >  {
+> > >  	struct ftrace_func_entry *entry;
+> > >  
+> > > @@ -4976,9 +4976,25 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
+> > >  	return add_hash_entry(hash, ip);
+> > >  }
+> > >  
+> > > +static int
+> > > +ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
+> > > +		  unsigned int cnt, int remove)
+> > > +{
+> > > +	unsigned int i;
+> > > +	int err;
+> > > +
+> > > +	for (i = 0; i < cnt; i++) {
+> > > +		err = __ftrace_match_addr(hash, ips[i], remove);
+> > > +		if (err)
+> > > +			return err;
+> > 
+> > On error should we revert what was done?
+> > 
+> > 			goto err;
+> > > +	}
+> > > +	return 0;
+> > 
+> > err:
+> > 	for (i--; i >= 0; i--)
+> > 		__ftrace_match_addr(hash, ips[i], !remove);
+> > 	return err;
+> > 
+> > Although it may not matter as it looks like it is only used on a temporary
+> > hash. But either it should be commented that is the case, or we do the above
+> > just to be more robust.
+> 
+> yes, that's the case.. it populates just the hash at this point
+> and if __ftrace_match_addr fails, the thehash is relased after
+> jumping to out_regex_unlock
+> 
+> > 
+> > > +}
+> > > +
+> > >  static int
+> > >  ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
+> > > -		unsigned long ip, int remove, int reset, int enable)
+> > > +		unsigned long *ips, unsigned int cnt,
+> > > +		int remove, int reset, int enable)
+> > >  {
+> > >  	struct ftrace_hash **orig_hash;
+> > >  	struct ftrace_hash *hash;
+> > > @@ -5008,8 +5024,8 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
+> > >  		ret = -EINVAL;
+> > >  		goto out_regex_unlock;
+> > >  	}
+> > > -	if (ip) {
+> > > -		ret = ftrace_match_addr(hash, ip, remove);
+> > > +	if (ips) {
+> > > +		ret = ftrace_match_addr(hash, ips, cnt, remove);
+> > >  		if (ret < 0)
+> > >  			goto out_regex_unlock;
+> > >  	}
+> > > @@ -5026,10 +5042,10 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
+> > >  }
+> > >  
+> > >  static int
+> > > -ftrace_set_addr(struct ftrace_ops *ops, unsigned long ip, int remove,
+> > > -		int reset, int enable)
+> > > +ftrace_set_addr(struct ftrace_ops *ops, unsigned long *ips, unsigned int cnt,
+> > > +		int remove, int reset, int enable)
+> > >  {
+> > > -	return ftrace_set_hash(ops, NULL, 0, ip, remove, reset, enable);
+> > > +	return ftrace_set_hash(ops, NULL, 0, ips, cnt, remove, reset, enable);
+> > >  }
+> > >  
+> > >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> > > @@ -5634,10 +5650,29 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
+> > >  			 int remove, int reset)
+> > >  {
+> > >  	ftrace_ops_init(ops);
+> > > -	return ftrace_set_addr(ops, ip, remove, reset, 1);
+> > > +	return ftrace_set_addr(ops, &ip, 1, remove, reset, 1);
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
+> > >  
+> > > +/**
+> > > + * ftrace_set_filter_ips - set a functions to filter on in ftrace by addresses
+> > 
+> > 		- set functions to filter on ...
+> 
+> will fix,
+
+So, I wrote a below change for the next version. Is that OK for you?
+
+Thank you,
+
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index f305e18f699f..a28b1bdb234a 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -4985,8 +4985,13 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
+ 
+ 	for (i = 0; i < cnt; i++) {
+ 		err = __ftrace_match_addr(hash, ips[i], remove);
+-		if (err)
++		if (err) {
++			/*
++			 * This expects the @hash is a temporary hash and if this
++			 * fails the caller must free the @hash.
++			 */
+ 			return err;
++		}
  	}
-=20
-+	if (acpi_has_method(dev->handle, "_PLD")) {
-+		result =3D device_create_file(&dev->dev, &dev_attr_pld);
-+		if (result)
-+			goto end;
-+	}
-+
- 	acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
-=20
- end:
-@@ -645,4 +685,6 @@ void acpi_device_remove_files(struct acpi_device *dev)
- 		device_remove_file(&dev->dev, &dev_attr_status);
- 	if (dev->handle)
- 		device_remove_file(&dev->dev, &dev_attr_path);
-+	if (acpi_has_method(dev->handle, "_PLD"))
-+		device_remove_file(&dev->dev, &dev_attr_pld);
+ 	return 0;
  }
---=20
-2.35.0.rc0.227.g00780c9af4-goog
+@@ -5649,7 +5654,7 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
+ EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
+ 
+ /**
+- * ftrace_set_filter_ips - set a functions to filter on in ftrace by addresses
++ * ftrace_set_filter_ips - set functions to filter on in ftrace by addresses
+  * @ops - the ops to set the filter with
+  * @ips - the array of addresses to add to or remove from the filter.
+  * @cnt - the number of addresses in @ips
 
+
+
+
+
+
+
+
+> 
+> thanks,
+> jirka
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

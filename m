@@ -2,72 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8E449FFB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D9149FFB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344313AbiA1RmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 12:42:07 -0500
-Received: from mail-pg1-f170.google.com ([209.85.215.170]:36488 "EHLO
-        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiA1RmF (ORCPT
+        id S1347163AbiA1RmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 12:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231135AbiA1RmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 12:42:05 -0500
-Received: by mail-pg1-f170.google.com with SMTP id e9so5814067pgb.3;
-        Fri, 28 Jan 2022 09:42:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PesQloUaxvEmTVPfJQcjOIXm9PVWBcnSQjPoitUS3nY=;
-        b=SSU6ixxs6a8oyjrnFWCP6N5zUp7Y2OfcX07onFSmI/kpfSxDZCu2sZBXiXQdhciEEI
-         pHCPHLpjZzS8GvaB4EO3kBUh5W2372Apzucg5w6E1cIPmtrt+vVIlZfZHEqedQ7mc2Kw
-         NPRKWQkVTBPA3QKcBHHxU4WHOgTh6Eh9I5S0UCdTaU+9etSj9E9Ni5IurA/7jWwwdjwv
-         j9zCtvDKcU/Dw6T5vSs1aB0spbnOfWkpo7KM+wfR1Fxe9n8RYihp9e0PviqYisvNkCIp
-         kVPpZQW+MT8HHkiSd7iWdHseQAMr1BZJfx0HQ6vCI/YOT0wHJafemG/acAkLHiSenRSy
-         u9bg==
-X-Gm-Message-State: AOAM533whrxnZg4wgrGTJyCflOOGQphaQbyM5Y4qatJs+ipTsUt6ZMr2
-        Dr0p8A2mmZ+1UJgvYsVz0tE=
-X-Google-Smtp-Source: ABdhPJzMLWm8Yz2uo2wdeHC5HjiecMlFM4aw3Bp/FY8+WB3loHfG+lRatSAgH3e6dnaxBBDKBabbxw==
-X-Received: by 2002:a63:e94e:: with SMTP id q14mr7390897pgj.376.1643391725033;
-        Fri, 28 Jan 2022 09:42:05 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id h18sm10275011pfh.51.2022.01.28.09.42.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 09:42:04 -0800 (PST)
-Message-ID: <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-Date:   Fri, 28 Jan 2022 09:42:02 -0800
+        Fri, 28 Jan 2022 12:42:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22270C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 09:42:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5A9B61B1D
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 17:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E281C340E0;
+        Fri, 28 Jan 2022 17:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643391742;
+        bh=Wz2gWXR3q1JSidKJ1sQ03/w/JCqeehltvieo00CPzEE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DfW4YqoEJYg5WkrAgCCp2XQUUxYxmuXhu2qj23+mzgulfqSFIyGAjXlswe8PjBTqe
+         R0YnISGSVnn1E51W4DDRqr+hQttqvZ+jaiaE6GO5ic0TxrmqlY45M36E9A3d/n0OU4
+         t+W2UA0xk8+hh5dqQCA4mkoYM01FeOwSunr7+TYBbv8NYUcmrmgWpOzT/MjDMoGUU8
+         57qORgK58jV5cri0TwYdgJH/trinwhWgqa7YIfu95Zs/+/Sy7WFtHHAob1TJZ02lX2
+         iaUDfVuDo0IA+nYUu9EgOTJRQRdVhfOwFDO22eJyjewAet0VzXdq9Wqr8O/xsTgroB
+         JFHm6LUhVkOhw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nDVGN-003sjO-Mz; Fri, 28 Jan 2022 17:42:19 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Anup Patel <anup@brainfault.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hector Martin <marcan@marcan.st>,
+        Jay Chen <jkchen@linux.alibaba.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: [GIT PULL] irqchip fixes for 5.17, take #1
+Date:   Fri, 28 Jan 2022 17:42:17 +0000
+Message-Id: <20220128174217.517041-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-Content-Language: en-US
-To:     trix@redhat.com, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220127151945.1244439-1-trix@redhat.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220127151945.1244439-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, anup@brainfault.org, ardb@kernel.org, christophe.jaillet@wanadoo.fr, geert@linux-m68k.org, geert+renesas@glider.be, marcan@marcan.st, jkchen@linux.alibaba.com, kieran.bingham+renesas@ideasonboard.com, lorenzo.pieralisi@arm.com, robh@kernel.org, sander@svanheule.net, valentin.schneider@arm.com, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 07:19, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> checkpatch reports several hundred formatting errors.
-> Run these files through clang-format and knock off
-> some of them.
+Hi Thomas,
 
-Isn't this the kind of patches that carries more risk than value? 
-Additionally, this patch conflicts with a patch series that I plan to 
-post soon.
+Here's a small collection of fixes for 5.17. Nothing stands out, only
+the usual cleanups, DT updates and small-scale bug fixes.
 
-Thanks,
+Please pull,
 
-Bart.
+	M.
+
+The following changes since commit cd448b24c621b2b676b4fa50a4ab4e9e9da114e2:
+
+  Merge branch irq/misc-5.17 into irq/irqchip-next (2021-12-20 14:00:47 +0000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.17-1
+
+for you to fetch changes up to c89e5eb7dcf1519e5e084ee82e0d29d4e751ddb7:
+
+  dt-bindings: interrupt-controller: sifive,plic: Group interrupt tuples (2022-01-28 17:27:26 +0000)
+
+----------------------------------------------------------------
+irqchip fixes for 5.17, take #1
+
+- Drop an unused private data field in the AIC driver
+
+- Various fixes to the realtek-rtl driver
+
+- Make the GICv3 ITS driver compile again in !SMP configurations
+
+- Force reset of the GICv3 ITSs at probe time to avoid issues during kexec
+
+- Yet another kfree/bitmap_free conversion
+
+- Various DT updates (Renesas, SiFive)
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      irqchip/gic-v3-its: Fix build for !SMP
+
+Christophe JAILLET (1):
+      irqchip/loongson-pch-ms: Use bitmap_free() to free bitmap
+
+Geert Uytterhoeven (3):
+      dt-bindings: irqchip: renesas-irqc: Add R-Car V3U support
+      dt-bindings: interrupt-controller: sifive,plic: Fix number of interrupts
+      dt-bindings: interrupt-controller: sifive,plic: Group interrupt tuples
+
+Marc Zyngier (2):
+      irqchip/apple-aic: Drop unused ipi_hwirq field
+      irqchip/gic-v3-its: Reset each ITS's BASERn register before probe
+
+Sander Vanheule (3):
+      irqchip/realtek-rtl: Map control data to virq
+      irqchip/realtek-rtl: Fix off-by-one in routing
+      irqchip/realtek-rtl: Service all pending interrupts
+
+ .../interrupt-controller/renesas,irqc.yaml         |   1 +
+ .../interrupt-controller/sifive,plic-1.0.0.yaml    |  12 +-
+ drivers/irqchip/irq-apple-aic.c                    |   1 -
+ drivers/irqchip/irq-gic-v3-its.c                   | 123 +++++++++++++++++----
+ drivers/irqchip/irq-loongson-pch-msi.c             |   2 +-
+ drivers/irqchip/irq-realtek-rtl.c                  |  18 ++-
+ 6 files changed, 121 insertions(+), 36 deletions(-)

@@ -2,468 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35094A0234
+	by mail.lfdr.de (Postfix) with ESMTP id 890C44A0233
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351583AbiA1Uk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:40:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22274 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232401AbiA1Uj4 (ORCPT
+        id S1351567AbiA1Ukr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351288AbiA1Ujx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:39:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643402395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oIuGCKEhKJ0rfok+3CzzqJj1VmBNcHrM7R91RoSbBf4=;
-        b=HURYE+jQ3ZWbD8guDeTSv4Ed/jlMTtjWyOS5LXTyfxM4xF+5OEv49vPGPupa6iJqqBv0uv
-        U8qSF0La5nIKY3DWqo67+A4lnuTS6PbTHk7UK6m7E4dQiWpdeUDfIvoy80aJV1LtRJJHwB
-        EILGNqpzVwUAxiv3itI0BgKSkGTXc5k=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-iiIeOfUmNgOeIJZh-UNObA-1; Fri, 28 Jan 2022 15:39:54 -0500
-X-MC-Unique: iiIeOfUmNgOeIJZh-UNObA-1
-Received: by mail-wm1-f71.google.com with SMTP id l16-20020a7bcf10000000b0034ffdd81e7aso3463177wmg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:54 -0800 (PST)
+        Fri, 28 Jan 2022 15:39:53 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2F4C061751
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:53 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id o64so7467793pjo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 12:39:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rtMqs+0t0LNCgzeXJAek0TSVqeINn0O3hd/R613R5/8=;
+        b=kArmkAHUM6o9YQWhMV6kun53D3KQpvPbMcXVFT/oWTdI3HcDAWQUKgPF0IUUsNYY2u
+         k1rK1neycm85tlbqWRty+PCsp+k+jlLOluLwUlvFHXyt0wCCkBDeZfQqch4RLi2pAL8w
+         pJflfNg6dHzmlmyJwWGI57FV0JcjVU5yEZ6RYAFYT/oprGioSPSicRB4EPhOKoeu1ASU
+         X03BnrsoG5wZZzDomyAFXrKPg5AOSvmmopI7ij1fR9cfTcJxCsB0Cu+jFWUcdVk5A7CI
+         RHCiWWD9ZvIzL1+vxID0hol+ohZJnKsJaOxkQ27zSZllFH/Rwn3eGoyVyQTATs9SJb7P
+         Zhkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oIuGCKEhKJ0rfok+3CzzqJj1VmBNcHrM7R91RoSbBf4=;
-        b=0KW4FQcw8YTUo8wChF1QxaSORf6Q4uq+/5OB1bf7R6QKTKoBbqfzrAHlcXhQxnIKqz
-         qBwbDEWvySxozn6YHPg2Mk5ZnQZDfVelz34xzwh1IFswQJpb0YDJUDnTul9eEfNzoSDr
-         YjfDVOKYIhki81W3rxUwNC5JntwGzWLjCr/RMaibB8g/8QPu4rz7wSQlD0fl35d8DJnX
-         SSHZqjHIomDq4ubHcXvnEL8StGHx7Wa/PlaO8bM4OjfDBHyGpl460+QXzkBgWsAJUUUz
-         mTQYeGnn5K35IhlzbIFPMDTHSLNGdptmZ0MSxixlk9g6eeOpaXuFwf2tcoyGr/Hjzg9M
-         UjlQ==
-X-Gm-Message-State: AOAM532U4OxtKs2HteEfDEGCGIOMNGnNvK7aOYP0YGc9DXe0OzeLUCQP
-        6amIrIrK8DNDQ5WHhVVx69ZjprRAh509BQFbRVDEvRchHVULoeao3qvvlcIrb4JMXBGBGTteHV9
-        eJZt2OhzQ5i3WTxk6elj5wtI=
-X-Received: by 2002:a05:6000:184c:: with SMTP id c12mr8062470wri.388.1643402393319;
-        Fri, 28 Jan 2022 12:39:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyIGqq2vfwnVZdpWgko/zZy8zCcphccPJeJWTP0SY1PFuMr0RUTmN/3jqnJJRw2GWOw1tInig==
-X-Received: by 2002:a05:6000:184c:: with SMTP id c12mr8062454wri.388.1643402393062;
-        Fri, 28 Jan 2022 12:39:53 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id w6sm2614345wmi.15.2022.01.28.12.39.52
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rtMqs+0t0LNCgzeXJAek0TSVqeINn0O3hd/R613R5/8=;
+        b=sm+qLJp+4lb6KwLxnp4nnUvdeWfWEKX3YgMWH5nhewMv6G6OyBJCG4PSdVYHZToYuE
+         9t3v+KbhG1NpafFZyPXNBEGfkXsUIwYUpP2IGcmfVTIisxb2M2ZGni50Kxc+4yYF55qS
+         ndrh9ZrLz3XjK/IMrgPeDABq9aOLY8HdIdrx6b9QSzrs5euRP3QEb5EtR58yaINqykFh
+         Y4bvoUw6GASHUnI18L6BUSt3ebGeuiI0WX9FGJX2/+qFkJoHVoRWmJ6F6+i2Oq2u5EcH
+         HmeRnEnhammmthfLSEXyb9bzeA8TJAytjbgRrNsKoMcyGrqz2smQHly78LfviktjdSXF
+         1BWQ==
+X-Gm-Message-State: AOAM531lHrJABWBsbPbcOF85rizxSi0sKGCOLAyREIXdfFlFloem7T6J
+        AN52tDg7+Ou7xwN9CDpMC0Y=
+X-Google-Smtp-Source: ABdhPJwzkQExiaV8hKBN6atyN/p0+WjjAHZt6sxoEei+r6kFLpww+pbe+s2nzSfor7uzZz4B3NzZHg==
+X-Received: by 2002:a17:90b:380f:: with SMTP id mq15mr21778403pjb.96.1643402392696;
+        Fri, 28 Jan 2022 12:39:52 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:f13b:bc2c:fac:4a86])
+        by smtp.gmail.com with ESMTPSA id k3sm11235428pfu.180.2022.01.28.12.39.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 28 Jan 2022 12:39:52 -0800 (PST)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com
-Subject: [RFC PATCH v3 13/13] module: Move version support into a separate file
-Date:   Fri, 28 Jan 2022 20:39:34 +0000
-Message-Id: <20220128203934.600247-14-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220128203934.600247-1-atomlin@redhat.com>
-References: <20220128203934.600247-1-atomlin@redhat.com>
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>
+Subject: [PATCH 0/3] Handle chroot tasks properly (v1)
+Date:   Fri, 28 Jan 2022 12:39:47 -0800
+Message-Id: <20220128203950.3371061-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional change.
+Hello,
 
-This patch migrates module version support out of core code into
-kernel/module/version.c. In addition simple code refactoring to
-make this possible.
+I found that perf tools don't work well with tasks in a chroot.  The
+filenames in MMAP record are from the root directory of the task so
+it's different than what it sees from outside.
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/Makefile   |   1 +
- kernel/module/internal.h |  51 +++++++++++++
- kernel/module/main.c     | 150 +--------------------------------------
- kernel/module/version.c  | 110 ++++++++++++++++++++++++++++
- 4 files changed, 164 insertions(+), 148 deletions(-)
- create mode 100644 kernel/module/version.c
+I've tested it with a simple program (myprog - statically built) which
+just consumes cpu cycles in a loop for a while (default 1 sec, can by
+overridden by a command-line argument).
 
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 44b9b4924d71..8b88ae28e714 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -15,3 +15,4 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_PROC_FS) += procfs.o
- obj-$(CONFIG_SYSFS) += sysfs.o
-+obj-$(CONFIG_MODVERSIONS) += version.o
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index bf2746949e93..94c6cfddf0a2 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -59,7 +59,31 @@ struct load_info {
- 	} index;
- };
- 
-+struct symsearch {
-+	const struct kernel_symbol *start, *stop;
-+	const s32 *crcs;
-+	enum mod_license {
-+		NOT_GPL_ONLY,
-+		GPL_ONLY,
-+	} license;
-+};
-+
-+struct find_symbol_arg {
-+	/* Input */
-+	const char *name;
-+	bool gplok;
-+	bool warn;
-+
-+	/* Output */
-+	struct module *owner;
-+	const s32 *crc;
-+	const struct kernel_symbol *sym;
-+	enum mod_license license;
-+};
-+
- extern int mod_verify_sig(const void *mod, struct load_info *info);
-+extern int try_to_force_load(struct module *mod, const char *reason);
-+extern bool find_symbol(struct find_symbol_arg *fsa);
- extern struct module *find_module_all(const char *name, size_t len, bool even_unformed);
- extern unsigned long kernel_symbol_value(const struct kernel_symbol *sym);
- extern int cmp_name(const void *name, const void *sym);
-@@ -149,3 +173,30 @@ static inline void module_remove_modinfo_attrs(struct module *mod, int end) { }
- static inline void del_usage_links(struct module *mod) { }
- static inline void init_param_lock(struct module *mod) { }
- #endif /* CONFIG_SYSFS */
-+
-+#ifdef CONFIG_MODVERSIONS
-+extern int check_version(const struct load_info *info,
-+			 const char *symname, struct module *mod, const s32 *crc);
-+extern int check_modstruct_version(const struct load_info *info, struct module *mod);
-+extern int same_magic(const char *amagic, const char *bmagic, bool has_crcs);
-+#else /* !CONFIG_MODVERSIONS */
-+static inline int check_version(const struct load_info *info,
-+				const char *symname,
-+				struct module *mod,
-+				const s32 *crc)
-+{
-+	return 1;
-+}
-+
-+static inline int check_modstruct_version(const struct load_info *info,
-+					  struct module *mod)
-+{
-+	return 1;
-+}
-+
-+static inline int same_magic(const char *amagic, const char *bmagic,
-+			    bool has_crcs)
-+{
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+#endif /* CONFIG_MODVERSIONS */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1f16e67f687f..0a1bd11d2a6e 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -231,28 +231,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
- #endif
- 
--struct symsearch {
--	const struct kernel_symbol *start, *stop;
--	const s32 *crcs;
--	enum mod_license {
--		NOT_GPL_ONLY,
--		GPL_ONLY,
--	} license;
--};
--
--struct find_symbol_arg {
--	/* Input */
--	const char *name;
--	bool gplok;
--	bool warn;
--
--	/* Output */
--	struct module *owner;
--	const s32 *crc;
--	const struct kernel_symbol *sym;
--	enum mod_license license;
--};
--
- static bool check_exported_symbol(const struct symsearch *syms,
- 				  struct module *owner,
- 				  unsigned int symnum, void *data)
-@@ -323,7 +301,7 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
-  * Find an exported symbol and return it, along with, (optional) crc and
-  * (optional) module which owns it.  Needs preempt disabled or module_mutex.
-  */
--static bool find_symbol(struct find_symbol_arg *fsa)
-+bool find_symbol(struct find_symbol_arg *fsa)
- {
- 	static const struct symsearch arr[] = {
- 		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
-@@ -997,7 +975,7 @@ size_t modinfo_attrs_count = ARRAY_SIZE(modinfo_attrs);
- 
- static const char vermagic[] = VERMAGIC_STRING;
- 
--static int try_to_force_load(struct module *mod, const char *reason)
-+int try_to_force_load(struct module *mod, const char *reason)
- {
- #ifdef CONFIG_MODULE_FORCE_LOAD
- 	if (!test_taint(TAINT_FORCED_MODULE))
-@@ -1009,115 +987,6 @@ static int try_to_force_load(struct module *mod, const char *reason)
- #endif
- }
- 
--#ifdef CONFIG_MODVERSIONS
--
--static u32 resolve_rel_crc(const s32 *crc)
--{
--	return *(u32 *)((void *)crc + *crc);
--}
--
--static int check_version(const struct load_info *info,
--			 const char *symname,
--			 struct module *mod,
--			 const s32 *crc)
--{
--	Elf_Shdr *sechdrs = info->sechdrs;
--	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
--
--	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
--	if (!crc)
--		return 1;
--
--	/* No versions at all?  modprobe --force does this. */
--	if (versindex == 0)
--		return try_to_force_load(mod, symname) == 0;
--
--	versions = (void *) sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
--
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
--
--		if (strcmp(versions[i].name, symname) != 0)
--			continue;
--
--		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
--			crcval = resolve_rel_crc(crc);
--		else
--			crcval = *crc;
--		if (versions[i].crc == crcval)
--			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
--		goto bad_version;
--	}
--
--	/* Broken toolchain. Warn once, then let it go.. */
--	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
--	return 1;
--
--bad_version:
--	pr_warn("%s: disagrees about version of symbol %s\n",
--	       info->name, symname);
--	return 0;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	struct find_symbol_arg fsa = {
--		.name	= "module_layout",
--		.gplok	= true,
--	};
--
--	/*
--	 * Since this should be found in kernel (which can't be removed), no
--	 * locking is necessary -- use preempt_disable() to placate lockdep.
--	 */
--	preempt_disable();
--	if (!find_symbol(&fsa)) {
--		preempt_enable();
--		BUG();
--	}
--	preempt_enable();
--	return check_version(info, "module_layout", mod, fsa.crc);
--}
--
--/* First part is kernel version, which we ignore if module has crcs. */
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	if (has_crcs) {
--		amagic += strcspn(amagic, " ");
--		bmagic += strcspn(bmagic, " ");
--	}
--	return strcmp(amagic, bmagic) == 0;
--}
--#else
--static inline int check_version(const struct load_info *info,
--				const char *symname,
--				struct module *mod,
--				const s32 *crc)
--{
--	return 1;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	return 1;
--}
--
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	return strcmp(amagic, bmagic) == 0;
--}
--#endif /* CONFIG_MODVERSIONS */
--
- static char *get_modinfo(const struct load_info *info, const char *tag);
- static char *get_next_modinfo(const struct load_info *info, const char *tag,
- 			      char *prev);
-@@ -3229,18 +3098,3 @@ void print_modules(void)
- 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
- 	pr_cont("\n");
- }
--
--#ifdef CONFIG_MODVERSIONS
--/*
-- * Generate the signature for all relevant module structures here.
-- * If these change, we don't want to try to parse the module.
-- */
--void module_layout(struct module *mod,
--		   struct modversion_info *ver,
--		   struct kernel_param *kp,
--		   struct kernel_symbol *ks,
--		   struct tracepoint * const *tp)
--{
--}
--EXPORT_SYMBOL(module_layout);
--#endif
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-new file mode 100644
-index 000000000000..6a2c9ae1c5c5
---- /dev/null
-+++ b/kernel/module/version.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module version support
-+ *
-+ * Copyright (C) 2008 Rusty Russell
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/printk.h>
-+#include "internal.h"
-+
-+/*
-+ * Generate the signature for all relevant module structures here.
-+ * If these change, we don't want to try to parse the module.
-+ */
-+void module_layout(struct module *mod,
-+		   struct modversion_info *ver,
-+		   struct kernel_param *kp,
-+		   struct kernel_symbol *ks,
-+		   struct tracepoint * const *tp)
-+{
-+}
-+EXPORT_SYMBOL(module_layout);
-+
-+static u32 resolve_rel_crc(const s32 *crc)
-+{
-+	return *(u32 *)((void *)crc + *crc);
-+}
-+
-+int check_version(const struct load_info *info,
-+			 const char *symname,
-+			 struct module *mod,
-+			 const s32 *crc)
-+{
-+	Elf_Shdr *sechdrs = info->sechdrs;
-+	unsigned int versindex = info->index.vers;
-+	unsigned int i, num_versions;
-+	struct modversion_info *versions;
-+
-+	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
-+	if (!crc)
-+		return 1;
-+
-+	/* No versions at all?  modprobe --force does this. */
-+	if (versindex == 0)
-+		return try_to_force_load(mod, symname) == 0;
-+
-+	versions = (void *) sechdrs[versindex].sh_addr;
-+	num_versions = sechdrs[versindex].sh_size
-+		/ sizeof(struct modversion_info);
-+
-+	for (i = 0; i < num_versions; i++) {
-+		u32 crcval;
-+
-+		if (strcmp(versions[i].name, symname) != 0)
-+			continue;
-+
-+		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
-+			crcval = resolve_rel_crc(crc);
-+		else
-+			crcval = *crc;
-+		if (versions[i].crc == crcval)
-+			return 1;
-+		pr_debug("Found checksum %X vs module %lX\n",
-+			 crcval, versions[i].crc);
-+		goto bad_version;
-+	}
-+
-+	/* Broken toolchain. Warn once, then let it go.. */
-+	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
-+	return 1;
-+
-+bad_version:
-+	pr_warn("%s: disagrees about version of symbol %s\n",
-+	       info->name, symname);
-+	return 0;
-+}
-+
-+inline int check_modstruct_version(const struct load_info *info,
-+					  struct module *mod)
-+{
-+	struct find_symbol_arg fsa = {
-+		.name	= "module_layout",
-+		.gplok	= true,
-+	};
-+
-+	/*
-+	 * Since this should be found in kernel (which can't be removed), no
-+	 * locking is necessary -- use preempt_disable() to placate lockdep.
-+	 */
-+	preempt_disable();
-+	if (!find_symbol(&fsa)) {
-+		preempt_enable();
-+		BUG();
-+	}
-+	preempt_enable();
-+	return check_version(info, "module_layout", mod, fsa.crc);
-+}
-+
-+/* First part is kernel version, which we ignore if module has crcs. */
-+inline int same_magic(const char *amagic, const char *bmagic,
-+			     bool has_crcs)
-+{
-+	if (has_crcs) {
-+		amagic += strcspn(amagic, " ");
-+		bmagic += strcspn(bmagic, " ");
-+	}
-+	return strcmp(amagic, bmagic) == 0;
-+}
+  # cd $HOME
+  # mkdir -p myroot/bin
+  # cp myprog myroot/bin
+
+  # perf record chroot myroot myprog
+  # perf report -D | grep MMAP | grep myprog
+  2084916774977911 0xa2e4 [0x70]: PERF_RECORD_MMAP2 3363818/3363818: \
+  [0x401000(0x80000) @ 0x1000 fe:01 4346398 2543719070]: r-xp /bin/myprog
+
+So it's reported as /bin/myprog and then it's unable to symbolize the
+samples.  It seems hard to fix it for the above use case as the record
+ended after the task exited.  It cannot know the root directory of the
+task anymore.  But we can fix it for real-time use cases like perf top
+or pipe-mode at least.
+
+I tested it again with the following command.
+
+  # perf record -o- chroot myroot myprog | perf report -i-
+  ...
+  #
+  # Overhead  Command  Shared Object      Symbol                          
+  # ........  .......  .................  ................................
+  #
+      46.02%  myprog   myprog             [.] 0x000000000000178a
+      36.71%  myprog   myprog             [.] 0x0000000000001792
+      17.12%  myprog   myprog             [.] 0x000000000000178e
+       0.05%  myprog   myprog             [.] 0x0000000000001796
+       0.05%  chroot   ld-2.33.so         [.] intel_check_word.constprop.0
+
+The symbols are not resolved because it failed to load the symbol
+table as it didn't find the file in the given path.
+
+So I modified the code to try a new name prepended with the task's
+root directory when it's not "/".  With this change, I can see the
+symbols of myprog.  In fact, it depends on timing if perf report hits
+the file before the task is gone.  Increasing the loop time to 3 sec
+helped it to get symbols reliably.
+
+  # perf record -o- chroot myroot myprog 3 | perf report -i-
+  ...
+  #
+  # Overhead  Command  Shared Object      Symbol                       
+  # ........  .......  .................  .............................
+  #
+      99.83%  myprog   myprog             [.] loop
+       0.04%  chroot   [kernel.kallsyms]  [k] fxregs_fixup
+       0.04%  chroot   [kernel.kallsyms]  [k] rsm_load_seg_32
+       0.03%  chroot   [kernel.kallsyms]  [k] show_cpuinfo_cur_freq
+       0.01%  myprog   [kernel.kallsyms]  [k] alarmtimer_fired
+
+
+I also found that perf inject and perf annotate need the similar changes.
+
+You can get it from 'perf/dso-chroot-v1' branch at
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (3):
+  perf tools: Try chroot'ed filename when opening dso/symbol
+  perf inject: Try chroot directory when reading build-id
+  perf annotate: Try chroot filename for objdump
+
+ tools/perf/builtin-inject.c | 10 ++++++++++
+ tools/perf/util/annotate.c  | 11 +++++++++++
+ tools/perf/util/dso.c       | 15 +++++++++++++--
+ tools/perf/util/dsos.c      | 13 +++++++++++++
+ tools/perf/util/symbol.c    | 10 ++++++++++
+ tools/perf/util/util.c      | 31 +++++++++++++++++++++++++++++++
+ tools/perf/util/util.h      |  2 ++
+ 7 files changed, 90 insertions(+), 2 deletions(-)
+
+
+base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
 -- 
-2.34.1
+2.35.0.rc2.247.g8bbb082509-goog
 

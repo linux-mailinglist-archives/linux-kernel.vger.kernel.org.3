@@ -2,91 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C844D49FA46
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B5749FA48
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238482AbiA1NDf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Jan 2022 08:03:35 -0500
-Received: from mail-yb1-f172.google.com ([209.85.219.172]:44967 "EHLO
-        mail-yb1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238248AbiA1NDe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:03:34 -0500
-Received: by mail-yb1-f172.google.com with SMTP id r65so18142264ybc.11;
-        Fri, 28 Jan 2022 05:03:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=ie2PuXYR3t0je7Ft2W8pd/QgIdnvwwoLONXZlKTVxhw=;
-        b=xLbLsn8wjojfHTctMrf0fP7NWECUqo9rQw1IayRZY3wo0X9vqwTEsaeSnxfgpakhxy
-         jxL4FY3bcWGSs89HUYaTCx4H5jIfvgigAiq4wP0pfEml011O1/fSOjMpUNcXazocSpTR
-         zymIWC3hkH5dZc7rc2DwQ7VQU2aHnXcD5BFiwpsBRovlU2W8ELo67zKwo9A0G5iJxRuq
-         B2vyF+deOP4z8YP8lu5rOprmPHs5JHF22ZSnvQV7WYd27RreXaGZAMYfGilc1VZipxkX
-         t1vtnKnBQzfHU+NLaj/m7keb0mY/ZL/XGBmWbza6nDc95dXE4I6oBHM58YnhONvz35ZI
-         LDYA==
-X-Gm-Message-State: AOAM533ge73A7tlkq+cCqwDFKELCTK7BxK9ULGHnxc3pbbdZfjMLqO9b
-        CpiKf+Azb2+aJ0na4EAMPCp63oWDAX9cyfpuVM0=
-X-Google-Smtp-Source: ABdhPJwKNeNoyVVRaUCPNDa1Ss6YHQDL+VZ+zRojzAROUl2MYovBBeh+LN2SvnhfkbeqKpR0/hc1lbWGVZuuQnkpBLI=
-X-Received: by 2002:a25:2ac3:: with SMTP id q186mr12803067ybq.272.1643375013552;
- Fri, 28 Jan 2022 05:03:33 -0800 (PST)
+        id S240647AbiA1NEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:04:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:42862 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238248AbiA1NET (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 08:04:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE9DA11D4;
+        Fri, 28 Jan 2022 05:04:18 -0800 (PST)
+Received: from [10.57.68.47] (unknown [10.57.68.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E4173F766;
+        Fri, 28 Jan 2022 05:04:13 -0800 (PST)
+Message-ID: <29deffd6-aac4-f085-bcd5-f5a2d02784a8@arm.com>
+Date:   Fri, 28 Jan 2022 13:04:07 +0000
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Jan 2022 14:03:22 +0100
-Message-ID: <CAJZ5v0jeB_WPnOJBzTk-VeOtdbwWFE4tLvVQzZH+Bhe3Q1pSdQ@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v5.17-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [RFC PATCH] component: Add common helpers for compare/release
+ functions
+Content-Language: en-GB
+To:     Yong Wu <yong.wu@mediatek.com>, dri-devel@lists.freedesktop.org
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        James Wang <james.qian.wang@arm.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        iommu@lists.linux-foundation.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-mediatek@lists.infradead.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>, srv_heupstream@mediatek.com,
+        Rob Clark <robdclark@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+References: <20220128081101.27837-1-yong.wu@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220128081101.27837-1-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2022-01-28 08:11, Yong Wu wrote:
+[...]
+> diff --git a/include/linux/component.h b/include/linux/component.h
+> index 16de18f473d7..5a7468ea827c 100644
+> --- a/include/linux/component.h
+> +++ b/include/linux/component.h
+> @@ -2,6 +2,8 @@
+>   #ifndef COMPONENT_H
+>   #define COMPONENT_H
+>   
+> +#include <linux/device.h>
+> +#include <linux/of.h>
+>   #include <linux/stddef.h>
+>   
+>   
+> @@ -82,6 +84,22 @@ struct component_master_ops {
+>   	void (*unbind)(struct device *master);
+>   };
+>   
+> +/* A set common helpers for compare/release functions */
+> +static inline int compare_of(struct device *dev, void *data)
+> +{
+> +	return dev->of_node == data;
+> +}
 
-Please pull from the tag
+Note that this is effectively just device_match_of_node(), although I 
+guess there is an argument that having a nice consistent set of 
+component_match API helpers might be worth more than a tiny code saving 
+by borrowing one from a different API.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.17-rc2
+Either way, however, I don't think there's any good argument for 
+instantiating separate copies of these functions in every driver that 
+uses them. If they're used as callbacks then they can't actually be 
+inlined anyway, so they may as well be exported from component.c as 
+normal so that the code really is shared (plus then there's nice 
+symmetry with the aforementioned device_match API helpers too).
 
-with top-most commit 33569ef3c754a82010f266b7b938a66a3ccf90a4
+Thanks,
+Robin.
 
- PM: hibernate: Remove register_nosave_region_late()
-
-on top of commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
-
- Linux 5.17-rc1
-
-to receive power management updates for 5.17-rc2.
-
-These make the buffer handling in pm_show_wakelocks() more robust
-and drop an unused hibernation-related function.
-
-Specifics:
-
- - Make the buffer handling in pm_show_wakelocks() more robust by
-   using sysfs_emit_at() in it to generate output (Greg Kroah-Hartman).
-
- - Drop register_nosave_region_late() which is not used (Amadeusz
-   Sławiński).
-
-Thanks!
-
-
----------------
-
-Amadeusz Sławiński (1):
-      PM: hibernate: Remove register_nosave_region_late()
-
-Greg Kroah-Hartman (1):
-      PM: wakeup: simplify the output logic of pm_show_wakelocks()
-
----------------
-
- include/linux/suspend.h | 11 +----------
- kernel/power/snapshot.c | 21 +++++++--------------
- kernel/power/wakelock.c | 11 ++++-------
- 3 files changed, 12 insertions(+), 31 deletions(-)
+> +static inline void release_of(struct device *dev, void *data)
+> +{
+> +	of_node_put(data);
+> +}
+> +
+> +static inline int compare_dev(struct device *dev, void *data)
+> +{
+> +	return dev == data;
+> +}
+> +
+>   void component_master_del(struct device *,
+>   	const struct component_master_ops *);
+>   
+> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+> index eff200a07d9f..992132cbfb9f 100644
+> --- a/sound/soc/codecs/wcd938x.c
+> +++ b/sound/soc/codecs/wcd938x.c
+> @@ -4417,16 +4417,6 @@ static const struct component_master_ops wcd938x_comp_ops = {
+>   	.unbind = wcd938x_unbind,
+>   };
+>   
+> -static int wcd938x_compare_of(struct device *dev, void *data)
+> -{
+> -	return dev->of_node == data;
+> -}
+> -
+> -static void wcd938x_release_of(struct device *dev, void *data)
+> -{
+> -	of_node_put(data);
+> -}
+> -
+>   static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+>   					struct device *dev,
+>   					struct component_match **matchptr)
+> @@ -4442,8 +4432,7 @@ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+>   	}
+>   
+>   	of_node_get(wcd938x->rxnode);
+> -	component_match_add_release(dev, matchptr, wcd938x_release_of,
+> -				    wcd938x_compare_of,	wcd938x->rxnode);
+> +	component_match_add_release(dev, matchptr, release_of, compare_of, wcd938x->rxnode);
+>   
+>   	wcd938x->txnode = of_parse_phandle(np, "qcom,tx-device", 0);
+>   	if (!wcd938x->txnode) {
+> @@ -4451,8 +4440,7 @@ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+>   		return -ENODEV;
+>   	}
+>   	of_node_get(wcd938x->txnode);
+> -	component_match_add_release(dev, matchptr, wcd938x_release_of,
+> -				    wcd938x_compare_of,	wcd938x->txnode);
+> +	component_match_add_release(dev, matchptr, release_of, compare_of, wcd938x->txnode);
+>   	return 0;
+>   }
+>   

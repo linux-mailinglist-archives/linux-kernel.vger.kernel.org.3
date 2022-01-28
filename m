@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8E64A005E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2484A0061
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350672AbiA1SwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:52:00 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:45742 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiA1Sv6 (ORCPT
+        id S1350680AbiA1SwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:52:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56296 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350694AbiA1SwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:51:58 -0500
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9399420B6C61;
-        Fri, 28 Jan 2022 10:51:58 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9399420B6C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1643395918;
-        bh=jUz1vj3LTc4nxky/K07D6wr8fvEcSpU5/ssFz4z4Z1Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lvbGvOvrQkNC8NCKPz1Tr0PkCbQ0YOisGb+WePML4fTeR5kF6MJP5BBrDDIz8jDce
-         XfydGHauwuFBYflYXCDPql8GE7Yx418XXlUdMv/t/+gprQ8n9NFabrRQY8ENPIGjSq
-         Dqpqu22Ta2GPknyCpSHrmUziFjKaPMmfZKGxOuNQ=
-Received: by mail-pl1-f171.google.com with SMTP id c9so6895311plg.11;
-        Fri, 28 Jan 2022 10:51:58 -0800 (PST)
-X-Gm-Message-State: AOAM532p/zmu9vWHqJ1pmCoVaNSv4zmuHBXu8HNFwVoVY6d//TuPxS64
-        HLmV/l5cXOp7NzaOigPYull59qR7CN1PB0qzp+4=
-X-Google-Smtp-Source: ABdhPJyXDI9twZ31dbqy14P/uFAhzQvWl8ehe9Ifkthejo3c3swvZgsDFKoH1rBIu7s6RRrPOhBpvpEOAFTFcZT7iIE=
-X-Received: by 2002:a17:902:e891:: with SMTP id w17mr9523373plg.33.1643395918172;
- Fri, 28 Jan 2022 10:51:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
- <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
- <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
- <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
- <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
- <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
- <177da568-8410-36d6-5f95-c5792ba47d62@fb.com> <CAADnVQJZvgpo-VjUCBL8YZy8J+s7O0mv5FW+5sx8NK84Lm6FUQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJZvgpo-VjUCBL8YZy8J+s7O0mv5FW+5sx8NK84Lm6FUQ@mail.gmail.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Fri, 28 Jan 2022 19:51:22 +0100
-X-Gmail-Original-Message-ID: <CAFnufp3ybOFMY=ObZFvbmr+c70CPUrL2uYp1oZQmffQBTyVy_A@mail.gmail.com>
-Message-ID: <CAFnufp3ybOFMY=ObZFvbmr+c70CPUrL2uYp1oZQmffQBTyVy_A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 28 Jan 2022 13:52:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D463561B14;
+        Fri, 28 Jan 2022 18:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40241C340E7;
+        Fri, 28 Jan 2022 18:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643395922;
+        bh=B3YtyNHxZR5KM+o1ZKPGnTvNlQkuMlzv8fu30ftptCg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jxdAPsjHhsL49xAwP0piG3fyX/VL7EWEsAbftkevxLbMZ0Qm+N0ooYfyZuJhxyzQR
+         IAkM/WmfoZu6RcVfzYubB8+/V6fEMtgI//vaKU0xZel7o4w1Ib+oQ34uRfKrVUNYdy
+         B/b11e3UPqbyBqMNdnF9BloWfEnl8sLIBMf9Oaric42X7HN8XWrFk+peJ3JeJq7BSM
+         wrjX9jurpLOmMsI+CXDmoNMnh/SpM4ugOxZT5cSdA1n6QCUIiKDYEi+cDp3hIqRfam
+         m+w2eOVH3/Hhcr3DyHEEU/WdcSn0KkeJaCvlhhqVkiMkdDSurz/3FmSHKaL4POYm6P
+         N5/24Wrjy4yQA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nDWLm-003tSX-Le; Fri, 28 Jan 2022 18:52:00 +0000
+Date:   Fri, 28 Jan 2022 18:51:58 +0000
+Message-ID: <87mtjf66cx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: interrupt-controller: sifive, plic: Fix number of interrupts
+In-Reply-To: <D-55Hk0vrg2vkivFR3NXwnyI8hno6J5TA6gRHi3GbGVflgVPOGQNM2auwcIoHVt3fuzkg-pe7MAARda8PG8-KPoEnarmha7U6TI-pA7V6uI=@conchuod.ie>
+References: <cover.1643360419.git.geert@linux-m68k.org>
+        <f73a0aead89e1426b146c4c64f797aa035868bf0.1643360419.git.geert@linux-m68k.org>
+        <D-55Hk0vrg2vkivFR3NXwnyI8hno6J5TA6gRHi3GbGVflgVPOGQNM2auwcIoHVt3fuzkg-pe7MAARda8PG8-KPoEnarmha7U6TI-pA7V6uI=@conchuod.ie>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mail@conchuod.ie, geert@linux-m68k.org, tglx@linutronix.de, palmer@dabbelt.com, paul.walmsley@sifive.com, sagar.kadam@sifive.com, robh+dt@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, robh@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 6:31 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Dec 20, 2021 at 10:34 PM Yonghong Song <yhs@fb.com> wrote:
-> >
-> >
-> > https://reviews.llvm.org/D116063 improved the error message as below
-> > to make it a little bit more evident what is the problem:
-> >
-> > $ clang -target bpf -O2 -g -c bug.c
-> >
-> > fatal error: error in backend: SubroutineType not supported for
-> > BTF_TYPE_ID_REMOTE reloc
->
-> Hi Matteo,
->
-> Are you still working on a test?
-> What's a timeline to repost the patch set?
->
-> Thanks!
+On Fri, 28 Jan 2022 17:57:04 +0000,
+Conor Dooley <mail@conchuod.ie> wrote:
+> 
+> [1 PGP/MIME version identification <application/pgp-encrypted (7bit)>]
+> [2 OpenPGP encrypted message <application/octet-stream (7bit)>]
 
-Hi Alexei,
+Please refrain from posting encrypted messages to the mailing lists.
 
-The change itself is ready, I'm just stuck at writing a test which
-will effectively calls __bpf_core_types_are_compat() with some
-recursion.
-I guess that I have to generate a BTF_KIND_FUNC_PROTO type somehow, so
-__bpf_core_types_are_compat() is called again to check the prototipe
-arguments type.
-I tried with these two, with no luck:
+	M.
 
-// 1
-typedef int (*func_proto_typedef)(struct sk_buff *);
-bpf_core_type_exists(func_proto_typedef);
-
-// 2
-void func_proto(int, unsigned int);
-bpf_core_type_id_kernel(func_proto);
-
-Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
-
-Regards,
 -- 
-per aspera ad upstream
+Without deviation from the norm, progress is not possible.

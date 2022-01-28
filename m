@@ -2,61 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DE849F456
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D63FB49F459
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346790AbiA1H32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346789AbiA1H31 (ORCPT
+        id S1346805AbiA1H3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:29:41 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:61640 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346799AbiA1H3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:29:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF12BC061714;
-        Thu, 27 Jan 2022 23:29:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7750CB824D0;
-        Fri, 28 Jan 2022 07:29:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692A3C340E0;
-        Fri, 28 Jan 2022 07:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643354965;
-        bh=eZ35IEF6zpm0kOMJqKFK+o80ETAHLjEXyNmLK8DT/wA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YCGFtbOLmgMLW28eG2AcesUEWAclfvVduXRRMrfiVwS8Q2dh3xlfJUoGXWu36GUww
-         c4z6m6fMkdporDdvpdJqpdWpNDiwu4bCd/l7NwL2L6KY5nfc5T3fCTdSaQhhVl4DMl
-         11puc3KUVAq9C2kjBa7oLDFeI9J4km6wIkcacbTxjkRShUlzXgpH60OKz65SFEhwya
-         WZP4NPDkwlzx0OOnhS1VCcjjcFJjjXiFsfr4qMcas6fx37Ph2w3PyHj4Od3/MdEjlE
-         h2nVZxksdX+chAx7BvGQiCOddRFXs56OnmOqAY1DtJDh7PiANhEdPcngnWqR7VpGNM
-         m/s2zpKQbIiog==
-Date:   Fri, 28 Jan 2022 15:29:19 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arm64: dts: imx8qm: Add SCU RTC node
-Message-ID: <20220128072918.GF4686@dragon>
-References: <20220103224900.1439756-1-abel.vesa@nxp.com>
+        Fri, 28 Jan 2022 02:29:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643354979; x=1674890979;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZGcuH87Cwn7NyyRqG7ZxtYxzEEkANIYIdOtWtks7Iv4=;
+  b=SGHuiHhyodhT2aSU04GxNPCSYj4ShScTbkLjuQOSEXlAGCDc8dMaMG/7
+   fqST/dJnfIxWb4ZaS9+6tMNV2zKE+7eKxxAPpdLtfpum4SiXdVoinEGPT
+   XJl3y7kKMkUpuBtN1wXBMxZ9TDd61ypC5h7k7xEjU8YOrvvbUV2qfOKKI
+   4=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 27 Jan 2022 23:29:39 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 23:29:38 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 27 Jan 2022 23:29:38 -0800
+Received: from [10.50.57.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 27 Jan
+ 2022 23:29:34 -0800
+Message-ID: <8f0d544f-ea79-9fab-9579-7bdfed6dcf1b@quicinc.com>
+Date:   Fri, 28 Jan 2022 12:59:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103224900.1439756-1-abel.vesa@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [PATCH 2/9] soc: qcom: llcc: Update the logic for version info
+ extraction
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1643353154.git.quic_saipraka@quicinc.com>
+ <e311b16376329b9e9483fed8ae910a31d0f7bcba.1643353154.git.quic_saipraka@quicinc.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <e311b16376329b9e9483fed8ae910a31d0f7bcba.1643353154.git.quic_saipraka@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:49:00AM +0200, Abel Vesa wrote:
-> Add SCU RTC node to support SC RTC driver.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+On 1/28/2022 12:39 PM, Sai Prakash Ranjan wrote:
+> LLCC HW version info is made up of major, branch, minor and echo
+> version bits each of which are 8bits. Several features in newer
+> LLCC HW are based on the full version rather than just major or
+> minor versions such as write-subcache enable which is applicable
+> for versions greater than v2.0.0.0 and upcoming write-subcache
+> cacheable for SM8450 SoC which is only present in versions v2.1.0.0
+> and later, so it makes it easier and cleaner to just directly
+> compare with the full version than adding additional major/branch/
+> minor/echo version checks. So remove the earlier major version check
+> and add full version check for those features.
+>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> ---
+>   drivers/soc/qcom/llcc-qcom.c       | 9 ++++-----
+>   include/linux/soc/qcom/llcc-qcom.h | 4 ++--
+>   2 files changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> index b3a34f117a7c..a06764f16023 100644
+> --- a/drivers/soc/qcom/llcc-qcom.c
+> +++ b/drivers/soc/qcom/llcc-qcom.c
+> @@ -37,7 +37,6 @@
+>   #define CACHE_LINE_SIZE_SHIFT         6
+>   
+>   #define LLCC_COMMON_HW_INFO           0x00030000
+> -#define LLCC_MAJOR_VERSION_MASK       GENMASK(31, 24)
+>   
+>   #define LLCC_COMMON_STATUS0           0x0003000c
+>   #define LLCC_LB_CNT_MASK              GENMASK(31, 28)
+> @@ -55,6 +54,8 @@
+>   
+>   #define BANK_OFFSET_STRIDE	      0x80000
+>   
+> +#define LLCC_VERSION_2_0_0_0          0x02000000
+> +
+>   /**
+>    * struct llcc_slice_config - Data associated with the llcc slice
+>    * @usecase_id: Unique id for the client's use case
+> @@ -504,7 +505,7 @@ static int _qcom_llcc_cfg_program(const struct llcc_slice_config *config,
+>   			return ret;
+>   	}
+>   
+> -	if (drv_data->major_version == 2) {
+> +	if (drv_data->version >= LLCC_VERSION_2_0_0_0) {
+>   		u32 wren;
+>   
+>   		wren = config->write_scid_en << config->slice_id;
+> @@ -598,13 +599,11 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>   		goto err;
+>   	}
+>   
+> -	/* Extract major version of the IP */
+> +	/* Extract version of the IP */
+>   	ret = regmap_read(drv_data->bcast_regmap, LLCC_COMMON_HW_INFO, &version);
+>   	if (ret)
+>   		goto err;
+>   
+> -	drv_data->major_version = FIELD_GET(LLCC_MAJOR_VERSION_MASK, version);
+> -
 
-Applied, thanks!
+Sorry, I missed assigning version info to drv_data here in this version. 
+I am sending a v2 with the fix.
+
+Thanks,
+Sai
+
+>   	ret = regmap_read(drv_data->regmap, LLCC_COMMON_STATUS0,
+>   						&num_banks);
+>   	if (ret)
+> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
+> index 9e8fd92c96b7..beecf00b707d 100644
+> --- a/include/linux/soc/qcom/llcc-qcom.h
+> +++ b/include/linux/soc/qcom/llcc-qcom.h
+> @@ -83,7 +83,7 @@ struct llcc_edac_reg_data {
+>    * @bitmap: Bit map to track the active slice ids
+>    * @offsets: Pointer to the bank offsets array
+>    * @ecc_irq: interrupt for llcc cache error detection and reporting
+> - * @major_version: Indicates the LLCC major version
+> + * @version: Indicates the LLCC version
+>    */
+>   struct llcc_drv_data {
+>   	struct regmap *regmap;
+> @@ -96,7 +96,7 @@ struct llcc_drv_data {
+>   	unsigned long *bitmap;
+>   	u32 *offsets;
+>   	int ecc_irq;
+> -	u32 major_version;
+> +	u32 version;
+>   };
+>   
+>   #if IS_ENABLED(CONFIG_QCOM_LLCC)
+
+

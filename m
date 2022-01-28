@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C55DD49FB09
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CEA49FB0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 14:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242655AbiA1NrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 08:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S241406AbiA1Nsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 08:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234242AbiA1NrU (ORCPT
+        with ESMTP id S234242AbiA1Nsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 08:47:20 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B55C061714;
-        Fri, 28 Jan 2022 05:47:19 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id o12so16125279eju.13;
-        Fri, 28 Jan 2022 05:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kC5o2fNLt6ygrhXBorsw5Jbr7rYM1p4JZsABmYPmJrA=;
-        b=eTKsnP/JHqCfDd19XPQdmmxRphUFecDk1mzHJ9/Vcyhx5Gh7sysyZgR43BDJPcphYA
-         ra03ixyetH7qYRDfmfgQlhr8QC+sG1XPMci+8lfU33boBieCQzv+uKphLCcdUcee8c/n
-         yiUAeMDsQ0P66Hz1u6YRikXSGoHpAq5RPNxkjhEdbPH3wRDTlBzyAnc7GzDJEefx+rxt
-         6jXJsPXuj1r6lAqQbzTgr5MApt6Qqcnj9lelN2laHFj4+ykOpy8onyQfohADpE0YLDr5
-         RcaB9gFXrEnoVbcFE+EIJw1lrfb6jj4UQZ+uBOi7d3oRwLg4VkLUTkZFeUQKgOeeqdpx
-         TW8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kC5o2fNLt6ygrhXBorsw5Jbr7rYM1p4JZsABmYPmJrA=;
-        b=OyxzrO/lpEh+roRTnmsp3X71AkZ3wD4FT4mMl7mVQkrEhkeglONX1y9rD917OSU9mF
-         XnfppszVRmWTDHeVxCJawxNW49pmwxEaz2cMuT5xW1qq5Jb/x6fktea6B411eMosoQ6m
-         h96GDa/9Cj9nEIe7g2twG3JlL/842oGjB/K8nGxa+3kezsKC5iJ6sSkM3km68Y7GBaxt
-         lW9qayEoGP50eS7urBtX96QhCjzhhZCNolgJs0YATzU1lOtRqbYCYFpDvKHPtqhDIjhy
-         3FhYztDURfPjbW4DecapBBquo3Nx4xzdm+SnRBTC/Ci74BZcoOXXe6IaP9cMVCl++oZv
-         ckbQ==
-X-Gm-Message-State: AOAM533l+/jAfji04Zsd/kcvE7zV9ShdyygT28XNBgA0kZRgpw+AzqyQ
-        OuiWqO7lErjqN2069FqOIouVwzlx8qZjrgAwEWs=
-X-Google-Smtp-Source: ABdhPJzLW6Dz5jckH3hcEqbdz8uz9Y3Mwk4ir9/MbzB6WF6CfSQQn8d61hI/Vm2s9Xd7Xo+PHjcDHvDMqB+A8YgnEj8=
-X-Received: by 2002:a17:907:3f99:: with SMTP id hr25mr6889917ejc.588.1643377637845;
- Fri, 28 Jan 2022 05:47:17 -0800 (PST)
+        Fri, 28 Jan 2022 08:48:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980EBC061714;
+        Fri, 28 Jan 2022 05:48:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61ED3B825A8;
+        Fri, 28 Jan 2022 13:48:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FB9C340E0;
+        Fri, 28 Jan 2022 13:48:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643377729;
+        bh=9sYtw3ou3lxpIW87228egdqTk/22E+Frt1X3mgjYsKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nvvTuGOKNZD1wmNC3hWhWYNLQgllvxLkQQeomJ0AtiVzEf9hZrd+gtSiPl16EcNQI
+         6lcyz7VDpfXU9o47agF2TTBPeCZHR7DKsW2qMOZHZER7v/X4lY0OdHyQ1pV8NOjB64
+         wAMtg1Ivw5Nl86cFY9NhUckO05ARwD5muNA3ylrxCoRt4fBeiajN95Q9YsbuN0VX9V
+         HIOGLSEAgiNmdZJe8uw5iFlvHs8MzgG6GaxmmJXPQhSdx4CLCqEmrCy9EGzyqYzlzL
+         5LWw9wvlxzlGbqM352nm5yeOacH14MBs6ORpaX8bOejAMX0xhlCBusTYLbrBHw+Ryo
+         PI/T0JnHOAofA==
+Date:   Fri, 28 Jan 2022 13:48:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/2] ASoC: ops: fix signedness bug in snd_soc_put_volsw()
+Message-ID: <YfP0PGbyFVDOevIH@sirena.org.uk>
+References: <20220128112007.GA24806@kili>
+ <YfPknO6si9CpotgS@sirena.org.uk>
+ <20220128133147.GL1978@kadam>
 MIME-Version: 1.0
-References: <20220124165206.55059-1-zhou1615@umn.edu> <YfPCdPuoB3RYgzL8@kroah.com>
-In-Reply-To: <YfPCdPuoB3RYgzL8@kroah.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 28 Jan 2022 07:47:06 -0600
-Message-ID: <CAHCN7x+bvC70Y18j8tvSVZNjwipYu3xTvFo=AjKvYnmaucBiGg@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx: Fix a NULL pointer dereference in imx_register_uart_clocks()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zhou Qingyang <zhou1615@umn.edu>, kjlu@umn.edu,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8ra+G6TvYIugz+90"
+Content-Disposition: inline
+In-Reply-To: <20220128133147.GL1978@kadam>
+X-Cookie: Torque is cheap.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 4:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jan 25, 2022 at 12:52:06AM +0800, Zhou Qingyang wrote:
-> > In imx_register_uart_clocks(), the global variable imx_uart_clocks is
-> > assigned by kcalloc() and there is a dereference of in the next for loop,
-> > which could introduce a NULL pointer dereference on failure of kcalloc().
-> >
-> > Fix this by adding a NULL check of imx_uart_clocks.
-> >
-> > This bug was found by a static analyzer.
-> >
-> > Builds with 'make allyesconfig' show no new warnings,
-> > and our static analyzer no longer warns about this code.
-> >
-> > Fixes: 379c9a24cc23 ("clk: imx: Fix reparenting of UARTs not associated with stdout")
-> > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> > ---
-> > The analysis employs differential checking to identify inconsistent
-> > security operations (e.g., checks or kfrees) between two code paths
-> > and confirms that the inconsistent operations are not recovered in the
-> > current function or the callers, so they constitute bugs.
-> >
-> > Note that, as a bug found by static analysis, it can be a false
-> > positive or hard to trigger. Multiple researchers have cross-reviewed
-> > the bug.
-> >
-> >  drivers/clk/imx/clk.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
-> > index 7cc669934253..99249ab361d2 100644
-> > --- a/drivers/clk/imx/clk.c
-> > +++ b/drivers/clk/imx/clk.c
-> > @@ -173,6 +173,8 @@ void imx_register_uart_clocks(unsigned int clk_count)
-> >               int i;
-> >
-> >               imx_uart_clocks = kcalloc(clk_count, sizeof(struct clk *), GFP_KERNEL);
-> > +             if (!imx_uart_clocks)
-> > +                     return;
-> >
-> >               if (!of_stdout)
-> >                       return;
-> > --
-> > 2.25.1
-> >
->
-> As stated before, umn.edu is still not allowed to contribute to the
-> Linux kernel.  Please work with your administration to resolve this
-> issue.
 
-Greg,
+--8ra+G6TvYIugz+90
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In the interest of safety, I believe this patch is reasonable.  I
-wrote the original patch that is being fixed by this.  Would it be
-acceptable if I submitted the same patch with "suggested-by"
-associated with Zhou @ umn.edu?  I want to give credit where credit is
-due while still maintaining the rule that patches are not actually
-being accepted by umn.edu.
+On Fri, Jan 28, 2022 at 04:31:47PM +0300, Dan Carpenter wrote:
+> On Fri, Jan 28, 2022 at 12:42:04PM +0000, Mark Brown wrote:
 
-adam
+> > This means that the helpers won't support controls that use the top bit
+> > of a 32 bit register.
+
+> Fine, I can delete the checks for negative instead (I'm surprised you
+> haven't already received a dozen bot emails about this).
+
+No, we need the checks for negatives since userspace supplies a signed
+value.  The check needs to be done on the value in the input structure
+before we pull it out for mangling.  I probably got bot emails but
+frankly these days almost all of them are some combination of barely
+legible and misdirected and there's plenty of people who like to fix
+these things if they're real.
+
+> I haven't been able to figure out where mc->min/max are set.  In
+
+They're the big tables of static assignments via macros in the drivers.=20
+
+> snd_soc_get_xr_sx() it checks whether "mc->min" is negative.
+
+> 	if (min < 0 && val > max)
+> 		val |=3D ~mask;
+
+> Is that a bug?  If mc->min is negative the math gets tricky.
+
+No, it *is* valid if weird to have negative values for some controls.
+
+--8ra+G6TvYIugz+90
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHz9DsACgkQJNaLcl1U
+h9AWswf/Uivc5XoK7qn+bLn7KmCk9wj+9FesEqzeNZefSTZKf0+7q789y4ZJNr0M
+T4pWgRgBuKoOtQsDSl5z00yLDloQ7SZ2fVptrLMSEjLds6fy6x6euDhmCt7Va2GY
+jlIQp0ZOipUAFUfmH8i53eqd9J40mELJ1E0Iy8ZnC4MSuClouzPNSgk+BqIU4DzV
+haVR2JnDiYTKKeOcNrsEGOGTuVkm68JANwjsrsx2ZhgdrBhURwB2CMDWb9RhNLXD
+m3zs76Rw62peY/wsVr/6PiPqxbDB2D99yleLU2KR4hoHQGk4dCJOBTf/IQT4Zd6l
+majtHP4B8506iCwaMqZ7BHJ4A2CR6Q==
+=qRg9
+-----END PGP SIGNATURE-----
+
+--8ra+G6TvYIugz+90--

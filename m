@@ -2,257 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E888249F029
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F7749EFF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236800AbiA1Ayi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S1344722AbiA1Awt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345081AbiA1Axz (ORCPT
+        with ESMTP id S1344693AbiA1Awo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 19:53:55 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7D0C06175B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:51 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id d9-20020a62f809000000b004bb5ffee9b3so2462700pfh.15
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:53:51 -0800 (PST)
+        Thu, 27 Jan 2022 19:52:44 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C593C061714;
+        Thu, 27 Jan 2022 16:52:44 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so4933394pjb.1;
+        Thu, 27 Jan 2022 16:52:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=cvygIoGiSQi3oTt0w5ZXf8sI2CTAC6vrqi+OOTHPRDE=;
-        b=FVi96naPKGiz/aF8Eh+slKp5cJeQJ6po/1hq26mKVP/XUrxRfayPckK10ADhIvj3hI
-         i6+e5NIccsNi5PDn0+PxRt/33GHxddNO0Ne34QQopnoj+FDYcH65XRq7iGHIPEyvA2/9
-         iP3EZF0F13nryrttQEIQmptEdrFzblKIulKPzwhnxjnkIkqhEoom40mHGIVAXCG7LY7L
-         Prn8DXm3yKx5BQl7bBagSIkmAmX3q2PX/9+GyeOJec2+HzI5iJRp220XcVWN6tp4pMdo
-         +xjl65qgtOzI5iooEsKb0MpGDXnsfF9ZaGON1CIvLpJUyXGs2J8qZ83smaU5PEydAgbx
-         NrqA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kJNJijaZP88bXaGh2neEJJTBJFiP0w2gHmp/ePTGmfE=;
+        b=Po0m9GwR4K5QGnYFsOD9VIGezFAmYKv8sSEdSQs73gaOb8zTj652zlhO0OM0JocENu
+         phKz4ktlibQH+zFL1blG7oFD1ZlZx30uYh2CObrVThOm0EbY6jbHrT3i0WaiDRjwAjnd
+         sx/umYh1v7K/ChixkoP0/+6F70WfrHLDGsyNw6mBg1sXbh+pb/Qa3EXYkfmcB8ehA6vv
+         lc2uYUtw4O3Rq+62BuvhdYq3sBgKRkT+S8+wnbikPY/tf239JndUPit6GRzjXeTSt0tQ
+         nQQ6BoTFj2M9V6Gk66qnPqIXLBRaP/RcF8FmYSYMJW+hRrbHTwGgcxjOgT1xhsJyI3PO
+         JstQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=cvygIoGiSQi3oTt0w5ZXf8sI2CTAC6vrqi+OOTHPRDE=;
-        b=Tkuzv8WvpJRXGnq6Zur8gQbgqtiHjc8ABwlbUz6gMA1ezrX6WkE7F3gtztCtlpuxZ0
-         OUYBJ8f05qrFZkkhsZ2osroD60kErAyVwwNZW1rawEVy+gXcThOVwYYP6Mfw+dJU70AP
-         SPJ769us0rPnKTsm2GkrHyHS63ol+c3DmZZTbw7DGoMJbznPUB2OgxU6ChEwDeiWodSJ
-         oumJYmz/03aaGeyINQ8Q6mZ/nTPMG9vL0qpZRhMik9UfhFWuk4gchhFVrmlNlD8prC3p
-         EM5jzi1Cw50pz2wfClTkr/w5QcB87KkbqTEm76GI7Xr1RiwhII9uIYAQQZb2C9x0CV0K
-         aW+A==
-X-Gm-Message-State: AOAM531GnKqODpZMNqaWKNBeuChylMpiy5CaRAliKKqi16reOTXaSSB5
-        zsVzBs8PLoQ2lobJ6WSSgRUjocTLqD8=
-X-Google-Smtp-Source: ABdhPJyb8tZJAL5p8BS/mQylHLPkXgqhV/ICfjkoJuopLsQFkNASSP9NS2yeeF9/K0Wc++PRvjolQ9+5vtQ=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:9a4b:: with SMTP id
- x11mr5995083plv.56.1643331230528; Thu, 27 Jan 2022 16:53:50 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 28 Jan 2022 00:52:08 +0000
-In-Reply-To: <20220128005208.4008533-1-seanjc@google.com>
-Message-Id: <20220128005208.4008533-23-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220128005208.4008533-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 22/22] KVM: SVM: Use kvm-x86-ops.h to fill svm_x86_ops
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kJNJijaZP88bXaGh2neEJJTBJFiP0w2gHmp/ePTGmfE=;
+        b=EqUwkshUGUua1HcEukLKXabq8D3KFEowqDofeLjzhlClA80a16hrbk7PZaUVu0z1vy
+         /KNfIlEFoBNLps7MLZAIV0ZcEGbyDfyZI8fkuzmUZTwuWqNSaVPnHj2aGzTHJpl96WVj
+         Oh6UKwmnjigrDjfJa/wTR1oj7wzyo3KG1Zn6DpyviCyaOvqfB4i6N9Bzy7JN8rzKw/+T
+         fXwawa5fp4tgImveRelpYugOidRa13srMULZmOZKomSPtTPmQECfaDbYkNXpuWhYLzEW
+         hzgQB/7nxWy3vkSVupq7md2+4lElUacZj+fEmmQzs0WyCczYSDSZxYQgb1V+SL04jp8q
+         Qykg==
+X-Gm-Message-State: AOAM530jG4Ip362UFGFrTZptgBkHlVEUKEVES905PrJAMD+MUM1QOdlu
+        EgMD6BMfu+n5YIDZgaDjWiA=
+X-Google-Smtp-Source: ABdhPJyZvcGvnXTFOj9DXoRU8MIzgborilNzBKzkr9QYRaOpCf2XP6lo3DCpe2B59JJJvtpYn+yK7g==
+X-Received: by 2002:a17:902:6b02:: with SMTP id o2mr5684636plk.56.1643331163740;
+        Thu, 27 Jan 2022 16:52:43 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id z124sm6529852pfb.166.2022.01.27.16.52.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 16:52:42 -0800 (PST)
+Message-ID: <6bf2f177-93f9-c1fb-ac06-ffe946a72abf@gmail.com>
+Date:   Thu, 27 Jan 2022 16:52:40 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 00/12] 5.15.18-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com
+References: <20220127180259.078563735@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fill svm_x86_ops by including kvm-x86-ops.h and defining the appropriate
-macros.  Document the handful of exceptions where svm_x86_ops deviates
-from the "default" (mostly due to lack of hardware support for a related
-feature).
 
-No functional change intended.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/svm/svm.c | 156 +++++++++--------------------------------
- 1 file changed, 32 insertions(+), 124 deletions(-)
+On 1/27/2022 10:09 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.18 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.18-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 7f70f456a5a5..b3761073fa81 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4464,138 +4464,46 @@ static int svm_vm_init(struct kvm *kvm)
- 	return 0;
- }
- 
-+/*
-+ * SVM unconditionally flushes between nested transition and so doesn't provide
-+ * a "flush all" variant, and a guest's ASID is tied to both guest and NPT
-+ * translations, thus there's no "flush guest" variant.
-+ */
-+#define svm_flush_tlb_all svm_flush_tlb_current
-+#define svm_flush_tlb_guest svm_flush_tlb_current
-+
-+/* APICv hooks not needed/implemented for AVIC. */
-+#define avic_guest_apic_has_interrupt NULL
-+#define avic_set_apic_access_page_addr NULL
-+#define avic_sync_pir_to_irr NULL
-+#define avic_pi_start_assignment NULL
-+
-+/* SVM has no hyperversior debug trap (VMX's Monitor Trap Flag). */
-+#define svm_update_emulated_instruction NULL
-+
-+/* SVM has no CPU assisted dirty logging (VMX's Page Modification Logging). */
-+#define svm_update_cpu_dirty_logging NULL
-+
-+/* SVM has no hypervisor timer (VMX's preemption timer). */
-+#define svm_set_hv_timer NULL
-+#define svm_cancel_hv_timer NULL
-+#define svm_migrate_timers NULL
-+#define svm_request_immediate_exit __kvm_request_immediate_exit
-+
- static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.name = "kvm_amd",
--
--	.hardware_unsetup = svm_hardware_unsetup,
--	.hardware_enable = svm_hardware_enable,
--	.hardware_disable = svm_hardware_disable,
--	.cpu_has_accelerated_tpr = svm_cpu_has_accelerated_tpr,
--	.has_emulated_msr = svm_has_emulated_msr,
--
--	.vcpu_create = svm_vcpu_create,
--	.vcpu_free = svm_vcpu_free,
--	.vcpu_reset = svm_vcpu_reset,
--
- 	.vm_size = sizeof(struct kvm_svm),
--	.vm_init = svm_vm_init,
--	.vm_destroy = svm_vm_destroy,
--
--	.prepare_switch_to_guest = svm_prepare_switch_to_guest,
--	.vcpu_load = svm_vcpu_load,
--	.vcpu_put = svm_vcpu_put,
--	.vcpu_blocking = avic_vcpu_blocking,
--	.vcpu_unblocking = avic_vcpu_unblocking,
--
--	.update_exception_bitmap = svm_update_exception_bitmap,
--	.get_msr_feature = svm_get_msr_feature,
--	.get_msr = svm_get_msr,
--	.set_msr = svm_set_msr,
--	.get_segment_base = svm_get_segment_base,
--	.get_segment = svm_get_segment,
--	.set_segment = svm_set_segment,
--	.get_cpl = svm_get_cpl,
--	.get_cs_db_l_bits = svm_get_cs_db_l_bits,
--	.set_cr0 = svm_set_cr0,
--	.post_set_cr3 = sev_post_set_cr3,
--	.is_valid_cr4 = svm_is_valid_cr4,
--	.set_cr4 = svm_set_cr4,
--	.set_efer = svm_set_efer,
--	.get_idt = svm_get_idt,
--	.set_idt = svm_set_idt,
--	.get_gdt = svm_get_gdt,
--	.set_gdt = svm_set_gdt,
--	.set_dr7 = svm_set_dr7,
--	.sync_dirty_debug_regs = svm_sync_dirty_debug_regs,
--	.cache_reg = svm_cache_reg,
--	.get_rflags = svm_get_rflags,
--	.set_rflags = svm_set_rflags,
--	.get_if_flag = svm_get_if_flag,
--
--	.flush_tlb_all = svm_flush_tlb_current,
--	.flush_tlb_current = svm_flush_tlb_current,
--	.flush_tlb_gva = svm_flush_tlb_gva,
--	.flush_tlb_guest = svm_flush_tlb_current,
--
--	.vcpu_pre_run = svm_vcpu_pre_run,
--	.vcpu_run = svm_vcpu_run,
--	.handle_exit = svm_handle_exit,
--	.skip_emulated_instruction = svm_skip_emulated_instruction,
--	.update_emulated_instruction = NULL,
--	.set_interrupt_shadow = svm_set_interrupt_shadow,
--	.get_interrupt_shadow = svm_get_interrupt_shadow,
--	.patch_hypercall = svm_patch_hypercall,
--	.inject_irq = svm_inject_irq,
--	.inject_nmi = svm_inject_nmi,
--	.queue_exception = svm_queue_exception,
--	.cancel_injection = svm_cancel_injection,
--	.interrupt_allowed = svm_interrupt_allowed,
--	.nmi_allowed = svm_nmi_allowed,
--	.get_nmi_mask = svm_get_nmi_mask,
--	.set_nmi_mask = svm_set_nmi_mask,
--	.enable_nmi_window = svm_enable_nmi_window,
--	.enable_irq_window = svm_enable_irq_window,
--	.update_cr8_intercept = svm_update_cr8_intercept,
--	.set_virtual_apic_mode = avic_set_virtual_apic_mode,
--	.refresh_apicv_exec_ctrl = avic_refresh_apicv_exec_ctrl,
--	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
--	.load_eoi_exitmap = avic_load_eoi_exitmap,
--	.hwapic_irr_update = avic_hwapic_irr_update,
--	.hwapic_isr_update = avic_hwapic_isr_update,
--	.apicv_post_state_restore = avic_apicv_post_state_restore,
--
--	.set_tss_addr = svm_set_tss_addr,
--	.set_identity_map_addr = svm_set_identity_map_addr,
--	.get_mt_mask = svm_get_mt_mask,
--
--	.get_exit_info = svm_get_exit_info,
--
--	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
--
--	.has_wbinvd_exit = svm_has_wbinvd_exit,
--
--	.get_l2_tsc_offset = svm_get_l2_tsc_offset,
--	.get_l2_tsc_multiplier = svm_get_l2_tsc_multiplier,
--	.write_tsc_offset = svm_write_tsc_offset,
--	.write_tsc_multiplier = svm_write_tsc_multiplier,
--
--	.load_mmu_pgd = svm_load_mmu_pgd,
--
--	.check_intercept = svm_check_intercept,
--	.handle_exit_irqoff = svm_handle_exit_irqoff,
--
--	.request_immediate_exit = __kvm_request_immediate_exit,
--
--	.sched_in = svm_sched_in,
- 
- 	.pmu_ops = &amd_pmu_ops,
- 	.nested_ops = &svm_nested_ops,
- 
--	.deliver_interrupt = svm_deliver_interrupt,
--	.dy_apicv_has_pending_interrupt = avic_dy_apicv_has_pending_interrupt,
--	.pi_update_irte = avic_pi_update_irte,
--	.setup_mce = svm_setup_mce,
-+#define KVM_X86_OP(func) .func = svm_##func,
-+#define KVM_X86_APICV_OP(func) .func = avic_##func,
-+#define KVM_X86_CVM_OP(func) .func = sev_##func,
- 
--	.smi_allowed = svm_smi_allowed,
--	.enter_smm = svm_enter_smm,
--	.leave_smm = svm_leave_smm,
--	.enable_smi_window = svm_enable_smi_window,
--
--	.mem_enc_ioctl = sev_mem_enc_ioctl,
--	.mem_enc_register_region = sev_mem_enc_register_region,
--	.mem_enc_unregister_region = sev_mem_enc_unregister_region,
--
--	.vm_copy_enc_context_from = sev_vm_copy_enc_context_from,
--	.vm_move_enc_context_from = sev_vm_move_enc_context_from,
--
--	.can_emulate_instruction = svm_can_emulate_instruction,
--
--	.apic_init_signal_blocked = svm_apic_init_signal_blocked,
--
--	.msr_filter_changed = svm_msr_filter_changed,
--	.complete_emulated_msr = svm_complete_emulated_msr,
--
--	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
-+/* Hyper-V hooks are filled at runtime. */
-+#define KVM_X86_HYPERV_OP(func) .func = NULL,
-+#include <asm/kvm-x86-ops.h>
- };
- 
- /*
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+Florian

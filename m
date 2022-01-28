@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A403749FD8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5254249FD95
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349858AbiA1QDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:03:48 -0500
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:39924 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiA1QDr (ORCPT
+        id S1349907AbiA1QEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:04:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47730 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235310AbiA1QEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:03:47 -0500
-Received: by mail-wm1-f50.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso8501901wmh.4;
-        Fri, 28 Jan 2022 08:03:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=dfivR9duFF12f7+6yAgovh6L+nViV0lQs8MikOxe6qo=;
-        b=h0lTgnxuEq+WAlL7/ao4ADV67Nfhc+i2s72cIdkaLP4JznSRqkv3/z78gSQmemxbrk
-         9ui2r2Du0rUvmAnADJoRXZ0Q0g5HOLdJGQh5gqx2ssQTZPasIzef7IVtXrN4keVY/yhp
-         2quX0ZvN9OBYGD6ywq03QUqTjOBSlFqwf0TpwsG/qKkMjjP6Ho8sT84/t6aI9WNe2ER1
-         GJrw1enSnPsuA9ruNTiD27D/tQw5WJWXAoo8KejnjBRgpW7isewIG2Co2NFi22fsx1QA
-         B0Xqv+kfn89/LPbty5KBDwEygJ0yDynIb4cV7DiIWJRRwI3Vape7lkTPRN266HumWalD
-         3jYA==
-X-Gm-Message-State: AOAM531WzSnNkbjx64swxhaM/54uWXyISEOSvD0afMWd8Cm+Kfd4fv/Z
-        Jm9x8jmbvP5TjfI28ws5hXc=
-X-Google-Smtp-Source: ABdhPJy9E6HnRIQR1YPTnxsCqZGUSxQBRCy9FCV2jv08kLdf4Q6yoiTXd9NZr4ZDlErsZ6w7CeyC0g==
-X-Received: by 2002:a05:600c:22d4:: with SMTP id 20mr16819751wmg.41.1643385826465;
-        Fri, 28 Jan 2022 08:03:46 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id t1sm6009345wre.45.2022.01.28.08.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:03:46 -0800 (PST)
-Date:   Fri, 28 Jan 2022 16:03:44 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V fixes for 5.17-rc2
-Message-ID: <20220128160344.ihcyofyvxvgwq2r4@liuwe-devbox-debian-v2>
+        Fri, 28 Jan 2022 11:04:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9AA461EE0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E5FC340E6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:04:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CdJcfcLO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643385867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7FKobJhoy7WUzr8IQkz4Rgy6lr68RmX0KGYKnV3Jq7A=;
+        b=CdJcfcLOfzJ5JEQ/fL6px0XaBMVQJ1QF8rReA5bzI5xJo3ryKXdsfBXzjn1kmtbpJHrEqB
+        1udybHl1Z1HityIxnFgmhHG9iOqbzww27iykrtAPjak0dz42s///dMUnqNSJrD0bwgDhhN
+        Cnld6iFAOvk0c8oxQccrVHeExW6mAwQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3223b17e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 28 Jan 2022 16:04:27 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id g14so19772291ybs.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:04:26 -0800 (PST)
+X-Gm-Message-State: AOAM5301q/iJ3G4ozOxlfo2yZBPa305LFlgkcZPB4KfYfFPhbMFJgRJw
+        L9coOMpm08ysCraLmx4FHQdEpjz/l4XJnsfU7Tw=
+X-Google-Smtp-Source: ABdhPJz7lBHvwJwjzcVYDzmaYorqDYCZA6cOCAlHTPjQk3rucBn0pxiKQU7dcjGChsxx5YjN+Xi4Sad+FSndrkFl294=
+X-Received: by 2002:a25:bd08:: with SMTP id f8mr6053390ybk.121.1643385864960;
+ Fri, 28 Jan 2022 08:04:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <YfMa0QgsjCVdRAvJ@latitude> <CAHmME9pb9A4SN6TTjNvvxKqw1L3gXVOX7KKihfEH4AgKGNGZ2A@mail.gmail.com>
+ <YfOqsOiNfURyvFRX@linutronix.de>
+In-Reply-To: <YfOqsOiNfURyvFRX@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 28 Jan 2022 17:04:13 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qBj2gL=spp3AUEo-Ri4r0KQq-KrR-f6dG++xXQvzcA7A@mail.gmail.com>
+Message-ID: <CAHmME9qBj2gL=spp3AUEo-Ri4r0KQq-KrR-f6dG++xXQvzcA7A@mail.gmail.com>
+Subject: Re: "BUG: Invalid wait context" in invalidate_batched_entropy
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Sebastian/Jonathan,
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+On Fri, Jan 28, 2022 at 9:35 AM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> This report is due to CONFIG_PROVE_LOCKING=y _and_
+> CONFIG_PROVE_RAW_LOCK_NESTING=y. It reports a nesting problem
+> (raw_spinlock_t -> spinlock_t lock ordering) which becomes a real
+> problem on PREEMPT_RT.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+Hmm, I'm still having a tough time reproducing this. I'm trying to
+understand your intuition. Is the problem you see that something else
+in the IRQ path uses a raw_spinlock_t, and then with that lock still
+held, we call invalidate_batched_entropy(), which takes an ordinary
+spinlock_t, non-raw? And taking a spinlock-t while holding a
+raw_spinlock_t is illegal?
 
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20220128
-
-for you to fetch changes up to 9ff5549b1d1d3c3a9d71220d44bd246586160f1d:
-
-  video: hyperv_fb: Fix validation of screen resolution (2022-01-24 14:01:12 +0000)
-
-----------------------------------------------------------------
-hyperv-fixes for 5.17-rc2
-  - Fix screen resolution for hyperv framebuffer (Michael Kelley)
-  - Fix packet header accounting for balloon driver (Yanming Liu)
-----------------------------------------------------------------
-Michael Kelley (1):
-      video: hyperv_fb: Fix validation of screen resolution
-
-Yanming Liu (1):
-      Drivers: hv: balloon: account for vmbus packet header in max_pkt_size
-
- drivers/hv/hv_balloon.c         |  7 +++++++
- drivers/video/fbdev/hyperv_fb.c | 16 +++-------------
- 2 files changed, 10 insertions(+), 13 deletions(-)
+Jason

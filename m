@@ -2,108 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DECA49F1EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4AB49F1F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 04:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345823AbiA1DnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 22:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiA1DnF (ORCPT
+        id S1345833AbiA1Dnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 22:43:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44442 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231289AbiA1Dnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:43:05 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9FFC061714;
-        Thu, 27 Jan 2022 19:43:05 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id r144so6209289iod.9;
-        Thu, 27 Jan 2022 19:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fEeC00YZEKtaMEvnvsES3LOa4ntiyaf7LZhFOYs3mwA=;
-        b=cGVIb30a2ofqveaSazvsol9VT3z5u7suLZF5H/C/1plXhq7KFMxmfpH7cTJKhpDlvh
-         s1YWuCiTvJ2SEpkUhX48EXZiWZk+pX82VxFDCyEYtPqO2JbJEc4KvyDv+0a5VE4ieMBO
-         bxAGM1B4sxxjh4XyhJuVS44T8mFjWiUIKeyEDqRD17TsWfVXRyl9a9yy5U4ayr1RC6Fo
-         uNEt2nKvIDBEeOVDXAXOEsZruBysI9Wztv32csPLl9sQpDQt1ZWbjuZRsKdQO9sZCOYb
-         Ny0dOHQsjkeZtyY+KxBAAPa8T3fAjcvlhAV+h4X5lzeF+YaC06GVhY1S4EyAM1rWRtLO
-         pfiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fEeC00YZEKtaMEvnvsES3LOa4ntiyaf7LZhFOYs3mwA=;
-        b=I8Guu3blo87A7ZKipae+g9Qc5YVFTuTseyFHnI629iey6Kg61eQ2YSIdEycb7mEZc0
-         PZcsB4O8T6J7ZPxwtHDl3WomKG2sXxU6mWLdyvU+yDJsOpvBA5cJXFBC66Ky0Y6XoJyr
-         hbMs9ZvM3NZp/Ccknzlrya/43EINgVQSF1yoxH7F2AC2jdMnjK+Oxez7FHdwc+UZeG33
-         cwviKL1y6VhNN6GN6wiJARDODNW7OGFRil+N0u2mOor+DJhHHr/LqY51WgwVeixzUJyl
-         vlRd4O5UG3fcTbryN4G5uoq6M+w+IF/GhMqFfH/UlQtr8MkDFG9dozqM3lAovCT6uhhT
-         hbDA==
-X-Gm-Message-State: AOAM533NIj0gfWEjWm0YDjL3GeHPOuzqtE0mnpv3kScGaHAErK8rJhMg
-        bKJTzMeOPeHglOoGHvQytbvVoGYDtQghtvdgfp0=
-X-Google-Smtp-Source: ABdhPJwj6fP1tLpQ2aUqt0hrqlpXUJO8aZobJmU5jeOkSf1eN5ylbgZu9llVb4DR/1aPutJ2I7gYC92qRsJ2l6E+FuI=
-X-Received: by 2002:a02:6988:: with SMTP id e130mr3623894jac.120.1643341384617;
- Thu, 27 Jan 2022 19:43:04 -0800 (PST)
+        Thu, 27 Jan 2022 22:43:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E37561E3C;
+        Fri, 28 Jan 2022 03:43:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EDEDC340E7;
+        Fri, 28 Jan 2022 03:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643341420;
+        bh=JIe+3zxHc652hiK2hz4NLH0pR4w+X2pBakJpnubLEWQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AZHOu8a/DkUmqJmk/ttCw43L6sXuI80w+UUH/sFapQKD0X4MdjxaH24i01YIY0Nc4
+         3OnAooetJsL4umgW9gNycmfe5Oh6HrCALtFz6Ap5NG+iNskyNAPnR8sZ5T+x4XioQb
+         eg5zXp5aq2F+CIcxtm+n6zqBYf6qd60ybqwvL/2SVWigbaXEkpvatE2/TQzhFDK/Nr
+         EkDKwoim6BySBsvwozpJvk37XY//tAFtGC+rU80RfDnn3hS9rjGt9vrLIfv6guiEJu
+         pLVPSuZ7Vrqyvd3nTr5MnkGPkiIo//ICtILXot2YteLR8X1tC3D9D4/sip+YmzJsLd
+         OJkWyHZpmmIKw==
+Date:   Thu, 27 Jan 2022 19:43:38 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Biao Huang <biao.huang@mediatek.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Fabien Parent <fparent@baylibre.com>,
+        Felix Fietkau <nbd@nbd.name>,
+        "John Crispin" <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: Re: [PATCH net-next v2 9/9] net: ethernet: mtk-star-emac: separate
+ tx/rx handling with two NAPIs
+Message-ID: <20220127194338.01722b3c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220127015857.9868-10-biao.huang@mediatek.com>
+References: <20220127015857.9868-1-biao.huang@mediatek.com>
+        <20220127015857.9868-10-biao.huang@mediatek.com>
 MIME-Version: 1.0
-References: <20220127180258.892788582@linuxfoundation.org>
-In-Reply-To: <20220127180258.892788582@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Thu, 27 Jan 2022 20:42:53 -0700
-Message-ID: <CAFU3qoaRESfpS5gk-RSXUL+WABgPeMuk+3qPQxuvx9pQ2x_6SQ@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0/9] 5.16.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:13 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.4 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.4-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, 27 Jan 2022 09:58:57 +0800 Biao Huang wrote:
+> Current driver may lost tx interrupts under bidirectional test with iperf3,
+> which leads to some unexpected issues.
+> 
+> This patch let rx/tx interrupt enable/disable separately, and rx/tx are
+> handled in different NAPIs.
 
-Hi Greg,
+> +/* mtk_star_handle_irq - Interrupt Handler.
+> + * @irq: interrupt number.
+> + * @data: pointer to a network interface device structure.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+if you mean this to me a kdoc comment it needs to start with /**
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+> + * Description : this is the driver interrupt service routine.
+> + * it mainly handles:
+> + *  1. tx complete interrupt for frame transmission.
+> + *  2. rx complete interrupt for frame reception.
+> + *  3. MAC Management Counter interrupt to avoid counter overflow.
+>   */
+>  static irqreturn_t mtk_star_handle_irq(int irq, void *data)
+>  {
+> -	struct mtk_star_priv *priv;
+> -	struct net_device *ndev;
+> +	struct net_device *ndev = data;
+> +	struct mtk_star_priv *priv = netdev_priv(ndev);
+> +	unsigned int intr_status = mtk_star_intr_ack_all(priv);
+> +	unsigned long flags = 0;
+> +
+> +	if (intr_status & MTK_STAR_BIT_INT_STS_FNRC) {
+> +		if (napi_schedule_prep(&priv->rx_napi)) {
+> +			spin_lock_irqsave(&priv->lock, flags);
+> +			/* mask Rx Complete interrupt */
+> +			mtk_star_disable_dma_irq(priv, true, false);
+> +			spin_unlock_irqrestore(&priv->lock, flags);
+> +			__napi_schedule_irqoff(&priv->rx_napi);
+> +		}
+> +	}
+>  
+> -	ndev = data;
+> -	priv = netdev_priv(ndev);
+> +	if (intr_status & MTK_STAR_BIT_INT_STS_TNTC) {
+> +		if (napi_schedule_prep(&priv->tx_napi)) {
+> +			spin_lock_irqsave(&priv->lock, flags);
+> +			/* mask Tx Complete interrupt */
+> +			mtk_star_disable_dma_irq(priv, false, true);
+> +			spin_unlock_irqrestore(&priv->lock, flags);
+> +			__napi_schedule_irqoff(&priv->tx_napi);
+> +		}
+> +	}
 
-     Total time: 0.441 [sec]
+Seems a little wasteful to retake the same lock twice if two IRQ
+sources fire at the same time.
 
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
+> @@ -1043,6 +1085,17 @@ static int mtk_star_netdev_start_xmit(struct sk_buff *skb,
+>  	struct mtk_star_ring *ring = &priv->tx_ring;
+>  	struct device *dev = mtk_star_get_dev(priv);
+>  	struct mtk_star_ring_desc_data desc_data;
+> +	int nfrags = skb_shinfo(skb)->nr_frags;
+> +
+> +	if (unlikely(mtk_star_tx_ring_avail(ring) < nfrags + 1)) {
+> +		if (!netif_queue_stopped(ndev)) {
+> +			netif_stop_queue(ndev);
+> +			/* This is a hard error, log it. */
+> +			netdev_err(priv->ndev, "%s: Tx Ring full when queue awake\n",
+> +				   __func__);
 
-     Total time: 7.131 [sec]
+This needs to be rate limited. Also no point printing the function
+name, unless the same message appears in multiple places.
 
-       7.131623 usecs/op
-         140220 ops/sec
+> +		}
+> +		return NETDEV_TX_BUSY;
+> +	}
+>  
+>  	desc_data.dma_addr = mtk_star_dma_map_tx(priv, skb);
+>  	if (dma_mapping_error(dev, desc_data.dma_addr))
+> @@ -1050,18 +1103,10 @@ static int mtk_star_netdev_start_xmit(struct sk_buff *skb,
+>  
+>  	desc_data.skb = skb;
+>  	desc_data.len = skb->len;
+> -
+> -	spin_lock_bh(&priv->lock);
+> 
+>  	mtk_star_ring_push_head_tx(ring, &desc_data);
+>  
+>  	netdev_sent_queue(ndev, skb->len);
+>  
+> -	if (mtk_star_ring_full(ring))
+> -		netif_stop_queue(ndev);
 
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
+Are you stopping the queue in advance somewhere else now? Did you only
+test this with BQL enabled? Only place that stops the ring also prints
+a loud warning now AFAICS..
 
-Thanks
--Zan
+> -static void mtk_star_tx_complete_all(struct mtk_star_priv *priv)
+> +static int mtk_star_tx_poll(struct napi_struct *napi, int budget)
+>  {
+> -	struct mtk_star_ring *ring = &priv->tx_ring;
+> -	struct net_device *ndev = priv->ndev;
+> -	int ret, pkts_compl, bytes_compl;
+> +	int ret, pkts_compl = 0, bytes_compl = 0, count = 0;
+> +	struct mtk_star_priv *priv;
+> +	struct mtk_star_ring *ring;
+> +	struct net_device *ndev;
+> +	unsigned long flags = 0;
+> +	unsigned int entry;
+>  	bool wake = false;
+>  
+> -	spin_lock(&priv->lock);
+> +	priv = container_of(napi, struct mtk_star_priv, tx_napi);
+> +	ndev = priv->ndev;
+>  
+> -	for (pkts_compl = 0, bytes_compl = 0;;
+> +	__netif_tx_lock_bh(netdev_get_tx_queue(priv->ndev, 0));
+
+Do you really need to lock out the Tx while cleaning?
+
+Drivers usually manage to implement concurrent Tx and cleanup with just
+a couple of memory barriers.
+
+> +	ring = &priv->tx_ring;
+> +	entry = ring->tail;
+> +	for (pkts_compl = 0, bytes_compl = 0;
+> +	     (entry != ring->head) && (count < budget);
+
+budget is not really relevant for Tx, you can clean the whole ring.
+netpoll will pass a budget of 0 to clean up rings.
+
+>  	     pkts_compl++, bytes_compl += ret, wake = true) {
+> -		if (!mtk_star_ring_descs_available(ring))
+> -			break;
+>  
+>  		ret = mtk_star_tx_complete_one(priv);
+>  		if (ret < 0)
+>  			break;
+> +		count++;
+> +		entry = ring->tail;
+>  	}
+>  
+
+> @@ -1196,7 +1258,7 @@ static const struct ethtool_ops mtk_star_ethtool_ops = {
+>  	.set_link_ksettings	= phy_ethtool_set_link_ksettings,
+>  };
+>  
+> -static int mtk_star_receive_packet(struct mtk_star_priv *priv)
+> +static int mtk_star_rx(struct mtk_star_priv *priv, int budget)
+>  {
+>  	struct mtk_star_ring *ring = &priv->rx_ring;
+>  	struct device *dev = mtk_star_get_dev(priv);
+> @@ -1204,107 +1266,86 @@ static int mtk_star_receive_packet(struct mtk_star_priv *priv)
+>  	struct net_device *ndev = priv->ndev;
+>  	struct sk_buff *curr_skb, *new_skb;
+>  	dma_addr_t new_dma_addr;
+> -	int ret;
+> +	int ret, count = 0;
+>  
+> -	spin_lock(&priv->lock);
+> -	ret = mtk_star_ring_pop_tail(ring, &desc_data);
+> -	spin_unlock(&priv->lock);
+> -	if (ret)
+> -		return -1;
+> +	while (count < budget) {
+> +		ret = mtk_star_ring_pop_tail(ring, &desc_data);
+> +		if (ret)
+> +			return -1;
+
+> -static int mtk_star_process_rx(struct mtk_star_priv *priv, int budget)
+> -{
+> -	int received, ret;
+> +		count++;
+>  
+> -	for (received = 0, ret = 0; received < budget && ret == 0; received++)
+> -		ret = mtk_star_receive_packet(priv);
+> +		desc_data.len = skb_tailroom(new_skb);
+> +		desc_data.skb = new_skb;
+> +		mtk_star_ring_push_head_rx(ring, &desc_data);
+> +	}
+>  
+>  	mtk_star_dma_resume_rx(priv);
+
+Again you can get a call with a budget of 0, not sure if it's okay to
+resume DMA in that case..
+
+> -	return received;
+> +	return count;
+>  }
+

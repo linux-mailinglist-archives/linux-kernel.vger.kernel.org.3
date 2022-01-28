@@ -2,177 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3B54A00A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0D84A00AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350801AbiA1TKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 14:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiA1TKW (ORCPT
+        id S1350817AbiA1TL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 14:11:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34858 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233548AbiA1TLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 14:10:22 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC2DC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 11:10:22 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id k17so7048665plk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 11:10:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qBrhGKhqGDo3ZZGcfTOvBOKxFA+ZreyYbNcf2efMXZM=;
-        b=eCZT8ZHOAxpHWEDrUQItUG+sx9VZ3ivRTx1df1Hb5Ao4XU7bhUL0XL2KBld709fVmg
-         IDG1SPPN7PGddHggtZ7UvMZKXPII86162snNhV14EycqAolc90+QaWRv3QLntN6Dm1Pl
-         nUkCG8lpzib1yRSSeLP62nAkHwE+KizSFaUN8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qBrhGKhqGDo3ZZGcfTOvBOKxFA+ZreyYbNcf2efMXZM=;
-        b=bw0ik1HZoWmWsX8aj6yzS/f/rBnCttCF+cPVLSGLCxPPv9nBliKbbMLnNOKgPS3Y0S
-         JHLde8b43OJxm6lnQBel2UaXZ9j+3BiHKlY0fQASyRMuzcWwNj7um+H/ZsZYm1KIKnpS
-         ygUzvMh0IS9WCGojB2v0L3EnR/dD7UMwqkMqNYeC/dNOOfLS5fRnXJIBSV6AIGcYe5pV
-         ktJgr3eZr7rGovNKg/BRm6AM0ACAD/4DP2KBXy/dWHDIUNDgThV3G6iUaGGT2uy908SI
-         Rfs5B1cJkH4ieDgZuxNHPxB2rcSyhp5rvWIVos4QktRxBWIqWgDKsRK3agVvi2Yv3Tji
-         p9Wg==
-X-Gm-Message-State: AOAM531Wk8wmXaT5GmZX1zZ1vNJjfwaZN5a1OXCJYd0X5ZIp43SKgBO6
-        VENlj9jlSoMgTvR78HS/SnNfwGbNHAW/2A==
-X-Google-Smtp-Source: ABdhPJwkfZT7H5g+ncTdGNx1L3u8QiZklleP3FKxab6bzRDhnivkR2Cau7R+nbnX7dJOZ7yw7amTDg==
-X-Received: by 2002:a17:90a:5890:: with SMTP id j16mr11399493pji.185.1643397021641;
-        Fri, 28 Jan 2022 11:10:21 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d2sm3142742pju.2.2022.01.28.11.10.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 11:10:21 -0800 (PST)
-Date:   Fri, 28 Jan 2022 11:10:20 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] stack: Constrain stack offset randomization with
- Clang builds
-Message-ID: <202201281058.83EC9565@keescook>
-References: <20220128114446.740575-1-elver@google.com>
- <20220128114446.740575-2-elver@google.com>
+        Fri, 28 Jan 2022 14:11:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0086B826E6;
+        Fri, 28 Jan 2022 19:11:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0644FC340E7;
+        Fri, 28 Jan 2022 19:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643397082;
+        bh=nEtRS4da8A0SmzOxcQ3RPNezBvSUb6/LzZRgw/9lq2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QLCC6rhhkXfPKby3V9ApuHBOZplcpuZbCFe2cgd61MP9BTM4XlZ3NQnYkBDcOqHu8
+         5XZJMCAObah5qnRXeAu0Sajy4zjDdxf/v6oDFigBHbc2rNwbIXzmQdWo1br2zbWkJY
+         J4IngMjXyl+ra+iXhcb2m1jTOEYJPpT5PE70hm72qCKkB8CW3VYQm3q2zrqFg1K4oX
+         B26PzSKX7k62V1AevuEqiEkJ8cbK601B+/qhiUK/WVDVBFAVWsJFEvydbcrKcJJ8gO
+         1r9UsXgxcKa2x5ttkfK7P/L8rd2J4ns+ep/2beQpzl98t6krTaoTv7c+MnkU96InBS
+         /O8YHJDHOnrRA==
+Date:   Fri, 28 Jan 2022 19:11:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
+Cc:     sfr@canb.auug.org.au, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
+        "lh.kuo" <lh.kuo@sunplus.com>
+Subject: Re: [PATCH -next] spi: Fix compiler warning for kernel test
+Message-ID: <YfQ/1aJzebxw2GS+@sirena.org.uk>
+References: <1643336485-10942-1-git-send-email-lhjeff911@gmail.com>
+ <CAGcXWkzM6wbhNFLbYoijq7iS_76nYVod1ySFEDu-BRgnBokEQA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CLZg43y2TCF/HuSl"
 Content-Disposition: inline
-In-Reply-To: <20220128114446.740575-2-elver@google.com>
+In-Reply-To: <CAGcXWkzM6wbhNFLbYoijq7iS_76nYVod1ySFEDu-BRgnBokEQA@mail.gmail.com>
+X-Cookie: Support your right to arm bears!!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 12:44:46PM +0100, Marco Elver wrote:
-> All supported versions of Clang perform auto-init of __builtin_alloca()
-> when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
-> 
-> add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> enabled, add_random_kstack_offset() will auto-init that unused portion
-> of the stack used to add an offset.
-> 
-> There are several problems with this:
-> 
-> 	1. These offsets can be as large as 1023 bytes. Performing
-> 	   memset() on them isn't exactly cheap, and this is done on
-> 	   every syscall entry.
-> 
-> 	2. Architectures adding add_random_kstack_offset() to syscall
-> 	   entry implemented in C require them to be 'noinstr' (e.g. see
-> 	   x86 and s390). The potential problem here is that a call to
-> 	   memset may occur, which is not noinstr.
-> 
-> A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> 
->  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> 
-> Clang 14 (unreleased) will introduce a way to skip alloca initialization
-> via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
-> 
-> Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
-> auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
-> __builtin_alloca_uninitialized() if the compiler provides it, as is done
-> by Clang 14.
-> 
-> Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
-> Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  arch/Kconfig                     |  1 +
->  include/linux/randomize_kstack.h | 14 ++++++++++++--
->  2 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 2cde48d9b77c..c5b50bfe31c1 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
->  	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
->  	default y
->  	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-> +	depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
 
-This makes it _unavailable_ for folks with Clang < 14, which seems
-too strong, especially since it's run-time off by default. I'd prefer
-dropping this hunk and adding some language to the _DEFAULT help noting
-the specific performance impact on Clang < 14.
+--CLZg43y2TCF/HuSl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  	help
->  	  The kernel stack offset can be randomized (after pt_regs) by
->  	  roughly 5 bits of entropy, frustrating memory corruption
-> diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
-> index 91f1b990a3c3..5c711d73ed10 100644
-> --- a/include/linux/randomize_kstack.h
-> +++ b/include/linux/randomize_kstack.h
-> @@ -17,8 +17,18 @@ DECLARE_PER_CPU(u32, kstack_offset);
->   * alignment. Also, since this use is being explicitly masked to a max of
->   * 10 bits, stack-clash style attacks are unlikely. For more details see
->   * "VLAs" in Documentation/process/deprecated.rst
-> + *
-> + * The normal alloca() can be initialized with INIT_STACK_ALL. Initializing the
-> + * unused area on each syscall entry is expensive, and generating an implicit
-> + * call to memset() may also be problematic (such as in noinstr functions).
-> + * Therefore, if the compiler provides it, use the "uninitialized" variant.
+On Fri, Jan 28, 2022 at 10:47:41PM +0800, =E9=83=AD=E5=8A=9B=E8=B1=AA wrote:
+> Fix compiler warming for kernel test
+>=20
+> Fixes: f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 
-Can you include the note that GCC doesn't initialize its alloca()?
+Thanks for adding the signoff but this and the other two patches you
+just sent are breaking the tooling - they're sent with HMTL and it looks
+like the text parts have been corrupted with at least word wrapping:
 
-Otherwise, yeah, looks good to me.
+> -int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfe=
+r)
+> +static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transf=
+er
+> *xfer)
 
--Kees
+so the diff doesn't work as-is.  Can you check and resend please, your
+normal posting mechanism works fine?
 
->   */
-> -void *__builtin_alloca(size_t size);
-> +#if __has_builtin(__builtin_alloca_uninitialized)
-> +#define __kstack_alloca __builtin_alloca_uninitialized
-> +#else
-> +#define __kstack_alloca __builtin_alloca
-> +#endif
-> +
->  /*
->   * Use, at most, 10 bits of entropy. We explicitly cap this to keep the
->   * "VLA" from being unbounded (see above). 10 bits leaves enough room for
-> @@ -37,7 +47,7 @@ void *__builtin_alloca(size_t size);
->  	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
->  				&randomize_kstack_offset)) {		\
->  		u32 offset = raw_cpu_read(kstack_offset);		\
-> -		u8 *ptr = __builtin_alloca(KSTACK_OFFSET_MAX(offset));	\
-> +		u8 *ptr = __kstack_alloca(KSTACK_OFFSET_MAX(offset));	\
->  		/* Keep allocation even after "ptr" loses scope. */	\
->  		asm volatile("" :: "r"(ptr) : "memory");		\
->  	}								\
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
-> 
+--CLZg43y2TCF/HuSl
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Kees Cook
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH0P9UACgkQJNaLcl1U
+h9BlpAf/arzffOmwe38Eq6+7Svb1SVF6H10OslQsbhpYHIXILWEO9vxbVKoEKPLm
+RrzE+eEN8U8ve8d3fjzZbLkUmH3jU0/dFvVI2J38mg3MoDsinq/PCdw0+XiUKNU7
+iUns6AcfJX0GdKSdmm6RwuxAchYUl9OrrvEWkoUG6hY2x42anDHTRyZ2kSPuwwtW
+WDNvaZg0UlKwTzuHBp0U55wXLkeML99mQo4Pu3GSaLwLssoWGKrhLGdA7rJKxGg+
+Uw+QVmhtAzOONj0n2P5SvdZ8PQ8mBJ69FTooUM+dEuTSGKw+7SW3+x1pTYNwhfRG
+CXL+IUmVC32tQAurF/FXqx2RxoSyTg==
+=jzUF
+-----END PGP SIGNATURE-----
+
+--CLZg43y2TCF/HuSl--

@@ -2,94 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9500149F84A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F9949F84B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbiA1L0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S235556AbiA1L0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:26:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:37828 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234386AbiA1L0a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Jan 2022 06:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbiA1L03 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:26:29 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D989C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:26:29 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 192so5858307pfz.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GTL7/BOv4lVDxBXnM15feo6pVbCDvXp/AEHcvXWMhq0=;
-        b=Vl8GzlaXNMauRoFrr8MSGPbBazgV2P1d319wiEwCBCg4ID+JFbPAsJiV8csyJyWx4W
-         JNWsMAVixQ3VfeKUDKgctI0FVmdu8khqu5/6HTGPQsNNFqkkKgAHNC1u9K82O8H5TUV4
-         zrVZyMONaHX8gunW4gC36FFEv5sCTJUIeZijo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GTL7/BOv4lVDxBXnM15feo6pVbCDvXp/AEHcvXWMhq0=;
-        b=o1t5MO+WNeqwq8HjOk/543pCiXyXSvNEg0HCPVJIBGTnPbyFHlcxdA+2PFm55AnhdD
-         eWJF60heBYDYz6dsoLrClEH6mekN1OJRXAXl1fMYQQgs70mDBYdSdEgIdcsj0L8q2Sgk
-         V1jSvdutVn7bZw4y4eBsGGAwIj+yhW2cHzoYJj5uIv85YjPX14r5k4ULIdvO24cwxpSc
-         nmFJk2edW20SVkZYoU2jFCvbuyZsbxFBEAQ906fD95O9mgt2yg+vV8Igq8a0J/N7yho4
-         Bo7d4suBo6DTqiMvzi4aDETPFoV+n2UJrXE0yC53DkuL0AAjjddWx+57DLYO4In2vs9c
-         8o2g==
-X-Gm-Message-State: AOAM531Gx0ucp3DsRogLxQYsC83VDVot0Mgg2+XT6JIVFZnh0MtZvUov
-        tDlOx7mDJR7DnmxFDKT2zONMWw==
-X-Google-Smtp-Source: ABdhPJwhxu9x3MJkeylqe469WLcp+17qBESHoJM1w2UppQkJPO3ok9iJS1Mnw1UeJp4y4KmG3LSxLQ==
-X-Received: by 2002:a63:88c7:: with SMTP id l190mr6168244pgd.230.1643369188831;
-        Fri, 28 Jan 2022 03:26:28 -0800 (PST)
-Received: from adf6a34bf206 ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id a1sm21503721pgm.83.2022.01.28.03.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 03:26:28 -0800 (PST)
-Date:   Fri, 28 Jan 2022 11:26:19 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Subject: Re: [PATCH 5.16 0/9] 5.16.4-rc1 review
-Message-ID: <20220128112619.GA7@adf6a34bf206>
-References: <20220127180258.892788582@linuxfoundation.org>
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94601113E;
+        Fri, 28 Jan 2022 03:26:29 -0800 (PST)
+Received: from [10.57.86.86] (unknown [10.57.86.86])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 138D73F766;
+        Fri, 28 Jan 2022 03:26:26 -0800 (PST)
+Message-ID: <e84cf689-10a5-c63f-b574-9da682da034e@arm.com>
+Date:   Fri, 28 Jan 2022 11:26:25 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127180258.892788582@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH v2 4/6] Documentation: coresight: Turn numbered
+ subsections into real subsections
+To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org, leo.yan@linaro.com,
+        mike.leach@linaro.org
+Cc:     Leo Yan <leo.yan@linaro.org>, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220113091056.1297982-1-james.clark@arm.com>
+ <20220113091056.1297982-5-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220113091056.1297982-5-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 07:09:35PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.4 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 13/01/2022 09:10, James Clark wrote:
+> This is to allow them to be referenced in a later commit. There was
+> also a mistake where sysFS was introduced as section 2, but numbered
+> as section 1. And vice versa for 'Using perf framework'. This can't
+> happen with unnumbered sections.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Hi Greg,
+Looks good to me
 
-5.16.4-rc1 tested.
-
-Run tested on:
-- Allwinner H6 (Tanix TX6)
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
-
-In addition: build tested on:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi

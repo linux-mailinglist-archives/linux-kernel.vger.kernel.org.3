@@ -2,93 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BABE949FC2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8668549FC32
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242044AbiA1Oxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbiA1Oxq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:53:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154DDC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:53:46 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643381623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C5w2S5ndYwVItVkiDPg/uT/UFko3VOhpELYHRGKacXU=;
-        b=LFOjhaqC5qvgSmaAH2KNicSXyl3qeriZ/Gj0IQOoWMWNe4v28oznoIF43IiHE0hhxjd4pf
-        Dp0SDui1xtKckdpveuc/8T8ybHkXnLDZIR6DFQW0s/b1vSLKuIJ9kSTqQ8TBY23jW6LVGt
-        DHUEPv55YkuVVdstdaDU13BUaeb1itS4WUj2Pr0XQ3D7Q0wvLxjguI6VYi3F/x4LOvLDYt
-        PF4VvIMrXt0sTvyMKURsjt1wlCvm1vmU4AzRXd45wcmaDcjKm7Ce/ZtjpHCHu7Ph9IaiFp
-        h+393lQsyi1qViC4Ll9U2p27LHRbZIm3h9sWyqdC9ACvINqSuQdlxLIx/4AluA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643381623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C5w2S5ndYwVItVkiDPg/uT/UFko3VOhpELYHRGKacXU=;
-        b=r7H3xY7nCZjmcsVrwvUy6GaO5T8z2QBOTJ/TnVehHwHwFxDF2NmH291HC3ZYSLHtC8DAvx
-        AgDGj7XNHAFaklBA==
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <YfNVBzN67rSu/QcE@otcwcpicx3.sc.intel.com>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
- <20211217220136.2762116-6-fenghua.yu@intel.com> <87ee4w6g1n.ffs@tglx>
- <87bl006fdb.ffs@tglx> <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
- <878rv46eg3.ffs@tglx> <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
- <87k0em4lu9.ffs@tglx> <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
- <8735la41qb.ffs@tglx> <YfNVBzN67rSu/QcE@otcwcpicx3.sc.intel.com>
-Date:   Fri, 28 Jan 2022 15:53:42 +0100
-Message-ID: <87zgnf29op.ffs@tglx>
+        id S242261AbiA1Oyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:54:33 -0500
+Received: from mga12.intel.com ([192.55.52.136]:9931 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231773AbiA1Oy3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 09:54:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643381669; x=1674917669;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iqtXsvLLgcuDFWQEAjNmfTJbNdGDPjDGzi77gNCcokc=;
+  b=hdZwZ1YIb7PNm1HBaaZxlg22wM9AdsuTPeGBgXFvSTC5JqiVPpMNz3fc
+   bI833X1TUleKLMHuao50gaZMwTlrbQd4c29SUeO6sscm76U3iVZlhxfLr
+   fJ0QmcfQK0tJqE2ro1eQpXgXxsB1NtriN5LXRFwM1z+xfcftRtrXVONfO
+   0ZWw6srOPXA5njd49iuMM73nqyxJE7QBO/1UPvnGf+pd3vhTTbdiCEjJG
+   DkqKoRu8GxckmRGQO+vfIzGzc/eAninS2z+1yTWIinKzMTxRWKH98GXLW
+   7pkfKRi6PhI9nU/70cN+Xo1x3u5FBla7rtAKdKbPZVYfcci5mM9BNEt1S
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227109740"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="227109740"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:54:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="521730521"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Jan 2022 06:54:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDSdu-000Nzq-DZ; Fri, 28 Jan 2022 14:54:26 +0000
+Date:   Fri, 28 Jan 2022 22:54:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, stefanr@s5r6.in-berlin.de
+Cc:     kbuild-all@lists.01.org, linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] drivers/firewire: use struct_size over open coded
+ arithmetic
+Message-ID: <202201282234.A43HZoSH-lkp@intel.com>
+References: <20220128080336.1211525-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128080336.1211525-1-chi.minghao@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27 2022 at 18:42, Fenghua Yu wrote:
-> On Wed, Jan 26, 2022 at 10:38:04PM +0100, Thomas Gleixner wrote:
->> Against Linus tree please so that the bugfix applies.
->> 
->> > I will fold the following patch into patch #5. The patch #11 (the doc patch)
->> > also needs to remove one paragraph talking about refcount.
->> >
->> > So I will send the whole patch set with the following changes:
->> > 1. One new bug fix patch (the above patch)
->
-> When I study your above aux_domain bug fix path, I find more aux_domain bugs.
-> But then I find aux_domain will be completely removed because all aux_domain
-> related callbacks are not called and are dead code (no wonder there are
-> so many bugs in aux_domain). Please see this series: https://lore.kernel.org/linux-iommu/20220124071103.2097118-4-baolu.lu@linux.intel.com/
-> For the series, Baolu confirms that he is "pretty sure that should be part
-> of v5.18". And I don't find the series calls any IOASID function after
-> removing the aux_domain code.
->
-> So that means we don't need to fix those issues in the dead aux_domain
-> code any more because it will be completely removed in 5.18, right?
->
-> If you agree, I will not include the aux_domain fix patch or any other
-> aux_domain fix patches in the up-coming v3. Is that OK?
+Hi,
 
-Fair enough.
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on ieee1394-linux1394/for-next]
+[also build test ERROR on v5.17-rc1 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/drivers-firewire-use-struct_size-over-open-coded-arithmetic/20220128-160602
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git for-next
+config: arm-randconfig-c002-20220124 (https://download.01.org/0day-ci/archive/20220128/202201282234.A43HZoSH-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1567c3f747219c35e83d9c1f4ac3c3d36f447d90
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/drivers-firewire-use-struct_size-over-open-coded-arithmetic/20220128-160602
+        git checkout 1567c3f747219c35e83d9c1f4ac3c3d36f447d90
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:29,
+                    from drivers/firewire/core-transaction.c:10:
+   drivers/firewire/core-transaction.c: In function 'allocate_request':
+>> include/linux/overflow.h:326:32: error: invalid type argument of '->' (have 'struct fw_request')
+     326 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
+         |                                ^~
+   drivers/firewire/core-transaction.c:780:27: note: in expansion of macro 'struct_size'
+     780 |         request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+         |                           ^~~~~~~~~~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:12,
+                    from include/asm-generic/bug.h:20,
+                    from arch/arm/include/asm/bug.h:60,
+                    from include/linux/bug.h:5,
+                    from drivers/firewire/core-transaction.c:8:
+   include/linux/overflow.h:326:63: error: invalid type argument of '->' (have 'struct fw_request')
+     326 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
+         |                                                               ^~
+   include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                              ^
+   include/linux/compiler.h:240:51: note: in expansion of macro '__same_type'
+     240 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+         |                                                   ^~~~~~~~~~~
+   include/linux/overflow.h:326:44: note: in expansion of macro '__must_be_array'
+     326 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
+         |                                            ^~~~~~~~~~~~~~~
+   drivers/firewire/core-transaction.c:780:27: note: in expansion of macro 'struct_size'
+     780 |         request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+         |                           ^~~~~~~~~~~
+   include/linux/overflow.h:326:63: error: invalid type argument of '->' (have 'struct fw_request')
+     326 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
+         |                                                               ^~
+   include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                              ^
+   include/linux/compiler.h:240:51: note: in expansion of macro '__same_type'
+     240 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+         |                                                   ^~~~~~~~~~~
+   include/linux/overflow.h:326:44: note: in expansion of macro '__must_be_array'
+     326 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
+         |                                            ^~~~~~~~~~~~~~~
+   drivers/firewire/core-transaction.c:780:27: note: in expansion of macro 'struct_size'
+     780 |         request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+         |                           ^~~~~~~~~~~
+   include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                   ^
+   include/linux/compiler.h:240:33: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
+     240 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+         |                                 ^~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:326:44: note: in expansion of macro '__must_be_array'
+     326 |                     sizeof(*(p)->member) + __must_be_array((p)->member),\
+         |                                            ^~~~~~~~~~~~~~~
+   drivers/firewire/core-transaction.c:780:27: note: in expansion of macro 'struct_size'
+     780 |         request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+         |                           ^~~~~~~~~~~
+   In file included from include/linux/device.h:29,
+                    from drivers/firewire/core-transaction.c:10:
+>> include/linux/overflow.h:327:28: error: invalid type argument of unary '*' (have 'struct fw_request')
+     327 |                     sizeof(*(p)))
+         |                            ^~~~
+   drivers/firewire/core-transaction.c:780:27: note: in expansion of macro 'struct_size'
+     780 |         request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+         |                           ^~~~~~~~~~~
+
+
+vim +326 include/linux/overflow.h
+
+610b15c50e86eb1 Kees Cook           2018-05-07  312  
+610b15c50e86eb1 Kees Cook           2018-05-07  313  /**
+610b15c50e86eb1 Kees Cook           2018-05-07  314   * struct_size() - Calculate size of structure with trailing array.
+610b15c50e86eb1 Kees Cook           2018-05-07  315   * @p: Pointer to the structure.
+610b15c50e86eb1 Kees Cook           2018-05-07  316   * @member: Name of the array member.
+b19d57d0f3cc6f1 Gustavo A. R. Silva 2020-06-08  317   * @count: Number of elements in the array.
+610b15c50e86eb1 Kees Cook           2018-05-07  318   *
+610b15c50e86eb1 Kees Cook           2018-05-07  319   * Calculates size of memory needed for structure @p followed by an
+b19d57d0f3cc6f1 Gustavo A. R. Silva 2020-06-08  320   * array of @count number of @member elements.
+610b15c50e86eb1 Kees Cook           2018-05-07  321   *
+610b15c50e86eb1 Kees Cook           2018-05-07  322   * Return: number of bytes needed or SIZE_MAX on overflow.
+610b15c50e86eb1 Kees Cook           2018-05-07  323   */
+b19d57d0f3cc6f1 Gustavo A. R. Silva 2020-06-08  324  #define struct_size(p, member, count)					\
+b19d57d0f3cc6f1 Gustavo A. R. Silva 2020-06-08  325  	__ab_c_size(count,						\
+610b15c50e86eb1 Kees Cook           2018-05-07 @326  		    sizeof(*(p)->member) + __must_be_array((p)->member),\
+610b15c50e86eb1 Kees Cook           2018-05-07 @327  		    sizeof(*(p)))
+610b15c50e86eb1 Kees Cook           2018-05-07  328  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

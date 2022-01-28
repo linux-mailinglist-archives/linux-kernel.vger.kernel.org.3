@@ -2,97 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 688B349F85F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B4749F862
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236347AbiA1LgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:36:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30957 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232502AbiA1LgI (ORCPT
+        id S236888AbiA1LhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232502AbiA1LhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:36:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643369767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/CVVmOo6bqPNMUWhv3lZL5OSdXdWuhtjBkekxnbtZx4=;
-        b=SRWaS4AdL2cQlYx+3umbqXjCI9RZdgYNWOlT41iwGydt4a2zV9lAUgQ0je2TGwl0Qz9s4Z
-        mHQcfjxuZjYk75yFFgF1n8/mUDrAeQ3ZMu+O6sJru1qah8Aat+166EcR7lEvW9C/cIIPZ/
-        6a//cVvJghgfUB5loN11MNvucJSPN9Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-9VLdvSs6OGyUhthgrzXNVA-1; Fri, 28 Jan 2022 06:36:04 -0500
-X-MC-Unique: 9VLdvSs6OGyUhthgrzXNVA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CB50D1091DA3;
-        Fri, 28 Jan 2022 11:36:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A99166E3B;
-        Fri, 28 Jan 2022 11:36:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAOQ4uxhRS3MGEnCUDcsB1RL0d1Oy0g0Rzm75hVFAJw2dJ7uKSA@mail.gmail.com>
-References: <CAOQ4uxhRS3MGEnCUDcsB1RL0d1Oy0g0Rzm75hVFAJw2dJ7uKSA@mail.gmail.com> <20220128074731.1623738-1-hch@lst.de> <918225.1643364739@warthog.procyon.org.uk>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Subject: Re: [PATCH v2] fs: rename S_KERNEL_FILE
+        Fri, 28 Jan 2022 06:37:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6939C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:37:18 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CB2D3471;
+        Fri, 28 Jan 2022 12:37:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643369836;
+        bh=CeJvR4ORKUeBh5O+rhMxUG+pi4kilih9I+hEF4f+sfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pXqX/EEQBJ5wwHO+8ucas+fjPqY3Vx+/MzDt4QJsxninA72AQfzWsM4TYjC0T3Aeg
+         Xfir9WqpRKJO9XAXJ1uXZVGLx7+KtbLKmDEHXFUDb5TZt19Ttm11DkXBlg7wB7ci5j
+         N3ZALuwl7lUx34szuUmUHwVfgttancuCFHVEMxC0=
+Date:   Fri, 28 Jan 2022 13:36:54 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
+ kernel parameter
+Message-ID: <YfPVVtWoW23xiP/g@pendragon.ideasonboard.com>
+References: <20211217003752.3946210-1-javierm@redhat.com>
+ <20211217003752.3946210-32-javierm@redhat.com>
+ <164336121612.533872.1685181669511488706@Monstersaurus>
+ <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
+ <YfPGnfly3GOAOlfp@pendragon.ideasonboard.com>
+ <584f1343-b285-bf8e-e48c-764c2a56bce3@suse.de>
+ <YfPN0fLfvWFC6mha@pendragon.ideasonboard.com>
+ <1b1a5dc1-e3cd-c7ce-426b-cc330ae3ed81@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <922908.1643369759.1@warthog.procyon.org.uk>
-Date:   Fri, 28 Jan 2022 11:35:59 +0000
-Message-ID: <922909.1643369759@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1b1a5dc1-e3cd-c7ce-426b-cc330ae3ed81@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amir Goldstein <amir73il@gmail.com> wrote:
+Hi Thomas,
 
-> Good idea, but then the helpers to set the flag should not be internal
-> to cachefiles and the locking semantics should be clear.
-
-I could move them out, at least partially.  They do log some information
-that's private to cachefiles through the tracepoint, but it's just one number
-and could be passed in as a parameter.  I could move the tracepoint to
-somewhere more generic.
-
-> FYI, overlayfs already takes an "exclusive lock" on upper/work dir
-> among all ovl instances.
+On Fri, Jan 28, 2022 at 12:26:03PM +0100, Thomas Zimmermann wrote:
+> Am 28.01.22 um 12:04 schrieb Laurent Pinchart:
+> > On Fri, Jan 28, 2022 at 11:46:49AM +0100, Thomas Zimmermann wrote:
+> >> Am 28.01.22 um 11:34 schrieb Laurent Pinchart:
+> >>> On Fri, Jan 28, 2022 at 10:33:21AM +0100, Thomas Zimmermann wrote:
+> >>>> Am 28.01.22 um 10:13 schrieb Kieran Bingham:
+> >>>>> Quoting Javier Martinez Canillas (2021-12-17 00:37:46)
+> >>>>>> According to disable Documentation/admin-guide/kernel-parameters.txt, this
+> >>>>>> parameter can be used to disable kernel modesetting.
+> >>>>>>
+> >>>>>> DRM drivers will not perform display-mode changes or accelerated rendering
+> >>>>>> and only the system framebuffer will be available if it was set-up.
+> >>>>>
+> >>>>> What is the 'system framebuffer' in this instance? Reading
+> >>>>> https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt
+> >>>>> it sounds like that means anything already set up by the bootloader.
+> >>>>
+> >>>> Exactly this.
+> >>>>
+> >>>>>> But only a few DRM drivers currently check for nomodeset, make this driver
+> >>>>>> to also support the command line parameter.
+> >>>>>>
+> >>>>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> >>>>>> ---
+> >>>>>>
+> >>>>>> (no changes since v1)
+> >>>>>>
+> >>>>>>     drivers/gpu/drm/rcar-du/rcar_du_drv.c | 3 +++
+> >>>>>>     1 file changed, 3 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> >>>>>> index 5a8131ef81d5..982e450233ed 100644
+> >>>>>> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> >>>>>> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> >>>>>> @@ -701,6 +701,9 @@ static struct platform_driver rcar_du_platform_driver = {
+> >>>>>>     
+> >>>>>>     static int __init rcar_du_init(void)
+> >>>>>>     {
+> >>>>>> +       if (drm_firmware_drivers_only())
+> >>>>>> +               return -ENODEV;
+> >>>>>> +
+> >>>>>
+> >>>>> This will completely disable all control of the display device when
+> >>>>> nomodeset is enabled.
+> >>>>>
+> >>>>> Is there any requirement for us to support outputting to the display if
+> >>>>> it was previously set up? presumably without setting or changing any
+> >>>>> modes, but simply allowing the existing frame to be updated?
+> >>>>
+> >>>> There's no requirement for your driver. We just want a parameter where
+> >>>> we can conveniently disable most of DRM's drivers and reduce it to a
+> >>>> minimum. Helps distributions to provide a simple fallback mode.  Most
+> >>>> PCI-based drivers already support that. Now we're added it to the other
+> >>>> drivers as well.
+> >>>>
+> >>>>>
+> >>>>> I think the implication is that 'firmware drivers' would mean a display
+> >>>>> could be updated through some firmware interface, which we won't have
+> >>>>> ... so it seems reasonable to accept that this whole driver can be
+> >>>>> disabled in that instance.
+> >>>>
+> >>>> It cannot be 'mode-setted'. We get a pre-configured framebuffer from the
+> >>>> firmware or bootloader. Whatever we draw there shows up on the screen.
+> >>>
+> >>> I doubt that's going to work as you expect, clocks and regulators will
+> >>> get disabled at boot if not used by any driver.
+> >>
+> >> Simpledrm and simplefb attach to these firmware framebuffers. Both
+> >> drivers look at the device tree nodes to acquire the relevant clocks and
+> >> regulators.
+> > 
+> > How about clocks and regulators for the ancillary devices, such as
+> > encoders, or in the R-Car case, the external composer handled by the
+> > vsp1 driver (in drivers/media/platform/vsp1) ?
+> > 
+> > This approach may work fine on x86 desktop systems, but for ARM-based
+> > devices, the situation is usually more complex.
 > 
-> How do you feel about hoisting ovl_inuse_* helpers to fs.h
-> and rename s/I_OVL_INUSE/I_EXCL_INUSE?
+> Well, in that case the problem has always been there. We don't make it 
+> worse.
 
-Fine by me.  Sharing a cache with or through an overlay would make for very
-fun coherency management.
+What's the point of adding nomodeset support in those drivers then, if
+it's known not to work ?
 
-> Whether deny rmdir should have its own flag or not I don't know,
-> but from ovl POV I *think* it should not be a problem to deny rmdir
-> for the ovl upper/work dirs as long as ovl is mounted(?).
+> >>>>> Reading your mail that brought this thread up in my inbox, I think
+> >>>>> you've already hit merge on this, so don't worry about adding a tag in
+> >>>>> that instance, but I think this is ok.
+> >>>>>
+> >>>>> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> >>>>>
+> >>>>>>            rcar_du_of_init(rcar_du_of_table);
+> >>>>>>     
+> >>>>>>            return platform_driver_register(&rcar_du_platform_driver);
 
-What's the consequence of someone rearranging the directories directly in the
-contributing dirs whilst there's an overlay over them?
+-- 
+Regards,
 
-> Another problem with generic deny of rmdir is that users getting
-> EBUSY have no way to figure out the reason.
-> At least for a specific subsystem (i.e. cachefiles) users should be able
-> to check if the denied dir is in the subsystem's inventory(?)
-
-I could add a tracepoint for that.  It could form a set with the cachefiles
-tracepoints if I move those out too.
-
-David
-
+Laurent Pinchart

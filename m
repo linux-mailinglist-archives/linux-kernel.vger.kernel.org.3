@@ -2,115 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F261A49FCFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBCA49FD01
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349630AbiA1Plp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:41:45 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19758 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231320AbiA1Pln (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:41:43 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SFDsTH003114;
-        Fri, 28 Jan 2022 15:41:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=mIVC4tQn5urWzaW41VWBK+MJStHSJn6U89EnXjbE3rE=;
- b=RJ8KPUwxbfNfcjGo1b5rmJ4kcDaJhu1+/G1QyRROuY4A2xVZxpmenPKrIImx3AqFjHrR
- eLid26hs1C6S5baPAMRh7WH3vBEyEyc5uF1ovb0WRFTOmOrFKNNQCrCqKyZq3GkoTlbL
- oXcLU+nuq/waYXfsqF1pp3RJfI7vZ7qTymQieOYt3YbTrNwhFr2iTmIJqCJYnNWRafLE
- lUAWJbcVBGVDOsIz3TKxeCKX/tEefbQv1xX4wUU4xCC3naACrVzBBYCz5EbnydYgebfS
- kIl0HeyEfUDOQj/Wtd8ZjJzqIZEiTiqQ++Hgz3suOHdbPRnueYbZWvbrAfZuj0xKhgb+ 0Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvfvb4ubx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:41:31 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SFE1ji003675;
-        Fri, 28 Jan 2022 15:41:30 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvfvb4ub5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:41:30 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SFWtDS023981;
-        Fri, 28 Jan 2022 15:41:27 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3dr9ja8d0t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:41:27 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SFfPu824183278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jan 2022 15:41:25 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2343D11C050;
-        Fri, 28 Jan 2022 15:41:25 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8405311C066;
-        Fri, 28 Jan 2022 15:41:23 +0000 (GMT)
-Received: from linux6.. (unknown [9.114.12.104])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jan 2022 15:41:23 +0000 (GMT)
-From:   Janosch Frank <frankja@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, guang.zeng@intel.com,
-        jing2.liu@intel.com, kevin.tian@intel.com, seanjc@google.com,
-        tglx@linutronix.de, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH] kvm: Move KVM_GET_XSAVE2 IOCTL definition at the end of kvm.h
-Date:   Fri, 28 Jan 2022 15:40:25 +0000
-Message-Id: <20220128154025.102666-1-frankja@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        id S1349644AbiA1PnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:43:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:50380 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349641AbiA1PnC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 10:43:02 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E493712FC;
+        Fri, 28 Jan 2022 07:43:01 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.13.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4654F3F793;
+        Fri, 28 Jan 2022 07:42:59 -0800 (PST)
+Date:   Fri, 28 Jan 2022 15:42:48 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yinan Liu <yinan@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, hca@linux.ibm.com,
+        linux-s390@vgr.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: ftrace hangs waiting for rcu (was: Re: [PATCH] ftrace: Have
+ architectures opt-in for mcount build time sorting)
+Message-ID: <YfQCohKWJg9H+uID@FVFF77S0Q05N>
+References: <20220127114249.03b1b52b@gandalf.local.home>
+ <YfLjIOlGfFmbh1Zv@FVFF77S0Q05N>
+ <yt9dy231yq90.fsf_-_@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -uiKA0YRqUO9Fvd8H9dVOt-g1rUD7k-I
-X-Proofpoint-ORIG-GUID: BXvA1Awgy1RUwIGL4zNAYE-i2P-NrMDv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_04,2022-01-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 malwarescore=0
- adultscore=0 mlxlogscore=999 clxscore=1011 phishscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201280097
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dy231yq90.fsf_-_@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This way we can more easily find the next free IOCTL number when
-adding new IOCTLs.
+Hi Sven,
 
-Fixes: be50b2065dfa ("kvm: x86: Add support for getting/setting expanded xstate buffer")
-Signed-off-by: Janosch Frank <frankja@linux.ibm.com>
----
- include/uapi/linux/kvm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu, Jan 27, 2022 at 07:42:35PM +0100, Sven Schnelle wrote:
+> Mark Rutland <mark.rutland@arm.com> writes:
+> 
+> > * I intermittently see a hang when running the tests. I previously hit that
+> >   when originally trying to bisect this issue (and IIRC that bisected down to
+> >   some RCU changes, but I need to re-run that). When the tests hang I
+> >   magic-srsrq + L tells me:
+> >
+> >   [  271.938438] sysrq: Show Blocked State
+> >   [  271.939245] task:ftracetest      state:D stack:    0 pid: 5687 ppid:  5627 flags:0x00000200
+> >   [  271.940961] Call trace:
+> >   [  271.941472]  __switch_to+0x104/0x160
+> >   [  271.942213]  __schedule+0x2b0/0x6e0
+> >   [  271.942933]  schedule+0x5c/0xf0
+> >   [  271.943586]  schedule_timeout+0x184/0x1c4
+> >   [  271.944410]  wait_for_completion+0x8c/0x12c
+> >   [  271.945274]  __wait_rcu_gp+0x184/0x190
+> >   [  271.946047]  synchronize_rcu_tasks_rude+0x48/0x70
+> >   [  271.947007]  update_ftrace_function+0xa4/0xec
+> >   [  271.947897]  __unregister_ftrace_function+0xa4/0xf0
+> >   [  271.948898]  unregister_ftrace_function+0x34/0x70
+> >   [  271.949857]  wakeup_tracer_reset+0x4c/0x100
+> >   [  271.950713]  tracing_set_tracer+0xd0/0x2b0
+> >   [  271.951552]  tracing_set_trace_write+0xe8/0x150
+> >   [  271.952477]  vfs_write+0xfc/0x284
+> >   [  271.953171]  ksys_write+0x7c/0x110
+> >   [  271.953874]  __arm64_sys_write+0x2c/0x40
+> >   [  271.954678]  invoke_syscall+0x5c/0x130
+> >   [  271.955442]  el0_svc_common.constprop.0+0x108/0x130
+> >   [  271.956435]  do_el0_svc+0x74/0x90
+> >   [  271.957124]  el0_svc+0x2c/0x90
+> >   [  271.957757]  el0t_64_sync_handler+0xa8/0x12c
+> >   [  271.958629]  el0t_64_sync+0x1a0/0x1a4
 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 9563d294f181..efe81fef25eb 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1623,9 +1623,6 @@ struct kvm_enc_region {
- #define KVM_S390_NORMAL_RESET	_IO(KVMIO,   0xc3)
- #define KVM_S390_CLEAR_RESET	_IO(KVMIO,   0xc4)
- 
--/* Available with KVM_CAP_XSAVE2 */
--#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
--
- struct kvm_s390_pv_sec_parm {
- 	__u64 origin;
- 	__u64 length;
-@@ -2047,4 +2044,7 @@ struct kvm_stats_desc {
- 
- #define KVM_GET_STATS_FD  _IO(KVMIO,  0xce)
- 
-+/* Available with KVM_CAP_XSAVE2 */
-+#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
-+
- #endif /* __LINUX_KVM_H */
--- 
-2.32.0
+On arm64 I bisected this down to:
 
+  7a30871b6a27de1a ("rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic queue selection")
+
+Which was going wrong because ilog2() rounds down, and so the shift was wrong
+for any nr_cpus that was not a power-of-two. Paul had already fixed that in
+rcu-next, and just sent a pull request to Linus:
+
+  https://lore.kernel.org/lkml/20220128143251.GA2398275@paulmck-ThinkPad-P17-Gen-1/
+
+With that applied, I no longer see these hangs.
+
+Does your s390 test machine have a non-power-of-two nr_cpus, and does that fix
+the issue for you?
+
+On arm64 the startup tests didn't seem to trigger the hang, but I was able to
+trigger the hang fairly reliably with the ftrace selftests, e.g.
+
+  $ for N in $(seq 1 10); do ./ftracetest test.d/00basic/basic2.tc; done
+
+... which prior to the fix, would hang between runs 2 to 5.
+
+Thanks,
+Mark.
+
+> that's interesting. On s390 i'm seeing the same problem in CI, but with
+> the startup ftrace tests. So that's likely not arm64 spacific.
+> 
+> On s390, the last messages from ftrace are [    5.663568] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+> [    5.667099] futex hash table entries: 65536 (order: 12, 16777216 bytes, vmalloc)
+> [    5.739549] Running postponed tracer tests:
+> [    5.740662] Testing tracer function: PASSED
+> [    6.194635] Testing dynamic ftrace: PASSED
+> [    6.471213] Testing dynamic ftrace ops #1: 
+> [    6.558445] (1 0 1 0 0) 
+> [    6.558458] (1 1 2 0 0) 
+> [    6.699135] (2 1 3 0 764347) 
+> [    6.699252] (2 2 4 0 766466) 
+> [    6.759857] (3 2 4 0 1159604)
+> [..] hangs here
+> 
+> The backtrace looks like this, which is very similar to the one above:
+> 
+> crash> bt 1
+> PID: 1      TASK: 80e68100          CPU: 133  COMMAND: "swapper/0"
+>  #0 [380004df808] __schedule at cda39f0e
+>  #1 [380004df880] schedule at cda3a488
+>  #2 [380004df8b0] schedule_timeout at cda41ef6
+>  #3 [380004df978] wait_for_completion at cda3bd0a
+>  #4 [380004df9d8] __wait_rcu_gp at ccdddd92
+>  #5 [380004dfa30] synchronize_rcu_tasks_generic at ccdde0aa
+>  #6 [380004dfad8] ftrace_shutdown at cce7b050
+>  #7 [380004dfb18] unregister_ftrace_function at cce7b192
+>  #8 [380004dfb50] trace_selftest_ops at cda1e0fa
+>  #9 [380004dfba0] run_tracer_selftest at cda1e4f2
+> #10 [380004dfc00] trace_selftest_startup_function at ce74355c
+> #11 [380004dfc58] run_tracer_selftest at cda1e2fc
+> #12 [380004dfc98] init_trace_selftests at ce742d30
+> #13 [380004dfcd0] do_one_initcall at cccdca16
+> #14 [380004dfd68] do_initcalls at ce72e776
+> #15 [380004dfde0] kernel_init_freeable at ce72ea60
+> #16 [380004dfe50] kernel_init at cda333fe
+> #17 [380004dfe68] __ret_from_fork at cccdf920
+> #18 [380004dfe98] ret_from_fork at cda444ca
+> 
+> I didn't had success reproducing it so far, but it is good to know that
+> this also happens when running the ftrace testsuite.
+> 
+> I have several crashdumps, so i could try to pull out some information
+> if someone tells me what to look for.
+> 
+> Thanks,
+> Sven

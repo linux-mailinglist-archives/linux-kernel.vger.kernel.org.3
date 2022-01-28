@@ -2,154 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870AD49F59B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B622649F5A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 09:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243304AbiA1Iv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 03:51:27 -0500
-Received: from smtpbg701.qq.com ([203.205.195.86]:45469 "EHLO
-        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238669AbiA1IvZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:51:25 -0500
-X-QQ-mid: bizesmtp7t1643359874tehmffseu
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 28 Jan 2022 16:51:08 +0800 (CST)
-X-QQ-SSF: 01400000002000B0E000B00A0000000
-X-QQ-FEAT: ddlUhmC0HYv/elwp/+QPGZxz4jGz15Y1XN3GwEBF4ubyMgVrtyD5gOWH+PuDE
-        l4+D6DZ6B+LcL1RZKO6j0xjPoKJSLjizYF8bDjBeWBHU/8mLXYGOS+6ANIdNYzNGy/jUBjQ
-        5A9LeEiI87cfLpn2dydwDG0u/4AUkkGL3JHbMZAeH1FWtFFpDNerUI9EAEGPUqGk5jHVUjg
-        dU8T/viSCAx7apwqCNGfgi7xJ7HoLzZxapZqNIePvrgRFKdWgCq2K9fOTVVEZhejX66TlPx
-        FybT4rA32tFnCtn22G91aEThDERmYtGVpwbCpgs3LEMUNtTwVZ37y2v0qSMWti0spU7znDi
-        nfeUoc5sgSM0TnJ8apfs6zjiLf/uWVcFtANxCaM
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH v2] kernel/time: move timer sysctls to its own file
-Date:   Fri, 28 Jan 2022 16:51:06 +0800
-Message-Id: <20220128085106.27031-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S1347320AbiA1IwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 03:52:12 -0500
+Received: from foss.arm.com ([217.140.110.172]:58788 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238669AbiA1IwM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 03:52:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FD9111D4;
+        Fri, 28 Jan 2022 00:52:11 -0800 (PST)
+Received: from [10.57.12.131] (unknown [10.57.12.131])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 10D553F793;
+        Fri, 28 Jan 2022 00:52:09 -0800 (PST)
+Subject: Re: [PATCH v2 1/2] cpufreq: Reintroduce ready() callback
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <f539ca2b-22c4-5708-ddd6-4b638dc0655d@arm.com>
+Date:   Fri, 28 Jan 2022 08:52:08 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
+In-Reply-To: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves the kernel/timer/timer.c respective sysctls to its own file.
+Hi Bjorn,
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
----
- include/linux/timer.h |  4 ----
- kernel/sysctl.c       | 11 -----------
- kernel/time/timer.c   | 27 +++++++++++++++++++++++++--
- 3 files changed, 25 insertions(+), 17 deletions(-)
+On 1/28/22 3:25 AM, Bjorn Andersson wrote:
+> This effectively revert '4bf8e582119e ("cpufreq: Remove ready()
+> callback")' (except the Chinese translation), in order to reintroduce
 
-diff --git a/include/linux/timer.h b/include/linux/timer.h
-index fda13c9d1256..793b6b7c5a3e 100644
---- a/include/linux/timer.h
-+++ b/include/linux/timer.h
-@@ -198,10 +198,6 @@ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
- 
- #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
- struct ctl_table;
--
--extern unsigned int sysctl_timer_migration;
--int timer_migration_handler(struct ctl_table *table, int write,
--			    void *buffer, size_t *lenp, loff_t *ppos);
- #endif
- 
- unsigned long __round_jiffies(unsigned long j, int cpu);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 5ae443b2882e..d6d133423e5d 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2292,17 +2292,6 @@ static struct ctl_table kern_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
--	{
--		.procname	= "timer_migration",
--		.data		= &sysctl_timer_migration,
--		.maxlen		= sizeof(unsigned int),
--		.mode		= 0644,
--		.proc_handler	= timer_migration_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
--#endif
- #ifdef CONFIG_BPF_SYSCALL
- 	{
- 		.procname	= "unprivileged_bpf_disabled",
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 85f1021ad459..ee462673f638 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -223,7 +223,7 @@ static void timer_update_keys(struct work_struct *work);
- static DECLARE_WORK(timer_update_work, timer_update_keys);
- 
- #ifdef CONFIG_SMP
--unsigned int sysctl_timer_migration = 1;
-+static unsigned int sysctl_timer_migration = 1;
- 
- DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
- 
-@@ -251,7 +251,8 @@ void timers_update_nohz(void)
- 	schedule_work(&timer_update_work);
- }
- 
--int timer_migration_handler(struct ctl_table *table, int write,
-+#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
-+static int timer_migration_handler(struct ctl_table *table, int write,
- 			    void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	int ret;
-@@ -264,6 +265,27 @@ int timer_migration_handler(struct ctl_table *table, int write,
- 	return ret;
- }
- 
-+static struct ctl_table timer_sysctl[] = {
-+	{
-+		.procname       = "timer_migration",
-+		.data           = &sysctl_timer_migration,
-+		.maxlen         = sizeof(unsigned int),
-+		.mode           = 0644,
-+		.proc_handler   = timer_migration_handler,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
-+	{}
-+};
-+
-+static int __init timer_sysctl_init(void)
-+{
-+	register_sysctl_init("kerneli/timer", timer_sysctl);
-+	return 0;
-+}
-+#else
-+#define timer_sysctl_init() do { } while (0)
-+#endif
- static inline bool is_timers_nohz_active(void)
- {
- 	return static_branch_unlikely(&timers_nohz_active);
-@@ -2022,6 +2044,7 @@ void __init init_timers(void)
- 	init_timer_cpus();
- 	posix_cputimers_init_work();
- 	open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
-+	timer_sysctl_init();
- }
- 
- /**
--- 
-2.20.1
+Is there something wrong with the Chinese translation that it has to be
+dropped? Someone has put an effort to create it, I'd assume (and also
+based on online translator) that it's correct.
 
+> the ready callback.
+> 
+> This is needed in order to be able to leave the thermal pressure
+> interrupts in the Qualcomm CPUfreq driver disabled during
+> initialization, so that it doesn't fire while related_cpus are still 0.
 
+If you are going to push the 2nd patch into stable tree, then you would
+also need this one.
 
-
+Regards,
+Lukasz

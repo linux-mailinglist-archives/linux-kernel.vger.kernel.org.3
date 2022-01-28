@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0D84A00AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6A44A00B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 20:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350817AbiA1TL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 14:11:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34858 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiA1TLZ (ORCPT
+        id S1350841AbiA1TMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 14:12:03 -0500
+Received: from relay027.a.hostedemail.com ([64.99.140.27]:63735 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233548AbiA1TMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 14:11:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0086B826E6;
-        Fri, 28 Jan 2022 19:11:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0644FC340E7;
-        Fri, 28 Jan 2022 19:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643397082;
-        bh=nEtRS4da8A0SmzOxcQ3RPNezBvSUb6/LzZRgw/9lq2E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QLCC6rhhkXfPKby3V9ApuHBOZplcpuZbCFe2cgd61MP9BTM4XlZ3NQnYkBDcOqHu8
-         5XZJMCAObah5qnRXeAu0Sajy4zjDdxf/v6oDFigBHbc2rNwbIXzmQdWo1br2zbWkJY
-         J4IngMjXyl+ra+iXhcb2m1jTOEYJPpT5PE70hm72qCKkB8CW3VYQm3q2zrqFg1K4oX
-         B26PzSKX7k62V1AevuEqiEkJ8cbK601B+/qhiUK/WVDVBFAVWsJFEvydbcrKcJJ8gO
-         1r9UsXgxcKa2x5ttkfK7P/L8rd2J4ns+ep/2beQpzl98t6krTaoTv7c+MnkU96InBS
-         /O8YHJDHOnrRA==
-Date:   Fri, 28 Jan 2022 19:11:17 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     =?utf-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
-Cc:     sfr@canb.auug.org.au, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
-        "lh.kuo" <lh.kuo@sunplus.com>
-Subject: Re: [PATCH -next] spi: Fix compiler warning for kernel test
-Message-ID: <YfQ/1aJzebxw2GS+@sirena.org.uk>
-References: <1643336485-10942-1-git-send-email-lhjeff911@gmail.com>
- <CAGcXWkzM6wbhNFLbYoijq7iS_76nYVod1ySFEDu-BRgnBokEQA@mail.gmail.com>
+        Fri, 28 Jan 2022 14:12:03 -0500
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id CA844607AA;
+        Fri, 28 Jan 2022 19:11:58 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 5CD0635;
+        Fri, 28 Jan 2022 19:11:43 +0000 (UTC)
+Message-ID: <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+From:   Joe Perches <joe@perches.com>
+To:     Tom Rix <trix@redhat.com>, Bart Van Assche <bvanassche@acm.org>,
+        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date:   Fri, 28 Jan 2022 11:11:55 -0800
+In-Reply-To: <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
+References: <20220127151945.1244439-1-trix@redhat.com>
+         <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
+         <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CLZg43y2TCF/HuSl"
-Content-Disposition: inline
-In-Reply-To: <CAGcXWkzM6wbhNFLbYoijq7iS_76nYVod1ySFEDu-BRgnBokEQA@mail.gmail.com>
-X-Cookie: Support your right to arm bears!!
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 5CD0635
+X-Spam-Status: No, score=-4.87
+X-Stat-Signature: 8653peheyynksmpug8otea4tq5jr88xn
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+tojhrHoxBG59eMTBbAjVdRtmbSPVhEWY=
+X-HE-Tag: 1643397103-49658
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-01-28 at 09:59 -0800, Tom Rix wrote:
+> On 1/28/22 9:42 AM, Bart Van Assche wrote:
+> > On 1/27/22 07:19, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > > 
+> > > checkpatch reports several hundred formatting errors.
+> > > Run these files through clang-format and knock off
+> > > some of them.
+> > 
+> > Isn't this the kind of patches that carries more risk than value?
 
---CLZg43y2TCF/HuSl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Risk for whitespace style reformatting patches is quite low.
 
-On Fri, Jan 28, 2022 at 10:47:41PM +0800, =E9=83=AD=E5=8A=9B=E8=B1=AA wrote:
-> Fix compiler warming for kernel test
->=20
-> Fixes: f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+Nominally, clang-format changes should not produce a different
+compiled object file unless __LINE__/__DATE__/__TIME__ style
+changes occur.
 
-Thanks for adding the signoff but this and the other two patches you
-just sent are breaking the tooling - they're sent with HMTL and it looks
-like the text parts have been corrupted with at least word wrapping:
+If it does, the clang-format tool is broken.
 
-> -int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfe=
-r)
-> +static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transf=
-er
-> *xfer)
+> > Additionally, this patch conflicts with a patch series that I plan to 
+> > post soon.
+[]
+> Long term, it would be good have a reliable way to automatically fix 
+> either new files or really broken old files.
 
-so the diff doesn't work as-is.  Can you check and resend please, your
-normal posting mechanism works fine?
+That's really a maintainer preference no?
 
---CLZg43y2TCF/HuSl
-Content-Type: application/pgp-signature; name="signature.asc"
+Especially so for any automation.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH0P9UACgkQJNaLcl1U
-h9BlpAf/arzffOmwe38Eq6+7Svb1SVF6H10OslQsbhpYHIXILWEO9vxbVKoEKPLm
-RrzE+eEN8U8ve8d3fjzZbLkUmH3jU0/dFvVI2J38mg3MoDsinq/PCdw0+XiUKNU7
-iUns6AcfJX0GdKSdmm6RwuxAchYUl9OrrvEWkoUG6hY2x42anDHTRyZ2kSPuwwtW
-WDNvaZg0UlKwTzuHBp0U55wXLkeML99mQo4Pu3GSaLwLssoWGKrhLGdA7rJKxGg+
-Uw+QVmhtAzOONj0n2P5SvdZ8PQ8mBJ69FTooUM+dEuTSGKw+7SW3+x1pTYNwhfRG
-CXL+IUmVC32tQAurF/FXqx2RxoSyTg==
-=jzUF
------END PGP SIGNATURE-----
-
---CLZg43y2TCF/HuSl--

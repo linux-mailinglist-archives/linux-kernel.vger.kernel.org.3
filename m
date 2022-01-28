@@ -2,88 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCA449FBBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5917649FBC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349250AbiA1Oc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:32:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55290 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349286AbiA1Ocw (ORCPT
+        id S1349258AbiA1OdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:33:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50106 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349242AbiA1OdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:32:52 -0500
+        Fri, 28 Jan 2022 09:33:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2534F61DF2;
-        Fri, 28 Jan 2022 14:32:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFCDC340E0;
-        Fri, 28 Jan 2022 14:32:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6105EB825E8;
+        Fri, 28 Jan 2022 14:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90865C340E0;
+        Fri, 28 Jan 2022 14:32:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643380371;
-        bh=q/+SlKWLFfFYnY/uUsQHFniHbZLaOmbQkD9uTXnzcP8=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=uGvtbRDIhUurwgW0lEL45dAWO9bElyol3mNLZmo6fexrxyfpXWE+r2kYzWUQzM5fh
-         DWU/5M5pKwFyT8nYzvpDW12ONzAkRnDVsfKNw4RPbxntORYF1M6ObAZcpPW0mszvoc
-         lZlJLs9r/+NYnh34zeZBKQAYa00BNg3VH0dDqARiRtiDXi+ptrHDHlI4Srm8fD+iBV
-         0Tn+Mk3oTmGHLF+xr0ivu6e2fJqCw8nRKj+WjcyJ99AYfVw+8gyxBLGsUMeyq41e7j
-         p4uNJzUPtjHJ5RJ6yBkLUuCsx1R6H4S7FeO0jKsw3cJZhe64OD2WH5BZgxTbfHICam
-         jMAsb1ZLyByJQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 55A1B5C010C; Fri, 28 Jan 2022 06:32:51 -0800 (PST)
-Date:   Fri, 28 Jan 2022 06:32:51 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        andrii.nakryiko@gmail.com, kafai@fb.com, neeraj.iitr10@gmail.com,
-        Mark.Rutland@arm.com, hca@linux.ibm.com, kernel-team@fb.com
-Subject: [GIT PULL] RCU Tasks fix for systems with non-power-of-two numbers
- of CPUs
-Message-ID: <20220128143251.GA2398275@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        s=k20201202; t=1643380379;
+        bh=/l2AYnhwkGK1vuSSo7mgSDc0f2wUI76MI5naeFuvPJo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XU0UL1TQ4cf+7VG6oppMhMOnRT7QodhTVa2Qm9zSBYaUMvPlwa2EV45HAsGn44YG2
+         g0aGOX/+kH6shchAVwnzgM2oSXKd7CDYwIhCgs1t8TBBl13fE68YYySnduuJYTpXOZ
+         cJShV521Oa8iNY4ZLu6UM4ZewJ3uKn9t8wapfRzM60Tg615/iJx0foaXzqFE3K0BLt
+         KvuXza1xswJxkdvqLhy9Bd36cwUewZtSt14CxPlKW6inpyn8eebi9YSO59YKesXRSr
+         LD/3UkJpAYVpV9kS0LmLip9dtwtCQSYK86edchGQuSPYERCkp6E77AzrMk3dclIUj+
+         cJn3ZvbF7r7Jg==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH v6 05/10] ARM: rethook: Add rethook arm implementation
+Date:   Fri, 28 Jan 2022 23:32:53 +0900
+Message-Id: <164338037327.2429999.13110792485526743529.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <164338031590.2429999.6203979005944292576.stgit@devnote2>
+References: <164338031590.2429999.6203979005944292576.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus,
+Add rethook arm implementation. Most of the code has been copied from
+kretprobes on arm.
 
-This pull request fixes a brown-paper-bag bug in RCU tasks that
-causes things like BPF and ftrace to fail miserably on systems with
-non-power-of-two numbers of CPUs.
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ Changes in v5:
+  - Fix build error when !CONFIG_KRETPROBES
+---
+ arch/arm/Kconfig                  |    1 +
+ arch/arm/include/asm/stacktrace.h |    4 +-
+ arch/arm/kernel/stacktrace.c      |    6 +++
+ arch/arm/probes/Makefile          |    1 +
+ arch/arm/probes/rethook.c         |   71 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 81 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm/probes/rethook.c
 
-And yes, I will be adding non-power-of-two scenarios to rcutorture,
-in case you were wondering.  But that can wait for v5.19.
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index c2724d986fa0..2fe24bbca618 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -106,6 +106,7 @@ config ARM
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NMI
+ 	select HAVE_OPTPROBES if !THUMB2_KERNEL
++	select HAVE_RETHOOK
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
+diff --git a/arch/arm/include/asm/stacktrace.h b/arch/arm/include/asm/stacktrace.h
+index 8f54f9ad8a9b..babed1707ca8 100644
+--- a/arch/arm/include/asm/stacktrace.h
++++ b/arch/arm/include/asm/stacktrace.h
+@@ -14,7 +14,7 @@ struct stackframe {
+ 	unsigned long sp;
+ 	unsigned long lr;
+ 	unsigned long pc;
+-#ifdef CONFIG_KRETPROBES
++#if defined(CONFIG_KRETPROBES) || defined(CONFIG_RETHOOK)
+ 	struct llist_node *kr_cur;
+ 	struct task_struct *tsk;
+ #endif
+@@ -27,7 +27,7 @@ void arm_get_current_stackframe(struct pt_regs *regs, struct stackframe *frame)
+ 		frame->sp = regs->ARM_sp;
+ 		frame->lr = regs->ARM_lr;
+ 		frame->pc = regs->ARM_pc;
+-#ifdef CONFIG_KRETPROBES
++#if defined(CONFIG_KRETPROBES) || defined(CONFIG_RETHOOK)
+ 		frame->kr_cur = NULL;
+ 		frame->tsk = current;
+ #endif
+diff --git a/arch/arm/kernel/stacktrace.c b/arch/arm/kernel/stacktrace.c
+index 75e905508f27..f509c6be4f57 100644
+--- a/arch/arm/kernel/stacktrace.c
++++ b/arch/arm/kernel/stacktrace.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <linux/export.h>
+ #include <linux/kprobes.h>
++#include <linux/rethook.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
+ #include <linux/stacktrace.h>
+@@ -66,6 +67,11 @@ int notrace unwind_frame(struct stackframe *frame)
+ 	frame->sp = *(unsigned long *)(fp - 8);
+ 	frame->pc = *(unsigned long *)(fp - 4);
+ #endif
++#ifdef CONFIG_RETHOOK
++	if (is_rethook_trampoline(frame->pc))
++		frame->pc = rethook_find_ret_addr(frame->tsk, frame->fp,
++						  &frame->kr_cur);
++#endif
+ #ifdef CONFIG_KRETPROBES
+ 	if (is_kretprobe_trampoline(frame->pc))
+ 		frame->pc = kretprobe_find_ret_addr(frame->tsk,
+diff --git a/arch/arm/probes/Makefile b/arch/arm/probes/Makefile
+index 8b0ea5ace100..10c083a22223 100644
+--- a/arch/arm/probes/Makefile
++++ b/arch/arm/probes/Makefile
+@@ -6,3 +6,4 @@ obj-$(CONFIG_KPROBES)		+= decode-thumb.o
+ else
+ obj-$(CONFIG_KPROBES)		+= decode-arm.o
+ endif
++obj-$(CONFIG_RETHOOK)		+= rethook.o
+diff --git a/arch/arm/probes/rethook.c b/arch/arm/probes/rethook.c
+new file mode 100644
+index 000000000000..adc16cdf358a
+--- /dev/null
++++ b/arch/arm/probes/rethook.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * arm implementation of rethook. Mostly copied from arch/arm/probes/kprobes/core.c
++ */
++
++#include <linux/kprobes.h>
++#include <linux/rethook.h>
++
++/* Called from arch_rethook_trampoline */
++static __used unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs)
++{
++	return rethook_trampoline_handler(regs, regs->ARM_fp);
++}
++NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
++
++/*
++ * When a rethook'ed function returns, it returns to arch_rethook_trampoline
++ * which calls rethook callback. We construct a struct pt_regs to
++ * give a view of registers r0-r11, sp, lr, and pc to the user
++ * return-handler. This is not a complete pt_regs structure, but that
++ * should be enough for stacktrace from the return handler with or
++ * without pt_regs.
++ */
++void __naked arch_rethook_trampoline(void)
++{
++	__asm__ __volatile__ (
++#ifdef CONFIG_FRAME_POINTER
++		"ldr	lr, =arch_rethook_trampoline	\n\t"
++	/* this makes a framepointer on pt_regs. */
++#ifdef CONFIG_CC_IS_CLANG
++		"stmdb	sp, {sp, lr, pc}	\n\t"
++		"sub	sp, sp, #12		\n\t"
++		/* In clang case, pt_regs->ip = lr. */
++		"stmdb	sp!, {r0 - r11, lr}	\n\t"
++		/* fp points regs->r11 (fp) */
++		"add	fp, sp,	#44		\n\t"
++#else /* !CONFIG_CC_IS_CLANG */
++		/* In gcc case, pt_regs->ip = fp. */
++		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
++		"sub	sp, sp, #16		\n\t"
++		"stmdb	sp!, {r0 - r11}		\n\t"
++		/* fp points regs->r15 (pc) */
++		"add	fp, sp, #60		\n\t"
++#endif /* CONFIG_CC_IS_CLANG */
++#else /* !CONFIG_FRAME_POINTER */
++		"sub	sp, sp, #16		\n\t"
++		"stmdb	sp!, {r0 - r11}		\n\t"
++#endif /* CONFIG_FRAME_POINTER */
++		"mov	r0, sp			\n\t"
++		"bl	arch_rethook_trampoline_callback	\n\t"
++		"mov	lr, r0			\n\t"
++		"ldmia	sp!, {r0 - r11}		\n\t"
++		"add	sp, sp, #16		\n\t"
++#ifdef CONFIG_THUMB2_KERNEL
++		"bx	lr			\n\t"
++#else
++		"mov	pc, lr			\n\t"
++#endif
++		: : : "memory");
++}
++NOKPROBE_SYMBOL(arch_rethook_trampoline);
++
++void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs)
++{
++	rh->ret_addr = regs->ARM_lr;
++	rh->frame = regs->ARM_fp;
++
++	/* Replace the return addr with trampoline addr. */
++	regs->ARM_lr = (unsigned long)arch_rethook_trampoline;
++}
++NOKPROBE_SYMBOL(arch_rethook_prepare);
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu-urgent.2022.01.26a
-
-for you to fetch changes up to da123016ca8cb5697366c0b2dd55059b976e67e4:
-
-  rcu-tasks: Fix computation of CPU-to-list shift counts (2022-01-26 13:04:05 -0800)
-
-----------------------------------------------------------------
-Urgent RCU pull request for v5.17
-
-This pull request fixes a math error added in 7a30871b6a27 ("rcu-tasks:
-Introduce ->percpu_enqueue_shift for dynamic queue selection') during the
-v5.17 merge window.  This commit works correctly only on systems with a
-power-of-two number of CPUs, which just so happens to be the kind that
-rcutorture always uses by default.
-
-This pull request fixes the math so that things also work on systems
-that don't happen to have a power-of-two number of CPUs.
-
-----------------------------------------------------------------
-Paul E. McKenney (1):
-      rcu-tasks: Fix computation of CPU-to-list shift counts
-
- kernel/rcu/tasks.h | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)

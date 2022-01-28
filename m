@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B8549F29D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3518349F29E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346099AbiA1Ey2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 23:54:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24348 "EHLO
+        id S1346105AbiA1Eye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 23:54:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58865 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231566AbiA1Ey1 (ORCPT
+        by vger.kernel.org with ESMTP id S1346106AbiA1Eyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 23:54:27 -0500
+        Thu, 27 Jan 2022 23:54:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643345666;
+        s=mimecast20190719; t=1643345672;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=resJk/tEdOzCb4HMrYNBbb0HwztWbu+r7ZIeropsSuw=;
-        b=cPXPRSe5IbPGnDT0ROKoTPDHgo+w78iRFAkX25HO1ZVc5dt6IXq0Z5DwFsCjV1XrzMW9aA
-        e8xjQQL2XNrKDRvKx45IzmZbAP75a5kgY4Ya1diOtlT771Yp7Xc3N/9CSPYgxSTAnsZHQt
-        ws1nbVqRh9reZICW0iSBJ2RE9fD5+h0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r0OLEdIrUqYcaY6DYkFVTZPLD4+1hLYjm8QOXt2Ctgs=;
+        b=DqcQDMxcgN4MZAcskziob3S2ldDRW8aAWg5MhNyrtNGd6+LLSbSA11/3vLnayDB6cR7fj7
+        AhHOTz4tjhzWYCEMrHZaX6kYg7tumHUoXCGUEogW0qZAmvjiN2cOfprURzUYb1y3PafehF
+        V+fgxVIze1zHMHzzxCWcelQWr14AvLQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-672-VQmb2JphPjqMoNcEdBulKA-1; Thu, 27 Jan 2022 23:54:25 -0500
-X-MC-Unique: VQmb2JphPjqMoNcEdBulKA-1
-Received: by mail-wm1-f71.google.com with SMTP id s1-20020a1ca901000000b0034ece94dd8cso5308144wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 20:54:25 -0800 (PST)
+ us-mta-642-fi-u0vRNOVamLqRpHkrtrg-1; Thu, 27 Jan 2022 23:54:30 -0500
+X-MC-Unique: fi-u0vRNOVamLqRpHkrtrg-1
+Received: by mail-wr1-f70.google.com with SMTP id v28-20020adfa1dc000000b001dd1cb24081so1782514wrv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 20:54:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=resJk/tEdOzCb4HMrYNBbb0HwztWbu+r7ZIeropsSuw=;
-        b=5sJpnoKTTXjtqJJSgt0GautmT6eZZHyu8zEkOnKT619JSKXLzVdotTiMFJvCIHVW2q
-         umAbY92wUD5f6/gGwwdPi+8kSNso3ccjKj9EFxYKfOW4MtG7gLp+6i2ZVl1N71CgbwYT
-         lN7G9sFo114XSY80prBQ7Ar76R/xh4W8KHnWJguOgK0T+NPKsh0MdUc5Ky6KMtIyl2KD
-         W1f4Kyr4XHU/jS6v8ZT86Hf7oY8CCWjmLGtyZUtANHUDmjWjCOACHfX/N9Y/duJZFtKx
-         ruTpwyTQ0140BVtGuYlTTczp2ZiJvVpckBN2qF1+WFgqxidt8uVSfG5O/g5Xapf1qkco
-         kGMA==
-X-Gm-Message-State: AOAM533sFpPZzVrRSK4W+Uzt1LZaCrsIS3lJjM2XKfZLxSbb1EJG7Zt5
-        8EIEhGFd3Sl233WFyWaPLg5/Yhos5zZksHEG96mZWSI7TZboEiVvEhvM9/h5gLyMJSgk2oK2oWS
-        ZDUHo59Xw4cDqWohRBtcWPvSw
-X-Received: by 2002:a1c:a98f:: with SMTP id s137mr14457872wme.51.1643345664235;
-        Thu, 27 Jan 2022 20:54:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz/cbngk6JPIWe7eDn77j5uX7Q7CZTQwNG84coFmrPmCGvDYAJ1k7y6Mm20IH62h5mnyIOGoQ==
-X-Received: by 2002:a1c:a98f:: with SMTP id s137mr14457846wme.51.1643345663947;
-        Thu, 27 Jan 2022 20:54:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=r0OLEdIrUqYcaY6DYkFVTZPLD4+1hLYjm8QOXt2Ctgs=;
+        b=CbaRXXiGBHAbgqcU7qKroTw+S86u5l8CrEB2wvsIjQTiFtEyWdqWMK4jayJ/dHUMW4
+         pxnc4Jznzy5z0tNHPFONBhEP2ST51Rkk+CKstWtlvPd1x2uw6yMFKVCeA7zw791Knc98
+         vGrkRboHy5ayIMX9AXi+uoxPNSE0o78CxU1oGfMooh3QBxhY9LH7SCvgbb7+cvJTm15k
+         za5kHW7qTl2wRN6VywZi9HIK5VKc8ePly9Qj4qaTVl4cr5SJEPUkq3ID/3icIkHsnIIy
+         olI2v3oE4TgIT2W11xEKuKUX4WvOP+fEgjvZKp3AamWv+TpK18KXafdfAAZjsjZ72qid
+         8/NQ==
+X-Gm-Message-State: AOAM530vH2JFvQNPNKItbhChU3s4tZDa8iubfKmWROLnIFyZ0PNZrrcB
+        xw5krZNGmN4QXszVVxo2jjdxkSQ1VTCvWvNW2UCiCXqcxjLotPtOeqtsxMlwKlevY21sjr6ofOR
+        03VtuKvCiCzhxpBYOv5cTLZqP
+X-Received: by 2002:a5d:6da4:: with SMTP id u4mr5486419wrs.611.1643345669617;
+        Thu, 27 Jan 2022 20:54:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzNjlbcr557L0JzcCx8cJn1ypoGGBxeXy3L3cPs1G3/t3aoCJ8N911EUy9hAc8Wvze/o8vnfQ==
+X-Received: by 2002:a5d:6da4:: with SMTP id u4mr5486406wrs.611.1643345669412;
+        Thu, 27 Jan 2022 20:54:29 -0800 (PST)
 Received: from localhost.localdomain ([64.64.123.9])
-        by smtp.gmail.com with ESMTPSA id i13sm814014wrf.3.2022.01.27.20.54.18
+        by smtp.gmail.com with ESMTPSA id i13sm814014wrf.3.2022.01.27.20.54.24
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 27 Jan 2022 20:54:23 -0800 (PST)
+        Thu, 27 Jan 2022 20:54:29 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     peterx@redhat.com, Alistair Popple <apopple@nvidia.com>,
@@ -63,59 +64,174 @@ Cc:     peterx@redhat.com, Alistair Popple <apopple@nvidia.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         Yang Shi <shy828301@gmail.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: [PATCH v3 0/4] mm: Rework zap ptes on swap entries
-Date:   Fri, 28 Jan 2022 12:54:08 +0800
-Message-Id: <20220128045412.18695-1-peterx@redhat.com>
+Subject: [PATCH v3 1/4] mm: Don't skip swap entry even if zap_details specified
+Date:   Fri, 28 Jan 2022 12:54:09 +0800
+Message-Id: <20220128045412.18695-2-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220128045412.18695-1-peterx@redhat.com>
+References: <20220128045412.18695-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v3:
-- Patch 1:
-  - Fix !non_swap_entry() case and hwpoison case too [Hugh]
-  - Added reproducer program in commit message
-  - Introduced should_zap_cows() helper
-- Added patch 2, "mm: Rename zap_skip_check_mapping() to should_zap_page()"
-- Added patch 3, "mm: Change zap_details.zap_mapping into even_cows"
+The "details" pointer shouldn't be the token to decide whether we should skip
+swap entries.  For example, when the user specified details->zap_mapping==NULL,
+it means the user wants to zap all the pages (including COWed pages), then we
+need to look into swap entries because there can be private COWed pages that
+was swapped out.
 
-RFC V2: https://lore.kernel.org/lkml/20211115134951.85286-1-peterx@redhat.com
-RFC V1: https://lore.kernel.org/lkml/20211110082952.19266-1-peterx@redhat.com
+Skipping some swap entries when details is non-NULL may lead to wrongly leaving
+some of the swap entries while we should have zapped them.
 
-Thanks to Hugh's help, we're pretty clear on the history of zap_details and
-swap skipping behavior, hence dropping the RFC tag.
+A reproducer of the problem:
 
-Patch 1 should fix a long standing bug for zap_pte_range() on zap_details
-usage.  The risk is we could have some swap entries skipped while we should
-have zapped them.
+===8<===
+        #define _GNU_SOURCE         /* See feature_test_macros(7) */
+        #include <stdio.h>
+        #include <assert.h>
+        #include <unistd.h>
+        #include <sys/mman.h>
+        #include <sys/types.h>
 
-Migration entries are not the major concern because file backed memory always
-zap in the pattern that "first time without page lock, then re-zap with page
-lock" hence the 2nd zap will always make sure all migration entries are already
-recovered.
+        int page_size;
+        int shmem_fd;
+        char *buffer;
 
-However there can be issues with real swap entries got skipped errornoously.
-There's a reproducer provided in commit message of patch 1 for that.
+        void main(void)
+        {
+                int ret;
+                char val;
 
-Patch 2-4 are cleanups that are based on patch 1.  After the whole patchset
-applied, we should have a very clean view of zap_pte_range().
+                page_size = getpagesize();
+                shmem_fd = memfd_create("test", 0);
+                assert(shmem_fd >= 0);
 
-Only patch 1 needs to be backported to stable.
+                ret = ftruncate(shmem_fd, page_size * 2);
+                assert(ret == 0);
 
-Please review, thanks.
+                buffer = mmap(NULL, page_size * 2, PROT_READ | PROT_WRITE,
+                                MAP_PRIVATE, shmem_fd, 0);
+                assert(buffer != MAP_FAILED);
 
-Peter Xu (4):
-  mm: Don't skip swap entry even if zap_details specified
-  mm: Rename zap_skip_check_mapping() to should_zap_page()
-  mm: Change zap_details.zap_mapping into even_cows
-  mm: Rework swap handling of zap_pte_range
+                /* Write private page, swap it out */
+                buffer[page_size] = 1;
+                madvise(buffer, page_size * 2, MADV_PAGEOUT);
 
- mm/memory.c | 85 +++++++++++++++++++++++++++++++----------------------
- 1 file changed, 50 insertions(+), 35 deletions(-)
+                /* This should drop private buffer[page_size] already */
+                ret = ftruncate(shmem_fd, page_size);
+                assert(ret == 0);
+                /* Recover the size */
+                ret = ftruncate(shmem_fd, page_size * 2);
+                assert(ret == 0);
 
+                /* Re-read the data, it should be all zero */
+                val = buffer[page_size];
+                if (val == 0)
+                        printf("Good\n");
+                else
+                        printf("BUG\n");
+        }
+===8<===
+
+We don't need to touch up the pmd path, because pmd never had a issue with swap
+entries.  For example, shmem pmd migration will always be split into pte level,
+and same to swapping on anonymous.
+
+Add another helper should_zap_cows() so that we can also check whether we
+should zap private mappings when there's no page pointer specified.
+
+This patch drops that trick, so we handle swap ptes coherently.  Meanwhile we
+should do the same check upon migration entry, hwpoison entry and genuine swap
+entries too.  To be explicit, we should still remember to keep the private
+entries if even_cows==false, and always zap them when even_cows==true.
+
+The issue seems to exist starting from the initial commit of git.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/memory.c | 45 ++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 36 insertions(+), 9 deletions(-)
+
+diff --git a/mm/memory.c b/mm/memory.c
+index c125c4969913..4bfeaca7cbc7 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1313,6 +1313,17 @@ struct zap_details {
+ 	struct folio *single_folio;	/* Locked folio to be unmapped */
+ };
+ 
++/* Whether we should zap all COWed (private) pages too */
++static inline bool should_zap_cows(struct zap_details *details)
++{
++	/* By default, zap all pages */
++	if (!details)
++		return true;
++
++	/* Or, we zap COWed pages only if the caller wants to */
++	return !details->zap_mapping;
++}
++
+ /*
+  * We set details->zap_mapping when we want to unmap shared but keep private
+  * pages. Return true if skip zapping this page, false otherwise.
+@@ -1320,11 +1331,15 @@ struct zap_details {
+ static inline bool
+ zap_skip_check_mapping(struct zap_details *details, struct page *page)
+ {
+-	if (!details || !page)
++	/* If we can make a decision without *page.. */
++	if (should_zap_cows(details))
+ 		return false;
+ 
+-	return details->zap_mapping &&
+-		(details->zap_mapping != page_rmapping(page));
++	/* E.g. zero page */
++	if (!page)
++		return false;
++
++	return details->zap_mapping != page_rmapping(page);
+ }
+ 
+ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+@@ -1405,17 +1420,29 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			continue;
+ 		}
+ 
+-		/* If details->check_mapping, we leave swap entries. */
+-		if (unlikely(details))
+-			continue;
+-
+-		if (!non_swap_entry(entry))
++		if (!non_swap_entry(entry)) {
++			/*
++			 * If this is a genuine swap entry, then it must be an
++			 * private anon page.  If the caller wants to skip
++			 * COWed pages, ignore it.
++			 */
++			if (!should_zap_cows(details))
++				continue;
+ 			rss[MM_SWAPENTS]--;
+-		else if (is_migration_entry(entry)) {
++		} else if (is_migration_entry(entry)) {
+ 			struct page *page;
+ 
+ 			page = pfn_swap_entry_to_page(entry);
++			if (zap_skip_check_mapping(details, page))
++				continue;
+ 			rss[mm_counter(page)]--;
++		} else if (is_hwpoison_entry(entry)) {
++			/* If the caller wants to skip COWed pages, ignore it */
++			if (!should_zap_cows(details))
++				continue;
++		} else {
++			/* We should have covered all the swap entry types */
++			WARN_ON_ONCE(1);
+ 		}
+ 		if (unlikely(!free_swap_and_cache(entry)))
+ 			print_bad_pte(vma, addr, ptent, NULL);
 -- 
 2.32.0
 

@@ -2,176 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DE249FCC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F5149FCCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349530AbiA1P2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:28:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:49664 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349368AbiA1P2a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:28:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6A1312FC;
-        Fri, 28 Jan 2022 07:28:29 -0800 (PST)
-Received: from [10.57.68.47] (unknown [10.57.68.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DB403F793;
-        Fri, 28 Jan 2022 07:28:28 -0800 (PST)
-Message-ID: <136be111-c75e-48b2-caef-cbf4900b6ce1@arm.com>
-Date:   Fri, 28 Jan 2022 15:28:23 +0000
+        id S1349545AbiA1P3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349368AbiA1P3B (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 10:29:01 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D3BC061714;
+        Fri, 28 Jan 2022 07:29:01 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p27so12549947lfa.1;
+        Fri, 28 Jan 2022 07:29:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=N4J//Mo9xUttrK0yF032bWbn0KZLi4C3IbfSaVZ898E=;
+        b=nMCCJwPleajqB6C9nJrLYmYyxvYJDjsPBaeAckGvpvNJDlogXVNDX5CMorLz8EkXwK
+         tOGGJLbUBQ5vVXgmuATMWVHVp6zRhthE/Z4c3fXvDzusCCvuSOLi2PeQqPPynXDiEqJa
+         wpkWD/KytYGfhbLSPodHYTZ193CEPYVnW8yYjqop2VUUI19OJJSNODw9+MHhdzD6OI8n
+         reTz6lWlg50Q6pG/G+MdGVZEs7E/JstVtaC73N7E3+wALEq524Y3vPRmf0zJQjvvlg5R
+         cR0EZAoEAIZxSDSUjdrrZQayHItW8C9PmvfUhNyD52CwO42YQFOTC1TF8xhvGNG+gp0E
+         rLPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N4J//Mo9xUttrK0yF032bWbn0KZLi4C3IbfSaVZ898E=;
+        b=ph2LkScdvjhnfKaTjEarW2R63Nvs8ycJqHuJIRLv5hUWHxGPa7c7gDEnwxsPW+UViA
+         +f7GrCVyKklqPXeux47iYZoLQJhnxO7qeGsVsNpQNpw68eRm4ZsuwmAYQpjALWj+recc
+         /lSmDgMhuXqo68QBjvJWU6ivOsYjb7U/BOwZyvJzhgQBCauAH3ux0HDQICP2lzB67YY7
+         8ElHfICV9jXMbdCqSWvQKbWY7HkN/KPf0HNmr99kZvRnyVGcP2oKNBH1l/jujgaJRMMY
+         N2sjGcsiU/ggS13Ciw3Sw2rTZxbR/T/8gzNUCJCWeQtVpOvIHcOsUidRvM7OqvjEDq0k
+         xoBw==
+X-Gm-Message-State: AOAM530RwKCIcHaPpXbjVRhkAtVBytlG62jJ7I3VQ3AREGp3y43wQ09m
+        01HARGi5SDaXnCifDeKBaQo=
+X-Google-Smtp-Source: ABdhPJyQ9v4PdBJzaie5bbiSmHbBxFsVgyJTcSUuDvUITdCGgIiqmLYFQd/isDs0HBzExLgZ/Z5wJg==
+X-Received: by 2002:a05:6512:3a96:: with SMTP id q22mr6579539lfu.521.1643383739523;
+        Fri, 28 Jan 2022 07:28:59 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.86.67])
+        by smtp.gmail.com with ESMTPSA id z11sm2563451lfu.106.2022.01.28.07.28.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 07:28:58 -0800 (PST)
+Subject: Re: [PATCH 4/7] mfd: hi6421-spmi-pmic: Use generic_handle_irq_safe().
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-5-bigeasy@linutronix.de>
+ <44b42c37-67a4-1d20-e2ff-563d4f9bfae2@gmail.com>
+ <YfPwqfmrWEPm/9K0@google.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <0daa924f-790c-cdc7-a1c0-4eb91917e084@gmail.com>
+Date:   Fri, 28 Jan 2022 18:28:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [RFC PATCH] ACPI / amba: Skip creating amba device when
- associated cpu is not online
-Content-Language: en-GB
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        chenxiang <chenxiang66@hisilicon.com>, linux@armlinux.org.uk,
-        vkoul@kernel.org, linux-arm-kernel@lists.infradead.org,
-        mathieu.poirier@linaro.org
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, Anshuman Khandual <anshuman.khandual@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
- <2f3c5e6b-7000-8fa2-21f7-3b0c3fb66ae3@arm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <2f3c5e6b-7000-8fa2-21f7-3b0c3fb66ae3@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfPwqfmrWEPm/9K0@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-28 11:00, Suzuki K Poulose wrote:
-> Hi Xiang
-> 
-> On 07/01/2022 08:41, chenxiang wrote:
->> From: Xiang Chen <chenxiang66@hisilicon.com>
->>
->> If not up all the cpus with command line "maxcpus=x", system will be
->> blocked.
->> We find that some amba devices such as ETM devices, are associated with
->> special cpus, and if the cpu is not up, the register of associated device
->> is not allowed to access. BIOS reports all the ETM device nodes and a
->> amba device is created for every ETM device, so even if one cpu is not 
->> up,
->> the amba device will still be created for the associated device, and also
->> the register of device (pid and cid) will be accessed when adding amba
->> device which will cause the issue.
->> To fix it, skip creating amba device if it is associated with a cpu which
->> is not online.
-> 
-> I understand the issue. We do not have an issue at least on DT based 
-> platforms with a similar environment (Juno). The key is the power 
-> management for the components.
-> 
-> There are two separate issues at play here :
-> 
-> 1) Power management with ACPI. I believe there is a solution in progress
-> to address this.
-> 
-> 2) The ETM is in the same power domain as that of the CPU and normal 
-> device power management may not work without the CPU being online.
-> 
-> 3) Additionally we have other issue of supporting system instructions
-> with ACPI, which do not appear on the AMBA bus.
-> 
-> Considering all of these, the ideal solution is to :
-> 
-> 1) Implement power management for ACPI, which is anyway in progress
->    (at least for SCMI based systems)
-> 2) Move the ETM driver away from the AMBA framework. That would make
->     the CPU online problem and the (3) above easier to solve.
->     Anshuman is going to look into this.
-> 
-> In the meantime, we could have this temporary fix in and solve it
-> forever by moving away from the AMBA.
+On 1/28/22 4:33 PM, Lee Jones wrote:
 
-Out of curiosity, what happens when you boot with "maxcpus=" and then 
-manually bring up the extra cpus from userspace later? Is there a chance 
-that tracing will explode if some online CPUs have ETM initialised but 
-others don't?
-
-Robin.
-
+>>> generic_handle_irq() is invoked from a regular interrupt service
+>>> routing. This handler will become a forced-threaded handler on
 >>
->> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
->> ---
->>   drivers/acpi/acpi_amba.c | 36 ++++++++++++++++++++++++++++++++++++
->>   1 file changed, 36 insertions(+)
+>>    s/routing/routine/?
 >>
->> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
->> index ab8a4e0191b1..2369198f734b 100644
->> --- a/drivers/acpi/acpi_amba.c
->> +++ b/drivers/acpi/acpi_amba.c
->> @@ -16,6 +16,7 @@
->>   #include <linux/ioport.h>
->>   #include <linux/kernel.h>
->>   #include <linux/module.h>
->> +#include <acpi/processor.h>
->>   #include "internal.h"
->> @@ -45,6 +46,35 @@ static void amba_register_dummy_clk(void)
->>       clk_register_clkdev(amba_dummy_clk, "apb_pclk", NULL);
->>   }
->> +static int acpi_handle_to_cpuid(acpi_handle handle)
->> +{
->> +    int cpu = -1;
->> +    struct acpi_processor *pr;
->> +
->> +    for_each_possible_cpu(cpu) {
->> +        pr = per_cpu(processors, cpu);
->> +        if (pr && pr->handle == handle)
->> +            break;
->> +    }
->> +
->> +    return cpu;
->> +}
->> +
+>>> PREEMPT_RT and will be invoked with enabled interrupts. The
+>>> generic_handle_irq() must be invoked with disabled interrupts in order
+>>> to avoid deadlocks.
+>>>
+>>> Instead of manually disabling interrupts before invoking use
+>>> generic_handle_irq() which can be invoked with enabled and disabled
+>>> interrupts.
+>>>
+>>> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>> [...]
+>>
+>> MBR, Sergey
 > 
-> Please could we reuse the function in coresight-platform.c ?
-> i.e, move it to a generic location and share it, rather than
-> duplicating it ?
-> 
-> 
->> +static int acpi_dev_get_cpu(struct acpi_device *adev)
->> +{
->> +    acpi_handle cpu_handle;
->> +    acpi_status status;
->> +    int cpu;
->> +
->> +    status = acpi_get_parent(adev->handle, &cpu_handle);
->> +    if (ACPI_FAILURE(status))
->> +        return -1;
->> +    cpu = acpi_handle_to_cpuid(cpu_handle);
->> +    if (cpu >= nr_cpu_ids)
->> +        return -1;
->> +    return cpu;
->> +}
->> +
->>   static int amba_handler_attach(struct acpi_device *adev,
->>                   const struct acpi_device_id *id)
->>   {
->> @@ -54,11 +84,17 @@ static int amba_handler_attach(struct acpi_device 
->> *adev,
->>       bool address_found = false;
->>       int irq_no = 0;
->>       int ret;
->> +    int cpu;
->>       /* If the ACPI node already has a physical device attached, skip 
->> it. */
->>       if (adev->physical_node_count)
->>           return 0;
->> +    /* If the cpu associated with the device is not online, skip it. */
->> +    cpu = acpi_dev_get_cpu(adev);
->> +    if (cpu >= 0 && !cpu_online(cpu))
->> +        return 0;
->> +
-> 
-> Except for the comment above, the patch looks good to me.
-> 
-> Suzuki
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> What does that mean?
+
+   That means that I think you had a typo in the word "routing".
+The s/// comes from vim, I think --where it means search and replace.
+
+MBR, Sergey

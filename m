@@ -2,421 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 501FF49F7D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A8049F7DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348016AbiA1LII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:08:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48472 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244104AbiA1LIG (ORCPT
+        id S1348061AbiA1LIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348022AbiA1LI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:08:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643368086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r/Z89cDjHpntAHUD/RSb3guWlLGmU+c1d1Z61HpvZ50=;
-        b=UkPnP3h2J7+RCf/rNNCulBU9MttB3/Kqgxljmva3Un02NVjhWxixJ/LuD8lhCgfjlKozXm
-        teoRiyP8k5nD5WvYcDxnlUV6cb82Ezq/aGEw3dnYh2aHgImZVgCvbx4smRHWclmQK/pJGp
-        dfYFnGSQuSGxWn2tOM0zxxZPSmoloCM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-MG5rN4g_PGmiVJU1Jx7V7A-1; Fri, 28 Jan 2022 06:08:04 -0500
-X-MC-Unique: MG5rN4g_PGmiVJU1Jx7V7A-1
-Received: by mail-wm1-f70.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so5714476wmb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:08:04 -0800 (PST)
+        Fri, 28 Jan 2022 06:08:27 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA0C06174A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:08:26 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id i62so17327510ybg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lO9i/7tiw1jg/f73d/YFPz8lyvK5KGNvKNKqwKL/0U4=;
+        b=sbUe+/c/fiMN9HVja46pA1A4kyF8x+DRfNpGmZNZxnNZk7z+qscTQKGlGWtJObsTm5
+         Q1uGNvFJk0Lz6EYy7+9iM32BkGcX16w0H12aVFEukSJQWf4HCs+/hlLOWhSZiJKfUi1y
+         M4XErpiI80jOheP5RlWrvX02Rp8DePtRLSHoP09Y37iXiPN3Jdr8lY7XaihXyhZJobDq
+         iM6Gbr6Rldij+0csWcxOo3FHrBM6xkQ9CCchhW1GXLg4zrsh0qA0C8nmFH7ujVh2cLr2
+         9TbGHDwi00jHynBQsqjmA2gXU9ewrUofndlDOKsqfXRA+VhOkAUKLNn3AYf2HucKgTK/
+         BaWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=r/Z89cDjHpntAHUD/RSb3guWlLGmU+c1d1Z61HpvZ50=;
-        b=al7hs6hIWlu2eOGpLmmpitA4By5mfN0rC3kdc1xhaFnFvCxokr/vCNn/U3ffHMvW+b
-         HzpicQTzfPN/ka6p/0qp3Xg2mRJX+xL03xcQR5kp/G4TI3h7p4iOfpPT/maKp+j7/0tc
-         Umq9Nmc+plnOAaBLthSxa1G1Oi1IF8QH5BkMMY5HTEm23vYg9zjc9CI7DtVIkWwbtNCn
-         9Y2B2TkPlZYwqo1dC/wJ7ogFR8fW4vrv9xiq00y4RCiDxa3x/xLmqZQM0lTYvoT8mBwe
-         CNqnBC6UUVUVnZQZRvIDMARYiByw3wv4xDPSlyjJFczbsD3l6r+mmbCvWy03OUVqXd06
-         KM+A==
-X-Gm-Message-State: AOAM533fWhkLGmgZGsIVJZS7DjALmktmCuWLEUaFDtMBUsxCDXl3+5ei
-        /iohblDSdo6fcviZi1MLiy2b1ZCwHfBXnvi1MMEYa8E+tOWmymW/ljq2Bf0nS4l4jExVyCWWjal
-        cwqL5KE+AFYx29OZy6iI43f40
-X-Received: by 2002:a1c:cc07:: with SMTP id h7mr15956179wmb.50.1643368083571;
-        Fri, 28 Jan 2022 03:08:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyGSxkD+x/HGNqu62fVuWQR5UvYZe4M0tfmZqqbG2QMxvuo6OHoohmnOIdvXtTCKrBrWjPbew==
-X-Received: by 2002:a1c:cc07:: with SMTP id h7mr15956149wmb.50.1643368083223;
-        Fri, 28 Jan 2022 03:08:03 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5c00:522f:9bcd:24a0:cd70? (p200300cbc70e5c00522f9bcd24a0cd70.dip0.t-ipconnect.de. [2003:cb:c70e:5c00:522f:9bcd:24a0:cd70])
-        by smtp.gmail.com with ESMTPSA id n10sm1621775wmr.25.2022.01.28.03.08.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 03:08:02 -0800 (PST)
-Message-ID: <99e39466-513b-6db9-6b3a-f40e68997cec@redhat.com>
-Date:   Fri, 28 Jan 2022 12:08:01 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lO9i/7tiw1jg/f73d/YFPz8lyvK5KGNvKNKqwKL/0U4=;
+        b=mXcwnpsnvK8qQ/bshRuAGeB/78X6hhL5Ap646QncZt35ZOeWR4DuZSglJTnvM1ZbyO
+         rYLl7eVvbddl4PGetj5LIb7RQh+Jg3fVYUQc+YqaRI83BO0ImL/s5ZQRKMxONjAq+eTz
+         sRHT4QQrTIt0DTfew+MS+oikV1SIcLW6DQsQtWH1wzJZDqvmRCKl1mazfstgJjqM4T5f
+         /z+I5F4ZeRSZeeR56Pz2v69AvYMo5xQ3FUdSC6hrVw8gMqveJMaI9vwrObH6gDfR2O/Z
+         1CVo5XZ97pPBfPHCoabT45zHikWcSfgAZhaTw/S+aiZAUR3JFDtvkmJx+e/DssroC88H
+         nNJQ==
+X-Gm-Message-State: AOAM5329cVDtKJ5bfQbZexANkJzXjBVP3JJTouURJqe5qMryv40jWyog
+        P0ZoqdpdGfOQgi+WLxugaHHfm3e3wQylioPxwEKDeaWLVp0ZTQ==
+X-Google-Smtp-Source: ABdhPJyaeTAYzVKHMXIlwWNuEs35Ttxny0l/LAFqAfv+YZlUjiYfihmEAFIdBIOwMNjoas3M3oogS25cDE55Em1JQVQ=
+X-Received: by 2002:a25:97c4:: with SMTP id j4mr12517532ybo.108.1643368105927;
+ Fri, 28 Jan 2022 03:08:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
-Content-Language: en-US
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bharata B Rao <bharata@amd.com>
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-4-nikunj@amd.com>
- <99248ffb-2c7c-ba25-5d56-2c577e58da4c@redhat.com>
- <c7918558-4eb3-0592-f3e1-9a1c4f36f7c0@amd.com>
- <ef8dcee4-8ce7-cb91-6938-feb39f0bdaba@redhat.com>
- <bd8e94d6-e2fd-16a9-273e-c2563af235df@amd.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <bd8e94d6-e2fd-16a9-273e-c2563af235df@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220127180259.078563735@linuxfoundation.org>
+In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 28 Jan 2022 16:38:14 +0530
+Message-ID: <CA+G9fYvpM5pqHNogaGu--bNqKQWUVBVWqCapwEU1p_w8ab99MA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/12] 5.15.18-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.01.22 12:04, Nikunj A. Dadhania wrote:
-> On 1/28/2022 1:57 PM, David Hildenbrand wrote:
->> On 28.01.22 07:57, Nikunj A. Dadhania wrote:
->>> On 1/26/2022 4:16 PM, David Hildenbrand wrote:
->>>> On 18.01.22 12:06, Nikunj A Dadhania wrote:
->>>>> Use the memslot metadata to store the pinned data along with the pfns.
->>>>> This improves the SEV guest startup time from O(n) to a constant by
->>>>> deferring guest page pinning until the pages are used to satisfy nested
->>>>> page faults. The page reference will be dropped in the memslot free
->>>>> path.
->>>>>
->>>>> Remove the enc_region structure definition and the code which did
->>>>> upfront pinning, as they are no longer needed in view of the demand
->>>>> pinning support.
->>>>>
->>>>> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
->>>>> since qemu is dependent on this API.
->>>>>
->>>>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
->>>>> ---
->>>>>  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
->>>>>  arch/x86/kvm/svm/svm.c |   1 +
->>>>>  arch/x86/kvm/svm/svm.h |   3 +-
->>>>>  3 files changed, 81 insertions(+), 131 deletions(-)
->>>>>
->>>>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
->>>>> index d972ab4956d4..a962bed97a0b 100644
->>>>> --- a/arch/x86/kvm/svm/sev.c
->>>>> +++ b/arch/x86/kvm/svm/sev.c
->>>>> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
->>>>>  static unsigned long *sev_asid_bitmap;
->>>>>  static unsigned long *sev_reclaim_asid_bitmap;
->>>>>  
->>>>> -struct enc_region {
->>>>> -	struct list_head list;
->>>>> -	unsigned long npages;
->>>>> -	struct page **pages;
->>>>> -	unsigned long uaddr;
->>>>> -	unsigned long size;
->>>>> -};
->>>>> -
->>>>>  /* Called with the sev_bitmap_lock held, or on shutdown  */
->>>>>  static int sev_flush_asids(int min_asid, int max_asid)
->>>>>  {
->>>>> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
->>>>>  	if (ret)
->>>>>  		goto e_free;
->>>>>  
->>>>> -	INIT_LIST_HEAD(&sev->regions_list);
->>>>> -
->>>>>  	return 0;
->>>>>  
->>>>>  e_free:
->>>>> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
->>>>>  	src->handle = 0;
->>>>>  	src->pages_locked = 0;
->>>>>  	src->enc_context_owner = NULL;
->>>>> -
->>>>> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
->>>>>  }
->>>>>  
->>>>>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
->>>>> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
->>>>>  int svm_register_enc_region(struct kvm *kvm,
->>>>>  			    struct kvm_enc_region *range)
->>>>>  {
->>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
->>>>> -	struct enc_region *region;
->>>>> -	int ret = 0;
->>>>> -
->>>>> -	if (!sev_guest(kvm))
->>>>> -		return -ENOTTY;
->>>>> -
->>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
->>>>> -	if (is_mirroring_enc_context(kvm))
->>>>> -		return -EINVAL;
->>>>> -
->>>>> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
->>>>> -		return -EINVAL;
->>>>> -
->>>>> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
->>>>> -	if (!region)
->>>>> -		return -ENOMEM;
->>>>> -
->>>>> -	mutex_lock(&kvm->lock);
->>>>> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
->>>>> -	if (IS_ERR(region->pages)) {
->>>>> -		ret = PTR_ERR(region->pages);
->>>>> -		mutex_unlock(&kvm->lock);
->>>>> -		goto e_free;
->>>>> -	}
->>>>> -
->>>>> -	region->uaddr = range->addr;
->>>>> -	region->size = range->size;
->>>>> -
->>>>> -	list_add_tail(&region->list, &sev->regions_list);
->>>>> -	mutex_unlock(&kvm->lock);
->>>>> -
->>>>> -	/*
->>>>> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
->>>>> -	 * or vice versa for this memory range. Lets make sure caches are
->>>>> -	 * flushed to ensure that guest data gets written into memory with
->>>>> -	 * correct C-bit.
->>>>> -	 */
->>>>> -	sev_clflush_pages(region->pages, region->npages);
->>>>> -
->>>>> -	return ret;
->>>>> -
->>>>> -e_free:
->>>>> -	kfree(region);
->>>>> -	return ret;
->>>>> -}
->>>>> -
->>>>> -static struct enc_region *
->>>>> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
->>>>> -{
->>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
->>>>> -	struct list_head *head = &sev->regions_list;
->>>>> -	struct enc_region *i;
->>>>> -
->>>>> -	list_for_each_entry(i, head, list) {
->>>>> -		if (i->uaddr == range->addr &&
->>>>> -		    i->size == range->size)
->>>>> -			return i;
->>>>> -	}
->>>>> -
->>>>> -	return NULL;
->>>>> -}
->>>>> -
->>>>> -static void __unregister_enc_region_locked(struct kvm *kvm,
->>>>> -					   struct enc_region *region)
->>>>> -{
->>>>> -	sev_unpin_memory(kvm, region->pages, region->npages);
->>>>> -	list_del(&region->list);
->>>>> -	kfree(region);
->>>>> +	return 0;
->>>>>  }
->>>>>  
->>>>>  int svm_unregister_enc_region(struct kvm *kvm,
->>>>>  			      struct kvm_enc_region *range)
->>>>>  {
->>>>> -	struct enc_region *region;
->>>>> -	int ret;
->>>>> -
->>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
->>>>> -	if (is_mirroring_enc_context(kvm))
->>>>> -		return -EINVAL;
->>>>> -
->>>>> -	mutex_lock(&kvm->lock);
->>>>> -
->>>>> -	if (!sev_guest(kvm)) {
->>>>> -		ret = -ENOTTY;
->>>>> -		goto failed;
->>>>> -	}
->>>>> -
->>>>> -	region = find_enc_region(kvm, range);
->>>>> -	if (!region) {
->>>>> -		ret = -EINVAL;
->>>>> -		goto failed;
->>>>> -	}
->>>>> -
->>>>> -	/*
->>>>> -	 * Ensure that all guest tagged cache entries are flushed before
->>>>> -	 * releasing the pages back to the system for use. CLFLUSH will
->>>>> -	 * not do this, so issue a WBINVD.
->>>>> -	 */
->>>>> -	wbinvd_on_all_cpus();
->>>>> -
->>>>> -	__unregister_enc_region_locked(kvm, region);
->>>>> -
->>>>> -	mutex_unlock(&kvm->lock);
->>>>>  	return 0;
->>>>> -
->>>>> -failed:
->>>>> -	mutex_unlock(&kvm->lock);
->>>>> -	return ret;
->>>>>  }
->>>>>  
->>>>>  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->>>>> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->>>>>  	mirror_sev->fd = source_sev->fd;
->>>>>  	mirror_sev->es_active = source_sev->es_active;
->>>>>  	mirror_sev->handle = source_sev->handle;
->>>>> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
->>>>>  	ret = 0;
->>>>>  
->>>>>  	/*
->>>>> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->>>>>  void sev_vm_destroy(struct kvm *kvm)
->>>>>  {
->>>>>  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
->>>>> -	struct list_head *head = &sev->regions_list;
->>>>> -	struct list_head *pos, *q;
->>>>>  
->>>>>  	WARN_ON(sev->num_mirrored_vms);
->>>>>  
->>>>> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
->>>>>  	 */
->>>>>  	wbinvd_on_all_cpus();
->>>>>  
->>>>> -	/*
->>>>> -	 * if userspace was terminated before unregistering the memory regions
->>>>> -	 * then lets unpin all the registered memory.
->>>>> -	 */
->>>>> -	if (!list_empty(head)) {
->>>>> -		list_for_each_safe(pos, q, head) {
->>>>> -			__unregister_enc_region_locked(kvm,
->>>>> -				list_entry(pos, struct enc_region, list));
->>>>> -			cond_resched();
->>>>> -		}
->>>>> -	}
->>>>> -
->>>>>  	sev_unbind_asid(kvm, sev->handle);
->>>>>  	sev_asid_free(sev);
->>>>>  }
->>>>> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
->>>>>  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
->>>>>  }
->>>>>  
->>>>> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
->>>>> +		  kvm_pfn_t pfn)
->>>>> +{
->>>>> +	struct kvm_arch_memory_slot *aslot;
->>>>> +	struct kvm_memory_slot *slot;
->>>>> +	gfn_t rel_gfn, pin_pfn;
->>>>> +	unsigned long npages;
->>>>> +	kvm_pfn_t old_pfn;
->>>>> +	int i;
->>>>> +
->>>>> +	if (!sev_guest(kvm))
->>>>> +		return;
->>>>> +
->>>>> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
->>>>> +		return;
->>>>> +
->>>>> +	/* Tested till 1GB pages */
->>>>> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
->>>>> +		return;
->>>>> +
->>>>> +	slot = gfn_to_memslot(kvm, gfn);
->>>>> +	if (!slot || !slot->arch.pfns)
->>>>> +		return;
->>>>> +
->>>>> +	/*
->>>>> +	 * Use relative gfn index within the memslot for the bitmap as well as
->>>>> +	 * the pfns array
->>>>> +	 */
->>>>> +	rel_gfn = gfn - slot->base_gfn;
->>>>> +	aslot = &slot->arch;
->>>>> +	pin_pfn = pfn;
->>>>> +	npages = KVM_PAGES_PER_HPAGE(level);
->>>>> +
->>>>> +	/* Pin the page, KVM doesn't yet support page migration. */
->>>>> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
->>>>> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
->>>>> +			old_pfn = aslot->pfns[rel_gfn];
->>>>> +			if (old_pfn == pin_pfn)
->>>>> +				continue;
->>>>> +
->>>>> +			put_page(pfn_to_page(old_pfn));
->>>>> +		}
->>>>> +
->>>>> +		set_bit(rel_gfn, aslot->pinned_bitmap);
->>>>> +		aslot->pfns[rel_gfn] = pin_pfn;
->>>>> +		get_page(pfn_to_page(pin_pfn));
->>>>
->>>>
->>>> I assume this is to replace KVM_MEMORY_ENCRYPT_REG_REGION, which ends up
->>>> calling svm_register_enc_region()->sev_pin_memory(), correct?
->>>
->>> Yes, that is correct.
->>>>
->>>> sev_pin_memory() correctly checks the RLIMIT_MEMLOCK and uses
->>>> pin_user_pages_fast().
->>>>
->>>> I have to strongly assume that sev_pin_memory() is *wrong* as is because
->>>> it's supposed to supply FOLL_LONGTERM -- after all we're pinning these
->>>> pages possibly forever.
->>>>
->>>>
->>>> I might be wrong but
->>>>
->>>> 1. You are missing the RLIMIT_MEMLOCK check
->>>
->>> Yes, I will add this check during the enc_region registration.
->>>
->>>> 2. get_page() is the wong way of long-term pinning a page. You would
->>>> have to mimic what pin_user_pages_fast(FOLL_LONGTERM) does to eventually
->>>> get it right (e.g., migrate the page off of MIGRATE_CMA or ZONE_MOVABLE).
->>>
->>> Let me go through this and I will come back. Thanks for pointing this out.
->>
->> I asusme the "issue" is that KVM uses mmu notifier and does a simple
->> get_user_pages() to obtain the references, to drop the reference when
->> the entry is invalidated via a mmu notifier call. So once you intent to
->> long-term pin, it's already to late.
->>
->> If you could teach KVM to do a long-term pin when stumbling over these
->> special encrypted memory regions (requires a proper matching
->> unpin_user_pages() call from KVM), then you could "take over" that pin
->> by get_page(), and let KVM do the ordinary put_page(), while you would
->> do the unpin_user_pages().
->>
-> 
-> The fault path looks like this in KVM x86 mmu code:
-> 
-> direct_page_fault()
-> -> kvm_faultin_pfn()
->    -> __gfn_to_pfn_memslot()
->       -> hva_to_pfn()
->          -> hva_to_pfn_{slow,fast}()
->             -> get_user_pages_*()      <<<<==== This is where the
->                                                 reference is taken
-> 
-> Next step is to create the mappings which is done in below functions:
-> 
-> -> kvm_tdp_mmu_map() / __direct_map()
-> 
->    -> Within this function (patch 1/6), I call sev_pin_spte to take an extra 
->       reference to pin it using get_page. 
-> 
->       Is it possible to use pin_user_pages(FOLL_LONGTERM) here? Wouldn't that 
->       be equivalent to "take over" solution that you are suggesting?
-> 
+On Thu, 27 Jan 2022 at 23:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.18 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.18-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The issue is that pin_user_pages(FOLL_LONGTERM) might have to migrate
-the page, which will fail if there is already an additional reference
-from get_user_pages_*().
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-Thanks,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-David / dhildenb
+## Build
+* kernel: 5.15.18-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 1985ebe37ea5497ded496bbf90dce6f216a0945b
+* git describe: v5.15.17-13-g1985ebe37ea5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.17-13-g1985ebe37ea5
 
+## Test Regressions (compared to v5.15.16-842-g384933ffef76)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.16-842-g384933ffef76)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.16-842-g384933ffef76)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.16-842-g384933ffef76)
+No metric fixes found.
+
+## Test result summary
+total: 103202, pass: 87990, fail: 1071, skip: 13242, xfail: 899
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 263 total, 261 passed, 2 failed
+* arm64: 42 total, 42 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 37 passed, 3 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 35 passed, 2 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 56 total, 50 passed, 6 failed
+* riscv: 28 total, 24 passed, 4 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 42 total, 42 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

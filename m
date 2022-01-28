@@ -2,112 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E679549F273
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBA149F276
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346001AbiA1EXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 23:23:33 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:45968 "EHLO inva021.nxp.com"
+        id S1346026AbiA1EYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 23:24:22 -0500
+Received: from mx.socionext.com ([202.248.49.38]:32419 "EHLO mx.socionext.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233877AbiA1EXb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 23:23:31 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D238A2000E1;
-        Fri, 28 Jan 2022 05:23:26 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6441C200AE0;
-        Fri, 28 Jan 2022 05:23:26 +0100 (CET)
-Received: from lsv03267.swis.in-blr01.nxp.com (lsv03267.swis.in-blr01.nxp.com [92.120.147.107])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 907D0183ACDE;
-        Fri, 28 Jan 2022 12:23:23 +0800 (+08)
-From:   nikhil.gupta@nxp.com
-To:     linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     priyanka.jain@nxp.com, aisheng.dong@nxp.com,
-        Nikhil Gupta <nikhil.gupta@nxp.com>
-Subject: [PATCH] of/fdt: move elfcorehdr reservation early for crash dump kernel
-Date:   Fri, 28 Jan 2022 09:53:21 +0530
-Message-Id: <20220128042321.15228-1-nikhil.gupta@nxp.com>
-X-Mailer: git-send-email 2.17.1
+        id S233877AbiA1EYW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 23:24:22 -0500
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 28 Jan 2022 13:24:21 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id E1C462083C4C;
+        Fri, 28 Jan 2022 13:24:20 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 28 Jan 2022 13:24:20 +0900
+Received: from [10.212.180.105] (unknown [10.212.180.105])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 4D760C1E22;
+        Fri, 28 Jan 2022 13:24:20 +0900 (JST)
+Subject: Re: [PATCH 2/3] pinctrl: uniphier: Divide pinmux group to support 1ch
+ and 2ch I2S
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>
+References: <1643283344-24911-3-git-send-email-hayashi.kunihiko@socionext.com>
+ <202201280448.njc6LUNd-lkp@intel.com>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <66679643-05a3-a404-adac-a18f008d7e65@socionext.com>
+Date:   Fri, 28 Jan 2022 13:24:19 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+In-Reply-To: <202201280448.njc6LUNd-lkp@intel.com>
+Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikhil Gupta <nikhil.gupta@nxp.com>
+On 2022/01/28 6:00, kernel test robot wrote:
+> Hi Kunihiko,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on linusw-pinctrl/devel]
+> [also build test ERROR on v5.17-rc1 next-20220127]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:
+> https://github.com/0day-ci/linux/commits/Kunihiko-Hayashi/pinctrl-uniphier
+> -Add-some-more-pinmux-settings/20220127-193715
+> base:
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+> devel
+> config: openrisc-buildonly-randconfig-r003-20220124
+> (https://download.01.org/0day-ci/archive/20220128/202201280448.njc6LUNd-lk
+> p@intel.com/config)
+> compiler: or1k-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wget
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          #
+> https://github.com/0day-ci/linux/commit/e0e366a006b79517336423f8a2c7266117
+> 8d5e41
+>          git remote add linux-review https://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review
+> Kunihiko-Hayashi/pinctrl-uniphier-Add-some-more-pinmux-settings/20220127-1
+> 93715
+>          git checkout e0e366a006b79517336423f8a2c72661178d5e41
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross
+> O=build_dir ARCH=openrisc SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     In file included from drivers/pinctrl/uniphier/pinctrl-uniphier-pxs2.c:
+> 12:
+>>> drivers/pinctrl/uniphier/pinctrl-uniphier-pxs2.c:958:34: error:
+> 'aout4_groups' undeclared here (not in a function); did you mean
+> 'aout3_groups'?
+>       958 |         UNIPHIER_PINMUX_FUNCTION(aout4),
+>           |                                  ^~~~~
+>     drivers/pinctrl/uniphier/pinctrl-uniphier.h:179:27: note: in definition
+> of macro 'UNIPHIER_PINMUX_FUNCTION'
+>       179 |                 .groups = func##_groups,
+> \
+>           |                           ^~~~
+>     In file included from include/linux/container_of.h:5,
+>                      from include/linux/kernel.h:21,
+>                      from drivers/pinctrl/uniphier/pinctrl-uniphier-pxs2.c:
+> 6:
+>>> include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width
+> not an integer constant
+>        16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct {
+> int:(-!!(e)); })))
+>           |                                                   ^
+>     include/linux/compiler.h:258:33: note: in expansion of macro
+> 'BUILD_BUG_ON_ZERO'
+>       258 | #define __must_be_array(a)
+> BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+>           |                                 ^~~~~~~~~~~~~~~~~
+>     include/linux/kernel.h:55:59: note: in expansion of macro
+> '__must_be_array'
+>        55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) +
+> __must_be_array(arr))
+>           |
+> ^~~~~~~~~~~~~~~
+>     drivers/pinctrl/uniphier/pinctrl-uniphier.h:180:31: note: in expansion
+> of macro 'ARRAY_SIZE'
+>       180 |                 .num_groups = ARRAY_SIZE(func##_groups),
+> \
+>           |                               ^~~~~~~~~~
+>     drivers/pinctrl/uniphier/pinctrl-uniphier-pxs2.c:958:9: note: in
+> expansion of macro 'UNIPHIER_PINMUX_FUNCTION'
+>       958 |         UNIPHIER_PINMUX_FUNCTION(aout4),
+>           |         ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
+> vim +958 drivers/pinctrl/uniphier/pinctrl-uniphier-pxs2.c
+> 
+>     949	
+>     950	static const struct uniphier_pinmux_function
+> uniphier_pxs2_functions[] = {
+>     951		UNIPHIER_PINMUX_FUNCTION(ain1),
+>     952		UNIPHIER_PINMUX_FUNCTION(ain2),
+>     953		UNIPHIER_PINMUX_FUNCTION(ain3),
+>     954		UNIPHIER_PINMUX_FUNCTION(ainiec1),
+>     955		UNIPHIER_PINMUX_FUNCTION(aout1),
+>     956		UNIPHIER_PINMUX_FUNCTION(aout2),
+>     957		UNIPHIER_PINMUX_FUNCTION(aout3),
+>   > 958		UNIPHIER_PINMUX_FUNCTION(aout4),
 
-elfcorehdr_addr is fixed address passed to Second kernel which may be conflicted
-with potential reserved memory in Second kernel,so fdt_reserve_elfcorehdr() ahead
-of fdt_init_reserved_mem() can relieve this situation.
+The aout4 function doesn't exist now. I'll remove them in next.
 
-Signed-off-by: Nikhil Gupta <nikhil.gupta@nxp.com>
----
-elfcorehdr addr is calculated in kexec tool based on reserved crashkernel memory space. (Last page is used in top down order)
-So It may potentially conflict the reserved memory in 2nd kernel.
-Below is log:
-load_crashdump_segments: page_offset:   ffffc00000000000
-…..
-load_crashdump_segments: elfcorehdr 0xf3fff000-0xf3fff3ff
-read_1st_dtb: found /sys/firmware/fdt
-get_cells_size: #address-cells:2 #size-cells:2
-cells_size_fitted: f3fff000-f3fff3ff
-cells_size_fitted: d4000000-f3ffffff
+Thank you,
 
-Overlaps seen on LS1043A SoC:
+>     959		UNIPHIER_PINMUX_FUNCTION(aoutiec1),
+>     960		UNIPHIER_PINMUX_FUNCTION(aoutiec2),
+>     961		UNIPHIER_PINMUX_FUNCTION(emmc),
+>     962		UNIPHIER_PINMUX_FUNCTION(ether_mii),
+>     963		UNIPHIER_PINMUX_FUNCTION(ether_rgmii),
+>     964		UNIPHIER_PINMUX_FUNCTION(ether_rmii),
+>     965		UNIPHIER_PINMUX_FUNCTION(i2c0),
+>     966		UNIPHIER_PINMUX_FUNCTION(i2c1),
+>     967		UNIPHIER_PINMUX_FUNCTION(i2c2),
+>     968		UNIPHIER_PINMUX_FUNCTION(i2c3),
+>     969		UNIPHIER_PINMUX_FUNCTION(i2c5),
+>     970		UNIPHIER_PINMUX_FUNCTION(i2c6),
+>     971		UNIPHIER_PINMUX_FUNCTION(nand),
+>     972		UNIPHIER_PINMUX_FUNCTION(sd),
+>     973		UNIPHIER_PINMUX_FUNCTION(spi0),
+>     974		UNIPHIER_PINMUX_FUNCTION(spi1),
+>     975		UNIPHIER_PINMUX_FUNCTION(system_bus),
+>     976		UNIPHIER_PINMUX_FUNCTION(uart0),
+>     977		UNIPHIER_PINMUX_FUNCTION(uart1),
+>     978		UNIPHIER_PINMUX_FUNCTION(uart2),
+>     979		UNIPHIER_PINMUX_FUNCTION(uart3),
+>     980		UNIPHIER_PINMUX_FUNCTION(usb0),
+>     981		UNIPHIER_PINMUX_FUNCTION(usb1),
+>     982		UNIPHIER_PINMUX_FUNCTION(usb2),
+>     983		UNIPHIER_PINMUX_FUNCTION(usb3),
+>     984	};
+>     985	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
-[    0.000000] memblock_reserve: [0x00000000d4010000-0x00000000d677ffff] arm64_memblock_init+0x258/0x2c8
-[    0.000000] memblock_phys_alloc_range: 4194304 bytes align=0x400000 from=0x0000000000000000 max_addr=0x0001000000000000 early_init_dt_alloc_reserved_memory_arch+0x9c/0x16c
-[    0.000000] memblock_reserve: [0x00000000f3c00000-0x00000000f3ffffff] memblock_alloc_range_nid+0xdc/0x150
-[    0.000000] memblock_phys_alloc_range: 33554432 bytes align=0x2000000 from=0x0000000000000000 max_addr=0x0001000000000000 early_init_dt_alloc_reserved_memory_arch+0x9c/0x16c
-[    0.000000] memblock_reserve: [0x00000000f0000000-0x00000000f1ffffff] memblock_alloc_range_nid+0xdc/0x150
-[    0.000000] memblock_phys_alloc_range: 16777216 bytes align=0x1000000 from=0x0000000000000000 max_addr=0x0001000000000000 early_init_dt_alloc_reserved_memory_arch+0x9c/0x16c
-[    0.000000] memblock_reserve: [0x00000000f2000000-0x00000000f2ffffff] memblock_alloc_range_nid+0xdc/0x150
-[    0.000000] OF: reserved mem: initialized node bman-fbpr, compatible id fsl,bman-fbpr
-[    0.000000] OF: fdt: elfcorehdr is overlapped
-
-panic in elfcorehdr_read.
-[    0.443984] Unable to handle kernel paging request at virtual address ffff000037fff000
-[    0.451942] Mem abort info:
-[    0.454740]   ESR = 0x96000006
-[    0.457806]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    0.463142]   SET = 0, FnV = 0
-[    0.466202]   EA = 0, S1PTW = 0
-[    0.469353] Data abort info:
-[    0.472243]   ISV = 0, ISS = 0x00000006
-[    0.476094]   CM = 0, WnR = 0
-[    0.479072] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000d9373000
-[    0.485806] [ffff000037fff000] pgd=00000000f7bf7003, pud=00000000f7bf6003, pmd=0000000000000000
-[    0.494553] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-[    0.500146] Modules linked in:
-[    0.503211] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.5.0-rc3-00062-gbf8d1cd #5
-[    0.510725] Hardware name: LS1043A RDB Board (DT)
-[    0.515446] pstate: 80000005 (Nzcv daif -PAN -UAO)
-[    0.520260] pc : __memcpy+0x78/0x180
-[    0.523847] lr : elfcorehdr_read+0x28/0x38
-[    0.611262] Call trace:
-[    0.613713]  __memcpy+0x78/0x180
-[    0.616950]  vmcore_init+0x70/0x534
- drivers/of/fdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index ad85ff6474ff..ec315b060cd5 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -648,8 +648,8 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 	}
- 
- 	fdt_scan_reserved_mem();
--	fdt_init_reserved_mem();
- 	fdt_reserve_elfcorehdr();
-+	fdt_init_reserved_mem();
- }
- 
- /**
 -- 
-2.17.1
-
+---
+Best Regards
+Kunihiko Hayashi

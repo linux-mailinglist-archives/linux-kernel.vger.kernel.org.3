@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C49E349F4C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832D449F4C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346982AbiA1H7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:59:32 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:41725 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242948AbiA1H7b (ORCPT
+        id S1346906AbiA1H6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229656AbiA1H6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:59:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643356584;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ZzqXPa82IBNEGYKQz95uFBzc3aktCqKLWKlNwv1H0BQ=;
-    b=nnLF4/VjWRZcHBwOJGZZJsxraZK0Z2DtdPg7gQ/hadNYiI/mneKwtNcrO1+2bWnHEE
-    vfVDxn8/qtKM2G6q/5QkUN6QqwtVF4jCW0CST54/PNjnLl4ZRbAfinXOw594kUr2AI1X
-    k/vooVhSW7z4vaoH+O9P0YWsR6SEIZTCxGCff9cn97vUIYIaA24/nCtfCgSlS0wAVlhx
-    RZwUnwfIPTqunaHOfQMB9DDSXuRVaDpCEJXOj4vzDWRaoOh5ZlBLXvKcNGoOGGoDNOEG
-    ePGuwQsooOgQIWBCCQ3reiBDzNAsjcN5ZOEiX2LnojoPFFRhTyeltwUtPn9zDbqHx59u
-    J2jQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.38.0 AUTH)
-    with ESMTPSA id zaacbfy0S7uOPvv
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 28 Jan 2022 08:56:24 +0100 (CET)
-Message-ID: <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
-Date:   Fri, 28 Jan 2022 08:56:19 +0100
+        Fri, 28 Jan 2022 02:58:15 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C69C061714;
+        Thu, 27 Jan 2022 23:58:15 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id o3so4517804qtm.12;
+        Thu, 27 Jan 2022 23:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/5HhBimjNoWs3dWyI50Lk0slVr7Jipa0Z/bMMBUtzHA=;
+        b=g13qFEEItG6X6sg/PdakSJkgV6hzeSRAl4NkP39ehB3t0YKihjR7u5OiLiP4SG0gwq
+         mxzB1OTJk02mmn3ILzfVOUI31favGFQuLR/0/fS0wyg5wIQo1pnXsrSowuxZr4fGh0hS
+         ljjKofmfdOWZTMlkY9lVUTxrUplFYv2gCPk0Sn3nOR8NehfshnySb7ghyI2E7xjkyD5D
+         i6kDDat8JdybeyMaQJ/70lcAILRlrDcefwBErWpiUE5ImuA7ooYmwQn7MiNSt7kcAHza
+         RgUJnJgvwKeZQ3TC2X9DenazrS1bQu2N8sUEdL4J/+oEKptJZtoMSLuzGdKf+IL5RD6P
+         pbkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/5HhBimjNoWs3dWyI50Lk0slVr7Jipa0Z/bMMBUtzHA=;
+        b=BoqvDVbpUZY8fkDx0MIX/lGIqn+aLcrBatW6IXbSFM6yH88Nkj6wIYugiqeL+6s5qh
+         gfd3Zzuoto8/uxC34yiy5UkRUsSj/fTU6KgxrI6RD91EeBElSTATqm42g6hUhIKL2bI0
+         7ttDIdt0tIlH2zgcMvgmTP0/Pb6CM8QvPcSqSD5b0co7+4349ALUapKDm3ohtTOEbwLs
+         x15F8MZIuCYbh3JQOP8Scn9x8UejbVAv5H47qROtJn9f6HNACTSAY9F5HD8supXunCyb
+         j8guBqV8BxsbOhX+1PUYB5PEEcvDdvL2qZ6wKrmxfX+0Dx2leVykTYrSlWq9ytBP+aXF
+         yx3A==
+X-Gm-Message-State: AOAM533XwJ76DCUt+o0uPA6T/0iTWcL7D3Y7n+wn6BJolQcr07F7bz9q
+        MWY5kLUa1Ukaqr7AepVwbNA=
+X-Google-Smtp-Source: ABdhPJzL4vdl7b84zi3Bkp4l11ujbRs9IP0YuxYNqU3rGURuPjFyrPhBLeQMPH+dbQ1JKw812QJtzA==
+X-Received: by 2002:ac8:5f88:: with SMTP id j8mr5204992qta.213.1643356694212;
+        Thu, 27 Jan 2022 23:58:14 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s2sm2483457qti.14.2022.01.27.23.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 23:58:13 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     jiri@resnulli.us
+Cc:     ivecera@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] net/switchdev: use struct_size over open coded arithmetic
+Date:   Fri, 28 Jan 2022 07:57:29 +0000
+Message-Id: <20220128075729.1211352-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        mkl@pengutronix.de
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
- <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
- <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
- <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
- <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
- <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
- <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
- <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
- <d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com>
- <97339463-b357-3e0e-1cbf-c66415c08129@hartkopp.net>
-In-Reply-To: <97339463-b357-3e0e-1cbf-c66415c08129@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Answering myself ...
+From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
 
-I've seen the frame processing sometimes freezes for one second when 
-stressing the isotp_rcv() from multiple sources. This finally freezes 
-the entire softirq which is either not good and not needed as we only 
-need to fix this race for stress tests - and not for real world usage 
-that does not create this case.
+Replace zero-length array with flexible-array member and make use
+of the struct_size() helper in kmalloc(). For example:
 
-Therefore I created a V2 patch which uses the spin_trylock() to simply 
-drop the incomming frame in the race condition.
+struct switchdev_deferred_item {
+	...
+	unsigned long data[];
+};
 
-https://lore.kernel.org/linux-can/20220128074327.52229-1-socketcan@hartkopp.net/T/
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
-Please take a look, if it also fixes the issue in your test setup.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+---
+ net/switchdev/switchdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks & best regards,
-Oliver
+diff --git a/net/switchdev/switchdev.c b/net/switchdev/switchdev.c
+index b62565278fac..b3aedd0ef4d0 100644
+--- a/net/switchdev/switchdev.c
++++ b/net/switchdev/switchdev.c
+@@ -85,7 +85,7 @@ static int switchdev_deferred_enqueue(struct net_device *dev,
+ {
+ 	struct switchdev_deferred_item *dfitem;
+ 
+-	dfitem = kmalloc(sizeof(*dfitem) + data_len, GFP_ATOMIC);
++	dfitem = kmalloc(struct_size(*dfitem, data, data_len), GFP_ATOMIC);
+ 	if (!dfitem)
+ 		return -ENOMEM;
+ 	dfitem->dev = dev;
+-- 
+2.25.1
 
-On 27.01.22 20:44, Oliver Hartkopp wrote:
-> Hello Ziyang Xuan,
-> 
-> On 21.01.22 02:50, Ziyang Xuan (William) wrote:
->>>
->>> On 20.01.22 12:28, Ziyang Xuan (William) wrote:
->>>>>
->>>>> On 20.01.22 07:24, Ziyang Xuan (William) wrote:
->>>>>
->>>>>> I have reproduced the syz problem with Marc's commit, the commit 
->>>>>> can not fix the panic problem.
->>>>>> So I tried to find the root cause for panic and gave my solution.
->>>>>>
->>>>>> Marc's commit just fix the condition that packet size bigger than 
->>>>>> INT_MAX which trigger
->>>>>> tpcon::{idx,len} integer overflow, but the packet size is 4096 in 
->>>>>> the syz problem.
->>>>>>
->>>>>> so->rx.len is 0 after the following logic in isotp_rcv_ff():
->>>>>>
->>>>>> /* get the FF_DL */
->>>>>> so->rx.len = (cf->data[ae] & 0x0F) << 8;
->>>>>> so->rx.len += cf->data[ae + 1];
->>>>>>
->>>>>> so->rx.len is 4096 after the following logic in isotp_rcv_ff():
->>>>>>
->>>>>> /* FF_DL = 0 => get real length from next 4 bytes */
->>>>>> so->rx.len = cf->data[ae + 2] << 24;
->>>>>> so->rx.len += cf->data[ae + 3] << 16;
->>>>>> so->rx.len += cf->data[ae + 4] << 8;
->>>>>> so->rx.len += cf->data[ae + 5];
->>>>>>
->>>>>
->>>>> In these cases the values 0 could be the minimum value in 
->>>>> so->rx.len - but e.g. the value 0 can not show up in isotp_rcv_cf() 
->>>>> as this function requires so->rx.state to be ISOTP_WAIT_DATA.
->>>>
->>>> Consider the scenario that isotp_rcv_cf() and isotp_rcv_cf() are 
->>>> concurrent for the same isotp_sock as following sequence:
->>>
->>> o_O
->>>
->>> Sorry but the receive path is not designed to handle concurrent 
->>> receptions that would run isotp_rcv_cf() and isotp_rcv_ff() 
->>> simultaneously.
->>>
->>>> isotp_rcv_cf()
->>>> if (so->rx.state != ISOTP_WAIT_DATA) [false]
->>>>                          isotp_rcv_ff()
->>>>                          so->rx.state = ISOTP_IDLE
->>>>                          /* get the FF_DL */ [so->rx.len == 0]
->>>> alloc_skb() [so->rx.len == 0]
->>>>                          /* FF_DL = 0 => get real length from next 4 
->>>> bytes */ [so->rx.len == 4096]
->>>> skb_put(nskb, so->rx.len) [so->rx.len == 4096]
->>>> skb_over_panic()
->>>>
->>>
->>> Even though this case is not possible with a real CAN bus due to the 
->>> CAN frame transmission times we could introduce some locking (or 
->>> dropping of concurrent CAN frames) in isotp_rcv() - but this code 
->>> runs in net softirq context ...
->>>
-> 
-> As discussed off-list I added a spin_lock() in isotp_rcv() as 
-> https://www.kernel.org/doc/htmldocs/kernel-locking/lock-softirqs.html 
-> suggests.
-> 
-> Please give this patch[1] a try in your test setup.
-> 
-> Many thanks,
-> Oliver
-> 
-> [1]: 
-> https://lore.kernel.org/linux-can/20220127192429.336335-1-socketcan@hartkopp.net/T/ 
-> 

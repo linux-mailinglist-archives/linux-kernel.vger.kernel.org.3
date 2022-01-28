@@ -2,162 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E2649F7C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 587A549F7C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347970AbiA1LBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:01:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:36462 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229562AbiA1LBD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:01:03 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2339A113E;
-        Fri, 28 Jan 2022 03:01:03 -0800 (PST)
-Received: from [10.57.86.86] (unknown [10.57.86.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6291A3F766;
-        Fri, 28 Jan 2022 03:01:01 -0800 (PST)
-Message-ID: <2f3c5e6b-7000-8fa2-21f7-3b0c3fb66ae3@arm.com>
-Date:   Fri, 28 Jan 2022 11:00:59 +0000
+        id S1347972AbiA1LBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:01:40 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53360 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229562AbiA1LBj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:01:39 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2354C212BB;
+        Fri, 28 Jan 2022 11:01:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643367698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=37Gsm1IqUIMRo4Ici9RHiEuf636sDOjp3AogAz570Po=;
+        b=cEk3twzyuE6Nz+5y6wQg/HcYfRSOj4+j9PVbl1sf4M9PNND4lTW7+JO1UDKH8YgtLtRIjP
+        ymZiBLT+5NIDKxB8wWjyllHQskNs0HB3GJ7cZ5JlmIRkwo1cYBy3X7TEsaZ6G0E5ffm/6n
+        z9S8K6wMNjRXoF6g2VR80n7h05FucOU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643367698;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=37Gsm1IqUIMRo4Ici9RHiEuf636sDOjp3AogAz570Po=;
+        b=4nK/NldkHONsuvlQ6D0XMHMjLKSP1YNEu5IdYj4NrjoZ33MCyaV9259pv6JrrvnFA4m+5F
+        T5iCIAz3iho0+CAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D9B813A83;
+        Fri, 28 Jan 2022 11:01:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id S7O7AhLN82HzLAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Fri, 28 Jan 2022 11:01:38 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [RFC PATCH] ACPI / amba: Skip creating amba device when
- associated cpu is not online
-To:     chenxiang <chenxiang66@hisilicon.com>, linux@armlinux.org.uk,
-        vkoul@kernel.org, linux-arm-kernel@lists.infradead.org,
-        mathieu.poirier@linaro.org
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, Anshuman Khandual <anshuman.khandual@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Fri, 28 Jan 2022 12:01:37 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Nico Pache <npache@redhat.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH 6/6] memcg: do not tweak node in
+ alloc_mem_cgroup_per_node_info
+In-Reply-To: <20220127085305.20890-7-mhocko@kernel.org>
+References: <20220127085305.20890-1-mhocko@kernel.org>
+ <20220127085305.20890-7-mhocko@kernel.org>
+User-Agent: Roundcube Webmail
+Message-ID: <b2ec940495fe4480bab793707bd6558f@suse.de>
+X-Sender: osalvador@suse.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiang
-
-On 07/01/2022 08:41, chenxiang wrote:
-> From: Xiang Chen <chenxiang66@hisilicon.com>
+On 2022-01-27 09:53, Michal Hocko wrote:
+> From: Wei Yang <richard.weiyang@gmail.com>
 > 
-> If not up all the cpus with command line "maxcpus=x", system will be
-> blocked.
-> We find that some amba devices such as ETM devices, are associated with
-> special cpus, and if the cpu is not up, the register of associated device
-> is not allowed to access. BIOS reports all the ETM device nodes and a
-> amba device is created for every ETM device, so even if one cpu is not up,
-> the amba device will still be created for the associated device, and also
-> the register of device (pid and cid) will be accessed when adding amba
-> device which will cause the issue.
-> To fix it, skip creating amba device if it is associated with a cpu which
-> is not online.
-
-I understand the issue. We do not have an issue at least on DT based 
-platforms with a similar environment (Juno). The key is the power 
-management for the components.
-
-There are two separate issues at play here :
-
-1) Power management with ACPI. I believe there is a solution in progress
-to address this.
-
-2) The ETM is in the same power domain as that of the CPU and normal 
-device power management may not work without the CPU being online.
-
-3) Additionally we have other issue of supporting system instructions
-with ACPI, which do not appear on the AMBA bus.
-
-Considering all of these, the ideal solution is to :
-
-1) Implement power management for ACPI, which is anyway in progress
-   (at least for SCMI based systems)
-2) Move the ETM driver away from the AMBA framework. That would make
-    the CPU online problem and the (3) above easier to solve.
-    Anshuman is going to look into this.
-
-In the meantime, we could have this temporary fix in and solve it
-forever by moving away from the AMBA.
-
+> alloc_mem_cgroup_per_node_info is allocated for each possible node and
+> this used to be a problem because not !node_online nodes didn't have
+> appropriate data structure allocated. This has changed by "mm: handle
+> uninitialized numa nodes gracefully" so we can drop the special casing
+> here.
 > 
-> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-> ---
->   drivers/acpi/acpi_amba.c | 36 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 36 insertions(+)
-> 
-> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
-> index ab8a4e0191b1..2369198f734b 100644
-> --- a/drivers/acpi/acpi_amba.c
-> +++ b/drivers/acpi/acpi_amba.c
-> @@ -16,6 +16,7 @@
->   #include <linux/ioport.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
-> +#include <acpi/processor.h>
->   
->   #include "internal.h"
->   
-> @@ -45,6 +46,35 @@ static void amba_register_dummy_clk(void)
->   	clk_register_clkdev(amba_dummy_clk, "apb_pclk", NULL);
->   }
->   
-> +static int acpi_handle_to_cpuid(acpi_handle handle)
-> +{
-> +	int cpu = -1;
-> +	struct acpi_processor *pr;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		pr = per_cpu(processors, cpu);
-> +		if (pr && pr->handle == handle)
-> +			break;
-> +	}
-> +
-> +	return cpu;
-> +}
-> +
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-Please could we reuse the function in coresight-platform.c ?
-i.e, move it to a generic location and share it, rather than
-duplicating it ?
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-
-> +static int acpi_dev_get_cpu(struct acpi_device *adev)
-> +{
-> +	acpi_handle cpu_handle;
-> +	acpi_status status;
-> +	int cpu;
-> +
-> +	status = acpi_get_parent(adev->handle, &cpu_handle);
-> +	if (ACPI_FAILURE(status))
-> +		return -1;
-> +	cpu = acpi_handle_to_cpuid(cpu_handle);
-> +	if (cpu >= nr_cpu_ids)
-> +		return -1;
-> +	return cpu;
-> +}
-> +
->   static int amba_handler_attach(struct acpi_device *adev,
->   				const struct acpi_device_id *id)
->   {
-> @@ -54,11 +84,17 @@ static int amba_handler_attach(struct acpi_device *adev,
->   	bool address_found = false;
->   	int irq_no = 0;
->   	int ret;
-> +	int cpu;
->   
->   	/* If the ACPI node already has a physical device attached, skip it. */
->   	if (adev->physical_node_count)
->   		return 0;
->   
-> +	/* If the cpu associated with the device is not online, skip it. */
-> +	cpu = acpi_dev_get_cpu(adev);
-> +	if (cpu >= 0 && !cpu_online(cpu))
-> +		return 0;
-> +
-
-Except for the comment above, the patch looks good to me.
-
-Suzuki
+-- 
+Oscar Salvador
+SUSE Labs

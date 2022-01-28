@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAF449F48D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E6F49F48E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 08:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242964AbiA1HmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 02:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S242967AbiA1Hmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 02:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiA1HmU (ORCPT
+        with ESMTP id S1346929AbiA1Hmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:42:20 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F70C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 23:42:20 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id az20so1986869vsb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 23:42:20 -0800 (PST)
+        Fri, 28 Jan 2022 02:42:43 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FB2C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 23:42:43 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id x13so1985534vsl.10
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 23:42:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=TUJN3E8HLIWQMC+JkuH+pNtqlz3LDjBnQRMbHqWeDZY=;
-        b=oRHvg9qCnFAFOGAFsSCyPwMEb+x54NrSRrWvx8JpZ4RAupPNRrpxkX5L17ovRg3Vt/
-         i63c8Q0ozaECZH1te1QVjS8HIc9xYz6PPHJH1IZHL/28t+J1j6Epq0mmZEpM6wCP9nJz
-         tUJibp4obJh5MErW44MuQYjDOEGYphSeLQKVk=
+        bh=iD4Xdgw71HLMmvdMsMDTR6FQ/xXimMvzqBGCzvKFjLs=;
+        b=FPylrTDsY2K3hOmGAMpHUjSNwkuz2BNcgOEy0c4YFgGFKJjehO5eFocGoa8naf4pZ0
+         /Iik/0Tz2OPw/DoPELjijxVpB634XjEjP26u0MDIhXLJOaVea2kvoWBlilSFtkF5Cybh
+         1Zuk+uviUZoYx7NFWKSnJzDc55St+iMAAV1tE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TUJN3E8HLIWQMC+JkuH+pNtqlz3LDjBnQRMbHqWeDZY=;
-        b=yCTqFSURUAW0IRLqR30w8NpgYynXi5/MrnGDbgZUEhDhAH5Bf3bYrTaFJreDPO1tnA
-         EbqgneYXNBVBxgrIL9iKtNYDqv85RPkFw/h0+J9SvMjCwfMR92j3lvHHMjXPdUU/4m53
-         OkLyHgSikTLEUrhwqaSO4/Ut4KWbndHb6BuVWSij8Q3tTeIDUQJqCOO4EdMyWH5t62HL
-         9SxdosstvM8YwtXKDRNUbzAM6IBNPtRqtK7gEbt9czZCMkbtzE4CBl1lNu6gB0j4YwiF
-         9F2miqe+I2ghJajRJi5jf528ekjL/ySU1oLKIWF2BtJmEhp/1YgsCc3J2ZZK/t3bAfbi
-         dJFg==
-X-Gm-Message-State: AOAM530WLC1gxae398KcmJms6vQeYEkyxCLZbiV4TBM/oHS1mbJ06lL8
-        d3VGDgUzNM4tmaRrlC/wLsRakxTXgHv9teAzeiVZCQ==
-X-Google-Smtp-Source: ABdhPJxKJjUVYuCr4CRypjs5KIau2+had06NuPAfIaws1OGW/6KUgGXj26162C85z7lT51v4dBsG/X9IxRzH5AVK3Tc=
-X-Received: by 2002:a05:6102:18d:: with SMTP id r13mr3631364vsq.67.1643355739440;
- Thu, 27 Jan 2022 23:42:19 -0800 (PST)
+        bh=iD4Xdgw71HLMmvdMsMDTR6FQ/xXimMvzqBGCzvKFjLs=;
+        b=ujwx7pb6pC1BloxaVLD0Xb9PHbLx0Svm2HvJ9P/qaLz6HKljU1SzLJ7NI+N+X6N9aG
+         odJuky3eztLVSSikx5Eg8j2FeGEEeShCYsPqyvb20e9KgJfv95B9Y0j9K6KKMlTymEw8
+         +fMgSMs5uQgOuoQVyNgsf3NhylebyeTfYJnl6Xtr4aIi0HZqjzVY/jIhJ1aGK3jKs1jQ
+         YWG3Rat6Ruy9q4TmSkXKpiUD4omRwSElLeyyQI2eCvro+ED0vGu6F4lPMwmBjVyE/2jA
+         YhneSwabzx+6GA5Hh8RXPQeUTm07QZlOgp4wyfRv/HS2Epp33tMceZltCZIISQxM/tqo
+         1gFw==
+X-Gm-Message-State: AOAM533PT7QjagqqDUeWFo+UsFrSUOhO8xrRqD2SQ1xImVfpZ7Wm+51r
+        8PqH5pmnmh61iEFpwdTqxrkwaDislR0Dfe2Uy/hg+w==
+X-Google-Smtp-Source: ABdhPJwLOnCBACCySx4/OYaV1zo4qkIeMMNqn0ClSqJF47Z43DGdF+xEOTesc/OQAnn2Tm5kU36DAh6VVK8AYoRHGos=
+X-Received: by 2002:a67:d98e:: with SMTP id u14mr3730406vsj.2.1643355762269;
+ Thu, 27 Jan 2022 23:42:42 -0800 (PST)
 MIME-Version: 1.0
 References: <20220127083545.1020423-1-skyostil@chromium.org>
- <20220127083545.1020423-3-skyostil@chromium.org> <YfJovN7clqBZ8NDr@kroah.com>
-In-Reply-To: <YfJovN7clqBZ8NDr@kroah.com>
+ <20220127083545.1020423-3-skyostil@chromium.org> <aa0b1b37-de0b-c859-5d9b-9de406c770b9@infradead.org>
+In-Reply-To: <aa0b1b37-de0b-c859-5d9b-9de406c770b9@infradead.org>
 From:   Sami Kyostila <skyostil@chromium.org>
-Date:   Fri, 28 Jan 2022 18:42:08 +1100
-Message-ID: <CAPuLczsLSnojXG8zyWBq6P50S8dVN3LcTi+2L0j-zLbwC_cJ0g@mail.gmail.com>
+Date:   Fri, 28 Jan 2022 18:42:31 +1100
+Message-ID: <CAPuLczt0Oo-tWZQDLe_g6JNvR9Dqa3wpKUjzMAv+goOV64DNyA@mail.gmail.com>
 Subject: Re: [PATCH 2/2] drivers/misc: add transfer ioctl for HPS
-To:     Greg KH <gregkh@linuxfoundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>, dtor@chromium.org,
-        evanbenn@chromium.org, arnd@arndb.de
+        evanbenn@chromium.org, arnd@arndb.de, gregkh@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to 27. tammik. 2022 klo 20.41 Greg KH (gregkh@linuxfoundation.org) kirjoitt=
-i:
+pe 28. tammik. 2022 klo 9.39 Randy Dunlap (rdunlap@infradead.org) kirjoitti=
+:
 >
-> On Thu, Jan 27, 2022 at 07:35:45PM +1100, Sami Ky=C3=B6stil=C3=A4 wrote:
+>
+>
+> On 1/27/22 00:35, Sami Ky=C3=B6stil=C3=A4 wrote:
 > > This patch adds an ioctl operation for sending and receiving data from
 > > the ChromeOS snooping protection sensor (a.k.a., HPS). This allows
 > > userspace programs to perform a combined read/write I2C transaction
@@ -81,110 +83,48 @@ i:
 > >  3 files changed, 102 insertions(+)
 > >  create mode 100644 include/uapi/linux/hps.h
 > >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 9dea4b8c2ab5..d5fc066fdbc2 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -8803,6 +8803,7 @@ M:      Sami Ky=C3=B6stil=C3=A4 <skyostil@chromiu=
-m.org>
-> >  R:   Evan Benn <evanbenn@chromium.org>
-> >  S:   Maintained
-> >  F:   drivers/misc/hps-i2c.c
-> > +F:   include/uapi/linux/hps.h
-> >
-> >  HSI SUBSYSTEM
-> >  M:   Sebastian Reichel <sre@kernel.org>
-> > diff --git a/drivers/misc/hps-i2c.c b/drivers/misc/hps-i2c.c
-> > index fe9f073b0352..748ead49d678 100644
-> > --- a/drivers/misc/hps-i2c.c
-> > +++ b/drivers/misc/hps-i2c.c
-> > @@ -17,9 +17,11 @@
-> >  #include <linux/i2c.h>
-> >  #include <linux/module.h>
-> >  #include <linux/pm_runtime.h>
-> > +#include <uapi/linux/hps.h>
-> >
-> >  #define HPS_ACPI_ID          "GOOG0020"
-> >  #define HPS_MAX_DEVICES              1
-> > +#define HPS_MAX_MSG_SIZE     8192
-> >
-> >  struct hps_drvdata {
-> >       struct i2c_client *client;
-> > @@ -60,6 +62,8 @@ static int hps_open(struct inode *inode, struct file =
-*file)
-> >       ret =3D pm_runtime_get_sync(dev);
-> >       if (ret < 0)
-> >               goto pm_get_fail;
-> > +
-> > +     file->private_data =3D hps->client;
-> >       return 0;
-> >
-> >  pm_get_fail:
-> > @@ -84,10 +88,87 @@ static int hps_release(struct inode *inode, struct =
-file *file)
-> >       return ret;
-> >  }
-> >
-> > +static int hps_do_ioctl_transfer(struct i2c_client *client,
-> > +                              struct hps_transfer_ioctl_data *args)
-> > +{
-> > +     int ret;
-> > +     int nmsg =3D 0;
-> > +     struct i2c_msg msgs[2] =3D {
-> > +             {
-> > +                     .addr =3D client->addr,
-> > +                     .flags =3D client->flags,
-> > +             },
-> > +             {
-> > +                     .addr =3D client->addr,
-> > +                     .flags =3D client->flags,
-> > +             },
-> > +     };
-> > +
-> > +     if (args->isize) {
-> > +             msgs[nmsg].len =3D args->isize;
-> > +             msgs[nmsg].buf =3D memdup_user(args->ibuf, args->isize);
-> > +             if (IS_ERR(msgs[nmsg].buf)) {
-> > +                     ret =3D PTR_ERR(msgs[nmsg].buf);
-> > +                     goto memdup_fail;
-> > +             }
-> > +             nmsg++;
-> > +     }
-> > +
-> > +     if (args->osize) {
-> > +             msgs[nmsg].len =3D args->osize;
-> > +             msgs[nmsg].buf =3D memdup_user(args->obuf, args->osize);
-> > +             msgs[nmsg].flags |=3D I2C_M_RD;
-> > +             if (IS_ERR(msgs[nmsg].buf)) {
-> > +                     ret =3D PTR_ERR(msgs[nmsg].buf);
-> > +                     goto memdup_fail;
-> > +             }
-> > +             nmsg++;
-> > +     }
-> > +
-> > +     ret =3D i2c_transfer(client->adapter, &msgs[0], nmsg);
-> > +     if (ret > 0 && args->osize) {
-> > +             if (copy_to_user(args->obuf, msgs[nmsg - 1].buf, ret))
-> > +                     ret =3D -EFAULT;
-> > +     }
 >
-> Why can't you just do normal i2c transfers to/from userspace instead of
-> requring a custom ioctl?
-
-The main reason is security: without this driver, in order to talk to
-HPS the userspace daemon needs read/write access to the entire I2C
-controller (e.g., /dev/i2c-0). This means the daemon can also control
-any other I2C device which happens to be on the same bus. With a
-separate ioctl we can limit access to just HPS.
-
-As far as I can tell, there's no way to restrict access on a
-per-device level with normal i2c, but I'd be happy to be proven wrong
-:)
-
+> Hi--
 >
-> thanks,
->
-> greg k-h
+> If your next patch version continues to use an ioctl, its magic "number"
+> ('h') should be documented in Documentation/userspace-api/ioctl/ioctl-num=
+ber.rst.
+
+Ah, thanks for the pointer. Will do.
 
 
 - Sami
+
+>
+> thanks.
+>
+> > diff --git a/include/uapi/linux/hps.h b/include/uapi/linux/hps.h
+> > new file mode 100644
+> > index 000000000000..2c1bd174cd02
+> > --- /dev/null
+> > +++ b/include/uapi/linux/hps.h
+> > @@ -0,0 +1,20 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> > +/*
+> > + *  Copyright 2022 Google LLC.
+> > + */
+> > +
+> > +#ifndef _UAPI_HPS_H
+> > +#define _UAPI_HPS_H
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +#define HPS_IOC_TRANSFER     _IOWR('h', 0x01, struct hps_transfer_ioct=
+l_data)
+> > +
+> > +struct hps_transfer_ioctl_data {
+> > +     __u32 isize;                    /* Number of bytes to send */
+> > +     unsigned char __user *ibuf;     /* Input buffer */
+> > +     __u32 osize;                    /* Number of bytes to receive */
+> > +     unsigned char __user *obuf;     /* Output buffer */
+> > +};
+> > +
+> > +#endif /* _UAPI_HPS_H */
+>
+> --
+> ~Randy

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9351949EFE4
+	by mail.lfdr.de (Postfix) with ESMTP id DCBE849EFE5
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344622AbiA1AiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S1344663AbiA1AiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiA1AiR (ORCPT
+        with ESMTP id S241595AbiA1AiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 19:38:17 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0717C061714;
-        Thu, 27 Jan 2022 16:38:17 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id k9so4397315qvv.9;
-        Thu, 27 Jan 2022 16:38:17 -0800 (PST)
+        Thu, 27 Jan 2022 19:38:18 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5346BC061714;
+        Thu, 27 Jan 2022 16:38:18 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id k14so3938373qtq.10;
+        Thu, 27 Jan 2022 16:38:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pLFwv7MjOQ+N54vrBm9216io6/o12k65yBVIhwcPg5Y=;
-        b=LxbFlMhLkImQU7BenMFSJxGZJe7qA50NBhuhQySXdCmKQOPYYjk6mWtu6ikBn35pca
-         3+mCL1QKPT2X0fBzscixX63/zFpbqu4oIK8Z/y6xelxW61p94+DgEU/WP9KX3k1TaHIe
-         somjPHKZ+svAFdzQvVqmxibq414ThT1PZq66WMG6XfkpmFhE7bzMS+KAcLJj2eqhPLiu
-         DlVUcm6n07Hwymu9QlH9YHlchrZ2W7mwjJwK1klkWGvXtqFEWRqMh0/rIZDj/65aRQUz
-         fZxMxzxG6ziSLO4idnclWdYFXqsZQBllQWdfAQFOLN92XE5cZJrNjK0Gmf5E9qlUwf7C
-         dpZA==
+        bh=U0ZtMbfGNf5bI/1AePHt7T+pCQPNUqP752Ba3r+02dM=;
+        b=ky3S5f7lhADSWWb9ST7r5M95iARgFNUMQiSs99hEtWaw9Cp2LuMvM2peP/BugzC8Qt
+         hL9HrtWe8moyMoNhZNvQiBjznS0tyEp0+rY8HYfYN3VoUS9cBnnKNVKYMZvPiwqJ3hic
+         rb+I9nYH8h0r66PhJaB8YPjBF9DzPXWTqulCSkokuNa48FoUim3pIGSCvAdRruR0m7or
+         ZEFoVTctqzAl3Jqh0xysji9bV1mN4IQwTUN8w0vgoz9hC+t+leeHidi4OkC03NIkFhF6
+         WMPV9PjfvLSKgDZRSQ/1m6rui25WgB5iCND4dEom4YN5aYnGka/J8MzSpBSV/2uSjfvw
+         hwSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pLFwv7MjOQ+N54vrBm9216io6/o12k65yBVIhwcPg5Y=;
-        b=HY8bcVARS0n8t13qC0NUIOuAuOj8Xq46KJg8ic1+hGb6NkfHxn/QLJmr4X11wSlKdc
-         yM+S3tZXPVCxAMe8cu15pHL2NBH2fm8mTU/tyPYcWzmRNyVWnBbDiqZVeAqo4nJ7aaBg
-         gyRq3wyy7P+oUBXv6mokiric0le2WX0FSUa54c0wWLJKjOWcjb8E83O6NMyPKA7VyG3D
-         MIYqULFz0NbHRvHDeEsVJhLTTt1QNnZc1oo4x1yvgZQj9DcYTmuuxLl6y6o40nDJHPq8
-         1xEJpkEGCUOdWlfteTD1pY1qLjgg+85YnWG9B7ZcR+fWLJlb0NurdCPeAsfsfXBnXhFD
-         tBig==
-X-Gm-Message-State: AOAM530FHIxiiTAw3KhyYlMG45NcDA5QnhBAyw+m1gBNtmztdLSGi+c/
-        CZIWbBDDsSk9K1t8EmYfkBw=
-X-Google-Smtp-Source: ABdhPJwrhsjuD03NSeUskaZoQXKK7d36ovsnIB0/+BjyXAkBfGW8Owu0kBbjWXKy0HrxScJjC41hRw==
-X-Received: by 2002:a05:6214:238a:: with SMTP id fw10mr5286173qvb.15.1643330296577;
-        Thu, 27 Jan 2022 16:38:16 -0800 (PST)
+        bh=U0ZtMbfGNf5bI/1AePHt7T+pCQPNUqP752Ba3r+02dM=;
+        b=75pljKZn7xxl+fqETECsICeU5NGkHHJr7+FiJQYAgCOuEa8nEH2wwghWncm7Q8EE9i
+         9zWrzylcVAPiTVKuGKLR6rBC2gHkrrCyhfTSnKlE7x1tY7hcDpwz5j+lKu8Sge9/nFp7
+         kGkQ7UhL1KtDf7kiSK8HRcyMkRX4XP//ALgowpPqefBA8Az4rt0Nu6xSD7xkKK0sdgqF
+         08zNlCF1clPyiGP4H5sPHdX+9LH/HrNXMuTe6QAYy8lMUVhLK3R9Z1vuCuNbmuVCxKB+
+         sxNyaNFaphYRypYGYbk3CkyrmZeRGxXIAyaGXfPFvPYYpIvmHWjIO80Q4IF8wFBLjzsD
+         /vRg==
+X-Gm-Message-State: AOAM532wZsUnvcrZq+6Y3TWxY3BFK5I2ssDUQImps9j8gCuHzaHBWyK2
+        QewXwh69KaynrBeMcQ4+kM4=
+X-Google-Smtp-Source: ABdhPJwRZPAqYv4oJNy1fNafX2Qj6lvpf2KHx++EeZKTn31dh+x8Mtfsyq8oYEbbM/XWJw5lq3VWrw==
+X-Received: by 2002:ac8:5e0d:: with SMTP id h13mr4763623qtx.97.1643330297428;
+        Thu, 27 Jan 2022 16:38:17 -0800 (PST)
 Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
         by smtp.gmail.com with ESMTPSA id t1sm2142883qtc.48.2022.01.27.16.38.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 16:38:16 -0800 (PST)
+        Thu, 27 Jan 2022 16:38:17 -0800 (PST)
 From:   Peter Geis <pgwipeout@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
 Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] arm64: dts: rockchip: add Quartz64-A pmu_io_domains
-Date:   Thu, 27 Jan 2022 19:38:06 -0500
-Message-Id: <20220128003809.3291407-3-pgwipeout@gmail.com>
+Subject: [PATCH v2 3/4] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
+Date:   Thu, 27 Jan 2022 19:38:07 -0500
+Message-Id: <20220128003809.3291407-4-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220128003809.3291407-1-pgwipeout@gmail.com>
 References: <20220128003809.3291407-1-pgwipeout@gmail.com>
@@ -65,41 +65,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several io power domains on the Quartz64-A operate at 1.8v.
-Add the pmu_io_domains definition to enable support for this.
-This permits the enablement of the following features:
-sdio - wifi support
-sdhci - mmc-hs200-1_8v
+The sdmmc1 node on Quartz64-A supports the optional wifi module from
+Pine64.
+Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi support on
+the Quartz64-A.
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+
+Changelog:
+v2:
+- drop status = "okay" from sdio_pwrseq
+- drop disable-wp from sdmmc1
+- move reset-gpios to be alphabetical in sdio_pwrseq
+
+---
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index d9eb92d59099..33c2c18caaa9 100644
+index 33c2c18caaa9..c5a79046a9d0 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -482,6 +482,19 @@ vcc_sd_h: vcc-sd-h {
+@@ -91,6 +91,17 @@ simple-audio-card,codec {
+ 		};
  	};
+ 
++	sdio_pwrseq: sdio-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		clocks = <&rk817 1>;
++		clock-names = "ext_clock";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_enable_h>;
++		post-power-on-delay-ms = <100>;
++		power-off-delay-us = <5000000>;
++		reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
++	};
++
+ 	vcc12v_dcin: vcc12v_dcin {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vcc12v_dcin";
+@@ -147,6 +158,17 @@ vcc_sys: vcc_sys {
+ 		regulator-max-microvolt = <4400000>;
+ 		vin-supply = <&vbus>;
+ 	};
++
++	/* sourced from vcc_sys, sdio module operates internally at 3.3v */
++	vcc_wl: vcc_wl {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_wl";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc_sys>;
++	};
  };
  
-+&pmu_io_domains {
-+	pmuio1-supply = <&vcc3v3_pmu>;
-+	pmuio2-supply = <&vcc3v3_pmu>;
-+	vccio1-supply = <&vccio_acodec>;
-+	vccio2-supply = <&vcc_1v8>;
-+	vccio3-supply = <&vccio_sd>;
-+	vccio4-supply = <&vcc_1v8>;
-+	vccio5-supply = <&vcc_3v3>;
-+	vccio6-supply = <&vcc1v8_dvp>;
-+	vccio7-supply = <&vcc_3v3>;
+ &cpu0 {
+@@ -475,6 +497,12 @@ pmic_int_l: pmic-int-l {
+ 		};
+ 	};
+ 
++	sdio-pwrseq {
++		wifi_enable_h: wifi-enable-h {
++			rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
+ 	vcc_sd {
+ 		vcc_sd_h: vcc-sd-h {
+ 			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
+@@ -516,6 +544,21 @@ &sdmmc0 {
+ 	status = "okay";
+ };
+ 
++&sdmmc1 {
++	bus-width = <4>;
++	cap-sd-highspeed;
++	cap-sdio-irq;
++	keep-power-in-suspend;
++	mmc-pwrseq = <&sdio_pwrseq>;
++	non-removable;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
++	sd-uhs-sdr104;
++	vmmc-supply = <&vcc_wl>;
++	vqmmc-supply = <&vcc_1v8>;
 +	status = "okay";
 +};
 +
- &sdhci {
- 	bus-width = <8>;
- 	mmc-hs200-1_8v;
+ &spdif {
+ 	status = "okay";
+ };
 -- 
 2.25.1
 

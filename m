@@ -2,163 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C89A49EF20
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7FC49EF2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 01:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344303AbiA1AIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 19:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S1344485AbiA1ARc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 19:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238679AbiA1AIB (ORCPT
+        with ESMTP id S235341AbiA1ARb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 19:08:01 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C81C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:08:00 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id v13so7626241wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:08:00 -0800 (PST)
+        Thu, 27 Jan 2022 19:17:31 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FC9C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:17:31 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id x23so8609062lfc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 16:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K+UJbVBKe2v11VAhxonJJHgo2MJev+F3zVTIM6Z5XRw=;
-        b=psUgohyl/doORdmZpKT9JvNyVNCMVTurVaepNc+M3Rb5SDgb0BnTDCUFFPigNzVotN
-         92nmmigURubruSfN/txEaLTLYMmP/5gAmxnu7kb1g7vLPjK5teQgIgBvlOiM/EFXjXiK
-         JMk+gbc2aq4sKB6TWO7NCf2PljfPtsC8ifxci2cEe0aCLzkzfFG2lor7yAIQE+nAe8d+
-         X7nNyTrXo1V34XQBoyZGHwFTM4pwIccOOOrkW7hJHURe1br5atFZtCthXeYLP5oqLuO5
-         wSutWX4u/k21K9QksqxirE/Tu0gGC+vdIiMToR7D++NkndSfeNiqCyT9e75LGM1WP4CL
-         g89Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IlSEJdjJrMjk0uBxQ1Hapn8YGZniC2X8+hlUSQJTZwM=;
+        b=b0GAq2WgzrvcsiDSn/b3NReLAu13yP5fhdkdH7+7CT6UB+7fWmzEeAHsKA4dDNoeNo
+         paizE2t2lPrMvJe9bILSyix2rdq0PRr2zY9MJG4pVC5F5WXz5wRRUk5hlzex7z7PLHob
+         asTr+61XLgdhhPpPp0RKDRELmqf75iv7SoSyPKD9BNktRE6TCLbmzkjFgoJEVVA7g3zb
+         6CjiFZP8sW76YJ+0pW8jd9eDQvnRKX1hdSL940vNICgmeRzitsOZ4qJcnM++xAhIrNJX
+         KLerT7V508LixrbrvdMjcwYUJsJzwlwqhT/00ZQBa3tUYwEQaJOlcy1E3kH0EaMhdcMY
+         AcdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K+UJbVBKe2v11VAhxonJJHgo2MJev+F3zVTIM6Z5XRw=;
-        b=FIioswbEhl3jUfphI/8dkYRpfJqD2x7Dh1jNS1XchdOXjpcJYNTXkQJ7qIvY3Z1aOO
-         AYeY+6L4XIQA8Ni/4feoEcFYa1PnG76Y7qrorqL1pkScjatymLAphAtMRrKStnGtVGwJ
-         kHfDhLOFNApLI0r6q90WGR/XTHrHp4rRce65q2RXoYW9+a/Orc0vN/sxy7kI5P9aOeU3
-         CA+525VJaCWoUouNEF0WjZzE1QqYh0TPxuzIOen4GscCKd7aHAjNfad+5wrGF29B0roy
-         /a5hPvG3lLK18ms537Svg/p2MbwvdkQ4vMTvQaKY9NWV9pVWbc8m32E68hAy12LiurFh
-         gMmw==
-X-Gm-Message-State: AOAM530Y1dITuwQL24C6dPieFw9BtTL8zi8q2UZOPvNLJkco3eLaA33v
-        1pw5ieUuLfBIew8C+lZvnbOvCw==
-X-Google-Smtp-Source: ABdhPJy3A9A4vHVzTqch7FBhXJ74y2DidYQOHSjMeuLljJ0EttxQrMYJx64VhClsBwmL/nuv77wyVg==
-X-Received: by 2002:a05:6000:18af:: with SMTP id b15mr4686186wri.589.1643328479307;
-        Thu, 27 Jan 2022 16:07:59 -0800 (PST)
-Received: from localhost ([2a02:168:96c5:1:55ed:514f:6ad7:5bcc])
-        by smtp.gmail.com with ESMTPSA id x4sm3478297wrp.13.2022.01.27.16.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 16:07:58 -0800 (PST)
-From:   Jann Horn <jannh@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        Eric Dumazet <edumazet@google.com>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH v2] x86/csum: Add KASAN/KCSAN instrumentation
-Date:   Fri, 28 Jan 2022 01:07:52 +0100
-Message-Id: <20220128000752.2322591-1-jannh@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IlSEJdjJrMjk0uBxQ1Hapn8YGZniC2X8+hlUSQJTZwM=;
+        b=o/QqYrFDUHLC3BRJBun3i8A1sgG90V7qLtFqvjJh/YxGaG7nNGzJcJuumDGsogJI8r
+         dbS1PYOFoPsoOvXenj0s6n0tPxzl9sMFI1qMzACMjRHjgHGEMS8MGngJbfgWn0bWVEu6
+         8aCo8UolruIXrLL888I94aafsp3uWt09gS5r8c2i2PzHAC8/ppZSpfrcrRmNDb/1DeXm
+         vnh4brXF9Qa/QVdN/SP4gwOXL8WBQfzwNSsEnlu5zO6mPwLebJUpM1wFczw4IAvwQW2L
+         FAcKhtgeNrerhjDdwwiEd7Wl8pedYFT3W0WAEesDTSC3eyO1ADOmMBPv3oclXFsDB/Gn
+         nftA==
+X-Gm-Message-State: AOAM531x2RyYE9movQz1HQrfas4OQ/WWXtF+ydmZimcZIv9MmhdSgzSs
+        dFTSPHrnY+VOJ95kC0t+O2sB0tec+MVKXmgaUYy4Tw==
+X-Google-Smtp-Source: ABdhPJwwq3RWKdq6zaQeBD4zp7BWV/yEz0bPSG5n3byJeJMyzqq7BkL9gHT/C/ZRY8175jaO1A1XGgvkI1yjZL5Hpfk=
+X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr4346659lfk.523.1643329049299;
+ Thu, 27 Jan 2022 16:17:29 -0800 (PST)
 MIME-Version: 1.0
+References: <20220120155517.066795336@infradead.org> <20220120160822.852009966@infradead.org>
+ <YfIAsHQv5Q84fOqO@google.com> <YfI9Y5l0fQAKuJav@google.com>
+ <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net> <YfMruK8/1izZ2VHS@google.com>
+In-Reply-To: <YfMruK8/1izZ2VHS@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 27 Jan 2022 16:17:17 -0800
+Message-ID: <CAKwvOdmPkCuYuMRBSeK7DaK-wrdH5+C0gL63eqJ1buHsmueFsg@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 4/5] x86/uaccess: Implement unsafe_try_cmpxchg_user()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, posk@google.com, avagin@google.com,
+        jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
+        posk@posk.io, James Y Knight <jyknight@google.com>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the optimized X86 version of the copy-with-checksum helpers, use
-instrument_*() before accessing buffers from assembly code so that KASAN
-and KCSAN don't have blind spots there.
+On Thu, Jan 27, 2022 at 3:33 PM Sean Christopherson <seanjc@google.com> wro=
+te:
+>
+> +Nick
 
-Signed-off-by: Jann Horn <jannh@google.com>
----
+(well, you asked the right person; you probably wont like the answer
+much though)
 
-Notes:
-    v2: use instrument_copy_{from,to}_user instead of instrument_{read,writ=
-e}
-        where appropriate (dvyukov)
+>
+> On Thu, Jan 27, 2022, Peter Zijlstra wrote:
+> > On Thu, Jan 27, 2022 at 06:36:19AM +0000, Sean Christopherson wrote:
+> > > On Thu, Jan 27, 2022, Sean Christopherson wrote:
+> > > > Doh, I should have specified that KVM needs 8-byte CMPXCHG on 32-bi=
+t kernels due
+> > > > to using it to atomically update guest PAE PTEs and LTR descriptors=
+ (yay).
+> > > >
+> > > > Also, KVM's use case isn't a tight loop, how gross would it be to a=
+dd a slightly
+> > > > less unsafe version that does __uaccess_begin_nospec()?  KVM pre-ch=
+ecks the address
+> > > > way ahead of time, so the access_ok() check can be omitted.  Altern=
+atively, KVM
+> > > > could add its own macro, but that seems a little silly.  E.g. somet=
+hign like this,
+> > > > though I don't think this is correct
+> > >
+> > > *sigh*
+> > >
+> > > Finally realized I forgot to add back the page offset after convertin=
+g from guest
+> > > page frame to host virtual address.  Anyways, this is what I ended up=
+ with, will
+> > > test more tomorrow.
+> >
+> > Looks about right :-) (famous last words etc..)
+>
+> And it was right, but clang-13 ruined the party :-/
+>
+> clang barfs on asm goto with a "+m" input/output.  Change the "+m" to "=
+=3Dm" and
+> clang is happy.  Remove usage of the label, clang is happy.
 
- arch/x86/lib/csum-partial_64.c  | 3 +++
- arch/x86/lib/csum-wrappers_64.c | 9 +++++++++
- 2 files changed, 12 insertions(+)
+Yep, sorry, we only recently noticed that this was broken.  I fixed
+this very recently (over the holidays) in clang-14, and is too risky
+and late to backport to clang-13 IMO.
+https://reviews.llvm.org/rG4edb9983cb8c8b850083ee5941468f5d0ef6fe2c
 
-diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
-index 1f8a8f895173..8b0c353cd212 100644
---- a/arch/x86/lib/csum-partial_64.c
-+++ b/arch/x86/lib/csum-partial_64.c
-@@ -8,6 +8,7 @@
-=20=20
- #include <linux/compiler.h>
- #include <linux/export.h>
-+#include <linux/instrumented.h>
- #include <asm/checksum.h>
- #include <asm/word-at-a-time.h>
-=20
-@@ -37,6 +38,8 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
- 	u64 temp64 =3D (__force u64)sum;
- 	unsigned odd, result;
-=20
-+	instrument_read(buff, len);
-+
- 	odd =3D 1 & (unsigned long) buff;
- 	if (unlikely(odd)) {
- 		if (unlikely(len =3D=3D 0))
-diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_6=
-4.c
-index 189344924a2b..c44973b8f255 100644
---- a/arch/x86/lib/csum-wrappers_64.c
-+++ b/arch/x86/lib/csum-wrappers_64.c
-@@ -6,6 +6,8 @@
-  */
- #include <asm/checksum.h>
- #include <linux/export.h>
-+#include <linux/in6.h>
-+#include <linux/instrumented.h>
- #include <linux/uaccess.h>
- #include <asm/smap.h>
-=20
-@@ -26,6 +28,7 @@ csum_and_copy_from_user(const void __user *src, void *dst=
-, int len)
- 	__wsum sum;
-=20
- 	might_sleep();
-+	instrument_copy_from_user(dst, src, len);
- 	if (!user_access_begin(src, len))
- 		return 0;
- 	sum =3D csum_partial_copy_generic((__force const void *)src, dst, len);
-@@ -51,6 +54,7 @@ csum_and_copy_to_user(const void *src, void __user *dst, =
-int len)
- 	__wsum sum;
-=20
- 	might_sleep();
-+	instrument_copy_to_user(dst, src, len);
- 	if (!user_access_begin(dst, len))
- 		return 0;
- 	sum =3D csum_partial_copy_generic(src, (void __force *)dst, len);
-@@ -71,6 +75,8 @@ EXPORT_SYMBOL(csum_and_copy_to_user);
- __wsum
- csum_partial_copy_nocheck(const void *src, void *dst, int len)
- {
-+	instrument_write(dst, len);
-+	instrument_read(src, len);
- 	return csum_partial_copy_generic(src, dst, len);
- }
- EXPORT_SYMBOL(csum_partial_copy_nocheck);
-@@ -81,6 +87,9 @@ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
- {
- 	__u64 rest, sum64;
-=20
-+	instrument_read(saddr, sizeof(*saddr));
-+	instrument_read(daddr, sizeof(*daddr));
-+
- 	rest =3D (__force __u64)htonl(len) + (__force __u64)htons(proto) +
- 		(__force __u64)sum;
-=20
+>
+> I tried a bunch of different variants to see if anything would squeak by,=
+ but
+> clang found a way to die on everything I threw at it.
+>
+> $ clang --version
+>
+>   Debian clang version 13.0.0-9+build1
+>   Target: x86_64-pc-linux-gnu
+>   Thread model: posix
+>   InstalledDir: /usr/bin
+>
+> As written, with a named label param, clang yields:
+>
+>   $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) :=
+:: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+>   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .=
+'
+>   int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar);=
+ return *x; bar: return 0; }
+>                             ^
+>   <stdin>:1:29: error: unknown token in expression
+>   <inline asm>:1:9: note: instantiated into assembly here
+>           .long () - .
+>                ^
+>   2 errors generated.
+>
+> While clang is perfectly happy switching "+m" to "=3Dm":
+>
+>   $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "=3Dm"(*x)=
+ ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
 
-base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+=3D constraints should work with older clang releases; + constraints are
+what was broken (Not generally, only when using asm goto with
+outputs), fixed in clang-14.
+
+>
+> Referencing the label with a numbered param yields either the original er=
+ror:
+>
+>   $ echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: b=
+ar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+>   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .=
+'
+>   int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); ret=
+urn *x; bar: return 0; }
+>                             ^
+>   <stdin>:1:29: error: unknown token in expression
+>   <inline asm>:1:9: note: instantiated into assembly here
+>           .long () - .
+>                  ^
+>    2 errors generated.
+
+^ That case should not work in either compilers, more info below...
+
+>
+> Bumping the param number (more below) yields a different error (I tried d=
+efining
+> tmp1, that didn't work :-) ).
+>
+>   $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: b=
+ar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+>   error: Undefined temporary symbol .Ltmp1
+>   1 error generated.
+
+"Bumping the param number" will be required when using numbered
+references, more info below...
+
+>
+> Regarding the param number, gcc also appears to have a goof with asm goto=
+ and "+m",
+> but bumping the param number in that case remedies its woes.
+>
+>   $echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: ba=
+r); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
+>   <stdin>: In function =E2=80=98foo=E2=80=99:
+>   <stdin>:1:19: error: invalid 'asm': '%l' operand isn't a label
+>
+>   $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: b=
+ar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
+
+Right, so in fixing the above issue with tied outputs, I noticed that
+the GCC implementation of asm goto with outputs had different
+behavior. I changed clang's implementation in clang-14 (same patch
+series) to match:
+https://reviews.llvm.org/rG5c562f62a4ee15592f5d764d0710553a4b07a6f2
+This comment summarizes most of my thoughts on the issue:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D98096#c7
+Specifically the quote "It appears to me that the GCC decision here
+was accidental, and that when pointed out, the bug was simply
+documented rather than fixed."
+Though I think compatibility between compilers is ultimately more
+important.  There's no standards bodies involved in these extension,
+which is simultaneously more flexible, yet can also lead to
+differences in implementations like this. Thanks for attending my TED
+talk.
+
+>
+>
+> So my immediate question: how do we want to we deal with this in the kern=
+el?  Keeping
+> in mind that I'd really like to send this to stable@ to fix the KVM mess.
+>
+> I can think of few options that are varying degrees of gross.
+>
+>   1) Use a more complex sequence for probing CC_HAS_ASM_GOTO_OUTPUT.
+>
+>   2) Use an output-only "=3Dm" operand.
+>
+>   3) Use an input register param.
+>
+> Option #1 has the obvious downside of the fancier asm goto for  __get_use=
+r_asm()
+> and friends being collateral damage.  The biggest benefit is it'd reduce =
+the
+> likelihood of someone else having to debug similar errors, which was quit=
+e painful.
+
+Right; I assumed we'd hit this at some point, as soon as people wanted
+to used tied outputs with asm goto.  I'd rather have a different
+Kconfig test for working tied outputs, and that all uses in the
+kernels used the symbolic references which are much more readable and
+less confusing than the rules for numbered references (which are bug
+prone IMO).
+
+>
+> Options #2 and #3 are quite gross, but I _think_ would be ok since the se=
+quence
+> is tagged as clobbering memory anyways?
+
 --=20
-2.35.0.rc0.227.g00780c9af4-goog
-
+Thanks,
+~Nick Desaulniers

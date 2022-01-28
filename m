@@ -2,152 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BC049F078
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DFD49F081
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 02:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345020AbiA1BUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 20:20:48 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:60914 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1345001AbiA1BUq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 20:20:46 -0500
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxiuDeRPNh7R0FAA--.15345S3;
-        Fri, 28 Jan 2022 09:20:31 +0800 (CST)
-Subject: Re: [RFC PATCH] kdump: Add support for crashkernel=auto
-To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <ptesarik@suse.cz>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <1643275911-19489-1-git-send-email-yangtiezhu@loongson.cn>
- <d513dea3-7300-9684-73af-0b51f5f0e572@suse.cz>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <f28c65f0-9bbb-6bf8-a223-0e18b861c805@loongson.cn>
-Date:   Fri, 28 Jan 2022 09:20:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1345042AbiA1B1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 20:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345028AbiA1B05 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 20:26:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13B6C061714;
+        Thu, 27 Jan 2022 17:26:56 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JlKYk3xXtz4xcP;
+        Fri, 28 Jan 2022 12:26:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643333211;
+        bh=aAjIfzo4A4A8Ms6f79436CT8Pjp3tnjPz5RVwJRWUl4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=T4dNhqKAJlS++pVWE5mLP3PgpMsgUOiswE+0ST5YT4nRzcpRAPJbBXFyOw2Nnsj85
+         HgvcCKFgQ3/q+RllMYtq6NODPsGtw0F3YsQqM85VTf+LToUtDY/9QVb0RBvxtjqUBX
+         zmJs406UtSn7NYvKuC7Y61s53vwaLoCe8kEStRdOqtiKgcU+GMn8mcX6ldN1ogGHyt
+         uYk5YYsqDy6V4/TSitiM8cS0oWCNQExrkCgjMvrUmbqxJ9+EKoNP1LYl1TyxvsSibe
+         ZgBCQnkHtsVsz8xZGliNph8CEMMTLQ+P5vxiYqtgB5yacXdsmZfUMFYzXF3XAG5Vjf
+         ohHJ/pIdqEBhQ==
+Date:   Fri, 28 Jan 2022 12:26:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Heidelberg <david@ixit.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luca Weiss <luca@z3ntu.xyz>
+Subject: linux-next: manual merge of the phy-next tree with the qcom tree
+Message-ID: <20220128122648.4c94b120@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <d513dea3-7300-9684-73af-0b51f5f0e572@suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxiuDeRPNh7R0FAA--.15345S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZry8tw1ruryDGFykGF4kZwb_yoW5ur1fpF
-        WUKr4FkryrGryDA348Jws3u3y8tw48Cr9ruwn8Ar18AFnxA3WfGr18Wr43uFW2vr4Y9F1Y
-        qw43KwnIga48ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI4
-        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20E
-        Y4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbNzVUUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: multipart/signed; boundary="Sig_/w_kT3C5hUF/k4IEMS76OfXG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/w_kT3C5hUF/k4IEMS76OfXG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 01/27/2022 11:53 PM, Petr Tesařík wrote:
-> Hi Tiezhu Yang,
->
-> I'm afraid the whole concept is broken by design. See below.
->
-> Dne 27. 01. 22 v 10:31 Tiezhu Yang napsal(a):
->> Set the reserved memory automatically for the crash kernel based on
->> architecture.
->>
->> Most code of this patch come from:
->> https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-8/-/tree/c8s
->>
->
-> And that's the problem, I think. The solution might be good for this
-> specific OS, but not for others.
+Today's linux-next merge of the phy-next tree got a conflict in:
 
-Hi Petr,
+  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
 
-Thank you for your reply.
+between commit:
 
-This is a RFC patch, the initial aim of this patch is to discuss what is 
-the proper way to support crashkernel=auto.
+  c04421c68fd4 ("dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 compatible")
 
-A moment ago, I find the following patch, it is more flexible, but it is 
-not merged into the upstream kernel now.
+from the qcom tree and commit:
 
-kernel/crash_core: Add crashkernel=auto for vmcore creation
+  e7393b60a14f ("dt-bindings: phy: convert Qualcomm USB HS phy to yaml")
 
-https://lore.kernel.org/lkml/20210223174153.72802-1-saeed.mirzamohammadi@oracle.com/
+from the phy-next tree.
 
->
->> [...]
->> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
->> index 256cf6d..32c51e2 100644
->> --- a/kernel/crash_core.c
->> +++ b/kernel/crash_core.c
->> @@ -252,6 +252,26 @@ static int __init __parse_crashkernel(char *cmdline,
->>       if (suffix)
->>           return parse_crashkernel_suffix(ck_cmdline, crash_size,
->>                   suffix);
->> +
->> +    if (strncmp(ck_cmdline, "auto", 4) == 0) {
->> +#if defined(CONFIG_X86_64) || defined(CONFIG_S390)
->> +        ck_cmdline = "1G-4G:160M,4G-64G:192M,64G-1T:256M,1T-:512M";
->> +#elif defined(CONFIG_ARM64)
->> +        ck_cmdline = "2G-:448M";
->> +#elif defined(CONFIG_PPC64)
->> +        char *fadump_cmdline;
->> +
->> +        fadump_cmdline = get_last_crashkernel(cmdline, "fadump=", NULL);
->> +        fadump_cmdline = fadump_cmdline ?
->> +                fadump_cmdline + strlen("fadump=") : NULL;
->> +        if (!fadump_cmdline || (strncmp(fadump_cmdline, "off", 3) == 0))
->> +            ck_cmdline =
->> "2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G";
->> +        else
->> +            ck_cmdline =
->> "4G-16G:768M,16G-64G:1G,64G-128G:2G,128G-1T:4G,1T-2T:6G,2T-4T:12G,4T-8T:20G,8T-16T:36G,16T-32T:64G,32T-64T:128G,64T-:180G";
->>
->> +#endif
->> +        pr_info("Using crashkernel=auto, the size chosen is a best
->> effort estimation.\n");
->> +    }
->> +
->
-> How did you even arrive at the above numbers?
+I fixed it up (I removed the file and added the following merge fix patch)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
-Memory requirements for kdump:
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 28 Jan 2022 12:24:35 +1100
+Subject: [PATCH] merge fix for "dt-bindings: phy: qcom,usb-hs-phy: add MSM8=
+226 compatible"
 
-https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/supported-kdump-configurations-and-targets_managing-monitoring-and-updating-the-kernel#memory-requirements-for-kdump_supported-kdump-configurations-and-targets
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-I've done some research on
-> this topic recently (ie. during the last 7 years or so). My x86_64
-> system with 8G RAM running openSUSE Leap 15.3 seems needs 188M for
-> saving to the local disk, and 203M to save over the network (using
-> SFTP). My PPC64 LPAR with 16G RAM running latest Beta of SLES 15 SP4
-> needs 587M, i.e. with the above numbers it may run out of memory while
-> saving the dump.
->
-> Since this is not the first time, I'm trying to explain things, I've
-> written a blog post now:
->
-> https://sigillatum.tesarici.cz/2022-01-27-whats-wrong-with-crashkernel-auto.html
->
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/D=
+ocumentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+index a60386bd19b2..e23e5590eaa3 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+@@ -38,6 +38,7 @@ properties:
+     items:
+       - enum:
+           - qcom,usb-hs-phy-apq8064
++          - qcom,usb-hs-phy-msm8226
+           - qcom,usb-hs-phy-msm8916
+           - qcom,usb-hs-phy-msm8974
+       - const: qcom,usb-hs-phy
+--=20
+2.34.1
 
-Thank you, this is useful.
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks,
-Tiezhu
+--Sig_/w_kT3C5hUF/k4IEMS76OfXG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->
-> HTH
-> Petr Tesarik
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHzRlkACgkQAVBC80lX
+0GyvaQf+I9MlD4vJKF09tucOeyLLHDL+1mmbhnNv98y/LZ868F89eI1LdrFeIV3+
+cSjVjPLVbQDyX+Jro05mLy/IUg3DiPWByp+HY8CWji0eGTP0veiaV60pDdl7b4if
+jHP5dnVrcIB5CCGlyilXJEl2gZF6ACAzgi2IiUXg1kPsVGtXlSwkLihC/eiKPD8J
+RGi+B3tMV0FLBg5DjoT9Mg8Zjnd9XRSCQINt8F/aK46OwgWp18vizJmpTnPY4/dy
+OtcOWlyGAHy0DcUqQBKNnHfDp7Ao3+nzRPXHTq7ZzlnjWyrE5GiybXo//GDEK1CU
+Hq5q5zuFtBU2T6w0vRw8+4oIk7MeGA==
+=diR3
+-----END PGP SIGNATURE-----
+
+--Sig_/w_kT3C5hUF/k4IEMS76OfXG--

@@ -2,154 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C949949F354
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88F249F362
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 07:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346225AbiA1GJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 01:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346238AbiA1GJS (ORCPT
+        id S1346311AbiA1GQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 01:16:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33840 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235649AbiA1GQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 01:09:18 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582CEC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:09:18 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id a8so5223704pfa.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:09:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xmJUYGxVIOq2ikN9W5Sr7Lz0nyJ9BNBmKrBR0wxwPTE=;
-        b=n52ktlUg3l4qy9m/0Ni0lzQNBoCvDxm+h9y9p5dLfgPUj79JmomeClnGajJBRNzxmI
-         RmTKQGeWberRRjud4XfI5FwJ3M1dW6UAT93DdcwU8iUFTJe8cxoE/1go74mWnbYA2rpN
-         ObgaBv5dxtL/9CfjgaLbkoUzx2YeVR33SLUsBgiGdJY8219auHHuheS18uX7ZVc5tBRI
-         bpCSqfPY4bFEciUcFhrRSRUX2LSAQoAJQgDeyd8SUQkxbTue8yeDx4555WEmKd3iTQ6Z
-         JZdNEHmylYt+bZujgRFF1PZ2l7EVhnbCQDbsk2dLaq4Nwn9fseH3PMqlbu9taC0UJtSe
-         fD7Q==
+        Fri, 28 Jan 2022 01:16:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643350567;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FSteX9W3PLWEuASmDON9me2d/UIiV3TbmFqzK6jQr4M=;
+        b=exyHxMKC/5CVY7SokVr+6WPK21979XT4Dwv149qzOG4d70Q54cL4YQJ+7iwE/jXqI4T9Vs
+        6GXVviyTSqpDKKZB/VPgDryNngusVmkRQYvv8trIGTfKsApJg76wZopFtINcLQyrZScjeX
+        VvDLkQI3QrFKCNv9+3AsXVndYmjOrQ8=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-a7y8ZmV6M_amCSwxVwYqKw-1; Fri, 28 Jan 2022 01:16:05 -0500
+X-MC-Unique: a7y8ZmV6M_amCSwxVwYqKw-1
+Received: by mail-pj1-f70.google.com with SMTP id 19-20020a17090a001300b001b480b09680so3162110pja.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 22:16:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xmJUYGxVIOq2ikN9W5Sr7Lz0nyJ9BNBmKrBR0wxwPTE=;
-        b=1ayTbl4XJDOGx6iqL/8W5rE9ah5oFldvU0UfWOt3gXnl2Ygt02rrczBdo+rhyOF8nk
-         zVYSt0UU6pWhq4NfIzZSSBjowu4JVBz0m3mRALsDHbNpvb0IKhbN+bayfAIe9JDlXaWr
-         qfH9dG1tcodBjv0xFxAOCAKvs3/zNToL86Z2E7cf/HCkyXNiUHl1wvDMSqKUQmrPh6Uz
-         aC4wd9cAm0uqy/eEJyB+1fzbXGfiLtdFDXR3iyQ7z3a6RdEHnMdsTf0KkWHC2Pdj7c/2
-         HMdZtDMejkwSV8ifD3zRmI0zlcaoCQPhAliN4AJ7wj6UEzZN3ULWbEOsko3zcMzOUE0T
-         Isqg==
-X-Gm-Message-State: AOAM532VaLMn9SwNzjEM+h6sitms7/iC9Mo9ZDpAdPU/Nx6vIqcS+k0X
-        ZmG8KMr+sV6HK17eWmOXCS639w==
-X-Google-Smtp-Source: ABdhPJxOswA3kNxXL45GkqcHS4JhxF0KFKbQ4Yl6by2ISkes4m7lp62H+duPcH9WQSM66RTMhk6uqA==
-X-Received: by 2002:a63:6342:: with SMTP id x63mr5500830pgb.148.1643350157903;
-        Thu, 27 Jan 2022 22:09:17 -0800 (PST)
-Received: from aqua.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id h5sm7743182pfi.111.2022.01.27.22.09.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FSteX9W3PLWEuASmDON9me2d/UIiV3TbmFqzK6jQr4M=;
+        b=ih1nDbV9DTrxilNcAkveblZ60vP4cEvSLQwApEG+dhvEH28TEm3bdiaYLXYZVem3H2
+         pteWVue7sO4WwkmzOMFqSHwwgjCAskb2gihVxm6HZoH6feM/6tDoph4eOj7yFsQDmQXh
+         IPhWJRIiOAEFU0R+pmKoR2xBwjiZVh9UjjZ+xA9dOAHq9yogodG8wj4HfclMMcFxuI74
+         FFh5RA6I9pLiTotuOzXMBFqLeuBRjycqw1ppO28khiLiZjhwfJU/fbcno46whWkYEEs8
+         zX1LzFmJ1PUXJ0fsQyb7tkyJ3b9QxztPrEetlvWEQSN2IFDPx7FQhzW4tMqGhdJOrv6U
+         Zlmw==
+X-Gm-Message-State: AOAM533fRdvGy2aziAStDoBxkc5fBiFx/txSzKiuy2p+vhk5Jxc4PNUT
+        GRY0miIpT5cNtT4zZeAufU50UP7UY8WIOY6Oyb46zQEij2GPdAivDWPNhm8A9v/AD5djS5OX5N2
+        o2mpho+R3gZa87Q1tAlraIh02
+X-Received: by 2002:a17:90b:4c8e:: with SMTP id my14mr18040497pjb.243.1643350564127;
+        Thu, 27 Jan 2022 22:16:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzBh69AF7fxpG19IrHi85o0ocI89x0eLeIZI+GAD7OdM5Lf69TwqdWkDCY/AsuxNlDs5C7u6A==
+X-Received: by 2002:a17:90b:4c8e:: with SMTP id my14mr18040465pjb.243.1643350563714;
+        Thu, 27 Jan 2022 22:16:03 -0800 (PST)
+Received: from xz-m1.local ([94.177.118.75])
+        by smtp.gmail.com with ESMTPSA id z13sm7923190pfe.20.2022.01.27.22.16.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 22:09:17 -0800 (PST)
-From:   Tomohito Esaki <etom@igel.co.jp>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Simon Ser <contact@emersion.fr>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomohito Esaki <etom@igel.co.jp>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-Subject: [RFC PATCH v6 3/3] drm: remove allow_fb_modifiers
-Date:   Fri, 28 Jan 2022 15:08:36 +0900
-Message-Id: <20220128060836.11216-4-etom@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220128060836.11216-1-etom@igel.co.jp>
-References: <20220128060836.11216-1-etom@igel.co.jp>
+        Thu, 27 Jan 2022 22:16:03 -0800 (PST)
+Date:   Fri, 28 Jan 2022 14:15:56 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: [PATCH] mm: Fix invalid page pointer returned with FOLL_PIN gups
+Message-ID: <YfOKHMbk2caH4d5g@xz-m1.local>
+References: <20220125033700.69705-1-peterx@redhat.com>
+ <f5400544-f602-0bb4-5cb1-5ac682e41974@nvidia.com>
+ <20220127004206.GP8034@ziepe.ca>
+ <YfJjhop3senAUjue@xz-m1.local>
+ <20220127152538.GQ8034@ziepe.ca>
+ <YfNIjqPpty0YkLJP@xz-m1.local>
+ <20220128023127.GR8034@ziepe.ca>
+ <YfNiWHDYH0dtj9rK@xz-m1.local>
+ <b773a0ab-e226-6acb-eab5-24036b0cf6f4@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b773a0ab-e226-6acb-eab5-24036b0cf6f4@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The allow_fb_modifiers flag is unnecessary since it has been replaced
-with fb_modifiers_not_supported flag.
+On Thu, Jan 27, 2022 at 09:57:34PM -0800, John Hubbard wrote:
+> On 1/27/22 19:26, Peter Xu wrote:
+> ...
+> > I see that both you and John has a strong preference on at least the
+> > WARN_ON_ONCE() in the patch.
+> > 
+> > Do you think it's okay I repost with only the one-liner fix, which will keep
+> > the Fixes but drop the WARN_ON_ONCE?  Then we can leave the rest as follow up.
+> > 
+> 
+> I think that's OK with me, anyway. You'll recall that I initially requested
+> that you split this into two patches, after all.
+> 
+> Would you like me to post a follow-up that does the refactoring that Jason
+> and I are requesting? I see that we have some fundamental differences in
+> opinion about how this should be done, so rather than drive you crazy with
+> debating, maybe that would be smoother?  :)
 
-v3:
- - change the order as follows:
-   1. add fb_modifiers_not_supported flag
-   2. add default modifiers
-   3. remove allow_fb_modifiers flag
+Sure thing. :-)
 
-v5:
- - keep a sanity check in plane init func
+Please just double check that the pud devmap will still always work on mlock().
+I believe both of you are much more familiar than me on that; it just still
+seems a little bit tricky.
 
-Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/gpu/drm/selftests/test-drm_framebuffer.c |  1 -
- include/drm/drm_mode_config.h                    | 16 ----------------
- 2 files changed, 17 deletions(-)
+I'll repost this one, thanks.
 
-diff --git a/drivers/gpu/drm/selftests/test-drm_framebuffer.c b/drivers/gpu/drm/selftests/test-drm_framebuffer.c
-index 61b44d3a6a61..f6d66285c5fc 100644
---- a/drivers/gpu/drm/selftests/test-drm_framebuffer.c
-+++ b/drivers/gpu/drm/selftests/test-drm_framebuffer.c
-@@ -323,7 +323,6 @@ static struct drm_device mock_drm_device = {
- 		.max_width = MAX_WIDTH,
- 		.min_height = MIN_HEIGHT,
- 		.max_height = MAX_HEIGHT,
--		.allow_fb_modifiers = true,
- 		.funcs = &mock_config_funcs,
- 	},
- };
-diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-index 4a93dac91cf9..6b5e01295348 100644
---- a/include/drm/drm_mode_config.h
-+++ b/include/drm/drm_mode_config.h
-@@ -917,22 +917,6 @@ struct drm_mode_config {
- 	 */
- 	bool async_page_flip;
- 
--	/**
--	 * @allow_fb_modifiers:
--	 *
--	 * Whether the driver supports fb modifiers in the ADDFB2.1 ioctl call.
--	 * Note that drivers should not set this directly, it is automatically
--	 * set in drm_universal_plane_init().
--	 *
--	 * IMPORTANT:
--	 *
--	 * If this is set the driver must fill out the full implicit modifier
--	 * information in their &drm_mode_config_funcs.fb_create hook for legacy
--	 * userspace which does not set modifiers. Otherwise the GETFB2 ioctl is
--	 * broken for modifier aware userspace.
--	 */
--	bool allow_fb_modifiers;
--
- 	/**
- 	 * @fb_modifiers_not_supported:
- 	 *
 -- 
-2.25.1
+Peter Xu
 

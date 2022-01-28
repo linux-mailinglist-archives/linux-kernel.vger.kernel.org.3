@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FBF49FDA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF7549FDB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349777AbiA1QJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:09:28 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30888 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234788AbiA1QJ1 (ORCPT
+        id S1349953AbiA1QLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349944AbiA1QK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:09:27 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SFoldD027320;
-        Fri, 28 Jan 2022 16:08:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : content-type :
- mime-version; s=pp1; bh=QuLXzDgjL9wnzbED3Nhc8cRtQ2KTEN03cmdeQI331YI=;
- b=KvhOshayGMTSXSGaeA4/I2ZeblH7U3fOIQzTE1m0wGbar/VSD3opcDl8nLE3BekGGnDm
- 6jVnwWvHywZNTwvxjzKy/WF++mICRRobj3FDDlydD+twy/BwX+d+aYcgfHNvkuR0xcu6
- MjWinBsFlmyZopC3PRN3Zc7bOJl/ySFoUllVHP14WIg7S8GsRjVk9Z8wldzo3Q59vnfU
- Ifogc4f7yDExw/YnPT5qr5fHy0QC9aPzHaDhIBfr5wNH+qWiMnfNLark9BBWz2EQqBoK
- 6KRQ8xCmRr+g6SJ9YBuvYa9/woAg/g9uUaA6Q+bkmoAqBN9eBlttO9ZKMEIg5s72yk0X oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dvjwus6pk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 16:08:55 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SFrXPj007396;
-        Fri, 28 Jan 2022 16:08:55 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dvjwus6nx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 16:08:55 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SG2rDB030994;
-        Fri, 28 Jan 2022 16:08:53 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3dr9ja8jqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 16:08:53 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SG8n4X33948128
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jan 2022 16:08:49 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 865BB11C052;
-        Fri, 28 Jan 2022 16:08:49 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1669111C058;
-        Fri, 28 Jan 2022 16:08:49 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 28 Jan 2022 16:08:49 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, hca@linux.ibm.com,
-        linux-s390@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: ftrace hangs waiting for rcu
-References: <20220127114249.03b1b52b@gandalf.local.home>
-        <YfLjIOlGfFmbh1Zv@FVFF77S0Q05N> <yt9dy231yq90.fsf_-_@linux.ibm.com>
-        <YfQCohKWJg9H+uID@FVFF77S0Q05N>
-Date:   Fri, 28 Jan 2022 17:08:48 +0100
-In-Reply-To: <YfQCohKWJg9H+uID@FVFF77S0Q05N> (Mark Rutland's message of "Fri,
-        28 Jan 2022 15:42:48 +0000")
-Message-ID: <yt9dee4rn8q7.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HIA2iVl0ZRTGnPPvDah9uhzigmjhRZTE
-X-Proofpoint-ORIG-GUID: 2MXkrPI1bRRT1QHJ7IkNsiOUGgkUm0bm
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 28 Jan 2022 11:10:57 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65526C061747
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:10:57 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id x193so13279848oix.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:10:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2ZOiI6lazSl8B7vFlhNLXnNn9YbN5dBSdVRmogZ9Qao=;
+        b=hjhdyG10JLRh3r2QbHELSXx0g9SkUM2z/Q+WCHuTANvkPtMdpLI05LySB+0s+JNeqp
+         h/b/RovU8FRUhcx0nA4QiCU4Ec5haUTbAGkuQGE9WmVhGiyoGpO0AWlkitWbFTm3hNIv
+         WOwq4Y8p27sqs/QAU2fe4/VBlAh6g0zYXW14P2FE0EQZttByFC2XTRxGIJeX73i4V44W
+         2Ngm7qxAjRB/RtK/6RhGfNjkvIK0+bAKORcRzH3dZKXFD9zZEnLa3RJd8V5AK5acFM6l
+         3ASHEH7e5S3qhR+jLkF17TNwE7Mxb3F2u8ND1rKpgD305U4kf1hbMjbHxxYSsfySId0n
+         DuxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2ZOiI6lazSl8B7vFlhNLXnNn9YbN5dBSdVRmogZ9Qao=;
+        b=VUj7ygWvsvEQeIZZn7owLHvvf8AeipzyKu+U86eytH4aqO68z8sVpdWySHCx0y4dtI
+         Pl1je9ovpKhKqtXBvRK0ZgDISdF6+ABQZz4UlNgRepl34byi6fMoQbf17eWaGI4/W/bH
+         JFci+bnunwqOBMU7UIycKIoe/42hG4o2kqHLMzJQ2TSobqbcgksOz70SoTO2pO+YEEf4
+         JgQOKJmv7kAMH8RS9IBMkqiZjfHFq75X+SP6DhBNT0n7FL0VN9uZ2Y71BNiC42CzZEPt
+         WVoAV7ivqmWK00o2H5VBPp0tGdraFx2jxZ7XD6Mx029It/J6Vh7DYfs32iv/ou5bA6wU
+         GJ6g==
+X-Gm-Message-State: AOAM530e+/JI4CxrDAIhjD/riz6ySb7qVVlh5Hy9RL6lWsUgjgem8ji9
+        p4SR3047VES71wIP+AugWdJJiQ==
+X-Google-Smtp-Source: ABdhPJx4HXeI26gB9vJZi3St+tQAaKLaM/tjSbjPY7Npv2+r+wxlghlN1mdUz3f7ObVBR1yYvKuEHA==
+X-Received: by 2002:a05:6808:f05:: with SMTP id m5mr8868453oiw.121.1643386256435;
+        Fri, 28 Jan 2022 08:10:56 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id m23sm10325469oos.6.2022.01.28.08.10.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 08:10:55 -0800 (PST)
+Date:   Fri, 28 Jan 2022 08:11:19 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        greg@kroah.com, robh@kernel.org, linux-kernel@vger.kernel.org,
+        quic_tsoni@quicinc.com, quic_psodagud@quicinc.com,
+        quic_satyap@quicinc.com, quic_pheragu@quicinc.com,
+        quic_rjendra@quicinc.com, quic_sibis@quicinc.com,
+        quic_saipraka@quicinc.com
+Subject: Re: [PATCH V4 3/6] soc: qcom: eud: Add driver support for Embedded
+ USB Debugger(EUD)
+Message-ID: <YfQVpzZ42MdJkkZW@ripper>
+References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+ <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
+ <YfDSZTZOryQuWIlJ@builder.lan>
+ <c072d162-e371-e44b-8160-d06a8a6c051c@quicinc.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_05,2022-01-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 phishscore=0 spamscore=0 mlxscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2201280101
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c072d162-e371-e44b-8160-d06a8a6c051c@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Thu 27 Jan 04:01 PST 2022, Souradeep Chowdhury wrote:
 
-Mark Rutland <mark.rutland@arm.com> writes:
+> 
+> On 1/26/2022 10:17 AM, Bjorn Andersson wrote:
+> > On Fri 21 Jan 07:53 CST 2022, Souradeep Chowdhury wrote:
+[..]
+> > > +		return PTR_ERR(chip->base);
+> > > +
+> > > +	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+> > > +	if (IS_ERR(chip->mode_mgr))
+> > > +		return PTR_ERR(chip->mode_mgr);
+> > > +
+> > > +	chip->irq = platform_get_irq(pdev, 0);
+> > > +	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
+> > > +			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
+> > > +	if (ret)
+> > > +		return dev_err_probe(chip->dev, ret, "failed to allocate irq\n");
+> > > +
+> > > +	enable_irq_wake(chip->irq);
+> > > +
+> > > +	platform_set_drvdata(pdev, chip);
+> > > +
+> > > +	return 0;
+> > Per the updated binding, the EUD would now be a usb-role-switch as well
+> > and when not enabled should simply propagate the incoming requests. So I
+> > was expecting this to register as a usb_role_switch as well...
+> 
+> Can you please elaborate on this?
+> 
+> Do I need to define a separate 'usb_role_switch_desc' here and register
+> using 'usb_role_switch_register'?
+> 
+> Also what should be the set method in this case for usb_role_switch_desc?
+> 
 
-> On arm64 I bisected this down to:
->
->   7a30871b6a27de1a ("rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic queue selection")
->
-> Which was going wrong because ilog2() rounds down, and so the shift was wrong
-> for any nr_cpus that was not a power-of-two. Paul had already fixed that in
-> rcu-next, and just sent a pull request to Linus:
->
->   https://lore.kernel.org/lkml/20220128143251.GA2398275@paulmck-ThinkPad-P17-Gen-1/
->
-> With that applied, I no longer see these hangs.
->
-> Does your s390 test machine have a non-power-of-two nr_cpus, and does that fix
-> the issue for you?
+My expectation is that in normal operation pmic_glink will provide role
+switching requests and then as you enable the EUD it will force the role
+to gadget.
 
-We noticed the PR from Paul and are currently testing the fix. So far
-it's looking good. The configuration where we have seen the hang is a
-bit unusual:
+So my suggestion was that you make eud a role-switch and as long as EUD
+is disabled you just pass through the role-switch vote from pmic_glink
+onto the dwc3.
 
-- 16 physical CPUs on the kvm host
-- 248 logical CPUs inside kvm
-- debug kernel both on the host and kvm guest
+Perhaps I'm misunderstanding how this is really working.
 
-So things are likely a bit slow in the kvm guest. Interesting is that
-the number of CPUs is even. But maybe RCU sees an odd number of CPUs
-and gets confused before all cpus are brought up. Have to read code/test
-to see whether that could be possible.
-
-Thanks for investigating!
-Sven
+Regards,
+Bjorn

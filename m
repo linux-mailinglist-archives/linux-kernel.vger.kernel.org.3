@@ -2,255 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE60449F608
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2734A49F60D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347512AbiA1JMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:12:15 -0500
-Received: from mga03.intel.com ([134.134.136.65]:13015 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234281AbiA1JMO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:12:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643361134; x=1674897134;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Urk9Fx5Hd5Js/YOOHw/RPA40Ql9fdsPvt6tLp2JZQZM=;
-  b=afrePYJLcMzOli0+B2KUaelQg3zDAExsPnyBzw5CkcyIh9i9getGmgD2
-   S5M1kY/deiKeUul9xECaGGhTALGU/llS4Z2l4fUwDSMbRcdtwTEjd8XG6
-   C6yAY9uNMAIDcCYV41AOGf7cI5yY0dQah6HvjYyC9vXNEXknIzhMGxxU8
-   b4RFsCeLx3vzjjSQRFtw2V674LhpVvuDH02oDB3WI63Xfb3for7qgNzYI
-   R36BYbvO1fXfNY+422NdM3bYU8OGvd6bFMJGC48NHfz7vg/HIMlOET1mn
-   zVpV8CehQInCzYGSPBYv3OhHzrY1mecf5Y6PFPxOW4qTCAbvpfsMlLn1W
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247030716"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="247030716"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:12:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="625576326"
-Received: from jsstout-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.160.158])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:12:13 -0800
-Date:   Fri, 28 Jan 2022 01:12:13 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
-        sumit.semwal@linaro.org, daniel.vetter@ffwll.ch, airlied@linux.ie,
-        lyude@redhat.com, tzimmermann@suse.de, linux-media@vger.kernel.org,
-        nouveau@lists.freedesktop.org
-Subject: Re: [PATCH 00/14] Rename dma-buf-map
-Message-ID: <20220128091213.qaq6v4vbeerzvd3f@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220128083626.3012259-1-lucas.demarchi@intel.com>
- <a45a8cef-f5e7-604c-64f1-e893ec9ba8af@amd.com>
+        id S1347527AbiA1JNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:13:14 -0500
+Received: from mail-dm6nam12on2088.outbound.protection.outlook.com ([40.107.243.88]:41024
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234281AbiA1JNN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 04:13:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NbGBIp3cIrkbLiSjtFvGUqtcUGsE+KFemZWyVsogzGOhBaMqS1szRiR7uWCUbIFCEqTGxz+dLt9Dq+wvEdlzkzWb7nHA/dwVxrWQlQy6H+OUkWs71fk6f6jXKJKAmt2ZUGfC3BIP1NfywfxsvSH1g2PFEya2e7XFv58s8eHq6WewIcss/p853WRLOwmsWWfPZXMb/GrbPlj1hFIEeyodrU3Z/4JAvMMXddHKQjYSGzF3cvFiFnr5kgeS6OCsItDcZe9pL4FdagxH+m/TOuvlMrYTAJ9j63AZyVBjqV/IWXJ7C1ZwpevNiurmh2CMHwgoY2fzCl+d5auQTHnHREHm0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hDDGO9l+GHDDD7OjVPtfLIcoHpug1HFQU/Kz2QCg7/A=;
+ b=V7oK/nyAdrBjJ9UVE+JWq3UP56wI0FE+hZC0o8/Bgv7fCAB2bCqhkL34R3oCg8ZA4l3r7IiAgyXyl63Q83J1STfrZtJKcTIFq9ZlgoJWNohn0jtn2SoVcNUZaK9N/9vIKK+FIpZUlhWmOcjchK6Lk/dtFG5561FFkgpnK9sshn1mdqamQnZ6PyBORVDSCDQf4r8tvL5g0U1vibP36LDxcYDOocDolNR9XBaNXi8gc5rvpTaHDMYkub4I5LldLoemD86H5gok5JWHu+KhcJ56Pw7Q+T6ALfpL22PdgKrqCfYWIo+RZ7IzfTGpEl49wMuQpBY95I4dX8v79V9cAUCDEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hDDGO9l+GHDDD7OjVPtfLIcoHpug1HFQU/Kz2QCg7/A=;
+ b=bOmE/QbpQ8DU71VOD3WQ5Ja0ag3EqbsjK6dawh7SlztdwmmbMXAKgJnrgT+YfMXKkf2b2CVsl47edB6w9hCW+goQgQ9MtYoQfswvb0oLxPW7t3q78eR09vU8XVz63Af33/XKNfYWapNDAWHxSGFkWiC5d7ROL97YnnNCRIZSlg78gTnz2NEK/pUX6uCslt7vBcPZDC/qBndLWRQZp9S9GkX7TT9nynl7uoRnQSVeY2UMVqRdhQTR57kXDTQ24tOeDYb03CE+yh8khW0lw2OlEt4ujjIglSKDRBtD4GJqhBggVMJ/x/vZI3MguUbfhFo8VooecRcFoKHd+DG5IOu6Hg==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by BYAPR12MB2631.namprd12.prod.outlook.com (2603:10b6:a03:6b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Fri, 28 Jan
+ 2022 09:13:11 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35%4]) with mapi id 15.20.4930.018; Fri, 28 Jan 2022
+ 09:13:11 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Logan Gunthorpe <logang@deltatee.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v5 12/24] nvme-pci: convert to using dma_map_sgtable()
+Thread-Topic: [PATCH v5 12/24] nvme-pci: convert to using dma_map_sgtable()
+Thread-Index: AQHYE93DRXAPGacM40q8QY5Zypteeax4Js4A
+Date:   Fri, 28 Jan 2022 09:13:11 +0000
+Message-ID: <8ea7b917-e8b9-2bed-40bf-276c8a0b1f2c@nvidia.com>
+References: <20220128002614.6136-1-logang@deltatee.com>
+ <20220128002614.6136-13-logang@deltatee.com>
+In-Reply-To: <20220128002614.6136-13-logang@deltatee.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9a97b3ac-8f71-4d97-c878-08d9e23e6828
+x-ms-traffictypediagnostic: BYAPR12MB2631:EE_
+x-microsoft-antispam-prvs: <BYAPR12MB263176D6DCF808CBBF261045A3229@BYAPR12MB2631.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FxNC72RfPCPnBNfX67COYfQRDLVZj0GWWwPThisBQgjqfwNZEIW8ZKvyuvPXlsvyg36DMEI2C0c9gAVId5lBE54RK8vfFFq4PkSb2lhVjOyjG/IYqeyKGWRa9ZNwtm8ZlARN39Go2e+Zf97QkcejH5lVnxzoKKnDMd80ylCUsSeN2AhRqvwY185j2V1LW+AUJR0cn/244TVk5QtfY9HAEw0g5SwIZvgJp7NSzqNihtzWhWrb932p4fP6mAqHttlPfUyoR0ZT6U3nYg+m+NGFlWYCydMGZMTlpAVh9PyXjpLn6wi4RScZAphelAjmUN6OzY/H9FgwAi41lGz5plL5ftkHCI5UAax5YgwZ/Fmr4hn9dTIvaf8u5n7DDUIwZ1re9CaIO2hWjUG7Rl+LWQrMe+nlv8NREwEmwzvzLFGamlLmiO35K4ZxgqcZLy2+0yGbZyxBfJdt6kr5dd6XFweW4bTj6SRndBv555dIe3XmdK3RHF23WL7V0An2t4XNfoIfynN9nmz6MKY7oNDM//7BAWPyNzMtn+RityXU6DUM6KKH7dDTfCx40KIwiBG+YesDAdw+5ZvV668W+npSq2HlnSrtjQdAftcYtaTMLeJsvv971E5ibxwCoFTz9ILjmn6NIz4KnX3ZeFTN6OWa2clD7S/6gxN+L4/lko+DupqWSmrXZI3A63vbaVK+DnH7APoQA/S8Lf1XUxCb1Ab6+uEXYve+ycGakN4XkaClYqw+hDxc2VuqToZQLzGLXWOfXQVTNq7/okYFOJq8/SgXEpZ3mw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(76116006)(4744005)(2616005)(6512007)(6486002)(53546011)(5660300002)(91956017)(71200400001)(508600001)(6506007)(66556008)(36756003)(2906002)(31686004)(38100700002)(186003)(122000001)(6916009)(54906003)(38070700005)(316002)(26005)(66446008)(66476007)(83380400001)(8676002)(64756008)(8936002)(4326008)(86362001)(31696002)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UEo5RmxWbUxsbmgrcHdvNVlnZFZNMm5yM1pxamtuWWR1TldIejEwU0NIZ2RI?=
+ =?utf-8?B?VXAyQmptV2loK0NpaGNieUhiTEFFd1BCZE9RaDg1b2lISmtUdTJzS2l6cXky?=
+ =?utf-8?B?dWN6MlFNM21raVc5MExkeVNkNkxad3dVdzdKdGZwV0pWYVFvTVUrL0VTK3BV?=
+ =?utf-8?B?ek5HNldVVk9IRGVXN1A3R0ZwWmg3c2gvZXZSMnk2eVI2M2FXWlN1dmlhWm9h?=
+ =?utf-8?B?a0Y4cnVsZk9VR25mUnlEREFBRVdBNm1qbDQ0NHU0aGtPbEhWR0RFTVVVNkMv?=
+ =?utf-8?B?WWFYcUNnMlViVHI2TlRQWVc4RE1lV2lTOWJDOGtjQzRhZzZYVnc4U1l4VDZx?=
+ =?utf-8?B?ZlZwT1hGVkpUWlArS2V6R1dobDcvNEo5ZmJkWHlaT0EvcE00S3lERlNvSjZu?=
+ =?utf-8?B?dS80K3laY2N1YThXS01uV0F5a1FTNGk1SjhBUTJqNVJpcjFKaDFoSnQraUk5?=
+ =?utf-8?B?VmNyMUpQSGhvd293NmJRc3lZRmNRdGZ0NTdKeEVqWmozeFpUMEhtVUFKM3F2?=
+ =?utf-8?B?alJXYndsRFN6VmNYTkpoQzZzZStXVHdSYU00OXNYWUVzbE9FZEJXVTRIS1U5?=
+ =?utf-8?B?ejF5UUY5MExXWkUycnphZnBtRVNhYmxicjBoMy9EcnhpNDNvaFF6QjUrNFZY?=
+ =?utf-8?B?T0hOWjl3cFVXYXZhbkpUemNyaWoxbldzZEE4cmQ4T1BRM2lxNkNHa3BRemdC?=
+ =?utf-8?B?cU5JRHQxWHBXVnc3Q09QOWQxNkV5dXV0UnNheXVVVzh1c2p5S0QyYnJmTENy?=
+ =?utf-8?B?Qkl1NTJIWk1DMVl0cVBlK3JLaUFLdjR5amtSMUVNNFB1QWpOMWpPSVJOd3Ns?=
+ =?utf-8?B?T041VW16U2h6MzF1QnArMHIrVDJid2JKZFJ6N0RZV2ZEVUlWMFRHQVRMOUdN?=
+ =?utf-8?B?RnZ4WXROQndSZnJaVlE3bytXV0tmeGZiQVFEWDFxRlFuaFNUd2xFdkpDUCty?=
+ =?utf-8?B?L2pUdWQ1ckJ0NkExdEg3Smlxc2VmVUY5V0RrdnhIVjkyWkNQZ3FGTkVFaDR3?=
+ =?utf-8?B?a3pBazE0bXgxdnRJczB0NTBXWm5EeUlmaFFLaExvb1k0RWdoVHp3bVdkbitS?=
+ =?utf-8?B?Z3kxN2RPa3VSUmhSTUl4cEc1R01EYVBFQlBBSVBOVmRTYzBXOHU5dWVTOGhw?=
+ =?utf-8?B?TzFrYXcxbXBtTTlTTnlhV0JRclorVk5GbzJGQU5kRVZ0cGhUSU10K0tVRHdE?=
+ =?utf-8?B?NEV1Z3ZSUXR1T0t5SzllUXJqcGRNVWlYaXFBWCt3TDlTaFVjbDVIVjFXWHlL?=
+ =?utf-8?B?OFppOHpWQXlQQjNOTkVCT0xiVkViczFGZkVjdDgrNEx0aHgwcmxFcVAyeE5B?=
+ =?utf-8?B?Tks4MHpzKzFWSVM2VXVUMXRKYnVVQjhLRVVoNm9nUlN5dUt6K0hZMWgrZThl?=
+ =?utf-8?B?K2RsRFIza01pZWNCWEk3V3VsUVVaekhDMC9jL2lOUjRneTZGbTVhMTQwdU5t?=
+ =?utf-8?B?MWN6QTNOc1pkbGt4MUdYOUZlR3hVYmJ6QmVtQ3hhcmd5U2RkUE1aM0xVNjF0?=
+ =?utf-8?B?SFlLaWI0QVJZNFEvcGRselZQZnpoalZxSUYzbk1MOS9MRVpXaTkwNEFBcW1N?=
+ =?utf-8?B?blAyOTJCaXFNUGFQbG5Pb2NpVHRUdlBEeFdDTzQ2NnpQS0ZlRW5Va241Y1VN?=
+ =?utf-8?B?d0R6S0M2MUQrMkhENUpIUjZDS0pMNjkxOTUwTFA2R2hiZ0tqamdEalZRVVpv?=
+ =?utf-8?B?VWZHQ2pqWmRzTGJJTm84L3RXY0lkeWN4UnZDSkhnOUs3UUhwenNML09nMFJO?=
+ =?utf-8?B?MVFiaXNvU093NjlHWHAvN3o1N0srVFJWNDd0OUVQTThteVBTRkJhL2lDVWhj?=
+ =?utf-8?B?Mk1QWllIZHB5aGtrRkMyUnZ6QVVWTkdjbVRRRG9zNVJwbVNSekw2cHd1aU5F?=
+ =?utf-8?B?b1p6Y28xSEF4ZGVYZjhPYyswcDV3MzFBcGhJRXpncDVtYmY1SStvVW1PWnQ5?=
+ =?utf-8?B?Z2NVbUt6YVZhZGxvZEptRXJWZnBTMWZDeWVZYUFqZzIwbC82eUxNT2hBSkFP?=
+ =?utf-8?B?K2JKbTRsd3ZxeHppdFZXOUlIb1IwUGZrTzB0a1FwblhPWk5SZHV4bUFqUkR0?=
+ =?utf-8?B?eGNUYm5XRGgvK09SRG9GMDZHQjJFeEw1YStJcVRTNlpmSURLZWx1R2s1MXBj?=
+ =?utf-8?B?dVZnUThRdGVCSVk1b2s5a3Viajl2UmVpaWQrQlhxdGQwYUlHSW1xMHZDTkNI?=
+ =?utf-8?B?bEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B315B704E0242243970070E55F91CF40@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a45a8cef-f5e7-604c-64f1-e893ec9ba8af@amd.com>
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a97b3ac-8f71-4d97-c878-08d9e23e6828
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2022 09:13:11.1738
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: f0hTNwwnRDK0aLpuKmNMZtks21K5zltKtcQ8BI6+1cvTfGCzGeUCHuz/1iRddoNVuaxb/ByY36lRTW2WV7pLTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2631
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 09:41:14AM +0100, Christian König wrote:
->Rule #1 is to never ever break the build.
->
->Because of this all those patches needs to be squashed into a single 
->one as far as I can see.
-
-what config are you building on? I built this series, full config with
-CONFIG_COMPILE_TEST and doing:
-
-	git rebase -i <base> -x "make -j$(nproc)"
-
-I split these patches in a way that wouldn't break the build on purpose.
-There were a couple that I couldn't build without cross compiling: tegra
-and rockchip. The others were ok.
-
-I'm not really against squashing everything in one to merge, though.
-It will be hard on the conflicts later, but should get the job done much
-quicker.
-
-Lucas De Marchi
-
->
->Regards,
->Christian.
->
->Am 28.01.22 um 09:36 schrieb Lucas De Marchi:
->>Motivation for this started in
->>https://lore.kernel.org/lkml/20220126203702.1784589-1-lucas.demarchi@intel.com/
->>when trying to extend the dma-buf-map API to cover new use cases: help a
->>single driver with allocations and sharing code paths for IO and system
->>memory. I'm leaving the API additions aside and first renaming the
->>interface as requested.
->>
->>There are already some users in tree outside the context of dma-buf
->>importer/exporter. So before extending the API, let's dissociate it from
->>dma-buf.
->>
->>The iosys-map.h is introduced in the first patch in a way that allows
->>the conversion of each driver to happen separately. After all the
->>conversions are done we can remove the old one, which is the last patch.
->>Another possible way is to squash everything and merge together,
->>but I believe this would make much harder for review.
->>
->>The conversion was done with the following semantic patch:
->>
->>	@r1@
->>	@@
->>	- struct dma_buf_map
->>	+ struct iosys_map
->>
->>	@r2@
->>	@@
->>	(
->>	- DMA_BUF_MAP_INIT_VADDR
->>	+ IOSYS_MAP_INIT_VADDR
->>	|
->>	- dma_buf_map_set_vaddr
->>	+ iosys_map_set_vaddr
->>	|
->>	- dma_buf_map_set_vaddr_iomem
->>	+ iosys_map_set_vaddr_iomem
->>	|
->>	- dma_buf_map_is_equal
->>	+ iosys_map_is_equal
->>	|
->>	- dma_buf_map_is_null
->>	+ iosys_map_is_null
->>	|
->>	- dma_buf_map_is_set
->>	+ iosys_map_is_set
->>	|
->>	- dma_buf_map_clear
->>	+ iosys_map_clear
->>	|
->>	- dma_buf_map_memcpy_to
->>	+ iosys_map_memcpy_to
->>	|
->>	- dma_buf_map_incr
->>	+ iosys_map_incr
->>	)
->>
->>	@@
->>	@@
->>	- #include <linux/dma-buf-map.h>
->>	+ #include <linux/iosys-map.h>
->>
->>and then some files had their includes adjusted so we can build
->>everything on each commit in this series. Also some comments were update
->>to remove mentions to dma-buf-map. Simply doing a sed to rename didn't
->>work as dma-buf has some APIs using the dma_buf_map prefix.
->>
->>Once finalized, I think most of this, if not all, could go through the
->>drm-misc-next branch. I split i915, msm, nouveau, and radeon in their
->>own patches in case it's preferred to take those through their own
->>trees.
->>
->>Lucas De Marchi
->>
->>Lucas De Marchi (14):
->>   iosys-map: Introduce renamed dma-buf-map
->>   misc: fastrpc: Replace dma-buf-map with iosys-map
->>   dma-buf: Replace dma-buf-map with iosys-map
->>   media: Replace dma-buf-map with iosys-map
->>   drm/ttm: Replace dma-buf-map with iosys-map
->>   drm: Replace dma-buf-map with iosys-map in drivers
->>   drm/i915: Replace dma-buf-map with iosys-map
->>   drm/msm: Replace dma-buf-map with iosys-map
->>   drm/nouveau: Replace dma-buf-map with iosys-map
->>   drm/tegra: Replace dma-buf-map with iosys-map
->>   drm/radeon: Replace dma-buf-map with iosys-map
->>   drm: Replace dma-buf-map with iosys-map in common code
->>   Documentation: Refer to iosys-map instead of dma-buf-map
->>   dma-buf-map: Remove API in favor of iosys-map
->>
->>  Documentation/driver-api/dma-buf.rst          |   4 +-
->>  Documentation/gpu/todo.rst                    |  20 +-
->>  MAINTAINERS                                   |   2 +-
->>  drivers/dma-buf/dma-buf.c                     |  22 +-
->>  drivers/dma-buf/heaps/cma_heap.c              |  10 +-
->>  drivers/dma-buf/heaps/system_heap.c           |  10 +-
->>  drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
->>  drivers/gpu/drm/ast/ast_mode.c                |   8 +-
->>  drivers/gpu/drm/drm_cache.c                   |  18 +-
->>  drivers/gpu/drm/drm_client.c                  |   9 +-
->>  drivers/gpu/drm/drm_fb_helper.c               |  12 +-
->>  drivers/gpu/drm/drm_gem.c                     |  12 +-
->>  drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
->>  drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
->>  drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
->>  drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
->>  drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
->>  drivers/gpu/drm/drm_internal.h                |   6 +-
->>  drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
->>  drivers/gpu/drm/drm_prime.c                   |   4 +-
->>  drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
->>  drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
->>  drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
->>  drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
->>  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
->>  .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
->>  .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
->>  drivers/gpu/drm/lima/lima_gem.c               |   3 +-
->>  drivers/gpu/drm/lima/lima_sched.c             |   4 +-
->>  drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
->>  drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
->>  drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
->>  drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
->>  drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
->>  drivers/gpu/drm/nouveau/nouveau_gem.c         |   2 +
->>  drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
->>  drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
->>  drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
->>  drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
->>  drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
->>  drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
->>  drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
->>  drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
->>  drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
->>  drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
->>  drivers/gpu/drm/tegra/gem.c                   |  10 +-
->>  drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
->>  drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
->>  drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
->>  drivers/gpu/drm/ttm/ttm_resource.c            |  26 +-
->>  drivers/gpu/drm/ttm/ttm_tt.c                  |   6 +-
->>  drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
->>  drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
->>  drivers/gpu/drm/virtio/virtgpu_prime.c        |   1 +
->>  drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
->>  drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
->>  drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
->>  drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
->>  drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
->>  drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
->>  .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
->>  .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
->>  .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
->>  drivers/misc/fastrpc.c                        |   4 +-
->>  include/drm/drm_cache.h                       |   6 +-
->>  include/drm/drm_client.h                      |   7 +-
->>  include/drm/drm_gem.h                         |   6 +-
->>  include/drm/drm_gem_atomic_helper.h           |   6 +-
->>  include/drm/drm_gem_cma_helper.h              |   6 +-
->>  include/drm/drm_gem_framebuffer_helper.h      |   8 +-
->>  include/drm/drm_gem_shmem_helper.h            |  12 +-
->>  include/drm/drm_gem_ttm_helper.h              |   6 +-
->>  include/drm/drm_gem_vram_helper.h             |   9 +-
->>  include/drm/drm_prime.h                       |   6 +-
->>  include/drm/ttm/ttm_bo_api.h                  |  10 +-
->>  include/drm/ttm/ttm_kmap_iter.h               |  10 +-
->>  include/drm/ttm/ttm_resource.h                |   6 +-
->>  include/linux/dma-buf-map.h                   | 266 ------------------
->>  include/linux/dma-buf.h                       |  12 +-
->>  include/linux/iosys-map.h                     | 257 +++++++++++++++++
->>  80 files changed, 579 insertions(+), 552 deletions(-)
->>  delete mode 100644 include/linux/dma-buf-map.h
->>  create mode 100644 include/linux/iosys-map.h
->>
->
+T24gMS8yNy8yMiA0OjI2IFBNLCBMb2dhbiBHdW50aG9ycGUgd3JvdGU6DQo+IEV4dGVybmFsIGVt
+YWlsOiBVc2UgY2F1dGlvbiBvcGVuaW5nIGxpbmtzIG9yIGF0dGFjaG1lbnRzDQo+IA0KPiANCj4g
+VGhlIGRtYV9tYXAgb3BlcmF0aW9ucyBub3cgc3VwcG9ydCBQMlBETUEgcGFnZXMgZGlyZWN0bHku
+IFNvIHJlbW92ZQ0KPiB0aGUgY2FsbHMgdG8gcGNpX3AycGRtYV9bdW5dbWFwX3NnX2F0dHJzKCkg
+YW5kIHJlcGxhY2UgdGhlbSB3aXRoIGNhbGxzDQo+IHRvIGRtYV9tYXBfc2d0YWJsZSgpLg0KPiAN
+Cj4gZG1hX21hcF9zZ3RhYmxlKCkgcmV0dXJucyBtb3JlIGNvbXBsZXRlIGVycm9yIGNvZGVzIHRo
+YW4gZG1hX21hcF9zZygpDQo+IGFuZCBhbGxvd3MgZGlmZmVyZW50aWF0aW5nIEVSRU1PVEVJTyBl
+cnJvcnMgaW4gY2FzZSBhbiB1bnN1cHBvcnRlZA0KPiBQMlBETUEgdHJhbnNmZXIgaXMgcmVxdWVz
+dGVkLiBXaGVuIHRoaXMgaGFwcGVucywgcmV0dXJuIEJMS19TVFNfVEFSR0VUDQo+IHNvIHRoZSBy
+ZXF1ZXN0IGlzbid0IHJldHJpZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBMb2dhbiBHdW50aG9y
+cGUgPGxvZ2FuZ0BkZWx0YXRlZS5jb20+DQo+IFJldmlld2VkLWJ5OiBNYXggR3VydG92b3kgPG1n
+dXJ0b3ZveUBudmlkaWEuY29tPg0KPiAtLS0NCg0KTG9va3MgZ29vZC4NCg0KUmV2aWV3ZWQtYnk6
+IENoYWl0YW55YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQoNCg==

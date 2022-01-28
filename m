@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8302F49F7EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E749F7EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 12:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348080AbiA1LJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 06:09:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24414 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238642AbiA1LJJ (ORCPT
+        id S1348027AbiA1LJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 06:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348074AbiA1LJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 06:09:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643368149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=35G0EZH/o9dD2crtrnjLKHLlwbAMq77uRxgBW+YN2gA=;
-        b=BQEkv8S6mM3zkeWHZMmBR2u9CELc+3S+p6HDdiO248GOLo53LPGbJkdwSvb6Cc3a7o96fd
-        yrm7J5FsS3OD1/3ZDIkMiq853lhIemsQlh55gz80qilpv74m284v/CRAL1O9XZ7E9OsPNy
-        4dcFkEJ3pJDGp/3OmGu3cuVdVeczzrs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-FP1g3hS1PgadjIn5JFmPxQ-1; Fri, 28 Jan 2022 06:09:07 -0500
-X-MC-Unique: FP1g3hS1PgadjIn5JFmPxQ-1
-Received: by mail-wm1-f71.google.com with SMTP id f7-20020a1cc907000000b0034b63f314ccso2805389wmb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 03:09:07 -0800 (PST)
+        Fri, 28 Jan 2022 06:09:26 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1BDC061749;
+        Fri, 28 Jan 2022 03:09:26 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id e8so5034631ilm.13;
+        Fri, 28 Jan 2022 03:09:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wDt4jv4w3YC6Q40GetvSo+cqdaAT0L68ivf9sPs/K8Q=;
+        b=EJ4fNl8jGpwOF+l7mYmqwnMdwQaU7ijAZyfJ0sMP9w1lOujGb+aadfBn078cU/LVXQ
+         CIjZFd2s8/1wcIz/IAfucniv59I5ug6C1Wdfc4DmVqaGXWPlVnXX7KfoI2I8zkuY9qlP
+         slYslrq1aeQhKYeGIWKYTvFuoORRrgA2yZSefrae4Ke3pluEiuMI7Dxy/N72sYXzYXx7
+         Fr+7EpWiyElnfqtE0K2vQhHIsB3XjL8vEbzhId/UQ5TsdvG+J8gcQUD25CwxTorFlFOy
+         5OjZ4v7itBoShKaf4qwlumgWCxZW6/wuL1AbNbZbaJQHo00QFfeTgUAUvJl5/SQ3uTFN
+         KTLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=35G0EZH/o9dD2crtrnjLKHLlwbAMq77uRxgBW+YN2gA=;
-        b=v5N7JM/cRDk4AMXIc/l//MiQ8xTlyRPB3UwWZ2kzCNuUCI3vNs3X31P9BkBT60CNkA
-         vuYLwYzdTMkVm6zQp6JsNXm6uEzOv3iXgQbcAVXSG5kZd2dEszl9kIpXG54U1IFM4RT9
-         tdnldREa0H9RoBwNedpuT/4SmXN+ESJYtEiYaVqh8msqhi14BbbQ/gGJkj6MKRXSIUYJ
-         jnoPeX08T+/PjNXq+zzk+Jjvt9eg5PqIOxqe0rfVYTslO4eCXVhpABIH3BnxgfpZeZCk
-         fwFdz1/XFZV/i4vS8UoN1ghFPV8uQMqngZHAZVSeRDu7AzSE7FQq1zksG2whMvJWyepP
-         gY3w==
-X-Gm-Message-State: AOAM531sRgYb0UTLlJwp10kkXwpxQv53OPw/dkVrpMfohWBAjMxl3fmn
-        3VHd1P2lgCiF+eA9Ya6kcEdWWljFABDESmxRAE1yK/vxnbG7h4xiFJOR/vRnVZJYUGOqXGpeoWR
-        MM3mxchTdRC0QGvAw7nPPwTiu
-X-Received: by 2002:a05:600c:2948:: with SMTP id n8mr7006475wmd.61.1643368146525;
-        Fri, 28 Jan 2022 03:09:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyK3G/FxIBrsORiLFoh6WUx871HJXkDD26z2CbztjoHQ9dhXPymdoC9rR9lW4k1VOIwEQjifw==
-X-Received: by 2002:a05:600c:2948:: with SMTP id n8mr7006453wmd.61.1643368146276;
-        Fri, 28 Jan 2022 03:09:06 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m25sm1594570wml.47.2022.01.28.03.09.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 03:09:05 -0800 (PST)
-Message-ID: <9ae2c7ba-133e-7c6f-190b-97158f241c7f@redhat.com>
-Date:   Fri, 28 Jan 2022 12:09:05 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wDt4jv4w3YC6Q40GetvSo+cqdaAT0L68ivf9sPs/K8Q=;
+        b=44c7AKpxFYlPu29UIm0/tkLWMYAjRyJ4G8rq2VJWNmb2CaT6jbAlRl5J23zQOmUvik
+         kk+y83cmxZ1hRutFHauwT0XMinHFhvxGlnFy/SgLOJORtwx6GeiWl14FE9wIJUrNes/L
+         oatT/wMpXx7sB+5EsxV8TqLKu8aJ5mkPu5+k8rveHY5CUjXxzb+PxCkAC5nrQfy7ZU8I
+         +1Lb/E1TUsMxcvLV+uJt/za6OzKlnJdjPvpgabcvk3DELUjp7mjYS7nDuKXz9fbd9VM1
+         +dqVp8b8OCMXAVfyh/eF98rsFRnQv5/IjZUIttaLN0+9Q3ypkxi+5u7KwfCU7aB4BISl
+         bq8A==
+X-Gm-Message-State: AOAM531PhPQTIN9u1Ug4SaaqecSDVMfFfDKZ3Gm+FUL8UPJnk+obnnna
+        m3tzF/liMSCZzQXT6MFl2k4Zj1IewVIM9GSGdmQ=
+X-Google-Smtp-Source: ABdhPJz/5GVv0Jc1fW6Af1E7s8iF0un/k2ZX3rLG5cEAum2D2zhCnqeEMRYTO6D1GV6CZwFQWFxbLpDEovkL/Cmpe5U=
+X-Received: by 2002:a92:c567:: with SMTP id b7mr5367192ilj.24.1643368165717;
+ Fri, 28 Jan 2022 03:09:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 31/37] drm: rcar-du: Add support for the nomodeset
- kernel parameter
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211217003752.3946210-1-javierm@redhat.com>
- <20211217003752.3946210-32-javierm@redhat.com>
- <164336121612.533872.1685181669511488706@Monstersaurus>
- <eb27fa44-2972-4a6e-465f-b9e4775820f4@suse.de>
- <YfPGnfly3GOAOlfp@pendragon.ideasonboard.com>
- <584f1343-b285-bf8e-e48c-764c2a56bce3@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <584f1343-b285-bf8e-e48c-764c2a56bce3@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220128074731.1623738-1-hch@lst.de> <918225.1643364739@warthog.procyon.org.uk>
+In-Reply-To: <918225.1643364739@warthog.procyon.org.uk>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 28 Jan 2022 13:09:14 +0200
+Message-ID: <CAOQ4uxhRS3MGEnCUDcsB1RL0d1Oy0g0Rzm75hVFAJw2dJ7uKSA@mail.gmail.com>
+Subject: Re: [PATCH v2] fs: rename S_KERNEL_FILE
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 11:46, Thomas Zimmermann wrote:
-> Am 28.01.22 um 11:34 schrieb Laurent Pinchart:
-
-[snip]
-
->>>
->>> It cannot be 'mode-setted'. We get a pre-configured framebuffer from the
->>> firmware or bootloader. Whatever we draw there shows up on the screen.
->>
->> I doubt that's going to work as you expect, clocks and regulators will
->> get disabled at boot if not used by any driver.
-> 
-> Simpledrm and simplefb attach to these firmware framebuffers. Both 
-> drivers look at the device tree nodes to acquire the relevant clocks and 
-> regulators.
+On Fri, Jan 28, 2022 at 12:12 PM David Howells <dhowells@redhat.com> wrote:
+>
+> Christoph Hellwig <hch@lst.de> wrote:
+>
+> > S_KERNEL_FILE is grossly misnamed.  We have plenty of files hold
+>
+> "held".
+>
+> > open by the kernel kernel using filp_open.
+>
+> You said "kernel" twice.
+>
+> And so what?  Cachefiles holds files open by filp_open - but it can only do so
+> temporarily otherwise EMFILE/ENFILE and OOMs start to become a serious problem
+> because it could end up holding thousands of files open (one or two of the
+> xfstests cause this to happen).
+>
+> Further, holding the file open *doesn't* prevent cachefilesd from trying to
+> cull the file to make space whilst it's "in use".
+>
+> Yet further, I'm not holding the directories that form the cache layout open
+> with filp_open at all - I'm not reading them, so that would just be a waste of
+> resources - but I really don't want cachefilesd culling them because it sees
+> they're empty but cachefiles is holding them ready.
+>
+> > This flag OTOH signals the inode as being a special snowflake that
+> > cachefiles holds onto that can't be unlinked because of ..., erm, pixie
+> > dust.
+>
+> Really?  I presume you read the explanation I gave of the races that are a
+> consequence of splitting the driver between the kernel and userspace?  I could
+> avoid them - or at least mitigate them - by keeping my own list of all the
+> inodes in use by cachefiles so that cachefilesd can query it.  I did, in fact,
+> use to have such a list, but the core kernel already has such lists and the
+> facilities to translate pathnames into internal objects, so my stuff ought to
+> be redundant - all I need is one inode flag.
+>
+> Further, that inode flag can be shared with anyone else who wants to do
+> something similar.  It's just an "I'm using this" lock.  There's no particular
+> reason to limit its use to cachefiles.  In fact, it is better if it is then
+> shared so that in the unlikely event that two drivers try to use the same
+> file, an error will occur.
 >
 
-Laurent is correct that in some cases it might be an issue. For example, if
-a SystemReady ES image is booted using the U-boot EFI stub instead of bootz.
+Good idea, but then the helpers to set the flag should not be internal
+to cachefiles and the locking semantics should be clear.
+FYI, overlayfs already takes an "exclusive lock" on upper/work dir
+among all ovl instances.
 
-In this case the system will be presented as EFI and the firmware framebuffer
-just taken from the EFI GOP. There won't be any Device Tree node describing
-the clocks, regulators, etc that are required for the framebuffer to work.
+How do you feel about hoisting ovl_inuse_* helpers to fs.h
+and rename s/I_OVL_INUSE/I_EXCL_INUSE?
 
-The user then will have to pass clk_ignore_unused, pd_ignore_unused and maybe
-other cmdline params (or even hack a DT to set regulator-always-on for needed
-regulators).
+Whether deny rmdir should have its own flag or not I don't know,
+but from ovl POV I *think* it should not be a problem to deny rmdir
+for the ovl upper/work dirs as long as ovl is mounted(?).
 
-But that is also true if the user wants to disable the real DRM driver with
-modprobe.blacklist=rcar-du-drm.
+From our experience, adding the exclusive lock caused regressions
+in setups with container runtimes that had mount leaks bugs.
+I am hoping that all those mount leaks bugs were fixed, but one never
+knows what sort of regressions deny rmdir of upper/work may cause.
 
-What this patch does is just to make all DRM drivers consistent and honour the
-nomodeset param (whose name is really misleading but we can't change that).
+Another problem with generic deny of rmdir is that users getting
+EBUSY have no way to figure out the reason.
+At least for a specific subsystem (i.e. cachefiles) users should be able
+to check if the denied dir is in the subsystem's inventory(?)
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Thanks,
+Amir.

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD59749F0EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 864CE49F0EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 03:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345307AbiA1CXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 21:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S1345316AbiA1CZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 21:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345221AbiA1CXQ (ORCPT
+        with ESMTP id S238197AbiA1CZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:23:16 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80B6C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:23:15 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id i10so14274123ybt.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:23:15 -0800 (PST)
+        Thu, 27 Jan 2022 21:25:07 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE02C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:25:07 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id p5so14199869ybd.13
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 18:25:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9eZnlJSlBPw0a4/YSci8FWmERiqsXY6ici0KSijmpAw=;
-        b=SKZmyCGsDIXgtr/fnOwVNDVgUma2QH1AyJ0h7xMpPArlqtIOURvn7flShTjE1iGcu8
-         IbYih/8vGUNZoVoDiJfVUyrlekuQBqV0wxjhAuxx2rx2uBL/cjw9gaoCVKeLnYAnIUi5
-         KrMxBy8Q/lf+9pzcCi/WzCWHjP7iea/rqkVsXVDNn9TJmkHowwb3duxIii2ue5uOzj/I
-         ae6Jqx2VJuyey+wVeUXe2j3C6bOFmOXLUH7SYhTq1NC3+xZApwCWg0Ke/oc7YvrzxXpN
-         MBgI5UL5+6NWgrW0Z6DyterNVKH4pmFcTSoW4koeso1fICJVcccUHLSF4vJByzHIloAV
-         xSpg==
+        bh=ATmoHVlBD0VCiYLSkpSLZVx9DF3vSOsZcS/Gfn721cA=;
+        b=oSHYThw9nT7Vj4MU4wqq1Lyk75UxanwpaOwc1jAdOh1MesFRpel8FcElAMjOXqtnRQ
+         Ru5mdwbD3b2Z3mXris1Iq/XAvaeOOR6YBdiFvS3C+86wsOu/GWVw2aWUW6OmzexJ7tN7
+         eC+2GfHlzSsqjNVU6xY3S6FMZglSY98pENs+2qR+wwnd9ircS9EmkvScbjjBd15itZHv
+         mDCMWsuvLyM40jOAiqc9O0QAKKVcIvyXQeYEyyL0WLz/L69RdRsw1XIZ6H2iSBsVM2Wr
+         nNrhqm8Rlxs9a64AaKF1kBsyYcAz0Ke6joKTXJwHCpFCHUbXcmOHWulGKsC4WMj5HXNE
+         RH7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9eZnlJSlBPw0a4/YSci8FWmERiqsXY6ici0KSijmpAw=;
-        b=RS5CT0Vr9wzJQLw+4slDltp1CSnC46xuRp4EVsEROZiJrbYUPzx0Y9zfmQs0YycQbE
-         jlk7+17lJOGHU1Qr2uYG49OGrWgSMpvAVeJR/x5nvIqgZnJm+y3AqnuOlkT2JThasMq3
-         mwpxO6X5Hn0OCZel3F/Re41DoQYZzoZSx+Iwv8R521br+2ai7AHgiDqhgYuO6m8x1YB3
-         Zn4j/wr39bKI0Y+mu62ce8kcj8xSsdG3PIWaZwVp5W0PUn0k3AQMhcOThGhq4gkgJmSA
-         j2Leq5fBQdp+01FarhfJMgfnhq+vnn5hLlAlPrh9Ht65WEw1M1f54MfsAs05pOg688WC
-         m1Fg==
-X-Gm-Message-State: AOAM532SQPb4x+5wXqU4gvSWH/bPvsbKZUktBANyJbz2k19H9nTUQxdz
-        TXd9wgRRk2/7/Vi/KiCO60YCCDTIcn47ETHI1e63Jw==
-X-Google-Smtp-Source: ABdhPJwVsfm97uUyp7RZ7RqMo7z8ka9Nyo4Q+8eVv/l89S8ziWJdQaM0yi+i0V/EltvSSqVOkELH6MK43HDGjAaqoxc=
-X-Received: by 2002:a25:d2cb:: with SMTP id j194mr9481633ybg.277.1643336594537;
- Thu, 27 Jan 2022 18:23:14 -0800 (PST)
+        bh=ATmoHVlBD0VCiYLSkpSLZVx9DF3vSOsZcS/Gfn721cA=;
+        b=CcBLBD7f44DrhUJleSp25GA5a9qYJOfpkwbDHvYF1ZFEL+q6Gaq65+tEgN3FqPFkri
+         x1GuatrIuRAvpgjJiTHDAyXHV8dmjRBxaA0VJLfAT2gjvWhdXvtOW3W+96dK6Yt9Wx8Z
+         Q9Y+Ihn0goKD4he42tIyptu50qTaX8Ao8OTtr3lLhFl3pK7WJL/odfiWq0t++IOvUFiU
+         LfKCxxg+0bDukjALj2pfMrZUisfu2Bj6IM5ZIdEXzHrubJrSNFUPb28r1xJ5Uj7rSo7N
+         0Y8T6VwWVVbsUxsSXcRbFTwRbAkoNYV/xSJl83vdL5aM660qtZUahIug6/cZAh6n/3UB
+         C++A==
+X-Gm-Message-State: AOAM530dQBdR+zvr/m38zqmQawUFFiSEXxL0Ed4Kwvn7qgtA8X3OhJ1X
+        72clNVlwGvLpolURtNWeSgWGxa3I8v+CBVktSeyxGw==
+X-Google-Smtp-Source: ABdhPJwUFE2YIXZKQUv8AVXKckyZT+MlKPPVqlfWSkGSqfj0HPTfbCIjBswEtQ/s1Xf6Vc+OHfasvFP0qHeWvi47VG8=
+X-Received: by 2002:a25:4f41:: with SMTP id d62mr9986485ybb.156.1643336706558;
+ Thu, 27 Jan 2022 18:25:06 -0800 (PST)
 MIME-Version: 1.0
 References: <20220128014303.2334568-1-jannh@google.com> <CANn89iKWaERfs1iW8jVyRZT8K1LwWM9efiRsx8E1U3CDT39dyw@mail.gmail.com>
- <CAG48ez0sXEjePefCthFdhDskCFhgcnrecEn2jFfteaqa2qwDnQ@mail.gmail.com> <20220127182219.1da582f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220127182219.1da582f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAG48ez0sXEjePefCthFdhDskCFhgcnrecEn2jFfteaqa2qwDnQ@mail.gmail.com>
+In-Reply-To: <CAG48ez0sXEjePefCthFdhDskCFhgcnrecEn2jFfteaqa2qwDnQ@mail.gmail.com>
 From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 27 Jan 2022 18:23:03 -0800
-Message-ID: <CANn89i+k4tiyQtb6fh8USDjhZGVwdx1puh8cr9NcDQECbvJvdg@mail.gmail.com>
+Date:   Thu, 27 Jan 2022 18:24:55 -0800
+Message-ID: <CANn89iKmCYq+WBu_S4OvKOXqRSagTg=t8xKq0WC_Rrw+TpKsbw@mail.gmail.com>
 Subject: Re: [PATCH net] net: dev: Detect dev_hold() after netdev_wait_allrefs()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jann Horn <jannh@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
+To:     Jann Horn <jannh@google.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         netdev <netdev@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Oliver Neukum <oneukum@suse.com>
@@ -63,15 +63,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 6:22 PM Jakub Kicinski <kuba@kernel.org> wrote:
+On Thu, Jan 27, 2022 at 6:14 PM Jann Horn <jannh@google.com> wrote:
 >
-> On Fri, 28 Jan 2022 03:14:14 +0100 Jann Horn wrote:
-> > Oh. Whoops. That's what I get for only testing without CONFIG_PCPU_DEV_REFCNT...
+> On Fri, Jan 28, 2022 at 3:09 AM Eric Dumazet <edumazet@google.com> wrote:
+> > On Thu, Jan 27, 2022 at 5:43 PM Jann Horn <jannh@google.com> wrote:
+> > >
+> > > I've run into a bug where dev_hold() was being called after
+> > > netdev_wait_allrefs(). But at that point, the device is already going
+> > > away, and dev_hold() can't stop that anymore.
+> > >
+> > > To make such problems easier to diagnose in the future:
+> > >
+> > >  - For CONFIG_PCPU_DEV_REFCNT builds: Recheck in free_netdev() whether
+> > >    the net refcount has been elevated. If this is detected, WARN() and
+> > >    leak the object (to prevent worse consequences from a
+> > >    use-after-free).
+> > >  - For builds without CONFIG_PCPU_DEV_REFCNT: Set the refcount to zero.
+> > >    This signals to the generic refcount infrastructure that any attempt
+> > >    to increment the refcount later is a bug.
+> > >
+> > > Signed-off-by: Jann Horn <jannh@google.com>
+> > > ---
+> > >  net/core/dev.c | 18 +++++++++++++++++-
+> > >  1 file changed, 17 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/net/core/dev.c b/net/core/dev.c
+> > > index 1baab07820f6..f7916c0d226d 100644
+> > > --- a/net/core/dev.c
+> > > +++ b/net/core/dev.c
+> > > @@ -9949,8 +9949,18 @@ void netdev_run_todo(void)
+> > >
+> > >                 netdev_wait_allrefs(dev);
+> > >
+> > > +               /* Drop the netdev refcount (which should be 1 at this point)
+> > > +                * to zero. If we're using the generic refcount code, this will
+> > > +                * tell it that any dev_hold() after this point is a bug.
+> > > +                */
+> > > +#ifdef CONFIG_PCPU_DEV_REFCNT
+> > > +               this_cpu_dec(*dev->pcpu_refcnt);
+> > > +               BUG_ON(netdev_refcnt_read(dev) != 0);
+> > > +#else
+> > > +               BUG_ON(!refcount_dec_and_test(&dev->dev_refcnt));
+> > > +#endif
+> > > +
+> > >                 /* paranoia */
+> > > -               BUG_ON(netdev_refcnt_read(dev) != 1);
+> > >                 BUG_ON(!list_empty(&dev->ptype_all));
+> > >                 BUG_ON(!list_empty(&dev->ptype_specific));
+> > >                 WARN_ON(rcu_access_pointer(dev->ip_ptr));
+> > > @@ -10293,6 +10303,12 @@ void free_netdev(struct net_device *dev)
+> > >         free_percpu(dev->xdp_bulkq);
+> > >         dev->xdp_bulkq = NULL;
+> > >
+> > > +       /* Recheck in case someone called dev_hold() between
+> > > +        * netdev_wait_allrefs() and here.
+> > > +        */
 > >
-> > I guess a better place to put the new check would be directly after
-> > checking for "dev->reg_state == NETREG_UNREGISTERING"? Like this?
+> > At this point, dev->pcpu_refcnt per-cpu data has been freed already
+> > (CONFIG_PCPU_DEV_REFCNT=y)
+> >
+> > So this should probably crash, or at least UAF ?
 >
-> Possibly a very silly suggestion but perhaps we should set
-> the pointer to NULL for the pcpu case and let it crash?
+> Oh. Whoops. That's what I get for only testing without CONFIG_PCPU_DEV_REFCNT...
+>
+> I guess a better place to put the new check would be directly after
+> checking for "dev->reg_state == NETREG_UNREGISTERING"? Like this?
+>
+>         if (dev->reg_state == NETREG_UNREGISTERING) {
+>                 ASSERT_RTNL();
+>                 dev->needs_free_netdev = true;
+>                 return;
+>         }
+>
+>         /* Recheck in case someone called dev_hold() between
+>          * netdev_wait_allrefs() and here.
+>          */
+>         if (WARN_ON(netdev_refcnt_read(dev) != 0))
+>                 return; /* leak memory, otherwise we might get UAF */
+>
+>         netif_free_tx_queues(dev);
+>         netif_free_rx_queues(dev);
 
-It is already set to 0
+Maybe another solution would be to leverage the recent dev_hold_track().
+
+We could add a  dead boolean to 'struct  ref_tracker_dir ' (dev->refcnt_tracker)
+
+diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
+index c11c9db5825cf933acf529c83db441a818135f29..d907759b2fa1dd6b2ef22f883d55963c410dc71b
+100644
+--- a/include/linux/ref_tracker.h
++++ b/include/linux/ref_tracker.h
+@@ -12,6 +12,7 @@ struct ref_tracker_dir {
+        spinlock_t              lock;
+        unsigned int            quarantine_avail;
+        refcount_t              untracked;
++       bool                    dead;
+        struct list_head        list; /* List of active trackers */
+        struct list_head        quarantine; /* List of dead trackers */
+ #endif
+@@ -24,6 +25,7 @@ static inline void ref_tracker_dir_init(struct
+ref_tracker_dir *dir,
+        INIT_LIST_HEAD(&dir->list);
+        INIT_LIST_HEAD(&dir->quarantine);
+        spin_lock_init(&dir->lock);
++       dir->dead = false;
+        dir->quarantine_avail = quarantine_count;
+        refcount_set(&dir->untracked, 1);
+ }
+diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
+index a6789c0c626b0f68ad67c264cd19177a63fb82d2..cbc798e5b97674a389ea3bbf17d9bb39fbf63328
+100644
+--- a/lib/ref_tracker.c
++++ b/lib/ref_tracker.c
+@@ -20,6 +20,7 @@ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+        unsigned long flags;
+        bool leak = false;
+
++       dir->dead = true;
+        spin_lock_irqsave(&dir->lock, flags);
+        list_for_each_entry_safe(tracker, n, &dir->quarantine, head) {
+                list_del(&tracker->head);
+@@ -72,6 +73,8 @@ int ref_tracker_alloc(struct ref_tracker_dir *dir,
+        gfp_t gfp_mask = gfp;
+        unsigned long flags;
+
++       WARN_ON_ONCE(dir->dead);
++
+        if (gfp & __GFP_DIRECT_RECLAIM)
+                gfp_mask |= __GFP_NOFAIL;
+        *trackerp = tracker = kzalloc(sizeof(*tracker), gfp_mask);

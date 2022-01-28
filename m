@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EED49F290
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1411449F2AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346073AbiA1Enq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 23:43:46 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:60582 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237235AbiA1Enp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 23:43:45 -0500
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1nDJ5r-00084p-2z; Fri, 28 Jan 2022 15:42:40 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 28 Jan 2022 15:42:38 +1100
-Date:   Fri, 28 Jan 2022 15:42:38 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] crypto: tcrypt - add asynchronous speed test for
- SM3
-Message-ID: <YfN0PsCAXYo0Hx9T@gondor.apana.org.au>
-References: <20220107120700.730-1-tianjia.zhang@linux.alibaba.com>
- <20220107120700.730-7-tianjia.zhang@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107120700.730-7-tianjia.zhang@linux.alibaba.com>
+        id S1346156AbiA1E4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 23:56:00 -0500
+Received: from mail.zju.edu.cn ([61.164.42.155]:40504 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346121AbiA1EzQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 23:55:16 -0500
+X-Greylist: delayed 447 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Jan 2022 23:55:07 EST
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgBHTIRXdfNhomB5AQ--.44160S2;
+        Fri, 28 Jan 2022 12:47:23 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH 0/2] ax25: fix NPD and UAF bugs when detaching ax25 device
+Date:   Fri, 28 Jan 2022 12:47:14 +0800
+Message-Id: <cover.1643343397.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgBHTIRXdfNhomB5AQ--.44160S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYn7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+        xVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUouWlDUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 08:07:00PM +0800, Tianjia Zhang wrote:
-> tcrypt supports testing of SM3 hash algorithms that use AVX
-> instruction acceleration.
-> 
-> In order to add the sm3 asynchronous test to the appropriate
-> position, shift the testcase sequence number of the multi buffer
-> backward and start from 450.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  crypto/tcrypt.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
+There are NPD and UAF bugs when detaching ax25 device, we
+use lock and refcount to mitigate these bugs.
 
-This is not an issue with your patch but we should delete all
-the mb hash tests as the mb hash algorithm tself was removed
-in 2018.
+Duoming Zhou (2):
+  ax25: improve the incomplete fix to avoid UAF and NPD bugs
+  ax25: add refcount in ax25_dev to avoid UAF bugs
 
-Thanks,
+ include/net/ax25.h    | 10 ++++++++++
+ net/ax25/af_ax25.c    | 11 ++++++++---
+ net/ax25/ax25_dev.c   | 12 ++++++++++--
+ net/ax25/ax25_route.c |  3 +++
+ 4 files changed, 31 insertions(+), 5 deletions(-)
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.17.1
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD30D49FD65
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D1E49FD67
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 16:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349831AbiA1P73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 10:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S1349874AbiA1P7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 10:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349813AbiA1P7K (ORCPT
+        with ESMTP id S1349852AbiA1P7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:59:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B85C061747;
-        Fri, 28 Jan 2022 07:59:10 -0800 (PST)
+        Fri, 28 Jan 2022 10:59:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C99BC061759;
+        Fri, 28 Jan 2022 07:59:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DEF8B82640;
-        Fri, 28 Jan 2022 15:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E13E8C36AE3;
-        Fri, 28 Jan 2022 15:59:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A047160EBA;
+        Fri, 28 Jan 2022 15:59:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142A4C340E0;
+        Fri, 28 Jan 2022 15:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643385547;
-        bh=A0ACMtz2PYMxCJh7KzbsBtaPz87LTsKG2YmEISHjPAM=;
+        s=k20201202; t=1643385552;
+        bh=Q+BPaVhBVlW6t4xHAF0VLYQt97JYB6FoKzavbL55ZHI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=R8uP5WeF3NuoUSS/XrcCWKGFIM+G/hF5YCATW+g4NJtTdDv3zzrE3HfKBTcP1/QKr
-         i+5kRC/7DEQsF4KaFHlKF/agL8siiilyP9HohmMhWWffpwhX/j8SSRexTNG8ax2L+j
-         4gC3AJKLlXcOwdGc7wVgslz0hyqkO2Qmr6nBCiK3qvxNuIZITS+HUBsOr505LIZc8H
-         hk2ugw/3SSXkBQTdxN6DxXwg/H69YYyeZUA/5p6M/N2ssGqtY6W8VLBHOA+w1diq+4
-         7F84TpOZkbCQwhRphGs+7Tg6uBiSm5Mh9u3+fjfQRm56q6I8Sc2fVYxVXu+4HueskB
-         LJ91yIE1ldk8g==
+        b=S9Mpsco7qCfmzeupEOyoqLxlHvn624icZbHOwhqyOfQa/fzhzqvUNKP3IW1iXN+Bh
+         v+nMn9R2jKpaJbVz0waAEceREATYi0yVBnRDtC5bVu5IU9sm8NU3LtCnf6vOjx8Pzf
+         nh2Ri4WaM475ZtupJVFJnt2ioGmV2wHAlqPdmHxnh5x6ChIDE6ZksJWruLyYTNWtKg
+         pC+1ouKsRRV9pNVZ/2098jbz9dNY/qxMhIgGMQSLvIyZsev19ydKKpw4O0EVEDlfBL
+         HCbKQ9MYNl4X8QyJS3wXoCkqkNCmOROea+eooIRONTIKNl9JZQDrpRtSV6AJovIibF
+         P1VXKTxlm9DwQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com
-In-Reply-To: <20220127185359.27322-1-kdasu.kdev@gmail.com>
-References: <20220127185359.27322-1-kdasu.kdev@gmail.com>
-Subject: Re: [PATCH] spi: bcm-qspi: check for valid cs before applying chip select
-Message-Id: <164338554665.1711475.8978411907163622225.b4-ty@kernel.org>
-Date:   Fri, 28 Jan 2022 15:59:06 +0000
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     p.zabel@pengutronix.de, lhjeff911@gmail.com
+In-Reply-To: <20220127115815.3148950-1-yangyingliang@huawei.com>
+References: <20220127115815.3148950-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] spi: Fix missing unlock on error in sp7021_spi_master_transfer_one()
+Message-Id: <164338555080.1711510.748078666368788162.b4-ty@kernel.org>
+Date:   Fri, 28 Jan 2022 15:59:10 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,24 +48,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 13:53:59 -0500, Kamal Dasu wrote:
-> Apply only valid chip select value. This change fixes case where chip
-> select is set to initial value of '-1' during probe and  PM supend and
-> subsequent resume can try to use the value with undefined behaviour.
-> Also in case where gpio based chip select, the check in
-> bcm_qspi_chip_select() shall prevent undefined behaviour on resume.
+On Thu, 27 Jan 2022 19:58:15 +0800, Yang Yingliang wrote:
+> Add the missing unlock before return from sp7021_spi_master_transfer_one()
+> in the error handling case.
 > 
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] spi: bcm-qspi: check for valid cs before applying chip select
-      commit: 2cbd27267ffe020af1442b95ec57f59a157ba85c
+[1/1] spi: Fix missing unlock on error in sp7021_spi_master_transfer_one()
+      commit: 20dc69ca1023b7e4c4af3c3495aa5a91e1a9be39
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

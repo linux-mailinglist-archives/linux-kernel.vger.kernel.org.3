@@ -2,390 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B184A0013
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98604A0022
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350193AbiA1S0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245735AbiA1S0d (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:26:33 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFE9C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:26:33 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id y17so6187002ilm.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kvav9IWRrkRa77XK9A0G2v+5XfUl1wSe7s9lPxsmWbM=;
-        b=IxD6YGzxGvnasgphHBgkyTm11+KHJsRqRBU1WkgMJLnLpFtAc2xoweRQriop/RiUpu
-         dgwn7TROWRMVqgERI+PNMt66CSsjn1n7Z/5NxEuMspvhj+N4ynTdB4SgZ2tgc7zGwhcs
-         Q/j6SkN5tsj5XlBvksAH7Tycz5gtP+H2+BC+lY38IbOqmq/Vej9NVzCB8GqV2Pmqd2JW
-         PTVPufS+nUCnRtqu4gU0agxHHvoyU/EVFP6VWiPMQhuoeky+8KBOr0eg1sWj1t/U0KM8
-         16806ElosaD7dYhnW5rk+V9v6xc0sYVjd4AWbN/+szCRp7j/e4wpULDZe69skFoQb2NT
-         ZSaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kvav9IWRrkRa77XK9A0G2v+5XfUl1wSe7s9lPxsmWbM=;
-        b=iuGXEmD4MuhTom0zLuBVQS4IebH59F7hPWUPUpyaOmX9ujwCVeQan0kHzqpezKrknx
-         LkWpaHi2tT/pNOZFV0lA52IMyLr4Xn1Zz518mgkJ+VZEYP8wrWalWL5az3pfK/zUe6Cu
-         NEEKGghzKWbskCKkP0nsrIxOr+0SahVmPlwfk48ENCOhLN83SrV1OPjXbA1pm/33YpYy
-         c2KQo/9EucIycMVmegPChUTxzz3Eh4HDKtfCqaXo2npqU7pEfbxkYWXIcdjzyLO1/+Ti
-         PuqmzpUJPV9EwqsMKbC5O0dUD76GNFJ4ruhhCNTQXF0UncwYrKPQun513LFgUbj9+PGK
-         7zAw==
-X-Gm-Message-State: AOAM5329skex6iYcoKS2gTdQMs363xPMFB2ECySZgJmUv81A/iN2/oT4
-        NOXLOtjFi5/vZoYDshC61yI4wXrGjLStRiOtx6vaWg==
-X-Google-Smtp-Source: ABdhPJzaSL7ddBrBRApd5gUkH4shhJnyxg+i4gE2IadrKTqJgWfDrZbsyUH3k45BSkaxwJqW4A7AoQEB2IQDfpsjNA8=
-X-Received: by 2002:a05:6e02:1202:: with SMTP id a2mr6516020ilq.2.1643394392465;
- Fri, 28 Jan 2022 10:26:32 -0800 (PST)
+        id S1350569AbiA1Sbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:31:42 -0500
+Received: from mga06.intel.com ([134.134.136.31]:21875 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229827AbiA1Sbd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 13:31:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643394693; x=1674930693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VY3aZdeFzyu6Va/UkaJ2MHdYDdTIzl5209jkDxWmEc4=;
+  b=gNL88JAhyKeb30oQaaWuOrk0BgUfnCtxHXTmAja8YyaKkjk3m9Q80DOL
+   Q6EFuw+CMMwenEYcAGvrMotEF7jvIK6XDNQgdFSFWCAOor9l39Nbw9CIk
+   zIzHnDnzRQph+5GaPYcr+QifJ5AlG8Y+HMI18iIQZ418rxaaPiMfxKzwI
+   VuTdl2Oo71p2WBvkEqc+Y74j4GxCy8Zb67YG1aqJLJTjs5h0KqS2cW9ej
+   hfsS4yW6T2/SzbaCpsd6PNaGZzjS4xrAL8dzE3qV4DMaBvOQBTHgmUNcp
+   5EajkI4ZGIszHdcHDbcsq+1LsulssNHq6VloRKy7FUQ1gIVAaakDSKX/H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307903943"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="307903943"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:31:32 -0800
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="598286304"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:31:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nDW0q-00FWNa-S2;
+        Fri, 28 Jan 2022 20:30:20 +0200
+Date:   Fri, 28 Jan 2022 20:30:20 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v3 3/8] platform/x86/intel: Add Primary to Sideband
+ (P2SB) bridge support
+Message-ID: <YfQ2PGzOyiBfCppd@smile.fi.intel.com>
+References: <YdhUqhflS/0YsRWJ@smile.fi.intel.com>
+ <20220107171108.GA381493@bhelgaas>
 MIME-Version: 1.0
-References: <20220125204602.4137477-1-irogers@google.com> <CAP-5=fXyJeX3b3egcAOfPndmYhakrsdKu7HttnHEH2DKP-6Vxw@mail.gmail.com>
- <20220128142348.17d51894dbdb35c9a9449567@kernel.org> <CAP-5=fXHudKqO4+0rbO9X3Ny+Cq7+KsHbKf4P8P24SjF0S232Q@mail.gmail.com>
- <20220129003450.77116209763f7e06d285e654@kernel.org>
-In-Reply-To: <20220129003450.77116209763f7e06d285e654@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 28 Jan 2022 10:26:20 -0800
-Message-ID: <CAP-5=fVoP9MAVsj7SdrxRjkr1Jt=XZ7Vf_FAooXA7B2OrC=XMA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Reference count checker and related fixes
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        masami.hiramatsu.pt@hitachi.com, eranian@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220107171108.GA381493@bhelgaas>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 7:35 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Thu, 27 Jan 2022 22:24:59 -0800
-> Ian Rogers <irogers@google.com> wrote:
->
-> > On Thu, Jan 27, 2022 at 9:24 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > On Thu, 27 Jan 2022 13:33:23 -0800
-> > > Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > > On Tue, Jan 25, 2022 at 12:46 PM Ian Rogers <irogers@google.com> wrote:
-> > > > >
-> > > > > This v2 patch set has the main reference count patch for cpu map from
-> > > > > the first set and then adds reference count checking to nsinfo. The
-> > > > > reference count checking on nsinfo helped diagnose a data race bug
-> > > > > which is fixed in the independent patches 2 and 3.
-> > > > >
-> > > > > The perf tool has a class of memory problems where reference counts
-> > > > > are used incorrectly. Memory/address sanitizers and valgrind don't
-> > > > > provide useful ways to debug these problems, you see a memory leak
-> > > > > where the only pertinent information is the original allocation
-> > > > > site. What would be more useful is knowing where a get fails to have a
-> > > > > corresponding put, where there are double puts, etc.
-> > > > >
-> > > > > This work was motivated by the roll-back of:
-> > > > > https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
-> > > > > where fixing a missed put resulted in a use-after-free in a different
-> > > > > context. There was a sense in fixing the issue that a game of
-> > > > > wac-a-mole had been embarked upon in adding missed gets and puts.
-> > > > >
-> > > > > The basic approach of the change is to add a level of indirection at
-> > > > > the get and put calls. Get allocates a level of indirection that, if
-> > > > > no corresponding put is called, becomes a memory leak (and associated
-> > > > > stack trace) that leak sanitizer can report. Similarly if two puts are
-> > > > > called for the same get, then a double free can be detected by address
-> > > > > sanitizer. This can also detect the use after put, which should also
-> > > > > yield a segv without a sanitizer.
-> > > > >
-> > > > > Adding reference count checking to cpu map was done as a proof of
-> > > > > concept, it yielded little other than a location where the use of get
-> > > > > could be cleaner by using its result. Reference count checking on
-> > > > > nsinfo identified a double free of the indirection layer and the
-> > > > > related threads, thereby identifying a data race as discussed here:
-> > > > > https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
-> > > > > Accordingly the dso->lock was extended and use to cover the race.
-> > > > >
-> > > > > An alternative that was considered was ref_tracker:
-> > > > >  https://lwn.net/Articles/877603/
-> > > > > ref_tracker requires use of a reference counted struct to also use a
-> > > > > cookie/tracker. The cookie is combined with data in a ref_tracker_dir
-> > > > > to spot double puts. When an object is finished with leaks can be
-> > > > > detected, as with this approach when leak analysis happens. This
-> > > > > approach was preferred as it doesn't introduce cookies, spots use
-> > > > > after put and appears moderately more neutral to the API. Weaknesses
-> > > > > of the implemented approcah are not being able to do adhoc leak
-> > > > > detection and a preference for adding an accessor API to structs. I
-> > > > > believe there are other issues and welcome suggestions.
-> > > >
-> > > > And so we've been here before (Dec 2015 to be exact). Namhyung pointed me to:
-> > > > https://lore.kernel.org/all/20151209021047.10245.8918.stgit@localhost.localdomain/
-> > > > by Masami Hiramatsu. In this work he adds a leak sanitizer style
-> > > > reference count checker that will describe locations of puts and gets
-> > > > for diagnosis. Firstly that's an awesome achievement! This work is
-> > > > different in that it isn't trying to invent a leak sanitizer, it is
-> > > > just using the existing one. By adding a level of indirection this
-> > > > work can catch use after put and pairs gets with puts to make lifetime
-> > > > analysis more automatic. An advantage of Masami's work is that it
-> > > > doesn't change data-structures and after the initial patch-set is
-> > > > somewhat transparent. Overall I prefer the approach in these patches,
-> > > > future patches can look to clean up the API as Masami has.
-> > >
-> > > Thanks for referring my series :-D The series aimed to solve the refcount
-> > > usage issue in the perf which lead the object leaks. At that moment,
-> > > I found that there were 2 patterns, refcount start from 0 and start from 1.
-> > > That made me confused what I should do for using a object.
-> > > But the perf uses linux/refcount.h now, I hope such issue has already gone.
-> > > (but the object leakage seems not fixed fully yet, as you found.)
-> > >
-> > > BTW, I think the introducing UNWRAP_* macro may put a burden on future
-> > > development. If it is inevitable, we should consider it as carefully as
-> > > possible. Or, it may cause another issue (it is easily missed that the new
-> > > patch does not use UNWRAP_* for object reference, because it is natual.)
-> > >
-> > > So I agree with you that you to clean up the API. :-)
-> > > I think we can make yet another refcount.h for user space debugging and
-> > > replace it with the linux/refcount.h.
-> >
-> > Thanks Masami,
-> >
-> > Agreed on the UNWRAP_ macros, hence wanting to hide them behind
-> > accessors. Making accessors could be automated with macros, for
-> > example, have a list of variables, have a macro declare the struct
-> > using the list, another macro can use the list to declare accessors. I
-> > didn't find adding the UNWRAP_ macros in this change particularly
-> > burdensome as any use of the wrapping pointer as the original type
-> > caused a compile time error telling you what and where to fix. The
-> > macro is extra stuff in the way of using just the raw object, but
-> > that's fairly typical in C++ with shared_ptr, scoped_lock, etc.
->
-> Hi Ian,
->
-> Hmm, but such a macro is not usual for C which perf is written in.
-> If I understand correctly, you might want to use memory leak
-> analyzer to detect refcount leak, and that analyzer will show
-> what data structure is leaked.
+On Fri, Jan 07, 2022 at 11:11:08AM -0600, Bjorn Helgaas wrote:
+> On Fri, Jan 07, 2022 at 04:56:42PM +0200, Andy Shevchenko wrote:
+> > On Thu, Jan 06, 2022 at 07:03:05PM -0600, Bjorn Helgaas wrote:
+> > > On Tue, Dec 21, 2021 at 08:15:21PM +0200, Andy Shevchenko wrote:
 
-Firstly, thanks for the conversation - this is really useful to
-improve the code!
-
-I think in an ideal world we'd somehow educate things like address
-sanitizer of reference counted data structures and they would do a
-better job of tracking gets and puts. The problem is pairing gets and
-puts. In C++ you use RAII types so that the destructor ensures a put -
-this can be complex when using data types like lists where you want to
-move or swap things onto the list, to keep the single pointer
-property. In the C code in Linux we use gotos, similarly to how defer
-is used in Go. Anyway, the ref_tracker that Eric Dumazet added solved
-the get/put pairing problem by adding a cookie that is passed around.
-The problem with that is that then the cookie becomes part of the API.
-To avoid that the approach here is just to change the original data
-type and add in a layer of indirection, that layer has become the
-cookie. A benefit of this approach is that once the cookie/indirection
-is freed, use of it becomes an obvious failure - we leverage address
-sanitizer for use after free.
-
-> If so, maybe you can do the same thing by introducing a dummy
-> list node for each data structure which you want to debug.
->
-> struct perf_cpu_map__refdebug {
->         struct perf_cpu_map__refdebug *orig;
-> };
->
-> And expand refcount_t as.
->
-> typedef struct refcount_struct {
->         atomic_t refs;
-> #ifdef REFCNT_CHECKING
->         void *orig;
-> #endif
-> } refcount_t;
->
-> And change the get/put as below
->
-> struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map)
-> {
->         if (map) {
-> #ifdef REFCNT_CHECKING
->                 struct perf_cpu_map__refdebug *new_node;
-> #endif
->                 refcount_inc(&map->refcnt);
-> #ifdef REFCNT_CHECKING
->                 new_node = malloc(sizeof(*new_node));
->                 new_node->orig = map->refcnt->orig;
->                 map->refcnt->orig = new_node;
-> #endif
->         }
->         return map;
-> }
->
-> void perf_cpu_map__put(struct perf_cpu_map *map)
-> {
->         if (map) {
->                 if (refcount_dec_and_test(&map->refcnt))
->                         cpu_map__delete(map);
->                 else {
-> #ifdef REFCNT_CHECKING
->                         struct perf_cpu_map__refdebug *node = map->refcnt->orig;
->
->                         map->refcnt->orig = node->orig;
->                         free(node);
-> #endif
->                 }
->         }
-> }
->
-> This need a bit complex get/put, but no need to change other parts.
-
-Adding a list like this gives an ability to say something like of the
-current reference count of 3 what indirection objects exist. This
-could be useful for diagnosis but you probably want to pair it with a
-stack trace, and the approach here is punting that problem to the
-address/leak sanitizer. I'm also concerned that there should be a lock
-around the list. I think pursuing this ends up with something like
-ref_tracker.
-
-If we're using indirection, as in my proposal, then adding a common
-indirection struct is problematic as anything declared to be a "struct
-cpumap" now needs to be either the indirection or the original type -
-hence using macros to hide that in the code. If we embed the
-information into the refcount_t then we end up with something like
-ref_tracker, API problems and losing use-after-put checking. Outside
-of the macros, I think there is a simplicity to the approach I've put
-forward.
-
-> > The
-> > question is, is it worth it to make sure use of the reference counted
-> > object is correct and misuse is easier to diagnose?
->
-> You mean the stackdump for every get/put as I did? That's a good
-> question. Let's think what may happen.
->
-> For example, if funcA() expects its caller funcB() will put the object
-> but actually funcB() doesn't, or the funcC() which is the another
-> caller of funcA()) doesn't expect the funcA() gets the object.
->
-> funcA() {
->         get(obj);
->         return obj;
-> }
->
-> funcB() {
->         obj = funcA();
->         ...
->         // wrong! it should do put(obj);
-> }
->
-> funcC() {
->         obj = funcA();
->         get(obj);               // this is wrong get().
->         ...
->         put(obj);
-> }
->
-> If we just list the non-released object, both logs seems same because
-> funcB()'s get/put pair will be skipped. If the analyzer shows the
-> stacktrace when the object was got, maybe we can notice the difference
-> of funcB() and funcC() path, but this is the simplest case. funcA()
-> can be called from funcB/C via several different functions.
-> But perhaps I'm too worried.
-
-So in the logs we should see for funcB:
-
-Memory leak of ... at:
-malloc...
-get...
-funcA
-funcB
 ...
 
-as the put on the indirection object was missed and this is now a leak
-of the indirection object. For funcC we should see:
+> > The unhide/hide back has been tested and we have
+> > already users in the kernel (they have other issues though with the
+> > PCI rescan lock, but it doesn't mean it wasn't ever tested).
+> 
+> Does the firmware team that hid this device sign off on the OS
+> unhiding and using it?  How do we know that BIOS is not using the
+> device?
 
-Memory leak of ... at:
-malloc..
-get..
-funcA
-funcC
+BIOS might use the device via OperationRegion() in ACPI, but that means
+that _CRS needs to have that region available. It seems not the case.
 
-So from the stack traces we can see that there is an unpaired get
-happening in funcA called from either funcB and funcC, which means we
-need to a put there. In the funcC case we can see the put was missed
-from a call to funcA, rather than a get it made.
+And as far I as see in the internal documentation the hide / unhide
+approach is not forbidden for OS side.
 
-As the code in perf is complex, multi-threaded and sometimes
-unintentionally racy a get may happen on 1 thread, the object is
-placed in a global, the object is put by another thread and also
-accessed by a 3rd thread. This is what was happening in the
-dso->nsinfo case. The bug there is that there was a double put
-happening by the third thread because of a race. Leak sanitizer treats
-memory visible from a global as not a leak, this can mean to get the
-most information on leaks in perf we need to aggressively
-free/delete/deconstruct when terminating so that leaks become visible.
-This feels to me like good hygiene, but it could also be argued to be
-a tax.
+Moreover, we have already this approach in the 3 device drivers on different
+platforms. If you not agree with it, probably you can send a removal to that
+drivers. In the terms of use this code doesn't change the status quo. What
+it does is the concentration of the p2sb code in one place as a library on
+obvious (?) purposes, e.g. maintenance.
 
-Anyway, I think I'm still at the same point I was when I posted these
-changes. That an indirection object is the simplest, smallest,
-cleanest way to get the most information. I think making the rest of
-the reference counted data structures have this feature would be
-great, so I'd like to merge the 4 patches here and work to add more. I
-think we can also build on that foundation for extra debug
-information.
+> > > And the fact that they went to all this trouble to hide it means
+> > > the BIOS is likely using it for its own purposes and the OS may
+> > > cause conflicts if it also uses it.
+> > 
+> > What purposes do you have in mind?
+> 
+> The functionality implemented in the P2SB MMIO space is not specified,
+> so I have no idea what it does or whether BIOS could be using it.
 
-Thanks,
-Ian
+It's specified based on how MMIO address is encoded.
 
-> Thank you,
->
-> > I think it is near
-> > as least offensive as possible while providing the best information -
-> > hence being able to solve the dso->nsinfo put data race, that has been
-> > a problem to solve up to this point. I'm open to better suggestions
-> > though :-)
-> >
-> > Thanks again,
-> > Ian
-> >
-> > > Thank you,
-> > >
-> > > --
-> > > Masami Hiramatsu <mhiramat@kernel.org>
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
+The third byte (bits [23:16]) representing the port ID on IOSF that
+belongs to the certain IPs, such as GPIO.
+
+> But here's a hypothetical example: some platform firmware logs errors
+> to NVRAM.  That NVRAM could exist on a device like the P2SB, where the
+> firmware assigns the MMIO address and hides the device from the OS.
+> The firmware legitimately assumes it has exclusive control of the
+> device and the OS will never touch it.  If the OS unhides the device
+> and also uses that NVRAM, the platform error logging no longer works.
+> 
+> My point is that the unhide is architecturally messed up.  The OS runs
+> on the platform as described by ACPI.  Devices that cannot be
+> enumerated are described in the ACPI namespace.
+
+This device may or may not be _partially_ or _fully_ (due to being
+multifunctional) described in ACPI. I agree, that ideally the devices
+in question it has behind should be represented properly by firmware.
+However, the firmwares in the wild for selected products / devices
+don't do that. We need to solve (work around) it in the software.
+
+This is already done for a few devices. This series consolidates that
+and enables it for very known GPIO IPs.
+
+> If the OS goes outside that ACPI-described platform and pokes at
+> things it "knows" should be there, the architectural model falls
+> apart.  The OS relies on things the firmware didn't guarantee, and
+> the firmware can't rely on non-interference from the OS.
+> 
+> If you want to go outside the ACPI model, that's up to you, but I
+> don't think we should tweak the PCI core to work with things that
+> the BIOS has explicitly arranged to *not* be PCI devices.
+
+PCI core just provides a code that is very similar to what we need
+here. Are you specifically suggesting that we have to copy'n'paste
+that rather long function and maintain in parallel with PCI?
+
+> > > The way the BIOS has this set up, P2SB is logically not a PCI
+> > > device.  It is not enumerable.  The MMIO space it uses is not in
+> > > the _CRS of a PCI host bridge.  That means it's now a platform
+> > > device.
+> > 
+> > I do not follow what you are implying here.
+> 
+> On an ACPI system, the way we enumerate PCI devices is to find all the
+> PCI host bridges (ACPI PNP0A03 devices), and scan config space to find
+> the PCI devices below them.  That doesn't find P2SB, so from a
+> software point of view, it is not a PCI device.
+
+It's a PCI device that has a PCI programming interface but it has some
+tricks behind. Do you mean that those tricks automatically make it non-PCI
+(software speaking) compatible?
+
+> Platform devices are by definition non-enumerable, and they have to be
+> described via ACPI, DT, or some kind of platform-specific code.  P2SB
+> is not enumerable, so I think a platform device is the most natural
+> way to handle it.
+
+How does it fit the proposed library model? Are you suggesting to create a
+hundreds of LOCs in order just to have some platform device which does what?
+
+I do not follow here the design you are proposing, sorry.
+
+> > As you see the code, it's not a driver, it's a library that reuses
+> > PCI functions because the hardware is represented by an IP inside
+> > PCI hierarchy and with PCI programming interface.
+> 
+> Yes, it's a PCI programming interface at the hardware level, but at
+> the software level, it's not part of PCI.
+
+Why?
+
+> This series does quite a lot of work in the PCI core to read that one
+> register in a device the PCI core doesn't know about.  I think it will
+> be simpler overall if instead of wedging this into PCI, we make p2sb.c
+> start with the ECAM base, ioremap() it, compute the register address,
+> readl() the MMIO address, and be done with it.  No need to deal with
+> pci_find_bus(), pci_lock_rescan_remove(), change the core's BAR sizing
+> code, etc.
+
+So, you are suggesting to write a (simplified) PCI core for the certain device,
+did I get you right? Would it have good long-term maintenance perspective?
+
+> > > The correct way to use this would be as an ACPI device so the OS
+> > > can enumerate it and the firmware can mediate access to it.  Going
+> > > behind the back of the firmware does not sound advisable to me.
+> > 
+> > Are you going to fix all firmwares and devices on the market?  We
+> > have it's done like this and unfortunately we can't fix what's is
+> > done due to users who won't update their firmwares by one or another
+> > reason.
+> 
+> I just mean that from a platform design standpoint, an ACPI device
+> would be the right way to do this.  Obviously it's not practical to
+> add that to systems in the field.  You could create a platform_device
+> manually now, and if there ever is an ACPI device, ACPI can create a
+> platform_device for you.
+
+Why do I need that device? What for? I really don't see a point here.
+
+> > > If you want to hack something in, I think it might be easier to
+> > > treat this purely as a platform device instead of a PCI device.
+> > > You can hack up the config accesses you need, discover the MMIO
+> > > address, plug that in as a resource of the platform device, and go
+> > > wild.  I don't think the PCI core needs to be involved at all.
+> > 
+> > Sorry, I do not follow you. The device is PCI, but it's taken out of
+> > PCI subsystem control by this hardware trick.
+> 
+> The electrical connection might be PCI, but from the software point of
+> view, it's only a PCI device if it can be enumerated by the mechanism
+> specified by the spec, namely, reading the Vendor ID of each potential
+> device.
+> 
+> Yes, doing it as a platform device would involve some code in p2sb.c
+> that looks sort of like code in the PCI core.  But I don't think it's
+> actually very much, and I think it would be less confusing than trying
+> to pretend that this device sometimes behaves like a PCI device and
+> sometimes not.
+
+So, duplicating code is good, right? Why do we have libraries in the code?
+
+> > There are document numbers that make sense.
+> > I believe that
+> > 
+> > [2]: https://cdrdv2.intel.com/v1/dl/getContent/332690?wapkw=332690
+> > [3]: https://cdrdv2.intel.com/v1/dl/getContent/332691?wapkw=332691
+> > 
+> > work for you. Tell me if not (Meanwhile I have changed locally)
+> 
+> Great, thanks.  The links work for me (currently).  I think a proper
+> citation would also include the document title and document number,
+> since I doubt Intel guarantees those URLs will work forever.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

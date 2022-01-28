@@ -2,149 +2,416 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C09749FA1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F49549FA20
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 13:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348670AbiA1Mze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 07:55:34 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:51146 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiA1Mze (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 07:55:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=9FRISzbgmrCCWcZD8ftGDL8nC0adXQ2wlur/JTV7yik=; b=peBzp/nGizhvgKckGBo/K3wk4L
-        yU9q/Zq4so6T2o8K4ZXDDUSUydNsC4OKwpq3us+0J5m+tHQtwwwqhyXOrdOuHyBHkotfUyI6xdZSf
-        2HwM/23B4oPWo3rOrswoUarONEYMhwSF6IL/A5aezbnPWvnjjjrUibWspfoerGNjNSnyfNP6qTfNN
-        6AqLkRRPvHaosCmFIV7UgMw4GjaLrURdRah1dthINSE52tJWEVlt1qkzzECEPeuNATPJOYq3IkCBo
-        AolVQyQx5aJp9OlQTkJK8FXhLMyCoOai3e+UPjCZb/7R1hMO9THwux0bjXZknffKbL4XmGA5lB8GD
-        JaaX+tyQ==;
-Received: from [165.90.113.117] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1nDQmk-0003ko-Ne; Fri, 28 Jan 2022 13:55:26 +0100
-Date:   Fri, 28 Jan 2022 11:55:10 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2] drm/v3d: fix missing unlock
-Message-ID: <20220128125510.idyai4bp3g5nbzd2@mail.igalia.com>
-References: <20220126205726.phfikh7kn3lks5ib@mail.igalia.com>
- <1643278460-100473-1-git-send-email-lyz_cs@pku.edu.cn>
+        id S1348747AbiA1Mzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 07:55:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:42336 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231817AbiA1Mzg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 07:55:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7015A11D4;
+        Fri, 28 Jan 2022 04:55:36 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D87E3F766;
+        Fri, 28 Jan 2022 04:55:35 -0800 (PST)
+Date:   Fri, 28 Jan 2022 12:55:25 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] kselftest: Fix vdso_test_abi return status
+Message-ID: <20220128125525.GB5776@e120937-lin>
+References: <20220128122744.17248-1-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g64nw4ibv7tj6mml"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643278460-100473-1-git-send-email-lyz_cs@pku.edu.cn>
+In-Reply-To: <20220128122744.17248-1-vincenzo.frascino@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---g64nw4ibv7tj6mml
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 01/27, Yongzhi Liu wrote:
-> [why]
-> Unlock is needed on the error handling path to prevent dead lock.
-> v3d_submit_cl_ioctl and v3d_submit_csd_ioctl is missing unlock.
->=20
-> [how]
-> Fix this by change goto target on the error handling path.
-s/change/changing/g
-
-I would just say: `Changing the goto to target an error handling path
-that includes drm_gem_unlock reservations.`
-
-and drop the explanation below
-
-> As unlock is handle in fail_unreserve, i keep the failures
-> handling around there. So the goto targets a place between
-> `fail_unreserve:` and `fail:`.
->=20
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+On Fri, Jan 28, 2022 at 12:27:44PM +0000, Vincenzo Frascino wrote:
+> vdso_test_abi contains a batch of tests that verify the validity of the
+> vDSO ABI.
+> 
+> When a vDSO symbol is not found the relevant test is skipped reporting
+> KSFT_SKIP. All the tests return values are then added in a single
+> variable which is checked to verify failures. This approach can have
+> side effects which result in reporting the wrong kselftest exit status.
+> 
+> Fix vdso_test_abi verifying the return code of each test separately.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Reported-by: Cristian Marussi <cristian.marussi@arm.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > ---
->  drivers/gpu/drm/v3d/v3d_gem.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
-> index c7ed2e1..d9c7b39 100644
-> --- a/drivers/gpu/drm/v3d/v3d_gem.c
-> +++ b/drivers/gpu/drm/v3d/v3d_gem.c
-> @@ -798,7 +798,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *dat=
-a,
-> =20
->  		if (!render->base.perfmon) {
->  			ret =3D -ENOENT;
-> -			goto fail;
-> +			goto v3d_unlock;
-We usually use a `fail` prefix when handling failures.
-A suggestion: `fail_perfmon` ?
->  		}
+
+Hi Vincenzo,
+
+>  tools/testing/selftests/vDSO/vdso_test_abi.c | 143 ++++++++-----------
+>  1 file changed, 62 insertions(+), 81 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> index 3d603f1394af..3e4dd47e404e 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> @@ -33,110 +33,106 @@ typedef long (*vdso_clock_gettime_t)(clockid_t clk_id, struct timespec *ts);
+>  typedef long (*vdso_clock_getres_t)(clockid_t clk_id, struct timespec *ts);
+>  typedef time_t (*vdso_time_t)(time_t *t);
+>  
+> -static int vdso_test_gettimeofday(void)
+> +#define VDSO_TEST_PASS_MSG()	"\n%s(): PASS\n", __func__
+> +#define VDSO_TEST_FAIL_MSG(x)	"\n%s(): %s FAIL\n", __func__, x
+> +#define VDSO_TEST_SKIP_MSG(x)	"\n%s(): SKIP: Could not find %s\n", __func__, x
+> +
+> +static void vdso_test_gettimeofday(void)
+>  {
+>  	/* Find gettimeofday. */
+>  	vdso_gettimeofday_t vdso_gettimeofday =
+>  		(vdso_gettimeofday_t)vdso_sym(version, name[0]);
+>  
+> -	if (!vdso_gettimeofday) {
+> -		printf("Could not find %s\n", name[0]);
+> -		return KSFT_SKIP;
+> -	}
+> +	if (!vdso_gettimeofday)
+> +		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[0]));
+>  
+>  	struct timeval tv;
+>  	long ret = vdso_gettimeofday(&tv, 0);
+>  
+>  	if (ret == 0) {
+> -		printf("The time is %lld.%06lld\n",
+> -		       (long long)tv.tv_sec, (long long)tv.tv_usec);
+> +		ksft_print_msg("The time is %lld.%06lld\n",
+> +			       (long long)tv.tv_sec, (long long)tv.tv_usec);
+> +		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
+>  	} else {
+> -		printf("%s failed\n", name[0]);
+> -		return KSFT_FAIL;
+> +		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[0]));
 >  	}
-> =20
-> @@ -847,6 +847,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *dat=
-a,
-> =20
->  fail_unreserve:
->  	mutex_unlock(&v3d->sched_lock);
-> +v3d_unlock:
->  	drm_gem_unlock_reservations(last_job->bo,
->  				    last_job->bo_count, &acquire_ctx);
->  fail:
-> @@ -1027,7 +1028,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *=
-data,
->  						     args->perfmon_id);
->  		if (!job->base.perfmon) {
->  			ret =3D -ENOENT;
-> -			goto fail;
-> +			goto v3d_unlock;
->  		}
+> -
+> -	return KSFT_PASS;
+>  }
+>  
+> -static int vdso_test_clock_gettime(clockid_t clk_id)
+> +static void vdso_test_clock_gettime(clockid_t clk_id)
+>  {
+>  	/* Find clock_gettime. */
+>  	vdso_clock_gettime_t vdso_clock_gettime =
+>  		(vdso_clock_gettime_t)vdso_sym(version, name[1]);
+>  
+> -	if (!vdso_clock_gettime) {
+> -		printf("Could not find %s\n", name[1]);
+> -		return KSFT_SKIP;
+> -	}
+> +	if (!vdso_clock_gettime)
+> +		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[1]));
+>  
+>  	struct timespec ts;
+>  	long ret = vdso_clock_gettime(clk_id, &ts);
+>  
+>  	if (ret == 0) {
+> -		printf("The time is %lld.%06lld\n",
+> -		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
+> +		ksft_print_msg("The time is %lld.%06lld\n",
+> +			       (long long)ts.tv_sec, (long long)ts.tv_nsec);
+> +		ksft_test_result_pass(VDSO_TEST_PASS_MSG());;
+>  	} else {
+> -		printf("%s failed\n", name[1]);
+> -		return KSFT_FAIL;
+> +		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[1]));
 >  	}
-> =20
-> @@ -1056,6 +1057,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *=
-data,
-> =20
->  fail_unreserve:
->  	mutex_unlock(&v3d->sched_lock);
-> +v3d_unlock:
->  	drm_gem_unlock_reservations(clean_job->bo, clean_job->bo_count,
->  				    &acquire_ctx);
->  fail:
+> -
+> -	return KSFT_PASS;
+>  }
+>  
+> -static int vdso_test_time(void)
+> +static void vdso_test_time(void)
+>  {
+>  	/* Find time. */
+>  	vdso_time_t vdso_time =
+>  		(vdso_time_t)vdso_sym(version, name[2]);
+>  
+> -	if (!vdso_time) {
+> -		printf("Could not find %s\n", name[2]);
+> -		return KSFT_SKIP;
+> -	}
+> +	if (!vdso_time)
+> +		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[2]));
+>  
+>  	long ret = vdso_time(NULL);
+>  
+>  	if (ret > 0) {
+> -		printf("The time in hours since January 1, 1970 is %lld\n",
+> +		ksft_print_msg("The time in hours since January 1, 1970 is %lld\n",
+>  				(long long)(ret / 3600));
+> +		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
+>  	} else {
+> -		printf("%s failed\n", name[2]);
+> -		return KSFT_FAIL;
+> +		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[2]));
+>  	}
+> -
+> -	return KSFT_PASS;
+>  }
+>  
+> -static int vdso_test_clock_getres(clockid_t clk_id)
+> +static void vdso_test_clock_getres(clockid_t clk_id)
+>  {
+> +	int clock_getres_fail = 0;
+> +
+>  	/* Find clock_getres. */
+>  	vdso_clock_getres_t vdso_clock_getres =
+>  		(vdso_clock_getres_t)vdso_sym(version, name[3]);
+>  
+> -	if (!vdso_clock_getres) {
+> -		printf("Could not find %s\n", name[3]);
+> -		return KSFT_SKIP;
+> -	}
+> +	if (!vdso_clock_getres)
+> +		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[3]));
+>  
+>  	struct timespec ts, sys_ts;
+>  	long ret = vdso_clock_getres(clk_id, &ts);
+>  
+>  	if (ret == 0) {
+> -		printf("The resolution is %lld %lld\n",
+> -		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
+> +		ksft_print_msg("The vdso resolution is %lld %lld\n",
+> +			       (long long)ts.tv_sec, (long long)ts.tv_nsec);
+>  	} else {
+> -		printf("%s failed\n", name[3]);
+> -		return KSFT_FAIL;
+> +		clock_getres_fail++;
+>  	}
+>  
+>  	ret = syscall(SYS_clock_getres, clk_id, &sys_ts);
+>  
+> -	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec)) {
+> -		printf("%s failed\n", name[3]);
+> -		return KSFT_FAIL;
+> -	}
+> +	ksft_print_msg("The syscall resolution is %lld %lld\n",
+> +			(long long)sys_ts.tv_sec, (long long)sys_ts.tv_nsec);
+> +
+> +	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec))
+> +		clock_getres_fail++;
+>  
+> -	return KSFT_PASS;
+> +	if (clock_getres_fail > 0) {
+> +		ksft_test_result_fail(VDSO_TEST_FAIL_MSG(name[3]));
+> +	} else {
+> +		ksft_test_result_pass(VDSO_TEST_PASS_MSG());
+> +	}
+>  }
+>  
+>  const char *vdso_clock_name[12] = {
+> @@ -158,36 +154,23 @@ const char *vdso_clock_name[12] = {
+>   * This function calls vdso_test_clock_gettime and vdso_test_clock_getres
+>   * with different values for clock_id.
+>   */
+> -static inline int vdso_test_clock(clockid_t clock_id)
+> +static inline void vdso_test_clock(clockid_t clock_id)
+>  {
+> -	int ret0, ret1;
+> -
+> -	ret0 = vdso_test_clock_gettime(clock_id);
+> -	/* A skipped test is considered passed */
+> -	if (ret0 == KSFT_SKIP)
+> -		ret0 = KSFT_PASS;
+> +	ksft_print_msg("\nclock_id: %s\n", vdso_clock_name[clock_id]);
+>  
+> -	ret1 = vdso_test_clock_getres(clock_id);
+> -	/* A skipped test is considered passed */
+> -	if (ret1 == KSFT_SKIP)
+> -		ret1 = KSFT_PASS;
+> +	vdso_test_clock_gettime(clock_id);
+>  
+> -	ret0 += ret1;
+> -
+> -	printf("clock_id: %s", vdso_clock_name[clock_id]);
+> -
+> -	if (ret0 > 0)
+> -		printf(" [FAIL]\n");
+> -	else
+> -		printf(" [PASS]\n");
+> -
+> -	return ret0;
+> +	vdso_test_clock_getres(clock_id);
+>  }
+>  
+> +#define VDSO_TEST_PLAN	16
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
+> -	int ret;
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(VDSO_TEST_PLAN);
+>  
+>  	if (!sysinfo_ehdr) {
+>  		printf("AT_SYSINFO_EHDR is not present!\n");
+> @@ -201,44 +184,42 @@ int main(int argc, char **argv)
+>  
+>  	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
+>  
+> -	ret = vdso_test_gettimeofday();
+> +	vdso_test_gettimeofday();
+>  
+>  #if _POSIX_TIMERS > 0
+>  
+>  #ifdef CLOCK_REALTIME
+> -	ret += vdso_test_clock(CLOCK_REALTIME);
+> +	vdso_test_clock(CLOCK_REALTIME);
+>  #endif
+>  
+>  #ifdef CLOCK_BOOTTIME
+> -	ret += vdso_test_clock(CLOCK_BOOTTIME);
+> +	vdso_test_clock(CLOCK_BOOTTIME);
+>  #endif
+>  
+>  #ifdef CLOCK_TAI
+> -	ret += vdso_test_clock(CLOCK_TAI);
+> +	vdso_test_clock(CLOCK_TAI);
+>  #endif
+>  
+>  #ifdef CLOCK_REALTIME_COARSE
+> -	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
+> +	vdso_test_clock(CLOCK_REALTIME_COARSE);
+>  #endif
+>  
+>  #ifdef CLOCK_MONOTONIC
+> -	ret += vdso_test_clock(CLOCK_MONOTONIC);
+> +	vdso_test_clock(CLOCK_MONOTONIC);
+>  #endif
+>  
+>  #ifdef CLOCK_MONOTONIC_RAW
+> -	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
+> +	vdso_test_clock(CLOCK_MONOTONIC_RAW);
+>  #endif
+>  
+>  #ifdef CLOCK_MONOTONIC_COARSE
+> -	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+> +	vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+>  #endif
+>  
+>  #endif
+>  
+> -	ret += vdso_test_time();
+> -
+> -	if (ret > 0)
+> -		return KSFT_FAIL;
+> +	vdso_test_time();
+>  
+> -	return KSFT_PASS;
+> +	ksft_print_cnts();
+> +	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
 
-With these changes, you can include in the next version my r-b:
-Reviewed-by: Melissa Wen <mwen@igalia.com>
+I gave it a go on JUNO, got a segfault as you can see below.
 
-> --=20
-> 2.7.4
->=20
+I think it is simply that now you are accounting properly for the
+FAIL/SKIP/PASS like in:
 
---g64nw4ibv7tj6mml
-Content-Type: application/pgp-signature; name="signature.asc"
+> -	if (!vdso_time) {
+> -		printf("Could not find %s\n", name[2]);
+> -		return KSFT_SKIP;
+> -	}
+> +	if (!vdso_time)
+> +		ksft_test_result_skip(VDSO_TEST_SKIP_MSG(name[2]));
+>  
+>
 
------BEGIN PGP SIGNATURE-----
+BUT you never bail out after the ksft_test_result_skip() so the
+test is run anyway.
 
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHz56kACgkQwqF3j0dL
-ehykixAAmS9Q4WCWvnB3FYPwrZS1XcYgs7c54qP1W+vYzZAAlx7aPQZYKv0lIXup
-yslTjdhGHTIsWvYu5+gGxdbT+7Mt2RBynrBWW2Cy3DFAblgxeqdifKosN27Jg4qt
-wR4GYebsEMnZ8UYPKqtZpPmXPlkT/4K/oFKxgQhHtRUNFIp+pmXLXYF816fI0Wf8
-H9mCgEBn8nGeTAjlJMhujj4l1v+3V2VTThpzz0LEX18s8T1+3+LpdTDNFJjo1F+j
-6ALfxpDu8LXBOKnOClKopXMZG0SrPfsx+p0WEToNTATG26L2irs6PNHK2zh4RDyl
-jSMeJ1pCrqvo/vokW2YT8aEFr+p+w2DAc4RwkmGhD1vbz/M/K83vUJQCpglVTNhA
-rebuXrjlBpLMADjWNZioPVHcnNqWpqkaKniN7CRPfW6gM0KPKjVpj6p78H+/9BFZ
-Pnid2szvwzrHqXQkzt77swJ1lwG8bPB2l7YZig8ONIUYEbIWNjt5exbfBQcRrzxH
-ubRxSsIpv65MOfD4060SQwdoCcdi7u1k/BxSnXDFfOUZgSCKsfDU5ZvLL8hp3Bxj
-MWBFGcup59QDkfMwT+KJEvZFKabE7WXvIJqHm4T9mdC3uwnNCeVdLU4laFaeHFTG
-jZTqi0NKsLl4szXy1s/Rrzla1D86FYK7oDPQGjfYVSy5NIn6AK8=
-=vq1L
------END PGP SIGNATURE-----
+Thanks,
+Cristian
 
---g64nw4ibv7tj6mml--
+-----
+
+TAP version 13
+1..16
+[vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
+# The time is 1643374139.646062
+ok 1 
+vdso_test_gettimeofday(): PASS
+# 
+clock_id: CLOCK_REALTIME
+# The time is 1643374139.646288567
+ok 2 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 1
+# The syscall resolution is 0 1
+ok 3 
+vdso_test_clock_getres(): PASS
+# 
+clock_id: CLOCK_BOOTTIME
+# The time is 5602.390284127
+ok 4 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 1
+# The syscall resolution is 0 1
+ok 5 
+vdso_test_clock_getres(): PASS
+# 
+clock_id: CLOCK_TAI
+# The time is 1643374139.647078775
+ok 6 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 1
+# The syscall resolution is 0 1
+ok 7 
+vdso_test_clock_getres(): PASS
+# 
+clock_id: CLOCK_REALTIME_COARSE
+# The time is 1643374139.641467075
+ok 8 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 4000000
+# The syscall resolution is 0 4000000
+ok 9 
+vdso_test_clock_getres(): PASS
+# 
+clock_id: CLOCK_MONOTONIC
+# The time is 5602.391454688
+ok 10 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 1
+# The syscall resolution is 0 1
+ok 11 
+vdso_test_clock_getres(): PASS
+# 
+clock_id: CLOCK_MONOTONIC_RAW
+# The time is 5602.278421300
+ok 12 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 1
+# The syscall resolution is 0 1
+ok 13 
+vdso_test_clock_getres(): PASS
+# 
+clock_id: CLOCK_MONOTONIC_COARSE
+# The time is 5602.389063303
+ok 14 
+vdso_test_clock_gettime(): PASS
+# The vdso resolution is 0 4000000
+# The syscall resolution is 0 4000000
+ok 15 
+vdso_test_clock_getres(): PASS
+ok 16 # SKIP 
+vdso_test_time(): SKIP: Could not find __kernel_time
+Segmentation fault
+
+
+> 

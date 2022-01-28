@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 651194A03F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 23:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D0A4A0401
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 23:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbiA1Wyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 17:54:33 -0500
-Received: from mga01.intel.com ([192.55.52.88]:54548 "EHLO mga01.intel.com"
+        id S243573AbiA1W6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 17:58:44 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:53298 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229658AbiA1Wyb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 17:54:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643410471; x=1674946471;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=XgOU541FlQhjL0uDJrwp7c1SOOpkxJu4iUoVA5Mh7mM=;
-  b=Ig/+C2BWyv7kMEHekli7Nf6WQJkr4yrD3i33JomyaO0NgOl2cxrmWYuq
-   bOIoa05EZmX58hl8EMOHJ7nwkoeg0htc6nOwIV9BI8oquHWZTV2mqeOh6
-   GJZJuBnvVg/qQKucK22c7H0m+VobH9RlX6YUky21C9R1ZywGwsephbZtu
-   zmbkSxPuHQobs+7Lw5aZW+Vma7yrys/lOJawq1/RGHGE5P8oj2C4EWpnx
-   h3XFSabGtUurdBcy0+v6ae9IGQX5syiW+sSNoEOXIjgaREjoxelkVbiCG
-   4kMSvaK8vY3sNbvZmtmHN+T826yu3lMuy4tGxGteD+N+1viqsodUsAll7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="271673594"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="271673594"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 14:54:30 -0800
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="697242453"
-Received: from zhenkuny-mobl2.amr.corp.intel.com (HELO [10.209.84.59]) ([10.209.84.59])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 14:54:30 -0800
-Message-ID: <9c4a8275-236d-67b6-07f9-5e46f66396c0@intel.com>
-Date:   Fri, 28 Jan 2022 14:54:26 -0800
+        id S229658AbiA1W6n (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 17:58:43 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 782941EC0541;
+        Fri, 28 Jan 2022 23:58:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643410717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YiDtT4AmBwaBafxN19hikHkQnXHuV/Zji75Dg4d6z9o=;
+        b=JeMERGTf8a8RMw2DrlfHpHUsES5/Meq6ySSpY6TOuLfyFrvzNtDn7lveOsMTQ4SU6arz+m
+        vxDfM4FJAPWYkgfWaV36naGgiPVOxezlLHTHlm1xJzgUAY1EVilAiIfwlzUYOoK9QYfL72
+        YM+sGX1caWZrfkO6VxwW0DyxEL2P9J8=
+Date:   Fri, 28 Jan 2022 23:58:32 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <YfR1GNb/yzKu4n5+@zn.tnic>
+References: <20220118142345.65wuub2p3alavhpb@amd.com>
+ <20220118143238.lu22npcktxuvadwk@amd.com>
+ <20220118143730.wenhm2bbityq7wwy@amd.com>
+ <YebsKcpnYzvjaEjs@zn.tnic>
+ <20220118172043.djhy3dwg4fhhfqfs@amd.com>
+ <Yeb7vOaqDtH6Fpsb@zn.tnic>
+ <20220118184930.nnwbgrfr723qabnq@amd.com>
+ <20220119011806.av5rtxfv4et2sfkl@amd.com>
+ <YefzQuqrV8kdLr9z@zn.tnic>
+ <20220119162747.ewgxirwcnrcajazm@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.2
-Content-Language: en-US
-To:     ira.weiny@intel.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-7-ira.weiny@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH V8 06/44] mm/pkeys: Add Kconfig options for PKS
-In-Reply-To: <20220127175505.851391-7-ira.weiny@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119162747.ewgxirwcnrcajazm@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Protection Key Supervisor, PKS, is a feature used by kernel code only.
-> As such if no kernel users are configured the PKS code is unnecessary
-> overhead.
-> 
-> Define a Kconfig structure which allows kernel code to detect PKS
-> support by an architecture and then subsequently enable that support
-> within the architecture.
-> 
-> ARCH_HAS_SUPERVISOR_PKEYS indicates to kernel consumers that an
-> architecture supports pkeys.  PKS users can then select
-> ARCH_ENABLE_SUPERVISOR_PKEYS to turn on the support within the
-> architecture.
-> 
-> If ARCH_ENABLE_SUPERVISOR_PKEYS is not selected architectures avoid the
-> PKS overhead.
-> 
-> ARCH_ENABLE_SUPERVISOR_PKEYS remains off until the first kernel use case
-> sets it.
+On Wed, Jan 19, 2022 at 10:27:47AM -0600, Michael Roth wrote:
+> At that point it's much easier for the guest owner to just check the
+> CPUID values directly against known good values for a particular
+> configuration as part of their attestation process and leave the
+> untrusted cloud vendor out of it completely. So not measuring the
+> CPUID page as part of SNP attestation allows for that flexibility.
 
-This is heavy on the "what" and weak on the "why".
+Well, in that case, I guess you don't need the sanity-checking in the
+guest either - you simply add it to the attestation TODO-list for the
+guest owner to go through:
 
-Why isn't this an x86-specific Kconfig?  Why do we need two Kconfigs?
-Good old user pkeys only has one:
+Upon booting, the guest owner should compare the CPUID leafs the guest
+sees with the ones supplied during boot.
 
-	config ARCH_HAS_PKEYS
-	        bool
+-- 
+Regards/Gruss,
+    Boris.
 
-and it's in arch-generic code because there are ppc and x86
-implementations *and* the pkey support touches generic code.
-
-This might become evident later in the series, but it's clear as mud as
-it stands.
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,121 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A0549FBD2
+	by mail.lfdr.de (Postfix) with ESMTP id BA9AE49FBD4
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349310AbiA1OeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:34:11 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40178 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349306AbiA1OeJ (ORCPT
+        id S1349322AbiA1Oee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:34:34 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50068 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245467AbiA1Oec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:34:09 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SDgegv001030;
-        Fri, 28 Jan 2022 14:34:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Bisv7qYFSopht4bvbLB1oB0IQLppMtLv0i9x2kv2OuY=;
- b=cpku7C2CCrGJ26gpGUegJFkTs4kow5YkdqbYIQkH33Le7AJAl2i3XbRWxl2CQQKPFzGJ
- ApjtPGs78MFrrHG6KhMpCLSggZHjb8D7crrZG8A7+Ly+OpfeOONePWwzhqpo7vH40eOd
- 7C9WVqeIUpmL2pFZFtgpjtfoZS8Hlck2Gk8wE7/eyuWzYYUB6AbHRlfRN+Ir6D41Gt36
- 0Gg1OEMsWqJZV6PtRhgBqeDjrfDRxHEz42UmvkTOJKSxkFasru8WBToVyil2XBbKLXDK
- LzcRsErxQSlvUqIbj59VbpohG9JRW1Z4hd07N+JEyaQ2OlZGJU75/PU+fcTonazZNwIs iA== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvhm3h456-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 14:34:01 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SERH1f012837;
-        Fri, 28 Jan 2022 14:34:00 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3dr9ja7vm1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 14:33:59 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SEXvXk44695906
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jan 2022 14:33:57 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 63A2FAE055;
-        Fri, 28 Jan 2022 14:33:57 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E9CBFAE059;
-        Fri, 28 Jan 2022 14:33:55 +0000 (GMT)
-Received: from sig-9-65-83-59.ibm.com (unknown [9.65.83.59])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jan 2022 14:33:55 +0000 (GMT)
-Message-ID: <9714e2824b35d12ee2f8ad70d65d8c9230be86e4.camel@linux.ibm.com>
-Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
- ima_hash=
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "Guozihua (Scott)" <guozihua@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        wangweiyang <wangweiyang2@huawei.com>,
-        Xiujianfeng <xiujianfeng@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Date:   Fri, 28 Jan 2022 09:33:55 -0500
-In-Reply-To: <ee116b29c27740119d98bc64e55f61e7@huawei.com>
-References: <20220125090237.120357-1-guozihua@huawei.com>
-         <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
-         <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
-         <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
-         <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
-         <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
-         <ee116b29c27740119d98bc64e55f61e7@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: b2MYNIcrZFuMk6KSGpgcDfFno8qu1A0q
-X-Proofpoint-ORIG-GUID: b2MYNIcrZFuMk6KSGpgcDfFno8qu1A0q
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 28 Jan 2022 09:34:32 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 11E3E212B6;
+        Fri, 28 Jan 2022 14:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643380471; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d2GA+HB9wkXuvJ87Q5v9+tVwtDvLVyKwD4FaXVR7w/o=;
+        b=DI6zpOJ0NGhzaEDdD7SETWObyvEMJuMN2HG4tDoaEoUuTrqR5bOU46Kx71fSwOhtkPXkbz
+        xi+EaKrZ+nW2VDWN2zPSMGLHi7zRwimNnMTcAlXQ3aJ53dcSHe6HeivP62/E+HUnXmwz1/
+        5dq9nykKOsKasURE16XF0XaU7SM224I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643380471;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d2GA+HB9wkXuvJ87Q5v9+tVwtDvLVyKwD4FaXVR7w/o=;
+        b=b0/Syh2DRN7jH5yGFNsRc6tAWcgNZbKrApZ3DL2gF3VFeWCbVJsiH1lgZsYc1OpoDbDe5u
+        JDQ18XtSsKn++dAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 73EF913B02;
+        Fri, 28 Jan 2022 14:34:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HXBbDvX+82G4KAAAMHmgww
+        (envelope-from <colyli@suse.de>); Fri, 28 Jan 2022 14:34:29 +0000
+Message-ID: <4c38baa1-9cb8-2ba5-36c0-251afc6e615b@suse.de>
+Date:   Fri, 28 Jan 2022 22:34:27 +0800
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_04,2022-01-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- bulkscore=0 adultscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201280092
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH] bcache: Fix a NULL or wild pointer dereference in
+ btree_gc_rewrite_node()
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     kjlu@umn.edu, Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhou Qingyang <zhou1615@umn.edu>
+References: <20220124164701.53525-1-zhou1615@umn.edu>
+ <YfPC0B9mBE/hkKEO@kroah.com>
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <YfPC0B9mBE/hkKEO@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-28 at 10:24 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Wednesday, January 26, 2022 1:48 PM
-> > On Wed, 2022-01-26 at 15:41 +0800, Guozihua (Scott) wrote:
-> > >
-> > >
-> > > The main issue lies in ima_template_desc_current called by hash_setup,
-> > > which does not just read ima_template global variable, but also tries to
-> > > set it if that hasn't been done already. Causing ima_template_setup to quit.
-> > 
-> > Right, which calls ima_init_template_list().  So part of the solution
-> > could be to conditionally call ima_init_template_list()
-> > in ima_template_setup().
-> > 
-> > -       if (ima_template)
-> > -               return 1;
-> > -
-> > -       ima_init_template_list();
-> > +       if (!ima_template
-> > +               ima_init_template_list();
-> 
-> 
-> is it still necessary to call ima_init_template_list() in
-> template_setup()? I saw it is called in init_ima().
+On 1/28/22 6:17 PM, Greg KH wrote:
+> On Tue, Jan 25, 2022 at 12:47:01AM +0800, Zhou Qingyang wrote:
+>> In btree_gc_rewrite_node(), btree_node_alloc_replacement() is assigned to
+>> n and return error code or NULL on failure. n is passed to
+>> bch_btree_node_write_sync() and there is a dereference of it in
+>> bch_btree_node_write_sync() without checks, which may lead to wild
+>> pointer dereference or NULL pointer dereference depending on n.
+>>
+>> Fix this bug by adding IS_ERR_OR_NULL check of n.
+>>
+>> This bug was found by a static analyzer.
+>>
+>> Builds with 'make allyesconfig' show no new warnings,
+>> and our static analyzer no longer warns about this code.
+>>
+>> Fixes: ("bcache: Rework btree cache reserve handling")
+>> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+>> ---
+>> The analysis employs differential checking to identify inconsistent
+>> security operations (e.g., checks or kfrees) between two code paths
+>> and confirms that the inconsistent operations are not recovered in the
+>> current function or the callers, so they constitute bugs.
+>>
+>> Note that, as a bug found by static analysis, it can be a false
+>> positive or hard to trigger. Multiple researchers have cross-reviewed
+>> the bug.
+>>
+>>   drivers/md/bcache/btree.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+>> index 88c573eeb598..06d42292e86c 100644
+>> --- a/drivers/md/bcache/btree.c
+>> +++ b/drivers/md/bcache/btree.c
+>> @@ -1504,6 +1504,8 @@ static int btree_gc_rewrite_node(struct btree *b, struct btree_op *op,
+>>   		return 0;
+>>   
+>>   	n = btree_node_alloc_replacement(replace, NULL);
+>> +	if (IS_ERR_OR_NULL(n))
+>> +		return 0;
+>>   
+>>   	/* recheck reserve after allocating replacement node */
+>>   	if (btree_check_reserve(b, NULL)) {
+>> -- 
+>> 2.25.1
+>>
+> As stated before, umn.edu is still not allowed to contribute to the
+> Linux kernel.  Please work with your administration to resolve this
+> issue.
+>
 
-All of these options are at __setup().
+Copied. Thanks for the reminding.
 
-thanks,
-
-Mimi
-
+Coly Li

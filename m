@@ -2,167 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A654E49F6A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65F949F6AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 10:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347732AbiA1Jts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 04:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347666AbiA1Jtr (ORCPT
+        id S1347736AbiA1JvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 04:51:01 -0500
+Received: from smtpbguseast3.qq.com ([54.243.244.52]:45941 "EHLO
+        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243580AbiA1JvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:49:47 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4184BC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:49:47 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id w133so11300298oie.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 01:49:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KD2MpvTo6d8AcZYWRzGbZANNSm7u8StOzxLlvpWuXTM=;
-        b=FQzQLz7w2uSqyOzFrdxgHPBSvl26iWOThEOJaHmMYuIVXnVQEgZKxZ5U4FWsJLPY0S
-         X4XEZ3XJtyt2Hk0VsyZfdJ30dA7SvjN3AZ6QJ5l2DCpTYfQZdDb00FoHJas4xqHE0lRE
-         0aOu4PtW8jL1ggLGdgMydU0uN8yXsBv5qOCviu2tDu4MBCNuiYhhW2oNdiW+QnjMy/jj
-         n0QqnYbHvV7RJUVwZjDX/6vTmFpoGsgkRhHiXwqRvFc9HrnyEWmxuljZgaze8tC1AAWV
-         PphyuKKG98JeSBtMcyM/5mPLxi2zPXe7nksv2nZa2qvYzpBK/MYoW2Y1GSzKRDWMxGWk
-         itVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KD2MpvTo6d8AcZYWRzGbZANNSm7u8StOzxLlvpWuXTM=;
-        b=2hmjV4DOPq+Jn2dF1SaqPFJHVNaEXqqP6eC2FwbGJY0nzuLx2jzzIUMSk1wGXlwJ5O
-         OTUk8egn473RSGMYvaJs/wIlrPI5HM9rChVxL41EbJhdt1OY+9SalEYPv+BzA5+MouJr
-         REz2npAK1womwFMZa/UPpYhJ8OOlHZTQyCeuQcRyQRX4+JleiP4qS3FR27cys+PRSEN+
-         MH/WTeKFiCrEM506jr0XXm4Ub7niPYnBXXA0D3BFKSkN/6+a5/44D+Yyx6EIqEJX8DYU
-         YmHOxqqV9IDEU578nwaoprm68d64885eunjeLmmg9iuJmPzmRAeJsr0JBYHS2aRB4ote
-         1qpQ==
-X-Gm-Message-State: AOAM532lqTepGS8qDBioKCkvQbUONl7arYkeQwuIYG/CMxn2EVTEYkni
-        ny8UwdbvsHSxagfQA2EwjiNanbar/qNzWmkNMvrngQ==
-X-Google-Smtp-Source: ABdhPJxKbcqfZUb1crg7oqDeoxOAlqqsIMh8sFoswaBdoHmg/9J3J8aMcSu3WBha2OvAdhq+y7Y7sjYIrLFdQDgLj1w=
-X-Received: by 2002:a05:6808:1901:: with SMTP id bf1mr5020470oib.197.1643363386387;
- Fri, 28 Jan 2022 01:49:46 -0800 (PST)
+        Fri, 28 Jan 2022 04:51:01 -0500
+X-QQ-mid: bizesmtp16t1643363449tqcolhvo
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 28 Jan 2022 17:50:29 +0800 (CST)
+X-QQ-SSF: 0140000000200000B000B00A0000000
+X-QQ-FEAT: dpyQmELDBxH9OJnSTX2OZ9jR1M94PHaAk870PQvL60zkQ6X7Dy7qLmCAK4wVQ
+        GLtkEl1gmLr+BvpdbZ1+imPzzhV7w62ToKPFmYz9l/hwf8MPaIMvYfINdHtArZPDUxf4sFp
+        kF/YvsbQ0zeHcc3Z7xSyJnUmGG0is1nYxjuLPj9fsyxh0F6MlNOUTS+EHAh9Fs+Hnu/XGZU
+        QLeMGccBGx4Io9DsD53edTMaVnPdDfPAZ0BhZvvqmXmBP66SgCu5UlZru7V6lZSOKQl5WAv
+        Ew5Os30G7cDlXe3iXdULYpUE4NAh6cNosFp2D6pHW2PaupM30Xjh+lGxUzn3/DiFSx3oqXm
+        S/2yq94LEp3kmTIuW4=
+X-QQ-GoodBg: 2
+From:   Zhen Ni <nizhen@uniontech.com>
+To:     mingo@redhat.com
+Cc:     peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>
+Subject: [PATCH] sched: move autogroup sysctls into its own file
+Date:   Fri, 28 Jan 2022 17:50:25 +0800
+Message-Id: <20220128095025.8745-1-nizhen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220128015752.931256-1-liupeng256@huawei.com>
-In-Reply-To: <20220128015752.931256-1-liupeng256@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 28 Jan 2022 10:49:34 +0100
-Message-ID: <CANpmjNP+J-Ztz_sov0LPXS8nGCf-2oJFs0OJp1LQMBeaL00CBQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kfence: Make test case compatible with run time set
- sample interval
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     glider@google.com, dvyukov@google.com, corbet@lwn.net,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        akpm@linux-foundation.org, kasan-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 at 02:41, Peng Liu <liupeng256@huawei.com> wrote:
-> The parameter kfence_sample_interval can be set via boot parameter
-> and late shell command, which is convenient for automatical tests
+move autogroup sysctls to autogroup.c and use the new
+register_sysctl_init() to register the sysctl interface.
 
-s/automatical/automated/
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+---
+ include/linux/sched/sysctl.h |  4 ----
+ kernel/sched/autogroup.c     | 23 +++++++++++++++++++++++
+ kernel/sched/autogroup.h     |  1 +
+ kernel/sysctl.c              | 11 -----------
+ 4 files changed, 24 insertions(+), 15 deletions(-)
 
-> and KFENCE parameter optimation. However, KFENCE test case just use
+diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+index c19dd5a2c05c..3f2b70f8d32c 100644
+--- a/include/linux/sched/sysctl.h
++++ b/include/linux/sched/sysctl.h
+@@ -45,10 +45,6 @@ extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
+ extern unsigned int sysctl_sched_cfs_bandwidth_slice;
+ #endif
+ 
+-#ifdef CONFIG_SCHED_AUTOGROUP
+-extern unsigned int sysctl_sched_autogroup_enabled;
+-#endif
+-
+ extern int sysctl_sched_rr_timeslice;
+ extern int sched_rr_timeslice;
+ 
+diff --git a/kernel/sched/autogroup.c b/kernel/sched/autogroup.c
+index 8629b37d118e..31dd2593145e 100644
+--- a/kernel/sched/autogroup.c
++++ b/kernel/sched/autogroup.c
+@@ -9,6 +9,28 @@ unsigned int __read_mostly sysctl_sched_autogroup_enabled = 1;
+ static struct autogroup autogroup_default;
+ static atomic_t autogroup_seq_nr;
+ 
++#ifdef CONFIG_SYSCTL
++static struct ctl_table sched_autogroup_sysctls[] = {
++	{
++		.procname       = "sched_autogroup_enabled",
++		.data           = &sysctl_sched_autogroup_enabled,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = proc_dointvec_minmax,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static void __init sched_autogroup_sysctl_init(void)
++{
++	register_sysctl_init("kernel", sched_autogroup_sysctls);
++}
++#else
++#define sched_autogroup_sysctl_init() do { } while (0)
++#endif
++
+ void __init autogroup_init(struct task_struct *init_task)
+ {
+ 	autogroup_default.tg = &root_task_group;
+@@ -198,6 +220,7 @@ void sched_autogroup_exit(struct signal_struct *sig)
+ static int __init setup_autogroup(char *str)
+ {
+ 	sysctl_sched_autogroup_enabled = 0;
++	sched_autogroup_sysctl_init();
+ 
+ 	return 1;
+ }
+diff --git a/kernel/sched/autogroup.h b/kernel/sched/autogroup.h
+index b96419974a1f..90fcbfdd70c3 100644
+--- a/kernel/sched/autogroup.h
++++ b/kernel/sched/autogroup.h
+@@ -27,6 +27,7 @@ extern bool task_wants_autogroup(struct task_struct *p, struct task_group *tg);
+ static inline struct task_group *
+ autogroup_task_group(struct task_struct *p, struct task_group *tg)
+ {
++	extern unsigned int sysctl_sched_autogroup_enabled;
+ 	int enabled = READ_ONCE(sysctl_sched_autogroup_enabled);
+ 
+ 	if (enabled && task_wants_autogroup(p, tg))
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..1cb7ca68cd4e 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1750,17 +1750,6 @@ static struct ctl_table kern_table[] = {
+ 		.proc_handler	= sysctl_sched_uclamp_handler,
+ 	},
+ #endif
+-#ifdef CONFIG_SCHED_AUTOGROUP
+-	{
+-		.procname	= "sched_autogroup_enabled",
+-		.data		= &sysctl_sched_autogroup_enabled,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_CFS_BANDWIDTH
+ 	{
+ 		.procname	= "sched_cfs_bandwidth_slice_us",
+-- 
+2.20.1
 
-s/optimation/optimization/
-
-> compile time CONFIG_KFENCE_SAMPLE_INTERVAL, this will make KFENCE
-> test case not run as user desired. This patch will make KFENCE test
-> case compatible with run-time-set sample interval.
-
-I'm not too particular about it, but "This patch" is usually bad style:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
-
-> v1->v2:
-> - Use EXPORT_SYMBOL_GPL replace EXPORT_SYMBOL
-
-Changelog is usually placed after '---', because it's mostly redundant
-once committed. Often maintainers include a "Link" to the original
-patch which then has history and discussion.
-
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
-
-Reviewed-by: Marco Elver <elver@google.com>
 
 
-> ---
->  include/linux/kfence.h  | 2 ++
->  mm/kfence/core.c        | 3 ++-
->  mm/kfence/kfence_test.c | 8 ++++----
->  3 files changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/kfence.h b/include/linux/kfence.h
-> index 4b5e3679a72c..f49e64222628 100644
-> --- a/include/linux/kfence.h
-> +++ b/include/linux/kfence.h
-> @@ -17,6 +17,8 @@
->  #include <linux/atomic.h>
->  #include <linux/static_key.h>
->
-> +extern unsigned long kfence_sample_interval;
-> +
->  /*
->   * We allocate an even number of pages, as it simplifies calculations to map
->   * address to metadata indices; effectively, the very first page serves as an
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 5ad40e3add45..13128fa13062 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -47,7 +47,8 @@
->
->  static bool kfence_enabled __read_mostly;
->
-> -static unsigned long kfence_sample_interval __read_mostly = CONFIG_KFENCE_SAMPLE_INTERVAL;
-> +unsigned long kfence_sample_interval __read_mostly = CONFIG_KFENCE_SAMPLE_INTERVAL;
-> +EXPORT_SYMBOL_GPL(kfence_sample_interval); /* Export for test modules. */
->
->  #ifdef MODULE_PARAM_PREFIX
->  #undef MODULE_PARAM_PREFIX
-> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-> index a22b1af85577..50dbb815a2a8 100644
-> --- a/mm/kfence/kfence_test.c
-> +++ b/mm/kfence/kfence_test.c
-> @@ -268,13 +268,13 @@ static void *test_alloc(struct kunit *test, size_t size, gfp_t gfp, enum allocat
->          * 100x the sample interval should be more than enough to ensure we get
->          * a KFENCE allocation eventually.
->          */
-> -       timeout = jiffies + msecs_to_jiffies(100 * CONFIG_KFENCE_SAMPLE_INTERVAL);
-> +       timeout = jiffies + msecs_to_jiffies(100 * kfence_sample_interval);
->         /*
->          * Especially for non-preemption kernels, ensure the allocation-gate
->          * timer can catch up: after @resched_after, every failed allocation
->          * attempt yields, to ensure the allocation-gate timer is scheduled.
->          */
-> -       resched_after = jiffies + msecs_to_jiffies(CONFIG_KFENCE_SAMPLE_INTERVAL);
-> +       resched_after = jiffies + msecs_to_jiffies(kfence_sample_interval);
->         do {
->                 if (test_cache)
->                         alloc = kmem_cache_alloc(test_cache, gfp);
-> @@ -608,7 +608,7 @@ static void test_gfpzero(struct kunit *test)
->         int i;
->
->         /* Skip if we think it'd take too long. */
-> -       KFENCE_TEST_REQUIRES(test, CONFIG_KFENCE_SAMPLE_INTERVAL <= 100);
-> +       KFENCE_TEST_REQUIRES(test, kfence_sample_interval <= 100);
->
->         setup_test_cache(test, size, 0, NULL);
->         buf1 = test_alloc(test, size, GFP_KERNEL, ALLOCATE_ANY);
-> @@ -739,7 +739,7 @@ static void test_memcache_alloc_bulk(struct kunit *test)
->          * 100x the sample interval should be more than enough to ensure we get
->          * a KFENCE allocation eventually.
->          */
-> -       timeout = jiffies + msecs_to_jiffies(100 * CONFIG_KFENCE_SAMPLE_INTERVAL);
-> +       timeout = jiffies + msecs_to_jiffies(100 * kfence_sample_interval);
->         do {
->                 void *objects[100];
->                 int i, num = kmem_cache_alloc_bulk(test_cache, GFP_ATOMIC, ARRAY_SIZE(objects),
-> --
-> 2.18.0.huawei.25
->

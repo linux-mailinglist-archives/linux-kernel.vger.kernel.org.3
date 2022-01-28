@@ -2,162 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD5C49FE06
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874F649FE0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245380AbiA1Q1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239213AbiA1Q06 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:26:58 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3902C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:26:57 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id x7so12804965lfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=nz10n5ifCC7jilAgmrhoGezCuubLvVaE9a6SaZb/KRM=;
-        b=J4T1axblWo2VjbOpI6MSS/XqleKMuc3xv/oPPvXCdlFRSykfHaHfxOARecbkZdiMK2
-         63+9Q16JMLDCtnzlc+prrkyM2CfGJ9C3xcWTLpTrEWTA3jJT+DFY9wgzgCIWd7P9dYrH
-         MIDYyiYTjdvnK2TMUMQmgMn9reR/+pMw8E7DBrKKc2zJjP/sk5vH5j3TzoK186s6l+sU
-         XHi0/vsNbCPk9Wjx6r48HaX1slR1EenNZc4kPogvbug3Wsf0V4Vkakau9Ahp4kuvfmWg
-         Zag0pznXkbJykbzb2/37t7HcWtdGD8jt+YR5hY7rNed4ILEuu4o0GUQThQgNUdd2biTF
-         fBMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=nz10n5ifCC7jilAgmrhoGezCuubLvVaE9a6SaZb/KRM=;
-        b=fVdmDeqZISaweu3ISmzCv+VUTAqL3DtFGo4ZL/IkrIpGKPjxUYXgVNpuQGvcW4ka+e
-         7bkeWMyrg/OSI7mV9agjR4vfZRNN97JJVIMVQXSQzviF96vTEFKHDPkYczS/O6U1vBzH
-         urzf+uuWznGnxlgwmVPJTfRnNUquPoDFbuB03AjkoEPympl/WJjas+ECEe4BLrk5Y1VY
-         2qTti2phdAvByf04lw+dCYw9Q5w0QoufMKgLBGK9+uapY50eVNaeH1Lq8qAC/yDxqNCU
-         rtBG8mdhQlgAdzSbljTh5mFUWPA86DHLrh173avJn6hoOUaGZMjxYcHd9t9t0+CKvQJX
-         skuQ==
-X-Gm-Message-State: AOAM533rRyK+FImJ2QhFXFWJF0uqgoHMgbIVZDe6JbRo01uz/U0Moqms
-        i0yw68K/q2QsmtB1C5hOY93SXw==
-X-Google-Smtp-Source: ABdhPJzcbdJrYGxeN2XkmQMIFB/uwv9rfLlwXrQ83Ox458wMfhw4lgxAc6IqSZS58Wzexzuc4q2pQw==
-X-Received: by 2002:a05:6512:68a:: with SMTP id t10mr6587439lfe.520.1643387216011;
-        Fri, 28 Jan 2022 08:26:56 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id v17sm1954968ljh.5.2022.01.28.08.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:26:55 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, David.Laight@ACULAB.COM,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 net-next 2/2] net: dsa: mv88e6xxx: Improve indirect addressing performance
-Date:   Fri, 28 Jan 2022 17:26:50 +0100
-Message-Id: <20220128162650.2510062-3-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220128162650.2510062-1-tobias@waldekranz.com>
-References: <20220128162650.2510062-1-tobias@waldekranz.com>
+        id S245399AbiA1Q2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:28:06 -0500
+Received: from mga05.intel.com ([192.55.52.43]:9372 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231221AbiA1Q2F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 11:28:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643387285; x=1674923285;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iDEdIyx/eA82CyxCDokO/3tZLh4lgebJYwjeiPMLUqE=;
+  b=QoKMLjxhxXAMPvweGpnCH4NYh9N5pTf4F4EMdUmYjLjmLtVIh4DzePIC
+   fl1uJXW7a0MpZpqnPVGB2gH3XizTgG9NRWNT2nxhfxDo3Ns+XysQJ4ubd
+   1HWS8nO82OI0MjL0t/YYFLjj/touNqPM29WTvMKHSTl1uPVI+j0Ws6mnM
+   8wShmmSlJus/wdHghdMr9DPX3UL6paQIMz16j+8vPx+j4cfGR/iFTV7g1
+   aYBd22JnmMFDCAtXldPJCNQjhT9ie3lsYqk6kcRoQMQ23g7/LjZWg+mp1
+   pRwyo45l9dqkFDp4gzHog+gJvdDzxx7KoC0B39X06hu1EUMiqgDNBvHIq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="333502956"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="333502956"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 08:28:05 -0800
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="480790453"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 08:28:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nDU5P-00FTd6-Vl;
+        Fri, 28 Jan 2022 18:26:55 +0200
+Date:   Fri, 28 Jan 2022 18:26:55 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] pinctrl: bcm2835: Fix a few error paths
+Message-ID: <YfQZT3NokrgF5OQA@smile.fi.intel.com>
+References: <20220127215033.267227-1-f.fainelli@gmail.com>
+ <YfP/TuEERCrgst+k@smile.fi.intel.com>
+ <f28cba7f-6799-9f08-71b2-249a2a506913@gmail.com>
 MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f28cba7f-6799-9f08-71b2-249a2a506913@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before this change, both the read and write callback would start out
-by asserting that the chip's busy flag was cleared. However, both
-callbacks also made sure to wait for the clearing of the busy bit
-before returning - making the initial check superfluous. The only
-time that would ever have an effect was if the busy bit was initially
-set for some reason.
+On Fri, Jan 28, 2022 at 08:12:02AM -0800, Florian Fainelli wrote:
+> On 1/28/2022 6:35 AM, Andy Shevchenko wrote:
+> > On Thu, Jan 27, 2022 at 01:50:31PM -0800, Florian Fainelli wrote:
+> > > After commit 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio
+> > > hogs") a few error paths would not unwind properly the registration of
+> > > gpio ranges. Correct that by assigning a single error label and goto it
+> > > whenever we encounter a fatal error.
+> > 
+> > >   1 file changed, 15 insertions(+), 8 deletions(-)
+> > 
+> > While this seems legit per se, my eyes caught this:
+> > 
+> > 
+> > >   	if (!girq->parents) {
+> > > -		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
+> > > -		return -ENOMEM;
+> > > +		err = -ENOMEM;
+> > > +		goto out_remove;
+> > 
+> > Non-devm....
+> > 
+> > >   	}
+> > >   	if (is_7211) {
+> > >   		pc->wake_irq = devm_kcalloc(dev, BCM2835_NUM_IRQS,
+> > >   					    sizeof(*pc->wake_irq),
+> > >   					    GFP_KERNEL);
+> > 
+> > ...followed by devm.
+> > 
+> > It means more ordering bugs in the ->remove() and error path are lurking
+> > around. Can you double check and be sure that we do not have a case where
+> > non-devm registration code followed by devm?
+> 
+> It seems to me like we are fine with the patch as is, because:
+> 
+> - girq->parents is allocated with devm
+> - pc->wake_irq is allocated with devm
+> - name is allocated with devm
+> 
+> and those are the only variables being allocated for which we also process
+> an error handling path.
 
-With that in mind, make sure to perform an initial check of the busy
-bit, after which both read and write can rely the previous operation
-to have waited for the bit to clear.
+Okay, thanks.
 
-This cuts the number of operations on the underlying MDIO bus by 25%
+My worries that it might be the case when the GPIO ranges have been removed by
+explicit call in ->remove() followed by some interrupt or so and oops or
+misbehaviour because of that.
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/dsa/mv88e6xxx/chip.h |  1 +
- drivers/net/dsa/mv88e6xxx/smi.c  | 24 ++++++++++++++----------
- 2 files changed, 15 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 8271b8aa7b71..438cee853d07 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -392,6 +392,7 @@ struct mv88e6xxx_chip {
- struct mv88e6xxx_bus_ops {
- 	int (*read)(struct mv88e6xxx_chip *chip, int addr, int reg, u16 *val);
- 	int (*write)(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val);
-+	int (*init)(struct mv88e6xxx_chip *chip);
- };
- 
- struct mv88e6xxx_mdio_bus {
-diff --git a/drivers/net/dsa/mv88e6xxx/smi.c b/drivers/net/dsa/mv88e6xxx/smi.c
-index 728ef3f54ec5..a990271b7482 100644
---- a/drivers/net/dsa/mv88e6xxx/smi.c
-+++ b/drivers/net/dsa/mv88e6xxx/smi.c
-@@ -111,11 +111,6 @@ static int mv88e6xxx_smi_indirect_read(struct mv88e6xxx_chip *chip,
- {
- 	int err;
- 
--	err = mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
--					MV88E6XXX_SMI_CMD, 15, 0);
--	if (err)
--		return err;
--
- 	err = mv88e6xxx_smi_direct_write(chip, chip->sw_addr,
- 					 MV88E6XXX_SMI_CMD,
- 					 MV88E6XXX_SMI_CMD_BUSY |
-@@ -139,11 +134,6 @@ static int mv88e6xxx_smi_indirect_write(struct mv88e6xxx_chip *chip,
- {
- 	int err;
- 
--	err = mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
--					MV88E6XXX_SMI_CMD, 15, 0);
--	if (err)
--		return err;
--
- 	err = mv88e6xxx_smi_direct_write(chip, chip->sw_addr,
- 					 MV88E6XXX_SMI_DATA, data);
- 	if (err)
-@@ -162,9 +152,20 @@ static int mv88e6xxx_smi_indirect_write(struct mv88e6xxx_chip *chip,
- 					 MV88E6XXX_SMI_CMD, 15, 0);
- }
- 
-+static int mv88e6xxx_smi_indirect_init(struct mv88e6xxx_chip *chip)
-+{
-+	/* Ensure that the chip starts out in the ready state. As both
-+	 * reads and writes always ensure this on return, they can
-+	 * safely depend on the chip not being busy on entry.
-+	 */
-+	return mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
-+					 MV88E6XXX_SMI_CMD, 15, 0);
-+}
-+
- static const struct mv88e6xxx_bus_ops mv88e6xxx_smi_indirect_ops = {
- 	.read = mv88e6xxx_smi_indirect_read,
- 	.write = mv88e6xxx_smi_indirect_write,
-+	.init = mv88e6xxx_smi_indirect_init,
- };
- 
- int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
-@@ -182,5 +183,8 @@ int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
- 	chip->bus = bus;
- 	chip->sw_addr = sw_addr;
- 
-+	if (chip->smi_ops->init)
-+		return chip->smi_ops->init(chip);
-+
- 	return 0;
- }
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

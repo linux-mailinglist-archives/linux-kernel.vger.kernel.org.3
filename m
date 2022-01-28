@@ -2,132 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C9C49F6CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6905C49F6D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 11:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241773AbiA1KFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 05:05:41 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:41254
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234425AbiA1KFj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:05:39 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 552163F4B6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:05:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643364338;
-        bh=O2AwCzmYc8oJyRvt38Q3eFdAEi62fT7JJ41T7HDRaZY=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=jFynAPC5jS3TuSW0DwBFoBtJMNpyruFX8Ud/SKY65dHlfFes688+9yvc2QTtU+4bn
-         L+fKJrSxitVSAHYJS0Lb+lLPdLNGVSkUQWVAO8AmIXdD9/0T9pXt/nlKX2Dg5JZLvg
-         H8BjAwM5L0VoO7mDKvh7sbWtnRYDMn8tRNFmfzuHyGPOIvRAxcWk6hRGxyfrBa42ly
-         M84OT647Chcd/U3H8T1CzYex/OEjWSKoUMR3kpTmI5/1/LWKK2Sw02hIIZBPuKNear
-         bgOKMy5GSRw6czM5B5u2tVYp4mrImUzZjAYDfSiGZ7rxJNJU0a8OjkiHgfe9iZz7uy
-         cgbx9VXJCrjeg==
-Received: by mail-ed1-f70.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so2833089eds.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 02:05:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2AwCzmYc8oJyRvt38Q3eFdAEi62fT7JJ41T7HDRaZY=;
-        b=phIPaxSPJH7lUL/JhW7WTY4dAGIiQf3ANsLCAOv0yn4Invs1RK9whm9aY0Hzg8AMJK
-         DSUqsLLkbFv6DjNJZmrG/xz0DVk7h5RtemcG6UW2mQcj2dDdKArCpFw6zwxgKB4rth2r
-         c50ygNqkmJj3QgsM7IC7Xtvi73bU4n02jsSdmwSgaxthYyU0wJ81Z47ahGJy7UU43XPr
-         qg/zKO8kwXzkIGr2+3j+9dHT24kWbtCNWxUymCE+qG4xoVbwHVDF577mPY5nF5bBnkZH
-         cHXaQDEqHkRs6ljyh2oxXcdqHpfR4dTaHv0xRT7Ih/MPx92dQEhLtXg5lhG4cxJqgP98
-         7DVA==
-X-Gm-Message-State: AOAM533Ny63GE2R31sP16uSeEBjdJNmodTeTf6mJ0gZpvZkqSvVh9C+G
-        OzmxeWjVMdT753T7kKVl7tLrzLj+OOsmNRkitvOHMtbNQWTaSFjMfuc7Hv6irrXp0XZONodiW6u
-        +IJnvCqPeeAL22451Eue/IQAFU5NAQGRf8IFSwM+mN5Y16x+L9t88eJldng==
-X-Received: by 2002:a05:6402:424a:: with SMTP id g10mr7509432edb.309.1643364337933;
-        Fri, 28 Jan 2022 02:05:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzsVnSwgUFr96As1FnWBQoNDpcCVx1aZj6cMWJvV98yVlEvSPf2G1oW4NedbPBIYoEh/UJEBA7P84mQwLL5yCU=
-X-Received: by 2002:a05:6402:424a:: with SMTP id g10mr7509413edb.309.1643364337738;
- Fri, 28 Jan 2022 02:05:37 -0800 (PST)
+        id S243293AbiA1KHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 05:07:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:33940 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242760AbiA1KHi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 05:07:38 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A520113E;
+        Fri, 28 Jan 2022 02:07:37 -0800 (PST)
+Received: from e126387.arm.com (unknown [10.57.5.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E7B53F766;
+        Fri, 28 Jan 2022 02:07:35 -0800 (PST)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        krzk@kernel.org, biju.das.jz@bp.renesas.com,
+        enric.balletbo@collabora.com, agx@sigxcpu.org, spujar@nvidia.com,
+        alexander.stein@ew.tq-group.com, yuzenghui@huawei.com,
+        festevam@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: defconfig: Enable modules for arm displays
+Date:   Fri, 28 Jan 2022 10:07:20 +0000
+Message-Id: <20220128100720.87803-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220126171442.1338740-1-aurelien@aurel32.net>
-In-Reply-To: <20220126171442.1338740-1-aurelien@aurel32.net>
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Date:   Fri, 28 Jan 2022 11:05:26 +0100
-Message-ID: <CA+zEjCvwsM=DaUqB8Hv_=dXRdauz6hjeFE1MK_A6=QjrsW2EyQ@mail.gmail.com>
-Subject: Re: [PATCH] riscv: fix build with binutils 2.38
-To:     Aurelien Jarno <aurelien@aurel32.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aurelien,
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-On Wed, Jan 26, 2022 at 6:41 PM Aurelien Jarno <aurelien@aurel32.net> wrote:
->
-> From version 2.38, binutils default to ISA spec version 20191213. This
-> means that the csr read/write (csrr*/csrw*) instructions and fence.i
-> instruction has separated from the `I` extension, become two standalone
-> extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-> this causes the following build failure:
->
->   CC      arch/riscv/kernel/vdso/vgettimeofday.o
->   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
->   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
->   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
->   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
->   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
->
-> The fix is to specify those extensions explicitely in -march. However as
-> older binutils version do not support this, we first need to detect
-> that.
->
-> Cc: stable@vger.kernel.org # 4.15+
-> Cc: Kito Cheng <kito.cheng@gmail.com>
-> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> ---
->  arch/riscv/Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 8a107ed18b0d..7d81102cffd4 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)     := rv32ima
->  riscv-march-$(CONFIG_ARCH_RV64I)       := rv64ima
->  riscv-march-$(CONFIG_FPU)              := $(riscv-march-y)fd
->  riscv-march-$(CONFIG_RISCV_ISA_C)      := $(riscv-march-y)c
-> +
-> +# Newer binutils versions default to ISA spec version 20191213 which moves some
-> +# instructions from the I extension to the Zicsr and Zifencei extensions.
-> +toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
-> +riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-> +
->  KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
->  KBUILD_AFLAGS += -march=$(riscv-march-y)
->
-> --
-> 2.34.1
->
->
+Key devices that support displays on SoCs like the Komeda DRM driver, the
+older HDLCD were not enabled by default and should be so displays can work
+out of the box on defconfig. Also Candence I2C support should be enabled so
+the PHY and thus displays can work too.
 
-That fixes our kernel build with the new binutils, so you can add:
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+---
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Tested-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 30516dc0b70e..87edd79dac99 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -469,6 +469,7 @@ CONFIG_I2C_TEGRA=y
+ CONFIG_I2C_UNIPHIER_F=y
+ CONFIG_I2C_RCAR=y
+ CONFIG_I2C_CROS_EC_TUNNEL=y
++CONFIG_I2C_CADENCE=m
+ CONFIG_SPI=y
+ CONFIG_SPI_ARMADA_3700=y
+ CONFIG_SPI_BCM2835=m
+@@ -678,7 +679,9 @@ CONFIG_VIDEO_OV5645=m
+ CONFIG_VIDEO_QCOM_CAMSS=m
+ CONFIG_DRM=m
+ CONFIG_DRM_I2C_NXP_TDA998X=m
++CONFIG_DRM_HDLCD=m
+ CONFIG_DRM_MALI_DISPLAY=m
++CONFIG_DRM_KOMEDA=m
+ CONFIG_DRM_NOUVEAU=m
+ CONFIG_DRM_EXYNOS=m
+ CONFIG_DRM_EXYNOS5433_DECON=y
+-- 
+2.25.1
 
-Thanks for working on this!
-
-Alex
-
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv

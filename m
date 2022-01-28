@@ -2,87 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D84049FB29
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A6C49FB32
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242640AbiA1OCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239050AbiA1OCH (ORCPT
+        id S1344122AbiA1ODl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:03:41 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50100 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238986AbiA1ODj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:02:07 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86456C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:02:06 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id t14so9113298ljh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:02:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=8xz6aFfkOUTGctpyY2ZSx87YSnfxC8HFhZK8bk5reIo=;
-        b=CV+M4b0XmS4b6WR3mTHK8cXy3RzBw+gdOL6/b5Nw/BG7eve2GBgSQXTznquCIcwXLN
-         HLxruCSRf6x7y+8NOijMDHsaViuBZVyJbUKY/SkwLABOY4qdm8ny6QpzG+WVC0CVSivW
-         MuiD9bqGxEiYSwwOam408J1130LjTh0gaCErPxghlxae33gq723pKAJS9djWso3V/NhN
-         cypUE/6BnQ/NONdH5FCBgceBmcDt0Tu3UBUtIAa5uMXmku4SVT/o984tCLwQ+NXN+S2+
-         icd8x4UeOFoMglrlS0pTYs2TgjZGeiEzmeR/glPRtKoeFNkcqUe98PzgsnKik2iLDAMz
-         FqNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=8xz6aFfkOUTGctpyY2ZSx87YSnfxC8HFhZK8bk5reIo=;
-        b=22Ep4U/rLOC3Sa1duKLu6yrEK9MchLeCO702BSch5wUE9k3JEFA9dS6AWIWI73uiJX
-         5f48ZfD3vCYrU/ZfrCSs8//ap1HpQ4ce4jabraa3Rm9pnDH1HKE5xU9BIlZpdDtsLSbG
-         9hu+Ir6QxNIuc8qpZOTtRsi+SaNQl1eEjvxrcdzzxR4BThqJCGY4Ar9siSjRbzErAHD9
-         8orfrZECGu2suGfuLGRufhxxkVlrxlocI+OYnWZRrL5LDE7urCtUoAq/+gl4AGYhWqwr
-         YHSuwpTY9BXB73RXcMXz0GzzRBexhi6l33EHP4tMohPKlbAizTrqVyrXCkFdnUdNPyvg
-         JZTQ==
-X-Gm-Message-State: AOAM530ZHhHtywqsNcux7JovDC4+fCVCvqxLSzQQhzmZeYowEjRRD/f4
-        L10h7NLjs9gHsgtjDZeeR2jEHf7mL2lbGrHxmV8=
-X-Google-Smtp-Source: ABdhPJwmWBvcDdDAQfpraODTAh8zouMstriDxLfk2vTbqLkS3ZsfNZuvAJMKshogAu2+lidJeb55kdlAzRmTN0Z7/3g=
-X-Received: by 2002:a05:651c:a0f:: with SMTP id k15mr3562012ljq.68.1643378523950;
- Fri, 28 Jan 2022 06:02:03 -0800 (PST)
-MIME-Version: 1.0
-Sender: alimahazem01@gmail.com
-Received: by 2002:a05:6504:547:0:0:0:0 with HTTP; Fri, 28 Jan 2022 06:02:03
- -0800 (PST)
-From:   Ann William <annwilliam372@gmail.com>
-Date:   Fri, 28 Jan 2022 06:02:03 -0800
-X-Google-Sender-Auth: SCBq35JeBJHdkzctdf2BTQGi3c4
-Message-ID: <CAAcvc8++5Nt6YsNXMC2GDXCffiyp0sdr1yZ+a7yPN5Tcke=9ow@mail.gmail.com>
-Subject: Re: Greetings My Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 28 Jan 2022 09:03:39 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SD6HZR030935;
+        Fri, 28 Jan 2022 14:03:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : in-reply-to : references : content-type : mime-version :
+ date : content-transfer-encoding; s=pp1;
+ bh=lzD27m9tVyI10xVC7XyEDLr4pq/3o3FXlGhpDw5JHt4=;
+ b=HZtpc9J2CwrhFbMwHr4txaUKABbsXwBVetQXLt0kCqvBH+bwQqO2BxIBBYLVh3o5CvyV
+ Gmo+FXYIC8InNyzTHamLOqtJK/B0avs3hvUoM85/r6bJ+QkXH+staoOoPhhUboyjKA5w
+ QsApBtuDCYw9p+iHzA2lfuYwbo0+FYeIK3FIm+TKRDDV3eBNr0TNajnO41MlZ13BlmyV
+ j1+bqSRKrJWnpMJ1vJRKPbV/QBp6VouPsMeg3dpv0sO0Undh480OJ4FQXyy5XjM14GSI
+ cq4bEUImHeVNzxnQymSvFYgtuEPRyi3Lb10PcpY2wDsERqhWj3k36IBsLD4gva7UOHE0 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvgqwhf22-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 14:03:15 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SD9qNT015365;
+        Fri, 28 Jan 2022 14:03:14 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvgqwheyf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 14:03:14 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SE0ekU016233;
+        Fri, 28 Jan 2022 14:03:11 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dr96ka38j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jan 2022 14:03:11 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SE382Q35979684
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Jan 2022 14:03:08 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0625A5204E;
+        Fri, 28 Jan 2022 14:03:08 +0000 (GMT)
+Received: from sig-9-65-83-59.ibm.com (unknown [9.65.83.59])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 57B305206B;
+        Fri, 28 Jan 2022 14:03:05 +0000 (GMT)
+Message-ID: <258c7c5e1aebfc9376560549794d43e744654713.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 16/23] ima: Implement ima_free_policy_rules() for
+ freeing of an ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220125224645.79319-17-stefanb@linux.vnet.ibm.com>
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+         <20220125224645.79319-17-stefanb@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Mime-Version: 1.0
+Date:   Fri, 28 Jan 2022 09:02:23 -0500
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Xzjbnohdiwo_aRI8Gc6kV7Yr2shG8kIu
+X-Proofpoint-GUID: f8tz81gN8LY9ADPXjR3bdBEWWTE-OFYz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-28_03,2022-01-27_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ adultscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 suspectscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201280090
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+Hi Stefan,
 
-I sent this mail praying it will find you in a good condition, since I
-myself am in a very critical health condition in which I sleep every
-night  without knowing if I may be alive to see the next day. I am
-Mrs.Ann William, a widow suffering from a long time illness. I have
-some funds I  inherited from my late husband, the sum of
-($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
-that I have serious sickness which is a cancer problem. What disturbs
-me most is my stroke sickness. Having known my condition, I decided to
-donate this fund to a good person that will utilize it the way I am
-going to instruct herein. I need a very honest God.
+On Tue, 2022-01-25 at 17:46 -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> Implement ima_free_policy_rules() that is needed when an ima_namespace
+> is freed.
+> 
+> Only reset temp_ima_appraise when using init_ima_ns.
 
-fearing a person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained. I do not want a situation where this money will be used in
-an ungodly manner. That's why I' making this decision. I'm not afraid
-of death so I know where I'm going. I accept this decision because I
-do not have any child who will inherit this money after I die. Please
-I want your sincere and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your
-reply.
+Instead of having to walk the policy rules to know if there are any
+"appraise" rules, the ima_appraise flag is set.  For now, only reset
+temp_ima_appraise flag on failed policy rule updates for init_ima_ns.
 
-May God Bless you,
-Mrs.Ann William,
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> ---
+>  v9:
+>   - Only reset temp_ima_appraise when using init_ima_ns.
+> ---
+>  security/integrity/ima/ima.h        |  1 +
+>  security/integrity/ima/ima_policy.c | 20 +++++++++++++++++++-
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index aea8fb8d2854..8c757223d549 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -329,6 +329,7 @@ void ima_update_policy_flags(struct ima_namespace *ns);
+>  ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule);
+>  void ima_delete_rules(struct ima_namespace *ns);
+>  int ima_check_policy(struct ima_namespace *ns);
+> +void ima_free_policy_rules(struct ima_namespace *ns);
+>  void *ima_policy_start(struct seq_file *m, loff_t *pos);
+>  void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos);
+>  void ima_policy_stop(struct seq_file *m, void *v);
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index e8140e73d80b..47f2d1b5d156 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1880,13 +1880,31 @@ void ima_delete_rules(struct ima_namespace *ns)
+>  {
+>  	struct ima_rule_entry *entry, *tmp;
+>  
+> -	temp_ima_appraise = 0;
+> +	if (ns == &init_ima_ns)
+> +		temp_ima_appraise = 0;
+> +
+>  	list_for_each_entry_safe(entry, tmp, &ns->ima_temp_rules, list) {
+>  		list_del(&entry->list);
+>  		ima_free_rule(entry);
+>  	}
+>  }
+>  
+> +/**
+> + * ima_free_policy_rules - free all policy rules
+> + * @ns: IMA namespace that has the policy
+> + */
+> +void ima_free_policy_rules(struct ima_namespace *ns)
+> +{
+> +	struct ima_rule_entry *entry, *tmp;
+> +
+> +	ima_delete_rules(ns);
+
+When the IMA policy is being extended, new rules are temporarily added
+to the ima_temp_rules list.  If the entire set of rules being added are
+valid, they're appended to the tail.
+
+There shouldn't be any rules on the ima_temp_rules list unless the
+policy is currently being extended.  Is that possible at this point?
+
+> +
+> +	list_for_each_entry_safe(entry, tmp, &ns->ima_policy_rules, list) {
+> +		list_del(&entry->list);
+> +		ima_free_rule(entry);
+> +	}
+> +}
+> +
+>  #define __ima_hook_stringify(func, str)	(#func),
+>  
+>  const char *const func_tokens[] = {
+
+thanks,
+
+Mimi
+

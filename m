@@ -2,134 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E784A01D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E744A4A01EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 21:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351185AbiA1U3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 15:29:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24813 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351175AbiA1U3U (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:29:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643401760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tcZWR2ltT9IDLZDOmiJU7QFW5/KRxJtDJKHmdv9rpsw=;
-        b=LIYRhzGQMO93ZX1yRXV9S93Dhbv7WokfbQT7eE2P5U26vRjWjt5x6JinzgRb8XYvfpMV0T
-        Q3OxRQ8JuRsINc3+TbmRo44ChbqTLT/0Hx4/DYhKuQa2kQa2DtEAWsIPkSbYzWtFQDTemz
-        dFgktNeaD/E7KpgdHe42fRaQ+uu8jW0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-DMWCd-ppN0i23JUeM4LERA-1; Fri, 28 Jan 2022 15:29:17 -0500
-X-MC-Unique: DMWCd-ppN0i23JUeM4LERA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4DAC190B2A0;
-        Fri, 28 Jan 2022 20:29:15 +0000 (UTC)
-Received: from vbendel-laptop-2020.redhat.com (unknown [10.40.195.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E4C395E26B;
-        Fri, 28 Jan 2022 20:29:13 +0000 (UTC)
-From:   vbendel@redhat.com
-To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     omosnace@redhat.com, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vratislav Bendel <vbendel@redhat.com>
-Subject: [PATCH 3/3] selinux: remove duplicate cond_list clean up calls
-Date:   Fri, 28 Jan 2022 21:28:58 +0100
-Message-Id: <20220128202858.96935-4-vbendel@redhat.com>
-In-Reply-To: <20220128202858.96935-1-vbendel@redhat.com>
-References: <20220128202858.96935-1-vbendel@redhat.com>
+        id S1351341AbiA1U3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 15:29:41 -0500
+Received: from mga02.intel.com ([134.134.136.20]:61402 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351175AbiA1U3Y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 15:29:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643401764; x=1674937764;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=S+9m7eyuXn1c2Qq6KqmCa13eplXgcNSM8btSUXiOqqw=;
+  b=Vs/pLpVoKTWWriRdxHLPbwDjLefS0XZWEM2eXGWGoyt2oriu4ftc8oGz
+   gaNF0P9sjbp14gJC1/fjcrMoo31He+4bwNcs9ayXWeI9bWGlGOQ86b4c7
+   UxaQsGcDnYm+Un62NDTXeoQsqcwqI4oc7jUtCCkD9ZXNGrt2punkfTAR0
+   ESrjCgEZ3OA6OOakLQReJMP+oFcyIEvc/ar++SPK6NkgjTkgsj7vg9kh7
+   SGrG24kxaIICDiuo8lyiLgFvR2WvAkAp/uD5jriVI7VPXJORno5z4RiSW
+   OaKJKqGjQka70dT9KRHS27vajbcgTi5j/au2g8yqGP9pWRbcf8lpccXbC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="234578006"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="234578006"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:29:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="618827700"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2022 12:29:22 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Ashok Raj" <ashok.raj@intel.com>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>
+Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v3 05/11] iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit
+Date:   Fri, 28 Jan 2022 12:28:59 -0800
+Message-Id: <20220128202905.2274672-6-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20220128202905.2274672-1-fenghua.yu@intel.com>
+References: <20220128202905.2274672-1-fenghua.yu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vratislav Bendel <vbendel@redhat.com>
+To avoid complexity of updating each thread's PASID status (e.g. sending
+IPI to update IA32_PASID MSR) on allocating and freeing PASID, once
+allocated and assigned to an mm, the PASID stays with the mm for the
+rest of the mm's lifetime. A reference to the PASID is taken on
+allocating the PASID. Binding/unbinding the PASID won't change refcount.
+The reference is dropped on mm exit and thus the PASID is freed.
 
-On error path from cond_read_list() and duplicate_policydb_cond_list()
-the *_destroy() functions get called a second time in caller functions.
-Remove the first calls and let the callers clean it.
+Two helpers mm_pasid_set() and mm_pasid_drop() are defined in mm because
+the PASID operations handle the pasid member in mm_struct and should be
+part of mm operations. Because IOASID's reference count is not used any
+more and removed, unused ioasid_get() and iommu_sva_free_pasid()
+are deleted and ioasid_put() is renamed to ioasid_free().
 
-Suggested-by: Ondrej Mosnacek <omosnace@redhat.com>
-Signed-off-by: Vratislav Bendel <vbendel@redhat.com>
+20-bit PASID allows up to 1M processes bound to PASIDs at the same time.
+With cgroups and other controls that might limit the number of process
+creation, the limited number of PASIDs is not a realistic issue for
+lazy PASID free.
+
+Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 ---
- security/selinux/ss/conditional.c | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
+v3:
+- Rename mm_pasid_get() to mm_pasid_set() (Thomas).
+- Remove ioasid_get() because it's not used any more when the IOASID
+  is freed on mm exit (Thomas).
+- Remove PASID's refcount exercise in ioasid_put() and rename
+  ioasid_put() to ioasid_free() (Thomas).
 
-diff --git a/security/selinux/ss/conditional.c b/security/selinux/ss/conditional.c
-index 8bc16ad3af9e..c333daaeceab 100644
---- a/security/selinux/ss/conditional.c
-+++ b/security/selinux/ss/conditional.c
-@@ -432,19 +432,16 @@ int cond_read_list(struct policydb *p, void *fp)
- 
- 	rc = avtab_alloc(&(p->te_cond_avtab), p->te_avtab.nel);
- 	if (rc)
--		goto err;
-+		return rc;
- 
- 	p->cond_list_len = len;
- 
- 	for (i = 0; i < len; i++) {
- 		rc = cond_read_node(p, &p->cond_list[i], fp);
- 		if (rc)
--			goto err;
-+			return rc;
+v2:
+- Free PASID on mm exit instead of in exit(2) or unbind() (Thomas, AndyL,
+  PeterZ)
+- Add mm_pasid_init(), mm_pasid_get(), and mm_pasid_drop() functions in mm.
+  So the mm's PASID operations are generic for both X86 and ARM
+  (Dave Hansen)
+
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  5 +--
+ drivers/iommu/intel/iommu.c                   |  4 +-
+ drivers/iommu/intel/svm.c                     |  9 -----
+ drivers/iommu/ioasid.c                        | 38 ++----------------
+ drivers/iommu/iommu-sva-lib.c                 | 39 ++++++-------------
+ drivers/iommu/iommu-sva-lib.h                 |  1 -
+ include/linux/ioasid.h                        | 12 +-----
+ include/linux/sched/mm.h                      | 16 ++++++++
+ kernel/fork.c                                 |  1 +
+ 9 files changed, 38 insertions(+), 87 deletions(-)
+
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index a737ba5f727e..22ddd05bbdcd 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -340,14 +340,12 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+ 	bond->smmu_mn = arm_smmu_mmu_notifier_get(smmu_domain, mm);
+ 	if (IS_ERR(bond->smmu_mn)) {
+ 		ret = PTR_ERR(bond->smmu_mn);
+-		goto err_free_pasid;
++		goto err_free_bond;
  	}
- 	return 0;
--err:
--	cond_list_destroy(p);
--	return rc;
+ 
+ 	list_add(&bond->list, &master->bonds);
+ 	return &bond->sva;
+ 
+-err_free_pasid:
+-	iommu_sva_free_pasid(mm);
+ err_free_bond:
+ 	kfree(bond);
+ 	return ERR_PTR(ret);
+@@ -377,7 +375,6 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
+ 	if (refcount_dec_and_test(&bond->refs)) {
+ 		list_del(&bond->list);
+ 		arm_smmu_mmu_notifier_put(bond->smmu_mn);
+-		iommu_sva_free_pasid(bond->mm);
+ 		kfree(bond);
+ 	}
+ 	mutex_unlock(&sva_lock);
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 92fea3fbbb11..ef03b2176bbd 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4781,7 +4781,7 @@ static int aux_domain_add_dev(struct dmar_domain *domain,
+ link_failed:
+ 	spin_unlock_irqrestore(&device_domain_lock, flags);
+ 	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+-		ioasid_put(domain->default_pasid);
++		ioasid_free(domain->default_pasid);
+ 
+ 	return ret;
+ }
+@@ -4811,7 +4811,7 @@ static void aux_domain_remove_dev(struct dmar_domain *domain,
+ 	spin_unlock_irqrestore(&device_domain_lock, flags);
+ 
+ 	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+-		ioasid_put(domain->default_pasid);
++		ioasid_free(domain->default_pasid);
  }
  
- int cond_write_bool(void *vkey, void *datum, void *ptr)
-@@ -643,7 +640,7 @@ static int duplicate_policydb_cond_list(struct policydb *newp,
- 				sizeof(*newp->cond_list),
- 				GFP_KERNEL);
- 	if (!newp->cond_list)
--		goto error;
-+		return -ENOMEM;
+ static int prepare_domain_attach_device(struct iommu_domain *domain,
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index 5b5d69b04fcc..51ac2096b3da 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -514,11 +514,6 @@ static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm,
+ 	return iommu_sva_alloc_pasid(mm, PASID_MIN, max_pasid - 1);
+ }
  
- 	for (i = 0; i < origp->cond_list_len; i++) {
- 		struct cond_node *newn = &newp->cond_list[i];
-@@ -656,27 +653,22 @@ static int duplicate_policydb_cond_list(struct policydb *newp,
- 				orign->expr.len * sizeof(*orign->expr.nodes),
- 				GFP_KERNEL);
- 		if (!newn->expr.nodes)
--			goto error;
-+			return -ENOMEM;
- 
- 		newn->expr.len = orign->expr.len;
- 
- 		rc = cond_dup_av_list(&newn->true_list, &orign->true_list,
- 				&newp->te_cond_avtab);
- 		if (rc)
--			goto error;
-+			return rc;
- 
- 		rc = cond_dup_av_list(&newn->false_list, &orign->false_list,
- 				&newp->te_cond_avtab);
- 		if (rc)
--			goto error;
-+			return rc;
- 	}
- 
- 	return 0;
+-static void intel_svm_free_pasid(struct mm_struct *mm)
+-{
+-	iommu_sva_free_pasid(mm);
+-}
 -
--error:
--	avtab_destroy(&newp->te_cond_avtab);
--	cond_list_destroy(newp);
--	return -ENOMEM;
+ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+ 					   struct device *dev,
+ 					   struct mm_struct *mm,
+@@ -662,8 +657,6 @@ static int intel_svm_unbind_mm(struct device *dev, u32 pasid)
+ 				kfree(svm);
+ 			}
+ 		}
+-		/* Drop a PASID reference and free it if no reference. */
+-		intel_svm_free_pasid(mm);
+ 	}
+ out:
+ 	return ret;
+@@ -1047,8 +1040,6 @@ struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm, void
+ 	}
+ 
+ 	sva = intel_svm_bind_mm(iommu, dev, mm, flags);
+-	if (IS_ERR_OR_NULL(sva))
+-		intel_svm_free_pasid(mm);
+ 	mutex_unlock(&pasid_mutex);
+ 
+ 	return sva;
+diff --git a/drivers/iommu/ioasid.c b/drivers/iommu/ioasid.c
+index 50ee27bbd04e..a786c034907c 100644
+--- a/drivers/iommu/ioasid.c
++++ b/drivers/iommu/ioasid.c
+@@ -2,7 +2,7 @@
+ /*
+  * I/O Address Space ID allocator. There is one global IOASID space, split into
+  * subsets. Users create a subset with DECLARE_IOASID_SET, then allocate and
+- * free IOASIDs with ioasid_alloc and ioasid_put.
++ * free IOASIDs with ioasid_alloc() and ioasid_free().
+  */
+ #include <linux/ioasid.h>
+ #include <linux/module.h>
+@@ -15,7 +15,6 @@ struct ioasid_data {
+ 	struct ioasid_set *set;
+ 	void *private;
+ 	struct rcu_head rcu;
+-	refcount_t refs;
+ };
+ 
+ /*
+@@ -315,7 +314,6 @@ ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min, ioasid_t max,
+ 
+ 	data->set = set;
+ 	data->private = private;
+-	refcount_set(&data->refs, 1);
+ 
+ 	/*
+ 	 * Custom allocator needs allocator data to perform platform specific
+@@ -348,34 +346,11 @@ ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min, ioasid_t max,
+ EXPORT_SYMBOL_GPL(ioasid_alloc);
+ 
+ /**
+- * ioasid_get - obtain a reference to the IOASID
+- */
+-void ioasid_get(ioasid_t ioasid)
+-{
+-	struct ioasid_data *ioasid_data;
+-
+-	spin_lock(&ioasid_allocator_lock);
+-	ioasid_data = xa_load(&active_allocator->xa, ioasid);
+-	if (ioasid_data)
+-		refcount_inc(&ioasid_data->refs);
+-	else
+-		WARN_ON(1);
+-	spin_unlock(&ioasid_allocator_lock);
+-}
+-EXPORT_SYMBOL_GPL(ioasid_get);
+-
+-/**
+- * ioasid_put - Release a reference to an ioasid
++ * ioasid_free - Free an ioasid
+  * @ioasid: the ID to remove
+- *
+- * Put a reference to the IOASID, free it when the number of references drops to
+- * zero.
+- *
+- * Return: %true if the IOASID was freed, %false otherwise.
+  */
+-bool ioasid_put(ioasid_t ioasid)
++void ioasid_free(ioasid_t ioasid)
+ {
+-	bool free = false;
+ 	struct ioasid_data *ioasid_data;
+ 
+ 	spin_lock(&ioasid_allocator_lock);
+@@ -385,10 +360,6 @@ bool ioasid_put(ioasid_t ioasid)
+ 		goto exit_unlock;
+ 	}
+ 
+-	free = refcount_dec_and_test(&ioasid_data->refs);
+-	if (!free)
+-		goto exit_unlock;
+-
+ 	active_allocator->ops->free(ioasid, active_allocator->ops->pdata);
+ 	/* Custom allocator needs additional steps to free the xa element */
+ 	if (active_allocator->flags & IOASID_ALLOCATOR_CUSTOM) {
+@@ -398,9 +369,8 @@ bool ioasid_put(ioasid_t ioasid)
+ 
+ exit_unlock:
+ 	spin_unlock(&ioasid_allocator_lock);
+-	return free;
+ }
+-EXPORT_SYMBOL_GPL(ioasid_put);
++EXPORT_SYMBOL_GPL(ioasid_free);
+ 
+ /**
+  * ioasid_find - Find IOASID data
+diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+index bd41405d34e9..106506143896 100644
+--- a/drivers/iommu/iommu-sva-lib.c
++++ b/drivers/iommu/iommu-sva-lib.c
+@@ -18,8 +18,7 @@ static DECLARE_IOASID_SET(iommu_sva_pasid);
+  *
+  * Try to allocate a PASID for this mm, or take a reference to the existing one
+  * provided it fits within the [@min, @max] range. On success the PASID is
+- * available in mm->pasid, and must be released with iommu_sva_free_pasid().
+- * @min must be greater than 0, because 0 indicates an unused mm->pasid.
++ * available in mm->pasid and will be available for the lifetime of the mm.
+  *
+  * Returns 0 on success and < 0 on error.
+  */
+@@ -33,38 +32,24 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&iommu_sva_lock);
+-	if (mm->pasid) {
+-		if (mm->pasid >= min && mm->pasid <= max)
+-			ioasid_get(mm->pasid);
+-		else
++	/* Is a PASID already associated with this mm? */
++	if (pasid_valid(mm->pasid)) {
++		if (mm->pasid < min || mm->pasid >= max)
+ 			ret = -EOVERFLOW;
+-	} else {
+-		pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
+-		if (pasid == INVALID_IOASID)
+-			ret = -ENOMEM;
+-		else
+-			mm->pasid = pasid;
++		goto out;
+ 	}
++
++	pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
++	if (!pasid_valid(pasid))
++		ret = -ENOMEM;
++	else
++		mm_pasid_set(mm, pasid);
++out:
+ 	mutex_unlock(&iommu_sva_lock);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(iommu_sva_alloc_pasid);
+ 
+-/**
+- * iommu_sva_free_pasid - Release the mm's PASID
+- * @mm: the mm
+- *
+- * Drop one reference to a PASID allocated with iommu_sva_alloc_pasid()
+- */
+-void iommu_sva_free_pasid(struct mm_struct *mm)
+-{
+-	mutex_lock(&iommu_sva_lock);
+-	if (ioasid_put(mm->pasid))
+-		mm->pasid = 0;
+-	mutex_unlock(&iommu_sva_lock);
+-}
+-EXPORT_SYMBOL_GPL(iommu_sva_free_pasid);
+-
+ /* ioasid_find getter() requires a void * argument */
+ static bool __mmget_not_zero(void *mm)
+ {
+diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva-lib.h
+index 95dc3ebc1928..8909ea1094e3 100644
+--- a/drivers/iommu/iommu-sva-lib.h
++++ b/drivers/iommu/iommu-sva-lib.h
+@@ -9,7 +9,6 @@
+ #include <linux/mm_types.h>
+ 
+ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max);
+-void iommu_sva_free_pasid(struct mm_struct *mm);
+ struct mm_struct *iommu_sva_find(ioasid_t pasid);
+ 
+ /* I/O Page fault */
+diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
+index 2237f64dbaae..af1c9d62e642 100644
+--- a/include/linux/ioasid.h
++++ b/include/linux/ioasid.h
+@@ -34,8 +34,7 @@ struct ioasid_allocator_ops {
+ #if IS_ENABLED(CONFIG_IOASID)
+ ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min, ioasid_t max,
+ 		      void *private);
+-void ioasid_get(ioasid_t ioasid);
+-bool ioasid_put(ioasid_t ioasid);
++void ioasid_free(ioasid_t ioasid);
+ void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+ 		  bool (*getter)(void *));
+ int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
+@@ -53,14 +52,7 @@ static inline ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min,
+ 	return INVALID_IOASID;
  }
  
- static int cond_bools_destroy(void *key, void *datum, void *args)
+-static inline void ioasid_get(ioasid_t ioasid)
+-{
+-}
+-
+-static inline bool ioasid_put(ioasid_t ioasid)
+-{
+-	return false;
+-}
++static inline void ioasid_free(ioasid_t ioasid) { }
+ 
+ static inline void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+ 				bool (*getter)(void *))
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index c74d1edbac2f..a80356e9dc69 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -439,8 +439,24 @@ static inline void mm_pasid_init(struct mm_struct *mm)
+ {
+ 	mm->pasid = INVALID_IOASID;
+ }
++
++/* Associate a PASID with an mm_struct: */
++static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
++{
++	mm->pasid = pasid;
++}
++
++static inline void mm_pasid_drop(struct mm_struct *mm)
++{
++	if (pasid_valid(mm->pasid)) {
++		ioasid_free(mm->pasid);
++		mm->pasid = INVALID_IOASID;
++	}
++}
+ #else
+ static inline void mm_pasid_init(struct mm_struct *mm) {}
++static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid) {}
++static inline void mm_pasid_drop(struct mm_struct *mm) {}
+ #endif
+ 
+ #endif /* _LINUX_SCHED_MM_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index deacd2c17a7f..c03c6682464c 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1115,6 +1115,7 @@ static inline void __mmput(struct mm_struct *mm)
+ 	}
+ 	if (mm->binfmt)
+ 		module_put(mm->binfmt->module);
++	mm_pasid_drop(mm);
+ 	mmdrop(mm);
+ }
+ 
 -- 
-2.26.3
+2.35.0
 

@@ -2,197 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA4949FD99
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FE249FD9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349916AbiA1QFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:05:05 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:48084 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234788AbiA1QFE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:05:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643385904; x=1674921904;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=or411cjleC+Ihl7R1QhLwHpbJvcXh16tO4SAHIDvYjA=;
-  b=CPFQI2n8642Pz3jTHC7jwPXlCkFjN+6JQ70HuOOsiv6Moq/SZ1YcyU2U
-   Mh9heG30KZwyC6FDmlT/eLmG+iFNvg9h5BJhHxWZvdxq/d73sAfFW/m+k
-   eW72dHDKBMVyqEeZ403LPRSBWPeA0jm+PpB9TsmRFS/yYhbvodyb+AYsG
-   A=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jan 2022 08:05:04 -0800
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 08:05:03 -0800
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 28 Jan 2022 08:05:03 -0800
-Date:   Fri, 28 Jan 2022 08:05:02 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Jinyoung CHOI <j-young.choi@samsung.com>
-CC:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "huobean@gmail.com" <huobean@gmail.com>
-Subject: Re: [PATCH RESEND] scsi: ufs: Add checking lifetime attribute for
- WriteBooster
-Message-ID: <20220128160502.GA24908@asutoshd-linux1.qualcomm.com>
-References: <CGME20220126104125epcms2p50afb250190ffc3f2dc7b16df31757c94@epcms2p3>
- <1891546521.01643252701746.JavaMail.epsvc@epcpadp3>
+        id S1349940AbiA1QGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:06:00 -0500
+Received: from mout.gmx.net ([212.227.15.19]:53215 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234788AbiA1QGA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 11:06:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643385958;
+        bh=4macMQryATn0a9e7Su1UA9Wf+EsDWpQOtJ0zx44KV1E=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=Tc1Oyw+kNwcc3d3euN132DEQXQqbMSoUGANs2E+5kwec9O78D8gzM0q+A3pqNkNKd
+         9/nXyvL30dw6jb2Em6bAkoIVkAq5i0dhSjPCC1fvfBDz/JCTdzR2ah0L8zECrsOPII
+         84jWECsd+erBcGGThrPQfdyFUNNiWA9P0db1oNoI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.35.55]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFsUv-1n2EHZ24gJ-00HLRa; Fri, 28
+ Jan 2022 17:05:58 +0100
+Message-ID: <47af10ef-c043-88d7-3fed-9a4a39369340@gmx.de>
+Date:   Fri, 28 Jan 2022 17:05:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1891546521.01643252701746.JavaMail.epsvc@epcpadp3>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.16 0/9] 5.16.4-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:ZEWUY2lShNjQXNZlZC2vW1v4ij83Aeho2gSjkN0+2pXPqG9xQfc
+ U0kuPxj2DquPQlJYMNFgcGG5PzDDorHRmy/MQWPDgMdeyOyzqLCHzbTazurT2qGWOljKpHl
+ VpNx4YxZd0fbd60paoHYdi9aEux7xB3A/2/YfynJ/smW2VOj/LdyGBpbKWgTaP78gQgNq7W
+ XSHartLTGe0lE31mNkZMg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cq1S47DohJM=:cGqpeGZOayaENC/C1ZOhv9
+ sOFPtzJOqD5RTFwD7WzeE3hLV3pT5b+DgCbx+URkanO2ylarYT5jLbZjsU7Mf1s2yR0Aja8/P
+ lUtTmJRwAbzj5Txt2jW3FmfehvXLSN36b68VbhcXkBVleZJSa6Wtrq3npZVOw9/BEVdAoO2rV
+ N9VifFoK2aWXQ0GmKufQl1YiLpBwP11NFq9S9d0ipvgB5gRTtw2Z05EMlRhGXrdRnyHE40+SG
+ OyN375LcqsOUcVYNJUayp5tXt1pCpS1/23hTSM3UsjQP1hiVrzdNeq04ApucCJDnKzhlzvVZ6
+ X0htS4aTj1dx6VhNwF539Q/3SfZNYzdwBOnzgxrEap+60CWDre5YGlZIw6hy0U1lK1tDrEG1K
+ JZ0X8bAceGDh/sTbUcBsYRVB2p3vMb5rLyE+SVbC2mE3rnRR+SudXTY/cIAy3BTY5O+wgcrBm
+ IVcjX2pnaMQnnbiDIb4D6lD1msALsdWREowfaZiry0CpBwzvhXqnjzZ9XiY9Zmkqk89u3TGth
+ /yn0nFmINbnV1wdfBm6DKzgQnqnprotyLglrk0SkJ5pj7QE0Tg4iVFCHpnkhvYe2VY2F6RhCY
+ YSI5l5UFIEkRRqJvKPbqRzYapt9vSqZeKp6Gheq3dBXRhuN4zqJLckKCCFNMq+V+GtoMj/W9J
+ Q+FD4spl4zz8BIUV9MJ9Ovrzye/xRPHqL4rjKZZSU3nBlNFVveHpR8ljUdU7OCfmzdAVKLKDs
+ sEuy9t6WuYtoc20xn/agWoSc2/2Uepiolkm6k/JxaSxo8ObyvPKDNOJCFqPh5JXF+Rc5AfEU6
+ TALd2+npcGhb+A7onM6C6BXt/jHejDJMEq260uAjQoTD4Bu/UuJx3w+BAAZHEEvuVGnM9J2Df
+ iJ61Gy6nGBXmjaFMoF7xTXoNoCxfecmlCqy+KPqwB2UvSA+7wfiBVmt74ikCrGXsjkI7vXD0l
+ S8xuMSq9u7so2Ej1FLw+ouDhegXEI3/d1JLd8mEv0PjgMpENYPE4VPckDNbEqXX3WfdyXUeUt
+ hKH/WHsfxX2OEo8NrhldkRqaPP0sMYEFvS9V37za6iGT+2IdpGGyr5hnea5b5kSoPzZcdsCsl
+ cQAtvLwR2R30rE=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27 2022 at 19:07 -0800, Jinyoung CHOI wrote:
->Because WB performs write in SLC mode, it is difficult to use WB
->infinitely.
->
->Vendors can set the Lifetime limit value to the device.
->If Lifetime exceeds the limit value, the device itself can disable the
->WB feature.
->
->WB feature supports "bWriteBoosterBufferLifeTimeEst (IDN = 1E)" attribute.
->
->With Lifetime exceeding the limit value,
->the current driver continuously performs the following query.
->
->	- Write Flag: WB_ENABLE / DISABLE
->	- Read attr: Available Buffer Size
->	- Read attr: Current Buffer Size
->
->This patch recognizes that WriteBooster is no longer supported by the device,
->and prevent unnecessary query issues.
->
->Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
->---
+hallo Greg
 
-LGTM.
+5.16.4-rc1
 
-Reviewed-by: Asutosh Das <quic_asutoshd@quicinc.com>
+compiles, boots and runs on my x86_64
+(Intel i5-11400, Fedora 35)
 
-> drivers/scsi/ufs/ufs.h    |  6 +++++
-> drivers/scsi/ufs/ufshcd.c | 52 +++++++++++++++++++++++++++++++++++++++
-> 2 files changed, 58 insertions(+)
->
->diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
->index 0bfdca3e648e..4a00c24a3209 100644
->--- a/drivers/scsi/ufs/ufs.h
->+++ b/drivers/scsi/ufs/ufs.h
->@@ -43,6 +43,12 @@
-> /* WriteBooster buffer is available only for the logical unit from 0 to 7 */
-> #define UFS_UPIU_MAX_WB_LUN_ID	8
->
->+/*
->+ * WriteBooster buffer lifetime has a limit setted by vendor.
->+ * If it is over the limit, WriteBooster feature will be disabled.
->+ */
->+#define UFS_WB_EXCEED_LIFETIME		0x0B
->+
-> /* Well known logical unit id in LUN field of UPIU */
-> enum {
-> 	UFS_UPIU_REPORT_LUNS_WLUN	= 0x81,
->diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
->index 460d2b440d2e..41d85b69fa50 100644
->--- a/drivers/scsi/ufs/ufshcd.c
->+++ b/drivers/scsi/ufs/ufshcd.c
->@@ -5778,6 +5778,47 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
-> 	return false;
-> }
->
->+static void ufshcd_wb_force_disable(struct ufs_hba *hba)
->+{
->+	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
->+		ufshcd_wb_toggle_flush(hba, false);
->+
->+	ufshcd_wb_toggle_flush_during_h8(hba, false);
->+	ufshcd_wb_toggle(hba, false);
->+	hba->caps &= ~UFSHCD_CAP_WB_EN;
->+
->+	dev_info(hba->dev, "%s: WB force disabled\n", __func__);
->+}
->+
->+static bool ufshcd_is_wb_buf_lifetime_available(struct ufs_hba *hba)
->+{
->+	u32 lifetime;
->+	int ret;
->+	u8 index;
->+
->+	index = ufshcd_wb_get_query_index(hba);
->+	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
->+				      QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST,
->+				      index, 0, &lifetime);
->+	if (ret) {
->+		dev_err(hba->dev,
->+			"%s: bWriteBoosterBufferLifeTimeEst read failed %d\n",
->+			__func__, ret);
->+		return false;
->+	}
->+
->+	if (lifetime == UFS_WB_EXCEED_LIFETIME) {
->+		dev_err(hba->dev, "%s: WB buf lifetime is exhausted 0x%02X\n",
->+			__func__, lifetime);
->+		return false;
->+	}
->+
->+	dev_dbg(hba->dev, "%s: WB buf lifetime is 0x%02X\n",
->+		__func__, lifetime);
->+
->+	return true;
->+}
->+
-> static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
-> {
-> 	int ret;
->@@ -5786,6 +5827,12 @@ static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
->
-> 	if (!ufshcd_is_wb_allowed(hba))
-> 		return false;
->+
->+	if (!ufshcd_is_wb_buf_lifetime_available(hba)) {
->+		ufshcd_wb_force_disable(hba);
->+		return false;
->+	}
->+
-> 	/*
-> 	 * The ufs device needs the vcc to be ON to flush.
-> 	 * With user-space reduction enabled, it's enough to enable flush
->@@ -7486,6 +7533,7 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
->
-> 	if (!ufshcd_is_wb_allowed(hba))
-> 		return;
->+
-> 	/*
-> 	 * Probe WB only for UFS-2.2 and UFS-3.1 (and later) devices or
-> 	 * UFS devices with quirk UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES
->@@ -7537,6 +7585,10 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
-> 		if (!d_lu_wb_buf_alloc)
-> 			goto wb_disabled;
-> 	}
->+
->+	if (!ufshcd_is_wb_buf_lifetime_available(hba))
->+		goto wb_disabled;
->+
-> 	return;
->
-> wb_disabled:
->-- 
->2.25.1
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
+
+regards
+Ronald
+

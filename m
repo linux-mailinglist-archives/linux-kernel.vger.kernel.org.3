@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B378249FB8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E4049FB91
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349075AbiA1OWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S1349086AbiA1OWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244873AbiA1OWh (ORCPT
+        with ESMTP id S245002AbiA1OWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:22:37 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943BEC061714;
-        Fri, 28 Jan 2022 06:22:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h21so11170342wrb.8;
-        Fri, 28 Jan 2022 06:22:37 -0800 (PST)
+        Fri, 28 Jan 2022 09:22:53 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5D8C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:22:53 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id k4so5936234qvt.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 06:22:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=JqRzFU3NTGaxRCA92BfkWdnqAUoHImOhqbYAAukL/WA=;
-        b=CPd86gzw5vDG8e3dfC98RsYhQCjpLk76/QV+NaHGJQ3IfZC4FkflbJgRpCSQaojcyb
-         Nu4Wo7x+p7NWc7YpYSOIN3FGIHjbuiitrmy3yxTQQ7LDee5Egst8KO+uLxv2eoVfD9QT
-         ULTn3O4b6ujUTZGuG201D0sluLZRrZTGCqqiIta5Uq8jO1nAUT8X0XhzsTuV9F4MgFHO
-         XPk0nEyMprAf/3SwRu9z1SULebl2A/wglW4U8DeBQaqhwDdO0wUVA4ZDM87kmxpozIij
-         FNN2PW4+4Y9XxaTG0CehdqUTgM5V+E1d++lacIQI8v2KC2ooWvgVzPSYKhId/Mblvtui
-         OVtA==
+        bh=hOJwMUY5Bby5v0yKsY6i8lpR9Ki3WovrYD+I2hctsmg=;
+        b=U6c+XkFY8s+Ffl7FMQbVxlp2XqdxMulpeXig888uzfihlBCtxwuxIolRJkxjXzaeEX
+         eIVyFvkbbf1xDb6SPEgSmnVCw9pDRfPJMYU4oslaqMl3i67iHf7KZeS/e0PmUBODdSZZ
+         AowH8T2WlGQ4lht/OCyvJWxyWbcXEvFC6taxlenfQBvCzsa6ZLxsUregxcSiDD43dffE
+         wyxXaf1wb+uEKWMD1qAmtSSmLQmslFUsrWqqlGvzI9Koh8SJ+5/r0xM1DEOICXREV+1R
+         hc7uSuZaF6wJJ5ERb4Bbz+7wa78dvtPacUGiJQdQuCom+zLYAupwohfFwPnp5nzy05HC
+         7X4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=JqRzFU3NTGaxRCA92BfkWdnqAUoHImOhqbYAAukL/WA=;
-        b=nEDvQcgUBcqhL1Mua20cHGzOLX0CmAoZXpuuszetAk0X7wdwwlmEbGuOIb9i+Z3sCj
-         sAQiGU/ua5A+esAVcLkaTI1y5owzZ4Q5Rws24CfEF3NzPYDW8HwhEY45Cs77Q2kEpXMJ
-         4AUdXhZ0i+g5zwu3aNXFGymEaG+ZYKwjCls6kEbnKRBvzILSL8onJRfBytQU3FrsgYD9
-         in92nL5OstAeLyfMXkze6mO0+IeiIJ5jzEOf6Cce+0aZeqqF6JqRxmLFEFNcdGK68xhT
-         V/uDOIAxZjK+QFGb2x0LipYzzDdBJ7Oy6bJj0rl04kH1ZjMYeeuE/Nf62h7sfoQjSajl
-         AYUA==
-X-Gm-Message-State: AOAM5330uMGZhTKtk1YqT4N8xutfD5c4auEqSs3HQfoyykFKEgdj5yKc
-        kD+ZxszS1JA6HVx6jEtCaQo=
-X-Google-Smtp-Source: ABdhPJwdMzo9hv8rwPvTwETuZlhc9M5WtrrznhyCgNe9Nx+siLH/uQ6HBTw9LK6PHcpRClpwV1hibw==
-X-Received: by 2002:a5d:588c:: with SMTP id n12mr7377461wrf.386.1643379756041;
-        Fri, 28 Jan 2022 06:22:36 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id w6sm2003187wmi.15.2022.01.28.06.22.34
+        bh=hOJwMUY5Bby5v0yKsY6i8lpR9Ki3WovrYD+I2hctsmg=;
+        b=Ae9TkEWjmrtmmgnJ5OatQm8I9yOupBkKknxgGHZ2vyHHxClcxKu34d81j3VrlF03gR
+         U6BIMBS6Wb9g0J92hDUql7jAtgy1c1f4IfJLPozG+v4Qu/UasV0SVMlzaiVcxwb5MUi6
+         OvTjrnLsHr/Val4NxEcD3ghhIxlkHi5qcwEalXXrlk1aAmB3jwbZdPRBxsWVy1Vs0Oe1
+         S9nIogi1jk/xUfJeIHNxaz+suJWFPNVPVqVhvpgTYgzVz/R09pnKsx5Oh3TTk/kSBnkD
+         5GYjSRvWO4DhBRdPPs2STO2WGla9aJU616ODnOEDOxIAx4TW+BFn/HUmGMEUu7hxq5R7
+         6nKQ==
+X-Gm-Message-State: AOAM53058kD4X8vjfErpSqTYc+FnSbyRoDN5uE8/YCD6IDm7javzjykp
+        22TNkfzrKksNpcPOKHwqSQBWYA==
+X-Google-Smtp-Source: ABdhPJxVRgqXNs0AEB/UOEkxwovAuD7L4ajDVFitY42TUAFuPNOZiD9bQ3/LB4azis3UeruHH3Md/w==
+X-Received: by 2002:a05:6214:29e7:: with SMTP id jv7mr7547390qvb.114.1643379772621;
+        Fri, 28 Jan 2022 06:22:52 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id v22sm1250520qtc.96.2022.01.28.06.22.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 06:22:35 -0800 (PST)
-Date:   Fri, 28 Jan 2022 14:22:33 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com
-Subject: Re: [PATCH 4.19 0/3] 4.19.227-rc1 review
-Message-ID: <YfP8KbSXrqL4HIMl@debian>
-References: <20220127180256.837257619@linuxfoundation.org>
+        Fri, 28 Jan 2022 06:22:52 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nDS9L-007UYx-Hy; Fri, 28 Jan 2022 10:22:51 -0400
+Date:   Fri, 28 Jan 2022 10:22:51 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: Re: [PATCH v5 22/24] mm: use custom page_free for P2PDMA pages
+Message-ID: <20220128142251.GV8034@ziepe.ca>
+References: <20220128002614.6136-1-logang@deltatee.com>
+ <20220128002614.6136-23-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127180256.837257619@linuxfoundation.org>
+In-Reply-To: <20220128002614.6136-23-logang@deltatee.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Jan 27, 2022 at 05:26:12PM -0700, Logan Gunthorpe wrote:
+> When P2PDMA pages are passed to userspace, they will need to be
+> reference counted properly and returned to their genalloc after their
+> reference count returns to 1. This is accomplished with the existing
 
-On Thu, Jan 27, 2022 at 07:09:00PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.227 release.
-> There are 3 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
+It is reference count returns to 0 now, right?
 
-Build test:
-mips (gcc version 11.2.1 20220121): 63 configs -> no failure
-arm (gcc version 11.2.1 20220121): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/664
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+Jason

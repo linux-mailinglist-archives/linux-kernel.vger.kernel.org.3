@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BE849FF8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152E349FF90
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 18:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240545AbiA1R3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 12:29:51 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44518 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbiA1R3u (ORCPT
+        id S1343798AbiA1R3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 12:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240734AbiA1R3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 12:29:50 -0500
-Date:   Fri, 28 Jan 2022 17:29:48 -0000
+        Fri, 28 Jan 2022 12:29:51 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922D6C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 09:29:51 -0800 (PST)
+Date:   Fri, 28 Jan 2022 17:29:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643390989;
+        s=2020; t=1643390990;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iUbt+XsdZt/0I+fpO0xMrokgkgc9LK4Grb7ieRcxOzY=;
-        b=WIBbuEDJRyJ9R8AyS2SW9kkNYHI/hOX44bMlMGWP/KhNm9hkz1ANhlFzJCCzuZN2h+1akc
-        UFrjPoNr7vWhxD3PDLnhpUU3kNYO2kJqCGtEprNzJxFwLk9oCsn9M6vlIFYnh9MCOn4vO1
-        qboYVKI9pt2kP593gvDEbztx6OfQb7WhOeFoGJAkNqjhVOXu3xGsI4Zs5dKhxyhiwuCaQj
-        ygIhuVp2gaB1AAoX+Ijy1k02/imAtm3xO++gDuI1xMjLuNDjxb2Sp2kfK7YD/QyGP45npl
-        bod4Px5rXdMD5RFZjOLcV1StakSTxSenggJZLeDWaAXNgklPFras6dXtHZCfSA==
+        bh=OfrGvvZ5mOwqQxBd5CwUM/7gXSXGhJ1/zpXqU3gSPzE=;
+        b=OBD1PXJ550fSnp3GzZ5or9sSvm7fropVzkzeJKFl5sCKqnvUzR02bvL0aPtkgbpzyWnmZM
+        MD925QI4wVeoXhxGZnshqosz5cjOXq+n2eosNGNwyiXHqJ/eNKgwLri0QNH5TMidZWLFyk
+        KZ56je/NJiqvtUpMyH05y55ptLdKcnY6dI7ngybaUrmecubhNPe+iBNobn91WbCKP4Z7vC
+        ZJj/ss5cMIUO+cKXCSAI/ghPxgqVX7CCYCczGYYTreFyFKVnKc4ycsuEQwijCSDa5aC7oe
+        r2NOpRLmEPVxDnbdLRKg9tcNqUcSw0MREZe87YJ1nXXg/tPsocUsJqhFbONfIw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643390989;
+        s=2020e; t=1643390990;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iUbt+XsdZt/0I+fpO0xMrokgkgc9LK4Grb7ieRcxOzY=;
-        b=L6OVt3Ht5NMNyrYtdeLs5vY5L+nR/3ZMJct38U3SiMC7XRbykEWHMxOQCJrPaYSmhBaGH+
-        F6fPWkgGIYAFxYBw==
+        bh=OfrGvvZ5mOwqQxBd5CwUM/7gXSXGhJ1/zpXqU3gSPzE=;
+        b=xwBrYML9oqPX/Jwrwkx23MooZiS5AZuUq3ZaKwi2wDS7b35XN82qHevqPiUgokJzStkVK+
+        cii+FaV4RzICLlAg==
 From:   "irqchip-bot for Geert Uytterhoeven" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] dt-bindings: interrupt-controller:
- sifive,plic: Fix number of interrupts
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
+Subject: [irqchip: irq/irqchip-fixes] dt-bindings: irqchip: renesas-irqc: Add
+ R-Car V3U support
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: =?utf-8?q?=3Cf73a0aead89e1426b146c4c64f797aa035868bf0=2E16433?=
- =?utf-8?q?60419=2Egit=2Egeert=40linux-m68k=2Eorg=3E?=
-References: =?utf-8?q?=3Cf73a0aead89e1426b146c4c64f797aa035868bf0=2E164336?=
- =?utf-8?q?0419=2Egit=2Egeert=40linux-m68k=2Eorg=3E?=
+In-Reply-To: =?utf-8?q?=3C85b246cc0792663c72c1bb12a8576bd23d2299d3=2E16432?=
+ =?utf-8?q?00256=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
+References: =?utf-8?q?=3C85b246cc0792663c72c1bb12a8576bd23d2299d3=2E164320?=
+ =?utf-8?q?0256=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
 MIME-Version: 1.0
-Message-ID: <164339098831.16921.9376678877863309527.tip-bot2@tip-bot2>
+Message-ID: <164339098921.16921.15045936430684951717.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,40 +64,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Commit-ID:     8fbc16d26d3a1ed3d80553b773be29408750987b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/8fbc16d26d3a1ed3d80553b773be29408750987b
-Author:        Geert Uytterhoeven <geert@linux-m68k.org>
-AuthorDate:    Fri, 28 Jan 2022 10:03:57 +01:00
+Commit-ID:     e8cc7a5d1ad2d44e7f43664ef6a61e31c0545a5b
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/e8cc7a5d1ad2d44e7f43664ef6a61e31c0545a5b
+Author:        Geert Uytterhoeven <geert+renesas@glider.be>
+AuthorDate:    Wed, 26 Jan 2022 13:32:05 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 28 Jan 2022 17:27:26 
+CommitterDate: Fri, 28 Jan 2022 17:22:17 
 
-dt-bindings: interrupt-controller: sifive,plic: Fix number of interrupts
+dt-bindings: irqchip: renesas-irqc: Add R-Car V3U support
 
-The number of interrupts lacks an upper bound, thus assuming one,
-causing properly grouped "interrupts-extended" properties to be flagged
-as an error by "make dtbs_check".
+Document support for the Interrupt Controller for External Devices
+(INT-EC) in the Renesas R-Car V3U (r8a779a0) SoC.
 
-Fix this by adding the missing "maxItems", using the architectural
-maximum of 15872 interrupts.
-
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/f73a0aead89e1426b146c4c64f797aa035868bf0.1643360419.git.geert@linux-m68k.org
+Link: https://lore.kernel.org/r/85b246cc0792663c72c1bb12a8576bd23d2299d3.1643200256.git.geert+renesas@glider.be
 ---
- Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml | 1 +
+ Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-index 08d5a57..5edaa08 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-@@ -61,6 +61,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml
+index 79d0358..620f017 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml
+@@ -36,6 +36,7 @@ properties:
+           - renesas,intc-ex-r8a77980    # R-Car V3H
+           - renesas,intc-ex-r8a77990    # R-Car E3
+           - renesas,intc-ex-r8a77995    # R-Car D3
++          - renesas,intc-ex-r8a779a0    # R-Car V3U
+       - const: renesas,irqc
  
-   interrupts-extended:
-     minItems: 1
-+    maxItems: 15872
-     description:
-       Specifies which contexts are connected to the PLIC, with "-1" specifying
-       that a context is not present. Each node pointed to should be a
+   '#interrupt-cells':

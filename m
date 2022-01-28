@@ -2,249 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98604A0022
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF084A001C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 19:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350569AbiA1Sbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 13:31:42 -0500
-Received: from mga06.intel.com ([134.134.136.31]:21875 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229827AbiA1Sbd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:31:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643394693; x=1674930693;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VY3aZdeFzyu6Va/UkaJ2MHdYDdTIzl5209jkDxWmEc4=;
-  b=gNL88JAhyKeb30oQaaWuOrk0BgUfnCtxHXTmAja8YyaKkjk3m9Q80DOL
-   Q6EFuw+CMMwenEYcAGvrMotEF7jvIK6XDNQgdFSFWCAOor9l39Nbw9CIk
-   zIzHnDnzRQph+5GaPYcr+QifJ5AlG8Y+HMI18iIQZ418rxaaPiMfxKzwI
-   VuTdl2Oo71p2WBvkEqc+Y74j4GxCy8Zb67YG1aqJLJTjs5h0KqS2cW9ej
-   hfsS4yW6T2/SzbaCpsd6PNaGZzjS4xrAL8dzE3qV4DMaBvOQBTHgmUNcp
-   5EajkI4ZGIszHdcHDbcsq+1LsulssNHq6VloRKy7FUQ1gIVAaakDSKX/H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307903943"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="307903943"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:31:32 -0800
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="598286304"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:31:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nDW0q-00FWNa-S2;
-        Fri, 28 Jan 2022 20:30:20 +0200
-Date:   Fri, 28 Jan 2022 20:30:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v3 3/8] platform/x86/intel: Add Primary to Sideband
- (P2SB) bridge support
-Message-ID: <YfQ2PGzOyiBfCppd@smile.fi.intel.com>
-References: <YdhUqhflS/0YsRWJ@smile.fi.intel.com>
- <20220107171108.GA381493@bhelgaas>
+        id S1350550AbiA1Sac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 13:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343763AbiA1SaZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 13:30:25 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0776FC061747
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:30:24 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id q186so13908039oih.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 10:30:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=255BVw7+Ht0b8sdVHt7ws2Ve8e5tAHnc/nipGjdYGp0=;
+        b=EEJpZtCHAcUPBVHDEt8/8j6Y06vhmk5k14Knz6haNa+/3HpxiSqJBPz46ecBlEdFWD
+         +Axw3MHdAC35prQcjEwCZj914HYtKUhRfdd8ZUBcyA9MhYCKgEntbaWmC5xmurfMMn1G
+         ass2HtUTa2wzYB6TOLbHG84Th8SSWeT/h2eOF/UoskJmoQD4WLBjzxLtFPiqY+LL8Yy3
+         zVRBXghfCdStwW9b4O4X7ScE1FgwmDgF6JJaqNJJhco8FyoIur76yEr5PyxyJW+52sym
+         2gBXcVAItfbioHCR4g628wY4QQj10oyFAIZA72JH2wZP5hhBq1W8HWiRGnmt7csEp62g
+         fXOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=255BVw7+Ht0b8sdVHt7ws2Ve8e5tAHnc/nipGjdYGp0=;
+        b=AnRJC8LSnB3dWbzTBtnzqiOjkNkGaXOClDaIbYChtlbhxI+6unTZeZVn2ouNzev5Mb
+         3Mom8ru++buem05ZTohUzgHKv7uoFwoBVdysIOBv7+yLHGWiPRuY3U4GbHB87Lq1kSJ1
+         QyORrNgXWq1Synzzf2yaQGAnihtzAsGs6EVVbhfV5857nzSCraqMmFZYDyBSSM5ID7Fq
+         Ijd09q2o1huzUBFvsGinP/P+IFeGAqYyvU0qb05weNobragPjZTpbUT5vmDFm15P2Jr4
+         nn5j6edJEudOWVCvi5TaA2ErzOeG0LXDWq8aoI4StioHGG+CY5y2I3q5M+DvsUYon+Vf
+         k1Ow==
+X-Gm-Message-State: AOAM531NG+Iy9s680lC5MwCyXnR67xGTFxJDKORny3swS50fNpILs+Vj
+        1PeC3byIJFBg23TXX3cVmfq+XA==
+X-Google-Smtp-Source: ABdhPJw3fgunIiMqXvsJlYsQB6YNJPusV5AEIDPjrkMWBztd7tGWvDrzSr4LAkUaCP1vZjbS3zX6HQ==
+X-Received: by 2002:a05:6808:2214:: with SMTP id bd20mr8376062oib.159.1643394624296;
+        Fri, 28 Jan 2022 10:30:24 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id s3sm8272427otg.67.2022.01.28.10.30.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 10:30:23 -0800 (PST)
+Date:   Fri, 28 Jan 2022 10:30:48 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v2 2/2] cpufreq: qcom-hw: Delay enabling throttle_irq
+Message-ID: <YfQ2WEiqV30PGNrt@ripper>
+References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+ <20220128032554.155132-2-bjorn.andersson@linaro.org>
+ <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107171108.GA381493@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:11:08AM -0600, Bjorn Helgaas wrote:
-> On Fri, Jan 07, 2022 at 04:56:42PM +0200, Andy Shevchenko wrote:
-> > On Thu, Jan 06, 2022 at 07:03:05PM -0600, Bjorn Helgaas wrote:
-> > > On Tue, Dec 21, 2021 at 08:15:21PM +0200, Andy Shevchenko wrote:
+On Fri 28 Jan 02:39 PST 2022, Lukasz Luba wrote:
 
-...
-
-> > The unhide/hide back has been tested and we have
-> > already users in the kernel (they have other issues though with the
-> > PCI rescan lock, but it doesn't mean it wasn't ever tested).
 > 
-> Does the firmware team that hid this device sign off on the OS
-> unhiding and using it?  How do we know that BIOS is not using the
-> device?
-
-BIOS might use the device via OperationRegion() in ACPI, but that means
-that _CRS needs to have that region available. It seems not the case.
-
-And as far I as see in the internal documentation the hide / unhide
-approach is not forbidden for OS side.
-
-Moreover, we have already this approach in the 3 device drivers on different
-platforms. If you not agree with it, probably you can send a removal to that
-drivers. In the terms of use this code doesn't change the status quo. What
-it does is the concentration of the p2sb code in one place as a library on
-obvious (?) purposes, e.g. maintenance.
-
-> > > And the fact that they went to all this trouble to hide it means
-> > > the BIOS is likely using it for its own purposes and the OS may
-> > > cause conflicts if it also uses it.
+> 
+> On 1/28/22 3:25 AM, Bjorn Andersson wrote:
+> > In the event that the SoC is under thermal pressure while booting it's
+> > possible for the dcvs notification to happen inbetween the cpufreq
+> > framework calling init and it actually updating the policy's
+> > related_cpus cpumask.
 > > 
-> > What purposes do you have in mind?
+> > Prior to the introduction of the thermal pressure update helper an empty
+> > cpumask would simply result in the thermal pressure of no cpus being
+> > updated, but the new code will attempt to dereference an invalid per_cpu
+> > variable.
 > 
-> The functionality implemented in the P2SB MMIO space is not specified,
-> so I have no idea what it does or whether BIOS could be using it.
-
-It's specified based on how MMIO address is encoded.
-
-The third byte (bits [23:16]) representing the port ID on IOSF that
-belongs to the certain IPs, such as GPIO.
-
-> But here's a hypothetical example: some platform firmware logs errors
-> to NVRAM.  That NVRAM could exist on a device like the P2SB, where the
-> firmware assigns the MMIO address and hides the device from the OS.
-> The firmware legitimately assumes it has exclusive control of the
-> device and the OS will never touch it.  If the OS unhides the device
-> and also uses that NVRAM, the platform error logging no longer works.
+> Just to confirm, is that per-cpu var the 'policy->related_cpus' in this
+> driver?
 > 
-> My point is that the unhide is architecturally messed up.  The OS runs
-> on the platform as described by ACPI.  Devices that cannot be
-> enumerated are described in the ACPI namespace.
 
-This device may or may not be _partially_ or _fully_ (due to being
-multifunctional) described in ACPI. I agree, that ideally the devices
-in question it has behind should be represented properly by firmware.
-However, the firmwares in the wild for selected products / devices
-don't do that. We need to solve (work around) it in the software.
+Correct, we boot under thermal pressure, so the interrupt fires before
+we return from "init", which means that related_cpus is still 0.
 
-This is already done for a few devices. This series consolidates that
-and enables it for very known GPIO IPs.
-
-> If the OS goes outside that ACPI-described platform and pokes at
-> things it "knows" should be there, the architectural model falls
-> apart.  The OS relies on things the firmware didn't guarantee, and
-> the firmware can't rely on non-interference from the OS.
-> 
-> If you want to go outside the ACPI model, that's up to you, but I
-> don't think we should tweak the PCI core to work with things that
-> the BIOS has explicitly arranged to *not* be PCI devices.
-
-PCI core just provides a code that is very similar to what we need
-here. Are you specifically suggesting that we have to copy'n'paste
-that rather long function and maintain in parallel with PCI?
-
-> > > The way the BIOS has this set up, P2SB is logically not a PCI
-> > > device.  It is not enumerable.  The MMIO space it uses is not in
-> > > the _CRS of a PCI host bridge.  That means it's now a platform
-> > > device.
 > > 
-> > I do not follow what you are implying here.
-> 
-> On an ACPI system, the way we enumerate PCI devices is to find all the
-> PCI host bridges (ACPI PNP0A03 devices), and scan config space to find
-> the PCI devices below them.  That doesn't find P2SB, so from a
-> software point of view, it is not a PCI device.
-
-It's a PCI device that has a PCI programming interface but it has some
-tricks behind. Do you mean that those tricks automatically make it non-PCI
-(software speaking) compatible?
-
-> Platform devices are by definition non-enumerable, and they have to be
-> described via ACPI, DT, or some kind of platform-specific code.  P2SB
-> is not enumerable, so I think a platform device is the most natural
-> way to handle it.
-
-How does it fit the proposed library model? Are you suggesting to create a
-hundreds of LOCs in order just to have some platform device which does what?
-
-I do not follow here the design you are proposing, sorry.
-
-> > As you see the code, it's not a driver, it's a library that reuses
-> > PCI functions because the hardware is represented by an IP inside
-> > PCI hierarchy and with PCI programming interface.
-> 
-> Yes, it's a PCI programming interface at the hardware level, but at
-> the software level, it's not part of PCI.
-
-Why?
-
-> This series does quite a lot of work in the PCI core to read that one
-> register in a device the PCI core doesn't know about.  I think it will
-> be simpler overall if instead of wedging this into PCI, we make p2sb.c
-> start with the ECAM base, ioremap() it, compute the register address,
-> readl() the MMIO address, and be done with it.  No need to deal with
-> pci_find_bus(), pci_lock_rescan_remove(), change the core's BAR sizing
-> code, etc.
-
-So, you are suggesting to write a (simplified) PCI core for the certain device,
-did I get you right? Would it have good long-term maintenance perspective?
-
-> > > The correct way to use this would be as an ACPI device so the OS
-> > > can enumerate it and the firmware can mediate access to it.  Going
-> > > behind the back of the firmware does not sound advisable to me.
+> > Avoid this problem by using the newly reintroduced "ready" callback, to
+> > postpone enabling the IRQ until the related_cpus cpumask is filled in.
 > > 
-> > Are you going to fix all firmwares and devices on the market?  We
-> > have it's done like this and unfortunately we can't fix what's is
-> > done due to users who won't update their firmwares by one or another
-> > reason.
+> > Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
 > 
-> I just mean that from a platform design standpoint, an ACPI device
-> would be the right way to do this.  Obviously it's not practical to
-> add that to systems in the field.  You could create a platform_device
-> manually now, and if there ever is an ACPI device, ACPI can create a
-> platform_device for you.
-
-Why do I need that device? What for? I really don't see a point here.
-
-> > > If you want to hack something in, I think it might be easier to
-> > > treat this purely as a platform device instead of a PCI device.
-> > > You can hack up the config accesses you need, discover the MMIO
-> > > address, plug that in as a resource of the platform device, and go
-> > > wild.  I don't think the PCI core needs to be involved at all.
-> > 
-> > Sorry, I do not follow you. The device is PCI, but it's taken out of
-> > PCI subsystem control by this hardware trick.
+> You have 'Fixes' tagging here, which might be picked by the stable tree.
+> The code uses the reverted callback .ready(), which might be missing
+> there (since patch 1/2 doesn't have tagging). This patch looks like a
+> proper fix for the root cause.
 > 
-> The electrical connection might be PCI, but from the software point of
-> view, it's only a PCI device if it can be enumerated by the mechanism
-> specified by the spec, namely, reading the Vendor ID of each potential
-> device.
+
+Yes, the pair would need to be picked up.
+
+> Anyway, I'm going to send a patch, which adds a check for null cpumask
+> in the topology_update_thermal_pressure()
+> It was removed after the review comments:
+> https://lore.kernel.org/linux-pm/20211028054459.dve6s2my2tq7odem@vireshk-i7/
 > 
-> Yes, doing it as a platform device would involve some code in p2sb.c
-> that looks sort of like code in the PCI core.  But I don't think it's
-> actually very much, and I think it would be less confusing than trying
-> to pretend that this device sometimes behaves like a PCI device and
-> sometimes not.
 
-So, duplicating code is good, right? Why do we have libraries in the code?
+I attempted that in v1:
+https://lore.kernel.org/all/20220118185612.2067031-2-bjorn.andersson@linaro.org/
 
-> > There are document numbers that make sense.
-> > I believe that
-> > 
-> > [2]: https://cdrdv2.intel.com/v1/dl/getContent/332690?wapkw=332690
-> > [3]: https://cdrdv2.intel.com/v1/dl/getContent/332691?wapkw=332691
-> > 
-> > work for you. Tell me if not (Meanwhile I have changed locally)
+And while patch 1 is broken, I think Greg and Sudeep made it clear that
+they didn't want a condition to guard against the caller passing cpus of
+0.
+
+That's why I in v2 reverted to postpone the thermal pressure IRQ until
+cpufreq is "ready".
+
+Regards,
+Bjorn
+
+> I'll also push that change for the stable tree.
 > 
-> Great, thanks.  The links work for me (currently).  I think a proper
-> citation would also include the document title and document number,
-> since I doubt Intel guarantees those URLs will work forever.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Regards,
+> Lukasz

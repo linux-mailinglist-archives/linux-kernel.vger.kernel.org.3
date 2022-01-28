@@ -2,87 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232B849FE00
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD05B49FE04
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 17:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350184AbiA1QYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 11:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S239528AbiA1Q06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 11:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350190AbiA1QYC (ORCPT
+        with ESMTP id S229628AbiA1Q05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:24:02 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A32C061748;
-        Fri, 28 Jan 2022 08:24:02 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so6895811pjp.0;
-        Fri, 28 Jan 2022 08:24:02 -0800 (PST)
+        Fri, 28 Jan 2022 11:26:57 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0CAC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:26:56 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id a25so9746479lji.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 08:26:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=cYD+QaDMmhVFmHVyK5zY8vTMje6fb0+VO33EZ6d8Ibk=;
-        b=ErEs6Uspe83hsPa+EChcIicSrkgK7KHPxX0PszN2yn4SfLYeUzRbo50VGuqKLt5O7b
-         nKfVL7FbmhobIzQr0uSDHo1Kq+gOfErJNm1jnJQi47mznW8urIUro9taAOPwTW613P4z
-         AP+F05ASGtB/jknnLRvk7SnVFzfkGkdEksMRArsKnb0pXnrCWefNXNDBxg+AbnNFgJzX
-         pxAswcr1OHr4WUoFSJjMIGesnMuXWOmOqjuxXKu13SDFnEIrnI5Y7klxbIrekSUab/be
-         8RO1d9nmmvKusnaNqspxqswDpw22rWnCA/a43nDx2RauQfUdfKcOOn6fXjPWP1QzEKTT
-         4gVg==
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:organization:content-transfer-encoding;
+        bh=/TiQff5wo3sO+pFFw8tQM78i8yOOCdG1QUdQMAaCrlI=;
+        b=Do2Gi2DKC15Aw4E1xojPxTgGkV5ex3ur2btG97aL4HsoKMU75Fm7UiNPtsxMQ+1j24
+         kmfziPNoo5ML2ZvB/9CMGQ+I7JL9d7LP/2zVGq6nqyb465w8dPPbcXpM3E5UHlLqtqOn
+         e1exTLIzNhkszp9vq9EJZ7cg+9FuI+APNSk3TBpLfbXs4bn0x3dtvZLeBIBHh22V1z8C
+         vg/O4SO26LWluC2kyAj6Z0cgVeKmhCedEyXfOeHvh0vmM6REEdpgxkGWDqXp3hkJ1lGI
+         Q5q3N3GQBg3MphXbz/BmC4podMB5XoYSe3WljznxqNz89hKmaYqHBaRLq8dyQQoGSM6t
+         uGFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=cYD+QaDMmhVFmHVyK5zY8vTMje6fb0+VO33EZ6d8Ibk=;
-        b=6scYu4yYQYrX/Z44njiTzb7k/abuDGLoYR6b+E+6GaEk05GYJucuqlRyKMNi4+6t5z
-         21ioeXG3izQXnzl8ky8Wq7tRRMEOox+7gHlW8xviHDdIWKLvk3mJbVVnHuocGQND8/3Q
-         ajI5Da7uPeJy0fCM7e0pFSxBQ1C4XZURquYHpVs/SDbJQWyXOuQp4GD8E94FVPYypKjy
-         +XP8wpDkZgWlFgKYMwD3AXw7FbpSYUXufKLESDuxhrbNx+UMrjQ56kjin93pwQmHXsQu
-         tysSALLVhu9NTCrFadaQaeWN5cxHzq35iNCavtCRx/rz5H40vZEQd7ZiuuV+e9dD0tJy
-         XXFA==
-X-Gm-Message-State: AOAM530qkxtyYzM6or+iEiLQ3QqVdR3Bz5Cif4GB4qqafTKd/E7NY5IC
-        8o1k9iKdjHAZoHXYfhbJBUE=
-X-Google-Smtp-Source: ABdhPJzA5dqI9Mz/0GouB0TsvaxTfylcTvGIQHkSJ/QLrdPrHrTYSFNx/UfzHnoGTCaN12GYPfY9Hw==
-X-Received: by 2002:a17:902:da86:: with SMTP id j6mr8971765plx.65.1643387041920;
-        Fri, 28 Jan 2022 08:24:01 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id l14sm10365506pjf.1.2022.01.28.08.24.00
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:organization:content-transfer-encoding;
+        bh=/TiQff5wo3sO+pFFw8tQM78i8yOOCdG1QUdQMAaCrlI=;
+        b=nrRGPJ7xVvbA4G4w9d9y1c51eG+hMiv+TNOs1GjwHwvtkIwuBfKQAo/5rYO8dETR3L
+         rIeNOoJW0vMMxKOaegemt/qqYyW4zdb1b1fC/shXmuI3l1UUI83qaOV6m0XjNXpQ4gBg
+         qbr+BXPZ7ZMYwPAqFKJzymotUlXD1lAbZOMuq3LbbGUtK1FdZVGTBcmT92sYm2wRxtt4
+         HoAA6najpcVMBjgZTEs2SvZC5sc9TvV7A/IpjnTLvVpeiVGPyxv0OtyYGELqeopmjmQa
+         aRR1v2xLBU4njDOHVnP2G5tI1YlImcX6Pl10bhmbHXP+QY2DejgvTrZ+Yf1zx4SqzhUV
+         zJ2w==
+X-Gm-Message-State: AOAM531+ym33bQUjCisTWLrYnq0iiSb+lfve9pQhfdmB0VMRREgl03OR
+        Zn7CfoihTtSl6RxVB+8h/FXe7A==
+X-Google-Smtp-Source: ABdhPJzSHByW4xTH8eUue4xiNcYHA0VKcrlvg+qpGX98quOT7UB+t9wN+tJ6l3foTKqOk/lYCcMzrg==
+X-Received: by 2002:a05:651c:1509:: with SMTP id e9mr889498ljf.155.1643387214989;
+        Fri, 28 Jan 2022 08:26:54 -0800 (PST)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id v17sm1954968ljh.5.2022.01.28.08.26.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:24:01 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Zhangfei Gao <zhangfei.gao@marvell.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] dmaengine: mmp_tdma: Add missing IRQ check in mmp_tdma_probe
-Date:   Fri, 28 Jan 2022 16:23:56 +0000
-Message-Id: <20220128162357.12540-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 28 Jan 2022 08:26:54 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, David.Laight@ACULAB.COM,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 net-next 1/2] net: dsa: mv88e6xxx: Improve performance of busy bit polling
+Date:   Fri, 28 Jan 2022 17:26:49 +0100
+Message-Id: <20220128162650.2510062-2-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220128162650.2510062-1-tobias@waldekranz.com>
+References: <20220128162650.2510062-1-tobias@waldekranz.com>
+MIME-Version: 1.0
+Organization: Westermo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This func misses checking for  platform_get_irq()'s call and may passes
-the negative error codes to devm_request_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
-Stop calling devm_request_irq() with invalid IRQ #s.
+Avoid a long delay when a busy bit is still set and has to be polled
+again.
 
-Fixes: f1a7757008b8 ("dmaengine: mmp_tdma: add dt support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Measurements on a system with 2 Opals (6097F) and one Agate (6352)
+show that even with this much tighter loop, we have about a 50% chance
+of the bit being cleared on the first poll, all other accesses see the
+bit being cleared on the second poll.
+
+On a standard MDIO bus running MDC at 2.5MHz, a single access with 32
+bits of preamble plus 32 bits of data takes 64*(1/2.5MHz) = 25.6us.
+
+This means that mv88e6xxx_smi_direct_wait took 26us + CPU overhead in
+the fast scenario, but 26us + 1500us + 26us + CPU overhead in the slow
+case - bringing the average close to 1ms.
+
+With this change in place, the slow case is closer to 2*26us + CPU
+overhead, with the average well below 100us - a 10x improvement.
+
+This translates to real-world winnings. On a 3-chip 20-port system,
+the modprobe time drops by 88%:
+
+Before:
+
+root@coronet:~# time modprobe mv88e6xxx
+real    0m 15.99s
+user    0m 0.00s
+sys     0m 1.52s
+
+After:
+
+root@coronet:~# time modprobe mv88e6xxx
+real    0m 2.21s
+user    0m 0.00s
+sys     0m 1.54s
+
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 ---
- drivers/dma/mmp_tdma.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/dsa/mv88e6xxx/chip.c | 13 ++++++++++---
+ drivers/net/dsa/mv88e6xxx/smi.c  | 11 +++++++++--
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/dma/mmp_tdma.c b/drivers/dma/mmp_tdma.c
-index a262e0eb4cc9..68f533ff7711 100644
---- a/drivers/dma/mmp_tdma.c
-+++ b/drivers/dma/mmp_tdma.c
-@@ -681,6 +681,8 @@ static int mmp_tdma_probe(struct platform_device *pdev)
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 58ca684d73f7..1023e4549359 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -86,12 +86,16 @@ int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val)
+ int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
+ 			u16 mask, u16 val)
+ {
++	const unsigned long timeout = jiffies + msecs_to_jiffies(50);
+ 	u16 data;
+ 	int err;
+ 	int i;
  
- 	if (irq_num != chan_num) {
- 		irq = platform_get_irq(pdev, 0);
-+		if (irq < 0)
-+			return irq;
- 		ret = devm_request_irq(&pdev->dev, irq,
- 			mmp_tdma_int_handler, IRQF_SHARED, "tdma", tdev);
- 		if (ret)
+-	/* There's no bus specific operation to wait for a mask */
+-	for (i = 0; i < 16; i++) {
++	/* There's no bus specific operation to wait for a mask. Even
++	 * if the initial poll takes longer than 50ms, always do at
++	 * least one more attempt.
++	 */
++	for (i = 0; time_before(jiffies, timeout) || (i < 2); i++) {
+ 		err = mv88e6xxx_read(chip, addr, reg, &data);
+ 		if (err)
+ 			return err;
+@@ -99,7 +103,10 @@ int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
+ 		if ((data & mask) == val)
+ 			return 0;
+ 
+-		usleep_range(1000, 2000);
++		if (i < 2)
++			cpu_relax();
++		else
++			usleep_range(1000, 2000);
+ 	}
+ 
+ 	dev_err(chip->dev, "Timeout while waiting for switch\n");
+diff --git a/drivers/net/dsa/mv88e6xxx/smi.c b/drivers/net/dsa/mv88e6xxx/smi.c
+index 282fe08db050..728ef3f54ec5 100644
+--- a/drivers/net/dsa/mv88e6xxx/smi.c
++++ b/drivers/net/dsa/mv88e6xxx/smi.c
+@@ -55,11 +55,15 @@ static int mv88e6xxx_smi_direct_write(struct mv88e6xxx_chip *chip,
+ static int mv88e6xxx_smi_direct_wait(struct mv88e6xxx_chip *chip,
+ 				     int dev, int reg, int bit, int val)
+ {
++	const unsigned long timeout = jiffies + msecs_to_jiffies(50);
+ 	u16 data;
+ 	int err;
+ 	int i;
+ 
+-	for (i = 0; i < 16; i++) {
++	/* Even if the initial poll takes longer than 50ms, always do
++	 * at least one more attempt.
++	 */
++	for (i = 0; time_before(jiffies, timeout) || (i < 2); i++) {
+ 		err = mv88e6xxx_smi_direct_read(chip, dev, reg, &data);
+ 		if (err)
+ 			return err;
+@@ -67,7 +71,10 @@ static int mv88e6xxx_smi_direct_wait(struct mv88e6xxx_chip *chip,
+ 		if (!!(data & BIT(bit)) == !!val)
+ 			return 0;
+ 
+-		usleep_range(1000, 2000);
++		if (i < 2)
++			cpu_relax();
++		else
++			usleep_range(1000, 2000);
+ 	}
+ 
+ 	return -ETIMEDOUT;
 -- 
-2.17.1
+2.25.1
 

@@ -2,123 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8E949FBEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A26B49FC00
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 15:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349327AbiA1Oob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 09:44:31 -0500
-Received: from mga06.intel.com ([134.134.136.31]:1049 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349091AbiA1Oo3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:44:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643381069; x=1674917069;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9MubXPOrZMSDvuDAk4wR9yXEG5Ff3JUogxZoDw218Ag=;
-  b=ApYxAwcepOdTxcRZcEtwu2fKfF/w8BNz4XyXGmuCDjdkSAkvaI3Kocbk
-   5/JaDnOiM+q5jI/VsDG6KeV9AVR8O3q19nAjSpINngFFsi1M+YUT5AFRq
-   J6GnKMP1wfyTJCVD9XaHxDGX7LSEZIo1fwMgK+momCtRFni3Sj16xJ2mA
-   2Z3HbVNZbD62gmk+pbHMqKrS9Onm5QXjc4VXMxWRNoJDrlY9q6Zhicd3p
-   WlZ2NIMrJhlo5acVUSFGk3jVaUbog2Z0oPCKdgDWQ/CgepOyDNJy6mDNl
-   7SdvtrKaPUGdV+suAlSORP8jTfakrqRrAbpwkBvQHaPlaraGKc5ceL76F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307846274"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="307846274"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:44:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="618739123"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2022 06:44:26 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDSUD-000NzG-US; Fri, 28 Jan 2022 14:44:25 +0000
-Date:   Fri, 28 Jan 2022 22:43:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 2786/2952] arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier
- 'smccc_trng_available'
-Message-ID: <202201282248.FsZz69z1-lkp@intel.com>
+        id S1349411AbiA1OpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 09:45:13 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:53241 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1349397AbiA1OpN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 09:45:13 -0500
+HMM_SOURCE_IP: 172.18.0.48:39842.1715433666
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id 6B76A280029;
+        Fri, 28 Jan 2022 22:45:04 +0800 (CST)
+X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 0df3d2047b33487fa1e6ddceffca084c for j.vosburgh@gmail.com;
+        Fri, 28 Jan 2022 22:45:07 CST
+X-Transaction-ID: 0df3d2047b33487fa1e6ddceffca084c
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jay.vosburgh@canonical.com, nikolay@nvidia.com,
+        huyd12@chinatelecom.cn, sunshouxin@chinatelecom.cn
+Subject: [PATCH v11] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+Date:   Fri, 28 Jan 2022 09:44:42 -0500
+Message-Id: <20220128144442.101289-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   0eaf0db549770f64aa4a81fa6361ad40e42c99f9
-commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/2952] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
-config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220128/202201282248.FsZz69z1-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Since ipv6 neighbor solicitation and advertisement messages
+isn't handled gracefully in bond6 driver, we can see packet
+drop due to inconsistency between mac address in the option
+message and source MAC .
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Another examples is ipv6 neighbor solicitation and advertisement
+messages from VM via tap attached to host bridge, the src mac
+might be changed through balance-alb mode, but it is not synced
+with Link-layer address in the option message.
 
-All errors (new ones prefixed by >>):
+The patch implements bond6's tx handle for ipv6 neighbor
+solicitation and advertisement messages.
 
->> arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier 'smccc_trng_available'
-           kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-                                                ^
-   1 error generated.
-
-
-vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
-
-  1997	
-  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
-  1999	{
-  2000		void *addr = phys_to_virt(hyp_mem_base);
-  2001		int ret;
-  2002	
-  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
-  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
-  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
-  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
-  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
-  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
-  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
-  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
-> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-  2012	
-  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
-  2014		if (ret)
-  2015			return ret;
-  2016	
-  2017		ret = init_stage2_iommu();
-  2018		if (ret < 0)
-  2019			return ret;
-  2020	
-  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
-  2022		if (ret)
-  2023			return ret;
-  2024	
-  2025		free_hyp_pgds();
-  2026	
-  2027		return 0;
-  2028	}
-  2029	
-
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v9->v10:
+- add IPv6 header pull in alb_determine_nd.
+- combine bond_xmit_alb_slave_get's IPv6 header
+pull with alb_determine_nd's
+
+v10->v11:
+- use pskb_network_may_pull insteading of pskb_may_pull in
+alb_determine_nd
+- remove __alb_determine_nd
+---
+ drivers/net/bonding/bond_alb.c | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..c98a4b0a8453 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1269,6 +1269,27 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+ 	return res;
+ }
+ 
++/* determine if the packet is NA or NS */
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
++		return true;
++
++	ip6hdr = ipv6_hdr(skb);
++	if (ip6hdr->nexthdr != IPPROTO_ICMPV6)
++		return false;
++
++	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
++		return true;
++
++	hdr = icmp6_hdr(skb);
++	return hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++		hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION;
++}
++
+ /************************ exported alb functions ************************/
+ 
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+@@ -1348,8 +1369,11 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 	/* Do not TX balance any multicast or broadcast */
+ 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
+ 		switch (skb->protocol) {
+-		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++			fallthrough;
++		case htons(ETH_P_IP):
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond,
+@@ -1432,10 +1456,12 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+ 			break;
+ 		}
+ 
+-		if (!pskb_network_may_pull(skb, sizeof(*ip6hdr))) {
++		if (alb_determine_nd(skb, bond)) {
+ 			do_tx_balance = false;
+ 			break;
+ 		}
++
++		/* The IPv6 header is pulled by alb_determine_nd */
+ 		/* Additionally, DAD probes should not be tx-balanced as that
+ 		 * will lead to false positives for duplicate addresses and
+ 		 * prevent address configuration from working.
+
+base-commit: 145d9b498fc827b79c1260b4caa29a8e59d4c2b9
+-- 
+2.27.0
+

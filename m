@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CDA49F267
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E679549F273
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 05:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346025AbiA1EVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 23:21:08 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:54848
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346015AbiA1EVH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 23:21:07 -0500
-Received: from HP-EliteBook-840-G7.. (1-171-96-243.dynamic-ip.hinet.net [1.171.96.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id BFB783F051;
-        Fri, 28 Jan 2022 04:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643343666;
-        bh=O7UDFd+18p0T3OuGDq+A+rqg6kK6AeWCWRKy8LSYkF8=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=RtxYzINEOYgtJ4stMeISzvQFkojTvOGuWpI5614HGp2bzJWhHtFoSslQ3xH7Pij7g
-         CPU75yahvtrGlA4VobFQ5fqRSa7TtlENHoJVMXzSbbCXl0WADRrXxAvd3unFSFV9F3
-         xehtNkP2pbEhRDJzO1BEbzG9ZGGFdF5xsSpypl3DdYNMyTQtajDqmgpg1+qI1MxulW
-         E7fznHZ4dKu0XjOs5ibmeigzb+M/ZjAI9gJO5c/aqUCcP5h1wdaMhGQfoJeYqqWu7k
-         A6SEBRlJVSZmvjjuT9BvAmAkBLLdFxva61EAyJCgMTxOcgjPzIoaW/1CO54z/26zZ9
-         OeafNlOib3R7w==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     andy.shevchenko@gmail.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Your Name <you@example.com>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] iio: humidity: hdc100x: Add ACPI HID table
-Date:   Fri, 28 Jan 2022 12:20:51 +0800
-Message-Id: <20220128042054.2062060-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
+        id S1346001AbiA1EXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 23:23:33 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:45968 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233877AbiA1EXb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 23:23:31 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D238A2000E1;
+        Fri, 28 Jan 2022 05:23:26 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6441C200AE0;
+        Fri, 28 Jan 2022 05:23:26 +0100 (CET)
+Received: from lsv03267.swis.in-blr01.nxp.com (lsv03267.swis.in-blr01.nxp.com [92.120.147.107])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 907D0183ACDE;
+        Fri, 28 Jan 2022 12:23:23 +0800 (+08)
+From:   nikhil.gupta@nxp.com
+To:     linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     priyanka.jain@nxp.com, aisheng.dong@nxp.com,
+        Nikhil Gupta <nikhil.gupta@nxp.com>
+Subject: [PATCH] of/fdt: move elfcorehdr reservation early for crash dump kernel
+Date:   Fri, 28 Jan 2022 09:53:21 +0530
+Message-Id: <20220128042321.15228-1-nikhil.gupta@nxp.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86 boards may use ACPI HID "TXNW1010" for the hdc100x device.
+From: Nikhil Gupta <nikhil.gupta@nxp.com>
 
-TI told us "The ACPI ID for TI is: https://uefi.org/node/1028 (TXNW),
-therefore it would most likely be appropriate to use TXNW1010."
+elfcorehdr_addr is fixed address passed to Second kernel which may be conflicted
+with potential reserved memory in Second kernel,so fdt_reserve_elfcorehdr() ahead
+of fdt_init_reserved_mem() can relieve this situation.
 
-So add an ACPI match table for that accordingly.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Nikhil Gupta <nikhil.gupta@nxp.com>
 ---
-v3:
- - Add info from vendor
- - Drop redundant line and comma.
- - Wording change.
+elfcorehdr addr is calculated in kexec tool based on reserved crashkernel memory space. (Last page is used in top down order)
+So It may potentially conflict the reserved memory in 2nd kernel.
+Below is log:
+load_crashdump_segments: page_offset:   ffffc00000000000
+…..
+load_crashdump_segments: elfcorehdr 0xf3fff000-0xf3fff3ff
+read_1st_dtb: found /sys/firmware/fdt
+get_cells_size: #address-cells:2 #size-cells:2
+cells_size_fitted: f3fff000-f3fff3ff
+cells_size_fitted: d4000000-f3ffffff
 
-v2:
- - Change the ID to follow ACPI Spec
- - Add __maybe_unused to avoid compiler warning
- 
- drivers/iio/humidity/hdc100x.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Overlaps seen on LS1043A SoC:
 
-diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
-index 9e0fce917ce4c..47f8e8ef56d68 100644
---- a/drivers/iio/humidity/hdc100x.c
-+++ b/drivers/iio/humidity/hdc100x.c
-@@ -417,10 +417,17 @@ static const struct of_device_id hdc100x_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
+[    0.000000] memblock_reserve: [0x00000000d4010000-0x00000000d677ffff] arm64_memblock_init+0x258/0x2c8
+[    0.000000] memblock_phys_alloc_range: 4194304 bytes align=0x400000 from=0x0000000000000000 max_addr=0x0001000000000000 early_init_dt_alloc_reserved_memory_arch+0x9c/0x16c
+[    0.000000] memblock_reserve: [0x00000000f3c00000-0x00000000f3ffffff] memblock_alloc_range_nid+0xdc/0x150
+[    0.000000] memblock_phys_alloc_range: 33554432 bytes align=0x2000000 from=0x0000000000000000 max_addr=0x0001000000000000 early_init_dt_alloc_reserved_memory_arch+0x9c/0x16c
+[    0.000000] memblock_reserve: [0x00000000f0000000-0x00000000f1ffffff] memblock_alloc_range_nid+0xdc/0x150
+[    0.000000] memblock_phys_alloc_range: 16777216 bytes align=0x1000000 from=0x0000000000000000 max_addr=0x0001000000000000 early_init_dt_alloc_reserved_memory_arch+0x9c/0x16c
+[    0.000000] memblock_reserve: [0x00000000f2000000-0x00000000f2ffffff] memblock_alloc_range_nid+0xdc/0x150
+[    0.000000] OF: reserved mem: initialized node bman-fbpr, compatible id fsl,bman-fbpr
+[    0.000000] OF: fdt: elfcorehdr is overlapped
+
+panic in elfcorehdr_read.
+[    0.443984] Unable to handle kernel paging request at virtual address ffff000037fff000
+[    0.451942] Mem abort info:
+[    0.454740]   ESR = 0x96000006
+[    0.457806]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.463142]   SET = 0, FnV = 0
+[    0.466202]   EA = 0, S1PTW = 0
+[    0.469353] Data abort info:
+[    0.472243]   ISV = 0, ISS = 0x00000006
+[    0.476094]   CM = 0, WnR = 0
+[    0.479072] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000d9373000
+[    0.485806] [ffff000037fff000] pgd=00000000f7bf7003, pud=00000000f7bf6003, pmd=0000000000000000
+[    0.494553] Internal error: Oops: 96000006 [#1] PREEMPT SMP
+[    0.500146] Modules linked in:
+[    0.503211] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.5.0-rc3-00062-gbf8d1cd #5
+[    0.510725] Hardware name: LS1043A RDB Board (DT)
+[    0.515446] pstate: 80000005 (Nzcv daif -PAN -UAO)
+[    0.520260] pc : __memcpy+0x78/0x180
+[    0.523847] lr : elfcorehdr_read+0x28/0x38
+[    0.611262] Call trace:
+[    0.613713]  __memcpy+0x78/0x180
+[    0.616950]  vmcore_init+0x70/0x534
+ drivers/of/fdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index ad85ff6474ff..ec315b060cd5 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -648,8 +648,8 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 	}
  
-+static const struct acpi_device_id hdc100x_acpi_match[] = {
-+	{ "TXNW1010" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
-+
- static struct i2c_driver hdc100x_driver = {
- 	.driver = {
- 		.name	= "hdc100x",
- 		.of_match_table = hdc100x_dt_ids,
-+		.acpi_match_table = hdc100x_acpi_match,
- 	},
- 	.probe = hdc100x_probe,
- 	.id_table = hdc100x_id,
+ 	fdt_scan_reserved_mem();
+-	fdt_init_reserved_mem();
+ 	fdt_reserve_elfcorehdr();
++	fdt_init_reserved_mem();
+ }
+ 
+ /**
 -- 
-2.33.1
+2.17.1
 

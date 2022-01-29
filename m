@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68794A2B36
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 03:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39804A2B39
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 03:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352165AbiA2CFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 21:05:42 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:31254 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352147AbiA2CF3 (ORCPT
+        id S1345321AbiA2CIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 21:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344877AbiA2CIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 21:05:29 -0500
-Received: from kwepemi100020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JlyLq1kfLzbk83;
-        Sat, 29 Jan 2022 10:04:35 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100020.china.huawei.com (7.221.188.48) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 29 Jan 2022 10:05:27 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 29 Jan 2022 10:05:26 +0800
-Subject: Re: [PATCH v3 0/3] block, bfq: minor cleanup and fix
-To:     Jens Axboe <axboe@kernel.dk>, <paolo.valente@linaro.org>,
-        <jack@suse.cz>
-CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220129015924.3958918-1-yukuai3@huawei.com>
- <7cb40388-02e9-712a-6a40-ccabd5605880@kernel.dk>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <9ed6bf05-4c31-eef1-1736-65915e55eb8e@huawei.com>
-Date:   Sat, 29 Jan 2022 10:05:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 28 Jan 2022 21:08:53 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A661EC06173B;
+        Fri, 28 Jan 2022 18:08:53 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id s16so6725285pgs.13;
+        Fri, 28 Jan 2022 18:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=T5QP4rvsRHAf+k4UZm2ZD9yCitHTNkLO/bReAgS58JA=;
+        b=XAOWparngd+vugNg20ipC1UryGHyoDbb93LFWA3GAFshr/ySrpNgjy0YOa40n9uwOX
+         WFvwAfWyH7B9cVgYfjMdVfb3iLcrz8k/YZWWydMwq6lbhcUXm6H7YI2fLqPQzu0LljS0
+         HwRJ7P9DlLHm6QhpbU2EHskMMeLlmRBr76/x6yXh9DTtzluYrXFy7PnSX8DNU1CImkL+
+         X0htmpI8WoVMCogsmB98RJp1JgZPoTeUo+F3NM3XumyarJwpbqeTiP6vixyLsd/oIMRR
+         w+ATpPW1aeFeIBZyNpc6itk7eg8dZVW2MnD2sPCqcLtismpsUxcQUdVBSVcGnZMbSR/U
+         o6GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=T5QP4rvsRHAf+k4UZm2ZD9yCitHTNkLO/bReAgS58JA=;
+        b=Xgo6CVG+tK5DFdkQK1sOvs7LsDrJprbAUGKa7Ricjs1qPJ7A0aV7nBPbejxaYF11ks
+         IgPn+okkGLEizLytq1qIb70kxPRjgTxW+ID+hosMRBu+tz8rBH50hxu+UrYfTJhesRyw
+         AYSgTstt0lusJC7wLeHFAnHG6QwexvHP2vjB3LGN8sdvi7Y/WdmwEtpjVvPaFlSNcTEZ
+         KVDuZhpEnvZlITfoN/nkBVyCSpfFLbBb3ryg9AXpB7UdlQQisMKwKXuF/aXb5Bqz6PuU
+         gCKwiMqBlFlDOhidh+OdSYYCdbbI40desr8qtkawElLqzbndS0xiNZg8dd46h9RcS8F6
+         rf5A==
+X-Gm-Message-State: AOAM533Jelk4yt9zwX7Fg+KkFXZWrTSfOXvLcsKw2qf7TxIoW5hVsuXf
+        5rp7tGeaV6urmVUqClFmDwaCfw9WXZI=
+X-Google-Smtp-Source: ABdhPJylW7PZ+KYCbUQHk3BPPrL/0h1TQWt6TeoocnKqbSzNdvVTRyzsyZG6F3MSn8uf/GMqJ2XH/w==
+X-Received: by 2002:a63:6586:: with SMTP id z128mr8857019pgb.103.1643422132798;
+        Fri, 28 Jan 2022 18:08:52 -0800 (PST)
+Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
+        by smtp.gmail.com with ESMTPSA id s2sm23087045pgf.56.2022.01.28.18.08.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jan 2022 18:08:52 -0800 (PST)
+Subject: Re: [PATCH] m68k: mm: Remove check for VM_IO to fix deferred I/O
+To:     Finn Thain <fthain@linux-m68k.org>
+References: <20220128173006.1713210-1-geert@linux-m68k.org>
+ <b1cd50eb-e476-b4bd-0b2f-b4a8699660f6@gmail.com>
+ <4d65d2e1-5fb3-456-3cc5-fbd3167d06c@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <2ff869af-87a5-898c-b863-18e48527464b@gmail.com>
+Date:   Sat, 29 Jan 2022 15:08:46 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <7cb40388-02e9-712a-6a40-ccabd5605880@kernel.dk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+In-Reply-To: <4d65d2e1-5fb3-456-3cc5-fbd3167d06c@linux-m68k.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/01/29 9:51, Jens Axboe 写道:
-> On 1/28/22 6:59 PM, Yu Kuai wrote:
->> Changes in v3:
->>   - fix a clerical error in patch 2
->>
->> Chagnes in v2:
->>   - add comment in patch 2
->>   - remove patch 4, since the problem do not exist.
->>
->> Yu Kuai (3):
->>    block, bfq: cleanup bfq_bfqq_to_bfqg()
->>    block, bfq: avoid moving bfqq to it's parent bfqg
->>    block, bfq: don't move oom_bfqq
->>
->>   block/bfq-cgroup.c  | 16 +++++++++++++++-
->>   block/bfq-iosched.c |  4 ++--
->>   block/bfq-iosched.h |  1 -
->>   block/bfq-wf2q.c    | 15 ---------------
->>   4 files changed, 17 insertions(+), 19 deletions(-)
-> 
-> I'm not even looking at this until you tell me that:
-> 
-> a) you've actually compiled this one. which, btw, I can't believe
->     needs mentioning, particularly when you had enough time to keep
->     pinging about this patchset.
-> 
-> b) it's actually be run. last one was clearly not.
-> 
-Hi,
+Hi Finn,
 
-I compiled and tested the patchset locally in a different version,
-v4.19 specifically. However, after I decide to send them to mainline,
-I made such clerical mistake and forgot to check the patches.
+Am 29.01.2022 um 12:55 schrieb Finn Thain:
+> On Sat, 29 Jan 2022, Michael Schmitz wrote:
+>
+>> Hi Geert,
+>>
+>> for hwregs_present(), the exception fixup will handle any access error
+>> (through send_fault_sig()), so this should continue to work.
+>>
+>> Why the special handling of VM_IO pages? Maybe hp300 had marked all IO
+>> register pages VM_IO to distinguish IO faults from VM faults...
+>>
+>> The only other area I can imagine this might have an impact is the Mac's
+>> pseudo-DMA - FInn might want to give this some testing.
+>>
+>
+> mac_scsi.c and mac_esp.c don't use ioremap(). They rely on head.S:
+>
+>         mmu_map_eq      #0x50000000,#0x03000000,%d3
+>
+> Having said that, I will run some tests if you still think it necessary.
 
-My sincerely apologize again...
-Kuai
+No need for test then, thanks!
+
+Cheers,
+
+	Michael
+
+

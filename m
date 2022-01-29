@@ -2,158 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369974A2FFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 15:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585A24A300A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 15:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244811AbiA2OKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 09:10:18 -0500
-Received: from mga04.intel.com ([192.55.52.120]:31763 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234194AbiA2OKQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 09:10:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643465416; x=1675001416;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VFcCHcnZzHGge7LC66GRjpuVC7vd/ne1/nu/vMIi1JY=;
-  b=As8+9ej2p0Djm06Md9YqE+JE8Sbm7/usq3lcaKeSGgZhBH8uBjoxLmdF
-   8jPJQt0Vcu890r5cXNmHP/+lKmjPOH4As0+rtNQRCt/fQ0teYLUHsDU7T
-   30asKFjVYSEg5NKFsv4orz32N01cLRprP375dUDTGqs0E4/5OCM0H/K5r
-   9AoWR7d+c1mFsRO1vRkoO0NbJre2cliOkFxdNEeGWUQ2WDLTPVOH+rmAC
-   aP79ySq4D3c+a9BhqHuqMpDrqnPVeTBiJKn3AwMfz9JNjMewX2yVtGa8n
-   FGhJo8VZiZjFUwT0EU+cmx3kievQgo3C1JnIlAYQynaGLGfj3imjCxMZ6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="246111818"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="246111818"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 06:10:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="675344441"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jan 2022 06:10:13 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDoQe-000PHv-Tv; Sat, 29 Jan 2022 14:10:12 +0000
-Date:   Sat, 29 Jan 2022 22:09:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>
-Subject: Re: [PATCH v5 5/9] pinctrl: nuvoton: Add driver for WPCM450
-Message-ID: <202201292234.NpSNe4TD-lkp@intel.com>
-References: <20220129115228.2257310-6-j.neuschaefer@gmx.net>
+        id S236742AbiA2OZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 09:25:50 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:42588 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230431AbiA2OZs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 09:25:48 -0500
+X-Greylist: delayed 359 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jan 2022 09:25:48 EST
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4JmGg464G4z9wKsP
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 14:19:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZJRs9isrw3wt for <linux-kernel@vger.kernel.org>;
+        Sat, 29 Jan 2022 08:19:44 -0600 (CST)
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4JmGg44D7Nz9wKsJ
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:19:44 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4JmGg44D7Nz9wKsJ
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4JmGg44D7Nz9wKsJ
+Received: by mail-io1-f72.google.com with SMTP id n20-20020a6bed14000000b0060faa0aefd3so6445741iog.20
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 06:19:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PuqdS3L58mzSCSZWW4CaQY14KAX9H/IcMnqehYd1TcA=;
+        b=ojx5o+0AWIsHn6CLcmG9NAIUTp7/bL7NxVhwKewAHTEKEAN/wTmvkqeMwnoqF2EWxF
+         MzTDAYUO3ADkb+dmMgKibHfnSlTqcBfmshdXYyd2m7QuzM+VqVZVn6zJtsciQ1IMIzOL
+         lEgHz6PGyIgAKWgwprAtYfe6gbnQRc6k8oYFBPhxFQCo+CVzD2qTp/NayfpNsH6Ca3G8
+         tjQOaZEv1eVvb/6knAwZe4HRCPl/2jKVbBtq5+VLH+vd4KhmmZKlN3wXqU5dDEY9Qnr8
+         l5lvNw4Whkzf1y34AhkFdH6MufWo4LH1u/sWggFn/tJgY2q3gKtlkrj5dG4E4m9u/RFI
+         qG/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PuqdS3L58mzSCSZWW4CaQY14KAX9H/IcMnqehYd1TcA=;
+        b=745AQoJ5ICnGDMBqaaz1uN1ieMmMIc4h8ge63Qu/JoCoOfnqaDIMMKmPz+OtLBzvqL
+         fSfw3aGxc60rwsDKih+BE3zAWMX9A1R/2v50GTorNPPUkfXT9+pJZglGk87fxeQlLaWN
+         NkBqBE9UfaRePuCKkIpfAS0HIR+DVqVm7Ygek0Ws+SarLdRBvdOPhOeLCxI42SzzmpJI
+         631OCihOXb13mBScP0QK5gjhScvlzLn2lBJeVXUreBt+7LcdsZCTcCHYzvnsSfK2dinI
+         LVLtJClZRosnJTqrucnmiJBRACoYQiZfuHANad6FPlVknDwiG5lmQbDWEE4qOUeTtmQW
+         6OIw==
+X-Gm-Message-State: AOAM533ku93suQP4xedrS9PRXWoNf3AiyQKejb91ThQaRrCdEhUuRtC6
+        aG5xLyQIqnMZ3Dz6QaFKRDv7uREUXo5ItISZfAH8DDMRkUdX1i5vFABYN4B/ObkNQK+igxdjgTr
+        ze/wiPa91rB52dW4ff+W3sSeSLY8LS1JpTiCs5mEnObrF
+X-Received: by 2002:a05:6e02:174a:: with SMTP id y10mr3656066ill.135.1643465984095;
+        Sat, 29 Jan 2022 06:19:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzycOv74QwTAVhQJh+Rc3bAmgfW8CYMlJTqaiuCC50HrW7pW+VbHnCWzlyJTWYfqKN1vkFodBYbD679saM8mT4=
+X-Received: by 2002:a05:6e02:174a:: with SMTP id y10mr3656033ill.135.1643465983736;
+ Sat, 29 Jan 2022 06:19:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129115228.2257310-6-j.neuschaefer@gmx.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220124165856.57022-1-zhou1615@umn.edu> <YfPC3N+H9Fu/gqpz@kroah.com>
+ <536c833413ccbe0b8ad653a50c5ea867bf975290.camel@redhat.com>
+ <CADnq5_MtMPNHbs92OMHEzvPYSHGt=nPJMdrny6Siuvj3SYTAXQ@mail.gmail.com> <CACO55tt4P+beifvS=jcDsfwybFynngc8DHLR0n3BseeDJNrHyw@mail.gmail.com>
+In-Reply-To: <CACO55tt4P+beifvS=jcDsfwybFynngc8DHLR0n3BseeDJNrHyw@mail.gmail.com>
+From:   Kangjie Lu <kjlu@umn.edu>
+Date:   Sat, 29 Jan 2022 08:18:55 -0600
+Message-ID: <CAK8Kejr6E76u2kf_OKxC1RT_qsCWXDf7q4WcTC13-OJz5CseWg@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/acr: Fix undefined behavior in nvkm_acr_hsfw_load_bl()
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Zhou Qingyang <zhou1615@umn.edu>,
+        David Airlie <airlied@linux.ie>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, Ben Skeggs <bskeggs@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Jonathan,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on robh/for-next linus/master v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jonathan-Neusch-fer/Nuvoton-WPCM450-pinctrl-and-GPIO-driver/20220129-195955
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220129/202201292234.NpSNe4TD-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/3fd91ea1bad905592e89c8f987f6bd3740329b80
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jonathan-Neusch-fer/Nuvoton-WPCM450-pinctrl-and-GPIO-driver/20220129-195955
-        git checkout 3fd91ea1bad905592e89c8f987f6bd3740329b80
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash drivers/pinctrl/nuvoton/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:908: warning: "DS" redefined
-     908 | #define DS(lo, hi) (((lo) << DRIVE_STRENGTH_LO_SHIFT) | \
-         | 
-   In file included from arch/x86/um/shared/sysdep/ptrace.h:44,
-                    from arch/um/include/asm/ptrace-generic.h:11,
-                    from arch/x86/um/asm/ptrace.h:9,
-                    from arch/um/include/asm/processor-generic.h:13,
-                    from arch/x86/um/asm/processor.h:41,
-                    from include/linux/rcupdate.h:30,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:5:
-   arch/x86/um/shared/sysdep/ptrace_64.h:38: note: this is the location of the previous definition
-      38 | #define DS (HOST_DS * sizeof(long))
-         | 
-   In file included from include/linux/printk.h:555,
-                    from include/asm-generic/bug.h:22,
-                    from ./arch/um/include/generated/asm/bug.h:1,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/current.h:5,
-                    from ./arch/um/include/generated/asm/current.h:1,
-                    from include/linux/sched.h:12,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:5:
-   drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c: In function 'npcm7xx_get_groups_count':
-   drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:1564:21: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
-    1564 |  dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
-         |                     ^~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:15: note: in definition of macro '__dynamic_func_call'
-     134 |   func(&id, ##__VA_ARGS__);  \
-         |               ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:166:2: note: in expansion of macro '_dynamic_func_call'
-     166 |  _dynamic_func_call(fmt,__dynamic_dev_dbg,   \
-         |  ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:2: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |  ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:23: note: in expansion of macro 'dev_fmt'
-     155 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                       ^~~~~~~
-   drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:1564:2: note: in expansion of macro 'dev_dbg'
-    1564 |  dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
-         |  ^~~~~~~
-   drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:1564:35: note: format string is defined here
-    1564 |  dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
-         |                                  ~^
-         |                                   |
-         |                                   int
-         |                                  %ld
+On Fri, Jan 28, 2022 at 1:58 PM Karol Herbst <kherbst@redhat.com> wrote:
+>
+> On Fri, Jan 28, 2022 at 8:54 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+> >
+> > On Fri, Jan 28, 2022 at 2:20 PM Lyude Paul <lyude@redhat.com> wrote:
+> > >
+> > > Sigh-thank you for catching this - I had totally forgot about the umn.edu ban.
+> > > I pushed this already but I will go ahead and send a revert for this patch.
+> > > Will cc you on it as well.
+> >
+> > This seems short-sighted.  If the patch is valid I see no reason to
+> > not accept it.  I'm not trying to downplay the mess umn got into, but
+> > as long as the patch is well scrutinized and fixes a valid issue, it
+> > should be applied rather than leaving potential bugs in place.
+> >
+> > Alex
+> >
+>
+> Even though knowing that malicious code can be introduced via
+> perfectly fine looking patches, and sometimes one will never spot the
+> problem, this patch isn't all that bad tbh.
+>
+> So should we reject patches out of "policies" or should we just be
+> extra careful? But not addressing the concerns as Greg pointed out is
+> also kind of a bad move, but also not knowing what the state of
+> resolving this mess is anyway.
 
 
-vim +/DS +908 drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+Seeing some discussion here, I feel I owe you some quick updates on
+the state. We sent three testing patches in August 2020, which is a
+serious mistake. We never did that again and will never do that again.
+All other patches including recent ones were sent to fix real bugs,
+not to introduce problems. Clearly, although most of the patches are
+valid, some patches are still not good enough, but it is not about
+malice. Fixing bugs in Linux isn't an easy task and takes so much
+effort.
 
-3b588e43ee5c7ad Tomer Maimon 2018-08-08  907  
-3b588e43ee5c7ad Tomer Maimon 2018-08-08 @908  #define DS(lo, hi)	(((lo) << DRIVE_STRENGTH_LO_SHIFT) | \
-3b588e43ee5c7ad Tomer Maimon 2018-08-08  909  			 ((hi) << DRIVE_STRENGTH_HI_SHIFT))
-3b588e43ee5c7ad Tomer Maimon 2018-08-08  910  #define DSLO(x)		(((x) >> DRIVE_STRENGTH_LO_SHIFT) & 0xF)
-3b588e43ee5c7ad Tomer Maimon 2018-08-08  911  #define DSHI(x)		(((x) >> DRIVE_STRENGTH_HI_SHIFT) & 0xF)
-3b588e43ee5c7ad Tomer Maimon 2018-08-08  912  
+We did not ignore the concerns pointed out by Greg, and have seriously
+taken some actions. For example, we explained how our static-analysis
+tool found the bugs, and members in my research group have internally
+cross-reviewed the found bugs. We sent these patches after contacting
+Greg---I thought Greg allowed us to send patches, but also requested
+us to work on the last process with our administration. Unfortunately,
+the process has been slow during the pandemic, but I hope this can be
+resolved soon. Of course, before this is resolved, we will not send
+any more patches.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+
+>
+> >
+> > >
+> > > On Fri, 2022-01-28 at 11:18 +0100, Greg KH wrote:
+> > > > On Tue, Jan 25, 2022 at 12:58:55AM +0800, Zhou Qingyang wrote:
+> > > > > In nvkm_acr_hsfw_load_bl(), the return value of kmalloc() is directly
+> > > > > passed to memcpy(), which could lead to undefined behavior on failure
+> > > > > of kmalloc().
+> > > > >
+> > > > > Fix this bug by using kmemdup() instead of kmalloc()+memcpy().
+> > > > >
+> > > > > This bug was found by a static analyzer.
+> > > > >
+> > > > > Builds with 'make allyesconfig' show no new warnings,
+> > > > > and our static analyzer no longer warns about this code.
+> > > > >
+> > > > > Fixes: 22dcda45a3d1 ("drm/nouveau/acr: implement new subdev to replace
+> > > > > "secure boot"")
+> > > > > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> > > > > ---
+> > > > > The analysis employs differential checking to identify inconsistent
+> > > > > security operations (e.g., checks or kfrees) between two code paths
+> > > > > and confirms that the inconsistent operations are not recovered in the
+> > > > > current function or the callers, so they constitute bugs.
+> > > > >
+> > > > > Note that, as a bug found by static analysis, it can be a false
+> > > > > positive or hard to trigger. Multiple researchers have cross-reviewed
+> > > > > the bug.
+> > > > >
+> > > > >  drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 9 +++++----
+> > > > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+> > > > > b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+> > > > > index 667fa016496e..a6ea89a5d51a 100644
+> > > > > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+> > > > > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+> > > > > @@ -142,11 +142,12 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const
+> > > > > char *name, int ver,
+> > > > >
+> > > > >         hsfw->imem_size = desc->code_size;
+> > > > >         hsfw->imem_tag = desc->start_tag;
+> > > > > -       hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
+> > > > > -       memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
+> > > > > -
+> > > > > +       hsfw->imem = kmemdup(data + desc->code_off, desc->code_size,
+> > > > > GFP_KERNEL);
+> > > > >         nvkm_firmware_put(fw);
+> > > > > -       return 0;
+> > > > > +       if (!hsfw->imem)
+> > > > > +               return -ENOMEM;
+> > > > > +       else
+> > > > > +               return 0;
+> > > > >  }
+> > > > >
+> > > > >  int
+> > > > > --
+> > > > > 2.25.1
+> > > > >
+> > > >
+> > > > As stated before, umn.edu is still not allowed to contribute to the
+> > > > Linux kernel.  Please work with your administration to resolve this
+> > > > issue.
+> > > >
+> > >
+> > > --
+> > > Cheers,
+> > >  Lyude Paul (she/her)
+> > >  Software Engineer at Red Hat
+> > >
+> >
+>
+
+
+--
+Kangjie Lu
+Assistant Professor
+Department of Computer Science and Engineering
+University of Minnesota
+https://www-users.cs.umn.edu/~kjlu

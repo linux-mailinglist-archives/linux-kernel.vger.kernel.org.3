@@ -2,238 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BF54A2D5F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DD84A2D67
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiA2JZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 04:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiA2JZB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 04:25:01 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A04C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:25:01 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 23so25454340ybf.7
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HWHYXLII0byMrBeerylNijL1LbJPU23zk0bTGbpZSZw=;
-        b=UUhLUCTGd9HfSLx0F3jmtZtSN5Gbh7g83ZZFQge0TxuO4VPWXCCuf9sj6VC59/ycGY
-         McVivBeNSOvIT+WBA6PWOwXRcah8VwXhSsWsMeNmE12CxIxIX/2UtR58Q9qBgG3+AHqr
-         dFym53Z/KNHw7NUh4TV9RZV3mlZ/rNdXGK2gUsFST6siKWQTKgnlJm3D9dinXL1dhUMP
-         tnKsN9KsFPnjEnjHAPea/uA6kZUmbxqZ9vYQ7xxISA2OiyKs7hn0RO4JKQihkfHVHYkH
-         31j+5ICkbEirIsryJ6kgg0NUfpKZ1o64M4CRINK2LExjkntYVZPraklb67wc0QPIfjMP
-         gNYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HWHYXLII0byMrBeerylNijL1LbJPU23zk0bTGbpZSZw=;
-        b=5uvPymSvPgPackKwPSIPlEmnw6Q4lDgI6dcZ5i9i9fMJmmYOeRenjzJq+xCEjPpaz/
-         aiEWos+KW7P8TfAXkTrAfkqLvtl1nbVEfG9ktAAE5ms5CbksIRDJzCs9E3v9yxVtFsRP
-         EetpMOAXCmkMf6haEl5aqidvSf2p3I45dxqFEfrpL21yn6rrh7/d+o/rNKVwcLKh/2xN
-         8N/duOekhWxoBKv2WcWoshWcnDdd7dXmOxzgLTXCv+YExx/0RD6zT+k1G/pgMgFNHxUn
-         US1FWxvRrBNHGsM5cIYiseWYDqPjgUK79td/aNEofFDyAqEVcOozJ4KztE5j/gjarqvh
-         mspw==
-X-Gm-Message-State: AOAM530bnH3vwtnhVbJe0sNjDgRvxNWWv3UnLxZVdl0C1hOQ07NOi4Gl
-        2ZK1OPWqICCDQkn28uvVehYLISgnkhCxOZ36DsCVSA==
-X-Google-Smtp-Source: ABdhPJwHdI1tvd5lY0c4v7muMuU4gCvQOaevnaLJ1fK+829QhTAxmgaxD3WLUww9JBS/lDgymEBDmTU88ZyJNP4GAjk=
-X-Received: by 2002:a25:418b:: with SMTP id o133mr18024994yba.704.1643448300586;
- Sat, 29 Jan 2022 01:25:00 -0800 (PST)
+        id S233561AbiA2Jbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 04:31:49 -0500
+Received: from mout.gmx.net ([212.227.17.20]:47257 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233096AbiA2Jbr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 04:31:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643448699;
+        bh=D7rgkhQ57nbk53MLqwVeodUVHa6zUEeKtJ5R3AU99Ms=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=GODZTR03kAqA1EQvaWgGzO5mpwJpE2bzAP1UmexkBVOk7SxcNNLBziEbRr+oqmsf/
+         GDqbj85vHxd58r1eIzC/SKTyPWnABc5U0Bd3WOWGstYixqUE3+kLvw2muPtFcW6yOE
+         8OjASb/B6n3mD6DpwhNc2pwgtPCkwAfb7s0Y2+cc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Ml6m4-1mX0rf0FQa-00lU4c; Sat, 29
+ Jan 2022 10:31:39 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: nuvoton,npcm7xx: remove bogus unit addresses from fixed-partition nodes
+Date:   Sat, 29 Jan 2022 10:29:56 +0100
+Message-Id: <20220129092957.2189769-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220127180256.764665162@linuxfoundation.org>
-In-Reply-To: <20220127180256.764665162@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 29 Jan 2022 14:54:49 +0530
-Message-ID: <CA+G9fYu3ECvC47s7Y-bzhcTu35DnGmQ8p7BC9uaKqJ-hQeUJog@mail.gmail.com>
-Subject: Re: [PATCH 4.14 0/2] 4.14.264-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LkNGm0idUbl+qi69GkTuh98bAQ1fCO3fAj1Oi4R4OxcDtIVWBSn
+ HSielVDyKOsbvIWKemrpwF15/S2D0/evvKWXZWDXLTzBs38uinRBEjsVompQ+aW4iBx/Abx
+ neuO9nRtJWmaG2dFMnzqxc5LquketEE5BIGxu9NDo3Q2VCuePizgXghCZRIjkLylVOHZPyI
+ IE9FJGczWzevtKy6Sk+SQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1DelM3YvDQw=:4eDFFnnBYNfHlQVoVZkQzD
+ v0WZYylljURUdWR/ibjKeH0YflwanU8LzCXhvdndyN5oBS0QccUA4zO5j8cpAAkPZj8Jo6pz/
+ KFnN2zJnJFMz/T73zfE7NRZdvdYAXBXtW5bsC/p4D6WD5dSMmjhLbshoNKIiH8bAoGbf43oZr
+ KwvyNtu19S/1WO0QCxkVFgpIfcGMIicIQ5l9b/wu/620618YKoJCgf/Le+tYinCoz/P11o/QQ
+ U1upvGxIyaD7BKbGlxB/v1B/Nhq6Q3nQa20oWCfyv/mCGu3aaVDDeZ2UsYw8VJOqgC4chDi1i
+ y36lYE/fGyPbtIwut2EsHGwIKjMoaMC2o66quQ9gEpSHdrjLLaDrvdZoQ2Lz0OHslIauKeNwK
+ 7d3QXKlPYxxrnIqyhFLUgJ+5ZtguyrviiALzT+SqxiAhKJCSgHo65MT0cbNn3pT0tMRuEB8HG
+ E2xsiPUEq81cEh+cVCSzJnla8N4tzcHnABWKCHZd6mRbpL1r4glsKwJO7VWBeIG+A02Q+8qR3
+ IlBxN7MzhAeoPj5QuG036p7OHCasicTajv9niqpuLVggj9lxxzIh0YzqHtsaVXRMdgLo/72Tz
+ 9UfpzgO4Ug8vAoOCiDneMwKOl3p0IJkEBAVVOdNjwgD1XnXnnyVMxR9VLnY6zd/pQXgEcIcnE
+ X0apjVQriN+C+3ZN4fMzYuWxaMPMlRfFfq+FOzXcruhAtkZlp9nihx/17PmWqidXxGqOLp766
+ DuK2H/ytNdwOyVZL3JJ7pbI984lyZQ8UURoSmZE6Bz2aY02fn3nNPzMSvB+y2fUrdGSxuN9ih
+ H28dsqBO8gZb9BuhLcsmPxf/7P0/fNdFlgfpy6ylJi/mN8Pj/hC3dEvm0NIUV+7QKTalde2tr
+ 4TyRE9CsVnElsUjR2MIPdrSfmDQhGM9XaxCYC6DFoEkqioraG/3F+KhkpW/WuxjekSVR3DCjt
+ 7INpANxG4ycHxbg+Q1gbZiVH0duHQU4yQkfZc1r5WyzbjjB5ZoFk/i6q/ZvHTUI260zgSQlqV
+ Jq7/t25NFU1TGKovtxJwbodZv4IlfnBJTDIdHMVhj/2WEZRK8CO0cbx+sR6j/yWSuYcKgi43q
+ XYuKvkS3ExWeR0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 at 23:39, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.264 release.
-> There are 2 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.264-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The unit addresses do not correspond to the nodes' reg properties,
+because they don't have any.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ arch/arm/boot/dts/nuvoton-npcm730-gbs.dts            | 2 +-
+ arch/arm/boot/dts/nuvoton-npcm730-gsj.dts            | 2 +-
+ arch/arm/boot/dts/nuvoton-npcm730-kudo.dts           | 6 +++---
+ arch/arm/boot/dts/nuvoton-npcm750-evb.dts            | 4 ++--
+ arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts | 6 +++---
+ 5 files changed, 10 insertions(+), 10 deletions(-)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+diff --git a/arch/arm/boot/dts/nuvoton-npcm730-gbs.dts b/arch/arm/boot/dts=
+/nuvoton-npcm730-gbs.dts
+index eb6eb21cb2a44..33c8d5b3d679a 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-npcm730-gbs.dts
++++ b/arch/arm/boot/dts/nuvoton-npcm730-gbs.dts
+@@ -366,7 +366,7 @@ spi-nor@0 {
+ 		spi-max-frequency =3D <20000000>;
+ 		spi-rx-bus-width =3D <2>;
+ 		label =3D "bmc";
+-		partitions@80000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+diff --git a/arch/arm/boot/dts/nuvoton-npcm730-gsj.dts b/arch/arm/boot/dts=
+/nuvoton-npcm730-gsj.dts
+index d4ff49939a3d9..bbe18618f5c56 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
++++ b/arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
+@@ -142,7 +142,7 @@ spi-nor@0 {
+ 		reg =3D <0>;
+ 		spi-rx-bus-width =3D <2>;
 
-## Build
-* kernel: 4.14.264-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: a816c082cb802807f6548940bb78b806ad74ca90
-* git describe: v4.14.263-3-ga816c082cb80
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.263-3-ga816c082cb80
+-		partitions@80000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+diff --git a/arch/arm/boot/dts/nuvoton-npcm730-kudo.dts b/arch/arm/boot/dt=
+s/nuvoton-npcm730-kudo.dts
+index 82a104b2a65f1..8e3425cb8e8b9 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-npcm730-kudo.dts
++++ b/arch/arm/boot/dts/nuvoton-npcm730-kudo.dts
+@@ -388,7 +388,7 @@ spi-nor@0 {
+ 		spi-max-frequency =3D <5000000>;
+ 		spi-rx-bus-width =3D <2>;
+ 		label =3D "bmc";
+-		partitions@80000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+@@ -422,7 +422,7 @@ spi-nor@1 {
+ 		reg =3D <1>;
+ 		spi-max-frequency =3D <5000000>;
+ 		spi-rx-bus-width =3D <2>;
+-		partitions@88000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+@@ -447,7 +447,7 @@ spi-nor@0 {
+ 		reg =3D <0>;
+ 		spi-max-frequency =3D <5000000>;
+ 		spi-rx-bus-width =3D <2>;
+-		partitions@A0000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+diff --git a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts b/arch/arm/boot/dts=
+/nuvoton-npcm750-evb.dts
+index 0334641f88292..cf274c926711a 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
++++ b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
+@@ -74,7 +74,7 @@ spi-nor@0 {
+ 		spi-rx-bus-width =3D <2>;
+ 		reg =3D <0>;
+ 		spi-max-frequency =3D <5000000>;
+-		partitions@80000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+@@ -135,7 +135,7 @@ spi-nor@0 {
+ 		spi-rx-bus-width =3D <2>;
+ 		reg =3D <0>;
+ 		spi-max-frequency =3D <5000000>;
+-		partitions@A0000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+diff --git a/arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts b/arch/a=
+rm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts
+index 767e0ac0df7c5..7fe7efee28acb 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts
++++ b/arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts
+@@ -107,7 +107,7 @@ spi-nor@0 {
+ 		reg =3D <0>;
+ 		spi-rx-bus-width =3D <2>;
 
-## Test Regressions (compared to v4.14.262-185-g1cb564222633)
-No test regressions found.
+-		partitions@80000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+@@ -146,7 +146,7 @@ spi-nor@1 {
+ 		reg =3D <1>;
+ 		npcm,fiu-rx-bus-width =3D <2>;
 
-## Metric Regressions (compared to v4.14.262-185-g1cb564222633)
-No metric regressions found.
+-		partitions@88000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+@@ -173,7 +173,7 @@ spi-nor@0 {
+ 		reg =3D <0>;
+ 		spi-rx-bus-width =3D <2>;
 
-## Test Fixes (compared to v4.14.262-185-g1cb564222633)
-No test fixes found.
+-		partitions@A0000000 {
++		partitions {
+ 			compatible =3D "fixed-partitions";
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+=2D-
+2.34.1
 
-## Metric Fixes (compared to v4.14.262-185-g1cb564222633)
-No metric fixes found.
-
-## Test result summary
-total: 69622, pass: 55697, fail: 666, skip: 11294, xfail: 1965
-
-## Build Summary
-* arm: 250 total, 242 passed, 8 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 52 total, 0 passed, 52 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

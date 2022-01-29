@@ -2,175 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3044A2E5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 12:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C244A2E7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 12:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239253AbiA2Lsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 06:48:50 -0500
-Received: from mail-sn1anam02on2063.outbound.protection.outlook.com ([40.107.96.63]:43366
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237490AbiA2Lss (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 06:48:48 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b1mMGSJPRin4ATPFNO8tC24c5pJEKj8/nZ1zglHtu7KbJ5zMCLxfs49wHHxhP0d+JzozRCWDuAFxhEnrOpiDyJYKQibMrNtQ7vzGMRBfSr/82uBD9YlVJlrv/u0AMo6KZk/rsPVltugOqipGyMVipU/Qlm0CFLujYY4MKvjpTBw9JByedxhLGWo7oUCSggB0DjDlpNUO5nJG+TkA2eIPayVtbU7aGq3Z6wNVyWzqspgLJCPm2jrShHDPAfFtZEwVnMN7HD/2LIpzX2LwpND2wZigrXvLuA7Ae8vLM6GER8nogaaLW+lLdCsF9rNJV4NWO7rbNm0cq+QdBRLFESChNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wU43uUqVo8BQh8M6lwMeKQIJ5bvOrNIWBqZDYrNlys8=;
- b=Oofoer7Ck0IyB8350lr0RmsFu1A3m+dAQNXz90kFR1+GfMKhIXl7vvfobnyPwkDB+tipNpEeNSr6n2nYD2grc6CU81vqCt0l1V/e5jybIXnt4WuWRRGK1gQ9MQsTp1KoiwHjBx8vpQI52K7mVjCPRAd8UPiVkN/4a5+J6C+IryLhVItW7puqrcLQVXdbHfT+csxu8KTnx/lHzlv0hqi5X+NvwaOtIMhDSkXh/fAYp2q8an3RFhLFcobRTtRHqGf/B+YHm4mk9FpAylwa1GhUVQPEzJnoY1ePdxnSA1dB0tFunDUnEuGcF0RQ5HJ5/vfh/Yei+Cm4Zw74I7TWFr327A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wU43uUqVo8BQh8M6lwMeKQIJ5bvOrNIWBqZDYrNlys8=;
- b=fca1unyRPAO4fxvZIJ+yepPMc8FbJHdST1DRGKiZwd/A9OznyPXaBuRjN8AePi9wgO26ksx9A/45BCafkoJq1tsuzCw818j85qwTs2Whb7XxGm8DcSwuR9l/Tq5hROx57410B2XI7njHLtIpjjPbt98i6EuVVnVt3w2hHUA7G3Q=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
- by DM5PR1201MB2537.namprd12.prod.outlook.com (2603:10b6:3:eb::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sat, 29 Jan
- 2022 11:48:46 +0000
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::500e:b264:8e8c:1817]) by SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::500e:b264:8e8c:1817%4]) with mapi id 15.20.4930.020; Sat, 29 Jan 2022
- 11:48:45 +0000
-Message-ID: <fb90b0a5-a8cf-0c94-ebbe-a0d5343fe3b9@amd.com>
-Date:   Sat, 29 Jan 2022 05:49:06 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Cc:     brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 36/40] x86/sev: Provide support for SNP guest request
- NAEs
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-37-brijesh.singh@amd.com> <YfLGcp8q5f+OW72p@zn.tnic>
- <87d4999a-14cc-5070-4f03-001dd5f1d2b1@amd.com> <YfUWgeonL4tfGf8P@zn.tnic>
-From:   Brijesh Singh <brijesh.singh@amd.com>
-In-Reply-To: <YfUWgeonL4tfGf8P@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0017.namprd04.prod.outlook.com
- (2603:10b6:806:f2::22) To SN6PR12MB2718.namprd12.prod.outlook.com
- (2603:10b6:805:6f::22)
+        id S242137AbiA2L5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 06:57:37 -0500
+Received: from mout.gmx.net ([212.227.15.15]:42461 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241314AbiA2L5e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 06:57:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643457444;
+        bh=LQ/D/czaqWi5t/2mji1EXwKk67vZOE9T5soDAh7nwmA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=SO1nnQnA8zBwlraHeZbETYGKO/KujBtjPsWAxdD90eZ80L9vJ/LkoE/kcNPe4u7fw
+         3uMbJFDlpZWEBJLukDMeZr3eUjWVog2a2A3fMhZ28QuPI0EdaQpvPR9gSu56nWKz4W
+         vGHrKrq1al+R4C+Mx85odoxQW+nRwGY5wuqkbSYg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1OXZ-1mGok32OAl-012psc; Sat, 29
+ Jan 2022 12:57:24 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: [PATCH v5 0/9] Nuvoton WPCM450 pinctrl and GPIO driver
+Date:   Sat, 29 Jan 2022 12:52:19 +0100
+Message-Id: <20220129115228.2257310-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 11c363bf-8878-45ff-c058-08d9e31d4e2a
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB2537:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB2537ABAEC04814645F534FCFE5239@DM5PR1201MB2537.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ffyCtm/hPU/mgxxnMUTr9nQTR9cKW/2nGrtGY9Tf/ekthabGmxI3YazDLUe/X3NF31EtfbkxHzob0Na0RsrKk4zCDUkSzoZrJcr0nLUunGnCgHBQDULlROa3aBIvWdjY19NvdQXwV6vbbUUWv5DMW0/1qFNls7S/dD6ahIB1zHiteI28colFLfwcOAiJTXXUJIKVFnjIRHBFzbXTEkwz7zFRPZnndgCARQTeRlqOKuWtb3zBhTEqdfXYilS9cndaKlCmUqyizwM3nZMYwgPW1u814RA+e/+w2p7KkqQrDdXPoDIGdyhAfihz8vmyaAmeC9Iiu0NCTNOJorKx/EeVcd4rtgjRWrO8od688WIZLsbrKdcspUW7LC1p0c3Q3ZABcS5C1bS3FSsuJ7oUzVZchjMwpYVhJwdgFBFZiSO0fLWOX1YGcQhtRvbGKFthAjBX1RVyWanwM3n9PlHZqLoZ+Z9v83o7O5/kTMVZrov+Vnf5dEnf69lomO0yUdMe1h7Mf79HoJG86Ycp2zHwlMvNdpvMs+p0gajIzCNctxdUv6LLvMdrBOptpmBr+1RmMvG68cefreqlvN2Uoknt8k/yFEmXHGOlHW2kuvjmYNjFM9nJOwd1CYth+llCW25vh4p1nswZHFZTB4qikL9Sc9neToFnUBDqs7o816DbDKb3PepNtjK7vas9KZUf/5H+UhOcylyDdDWLLFr/BKF4dtf8vZECzi1GKPxltkYHsRjHFl8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(6506007)(5660300002)(44832011)(7416002)(7406005)(4326008)(66946007)(38100700002)(53546011)(8676002)(8936002)(6666004)(86362001)(2906002)(31696002)(6486002)(66556008)(2616005)(66476007)(83380400001)(26005)(6916009)(316002)(508600001)(54906003)(36756003)(186003)(31686004)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MUJ1QkhZSHVtQjdueUxCM3BtckQxem4xTzlFY3RjRytlN2dRQmh5U01UTDcy?=
- =?utf-8?B?M1B3VEM2eXFIbkFtb0NtNFNMRm5yQnBBS3hMeDJtQ0NhN3ZDVTJQVHNwWGhU?=
- =?utf-8?B?c25OWEV2U242cm5TYzlCNy9kczBZd1Nrc2VyaU9uYk1YYzVhY1pmeGUrR3Ax?=
- =?utf-8?B?SEZGMktNL3dxUVdEUFRiakUwV1VaQi9EUW9aNUhHTjJoZCtQTWJvTldrWWZ0?=
- =?utf-8?B?U0g3NnQ4bWFxNXFCK1hFQ3BoTkVBdlhpUHNZOFpuY1NxRm05dEhxblFFc3ln?=
- =?utf-8?B?dU5GY2VHM242L3lwTGlIVlN6T1VESFNRTGRGbkViaFB3S3JNVklBMVN6QUdP?=
- =?utf-8?B?VkhFdDZkM0YvK1hyYXg0QlpxQTRuMEFDMElhSWxJRDBlVElIWXlCUEh0SXZq?=
- =?utf-8?B?N09EZnJjTTNCQVowd09DVWY0L2VBUmY2SWQwUk5WTjVobVo3TGZuUEg1K0JZ?=
- =?utf-8?B?UkZ3emd1U3IrQzZGQ2ZOd0EwT0RHR0orTkkzbUtZWkJXYU92NjBJby91cnZQ?=
- =?utf-8?B?QmFwK1gvZEEyN3BxWjVpdmRsbmxJeUhzWk9PQ29ESEl5VTFVQ05SbzFrNVZG?=
- =?utf-8?B?cFA4VDdPUm81MlY2VDNaOTFlQnhTN25Eb2F1U2xjaXBKTmkveElrTkc0TFd2?=
- =?utf-8?B?aWpBeWhMK2VkZitUN0YwV3NTemttcEs4MVFQY1hjVnF3MlhQalZHekh0b0dy?=
- =?utf-8?B?MnRSZkRQWVFMN2RqR3BJM2hxbGtjWEhvcURSK2lRWGpIbGtrc3hUb2E2b2Rk?=
- =?utf-8?B?eEw2a3FHZlBJZGl0TFE0TXBSRE9xdXJVNFV2MHhDRHlpUzMyR0tDTHBHa1NE?=
- =?utf-8?B?Q1VvZDJ0YU5qYTFLTlM4S01mUjZpQ05hQWNMZVRERDdwblBYcWJteXpQTXlk?=
- =?utf-8?B?NlNqdlJTcUJhd1dUNkNvakxYZ0Z3WmJDS1pHQVJpTlhhZGlhYjEyWkJ4eUpq?=
- =?utf-8?B?REJxT0lvS2hCV2toM21hYUFJVjA4VUN6R1oyRlY1Zk40OGx1cFlYMlZ5aDR3?=
- =?utf-8?B?ckN1UHRtaHhWRG9sdDY2U1k0WGd5WWdVZVdaOUdSS0l4aldIZ3h1WlNkRFh6?=
- =?utf-8?B?RGlqRDIrVjBwOVozWXF4aFJNOGcraVNJbjdFOFNxbWhKR0tRdlg2ZHVrVHA4?=
- =?utf-8?B?TEs5bFp0Z1hJM3AwVjh6MUk5bFVJWHkyblRmT3dLRGFWWFNTUkNNTDlsTWNm?=
- =?utf-8?B?UzRsMVBrRkpaMVhwQ3ZoeWR4MFZTZmdTQjlqYWswOUYwVCtyZXg4WGdNWmh4?=
- =?utf-8?B?U2dGaHBOaVVhME9YQ2xidEx1QW5DZHNnbnRoTXpxNHYrNk5HUUI3UUVlS3Aw?=
- =?utf-8?B?YkJodWlIUTVCaXF1NzNoZWRucUNjTStEWVRTaFN6K2ZPVmIxNUhrUllRRlV1?=
- =?utf-8?B?WEF4ODEzNjYxSEs0UzB1dFNkL3l1cEZibU4zajduZmxLVllqenNoRmpSaFZy?=
- =?utf-8?B?eEtZdWsvVWc0K0hpSml0QmZEdFJhMlZpNjdIRGg3OFU1RkE5dE1Fb2hZd3hQ?=
- =?utf-8?B?QzJqSXBaUDEyTERxSFlac2g5ekFsSTU2ZGpiMVNTaWh3SGtML1pRakFWUjFY?=
- =?utf-8?B?RzF3MTJLSUdTU2VNbTJNMWhKUk9vb2FMays2SmxDOFB2NDF4Rkc2MkZwSUlS?=
- =?utf-8?B?ZC9EQ29oRkxPWDdYeXNKMmhDcDdYY1VJYnZzYmpOTElqeHJtR0VUMzZBNm5X?=
- =?utf-8?B?UVFiNFEyU1c3NGIzZ3NUdFg5R1dydEkzL3pKWUlKem0xZ0w3UTVXbU4wRCtj?=
- =?utf-8?B?cUd4UnhxMnRMb0F0N3B2TllGSXcxWnMxUWRXeWNFc3hFZGRWdGJnSlpFK3RJ?=
- =?utf-8?B?cUpNaWRTVlMyMTZ3THMvQkJVbVExRk5pMXNnMW5HZ041Z1dZcGNGYWtHN094?=
- =?utf-8?B?THdpa1ZETDdzejZtbmZRWGkzeWJvNEorOUt1dE1ScGZuQ3pURyswTUl6U21E?=
- =?utf-8?B?c1ZNbk1CaSt5QXlqaUdvaVpWeTFlZ09pajRVS1VNeUNDK01FeXNBbHg1Ky9o?=
- =?utf-8?B?c1o4TnZNRm5QSzJOTjdvbklaTHYxVElZQ3I4N1U1L0VodnJ0OFlURloyZFlH?=
- =?utf-8?B?bmRncWRzbjA5VWlGTTJkMDdtWlJQa0JSTkFRaWhFdlhXVmJ3WjVYS1hqcDVH?=
- =?utf-8?B?cVFiZ09Xd2xFSnE2Ry92T3dDdHYvRkJkallNQ2ZnSTF4WVBvV0tidnlCVjc4?=
- =?utf-8?Q?vrcOqmUatzdLlp4zP6xqo5I=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11c363bf-8878-45ff-c058-08d9e31d4e2a
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2022 11:48:45.7117
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 99jELdhg8I76TgIewNaOnhsoA+RRojuNzkjs57ZMOwa9aYScvMjK11GM4NBoiWl/18zrdzLXyIP5aEMBi9cgEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB2537
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:2IjlardMyLFrtr1FjGEBDyjH8nrE1nBJ6Ibpk0PAWi2YuMn5zMr
+ JwFMIl83ycDgQgzkSra47Gyd7Lr4e+YhaxsE/yATZdDJGxwzDcyPVbOr712A4jx5NUfOoOn
+ VwnKHMOYn2xmiCV6xhpHiEgPkxeMF1y4lW/9Ne8WGyoTB1x0r78STkTOhnXnjh54aQ/rXaD
+ E99XVcYLpfLV64QoGDUrQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5Qbvq6uQgQI=:PPBL8jJ0sH0pa73bp4hEs1
+ 3qiJPWjyIU4f4si9otbCG4AVXN9P2MMoG3RyIOMBedNUJbBINjMLWPeWq/U38Ym8IqdH4mLFR
+ MUoX/Rk2USPppNWz/SNL8GoQ9cRPlDxadeSxXn0bLuTYS525fmwe7mIN/gW9MDD0Gs/su0Nv7
+ swvXGxRPuXCtJlsVjwRMBjoZIT3SBwnehk5O/l7UhcliBfOL54WjP9DVUqejrK+MdVNdnro4k
+ QLfZ1hzS1ETWoRsZ0Xu6dTvzrY0x5GJKf5nRfWaEIrXU0W+mAVk4bmKVz+Gd+x/p5rgZxWzOa
+ RYhzXA22tUqpro1SQr1nU+gAhCA55r5Byck08gg0I5VbrYfy9XUPrSbCyvUfYimVow75Gprhv
+ /JZz9xzWZsM92tEM8x4/m1PPBIpuGBeAAf2ZtDEaii5DVUNcDNudpOjsBzKAx806BECi4A36E
+ VO/Rehii6gHE7ul5i6U48TKSq+Ci8eKbTSrplaBvoJcgQRk/q3hN+JvBZootTodzLweKKlBER
+ v3cA+HijpaPXbtY84ro7hWOE+Al/FjktJ9syv0ms9BAdUqjXxC+LjT3XJ9OL/sbj4fFoSTnXo
+ kzEyoH8ICQ8GfN7Rb0O/IvAuX4JzKouzBfua7HazBGbKvcJcGl+fzHYofIypOfPIhcWbiTuVh
+ 0tki4KKk/PMFDw2PCNt3kc5SGa5A6DxK/xsKM23lmwRCPX9CQApnZkwBFlcyK+OHnLQ59UKV5
+ neREFgbk4dkPJqoeFJUVWy394DZD4j5JW7CxfPkdEf2jY184yHUFnOouCXDnkT4EMlChzqAwu
+ U1MdBZiVHeBU8i4UXEyG1v6AszPdPC+wsPxsPnNBA5WiAbJXBktD3N9j+yLqJYnZ3UlP4iMzv
+ E9Qwdw3S6a5NiNtT8f6QmIFDpCwFD32FFz2WkcNztFFDNqXo5fJCOc04M872MEw0FnQ58ih5H
+ O2z2g1eurLPtm/iMVuLqjUDuqELoSEw6uYXEjTKb8psg9JMVcmZAAtdtKgzISsSe/FFQs5mPR
+ Yr1eSagTK0vGCi56mQ4zdnK17gSrE4jM14nUZempjGBOXWBqE8T6IqmaZmNFlHvVBOh0nYnoR
+ dmt+1gtDNpbmac=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is version 5 of the WPCM450 pinctrl/GPIO driver patchset.
 
-On 1/29/22 4:27 AM, Borislav Petkov wrote:
-> On Thu, Jan 27, 2022 at 11:02:13AM -0600, Brijesh Singh wrote:
->> I am okay with using SZ_4G but per the spec they don't spell that its 4G
->> size. It says bit 32 will should be set on error.
-> What does the speck call it exactly? Is it "length"? Because that's what
-> confused me: SNP_GUEST_REQ_INVALID_LEN - that's a length and length you
-> don't usually specify with a bit position...
+I was originally just going to rebase the patchset on top of v5.17-rc1,
+but while testing, I found that the IRQ handling code violated locking
+rules, specifically that it used spin locks (which can sleep on RT kernels=
+)
+in IRQ contexts. So I made a few changes to fix that, mainly switching
+to raw spin locks.
 
-Here is the text from the spec:
+Best regards,
+Jonathan Neusch=C3=A4fer
 
-----------
+v4: https://lore.kernel.org/lkml/20220109173000.1242703-1-j.neuschaefer@gm=
+x.net/
+v3: https://lore.kernel.org/lkml/20211224200935.93817-1-j.neuschaefer@gmx.=
+net/
+v2: https://lore.kernel.org/lkml/20211207210823.1975632-1-j.neuschaefer@gm=
+x.net/
 
-The hypervisor must validate that the guest has supplied enough pages to
-hold the certificates that will be returned before performing the SNP
-guest request. If there are not enough guest pages to hold the
-certificate table and certificate data, the hypervisor will return the
-required number of pages needed to hold the certificate table and
-certificate data in the RBX register and set the SW_EXITINFO2 field to
-0x0000000100000000.
+v1:
+- https://lore.kernel.org/lkml/20210602120329.2444672-1-j.neuschaefer@gmx.=
+net/
 
----------
+> This series adds support for pinctrl and GPIO in the Nuvoton WPCM450 SoC=
+.
+> Both my DT bindings and my driver are based on the work done by others f=
+or
+> the newer Nuvoton NPCM7xx SoC, and I've tried to keep both similar.
+>
+> Instead of extending the pinctrl-npcm7xx driver to add WPCM450 support,
+> I copied/forked it. The pinmux mechanism is very similar (using MFSEL1 a=
+nd
+> MFSEL2 registers), but the GPIO register interface has been redesigned f=
+or
+> NPCM7xx; adding support for the older GPIO controller would make the dri=
+ver
+> harder to understand, while only enabling a small amount of code sharing=
+.
+>
+> The DT binding in YAML format might make a good template for also conver=
+ting
+> the nuvoton,npcm7xx-pinctrl binding to YAML.
+>
+> Both in the DT binding and in the driver I kept the name "pinctrl". For =
+the
+> driver, I find it accurate enough because it handles pinctrl and GPIO. F=
+or
+> the DT node, it's a bit less accurate because the register block at 0xb8=
+003000
+> is about GPIOs, and pin control happens in the global control registers =
+(GCR)
+> block, except for input debouncing. So, "GPIO" might be the more appropr=
+iate
+> name component there.
 
-It does not spell it as invalid length. However, for *similar* failure,
-the SEV-SNP spec spells out it as INVALID_LENGTH, so, I choose macro
-name as INVALID_LENGTH.
+Jonathan Neusch=C3=A4fer (9):
+  dt-bindings: arm/npcm: Add binding for global control registers (GCR)
+  MAINTAINERS: Match all of bindings/arm/npcm/ as part of NPCM
+    architecture
+  ARM: dts: wpcm450: Add global control registers (GCR) node
+  dt-bindings: pinctrl: Add Nuvoton WPCM450
+  pinctrl: nuvoton: Add driver for WPCM450
+  ARM: dts: wpcm450: Add pinctrl and GPIO nodes
+  ARM: dts: wpcm450: Add pin functions
+  ARM: dts: wpcm450-supermicro-x9sci-ln4f: Add GPIO LEDs and buttons
+  ARM: dts: wpcm450: Add pinmux information to UART0
 
-thanks
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   48 +
+ .../pinctrl/nuvoton,wpcm450-pinctrl.yaml      |  160 +++
+ MAINTAINERS                                   |    2 +
+ .../nuvoton-wpcm450-supermicro-x9sci-ln4f.dts |   43 +
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi        |  384 ++++++
+ drivers/pinctrl/Makefile                      |    2 +-
+ drivers/pinctrl/nuvoton/Kconfig               |   18 +
+ drivers/pinctrl/nuvoton/Makefile              |    1 +
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c     | 1150 +++++++++++++++++
+ 9 files changed, 1807 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr=
+.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm=
+450-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+
+=2D-
+2.34.1
 

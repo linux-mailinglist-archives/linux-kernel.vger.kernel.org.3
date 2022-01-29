@@ -2,95 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF3A4A3054
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184FF4A3055
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240549AbiA2Pmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 10:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S1344843AbiA2Po4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 10:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiA2Pmp (ORCPT
+        with ESMTP id S233890AbiA2Pox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 10:42:45 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58607C061714;
-        Sat, 29 Jan 2022 07:42:45 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h21so16679689wrb.8;
-        Sat, 29 Jan 2022 07:42:45 -0800 (PST)
+        Sat, 29 Jan 2022 10:44:53 -0500
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCAAC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:44:53 -0800 (PST)
+Received: by mail-vs1-xe41.google.com with SMTP id r20so6628584vsn.0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:44:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xDfBcCV+jqICJ+umnEPyh0zc5fKOvTpA/0JLXbxrvaw=;
-        b=YRADI/76mabaLf4IRcW+iUVwM4d5XalrfrM65rAgmDHXMgw/pREmSDXS1OlC0Bn00W
-         BYD58D2rRkOkUXyYsmqT6UsbbLZOE49yI72y1wbyFYP0oh3pTbKX+whITxjx54FwHT54
-         rcY0tfctVsXgFc046Jyzq7yoGgtWwTbIU696dGNvIju/PnrS7YBdaqlqkoPYwHqtF81b
-         R1iPZVhdmnGJQ7jdzQtZ5/9vx/0mE9TN8rOW1bl1XyoPbB8TDqjnTKzxLbU4X7u477iX
-         vPMAuxN69n3L4m0hkvoTRM62uivp3iH4vnoWcwG0fD8h4qMX1f3LOxV2lbFv7d4OCDJz
-         deTw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DF9UmNfGnrYDhtKMt7WXfa1288InJPsKdF0BR5VR4Z4=;
+        b=KEjn+twTsONFsnXE+lRcbGAx631b4g4kj3YiuURpgYEO90lrvXd8dZFRlJJb4QwMbm
+         HvSPd3n6L6M3dXVYAcwiGU18E+d4qeRXySNA7ln5cboyLaiqVO8WkeHFrWvmPypxNdBm
+         TOC3s03SlXdJkPEluQQYwAd12JnEYvfEakQetux+pP2IxD+QPYCc4MODoNDCXl33tRuc
+         wP/UQgIqxF001lrZXY5Bj6LoohO70tbA5sgc8zNIXPUccDKbV5qBSskekr40n8G1NbYc
+         ceNkJL+DCNsa2GWc4V75o6afMKyn0/BTp6wzQ0pH8jU0W5MYeaIzj/ebav6GkqSSb6fm
+         NrnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xDfBcCV+jqICJ+umnEPyh0zc5fKOvTpA/0JLXbxrvaw=;
-        b=65v84vvfhMZiFbGdFNVGk7U2glQBZ3sr05tujhyZqlkngnFBeOB17nUI6auldbKEpb
-         TnxIayVz1vAGYHMZr4OB+TDt/St0UjP1RS88vTfvFMyYdvkU67ZbnQ4UHU3ffq6jIDDS
-         ldD/+lWXkcm4ddsGwKjlUgaFO4dEMdXz7gsKrDT8zMXB5Zm7FtRYTnpF1GO+gJwZjMQx
-         t/mxfbq9yoWG3LT8jWq+6ys9ruR4ley9Lh3857AKVTG9Rv4u7+iEb/04CXVpAmGzZpw/
-         /RPsecADZmLInMME5Vj2SJpNzsoI66DD9C2WZofoddvCvdim//5Ob1V2XhHaQUin5BLV
-         bkNA==
-X-Gm-Message-State: AOAM532ZnZWEQ2N30E+kbtUstv1WNRhqxDIpN+9Sr5ykHPxlmkx7X/6q
-        zowV0Pw3LcBFxGpxcBxeJ1M=
-X-Google-Smtp-Source: ABdhPJzuryF9xXT+zqclTdu3vlK9c6QeyBNyyqPs6N9Gl6EC9RT7kbjuBw1I6Pf7pwGVHC/qP48VuA==
-X-Received: by 2002:adf:ff83:: with SMTP id j3mr11159990wrr.618.1643470963900;
-        Sat, 29 Jan 2022 07:42:43 -0800 (PST)
-Received: from pluto.desnull.home (84-236-21-114.pool.digikabel.hu. [84.236.21.114])
-        by smtp.gmail.com with ESMTPSA id b11sm4478557wmq.46.2022.01.29.07.42.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 07:42:43 -0800 (PST)
-From:   =?UTF-8?q?Baltaz=C3=A1r=20Radics?= <baltazar.radics@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Baltaz=C3=A1r=20Radics?= <baltazar.radics@gmail.com>
-Subject: [PATCH] Add ethernet0 alias in Nanopi NEO's device tree
-Date:   Sat, 29 Jan 2022 16:42:14 +0100
-Message-Id: <20220129154214.45629-1-baltazar.radics@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DF9UmNfGnrYDhtKMt7WXfa1288InJPsKdF0BR5VR4Z4=;
+        b=1E3EANwhI0hHgqYcp0IBy41DIiSXcNsrVU5NnyUU1WWx7XXac3Tm7a2y0JgotlcchY
+         ZNnX45N4ALdrAocUjKmPAIMCpVnLdc3h5hdq61M0gy3pUQH3LrjxyzUKAuO6r7xHlSx9
+         KvMF+4GRoFxC6XD1q8ttFFVhA8zHqA5bQZLP5KN2XWTjMuf3/twQP22o+tM+Du+2Khn/
+         BRS2hTgIz8N5s9ilzXLAcw9TCD2xLFELew7lXBxWibz7QoZMAb3V1F4bvv6uXx++ln8t
+         SFWZ9i1ATLWa+uOYra+dYVMe1Sq3v58RA/cnmkBQfyjndwNnBDgaoPgNWEX/4brXjLrN
+         +5hw==
+X-Gm-Message-State: AOAM531xSC3WSfWAWnga7V2vN20gwUx419FezUTKbAicSgBbeudXBP/x
+        QUVfR1m7gFImmA6MttrLT9D+jPwX5LjuzU7L/Q==
+X-Google-Smtp-Source: ABdhPJwu0tSjrLKxrLRWZSQheWW4RjmxVH+QlepWWeWQ5CvSjHsPcb2lp/GTSDqf8M0QFPv/qblczFtbsI3AK61oEIU=
+X-Received: by 2002:a05:6102:f06:: with SMTP id v6mr2733879vss.71.1643471092223;
+ Sat, 29 Jan 2022 07:44:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a59:bde6:0:b0:282:e5d0:6681 with HTTP; Sat, 29 Jan 2022
+ 07:44:51 -0800 (PST)
+Reply-To: dramirparnian1975@gmail.com
+From:   "Dr.Amir Parnian" <mrrocksteven505@gmail.com>
+Date:   Sat, 29 Jan 2022 07:44:51 -0800
+Message-ID: <CAAHk35NcxMan-ENRc8Fz4s_WJAnqE33n_f6eA79CKjWoNhmXBA@mail.gmail.com>
+Subject: READ AND REPLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is required for U-Boot to generate a MAC address for it
-automatically.
-(Without this, the MAC address will be random on each boot.)
-
-Signed-off-by: Baltazár Radics <baltazar.radics@gmail.com>
----
- arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts b/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts
-index 9f33f6fae5..df71fab3cf 100644
---- a/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts
-+++ b/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts
-@@ -45,6 +45,10 @@
- / {
- 	model = "FriendlyARM NanoPi NEO";
- 	compatible = "friendlyarm,nanopi-neo", "allwinner,sun8i-h3";
-+
-+	aliases {
-+		ethernet0 = &emac;
-+	};
- };
- 
- &ehci0 {
--- 
-2.35.1
-
+Dear Friend,
+My Name is Dr.Amir Parnian,I am a banker by profession. My reason for
+contacting you is to transfer abandoned $15.5 Million United States
+Dollars to your account.
+Further details of the transaction shall be forwarded to you as soon
+as I receive your return mail indicating your interest.
+Thanks and hope to hear from you soon.
+Dr.Amir Parnian

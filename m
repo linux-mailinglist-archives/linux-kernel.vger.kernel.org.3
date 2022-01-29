@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5097F4A3031
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83744A3034
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240860AbiA2PGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 10:06:37 -0500
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:52955 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiA2PGg (ORCPT
+        id S243327AbiA2PJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 10:09:27 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:37190 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232848AbiA2PJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 10:06:36 -0500
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id DpJ7n81bv0Z1CDpJ7nnDkd; Sat, 29 Jan 2022 16:06:34 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 29 Jan 2022 16:06:34 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/bridge: lt9611: Fix an error handling path in lt9611_probe()
-Date:   Sat, 29 Jan 2022 16:06:24 +0100
-Message-Id: <9c20eb74d42f6d4128e58e3e46aa320482472b77.1643468761.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sat, 29 Jan 2022 10:09:26 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 39BAF201416;
+        Sat, 29 Jan 2022 15:09:25 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 549A28075E; Sat, 29 Jan 2022 16:08:46 +0100 (CET)
+Date:   Sat, 29 Jan 2022 16:08:46 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu
+Subject: Re: [PATCH] random: wake up /dev/random writers after zap
+Message-ID: <YfVYfsDCVnKSfDSc@owl.dominikbrodowski.net>
+References: <20220128224906.104235-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128224906.104235-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If lt9611_audio_init() fails, some resources still need to be released
-before returning an error code.
+Am Fri, Jan 28, 2022 at 11:49:06PM +0100 schrieb Jason A. Donenfeld:
+> When account() is called, and the amount of entropy dips below
+> random_write_wakeup_bits, we wake up the random writers, so that they
+> can write some more in. However, the RNDZAPENTCNT/RNDCLEARPOOL ioctl
+> sets the entropy count to zero -- a potential reduction just like
+> account() -- but does not unblock writers. This commit adds the missing
+> logic to that ioctl to unblock waiting writers.
+> 
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Add the missing goto the error handling path.
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 
-Fixes: 23278bf54afe ("drm/bridge: Introduce LT9611 DSI to HDMI bridge")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/gpu/drm/bridge/lontium-lt9611.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-index dafb1b47c15f..00597eb54661 100644
---- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-@@ -1164,7 +1164,11 @@ static int lt9611_probe(struct i2c_client *client,
- 
- 	lt9611_enable_hpd_interrupts(lt9611);
- 
--	return lt9611_audio_init(dev, lt9611);
-+	ret = lt9611_audio_init(dev, lt9611);
-+	if (ret)
-+		goto err_remove_bridge;
-+
-+	return 0;
- 
- err_remove_bridge:
- 	drm_bridge_remove(&lt9611->bridge);
--- 
-2.32.0
-
+Thanks,
+	Dominik

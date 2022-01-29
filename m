@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA354A3095
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299EA4A3096
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352667AbiA2Qbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S1352670AbiA2Qbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 11:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352668AbiA2Qbd (ORCPT
+        with ESMTP id S1352668AbiA2Qbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 11:31:33 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDC0C061741
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:31:33 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 133so8099138pgb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:31:33 -0800 (PST)
+        Sat, 29 Jan 2022 11:31:37 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F9CC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:31:37 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id 192so8978741pfz.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:31:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6bf6lhHbgkl3pCSqm/k2iChu7YEwDY7WU7VmbDU3O3o=;
-        b=dAdoYV5mtnPLehk0FRM4X0AdM8jKLGQFg0jMR+yN5Z5ih+CeKbXRjwBPd2qH4e0B2H
-         V+FXAjqf/+SSNo+YVyVYCmjt/MjApPsDSMnS0k+6Pox/4Xkgr1SAE+BviaGXjgoiF5Aq
-         lBFDjZie4YiXcpQEa8gfHb63GYizTeLovnGa9OqokDBAxxYCgCmPxhJqwQYGO8ev0S3N
-         sYL/I+Az1cO4wHR5ee8g6kS1bUpEmBbReZvolJx65i86JjltY4hvL1PoBi8uA9K7DrXs
-         A7LdUQ0md+KZKKnQbwAOYMJPioB7Si7rNHCYV4vIlXNe7ocbYerTjJqOKeL7TTEASZx+
-         Caow==
+        bh=o6tVV3EV5GZ5J/+KxHkNVwDUV3xfQLU/3YBnbUf4aGM=;
+        b=hCgYXrv6DRbcOuxqv2dfwWHpSTMEEg8Mpui5vyFv4gqzTslH62lPPj3eU3lPodSzzj
+         20JNikaM7qrs5UqzNvhdJl2HKidG0ehRxcTX/Szw1ZtFQ5eonVSrc6SM7qd7TfYyN9R4
+         fMswRD1VjIl6WZoJ9U4Uo5szk31jVCfL/Rp/9JpWcfJvZZyAg+4ZlUqF2yqBAx1vJJ8Y
+         6ETl1ssSso0uV8KSoRFJBjFVwlgfb7s+Q9v33Ezd0zAM0tfa7JlB8qwxU9X6fYc+VJK0
+         pIklOaTv6E2+//ppXK5jjQRBlA8xXkGg5zvqXaZk1eHptON7+6cW7DWRsSp1DrGq4xIq
+         sYGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6bf6lhHbgkl3pCSqm/k2iChu7YEwDY7WU7VmbDU3O3o=;
-        b=RSUB1r1MHbx5EPehUk8hZSDaq0rHxXJQd1Qmoeljyyigc/nVDTuKPVR1e5FHHL7aTQ
-         RDJ5SCCOHiarzrSf156p5wi9iBmA7ebdWA1C5giZzJtmOuvsvyQq2RHOIvBQUFYE7yV5
-         XlFG4n7kpVoDEms/BX/ZGJQxce4YNt0B91z4PqQZtWTfBu1T5B8mySFd0EkKcrSn2AJp
-         75CRRVfNsry2xzxnEJ6rj4BPHttrUgeb4TQQos0Mhuy7hmTj9tJ6x44rkfagP64FPeI4
-         u4i6VFWNgKY2907yImdJcDtw6S+UrezHjvyN44ajLMZ7Vd8kBc03EJScz4PJ9uum08A+
-         sg3g==
-X-Gm-Message-State: AOAM530NTMY3R9yyOPZKO2Ywdb2zWc/fHdPWlN2J68kvBaPthMU/GOt8
-        8/DPl2yj+2wiqskrY9xm220=
-X-Google-Smtp-Source: ABdhPJwKSvI9hGklRZ4LetcksI2zs63WhOMTuytmMMX+51ZZT0rkLUIdmTFvLeTa/j/lxaf24oZ9FA==
-X-Received: by 2002:a63:2ad6:: with SMTP id q205mr9014100pgq.46.1643473893318;
-        Sat, 29 Jan 2022 08:31:33 -0800 (PST)
+        bh=o6tVV3EV5GZ5J/+KxHkNVwDUV3xfQLU/3YBnbUf4aGM=;
+        b=Di6cqMM9PJ4jZpUU69abvdHynTfwbF8OFxBTqdwJZj4yuivwSEUB/nQ9v0Wh6Jrgof
+         GTCf+43y5ZQBycexDR9sUX9X+zwHQR/qxT1CpZlP5g+XGOS3og1eCBb5yUKxEUa0sfxv
+         WyXuKX+LnlYtk8B+MqFU9i/SCF37JziJJuRR8tTocIxctc+pwbgE8nkTq+pBrvLwO70b
+         ka0wspaxCF0InXVKvCImFg1FFSVvkUarglJAqZYA5/K2Ry1xGyDUkcnMn3emZhnvlFHl
+         EOnFHZwMx9Yq/Zyy8FHfLJ5ZxQol+Oojea1BjDO0wAASXZc3EQhiJN7BSJfiP0FRvRIw
+         cePg==
+X-Gm-Message-State: AOAM530NbM5ihUGAAEuBTYGP28+mzcFnr9JJV/WbJ7duOL/xxydFBomJ
+        nob5sOFwfUlgKlPgmK/DhAU=
+X-Google-Smtp-Source: ABdhPJxvSzeza5iycL4aC4oHZRG2A7r2dKzZSFqF4ywHytGL0mAiZoaR2F6CsnK03S0PwkJr7xmO5A==
+X-Received: by 2002:a05:6a00:1ac8:: with SMTP id f8mr12890844pfv.7.1643473896998;
+        Sat, 29 Jan 2022 08:31:36 -0800 (PST)
 Received: from localhost.localdomain ([171.78.146.184])
-        by smtp.googlemail.com with ESMTPSA id q13sm1893528pfj.44.2022.01.29.08.31.29
+        by smtp.googlemail.com with ESMTPSA id q13sm1893528pfj.44.2022.01.29.08.31.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 08:31:32 -0800 (PST)
+        Sat, 29 Jan 2022 08:31:36 -0800 (PST)
 From:   Abdun Nihaal <abdun.nihaal@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Abdun Nihaal <abdun.nihaal@gmail.com>, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, straube.linux@gmail.com, martin@kaiser.cx,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 06/23] staging: r8188eu: remove unneeded variable in rtw_p2p_get_device_type
-Date:   Sat, 29 Jan 2022 21:57:58 +0530
-Message-Id: <83609e3c75a0bde4be612d32d76eaed6a26f72aa.1643466748.git.abdun.nihaal@gmail.com>
+Subject: [PATCH v4 07/23] staging: r8188eu: remove unneeded variable in rtw_p2p_get_device_name
+Date:   Sat, 29 Jan 2022 21:57:59 +0530
+Message-Id: <d94c3029128b9c094bf4e0b2e4574a177aef46e9.1643466748.git.abdun.nihaal@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1643466748.git.abdun.nihaal@gmail.com>
 References: <cover.1643466748.git.abdun.nihaal@gmail.com>
@@ -75,10 +75,10 @@ Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index b093430ff744..6d72b15541ab 100644
+index 6d72b15541ab..33fe8e944df4 100644
 --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
 +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -2769,7 +2769,6 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
+@@ -2844,7 +2844,6 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
  			       struct iw_request_info *info,
  			       union iwreq_data *wrqu, char *extra)
  {
@@ -86,15 +86,15 @@ index b093430ff744..6d72b15541ab 100644
  	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
  	u8 peerMAC[ETH_ALEN] = {0x00};
  	int jj, kk;
-@@ -2838,7 +2837,7 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
- 		return -EFAULT;
- 	}
+@@ -2903,7 +2902,7 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
  
+ 	if (copy_to_user(wrqu->data.pointer, dev_name_str, 5 + ((dev_len > 17) ? dev_len : 17)))
+ 		return -EFAULT;
 -	return ret;
 +	return 0;
  }
  
- static int rtw_p2p_get_device_name(struct net_device *dev,
+ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 -- 
 2.34.1
 

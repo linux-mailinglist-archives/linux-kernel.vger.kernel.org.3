@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701194A306B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893E54A306C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351193AbiA2QFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
+        id S1351528AbiA2QFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 11:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiA2QFg (ORCPT
+        with ESMTP id S1351513AbiA2QFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 11:05:36 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEC6C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:36 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id z10-20020a17090acb0a00b001b520826011so13838883pjt.5
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:36 -0800 (PST)
+        Sat, 29 Jan 2022 11:05:43 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B480C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:43 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id h14so8849027plf.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EqfKy3dtUhi7JBYRclICg0WdgZkWY6fzxwHSqCR6ZPI=;
-        b=g19dEYIWrY3UQofi3mTplA5jprQAq+MBqAqRKYo4JfJ0Pdpaob4hQHLtMNBJ6kM98d
-         ySvX1jCJ4XD5D1oxxSMd8FuLCDspE6BmyUVp5A9gWPecI4c3WMndUeUURDBJRE2qSUR3
-         qmbwuWtJqEjqwDLH7z0QkWYmLTxn1c4D98NfhbJUokuuppYMqKLei1LskmF1ABQ4w0DD
-         +TR6OHDaaD3pu8sBdjdFwxu+uA5YfD0FfFsFFcHX5s4eo0Z9Ih3AO4mprTlQY59GT2gT
-         ahbnDK9QvI4OwQqobAAardMKZywVn6egZzgWdFgRuE5o84s2HrRpFi2XJueV8R2LjZR8
-         p2Xg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=PnbU93vWGV651EUjlzxYJgD/J8Jnot+F9jtiMaEhyAI=;
+        b=DoCu4VSTL/VXy1qaQWua2z8oAd/y6fgGWU7W5ZR8KskvW8xP480BlgXc3FL7fAoc1A
+         LKKK5eZ0XC3o/3q2ykRBc30nfyHVbmLcfT0OwIcjFrQ1FfgK/mLyBwoiwlMJ2O/4WDeY
+         cuzIcYgZ++sYothW7hU3FUsb6yehknz49JTflbzwmPoKttL/r67dTwcGmiRP2QhmN3ZB
+         DMdhY2v6W4ikEqfYad2LIB+2Fw+9O60CiE+DrLZvtw3tWIX7svbZrj2CYX59AsHRaHdO
+         xfTbho91ruL2hPmGNjOdQyjIyLwRluI1ihrde2hTA2lX8S5Yw/7O+lToCwUzQee0tVao
+         JQzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EqfKy3dtUhi7JBYRclICg0WdgZkWY6fzxwHSqCR6ZPI=;
-        b=M22VMiihNzZuRi1x4B1W7ygn+9DiwnxYo1wDkDwRxkOclyRYMlI9b2jL3a08JgKM0w
-         gjjIZJMJ6oy4C8f5wetYOvRarTViANL71l30aaLe9s/2ppRBoqxHm4efS9AHns9CJxMl
-         mSWLtPnAVPKhoZS7e9ekXHqotbFlcYure5DF3wgwxmXKhgtu1g4W82ZaMfRQbHLPeGLk
-         GyYRJeX6KajefE4JQbnAb3vt7ouSeZt9kssTJWlh3ddVEcsR9Me69BMoKOPe28+aGAUM
-         cAiwE+FPRP1Z/fQBXYzFrCJZxZBcsbVhnHQ5pH+mEXDkZCpZZVPqI4SF4Z3qNQPAVhee
-         f5FQ==
-X-Gm-Message-State: AOAM532ZAPU3XRCgaCmLKn341ZhMk1JgOIJ2uvMjrlc3ihqLGSPx0Wdx
-        GO7Jo6VHLJOzdkhJf9aHqv4=
-X-Google-Smtp-Source: ABdhPJzsgvSH+gGJzqQmXJ3UFugV6e/s7qFCPn8U5RFGkwOgTsyIqUUO+V4WiD7cr2Fs+Z4boxHHQQ==
-X-Received: by 2002:a17:902:7e4a:: with SMTP id a10mr13264848pln.143.1643472335533;
-        Sat, 29 Jan 2022 08:05:35 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=PnbU93vWGV651EUjlzxYJgD/J8Jnot+F9jtiMaEhyAI=;
+        b=oPZumd2WmuLpR9Fh2E1k2DoMBY9AP1HrKWZdr5BjvoXeiWfXuv5X5c9EYmPCTxol+/
+         t7qCZpkLOMRXT/sMAo1QYCoMKXdrcPccnummBOcQ8aUvO8q4bnjkiWRjtQ5be77xsRus
+         nnZAo42bVOc4s9vhsifpkJslfZzJ7NxJ+GUh2JUm6duBrs6xO8+v9VllVafhai5nWyF8
+         +J+gAeyIgiLX0wDupl5FzczDMFsse7dpDHMvcrvxE3vfSOF+LVv5bP4+sxRQQ1DeTy/m
+         B18Uol5C2wu8svbVfwsGmGZ2jFQ4DM1Tm7ag4a0c25ubDidjsbxIi2nTi0U+qTkspfqa
+         gcjQ==
+X-Gm-Message-State: AOAM53000Ul8npjyLsSuk5j8qteLO3BQu3q2giXGSlkl/DzfQVsinxV1
+        11k6w/mZofySnnOt+fLrlyk=
+X-Google-Smtp-Source: ABdhPJyUB/YePSOX4rrwQOnm1FOUbvi5tDeD6LRqBCNKxaRa588oXCVIUfazXLkuNrGtoVcuJzywPA==
+X-Received: by 2002:a17:90b:17c4:: with SMTP id me4mr15556737pjb.243.1643472342592;
+        Sat, 29 Jan 2022 08:05:42 -0800 (PST)
 Received: from localhost.localdomain ([171.78.146.184])
-        by smtp.googlemail.com with ESMTPSA id t9sm5672868pjg.44.2022.01.29.08.05.31
+        by smtp.googlemail.com with ESMTPSA id t9sm5672868pjg.44.2022.01.29.08.05.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 08:05:34 -0800 (PST)
+        Sat, 29 Jan 2022 08:05:42 -0800 (PST)
 From:   Abdun Nihaal <abdun.nihaal@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Abdun Nihaal <abdun.nihaal@gmail.com>, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, straube.linux@gmail.com, martin@kaiser.cx,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 00/23] staging: r8188eu: remove unneeded ret variables
-Date:   Sat, 29 Jan 2022 21:34:06 +0530
-Message-Id: <cover.1643466748.git.abdun.nihaal@gmail.com>
+Subject: [PATCH v4 01/23] staging: r8188eu: remove unneeded variable in rtw_wx_get_essid
+Date:   Sat, 29 Jan 2022 21:34:07 +0530
+Message-Id: <d0208689dffce91c52afbd5938b2704a8b1b554e.1643466748.git.abdun.nihaal@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1643466748.git.abdun.nihaal@gmail.com>
+References: <cover.1643466748.git.abdun.nihaal@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset does the following to functions in ioctl_linux.c:
-- Remove unneeded return variable in some functions.
-  These functions cannot be converted to void either because it is an
-  iw_handler function or the function does return error code.
-- Propagate error code in rtw_p2p_get2 function
-- Convert some functions that always return 0 to return void
+Remove unneeded return variable that is initialized to 0 and not
+assigned after.
 
-v3 -> v4:
-- Split the changes into smaller patches to make it easier to review
-- Add a new patch to propagate error code in rtw_p2p_get2 function
+Found using Coccinelle
+Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
+---
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2 -> v3:
-- Remove returns at the end of void functions to conform to coding style
-
-v1 -> v2:
-- As suggested by Greg, change functions that always return 0
-  and whose return value is not used, to return void instead.
-- Not removing return variables in rtw_p2p_get2 and rtw_p2p_set
-  as they may need to be used.
-
-Abdun Nihaal (23):
-  staging: r8188eu: remove unneeded variable in rtw_wx_get_essid
-  staging: r8188eu: remove unneeded variable in rtw_wx_get_enc
-  staging: r8188eu: remove unneeded variable in rtw_p2p_get
-  staging: r8188eu: remove unneeded variable in
-    rtw_p2p_get_wps_configmethod
-  staging: r8188eu: remove unneeded variable in
-    rtw_p2p_get_go_device_address
-  staging: r8188eu: remove unneeded variable in rtw_p2p_get_device_type
-  staging: r8188eu: remove unneeded variable in rtw_p2p_get_device_name
-  staging: r8188eu: remove unneeded variable in
-    rtw_p2p_get_invitation_procedure
-  staging: r8188eu: propagate error code in rtw_p2p_get2
-  staging: r8188eu: convert rtw_p2p_set_go_nego_ssid to return void
-  staging: r8188eu: convert rtw_p2p_setDN to return void
-  staging: r8188eu: convert rtw_p2p_get_status to return void
-  staging: r8188eu: convert rtw_p2p_get_req_cm to return void
-  staging: r8188eu: convert rtw_p2p_get_role to return void
-  staging: r8188eu: convert rtw_p2p_get_peer_ifaddr to return void
-  staging: r8188eu: convert rtw_p2p_get_peer_devaddr to return void
-  staging: r8188eu: convert rtw_p2p_get_peer_devaddr_by_invitation to
-    return void
-  staging: r8188eu: convert rtw_p2p_get_groupid to return void
-  staging: r8188eu: convert rtw_p2p_get_op_ch to return void
-  staging: r8188eu: convert rtw_p2p_invite_req to return void
-  staging: r8188eu: convert rtw_p2p_set_persistent to return void
-  staging: r8188eu: convert rtw_p2p_prov_disc to return void
-  staging: r8188eu: convert rtw_p2p_got_wpsinfo to return void
-
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 155 +++++++------------
- 1 file changed, 59 insertions(+), 96 deletions(-)
-
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index b9f9698d70cf..3a60e1f81592 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -1383,7 +1383,7 @@ static int rtw_wx_get_essid(struct net_device *dev,
+ 			      struct iw_request_info *a,
+ 			      union iwreq_data *wrqu, char *extra)
+ {
+-	u32 len, ret = 0;
++	u32 len;
+ 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
+ 	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+ 	struct wlan_bssid_ex  *pcur_bss = &pmlmepriv->cur_network.network;
+@@ -1399,7 +1399,7 @@ static int rtw_wx_get_essid(struct net_device *dev,
+ 	wrqu->essid.length = len;
+ 	wrqu->essid.flags = 1;
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int rtw_wx_set_rate(struct net_device *dev,
 -- 
 2.34.1
 

@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDF64A2B7F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 04:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5832E4A2B81
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 04:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352320AbiA2Dn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 22:43:28 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:40744 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241747AbiA2Dn0 (ORCPT
+        id S1352207AbiA2Dp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 22:45:29 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:49607 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238931AbiA2Dp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 22:43:26 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V34uYIR_1643427803;
-Received: from 30.15.211.55(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0V34uYIR_1643427803)
+        Fri, 28 Jan 2022 22:45:27 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V35CZvv_1643427916;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V35CZvv_1643427916)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 29 Jan 2022 11:43:24 +0800
-Message-ID: <a297c8cf-384c-2184-aabb-49ee32476d99@linux.alibaba.com>
-Date:   Sat, 29 Jan 2022 11:43:22 +0800
+          Sat, 29 Jan 2022 11:45:21 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jiangshanlai@gmail.com
+Cc:     paulmck@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] srcu: make srcu_size_state_name static
+Date:   Sat, 29 Jan 2022 11:45:02 +0800
+Message-Id: <20220129034502.73912-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [RFC PATCH net-next] net/smc: Introduce receive queue flow
- control support
-Content-Language: en-US
-To:     Stefan Raspl <raspl@linux.ibm.com>, kgraul@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net
-References: <20220120065140.5385-1-guangguan.wang@linux.alibaba.com>
- <1f13f001-e4d7-fdcd-6575-caa1be1526e1@linux.ibm.com>
-From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
-In-Reply-To: <1f13f001-e4d7-fdcd-6575-caa1be1526e1@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This symbol is not used outside of srcutree.c, so marks it static.
 
-On 2022/1/25 17:42, Stefan Raspl wrote:
-> 
-> That's some truly substantial improvements!
-> But we need to be careful with protocol-level changes: There are other operating systems like z/OS and AIX which have compatible implementations of SMC, too. Changes like a reduction of connections per link group or usage of reserved fields would need to be coordinated, and likely would have unwanted side-effects even when used with older Linux kernel versions.
-> Changing the protocol is "expensive" insofar as it requires time to thoroughly discuss the changes, perform compatibility tests, and so on.
-> So I would like to urge you to investigate alternative ways that do not require protocol-level changes to address this scenario, e.g. by modifying the number of completion queue elements, to see if this could yield similar results.
-> 
-> Thx!
-> 
+Fixes the following sparse warning:
 
-Yes, there are alternative ways, as RNR caused by the missmatch of send rate and receive rate, which means sending too fast
-or receiving too slow. What I have done in this patch is to backpressure the sending side when sending too fast.
+kernel/rcu/srcutree.c:1426:12: warning: symbol 'srcu_size_state_name'
+was not declared. Should it be static?
 
-Another solution is to process and refill the receive queue as quickly as posibble, which requires no protocol-level change. 
-The fllowing modifications are needed:
-- Enqueue cdc msgs to backlog queues instead of processing in rx tasklet. llc msgs remain unchanged.
-- A mempool is needed as cdc msgs are processed asynchronously. Allocate new receive buffers from mempool when refill receive queue.
-- Schedule backlog queues to other cpus, which are calculated by 4-tuple or 5-tuple hash of the connections, to process the cdc msgs,
-  in order to reduce the usage of the cpu where rx tasklet runs on.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ kernel/rcu/srcutree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-the pseudocode shows below:
-rx_tasklet
-    if cdc_msgs
-        enqueue to backlog;
-	maybe smp_call_function_single_async is needed to wakeup the corresponding cpu to process backlog;
-        allocate new buffer and modify the sge in rq_wr;
-    else
-        process remains unchanged;
-    endif
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 4201815744d8..31dbd41332f6 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -1423,7 +1423,7 @@ void srcutorture_get_gp_data(enum rcutorture_type test_type,
+ }
+ EXPORT_SYMBOL_GPL(srcutorture_get_gp_data);
+ 
+-const char * const srcu_size_state_name[] =
++static const char * const srcu_size_state_name[] =
+ {
+ 	"SRCU_SIZE_SMALL",
+ 	"SRCU_SIZE_ALLOC",
+-- 
+2.20.1.7.g153144c
 
-    post_recv rq_wr;
-end rx_tasklet
-
-smp_backlog_process in corresponding cpu, called by smp_call_function_single_async
-    for connections hashed to this cpu
-        for cdc_msgs in backlog
-            process cdc msgs;
-        end cdc_msgs
-    end connections
-end smp_backlog_process
-
-I‘d like to hear your suggestions of this solution.
-Thank you.

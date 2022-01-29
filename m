@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F2A4A2AA7
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF5C4A2AAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241447AbiA2Arn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbiA2Arl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:47:41 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA5BC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:47:41 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id ka4so21421793ejc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:47:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kB67G3+aOp/BknIObLtkl/DFgO8sf3NUTmgGKY/E+24=;
-        b=m5JrgPX7rY1AXo8AND+SfpLXf3k2VCB5OjOQaBw9OBwOjk2D96RC5Zw5ntj8UhIMNB
-         rnS3z977Hf7D8NMVhUSdafGokY6KjItiXQY3sfZctdaQHLcLzfPEr3R/oy8OqvSlkoLh
-         gR87RUHh79Y+ZSQayph17cTUxnVTKd5tNRGuKF5C9sx2Yea1Y0EgxJAlIX2rAtcfhPGk
-         DeLm7ypYMnY3hh2xDTRvxlbWIlcdP1QYATq27qrII08uSYo2I1ssMMPYyK6AZylpFtDI
-         FGUDvkvo/fQoiFciCe1idMY6fyuchYRVnC3Nx4Jz6m/ZqT6ki+WXKhAFqbJFoc22ctjv
-         8OYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kB67G3+aOp/BknIObLtkl/DFgO8sf3NUTmgGKY/E+24=;
-        b=7ob3thO7r+2+Sj4s+kSNG2bjDl4GLH7yMq1cCcUUMmxRhUmQSKDo8tS5M0ciFddQgJ
-         MjagBFCIX+hhpP6py/ggOBUJq03kIu+n9sa8SDDwsF2ojvwQhHimiGqVVyFkULW7KNa8
-         IBAZ8PlsEp0GMODa7QY2doIXIEThqgYp1bpZFvhGvjGKxvK1bpP6OA3IfxUyMqiM81Sr
-         k11BSHDVJG6OUEt2NVKGUZ20ArLABQzSDBudF/hyBvg9lrjoHQa577OUZJCQnGY9cCZq
-         WIiVfc7URZ/tMzbTW1AZJMYo0HpIC8q/anXUWgeHT9ulDjag+EywSxpiomy3dob6u7kK
-         9Cdg==
-X-Gm-Message-State: AOAM5308P+h0/gu0trtCvsVWquMOVEGOduQ+49o2NMO8wR+J8BLw13u1
-        4IbuFk+SS9bEGO5ILu3qHfU=
-X-Google-Smtp-Source: ABdhPJyLPOWrHg5Qh5KESKL/LjIkKA+rI2w1NbdXIt5W/b98M05/Q+1LIAVjaiokBR5V0GOiAt72Tg==
-X-Received: by 2002:a17:906:7308:: with SMTP id di8mr9028450ejc.464.1643417260182;
-        Fri, 28 Jan 2022 16:47:40 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id q23sm8124776ejz.30.2022.01.28.16.47.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 28 Jan 2022 16:47:39 -0800 (PST)
-Date:   Sat, 29 Jan 2022 00:47:39 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Wei Yang <richard.weiyang@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        peterz@infradead.org, will@kernel.org, linyunsheng@huawei.com,
-        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
- folio->lru
-Message-ID: <20220129004739.d2b3dqiv3qw6dfhs@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <Ydi6iMbSZ/FewYPT@casper.infradead.org>
- <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
- <YdjfsbAR0UlwyC6b@casper.infradead.org>
- <20220108081340.3oi2z2rm3cbqozzt@master>
- <20220123013852.mm7eyn3z26v3hkc2@master>
- <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
- <20220124225531.26yyse52yo5x3fr5@master>
- <581f4247-83b1-df39-6724-af0565d0c7ea@suse.cz>
- <20220127011054.zlqtydxbhi4ioj5d@master>
- <9451a3f7-ef63-6d01-1357-4953f3d1e566@suse.cz>
+        id S1344671AbiA2Auy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:50:54 -0500
+Received: from mout.gmx.net ([212.227.15.19]:57869 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241666AbiA2Aux (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 19:50:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643417444;
+        bh=Diw1Yu38TMajSwVTyV0Mz3ACbBBVfaeWXm13ZtCuYo0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=KJ2kLNq2Z32iYHQulMMlqmm8mb2Xok1JZW1B9uiqIX3Z+V4s/EuQ0fnlsIhZp68HS
+         9UEys9vIZhY77JqK6ktCXR48nzVaej5x/akPcby0yOeTfkAhFdrYpiMOqbbjRhzQKn
+         NDbMwRa+sKTOorynT5Fz4IHDjQvRL57xoHPTmZXI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([89.0.80.162]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOREi-1mtKiT1vAM-00Puwe; Sat, 29
+ Jan 2022 01:50:44 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v2] scripts/get_abi.pl: Ignore hidden files
+Date:   Sat, 29 Jan 2022 01:50:18 +0100
+Message-Id: <20220129005019.2090996-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9451a3f7-ef63-6d01-1357-4953f3d1e566@suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:j9u2Zu2cquDw+N6/3IDKCuTSyb2QKViD3fdHEOS3yJit5EzSvUa
+ wzSgrqw4vFkrdpjdthP+AOCfKyLFqAnksVLmmbSh+K+twXh6lxWBnWjIb47SPyvId7Opxvr
+ lJ5Ug9LgrtnnQhZFVUDIfz3qoAdb/OnkIcJ4qYx3cjzESzo3+IWPznTAwgWCqGBLB0OvjKw
+ k5WNJYwdyvvzZsKJzOfsg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hZ+ZOEekVhg=:vFWodCGU08dm9Bpf1qXdvx
+ YpoKSxqtBqtUhTP88Z64L+uf3vdXUq+hJavKFRWcRo9p7ra3xvAzgwPpPnNw7h/vOr/jokqkI
+ LZd5k7eDgPFUQ/69eXlErJAahHNKXGGxpvQt0D7pJRX6cQDnX/fT5/3mRZr8GI5VkQtxbSFPb
+ Pshs300jKa5kZgae4d1GfR8dmC5A5uluIT5xNIXJU4EI+Q5B6yRTNQKUMqLOYPvj3KbCl6ajw
+ CCC7YizbXG2SPjGhcX8h+zpQyQ9OwKSeCkMM4cMMIg/JJTNMg/by8dTketFv+qMv2IrKQWC7a
+ etoCk+xaXACw/f91hSm5g5LBJ1KnwIgXka2XMtJxgWmN9b0sluyQpwyqgwZJF7+hbiQkL0WPf
+ fb68KyNS1T5F9HEV/WRulZujQGrhZiuR1CaG0RhFG6+BRNVIrnGv43HBUgJl2VVNQ5vJm7r2c
+ coEzDuBHPpaLUlNCPMF/ipz5GKcobKPYsjXGqi6wq6E5Rp5aD5OW3JiKzR0y/a51rI5BdC8sl
+ E0jEWC6BGbKdvJp+sg8KrLA6RK0s3lk4CwK2eseqBCMXXJg0lu3Br+qL1CvL+OJru3i3hIL8v
+ FGTadgMbJM8AfEhsvozg52tSYaU3FqyY4+l/Tho3cr6webWxFd3ZdeU3xsi7qUfpB34ijZ3Q8
+ MLYZUwTwTDJnP6+c/FlfqsMRLXdcUNjY6fEKpZC5w7L1EFjANphr+xIUGuL+txXsCwMDgBh3u
+ VuEW0KlpunAlF3HSJY4oNfnxuMyETPEMpxb/Qp49wa5JnR00O/li7yfWqNuAjTFOV++eWHIdf
+ u+0i8VdmIaaB6KqqhCIV5nF4+kbpb1HuK89pjInFGylt5J+Y+magzwxijB/6BQMK1Qlot2jwa
+ f42+B8LReS3wt/YUWZbzcXIgyD16SlzQ06mSSAJy6++tqdS58+trHSdsX18b1cOTGlsQfVUyc
+ 54TrQqmHbUTy3Tt9/7Ch8T0lakoIxQC5Vqbj0lNXSoDv4n0kOt7hu9PyJ/aCnq2V2C0mUP39y
+ XtbtjwXieejZIikxg2gzRaGNcNMvz7A2x1C38VrzGeesBZtvI2zFA2L9TpK5fnO0DrG9UuLPY
+ r249Lbrqeqxars=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 04:42:10PM +0100, Vlastimil Babka wrote:
->On 1/27/22 02:10, Wei Yang wrote:
->> On Tue, Jan 25, 2022 at 11:11:40AM +0100, Vlastimil Babka wrote:
->>>On 1/24/22 23:55, Wei Yang wrote:
->>>> On Mon, Jan 24, 2022 at 11:30:10AM +0100, Vlastimil Babka wrote:
->>>>>On 1/23/22 02:38, Wei Yang wrote:
->>>>>
->>>>>I can offer my insight (which might be of course wrong). Ideally one day
->>>>>page.lru will be gone and only folio will be used for LRU pages. Then there
->>>>>won't be a  FOLIO_MATCH(lru, lru); and FOLIO_MATCH(compound_head, lru);
->>>>>won't appear to be redundant anymore. lru is list_head so two pointers and
->>>> 
->>>> Thanks for your comment.
->>>> 
->>>> I can't imagine the final result. If we would remove page.lru, we could remove
->>>> FOLIO_MATCH(lru, lru) and add FOLIO_MATCH(compound_head, lru) at that moment?
->>>
->>>Yes, or we could forget to do it. Adding it right now is another option that
->>>Matthew has chosen and I don't see a strong reason to change it. Can you
->>>measure a kernel build speedup thanks to removing the now redundant check?
->>>
->> 
->> If we forget to do it, the compile would fail, right?
->
->No, FOLIO_MATCH is like a build-time assert. It can only fail if the assert
->is there, and the condition evaluates to false.
+get_abi.pl currently collects every file in Documentation/ABI. This
+causes a UnicodeDecodeError in Documentation/sphinx/kernel_abi.py,
+when it finds my Vim swap files (.foo.swp) in the directory.
 
-Currently we have this check
+To avoid such issues, ignore hidden files in get_abi.pl.
 
-  FOLIO_MATCH(lru, lru)
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+=2D--
 
-Which checks page->lru and folio->lru.
+v2:
+- Fix abi->api typo
+- Add R-b tag
+=2D--
+ scripts/get_abi.pl | 1 +
+ 1 file changed, 1 insertion(+)
 
-As you mentioned page->lru would be gone. So this check would fail at compile?
+diff --git a/scripts/get_abi.pl b/scripts/get_abi.pl
+index 6212f58b69c61..47b7eca5b0b71 100755
+=2D-- a/scripts/get_abi.pl
++++ b/scripts/get_abi.pl
+@@ -92,6 +92,7 @@ sub parse_abi {
+ 	my $mode =3D (stat($file))[2];
+ 	return if ($mode & S_IFDIR);
+ 	return if ($file =3D~ m,/README,);
++	return if ($file =3D~ m,/\.,);
 
+ 	my $name =3D $file;
+ 	$name =3D~ s,.*/,,;
+=2D-
+2.34.1
 
--- 
-Wei Yang
-Help you, Help me

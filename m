@@ -2,140 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 983FA4A2AA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336194A2AA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237195AbiA2AhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S241158AbiA2Amm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbiA2AhJ (ORCPT
+        with ESMTP id S233942AbiA2Amj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:37:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E435CC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:37:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8326860DBC
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFBFC340E7;
-        Sat, 29 Jan 2022 00:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643416627;
-        bh=ouiW9oGv6HXtWJIQRDQ98A6hortJtyz/aXTnLA/yjuM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pKKn21LmTef1+meSgnLxRAzGVJE/j1YKS9Y2dSpRubtjxTRb7/4pwt/lCvTsx6ErQ
-         wbCW8Qc2RF0ITgt7flUqqqQEmjxAqthzRSnzhvuYNpYeB8QfWjnpBEpKxtC6rdB36m
-         GKeS2w/qimQJJobuAmwz5EC7f/uahexPGRaUSpv72Xkj9I9/EpYiiqTnAnlClCgj+h
-         E20CInzh/K62mSKSlCwa5+17x8/sF/fAyx/sSNltxvwMU7FDW16jov7S1c/Q3kLI5G
-         XQ+BwWnlqB6t4YpuloIvNRYrpOPckYCE1Rxzy3iJSf7wKadLtxgwRbpaaw3+qMfjIF
-         qjnBBlsUfE+mQ==
-Date:   Fri, 28 Jan 2022 16:37:06 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>,
-        Jing Xia <jing.xia@unisoc.com>
-Subject: Re: [PATCH] f2fs: fix to avoid potential deadlock
-Message-ID: <YfSMMpj2GrYXAJK2@google.com>
-References: <20220127054449.24711-1-chao@kernel.org>
- <YfMVxzdhat01ca7m@google.com>
- <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
+        Fri, 28 Jan 2022 19:42:39 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F5FC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:42:39 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id e16so6673697qtq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/3uwQP8SHhp1Z798VpavV4kzs0Y+7l84uUhq28tLIeE=;
+        b=FRTrfCUNI8my/uWB6yKWKFyVGWhZ43aDLzQzSfVa9S/x7cPeNAYceT3sDrLlipz638
+         fcWwBbgYR0cGA7EHq/1bkap2iVdOYkx9XR5Co7S+J8XM1qVcFU3bzTkjjx5e2Gx+6qeR
+         4EwPg+gBHeha7odXHDQUBP9Fu/xagjIDosx5IYOK+Quv7bSVrwqfPUSzm4anBJD6L2PL
+         rE9LIA6bHokEAGRXpUHNUceMs72FLZGPX0zTQj0Sgf0kKLC+xCqkLr/BQsFGJ43Hm2ob
+         SAfwqgXY4wrNVtUDM3WMSoOMJgsYlg/n2rL1PUxGwrQOKM6iJxW2hnFo4Fb/ydcpkGM2
+         aOPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/3uwQP8SHhp1Z798VpavV4kzs0Y+7l84uUhq28tLIeE=;
+        b=wi3hMiOPZpmzPZHsEoiKazvzrNpzLsAp4M9qwuzdGAEUtXqb+HIpkHcnLuLPlIBOrZ
+         zVqI2O1uVqJPUYHN8RnXhis6UUqd9I41rKJLgw13Hpm6d6HiN5fXB2+dSj0EPv6ZjB7+
+         PUNxY92dRMirOPj8eUV3muqQWm0h4wM/cSOxexn5/NHnOtrUruu5B599VHCxRGTHfe1O
+         dpyhir+vX8Ec48wNd+iZbgfXbmXi53vEFKQpRMqF3IeaO1j83Rp10WlRbZSEJJIXYHsv
+         1aXwadnrRQ3EM9xogavdvkxNhOqguCODLab+i6Ufmc9CYh2nRnMrO5twfB5lKP86aOqO
+         LLvA==
+X-Gm-Message-State: AOAM532h/AXvI2q0sYi42efbouSsZWPsa6K1L7+7LMrOSTGCNbJJrRiI
+        BiR4LpeouuCzUN4q0DaZzDE=
+X-Google-Smtp-Source: ABdhPJxBpYKmB+eWPxjhuIkrhQ9GVVY3blEgnclKDGxeLa2Rlkc8kJAAuQKmiqYzamxOffB/NtEm8Q==
+X-Received: by 2002:a05:622a:5ce:: with SMTP id d14mr8215060qtb.642.1643416957534;
+        Fri, 28 Jan 2022 16:42:37 -0800 (PST)
+Received: from WRT-WX9.. ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id 66sm3731055qte.42.2022.01.28.16.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 16:42:37 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH v2] riscv: fix oops caused by irq on/off tracer
+Date:   Sat, 29 Jan 2022 08:42:26 +0800
+Message-Id: <20220129004226.32868-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/28, Chao Yu wrote:
-> On 2022/1/28 5:59, Jaegeuk Kim wrote:
-> > On 01/27, Chao Yu wrote:
-> > > Quoted from Jing Xia's report, there is a potential deadlock may happen
-> > > between kworker and checkpoint as below:
-> > > 
-> > > [T:writeback]				[T:checkpoint]
-> > > - wb_writeback
-> > >   - blk_start_plug
-> > > bio contains NodeA was plugged in writeback threads
-> > 
-> > I'm still trying to understand more precisely. So, how is it possible to
-> > have bio having node write in this current context?
-> 
-> IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
-> during writebacking node_inode's data page (which should be node page)?
+The trace_hardirqs_on/off requires at least two parent call frames.
+If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
+could trigger memory access fault.
 
-Wasn't that added into a different task->plug?
+[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+[    0.041925][    T0] Oops [#1]
+[    0.042063][    T0] Modules linked in:
+[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+[    0.044601][    T0]  ra : restore_all+0x12/0x6e
+[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
 
-> 
-> Thanks,
-> 
-> > 
-> > > 					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
-> > > 					 - f2fs_write_data_pages
-> > > 					  - f2fs_write_single_data_page -- write last dirty page
-> > > 					   - f2fs_do_write_data_page
-> > > 					    - set_page_writeback  -- clear page dirty flag and
-> > > 					    PAGECACHE_TAG_DIRTY tag in radix tree
-> > > 					    - f2fs_outplace_write_data
-> > > 					     - f2fs_update_data_blkaddr
-> > > 					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
-> > > 					   - inode_dec_dirty_pages
-> > >   - writeback_sb_inodes
-> > >    - writeback_single_inode
-> > >     - do_writepages
-> > >      - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
-> > >       - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
-> > >    - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
-> > >   - blk_finish_plug
-> > > 
-> > > Let's try to avoid deadlock condition by forcing unplugging previous bio via
-> > > blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
-> > > due to valid sbi->wb_sync_req[DATA/NODE].
-> > > 
-> > > Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
-> > > Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
-> > > Signed-off-by: Jing Xia <jing.xia@unisoc.com>
-> > > Signed-off-by: Chao Yu <chao@kernel.org>
-> > > ---
-> > >   fs/f2fs/data.c | 6 +++++-
-> > >   fs/f2fs/node.c | 6 +++++-
-> > >   2 files changed, 10 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > > index 76d6fe7b0c8f..932a4c81acaf 100644
-> > > --- a/fs/f2fs/data.c
-> > > +++ b/fs/f2fs/data.c
-> > > @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
-> > >   	/* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
-> > >   	if (wbc->sync_mode == WB_SYNC_ALL)
-> > >   		atomic_inc(&sbi->wb_sync_req[DATA]);
-> > > -	else if (atomic_read(&sbi->wb_sync_req[DATA]))
-> > > +	else if (atomic_read(&sbi->wb_sync_req[DATA])) {
-> > > +		/* to avoid potential deadlock */
-> > > +		if (current->plug)
-> > > +			blk_finish_plug(current->plug);
-> > >   		goto skip_write;
-> > > +	}
-> > >   	if (__should_serialize_io(inode, wbc)) {
-> > >   		mutex_lock(&sbi->writepages);
-> > > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-> > > index 556fcd8457f3..69c6bcaf5aae 100644
-> > > --- a/fs/f2fs/node.c
-> > > +++ b/fs/f2fs/node.c
-> > > @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
-> > >   	if (wbc->sync_mode == WB_SYNC_ALL)
-> > >   		atomic_inc(&sbi->wb_sync_req[NODE]);
-> > > -	else if (atomic_read(&sbi->wb_sync_req[NODE]))
-> > > +	else if (atomic_read(&sbi->wb_sync_req[NODE])) {
-> > > +		/* to avoid potential deadlock */
-> > > +		if (current->plug)
-> > > +			blk_finish_plug(current->plug);
-> > >   		goto skip_write;
-> > > +	}
-> > >   	trace_f2fs_writepages(mapping->host, wbc, NODE);
-> > > -- 
-> > > 2.32.0
+To fix above issue, here we add one extra level wrapper so they can be
+safely called by low level entry code.
+
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+
+---
+v2: fix compile warning.
+---
+ arch/riscv/kernel/Makefile    |  2 ++
+ arch/riscv/kernel/entry.S     | 10 +++++-----
+ arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
+ arch/riscv/kernel/trace_irq.h | 11 +++++++++++
+ 4 files changed, 44 insertions(+), 5 deletions(-)
+ create mode 100644 arch/riscv/kernel/trace_irq.c
+ create mode 100644 arch/riscv/kernel/trace_irq.h
+
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 612556faa527..ffc87e76b1dd 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+ obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+ 
++obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
++
+ obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+ obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index ed29e9c8f660..d6a46ed0bf05 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -108,7 +108,7 @@ _save_context:
+ .option pop
+ 
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+@@ -143,7 +143,7 @@ skip_context_tracking:
+ 	li t0, EXC_BREAKPOINT
+ 	beq s4, t0, 1f
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ #endif
+ 	csrs CSR_STATUS, SR_IE
+ 
+@@ -234,7 +234,7 @@ ret_from_exception:
+ 	REG_L s0, PT_STATUS(sp)
+ 	csrc CSR_STATUS, SR_IE
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ #ifdef CONFIG_RISCV_M_MODE
+ 	/* the MPP value is too large to be used as an immediate arg for addi */
+@@ -270,10 +270,10 @@ restore_all:
+ 	REG_L s1, PT_STATUS(sp)
+ 	andi t0, s1, SR_PIE
+ 	beqz t0, 1f
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ 	j 2f
+ 1:
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ 2:
+ #endif
+ 	REG_L a0, PT_STATUS(sp)
+diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
+new file mode 100644
+index 000000000000..fc194c56a35d
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++
++#include <linux/irqflags.h>
++#include <linux/kprobes.h>
++#include "trace_irq.h"
++
++/**
++ * trace_hardirqs_on/off requires at least two parent call frames.
++ * Here we add one extra level so they can be safely called by low
++ * level entry code.
++ */
++
++void __trace_hardirqs_on(void)
++{
++	trace_hardirqs_on();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_on);
++
++void __trace_hardirqs_off(void)
++{
++	trace_hardirqs_off();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_off);
+diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
+new file mode 100644
+index 000000000000..99fe67377e5e
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++#ifndef __TRACE_IRQ_H
++#define __TRACE_IRQ_H
++
++void __trace_hardirqs_on(void);
++void __trace_hardirqs_off(void);
++
++#endif /* __TRACE_IRQ_H */
+-- 
+2.32.0
+

@@ -2,143 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7A34A30EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 18:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE024A30DC
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 18:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352923AbiA2RCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 12:02:54 -0500
-Received: from mga05.intel.com ([192.55.52.43]:44386 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352962AbiA2RCZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 12:02:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643475746; x=1675011746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W7DZG6qmcOjEcEDWWfMSe6v88eVVQD1gFgLStlTGeVA=;
-  b=MEX2RksDOMmrgvutXoQVgcRYFhivLMi0xWhM25TkeLUlIAms7WjIzwyr
-   e1XTGf3gIFggyJ+gefNW+9t8tT/3YNjJhfgNUAzzQrthUMnQG5hO9wZGB
-   xnEwBW2tEXf+en+g0qUof6/nehUWa9yOCVryKiHN5DP+mVmMNwZjZskYZ
-   b6I5wEzSA8Kxu24Przy8J41oR3KfsujVuJDy820hTLHA9gjQOzPFjOHX9
-   ZPCu7aVjjv7IIJA83/Mdwg3wLqcddzNoP44ofttFzkKTdYyAAvTgiQNQb
-   +YzvOKwV4WAstZNCvWL+UsHZduQcjmd4UKctHqoUigR1yw1zUtl6/4aEj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="333638913"
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="333638913"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 09:02:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="522063039"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jan 2022 09:02:21 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDr7E-000PQO-Vz; Sat, 29 Jan 2022 17:02:20 +0000
-Date:   Sun, 30 Jan 2022 01:01:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jordy Zomer <jordy@pwning.systems>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Jordy Zomer <jordy@pwning.systems>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com
-Subject: Re: [PATCH] dm ioct: prevent potential specter v1 gadget
-Message-ID: <202201300033.eThgyeLo-lkp@intel.com>
-References: <20220129143722.3460829-1-jordy@pwning.systems>
+        id S243989AbiA2RCI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 29 Jan 2022 12:02:08 -0500
+Received: from mail-eopbgr120075.outbound.protection.outlook.com ([40.107.12.75]:14542
+        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235519AbiA2RCF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 12:02:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LkmIiCXT4ziPRqsLlezbz2h5AhfE8z9FKOljrTvAaJqSV7C+O/jNh8mqFHOg2MV3O6GzIdOg0kSvG/NxA4mC9l9Gr0qA9+V5F6fkmgQRXN9aHH4Ec6krYi6uPwfEwaHoXVEuEaxCGudkNaK0zCryNxyVlRLfmVERTsKFOaKpbg3fVGooQPMVVDL7F5W4QZ7lO04yYXIvJKuG3udVG3+QtXWfQVINiS7/XfhVHZRf2hqhNcICr3iFy/ZqmpeWggvT1YP+YnU4A55pjh5Y+lS2IRRTZTHIabVxlj5kezCLfqYGWJu1hesIkRAyBAPbB56ZT3BetRZx3Hs1sPEZvzRfrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DFe2jru4e765k+AtEaywltcFddJL0rBEMrtvg51fbp8=;
+ b=nwBiU1qFnoXLEw+8x7ZxGxgk62DZauDrHVgA2U8tOyZsU+mGEyX71bWPV1S1uEiqgGzIukk5oq5TnztBHU2MMGtdQWeBemdtqsZDRd2yk9MtSrb0o0qfF0+NKSP4+lpjfmZRNMwAkKQN8F88LiJZUWmprqDSSIefbSenNvK1sgaJzHx/y8rp9wGqFGFOFTiHD81wVfPoyPmkn6D+4cTGIVQVDwbZ9dPmLbDxkkpFsTDIn5czzhaPOSY2Z2+lhmbi65Qbnsn51dQmPKjvQFMTvaRLcmNmXi2OP2Qee1RfEtRSr3Edg4DdAQHvaEGDRkf2NNSuBiBxonI7+ovv5cg0Uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2584.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e3::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sat, 29 Jan
+ 2022 17:02:03 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.020; Sat, 29 Jan 2022
+ 17:02:03 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: [PATCH v3 0/6] Allocate module text and data separately
+Thread-Topic: [PATCH v3 0/6] Allocate module text and data separately
+Thread-Index: AQHYFTHvUwh0xR1dj0+CyueZIq28OA==
+Date:   Sat, 29 Jan 2022 17:02:03 +0000
+Message-ID: <cover.1643475473.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 892d4223-8cff-472b-6752-08d9e3491279
+x-ms-traffictypediagnostic: PR0P264MB2584:EE_
+x-microsoft-antispam-prvs: <PR0P264MB2584A5D015F68D597D1E572EED239@PR0P264MB2584.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RKfoTkUtOawyjK5uczxHEECkyxYbemWn3txATQY9icTrbqBP8t8MGPN/9mIi/qPMlalfA3NzT5o7aSK6+bqO0Fd+phGV5a2+egkbzNq8eNQ6q+2Tuw5s5uHq0nFoRzj8tWZD+R5JdD+LwKjXh023r1ZnU6ZwvSG0x9x2OHb9qEfFyhPsEVGF0291F75yJ2iyx4Je5bigwgNf13gwIWM8d0yLQZXJT2oTzcDZSDLB3P7wyY7cWr+N2EtCiqXRn3imWUpzzTZniItsD0so2BDeXBTQbJJLY6fJ3Mcd4/oQz7wQ+1QMI1j04PF8vMrIDWVxQIrSqKf4iK7onxgoDrSPZp8bWgCPpzorFDWNmh/092DBOdEd2vCesyMhKubrLwxSma44E5WX9qho2XBtWornC3hMHZdkuqT2V5tQiazcXi8a/HEbxClufevt8hOVHEi8hr185WFyD2qZmvSfwUUy+vb4haPbEn19SQn9AcG5ktLCneNH1Vo6Nqx4yzIScIGIFta3QMCwlxxXG3Cugg6nQIMUpqpiKUu3ccTijdaPVNoVhJyXhicB8FS1IYEg1+Pdkb2Ce6MivnNqGXNLmI3g13xfRUsGZ7Lc62/cd+caobzqDIvzQEiGZMedm7dfwepkUTWvs053hrXPpyR6H1v0VY8W3U/f/NmveGclr0D/tw4fVsWYAF32ZG4vf2KCCe2fZls76ynsBX8oPwhLWs2A6Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(110136005)(6512007)(2906002)(86362001)(6486002)(508600001)(4326008)(122000001)(38100700002)(91956017)(316002)(76116006)(26005)(64756008)(6506007)(8936002)(186003)(5660300002)(44832011)(66476007)(66556008)(71200400001)(66946007)(8676002)(66446008)(83380400001)(2616005)(36756003)(38070700005)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?20FFZVBRKvjedqRUl/SSTnbdtLAYkCaoCuzqhwUGtys4VKy4HrtuzssWDR?=
+ =?iso-8859-1?Q?7X9M/JRHJh3FP+np6aBauLAPIRY7LlF2pP5GyqcdWJNXMy2orfkG6sxmZC?=
+ =?iso-8859-1?Q?VBZug+EAig9nedRdjzMj9SGTxBVkUDHPvAVRBSU09DJO+IIKyrVSX7BX7O?=
+ =?iso-8859-1?Q?bAKMEb3enosmeIelB297yzVU2YerWMJxa2EIsbRDnI9UgCGwkPrzWdOuX7?=
+ =?iso-8859-1?Q?SmJfX6vuucCOiuJDyG5AQtTAFXGW28TreBgqwncUK2TCil+2bRq23sY7LP?=
+ =?iso-8859-1?Q?9v9Ara+u9Nwd3RuI1utiR4XBxW4Gh3pVcUccyF3CWnXBWStJDtPefMI0Qj?=
+ =?iso-8859-1?Q?2NPWa2ZRdRGcwJLTuEYfeNAoJYoARJmVgQjc4C9rsUrBWidTZh2Ugy2m5k?=
+ =?iso-8859-1?Q?jVrSPTqmZSI4zvR/oJ4zFpLxAQqa+zcPWL+xVSyYVjqLXf+0mQbLODW964?=
+ =?iso-8859-1?Q?xHGqqfyFQ9mD5tsOxZRvtg0SbLQ8FGVPZg4oBrvtyI4m0kSuhqA/ic8AmR?=
+ =?iso-8859-1?Q?LiMA16eHozarleSUZAPD5zp7ycB2PTNTUq7zoLW8pva1l6m73ecG9ui0oy?=
+ =?iso-8859-1?Q?7PE6BZExxhsI+mqyyx3aezQS+iBcGueLe640LcwFwl/oKdnCJtkfKSrBCF?=
+ =?iso-8859-1?Q?cUPHDaD4Demp+zhbPdSovxaXGTE6oF6HMeE7vcjtjWYAw+6Vox//mnbUDu?=
+ =?iso-8859-1?Q?vUZfBQx6OdutWF8WFfj6vS9qh7UlTT/n5SZEASi1nMN+soXj6W4M1RGVYc?=
+ =?iso-8859-1?Q?IAevN8l5xTy9EY+hmmo4FqsCSmHu2Ha+MSi00eXoPZCChcNs772TimSqft?=
+ =?iso-8859-1?Q?mvDbMzb2I8itaODDqbohNpzp7Nzd86/Oy6MKKfg4Cd2qRs3DYr7ZHCPOcI?=
+ =?iso-8859-1?Q?b63lA6+tncllH0F586rSwhK+mfo0lwnD/m8W1G12OAfzpIXxkezdwj65ZB?=
+ =?iso-8859-1?Q?o4TVj2QJcg78UkAMC2e4b00cC+koXfQqcU2IwbYhD536FkWw4HdcFCzorQ?=
+ =?iso-8859-1?Q?NpwKXazzRfnIT1sxeKyLPk9KLgVF2VX4BNcO6HnmS314FECqmVSVZ7jMvd?=
+ =?iso-8859-1?Q?x8jgiKEhDtTZCGVKP/95mMz4OMsOkaaybj9Och8XvS4833OiPXsMLJ9b5v?=
+ =?iso-8859-1?Q?BHqpowX1FTnkG7yN12oseJlw2olcTsjUVd3bNs+UktcaNmKaGtK2q4bHqU?=
+ =?iso-8859-1?Q?Jc2+9UXdOPqEP9hHJMzfZomBiXbiBo+ajMFg/pdkDi+UgfMYao1eg/mc23?=
+ =?iso-8859-1?Q?4lBCFQR3EjOVU4sgFlC0b8JH7tG3o7euD4+TRvhunWkqosL8q7g6JIv5iC?=
+ =?iso-8859-1?Q?0ot2xzJB9hfL2uQjBadlMCH0CklzQbR5uJqFoeRzDOYQgOw1QMAVjjGwu4?=
+ =?iso-8859-1?Q?BbUZ0twOPEb12z6ri3xiweVKSHxW1qLjK7RfxwlrnTUvsC2n6dr3sCbZCn?=
+ =?iso-8859-1?Q?ZkzhmpFS8ohXLZjKpRiwAq12xEjIjExC6Yy4N5PzbL67jRenZ1C1AKoMUV?=
+ =?iso-8859-1?Q?boVshmuJxoUYUvTWi017IuXxLUCc2Hnsh9htcvyiM2aj7nbF8cDIZRYA2D?=
+ =?iso-8859-1?Q?/KTDBC8z0C12VLKQmzKuSoJid97Akj3TxhQPWunLOQrJPzWppcTIjMJRXj?=
+ =?iso-8859-1?Q?NNsdlCrF/BSNw9okwpAlpdAj56Icd66xahMBpkO5BGFxrQdZ4sHUHxztaq?=
+ =?iso-8859-1?Q?yoOs3qKmII1uZmXCCToJMqxEXftJeKPs3OdZNvzh6sV/ECcYuHui7X98Rk?=
+ =?iso-8859-1?Q?YObev7s6DDDu+oaqkJuZkNUmA=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129143722.3460829-1-jordy@pwning.systems>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 892d4223-8cff-472b-6752-08d9e3491279
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jan 2022 17:02:03.0606
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yMU6eVPzk9t5QNlyd7FgGd6fDDBSBK6/4w4wjs9bqsy31YHUXQoC5yuSbSyKke1IPtSEMfUydPDLLs4it14pucPnlsIoiXXzcTS8y6VPzh4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2584
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jordy,
+This series allow architectures to request having modules data in
+vmalloc area instead of module area.
 
-Thank you for the patch! Yet something to improve:
+This is required on powerpc book3s/32 in order to set data non
+executable, because it is not possible to set executability on page
+basis, this is done per 256 Mbytes segments. The module area has exec
+right, vmalloc area has noexec. Without this change module data
+remains executable regardless of CONFIG_STRICT_MODULES_RWX.
 
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on linux/master linus/master v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This can also be useful on other powerpc/32 in order to maximize the
+chance of code being close enough to kernel core to avoid branch
+trampolines.
 
-url:    https://github.com/0day-ci/linux/commits/Jordy-Zomer/dm-ioct-prevent-potential-specter-v1-gadget/20220129-223840
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-config: hexagon-buildonly-randconfig-r001-20220129 (https://download.01.org/0day-ci/archive/20220130/202201300033.eThgyeLo-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/494fed5461aa05e0efaf098b57a2a47dc19ba226
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jordy-Zomer/dm-ioct-prevent-potential-specter-v1-gadget/20220129-223840
-        git checkout 494fed5461aa05e0efaf098b57a2a47dc19ba226
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/md/
+Changes in v3:
+- Fixed the tree for data_layout at one place (Thanks Miroslav)
+- Moved removal of module_addr_min/module_addr_max macro out of patch 1 in a new patch at the end of the series to reduce churn.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes in v2:
+- Dropped first two patches which are not necessary. They may be added back later as a follow-up series.
+- Fixed the printks in GDB
 
-All errors (new ones prefixed by >>):
+Christophe Leroy (6):
+  modules: Always have struct mod_tree_root
+  modules: Prepare for handling several RB trees
+  modules: Introduce data_layout
+  modules: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+  modules: Remove module_addr_min and module_addr_max
+  powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and
+    8xx
 
->> drivers/md/dm-ioctl.c:1791:8: error: implicit declaration of function 'array_index_nospec' [-Werror,-Wimplicit-function-declaration]
-           cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
-                 ^
-   1 error generated.
+ arch/Kconfig                |   6 ++
+ arch/powerpc/Kconfig        |   1 +
+ include/linux/module.h      |   8 ++
+ kernel/debug/kdb/kdb_main.c |  10 +-
+ kernel/module.c             | 193 +++++++++++++++++++++++++-----------
+ 5 files changed, 156 insertions(+), 62 deletions(-)
 
-
-vim +/array_index_nospec +1791 drivers/md/dm-ioctl.c
-
-  1752	
-  1753	/*-----------------------------------------------------------------
-  1754	 * Implementation of open/close/ioctl on the special char
-  1755	 * device.
-  1756	 *---------------------------------------------------------------*/
-  1757	static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
-  1758	{
-  1759		static const struct {
-  1760			int cmd;
-  1761			int flags;
-  1762			ioctl_fn fn;
-  1763		} _ioctls[] = {
-  1764			{DM_VERSION_CMD, 0, NULL}, /* version is dealt with elsewhere */
-  1765			{DM_REMOVE_ALL_CMD, IOCTL_FLAGS_NO_PARAMS | IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, remove_all},
-  1766			{DM_LIST_DEVICES_CMD, 0, list_devices},
-  1767	
-  1768			{DM_DEV_CREATE_CMD, IOCTL_FLAGS_NO_PARAMS | IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, dev_create},
-  1769			{DM_DEV_REMOVE_CMD, IOCTL_FLAGS_NO_PARAMS | IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, dev_remove},
-  1770			{DM_DEV_RENAME_CMD, IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, dev_rename},
-  1771			{DM_DEV_SUSPEND_CMD, IOCTL_FLAGS_NO_PARAMS, dev_suspend},
-  1772			{DM_DEV_STATUS_CMD, IOCTL_FLAGS_NO_PARAMS, dev_status},
-  1773			{DM_DEV_WAIT_CMD, 0, dev_wait},
-  1774	
-  1775			{DM_TABLE_LOAD_CMD, 0, table_load},
-  1776			{DM_TABLE_CLEAR_CMD, IOCTL_FLAGS_NO_PARAMS, table_clear},
-  1777			{DM_TABLE_DEPS_CMD, 0, table_deps},
-  1778			{DM_TABLE_STATUS_CMD, 0, table_status},
-  1779	
-  1780			{DM_LIST_VERSIONS_CMD, 0, list_versions},
-  1781	
-  1782			{DM_TARGET_MSG_CMD, 0, target_message},
-  1783			{DM_DEV_SET_GEOMETRY_CMD, 0, dev_set_geometry},
-  1784			{DM_DEV_ARM_POLL, IOCTL_FLAGS_NO_PARAMS, dev_arm_poll},
-  1785			{DM_GET_TARGET_VERSION, 0, get_target_version},
-  1786		};
-  1787	
-  1788		if (unlikely(cmd >= ARRAY_SIZE(_ioctls)))
-  1789			return NULL;
-  1790	
-> 1791		cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
-  1792		*ioctl_flags = _ioctls[cmd].flags;
-  1793		return _ioctls[cmd].fn;
-  1794	}
-  1795	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.33.1

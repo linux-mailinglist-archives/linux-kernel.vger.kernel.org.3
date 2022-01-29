@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C5B4A2DA3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 11:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E774A2DAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 11:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237084AbiA2K13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 05:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S238531AbiA2Kc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 05:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiA2K1Z (ORCPT
+        with ESMTP id S229987AbiA2Kc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 05:27:25 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1AAC061714;
-        Sat, 29 Jan 2022 02:27:25 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 270DF1EC0501;
-        Sat, 29 Jan 2022 11:27:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643452037;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AeMz8utJPjiFofsQ6mF6x/vbEjaSoinR7o1iyyLw8Cw=;
-        b=SN18OmDj+GbYBib29R2reyRvEyZD0+slBoHelzKf/froKnaX6ZCcfGVkGBJrjqgLwz7PKK
-        BTkU9h2E5QWrnzUda8K2NSIGtBO1fxJ/zPknHWvAlj68G7ElCHoMv858/Hd86Toroe9NJD
-        gLJAJH1HoQSqgywzuN4l/5QQnvvk8VY=
-Date:   Sat, 29 Jan 2022 11:27:13 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 36/40] x86/sev: Provide support for SNP guest request
- NAEs
-Message-ID: <YfUWgeonL4tfGf8P@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-37-brijesh.singh@amd.com>
- <YfLGcp8q5f+OW72p@zn.tnic>
- <87d4999a-14cc-5070-4f03-001dd5f1d2b1@amd.com>
+        Sat, 29 Jan 2022 05:32:27 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE7EC061714;
+        Sat, 29 Jan 2022 02:32:26 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id q22so12524378ljh.7;
+        Sat, 29 Jan 2022 02:32:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=M8KppXZwkQSQWhLcBO/fg1G7bhttmzdUMDjxY3POSRc=;
+        b=KYcUA2p/u0YUGwacjhosNfy6/MHCmvfyLeV7o9hkVTyZtzJe9N4W9DkjAJHmHCBpbD
+         4xcRPkZhMgS8zZsVFRqMRgjSJXNI3paToeVAX5Y6l5md3kVF3gejygqPx2A2fZx04Byy
+         0K28Y0EXQMvRSypEcGq780su83T2Wlkw5hvbhl2/J6dd7nyDdSvc2fhkQT+hKK0m1j37
+         uKGKAKDjt3HcHeuxtVUF4bfKWvElYsXUHBzFAs57ATbc4pPTXj/PqBAMjox2t41y1Eh+
+         YLDv/7FbANJF4pXnbMXEmw5hhHi1q+7ncSVFZrjRuFUOVG/mBa+YO6AUK0wKx7kf6qp2
+         Tkrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=M8KppXZwkQSQWhLcBO/fg1G7bhttmzdUMDjxY3POSRc=;
+        b=MUiqOU0o31L9+yMjoATN5Z/E5WdslIjfz8ew7CsWeFNXtw0Iz5qbyIjPRniQdsZlH9
+         /ETFffdnEpWMJe3bamXVzIkEM8IOtPzEYPLqNTM1/63YVxuFCGfHlCxvR0fuRA4Q6QVC
+         4npFvetjfQWJfl50dtQKC7r0nXz2metnd8u1MHOl0AzXP7+4pexRfkILPyQ9KGL6IIuK
+         c1/NeJi1Q3JntOyZJIvtJbKPszAZdtA4VDxPcHJbdIIFMhkMbR9jFjeno4YVcP20unlD
+         C6XMVNoZEDEXwYTzAD57u61hXP2LZf2ByHC3ZTY7UWIUt8MlsJj64qq3c29hqGz9Bx2b
+         Zq5A==
+X-Gm-Message-State: AOAM533/J6UkAc/46WlreFDnixaec2Yfbv1qXhmslqbSma8x6XLCu7ba
+        +5QgT1LQkspUFiS0I1EnB3SzzV89dk8=
+X-Google-Smtp-Source: ABdhPJwHr9BlhoIOQVT34MoP/cSFcrqcUz/v8macj0lwehEYlcwRDIrSo/596bJ42uJya5xVQysz/Q==
+X-Received: by 2002:a2e:9594:: with SMTP id w20mr7906708ljh.448.1643452344673;
+        Sat, 29 Jan 2022 02:32:24 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.86.18])
+        by smtp.gmail.com with ESMTPSA id s18sm1705138ljs.115.2022.01.29.02.32.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Jan 2022 02:32:23 -0800 (PST)
+Subject: Re: [PATCH v2] usb: usb251xb: add boost-up property support
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     linuxfancy@googlegroups.com,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220127231437.10893-1-tomm.merciai@gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <978bc09c-b963-566b-8fa4-a53f1e5c569b@gmail.com>
+Date:   Sat, 29 Jan 2022 13:32:21 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20220127231437.10893-1-tomm.merciai@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87d4999a-14cc-5070-4f03-001dd5f1d2b1@amd.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:02:13AM -0600, Brijesh Singh wrote:
-> I am okay with using SZ_4G but per the spec they don't spell that its 4G
-> size. It says bit 32 will should be set on error.
+Hello again!
 
-What does the speck call it exactly? Is it "length"? Because that's what
-confused me: SNP_GUEST_REQ_INVALID_LEN - that's a length and length you
-don't usually specify with a bit position...
+On 1/28/22 2:14 AM, Tommaso Merciai wrote:
 
-> Typically the sev_es_ghcb_hv_handler() is called from #VC handler, which
-> provides the context structure. But in this and PSC case, the caller is not
-> a #VC handler, so we don't have a context structure. But as you pointed, we
-> could allocate context structure on the stack and pass it down so that
-> verify_exception_info() does not cause a panic with NULL deference (when HV
-> violates the spec and inject exception while handling this NAE).
+> Add u8 property to support boost-up register of usb251xb hub.
+> boost-up property control USB electrical drive strenght
 
-Yap, exactly.
+   Strength.
 
--- 
-Regards/Gruss,
-    Boris.
+> This register can be set:
+> 
+>  - Normal mode -> 0x00
+>  - Low         -> 0x01
+>  - Medium      -> 0x10
+>  - High        -> 0x11
+> 
+> (Normal Default)
+> 
+> References:
+>  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+> 
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> ---
+> Changes since v1:
+>  - Fix patch as suggested by RLeitner
+> 
+>  drivers/usb/misc/usb251xb.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> index 507deef1f709..b60ab148e6ac 100644
+> --- a/drivers/usb/misc/usb251xb.c
+> +++ b/drivers/usb/misc/usb251xb.c
+> @@ -543,6 +543,8 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+>  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+>  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+>  
+> +	of_property_read_u8(np, "boost-up", &hub->boost_up))
 
-https://people.kernel.org/tglx/notes-about-netiquette
+   Isn't it hub->boost_up left uninitialized if an error occurs here?
+
+[...]
+
+MBR, Sergey

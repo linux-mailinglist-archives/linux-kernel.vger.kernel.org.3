@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6E94A2D36
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B444A2D41
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352591AbiA2IkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 03:40:14 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:38579 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352565AbiA2IkM (ORCPT
+        id S243779AbiA2Ixn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 03:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232415AbiA2Ixm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 03:40:12 -0500
-Received: from [77.244.183.192] (port=65236 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nDjHF-000AeJ-QV; Sat, 29 Jan 2022 09:40:09 +0100
-Message-ID: <4532b372-f16a-7658-623d-71af93306e44@lucaceresoli.net>
-Date:   Sat, 29 Jan 2022 09:40:06 +0100
+        Sat, 29 Jan 2022 03:53:42 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD20C061714;
+        Sat, 29 Jan 2022 00:53:41 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id v3so7409265pgc.1;
+        Sat, 29 Jan 2022 00:53:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=a05V4ozyXx2YyDX8DIWgRjjIxEZoALk0gSpI8hkYt60=;
+        b=Kj0r4g1ZMDIk4p86Ak/uNjXu8XRB31hUfA5AIWSl/JY2D/YIW73E0ABXKWNkakq06K
+         bD3HxcnN5YBgQ8kpKoF4nG4uY3FmlVySxYiR/3alBcF5zTWkcqC3YMXSq6ZLRZNVs5cN
+         I7kdhupFLui17WWvAilOLJyQkiBboFQncqKR9aKui8lEQdoDevPRHz+gynR23eu/mVty
+         VkKFF0ky7YeUwpApt94TvCUa+Y7EvPIN2NnJ20N/ecaeWRJ4B5Vk4w5nK5uoegYs1gAO
+         rafAteQmE8PD4W4Bkt5di+eQDMTm4S8m9r/AUvapAnB1/BBe6VBfLe42WzV05U4oTnZ+
+         su1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=a05V4ozyXx2YyDX8DIWgRjjIxEZoALk0gSpI8hkYt60=;
+        b=qlMno8WhmxFSCYcXptgkuqafcl6dYezQ3nVVA733A7g01dJGU+AjHqfPhuRchoBg4b
+         vjh/O8qVgj6Tlrb9V3WDvoy0sxZXO2wIeXTdO5gHO0wsy3cMgt3mTJq7mXrgZ2cLin18
+         igQquvl2cm9HCX7vTLmidL1Cilxs8EVxHSkza20kFqxvQ25CUskHpcQ0McpW7zLKtW6b
+         ncWZZwk1SB7z5FExyvYWctV6DCAeXsjAUM+TIJwtef60no/vZ4krNOxE4EDUp6IxtZXV
+         XdNa7SMvcv80k8o+PqnepddQF7jkD/V22ORhNSDjc5sAqrqhIv5InXSH4ys0O2Mf+w+O
+         SX3w==
+X-Gm-Message-State: AOAM532sA6PBkN919lvxfkisRDhfgcQcf1UaxAa40Cqv0jg//M/sN8QA
+        3Wlz9YVZKvMn1XnTMCvKYRihjacqVQvjuw==
+X-Google-Smtp-Source: ABdhPJwRqs7csuGE/JE8h2SQ5QQd9S5Ru37Nko/elf0xCLUdsYZWj73lOjH2Dd+GWfHYlVACp+FWow==
+X-Received: by 2002:a05:6a00:884:: with SMTP id q4mr11570615pfj.81.1643446421000;
+        Sat, 29 Jan 2022 00:53:41 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id k21sm11932108pff.33.2022.01.29.00.53.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 00:53:40 -0800 (PST)
+Date:   Sat, 29 Jan 2022 08:53:36 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     jwiedmann.dev@gmail.com, Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sameeh Jubran <sameehj@amazon.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [PATCH v2] net: ena: Do not waste napi skb cache
+Message-ID: <YfUAkA9BhyOJRT4B@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
- only)
-Content-Language: en-US
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
- <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
-In-Reply-To: <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee, all,
+By profiling, discovered that ena device driver allocates skb by
+build_skb() and frees by napi_skb_cache_put(). Because the driver
+does not use napi skb cache in allocation path, napi skb cache is
+periodically filled and flushed. This is waste of napi skb cache.
 
-On 11/01/22 11:10, Luca Ceresoli wrote:
-> Hi All,
-> 
-> On 11/12/21 18:59, Luca Ceresoli wrote:
->> Hi,
->>
->> this series adds minimal drivers for the Maxim Semiconductor MAX77714
->> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
->> Only RTC and watchdog are implemented by these patches.
->>
->> All implemented functionality is tested and working: RTC read/write,
->> watchdog start/stop/ping/set_timeout.
->>
->> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
->> indentation and can probably be applied easily.
->>
->> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
->> rtc driver.
-> 
-> A gentle ping about this series. It's at v5, all patches have at least
-> one ack/review tag and most patches are unchanged since ~v2. It applies
-> cleanly on current master.
-> 
-> Is there anything I should do to help making progress?
+As ena_alloc_skb() is called only in napi, Use napi_build_skb()
+and napi_alloc_skb() when allocating skb.
 
-Apologies for pinging again... but as I got no further comments about
-these patches I guess I can really do nothing at the moment.
+This patch was tested on aws a1.metal instance.
 
-Lee, is this series completely in charge to you or should it be applied
-by the respective subsystem maintainers?
+[ jwiedmann.dev@gmail.com: Use napi_alloc_skb() instead of
+  netdev_alloc_skb_ip_align() to keep things consistent. ]
 
-Thanks.
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Acked-by: Shay Agroskin <shayagr@amazon.com>
+---
+ drivers/net/ethernet/amazon/ena/ena_netdev.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 53080fd143dc..07444aead3fd 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -1400,10 +1400,9 @@ static struct sk_buff *ena_alloc_skb(struct ena_ring *rx_ring, void *first_frag)
+ 	struct sk_buff *skb;
+ 
+ 	if (!first_frag)
+-		skb = netdev_alloc_skb_ip_align(rx_ring->netdev,
+-						rx_ring->rx_copybreak);
++		skb = napi_alloc_skb(rx_ring->napi, rx_ring->rx_copybreak);
+ 	else
+-		skb = build_skb(first_frag, ENA_PAGE_SIZE);
++		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
+ 
+ 	if (unlikely(!skb)) {
+ 		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail, 1,
 -- 
-Luca
+2.33.1
+

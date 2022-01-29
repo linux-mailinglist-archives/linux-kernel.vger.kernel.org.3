@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2965E4A2FEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 14:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2D84A2FF7
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 15:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351992AbiA2Ny6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 08:54:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38664 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351603AbiA2Nyv (ORCPT
+        id S237141AbiA2OHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 09:07:12 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:50823 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234194AbiA2OHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 08:54:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA59560DDF
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 13:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4AFC5C340E8;
-        Sat, 29 Jan 2022 13:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643464490;
-        bh=txDhPLoRtaiqqFGWfzdVLSVMptV59oFvuQI9M00RGGs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=DD9QPqsvyF+EMGn3/pAeGDKnyxbOFJot/E0CNhV1pnmeZrl119pBJy88680Cwbivw
-         keHfnZRno7toS/egxEqeECzORIDplqaGBh+aWH0uaOgHKMOdsjssohEtTj4wX5cqLX
-         Bt2aKkVzz620ysYRcwqJGdj6IiV17KXBMc4gEh8IGAe0x0PotLRj+2qozW3xGTq5uQ
-         rvXHg5esRiAEW31uHSIZj+whPi7X+hFy0tS7XMiIpDEfpflHYSIDqk+15PMdfxIvHZ
-         vZjBY7xr+9iQkSkf7RERFUapQvbmkYDhs2Wb1WVU/VGGWXLKiZOi5y2z+TLm7Eicdl
-         ET+C367GzApzA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3AF72E5D07E;
-        Sat, 29 Jan 2022 13:54:50 +0000 (UTC)
-Subject: Re: [GIT PULL] Char/Misc driver fixes for 5.17-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YfU9LsK5kzsyBmRH@kroah.com>
-References: <YfU9LsK5kzsyBmRH@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YfU9LsK5kzsyBmRH@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.17-rc2
-X-PR-Tracked-Commit-Id: fc55e63e148f1db2180867da875460a00aac8bd1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e255759e5afbc233544d7246ad325417320e90b6
-Message-Id: <164346449023.28926.3850708576063394912.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 Jan 2022 13:54:50 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+        Sat, 29 Jan 2022 09:07:10 -0500
+Received: by mail-io1-f72.google.com with SMTP id m185-20020a6bbcc2000000b00605898d6b61so6444847iof.17
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 06:07:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=0yID9FBNEnlHIDDPVExH7+jnkGuixmiFgWV9iVk8uAw=;
+        b=Bip5g7yCmjqJGOzIg6oYds0VGALIgPTUlCHwX76pqoTuXtgqbWLMKghGUkaT9LAWWd
+         XJ0NwzFEaOBfnrOSYt/lOjKrgV3hG8+zA9CEuv0wqdwNIvex+JwZwKJMVXW+55fXnQ1a
+         WsCCp0XTQsuOG5ok277hjPuR2sdi+O9JlEK7hdS0U9o1op88L+nYZPWPj66jqDomZK1k
+         XMlgEUrd9cX5pkWINH0vNivTlBj3vh5CyowdzIBDOd/zZ7jJPrlQZh/GYd4yIwp8vR7n
+         sdUny4eXYjQ1vzmTvVoGRedpCJJXUcarhOOrqsViSsUzUsMEZ3VmwuWAn0CIVt1FmxGV
+         6avA==
+X-Gm-Message-State: AOAM531QWRh7m8Yh20dihEQillN5Ss4qI9yhp152rj8VojvvD+IoAwgU
+        ij7QMlg8AdqUQuhpDSVzj9syibT7L5U/82rzyqhQvulcbleX
+X-Google-Smtp-Source: ABdhPJys2smNcd54wqnufpsY+9aFghoE3qs6+teGCIqgvZBHcvUKkSP+xokUF3PxNaUW5iPcGnSHcmzTLIMObGaNGwv6yrAlWEs8
+MIME-Version: 1.0
+X-Received: by 2002:a6b:3b8a:: with SMTP id i132mr7981765ioa.85.1643465229580;
+ Sat, 29 Jan 2022 06:07:09 -0800 (PST)
+Date:   Sat, 29 Jan 2022 06:07:09 -0800
+In-Reply-To: <000000000000ab6df705b453993a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000035befb05d6b91185@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
+ bitfill_aligned (2)
+From:   syzbot <syzbot+a4edd73d589b0b7efbeb@syzkaller.appspotmail.com>
+To:     b.zolnierkie@samsung.com, bugs-a21@moonlit-rail.com,
+        dri-devel@lists.freedesktop.org, javierm@redhat.com,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime@cerno.tech, ngraniel@cocobongo.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 29 Jan 2022 14:12:14 +0100:
+syzbot suspects this issue was fixed by commit:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.17-rc2
+commit 0499f419b76f94ede08304aad5851144813ac55c
+Author: Javier Martinez Canillas <javierm@redhat.com>
+Date:   Mon Jan 10 09:56:25 2022 +0000
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e255759e5afbc233544d7246ad325417320e90b6
+    video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
 
-Thank you!
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1752f5c0700000
+start commit:   2a987e65025e Merge tag 'perf-tools-fixes-for-v5.16-2021-12..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7d5e878e3399b6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=a4edd73d589b0b7efbeb
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16671badb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122beabdb00000
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

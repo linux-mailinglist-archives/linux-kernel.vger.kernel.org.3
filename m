@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A84E4A31A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 20:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3344A31A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 20:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353291AbiA2Thv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 14:37:51 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:60320
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353121AbiA2ThN (ORCPT
+        id S1353125AbiA2ThW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 14:37:22 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:37346
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353099AbiA2ThH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 14:37:13 -0500
+        Sat, 29 Jan 2022 14:37:07 -0500
 Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5A50740318
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 19:37:06 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B3A3E4002A
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 19:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643485026;
-        bh=wEL89/ynvDT+atuZL4csG/pFwiNgDZ9SBr5HgtriJD4=;
+        s=20210705; t=1643485018;
+        bh=Fc1eyAl7NybW6jYdngJRL9d8j3U5amMxubQkyGhXpG4=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=Ijg7hslmQ2QMNqyOZG231syx5KMpd3jfLwPtPa58pRGlFXMQiO+tC2Ttfdh3BlSIi
-         103oTWND1A4yw30NDi9hFCmSCrA3VP3Vm7qG3yjtNlsFaa6xZUqne7DsuXakPaiXLI
-         xO0o8X5lPry9VbWa6uslH+StoJN/quQfx0S2+/MQxMcCtldCMuZZgsTbKkR5nPT7FO
-         gPr/BzqxlM8AupN9iZMVBqEj6/ioOI9KPY3GW9HZe1LtR2LUX2iNFySIeKbJ3UeN0i
-         xH8wGFAwjwE6LiPzWtHCcs1aQ0bKkTk+QR032MmhSUx96LyWeHJCbwToNKvlaErSQ3
-         Q4wXD1ugirWaQ==
-Received: by mail-ed1-f71.google.com with SMTP id bc24-20020a056402205800b00407cf07b2e0so4798218edb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 11:37:06 -0800 (PST)
+        b=PgOrk954aJll0U8qHwyfFHfOjAnd61R9wrh74AJF9KhEm1VKcWLNLv6LYNnQxa4Kl
+         OBKHAfLpQr6mMqNOkOt7MZ12D8JIpzdJZwitmkod/IX+bWSqmwRR5y/etP2U4Y3IsO
+         JJtswVzJzczbxAcuq7YmIr85d+HYIuUrRw/Gv1iEamxL4GNbjn2BS/7Oq3dysUmRIH
+         XeSrFw6VZg8k+zL43IzB3zh/fJAz3VlDv1AdvAbrbN3NVejkla4An8Y9hj58As6wFV
+         kz3z6Jk1ETbAouWF7bYygJKC93haR7pkSKnUAvcHH+etCaZYbYhvN9wy4pkT1oBNDe
+         M//K325mNHeWg==
+Received: by mail-ed1-f71.google.com with SMTP id bc24-20020a056402205800b00407cf07b2e0so4798236edb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 11:36:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wEL89/ynvDT+atuZL4csG/pFwiNgDZ9SBr5HgtriJD4=;
-        b=mcqWXqHUHG1+FfK9eIEkP/LkEDvpR2FO8Fb/5FuqWPmVgFgR+BzEJHNPgeOz00esx5
-         I7IXObR3yzOf5Qm3H3rWuu5rC5zs7QxzBePwS9XuONguB5d1x/CvGu5iGZ7bt9t/GtUz
-         mlB7YB9Uao37bRhTXmCY3iRHimYJ6VHDDaqAnOGUtaaQJNViMP4IpIpfJTtTpR8EwpVA
-         H20BdhOdN4Cc36fSaO2yGmnWy2rkXCBWKbxrOHPeSAan9REC9cjY2GM6hJ4JeXqv5E0o
-         byIywL7SrBn/jDuswmy5Eyo9eRsJ+0EN0SW4jjlHOLZO/h5M7kD6QCypXnEIeS1zopqX
-         OcRg==
-X-Gm-Message-State: AOAM533h/9KR1pW04H0GilzSph5uf21ljbnjcjoONHWjrsw3hRKmaNkY
-        o7v3M2mS7T5OVk5H96AH3NvOOjNari6l5A9a02i10UouBrgK3cGIwb4Qmyrd7RyZA0MjeAHlQEF
-        2QgC39IxRrUZYiUWaIIGlTaCuxwxQWn2SPhk0kIDH5w==
-X-Received: by 2002:a17:907:7f88:: with SMTP id qk8mr7709005ejc.622.1643485016446;
-        Sat, 29 Jan 2022 11:36:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIgwaMH7JjSWPd08LTkb2moQW6C24pusHL1cGkG0T2qvrd39Ci/vgQ+6J35I6bR1JyOn/FSw==
-X-Received: by 2002:a17:907:7f88:: with SMTP id qk8mr7708987ejc.622.1643485016259;
-        Sat, 29 Jan 2022 11:36:56 -0800 (PST)
+        bh=Fc1eyAl7NybW6jYdngJRL9d8j3U5amMxubQkyGhXpG4=;
+        b=w1fIhzj1TTKVcGp5T1OMH29z09MfvGTbbn80Ow1mVb3HRUr+5Sp1P2zk4feTGudJ8S
+         nc4Vjbh4it9XD5Y8E6AgBnT9LQ+xgZ3m+iXzusKWUDoik4e1KLMi4s3EA3jdwiY5cnZ6
+         TDlBs6fPB1JbOCiCnQpbLvLkKFbyC2i2eePyJpcLc/MHV7QJyoQTBONf2DsmmxyjZuVW
+         KJgwyPZ6IP0FIm4RFZOvRee70SCuitYPjELimJVU3WIVEmpQj341ZKCk5sr2JzKSaBBN
+         HTGtOFBfjhWzeNrwaGgfOUMIFrM3XGDfzz3k0nmiFKa09Wd6Xn/K7UmrMzirjR4tW0xW
+         iCzg==
+X-Gm-Message-State: AOAM532WB++uTFhLr62QcXH/KLoPr1yTqb7X0YNYlXRWsC8xxg7VJxNT
+        1B16nKoP/Imc+qwJ6n5Prjxub5M7wS00twFDwHauif5W/3dCf1uTLxwAuUXI72mePWgiywdS7Zb
+        d08QMOAkBWr+wq7Ui6b2eotOyNjny5bGDIhN5l2JiVA==
+X-Received: by 2002:a17:907:6096:: with SMTP id ht22mr11140550ejc.611.1643485018006;
+        Sat, 29 Jan 2022 11:36:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw2C00tlFyQ3RoELXj4WirLkICa8agfl7xt6lK1t4z9axQaIvO2QsBaGqe8J3bXTyJSyrs97A==
+X-Received: by 2002:a17:907:6096:: with SMTP id ht22mr11140538ejc.611.1643485017831;
+        Sat, 29 Jan 2022 11:36:57 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id bf21sm14968026edb.2.2022.01.29.11.36.54
+        by smtp.gmail.com with ESMTPSA id bf21sm14968026edb.2.2022.01.29.11.36.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 11:36:55 -0800 (PST)
+        Sat, 29 Jan 2022 11:36:56 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
@@ -66,9 +66,9 @@ To:     Kishon Vijay Abraham I <kishon@ti.com>,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 6/8] dt-bindings: phy: samsung,exynos5250-sata-phy: convert to dtschema
-Date:   Sat, 29 Jan 2022 20:36:44 +0100
-Message-Id: <20220129193646.372481-6-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 7/8] dt-bindings: phy: samsung: move SATA phy I2C to trivial devices
+Date:   Sat, 29 Jan 2022 20:36:45 +0100
+Message-Id: <20220129193646.372481-7-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
 References: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
@@ -78,120 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Samsung Exynos5250 SoC SATA PHY bindings to DT schema
-format.
+The I2C interface for Samsung Exynos SoC SATA phy is a very simple and
+limited, so move it to trivial devices.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../phy/samsung,exynos5250-sata-phy.yaml      | 64 +++++++++++++++++++
- .../devicetree/bindings/phy/samsung-phy.txt   | 26 --------
- 2 files changed, 64 insertions(+), 26 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/phy/samsung,exynos5250-sata-phy.yaml
+ .../devicetree/bindings/phy/samsung-phy.txt        | 14 --------------
+ .../devicetree/bindings/trivial-devices.yaml       |  2 ++
+ 2 files changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/samsung,exynos5250-sata-phy.yaml b/Documentation/devicetree/bindings/phy/samsung,exynos5250-sata-phy.yaml
-new file mode 100644
-index 000000000000..62b39bb46585
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/samsung,exynos5250-sata-phy.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/samsung,exynos5250-sata-phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung Exynos5250 SoC SATA PHY
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+  - Marek Szyprowski <m.szyprowski@samsung.com>
-+  - Sylwester Nawrocki <s.nawrocki@samsung.com>
-+
-+properties:
-+  compatible:
-+    const: samsung,exynos5250-sata-phy
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: sata_phyctrl
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+
-+  samsung,syscon-phandle:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to PMU system controller interface.
-+
-+  samsung,exynos-sataphy-i2c-phandle:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to I2C SATA interface.
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - "#phy-cells"
-+  - reg
-+  - samsung,syscon-phandle
-+  - samsung,exynos-sataphy-i2c-phandle
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/exynos5250.h>
-+
-+    phy@12170000 {
-+        compatible = "samsung,exynos5250-sata-phy";
-+        reg = <0x12170000 0x1ff>;
-+        clocks = <&clock CLK_SATA_PHYCTRL>;
-+        clock-names = "sata_phyctrl";
-+        #phy-cells = <0>;
-+        samsung,syscon-phandle = <&pmu_system_controller>;
-+        samsung,exynos-sataphy-i2c-phandle = <&sata_phy_i2c>;
-+    };
 diff --git a/Documentation/devicetree/bindings/phy/samsung-phy.txt b/Documentation/devicetree/bindings/phy/samsung-phy.txt
-index d26ac7401258..1ee78016dc72 100644
+index 1ee78016dc72..b0abeb4ac0a2 100644
 --- a/Documentation/devicetree/bindings/phy/samsung-phy.txt
 +++ b/Documentation/devicetree/bindings/phy/samsung-phy.txt
-@@ -1,29 +1,3 @@
--Samsung SATA PHY Controller
-----------------------------
--
--SATA PHY nodes are defined to describe on-chip SATA Physical layer controllers.
--Each SATA PHY controller should have its own node.
+@@ -1,17 +1,3 @@
+-Device-Tree bindings for sataphy i2c client driver
+---------------------------------------------------
 -
 -Required properties:
--- compatible        : compatible list, contains "samsung,exynos5250-sata-phy"
--- reg : offset and length of the SATA PHY register set;
--- #phy-cells : must be zero
--- clocks : must be exactly one entry
--- clock-names : must be "sata_phyctrl"
--- samsung,exynos-sataphy-i2c-phandle : a phandle to the I2C device, no arguments
--- samsung,syscon-phandle : a phandle to the PMU system controller, no arguments
+-compatible: Should be "samsung,exynos-sataphy-i2c"
+-- reg: I2C address of the sataphy i2c device.
 -
 -Example:
--	sata_phy: sata-phy@12170000 {
--		compatible = "samsung,exynos5250-sata-phy";
--		reg = <0x12170000 0x1ff>;
--		clocks = <&clock 287>;
--		clock-names = "sata_phyctrl";
--		#phy-cells = <0>;
--		samsung,exynos-sataphy-i2c-phandle = <&sata_phy_i2c>;
--		samsung,syscon-phandle = <&pmu_syscon>;
+-
+-	sata_phy_i2c:sata-phy@38 {
+-		compatible = "samsung,exynos-sataphy-i2c";
+-		reg = <0x38>;
 -	};
 -
- Device-Tree bindings for sataphy i2c client driver
+ Samsung Exynos5 SoC series USB DRD PHY controller
  --------------------------------------------------
  
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 091792ba993e..d53a4b2f81aa 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -283,6 +283,8 @@ properties:
+           - renesas,isl29501
+             # S524AD0XF1 (128K/256K-bit Serial EEPROM for Low Power)
+           - samsung,24ad0xd1
++            # Samsung Exynos SoC SATA PHY I2C device
++          - samsung,exynos-sataphy-i2c
+             # Sensirion low power multi-pixel gas sensor with I2C interface
+           - sensirion,sgpc3
+             # Sensirion multi-pixel gas sensor with I2C interface
 -- 
 2.32.0
 

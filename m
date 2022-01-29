@@ -2,88 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD37B4A2B73
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 04:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D144A2B75
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 04:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352301AbiA2DfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 22:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241053AbiA2DfQ (ORCPT
+        id S1352309AbiA2Dfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 22:35:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52878 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241053AbiA2Dff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 22:35:16 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDB8C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 19:35:15 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id v74so7938326pfc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 19:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=xpheXdEDJM6VvCfIU64qNXEiyDxBWjW4KluJVHuQUq8=;
-        b=qk0s19Q63d4FCHY6zN3MYD2/RLhB2CtR31+rQUXSro1imnRPKWj9qn1DpvmGx4hZCn
-         siQ1TchQPOw6yc/jzjh7F+vMKNWN9lKn1VxOkWB4osIvobPGht+fYITAZgXhQXLjtHwE
-         3hpXHGUNSMGWeva0d+Y8DXATmYSdfiaxqv2mZ39x5OSQ6U2n3FLN1ageb0/CW0O331AI
-         iritYYNhUWQiYrwNv4Z9rRaZGtVgLY9jJJo4yF64qOmKegu/DcSIqFo5KWwchuNI0RuU
-         gtpJWiW8Az9qt6XIt2b8q5724Cic2RKAdF6G0h0uCYmEoGSWXElY9RtqjYFb/W0o+u6S
-         WTHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xpheXdEDJM6VvCfIU64qNXEiyDxBWjW4KluJVHuQUq8=;
-        b=2Ahihh7B1Idf8YQiHhmZLjBIfpDANjcoW2vw7+/Js5Gpfm1AlL5Z9YC0msyM+T5uPR
-         1cfGiPfGC3v/w29QMqA2EcbqKEg0qGeiKYo1ceMrEkW9UH2zISbFjOAG+TtiTo6vDsXw
-         RP1BKQZV2H57rOjtoYpYzWhGgoxCnkJiiAX1/8rkgWviDJkQt3aa6XsyBa/yZsFq4qMV
-         /mTapTwn3V8oG7N2lPVUtu/B8syUWJZf/QWinQjHT9ZZAe1MNkJ299gif+yQkQDsULcI
-         DkSrk45D0KHiNxjAyFSudpzamlntLL3T7Fx7Hz08Zv2CHHTguShyNHbaJT2DW/fT291A
-         xFwg==
-X-Gm-Message-State: AOAM533df6E/6qzgkn5s3+W7YdSI06yDkpOA2FwKs5irg3fe1OGEBpnZ
-        Fug1c9Eaj0jdEbDRY75/7ta3eIAm49tyDO8W
-X-Google-Smtp-Source: ABdhPJzeKLGw416T+p9clA7uBhbAloo6Y7BlYFBP1/1XY4HpKuYJVe4Ng0C83GcCvAyaFMeYJotKWA==
-X-Received: by 2002:aa7:9838:: with SMTP id q24mr11061113pfl.76.1643427314445;
-        Fri, 28 Jan 2022 19:35:14 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id s37sm5963592pfg.144.2022.01.28.19.35.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 19:35:14 -0800 (PST)
-Date:   Sat, 29 Jan 2022 16:35:09 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     realwakka@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] staging: pi433: add debugfs interface
-Message-ID: <YfS17W10UTAKn3dc@mail.google.com>
-References: <20220124042506.GA7662@mail.google.com>
- <20220124042721.GA8078@mail.google.com>
- <YfE4d4UY1yIVvapC@kroah.com>
+        Fri, 28 Jan 2022 22:35:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643427334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hQBH9GHjqS+rcFX3pcvUpks72KYFeedJ6djvUFY0Gn8=;
+        b=O7dSL0+11b9DTlW18CTRntnV/jiLt1yGGixh/y7pMWhIyUJpvZ2Y9IwtMM9/plTA2XN6If
+        cRi3iKONbWyGXlomtfCNaW9hy9xTOFhP/theZ1Hg7D75c9KBPdh4avG9YMlG8mlwVpRqE/
+        BAJvuH34o0HYkMCniQx4p/KV8+KyETk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-z98i_43JPHSrFhuU4R2vnw-1; Fri, 28 Jan 2022 22:35:31 -0500
+X-MC-Unique: z98i_43JPHSrFhuU4R2vnw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A06EF1006AA5;
+        Sat, 29 Jan 2022 03:35:29 +0000 (UTC)
+Received: from [10.22.32.53] (unknown [10.22.32.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 357EE60BD8;
+        Sat, 29 Jan 2022 03:35:22 +0000 (UTC)
+Message-ID: <1badb3ac-6631-68ac-364d-69dee237583c@redhat.com>
+Date:   Fri, 28 Jan 2022 22:35:22 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfE4d4UY1yIVvapC@kroah.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/2] mm/page_owner: Dump memcg information
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Rafael Aquini <aquini@redhat.com>
+References: <20220128195642.416743-1-longman@redhat.com>
+ <20220128195642.416743-3-longman@redhat.com>
+ <20220128212249.GI785175@iweiny-DESK2.sc.intel.com>
+ <e14e8c96-b2e3-cb57-2c35-284116798225@redhat.com>
+ <20220128214843.GJ785175@iweiny-DESK2.sc.intel.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220128214843.GJ785175@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:03:03PM +0100, Greg KH wrote:
-> 
-> Breaks the build:
-> 
-> drivers/staging/pi433/pi433_if.c:1166:25: error: initialization of ‘int (*)(struct inode *, struct file *)’ from incompatible pointer type ‘ssize_t (*)(struct inode *, struct file *)’ {aka ‘long int (*)(struct inode *, struct file *)’} [-Werror=incompatible-pointer-types]
->  1166 |         .open =         pi433_debugfs_regs_open,
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~
-> 
-> 
+On 1/28/22 16:48, Ira Weiny wrote:
+> On Fri, Jan 28, 2022 at 04:31:07PM -0500, Waiman Long wrote:
+>> On 1/28/22 16:22, Ira Weiny wrote:
+>>> On Fri, Jan 28, 2022 at 02:56:42PM -0500, Waiman Long wrote:
+>>>> It was found that a number of offlined memcgs were not freed because
+>>>> they were pinned by some charged pages that were present. Even "echo
+>>>> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
+>>>> offlined but not freed memcgs tend to increase in number over time with
+>>>> the side effect that percpu memory consumption as shown in /proc/meminfo
+>>>> also increases over time.
+>>>>
+>>>> In order to find out more information about those pages that pin
+>>>> offlined memcgs, the page_owner feature is extended to dump memory
+>>>> cgroup information especially whether the cgroup is offlined or not.
+>>>>
+>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>>> ---
+>>>>    mm/page_owner.c | 28 ++++++++++++++++++++++++++++
+>>>>    1 file changed, 28 insertions(+)
+>>>>
+>>>> diff --git a/mm/page_owner.c b/mm/page_owner.c
+>>>> index c52ce9d6bc3b..e5d8c642296b 100644
+>>>> --- a/mm/page_owner.c
+>>>> +++ b/mm/page_owner.c
+>>>> @@ -10,6 +10,7 @@
+>>>>    #include <linux/migrate.h>
+>>>>    #include <linux/stackdepot.h>
+>>>>    #include <linux/seq_file.h>
+>>>> +#include <linux/memcontrol.h>
+>>>>    #include <linux/sched/clock.h>
+>>>>    #include "internal.h"
+>>>> @@ -339,6 +340,7 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>>>>    		depot_stack_handle_t handle)
+>>>>    {
+>>>>    	int ret = 0, pageblock_mt, page_mt;
+>>>> +	unsigned long __maybe_unused memcg_data;
+>>>>    	char *kbuf;
+>>>>    	count = min_t(size_t, count, PAGE_SIZE);
+>>>> @@ -371,6 +373,32 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>>>>    			"Page has been migrated, last migrate reason: %s\n",
+>>>>    			migrate_reason_names[page_owner->last_migrate_reason]);
+>>>> +#ifdef CONFIG_MEMCG
+>>>> +	/*
+>>>> +	 * Look for memcg information and print it out
+>>>> +	 */
+>>>> +	memcg_data = READ_ONCE(page->memcg_data);
+>>>> +	if (memcg_data) {
+>>>> +		struct mem_cgroup *memcg = page_memcg_check(page);
+>>>> +		bool onlined;
+>>>> +		char name[80];
+>>>> +
+>>>> +		if (memcg_data & MEMCG_DATA_OBJCGS)
+>>>> +			SNPRINTF(kbuf, count, ret, err, "Slab cache page\n");
+>>>> +
+>>>> +		if (!memcg)
+>>>> +			goto copy_out;
+>>>> +
+>>>> +		onlined = (memcg->css.flags & CSS_ONLINE);
+>>>> +		cgroup_name(memcg->css.cgroup, name, sizeof(name) - 1);
+>>>> +		SNPRINTF(kbuf, count, ret, err, "Charged %sto %smemcg %s\n",
+>>>                                                           ^^^
+>>> 						Extra specifier?
+>>>
+>>> Did this compile without warnings?
+>> Yes, there was no warning.
+> But isn't that an extra specifier?
 
-My apologies, I will be more careful next time. I must have missed
-something out on my module-specific makefile. 
+There are 3 arguments to the format string that match the 3 "%s" in it:
 
-I will incorporate the changes that Dan Carpenter suggested and submit a
-new version of this patch shortly.
+1) PageMemcgKmem(page) ? "(via objcg) " : ""
+2) onlined ? "" : "offlined
+3) name
 
-thanks,
+Cheers,
+Longman
 
-Paulo A.

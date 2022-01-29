@@ -2,101 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CD94A320F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 22:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9500C4A3218
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 22:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351324AbiA2VkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 16:40:25 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:33407 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233129AbiA2VkW (ORCPT
+        id S1353123AbiA2Vsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 16:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243871AbiA2Vsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 16:40:22 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MKKIZ-1mxmHb13Pz-00Lj0v; Sat, 29 Jan 2022 22:40:20 +0100
-Received: by mail-ot1-f43.google.com with SMTP id i16-20020a056830011000b005a3cc8d20fbso2826089otp.9;
-        Sat, 29 Jan 2022 13:40:19 -0800 (PST)
-X-Gm-Message-State: AOAM532uGFEAQ/r3avHpRSTjCMnoMLcVBHqAJhysaZqycCFO1YHD+rc3
-        KGSt8BekMqCCxzBPyaaoCftp52ERQFwSEyLRg7A=
-X-Google-Smtp-Source: ABdhPJxSc4cWbyXoSGQiQtpLi4PNMIRU496vg4S4jN8fyO8Z/BY7E62yNehuKgdWMqyCyzVpdMc329RL2rEKIxjEMaU=
-X-Received: by 2002:a9d:73da:: with SMTP id m26mr8391513otk.72.1643492418274;
- Sat, 29 Jan 2022 13:40:18 -0800 (PST)
+        Sat, 29 Jan 2022 16:48:42 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F10C061714;
+        Sat, 29 Jan 2022 13:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=Y6GP8wuCVrMbh1L90jUb2V1yBKObZZXodauMSz2sdnY=; b=N0fJp10Cdyb2JHaUfPeXLwA/7y
+        GUrK03zc35hx2x40Zde5A/7SOy4RFaDIIVaI1/FLAObVod0sZAEhKy3DQaDrMDJCSorq+9SoC8AyL
+        974UM/8BiwU+uHEh8vYXPuQK7JbCV648cGCNWZ5e/U21KdjMw7EBhqI7Qy7OswkO2QYkDBasnqocK
+        Hytdm1sFv/r2MBBrUQ4XswJgMOwjJlXAyN5JjFIKZLrOTroH4Vo5lSSkkLdKOaB4XYcGQhjurhT/T
+        rnvkFaeEM5tEHNBQsBVndj1EHveSCu/NMx+qNBSufeBkOh5mBwWExm2o0PG4SliPOc9bMRAvw79D8
+        q7g+2jnQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDvZT-004yRY-UH; Sat, 29 Jan 2022 21:47:50 +0000
+Message-ID: <606c84f4-cad0-7223-da7f-4ec48e93360e@infradead.org>
+Date:   Sat, 29 Jan 2022 13:47:38 -0800
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-4-guoren@kernel.org>
-In-Reply-To: <20220129121728.1079364-4-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 29 Jan 2022 22:40:02 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0jK4quTT6txPakQuuAjyoMXRq1eM35pCFLo0PQNq+p2Q@mail.gmail.com>
-Message-ID: <CAK8P3a0jK4quTT6txPakQuuAjyoMXRq1eM35pCFLo0PQNq+p2Q@mail.gmail.com>
-Subject: Re: [PATCH V4 03/17] asm-generic: compat: Cleanup duplicate definitions
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lnMfdgYEnSzWgrBdIox1QiTtJ/mhHPon38ownGxPYpb8Uida3VU
- tfyy4FXB2xzzPbBOtGmv5a4pBMEEwyX8O9L1f+kulgNvew7caxFsmKjzWFd+zLH4Fejx5l+
- xassjjrOzMYYfFKqcaxlqyWAWmJ/hygLwuzTj6az5ltiiR6k1hxnFeXy1bEFXbs8GorGkjJ
- zEl1/GLHKvkmvf/pVWmjw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+xAXmlQqFQ0=:q+/YVKL9cK4h9X74Ey2YvJ
- upHTbUlCwlp/hRQIU2bY3zQKgizxwntrROt8rL9SDmbxXt1t9xeiH9gl01IN5lHGQE4F509VY
- PE5BcwOJWst8MWCYFiskFW5fHUP4hpqK1iiLACC8GL/xk+2vq8XvtkypvcwAFSPAhFPCOv5fk
- WEFtf46LfdL1BtGJhTXpo6WAMgzu7+RQiKzGL2fpCWRQHeR/q0pVdgjxZATz0mklQA2ry0rxX
- WlWL2KNZv85yJciTzU3lZ1+olVgzVJ6bW811KHgBuaoNefuqX9MOEZSCaHFnBX/l5gMPdrPll
- 51wRPTqB8QRBvnqGZTfMdAHma8C3jx366/Llc5HJpqFmgSMXiAAVDu0zv9bUvRfau/eEbGRIW
- AQYaxk5TgqDdohW4PzPqf4V+OA0jZnTZLhxdCi4CXgwUvqZtqAA/Gk7E+0sIte3LK+65xMZzL
- 4hhAefxkz6QTglhcmXDFCozB4OpQqvtX/spngdIDdseRL0Z8Q0j/idC0e1mYPJt/NN9Hs9D/U
- rbReiEIS5pjpCKzzxRoYx7K4b2sP/PXrfr3Iphm6JMwqfvyK5D+DgyFbZieQKdXelPOWdZJIr
- mO1N72L4x2usAHDO3SKhIOq4HzITZIIT1IJFjosHJ1qI6o3/oPvGqMZeCZyN95DuM2YnUirFa
- icB0qacmeX6rA85wW4PTuMQHLsGu69h0doRRlK2XxRu7ZFzzQ/Kww9dT6ZHYkh036G0NhjKTr
- L5JFGyW2RyI8yUnOUh3949XJgOa2HNLfuhUC0YyHnI4HF7fNwJ7dTTebGHwbnZQmq08LP8udI
- KFcvUfXzKU8E0W7uhYGAcWv+bpd1bPXOZ68FA3AaB80qORmrTU=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/1] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     suijingfeng <suijingfeng@loongson.cn>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Sui Jingfeng <15330273260@189.cn>
+References: <20220129203357.1613654-1-suijingfeng@loongson.cn>
+ <20220129203357.1613654-2-suijingfeng@loongson.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220129203357.1613654-2-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 1:17 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> There are 7 64bit architectures that support Linux COMPAT mode to
-> run 32bit applications. A lot of definitions are duplicate:
->  - COMPAT_USER_HZ
->  - COMPAT_RLIM_INFINITY
->  - COMPAT_OFF_T_MAX
->  - __compat_uid_t, __compat_uid_t
->  - compat_dev_t
->  - compat_ipc_pid_t
->  - struct compat_flock
->  - struct compat_flock64
->  - struct compat_statfs
->  - struct compat_ipc64_perm, compat_semid64_ds,
->           compat_msqid64_ds, compat_shmid64_ds
->
-> Cleanup duplicate definitions and merge them into asm-generic.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Hi--
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+On 1/29/22 12:33, suijingfeng wrote:
+> diff --git a/drivers/gpu/drm/lsdc/Kconfig b/drivers/gpu/drm/lsdc/Kconfig
+> new file mode 100644
+> index 000000000000..744009dfcdde
+> --- /dev/null
+> +++ b/drivers/gpu/drm/lsdc/Kconfig
+> @@ -0,0 +1,32 @@
+> +config DRM_LSDC
+> +	tristate "DRM Support for loongson's display controller"
+> +	depends on DRM && PCI
+> +	depends on MACH_LOONGSON64 || LOONGARCH || MIPS || COMPILE_TEST
+> +	select OF
+> +	select CMA if HAVE_DMA_CONTIGUOUS
+> +	select DMA_CMA if HAVE_DMA_CONTIGUOUS
+> +	select DRM_KMS_HELPER
+> +	select DRM_KMS_FB_HELPER
+> +	select DRM_GEM_CMA_HELPER
+> +	select VIDEOMODE_HELPERS
+> +	select BACKLIGHT_PWM if CPU_LOONGSON2K
+> +	select I2C_GPIO if CPU_LOONGSON2K
+> +	select I2C_LS2X if CPU_LOONGSON2K
+> +	default m
+> +	help
+> +	  This is a KMS driver for the display controller in the LS7A1000
+> +	  bridge chip and LS2K1000 SoC. The display controller have two
+
+	                                                       has two
+
+> +	  display pipes and it is a pci device.
+
+	                            PCI device.
+
+> +	  When using it on LS2K1000/LS2K0500 SoC, its framebuffer is
+> +	  located at system memory.
+> +	  If "M" is selected, the module will be called lsdc.
+> +
+> +	  If in doubt, say "Y".
+> +
+> +config DRM_LSDC_VRAM_DRIVER
+> +	bool "vram helpper based device driver support"
+
+	           helper
+
+> +	depends on DRM_LSDC
+> +	select DRM_VRAM_HELPER
+> +	default y
+> +	help
+> +	  If in doubt, say "n".
+
+-- 
+~Randy

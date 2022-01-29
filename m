@@ -2,91 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 011E64A2AE4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5E94A2AE6
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344777AbiA2BKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 20:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S1351967AbiA2BLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 20:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiA2BKp (ORCPT
+        with ESMTP id S229812AbiA2BLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 20:10:45 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD132C061714;
-        Fri, 28 Jan 2022 17:10:44 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id j10so6735779pgc.6;
-        Fri, 28 Jan 2022 17:10:44 -0800 (PST)
+        Fri, 28 Jan 2022 20:11:47 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D22BC061714;
+        Fri, 28 Jan 2022 17:11:46 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id x11so7711918plg.6;
+        Fri, 28 Jan 2022 17:11:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=iskxve2GJoOPlpLkE7JwxkMKKyjsGwBxLICh76iTzgI=;
-        b=XND3H8+4u8ndtnrtTz+gj9HTk6MCehfjRf+C1tsECZIpYE7eWgLeIOkEPkdpY+V0+x
-         7Cko916Tb2KeWN5Zj1WL6yaW7xF+WaZNmcTirqc13sP5/yH3Y1Hli2w05jnbOEvVcpFw
-         meWuDP8p52WZxQ8+GRpxOcJ2Mw68UrpOh7Eg7FmDpCN9aoREKEGRW3BUhADzgZOYEj7V
-         ETX9NuQN5AqefpIsUA/5maz6t4lR6Yq8YB66scemaZesWRHfygVJVHzVevORFSVQ5yVG
-         Txwa52eDrB+1V9eS81jo/p7DeEWCOmYmnkj4+6zuK6MVPbKAY6+gc21n1ESk9KCsVm4X
-         f8YQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sKsBVhQwSlJcRatjipRMtQLnHaf6lN3tRXCvoF5/r20=;
+        b=puOMkZ0UFGv9hyGOgycf4HKKTdfZqIGO1mTa/jfGvU4s52IdOFDx07S+Y+hkfcroi5
+         wa8t9B+tb1Mdxsl9DSHh57cjQLi8qZ8iY0IXkAEhw914wvy/cPM9+Zhz1vqB1YtfhWbV
+         D1dDGEMpDPTc8AwnDiBMYXs3i429EAI1d0x6GhgylerxkcMn+3EP+/2MEsldY8RjW6Im
+         xEJkGOEtdmHkH80zc2weJ9eMATeLBwGpkKhpI+0ffNn/BT4P9uXRAcO4owmMcon1Nbrf
+         9MqewY7KWoLlWuE0MHuvIJIQm/62c+wrFiVoKa9rj2npQ3z/OBJJW/iN/zAX6puCSxeR
+         4rtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=iskxve2GJoOPlpLkE7JwxkMKKyjsGwBxLICh76iTzgI=;
-        b=RwP15OX7E9xMGbgS3ZYLydEAO8HW8IDXr73B+gnabiWIXr7fa6WHtHYm6uHwpzaQLt
-         DNj2NJqgU2N++C6dVi12WBae8eU25QJ7L6EyuTG0jVkRG/wxPe+jjso9uNyFPTExyd3P
-         1oKHkoEoj6k7yosaBNl+7dol7dQbilwrfFLzq4g3VwdwglaVwnvEh21r/fATFyGgTqH0
-         a30HMtILYXXgiIykkhAyFD9vu2xs75PIwVxUkINYHo5iQH5gQq1nhA0xgBsmUjiidPIC
-         snF3CMdwHzqJrqykHPFt+ZU0ZfViJXSC7RIsIFWJH58fF54WUHezgrullqkjShus52gA
-         Jdfg==
-X-Gm-Message-State: AOAM533VHv4iNSeYxfbxbdec22BILv66ST5jbprxSyAKr80luJIhh8iI
-        LfcDK6nxeMk3e72LaMedTYXNh7HDSgC4P8GStM8=
-X-Google-Smtp-Source: ABdhPJyHSQlLS+PJ9zUKhTpkkq07S29lUCSnNruTy8E3v3GSKZsPrgb6nK8MhfCC3Myj4eRC/2eajA==
-X-Received: by 2002:a05:6a00:15c6:: with SMTP id o6mr10366778pfu.9.1643418643656;
-        Fri, 28 Jan 2022 17:10:43 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id t9sm3361858pjg.44.2022.01.28.17.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 17:10:43 -0800 (PST)
-Message-ID: <61f49413.1c69fb81.1bcb.a324@mx.google.com>
-Date:   Fri, 28 Jan 2022 17:10:43 -0800 (PST)
-X-Google-Original-Date: Sat, 29 Jan 2022 01:10:41 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220127180259.078563735@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 00/12] 5.15.18-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sKsBVhQwSlJcRatjipRMtQLnHaf6lN3tRXCvoF5/r20=;
+        b=gzZT1ydAZ97oWjMqhlGta1MY3Yrpd+yKWn8vBUXGxHinC4WVQ50c010+ZFd3a3WWdN
+         qaU2WEJ0niE7AT+Fcf6c7V09fBxSXkUD/8OcDJ5CV/o148XJOr64imXIjg8LtMGCa4yR
+         +NIXIoJ8pG4/XytNRoHTFgjrQRvSSeRltS7U8qn19MFfAcxX+zm1OioF5BmbR5A/wJCH
+         DRGioeLCqAZ7KrI64sj3qkynCMTG8qyn5QwQemK1jepgHdMxpRRJY5645jn2AQAviMoe
+         U7baBw3Cw4tpP1I5wDCapkrteWZJ56EyTNSUvLumLPQfylU5taFWVOwb0ZzFb2+kcvk1
+         FzOQ==
+X-Gm-Message-State: AOAM532tF9Gu5724+ttvxYCCDueXqPkgkpug8FROPmL8Tt9u+Rgxchf2
+        LKNzGUSK6yzoRXkKfVnP4WwWr6YfrWIGrk6/KLg=
+X-Google-Smtp-Source: ABdhPJwpZJefhaXw6b9jI+aK36Vigr5rNrt3zdJ8hyeB/f3ZBlfA/8bmw/aLvPYYd7zdgrbxJhmkE5wrT7fcFfxdJF8=
+X-Received: by 2002:a17:902:e54c:: with SMTP id n12mr10841591plf.78.1643418705879;
+ Fri, 28 Jan 2022 17:11:45 -0800 (PST)
+MIME-Version: 1.0
+References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
+ <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+ <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
+ <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
+ <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+ <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
+ <177da568-8410-36d6-5f95-c5792ba47d62@fb.com> <CAADnVQJZvgpo-VjUCBL8YZy8J+s7O0mv5FW+5sx8NK84Lm6FUQ@mail.gmail.com>
+ <CAFnufp3ybOFMY=ObZFvbmr+c70CPUrL2uYp1oZQmffQBTyVy_A@mail.gmail.com>
+ <CAADnVQ+cvD2rwa-hRQP8agj8=SXuun3dv-PZpK5=kJ2Ea_0KCg@mail.gmail.com> <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com>
+In-Reply-To: <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 28 Jan 2022 17:11:34 -0800
+Message-ID: <CAADnVQL8D0cBixtqnOok621gfXnBs4sZSTSTKBodrtRzwBFsHQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
+To:     Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 19:09:24 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.18 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.18-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Fri, Jan 28, 2022 at 4:36 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+>
+> On Fri, Jan 28, 2022 at 9:09 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Jan 28, 2022 at 10:51 AM Matteo Croce
+> > <mcroce@linux.microsoft.com> wrote:
+> > >
+> > > On Fri, Jan 28, 2022 at 6:31 AM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Mon, Dec 20, 2021 at 10:34 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > >
+> > > > >
+> > > > > https://reviews.llvm.org/D116063 improved the error message as below
+> > > > > to make it a little bit more evident what is the problem:
+> > > > >
+> > > > > $ clang -target bpf -O2 -g -c bug.c
+> > > > >
+> > > > > fatal error: error in backend: SubroutineType not supported for
+> > > > > BTF_TYPE_ID_REMOTE reloc
+> > > >
+> > > > Hi Matteo,
+> > > >
+> > > > Are you still working on a test?
+> > > > What's a timeline to repost the patch set?
+> > > >
+> > > > Thanks!
+> > >
+> > > Hi Alexei,
+> > >
+> > > The change itself is ready, I'm just stuck at writing a test which
+> > > will effectively calls __bpf_core_types_are_compat() with some
+> > > recursion.
+> > > I guess that I have to generate a BTF_KIND_FUNC_PROTO type somehow, so
+> > > __bpf_core_types_are_compat() is called again to check the prototipe
+> > > arguments type.
+> > > I tried with these two, with no luck:
+> > >
+> > > // 1
+> > > typedef int (*func_proto_typedef)(struct sk_buff *);
+> > > bpf_core_type_exists(func_proto_typedef);
+> > >
+> > > // 2
+> > > void func_proto(int, unsigned int);
+> > > bpf_core_type_id_kernel(func_proto);
+> > >
+> > > Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
+> >
+> > What do you mean 'no luck'?
+> > Have you tried what progs/test_core_reloc_type_id.c is doing?
+> > typedef int (*func_proto_typedef)(long);
+> > bpf_core_type_id_kernel(func_proto_typedef);
+> >
+> > Without macros:
+> > typedef int (*func_proto_typedef)(long);
+> >
+> > int test() {
+> >    return __builtin_btf_type_id(*(typeof(func_proto_typedef) *)0, 1);
+> > }
+> > int test2() {
+> >    return __builtin_preserve_type_info(*(typeof(func_proto_typedef) *)0, 0);
+> > }
+> >
+> >
+> > compiles fine and generates relos.
+>
+> Yes, I tried that one.
+> We reach bpf_core_apply_relo_insn() but not bpf_core_spec_match(),
+> since cands->len is 0.
+>
+> [   16.424821] bpf_core_apply_relo_insn:1202 cands->len: 0
+>
+> That's a very simple raw_tracepoint/sys_enter program:
 
-5.15.18-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Did you forget to attach it ?
 
+If it's doing bpf_core_type_id_kernel(func_proto_typedef)
+then, of course, cands->len will be zero.
+You need to add this typedef to bpf_testmod first.
+Then use two typedef flavors: func_proto_typedef___match
+and func_proto_typedef___doesnt_match
+with matching and mismatching prototypes, so
+both can call into bpf_core_types_are_compat() and
+return different results.
+Then build on top to test recursion.

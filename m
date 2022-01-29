@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CE84A329F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 00:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2B14A32A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 00:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353420AbiA2XbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 18:31:00 -0500
-Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:49292
-        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238951AbiA2Xa6 (ORCPT
+        id S1353426AbiA2XhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 18:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238951AbiA2XhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 18:30:58 -0500
-Received: from [192.168.88.87] (unknown [36.81.38.25])
-        by gnuweeb.org (Postfix) with ESMTPSA id AE5C8C32D0;
-        Sat, 29 Jan 2022 23:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
-        s=default; t=1643499055;
-        bh=B4K+3+JFTWWKU/O0tyev275Y374cFJ34SuhCQURx7oc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JKJ5Ct61wVnrR2iphOOxgQYDqWKHYayo3MF1SEnxb+dYFC0P7aw2idbQ1+YoOhngb
-         Wfkb89NKejxQCeTxH4CWHkbjtRsG7pIj5zktfZT0kPzn9bMyUvtgicacW1FFwLRK3p
-         LYnE7fh5WJIpxBqXMoVo4LAArpgAxK/IEXPT00uFhLkIZFJG8zKXO016l1qH/RhrMH
-         Hx2N0lsxNpHe3lpPcQgWY/+HUwJ6IkJ9jpIZX6sQ0V7ThEfaXCLVpQn3ekYrLlL3uq
-         YxK4kUYb395e8tCKQC9goRn4GwgbKq3TK69ts9um/JEMhdJ77rZOzaY/KrO95ambO1
-         bsnQtR12AyXng==
-Message-ID: <8c5e3b16-15ac-45fe-d9c2-14615eccb981@gnuweeb.org>
-Date:   Sun, 30 Jan 2022 06:30:52 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH for-5.18 v1 0/3] Add `sendto(2)` and `recvfrom(2)` support
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
-        netdev Mailing List <netdev@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
+        Sat, 29 Jan 2022 18:37:18 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0719C061714;
+        Sat, 29 Jan 2022 15:37:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JmW2K4t2Qz4xcN;
+        Sun, 30 Jan 2022 10:37:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643499436;
+        bh=FSKXe7E9PwPDbZiibMOaFerPO5Fty9qSVnGbt7bjiOA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P6cEBLAT+WqETy48Mb4Fr9Tr7ECTnQT1y0U4tSAe1IgKVEdwO+zUzr8Oe/nVcVtOQ
+         o/s/MiO6oTCVwOVDdMhX8C2mdOhjRUQn/fyEu1qf3B+zgFOgceCybg5JvcHsVrl51/
+         8e2foIo6W2KlamTO+JEPlfLCht35wNhtb4agcdeRve1YLbQzHkybYs3wmroRimeaRb
+         YD2ZFwi7I+IZGRQcqiZarSIrFaIluKL+GIE2JK2kf2xuoFpW8d+0EaOQNHmzLun8dy
+         HtGoM+RxjwBJegDdIYQeeVdNJ66BYtA+cn7K9x5HEX/ABOrhVYdNfq25AqSOZGYqfs
+         biqr1StbvN9qA==
+Date:   Sun, 30 Jan 2022 10:37:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Nugra <richiisei@gmail.com>,
-        Praveen Kumar <kpraveen.lkml@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-References: <20220129125021.15223-1-ammarfaizi2@gnuweeb.org>
- <98d4f268-5945-69a7-cec7-bccfcdedde1c@kernel.dk>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <98d4f268-5945-69a7-cec7-bccfcdedde1c@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the edac tree
+Message-ID: <20220130103712.391407a7@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/47CorGqD=TTlKR1s8bFM9g0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 1:32 AM, Jens Axboe wrote:
-> On 1/29/22 5:50 AM, Ammar Faizi wrote:
->> Hello,
->>
->> This patchset adds sendto(2) and recvfrom(2) support for io_uring. It
->> also addresses an issue in the liburing GitHub repository [1].
->>
->> ## Motivations:
->>
->> 1) By using `sendto()` and `recvfrom()` we can make the submission
->>     simpler compared to always using `sendmsg()` and `recvmsg()` from
->>     the userspace. Especially for UDP socket.
->>
->> 2) There is a historical patch that tried to add the same
->>     functionality, but did not end up being applied. [2]
-> 
-> As far as I can tell, the only win from sendto/recvfrom is that we can
-> handle async offload a bit cheaper compared to sendmsg/recvmsg. Is this
-> enough to warrant adding them separately? I don't know, which is why
-> this has been somewhat stalled for a while.
-> 
-> Maybe you have done some testing and have numbers (or other reasons) to
-> back up the submission? There's not a whole lot of justification in this
-> patchset.
-> 
+--Sig_/47CorGqD=TTlKR1s8bFM9g0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-So far, I haven't done it. I only created a test that ensures the
-functionality is working properly.
+Hi all,
 
-I will play with this further. If I win, I will submit the v2 of
-this series for review. Thanks, Jens!
+In commit
 
--- 
-Ammar Faizi
+  34f6e9ab86ec ("EDAC/xgene: Fix deferred probing")
+
+Fixes tag
+
+  Fixes: 0d4429301c4 ("EDAC: Add APM X-Gene SoC EDAC driver")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed in the future by setting core.abbrev to 12 (or more) or
+    (for git v2.11 or later) just making sure it is not set (or set to
+    "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/47CorGqD=TTlKR1s8bFM9g0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH1z6kACgkQAVBC80lX
+0GwUoAgAj6ZfNtmHZimqK/zMianANBgmw3mhCbtjsRj6JsMvbiqW7zZPsH+CsvQa
+cnLkZALIErpW/OxTw8KrjPXmXr9j/S05zjX7O4EjNCWoPJpNpGJDe4sYz+tPu0C/
+tp9Pv1MeVJApP0h9qDzyqLqccZlKyRnoN12lE4I/K6t8fAt/4KGSllwvc1oQKFLY
+e+/Lw/1lXehvZPDEMngqVk+SeSWpOIAbyeFula307KsQ+NuIEtkFRNW3U1/xVCj/
+gJY/cjrMwWgyZJmT02QWrKDqclQEAcyLFjieNTGB62Be7UaT0MKA1+AJZKDhz93R
+Xlv5P4iAg5zgs6JDLE7A3xO950ArAA==
+=YirD
+-----END PGP SIGNATURE-----
+
+--Sig_/47CorGqD=TTlKR1s8bFM9g0--

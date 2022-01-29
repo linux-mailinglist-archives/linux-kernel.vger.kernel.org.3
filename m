@@ -2,118 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 618974A2D4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6C74A2D52
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiA2I4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 03:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S231340AbiA2JUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 04:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiA2I4d (ORCPT
+        with ESMTP id S229704AbiA2JUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 03:56:33 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15802C061714;
-        Sat, 29 Jan 2022 00:56:33 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id qe6-20020a17090b4f8600b001b7aaad65b9so2531282pjb.2;
-        Sat, 29 Jan 2022 00:56:33 -0800 (PST)
+        Sat, 29 Jan 2022 04:20:08 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E50C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:20:08 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id w81so3198059ybg.12
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:20:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xn/qJjrrzAvXyxtE1CdQaJrstqcp2JmG2KjRcr5IUNk=;
-        b=S0kRGrUdtb6+O2XoqCMR9FNw3hpDGFKxPXATSEXGU+XfskCh8+j9ORGhSHIMzKMMtv
-         Li0Lg7IMCesd4TLZsMs5JILyAwj0FHEotg4MmdUU5n7ZqDrRNiw5DETsMuVqyDOUnLWM
-         Xdzy6k+Y2koQXMZfQ0h7IfCVIii5m7QVX5cAiqGAiu24MeDRn8xSMRLm/EN0YFhtO18x
-         BgEHDJGC4uwZ8OD4N6EXdrAqH5rJkSUnsAQhz5BuHCAZ5cb8pV1V+mERuU5Tb990wgq3
-         cs5mq+U27oZ0vr6zsrh8j/TGNvRmxr0StAYbsmw40lMB+OahKrA50E183izk5cL176O+
-         mY3g==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Fmg8R0DlhNpOmkHKo73NhOYJJVG4NLTqZoLmCBH7BGI=;
+        b=a4OatBY7GPljwpd05Z6hIBRgQq+FqhPIp9C1GhohOUpAqaTYr3nBvWW10eYfR1dcrf
+         AfdtUn+fgCl2j2DKRSHZp567CnGvI9ECiF3rKbGhbIIPfBM2VtocvVXpNFJzMAsP4MA7
+         BmbndYJIHikImP1PNwr08PkHNuTwdhD8Tw1lgQ/DI9vdYXcd7DdUV24y788jNzWO2bhY
+         8MIcf62fslW5LEJdo9y4oNNr+LyOAm6cTfgGtomy7eRHjwlsObjMe+ZJ/AKvKOVOAwPq
+         plEI23kU7uY15YIXM8ma7gaBt3RRXnNf6gZz3icAsPVuM8iCbkrZTqdnpY13xMnHxXPE
+         of9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xn/qJjrrzAvXyxtE1CdQaJrstqcp2JmG2KjRcr5IUNk=;
-        b=qDF1OGO3iyiCHA6+eQGc0R7bt8IURYsq8s3+qLGUXiFx0t5j3H0BM/P1NF4CO7UIYv
-         s5+JqaFfS1slG+gNzSNvMt0xCvJ+r26napIM7sKvGOoGTE2yul/aIT9AMNIzAX/6T3rm
-         ap8Vq1vhe3BBvbllw2a0a1LNw4pOOstuQW5ZzFmi4jBWGXULbtwSPILPsCnoBYWaSl5j
-         LC/CEj+a2BT0kujAnsabvMcHT5S2fI+NQTQiHA91WMHYJtJyRf8yBOTxe+A8anjpKt9M
-         feslXbY0fjCQIQs3ul0iOXKYwD50m9K8mt0n0C0Kulsa4FqHl6w933ipDyblSxk0FW0I
-         cw2A==
-X-Gm-Message-State: AOAM533owZKP69em4qDSiq498fQ8/Kg7EVOFVYFwyossiXvwfxo4YD0k
-        SFPwGsmLZ9eAYtepZZ72dnY=
-X-Google-Smtp-Source: ABdhPJwSY20TPYJ25ZlXjRuK3gW21tFwgBtIXJAU15gNpsvvXqU4nFwSCDyO3RjxW3BOHTer5Zy+xw==
-X-Received: by 2002:a17:90a:d58d:: with SMTP id v13mr14098494pju.210.1643446592611;
-        Sat, 29 Jan 2022 00:56:32 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id d9sm11830687pfl.69.2022.01.29.00.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 00:56:32 -0800 (PST)
-Date:   Sat, 29 Jan 2022 08:56:27 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Julian Wiedmann <jwiedmann.dev@gmail.com>
-Cc:     Shay Agroskin <shayagr@amazon.com>, netdev@vger.kernel.org,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ena: Do not waste napi skb cache
-Message-ID: <YfUBO2pTUVoHSTim@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
- <f835cbb3-a028-1daf-c038-516dd47ce47c@gmail.com>
- <5cca8bdd-bed0-f26a-6c96-d18947d3a50b@gmail.com>
- <pj41zlmtjk7t9a.fsf@u570694869fb251.ant.amazon.com>
- <Ye/EQgqCBogZR87T@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <bad34ba9-eacf-f325-7ebc-6fdd43414945@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Fmg8R0DlhNpOmkHKo73NhOYJJVG4NLTqZoLmCBH7BGI=;
+        b=j8FXl6CTBNeN8UzHBXswtilXTGB2iB4M/w+oWtFheioVr4D838fVmYUpM0ZaDji2Rl
+         nqMPmdzEGxBrroDBE4HKC3DGdMk+z102x2+K2qeQUZfOwJ7aNDMlVztvWPn5IqAOj1i4
+         idSj+xIl0XMja+M+NIbIwOD+bpohcI49Ysp5lzjM8+sJL/xS1iay9Ga2dhy4KhqbxxRY
+         rfMlsdjwl35MvDZ41zkPT5fsNhERVp2O7Mk44U8ib458YfyOWS5xUxURnqeojAtMfAhQ
+         9OlfrQfUcJDa9w1pLU1ql7VTNlJmf75CGHOnzR6kGuBLs5algoqF/S5EHM/rGfbAZbmA
+         5KCw==
+X-Gm-Message-State: AOAM531qDSy6ZmiD+xVCZY9qJcVp2EoqIpU+XfQK2SasNEbk+u4ew1O5
+        l76+E3hYUXVgGtpOHqc8ylTKT16byE5IPtdtV1x3fg==
+X-Google-Smtp-Source: ABdhPJxon0VydaZw6BrbMxr1ebOAFpPPE4trfgaK38I4rlLdJDsvnvAnuaCSeue48MysxEVAF+RZsbaknHdKUVoEW5c=
+X-Received: by 2002:a25:324a:: with SMTP id y71mr18068828yby.181.1643448006858;
+ Sat, 29 Jan 2022 01:20:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bad34ba9-eacf-f325-7ebc-6fdd43414945@gmail.com>
+References: <20220127180256.837257619@linuxfoundation.org>
+In-Reply-To: <20220127180256.837257619@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 29 Jan 2022 14:49:55 +0530
+Message-ID: <CA+G9fYszsF8zZ4nw-wL2Rc12+AoZuftdNXx0nvUmKihkztwE=Q@mail.gmail.com>
+Subject: Re: [PATCH 4.19 0/3] 4.19.227-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 03:50:30PM +0200, Julian Wiedmann wrote:
-> On 25.01.22 11:34, Hyeonggon Yoo wrote:
-> > On Mon, Jan 24, 2022 at 10:50:05PM +0200, Shay Agroskin wrote:
-> >>
-> 
-> [...]
-> 
-> >>
-> >> I agree that the netdev_alloc_skb_ip_align() can become napi_alloc_skb().
-> >> Hyeonggon Yoo, can you please apply this change as well to this patch?
-> >>
-> > 
-> > Okay. I'll update and test it again.
-> > 
-> > BTW, It seems netdev_alloc_skb_ip_align() is used to make some fields
-> > be aligned. It's okay to just ignore this?
-> > 
-> 
-> napi_alloc_skb() adds NET_IP_ALIGN internally, so you end up with the same alignment as before.
-> 
+On Thu, 27 Jan 2022 at 23:39, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.227 release.
+> There are 3 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.227-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Oh I was missing that. I updated the patch and tested again.
-Thank you!
 
-> 
-> > Thanks,
-> > Hyeonggon.
-> > 
-> >> Thanks,
-> >> Shay
-> >>
-> >>
-> >>>>>  	else
-> >>>>> -		skb = build_skb(first_frag, ENA_PAGE_SIZE);
-> >>>>> +		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
-> >>>>>  	if (unlikely(!skb)) {
-> >>>>>  		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail,  1,
-> >>>>
-> 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.19.227-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 0f7abe705832c477bd2571c77981ca3034202ace
+* git describe: v4.19.226-4-g0f7abe705832
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.226-4-g0f7abe705832
+
+## Test Regressions (compared to v4.19.225-239-gcedebae149c2)
+No test regressions found.
+
+## Metric Regressions (compared to v4.19.225-239-gcedebae149c2)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.225-239-gcedebae149c2)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.225-239-gcedebae149c2)
+No metric fixes found.
+
+## Test result summary
+total: 78421, pass: 63758, fail: 737, skip: 12182, xfail: 1744
+
+## Build Summary
+* arm: 250 total, 246 passed, 4 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

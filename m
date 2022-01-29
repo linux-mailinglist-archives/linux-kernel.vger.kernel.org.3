@@ -2,66 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 184FF4A3055
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936404A305A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344843AbiA2Po4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 10:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S243327AbiA2Pyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 10:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbiA2Pox (ORCPT
+        with ESMTP id S233890AbiA2Pyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 10:44:53 -0500
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCAAC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:44:53 -0800 (PST)
-Received: by mail-vs1-xe41.google.com with SMTP id r20so6628584vsn.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:44:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=DF9UmNfGnrYDhtKMt7WXfa1288InJPsKdF0BR5VR4Z4=;
-        b=KEjn+twTsONFsnXE+lRcbGAx631b4g4kj3YiuURpgYEO90lrvXd8dZFRlJJb4QwMbm
-         HvSPd3n6L6M3dXVYAcwiGU18E+d4qeRXySNA7ln5cboyLaiqVO8WkeHFrWvmPypxNdBm
-         TOC3s03SlXdJkPEluQQYwAd12JnEYvfEakQetux+pP2IxD+QPYCc4MODoNDCXl33tRuc
-         wP/UQgIqxF001lrZXY5Bj6LoohO70tbA5sgc8zNIXPUccDKbV5qBSskekr40n8G1NbYc
-         ceNkJL+DCNsa2GWc4V75o6afMKyn0/BTp6wzQ0pH8jU0W5MYeaIzj/ebav6GkqSSb6fm
-         NrnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=DF9UmNfGnrYDhtKMt7WXfa1288InJPsKdF0BR5VR4Z4=;
-        b=1E3EANwhI0hHgqYcp0IBy41DIiSXcNsrVU5NnyUU1WWx7XXac3Tm7a2y0JgotlcchY
-         ZNnX45N4ALdrAocUjKmPAIMCpVnLdc3h5hdq61M0gy3pUQH3LrjxyzUKAuO6r7xHlSx9
-         KvMF+4GRoFxC6XD1q8ttFFVhA8zHqA5bQZLP5KN2XWTjMuf3/twQP22o+tM+Du+2Khn/
-         BRS2hTgIz8N5s9ilzXLAcw9TCD2xLFELew7lXBxWibz7QoZMAb3V1F4bvv6uXx++ln8t
-         SFWZ9i1ATLWa+uOYra+dYVMe1Sq3v58RA/cnmkBQfyjndwNnBDgaoPgNWEX/4brXjLrN
-         +5hw==
-X-Gm-Message-State: AOAM531xSC3WSfWAWnga7V2vN20gwUx419FezUTKbAicSgBbeudXBP/x
-        QUVfR1m7gFImmA6MttrLT9D+jPwX5LjuzU7L/Q==
-X-Google-Smtp-Source: ABdhPJwu0tSjrLKxrLRWZSQheWW4RjmxVH+QlepWWeWQ5CvSjHsPcb2lp/GTSDqf8M0QFPv/qblczFtbsI3AK61oEIU=
-X-Received: by 2002:a05:6102:f06:: with SMTP id v6mr2733879vss.71.1643471092223;
- Sat, 29 Jan 2022 07:44:52 -0800 (PST)
+        Sat, 29 Jan 2022 10:54:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E18C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:54:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 871F460EB2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 15:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7871AC340E5;
+        Sat, 29 Jan 2022 15:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643471685;
+        bh=MUJUxdkPGfv/or2YLQ6Mah4UNtbPJ+YJLCFJgLzFZ08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=od1g9pszTmK+WNud2Fyz8MEVlm+QNXXS/Jwoa9e/4Ti/oK3fPT6AZKjRUMkftn3WX
+         qnyYgGzZJ3gJTiUhC35f9yOrv271fWe1S1f8spb4eUiBDwDY9PU4/gcyrGVw/PF8OJ
+         VCLej+GUFjfWn2TjLA0DzXddJ9LfLIek0kgWWiW4=
+Date:   Sat, 29 Jan 2022 16:54:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kangjie Lu <kjlu@umn.edu>
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Zhou Qingyang <zhou1615@umn.edu>,
+        David Airlie <airlied@linux.ie>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, Ben Skeggs <bskeggs@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/acr: Fix undefined behavior in
+ nvkm_acr_hsfw_load_bl()
+Message-ID: <YfVjQw1i9AYVz9e3@kroah.com>
+References: <20220124165856.57022-1-zhou1615@umn.edu>
+ <YfPC3N+H9Fu/gqpz@kroah.com>
+ <536c833413ccbe0b8ad653a50c5ea867bf975290.camel@redhat.com>
+ <CADnq5_MtMPNHbs92OMHEzvPYSHGt=nPJMdrny6Siuvj3SYTAXQ@mail.gmail.com>
+ <CACO55tt4P+beifvS=jcDsfwybFynngc8DHLR0n3BseeDJNrHyw@mail.gmail.com>
+ <CAK8Kejr6E76u2kf_OKxC1RT_qsCWXDf7q4WcTC13-OJz5CseWg@mail.gmail.com>
+ <YfVTcUA4MKknEawL@kroah.com>
+ <CAK8Kejo6p57u8tz1rnV5bhQVO_vz-p1nCsc_G=EvEr1u3FUP9g@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:bde6:0:b0:282:e5d0:6681 with HTTP; Sat, 29 Jan 2022
- 07:44:51 -0800 (PST)
-Reply-To: dramirparnian1975@gmail.com
-From:   "Dr.Amir Parnian" <mrrocksteven505@gmail.com>
-Date:   Sat, 29 Jan 2022 07:44:51 -0800
-Message-ID: <CAAHk35NcxMan-ENRc8Fz4s_WJAnqE33n_f6eA79CKjWoNhmXBA@mail.gmail.com>
-Subject: READ AND REPLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8Kejo6p57u8tz1rnV5bhQVO_vz-p1nCsc_G=EvEr1u3FUP9g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
-My Name is Dr.Amir Parnian,I am a banker by profession. My reason for
-contacting you is to transfer abandoned $15.5 Million United States
-Dollars to your account.
-Further details of the transaction shall be forwarded to you as soon
-as I receive your return mail indicating your interest.
-Thanks and hope to hear from you soon.
-Dr.Amir Parnian
+On Sat, Jan 29, 2022 at 09:19:18AM -0600, Kangjie Lu wrote:
+> > So to be explicit, so you do not misunderstand me somehow:
+> >
+> >         No more patches from umn.edu should be accepted into the Linux
+> >         kernel until further public notice.
+> 
+> This is clear to me.
+> 
+> > They should be considered a
+> >         "bad actor" given their prior history of submissions and lack of
+> >         complying with the kernel community's prior requirements to
+> >         them.
+> 
+> I am sorry for the delay of the last process which is unfortunately
+> not under the control of the researchers. According to our
+> administration, the process has started and is moving forward. I hope
+> that can be done soon.
+
+Given that our previously agreed-upon requirements were not met, I do
+not think that finally meeting these requirements when caught that you
+were not following them is going to be acceptable to allow your
+organization to return to the kernel community.
+
+Your people have shown bad-faith toward us too many times, and we have
+wasted too much of our own time and energy on this for absolutely no
+benefit at all, except as an example to point others at and say "do not
+be like them."
+
+greg k-h

@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC034A324A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 23:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCAF4A3266
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 23:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353320AbiA2WFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 17:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353381AbiA2WF2 (ORCPT
+        id S1353364AbiA2Wm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 17:42:29 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:36377 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243417AbiA2Wm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 17:05:28 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACA9C061753;
-        Sat, 29 Jan 2022 14:05:04 -0800 (PST)
-Date:   Sat, 29 Jan 2022 23:04:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643493900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n4D+U5HlMhytxF2oWJ6akeJdqZUw/giBlQQtt02lSdo=;
-        b=KoDi8BGMdKHj/IZ8Kam0jq/XfIKb1SjwVNTrk094cQArFm14cIEJ7sv5KPNPTn47neg/g9
-        ygizzb4Bssk54esqzhIcofiPW0yL2ZiKQzJsKOhVX9jkiMjpKtnzPLfXTWW/Nj5M82xVNz
-        vWgVIqkPag04UKdTQhw9vdwp26FUoDE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Richard Leitner <richard.leitner@linux.dev>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     linuxfancy@googlegroups.com,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: usb251xb: add boost-up property support
-Message-ID: <YfW6B4LANy11X5TQ@ltleri2>
-References: <20220128181713.96856-1-tomm.merciai@gmail.com>
+        Sat, 29 Jan 2022 17:42:27 -0500
+Received: from mail-lf1-f41.google.com ([209.85.167.41]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MUXh8-1mnVab0iZs-00QVLS; Sat, 29 Jan 2022 23:42:25 +0100
+Received: by mail-lf1-f41.google.com with SMTP id x11so19043465lfa.2;
+        Sat, 29 Jan 2022 14:42:24 -0800 (PST)
+X-Gm-Message-State: AOAM531LPENl6+KXxvfJsA9tqS18HNo2D2KpIbD6R5kD8gHnUNXXe7de
+        vOZK5fCmxmvo+UsqeygBjhn1hKpGAJ88W4PTRMc=
+X-Google-Smtp-Source: ABdhPJzI0D41s8yrwHglCZkVEr0x+bK1CMwYgZgaz1NErnnr1PsIuPoCJo0tLrBweMwgRCKK6bnEP4/locNb0Mfr0Gg=
+X-Received: by 2002:a05:6000:3c6:: with SMTP id b6mr11705793wrg.12.1643494389446;
+ Sat, 29 Jan 2022 14:13:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128181713.96856-1-tomm.merciai@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-9-guoren@kernel.org>
+In-Reply-To: <20220129121728.1079364-9-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 29 Jan 2022 23:12:53 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
+Message-ID: <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
+Subject: Re: [PATCH V4 08/17] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:0Yzxyzy2LWbvcWRmp6MeESLeJNu4HiYS0v+nd8H1Q5aXbPkaH3h
+ mmZ+2CBXPSpeBCHtzPy5un72C3Yx1seV3vXVkpHT+PrN/YcMbemmvbgD0jHrvhFjno+Tg0Y
+ fvqULPUJqNJz+T/rMGy3qgjmCSeLRmCbzt/mIBDRXs4LkxVEYtw0btA1HB91O2De7iHcXyM
+ MWdMgVoQ1PPCsUPLhdUVA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dWjG/ko0EdY=:+zw7v6BvhXjWByWelgdfw6
+ Q3AejGC3+HE8YYQOMcY+giFrl8yPSdiPa7+0ivr3Ipj1oiYMIStsvLVVvOY8ckTDM8oYnur8d
+ pCR0f8xgp/UegOdYGfHTcYO1rm8N8sph8OxobFJFfrpIY0lW5cjCqOiNafseRDkhQxea28LWR
+ fdb1R5Eg7T0rz8rq08gAxO01DFdaRkMoZXaD5K7Bb747a6m4JjuBfNrJkseFZJm2+W7mcByxw
+ nk4ZYr9oPkHqtFRo3zVrt7E8Tk/2Var7bMvnGyk6GvuP8CzOYyUEmuKFFc/7hE5k8xpN/nywi
+ I+6jt2iCtD8EV0DSW4pBvAUPYib8iuLvcRS1edR+G305Zao6WGB5+a7FmA6Uw3603dpIlOgB2
+ F2y8megL4+vWzqKyv6eSeu8ZxR7/f4nOxveFRfDFpEtGwjvDNGl7cHj+ix2PH1mRfCfbmOkni
+ q/w2/Kq50c4OAKOWhJ9rFHymKfb1kKJ1MpHy1rrG21kXl37KVdnm7u3XnSOg4DD0J/vlO0THX
+ Enhjc8wH/8kr1DNcJLIog/ku3oTnUL2PUeTF9o8tJiAahGBk++9aEueAQUrZdu+uiY3ik85CZ
+ PzVkPJ3bPZzaEEJn0XakE7dWgQ/PCdY7QGhdEVIcnw5rh4U8BIehof++NqNgeaSAZU/Spe5HT
+ 0cGKu6qKg1XZUOjQPt7nihz+Gz7+b3pPTGlhvpYUnGJbUj8XSV5mveQs8u/f/80JOTHO9jWAG
+ cE0wn/RVJklRA8VjUu2Oj7gXevld3Ox9fPQHMkkCVF1KzvVZ/TTSDT3zglwFcM3ZZPoopchfH
+ d7OYU5Bhv76HpKNGmuP6lksZRTpQap8HmTAdW84KRODDXqchCk=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LGTM. Please feel free to add
+> Implement compat sys_call_table and some system call functions:
+> truncate64, ftruncate64, fallocate, pread64, pwrite64,
+> sync_file_range, readahead, fadvise64_64 which need argument
+> translation.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Richard Leitner <richard.leitner@linux.dev>
+This all looks really good, but I would change one detail:
 
-On Fri, Jan 28, 2022 at 07:17:13PM +0100, Tommaso Merciai wrote:
-> Add support for boost-up register of usb251xb hub.
-> boost-up property control USB electrical drive strength
-> This register can be set:
-> 
->  - Normal mode -> 0x00
->  - Low         -> 0x01
->  - Medium      -> 0x10
->  - High        -> 0x11
-> 
-> (Normal Default)
-> 
-> References:
->  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
-> 
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> ---
-> Changes since v1:
->  - Fix patch as suggested by RLeitner
-> 
-> Changes since v2:
->  - Fix commit body as suggested by Shtylyov
->  - Fix commit msg
->  - Fix patch as suggested by RLeitner and Shtylyov
-> 
->  drivers/usb/misc/usb251xb.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index 507deef1f709..04c4e3fed094 100644
-> --- a/drivers/usb/misc/usb251xb.c
-> +++ b/drivers/usb/misc/usb251xb.c
-> @@ -543,6 +543,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
->  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
->  
-> +	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
-> +		hub->boost_up = USB251XB_DEF_BOOST_UP;
-> +
->  	cproperty_char = of_get_property(np, "manufacturer", NULL);
->  	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
->  		sizeof(str));
-> @@ -584,7 +587,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  	 * may be as soon as needed.
->  	 */
->  	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
-> -	hub->boost_up = USB251XB_DEF_BOOST_UP;
->  	hub->boost_57 = USB251XB_DEF_BOOST_57;
->  	hub->boost_14 = USB251XB_DEF_BOOST_14;
->  	hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
-> -- 
-> 2.25.1
-> 
+> +#ifndef compat_arg_u64
+> +#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
+> +#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
+> +#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
+> +                                        ((u64)name##_lo & 0xffffffffUL))
+> +#endif
+
+I would make these endian-specific, and reverse them on big-endian
+architectures. That way it
+should be possible to share them across all compat architectures
+without needing the override
+option.
+
+        Arnd

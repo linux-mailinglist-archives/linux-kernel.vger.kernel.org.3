@@ -2,209 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570FA4A2C93
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D3E4A2CA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245071AbiA2Hmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 02:42:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20300 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239887AbiA2Hmu (ORCPT
+        id S1343994AbiA2Hxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 02:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343747AbiA2Hxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 02:42:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643442168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hqAbydCBk9H7/5XjW5Z7u+h9UMhr2T8NZqYgPwuQK68=;
-        b=E6lo7rXSTapKmI97fot2plyAY/BTa0GvF47yFpNIELprafSRsDXiJUH5393IQLMIjoxTHi
-        MBjBSOPa4pw2IGOWlXkyVrQEPwqxklMRDDfZzgA7IXB0FsrvcQVHiw/xbjneaMgHz2B1iP
-        jl/PxwSaN3nSG2kM0UcA6ldzp90aOgc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-YzTIbIpCMQqLosWZ1C3_xg-1; Sat, 29 Jan 2022 02:42:47 -0500
-X-MC-Unique: YzTIbIpCMQqLosWZ1C3_xg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C06AC1898290;
-        Sat, 29 Jan 2022 07:42:44 +0000 (UTC)
-Received: from localhost (ovpn-12-33.pek2.redhat.com [10.72.12.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 87C616E4A1;
-        Sat, 29 Jan 2022 07:42:37 +0000 (UTC)
-Date:   Sat, 29 Jan 2022 15:42:34 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "anton@enomsg.org" <anton@enomsg.org>,
-        "ccross@android.com" <ccross@android.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Message-ID: <20220129074234.GA17613@MiWiFi-R3L-srv>
-References: <20220119071318.GA4977@MiWiFi-R3L-srv>
- <YegytkfED+QI56Y8@alley>
- <20220120085115.GB18398@MiWiFi-R3L-srv>
- <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
- <20220121023119.GB4579@MiWiFi-R3L-srv>
- <MWHPR21MB1593A32A3433F5F262796FCFD75B9@MWHPR21MB1593.namprd21.prod.outlook.com>
- <20220122043351.GA2596@MiWiFi-R3L-srv>
- <MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com>
- <20220128090311.GA27201@MiWiFi-R3L-srv>
- <MWHPR21MB159337667BD11F6F8BCA6A06D7229@MWHPR21MB1593.namprd21.prod.outlook.com>
+        Sat, 29 Jan 2022 02:53:32 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD9EC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 23:53:31 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id c7so11671633ljr.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 23:53:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZjffD8C6hWszKe+q+e4gp+s/8emWlsNf02+aVWLSx1o=;
+        b=XtVYbiuKY9YiMw7e4qqMCW0JoeMk0DpTYwCwXZJrNVziB0gmDaUmkyglq9LmvvTJMW
+         zVozIdHYPSnjxLH1Ov0a235DAG9mULlYwksbOkmv4YQoOj9cMIzAlh9OjvoSsSHW0w+P
+         lbupVGzXMFz8yplhEiPpLVYiiJE2bkE0WCGzHKPRDvIw6RgSFdeqQZSdNgwAXWiRIpOJ
+         uRRa5UY2j/OtaEWGNnZv7pRHj+eKlj3iqzJvaGfhFxBZZ2PvRDmExevajdp20nzgFgou
+         bdBr8696+nNQ/Z6DYSFinK823o7c4wt8EiinzJ6nMzCGCGOpAgBcEsuZJEqDTIpjn7PJ
+         2qVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZjffD8C6hWszKe+q+e4gp+s/8emWlsNf02+aVWLSx1o=;
+        b=JzhqqV8zqgOOYVagfk6BjW2e9T2fRnfuU+aq6tly7T68++vwJsICD41bcpK4WfXThH
+         TENLMsrj1bLDz57AtaxjUIcHT247fFhR2ISh4hjAtwoFWybBi1Hv4oVV8iJ3yp6CuHtX
+         uOJryj1rX8eRMDJY8+9Ig6/dJeGZbjGJabqj4bnon1OSJFvwPEAMpk5L24IQ3sOQ7PAT
+         nNXiae8EmhjLhyum0evPIQcPl4Dmy03nZqx/QreXJbyLN0jMEnyGA1tKAY48HDJs6GRZ
+         hSz+ruRwH6phR0/bWvLoirCbDJ60Eu3snrF2w+Ypvad0CRg3zNF5NkslLpo+fXvF6zgV
+         fjBA==
+X-Gm-Message-State: AOAM532lHpfPyxq1l/D5r7pMRbXqfYRKSaX1Dk+6Rm8b8tfWv2XQ4yIn
+        WrGx5sHwQ3yD5vXBXEEnAfXHxAKHNkITgRUweOGYHA==
+X-Google-Smtp-Source: ABdhPJxXjmeIrPS5esBmIZy29jk4awgm1RZq5Zk2vMrOjU/zU+/NmzMmcb4LYpJstc59tkQ37omBeDPXUe/O8Woi8/g=
+X-Received: by 2002:a2e:bf01:: with SMTP id c1mr7963677ljr.406.1643442809222;
+ Fri, 28 Jan 2022 23:53:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR21MB159337667BD11F6F8BCA6A06D7229@MWHPR21MB1593.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
+ <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com> <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+In-Reply-To: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+From:   Kelly Rossmoyer <krossmo@google.com>
+Date:   Fri, 28 Jan 2022 23:52:52 -0800
+Message-ID: <CAHTsKTcHd1Uo2QVr=ux1hFfA+x00k3i3Jya5n5XqZFfg9B68bw@mail.gmail.com>
+Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
+To:     Zichar Zhang <zichar.zhang@linaro.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Vijay Nayak <nayakvij@google.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/28/22 at 06:24pm, Michael Kelley (LINUX) wrote:
-> From: Baoquan He <bhe@redhat.com> Sent: Friday, January 28, 2022 1:03 AM
-> > 
-> > On 01/24/22 at 04:57pm, Michael Kelley (LINUX) wrote:
-> > > From: Baoquan He <bhe@redhat.com> Sent: Friday, January 21, 2022 8:34 PM
-> > > >
-> > > > On 01/21/22 at 03:00pm, Michael Kelley (LINUX) wrote:
-> > > > > From: Baoquan He <bhe@redhat.com> Sent: Thursday, January 20, 2022 6:31 PM
-> > > > > >
-> > > > > > On 01/20/22 at 06:36pm, Guilherme G. Piccoli wrote:
-> > > > > > > Hi Baoquan, some comments inline below:
-> > > > > > >
-> > > > > > > On 20/01/2022 05:51, Baoquan He wrote:
-> > >
-> > > [snip]
-> > >
-> > > > > > > Do you think it should be necessary?
-> > > > > > > How about if we allow users to just "panic_print" with or without the
-> > > > > > > "crash_kexec_post_notifiers", then we pursue Petr suggestion of
-> > > > > > > refactoring the panic notifiers? So, after this future refactor, we
-> > > > > > > might have a much clear code.
-> > > > > >
-> > > > > > I haven't read Petr's reply in another panic notifier filter thread. For
-> > > > > > panic notifier, it's only enforced to use on HyperV platform, excepto of
-> > > > > > that, users need to explicitly add "crash_kexec_post_notifiers=1" to enable
-> > > > > > it. And we got bug report on the HyperV issue. In our internal discussion,
-> > > > > > we strongly suggest HyperV dev to change the default enablement, instead
-> > > > > > leave it to user to decide.
-> > > > > >
-> > > > >
-> > > > > Regarding Hyper-V:   Invoking the Hyper-V notifier prior to running the
-> > > > > kdump kernel is necessary for correctness.  During initial boot of the
-> > > > > main kernel, the Hyper-V and VMbus code in Linux sets up several guest
-> > > > > physical memory pages that are shared with Hyper-V, and that Hyper-V
-> > > > > may write to.   A VMbus connection is also established. Before kexec'ing
-> > > > > into the kdump kernel, the sharing of these pages must be rescinded
-> > > > > and the VMbus connection must be terminated.   If this isn't done, the
-> > > > > kdump kernel will see strange memory overwrites if these shared guest
-> > > > > physical memory pages get used for something else.
-> > > > >
-> > > > > I hope we've found and fixed all the problems where the Hyper-V
-> > > > > notifier could get hung.  Unfortunately, the Hyper-V interfaces were
-> > > > > designed long ago without the Linux kexec scenario in mind, and they
-> > > > > don't provide a simple way to reset everything except by doing a
-> > > > > reboot that goes back through the virtual BIOS/UEFI.  So the Hyper-V
-> > > > > notifier code is more complicated than would be desirable, and in
-> > > > > particular, terminating the VMbus connection is tricky.
-> > > > >
-> > > > > This has been an evolving area of understanding.  It's only been the last
-> > > > > couple of years that we've fully understood the implications of these
-> > > > > shared memory pages on the kexec/kdump scenario and what it takes
-> > > > > to reset everything so the kexec'ed kernel will work.
-> > > >
-> > > > Glad to know these background details, thx, Michael. While from the
-> > > > commit which introduced it and the code comment above code, I thought
-> > > > Hyper-V wants to collect data before crash dump. If this is the true,
-> > > > it might be helpful to add these in commit log or add as code comment,
-> > > > and also help to defend you when people question it.
-> > > >
-> > > > int __init hv_common_init(void)
-> > > > {
-> > > >         int i;
-> > > >
-> > > >         /*
-> > > >          * Hyper-V expects to get crash register data or kmsg when
-> > > >          * crash enlightment is available and system crashes. Set
-> > > >          * crash_kexec_post_notifiers to be true to make sure that
-> > > >          * calling crash enlightment interface before running kdump
-> > > >          * kernel.
-> > > >          */
-> > > >         if (ms_hyperv.misc_features &
-> > HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE)
-> > > >                 crash_kexec_post_notifiers = true;
-> > > >
-> > > > 	......
-> > > > }
-> > >
-> > > In the Azure cloud, collecting data before crash dumps is a motivation
-> > > as well for setting crash_kexec_post_notifiers to true.   That way as
-> > > cloud operator we can see broad failure trends, and in specific cases
-> > > customers often expect the cloud operator to be able to provide info
-> > > about a problem even if they have taken a kdump.  Where did you
-> > > envision adding a comment in the code to help clarify these intentions?
-> > >
-> > > I looked at the code again, and should revise my previous comments
-> > > somewhat.   The Hyper-V resets that I described indeed must be done
-> > > prior to kexec'ing the kdump kernel.   Most such resets are actually
-> > > done via __crash_kexec() -> machine_crash_shutdown(), not via the
-> > > panic notifier. However, the Hyper-V panic notifier must terminate the
-> > > VMbus connection, because that must be done even if kdump is not
-> > > being invoked.  See commit 74347a99e73.
-> > >
-> > > Most of the hangs seen in getting into the kdump kernel on Hyper-V/Azure
-> > > were probably due to the machine_crash_shutdown() path, and not due
-> > > to running the panic notifiers prior to kexec'ing the kdump kernel.  The
-> > > exception is terminating the VMbus connection, which had problems that
-> > > are hopefully now fixed because of adding a timeout.
-> > Thanks for detailed information.
-> > 
-> > So I can understand the status as:
-> > ===
-> > Hyper-V needed panic_notifier to execute before __crash_kexec() in
-> > the past, because VMbus connection need be terminated, that's done in
-> > commit 74347a99e73 as a workaround when panic happened, whether kdump is
-> > enabled or not. But now, the VMbus connection termination is not needed
-> > anymore since it's fixed by adding a timeout on Hyper-V.
-> 
-> No.  Sorry I wasn't clear.  Even now, specific action needs to be taken to
-> terminate the VMbus connection before __crash_kexec() runs so that
-> the new kdump kernel can start fresh and establish its own VMbus
-> connection.  You had originally mentioned hang problems occurring
-> because of running the Hyper-V panic notifier before __crash_kexec().
-> Terminating the VMbus connection waits for a reply from Hyper-V
-> because terminating the connection can take a while (10's seconds)
-> if Hyper-V has a lot of disk data cached.  Dirty data must be flushed back
-> to a cloud disk before the kdump kernel runs (otherwise other weird stuff
-> happens in the kdump kernel).  We've added a timeout in Linux so that if
-> for whatever reason Hyper-V fails to reply, __crash_kexec() still gets called.
-> Hopefully that timeout cures any hang problems that were previously
-> seen.  But the timeout does not remove the need to terminate the
-> VMbus connection.
+On Tue, Jan 25, 2022 at 9:09 PM Zichar Zhang <zichar.zhang@linaro.org> wrote:
+>
+> hello John,  Kelly!
 
-Ah, got it now, thx.
+Hello!  Happy to see what the future may bring in this space, and looking
+forward to what we can all do to move this area forward.
 
-So the VMbus connection has to be terminated explicitly and need be
-waited, no matter kdump is configured or not. Wondering why we don't 
-wrap these into a function and call it before __crash_kexec() if
-platform is Hyper-V. Honeslty, hooking it up to panic_notifier_list
-and executing the entire panic_notifiers for Hyper-V is risky and
-not so inappropriate.
+>     -- If these IRQs do hanpen, the code in this commit will catch
+>     them as "unknown wakeup reason" and suggest user to check the
+>     kernel log for more information.
 
+I would argue that - at least in Android context, as that's what I know -
+the kernel log is not a substitute for wakeup reason capture.
+1) It is common to find yourself troubleshooting battery life issues for
+   which kernel log data is not unavailable.
+2) Troubleshooting is not the only consideration.  Since "why aren't we in
+   suspend right now?" is such a key question for mobile device battery
+   life, this is also about power attribution.  And I think trying to build
+   that upon live kernel log parsing would be both inefficient and brittle.
+   (But my lack of knowledge is vast, so maybe that's a solvable problem?)
 
+> >> * abort reasons, including:
+> >>    * wakeup_source activity
+> >>    * failure to freeze userspace
+> >>    * failure to suspend devices
+> >>    * failed syscore_suspend callback
+>
+>     -- As mentioned before, if these "abort action" happened, you
+>     can catch string "unknown wakeup reason", and check the kernel
+>     log then.
 
+I don't think the kernel log is a solution here.  Suspend aborts can be a
+significant fraction of how suspend attempts end, making them a key
+contributor to battery drain.  If the eventual set of patches doesn't solve
+for at least the most common kinds of suspend aborts, that leaves a lot of
+power observability off the table.  And again, at least on Android, kernel
+log content is often not available for the interval when a series of
+suspend aborts contributed to power drain.
 
+> The patch is not complete, these is the next steps:
+> 1. add interface to show time spend in suspend/resume work.
+> (after this, I think it could be works and replace the android patch)
+
+I believe Android would experience a significant regression in capability
+with only those two patches implemented, so that would require a lot of
+careful consideration.
+
+> 2. we need solve the "unmapped HW IRQs", "misconfigured IRQs" and
+> "threaded IRQs" problem.
+> (this is the hardest one)
+
+FWIW, I'm already expecting unmapped HW IRQs and misconfigured IRQs not to
+make the cut.  Those have helped solve real and recurring issues, but
+they're admittedly niche solutions to infrequent problems at the expense of
+messy code coupling, so... maybe not broadly beneficial for Linux.
+
+Threaded wakeup IRQs are a different matter.  As one example, there are
+architectures in which the RTC wakeup IRQ is threaded and knowing "this
+string of wakeups was due to the RTC" is a lot more useful than "this
+string of wakeups was due to an irqchip with tens of child IRQs".
+
+> ... So it just report a "wakeup reason" from
+> interrupt subsystem. It just a coincidence that most hardware "wakeup
+> reason" is also the interupt signal.  Even the "interrupt" and "wake up"
+> signal are separated from each other in GIC700.
+> So give them a chance to report the their "wakeup reason".)
+
+Agreed.  But I do hope we can find a way to bring them together so a single
+story is presented to userspace.  Or, barring that, at least make it easy
+for userspace to figure that out after the fact.
+
+Thanks so much for the work you are doing on this and taking the time to
+walk me through your thoughts.  I'm happy to contribute in whatever manner
+adds value.
+
+--
+
+Kelly Rossmoyer | Software Engineer | krossmo@google.com | 858-239-4111

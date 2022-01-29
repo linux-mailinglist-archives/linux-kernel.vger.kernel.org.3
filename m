@@ -2,60 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E794A2C3E
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7825B4A2C41
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbiA2HBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 02:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236234AbiA2HBH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 02:01:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AED8C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 23:01:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 662C360B65
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DA0C340E5;
-        Sat, 29 Jan 2022 07:01:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643439665;
-        bh=BamMGzH8nXZci1GRam4W2FajTEbOEjdeeV7Z0ODh6xI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mffmIT29FQGgwpUdF6lGEoghZE44l1CXYl7FwtXNdfb2wJb1R3JZPQwNNsWxVQ61a
-         tPV4wizXYKSvJY9fJqkBW/qjnt3bwopmwoX41GP1PT9ZZ1lejmQloaeW5rwfih1xJi
-         33W2pGyZUd0gjYmAhc1buOx66zBLNKZcG5rHWWTPFMgBvKhSPCpuwtrey+MbDy2T10
-         +fhio6qkAf/N1eT/7VVGSwsbmMvofeyYXDdqiv9zaCV3+qxql9V3LQQ3ld9tFv/jSc
-         W10ApU4BeSZOYlIgcSCSHnRorRMf95ywVToCgTjZTvIOeSrjttHI2ummdZ6smPROGX
-         pzAARalaQPQMw==
-Date:   Sat, 29 Jan 2022 15:01:01 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alex Marginean <alexandru.marginean@nxp.com>
-Subject: Re: [PATCH] arm64: dts: ls1028a-qds: define mdio slots for
- networking options
-Message-ID: <20220129070100.GY4686@dragon>
-References: <20220126092650.19962-1-leoyang.li@nxp.com>
+        id S1347735AbiA2HDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 02:03:49 -0500
+Received: from mga01.intel.com ([192.55.52.88]:2285 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233593AbiA2HDq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 02:03:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643439826; x=1674975826;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Gy+amLjM7g3mHU1szM7Bq3uoZ8SJyvAh77TBOs8M1rk=;
+  b=Xjh62I3wGbQsBf/2HsqZJRxGthfcaz28BVLPGeps+SGV6AxClY8Gq/AJ
+   J5IspoFFw5T7wU1vFnWN3Nj153FgkBkcGtw5B+sYtMF37x18kMgush17Y
+   IRvmQJJxqsy2Cu+UM353HSfPtYw5POtNTl27CSJDeKeRNUEN09Xec/aXN
+   B7opeamza0IihfKFbZ5m8JnwDzFudOdkyCpJo/AOaj/VuYFRWc9KxgUYS
+   5FFpgUZEvJi0H6xWMGFyzU1C0g8bFru5EudCnhPA5Lhw6KLGnMtYE9hIi
+   nHb2pP/HYlaWwYOWiSc50dqn+Tk6kFg4zhSVfj/4BPYFeZ5BFx8Vi14gB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="271713934"
+X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
+   d="scan'208";a="271713934"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 23:03:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
+   d="scan'208";a="629361273"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2022 23:03:44 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDhlv-000OuM-Bg; Sat, 29 Jan 2022 07:03:43 +0000
+Date:   Sat, 29 Jan 2022 15:02:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Justin M. Forbes" <jforbes@fedoraproject.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Jason A. Donenfeld" <zx2c4@kernel.org>
+Subject: arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least
+ version 4.6 of GCC
+Message-ID: <202201291408.Pkylyt75-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126092650.19962-1-leoyang.li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 03:26:50AM -0600, Li Yang wrote:
-> The ls1028a QDS board support different pluggable PHY cards.  Define the
-> nodes for these slots to be updated at boot time with overlay according
-> to board setup.
-> 
-> Signed-off-by: Alex Marginean <alexandru.marginean@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+Hi Justin,
 
-Applied, thanks!
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   169387e2aa291a4e3cb856053730fe99d6cec06f
+commit: e56e18985596617ae426ed5997fb2e737cffb58b lib/crypto: add prompts back to crypto libraries
+date:   11 days ago
+config: arm-randconfig-r004-20220128 (https://download.01.org/0day-ci/archive/20220129/202201291408.Pkylyt75-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e56e18985596617ae426ed5997fb2e737cffb58b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e56e18985596617ae426ed5997fb2e737cffb58b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
+   #warning This code requires at least version 4.6 of GCC
+    ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
+   Depends on DMADEVICES && (ARCH_TEGRA || COMPILE_TEST
+   Selected by
+   - SOC_TEGRA_FUSE && ARCH_TEGRA && ARCH_TEGRA_2x_SOC
+
+
+vim +30 arch/arm/lib/xor-neon.c
+
+01956597cbc46d Ard Biesheuvel 2013-05-17  16  
+01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
+01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
+01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
+01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
+01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
+01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
+01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
+01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
+01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
+01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
+01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
+01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
+01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
+01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
+01956597cbc46d Ard Biesheuvel 2013-05-17  32  
+
+:::::: The code at line 30 was first introduced by commit
+:::::: 01956597cbc46df072f20f90a40eebe356200c38 ARM: crypto: add NEON accelerated XOR implementation
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

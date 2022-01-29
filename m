@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAFE4A30F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 18:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBB74A30FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 18:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352874AbiA2RD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 12:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235519AbiA2RDy (ORCPT
+        id S1352920AbiA2RHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 12:07:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53828 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245664AbiA2RHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 12:03:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAF0C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 09:03:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=vq4Avmy7ppv5DneVq71c6GVpA7SJmG9GPgd/NUf1nv4=; b=DU4Hzal/kaaGKDb+MKnAgrEERN
-        B/LOfBx+Fdtj7EfYyPPGQCk0MU0DLdhgB9OZSeext1Vuvr5vF3TuuIUgDP/t3VQR8DLSobUXqmPc3
-        xndJ1JWuNYkNdPZc4v7dcuI9VICG57bZRRmvRTGNhyq8CjMTmGbqAMikaZVn9f+26tDvqyXYDm09Y
-        GApPOQEjZTNwzOG4RwnAeofDYn0Iw0I3arYKFLI6pE1VWayJs+tvDfARSIToFciXDmLlWk5IQkgkm
-        A4ZL/O2EfXRsWIFNeX+AK12iChqJQXRq9KsC3R44tiP+vf9OA8L9HX9/q7zud/tqH8jA+ThHRqO4B
-        xvMtSDeg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDr8M-004uD7-3Y; Sat, 29 Jan 2022 17:03:30 +0000
-Message-ID: <964539a8-334d-37d4-99e7-d2dd76887fa1@infradead.org>
-Date:   Sat, 29 Jan 2022 09:03:23 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/8] arm64: Add Kconfig/Makefile to build hardware
- prefetch control driver
-Content-Language: en-US
-To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
-        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220125071414.811344-1-tarumizu.kohei@fujitsu.com>
- <20220125071414.811344-5-tarumizu.kohei@fujitsu.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220125071414.811344-5-tarumizu.kohei@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Sat, 29 Jan 2022 12:07:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE40B8279C;
+        Sat, 29 Jan 2022 17:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1F0DBC340E5;
+        Sat, 29 Jan 2022 17:07:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643476066;
+        bh=mK4GOxjWQhgRBxEZl+E4VWsLx6wsCN7ihIaJ91iTUj0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GdlQvadpZItLZKHQeaAo/69i91fqU+knvzzcHU5wGgL/6llcQFwxq/dytA1HPv+CV
+         SeYTy6P32XFZNZfZR+7thit3bAlRjN112WnuViIITpzcSHQhUWalHvF0gmhsQX3bv3
+         c9HrqElGb5savYCAZV6obr+OlA3U64wn22RXhOrjj5axZtLh7evJrUrIWz/R6mopbv
+         eMazdV16ZaEzBggb1d+8UcjdrRSluSBFQ0OfSWBEfgXTgksHGMsTaxOAZBBtsOzVpC
+         vyZYq0+RncErBvhaArEykqLRJW7eDwmhbsiLIiCzUt+SGQfAbVxUy6ShLfu5UeyvNC
+         wyX5X1Gg0/NxA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E9D0E5D07E;
+        Sat, 29 Jan 2022 17:07:46 +0000 (UTC)
+Subject: Re: [GIT PULL] PCI fixes for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220129161547.GA352890@bhelgaas>
+References: <20220129161547.GA352890@bhelgaas>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220129161547.GA352890@bhelgaas>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-2
+X-PR-Tracked-Commit-Id: 66d28b21fe6b3da8d1e9f0a7ba38bc61b6c547e1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f8c7e4ede46fe63ff10000669652648aab09d112
+Message-Id: <164347606605.4234.11517840311801526698.pr-tracker-bot@kernel.org>
+Date:   Sat, 29 Jan 2022 17:07:46 +0000
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+The pull request you sent on Sat, 29 Jan 2022 10:15:47 -0600:
 
-On 1/24/22 23:14, Kohei Tarumizu wrote:
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 6978140edfa4..c2256dbb0243 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
+> git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-2
 
->  	def_bool y
->  	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_SYSREG
->  
-> +config ARM64_HWPF_CONTROL
-> +	tristate "ARM64 Hardware Prefetch Control support"
-> +	depends on HWPF_CONTROL
-> +	default m
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f8c7e4ede46fe63ff10000669652648aab09d112
 
-Don't enable random drivers unless they are required for booting etc.
-So can you justify having this driver enabled by default?
+Thank you!
 
-I see that the X86 driver is not enabled by default.
-
-> +	help
-> +	  This adds Hardware Prefetch Control driver support for ARM64.
-
-thanks.
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

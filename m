@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D401E4A2E74
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 12:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7B64A2EAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 13:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241184AbiA2L5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 06:57:08 -0500
-Received: from mga06.intel.com ([134.134.136.31]:28873 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240332AbiA2L5G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 06:57:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643457426; x=1674993426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6Qn6Nz3CVj0GK0u7Ow+pSh0AFpPGVF2G0H6EUY93syc=;
-  b=POL0cGzdvZz2XACcbpiS6Lr0JRy0FonGJbAf5VdCSGmo4qOtH0cHP5sc
-   Yf8aNYhv/i1mD56WuZTAXecHixg6V9BPbpiNoJljznlArRzAbzshQQFhT
-   NI6K9+mqvS5+r6tn2ZVLOUCurbIObkXX4nj4YRs+3TohrrSk3iHNXROAJ
-   nIWbYOGvk4JTduTUdIfRRJPjfRB33E0BjQgn3PmLggWRJkPbyiHw5nfKz
-   HkKcNyab3Nz0dBgFfR28hu8qK+4rP8eq24mSVhyAf/eGO/X2O6Nohz58h
-   RPJzkzsrGaWGjf1JFUHCrouWZFVgr6JSirma5Ks2rwEwQBoO6MhRAYdzU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307994510"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="307994510"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 03:57:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="481027486"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jan 2022 03:57:05 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDmLo-000P9N-Cp; Sat, 29 Jan 2022 11:57:04 +0000
-Date:   Sat, 29 Jan 2022 19:56:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_aclint_v5 3/12] arch/riscv/kernel/smp.c:166:50:
- sparse: sparse: incorrect type in argument 4 (different address spaces)
-Message-ID: <202201291952.3uJSTKvp-lkp@intel.com>
+        id S243290AbiA2MC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 07:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229989AbiA2MC1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 07:02:27 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1DCC061714;
+        Sat, 29 Jan 2022 04:02:26 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2BF4B1EC01B7;
+        Sat, 29 Jan 2022 13:02:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643457741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1SqI9kGrSv75+nJPwZYKxkcTL83Vduz6X2Q74CD9Idc=;
+        b=cpPOiblw8z2FwDfVV+8Cx0gJBEZNMWEIsqxMvsZI45g70BBWrD1cdgvk7WcuViGnXEW3Zt
+        w2dBeSBqEsUj1PwAVsBYj3Ix9UfYnGw4OVtjeo9/YFKg83b4EBpejQM5Gk0DJD94L1MujC
+        KQyEa3QGcWGmbyjQjsI3rua5JaZbDeo=
+Date:   Sat, 29 Jan 2022 13:02:18 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 36/40] x86/sev: Provide support for SNP guest request
+ NAEs
+Message-ID: <YfUsygRVgPCrUvFX@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-37-brijesh.singh@amd.com>
+ <YfLGcp8q5f+OW72p@zn.tnic>
+ <87d4999a-14cc-5070-4f03-001dd5f1d2b1@amd.com>
+ <YfUWgeonL4tfGf8P@zn.tnic>
+ <fb90b0a5-a8cf-0c94-ebbe-a0d5343fe3b9@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <fb90b0a5-a8cf-0c94-ebbe-a0d5343fe3b9@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_aclint_v5
-head:   7f4564bd884ddd6e785f4718ed46c5d4a59bf310
-commit: bbfd82cb293e2c4fe309a1c9bf59d3a4d9459d26 [3/12] RISC-V: Treat IPIs as normal Linux IRQs
-config: riscv-randconfig-s032-20220129 (https://download.01.org/0day-ci/archive/20220129/202201291952.3uJSTKvp-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/avpatel/linux/commit/bbfd82cb293e2c4fe309a1c9bf59d3a4d9459d26
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_aclint_v5
-        git checkout bbfd82cb293e2c4fe309a1c9bf59d3a4d9459d26
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+On Sat, Jan 29, 2022 at 05:49:06AM -0600, Brijesh Singh wrote:
+> The hypervisor must validate that the guest has supplied enough pages to
+> hold the certificates that will be returned before performing the SNP
+> guest request. If there are not enough guest pages to hold the
+> certificate table and certificate data, the hypervisor will return the
+> required number of pages needed to hold the certificate table and
+> certificate data in the RBX register and set the SW_EXITINFO2 field to
+> 0x0000000100000000.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Then you could call that one:
 
+#define SNP_GUEST_REQ_ERR_NUM_PAGES       BIT_ULL(32)
 
-sparse warnings: (new ones prefixed by >>)
->> arch/riscv/kernel/smp.c:166:50: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int * @@
-   arch/riscv/kernel/smp.c:166:50: sparse:     expected void [noderef] __percpu *percpu_dev_id
-   arch/riscv/kernel/smp.c:166:50: sparse:     got int *
+or so, to mean what exactly that error is. Because when you read the
+code, it is more "self-descriptive" this way:
 
-vim +166 arch/riscv/kernel/smp.c
+	...
+	ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_ERR_NUM_PAGES)
+		input->data_npages = ghcb_get_rbx(ghcb);
 
-   151	
-   152	void riscv_ipi_set_virq_range(int virq, int nr)
-   153	{
-   154		int i, err;
-   155	
-   156		if (WARN_ON(ipi_virq_base))
-   157			return;
-   158	
-   159		WARN_ON(nr < IPI_MAX);
-   160		nr_ipi = min(nr, IPI_MAX);
-   161		ipi_virq_base = virq;
-   162	
-   163		/* Request IPIs */
-   164		for (i = 0; i < nr_ipi; i++) {
-   165			err = request_percpu_irq(ipi_virq_base + i, handle_IPI,
- > 166						 "IPI", &ipi_virq_base);
-   167			WARN_ON(err);
-   168	
-   169			ipi_desc[i] = irq_to_desc(ipi_virq_base + i);
-   170			irq_set_status_flags(ipi_virq_base + i, IRQ_HIDDEN);
-   171		}
-   172	
-   173		/* Enabled IPIs for boot CPU immediately */
-   174		riscv_ipi_enable();
-   175	}
-   176	EXPORT_SYMBOL_GPL(riscv_ipi_set_virq_range);
-   177	
+> It does not spell it as invalid length. However, for *similar* failure,
+> the SEV-SNP spec spells out it as INVALID_LENGTH, so, I choose macro
+> name as INVALID_LENGTH.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+You can simply define a separate one here called ...INVALID_LENGTH.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

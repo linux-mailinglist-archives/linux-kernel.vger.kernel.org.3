@@ -2,123 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7825B4A2C41
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5214A2C47
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347735AbiA2HDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 02:03:49 -0500
-Received: from mga01.intel.com ([192.55.52.88]:2285 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233593AbiA2HDq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 02:03:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643439826; x=1674975826;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Gy+amLjM7g3mHU1szM7Bq3uoZ8SJyvAh77TBOs8M1rk=;
-  b=Xjh62I3wGbQsBf/2HsqZJRxGthfcaz28BVLPGeps+SGV6AxClY8Gq/AJ
-   J5IspoFFw5T7wU1vFnWN3Nj153FgkBkcGtw5B+sYtMF37x18kMgush17Y
-   IRvmQJJxqsy2Cu+UM353HSfPtYw5POtNTl27CSJDeKeRNUEN09Xec/aXN
-   B7opeamza0IihfKFbZ5m8JnwDzFudOdkyCpJo/AOaj/VuYFRWc9KxgUYS
-   5FFpgUZEvJi0H6xWMGFyzU1C0g8bFru5EudCnhPA5Lhw6KLGnMtYE9hIi
-   nHb2pP/HYlaWwYOWiSc50dqn+Tk6kFg4zhSVfj/4BPYFeZ5BFx8Vi14gB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="271713934"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="271713934"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 23:03:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="629361273"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2022 23:03:44 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDhlv-000OuM-Bg; Sat, 29 Jan 2022 07:03:43 +0000
-Date:   Sat, 29 Jan 2022 15:02:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Justin M. Forbes" <jforbes@fedoraproject.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least
- version 4.6 of GCC
-Message-ID: <202201291408.Pkylyt75-lkp@intel.com>
+        id S1348883AbiA2HGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 02:06:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53786 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243344AbiA2HGW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 02:06:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31DEC60B65;
+        Sat, 29 Jan 2022 07:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA0AC340E5;
+        Sat, 29 Jan 2022 07:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643439981;
+        bh=+9orCdx5OHHhlT7WVp0s9rE5tL8RNTogO1+pon4/4lk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PHuxg106g2qBs0R/75fdVcw0HV82kniQZKT8AeS0WpsXntUo5uM59UqwswEZfvzHM
+         0gItCXlqaRMCXkNfA2hf2n4zzkAkAfzyfV6FX9y8O4tvhdDopl/mp0mfgTOKXGhJsD
+         4hI1LzPKaSVENNr/ZccGMXFw19Eyrj/NdYBNsNoc=
+Date:   Sat, 29 Jan 2022 08:06:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Zhou Qingyang <zhou1615@umn.edu>, kjlu@umn.edu,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ata: pata_platform: Fix a NULL pointer dereference in
+ __pata_platform_probe()
+Message-ID: <YfTnatj5sNOswqFk@kroah.com>
+References: <20220124164525.53068-1-zhou1615@umn.edu>
+ <YfPBb4gHDkr76xPT@kroah.com>
+ <3621c7db-0b73-d7eb-f987-45ec59a6c738@opensource.wdc.com>
+ <YfQSdJgi4x5hN3Ee@kroah.com>
+ <45efc552-999b-c57b-5da1-0818893c031d@opensource.wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <45efc552-999b-c57b-5da1-0818893c031d@opensource.wdc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Justin,
+On Sat, Jan 29, 2022 at 09:12:19AM +0900, Damien Le Moal wrote:
+> On 1/29/22 00:57, Greg KH wrote:
+> > On Fri, Jan 28, 2022 at 08:50:04PM +0900, Damien Le Moal wrote:
+> >> On 1/28/22 19:11, Greg KH wrote:
+> >>> On Tue, Jan 25, 2022 at 12:45:25AM +0800, Zhou Qingyang wrote:
+> >>>> In __pata_platform_probe(), devm_kzalloc() is assigned to ap->ops and
+> >>>> there is a dereference of it right after that, which could introduce a
+> >>>> NULL pointer dereference bug.
+> >>>>
+> >>>> Fix this by adding a NULL check of ap->ops.
+> >>>>
+> >>>> This bug was found by a static analyzer.
+> >>>>
+> >>>> Builds with 'make allyesconfig' show no new warnings,
+> >>>> and our static analyzer no longer warns about this code.
+> >>>>
+> >>>> Fixes: f3d5e4f18dba ("ata: pata_of_platform: Allow to use 16-bit wide data transfer")
+> >>>> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> >>>> ---
+> >>>
+> >>> As stated in the past, please do not make contributions to the Linux
+> >>> kernel until umn.edu has properly resolved its development issues.
+> >>
+> >> Aouch. My apologies. I forgot about this. Thank you for the reminder.
+> >>
+> >>>
+> >>>> The analysis employs differential checking to identify inconsistent 
+> >>>> security operations (e.g., checks or kfrees) between two code paths 
+> >>>> and confirms that the inconsistent operations are not recovered in the
+> >>>> current function or the callers, so they constitute bugs. 
+> >>>>
+> >>>> Note that, as a bug found by static analysis, it can be a false
+> >>>> positive or hard to trigger. Multiple researchers have cross-reviewed
+> >>>> the bug.
+> >>>>
+> >>>>  drivers/ata/pata_platform.c | 2 ++
+> >>>>  1 file changed, 2 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
+> >>>> index 028329428b75..021ef9cbcbc1 100644
+> >>>> --- a/drivers/ata/pata_platform.c
+> >>>> +++ b/drivers/ata/pata_platform.c
+> >>>> @@ -128,6 +128,8 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
+> >>>>  	ap = host->ports[0];
+> >>>>  
+> >>>>  	ap->ops = devm_kzalloc(dev, sizeof(*ap->ops), GFP_KERNEL);
+> >>>> +	if (ap->ops)
+> >>>> +		return -ENOMEM;
+> >>>
+> >>> This change seems to leak memory.  Damien, please revert it.
+> >>
+> >> I fixed the patch when applying, so there is no leak.
+> > 
+> > Really?  What happened to the memory that ata_host_alloc() created above
+> > this call?  How is that freed?
+> > 
+> >> This is a genuine (potential) bug fix.
+> > 
+> > As I tell others, how can kmalloc() ever fail here, so odd of this being
+> > a real bugfix are so low it's not funny.  So take these types of
+> > cleanups as a last-resort only after you have strongly validated that
+> > they are correct.  The current group of people trying to do these fixes
+> > have a horrible track-record and are getting things wrong way more than
+> > they should be.  And so it is worse having code that "looks" correct vs.
+> > something that is "obviously we need to handle this some day".
+> 
+> I completely agree that this is not fixing any real bug reported in the
+> field. And as you say, an error here is more than unlikely. I accepted
+> the patch only on the ground of code correctness.
+> 
+> > 
+> >> Must I revert ?
+> > 
+> > If it's buggy you should, see my above question about ata_host_alloc(),
+> > is there a cleanup path somewhere that I am missing?
+> 
+> The resources allocated by ata_host_alloc() are attached to the device
+> (devres and drv_data) so they will be freed by ata_devres_release() when
+> the dev is dropped due to the probe error. I think the return that the
+> patch introduces is fine as is.
+> 
+> If I am misunderstanding the devres handling, please let me know.
 
-First bad commit (maybe != root cause):
+Where does the data allocated in ata_host_alloc() on this line:
+	host = kzalloc(sz, GFP_KERNEL);
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   169387e2aa291a4e3cb856053730fe99d6cec06f
-commit: e56e18985596617ae426ed5997fb2e737cffb58b lib/crypto: add prompts back to crypto libraries
-date:   11 days ago
-config: arm-randconfig-r004-20220128 (https://download.01.org/0day-ci/archive/20220129/202201291408.Pkylyt75-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e56e18985596617ae426ed5997fb2e737cffb58b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e56e18985596617ae426ed5997fb2e737cffb58b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Get attached to a devres structure?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It's a kref-managed data structure (see the call to kref_init() a few
+lines down), and the memory will be freed if you release the last
+reference on the kref, but that has nothing to do with devres.
 
-All warnings (new ones prefixed by >>):
+There's also the ports memory attached to the host structure as well,
+that is controlled by the lifetime of the kref, not a devres reference
+that I can see.
 
->> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
-   #warning This code requires at least version 4.6 of GCC
-    ^
-   1 warning generated.
+Or am I missing some link somewhere here?
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
-   Depends on DMADEVICES && (ARCH_TEGRA || COMPILE_TEST
-   Selected by
-   - SOC_TEGRA_FUSE && ARCH_TEGRA && ARCH_TEGRA_2x_SOC
+thanks,
 
-
-vim +30 arch/arm/lib/xor-neon.c
-
-01956597cbc46d Ard Biesheuvel 2013-05-17  16  
-01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
-01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
-01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
-01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
-01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
-01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
-01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
-01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
-01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
-01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
-01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
-01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
-01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
-01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
-01956597cbc46d Ard Biesheuvel 2013-05-17  32  
-
-:::::: The code at line 30 was first introduced by commit
-:::::: 01956597cbc46df072f20f90a40eebe356200c38 ARM: crypto: add NEON accelerated XOR implementation
-
-:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-:::::: CC: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h

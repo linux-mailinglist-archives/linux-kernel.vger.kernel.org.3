@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FCA4A329A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 00:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CE84A329F
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 00:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351484AbiA2XXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 18:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238951AbiA2XXK (ORCPT
+        id S1353420AbiA2XbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 18:31:00 -0500
+Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:49292
+        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238951AbiA2Xa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 18:23:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79062C061714;
-        Sat, 29 Jan 2022 15:23:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JmVjz37dQz4xcN;
-        Sun, 30 Jan 2022 10:23:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643498583;
-        bh=SxN/2ugBVfaI/4+xVgJJ0hH3WGsgXTSrK65pT/q6KR4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nw0OUYt3Sd7aXz2WdhtT7vlWfFlXg0q7XSQz60afOAcsrjyvDQLiiY93Sk6ffUv1h
-         r8bPC1fPvmyV871Qq3Fu+C3NhHr9U7qZeqo5ZoQhF1Tm6W3QgKTJaVxNjUx/FKFo/s
-         B6jAtzeVUbFjp0sVHTkbJO9ZC1TrM5Tzt0vBHNpYXLCNry0ViX8xlI5AZVu1FNJpQY
-         QkOtpWMK9byGL17vAndOO0M1t+UZ+7Z/f7JDJa0fKR0FYvmJqhICICNueTtEnCySPR
-         66qsSGZv+HPVEeKXH8WSpHaViWOzu9QQsXpFIB8T3Keg4/z3/ySNscXkKWErDJtY2O
-         JG311EEQ/xj+A==
-Date:   Sun, 30 Jan 2022 10:23:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the rockchip tree
-Message-ID: <20220130102302.698a7551@canb.auug.org.au>
+        Sat, 29 Jan 2022 18:30:58 -0500
+Received: from [192.168.88.87] (unknown [36.81.38.25])
+        by gnuweeb.org (Postfix) with ESMTPSA id AE5C8C32D0;
+        Sat, 29 Jan 2022 23:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
+        s=default; t=1643499055;
+        bh=B4K+3+JFTWWKU/O0tyev275Y374cFJ34SuhCQURx7oc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JKJ5Ct61wVnrR2iphOOxgQYDqWKHYayo3MF1SEnxb+dYFC0P7aw2idbQ1+YoOhngb
+         Wfkb89NKejxQCeTxH4CWHkbjtRsG7pIj5zktfZT0kPzn9bMyUvtgicacW1FFwLRK3p
+         LYnE7fh5WJIpxBqXMoVo4LAArpgAxK/IEXPT00uFhLkIZFJG8zKXO016l1qH/RhrMH
+         Hx2N0lsxNpHe3lpPcQgWY/+HUwJ6IkJ9jpIZX6sQ0V7ThEfaXCLVpQn3ekYrLlL3uq
+         YxK4kUYb395e8tCKQC9goRn4GwgbKq3TK69ts9um/JEMhdJ77rZOzaY/KrO95ambO1
+         bsnQtR12AyXng==
+Message-ID: <8c5e3b16-15ac-45fe-d9c2-14615eccb981@gnuweeb.org>
+Date:   Sun, 30 Jan 2022 06:30:52 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xQXFxOSoM50oyK0_sAbP=9A";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH for-5.18 v1 0/3] Add `sendto(2)` and `recvfrom(2)` support
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
+        netdev Mailing List <netdev@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        Tea Inside Mailing List <timl@vger.teainside.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Nugra <richiisei@gmail.com>,
+        Praveen Kumar <kpraveen.lkml@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
+References: <20220129125021.15223-1-ammarfaizi2@gnuweeb.org>
+ <98d4f268-5945-69a7-cec7-bccfcdedde1c@kernel.dk>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <98d4f268-5945-69a7-cec7-bccfcdedde1c@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xQXFxOSoM50oyK0_sAbP=9A
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/30/22 1:32 AM, Jens Axboe wrote:
+> On 1/29/22 5:50 AM, Ammar Faizi wrote:
+>> Hello,
+>>
+>> This patchset adds sendto(2) and recvfrom(2) support for io_uring. It
+>> also addresses an issue in the liburing GitHub repository [1].
+>>
+>> ## Motivations:
+>>
+>> 1) By using `sendto()` and `recvfrom()` we can make the submission
+>>     simpler compared to always using `sendmsg()` and `recvmsg()` from
+>>     the userspace. Especially for UDP socket.
+>>
+>> 2) There is a historical patch that tried to add the same
+>>     functionality, but did not end up being applied. [2]
+> 
+> As far as I can tell, the only win from sendto/recvfrom is that we can
+> handle async offload a bit cheaper compared to sendmsg/recvmsg. Is this
+> enough to warrant adding them separately? I don't know, which is why
+> this has been somewhat stalled for a while.
+> 
+> Maybe you have done some testing and have numbers (or other reasons) to
+> back up the submission? There's not a whole lot of justification in this
+> patchset.
+> 
 
-Hi all,
+So far, I haven't done it. I only created a test that ensures the
+functionality is working properly.
 
-In commit
+I will play with this further. If I win, I will submit the v2 of
+this series for review. Thanks, Jens!
 
-  8c318aaa2000 ("arm64: dts: rockchip: fix Quartz64-A ddr regulator voltage=
-")
-
-Fixes tag
-
-  Fixes: b33a22a1e7c4 ("arm64: dts: rockchip: add basic dts for Pine64
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.  Also, keep all
-the commit message tags together at the end of the commit message.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xQXFxOSoM50oyK0_sAbP=9A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH1zFYACgkQAVBC80lX
-0GxrAgf/Skh0jQzGNH27+MEUw8u0Am48iG0txW+52GLJq0S4ARNlKGr0IwYefbOd
-5A2B6kZB8dyUjcOUD7mcy6aq3VMY5iLrL2HEf54RSD8ldNY+egjeIDDbut8l+kDs
-ZMTcfCMq70zsTUafibt5pbR5p4U9dSxJx8NZ1UJRiKHrX89FC0pyhFQHIFTC4UXj
-g/VO/7vlpoDw4SoPUhLuOLkMVO1u4frpZSHAH4dthb1U5LBahW7CzYDlrjcKxx9e
-WRbeOTqip110+DqbIjeGJprbYcEgETB34DgOA+0EQah4T7tGdjR2YGFukElsQ25r
-dWD+fPcKQX7g4gzEqPkbiyh0zpsZ4w==
-=WQzr
------END PGP SIGNATURE-----
-
---Sig_/xQXFxOSoM50oyK0_sAbP=9A--
+-- 
+Ammar Faizi

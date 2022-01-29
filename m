@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7C84A2FAE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 14:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66FD4A2FB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 14:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348189AbiA2NLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 08:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239739AbiA2NLj (ORCPT
+        id S1349531AbiA2NL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 08:11:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46806 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239739AbiA2NLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 08:11:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CE7C061714;
-        Sat, 29 Jan 2022 05:11:39 -0800 (PST)
+        Sat, 29 Jan 2022 08:11:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 717ACB811EA;
-        Sat, 29 Jan 2022 13:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D484DC340E5;
-        Sat, 29 Jan 2022 13:11:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C38D60C75;
+        Sat, 29 Jan 2022 13:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91298C340E5;
+        Sat, 29 Jan 2022 13:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643461896;
-        bh=WL1zPq7qPyVP2phf4SmUWmSQlcrTRlPlpSB7FeBMr4E=;
+        s=korg; t=1643461914;
+        bh=pVMrF2W04FDCluw+LRWB6W2yETOEVIUjr7cu3PrFO7E=;
         h=Date:From:To:Cc:Subject:From;
-        b=lbRmkCbgrhnIjjHKLC6C5ss6I4tgPtyHAIJqew4CqIEWUbPa5K3RkpG/NydLh/0Q9
-         uNjAP02G1NxeqBebaZ2tu3rPuVBuSg1kBuWFBEaZuk7L3aJZFkgpINsFDQWDkfMvTZ
-         2en/esMec2WCWvb5oU+fZoU09nDsxcE0zBTmaRUI=
-Date:   Sat, 29 Jan 2022 14:11:33 +0100
+        b=2FpmpiS+8t7JZJK2zR7Zegd52OVWpbCfZSUaOQ40UKAMMHWFTREICf/L1lKVvqNp1
+         K9dGywyQmkM/KBouM+OfoetNdUF5idZ/RPa/3lHdsrsX5VcdRNgdWZi1yeda8otiEZ
+         l77D8VP60sv6UaD06377qznv+dSB3HlyrCUQxgPY=
+Date:   Sat, 29 Jan 2022 14:11:51 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.17-rc2
-Message-ID: <YfU9Bdjy8/Z0qQX/@kroah.com>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY/Serial driver fixes for 5.17-rc2
+Message-ID: <YfU9F+OwlK+Rso3T@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -49,89 +48,76 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc2
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.17-rc2
 
-for you to fetch changes up to 79aa3e19fe8f5be30e846df8a436bfe306e8b1a6:
+for you to fetch changes up to d1ad2721b1eb05d54e81393a7ebc332d4a35c68f:
 
-  usb: cdnsp: Fix segmentation fault in cdns_lost_power function (2022-01-26 14:11:16 +0100)
+  kbuild: remove include/linux/cyclades.h from header file check (2022-01-27 08:51:08 +0100)
 
 ----------------------------------------------------------------
-USB driver fixes for 5.17-rc2
+TTY/Serial driver fixes for 5.17-rc2
 
-Here are some small USB driver fixes for 5.17-rc2 that resolve a number
-of reported problems.  These include:
-	- typec driver fixes
-	- xhci platform driver fixes for suspending
-	- ulpi core fix
-	- role.h build fix
-	- new device ids
-	- syzbot-reported bugfixes
-	- gadget driver fixes
-	- dwc3 driver fixes
-	- other small fixes
+Here are some small bug fixes and reverts for reported problems with the
+tty core and drivers.  They include:
+	- revert the fifo use for the 8250 console mode.  It caused too
+	  many regressions and problems, and had a bug in it as well.
+	  This is being reworked and should show up in a later -rc1
+	  release, but it's not ready for 5.17
+	- rpmsg tty race fix
+	- restore the cyclades.h uapi header file.  Turns out a compiler
+	  test suite used it for some unknown reason.  Bring it back
+	  just for the parts that are used by the builder test so they
+	  continue to build.  No functionality is restored as no one
+	  actually has this hardware anymore, nor is it really tested.
+	- stm32 driver fixes
+	- n_gsm flow control fixes
+	- pl011 driver fix
+	- rs485 initialization fix
 
-All of these have been in linux-next this week with no reported issues.
+All of these have been in linux-next this week with no reported
+problems.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Alan Stern (2):
-      usb-storage: Add unusual-devs entry for VL817 USB-SATA bridge
-      USB: core: Fix hang in usb_kill_urb by adding memory barriers
+Arnaud Pouliquen (1):
+      tty: rpmsg: Fix race condition releasing tty port
 
-Amelie Delaunay (1):
-      usb: dwc2: gadget: don't try to disable ep0 in dwc2_hsotg_suspend
+Cameron Williams (1):
+      tty: Add support for Brainboxes UC cards.
 
-Badhri Jagan Sridharan (2):
-      usb: typec: tcpm: Do not disconnect while receiving VBUS off
-      usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
+Greg Kroah-Hartman (2):
+      Revert "tty: serial: Use fifo in 8250 console driver"
+      kbuild: remove include/linux/cyclades.h from header file check
 
-Frank Li (1):
-      usb: xhci-plat: fix crash when suspend if remote wake enable
+Jochen Mades (1):
+      serial: pl011: Fix incorrect rs485 RTS polarity on set_mctrl
 
-Heikki Krogerus (2):
-      usb: typec: Only attempt to link USB ports if there is fwnode
-      usb: typec: Don't try to register component master without components
+Lukas Wunner (1):
+      serial: core: Initialize rs485 RTS polarity already on probe
 
-Jon Hunter (1):
-      usb: common: ulpi: Fix crash in ulpi_match()
+Maciej W. Rozycki (1):
+      tty: Partially revert the removal of the Cyclades public API
 
-Linyu Yuan (1):
-      usb: roles: fix include/linux/usb/role.h compile issue
+Robert Hancock (1):
+      serial: 8250: of: Fix mapped region size when using reg-offset property
 
-Miles Chen (1):
-      usb: gadget: at91_udc: fix incorrect print type
+Valentin Caron (2):
+      serial: stm32: prevent TDR register overwrite when sending x_char
+      serial: stm32: fix software flow control transfer
 
-Pavankumar Kondeti (1):
-      usb: gadget: f_sourcesink: Fix isoc transfer for USB_SPEED_SUPER_PLUS
+daniel.starke@siemens.com (1):
+      tty: n_gsm: fix SW flow control encoding/handling
 
-Pawel Laszczak (1):
-      usb: cdnsp: Fix segmentation fault in cdns_lost_power function
-
-Robert Hancock (2):
-      usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode
-      usb: dwc3: xilinx: Fix error handling when getting USB3 PHY
-
-Sing-Han Chen (1):
-      ucsi_ccg: Check DEV_INT bit only when starting CCG4
-
-Xu Yang (1):
-      usb: typec: tcpci: don't touch CC line if it's Vconn source
-
- drivers/usb/cdns3/drd.c                    |  6 +++---
- drivers/usb/common/ulpi.c                  |  7 +++++--
- drivers/usb/core/hcd.c                     | 14 ++++++++++++++
- drivers/usb/core/urb.c                     | 12 ++++++++++++
- drivers/usb/dwc2/gadget.c                  |  2 +-
- drivers/usb/dwc3/dwc3-xilinx.c             | 23 ++++++++++++++++++-----
- drivers/usb/gadget/function/f_sourcesink.c |  1 +
- drivers/usb/gadget/udc/at91_udc.c          |  2 +-
- drivers/usb/host/xhci-plat.c               |  3 +++
- drivers/usb/storage/unusual_devs.h         | 10 ++++++++++
- drivers/usb/typec/port-mapper.c            |  8 +++++++-
- drivers/usb/typec/tcpm/tcpci.c             | 26 ++++++++++++++++++++++++++
- drivers/usb/typec/tcpm/tcpci.h             |  1 +
- drivers/usb/typec/tcpm/tcpm.c              |  7 ++++++-
- drivers/usb/typec/ucsi/ucsi_ccg.c          |  2 +-
- include/linux/usb/role.h                   |  6 ++++++
- 16 files changed, 115 insertions(+), 15 deletions(-)
+ drivers/tty/n_gsm.c                 |   4 +-
+ drivers/tty/rpmsg_tty.c             |  40 ++++++++++-----
+ drivers/tty/serial/8250/8250_of.c   |  11 +++-
+ drivers/tty/serial/8250/8250_pci.c  | 100 +++++++++++++++++++++++++++++++++++-
+ drivers/tty/serial/8250/8250_port.c |  61 +++-------------------
+ drivers/tty/serial/amba-pl011.c     |  11 +---
+ drivers/tty/serial/serial_core.c    |  34 +++++-------
+ drivers/tty/serial/stm32-usart.c    |  14 ++++-
+ include/uapi/linux/cyclades.h       |  35 +++++++++++++
+ usr/include/Makefile                |   1 +
+ 10 files changed, 205 insertions(+), 106 deletions(-)
+ create mode 100644 include/uapi/linux/cyclades.h

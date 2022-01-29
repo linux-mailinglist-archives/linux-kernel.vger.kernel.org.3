@@ -2,102 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B46FC4A2D6A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F374A2D6D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234124AbiA2JeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 04:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S234381AbiA2Jik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 04:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiA2JeI (ORCPT
+        with ESMTP id S233096AbiA2Jii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 04:34:08 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF153C061714;
-        Sat, 29 Jan 2022 01:34:08 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d187so8348996pfa.10;
-        Sat, 29 Jan 2022 01:34:08 -0800 (PST)
+        Sat, 29 Jan 2022 04:38:38 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072E9C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:38:38 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id r65so25440507ybc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=e1+s0tV2NM8ycsoAVvvJcxRRSB8Uzk8N0RZeeZJQsso=;
-        b=kt6gKqVAY+cBpVjOfFNLBtBUEc8nMw7OglSpM5bVIByxFuPLATjnZfWszxFv4vLKFI
-         HhcIjvxG58KoWPX1vd0lcVTpsESMIOrQkArVC5RgQQ3zm3A8vQlaCgpsoVNsAzbI/CU3
-         ofV7vEKM6gB/7JpRPSRS23+tnJ9swYc9/S896sL1V14fjVU33a/mgIj7PutG9sLIqmFC
-         AxYxJ7Itm2400CqMSnWo2wk7V8CdNmiNe4FIPG1GoTuEAyu+PCJVfeKlt8oMHL/TsZab
-         WWM9jvNmaOaErCNSoqGHe0pI3wtBv2/Cnm/bdZ6TAkD2qIQgsPnzlM8JcpJCR3Li4fEx
-         AOAg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=x8oTHXyVoob250FmOz+GtPBKKlC5Finw/OsEFce6MMs=;
+        b=vHnWZhQ1GIcVvWQL9ktXBM4umWNVRj93nDCaawDMUNc6CAHd9OvNrp9Im580678g3D
+         A8ojea6lJV+WoTN66GkGACURlt5MMjwjM2sy3yZ1hR+CCOU7D59mEILl5uXoe/x/rNlW
+         BqkyJfdWKjs6ykX4J5PvQspxtql6lrqmCsc063fZyxx6IrW+PgNvSc1d1mcnLPaBvYJu
+         mfFUQf5LVVdlacJN9qeYZHTIwRbIoY1bGi+LZeED0h750L9549fw4dk7I9W5vV3G0gld
+         CCiqizMz438r1dWjdLF2Jy8xViR3rtduLfxNBLh3VpokXZwAD0K6MHgXJrt4vx9AUzzm
+         QsqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=e1+s0tV2NM8ycsoAVvvJcxRRSB8Uzk8N0RZeeZJQsso=;
-        b=RpzRgambnnmNhwTb+6rb/qXFzC8hP7yBsp7cRgIGcX/E5fYUAclNa7RmaOW7feqEML
-         P7emCofh4slCsuhj0kV1zHL4KPuVsmfxtlSZiS8dF6lwBc7idD893n1YwlpS1HQNWICp
-         steejZ3Y9Wu74tHO8dRHoPiceLxj5wNqbMnIJi/d4XljPts8HTfk762NXoX5s8ttIsbq
-         J6n2CCv09RGy+Ceegrn8T0fpH8sZvpIR02GjAUkD0XY/6nyB3ILIK8ZGR7nl7c9Yb9w2
-         vl30//Ve21/Ba1+5QbcwUNn5ilXPW5NMRNvJT6wWWOQxbMCvmBe6ZVYEs4DCyUn08//t
-         MeYg==
-X-Gm-Message-State: AOAM533VbrgLJcuw8MnIPXEtr3itAzTqarvozpbCkQ568Ya8ZxOqLz4J
-        le5/f+XnHzP/2MP6TzwRcXLSLGS8gYY=
-X-Google-Smtp-Source: ABdhPJy4G8FisyqpC2Ulu4u+DCrnruoB6Ktq8bxKJ7ApwZGx2xEnqk82iS0MmDevTzj4HMPuVrIk2Q==
-X-Received: by 2002:aa7:95b2:: with SMTP id a18mr11718184pfk.39.1643448847776;
-        Sat, 29 Jan 2022 01:34:07 -0800 (PST)
-Received: from [192.168.1.101] ([166.111.139.99])
-        by smtp.gmail.com with ESMTPSA id x17sm11160250pfu.135.2022.01.29.01.34.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jan 2022 01:34:07 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] tty: serial: possible deadlock in uart_remove_one_port() and
- uart_hangup()
-To:     Greg KH <gregkh@linuxfoundation.org>, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <ab5d9322-6bea-9845-c61b-fb68e3bb3a87@gmail.com>
-Date:   Sat, 29 Jan 2022 17:34:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=x8oTHXyVoob250FmOz+GtPBKKlC5Finw/OsEFce6MMs=;
+        b=2iHqQIPy0Tkw9F0xTKtYpdQ61u/ffvrRBk04dAsb0lcgCMgFy6IDAyt+h6Yv7/HS/z
+         8Ab9IY+Q4V98s9e0vh6tkfIBOKwZO8MEjmLjhCVTwKvqB7blIlLumf00YQHBtdKqLAQQ
+         zdth2e2e6fcqv8rGR5tp8LJ6hNZrc2WnHKZETIc8539eoqdWyC7DVV26zEZgBVLk88fE
+         8v31KLge8Esla44Ms0pLQW996nTzsLzs2u97L5ccnin7oR3kheNwSSvv/yrr9G9tq8g0
+         f4W0ZB7wPz3k1X/c3AdsySZn0sUpPC3a4L171aBaxr/ccIGpzdOq/+/EP7S51DFY62R+
+         q9ow==
+X-Gm-Message-State: AOAM533zSbYmWDA2p+v0XzwIhkjIUHwI+FgLMaGCjITsevZsmwSVJy4B
+        I/51d+3UPJpKT5FG2XIzj8qKusTUvCcTt5fTHbe6sg==
+X-Google-Smtp-Source: ABdhPJwMb3vOBAmNK/GUt0OhtvjRstXoGlHNhlZw9/5SrdD/uIglcigRMoUGe4wHu9e53sWVyqX1yHIOqMJnGKSLjd4=
+X-Received: by 2002:a25:97c4:: with SMTP id j4mr19123089ybo.108.1643449117114;
+ Sat, 29 Jan 2022 01:38:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20220127180256.347004543@linuxfoundation.org>
+In-Reply-To: <20220127180256.347004543@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 29 Jan 2022 15:08:26 +0530
+Message-ID: <CA+G9fYvk5Ye+6Y+Tu0mwYhe9bEL5y+dgAmQKDpQ=2CFtu9Td9Q@mail.gmail.com>
+Subject: Re: [PATCH 4.4 0/1] 4.4.301-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 27 Jan 2022 at 23:38, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.4.301 release.
+> There are 1 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.4.301-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-My static analysis tool reports a possible deadlock in the tty driver in 
-Linux 5.10:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-uart_remove_one_port()
-   mutex_lock(&port->mutex); --> Line 3017 (Lock A)
-   wait_event(state->remove_wait, ...); --> Line 3019 (Wait X)
-   mutex_unlock(&port->mutex); --> Line 3021 (Unlock A)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-uart_hangup()
-   mutex_lock(&port->mutex); --> Line 1667 (Lock A)
-   uart_flush_buffer()
-     uart_port_unlock()
-       uart_port_deref()
-         wake_up(&uport->state->remove_wait); --> Line 68 (Wake X)
-   mutex_unlock(&port->mutex); --> Line 1684 (Unlock A)
+## Build
+* kernel: 4.4.301-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.4.y
+* git commit: 187d7c3b8ca09131c71f6dbb8c8761f7f809402c
+* git describe: v4.4.300-2-g187d7c3b8ca0
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.3=
+00-2-g187d7c3b8ca0
 
-When uart_remove_one_port() is executed, "Wait X" is performed by 
-holding "Lock A". If uart_hangup() is executed at this time, "Wake X" 
-cannot be performed to wake up "Wait X" in uart_remove_one_port(), 
-because "Lock A" has been already hold by uart_remove_one_port(), 
-causing a possible deadlock.
+## Test Regressions (compared to v4.4.299-114-g67ca9c44f63d)
+No test regressions found.
 
-I am not quite sure whether this possible problem is real and how to fix 
-it if it is real.
-Maybe we can call wait_event() before mutex_lock() in 
-uart_remove_one_port().
-Any feedback would be appreciated, thanks :)
+## Metric Regressions (compared to v4.4.299-114-g67ca9c44f63d)
+No metric regressions found.
 
+## Test Fixes (compared to v4.4.299-114-g67ca9c44f63d)
+No test fixes found.
 
-Best wishes,
-Jia-Ju Bai
+## Metric Fixes (compared to v4.4.299-114-g67ca9c44f63d)
+No metric fixes found.
 
+## Test result summary
+total: 33090, pass: 26341, fail: 104, skip: 5946, xfail: 699
 
+## Build Summary
+* arm: 129 total, 129 passed, 0 failed
+* arm64: 31 total, 31 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 30 total, 24 passed, 6 failed
+
+## Test suites summary
+* kselftest-bpf
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-livepatch
+* kselftest-ptrace
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

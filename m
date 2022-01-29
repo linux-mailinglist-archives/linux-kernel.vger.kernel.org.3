@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE2C4A31CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC614A31D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348567AbiA2UXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 15:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbiA2UXD (ORCPT
+        id S1353072AbiA2U0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 15:26:36 -0500
+Received: from mail.hugovil.com ([162.243.120.170]:57052 "EHLO
+        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234289AbiA2U0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 15:23:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77398C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 12:23:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 770A660A66
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 20:23:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B013C340E5;
-        Sat, 29 Jan 2022 20:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643487781;
-        bh=ibfNrnDd+VmWeyoly0lQUrC025/BUGr3gbVTET9B04U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fay9tk8OjFXVk8vdBucFW8q9Lae+bmmvVnF+NZk2vUuCFrD1LhEIZ+xhKsX/cmjBw
-         byAdYx7nhRN2gpaSNxhehoU6ddWrV/7C2K6bm6YAVygo9VGhlKYjEzMrjcelsIU4oN
-         BefZ0+fqcC+pwugYwINovryHY3EBFY+0/K9vC/2ClF4V4kvPTdLb2J5xibyhp4HX17
-         MRTPWKZG2wOZw/DEeYB20W77WnJfMXea2zz6/7Jix67Yl0Y590atXG3y6h6IM+irbB
-         YI8MTa/BDGqcN91XQPLybQgd8yVc2l6yJydPx5HzDb57DBzuRCdU7FUmEM3xjczwJa
-         v91eGA2cnfY0w==
-Date:   Sat, 29 Jan 2022 13:22:57 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: Re: arch/arm/lib/xor-neon.c:30:2: warning: This code requires at
- least version 4.6 of GCC
-Message-ID: <YfWiIZ9QZuWRTYRy@dev-arch.archlinux-ax161>
-References: <202201291408.Pkylyt75-lkp@intel.com>
+        Sat, 29 Jan 2022 15:26:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nB+1Cg03XOHqlY3t8HBuf0gJTSR4wOsWdCqtLuMW07s=; b=SWvd/Oyc5QAnYl+K47OrCkd7b8
+        WcVS0UE2zCnGmJPov1KNFmlhHU6j7PQuPi6s7siODdn6k+heeMlGchldUmqzXutFwOpHMhuxtRGxl
+        fFaxxgUvGHA6A7WCt7tdwPZGnoKCItIbSiFD+kk4i9OLj6FLlMiIvNtjqoyeNqMXA3Lc=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55112 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1nDuIf-0005AC-7A; Sat, 29 Jan 2022 15:26:22 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     hugo@hugovil.com, Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 29 Jan 2022 15:26:17 -0500
+Message-Id: <20220129202617.2332885-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220129060818.GQ4686@dragon>
+References: <20220129060818.GQ4686@dragon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202201291408.Pkylyt75-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
+X-Spam-Level: 
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: dimonoff.com]
+        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.2
+Subject: [PATCH v2] arm64: dts: imx8mp-evk: add PCA6416 interrupt controller mode
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 03:02:58PM +0800, kernel test robot wrote:
-> Hi Justin,
-> 
-> First bad commit (maybe != root cause):
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Yeah, this commit definitely does not introduce this warning, it has
-been one of our longest tracked warnings.
+Add interrupt controller mode for the pca6416 on i.MX8MP EVK board's.
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   169387e2aa291a4e3cb856053730fe99d6cec06f
-> commit: e56e18985596617ae426ed5997fb2e737cffb58b lib/crypto: add prompts back to crypto libraries
-> date:   11 days ago
-> config: arm-randconfig-r004-20220128 (https://download.01.org/0day-ci/archive/20220129/202201291408.Pkylyt75-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e56e18985596617ae426ed5997fb2e737cffb58b
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e56e18985596617ae426ed5997fb2e737cffb58b
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
->    #warning This code requires at least version 4.6 of GCC
->     ^
->    1 warning generated.
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
 
-https://github.com/ClangBuiltLinux/linux/issues/496
+Rebased on tree: git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git
+         branch: for-next
 
-https://lore.kernel.org/r/20220127081227.2430-3-ardb@kernel.org/
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Cheers,
-Nathan
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index 2eb943210678..9055ce32aecc 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -294,6 +294,12 @@ pca6416: gpio@20 {
+ 		reg = <0x20>;
+ 		gpio-controller;
+ 		#gpio-cells = <2>;
++		interrupt-controller;
++		#interrupt-cells = <2>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pca6416_int>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ };
+ 
+@@ -448,6 +454,12 @@ MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x000001c0
+ 		>;
+ 	};
+ 
++	pinctrl_pca6416_int: pca6416_int_grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x146 /* Input pull-up. */
++		>;
++	};
++
+ 	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x41
+-- 
+2.30.2
+

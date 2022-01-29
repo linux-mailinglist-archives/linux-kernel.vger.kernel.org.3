@@ -2,131 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6A64A307D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A8D4A3082
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352037AbiA2QSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S1352180AbiA2QUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 11:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242424AbiA2QSy (ORCPT
+        with ESMTP id S242424AbiA2QT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 11:18:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEB2C061714;
-        Sat, 29 Jan 2022 08:18:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=73CZnjVYHIXhRB/BsZv3cHKLBCrUj4dQX035/VBBClc=; b=oF6JCHX6oJfFHVw0T1Ej1ZyxqV
-        YFlVadlJ0l8r9yRM1sVyTv8B7UBO0L7aEqTPkPR4HAu3LhR3JC1pu1Zzxrg+vluL55X4iVGlyYiZ4
-        2W4wmC/3NVIYmGK9bhFJUIGdGlpEXNVQXKRpIm8gbLF1y5jVWaQVB/Smj8hcLsbxpoFag8KfdK/tt
-        NlP/Yd+0kEQupJKc6JvgqCiD/Hu/w2+NNBhC+6RfwtgX0O2aVGaLaj/QSjI4sFiliKcM7QcuJYq3d
-        VtdSupwypCe4MFT4E71zVDmUu3vizsVH9Q1rn30Aeqvkzjd3t2JyybPgcj3FeVBXtSXCTwxhmBc7A
-        +EOXCiag==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDqR5-004tWW-GO; Sat, 29 Jan 2022 16:18:48 +0000
-Message-ID: <c2ec8677-e7a2-c9cd-b291-9785e7e2800c@infradead.org>
-Date:   Sat, 29 Jan 2022 08:18:41 -0800
+        Sat, 29 Jan 2022 11:19:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C769C061714;
+        Sat, 29 Jan 2022 08:19:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17EAEB8120C;
+        Sat, 29 Jan 2022 16:19:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08C2C340E5;
+        Sat, 29 Jan 2022 16:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643473195;
+        bh=ozMiiYFbCOSr6At7dNUhU0RKoDLf1poblUCMXrvrUTc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jNezTp5EJyW5hRYPxZP22DprMQ+MrUgs6k5X7wVUcnRrvkbBcapZl4jD9it8Es7L0
+         f+14aV7kNknvtHqL7kJfFSAyiOGNcvGeCKry5iXFLyM4pvwnKbsapLiaaIyJm5k6G9
+         2brdDg9Hxney+o74sQhxEU4yumnIfDJZ/73MOlYklxKGktGH5MrGsjDBAar7EpQNwi
+         gUFvxHh9iJhLH1JqIwmUFzaOa7J/jdgnsSSKu6VspbeQURN7s0gam2EbgF9r37KD5D
+         kztO+8/gB+D8xOQ29G5s1muQ93wxfF4VJyeLdEP3Ho0VofibiZ3LcE7qspR0E338DG
+         9MFWwOsCHb0IA==
+Received: by mail-wm1-f43.google.com with SMTP id d138-20020a1c1d90000000b0034e043aaac7so7864562wmd.5;
+        Sat, 29 Jan 2022 08:19:55 -0800 (PST)
+X-Gm-Message-State: AOAM531D9SMn/eknOR7ugPhOZPk1JFG1UC2k81WzJuNRgc3k0h+DY9Sg
+        4lbxL20gEzkkVhIBsPFyu+vNqd8WAGHW/gVTcSk=
+X-Google-Smtp-Source: ABdhPJzEFC2YpKEZ1hgsY28YircroF5snPOgYrizVAYq4zDTywcro2JwThKl6Oxj03ZEup5kdtiQrwZtqqLM9U47B6c=
+X-Received: by 2002:a05:600c:4f84:: with SMTP id n4mr11799956wmq.106.1643473194017;
+ Sat, 29 Jan 2022 08:19:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] i2c: npcm7xx: Fix typos
-Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        linux-i2c@vger.kernel.org
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220129093907.2196730-1-j.neuschaefer@gmx.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220129093907.2196730-1-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220110210809.3528-1-fllinden@amazon.com> <20220110210809.3528-2-fllinden@amazon.com>
+ <Yd1cnquQFZoNE7FP@kernel.org> <20220124210538.GA15943@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
+In-Reply-To: <20220124210538.GA15943@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 29 Jan 2022 17:19:42 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHSGGUhmAdOFzpHJrMjfts-AgdpVJ6LJRkmm9_xLL0guw@mail.gmail.com>
+Message-ID: <CAMj1kXHSGGUhmAdOFzpHJrMjfts-AgdpVJ6LJRkmm9_xLL0guw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory range
+To:     Frank van der Linden <fllinden@amazon.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 24 Jan 2022 at 22:05, Frank van der Linden <fllinden@amazon.com> wrote:
+>
+> Meanwhile, it seems that this issue was already addressed in:
+>
+> https://lore.kernel.org/all/20211215021348.8766-1-kernelfans@gmail.com/
+>
+> ..which has now been pulled in, and sent to stable@ for 5.15. I
+> somehow missed that message, and sent my change in a few weeks
+> later.
+>
+> The fix to just reserve the ranges does seem a bit cleaner overall,
+> but this will do fine.
+>
 
-
-On 1/29/22 01:39, Jonathan Neuschäfer wrote:
-> The comments in this driver have a few typos. Let's fix them.
-> 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-> index 2ad166355ec9b..71aad029425d8 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -781,7 +781,7 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus, int nread, int nwrite)
->  		/*
->  		 * if we are about to read the first byte in blk rd mode,
->  		 * don't NACK it. If slave returns zero size HW can't NACK
-> -		 * it immidiattly, it will read extra byte and then NACK.
-> +		 * it immediately, it will read extra byte and then NACK.
->  		 */
->  		if (bus->rd_ind == 0 && bus->read_block_use) {
->  			/* set fifo to read one byte, no last: */
-> @@ -981,7 +981,7 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bus, u16 nwrite,
->  /*
->   * npcm_i2c_slave_wr_buf_sync:
->   * currently slave IF only supports single byte operations.
-> - * in order to utilyze the npcm HW FIFO, the driver will ask for 16 bytes
-> + * in order to utilize the npcm HW FIFO, the driver will ask for 16 bytes
->   * at a time, pack them in buffer, and then transmit them all together
->   * to the FIFO and onward to the bus.
->   * NACK on read will be once reached to bus->adap->quirks->max_read_len.
-> @@ -1175,7 +1175,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(struct npcm_i2c *bus)
->  				/*
->  				 * the i2c module can response to 10 own SA.
->  				 * check which one was addressed by the master.
-> -				 * repond to the first one.
-> +				 * respond to the first one.
->  				 */
->  				addr = ((i2ccst3 & 0x07) << 7) |
->  					(i2ccst2 & 0x7F);
-> @@ -1753,8 +1753,8 @@ static void npcm_i2c_recovery_init(struct i2c_adapter *_adap)
->  	/*
->  	 * npcm i2c HW allows direct reading of SCL and SDA.
->  	 * However, it does not support setting SCL and SDA directly.
-> -	 * The recovery function can togle SCL when SDA is low (but not set)
-> -	 * Getter functions used internally, and can be used externaly.
-> +	 * The recovery function can toggle SCL when SDA is low (but not set)
-> +	 * Getter functions used internally, and can be used externally.
->  	 */
->  	rinfo->get_scl = npcm_i2c_get_SCL;
->  	rinfo->get_sda = npcm_i2c_get_SDA;
-> @@ -1768,10 +1768,10 @@ static void npcm_i2c_recovery_init(struct i2c_adapter *_adap)
-> 
->  /*
->   * npcm_i2c_init_clk: init HW timing parameters.
-> - * NPCM7XX i2c module timing parameters are depenent on module core clk (APB)
-> + * NPCM7XX i2c module timing parameters are dependent on module core clk (APB)
->   * and bus frequency.
-> - * 100kHz bus requires tSCL = 4 * SCLFRQ * tCLK. LT and HT are simetric.
-> - * 400kHz bus requires assymetric HT and LT. A different equation is recomended
-> + * 100kHz bus requires tSCL = 4 * SCLFRQ * tCLK. LT and HT are symmetric.
-> + * 400kHz bus requires asymmetric HT and LT. A different equation is recommended
->   * by the HW designer, given core clock range (equations in comments below).
->   *
->   */
-> --
-> 2.34.1
-> 
-
--- 
-~Randy
+Works for me.

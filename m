@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 893E54A306C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427FC4A306D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351528AbiA2QFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S1351943AbiA2QFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 11:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351513AbiA2QFn (ORCPT
+        with ESMTP id S1351673AbiA2QFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 11:05:43 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B480C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:43 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id h14so8849027plf.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:43 -0800 (PST)
+        Sat, 29 Jan 2022 11:05:46 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CBDC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:46 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id r59so9417436pjg.4
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:05:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PnbU93vWGV651EUjlzxYJgD/J8Jnot+F9jtiMaEhyAI=;
-        b=DoCu4VSTL/VXy1qaQWua2z8oAd/y6fgGWU7W5ZR8KskvW8xP480BlgXc3FL7fAoc1A
-         LKKK5eZ0XC3o/3q2ykRBc30nfyHVbmLcfT0OwIcjFrQ1FfgK/mLyBwoiwlMJ2O/4WDeY
-         cuzIcYgZ++sYothW7hU3FUsb6yehknz49JTflbzwmPoKttL/r67dTwcGmiRP2QhmN3ZB
-         DMdhY2v6W4ikEqfYad2LIB+2Fw+9O60CiE+DrLZvtw3tWIX7svbZrj2CYX59AsHRaHdO
-         xfTbho91ruL2hPmGNjOdQyjIyLwRluI1ihrde2hTA2lX8S5Yw/7O+lToCwUzQee0tVao
-         JQzQ==
+        bh=Xa9/uQimRO4U5DdZfy5OHCYx6e+VSAPR4ymHWAiOiFc=;
+        b=nitZL45Jd8jjpmzytmvzZg4RNy1iCWk6koqbhkdU1VvecYhAnNMJIExE7JcVSBVnkU
+         khBVIo/39rVRwuAUJAHUdiuvYXA4DoqN9hIb4W56m34+quB80y8obNhshlBxcBwwb188
+         T+e+kie/Geu4QFabfsT40lKBOyY26ijKOpL+rxEyn0hSk86kkNXdmwYcLDKsG2/AE+Mc
+         2Y0zv7OkmR8j2Qb4KdENcjqEn+rM8X1f7whpg4Q8eSlEWjBpxDIn+rTwyyL5ICZaTlrJ
+         5UmWwAWdg7GpPQ+3CXsJtbzvejV+5LipP+U+chLXcwBrf3to+Cxfxk1aoWgydyga/ItY
+         j4+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PnbU93vWGV651EUjlzxYJgD/J8Jnot+F9jtiMaEhyAI=;
-        b=oPZumd2WmuLpR9Fh2E1k2DoMBY9AP1HrKWZdr5BjvoXeiWfXuv5X5c9EYmPCTxol+/
-         t7qCZpkLOMRXT/sMAo1QYCoMKXdrcPccnummBOcQ8aUvO8q4bnjkiWRjtQ5be77xsRus
-         nnZAo42bVOc4s9vhsifpkJslfZzJ7NxJ+GUh2JUm6duBrs6xO8+v9VllVafhai5nWyF8
-         +J+gAeyIgiLX0wDupl5FzczDMFsse7dpDHMvcrvxE3vfSOF+LVv5bP4+sxRQQ1DeTy/m
-         B18Uol5C2wu8svbVfwsGmGZ2jFQ4DM1Tm7ag4a0c25ubDidjsbxIi2nTi0U+qTkspfqa
-         gcjQ==
-X-Gm-Message-State: AOAM53000Ul8npjyLsSuk5j8qteLO3BQu3q2giXGSlkl/DzfQVsinxV1
-        11k6w/mZofySnnOt+fLrlyk=
-X-Google-Smtp-Source: ABdhPJyUB/YePSOX4rrwQOnm1FOUbvi5tDeD6LRqBCNKxaRa588oXCVIUfazXLkuNrGtoVcuJzywPA==
-X-Received: by 2002:a17:90b:17c4:: with SMTP id me4mr15556737pjb.243.1643472342592;
-        Sat, 29 Jan 2022 08:05:42 -0800 (PST)
+        bh=Xa9/uQimRO4U5DdZfy5OHCYx6e+VSAPR4ymHWAiOiFc=;
+        b=QlRX0KmmoUuEnzC32e6sxs4yE9Xor4NxK5Pj+6Jj4Ejc+N1sMoGOZfPhYZ8LNWEBPi
+         Yp3vHMgn/Z3J99IMP74OPJ9n/MfPJWJeszORV/mGCo6lP69JmQ5yQA69evJbmke4vfhH
+         0+sc5gcd4ITG7cJqxkw3zh5bICWv3qb0Xcbn0sNf6NM4ObZBiVDdrIlo743pcXSpSvCX
+         tDm7j1bd26B/iPASONcODlTPKrEAf23q9EatohEsAbMCMGtUttrlwtVC8H6KlxQKLpGM
+         qbgWmoSjVJ9rFIQ6iKPZrVbMhu3SpMGrMJhp/AKflASaHK5ZK8SSfwNEvmReVwJR2V7t
+         7C8A==
+X-Gm-Message-State: AOAM530aXGbg7gS378HmIh2dBV2Zxf41njzNzjDY2WpqfAvXhczxYDWm
+        gZssGCLohMHvcxje3Wggq0s=
+X-Google-Smtp-Source: ABdhPJyiCGW59QHIl7TaXuJn+iXBBjkYu4OgfUAwdBNc3X9SDa9676AKvhMF8dkYwjmEhbT8AzGJTw==
+X-Received: by 2002:a17:902:e746:: with SMTP id p6mr13199995plf.78.1643472345817;
+        Sat, 29 Jan 2022 08:05:45 -0800 (PST)
 Received: from localhost.localdomain ([171.78.146.184])
-        by smtp.googlemail.com with ESMTPSA id t9sm5672868pjg.44.2022.01.29.08.05.39
+        by smtp.googlemail.com with ESMTPSA id t9sm5672868pjg.44.2022.01.29.08.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 08:05:42 -0800 (PST)
+        Sat, 29 Jan 2022 08:05:45 -0800 (PST)
 From:   Abdun Nihaal <abdun.nihaal@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Abdun Nihaal <abdun.nihaal@gmail.com>, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, straube.linux@gmail.com, martin@kaiser.cx,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 01/23] staging: r8188eu: remove unneeded variable in rtw_wx_get_essid
-Date:   Sat, 29 Jan 2022 21:34:07 +0530
-Message-Id: <d0208689dffce91c52afbd5938b2704a8b1b554e.1643466748.git.abdun.nihaal@gmail.com>
+Subject: [PATCH v4 02/23] staging: r8188eu: remove unneeded variable in rtw_wx_get_enc
+Date:   Sat, 29 Jan 2022 21:34:08 +0530
+Message-Id: <e31a2b15673497cbd70bf62b0093f46952cc7596.1643466748.git.abdun.nihaal@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1643466748.git.abdun.nihaal@gmail.com>
 References: <cover.1643466748.git.abdun.nihaal@gmail.com>
@@ -75,27 +75,27 @@ Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index b9f9698d70cf..3a60e1f81592 100644
+index 3a60e1f81592..f99942417a71 100644
 --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
 +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -1383,7 +1383,7 @@ static int rtw_wx_get_essid(struct net_device *dev,
- 			      struct iw_request_info *a,
- 			      union iwreq_data *wrqu, char *extra)
+@@ -1717,7 +1717,7 @@ static int rtw_wx_get_enc(struct net_device *dev,
+ 			    struct iw_request_info *info,
+ 			    union iwreq_data *wrqu, char *keybuf)
  {
--	u32 len, ret = 0;
-+	u32 len;
+-	uint key, ret = 0;
++	uint key;
  	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
+ 	struct iw_point *erq = &wrqu->encoding;
  	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
- 	struct wlan_bssid_ex  *pcur_bss = &pmlmepriv->cur_network.network;
-@@ -1399,7 +1399,7 @@ static int rtw_wx_get_essid(struct net_device *dev,
- 	wrqu->essid.length = len;
- 	wrqu->essid.flags = 1;
+@@ -1778,7 +1778,7 @@ static int rtw_wx_get_enc(struct net_device *dev,
+ 	}
+ 
  
 -	return ret;
 +	return 0;
  }
  
- static int rtw_wx_set_rate(struct net_device *dev,
+ static int rtw_wx_get_power(struct net_device *dev,
 -- 
 2.34.1
 

@@ -2,81 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F274A3075
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6A64A307D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351960AbiA2QPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:15:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48234 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243532AbiA2QPu (ORCPT
+        id S1352037AbiA2QSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 11:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242424AbiA2QSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 11:15:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DD2260B8E;
-        Sat, 29 Jan 2022 16:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E347C340E5;
-        Sat, 29 Jan 2022 16:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643472949;
-        bh=eNcKutvg7at4+y7aT8bzCB1OBz/CjF6juy0X80i8Z+E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bygIkpJVY4RrGp1UWzYSCdLPpb50HPCXn+0NojYVgP0Zllj5oPr0RyBFTB81tnwQE
-         B286PAqVm6Gzrvpmi+Kikafjoc49ZJODZecasOKzrYFeh6GILrrz0Y12t2FDr0B+0l
-         wteFm/leu4vNBETBqQdNIl6/f3DRUZy6HR1S6QJDsfPn8kw9parXKjd2BpVEwQ8p+h
-         GaL3dCxIkut0u136T0PJG2/mkPLnvyjU182DykDe0pHEOxM4bBiK0vvO37/67nxUpb
-         PhE9SWFu7VRUG1c0Q3iIe6k7PGuB/XrJWu5vwgKdgLjo5MSEotWDUjqT2MCcMmWfKd
-         wjeYJT4utrJew==
-Date:   Sat, 29 Jan 2022 10:15:47 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: [GIT PULL] PCI fixes for v5.17
-Message-ID: <20220129161547.GA352890@bhelgaas>
+        Sat, 29 Jan 2022 11:18:54 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEB2C061714;
+        Sat, 29 Jan 2022 08:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=73CZnjVYHIXhRB/BsZv3cHKLBCrUj4dQX035/VBBClc=; b=oF6JCHX6oJfFHVw0T1Ej1ZyxqV
+        YFlVadlJ0l8r9yRM1sVyTv8B7UBO0L7aEqTPkPR4HAu3LhR3JC1pu1Zzxrg+vluL55X4iVGlyYiZ4
+        2W4wmC/3NVIYmGK9bhFJUIGdGlpEXNVQXKRpIm8gbLF1y5jVWaQVB/Smj8hcLsbxpoFag8KfdK/tt
+        NlP/Yd+0kEQupJKc6JvgqCiD/Hu/w2+NNBhC+6RfwtgX0O2aVGaLaj/QSjI4sFiliKcM7QcuJYq3d
+        VtdSupwypCe4MFT4E71zVDmUu3vizsVH9Q1rn30Aeqvkzjd3t2JyybPgcj3FeVBXtSXCTwxhmBc7A
+        +EOXCiag==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDqR5-004tWW-GO; Sat, 29 Jan 2022 16:18:48 +0000
+Message-ID: <c2ec8677-e7a2-c9cd-b291-9785e7e2800c@infradead.org>
+Date:   Sat, 29 Jan 2022 08:18:41 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] i2c: npcm7xx: Fix typos
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        linux-i2c@vger.kernel.org
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220129093907.2196730-1-j.neuschaefer@gmx.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220129093907.2196730-1-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-are available in the Git repository at:
+On 1/29/22 01:39, Jonathan Neuschäfer wrote:
+> The comments in this driver have a few typos. Let's fix them.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-2
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-for you to fetch changes up to 66d28b21fe6b3da8d1e9f0a7ba38bc61b6c547e1:
+Thanks.
 
-  PCI/sysfs: Find shadow ROM before static attribute initialization (2022-01-26 10:41:21 -0600)
+> ---
+>  drivers/i2c/busses/i2c-npcm7xx.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+> index 2ad166355ec9b..71aad029425d8 100644
+> --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -781,7 +781,7 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus, int nread, int nwrite)
+>  		/*
+>  		 * if we are about to read the first byte in blk rd mode,
+>  		 * don't NACK it. If slave returns zero size HW can't NACK
+> -		 * it immidiattly, it will read extra byte and then NACK.
+> +		 * it immediately, it will read extra byte and then NACK.
+>  		 */
+>  		if (bus->rd_ind == 0 && bus->read_block_use) {
+>  			/* set fifo to read one byte, no last: */
+> @@ -981,7 +981,7 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bus, u16 nwrite,
+>  /*
+>   * npcm_i2c_slave_wr_buf_sync:
+>   * currently slave IF only supports single byte operations.
+> - * in order to utilyze the npcm HW FIFO, the driver will ask for 16 bytes
+> + * in order to utilize the npcm HW FIFO, the driver will ask for 16 bytes
+>   * at a time, pack them in buffer, and then transmit them all together
+>   * to the FIFO and onward to the bus.
+>   * NACK on read will be once reached to bus->adap->quirks->max_read_len.
+> @@ -1175,7 +1175,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(struct npcm_i2c *bus)
+>  				/*
+>  				 * the i2c module can response to 10 own SA.
+>  				 * check which one was addressed by the master.
+> -				 * repond to the first one.
+> +				 * respond to the first one.
+>  				 */
+>  				addr = ((i2ccst3 & 0x07) << 7) |
+>  					(i2ccst2 & 0x7F);
+> @@ -1753,8 +1753,8 @@ static void npcm_i2c_recovery_init(struct i2c_adapter *_adap)
+>  	/*
+>  	 * npcm i2c HW allows direct reading of SCL and SDA.
+>  	 * However, it does not support setting SCL and SDA directly.
+> -	 * The recovery function can togle SCL when SDA is low (but not set)
+> -	 * Getter functions used internally, and can be used externaly.
+> +	 * The recovery function can toggle SCL when SDA is low (but not set)
+> +	 * Getter functions used internally, and can be used externally.
+>  	 */
+>  	rinfo->get_scl = npcm_i2c_get_SCL;
+>  	rinfo->get_sda = npcm_i2c_get_SDA;
+> @@ -1768,10 +1768,10 @@ static void npcm_i2c_recovery_init(struct i2c_adapter *_adap)
+> 
+>  /*
+>   * npcm_i2c_init_clk: init HW timing parameters.
+> - * NPCM7XX i2c module timing parameters are depenent on module core clk (APB)
+> + * NPCM7XX i2c module timing parameters are dependent on module core clk (APB)
+>   * and bus frequency.
+> - * 100kHz bus requires tSCL = 4 * SCLFRQ * tCLK. LT and HT are simetric.
+> - * 400kHz bus requires assymetric HT and LT. A different equation is recomended
+> + * 100kHz bus requires tSCL = 4 * SCLFRQ * tCLK. LT and HT are symmetric.
+> + * 400kHz bus requires asymmetric HT and LT. A different equation is recommended
+>   * by the HW designer, given core clock range (equations in comments below).
+>   *
+>   */
+> --
+> 2.34.1
+> 
 
-----------------------------------------------------------------
-PCI fixes:
-
-  - Fix compilation warnings in new mt7621 driver (Sergio Paracuellos)
-
-  - Restore the sysfs "rom" file for VGA shadow ROMs, which was broken when
-    converting "rom" to be a static attribute (Bjorn Helgaas)
-
-----------------------------------------------------------------
-Bjorn Helgaas (1):
-      PCI/sysfs: Find shadow ROM before static attribute initialization
-
-Sergio Paracuellos (2):
-      PCI: mt7621: Drop of_match_ptr() to avoid unused variable
-      PCI: mt7621: Remove unused function pcie_rmw()
-
- arch/ia64/pci/fixup.c                |  4 ++--
- arch/mips/loongson64/vbios_quirk.c   |  9 ++++-----
- arch/x86/pci/fixup.c                 |  4 ++--
- drivers/pci/controller/pcie-mt7621.c | 11 +----------
- 4 files changed, 9 insertions(+), 19 deletions(-)
+-- 
+~Randy

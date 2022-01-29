@@ -2,138 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37E34A2ACC
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CDA4A2ACD
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344643AbiA2Azz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S1351927AbiA2A4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiA2Azx (ORCPT
+        with ESMTP id S231846AbiA2A4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:55:53 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A90C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:55:53 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id k9so7436864qvv.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:55:53 -0800 (PST)
+        Fri, 28 Jan 2022 19:56:19 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA7DC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:56:18 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id w81so1155805ybg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:56:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/Babq3FplbrE6ia+3+gxSJA2pG5zbSBPMzCgi+sKFdk=;
-        b=nV6ULo6Y+G2Wg4meFRNeDHaMRxniC97fbDBmxkPo51IFlCGPvTZ6twCsybA/0BL4Mo
-         XmUxsMw6AnXwqvl5vtXkHc9lWAYPd7mSCcmSaz5Pryf7dlb1bAtUd6KBE4kYXzRvg9D+
-         RGAtJhCPbKqKxu5PS9clTuPqVRnYPuVDJh3kuhGpJ75SJ6Z93UCI8iQDmlBcUxPQUrDp
-         9Yu1j6RCJmWiEjfWisWNyCf17o2BbMzbeM8h9wxt/kx+ZPVp5U4eHmQZL+4pozUZoUFr
-         c7lg5z1VGFQc1iKVOioG1d7Zr542uaHe+GDTZaSLV1E29MZCzvIx3oH73bg1cDSzn1J/
-         XMOQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nmGDwuvfkax3Sda7saTwAAxqwMsmlPhpVKCcAyRAE+4=;
+        b=g8yjPt4IeG+Szx3AUtuIzVZxmHIhM2XsIrQO8mD23tMBnH/IH9AWs+sRSsbRLkJCEB
+         ++gkH3G3WtjfV2VLWYUhdnjSWQ2WP+Syda59cci4Wmv3GYQCbNPimfY8fLFUC1fnnR+Z
+         Aylj+v5+p0FmA1i02GWJk3GmU4tejCH2xWdsAP8IWQ2g41kGy1l2BbVBJgu7ViZUFDk4
+         DoC2nW0E5tjN3czpD2RbtQkCYIvP53yLxDm/2V5nR/sLn7zvuOanvVhPmPYcc4jclwNY
+         KuiivmT0lHgtpOUFTQQk/AYXPdgYniimNqtRIGg4jT/y0LZw/jpHkh/9BxzsUe3YzYNK
+         H6uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/Babq3FplbrE6ia+3+gxSJA2pG5zbSBPMzCgi+sKFdk=;
-        b=mBtGSO5C121CKGTePqnqfhjPZfn/iexZo/fmcyuusaNyo6F27huXuRx25wnEqbcrdd
-         DiLDvTExy+kHTLYdBDxC/v8ZBXigtxJkjGj8BG2aBDxHgsb4GUAjLW/XguKG0QN66BoE
-         GMM36n/B/FJz+XYe1nDnz63qpbW71BhZHcJVStREGRpS3qFBgpK79ujn3mH2VlB1y6Ay
-         5SylNxhUlRGtaOh7qst8VftZvUhbWslfBVlv4O/vSm/78CsmX2pK1iKo8JbS3PJTqzj8
-         zroZEd/GPizWWVZq9S/Tzpz9OfJEsMU4S8DZ9odSiZQzpzcq5B7WxQTk0bbKIs+YcLRI
-         Yn6A==
-X-Gm-Message-State: AOAM532RiCJ7keKl/m8oi9gNIQhzKpCG66f/0Nsav/opYxZ0QK2y6ANB
-        yMKQGDVCQD5Mtu3+kHNFiQ+4pOu6FFzq6y4Q
-X-Google-Smtp-Source: ABdhPJxrHmBRRiruuUDQEiaw1eOLyEM0h4Jbo1PM/wLrOjvuiUbn5IVtzXefYh10Af7lQDHXfunCLA==
-X-Received: by 2002:a05:6214:d6e:: with SMTP id 14mr9371496qvs.32.1643417752838;
-        Fri, 28 Jan 2022 16:55:52 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id z19sm1387496qtj.77.2022.01.28.16.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 16:55:52 -0800 (PST)
-Date:   Sat, 29 Jan 2022 08:55:46 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] kallsyms: ignore local block labels generated by compiler
-Message-ID: <20220129005546.3k4xblksuo5lnr3f@mail.google.com>
-References: <20220128105746.2459-1-changbin.du@gmail.com>
- <20220128152147.mwjkf45z72qwdikq@mail.google.com>
- <CAKwvOdncnh1sGjaBDOepQrAc+AHgEr=gWTJqKSxwvPu0f5A1dg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nmGDwuvfkax3Sda7saTwAAxqwMsmlPhpVKCcAyRAE+4=;
+        b=zyX7xv8Bc9OGX60XRoUJYv4sdEoexwU5AIp/r8MMCvUX4cCHX+yWCwYNrS6f8IYlV6
+         eI15nAeBvyJj4QWwR5M9ewbD9ZejmhRPzOH6H4dLhzZWnHYGA3SM15vTYcGJPvbp0mnc
+         i1cdUBZqna5cyJg3MFKrfG2udUezftfE4fhwSgyPuIdwnqfD/DVVzlmhI4Rvi1E8GJJQ
+         uXQ0vAbPIttEKPO3xZPsbtTMv2xSa9/sKGTdyqtv8F2d/B/NdAPuzvBbiW7wS9HDFbyj
+         oPLVtMQEIMv+ojZoEVpnulI0nOnCFBzGLP9zCBxD7z0/UtR8BGfHeDt2jv2rCjHxPNaj
+         tDAg==
+X-Gm-Message-State: AOAM531+EIp4UBuwt0mpbDOWv/cUl9eVu3IrZ8oVLS3R0n/4dR/oreHR
+        ycaiJDmuDae1accV/LmAqZvZ7Nhm3BXaddfwCBq3jKjZvH4=
+X-Google-Smtp-Source: ABdhPJyWvdcU804CKXVZLmLkK6HbWC8olU8hvyg812kD7z4qs+CeseBUaCVnodiEtWpoWFivSUYVy22N4+xx6mVOD/w=
+X-Received: by 2002:a25:df56:: with SMTP id w83mr16041704ybg.110.1643417778032;
+ Fri, 28 Jan 2022 16:56:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdncnh1sGjaBDOepQrAc+AHgEr=gWTJqKSxwvPu0f5A1dg@mail.gmail.com>
+References: <202201281045.Z9UBygXr-lkp@intel.com>
+In-Reply-To: <202201281045.Z9UBygXr-lkp@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 29 Jan 2022 01:56:06 +0100
+Message-ID: <CACRpkdY0zN1RexZDyqdqX_QhtHMV61DBfxiNv1ODXo8KWy42fw@mail.gmail.com>
+Subject: Re: drivers/power/supply/ab8500_fg.c:2243:75: warning: variable 'b'
+ set but not used
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:59:55AM -0800, Nick Desaulniers wrote:
-> On Fri, Jan 28, 2022 at 7:21 AM Changbin Du <changbin.du@gmail.com> wrote:
-> >
-> > On Fri, Jan 28, 2022 at 06:57:46PM +0800, Changbin Du wrote:
-> > > The llvm compiler can generate lots of local block labels and they might
-> > > overlap with C defined symbols. So let's ignore such local labels.
-> > >
-> > > Before this change, dumpstack shows a local symbol for epc:
-> > > [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > > [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-> > > [    0.040452][    T0]  ra : restore_all+0x12/0x6e
-> > >
-> > > After this change, the C defined symbol is shown which is expected:
-> > > [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > > [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-> > > [    0.036567][    T0]  ra : restore_all+0x12/0x6e
-> > >
-> > > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > > ---
-> > >  scripts/kallsyms.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > > index 54ad86d13784..5f4be9d72a32 100644
-> > > --- a/scripts/kallsyms.c
-> > > +++ b/scripts/kallsyms.c
-> > > @@ -108,6 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
-> > >       /* Symbol names that begin with the following are ignored.*/
-> > >       static const char * const ignored_prefixes[] = {
-> > >               "$",                    /* local symbols for ARM, MIPS, etc. */
-> > > +             ".LBB",                 /* local block labels generated by compiler */
-> > I aslo found many symbols like '.Ltmpxxx', '.L__unnamed_xx'. So should we just
-> > ignore all symbols prefixed by '.L'?
-> 
-> .L prefixes are "local labels" meaning they don't get an entry in the
-> symbol table.  The trade off is that there is no such convention
-> between compiler generated local label naming conventions, vs hand
-> written ones.  If we omit all local labels, then it might be
-> surprising that a handwritten local label disappeared from this list.
-> I think though that we should omit all local labels, and if someone
-> needs a label to appear in their dumpstack, then they should simply
-> drop the .L prefix on their handwritten label.
->
-Agree. I checked vmlinux for riscv and x86, seeing no handwritten function
-labels prefixed by '.L'. (just some data definition symbols). It should be
-safte to simply ignore all these symbols.
+On Fri, Jan 28, 2022 at 3:36 AM kernel test robot <lkp@intel.com> wrote:
 
-> >
-> > >               ".LASANPC",             /* s390 kasan local symbols */
-> > >               "__crc_",               /* modversions */
-> > >               "__efistub_",           /* arm64 EFI stub namespace */
-> > > --
-> > > 2.32.0
-> > >
-> >
-> > --
-> > Cheers,
-> > Changbin Du
-> 
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+> FYI, the error/warning still remains.
+(...)
+>    drivers/power/supply/ab8500_fg.c: In function 'ab8500_fg_get_ext_psy_data':
+> >> drivers/power/supply/ab8500_fg.c:2243:75: warning: variable 'b' set but not used [-Wunused-but-set-variable]
+>     2243 |                                         const struct ab8500_battery_type *b;
 
--- 
-Cheers,
-Changbin Du
+This is being addressed in a series I am working on (gets deleted) and this
+is not urgent to fix.
+
+Yours.
+Linus Walleij

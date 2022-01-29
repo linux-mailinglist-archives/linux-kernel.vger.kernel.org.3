@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B444A2D41
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7004A2D42
 	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243779AbiA2Ixn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 03:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbiA2Ixm (ORCPT
+        id S232415AbiA2Ix7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 03:53:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57353 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231802AbiA2Ix4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 03:53:42 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD20C061714;
-        Sat, 29 Jan 2022 00:53:41 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id v3so7409265pgc.1;
-        Sat, 29 Jan 2022 00:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=a05V4ozyXx2YyDX8DIWgRjjIxEZoALk0gSpI8hkYt60=;
-        b=Kj0r4g1ZMDIk4p86Ak/uNjXu8XRB31hUfA5AIWSl/JY2D/YIW73E0ABXKWNkakq06K
-         bD3HxcnN5YBgQ8kpKoF4nG4uY3FmlVySxYiR/3alBcF5zTWkcqC3YMXSq6ZLRZNVs5cN
-         I7kdhupFLui17WWvAilOLJyQkiBboFQncqKR9aKui8lEQdoDevPRHz+gynR23eu/mVty
-         VkKFF0ky7YeUwpApt94TvCUa+Y7EvPIN2NnJ20N/ecaeWRJ4B5Vk4w5nK5uoegYs1gAO
-         rafAteQmE8PD4W4Bkt5di+eQDMTm4S8m9r/AUvapAnB1/BBe6VBfLe42WzV05U4oTnZ+
-         su1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=a05V4ozyXx2YyDX8DIWgRjjIxEZoALk0gSpI8hkYt60=;
-        b=qlMno8WhmxFSCYcXptgkuqafcl6dYezQ3nVVA733A7g01dJGU+AjHqfPhuRchoBg4b
-         vjh/O8qVgj6Tlrb9V3WDvoy0sxZXO2wIeXTdO5gHO0wsy3cMgt3mTJq7mXrgZ2cLin18
-         igQquvl2cm9HCX7vTLmidL1Cilxs8EVxHSkza20kFqxvQ25CUskHpcQ0McpW7zLKtW6b
-         ncWZZwk1SB7z5FExyvYWctV6DCAeXsjAUM+TIJwtef60no/vZ4krNOxE4EDUp6IxtZXV
-         XdNa7SMvcv80k8o+PqnepddQF7jkD/V22ORhNSDjc5sAqrqhIv5InXSH4ys0O2Mf+w+O
-         SX3w==
-X-Gm-Message-State: AOAM532sA6PBkN919lvxfkisRDhfgcQcf1UaxAa40Cqv0jg//M/sN8QA
-        3Wlz9YVZKvMn1XnTMCvKYRihjacqVQvjuw==
-X-Google-Smtp-Source: ABdhPJwRqs7csuGE/JE8h2SQ5QQd9S5Ru37Nko/elf0xCLUdsYZWj73lOjH2Dd+GWfHYlVACp+FWow==
-X-Received: by 2002:a05:6a00:884:: with SMTP id q4mr11570615pfj.81.1643446421000;
-        Sat, 29 Jan 2022 00:53:41 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id k21sm11932108pff.33.2022.01.29.00.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 00:53:40 -0800 (PST)
-Date:   Sat, 29 Jan 2022 08:53:36 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     jwiedmann.dev@gmail.com, Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sameeh Jubran <sameehj@amazon.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH v2] net: ena: Do not waste napi skb cache
-Message-ID: <YfUAkA9BhyOJRT4B@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Sat, 29 Jan 2022 03:53:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643446436;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=cr+ebJaUo9nx6h/WUxTauaoEwHuILetaAEgQRvXMOro=;
+        b=dRA62j4zXS43T6AoV1ygKJIp7AFF+cMudtWBB8RnBn4ed4aKhphwolp3JpoQc+UagOFzuV
+        oBpwaQUlFnMSDyMNdRmNrGjeOd0jghBYoLVoB7GjPS637m9Sz5qwQIhOZQ/BQTYaVugtlo
+        bJ/tZl8BO4BYrxE+0zqhEVGUzO83U14=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-546-fp6E1wwFPOyIn1D5-JEt7Q-1; Sat, 29 Jan 2022 03:53:54 -0500
+X-MC-Unique: fp6E1wwFPOyIn1D5-JEt7Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A2A28144E1;
+        Sat, 29 Jan 2022 08:53:53 +0000 (UTC)
+Received: from tucnak.zalov.cz (unknown [10.39.192.125])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D1EEA1086481;
+        Sat, 29 Jan 2022 08:53:52 +0000 (UTC)
+Received: from tucnak.zalov.cz (localhost [127.0.0.1])
+        by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 20T8rnxD3397221
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 29 Jan 2022 09:53:50 +0100
+Received: (from jakub@localhost)
+        by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 20T8rm013397220;
+        Sat, 29 Jan 2022 09:53:48 +0100
+Date:   Sat, 29 Jan 2022 09:53:48 +0100
+From:   Jakub Jelinek <jakub@redhat.com>
+To:     "Justin M. Forbes" <jforbes@fedoraproject.org>
+Cc:     linux-kernel@vger.kernel.org, jmforbes@linuxtx.org
+Subject: Re: [PATCH] Fix for gcc12 compile issues in ubcmd-util.h
+Message-ID: <20220129085348.GT2646553@tucnak>
+Reply-To: Jakub Jelinek <jakub@redhat.com>
+References: <20220129010215.781601-1-jforbes@fedoraproject.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220129010215.781601-1-jforbes@fedoraproject.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By profiling, discovered that ena device driver allocates skb by
-build_skb() and frees by napi_skb_cache_put(). Because the driver
-does not use napi skb cache in allocation path, napi skb cache is
-periodically filled and flushed. This is waste of napi skb cache.
+On Fri, Jan 28, 2022 at 07:02:14PM -0600, Justin M. Forbes wrote:
+> While the current code builds fine with gcc 11, it does not with gcc 12,
+> resulting in:
+> 
+> In file included from help.c:12:
+> In function 'xrealloc',
+>     inlined from 'add_cmdname' at help.c:24:2:
+> subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+>    56 |                 ret = realloc(ptr, size);
+>       |                       ^~~~~~~~~~~~~~~~~~
+> subcmd-util.h:52:21: note: call to 'realloc' here
+>    52 |         void *ret = realloc(ptr, size);
+>       |                     ^~~~~~~~~~~~~~~~~~
+> subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+>    58 |                         ret = realloc(ptr, 1);
+>       |                               ^~~~~~~~~~~~~~~
+> subcmd-util.h:52:21: note: call to 'realloc' here
+>    52 |         void *ret = realloc(ptr, size);
+>       |                     ^~~~~~~~~~~~~~~~~~
+> 
+> The was mentioned in upstream gcc bug
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104069 where it was
+> determined that gcc was correct and the kernel needed to change.
 
-As ena_alloc_skb() is called only in napi, Use napi_build_skb()
-and napi_alloc_skb() when allocating skb.
+This is due to the different behaviors of realloc when size is 0 as
+described in http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm#dr_400
+and as the code explicitly tries to cope with !size, there is at least
+theoretical chance that it is called with size 0.
+In glibc/AIX, for non-NULL ptr realloc(ptr, 0) will free(ptr) and return
+NULL, so the code as written in that case will in
+	void *ret = realloc(ptr, 0);
+	if (!ret && !0)
+		ret = realloc(ptr, 1);
+effectively
+	free(ptr);
+	ret = realloc(ptr, 1);
+and so try to reallocate freed memory.  On BSD libcs it will work properly
+though.
 
-This patch was tested on aws a1.metal instance.
-
-[ jwiedmann.dev@gmail.com: Use napi_alloc_skb() instead of
-  netdev_alloc_skb_ip_align() to keep things consistent. ]
-
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Acked-by: Shay Agroskin <shayagr@amazon.com>
----
- drivers/net/ethernet/amazon/ena/ena_netdev.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-index 53080fd143dc..07444aead3fd 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -1400,10 +1400,9 @@ static struct sk_buff *ena_alloc_skb(struct ena_ring *rx_ring, void *first_frag)
- 	struct sk_buff *skb;
- 
- 	if (!first_frag)
--		skb = netdev_alloc_skb_ip_align(rx_ring->netdev,
--						rx_ring->rx_copybreak);
-+		skb = napi_alloc_skb(rx_ring->napi, rx_ring->rx_copybreak);
- 	else
--		skb = build_skb(first_frag, ENA_PAGE_SIZE);
-+		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
- 
- 	if (unlikely(!skb)) {
- 		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail, 1,
--- 
-2.33.1
+	Jakub
 

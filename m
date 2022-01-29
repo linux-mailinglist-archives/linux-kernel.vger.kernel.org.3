@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7D04A2AEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130A34A2AEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352003AbiA2BOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 20:14:20 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:32130 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiA2BOS (ORCPT
+        id S1352017AbiA2BPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 20:15:03 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:36496 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229812AbiA2BOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 20:14:18 -0500
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jlx9J2Y0Rz8wWp;
-        Sat, 29 Jan 2022 09:11:16 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 29 Jan 2022 09:14:16 +0800
-Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
- (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 29 Jan
- 2022 09:14:15 +0800
-Subject: Re: [RESEND PATCH net-next 2/2] net: hns3: add ethtool priv-flag for
- TX push
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, <wangjie125@huawei.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <chenhao288@hisilicon.com>
-References: <20220125072149.56604-1-huangguangbin2@huawei.com>
- <20220125072149.56604-3-huangguangbin2@huawei.com>
- <20220125195508.585b0c40@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
-Message-ID: <2b7029d4-c1a7-93af-1846-7b91703f9edf@huawei.com>
-Date:   Sat, 29 Jan 2022 09:14:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Fri, 28 Jan 2022 20:14:54 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V34G8yp_1643418891;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V34G8yp_1643418891)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 29 Jan 2022 09:14:52 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     bhe@redhat.com
+Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] proc/vmcore: Fix vmcore_alloc_buf() kernel-doc comment
+Date:   Sat, 29 Jan 2022 09:14:49 +0800
+Message-Id: <20220129011449.105278-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-In-Reply-To: <20220125195508.585b0c40@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix a spelling problem to remove warnings found
+by running scripts/kernel-doc, which is caused by
+using 'make W=1'.
 
+fs/proc/vmcore.c:492: warning: Function parameter or member 'size' not
+described in 'vmcore_alloc_buf'
+fs/proc/vmcore.c:492: warning: Excess function parameter 'sizez'
+description in 'vmcore_alloc_buf'
 
-On 2022/1/26 11:55, Jakub Kicinski wrote:
-> On Tue, 25 Jan 2022 15:21:49 +0800 Guangbin Huang wrote:
->> From: Yufeng Mo <moyufeng@huawei.com>
->>
->> Add a control private flag in ethtool for enable/disable
->> TX push feature.
-> 
-> I think it's a pretty standard feature for NICs which also support RDMA.
-> Mellanox/nVidia has it (or at least it the previous gen HW did),
-> Broadcom's bnxt driver does it as well.
-> 
-> Can we make this a standard knob via ethtool? Not entirely sure under
-> which switch, maybe it's okay to add it under -g? Perhaps we need a new
-> command similar to -k but for features contained entirely to the driver?
-> .
-> 
-Hi Jakub,
-We consider adding a new command for this feature. We will send RFC after we finish it.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/proc/vmcore.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+index edeb01dfe05d..6f1b8ddc6f7a 100644
+--- a/fs/proc/vmcore.c
++++ b/fs/proc/vmcore.c
+@@ -480,7 +480,7 @@ static const struct vm_operations_struct vmcore_mmap_ops = {
+ 
+ /**
+  * vmcore_alloc_buf - allocate buffer in vmalloc memory
+- * @sizez: size of buffer
++ * @size: size of buffer
+  *
+  * If CONFIG_MMU is defined, use vmalloc_user() to allow users to mmap
+  * the buffer to user-space by means of remap_vmalloc_range().
+-- 
+2.20.1.7.g153144c
+

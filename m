@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EE44A30A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681854A30A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352839AbiA2Qdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352848AbiA2Qc6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 11:32:58 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1048DC06175C
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:32:39 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id b15so8881443plg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HB3rD200TcYiLs5tsvdXeI+ibi+B/S+l18YmlgU5fCE=;
-        b=FF2HNd+zuYsbL5g/5i0PUuE/ezTQauFPKnMkcuHyUpOqAdAwCchqRXMueOaHkx0NQZ
-         zQa/r14k1efRYzFBX/9va6h7buyryd2qCHowI4pQ6meFEEP9W/4WINrUV0K967c+1b1R
-         rFn1Nhq5VLKzmxzBpngECcLDPYMYZWO7GOeP2t+U7l0zZWE5GSF/oCEe0G/jdCCuIVfy
-         dkn7BwizAj+c5mvHdKHh9dGzs9ebOrdyR15GDBYGFw9PbsD0dR7TBSQHmA1w0KHb0cER
-         cdRGIfuf3ythKCscRz4IkUpseDFmbIMpifltGQCfgJNcttJPr8gmXZK8WxnJppX713V6
-         Dzvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HB3rD200TcYiLs5tsvdXeI+ibi+B/S+l18YmlgU5fCE=;
-        b=UC6/SUYWSDqpUaiJUZILSJZTziV/2594CysOpyvU1yuBjW/0BZ/Xc1pDKEOoyutUjM
-         elaO860piPGIm8BDUxSSxTOY5hftwhhsReAKf9RDtwAcJOT5P10+kC44CEODVe5Ciav/
-         R3tcyGdlYIisAheC1vnFc3cH9o8OIFBO6nNIuTDdcqYm3ucxEnj4i1ET+WtdSM/X4Wyy
-         9O08Tn2Vux2RqxVogdWUUyxzcjlUPVXfJWzkCTzgB6JXTGRPHIU+cTaS8sbh0p7Xha7Q
-         p3r2YIJRbmsIEUXZGmJSqJdeUwRRs92p1W8VBBe3+DovH3pMMuOTR0bmt79t5BaUAzxA
-         yZxw==
-X-Gm-Message-State: AOAM530hDFbNncXQX+XCcLz5wjxcOjEg7okjEQdQa+bgcQuuyr14zBFP
-        DXOJh+1UB1/7INPETnrvCDM=
-X-Google-Smtp-Source: ABdhPJwzF4IZ8/LW/oEI2adx+41W+RVXEkFWhs93pWHft5RlATLB++QwJKhjwvXdCOrCOg3y50ndvg==
-X-Received: by 2002:a17:90b:1983:: with SMTP id mv3mr15877594pjb.222.1643473958680;
-        Sat, 29 Jan 2022 08:32:38 -0800 (PST)
-Received: from localhost.localdomain ([171.78.146.184])
-        by smtp.googlemail.com with ESMTPSA id q13sm1893528pfj.44.2022.01.29.08.32.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 08:32:38 -0800 (PST)
-From:   Abdun Nihaal <abdun.nihaal@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Abdun Nihaal <abdun.nihaal@gmail.com>, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 23/23] staging: r8188eu: convert rtw_p2p_got_wpsinfo to return void
-Date:   Sat, 29 Jan 2022 21:58:15 +0530
-Message-Id: <f63e236e3a338789265172990fea049216115105.1643466748.git.abdun.nihaal@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1643466748.git.abdun.nihaal@gmail.com>
-References: <cover.1643466748.git.abdun.nihaal@gmail.com>
+        id S1352725AbiA2QgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 11:36:08 -0500
+Received: from mga18.intel.com ([134.134.136.126]:28556 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229975AbiA2QgH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 11:36:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643474167; x=1675010167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NeN+U8iKMJdDOcMiYQHwhsKC4blyvRV8SKBOfqOcU+4=;
+  b=g3UMNyPMjRQLa4CRSF4wM9kWg+HLuSxbX6gqbcKRbDwwME7YpMxpQh6F
+   zjZDBt13tVbt6uxuTE2Mc5KOQwQDpqTfSX1MZ+ivaPIYf+jYi5e74vYiL
+   FMx5oLE8Vkgw/qjMrI4ZwPVxl8eVImhNXvGRH0s+nOaGQRer+i+9kQbTD
+   LWQbCV2yFAcpkM3OAqDdxfGH+saQj/46ppG1Fgl/SqvkpFrmJ+QGW05AK
+   cOgnqjzm/tY/fxGbrQQGUcvU2Ed7Rof16SZSH4dwXI6V1iNe9QgaYXdUm
+   UALg8wOA2xtMdDQdzNBf+KJw5vNr9TWmw3G4ReEAacG6AjBTRvKnpwui0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230856813"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="230856813"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 08:36:07 -0800
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="496431763"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 08:36:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nDqgm-00FxsL-CB;
+        Sat, 29 Jan 2022 18:35:00 +0200
+Date:   Sat, 29 Jan 2022 18:35:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>
+Subject: Re: [PATCH] staging: media: atomisp: Use BIT macro instead of left
+ shifting
+Message-ID: <YfVstOJ38OTtd43n@smile.fi.intel.com>
+References: <20220129113821.324180-1-mosescb.dev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129113821.324180-1-mosescb.dev@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtw_p2p_got_wpsinfo always returns 0 and it's return value is not used.
-Convert it to return void.
+On Sat, Jan 29, 2022 at 12:38:04PM +0100, Moses Christopher Bollavarapu wrote:
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
----
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+It's a bit too many people in Cc list (I dropped more than a half in this reply).
+I would suggest to use my script [1] or look into it for a hint how to reduce it.
 
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 1af8b2c068b8..c54ec5602ddf 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -3301,11 +3301,10 @@ static void rtw_p2p_prov_disc(struct net_device *dev,
- /*	This function is used to inform the driver the user had specified the pin code value or pbc */
- /*	to application. */
- 
--static int rtw_p2p_got_wpsinfo(struct net_device *dev,
--			       struct iw_request_info *info,
--			       union iwreq_data *wrqu, char *extra)
-+static void rtw_p2p_got_wpsinfo(struct net_device *dev,
-+				struct iw_request_info *info,
-+				union iwreq_data *wrqu, char *extra)
- {
--	int ret = 0;
- 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
- 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
- 
-@@ -3326,7 +3325,6 @@ static int rtw_p2p_got_wpsinfo(struct net_device *dev,
- 		pwdinfo->ui_got_wps_info = P2P_GOT_WPSINFO_PBC;
- 	else
- 		pwdinfo->ui_got_wps_info = P2P_NO_WPSINFO;
--	return ret;
- }
- 
- static int rtw_p2p_set(struct net_device *dev,
+[1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
+
+> There is a BIT(nr) macro available in Linux Kernel,
+> which does the same thing.
+
+In some cases it might fix a (theoretical) UB issue.
+
+> Example: BIT(7) = (1UL << 7)
+
+...
+
+> +		s_config->source.tpg.x_mask = BIT(4) - 1;
+
+> +		s_config->source.tpg.y_mask = BIT(4) - 1;
+
+> +		s_config->source.tpg.xy_mask = BIT(8) - 1;
+
+For masks you may use GENMASK().
+
+...
+
+> -		irq = irq & 1 << INTR_IIR;
+> +		irq = irq & BIT(INTR_IIR);
+
+It may be:
+
+	irq &= BIT(...);
+
+...
+
+> -	irq = irq & 1 << INTR_IIR;
+> +	irq = irq & BIT(INTR_IIR);
+
+Ditto.
+
+...
+
+> -		virt += (1 << PAGE_SHIFT);
+> +		virt += BIT(PAGE_SHIFT);
+
+This is weird. Shouldn't be as simple as
+
+	virt += PAGE_SIZE;
+
+?
+
+...
+
+>  enum ia_css_sp_sleep_mode {
+>  	SP_DISABLE_SLEEP_MODE = 0,
+> -	SP_SLEEP_AFTER_FRAME = 1 << 0,
+> -	SP_SLEEP_AFTER_IRQ = 1 << 1
+> +	SP_SLEEP_AFTER_FRAME  = BIT(0),
+
+> +	SP_SLEEP_AFTER_IRQ    = BIT(1)
+
+While at it, add a comma here.
+
+>  };
+
+...
+
+> +	IA_CSS_DEBUG_DUMP_ALL = BIT(14)  /** Dump all device parameters */
+
+Ditto.
+
+...
+
+On top of this don't forget to add
+
+	#include <linux/bits.h>
+
+to the modified header files.
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 

@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5FE4A2B70
+	by mail.lfdr.de (Postfix) with ESMTP id B75D34A2B71
 	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 04:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352288AbiA2DcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 22:32:25 -0500
-Received: from mga05.intel.com ([192.55.52.43]:48301 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241053AbiA2DcX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 22:32:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643427143; x=1674963143;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mhdD5HHyqMlNNSG85ksnNtIQQC+USBb6A+/glwu7chk=;
-  b=V79gBByfJUkkAvVh8daHf7liuoVeSPh0zRqgnzBGH8nIpHDb9RheZdA/
-   Sb631XP2QdJuUHSxvstT1ZSm2i3O8Sp+xF752us2kGuM6p7vyXRtdWYNy
-   G1Gzmuhdy+oMaeKOH0QKRoToaU2JQUc2xZj5PlM39gj/dKHPTv6jLkF/l
-   XAXyQ3yDv2XW2wyao92XSjUbdUNKhXrpK0Uab0pZJUJPE2TOXgdX55+PV
-   cOWXuOtbLSn7ztqdClCsDvLJa4TO3vL1yUD/8eydu/j3y/cKVgSCixiXL
-   Q1SgaGbnUwk566A0U2kyv3Ky2WMrfhMzOXke+iKc0qixYtjnV9QnP1yBn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="333591604"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="333591604"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 19:32:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="480946584"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jan 2022 19:32:21 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDeTM-000OhY-JE; Sat, 29 Jan 2022 03:32:20 +0000
-Date:   Sat, 29 Jan 2022 11:31:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [ardb:arm64-ro-page-tables-pkvm-v5.17 16/26]
- arch/arm64/kvm/mmu.c:517:13: warning: no previous prototype for
- 'kvm_hyp_debug_uart_set_basep'
-Message-ID: <202201291152.MDHD6psp-lkp@intel.com>
+        id S1352295AbiA2Dde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 22:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241053AbiA2Ddc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 22:33:32 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F799C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 19:33:32 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id c23so14417794wrb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 19:33:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=MEEV8WH7gcIBaywuZqpSloW8+fQPmSsXYorwBGkwcEQ=;
+        b=ft1K6ec+bpsSUrO6sHzilNhZI5D7ygOV6cUs23pfaPUJ86HDBgX0unZVVHu1tlpSzV
+         S3HLok9V9mqEFkQpws5xw3ogn4wQonCdzOjENUWOUKy8jo4+t3fYvLRvRDxuVO+D/A8n
+         uVVH1VpoDrgOPq8e6nNviJBhGUMnUUFf351smOMUpH42GpfGrQUlo0HiNEt2nPCdDija
+         Nq1cTeDQUAxClEhhGfdNvCub+wDMVFSBMW86P6wTCiyT0VBQQyrZ/86VMrYpRGJ/eYAN
+         FSNbmr2PQVAZT2m7sVIM3lcR8LHGZiXTF1Eg54+4IXZ+i/y0eIvKSj1+PNMrNzT/eDp0
+         Bv9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=MEEV8WH7gcIBaywuZqpSloW8+fQPmSsXYorwBGkwcEQ=;
+        b=qV5bbmOlw5qPl7I8S8gH79zffgbrRabGbmgrte/1jDpYiCmantQ5MiDz3Y4lbCItKT
+         rffOMNfOpgvFtwMiYN1m75IwT8kFyiEwH8De+uVEo5Nflq4JNIjnmNqZxgPoXtJkCn8N
+         y8+g0b50V31P60GILrqppvAMIhkt9R1UhEUhDNa4MYvWHP2U+iCUECqXetTFcBnZWmtP
+         WNgyqOQv3N3xmHEVHDhV5hkckt4xo6CCsiuSt3HAJVMf9lMfqNM4mYM4dc6iqS9qdWx1
+         NPheYCVCCFSNsnp1EY55AlBRn2MYT7oCyBNdNre25nuiMfbgxg/mMhogbmRQsXQeDV/H
+         QlDA==
+X-Gm-Message-State: AOAM530gPm0OUVX5IFlnnCF/pJNDsc7GAuLGjU/h6291cyuKLuK97i6U
+        17OPLOfl5PXpqEuv4tL8qAl700Uvy2k=
+X-Google-Smtp-Source: ABdhPJyiMDc7MH6tbWAjV3Be75ZoFQZE5hbcKQdm0LjQKmgM7IzYGTiitEr0vIiW8lRjpb0lPUKvKQ==
+X-Received: by 2002:a5d:494b:: with SMTP id r11mr9289806wrs.626.1643427210591;
+        Fri, 28 Jan 2022 19:33:30 -0800 (PST)
+Received: from [10.96.0.6] ([85.203.46.187])
+        by smtp.gmail.com with ESMTPSA id j19sm3551042wmq.17.2022.01.28.19.33.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 19:33:30 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] ALSA: core: possible deadlock involving waiting and locking
+ operations
+To:     perex@perex.cz, tiwai@suse.com, broonie@kernel.org,
+        o-takashi@sakamocchi.jp
+Cc:     alsa-devel@alsa-project.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <56766037-972e-9e5b-74c1-88633a72a77f@gmail.com>
+Date:   Sat, 29 Jan 2022 11:33:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-ro-page-tables-pkvm-v5.17
-head:   b38f2df95cbf61e70bc32017da5318d1cb03e3e3
-commit: ed0901f32dbd42aab0cd95a848ea943273062b2f [16/26] [DONOTMERGE] KVM: arm64: Add debug UART hacks at EL2
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220129/202201291152.MDHD6psp-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=ed0901f32dbd42aab0cd95a848ea943273062b2f
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm64-ro-page-tables-pkvm-v5.17
-        git checkout ed0901f32dbd42aab0cd95a848ea943273062b2f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My static analysis tool reports a possible deadlock in the sound driver 
+in Linux 5.10:
 
-All warnings (new ones prefixed by >>):
+snd_card_disconnect_sync()
+   spin_lock_irq(&card->files_lock); --> Line 461 (Lock A)
+   wait_event_lock_irq(card->remove_sleep, ...); --> Line 462 (Wait X)
+   spin_unlock_irq(&card->files_lock); --> Line 465 (Unlock A)
 
->> arch/arm64/kvm/mmu.c:517:13: warning: no previous prototype for 'kvm_hyp_debug_uart_set_basep' [-Wmissing-prototypes]
-     517 | void __init kvm_hyp_debug_uart_set_basep(struct alt_instr *alt,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arm64/include/asm/kvm_host.h:28,
-                    from include/linux/kvm_host.h:43,
-                    from arch/arm64/kvm/mmu.c:8:
-   arch/arm64/kvm/mmu.c: In function 'kvm_hyp_debug_uart_set_basep':
->> arch/arm64/include/asm/kvm_asm.h:183:29: warning: initialization of 'void *' from 'long unsigned int' makes pointer from integer without a cast [-Wint-conversion]
-     183 |                 void *val = (ptr);                                      \
-         |                             ^
-   arch/arm64/kvm/mmu.c:522:25: note: in expansion of macro 'kvm_ksym_ref'
-     522 |         u64 addr = (u64)kvm_ksym_ref(arm64_kvm_hyp_debug_uart_addr);
-         |                         ^~~~~~~~~~~~
-   arch/arm64/include/asm/kvm_asm.h:183:29: note: (near initialization for 'addr')
-     183 |                 void *val = (ptr);                                      \
-         |                             ^
-   arch/arm64/kvm/mmu.c:522:25: note: in expansion of macro 'kvm_ksym_ref'
-     522 |         u64 addr = (u64)kvm_ksym_ref(arm64_kvm_hyp_debug_uart_addr);
-         |                         ^~~~~~~~~~~~
+snd_hwdep_release()
+   mutex_lock(&hw->open_mutex); --> Line 152 (Lock B)
+   mutex_unlock(&hw->open_mutex); --> Line 157 (Unlock B)
+   snd_card_file_remove()
+     wake_up_all(&card->remove_sleep); --> Line 976 (Wake X)
+
+snd_hwdep_open()
+   mutex_lock(&hw->open_mutex); --> Line 95 (Lock B)
+   snd_card_file_add()
+     spin_lock(&card->files_lock); --> Line 932 (Lock A)
+     spin_unlock(&card->files_lock); --> Line 940 (Unlock A)
+   mutex_unlock(&hw->open_mutex); --> Line 139 (Unlock B)
+
+When snd_card_disconnect_sync() is executed, "Wait X" is performed by 
+holding "Lock A". If snd_hwdep_open() is executed at this time, it holds 
+"Lock B" and then waits for acquiring "Lock A". If snd_hwdep_release() 
+is executed at this time, it waits for acquiring "Lock B", and thus 
+"Wake X" cannot be performed to wake up "Wait X" in 
+snd_card_disconnect_sync(), causing a possible deadlock.
+
+I am not quite sure whether this possible problem is real and how to fix 
+it if it is real.
+Any feedback would be appreciated, thanks :)
 
 
-vim +/kvm_hyp_debug_uart_set_basep +517 arch/arm64/kvm/mmu.c
-
-   516	
- > 517	void __init kvm_hyp_debug_uart_set_basep(struct alt_instr *alt,
-   518						 __le32 *origptr, __le32 *updptr,
-   519						 int nr_inst)
-   520	{
-   521		int i;
-   522		u64 addr = (u64)kvm_ksym_ref(arm64_kvm_hyp_debug_uart_addr);
-   523	
-   524		BUG_ON(nr_inst != 4);
-   525	
-   526		for (i = 0; i < 4; ++i) {
-   527			u32 insn = le32_to_cpu(origptr[i]);
-   528	
-   529			insn = aarch64_insn_encode_immediate(AARCH64_INSN_IMM_16,
-   530							     insn,
-   531							     addr & 0xffff);
-   532			BUG_ON(insn == AARCH64_BREAK_FAULT);
-   533			updptr[i] = cpu_to_le32(insn);
-   534			addr >>= 16;
-   535		}
-   536	}
-   537	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best wishes,
+Jia-Ju Bai

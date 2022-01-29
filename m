@@ -2,197 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DD84A2D67
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0279C4A2D63
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbiA2Jbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 04:31:49 -0500
-Received: from mout.gmx.net ([212.227.17.20]:47257 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233096AbiA2Jbr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 04:31:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643448699;
-        bh=D7rgkhQ57nbk53MLqwVeodUVHa6zUEeKtJ5R3AU99Ms=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=GODZTR03kAqA1EQvaWgGzO5mpwJpE2bzAP1UmexkBVOk7SxcNNLBziEbRr+oqmsf/
-         GDqbj85vHxd58r1eIzC/SKTyPWnABc5U0Bd3WOWGstYixqUE3+kLvw2muPtFcW6yOE
-         8OjASb/B6n3mD6DpwhNc2pwgtPCkwAfb7s0Y2+cc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Ml6m4-1mX0rf0FQa-00lU4c; Sat, 29
- Jan 2022 10:31:39 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: nuvoton,npcm7xx: remove bogus unit addresses from fixed-partition nodes
-Date:   Sat, 29 Jan 2022 10:29:56 +0100
-Message-Id: <20220129092957.2189769-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LkNGm0idUbl+qi69GkTuh98bAQ1fCO3fAj1Oi4R4OxcDtIVWBSn
- HSielVDyKOsbvIWKemrpwF15/S2D0/evvKWXZWDXLTzBs38uinRBEjsVompQ+aW4iBx/Abx
- neuO9nRtJWmaG2dFMnzqxc5LquketEE5BIGxu9NDo3Q2VCuePizgXghCZRIjkLylVOHZPyI
- IE9FJGczWzevtKy6Sk+SQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1DelM3YvDQw=:4eDFFnnBYNfHlQVoVZkQzD
- v0WZYylljURUdWR/ibjKeH0YflwanU8LzCXhvdndyN5oBS0QccUA4zO5j8cpAAkPZj8Jo6pz/
- KFnN2zJnJFMz/T73zfE7NRZdvdYAXBXtW5bsC/p4D6WD5dSMmjhLbshoNKIiH8bAoGbf43oZr
- KwvyNtu19S/1WO0QCxkVFgpIfcGMIicIQ5l9b/wu/620618YKoJCgf/Le+tYinCoz/P11o/QQ
- U1upvGxIyaD7BKbGlxB/v1B/Nhq6Q3nQa20oWCfyv/mCGu3aaVDDeZ2UsYw8VJOqgC4chDi1i
- y36lYE/fGyPbtIwut2EsHGwIKjMoaMC2o66quQ9gEpSHdrjLLaDrvdZoQ2Lz0OHslIauKeNwK
- 7d3QXKlPYxxrnIqyhFLUgJ+5ZtguyrviiALzT+SqxiAhKJCSgHo65MT0cbNn3pT0tMRuEB8HG
- E2xsiPUEq81cEh+cVCSzJnla8N4tzcHnABWKCHZd6mRbpL1r4glsKwJO7VWBeIG+A02Q+8qR3
- IlBxN7MzhAeoPj5QuG036p7OHCasicTajv9niqpuLVggj9lxxzIh0YzqHtsaVXRMdgLo/72Tz
- 9UfpzgO4Ug8vAoOCiDneMwKOl3p0IJkEBAVVOdNjwgD1XnXnnyVMxR9VLnY6zd/pQXgEcIcnE
- X0apjVQriN+C+3ZN4fMzYuWxaMPMlRfFfq+FOzXcruhAtkZlp9nihx/17PmWqidXxGqOLp766
- DuK2H/ytNdwOyVZL3JJ7pbI984lyZQ8UURoSmZE6Bz2aY02fn3nNPzMSvB+y2fUrdGSxuN9ih
- H28dsqBO8gZb9BuhLcsmPxf/7P0/fNdFlgfpy6ylJi/mN8Pj/hC3dEvm0NIUV+7QKTalde2tr
- 4TyRE9CsVnElsUjR2MIPdrSfmDQhGM9XaxCYC6DFoEkqioraG/3F+KhkpW/WuxjekSVR3DCjt
- 7INpANxG4ycHxbg+Q1gbZiVH0duHQU4yQkfZc1r5WyzbjjB5ZoFk/i6q/ZvHTUI260zgSQlqV
- Jq7/t25NFU1TGKovtxJwbodZv4IlfnBJTDIdHMVhj/2WEZRK8CO0cbx+sR6j/yWSuYcKgi43q
- XYuKvkS3ExWeR0=
+        id S233175AbiA2JbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 04:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232938AbiA2JbD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 04:31:03 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BB3C061748
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:31:02 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id b2-20020a252e42000000b00619593ff8ddso6122832ybn.6
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:31:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eQiF13v2Gsd7OivTrV/U/UDNZ731mX3c3wpLefP6cJw=;
+        b=dGKm8kCRfr/obRdHtiZJnzlManXsVaOXRWUBx/zeLE1FiuUXnlnkU6UYocCbpZekjX
+         WXE3V5Ma1aexAqQmBKQguT2HhSDKNOpm6wb3DjaBdzVttIemJAqbzwFw4XIxSqYRWsnv
+         Nf32wA6Z2PxGO+ifJlZLkbDBUhf5+GWlv6tQA1ayX8WZrxfE0hf34YAAZoMKD671O6/0
+         e0PwldCxszga5aKdvpKPdSAib6o4X9Wt1KvwpJFQwD/mYXe0iPgqivgqi6d1Wji7dmlb
+         LMWtkB8SmC60TpGIDM6/aNGNL8RaF62wOHeCXtTNSJWXwI0xiRFvSvyBBPiObIYq2gT5
+         FSLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eQiF13v2Gsd7OivTrV/U/UDNZ731mX3c3wpLefP6cJw=;
+        b=QcZ0zO4jMgVi6ULOHg/KssOELJzA+SuHxEuiqDg2ZAtMFJk0vgpd08ZykXd0FpOLr+
+         EGXkjsl/H4ffy0hT+iTrpv8oBgpLOrMJihq/aF+WikcY9AnrmxqFeFTYvPp8ttkRpHZu
+         N82veLamwLQrgQ06ETwhV9cTMGvrlb2U/L6EI8P1bxL67gKRD1/9dOw/G4Jwg/ZdLbav
+         GLvdvssrUerpxgffiuT7rhNwA9gIB3rqkYcEesRvCYlP7lrEG5PTP7FJ1Y+3hUt3AC3D
+         Bj6x+/XBkGsKdxOwyxNBgyMnIfocHHy21+iiSyEttghHpbZt2ptohT0ajVp6WK9GUOG/
+         YoyA==
+X-Gm-Message-State: AOAM531q6hFA0BMg2ehL7TswcRU4UXETpMTR5u4m/zHm3xkS4ef6VQ59
+        dcGlfmDgjfzWplWRk1KnCCKLaMO5qRF8
+X-Google-Smtp-Source: ABdhPJySTU9JqPpXZ+xr2kOfpBPYym9Fd+bimdqVuTR+Dro5+7AjxNgg8+CbiD5EvQ+hLJtiN1GM//X0cydf
+X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:e174:365:53b4:80cd])
+ (user=pumahsu job=sendgmr) by 2002:a0d:cf81:: with SMTP id
+ r123mr1548ywd.59.1643448661327; Sat, 29 Jan 2022 01:31:01 -0800 (PST)
+Date:   Sat, 29 Jan 2022 17:30:36 +0800
+Message-Id: <20220129093036.488231-1-pumahsu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH v6] xhci: re-initialize the HC during resume if HCE was set
+From:   Puma Hsu <pumahsu@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Puma Hsu <pumahsu@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The unit addresses do not correspond to the nodes' reg properties,
-because they don't have any.
+When HCE(Host Controller Error) is set, it means an internal
+error condition has been detected. Software needs to re-initialize
+the HC, so add this check in xhci resume.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- arch/arm/boot/dts/nuvoton-npcm730-gbs.dts            | 2 +-
- arch/arm/boot/dts/nuvoton-npcm730-gsj.dts            | 2 +-
- arch/arm/boot/dts/nuvoton-npcm730-kudo.dts           | 6 +++---
- arch/arm/boot/dts/nuvoton-npcm750-evb.dts            | 4 ++--
- arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts | 6 +++---
- 5 files changed, 10 insertions(+), 10 deletions(-)
+Cc: stable@vger.kernel.org
+Signed-off-by: Puma Hsu <pumahsu@google.com>
+---
+v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+v3: Add stable@vger.kernel.org for stable release.
+v4: Refine the commit message.
+v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
+v6: Fix the missing declaration for str.
 
-diff --git a/arch/arm/boot/dts/nuvoton-npcm730-gbs.dts b/arch/arm/boot/dts=
-/nuvoton-npcm730-gbs.dts
-index eb6eb21cb2a44..33c8d5b3d679a 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-npcm730-gbs.dts
-+++ b/arch/arm/boot/dts/nuvoton-npcm730-gbs.dts
-@@ -366,7 +366,7 @@ spi-nor@0 {
- 		spi-max-frequency =3D <20000000>;
- 		spi-rx-bus-width =3D <2>;
- 		label =3D "bmc";
--		partitions@80000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-diff --git a/arch/arm/boot/dts/nuvoton-npcm730-gsj.dts b/arch/arm/boot/dts=
-/nuvoton-npcm730-gsj.dts
-index d4ff49939a3d9..bbe18618f5c56 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
-+++ b/arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
-@@ -142,7 +142,7 @@ spi-nor@0 {
- 		reg =3D <0>;
- 		spi-rx-bus-width =3D <2>;
+ drivers/usb/host/xhci.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
--		partitions@80000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-diff --git a/arch/arm/boot/dts/nuvoton-npcm730-kudo.dts b/arch/arm/boot/dt=
-s/nuvoton-npcm730-kudo.dts
-index 82a104b2a65f1..8e3425cb8e8b9 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-npcm730-kudo.dts
-+++ b/arch/arm/boot/dts/nuvoton-npcm730-kudo.dts
-@@ -388,7 +388,7 @@ spi-nor@0 {
- 		spi-max-frequency =3D <5000000>;
- 		spi-rx-bus-width =3D <2>;
- 		label =3D "bmc";
--		partitions@80000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-@@ -422,7 +422,7 @@ spi-nor@1 {
- 		reg =3D <1>;
- 		spi-max-frequency =3D <5000000>;
- 		spi-rx-bus-width =3D <2>;
--		partitions@88000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-@@ -447,7 +447,7 @@ spi-nor@0 {
- 		reg =3D <0>;
- 		spi-max-frequency =3D <5000000>;
- 		spi-rx-bus-width =3D <2>;
--		partitions@A0000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-diff --git a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts b/arch/arm/boot/dts=
-/nuvoton-npcm750-evb.dts
-index 0334641f88292..cf274c926711a 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-+++ b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-@@ -74,7 +74,7 @@ spi-nor@0 {
- 		spi-rx-bus-width =3D <2>;
- 		reg =3D <0>;
- 		spi-max-frequency =3D <5000000>;
--		partitions@80000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-@@ -135,7 +135,7 @@ spi-nor@0 {
- 		spi-rx-bus-width =3D <2>;
- 		reg =3D <0>;
- 		spi-max-frequency =3D <5000000>;
--		partitions@A0000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-diff --git a/arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts b/arch/a=
-rm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts
-index 767e0ac0df7c5..7fe7efee28acb 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts
-+++ b/arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dts
-@@ -107,7 +107,7 @@ spi-nor@0 {
- 		reg =3D <0>;
- 		spi-rx-bus-width =3D <2>;
-
--		partitions@80000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-@@ -146,7 +146,7 @@ spi-nor@1 {
- 		reg =3D <1>;
- 		npcm,fiu-rx-bus-width =3D <2>;
-
--		partitions@88000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-@@ -173,7 +173,7 @@ spi-nor@0 {
- 		reg =3D <0>;
- 		spi-rx-bus-width =3D <2>;
-
--		partitions@A0000000 {
-+		partitions {
- 			compatible =3D "fixed-partitions";
- 			#address-cells =3D <1>;
- 			#size-cells =3D <1>;
-=2D-
-2.34.1
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..6f1198068004 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 	int			retval = 0;
+ 	bool			comp_timer_running = false;
+ 	bool			pending_portevent = false;
++	char			str[XHCI_MSG_MAX];
+ 
+ 	if (!hcd->state)
+ 		return 0;
+@@ -1146,8 +1147,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		temp = readl(&xhci->op_regs->status);
+ 	}
+ 
+-	/* If restore operation fails, re-initialize the HC during resume */
+-	if ((temp & STS_SRE) || hibernated) {
++	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
++	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
++		xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
++			  xhci_decode_usbsts(str, temp));
+ 
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 

@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D933F4A31E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C424A31EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352738AbiA2Uwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 15:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbiA2Uwr (ORCPT
+        id S1353166AbiA2Uxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 15:53:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20983 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353017AbiA2Uxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 15:52:47 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29940C061714;
-        Sat, 29 Jan 2022 12:52:47 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so14261394pju.2;
-        Sat, 29 Jan 2022 12:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rG3r5ZbC2x1JmoZsR1mSi/6qN848gdvRGNssZE6aO9s=;
-        b=GNChJEYOfjxlgNGB9V2NmQKpXGZ1FjUV/jXeKynb+4pUCuwEi5Gj3qR95Q+5aQwJcx
-         ocwaZD60eTtDgPT1EN4x8ZnmZAMGGoCJX6xa1Uqt6lF+HPDaweGcgZ5Uk8AzOHPo5sWV
-         LsaeCnVnxmM25Z96MGAsZCJkcz8zy6YTMT0dT95fc6MM6YHAZDHUEB5J7+3Qq/tEOboG
-         7ietO+DIAijhSUhmdFOIyd1b/5FXU3ivcxwCc4GTOeVjWyCXKYhF4uetHEUfBHurAjJ6
-         HhuGySOFrLh92lnf4PpI05zsgqz6X7bq8Q0k2eS7TjRIKlzsd2NVihaoCzDC0IV2wqHR
-         ewgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rG3r5ZbC2x1JmoZsR1mSi/6qN848gdvRGNssZE6aO9s=;
-        b=FWatXw8uVZdH0Qxn2RiPkJTR8DD0lD9vPuzgWQ6QlFfTMvGaELKJq4tIQ3PZp0urp5
-         Pupir5cy/eJ2yD77tfsEkIKbKvD3AuU6AbWTHn52Xf8US31WDWpKGrJgOhYTXFj/TZ6D
-         FbxJJoKZlSqiqett5mSrzcis4xX793+db0+FLsxyg3R8suI+5U+ZqG2V0rgaRZ/GN7u4
-         02GS7Plm0gaNNw5/LjUdwzzhn7oyCCGcgEtchdkj1Qh2rCOx1ARN+Igyccogstpze0A9
-         NnhGLsf82Hyn3jx8AlvlAZgKxLgzzOMz+C5fywDz85okGpz8fNqYOqdUdzCSmsauOxWK
-         7w/w==
-X-Gm-Message-State: AOAM531+0tAlQozaec41s8wfkeQ87BC0FfzGZxDUTLadGfVhYZmXJEzJ
-        lFyryAiXSSN7KdKOpDk+zFPX9jCgtDXx+5UFhu4=
-X-Google-Smtp-Source: ABdhPJz2eqoeVk5C7Poy+sLiUNhkwS7jXXPniyR8qaRU9UvBft5kRdpjSwRs2uX0LMlCriraErPiAYfYg9UzpI2GiSA=
-X-Received: by 2002:a17:902:da89:: with SMTP id j9mr13905186plx.66.1643489566450;
- Sat, 29 Jan 2022 12:52:46 -0800 (PST)
+        Sat, 29 Jan 2022 15:53:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643489629;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sryFgTCSFHX+LlbTjqU4BHuCFjlOyZxrEe4xCO3rDAc=;
+        b=TKZG6Uqr7+NHBTjcGbv44utqlXgrIhxlYVNUggLiRasjDmc607k70QUpCt3ZRPY5fwLBta
+        GrISyGci5bZdSn4Z3WTDXhvMRTcjuvTIreaDDJwC0qpOHe2RgFwdh10xmbcyQOxc3XqH0C
+        Oh6oAHzDjdEnLdbgubcAY6OH6dKZm7U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-533-nmrD0L9aMs-rQecuq2Gl_w-1; Sat, 29 Jan 2022 15:53:46 -0500
+X-MC-Unique: nmrD0L9aMs-rQecuq2Gl_w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3B8683DD20;
+        Sat, 29 Jan 2022 20:53:43 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8BB0D5E24E;
+        Sat, 29 Jan 2022 20:53:41 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/3] mm/page_owner: Extend page_owner to show memcg information
+Date:   Sat, 29 Jan 2022 15:53:12 -0500
+Message-Id: <20220129205315.478628-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20211228072645.32341-1-luizluca@gmail.com> <Ydx4+o5TsWZkZd45@robh.at.kernel.org>
- <CAJq09z4G40ttsTHXtOywjyusNLSjt_BQ9D78PhwSodJr=4p6OA@mail.gmail.com> <7d6231f1-a45d-f53e-77d9-3e8425996662@arinc9.com>
-In-Reply-To: <7d6231f1-a45d-f53e-77d9-3e8425996662@arinc9.com>
-From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date:   Sat, 29 Jan 2022 17:52:35 -0300
-Message-ID: <CAJq09z7n_RZpsZS+RNpdzzYzhiogHfWmfpOF5CJCLBL6gurS_Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML schema
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Why not turn realtek-smi.yaml into realtek.yaml which would also contain
-> information for the mdio interface? The things different with using MDIO
-> are that we don't use the [mdc,mdio,reset]-gpios properties and don't
-> handle the PHYs to the DSA ports. Couldn't you present these differences
-> on a single YAML file?
+ v2:
+  - Remove the SNPRINTF() macro as suggested by Ira and use scnprintf()
+    instead to remove some buffer overrun checks.
+  - Add a patch to optimize vscnprintf with a size parameter of 0.
 
-Hello, Arin=C3=A7
+While debugging the constant increase in percpu memory consumption on
+a system that spawned large number of containers, it was found that a
+lot of offlined mem_cgroup structures remained in place without being
+freed. Further investigation indicated that those mem_cgroup structures
+were pinned by some pages.
 
-realtek-mdio is an mdio driver with a couple of less properties. They
-do share a lot of stuff. But I don't know if I can fit the schema
-validation into a single file.
-YAML files are not simply documentation. They are used to validate DTS
-files. But that's still off-topic. Let's finish SMI version first and
-then discuss
-if the MDIO version should be standalone or merged with SMI.
+In order to find out what those pages are, the existing page_owner
+debugging tool is extended to show memory cgroup information and whether
+those memcgs are offlined or not. With the enhanced page_owner tool,
+the following is a typical page that pinned the mem_cgroup structure
+in my test case:
 
-Regards,
+Page allocated via order 0, mask 0x1100cca(GFP_HIGHUSER_MOVABLE), pid 62760, ts 119274296592 ns, free_ts 118989764823 ns
+PFN 1273412 type Movable Block 2487 type Movable Flags 0x17ffffc00c001c(uptodate|dirty|lru|reclaim|swapbacked|node=0|zone=2|lastcpupid=0x1fffff)
+ prep_new_page+0x8e/0xb0
+ get_page_from_freelist+0xc4d/0xe50
+ __alloc_pages+0x172/0x320
+ alloc_pages_vma+0x84/0x230
+ shmem_alloc_page+0x3f/0x90
+ shmem_alloc_and_acct_page+0x76/0x1c0
+ shmem_getpage_gfp+0x48d/0x890
+ shmem_write_begin+0x36/0xc0
+ generic_perform_write+0xed/0x1d0
+ __generic_file_write_iter+0xdc/0x1b0
+ generic_file_write_iter+0x5d/0xb0
+ new_sync_write+0x11f/0x1b0
+ vfs_write+0x1ba/0x2a0
+ ksys_write+0x59/0xd0
+ do_syscall_64+0x37/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+Charged to offlined memcg libpod-conmon-e59cc83faf807bacc61223fec6a80c1540ebe8f83c802870c6af4708d58f77ea
+
+So the page was not freed because it was part of a shmem segment. That
+is useful information that can help users to diagnose similar problems.
+
+Waiman Long (3):
+  lib/vsprintf: Avoid redundant work with 0 size
+  mm/page_owner: Use scnprintf() to avoid excessive buffer overrun check
+  mm/page_owner: Dump memcg information
+
+ lib/vsprintf.c  |  8 +++++---
+ mm/page_owner.c | 45 ++++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 39 insertions(+), 14 deletions(-)
+
+-- 
+2.27.0
+

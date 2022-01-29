@@ -2,132 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6004A2AA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 983FA4A2AA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236470AbiA2Agh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:36:37 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:58332 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbiA2Agg (ORCPT
+        id S237195AbiA2AhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233942AbiA2AhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:36:36 -0500
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E707620B8010;
-        Fri, 28 Jan 2022 16:36:35 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E707620B8010
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1643416595;
-        bh=J5hHj/dx23so3IxDHwT/MEE38qNMldGDsBDJbZWzMuI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DIzmeTE//T4QPJlvda5dJgcz5067BjdRLHBzq7nBxOi7CJxO8WL8sd49RAEt4W77y
-         3b7szVzDoCkpWB+ZWHJYrh9T/AdU4DLX3duNVHqGJmkN95KyhlZ62mWNcjXP3pvNOf
-         wTR6yffucvl8oFCM8fDprbtW5i94b0PPkspWHQkE=
-Received: by mail-pg1-f182.google.com with SMTP id t32so6670074pgm.7;
-        Fri, 28 Jan 2022 16:36:35 -0800 (PST)
-X-Gm-Message-State: AOAM533zMndws+4tkMmmZkQB4j4sFE6F3k+gkq3G84LURFLQgcqxYhUk
-        rgU6339e1RCtbHz41NFt7bDuM+NgwNCj2KcOI9M=
-X-Google-Smtp-Source: ABdhPJz+yMH8XVHa0HI6zjz0tpcPbMSW6aHedHYPtjoaizEr1bRo1kq1BmO9chZiqEPiwj94mb7g+Pdix4X1XIQ1sBg=
-X-Received: by 2002:a63:5146:: with SMTP id r6mr8357669pgl.455.1643416595340;
- Fri, 28 Jan 2022 16:36:35 -0800 (PST)
+        Fri, 28 Jan 2022 19:37:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E435CC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:37:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8326860DBC
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:37:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFBFC340E7;
+        Sat, 29 Jan 2022 00:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643416627;
+        bh=ouiW9oGv6HXtWJIQRDQ98A6hortJtyz/aXTnLA/yjuM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pKKn21LmTef1+meSgnLxRAzGVJE/j1YKS9Y2dSpRubtjxTRb7/4pwt/lCvTsx6ErQ
+         wbCW8Qc2RF0ITgt7flUqqqQEmjxAqthzRSnzhvuYNpYeB8QfWjnpBEpKxtC6rdB36m
+         GKeS2w/qimQJJobuAmwz5EC7f/uahexPGRaUSpv72Xkj9I9/EpYiiqTnAnlClCgj+h
+         E20CInzh/K62mSKSlCwa5+17x8/sF/fAyx/sSNltxvwMU7FDW16jov7S1c/Q3kLI5G
+         XQ+BwWnlqB6t4YpuloIvNRYrpOPckYCE1Rxzy3iJSf7wKadLtxgwRbpaaw3+qMfjIF
+         qjnBBlsUfE+mQ==
+Date:   Fri, 28 Jan 2022 16:37:06 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>,
+        Jing Xia <jing.xia@unisoc.com>
+Subject: Re: [PATCH] f2fs: fix to avoid potential deadlock
+Message-ID: <YfSMMpj2GrYXAJK2@google.com>
+References: <20220127054449.24711-1-chao@kernel.org>
+ <YfMVxzdhat01ca7m@google.com>
+ <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
 MIME-Version: 1.0
-References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
- <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
- <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
- <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
- <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
- <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
- <177da568-8410-36d6-5f95-c5792ba47d62@fb.com> <CAADnVQJZvgpo-VjUCBL8YZy8J+s7O0mv5FW+5sx8NK84Lm6FUQ@mail.gmail.com>
- <CAFnufp3ybOFMY=ObZFvbmr+c70CPUrL2uYp1oZQmffQBTyVy_A@mail.gmail.com> <CAADnVQ+cvD2rwa-hRQP8agj8=SXuun3dv-PZpK5=kJ2Ea_0KCg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+cvD2rwa-hRQP8agj8=SXuun3dv-PZpK5=kJ2Ea_0KCg@mail.gmail.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Sat, 29 Jan 2022 01:35:59 +0100
-X-Gmail-Original-Message-ID: <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com>
-Message-ID: <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 9:09 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Jan 28, 2022 at 10:51 AM Matteo Croce
-> <mcroce@linux.microsoft.com> wrote:
-> >
-> > On Fri, Jan 28, 2022 at 6:31 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Mon, Dec 20, 2021 at 10:34 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >
-> > > >
-> > > > https://reviews.llvm.org/D116063 improved the error message as below
-> > > > to make it a little bit more evident what is the problem:
-> > > >
-> > > > $ clang -target bpf -O2 -g -c bug.c
-> > > >
-> > > > fatal error: error in backend: SubroutineType not supported for
-> > > > BTF_TYPE_ID_REMOTE reloc
-> > >
-> > > Hi Matteo,
-> > >
-> > > Are you still working on a test?
-> > > What's a timeline to repost the patch set?
-> > >
-> > > Thanks!
-> >
-> > Hi Alexei,
-> >
-> > The change itself is ready, I'm just stuck at writing a test which
-> > will effectively calls __bpf_core_types_are_compat() with some
-> > recursion.
-> > I guess that I have to generate a BTF_KIND_FUNC_PROTO type somehow, so
-> > __bpf_core_types_are_compat() is called again to check the prototipe
-> > arguments type.
-> > I tried with these two, with no luck:
-> >
-> > // 1
-> > typedef int (*func_proto_typedef)(struct sk_buff *);
-> > bpf_core_type_exists(func_proto_typedef);
-> >
-> > // 2
-> > void func_proto(int, unsigned int);
-> > bpf_core_type_id_kernel(func_proto);
-> >
-> > Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
->
-> What do you mean 'no luck'?
-> Have you tried what progs/test_core_reloc_type_id.c is doing?
-> typedef int (*func_proto_typedef)(long);
-> bpf_core_type_id_kernel(func_proto_typedef);
->
-> Without macros:
-> typedef int (*func_proto_typedef)(long);
->
-> int test() {
->    return __builtin_btf_type_id(*(typeof(func_proto_typedef) *)0, 1);
-> }
-> int test2() {
->    return __builtin_preserve_type_info(*(typeof(func_proto_typedef) *)0, 0);
-> }
->
->
-> compiles fine and generates relos.
+On 01/28, Chao Yu wrote:
+> On 2022/1/28 5:59, Jaegeuk Kim wrote:
+> > On 01/27, Chao Yu wrote:
+> > > Quoted from Jing Xia's report, there is a potential deadlock may happen
+> > > between kworker and checkpoint as below:
+> > > 
+> > > [T:writeback]				[T:checkpoint]
+> > > - wb_writeback
+> > >   - blk_start_plug
+> > > bio contains NodeA was plugged in writeback threads
+> > 
+> > I'm still trying to understand more precisely. So, how is it possible to
+> > have bio having node write in this current context?
+> 
+> IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
+> during writebacking node_inode's data page (which should be node page)?
 
-Yes, I tried that one.
-We reach bpf_core_apply_relo_insn() but not bpf_core_spec_match(),
-since cands->len is 0.
+Wasn't that added into a different task->plug?
 
-[   16.424821] bpf_core_apply_relo_insn:1202 cands->len: 0
-
-That's a very simple raw_tracepoint/sys_enter program:
-
--- 
-per aspera ad upstream
+> 
+> Thanks,
+> 
+> > 
+> > > 					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+> > > 					 - f2fs_write_data_pages
+> > > 					  - f2fs_write_single_data_page -- write last dirty page
+> > > 					   - f2fs_do_write_data_page
+> > > 					    - set_page_writeback  -- clear page dirty flag and
+> > > 					    PAGECACHE_TAG_DIRTY tag in radix tree
+> > > 					    - f2fs_outplace_write_data
+> > > 					     - f2fs_update_data_blkaddr
+> > > 					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+> > > 					   - inode_dec_dirty_pages
+> > >   - writeback_sb_inodes
+> > >    - writeback_single_inode
+> > >     - do_writepages
+> > >      - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+> > >       - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+> > >    - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+> > >   - blk_finish_plug
+> > > 
+> > > Let's try to avoid deadlock condition by forcing unplugging previous bio via
+> > > blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
+> > > due to valid sbi->wb_sync_req[DATA/NODE].
+> > > 
+> > > Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
+> > > Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> > > Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+> > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > ---
+> > >   fs/f2fs/data.c | 6 +++++-
+> > >   fs/f2fs/node.c | 6 +++++-
+> > >   2 files changed, 10 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > index 76d6fe7b0c8f..932a4c81acaf 100644
+> > > --- a/fs/f2fs/data.c
+> > > +++ b/fs/f2fs/data.c
+> > > @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+> > >   	/* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
+> > >   	if (wbc->sync_mode == WB_SYNC_ALL)
+> > >   		atomic_inc(&sbi->wb_sync_req[DATA]);
+> > > -	else if (atomic_read(&sbi->wb_sync_req[DATA]))
+> > > +	else if (atomic_read(&sbi->wb_sync_req[DATA])) {
+> > > +		/* to avoid potential deadlock */
+> > > +		if (current->plug)
+> > > +			blk_finish_plug(current->plug);
+> > >   		goto skip_write;
+> > > +	}
+> > >   	if (__should_serialize_io(inode, wbc)) {
+> > >   		mutex_lock(&sbi->writepages);
+> > > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> > > index 556fcd8457f3..69c6bcaf5aae 100644
+> > > --- a/fs/f2fs/node.c
+> > > +++ b/fs/f2fs/node.c
+> > > @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
+> > >   	if (wbc->sync_mode == WB_SYNC_ALL)
+> > >   		atomic_inc(&sbi->wb_sync_req[NODE]);
+> > > -	else if (atomic_read(&sbi->wb_sync_req[NODE]))
+> > > +	else if (atomic_read(&sbi->wb_sync_req[NODE])) {
+> > > +		/* to avoid potential deadlock */
+> > > +		if (current->plug)
+> > > +			blk_finish_plug(current->plug);
+> > >   		goto skip_write;
+> > > +	}
+> > >   	trace_f2fs_writepages(mapping->host, wbc, NODE);
+> > > -- 
+> > > 2.32.0

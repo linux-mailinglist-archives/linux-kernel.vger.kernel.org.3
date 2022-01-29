@@ -2,244 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 914644A31E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D933F4A31E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353152AbiA2UkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 15:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S1352738AbiA2Uwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 15:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347096AbiA2UkL (ORCPT
+        with ESMTP id S231767AbiA2Uwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 15:40:11 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617FAC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 12:40:11 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id e8so17685816wrc.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 12:40:11 -0800 (PST)
+        Sat, 29 Jan 2022 15:52:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29940C061714;
+        Sat, 29 Jan 2022 12:52:47 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so14261394pju.2;
+        Sat, 29 Jan 2022 12:52:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U5j4Lp15SmJkfLirC7e9ctVB85SgWzCUrNRsur35kQU=;
-        b=10WWbFMO2KEv2ncnmd2fiaHXIr0qTwt2AAfgWqeJk2VbJWhFLIKnJmA9jLaok3vljq
-         vt+SpZLfl7WFQZVntYIudgKm6/CXmnkojj2aIEZWZThGJJlWifbUYJY7oJosCkYiEHGY
-         CrBvaFJOzCIP85lBJLWpputV2VKiYvfx14HIeQVdOrNEJ1kRMaou0FuDJqSuaXpVct50
-         uXB94c+psLI8cVS+FcKBSItgadTa07RFtwoKzo7GJmDsfZtgluzPZX9xk6GyqCxb+VmU
-         n/PzugPgwz68HIHINBZvWjIT+qs/ROO49w5FSGmcLU4J65n5+QgUtE/QEUwEzBW1jRxM
-         XZAA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rG3r5ZbC2x1JmoZsR1mSi/6qN848gdvRGNssZE6aO9s=;
+        b=GNChJEYOfjxlgNGB9V2NmQKpXGZ1FjUV/jXeKynb+4pUCuwEi5Gj3qR95Q+5aQwJcx
+         ocwaZD60eTtDgPT1EN4x8ZnmZAMGGoCJX6xa1Uqt6lF+HPDaweGcgZ5Uk8AzOHPo5sWV
+         LsaeCnVnxmM25Z96MGAsZCJkcz8zy6YTMT0dT95fc6MM6YHAZDHUEB5J7+3Qq/tEOboG
+         7ietO+DIAijhSUhmdFOIyd1b/5FXU3ivcxwCc4GTOeVjWyCXKYhF4uetHEUfBHurAjJ6
+         HhuGySOFrLh92lnf4PpI05zsgqz6X7bq8Q0k2eS7TjRIKlzsd2NVihaoCzDC0IV2wqHR
+         ewgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U5j4Lp15SmJkfLirC7e9ctVB85SgWzCUrNRsur35kQU=;
-        b=Y/B4cQ00HXfz24pJqd5mB8LDyixTaCoowE48CD2ydcFZV3RJ6o8csT5/xaBuFROsGu
-         /PruSF4AmtFBbHiQEZjmk5BYcKF/mEenegO/gcyJOh+SMvyBtHvF6ny5ZxaNoqd23O42
-         8J6KtF6LAko7dDkgo2Xzcf9UTQQAVWRE6OvVs9k5a6V02ouJ9FzbdrnFxBMgRvtDwHeF
-         GxpZZoKrN33KhZ6zhkNHusUfasWvRXF54MVKH3AnQrliZA/nyuiQjA25eSKeF68LdyWs
-         eDMqUzVqMw01EHrrAmrfJikHjMESaLY1SaNdMsDYV8GSGvF4ySVGJf2HC3n50znj2Xrw
-         H29w==
-X-Gm-Message-State: AOAM532G0XhBrbwDqCSY4SXUNosO8exi6r/j5EniZhvFLggSu5crMzTk
-        IOo/H3N25/k6hUvH3sqqOkuTQQ==
-X-Google-Smtp-Source: ABdhPJzxGPN4HvMYawcxI0HhDUqZbvOgoIMexR49vt8JzCPMfBawIPqjLopQtnAmfSjNhvYiiBGvQA==
-X-Received: by 2002:a05:6000:178b:: with SMTP id e11mr11491365wrg.634.1643488809950;
-        Sat, 29 Jan 2022 12:40:09 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id 1sm9227248wry.52.2022.01.29.12.40.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 12:40:09 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     damien.lemoal@opensource.wdc.com, linus.walleij@linaro.org,
-        robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] dt-bindings: ata: convert ata/cortina,gemini-sata-bridge to yaml
-Date:   Sat, 29 Jan 2022 20:40:04 +0000
-Message-Id: <20220129204004.1009571-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rG3r5ZbC2x1JmoZsR1mSi/6qN848gdvRGNssZE6aO9s=;
+        b=FWatXw8uVZdH0Qxn2RiPkJTR8DD0lD9vPuzgWQ6QlFfTMvGaELKJq4tIQ3PZp0urp5
+         Pupir5cy/eJ2yD77tfsEkIKbKvD3AuU6AbWTHn52Xf8US31WDWpKGrJgOhYTXFj/TZ6D
+         FbxJJoKZlSqiqett5mSrzcis4xX793+db0+FLsxyg3R8suI+5U+ZqG2V0rgaRZ/GN7u4
+         02GS7Plm0gaNNw5/LjUdwzzhn7oyCCGcgEtchdkj1Qh2rCOx1ARN+Igyccogstpze0A9
+         NnhGLsf82Hyn3jx8AlvlAZgKxLgzzOMz+C5fywDz85okGpz8fNqYOqdUdzCSmsauOxWK
+         7w/w==
+X-Gm-Message-State: AOAM531+0tAlQozaec41s8wfkeQ87BC0FfzGZxDUTLadGfVhYZmXJEzJ
+        lFyryAiXSSN7KdKOpDk+zFPX9jCgtDXx+5UFhu4=
+X-Google-Smtp-Source: ABdhPJz2eqoeVk5C7Poy+sLiUNhkwS7jXXPniyR8qaRU9UvBft5kRdpjSwRs2uX0LMlCriraErPiAYfYg9UzpI2GiSA=
+X-Received: by 2002:a17:902:da89:: with SMTP id j9mr13905186plx.66.1643489566450;
+ Sat, 29 Jan 2022 12:52:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211228072645.32341-1-luizluca@gmail.com> <Ydx4+o5TsWZkZd45@robh.at.kernel.org>
+ <CAJq09z4G40ttsTHXtOywjyusNLSjt_BQ9D78PhwSodJr=4p6OA@mail.gmail.com> <7d6231f1-a45d-f53e-77d9-3e8425996662@arinc9.com>
+In-Reply-To: <7d6231f1-a45d-f53e-77d9-3e8425996662@arinc9.com>
+From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Date:   Sat, 29 Jan 2022 17:52:35 -0300
+Message-ID: <CAJq09z7n_RZpsZS+RNpdzzYzhiogHfWmfpOF5CJCLBL6gurS_Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML schema
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch converts ata/cortina,gemini-sata-bridge binding to yaml
+> Why not turn realtek-smi.yaml into realtek.yaml which would also contain
+> information for the mdio interface? The things different with using MDIO
+> are that we don't use the [mdc,mdio,reset]-gpios properties and don't
+> handle the PHYs to the DSA ports. Couldn't you present these differences
+> on a single YAML file?
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- .../ata/cortina,gemini-sata-bridge.txt        |  55 ----------
- .../ata/cortina,gemini-sata-bridge.yaml       | 100 ++++++++++++++++++
- 2 files changed, 100 insertions(+), 55 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
- create mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+Hello, Arin=C3=A7
 
-diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-deleted file mode 100644
-index 1c3d3cc70051..000000000000
---- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-+++ /dev/null
-@@ -1,55 +0,0 @@
--* Cortina Systems Gemini SATA Bridge
--
--The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
--takes two Faraday Technology FTIDE010 PATA controllers and bridges
--them in different configurations to two SATA ports.
--
--Required properties:
--- compatible: should be
--  "cortina,gemini-sata-bridge"
--- reg: registers and size for the block
--- resets: phandles to the reset lines for both SATA bridges
--- reset-names: must be "sata0", "sata1"
--- clocks: phandles to the compulsory peripheral clocks
--- clock-names: must be "SATA0_PCLK", "SATA1_PCLK"
--- syscon: a phandle to the global Gemini system controller
--- cortina,gemini-ata-muxmode: tell the desired multiplexing mode for
--  the ATA controller and SATA bridges. Values 0..3:
--  Mode 0: ata0 master <-> sata0
--          ata1 master <-> sata1
--          ata0 slave interface brought out on IDE pads
--  Mode 1: ata0 master <-> sata0
--          ata1 master <-> sata1
--          ata1 slave interface brought out on IDE pads
--  Mode 2: ata1 master <-> sata1
--          ata1 slave  <-> sata0
--          ata0 master and slave interfaces brought out
--               on IDE pads
--  Mode 3: ata0 master <-> sata0
--          ata0 slave  <-> sata1
--          ata1 master and slave interfaces brought out
--               on IDE pads
--
--Optional boolean properties:
--- cortina,gemini-enable-ide-pins: enables the PATA to IDE connection.
--  The muxmode setting decides whether ATA0 or ATA1 is brought out,
--  and whether master, slave or both interfaces get brought out.
--- cortina,gemini-enable-sata-bridge: enables the PATA to SATA bridge
--  inside the Gemnini SoC. The Muxmode decides what PATA blocks will
--  be muxed out and how.
--
--Example:
--
--sata: sata@46000000 {
--	compatible = "cortina,gemini-sata-bridge";
--	reg = <0x46000000 0x100>;
--	resets = <&rcon 26>, <&rcon 27>;
--	reset-names = "sata0", "sata1";
--	clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
--		 <&gcc GEMINI_CLK_GATE_SATA1>;
--	clock-names = "SATA0_PCLK", "SATA1_PCLK";
--	syscon = <&syscon>;
--	cortina,gemini-ata-muxmode = <3>;
--	cortina,gemini-enable-ide-pins;
--	cortina,gemini-enable-sata-bridge;
--};
-diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-new file mode 100644
-index 000000000000..ff27e4884e21
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/ata/cortina,gemini-sata-bridge.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cortina Systems Gemini SATA Bridge
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description: |
-+    The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
-+    takes two Faraday Technology FTIDE010 PATA controllers and bridges
-+    them in different configurations to two SATA ports.
-+
-+properties:
-+  compatible:
-+    const: "cortina,gemini-sata-bridge"
-+  reg:
-+    minItems: 1
-+  resets:
-+    minItems: 2
-+    description: phandles to the reset lines for both SATA bridges
-+  reset-names:
-+    items:
-+      - const: "sata0"
-+      - const: "sata1"
-+  clocks:
-+    minItems: 2
-+    description: phandles to the compulsory peripheral clocks
-+  clock-names:
-+    items:
-+      - const: "SATA0_PCLK"
-+      - const: "SATA1_PCLK"
-+  syscon:
-+    minItems: 1
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: a phandle to the global Gemini system controller
-+  cortina,gemini-ata-muxmode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum:
-+      - 0
-+      - 1
-+      - 2
-+      - 3
-+    description: |
-+      tell the desired multiplexing mode for the ATA controller and SATA bridges. Values 0..3:
-+      Mode 0: ata0 master <-> sata0
-+              ata1 master <-> sata1
-+              ata0 slave interface brought out on IDE pads
-+      Mode 1: ata0 master <-> sata0
-+              ata1 master <-> sata1
-+              ata1 slave interface brought out on IDE pads
-+      Mode 2: ata1 master <-> sata1
-+              ata1 slave  <-> sata0
-+              ata0 master and slave interfaces brought out on IDE pads
-+      Mode 3: ata0 master <-> sata0
-+              ata0 slave  <-> sata1
-+              ata1 master and slave interfaces brought out on IDE pads
-+
-+  cortina,gemini-enable-ide-pins:
-+    type: boolean
-+    description: enables the PATA to IDE connection.
-+                 The muxmode setting decides whether ATA0 or ATA1 is brought out,
-+                 and whether master, slave or both interfaces get brought out.
-+  cortina,gemini-enable-sata-bridge:
-+    type: boolean
-+    description: enables the PATA to SATA bridge
-+                 inside the Gemnini SoC. The Muxmode decides what PATA blocks will
-+                 be muxed out and how.
-+
-+required:
-+  - clocks
-+  - clock-names
-+  - cortina,gemini-ata-muxmode
-+  - resets
-+  - reset-names
-+  - compatible
-+  - reg
-+  - syscon
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/cortina,gemini-clock.h>
-+    sata: sata@46000000 {
-+      compatible = "cortina,gemini-sata-bridge";
-+      reg = <0x46000000 0x100>;
-+      resets = <&rcon 26>, <&rcon 27>;
-+      reset-names = "sata0", "sata1";
-+      clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
-+               <&gcc GEMINI_CLK_GATE_SATA1>;
-+      clock-names = "SATA0_PCLK", "SATA1_PCLK";
-+      syscon = <&syscon>;
-+      cortina,gemini-ata-muxmode = <3>;
-+      cortina,gemini-enable-ide-pins;
-+      cortina,gemini-enable-sata-bridge;
-+    };
--- 
-2.34.1
+realtek-mdio is an mdio driver with a couple of less properties. They
+do share a lot of stuff. But I don't know if I can fit the schema
+validation into a single file.
+YAML files are not simply documentation. They are used to validate DTS
+files. But that's still off-topic. Let's finish SMI version first and
+then discuss
+if the MDIO version should be standalone or merged with SMI.
 
+Regards,

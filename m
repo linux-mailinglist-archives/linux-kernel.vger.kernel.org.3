@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7E14A2D5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67E34A2D5A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiA2JXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 04:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S232399AbiA2JXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 04:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiA2JXt (ORCPT
+        with ESMTP id S232265AbiA2JXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 04:23:49 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE3C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:23:49 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so8701128pjb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:23:49 -0800 (PST)
+        Sat, 29 Jan 2022 04:23:22 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884DEC06173B;
+        Sat, 29 Jan 2022 01:23:21 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id a28so16502970lfl.7;
+        Sat, 29 Jan 2022 01:23:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bqzBoRkDi8kVZLIMHecE3nTUwM1cKHwe7YhWSOKzDP4=;
-        b=s97mGS9tiPyBqXIXKy3aSh/N4MQ9p3JSjfDa3iVBO/Yre+GETk8gTsrVUntRjvG8/m
-         rQrNRXjXcrI0pnn6CapBI1VN2KoFgEQfUybFE0qXREGW7/Ct7OPgPDUzdb0iFQbg5Lok
-         GPiSGiEUkxt5e7FpuZofX6lubQiidNESe0CzO+sgmdijG9oXNeQT3Wh2eIlRUgiBEcNS
-         G1JfC8l3U2YHhQuvDFlTkIcZQskxd0h9YRiuPXbnanlukqx+0Bt105wGtXQkOAA5SpkV
-         pTFHnmpt6XZHRqqG6WQoU6w09u/PM1eStPysheNrb67/4Oj9WUDoVpjQSOb1oF95rTIr
-         zcWQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=KVPWNoQrOh4gwIS/NTKfwX1pCCKtfusbVveEiycdTlA=;
+        b=DMKpx/mOMfOI21feRiUbT2oeVdaTx0RfWxyiFQ2n5jAFIdjM+oaXTaAWOTF51h8lIt
+         EfCy8DZfnipXO8aRfg0Mp/Y/DjwkUY3kjMzpyh3LhL7emtVBR7jykxnh9KuyyXu+IVzo
+         +Uv+hRCF2HBbvSkvq1KbPU4KnQotY2tyU8EVZdjGW4vNrC/aXsFj8v4RKWA1bAAqY7/i
+         V2GDPndsnk0wdqVwuogA7Uf8+TfDu7G4kdc3n4ksVQStfs7elj3cdb+Af92cwJuDqUCa
+         E67uootxFouyYc2Y3LyprLnGvamc+q6i/Jx0IbmUFkmG+vGEWG4ZJBJSGSrxIRWng7kM
+         0gPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bqzBoRkDi8kVZLIMHecE3nTUwM1cKHwe7YhWSOKzDP4=;
-        b=PUSj7iDfu7n3dxubBEmIqW41c8Kbo6/o1HhDrJw9Y2mOSrAAWIAcUYczRv2g0TwFyf
-         mUVUEON/eWT44x9f6XKEcAlbacu7Kz8rYzevLnHcmS/h9OULWPaMHPpEflJ7zIfNOnNx
-         ZffP71ZmsPcIm5bNlk7XO0Re1wINxgLGlS2pnFTI7oqONq+NqBR/8xSPaQJHZaGtoh8I
-         M9lfX73zDybZj2X0MJuif4OnVPCStB32TFwR6K7j48ddt2ykwCtN/7j3PvEeZUUp7uAp
-         aSSVnRKdTbmthJV5fK5VWM3TPMipkWSEAWHCdu+XWjPkwmY5sny5OUoox/XGY9Lyc9Lv
-         nK3g==
-X-Gm-Message-State: AOAM531jOfD5FyP/y6Bio7vG0dhcfeQn3nJM836He7ke9yyhfPtDuWD4
-        l5a8yP7Wci8edRpAhk6qIFJH20hI4Wf4u2oAQIeBdQ==
-X-Google-Smtp-Source: ABdhPJxkwCr5AJ3CWlNsUJ2kZldTLSWl6JJt6MW+qo5eS2oZPFbsWd6uXO4KRJK6Arlc6JioXfqDrw3X/aq49qkQFHs=
-X-Received: by 2002:a17:90b:1881:: with SMTP id mn1mr23751902pjb.236.1643448228173;
- Sat, 29 Jan 2022 01:23:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119064013.1381172-1-pumahsu@google.com> <e2baf3c5-0d80-9143-5fec-98a9e1474068@linux.intel.com>
-In-Reply-To: <e2baf3c5-0d80-9143-5fec-98a9e1474068@linux.intel.com>
-From:   Puma Hsu <pumahsu@google.com>
-Date:   Sat, 29 Jan 2022 17:23:12 +0800
-Message-ID: <CAGCq0LbWSqTJ+M+jxryUmn44FefC7cmS5ouP8BLyFY9z1RePMA@mail.gmail.com>
-Subject: Re: [PATCH v5] xhci: re-initialize the HC during resume if HCE was set
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=KVPWNoQrOh4gwIS/NTKfwX1pCCKtfusbVveEiycdTlA=;
+        b=Pduayh2X+wLC+1M0LO/qTliA5JVcxBzVQc2glsoUpQxxFUi2ziPkr3zeoHgrIT/cQH
+         6NqEtQ4TK75XOCH907C+Cm+1dxXv2WeSB3UkVwaPwSoHsfCtcHtphT7yDn89jeIZJSNB
+         SI33fxvnS7BRytmU6bdVmRogmfGi7B9DJeUw3nv2a5BcRcdIdq0m9/1cnBSZGKWyIt6e
+         9PDwsnwn+yeTn352kf27/XX6RRnWHtYdzt5q9hxlEy5QwE+mMmG7Ui1xfLa7O9hb7RpQ
+         s038DhrYYmqdUCqq/vEcdY9UTn7hPzuSAu7XNs3UXGWPxZ2ZaG79gPBX1mQRfYIWiAik
+         nB4Q==
+X-Gm-Message-State: AOAM53328oqGAGrmWQeGqC1eXrwYBnF04Z3zvfu14B5wMdqEKaZSowGT
+        cA3YHB6WuKF24TsA0YTk1l75GSpQHAcbsQ==
+X-Google-Smtp-Source: ABdhPJyaLcKoXoj1+6kWfERTDb9i4r4ZTSXhTaGOw5RGwBC3tS/TconpSBW3IKUr+gPuifjgzU+3Ow==
+X-Received: by 2002:a05:6512:33d1:: with SMTP id d17mr1232439lfg.455.1643448199773;
+        Sat, 29 Jan 2022 01:23:19 -0800 (PST)
+Received: from smtpclient.apple (31-178-191-245.dynamic.chello.pl. [31.178.191.245])
+        by smtp.gmail.com with ESMTPSA id u15sm658935lfq.107.2022.01.29.01.23.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 29 Jan 2022 01:23:19 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH 1/2] arm64: dts: rockchip: rename and sort the rk356x usb2
+ phy handles
+From:   Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+In-Reply-To: <CAMdYzYpkXdXDST+N8dEn7UvibXmytwNeJ+KZ9bn9Oq+RJuSaeQ@mail.gmail.com>
+Date:   Sat, 29 Jan 2022 10:23:18 +0100
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Liang Chen <cl@rock-chips.com>
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <FBB7C392-C5E0-4E34-AC17-5323414623F5@gmail.com>
+References: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
+ <CAMdYzYpkXdXDST+N8dEn7UvibXmytwNeJ+KZ9bn9Oq+RJuSaeQ@mail.gmail.com>
+To:     Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 9:43 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 19.1.2022 8.40, Puma Hsu wrote:
-> > When HCE(Host Controller Error) is set, it means an internal
-> > error condition has been detected. Software needs to re-initialize
-> > the HC, so add this check in xhci resume.
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> > ---
-> > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> > v3: Add stable@vger.kernel.org for stable release.
-> > v4: Refine the commit message.
-> > v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.co=
-m>'s comment.
-> >
-> >  drivers/usb/host/xhci.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index dc357cabb265..41f594f0f73f 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> > @@ -1146,8 +1146,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibe=
-rnated)
-> >               temp =3D readl(&xhci->op_regs->status);
-> >       }
-> >
-> > -     /* If restore operation fails, re-initialize the HC during resume=
- */
-> > -     if ((temp & STS_SRE) || hibernated) {
-> > +     /* If restore operation fails or HC error is detected, re-initial=
-ize the HC during resume */
-> > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> > +             xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%=
-s\n",
-> > +                       xhci_decode_usbsts(str, temp));
-> >
-> >               if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
-> >                               !(xhci_all_ports_seen_u0(xhci))) {
-> >
->
-> Tried to compile, something is missing in this patch:
->
-> drivers/usb/host/xhci.c:1152:25: error: =E2=80=98str=E2=80=99 undeclared =
-(first use in this function); did you mean =E2=80=98qstr=E2=80=99?
 
-Sorry for missing the declaration, I will fix it.
 
-> -Mathias
+>=20
+> Good Evening,
+>=20
+> While I'm not against this idea, my main concern still stands.
+> I spent a great deal of thought on this, and decided to go the route I
+> did to maintain consistency with previous generations.
+> As such, I see one of three paths here:
+> - Pull this patch only and depart rk356x from previous SoCs.
+> - Do the same for previous SoCs to maintain consistency.
+> - Drop this patch to maintain consistency with previous SoCs.
+>=20
+> I ask that others weigh in here, as offline discussion has produced
+> mixed results already.
+
+just pure user perspective
+
+(who spent last weeks considerable time to develop DT for rk3566 tvbox. =
+99% of my work was by reading/learning from other boards existing DT's. =
+Any inconsistencies in DTs makes work for such ppl like me much more =
+harder):
+
+For option 1 - i don't see value
+For option 2 - what is reward for extra work needs to be done on all =
+other SoCs?
+
+so option 3 seems to be natural choice...
+
+in other words:
+
+for me:
+option 1 brings practically zero value + increased inconsistency.
+option 2: extra work - but consistency is like in option 3 (so where is =
+value?)
+
+so option 3 offers the same consistency - but without extra work...
+=20
+just my 0.02$
+
+=20=

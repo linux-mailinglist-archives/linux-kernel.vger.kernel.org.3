@@ -2,215 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 336194A2AA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F2A4A2AA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241158AbiA2Amm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
+        id S241447AbiA2Arn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbiA2Amj (ORCPT
+        with ESMTP id S232089AbiA2Arl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:42:39 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F5FC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:42:39 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id e16so6673697qtq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:42:39 -0800 (PST)
+        Fri, 28 Jan 2022 19:47:41 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA5BC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:47:41 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id ka4so21421793ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:47:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/3uwQP8SHhp1Z798VpavV4kzs0Y+7l84uUhq28tLIeE=;
-        b=FRTrfCUNI8my/uWB6yKWKFyVGWhZ43aDLzQzSfVa9S/x7cPeNAYceT3sDrLlipz638
-         fcWwBbgYR0cGA7EHq/1bkap2iVdOYkx9XR5Co7S+J8XM1qVcFU3bzTkjjx5e2Gx+6qeR
-         4EwPg+gBHeha7odXHDQUBP9Fu/xagjIDosx5IYOK+Quv7bSVrwqfPUSzm4anBJD6L2PL
-         rE9LIA6bHokEAGRXpUHNUceMs72FLZGPX0zTQj0Sgf0kKLC+xCqkLr/BQsFGJ43Hm2ob
-         SAfwqgXY4wrNVtUDM3WMSoOMJgsYlg/n2rL1PUxGwrQOKM6iJxW2hnFo4Fb/ydcpkGM2
-         aOPg==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kB67G3+aOp/BknIObLtkl/DFgO8sf3NUTmgGKY/E+24=;
+        b=m5JrgPX7rY1AXo8AND+SfpLXf3k2VCB5OjOQaBw9OBwOjk2D96RC5Zw5ntj8UhIMNB
+         rnS3z977Hf7D8NMVhUSdafGokY6KjItiXQY3sfZctdaQHLcLzfPEr3R/oy8OqvSlkoLh
+         gR87RUHh79Y+ZSQayph17cTUxnVTKd5tNRGuKF5C9sx2Yea1Y0EgxJAlIX2rAtcfhPGk
+         DeLm7ypYMnY3hh2xDTRvxlbWIlcdP1QYATq27qrII08uSYo2I1ssMMPYyK6AZylpFtDI
+         FGUDvkvo/fQoiFciCe1idMY6fyuchYRVnC3Nx4Jz6m/ZqT6ki+WXKhAFqbJFoc22ctjv
+         8OYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/3uwQP8SHhp1Z798VpavV4kzs0Y+7l84uUhq28tLIeE=;
-        b=wi3hMiOPZpmzPZHsEoiKazvzrNpzLsAp4M9qwuzdGAEUtXqb+HIpkHcnLuLPlIBOrZ
-         zVqI2O1uVqJPUYHN8RnXhis6UUqd9I41rKJLgw13Hpm6d6HiN5fXB2+dSj0EPv6ZjB7+
-         PUNxY92dRMirOPj8eUV3muqQWm0h4wM/cSOxexn5/NHnOtrUruu5B599VHCxRGTHfe1O
-         dpyhir+vX8Ec48wNd+iZbgfXbmXi53vEFKQpRMqF3IeaO1j83Rp10WlRbZSEJJIXYHsv
-         1aXwadnrRQ3EM9xogavdvkxNhOqguCODLab+i6Ufmc9CYh2nRnMrO5twfB5lKP86aOqO
-         LLvA==
-X-Gm-Message-State: AOAM532h/AXvI2q0sYi42efbouSsZWPsa6K1L7+7LMrOSTGCNbJJrRiI
-        BiR4LpeouuCzUN4q0DaZzDE=
-X-Google-Smtp-Source: ABdhPJxBpYKmB+eWPxjhuIkrhQ9GVVY3blEgnclKDGxeLa2Rlkc8kJAAuQKmiqYzamxOffB/NtEm8Q==
-X-Received: by 2002:a05:622a:5ce:: with SMTP id d14mr8215060qtb.642.1643416957534;
-        Fri, 28 Jan 2022 16:42:37 -0800 (PST)
-Received: from WRT-WX9.. ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id 66sm3731055qte.42.2022.01.28.16.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 16:42:37 -0800 (PST)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Date:   Sat, 29 Jan 2022 08:42:26 +0800
-Message-Id: <20220129004226.32868-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kB67G3+aOp/BknIObLtkl/DFgO8sf3NUTmgGKY/E+24=;
+        b=7ob3thO7r+2+Sj4s+kSNG2bjDl4GLH7yMq1cCcUUMmxRhUmQSKDo8tS5M0ciFddQgJ
+         MjagBFCIX+hhpP6py/ggOBUJq03kIu+n9sa8SDDwsF2ojvwQhHimiGqVVyFkULW7KNa8
+         IBAZ8PlsEp0GMODa7QY2doIXIEThqgYp1bpZFvhGvjGKxvK1bpP6OA3IfxUyMqiM81Sr
+         k11BSHDVJG6OUEt2NVKGUZ20ArLABQzSDBudF/hyBvg9lrjoHQa577OUZJCQnGY9cCZq
+         WIiVfc7URZ/tMzbTW1AZJMYo0HpIC8q/anXUWgeHT9ulDjag+EywSxpiomy3dob6u7kK
+         9Cdg==
+X-Gm-Message-State: AOAM5308P+h0/gu0trtCvsVWquMOVEGOduQ+49o2NMO8wR+J8BLw13u1
+        4IbuFk+SS9bEGO5ILu3qHfU=
+X-Google-Smtp-Source: ABdhPJyLPOWrHg5Qh5KESKL/LjIkKA+rI2w1NbdXIt5W/b98M05/Q+1LIAVjaiokBR5V0GOiAt72Tg==
+X-Received: by 2002:a17:906:7308:: with SMTP id di8mr9028450ejc.464.1643417260182;
+        Fri, 28 Jan 2022 16:47:40 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id q23sm8124776ejz.30.2022.01.28.16.47.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 28 Jan 2022 16:47:39 -0800 (PST)
+Date:   Sat, 29 Jan 2022 00:47:39 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Wei Yang <richard.weiyang@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        peterz@infradead.org, will@kernel.org, linyunsheng@huawei.com,
+        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
+ folio->lru
+Message-ID: <20220129004739.d2b3dqiv3qw6dfhs@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <Ydi6iMbSZ/FewYPT@casper.infradead.org>
+ <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
+ <YdjfsbAR0UlwyC6b@casper.infradead.org>
+ <20220108081340.3oi2z2rm3cbqozzt@master>
+ <20220123013852.mm7eyn3z26v3hkc2@master>
+ <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
+ <20220124225531.26yyse52yo5x3fr5@master>
+ <581f4247-83b1-df39-6724-af0565d0c7ea@suse.cz>
+ <20220127011054.zlqtydxbhi4ioj5d@master>
+ <9451a3f7-ef63-6d01-1357-4953f3d1e566@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9451a3f7-ef63-6d01-1357-4953f3d1e566@suse.cz>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The trace_hardirqs_on/off requires at least two parent call frames.
-If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
-could trigger memory access fault.
+On Thu, Jan 27, 2022 at 04:42:10PM +0100, Vlastimil Babka wrote:
+>On 1/27/22 02:10, Wei Yang wrote:
+>> On Tue, Jan 25, 2022 at 11:11:40AM +0100, Vlastimil Babka wrote:
+>>>On 1/24/22 23:55, Wei Yang wrote:
+>>>> On Mon, Jan 24, 2022 at 11:30:10AM +0100, Vlastimil Babka wrote:
+>>>>>On 1/23/22 02:38, Wei Yang wrote:
+>>>>>
+>>>>>I can offer my insight (which might be of course wrong). Ideally one day
+>>>>>page.lru will be gone and only folio will be used for LRU pages. Then there
+>>>>>won't be a  FOLIO_MATCH(lru, lru); and FOLIO_MATCH(compound_head, lru);
+>>>>>won't appear to be redundant anymore. lru is list_head so two pointers and
+>>>> 
+>>>> Thanks for your comment.
+>>>> 
+>>>> I can't imagine the final result. If we would remove page.lru, we could remove
+>>>> FOLIO_MATCH(lru, lru) and add FOLIO_MATCH(compound_head, lru) at that moment?
+>>>
+>>>Yes, or we could forget to do it. Adding it right now is another option that
+>>>Matthew has chosen and I don't see a strong reason to change it. Can you
+>>>measure a kernel build speedup thanks to removing the now redundant check?
+>>>
+>> 
+>> If we forget to do it, the compile would fail, right?
+>
+>No, FOLIO_MATCH is like a build-time assert. It can only fail if the assert
+>is there, and the condition evaluates to false.
 
-[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-[    0.041925][    T0] Oops [#1]
-[    0.042063][    T0] Modules linked in:
-[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-[    0.044601][    T0]  ra : restore_all+0x12/0x6e
-[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
+Currently we have this check
 
-To fix above issue, here we add one extra level wrapper so they can be
-safely called by low level entry code.
+  FOLIO_MATCH(lru, lru)
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
+Which checks page->lru and folio->lru.
 
----
-v2: fix compile warning.
----
- arch/riscv/kernel/Makefile    |  2 ++
- arch/riscv/kernel/entry.S     | 10 +++++-----
- arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
- arch/riscv/kernel/trace_irq.h | 11 +++++++++++
- 4 files changed, 44 insertions(+), 5 deletions(-)
- create mode 100644 arch/riscv/kernel/trace_irq.c
- create mode 100644 arch/riscv/kernel/trace_irq.h
+As you mentioned page->lru would be gone. So this check would fail at compile?
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 612556faa527..ffc87e76b1dd 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
- obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
- obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
- 
-+obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
-+
- obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
- obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
- obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ed29e9c8f660..d6a46ed0bf05 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -108,7 +108,7 @@ _save_context:
- .option pop
- 
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- #endif
- 
- #ifdef CONFIG_CONTEXT_TRACKING
-@@ -143,7 +143,7 @@ skip_context_tracking:
- 	li t0, EXC_BREAKPOINT
- 	beq s4, t0, 1f
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_on
-+	call __trace_hardirqs_on
- #endif
- 	csrs CSR_STATUS, SR_IE
- 
-@@ -234,7 +234,7 @@ ret_from_exception:
- 	REG_L s0, PT_STATUS(sp)
- 	csrc CSR_STATUS, SR_IE
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- #endif
- #ifdef CONFIG_RISCV_M_MODE
- 	/* the MPP value is too large to be used as an immediate arg for addi */
-@@ -270,10 +270,10 @@ restore_all:
- 	REG_L s1, PT_STATUS(sp)
- 	andi t0, s1, SR_PIE
- 	beqz t0, 1f
--	call trace_hardirqs_on
-+	call __trace_hardirqs_on
- 	j 2f
- 1:
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- 2:
- #endif
- 	REG_L a0, PT_STATUS(sp)
-diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-new file mode 100644
-index 000000000000..fc194c56a35d
---- /dev/null
-+++ b/arch/riscv/kernel/trace_irq.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-+ */
-+
-+#include <linux/irqflags.h>
-+#include <linux/kprobes.h>
-+#include "trace_irq.h"
-+
-+/**
-+ * trace_hardirqs_on/off requires at least two parent call frames.
-+ * Here we add one extra level so they can be safely called by low
-+ * level entry code.
-+ */
-+
-+void __trace_hardirqs_on(void)
-+{
-+	trace_hardirqs_on();
-+}
-+NOKPROBE_SYMBOL(__trace_hardirqs_on);
-+
-+void __trace_hardirqs_off(void)
-+{
-+	trace_hardirqs_off();
-+}
-+NOKPROBE_SYMBOL(__trace_hardirqs_off);
-diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
-new file mode 100644
-index 000000000000..99fe67377e5e
---- /dev/null
-+++ b/arch/riscv/kernel/trace_irq.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-+ */
-+#ifndef __TRACE_IRQ_H
-+#define __TRACE_IRQ_H
-+
-+void __trace_hardirqs_on(void);
-+void __trace_hardirqs_off(void);
-+
-+#endif /* __TRACE_IRQ_H */
+
 -- 
-2.32.0
-
+Wei Yang
+Help you, Help me

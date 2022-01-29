@@ -2,187 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1394A2A9D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852254A2A9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbiA2Adc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S235451AbiA2AfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiA2Ada (ORCPT
+        with ESMTP id S234059AbiA2AfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:33:30 -0500
-Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F80CC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:33:30 -0800 (PST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-53-ed;
- t=1643416409; h=date : from : to : cc : subject : message-id :
- references : mime-version : content-type : in-reply-to : from;
- bh=Ks58RD92sFw1u4MB19gv/koeUljumN7OZNwwzwqESMg=;
- b=GydC0FU6vw4+iPN7EbvznPgucVy/xofT+Usuu4cmXupf8aIP5votm1UGluhzGJVYhYHX0
- VgBMfvgzy49ZWUnAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
- i=@lespinasse.org; q=dns/txt; s=srv-53-rsa; t=1643416409; h=date :
- from : to : cc : subject : message-id : references : mime-version :
- content-type : in-reply-to : from;
- bh=Ks58RD92sFw1u4MB19gv/koeUljumN7OZNwwzwqESMg=;
- b=BQP2aVVJwWLZaQGslcdEA4461tfkn3lV+mH53sNQ4HqTI2qpWTXRzwZarK4tah61Tm20L
- m0c+G76dwHAt+ycXy/dA30Q7OVPsTqIRpwSbJxK7VnADm8SN2dwwTshQj0q1xSz+3gB7+ph
- D049T9ZuLYmaChIFAaseiwvhGtumJbL++TpDybWha/F6lSOsVZmbIBqj7aJwX03n3c9bx0n
- fMoTpXA8guGQQV46TrZJ+GECgavBKXRbvsQMsuF5u63Agz1q/ljaCFYBUZQchYhtL+n3udy
- KBvjjwQDdHnrM5Hyb0/f9J58vZw6IrxWxQXVMqtCQUl85n5zrVEWxWYh9pLA==
-Received: by server.lespinasse.org (Postfix, from userid 1000)
-        id 84F5116094C; Fri, 28 Jan 2022 16:33:29 -0800 (PST)
-Date:   Fri, 28 Jan 2022 16:33:29 -0800
-From:   Michel Lespinasse <michel@lespinasse.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Michel Lespinasse <michel@lespinasse.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel-team@fb.com,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Jerome Glisse <jglisse@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH v2 12/35] mm: separate mmap locked assertion from find_vma
-Message-ID: <20220129003329.GB18863@lespinasse.org>
-References: <20220128131006.67712-13-michel@lespinasse.org>
- <202201290752.GKB0XPLn-lkp@intel.com>
+        Fri, 28 Jan 2022 19:35:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504C7C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:35:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E161860A66
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350A9C340E7;
+        Sat, 29 Jan 2022 00:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643416513;
+        bh=kw+3OTuPDX3/tG8tmhcjVaDk/mA/bOZLCX0XvOcKmD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YaOC4DvVe8kU3LsMjzXMw9wjm5SiYfjaXhHKNuthOgxNYw9ArzXaEVQPqh0wNlQ7s
+         ZoYEfSaoc8fjwbltCZQkywbTTmnO+n+n5rj/ySoSTjp3oDH7KDJKYvkorLiJIMVzxN
+         BfXpBVA7IN1htEKssXqfgUZnD+xclxAZgyW0I353BjSavykv0S4Kt49qb18xbOGG8u
+         3EwG9XkURp2V9Butaz+BcMDRAGB+j973hWaD4Se1csufGfa9+vW3E+Xz0Hx95UV7Vo
+         iKJDOawtMg6v0jqX8CfddBzhTAPiQ+HW0XHDT6t8OqTxrC1oZtqkPqIFn6x1XboEzz
+         i2TNzanbRPmtg==
+Date:   Fri, 28 Jan 2022 16:35:11 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: don't check IPU policy during file defragment
+Message-ID: <YfSLvyMUd3lam415@google.com>
+References: <20220128091920.1556480-1-chao@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201290752.GKB0XPLn-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220128091920.1556480-1-chao@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 08:08:15AM +0800, kernel test robot wrote:
-> >> mm/nommu.c:666:24: error: redefinition of 'find_vma'
->    struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->                           ^
->    include/linux/mm.h:2759:24: note: previous definition is here
->    struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->                           ^
->    1 error generated.
+On 01/28, Chao Yu wrote:
+> Once IPU policy is enabled in some cases:
+> a) f2fs forces to use F2FS_IPU_FORCE in a small-sized volume
+> b) user configures IPU policy via sysfs
 
-Nice catch. The following amended patch should fix this:
-(I only added the mm/nommu.c changes)
+It's contradictory to each other. How about just letting users decide to do what
+they want to do? IOWs, if user wants to do defrag, they should change ipu_policy
+on the fly.
 
------------------------------------ 8< ----------------------------------
-
-mm: separate mmap locked assertion from find_vma
-
-This adds a new __find_vma() function, which implements find_vma minus
-the mmap_assert_locked() assertion.
-
-find_vma() is then implemented as an inline wrapper around __find_vma().
-
-Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
----
- drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
- include/linux/mm.h                    | 9 ++++++++-
- mm/mmap.c                             | 5 ++---
- mm/nommu.c                            | 4 ++--
- 4 files changed, 14 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-index 5ae812d60abe..94ab71a9b493 100644
---- a/drivers/gpu/drm/i915/i915_gpu_error.c
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-@@ -515,7 +515,7 @@ static void error_print_context(struct drm_i915_error_state_buf *m,
- }
- 
- static struct i915_vma_coredump *
--__find_vma(struct i915_vma_coredump *vma, const char *name)
-+__i915_find_vma(struct i915_vma_coredump *vma, const char *name)
- {
- 	while (vma) {
- 		if (strcmp(vma->name, name) == 0)
-@@ -529,7 +529,7 @@ __find_vma(struct i915_vma_coredump *vma, const char *name)
- static struct i915_vma_coredump *
- find_batch(const struct intel_engine_coredump *ee)
- {
--	return __find_vma(ee->vma, "batch");
-+	return __i915_find_vma(ee->vma, "batch");
- }
- 
- static void error_print_engine(struct drm_i915_error_state_buf *m,
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 4600dbb98cef..6f7712179503 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2751,10 +2751,17 @@ extern int expand_upwards(struct vm_area_struct *vma, unsigned long address);
- #endif
- 
- /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
--extern struct vm_area_struct * find_vma(struct mm_struct * mm, unsigned long addr);
-+extern struct vm_area_struct * __find_vma(struct mm_struct * mm, unsigned long addr);
- extern struct vm_area_struct * find_vma_prev(struct mm_struct * mm, unsigned long addr,
- 					     struct vm_area_struct **pprev);
- 
-+static inline
-+struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-+{
-+	mmap_assert_locked(mm);
-+	return __find_vma(mm, addr);
-+}
-+
- /**
-  * find_vma_intersection() - Look up the first VMA which intersects the interval
-  * @mm: The process address space.
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 1e8fdb0b51ed..b09a2c875507 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2276,12 +2276,11 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
- EXPORT_SYMBOL(get_unmapped_area);
- 
- /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
--struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-+struct vm_area_struct *__find_vma(struct mm_struct *mm, unsigned long addr)
- {
- 	struct rb_node *rb_node;
- 	struct vm_area_struct *vma;
- 
--	mmap_assert_locked(mm);
- 	/* Check the cache first. */
- 	vma = vmacache_find(mm, addr);
- 	if (likely(vma))
-@@ -2308,7 +2307,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
- 	return vma;
- }
- 
--EXPORT_SYMBOL(find_vma);
-+EXPORT_SYMBOL(__find_vma);
- 
- /*
-  * Same as find_vma, but also return a pointer to the previous VMA in *pprev.
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 55a9e48a7a02..8d2582ff319f 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -663,7 +663,7 @@ static void delete_vma(struct mm_struct *mm, struct vm_area_struct *vma)
-  * look up the first VMA in which addr resides, NULL if none
-  * - should be called with mm->mmap_lock at least held readlocked
-  */
--struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-+struct vm_area_struct *__find_vma(struct mm_struct *mm, unsigned long addr)
- {
- 	struct vm_area_struct *vma;
- 
-@@ -685,7 +685,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
- 
- 	return NULL;
- }
--EXPORT_SYMBOL(find_vma);
-+EXPORT_SYMBOL(__find_vma);
- 
- /*
-  * find a VMA
--- 
-2.20.1
-
+> 
+> Then we may fail to defragment file via ioctl due to IPU policy check,
+> it doesn't make sense, so let's change to use IPU policy for common
+> data writeback, rather than for specific data writeback, e.g. GC,
+> defragment, and so on.
+> 
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+>  fs/f2fs/data.c | 15 ++++++++++-----
+>  fs/f2fs/f2fs.h |  3 ++-
+>  fs/f2fs/file.c | 17 ++++++++++-------
+>  3 files changed, 22 insertions(+), 13 deletions(-)
+> 
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index 0f124e8de1d4..bce7ecac8976 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -2530,6 +2530,9 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
+>  	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+>  		return true;
+>  
+> +	if (is_inode_flag_set(inode, FI_DEFRAG_PROCESS))
+> +		return true;
+> +
+>  	if (fio) {
+>  		if (page_private_gcing(fio->page))
+>  			return true;
+> @@ -3154,8 +3157,8 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+>  			f2fs_available_free_memory(sbi, DIRTY_DENTS))
+>  		goto skip_write;
+>  
+> -	/* skip writing during file defragment */
+> -	if (is_inode_flag_set(inode, FI_DO_DEFRAG))
+> +	/* skip writing in file defragment preparing stage */
+> +	if (is_inode_flag_set(inode, FI_DEFRAG_PREPARE))
+>  		goto skip_write;
+>  
+>  	trace_f2fs_writepages(mapping->host, wbc, DATA);
+> @@ -3733,7 +3736,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+>  		f2fs_allocate_new_section(sbi, CURSEG_COLD_DATA_PINNED, false);
+>  		f2fs_unlock_op(sbi);
+>  
+> -		set_inode_flag(inode, FI_DO_DEFRAG);
+> +		set_inode_flag(inode, FI_DEFRAG_PREPARE);
+>  
+>  		for (blkofs = 0; blkofs < blk_per_sec; blkofs++) {
+>  			struct page *page;
+> @@ -3750,9 +3753,11 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+>  			f2fs_put_page(page, 1);
+>  		}
+>  
+> -		clear_inode_flag(inode, FI_DO_DEFRAG);
+> +		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+>  
+> +		set_inode_flag(inode, FI_DEFRAG_PROCESS);
+>  		ret = filemap_fdatawrite(inode->i_mapping);
+> +		clear_inode_flag(inode, FI_DEFRAG_PROCESS);
+>  
+>  		f2fs_up_write(&sbi->pin_sem);
+>  
+> @@ -3761,7 +3766,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+>  	}
+>  
+>  done:
+> -	clear_inode_flag(inode, FI_DO_DEFRAG);
+> +	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+>  	clear_inode_flag(inode, FI_ALIGNED_WRITE);
+>  
+>  	filemap_invalidate_unlock(inode->i_mapping);
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 8178a9152e49..4b905059a81e 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -733,7 +733,8 @@ enum {
+>  	FI_DROP_CACHE,		/* drop dirty page cache */
+>  	FI_DATA_EXIST,		/* indicate data exists */
+>  	FI_INLINE_DOTS,		/* indicate inline dot dentries */
+> -	FI_DO_DEFRAG,		/* indicate defragment is running */
+> +	FI_DEFRAG_PREPARE,	/* indicate defragment is preparing */
+> +	FI_DEFRAG_PROCESS,	/* indicate defragment is processing */
+>  	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
+>  	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
+>  	FI_HOT_DATA,		/* indicate file is hot */
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 6ccdd6e347e2..696f4a175228 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -2559,10 +2559,6 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+>  	bool fragmented = false;
+>  	int err;
+>  
+> -	/* if in-place-update policy is enabled, don't waste time here */
+> -	if (f2fs_should_update_inplace(inode, NULL))
+> -		return -EINVAL;
+> -
+>  	pg_start = range->start >> PAGE_SHIFT;
+>  	pg_end = (range->start + range->len) >> PAGE_SHIFT;
+>  
+> @@ -2570,6 +2566,11 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+>  
+>  	inode_lock(inode);
+>  
+> +	if (f2fs_is_pinned_file(inode)) {
+> +		err = -EINVAL;
+> +		goto out;
+> +	}
+> +
+>  	/* writeback all dirty pages in the range */
+>  	err = filemap_write_and_wait_range(inode->i_mapping, range->start,
+>  						range->start + range->len - 1);
+> @@ -2651,7 +2652,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+>  			goto check;
+>  		}
+>  
+> -		set_inode_flag(inode, FI_DO_DEFRAG);
+> +		set_inode_flag(inode, FI_DEFRAG_PREPARE);
+>  
+>  		idx = map.m_lblk;
+>  		while (idx < map.m_lblk + map.m_len && cnt < blk_per_seg) {
+> @@ -2676,14 +2677,16 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+>  		if (map.m_lblk < pg_end && cnt < blk_per_seg)
+>  			goto do_map;
+>  
+> -		clear_inode_flag(inode, FI_DO_DEFRAG);
+> +		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+>  
+> +		set_inode_flag(inode, FI_DEFRAG_PROCESS);
+>  		err = filemap_fdatawrite(inode->i_mapping);
+> +		clear_inode_flag(inode, FI_DEFRAG_PROCESS);
+>  		if (err)
+>  			goto out;
+>  	}
+>  clear_out:
+> -	clear_inode_flag(inode, FI_DO_DEFRAG);
+> +	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
+>  out:
+>  	inode_unlock(inode);
+>  	if (!err)
+> -- 
+> 2.25.1

@@ -2,81 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6DA4A2F43
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 13:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABA44A2F52
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 13:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346757AbiA2MUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 07:20:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48558 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346889AbiA2MTi (ORCPT
+        id S241633AbiA2MYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 07:24:02 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:32850
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239212AbiA2MYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 07:19:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 29 Jan 2022 07:24:00 -0500
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0017B8234E;
-        Sat, 29 Jan 2022 12:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA85DC36AE3;
-        Sat, 29 Jan 2022 12:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643458775;
-        bh=J65VF607Au+lXQP+8mKXArK6fDS/9hBK5qV8mWwi4fM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hNexS/zfRcpJQb9tKy9uq83XaLRwvXw8cgOzwvW9WGM8zvfpjFXUMmOHV7wpYFjBp
-         R4zZeyMkYScimS69R0rmPSDQiLeoyC4tNXnoZopSCmrKnJ8CXAdNqsBzb1ez7gi6HN
-         0Tyxrhtp5Mi9AKTv9oQEZpKazjfoFIi00SyeBHUBliq5cJENB09Lf+Pi7mLjn7YNBT
-         aPsDFmioeyhcJlUMm3AZSlSK9ucd2doig8+iZU2Wyg6rU0gRs5rtmxtw+5HhoIUawl
-         66/hvRTiAyCZ/rB8cQbfhby7/PO6/fXx4w8NqSqdB00+lX+6mDb6AecdxvXlTOakZB
-         Pa6OVe+KOUrow==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, hch@lst.de, hch@infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 17/17] KVM: compat: riscv: Prevent KVM_COMPAT from being selected
-Date:   Sat, 29 Jan 2022 20:17:28 +0800
-Message-Id: <20220129121728.1079364-18-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220129121728.1079364-1-guoren@kernel.org>
-References: <20220129121728.1079364-1-guoren@kernel.org>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D20D33F1D9
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 12:23:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643459039;
+        bh=x4o0tadweuj23sLkh9uK/49Ckg22Ago7xB3yd+9McbM=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=VZhSXu9vwBHUaIhkfD0+K9eABZ0anng0dYAXXKmyh+QfNaw6/DPM3ixAf4eK4Y/gE
+         4IbsKPDMu5nE0hCUmt1HCMkyZuYGeikFGHpbFXgwBPan3gZBppbPBqEySwIwM8sK7/
+         iJ7Z2aZy2alH+Db+HXbXaZtkCxvzT4GKzOy5L9cMV8C5ozKn2nm20Nl3J6XHAdNv/u
+         vkDUOioNRQESfUvhPrCMB9+KgbiADRVQQtp9TjEYLRWWmt/2aeCI+ZoytzkMaT53Ny
+         s/6dynzOlq6GWY0PejcdZbhAdoXVzSGkI/+Pc1ezIAz6+7PIWA2IVMG42aXw8N/43S
+         jsMwbVA/KCGkA==
+Received: by mail-wm1-f70.google.com with SMTP id l20-20020a05600c1d1400b0035153bf34c3so4707422wms.2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 04:23:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x4o0tadweuj23sLkh9uK/49Ckg22Ago7xB3yd+9McbM=;
+        b=FxYyprr04F1OVT7rxLcpHp0+PDncOMnopfMy2ACGPCEiSm4D3bR1TndhEHLJPeerk4
+         mxQdqtsbQQkVDKsR43X2X5iLDvcIGz0za8YEmxnxtALGAcd6NdPNf59CImjoEypIoxBq
+         2+mXL9u6cHEgPaBoXwOrONG7hpZMYZrDyZ2wXO571fCDSrzHYb0v0tpHeIz7kox98woO
+         f5iEAXIt8RsZPNj2YxjOyWZXWb2PbN42bPrv8uhdhUFObIcAm7qQSpDZcnQxsYUh7Wvd
+         mcQT5zl37cntUJ/pcPz48FDUw9nS4r83bWuU3WmRb4p54tSTdrIzjBN03Jcxk8BVlAg5
+         gp8A==
+X-Gm-Message-State: AOAM531hixMiLIT9+RoehLelOEzgTFnZzRZSf6+hsOsDxcOo7rbkO20x
+        Cg483h/nu1DG5ZqSH9aigOEWORXE1mxMNmyuUyrt/FK6D2u3VyNXeB2EMv97H9yH3alHZHQkG9J
+        E4v8xCoRABf1usWQjmsmB0ONdlLB3CnIqBz6fMsMr6w==
+X-Received: by 2002:a05:6000:3ce:: with SMTP id b14mr11007119wrg.118.1643459039567;
+        Sat, 29 Jan 2022 04:23:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJygRY/OO3A1gLYNKDwc5YcDp9OYKQQJgKxWDSCXzN4Pa9hV5T3InC2pPxALeSJIge3bJVVrsw==
+X-Received: by 2002:a05:6000:3ce:: with SMTP id b14mr11007100wrg.118.1643459039297;
+        Sat, 29 Jan 2022 04:23:59 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id z13sm7901534wrm.90.2022.01.29.04.23.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 04:23:58 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] ASoC: dt-bindings: samsung: convert to dtschema
+Date:   Sat, 29 Jan 2022 13:23:51 +0100
+Message-Id: <20220129122357.45545-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi,
 
-Current riscv doesn't support the 32bit KVM API. Let's make it
-clear by not selecting KVM_COMPAT.
+The patchset is based on Rob's sound-dai changes:
+https://lore.kernel.org/all/20220126231427.1638089-1-robh@kernel.org/
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
----
- virt/kvm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v1:
+1. Correct samsung,snow cpu/sound-dai.
 
-diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-index f4834c20e4a6..a8c5c9f06b3c 100644
---- a/virt/kvm/Kconfig
-+++ b/virt/kvm/Kconfig
-@@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
- 
- config KVM_COMPAT
-        def_bool y
--       depends on KVM && COMPAT && !(S390 || ARM64)
-+       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
- 
- config HAVE_KVM_IRQ_BYPASS
-        bool
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (6):
+  ASoC: dt-bindings: samsung,aries-wm8994: require sound-dai property
+  ASoC: dt-bindings: samsung,arndale: convert to dtschema
+  ASoC: dt-bindings: samsung,arndale: document ALC5631
+  ASoC: dt-bindings: samsung,smdk5250: convert to dtschema
+  ASoC: dt-bindings: samsung,snow: convert to dtschema
+  ASoC: dt-bindings: samsung,tm2: convert to dtschema
+
+ .../devicetree/bindings/sound/arndale.txt     | 25 ------
+ .../bindings/sound/samsung,aries-wm8994.yaml  |  4 +
+ .../bindings/sound/samsung,arndale.yaml       | 45 +++++++++++
+ .../bindings/sound/samsung,smdk-wm8994.txt    | 14 ----
+ .../bindings/sound/samsung,smdk5250.yaml      | 38 +++++++++
+ .../bindings/sound/samsung,snow.yaml          | 74 +++++++++++++++++
+ .../bindings/sound/samsung,tm2-audio.txt      | 42 ----------
+ .../bindings/sound/samsung,tm2.yaml           | 80 +++++++++++++++++++
+ .../devicetree/bindings/sound/snow.txt        | 31 -------
+ 9 files changed, 241 insertions(+), 112 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/sound/arndale.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/samsung,arndale.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/samsung,smdk-wm8994.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/samsung,smdk5250.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/samsung,snow.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/samsung,tm2-audio.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/samsung,tm2.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/snow.txt
+
 -- 
-2.25.1
+2.32.0
 

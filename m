@@ -2,147 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F794A2B8C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 05:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BB34A2B90
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 05:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352337AbiA2EFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 23:05:42 -0500
-Received: from mga06.intel.com ([134.134.136.31]:29142 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238931AbiA2EFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 23:05:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643429139; x=1674965139;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pq7zHWakzHtq/Q7I3xjAFcH86XLtbzbQffOAcTHn3cQ=;
-  b=B5a13m6OZ932TDiGG39mJGhFLGYL6o/jfwG0j4Xngx4e2ugSR4V9B9M0
-   pQV+dZw5PrpMOp0g1v1VUyDxNMIhFsnstiGkD9Tj+CNtZ85QdJg0zDvhp
-   2Z/3ykW+p1W/+Dxw8Wr6Ijb8QtzZT40j+Smm1QOSrzDpMuelTvhlCbvnq
-   2qxhOUTzp5UsTt0Ukk5z3gnSWnLdbzu3eJeQTRdikNMMS+1gINraFoBBu
-   CqE4F79RtQuu8htFfq+1p5I3CpxHDO/21V3+yOW2kdBboHu30jdnQTax4
-   y7MWppcXsCkDj14uLugsxG20VMxJYezKGVGxin61zbuQwskzvsHflAhT8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="307969611"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="307969611"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 20:05:38 -0800
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="521943076"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 20:05:38 -0800
-Date:   Fri, 28 Jan 2022 20:05:38 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH 2/2] mm/page_owner: Dump memcg information
-Message-ID: <20220129040538.GN785175@iweiny-DESK2.sc.intel.com>
-References: <20220128195642.416743-1-longman@redhat.com>
- <20220128195642.416743-3-longman@redhat.com>
- <20220128212249.GI785175@iweiny-DESK2.sc.intel.com>
- <e14e8c96-b2e3-cb57-2c35-284116798225@redhat.com>
- <20220128214843.GJ785175@iweiny-DESK2.sc.intel.com>
- <1badb3ac-6631-68ac-364d-69dee237583c@redhat.com>
+        id S1352339AbiA2EPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 23:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230242AbiA2EPP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 23:15:15 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6C2C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 20:15:14 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id r7so5925921wmq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 20:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u4oel1aQBoCtI/b7gkK6UL5x2odlkFP6no8sfDKO+Pg=;
+        b=LUPkVY/TcyzOL0KUTKOMPPkxjWtZRrwB3qQhWUHq/enS3OBA9r9jFpseAGdPZDowxw
+         eF57APKjuCQ446mmevqtldVRmIx9TCA7Y2oAZYfk3QdLaYEI2qn7wlflWc64wuHPzQZp
+         NkwuxKKnksGZSXrFMsFyvdUXMAu/kdtOzLYHSXtzN1MfgTcDwCfA2HhxQERheaAcL9tx
+         Slwqmt0A6TsUrFTFecX7gWVLuiZtnOOn71jHFc5Qr0ntDYSVpuncXEaJbqtmC3CZ9JZn
+         CxnvxQSJ8aZ/D2a12dzwePAzmo7vzSQ/r9EZ5nHmxq/KAA/kJ6cMPhrWZi7ety/6ZjN+
+         0Vig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u4oel1aQBoCtI/b7gkK6UL5x2odlkFP6no8sfDKO+Pg=;
+        b=njjrO7lJdQWvEbAZJgabE+sLTTNxmUDmwpbYepSrTvO+blGN63vwk51vHifmIlr+yB
+         gWNCxVKcEiDgeetaFB6wnAX5LOAHbIj/a5zjrMJnrt6EzxTNHxr7bRU14R4Avy9kekic
+         qpdNpxL/U8pOWl2yaglCxk5AFHnKi2IUlOa6qNr0vyQ4fxE/FkFH8+e2tZc5ATbvHa1q
+         hUgkx2SdIiptZGXrCC8bgubLymJYQuW+yNVbN/sVyjwr9qLXBJ/IFBVNSCrVyrFTVbpK
+         M5mVwbhwwD3QRidGDj2mw5i5qlFcOO4zOcUnh9WlSwQSjnfD2qHWau8itN8WL2cxwXWR
+         Y9Uw==
+X-Gm-Message-State: AOAM531PNFqJ7gbLeNCjU1zwW098U8gd0DBrhM5jSMDuY93SkwDy8J8Q
+        TUbOh/U8bPQ1LfVKXpadzq4v9rgXlWGWZCLVx+XCLQ==
+X-Google-Smtp-Source: ABdhPJyJtOmRyTmN1Db/Nvc1SI43ufGP0GPkypCaSyJvYg+TaDwEsgkzTiKthZmm5E5iVrOnyYIDmJ/0nCw5YRvKqxI=
+X-Received: by 2002:a1c:e90a:: with SMTP id q10mr18501063wmc.18.1643429712927;
+ Fri, 28 Jan 2022 20:15:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1badb3ac-6631-68ac-364d-69dee237583c@redhat.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <20220127221710.165733-1-dlatypov@google.com>
+In-Reply-To: <20220127221710.165733-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 29 Jan 2022 12:15:01 +0800
+Message-ID: <CABVgOSncO56y02RkUMeBU2rpqxXgDudL24gG0UUqzhX58JqjJg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix missing f in f-string in run_checks.py
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:35:22PM -0500, Waiman Long wrote:
-> On 1/28/22 16:48, Ira Weiny wrote:
-> > On Fri, Jan 28, 2022 at 04:31:07PM -0500, Waiman Long wrote:
-> > > On 1/28/22 16:22, Ira Weiny wrote:
-> > > > On Fri, Jan 28, 2022 at 02:56:42PM -0500, Waiman Long wrote:
-> > > > > It was found that a number of offlined memcgs were not freed because
-> > > > > they were pinned by some charged pages that were present. Even "echo
-> > > > > 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
-> > > > > offlined but not freed memcgs tend to increase in number over time with
-> > > > > the side effect that percpu memory consumption as shown in /proc/meminfo
-> > > > > also increases over time.
-> > > > > 
-> > > > > In order to find out more information about those pages that pin
-> > > > > offlined memcgs, the page_owner feature is extended to dump memory
-> > > > > cgroup information especially whether the cgroup is offlined or not.
-> > > > > 
-> > > > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > > > ---
-> > > > >    mm/page_owner.c | 28 ++++++++++++++++++++++++++++
-> > > > >    1 file changed, 28 insertions(+)
-> > > > > 
-> > > > > diff --git a/mm/page_owner.c b/mm/page_owner.c
-> > > > > index c52ce9d6bc3b..e5d8c642296b 100644
-> > > > > --- a/mm/page_owner.c
-> > > > > +++ b/mm/page_owner.c
-> > > > > @@ -10,6 +10,7 @@
-> > > > >    #include <linux/migrate.h>
-> > > > >    #include <linux/stackdepot.h>
-> > > > >    #include <linux/seq_file.h>
-> > > > > +#include <linux/memcontrol.h>
-> > > > >    #include <linux/sched/clock.h>
-> > > > >    #include "internal.h"
-> > > > > @@ -339,6 +340,7 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
-> > > > >    		depot_stack_handle_t handle)
-> > > > >    {
-> > > > >    	int ret = 0, pageblock_mt, page_mt;
-> > > > > +	unsigned long __maybe_unused memcg_data;
-> > > > >    	char *kbuf;
-> > > > >    	count = min_t(size_t, count, PAGE_SIZE);
-> > > > > @@ -371,6 +373,32 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
-> > > > >    			"Page has been migrated, last migrate reason: %s\n",
-> > > > >    			migrate_reason_names[page_owner->last_migrate_reason]);
-> > > > > +#ifdef CONFIG_MEMCG
-> > > > > +	/*
-> > > > > +	 * Look for memcg information and print it out
-> > > > > +	 */
-> > > > > +	memcg_data = READ_ONCE(page->memcg_data);
-> > > > > +	if (memcg_data) {
-> > > > > +		struct mem_cgroup *memcg = page_memcg_check(page);
-> > > > > +		bool onlined;
-> > > > > +		char name[80];
-> > > > > +
-> > > > > +		if (memcg_data & MEMCG_DATA_OBJCGS)
-> > > > > +			SNPRINTF(kbuf, count, ret, err, "Slab cache page\n");
-> > > > > +
-> > > > > +		if (!memcg)
-> > > > > +			goto copy_out;
-> > > > > +
-> > > > > +		onlined = (memcg->css.flags & CSS_ONLINE);
-> > > > > +		cgroup_name(memcg->css.cgroup, name, sizeof(name) - 1);
-> > > > > +		SNPRINTF(kbuf, count, ret, err, "Charged %sto %smemcg %s\n",
-> > > >                                                           ^^^
-> > > > 						Extra specifier?
-> > > > 
-> > > > Did this compile without warnings?
-> > > Yes, there was no warning.
-> > But isn't that an extra specifier?
-> 
-> There are 3 arguments to the format string that match the 3 "%s" in it:
-> 
-> 1) PageMemcgKmem(page) ? "(via objcg) " : ""
-> 2) onlined ? "" : "offlined
-> 3) name
+On Fri, Jan 28, 2022 at 6:17 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> We're missing the `f` prefix to have python do string interpolation, so
+> we'd never end up printing what the actual "unexpected" error is.
+>
+> Fixes: ee92ed38364e ("kunit: add run_checks.py script to validate kunit changes")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-My apologies.  My parsing of the ? statements was off.  FWIW putting
+Looks good!
 
-	', name'
+Reviewed-by: David Gow <davidgow@google.com>
 
-on the next line would make it more clear...  But I see now...
+Cheers,
+-- David
 
-Sorry,
-Ira
-
-> 
-> Cheers,
-> Longman
-> 
+>  tools/testing/kunit/run_checks.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+> index 4f32133ed77c..13d854afca9d 100755
+> --- a/tools/testing/kunit/run_checks.py
+> +++ b/tools/testing/kunit/run_checks.py
+> @@ -61,7 +61,7 @@ def main(argv: Sequence[str]) -> None:
+>                 elif isinstance(ex, subprocess.CalledProcessError):
+>                         print(f'{name}: FAILED')
+>                 else:
+> -                       print('{name}: unexpected exception: {ex}')
+> +                       print(f'{name}: unexpected exception: {ex}')
+>                         continue
+>
+>                 output = ex.output
+>
+> base-commit: 6125a5c70acddd9fc1fb7329047a254c74d0173c
+> --
+> 2.35.0.rc2.247.g8bbb082509-goog
+>

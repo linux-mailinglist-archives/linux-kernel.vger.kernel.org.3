@@ -2,37 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 933E54A2E13
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 12:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166714A2E37
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 12:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235581AbiA2LPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 06:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbiA2LPN (ORCPT
+        id S236365AbiA2L3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 06:29:31 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53154
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235093AbiA2L31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 06:15:13 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E317CC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 03:15:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Sat, 29 Jan 2022 06:29:27 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JmBZ56XGMz4xcS;
-        Sat, 29 Jan 2022 22:15:09 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Maxime Bizon <mbizon@freebox.fr>
-In-Reply-To: <b0b752f6f6ecc60653e873f385c6f0dce4e9ab6a.1638789098.git.christophe.leroy@csgroup.eu>
-References: <b0b752f6f6ecc60653e873f385c6f0dce4e9ab6a.1638789098.git.christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] powerpc/fixmap: Fix VM debug warning on unmap
-Message-Id: <164345486523.1545234.1636640296413408216.b4-ty@ellerman.id.au>
-Date:   Sat, 29 Jan 2022 22:14:25 +1100
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DEA9F3F4B6
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 11:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643455766;
+        bh=mQWIhzfALzmhNvVwAVuvuNXj69s9Y0aV8nVP8i/ovfg=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=NFg+xFE44e5U+WJh7VaXUwffiot4vxAky2m9/yZxJQtp7TSkUid89L5/vVIHpDMgT
+         KWVVa0FLcp9yPw4RzVCdF5A6+DRPBybgsaMHnQdBL8wyEbik3wqRzUhXln5Fqn98dA
+         37SK8oPG6b/B6OJulLR5FRwAjCFwPx6lL58hqjqmDeA09O495CVUNR1eS8O1L/qIIz
+         wzQ8TZoA5jXTlmbVDzSj1aaG//EYvNd/4KltR+QIGynW37PgJbUOBlvPVpWJNFesj9
+         EGrleRpg3taeDpu9BONvk9j0h0lewi9nLO5F74gkO9v4UhgmboRLo9RDSTQd/ijsTL
+         1/t09QVSTsybw==
+Received: by mail-ed1-f71.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso4342337edk.13
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 03:29:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mQWIhzfALzmhNvVwAVuvuNXj69s9Y0aV8nVP8i/ovfg=;
+        b=pBoJ57CLfu/yGjlNhBGIM+//da1cpndWmJDo6aTRy3GW5AJccGylha/zsXVFzqhvgL
+         DcIg+ff4WiDW9ih5HXWGy0RJAKWAC08/jFPDG3cy0sbyp0lIC6AsuD2oMpRp7LJcV/Uc
+         ceaVScfjmAt1C5T6h3gNGcxdAbyJPt5ZejfyEetaSZJKj2i8KiQv0M5chsXJe/EtT7dK
+         Xeb64NDf37jwOkuY4n6koGcKyVgE+Zxw8nhxVbXOk97NLFbMSSj8QQPUBBEQl9LNbhGK
+         S4Wksut3otRwQaED35nLG4aLkt4lH8ex/lHUHd4kRUUTTzKOQiQiH7WaQYa+/hGvoMwH
+         1ghA==
+X-Gm-Message-State: AOAM533K4ip3+thdPromednck0itcfn7IOY30/nqHKyXduCz8Z3eBH5q
+        VwF+C/BazKB/XURowuF8O8rwEC6AdTddQRDl/eOmRjIxCiD5d2UZy3V9nvTkh30HsGCQtXsxENx
+        alwS23tZ1AjQXSwrvJZnAyYQH50lBcYmdpbGGujYJVQ==
+X-Received: by 2002:a17:907:3f99:: with SMTP id hr25mr10190860ejc.588.1643455765345;
+        Sat, 29 Jan 2022 03:29:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzUWK6qByvVxIBS+9uu2vdLsOAJFd0ApGv7Ogy0hcRemfHrZnMyIWyq6RHHSeL54zf6jeCBQw==
+X-Received: by 2002:a17:907:3f99:: with SMTP id hr25mr10190835ejc.588.1643455765142;
+        Sat, 29 Jan 2022 03:29:25 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id jt17sm10943147ejb.161.2022.01.29.03.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 03:29:24 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linus.walleij@linaro.org, Aswani Reddy <aswani.reddy@samsung.com>,
+        linux-fsd@tesla.com, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        pankaj.dubey@samsung.com, devicetree@vger.kernel.org,
+        andi@etezian.org, linux-samsung-soc@vger.kernel.org,
+        broonie@kernel.org
+Subject: Re: (subset) [PATCH v3 3/3] arm64: dts: fsd: Add SPI device nodes
+Date:   Sat, 29 Jan 2022 12:29:22 +0100
+Message-Id: <164345575829.11115.173136141798893555.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220125031604.76009-4-alim.akhtar@samsung.com>
+References: <20220125031604.76009-1-alim.akhtar@samsung.com> <CGME20220125032828epcas5p22fbacf42ebfb1b78c1f74f48d37aa381@epcas5p2.samsung.com> <20220125031604.76009-4-alim.akhtar@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,20 +77,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 11:11:51 +0000, Christophe Leroy wrote:
-> Unmapping a fixmap entry is done by calling __set_fixmap()
-> with FIXMAP_PAGE_CLEAR as flags.
+On Tue, 25 Jan 2022 08:46:04 +0530, Alim Akhtar wrote:
+> From: Aswani Reddy <aswani.reddy@samsung.com>
 > 
-> Today, powerpc __set_fixmap() calls map_kernel_page().
+> Adds device tree node for SPI IPs
 > 
-> map_kernel_page() is not happy when called a second time
-> for the same page.
 > 
-> [...]
 
-Applied to powerpc/fixes.
+Applied, thanks!
 
-[1/1] powerpc/fixmap: Fix VM debug warning on unmap
-      https://git.kernel.org/powerpc/c/aec982603aa8cc0a21143681feb5f60ecc69d718
+[3/3] arm64: dts: fsd: Add SPI device nodes
+      commit: bd1e3696a052b9b2bd3c1c72ef4bf800a3a1e286
 
-cheers
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

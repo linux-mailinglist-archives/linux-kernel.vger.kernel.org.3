@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05034A304C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF3A4A3054
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240648AbiA2P2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 10:28:17 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:48420 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239029AbiA2P2Q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 10:28:16 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nDpe6-000583-FB; Sat, 29 Jan 2022 16:28:10 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Liang Chen <cl@rock-chips.com>
-Subject: Re: [PATCH 1/2] arm64: dts: rockchip: rename and sort the rk356x usb2 phy handles
-Date:   Sat, 29 Jan 2022 16:28:09 +0100
-Message-ID: <3736463.EBuT6JFcjP@diego>
-In-Reply-To: <64f539b5-30b2-c0b7-17bf-c448b507713e@wolfvision.net>
-References: <20220127190456.2195527-1-michael.riesch@wolfvision.net> <FBB7C392-C5E0-4E34-AC17-5323414623F5@gmail.com> <64f539b5-30b2-c0b7-17bf-c448b507713e@wolfvision.net>
+        id S240549AbiA2Pmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 10:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235877AbiA2Pmp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 10:42:45 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58607C061714;
+        Sat, 29 Jan 2022 07:42:45 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id h21so16679689wrb.8;
+        Sat, 29 Jan 2022 07:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xDfBcCV+jqICJ+umnEPyh0zc5fKOvTpA/0JLXbxrvaw=;
+        b=YRADI/76mabaLf4IRcW+iUVwM4d5XalrfrM65rAgmDHXMgw/pREmSDXS1OlC0Bn00W
+         BYD58D2rRkOkUXyYsmqT6UsbbLZOE49yI72y1wbyFYP0oh3pTbKX+whITxjx54FwHT54
+         rcY0tfctVsXgFc046Jyzq7yoGgtWwTbIU696dGNvIju/PnrS7YBdaqlqkoPYwHqtF81b
+         R1iPZVhdmnGJQ7jdzQtZ5/9vx/0mE9TN8rOW1bl1XyoPbB8TDqjnTKzxLbU4X7u477iX
+         vPMAuxN69n3L4m0hkvoTRM62uivp3iH4vnoWcwG0fD8h4qMX1f3LOxV2lbFv7d4OCDJz
+         deTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xDfBcCV+jqICJ+umnEPyh0zc5fKOvTpA/0JLXbxrvaw=;
+        b=65v84vvfhMZiFbGdFNVGk7U2glQBZ3sr05tujhyZqlkngnFBeOB17nUI6auldbKEpb
+         TnxIayVz1vAGYHMZr4OB+TDt/St0UjP1RS88vTfvFMyYdvkU67ZbnQ4UHU3ffq6jIDDS
+         ldD/+lWXkcm4ddsGwKjlUgaFO4dEMdXz7gsKrDT8zMXB5Zm7FtRYTnpF1GO+gJwZjMQx
+         t/mxfbq9yoWG3LT8jWq+6ys9ruR4ley9Lh3857AKVTG9Rv4u7+iEb/04CXVpAmGzZpw/
+         /RPsecADZmLInMME5Vj2SJpNzsoI66DD9C2WZofoddvCvdim//5Ob1V2XhHaQUin5BLV
+         bkNA==
+X-Gm-Message-State: AOAM532ZnZWEQ2N30E+kbtUstv1WNRhqxDIpN+9Sr5ykHPxlmkx7X/6q
+        zowV0Pw3LcBFxGpxcBxeJ1M=
+X-Google-Smtp-Source: ABdhPJzuryF9xXT+zqclTdu3vlK9c6QeyBNyyqPs6N9Gl6EC9RT7kbjuBw1I6Pf7pwGVHC/qP48VuA==
+X-Received: by 2002:adf:ff83:: with SMTP id j3mr11159990wrr.618.1643470963900;
+        Sat, 29 Jan 2022 07:42:43 -0800 (PST)
+Received: from pluto.desnull.home (84-236-21-114.pool.digikabel.hu. [84.236.21.114])
+        by smtp.gmail.com with ESMTPSA id b11sm4478557wmq.46.2022.01.29.07.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 07:42:43 -0800 (PST)
+From:   =?UTF-8?q?Baltaz=C3=A1r=20Radics?= <baltazar.radics@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Baltaz=C3=A1r=20Radics?= <baltazar.radics@gmail.com>
+Subject: [PATCH] Add ethernet0 alias in Nanopi NEO's device tree
+Date:   Sat, 29 Jan 2022 16:42:14 +0100
+Message-Id: <20220129154214.45629-1-baltazar.radics@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Samstag, 29. Januar 2022, 10:59:32 CET schrieb Michael Riesch:
-> Hello Peter and Piotr,
-> 
-> On 1/29/22 10:23, Piotr Oniszczuk wrote:
-> > 
-> > 
-> >>
-> >> Good Evening,
-> >>
-> >> While I'm not against this idea, my main concern still stands.
-> >> I spent a great deal of thought on this, and decided to go the route I
-> >> did to maintain consistency with previous generations.
-> >> As such, I see one of three paths here:
-> >> - Pull this patch only and depart rk356x from previous SoCs.
-> >> - Do the same for previous SoCs to maintain consistency.
-> >> - Drop this patch to maintain consistency with previous SoCs.
-> >>
-> >> I ask that others weigh in here, as offline discussion has produced
-> >> mixed results already.
-> > 
-> > just pure user perspective
-> > 
-> > (who spent last weeks considerable time to develop DT for rk3566 tvbox. 99% of my work was by reading/learning from other boards existing DT's. Any inconsistencies in DTs makes work for such ppl like me much more harder):
-> > 
-> > For option 1 - i don't see value
-> > For option 2 - what is reward for extra work needs to be done on all other SoCs?
-> > 
-> > so option 3 seems to be natural choice...
-> > 
-> > in other words:
-> > 
-> > for me:
-> > option 1 brings practically zero value + increased inconsistency.
-> > option 2: extra work - but consistency is like in option 3 (so where is value?)
-> > 
-> > so option 3 offers the same consistency - but without extra work...
-> >  
-> > just my 0.02$
-> 
-> Of course this change is purely cosmetic and it is reasonable to ask for
-> the practical value. It is just that technically the quartz64 dts is not
-> sorted alphabetically at the moment. The u2phy* nodes should be but
-> before the uart* nodes to follow the convention. On the other hand, it
-> may be nice to have the usb2 phys and controllers grouped in the dts.
-> The proposed renaming would allow all the mentioned nodes sorted
-> alphabetically and grouped logically.
-> 
-> Therefore I had option 1 in mind. I don't see any dependencies between
-> the different SoCs and think we can make a fresh start here.
+This is required for U-Boot to generate a MAC address for it
+automatically.
+(Without this, the MAC address will be random on each boot.)
 
-correct :-) .
+Signed-off-by: Baltazár Radics <baltazar.radics@gmail.com>
+---
+ arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I do see each SoC individually and while I try to have people follow some
-styling guidelines everywhere (ordering of properties, ordering of nodes)
-I don't really want people to fear what some other SoC has done before.
-
-But even these rules evolve sometimes, when something seems to work
-better than before.
-
-We have nowadays 9 years of Rockchip SoC history in the kernel.
-Thanks to general dt-binding conventions most nodes have specific
-names anyway (mmc@... etc), but for example trying to rename stuff
-in older SoCs that has worked for years now is for one error-prone
-as Michael pointed out, but also introduces unnecessary churn,
-when these old SoCs (thinking of rk3188, rk3288 and friends but also things
-like the rk3368) are essentially "finished" and most likely won't see that
-much additional support for stuff added.
-
-
-Heiko
-
-
-> Option 2 is not really feasible, we would almost definitely break
-> something existent.
-> 
-> Option 3 is feasible, of course. However, I would sort the nodes
-> alphabetically (u2phy*, then uart*, then usb*). Works for me as well,
-> although it is not that nice IMHO.
-> 
-> Since many boards with the RK3566 and RK3568 will pop up in near future
-> we should do the change right now (if we want to do it), as of course
-> all the board files need to be changed. Therefore I wanted to bring this
-> matter up now. Let's agree on something and move on.
-> 
-> Best regards,
-> Michael
-> 
-
-
-
+diff --git a/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts b/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts
+index 9f33f6fae5..df71fab3cf 100644
+--- a/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts
++++ b/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts
+@@ -45,6 +45,10 @@
+ / {
+ 	model = "FriendlyARM NanoPi NEO";
+ 	compatible = "friendlyarm,nanopi-neo", "allwinner,sun8i-h3";
++
++	aliases {
++		ethernet0 = &emac;
++	};
+ };
+ 
+ &ehci0 {
+-- 
+2.35.1
 

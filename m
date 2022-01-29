@@ -2,198 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 852254A2A9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6004A2AA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiA2AfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbiA2AfO (ORCPT
+        id S236470AbiA2Agh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 19:36:37 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:58332 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233942AbiA2Agg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:35:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504C7C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:35:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E161860A66
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350A9C340E7;
-        Sat, 29 Jan 2022 00:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643416513;
-        bh=kw+3OTuPDX3/tG8tmhcjVaDk/mA/bOZLCX0XvOcKmD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YaOC4DvVe8kU3LsMjzXMw9wjm5SiYfjaXhHKNuthOgxNYw9ArzXaEVQPqh0wNlQ7s
-         ZoYEfSaoc8fjwbltCZQkywbTTmnO+n+n5rj/ySoSTjp3oDH7KDJKYvkorLiJIMVzxN
-         BfXpBVA7IN1htEKssXqfgUZnD+xclxAZgyW0I353BjSavykv0S4Kt49qb18xbOGG8u
-         3EwG9XkURp2V9Butaz+BcMDRAGB+j973hWaD4Se1csufGfa9+vW3E+Xz0Hx95UV7Vo
-         iKJDOawtMg6v0jqX8CfddBzhTAPiQ+HW0XHDT6t8OqTxrC1oZtqkPqIFn6x1XboEzz
-         i2TNzanbRPmtg==
-Date:   Fri, 28 Jan 2022 16:35:11 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: don't check IPU policy during file defragment
-Message-ID: <YfSLvyMUd3lam415@google.com>
-References: <20220128091920.1556480-1-chao@kernel.org>
+        Fri, 28 Jan 2022 19:36:36 -0500
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E707620B8010;
+        Fri, 28 Jan 2022 16:36:35 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E707620B8010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1643416595;
+        bh=J5hHj/dx23so3IxDHwT/MEE38qNMldGDsBDJbZWzMuI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DIzmeTE//T4QPJlvda5dJgcz5067BjdRLHBzq7nBxOi7CJxO8WL8sd49RAEt4W77y
+         3b7szVzDoCkpWB+ZWHJYrh9T/AdU4DLX3duNVHqGJmkN95KyhlZ62mWNcjXP3pvNOf
+         wTR6yffucvl8oFCM8fDprbtW5i94b0PPkspWHQkE=
+Received: by mail-pg1-f182.google.com with SMTP id t32so6670074pgm.7;
+        Fri, 28 Jan 2022 16:36:35 -0800 (PST)
+X-Gm-Message-State: AOAM533zMndws+4tkMmmZkQB4j4sFE6F3k+gkq3G84LURFLQgcqxYhUk
+        rgU6339e1RCtbHz41NFt7bDuM+NgwNCj2KcOI9M=
+X-Google-Smtp-Source: ABdhPJz+yMH8XVHa0HI6zjz0tpcPbMSW6aHedHYPtjoaizEr1bRo1kq1BmO9chZiqEPiwj94mb7g+Pdix4X1XIQ1sBg=
+X-Received: by 2002:a63:5146:: with SMTP id r6mr8357669pgl.455.1643416595340;
+ Fri, 28 Jan 2022 16:36:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128091920.1556480-1-chao@kernel.org>
+References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
+ <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+ <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
+ <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
+ <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+ <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
+ <177da568-8410-36d6-5f95-c5792ba47d62@fb.com> <CAADnVQJZvgpo-VjUCBL8YZy8J+s7O0mv5FW+5sx8NK84Lm6FUQ@mail.gmail.com>
+ <CAFnufp3ybOFMY=ObZFvbmr+c70CPUrL2uYp1oZQmffQBTyVy_A@mail.gmail.com> <CAADnVQ+cvD2rwa-hRQP8agj8=SXuun3dv-PZpK5=kJ2Ea_0KCg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+cvD2rwa-hRQP8agj8=SXuun3dv-PZpK5=kJ2Ea_0KCg@mail.gmail.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Sat, 29 Jan 2022 01:35:59 +0100
+X-Gmail-Original-Message-ID: <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com>
+Message-ID: <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/28, Chao Yu wrote:
-> Once IPU policy is enabled in some cases:
-> a) f2fs forces to use F2FS_IPU_FORCE in a small-sized volume
-> b) user configures IPU policy via sysfs
+On Fri, Jan 28, 2022 at 9:09 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Jan 28, 2022 at 10:51 AM Matteo Croce
+> <mcroce@linux.microsoft.com> wrote:
+> >
+> > On Fri, Jan 28, 2022 at 6:31 AM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Mon, Dec 20, 2021 at 10:34 PM Yonghong Song <yhs@fb.com> wrote:
+> > > >
+> > > >
+> > > > https://reviews.llvm.org/D116063 improved the error message as below
+> > > > to make it a little bit more evident what is the problem:
+> > > >
+> > > > $ clang -target bpf -O2 -g -c bug.c
+> > > >
+> > > > fatal error: error in backend: SubroutineType not supported for
+> > > > BTF_TYPE_ID_REMOTE reloc
+> > >
+> > > Hi Matteo,
+> > >
+> > > Are you still working on a test?
+> > > What's a timeline to repost the patch set?
+> > >
+> > > Thanks!
+> >
+> > Hi Alexei,
+> >
+> > The change itself is ready, I'm just stuck at writing a test which
+> > will effectively calls __bpf_core_types_are_compat() with some
+> > recursion.
+> > I guess that I have to generate a BTF_KIND_FUNC_PROTO type somehow, so
+> > __bpf_core_types_are_compat() is called again to check the prototipe
+> > arguments type.
+> > I tried with these two, with no luck:
+> >
+> > // 1
+> > typedef int (*func_proto_typedef)(struct sk_buff *);
+> > bpf_core_type_exists(func_proto_typedef);
+> >
+> > // 2
+> > void func_proto(int, unsigned int);
+> > bpf_core_type_id_kernel(func_proto);
+> >
+> > Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
+>
+> What do you mean 'no luck'?
+> Have you tried what progs/test_core_reloc_type_id.c is doing?
+> typedef int (*func_proto_typedef)(long);
+> bpf_core_type_id_kernel(func_proto_typedef);
+>
+> Without macros:
+> typedef int (*func_proto_typedef)(long);
+>
+> int test() {
+>    return __builtin_btf_type_id(*(typeof(func_proto_typedef) *)0, 1);
+> }
+> int test2() {
+>    return __builtin_preserve_type_info(*(typeof(func_proto_typedef) *)0, 0);
+> }
+>
+>
+> compiles fine and generates relos.
 
-It's contradictory to each other. How about just letting users decide to do what
-they want to do? IOWs, if user wants to do defrag, they should change ipu_policy
-on the fly.
+Yes, I tried that one.
+We reach bpf_core_apply_relo_insn() but not bpf_core_spec_match(),
+since cands->len is 0.
 
-> 
-> Then we may fail to defragment file via ioctl due to IPU policy check,
-> it doesn't make sense, so let's change to use IPU policy for common
-> data writeback, rather than for specific data writeback, e.g. GC,
-> defragment, and so on.
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
->  fs/f2fs/data.c | 15 ++++++++++-----
->  fs/f2fs/f2fs.h |  3 ++-
->  fs/f2fs/file.c | 17 ++++++++++-------
->  3 files changed, 22 insertions(+), 13 deletions(-)
-> 
-> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> index 0f124e8de1d4..bce7ecac8976 100644
-> --- a/fs/f2fs/data.c
-> +++ b/fs/f2fs/data.c
-> @@ -2530,6 +2530,9 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
->  	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
->  		return true;
->  
-> +	if (is_inode_flag_set(inode, FI_DEFRAG_PROCESS))
-> +		return true;
-> +
->  	if (fio) {
->  		if (page_private_gcing(fio->page))
->  			return true;
-> @@ -3154,8 +3157,8 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
->  			f2fs_available_free_memory(sbi, DIRTY_DENTS))
->  		goto skip_write;
->  
-> -	/* skip writing during file defragment */
-> -	if (is_inode_flag_set(inode, FI_DO_DEFRAG))
-> +	/* skip writing in file defragment preparing stage */
-> +	if (is_inode_flag_set(inode, FI_DEFRAG_PREPARE))
->  		goto skip_write;
->  
->  	trace_f2fs_writepages(mapping->host, wbc, DATA);
-> @@ -3733,7 +3736,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->  		f2fs_allocate_new_section(sbi, CURSEG_COLD_DATA_PINNED, false);
->  		f2fs_unlock_op(sbi);
->  
-> -		set_inode_flag(inode, FI_DO_DEFRAG);
-> +		set_inode_flag(inode, FI_DEFRAG_PREPARE);
->  
->  		for (blkofs = 0; blkofs < blk_per_sec; blkofs++) {
->  			struct page *page;
-> @@ -3750,9 +3753,11 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->  			f2fs_put_page(page, 1);
->  		}
->  
-> -		clear_inode_flag(inode, FI_DO_DEFRAG);
-> +		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->  
-> +		set_inode_flag(inode, FI_DEFRAG_PROCESS);
->  		ret = filemap_fdatawrite(inode->i_mapping);
-> +		clear_inode_flag(inode, FI_DEFRAG_PROCESS);
->  
->  		f2fs_up_write(&sbi->pin_sem);
->  
-> @@ -3761,7 +3766,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->  	}
->  
->  done:
-> -	clear_inode_flag(inode, FI_DO_DEFRAG);
-> +	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->  	clear_inode_flag(inode, FI_ALIGNED_WRITE);
->  
->  	filemap_invalidate_unlock(inode->i_mapping);
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 8178a9152e49..4b905059a81e 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -733,7 +733,8 @@ enum {
->  	FI_DROP_CACHE,		/* drop dirty page cache */
->  	FI_DATA_EXIST,		/* indicate data exists */
->  	FI_INLINE_DOTS,		/* indicate inline dot dentries */
-> -	FI_DO_DEFRAG,		/* indicate defragment is running */
-> +	FI_DEFRAG_PREPARE,	/* indicate defragment is preparing */
-> +	FI_DEFRAG_PROCESS,	/* indicate defragment is processing */
->  	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
->  	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
->  	FI_HOT_DATA,		/* indicate file is hot */
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index 6ccdd6e347e2..696f4a175228 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -2559,10 +2559,6 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->  	bool fragmented = false;
->  	int err;
->  
-> -	/* if in-place-update policy is enabled, don't waste time here */
-> -	if (f2fs_should_update_inplace(inode, NULL))
-> -		return -EINVAL;
-> -
->  	pg_start = range->start >> PAGE_SHIFT;
->  	pg_end = (range->start + range->len) >> PAGE_SHIFT;
->  
-> @@ -2570,6 +2566,11 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->  
->  	inode_lock(inode);
->  
-> +	if (f2fs_is_pinned_file(inode)) {
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
->  	/* writeback all dirty pages in the range */
->  	err = filemap_write_and_wait_range(inode->i_mapping, range->start,
->  						range->start + range->len - 1);
-> @@ -2651,7 +2652,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->  			goto check;
->  		}
->  
-> -		set_inode_flag(inode, FI_DO_DEFRAG);
-> +		set_inode_flag(inode, FI_DEFRAG_PREPARE);
->  
->  		idx = map.m_lblk;
->  		while (idx < map.m_lblk + map.m_len && cnt < blk_per_seg) {
-> @@ -2676,14 +2677,16 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->  		if (map.m_lblk < pg_end && cnt < blk_per_seg)
->  			goto do_map;
->  
-> -		clear_inode_flag(inode, FI_DO_DEFRAG);
-> +		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->  
-> +		set_inode_flag(inode, FI_DEFRAG_PROCESS);
->  		err = filemap_fdatawrite(inode->i_mapping);
-> +		clear_inode_flag(inode, FI_DEFRAG_PROCESS);
->  		if (err)
->  			goto out;
->  	}
->  clear_out:
-> -	clear_inode_flag(inode, FI_DO_DEFRAG);
-> +	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->  out:
->  	inode_unlock(inode);
->  	if (!err)
-> -- 
-> 2.25.1
+[   16.424821] bpf_core_apply_relo_insn:1202 cands->len: 0
+
+That's a very simple raw_tracepoint/sys_enter program:
+
+-- 
+per aspera ad upstream

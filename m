@@ -2,74 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CDA4A2ACD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 01:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9444A2ACF
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351927AbiA2A4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 19:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S1351936AbiA2BCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 20:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiA2A4T (ORCPT
+        with ESMTP id S231846AbiA2BCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 19:56:19 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA7DC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:56:18 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id w81so1155805ybg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 16:56:18 -0800 (PST)
+        Fri, 28 Jan 2022 20:02:45 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D5CC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 17:02:45 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id n6-20020a9d6f06000000b005a0750019a7so7379964otq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 17:02:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nmGDwuvfkax3Sda7saTwAAxqwMsmlPhpVKCcAyRAE+4=;
-        b=g8yjPt4IeG+Szx3AUtuIzVZxmHIhM2XsIrQO8mD23tMBnH/IH9AWs+sRSsbRLkJCEB
-         ++gkH3G3WtjfV2VLWYUhdnjSWQ2WP+Syda59cci4Wmv3GYQCbNPimfY8fLFUC1fnnR+Z
-         Aylj+v5+p0FmA1i02GWJk3GmU4tejCH2xWdsAP8IWQ2g41kGy1l2BbVBJgu7ViZUFDk4
-         DoC2nW0E5tjN3czpD2RbtQkCYIvP53yLxDm/2V5nR/sLn7zvuOanvVhPmPYcc4jclwNY
-         KuiivmT0lHgtpOUFTQQk/AYXPdgYniimNqtRIGg4jT/y0LZw/jpHkh/9BxzsUe3YzYNK
-         H6uw==
+        d=linuxtx.org; s=google;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PpOuM7drLoUIl4lwc9nRVacziqUgNpI3pypkXTl2W3Y=;
+        b=d1KeHjFBrMAvw9g0Y2OvCJmODAk04mxW+SRBCM6tzgt3oIKKLc5b6AMyzLmn4N4EBM
+         gl8Yrsn39hKQq/eIGu2iIxkAw1+jezSNhAHgoh7UwVNvakRmvjBmffJV/KQ/RhLiRWn3
+         IT5Vmh8++kNrg9zpG7WHVKfW8PybZhLCMLGfc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nmGDwuvfkax3Sda7saTwAAxqwMsmlPhpVKCcAyRAE+4=;
-        b=zyX7xv8Bc9OGX60XRoUJYv4sdEoexwU5AIp/r8MMCvUX4cCHX+yWCwYNrS6f8IYlV6
-         eI15nAeBvyJj4QWwR5M9ewbD9ZejmhRPzOH6H4dLhzZWnHYGA3SM15vTYcGJPvbp0mnc
-         i1cdUBZqna5cyJg3MFKrfG2udUezftfE4fhwSgyPuIdwnqfD/DVVzlmhI4Rvi1E8GJJQ
-         uXQ0vAbPIttEKPO3xZPsbtTMv2xSa9/sKGTdyqtv8F2d/B/NdAPuzvBbiW7wS9HDFbyj
-         oPLVtMQEIMv+ojZoEVpnulI0nOnCFBzGLP9zCBxD7z0/UtR8BGfHeDt2jv2rCjHxPNaj
-         tDAg==
-X-Gm-Message-State: AOAM531+EIp4UBuwt0mpbDOWv/cUl9eVu3IrZ8oVLS3R0n/4dR/oreHR
-        ycaiJDmuDae1accV/LmAqZvZ7Nhm3BXaddfwCBq3jKjZvH4=
-X-Google-Smtp-Source: ABdhPJyWvdcU804CKXVZLmLkK6HbWC8olU8hvyg812kD7z4qs+CeseBUaCVnodiEtWpoWFivSUYVy22N4+xx6mVOD/w=
-X-Received: by 2002:a25:df56:: with SMTP id w83mr16041704ybg.110.1643417778032;
- Fri, 28 Jan 2022 16:56:18 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=PpOuM7drLoUIl4lwc9nRVacziqUgNpI3pypkXTl2W3Y=;
+        b=oipUOqyubIUvC/apP+rPFpsbWYcdxsUHuPqG4nXjBVWCd/8lzR7mcPr5v8IOKp468u
+         UP+CcUEmlUCzGbBOhM6pVMYQA3wrbBUlI1WG0JTa1vhWxRtw/BwCvQsbb0waN8ormMrC
+         QmRRny7IXhVzX+U2Fw3HhCiW8PKbEjzw6EImpTUTN5lSFg9/U2ZtYx8OM0Xe93BJyTJy
+         Rr6csKzxTGS2exqhLHF7fWL8vqeDDNIzQ/DGLjsyun596WS153VKkENUz58IA/swaSvT
+         acvZtXMxl637AUTo6Von0S4TBKvnf+0QND+SJHETVKmDXfMCe9HmunobCk5ABf6og+OD
+         OMXw==
+X-Gm-Message-State: AOAM531lY/lwxXpC0I33jH87qogNJHgrus7MfQFfihn6tR55yT7Wmiwo
+        4yatt7Wf4TBSXOkj6zircC3xZFj2NHUfxg==
+X-Google-Smtp-Source: ABdhPJz/3ZHiuhZMvZrkACWHCGfBvnGtZ7fWFKhDpm+TarCXGPIFRCPUWV/1NgX9qvfW/h9OMUB6LQ==
+X-Received: by 2002:a05:6830:2646:: with SMTP id f6mr5103614otu.290.1643418164967;
+        Fri, 28 Jan 2022 17:02:44 -0800 (PST)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id r14sm114295oiw.40.2022.01.28.17.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 17:02:44 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+From:   "Justin M. Forbes" <jforbes@fedoraproject.org>
+To:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        linux-kernel@vger.kernel.org
+Cc:     jmforbes@linuxtx.org, Jakub Jelinek <jakub@redhat.com>
+Subject: [PATCH] Fix for gcc12 compile issues in ubcmd-util.h
+Date:   Fri, 28 Jan 2022 19:02:14 -0600
+Message-Id: <20220129010215.781601-1-jforbes@fedoraproject.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <202201281045.Z9UBygXr-lkp@intel.com>
-In-Reply-To: <202201281045.Z9UBygXr-lkp@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 29 Jan 2022 01:56:06 +0100
-Message-ID: <CACRpkdY0zN1RexZDyqdqX_QhtHMV61DBfxiNv1ODXo8KWy42fw@mail.gmail.com>
-Subject: Re: drivers/power/supply/ab8500_fg.c:2243:75: warning: variable 'b'
- set but not used
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 3:36 AM kernel test robot <lkp@intel.com> wrote:
+While the current code builds fine with gcc 11, it does not with gcc 12,
+resulting in:
 
-> FYI, the error/warning still remains.
-(...)
->    drivers/power/supply/ab8500_fg.c: In function 'ab8500_fg_get_ext_psy_data':
-> >> drivers/power/supply/ab8500_fg.c:2243:75: warning: variable 'b' set but not used [-Wunused-but-set-variable]
->     2243 |                                         const struct ab8500_battery_type *b;
+In file included from help.c:12:
+In function 'xrealloc',
+    inlined from 'add_cmdname' at help.c:24:2:
+subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+   56 |                 ret = realloc(ptr, size);
+      |                       ^~~~~~~~~~~~~~~~~~
+subcmd-util.h:52:21: note: call to 'realloc' here
+   52 |         void *ret = realloc(ptr, size);
+      |                     ^~~~~~~~~~~~~~~~~~
+subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+   58 |                         ret = realloc(ptr, 1);
+      |                               ^~~~~~~~~~~~~~~
+subcmd-util.h:52:21: note: call to 'realloc' here
+   52 |         void *ret = realloc(ptr, size);
+      |                     ^~~~~~~~~~~~~~~~~~
 
-This is being addressed in a series I am working on (gets deleted) and this
-is not urgent to fix.
+The was mentioned in upstream gcc bug
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104069 where it was
+determined that gcc was correct and the kernel needed to change.  This
+fixes that use-after-free and makes things build again.
 
-Yours.
-Linus Walleij
+Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Cc: Jakub Jelinek <jakub@redhat.com>
+
+---
+ tools/lib/subcmd/subcmd-util.h | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/tools/lib/subcmd/subcmd-util.h b/tools/lib/subcmd/subcmd-util.h
+index 794a375dad36..7009fc176636 100644
+--- a/tools/lib/subcmd/subcmd-util.h
++++ b/tools/lib/subcmd/subcmd-util.h
+@@ -49,13 +49,12 @@ static NORETURN inline void die(const char *err, ...)
+
+ static inline void *xrealloc(void *ptr, size_t size)
+ {
+-	void *ret = realloc(ptr, size);
+-	if (!ret && !size)
+-		ret = realloc(ptr, 1);
++	void *ret;
++	if (!size)
++		size = 1;
++	ret = realloc(ptr, size);
+ 	if (!ret) {
+ 		ret = realloc(ptr, size);
+-		if (!ret && !size)
+-			ret = realloc(ptr, 1);
+ 		if (!ret)
+ 			die("Out of memory, realloc failed");
+ 	}
+-- 
+2.34.1
+

@@ -2,130 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1B04A2B23
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 03:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB24A4A2B27
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 03:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345091AbiA2CAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 21:00:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:3769 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344864AbiA2CAR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 21:00:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643421617; x=1674957617;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HwFzOUQ3ETlxvQNyfQGh+3gx+Q9wov9hHhNb1uvx0fc=;
-  b=YawP6mf7zq2DeBzpqytqXVnuzo29EcuC/AlfT/lKgjAySOqeSLGgtILP
-   JKUZLRSZz/70BCXNUrmkR/n5mGWBd20c2bZirmKtS2HMxr/2iBU6RcFbd
-   8vfnvKLQyUfnjBZfBDNsA6HRi4KHfhRtM04KUbNNs0jpGVWYouXckwso4
-   PN6/3V59xHZlW5U0GTOQzhx3GZ1QnAlcphZGmZOdDMTcW1vTDtlQUTbBP
-   70ArWPyjXHrlfWXpqesLIv8pk0Cl8uLMGbpEDRKI6XZEtTkcGQBTt9yAt
-   WJZkuIg2woZQs+p1OuMPSee3NM/fvsKA/Dxc0/ZX5MuG99I9eNzEUv2XM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="271693722"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="271693722"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 18:00:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="496313134"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 18:00:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDd2F-000Ocy-Dn; Sat, 29 Jan 2022 02:00:15 +0000
-Date:   Sat, 29 Jan 2022 10:00:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jlayton:ceph-fscrypt 53/53] net/ceph/osd_client.c:5775:3: error:
- expected expression
-Message-ID: <202201290935.AEKKkabv-lkp@intel.com>
+        id S1345241AbiA2CEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 21:04:12 -0500
+Received: from mail-centralusazon11021014.outbound.protection.outlook.com ([52.101.62.14]:63231
+        "EHLO na01-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344799AbiA2CEJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 21:04:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KoMmkLRxXaPhbIE9QmP95YFy/ZZeTxAXK43lD9DI69z6+PkjLYE6J5iiH4V4iP+7qal5kbbL+tjOQRgiJqc88Q38JNfib4XPqM6De8JTcmfMkye7AZ9i0TESD2GnrUj/85Lu+f5BKQ+8G+3v5Zg3Cp6sf6/VyWiME1MVJsvXsW9NVknhbUcP13f7z9YOHy/a9W1EmLiOkwrLfZByb638/SvlwRKdch2iOpMT9JAMslORxTDuMV1TAl80q+ED+6k7WkUIU8VD2zy09mMxiAbrjP178VGfHYhalDH4K7R3MxpYnWANyMtj9p62MbnsLO1AZx6fHRHRL4lr2W7BYMjLzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lnjyBs0C4RI1dofwA9LNy1BmRfmuu/5yqyRRqe26n7o=;
+ b=FAhUO7ljZ3XI7IQe8xFsQVUlk2pJa3X904B8BJkAN5BTBZbsQjiYyg7A+Ge9LCb1jFJ0seGeNnPfzVZXW2J+dLP/trhljgeEuRo4UuzQks+VyrCcTpWuE0jeskY+iz7H78ce5n3y2gUPjD/uqyfH4ll+LZvEXq9GbT5a2winb8CyqvfCgRTCNTh1yo0qQURXJoUeU/MriSChTm5w/NJJ0Hss2R0hzjD1fAFNdI84z1HCm7tJxUeUoW4EA6rVrvLKyq09099ThnCRQz+HCEdfq/PnfDxYDtNCThS6rdU6CpH/Y3CE03V5XZyOmixRnAFxAxTFPl0nVF/VN9EPHOERzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lnjyBs0C4RI1dofwA9LNy1BmRfmuu/5yqyRRqe26n7o=;
+ b=Kd5EonKito9KoABibXZkcjjZcIiVoMPDd0y432LHQb2S5k/5hJgxnZ49Bd3T7nIeVUVzI0UE43RQ2XbE8my5WSbgzaYWWhKKPONr30L9BDIXBgfyRnp3c0q20vn/Oy/35fi1H3YS3jaSatAUUX+ZP2QhPFvfxhFK7KXAvTP64WY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1340.namprd21.prod.outlook.com (2603:10b6:5:175::19)
+ by MWHPR21MB0191.namprd21.prod.outlook.com (2603:10b6:300:79::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.7; Sat, 29 Jan
+ 2022 02:04:04 +0000
+Received: from DM6PR21MB1340.namprd21.prod.outlook.com
+ ([fe80::1d9b:cd14:e6bb:43fd]) by DM6PR21MB1340.namprd21.prod.outlook.com
+ ([fe80::1d9b:cd14:e6bb:43fd%6]) with mapi id 15.20.4951.007; Sat, 29 Jan 2022
+ 02:04:04 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
+Cc:     haiyangz@microsoft.com, decui@microsoft.com, kys@microsoft.com,
+        sthemmin@microsoft.com, paulros@microsoft.com,
+        shacharr@microsoft.com, olaf@aepfle.de, vkuznets@redhat.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next, 0/3] net: mana: Add XDP counters, reuse dropped pages
+Date:   Fri, 28 Jan 2022 18:03:35 -0800
+Message-Id: <1643421818-14259-1-git-send-email-haiyangz@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0311.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::16) To DM6PR21MB1340.namprd21.prod.outlook.com
+ (2603:10b6:5:175::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: LKML haiyangz <lkmlhyz@microsoft.com>
+X-MS-Exchange-MessageSentRepresentingType: 2
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b329db8b-796d-4d4b-2ad3-08d9e2cb9fee
+X-MS-TrafficTypeDiagnostic: MWHPR21MB0191:EE_
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Microsoft-Antispam-PRVS: <MWHPR21MB019191F983F9C1013864B0FEAC239@MWHPR21MB0191.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dRy+YYjFwQWFxpgvlKXp4QmdrZ5HqsraL69OsY3gzask8uvCsTpG7gx9Wbk0QJxplvp76erl1onCnfQfCkfYMi3DInXGLoKi5W69hNz5op+12ywSboQNGGEc8yYnzp82XB28vsRzKfWTyNet8jeksJflrVHjsf6NucOfV44D+A1z47raOlu1ZUdfGVUwG/HV4s95ZvKlAW8ZDaaS2JEhjMpUyoqslvrmje94HWa619xUWCa6GnHdNHl2YT7cCfAQsFkepr3JpnjgpoA5v1eD7+weAKcfK5hEfJSE7Kyi2Qq4nNwWdhOeRiR0P5MnXZ9KwRmC9mMldJw2a6ZUMR0uQuRmDN+mdSoJimqyPpjNLGbtv3rpK6RMf0cU+ORLB6LZG52hD/mxGywSLmp9FqyWwT8LsHj8wLetLTj2XcjLkuvw7Ff57NhUU9XTgaKsK0qxqCp/j0Je5LH6WUfkJd6oyBtNe+oUubBx5fYlDO34EgeXRzEy8a3plX5TOXU1wd8xHkp4mveUAVz8bn3EVsfsW9u+qh6zaD0WEvTsqhJLcc0L1MYmtZYh9gl+IOEQX2zGXwm1dfBVggst7ofNIDj5KlyO96APQ0t3KUNuxRhBYo8s8zdrrqFivi9Xpm7XgBv8vKJnqu6cXA84TEjODG0V3KqSx8Gk+BWppJt+eEC3qPYYx6Yg9L/egXPVxMeVIcbkKOsdbeaTwm1Yq3k37LxE2IBojwa98FdgLBj0Va4hn4QrwDhM1dHNTqw2vz5O3aov
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1340.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(4326008)(66476007)(8676002)(8936002)(4744005)(5660300002)(38350700002)(38100700002)(82950400001)(316002)(82960400001)(186003)(6512007)(6506007)(26005)(2906002)(2616005)(508600001)(6666004)(36756003)(7846003)(52116002)(83380400001)(6486002)(10290500003)(20210929001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yxqu5K4orWhl14Lro/Vfh6jprkYWjff1bgQvmQp822PLoUCvr3mnMyeBy4Jd?=
+ =?us-ascii?Q?SEf2ZN5gkRXU0ipG5MA9iGMehoumGdWGjR1i13ThI1n9BlO61gZKRN28/Dsu?=
+ =?us-ascii?Q?q25xMvh0cEzeK5tlX0KwjrUA61OUfmB2JTNj1sgLSkDLExu89iUOtKuuL42a?=
+ =?us-ascii?Q?dkQAh6XhEUQy8MlltFG49wj5kz85pRfhBVfAeS3nNChWxTH4zWbC/3jP1oYy?=
+ =?us-ascii?Q?YhJRjhGxs73Myv0hPQ5YcLIHr1tWbOIDFRckMdIgLDWXNydA/fFHRlAKmnpn?=
+ =?us-ascii?Q?UTAiCxL0kbMj+ccz+5GLwQMHhKl7lWfDTQIBQZuguXM17/79ozpzAqSvxTQa?=
+ =?us-ascii?Q?imA+4jvBJ7eA0O1TieMAvj53K5O5K4YykD/AnnlqLZp31RDflCF9FgVA50U6?=
+ =?us-ascii?Q?ntj+Kvui6YTcLfcKaCMn0JI6knuyXFXYbd7wNR98Ld4GHXrN9Kni8+2H/zIG?=
+ =?us-ascii?Q?C8/zs9lnSVzOCNKqg399fgKtFYSgLPcArGz3R64FneItXm0hiAQLE7+ogX9v?=
+ =?us-ascii?Q?BGotv/Xwe0I6L/blqtQvQxRuSYTj3C/Ha2tlt5TdD94bSJig0kCWXOzGO05T?=
+ =?us-ascii?Q?bj6w+hgi63HzgTeFHdYI8Kl7WPLHX0RJBgxWe/5X/CKAoWFFWXVudJFsJDUe?=
+ =?us-ascii?Q?0g5cMdYhomRqzVPm+DQOqn8lzA6k+46XmHQwSlub3krTVfqrUlU4OEVlAMPd?=
+ =?us-ascii?Q?fgiDM824znOCc7mpjqc7e1hEh2O4Nh+2kYgrCKSXF9hQsvAstbfNLeijqXI+?=
+ =?us-ascii?Q?oh3XMQkssiRILsEPs63X12wP6SL+Uidp3v/iF19klPx6axXCrUu7kFfClUHP?=
+ =?us-ascii?Q?4Cz/KYkNh2eD7P3D4hnJz+KMOza+OOzLtEjuoOgvwR/uDyrXToHnkhc2jpf4?=
+ =?us-ascii?Q?Q817JuXq6sZSKqjSQrCG1xH++xywzSgEq9HFPHVR+WPllWZWuzqQs5+QIa78?=
+ =?us-ascii?Q?5wzXAeq3RyFA1dAZMjvB6FkB0ARBYi7+EZlVUtdAROiUIThmIQtDZZJStShP?=
+ =?us-ascii?Q?3A9mdWm7qH7DzmydmMx7Q2QmTuBbX1ZDU/iIB/FkI0+65gm29pOcIjMdQYcl?=
+ =?us-ascii?Q?qggoxJaykXFhnot6+ZLmQ/jx8U8f577l2ApO0TCA3t2opHfpNNDtBuuCtNuq?=
+ =?us-ascii?Q?ZAOyXWhGa1VjQ2kqNsjvRbVIlYkC6OlrHGQ5bxO7nioeBOmuHbK5ubj6Rbp7?=
+ =?us-ascii?Q?I1yhDUPdioHXFRryP6Y6T7PWXV3CvhdByuCzxtQ+S0IunSDsyu+HxotWc8xc?=
+ =?us-ascii?Q?f95QkOvV4duPjcRood/yD7Ji6CGIp6qf8TF12u2bs+yyJ/AFtvxJTYiTiRui?=
+ =?us-ascii?Q?TKVFaV3k50/GrVo8BjH/XXE4KOQ1eW1TILHBu695ngaYqbbofdiSu5WgJ11o?=
+ =?us-ascii?Q?eB/7VKDyL8Cm5SR/nT5gmPonB1uLfz1v+5mhIr0rOhQm0pXw+qaoVrFgCfdi?=
+ =?us-ascii?Q?46H0ZY+msWhdQKOx++/y8u4kzY1DjJG12o2BHLcGqIO5kBh+Sgf0Pft3CNCN?=
+ =?us-ascii?Q?ZQMfRI+KWjRGTJ/dg+DHFo084ThExniwlvl41OwAi1Gv3MXShkF/VUwtbL1L?=
+ =?us-ascii?Q?c2mGCm1KPs6zWbcjTwQgHrCBmqUTLjdX4hyiQwZxjg6eJzjga8LpxQdvbi4r?=
+ =?us-ascii?Q?DTaV+zvNE6/HPNyuXOe4YBI=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b329db8b-796d-4d4b-2ad3-08d9e2cb9fee
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1340.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2022 02:04:04.2259
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ctOuc+kZ8HPiWxb0nwhURYU/8yaV7qleN0twBJNCBM2gTqOmXE212AtESWyvluJDmsSCW0FU463acLe7D6AuLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0191
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
-head:   3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
-commit: 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f [53/53] libceph: define a structure to track SPARSE_READ reply processing
-config: hexagon-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290935.AEKKkabv-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-fscrypt
-        git checkout 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ceph/
+Add drop, tx counters for XDP.
+Reuse dropped pages
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Haiyang Zhang (3):
+  net: mana: Add counter for packet dropped by XDP
+  net: mana: Add counter for XDP_TX
+  net: mana: Reuse XDP dropped page
 
-All error/warnings (new ones prefixed by >>):
+ drivers/net/ethernet/microsoft/mana/mana.h    | 15 ++++-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 60 +++++++++++++------
+ .../ethernet/microsoft/mana/mana_ethtool.c    | 35 +++++++----
+ 3 files changed, 76 insertions(+), 34 deletions(-)
 
->> net/ceph/osd_client.c:5775:3: error: expected expression
-                   u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
-                   ^
->> net/ceph/osd_client.c:5776:7: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-                   u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
-                       ^
-   1 warning and 1 error generated.
+-- 
+2.25.1
 
-
-vim +5775 net/ceph/osd_client.c
-
-  5746	
-  5747	static int osd_sparse_read(struct ceph_connection *con, u64 *len, char **buf)
-  5748	{
-  5749		struct ceph_osd *o = con->private;
-  5750		struct ceph_sparse_read *sr = &o->o_sparse_read;
-  5751		u32 count = __le32_to_cpu(sr->sr_count);
-  5752		int ret = 1;
-  5753	
-  5754		switch (sr->sr_state) {
-  5755		case CEPH_SPARSE_READ_COUNT:
-  5756			/* number of extents */
-  5757			*len = sizeof(sr->sr_count);
-  5758			*buf = (char *)&sr->sr_count;
-  5759			sr->sr_state = CEPH_SPARSE_READ_EXTENTS;
-  5760			break;
-  5761		case CEPH_SPARSE_READ_EXTENTS:
-  5762			/* the extent array */
-  5763			*len = count * sizeof(*sr->sr_extent);
-  5764			if (count > 1) {
-  5765				/* can't use the embedded extent array */
-  5766				sr->sr_extent = kmalloc_array(count, sizeof(*sr->sr_extent),
-  5767							   GFP_NOIO);
-  5768				if (!sr->sr_extent)
-  5769					return -ENOMEM;
-  5770			}
-  5771			*buf = (char *)sr->sr_extent;
-  5772			sr->sr_state = CEPH_SPARSE_READ_DATA;
-  5773			break;
-  5774		case CEPH_SPARSE_READ_DATA:
-> 5775			u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
-> 5776			u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
-  5777	
-  5778			/* ret to 0 if this is the last extent */
-  5779			++sr->sr_index;
-  5780			if (sr->sr_index >= count)
-  5781				ret = 0;
-  5782			break;
-  5783		}
-  5784		return ret;
-  5785	}
-  5786	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

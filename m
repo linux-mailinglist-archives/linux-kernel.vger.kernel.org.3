@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B1A4A30AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A80E4A30AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 17:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352750AbiA2Qh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 11:37:27 -0500
-Received: from relay036.a.hostedemail.com ([64.99.140.36]:34737 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1352705AbiA2QhZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1352733AbiA2QhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 29 Jan 2022 11:37:25 -0500
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay13.hostedemail.com (Postfix) with ESMTP id 0E75360C6F;
-        Sat, 29 Jan 2022 16:37:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id A7ADA3C;
-        Sat, 29 Jan 2022 16:37:00 +0000 (UTC)
-Message-ID: <17bc03b62ebb71ca8d80f0e7ad0c6a7a7ea96d0c.camel@perches.com>
-Subject: Re: [PATCH] staging: media: atomisp: Use BIT macro instead of left
- shifting
-From:   Joe Perches <joe@perches.com>
-To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yizhuo <yzhai003@ucr.edu>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Kaixu Xia <kaixuxia@tencent.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Alan <alan@linux.intel.com>,
-        Souptick Joarder <jrdr.linux@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Date:   Sat, 29 Jan 2022 08:36:59 -0800
-In-Reply-To: <20220129113821.324180-1-mosescb.dev@gmail.com>
-References: <20220129113821.324180-1-mosescb.dev@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229975AbiA2QhY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 11:37:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8900FC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 08:37:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 540B2B827C6
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 16:37:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09CADC340E5;
+        Sat, 29 Jan 2022 16:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643474242;
+        bh=9V2PsIVfGM10lLF4yZ4EtnkIU5xar4/Tv+/Ai7QSZtw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WwT7LLaZX5wifQDF3J492y47tk/GLUajntexLqMxuphpryg7yo9uovl1NiYdUF+fm
+         m9gUFbA4KSD/rb1sEVN4Hs+5uKPc8HhVfD/hWEA5EUNXzFAppXhksWJfuAkaSC2FsT
+         RMZjsEwffTDYaq6fwrhQBllsMFykKKC18rCSVhotMAux2eVnZWkqqR7mFyoKoFh12G
+         8+hHjcUF2GISgdOaIVN3ee2fwkmtgFSBwIkbVAlNxMJCpVK62qBjnyQ/vkadKhXA6N
+         trVQ9SbUs3GBbYmwameqoemT104F/z2Qbf8FPxtzxCqxOHCAokPD0unWIkJ2xIplRp
+         Zjba6BSfR8TdQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BF7425C03AE; Sat, 29 Jan 2022 08:37:21 -0800 (PST)
+Date:   Sat, 29 Jan 2022 08:37:21 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rcu: When rcuog kthreads is in polling mode, wakeup
+ waitqueue is not requried
+Message-ID: <20220129163721.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220128031346.157961-1-qiang1.zhang@intel.com>
+ <20220129051748.GP4285@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880073B7080265117EE2868DA239@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: f7hho91x7ghyxojz4sfacmj81jcsayi1
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: A7ADA3C
-X-Spam-Status: No, score=-3.39
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/iKUfIN/lCXEcN3DWYYXRCadUaTK5AfDE=
-X-HE-Tag: 1643474220-22022
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880073B7080265117EE2868DA239@PH0PR11MB5880.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-01-29 at 12:38 +0100, Moses Christopher Bollavarapu wrote:
-> There is a BIT(nr) macro available in Linux Kernel,
-> which does the same thing.
+On Sat, Jan 29, 2022 at 05:55:34AM +0000, Zhang, Qiang1 wrote:
 > 
-> Example: BIT(7) = (1UL << 7)
-[]
-> diff --git a/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c b/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-[]
-> @@ -548,7 +548,7 @@ static long __ov5693_set_exposure(struct v4l2_subdev *sd, int coarse_itg,
->  	 * The way is to write coarse_itg/2 to the reg, meanwhile write 2*hts
->  	 * to the reg.
->  	 */
-> -	if (coarse_itg > (1 << 15)) {
-> +	if (coarse_itg > BIT(15)) {
+> On Fri, Jan 28, 2022 at 11:13:46AM +0800, Zqiang wrote:
+> > When grace period cleanup, the rcuog kthreads that waiting in sq 
+> > waitqueue will be awakened, however if the 'rcu_nocb_poll' is set, the 
+> > sq waitqueue always empty, so if 'rcu_nocb_poll' is set, return 
+> > directly.
+> 
+> >This does decrease grace-period-cleanup overhead in kernels built with CONFIG_RCU_NOCB_CPU=y and booted with the rcu_nocb_poll kernel boot parameter set.  On the other hand, it increases grace-period-cleanup overhead in kernels built with CONFIG_RCU_NOCB_CPU=y but booted without the rcu_nocb_poll kernel boot parameter set.
+> >
+> >Last I checked, more kernels were booted without the rcu_nocb_poll kernel boot parameter set.  If this is still the case, this patch would slow things down for most systems.
+> >
+> >Or are there now lots of systems booted with rcu_nocb_poll?
+> 
+> Hi Paul
+> I found that some of our customers configured rcu_nocb_poll startup parameters under Preempt-RT kernel.
+> at each grace period cleanup, we'll all wakeup sq waitqueue, however when rcuog kthreads is in polling mode, 
+> the wakeup operation doesn't required, because the sq waitqueue always empty.
 
-Not all uses of 1 left shift should be converted to BIT
-Especially when used with a non-bit value comparison test.
+OK, fair enough.  But was there any difference in performance measurable
+at the system level?  Let's take a look at swake_up_all():
 
-This is a size and not a bit position so this is likely not appropriate.
+	void swake_up_all(struct swait_queue_head *q)
+	{
+		struct swait_queue *curr;
+		LIST_HEAD(tmp);
 
-It'd probably be better as
-	if (coarse_itg > 0x8000)
-or
-	if (coarse_itg > 32768)
-or
-	if (coarse_itg > SOME_CONSTANT_DEFINE)
+		raw_spin_lock_irq(&q->lock);
+		list_splice_init(&q->task_list, &tmp);
+		while (!list_empty(&tmp)) {
+			curr = list_first_entry(&tmp, typeof(*curr), task_list);
 
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-[]
-> @@ -1913,11 +1913,11 @@ void atomisp_css_input_set_mode(struct atomisp_sub_device *asd,
->  			    &asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream_config;
->  		s_config->mode = IA_CSS_INPUT_MODE_TPG;
->  		s_config->source.tpg.mode = IA_CSS_TPG_MODE_CHECKERBOARD;
-> -		s_config->source.tpg.x_mask = (1 << 4) - 1;
-> +		s_config->source.tpg.x_mask = BIT(4) - 1;
+			wake_up_state(curr->task, TASK_NORMAL);
+			list_del_init(&curr->task_list);
 
-These should probably use GENMASK
+			if (list_empty(&tmp))
+				break;
 
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-[]
-> @@ -626,11 +626,11 @@ static int atomisp_mrfld_pre_power_down(struct atomisp_device *isp)
->  	 * IRQ, if so, waiting for it to be served
->  	 */
->  	pci_read_config_dword(pdev, PCI_INTERRUPT_CTRL, &irq);
-> -	irq = irq & 1 << INTR_IIR;
-> +	irq = irq & BIT(INTR_IIR);
+			raw_spin_unlock_irq(&q->lock);
+			raw_spin_lock_irq(&q->lock);
+		}
+		raw_spin_unlock_irq(&q->lock);
+	}
 
-The rest seems sensible.
+If the list is empty, we acquire an uncontended lock, splice an empty
+list, check a pair of pointers for equality, and release that lock.
+We do this once per 16 CPUs per grace period, which normally will be
+every few milliseconds or less frequently.
 
+What is the system-level performance difference and how did you measure
+it?
 
+Please don't get me wrong.  If this really is causing your users trouble,
+we clearly do need to fix it.  But if so, let's do so in a way that
+doesn't risk penalizing the many users who do not set rcu_nocb_poll.
+
+							Thanx, Paul
+
+> Thanks,
+> Zqiang
+> 
+> >
+> >							Thanx, Paul
+> 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > ---
+> >  kernel/rcu/tree_nocb.h | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h index 
+> > 636d0546a4e9..9e106c590e56 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -201,6 +201,8 @@ static void rcu_lockdep_assert_cblist_protected(struct rcu_data *rdp)
+> >   */
+> >  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq)  {
+> > +	if (rcu_nocb_poll)
+> > +		return;
+> >  	swake_up_all(sq);
+> >  }
+> >  
+> > --
+> > 2.25.1
+> > 

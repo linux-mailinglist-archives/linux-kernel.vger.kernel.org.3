@@ -2,169 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2764A2CB9
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6824A2CBB
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245071AbiA2IHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 03:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        id S1345033AbiA2IJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 03:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241955AbiA2IHM (ORCPT
+        with ESMTP id S241955AbiA2IJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 03:07:12 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D28C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:07:11 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id k18so15199746wrg.11
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:07:11 -0800 (PST)
+        Sat, 29 Jan 2022 03:09:34 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C3FC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:09:33 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id i203-20020a253bd4000000b006195f020a0cso5268990yba.14
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 00:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=QGqCLwrYCOsLTLWxlsYjHAKL7s07BhHpkbZ0BHayhEY=;
-        b=XXhQLm4XFpK3TEqUu6oVnTKrNXWyDVZ19MGKTRDv/YMl8p4WAUmNbBD1IxTMPQi1/Q
-         7zUeRdI3tGgsJvTeMZTZgK3ls+Cghokr/ZIIrWGfC321V/NgNm7HqcsQHjr5hCrozLiE
-         ctasMt1p8lnwt5z5QNqSV1xcpS2lLImSqvwtK5aJIOe7f4rAMQabXTKJ9E5R71Sqe4Zy
-         NKeZQYipRj6+BRrOEOeGZvgM7+JdFVlBZvfTd+kUaOu8HZsBAD6scwriB720tyhv2D0k
-         f3PdjRp+ZU3hnh23J5SYKhKZryk5+HD5tsR30y6YhHA05y/y+kJR424vaM27JljQskZg
-         4L5A==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2S6j+ZOBNLCxBAt46yb9qNTVjmEwxPgPoYoB7D853Og=;
+        b=ER+1l7o7gZZxryQlGSp924rdCJedpkVhZ+Ml7X1R1w8gDmnBVMtiseJJX59taQrnMe
+         LebbLV1lJD2CPLG2vXkk++Etuqy23yDTiKpKSbvsglGBeDcQH/ji4FODjygWz/4zXDhR
+         /rYgO1Ghy0RqAVPWO9z3uOatTBq32f7jEjv/kji5qS058iBkfUlSO/O+sMJ3BWYTTE3R
+         lISxd+FX25hI8yjUdih6Y1FDt5CG0I+uK01dxWMytkG4flhFZhrCp7MpNSRKUsC8CzP3
+         Qsmrp3LXD4sl9nd7sX1rTWGGpKaf3AGVO5Teqs43eWDkPZzfia0gIRw5F7LNONt6ENZI
+         0pVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=QGqCLwrYCOsLTLWxlsYjHAKL7s07BhHpkbZ0BHayhEY=;
-        b=Twi0JfeQ4sV4IoQwl6WZXa/lqa7DvapcwThUfSXEAOfrKLchsp8nNygnzxqtWHv0f6
-         CU9CcKfb9c5skfqLz+vP+OY1S4QG+7cwe6JlHQDv9sdkhBdj6oMiKJqGLBmIy3IzAc+2
-         GC2BaCbEYv07PjXm4AzI67EbpWPh2lnNCzEEzwOaGOW9EaOd2AMKfFA9JOePqMcCKymx
-         LH7ro2FQvDvTCVOqEj+IIyIUSVgX9nAmYt7q8N+Mfcbh5YIexmVQCup3eQWqtbog4xlR
-         HgjxfRi1MHuvmOp1ie7UFHEF9rxykgN6TXcapFeO10e0cvzTRdA/VskSIQwpgdN+qDVD
-         D2ag==
-X-Gm-Message-State: AOAM53368aTWOsMmembr9LcGiN1SOSFXualayoiIawmUMvKWKu6zOb+p
-        eavsXS+DJgedRKZhJmxUrTo37rNAlcU=
-X-Google-Smtp-Source: ABdhPJy2Kz0Ejxy8IE6Nkx/AeK5mYYZno6b45FJq7Ugm4sukeGrRfzbYnJWcFIqqwqkjXvXPhGh2bA==
-X-Received: by 2002:adf:de83:: with SMTP id w3mr9591722wrl.181.1643443630198;
-        Sat, 29 Jan 2022 00:07:10 -0800 (PST)
-Received: from [10.68.0.6] ([64.64.123.28])
-        by smtp.gmail.com with ESMTPSA id n2sm7460545wrw.63.2022.01.29.00.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jan 2022 00:07:09 -0800 (PST)
-Subject: Re: [BUG] ALSA: core: possible deadlock involving waiting and locking
- operations
-To:     perex@perex.cz, tiwai@suse.com, broonie@kernel.org,
-        o-takashi@sakamocchi.jp
-References: <56766037-972e-9e5b-74c1-88633a72a77f@gmail.com>
- <YfTCKrjpaeKWFglO@workstation>
-Cc:     alsa-devel@alsa-project.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Message-ID: <37c84cd1-80c6-cbcf-6673-d90d99501d4f@gmail.com>
-Date:   Sat, 29 Jan 2022 16:07:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <YfTCKrjpaeKWFglO@workstation>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2S6j+ZOBNLCxBAt46yb9qNTVjmEwxPgPoYoB7D853Og=;
+        b=iB+sVEBSI0BRnOS0Os2dNCBiq2RZGjoe4/MoaZQ3MGgfUwnskv4fhU3FSJuPUaZwSP
+         4s2DBvoTQDr05PsJEKym9AyyhCAyxztXuuZ+1li5nolbAHbKiJKCaUsTO6I4mjSSCk3C
+         iPmq9MLBCCZYk7+j+xRK/u4KuXFKlhD8jkrC277bMwyBkC5CBsqKNG4JvouT5Q5A2q/a
+         Atzg/Q6fhiGrnORdrIYXNlJYh2CxKghp3z5YLNf5H/EaDLFjpGY0vW89UMuD6XzEwlOy
+         1x2pgffWM5JcWP3h2LObFy4ubzr9YCSlXhE3a8wCLq/1/4FCZLC81mvMt2GT7Arecrj2
+         WoFw==
+X-Gm-Message-State: AOAM530pmCP4uVvj8gWfsmTrvPW6kxEFJiR2SsSH9jh8W64xIIP1+NM1
+        FsKYZxNtS/WB4ti8Box3egPb2Pq6fVMT
+X-Google-Smtp-Source: ABdhPJzXRLZlMw8Bn52/U06GCxbqAIn1/MDE93tDy+QS9MakDYzS2G0eaG0KY5+9fe9uTBBKPh6WHigE/86H
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:e8ae:7315:2a3d:98f2])
+ (user=irogers job=sendgmr) by 2002:a25:2d4a:: with SMTP id
+ s10mr19319826ybe.178.1643443773155; Sat, 29 Jan 2022 00:09:33 -0800 (PST)
+Date:   Sat, 29 Jan 2022 00:09:03 -0800
+Message-Id: <20220129080929.837293-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH 00/26] Update Intel events and metrics
+From:   Ian Rogers <irogers@google.com>
+To:     Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fetch and update Intel events and metrics using the script at:
+https://github.com/intel/event-converter-for-linux-perf/pull/10
+Generated events and metrics were added 1-by-1 and tested as much as
+possible. Sometimes event data is the same but the files were
+regenerated so the script improvements or a stable ordering would
+occur. A particular improvement is to reintroduce TMA/Topdown metrics
+generated from the full version of the spreadsheet.
 
+Ian Rogers (26):
+  perf test: Allow skip for all metrics test
+  perf vendor events: Update metrics for SkyLake Server
+  perf vendor events: Update metrics for Broadwell DE
+  perf vendor events: Update metrics for CascadelakeX
+  perf vendor events: Update metrics for HaswellX
+  perf vendor events: Update metrics for Ivybridge
+  perf vendor events: Update for Westmere EP-DP
+  perf vendor events: Update metrics for IcelakeX
+  perf vendor events: Update for Bonnell
+  perf vendor events: Update metrics for Broadwell
+  perf vendor events: Update metrics for BroadwellX
+  perf vendor events: Update for Goldmont
+  perf vendor events: Update for GoldmontPlus
+  perf vendor events: Update metrics for Haswell
+  perf vendor events: Update metrics for Icelake
+  perf vendor events: Update metrics for Ivytown
+  perf vendor events: Update metrics for Jaketown
+  perf vendor events: Update Knights Landing
+  perf vendor events: Update Nehalem EP
+  perf vendor events: Update metrics for Skylake
+  perf vendor events: Update Sandybridge
+  perf vendor events: Update Silvermont
+  perf vendor events: Update Tigerlake
+  perf vendor events: Update Westmere EP-SP
+  perf vendor events: Update Westmere EX
+  perf vendor events: Update TremontX
 
-On 2022/1/29 12:27, Takashi Sakamoto wrote:
-> Hi,
->
-> On Sat, Jan 29, 2022 at 11:33:26AM +0800, Jia-Ju Bai wrote:
->> Hello,
->>
->> My static analysis tool reports a possible deadlock in the sound driver
->> in Linux 5.10:
->>
->> snd_card_disconnect_sync()
->>    spin_lock_irq(&card->files_lock); --> Line 461 (Lock A)
->>    wait_event_lock_irq(card->remove_sleep, ...); --> Line 462 (Wait X)
->>    spin_unlock_irq(&card->files_lock); --> Line 465 (Unlock A)
->>
->> snd_hwdep_release()
->>    mutex_lock(&hw->open_mutex); --> Line 152 (Lock B)
->>    mutex_unlock(&hw->open_mutex); --> Line 157 (Unlock B)
->>    snd_card_file_remove()
->>      wake_up_all(&card->remove_sleep); --> Line 976 (Wake X)
->>
->> snd_hwdep_open()
->>    mutex_lock(&hw->open_mutex); --> Line 95 (Lock B)
->>    snd_card_file_add()
->>      spin_lock(&card->files_lock); --> Line 932 (Lock A)
->>      spin_unlock(&card->files_lock); --> Line 940 (Unlock A)
->>    mutex_unlock(&hw->open_mutex); --> Line 139 (Unlock B)
->>
->> When snd_card_disconnect_sync() is executed, "Wait X" is performed by
->> holding "Lock A". If snd_hwdep_open() is executed at this time, it holds
->> "Lock B" and then waits for acquiring "Lock A". If snd_hwdep_release()
->> is executed at this time, it waits for acquiring "Lock B", and thus
->> "Wake X" cannot be performed to wake up "Wait X" in
->> snd_card_disconnect_sync(), causing a possible deadlock.
->>
->> I am not quite sure whether this possible problem is real and how to fix
->> it if it is real.
->> Any feedback would be appreciated, thanks :)
-> I'm interested in your report about the deadlock, and seek the cause
-> of issue. Then I realized that we should take care of the replacement of
-> file_operation before acquiring spinlock in snd_card_disconnect_sync().
->
-> ```
-> snd_card_disconnect_sync()
-> ->snd_card_disconnect()
->    ->spin_lock()
->    ->list_for_each_entry()
->      mfile->file->f_op = snd_shutdown_f_ops
->    ->spin_unlock()
-> ->spin_lock_irq()
-> ->wait_event_lock_irq()
-> ->spin_unlock_irq()
-> ```
->
-> The implementation of snd_shutdown_f_ops has no value for .open, therefore
-> snd_hwdep_open() is not called anymore when waiting the event. The mutex
-> (Lock B) is not acquired in process context of ALSA hwdep application.
->
-> The original .release function can be called by snd_disconnect_release()
-> via replaced snd_shutdown_f_ops. In the case, as you can see, the spinlock
-> (Lock A) is not acquired.
->
-> I think there are no race conditions against Lock A and B in process
-> context of ALSA hwdep application after card disconnection. But it would
-> be probable to overlook the other case. I would be glad to receive your
-> check for the above procedure.
+ .../pmu-events/arch/x86/bonnell/cache.json    |  748 +--
+ .../arch/x86/bonnell/floating-point.json      |  274 +-
+ .../pmu-events/arch/x86/bonnell/frontend.json |   96 +-
+ .../pmu-events/arch/x86/bonnell/memory.json   |  152 +-
+ .../pmu-events/arch/x86/bonnell/other.json    |  452 +-
+ .../pmu-events/arch/x86/bonnell/pipeline.json |  402 +-
+ .../arch/x86/bonnell/virtual-memory.json      |  126 +-
+ .../arch/x86/broadwell/bdw-metrics.json       |  353 +-
+ .../pmu-events/arch/x86/broadwell/cache.json  | 4713 +++++++++--------
+ .../arch/x86/broadwell/floating-point.json    |  235 +-
+ .../arch/x86/broadwell/frontend.json          |  361 +-
+ .../pmu-events/arch/x86/broadwell/memory.json | 4312 +++++++--------
+ .../pmu-events/arch/x86/broadwell/other.json  |   42 +-
+ .../arch/x86/broadwell/pipeline.json          | 1903 ++++---
+ .../arch/x86/broadwell/virtual-memory.json    |  412 +-
+ .../arch/x86/broadwellde/bdwde-metrics.json   |  401 +-
+ .../arch/x86/broadwellde/cache.json           | 1122 ++--
+ .../arch/x86/broadwellde/floating-point.json  |  222 +-
+ .../arch/x86/broadwellde/frontend.json        |  335 +-
+ .../arch/x86/broadwellde/memory.json          |  608 +--
+ .../arch/x86/broadwellde/other.json           |   28 +-
+ .../arch/x86/broadwellde/pipeline.json        | 1892 ++++---
+ .../arch/x86/broadwellde/virtual-memory.json  |  394 +-
+ .../arch/x86/broadwellx/bdx-metrics.json      |  351 +-
+ .../pmu-events/arch/x86/broadwellx/cache.json | 1300 ++---
+ .../arch/x86/broadwellx/floating-point.json   |  224 +-
+ .../arch/x86/broadwellx/frontend.json         |  335 +-
+ .../arch/x86/broadwellx/memory.json           |  974 ++--
+ .../pmu-events/arch/x86/broadwellx/other.json |   28 +-
+ .../arch/x86/broadwellx/pipeline.json         | 1891 ++++---
+ .../arch/x86/broadwellx/virtual-memory.json   |  394 +-
+ .../arch/x86/cascadelakex/cache.json          |  967 ++--
+ .../arch/x86/cascadelakex/clx-metrics.json    |  469 +-
+ .../arch/x86/cascadelakex/floating-point.json |   50 +-
+ .../arch/x86/cascadelakex/frontend.json       |   18 +-
+ .../arch/x86/cascadelakex/memory.json         | 1008 ++--
+ .../arch/x86/cascadelakex/other.json          |  952 ++--
+ .../arch/x86/cascadelakex/pipeline.json       |   11 +
+ .../arch/x86/cascadelakex/uncore-other.json   |   23 +
+ .../pmu-events/arch/x86/goldmont/cache.json   | 1466 +++--
+ .../arch/x86/goldmont/floating-point.json     |   33 +
+ .../arch/x86/goldmont/frontend.json           |   78 +-
+ .../pmu-events/arch/x86/goldmont/memory.json  |   38 +-
+ .../pmu-events/arch/x86/goldmont/other.json   |   92 +-
+ .../arch/x86/goldmont/pipeline.json           |  538 +-
+ .../arch/x86/goldmont/virtual-memory.json     |   94 +-
+ .../arch/x86/goldmontplus/cache.json          | 1730 +++---
+ .../arch/x86/goldmontplus/floating-point.json |   38 +
+ .../arch/x86/goldmontplus/frontend.json       |   88 +-
+ .../arch/x86/goldmontplus/memory.json         |   44 +-
+ .../arch/x86/goldmontplus/other.json          |  106 +-
+ .../arch/x86/goldmontplus/pipeline.json       |  616 +--
+ .../arch/x86/goldmontplus/virtual-memory.json |  214 +-
+ .../pmu-events/arch/x86/haswell/cache.json    | 1446 +++--
+ .../arch/x86/haswell/floating-point.json      |  129 +-
+ .../pmu-events/arch/x86/haswell/frontend.json |  362 +-
+ .../arch/x86/haswell/hsw-metrics.json         |  265 +-
+ .../pmu-events/arch/x86/haswell/memory.json   | 1004 ++--
+ .../pmu-events/arch/x86/haswell/other.json    |   40 +-
+ .../pmu-events/arch/x86/haswell/pipeline.json | 1796 +++----
+ .../arch/x86/haswell/uncore-cache.json        |  252 +
+ .../arch/x86/haswell/uncore-other.json        |   69 +
+ .../pmu-events/arch/x86/haswell/uncore.json   |  374 --
+ .../arch/x86/haswell/virtual-memory.json      |  552 +-
+ .../pmu-events/arch/x86/haswellx/cache.json   | 1434 ++---
+ .../arch/x86/haswellx/floating-point.json     |  116 +-
+ .../arch/x86/haswellx/frontend.json           |  336 +-
+ .../arch/x86/haswellx/hsx-metrics.json        |  263 +-
+ .../pmu-events/arch/x86/haswellx/memory.json  | 1070 ++--
+ .../pmu-events/arch/x86/haswellx/other.json   |   28 +-
+ .../arch/x86/haswellx/pipeline.json           | 1763 +++---
+ .../arch/x86/haswellx/virtual-memory.json     |  512 +-
+ .../pmu-events/arch/x86/icelake/cache.json    |  658 +--
+ .../arch/x86/icelake/floating-point.json      |   69 +-
+ .../pmu-events/arch/x86/icelake/frontend.json |  449 +-
+ .../arch/x86/icelake/icl-metrics.json         |  338 +-
+ .../pmu-events/arch/x86/icelake/memory.json   |  591 ++-
+ .../pmu-events/arch/x86/icelake/other.json    |  630 +--
+ .../pmu-events/arch/x86/icelake/pipeline.json | 1081 ++--
+ .../arch/x86/icelake/virtual-memory.json      |  178 +-
+ .../pmu-events/arch/x86/icelakex/cache.json   |  851 +--
+ .../arch/x86/icelakex/floating-point.json     |   51 +-
+ .../arch/x86/icelakex/frontend.json           |  501 +-
+ .../arch/x86/icelakex/icx-metrics.json        |  304 +-
+ .../pmu-events/arch/x86/icelakex/memory.json  |  601 ++-
+ .../pmu-events/arch/x86/icelakex/other.json   |  794 ++-
+ .../arch/x86/icelakex/pipeline.json           | 1112 ++--
+ .../arch/x86/icelakex/uncore-other.json       |   61 +-
+ .../arch/x86/icelakex/virtual-memory.json     |  150 +-
+ .../pmu-events/arch/x86/ivybridge/cache.json  | 1446 ++---
+ .../arch/x86/ivybridge/floating-point.json    |  212 +-
+ .../arch/x86/ivybridge/frontend.json          |  386 +-
+ .../arch/x86/ivybridge/ivb-metrics.json       |  287 +-
+ .../pmu-events/arch/x86/ivybridge/memory.json |  290 +-
+ .../pmu-events/arch/x86/ivybridge/other.json  |   42 +-
+ .../arch/x86/ivybridge/pipeline.json          | 1769 +++----
+ .../arch/x86/ivybridge/uncore-cache.json      |  252 +
+ .../arch/x86/ivybridge/uncore-other.json      |   91 +
+ .../pmu-events/arch/x86/ivybridge/uncore.json |  314 --
+ .../arch/x86/ivybridge/virtual-memory.json    |  208 +-
+ .../pmu-events/arch/x86/ivytown/cache.json    | 1594 +++---
+ .../arch/x86/ivytown/floating-point.json      |  212 +-
+ .../pmu-events/arch/x86/ivytown/frontend.json |  386 +-
+ .../arch/x86/ivytown/ivt-metrics.json         |  277 +-
+ .../pmu-events/arch/x86/ivytown/memory.json   |  562 +-
+ .../pmu-events/arch/x86/ivytown/other.json    |   42 +-
+ .../pmu-events/arch/x86/ivytown/pipeline.json | 1769 +++----
+ .../arch/x86/ivytown/virtual-memory.json      |  232 +-
+ .../pmu-events/arch/x86/jaketown/cache.json   | 1582 +++---
+ .../arch/x86/jaketown/floating-point.json     |  160 +-
+ .../arch/x86/jaketown/frontend.json           |  363 +-
+ .../arch/x86/jaketown/jkt-metrics.json        |  140 +-
+ .../pmu-events/arch/x86/jaketown/memory.json  |  478 +-
+ .../pmu-events/arch/x86/jaketown/other.json   |   58 +-
+ .../arch/x86/jaketown/pipeline.json           | 1556 +++---
+ .../arch/x86/jaketown/virtual-memory.json     |  178 +-
+ .../arch/x86/knightslanding/cache.json        | 2602 +++++----
+ .../x86/knightslanding/floating-point.json    |   29 +
+ .../arch/x86/knightslanding/frontend.json     |   48 +-
+ .../arch/x86/knightslanding/memory.json       | 1226 ++---
+ .../arch/x86/knightslanding/pipeline.json     |  465 +-
+ .../x86/knightslanding/virtual-memory.json    |   68 +-
+ .../pmu-events/arch/x86/nehalemep/cache.json  | 3062 +++++------
+ .../arch/x86/nehalemep/floating-point.json    |  180 +-
+ .../arch/x86/nehalemep/frontend.json          |   18 +-
+ .../pmu-events/arch/x86/nehalemep/memory.json |  670 +--
+ .../pmu-events/arch/x86/nehalemep/other.json  |  156 +-
+ .../arch/x86/nehalemep/pipeline.json          |  764 +--
+ .../arch/x86/nehalemep/virtual-memory.json    |   90 +-
+ .../arch/x86/sandybridge/cache.json           | 2298 ++++----
+ .../arch/x86/sandybridge/floating-point.json  |  172 +-
+ .../arch/x86/sandybridge/frontend.json        |  365 +-
+ .../arch/x86/sandybridge/memory.json          |  520 +-
+ .../arch/x86/sandybridge/other.json           |   66 +-
+ .../arch/x86/sandybridge/pipeline.json        | 1634 +++---
+ .../arch/x86/sandybridge/snb-metrics.json     |  150 +-
+ .../arch/x86/sandybridge/uncore-cache.json    |  252 +
+ .../arch/x86/sandybridge/uncore-other.json    |   91 +
+ .../arch/x86/sandybridge/uncore.json          |  314 --
+ .../arch/x86/sandybridge/virtual-memory.json  |  160 +-
+ .../pmu-events/arch/x86/silvermont/cache.json |  940 ++--
+ .../arch/x86/silvermont/floating-point.json   |   11 +
+ .../arch/x86/silvermont/frontend.json         |   75 +-
+ .../arch/x86/silvermont/memory.json           |    8 +-
+ .../pmu-events/arch/x86/silvermont/other.json |   20 +-
+ .../arch/x86/silvermont/pipeline.json         |  422 +-
+ .../arch/x86/silvermont/virtual-memory.json   |   76 +-
+ .../pmu-events/arch/x86/skylake/cache.json    | 2611 ++++-----
+ .../arch/x86/skylake/floating-point.json      |   48 +-
+ .../pmu-events/arch/x86/skylake/frontend.json |  578 +-
+ .../pmu-events/arch/x86/skylake/memory.json   | 1566 +++---
+ .../pmu-events/arch/x86/skylake/other.json    |   46 +-
+ .../pmu-events/arch/x86/skylake/pipeline.json | 1083 ++--
+ .../arch/x86/skylake/skl-metrics.json         |  497 +-
+ .../arch/x86/skylake/virtual-memory.json      |  274 +-
+ .../pmu-events/arch/x86/skylakex/cache.json   |  111 +-
+ .../arch/x86/skylakex/floating-point.json     |   24 +-
+ .../arch/x86/skylakex/frontend.json           |   18 +-
+ .../pmu-events/arch/x86/skylakex/memory.json  |   96 +-
+ .../arch/x86/skylakex/pipeline.json           |   11 +
+ .../arch/x86/skylakex/skx-metrics.json        |  461 +-
+ .../arch/x86/skylakex/uncore-other.json       |   23 +
+ .../pmu-events/arch/x86/tigerlake/cache.json  |   44 +-
+ .../arch/x86/tigerlake/floating-point.json    |   11 +-
+ .../arch/x86/tigerlake/frontend.json          |   17 +-
+ .../arch/x86/tigerlake/pipeline.json          |   37 +-
+ .../pmu-events/arch/x86/tremontx/cache.json   |  282 +-
+ .../arch/x86/tremontx/floating-point.json     |   24 +
+ .../arch/x86/tremontx/frontend.json           |   97 +-
+ .../pmu-events/arch/x86/tremontx/memory.json  |  449 +-
+ .../pmu-events/arch/x86/tremontx/other.json   | 1786 ++++++-
+ .../arch/x86/tremontx/pipeline.json           |  341 +-
+ .../arch/x86/tremontx/uncore-memory.json      |  156 +-
+ .../arch/x86/tremontx/uncore-other.json       | 2045 ++++++-
+ .../arch/x86/tremontx/virtual-memory.json     |  320 +-
+ .../arch/x86/westmereep-dp/cache.json         | 2734 +++++-----
+ .../x86/westmereep-dp/floating-point.json     |  180 +-
+ .../arch/x86/westmereep-dp/frontend.json      |   18 +-
+ .../arch/x86/westmereep-dp/memory.json        |  686 +--
+ .../arch/x86/westmereep-dp/other.json         |  238 +-
+ .../arch/x86/westmereep-dp/pipeline.json      |  780 +--
+ .../x86/westmereep-dp/virtual-memory.json     |  138 +-
+ .../arch/x86/westmereep-sp/cache.json         | 3142 +++++------
+ .../x86/westmereep-sp/floating-point.json     |  180 +-
+ .../arch/x86/westmereep-sp/frontend.json      |   18 +-
+ .../arch/x86/westmereep-sp/memory.json        |  670 +--
+ .../arch/x86/westmereep-sp/other.json         |  238 +-
+ .../arch/x86/westmereep-sp/pipeline.json      |  780 +--
+ .../x86/westmereep-sp/virtual-memory.json     |  120 +-
+ .../pmu-events/arch/x86/westmereex/cache.json | 3142 +++++------
+ .../arch/x86/westmereex/floating-point.json   |  180 +-
+ .../arch/x86/westmereex/frontend.json         |   18 +-
+ .../arch/x86/westmereex/memory.json           |  676 +--
+ .../pmu-events/arch/x86/westmereex/other.json |  238 +-
+ .../arch/x86/westmereex/pipeline.json         |  784 ++-
+ .../arch/x86/westmereex/virtual-memory.json   |  138 +-
+ tools/perf/tests/shell/stat_all_metrics.sh    |   10 +-
+ 197 files changed, 61330 insertions(+), 52655 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/x86/goldmont/floating-point.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/goldmontplus/floating-point.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/haswell/uncore-cache.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/haswell/uncore-other.json
+ delete mode 100644 tools/perf/pmu-events/arch/x86/haswell/uncore.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/uncore-cache.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/uncore-other.json
+ delete mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/uncore.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/knightslanding/floating-point.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/uncore-cache.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.json
+ delete mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/uncore.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/silvermont/floating-point.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/tremontx/floating-point.json
 
-Thanks a lot for the quick reply :)
-Your explanation is reasonable, because snd_shutdown_f_ops indeed has no 
-value for .open.
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 
-However, my static analysis tool finds another possible deadlock in the 
-mentioned code:
-
-snd_card_disconnect_sync()
-   spin_lock_irq(&card->files_lock); --> Line 461 (Lock A)
-   wait_event_lock_irq(card->remove_sleep, ...); --> Line 462 (Wait X)
-   spin_unlock_irq(&card->files_lock); --> Line 465 (Unlock A)
-
-snd_hwdep_release()
-   snd_card_file_remove()
-     spin_lock(&card->files_lock); --> Line 962 (Lock A)
-     wake_up_all(&card->remove_sleep); --> Line 976 (Wake X)
-     spin_unlock(&card->files_lock); --> Line 977 (Unlock A)
-
-When snd_card_disconnect_sync() is executed, "Wait X" is performed by 
-holding "Lock A". If snd_hwdep_release() is executed at this time, "Wake 
-X" cannot be performed to wake up "Wait X", because "Lock A" has been 
-already hold by snd_card_disconnect_sync().
-
-I am not quite sure whether this possible problem is real.
-Any feedback would be appreciated, thanks :)
-
-
-Best wishes,
-Jia-Ju Bai

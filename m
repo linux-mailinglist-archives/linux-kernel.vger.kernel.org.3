@@ -2,155 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 602624A303C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B404A3047
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 16:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347949AbiA2PVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 10:21:23 -0500
-Received: from mga07.intel.com ([134.134.136.100]:25933 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232848AbiA2PVU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 10:21:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643469680; x=1675005680;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pgysy1t4On9EFZB1/FDtBHsS5CHIdnff/t/GCKX1gFM=;
-  b=IndZLpWV7Y2yq9SbRek2P9ZhztMn2gqEeCQi1jVa/KCcFsWCOpgg5nls
-   w9LLSyKw9w9jAggw99wkmPbXTaFTKBhSODQnGz00sX2h5cevAPJGTSnG1
-   nLn5B+X+pEnxiDK5Yl+3z3myJroOVbkQdV8CY6vZMG+YRybuRG97L1knL
-   Q/IOErDE6p/DDUHOjepBiMqlPv+YXq92v2VI+XIx4s30DjXNfzzDmagIX
-   EmWT7z+/i0n0xKrV/YLbkK6PRGkUo2UtlK7NHgEE9QJG3LbzpQLRs+nxT
-   32JLqFhNRk2SB4uI12ex4FCtsLkjft6CLrgVWxxxmcGiw18b+1z0zvfiR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="310589604"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="310589604"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 07:21:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="629423692"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Jan 2022 07:21:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDpXR-000PLl-Iy; Sat, 29 Jan 2022 15:21:17 +0000
-Date:   Sat, 29 Jan 2022 23:20:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bhaskara Budiredla <bbudiredla@marvell.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: drivers/perf/marvell_cn10k_tad_pmu.c:371:34: warning: unused
- variable 'tad_pmu_of_match'
-Message-ID: <202201292349.zRQLcDDD-lkp@intel.com>
+        id S1351513AbiA2PXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 10:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351193AbiA2PXl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 10:23:41 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA3AC061753
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:23:40 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id z7so13239368ljj.4
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 07:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=drummond.us; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0mCWH6Tux8tcx0O8BuZbvK36ydxh3XeFUHA8Flrblcc=;
+        b=cmvGYiFpo2ar6tVj5q2BCQVYb9k8BBD0XwhyxqAVItAmy2DCdgiftAuj8oc7BBE49Q
+         LjK1fzbe0hOX97nInIogSNxADc9w4GpCfyauU6NFtNktDIG03u61lrQy9hqdUvd6EUft
+         C6I/tHY4kzyBauIRoXYOzo9LGSe929OK0jEzQ59wjAL3By0a+QjA0M9X3G7I1kcoxcb7
+         Q0AdPG8TS8c6yTTOUze5l0qFpdoVitgV/p2s3UNbwqPC0EG+SKAZieLlLnSPMO8rnFD5
+         +FIv54+PLtXCBluE0vkOLnAVfI1OEciJIeE6mtAgIHH1+Z3qSeTB6dFp5Kah63auycAx
+         k05w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0mCWH6Tux8tcx0O8BuZbvK36ydxh3XeFUHA8Flrblcc=;
+        b=5QbVldsMzY9FN8Xeuz2gcXBz21XZUiWRfzKITMv6urQskIQpynnNiuf1l4C+vWQCAX
+         IIc12dlQZAfQ3xuqdIhWlE2oHlgnS+FUzbpEl4elGn9XbWkXmzmoJ9UpV+/Y8cL5X+ge
+         vvb6cZ/28p7T3AJfq3KumFqn7TGOS0lEm2Ki9ZUFmYQ9ZDIt63WusLH9PWzdHHjkDIm3
+         uinuagWfmG+JtDRB5enRIA8e0hS2vWYXtKO7+pQlIVJgxqCPhi8vcARsSQhfKrz4QYxh
+         nh+Rje3dnd51uvgAw+Nr3Gl8j1IMIdZGZKTdg62ndmS0QpvGVxF6VFYhz1W/l+S97+jJ
+         mleg==
+X-Gm-Message-State: AOAM532DRGCPSPvGQM+k3X2buTPcTZtTpWtTooJj+n3DGSeRSoOZynLM
+        63eSfXvRcYzm8SR3Td5gP1tpkZSy2DS5K9bJIkrRvA==
+X-Google-Smtp-Source: ABdhPJzK4pFoabd9NoIBHHNS2OQ2X0frUhiKWXvHsU/uBjqxnLeu+8dmN2me2gLqvfH4JEfcPiamxCIYMad5ipU8E2c=
+X-Received: by 2002:a2e:994a:: with SMTP id r10mr8482884ljj.254.1643469817879;
+ Sat, 29 Jan 2022 07:23:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220118044259.764945-1-walt@drummond.us> <YfFQeC1cUVFmISMK@kroah.com>
+In-Reply-To: <YfFQeC1cUVFmISMK@kroah.com>
+From:   Walt Drummond <walt@drummond.us>
+Date:   Sat, 29 Jan 2022 07:23:26 -0800
+Message-ID: <CADCN6nyyChM=jb9nmc2jDg2UdHUoXp3E05=ifxRpcs=8k8t09Q@mail.gmail.com>
+Subject: Re: [PATCH 0/3] status: TTY status message request
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@linux.ibm.com, chris@zankel.net, davem@davemloft.net,
+        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
+        James.Bottomley@hansenpartnership.com, jirislaby@kernel.org,
+        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
+        paulus@samba.org, rth@twiddle.net, dalias@libc.org,
+        tsbogend@alpha.franken.de, gor@linux.ibm.com, ysato@users.osdn.me,
+        linux-kernel@vger.kernel.org, ar@cs.msu.ru,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   169387e2aa291a4e3cb856053730fe99d6cec06f
-commit: 036a7584bede317d0df6b854e4f531b7a2dd8b33 drivers: perf: Add LLC-TAD perf counter support
-date:   7 weeks ago
-config: s390-randconfig-r001-20220129 (https://download.01.org/0day-ci/archive/20220129/202201292349.zRQLcDDD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=036a7584bede317d0df6b854e4f531b7a2dd8b33
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 036a7584bede317d0df6b854e4f531b7a2dd8b33
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/perf/
+ACK, will do.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/perf/marvell_cn10k_tad_pmu.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/perf/marvell_cn10k_tad_pmu.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/perf/marvell_cn10k_tad_pmu.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/perf/marvell_cn10k_tad_pmu.c:371:34: warning: unused variable 'tad_pmu_of_match' [-Wunused-const-variable]
-   static const struct of_device_id tad_pmu_of_match[] = {
-                                    ^
-   13 warnings generated.
-
-
-vim +/tad_pmu_of_match +371 drivers/perf/marvell_cn10k_tad_pmu.c
-
-   370	
- > 371	static const struct of_device_id tad_pmu_of_match[] = {
-   372		{ .compatible = "marvell,cn10k-tad-pmu", },
-   373		{},
-   374	};
-   375	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Wed, Jan 26, 2022 at 5:45 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jan 17, 2022 at 08:42:57PM -0800, Walt Drummond wrote:
+> > This patchset adds TTY status message request feature to the n_tty
+> > line dicipline.  This feature prints a brief message containing basic
+> > system and process group information to a user's TTY in response to a
+> > new control character in the line dicipline (default Ctrl-T) or the
+> > TIOCSTAT ioctl.  The message contains the current system load, the
+> > name and PID of an interesting process in the forground process group,
+> > it's run time, percent CPU usage and RSS.  An example of this message
+> > is:
+> >
+> >   load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
+> >
+> > User API visible changes are limited to:
+> >  - The addition of VSTATUS in termios.c_cc[]
+> >  - The addition of NOKERNINFO bit in termios.l_cflags
+> >  - The addition of the TIOCSTAT ioctl number
+> >
+> > None of these changes break the existing kernel api as the termios
+> > structure on all architectures has enough space in the control
+> > character array (.c_cc) for the new character, and the other changes
+> > are space agnostic.
+> >
+> > This feature is in many other Unix-like systems, both current and
+> > historical.  In other implementations, this feature would also send
+> > SIGINFO to the process group; this implementation does not.
+> >
+> > Walt Drummond (3):
+> >   vstatus: Allow the n_tty line dicipline to write to a user tty
+> >   vstatus: Add user space API definitions for VSTATUS, NOKERNINFO and
+> >     TIOCSTAT
+> >   status: Display an informational message when the VSTATUS character is
+> >     pressed or TIOCSTAT ioctl is called.
+> >
+> >  arch/alpha/include/asm/termios.h         |   4 +-
+> >  arch/alpha/include/uapi/asm/ioctls.h     |   1 +
+> >  arch/alpha/include/uapi/asm/termbits.h   |  34 ++---
+> >  arch/ia64/include/asm/termios.h          |   4 +-
+> >  arch/ia64/include/uapi/asm/termbits.h    |  34 ++---
+> >  arch/mips/include/asm/termios.h          |   4 +-
+> >  arch/mips/include/uapi/asm/ioctls.h      |   1 +
+> >  arch/mips/include/uapi/asm/termbits.h    |  36 ++---
+> >  arch/parisc/include/asm/termios.h        |   4 +-
+> >  arch/parisc/include/uapi/asm/ioctls.h    |   1 +
+> >  arch/parisc/include/uapi/asm/termbits.h  |  34 ++---
+> >  arch/powerpc/include/asm/termios.h       |   4 +-
+> >  arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
+> >  arch/powerpc/include/uapi/asm/termbits.h |  34 ++---
+> >  arch/s390/include/asm/termios.h          |   4 +-
+> >  arch/sh/include/uapi/asm/ioctls.h        |   1 +
+> >  arch/sparc/include/uapi/asm/ioctls.h     |   1 +
+> >  arch/sparc/include/uapi/asm/termbits.h   |  38 +++---
+> >  arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
+> >  drivers/tty/Makefile                     |   2 +-
+> >  drivers/tty/n_tty.c                      | 113 +++++++++++-----
+> >  drivers/tty/n_tty_status.c               | 162 +++++++++++++++++++++++
+> >  drivers/tty/tty_io.c                     |   2 +-
+> >  include/asm-generic/termios.h            |   4 +-
+> >  include/linux/tty.h                      | 123 ++++++++---------
+> >  include/uapi/asm-generic/ioctls.h        |   1 +
+> >  include/uapi/asm-generic/termbits.h      |  34 ++---
+> >  27 files changed, 461 insertions(+), 222 deletions(-)
+> >  create mode 100644 drivers/tty/n_tty_status.c
+> >
+> > --
+> > 2.30.2
+> >
+>
+> You forgot to cc: me on patch 2/3, which would be needed if I was to
+> take them all.
+>
+> Please fix up patch 2 and resend the whole series.
+>
+> thanks,
+>
+> greg k-h

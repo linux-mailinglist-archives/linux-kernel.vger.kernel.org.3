@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8034A2B1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4C84A2B1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 02:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352110AbiA2BuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 20:50:18 -0500
-Received: from mga12.intel.com ([192.55.52.136]:48705 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352068AbiA2BuR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Jan 2022 20:50:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643421017; x=1674957017;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bmJrVUsxb+MtLQ2Qx+pdstrggeZTOGR4fFIsPW2Os7Y=;
-  b=Ch2yxex5WKmuq5vQMon2Z4yI2PqfARPYMcXdZJdsnuxsmj6JSSsNBvpB
-   FZq6f/gOeic5rm6EMyaUvvc43jxQCb+jCFvczfnbFFh6ciKHTZS5t6Ue7
-   O3Ayqs1rmWrVyZyAnVYv+2rBO1sc8Xn2Kn8RNokEiU1B2dxy9cpeTUmbB
-   j+oTqyrxn+yxSkJrpDL0OW9fO2w0u7hnLc4dUPk6PXUnxP0gbgsUOwS1Y
-   k5j1Fv44I4P1dv3DgbK5TLAQ5ZTc9yfL99bNn53INn/yxKD4HXDIXQbDR
-   D2shozR7nKAeqMvjVet+/04rIsq00hoLAHEFm6t/0zzMNoQhD39DWnpD1
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="227207413"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="227207413"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 17:50:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="564377908"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jan 2022 17:50:15 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDcsZ-000OcE-4L; Sat, 29 Jan 2022 01:50:15 +0000
-Date:   Sat, 29 Jan 2022 09:49:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:for-v5.18k 104/107] nds32le-linux-ld:
- vimc-capture.c:undefined reference to `vb2_dma_contig_memops'
-Message-ID: <202201290904.NmpIpCkd-lkp@intel.com>
+        id S1352120AbiA2Bvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 20:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352068AbiA2Bvp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 28 Jan 2022 20:51:45 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975BCC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 17:51:45 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so8314365pjl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 17:51:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3HAETZklYMRHOBMF4nZqSUVtbfOCXRHz+7u9x6rdHNk=;
+        b=KdotavDnl39ndT7clf/ig6ckZcizJxpNLOerW7ygxH6m8J6LOd+Y69okHEcP764r5P
+         dwq2DNviRFubvvn/eCYqrjpbkdg7JtZueRxpFK67Lj9+H5LB8tdiG4y0LosjH89ED0Fa
+         /VGdGOuwT121ACmm+0o+QFBukGwqZqpmXP73IYCdPTb2dL/Ay2fCyTGFijwv2cXky5vJ
+         6uQTU6iVTYa8ePLqI5Ijjne0AFuNPouLMMXzbJZ/+litaEcSV72lQeOub9t6EGdHmC0e
+         3EHwPtb23R2Smae00Eg6//vzR5n2E0Nbm9Xf0cXbEqxhWC8hpRln8XeGaGiq9r858tWC
+         vQbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3HAETZklYMRHOBMF4nZqSUVtbfOCXRHz+7u9x6rdHNk=;
+        b=qxyNTPImw8MryxIcWLxREO4nxHaDzDHbvDrL3gtqLqYazeGYSOB12eZUqG04vspwEp
+         Q6TTUN1hurc25KMZFqhkpFVLj1LX9tH6NQW1sNx5J8w/blLZdFoZ4dKxnzjroBrBwLVx
+         Zdu7Naf5ICdu7E31WZY/zDuKBrzhaxmvkXgoosLTFNo+uhNmM6VQMWlU2cRWusJhTnt7
+         YLsNAWmlwaSAnmwcsp8RSHCk8c89xNDjSi/4EP4Vq0a3F7PKXWcAwrOkpjC3So4OE+uv
+         w1VUbVHsI7HwCK9o1MZr8kpK+w8uAHoc+NpHVU5AfJDxyvDhARCzPuHa+76DWHWr1bhV
+         upAw==
+X-Gm-Message-State: AOAM533TJWjOlATaOLUjhZRNpOczYBbEY6Q2hALeVXKocIOHPUvm1iVW
+        AfOzXqZQzly0pHAm8/Dx9o1+7e0HWLEPaw==
+X-Google-Smtp-Source: ABdhPJxIAjqPrZg0Dh0AgczUDxeDVDYuUMiAhQxGCbZ0io601R9FaHnpIHoXrdalmoKZF9W0y06rMQ==
+X-Received: by 2002:a17:903:404b:: with SMTP id n11mr11675278pla.42.1643421104746;
+        Fri, 28 Jan 2022 17:51:44 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id 190sm10123225pfg.181.2022.01.28.17.51.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 17:51:44 -0800 (PST)
+Subject: Re: [PATCH v3 0/3] block, bfq: minor cleanup and fix
+To:     Yu Kuai <yukuai3@huawei.com>, paolo.valente@linaro.org,
+        jack@suse.cz
+Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+References: <20220129015924.3958918-1-yukuai3@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <7cb40388-02e9-712a-6a40-ccabd5605880@kernel.dk>
+Date:   Fri, 28 Jan 2022 18:51:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220129015924.3958918-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18k
-head:   ab1804e24c2d3bb0b511db538d9e834e260db16b
-commit: 6e0f23d9552db48996f82eaa5659fb50c692c6a2 [104/107] media: vimc: Add support for contiguous DMA buffers
-config: nds32-randconfig-r015-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290904.NmpIpCkd-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.18k
-        git checkout 6e0f23d9552db48996f82eaa5659fb50c692c6a2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+On 1/28/22 6:59 PM, Yu Kuai wrote:
+> Changes in v3:
+>  - fix a clerical error in patch 2
+> 
+> Chagnes in v2:
+>  - add comment in patch 2
+>  - remove patch 4, since the problem do not exist.
+> 
+> Yu Kuai (3):
+>   block, bfq: cleanup bfq_bfqq_to_bfqg()
+>   block, bfq: avoid moving bfqq to it's parent bfqg
+>   block, bfq: don't move oom_bfqq
+> 
+>  block/bfq-cgroup.c  | 16 +++++++++++++++-
+>  block/bfq-iosched.c |  4 ++--
+>  block/bfq-iosched.h |  1 -
+>  block/bfq-wf2q.c    | 15 ---------------
+>  4 files changed, 17 insertions(+), 19 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'm not even looking at this until you tell me that:
 
-All errors (new ones prefixed by >>):
+a) you've actually compiled this one. which, btw, I can't believe
+   needs mentioning, particularly when you had enough time to keep
+   pinging about this patchset.
 
-   nds32le-linux-ld: drivers/media/test-drivers/vimc/vimc-capture.o: in function `vimc_cap_add':
-   vimc-capture.c:(.text+0x87c): undefined reference to `vb2_dma_contig_memops'
->> nds32le-linux-ld: vimc-capture.c:(.text+0x880): undefined reference to `vb2_dma_contig_memops'
+b) it's actually be run. last one was clearly not.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Jens Axboe
+

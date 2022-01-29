@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 781A14A31F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 21:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8FE4A31FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 22:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353209AbiA2U61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 15:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353175AbiA2U6Z (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 15:58:25 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26FAC061714;
-        Sat, 29 Jan 2022 12:58:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=qDaqx4uPzigiZNs9b0PXl1R6NK3i5Wj+JiU5Hgbuaiw=; b=EIsHDgeS8OmzCpSP31tJgQWAoL
-        OGrdQhBrOhDpYthHpbIdgc2YerBNjTRsi4e5NkcFOR7haNtNtauUeXbnvDpu9EzvqJkZ5CJha0b+Y
-        Rzb3cRAHbwPA7RShEnnWF3Do5TOKuA8yVWg28sBML1GQl/nVmm3yqYAfpfyPjqLJu9Qy1KDGUn8s8
-        rijx55saWJo3B1VzXe1D54Dydznk4pADR1HbpGXF+ei8ZWXpFTOyISBYLhTiSpRy2wzWFM0SUBsmE
-        724IiLtCRhfqJ93H8ZFGQmSo2ZaWYdl34W3g/c7o9xcOm01TswfF0zr/uTye+xQVuJ3PkSxTkyII4
-        WHbRVg/g==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nDune-005QDy-Or; Sat, 29 Jan 2022 20:58:22 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        James Hogan <jhogan@kernel.org>, kvm@vger.kernel.org
-Subject: [PATCH] MIPS: KVM: fix vz.c kernel-doc notation
-Date:   Sat, 29 Jan 2022 12:58:19 -0800
-Message-Id: <20220129205819.23781-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S1353123AbiA2VD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 16:03:58 -0500
+Received: from mga11.intel.com ([192.55.52.93]:9071 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346309AbiA2VD4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 16:03:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643490236; x=1675026236;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=25bua2yRysQfzGQl1AAce3kq14RVFHxex9Fy+cAJ/Ko=;
+  b=eHUA1gsZ8DPiyx04TUC31QYbeOP2d/LuGcQ6ZbgaboE8h4JP4tPo9Ppw
+   1JV18Igmk+BRGSnM2fva7ibvW+f8uiBekk2w7mBGEe/GhnKm9cbDn4Q9+
+   L4kKi9HfsMqXT6q5p25oDU4kiK8lla8bEwVVxQU/EHmYQb5eDLN4y0q8+
+   gjBT+bcrI6sfiH1Cn0GB75SSiYZHVBxWa4ca0xKTt3FfynfhXuL1OuFUj
+   wz2g1g3WYDJhsoxhbQe5Vy2XJviqeRSeIkrSIc5mY5yBa1YWPw75tCIRo
+   MUWrAZJOOuBRd9K5koc4lyAiU9ySa/T6JVeJIfRppF1hVsvv/O4Jwjya3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="244894206"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="244894206"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 13:03:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="582205233"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jan 2022 13:03:36 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDusi-000PcZ-76; Sat, 29 Jan 2022 21:03:36 +0000
+Date:   Sun, 30 Jan 2022 05:03:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] RISC-V: fix semicolon.cocci warnings
+Message-ID: <20220129210306.GA65937@44491a595360>
+References: <202201300500.BuB28g96-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201300500.BuB28g96-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix all kernel-doc warnings in mips/kvm/vz.c as reported by the
-kernel test robot:
+From: kernel test robot <lkp@intel.com>
 
-  arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_compare' not described in '_kvm_vz_save_htimer'
-  arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_cause' not described in '_kvm_vz_save_htimer'
-  arch/mips/kvm/vz.c:471: warning: Excess function parameter 'compare' description in '_kvm_vz_save_htimer'
-  arch/mips/kvm/vz.c:471: warning: Excess function parameter 'cause' description in '_kvm_vz_save_htimer'
-  arch/mips/kvm/vz.c:1551: warning: No description found for return value of 'kvm_trap_vz_handle_cop_unusable'
-  arch/mips/kvm/vz.c:1552: warning: expecting prototype for kvm_trap_vz_handle_cop_unusuable(). Prototype was for kvm_trap_vz_handle_cop_unusable() instead
-  arch/mips/kvm/vz.c:1597: warning: No description found for return value of 'kvm_trap_vz_handle_msa_disabled'
+arch/riscv/kernel/smp.c:120:2-3: Unneeded semicolon
 
-Fixes: c992a4f6a9b0 ("KVM: MIPS: Implement VZ support")
-Fixes: f4474d50c7d4 ("KVM: MIPS/VZ: Support hardware guest timer")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+
+ Remove unneeded semicolon.
+
+Generated by: scripts/coccinelle/misc/semicolon.cocci
+
+CC: Anup Patel <apatel@ventanamicro.com>
 Reported-by: kernel test robot <lkp@intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: kvm@vger.kernel.org
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- arch/mips/kvm/vz.c |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
---- linux-next-20220128.orig/arch/mips/kvm/vz.c
-+++ linux-next-20220128/arch/mips/kvm/vz.c
-@@ -458,8 +458,8 @@ void kvm_vz_acquire_htimer(struct kvm_vc
- /**
-  * _kvm_vz_save_htimer() - Switch to software emulation of guest timer.
-  * @vcpu:	Virtual CPU.
-- * @compare:	Pointer to write compare value to.
-- * @cause:	Pointer to write cause value to.
-+ * @out_compare: Pointer to write compare value to.
-+ * @out_cause:	Pointer to write cause value to.
-  *
-  * Save VZ guest timer state and switch to software emulation of guest CP0
-  * timer. The hard timer must already be in use, so preemption should be
-@@ -1541,11 +1541,14 @@ static int kvm_trap_vz_handle_guest_exit
- }
+tree:   https://github.com/avpatel/linux.git riscv_aia_v1
+head:   c0d96c2f57e644a9ec0819785541e033f8ce5e6b
+commit: bbfd82cb293e2c4fe309a1c9bf59d3a4d9459d26 [3/21] RISC-V: Treat IPIs as normal Linux IRQs
+:::::: branch date: 10 hours ago
+:::::: commit date: 2 days ago
+
+ smp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/riscv/kernel/smp.c
++++ b/arch/riscv/kernel/smp.c
+@@ -117,7 +117,7 @@ static irqreturn_t handle_IPI(int irq, v
+ 	default:
+ 		pr_warn("CPU%d: unhandled IPI%d\n", smp_processor_id(), ipi);
+ 		break;
+-	};
++	}
  
- /**
-- * kvm_trap_vz_handle_cop_unusuable() - Guest used unusable coprocessor.
-+ * kvm_trap_vz_handle_cop_unusable() - Guest used unusable coprocessor.
-  * @vcpu:	Virtual CPU context.
-  *
-  * Handle when the guest attempts to use a coprocessor which hasn't been allowed
-  * by the root context.
-+ *
-+ * Return: value indicating whether to resume the host or the guest
-+ * 	   (RESUME_HOST or RESUME_GUEST)
-  */
- static int kvm_trap_vz_handle_cop_unusable(struct kvm_vcpu *vcpu)
- {
-@@ -1592,6 +1595,9 @@ static int kvm_trap_vz_handle_cop_unusab
-  *
-  * Handle when the guest attempts to use MSA when it is disabled in the root
-  * context.
-+ *
-+ * Return: value indicating whether to resume the host or the guest
-+ * 	   (RESUME_HOST or RESUME_GUEST)
-  */
- static int kvm_trap_vz_handle_msa_disabled(struct kvm_vcpu *vcpu)
- {
+ 	return IRQ_HANDLED;
+ }

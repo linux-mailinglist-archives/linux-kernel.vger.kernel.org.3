@@ -2,109 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C83D4A31FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 22:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600134A3201
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 22:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353214AbiA2VFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 16:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S1353222AbiA2VHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 16:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346309AbiA2VFI (ORCPT
+        with ESMTP id S1346309AbiA2VHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 16:05:08 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825EC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 13:05:08 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id j16so9214239plx.4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 13:05:08 -0800 (PST)
+        Sat, 29 Jan 2022 16:07:01 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F1CC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 13:07:01 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id c6so28823309ybk.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 13:07:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hUntcolkKoG81YeeiCT2Ivi3zNzCUdhrxI8/sMLFU2E=;
-        b=G3AzFjJJ92ol7qLFDRRFSLfp/CLaSfxoqvRBEUwKQpdQHZLFvCJkOnS08WK68jfAIe
-         GNSwYfv/zfiRiwJdVfwDklXj0ALbg9RZixiie8z+SReymEqrbbIqckj/W7GtDnRANA4/
-         ZcaXGVYH/u6VCjmvU7qEAJAcCzOj60u1qzEfDJ/e6RWmtBhVvocYJy81jzNC4BDLDOIL
-         1a3nHaA/bBkmYr3zZ9uXE2C8uCF5IoOmAn+J5OxWWgPELVDD5yEOjFQv+W3qN9tpHVPJ
-         kV4sIQzINoZPDkTpK+ecwyf/9HOtO9bfQDmueFsGRWagkW3AgqDlSzJLjfFFxpmyzkcK
-         AU5Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=U3dc3xqDLlTpC2E+9rOE/F5axFiCJUonmG/KQjDXwZ0=;
+        b=IYosVfoz8ZArLESPT+qCN24rTXUj9pma0U7EgFPqSR8Sq2OtFr9ONsO5qu7bSqXJP3
+         z5Cf2XC96KZTb0omfQNZs0aA2Nkc5nGws9BzJKcd11VUnzh+jKRUjSyf5kMKznVz9rf4
+         V3HpeInl67nXeXFlK4Lly+k+sKtsoqKglJgoLWPRjL5v99v++RzOT1r1ricnTw+yKphV
+         7ltO6FGyDrSoLmpk39n+9IPQ0BTs5d4CYhCogCjA9dHhrrBw9+h+PtR5svxXK5uXP7mq
+         SgFEHiOCl15i5c12vTD+nARLN22gqY5kqC6EenfSbtejHHHFzAt6gG9Z3yzKxV73bli1
+         d47w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hUntcolkKoG81YeeiCT2Ivi3zNzCUdhrxI8/sMLFU2E=;
-        b=8PCQ+qEWQ1nJrEXCygBOCrOthfb36rJjrYisDSi8CzgcvQPPyB4VddVha08tQhRucy
-         aHRrbrRSDs2gtYo6BJd5Z24FHiDTaVXtM5ZqMKv32/NRV0lmaQ7i51qlVh+VVXpZtHvp
-         GrD5q7yLbcj4/ncz0+hDPcxw8/AG3kVM2GcT0Mtkdg19M8PEQkfFXzcGexksVTJLn66j
-         I4D6CrFBw4pir47lTre3iAetI5+eTdOdEmGba7FChHiVI0ncGvS3kWurLrjeNny4/vPz
-         zCU9tK0QiD/ntERa4b780in+WJ6UtvstdFvsXuGJekQmJOsqwcHB5wevTNEonkOgkEQs
-         mr3Q==
-X-Gm-Message-State: AOAM532EbRFMK87UmptBApfApDf8cp+bbXV+XyPvLSU+29D223P8ZJDN
-        wiFWvTQLPHrtbCxLiZUqlgHuJw==
-X-Google-Smtp-Source: ABdhPJwjpG3OiPfI97msJffsJIBxd35YRlUPDoyKmkHH7MxwyWq/knvXfXMs/N182qeFHWduDIH2qw==
-X-Received: by 2002:a17:90b:23d4:: with SMTP id md20mr21278863pjb.199.1643490308052;
-        Sat, 29 Jan 2022 13:05:08 -0800 (PST)
-Received: from x1 ([2601:1c2:1001:7090:638f:aa01:c56a:78da])
-        by smtp.gmail.com with ESMTPSA id j14sm13857007pfj.218.2022.01.29.13.05.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 13:05:07 -0800 (PST)
-Date:   Sat, 29 Jan 2022 13:05:31 -0800
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keerthy <j-keerthy@ti.com>, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: Re: [PATCH 2/2] clocksource/drivers/timer-ti-dm: Handle dra7 timer
- wrap errata i940
-Message-ID: <YfWsG0p6to3IJuvE@x1>
-References: <20210323074326.28302-1-tony@atomide.com>
- <20210323074326.28302-3-tony@atomide.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=U3dc3xqDLlTpC2E+9rOE/F5axFiCJUonmG/KQjDXwZ0=;
+        b=N0AoBkHmQ34LywYOhh17koHgPqcPpVlQXx9/sUru68kRAzfAM8YG9dFSoazKW6ExPT
+         9Z1JjTtxRU7UfxCpLw3s5C8EaosOAEyw6vq+VL3QaLXUgNXJEKcyksUwa7LEjzEda7+S
+         aJi04elnkHZL+XOyw2x/Y8xuUP/BF5SRUvv1/GSBTFCy6Ow/5qDMhTKN4TH+o9SxW1lj
+         rAnJ6yBPahTk5plEkJetyPNjEkvueB5XwzmGWmPxM7tfn+6EOCwpotliZyEnLZo3KQMh
+         PldKT7Bckccr6sxJnT2BRnpiT7oIoWWV9UBmLR0WXIEbsUvgEY44kHkPheCFlan07gC5
+         dLDg==
+X-Gm-Message-State: AOAM532ZzMz0qNu6HhYRGE4nzvXR/zJC7sBfImoshfqQcNTW6gMVMOQL
+        yMtRIJPwdDNh4sl641U/HjV7RlPrdjjYtUPOyyE=
+X-Google-Smtp-Source: ABdhPJwsHFOowFI71uk77bu4yu1OCDa0mZHuTMX6PJrsJxa/x+zhRVKNQoXRn0d9zL3p2ISMTvZD6GeHERES792aGTs=
+X-Received: by 2002:a25:7c3:: with SMTP id 186mr21870996ybh.235.1643490420350;
+ Sat, 29 Jan 2022 13:07:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210323074326.28302-3-tony@atomide.com>
+From:   Vasyl Vavrychuk <vvavrychuk@gmail.com>
+Date:   Sat, 29 Jan 2022 23:06:48 +0200
+Message-ID: <CAGj4m+4QPE7uHzbsQbG6Fp3Ke2eQRQQ2z2-1rsKDPtXqs-vpGg@mail.gmail.com>
+Subject: gdb switches to __sysvec_apic_timer_interrupt or __default_send_IPI_dest_field
+ with KVM enabled
+To:     qemu-discuss@nongnu.org, linux-kernel@vger.kernel.org,
+        gdb@sourceware.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 09:43:26AM +0200, Tony Lindgren wrote:
-> There is a timer wrap issue on dra7 for the ARM architected timer.
-> In a typical clock configuration the timer fails to wrap after 388 days.
-> 
-> To work around the issue, we need to use timer-ti-dm percpu timers instead.
-> 
-> Let's configure dmtimer3 and 4 as percpu timers by default, and warn about
-> the issue if the dtb is not configured properly.
+Hello,
 
-Hi Tony,
+I run Linux kernel under qemu-system-x86_64 via the "-kernel" option.
 
-This causes a conflict for IPU2 which is using timer 3 and 4.
+Also, I added the "-s" option to accept the gdb connection.
 
-From arch/arm/boot/dts/dra7-ipu-dsp-common.dtsi:
+After Linux boot up I connect with gdb and set a breakpoint in some
+function, for example "device_del", does not matter really.
 
-  &ipu2 {
-          mboxes = <&mailbox6 &mbox_ipu2_ipc3x>;
-          ti,timers = <&timer3>;
-          ti,watchdog-timers = <&timer4>, <&timer9>;
-  };
+The problem is if I also use "--enable-kvm", then after breakpoint
+triggered and sending "n" from gdb, it switches to
 
-I noticed an error ("could not get timer platform device") when booting
-mainline on a BeagleBoard X15 (AM578):
+    __sysvec_apic_timer_interrupt (regs=0xffffc90000297de8) at
+arch/x86/kernel/apic/apic.c:1102
+    1102            trace_local_timer_entry(LOCAL_TIMER_VECTOR);
 
-  omap-rproc 55020000.ipu: assigned reserved memory node ipu2-memory@95800000
-  remoteproc remoteproc1: 55020000.ipu is available
-  remoteproc remoteproc1: powering up 55020000.ipu
-  remoteproc remoteproc1: Booting fw image dra7-ipu2-fw.xem4, size 3747220
-  omap-rproc 55020000.ipu: could not get timer platform device
-  omap-rproc 55020000.ipu: omap_rproc_enable_timers failed: -19
-  remoteproc remoteproc1: can't start rproc 55020000.ipu: -19
+or to
 
-I switched this errata fix to use timer 15 and 16 instead which resolves
-the error.  Do you think that is an acceptable solution?
+    __default_send_IPI_dest_field (mask=<optimized out>,
+vector=<optimized out>, dest=dest@entry=2048) at
+arch/x86/kernel/apic/ipi.c:161
+    161             cfg = __prepare_ICR2(mask);
 
-If so, I will post the patch to the list.
+I am stepping over kernel code that does not perform any waiting or blocking.
+
+Everything works fine with "--enable-kvm" removed.
 
 Thanks,
-Drew
+Vasyl

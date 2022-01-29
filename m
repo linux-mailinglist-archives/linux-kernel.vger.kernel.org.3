@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DCD4A2B24
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 03:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1B04A2B23
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 03:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352129AbiA2CA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Jan 2022 21:00:28 -0500
-Received: from mga04.intel.com ([192.55.52.120]:40945 "EHLO mga04.intel.com"
+        id S1345091AbiA2CAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Jan 2022 21:00:23 -0500
+Received: from mga01.intel.com ([192.55.52.88]:3769 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344799AbiA2CAR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1344864AbiA2CAR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Jan 2022 21:00:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643421617; x=1674957617;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4zvdgBYh2ls3zOVxz7T83aFv97Nbf8U05HBx7PeqCJo=;
-  b=XhCr1B+CL0jpjZ/fqY4btzX6d5CALxdLwJJVsd9vJKBwOjWN1ZdBPUXT
-   x95JEFeIxlCJM2h+v1aR0LwNVvIEcbCNdR8CG3/N/oari+Z5ObrXufwD8
-   lTOIk5D1QPEibQWhr9ihsz+ygQ0Dgw31210taRzB4VXUFyxNGvQDbRIJW
-   b60QNOkAlxDtvHb0TH9PsZFLm59nGP4G9etGk2kd9AXSqfdFTSrok2xtY
-   CbPVlln6Jz7+QvAOTH9Or1Il7RM9DsqieSdpMRAnAr9GuxhFDgUm2QNMN
-   vSjdTJGj6LAYscZbiq0NCRahFOjPfHUcocK4uYTlGPQI/bujVs1kHhHgm
+  bh=HwFzOUQ3ETlxvQNyfQGh+3gx+Q9wov9hHhNb1uvx0fc=;
+  b=YawP6mf7zq2DeBzpqytqXVnuzo29EcuC/AlfT/lKgjAySOqeSLGgtILP
+   JKUZLRSZz/70BCXNUrmkR/n5mGWBd20c2bZirmKtS2HMxr/2iBU6RcFbd
+   8vfnvKLQyUfnjBZfBDNsA6HRi4KHfhRtM04KUbNNs0jpGVWYouXckwso4
+   PN6/3V59xHZlW5U0GTOQzhx3GZ1QnAlcphZGmZOdDMTcW1vTDtlQUTbBP
+   70ArWPyjXHrlfWXpqesLIv8pk0Cl8uLMGbpEDRKI6XZEtTkcGQBTt9yAt
+   WJZkuIg2woZQs+p1OuMPSee3NM/fvsKA/Dxc0/ZX5MuG99I9eNzEUv2XM
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="246071391"
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="271693722"
 X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="246071391"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 18:00:17 -0800
+   d="scan'208";a="271693722"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 18:00:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="478470650"
+   d="scan'208";a="496313134"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2022 18:00:16 -0800
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 18:00:16 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nDd2F-000Od1-Ee; Sat, 29 Jan 2022 02:00:15 +0000
-Date:   Sat, 29 Jan 2022 10:00:04 +0800
+        id 1nDd2F-000Ocy-Dn; Sat, 29 Jan 2022 02:00:15 +0000
+Date:   Sat, 29 Jan 2022 10:00:06 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.17-vdso-mini-3 1/1]
- arch/parisc/kernel/vdso32/sigtramp.S:39: Error: unknown pseudo-op: `.proc'
-Message-ID: <202201290925.4WPmV6eS-lkp@intel.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jlayton:ceph-fscrypt 53/53] net/ceph/osd_client.c:5775:3: error:
+ expected expression
+Message-ID: <202201290935.AEKKkabv-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -51,124 +52,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.17-vdso-mini-3
-head:   8d7e3770fb1fb6c01147f8ebf2914cd2037fac16
-commit: 8d7e3770fb1fb6c01147f8ebf2914cd2037fac16 [1/1] parisc: Add vDSO support
-config: parisc-generic-64bit_defconfig (https://download.01.org/0day-ci/archive/20220129/202201290925.4WPmV6eS-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
+head:   3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
+commit: 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f [53/53] libceph: define a structure to track SPARSE_READ reply processing
+config: hexagon-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290935.AEKKkabv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?id=8d7e3770fb1fb6c01147f8ebf2914cd2037fac16
-        git remote add deller-parisc https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
-        git fetch --no-tags deller-parisc 5.17-vdso-mini-3
-        git checkout 8d7e3770fb1fb6c01147f8ebf2914cd2037fac16
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt
+        git checkout 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ceph/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   arch/parisc/kernel/vdso64/Makefile:30: FORCE prerequisite is missing
-   arch/parisc/kernel/vdso32/sigtramp.S: Assembler messages:
->> arch/parisc/kernel/vdso32/sigtramp.S:39: Error: unknown pseudo-op: `.proc'
->> arch/parisc/kernel/vdso32/sigtramp.S:40: Error: unknown pseudo-op: `.callinfo'
->> arch/parisc/kernel/vdso32/sigtramp.S:41: Error: unknown pseudo-op: `.entry'
->> arch/parisc/kernel/vdso32/sigtramp.S:44: Error: no such instruction: `ldi 0,%r25'
->> arch/parisc/kernel/vdso32/sigtramp.S:45: Error: no such instruction: `ldi 173,%r20'
->> arch/parisc/kernel/vdso32/sigtramp.S:46: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/sigtramp.S:49: Error: no such instruction: `ldi 1,%r25'
-   arch/parisc/kernel/vdso32/sigtramp.S:50: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/sigtramp.S:51: Error: no such instruction: `ble 0x100(%sr2,%r0)'
->> arch/parisc/kernel/vdso32/sigtramp.S:54: Error: unknown pseudo-op: `.exit'
->> arch/parisc/kernel/vdso32/sigtramp.S:55: Error: unknown pseudo-op: `.procend'
->> arch/parisc/kernel/vdso32/sigtramp.S:76: Error: unknown pseudo-op: `.stringz'
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:34: arch/parisc/kernel/vdso32/sigtramp.o] Error 1
-   arch/parisc/kernel/vdso32/restart_syscall.S: Assembler messages:
->> arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: bad or irreducible absolute expression
->> arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: junk at end of line, first unrecognized character is `:'
->> arch/parisc/kernel/vdso32/restart_syscall.S:26: Error: no such instruction: `ldw 0(%sp),%r31'
->> arch/parisc/kernel/vdso32/restart_syscall.S:29: Error: no such instruction: `be 0x100(%sr2,%r0)'
->> arch/parisc/kernel/vdso32/restart_syscall.S:30: Error: no such instruction: `ldi 0,%r20'
->> arch/parisc/kernel/vdso32/restart_syscall.S:32: Error: .cfi_endproc without corresponding .cfi_startproc
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:34: arch/parisc/kernel/vdso32/restart_syscall.o] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/parisc/Makefile:186: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> net/ceph/osd_client.c:5775:3: error: expected expression
+                   u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
+                   ^
+>> net/ceph/osd_client.c:5776:7: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+                   u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
+                       ^
+   1 warning and 1 error generated.
 
 
-vim +39 arch/parisc/kernel/vdso32/sigtramp.S
+vim +5775 net/ceph/osd_client.c
 
-    12	
-    13		.text
-    14	
-    15	/* Gdb expects the trampoline is on the stack and the pc is offset from
-    16	   a 64-byte boundary by 0, 4 or 5 instructions. Since the vdso trampoline
-    17	   is not on the stack, we need a new variant with different offsets and
-    18	   data to tell gdb where to find the signal context on the stack.
-    19	
-    20	   Here we put the offset to the context data at the start of the trampoline
-    21	   region and offset the first trampoline by 2 instructions. Please do
-    22	   not change the trampoline as the code in gdb depends on the following
-    23	   instruction sequence exactly.
-    24	 */
-    25		.align 64
-    26		.word SIGFRAME_CONTEXT_REGS32
-    27	
-    28	/* The nop here is a hack.  The dwarf2 unwind routines subtract 1 from
-    29	   the return address to get an address in the middle of the presumed
-    30	   call instruction.  Since we don't have a call here, we artifically
-    31	   extend the range covered by the unwind info by adding a nop before
-    32	   the real start.
-    33	 */
-    34		nop
-    35	
-    36		.globl __kernel_sigtramp_rt
-    37		.type __kernel_sigtramp_rt, @function
-    38	__kernel_sigtramp_rt:
-  > 39		.proc
-  > 40		.callinfo FRAME=ASM_SIGFRAME_SIZE32,CALLS,SAVE_RP
-  > 41		.entry
-    42	
-    43	.Lsigrt_start = . - 4
-  > 44	0:	ldi	0, %r25			/* (in_syscall=0) */
-  > 45		ldi  __NR_rt_sigreturn, %r20
-  > 46		ble  0x100(%sr2, %r0)
-    47		nop
-    48	
-    49	1:	ldi	1, %r25			/* (in_syscall=1) */
-    50		ldi  __NR_rt_sigreturn, %r20
-    51		ble  0x100(%sr2, %r0)
-    52		nop
-    53	.Lsigrt_end:
-  > 54		.exit
-  > 55		.procend
-    56		.size __kernel_sigtramp_rt,.-__kernel_sigtramp_rt
-    57	
-    58	
-    59		.section .eh_frame,"a",@progbits
-    60	
-    61	/* This is where the mcontext_t struct can be found on the stack.  */
-    62	#define PTREGS SIGFRAME_CONTEXT_REGS32	/* 32-bit process offset is -672 */
-    63	
-    64	/* Register REGNO can be found at offset OFS of the mcontext_t structure. */
-    65		.macro rsave regno,ofs
-    66		.byte 0x05		/* DW_CFA_offset_extended */
-    67		.uleb128 \regno;	/*   regno */
-    68		.uleb128 \ofs		/*   factored offset */
-    69		.endm
-    70	
-    71	.Lcie:
-    72		.long .Lcie_end - .Lcie_start
-    73	.Lcie_start:
-    74		.long 0			/* CIE ID */
-    75		.byte 1			/* Version number */
-  > 76		.stringz "zRS"		/* NUL-terminated augmentation string */
+  5746	
+  5747	static int osd_sparse_read(struct ceph_connection *con, u64 *len, char **buf)
+  5748	{
+  5749		struct ceph_osd *o = con->private;
+  5750		struct ceph_sparse_read *sr = &o->o_sparse_read;
+  5751		u32 count = __le32_to_cpu(sr->sr_count);
+  5752		int ret = 1;
+  5753	
+  5754		switch (sr->sr_state) {
+  5755		case CEPH_SPARSE_READ_COUNT:
+  5756			/* number of extents */
+  5757			*len = sizeof(sr->sr_count);
+  5758			*buf = (char *)&sr->sr_count;
+  5759			sr->sr_state = CEPH_SPARSE_READ_EXTENTS;
+  5760			break;
+  5761		case CEPH_SPARSE_READ_EXTENTS:
+  5762			/* the extent array */
+  5763			*len = count * sizeof(*sr->sr_extent);
+  5764			if (count > 1) {
+  5765				/* can't use the embedded extent array */
+  5766				sr->sr_extent = kmalloc_array(count, sizeof(*sr->sr_extent),
+  5767							   GFP_NOIO);
+  5768				if (!sr->sr_extent)
+  5769					return -ENOMEM;
+  5770			}
+  5771			*buf = (char *)sr->sr_extent;
+  5772			sr->sr_state = CEPH_SPARSE_READ_DATA;
+  5773			break;
+  5774		case CEPH_SPARSE_READ_DATA:
+> 5775			u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
+> 5776			u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
+  5777	
+  5778			/* ret to 0 if this is the last extent */
+  5779			++sr->sr_index;
+  5780			if (sr->sr_index >= count)
+  5781				ret = 0;
+  5782			break;
+  5783		}
+  5784		return ret;
+  5785	}
+  5786	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

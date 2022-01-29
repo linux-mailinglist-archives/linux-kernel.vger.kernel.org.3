@@ -2,66 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5931E4A300E
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 15:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0224A3010
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 15:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238715AbiA2Oht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 09:37:49 -0500
-Received: from h2.fbrelay.privateemail.com ([131.153.2.43]:45151 "EHLO
-        h2.fbrelay.privateemail.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230431AbiA2Oho (ORCPT
+        id S238900AbiA2OlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 09:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230431AbiA2OlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 09:37:44 -0500
-Received: from MTA-12-4.privateemail.com (mta-12-1.privateemail.com [198.54.122.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by h1.fbrelay.privateemail.com (Postfix) with ESMTPS id 2B2201806B6E
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 09:37:43 -0500 (EST)
-Received: from mta-12.privateemail.com (localhost [127.0.0.1])
-        by mta-12.privateemail.com (Postfix) with ESMTP id 722A818000AE;
-        Sat, 29 Jan 2022 09:37:41 -0500 (EST)
-Received: from localhost.localdomain (unknown [10.20.151.157])
-        by mta-12.privateemail.com (Postfix) with ESMTPA id 168591800350;
-        Sat, 29 Jan 2022 09:37:39 -0500 (EST)
-From:   Jordy Zomer <jordy@pwning.systems>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jordy Zomer <jordy@pwning.systems>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com
-Subject: [PATCH] dm ioct: prevent potential specter v1 gadget
-Date:   Sat, 29 Jan 2022 15:37:22 +0100
-Message-Id: <20220129143722.3460829-1-jordy@pwning.systems>
-X-Mailer: git-send-email 2.27.0
+        Sat, 29 Jan 2022 09:41:16 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F410DC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 06:41:15 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id o12so17474227lfg.12
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 06:41:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:user-agent:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TsD8UeueTttBbcCHC8xUyUOJgggM70vG6Ymhib31NHo=;
+        b=ftqe9oZG5U1OUJ0e9KhaRfFuHuU9Eu6WA3j07WrvrgMoj/UzMxautnN6JROsf9jQ/7
+         v/YoXeu8xtCEwcNPhQk4fJQweFUbwfHl+IpRP2E45LO7y80FDxNWksAmau35j1ZQRk+D
+         apG9ZP8jOUWupOqdeZKux9FhmrbQNyoHUt04Y/X8VoB7rP8nyWIcoEAldmWps8wCWHns
+         q1FWA6SgQNsorJOHWWPhONjV2JpR/8mUkIw/lEYbdHS67g8JPdZZshURaeET2W0o/Q0g
+         HllmJzIf7HPFe75WVQlVLRfaRndBCe5zJdV9QOiSNVbUVihYveDLeDgMxj1GVKP0DAL+
+         7ZWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=TsD8UeueTttBbcCHC8xUyUOJgggM70vG6Ymhib31NHo=;
+        b=KsVQ9VIxJaJWtW0fFGpgZ+/7QAMVknSzucILsFv1fGt/ercYEzzcyMfkB+8oLGL49D
+         /bKl2BO1xbJJk9fRjKl6hSkrWjWjVjseHIoMQaBPXZtqVhY8HIWPrLHdhBYJVCewPtC9
+         KW98c9PnJTf/FtEPjbRxrAHrYZnFObJOvBMExnAhlJU262rY8yoxCXy8M/1IG//9EPY6
+         c6R23LrSCKT5ToSKLRBuv1dbmNpA6KXigSZqXA99cfXd8E4fezf5oLxAyFdiby/M5ur8
+         YHwzblPt/RFF8a2hD1ur0oaVlztlSnST+LfcWyiANwup/ir+qpehpoHzfVU4Srmd6h9/
+         WkNg==
+X-Gm-Message-State: AOAM5313+m71FBd6RUsbbxh5wOHHncYDlXkvtTvWO3UHwUY4YJWhMMgS
+        vMlLxM/mCTpWyvRHfip27M0=
+X-Google-Smtp-Source: ABdhPJzpBphGrUIiWnPY3CxLFskI7SIHm2vjLCVJp+05tqtgRZmpG77Qs6l33CRF6B63CpQC63D5eQ==
+X-Received: by 2002:ac2:50d8:: with SMTP id h24mr9681599lfm.33.1643467274226;
+        Sat, 29 Jan 2022 06:41:14 -0800 (PST)
+Received: from localhost.localdomain (broadband-95-84-228-163.ip.moscow.rt.ru. [95.84.228.163])
+        by smtp.gmail.com with ESMTPSA id j2sm2215811lfp.256.2022.01.29.06.41.12
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Sat, 29 Jan 2022 06:41:13 -0800 (PST)
+Date:   Sat, 29 Jan 2022 17:47:04 +0300
+From:   Alexander Sergeyev <sergeev917@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
+ G8
+Message-ID: <20220129144704.xlmeylllvy3b3fum@localhost.localdomain>
+User-Agent: mtt
+References: <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+ <s5ha6fy46jt.wl-tiwai@suse.de>
+ <20220114183720.n46wealclg6spxkp@localhost.localdomain>
+ <s5hsftp3027.wl-tiwai@suse.de>
+ <20220115152215.kprws5nja2i43qax@localhost.localdomain>
+ <s5hilugw0l0.wl-tiwai@suse.de>
+ <20220119093249.eaxem33bjqjxcher@localhost.localdomain>
+ <20220122190522.ycaygrqcen7d3hj2@localhost.localdomain>
+ <20220122205637.7gzurdu7xl4sthxw@localhost.localdomain>
+ <s5ho83yldu3.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s5ho83yldu3.wl-tiwai@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It appears like cmd could be a Spectre v1 gadget as it's supplied by a
-user and used as an array index. Prevent the contents
-of kernel memory from being leaked to userspace via speculative
-execution by using array_index_nospec.
+On Wed, Jan 26, 2022 at 04:24:36PM +0100, Takashi Iwai wrote:
+> > Given that the CPU number is the same in alc_update_coefex_idx(), it seems 
+> > these calls execution is interrupted and interleaved on the same core.
+> > And, actually, there are two LEDs to set (mute and micmute). Am I onto 
+> > something here?
+> That's an interesting finding, and yes, such a race is quite
+> possible. Below is a quick fix as an attempt to cover it.
+> Could you give it a try?
 
-Signed-off-by: Jordy Zomer <jordy@pwning.systems>
----
- drivers/md/dm-ioctl.c | 1 +
- 1 file changed, 1 insertion(+)
+Well, results are somewhat mixed.
 
-diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
-index 21fe8652b095..0c1f9983f080 100644
---- a/drivers/md/dm-ioctl.c
-+++ b/drivers/md/dm-ioctl.c
-@@ -1788,6 +1788,7 @@ static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
- 	if (unlikely(cmd >= ARRAY_SIZE(_ioctls)))
- 		return NULL;
- 
-+	cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
- 	*ioctl_flags = _ioctls[cmd].flags;
- 	return _ioctls[cmd].fn;
- }
--- 
-2.27.0
+With the supplied patch (with a mutex), the original fixup 91502a9a0b0d ("ALSA: 
+hda/realtek: fix speakers and micmute on HP 855 G8") is no longer needed for 
+speakers to work. So, the original timing issue is identified now.
 
+But unbind-bind problems with IO_PAGE_FAULT and "out of range cmd" are not 
+eliminated. IO_PAGE_FAULT are often logged without accompanying "out of range 
+cmd". And after adding debugging printk() I haven't managed to trigger "out of 
+range cmd" yet. But IO_PAGE_FAULT are more easily triggered.
+
+Are there ways to trace origins of IO_PAGE_FAULT itself?

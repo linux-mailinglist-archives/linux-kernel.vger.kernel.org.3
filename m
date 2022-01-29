@@ -2,176 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F374A2D6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD934A2D6F
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 10:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbiA2Jik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 04:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiA2Jii (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 04:38:38 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072E9C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:38:38 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id r65so25440507ybc.11
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 01:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=x8oTHXyVoob250FmOz+GtPBKKlC5Finw/OsEFce6MMs=;
-        b=vHnWZhQ1GIcVvWQL9ktXBM4umWNVRj93nDCaawDMUNc6CAHd9OvNrp9Im580678g3D
-         A8ojea6lJV+WoTN66GkGACURlt5MMjwjM2sy3yZ1hR+CCOU7D59mEILl5uXoe/x/rNlW
-         BqkyJfdWKjs6ykX4J5PvQspxtql6lrqmCsc063fZyxx6IrW+PgNvSc1d1mcnLPaBvYJu
-         mfFUQf5LVVdlacJN9qeYZHTIwRbIoY1bGi+LZeED0h750L9549fw4dk7I9W5vV3G0gld
-         CCiqizMz438r1dWjdLF2Jy8xViR3rtduLfxNBLh3VpokXZwAD0K6MHgXJrt4vx9AUzzm
-         QsqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=x8oTHXyVoob250FmOz+GtPBKKlC5Finw/OsEFce6MMs=;
-        b=2iHqQIPy0Tkw9F0xTKtYpdQ61u/ffvrRBk04dAsb0lcgCMgFy6IDAyt+h6Yv7/HS/z
-         8Ab9IY+Q4V98s9e0vh6tkfIBOKwZO8MEjmLjhCVTwKvqB7blIlLumf00YQHBtdKqLAQQ
-         zdth2e2e6fcqv8rGR5tp8LJ6hNZrc2WnHKZETIc8539eoqdWyC7DVV26zEZgBVLk88fE
-         8v31KLge8Esla44Ms0pLQW996nTzsLzs2u97L5ccnin7oR3kheNwSSvv/yrr9G9tq8g0
-         f4W0ZB7wPz3k1X/c3AdsySZn0sUpPC3a4L171aBaxr/ccIGpzdOq/+/EP7S51DFY62R+
-         q9ow==
-X-Gm-Message-State: AOAM533zSbYmWDA2p+v0XzwIhkjIUHwI+FgLMaGCjITsevZsmwSVJy4B
-        I/51d+3UPJpKT5FG2XIzj8qKusTUvCcTt5fTHbe6sg==
-X-Google-Smtp-Source: ABdhPJwMb3vOBAmNK/GUt0OhtvjRstXoGlHNhlZw9/5SrdD/uIglcigRMoUGe4wHu9e53sWVyqX1yHIOqMJnGKSLjd4=
-X-Received: by 2002:a25:97c4:: with SMTP id j4mr19123089ybo.108.1643449117114;
- Sat, 29 Jan 2022 01:38:37 -0800 (PST)
+        id S234553AbiA2JjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 04:39:20 -0500
+Received: from mout.gmx.net ([212.227.17.21]:35221 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232711AbiA2JjU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 04:39:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643449155;
+        bh=Op5WAOFoopxJqRI4M6WGEIj6EBhlwpGSblJPcKgOtgY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Rwz1Sy7QbfB3qeSPzD7xpKfY0U38AiNJ576xPDoEGyy08XfmAEkTttIqtHrhaZ1AA
+         9qVXFwg1HkgJlHVhMV49Mzx3gA1QhFNM0y5cEeY0tms3DM5Gf3nCX6iqmAN4YFPQvw
+         kMeNVVD6kArPlH0gVxIUGNCb8ii5l424Y3t5W7Dw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3UZG-1nEIAD1h1W-000ZAM; Sat, 29
+ Jan 2022 10:39:15 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-i2c@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: npcm7xx: Fix typos
+Date:   Sat, 29 Jan 2022 10:39:07 +0100
+Message-Id: <20220129093907.2196730-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220127180256.347004543@linuxfoundation.org>
-In-Reply-To: <20220127180256.347004543@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 29 Jan 2022 15:08:26 +0530
-Message-ID: <CA+G9fYvk5Ye+6Y+Tu0mwYhe9bEL5y+dgAmQKDpQ=2CFtu9Td9Q@mail.gmail.com>
-Subject: Re: [PATCH 4.4 0/1] 4.4.301-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:doqg1AvrDm2EWU0TKD4LgefzLSS50Klm1z7L4UIO6eD1gOSlxXZ
+ 6EQBqy2/3Cvwt+zh7HMSzylgtc4MF0x0csj0dmQjwiw7k2DvyygjHJVuvA7QIkiktgMveht
+ EcjxQMrw+OZ/GxxSZTkIuFbvY6Xh5R+VKyZsxRWy3umfik0MgLZD7HsbO3WBYBSpcZnPwpp
+ gcl6/qfkR4TQKIJnj9Klg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:C3nW1pPfTOs=:GwBV/SYaRmMtIAIF/gkZyF
+ NEn7kDjnOOeuu9pCLhO3Ey0GOUdp4z0TicEjgWSoBdfA2sHqgZI59vOp+Sf/Ull59tZLeNgdE
+ Yc9sa/LUL1Zns5Gx3mLkqOgKZt8lj1zL+p/roH+wLfPjZ9aYSFa9RCJHjy077xI0f/8rnUrpI
+ zB8AvDGmCn7oLqgvlQAoaMZO3JpuZBOYTMSlBI40KxPCsT8FBAyuDHkdH64CLzM/TyDwZfPLe
+ Yrkhs787l13WHislDdDvZR1yE/WOi5z+RxODe3CF/dkDT7TvzzAm61izsiZH3bgzGRz8i/xc6
+ jl1004hP+yBtVsF/UEOnfsyAjf+u9USVkqK3TwMlrfyJ0vV46Nq9bDvIPz3a2ZwQkkugPaU2L
+ A0ByUbrpLuuw9+SFuMgsuLXYJhjjCvBK0V6OhqXoHvnu58HQ9m9AgGWBwvymJ+EgIpdD2Aoq7
+ xVfS5FifyTc0fGwJfAIVlBNY8oJFMTZ1Ybr69Q3nNQLNH8Kg+QED3vNqjUgXVth4n8rprbcdB
+ CBIp6Z6lf7996PxYF31maD+tgtBHDxdoXa52i22GYF3u4l8hQcN9tY43brqKi/DXHiWGiMdiP
+ IQx7+7oSY9Bj0L083HktTQZTXQM9QtqVfiq2F0LmXzM7Ej7wv2nHvZmQ1HExeX4AelkS1j/Qc
+ mC0W0NIKxYSLkMfvlB8PlzC4bddJZRPtfc1QQMaNDwqPIPio/bj/Q+YO/VPdP3AlAtArhPAoN
+ 74lZUUKmn8CwNGN0vSgc3ANdmOe61sKsapPYt1ysyW+AaLG5qkeDeR/wqWeT+4HUlSo6eE5Fr
+ Qxu2JWfpAxsmKrJ7wzs+7fIEFIagn2wYDXKaeztWss005nUYHRXSoMod70hcITIcp6Hp9aKd2
+ X4SblpsX3tP96wNwRma2imvaA9Vq51h50ebEBiDheRdEIKFbm77Uhys695NY9kxs62iyN/TY4
+ bF6odIYUKSJCI0H8nQ9ySSczOKrEtSWNcu1lTl598EfR51qsn6k9BXoXqizucQJbrYi0AMf8s
+ a4/Pz9mDzGS6J0UDEdfvxY3kLgDf6pejZWUKS4qXxcfVzdYp/DIoIYSUqkJimaJAgY7tlf80x
+ K8QXdJphsD4X+4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 at 23:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.4.301 release.
-> There are 1 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 29 Jan 2022 18:02:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.4.301-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The comments in this driver have a few typos. Let's fix them.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/i2c/busses/i2c-npcm7xx.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npc=
+m7xx.c
+index 2ad166355ec9b..71aad029425d8 100644
+=2D-- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -781,7 +781,7 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus, in=
+t nread, int nwrite)
+ 		/*
+ 		 * if we are about to read the first byte in blk rd mode,
+ 		 * don't NACK it. If slave returns zero size HW can't NACK
+-		 * it immidiattly, it will read extra byte and then NACK.
++		 * it immediately, it will read extra byte and then NACK.
+ 		 */
+ 		if (bus->rd_ind =3D=3D 0 && bus->read_block_use) {
+ 			/* set fifo to read one byte, no last: */
+@@ -981,7 +981,7 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bus, =
+u16 nwrite,
+ /*
+  * npcm_i2c_slave_wr_buf_sync:
+  * currently slave IF only supports single byte operations.
+- * in order to utilyze the npcm HW FIFO, the driver will ask for 16 bytes
++ * in order to utilize the npcm HW FIFO, the driver will ask for 16 bytes
+  * at a time, pack them in buffer, and then transmit them all together
+  * to the FIFO and onward to the bus.
+  * NACK on read will be once reached to bus->adap->quirks->max_read_len.
+@@ -1175,7 +1175,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(struct=
+ npcm_i2c *bus)
+ 				/*
+ 				 * the i2c module can response to 10 own SA.
+ 				 * check which one was addressed by the master.
+-				 * repond to the first one.
++				 * respond to the first one.
+ 				 */
+ 				addr =3D ((i2ccst3 & 0x07) << 7) |
+ 					(i2ccst2 & 0x7F);
+@@ -1753,8 +1753,8 @@ static void npcm_i2c_recovery_init(struct i2c_adapte=
+r *_adap)
+ 	/*
+ 	 * npcm i2c HW allows direct reading of SCL and SDA.
+ 	 * However, it does not support setting SCL and SDA directly.
+-	 * The recovery function can togle SCL when SDA is low (but not set)
+-	 * Getter functions used internally, and can be used externaly.
++	 * The recovery function can toggle SCL when SDA is low (but not set)
++	 * Getter functions used internally, and can be used externally.
+ 	 */
+ 	rinfo->get_scl =3D npcm_i2c_get_SCL;
+ 	rinfo->get_sda =3D npcm_i2c_get_SDA;
+@@ -1768,10 +1768,10 @@ static void npcm_i2c_recovery_init(struct i2c_adap=
+ter *_adap)
 
-## Build
-* kernel: 4.4.301-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.4.y
-* git commit: 187d7c3b8ca09131c71f6dbb8c8761f7f809402c
-* git describe: v4.4.300-2-g187d7c3b8ca0
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.3=
-00-2-g187d7c3b8ca0
+ /*
+  * npcm_i2c_init_clk: init HW timing parameters.
+- * NPCM7XX i2c module timing parameters are depenent on module core clk (=
+APB)
++ * NPCM7XX i2c module timing parameters are dependent on module core clk =
+(APB)
+  * and bus frequency.
+- * 100kHz bus requires tSCL =3D 4 * SCLFRQ * tCLK. LT and HT are simetric=
+.
+- * 400kHz bus requires assymetric HT and LT. A different equation is reco=
+mended
++ * 100kHz bus requires tSCL =3D 4 * SCLFRQ * tCLK. LT and HT are symmetri=
+c.
++ * 400kHz bus requires asymmetric HT and LT. A different equation is reco=
+mmended
+  * by the HW designer, given core clock range (equations in comments belo=
+w).
+  *
+  */
+=2D-
+2.34.1
 
-## Test Regressions (compared to v4.4.299-114-g67ca9c44f63d)
-No test regressions found.
-
-## Metric Regressions (compared to v4.4.299-114-g67ca9c44f63d)
-No metric regressions found.
-
-## Test Fixes (compared to v4.4.299-114-g67ca9c44f63d)
-No test fixes found.
-
-## Metric Fixes (compared to v4.4.299-114-g67ca9c44f63d)
-No metric fixes found.
-
-## Test result summary
-total: 33090, pass: 26341, fail: 104, skip: 5946, xfail: 699
-
-## Build Summary
-* arm: 129 total, 129 passed, 0 failed
-* arm64: 31 total, 31 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 30 total, 24 passed, 6 failed
-
-## Test suites summary
-* kselftest-bpf
-* kselftest-intel_pstate
-* kselftest-kvm
-* kselftest-livepatch
-* kselftest-ptrace
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-zram
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

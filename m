@@ -2,533 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDD24A2D02
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B094A2D07
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 09:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352487AbiA2IPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 03:15:50 -0500
-Received: from mga12.intel.com ([192.55.52.136]:59787 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235255AbiA2IPE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 03:15:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643444103; x=1674980103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xiKxwkxZGpQUMiR5hd0P3B1nnjHl7/YchFR5kJxvI9o=;
-  b=m3bNOL13TSYXBsw+O4srjVT8YoI6nVNzU8kD73NUbIcnkSnpA2qQgGmM
-   rS7pmr5OQlYPtCR/lF9/OBfbSZMKhvyjmvgI88gv7ApAoH7JJgf4p4yDZ
-   03ohqVgRqYCORksO0wHhHvwQqO04SpwC5RHJEGs98VXyvnWfwgd1ewrFz
-   VRnbS8RZJBDYLsRNG4QZODbueim6CPnZhqtl/xkym0Q0sPJLK4hQ9ce5q
-   p2CbCGDvVIuw8uAoy/gbAyR5XXocIrIKV0J8g3QsxJytGDWC4xoEMOPfW
-   TxoyLslnkgX/7naPlF5XLantgieotyGqQqoBIy7wXb5p+CwdJ3Ky9rWiD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="227230680"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="227230680"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 00:14:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="697342462"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Jan 2022 00:14:48 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDisi-000Oxr-Ai; Sat, 29 Jan 2022 08:14:48 +0000
-Date:   Sat, 29 Jan 2022 16:14:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>
-Subject: [s390:fixes 5/6] arch/s390/lib/test_modules_helpers.c:8:13: warning:
- no previous prototype for 'test_modules_return_0000'
-Message-ID: <202201291658.maxSRfHd-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1345189AbiA2IU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 03:20:27 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:53774 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345045AbiA2IUY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 03:20:24 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 33D1E1F37B;
+        Sat, 29 Jan 2022 08:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643444423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YQGe8ku0xgyOr5vWVm7ZKhVbHPS12hwqWMo7r42m+vg=;
+        b=fPDltyJAcjS9Xa6/tv0Mu9nklS7kHMr+HGru4P5KtNHNWzWVnO+lu5VlKgbxN117jux9MO
+        zUbjqZ5j7iP3ZxD0pqjrXRYGoyZjYEGrN3opxreAus3nyRhx1bdU0jwZqHWS72ekmVvtWP
+        1sjj5dIEYzi0FJvXraixyWF4t+8zCA0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643444423;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YQGe8ku0xgyOr5vWVm7ZKhVbHPS12hwqWMo7r42m+vg=;
+        b=1fAjckwkqjuW6ClPPv5NZqCZsDGYOSyG1duC3rHJUbNZ6Yd1jFDfCQh3nLrR6vqdk0imam
+        Stgt+XWEvTthPPBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id DF6ECA3B83;
+        Sat, 29 Jan 2022 08:20:22 +0000 (UTC)
+Date:   Sat, 29 Jan 2022 09:20:22 +0100
+Message-ID: <s5hilu3eywp.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, broonie@kernel.org,
+        o-takashi@sakamocchi.jp, alsa-devel@alsa-project.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] ALSA: core: possible deadlock involving waiting and locking operations
+In-Reply-To: <37c84cd1-80c6-cbcf-6673-d90d99501d4f@gmail.com>
+References: <56766037-972e-9e5b-74c1-88633a72a77f@gmail.com>
+        <YfTCKrjpaeKWFglO@workstation>
+        <37c84cd1-80c6-cbcf-6673-d90d99501d4f@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git fixes
-head:   c9bb19368b3ab111aedf3297e65bf84c9d3aa005
-commit: 90c5318795eefa09a9f9aef8d18a904e24962b5c [5/6] s390/module: test loading modules with a lot of relocations
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220129/202201291658.maxSRfHd-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?id=90c5318795eefa09a9f9aef8d18a904e24962b5c
-        git remote add s390 https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git
-        git fetch --no-tags s390 fixes
-        git checkout 90c5318795eefa09a9f9aef8d18a904e24962b5c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+On Sat, 29 Jan 2022 09:07:05 +0100,
+Jia-Ju Bai wrote:
+> 
+> 
+> 
+> On 2022/1/29 12:27, Takashi Sakamoto wrote:
+> > Hi,
+> >
+> > On Sat, Jan 29, 2022 at 11:33:26AM +0800, Jia-Ju Bai wrote:
+> >> Hello,
+> >>
+> >> My static analysis tool reports a possible deadlock in the sound driver
+> >> in Linux 5.10:
+> >>
+> >> snd_card_disconnect_sync()
+> >>    spin_lock_irq(&card->files_lock); --> Line 461 (Lock A)
+> >>    wait_event_lock_irq(card->remove_sleep, ...); --> Line 462 (Wait X)
+> >>    spin_unlock_irq(&card->files_lock); --> Line 465 (Unlock A)
+> >>
+> >> snd_hwdep_release()
+> >>    mutex_lock(&hw->open_mutex); --> Line 152 (Lock B)
+> >>    mutex_unlock(&hw->open_mutex); --> Line 157 (Unlock B)
+> >>    snd_card_file_remove()
+> >>      wake_up_all(&card->remove_sleep); --> Line 976 (Wake X)
+> >>
+> >> snd_hwdep_open()
+> >>    mutex_lock(&hw->open_mutex); --> Line 95 (Lock B)
+> >>    snd_card_file_add()
+> >>      spin_lock(&card->files_lock); --> Line 932 (Lock A)
+> >>      spin_unlock(&card->files_lock); --> Line 940 (Unlock A)
+> >>    mutex_unlock(&hw->open_mutex); --> Line 139 (Unlock B)
+> >>
+> >> When snd_card_disconnect_sync() is executed, "Wait X" is performed by
+> >> holding "Lock A". If snd_hwdep_open() is executed at this time, it holds
+> >> "Lock B" and then waits for acquiring "Lock A". If snd_hwdep_release()
+> >> is executed at this time, it waits for acquiring "Lock B", and thus
+> >> "Wake X" cannot be performed to wake up "Wait X" in
+> >> snd_card_disconnect_sync(), causing a possible deadlock.
+> >>
+> >> I am not quite sure whether this possible problem is real and how to fix
+> >> it if it is real.
+> >> Any feedback would be appreciated, thanks :)
+> > I'm interested in your report about the deadlock, and seek the cause
+> > of issue. Then I realized that we should take care of the replacement of
+> > file_operation before acquiring spinlock in snd_card_disconnect_sync().
+> >
+> > ```
+> > snd_card_disconnect_sync()
+> > ->snd_card_disconnect()
+> >    ->spin_lock()
+> >    ->list_for_each_entry()
+> >      mfile->file->f_op = snd_shutdown_f_ops
+> >    ->spin_unlock()
+> > ->spin_lock_irq()
+> > ->wait_event_lock_irq()
+> > ->spin_unlock_irq()
+> > ```
+> >
+> > The implementation of snd_shutdown_f_ops has no value for .open, therefore
+> > snd_hwdep_open() is not called anymore when waiting the event. The mutex
+> > (Lock B) is not acquired in process context of ALSA hwdep application.
+> >
+> > The original .release function can be called by snd_disconnect_release()
+> > via replaced snd_shutdown_f_ops. In the case, as you can see, the spinlock
+> > (Lock A) is not acquired.
+> >
+> > I think there are no race conditions against Lock A and B in process
+> > context of ALSA hwdep application after card disconnection. But it would
+> > be probable to overlook the other case. I would be glad to receive your
+> > check for the above procedure.
+> 
+> Thanks a lot for the quick reply :)
+> Your explanation is reasonable, because snd_shutdown_f_ops indeed has
+> no value for .open.
+> 
+> However, my static analysis tool finds another possible deadlock in
+> the mentioned code:
+> 
+> snd_card_disconnect_sync()
+>   spin_lock_irq(&card->files_lock); --> Line 461 (Lock A)
+>   wait_event_lock_irq(card->remove_sleep, ...); --> Line 462 (Wait X)
+>   spin_unlock_irq(&card->files_lock); --> Line 465 (Unlock A)
+> 
+> snd_hwdep_release()
+>   snd_card_file_remove()
+>     spin_lock(&card->files_lock); --> Line 962 (Lock A)
+>     wake_up_all(&card->remove_sleep); --> Line 976 (Wake X)
+>     spin_unlock(&card->files_lock); --> Line 977 (Unlock A)
+> 
+> When snd_card_disconnect_sync() is executed, "Wait X" is performed by
+> holding "Lock A".
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0000' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:6:9: note: in expansion of macro 'DEFINE_RETURN'
-       6 |         f(x ## 0); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0001' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:7:9: note: in expansion of macro 'DEFINE_RETURN'
-       7 |         f(x ## 1); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0002' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:8:9: note: in expansion of macro 'DEFINE_RETURN'
-       8 |         f(x ## 2); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0003' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:9:9: note: in expansion of macro 'DEFINE_RETURN'
-       9 |         f(x ## 3); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0004' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:10:9: note: in expansion of macro 'DEFINE_RETURN'
-      10 |         f(x ## 4); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0005' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:11:9: note: in expansion of macro 'DEFINE_RETURN'
-      11 |         f(x ## 5); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0006' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:12:9: note: in expansion of macro 'DEFINE_RETURN'
-      12 |         f(x ## 6); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0007' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:13:9: note: in expansion of macro 'DEFINE_RETURN'
-      13 |         f(x ## 7); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0008' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:14:9: note: in expansion of macro 'DEFINE_RETURN'
-      14 |         f(x ## 8); \
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0009' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:15:9: note: in expansion of macro 'DEFINE_RETURN'
-      15 |         f(x ## 9)
-         |         ^
-   arch/s390/lib/test_modules.h:17:9: note: in expansion of macro '__REPEAT_10000_3'
-      17 |         __REPEAT_10000_3(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0010' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:6:9: note: in expansion of macro 'DEFINE_RETURN'
-       6 |         f(x ## 0); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0011' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:7:9: note: in expansion of macro 'DEFINE_RETURN'
-       7 |         f(x ## 1); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0012' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:8:9: note: in expansion of macro 'DEFINE_RETURN'
-       8 |         f(x ## 2); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0013' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:9:9: note: in expansion of macro 'DEFINE_RETURN'
-       9 |         f(x ## 3); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0014' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:10:9: note: in expansion of macro 'DEFINE_RETURN'
-      10 |         f(x ## 4); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0015' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:11:9: note: in expansion of macro 'DEFINE_RETURN'
-      11 |         f(x ## 5); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0016' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:12:9: note: in expansion of macro 'DEFINE_RETURN'
-      12 |         f(x ## 6); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0017' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:13:9: note: in expansion of macro 'DEFINE_RETURN'
-      13 |         f(x ## 7); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0018' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:14:9: note: in expansion of macro 'DEFINE_RETURN'
-      14 |         f(x ## 8); \
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
->> arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0019' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:15:9: note: in expansion of macro 'DEFINE_RETURN'
-      15 |         f(x ## 9)
-         |         ^
-   arch/s390/lib/test_modules.h:18:9: note: in expansion of macro '__REPEAT_10000_3'
-      18 |         __REPEAT_10000_3(f, x ## 1); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0020' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:6:9: note: in expansion of macro 'DEFINE_RETURN'
-       6 |         f(x ## 0); \
-         |         ^
-   arch/s390/lib/test_modules.h:19:9: note: in expansion of macro '__REPEAT_10000_3'
-      19 |         __REPEAT_10000_3(f, x ## 2); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0021' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:7:9: note: in expansion of macro 'DEFINE_RETURN'
-       7 |         f(x ## 1); \
-         |         ^
-   arch/s390/lib/test_modules.h:19:9: note: in expansion of macro '__REPEAT_10000_3'
-      19 |         __REPEAT_10000_3(f, x ## 2); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0022' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:8:9: note: in expansion of macro 'DEFINE_RETURN'
-       8 |         f(x ## 2); \
-         |         ^
-   arch/s390/lib/test_modules.h:19:9: note: in expansion of macro '__REPEAT_10000_3'
-      19 |         __REPEAT_10000_3(f, x ## 2); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0023' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:9:9: note: in expansion of macro 'DEFINE_RETURN'
-       9 |         f(x ## 3); \
-         |         ^
-   arch/s390/lib/test_modules.h:19:9: note: in expansion of macro '__REPEAT_10000_3'
-      19 |         __REPEAT_10000_3(f, x ## 2); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:39:9: note: in expansion of macro '__REPEAT_10000_1'
-      39 |         __REPEAT_10000_1(f, 0); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:13:1: note: in expansion of macro 'REPEAT_10000'
-      13 | REPEAT_10000(DEFINE_RETURN);
-         | ^~~~~~~~~~~~
-   arch/s390/lib/test_modules_helpers.c:8:13: warning: no previous prototype for 'test_modules_return_0024' [-Wmissing-prototypes]
-       8 |         int test_modules_return_ ## i(void) \
-         |             ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:10:9: note: in expansion of macro 'DEFINE_RETURN'
-      10 |         f(x ## 4); \
-         |         ^
-   arch/s390/lib/test_modules.h:19:9: note: in expansion of macro '__REPEAT_10000_3'
-      19 |         __REPEAT_10000_3(f, x ## 2); \
-         |         ^~~~~~~~~~~~~~~~
-   arch/s390/lib/test_modules.h:28:9: note: in expansion of macro '__REPEAT_10000_2'
-      28 |         __REPEAT_10000_2(f, x ## 0); \
+No, it's wait_event_lock_irq(), and this helper unlocks the given lock
+during waiting and re-locks it after schedule().  See the macro
+expansion in include/linux/wait.h.
 
 
-vim +/test_modules_return_0000 +8 arch/s390/lib/test_modules_helpers.c
-
-     6	
-     7	#define DEFINE_RETURN(i) \
-   > 8		int test_modules_return_ ## i(void) \
-     9		{ \
-    10			return 1 ## i - 10000; \
-    11		} \
-    12		EXPORT_SYMBOL_GPL(test_modules_return_ ## i)
-  > 13	REPEAT_10000(DEFINE_RETURN);
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Takashi

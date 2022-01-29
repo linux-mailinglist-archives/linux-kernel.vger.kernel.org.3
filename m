@@ -2,711 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9B74A325A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 23:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9FA4A325B
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 23:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353342AbiA2WYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 17:24:36 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:35285 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353302AbiA2WYd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 17:24:33 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id A748C3200E82;
-        Sat, 29 Jan 2022 17:24:32 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 29 Jan 2022 17:24:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=b43zxkhB6DuN1oYuOULPcOcgjSCCPI
-        YADpOYiC2iT2Y=; b=VWC9nRD4wV/S3euErRmU8g9lC5fXEIW8LFTAqjDxQJM6w6
-        GFZfM2byw4DMvPWNDmrk+GmgvZYRT9KKKskaF+G6/rg9kxTm6hucWOCMrqzr5cbL
-        FoVY2IlHIhs9KMBYsrVy67ahXMC1plXRKDtELX4Cf9UQCT6m8WAAMmVJefaZiI88
-        brPG9ZChcFGq0bSyUn3Rza8fBJtNBS7RIyoldfwgUkrkMv97anLU9L0FyoGbw9+q
-        x3PDMmfBr3Mamta/xeX7EQZWrpXir3km4mB0vMqmjlA4UzESdl3NV8hLvQlkVrtA
-        I1BBMF8in90qId0whq0O9hQhfqpamWcrlugRJSMA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=b43zxk
-        hB6DuN1oYuOULPcOcgjSCCPIYADpOYiC2iT2Y=; b=U/Xa6uoCUfZT+qHO9LOBjV
-        gNpuYog8QdSxUug/pYWP0gvuJ12AOZCjKUHFTsEgQRTf6oL6Epin5b893tJp3IyK
-        vz/XIyhE2kNseGonaGXtD6kuoLiC7Y8KFOxotZLUFLH9KCETNrCgzr1WsxY6/oZ7
-        3Uu6O7LzYyw06j0n/erDBbTC0a/WRGt65HmUSUGy+OcKEs0pqEjmhEW+NKUk1TUn
-        O7R4z06HwXJYfT7Xz0dL5ewqAOXTQk5BUbB+Di4JE5sHybTdDnMJ+OnCF1JSNB7/
-        e6jY5VNIKIW9b7Qxyl9ktTWQ78ebDfW9Av2WI+S7ojwHFbSem3OdcHl15CMJ0CrQ
-        ==
-X-ME-Sender: <xms:n771YbTfQ5owYmx5N_fzQp6NKlJtPD6UJlafHppNOu7qLR2NIf0YAQ>
-    <xme:n771YcwTyEMmwe1yo4u-vjFOS1M751Oz7Xwu-SSBONh1HzdI9_vGXiwWBDrJBAKIt
-    v6vLsQG7aiyqEwAGQ>
-X-ME-Received: <xmr:n771YQ0Oar3SzQy2yddvNsT_UEOpaynWvagMa62cNqwkR3MSbPtuLPmx_Z_X-snAVp6x75zFPxfhe65M1pTpJMir-dVGK9WlNVm7c6__IjNw-Y4YF2XpIfmgV_0Zna6I0Y0m5A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeejgdduieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
-    gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:n771YbAVp21PMFovkEAwSFd4mvu9HVtTdnxtLsZ84Ok84gWNdCNoYw>
-    <xmx:n771YUggJKh4y2YjbYYEhSjXcolMcy03Nyg_JKTdAGmTr19tnGirFg>
-    <xmx:n771YfoKqb9dmu0y8RQdE0f8APciF-743WrJbwj-r8kRUgJzp-RkgQ>
-    <xmx:n771YeaXsfZPM1cPjoeMDAIDo2v6rocXHgLqqqhQrKQETvASY5z2zw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Jan 2022 17:24:31 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ondrej Jirman <megous@megous.com>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 3/3] power: supply: Add a driver for Injoinic power bank ICs
-Date:   Sat, 29 Jan 2022 16:24:24 -0600
-Message-Id: <20220129222424.45707-3-samuel@sholland.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220129222424.45707-1-samuel@sholland.org>
-References: <20220129222424.45707-1-samuel@sholland.org>
+        id S1353345AbiA2Wac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 17:30:32 -0500
+Received: from mga03.intel.com ([134.134.136.65]:27050 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243417AbiA2Waa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 17:30:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643495430; x=1675031430;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0YoN78A9G/WwGCZn+KmDESCzV1UuFBL3r+2yfV3uecg=;
+  b=H2OmUxazp/YPxA0+xbKPRdvj3salLxMWZqzvs/RxPFqU85jG9ezEVDql
+   JyQ/zVpXTTN10Vir4FX7Fpb1Bs2uYLrWl8KztrP8uS04+NY6XkVZeF5j6
+   tA4R84nt16xtV/5EfnCxUomjNO0swUR3T+HugxIvWM+LaXjAqJPYEWCnr
+   f0aHSL7hWA/1BrfW4W6dHodUnpxM5ENpE7ccQWZY5ofiRFMYPhrWjE8Dw
+   xntuoMTjMhlVPGmy/PElBEzEFRQVhAE+u8krVTaPbAKEE+VyCQgHWnrRj
+   InptdrMuORSor82SUZ3/hJfIL9JdjZ1N8aBQz+fIl2pjb0uhEOTqsbIqC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="247249876"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="247249876"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 14:30:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="625978430"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Jan 2022 14:30:23 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id B160B114; Sun, 30 Jan 2022 00:30:37 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     bp@alien8.de
+Cc:     aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: [PATCHv2.1 05/29] x86/tdx: Add HLT support for TDX guests
+Date:   Sun, 30 Jan 2022 01:30:21 +0300
+Message-Id: <20220129223021.29417-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <YfVU01dBD36H0EIv@zn.tnic>
+References: <YfVU01dBD36H0EIv@zn.tnic>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver supports several chip variants which all share the same I2C
-register interface. Since the chip will turn off and become inaccessible
-under conditions outside of software control (e.g. upon button press or
-input voltage removal), some special handling is needed to delay the
-initialization of the IC until it is accessible.
+The HLT instruction is a privileged instruction, executing it stops
+instruction execution and places the processor in a HALT state. It
+is used in kernel for cases like reboot, idle loop and exception fixup
+handlers. For the idle case, interrupts will be enabled (using STI)
+before the HLT instruction (this is also called safe_halt()).
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+To support the HLT instruction in TDX guests, it needs to be emulated
+using TDVMCALL (hypercall to VMM). More details about it can be found
+in Intel Trust Domain Extensions (Intel TDX) Guest-Host-Communication
+Interface (GHCI) specification, section TDVMCALL[Instruction.HLT].
+
+In TDX guests, executing HLT instruction will generate a #VE, which is
+used to emulate the HLT instruction. But #VE based emulation will not
+work for the safe_halt() flavor, because it requires STI instruction to
+be executed just before the TDCALL. Since idle loop is the only user of
+safe_halt() variant, handle it as a special case.
+
+To avoid *safe_halt() call in the idle function, define the
+tdx_guest_idle() and use it to override the "x86_idle" function pointer
+for a valid TDX guest.
+
+Alternative choices like PV ops have been considered for adding
+safe_halt() support. But it was rejected because HLT paravirt calls
+only exist under PARAVIRT_XXL, and enabling it in TDX guest just for
+safe_halt() use case is not worth the cost.
+
+Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
+ arch/x86/include/asm/tdx.h |  3 ++
+ arch/x86/kernel/process.c  |  4 +++
+ arch/x86/kernel/tdcall.S   | 31 +++++++++++++++++
+ arch/x86/kernel/tdx.c      | 70 ++++++++++++++++++++++++++++++++++++--
+ 4 files changed, 106 insertions(+), 2 deletions(-)
 
- MAINTAINERS                         |   5 +
- drivers/power/supply/Kconfig        |   8 +
- drivers/power/supply/Makefile       |   1 +
- drivers/power/supply/ip5xxx_power.c | 563 ++++++++++++++++++++++++++++
- 4 files changed, 577 insertions(+)
- create mode 100644 drivers/power/supply/ip5xxx_power.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f41088418aae..061e2de72de5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9464,6 +9464,11 @@ F:	include/linux/mfd/ingenic-tcu.h
- F:	sound/soc/codecs/jz47*
- F:	sound/soc/jz4740/
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index d17143290f0a..9b4714a45bb9 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -74,10 +74,13 @@ bool tdx_get_ve_info(struct ve_info *ve);
  
-+INJOINIC IP5xxx POWER BANK IC DRIVER
-+M:	Samuel Holland <samuel@sholland.org>
-+S:	Maintained
-+F:	drivers/power/supply/ip5xxx_power.c
-+
- INOTIFY
- M:	Jan Kara <jack@suse.cz>
- R:	Amir Goldstein <amir73il@gmail.com>
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index b366e2fd8e97..539f66018ec4 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -51,6 +51,14 @@ config GENERIC_ADC_BATTERY
- 	  Say Y here to enable support for the generic battery driver
- 	  which uses IIO framework to read adc.
+ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
  
-+config IP5XXX_POWER
-+	tristate "Injoinic IP5xxx power bank IC driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y to include support for Injoinic IP5xxx power bank ICs,
-+	  which include a battery charger and a boost converter.
++void tdx_safe_halt(void);
 +
- config MAX8925_POWER
- 	tristate "MAX8925 battery charger support"
- 	depends on MFD_MAX8925
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 2c1b264b2046..7a70c740324e 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_GENERIC_ADC_BATTERY)	+= generic-adc-battery.o
- obj-$(CONFIG_PDA_POWER)		+= pda_power.o
- obj-$(CONFIG_APM_POWER)		+= apm_power.o
- obj-$(CONFIG_AXP20X_POWER)	+= axp20x_usb_power.o
-+obj-$(CONFIG_IP5XXX_POWER)	+= ip5xxx_power.o
- obj-$(CONFIG_MAX8925_POWER)	+= max8925_power.o
- obj-$(CONFIG_WM831X_BACKUP)	+= wm831x_backup.o
- obj-$(CONFIG_WM831X_POWER)	+= wm831x_power.o
-diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
-new file mode 100644
-index 000000000000..00fae16f6297
---- /dev/null
-+++ b/drivers/power/supply/ip5xxx_power.c
-@@ -0,0 +1,563 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (C) 2021 Samuel Holland <samuel@sholland.org>
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+
-+#define IP5XXX_SYS_CTL0			0x01
-+#define IP5XXX_SYS_CTL0_WLED_DET_EN		BIT(4)
-+#define IP5XXX_SYS_CTL0_WLED_EN			BIT(3)
-+#define IP5XXX_SYS_CTL0_BOOST_EN		BIT(2)
-+#define IP5XXX_SYS_CTL0_CHARGER_EN		BIT(1)
-+#define IP5XXX_SYS_CTL1			0x02
-+#define IP5XXX_SYS_CTL1_LIGHT_SHDN_EN		BIT(1)
-+#define IP5XXX_SYS_CTL1_LOAD_PWRUP_EN		BIT(0)
-+#define IP5XXX_SYS_CTL2			0x0c
-+#define IP5XXX_SYS_CTL2_LIGHT_SHDN_TH		GENMASK(7, 3)
-+#define IP5XXX_SYS_CTL3			0x03
-+#define IP5XXX_SYS_CTL3_LONG_PRESS_TIME_SEL	GENMASK(7, 6)
-+#define IP5XXX_SYS_CTL3_BTN_SHDN_EN		BIT(5)
-+#define IP5XXX_SYS_CTL4			0x04
-+#define IP5XXX_SYS_CTL4_SHDN_TIME_SEL		GENMASK(7, 6)
-+#define IP5XXX_SYS_CTL4_VIN_PULLOUT_BOOST_EN	BIT(5)
-+#define IP5XXX_SYS_CTL5			0x07
-+#define IP5XXX_SYS_CTL5_NTC_DIS			BIT(6)
-+#define IP5XXX_SYS_CTL5_WLED_MODE_SEL		BIT(1)
-+#define IP5XXX_SYS_CTL5_BTN_SHDN_SEL		BIT(0)
-+#define IP5XXX_CHG_CTL1			0x22
-+#define IP5XXX_CHG_CTL1_BOOST_UVP_SEL		GENMASK(3, 2)
-+#define IP5XXX_CHG_CTL2			0x24
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL		GENMASK(6, 5)
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_2V	(0x0 << 5)
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_3V	(0x1 << 5)
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_35V	(0x2 << 5)
-+#define IP5XXX_CHG_CTL2_CONST_VOLT_SEL		GENMASK(2, 1)
-+#define IP5XXX_CHG_CTL4			0x26
-+#define IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN		BIT(6)
-+#define IP5XXX_CHG_CTL4A		0x25
-+#define IP5XXX_CHG_CTL4A_CONST_CUR_SEL		GENMASK(4, 0)
-+#define IP5XXX_MFP_CTL0			0x51
-+#define IP5XXX_MFP_CTL1			0x52
-+#define IP5XXX_GPIO_CTL2		0x53
-+#define IP5XXX_GPIO_CTL2A		0x54
-+#define IP5XXX_GPIO_CTL3		0x55
-+#define IP5XXX_READ0			0x71
-+#define IP5XXX_READ0_CHG_STAT			GENMASK(7, 5)
-+#define IP5XXX_READ0_CHG_STAT_IDLE		(0x0 << 5)
-+#define IP5XXX_READ0_CHG_STAT_TRICKLE		(0x1 << 5)
-+#define IP5XXX_READ0_CHG_STAT_CONST_VOLT	(0x2 << 5)
-+#define IP5XXX_READ0_CHG_STAT_CONST_CUR		(0x3 << 5)
-+#define IP5XXX_READ0_CHG_STAT_CONST_VOLT_STOP	(0x4 << 5)
-+#define IP5XXX_READ0_CHG_STAT_FULL		(0x5 << 5)
-+#define IP5XXX_READ0_CHG_STAT_TIMEOUT		(0x6 << 5)
-+#define IP5XXX_READ0_CHG_OP			BIT(4)
-+#define IP5XXX_READ0_CHG_END			BIT(3)
-+#define IP5XXX_READ0_CONST_VOLT_TIMEOUT		BIT(2)
-+#define IP5XXX_READ0_CHG_TIMEOUT		BIT(1)
-+#define IP5XXX_READ0_TRICKLE_TIMEOUT		BIT(0)
-+#define IP5XXX_READ0_TIMEOUT			GENMASK(2, 0)
-+#define IP5XXX_READ1			0x72
-+#define IP5XXX_READ1_WLED_PRESENT		BIT(7)
-+#define IP5XXX_READ1_LIGHT_LOAD			BIT(6)
-+#define IP5XXX_READ1_VIN_OVERVOLT		BIT(5)
-+#define IP5XXX_READ2			0x77
-+#define IP5XXX_READ2_BTN_PRESS			BIT(3)
-+#define IP5XXX_READ2_BTN_LONG_PRESS		BIT(1)
-+#define IP5XXX_READ2_BTN_SHORT_PRESS		BIT(0)
-+#define IP5XXX_BATVADC_DAT0		0xa2
-+#define IP5XXX_BATVADC_DAT1		0xa3
-+#define IP5XXX_BATIADC_DAT0		0xa4
-+#define IP5XXX_BATIADC_DAT1		0xa5
-+#define IP5XXX_BATOCV_DAT0		0xa8
-+#define IP5XXX_BATOCV_DAT1		0xa9
-+
-+struct ip5xxx {
-+	struct regmap *regmap;
-+	bool initialized;
-+};
-+
+ #else
+ 
+ static inline void tdx_early_init(void) { };
+ static inline bool is_tdx_guest(void) { return false; }
++static inline void tdx_safe_halt(void) { };
+ 
+ #endif /* CONFIG_INTEL_TDX_GUEST */
+ 
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 81d8ef036637..71aa12082370 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -46,6 +46,7 @@
+ #include <asm/proto.h>
+ #include <asm/frame.h>
+ #include <asm/unwind.h>
++#include <asm/tdx.h>
+ 
+ #include "process.h"
+ 
+@@ -870,6 +871,9 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+ 	} else if (prefer_mwait_c1_over_halt(c)) {
+ 		pr_info("using mwait in idle threads\n");
+ 		x86_idle = mwait_idle;
++	} else if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
++		pr_info("using TDX aware idle routine\n");
++		x86_idle = tdx_safe_halt;
+ 	} else
+ 		x86_idle = default_idle;
+ }
+diff --git a/arch/x86/kernel/tdcall.S b/arch/x86/kernel/tdcall.S
+index 46a49a96cf6c..ae74da33ccc6 100644
+--- a/arch/x86/kernel/tdcall.S
++++ b/arch/x86/kernel/tdcall.S
+@@ -3,6 +3,7 @@
+ #include <asm/asm.h>
+ #include <asm/frame.h>
+ #include <asm/unwind_hints.h>
++#include <uapi/asm/vmx.h>
+ 
+ #include <linux/linkage.h>
+ #include <linux/bits.h>
+@@ -39,6 +40,12 @@
+  */
+ #define tdcall .byte 0x66,0x0f,0x01,0xcc
+ 
 +/*
-+ * The IP5xxx charger only responds on I2C when it is "awake". The charger is
-+ * generally only awake when VIN is powered or when its boost converter is
-+ * enabled. Going into shutdown resets all register values. To handle this:
-+ *  1) When any bus error occurs, assume the charger has gone into shutdown.
-+ *  2) Attempt the initialization sequence on each subsequent register access
-+ *     until it succeeds.
++ * Used in __tdx_hypercall() to determine whether to enable interrupts
++ * before issuing TDCALL for the EXIT_REASON_HLT case.
 + */
-+static int ip5xxx_read(struct ip5xxx *ip5xxx, unsigned int reg,
-+		       unsigned int *val)
-+{
-+	int ret;
++#define ENABLE_IRQS_BEFORE_HLT 0x01
 +
-+	ret = regmap_read(ip5xxx->regmap, reg, val);
-+	if (ret)
-+		ip5xxx->initialized = false;
+ /*
+  * __tdx_module_call()  - Used by TDX guests to request services from
+  * the TDX module (does not include VMM services).
+@@ -230,6 +237,30 @@ SYM_FUNC_START(__tdx_hypercall)
+ 
+ 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
+ 
++	/*
++	 * For the idle loop STI needs to be called directly before
++	 * the TDCALL that enters idle (EXIT_REASON_HLT case). STI
++	 * instruction enables interrupts only one instruction later.
++	 * If there is a window between STI and the instruction that
++	 * emulates the HALT state, there is a chance for interrupts to
++	 * happen in this window, which can delay the HLT operation
++	 * indefinitely. Since this is the not the desired result,
++	 * conditionally call STI before TDCALL.
++	 *
++	 * Since STI instruction is only required for the idle case
++	 * (a special case of EXIT_REASON_HLT), use the r15 register
++	 * value to identify it. Since the R15 register is not used
++	 * by the VMM as per EXIT_REASON_HLT ABI, re-use it in
++	 * software to identify the STI case.
++	 */
++	cmpl $EXIT_REASON_HLT, %r11d
++	jne .Lskip_sti
++	cmpl $ENABLE_IRQS_BEFORE_HLT, %r15d
++	jne .Lskip_sti
++	/* Set R15 register to 0, it is unused in EXIT_REASON_HLT case */
++	xor %r15, %r15
++	sti
++.Lskip_sti:
+ 	tdcall
+ 
+ 	/* Restore output pointer to R9 */
+diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
+index 5a5b25f9c4d3..eeb456631a65 100644
+--- a/arch/x86/kernel/tdx.c
++++ b/arch/x86/kernel/tdx.c
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/cpufeature.h>
+ #include <asm/tdx.h>
++#include <asm/vmx.h>
+ 
+ /* TDX module Call Leaf IDs */
+ #define TDX_GET_VEINFO			3
+@@ -35,6 +36,61 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14,
+ 	return out->r10;
+ }
+ 
++static u64 __cpuidle _tdx_halt(const bool irq_disabled, const bool do_sti)
++{
++	/*
++	 * Emulate HLT operation via hypercall. More info about ABI
++	 * can be found in TDX Guest-Host-Communication Interface
++	 * (GHCI), sec 3.8 TDG.VP.VMCALL<Instruction.HLT>.
++	 *
++	 * The VMM uses the "IRQ disabled" param to understand IRQ
++	 * enabled status (RFLAGS.IF) of the TD guest and to determine
++	 * whether or not it should schedule the halted vCPU if an
++	 * IRQ becomes pending. E.g. if IRQs are disabled, the VMM
++	 * can keep the vCPU in virtual HLT, even if an IRQ is
++	 * pending, without hanging/breaking the guest.
++	 *
++	 * do_sti parameter is used by the __tdx_hypercall() to decide
++	 * whether to call the STI instruction before executing the
++	 * TDCALL instruction.
++	 */
++	return _tdx_hypercall(EXIT_REASON_HLT, irq_disabled, 0, 0,
++			      do_sti, NULL);
++}
++
++static bool tdx_halt(void)
++{
++	/*
++	 * Since non safe halt is mainly used in CPU offlining
++	 * and the guest will always stay in the halt state, don't
++	 * call the STI instruction (set do_sti as false).
++	 */
++	const bool irq_disabled = irqs_disabled();
++	const bool do_sti = false;
++
++	if (_tdx_halt(irq_disabled, do_sti))
++		return false;
++
++	return true;
++}
++
++void __cpuidle tdx_safe_halt(void)
++{
++	 /*
++	  * For do_sti=true case, __tdx_hypercall() function enables
++	  * interrupts using the STI instruction before the TDCALL. So
++	  * set irq_disabled as false.
++	  */
++	const bool irq_disabled = false;
++	const bool do_sti = true;
++
++	/*
++	 * Use WARN_ONCE() to report the failure.
++	 */
++	if (_tdx_halt(irq_disabled, do_sti))
++		WARN_ONCE(1, "HLT instruction emulation failed\n");
++}
++
+ bool tdx_get_ve_info(struct ve_info *ve)
+ {
+ 	struct tdx_module_output out;
+@@ -75,8 +131,18 @@ static bool tdx_virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+ /* Handle the kernel #VE */
+ static bool tdx_virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+ {
+-	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+-	return false;
++	bool ret = false;
++
++	switch (ve->exit_reason) {
++	case EXIT_REASON_HLT:
++		ret = tdx_halt();
++		break;
++	default:
++		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
++		break;
++	}
 +
 +	return ret;
-+}
-+
-+static int ip5xxx_update_bits(struct ip5xxx *ip5xxx, unsigned int reg,
-+			      unsigned int mask, unsigned int val)
-+{
-+	int ret;
-+
-+	ret = regmap_update_bits(ip5xxx->regmap, reg, mask, val);
-+	if (ret)
-+		ip5xxx->initialized = false;
-+
-+	return ret;
-+}
-+
-+static int ip5xxx_initialize(struct power_supply *psy)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	if (ip5xxx->initialized)
-+		return 0;
-+
-+	/*
-+	 * Disable shutdown under light load.
-+	 * Enable power on when under load.
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL1,
-+				 IP5XXX_SYS_CTL1_LIGHT_SHDN_EN |
-+				 IP5XXX_SYS_CTL1_LOAD_PWRUP_EN,
-+				 IP5XXX_SYS_CTL1_LOAD_PWRUP_EN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Enable shutdown after a long button press (as configured below).
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL3,
-+				 IP5XXX_SYS_CTL3_BTN_SHDN_EN,
-+				 IP5XXX_SYS_CTL3_BTN_SHDN_EN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Power on automatically when VIN is removed.
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL4,
-+				 IP5XXX_SYS_CTL4_VIN_PULLOUT_BOOST_EN,
-+				 IP5XXX_SYS_CTL4_VIN_PULLOUT_BOOST_EN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Enable the NTC.
-+	 * Configure the button for two presses => LED, long press => shutdown.
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL5,
-+				 IP5XXX_SYS_CTL5_NTC_DIS |
-+				 IP5XXX_SYS_CTL5_WLED_MODE_SEL |
-+				 IP5XXX_SYS_CTL5_BTN_SHDN_SEL,
-+				 IP5XXX_SYS_CTL5_WLED_MODE_SEL |
-+				 IP5XXX_SYS_CTL5_BTN_SHDN_SEL);
-+	if (ret)
-+		return ret;
-+
-+	ip5xxx->initialized = true;
-+	dev_dbg(psy->dev.parent, "Initialized after power on\n");
-+
-+	return 0;
-+}
-+
-+static const enum power_supply_property ip5xxx_charger_properties[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_VOLTAGE_OCV,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
-+};
-+
-+static int ip5xxx_charger_get_status(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_READ0, &rval);
-+	if (ret)
-+		return ret;
-+
-+	switch (rval & IP5XXX_READ0_CHG_STAT) {
-+	case IP5XXX_READ0_CHG_STAT_IDLE:
-+		*val = POWER_SUPPLY_STATUS_DISCHARGING;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_TRICKLE:
-+	case IP5XXX_READ0_CHG_STAT_CONST_CUR:
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT:
-+		*val = POWER_SUPPLY_STATUS_CHARGING;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT_STOP:
-+	case IP5XXX_READ0_CHG_STAT_FULL:
-+		*val = POWER_SUPPLY_STATUS_FULL;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_TIMEOUT:
-+		*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_charger_get_charge_type(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_READ0, &rval);
-+	if (ret)
-+		return ret;
-+
-+	switch (rval & IP5XXX_READ0_CHG_STAT) {
-+	case IP5XXX_READ0_CHG_STAT_IDLE:
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT_STOP:
-+	case IP5XXX_READ0_CHG_STAT_FULL:
-+	case IP5XXX_READ0_CHG_STAT_TIMEOUT:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_NONE;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_TRICKLE:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_CONST_CUR:
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_charger_get_health(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_READ0, &rval);
-+	if (ret)
-+		return ret;
-+
-+	if (rval & IP5XXX_READ0_TIMEOUT)
-+		*val = POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE;
-+	else
-+		*val = POWER_SUPPLY_HEALTH_GOOD;
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_charger_get_voltage_max(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL2, &rval);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * It is not clear what this will return if
-+	 * IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN is not set...
-+	 */
-+	switch (rval & IP5XXX_CHG_CTL2_BAT_TYPE_SEL) {
-+	case IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_2V:
-+		*val = 4200000;
-+		break;
-+	case IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_3V:
-+		*val = 4300000;
-+		break;
-+	case IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_35V:
-+		*val = 4350000;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_charger_read_adc(struct ip5xxx *ip5xxx,
-+				   u8 lo_reg, u8 hi_reg, int *val)
-+{
-+	unsigned int hi, lo;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, lo_reg, &lo);
-+	if (ret)
-+		return ret;
-+
-+	ret = ip5xxx_read(ip5xxx, hi_reg, &hi);
-+	if (ret)
-+		return ret;
-+
-+	*val = sign_extend32(hi << 8 | lo, 13);
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_charger_get_property(struct power_supply *psy,
-+				       enum power_supply_property psp,
-+				       union power_supply_propval *val)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	int raw, ret, vmax;
-+	unsigned int rval;
-+
-+	ret = ip5xxx_initialize(psy);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		return ip5xxx_charger_get_status(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		return ip5xxx_charger_get_charge_type(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_HEALTH:
-+		return ip5xxx_charger_get_health(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_SYS_CTL0, &rval);
-+		if (ret)
-+			return ret;
-+
-+		val->intval = !!(rval & IP5XXX_SYS_CTL0_BOOST_EN);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-+		return ip5xxx_charger_get_voltage_max(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		ret = ip5xxx_charger_read_adc(ip5xxx, IP5XXX_BATVADC_DAT0,
-+					      IP5XXX_BATVADC_DAT1, &raw);
-+
-+		val->intval = 2600000 + DIV_ROUND_CLOSEST(raw * 26855, 100);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
-+		ret = ip5xxx_charger_read_adc(ip5xxx, IP5XXX_BATOCV_DAT0,
-+					      IP5XXX_BATOCV_DAT1, &raw);
-+
-+		val->intval = 2600000 + DIV_ROUND_CLOSEST(raw * 26855, 100);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		ret = ip5xxx_charger_read_adc(ip5xxx, IP5XXX_BATIADC_DAT0,
-+					      IP5XXX_BATIADC_DAT1, &raw);
-+
-+		val->intval = DIV_ROUND_CLOSEST(raw * 745985, 1000);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL4A, &rval);
-+		if (ret)
-+			return ret;
-+
-+		rval &= IP5XXX_CHG_CTL4A_CONST_CUR_SEL;
-+		val->intval = 100000 * rval;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-+		val->intval = 100000 * 0x1f;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+		ret = ip5xxx_charger_get_voltage_max(ip5xxx, &vmax);
-+		if (ret)
-+			return ret;
-+
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL2, &rval);
-+		if (ret)
-+			return ret;
-+
-+		rval &= IP5XXX_CHG_CTL2_CONST_VOLT_SEL;
-+		val->intval = vmax + 14000 * (rval >> 1);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-+		ret = ip5xxx_charger_get_voltage_max(ip5xxx, &vmax);
-+		if (ret)
-+			return ret;
-+
-+		val->intval = vmax + 14000 * 3;
-+		return 0;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ip5xxx_charger_set_voltage_max(struct ip5xxx *ip5xxx, int val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	switch (val) {
-+	case 4200000:
-+		rval = IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_2V;
-+		break;
-+	case 4300000:
-+		rval = IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_3V;
-+		break;
-+	case 4350000:
-+		rval = IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_35V;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL2,
-+				 IP5XXX_CHG_CTL2_BAT_TYPE_SEL, rval);
-+	if (ret)
-+		return ret;
-+
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL4,
-+				 IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN,
-+				 IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_charger_set_property(struct power_supply *psy,
-+				       enum power_supply_property psp,
-+				       const union power_supply_propval *val)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	unsigned int rval;
-+	int ret, vmax;
-+
-+	ret = ip5xxx_initialize(psy);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		switch (val->intval) {
-+		case POWER_SUPPLY_STATUS_CHARGING:
-+			rval = IP5XXX_SYS_CTL0_CHARGER_EN;
-+			break;
-+		case POWER_SUPPLY_STATUS_DISCHARGING:
-+		case POWER_SUPPLY_STATUS_NOT_CHARGING:
-+			rval = 0;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL0,
-+					  IP5XXX_SYS_CTL0_CHARGER_EN, rval);
-+
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		rval = val->intval ? IP5XXX_SYS_CTL0_BOOST_EN : 0;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL0,
-+					  IP5XXX_SYS_CTL0_BOOST_EN, rval);
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-+		return ip5xxx_charger_set_voltage_max(ip5xxx, val->intval);
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		rval = val->intval / 100000;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL4A,
-+					  IP5XXX_CHG_CTL4A_CONST_CUR_SEL, rval);
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+		ret = ip5xxx_charger_get_voltage_max(ip5xxx, &vmax);
-+		if (ret)
-+			return ret;
-+
-+		rval = ((val->intval - vmax) / 14000) << 1;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL2,
-+					  IP5XXX_CHG_CTL2_CONST_VOLT_SEL, rval);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ip5xxx_charger_property_is_writeable(struct power_supply *psy,
-+						enum power_supply_property psp)
-+{
-+	return psp == POWER_SUPPLY_PROP_STATUS ||
-+	       psp == POWER_SUPPLY_PROP_ONLINE ||
-+	       psp == POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
-+	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
-+	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE;
-+}
-+
-+static const struct power_supply_desc ip5xxx_charger_desc = {
-+	.name			= "ip5xxx-charger",
-+	.type			= POWER_SUPPLY_TYPE_BATTERY,
-+	.properties		= ip5xxx_charger_properties,
-+	.num_properties		= ARRAY_SIZE(ip5xxx_charger_properties),
-+	.get_property		= ip5xxx_charger_get_property,
-+	.set_property		= ip5xxx_charger_set_property,
-+	.property_is_writeable	= ip5xxx_charger_property_is_writeable,
-+};
-+
-+static const struct regmap_config ip5xxx_regmap_config = {
-+	.reg_bits		= 8,
-+	.val_bits		= 8,
-+	.max_register		= IP5XXX_BATOCV_DAT1,
-+};
-+
-+static int ip5xxx_power_probe(struct i2c_client *client)
-+{
-+	struct power_supply_config psy_cfg = {};
-+	struct device *dev = &client->dev;
-+	struct power_supply *psy;
-+	struct ip5xxx *ip5xxx;
-+
-+	ip5xxx = devm_kzalloc(dev, sizeof(*ip5xxx), GFP_KERNEL);
-+
-+	ip5xxx->regmap = devm_regmap_init_i2c(client, &ip5xxx_regmap_config);
-+	if (IS_ERR(ip5xxx->regmap))
-+		return PTR_ERR(ip5xxx->regmap);
-+
-+	psy_cfg.of_node = dev->of_node;
-+	psy_cfg.drv_data = ip5xxx;
-+
-+	psy = devm_power_supply_register(dev, &ip5xxx_charger_desc, &psy_cfg);
-+	if (IS_ERR(psy))
-+		return PTR_ERR(psy);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id ip5xxx_power_of_match[] = {
-+	{ .compatible = "injoinic,ip5108" },
-+	{ .compatible = "injoinic,ip5109" },
-+	{ .compatible = "injoinic,ip5207" },
-+	{ .compatible = "injoinic,ip5209" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ip5xxx_power_of_match);
-+
-+static struct i2c_driver ip5xxx_power_driver = {
-+	.probe_new	= ip5xxx_power_probe,
-+	.driver		= {
-+		.name		= "ip5xxx-power",
-+		.of_match_table	= ip5xxx_power_of_match,
-+	}
-+};
-+module_i2c_driver(ip5xxx_power_driver);
-+
-+MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
-+MODULE_DESCRIPTION("Injoinic IP5xxx power bank IC driver");
-+MODULE_LICENSE("GPL");
+ }
+ 
+ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
 -- 
-2.33.1
+2.34.1
 

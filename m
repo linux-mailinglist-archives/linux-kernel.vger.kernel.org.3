@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E0C4A2C1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 07:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531BA4A2C22
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 07:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241399AbiA2G3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 01:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241065AbiA2G3d (ORCPT
+        id S242201AbiA2GaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 01:30:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46346 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241065AbiA2GaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 01:29:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D89C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Jan 2022 22:29:32 -0800 (PST)
+        Sat, 29 Jan 2022 01:30:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74A97B810A9
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 06:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F351CC340E5;
-        Sat, 29 Jan 2022 06:29:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DD260B82;
+        Sat, 29 Jan 2022 06:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C18C340E5;
+        Sat, 29 Jan 2022 06:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643437770;
-        bh=qAe52EceE/ZktnrH9t02qqOXkPJeOr1aXAVgzP7cj1s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bGKgZgJapdwZZigk69QJrsUoRNGVRRFET8AAL6Y+oKdKrkyRdxu/AmwxR0JbhL/ma
-         E4RfESH84YE6mos2ScF7QSudz2QkyQBseJiZmuij1QHj+efDjkQng6SG4lWXNPBJ10
-         0XgcRCNwW/7/lWWWJh0SCclO3wYv6zash/PlhcFccphRLNI9tfMvAVks1xyX26Ec8j
-         meFAP93pem50jSF3QZzlJZLQaqacCwTCXITQEgi3SopPGjOpQBoTKCwO9Btd0hlAGa
-         eNwcEwpZrQHNtPEGl8hh2Xmby6ZASRJyYf6c/equNhcjWXhdlTYRIY8gxBQTUCdQxm
-         +xrLyO0QUmAWA==
-Message-ID: <513a1ad8-20b1-96a3-54c9-a8ce8773a087@kernel.org>
-Date:   Sat, 29 Jan 2022 14:29:25 +0800
+        s=k20201202; t=1643437806;
+        bh=n5bRWi0m5mJ6YjL6XrHyZXTFrOPN0+5O+FbZQVdAgPw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hZI12qGVt31IQWCnO7uDi1TjfJAq2qD+zjCb3tPNHbBRymbf32zuHSnyX4JEVvEY/
+         SFR+fDlDGetyMW0CD6rTNVVXVmOG2bqyGgjXnByUMP7sQzmS723mLW12VrRkqke4IY
+         IwBNfhpf6TZz3v3QAFn1/Qn8g4eG3fRuzIYiIXo7yAzNCcFFqnf1eF4xEkkBXhEbko
+         uRtVrFvmBc3Gxs1pmZa/3y8HFxKg7RgX1cM1oQOfMYXn3YmCi2eQ0kZIBcCJRONn02
+         V8EGHr+9wXWrpFmNq4nKbaRyKeO7WB9Sjufhbrv0S88NkL44Ao6RT9pogakKhBD7K7
+         Hlct81a10Ol4A==
+Date:   Sat, 29 Jan 2022 14:30:00 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     robh@kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        phone-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] arm64: dts: imx8mq: fix mipi_csi port numbering
+Message-ID: <20220129062959.GU4686@dragon>
+References: <20220121093326.2388251-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: move discard parameters into
- discard_cmd_control
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Konstantin Vyshetsky <vkon@google.com>
-References: <20220125202254.3111474-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220125202254.3111474-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121093326.2388251-1-martin.kepplinger@puri.sm>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/26 4:22, Jaegeuk Kim wrote:
-> From: Konstantin Vyshetsky <vkon@google.com>
+On Fri, Jan 21, 2022 at 10:33:24AM +0100, Martin Kepplinger wrote:
+> hi Shawn and all interested,
 > 
-> This patch unifies parameters related to how often discard is issued and
-> how many requests go out at the same time by placing them in
-> discard_cmd_control. The move will allow the parameters to be modified
-> in the future without relying on hard-coded values.
+> This is a fix for an embarrassing bug that slipped into commit
+> bcadd5f66c2a ("arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions")
+> and commit fed7603597fa ("arm64: dts: imx8mq-librem5: describe the selfie cam").
 > 
-> Signed-off-by: Konstantin Vyshetsky <vkon@google.com>
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> When preparing the imx8mq.dtsi description I only tested with port@1
+> being connected to the csi bridge, but what I sent said port@0.
+> 
+> I have this on my list for a while and want to sort this out now. I'm
+> sorry for the inconvenience. Until now imx8mq-librem5 is the only user
+> (maybe because of this :).
+> 
+> thank you,
+> 
+>                               martin
+> 
+> 
+> Martin Kepplinger (2):
+>   arm64: dts: imx8mq: fix mipi_csi bidirectional port numbers
+>   arm64: dts: imx8mq-librem5: fix mipi_csi1 port number to sensor
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
+Applied both, thanks!

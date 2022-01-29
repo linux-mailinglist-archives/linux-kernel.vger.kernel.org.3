@@ -2,109 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 735374A2C7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D6E4A2C86
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Jan 2022 08:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350688AbiA2H1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 02:27:39 -0500
-Received: from relay029.a.hostedemail.com ([64.99.140.29]:60308 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236113AbiA2H1g (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 02:27:36 -0500
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id B770EF7A;
-        Sat, 29 Jan 2022 07:27:32 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 5FAD320021;
-        Sat, 29 Jan 2022 07:27:30 +0000 (UTC)
-Message-ID: <c94bd56f8be79670542af53eaaf4bd749505b78b.camel@perches.com>
-Subject: Re: [RFC PATCH v3 03/13] module: Move livepatch support to a
- separate file
-From:   Joe Perches <joe@perches.com>
-To:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com
-Date:   Fri, 28 Jan 2022 23:27:29 -0800
-In-Reply-To: <20220128203934.600247-4-atomlin@redhat.com>
-References: <20220128203934.600247-1-atomlin@redhat.com>
-         <20220128203934.600247-4-atomlin@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        id S1352347AbiA2Hfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 02:35:44 -0500
+Received: from smtpbgsg1.qq.com ([54.254.200.92]:50533 "EHLO smtpbgsg1.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350821AbiA2Hfn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 02:35:43 -0500
+X-QQ-mid: bizesmtp38t1643441730t62b498p
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 29 Jan 2022 15:35:25 +0800 (CST)
+X-QQ-SSF: 0140000000200090G000B00A0000000
+X-QQ-FEAT: G+mSt178IQoTYQN1zQNWO4fWEpa2DjF6LmdbvCkxTJpa6g30cSawiGGPsWRcy
+        nSN5/XaF6Hijq/rToZi9VOEKBy34VSLgR4gviRn/x3+ozu64xzhns6OV5jLbY/cTWsOR/9l
+        1qo0H/L5m9ltuGRZln+q3CURtPSA7Gnc7gUZCW2iAotyAk7QATiOuMy2KznxJBoLzVGZ6Q9
+        qLOAbhFvdq1lIzpNeWlQ8bJQTsOotpi5qp4I/ZTmMLT/wN7LMFt7D707KjGSbZlvNcbrAHB
+        qlC+YT2uRY9kTAhUuQ/JTxNuoDx0vTYM/4fE1arW8E89cYhgdPP6XuaEQ276OChAaVO0MZt
+        uf004hDt1ZApRHI+d3liKosa2WXnCuDfAMAtZpr
+X-QQ-GoodBg: 2
+From:   zhanglianjie <zhanglianjie@uniontech.com>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        zhanglianjie <zhanglianjie@uniontech.com>
+Subject: [PATCH 1/2] drm/amd/amdgpu/amdgpu_uvd: Fix forgotten unmap buffer object
+Date:   Sat, 29 Jan 2022 15:35:23 +0800
+Message-Id: <20220129073524.31534-1-zhanglianjie@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 77agk1thbwafnubyr77zj8armqi3zqr5
-X-Spam-Status: No, score=-3.03
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 5FAD320021
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18tnKphhZrxs8SAkUupQjJbwtcTABK26Jg=
-X-HE-Tag: 1643441250-995245
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-28 at 20:39 +0000, Aaron Tomlin wrote:
-> No functional change.
-> 
-> This patch migrates livepatch support (i.e. used during module
-> add/or load and remove/or deletion) from core module code into
-> kernel/module/livepatch.c. At the moment it contains code to
-> persist Elf information about a given livepatch module, only.
-[]
-> diff --git a/include/linux/module.h b/include/linux/module.h
-[]
-> @@ -668,11 +668,22 @@ static inline bool is_livepatch_module(struct module *mod)
->  {
->  	return mod->klp;
->  }
-> +
-> +static inline bool set_livepatch_module(struct module *mod)
-> +{
-> +	mod->klp = true;
-> +	return true;
-> +}
->  #else /* !CONFIG_LIVEPATCH */
->  static inline bool is_livepatch_module(struct module *mod)
->  {
->  	return false;
->  }
-> +
-> +static inline bool set_livepatch_module(struct module *mod)
-> +{
-> +	return false;
-> +}
->  #endif /* CONFIG_LIVEPATCH */
+after the buffer object is successfully mapped, call amdgpu_bo_kunmap before the function returns.
 
-style trivia:
+Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
 
-Generally, these static inlines can be written deduplicating
-the function declaration and using IS_ENABLED or #if inside
-the definition.
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
+index 6f8de11a17f1..9cc23b220537 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
+@@ -834,6 +834,7 @@ static int amdgpu_uvd_cs_msg(struct amdgpu_uvd_cs_ctx *ctx,
+ 	handle = msg[2];
 
-Something like:
+ 	if (handle == 0) {
++		amdgpu_bo_kunmap(bo);
+ 		DRM_ERROR("Invalid UVD handle!\n");
+ 		return -EINVAL;
+ 	}
+@@ -892,6 +893,7 @@ static int amdgpu_uvd_cs_msg(struct amdgpu_uvd_cs_ctx *ctx,
+ 		DRM_ERROR("Illegal UVD message type (%d)!\n", msg_type);
+ 	}
 
-static inline bool is_livepatch_module(struct module *mod)
-{
-	if (IS_ENABLED(CONFIG_LIVEPATCH)) {
-		mod->klp = true;
-		return true;
-	}
-	return false;
-}
++	amdgpu_bo_kunmap(bo);
+ 	return -EINVAL;
+ }
 
-or
+--
+2.20.1
 
-static inline bool is_livepatch_module(struct module *mod)
-{
-#ifdef CONFIG_LIVEPATCH
-	mod->klp = true;
-	return true;
-#else
-	return false;
-#endif
-}
+
 
 

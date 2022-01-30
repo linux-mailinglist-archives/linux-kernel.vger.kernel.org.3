@@ -2,104 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16B34A372D
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08144A372E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355386AbiA3PL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 10:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349175AbiA3PL5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 10:11:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B564C061714;
-        Sun, 30 Jan 2022 07:11:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA2426124C;
-        Sun, 30 Jan 2022 15:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19190C340F1;
-        Sun, 30 Jan 2022 15:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643555516;
-        bh=bjY5Bd8WmnLHJ0/+E+BfU396MaNZGVNtIYeOtwQvt6g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mZ0ZlJ/lU2kQQdZJe9lUTm5uIlQm/lY0zHmBxzHKgOsEruCpf2svcyi0SNqfmgbVj
-         iaLel856SEz8fiB+B6LJae2tOUcOu9CELIlhAjC3h1wbRCxxkN3GeWvGObTCGtIJy9
-         jodkfRf6SZV/ADfbpvozpjMxcwx+HoPFMW7Uzky3QWFBvuL3SVNtLDbb5CVL7ROW/f
-         +VpSwqB8weruf1R3hbV/ad7Oz99myFABa2EUTS59+o17a5VWgys9iBoP3WFjGcdpNw
-         t6h82+/TbPhnCG6A4uTjkaWbNEy/oXyZ82g+NATSCYw07jif2P2KEkKRDHzyYHfuAJ
-         voFTwRfEwAQjw==
-Received: by mail-vs1-f48.google.com with SMTP id f6so8831175vsa.5;
-        Sun, 30 Jan 2022 07:11:56 -0800 (PST)
-X-Gm-Message-State: AOAM533SvSQgq2yenh6dgyX7kTTIXq0PZpXL4eV7uBhoxFIg6lHme34z
-        eJwOB0vbvkVMhD9PXGa8lvtFDsMHZMxakypPKXA=
-X-Google-Smtp-Source: ABdhPJwMK9DUIzKUAIOWlaq0Ta5XXx5E4OMuiq5shsMOycqIZItMc4Gr9hUgonYaoC8Fda1dzq199JcGzBkeL2fUibA=
-X-Received: by 2002:a67:e947:: with SMTP id p7mr6666466vso.59.1643555515158;
- Sun, 30 Jan 2022 07:11:55 -0800 (PST)
+        id S1355390AbiA3POh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 10:14:37 -0500
+Received: from smtpbgjp3.qq.com ([54.92.39.34]:34876 "EHLO smtpbgjp3.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349175AbiA3POg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 10:14:36 -0500
+X-QQ-mid: bizesmtp42t1643555661tvf2j5vv
+Received: from localhost.localdomain (unknown [180.105.58.61])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 30 Jan 2022 23:14:12 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000B00A0000000
+X-QQ-FEAT: awo/irkzQ9x7uCJ7hJ2L2ByOwJx57RTcgS8GnflcG+562cie6+uqZolaa1riz
+        5XSqAxZU5rcs2SjiB0xEVGQ91FJfTnyXaQO4KhzVPv/w9eVaN538WHS3+OhRNPyPcMozUax
+        DEhT2g9jT3A+ep+/QY+t+8D9aCd2Nm5YJ1MG7wRhoio+3qjC16fQPQ1JYdsQ/lH70ZGntuJ
+        F90/Jlt+ejtHdbKs8CZmyTVDtIm41pIiNOo4SB0qSYK12BvuGp8U5z/hDgMzxBeFTKPmFzm
+        roCxLMoy/+15Txxc3G10vwxmQCg8Yq1pUN+3MlB7e8yl6YbiJUTV9tHbRdlb9LjlyGbQRVr
+        BVnkto3wPVy9Xnr6dbZgBAmw0ENAw==
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH v3] kernel/time: move timer sysctls to its own file
+Date:   Sun, 30 Jan 2022 23:13:38 +0800
+Message-Id: <20220130151338.6533-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220129162726.1154501-1-guoren@kernel.org> <20220129162726.1154501-3-guoren@kernel.org>
- <87r18qxui9.wl-maz@kernel.org> <CAJF2gTTYN0bxnnMtP9L1KvaH0h6ny+Lr3+fC7GP-YWnwjAYd4A@mail.gmail.com>
- <35b1838d-ef80-1816-46f6-9cba7afc813e@sholland.org> <CAJF2gTQsi6uT8ea6MTu6oDA-9xsd3fW5ETHAtpzGZxapLpLsWA@mail.gmail.com>
- <87o83ty0ti.wl-maz@kernel.org> <CAJF2gTR=Gyw33dt36g+uqDSMckqJW+bifpue2N_+FAMEn4NqAQ@mail.gmail.com>
- <87mtjdxoam.wl-maz@kernel.org>
-In-Reply-To: <87mtjdxoam.wl-maz@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 30 Jan 2022 23:11:44 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTROgAuj0j2qC6AZFgP+k3erU7erQRadH5ugaVPkj_=1hQ@mail.gmail.com>
-Message-ID: <CAJF2gTROgAuj0j2qC6AZFgP+k3erU7erQRadH5ugaVPkj_=1hQ@mail.gmail.com>
-Subject: Re: [PATCH V6 2/2] irqchip/sifive-plic: Fixup thead,c900-plic dt
- parse in opensbi
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Anup Patel <anup@brainfault.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 10:59 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Sun, 30 Jan 2022 13:09:21 +0000,
-> Guo Ren <guoren@kernel.org> wrote:
-> >
-> > On Sun, Jan 30, 2022 at 6:28 PM Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On Sun, 30 Jan 2022 04:39:34 +0000,
-> > > Guo Ren <guoren@kernel.org> wrote:
-> > > >
-> > > > > +IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init);
-> > > > I think we should give clear info in /proc/interrupts. I hope we could
-> > > > keep thead_plic_init.
-> > >
-> > > Why? There is no material difference at the driver level, and
-> > > /proc/interrupts won't be the target of a branding exercise (which
-> > > this series seems to be all about).
-> > It's not a branding exercise, the series just correct the broken code
-> > & incorrect /proc/interrupts display.
->
-> There is *nothing* incorrect in /proc/interrupt. If anything, changing
-> the string *is* an ABI change, for no good reason.
-I've minimized the modification to fix the problem, please have a look:
+This moves the kernel/timer/timer.c respective sysctls to its own file.
 
-https://lore.kernel.org/linux-riscv/20220130135634.1213301-3-guoren@kernel.org/T/#u
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ include/linux/timer.h |  4 ----
+ kernel/sysctl.c       | 11 -----------
+ kernel/time/timer.c   | 28 ++++++++++++++++++++++++++--
+ 3 files changed, 26 insertions(+), 17 deletions(-)
 
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..793b6b7c5a3e 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -198,10 +198,6 @@ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
+ 
+ #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+ struct ctl_table;
+-
+-extern unsigned int sysctl_timer_migration;
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos);
+ #endif
+ 
+ unsigned long __round_jiffies(unsigned long j, int cpu);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..d6d133423e5d 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2292,17 +2292,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	{
+-		.procname	= "timer_migration",
+-		.data		= &sysctl_timer_migration,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= timer_migration_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_BPF_SYSCALL
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..f9ae2b4f6326 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -44,6 +44,7 @@
+ #include <linux/slab.h>
+ #include <linux/compat.h>
+ #include <linux/random.h>
++#include <linux/sysctl.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -223,7 +224,7 @@ static void timer_update_keys(struct work_struct *work);
+ static DECLARE_WORK(timer_update_work, timer_update_keys);
+ 
+ #ifdef CONFIG_SMP
+-unsigned int sysctl_timer_migration = 1;
++static unsigned int sysctl_timer_migration = 1;
+ 
+ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+ 
+@@ -251,7 +252,8 @@ void timers_update_nohz(void)
+ 	schedule_work(&timer_update_work);
+ }
+ 
+-int timer_migration_handler(struct ctl_table *table, int write,
++#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
++static int timer_migration_handler(struct ctl_table *table, int write,
+ 			    void *buffer, size_t *lenp, loff_t *ppos)
+ {
+ 	int ret;
+@@ -264,6 +266,27 @@ int timer_migration_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static struct ctl_table timer_sysctl[] = {
++	{
++		.procname       = "timer_migration",
++		.data           = &sysctl_timer_migration,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = timer_migration_handler,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static int __init timer_sysctl_init(void)
++{
++	register_sysctl_init("kernel", timer_sysctl);
++	return 0;
++}
++#else
++#define timer_sysctl_init() do { } while (0)
++#endif
+ static inline bool is_timers_nohz_active(void)
+ {
+ 	return static_branch_unlikely(&timers_nohz_active);
+@@ -2022,6 +2045,7 @@ void __init init_timers(void)
+ 	init_timer_cpus();
+ 	posix_cputimers_init_work();
+ 	open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
++	timer_sysctl_init();
+ }
+ 
+ /**
+-- 
+2.20.1
 
---
-Best Regards
- Guo Ren
 
-ML: https://lore.kernel.org/linux-csky/
+

@@ -2,206 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 243F04A3389
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 04:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140A34A338E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 04:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353852AbiA3Dc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 22:32:57 -0500
-Received: from mga12.intel.com ([192.55.52.136]:54986 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233631AbiA3Dcz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 22:32:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643513575; x=1675049575;
-  h=message-id:date:subject:references:in-reply-to:to:cc:
-   from:content-transfer-encoding:mime-version;
-  bh=95jIHp5Iv+v+3CbkJ8acneH+5VJQWi280Ke1yZOj9dM=;
-  b=DEdbkdP9Q0H1JNhNZxvVhITA5OiiClHKlhAivH4ZxG2VNfU67IVCOvYx
-   ZWg4vJTksqbtbOpdli3VsqokBz0mpDm/XfFwcPOqL1y1/tM440pxG4KDJ
-   f7dHcF5Ba7Ub/8ti+h+HP1Ea0MDePYPmY8LDmt/H6GkvKF51gjAO9DncT
-   WXdq3CUDy3Ih0xVzV1Xz60iNI0FCVm/0XrHPUJk15UjurODj3BuNJUCnf
-   N26MXY1oZX+DqsBHbl8RU9i+FRFYKLDPK4AR9xi7W0hpA4swO0x/niX24
-   MSW5cKWNV+eMUk2MO0+zjb7Bb/w6yW2blFBTxMN79qTSeNlzY72TL3rB4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="227288753"
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="227288753"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 19:32:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="564594763"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga001.jf.intel.com with ESMTP; 29 Jan 2022 19:32:55 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 29 Jan 2022 19:32:54 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Sat, 29 Jan 2022 19:32:54 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Sat, 29 Jan 2022 19:32:54 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LNFuRsk1VJRkS94GY81SkzQH6SGzClqOPhFxOdLsIM7Zd3AqrBZxNrMFXsu+laa2Gb4QT+MOc4CmVegXfkiIRmcSVx4GIZkMAhg/iJS6k2oXzd4RGRIyOSdKkinFuNTysD9MN+/59VKFI4vAMpui0CCXq7NS/9LKQgirKGU8LkPeO3Yj/uJ/UcVR+AYN4d9N68h+lc9HdYIHb67gAfenYpKcj8lL34XqLBbwYY7hokdKqTSZp7e+orHyvVGlPzr8IRphluBBkxRykWtjaoMg2N/BHZ01/Ps6WNIhoL6oWfTWaGiNBeTJoCZEJ77+bb0EtaYAfwurDeBxEbbu3kB2Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nJw7hfzLH7nrUtCJ5FhkY94HUfFtCtCHMDYHURmdjOA=;
- b=jDPfCPViJJlc3d8RcJtUH0Ef+eCpfxZ9cw1e36OA9yJ88xVf33AI+8xKwjhVaRqpWkJqHP1cl/R66JePUjSYv3G5WaMjaiXfhVn/A+fSjhe39Yav4zypfOew8BZxuN57PzZyzfjOgem1+Dy5o9zlUZ3TaRBtASINkAGdO1uPvZZu7agl8lk4L1bpYLatkjLvwCutvjGJItOwDNRQd/VbdGUQNTNiiduO0FRboXXncAjoY9cScW2R15HqSFb41OlQhnoDf2zdS1MfFvHJgPo5EGuWsSzpyEoKMI9k/sljPcyTkuGrnvUHeiyFDidtYV6EC6dmHHwTJzHrhjkLR1CjCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
- by BN9PR11MB5419.namprd11.prod.outlook.com (2603:10b6:408:100::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sun, 30 Jan
- 2022 03:32:51 +0000
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d]) by SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d%6]) with mapi id 15.20.4930.020; Sun, 30 Jan 2022
- 03:32:51 +0000
-Message-ID: <1d626480-dce8-03ea-d6ed-f060a17edec1@intel.com>
-Date:   Sun, 30 Jan 2022 11:32:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.1
-Subject: Re: [PATCH v10 9/9] fsdax: set a CoW flag when associate reflink
- mappings
-References: <202201290206.TU7AHhWg-lkp@intel.com>
-Content-Language: en-US
-In-Reply-To: <202201290206.TU7AHhWg-lkp@intel.com>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-xfs@vger.kernel.org>
-From:   kernel test robot <yujie.liu@intel.com>
-X-Forwarded-Message-Id: <202201290206.TU7AHhWg-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR0302CA0002.apcprd03.prod.outlook.com
- (2603:1096:202::12) To SJ0PR11MB5598.namprd11.prod.outlook.com
- (2603:10b6:a03:304::12)
+        id S1353786AbiA3DkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 22:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230326AbiA3DkJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 22:40:09 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA91C061714;
+        Sat, 29 Jan 2022 19:40:08 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id 13so9076003qkd.13;
+        Sat, 29 Jan 2022 19:40:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to;
+        bh=w0jqfbg3kgGx+9Z78D7E7J2qiluF5r+yauiuia9Gi94=;
+        b=E4JmKlPGY8B1Lxv9Z+uIYxmP5HiM4EaVqcnvbuP9FIf40natyVDgZa4aD3v7DvW0M5
+         dvNkHHz3xpVrrrH4l385m3bfJu2nqxM+IVzaLOF5JcIVvrCJX5KMJSjF1qr2IIghjquW
+         xg4JfQiSiVqtBPcQ3wR0r0dcFOaZX6P79QT6aik6QblpQWx+tFfqTAOYAsISr3hshA3a
+         TBg9R3Z1SHC2UGXdw8BCXi6rHZIRDZtOdikrABGsyhcdzeq5b/IGqoJSPqpE5QVGXHqQ
+         0s3wPa/jL1pbS2dvZQUfYk64yQXdXfN4F8AzrTqG4VZ6QyfjMVx0y6RbfAbsEiplxEf2
+         9ynQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to;
+        bh=w0jqfbg3kgGx+9Z78D7E7J2qiluF5r+yauiuia9Gi94=;
+        b=pykMIrynkEWHLmKTRDxueuQkXNOLyNX7QrcMSgeSSNtOR//ZIDw1qCMHQB7JShErNw
+         oh1UCc+ad6a21OI0umPzKKnW6HVoFakn45GwttV4XP/15JU9XgAdhYrhMUonr4+WVS4e
+         qT1B+4aJzWoLU63xu3yipS/SsX6dava86Yz9KJWcfvddvrYGIkEos/SX8i5Pdn3H9t6h
+         y+4JL9TEqpOXh/lqCLtc+ZgNDoKXvfpj3LRIslnQAsQKX/kH3MZ04DLS7/XnaeGFc1X7
+         PV82AC7LvjzTF4R0P5ggsAmgcY3wRsIrkazIiM2GAAuRvUJRnaPT7Z+hUyw/KOKKqRWu
+         oqRw==
+X-Gm-Message-State: AOAM531RrZ5EfvDEHnfCGwGnjqY663HdZ4cLp09wZC74URJzKtkh27MA
+        JQCb8n/MHItHMICfK2fmc6D8bySeRzFG6w==
+X-Google-Smtp-Source: ABdhPJyGa3DDzt7CAoLBTK37oU5Db6XWQNQxy+X+vN74nplOFl0M13XxUEvQB5JOKPVjrJt7L6HBGQ==
+X-Received: by 2002:a05:620a:4108:: with SMTP id j8mr882890qko.131.1643514007777;
+        Sat, 29 Jan 2022 19:40:07 -0800 (PST)
+Received: from [10.139.255.254] ([89.187.171.240])
+        by smtp.gmail.com with ESMTPSA id l12sm4207982qtk.25.2022.01.29.19.40.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Jan 2022 19:40:06 -0800 (PST)
+Message-ID: <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com>
+Date:   Sat, 29 Jan 2022 22:40:04 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e469a7d5-2104-4bdb-a266-08d9e3a1317a
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5419:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR11MB541913AA71AACD3FC686E4A3FB249@BN9PR11MB5419.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nf+iopEzPElKG0Z3B/his/GUSwijHTMG557geNPJKpxIPJsKJFnNZUH0D6P17KjTWUvGGmz5YGBjI8Z9WwdDImXrlJdSuT7ZQ/SRUDaIVqDm0OZRqGTa24Aguw+pnaZCAR66KwzixcekXS65UK48dc6MXdZrmeqV9YDnmo56UJeQerMETL8Jyb+lWRrIKqMBWCPRSO20nkyl/EB76OOwxHbDaqtPM2jXFq1SAu/4dvAN+72CCPr1ubFqz63wALHMwV2CYneaxBUh8qozPSreorRdZn08vzxV4FmUFcT03HEFOk4AL43uGxI2FH5RsepFprIVODhMfmephzfZfHY7P1KBP5D3LN9qmQR7e1FaJwqP5fMnUb/y8Fd4z6ilfhuNUL+siA48n6oaAObRUigiAWclY2S7F8B3Y+qAPTJT8tagAjqodXxXrvf4/MrGXXI5/KCltzrVzdnU6YZUiWPPwLylaYtuNfiT1Mi7OrByPJgxGUVIAS2H2WE4mzfG0uzhaF7pA1WD6a+zqumrG2Uoe6lNk0nFQerW0fup597Kan4UNTKMKAySd2a3uY5O+M1FYv3XtEAGlIqsW6e8y2PeCvFE7zlZkMQdUylLc1GgFr+8daBB4gtEGMRr+fHQl9++19BSKvJR5D7DfEQ30r0r4OU9oWoIPxK6BmwkKhHCAWcBJanqcGYD/PZgDqvYjsKwT62jmHy4FjR1tL72JkL7X85iCU7yM1tSbVe/6LBjWbpd8E6pFw/Uaw/6k+fg5yBOxrkWjCBnltj8HuiPfHNoiXTMzmcRSh8+tmtXyvIidRhHAYu6WfEWlOktt42FFoXb9mouaIM3KtBVYYuTsaVUyoE82XDwJgAl1lK+ODYAmpE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(5660300002)(66946007)(186003)(66556008)(8936002)(66476007)(316002)(8676002)(4326008)(6666004)(38100700002)(2616005)(4001150100001)(31686004)(36756003)(83380400001)(6512007)(6916009)(2906002)(6506007)(966005)(86362001)(6486002)(508600001)(31696002)(82960400001)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TE80b1JOSmpBL3h6MUE5SkJVak8vQ2MrK05OU085MDRUQlpaWHN4V0hhYU5r?=
- =?utf-8?B?RjdIcHFOcGgxOTRrNnl3RkxhWU5SV2YyVndLYWVFaWZiWUU4L0dnOXhUd2ho?=
- =?utf-8?B?TEc4eEh0SngrbEVheVlqSVFCZFRteUJOMEI2QXpKQW0vU2pNMnVsQStaZzVs?=
- =?utf-8?B?UXg3ZWlzUUxmV3JtR29jNEdMK1A2ZEhQTmpCVW5rRll1STYwOHBuK3dneHho?=
- =?utf-8?B?dkswZ3VvamxFMVBuV0I0am83ODBGbjdwbmo2UXVaOE5JbUhPMEJNTVhYMHFy?=
- =?utf-8?B?UGhVcXM4ejVrMnUzWDJ1QmpsUVJOSDE5OTJZVytYMkxqbEUwbEJ6c2w0VjYw?=
- =?utf-8?B?NVlhQ3pickg4WWZGOVRaZHBFRk80UmljQTgzM3VxNnZJc1ZIc3RxOXh3eWtF?=
- =?utf-8?B?SzFkb2RXeUlPVUR2MTBDUm9RcEcrUG4vdTF5Ylh2L2hRckdyemlyQTNKNmtQ?=
- =?utf-8?B?ZlRzZ0pTTVY3RWRseXF2a2pCOVllK2JSSWtFUlc2NWFLZ2NpZ3ZrSVNTY1U1?=
- =?utf-8?B?b3JON2gvSDdna0FBdkRlbW1tdU50QmhiajY3SzJWcDBjNVFYS2dVSnJKanhD?=
- =?utf-8?B?ZG9xdGpmd1ZWZ0tPU1pJZUF3MjZ1OXVPakV0WDVSZUZ2clhpZEd6c2s5L0RM?=
- =?utf-8?B?SklLUU5sQjVNblc0M1BHRng0TTVMRStkV2VtUUdWUjRDVkJrMExpbzBRb3h2?=
- =?utf-8?B?bjdDVXM1cklzOE1GWE43V1VzODJiMEdpMFZKV2RKS0VRaTUwQzdUb1ZEdXlv?=
- =?utf-8?B?YXJRNUFTcStUUUxuaFBqb3VKbm9rRTc1V0hTVFRPb2k0L05pTzBNdi9pdHZT?=
- =?utf-8?B?eG0zVlUzN1RTZ29TZVk1aHVQZlA0OUpqclk4d3lPR21ZK3NoNGZhZG9INmhi?=
- =?utf-8?B?WW1KWHIvS2hWTFhqNnlqcHBycmtMOU5KRDFLbnVTRTYxWVZtc1grc2ZjeHph?=
- =?utf-8?B?blJkWkgybWNJb08walVlaC91MkZnb2VtS1FNODJJQVZWVDJnMFdsWmZHZFp0?=
- =?utf-8?B?V0J6czI5U2VFQUk3QnhpMzZDMDRNWWhkTHdHWW9Gemc4VDl6YjFLb1pEcVdz?=
- =?utf-8?B?SlNaMHcvNEMwZWg1UXEvc1hFN0JMKzIrSENiV0xlQWhhTnpUbFBHVkpFZTNj?=
- =?utf-8?B?UnlPRXRBbHNBU29uU0Noa2wxUXZtYk9pOGUrQmdtVTV6S2xCYjRRMHVlOWlm?=
- =?utf-8?B?QXRMdmNmR05iazdvS05mdUQrWmc1VUVaSVNmN3FrclJhRWtaSEFjOXZEekxV?=
- =?utf-8?B?OGNpWUpYYmtLNmVucTQ4LzJOZFZaTWx4M3ZIZVBvRmFIRFIrZFRlUzVNSmVw?=
- =?utf-8?B?LzE0bVl5MDU5OUZYWFRNODRZZXJUV0tPeWl4UHM2djVNdXZLUmd2ZmxrRXVm?=
- =?utf-8?B?YTZDZ1BsalJZTFdFWXZqdk1HbXpGQlA5MjAzaWZsNjAzdU5NamIrbVRZM0ZT?=
- =?utf-8?B?WG5FWUNGQ3NkMzZTdVVQckFydWR1RExxSFdVM3g2UmpvUlkwc241L1BnVnpF?=
- =?utf-8?B?R3hCalhzZzJBTXNYekhML2tNSUtJZElIQjNLZVpGbzd5ZnZ3aDFJK1IwMnhj?=
- =?utf-8?B?Z0dvMU4vcjhGRDVjM1lEeVdYVlZjSlhpVkNyYURpUmJhbjZyVTFuQXl3V1U4?=
- =?utf-8?B?SER5NkRTNjZGRWgrN2lUUm5pVDBCV1ZFSVNnTDBJSklJWXI5eG5aU2tKZkdh?=
- =?utf-8?B?OUpTbDhaR3RuOTRLUjBWZWx6Z0VaK3lvY2daUG1Zc2tWcEFJNnVsaUtUa0E3?=
- =?utf-8?B?aGlYQWlValNtZllrTWJ3dlR6K3lXdEdQaFNHSVRXa0pNcHJJNEpOY0dRSk5w?=
- =?utf-8?B?NGFsWVZNUFMvL1hJWitGL01HOWN4aXFkUHM4OFlLZkRzUGN5TlBmSWM3UkRa?=
- =?utf-8?B?V2dJMmJoLzVaQmg4eVhPYXA2RW43NUw1MG4wQjd2eUJBN21yM01lRUUwL2sy?=
- =?utf-8?B?d0ZWTXRvZXFXK1ljVVp4MjlELzRHSmdad3pkcHk5UlBuYkJncXBZYXNNUUdT?=
- =?utf-8?B?NzdkWkRGc0h0bzVjazUwNlovVjB4dm50Y2VPZWlqQTFoUC91MERsTVh5VmYw?=
- =?utf-8?B?VkdQdnNuN09WeTJidnY5WmQrSU40bUhzRCtCMUdYMTlHZHJVTklpMTA5R2l6?=
- =?utf-8?B?Rm5KUzRvQTlJRXlVRXRqZHJJTmEvT1U0aXZIdU91WlFiVUpSZ2NldzM4bWFz?=
- =?utf-8?Q?Pl7YBpA6fswvKokRdOcc2Nc=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e469a7d5-2104-4bdb-a266-08d9e3a1317a
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2022 03:32:51.1964
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ProPGOch8VHjelR2btPPUEuRmT45uk+Oly208/GMjEjyUv5BY6zW0nvgEQsWtn6za8GrpMPHOabRujCsRNxNrA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5419
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Demi Marie Obenour <demiobenour@gmail.com>
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+ <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+ <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MRZyEwVq3lbW9Otr8cYDy7pf"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shiyang,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MRZyEwVq3lbW9Otr8cYDy7pf
+Content-Type: multipart/mixed; boundary="------------9R0WQB06qXIj0bYyjtKAQ77I";
+ protected-headers="v1"
+From: Demi Marie Obenour <demiobenour@gmail.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org
+Message-ID: <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com>
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+ <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+ <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
 
-Thank you for the patch! Perhaps something to improve:
+--------------9R0WQB06qXIj0bYyjtKAQ77I
+Content-Type: multipart/mixed; boundary="------------BOi4hxMK3aumvkUoIxQfuwDU"
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on linus/master v5.17-rc1]
-[cannot apply to xfs-linux/for-next hnaz-mm/master next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+--------------BOi4hxMK3aumvkUoIxQfuwDU
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: x86_64-randconfig-c007-20220124 (https://download.01.org/0day-ci/archive/20220129/202201290206.TU7AHhWg-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
-reproduce (this is a W=1 build):
-         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # https://github.com/0day-ci/linux/commit/26822296a70d211de3c5f4ef903d4c4cf29179bd
-         git remote add linux-review https://github.com/0day-ci/linux
-         git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
-         git checkout 26822296a70d211de3c5f4ef903d4c4cf29179bd
-         # save the config file to linux build tree
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer
+On 1/26/22 17:41, Paul Moore wrote:
+> On Tue, Jan 25, 2022 at 5:50 PM Demi Marie Obenour
+> <demiobenour@gmail.com> wrote:
+>> On 1/25/22 17:27, Paul Moore wrote:
+>>> On Tue, Jan 25, 2022 at 4:34 PM Demi Marie Obenour
+>>> <demiobenour@gmail.com> wrote:
+>>>>
+>>>> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELi=
+nux
+>>>> always allows too.  Furthermore, a failed FIOCLEX could result in a =
+file
+>>>> descriptor being leaked to a process that should not have access to =
+it.
+>>>>
+>>>> Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
+>>>> ---
+>>>>  security/selinux/hooks.c | 5 +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>
+>>> I'm not convinced that these two ioctls should be exempt from SELinux=
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>>> policy control, can you explain why allowing these ioctls with the
+>>> file:ioctl permission is not sufficient for your use case?  Is it a
+>>> matter of granularity?
+>>
+>> FIOCLEX and FIONCLEX are applicable to *all* file descriptors, not jus=
+t
+>> files.  If I want to allow them with SELinux policy, I have to grant
+>> *:ioctl to all processes and use xperm rules to determine what ioctls
+>> are actually allowed.  That is incompatible with existing policies and=
 
+>> needs frequent maintenance when new ioctls are added.
+>>
+>> Furthermore, these ioctls do not allow one to do anything that cannot
+>> already be done by fcntl(F_SETFD), and (unless I have missed something=
+)
+>> SELinux unconditionally allows that.  Therefore, blocking these ioctls=
 
-clang-analyzer warnings: (new ones prefixed by >>)
+>> does not improve security, but does risk breaking userspace programs.
+>> The risk is especially great because in the absence of SELinux, I
+>> believe FIOCLEX and FIONCLEX *will* always succeed, and userspace
+>> programs may rely on this.  Worse, if a failure of FIOCLEX is ignored,=
 
- >> fs/dax.c:339:2: warning: Value stored to 'mapping' is never read [clang-analyzer-deadcode.DeadStores]
-            mapping = (struct address_space *)PAGE_MAPPING_DAX_COW;
-            ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> a file descriptor can be leaked to a child process that should not hav=
+e
+>> access to it, but which SELinux allows access to.  Userspace
+>> SELinux-naive sandboxes are one way this could happen.  Therefore,
+>> blocking FIOCLEX may *create* a security issue, and it cannot solve on=
+e.
+>=20
+> I can see you are frustrated with my initial take on this, but please
+> understand that excluding an operation from the security policy is not
+> something to take lightly and needs discussion.  I've added the
+> SELinux refpolicy list to this thread as I believe their input would
+> be helpful here.
 
-vim +/mapping +339 fs/dax.c
+Absolutely it is not something that should be taken lightly, though I
+strongly believe it is correct in this case.  Is one of my assumptions
+mistaken?
 
-d2c997c0f14535 Dan Williams   2017-12-22  328
-d2c997c0f14535 Dan Williams   2017-12-22  329  /*
-d2c997c0f14535 Dan Williams   2017-12-22  330   * Iterate through all mapped pfns represented by an entry, i.e. skip
-d2c997c0f14535 Dan Williams   2017-12-22  331   * 'empty' and 'zero' entries.
-d2c997c0f14535 Dan Williams   2017-12-22  332   */
-d2c997c0f14535 Dan Williams   2017-12-22  333  #define for_each_mapped_pfn(entry, pfn) \
-a77d19f46a37c0 Matthew Wilcox 2018-03-27  334  	for (pfn = dax_to_pfn(entry); \
-a77d19f46a37c0 Matthew Wilcox 2018-03-27  335  			pfn < dax_end_pfn(entry); pfn++)
-d2c997c0f14535 Dan Williams   2017-12-22  336
-26822296a70d21 Shiyang Ruan   2022-01-27  337  static inline void dax_mapping_set_cow_flag(struct address_space *mapping)
-26822296a70d21 Shiyang Ruan   2022-01-27  338  {
-26822296a70d21 Shiyang Ruan   2022-01-27 @339  	mapping = (struct address_space *)PAGE_MAPPING_DAX_COW;
-26822296a70d21 Shiyang Ruan   2022-01-27  340  }
-26822296a70d21 Shiyang Ruan   2022-01-27  341
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--------------BOi4hxMK3aumvkUoIxQfuwDU
+Content-Type: application/pgp-keys; name="OpenPGP_0xB288B55FFF9C22C1.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB288B55FFF9C22C1.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+=3Dx+Ro
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------BOi4hxMK3aumvkUoIxQfuwDU--
+
+--------------9R0WQB06qXIj0bYyjtKAQ77I--
+
+--------------MRZyEwVq3lbW9Otr8cYDy7pf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmH2CJUACgkQsoi1X/+c
+IsHbkxAAzWcvHC1yTM5dZ19VxWITnYkcZQWvxzHjQWieTzun4Im67UnQSYmtjGOO
+Nds7rl+4R429G9leYx9gNHFcfT5gMeHXpvIbmL0C/UrwAjvWIB8Iaeig9tUuXnxa
+Z0RlRmjVBOd6DqstB4Dn9k0ZkUNDOrPgUvYL2cnLisss2dnP6hO6+7Ddcyrq3n4A
+RPl+lkzk6DioP8J4Ye54pcGczGM03vSz7+kaH71xpznnJNitbsrHRKQmleRw6FU+
+wUneOzAxOsTgpTfXiea/QuNRLlRpH3UFBHucQTTgk30cy23dqLv/xsXrVVt2F0AJ
+z7zyNu0/pXJNTbbR1O5lTXrynoU2VsL2tzYiMl/CU6H7hJeMIrk5WasEOWOvQDsw
+YpVTE/xE4fmMMc6cKg2zVXb6ALc8Hh4OvL6SE9YP60T2ZAb91uXs8chXJnPmDiyx
+4wQnQolyaTJey0TNCcWmRBKib+9qWocGO3U51vlq077encCBNZrxUKyCOOmNxhpu
+e6ofBa2L68gQuPhBry0MtOKBIW4yuTLAwbVnmtV4XP9Kln9PVjtYEVOpfcZcWOFa
+iku7QciRkBsPt6VpnA8W30xiuKu4wO0UaXZeKN82Qk8hBUYixW4e60sau1U2TfYg
+G0UtLUA8bgEtQ1Nvy8UG7Qy8WG+2U6NMECcIs58llqqUq4NqaJo=
+=DD2E
+-----END PGP SIGNATURE-----
+
+--------------MRZyEwVq3lbW9Otr8cYDy7pf--

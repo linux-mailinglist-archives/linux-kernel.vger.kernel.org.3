@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E494A36AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2764A36C5
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355006AbiA3OdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:33:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50260 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355003AbiA3OdN (ORCPT
+        id S1347225AbiA3OkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:40:02 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:47382 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239952AbiA3Oj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:33:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B92A7B8295F;
-        Sun, 30 Jan 2022 14:33:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93B6C340E4;
-        Sun, 30 Jan 2022 14:33:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643553190;
-        bh=TFefdRhPLf81qj1p1gXB2Ss7XyPQr+9Ehf+Zq1TKv1c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hJ7NfX/RF1rTizn+NIJGmFIksXhdfn0cc1dVhJtzyLMpXIgOHuQWKMnxedNH9qw/G
-         pdIGes6GclGBaRMhBEn/oNhH8NGreaA2bNBmQLNcRL1NwmXHM2EYZfR1oNq2lYLQXd
-         tbZxuzgJmQwqMeLzBWecStl0mFbb3TTTgDgJ5X9Y6NRWuFgSibN+I84ZA2/4hwOkuq
-         ko4rH05TBertwgbo+3d5qdiTUULMzIBUqUbztc4DRgWgU+CPinSqy0jCFn/hy71uOf
-         hG4ZC0G78lnlGPnB1xO2E9LFbDc7GT1XqsbHLPrxAJQlZqAPjTIS1btALXbIfPh8we
-         jzmQixhqGbcog==
-Date:   Sun, 30 Jan 2022 14:39:33 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Liam Beguin <liambeguin@gmail.com>, Peter Rosin <peda@axentia.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v12 00/16] iio: afe: add temperature rescaling support
-Message-ID: <20220130143933.7711025a@jic23-huawei>
-In-Reply-To: <CAHp75VdyujSuTCr_+oFP9t=tardioG69k7uNkBSRAmPvqiyT7w@mail.gmail.com>
-References: <20220108205319.2046348-1-liambeguin@gmail.com>
-        <CAHp75VdyujSuTCr_+oFP9t=tardioG69k7uNkBSRAmPvqiyT7w@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 30 Jan 2022 09:39:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643553600; x=1675089600;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uEEQeO/Eh89v4YMamB0V1pn92PXWSNezWO1prkfXii8=;
+  b=o7hEYwMruKYekqQx1YgaRIfDnniLAZ94O8xEAssVWo/i9GzAL9X5GhAO
+   1luBbZ/mUDu/uRj4/Uv1qxpa7MJ+ONwMfQJL1x5mzLM7pu7bJrB4Dn+v6
+   OCpNmet4WUkSF11vA3nFksPrSIwXYsPpEWOVY5gTAc6Wn8s2TD8o0V6rP
+   iLxJjG8AQVch2uDnjAUTpXHPotn4fiucteWxFVfJ1kSaggjhTBUf3/YK/
+   4t9QHq0nRVuHAzct7+2ah/1ucJ6ASDExg+3nuTivOtPx7gj1Hz4bXYTTj
+   aabtH4rvm2lIMzvBBLByJHYVBh4v/talNE88vVm/z0q5wByftlfVQEf+g
+   g==;
+IronPort-SDR: vpZEmE08hS48EWNgafJx5PuqniuKSfZr9ksx1uA4mGmGn7G84tNrVHPWN2z/hHAodsSkLdL6lP
+ p74UUwG7eB9B5IQs01QaOskF6MQH8o8lUmMxsbryifVBH57bo+l/K76xarhbx3ffl070pdBzhn
+ uz6Xcn/SyDA3lF6QIeXHCNdsBo7Ws9eLYnYj80QXNVFjT0JWQBDvI2AfYB6+097RiVdWsAshCk
+ kCVc22IaAGoFWWsjfocifGfM949aqLTFAw9jtIYLPxkREr12+HbNJ6I7SwNgvGnAIi1GO9Jfym
+ zWA8Bp7ui26kxp9lUGQLmqtJ
+X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
+   d="scan'208";a="147058376"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2022 07:39:59 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 30 Jan 2022 07:39:58 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Sun, 30 Jan 2022 07:39:57 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Subject: [PATCH 1/2] MAINTAINERS: replace a Microchip AT91 maintainer
+Date:   Sun, 30 Jan 2022 15:39:35 +0100
+Message-ID: <23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 9 Jan 2022 15:10:36 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-> On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> >
-> > Jonathan, Peter, Andy,
-> >
-> > I left out IIO_VAL_INT overflows for now, so that I can focus on getting
-> > the rest of these changes pulled in, but I don't mind adding a patch for
-> > that later on.
-> >
-> > This series focuses on adding temperature rescaling support to the IIO
-> > Analog Front End (AFE) driver.
-> >
-> > The first few patches address minor bugs in IIO inkernel functions, and
-> > prepare the AFE driver for the additional features.
-> >
-> > The main changes to the AFE driver include an initial Kunit test suite,
-> > support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
-> > and temperature transducer sensors.
-> >
-> > My apologies Andy for misunderstanding your left-shift comments, I don't
-> > know where my head was at... Thanks for your patience!  
-> 
-> For the patches 1-5
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-> Jonathan, perhaps you may apply them, so Liam will have less burden in
-> the near future.
-> 
-done, Patches 1-5 applied to the togreg branch of iio.git and pushed out
-as testing for 0-day to see if it can find anything we missed.
+As Ludovic is more focusing on other aspects of the Microchip
+Linux-based development, replace him with Claudiu.
+Entry is added to the CREDITS file.
 
-I've marked the fixes for stable, but am taking these the slow way
-(via next merge window) so as to keep things simple for applying the
-rest of the series later this cycle.
+Thanks Ludovic for these great contributions in the kernel space!
 
-I got a bit lost in the discussion but seems there are some minor
-requests for changes so I guess I'll see a v13 of patches 6-12.
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+---
+ CREDITS     | 6 ++++++
+ MAINTAINERS | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Thanks,
-
-Jonathan
-
+diff --git a/CREDITS b/CREDITS
+index b97256d5bc24..7e85a53b6a88 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -895,6 +895,12 @@ S: 3000 FORE Drive
+ S: Warrendale, Pennsylvania 15086
+ S: USA
+ 
++N: Ludovic Desroches
++E: ludovic.desroches@microchip.com
++D: Maintainer for ARM/Microchip (AT91) SoC support
++D: Author of ADC, pinctrl, XDMA and SDHCI drivers for this platform
++S: France
++
+ N: Martin Devera
+ E: devik@cdi.cz
+ W: http://luxik.cdi.cz/~devik/qos/
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ea3e6c914384..674d13708324 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2250,7 +2250,7 @@ F:	drivers/phy/mediatek/
+ ARM/Microchip (AT91) SoC support
+ M:	Nicolas Ferre <nicolas.ferre@microchip.com>
+ M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+-M:	Ludovic Desroches <ludovic.desroches@microchip.com>
++M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
+ W:	http://www.linux4sam.org
+-- 
+2.32.0
 

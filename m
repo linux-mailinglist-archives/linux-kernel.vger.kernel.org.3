@@ -2,176 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B724A37C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 17:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA194A37C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 17:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355617AbiA3Qnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 11:43:49 -0500
-Received: from mail-bn8nam12on2085.outbound.protection.outlook.com ([40.107.237.85]:62176
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1355563AbiA3Qns (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 11:43:48 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=faG8TIgxudTj0DKgkid1diqleLxVQMsPbbMj/PmjwMxFZAnglgpbLAJQr0tnR87LCt+fbZe+32oQVRv3Ht026xHywRLzquvSHgiv4b0WD7gCghcfEAOtgHYQ4tjB3qUZSf6Zlqd44Y7ugF3rGutwbEoabbetssC8uw6Lgan+gSMXtS9VSrFQX2eW0lGxyTDvO9bsdAvwhbLwNP0b6oiI1/Q2I5ubk3RHcRwhqasE8dIQrSRQtthQXTO/o23Sad3FZLy4oUC30ZPPE7t6dewUzobJT9MG47PDa2pEbeDl9PbEXzUQBC5+LzHitXotrR7H9ZKJo5tafZt9TTKdxmELnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UoXT6p4xOlm6HKPDaMzvfEo+HXOLTE7ZSXkbJgqSqf8=;
- b=cqy8drJ5wvCeeDj69oCPLyShzrWv+1X2qyR5Ru0VxU99M/GuTqW4Gdf22gLVVcWelSy2VbBkX+tpugmf2X2kFsWsBVcsEHcDQ0ky9QWAVETi7aCzXyT/yBKm2B4d4ROgMrZzDybCIEP5OQF2eGBh36fofLJBbgxBBNkhpzhtLxhfytwGsjfcUDLEEl7D+jgRD0+cX6zHEkh1UudKe0mQPxUqjh5U4E/axW5Ow/KLpbIXvIQwJFJqtYEtOE/FFZYEc4lrbnyMHxrhMSMrYP8eOtruSgOW+1ZmTLV4ag0Ob1lh3XuUJBETPZ2jxzpFl6F4oUjWnNC2jAEnqoE/ILR1xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UoXT6p4xOlm6HKPDaMzvfEo+HXOLTE7ZSXkbJgqSqf8=;
- b=VNc3/1Q/9uw1xnkO0XJBoXRLd97bq+bDaHv+nx0j03bFsQthtuS8od4tACWIoBvpqH/KiN80iWZdk5nv33qYbYUa5DprzUpjiLpam6vAixiG4/VqPdg/4WGGc89+qBAkiASQjkhhMFYJ46tnUrThdAv4bWTswVdTLPpx1G7ZRLsTjN6momTAmWQqLX3+hU8jyTd7ruPI4+qOkeCrw2XK2lwkvm5b549UbzqZWXhVDfwyPphMUsA5QujoEciMGWDWkQZNxXpp4dAokiw7VKjas5NoTLAPmgggS5xxdkfcPGcxo9xwIvgV1y/QIvImTdMqbjRUZoMuCGLYBVy4mhYS2A==
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
- by BL1PR12MB5334.namprd12.prod.outlook.com (2603:10b6:208:31d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sun, 30 Jan
- 2022 16:43:46 +0000
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::94d8:5850:e33d:b133]) by DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::94d8:5850:e33d:b133%4]) with mapi id 15.20.4930.021; Sun, 30 Jan 2022
- 16:43:46 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-CC:     Pavan Kunapuli <pkunapuli@nvidia.com>
-Subject: RE: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Thread-Topic: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Thread-Index: AQHYFS8ttZm9vnsYMkmLjfwGSkse9qx7V3sAgAAF64CAAAH6gIAAZMoA
-Date:   Sun, 30 Jan 2022 16:43:46 +0000
-Message-ID: <DM5PR12MB1850C29D41F50FA6850C89DDC0249@DM5PR12MB1850.namprd12.prod.outlook.com>
-References: <1643474453-32619-1-git-send-email-akhilrajeev@nvidia.com>
- <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
- <ba109465-d7ee-09cb-775b-9b702a3910b0@gmail.com>
- <dcd4e4db-2999-15c9-0c82-42dd8ca1e61d@gmail.com>
- <f32e119a-1d08-d1f9-a264-fe004960e8bf@gmail.com>
-In-Reply-To: <f32e119a-1d08-d1f9-a264-fe004960e8bf@gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 312fe727-81a0-45ba-2892-08d9e40faf3d
-x-ms-traffictypediagnostic: BL1PR12MB5334:EE_
-x-microsoft-antispam-prvs: <BL1PR12MB53346194B870A489244959F1C0249@BL1PR12MB5334.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NbGjeKWBJ0hEfNSly+wJyg3WnStk+R8x8Scayzwm0AMDt2UYfpYUCmODVLZO69pd9np63Wfd0karzM96WaAPQqMfCOYmeVhY57ILPQCY2l3uFfbLWV7zwPHPJMywyj7kMtEXxbqtRd6w0SHa8G3naO3QIvT8VNgluSAWKCYXu1AxnVLpdj66jutQGAFmvhk/w2vRod+xKejXu7Y+69yiYAU05Q4YoZupMxJK/yshuUY0/cIaoQcYWoffafE4NsK49yc3nuOhtHUgsv+so3JC8ID9eOcfYxfaEBAAzoIY6YxE2/SbKEBVhMm/NmJdDwr0CCpq8FV8wQ1btlqFeyqX8VrbcU2ifn39j4KNqfVgaVKFjDwdRHJhI8LysbFr67HOt02RtaTMfkJpzy0zPETml0wckMCAcp+BNLeBBi40DsMP81t2seF4H/GLkJIf0NYELl47WW95PCDzZO4tLZ/+/v8SpU3Yh9MIN6g3CYHnTPqf1ZRn0XquujS5XtMEM6OCnfFgVpXhu25jUWkAgRN1BVuDdiGZTA+BOdyhHbBlbh63zN9fEnF3JgpcvM/pFD6OVAvBe4OwPrafQqW3yWhzuKQNvKyJzUtOrlsH7XIYNdO4vLAm4x6AuIJ1I3wioTEi6pTFNgWTfSUwkr4Azj/M487B8nkgKxTJCqhif5KeUVbimMr7hZfwrPxnDVB4mYuURvyonWjSAlZUkz+ik7c9pv7q3JsrXrzHP1i3Qi90NW4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7696005)(6506007)(9686003)(107886003)(52536014)(5660300002)(2906002)(33656002)(26005)(186003)(55016003)(508600001)(921005)(122000001)(86362001)(83380400001)(38070700005)(8936002)(8676002)(71200400001)(4326008)(316002)(64756008)(66476007)(66446008)(66946007)(66556008)(76116006)(38100700002)(110136005)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RlFKYi94UFlVVXA1QzdMZVM0dFM2U3d4MUdIWVF6NDBncGgrUzNOcWJPK05T?=
- =?utf-8?B?NUNTQlIrN0t6SzJwRW1rakk3UGxVd2Z1Tm9rdVJpS3Jqd04yWW1lUGNvRW03?=
- =?utf-8?B?N3VIRm9MYjIwL2RpdVFSRUF5c0ROV1pNSXh0SkVBcGRwTVdsUVdlaTNzRFZs?=
- =?utf-8?B?aUtmTkhhWVZTVEpoYW9VajdqVll2cnk1SlFLK2U2QnRuMmxzSGZ4VFpOSHR1?=
- =?utf-8?B?dld5bXJvcUFPQVNQZFZnamdDRnhSVWdESHhKSmlnNDluOVo3SFlhMXZiMlk1?=
- =?utf-8?B?WkhQUDhoMllESHFMejhhOHhieXFQNjBJOE1IbFJSSHRkYTdySlNYelNqcHVX?=
- =?utf-8?B?VC9RcXBLNS9ZSERGQjdFNG9iTTZFSzk1azI2QTNrU1lhSS9JMncwM2JkZ2Fp?=
- =?utf-8?B?bUtZZVB0Z0E4TWl1Zk9jLzhjdXYzVlZTdGx6N2N1LzJCMXVqMlZHZ3NCcXAr?=
- =?utf-8?B?RzVEZThuSHRqSWU2azUzZFc2VGplVmZQY1RWMS9OTlRYS3ZUZ3dmK2F4N1p5?=
- =?utf-8?B?WFNDWWQwL2ZHWWpNcWRPL2JybGVZUXMvczlTTXdsTzdtUHV4YzgvVFlSemYy?=
- =?utf-8?B?VjhOMjRsalBycTRHcGp3QUY5bmNlWk51SllJNENvM2xvem1nMS9WdkFOWXNm?=
- =?utf-8?B?RWJxcjk5bTdnaXZ0cFpncERJZFU0QXIyUm9TSWo3YUZoNDkvTEhOUXNkMnpV?=
- =?utf-8?B?VmdKRlE0NEdMUUtqNUxjLzlVajFvOTNiZS9kRUVOS0NoQitNWnd1Z0hDaWpn?=
- =?utf-8?B?eEhUV2p4aFpsUVlrSGljZGZ1MGpLRHVlMXRlNWZITEV0c1lPbDZjMTF3OHNm?=
- =?utf-8?B?Wktzd1Q0Vm00Q040U0VaQ3Rjc3FmdHJsTm5DM3JuSlZsNFB6ZXZ2TkhWNnlK?=
- =?utf-8?B?ZHYzT0JGRmc4KzRhWlc0VVhFam5YeHJiZERnS2tPZW5zdlRsT0tCOFU4UTBP?=
- =?utf-8?B?L0tnL0J3MGJNSEJmYWdOVjdpVHZJTXgyalI0OHN3OHJFbnZFSTIreGZKNFk2?=
- =?utf-8?B?UGpnN0x0czVzU0M1Z2dic29iOTBaMEtUalI0eXNPR0lkMFNCRlUwOTBmNXJh?=
- =?utf-8?B?b1B0aElrcTNCczVJYjA1bVZmcTU2QU5tN2Q4TFR2UFZIUFZlQXJiV0lhcG9j?=
- =?utf-8?B?L2xHQlZhUG1DUWgzSVdkeVJ5dUhkcjgyUXVJd3hjZ0xMWG9oaEh4ejNtTldn?=
- =?utf-8?B?UHZoTk5HakRQcW9LSFAwN2RzeE1JOUEvNEhRSWFXZzdLajc2TlB2R2UxanN0?=
- =?utf-8?B?YWJIdnlVZ1NiajB5UVBXTnNLczNjc2JtQzE1T2UyVFJydHExdWkzTTlXbE5D?=
- =?utf-8?B?TDkyZ0dNTmpCbGNFWGp0VTBVSTR0RFdlZlBZemtWZ1JObGhSdXJQd3EwWExS?=
- =?utf-8?B?SWRvLzJteDJCbWhSN1dCOEpyalRnNXZFVmVoN0ZIVnRJQmVXOC96aS8xMm8x?=
- =?utf-8?B?TTY1STdLYzVteG9ycTdJeEliQzQ3SVdDNElsSFlWOCtUWHRYSkFmSVoxbkhC?=
- =?utf-8?B?T3BwSmNOcktRQjlJdVNSd1lNbTJxbWhZNXVJd1RvMytuVzJpbk5UNzBMSFhu?=
- =?utf-8?B?anFEclBBTVFLcDhpTDhjZXpwMDduTzRIN2ZnSlV2azNwN29vaEZhTVU2S1oy?=
- =?utf-8?B?OHBwZjA3ZFRNTXlBN1VIbjJuT0pUSW9HWkJsYlRaM1JEQzdaS0lXL255TWJq?=
- =?utf-8?B?Q3ZXTHp6azhhT25WRG5oMEN1WHFvL0F5RC9DTEFsWTltSjVNbDZQeU9wVUVx?=
- =?utf-8?B?RnFST1FBUHBYMExBK2RFU0Y1QWR6UndPbHI1bklrU3NaNitEQXZwQTRNRm9D?=
- =?utf-8?B?czFjUU45V1d3NmRjZ2pYNjhseTdBeFlCMFUrRWhvem1OdFBiekZUNjVtUjky?=
- =?utf-8?B?WUVuMFFPcjhzeVYyQlErNFQwZk10UnlOTzNPd0pmTzVXWEdlQy8yZzNXOGNr?=
- =?utf-8?B?Q1R0dUk0RWZUbjNvVGZtTE9RV0hzVU9nZWhYWnVyQlNPaGJJYlVTbGVndXZ0?=
- =?utf-8?B?MlV1STloNnNiaTRtR1FPYmt5cDAxMWF1cFk0UFNoRTFzcW5JbmhndjhGT1U4?=
- =?utf-8?B?R0ZoZHAzdmRic0JLWHY1emJBcmQxUUQra0xlNGVxUzcrRktUVUdxdERZQThC?=
- =?utf-8?B?NzZFa21qZjJaWnlTMTZ4NFc5UW9GVDdIQnF0NjNyS0lrTGI2Z2lsaWdMcktB?=
- =?utf-8?B?V3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1355635AbiA3QqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 11:46:14 -0500
+Received: from mga18.intel.com ([134.134.136.126]:59726 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355610AbiA3QqM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 11:46:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643561172; x=1675097172;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iPSUyfTOWmQNxJXF3W6BUfHMnx9aMsx3QIVFSuilmwM=;
+  b=GHRI8lG+1jtfjYTCN4vhxEQPm0zuhH7KaKL030eVlExBuiQuY3QTdwlW
+   pGQuhD7lnIqOjDxhHWjOJdbfAdLfQltYAjCnWa5vVM4TKJ1IPjbfYfyo+
+   Tnl+rfivEClDrJ2kSUkPsC7FF3HfLxH8XLM0lHM8rE82V+g5A8c4cLWyO
+   /8lGDj4rTvkxtT7UpTZnnZ1gVxbWiAug8a/RkPNJeYmCQl9eNPSK9D07F
+   uTz8p17XvJnHZ3gmZvcdCxNSR1KlgQb54Y5zbvnk/lmmZWZXWtiqW8RHo
+   LJo/lI2kmNifEAaklpGUWXwfP0A+JkkHJPPDUZNeTYGEN03lV63fp8Cvu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230933092"
+X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
+   d="scan'208";a="230933092"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 08:46:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
+   d="scan'208";a="770566154"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jan 2022 08:46:00 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 36E80176; Sun, 30 Jan 2022 18:46:13 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     rppt@kernel.org
+Cc:     ak@linux.intel.com, akpm@linux-foundation.org, ardb@kernel.org,
+        bp@alien8.de, brijesh.singh@amd.com, dave.hansen@intel.com,
+        david@redhat.com, dfaggioli@suse.com, jroedel@suse.de,
+        kirill.shutemov@linux.intel.com, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org, rientjes@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, thomas.lendacky@amd.com, varad.gautam@suse.com,
+        vbabka@suse.cz, x86@kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCHv3.1 1/7] mm: Add support for unaccepted memory
+Date:   Sun, 30 Jan 2022 19:45:48 +0300
+Message-Id: <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <YfZJQedck2YxZcWA@kernel.org>
+References: <YfZJQedck2YxZcWA@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 312fe727-81a0-45ba-2892-08d9e40faf3d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2022 16:43:46.4517
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: x53B0sXy50VN3pc7hl6kkBu00e/Buf5VVhHicLCQQ0okLYNbthfpSQBK+HPA54rd5Knij3ctT5pFQi1Ya+kKmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5334
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAzMC4wMS4yMDIyIDEzOjI2LCBEbWl0cnkgT3NpcGVua28g0L/QuNGI0LXRgjoNCj4gPiAzMC4w
-MS4yMDIyIDEzOjA1LCBEbWl0cnkgT3NpcGVua28g0L/QuNGI0LXRgjoNCj4gPj4gU3RpbGwgbm90
-aGluZyBwcmV2ZW50cyBpbnRlcnJ1cHQgaGFuZGxlciB0byBmaXJlIGR1cmluZyB0aGUgcGF1c2Uu
-DQo+ID4+DQo+ID4+IFdoYXQgeW91IGFjdHVhbGx5IG5lZWQgdG8gZG8gaXMgdG8gZGlzYWJsZS9l
-bmFibGUgaW50ZXJydXB0LiBUaGlzDQo+ID4+IHdpbGwgcHJldmVudCB0aGUgaW50ZXJydXB0IHJh
-Y2luZyBhbmQgdGhlbiBwYXVzZS9yZXN1bWUgbWF5IGxvb2sgbGlrZSB0aGlzOg0KPiA+DQo+ID4g
-QWx0aG91Z2gsIHNlZW1zIHRoaXMgd29uJ3Qgd29yaywgdW5mb3J0dW5hdGVseS4gSSBzZWUgbm93
-IHRoYXQNCj4gPiBkZXZpY2VfcGF1c2UoKSBkb2Vzbid0IGhhdmUgbWlnaHRfc2xlZXAoKS4NCj4g
-Pg0KPiANCj4gQWgsIEkgc2VlIG5vdyB0aGF0IHRoZSBwYXVzZS91bnBhdXNlIGlzIGFjdHVhbGx5
-IGEgc2VwYXJhdGUgY29udHJvbCBhbmQgZG9lc24ndA0KPiBjb25mbGljdCB3aXRoICJzdGFydCBu
-ZXh0IHRyYW5zZmVyIi4NCj4gDQo+IFNvIHlvdSBqdXN0IG5lZWQgdG8gc2V0L3Vuc2V0IHRoZSBw
-YXVzZSB1bmRlciBsb2NrLiBBbmQgZG9uJ3QgdG91Y2gNCj4gdGRjLT5kbWFfZGVzYy4gVGhhdCdz
-IGl0Lg0KPiANCj4gc3RhdGljIGludCB0ZWdyYV9kbWFfZGV2aWNlX3BhdXNlKHN0cnVjdCBkbWFf
-Y2hhbiAqZGMpIHsNCj4gICAgICAgICBzdHJ1Y3QgdGVncmFfZG1hX2NoYW5uZWwgKnRkYyA9IHRv
-X3RlZ3JhX2RtYV9jaGFuKGRjKTsNCj4gICAgICAgICB1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiAg
-ICAgICAgIHUzMiB2YWw7DQo+IA0KPiAgICAgICAgIGlmICghdGRjLT50ZG1hLT5jaGlwX2RhdGEt
-Pmh3X3N1cHBvcnRfcGF1c2UpDQo+ICAgICAgICAgICAgICAgICByZXR1cm4gLUVOT1NZUzsNCj4g
-DQo+ICAgICAgICAgc3Bpbl9sb2NrX2lycXNhdmUoJnRkYy0+dmMubG9jaywgZmxhZ3MpOw0KPiAN
-Cj4gICAgICAgICB2YWwgPSB0ZGNfcmVhZCh0ZGMsIFRFR1JBX0dQQ0RNQV9DSEFOX0NTUkUpOw0K
-PiAgICAgICAgIHZhbCB8PSBURUdSQV9HUENETUFfQ0hBTl9DU1JFX1BBVVNFOw0KPiAgICAgICAg
-IHRkY193cml0ZSh0ZGMsIFRFR1JBX0dQQ0RNQV9DSEFOX0NTUkUsIHZhbCk7DQo+IA0KPiAgICAg
-ICAgIHNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnRkYy0+dmMubG9jaywgZmxhZ3MpOw0KPiANCj4g
-ICAgICAgICByZXR1cm4gMDsNCj4gfQ0KPiANCj4gc3RhdGljIGludCB0ZWdyYV9kbWFfZGV2aWNl
-X3Jlc3VtZShzdHJ1Y3QgZG1hX2NoYW4gKmRjKSB7DQo+ICAgICAgICAgc3RydWN0IHRlZ3JhX2Rt
-YV9jaGFubmVsICp0ZGMgPSB0b190ZWdyYV9kbWFfY2hhbihkYyk7DQo+ICAgICAgICAgdW5zaWdu
-ZWQgbG9uZyBmbGFnczsNCj4gICAgICAgICB1MzIgdmFsOw0KPiANCj4gICAgICAgICBpZiAoIXRk
-Yy0+dGRtYS0+Y2hpcF9kYXRhLT5od19zdXBwb3J0X3BhdXNlKQ0KPiAgICAgICAgICAgICAgICAg
-cmV0dXJuIC1FTk9TWVM7DQo+IA0KPiAgICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKCZ0ZGMtPnZj
-LmxvY2ssIGZsYWdzKTsNCj4gDQo+ICAgICAgICAgdmFsID0gdGRjX3JlYWQodGRjLCBURUdSQV9H
-UENETUFfQ0hBTl9DU1JFKTsNCj4gICAgICAgICB2YWwgJj0gflRFR1JBX0dQQ0RNQV9DSEFOX0NT
-UkVfUEFVU0U7DQo+ICAgICAgICAgdGRjX3dyaXRlKHRkYywgVEVHUkFfR1BDRE1BX0NIQU5fQ1NS
-RSwgdmFsKTsNCj4gDQo+ICAgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmdGRjLT52Yy5s
-b2NrLCBmbGFncyk7DQo+IA0KPiAgICAgICAgIHJldHVybiAwOw0KPiB9DQoNClRoZSByZWFzb24g
-SSBzZXBhcmF0ZWQgb3V0IHJlZ2lzdGVyIHdyaXRlcyB3YXMgdG8gY29udmVuaWVudGx5IGNhbGwg
-dGhvc2UNCmluIGRtYV9zdGFydCgpIGFuZCB0ZXJtaW5hdGVfYWxsKCkuIERvIHlvdSBzZWUgYW55
-IGlzc3VlIHRoZXJlPw0KVGhlIHJlY29tbWVuZGVkIHdheSBvZiB0ZXJtaW5hdGluZyBhIHRyYW5z
-ZmVyIGluIGJldHdlZW4gaXMgdG8gcGF1c2UNCml0IGJlZm9yZSBkaXNhYmxpbmcgdGhlIGNoYW5u
-ZWwuDQoNCmRtYV9kZXNjIGNvdWxkIGJlIE5VTEwgd2hpbGUgdGhlc2UgZnVuY3Rpb25zIGFyZSBj
-YWxsZWQuIHBhdXNlKCkgb3INCnJlc3VtZSgpIGlzIHVubmVlZGVkIGlmIHRoZXJlIGlzbid0IGFu
-eSB0cmFuc2ZlciBnb2luZyBvbi4gTW9yZW92ZXIsDQppZiB3ZSBhcmUgdG8gY2FsY3VsYXRlIHRo
-ZSB4ZmVyX3NpemUsIHRoZSBjaGVjayB3b3VsZCBiZSBtYW5kYXRvcnkuDQoNCkFncmVlIHdpdGgg
-dGhlIG90aGVyIGNvbW1lbnRzLg0KDQpUaGFua3MsDQpBa2hpbCANCg==
+UEFI Specification version 2.9 introduces the concept of memory
+acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
+SEV-SNP, requiring memory to be accepted before it can be used by the
+guest. Accepting happens via a protocol specific for the Virtual Machine
+platform.
+
+Accepting memory is costly and it makes VMM allocate memory for the
+accepted guest physical address range. It's better to postpone memory
+acceptance until memory is needed. It lowers boot time and reduces
+memory overhead.
+
+Support of such memory requires a few changes in core-mm code:
+
+  - memblock has to accept memory on allocation;
+
+  - page allocator has to accept memory on the first allocation of the
+    page;
+
+Memblock change is trivial.
+
+The page allocator is modified to accept pages on the first allocation.
+PageBuddyUnaccepted() is used to indicate that the page requires acceptance.
+
+Kernel only need to accept memory once after boot, so during the boot
+and warm up phase there will be a lot of memory acceptance. After things
+are settled down the only price of the feature if couple of checks for
+PageBuddyUnaccepted() in alloc and free paths. The check refers a hot
+variable (that also encodes PageBuddy()), so it is cheap and not visible
+on profiles.
+
+Architecture has to provide three helpers if it wants to support
+unaccepted memory:
+
+ - accept_memory() makes a range of physical addresses accepted.
+
+ - maybe_mark_page_unaccepted() marks a page PageBuddyUnaccepted() if it
+   requires acceptance. Used during boot to put pages on free lists.
+
+ - accept_page() makes a page accepted and clears PageBuddyUnaccepted().
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+---
+ include/linux/page-flags.h | 27 +++++++++++++++++++++++++++
+ mm/internal.h              | 15 +++++++++++++++
+ mm/memblock.c              |  9 +++++++++
+ mm/page_alloc.c            | 23 ++++++++++++++++++++++-
+ 4 files changed, 73 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 1c3b6e5c8bfd..1bdc6b422207 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -871,6 +871,18 @@ static __always_inline void __ClearPage##uname(struct page *page)	\
+ 	page->page_type |= PG_##lname;					\
+ }
+ 
++#define PAGE_TYPE_OPS_FALSE(uname)					\
++static __always_inline int Page##uname(struct page *page)		\
++{									\
++	return false;							\
++}									\
++static __always_inline void __SetPage##uname(struct page *page)		\
++{									\
++}									\
++static __always_inline void __ClearPage##uname(struct page *page)	\
++{									\
++}
++
+ /*
+  * PageBuddy() indicates that the page is free and in the buddy system
+  * (see mm/page_alloc.c).
+@@ -901,6 +913,21 @@ PAGE_TYPE_OPS(Buddy, buddy)
+  */
+ PAGE_TYPE_OPS(Offline, offline)
+ 
++ /*
++  * PageBuddyUnaccepted() indicates that the page has to be "accepted" before
++  * it can be used. Page allocator has to call accept_page() before returning
++  * the page to the caller.
++  *
++  * PageBuddyUnaccepted() encoded with the same bit as PageOffline().
++  * PageOffline() pages are never on free list of buddy allocator, so there's
++  * not conflict.
++  */
++#ifdef CONFIG_UNACCEPTED_MEMORY
++PAGE_TYPE_OPS(BuddyUnaccepted, offline)
++#else
++PAGE_TYPE_OPS_FALSE(BuddyUnaccepted)
++#endif
++
+ extern void page_offline_freeze(void);
+ extern void page_offline_thaw(void);
+ extern void page_offline_begin(void);
+diff --git a/mm/internal.h b/mm/internal.h
+index d80300392a19..26e5d7cb6aff 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -718,4 +718,19 @@ void vunmap_range_noflush(unsigned long start, unsigned long end);
+ int numa_migrate_prep(struct page *page, struct vm_area_struct *vma,
+ 		      unsigned long addr, int page_nid, int *flags);
+ 
++#ifndef CONFIG_UNACCEPTED_MEMORY
++static inline void maybe_mark_page_unaccepted(struct page *page,
++					      unsigned int order)
++{
++}
++
++static inline void accept_page(struct page *page, unsigned int order)
++{
++}
++
++static inline void accept_memory(phys_addr_t start, phys_addr_t end)
++{
++}
++#endif
++
+ #endif	/* __MM_INTERNAL_H */
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 1018e50566f3..6c109b3b2a02 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -1400,6 +1400,15 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
+ 		 */
+ 		kmemleak_alloc_phys(found, size, 0, 0);
+ 
++	/*
++	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
++	 * require memory to be accepted before it can be used by the
++	 * guest.
++	 *
++	 * Accept the memory of the allocated buffer.
++	 */
++	accept_memory(found, found + size);
++
+ 	return found;
+ }
+ 
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 3589febc6d31..27b9bd20e675 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1077,6 +1077,7 @@ static inline void __free_one_page(struct page *page,
+ 	unsigned int max_order;
+ 	struct page *buddy;
+ 	bool to_tail;
++	bool unaccepted = PageBuddyUnaccepted(page);
+ 
+ 	max_order = min_t(unsigned int, MAX_ORDER - 1, pageblock_order);
+ 
+@@ -1110,6 +1111,10 @@ static inline void __free_one_page(struct page *page,
+ 			clear_page_guard(zone, buddy, order, migratetype);
+ 		else
+ 			del_page_from_free_list(buddy, zone, order);
++
++		if (PageBuddyUnaccepted(buddy))
++			unaccepted = true;
++
+ 		combined_pfn = buddy_pfn & pfn;
+ 		page = page + (combined_pfn - pfn);
+ 		pfn = combined_pfn;
+@@ -1143,6 +1148,10 @@ static inline void __free_one_page(struct page *page,
+ done_merging:
+ 	set_buddy_order(page, order);
+ 
++	/* Mark page unaccepted if any of merged pages were unaccepted */
++	if (unaccepted)
++		__SetPageBuddyUnaccepted(page);
++
+ 	if (fpi_flags & FPI_TO_TAIL)
+ 		to_tail = true;
+ 	else if (is_shuffle_order(order))
+@@ -1168,7 +1177,8 @@ static inline void __free_one_page(struct page *page,
+ static inline bool page_expected_state(struct page *page,
+ 					unsigned long check_flags)
+ {
+-	if (unlikely(atomic_read(&page->_mapcount) != -1))
++	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
++	    !PageBuddyUnaccepted(page))
+ 		return false;
+ 
+ 	if (unlikely((unsigned long)page->mapping |
+@@ -1749,6 +1759,8 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+ {
+ 	if (early_page_uninitialised(pfn))
+ 		return;
++
++	maybe_mark_page_unaccepted(page, order);
+ 	__free_pages_core(page, order);
+ }
+ 
+@@ -1838,10 +1850,12 @@ static void __init deferred_free_range(unsigned long pfn,
+ 	if (nr_pages == pageblock_nr_pages &&
+ 	    (pfn & (pageblock_nr_pages - 1)) == 0) {
+ 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
++		maybe_mark_page_unaccepted(page, pageblock_order);
+ 		__free_pages_core(page, pageblock_order);
+ 		return;
+ 	}
+ 
++	accept_memory(pfn << PAGE_SHIFT, (pfn + nr_pages) << PAGE_SHIFT);
+ 	for (i = 0; i < nr_pages; i++, page++, pfn++) {
+ 		if ((pfn & (pageblock_nr_pages - 1)) == 0)
+ 			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+@@ -2312,6 +2326,10 @@ static inline void expand(struct zone *zone, struct page *page,
+ 		if (set_page_guard(zone, &page[size], high, migratetype))
+ 			continue;
+ 
++		/* Transfer PageBuddyUnaccepted() to the newly split pages */
++		if (PageBuddyUnaccepted(page))
++			__SetPageBuddyUnaccepted(&page[size]);
++
+ 		add_to_free_list(&page[size], zone, high, migratetype);
+ 		set_buddy_order(&page[size], high);
+ 	}
+@@ -2408,6 +2426,9 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 	 */
+ 	kernel_unpoison_pages(page, 1 << order);
+ 
++	if (PageBuddyUnaccepted(page))
++		accept_page(page, order);
++
+ 	/*
+ 	 * As memory initialization might be integrated into KASAN,
+ 	 * kasan_alloc_pages and kernel_init_free_pages must be
+-- 
+2.34.1
+

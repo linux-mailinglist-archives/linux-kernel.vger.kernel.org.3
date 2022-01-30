@@ -2,131 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B5D4A3ADB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 00:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058574A3ADE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 00:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbiA3XKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 18:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S1356818AbiA3XLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 18:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiA3XKB (ORCPT
+        with ESMTP id S233819AbiA3XLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 18:10:01 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E719CC061714;
-        Sun, 30 Jan 2022 15:10:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jn6NM4bKkz4xRB;
-        Mon, 31 Jan 2022 10:09:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643584195;
-        bh=bDpsJoZWES//hT1pTNftPxhCHGgocAa0nMe8EX/9mA0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kdmvn6grKXsB/4rdyx3o3I3cofHcTXQ/LbvvvOhUEMj9JcthWq7oc/z0HkHpd4Qli
-         y8gGWOj5O8uwqkv6sROMLbi+GbPmGQUjSetrWFJocvkyT5D2lXuvBWlevD+YfCNGch
-         7TJexujRAQRMua3AUvqOjPRG6132rut3udkb2kO5+tcPPuB44xWgsJM9dgke/+Rgnj
-         6QQ8t57aRlUWcMCSaIyTMAjv8VF3JaO+1+tgjwLb2SwHqpw8SvtxtgHqlClP13gDi+
-         6wzjMl9jGdkoWTJ9zpvF3ocvKQjvfoJh01e8OvQgbCgSovECHmt4g08Cy1eUywjK77
-         nI9pUGrqY+P/Q==
-Date:   Mon, 31 Jan 2022 10:09:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220131100954.74a2034f@canb.auug.org.au>
+        Sun, 30 Jan 2022 18:11:14 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B682BC061714;
+        Sun, 30 Jan 2022 15:11:13 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id u15so21972129wrt.3;
+        Sun, 30 Jan 2022 15:11:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yIdPqYs8pcB/F7X2IthUrwmWJbc2O1lsmbqHpZXh+GI=;
+        b=XjyGAy2uvlKwAUCs5+9yzRDXlMoY/j1Fhlmo2d66/Vlw6KVNcUKS2FZ/9pvNCr7MZx
+         BlwFU03OlwWLausgmgG7ICtMVATz2iG4/WtA5brbo2hw2/MPEyJ769oW406pMTtU4UF8
+         E4s5KTB2dbJKbAQ1LqCE7f4y7nM3UmC0rq6dL/DXbNI/iK4MEFA1Slbo4KmHrOGE/0S9
+         4wCqVkqsv5VWLK7z7sPBUGpyJdxy0fVOs1rElhZIxtcQaR5uZiJCgk3WrEJ4uVMZzEDQ
+         TqW0PgK3eRH+AnfbYBOGyMM6hGog/VHUbStj6jm2G9hhaNG3qGkjxIynljciYHYtMJlE
+         FY8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yIdPqYs8pcB/F7X2IthUrwmWJbc2O1lsmbqHpZXh+GI=;
+        b=a6J/txaPTP4BTs+Wie+R+od0nS7jhWQiONlh8OHGgdrT3OyU0JTalt9/trdxDsxa4L
+         wVK1xvRspq/UhUx1bb/ZTwAjflDNmggWrT5Hpsb5M2AU5FQYTahiE0OIP8nUp8zcfBLE
+         mQhO93I8MFrROci9NFGyb5ln6CboqNNo8MocCFE40fSfnVkfKqU6ss8zV47ND0jd7dt0
+         peaH+MbnMvFjQyqowfrdpKzhglqhoeR+dXR2jF41peyMAKX2wTSMGOTQbwsSBig9zQA0
+         0KICPH65D2t6y6MKJ1Rrjq9dsb4ZpmfbOyFVooUT8XVOmeZzBpJIYeglsqLnJNQ6a3sX
+         /Few==
+X-Gm-Message-State: AOAM531a6bpNkeefOWEfRSvLXEUiq3riLTCckZjH0Ly+07y7OTlz5YCG
+        jSdGXHhA42YUOF8F98lv47E=
+X-Google-Smtp-Source: ABdhPJw9oOFK6pyGWIH/2GPlhXou3jJsuUPf6+NVS+34/TUD9G3Tzw+tqYsd85BYIPXisSnWQkiZXQ==
+X-Received: by 2002:adf:f045:: with SMTP id t5mr14744801wro.383.1643584272372;
+        Sun, 30 Jan 2022 15:11:12 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p15sm10018366wrq.66.2022.01.30.15.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 15:11:11 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Rick Chang <rick.chang@mediatek.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: mtk-jpeg: remove redundant initialization of variable plane_fmt
+Date:   Sun, 30 Jan 2022 23:11:11 +0000
+Message-Id: <20220130231111.8563-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zu4q6q2/mkBU.yay6bQj.rh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zu4q6q2/mkBU.yay6bQj.rh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The variable plane_fmt is being initialized with a value that is never
+read, it is being re-assigned a new value on each iteration of a for
+loop. The initialization is redundant and can be removed.
 
-Hi all,
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-After merging the kspp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+index f332beb06d51..b334bbb2e682 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+@@ -681,7 +681,7 @@ static int mtk_jpeg_buf_prepare(struct vb2_buffer *vb)
+ {
+ 	struct mtk_jpeg_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+ 	struct mtk_jpeg_q_data *q_data = NULL;
+-	struct v4l2_plane_pix_format plane_fmt = {};
++	struct v4l2_plane_pix_format plane_fmt;
+ 	int i;
+ 
+ 	q_data = mtk_jpeg_get_q_data(ctx, vb->vb2_queue->type);
+-- 
+2.34.1
 
-In file included from include/linux/string.h:253,
-                 from include/linux/bitmap.h:11,
-                 from include/linux/cpumask.h:12,
-                 from arch/x86/include/asm/cpumask.h:5,
-                 from arch/x86/include/asm/msr.h:11,
-                 from arch/x86/include/asm/processor.h:22,
-                 from arch/x86/include/asm/timex.h:5,
-                 from include/linux/timex.h:65,
-                 from include/linux/time32.h:13,
-                 from include/linux/time.h:60,
-                 from include/linux/skbuff.h:15,
-                 from include/linux/tcp.h:17,
-                 from drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:33:
-In function 'fortify_memcpy_chk',
-    inlined from 'mlx5e_insert_vlan' at drivers/net/ethernet/mellanox/mlx5/=
-core/en_tx.c:211:2,
-    inlined from 'mlx5e_sq_xmit_wqe' at drivers/net/ethernet/mellanox/mlx5/=
-core/en_tx.c:496:4:
-include/linux/fortify-string.h:325:25: error: call to '__write_overflow_fie=
-ld' declared with attribute warning: detected write beyond size of field (1=
-st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
-  325 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from include/linux/string.h:253,
-                 from include/linux/bitmap.h:11,
-                 from include/linux/cpumask.h:12,
-                 from arch/x86/include/asm/cpumask.h:5,
-                 from arch/x86/include/asm/msr.h:11,
-                 from arch/x86/include/asm/processor.h:22,
-                 from arch/x86/include/asm/timex.h:5,
-                 from include/linux/timex.h:65,
-                 from include/linux/time32.h:13,
-                 from include/linux/time.h:60,
-                 from include/linux/ktime.h:24,
-                 from include/linux/timer.h:6,
-                 from include/linux/netdevice.h:24,
-                 from include/trace/events/xdp.h:8,
-                 from include/linux/bpf_trace.h:5,
-                 from drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:33:
-In function 'fortify_memcpy_chk',
-    inlined from 'mlx5e_xmit_xdp_frame' at drivers/net/ethernet/mellanox/ml=
-x5/core/en/xdp.c:344:3:
-include/linux/fortify-string.h:325:25: error: call to '__write_overflow_fie=
-ld' declared with attribute warning: detected write beyond size of field (1=
-st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
-  325 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Caused by various commits in the mlx5 driver interacting with the new
-memcpy checking.
-
-I have disabled CONFIG_MLX5_CORE_EN for today while this gets sorted
-out properly.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zu4q6q2/mkBU.yay6bQj.rh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH3GsIACgkQAVBC80lX
-0GwP6Qf9EISBThaLkN39k4EX2CoZ3A7N1cqf1QaL/+IEsaOCxaX8BOcMyvj/D2dA
-kZ/w+ZAnGOeeLTWgDE4phA05h7wKZ09HTjM+6kuQH4nm9NjylxC9VfJp+Fxi6W5S
-CjN+lGRrtO7I/+eJPA7BTy3pH0sBGwBcLy+ZlVdbO/zrm+6TlFkYqXzgJJgNazmE
-xSuC/WVvRTv1PBfo7Rjp8VD0XiYOsK46ovJP3tYA51BzhepyWcl0yduBAzjWB/wp
-7pnjWOaBmHeo2VHmSQo+71+IlteslG7tSlO87c9XAoL0FWB0MmeW9CX82TMU4H8h
-YfnbU02OM7AUMfYVFCEobwTwHlf0jQ==
-=Nn/o
------END PGP SIGNATURE-----
-
---Sig_/zu4q6q2/mkBU.yay6bQj.rh--

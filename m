@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D314A3630
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 13:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0524A364F
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 13:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354763AbiA3MY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 07:24:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56526 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354425AbiA3MY0 (ORCPT
+        id S1354624AbiA3MlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 07:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240805AbiA3MlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 07:24:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAD15B80DEF;
-        Sun, 30 Jan 2022 12:24:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414C7C340E4;
-        Sun, 30 Jan 2022 12:24:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643545463;
-        bh=pwp+GnroCdFEJWcK92qTVzMBdnxk6NQt6J0zB3LNVFw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MKwSQ4Kc2eZERUl547NyXjpkmgDhFlbBAXPMGgkB/2IF1avODl8A5zheoOiuhdvBK
-         PUkZ/XHPlQ3tw6XTJy5ib8Qq3tkemLckKabLfO0+iXpwBeP2JOP/1udQ4zHYCNKIVc
-         QCcU8V6K04kNc0Y7+uwicf0LZ4otCFrL99yTkqMW+N6dwzb7ldYFRMQLewoi2Gs0Pd
-         UepBAywLrbMA7nsrzatHNRnuRAtCJ1pB8WTLMja4xXECRmb6kXbhORfWunr6qJkpom
-         QkJbEmSGkCR+w57Xt9LWGGHhXbWNnzrJxwDoV5rTjdRO17ox4L0xhiUDmXInSTU/EP
-         ItvlnGt61ip0Q==
-Date:   Sun, 30 Jan 2022 12:30:47 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v4 1/4] math.h: Introduce data types for fractional
- numbers
-Message-ID: <20220130123034.708543ad@jic23-huawei>
-In-Reply-To: <20220126135353.24007-1-andriy.shevchenko@linux.intel.com>
-References: <20220126135353.24007-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 30 Jan 2022 07:41:10 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55008C061714;
+        Sun, 30 Jan 2022 04:41:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kZB5ahdLUol5/N8DBSN+3qX+veD/LzUVPKh58HExSNk=; b=DgPu0Q3DwXvjAcD1HMncfoPpm/
+        OZGmGlgvMXRpX6yICg6YxkcSVqgxV4jBkRh4Dpkk5bOS/W9sAS7LIFqqHBRPFjxORv5Pe0NRi2ZtQ
+        2X2q182H9jLgAI3RFaCzOzfhIoFv1kCHVzUAX7ON1mJYSDFJJ5BQLiSaOjlqFEt07hQyXFdUyyVm4
+        ndyEYoBzAsKL1QJdtt/sl1Infty025qni+VEIGpVPibCpCGQURMtDAbABWY21zePcJJDtMEcivbCQ
+        3T6UNxnZLaRoirm4jcNncS9Xc4Vh+K+mx8NXRdMVWr5xUeEvAwKH9/ZCkXXE/y8I3wK/AKgb34qW2
+        ZpoHu3Lg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56932)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nE9Vr-0007MR-Qy; Sun, 30 Jan 2022 12:40:59 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nE9Vp-0000A2-Ka; Sun, 30 Jan 2022 12:40:57 +0000
+Date:   Sun, 30 Jan 2022 12:40:57 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luo Jie <luoj@codeaurora.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Marko <robimarko@gmail.com>
+Subject: Re: [PATCH net] net: phy: Fix qca8081 with speeds lower than 2.5Gb/s
+Message-ID: <YfaHWSe+FvZC7w/x@shell.armlinux.org.uk>
+References: <YfZnmMteVry/A1XR@earth.li>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfZnmMteVry/A1XR@earth.li>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 15:53:50 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> Introduce a macro to produce data types like
+On Sun, Jan 30, 2022 at 10:25:28AM +0000, Jonathan McDowell wrote:
+> A typo in qca808x_read_status means we try to set SMII mode on the port
+> rather than SGMII when the link speed is not 2.5Gb/s. This results in no
+> traffic due to the mismatch in configuration between the phy and the
+> mac.
 > 
-> 	struct TYPE_fract {
-> 		__TYPE numerator;
-> 		__TYPE denominator;
-> 	};
-> 
-> to be used in the code wherever it's needed.
-> 
-> In the following changes convert some users to it.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-I'm not 100% sold on this, but I'm going to give them the benefit
-of the doubt as to long term usefulness and apply them.
-
-Basically I'm taking the view Andy is often right :)
-
-Applied to the togreg branch of iio.git and pushed out as testing
-for 0-day to see if we missed anything.
-
-Thanks,
-
-Jonathan
-
+> Fixes: 79c7bc0521545 ("net: phy: add qca8081 read_status")
+> Signed-off-by: Jonathan McDowell <noodles@earth.li>
 > ---
+>  drivers/net/phy/at803x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> May be pulled via IIO tree.
-> 
-> v4: no changes
-> v3: no changes
-> v2: no changes
-> 
->  include/linux/math.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/include/linux/math.h b/include/linux/math.h
-> index 53674a327e39..439b8f0b9ebd 100644
-> --- a/include/linux/math.h
-> +++ b/include/linux/math.h
-> @@ -2,6 +2,7 @@
->  #ifndef _LINUX_MATH_H
->  #define _LINUX_MATH_H
->  
-> +#include <linux/types.h>
->  #include <asm/div64.h>
->  #include <uapi/linux/kernel.h>
->  
-> @@ -106,6 +107,17 @@
->  }							\
->  )
->  
-> +#define __STRUCT_FRACT(type)				\
-> +struct type##_fract {					\
-> +	__##type numerator;				\
-> +	__##type denominator;				\
-> +};
-> +__STRUCT_FRACT(s16)
-> +__STRUCT_FRACT(u16)
-> +__STRUCT_FRACT(s32)
-> +__STRUCT_FRACT(u32)
-> +#undef __STRUCT_FRACT
-> +
->  /*
->   * Multiplies an integer by a fraction, while avoiding unnecessary
->   * overflow or loss of precision.
+> diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+> index 5b6c0d120e09..7077e3a92d31 100644
+> --- a/drivers/net/phy/at803x.c
+> +++ b/drivers/net/phy/at803x.c
+> @@ -1691,7 +1691,7 @@ static int qca808x_read_status(struct phy_device *phydev)
+>  	if (phydev->link && phydev->speed == SPEED_2500)
+>  		phydev->interface = PHY_INTERFACE_MODE_2500BASEX;
+>  	else
+> -		phydev->interface = PHY_INTERFACE_MODE_SMII;
+> +		phydev->interface = PHY_INTERFACE_MODE_SGMII;
 
+Is it intentional to set the interface to SGMII also when there is no
+link?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

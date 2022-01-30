@@ -2,225 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707D24A32CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D16F4A32CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353544AbiA3AV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353529AbiA3AVz (ORCPT
+        id S1353560AbiA3AW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:22:28 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:43927 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353529AbiA3AWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:21:55 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0405AC061714;
-        Sat, 29 Jan 2022 16:21:55 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id jx6so30238072ejb.0;
-        Sat, 29 Jan 2022 16:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZQaIehgXeuA4euu7fUr1NZwAZWdGjLXP2W1GG/EJe78=;
-        b=lne+hv2bkrsEsd3f5N9TuK4uAc8P372g1pkCINu+zXKJfNiXkaip9GXZ8uzwcHHjBT
-         Zkn5P7wBIsM3F/HZtnPRQK1g6xNGYTJdtKv/tTLNWOwDPqjlEaefww3J7PUpkpykYnFI
-         98R6s/EmHmZpXkY5ZtuGzlZ5rYRAFIYH+uu1Adata79LKNXsoJubQpNk8kk9Z2aL2308
-         0HGStXwpBugSl2btb1KNadBxO4Juu7yxkByDPrXrT6ZuAKlmuz/fe28leMfBZjUO6cqd
-         YkL4+7kSxHfXT2H9qvap4oNBh50ls4z+rE6iHPC0cMCBfv23h6Eh8rr0kawg1SEIN6XF
-         oeLA==
+        Sat, 29 Jan 2022 19:22:20 -0500
+Received: by mail-oi1-f176.google.com with SMTP id t199so3099599oie.10;
+        Sat, 29 Jan 2022 16:22:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZQaIehgXeuA4euu7fUr1NZwAZWdGjLXP2W1GG/EJe78=;
-        b=Wdmyl6GpwmFBGzogVvBY2yWqpqLVDtoO/Ukc51RKZGIAcU2qT2QXsTCPr/lCk0vCkQ
-         gWj8Ybp6w2ZZkHMXXZEqpcKiBYDjO28EP5OmQ91TtpGRT/OBCHM+itTpL+LBBqPnlP5I
-         nxZBmUgn6kf5zxb7FiDnQ2jVjHDDLfzWoewS2w29uL01IpweBD4S9nBh6Q4e5y/UNVDV
-         0nBViQY2JmWsyDt/YthmS2I+eR9d/6riPkt2ccQGDaYKkvmJbXnFTJ70EkdXxFxgSo0I
-         oepRAji9au1BZu+sX0eeGUBg9T9n2FxNGINEEIBVuPsR6VJRdkpQzIgVA6MTYIBhFOph
-         lAsg==
-X-Gm-Message-State: AOAM532N9io5vcVm6i8RzKhiyjmzzvtVVrJ1iOaM7uhQ1mZxnrAFazR6
-        6vVviy4qs0+5sx+YYmNJrXfAB0LkFNVHIuSWPJA=
-X-Google-Smtp-Source: ABdhPJwDojIzwvYYox5AhJniOifzj8etz2yBw2OL6AHjEfHm6QCO8eEogKCw6AjcCgRZQLdWNiHAAT/2mntSq2TarMY=
-X-Received: by 2002:a17:907:3f9d:: with SMTP id hr29mr11926680ejc.614.1643502113431;
- Sat, 29 Jan 2022 16:21:53 -0800 (PST)
-MIME-Version: 1.0
-References: <159db05f-539c-fe29-608b-91b036588033@molgen.mpg.de>
- <CAABZP2xampOLo8k93OLgaOfv9LreJ+f0g0_1mXwqtrv_LKewQg@mail.gmail.com> <3534d781-7d01-b42a-8974-0b1c367946f0@molgen.mpg.de>
-In-Reply-To: <3534d781-7d01-b42a-8974-0b1c367946f0@molgen.mpg.de>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Sun, 30 Jan 2022 08:21:41 +0800
-Message-ID: <CAABZP2zFDY-hrZqE=-c0uW8vFMH+Q9XezYd2DcBX4Wm+sxzK1g@mail.gmail.com>
-Subject: Re: BUG: Kernel NULL pointer dereference on write at 0x00000000 (rtmsg_ifinfo_build_skb)
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=ibh5bZb+8onvBhI3GZYIGBn3IOvNBzxGMepZQyo+6ek=;
+        b=sFW172SNZ/RdnODM/VftOIePk+7FP+koZ3V2qgBqi9Xy79g9Sob7cyONtxyvrHzOsM
+         Qo3JnJ+ab8GRUI0Fj3sgq/4jgY257dafsqB580jmhRxI/cvXv/OwHOb4seDULBiv4OQw
+         qQklj/BhRXpP6P1Gq4K/E8M4scDYjyR0TWYCds+Wno3+1rR71kgsXyxE2evKH2WpYw02
+         BDBfL1zUi6qunUvgrcJazwRryh9qjC1LG8LTDfNMJPx45iJOJZTeRhGp9+al5NTWb4i0
+         lI6jJ7OvnRfVyR/TxbtWhbgs8Q+AadAiFDoCgt1A1HajRgS52dadKNLJydTPkG1YB+HT
+         qfVA==
+X-Gm-Message-State: AOAM531JaBvrTzWB3RF5DsF+s0RX7DI+LTOK5+tntgHI2N1TXf7GC7HH
+        t1ewE8HAjqXE3Wzk2RmsMQ==
+X-Google-Smtp-Source: ABdhPJxks5VGix5iWHqoMoUIgzq1MfZ1Qhz2CqmrUq3Gw6cO1IsliqmYZDbUrJ6JnFbO8Tb4RG1vDw==
+X-Received: by 2002:aca:bb07:: with SMTP id l7mr14920384oif.166.1643502139874;
+        Sat, 29 Jan 2022 16:22:19 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id v4sm9027933oou.1.2022.01.29.16.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 16:22:19 -0800 (PST)
+Received: (nullmailer pid 416951 invoked by uid 1000);
+        Sun, 30 Jan 2022 00:22:17 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Patrick Venture <venture@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        openbmc@lists.ozlabs.org, Nancy Yuen <yuenn@google.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220128214427.1990183-1-j.neuschaefer@gmx.net>
+References: <20220128214427.1990183-1-j.neuschaefer@gmx.net>
+Subject: Re: [PATCH] dt-bindings: timer: nuvoton,npcm7xx-timer: Convert to YAML
+Date:   Sat, 29 Jan 2022 18:22:17 -0600
+Message-Id: <1643502137.246273.416950.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul,
+On Fri, 28 Jan 2022 22:44:26 +0100, Jonathan Neuschäfer wrote:
+> Let's convert this devicetree binding to YAML, to make it easier to
+> extend later.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>  .../bindings/timer/nuvoton,npcm7xx-timer.txt  | 21 ---------
+>  .../bindings/timer/nuvoton,npcm7xx-timer.yaml | 46 +++++++++++++++++++
+>  2 files changed, 46 insertions(+), 21 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.txt
+>  create mode 100644 Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
+> 
 
-Thank you for your instructions, I learned a lot from this process.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-On Sun, Jan 30, 2022 at 12:52 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Zhouyi,
->
->
-> Thank you for taking the time.
->
->
-> Am 29.01.22 um 03:23 schrieb Zhouyi Zhou:
->
-> > I don't have an IBM machine, but I tried to analyze the problem using
-> > my x86_64 kvm virtual machine, I can't reproduce the bug using my
-> > x86_64 kvm virtual machine.
->
-> No idea, if it=E2=80=99s architecture specific.
->
-> > I saw the panic is caused by registration of sit device (A sit device
-> > is a type of virtual network device that takes our IPv6 traffic,
-> > encapsulates/decapsulates it in IPv4 packets, and sends/receives it
-> > over the IPv4 Internet to another host)
-> >
-> > sit device is registered in function sit_init_net:
-> > 1895    static int __net_init sit_init_net(struct net *net)
-> > 1896    {
-> > 1897        struct sit_net *sitn =3D net_generic(net, sit_net_id);
-> > 1898        struct ip_tunnel *t;
-> > 1899        int err;
-> > 1900
-> > 1901        sitn->tunnels[0] =3D sitn->tunnels_wc;
-> > 1902        sitn->tunnels[1] =3D sitn->tunnels_l;
-> > 1903        sitn->tunnels[2] =3D sitn->tunnels_r;
-> > 1904        sitn->tunnels[3] =3D sitn->tunnels_r_l;
-> > 1905
-> > 1906        if (!net_has_fallback_tunnels(net))
-> > 1907            return 0;
-> > 1908
-> > 1909        sitn->fb_tunnel_dev =3D alloc_netdev(sizeof(struct ip_tunne=
-l), "sit0",
-> > 1910                           NET_NAME_UNKNOWN,
-> > 1911                           ipip6_tunnel_setup);
-> > 1912        if (!sitn->fb_tunnel_dev) {
-> > 1913            err =3D -ENOMEM;
-> > 1914            goto err_alloc_dev;
-> > 1915        }
-> > 1916        dev_net_set(sitn->fb_tunnel_dev, net);
-> > 1917        sitn->fb_tunnel_dev->rtnl_link_ops =3D &sit_link_ops;
-> > 1918        /* FB netdevice is special: we have one, and only one per n=
-etns.
-> > 1919         * Allowing to move it to another netns is clearly unsafe.
-> > 1920         */
-> > 1921        sitn->fb_tunnel_dev->features |=3D NETIF_F_NETNS_LOCAL;
-> > 1922
-> > 1923        err =3D register_netdev(sitn->fb_tunnel_dev);
-> > register_netdev on line 1923 will call if_nlmsg_size indirectly.
-> >
-> > On the other hand, the function that calls the paniced strlen is if_nlm=
-sg_size:
-> > (gdb) disassemble if_nlmsg_size
-> > Dump of assembler code for function if_nlmsg_size:
-> >     0xffffffff81a0dc20 <+0>:    nopl   0x0(%rax,%rax,1)
-> >     0xffffffff81a0dc25 <+5>:    push   %rbp
-> >     0xffffffff81a0dc26 <+6>:    push   %r15
-> >     0xffffffff81a0dd04 <+228>:    je     0xffffffff81a0de20 <if_nlmsg_s=
-ize+512>
-> >     0xffffffff81a0dd0a <+234>:    mov    0x10(%rbp),%rdi
-> >     ...
-> >   =3D> 0xffffffff81a0dd0e <+238>:    callq  0xffffffff817532d0 <strlen>
-> >     0xffffffff81a0dd13 <+243>:    add    $0x10,%eax
-> >     0xffffffff81a0dd16 <+246>:    movslq %eax,%r12
->
-> Excuse my ignorance, would that look the same for ppc64le?
-> Unfortunately, I didn=E2=80=99t save the problematic `vmlinuz` file, but =
-on a
-> current build (without rcutorture) I have the line below, where strlen
-> shows up.
->
->      (gdb) disassemble if_nlmsg_size
->      [=E2=80=A6]
->      0xc000000000f7f82c <+332>: bl      0xc000000000a10e30 <strlen>
->      [=E2=80=A6]
->
-> > and the C code for 0xffffffff81a0dd0e is following (line 524):
-> > 515    static size_t rtnl_link_get_size(const struct net_device *dev)
-> > 516    {
-> > 517        const struct rtnl_link_ops *ops =3D dev->rtnl_link_ops;
-> > 518        size_t size;
-> > 519
-> > 520        if (!ops)
-> > 521            return 0;
-> > 522
-> > 523        size =3D nla_total_size(sizeof(struct nlattr)) + /* IFLA_LIN=
-KINFO */
-> > 524               nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_=
-KIND */
->
-> How do I connect the disassemby output with the corresponding line?
-I use "make  ARCH=3Dpowerpc CC=3Dpowerpc64le-linux-gnu-gcc-9
-CROSS_COMPILE=3Dpowerpc64le-linux-gnu- -j 16" to cross compile kernel
-for powerpc64le in my Ubuntu 20.04 x86_64.
+yamllint warnings/errors:
 
-gdb-multiarch ./vmlinux
-(gdb)disassemble if_nlmsg_size
-[...]
-0xc00000000191bf40 <+112>:    bl      0xc000000001c28ad0 <strlen>
-[...]
-(gdb) break *0xc00000000191bf40
-Breakpoint 1 at 0xc00000000191bf40: file ./include/net/netlink.h, line 1112=
-.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.example.dt.yaml:0:0: /example-0/timer@f0008000: failed to match any schema with compatible: ['nuvoton,npcm750-timer']
 
-But in include/net/netlink.h:1112, I can't find the call to strlen
-1110static inline int nla_total_size(int payload)
-1111{
-1112        return NLA_ALIGN(nla_attr_size(payload));
-1113}
-This may be due to the compiler wrongly encode the debug information, I gue=
-ss.
+doc reference errors (make refcheckdocs):
 
->
-> > But ops is assigned the value of sit_link_ops in function sit_init_net
-> > line 1917, so I guess something must happened between the calls.
-> >
-> > Do we have KASAN in IBM machine? would KASAN help us find out what
-> > happened in between?
->
-> Unfortunately, KASAN is not support on Power, I have, as far as I can
-> see. From `arch/powerpc/Kconfig`:
->
->          select HAVE_ARCH_KASAN                  if PPC32 &&
-> PPC_PAGE_SHIFT <=3D 14
->          select HAVE_ARCH_KASAN_VMALLOC          if PPC32 &&
-> PPC_PAGE_SHIFT <=3D 14
->
-en, agree, I invoke "make  menuconfig  ARCH=3Dpowerpc
-CC=3Dpowerpc64le-linux-gnu-gcc-9 CROSS_COMPILE=3Dpowerpc64le-linux-gnu- -j
-16", I can't find KASAN under Memory Debugging, I guess we should find
-the bug by bisecting instead.
+See https://patchwork.ozlabs.org/patch/1585958
 
-> > Hope I can be of more helpful.
->
-> Some distributions support multi-arch, so they easily allow
-> crosscompiling for different architectures.
-I use "make  ARCH=3Dpowerpc CC=3Dpowerpc64le-linux-gnu-gcc-9
-CROSS_COMPILE=3Dpowerpc64le-linux-gnu- -j 16" to cross compile kernel
-for powerpc64le in my Ubuntu 20.04 x86_64. But I can't boot the
-compiled kernel using "qemu-system-ppc64le -M pseries -nographic -smp
-4 -net none -m 4G -kernel arch/powerpc/boot/zImage". I will continue
-to explore it.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Kind regards
-Zhouyi
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
->
->
-> Kind regards,
->
-> Paul
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

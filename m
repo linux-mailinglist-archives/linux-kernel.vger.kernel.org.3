@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD3D4A385D
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8653C4A386A
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355942AbiA3TEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 14:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S233595AbiA3TLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 14:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355806AbiA3TDp (ORCPT
+        with ESMTP id S231396AbiA3TLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 14:03:45 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723AEC061748
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:03:45 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id d10so36046903eje.10
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:03:45 -0800 (PST)
+        Sun, 30 Jan 2022 14:11:00 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0FFC06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:10:59 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id d138-20020a1c1d90000000b0034e043aaac7so9604871wmd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xkpzfLZXkf4Cff58Y+MCWi39G/nogDyQTUwKpV7CqzE=;
-        b=AcM7N/PpcJzgUpZ3pWcXxCACuWyBKgDicwdzR1wQY9tnu0tUIOZGEF0BOG4xvBkuzi
-         Uxv8NRoIF3LnhS0W24k+h0LGf9hj0FrKfgIE2yJ5vn02OUIVQF0GysWZp4EuWzM6MK3d
-         YHJ+jgXkKcnIO0QwY3UufJlixPNHmyFbW2/Xm6mmXHL9GtKHBCUFSrft3LCUgyrZ6/tZ
-         QLyBHwmkEumepL80X63i23yJwV0JnOIp84jh+Sh5pnFCgIuHnQu4nzt5VYuTMqhIj89g
-         RbvqIFsvezp9AGJqudUzplYjXu9mkeANRZcSeXnLN6tDvsLdVZuRUHqXc4glzJoym9Xb
-         D2xw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=M/+f53STiBHRkcS4IGPMxd+HMPefmbpzrpbFyFpBgDI=;
+        b=JMTUfDVt/jAgwE6uD4SQKeGTGPu7soib7jix16t/LCqXaNXsUpSoIujT9S/gPFBwqP
+         LUDokxLx4PoH+naPh9+qEIKh3/ZHBpu+iNc9yihwLe+hC4hvQA9m8v8YjLLiyYBWIOXo
+         lkhOJPj34zjSJVKgEnjzhVxVMws2CMhz/wjfLKRlZbNWu9wzThGdgAuRHibOiUsb3Xok
+         2/9mgrQRgZz7CxkvcAinkyodzDwYAwihnbIigmUucFksQ/VUbOD92kQa4pWNg7T5cijK
+         42YiEIVkrJ1DCBm6TUr4DI0FOtEMCIzO2/XBWfsACeNA87rYwgsSFV4m+5QCfUtIwTld
+         4BeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xkpzfLZXkf4Cff58Y+MCWi39G/nogDyQTUwKpV7CqzE=;
-        b=NA+2XcuiIWY1ue1UoLFTWjpeWthOTf2kVN2IwzbThL7T8TtLywt7JGy0xYkA6UQb00
-         SYT5BLSdOGMtfJQRASuKVeqyL1RWpRbNVqGl8vKZkl2ZXIjbzwz+5vAn1MgcNar0DHmA
-         VIqaAAcvL+FIm9Azsvxh6Uh7hEeJDn2TzTnKRaXgAFpbQpZlnMnyNv7xNP86qKI8Rp5o
-         H+MiKlmmDJkzjxDMAaRToRE3e51aSfbGGP7kbHnFgnIfv32wOJauz2T0ipL/4F0xflzc
-         +/1uUidiClhuzwfobz3OgKDGgoDuxai4dnKmUkioNDlk4vq2MKN5gfAs/U210WfYNnr4
-         OTlQ==
-X-Gm-Message-State: AOAM532RJhSfD9x4is1WtDtZCfEhEgNpK6u495uPixN9Tmtw3c4tKaXz
-        D8Mkau1BDJalr0iB/nimzMA=
-X-Google-Smtp-Source: ABdhPJxClUYmhMwbcglWbNdSaRQ6wu5KPIeYCtpTIecwhVHPk9Y2bk6OVyyxjl0vsgohgSsGMUs+cA==
-X-Received: by 2002:a17:906:eb89:: with SMTP id mh9mr14643269ejb.399.1643569424019;
-        Sun, 30 Jan 2022 11:03:44 -0800 (PST)
-Received: from localhost.localdomain (ip5f5abb5a.dynamic.kabel-deutschland.de. [95.90.187.90])
-        by smtp.gmail.com with ESMTPSA id n3sm921124ejr.6.2022.01.30.11.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 11:03:43 -0800 (PST)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 12/12] staging: r8188eu: remove HW_VAR_CAM_EMPTY_ENTRY
-Date:   Sun, 30 Jan 2022 20:03:21 +0100
-Message-Id: <20220130190321.7172-13-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220130190321.7172-1-straube.linux@gmail.com>
-References: <20220130190321.7172-1-straube.linux@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=M/+f53STiBHRkcS4IGPMxd+HMPefmbpzrpbFyFpBgDI=;
+        b=W9Jg5k7ivk/bFo6oxiTaqhoEVDVGK0d/nfOxtt5DsSsyPh9n0yqaipnF2egFL5IM2n
+         QOD43PoXzr0qGUdFNgzuGS6TYP8MEog4lnR9f41pSqVlpt4dcc1lKxX3b11FE5IQ2O2c
+         2xNiX1slbU3ao+vpeQoZkRFLdTUvmQhuvRQzj2hdagM5D0BmWfNigAgaIAF6uDN/jKo2
+         HWk6tEnYlg62ome57NpaUWxjtVxYyfS9anMBsYLlOsbe55aYOm5CT4lzb6wotsJpfl78
+         aAsDEycD2/fGTeh6YtXGdnXGlrUNFVs9jbMnrN4kE+hlFey1NZ3Ljgb0fQh2qEQt9xU2
+         FAyQ==
+X-Gm-Message-State: AOAM532nm+lowrgvoGIPp+2kbnw7R4pwOQYvXjw+6IvCoL6YV6d9VFus
+        TnKwGZ0Ll7bftbOqR5BqxBHvVA==
+X-Google-Smtp-Source: ABdhPJyF3HluxL6TTy22PSoOozjmKOsKtmhCZSw2pLGT1B2Lpqu1z+prOt1AEOj1KxTjK+X6U4kgYg==
+X-Received: by 2002:a05:600c:507:: with SMTP id i7mr15717932wmc.40.1643569858066;
+        Sun, 30 Jan 2022 11:10:58 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:d3c5:fe0:78a4:5227? ([2a01:e34:ed2f:f020:d3c5:fe0:78a4:5227])
+        by smtp.googlemail.com with ESMTPSA id u19sm6934055wmm.39.2022.01.30.11.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jan 2022 11:10:56 -0800 (PST)
+Message-ID: <8f448883-f8cf-76fc-6275-ed5d887f16c8@linaro.org>
+Date:   Sun, 30 Jan 2022 20:10:55 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 0/6] powercap/drivers/dtpm: Create the dtpm hierarchy
+Content-Language: en-US
+To:     rjw@rjwysocki.net
+Cc:     heiko@sntech.de, robh@kernel.org, lukasz.luba@arm.com,
+        arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220128163537.212248-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220128163537.212248-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HW_VAR_CAM_EMPTY_ENTRY case in SetHwReg8188EU() is not used.
-Remove it.
+On 28/01/2022 17:35, Daniel Lezcano wrote:
+> The DTPM hierarchy is the base to build on top of it a power budget allocator.
+> It reflects the power consumption of the group of devices and allows to cap
+> their power.
+> 
+> The core code is there but there is no way to describe the desired hierarchy
+> yet.
+> 
+> A first proposal introduced the description through configfs [1] but was
+> rejected [2].
+> 
+> A second proposal based on the device tree with a binding similar to the power
+> domains [3] was proposed but finally rejected [4].
+> 
+> This version delegates the hierarchy creation to the SoC with a specific and
+> self-encapsulated code using an array to describe the tree. The SoC DTPM driver
+> defines an array of nodes pointing to their parents.  The hierarchy description
+> can integrate a DT node and in the future a SCMI node, that means the
+> description can mix different type of nodes.
+> 
+> As the DTPM tree depends on different devices which could be modules, the SoC
+> specific description must always be compiled as a module and describe the
+> module softdeps in order to let the userspace to handle proper loading
+> ordering.
+> 
+> In addition to the hierarchy creation, the devfreq dtpm support is also
+> integrated into this series.
+> 
+> This series was tested on a rock960 (revision B - rk3399 based) and a db845c
+> (Qualcomm sdm845 based).
+> 
+> [1] https://lore.kernel.org/all/20210401183654.27214-1-daniel.lezcano@linaro.org/
+> [2] https://lore.kernel.org/all/YGYg6ZeZ1181%2FpXk@kroah.com/
+> [3] https://lore.kernel.org/all/20211205231558.779698-1-daniel.lezcano@linaro.org/
+> [4] https://lore.kernel.org/all/YbfFapsmsjs4qnsg@robh.at.kernel.org/
+> 
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/hal/usb_halinit.c  | 23 ----------------------
- drivers/staging/r8188eu/include/hal_intf.h |  1 -
- 2 files changed, 24 deletions(-)
+Applied for v5.18
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index bab76a92ece5..996ded880034 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1272,29 +1272,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 	case HW_VAR_DM_FUNC_CLR:
- 		podmpriv->SupportAbility &= *((u32 *)val);
- 		break;
--	case HW_VAR_CAM_EMPTY_ENTRY:
--		{
--			u8 ucIndex = *((u8 *)val);
--			u8 i;
--			u32 ulCommand = 0;
--			u32 ulContent = 0;
--			u32 ulEncAlgo = CAM_AES;
--
--			for (i = 0; i < CAM_CONTENT_COUNT; i++) {
--				/*  filled id in CAM config 2 byte */
--				if (i == 0)
--					ulContent |= (ucIndex & 0x03) | ((u16)(ulEncAlgo) << 2);
--				else
--					ulContent = 0;
--				/*  polling bit, and No Write enable, and address */
--				ulCommand = CAM_CONTENT_COUNT * ucIndex + i;
--				ulCommand = ulCommand | CAM_POLLINIG | CAM_WRITE;
--				/*  write content 0 is equall to mark invalid */
--				rtw_write32(Adapter, WCAMI, ulContent);  /* delay_ms(40); */
--				rtw_write32(Adapter, RWCAM, ulCommand);  /* delay_ms(40); */
--			}
--		}
--		break;
- 	case HW_VAR_AC_PARAM_BE:
- 		haldata->AcParam_BE = ((u32 *)(val))[0];
- 		rtw_write32(Adapter, REG_EDCA_BE_PARAM, ((u32 *)(val))[0]);
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 5add8d100da7..cb460d8a4595 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -25,7 +25,6 @@ enum hw_variables {
- 	HW_VAR_DM_FUNC_OP,
- 	HW_VAR_DM_FUNC_SET,
- 	HW_VAR_DM_FUNC_CLR,
--	HW_VAR_CAM_EMPTY_ENTRY,
- 	HW_VAR_CAM_READ,
- 	HW_VAR_AC_PARAM_BE,
- 	HW_VAR_ACM_CTRL,
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

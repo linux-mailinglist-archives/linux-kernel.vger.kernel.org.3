@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B12D94A32F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E8D4A32FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353615AbiA3BHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 20:07:23 -0500
-Received: from mga03.intel.com ([134.134.136.65]:11829 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232795AbiA3BHW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 20:07:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643504842; x=1675040842;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=HAtiV9xYaZQgR7COoOn8hvU9x5+DlnyBUlJJ0ycfjXE=;
-  b=W3gWegH3kfSl8Ck5HF77kSjBi5o7dhKR7Rh95gzsPNnFi57YEBjAyp2N
-   u6bNWAVqs1ENqas8tTm31qY3RRVB5UNtr8ruHqT7RSV3VN+0NtWvuF97O
-   ZgeHEG7dyhzncq2ZJcIy0/6BqnA63SpK4akqMmpbS8blim2oxdj8BM0i5
-   VZxrMW6qyz++dOjF4S8485S5T7dIXs5CqD2pDaTBlqc8wh5e1sxUTojLF
-   bwyqynbtg69yFISou4fpFWlJmzNcWokOT2rZuLcEH6/yagVSTXJlHJ5oV
-   +/9oTK4RYT0nQR41AwD6sc7retl5CTQyyVB3pvGs+u0g3hpMC/5/A32fk
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="247256806"
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="247256806"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 17:07:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="582235464"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 17:07:19 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Rik van Riel <riel@surriel.com>
-Subject: Re: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for
- memory tiering system
-References: <20220128023842.1946583-1-ying.huang@intel.com>
-        <20220128052345.GA618915@linux.vnet.ibm.com>
-        <87czkctiz9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <YfQIMmbY7nHusQRK@hirez.programming.kicks-ass.net>
-Date:   Sun, 30 Jan 2022 09:07:17 +0800
-In-Reply-To: <YfQIMmbY7nHusQRK@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Fri, 28 Jan 2022 16:13:54 +0100")
-Message-ID: <87sft6rpyy.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S1353629AbiA3BIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 20:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232795AbiA3BIv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 20:08:51 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763CC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:08:50 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id i10so29645488ybt.10
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:08:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=02uHw9l58hh+muQ0KbMFsY5uF5yxmJgiUPQGP+bydes=;
+        b=SFWZj0gBP6IRp9aDFoy+xQUE8PPySKJ2umdyyTH0/76Ude/Sa/8rlfSvjRzOSZuCe1
+         oI6l+vseIe7/wXn6K3j1gw7WNCxH2Kb6dO46ZlmI9ZtUvV+Xsci0jYIZiVFh/GorOMWY
+         XW+NSPF5dIGmv7XqLzUPcuOmN6fqf3R1AombzO9zj2ZVhbhC3PDzYow+rhUZR7RFqf6I
+         DhuknS+cFKrmSjx+0En68Njj7Y9UjJhPu1duqbPCjKZyVWgmstU+nKDqpMZIbfbptud0
+         /yxVS1IUB97IlmE3oa8oTm2CACbtR/U9NOnRpqMQVCt6hx7VqsEcmAoR2bJUzhPGhRKB
+         s55Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=02uHw9l58hh+muQ0KbMFsY5uF5yxmJgiUPQGP+bydes=;
+        b=Y6Q0L6p0CnsVS5NujLJavV0Zr/dGqJXWXADSHGGKT7veSeCeX8O71GTzlncugQRsgu
+         ot72o/99piGK3BAmsj/wUJjy6hm0HId2nSd51nNWSV53mQ/F5XMaO6fsfNkIyhjGfOgd
+         UfP+6HjDBNk9Sr8Ts54QbvqG6E+lKwLMNd/QLerfZGasVeUCxrthb7XvBz/VU+rsx8nC
+         wIM8flFrDTelU1dibbhwQ0gfs00fbQoBJA0YMMMpz9+JMgXiofwK8HVdDQzc61zcFvqF
+         8YCNKCG+T7Bsh8Jw1dcIwV4LiYxISMadyVPrAoguvsTGzNyWe/14h/bD4mwQKlIzu0kG
+         r6Cw==
+X-Gm-Message-State: AOAM531t5Gj9mLtwGKd/VDRMekKat+r8JCp0TD1SmrcMcUhqS7PZzMyc
+        TW6dSBnR9TOoePdo6sanCtQTvpxDQLOFIzvZ++nawQ==
+X-Google-Smtp-Source: ABdhPJyxe/T6VMm8ymvO6Ahfr5MEhtC4jE74F8HctHiIiYxrOIhRbLOh6y0Ddd9fyCHF8SU029pA7zW3pKDOLCSxsdo=
+X-Received: by 2002:a05:6902:124a:: with SMTP id t10mr20237420ybu.634.1643504929797;
+ Sat, 29 Jan 2022 17:08:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+References: <20220119160715.650535-1-nikita.yoush@cogentembedded.com>
+In-Reply-To: <20220119160715.650535-1-nikita.yoush@cogentembedded.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 30 Jan 2022 02:08:38 +0100
+Message-ID: <CACRpkdZ2rBii88APKacg=LyVY-9m9pxM5z08YawkvjuWmjSJrA@mail.gmail.com>
+Subject: Re: [PATCH/RFC] gpiolib: create irq_domain hierarchy bottom if possible
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+On Wed, Jan 19, 2022 at 5:07 PM Nikita Yushchenko
+<nikita.yoush@cogentembedded.com> wrote:
 
-> On Fri, Jan 28, 2022 at 03:30:50PM +0800, Huang, Ying wrote:
->> Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
->> 
->> > * Huang Ying <ying.huang@intel.com> [2022-01-28 10:38:41]:
->> >
->> >> 
->> >> One possible fix is to ignore CPU-less nodes when detecting NUMA
->> >> topology type in init_numa_topology_type().  That works well for the
->> >> example system.  Is it good in general for any system with CPU-less
->> >> nodes?
->> >> 
->> >
->> > A CPUless node at the time online doesn't necessarily mean a CPUless node
->> > for the entire boot. For example: On PowerVM Lpars, aka powerpc systems,
->> > some of the nodes may start as CPUless nodes and then CPUS may get
->> > populated/hotplugged on them.
->> 
->> Got it!
->> 
->> > Hence I am not sure if adding a check for CPUless nodes at node online may
->> > work for such systems.
->> 
->> How about something as below?
+> Currently, gpiolib creates irq_domain compatible with hierarchical API
+> only when interrupts provided by gpiochip lay on top of existing
+> hierarchy. Otherwise, legacy API is used.
 >
-> I'm thinking that might not be enough in that scenario; if we're going
-> to consistently skip CPU-less nodes (as I really think we should) then
-> __sched_domains_numa_masks_set() is not sufficient for the hotplug case
-> since sched_domains_numa_levels and sched_max_numa_distance can also
-> change.
+> With this patch, as soon as
+> - irq_domain hierarchical API is enabled in the kernel config,
+> - chip driver does not request preallocated interrupt numbers,
+> - chip driver does not provide it's own irq_domain_ops,
+> - chip driver provides fwnode, either explicitly or via it's struct
+>   device,
+> irq_domain created by gpiolib will use hierarchical API even without
+> parent.
 >
-> This means we need to re-do more of sched_init_numa() and possibly
-> re-alloc some of those arrays etc..
->
-> Same for offline ofc.
+> This allows other irqchips to lay on top of this irq_domain.
 
-Got it!  It doesn't make sense to create schedule domains for CPU-less
-nodes.  I can work on this after Chinese New Year holiday week (the
-whole next week).  But if anyone want to work on this, feel free to do
-that.
+I see what you're trying to do, but we definitely need Marc Z to
+provide review for this patch before we merge it.
 
-Best Regards,
-Huang, Ying
+> @@ -1095,14 +1095,6 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
+(...)
+> +       if (d->parent) {
+
+You have just put a big if (d->parent) around 95% of the code, invent
+a different
+function name and make that do what you want if parent is set, or just
+inline the code you need for that case.
+
+>  static bool gpiochip_hierarchy_is_hierarchical(struct gpio_chip *gc)
+>  {
+> -       return !!gc->irq.parent_domain;
+> +       if (gc->irq.parent_domain)
+> +               return true;    /* will add to existing hierarchy */
+
+OK the old case...
+
+> +       if (!gc->irq.first && !gc->irq.domain_ops &&
+> +           (gc->irq.fwnode || dev_fwnode(&gc->gpiodev->dev)))
+> +               return true;    /* will create hierarchy bottom */
+
+This will turn a *lot* of GPIO chips created with this helper
+into hierarchical root controllers.
+
+Is this really the right thing to do? (Marc?)
+
+Yours,
+Linus Walleij

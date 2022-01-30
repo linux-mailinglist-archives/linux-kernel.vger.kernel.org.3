@@ -2,80 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9F04A35E8
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141A94A35FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354623AbiA3L3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 06:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242943AbiA3L3A (ORCPT
+        id S1354669AbiA3Lgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 06:36:47 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:41545 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354655AbiA3Lgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 06:29:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3AEC061714;
-        Sun, 30 Jan 2022 03:28:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77D1CB828FB;
-        Sun, 30 Jan 2022 11:28:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FD70C340E4;
-        Sun, 30 Jan 2022 11:28:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643542137;
-        bh=O3fxXoAXDyiaNpmyIMzruf5onAwLK+lMiucIKH0HQp8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NjdXPyQ2uz8w00/wHvUA0M7/DQ3NB4I4XI9uFpAjegKLclmoTnZp1sCGfwUo4BDgN
-         vjZ8lRlV0ujWxT08IlOLhbZdGANQJ6aUq4glFjIXnTH3ShCPGlYo3mCLbKcv5LAh1e
-         uGmZCr89ZcqzDRJDVfy6tRF+mf71bO3y+HF0+P+gAWY1I0A8nF4b/gIfQ+tv3un0f2
-         wuMYNiBre5vssUS1S2gorVRzQ6huedKKgRyJB5neLKIZJOGEDQmorYD6SpE1hwT0NT
-         QItIOW1bOosqOTNzWNXnRD6u/jS11sg+ySp/XEAbzUtGXJLGnFivzokW2jf6tBXf6V
-         MsQO5HcCrT7tw==
-Date:   Sun, 30 Jan 2022 11:35:15 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
-        andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1 0/6] i iio: accel: sca3300: add compitible for
- scl3300
-Message-ID: <20220130113515.4e9ffe1b@jic23-huawei>
-In-Reply-To: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn>
-References: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 30 Jan 2022 06:36:44 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MkpjD-1mX4CN3OxT-00mKSp; Sun, 30 Jan 2022 12:36:41 +0100
+Received: by mail-oi1-f182.google.com with SMTP id t199so4771640oie.10;
+        Sun, 30 Jan 2022 03:36:39 -0800 (PST)
+X-Gm-Message-State: AOAM5314Ox/BEinCAcq0fPV8cd3GKJu05gn1BFnwkD48soO66bExzH/x
+        8G4HgiWAuS46vCuxnRu+Kuk18wAjT0tMlFKJAdM=
+X-Google-Smtp-Source: ABdhPJx02/VRPT+lHqxP4cUEJpaptHk8IWYJlq+IlqFxgivaG7fXilNMey5++lAxG71rgAwjbfrXcV/NpMPlqrdhT2Y=
+X-Received: by 2002:aca:f03:: with SMTP id 3mr10491465oip.102.1643542598876;
+ Sun, 30 Jan 2022 03:36:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-7-guoren@kernel.org>
+ <CAK8P3a3_kVB78-26sxdsEjb3MMcco6U55tc7siCBFZbJjyH6Sw@mail.gmail.com> <CAJF2gTThb8_-T0iOFVZoJrvZqeFvjfWB+AdFyOwtGhN9aG-MQQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTThb8_-T0iOFVZoJrvZqeFvjfWB+AdFyOwtGhN9aG-MQQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 30 Jan 2022 12:36:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3A9AMyv7ABRpUgrTo3sg+SogoDSG5cudR87iK+PifU4g@mail.gmail.com>
+Message-ID: <CAK8P3a3A9AMyv7ABRpUgrTo3sg+SogoDSG5cudR87iK+PifU4g@mail.gmail.com>
+Subject: Re: [PATCH V4 06/17] riscv: compat: Add basic compat date type implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:qz/9sgDzB4qJJ3+Q/QIzZPuO+2NXM74KRntuyUyYRQ6Q82LLX8q
+ 5m29nqq7hI8NgdOZpUSJcmmhtHRIaNk2664vaZqMavt08hkwW5EB1iMikbNA0WaUy2hhFZW
+ igASxu07SEzkAuRIeHvw81hHl/RErbhtZDDstsb1vbS0ZVogd98vpQsePnLahyxNWuQp2bZ
+ fycIk65CN+YPTIDl0XsEg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:t6t6eCcbCi0=:Ildz/xss/+/vz9314TtGHP
+ p5xqRwsnhPF3BEgXuo72mHm3SouliMJOMjEvy06dYOOOxKhBk7kIJ0NVWx12x28p4hTxr6nBJ
+ am7cCa2hw3wgUy/feRRX3NWojL9VDQ5Fw6NCmV3r/YusXy22pT47+k5M6r5aUhfXEYqeqGSsw
+ Y9v7pDKL2ALNfeLqHVGjT4xzKZ0WkLPJrDrK4A8GTNm6f3S1GOIhQ+BKj64VZHIf7i0mW5oT5
+ TJO0Cj/t9V4yPslgS/NIlpkP47wHVodUff0PF11I1MEr2cq+bAWdt7qAnNxdiTW3F8Dffwk4R
+ FFNyz+pPAAceRtzIU5QcvEuE0zp3WuI+fK6Wu5OG7NOBozw81m5nRGjvyZZX++JKM1ci+hQ3S
+ /JfLmJB5sfe+mAneuIluhOlS7o2CuXVtM/P0wyK5v12Z6Uexb8RDLS60CA7x6Vo9iKW50d2OG
+ B1KuYUEbfT9nB92Pgpv2ozKCKfBB7Vo0szwOZ3jRRTYXVKeH8Q/us0q3fki7ugaTe0y0FdV2G
+ m3gdHN6Y0kJAuzIJttE3nKkrV3CevGA4sbuPZqCJz6J6LXS0RD9wqDM/HyaBgb0rqPUQAzkqV
+ htNDhdQuRIYl+kgf6GTl/e8rjsAa1Dj7QMwrjq1MFCIQsNC80wG05KAdWIumyb8uz2e5Z3l/D
+ 6XGRsL33Gd0/9s/3IQbzaOnMmwRlLOE09sqaD3njZZ1Yd5eEwbgqcKke7tAM8iRlx+EridEVX
+ eYpBI/r5xhKQh9yl+dcvKf5UrxnVn1xOXlztxuXdcpXaJ4jdnIG21kYM4naOoPbo/60N6dMvP
+ 8dcM6MZQKj3xzQ4TEqXkBGxkqXUBxDLeBRXF+tmuq6oFu4Dyn0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022 09:39:06 +0000
-LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
+On Sun, Jan 30, 2022 at 6:47 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Sun, Jan 30, 2022 at 5:56 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Sat, Jan 29, 2022 at 1:17 PM <guoren@kernel.org> wrote:
+> > > +
+> > > +#define COMPAT_RLIM_INFINITY   0x7fffffff
+> > >
+> > > +#define F_GETLK64      12
+> > > +#define F_SETLK64      13
+> > > +#define F_SETLKW64     14
+> >
+> > These now come from the generic definitions I think. The flock definitions
+> > are just the normal ones,
+> Yes, it could be removed after Christoph Hellwig's patch merged.
 
-> The current driver support sca3300 only.
-> Modifed for support SCL3300.
-> Verifed with SCL3300 on IMX8MM.
-> Splited the change for review.
-> 
-> LI Qingwu (6):
->   iio: accel: sca3300: add define for temp channel for reuse.
->   iio: accel: sca3300: Add interface for operation modes.
->   iio: accel: sca3300: modified to support multi chips
->   iio: accel: sca3300: Add support for SCL3300
->   iio: accel: sca3300: Add inclination channels.
->   dt-bindings: iio: accel: sca3300: Document murata,scl3300
-> 
->  .../bindings/iio/accel/murata,sca3300.yaml    |   1 +
->  drivers/iio/accel/sca3300.c                   | 284 +++++++++++++++---
->  2 files changed, 238 insertions(+), 47 deletions(-)
-> 
+Rgiht, I keep forgetting that this is a separate series, so this is fine.
 
-For v2, please make sure to cc linux-iio@vger.kernel.org
+> > and AFAICT the RLIM_INIFINITY definition here
+> > is actually wrong and should be the default 0xffffffffu to match the
+> > native (~0UL) definition.
+> Yes, native rv32 used ~0UL, although its task_size is only 2.4GB.
 
-I won't pick up any IIO changes that haven't been sent to that list.
+The rlimit range has very little to do with the virtual memory address
+limits, it is used for a number of other things that are typically more
+limited in practice.
 
-Thanks,
+> I would remove #define COMPAT_RLIM_INFINITY   0x7fffffff
 
-Jonathan
+Ok.
+
+       Arnd

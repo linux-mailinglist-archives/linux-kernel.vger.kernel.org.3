@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8CC4A34B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 07:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291A54A34B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 07:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354239AbiA3G2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 01:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
+        id S1354243AbiA3Gd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 01:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiA3G2B (ORCPT
+        with ESMTP id S229873AbiA3GdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 01:28:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514E1C061714;
-        Sat, 29 Jan 2022 22:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=hbegQiqCRQ0s45eKAn6OzrlJwshqG8ZUtRw1/WsvnxE=; b=QBwQcb+YAGcLw3iBLr/zC9kkBZ
-        YrpflwePJnc3qN5HyKDnwIpa/8jO2n9cQOrON2TtDwJhwbjgRhqaLMhly3lLCdfEDpay17oP3Wk7x
-        h1V3EVTx+XuDOljoPK8ljQqhCDHE0kUiyfmP8Ks9li3ytBwsFkvlMVFJVMw8ZZGBx3EngwkTDOK5B
-        kfis5hM6c52BURRqwfJi1qwQnGP1oWMDIDjYot/3/aBJOYU6QRIqFUxzFTXgHcb7pvzUCDDIjcgoA
-        t3fMmG3cEamlRvZ1Q4E0X+2XXKedINZWgJT9ccPM+nLets3PcOPxiMagiBOOtQmWnSN+wrQXjH9vB
-        nlsZqmog==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nE3gF-008Bq0-Q4; Sun, 30 Jan 2022 06:27:20 +0000
-Message-ID: <687c2d76-ecfd-f3a4-f9b0-8c0178705cdf@infradead.org>
-Date:   Sat, 29 Jan 2022 22:27:12 -0800
+        Sun, 30 Jan 2022 01:33:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180EBC061714;
+        Sat, 29 Jan 2022 22:33:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83668B8284C;
+        Sun, 30 Jan 2022 06:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0977CC340E4;
+        Sun, 30 Jan 2022 06:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643524400;
+        bh=/cIdn3XGZbN01cqnIxUhf4QjDFd+RjN9h/GNFpqHBx4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V+JJuEWZcnyvKQ4HBFshhORdDO3wl1baZ/MEmOSMA2ycX0QORFHD9sG+pkfY6t74b
+         qzHqRUOJ1ukf4x4FPzevBh4425WXcs28BiSkQ+1Gtn4D3Nv8iwWjDVgzuYW/pOHjji
+         axNJGCW5sLHHwFEzGvJ2di99X8+7oUT3WqDpEmC8J7P7Spf2cYHhlIbUt27rV5D1vK
+         O//w3AAxUvjQAoVZaSyOe+GwnJrXjaleSvBNwOWXJ43F/WV9Ei1rCimn5Q1RQlptI4
+         m7vro243wjTnidHvtFmc1cK8C2biVDrVd7T5X1j4jt/jUZxZzN8/zRvlmeZCsAH4d+
+         l84dEpLXmuhEA==
+Date:   Sun, 30 Jan 2022 08:33:09 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v2 3/3] mm/page_owner: Dump memcg information
+Message-ID: <YfYxJR7ugv83ywAb@kernel.org>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-4-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/1] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220130060412.12100-1-15330273260@189.cn>
- <20220130060412.12100-2-15330273260@189.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220130060412.12100-2-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129205315.478628-4-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Sat, Jan 29, 2022 at 03:53:15PM -0500, Waiman Long wrote:
+> It was found that a number of offlined memcgs were not freed because
+> they were pinned by some charged pages that were present. Even "echo
+> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
+> offlined but not freed memcgs tend to increase in number over time with
+> the side effect that percpu memory consumption as shown in /proc/meminfo
+> also increases over time.
+> 
+> In order to find out more information about those pages that pin
+> offlined memcgs, the page_owner feature is extended to dump memory
+> cgroup information especially whether the cgroup is offlined or not.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  mm/page_owner.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index 28dac73e0542..8dc5cd0fa227 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/migrate.h>
+>  #include <linux/stackdepot.h>
+>  #include <linux/seq_file.h>
+> +#include <linux/memcontrol.h>
+>  #include <linux/sched/clock.h>
+>  
+>  #include "internal.h"
+> @@ -331,6 +332,7 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  		depot_stack_handle_t handle)
+>  {
+>  	int ret, pageblock_mt, page_mt;
+> +	unsigned long __maybe_unused memcg_data;
+>  	char *kbuf;
+>  
+>  	count = min_t(size_t, count, PAGE_SIZE);
+> @@ -365,6 +367,35 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  			migrate_reason_names[page_owner->last_migrate_reason]);
+>  	}
+>  
+> +#ifdef CONFIG_MEMCG
 
-On 1/29/22 22:04, Sui Jingfeng wrote:
-> diff --git a/drivers/gpu/drm/lsdc/Kconfig b/drivers/gpu/drm/lsdc/Kconfig
-> new file mode 100644
-> index 000000000000..f470892ddf60
-> --- /dev/null
-> +++ b/drivers/gpu/drm/lsdc/Kconfig
-> @@ -0,0 +1,38 @@
-> +config DRM_LSDC
-> +	tristate "DRM Support for loongson's display controller"
-> +	depends on DRM && PCI
-> +	depends on MACH_LOONGSON64 || LOONGARCH || MIPS || COMPILE_TEST
-> +	select OF
-> +	select CMA if HAVE_DMA_CONTIGUOUS
-> +	select DMA_CMA if HAVE_DMA_CONTIGUOUS
-> +	select DRM_KMS_HELPER
-> +	select DRM_KMS_FB_HELPER
-> +	select DRM_GEM_CMA_HELPER
-> +	select VIDEOMODE_HELPERS
-> +	select BACKLIGHT_PWM if CPU_LOONGSON2K
-> +	select I2C_GPIO if CPU_LOONGSON2K
-> +	select I2C_LS2X if CPU_LOONGSON2K
-> +	default m
-> +	help
-> +	  This is a KMS driver for the display controller in the LS7A1000
-> +	  bridge chip and LS2K1000 SoC. The display controller have two
+Can we put all this along with the declaration of memcg_data in a helper
+function please?
 
-	                                                       has two
-
-> +	  display pipes and it is a PCI device.
-> +	  When using this driver on LS2K1000/LS2K0500 SoC, its framebuffer
-> +	  is located at system memory.
-> +	  If "M" is selected, the module will be called lsdc.
+> +	/*
+> +	 * Look for memcg information and print it out
+> +	 */
+> +	memcg_data = READ_ONCE(page->memcg_data);
+> +	if (memcg_data) {
+> +		struct mem_cgroup *memcg = page_memcg_check(page);
+> +		bool onlined;
+> +		char name[80];
 > +
-> +	  If in doubt, say "Y".
+> +		if (memcg_data & MEMCG_DATA_OBJCGS)
+> +			ret += scnprintf(kbuf + ret, count - ret,
+> +					"Slab cache page\n");
 > +
-> +config DRM_LSDC_VRAM_DRIVER
-> +	bool "vram helper based device driver support"
-> +	depends on DRM_LSDC
-> +	select DRM_VRAM_HELPER
-> +	default y
-> +	help
-> +	  When using this driver on LS7A1000 + LS3A3000/LS3A4000/LS3A5000
-> +	  platform, the LS7A1000 bridge chip have dedicated video RAM.
-
-	                                     has
-
-> +	  Pass lsdc.use_vram_helper = 1 to the kernel cmd line will enable
-
-	  Using "lsdc.use_vram_helper=1" in the kernel command line will enable
-
-(No spaces allowed in the kernel command line.)
-
-> +	  this driver mode and then the framebuffer will located at the
-> +	  VRAM at the price of losing PRIME support.
+> +		if (!memcg)
+> +			goto copy_out;
+> +
+> +		onlined = (memcg->css.flags & CSS_ONLINE);
+> +		cgroup_name(memcg->css.cgroup, name, sizeof(name));
+> +		ret += scnprintf(kbuf + ret, count - ret,
+> +				"Charged %sto %smemcg %s\n",
+> +				PageMemcgKmem(page) ? "(via objcg) " : "",
+> +				onlined ? "" : "offlined ",
+> +				name);
+> +	}
+> +
+> +copy_out:
+> +#endif
+> +
+>  	ret += snprintf(kbuf + ret, count - ret, "\n");
+>  	if (ret >= count)
+>  		goto err;
+> -- 
+> 2.27.0
+> 
+> 
 
 -- 
-~Randy
+Sincerely yours,
+Mike.

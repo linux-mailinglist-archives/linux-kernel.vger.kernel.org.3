@@ -2,308 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4DB4A351D
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CC34A3520
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354357AbiA3IQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 03:16:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54050 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiA3IQP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 03:16:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1354375AbiA3ITb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 03:19:31 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:56615 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234792AbiA3IT3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 03:19:29 -0500
+Received: from [10.59.106.37] (unknown [77.235.169.38])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7773A61035;
-        Sun, 30 Jan 2022 08:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEADC340E4;
-        Sun, 30 Jan 2022 08:16:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643530574;
-        bh=Kj6ddOq5QHP7GclXHj1ybguuXq6ZA/wCuiUiRcvPprA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C1lXwqP594YRNMW+7ckFOaUsIlGP/cvWTeooFm87PdDvyg9JBfUyxHn9DYk0mFXCQ
-         l7bz0kTCvbnBUZtgxQG4IJe9Pe5oNBtepfxiund2Lz6Fimv8RZ9aafY9GBPqzok2MK
-         Tz9ajDj99yNwvp+o7lg37AdcTUBkEZaKrCb5Ji82/iHBdgJ74JH2qQizrdCTnLKygE
-         OOji6h826y5ntPNsWranNYshvfxSLHF8rgjYEigpzu4fCgBkdTkM+0SZr9LucRdOEr
-         2NQK2+G5oHEnw2NVMmzz+EOesvvmd4pwlD1vrDbFfCs2+3xah0h5wh+jWLHxuIJn8d
-         nAdVT+EQTvZXA==
-Date:   Sun, 30 Jan 2022 10:16:01 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 1/7] mm: Add support for unaccepted memory
-Message-ID: <YfZJQedck2YxZcWA@kernel.org>
-References: <20220128205906.27503-1-kirill.shutemov@linux.intel.com>
- <20220128205906.27503-2-kirill.shutemov@linux.intel.com>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id A22C561EA1926;
+        Sun, 30 Jan 2022 09:19:25 +0100 (CET)
+Message-ID: <04a597dc-64aa-57e6-f7fb-17bd2ec58159@molgen.mpg.de>
+Date:   Sun, 30 Jan 2022 09:19:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128205906.27503-2-kirill.shutemov@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: BUG: Kernel NULL pointer dereference on write at 0x00000000
+ (rtmsg_ifinfo_build_skb)
+Content-Language: en-US
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+References: <159db05f-539c-fe29-608b-91b036588033@molgen.mpg.de>
+ <CAABZP2xampOLo8k93OLgaOfv9LreJ+f0g0_1mXwqtrv_LKewQg@mail.gmail.com>
+ <3534d781-7d01-b42a-8974-0b1c367946f0@molgen.mpg.de>
+ <CAABZP2zFDY-hrZqE=-c0uW8vFMH+Q9XezYd2DcBX4Wm+sxzK1g@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAABZP2zFDY-hrZqE=-c0uW8vFMH+Q9XezYd2DcBX4Wm+sxzK1g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:59:00PM +0300, Kirill A. Shutemov wrote:
-> UEFI Specification version 2.9 introduces the concept of memory
-> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
-> SEV-SNP, requiring memory to be accepted before it can be used by the
-> guest. Accepting happens via a protocol specific for the Virtual Machine
-> platform.
-> 
-> Accepting memory is costly and it makes VMM allocate memory for the
-> accepted guest physical address range. It's better to postpone memory
-> acceptance until memory is needed. It lowers boot time and reduces
-> memory overhead.
-> 
-> Support of such memory requires a few changes in core-mm code:
-> 
->   - memblock has to accept memory on allocation;
-> 
->   - page allocator has to accept memory on the first allocation of the
->     page;
-> 
-> Memblock change is trivial.
-> 
-> The page allocator is modified to accept pages on the first allocation.
-> PageBuddyUnaccepted() is used to indicate that the page requires acceptance.
-> 
-> Kernel only need to accept memory once after boot, so during the boot
-> and warm up phase there will be a lot of memory acceptance. After things
-> are settled down the only price of the feature if couple of checks for
-> PageBuddyUnaccepted() in alloc and free paths. The check refers a hot
-> variable (that also encodes PageBuddy()), so it is cheap and not visible
-> on profiles.
-> 
-> Architecture has to provide three helpers if it wants to support
-> unaccepted memory:
-> 
->  - accept_memory() makes a range of physical addresses accepted.
-> 
->  - maybe_mark_page_unaccepted() marks a page PageBuddyUnaccepted() if it
->    requires acceptance. Used during boot to put pages on free lists.
-> 
->  - accept_page() makes a page accepted and clears PageBuddyUnaccepted().
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  include/linux/page-flags.h | 27 +++++++++++++++++++++++++++
->  mm/internal.h              | 15 +++++++++++++++
->  mm/memblock.c              |  8 ++++++++
->  mm/page_alloc.c            | 23 ++++++++++++++++++++++-
->  4 files changed, 72 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index 1c3b6e5c8bfd..1bdc6b422207 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -871,6 +871,18 @@ static __always_inline void __ClearPage##uname(struct page *page)	\
->  	page->page_type |= PG_##lname;					\
->  }
->  
-> +#define PAGE_TYPE_OPS_FALSE(uname)					\
-> +static __always_inline int Page##uname(struct page *page)		\
-> +{									\
-> +	return false;							\
-> +}									\
-> +static __always_inline void __SetPage##uname(struct page *page)		\
-> +{									\
-> +}									\
-> +static __always_inline void __ClearPage##uname(struct page *page)	\
-> +{									\
-> +}
-> +
->  /*
->   * PageBuddy() indicates that the page is free and in the buddy system
->   * (see mm/page_alloc.c).
-> @@ -901,6 +913,21 @@ PAGE_TYPE_OPS(Buddy, buddy)
->   */
->  PAGE_TYPE_OPS(Offline, offline)
->  
-> + /*
-> +  * PageBuddyUnaccepted() indicates that the page has to be "accepted" before
-> +  * it can be used. Page allocator has to call accept_page() before returning
-> +  * the page to the caller.
-> +  *
-> +  * PageBuddyUnaccepted() encoded with the same bit as PageOffline().
-> +  * PageOffline() pages are never on free list of buddy allocator, so there's
-> +  * not conflict.
-> +  */
-> +#ifdef CONFIG_UNACCEPTED_MEMORY
-> +PAGE_TYPE_OPS(BuddyUnaccepted, offline)
-> +#else
-> +PAGE_TYPE_OPS_FALSE(BuddyUnaccepted)
-> +#endif
-> +
->  extern void page_offline_freeze(void);
->  extern void page_offline_thaw(void);
->  extern void page_offline_begin(void);
-> diff --git a/mm/internal.h b/mm/internal.h
-> index d80300392a19..26e5d7cb6aff 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -718,4 +718,19 @@ void vunmap_range_noflush(unsigned long start, unsigned long end);
->  int numa_migrate_prep(struct page *page, struct vm_area_struct *vma,
->  		      unsigned long addr, int page_nid, int *flags);
->  
-> +#ifndef CONFIG_UNACCEPTED_MEMORY
-> +static inline void maybe_mark_page_unaccepted(struct page *page,
-> +					      unsigned int order)
-> +{
-> +}
-> +
-> +static inline void accept_page(struct page *page, unsigned int order)
-> +{
-> +}
-> +
-> +static inline void accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +}
-> +#endif
-> +
->  #endif	/* __MM_INTERNAL_H */
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 1018e50566f3..24ab07c44d4a 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -1400,6 +1400,14 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
->  		 */
->  		kmemleak_alloc_phys(found, size, 0, 0);
->  
-> +	/*
-> +	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
-> +	 * requiring memory to be accepted before it can be used by the
+Dear Zhouyi,
 
-Nit:     ^ require
 
-> +	 * guest.
-> +	 *
-> +	 * Accept the memory of the allocated buffer.
-> +	 */
-> +	accept_memory(found, found + size);
+Am 30.01.22 um 01:21 schrieb Zhouyi Zhou:
 
-I'd appreciate an empty line here.
+> Thank you for your instructions, I learned a lot from this process.
 
-Otherwise
+Same on my end.
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+> On Sun, Jan 30, 2022 at 12:52 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
 
->  	return found;
->  }
->  
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 3589febc6d31..27b9bd20e675 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1077,6 +1077,7 @@ static inline void __free_one_page(struct page *page,
->  	unsigned int max_order;
->  	struct page *buddy;
->  	bool to_tail;
-> +	bool unaccepted = PageBuddyUnaccepted(page);
->  
->  	max_order = min_t(unsigned int, MAX_ORDER - 1, pageblock_order);
->  
-> @@ -1110,6 +1111,10 @@ static inline void __free_one_page(struct page *page,
->  			clear_page_guard(zone, buddy, order, migratetype);
->  		else
->  			del_page_from_free_list(buddy, zone, order);
-> +
-> +		if (PageBuddyUnaccepted(buddy))
-> +			unaccepted = true;
-> +
->  		combined_pfn = buddy_pfn & pfn;
->  		page = page + (combined_pfn - pfn);
->  		pfn = combined_pfn;
-> @@ -1143,6 +1148,10 @@ static inline void __free_one_page(struct page *page,
->  done_merging:
->  	set_buddy_order(page, order);
->  
-> +	/* Mark page unaccepted if any of merged pages were unaccepted */
-> +	if (unaccepted)
-> +		__SetPageBuddyUnaccepted(page);
-> +
->  	if (fpi_flags & FPI_TO_TAIL)
->  		to_tail = true;
->  	else if (is_shuffle_order(order))
-> @@ -1168,7 +1177,8 @@ static inline void __free_one_page(struct page *page,
->  static inline bool page_expected_state(struct page *page,
->  					unsigned long check_flags)
->  {
-> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
-> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
-> +	    !PageBuddyUnaccepted(page))
->  		return false;
->  
->  	if (unlikely((unsigned long)page->mapping |
-> @@ -1749,6 +1759,8 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
->  {
->  	if (early_page_uninitialised(pfn))
->  		return;
-> +
-> +	maybe_mark_page_unaccepted(page, order);
->  	__free_pages_core(page, order);
->  }
->  
-> @@ -1838,10 +1850,12 @@ static void __init deferred_free_range(unsigned long pfn,
->  	if (nr_pages == pageblock_nr_pages &&
->  	    (pfn & (pageblock_nr_pages - 1)) == 0) {
->  		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
-> +		maybe_mark_page_unaccepted(page, pageblock_order);
->  		__free_pages_core(page, pageblock_order);
->  		return;
->  	}
->  
-> +	accept_memory(pfn << PAGE_SHIFT, (pfn + nr_pages) << PAGE_SHIFT);
->  	for (i = 0; i < nr_pages; i++, page++, pfn++) {
->  		if ((pfn & (pageblock_nr_pages - 1)) == 0)
->  			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
-> @@ -2312,6 +2326,10 @@ static inline void expand(struct zone *zone, struct page *page,
->  		if (set_page_guard(zone, &page[size], high, migratetype))
->  			continue;
->  
-> +		/* Transfer PageBuddyUnaccepted() to the newly split pages */
-> +		if (PageBuddyUnaccepted(page))
-> +			__SetPageBuddyUnaccepted(&page[size]);
-> +
->  		add_to_free_list(&page[size], zone, high, migratetype);
->  		set_buddy_order(&page[size], high);
->  	}
-> @@ -2408,6 +2426,9 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
->  	 */
->  	kernel_unpoison_pages(page, 1 << order);
->  
-> +	if (PageBuddyUnaccepted(page))
-> +		accept_page(page, order);
-> +
->  	/*
->  	 * As memory initialization might be integrated into KASAN,
->  	 * kasan_alloc_pages and kernel_init_free_pages must be
-> -- 
-> 2.34.1
+>> Am 29.01.22 um 03:23 schrieb Zhouyi Zhou:
+>>
+>>> I don't have an IBM machine, but I tried to analyze the problem using
+>>> my x86_64 kvm virtual machine, I can't reproduce the bug using my
+>>> x86_64 kvm virtual machine.
+>>
+>> No idea, if it’s architecture specific.
+>>
+>>> I saw the panic is caused by registration of sit device (A sit device
+>>> is a type of virtual network device that takes our IPv6 traffic,
+>>> encapsulates/decapsulates it in IPv4 packets, and sends/receives it
+>>> over the IPv4 Internet to another host)
+>>>
+>>> sit device is registered in function sit_init_net:
+>>> 1895    static int __net_init sit_init_net(struct net *net)
+>>> 1896    {
+>>> 1897        struct sit_net *sitn = net_generic(net, sit_net_id);
+>>> 1898        struct ip_tunnel *t;
+>>> 1899        int err;
+>>> 1900
+>>> 1901        sitn->tunnels[0] = sitn->tunnels_wc;
+>>> 1902        sitn->tunnels[1] = sitn->tunnels_l;
+>>> 1903        sitn->tunnels[2] = sitn->tunnels_r;
+>>> 1904        sitn->tunnels[3] = sitn->tunnels_r_l;
+>>> 1905
+>>> 1906        if (!net_has_fallback_tunnels(net))
+>>> 1907            return 0;
+>>> 1908
+>>> 1909        sitn->fb_tunnel_dev = alloc_netdev(sizeof(struct ip_tunnel), "sit0",
+>>> 1910                           NET_NAME_UNKNOWN,
+>>> 1911                           ipip6_tunnel_setup);
+>>> 1912        if (!sitn->fb_tunnel_dev) {
+>>> 1913            err = -ENOMEM;
+>>> 1914            goto err_alloc_dev;
+>>> 1915        }
+>>> 1916        dev_net_set(sitn->fb_tunnel_dev, net);
+>>> 1917        sitn->fb_tunnel_dev->rtnl_link_ops = &sit_link_ops;
+>>> 1918        /* FB netdevice is special: we have one, and only one per netns.
+>>> 1919         * Allowing to move it to another netns is clearly unsafe.
+>>> 1920         */
+>>> 1921        sitn->fb_tunnel_dev->features |= NETIF_F_NETNS_LOCAL;
+>>> 1922
+>>> 1923        err = register_netdev(sitn->fb_tunnel_dev);
+>>> register_netdev on line 1923 will call if_nlmsg_size indirectly.
+>>>
+>>> On the other hand, the function that calls the paniced strlen is if_nlmsg_size:
+>>> (gdb) disassemble if_nlmsg_size
+>>> Dump of assembler code for function if_nlmsg_size:
+>>>      0xffffffff81a0dc20 <+0>:    nopl   0x0(%rax,%rax,1)
+>>>      0xffffffff81a0dc25 <+5>:    push   %rbp
+>>>      0xffffffff81a0dc26 <+6>:    push   %r15
+>>>      0xffffffff81a0dd04 <+228>:    je     0xffffffff81a0de20 <if_nlmsg_size+512>
+>>>      0xffffffff81a0dd0a <+234>:    mov    0x10(%rbp),%rdi
+>>>      ...
+>>>    => 0xffffffff81a0dd0e <+238>:    callq  0xffffffff817532d0 <strlen>
+>>>      0xffffffff81a0dd13 <+243>:    add    $0x10,%eax
+>>>      0xffffffff81a0dd16 <+246>:    movslq %eax,%r12
+>>
+>> Excuse my ignorance, would that look the same for ppc64le?
+>> Unfortunately, I didn’t save the problematic `vmlinuz` file, but on a
+>> current build (without rcutorture) I have the line below, where strlen
+>> shows up.
+>>
+>>       (gdb) disassemble if_nlmsg_size
+>>       […]
+>>       0xc000000000f7f82c <+332>: bl      0xc000000000a10e30 <strlen>
+>>       […]
+>>
+>>> and the C code for 0xffffffff81a0dd0e is following (line 524):
+>>> 515    static size_t rtnl_link_get_size(const struct net_device *dev)
+>>> 516    {
+>>> 517        const struct rtnl_link_ops *ops = dev->rtnl_link_ops;
+>>> 518        size_t size;
+>>> 519
+>>> 520        if (!ops)
+>>> 521            return 0;
+>>> 522
+>>> 523        size = nla_total_size(sizeof(struct nlattr)) + /* IFLA_LINKINFO */
+>>> 524               nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_KIND */
+>>
+>> How do I connect the disassemby output with the corresponding line?
+> I use "make  ARCH=powerpc CC=powerpc64le-linux-gnu-gcc-9
+> CROSS_COMPILE=powerpc64le-linux-gnu- -j 16" to cross compile kernel
+> for powerpc64le in my Ubuntu 20.04 x86_64.
 > 
+> gdb-multiarch ./vmlinux
+> (gdb)disassemble if_nlmsg_size
+> [...]
+> 0xc00000000191bf40 <+112>:    bl      0xc000000001c28ad0 <strlen>
+> [...]
+> (gdb) break *0xc00000000191bf40
+> Breakpoint 1 at 0xc00000000191bf40: file ./include/net/netlink.h, line 1112.
+> 
+> But in include/net/netlink.h:1112, I can't find the call to strlen
+> 1110static inline int nla_total_size(int payload)
+> 1111{
+> 1112        return NLA_ALIGN(nla_attr_size(payload));
+> 1113}
+> This may be due to the compiler wrongly encode the debug information, I guess.
 
--- 
-Sincerely yours,
-Mike.
+`rtnl_link_get_size()` contains:
+
+             size = nla_total_size(sizeof(struct nlattr)) + /* 
+IFLA_LINKINFO */
+                    nla_total_size(strlen(ops->kind) + 1);  /* 
+IFLA_INFO_KIND */
+
+Is that inlined(?) and the code at fault?
+
+>>> But ops is assigned the value of sit_link_ops in function sit_init_net
+>>> line 1917, so I guess something must happened between the calls.
+>>>
+>>> Do we have KASAN in IBM machine? would KASAN help us find out what
+>>> happened in between?
+>>
+>> Unfortunately, KASAN is not support on Power, I have, as far as I can
+>> see. From `arch/powerpc/Kconfig`:
+>>
+>>           select HAVE_ARCH_KASAN                  if PPC32 && PPC_PAGE_SHIFT <= 14
+>>           select HAVE_ARCH_KASAN_VMALLOC          if PPC32 && PPC_PAGE_SHIFT <= 14
+>>
+> en, agree, I invoke "make  menuconfig  ARCH=powerpc
+> CC=powerpc64le-linux-gnu-gcc-9 CROSS_COMPILE=powerpc64le-linux-gnu- -j
+> 16", I can't find KASAN under Memory Debugging, I guess we should find
+> the bug by bisecting instead.
+
+I do not know, if it is a regression, as it was the first time I tried 
+to run a Linux kernel built with rcutorture on real hardware.
+
+>>> Hope I can be of more helpful.
+>>
+>> Some distributions support multi-arch, so they easily allow
+>> crosscompiling for different architectures.
+> I use "make  ARCH=powerpc CC=powerpc64le-linux-gnu-gcc-9
+> CROSS_COMPILE=powerpc64le-linux-gnu- -j 16" to cross compile kernel
+> for powerpc64le in my Ubuntu 20.04 x86_64. But I can't boot the
+> compiled kernel using "qemu-system-ppc64le -M pseries -nographic -smp
+> 4 -net none -m 4G -kernel arch/powerpc/boot/zImage". I will continue
+> to explore it.
+
+Oh, that does not sound good. But I have not tried that in a long time 
+either. It’s a separate issue, but maybe some of the PPC 
+maintainers/folks could help.
+
+
+Kind regards,
+
+Paul

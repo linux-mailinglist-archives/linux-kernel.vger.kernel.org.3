@@ -2,138 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 279424A3815
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 19:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC064A3819
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 19:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354809AbiA3Sg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 13:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241414AbiA3Sg4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 13:36:56 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B6BC06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 10:36:55 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id c3so10598670pls.5
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 10:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q5vjG+YMypgAosvq5fGFyI71IypDtaJUOdFNQIbCj7c=;
-        b=Tb8nC01F+DRqFoHXLT7qgPpKsIdyH09z+q9OtVS0BCOO7v4EMNn42gukaDyeTdAo2m
-         UqWilgsSHw3fQHIKwDxPJOYJT/odvwD+RQdZlVu4ayXZ3YRVJI/9yNJlpEnQ9+Orhs+N
-         q71CrR0DEPFX0q4KLBMBE+abeKxHRtJrwT1/I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q5vjG+YMypgAosvq5fGFyI71IypDtaJUOdFNQIbCj7c=;
-        b=p57/kiR88Ya6QZFWa+NYhY+oGs5b2zec4fW7jfXYM8hT+5JerbdjfnKp1sIjT68X3H
-         kMAe1YM5z+rboQ/sPa8lxAZtDE8AnTWFVTnui9DnXe3baf9tZs0koZYP5klmut2wd5WU
-         kN6LvdO4DSIiI9oO2OYifjkI5wXrTDPZ8CTplrh6fopIU99KTXmXj/EGUqxzxnJW7M9D
-         87EzlWk4fYEPFuaevKwk6FIXFZZxoMf4JUn+lp8XMLRoc8utTsr04RN75Z6v0Lf9/Grp
-         aqxtoijyicvFICxpy1LvRyzFTWKK3DBfC6uGp92lcJtF+6nRbWVaaVn2CBKHpFiFXQam
-         xjwA==
-X-Gm-Message-State: AOAM531RmfVeymMNuST9uqRZ3b33GIiRKBDNaY1mYd4KFj0nmXdPXXQy
-        LQShoGqJvbQtw8sng0GVCqriOw==
-X-Google-Smtp-Source: ABdhPJzi6aCYq4cU+3Y6e2MM/lD1976jEVm8rfWvXvefJCxXxdbxY/5xTJkF3VFptZ27isF8Ea8KWg==
-X-Received: by 2002:a17:90b:1c8b:: with SMTP id oo11mr5325523pjb.9.1643567815256;
-        Sun, 30 Jan 2022 10:36:55 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ne23sm8342898pjb.57.2022.01.30.10.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 10:36:54 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] lib/test_string.c: Add test for strlen()
-Date:   Sun, 30 Jan 2022 10:36:53 -0800
-Message-Id: <20220130183653.491292-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        id S1354860AbiA3Sj1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 30 Jan 2022 13:39:27 -0500
+Received: from mail-eopbgr120059.outbound.protection.outlook.com ([40.107.12.59]:12752
+        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236688AbiA3SjV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 13:39:21 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N8r2sEXIB2iWnaU9QtSwHvZPL+8v/P31k3Qo0JEzhN0BHwqALm7FXmzFZoWL4g+Rj+hPdOb0sBoVYXlFrUSCnWEwNAI4V6D7pXwPqgxeIxMjmlExVeZDyee6RWbzE95Znpp5z1ih4/1nKXKo+7tyXyoggYhH6jgnkSvx9aq/XJ9JZP1172vq+3XpZaXs1rQwNXBRlV0ZoV0sZr3YZt82OqG6VNtOvLDbPoH8SbO8xN0MBudr9nI7RYLHJibPsZWp91614j8rlGTIaQpHhZKNK4YV/Z5lxOvQUpqXxNxLvg3we+xfKXmbefEmC1njFFHtijrD8Sf7ySHpwHLrogguvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0WAZ7AtoNrM0ysy6SKzdy9H1LuAFud7SD2Nuqv/cvLg=;
+ b=niwzQCbwaDzirsiqzso7SMlkmDASH6XppAKBPe9VYHuwYpJXSUvO1W4yCjxLSuSeGjmfdScPk56yb6VBPQo8c2c2E/qJfqfxfjVVMJDHenzrtZs5EzYfIjORKKctPKK4RGs3zATJhQHJZQ9te2xWAzA++FWChPoKmhL9rI1+1IbqlauYA3mpsCe0edV+zZYLe/X498WbxrK0KcYLJ6VbAW2gp7y2z4bWma+784FWbW7/SwUR9YpiprsdyDpik1PVC3zsbs94nSlJxNoxyXuwHaIkVOdAlwBjoZV25B53b2xjnVafbKi+XHxOpp5EkAygVBb7e7XM6OMaQ5ouH6L+Jg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAYP264MB3486.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:125::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Sun, 30 Jan
+ 2022 18:39:19 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.020; Sun, 30 Jan 2022
+ 18:39:18 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] powerpc/ptdump: Fix sparse warning in hashpagetable.c
+Thread-Topic: [PATCH] powerpc/ptdump: Fix sparse warning in hashpagetable.c
+Thread-Index: AQHYFgiwjP4NasC/wUmzoQdvzYRFMg==
+Date:   Sun, 30 Jan 2022 18:39:18 +0000
+Message-ID: <bbc196451dd34521d239023ccca488db35b8fff1.1643567900.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d4a247b1-56ab-4fe3-f46d-08d9e41fd34c
+x-ms-traffictypediagnostic: PAYP264MB3486:EE_
+x-microsoft-antispam-prvs: <PAYP264MB34862CEF4C518CF9EF3FADDDED249@PAYP264MB3486.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:93;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wAgeOhuXbBeVRCRwl/MlueIWOD9+hJXKl2Hi9ph8Hsobrpdu73CN5FCxeSB6Ofdz3+lXHQ4VHRA2PrGlJEURCJcOwU3QbAPudkXYO4KJ6Rg6plc+5wEG7eBP3f8eshEVmYBLUHmJMrmkNGKkZ0b4DZFPyPc0/+DlrgTLX4MqTMrK+cNDqwuxSJn8Gc7mqIXyvwi9Zkgfb2BmkIcet+s7w0X0ua+lkAtVtauZXDZtWfq3yA66tX3pD69X4g/wROf7aSBa3EPOe3BJy0rzrt/3R68s5ha7tnRS68J+8q/qDPFhko/cVtJ2dff6n15Z0tSxzBtSsnAmgWzBGqd988iMAYrkwLCIt8mok30IU5HIyQucKEcuWPcaHuigLv6WiFpHwxH60SRRdhsXmUHFFiKTyFcxbzs7km7hXk7zqDKLCk1OnZQv306fkbvcNRr05niGUjpR+8gje4sURCo/n/TDx2qBjjtQiFrgtFzvr3yKvHV9gruy33Jrq7YBWuSfQC0/Ak/FbosZ8iL+k5YZJ841kNZt21r6/YU05CpHvImo0iJi8Wc4dCyFCUM3HLqYgT/ut5APzLpesnerF6VS3lzT9UV9+YGz4R+B9c7r451PWSE4lyxfYIyXuGc0j5LvnXJLlZ4jTFq4Kopt3qMVVLoOqTQuuOWHyFAXDHZ49eYzB1HAdGM73xpWp1KW9GKA+BV2TtxgvUlU8v3nkmAV6Y7asg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(83380400001)(110136005)(316002)(54906003)(122000001)(5660300002)(64756008)(38070700005)(66446008)(8936002)(8676002)(186003)(26005)(38100700002)(86362001)(6512007)(44832011)(36756003)(66946007)(2906002)(6486002)(66476007)(66556008)(4326008)(2616005)(91956017)(76116006)(508600001)(6506007)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?JUS2MiSvdiW9Jm84svyZglPq5s3jGWcrFMNy8sNns/z764PBPjw36u9XA/?=
+ =?iso-8859-1?Q?/qmN71U9+7wajwEo0VRX8Jc9P54sXxrrjBvKafLEnqTfxu7RGgtDWgrOom?=
+ =?iso-8859-1?Q?qSugtBdp/gwiRBbNhoAfe/fgPvh8v3bsblTD4btp2aWGI2eRhlo1jxYOuE?=
+ =?iso-8859-1?Q?KSRb97dWRqRRNUzc7e50zQnLKZP/L5zpYKn+yJgbDRWvdivzrncFTVUsD8?=
+ =?iso-8859-1?Q?k9+VpqfOK1zSbyBrrKmpYgfpHoOuZeXAP0SaDQpjR0KIJ0gv7uR3ZfOzpx?=
+ =?iso-8859-1?Q?2r1Fo/OZzyxZb4PEaL6q3oT1wbl3i3JbNho0/OvrMJ6OvsfT6YPrDD9WU7?=
+ =?iso-8859-1?Q?LCyK2ccLjOc4VSKXh+cf/HoweJQgQPizsWbFh9vD1aE479Kzywkp+QcsEX?=
+ =?iso-8859-1?Q?6YlK4+y82x26VcI+kDj9uDGdf9uUvSXuqYjj/HKNGN4FsehJ2zk7D2EAPB?=
+ =?iso-8859-1?Q?zLtdXSbMR+jVxu/XKP0ce0/kiPrZiFxMEQvOecY1eGP4D2eEOwWk0lYXtX?=
+ =?iso-8859-1?Q?Ji4IMfdBopLIf9Swuvsnrq839RiZ9OiN8ml7wUb2GD+lj+oJNgcAY83ZHl?=
+ =?iso-8859-1?Q?R+0hcFHDGlsefRAzNAVdGvi8C97ifGiFLJw4fSqte95E6ivE6RMjclkl6d?=
+ =?iso-8859-1?Q?K+m/CzeTIKEXbbSwuG5WpO7gOLxx6k0h+9GhLRxq8WSR6kGMMocjYkZ0E/?=
+ =?iso-8859-1?Q?5Y2EsWaMRS6uPHGRBr7QLesP3dmUVkcCc1z61sReBAAUTmhEygGrVYkN+j?=
+ =?iso-8859-1?Q?RoIBBAf+5K+ZMiZvqW8L9PcYS/onQr8afbfSrajPZAMVKMcLMyKOQxgr1C?=
+ =?iso-8859-1?Q?gatWabzWDW55B1a5psGKoAdxiKZdjhYNpFa2QtQR5eu84o0Fj+nKhLL230?=
+ =?iso-8859-1?Q?V01aUIQm/hBHngi4kc23DRY6+77pBVkKwVYg6IxBRWl3rcWoDh2+uMwl6a?=
+ =?iso-8859-1?Q?/k1F8u3Dxf1wi45MfiMZGuRqRi1fLSpYBBugYkQm6ZOdARnPrAAgL7/p03?=
+ =?iso-8859-1?Q?UIXOZiTGs8kGmpozqSYrYM6PCZhsrGbtat5oFWkdPKDZxDobOpqZtzf7mD?=
+ =?iso-8859-1?Q?aFXBV1ugrm4+kgcIqoxTzYDOiLgxYrrMgIHI0qd1JJXRQGCX0nP6DkE8GN?=
+ =?iso-8859-1?Q?b736j1aKbdcopkys3b2ZV1ntf8PZDcbTjpM+hLvlgkGu+CchRNw/sNsTPr?=
+ =?iso-8859-1?Q?X0jM7IP+8N4FGYf/Ux2wtXie2ffHMANsPlErUMDmbYVi/LzNFOy+Ry7OxN?=
+ =?iso-8859-1?Q?d+izMVR8R8U5ZnE8sJIrqtUchIlUCK13fXmrTfz4oRvMRL+KqaoMtj4lz+?=
+ =?iso-8859-1?Q?upPoOnDjjnrhmpE3CccN9jHPLUs2KUx38AYtPPNU8yJloNFCR/Jixw5/Ej?=
+ =?iso-8859-1?Q?eREiX98uAMRlyuGATEgW7WJSEJxtD2JSCZ92jvrVv5kCeMURcuPExxLjCW?=
+ =?iso-8859-1?Q?l9qo9vU9lQ0LTiDkzHfbLh3kX/E91RkGXMU7OfpFAVQoDjTOlpdcYrJg8/?=
+ =?iso-8859-1?Q?Nf57wDJtB6Cn3mrs5VGxDt9JFmje8DxAI0MauGg5lPngP11Ts/6GhUGS7Q?=
+ =?iso-8859-1?Q?xF1k96XN7VSW8i+olI8CdityRHymHTc7XcX/S03M6J/hqC15Qm8cvVEp3x?=
+ =?iso-8859-1?Q?izlQdbX7Tdgi1oGAKWGqLaB4xvG0k7LgWj5IamHzr+AVXsweNa0/+I+qQ9?=
+ =?iso-8859-1?Q?CAblO9ZDxwCFhveH1IZQz1CW8e+XLW6MphxubxKQEgVdBgxS55buO9Nvrx?=
+ =?iso-8859-1?Q?j2PL6BziqCPwN15qfxIGCefjk=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1906; h=from:subject; bh=StW5CkYsJmkZOPt9qK/Mj4yFOZ3WDOkjyFpDMiiGEws=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh9trEXeMxmUufHBSxPUHfFwxLEBs9VUcxm3mkqbV3 B0QB/XmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfbaxAAKCRCJcvTf3G3AJrOvEA CKkBcQp1Pf4H5nU+9Xgq02JhlS8Hatlj0a3OjZYovR7LFvzBXrbK2tboDY8ADyPof0JlHBjaFlEzzV hZSLQz4NlIJBBGoSl4tgS1pz6Joq4yYj4tdtN6jR4T7C+ZQDJsE9aeQ6fMbn9Cr2/Soditxu1dY8Kc 6HZi+ABohJPLNGuQHNtwMXX3ZQHxSFEmSzMxtOTCYcpjh7D5f4R74Pw5dJ4RmQL2lsDL/b02i5akNZ YeFeSWLZcqW0rISxX8hpv0K+oAtaN27+RKnnh4CgjnpsWdYzS+6X2DdBNl/3SBFZvWqVOrZIZhJt9r vSNjQEKjO01zr1RmnZAEHjNSLrAfuzMX0IRVzcmsp7yfmBgP/P1G41oD04Q0FAakHpT0J0ONnjnXNQ WN3XGBTetguzj+IL4CLS8GfW5ifgUn2SfSq3S5hWHZ1/O6Kn/09LC+LT7zWU4iKSBMetrZS+Rzxyxp 2NCpGnyWWhG0EUB7m7nhBWbEZA2cKmyBdxnw2qStimSHHcRECPtJmCg6aL5iIbgWdrP7H5f8PphRoF NTVcIaeWChv7UfmYe2bhEEFZvvbXoYxP5WqVi9kKeodGHKkHnpPLfCm39/BaiK2+Edz5YJoSWlEAmJ 3kwbX+0KYhcH3OkRf3oB40iDh+9YecgwQ0GhR+KOJNvAVikfpG+VkAOZo8Pw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4a247b1-56ab-4fe3-f46d-08d9e41fd34c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2022 18:39:18.8685
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Sd9dry6p6OCac64PtWwUxs+vuohF1Hcthv5P5e9Ndij4Xe7+yWBu8HuQGs4nr0vLwXXu8ATqRXXXWcE7510xUjFL2wawJ7a0u8SD+C+UWDk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB3486
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple test for strlen() functionality, including using it as a
-constant expression.
+  arch/powerpc/mm/ptdump/hashpagetable.c:264:29: warning: restricted __be64 degrades to integer
+  arch/powerpc/mm/ptdump/hashpagetable.c:265:49: warning: restricted __be64 degrades to integer
+  arch/powerpc/mm/ptdump/hashpagetable.c:267:36: warning: incorrect type in assignment (different base types)
+  arch/powerpc/mm/ptdump/hashpagetable.c:267:36:    expected unsigned long long [usertype]
+  arch/powerpc/mm/ptdump/hashpagetable.c:267:36:    got restricted __be64 [usertype] v
+  arch/powerpc/mm/ptdump/hashpagetable.c:268:36: warning: incorrect type in assignment (different base types)
+  arch/powerpc/mm/ptdump/hashpagetable.c:268:36:    expected unsigned long long [usertype]
+  arch/powerpc/mm/ptdump/hashpagetable.c:268:36:    got restricted __be64 [usertype] r
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Peter Rosin <peda@axentia.se>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-I'll be taking this as part of my Clang FORTIFY_SOURCE series.
----
- lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+struct hash_pte fields have type __be64. Convert them to
+regular long before using them.
 
-diff --git a/lib/test_string.c b/lib/test_string.c
-index 9dfd6f52de92..59994f552c48 100644
---- a/lib/test_string.c
-+++ b/lib/test_string.c
-@@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
- 	return 0;
- }
- 
-+/*
-+ * Unlike many other string functions, strlen() can be used in
-+ * static initializers when string lengths are known at compile
-+ * time. (i.e. Under these conditions, strlen() is a constant
-+ * expression.) Make sure it can be used this way.
-+ */
-+static const int strlen_ce = strlen("tada, a constant expression");
-+
-+static __init int strlen_selftest(void)
-+{
-+	/* String length ruler:         123456789012345 */
-+	static const char normal[]   = "I am normal";
-+	static const char *ptr       = "where do I go?";
-+	static const char trailing[] = "hidden NULLs\0\0\0";
-+	static const char leading[]  = "\0\0hidden text";
-+
-+	if (strlen(normal) != 11)
-+		return 0x100001;
-+	if (strlen(ptr++) != 14)
-+		return 0x100002;
-+	if (strlen(ptr++) != 13)
-+		return 0x100003;
-+	if (strlen(trailing) != 12)
-+		return 0x100004;
-+	if (strlen(leading) != 0)
-+		return 0x100005;
-+	if (strlen_ce != 27)
-+		return 0x100006;
-+
-+	return 0;
-+}
-+
- static __exit void string_selftest_remove(void)
- {
- }
-@@ -212,6 +244,11 @@ static __init int string_selftest_init(void)
- 	if (subtest)
- 		goto fail;
- 
-+	test = 5;
-+	subtest = strlen_selftest();
-+	if (subtest)
-+		goto fail;
-+
- 	pr_info("String selftests succeeded\n");
- 	return 0;
- fail:
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/mm/ptdump/hashpagetable.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/powerpc/mm/ptdump/hashpagetable.c b/arch/powerpc/mm/ptdump/hashpagetable.c
+index c7f824d294b2..bf60ab1bedb9 100644
+--- a/arch/powerpc/mm/ptdump/hashpagetable.c
++++ b/arch/powerpc/mm/ptdump/hashpagetable.c
+@@ -261,11 +261,11 @@ static int pseries_find(unsigned long ea, int psize, bool primary, u64 *v, u64 *
+ 		if (lpar_rc)
+ 			continue;
+ 		for (j = 0; j < 4; j++) {
+-			if (HPTE_V_COMPARE(ptes[j].v, want_v) &&
+-					(ptes[j].v & HPTE_V_VALID)) {
++			if (HPTE_V_COMPARE(be64_to_cpu(ptes[j].v), want_v) &&
++			    (be64_to_cpu(ptes[j].v) & HPTE_V_VALID)) {
+ 				/* HPTE matches */
+-				*v = ptes[j].v;
+-				*r = ptes[j].r;
++				*v = be64_to_cpu(ptes[j].v);
++				*r = be64_to_cpu(ptes[j].r);
+ 				return 0;
+ 			}
+ 		}
 -- 
-2.30.2
-
+2.33.1

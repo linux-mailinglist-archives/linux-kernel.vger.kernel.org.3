@@ -2,116 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5244A37ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770AD4A37EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355763AbiA3Rxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 12:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
+        id S1355772AbiA3RyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 12:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355752AbiA3Rxd (ORCPT
+        with ESMTP id S1355768AbiA3RyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 12:53:33 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F845C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 09:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=q9+EHyu3P4aG//IMUenHLzdEoIKfstwmum3ucRb3ZQA=; b=S3r9LfeuVn6akyjWXqk1xuvdjY
-        o5U2C1SIFQv8tj3jbbkVZnPUpir/uXZ1JyNHt2gGpKaBl+zrpM0HiIuMFSfqXus+kR/D4CczvTWtX
-        YMjaHJzN30XCg7WDywJ1hoAtqm76/4rne/bTutVxJxk4ZQaeSqJLGSJDy7lPaJTASjkme+eTXK6bL
-        AKDNo2/33nfflm4p0kZNfK6hpeI5LmM06zMHbEJmzN9blNAymt4p0KexfvBh0MiwSc55EdVbH29N3
-        i6Zjf+RfrDybuZYHvqNKl0l3ZJtCWvwTTZ0qve/Br/FkToBo37ASO1O4DrvzjHe3QOH42VDSFOfgy
-        fLBEKRPw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEEOC-008f7O-DC; Sun, 30 Jan 2022 17:53:24 +0000
-Date:   Sun, 30 Jan 2022 17:53:24 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, mike.rapoport@gmail.com,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 07/16] tools/include: Add io.h stub
-Message-ID: <YfbQlMyohx31FhSW@casper.infradead.org>
-References: <cover.1643206612.git.karolinadrobnik@gmail.com>
- <2d9aa000afe81b45157617664134b871207c2067.1643206612.git.karolinadrobnik@gmail.com>
- <YfKngOPLeI3rQOn3@casper.infradead.org>
- <48499a57afb3d27df26b39aa4255b4ba583c1148.camel@gmail.com>
- <Yfa4WMeauvmgkQ9H@kernel.org>
+        Sun, 30 Jan 2022 12:54:10 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45B8C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 09:54:07 -0800 (PST)
+Received: from ipservice-092-217-087-009.092.217.pools.vodafone-ip.de ([92.217.87.9] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <postmaster@kaiser.cx>)
+        id 1nEEOn-0007xP-Bc; Sun, 30 Jan 2022 18:54:01 +0100
+Received: from martin by martin-debian-2.paytec.ch with local (Exim 4.94.2)
+        (envelope-from <martin@martin-debian-2.paytec.ch>)
+        id 1nEEOm-002wou-Ny; Sun, 30 Jan 2022 18:54:00 +0100
+Date:   Sun, 30 Jan 2022 18:54:00 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rt8188eu: Remove dead code
+Message-ID: <YfbQuA6SSIEXGrWu@martin-debian-1.paytec.ch>
+References: <20220128111954.1028121-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yfa4WMeauvmgkQ9H@kernel.org>
+In-Reply-To: <20220128111954.1028121-1-usama.anjum@collabora.com>
+Sender: "Martin Kaiser,,," <martin@martin-debian-2.paytec.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 06:10:00PM +0200, Mike Rapoport wrote:
-> On Fri, Jan 28, 2022 at 12:21:59PM +0100, Karolina Drobnik wrote:
-> > On Thu, 2022-01-27 at 14:09 +0000, Matthew Wilcox wrote:
-> > > On Thu, Jan 27, 2022 at 02:21:25PM +0100, Karolina Drobnik wrote:
-> > > > Add a dummy io.h header.
-> > > 
-> > > Rather begs the question of what memblock.c needs from linux/io.h.
-> > > 
-> > > Wouldn't it be better to:
-> > > 
-> > > +++ b/mm/memblock.c
-> > > @@ -18,7 +18,6 @@
-> > >  #include <linux/memblock.h>
-> > > 
-> > >  #include <asm/sections.h>
-> > > -#include <linux/io.h>
-> > > 
-> > >  #include "internal.h"
-> > > 
-> > 
-> > That was something I considered in the very beginning, but didn't have
-> > a chance to verify it works for all architectures. I can take a look
-> > after I'm finished with other v2 changes.
-> > 
-> > > (allmodconfig on x86-64 builds fine with this; I have not done an
-> > > extended sweep of other arches / build options).
-> 
-> I did a sweep for defconfigs for all arches and all were fine.
+Thus wrote Muhammad Usama Anjum (usama.anjum@collabora.com):
 
-Thanks for doing the sweep, Mike.
+> rtStatus is _SUCCESS when the execution reaches this if condition.
+> Remove the dead code.
 
-I think I found a deeper problem which is masked due to our maze of
-header files:
+> Fixes: 67396d2dfef3 ("staging: r8188eu: merge ODM_ConfigBBWithHeaderFile with its callers")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 3 ---
+>  1 file changed, 3 deletions(-)
 
-include/asm-generic/io.h:#ifndef virt_to_phys
-include/asm-generic/io.h:#define virt_to_phys virt_to_phys
+> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+> index 0b0690dfb947c..41a0d7f0d29f4 100644
+> --- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+> +++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+> @@ -504,9 +504,6 @@ static	int phy_BB8188E_Config_ParaFile(struct adapter *Adapter)
+>  		ODM_ReadAndConfig_PHY_REG_PG_8188E(&pHalData->odmpriv);
+>  	}
 
-so there's an assumption that <asm/io.h> defines virt_to_phys().
-You can see that in a number of architectures, eg:
+> -	if (rtStatus != _SUCCESS)
+> -		goto phy_BB8190_Config_ParaFile_Fail;
+> -
+>  	/*  3. BB AGC table Initialization */
+>  	if (HAL_STATUS_FAILURE == ODM_ReadAndConfig_AGC_TAB_1T_8188E(&pHalData->odmpriv))
+>  		rtStatus = _FAIL;
+> -- 
+> 2.30.2
 
-arch/alpha/include/asm/io.h:static inline unsigned long virt_to_phys(volatile void *address)
-arch/ia64/include/asm/io.h:#define virt_to_phys virt_to_phys
-arch/mips/include/asm/io.h:#define virt_to_phys virt_to_phys
-arch/nios2/include/asm/io.h:#define virt_to_phys(vaddr) \
-arch/parisc/include/asm/io.h:#define virt_to_phys(a) ((unsigned long)__pa(a))
-arch/powerpc/include/asm/io.h:#define virt_to_phys virt_to_phys
-arch/sh/include/asm/io.h:#define virt_to_phys(address)  ((unsigned long)(address))
-arch/x86/include/asm/io.h:#define virt_to_phys virt_to_phys
+Thanks for spotting this. It makes sense to remove this duplicate check.
 
-That's clearly not the right place to define it.  Two architectures
-put it in asm/memory.h:
+Acked-by: Martin Kaiser <martin@kaiser.cx>
 
-arch/arm/include/asm/memory.h:#define virt_to_phys virt_to_phys
-arch/arm64/include/asm/memory.h:#define virt_to_phys virt_to_phys
-
-then:
-
-arch/m68k/include/asm/virtconvert.h:#define virt_to_phys virt_to_phys
-arch/sparc/include/asm/page_32.h:#define virt_to_phys           __pa
-arch/sparc/include/asm/page_64.h:#define virt_to_phys __pa
-
-This needs to be properly sorted out, but I don't want to tell Karolina
-that's now her job as a prerequisite for merging this patchset; that
-would be unfair.
-
-Cc'ing Arnd.  This is the kind of awful mess that he loves fixing ;-)
+Looking at the function again, the rest of the error handling should be
+cleaned up as well. I'll send a patch for this.

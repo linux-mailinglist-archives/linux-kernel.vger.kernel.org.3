@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F24A4A3697
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA78B4A369D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354954AbiA3OFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:05:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49928 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237553AbiA3OFs (ORCPT
+        id S1354973AbiA3ONV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:13:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46944 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354964AbiA3ONU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:05:48 -0500
+        Sun, 30 Jan 2022 09:13:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 351F761193;
-        Sun, 30 Jan 2022 14:05:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6520BC340F0;
-        Sun, 30 Jan 2022 14:05:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8FD6B80D24;
+        Sun, 30 Jan 2022 14:13:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF6FC340F0;
+        Sun, 30 Jan 2022 14:13:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643551547;
-        bh=OO5FkFuFfJwcPYSFa+GXosL1yGNT8VeA5s9UGFeBx1I=;
+        s=k20201202; t=1643551997;
+        bh=137KAOgxQxq5H3WxKNVyxwmutOBva+lpHHW1WAXVK68=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SmsH8BbYG8IIVjPrFLxxIGPrjkIdheqTwz4j/ekOu7eBXOmeuVC9CpcQ5MXy9TbfT
-         n3MVebVg3aW+nmH908C1UFS1IXZlQTvt2Gsvh3V3kSKDTMBExDLBpnMms2+FF5m3CF
-         c9aNnRtZhPDM6dR/jDH0F1UKmR/rSYiyGD8WtJZ50CtGg/JbjV6s0Ht0XrAtivzhoH
-         5H/BYuMnLsnRxMtkwqobbDkjXql6yxt0DXftDS2RgDW41pChVuAQVzfa/hZBnkKgwe
-         tAvhp9ADSZ0Rssxewp8vr4hsnM3ueIWY0yqCKqz3e63YXqAKQIxc+D6JcoR5e4Qwc+
-         pIl+xBEfH2W6Q==
-Date:   Sun, 30 Jan 2022 14:12:11 +0000
+        b=p3xJzsLIaViunoxpfA/yNFWG5fX8Sa5pJ9pIPRaf1FkMEZN4lFpCA7Cg/kPQsI1H9
+         7xLaLlNwg2t85mlf5zoAmU07kbPWhRFM4NRGdo7oKjGKjFH+Y1Rkj0/wOITdbFbJdQ
+         M8WBeDq5QVOVFVA55eptQw4OxRP+EFYvn9IxskIsz6XsQPJqc92s5qE6jqhfc0TPKz
+         M5PYkUKT17X+wOUCESAB9/j3r6wwqFuxd5KWPAo+2weY9aAWS9HL9LP6Y3OCddY3cg
+         CXV+u487QKTYraFJabGaJ0JiL2jiVz5mnGcU8CtfNue+Bln1QE7fW8uIh/nAGrcsNP
+         MXarEpYalL6Xw==
+Date:   Sun, 30 Jan 2022 14:19:42 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Denis Ciocca <denis.ciocca@st.com>,
+To:     "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: iio: st: Add Silan SC7A20
- accelerometer
-Message-ID: <20220130141211.19a61569@jic23-huawei>
-In-Reply-To: <20220130034441.15474-3-samuel@sholland.org>
-References: <20220130034441.15474-1-samuel@sholland.org>
-        <20220130034441.15474-3-samuel@sholland.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH v2] iio: addac: ad74413r: Do not reference negative
+ array offsets
+Message-ID: <20220130141942.7c653e0d@jic23-huawei>
+In-Reply-To: <8e6a081daeb54be38fdd658c796ec120@analog.com>
+References: <20220112203456.3950884-1-keescook@chromium.org>
+        <8e6a081daeb54be38fdd658c796ec120@analog.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -51,36 +54,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 21:44:40 -0600
-Samuel Holland <samuel@sholland.org> wrote:
+On Thu, 13 Jan 2022 21:57:22 +0000
+"Tanislav, Cosmin" <Cosmin.Tanislav@analog.com> wrote:
 
-> This chip appears to be a clone of the LIS2DH, as the register bit
-> definitions match exactly.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-> index 71de5631ebae..70f755041d8a 100644
-> --- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-> +++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-> @@ -24,6 +24,7 @@ properties:
->      oneOf:
->        - description: STMicroelectronics Accelerometers
+> Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-It's not an STMicroelectronics part, so add a new block for silan ones.
+Applied to the fixes-togreg branch of iio.git.
 
 Thanks,
 
 Jonathan
 
-
->          enum:
-> +          - silan,sc7a20
->            - st,h3lis331dl-accel
->            - st,lis2de12
->            - st,lis2dw12
+> 
+> > -----Original Message-----
+> > From: Kees Cook <keescook@chromium.org>
+> > Sent: Wednesday, January 12, 2022 10:35 PM
+> > To: Lars-Peter Clausen <lars@metafoo.de>
+> > Cc: Kees Cook <keescook@chromium.org>; Hennerich, Michael
+> > <Michael.Hennerich@analog.com>; Jonathan Cameron <jic23@kernel.org>;
+> > linux-iio@vger.kernel.org; Tanislav, Cosmin <Cosmin.Tanislav@analog.com>;
+> > Jonathan Cameron <Jonathan.Cameron@huawei.com>; Linus Walleij
+> > <linus.walleij@linaro.org>; linux-kernel@vger.kernel.org; linux-
+> > hardening@vger.kernel.org
+> > Subject: [PATCH v2] iio: addac: ad74413r: Do not reference negative array
+> > offsets
+> > 
+> > [External]
+> > 
+> > Instead of aiming rx_buf at an invalid array-boundary-crossing location,
+> > just skip the first increment. Seen when building with -Warray-bounds:
+> > 
+> > drivers/iio/addac/ad74413r.c: In function 'ad74413r_update_scan_mode':
+> > drivers/iio/addac/ad74413r.c:843:22: warning: array subscript -4 is below
+> > array bounds of 'u8[16]' { aka 'unsigned char[16]'} [-Warray-bounds]
+> >   843 |         u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
+> > AD74413R_FRAME_SIZE];
+> >       |
+> > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/iio/addac/ad74413r.c:84:20: note: while referencing 'rx_buf'
+> >    84 |                 u8 rx_buf[AD74413R_FRAME_SIZE *
+> > AD74413R_CHANNEL_MAX];
+> >       |                    ^~~~~~
+> > 
+> > Cc: Lars-Peter Clausen <lars@metafoo.de>
+> > Cc: Michael Hennerich <Michael.Hennerich@analog.com>
+> > Cc: Jonathan Cameron <jic23@kernel.org>
+> > Cc: linux-iio@vger.kernel.org
+> > Fixes: fea251b6a5db ("iio: addac: add AD74413R driver")
+> > Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v1: https://urldefense.com/v3/__https://lore.kernel.org/linux-
+> > hardening/20220105180214.2435001-1-
+> > keescook@chromium.org/__;!!A3Ni8CS0y2Y!oWs0KcGPANFn-
+> > L0qJPZgP47AQIYpBXJxg5LHiLDFGa_-SI2DwmSMzjgl3ehyu-8JYPgq$
+> > v2:
+> >  - Update commit Subject prefix
+> >  - add Reviewed-by
+> > ---
+> >  drivers/iio/addac/ad74413r.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+> > index 5271073bb74e..aba9a643a4ca 100644
+> > --- a/drivers/iio/addac/ad74413r.c
+> > +++ b/drivers/iio/addac/ad74413r.c
+> > @@ -840,7 +840,7 @@ static int ad74413r_update_scan_mode(struct iio_dev
+> > *indio_dev,
+> >  {
+> >  	struct ad74413r_state *st = iio_priv(indio_dev);
+> >  	struct spi_transfer *xfer = st->adc_samples_xfer;
+> > -	u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
+> > AD74413R_FRAME_SIZE];
+> > +	u8 *rx_buf = st->adc_samples_buf.rx_buf;
+> >  	u8 *tx_buf = st->adc_samples_tx_buf;
+> >  	unsigned int channel;
+> >  	int ret = -EINVAL;
+> > @@ -894,9 +894,10 @@ static int ad74413r_update_scan_mode(struct
+> > iio_dev *indio_dev,
+> > 
+> >  		spi_message_add_tail(xfer, &st->adc_samples_msg);
+> > 
+> > -		xfer++;
+> >  		tx_buf += AD74413R_FRAME_SIZE;
+> > -		rx_buf += AD74413R_FRAME_SIZE;
+> > +		if (xfer != st->adc_samples_xfer)
+> > +			rx_buf += AD74413R_FRAME_SIZE;
+> > +		xfer++;
+> >  	}
+> > 
+> >  	xfer->rx_buf = rx_buf;
+> > --
+> > 2.30.2  
+> 
 

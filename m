@@ -2,208 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6024A34AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 07:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8CC4A34B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 07:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354235AbiA3GSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 01:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S1354239AbiA3G2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 01:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiA3GSc (ORCPT
+        with ESMTP id S232509AbiA3G2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 01:18:32 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941EEC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 22:18:32 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id p125so9161753pga.2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 22:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=dG/QvFD37vEgjdhgbYhQHvG7sBh/ORqBt6k3eWpPNz8=;
-        b=iVpd4MAQaStY9YlHc2qfS2XoQrwbhnGeJyMctD/8nVc1lg35dUM4JV/gm27ARp8v/5
-         WBD56CnXVjYUDTXrZ0gXVPByNL0vNR9BDo3Wx5HCehj3Dis7c4gp2rkNxR0NTAfLbwXq
-         +WFRClTv6qr+AedSQ2WdGs3X4T3vEoKQ4CXxLr23veNc5cRijSkh9oBfjo50a3LC6dON
-         +5DZgOX64gt4sua3dKwhkMUy9cSJcndkaO9LdPeczWkLhtI0f5nLYzwy+7tgorBFgyBl
-         7WGUvJPP3uJnk9/HDl1cKS2a40E6nF6hEl5tstbfXWGVnhjpDxPSPzYQ311CQ4PKoaJi
-         kN6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=dG/QvFD37vEgjdhgbYhQHvG7sBh/ORqBt6k3eWpPNz8=;
-        b=zXWwcKF/2X0adaQhdvH/VI0j3ZvCGpRlFEt14orJI9clCpMDQjPYy29hplBitdoZ7l
-         OrHN/1j1WCAazqao9qthuoD+EJqTPVSEQ3UOyATR9qBN+B+gThnEKYHH3V3QJFZbW/4o
-         gL9c9VRjhodFTshKtlEYDT4qyVOfVjaajQIMHjMMAiaBG4mzMJ3w+z7pih532qHSsp8i
-         dlhK8IqAkUtHbuRYc7kxcUew4RgojjZGMyZjVP1hhvtgCr6y2bcoCtZctCy4zVzXdbxf
-         bcxT388TaAumEm1cjTrJyOfEoN4My62s8PWIcAF9+0jsgchAEvv+jyUp8ttXPAtcP4ko
-         MDgA==
-X-Gm-Message-State: AOAM532phv59K1wBnDGjGQ+wktJE3Wx1UNq3ETAdOdCCDk0s+wy9gtuC
-        cKlRpFuwQtOMjiQ6gZtR9d8=
-X-Google-Smtp-Source: ABdhPJx03navMcD0yp7qxY9skuhK1h5+0YZ3UdOXNcEWJO1eqWRhzv+TVQoYv3CJyMM0as1SMSzidA==
-X-Received: by 2002:a63:6b8a:: with SMTP id g132mr12418880pgc.540.1643523512006;
-        Sat, 29 Jan 2022 22:18:32 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id c11sm8858051pgl.92.2022.01.29.22.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 22:18:31 -0800 (PST)
-Date:   Sun, 30 Jan 2022 19:18:26 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
-        realwakka@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: remove unnecessary new line escape sequence
- characters
-Message-ID: <YfYtsiKbOXghIN+5@mail.google.com>
+        Sun, 30 Jan 2022 01:28:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514E1C061714;
+        Sat, 29 Jan 2022 22:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=hbegQiqCRQ0s45eKAn6OzrlJwshqG8ZUtRw1/WsvnxE=; b=QBwQcb+YAGcLw3iBLr/zC9kkBZ
+        YrpflwePJnc3qN5HyKDnwIpa/8jO2n9cQOrON2TtDwJhwbjgRhqaLMhly3lLCdfEDpay17oP3Wk7x
+        h1V3EVTx+XuDOljoPK8ljQqhCDHE0kUiyfmP8Ks9li3ytBwsFkvlMVFJVMw8ZZGBx3EngwkTDOK5B
+        kfis5hM6c52BURRqwfJi1qwQnGP1oWMDIDjYot/3/aBJOYU6QRIqFUxzFTXgHcb7pvzUCDDIjcgoA
+        t3fMmG3cEamlRvZ1Q4E0X+2XXKedINZWgJT9ccPM+nLets3PcOPxiMagiBOOtQmWnSN+wrQXjH9vB
+        nlsZqmog==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nE3gF-008Bq0-Q4; Sun, 30 Jan 2022 06:27:20 +0000
+Message-ID: <687c2d76-ecfd-f3a4-f9b0-8c0178705cdf@infradead.org>
+Date:   Sat, 29 Jan 2022 22:27:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/1] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20220130060412.12100-1-15330273260@189.cn>
+ <20220130060412.12100-2-15330273260@189.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220130060412.12100-2-15330273260@189.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this driver there were occurences of '\n'-ended strings when using
-dev_dbg function which isn't required which most likely were leftovers
-from a previous printk/pr_<level> implementation.
+Hi--
 
-This patch removes the extraneous '\n' characters to make it consistent
-with the other dev_dbg instances.
+On 1/29/22 22:04, Sui Jingfeng wrote:
+> diff --git a/drivers/gpu/drm/lsdc/Kconfig b/drivers/gpu/drm/lsdc/Kconfig
+> new file mode 100644
+> index 000000000000..f470892ddf60
+> --- /dev/null
+> +++ b/drivers/gpu/drm/lsdc/Kconfig
+> @@ -0,0 +1,38 @@
+> +config DRM_LSDC
+> +	tristate "DRM Support for loongson's display controller"
+> +	depends on DRM && PCI
+> +	depends on MACH_LOONGSON64 || LOONGARCH || MIPS || COMPILE_TEST
+> +	select OF
+> +	select CMA if HAVE_DMA_CONTIGUOUS
+> +	select DMA_CMA if HAVE_DMA_CONTIGUOUS
+> +	select DRM_KMS_HELPER
+> +	select DRM_KMS_FB_HELPER
+> +	select DRM_GEM_CMA_HELPER
+> +	select VIDEOMODE_HELPERS
+> +	select BACKLIGHT_PWM if CPU_LOONGSON2K
+> +	select I2C_GPIO if CPU_LOONGSON2K
+> +	select I2C_LS2X if CPU_LOONGSON2K
+> +	default m
+> +	help
+> +	  This is a KMS driver for the display controller in the LS7A1000
+> +	  bridge chip and LS2K1000 SoC. The display controller have two
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Patch dependencies:
+	                                                       has two
 
-The following patches must be applied first given that changes are made
-to the same set of files:
+> +	  display pipes and it is a PCI device.
+> +	  When using this driver on LS2K1000/LS2K0500 SoC, its framebuffer
+> +	  is located at system memory.
+> +	  If "M" is selected, the module will be called lsdc.
+> +
+> +	  If in doubt, say "Y".
+> +
+> +config DRM_LSDC_VRAM_DRIVER
+> +	bool "vram helper based device driver support"
+> +	depends on DRM_LSDC
+> +	select DRM_VRAM_HELPER
+> +	default y
+> +	help
+> +	  When using this driver on LS7A1000 + LS3A3000/LS3A4000/LS3A5000
+> +	  platform, the LS7A1000 bridge chip have dedicated video RAM.
 
-- https://lore.kernel.org/lkml/YfYdVokxsQ+Adl+T@mail.google.com/
-- https://lore.kernel.org/lkml/YfX+llwDWZZMz+NY@mail.google.com/
----
- drivers/staging/pi433/pi433_if.c | 14 +++++++-------
- drivers/staging/pi433/rf69.c     | 16 ++++++++--------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+	                                     has
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index 02d4ccebf..db1b092e8 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -124,13 +124,13 @@ static irqreturn_t DIO0_irq_handler(int irq, void *dev_id)
- 
- 	if (device->irq_state[DIO0] == DIO_PACKET_SENT) {
- 		device->free_in_fifo = FIFO_SIZE;
--		dev_dbg(device->dev, "DIO0 irq: Packet sent\n");
-+		dev_dbg(device->dev, "DIO0 irq: Packet sent");
- 		wake_up_interruptible(&device->fifo_wait_queue);
- 	} else if (device->irq_state[DIO0] == DIO_RSSI_DIO0) {
--		dev_dbg(device->dev, "DIO0 irq: RSSI level over threshold\n");
-+		dev_dbg(device->dev, "DIO0 irq: RSSI level over threshold");
- 		wake_up_interruptible(&device->rx_wait_queue);
- 	} else if (device->irq_state[DIO0] == DIO_PAYLOAD_READY) {
--		dev_dbg(device->dev, "DIO0 irq: Payload ready\n");
-+		dev_dbg(device->dev, "DIO0 irq: Payload ready");
- 		device->free_in_fifo = 0;
- 		wake_up_interruptible(&device->fifo_wait_queue);
- 	}
-@@ -151,7 +151,7 @@ static irqreturn_t DIO1_irq_handler(int irq, void *dev_id)
- 			device->free_in_fifo = FIFO_SIZE - FIFO_THRESHOLD - 1;
- 	}
- 	dev_dbg(device->dev,
--		"DIO1 irq: %d bytes free in fifo\n", device->free_in_fifo);
-+		"DIO1 irq: %d bytes free in fifo", device->free_in_fifo);
- 	wake_up_interruptible(&device->fifo_wait_queue);
- 
- 	return IRQ_HANDLED;
-@@ -726,7 +726,7 @@ static int pi433_tx_thread(void *data)
- 			retval = wait_event_interruptible(device->fifo_wait_queue,
- 							  device->free_in_fifo > 0);
- 			if (retval) {
--				dev_dbg(device->dev, "ABORT\n");
-+				dev_dbg(device->dev, "ABORT");
- 				goto abort;
- 			}
- 		}
-@@ -1180,7 +1180,7 @@ static int pi433_probe(struct spi_device *spi)
- 
- 	retval = spi_setup(spi);
- 	if (retval) {
--		dev_dbg(&spi->dev, "configuration of SPI interface failed!\n");
-+		dev_dbg(&spi->dev, "configuration of SPI interface failed!");
- 		return retval;
- 	}
- 
-@@ -1283,7 +1283,7 @@ static int pi433_probe(struct spi_device *spi)
- 		goto device_create_failed;
- 	} else {
- 		dev_dbg(device->dev,
--			"created device for major %d, minor %d\n",
-+			"created device for major %d, minor %d",
- 			MAJOR(pi433_dev),
- 			device->minor);
- 	}
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index 2ab3bf46e..9a8f93fd7 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -37,9 +37,9 @@ u8 rf69_read_reg(struct spi_device *spi, u8 addr)
- 		 * that module is connected. Therefore no error
- 		 * handling, just an optional error message...
- 		 */
--		dev_dbg(&spi->dev, "read 0x%x FAILED\n", addr);
-+		dev_dbg(&spi->dev, "read 0x%x FAILED", addr);
- 	else
--		dev_dbg(&spi->dev, "read 0x%x from reg 0x%x\n", retval, addr);
-+		dev_dbg(&spi->dev, "read 0x%x from reg 0x%x", retval, addr);
- #endif
- 
- 	return retval;
-@@ -62,9 +62,9 @@ static int rf69_write_reg(struct spi_device *spi, u8 addr, u8 value)
- 		 * that module is connected. Therefore no error
- 		 * handling, just an optional error message...
- 		 */
--		dev_dbg(&spi->dev, "write 0x%x to 0x%x FAILED\n", value, addr);
-+		dev_dbg(&spi->dev, "write 0x%x to 0x%x FAILED", value, addr);
- 	else
--		dev_dbg(&spi->dev, "wrote 0x%x to reg 0x%x\n", value, addr);
-+		dev_dbg(&spi->dev, "wrote 0x%x to reg 0x%x", value, addr);
- #endif
- 
- 	return retval;
-@@ -870,7 +870,7 @@ int rf69_read_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- 	if (size > FIFO_SIZE) {
- 		dev_dbg(&spi->dev,
--			"read fifo: passed in buffer bigger then internal buffer\n");
-+			"read fifo: passed in buffer bigger then internal buffer");
- 		return -EMSGSIZE;
- 	}
- 
-@@ -885,7 +885,7 @@ int rf69_read_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- #ifdef DEBUG_FIFO_ACCESS
- 	for (i = 0; i < size; i++)
--		dev_dbg(&spi->dev, "%d - 0x%x\n", i, local_buffer[i + 1]);
-+		dev_dbg(&spi->dev, "%d - 0x%x", i, local_buffer[i + 1]);
- #endif
- 
- 	memcpy(buffer, &local_buffer[1], size);
-@@ -902,7 +902,7 @@ int rf69_write_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- 	if (size > FIFO_SIZE) {
- 		dev_dbg(&spi->dev,
--			"read fifo: passed in buffer bigger then internal buffer\n");
-+			"read fifo: passed in buffer bigger then internal buffer");
- 		return -EMSGSIZE;
- 	}
- 
-@@ -911,7 +911,7 @@ int rf69_write_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- #ifdef DEBUG_FIFO_ACCESS
- 	for (i = 0; i < size; i++)
--		dev_dbg(&spi->dev, "0x%x\n", buffer[i]);
-+		dev_dbg(&spi->dev, "0x%x", buffer[i]);
- #endif
- 
- 	return spi_write(spi, local_buffer, size + 1);
+> +	  Pass lsdc.use_vram_helper = 1 to the kernel cmd line will enable
+
+	  Using "lsdc.use_vram_helper=1" in the kernel command line will enable
+
+(No spaces allowed in the kernel command line.)
+
+> +	  this driver mode and then the framebuffer will located at the
+> +	  VRAM at the price of losing PRIME support.
+
 -- 
-2.34.1
-
+~Randy

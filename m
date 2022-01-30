@@ -2,112 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403C54A3A9A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 22:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941CE4A3AAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347731AbiA3VkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 16:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S1352469AbiA3WTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 17:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242760AbiA3VkT (ORCPT
+        with ESMTP id S232281AbiA3WTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:40:19 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF251C061714;
-        Sun, 30 Jan 2022 13:40:18 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ka4so36536742ejc.11;
-        Sun, 30 Jan 2022 13:40:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rIsQmiCYLNWlEDt7j0E7mZU87pG2DkpHuzF5PvCdiJg=;
-        b=NeOjQDxixyaZwWdkgZDXDFvksKjZYcEyncdgFZm7N4ZYMk7lzV86mQhC0VSFy//eZT
-         1yixt5xvqP+eHVrrwQtVcHsHEVViBYo1nNvR/v1zqWJ7o2eCkiBGXKMS+TCTf+w2f+tq
-         XzdFnOxHDLY8YNfNCElr5gxwVRVQej+vFz4hF9EqLhyUq5JzSEAPOpS8waYiwFqSsE4z
-         uuRjn/QO++bJ19fZYk9Z/M9h+PXLzO6kixr+Zsm1AE/7ZwIy2tHHxUXWqL2WToSGrJqO
-         pRB3admZ4LtSRu5gjuw4WHuM3Fg/+iYWB8cV91aONhzh19EKqeonzGMrVYlU0Sw2p43j
-         bxcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rIsQmiCYLNWlEDt7j0E7mZU87pG2DkpHuzF5PvCdiJg=;
-        b=aoq7rpnczeR6it3CM/wWPdVcvxjt1yqwTJjNMlWmNgGW8rlI3OGxqhT1tHEjBI6Y8I
-         2o4pgFfH9PxkYl+ItBOr5a7E0APKbE05cazdiV3mF/7kGfeKKKDlXBP9Qh1OrRu7/0Xt
-         wUWkJC7RVeNyK2u+klYq47xvRtsQjtNminuT/wH9jGjYKA9zJSO7UkdieoyXN+NrXCTM
-         lNSpfgowh3n+DAOKChIwN5a/88IwcSaSA5+cHLh/vXISKQaV1fbkN+2zRQlrPnWDlpii
-         NvdZiovAwqSRhRHjzXrZBzdsPwiTY8iQh8lI7C16N0Qm0biJeFFM6OthS+wTFUl1J5W6
-         3lag==
-X-Gm-Message-State: AOAM530Czf3s5t74QMK++k2XamL8GORxYIUhdQQbnRvlUeEQxCgczHMK
-        PnI3/COXpVgz2XOvJC6+mwHNZl8ruKa+Qj6E5d4=
-X-Google-Smtp-Source: ABdhPJxXlS15ErRcsLX0t7qINUkTOvPGy9q2BXQi9sgDktA7CNItfeZWd2hK29DVWwnklpQb3sufYabIFP6jxYigf90=
-X-Received: by 2002:a17:907:1c9d:: with SMTP id nb29mr15277424ejc.281.1643578817092;
- Sun, 30 Jan 2022 13:40:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20220108005533.947787-1-martin.blumenstingl@googlemail.com>
- <423f474e15c948eda4db5bc9a50fd391@realtek.com> <CAFBinCBVEndU0t-6d5atE31OFYHzPyk7pOe78v0XrrFWcBec9w@mail.gmail.com>
- <5ef8ab4f78e448df9f823385d0daed88@realtek.com> <CAFBinCDjfKK3+WOXP2xbcAK-KToWof+kSzoxYztqRcc=7T1eyg@mail.gmail.com>
- <53bea965043548539b995514d36f48e5@realtek.com>
-In-Reply-To: <53bea965043548539b995514d36f48e5@realtek.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 30 Jan 2022 22:40:06 +0100
-Message-ID: <CAFBinCBcgEKB3Zak9oGrZ-azqgot691gFSRGGeOP-hr4e+9C4Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ed Swierk <eswierk@gh.st>
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 30 Jan 2022 17:19:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6325C061714;
+        Sun, 30 Jan 2022 14:19:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55C2C60F56;
+        Sun, 30 Jan 2022 22:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7992CC340E4;
+        Sun, 30 Jan 2022 22:19:44 +0000 (UTC)
+X-Mailbox-Line: From 21c067c189901e2f7b368bc1ff6e7216a367c347 Mon Sep 17 00:00:00 2001
+From:   Clark Williams <clark.williams@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Thomas Gleixner <tglx@linutronix.org>,
+        linux-rt-users@vger.kernel.org, williams@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 30 Jan 2022 15:46:27 -0600
+Subject: [PATCH PREEMPT_RT 4.19 STABLE] rt:  PREEMPT_RT safety net for backported patches
+Message-Id: <20220130221944.7992CC340E4@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ping-Ke,
+While doing some 4.19-rt cleanup work, I stumbled across the fact that parts of
+two backported patches were dependent on CONFIG_PREEMPT_RT, rather than
+the CONFIG_PREEMPT_RT_FULL used in 4.19 and earlier RT series.  The commits
+in the linux-stable-rt v4.19-rt branch are:
 
-On Fri, Jan 28, 2022 at 1:51 AM Pkshih <pkshih@realtek.com> wrote:
-[...]
->
-> > >
-> > > To avoid this, we can add a flag to struct rtw_vif, and set this flag
-> > > when ::remove_interface. Then, only collect vif without this flag into list
-> > > when we use iterate_actiom().
-> > >
-> > > As well as ieee80211_sta can do similar fix.
-> > >
->
-> I would prefer my method that adds a 'bool disabled' flag to struct rtw_vif/rtw_sta
-> and set it when ::remove_interface/::sta_remove. Then rtw_iterate_stas() can
-> check this flag to decide whether does thing or not.
-That would indeed be a very straight forward approach and easy to read.
-In net/mac80211/iface.c there's some cases where after
-drv_remove_interface() (which internally calls our .remove_interface
-op) will kfree the vif (sdata). Doesn't that then result in a
-use-after-free if we rely on a boolean within rtw_vif?
+dad4c6a33bf4e mm: slub: Don't resize the location tracking cache on PREEMPT_RT
+e626b6f873f2c net: Treat __napi_schedule_irqoff() as __napi_schedule() on PREEMPT_RT
 
-[...]
-> > For the interface use-case it's not clear to me how this works at all.
-> > rtw_ops_add_interface() has (in a simplified view):
-> >     u8 port = 0;
-> >     // the port variable is never changed
-> >     rtwvif->port = port;
-> >     rtwvif->conf = &rtw_vif_port[port];
-> >     rtw_info(rtwdev, "start vif %pM on port %d\n", vif->addr, rtwvif->port);
-> > How do multiple interfaces (vifs) work in rtw88 if the port is always
-> > zero? Is some kind of tracking of the used ports missing (similar to
-> > how we track the used station IDs - also called mac_id - in
-> > rtw_dev->mac_id_map)?
->
-> The port should be allocated dynamically if we support two or more vifs.
-> We have internal tree that is going to support p2p by second vif.
-I see, thanks for clarifying this!
+Discussing this at the Stable RT maintainers meeting, Steven Rostedt suggested that
+we automagically select CONFIG_PREEMPT_RT if CONFIG_PREEMPT_RT_FULL is on, giving
+us a safety net for any subsequently backported patches. Here's my first cut at
+that patch.
 
+I suspect we'll need a similar patch for stable RT kernels < 4.19.
 
-Best regards,
-Martin
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Clark Williams <williams@redhat.com>
+---
+ kernel/Kconfig.preempt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+index 306567f72a3e..951f58cbd652 100644
+--- a/kernel/Kconfig.preempt
++++ b/kernel/Kconfig.preempt
+@@ -6,6 +6,10 @@ config PREEMPT_RT_BASE
+ 	bool
+ 	select PREEMPT
+ 
++config PREEMPT_RT
++       bool
++       default false
++
+ config HAVE_PREEMPT_LAZY
+ 	bool
+ 
+@@ -80,6 +84,7 @@ config PREEMPT_RT_FULL
+ 	depends on IRQ_FORCED_THREADING
+ 	select PREEMPT_RT_BASE
+ 	select PREEMPT_RCU
++	select PREEMPT_RT
+ 	help
+ 	  All and everything
+ 
+-- 
+2.34.1
+

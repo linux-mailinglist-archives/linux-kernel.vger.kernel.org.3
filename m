@@ -2,181 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 896534A353C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701E04A3542
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354377AbiA3IvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 03:51:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20575 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236235AbiA3Iu7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 03:50:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643532658;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HCXMYXvKDjBzFRFAFcJyGybTMYraghi7evnbgQc/nHI=;
-        b=fxwKLQXl7w+5ZFDUFGPA0aO3y7IY41nhawyR47KVFOtPfryeAC73uTN438mk8AkiGgEr5/
-        Sd6q8LkURevdlrkWb+iJB7vFfL/UgpmLThNXQoAhTYlKY5gr7AunL1OW6jvMBONzVYQj0y
-        tBMzKS4aOSjtPbgj5ibZW9L0mB8Ffaw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-aEH1SB3jOdiDX9buAhxxJw-1; Sun, 30 Jan 2022 03:50:54 -0500
-X-MC-Unique: aEH1SB3jOdiDX9buAhxxJw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D53361006AA4;
-        Sun, 30 Jan 2022 08:50:49 +0000 (UTC)
-Received: from localhost (ovpn-12-238.pek2.redhat.com [10.72.12.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6C56A60C2F;
-        Sun, 30 Jan 2022 08:50:40 +0000 (UTC)
-Date:   Sun, 30 Jan 2022 16:50:38 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        HATAYAMA Daisuke <d.hatayama@jp.fujitsu.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, linux-doc@vger.kernel.org, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net,
-        Will Deacon <will@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>, mikelley@microsoft.com
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Message-ID: <20220130085038.GC29425@MiWiFi-R3L-srv>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <Yel8WQiBn/HNQN83@alley>
- <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
- <20220122105514.GA18258@MiWiFi-R3L-srv>
- <20220123220711.44f1484c9b510eea8cda9c47@kernel.org>
- <20220124135902.GB8305@MiWiFi-R3L-srv>
- <ff3bc2cf-80bf-3bb0-0dcd-7f9cacdae45a@igalia.com>
- <20220126031039.GA26064@MiWiFi-R3L-srv>
- <YfFKiscTVckEy2E8@alley>
+        id S1354451AbiA3Iyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 03:54:40 -0500
+Received: from mga07.intel.com ([134.134.136.100]:10225 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354402AbiA3Iya (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 03:54:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643532869; x=1675068869;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q0NDDtBiEM8z5ti1owuk2Dmv4VzlaMxUi93mnwNgEs4=;
+  b=jUG8svwCgAeKKPzgUmyRLJqT9NQ3lwvyM4MRLTXhxnGepdHNlhN9sxga
+   17c/5MQSV1zXzs1W3T+8kNhgnjkSklcb+bDXkYgj9nEjqFQXVu6IUKziX
+   ggYJk+uaWtkSovXllnafQ9Nfb/jYNhmYOQeafAf9b6lyCiRJgdKIaUH+y
+   CefLas1DatKfCnUoKXl9ihVtW1ZzV57TFg0LuVhMWqEdKGYd2ZurwRkSF
+   emXQqTzRnpgivBKq3m2ku+rMaBGhXCMzqn1ayA3tMjXEXtNFbz+fIHOQv
+   HOY6/SbCUTXZqT5BBA4SsLyULbE+Os9Kig0yJjrGPJ9EakTkGQocX6Jto
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="310640866"
+X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
+   d="scan'208";a="310640866"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 00:54:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
+   d="scan'208";a="675472668"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2022 00:54:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nE5yc-000QHW-6Z; Sun, 30 Jan 2022 08:54:26 +0000
+Date:   Sun, 30 Jan 2022 16:53:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: arch/s390/lib/spinlock.c:78:3: error: expected absolute expression
+Message-ID: <202201301448.qXX8mRNr-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfFKiscTVckEy2E8@alley>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/26/22 at 02:20pm, Petr Mladek wrote:
-> On Wed 2022-01-26 11:10:39, Baoquan He wrote:
-> > On 01/24/22 at 11:48am, Guilherme G. Piccoli wrote:
-> > > On 24/01/2022 10:59, Baoquan He wrote:
-> > > > [...]
-> > > > About pre_dump, if the dump is crash dump, hope those pre_dump notifiers
-> > > > will be executed under conditional check, e.g only if 'crash_kexec_post_notifiers'
-> > > > is specified in kernel cmdline. 
-> > > 
-> > > Hi Baoquan, based on Petr's suggestion, I think pre_dump would be
-> > > responsible for really *non-intrusive/non-risky* tasks and should be
-> > > always executed in the panic path (before kdump), regardless of
-> > > "crash_kexec_post_notifiers".
-> > > 
-> > > The idea is that the majority of the notifiers would be executed in the
-> > > post_dump portion, and for that, we have the
-> > > "crash_kexec_post_notifiers" conditional. I also suggest we have
-> > > blacklist options (based on function names) for both notifiers, in order
-> > > to make kdump issues debug easier.
-> > > 
-> > > Do you agree with that? Feel free to comment with suggestions!
-> > > Cheers,
-> > 
-> > I would say "please NO" cautiously.
-> > 
-> > As Petr said, kdump mostly works only if people configure it correctly.
-> > That's because we try best to switch to kdump kernel from the fragile
-> > panicked kernel immediately. When we try to add anthing before the switching,
-> > please consider carefully and ask if that adding is mandatory, otherwise
-> > switching into kdump kernel may fail. If the answer is yes, the adding
-> > is needed and welcomed. Othewise, any unnecessary action, including any
-> > "non-intrusive/non-risky" tasks, would be unwelcomed.
-> 
-> I still do not have the complete picture. But it seems that some
-> actions make always sense even for kdump:
-> 
->     + Super safe operations that might disable churn from broken
->       system. For examle, disabling watchdogs by setting a single
->       variable, see rcu_panic() notifier
-> 
->     + Actions needed that allow to kexec the crash kernel a safe
->       way under some hypervisor, see
->       https://lore.kernel.org/r/MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f8c7e4ede46fe63ff10000669652648aab09d112
+commit: 69d0db01e210e07fe915e5da91b54a867cda040f ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+date:   10 days ago
+config: s390-randconfig-c005-20220130 (https://download.01.org/0day-ci/archive/20220130/202201301448.qXX8mRNr-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d0db01e210e07fe915e5da91b54a867cda040f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 69d0db01e210e07fe915e5da91b54a867cda040f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Yes, I agree with this after going through threads of discussion again.
-There is much space we can do something for panic_notifier, and it might
-be a good time to do now with these discussion and some clarification.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> 
-> > Surely, we don't oppose the "non-intrusive/non-risky" or completely
-> > "intrusive/risky" action adding before kdump kernel switching, with a
-> > conditional limitation. When we handle customers' kdump support, we
-> > explicitly declare we only support normal and default kdump operation.
-> > If any action which is done before switching into kdump kernel is specified,
-> > e.g panic_notifier, panic_print, they need take care of their own kdump
-> > failure.
-> 
-> All this actually started because of kmsg_dump. It might make sense to
-> allow both kmsg_dump and kdump together. The messages stored by
-> kmsg_dump might be better than nothing when kdump fails.
+All errors (new ones prefixed by >>):
 
-I think this can be done later, after panics notifiers are combed and
-tidied up.
+   In file included from arch/s390/lib/spinlock.c:17:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/lib/spinlock.c:17:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/lib/spinlock.c:17:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/lib/spinlock.c:78:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:5:5: note: instantiated into assembly here
+   .if 6651b-6641b > 254
+       ^
+>> arch/s390/lib/spinlock.c:78:3: error: cpu alternatives does not support instructions blocks > 254 bytes
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives does not support instructions "    \
+            ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+>> arch/s390/lib/spinlock.c:78:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if (" len ") %% 2\n"                                          \
+            ^
+   <inline asm>:8:5: note: instantiated into assembly here
+   .if (6651b-6641b) % 2
+       ^
+>> arch/s390/lib/spinlock.c:78:3: error: cpu alternatives instructions length is odd
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
+            ^
+   <inline asm>:9:2: note: instantiated into assembly here
+           .error "cpu alternatives instructions length is odd"
+           ^
+>> arch/s390/lib/spinlock.c:78:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
+           OLDINSTR_PADDING(oldinstr, num)                                 \
+           ^
+   arch/s390/include/asm/alternative.h:71:3: note: expanded from macro 'OLDINSTR_PADDING'
+           ".if " oldinstr_pad_len(num) " > 6\n"                           \
+            ^
+   <inline asm>:15:5: note: instantiated into assembly here
+   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
+       ^
+>> arch/s390/lib/spinlock.c:78:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:25:5: note: instantiated into assembly here
+   .if 662b-661b > 254
+       ^
+>> arch/s390/lib/spinlock.c:78:3: error: cpu alternatives does not support instructions blocks > 254 bytes
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives does not support instructions "    \
+            ^
+   <inline asm>:26:2: note: instantiated into assembly here
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+>> arch/s390/lib/spinlock.c:78:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if (" len ") %% 2\n"                                          \
+            ^
+   <inline asm>:28:5: note: instantiated into assembly here
+   .if (662b-661b) % 2
+       ^
+>> arch/s390/lib/spinlock.c:78:3: error: cpu alternatives instructions length is odd
+                   ALTERNATIVE("", ".long 0xb2fa0040", 49) /* NIAI 4 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
+            ^
+   <inline asm>:29:2: note: instantiated into assembly here
+           .error "cpu alternatives instructions length is odd"
+           ^
+   arch/s390/lib/spinlock.c:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0080", 49) /* NIAI 8 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:5:5: note: instantiated into assembly here
+   .if 6651b-6641b > 254
+       ^
+   arch/s390/lib/spinlock.c:89:3: error: cpu alternatives does not support instructions blocks > 254 bytes
+                   ALTERNATIVE("", ".long 0xb2fa0080", 49) /* NIAI 8 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives does not support instructions "    \
+            ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   arch/s390/lib/spinlock.c:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0080", 49) /* NIAI 8 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if (" len ") %% 2\n"                                          \
+            ^
+   <inline asm>:8:5: note: instantiated into assembly here
+   .if (6651b-6641b) % 2
+       ^
+   arch/s390/lib/spinlock.c:89:3: error: cpu alternatives instructions length is odd
+                   ALTERNATIVE("", ".long 0xb2fa0080", 49) /* NIAI 8 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
+            ^
+   <inline asm>:9:2: note: instantiated into assembly here
+           .error "cpu alternatives instructions length is odd"
+           ^
+   arch/s390/lib/spinlock.c:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0080", 49) /* NIAI 8 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
+           OLDINSTR_PADDING(oldinstr, num)                                 \
+           ^
+   arch/s390/include/asm/alternative.h:71:3: note: expanded from macro 'OLDINSTR_PADDING'
+           ".if " oldinstr_pad_len(num) " > 6\n"                           \
+            ^
+   <inline asm>:15:5: note: instantiated into assembly here
+   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
+       ^
+   arch/s390/lib/spinlock.c:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0080", 49) /* NIAI 8 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
 
-> 
-> It actually seems to be the main motivation to introduce
-> "crash_kexec_post_notifier" parameter, see the commit
-> f06e5153f4ae2e2f3b03 ("kernel/panic.c: add "crash_kexec_post_notifiers"
-> option for kdump after panic_notifers").
 
-From discussion with Hitachi and FJ engineers, they use
-crash_kexec_post_notifiers when 1st kernel panicked and kdump kernel is
-not so stable to function. In that case, the captured information 
-with best effort after panic in 1st kernel can help analyze what
-happened in 1st kernel, and also might give hint on why kdump kernel
-is unstbale. But they will not add crash_kexec_post_notifiers in kernel
-cmdline by default. The unstable kdump kernel rarely happened, need be
-debugged and investigated. 
+vim +78 arch/s390/lib/spinlock.c
 
-> 
-> And this patch introduces panic_notifier_filter that tries to select
-> notifiers that are helpful and harmful. IMHO, it is almost unusable.
-> It seems that even kernel developers do not understand what exactly
-> some notifiers do and why they are needed. Usually only the author
-> and people familiar with the subsystem have some idea. It makes
-> it pretty hard for anyone to create a reasonable filter.
+b96f7d881ad942 Martin Schwidefsky 2017-03-24  72  
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  73  static inline int arch_load_niai4(int *lock)
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  74  {
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  75  	int owner;
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  76  
+cceb018377a123 Heiko Carstens     2019-10-18  77  	asm_inline volatile(
+f554be42fd0fd8 Vasily Gorbik      2017-10-12 @78  		ALTERNATIVE("", ".long 0xb2fa0040", 49)	/* NIAI 4 */
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  79  		"	l	%0,%1\n"
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  80  		: "=d" (owner) : "Q" (*lock) : "memory");
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  81  	return owner;
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  82  }
+7f7e6e28cd3285 Martin Schwidefsky 2017-04-19  83  
 
-Then people can select the notifiers they know to execute. E.g for
-Hyper-V, they can run the notifiers related. And as HATAYAMA mentioned,
-they have the same expection. This kind of filter is not for people to
-blindly pick and run, but for the professional.
+:::::: The code at line 78 was first introduced by commit
+:::::: f554be42fd0fd8dd14680c67f2db26b3e7de9670 s390/spinlock: use cpu alternatives to enable niai instruction
 
-I think the chaos is from not being monitored entirely. People can
-freely register one when they need. The priority, impaction to the
-entirety is not considered by subsystem developer.
+:::::: TO: Vasily Gorbik <gor@linux.vnet.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
 
-> 
-> I am pretty sure that we could do better. I propose to add more
-> notifier lists that will be called at various places with reasonable
-> rules and restrictions. Then the susbsystem maintainers could decide
-> where exactly a given action must be done.
-
-Agree that we can do something to improve.
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

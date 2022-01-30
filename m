@@ -2,91 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7C94A3720
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D184A3718
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355387AbiA3PAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 10:00:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26268 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355350AbiA3O72 (ORCPT
+        id S1355314AbiA3O7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:59:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58328 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345912AbiA3O6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:59:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643554765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xudE8SFyweDgi30gczcfI1OPOT6rRDCIESB6EBvxvdI=;
-        b=VYjQlXhpjRa05IUArUKr4DzzoYY0h3KYQphHtUYSY7I0qEO1kPqBZAyEunVvsOJU04Mgxy
-        Az2FltEPulUoQDKOJILZkIJ8KCjHZePiXTqwmYsLeoVfM7PJFA1TtyxAz9Aj8lLjmDsSDg
-        HMGNk+ZCMuA8SftV7sCsM/FEitCXKAE=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-CRtWt9zgNI2Oxq75J2iJ2A-1; Sun, 30 Jan 2022 09:59:24 -0500
-X-MC-Unique: CRtWt9zgNI2Oxq75J2iJ2A-1
-Received: by mail-qt1-f198.google.com with SMTP id y1-20020ac87041000000b002c3db9c25f8so8316658qtm.5
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 06:59:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xudE8SFyweDgi30gczcfI1OPOT6rRDCIESB6EBvxvdI=;
-        b=HFHZvqYGfn1VuaugxdpB24+woc4s7DRFwcv0o71R3tx1rXnBxPtNRRm1j3g0aRXxMS
-         QvBfp6MYRAZEeELSvIWBGg4GwzWZ8gi/W5qhX5M0K6D4KU763ngw4K5rlnIQeHHfM9NQ
-         2kMBdBvBNJiLbhuUnmunLLc6E0te2/RVhIgoPX66IGvLPR+F/V6hZT86+xi8th9VOyZf
-         +eojzxqdHTi5PiyAWrFHTydi2/770SeekDWhsO5tVOz78ofN5sOYRULaPcNvfIille5M
-         GiyGu6vCjPKSv/2vepZF2H13YA0y8GfwPmrKga64JcoCMdIRBHKCbuBlK0NFdWJlo9tL
-         JnfQ==
-X-Gm-Message-State: AOAM531YNXL8GMquQyKOvzb0fR3QPqAdayvYCplhJHlz8JkAkYV+keCv
-        PiEhn6ytnyUXgSVeA5qYhopSu3CrjkfPLgb+NgyrCoMsTGny72ZiGbo6G1VaT6poWYpPf8nXO7t
-        G+Hjab2B60c/Hhj8TnvF54Vv3
-X-Received: by 2002:a05:622a:38c:: with SMTP id j12mr11682790qtx.336.1643554764051;
-        Sun, 30 Jan 2022 06:59:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwZhw5EwnviYrqCBy0aif5dSsqa62U9luVFrPneT4ZfeEcZxFYRqIU2Vgthv4/kf4s0YPIZxQ==
-X-Received: by 2002:a05:622a:38c:: with SMTP id j12mr11682777qtx.336.1643554763850;
-        Sun, 30 Jan 2022 06:59:23 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bl1sm7251745qkb.16.2022.01.30.06.59.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 06:59:23 -0800 (PST)
-From:   trix@redhat.com
-To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] ACPICA: cleanup double word in comment
-Date:   Sun, 30 Jan 2022 06:59:18 -0800
-Message-Id: <20220130145918.1498203-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sun, 30 Jan 2022 09:58:54 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2107B8296F;
+        Sun, 30 Jan 2022 14:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C61C340E4;
+        Sun, 30 Jan 2022 14:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643554730;
+        bh=GL1zKW+fnVss13mOmdWWVRmOagcQ6XFxtwi7aOMdkXw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iqwJ3iNFmreR4JSoSb4n27mVOKwAewuQXXOFGNk4buR2bUqeaXL0Pnz8qH7UMdbOL
+         YVTNx/bXBnSh3ddVHi9MjxOyx4o56pVqJkaF5orz2suVUp6L7z7MNGvI9jwWDluvQM
+         abfTwVqaEnksmOuCzx9B/LQOMLDwXIF0sgsiGg1/L/TgqCl5f0hfPSayS9WYnP1rNE
+         Wf4xIlKEeKSB4bzDrcS6HvjQXQPUtiudZiKxLkmdfDy181KMyWBXUosw397yqxSx0e
+         AcVsnpixAiVrsts7NdGblMAN8BclBYHagOWoUo+t4wO+G3vfpXR3yhnk9TmfX070XJ
+         oaa3r6iUZCoWg==
+Date:   Sun, 30 Jan 2022 15:05:10 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-iio@vger.kernel.org,
+        Michael Hennerich <Michael.Hennerich@analog.com>
+Subject: Re: [RFC 12/32] iio: adc: Kconfig: add HAS_IOPORT dependencies
+Message-ID: <20220130150510.66ea7cd4@jic23-huawei>
+In-Reply-To: <20211228170031.12dac755@jic23-huawei>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        <20211227164317.4146918-13-schnelle@linux.ibm.com>
+        <CAMuHMdXDL6XXfohzJFTTV6tR=gg=bcCQq935eKUbNaNLHp9xiw@mail.gmail.com>
+        <b21410ee32857b4913e4ba4595f9e8da299c501f.camel@linux.ibm.com>
+        <20211228170031.12dac755@jic23-huawei>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Tue, 28 Dec 2021 17:01:25 +0000
+Jonathan Cameron <jic23@jic23.retrosnub.co.uk> wrote:
 
-Remove the second 'than'.
+> On Tue, 28 Dec 2021 13:50:20 +0100
+> Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> 
+> > On Tue, 2021-12-28 at 11:32 +0100, Geert Uytterhoeven wrote:  
+> > > Hi Niklas,
+> > > 
+> > > On Mon, Dec 27, 2021 at 5:53 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:    
+> > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > > > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > > > those drivers using them.
+> > > > 
+> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>    
+> 
+> As a side note, whilst it doesn't always happen and I regularly forget
+> to fix it up whilst applying, it's really helpful to make sure the driver
+> name is somewhere in the patch title.
+> 
+> e.g. iio: adc: ad7606: add HAS_IOPORT dependencies.
+> 
+> > > 
+> > > Thanks for your patch!
+> > >     
+> > > > --- a/drivers/iio/adc/Kconfig
+> > > > +++ b/drivers/iio/adc/Kconfig
+> > > > @@ -119,7 +119,7 @@ config AD7606
+> > > > 
+> > > >  config AD7606_IFACE_PARALLEL
+> > > >         tristate "Analog Devices AD7606 ADC driver with parallel interface support"
+> > > > -       depends on HAS_IOMEM
+> > > > +       depends on HAS_IOPORT    
+> > > 
+> > > While this driver uses ins[bw](), this seems unrelated to legacy
+> > > I/O space, as the driver maps a MMIO region.  Probably different
+> > > accessors should be used instead.    
+> > 
+> > You're right on first glance it looks like a misuse of the ins[bw]()
+> > accessors. I do wonder how that even works, if PCI_IOBASE is 0 it would
+> > result in readsw()/readsb() with presumably the correct address but no
+> > idea how this interacts witth x86's special I/O instructions.
+> >   
+> > > 
+> > > Note that this driver has no in-tree users. Same for the SPI variant,
+> > > but at least that one has modern json-schema DT bindings ;-)    
+> > 
+> > Can't find any mention in the MAINTAINERS file either.  
+> 
+> It falls under the Analog devices catch all.
+> We don't list them all individually because there are a lot of them and
+> it would just be noise in many case.
+> 
+> Added Michael to CC. You already have Lars.
+> 
+> ANALOG DEVICES INC IIO DRIVERS
+> M:	Lars-Peter Clausen <lars@metafoo.de>
+> M:	Michael Hennerich <Michael.Hennerich@analog.com>
+> S:	Supported
+> W:	http://wiki.analog.com/
+> W:	http://ez.analog.com/community/linux-device-drivers
+> F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-ad9523
+> F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4350
+> F:	Documentation/devicetree/bindings/iio/*/adi,*
+> F:	Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+> F:	drivers/iio/*/ad*
+> F:	drivers/iio/adc/ltc249*
+> F:	drivers/iio/amplifiers/hmc425a.c
+> F:	drivers/staging/iio/*/ad*
+> X:	drivers/iio/*/adjd*
+> 
+> https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7606
+> includes some details.
+> 
+> I'll leave it to the Lars or Michael to confirm what is going on here.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/acpi/acpica/hwregs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Can someone (probably at Analog Devices) take a look at this?
 
-diff --git a/drivers/acpi/acpica/hwregs.c b/drivers/acpi/acpica/hwregs.c
-index 69603ba52a3ac..f62d5d0242058 100644
---- a/drivers/acpi/acpica/hwregs.c
-+++ b/drivers/acpi/acpica/hwregs.c
-@@ -446,7 +446,7 @@ struct acpi_bit_register_info *acpi_hw_get_bit_register_info(u32 register_id)
-  * RETURN:      Status
-  *
-  * DESCRIPTION: Write the PM1 A/B control registers. These registers are
-- *              different than than the PM1 A/B status and enable registers
-+ *              different than the PM1 A/B status and enable registers
-  *              in that different values can be written to the A/B registers.
-  *              Most notably, the SLP_TYP bits can be different, as per the
-  *              values returned from the _Sx predefined methods.
--- 
-2.26.3
+Thanks,
+
+Jonathan
+
+> 
+> Jonathan
+> 
+> >   
+> > >     
+> > > >         select AD7606
+> > > >         help
+> > > >           Say yes here to build parallel interface support for Analog Devices:    
+> > > 
+> > > Gr{oetje,eeting}s,
+> > > 
+> > >                         Geert
+> > > 
+> > > --
+> > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > > 
+> > > In personal conversations with technical people, I call myself a hacker. But
+> > > when I'm talking to journalists I just say "programmer" or something like that.
+> > >                                 -- Linus Torvalds    
+> >   
+> 
 

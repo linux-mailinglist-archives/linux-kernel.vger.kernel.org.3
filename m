@@ -2,128 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F934A37D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B664A37D5
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355704AbiA3RHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 12:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S1355715AbiA3RMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 12:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiA3RHT (ORCPT
+        with ESMTP id S234833AbiA3RMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 12:07:19 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7C7C061714;
-        Sun, 30 Jan 2022 09:07:18 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id z10-20020a17090acb0a00b001b520826011so15889409pjt.5;
-        Sun, 30 Jan 2022 09:07:18 -0800 (PST)
+        Sun, 30 Jan 2022 12:12:15 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49871C061714;
+        Sun, 30 Jan 2022 09:12:15 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id s9so22325925oib.11;
+        Sun, 30 Jan 2022 09:12:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=YUtvVETQ4W7uTMzStV3psNo1qD2DtUJmtWqMjy6DR8w=;
-        b=NN78dhDDRCEpTpZpsQG+Py30WVC5QPnEcc9wfQwS/Xn61JzXnxToguU4FDz6MLYMQs
-         CkF/tiKlhPMk3rIMWS3d37W3awQAaHJH9LKh5c+Esjo1wh/mqVUuxmy++JGGOlC71bMx
-         8pDA12ap/dNnw+RpsoGwG+EDhJiGxal49NIr5HUNYLdwKPCJxUsBmofi5p2aEiUaJ+t5
-         nAIKTnC6rl9mk0R9qw4QjX7OW/6Vz4PJZW0+UjNwwV9d+JKYyKWx5hQVHUYIvM/Zc4Hb
-         bLAFk43QRdrQ55PWeTiDqjeGi1MMPolHV3xmHR7LE6VXlRtTN+INmysRfGn8A0IehWo3
-         EXAw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w1dNkPhtgiRjushmjZUey1uH/mwMDz9W8IeIjD9XGNU=;
+        b=QF78vYBJuFyFO0WuVGOnN8lRblJpn342qlEeX7HiKWboUdAtwbFRe3IeTC6lVcWB/R
+         4N84b2uUq2+PKSm35M7ONMSAwTC/Az0dw0ipKleJzJX2pMSA6J9nhBfISWdZWu5QJVq9
+         Fo2KgA4IjFPwqEf7VtfbL+V2p8nzGF2YrZm6hfaaCt06Fag/mTDRnUoBfERcs0XRRgYZ
+         0s6PTUxFBvh1truP4Kw2sc7kHYJm4j/x/3+pTbch9ghHfobfYHWUxsM/TcZgiH2YqryW
+         ERjUmG8WbeJ7HXEmt5lTb4D3hBy1mtcBpyRJ9rRCAbaCfkQhD/VimAg/BuhC9lB1hbzA
+         Hqmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YUtvVETQ4W7uTMzStV3psNo1qD2DtUJmtWqMjy6DR8w=;
-        b=vKj0BRvX3Xs4bdhmfd1uVC0pZ0AqMeji7O5XQf2/F3M5D5JZtu973jeirmDO9T08in
-         +mSdGqjU7SutzBHkXyc3x3E0RDzZVS4Z4I197ZSX7PG8UEPpN+OfReIBNRIjVnD647iy
-         0XEH0EIPEaU3UFk0Py1Y+t3KYudBCa0otSEVOwPtF/8i4Bf1XFWsbJJgtXrhgEh50mDY
-         8H58OEGcy7g1qbaaCHHSO2kCckbP2Zi1qBoflDNEonf3TN6kObxDojkA8FV9XpnnWIiS
-         a4MQ9n6ziBgQ4pde1MlJryt/o3OC8lhyB1eQy/RKiMxLl30aKtQh1D3bt0i3xAOC0pQV
-         xTBQ==
-X-Gm-Message-State: AOAM532w6GKOj/RKBx5FbHy3TcjG11HpticeeNXVNz3hT5LldMN0jPKo
-        AHKQzuwq4Gk1/aOxxB1pHUU4obIzkrk=
-X-Google-Smtp-Source: ABdhPJwuQhw9UdnnedQW3xEP9QEFq8KZX6ReEl3AW4G0KVuH6AKWU2r5qjLG+rdP265OmBj2l1ZqJg==
-X-Received: by 2002:a17:90a:f198:: with SMTP id bv24mr18687467pjb.32.1643562438325;
-        Sun, 30 Jan 2022 09:07:18 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:31be:19f8:e4b4:84c8? ([2600:8802:b00:4a48:31be:19f8:e4b4:84c8])
-        by smtp.gmail.com with ESMTPSA id p4sm3187903pfw.133.2022.01.30.09.07.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Jan 2022 09:07:17 -0800 (PST)
-Message-ID: <a8244311-175d-79d3-d61b-c7bb99ffdfb7@gmail.com>
-Date:   Sun, 30 Jan 2022 09:07:16 -0800
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=w1dNkPhtgiRjushmjZUey1uH/mwMDz9W8IeIjD9XGNU=;
+        b=WYa2+bqSvKyQ9GXeG39oMUmdQUqi3I4xcp7vZO60G3sGwO3uOu3QXGWrCNK51WM8O2
+         teutqh2uIZY1Pz3FqlreM+v7273ZF6VQPuvqYfWNtob5kSMAt7TdMCzEVbk0mkAHGzZu
+         qLhGHC7mhPdWgD/jh33S4Czmyh/9VGY5SufGeQPzpw2OhzlLhPx3DreoyN2WsBhPSlCW
+         lFzzwI6F2W6do8CJuTPy1lyhGwgfuAOtZ2wLC7+P2tKNbiVuyWfUCHQMZTHch74oSwsk
+         Hw1nuDdJ7odIJ7W5+Y8xeFyIOk/g3FQR/oZkvBtb0MmFFdgkAQbqMpRtnN1ozxqAU0gw
+         Yb7A==
+X-Gm-Message-State: AOAM5307G+dzgB1KU+ncKIG+mMwtIBZx3Fz/5ib0ghp9PFTi7N1LnLuk
+        QpLKuPtwM3n5tISYWQJ272s=
+X-Google-Smtp-Source: ABdhPJzDfpA/kFQ2ZUKPGwyRfaVdw4HLQweTlCDIHi6gw/h077fparPnBlJNMYVufYz9gxu/ali5cg==
+X-Received: by 2002:a05:6808:bca:: with SMTP id o10mr6747446oik.58.1643562733195;
+        Sun, 30 Jan 2022 09:12:13 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w9sm11309793ool.31.2022.01.30.09.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 09:12:12 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 30 Jan 2022 09:12:10 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Kevin Tian <kevin.tian@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cedric Le Goater <clg@kaod.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        dmaengine@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V3 28/35] PCI/MSI: Simplify pci_irq_get_affinity()
+Message-ID: <20220130171210.GA3545402@roeck-us.net>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221814.900929381@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v7 00/16] Add support for qca8k mdio rw in Ethernet
- packet
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <YfaZrsewBMhqr0Db@Ansuel-xps.localdomain>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <YfaZrsewBMhqr0Db@Ansuel-xps.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210221814.900929381@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 10, 2021 at 11:19:26PM +0100, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Replace open coded MSI descriptor chasing and use the proper accessor
+> functions instead.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
+This patch results in the following runtime warning when booting x86
+(32 bit) nosmp images from NVME in qemu.
 
-On 1/30/2022 5:59 AM, Ansuel Smith wrote:
->>
-> 
-> Hi,
-> sorry for the delay in sending v8, it's ready but I'm far from home and
-> I still need to check some mdio improvement with pointer handling.
-> 
-> Anyway I have some concern aboutall the skb alloc.
-> I wonder if that part can be improved at the cost of some additional
-> space used.
-> 
-> The idea Is to use the cache stuff also for the eth skb (or duplicate
-> it?) And use something like build_skb and recycle the skb space
-> everytime...
-> This comes from the fact that packet size is ALWAYS the same and it
-> seems stupid to allocate and free it everytime. Considering we also
-> enforce a one way transaction (we send packet and we wait for response)
-> this makes the allocation process even more stupid.
-> 
-> So I wonder if we would have some perf improvement/less load by
-> declaring the mgmt eth space and build an skb that always use that
-> preallocate space and just modify data.
-> 
-> I would really love some feedback considering qca8k is also used in very
-> low spec ath79 device where we need to reduce the load in every way
-> possible. Also if anyone have more ideas on how to improve this to make
-> it less heavy cpu side, feel free to point it out even if it would
-> mean that my implemenation is complete sh*t.
-> 
-> (The use of caching the address would permit us to reduce the write to
-> this preallocated space even more or ideally to send the same skb)
+[   14.825482] nvme nvme0: 1/0/0 default/read/poll queues
+ILLOPC: ca7c6d10: 0f 0b
+[   14.826188] ------------[ cut here ]------------
+[   14.826307] WARNING: CPU: 0 PID: 7 at drivers/pci/msi/msi.c:1114 pci_irq_get_affinity+0x80/0x90
+[   14.826455] Modules linked in:
+[   14.826640] CPU: 0 PID: 7 Comm: kworker/u2:0 Not tainted 5.17.0-rc1-00419-g1d2d8baaf053 #1
+[   14.826797] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+[   14.827132] Workqueue: nvme-reset-wq nvme_reset_work
+[   14.827336] EIP: pci_irq_get_affinity+0x80/0x90
+[   14.827452] Code: e8 d5 30 af ff 85 c0 75 bd 90 0f 0b 31 c0 5b 5e 5d c3 8d b4 26 00 00 00 00 90 5b b8 24 32 7e cb 5e 5d c3 8d b4 26 00 00 00 00 <0f> 0b eb e0 8d b4 26 00 00 00 00 8d 74 26 00 90 55 89 e5 57 56 53
+[   14.827717] EAX: 00000000 EBX: c18ba000 ECX: 00000000 EDX: c297c210
+[   14.827816] ESI: 00000001 EDI: c18ba000 EBP: c1247e24 ESP: c1247e1c
+[   14.827924] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00000246
+[   14.828110] CR0: 80050033 CR2: ffda9000 CR3: 0b8ad000 CR4: 000006d0
+[   14.828268] Call Trace:
+[   14.828554]  blk_mq_pci_map_queues+0x26/0x70
+[   14.828710]  nvme_pci_map_queues+0x75/0xc0
+[   14.828808]  blk_mq_update_queue_map+0x86/0xa0
+[   14.828891]  blk_mq_alloc_tag_set+0xf3/0x390
+[   14.828965]  ? nvme_wait_freeze+0x3d/0x50
+[   14.829137]  nvme_reset_work+0xd02/0x1120
+[   14.829269]  ? lock_acquire+0xc3/0x290
+[   14.829435]  process_one_work+0x1ed/0x490
+[   14.829569]  worker_thread+0x15e/0x3c0
+[   14.829665]  kthread+0xd3/0x100
+[   14.829729]  ? process_one_work+0x490/0x490
+[   14.829799]  ? kthread_complete_and_exit+0x20/0x20
+[   14.829890]  ret_from_fork+0x1c/0x28
 
-I would say first things first: get this patch series included since it 
-is very close from being suitable for inclusion in net-next. Then you 
-can profile the I/O accesses over the management Ethernet frames and 
-devise a strategy to optimize them to make as little CPU cycles 
-intensive as possible.
+Bisect results below.
 
-build_skb() is not exactly a magic bullet that will solve all 
-performance problems, you still need the non-data portion of the skb to 
-be allocated, and also keep in mind that you need tail room at the end 
-of the data buffer in order for struct skb_shared_info to be written. 
-This means that the hardware is not allowed to write at the end of the 
-data buffer, or you must reduce the maximum RX length accordingly to 
-prevent that. Your frames are small enough here this is unlikely to be 
-an issue.
+#regzbot introduced: f48235900182d6
 
-Since the MDIO layer does not really allow more than one outstanding 
-transaction per MDIO device at a time, you might be just fine with just 
-have a front and back skb set of buffers and alternating between these two.
--- 
-Florian
+Guenter
+
+---
+# bad: [e783362eb54cd99b2cac8b3a9aeac942e6f6ac07] Linux 5.17-rc1
+# good: [df0cc57e057f18e44dac8e6c18aba47ab53202f9] Linux 5.16
+git bisect start 'v5.17-rc1' 'v5.16'
+# good: [fef8dfaea9d6c444b6c2174b3a2b0fca4d226c5e] Merge tag 'regulator-v5.17' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator
+git bisect good fef8dfaea9d6c444b6c2174b3a2b0fca4d226c5e
+# bad: [3ceff4ea07410763d5d4cccd60349bf7691e7e61] Merge tag 'sound-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
+git bisect bad 3ceff4ea07410763d5d4cccd60349bf7691e7e61
+# good: [57ea81971b7296b42fc77424af44c5915d3d4ae2] Merge tag 'usb-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+git bisect good 57ea81971b7296b42fc77424af44c5915d3d4ae2
+# bad: [feb7a43de5ef625ad74097d8fd3481d5dbc06a59] Merge tag 'irq-msi-2022-01-13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect bad feb7a43de5ef625ad74097d8fd3481d5dbc06a59
+# good: [ce990f1de0bc6ff3de43d385e0985efa980fba24] Merge tag 'for-linus-5.17-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
+git bisect good ce990f1de0bc6ff3de43d385e0985efa980fba24
+# good: [4afd2a9355a9deb16ea42b896820dacf49843a8f] Merge branches 'clk-ingenic' and 'clk-mediatek' into clk-next
+git bisect good 4afd2a9355a9deb16ea42b896820dacf49843a8f
+# good: [455e73a07f6e288b0061dfcf4fcf54fa9fe06458] Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+git bisect good 455e73a07f6e288b0061dfcf4fcf54fa9fe06458
+# bad: [f2948df5f87a722591499da60ab91c611422f755] x86/pci/xen: Use msi_for_each_desc()
+git bisect bad f2948df5f87a722591499da60ab91c611422f755
+# good: [93296cd1325d1d9afede60202d8833011c9001f2] PCI/MSI: Allocate MSI device data on first use
+git bisect good 93296cd1325d1d9afede60202d8833011c9001f2
+# good: [82ff8e6b78fc4587a4255301f0a283506daf11b6] PCI/MSI: Use msi_get_virq() in pci_get_vector()
+git bisect good 82ff8e6b78fc4587a4255301f0a283506daf11b6
+# bad: [125282cd4f33ecd53a24ae4807409da0e5e90fd4] genirq/msi: Move descriptor list to struct msi_device_data
+git bisect bad 125282cd4f33ecd53a24ae4807409da0e5e90fd4
+# bad: [065afdc9c521f05c53f226dabe5dda2d30294d65] iommu/arm-smmu-v3: Use msi_get_virq()
+git bisect bad 065afdc9c521f05c53f226dabe5dda2d30294d65
+# bad: [f6632bb2c1454b857adcd131320379ec16fd8666] dmaengine: mv_xor_v2: Get rid of msi_desc abuse
+git bisect bad f6632bb2c1454b857adcd131320379ec16fd8666
+# bad: [f48235900182d64537c6e8f8dc0932b57a1a0638] PCI/MSI: Simplify pci_irq_get_affinity()
+git bisect bad f48235900182d64537c6e8f8dc0932b57a1a0638
+# first bad commit: [f48235900182d64537c6e8f8dc0932b57a1a0638] PCI/MSI: Simplify pci_irq_get_affinity()

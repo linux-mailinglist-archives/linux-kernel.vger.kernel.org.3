@@ -2,118 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 990174A349B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 06:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83924A34A8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 07:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353852AbiA3Fyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 00:54:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60604 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiA3Fyf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 00:54:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33BDEB828BB;
-        Sun, 30 Jan 2022 05:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B706CC340EE;
-        Sun, 30 Jan 2022 05:54:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643522071;
-        bh=KTwtRKH/OVKhaNoB2dpS+9CRT5rYtiTrBbRTY58frfI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KbqY9YcjYQ53gmY2dHmrpw7RqkS4V6dNNJjtLBbW8U4K47uqz0ecQoZbQwgfGmZma
-         tRCWkNjivI6OGFruhAjydv25WQ48WPT8wiGKtc8VkkqRijcv4FkBddBEiA9bZ6UpWM
-         I5RJVntAdZO8XAOSx+Hzslf2/jqxqMaVH/0ebTmNHQjz/YBFdn/6EIt7d+vxsPHNSZ
-         ZaFIL+Fyvt5HOclTxwg6T2ZdaTD4y5Z172agNJmW87mhTO2d74ig4seQ3g/0cZwPaa
-         1X8MVufLeenvPKvFey3paLO3ejlnzOfUnZP2orkztfEtq678+ZCjwp7m/wgaw/Qbsh
-         4OleGJIuGH/Uw==
-Received: by mail-vs1-f50.google.com with SMTP id r20so7975499vsn.0;
-        Sat, 29 Jan 2022 21:54:31 -0800 (PST)
-X-Gm-Message-State: AOAM5308+np7kMCyDNQotlUnib0rAwi3GriWPQ1cZ5QdfJumkteRXJBX
-        RSAYzQhONChfOJBk15UkoH22tLJIvwifVVQsqXY=
-X-Google-Smtp-Source: ABdhPJw3SI5w6wpfoRZZErXNv34dgmNp5eduh3H4LQwaI7qbmi+2hfTO0XEH13fEEhf3iFH2jsVqfmVsSGc5OwjgZr4=
-X-Received: by 2002:a67:e0d9:: with SMTP id m25mr5857135vsl.51.1643522070834;
- Sat, 29 Jan 2022 21:54:30 -0800 (PST)
+        id S1354185AbiA3GE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 01:04:26 -0500
+Received: from ptr.189.cn ([183.61.185.103]:11466 "EHLO 189.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233771AbiA3GEZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 01:04:25 -0500
+HMM_SOURCE_IP: 10.64.8.31:42436.1478280989
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 22C881001DD;
+        Sun, 30 Jan 2022 14:04:17 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 93f8625f5ef34d5db5f52ead6b8105e1 for l.stach@pengutronix.de;
+        Sun, 30 Jan 2022 14:04:18 CST
+X-Transaction-ID: 93f8625f5ef34d5db5f52ead6b8105e1
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 0/1] drm/lsdc: add drm driver for loongson display controller
+Date:   Sun, 30 Jan 2022 14:04:11 +0800
+Message-Id: <20220130060412.12100-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-9-guoren@kernel.org>
- <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
-In-Reply-To: <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 30 Jan 2022 13:54:20 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com>
-Message-ID: <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com>
-Subject: Re: [PATCH V4 08/17] riscv: compat: syscall: Add compat_sys_call_table
- implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 6:41 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> > Implement compat sys_call_table and some system call functions:
-> > truncate64, ftruncate64, fallocate, pread64, pwrite64,
-> > sync_file_range, readahead, fadvise64_64 which need argument
-> > translation.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
->
-> This all looks really good, but I would change one detail:
->
-> > +#ifndef compat_arg_u64
-> > +#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
-> > +#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
-> > +#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
-> > +                                        ((u64)name##_lo & 0xffffffffUL))
-> > +#endif
->
-> I would make these endian-specific, and reverse them on big-endian
-> architectures. That way it
-> should be possible to share them across all compat architectures
-> without needing the override
-> option.
-I hope it could be another patch. Because it's not clear to
-_LITTLE_ENDIAN definition in archs.
+v2: fixup warnings reported by kernel test robot
 
-eg: Names could be __ORDER_LITTLE_ENDIAN__ CPU_LITTLE_ENDIAN
-SYS_SUPPORTS_LITTLE_ENDIAN __LITTLE_ENDIAN
+There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+bridge, and the DC in those chip is a PCI device. This display controller
+have two display pipes but with only one hardware cursor.
 
-riscv is little-endian, but no any LITTLE_ENDIAN definition.
+This display controller is uncommon outside of china, it don't have rich
+document either. This patch try to provided a minimal support for this
+display controller which is for graphic environment bring up. Hope the
+code can speak for itself.
 
-So let's keep them in the patch, first, Thx
+For ls7a1000, there are 4 gpios who register is located at dc register
+space which is used to emulation i2c. LS2K1000 and LS2K0500 SoC don't
+have those hardware, they use general purpose gpio or hardware i2c to
+serve this purpose.
 
->
->         Arnd
+LS2K1000 is a double core 1.0Ghz mips64r2 compatible SoC[1]. LS7A1000 is
+a bridge chip made by Loongson corporation which act as north and/or south
+bridge of loongson's desktop and server level processor. It is equivalent
+to RS780E or something like that. More details can be read from its user
+manual[2].
 
+This bridge chip is typically use with LS3A3000, LS3A4000 and LS3A5000 cpu.
+LS3A3000 is 4 core 1.45gHz mips64r2 compatible cpu.
+LS3A4000 is 4 core 1.8gHz mips64r5 compatible cpu.
+LS3A5000 is 4 core 2.5gHz loongarch cpu[3].
 
+[1] https://wiki.debian.org/InstallingDebianOn/Lemote/Loongson2K1000
+[2] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN.html
+[3] https://loongson.github.io/LoongArch-Documentation/Loongson-3A5000-usermanual-EN.html
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+
+suijingfeng (1):
+  drm/lsdc: add drm driver for loongson display controller
+
+ drivers/gpu/drm/Kconfig               |   2 +
+ drivers/gpu/drm/Makefile              |   1 +
+ drivers/gpu/drm/lsdc/Kconfig          |  38 ++
+ drivers/gpu/drm/lsdc/Makefile         |  15 +
+ drivers/gpu/drm/lsdc/lsdc_connector.c | 439 ++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_connector.h |  60 ++
+ drivers/gpu/drm/lsdc/lsdc_crtc.c      | 438 ++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.c       | 824 ++++++++++++++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.h       | 214 +++++++
+ drivers/gpu/drm/lsdc/lsdc_encoder.c   |  79 +++
+ drivers/gpu/drm/lsdc/lsdc_i2c.c       | 220 +++++++
+ drivers/gpu/drm/lsdc/lsdc_i2c.h       |  61 ++
+ drivers/gpu/drm/lsdc/lsdc_irq.c       |  77 +++
+ drivers/gpu/drm/lsdc/lsdc_irq.h       |  37 ++
+ drivers/gpu/drm/lsdc/lsdc_plane.c     | 694 ++++++++++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.c       | 605 +++++++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.h       | 109 ++++
+ drivers/gpu/drm/lsdc/lsdc_regs.h      | 242 ++++++++
+ 18 files changed, 4155 insertions(+)
+ create mode 100644 drivers/gpu/drm/lsdc/Kconfig
+ create mode 100644 drivers/gpu/drm/lsdc/Makefile
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_encoder.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
 
 -- 
-Best Regards
- Guo Ren
+2.20.1
 
-ML: https://lore.kernel.org/linux-csky/

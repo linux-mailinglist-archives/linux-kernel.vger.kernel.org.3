@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816434A3745
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3531B4A3735
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355451AbiA3P11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 10:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355439AbiA3P1Y (ORCPT
+        id S1355413AbiA3PTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 10:19:24 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:59154 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347323AbiA3PTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 10:27:24 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C95C061714;
-        Sun, 30 Jan 2022 07:27:24 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso6541004wms.0;
-        Sun, 30 Jan 2022 07:27:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M0F+HzCmfFkZhhA5GVZSk7LS0FRyBdrUMs+hALno+og=;
-        b=HHH4AjpTv8Dw7eKZmrdJJqAKeEvQW3gjfra/tFHN2EzVsGB5vgB9PDUrwdhsq3yeQS
-         swwE6CWvjOG5oPntOl2fG04zLhKbmfvFnZJpiCGQB3+qJsM6WS7sWn6WEF94hi7YI2N9
-         c+3Jt5c+IVclsUFFbNznJZQF8J/na1I9Yt87uWAow/BpliPWnw+nNuc/Y0f4IlbLffir
-         0TAgsiiaDgqaayi8MGXSIwmEqU2Kkv/pPMwprRFGSx9MNau3nykRDZsa+dhhy8UWHQpV
-         XSHvIdOixgflew0M6Apa2xfNb+yVOEWyJ1hQNGVlkYvFS3DHJVeJhcxKZId5Zg8QvbsV
-         pN0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M0F+HzCmfFkZhhA5GVZSk7LS0FRyBdrUMs+hALno+og=;
-        b=s3210S5mBzCA/dae4XyikA627Ozgq6LqmGVNCeUYE1rUssKIB3qMNhUEuLOFP7DlN3
-         a9laolPKmAR4tqcfvj6TJAxPo3NzlotS7YzPD56pqf5qSWXwkYl/iUhjMTSQMQwlVKMe
-         bb5+JE+Gf+TnvBYTPiKdUPr70V1eaXk/9+0gVMv8mLOV5m3izznuQSmHmrX1cVwfoBRD
-         0toNHzLhr8coGtVQx0NWuWRVLsFlNTdQMlRUrXr/STgZskiwvZq3GodSliXjp+N/uMMq
-         zOrFsCuHPGV+sdjZgqaQyT3LTKzoGX8IA2wscjeXrCXnV+MGv8dKQrtF0TPIE9GuBWHm
-         GUEQ==
-X-Gm-Message-State: AOAM530sRQaOvDT43xrjU6B7T6CNqXJgOZqSAmCfyPQcbse2XtAcXZxw
-        CtzCUYj84hUe60Erwr2kbvk=
-X-Google-Smtp-Source: ABdhPJzlQoKGNrSZe/aJNh2YZSd7efE3HmJEbXmeg+HInoCCF6VtWJp/rJQaZd77rIekxd6/ddYWUQ==
-X-Received: by 2002:a1c:1f0c:: with SMTP id f12mr14939908wmf.44.1643556443067;
-        Sun, 30 Jan 2022 07:27:23 -0800 (PST)
-Received: from localhost.localdomain ([195.245.21.30])
-        by smtp.gmail.com with ESMTPSA id n11sm7477781wms.3.2022.01.30.07.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 07:27:22 -0800 (PST)
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Subject: [PATCH v2] ep93xx: clock: Fix UAF in ep93xx_clk_register_gate()
-Date:   Sun, 30 Jan 2022 16:25:02 +0100
-Message-Id: <20220130152502.236531-1-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 30 Jan 2022 10:19:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 69B0BCE0FC9;
+        Sun, 30 Jan 2022 15:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3921C340E4;
+        Sun, 30 Jan 2022 15:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643555957;
+        bh=gqZKjFiI669q0gnS/jVPy4eF6e3RL32aeL9cHh4hGBk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KyRnbaqFAK+nA9fhN2VtkQpD/lSC+SORK4ahJNndfScSUw343/mnE0tfnEkQCSGit
+         /nPfhF6D1gCzxmi+K4kkhZsFXp8QrJYwzJOwcdKYE9M4JEBwiC0sBWsqMObkV7evYU
+         sEUsHuvfS9P2iJcOLKIviv3Rv14Au2D/rSib9z+x8SS7OPkQy4fNwZzyO/mLhm/RQS
+         0ts1urKPEl77crlCKxgGOpe7lyTyipRoO1ZjJotdTdR2TY7w5ZaGJWLGO8wFNLi4kU
+         Z7AhZSg3ifSZ6tJ5ngAUZwe3SBQONL/1tO0njody7SgCsMT3KvEhZeQcH/uiPiASA/
+         bS5izFbYgDcCQ==
+Date:   Sun, 30 Jan 2022 15:25:41 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <nicolas.ferre@microchip.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH 1/1] dt-bindings: iio: adc: at91-sama5d2: update
+ maintainers entry
+Message-ID: <20220130152541.5772d4ad@jic23-huawei>
+In-Reply-To: <6acdb66592baf395a77a431c0cb9a37b0f178097.1643554065.git.nicolas.ferre@microchip.com>
+References: <6acdb66592baf395a77a431c0cb9a37b0f178097.1643554065.git.nicolas.ferre@microchip.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
-arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
-if (IS_ERR(clk))
-^
-arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
-kfree(psc);
-^~~~~~~~~~
-arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after it is freed
-return &psc->hw;
-^ ~~~~~~~~
+On Sun, 30 Jan 2022 15:50:08 +0100
+<nicolas.ferre@microchip.com> wrote:
 
-Link: https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/B5YCO2NJEXINCYE26Y255LCVMO55BGWW/
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 9645ccc7bd7a ("ep93xx: clock: convert in-place to COMMON_CLK")
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
-Changelog:
-v2:
-- Thanks to Nick for the hint to use ERR_CAST()
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+> 
+> Update the maintainers entry to match the changes made back in
+> mid-2020 with 853fa48717c2 ("MAINTAINERS: adc: at91-sama5d2_adc:
+> remove myself as co-maintainer").
+> 
+> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Applied to the togreg branch of iio.git and pushed out as testing
+for 0-day to poke at other things I applied today.
 
- arch/arm/mach-ep93xx/clock.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
-index cc75087134d3..4aee14f18123 100644
---- a/arch/arm/mach-ep93xx/clock.c
-+++ b/arch/arm/mach-ep93xx/clock.c
-@@ -148,8 +148,10 @@ static struct clk_hw *ep93xx_clk_register_gate(const char *name,
- 	psc->lock = &clk_lock;
- 
- 	clk = clk_register(NULL, &psc->hw);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
- 		kfree(psc);
-+		return ERR_CAST(clk);
-+	}
- 
- 	return &psc->hw;
- }
--- 
-2.34.1
+Jonathan
+
+> ---
+> Hi,
+> 
+> Patch for new MAINTAINERS entry is here:
+> https://lore.kernel.org/linux-arm-kernel/23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com/
+> 
+> Regards,
+>   Nicolas
+> 
+>  Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml b/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
+> index efed361215b4..9a2292e7defc 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
+> @@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: AT91 SAMA5D2 Analog to Digital Converter (ADC)
+>  
+>  maintainers:
+> -  - Ludovic Desroches <ludovic.desroches@atmel.com>
+>    - Eugen Hristev <eugen.hristev@microchip.com>
+>  
+>  properties:
 

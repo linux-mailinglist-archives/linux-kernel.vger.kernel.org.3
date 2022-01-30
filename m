@@ -2,233 +2,429 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C244A3517
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C494A3509
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349903AbiA3IIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 03:08:37 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:38161 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347717AbiA3II3 (ORCPT
+        id S238198AbiA3IEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 03:04:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60676 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230226AbiA3IEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 03:08:29 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220130080828epoutp0325203641dfb7b6ac4fbcf7c93cc99420~O-e0MaQUe2581825818epoutp03h
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 08:08:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220130080828epoutp0325203641dfb7b6ac4fbcf7c93cc99420~O-e0MaQUe2581825818epoutp03h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643530108;
-        bh=HkUEc1GvRws2hCGHAS/Busf6caUOkPlQ858JwyoYSHE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u5Ls5pasipOGQBU64RsPsnebCOXv9/r1RcmK/KHscd/dWX7UZuYhgJ6rulVy476FL
-         UI+8EbfbubTkqOjCr//dMfyfALYnzY0C0W6MYje68vFLfE6zXPB5MzzSCKpZtw9Rrp
-         paH1PWMsGZh70OjNY4YoPR9ULB6aWufGVizGRy38=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220130080827epcas5p1be81b955d056e495033b4a7386408b28~O-ezDX43E3102231022epcas5p1n;
-        Sun, 30 Jan 2022 08:08:27 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JmkN26Pssz4x9Pt; Sun, 30 Jan
-        2022 08:08:18 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3B.F6.06423.37746F16; Sun, 30 Jan 2022 17:08:19 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220130080818epcas5p15adb431d08cb37060310fec00bb77cd2~O-eqi0bnT3102231022epcas5p1i;
-        Sun, 30 Jan 2022 08:08:18 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220130080818epsmtrp1912459ece4236c838fa4a47a48d34390~O-eqdwXuy1370913709epsmtrp1Q;
-        Sun, 30 Jan 2022 08:08:18 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-e1-61f6477303d6
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        40.11.08738.27746F16; Sun, 30 Jan 2022 17:08:18 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220130080816epsmtip2605fd20040ca39835ce562f4c5f40e8c~O-epXXhEv0517905179epsmtip2M;
-        Sun, 30 Jan 2022 08:08:16 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH 3/3] ARM: dts: exynos: update dma nodename for exynos5
-Date:   Sun, 30 Jan 2022 13:25:20 +0530
-Message-Id: <20220130075520.49193-3-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220130075520.49193-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEKsWRmVeSWpSXmKPExsWy7bCmum6x+7dEg9Of+CwezNvGZjH/yDlW
-        i41vfzBZbHp8jdXi8q45bBYzzu9jsmjde4Tdgd1jVkMvm8emVZ1sHpuX1Hv0bVnF6PF5k1wA
-        a1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QFUoK
-        ZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpScApMCveLE3OLSvHS9vNQSK0MDAyNToMKE
-        7Iw3836wFZxUrGjdsYi5gfGvVBcjJ4eEgInEmmcXmLoYuTiEBHYzSmyb/okNwvnEKLHjyFVW
-        COczo8Sjji3MMC09r1YzQiR2MUq8udIK5bQwSdw6cYwNpIpNQFvi7vQtTCC2iICbxI3GDjCb
-        WWAxo8SvhekgtjBQ/PrpNWBxFgFVif7mTewgNq+AjcSUN9+ZILbJS6zecABsM6eArUTb7W1g
-        90kIHGOX2H58EVSRi0Rf13UoW1ji1fEt7BC2lMTL/jYgmwPIzpbo2WUMEa6RWDrvGAuEbS9x
-        4MocFpASZgFNifW79CHO5JPo/f2ECaKTV6KjTQiiWlWi+d1VqE5piYnd3awQtofEq2eNLJBg
-        mMAocebmTOYJjLKzEKYuYGRcxSiZWlCcm55abFpgmJdaDo+o5PzcTYzgxKXluYPx7oMPeocY
-        mTgYDzFKcDArifDO2PQpUYg3JbGyKrUoP76oNCe1+BCjKTDIJjJLiSbnA1NnXkm8oYmlgYmZ
-        mZmJpbGZoZI47+n0DYlCAumJJanZqakFqUUwfUwcnFINTB6Fa/3S32kmBlVOsouZGiFf/fqh
-        lh1D58vHEgwGfy0OXuNctvTEXKVd8izHXTwKrxjZqVwN33ne5UkBywktL22v5GDl0vLPc3c+
-        VDjr6+N6jmER55bHlYofelcf+x0c5ya5lLXI8rm/86fb32OcOZMSQyXL/gTsLEix2vb6lIfK
-        cjmVi7yX+OLuyaafkRL0LNNoCVjf/2rNh1tnTqgrrrs3Z91c359latZ3S33mhq7a1spld+lt
-        eBaDdknGDTmLkk/HdCbWpngFMlWd2GzHIK8i9E9D+pjEt9z1a9bkiVSbfT624THf9q1TKp4x
-        XDE0+D5zn9TVpT2Hf75hXeI7Y9LZkIkOL0Kf6PHVfJq+WYmlOCPRUIu5qDgRAGtSISzlAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOLMWRmVeSWpSXmKPExsWy7bCSvG6R+7dEg3PvOCwezNvGZjH/yDlW
-        i41vfzBZbHp8jdXi8q45bBYzzu9jsmjde4Tdgd1jVkMvm8emVZ1sHpuX1Hv0bVnF6PF5k1wA
-        axSXTUpqTmZZapG+XQJXxpt5P9gKTipWtO5YxNzA+Feqi5GTQ0LARKLn1WrGLkYuDiGBHYwS
-        syesYYdISEtc3zgByhaWWPnvOTtEUROTxLsTT5lAEmwC2hJ3p28Bs0UEPCTa/t1jBiliFljO
-        KNG5azkbSEJYwE3i+uk1YEUsAqoS/c2bwKbyCthITHnznQlig7zE6g0HmEFsTgFbibbb28B6
-        hYBqpv/sY5zAyLeAkWEVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZw2Glp7WDcs+qD
-        3iFGJg7GQ4wSHMxKIrwzNn1KFOJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZq
-        akFqEUyWiYNTqoHJ7kmkbrfm6naVUz9uasc+Y9TdvFXtfPo7m6Ksvyxes6fqfpINyjEzuiHB
-        fldB/djNCV83v9wQLd9YZCX5eeeGbs2H9ow7zn9m7nq9qENs55a+kiUBWqevfvi8pk0tbWWG
-        pxlr/olc1XnG8zb9kd4TnpibITDfaNO94DcuGsw5za9srdNs+AVy9G68uiO/2DvZp8tzavXb
-        n+s23M0tvbJFfcUyv/v9frcXcBoUPI7rW3n7N6Pmqr8CWhd3r123V7jh4tMDexk4s57Ma3dr
-        u7GNu3L3C7GawEgJn+v/30z/tSfwl1/U1FfNwhxFOV1B2oL/E57O2e638MNt66PPrntU7dmh
-        E6Q+IcUvxurEfnsGJZbijERDLeai4kQAuUGDhKoCAAA=
-X-CMS-MailID: 20220130080818epcas5p15adb431d08cb37060310fec00bb77cd2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220130080818epcas5p15adb431d08cb37060310fec00bb77cd2
-References: <20220130075520.49193-1-alim.akhtar@samsung.com>
-        <CGME20220130080818epcas5p15adb431d08cb37060310fec00bb77cd2@epcas5p1.samsung.com>
+        Sun, 30 Jan 2022 03:04:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF825B8285A;
+        Sun, 30 Jan 2022 08:04:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D6BC340E4;
+        Sun, 30 Jan 2022 08:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643529868;
+        bh=600dPcJ4rCZdXhgeUQa3AhxZQ/MTAqDwVkJ7K/M7qv8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Qq/XlyAcP96dF2sCiqo84hbNFCdVxoea53ZpOV3PRJWiZehfX30z5QNwcamIMu25H
+         xrOCVqGHAonZBUQ1oX+A6zL9NoS1QzgqCA/G5X0jumkAVKB70rjSr6KqivVNBn0usv
+         KjRHQY/VWUDmuvPxlcRuu57jLW2SuFalzJsjaSl1eVnrJEoBBCqQ5Dfn1Kyy+6Rsbj
+         D8xJKCRGjGIfno6lT62n23QeB3gmUGQ6T/FccFSMrShGmpLnSMwG3QQKaonGqpfSUf
+         gVV9yz6ozNtHsJgi9UL1E+IhslTk6jothPpxm+xAknnaYlN5FE4ktphPVQ3JeMAkqg
+         dGUR/qVKlKqyg==
+Date:   Sun, 30 Jan 2022 17:04:18 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        masami.hiramatsu.pt@hitachi.com, eranian@google.com
+Subject: Re: [PATCH v2 0/4] Reference count checker and related fixes
+Message-Id: <20220130170418.40d812169bcae1323f8b20bf@kernel.org>
+In-Reply-To: <YfRLEel7/nxWSgIP@kernel.org>
+References: <20220125204602.4137477-1-irogers@google.com>
+        <CAP-5=fXyJeX3b3egcAOfPndmYhakrsdKu7HttnHEH2DKP-6Vxw@mail.gmail.com>
+        <20220128142348.17d51894dbdb35c9a9449567@kernel.org>
+        <CAP-5=fXHudKqO4+0rbO9X3Ny+Cq7+KsHbKf4P8P24SjF0S232Q@mail.gmail.com>
+        <20220129003450.77116209763f7e06d285e654@kernel.org>
+        <CAP-5=fVoP9MAVsj7SdrxRjkr1Jt=XZ7Vf_FAooXA7B2OrC=XMA@mail.gmail.com>
+        <YfRLEel7/nxWSgIP@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently dma node name does not matches the pl330
-dt schema and make dtbs_check report below warning
+On Fri, 28 Jan 2022 16:59:13 -0300
+Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 
-'pdma@121a0000' does not match '^dma-controller(@.*)?$'
-'mdma@10800000' does not match '^dma-controller(@.*)?$'
+> Em Fri, Jan 28, 2022 at 10:26:20AM -0800, Ian Rogers escreveu:
+> > On Fri, Jan 28, 2022 at 7:35 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >
+> > > On Thu, 27 Jan 2022 22:24:59 -0800
+> > > Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > > On Thu, Jan 27, 2022 at 9:24 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > > >
+> > > > > On Thu, 27 Jan 2022 13:33:23 -0800
+> > > > > Ian Rogers <irogers@google.com> wrote:
+> > > > >
+> > > > > > On Tue, Jan 25, 2022 at 12:46 PM Ian Rogers <irogers@google.com> wrote:
+> > > > > > >
+> > > > > > > This v2 patch set has the main reference count patch for cpu map from
+> > > > > > > the first set and then adds reference count checking to nsinfo. The
+> > > > > > > reference count checking on nsinfo helped diagnose a data race bug
+> > > > > > > which is fixed in the independent patches 2 and 3.
+> > > > > > >
+> > > > > > > The perf tool has a class of memory problems where reference counts
+> > > > > > > are used incorrectly. Memory/address sanitizers and valgrind don't
+> > > > > > > provide useful ways to debug these problems, you see a memory leak
+> > > > > > > where the only pertinent information is the original allocation
+> > > > > > > site. What would be more useful is knowing where a get fails to have a
+> > > > > > > corresponding put, where there are double puts, etc.
+> > > > > > >
+> > > > > > > This work was motivated by the roll-back of:
+> > > > > > > https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+> > > > > > > where fixing a missed put resulted in a use-after-free in a different
+> > > > > > > context. There was a sense in fixing the issue that a game of
+> > > > > > > wac-a-mole had been embarked upon in adding missed gets and puts.
+> > > > > > >
+> > > > > > > The basic approach of the change is to add a level of indirection at
+> > > > > > > the get and put calls. Get allocates a level of indirection that, if
+> > > > > > > no corresponding put is called, becomes a memory leak (and associated
+> > > > > > > stack trace) that leak sanitizer can report. Similarly if two puts are
+> > > > > > > called for the same get, then a double free can be detected by address
+> > > > > > > sanitizer. This can also detect the use after put, which should also
+> > > > > > > yield a segv without a sanitizer.
+> > > > > > >
+> > > > > > > Adding reference count checking to cpu map was done as a proof of
+> > > > > > > concept, it yielded little other than a location where the use of get
+> > > > > > > could be cleaner by using its result. Reference count checking on
+> > > > > > > nsinfo identified a double free of the indirection layer and the
+> > > > > > > related threads, thereby identifying a data race as discussed here:
+> > > > > > > https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+> > > > > > > Accordingly the dso->lock was extended and use to cover the race.
+> > > > > > >
+> > > > > > > An alternative that was considered was ref_tracker:
+> > > > > > >  https://lwn.net/Articles/877603/
+> > > > > > > ref_tracker requires use of a reference counted struct to also use a
+> > > > > > > cookie/tracker. The cookie is combined with data in a ref_tracker_dir
+> > > > > > > to spot double puts. When an object is finished with leaks can be
+> > > > > > > detected, as with this approach when leak analysis happens. This
+> > > > > > > approach was preferred as it doesn't introduce cookies, spots use
+> > > > > > > after put and appears moderately more neutral to the API. Weaknesses
+> > > > > > > of the implemented approcah are not being able to do adhoc leak
+> > > > > > > detection and a preference for adding an accessor API to structs. I
+> > > > > > > believe there are other issues and welcome suggestions.
+> > > > > >
+> > > > > > And so we've been here before (Dec 2015 to be exact). Namhyung pointed me to:
+> > > > > > https://lore.kernel.org/all/20151209021047.10245.8918.stgit@localhost.localdomain/
+> > > > > > by Masami Hiramatsu. In this work he adds a leak sanitizer style
+> > > > > > reference count checker that will describe locations of puts and gets
+> > > > > > for diagnosis. Firstly that's an awesome achievement! This work is
+> > > > > > different in that it isn't trying to invent a leak sanitizer, it is
+> > > > > > just using the existing one. By adding a level of indirection this
+> > > > > > work can catch use after put and pairs gets with puts to make lifetime
+> > > > > > analysis more automatic. An advantage of Masami's work is that it
+> > > > > > doesn't change data-structures and after the initial patch-set is
+> > > > > > somewhat transparent. Overall I prefer the approach in these patches,
+> > > > > > future patches can look to clean up the API as Masami has.
+> > > > >
+> > > > > Thanks for referring my series :-D The series aimed to solve the refcount
+> > > > > usage issue in the perf which lead the object leaks. At that moment,
+> > > > > I found that there were 2 patterns, refcount start from 0 and start from 1.
+> > > > > That made me confused what I should do for using a object.
+> > > > > But the perf uses linux/refcount.h now, I hope such issue has already gone.
+> > > > > (but the object leakage seems not fixed fully yet, as you found.)
+> > > > >
+> > > > > BTW, I think the introducing UNWRAP_* macro may put a burden on future
+> > > > > development. If it is inevitable, we should consider it as carefully as
+> > > > > possible. Or, it may cause another issue (it is easily missed that the new
+> > > > > patch does not use UNWRAP_* for object reference, because it is natual.)
+> > > > >
+> > > > > So I agree with you that you to clean up the API. :-)
+> > > > > I think we can make yet another refcount.h for user space debugging and
+> > > > > replace it with the linux/refcount.h.
+> > > >
+> > > > Thanks Masami,
+> > > >
+> > > > Agreed on the UNWRAP_ macros, hence wanting to hide them behind
+> > > > accessors. Making accessors could be automated with macros, for
+> > > > example, have a list of variables, have a macro declare the struct
+> > > > using the list, another macro can use the list to declare accessors. I
+> > > > didn't find adding the UNWRAP_ macros in this change particularly
+> > > > burdensome as any use of the wrapping pointer as the original type
+> > > > caused a compile time error telling you what and where to fix. The
+> > > > macro is extra stuff in the way of using just the raw object, but
+> > > > that's fairly typical in C++ with shared_ptr, scoped_lock, etc.
+> > >
+> > > Hi Ian,
+> > >
+> > > Hmm, but such a macro is not usual for C which perf is written in.
+> > > If I understand correctly, you might want to use memory leak
+> > > analyzer to detect refcount leak, and that analyzer will show
+> > > what data structure is leaked.
+> > 
+> > Firstly, thanks for the conversation - this is really useful to
+> > improve the code!
+> > 
+> > I think in an ideal world we'd somehow educate things like address
+> > sanitizer of reference counted data structures and they would do a
+> > better job of tracking gets and puts. The problem is pairing gets and
+> > puts. In C++ you use RAII types so that the destructor ensures a put -
+> > this can be complex when using data types like lists where you want to
+> > move or swap things onto the list, to keep the single pointer
+> > property. In the C code in Linux we use gotos, similarly to how defer
+> > is used in Go. Anyway, the ref_tracker that Eric Dumazet added solved
+> > the get/put pairing problem by adding a cookie that is passed around.
+> > The problem with that is that then the cookie becomes part of the API.
+> > To avoid that the approach here is just to change the original data
+> > type and add in a layer of indirection, that layer has become the
+> > cookie. A benefit of this approach is that once the cookie/indirection
+> > is freed, use of it becomes an obvious failure - we leverage address
+> > sanitizer for use after free.
+> 
+> I went back to that discussion and saw this part where I brainstormed
+> about doing all this in unmodified binaries:
+> 
+> https://lore.kernel.org/all/20151209134138.GB15864@kernel.org/
+> 
+> Even Alexei chimed in and replied to that thinking it was doable:
+> 
+> https://lore.kernel.org/all/20151210033139.GA10056@ast-mbp.thefacebook.com/#t
+> 
+> And nowadays we have much better BPF infrastructure, much faster probes,
+> etc.
 
-Update the dma node name to match pl330 dt schema
+Yeah I think now we (will) have faster user-event[1] too. :)
 
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- arch/arm/boot/dts/exynos5250.dtsi |  8 ++++----
- arch/arm/boot/dts/exynos5410.dtsi |  4 ++--
- arch/arm/boot/dts/exynos5420.dtsi | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+[1] https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/T/#u
 
-diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
-index c6080bb75a62..5baaa7eb71a4 100644
---- a/arch/arm/boot/dts/exynos5250.dtsi
-+++ b/arch/arm/boot/dts/exynos5250.dtsi
-@@ -692,7 +692,7 @@ usb2_phy_gen: phy@12130000 {
- 			samsung,pmureg-phandle = <&pmu_system_controller>;
- 		};
- 
--		pdma0: pdma@121a0000 {
-+		pdma0: dma-controller@121a0000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x121A0000 0x1000>;
- 			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
-@@ -703,7 +703,7 @@ pdma0: pdma@121a0000 {
- 			#dma-requests = <32>;
- 		};
- 
--		pdma1: pdma@121b0000 {
-+		pdma1: dma-controller@121b0000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x121B0000 0x1000>;
- 			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-@@ -714,7 +714,7 @@ pdma1: pdma@121b0000 {
- 			#dma-requests = <32>;
- 		};
- 
--		mdma0: mdma@10800000 {
-+		mdma0: dma-controller@10800000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x10800000 0x1000>;
- 			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-@@ -725,7 +725,7 @@ mdma0: mdma@10800000 {
- 			#dma-requests = <1>;
- 		};
- 
--		mdma1: mdma@11c10000 {
-+		mdma1: dma-controller@11c10000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x11C10000 0x1000>;
- 			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm/boot/dts/exynos5410.dtsi b/arch/arm/boot/dts/exynos5410.dtsi
-index 584ce62361b1..4d797a9abba4 100644
---- a/arch/arm/boot/dts/exynos5410.dtsi
-+++ b/arch/arm/boot/dts/exynos5410.dtsi
-@@ -189,7 +189,7 @@ pinctrl_3: pinctrl@3860000 {
- 			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
--		pdma0: pdma@121a0000 {
-+		pdma0: dma-controller@121a0000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x121a0000 0x1000>;
- 			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
-@@ -200,7 +200,7 @@ pdma0: pdma@121a0000 {
- 			#dma-requests = <32>;
- 		};
- 
--		pdma1: pdma@121b0000 {
-+		pdma1: dma-controller@121b0000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x121b0000 0x1000>;
- 			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-index e23e8ffb093f..29e33cda14c4 100644
---- a/arch/arm/boot/dts/exynos5420.dtsi
-+++ b/arch/arm/boot/dts/exynos5420.dtsi
-@@ -430,7 +430,7 @@ pinctrl_4: pinctrl@3860000 {
- 			power-domains = <&mau_pd>;
- 		};
- 
--		adma: adma@3880000 {
-+		adma: dma-controller@3880000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x03880000 0x1000>;
- 			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
-@@ -442,7 +442,7 @@ adma: adma@3880000 {
- 			power-domains = <&mau_pd>;
- 		};
- 
--		pdma0: pdma@121a0000 {
-+		pdma0: dma-controller@121a0000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x121A0000 0x1000>;
- 			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
-@@ -453,7 +453,7 @@ pdma0: pdma@121a0000 {
- 			#dma-requests = <32>;
- 		};
- 
--		pdma1: pdma@121b0000 {
-+		pdma1: dma-controller@121b0000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x121B0000 0x1000>;
- 			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-@@ -464,7 +464,7 @@ pdma1: pdma@121b0000 {
- 			#dma-requests = <32>;
- 		};
- 
--		mdma0: mdma@10800000 {
-+		mdma0: dma-controller@10800000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x10800000 0x1000>;
- 			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-@@ -475,7 +475,7 @@ mdma0: mdma@10800000 {
- 			#dma-requests = <1>;
- 		};
- 
--		mdma1: mdma@11c10000 {
-+		mdma1: dma-controller@11c10000 {
- 			compatible = "arm,pl330", "arm,primecell";
- 			reg = <0x11C10000 0x1000>;
- 			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
+So instead of allocating an indirect object on get(), we also can define
+an event and send it to the kernel, and run a BPF to analyze it.
+Note that this will *NOT* be able to detect the "use-after-put" unless
+we automatically trace the all object field access ;-)
+
+Hm, apart from this topic, isn't it good to introduce user-space trace
+event( macro)s in perf tools? :-)
+
+Thank you,
+
+> 
+> But anyway, like at that opportunity, I thank you guys for working on
+> such infrastructure, in 2015 several bugs were found and fixed with that
+> refcount debbuger, as is now the case with Ian's attempt.
+> 
+> Thanks!
+> 
+> - Arnaldo
+>  
+> > > If so, maybe you can do the same thing by introducing a dummy
+> > > list node for each data structure which you want to debug.
+> > >
+> > > struct perf_cpu_map__refdebug {
+> > >         struct perf_cpu_map__refdebug *orig;
+> > > };
+> > >
+> > > And expand refcount_t as.
+> > >
+> > > typedef struct refcount_struct {
+> > >         atomic_t refs;
+> > > #ifdef REFCNT_CHECKING
+> > >         void *orig;
+> > > #endif
+> > > } refcount_t;
+> > >
+> > > And change the get/put as below
+> > >
+> > > struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map)
+> > > {
+> > >         if (map) {
+> > > #ifdef REFCNT_CHECKING
+> > >                 struct perf_cpu_map__refdebug *new_node;
+> > > #endif
+> > >                 refcount_inc(&map->refcnt);
+> > > #ifdef REFCNT_CHECKING
+> > >                 new_node = malloc(sizeof(*new_node));
+> > >                 new_node->orig = map->refcnt->orig;
+> > >                 map->refcnt->orig = new_node;
+> > > #endif
+> > >         }
+> > >         return map;
+> > > }
+> > >
+> > > void perf_cpu_map__put(struct perf_cpu_map *map)
+> > > {
+> > >         if (map) {
+> > >                 if (refcount_dec_and_test(&map->refcnt))
+> > >                         cpu_map__delete(map);
+> > >                 else {
+> > > #ifdef REFCNT_CHECKING
+> > >                         struct perf_cpu_map__refdebug *node = map->refcnt->orig;
+> > >
+> > >                         map->refcnt->orig = node->orig;
+> > >                         free(node);
+> > > #endif
+> > >                 }
+> > >         }
+> > > }
+> > >
+> > > This need a bit complex get/put, but no need to change other parts.
+> > 
+> > Adding a list like this gives an ability to say something like of the
+> > current reference count of 3 what indirection objects exist. This
+> > could be useful for diagnosis but you probably want to pair it with a
+> > stack trace, and the approach here is punting that problem to the
+> > address/leak sanitizer. I'm also concerned that there should be a lock
+> > around the list. I think pursuing this ends up with something like
+> > ref_tracker.
+> > 
+> > If we're using indirection, as in my proposal, then adding a common
+> > indirection struct is problematic as anything declared to be a "struct
+> > cpumap" now needs to be either the indirection or the original type -
+> > hence using macros to hide that in the code. If we embed the
+> > information into the refcount_t then we end up with something like
+> > ref_tracker, API problems and losing use-after-put checking. Outside
+> > of the macros, I think there is a simplicity to the approach I've put
+> > forward.
+> > 
+> > > > The
+> > > > question is, is it worth it to make sure use of the reference counted
+> > > > object is correct and misuse is easier to diagnose?
+> > >
+> > > You mean the stackdump for every get/put as I did? That's a good
+> > > question. Let's think what may happen.
+> > >
+> > > For example, if funcA() expects its caller funcB() will put the object
+> > > but actually funcB() doesn't, or the funcC() which is the another
+> > > caller of funcA()) doesn't expect the funcA() gets the object.
+> > >
+> > > funcA() {
+> > >         get(obj);
+> > >         return obj;
+> > > }
+> > >
+> > > funcB() {
+> > >         obj = funcA();
+> > >         ...
+> > >         // wrong! it should do put(obj);
+> > > }
+> > >
+> > > funcC() {
+> > >         obj = funcA();
+> > >         get(obj);               // this is wrong get().
+> > >         ...
+> > >         put(obj);
+> > > }
+> > >
+> > > If we just list the non-released object, both logs seems same because
+> > > funcB()'s get/put pair will be skipped. If the analyzer shows the
+> > > stacktrace when the object was got, maybe we can notice the difference
+> > > of funcB() and funcC() path, but this is the simplest case. funcA()
+> > > can be called from funcB/C via several different functions.
+> > > But perhaps I'm too worried.
+> > 
+> > So in the logs we should see for funcB:
+> > 
+> > Memory leak of ... at:
+> > malloc...
+> > get...
+> > funcA
+> > funcB
+> > ...
+> > 
+> > as the put on the indirection object was missed and this is now a leak
+> > of the indirection object. For funcC we should see:
+> > 
+> > Memory leak of ... at:
+> > malloc..
+> > get..
+> > funcA
+> > funcC
+> > 
+> > So from the stack traces we can see that there is an unpaired get
+> > happening in funcA called from either funcB and funcC, which means we
+> > need to a put there. In the funcC case we can see the put was missed
+> > from a call to funcA, rather than a get it made.
+> > 
+> > As the code in perf is complex, multi-threaded and sometimes
+> > unintentionally racy a get may happen on 1 thread, the object is
+> > placed in a global, the object is put by another thread and also
+> > accessed by a 3rd thread. This is what was happening in the
+> > dso->nsinfo case. The bug there is that there was a double put
+> > happening by the third thread because of a race. Leak sanitizer treats
+> > memory visible from a global as not a leak, this can mean to get the
+> > most information on leaks in perf we need to aggressively
+> > free/delete/deconstruct when terminating so that leaks become visible.
+> > This feels to me like good hygiene, but it could also be argued to be
+> > a tax.
+> > 
+> > Anyway, I think I'm still at the same point I was when I posted these
+> > changes. That an indirection object is the simplest, smallest,
+> > cleanest way to get the most information. I think making the rest of
+> > the reference counted data structures have this feature would be
+> > great, so I'd like to merge the 4 patches here and work to add more. I
+> > think we can also build on that foundation for extra debug
+> > information.
+> > 
+> > Thanks,
+> > Ian
+> > 
+> > > Thank you,
+> > >
+> > > > I think it is near
+> > > > as least offensive as possible while providing the best information -
+> > > > hence being able to solve the dso->nsinfo put data race, that has been
+> > > > a problem to solve up to this point. I'm open to better suggestions
+> > > > though :-)
+> > > >
+> > > > Thanks again,
+> > > > Ian
+> > > >
+> > > > > Thank you,
+> > > > >
+> > > > > --
+> > > > > Masami Hiramatsu <mhiramat@kernel.org>
+> > >
+> > >
+> > > --
+> > > Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> -- 
+> 
+> - Arnaldo
+
+
 -- 
-2.25.1
-
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,88 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD71C4A32C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89604A32C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353529AbiA3AJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:09:16 -0500
-Received: from mga14.intel.com ([192.55.52.115]:7601 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353509AbiA3AJL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:09:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643501351; x=1675037351;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IDotzqPh1Xwsld/kU45ptc58h71ouhRIvIDPnNiiFMc=;
-  b=PtoKqpS/QrqMIJ/PsAvCeQ2aDuLGqAfC/8HtFhbEAKwatOF7B8MYiPWt
-   DD/Mn81Ec3jle5H/dTvTTncbVDHnuCPv6U4Xkec6DRg1wTFiAyu9U8JH+
-   B1E7jskr+9DB2CYYJmUYakaWHHiZJMFyA5R1XeW2oWY+3nYaqTr+Qzwpf
-   lS+TlAWQVR/EFeA5YjyPCTrI1WTcyZ7PPcx2MJdR636Y25ID0cmzq4Wd0
-   I6e/Ne2w31OqYMzBoDXtBqsTMh1t/q9oNuLV1cgFOvfpn9EkePU90hyQb
-   Sy+l+hjUkSq/M8Fj37XA8g97jjc+fPTHlr1MhYAEv/4H2nIg01U7IJcmM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="247524742"
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="247524742"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 16:09:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="522127645"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jan 2022 16:09:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDxmG-000PnT-RH; Sun, 30 Jan 2022 00:09:08 +0000
-Date:   Sun, 30 Jan 2022 08:08:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: /tmp/ccFBm0kb.s: Warning: Can not find match relax hint.  Line: 1875
-Message-ID: <202201300841.3iDnRrAM-lkp@intel.com>
+        id S1353534AbiA3ARs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237062AbiA3ARp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 19:17:45 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCD8C061714;
+        Sat, 29 Jan 2022 16:17:44 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id p63so11472666iod.11;
+        Sat, 29 Jan 2022 16:17:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rANV6nEu2e4bxIniTc4cVrydOQZuaQWRhvzW9XFD3+A=;
+        b=a73qC0JlDQTpWjpvXPlCOcZg7ltvcmoMlMsnPiXEOmWh9FbypkAJLwph+Rx6QFoskH
+         ervZZFAHAYYtbOYzQKbm21NTzuU0dE0BKAZmADO0ZSb4GsIGaWfIwbRW59ik88nKHKlK
+         yuMqC/+ZNtKFas3SZXQvm/zY/UrswHOb+pbAmgO6h8f+maAb2SwT6eyzeu2fKJmBEwQ5
+         Hs1db3dDG8nkncCqL5a18fYSVZfUF6L8R+rCFqb5ac7TcvpUWuDy+hRlT9Rm+vDI0G8T
+         FE5eXmho2mORpMuFGxT5ybvwrL+8YsW7DZeydzqy8yYxi0o7GP6f3iL9Iy+L1Ci4nbv/
+         v/oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rANV6nEu2e4bxIniTc4cVrydOQZuaQWRhvzW9XFD3+A=;
+        b=KMhlAQk8+i0ux14poXcSQZvAjhN9tvM9LPpzRd/HPu1as1XqvsFKxdxkXnS5r0s7GJ
+         QbBEJEBIbsmjILwTxFhCUFr2FdhQPmSnrFkObLKUCp/eKH7plVmJ2vM4jy2YSFch3Vln
+         CacwmT04fUzBnxg2yJusEzBYt0saREodPAGxMK0UkSo3gnlpICOA3lv1ba5WI96UvU4i
+         yDBrUnYwEX/uXRr9i41p2Xg++W9bCtIXafpORocoajtiaAVtjBmRbfu0jZ55OfQmFOD5
+         HWxnweqxRNglqeAxIwWkJCy58ThitmkYFnC0mcE9wT7Qy054uPKPB6NUgDqPPmzeeZJs
+         XEiQ==
+X-Gm-Message-State: AOAM5313tmaVPpUmUI9PzR2oFJIjJYMvOC9FRVkstJEK3cUDXszmtWeF
+        TyVHQ7zQJhZ+qsDVdYiRTnOyfPC83IoF0MMYmHU=
+X-Google-Smtp-Source: ABdhPJwI/rc7H9WwBjrNLup8fE45Vvo6eUPM9DtKYduoCZpu+T4kB4o6Ns/8HOw6vOSBVKbd+aRh3F/WTmlJCApUIM4=
+X-Received: by 2002:a05:6602:2d95:: with SMTP id k21mr8723691iow.107.1643501863887;
+ Sat, 29 Jan 2022 16:17:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220104062547.2103016-1-peng.fan@oss.nxp.com> <DU0PR04MB941793A918C5E08C9A48BCAC88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB941793A918C5E08C9A48BCAC88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Sat, 29 Jan 2022 18:17:33 -0600
+Message-ID: <CABb+yY2tFtwFvWGh5OtHYwfvkjv3z51CD3cyemq=4Vd-YnY6aQ@mail.gmail.com>
+Subject: Re: [PATCH 0/7] mailbox: imx: misc fix and SECO MU support
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexei,
+On Wed, Jan 26, 2022 at 2:28 AM Peng Fan <peng.fan@nxp.com> wrote:
+>
+> > Subject: [PATCH 0/7] mailbox: imx: misc fix and SECO MU support
+>
+> Ping..
+>
+This adds new features, so it will go in the next release.
+Meanwhile you may want to fix the issue in 3/7 reported by lkp test bot.
 
-FYI, the error/warning still remains.
+thanks.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f8c7e4ede46fe63ff10000669652648aab09d112
-commit: 29db4bea1d10b73749d7992c1fc9ac13499e8871 bpf: Prepare relo_core.c for kernel duty.
-date:   8 weeks ago
-config: nds32-randconfig-m031-20220130 (https://download.01.org/0day-ci/archive/20220130/202201300841.3iDnRrAM-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29db4bea1d10b73749d7992c1fc9ac13499e8871
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 29db4bea1d10b73749d7992c1fc9ac13499e8871
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
-   tools/lib/bpf/relo_core.c: In function 'bpf_core_apply_relo_insn':
-   tools/lib/bpf/relo_core.c:1346:1: warning: the frame size of 1160 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    1346 | }
-         | ^
-   /tmp/ccFBm0kb.s: Assembler messages:
->> /tmp/ccFBm0kb.s: Warning: Can not find match relax hint.  Line: 1875
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Thanks,
+> Peng.
+>
+> >
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > This patchset includes a few fixes for low power and i.MX8 SECO MU support
+> >
+> > Franck LENORMAND (1):
+> >   mailbox: imx: add i.MX8 SECO MU support
+> >
+> > Peng Fan (2):
+> >   dt-bindings: mailbox: imx-mu: add i.MX8 SECO MU support
+> >   mailbox: imx: introduce rxdb callback
+> >
+> > Ranjani Vaidyanathan (2):
+> >   mailbox: imx: Add support for identifying SCU wakeup source from sysfs
+> >   mailbox: imx: enlarge timeout while reading/writing messages to SCFW
+> >
+> > Robin Gong (2):
+> >   mailbox: imx: fix wakeup failure from freeze mode
+> >   mailbox: imx: fix crash in resume on i.mx8ulp
+> >
+> >  .../devicetree/bindings/mailbox/fsl,mu.yaml   |   1 +
+> >  drivers/mailbox/imx-mailbox.c                 | 249
+> > +++++++++++++++++-
+> >  2 files changed, 243 insertions(+), 7 deletions(-)
+> >
+> > --
+> > 2.25.1
+>

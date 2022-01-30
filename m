@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2366F4A39AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 22:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3814A39C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 22:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356434AbiA3VEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 16:04:48 -0500
-Received: from isilmar-4.linta.de ([136.243.71.142]:51612 "EHLO
-        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238044AbiA3VEl (ORCPT
+        id S1356423AbiA3VOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 16:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232933AbiA3VO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:04:41 -0500
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 19B112013FC;
-        Sun, 30 Jan 2022 21:04:40 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id 0194280807; Sun, 30 Jan 2022 22:03:22 +0100 (CET)
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     tytso@mit.edu, Jason@zx2c4.com
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH 2/2] random: only call crng_finalize_init() for primary_crng
-Date:   Sun, 30 Jan 2022 22:03:20 +0100
-Message-Id: <20220130210320.3997-2-linux@dominikbrodowski.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220130210320.3997-1-linux@dominikbrodowski.net>
-References: <20220130210320.3997-1-linux@dominikbrodowski.net>
+        Sun, 30 Jan 2022 16:14:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E937C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 13:14:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y6C64rp3OckgZemaQ6wbEiWdl97OAVw+WvBx+s5/qQU=; b=Oa490mYU6J3F82zaqC7vMK1vrL
+        c4uVvh0LgiZWlQ5mahycnGEzdTUilgtm0Zw9UYzrGiinrmqeOu5JGRr7eopzZiEixCt++LEDO+geZ
+        EIOlVaPFaEq8InEDBJQMwKbLJINaRB7M3/2MKZsZacijgO6r6SgREtYP4fFj8SOuwCI6CsljdpT9V
+        UtnnUQ/aHKwVk7tqUl+VJpPmk4JPPkGLfWFjypNghBfo4+KYUGIiomGkuFx5uvNKhfYGHPl5GUtAc
+        u64IN0IEOb6WdIeZ4Uu3Nelh5zMnXa0KecGDlLXve9csBHKaNIs6V13s9WFTlnBBATbN1nTZ6LBsI
+        wsbPkgQA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEHWf-008nwA-Lc; Sun, 30 Jan 2022 21:14:21 +0000
+Date:   Sun, 30 Jan 2022 21:14:21 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Rientjes <rientjes@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: Re: [PATCH] mm/hwpoison: Check the subpage, not the head page
+Message-ID: <Yfb/rVg1HYHkKBgO@casper.infradead.org>
+References: <20220130013042.1906881-1-willy@infradead.org>
+ <dcfa1ee5-1512-5e49-92c2-4a33ab59080@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcfa1ee5-1512-5e49-92c2-4a33ab59080@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-crng_finalize_init() returns instantly if it is called for another pool
-than primary_crng. The test whether crng_finalize_init() is still required
-can be moved to the relevant caller in crng_reseed(), and
-crng_need_final_init can be reset to false if crng_finalize_init() is
-called with workqueues ready. Then, no previous callsite will call
-crng_finalize_init() unless it is needed, and we can get rid of the
-superfluous function parameter. 
+On Sun, Jan 30, 2022 at 12:58:17PM -0800, David Rientjes wrote:
+> On Sun, 30 Jan 2022, Matthew Wilcox (Oracle) wrote:
+> 
+> > Hardware poison is tracked on a per-page basis, not on the head page.
+> > 
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > ---
+> >  mm/rmap.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/mm/rmap.c b/mm/rmap.c
+> > index 6a1e8c7f6213..09b08888120e 100644
+> > --- a/mm/rmap.c
+> > +++ b/mm/rmap.c
+> > @@ -1553,7 +1553,7 @@ static bool try_to_unmap_one(struct page *page, struct vm_area_struct *vma,
+> >  		/* Update high watermark before we lower rss */
+> >  		update_hiwater_rss(mm);
+> >  
+> > -		if (PageHWPoison(page) && !(flags & TTU_IGNORE_HWPOISON)) {
+> > +		if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+> >  			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> >  			if (PageHuge(page)) {
+> >  				hugetlb_count_sub(compound_nr(page), mm);
+> > @@ -1873,7 +1873,7 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
+> >  			 * memory are supported.
+> >  			 */
+> >  			subpage = page;
+> > -		} else if (PageHWPoison(page)) {
+> > +		} else if (PageHWPoison(subpage)) {
+> >  			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> >  			if (PageHuge(page)) {
+> >  				hugetlb_count_sub(compound_nr(page), mm);
+> 
+> This looks correct.  Correct me if I'm wrong that this is for consistency 
+> and cleanup and that there is no bug being fixed by this, however.
 
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/char/random.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index d332054bbbb6..7ed910c23858 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -800,10 +800,8 @@ static void __init crng_initialize_primary(void)
- 	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
- }
- 
--static void crng_finalize_init(struct crng_state *crng)
-+static void crng_finalize_init(void)
- {
--	if (crng != &primary_crng || crng_init >= 2)
--		return;
- 	if (!system_wq) {
- 		/* We can't call numa_crng_init until we have workqueues,
- 		 * so mark this for processing later. */
-@@ -814,6 +812,7 @@ static void crng_finalize_init(struct crng_state *crng)
- 	invalidate_batched_entropy();
- 	numa_crng_init();
- 	crng_init = 2;
-+	crng_need_final_init = false;
- 	process_random_ready_list();
- 	wake_up_interruptible(&crng_init_wait);
- 	kill_fasync(&fasync, SIGIO, POLL_IN);
-@@ -980,7 +979,8 @@ static void crng_reseed(struct crng_state *crng, bool use_input_pool)
- 	memzero_explicit(&buf, sizeof(buf));
- 	WRITE_ONCE(crng->init_time, jiffies);
- 	spin_unlock_irqrestore(&crng->lock, flags);
--	crng_finalize_init(crng);
-+	if (crng == &primary_crng && crng_init < 2)
-+		crng_finalize_init();
- }
- 
- static void _extract_crng(struct crng_state *crng, u8 out[CHACHA_BLOCK_SIZE])
-@@ -1697,7 +1697,7 @@ int __init rand_initialize(void)
- {
- 	init_std_data();
- 	if (crng_need_final_init)
--		crng_finalize_init(&primary_crng);
-+		crng_finalize_init();
- 	crng_initialize_primary();
- 	crng_global_init_time = jiffies;
- 	if (ratelimit_disable) {
--- 
-2.35.1
-
+Oh, no, I think there's a real bug here.  It's just that we're looking
+at an uncommon & hence rarely-tested scenario -- a memory fault in the
+middle of a THP (in mainline; obviously it'll be a little more common
+with arbitrary sized folios).  I don't do HWPoison testing myself, so
+this was by inspection and not from testing.  A scenario where things
+would go wrong is a memory error on a non-head-page would go unnoticed
+when migrating or unmapping.  Contrariwise, if there's a hardware error
+on a head page, all the subpages get treated as poisoned, even though
+they shouldn't be.

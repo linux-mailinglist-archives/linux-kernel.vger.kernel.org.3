@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FA94A33A8
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 05:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8894A33DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 05:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354148AbiA3EM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 23:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S1354250AbiA3E2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 23:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353820AbiA3EMY (ORCPT
+        with ESMTP id S1354192AbiA3E23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 23:12:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9110CC061714;
-        Sat, 29 Jan 2022 20:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=dNnTgGunISh6IkejeLTnvBS8rg0J0+ka5G45qlCqRVI=; b=aR+SGtya0LgPBO1+v6Rmz/gGiW
-        plaHy7iOoVw+9kt2Hkwji930xwcb6O1J7BojatR2Jmm6ZTc5+aHnmm1lz09Ty7a68OLbJKYHAXRO+
-        fFvfC/+UPcM4Hxi4y/8KBnJYeE721bqFvu/KceHfDGoCGxxPPgalO5s1Oe31RBSPwzUGtT4BgAn46
-        JltjowvNtUdd/y4rq+6luS3KhjAWPbkFythIKNHaC514Mq4h0+jlSAeyn68uQdTG3bPcNuQCDKHF3
-        CIpsOvJVksIuiFZjnRnhkZGL73XAJZ9mVPre6E4JcQCszD+MI93/FQteY0fPfP1QL+UtXKjNLNp8v
-        mowtgqSQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nE1Zd-005sK9-N6; Sun, 30 Jan 2022 04:12:22 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: typec: mux: select not-visible INTEL_SCU_IPC
-Date:   Sat, 29 Jan 2022 20:12:20 -0800
-Message-Id: <20220130041220.9968-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Sat, 29 Jan 2022 23:28:29 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5084C061762
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 20:28:24 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id p5so30332829ybd.13
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 20:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
+         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
+         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
+         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
+         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
+         5U2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=Vvf9Z/oruWiGrp9VazYwYmpN7yKrwr+bDsvoo0G3HjYVhO6pplhIgjh+QZmEIuj7JY
+         1DYuut20IVR9FOu65/h6t5OhFjgK7wMD7DRenmlKryvPOJPK7kSxGX5+8VKo2yxNKF+Z
+         b2zRe6ZmTfs/+ig4LU2jGni0W1n694e58Fnm2NBqDwkULicxQec8+bRkRaEQnyrS///j
+         JN4qmhiZcH6hXSKL3qUfbl3XODXFCDjt8sooje4GFVA2Ff+y1ShdpuYlwEjM6NRD3suP
+         rXoE3KiYnfQ91BFkT1pDkFRLGGbcnsHsKXdwIzd3k4VxUnSvND/c35ARk68VAmkk5ykU
+         +DGg==
+X-Gm-Message-State: AOAM533p+QpXJt9w7EZDlDAIg4M2qSllp3tK32xgt4KOlybOefrtY6Z6
+        AL/ImE6VtXCETv/dDOf0RcnAGOv9yY50PotmM0vb1ygySgw=
+X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
+X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
+ Sat, 29 Jan 2022 20:28:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
+ 20:28:13 -0800 (PST)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
+Date:   Sun, 30 Jan 2022 05:28:13 +0100
+Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
+Subject: Hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use "select INTEL_SCU_IPC" instead of depending on it since it is
-not a visible Kconfig symbol and it may not otherwise be set/enabled.
+You have been compensated with the sum of 9.5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/typec/mux/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks my
 
---- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
-+++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
-@@ -12,7 +12,7 @@ config TYPEC_MUX_PI3USB30532
- config TYPEC_MUX_INTEL_PMC
- 	tristate "Intel PMC mux control"
- 	depends on ACPI
--	depends on INTEL_SCU_IPC
-+	select INTEL_SCU_IPC
- 	select USB_ROLE_SWITCH
- 	help
- 	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
+mrs bill chantal

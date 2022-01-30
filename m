@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BF04A3857
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0934A3858
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355863AbiA3TEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 14:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S1355824AbiA3TEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 14:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355631AbiA3TDk (ORCPT
+        with ESMTP id S1355675AbiA3TDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 14:03:40 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC6BC061714
+        Sun, 30 Jan 2022 14:03:41 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D8FC061714
         for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:03:40 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id p15so36012657ejc.7
+Received: by mail-ed1-x530.google.com with SMTP id w25so21685368edt.7
         for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:03:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6O9P4Kn3wzm5lIy7NIDIKwmOMq5SzJG+TZSo9CxgId8=;
-        b=Ddhz1OwGjmXtYEI7suKaTmxXESQgm5tcS1Ejzb/nuKsQLkDzk3GXMstz+jinBK/R2l
-         MmgEGFR7llBRoYe6yILkxTSbwxhgn7W1tplCKEAe02SjH/holnPS7h17MouXbQSi+XHP
-         CWu7710SoiOrmJh9YRDzOgzVKuJubZNNSAHVYCtPPXUpdpLD/54oU0iaIz7QGYrmpBrz
-         NfL6BA5lihH1Ry0EVsh/vMoBYGxzVTULlxaiyykzhvKDbbIqOn3H0pp5tg2HqWu1QJrI
-         U9LaCaobBbo3VXuEELpF8Uk/NDfmg21akFM95slHOYixiilIee8dGoMDw7qRYkgGj/b7
-         p84Q==
+        bh=jhz6BST1YYjMMuHmLP73e+gH+hSHU2pinLOrqLycFXQ=;
+        b=Ox76lBFdBm6M7RVdiI6u3f8fcLujt3iSnk/iBR65DY6/6AVtkMU4lr7EAAc7KOYcW9
+         SOvvIMDMx0/57eWA1T75WMs7mmRF4z3md5NgnEQxt68yljaZ7XVqtJAgCdfu6Xb2Fynt
+         n0nTr9sAGvpx5ERcAtEiRfGgOMa1/TMDw6zZSadfS4P5CxjKV4bKNQVZL43QV8kJHcqD
+         4XbaQ8o73yadah6lih4JUihIDu77w7Y3HDpD0O9rBMpTIP7VnAOByHqT2uR2wujgYOhA
+         GHvbTep4GLLh8DoNZfpDvGJYxxYyUJtW0pC55mfAQC9HjdScllNeaMfuT+nT6WGOnOsP
+         cgJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6O9P4Kn3wzm5lIy7NIDIKwmOMq5SzJG+TZSo9CxgId8=;
-        b=I8WNifJO3bF2EFPudeOznCv582iwx4xQL/v3b7rJVIQtol52y+GfsT0Z57VuGxz1ks
-         9sPPJXe6Vbe92Ec0ROeELzocW01YzDoTam4Zba3ksHXzWh//LDr9wmDHmvqfSqsMvav0
-         VXz9McKudlqtNqda0GNgVZnrlUannAIJZF+gfiIj7UdAHEEAshrJ4sLjWaSMgMoRfdvp
-         2Q2sMAhakUH6rZ92h0+VM9R52Fa3KYpmCOPoWxQBE3X2eBuh6y54wrRM5HHcGVyaxmVn
-         N+F6XmAdapRDBI1S4Zq2BbmcTxBh1+rWkTpMnayY2IrunMDRkocxx/gJmOzKW1EKw9eo
-         n1dg==
-X-Gm-Message-State: AOAM532qG0b0zZ8hOdDskZD138RlEb30aCN5wEohNrEWXkb0bsKozAhn
-        5+9w8Ix541V1LAwKQCWXMaM=
-X-Google-Smtp-Source: ABdhPJw/y5MTRn6TA4GvLFeY4yLkecZYWSgilPqzGI9fa++8QTlZWpkwniwsyidm4WRwxGB+wuQSTA==
-X-Received: by 2002:a17:907:213c:: with SMTP id qo28mr14987414ejb.325.1643569418851;
-        Sun, 30 Jan 2022 11:03:38 -0800 (PST)
+        bh=jhz6BST1YYjMMuHmLP73e+gH+hSHU2pinLOrqLycFXQ=;
+        b=S4GQidItyVezx00TyRjEUmAYmGHxpXZEv6pRo/WiN7fIvguk8lWeqdDMK6d51/aArY
+         2XZ8eK9YdAd9CHHVRgQZ8MuJBJM5cMvts2vLi7z5juimFQBqKNyjbSK+4IjreTAwVxXM
+         Kf6n1KjBNGqU6T1H2wOnzRfCiTMa4HEJ3kOlKT5x4GIGNLZe63VD8hm7ZkYIDHpOGs1P
+         iFz6kAgi6f0POVD8xfr+f6qhpZ+UCbC6tRKtTa5VXjFCwOLTW/vdoKyUM4OZ/3N+H+eD
+         fA53+B84PeOhXRq1JJWAwiUSrEgUngdVD7Uy1XlSy/N3uclv5wUVtZKWEJMT7egED6vm
+         s6XQ==
+X-Gm-Message-State: AOAM532algPgeEBL5kudiaga6KiZzRpJmEAHLTFzp94vuqlunhlFvuCB
+        7+ry4Hg4V1+HFK52TpbNaVg=
+X-Google-Smtp-Source: ABdhPJz8vOfx1TDw8IeMyjtvxHmdPrldqreTPTyFUgKeavy8P0v5YZjxqhewcj9RZMcmY+tdZfOR8Q==
+X-Received: by 2002:a50:d907:: with SMTP id t7mr17855349edj.59.1643569419590;
+        Sun, 30 Jan 2022 11:03:39 -0800 (PST)
 Received: from localhost.localdomain (ip5f5abb5a.dynamic.kabel-deutschland.de. [95.90.187.90])
         by smtp.gmail.com with ESMTPSA id n3sm921124ejr.6.2022.01.30.11.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 11:03:38 -0800 (PST)
+        Sun, 30 Jan 2022 11:03:39 -0800 (PST)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 06/12] staging: r8188eu: remove HW_VAR_AC_PARAM_BK
-Date:   Sun, 30 Jan 2022 20:03:15 +0100
-Message-Id: <20220130190321.7172-7-straube.linux@gmail.com>
+Subject: [PATCH 07/12] staging: r8188eu: remove HW_VAR_MEDIA_STATUS
+Date:   Sun, 30 Jan 2022 20:03:16 +0100
+Message-Id: <20220130190321.7172-8-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220130190321.7172-1-straube.linux@gmail.com>
 References: <20220130190321.7172-1-straube.linux@gmail.com>
@@ -65,55 +65,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove HW_VAR_AC_PARAM_BK from SetHwReg8188EU() and call
-rtw_write32() directly.
+Remove HW_VAR_MEDIA_STATUS from SetHwReg8188EU() and call
+rtw_read8() and rtw_write8() directly.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_wlan_util.c | 2 +-
- drivers/staging/r8188eu/hal/usb_halinit.c    | 3 ---
+ drivers/staging/r8188eu/core/rtw_wlan_util.c | 6 +++++-
+ drivers/staging/r8188eu/hal/usb_halinit.c    | 9 ---------
  drivers/staging/r8188eu/include/hal_intf.h   | 1 -
- 3 files changed, 1 insertion(+), 5 deletions(-)
+ 3 files changed, 5 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index ac1ab5c6b169..62a96e59b00d 100644
+index 62a96e59b00d..d28929a95108 100644
 --- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
 +++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -558,7 +558,7 @@ void WMMOnAssocRsp(struct adapter *padapter)
- 			edca[XMIT_BE_QUEUE] = acParm;
- 			break;
- 		case 0x1:
--			SetHwReg8188EU(padapter, HW_VAR_AC_PARAM_BK, (u8 *)(&acParm));
-+			rtw_write32(padapter, REG_EDCA_BK_PARAM, acParm);
- 			edca[XMIT_BK_QUEUE] = acParm;
- 			break;
- 		case 0x2:
+@@ -286,7 +286,11 @@ void Switch_DM_Func(struct adapter *padapter, u32 mode, u8 enable)
+ 
+ static void Set_NETYPE0_MSR(struct adapter *padapter, u8 type)
+ {
+-	SetHwReg8188EU(padapter, HW_VAR_MEDIA_STATUS, (u8 *)(&type));
++	u8 val8;
++
++	val8 = rtw_read8(padapter, MSR) & 0x0c;
++	val8 |= type;
++	rtw_write8(padapter, MSR, val8);
+ }
+ 
+ void Set_MSR(struct adapter *padapter, u8 type)
 diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 82dc0324fbab..3d05bae459b7 100644
+index 3d05bae459b7..96088a344d47 100644
 --- a/drivers/staging/r8188eu/hal/usb_halinit.c
 +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1346,9 +1346,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 		haldata->AcParam_BE = ((u32 *)(val))[0];
- 		rtw_write32(Adapter, REG_EDCA_BE_PARAM, ((u32 *)(val))[0]);
- 		break;
--	case HW_VAR_AC_PARAM_BK:
--		rtw_write32(Adapter, REG_EDCA_BK_PARAM, ((u32 *)(val))[0]);
+@@ -1068,15 +1068,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+ 	struct odm_dm_struct *podmpriv = &haldata->odmpriv;
+ 
+ 	switch (variable) {
+-	case HW_VAR_MEDIA_STATUS:
+-		{
+-			u8 val8;
+-
+-			val8 = rtw_read8(Adapter, MSR) & 0x0c;
+-			val8 |= *((u8 *)val);
+-			rtw_write8(Adapter, MSR, val8);
+-		}
 -		break;
- 	case HW_VAR_ACM_CTRL:
- 		{
- 			u8 acm_ctrl = *((u8 *)val);
+ 	case HW_VAR_SET_OPMODE:
+ 		hw_var_set_opmode(Adapter, val);
+ 		break;
 diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 03566f317513..169f1cccafdb 100644
+index 169f1cccafdb..2912151c7830 100644
 --- a/drivers/staging/r8188eu/include/hal_intf.h
 +++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -32,7 +32,6 @@ enum hw_variables {
- 	HW_VAR_CAM_WRITE,
- 	HW_VAR_CAM_READ,
- 	HW_VAR_AC_PARAM_BE,
--	HW_VAR_AC_PARAM_BK,
- 	HW_VAR_ACM_CTRL,
- 	HW_VAR_AMPDU_MIN_SPACE,
- 	HW_VAR_AMPDU_FACTOR,
+@@ -9,7 +9,6 @@
+ #include "Hal8188EPhyCfg.h"
+ 
+ enum hw_variables {
+-	HW_VAR_MEDIA_STATUS,
+ 	HW_VAR_SET_OPMODE,
+ 	HW_VAR_BSSID,
+ 	HW_VAR_INIT_RTS_RATE,
 -- 
 2.34.1
 

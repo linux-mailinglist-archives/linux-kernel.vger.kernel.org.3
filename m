@@ -2,73 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 871974A34C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 08:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF124A34C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 08:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354277AbiA3HDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 02:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S1354284AbiA3HJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 02:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354238AbiA3HDs (ORCPT
+        with ESMTP id S1353446AbiA3HJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 02:03:48 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DE9C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 23:03:45 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id a8so32062939ejc.8
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 23:03:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=Blcn4/1fZwRWt2WeKwSyjSc89EgxDar6priCiL/iajE=;
-        b=nSWbSty0f+WbhduU3c7kEMc/dkb4SJMIGeFE4x8GXmUJ9/HyrmehIydktCXXTpd0L5
-         xlP8ofiaGAwcdxHhxGK705AAtHKluup2T5c+s8IxezP+Fxwc2xOtfKoDFyFxY94Nn1lc
-         KnXMhQQUAipY0JbtbtCY4I8z/oEUL4KrXdkxJUxfOiIqq0itlrxijyeN73PiefatG2zC
-         XCoE8oOasOfqTkGWTcY0DfwdbyHccJsUUBPBMfSaV9sXc/m+EeRRkHNMXcY6dFKIoWgj
-         /Hhxq7TxOx8tbb13kek8Tr6FTKJZuIZ6fCdXvwICkjenyY6kRyjob//2j7/0NSA3wGV4
-         XQfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=Blcn4/1fZwRWt2WeKwSyjSc89EgxDar6priCiL/iajE=;
-        b=PXBIRVLoy8Dx1qKA8sY+AJLd1he3DZULJuWPE7OgU6PGXt/rPnkYsCXb84d7EBrLr6
-         RkUDj/unR5r4bviAjh2EOUXAtNIGofIgYEI0uN+iXTX1D1Rp0tWMAHQBcX9xxrXRICmv
-         hn0YMVkCdOvNcBMx0skKl6MotHgLfQ349m7XBmGNQpxIO+oPktab58+rV3patLo8GQtF
-         s74xIGY6++QFGC8UYMZSp0hH0KOnfHwZcJsL2KzkTV1ICI5h5Lg9yKlMiC9w8REfFShG
-         cDKJHAfMavy4TffABF8U0aO+XV68DSR/wtsSjpKNIIrGIXZk0heDV+r/sOenlkxLcxwt
-         lA/w==
-X-Gm-Message-State: AOAM532mVmCrrBAB+1TdVgAOOJ4JFWdfHeR4alVPu471rylrB94tg5G5
-        IX36ehkPQFZWuOJVtDQDmg8dyQEBtYK5lJVebb0=
-X-Google-Smtp-Source: ABdhPJwOsDu/rN67+W8qW6ELE7Q0m5qec7OAmm9YDYCgUWdn3bONj6hb10rfoXoLvVKP0AY3C7oKT1YzD9rhI9CP1hE=
-X-Received: by 2002:a17:906:7949:: with SMTP id l9mr12893300ejo.296.1643526224417;
- Sat, 29 Jan 2022 23:03:44 -0800 (PST)
-MIME-Version: 1.0
-Sender: kaboremarlaine689@gmail.com
-Received: by 2002:ab4:aaa7:0:0:0:0:0 with HTTP; Sat, 29 Jan 2022 23:03:44
- -0800 (PST)
-From:   "Mr. Ibrahim Salif" <ibrahimsalif516@gmail.com>
-Date:   Sun, 30 Jan 2022 07:03:44 +0000
-X-Google-Sender-Auth: -e-5_vZ7rpg0v3zGJm6ELTj6w4I
-Message-ID: <CAJpnYxyamhOvC8QbSo==rtTckPW6aAZV1wD9wakDbAN7X5G17Q@mail.gmail.com>
-Subject: ATTENTION PLEASE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 30 Jan 2022 02:09:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F144C061714;
+        Sat, 29 Jan 2022 23:09:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCAA961011;
+        Sun, 30 Jan 2022 07:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2352C340E4;
+        Sun, 30 Jan 2022 07:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643526578;
+        bh=tTPAQtDIGEnVU5RkyCGGJre+Trs0HwTrP9s3QlyXJhE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gPCm/gd/id+aX9D4MmZSvMMWgj2AiD2rJHvaeUVb6hHGFn+AdkZ/aX5PfGv00dV/Q
+         9C+8jCi2MEBGwfHLvU42qDi/F4YIJGootA83y3LVIpGyt9UuNZ9h0JsazIhAxVo94Q
+         b0HXMGE0AHiCJCOIQhtpI/lv3EKLdEcGaMhkCjUQaL1+NjMAhckAJ4K56+DK+Q9N7D
+         ql2uC1uSOK1X3h+BdjxgO0VhT92a39iB+g8WBI9g31EcowZ61+pWiQawajtvlHh+vI
+         dWqZ5Edp8xMcfEmgSudT+q6PWE0DIbCK0JsaKN+ZM90mCqTZtXTTgRcgby1mVOv5aa
+         mAg+GaFN4f4aw==
+Date:   Sun, 30 Jan 2022 16:09:32 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v6 07/10] fprobe: Add exit_handler support
+Message-Id: <20220130160932.30f7d4bd0af58eda4ea263c8@kernel.org>
+In-Reply-To: <164338039561.2429999.13188362820100127912.stgit@devnote2>
+References: <164338031590.2429999.6203979005944292576.stgit@devnote2>
+        <164338039561.2429999.13188362820100127912.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear friend,
+On Fri, 28 Jan 2022 23:33:15 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-My name is Mr. Ibrahim Salif, I am a staff working with the Bank of
-Africa here in Ouagadougou,Burkina Faso.
+> Add exit_handler to fprobe. fprobe + rethook allows us to hook the kernel
+> function return. The rethook will be enabled only if the
+> fprobe::exit_handler is set.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  Changes in v6:
+>   - Update according to the fprobe update.
+>  Changes in v5:
+>   - Add dependency for HAVE_RETHOOK.
+>  Changes in v4:
+>   - Check fprobe is disabled in the exit handler.
+>  Changes in v3:
+>   - Make sure to clear rethook->data before free.
+>   - Handler checks the data is not NULL.
+>   - Free rethook only if the rethook is using.
+> ---
+>  include/linux/fprobe.h |    6 ++
+>  kernel/trace/Kconfig   |    2 +
+>  kernel/trace/fprobe.c  |  127 +++++++++++++++++++++++++++++++++++++++++++-----
+>  3 files changed, 123 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
+> index b920dc1b2969..acfdcc37acf6 100644
+> --- a/include/linux/fprobe.h
+> +++ b/include/linux/fprobe.h
+> @@ -5,19 +5,25 @@
+>  
+>  #include <linux/compiler.h>
+>  #include <linux/ftrace.h>
+> +#include <linux/rethook.h>
+>  
+>  /**
+>   * struct fprobe - ftrace based probe.
+>   * @ops: The ftrace_ops.
+>   * @nmissed: The counter for missing events.
+>   * @flags: The status flag.
+> + * @rethook: The rethook data structure. (internal data)
+>   * @entry_handler: The callback function for function entry.
+> + * @exit_handler: The callback function for function exit.
+>   */
+>  struct fprobe {
+>  	struct ftrace_ops	ops;
+>  	unsigned long		nmissed;
+>  	unsigned int		flags;
+> +	struct rethook		*rethook;
+> +
+>  	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+> +	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+>  };
+>  
+>  #define FPROBE_FL_DISABLED	1
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 9e66fd29d94e..3c1f808969f1 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -245,6 +245,8 @@ config FPROBE
+>  	bool "Kernel Function Probe (fprobe)"
+>  	depends on FUNCTION_TRACER
+>  	depends on DYNAMIC_FTRACE_WITH_REGS
+> +	depends on HAVE_RETHOOK
+> +	select RETHOOK
+>  	default n
+>  	help
+>  	  This option enables kernel function probe (fprobe) based on ftrace,
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 081aef6bf531..408dcb6503fe 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -8,12 +8,22 @@
+>  #include <linux/fprobe.h>
+>  #include <linux/kallsyms.h>
+>  #include <linux/kprobes.h>
+> +#include <linux/rethook.h>
+>  #include <linux/slab.h>
+>  #include <linux/sort.h>
+>  
+> +#include "trace.h"
+> +
+> +struct fprobe_rethook_node {
+> +	struct rethook_node node;
+> +	unsigned long entry_ip;
+> +};
+> +
+>  static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+> +	struct fprobe_rethook_node *fpr;
+> +	struct rethook_node *rh;
+>  	struct fprobe *fp;
+>  	int bit;
+>  
+> @@ -30,10 +40,37 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  	if (fp->entry_handler)
+>  		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
+>  
+> +	if (fp->exit_handler) {
+> +		rh = rethook_try_get(fp->rethook);
+> +		if (!rh) {
+> +			fp->nmissed++;
+> +			goto out;
+> +		}
+> +		fpr = container_of(rh, struct fprobe_rethook_node, node);
+> +		fpr->entry_ip = ip;
+> +		rethook_hook(rh, ftrace_get_regs(fregs));
+> +	}
+> +
+> +out:
+>  	ftrace_test_recursion_unlock(bit);
+>  }
+>  NOKPROBE_SYMBOL(fprobe_handler);
+>  
+> +static void fprobe_exit_handler(struct rethook_node *rh, void *data,
+> +				struct pt_regs *regs)
+> +{
+> +	struct fprobe *fp = (struct fprobe *)data;
+> +	struct fprobe_rethook_node *fpr;
+> +
+> +	if (!fp || fprobe_disabled(fp))
+> +		return;
+> +
+> +	fpr = container_of(rh, struct fprobe_rethook_node, node);
+> +
+> +	fp->exit_handler(fp, fpr->entry_ip, regs);
+> +}
+> +NOKPROBE_SYMBOL(fprobe_exit_handler);
+> +
+>  /* Convert ftrace location address from symbols */
+>  static unsigned long *get_ftrace_locations(const char **syms, int num)
+>  {
+> @@ -76,6 +113,48 @@ static void fprobe_init(struct fprobe *fp)
+>  	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
+>  }
+>  
+> +static int fprobe_init_rethook(struct fprobe *fp, int num)
+> +{
+> +	int i, size;
+> +
+> +	if (num < 0)
+> +		return -EINVAL;
+> +
+> +	if (!fp->exit_handler) {
+> +		fp->rethook = NULL;
+> +		return 0;
+> +	}
+> +
+> +	/* Initialize rethook if needed */
+> +	size = num * num_possible_cpus() * 2;
+> +	if (size < 0)
+> +		return -E2BIG;
+> +
+> +	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler);
+> +	for (i = 0; i < size; i++) {
+> +		struct rethook_node *node;
+> +
+> +		node = kzalloc(sizeof(struct fprobe_rethook_node), GFP_KERNEL);
+> +		if (!node) {
+> +			rethook_free(fp->rethook);
+> +			fp->rethook = NULL;
+> +			return -ENOMEM;
+> +		}
+> +		rethook_add_node(fp->rethook, node);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void fprobe_fail_cleanup(struct fprobe *fp)
+> +{
+> +	if (fp->rethook) {
+> +		/* Don't need to cleanup rethook->handler because this is not used. */
+> +		rethook_free(fp->rethook);
+> +		fp->rethook = NULL;
+> +	}
+> +	ftrace_free_filter(&fp->ops);
+> +}
+> +
+>  /**
+>   * register_fprobe() - Register fprobe to ftrace by pattern.
+>   * @fp: A fprobe data structure to be registered.
+> @@ -89,6 +168,7 @@ static void fprobe_init(struct fprobe *fp)
+>   */
+>  int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter)
+>  {
+> +	struct ftrace_hash *hash;
+>  	unsigned char *str;
+>  	int ret, len;
+>  
+> @@ -113,10 +193,21 @@ int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter
+>  			goto out;
+>  	}
+>  
+> -	ret = register_ftrace_function(&fp->ops);
+> +	/* TODO:
+> +	 * correctly calculate the total number of filtered symbols
+> +	 * from both filter and notfilter.
+> +	 */
+> +	hash = fp->ops.local_hash.filter_hash;
+> +	if (WARN_ON_ONCE(!hash))
+> +		goto out;
+> +
+> +	ret = fprobe_init_rethook(fp, (int)hash->count);
+> +	if (!ret)
+> +		ret = register_ftrace_function(&fp->ops);
+> +
+>  out:
+>  	if (ret)
+> -		ftrace_free_filter(&fp->ops);
+> +		fprobe_fail_cleanup(fp);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(register_fprobe);
+> @@ -144,12 +235,15 @@ int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num)
+>  	fprobe_init(fp);
+>  
+>  	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = fprobe_init_rethook(fp, num);
+>  	if (!ret)
+>  		ret = register_ftrace_function(&fp->ops);
+>  
+>  	if (ret)
+> -		ftrace_free_filter(&fp->ops);
+> -
+> +		fprobe_fail_cleanup(fp);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(register_fprobe_ips);
+> @@ -179,14 +273,16 @@ int register_fprobe_syms(struct fprobe *fp, const char **syms, int num)
+>  		return PTR_ERR(addrs);
+>  
+>  	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
+> +	kfree(addrs);
+>  	if (ret)
+> -		goto out;
+> -	ret = register_ftrace_function(&fp->ops);
+> -	if (ret)
+> -		ftrace_free_filter(&fp->ops);
+> +		return ret;
+>  
+> -out:
+> -	kfree(addrs);
+> +	ret = fprobe_init_rethook(fp, num);
+> +	if (!ret)
+> +		ret = register_ftrace_function(&fp->ops);
+> +
+> +	if (ret)
+> +		fprobe_fail_cleanup(fp);
+>  
+>  	return ret;
+>  }
+> @@ -210,9 +306,16 @@ int unregister_fprobe(struct fprobe *fp)
+>  		return -EINVAL;
+>  
+>  	ret = unregister_ftrace_function(&fp->ops);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> -	if (!ret)
+> -		ftrace_free_filter(&fp->ops);
+> +	if (fp->rethook) {
+> +		/* Make sure to clear rethook->data before freeing. */
+> +		WRITE_ONCE(fp->rethook->data, NULL);
+> +		barrier();
+> +		rethook_free(fp->rethook);
+> +	}
 
-I want you to help me in receiving the sum of Twenty Seven Million Two
-Hundred thousand Dollars ($27,200,000) into your Bank Account. This
-fund was deposited in the bank here by a foreign customer who died
-accidentally alongside with his entire family members many years ago.
+Oops, I felt uncomfortable on this part, and I found that this rethook_free()
+must be called before unregister_ftrace_function() so that no more rethook will
+be used, and also need to wait for rcu before returning (this is also done
+in unregister_ftrace_function().)
 
-Nobody had asked for this fund till now please contact me through my
-private email address: (ibrahimsalif516@yahoo.com) for more details.
+Let me update this part.
 
-Mr. Ibrahim Salif.
+Thank you,
+
+
+> +	ftrace_free_filter(&fp->ops);
+>  
+>  	return ret;
+>  }
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

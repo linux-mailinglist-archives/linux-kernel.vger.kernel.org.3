@@ -2,173 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2104A34F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 08:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E34F4A34FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 08:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354349AbiA3HjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 02:39:16 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:24937 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354278AbiA3HjP (ORCPT
+        id S242883AbiA3HrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 02:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237577AbiA3HrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 02:39:15 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220130073914epoutp04c7482297be02701f3eefb9c9c1f69c9a~O-FStfgdR2398323983epoutp04b
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 07:39:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220130073914epoutp04c7482297be02701f3eefb9c9c1f69c9a~O-FStfgdR2398323983epoutp04b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643528354;
-        bh=ao+rcWomYdEqGl023a7DOT+HqdMuPkk8+vq62A4Cmd0=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=lLMaVu/ZNnhOggjfKySdCr2vPOjbCbFZkgpR3evZx+pGdl1gMT86sg1B9EJkBKlIZ
-         6L95+ZbNhEpnJcU0r779E4CrbvVzNLvRoFBeXH/qRPR5zw3m8Qig430nsKe+D7Cq6E
-         X//IzQL+5aXFgEZk4G4WMlnkw/Yf1tWMcuosPhKY=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220130073914epcas5p185e90f443783a56d42260432c1572e26~O-FSTTZw02335223352epcas5p1M;
-        Sun, 30 Jan 2022 07:39:14 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4JmjkQ1kPRz4x9Pp; Sun, 30 Jan
-        2022 07:39:10 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2C.C4.06423.D9046F16; Sun, 30 Jan 2022 16:39:09 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220130073909epcas5p2103bbedd00fe87d36c62a3796765aff3~O-FN7Sn5i1016910169epcas5p2v;
-        Sun, 30 Jan 2022 07:39:09 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220130073909epsmtrp13d97a7e5048d6e9da9c7233e1c22261c~O-FN7bQ5K3004430044epsmtrp1o;
-        Sun, 30 Jan 2022 07:39:09 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-39-61f6409da6d5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        19.F0.29871.C9046F16; Sun, 30 Jan 2022 16:39:08 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220130073906epsmtip14cfbac836495c77d7aaf30ba3764ff06~O-FKvAWy91200912009epsmtip1Y;
-        Sun, 30 Jan 2022 07:39:05 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Lee Jones'" <lee.jones@linaro.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
-        "'Marek Szyprowski'" <m.szyprowski@samsung.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
-In-Reply-To: <20220129175332.298666-5-krzysztof.kozlowski@canonical.com>
-Subject: RE: [PATCH 5/5] dt-bindings: serial: samsung_uart: Document
- Exynos5433 compatible
-Date:   Sun, 30 Jan 2022 13:09:03 +0530
-Message-ID: <00db01d815ac$77248570$656d9050$@samsung.com>
+        Sun, 30 Jan 2022 02:47:06 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FCC061714;
+        Sat, 29 Jan 2022 23:47:06 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id d8so9936864qvv.2;
+        Sat, 29 Jan 2022 23:47:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=npCjjwPovRha/N7OPY5Pt5Y8ZEDPZK+wTLJ4YtCTeD4=;
+        b=cDs69FRlDNvFX3X+sBEAC9SL+ZNmal9A+aBP3aMK0y+MdRQUQuJVUznv/vLJDO0Piu
+         SiUfz2fEY+0QaQ+WTD78QuPmQKz5Rf/rsI0Dcw8dC7i3m0tZtyi4EcWCXfD0c8Oia6om
+         CFzJXVyyAiERR2oDepaLqPP/fIhN5jo15zLDyn44kUoy3eHgEOp8Wsr+QFwRU6e7AUb7
+         u7V1BVCY4RtLY1YDKG6eSWy9Zknm8RDZNhv1eBRBteoGGrDOvzJuQYdqG7TwWbh14E9J
+         b6n93Vahqd+nx9MPuUK00h4O9C9IR9j0fL4LRQjnH9NkiBagWqV1NWYhu1SFKOLUNM6/
+         gCdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=npCjjwPovRha/N7OPY5Pt5Y8ZEDPZK+wTLJ4YtCTeD4=;
+        b=Sc8rYQmyHUkwnJShAwE76FLBUYJ1XqjlgX9zA3OBa1gJwoxqsw9sXfYH9ETQv7G1Ri
+         GV0ZZJgY44lye1oRGoydqk+292SQCIJZ2n46UR+3GSHdSBsFhuaB2MILpK0bR2jzfLFA
+         r5f71tgfpL5Y3AC1jHI3dFu5DgWTpLDbEepXF7uj57tQbUf66Kbpfqf7RZtgabk95e/C
+         HC6DG7WPjkU+iYPdkGBecLqH+9fxtWfCPKg9Mj6tHW3pTH5ra3GZZiPql3bSrZECiNeT
+         1d0vr+SMHOJIbKjvgVO4GGFNT9ji8WlQseZgVUNsN3Mnr2NnfhIw55/AeskSRn4xzcd0
+         dsNg==
+X-Gm-Message-State: AOAM532LPe/oAFRCFqopcTPGbyzovOoD1DG77pbmmyrKnddne5R6Kmlj
+        sArTOPH6WUp3UCKyvfToWoMwWNEBAT1TnWzZqgw=
+X-Google-Smtp-Source: ABdhPJwtWn0MO25kdPw0LJuGltLQ9hXEmZkm48vzz0cfgumCsybfKkx4jTDFfdrB7DQCnNF9vhV7tQLXyoYBiRRIVhM=
+X-Received: by 2002:a05:6214:1bc5:: with SMTP id m5mr13249076qvc.4.1643528825725;
+ Sat, 29 Jan 2022 23:47:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFgtqenDY7K+SNveA8HtgWqOAMTMQJGUk2cAqnLQMOtQmpeMA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKJsWRmVeSWpSXmKPExsWy7bCmlu5ch2+JBvP/i1vMP3KO1aJ58Xo2
-        i41vfzBZ3P96lNFi0+NrrBaXd81hs5hxfh+TxZnFvewWa4/cZbdo3XuE3eLwm3ZWB26PWQ29
-        bB6bVnWyedy5tofNY//cNewem5fUe/RtWcXo8XmTXAB7VLZNRmpiSmqRQmpecn5KZl66rZJ3
-        cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtCNSgpliTmlQKGAxOJiJX07m6L80pJUhYz8
-        4hJbpdSClJwCkwK94sTc4tK8dL281BIrQwMDI1OgwoTsjGuvpzMWvOer+L43vYFxGU8XIweH
-        hICJxOX3+V2MXBxCArsZJea3f2OGcD4xSlydfp4JwvnGKLH9/0b2LkZOsI43R36yQCT2Mkoc
-        2P6XFcJ5ySix7stpJpAqNgFdiR2L29hAEiICN5klVm1pYQFJcAp4SByasooNxBYWiJF42HyG
-        CeQQFgFViZc7FEBMXgFLibV7+UAqeAUEJU7OfALWySwgL7H97RxmiCMUJH4+XcYKYosIOEk8
-        ndHIDFEjLvHy6BF2kLUSAns4JP637oO62kXizb8fULawxKvjW6BsKYmX/W3skLDIlujZZQwR
-        rpFYOu8YC4RtL3HgyhwWkBJmAU2J9bv0IVbxSfT+fsIE0ckr0dEmBFGtKtH87ipUp7TExO5u
-        VgjbQ+Lggh5osN1klDj8aBLLBEaFWUi+nIXky1lIvpmFsHkBI8sqRsnUguLc9NRi0wLDvNRy
-        eGwn5+duYgSnXy3PHYx3H3zQO8TIxMF4iFGCg1lJhHfGpk+JQrwpiZVVqUX58UWlOanFhxhN
-        gQE/kVlKNDkfmAHySuINTSwNTMzMzEwsjc0MlcR5T6dvSBQSSE8sSc1OTS1ILYLpY+LglGpg
-        MrtgLxs8oX7HJHOrx92u2pXpzX/n3t38fP7DtKXP+jumH93hz+Z3PnWN5GtNH2MvrhPP/Jwm
-        rsk5ICv3cQHL6/D9r3qrsyu8X7Fm+nU4ny2vSj3+RvMe7+GdqR8juF8WNYbVP1m7YEGK38LK
-        3ffXhgZrB3zt0kjqu3nlJ6/xO40FdqwSO9KbLv983L7wxs1AkU2PSw3436q2p9Wa/LWN3uPX
-        MUHP0YF55bmGC+Ia0hcKGv8zOWTMWcAjeLNZw/Jt5hGDoD2XBYL2nayX1tA5UFTb++VSWtq8
-        +V7bYj+dSfnhsMDl5+8jsd8N2T56X9kc8iNSsfBSisGNrtx/fec3Km+6lKklniJwwfBx6CML
-        JZbijERDLeai4kQAtiDrZkgEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnO4ch2+JBrOmqlnMP3KO1aJ58Xo2
-        i41vfzBZ3P96lNFi0+NrrBaXd81hs5hxfh+TxZnFvewWa4/cZbdo3XuE3eLwm3ZWB26PWQ29
-        bB6bVnWyedy5tofNY//cNewem5fUe/RtWcXo8XmTXAB7FJdNSmpOZllqkb5dAlfGtdfTGQve
-        81V835vewLiMp4uRk0NCwETizZGfLF2MXBxCArsZJZad+cwKkZCWuL5xAjuELSyx8t9zMFtI
-        4DmjxMnbfiA2m4CuxI7FbWwgzSICD5kldv2YxAox6SqjxOTrf8E6OAU8JA5NWcUGYgsLREls
-        b1oNFOfgYBFQlXi5QwHE5BWwlFi7lw+kgldAUOLkzCcsIGFmAT2Jto2MIGFmAXmJ7W/nMEOc
-        oyDx8+kysDNFBJwkns5oZIaoEZd4efQI+wRGoVlIJs1CmDQLyaRZSDoWMLKsYpRMLSjOTc8t
-        NiwwzEst1ytOzC0uzUvXS87P3cQIjjQtzR2M21d90DvEyMTBeIhRgoNZSYR3xqZPiUK8KYmV
-        ValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwJX+ef7kzJmPtMT5p
-        p6DnBju0XJ+3VqsclfW1Y9c+52/q4Ky054z8FvFLu/7/V/66Y17k7/JC+YMT7Feekm3LihM8
-        aS3dorm9+5378xlyvJ7Zk6anxrCqFl9LeBT/+fju7S1MBRoVyfcmifC+DpVb/nO19TX3xXLr
-        LjzuXbdp4Q0/M7a/rusj3a+otG5UmSUunu77/rWS1yeXyvtTEhTrCzIiOnJ/Ma949PfollqR
-        Xw+3tJ7mN9y4wdHnevW3toysN3v/fm5WzjzItr+bRbzasd8iv56HxXbd2WulrReOFO3quqSl
-        Ni/r8zHXt7N+Nga6vNFU4ThtUHCSo5BD/LzY0ezt84VaimfevXx494oPSizFGYmGWsxFxYkA
-        GqZNZCMDAAA=
-X-CMS-MailID: 20220130073909epcas5p2103bbedd00fe87d36c62a3796765aff3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220129175345epcas5p37b7f9b667292af3d085580696fe86c10
-References: <20220129175332.298666-1-krzysztof.kozlowski@canonical.com>
-        <CGME20220129175345epcas5p37b7f9b667292af3d085580696fe86c10@epcas5p3.samsung.com>
-        <20220129175332.298666-5-krzysztof.kozlowski@canonical.com>
+References: <20220129093907.2196730-1-j.neuschaefer@gmx.net> <c2ec8677-e7a2-c9cd-b291-9785e7e2800c@infradead.org>
+In-Reply-To: <c2ec8677-e7a2-c9cd-b291-9785e7e2800c@infradead.org>
+From:   Tali Perry <tali.perry1@gmail.com>
+Date:   Sun, 30 Jan 2022 09:46:55 +0200
+Message-ID: <CAHb3i=vxghPw57Z=aEe-ns=LaD69eYyCv5VqbKBaARn9ZLfL8w@mail.gmail.com>
+Subject: Re: [PATCH] i2c: npcm7xx: Fix typos
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kfting@nuvoton.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reviewed-by: tali.perry@nuvoton.com
 
+Thank you very much !
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->Sent: Saturday, January 29, 2022 11:24 PM
->To: Lee Jones <lee.jones@linaro.org>; Rob Herring <robh+dt@kernel.org>;
->Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
-><alim.akhtar@samsung.com>; Greg Kroah-Hartman
-><gregkh@linuxfoundation.org>; Sylwester Nawrocki
-><s.nawrocki@samsung.com>; Marek Szyprowski
-><m.szyprowski@samsung.com>; devicetree@vger.kernel.org; linux-arm-
->kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
->kernel@vger.kernel.org; linux-serial@vger.kernel.org
->Subject: [PATCH 5/5] dt-bindings: serial: samsung_uart: Document
->Exynos5433 compatible
+On Sat, Jan 29, 2022 at 6:18 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
->Document the Exynos5433 UART compatible, supported since commit
->31ec77aca72e ("serial: samsung: Add the support for Exynos5433 SoC").
 >
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->---
-Thanks
-
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
-
-> Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
-> 1 file changed, 2 insertions(+)
 >
->diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->index 2940afb874b3..6aceba4a5f79 100644
->--- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->+++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->@@ -26,6 +26,7 @@ properties:
->           - samsung,s3c6400-uart
->           - samsung,s5pv210-uart
->           - samsung,exynos4210-uart
->+          - samsung,exynos5433-uart
->           - samsung,exynos850-uart
+> On 1/29/22 01:39, Jonathan Neusch=C3=A4fer wrote:
+> > The comments in this driver have a few typos. Let's fix them.
+> >
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 >
->   reg:
->@@ -111,6 +112,7 @@ allOf:
->             enum:
->               - apple,s5l-uart
->               - samsung,exynos4210-uart
->+              - samsung,exynos5433-uart
->     then:
->       properties:
->         clocks:
->--
->2.32.0
-
-
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+>
+> Thanks.
+>
+> > ---
+> >  drivers/i2c/busses/i2c-npcm7xx.c | 16 ++++++++--------
+> >  1 file changed, 8 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
+npcm7xx.c
+> > index 2ad166355ec9b..71aad029425d8 100644
+> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> > @@ -781,7 +781,7 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus,=
+ int nread, int nwrite)
+> >               /*
+> >                * if we are about to read the first byte in blk rd mode,
+> >                * don't NACK it. If slave returns zero size HW can't NAC=
+K
+> > -              * it immidiattly, it will read extra byte and then NACK.
+> > +              * it immediately, it will read extra byte and then NACK.
+> >                */
+> >               if (bus->rd_ind =3D=3D 0 && bus->read_block_use) {
+> >                       /* set fifo to read one byte, no last: */
+> > @@ -981,7 +981,7 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bu=
+s, u16 nwrite,
+> >  /*
+> >   * npcm_i2c_slave_wr_buf_sync:
+> >   * currently slave IF only supports single byte operations.
+> > - * in order to utilyze the npcm HW FIFO, the driver will ask for 16 by=
+tes
+> > + * in order to utilize the npcm HW FIFO, the driver will ask for 16 by=
+tes
+> >   * at a time, pack them in buffer, and then transmit them all together
+> >   * to the FIFO and onward to the bus.
+> >   * NACK on read will be once reached to bus->adap->quirks->max_read_le=
+n.
+> > @@ -1175,7 +1175,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(str=
+uct npcm_i2c *bus)
+> >                               /*
+> >                                * the i2c module can response to 10 own =
+SA.
+> >                                * check which one was addressed by the m=
+aster.
+> > -                              * repond to the first one.
+> > +                              * respond to the first one.
+> >                                */
+> >                               addr =3D ((i2ccst3 & 0x07) << 7) |
+> >                                       (i2ccst2 & 0x7F);
+> > @@ -1753,8 +1753,8 @@ static void npcm_i2c_recovery_init(struct i2c_ada=
+pter *_adap)
+> >       /*
+> >        * npcm i2c HW allows direct reading of SCL and SDA.
+> >        * However, it does not support setting SCL and SDA directly.
+> > -      * The recovery function can togle SCL when SDA is low (but not s=
+et)
+> > -      * Getter functions used internally, and can be used externaly.
+> > +      * The recovery function can toggle SCL when SDA is low (but not =
+set)
+> > +      * Getter functions used internally, and can be used externally.
+> >        */
+> >       rinfo->get_scl =3D npcm_i2c_get_SCL;
+> >       rinfo->get_sda =3D npcm_i2c_get_SDA;
+> > @@ -1768,10 +1768,10 @@ static void npcm_i2c_recovery_init(struct i2c_a=
+dapter *_adap)
+> >
+> >  /*
+> >   * npcm_i2c_init_clk: init HW timing parameters.
+> > - * NPCM7XX i2c module timing parameters are depenent on module core cl=
+k (APB)
+> > + * NPCM7XX i2c module timing parameters are dependent on module core c=
+lk (APB)
+> >   * and bus frequency.
+> > - * 100kHz bus requires tSCL =3D 4 * SCLFRQ * tCLK. LT and HT are simet=
+ric.
+> > - * 400kHz bus requires assymetric HT and LT. A different equation is r=
+ecomended
+> > + * 100kHz bus requires tSCL =3D 4 * SCLFRQ * tCLK. LT and HT are symme=
+tric.
+> > + * 400kHz bus requires asymmetric HT and LT. A different equation is r=
+ecommended
+> >   * by the HW designer, given core clock range (equations in comments b=
+elow).
+> >   *
+> >   */
+> > --
+> > 2.34.1
+> >
+>
+> --
+> ~Randy

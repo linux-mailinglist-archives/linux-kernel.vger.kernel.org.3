@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5A84A35F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9F04A35E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354648AbiA3Lcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 06:32:55 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:58971 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344102AbiA3Lcu (ORCPT
+        id S1354623AbiA3L3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 06:29:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242943AbiA3L3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 06:32:50 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MCayD-1n51Vk460h-009cnm; Sun, 30 Jan 2022 12:32:48 +0100
-Received: by mail-ot1-f49.google.com with SMTP id o9-20020a9d7189000000b0059ee49b4f0fso10267743otj.2;
-        Sun, 30 Jan 2022 03:32:47 -0800 (PST)
-X-Gm-Message-State: AOAM532cCbxEelwRHlt25HUiGSKF8InPnYi6gUnC3N0/EyVNse6eycj+
-        uxkeTKq8fqFIxlBHl5EH7e1nAU80CZOsusUscHU=
-X-Google-Smtp-Source: ABdhPJwfE8JwIPR39kNR+t9u+MXKrX+M/IvR4BevQAZ6Ex6kYRsjbH69gpBCBcpvwPyYexj/E8Z2vleiIWqqwcDE0P4=
-X-Received: by 2002:a05:6830:33c2:: with SMTP id q2mr8818491ott.368.1643542365934;
- Sun, 30 Jan 2022 03:32:45 -0800 (PST)
+        Sun, 30 Jan 2022 06:29:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3AEC061714;
+        Sun, 30 Jan 2022 03:28:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77D1CB828FB;
+        Sun, 30 Jan 2022 11:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FD70C340E4;
+        Sun, 30 Jan 2022 11:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643542137;
+        bh=O3fxXoAXDyiaNpmyIMzruf5onAwLK+lMiucIKH0HQp8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NjdXPyQ2uz8w00/wHvUA0M7/DQ3NB4I4XI9uFpAjegKLclmoTnZp1sCGfwUo4BDgN
+         vjZ8lRlV0ujWxT08IlOLhbZdGANQJ6aUq4glFjIXnTH3ShCPGlYo3mCLbKcv5LAh1e
+         uGmZCr89ZcqzDRJDVfy6tRF+mf71bO3y+HF0+P+gAWY1I0A8nF4b/gIfQ+tv3un0f2
+         wuMYNiBre5vssUS1S2gorVRzQ6huedKKgRyJB5neLKIZJOGEDQmorYD6SpE1hwT0NT
+         QItIOW1bOosqOTNzWNXnRD6u/jS11sg+ySp/XEAbzUtGXJLGnFivzokW2jf6tBXf6V
+         MsQO5HcCrT7tw==
+Date:   Sun, 30 Jan 2022 11:35:15 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
+        andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V1 0/6] i iio: accel: sca3300: add compitible for
+ scl3300
+Message-ID: <20220130113515.4e9ffe1b@jic23-huawei>
+In-Reply-To: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn>
+References: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-9-guoren@kernel.org>
- <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com> <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com>
-In-Reply-To: <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 30 Jan 2022 12:32:29 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a12CygLFT7qoQ9K=sowvTgNpeRej6Zh6Pv2PL_e2zMhMQ@mail.gmail.com>
-Message-ID: <CAK8P3a12CygLFT7qoQ9K=sowvTgNpeRej6Zh6Pv2PL_e2zMhMQ@mail.gmail.com>
-Subject: Re: [PATCH V4 08/17] riscv: compat: syscall: Add compat_sys_call_table
- implementation
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:s+QB4RyZjKJhrb5eRJs6jI0hTwFihOqehJSH7HnwKR1Mql0VAi5
- u21yO7l5oALaUX9DERN/QeXkP7eAmS8jZkHjs92PN+IZeirfgR7Ql/uPJCei9wC4ZRIypm5
- r02VfVWq/0hbyNZz07lCwmHnZCErMtNQopjlguoZ1YQJG1n2sNki3rK3oZ5qldawNE2phqf
- D8fgClrXLWJy3LNJnloBw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZWoipqB24Tg=:ye1vFxvIQLsaCuYBZZ9XbO
- a5hEFioB7YtytOQdB2A9Lr4tONnTXpusBSARti+KoGWyMNuvruKoWQMH0ETnu05bdc/HKjPT7
- huwalokfHNDc63FEXrFXpwh9ahn77VTnh1vr0fixjqcvGIi8P9Q3OHJamxg9DMV0cabwBpt2u
- iZW77e6dvvwoyG0zry9bzPvql7k49w0KWcZwEUypw3vMu5L7qV4im1FDBFvC7zL9TjGvwkzld
- aRoVMl9OYf82TvxFFYLIa5kr8VBC33aTO6CdGQ5lTqrxl/8ZWSzYUOZP53uYLyq6D0jc9t3ZE
- om4QFNiUVrTKrr0kEyBdE5cKpx6OBQ6Qw5YGNpl0hAsHRXIy20WUKGC41EaiM1zqHLinnuQ/s
- biOTzn4ON0IoD3kMeWj6LRIqzbLZQjmTuWmfzdpVrru/IruZGZ2AFBJ1sHDZ9HuGWfyhXJbO1
- 5I99qzRD//Z2BKgJD9oYJJhJDBlQTbcloJHLeit7kqBd/xPgsJETjJFYuvdvKN55BDc3M0TQk
- yf1rO1MQRBrugPYU+ZyvOHbNJdhqwLFeqMJxMm7pWfWiOKZUg5MH1XaZOOjmna3xnTXtnXAMi
- QNJRFKlNeXdTK3/dg75Vw2FJXqecEEby2sqiAH/pmjI33vnPUI8WTkst7/p0dV+Nplx1khLAo
- X+mvB2RkfYfj+YaHgeMAoHNE40AmA1FODQLiH5L1VXv8rqVWjZURt8jvAIN2bSFAtFcgZlfeP
- jCcgozgUX9axmoFCawmynVSNTbvPIwlP6+MYjGgAs43coiyEX0yO4jpf1sfgBCbhKoRQrjzdj
- 9JC9xQcao/vy/Pp9rZkYbkjp60JeOvJd6qRTungoei5L6umgwY=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 6:54 AM Guo Ren <guoren@kernel.org> wrote:
-> On Sun, Jan 30, 2022 at 6:41 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > I would make these endian-specific, and reverse them on big-endian
-> > architectures. That way it
-> > should be possible to share them across all compat architectures
-> > without needing the override
-> > option.
-> I hope it could be another patch. Because it's not clear to
-> _LITTLE_ENDIAN definition in archs.
->
-> eg: Names could be __ORDER_LITTLE_ENDIAN__ CPU_LITTLE_ENDIAN
-> SYS_SUPPORTS_LITTLE_ENDIAN __LITTLE_ENDIAN
->
-> riscv is little-endian, but no any LITTLE_ENDIAN definition.
->
-> So let's keep them in the patch, first, Thx
+On Mon, 24 Jan 2022 09:39:06 +0000
+LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
 
-The correct way to do it is to check for CONFIG_CPU_BIG_ENDIAN,
-which works on all architectures. Since nothing else selects the
-__ARCH_WANT_COMPAT_* symbols, there is also no risk for
-regressions, so just use this and leave the #ifndef compat_arg_u64
-check in place.
+> The current driver support sca3300 only.
+> Modifed for support SCL3300.
+> Verifed with SCL3300 on IMX8MM.
+> Splited the change for review.
+> 
+> LI Qingwu (6):
+>   iio: accel: sca3300: add define for temp channel for reuse.
+>   iio: accel: sca3300: Add interface for operation modes.
+>   iio: accel: sca3300: modified to support multi chips
+>   iio: accel: sca3300: Add support for SCL3300
+>   iio: accel: sca3300: Add inclination channels.
+>   dt-bindings: iio: accel: sca3300: Document murata,scl3300
+> 
+>  .../bindings/iio/accel/murata,sca3300.yaml    |   1 +
+>  drivers/iio/accel/sca3300.c                   | 284 +++++++++++++++---
+>  2 files changed, 238 insertions(+), 47 deletions(-)
+> 
 
-      Arnd
+For v2, please make sure to cc linux-iio@vger.kernel.org
+
+I won't pick up any IIO changes that haven't been sent to that list.
+
+Thanks,
+
+Jonathan

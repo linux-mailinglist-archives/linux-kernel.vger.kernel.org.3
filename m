@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A80D4A369B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F24A4A3697
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiA3OMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:12:21 -0500
-Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:64671 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbiA3OMS (ORCPT
+        id S1354954AbiA3OFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:05:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49928 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237553AbiA3OFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:12:18 -0500
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id EAwCnru7fEuQ2EAwCnR8Qu; Sun, 30 Jan 2022 15:12:17 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 30 Jan 2022 15:12:17 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Sanjay R Mehta <sanju.mehta@amd.com>, Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dmaengine@vger.kernel.org
-Subject: [PATCH] dmaengine: ptdma: Fix the error handling path in pt_core_init()
-Date:   Sun, 30 Jan 2022 15:12:09 +0100
-Message-Id: <1b2573cf3cd077494531993239f80c08e7feb39e.1643551909.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 30 Jan 2022 09:05:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 351F761193;
+        Sun, 30 Jan 2022 14:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6520BC340F0;
+        Sun, 30 Jan 2022 14:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643551547;
+        bh=OO5FkFuFfJwcPYSFa+GXosL1yGNT8VeA5s9UGFeBx1I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SmsH8BbYG8IIVjPrFLxxIGPrjkIdheqTwz4j/ekOu7eBXOmeuVC9CpcQ5MXy9TbfT
+         n3MVebVg3aW+nmH908C1UFS1IXZlQTvt2Gsvh3V3kSKDTMBExDLBpnMms2+FF5m3CF
+         c9aNnRtZhPDM6dR/jDH0F1UKmR/rSYiyGD8WtJZ50CtGg/JbjV6s0Ht0XrAtivzhoH
+         5H/BYuMnLsnRxMtkwqobbDkjXql6yxt0DXftDS2RgDW41pChVuAQVzfa/hZBnkKgwe
+         tAvhp9ADSZ0Rssxewp8vr4hsnM3ueIWY0yqCKqz3e63YXqAKQIxc+D6JcoR5e4Qwc+
+         pIl+xBEfH2W6Q==
+Date:   Sun, 30 Jan 2022 14:12:11 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: iio: st: Add Silan SC7A20
+ accelerometer
+Message-ID: <20220130141211.19a61569@jic23-huawei>
+In-Reply-To: <20220130034441.15474-3-samuel@sholland.org>
+References: <20220130034441.15474-1-samuel@sholland.org>
+        <20220130034441.15474-3-samuel@sholland.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to free resources correctly in the error handling path of
-pt_core_init(), 2 goto's have to be switched. Otherwise, some resources
-will leak and we will try to release things that have not been allocated
-yet.
+On Sat, 29 Jan 2022 21:44:40 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-Fixes: fa5d823b16a9 ("dmaengine: ptdma: Initial driver for the AMD PTDMA")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/dma/ptdma/ptdma-dev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> This chip appears to be a clone of the LIS2DH, as the register bit
+> definitions match exactly.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+> index 71de5631ebae..70f755041d8a 100644
+> --- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+> +++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+> @@ -24,6 +24,7 @@ properties:
+>      oneOf:
+>        - description: STMicroelectronics Accelerometers
 
-diff --git a/drivers/dma/ptdma/ptdma-dev.c b/drivers/dma/ptdma/ptdma-dev.c
-index 8a6bf291a73f..3fa2a6ed4b68 100644
---- a/drivers/dma/ptdma/ptdma-dev.c
-+++ b/drivers/dma/ptdma/ptdma-dev.c
-@@ -207,7 +207,7 @@ int pt_core_init(struct pt_device *pt)
- 	if (!cmd_q->qbase) {
- 		dev_err(dev, "unable to allocate command queue\n");
- 		ret = -ENOMEM;
--		goto e_dma_alloc;
-+		goto e_pool;
- 	}
- 
- 	cmd_q->qidx = 0;
-@@ -230,7 +230,7 @@ int pt_core_init(struct pt_device *pt)
- 	/* Request an irq */
- 	ret = request_irq(pt->pt_irq, pt_core_irq_handler, 0, dev_name(pt->dev), pt);
- 	if (ret)
--		goto e_pool;
-+		goto e_dma_alloc;
- 
- 	/* Update the device registers with queue information. */
- 	cmd_q->qcontrol &= ~CMD_Q_SIZE;
--- 
-2.32.0
+It's not an STMicroelectronics part, so add a new block for silan ones.
+
+Thanks,
+
+Jonathan
+
+
+>          enum:
+> +          - silan,sc7a20
+>            - st,h3lis331dl-accel
+>            - st,lis2de12
+>            - st,lis2dw12
 

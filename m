@@ -2,160 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08144A372E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DBC4A3728
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355390AbiA3POh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 10:14:37 -0500
-Received: from smtpbgjp3.qq.com ([54.92.39.34]:34876 "EHLO smtpbgjp3.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349175AbiA3POg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 10:14:36 -0500
-X-QQ-mid: bizesmtp42t1643555661tvf2j5vv
-Received: from localhost.localdomain (unknown [180.105.58.61])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 30 Jan 2022 23:14:12 +0800 (CST)
-X-QQ-SSF: 01400000002000B0E000B00A0000000
-X-QQ-FEAT: awo/irkzQ9x7uCJ7hJ2L2ByOwJx57RTcgS8GnflcG+562cie6+uqZolaa1riz
-        5XSqAxZU5rcs2SjiB0xEVGQ91FJfTnyXaQO4KhzVPv/w9eVaN538WHS3+OhRNPyPcMozUax
-        DEhT2g9jT3A+ep+/QY+t+8D9aCd2Nm5YJ1MG7wRhoio+3qjC16fQPQ1JYdsQ/lH70ZGntuJ
-        F90/Jlt+ejtHdbKs8CZmyTVDtIm41pIiNOo4SB0qSYK12BvuGp8U5z/hDgMzxBeFTKPmFzm
-        roCxLMoy/+15Txxc3G10vwxmQCg8Yq1pUN+3MlB7e8yl6YbiJUTV9tHbRdlb9LjlyGbQRVr
-        BVnkto3wPVy9Xnr6dbZgBAmw0ENAw==
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH v3] kernel/time: move timer sysctls to its own file
-Date:   Sun, 30 Jan 2022 23:13:38 +0800
-Message-Id: <20220130151338.6533-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S1355365AbiA3PHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 10:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347345AbiA3PHa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 10:07:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDCFC061714;
+        Sun, 30 Jan 2022 07:07:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1DF761242;
+        Sun, 30 Jan 2022 15:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B717C340E4;
+        Sun, 30 Jan 2022 15:07:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643555249;
+        bh=iuo37CD5qHk1n9pawYxodgVuEwF9nXOq27mneEJQ6GA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NBBd4oyMjUBx/BsW/dY2HNfaI7PfZLyOxs40U8ln+YR5vFJywUqs07Alrd8257sGa
+         Pp2wq2j+t1k9TVvS50JNgYAfPGdO3RiQFvJczuSw47X4EIyi1TXhmcimDzZuzMhS0q
+         7PP70LSV1Gq5PDJTAMXC9bz9U9k3CWjAFOcRl5FsgBtgWaF1BfsaDk1Uff4sLoPrRI
+         7KEU5lBw8+buYzclNfaBV/G+c/nREKisO58jM9tIcNIkSciJLHQG1NYctPlPwUU9pu
+         QM/aGOYEBXCfs6PBzktX05ooRDERdvgSNXpdPsQH10p9ibIWNKckV9dW8qQsQKkq/P
+         Y9ZBWzVRa3krA==
+Date:   Sun, 30 Jan 2022 15:13:53 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cai Huoqing <caihuoqing@baidu.com>
+Cc:     <festevam@gmail.com>, <linux-imx@nxp.com>, <kernel@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] mailmap: Update email address for Cai Huoqing
+Message-ID: <20220130151353.1ddcd70e@jic23-huawei>
+In-Reply-To: <20211216164051.10225276@jic23-huawei>
+References: <20211206025034.2729-1-caihuoqing@baidu.com>
+        <20211216164051.10225276@jic23-huawei>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves the kernel/timer/timer.c respective sysctls to its own file.
+On Thu, 16 Dec 2021 16:41:00 +0000
+Jonathan Cameron <jic23@jic23.retrosnub.co.uk> wrote:
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
----
- include/linux/timer.h |  4 ----
- kernel/sysctl.c       | 11 -----------
- kernel/time/timer.c   | 28 ++++++++++++++++++++++++++--
- 3 files changed, 26 insertions(+), 17 deletions(-)
+> On Mon, 6 Dec 2021 10:50:34 +0800
+> Cai Huoqing <caihuoqing@baidu.com> wrote:
+> 
+> > The caihuoqing@baidu.com would be deprecated and use cai.huoqing@linux.dev
+> > as the main email address.
+> > 
+> > Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>  
+> 
+> Which maintainer wants to pick this one up?  I can take it via iio if that
+> is fine with others.
 
-diff --git a/include/linux/timer.h b/include/linux/timer.h
-index fda13c9d1256..793b6b7c5a3e 100644
---- a/include/linux/timer.h
-+++ b/include/linux/timer.h
-@@ -198,10 +198,6 @@ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
- 
- #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
- struct ctl_table;
--
--extern unsigned int sysctl_timer_migration;
--int timer_migration_handler(struct ctl_table *table, int write,
--			    void *buffer, size_t *lenp, loff_t *ppos);
- #endif
- 
- unsigned long __round_jiffies(unsigned long j, int cpu);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 5ae443b2882e..d6d133423e5d 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2292,17 +2292,6 @@ static struct ctl_table kern_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
--	{
--		.procname	= "timer_migration",
--		.data		= &sysctl_timer_migration,
--		.maxlen		= sizeof(unsigned int),
--		.mode		= 0644,
--		.proc_handler	= timer_migration_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
--#endif
- #ifdef CONFIG_BPF_SYSCALL
- 	{
- 		.procname	= "unprivileged_bpf_disabled",
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 85f1021ad459..f9ae2b4f6326 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -44,6 +44,7 @@
- #include <linux/slab.h>
- #include <linux/compat.h>
- #include <linux/random.h>
-+#include <linux/sysctl.h>
- 
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
-@@ -223,7 +224,7 @@ static void timer_update_keys(struct work_struct *work);
- static DECLARE_WORK(timer_update_work, timer_update_keys);
- 
- #ifdef CONFIG_SMP
--unsigned int sysctl_timer_migration = 1;
-+static unsigned int sysctl_timer_migration = 1;
- 
- DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
- 
-@@ -251,7 +252,8 @@ void timers_update_nohz(void)
- 	schedule_work(&timer_update_work);
- }
- 
--int timer_migration_handler(struct ctl_table *table, int write,
-+#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
-+static int timer_migration_handler(struct ctl_table *table, int write,
- 			    void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	int ret;
-@@ -264,6 +266,27 @@ int timer_migration_handler(struct ctl_table *table, int write,
- 	return ret;
- }
- 
-+static struct ctl_table timer_sysctl[] = {
-+	{
-+		.procname       = "timer_migration",
-+		.data           = &sysctl_timer_migration,
-+		.maxlen         = sizeof(unsigned int),
-+		.mode           = 0644,
-+		.proc_handler   = timer_migration_handler,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
-+	{}
-+};
-+
-+static int __init timer_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", timer_sysctl);
-+	return 0;
-+}
-+#else
-+#define timer_sysctl_init() do { } while (0)
-+#endif
- static inline bool is_timers_nohz_active(void)
- {
- 	return static_branch_unlikely(&timers_nohz_active);
-@@ -2022,6 +2045,7 @@ void __init init_timers(void)
- 	init_timer_cpus();
- 	posix_cputimers_init_work();
- 	open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
-+	timer_sysctl_init();
- }
- 
- /**
--- 
-2.20.1
+Long enough for someone else to shout.
 
+Applied to the togreg branch of iio.git and pushed out as testing so
+0-day can poke some other stuff I've just applied.
 
+Thanks,
+
+Jonathan
+
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> 
+> > ---
+> >  .mailmap | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/.mailmap b/.mailmap
+> > index a83599921b1a..f82b0378df7c 100644
+> > --- a/.mailmap
+> > +++ b/.mailmap
+> > @@ -68,6 +68,7 @@ Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@bootlin.com>
+> >  Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@free-electrons.com>
+> >  Brian Avery <b.avery@hp.com>
+> >  Brian King <brking@us.ibm.com>
+> > +Cai Huoqing <cai.huoqing@linux.dev> <caihuoqing@baidu.com>
+> >  Changbin Du <changbin.du@intel.com> <changbin.du@gmail.com>
+> >  Changbin Du <changbin.du@intel.com> <changbin.du@intel.com>
+> >  Chao Yu <chao@kernel.org> <chao2.yu@samsung.com>  
+> 
 

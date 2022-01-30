@@ -2,165 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4333E4A358B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 10:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FBF4A358D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 10:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354488AbiA3Jzr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 30 Jan 2022 04:55:47 -0500
-Received: from mail-eopbgr90089.outbound.protection.outlook.com ([40.107.9.89]:33040
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        id S1354553AbiA3J4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 04:56:19 -0500
+Received: from mail-eopbgr70057.outbound.protection.outlook.com ([40.107.7.57]:64542
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239760AbiA3Jzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 04:55:45 -0500
+        id S239760AbiA3J4R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 04:56:17 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R17SYY9om7iJQ4lEHSBKbi5beJU+og3HkH7GAQ73Uttiv+rmvgCWvL/u6Th1+vPeXhWvtCo9Gy2yMoupElAssb+XW/n2LVq4WvcP53Y8ES7wbm+GI7bwMIVOqlfW/I+bYzIcnVb11UmsQ+skfXi5vnN5ji5JfqazrsmzdpHXaRfE252yKNIkOUj3gNgus5uEgJWAgh6lf8owJkoyVEoSplZaZXadqU3S/xt/A6Xot2A250wms5IdD5a+AiOTNvrd9lfxzOdNrG+ME1VQ1g41n77WSLVZcYsNSCwxytvRdCD7nCNiOkGgkrcHRqCSyTLs9h7uE2DaqQjVvaxh/IwdpA==
+ b=XkELyuP4/wcKJyj2eDJG6Qtx1X71Zz2h70AGRGooo1OEK3yKPxSSixooof4/gI6Ugu53nR3LeUd/DmzRK8LFjZVXQ4emjGG1z5jybStvsTeziyVOBAE7OZdV5Q7A4BvC6+BekHPvTi61PbGV5tFtluCSf86FSY4Dq0cVlCMLhTTRzc0h5wIQBEopj8i3eDH64ebIxSesDFPHCi/oypHs8gMkkNLfAMfo0fedUKarxbTrZgfikfuX08FodAk3h9WOoWAkaRdx1HUBSz55A6MsehzlyA1/xgwoDKrdI6MmCGliehZ5PsI0Z3taTILln0Eni4i9rntNV0O5uCnTbIbsvg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H0pFT4jon4M/wf4hXEJ8fVFZZtbHSN2U6qzJj/M7OZ8=;
- b=epPsf0rcl2kBWnTqU1wIeDzP1QvnLmjPr8SsJ2n2YOpgz4ZCRvlWhsbdnL23GkGPbs2DCzObkdtmSRmcjh10xtzYYTOMHNWmQaQLxbVMRXTf10sDy/6AsIBApIk37l+c63uJImU/aeSv45y4mxl8/5zpNkEBwOs3YMpTm24N9ztGnNh/OhMxBExPXbawtbZoD4EpwH0y1H5fkwKjkTJl6w8UBnb0IUYHij3Lb9zTnMydbagIGkdfi7OEJ9+ff9H1tz7chcbzfQXbnezNjiuypIF3PwXYxCBn9pAc5iJtxs34mAq3+nGaja2aTmvbbc22Wv5SfgvIwgLcLsQOClMBmg==
+ bh=lCcGRgG5pkGYsUfYK8GU1z+mM7ORwIOl/GAzMXRAsdY=;
+ b=Xeh8Wu9Awiu7Y+mYujDGFeGj6zcRbFgqXe5q0Z2ViPRsJobiJixJwKo/DjG8TTuHcJF1K8fDjP5plOX6IraO7CvEplVK8Qs1dtlGEEch4wIGrop/j2PaeAzkMYj5U/u0qSM7MXC3QpLlj3SZD+VJC9a8oCHrw38NOfowDdw2wZygxMT9XGXKovs+UlpkFHQyW7uTiDAqE9VG8hiJBzWLcaHykC2eNtotNf8t2moqP+wh2/DfGOlwGHSRPc6+SmvEmQTNSeJH36FoJxYp6U9mz1KUKHpT0+GX9KLlFhfNyq6vpyY44b24pbBmj5oKQFoL3JgehBEXdxUrDebsIwbkVg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB0825.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100:5::16) with
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lCcGRgG5pkGYsUfYK8GU1z+mM7ORwIOl/GAzMXRAsdY=;
+ b=X+g2WeXp0k+ocKUI853u4B7VU82EyyC/BiKp9gF4Gyv4mEafBanMp4vxz+fTrQSQBXH9epSH6tnyrMJN03La4ITjPHifnvwAYond5WHQk11Vzkz4+Z5jIFTdUwRlyrPE9Hk/0vQL+/ubj9XhcdvTAsZQzabZ+4I3ffaIi/mQuko=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com (2603:10a6:3:e1::23)
+ by VE1PR08MB5661.eurprd08.prod.outlook.com (2603:10a6:800:1b3::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sun, 30 Jan
- 2022 09:55:40 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.020; Sun, 30 Jan 2022
- 09:55:39 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] [Rebased for 4.14] lkdtm: Fix content of section containing
- lkdtm_rodata_do_nothing()
-Thread-Topic: [PATCH] [Rebased for 4.14] lkdtm: Fix content of section
- containing lkdtm_rodata_do_nothing()
-Thread-Index: AQHYFb+JVDWALiF3l0KHVv16Qql+pw==
-Date:   Sun, 30 Jan 2022 09:55:39 +0000
-Message-ID: <32bbc122ba24b863d048f51ff13fe391b16b9f2e.1643536487.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Sun, 30 Jan
+ 2022 09:56:12 +0000
+Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com
+ ([fe80::e14f:197:5001:4c56]) by HE1PR0802MB2426.eurprd08.prod.outlook.com
+ ([fe80::e14f:197:5001:4c56%3]) with mapi id 15.20.4930.020; Sun, 30 Jan 2022
+ 09:56:11 +0000
+Message-ID: <d203569c-bae1-c35a-204a-53617170d3b3@wolfvision.net>
+Date:   Sun, 30 Jan 2022 10:56:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] arm64: dts: rockchip: rename and sort the rk356x usb2
+ phy handles
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fbc67731-7884-47ab-c800-08d9e3d6ac1e
-x-ms-traffictypediagnostic: PR0P264MB0825:EE_
-x-microsoft-antispam-prvs: <PR0P264MB0825DAD772D7BF82715C97A2ED249@PR0P264MB0825.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:644;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /+dXRUFOJ4aUWvYamRNF8HSCsKwY9cb+PAWMh+llUdScchSnEOUSGbOvWSJdEx9DobComWT5uv16K9gsSgsJBxpoGSjf1kHuBOnmHL3FOS2uJ6Iag0+UgDQZjfNxhYvVUdDKSFMSWf+hYzkK2aTl1/XmhQdU/g0PvxFDV0Ei5LNUuaFR7qNHo6iFd+5VjVmevBrq5h6pv1o7JtPn9NUDs6gZnauYRPjf2MjpCXqxzP0/6uVT4YLPEjSyRbUwlrqfdpkkaAgzmfWZtTDHEHDxLDgj+paOOWs+TdhUovF36Pu2p0o4QK0CVgN3/WmxqB3VMj4OBqSsGxG2CU0UZb6UQSk+dFj6s3PLzrswrvO21HbGDHH+lwKe6gVtnR4ab2Ha8YeTNFBNOXBGOh+AezKF4l4OuT293FfXtjOpSy51Qy12j81oVPtAzXZrv9gXLai3CIiAUu3B2S5oE6bdTiuy6+ikaSejP4FGStO0GeGtCuoxxe4TaUEAWVbH/17JQwB8kd7wEF6dw1VHqlbnUFw4uxaHA3gq10pCdZn5jBMZIMgiVcTU+WZap/logIb2p1qlCv4cFGZSjnqLZhGBV5xemzYQBb4Cu49clZEahJ46tHX7gRs25jMP0U6st+8Vad1+Ieq8ygiQ+8MrY+WxY3q8xY3vPbL9FQkrIe1OIZFcJOQXid93n+TpsySmMqqsN8lvtywArF+S4zB4/PP0BvYHIBQJFIvj+1wBymOZJE8pV62DQpMjDB71TRLJEmzIFEMvDci3i87IQ2CdMajsIKVR1BG4mUZb2Mfc9TeemJo4f5k=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(4326008)(316002)(122000001)(86362001)(83380400001)(508600001)(38100700002)(36756003)(66946007)(76116006)(71200400001)(91956017)(66446008)(66556008)(64756008)(66476007)(8936002)(8676002)(54906003)(110136005)(6486002)(966005)(6512007)(5660300002)(44832011)(6506007)(2906002)(2616005)(26005)(186003)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?wrPCRg89A0YLr9KWFTZAstonbpbzIMGBLdqb5BZvyhMYezCgoyDOk0xQB1?=
- =?iso-8859-1?Q?XxI35CWeFWXX3q/8GeSp5iNhqGWrYdSawRfsoQdrpTC8ulTc167z9FohwY?=
- =?iso-8859-1?Q?RUOvlHPrAvrnlua15OkjG8XtJIhAjF6ZDv83UI4LqhcDSUWNm+5QlAJ+d1?=
- =?iso-8859-1?Q?oL4FsmCmNb/ES0z2DXZgfCItKrVjpHGQxcD8vmFNBib8cttWfR2UsjggCk?=
- =?iso-8859-1?Q?EAEE9LayXDOJkJWqgoUulRYQRx2i3L4iiHKREX+tG2vua+8R/1cset2lmC?=
- =?iso-8859-1?Q?VZ4qaZOzWNiTy4olZxYXo5LvXGC/4wCwqOa1OVJTSs+Bou8wz4KmJlTP1b?=
- =?iso-8859-1?Q?EOocgUHfl/ADFDBNAOj0+Vt2+iizbm7sxsOWlf4CTMIeUP4N9+lsLYqlI6?=
- =?iso-8859-1?Q?H/fyCc1jKG9mydQMhPNaBYEnCGy1SJjLlIxpF7evsMuI5ylygqC/CB5++A?=
- =?iso-8859-1?Q?vz2Qz5UAKChhS5rzVzNYywg3+MUTZZ5ezdDwJiMQkv5bCcpgHBasPznem0?=
- =?iso-8859-1?Q?MKkx4OZj2cPwQiWIn2TLOPCLMxGT5IRPo7fnUkn4RBP4ypjIkAq+6kQDg7?=
- =?iso-8859-1?Q?jwDvZhG7k6DhSxRAhQGBUh2nRECnPeu7C2xn1kf2Fc5wjzU6QtxcWwoH5y?=
- =?iso-8859-1?Q?ukSjCLNuo7JJXRGm7nAxC/9FyHtvWr0JHBbbN79p5uInv3bk2F5DCLstwv?=
- =?iso-8859-1?Q?b6CkfkBN8qq9njtVlbb/zpQ2g2RshU43Kh1skqvMiQmF0LkuIuKX9lE2S8?=
- =?iso-8859-1?Q?dCiyvxiRpxfDMRolyWtG81iM5TBX4zu5ii/ORRZ4fyIxJ8Dc50ILogeMnn?=
- =?iso-8859-1?Q?yGUh03xWfFJOwfamarQQPyiy8HR9ZHwMmbKIOZozu1AXSuc487QbmGryu8?=
- =?iso-8859-1?Q?6QpPLMy+lbVM3skJA0/bgTW0srjcbPMoBObWXsfI88eq97qSWWBIWHdvmC?=
- =?iso-8859-1?Q?NxKJfNljg9zKZoF2PEuA5INzBVbFOZH1qZp8XfLZv66Nz425XItTi+JJd8?=
- =?iso-8859-1?Q?NYTYMCFScORL44RCOxxsNI23UoMr63PNmnCqVqj/ra1pXE+vlwrQhajNkJ?=
- =?iso-8859-1?Q?cDdYg+okUS6SLjoDRNSodDHvk8qswVEH6csWMNCfAJSI/BB+LsQWgMRIp9?=
- =?iso-8859-1?Q?P9NZ+aYXQbXUqusLDCy6Ri5BV1lLJ3yj+FqurLgnpXpR3tz2XSkM/v3CTw?=
- =?iso-8859-1?Q?geCr+BeXD9pABSAdkqA7R6dIlOn75kYZuUSuo1wxPbFZ4AZ2+xLKiBNH6v?=
- =?iso-8859-1?Q?c03eUMZ9y4LIlk+rTVRF/MvA3/X8xXiIHGyfAKbglvFBc56SMsmmfjj5af?=
- =?iso-8859-1?Q?i7OIVXsYk+9KfGcBrYc8CL7nSvY+tonhaJF8Ccnw4zsITgs8F7AiO6uWbJ?=
- =?iso-8859-1?Q?n8oRAz4l8yd3srIP/+pbQOfXh88CuiW6IGCBUyMR9DEsp7sLX/o1Tv3hD5?=
- =?iso-8859-1?Q?xkUFMjQYqutFBhxwscArV6yLvhh9AivGkzONzLKaUEQ/zWyPO+uspVzBmO?=
- =?iso-8859-1?Q?qhqb8mtua5MSJeZOdLKjkXSjVmMTCOj4Ka/5olssQdP2H6FQXb3hMWoVZN?=
- =?iso-8859-1?Q?sMgy3bURc2clAFMU7Yn63k6Hk60Ptpsb4krPWvcG6AfSV0HodpVNTubksd?=
- =?iso-8859-1?Q?e0jvLs6ri9TbvXPQSONLJFZ9hba6XLindQ/uiWdnWd+n1ACwnUYQPyvy+w?=
- =?iso-8859-1?Q?zsKoCJRfbHFwfyck7p+3lBoyojl1Dkh4zTfLijp51ctSkt1xLSiGqZ0i8V?=
- =?iso-8859-1?Q?xqb7uXccet450SSlvUjKAndS4=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Liang Chen <cl@rock-chips.com>
+References: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
+ <FBB7C392-C5E0-4E34-AC17-5323414623F5@gmail.com>
+ <64f539b5-30b2-c0b7-17bf-c448b507713e@wolfvision.net>
+ <3736463.EBuT6JFcjP@diego>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <3736463.EBuT6JFcjP@diego>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ZR0P278CA0136.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:40::15) To HE1PR0802MB2426.eurprd08.prod.outlook.com
+ (2603:10a6:3:e1::23)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c46e7fe6-52ad-48d1-73c5-08d9e3d6bef3
+X-MS-TrafficTypeDiagnostic: VE1PR08MB5661:EE_
+X-Microsoft-Antispam-PRVS: <VE1PR08MB566185489174AE1892A33AC8F2249@VE1PR08MB5661.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tqFRGz56Q12qDLXzNSnOYGbsWd9n9HS5vRXNJfQu4pQNHwHurU7yOaWgT6RPhpbpceSSPN5x+gm6C6VbAYDhNa4W2Xk/WiUMQcIT1rlnIYONhuy4Il1piJ6q/lYt9B//Z7hS8qn+6RdF8FH1aiJYmbyb+l/IOKRfrJETAZRSHe5NZkZr4pQfCJC2J2K2Z/oC2ebiSDdD7Y43On3qpWfAfJCTuPPVz8WwTjipSR4cuSqRWUdUOG4k8GhXKFMCsVc0XgbL/271i+80l/O18MjpGwcrYnKR73O5LPK0htK91k8kVRgegiBqeeMwX7yMJ4xeR5n/h4P37SnuJbzc2Vpf4kEscxwVPDktAyHncRBIfw0OUkm/vIP9ST/K41Axn5qZBOxjSTx4w6lyTenPCxkPHN8ybHRUSs9rtAmDxL9RKS/nKh9NnGJGxJecJGNsz77ZSPWHSMalek4YizGmydQuphn+GqvQ1imakMwCrJR2RY+CvtRdsmdLzBBST6ZTumeigI2c8B+ZLMv2ZUk07cmzhJ9z5VDkkE3dVMtJ7QhtsDWhWsNQ1J5AHPNyJZMe0lxHvE+m3+qUViZCvULFenIP+MgEAH0UDWG1OEbl9bd5Op+M8AvKQxT6U++8H/gyNodeP4VINi2goTzm5xEPSSihXh1ULTD9X2alb1Z2gGzdo7mnK+oFMIwKAcUN7JZFBdKL8U/eokY1w6XHPaqhFtHQkjKQSrak1AQuWaYUv0eulqzV8FypWwyeYwle+yXuxGVx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0802MB2426.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(8936002)(66556008)(66476007)(86362001)(4326008)(8676002)(66946007)(38100700002)(53546011)(52116002)(7416002)(6512007)(5660300002)(6506007)(508600001)(6666004)(6486002)(54906003)(316002)(83380400001)(2616005)(2906002)(44832011)(186003)(110136005)(36756003)(31686004)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TEpIWmFUeXhwTnQ5TWVreDJwTUUyV3E5K3dveTNqR0gwQXlsUU5KSXpNbXZG?=
+ =?utf-8?B?b2JEeE9uWWp3YUc4WTM3eVdIbDVhak5LQ0QxcGFzbXVteTJZUnBkNjM4QTlW?=
+ =?utf-8?B?cnZudUJJblJMS0crcE8zY000eld5aU9KVWlNY0ZySlNoTmhZSzdIbThTQUp2?=
+ =?utf-8?B?enVEeTJlUFlkOWZzRGZMeGUraUpJTG5BQll2S1preUkwdzZJNUlMUXZDbTZD?=
+ =?utf-8?B?SE1sU0FpbnJSUjNOZG5pb2NiSmxjQzlJN1FTN3F3dXlKNTFZVjdFWmlNWVFx?=
+ =?utf-8?B?Ykl4N2E2TVhyYk1Hd3lwU3l2elZOVzNxZ2JGeUlmYmFyd3RkZUNjeUVVT3JB?=
+ =?utf-8?B?T00yS0NTd3VNS2ZjYXBrbC9YRHpDcjY3Q09PbXkxYS9yNElzYzRSNXhndThs?=
+ =?utf-8?B?WmlBTGw5Nitwb1ZraVBOTGNtL3hmTDE1QmZqZDFBa0tydTIwbGVWbFMxSzNM?=
+ =?utf-8?B?aGtGYVl1bFUySkVQbGxpQW9MSHNXeU5UZmpId3RwQm9IRTdFV2pQU2RJWmF0?=
+ =?utf-8?B?UGY0QVh1dE52eTJTOHBOZDNHSWd1SWQ0SkJ1Vjg1QTRJM3kzN3d3UEs4MWRr?=
+ =?utf-8?B?WGlVN3lTYm9KclNRcUZ3ajIvMHBHUnc4RVg0bHZaMmhtZ01rai9aWlR3d0RO?=
+ =?utf-8?B?NXNvWkwwVkd1VVVhTk1hY25senh1czFZVHBGMWFlUFo0Y0RZWjJhRTBZRWtO?=
+ =?utf-8?B?QlRKR3ZYTHhDVlJJekpoV2UvVTBMTDFLbmhHUXB4Lzc0UWxLVGNkTUliTnZh?=
+ =?utf-8?B?Q1NvOVJmMjBuTjNwTzRPcmV1MEx6cERzOURDRzF4elB6NkhtM0M4cjFnU0E0?=
+ =?utf-8?B?YTgrY0NPVmd0NHVObzdhbmVtQjNMbUlMSmFwWTRNSjB2SFBlWStGZGhkZzFt?=
+ =?utf-8?B?Qk0rU2c4Y1B2bnhwVWlQalJkNWRQSmNlakp3YzRob0JoNTVPMEI0d2s0QTY3?=
+ =?utf-8?B?T09CbDBvUzlQcEpIaWJmWis0NW1SbzVuUW1Mbk5ZbnVtZ21kSytKOVJ1WDJO?=
+ =?utf-8?B?WXF2OCtlYjNCMnpnNktmeGdOVzNuRFFNSmV0RU84ZlZHMmEvbG5hSlBtalQ0?=
+ =?utf-8?B?ZkgvcFRYbnBxZVRGV3pEQTVsRHhxdG5kcHR4QmROYlRFRkUxTitpaUxVYmxS?=
+ =?utf-8?B?eS93OFJYTUdJVjA4WEs0NVZyb092dE9TNE4xRTRKNGJNeDVoek8yMmI4MFE2?=
+ =?utf-8?B?bXo4N3htSjAyV20xaTMrbzdrTGRCK0ErODcvQThkVE0xY1kvd2V5R2cyUTFo?=
+ =?utf-8?B?TzhDMHcvbUJMMkQ3SS8wOTB1eGUraEZlWXNHWUZUSThBdmNVbjcvQnNLQThL?=
+ =?utf-8?B?c0JsRHZQbXJJSEJaZjQrYUxac3BENVhFdTVzK3ZjU3Y2b1g5RCs3eWtkNjN0?=
+ =?utf-8?B?N3V1NXp5VWVzSWhTTjFta0ZaRjdZUVl3dnpDSHpVKzFBSWpqR1NqWHFhVnRq?=
+ =?utf-8?B?aHBtK2k1aHFFRjRGM0dGMlZEVUxEd3FhdXFaY3JjNndwRHhWdmtzYUUzZzZ5?=
+ =?utf-8?B?RG9lMyszQk52SGZ5Y3Q3eEMxZ2NjZU8wWlZ0a3p2SHo4RUdINXlIOHVGTFpq?=
+ =?utf-8?B?N1BoMmRkVm1uRmErTEt5enNHUzg0YUYwZm4yK3V1RStSWFpUR2hBcm56QWZv?=
+ =?utf-8?B?M2ZSdWxSaFlBKzBPcUVBRVJiWVgrbi8xYWJhNkJPeEYvdzRDM1JSY05zYzZi?=
+ =?utf-8?B?VUV6d1c3anBTZ3VGWEhlR2VYL0FvRW83OU56SXhsZXRpa3dOaXM1Tyt5ZzV1?=
+ =?utf-8?B?Y2IyeGs4WFBDWm84WWc4Ui9ON212VktZbmZYOTZyOW9IcmpvVDRBWFFMbFVm?=
+ =?utf-8?B?WUFaVzBodlJsOXYrRGJqeUluOEo3L3pIMG02TnV2QVNrT2JWNSt1OFhKT1Vu?=
+ =?utf-8?B?cW5JdDRxVTNvU2V5dUVySWdKWEQ0TFJwb1VxMmxXK2I2RlZrZ2tUYU5QTUhW?=
+ =?utf-8?B?a3JtaWhRYnRZYVhKZ2Mwa2VYYndCZnFlT095dXRxanM5SmJybTg0YVRuODky?=
+ =?utf-8?B?K3REMDdnUFpzckhsS2hObDl3UzBhSldGRk4vS2w1VitJU3BPNWpuRjFvalF4?=
+ =?utf-8?B?Ky91TUt3OVNMaW1sQVlEdHVaaXRNUTlCY1dVdGh1OHk5bTBXc3dEcit6dWpX?=
+ =?utf-8?B?UDVZb2FVWTJobFYrT3BjWmMvcW95U2RqQnR4M3h2WVJnVjBKckg4dWxCRk84?=
+ =?utf-8?B?cVFERTZFMUhzQjh5cE5jbjZtNUlQVTRjUlV6RWxLZVAwWVVHWXhteXZwWkpG?=
+ =?utf-8?B?WnRMeXZUd0RtSjhKcXdFamt6aFByWG4rVlh4RW50WTFpWVkrcTFMdUYyV3M3?=
+ =?utf-8?B?SXZiS0Q2OW1sRFZaV1UvQXpLMjFjR1BKazNyWE1BV3E0RnpKcW0rdWtsRzVG?=
+ =?utf-8?Q?6VSzo/H3zpcbKn7s=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: c46e7fe6-52ad-48d1-73c5-08d9e3d6bef3
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0802MB2426.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbc67731-7884-47ab-c800-08d9e3d6ac1e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2022 09:55:39.9215
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2022 09:56:11.7643
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aWQbLYGaXCFjdJzGipn57jJuXi6QkUWMWor17DhPKKUEcMjk1v1BLaJ1UjN8gZQRNk7J16DaJQx/cBmy9xhzFw3K59qrrIv2qWKrf8DYdVU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB0825
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AFFbtriAQeaAS4NGEhZj3oemPkb/mFaEIIa9CvOXtsdt1P7qwhDqKTlfS4gfzz2KL61OyJkiTf2QUqU8sw+Q1OAcBex8TSYBKBVwEYvhbG0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5661
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is backport for 4.14
+Hello Heiko,
 
-(cherry picked from commit bc93a22a19eb2b68a16ecf04cdf4b2ed65aaf398)
+On 1/29/22 16:28, Heiko Stübner wrote:
+> Am Samstag, 29. Januar 2022, 10:59:32 CET schrieb Michael Riesch:
+>> Hello Peter and Piotr,
+>>
+>> On 1/29/22 10:23, Piotr Oniszczuk wrote:
+>>>
+>>>
+>>>>
+>>>> Good Evening,
+>>>>
+>>>> While I'm not against this idea, my main concern still stands.
+>>>> I spent a great deal of thought on this, and decided to go the route I
+>>>> did to maintain consistency with previous generations.
+>>>> As such, I see one of three paths here:
+>>>> - Pull this patch only and depart rk356x from previous SoCs.
+>>>> - Do the same for previous SoCs to maintain consistency.
+>>>> - Drop this patch to maintain consistency with previous SoCs.
+>>>>
+>>>> I ask that others weigh in here, as offline discussion has produced
+>>>> mixed results already.
+>>>
+>>> just pure user perspective
+>>>
+>>> (who spent last weeks considerable time to develop DT for rk3566 tvbox. 99% of my work was by reading/learning from other boards existing DT's. Any inconsistencies in DTs makes work for such ppl like me much more harder):
+>>>
+>>> For option 1 - i don't see value
+>>> For option 2 - what is reward for extra work needs to be done on all other SoCs?
+>>>
+>>> so option 3 seems to be natural choice...
+>>>
+>>> in other words:
+>>>
+>>> for me:
+>>> option 1 brings practically zero value + increased inconsistency.
+>>> option 2: extra work - but consistency is like in option 3 (so where is value?)
+>>>
+>>> so option 3 offers the same consistency - but without extra work...
+>>>  
+>>> just my 0.02$
+>>
+>> Of course this change is purely cosmetic and it is reasonable to ask for
+>> the practical value. It is just that technically the quartz64 dts is not
+>> sorted alphabetically at the moment. The u2phy* nodes should be but
+>> before the uart* nodes to follow the convention. On the other hand, it
+>> may be nice to have the usb2 phys and controllers grouped in the dts.
+>> The proposed renaming would allow all the mentioned nodes sorted
+>> alphabetically and grouped logically.
+>>
+>> Therefore I had option 1 in mind. I don't see any dependencies between
+>> the different SoCs and think we can make a fresh start here.
+> 
+> correct :-) .
+> 
+> I do see each SoC individually and while I try to have people follow some
+> styling guidelines everywhere (ordering of properties, ordering of nodes)
+> I don't really want people to fear what some other SoC has done before.
+> 
+> But even these rules evolve sometimes, when something seems to work
+> better than before.
+> 
+> We have nowadays 9 years of Rockchip SoC history in the kernel.
+> Thanks to general dt-binding conventions most nodes have specific
+> names anyway (mmc@... etc), but for example trying to rename stuff
+> in older SoCs that has worked for years now is for one error-prone
+> as Michael pointed out, but also introduces unnecessary churn,
+> when these old SoCs (thinking of rk3188, rk3288 and friends but also things
+> like the rk3368) are essentially "finished" and most likely won't see that
+> much additional support for stuff added.
 
-On a kernel without CONFIG_STRICT_KERNEL_RWX, running EXEC_RODATA
-test leads to "Illegal instruction" failure.
+So... may I take it that you are going to apply the patches in this series?
 
-Looking at the content of rodata_objcopy.o, we see that the
-function content zeroes only:
+Or should I switch to option 3 and re-submit?
 
-	Disassembly of section .rodata:
+Thanks and best regards,
+Michael
 
-	0000000000000000 <.lkdtm_rodata_do_nothing>:
-	   0:	00 00 00 00 	.long 0x0
-
-Add the contents flag in order to keep the content of the section
-while renaming it.
-
-	Disassembly of section .rodata:
-
-	0000000000000000 <.lkdtm_rodata_do_nothing>:
-	   0:	4e 80 00 20 	blr
-
-Fixes: e9e08a07385e ("lkdtm: support llvm-objcopy")
-Cc: stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/8900731fbc05fb8b0de18af7133a8fc07c3c53a1.1633712176.git.christophe.leroy@csgroup.eu
----
- drivers/misc/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 76f6a4f628b3..cc0df7280fe5 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -69,7 +69,7 @@ KCOV_INSTRUMENT_lkdtm_rodata.o	:= n
- 
- OBJCOPYFLAGS :=
- OBJCOPYFLAGS_lkdtm_rodata_objcopy.o := \
--	--rename-section .text=.rodata,alloc,readonly,load
-+	--rename-section .text=.rodata,alloc,readonly,load,contents
- targets += lkdtm_rodata.o lkdtm_rodata_objcopy.o
- $(obj)/lkdtm_rodata_objcopy.o: $(obj)/lkdtm_rodata.o FORCE
- 	$(call if_changed,objcopy)
--- 
-2.33.1
+> 
+> 
+> Heiko
+> 
+> 
+>> Option 2 is not really feasible, we would almost definitely break
+>> something existent.
+>>
+>> Option 3 is feasible, of course. However, I would sort the nodes
+>> alphabetically (u2phy*, then uart*, then usb*). Works for me as well,
+>> although it is not that nice IMHO.
+>>
+>> Since many boards with the RK3566 and RK3568 will pop up in near future
+>> we should do the change right now (if we want to do it), as of course
+>> all the board files need to be changed. Therefore I wanted to bring this
+>> matter up now. Let's agree on something and move on.
+>>
+>> Best regards,
+>> Michael
+>>
+> 
+> 
+> 
+> 

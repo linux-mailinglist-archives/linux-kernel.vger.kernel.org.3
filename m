@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DCE4A38C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4784A38D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiA3Tzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 14:55:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57208 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiA3Tzv (ORCPT
+        id S1356049AbiA3T5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 14:57:03 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:63832 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230471AbiA3T45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 14:55:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FF21B82990;
-        Sun, 30 Jan 2022 19:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A452AC340E4;
-        Sun, 30 Jan 2022 19:55:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643572548;
-        bh=4zb5UhaLqOlfRtVbPkkYmuMWAyxQjIa7QavGlkoM4eY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MmpQdk6vxwUc5/7Me6VbFqowflhqyb21APAhIUHdRbQqNByAIP3Yy97ZJuFCKVCl8
-         Fdu3jHEYvu9313W7EalsU8hopwAMfD07RixFPkXR3EZrvhFppLmdf0E/KgMUqWHnx/
-         05jS6ZyQeyl9kZYjBqmsy1vTis38vM0FsZMN2C6QHyls0JtlXYqynIHzaQ2K8/lNWP
-         PrCDa/B+FI6ywZO77WLb//H/6Rgy3x/DhycYIX2O6VwTq3sHNQ67+V9C68Ix2GLr/0
-         Sen4s7oAuED/2zCfpUeN7xh704ZRLehX9H/mvdN3QdxZJiD7t6JMzoIZs0/6LZ0ZyG
-         covhJhvsAIvSw==
-Date:   Sun, 30 Jan 2022 12:55:44 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fortify: Update compile-time tests for Clang 14
-Message-ID: <YfbtQKtpyAM1hHiC@dev-arch.archlinux-ax161>
-References: <20220130181616.420092-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130181616.420092-1-keescook@chromium.org>
+        Sun, 30 Jan 2022 14:56:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643572618; x=1675108618;
+  h=from:to:cc:subject:date:message-id;
+  bh=s2sELOnPb6T0JSF8MY6fuNvaeEGvsjr9oQdNpy6PSgE=;
+  b=VB+jYB3b9dOlSSi7fMSUkxLTP2MU5HbW5QfYyu0q52FmTGozLmGSc2n9
+   R/VTFcHK+M/9f+LaUdDfhWgbvjMBLatoosDiohU5GNtrFpxcEkhgPrW/+
+   IPPX4DJsUhewgsWhmMt5KHQWq07ZTPoOdani/pl4PaYLoVWhHkCmgCfiH
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 30 Jan 2022 11:56:57 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 30 Jan 2022 11:56:56 -0800
+X-QCInternal: smtphost
+Received: from rajeevny-linux.qualcomm.com ([10.204.66.121])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 31 Jan 2022 01:26:30 +0530
+Received: by rajeevny-linux.qualcomm.com (Postfix, from userid 2363605)
+        id 4237D21ACE; Mon, 31 Jan 2022 01:26:29 +0530 (IST)
+From:   Rajeev Nandan <quic_rajeevny@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
+        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
+        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
+        jonathan@marek.ca, dmitry.baryshkov@linaro.org, airlied@linux.ie,
+        daniel@ffwll.ch, swboyd@chromium.org
+Subject: [v4 0/3] drm/msm/dsi: Add 10nm dsi phy tuning configuration support 
+Date:   Mon, 31 Jan 2022 01:26:23 +0530
+Message-Id: <1643572586-21331-1-git-send-email-quic_rajeevny@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 10:16:16AM -0800, Kees Cook wrote:
-> Clang 14 introduces support for compiletime_assert(). Update the
-> compile-time warning regex to catch Clang's variant of the warning text
-> in preparation for Clang supporting CONFIG_FORTIFY_SOURCE.
-> 
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-hardening@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+This series is to add DSI PHY tuning support in Qualcomm Snapdragon
+SoCs with 10nm DSI PHY e.g. SC7180
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+In most cases the default values of DSI PHY tuning registers
+should be sufficient as they are fully optimized. However, in
+some cases (for example, where extreme board parasitics cause
+the eye shape to degrade), the override bits can be used to
+improve the signal quality.
 
-> ---
-> I'm splitting this patch out of the main Clang FORTIFY enabling patch.
-> ---
->  scripts/test_fortify.sh | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
-> index a4da365508f0..c2688ab8281d 100644
-> --- a/scripts/test_fortify.sh
-> +++ b/scripts/test_fortify.sh
-> @@ -46,8 +46,12 @@ if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
->  		status="warning: unsafe ${FUNC}() usage lacked '$WANT' symbol in $IN"
->  	fi
->  else
-> -	# If the build failed, check for the warning in the stderr (gcc).
-> -	if ! grep -q -m1 "error: call to .\b${WANT}\b." "$TMP" ; then
-> +	# If the build failed, check for the warning in the stderr.
-> +	# GCC:
-> +	# ./include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-> +	# Clang 14:
-> +	# ./include/linux/fortify-string.h:316:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> +	if ! grep -Eq -m1 "error: call to .?\b${WANT}\b.?" "$TMP" ; then
->  		status="warning: unsafe ${FUNC}() usage lacked '$WANT' warning in $IN"
->  	fi
->  fi
-> -- 
-> 2.30.2
-> 
+Different DSI PHY versions have different configurations to adjust the
+drive strength, drive level, de-emphasis, etc. The current series has only
+those configuration options supported by 10nm PHY, e.g. drive strength and
+drive level. The number of registers to configure the drive strength are
+different for 7nm PHY. The design can be extended to other DSI PHY versions
+if required, as each PHY version can have its callback to get the input
+from DT and prepare register values.
+
+Changes in v2:
+ - Addressed dt-bindings comments (Stephen Boyd, Dmitry Baryshkov)
+ - Split into generic code and 10nm-specific part (Dmitry Baryshkov)
+ - Fix the backward compatibility (Dmitry Baryshkov)
+
+Changes in v3:
+ - Addressed dt-bindings comments (Rob Herring, Dmitry Baryshkov)
+ - Address comments for phy tuning data structure (Dmitry Baryshkov)
+ - s/ops.tuning_cfg_init/ops.parse_dt_properties (Dmitry Baryshkov)
+
+Changes in v4:
+ - Fixed dt_binding_check error (Rob Herring's bot)
+ - Return error in case of out of range values (Dmitry Baryshkov)
+ - Return error if dt property is present but parsing is failing
+
+
+Rajeev Nandan (3):
+  dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
+  drm/msm/dsi: Add dsi phy tuning configuration support
+  drm/msm/dsi: Add 10nm dsi phy tuning configuration support
+
+ .../bindings/display/msm/dsi-phy-10nm.yaml         |  36 +++++++
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c              |   6 ++
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.h              |   4 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c         | 118 +++++++++++++++++++--
+ 4 files changed, 158 insertions(+), 6 deletions(-)
+
+-- 
+2.7.4
+

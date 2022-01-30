@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D704A3803
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 19:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5224A3804
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 19:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241414AbiA3SPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 13:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S243822AbiA3SQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 13:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234672AbiA3SPc (ORCPT
+        with ESMTP id S242093AbiA3SQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 13:15:32 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A46C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 10:15:31 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id b16so10604846uaq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 10:15:31 -0800 (PST)
+        Sun, 30 Jan 2022 13:16:19 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925FC06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 10:16:19 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so10554353pjl.0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 10:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=PB7S81wb9t4u0hRvcxHMNh0F5lIgk9V9ej9pH5Jl/70=;
-        b=qcUne9Bu7WOVGASCnovsKC7MQtpyr8NW367UbN9LDAKeYqjV+Sc1eaTq7aXGnL8uYB
-         yy+vLPD2xC0TrFWLb3JJGZcVrhMhvJ5C+AsurDen9tJ5nka/M6wf+pDb1bRB0BSioeUJ
-         qiiOjKHv2spFm+Pw6Qx7t6Jdazw8Te/U+OaPKscHrxLlVUppgq3WTrOVQEOVJBUKGYT2
-         h1GXw5ZSXwIdGki6m949qzHILSRhNPaPRiRB3Pz5QwxIIXBGwuj6MqBI8UB9udpj1F2B
-         TP6accXkSFhXaKidGNlPEiUgQLcviMaAowWoJA14YyB5vXA5wHPnEr2JUIYrF7ff1IPL
-         M5OA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DUTPHSZB8lKbcN5X9fQAEQY4eG+Q45KibRaKjR9V6no=;
+        b=WaXYSnDMYgpE22YYEaBoUF7YsSe7hnZm7tnKIGeAEsUVMY6hSH5Bzp3DTKaEl3psPl
+         TKW//C5ohyOn56iAkVs5VkrFeO6OZt30RN4Fh7SqKi9geea4xM0KgShQyxV3OH/Qi2cE
+         6xgAm5wifa+FtPUzHgNuh39b8G8VcU09AxQnM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=PB7S81wb9t4u0hRvcxHMNh0F5lIgk9V9ej9pH5Jl/70=;
-        b=AQG4z/T3etlpRU3d/lGWYPjvuJ4kBaL4i1tSD+B027bkh+iJo8JCozJg/ypPnVaZ3l
-         DflfhTHiUT/D2DW5fCdkuA/js/NFmAncoAB0RAeGHul6a6nQ4SMkQmhO+Rh5O8lwD5I4
-         zNY9s5zJ1jWiYQl//Xf6tIlE4hoObBcMwY2/5SscB+zp8j2PIiy9zggcsxYQGw4XFl8U
-         WOPUkVtTRLA5tH8C1DRkE8AbzQTpaEoJPPuRdu2vuKcHiy5B+w4uE4CJZDks1wHoaNEz
-         IGRTNDKtztXwv+3W6Dd7CJI84MkUNFDLmTzQERhZakyfg7hHVqqrWSAx9P5rxP6nB4fd
-         zkRg==
-X-Gm-Message-State: AOAM5332cih2p7rcDS3QQKQxcNx6UzpqmAaQAAfuvK3/9Uiy8yEN/wVH
-        3BBCDyLenbtVLI1M5lgkHPAKCH50CNksDou+QsZAqw==
-X-Google-Smtp-Source: ABdhPJx5lAhfHKjbAMCz3qIR4BXsRA6gWS+gSyHum+OQxSFQ/mgbgvgsC/r0+PEV2LnuYeJfDS2f5S1vk7x74VOhmkw=
-X-Received: by 2002:ab0:2619:: with SMTP id c25mr6810336uao.44.1643566529737;
- Sun, 30 Jan 2022 10:15:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DUTPHSZB8lKbcN5X9fQAEQY4eG+Q45KibRaKjR9V6no=;
+        b=uDxXehIZYh9mvCY54Kjy7byUo6ga1MI3AVBLKyBWSWCJaAH3rUmaN0KCkB3nMGqRgg
+         /+yoQI7/n5tAJXJsmxkBpDFdZY5Ez590cd1xBVxm3Le7k8r/jI6Pke2ZRXgkgmcdNp6/
+         gKhaXBXn/dg7H2JEQ+fjqBruXPnEgtGthpV11Bn9lz/w3BOVqV8jVMBKqiau8gnOsciG
+         e1XKVbb5nEieBB1X1OEUsqYpBP/74ovbWraoL1RyqxpkglWSz/+r/GYXBlmfqMPnbruK
+         syOa4ajLrrtGWLmKjQdXXOCpB49421lqDcnCZlzjEuk4FkgiGu9GzF5AXmXe945xstr2
+         QzOg==
+X-Gm-Message-State: AOAM533txAD+eOMsllkbCyolzWM7dOpkYSWZU7hnyChh5n7jJBSLIwge
+        qI+n3ebMyAzQ5/MxBI4GIc2d/A==
+X-Google-Smtp-Source: ABdhPJxS922LSEar3e+IGrSkOBYeH1NhSt0ZrGNr3dMGmfn+eZwOxAz+RxlNe7MtT6+Uam14AY31QQ==
+X-Received: by 2002:a17:902:c612:: with SMTP id r18mr18375513plr.64.1643566579258;
+        Sun, 30 Jan 2022 10:16:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s14sm15375579pfk.65.2022.01.30.10.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 10:16:18 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fortify: Update compile-time tests for Clang 14
+Date:   Sun, 30 Jan 2022 10:16:16 -0800
+Message-Id: <20220130181616.420092-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-From:   Zichar Zhang <zichar.zhang@linaro.org>
-Date:   Mon, 31 Jan 2022 02:15:05 +0800
-Message-ID: <CAE9iGojMgYKxReeartpXKWORdAfsj4t7Zo0pVb--+SLVGq4=cA@mail.gmail.com>
-Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kelly Rossmoyer <krossmo@google.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Len Brown <len.brown@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Vijay Nayak <nayakvij@google.com>,
-        Pavel Machek <pavel@ucw.cz>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1748; h=from:subject; bh=W5hUpBKUYkAQB5mlGYXbErF7oKWbamcl0yA13kKO2Hg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh9tXvXjihVpXb0Nwyu1NPps2o/Jeb/lCTFL9m9CG4 95zfhcSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfbV7wAKCRCJcvTf3G3AJrG7D/ 4i3Q4WoYVqrk/BRG2DzTRezzBzFoNJZ43ZgWaSp90pdBsBvZvzlfZ4G1TIkiibm3YRwvyQoxholLoY nkojg5drZFsOGSPNNIZhbCCiubj1WYJOLFFPeixZrUtrjbRhJJWRJq9koNjSrwXQPorSO0z3wMmcY5 9OpWiRkfNs+uWuhanSLS2Klzn6HiMibREhl2anNg22uD5f0xrT6hyMGadKs/+w9td4A/qSOc1R4Z4A C9ajWqrvUi7fUh245VlKYs0rf3uR1dd8V8RFOoXJdoV3QL3JJa87wa75SzuRaOIbpRFlR0miluVRQJ +Y05pZN+uWn4UKhxXyYay9XYndRcOFRnBrloPhGtmSgfLWXjUu2zMlm4rIgHaWHofYRDhgR9/n9Bix 0BxRLqy2t9+YXrkTGmdn9cKL/xWsYaDHWXRkbhoNL8vRs8SflNpi66nLIlkKbP8ransSrLPZ2Dulzg th9GbOVQxNpURYVgrwyDQPyhUYdUIjfZfisJijaVa+3ZLx2T0mB4tGBljLpoTLdtOREMbFAGFlKyzy l3djSIwRISMUatteq7/Jh2C6W+2bwWLsbkMaVSx1gnbywpu1VW6KVSF0kM5Z1YZcR1v7VSkHM8C6lQ 132pCbTqvvXfb8QhLwje7/c+Fy548hbCWsFKFSHqfklj2Q8K7e+Le4m3srbQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael, Kelly
+Clang 14 introduces support for compiletime_assert(). Update the
+compile-time warning regex to catch Clang's variant of the warning text
+in preparation for Clang supporting CONFIG_FORTIFY_SOURCE.
 
-hello Rafael, it is a little bit late for me to reply to you. I was
-finding the way to
-reply to you, cause I'm not in the "cc list". So, thanks Kelly in that way. :)
-I'm totally agree with you that we should split the work into smaller
-pieces and do it step by step.
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-hardening@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+I'm splitting this patch out of the main Clang FORTIFY enabling patch.
+---
+ scripts/test_fortify.sh | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Hi Kelly,
-I got the strong signal from you that you insist on your requirement.
-It's reasonable, and I want that if I am the user too. :)
+diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
+index a4da365508f0..c2688ab8281d 100644
+--- a/scripts/test_fortify.sh
++++ b/scripts/test_fortify.sh
+@@ -46,8 +46,12 @@ if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
+ 		status="warning: unsafe ${FUNC}() usage lacked '$WANT' symbol in $IN"
+ 	fi
+ else
+-	# If the build failed, check for the warning in the stderr (gcc).
+-	if ! grep -q -m1 "error: call to .\b${WANT}\b." "$TMP" ; then
++	# If the build failed, check for the warning in the stderr.
++	# GCC:
++	# ./include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
++	# Clang 14:
++	# ./include/linux/fortify-string.h:316:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
++	if ! grep -Eq -m1 "error: call to .?\b${WANT}\b.?" "$TMP" ; then
+ 		status="warning: unsafe ${FUNC}() usage lacked '$WANT' warning in $IN"
+ 	fi
+ fi
+-- 
+2.30.2
 
-But it's could be some problem for me to do all of that. And I am calling help
-here. Yes! I need some help!
-
-I want to seperate this task into 4 part:
-1. user interface: like sysfs file /sys/power/last_wakeup_reason.
-2. report interface: call by "wakeup sources" to report "wakeup reason".
-3. report operation in kernel: like "interrupt subsystem". (a common interface)
-4. report operation in device: like WDT driver, GIC driver or other
-device driver.
-
-I think we should do the first 3 parts, but not the last one, cause it is device
-specific things. Device and BSP should do that, I insist that.
-Part 1 and 2 are easily to do, and I can rework again and agian until it is all
-right for everyone.
-So it is clear that we have problem with the third part. And yes! it is very
-hard.
-
-Kernel desn't know how the "machine" wakeup, kernel just offer the interface
-that user can mark the "wakeup source", like IRQD_WAKEUP_STATE flag
-and "ws"(wakeup source) interface (acturally they are fake wakeup sources).
-These works well and we can easily to report these which Android patch and
-mine already do that.
-But the left things is hard.Cause kernel or "subsystem" in kernel desn't has
-any mechanism to do that. Then we are facing these three things:
-
-1. "misconfigured" and "unmapped" IRQs reporting.
-Android patch just add a "wakeup report" interface here once it was occurred,
-even it's not in a "suspend" state, and even one of them was in GIC driver.
-if I was the maintainer I won't take this, but the question is what should I do
-for that?
-(Maybe I shoud give a task to "interrupt subsystem people" and ask them to
-do that? :) )
-
-2. errors in suspend/resume process.
-That means if there is a error occurs in suspend/resume process I need to
-report it as "wakeup reason".Which is just "abort wakeup reason" as  Kelly
-said. But it is lots of errors may occurs here, and which one I should report,
-and is that enough?
-And as  Kelly said the code is "messy", that does hit the point.
-
-3. threaded inerrupt
-Sorry, I don't find the properly place in kernel to report there "wakeup
-reason". Maybe that's my lack of knowalige. :)
-It's seem like some interrupt chip driver should do that? I don't know. Maybe
-I should offer a interface and just let "user" to use it?
-
-So, that all the things I got.
-And again kelly, I got your mind, and I will try to think this over again to see
-if I can find a way to do that.
-
-besides, thanks Jone and John, I will rework the patch after this discusion.
-
-And any advice could help! :)
-Or you have a better idea, I can help you to do yours!
-
-Best
-Zichar

@@ -2,241 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5904A36E0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C254A3701
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355132AbiA3OqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:46:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54302 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355122AbiA3OpZ (ORCPT
+        id S1355257AbiA3Oxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:53:30 -0500
+Received: from mail-yb1-f176.google.com ([209.85.219.176]:44592 "EHLO
+        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355210AbiA3OxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:45:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 077A9B82973;
-        Sun, 30 Jan 2022 14:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161E5C340E8;
-        Sun, 30 Jan 2022 14:45:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643553922;
-        bh=5HmiHVeprudoa5Q4aruSHZTv9jVzOD5vFnAOcy/m0zY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=clqj16mVniI09/7yffpGOBTFfPpUTpDqWQlRd3/1dJwTRc59CoU+T83nPom24EfHP
-         PkLBfWL98h0RRhSt4n15TlJCn7k9h45WnP4znvbXd2SqTQCCxDucrPt50HG603Pz3K
-         aAJLZqfYvbcvMOOJsLwtqFc9+RUSkmu2T/+awMwHtY9w+3ULoyEiKDQ/sEAMuDnYQ9
-         8ILIa8FkvGRzd+CdpujN30LxDC63HjGVhQq7HAwTm6nTKiAz+eciTJg1kmB9zo+yV2
-         cc7qi1JAcIc0abxsy9E/DL+FHUrbs8kJdWrCn8cPqnK0qkYK6Yn5UNqv2Fr37ryzVG
-         TaEhoayOFrVVw==
-Date:   Sun, 30 Jan 2022 14:51:46 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Miaoqian Lin <linmq006@gmail.com>, adi.reus@gmail.com,
-        ardeleanalex@gmail.com, gwendal@chromium.org, lars@metafoo.de,
-        linus.walleij@linaro.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stephan@gerhold.net
-Subject: Re: [PATCH v2] iio: Fix error handling for PM
-Message-ID: <20220130145146.2d666289@jic23-huawei>
-In-Reply-To: <YdgrMwCkqzOG8j/j@smile.fi.intel.com>
-References: <YdWjHWowWXy01zaE@smile.fi.intel.com>
-        <20220106112309.16879-1-linmq006@gmail.com>
-        <YdgrMwCkqzOG8j/j@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 30 Jan 2022 09:53:25 -0500
+Received: by mail-yb1-f176.google.com with SMTP id r65so32816927ybc.11;
+        Sun, 30 Jan 2022 06:53:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7eJIL31UX2rAhkSExrDSGNzwUL60RNw+wx2TtRBpbHM=;
+        b=EGIaZctifb3Z6xrjTV7QI5nh/c9u2+7+J/H0ezfaLnGim/zGZaedgvsF8grMwD8ViK
+         qkE3iw3mQEL6mabhYTMtZDmyib7YQ+Zg7UdJkB4shO911FrioclznN2Tr1N0AYtxzfSS
+         kvQYX3XLliXRG6VERMz4iXPmpks6n8FdTgGfeZQ+Svc7lRUfIYMgwKsXUMOPX1NAI4Sr
+         iccoMQrOJx4oQjLggjxTAIpXOUeXtiWpv/JC2S2IfReV4zM7m5RHFvA175eq+/XG52iQ
+         8Ig1jEPqCSQTHzNrMcFzmo3YM8F82qdMGsbkIY+QaFKDFz+CPY07JsoIjo8YH+cwoi+B
+         upZw==
+X-Gm-Message-State: AOAM531SaMlUnRVvEdLV/4Wz8QJ309Zodk9w7j/nHwm8wXs39/lbBF9D
+        mGllgQydsKca9Tpnz3YL8GVYEbeq2vcBEz8gQcc=
+X-Google-Smtp-Source: ABdhPJz5Sdr72jUwaYcAB+X7TeIukkf5+ix90a/KgepawgznXeBG4JZ59eM1/4KjeSYHmb2QEwdTsN5SpYfoP1Z7nCA=
+X-Received: by 2002:a25:34c4:: with SMTP id b187mr24811518yba.78.1643554404447;
+ Sun, 30 Jan 2022 06:53:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211126125244.126300-1-abailon@baylibre.com> <20211126125244.126300-3-abailon@baylibre.com>
+ <CAJZ5v0jejFG76OfewYg3kmKv4xwLdRBpC+zRpJ9Jom+tqo7qyg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jejFG76OfewYg3kmKv4xwLdRBpC+zRpJ9Jom+tqo7qyg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 30 Jan 2022 15:53:13 +0100
+Message-ID: <CAJZ5v0iy_nVvvxYArBG=8=xxLzPDorct+bQQBLqcrWsjRuT5sg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] thermal: add a virtual sensor to aggregate temperatures
+To:     Alexandre Bailon <abailon@baylibre.com>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 13:59:47 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> On Thu, Jan 06, 2022 at 11:23:09AM +0000, Miaoqian Lin wrote:
-> > The pm_runtime_enable will increase power disable depth.
-> > If the probe fails, we should use pm_runtime_disable() to balance
-> > pm_runtime_enable(). In the PM Runtime docs:
-> >     Drivers in ->remove() callback should undo the runtime PM changes done
-> >     in ->probe(). Usually this means calling pm_runtime_disable(),
-> >     pm_runtime_dont_use_autosuspend() etc.
-> > We should do this in error handling.
-> > 
-> > Fix this problem for the following drivers: bmc150, bmg160, kmx61,
-> > kxcj-1013, mma9551, mma9553.  
-> 
-> LGTM, FWIW,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Applied to the fixes-togreg branch of iio.git and marked for stable.
-
-Thanks,
-
-Jonathan
-
-> 
-> > Fixes: 7d0ead5c3f00 ("iio: Reconcile operation order between iio_register/unregister and pm functions")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On Fri, Jan 28, 2022 at 8:31 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Nov 26, 2021 at 1:53 PM Alexandre Bailon <abailon@baylibre.com> wrote:
+> >
+> > This adds a virtual thermal sensor driver that reads temperature from
+> > multiple hardware sensors and returns an aggregated temperature.
+> > Currently, this supports three aggregations:
+> > the minimum, maximum and average temperature.
+> >
+> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 > > ---
-> > Changes in v2:
-> > - fix the fixes tag
-> > - fix similar problems introduced by the same commit
-> > ---
-> >  drivers/iio/accel/bmc150-accel-core.c  | 5 ++++-
-> >  drivers/iio/accel/kxcjk-1013.c         | 5 ++++-
-> >  drivers/iio/accel/mma9551.c            | 5 ++++-
-> >  drivers/iio/accel/mma9553.c            | 5 ++++-
-> >  drivers/iio/gyro/bmg160_core.c         | 5 ++++-
-> >  drivers/iio/imu/kmx61.c                | 5 ++++-
-> >  drivers/iio/magnetometer/bmc150_magn.c | 5 +++--
-> >  7 files changed, 27 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/iio/accel/bmc150-accel-core.c b/drivers/iio/accel/bmc150-accel-core.c
-> > index b0678c351e82..c3a2b4c0b3b2 100644
-> > --- a/drivers/iio/accel/bmc150-accel-core.c
-> > +++ b/drivers/iio/accel/bmc150-accel-core.c
-> > @@ -1783,11 +1783,14 @@ int bmc150_accel_core_probe(struct device *dev, struct regmap *regmap, int irq,
-> >  	ret = iio_device_register(indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(dev, "Unable to register iio device\n");
-> > -		goto err_trigger_unregister;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	return 0;
-> >  
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(dev);
-> > +	pm_runtime_disable(dev);
-> >  err_trigger_unregister:
-> >  	bmc150_accel_unregister_triggers(data, BMC150_ACCEL_TRIGGERS - 1);
-> >  err_buffer_cleanup:
-> > diff --git a/drivers/iio/accel/kxcjk-1013.c b/drivers/iio/accel/kxcjk-1013.c
-> > index 24c9387c2968..ba6c8ca488b1 100644
-> > --- a/drivers/iio/accel/kxcjk-1013.c
-> > +++ b/drivers/iio/accel/kxcjk-1013.c
-> > @@ -1589,11 +1589,14 @@ static int kxcjk1013_probe(struct i2c_client *client,
-> >  	ret = iio_device_register(indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(&client->dev, "unable to register iio device\n");
-> > -		goto err_buffer_cleanup;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	return 0;
-> >  
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(&client->dev);
-> > +	pm_runtime_disable(&client->dev);
-> >  err_buffer_cleanup:
-> >  	iio_triggered_buffer_cleanup(indio_dev);
-> >  err_trigger_unregister:
-> > diff --git a/drivers/iio/accel/mma9551.c b/drivers/iio/accel/mma9551.c
-> > index 4c359fb05480..c53a3398b14c 100644
-> > --- a/drivers/iio/accel/mma9551.c
-> > +++ b/drivers/iio/accel/mma9551.c
-> > @@ -495,11 +495,14 @@ static int mma9551_probe(struct i2c_client *client,
-> >  	ret = iio_device_register(indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(&client->dev, "unable to register iio device\n");
-> > -		goto out_poweroff;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	return 0;
-> >  
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(&client->dev);
-> > +	pm_runtime_disable(&client->dev);
-> >  out_poweroff:
-> >  	mma9551_set_device_state(client, false);
-> >  
-> > diff --git a/drivers/iio/accel/mma9553.c b/drivers/iio/accel/mma9553.c
-> > index ba3ecb3b57dc..1599b75724d4 100644
-> > --- a/drivers/iio/accel/mma9553.c
-> > +++ b/drivers/iio/accel/mma9553.c
-> > @@ -1134,12 +1134,15 @@ static int mma9553_probe(struct i2c_client *client,
-> >  	ret = iio_device_register(indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(&client->dev, "unable to register iio device\n");
-> > -		goto out_poweroff;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	dev_dbg(&indio_dev->dev, "Registered device %s\n", name);
-> >  	return 0;
-> >  
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(&client->dev);
-> > +	pm_runtime_disable(&client->dev);
-> >  out_poweroff:
-> >  	mma9551_set_device_state(client, false);
-> >  	return ret;
-> > diff --git a/drivers/iio/gyro/bmg160_core.c b/drivers/iio/gyro/bmg160_core.c
-> > index 17b939a367ad..81a6d09788bd 100644
-> > --- a/drivers/iio/gyro/bmg160_core.c
-> > +++ b/drivers/iio/gyro/bmg160_core.c
-> > @@ -1188,11 +1188,14 @@ int bmg160_core_probe(struct device *dev, struct regmap *regmap, int irq,
-> >  	ret = iio_device_register(indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(dev, "unable to register iio device\n");
-> > -		goto err_buffer_cleanup;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	return 0;
-> >  
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(dev);
-> > +	pm_runtime_disable(dev);
-> >  err_buffer_cleanup:
-> >  	iio_triggered_buffer_cleanup(indio_dev);
-> >  err_trigger_unregister:
-> > diff --git a/drivers/iio/imu/kmx61.c b/drivers/iio/imu/kmx61.c
-> > index 1dabfd615dab..f89724481df9 100644
-> > --- a/drivers/iio/imu/kmx61.c
-> > +++ b/drivers/iio/imu/kmx61.c
-> > @@ -1385,7 +1385,7 @@ static int kmx61_probe(struct i2c_client *client,
-> >  	ret = iio_device_register(data->acc_indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(&client->dev, "Failed to register acc iio device\n");
-> > -		goto err_buffer_cleanup_mag;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	ret = iio_device_register(data->mag_indio_dev);
-> > @@ -1398,6 +1398,9 @@ static int kmx61_probe(struct i2c_client *client,
-> >  
-> >  err_iio_unregister_acc:
-> >  	iio_device_unregister(data->acc_indio_dev);
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(&client->dev);
-> > +	pm_runtime_disable(&client->dev);
-> >  err_buffer_cleanup_mag:
-> >  	if (client->irq > 0)
-> >  		iio_triggered_buffer_cleanup(data->mag_indio_dev);
-> > diff --git a/drivers/iio/magnetometer/bmc150_magn.c b/drivers/iio/magnetometer/bmc150_magn.c
-> > index f96f53175349..3d4d21f979fa 100644
-> > --- a/drivers/iio/magnetometer/bmc150_magn.c
-> > +++ b/drivers/iio/magnetometer/bmc150_magn.c
-> > @@ -962,13 +962,14 @@ int bmc150_magn_probe(struct device *dev, struct regmap *regmap,
-> >  	ret = iio_device_register(indio_dev);
-> >  	if (ret < 0) {
-> >  		dev_err(dev, "unable to register iio device\n");
-> > -		goto err_disable_runtime_pm;
-> > +		goto err_pm_cleanup;
-> >  	}
-> >  
-> >  	dev_dbg(dev, "Registered device %s\n", name);
-> >  	return 0;
-> >  
-> > -err_disable_runtime_pm:
-> > +err_pm_cleanup:
-> > +	pm_runtime_dont_use_autosuspend(dev);
-> >  	pm_runtime_disable(dev);
-> >  err_buffer_cleanup:
-> >  	iio_triggered_buffer_cleanup(indio_dev);
-> > -- 
-> > 2.17.1
-> >   
-> 
+> >  drivers/thermal/Kconfig                  |   8 +
+> >  drivers/thermal/Makefile                 |   1 +
+> >  drivers/thermal/virtual_thermal_sensor.c | 218 +++++++++++++++++++++++
+> >  3 files changed, 227 insertions(+)
+> >  create mode 100644 drivers/thermal/virtual_thermal_sensor.c
+> >
+> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > index d7f44deab5b1..b326fae5ad1d 100644
+> > --- a/drivers/thermal/Kconfig
+> > +++ b/drivers/thermal/Kconfig
+> > @@ -228,6 +228,14 @@ config THERMAL_MMIO
+> >           register or shared memory, is a potential candidate to work with this
+> >           driver.
+> >
+> > +config VIRTUAL_THERMAL
+>
+> The name is a bit overly generic IMV and that may be confusing.  It
+> would be good to use a name reflecting the fact that this is DT-based.
+> For example, something like thermal_of_virtual_sensor or similar.
+>
+> > +       tristate "DT-based virtual thermal sensor driver"
+> > +       depends on THERMAL_OF || COMPILE_TEST
+> > +       help
+> > +         This option enables the generic DT-based thermal sensor aggregator.
+> > +         This driver creates a thermal sensor that reads multiple hardware
+> > +         sensors and aggregates their output.
+> > +
+> >  config HISI_THERMAL
+> >         tristate "Hisilicon thermal driver"
+> >         depends on ARCH_HISI || COMPILE_TEST
+> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > index 82fc3e616e54..8bf55973059c 100644
+> > --- a/drivers/thermal/Makefile
+> > +++ b/drivers/thermal/Makefile
+> > @@ -60,3 +60,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)        += uniphier_thermal.o
+> >  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> >  obj-$(CONFIG_SPRD_THERMAL)     += sprd_thermal.o
+> >  obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)   += khadas_mcu_fan.o
+> > +obj-$(CONFIG_VIRTUAL_THERMAL) += virtual_thermal_sensor.o
+> > diff --git a/drivers/thermal/virtual_thermal_sensor.c b/drivers/thermal/virtual_thermal_sensor.c
+> > new file mode 100644
+> > index 000000000000..9f38af925fd1
+> > --- /dev/null
+> > +++ b/drivers/thermal/virtual_thermal_sensor.c
+> > @@ -0,0 +1,218 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * virtual_thermal_sensor.c - DT-based virtual thermal sensor driver.
+>
+> It would be good to have some more information on what it does here.
+>
+> > + *
+> > + * Copyright (c) 2021 BayLibre
+> > + */
+> > +
+> > +#include <linux/err.h>
+> > +#include <linux/export.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/of_platform.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/thermal.h>
+> > +#include <linux/types.h>
+> > +#include <linux/string.h>
+> > +
+> > +#include <dt-bindings/thermal/virtual-sensor.h>
+> > +
+> > +struct virtual_thermal_zone_device {
+> > +       struct thermal_zone_device *zone;
+> > +       struct module *owner;
+> > +};
+> > +
+> > +struct virtual_thermal_sensor {
+> > +       int count;
+> > +       struct virtual_thermal_zone_device *zones;
+> > +       struct thermal_zone_device *tzd;
+> > +       int (*aggr_temp)(int temp1, int temp2);
+> > +
+> > +       struct list_head node;
+> > +};
+> > +
+> > +static int max_temp(int temp1, int temp2)
+> > +{
+> > +       return max(temp1, temp2);
+> > +}
+> > +
+> > +static int min_temp(int temp1, int temp2)
+> > +{
+> > +       return min(temp1, temp2);
+> > +}
+> > +
+> > +static int avg_temp(int temp1, int temp2)
+> > +{
+> > +       return (temp1 + temp2) / 2;
+> > +}
+> > +
+> > +static int virtual_thermal_sensor_get_temp(void *data, int *temperature)
+> > +{
+> > +       struct virtual_thermal_sensor *sensor = data;
+> > +       int max_temp = INT_MIN;
+> > +       int temp;
+> > +       int i;
+> > +
+> > +       for (i = 0; i < sensor->count; i++) {
+> > +               struct thermal_zone_device *zone;
+> > +
+> > +               zone = sensor->zones[i].zone;
+>
+> What if one of the zones gets unregistered after registering a thermal
+> sensor depending on it?
+>
+> I don't think this will still work in that case.
+>
+> > +               zone->ops->get_temp(zone, &temp);
+> > +               max_temp = sensor->aggr_temp(max_temp, temp);
 
+One more thing: AFAICS, this is only going to work for the "average"
+type of aggregation if there are two sensors involved.  For three (or
+more), you won't really get the average.  For instance, for three
+sensors the current patch leads to t = t_0 / 4 + t_1 / 4 + t_2 / 2
+whereas the average is the sum of t_i divided by the number of them
+(3).
+
+It looks like you need to check the aggregation type here directly
+instead of using the callback approach, which would also make it
+easier to follow the code.
+
+> > +       }
+> > +
+> > +       *temperature = max_temp;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static const struct thermal_zone_of_device_ops virtual_thermal_sensor_ops = {
+> > +       .get_temp = virtual_thermal_sensor_get_temp,
+> > +};
+> > +
+> > +static int virtual_thermal_sensor_get_module(struct virtual_thermal_zone_device *zone,
+> > +                                            const char *name)
+> > +{
+> > +               struct platform_device *sensor_pdev;
+> > +               struct device_node *node;
+> > +
+> > +               node = of_find_node_by_name(NULL, name);
+> > +               if (!node)
+> > +                       return -ENODEV;
+> > +
+> > +               node = of_parse_phandle(node, "thermal-sensors", 0);
+> > +               if (!node)
+> > +                       return -ENODEV;
+> > +
+> > +               sensor_pdev = of_find_device_by_node(node);
+> > +               if (!sensor_pdev)
+> > +                       return -ENODEV;
+> > +
+> > +               if (!sensor_pdev->dev.driver)
+> > +                       return -EPROBE_DEFER;
+> > +
+> > +               if (!try_module_get(sensor_pdev->dev.driver->owner))
+> > +                       return -ENODEV;
+> > +
+> > +               zone->owner = sensor_pdev->dev.driver->owner;
+> > +
+> > +               return 0;
+> > +}
+> > +
+> > +static void virtual_thermal_sensor_put_modules(struct virtual_thermal_sensor *sensor)
+> > +{
+> > +       int i;
+> > +
+> > +       for (i = 0; i < sensor->count; i++) {
+> > +               if (sensor->zones[i].zone)
+> > +                       module_put(sensor->zones[i].owner);
+> > +       }
+> > +}
+> > +
+> > +static int virtual_thermal_sensor_probe(struct platform_device *pdev)
+> > +{
+> > +       struct virtual_thermal_sensor *sensor;
+> > +       struct device *dev = &pdev->dev;
+> > +       struct property *prop;
+> > +       const char *name;
+> > +       u32 type;
+> > +       int ret;
+> > +       int i = 0;
+> > +
+> > +       sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+> > +       if (!sensor)
+> > +               return -ENOMEM;
+> > +       sensor->count = of_property_count_strings(dev->of_node, "thermal-sensors");
+> > +       if (sensor->count <= 0)
+> > +               return -EINVAL;
+> > +
+> > +       sensor->zones = devm_kmalloc_array(dev, sensor->count,
+> > +                                            sizeof(*sensor->zones),
+> > +                                            GFP_KERNEL);
+> > +       if (!sensor->zones)
+> > +               return -ENOMEM;
+> > +
+> > +       of_property_for_each_string(dev->of_node, "thermal-sensors", prop, name) {
+> > +               struct virtual_thermal_zone_device *virtual_zone;
+> > +               struct thermal_zone_device *zone;
+> > +
+> > +               virtual_zone = &sensor->zones[i++];
+> > +
+> > +               zone = thermal_zone_get_zone_by_name(name);
+> > +               if (IS_ERR(zone))
+> > +                       return PTR_ERR(zone);
+> > +
+> > +               ret = virtual_thermal_sensor_get_module(virtual_zone, name);
+> > +               if (ret)
+> > +                       goto err;
+>
+> The above prevents the module holding the zone driver from being
+> unloaded while it is used by this virtual sensor, but it still doesn't
+> prevent its zone from being unregistered after probing the virtual
+> sensor.
+>
+> > +
+> > +               virtual_zone->zone = zone;
+> > +       }
+> > +
+> > +       ret = of_property_read_u32(dev->of_node, "aggregation-function", &type);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       switch (type) {
+> > +       case VIRTUAL_THERMAL_SENSOR_MAX_VAL:
+> > +               sensor->aggr_temp = max_temp;
+> > +               break;
+> > +       case VIRTUAL_THERMAL_SENSOR_MIN_VAL:
+> > +               sensor->aggr_temp = min_temp;
+> > +               break;
+> > +       case VIRTUAL_THERMAL_SENSOR_AVG_VAL:
+> > +               sensor->aggr_temp = avg_temp;
+> > +               break;
+> > +       default:
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       sensor->tzd = devm_thermal_zone_of_sensor_register(dev, 0, sensor,
+> > +                                                          &virtual_thermal_sensor_ops);
+> > +       if (IS_ERR(sensor->tzd))
+> > +               return PTR_ERR(sensor->tzd);
+> > +
+> > +       platform_set_drvdata(pdev, sensor);
+> > +
+> > +       return 0;
+> > +
+> > +err:
+> > +       virtual_thermal_sensor_put_modules(sensor);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static int virtual_thermal_sensor_remove(struct platform_device *pdev)
+> > +{
+> > +       struct virtual_thermal_sensor *sensor;
+> > +
+> > +       sensor = platform_get_drvdata(pdev);
+> > +       list_del(&sensor->node);
+> > +
+> > +       virtual_thermal_sensor_put_modules(sensor);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static const struct of_device_id virtual_thermal_sensor_of_match[] = {
+> > +       {
+> > +               .compatible = "virtual,thermal-sensor",
+> > +       },
+> > +       {
+> > +       },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, virtual_thermal_sensor_of_match);
+> > +
+> > +static struct platform_driver virtual_thermal_sensor = {
+> > +       .probe = virtual_thermal_sensor_probe,
+> > +       .remove = virtual_thermal_sensor_remove,
+> > +       .driver = {
+> > +               .name = "virtual-thermal-sensor",
+> > +               .of_match_table = virtual_thermal_sensor_of_match,
+> > +       },
+> > +};
+> > +
+> > +module_platform_driver(virtual_thermal_sensor);
+> > +MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
+> > +MODULE_DESCRIPTION("Virtual thermal sensor");
+> > +MODULE_LICENSE("GPL v2");
+> > --

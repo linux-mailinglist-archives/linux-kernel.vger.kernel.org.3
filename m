@@ -2,181 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 822574A3578
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 10:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4333E4A358B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 10:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354524AbiA3JuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 04:50:06 -0500
-Received: from mail-eopbgr70052.outbound.protection.outlook.com ([40.107.7.52]:51574
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        id S1354488AbiA3Jzr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 30 Jan 2022 04:55:47 -0500
+Received: from mail-eopbgr90089.outbound.protection.outlook.com ([40.107.9.89]:33040
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1346817AbiA3JuC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 04:50:02 -0500
+        id S239760AbiA3Jzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 04:55:45 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W2iMqp4fhkYyqKZxMgsCRNA+bLrIr4+4+UX2Bj5zVW3hXUq5G00Io/uC4emqYubpk7WiWQEOdBH2hEgH3bsiHR5EN4TWaoVua+bfbT+GZP6HH/V+BdsdT21rRIslRoSlobq1MlabFpbFtSAOSPm63pDiw7ki4ePa/0V+3ckWvQ9ARQSs+Jr18/un2qf4A4u78+COMglArbVAmPH8d8fm8ckOcCnbpm4oMKbWa0FHZNb+ihJ9bI+LqAOldNJquNtdbA2Zm4fpmJpQgNJqdXkHC0wflDoTPjPsinzdx0Roand7lhpZZla+qM9MWPl6kH7d1/EPzi0e6/8nxj+ROTrhyA==
+ b=R17SYY9om7iJQ4lEHSBKbi5beJU+og3HkH7GAQ73Uttiv+rmvgCWvL/u6Th1+vPeXhWvtCo9Gy2yMoupElAssb+XW/n2LVq4WvcP53Y8ES7wbm+GI7bwMIVOqlfW/I+bYzIcnVb11UmsQ+skfXi5vnN5ji5JfqazrsmzdpHXaRfE252yKNIkOUj3gNgus5uEgJWAgh6lf8owJkoyVEoSplZaZXadqU3S/xt/A6Xot2A250wms5IdD5a+AiOTNvrd9lfxzOdNrG+ME1VQ1g41n77WSLVZcYsNSCwxytvRdCD7nCNiOkGgkrcHRqCSyTLs9h7uE2DaqQjVvaxh/IwdpA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6XIYa4zkcd6a6/78+EPlpTrTWEidaxP2YsOI3kfOPKA=;
- b=FQBKzWhtmqjppkEvj1G2iqwGp28K4ejU674ONi08+ti4mFZux9Ra00dMY3y7Vv40nal06t0qs/Yhp7PCTp+7H4qhaV9CZ7puEtsxHG+0excWZnJ+6bG8kMihrjWN8cLClegH1m6Ecyb/P7PmNXBfxwFvy+FFvnvUOHMogPBLhJyxi85ngtRY9zfKDWStVw9y8UPe+PW20ErrngmAjHLMnjOL0N5RM8qC9FEeB9NOW+cI5APwPhL304kt80IdAoleVbt7266wS04LDW+QbewYrJ1XwFrmuStO/A0NozLWxtkX7J+2p3H9cLrYA5KDt37BFsJCIS7cFAbpVCfQzPfw6w==
+ bh=H0pFT4jon4M/wf4hXEJ8fVFZZtbHSN2U6qzJj/M7OZ8=;
+ b=epPsf0rcl2kBWnTqU1wIeDzP1QvnLmjPr8SsJ2n2YOpgz4ZCRvlWhsbdnL23GkGPbs2DCzObkdtmSRmcjh10xtzYYTOMHNWmQaQLxbVMRXTf10sDy/6AsIBApIk37l+c63uJImU/aeSv45y4mxl8/5zpNkEBwOs3YMpTm24N9ztGnNh/OhMxBExPXbawtbZoD4EpwH0y1H5fkwKjkTJl6w8UBnb0IUYHij3Lb9zTnMydbagIGkdfi7OEJ9+ff9H1tz7chcbzfQXbnezNjiuypIF3PwXYxCBn9pAc5iJtxs34mAq3+nGaja2aTmvbbc22Wv5SfgvIwgLcLsQOClMBmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6XIYa4zkcd6a6/78+EPlpTrTWEidaxP2YsOI3kfOPKA=;
- b=CEbyTs5CUoOMQMHQRg1Sl/3xYS0TkkeZ9plXPH6h7KuuaASs+TeAgkIOK32aBuUsCtPtsh2yX/fpqalsoWG7AYIqOGbLCWFZq4XnOGU9nQzmPtsmNmCBwSRduM2Txl8e38ksj3jhl5hwn35fJyq8b5ado2L5df0OOqBidzZqhp8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com (2603:10a6:3:e1::23)
- by VI1PR08MB4543.eurprd08.prod.outlook.com (2603:10a6:803:f4::13) with
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB0825.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100:5::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Sun, 30 Jan
- 2022 09:49:58 +0000
-Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com
- ([fe80::e14f:197:5001:4c56]) by HE1PR0802MB2426.eurprd08.prod.outlook.com
- ([fe80::e14f:197:5001:4c56%3]) with mapi id 15.20.4930.020; Sun, 30 Jan 2022
- 09:49:58 +0000
-Message-ID: <0fe601eb-2993-79a5-bb45-6eafc7f9d0ba@wolfvision.net>
-Date:   Sun, 30 Jan 2022 10:49:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] arm64: dts: rockchip: rk356x: Add pdm node
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sun, 30 Jan
+ 2022 09:55:40 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.020; Sun, 30 Jan 2022
+ 09:55:39 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] [Rebased for 4.14] lkdtm: Fix content of section containing
+ lkdtm_rodata_do_nothing()
+Thread-Topic: [PATCH] [Rebased for 4.14] lkdtm: Fix content of section
+ containing lkdtm_rodata_do_nothing()
+Thread-Index: AQHYFb+JVDWALiF3l0KHVv16Qql+pw==
+Date:   Sun, 30 Jan 2022 09:55:39 +0000
+Message-ID: <32bbc122ba24b863d048f51ff13fe391b16b9f2e.1643536487.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Alex Bee <knaerzche@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Levin Du <djw@t-chip.com.cn>, Liang Chen <cl@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tianling Shen <cnsztl@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-References: <20220130053803.43660-1-samuel@sholland.org>
- <20220130053803.43660-2-samuel@sholland.org>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-In-Reply-To: <20220130053803.43660-2-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR0P278CA0086.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:22::19) To HE1PR0802MB2426.eurprd08.prod.outlook.com
- (2603:10a6:3:e1::23)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fbc67731-7884-47ab-c800-08d9e3d6ac1e
+x-ms-traffictypediagnostic: PR0P264MB0825:EE_
+x-microsoft-antispam-prvs: <PR0P264MB0825DAD772D7BF82715C97A2ED249@PR0P264MB0825.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:644;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /+dXRUFOJ4aUWvYamRNF8HSCsKwY9cb+PAWMh+llUdScchSnEOUSGbOvWSJdEx9DobComWT5uv16K9gsSgsJBxpoGSjf1kHuBOnmHL3FOS2uJ6Iag0+UgDQZjfNxhYvVUdDKSFMSWf+hYzkK2aTl1/XmhQdU/g0PvxFDV0Ei5LNUuaFR7qNHo6iFd+5VjVmevBrq5h6pv1o7JtPn9NUDs6gZnauYRPjf2MjpCXqxzP0/6uVT4YLPEjSyRbUwlrqfdpkkaAgzmfWZtTDHEHDxLDgj+paOOWs+TdhUovF36Pu2p0o4QK0CVgN3/WmxqB3VMj4OBqSsGxG2CU0UZb6UQSk+dFj6s3PLzrswrvO21HbGDHH+lwKe6gVtnR4ab2Ha8YeTNFBNOXBGOh+AezKF4l4OuT293FfXtjOpSy51Qy12j81oVPtAzXZrv9gXLai3CIiAUu3B2S5oE6bdTiuy6+ikaSejP4FGStO0GeGtCuoxxe4TaUEAWVbH/17JQwB8kd7wEF6dw1VHqlbnUFw4uxaHA3gq10pCdZn5jBMZIMgiVcTU+WZap/logIb2p1qlCv4cFGZSjnqLZhGBV5xemzYQBb4Cu49clZEahJ46tHX7gRs25jMP0U6st+8Vad1+Ieq8ygiQ+8MrY+WxY3q8xY3vPbL9FQkrIe1OIZFcJOQXid93n+TpsySmMqqsN8lvtywArF+S4zB4/PP0BvYHIBQJFIvj+1wBymOZJE8pV62DQpMjDB71TRLJEmzIFEMvDci3i87IQ2CdMajsIKVR1BG4mUZb2Mfc9TeemJo4f5k=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(4326008)(316002)(122000001)(86362001)(83380400001)(508600001)(38100700002)(36756003)(66946007)(76116006)(71200400001)(91956017)(66446008)(66556008)(64756008)(66476007)(8936002)(8676002)(54906003)(110136005)(6486002)(966005)(6512007)(5660300002)(44832011)(6506007)(2906002)(2616005)(26005)(186003)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?wrPCRg89A0YLr9KWFTZAstonbpbzIMGBLdqb5BZvyhMYezCgoyDOk0xQB1?=
+ =?iso-8859-1?Q?XxI35CWeFWXX3q/8GeSp5iNhqGWrYdSawRfsoQdrpTC8ulTc167z9FohwY?=
+ =?iso-8859-1?Q?RUOvlHPrAvrnlua15OkjG8XtJIhAjF6ZDv83UI4LqhcDSUWNm+5QlAJ+d1?=
+ =?iso-8859-1?Q?oL4FsmCmNb/ES0z2DXZgfCItKrVjpHGQxcD8vmFNBib8cttWfR2UsjggCk?=
+ =?iso-8859-1?Q?EAEE9LayXDOJkJWqgoUulRYQRx2i3L4iiHKREX+tG2vua+8R/1cset2lmC?=
+ =?iso-8859-1?Q?VZ4qaZOzWNiTy4olZxYXo5LvXGC/4wCwqOa1OVJTSs+Bou8wz4KmJlTP1b?=
+ =?iso-8859-1?Q?EOocgUHfl/ADFDBNAOj0+Vt2+iizbm7sxsOWlf4CTMIeUP4N9+lsLYqlI6?=
+ =?iso-8859-1?Q?H/fyCc1jKG9mydQMhPNaBYEnCGy1SJjLlIxpF7evsMuI5ylygqC/CB5++A?=
+ =?iso-8859-1?Q?vz2Qz5UAKChhS5rzVzNYywg3+MUTZZ5ezdDwJiMQkv5bCcpgHBasPznem0?=
+ =?iso-8859-1?Q?MKkx4OZj2cPwQiWIn2TLOPCLMxGT5IRPo7fnUkn4RBP4ypjIkAq+6kQDg7?=
+ =?iso-8859-1?Q?jwDvZhG7k6DhSxRAhQGBUh2nRECnPeu7C2xn1kf2Fc5wjzU6QtxcWwoH5y?=
+ =?iso-8859-1?Q?ukSjCLNuo7JJXRGm7nAxC/9FyHtvWr0JHBbbN79p5uInv3bk2F5DCLstwv?=
+ =?iso-8859-1?Q?b6CkfkBN8qq9njtVlbb/zpQ2g2RshU43Kh1skqvMiQmF0LkuIuKX9lE2S8?=
+ =?iso-8859-1?Q?dCiyvxiRpxfDMRolyWtG81iM5TBX4zu5ii/ORRZ4fyIxJ8Dc50ILogeMnn?=
+ =?iso-8859-1?Q?yGUh03xWfFJOwfamarQQPyiy8HR9ZHwMmbKIOZozu1AXSuc487QbmGryu8?=
+ =?iso-8859-1?Q?6QpPLMy+lbVM3skJA0/bgTW0srjcbPMoBObWXsfI88eq97qSWWBIWHdvmC?=
+ =?iso-8859-1?Q?NxKJfNljg9zKZoF2PEuA5INzBVbFOZH1qZp8XfLZv66Nz425XItTi+JJd8?=
+ =?iso-8859-1?Q?NYTYMCFScORL44RCOxxsNI23UoMr63PNmnCqVqj/ra1pXE+vlwrQhajNkJ?=
+ =?iso-8859-1?Q?cDdYg+okUS6SLjoDRNSodDHvk8qswVEH6csWMNCfAJSI/BB+LsQWgMRIp9?=
+ =?iso-8859-1?Q?P9NZ+aYXQbXUqusLDCy6Ri5BV1lLJ3yj+FqurLgnpXpR3tz2XSkM/v3CTw?=
+ =?iso-8859-1?Q?geCr+BeXD9pABSAdkqA7R6dIlOn75kYZuUSuo1wxPbFZ4AZ2+xLKiBNH6v?=
+ =?iso-8859-1?Q?c03eUMZ9y4LIlk+rTVRF/MvA3/X8xXiIHGyfAKbglvFBc56SMsmmfjj5af?=
+ =?iso-8859-1?Q?i7OIVXsYk+9KfGcBrYc8CL7nSvY+tonhaJF8Ccnw4zsITgs8F7AiO6uWbJ?=
+ =?iso-8859-1?Q?n8oRAz4l8yd3srIP/+pbQOfXh88CuiW6IGCBUyMR9DEsp7sLX/o1Tv3hD5?=
+ =?iso-8859-1?Q?xkUFMjQYqutFBhxwscArV6yLvhh9AivGkzONzLKaUEQ/zWyPO+uspVzBmO?=
+ =?iso-8859-1?Q?qhqb8mtua5MSJeZOdLKjkXSjVmMTCOj4Ka/5olssQdP2H6FQXb3hMWoVZN?=
+ =?iso-8859-1?Q?sMgy3bURc2clAFMU7Yn63k6Hk60Ptpsb4krPWvcG6AfSV0HodpVNTubksd?=
+ =?iso-8859-1?Q?e0jvLs6ri9TbvXPQSONLJFZ9hba6XLindQ/uiWdnWd+n1ACwnUYQPyvy+w?=
+ =?iso-8859-1?Q?zsKoCJRfbHFwfyck7p+3lBoyojl1Dkh4zTfLijp51ctSkt1xLSiGqZ0i8V?=
+ =?iso-8859-1?Q?xqb7uXccet450SSlvUjKAndS4=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 205a647d-3795-4c82-7ac6-08d9e3d5e002
-X-MS-TrafficTypeDiagnostic: VI1PR08MB4543:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR08MB4543E4BF2DA5B010DE4FD6A1F2249@VI1PR08MB4543.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2089;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4w/hfnxfbF/M710Pl9fni/+neFDcka539zfAlerqxiyNEmWzhmDVE32yIDUm3V/5dEAORSLTYhDFbiz+D907YN1F+WYPJHHs+u3QAX18Asm59j15sKxbM05BMxxbuBRwCXaFdtYvXTz/LP9JPtjka4k2BwQEdrJen5Xp3anFO6oIIxqMuttXPvPzVBRNMf04CBiD940N09RVC3CA04tGP/ZneCZAuY1SV5LZaXG5DdG/+BDuCoFnolPylEhRMJuqK9uglqgfkfr5e6ES9xxIefY6CHYGO+iIns/Ew01/xZ2AZeH5s8sGOT+fZ7AFjw1MU3IAD6mexwi8IQP75wZBBkF6qAoGnZgllNy0LaEVHNxOlnicNisuTFnXSiRK8TmJNHT9znBH8E2FVFHmqlWYOkd8XookBKMkJEom+scalcZ3vHkUCQl3spmm9SWmo8u0x4Kh1sC1ZiLLUmVk/iLsyzKWU1u95pv5s/Cm3pOP15xHh8MBM1RfwK4Uds3aHxrr8/uBkrXQd2L0lQaAnfX3oN/FwfZdxM+mzeBOsAjxdDI6fgXh8LwOI6ILWf5ntV8388McrpgJUdhtmD0TLbfJaEQOaoTIwKOU8LLLbXMI0g0FKo686GKB9bO0dPMNutfrA9rJkwbguXE+EhgL25Jx4uF7z94eSQTsS1i2smSibD9PWnaum7tQjn+6ghw69aymHX4r4EH/7MmjM/P8zfwoujV7aKjv5EshxU45tLa7838=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0802MB2426.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(8936002)(66556008)(66476007)(86362001)(4326008)(8676002)(66946007)(38100700002)(53546011)(52116002)(7416002)(6512007)(5660300002)(6506007)(508600001)(6666004)(6486002)(54906003)(316002)(83380400001)(2616005)(2906002)(44832011)(186003)(110136005)(36756003)(31686004)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Sk85bXlpSUhuR0hiY1gyWjlWc1kydmprSk84b29xbU1hWEZmeHhFTzltSHFM?=
- =?utf-8?B?eTBJcVF3eHZLak9OdmV5S0tsRlp2VE5CTUlyN3U3TllHaEU4Rm0rTy9ESE9N?=
- =?utf-8?B?WlROUEtlNDVlb0EyU1RCS3ZienVONDh6L1lWc2xSaUdaRSs1Yjl1SGRZa0Yw?=
- =?utf-8?B?YjRqZnprOTZKaWk1Q2xwQUJNbCs0Tlh3bDhqMTh3TlRVWCt1dlNGMkR4ODUw?=
- =?utf-8?B?ODVlK0hyMWV6dG1kNnBEREdqaGV2amtGeEthZExWak53Z1dJSnZqMk9iSHpw?=
- =?utf-8?B?VnpiYTA5OG1tV1plVDloWEhUMGpyYlNoeXBBeWJKY0hhVmZhZ21CQ05veEJu?=
- =?utf-8?B?dXRJNVlQd3FvWU96cldSelYrZUN5eFVGejBRcmhYS0tsY24zVE02TjRIekFU?=
- =?utf-8?B?bnpiMlA1Tk1laHZvL3JxSkVrU1R1UlFwbndyc0lTRGpiMnRMZFB3OC9TWXhW?=
- =?utf-8?B?TGF5Qy9VMlF5aWhYV0wwQksyWEdYamdTN1BpdVJ2Yi8wTmVqL3BNbDAvTkZr?=
- =?utf-8?B?VU1mTWhZeUdQdit5eW1DdXdPNnJuSFdnMHFqUkJ5NHVpOWVmZ0VNZGNseFk3?=
- =?utf-8?B?YVpIbjRlRCtIWVk1dFBLUlFvN1ZFbmpMM0svaVNjWW9yeFRKdjlKempLY1lV?=
- =?utf-8?B?UkFpQ2gvWVFuK2d6aGxkRVVndkYwSnV5RENBdkIzR25sUlVjelQ2Sk5YcHBt?=
- =?utf-8?B?RU5qUGdSMmlKSWkwajNGNWZOdmh1cXhPbmpqWUxYVXQzdWYxT1lKdDh2UUl2?=
- =?utf-8?B?M1d4eHgwZ1Y5WS9vU1Jod2dxYmNXZEJGMjI4dTVFZXEySHNvRFk1Qko2dlVv?=
- =?utf-8?B?M01PZXIrYXY5RFlDeUdIMGh6ZXJGQ0JCSk9hOXp1YVk2Vnh6c2dXb3ZIcXpG?=
- =?utf-8?B?L2pjZGl6aE8rSGp3ZlBpN2tkTTI0dlo0cytxVkxMMS9RZ1RWaWhmZ0hMNHFD?=
- =?utf-8?B?K1hCNFJzOWZtOHVFUzB4clZqcDI2cDNPQzFIa1VvQUpUbnFKb3BTYkx6UFBa?=
- =?utf-8?B?SEh2aXZWWEdHRjVhTmNhbkFFOExPK21CeHRyMDlDZDhhb3RpWXlaRVRGZktw?=
- =?utf-8?B?b2VvcnpMdENLOFloNTBuaE5mL2xHeHMzQ3VzVTgvUVRKWkNQMmFzL08vV3dZ?=
- =?utf-8?B?dEVzdVcwY0VEYnJFUVJXU2pzaW9aUUdFOW1EajRiWXl6S01YY25UVG55bWhJ?=
- =?utf-8?B?QmNSOExzY0pWTlNjRHVrL3crS1Rnc2Rzd2hmRFp3WG52UUcwNUM5WjgyRmpo?=
- =?utf-8?B?cTJnUjVJcGRVNVdvS1l5WndlRWNuQjRmcElCaVlFd2lXU3JRRXdBV3ZTdGZ4?=
- =?utf-8?B?bEJCNnpCSTdLK1lMd2UxUjhadWlXbmMxcithalp2d1RPbVN3OHZXekc4VG1J?=
- =?utf-8?B?WldRMC9xY0loWEVSRHZ6aXZwL1N2NGYwS3dWbnp3Qnl0L0pxeGF6aFdnNEVh?=
- =?utf-8?B?SDJTVFllNW51VEkzVGk0ZVhhcWQ3c202NkdCbDUzSFQrekwwSko0L1lNdXFj?=
- =?utf-8?B?QzRDUkIxMUFKS25pUmZxLzBxa29XOTBlKzdNZHhLenRYWTR6ZEZlaG5McUll?=
- =?utf-8?B?QWR4cUV3VXN5TDhlQ1JtYmQvMmY3REF6cFY5QkRvOThXZFlxRW5Id09ZZ1ov?=
- =?utf-8?B?ZTZvV1lLbHVPV09CMnZCa204V1BVb25UQ3QzSFF6bWxnMlFreFV2OHFMQTg2?=
- =?utf-8?B?V1BLU3JRaXVYTE54N0gzRHYzTnVCOUJEOFpqaS9QWGUweFExalY4NEJVSHB3?=
- =?utf-8?B?UzJRbzlSYWJIZEJ1NWJnbENuSktuM295aDZvQmFUOU5JQXJqWmNUaTdpVFFP?=
- =?utf-8?B?Z3VWamFyS2RyZG51cVFKVmN5YkFSSU83cnZ0UURnR291MmtRTkdISjZlcUd4?=
- =?utf-8?B?VGExZnByTkxmSloxaU43N24zellwdmxMRm1DWkV5amREVlB4QmE1ZEZ3d05R?=
- =?utf-8?B?ZjlGTTdoRU1jdXVPT1g3cVJtOHoyY2ZWcUlRaVZYa1J0KzR5aWZKZjhqalov?=
- =?utf-8?B?a244RFVuTXUxczJiVGtwbERhRmR0TnUvUEZxUE12SkhHQTZSYllEWVMxaDV6?=
- =?utf-8?B?aXp0SlhGbEJUM1gwVnUyWHRHK01Od0tJNWRXUWFINU5FMmdoQ0pEOUg2a1Q5?=
- =?utf-8?B?cEQ4Z0Q0bmRsR2MydE0vTDMzL0JXUlZWd0JWSXhtb2xmYnhwbGk0UytpbG8x?=
- =?utf-8?B?QkVSOVN0TDl1VHU0alFGZDkzbm5NTFN5SEovU2JUOXpIbHZSbkM1aFBKUjJG?=
- =?utf-8?B?K0NldE1jZkQ0eG9vTlc4NFJsTStvQTI5ZitPbDloNjVOSlQwUW12TkFoWm1i?=
- =?utf-8?B?b2NYRlNxejNlTmdzdmJsd2g5M2MreFhlV0xjcEdtcnN2eEZCZ2RUdz09?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 205a647d-3795-4c82-7ac6-08d9e3d5e002
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0802MB2426.eurprd08.prod.outlook.com
+X-OriginatorOrg: csgroup.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2022 09:49:57.8246
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbc67731-7884-47ab-c800-08d9e3d6ac1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2022 09:55:39.9215
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TiyzCM6efAYHYlSL36wGnwUHOOlToaE6FsDtI4jxUNhExYrdJ+vjf7oU/0sZK8eTBCYLCOEL/84Bf+me6RrHwBCKQ+5ECdyhrSI16BDejOo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB4543
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aWQbLYGaXCFjdJzGipn57jJuXi6QkUWMWor17DhPKKUEcMjk1v1BLaJ1UjN8gZQRNk7J16DaJQx/cBmy9xhzFw3K59qrrIv2qWKrf8DYdVU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB0825
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Samuel,
+This is backport for 4.14
 
-On 1/30/22 06:38, Samuel Holland wrote:
-> rk356x contains a PDM microphone controller which is compatible with the
-> existing rockchip,pdm binding. Add its node.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index a68033a23975..f2f3cdeab0aa 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -651,6 +651,27 @@ &i2s1m0_sdo0   &i2s1m0_sdo1
->  		status = "disabled";
->  	};
->  
-> +	pdm: pdm@fe440000 {
-> +		compatible = "rockchip,rk3568-pdm";
-> +		reg = <0x0 0xfe440000 0x0 0x1000>;
-> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
-> +		clocks = <&cru MCLK_PDM>, <&cru HCLK_PDM>;
-> +		clock-names = "pdm_clk", "pdm_hclk";
-> +		dmas = <&dmac1 9>;
-> +		dma-names = "rx";
-> +		resets = <&cru SRST_M_PDM>;
-> +		reset-names = "pdm-m";
-> +		pinctrl-0 = <&pdmm0_clk
-> +			     &pdmm0_clk1
-> +			     &pdmm0_sdi0
-> +			     &pdmm0_sdi1
-> +			     &pdmm0_sdi2
-> +			     &pdmm0_sdi3>;
-> +		pinctrl-names = "default";
+(cherry picked from commit bc93a22a19eb2b68a16ecf04cdf4b2ed65aaf398)
 
-I think the pinctrl properties should go before the reset properties.
+On a kernel without CONFIG_STRICT_KERNEL_RWX, running EXEC_RODATA
+test leads to "Illegal instruction" failure.
 
-Apart from that this patch looks good to me.
+Looking at the content of rodata_objcopy.o, we see that the
+function content zeroes only:
 
-Best regards,
-Michael
+	Disassembly of section .rodata:
 
-> +		#sound-dai-cells = <0>;
-> +		status = "disabled";
-> +	};
-> +
->  	dmac0: dmac@fe530000 {
->  		compatible = "arm,pl330", "arm,primecell";
->  		reg = <0x0 0xfe530000 0x0 0x4000>;
+	0000000000000000 <.lkdtm_rodata_do_nothing>:
+	   0:	00 00 00 00 	.long 0x0
+
+Add the contents flag in order to keep the content of the section
+while renaming it.
+
+	Disassembly of section .rodata:
+
+	0000000000000000 <.lkdtm_rodata_do_nothing>:
+	   0:	4e 80 00 20 	blr
+
+Fixes: e9e08a07385e ("lkdtm: support llvm-objcopy")
+Cc: stable@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/8900731fbc05fb8b0de18af7133a8fc07c3c53a1.1633712176.git.christophe.leroy@csgroup.eu
+---
+ drivers/misc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index 76f6a4f628b3..cc0df7280fe5 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -69,7 +69,7 @@ KCOV_INSTRUMENT_lkdtm_rodata.o	:= n
+ 
+ OBJCOPYFLAGS :=
+ OBJCOPYFLAGS_lkdtm_rodata_objcopy.o := \
+-	--rename-section .text=.rodata,alloc,readonly,load
++	--rename-section .text=.rodata,alloc,readonly,load,contents
+ targets += lkdtm_rodata.o lkdtm_rodata_objcopy.o
+ $(obj)/lkdtm_rodata_objcopy.o: $(obj)/lkdtm_rodata.o FORCE
+ 	$(call if_changed,objcopy)
+-- 
+2.33.1

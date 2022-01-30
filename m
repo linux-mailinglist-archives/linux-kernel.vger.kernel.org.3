@@ -2,258 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 576ED4A3762
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 17:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B664A3765
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 17:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355474AbiA3QLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 11:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S1355490AbiA3QLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 11:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344953AbiA3QLR (ORCPT
+        with ESMTP id S1355473AbiA3QLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 11:11:17 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0882C061714;
-        Sun, 30 Jan 2022 08:11:16 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id d8so10584236qvv.2;
-        Sun, 30 Jan 2022 08:11:16 -0800 (PST)
+        Sun, 30 Jan 2022 11:11:18 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55474C061714;
+        Sun, 30 Jan 2022 08:11:18 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id g145so9948088qke.3;
+        Sun, 30 Jan 2022 08:11:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xzxhhdUiPgX+hCQgfRaiQzFKENo+0Wnw2QbKi28F/g8=;
-        b=M3+lDYYZiWlhuhKELh7VN5Q201mDtkyYNl+rohsfDERgEoV2sJODufPl8vKUli9JJZ
-         1PmCBS/QdEyyYF67vgpiI5mTKG+WWqaqB9le6JY2FRfMiLmkyjz5AuPRlbXRJEtoaO0s
-         uC5pGbsbHzXOl2j18k6ihH/kZFYLEmAKDISRLX7b9Uuu4UClEGk4nppg0omosovlKg8v
-         jIr8elbgkggIIriu2P48B1KdDJP6oca6OeXwWQuFjfGuIOTqkvItia9CXg8jY9GlPGcX
-         GYX4I+A4haqF/C+YNk+uF5vGVvjETi6ZDSfLJOkGr9vnCPRzr1mLnVrbaJKuAerMbpJ3
-         fJdA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SMTOaLQ7dmVrFU4YApnbu06iYLDeLwergecv++KC6K8=;
+        b=Dopl9rfJiV65Q6TXLcgKC3FViQVgw/FUeRM6nf8lIuvnrlKhBD5NiIAuMH+/UaGDdn
+         N7YwKWvCkwDrc9HYiTY5iHfy9Gz4VSpDHaJy+DTb/RILM1YQ/ePJ4EEpi5qnqs319jkH
+         TFGbplTFjqNSQv7si1AQMrcie6/3W2sFDxl0WbeWcxR4cMlqKjajzLtJXDLGmzrWV+lf
+         p3zcXzNBKfuCqQrBfvjIryaVupPMdehkszNjFqg6TgXZb1+0pr2G+OYlAZKX84ackqQ/
+         ixLLRCIcKfPfnA+55e4JBvsr7xkps7Y52RsUEXw+6G9bqU7N5Jt65uTxfOX1h5pWuXDk
+         3diw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xzxhhdUiPgX+hCQgfRaiQzFKENo+0Wnw2QbKi28F/g8=;
-        b=xk6pxEyYwAeeWCcY1g8WPf9mJ1CCizrSZxH0+9f4jazesunVfGL/16cbL69i1OBm7R
-         e86NQPG0YLi/Q9Dl/r+8lUARo6IPd3P5JcO6zrkV5ckHIdenqDNmQJEwyK+ga6K7qJj3
-         TVzaQQoxBPlQwftoMjc+VrnsljO/CtFVMEykGHN4WCA/sDYGB/f6g4RHD0/2AmWOPMZI
-         2HKQ0X9nmav22fiQsVBa+CpCL9bhg0QQYSesWQ7ePJ0Do6yOejVLlACAJd3mdEsUKnFc
-         9PRlrCbpBR4ojHPY20ycPKP+Gl+vTGyMwBW6UG6jpU3UVH5e167BUe7ilIpG20jKM7ax
-         BUFQ==
-X-Gm-Message-State: AOAM530QDizHpyU7eRzLPQnJYnVRUPZ8SaNuhbinxKoE7Hj7leTp6IW/
-        PYPpgGW/k35j7tPtmTXuWWdOF0DdOFM=
-X-Google-Smtp-Source: ABdhPJxuUGfF40PwYVBOyTGGsbvA77PPU7FZQaF7g877M/0FFIU+bPHnElV2GnCe7fjEYb8Ff0tEHA==
-X-Received: by 2002:a05:6214:400f:: with SMTP id kd15mr14249830qvb.69.1643559076008;
-        Sun, 30 Jan 2022 08:11:16 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SMTOaLQ7dmVrFU4YApnbu06iYLDeLwergecv++KC6K8=;
+        b=lNMusE0xdPAV7/t6iTRRECK7tqWeUaZjoIk1EYC9uH5dDA68wIPbJXoMX7ls+IYaMA
+         M+T9ZGjeRsRPQxcGQBX8HpC48M+IG743MBPBp358yLZsgIUHdddPMfqxbkbO8TmbmNZy
+         MdPZNohwWnRrBwFvSsybRNZUtj2Ua88FOZ03jlmIiU3HFWk50vF4I81MQYJIfWvdlc8j
+         5hlHS/aDDXqIbRUeQ5/vjXiV2j0so4IEuRDRQjs6QR6rMScvvTq/Fc9223KHSiv8c+q0
+         64lw8aAFttKTuDGKuJvBFco1HWeInhu4IsWjNfhXjDgATYFuSSMRiH+aO4aSjHrmX83o
+         iq2A==
+X-Gm-Message-State: AOAM530D6y9Gy90X+IHdMcbfZmWoSZZB8MDZgZuOW32K3Cn3KcVbwkl3
+        BnYPKbX0lDWNG0buTfNuCXc=
+X-Google-Smtp-Source: ABdhPJwFGVOC5gOSb37QQoxK9f1YuVknm1dwZD18q9Glh3wSDeJ39kh6NiW25jCluLXmGHiPqz6x8Q==
+X-Received: by 2002:a37:c4c:: with SMTP id 73mr10968454qkm.537.1643559077431;
+        Sun, 30 Jan 2022 08:11:17 -0800 (PST)
 Received: from shaak.. (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id v73sm6906148qkb.51.2022.01.30.08.11.14
+        by smtp.gmail.com with ESMTPSA id v73sm6906148qkb.51.2022.01.30.08.11.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 08:11:15 -0800 (PST)
+        Sun, 30 Jan 2022 08:11:16 -0800 (PST)
 From:   Liam Beguin <liambeguin@gmail.com>
 To:     liambeguin@gmail.com, peda@axentia.se, jic23@kernel.org,
         andy.shevchenko@gmail.com, lars@metafoo.de
 Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: [PATCH v13 00/11] iio: afe: add temperature rescaling support
-Date:   Sun, 30 Jan 2022 11:10:50 -0500
-Message-Id: <20220130161101.1067691-1-liambeguin@gmail.com>
+Subject: [PATCH v13 01/11] iio: afe: rescale: expose scale processing function
+Date:   Sun, 30 Jan 2022 11:10:51 -0500
+Message-Id: <20220130161101.1067691-2-liambeguin@gmail.com>
 X-Mailer: git-send-email 2.35.1.4.g5d01301f2b86
+In-Reply-To: <20220130161101.1067691-1-liambeguin@gmail.com>
+References: <20220130161101.1067691-1-liambeguin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan, Peter, Andy,
+In preparation for the addition of kunit tests, expose the logic
+responsible for combining channel scales.
 
-This series focuses on adding temperature rescaling support to the IIO
-Analog Front End (AFE) driver.
-
-The first few patches from previous iterations addressing minor bugs in
-IIO inkernel functions have been taken in, and are no longer in v13.
-
-The main changes to the AFE driver include an initial Kunit test suite,
-support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
-and temperature transducer sensors.
-
-I'm not quite sure what happened with the left-shift change last time,
-I had it in my v12 local branch, it seems I got mixed up before sending.
-
-Thanks for your time,
-Liam
-
-Changes since v12:
-- rebase on latest testing branch
-- fix copyright holder in newly created header file
-- add myself as a copyright holder of the iio-rescale.c driver at
-  Peter's suggestion
-- fix undefined behavior on left-shift operation
-
-Changes since v11:
-- update commits with my personal email since all this work was done on
-  my own time
-- apply Peter's Reviewed-by to my local tree
-- fix use of units.h
-- make use of units.h more consistently in iio-rescale.c and in the
-  tests
-- fix #include ordering
-- treat 04/16 as a fix. Move it, and add a Fixes: tag
-- fix undefined behavior on left-shift operation
-- add comment about fract_mult with iio_str_to_fixpoint()
-- reword commit message for 14/16, based on Andy's comments
-
-Changes since v10:
-- apply Andy's suggestion for offset calculations
-- make use of units.h more consistently
-
-Changes since v9:
-- make use of linux/units.h
-- reorder commits, fix fract_log2 before merging fract
-- keep fractional representation when not overflowing
-
-Changes since v8:
-- reword comment
-- fix erroneous 64-bit division
-- optimize and use 32-bit divisions when values are know to not overflow
-- keep IIO_VAL_FRACTIONAL scale when possible, if not default to fixed
-  point
-- add test cases
-- use nano precision in test cases
-- simplify offset calculation in rtd_props()
-
-Changes since v7:
-- drop gcd() logic in rescale_process_scale()
-- use div_s64() instead of do_div() for signed 64-bit divisions
-- combine IIO_VAL_FRACTIONAL and IIO_VAL_FRACTIONAL_LOG2 scale cases
-- switch to INT_PLUS_NANO when accuracy is lost with FRACTIONAL scales
-- rework test logic to allow for small relative error
-- rename test variables to align error output messages
-
-Changes since v6:
-- rework IIO_VAL_INT_PLUS_{NANO,MICRO} based on Peter's suggestion
-- combine IIO_VAL_INT_PLUS_{NANO,MICRO} cases
-- add test cases for negative IIO_VAL_INT_PLUS_{NANO,MICRO} corner cases
-- force use of positive integers with gcd()
-- reduce risk of integer overflow in IIO_VAL_FRACTIONAL_LOG2
-- fix duplicate symbol build error
-- apply Reviewed-by
-
-Changes since v5:
-- add include/linux/iio/afe/rescale.h
-- expose functions use to process scale and offset
-- add basic iio-rescale kunit test cases
-- fix integer overflow case
-- improve precision for IIO_VAL_FRACTIONAL_LOG2
-
-Changes since v4:
-- only use gcd() when necessary in overflow mitigation
-- fix INT_PLUS_{MICRO,NANO} support
-- apply Reviewed-by
-- fix temperature-transducer bindings
-
-Changes since v3:
-- drop unnecessary fallthrough statements
-- drop redundant local variables in some calculations
-- fix s64 divisions on 32bit platforms by using do_div
-- add comment describing iio-rescaler offset calculation
-- drop unnecessary MAINTAINERS entry
-
-Changes since v2:
-- don't break implicit offset truncations
-- make a best effort to get a valid value for fractional types
-- drop return value change in iio_convert_raw_to_processed_unlocked()
-- don't rely on processed value for offset calculation
-- add INT_PLUS_{MICRO,NANO} support in iio-rescale
-- revert generic implementation in favor of temperature-sense-rtd and
-  temperature-transducer
-- add separate section to MAINTAINERS file
-
-Changes since v1:
-- rebase on latest iio `testing` branch
-- also apply consumer scale on integer channel scale types
-- don't break implicit truncation in processed channel offset
-  calculation
-- drop temperature AFE flavors in favor of a simpler generic
-  implementation
-
-
-Liam Beguin (11):
-  iio: afe: rescale: expose scale processing function
-  iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
-  iio: afe: rescale: add offset support
-  iio: afe: rescale: fix accuracy for small fractional scales
-  iio: afe: rescale: reduce risk of integer overflow
-  iio: afe: rescale: make use of units.h
-  iio: test: add basic tests for the iio-rescale driver
-  iio: afe: rescale: add RTD temperature sensor support
-  iio: afe: rescale: add temperature transducers
-  dt-bindings: iio: afe: add bindings for temperature-sense-rtd
-  dt-bindings: iio: afe: add bindings for temperature transducers
-
- .../iio/afe/temperature-sense-rtd.yaml        | 101 +++
- .../iio/afe/temperature-transducer.yaml       | 114 +++
- drivers/iio/afe/iio-rescale.c                 | 292 ++++++-
- drivers/iio/test/Kconfig                      |  10 +
- drivers/iio/test/Makefile                     |   1 +
- drivers/iio/test/iio-test-rescale.c           | 711 ++++++++++++++++++
- include/linux/iio/afe/rescale.h               |  36 +
- 7 files changed, 1226 insertions(+), 39 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-sense-rtd.yaml
- create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml
- create mode 100644 drivers/iio/test/iio-test-rescale.c
+Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+Reviewed-by: Peter Rosin <peda@axentia.se>
+---
+ drivers/iio/afe/iio-rescale.c   | 65 ++++++++++++++-------------------
+ include/linux/iio/afe/rescale.h | 32 ++++++++++++++++
+ 2 files changed, 60 insertions(+), 37 deletions(-)
  create mode 100644 include/linux/iio/afe/rescale.h
 
-Range-diff against v12:
- 1:  a8ca9300ef2a <  -:  ------------ iio: inkern: apply consumer scale on IIO_VAL_INT cases
- 2:  efaeceac8d87 <  -:  ------------ iio: inkern: apply consumer scale when no channel scale is available
- 3:  8131208a4454 <  -:  ------------ iio: inkern: make a best effort on offset calculation
- 4:  06202d8f6481 <  -:  ------------ iio: afe: rescale: use s64 for temporary scale calculations
- 5:  87b9d77f0d30 <  -:  ------------ iio: afe: rescale: reorder includes
- 6:  e9bf09ca9703 !  1:  ee26b0eeac65 iio: afe: rescale: expose scale processing function
-    @@ include/linux/iio/afe/rescale.h (new)
-     @@
-     +/* SPDX-License-Identifier: GPL-2.0-only */
-     +/*
-    -+ * Copyright (C) 2021 Liam Beguin <liambeguin@gmail.com>
-    ++ * Copyright (C) 2018 Axentia Technologies AB
-     + */
-     +
-     +#ifndef __IIO_RESCALE_H__
- 7:  865296d2bc4f =  2:  a510097c83f1 iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
- 8:  aea3159ed169 !  3:  8f2f2699a9b4 iio: afe: rescale: add offset support
-    @@ Commit message
-         Reviewed-by: Peter Rosin <peda@axentia.se>
-     
-      ## drivers/iio/afe/iio-rescale.c ##
-    +@@
-    +  * IIO rescale driver
-    +  *
-    +  * Copyright (C) 2018 Axentia Technologies AB
-    ++ * Copyright (C) 2022 Liam Beguin <liambeguin@gmail.com>
-    +  *
-    +  * Author: Peter Rosin <peda@axentia.se>
-    +  */
-     @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
-      	}
-      }
- 9:  7b518cba1cb5 =  4:  2efa970bad26 iio: afe: rescale: fix accuracy for small fractional scales
-10:  79844ae7461c !  5:  201037c0ead8 iio: afe: rescale: reduce risk of integer overflow
-    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
-     +		if (scale_type == IIO_VAL_FRACTIONAL)
-     +			tmp = *val2;
-     +		else
-    -+			tmp = 1 << *val2;
-    ++			tmp = ULL(1) << *val2;
-      
-      		rem2 = *val % (int)tmp;
-      		*val = *val / (int)tmp;
-11:  19f28d029522 =  6:  0e3bf50d9eb2 iio: afe: rescale: make use of units.h
-12:  18b743ae2f8b =  7:  72813d9788e4 iio: test: add basic tests for the iio-rescale driver
-13:  240a3f1424fc =  8:  8ee4c16355af iio: afe: rescale: add RTD temperature sensor support
-14:  d7dc1e1f8f9c =  9:  36a9bb066369 iio: afe: rescale: add temperature transducers
-15:  c0a94061491a = 10:  581962b44cf3 dt-bindings: iio: afe: add bindings for temperature-sense-rtd
-16:  b29eed6b4e17 = 11:  d09d377b05ac dt-bindings: iio: afe: add bindings for temperature transducers
-
-base-commit: cd717ac6f69db4953ca701c6220c7cb58e17f35a
+diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
+index 69710c481376..65832dd09249 100644
+--- a/drivers/iio/afe/iio-rescale.c
++++ b/drivers/iio/afe/iio-rescale.c
+@@ -15,32 +15,43 @@
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ 
++#include <linux/iio/afe/rescale.h>
+ #include <linux/iio/consumer.h>
+ #include <linux/iio/iio.h>
+ 
+-struct rescale;
+-
+-struct rescale_cfg {
+-	enum iio_chan_type type;
+-	int (*props)(struct device *dev, struct rescale *rescale);
+-};
++int rescale_process_scale(struct rescale *rescale, int scale_type,
++			  int *val, int *val2)
++{
++	s64 tmp;
+ 
+-struct rescale {
+-	const struct rescale_cfg *cfg;
+-	struct iio_channel *source;
+-	struct iio_chan_spec chan;
+-	struct iio_chan_spec_ext_info *ext_info;
+-	bool chan_processed;
+-	s32 numerator;
+-	s32 denominator;
+-};
++	switch (scale_type) {
++	case IIO_VAL_FRACTIONAL:
++		*val *= rescale->numerator;
++		*val2 *= rescale->denominator;
++		return scale_type;
++	case IIO_VAL_INT:
++		*val *= rescale->numerator;
++		if (rescale->denominator == 1)
++			return scale_type;
++		*val2 = rescale->denominator;
++		return IIO_VAL_FRACTIONAL;
++	case IIO_VAL_FRACTIONAL_LOG2:
++		tmp = (s64)*val * 1000000000LL;
++		tmp = div_s64(tmp, rescale->denominator);
++		tmp *= rescale->numerator;
++		tmp = div_s64(tmp, 1000000000LL);
++		*val = tmp;
++		return scale_type;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
+ 
+ static int rescale_read_raw(struct iio_dev *indio_dev,
+ 			    struct iio_chan_spec const *chan,
+ 			    int *val, int *val2, long mask)
+ {
+ 	struct rescale *rescale = iio_priv(indio_dev);
+-	s64 tmp;
+ 	int ret;
+ 
+ 	switch (mask) {
+@@ -66,27 +77,7 @@ static int rescale_read_raw(struct iio_dev *indio_dev,
+ 		} else {
+ 			ret = iio_read_channel_scale(rescale->source, val, val2);
+ 		}
+-		switch (ret) {
+-		case IIO_VAL_FRACTIONAL:
+-			*val *= rescale->numerator;
+-			*val2 *= rescale->denominator;
+-			return ret;
+-		case IIO_VAL_INT:
+-			*val *= rescale->numerator;
+-			if (rescale->denominator == 1)
+-				return ret;
+-			*val2 = rescale->denominator;
+-			return IIO_VAL_FRACTIONAL;
+-		case IIO_VAL_FRACTIONAL_LOG2:
+-			tmp = (s64)*val * 1000000000LL;
+-			tmp = div_s64(tmp, rescale->denominator);
+-			tmp *= rescale->numerator;
+-			tmp = div_s64(tmp, 1000000000LL);
+-			*val = tmp;
+-			return ret;
+-		default:
+-			return -EOPNOTSUPP;
+-		}
++		return rescale_process_scale(rescale, ret, val, val2);
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/include/linux/iio/afe/rescale.h b/include/linux/iio/afe/rescale.h
+new file mode 100644
+index 000000000000..8a2eb34af327
+--- /dev/null
++++ b/include/linux/iio/afe/rescale.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2018 Axentia Technologies AB
++ */
++
++#ifndef __IIO_RESCALE_H__
++#define __IIO_RESCALE_H__
++
++#include <linux/types.h>
++#include <linux/iio/iio.h>
++
++struct device;
++struct rescale;
++
++struct rescale_cfg {
++	enum iio_chan_type type;
++	int (*props)(struct device *dev, struct rescale *rescale);
++};
++
++struct rescale {
++	const struct rescale_cfg *cfg;
++	struct iio_channel *source;
++	struct iio_chan_spec chan;
++	struct iio_chan_spec_ext_info *ext_info;
++	bool chan_processed;
++	s32 numerator;
++	s32 denominator;
++};
++
++int rescale_process_scale(struct rescale *rescale, int scale_type,
++			  int *val, int *val2);
++#endif /* __IIO_RESCALE_H__ */
 -- 
 2.35.1.4.g5d01301f2b86
 

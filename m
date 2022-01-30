@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C534A384E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CA64A3851
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355436AbiA3TAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 14:00:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46722 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA3TAf (ORCPT
+        id S1355665AbiA3TDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 14:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbiA3TDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 14:00:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E644B829A6
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 19:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326F0C340E4;
-        Sun, 30 Jan 2022 19:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643569232;
-        bh=J5VGqQOy6MMXL8J5ar+eI2vqjBOz9iohKVb1BM9GqWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LMoMrALaOnlYPLk7kPn8+j8QUdsjt0NDubYijeeh/x71chGgfwIB8tedapUb8YnDs
-         TCrvsGAJuTHcUzkHEDwWcLRZ5keYw0ZaAnJZEZ7VcXpZ19aaFuITeGnF+UilU8kq1t
-         fibdXm1SJpWMAqWukPgz7546YKFQbqE0EJjrwUzmDjoDWhfTARFrER8bP2a5f4FGEA
-         Fja7j0iccIi7zvRztUsWE+EptEb9pnJn/CXr3VgfD7pPt5iqFP3HCnuVAlcAXHTJfE
-         pfXZMmvt98W+DBLGvIPd/+sy7h/nJkRTbiIiz2cwHKpe9PpLuxRFxXOUWxglGPwO/W
-         mVhW4c92Wv6ww==
-Date:   Sun, 30 Jan 2022 21:00:22 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, mike.rapoport@gmail.com,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 07/16] tools/include: Add io.h stub
-Message-ID: <YfbgRm8qq7E260UY@kernel.org>
-References: <cover.1643206612.git.karolinadrobnik@gmail.com>
- <2d9aa000afe81b45157617664134b871207c2067.1643206612.git.karolinadrobnik@gmail.com>
- <YfKngOPLeI3rQOn3@casper.infradead.org>
- <48499a57afb3d27df26b39aa4255b4ba583c1148.camel@gmail.com>
- <Yfa4WMeauvmgkQ9H@kernel.org>
- <YfbQlMyohx31FhSW@casper.infradead.org>
+        Sun, 30 Jan 2022 14:03:38 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C90DC061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:03:35 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id s13so36157310ejy.3
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:03:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sY7P/t1AUJsEIOGpEH9jaDzmKFiJT+OmhoPSXZS+aIU=;
+        b=KVgyFQYvaCRMG8doNu5bpdNayOmMOVW9c5lDnOPnN+8l5VCOJ5iGipAdwjLMmkrjcc
+         JowLuzdEuCzMedpD58bdrhcczDKcZqi2FKpjxaXjjQ+gpFifMvxRof39272dM63rRDpC
+         Sep+T/f57kqrf9n00LULD6w6Pafd4U7OlJxSDXDCd2JSWjnUTF2lpHe80eOKt1sbiELQ
+         G2GifrF/8LpNYkgUccs2tVwR3AkxRxdbHXSn5wW99y8jMhLlotWplzHpZIMrldH5hJcW
+         YWjHeUvfcFGFhSvFs29+/3YUydmS8bv9gNPeReSb6IC9QcbiqiJnt0hv2Tyj7Y5tmBy8
+         yaFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sY7P/t1AUJsEIOGpEH9jaDzmKFiJT+OmhoPSXZS+aIU=;
+        b=AaTHTgqv7m97DuOnbBUnkTv3hudxXn2H7y8TcLuJskOW2jSTEb1U3YndAs1hzY8Vd4
+         lXXo7B1QkeQjc/IsuHaYDFoK+L6oW3q0Ii8y2tvsXQi1oyRFIS3B9+KfWKyDVYHLTi7I
+         Tql1uraCNHvj5gzez5dvYbL8Q2Lsp1nNWFo1KIMKt1YX5NvW5h4AL07G8jRMZrhHFa8m
+         48oRht80eTCjdFw/Acvo3EX0E0EAFb4ZQe3yZHdIMOA0D2s9T6/GfFomt5kNedwxx/EK
+         hYHS5x8vPaJEswW/mBvrzv5t9TbMBIIYmKPxUrEvHRJPdOLu9rcFUBQeai0cFjYVFMT6
+         pV/w==
+X-Gm-Message-State: AOAM532xiM2UgSxhRNz5fgjO8OjvfnDFihJrgv814gwa32YzuXCk71++
+        veQkjtkV2k/X8fRtX+u/aNtEHeHL4/M=
+X-Google-Smtp-Source: ABdhPJy80yJCavGANxQUw1B/AB5X3t8dzuJoZKNdwdH6uhYKbCE/WBKO1flQ8Fn3z3MgtvB16bgPRQ==
+X-Received: by 2002:a17:907:7d8e:: with SMTP id oz14mr6463555ejc.764.1643569414130;
+        Sun, 30 Jan 2022 11:03:34 -0800 (PST)
+Received: from localhost.localdomain (ip5f5abb5a.dynamic.kabel-deutschland.de. [95.90.187.90])
+        by smtp.gmail.com with ESMTPSA id n3sm921124ejr.6.2022.01.30.11.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 11:03:33 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 00/12] staging: r8188eu: remove some HW variables
+Date:   Sun, 30 Jan 2022 20:03:09 +0100
+Message-Id: <20220130190321.7172-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfbQlMyohx31FhSW@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 05:53:24PM +0000, Matthew Wilcox wrote:
-> On Sun, Jan 30, 2022 at 06:10:00PM +0200, Mike Rapoport wrote:
-> > On Fri, Jan 28, 2022 at 12:21:59PM +0100, Karolina Drobnik wrote:
-> > > On Thu, 2022-01-27 at 14:09 +0000, Matthew Wilcox wrote:
-> > > > On Thu, Jan 27, 2022 at 02:21:25PM +0100, Karolina Drobnik wrote:
-> > > > > Add a dummy io.h header.
-> > > > 
-> > > > Rather begs the question of what memblock.c needs from linux/io.h.
-> > > > 
-> > > > Wouldn't it be better to:
-> > > > 
-> > > > +++ b/mm/memblock.c
-> > > > @@ -18,7 +18,6 @@
-> > > >  #include <linux/memblock.h>
-> > > > 
-> > > >  #include <asm/sections.h>
-> > > > -#include <linux/io.h>
-> > > > 
-> > > >  #include "internal.h"
-> > > > 
-> > > 
-> > > That was something I considered in the very beginning, but didn't have
-> > > a chance to verify it works for all architectures. I can take a look
-> > > after I'm finished with other v2 changes.
-> > > 
-> > > > (allmodconfig on x86-64 builds fine with this; I have not done an
-> > > > extended sweep of other arches / build options).
-> > 
-> > I did a sweep for defconfigs for all arches and all were fine.
-> 
-> Thanks for doing the sweep, Mike.
-> 
-> I think I found a deeper problem which is masked due to our maze of
-> header files:
-> 
-> include/asm-generic/io.h:#ifndef virt_to_phys
-> include/asm-generic/io.h:#define virt_to_phys virt_to_phys
-> 
-> so there's an assumption that <asm/io.h> defines virt_to_phys().
-> You can see that in a number of architectures, eg:
-> 
-> arch/alpha/include/asm/io.h:static inline unsigned long virt_to_phys(volatile void *address)
-> arch/ia64/include/asm/io.h:#define virt_to_phys virt_to_phys
-> arch/mips/include/asm/io.h:#define virt_to_phys virt_to_phys
-> arch/nios2/include/asm/io.h:#define virt_to_phys(vaddr) \
-> arch/parisc/include/asm/io.h:#define virt_to_phys(a) ((unsigned long)__pa(a))
-> arch/powerpc/include/asm/io.h:#define virt_to_phys virt_to_phys
-> arch/sh/include/asm/io.h:#define virt_to_phys(address)  ((unsigned long)(address))
-> arch/x86/include/asm/io.h:#define virt_to_phys virt_to_phys
-> 
-> That's clearly not the right place to define it.  Two architectures
-> put it in asm/memory.h:
-> 
-> arch/arm/include/asm/memory.h:#define virt_to_phys virt_to_phys
-> arch/arm64/include/asm/memory.h:#define virt_to_phys virt_to_phys
-> 
-> then:
-> 
-> arch/m68k/include/asm/virtconvert.h:#define virt_to_phys virt_to_phys
-> arch/sparc/include/asm/page_32.h:#define virt_to_phys           __pa
-> arch/sparc/include/asm/page_64.h:#define virt_to_phys __pa
+This series removes some cases from SetHwReg8188EU() and replaces
+the usages with calling the according code directly. In most cases
+calls to rtw_write/rtw_read.
 
-I'd say sparc picked the most appropriate header for it. memory.h could
-also work fine, but it's only present on some arches.
-I'll take a deeper look, thanks for checking this.
- 
-> This needs to be properly sorted out, but I don't want to tell Karolina
-> that's now her job as a prerequisite for merging this patchset; that
-> would be unfair.
- 
-Totally agree.
+Tested on x86_64 with Inter-Tech DMG-02.
 
-> Cc'ing Arnd.  This is the kind of awful mess that he loves fixing ;-)
+Please apply this series on top of the series
+"staging: r8188eu: remove two wrappers"
 
-Heh, me too :)
+Thanks,
+Michael
+
+Michael Straube (12):
+  staging: r8188eu: remove HW_VAR_BEACON_INTERVAL
+  staging: r8188eu: remove HW_VAR_SEC_CFG
+  staging: r8188eu: remove HW_VAR_CAM_INVALID_ALL
+  staging: r8188eu: remove HW_VAR_AC_PARAM_VO
+  staging: r8188eu: remove HW_VAR_AC_PARAM_VI
+  staging: r8188eu: remove HW_VAR_AC_PARAM_BK
+  staging: r8188eu: remove HW_VAR_MEDIA_STATUS
+  staging: r8188eu: merge Set_NETYPE0_MSR() and Set_MSR()
+  staging: r8188eu: remove HW_VAR_CAM_WRITE
+  staging: r8188eu: remove HW_VAR_BCN_FUNC
+  staging: r8188eu: remove HW_VAR_CHECK_BSSID
+  staging: r8188eu: remove HW_VAR_CAM_EMPTY_ENTRY
+
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 15 ++--
+ drivers/staging/r8188eu/core/rtw_wlan_util.c | 24 +++---
+ drivers/staging/r8188eu/hal/usb_halinit.c    | 88 --------------------
+ drivers/staging/r8188eu/include/hal_intf.h   | 11 ---
+ 4 files changed, 18 insertions(+), 120 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+

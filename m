@@ -2,166 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A77A24A3BE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 00:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB404A3BF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 00:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiA3Xn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 18:43:58 -0500
-Received: from mga14.intel.com ([192.55.52.115]:16418 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357591AbiA3Xny (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 18:43:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643586233; x=1675122233;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gZYY5LuTVEz9xOHMxgiC8QQWbczJL1t03Bu7nJ+lJew=;
-  b=b0Q67tSIO2XPxpIKJbv908/QeJp1KgyZJz/8JkGVv4owEMRJvwtgIcHb
-   OvCr3Hj+cJJWG4mJtSCJE6YsmPciOhCCJyhBEpHoehNRf6LZ3Gnvk9C3p
-   JkhNGmDaEHVDhpjCUoaUgh4yijXROiMJ4nWzGiaZ0MCbdhJqtlw6XKGc7
-   JWpUjYLLpPE+RFcdjmOR7AV+qZe7y0hDp+SWgYeXrZ/RBvH2I01X6G89p
-   sbgLe9VO0vydT5NMVXS+CVf+21YMqh2YmX1outkeYot+qd/iyv7AeB00N
-   ydQ9SI6m7eP5xfxDMvQBLW/re+PajXB0HfVTjG1keGDiWk5MXI8z6Qkwd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247599213"
-X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="247599213"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 15:39:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="481480038"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2022 15:39:56 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEJnY-000R7K-4e; Sun, 30 Jan 2022 23:39:56 +0000
-Date:   Mon, 31 Jan 2022 07:39:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 29/346] fs/xfs/scrub/agheader.c:741:25:
- sparse: sparse: restricted gfp_t degrades to integer
-Message-ID: <202201310744.lVDnY8qA-lkp@intel.com>
+        id S238141AbiA3X4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 18:56:48 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:14550 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234915AbiA3X4p (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 18:56:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1643587005; x=1675123005;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IbL3PjiyRfSGjP+MCmktAmlDzb3Y8TTYlrkcO9OhZQI=;
+  b=ApaQXbqmRXOLmjNXniGUoG7BRoFkDE8FXZFvXWHl8hmYgHxD5lXlfLlZ
+   FS8L5QSs2NomtgYJ0z2e+KblWAKPe8YfWjYBhufFyHe/96owLGKCMPJMZ
+   EpRrpQ5YrXlZ/JaImvKpnJj/AQKeUjMis6hNYZI1zEGnN1lo4FRsZXi95
+   /ZioXZJFtAhO5azNyKmL9WqvxcrZCuHD44E6bR72FaavaVlCy4UrjlDvv
+   PlD2fgKJNSYF9pns1YwM50Y6w+6Ea9cZTnkBS7KiXihrKWu+LT44WiZWY
+   NWrspcHjz/NR+QPD2QwbET5voZpTYlPHcH55yL/5m6C+mtIl7chK3lIP6
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,329,1635177600"; 
+   d="scan'208";a="190709155"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 31 Jan 2022 07:56:44 +0800
+IronPort-SDR: oUv9yn1sRG+lLbza10/tYFlGOSwzR7kfIAQAyGtBqk1SEVZxTVORapYNaCD5KUo68ELUMxB4mr
+ eVUrrUtf5TmJaOZzEoufSc2ZdJ+2+N6xpVIwAjOWmz4br5YHTw3w0vaW0xjZVFWO5UFX9xCWYI
+ Sbb40E4eE177i0XeX7L9T7reYWPa0ukv8twagZsiLhL8OaofY2MziypG+z++1goffX43O4z3C6
+ hOXmogNPSqaQUeOD5yfNIam4X3l4JJQgS2LzdhE7JB1GMiOx1ISSDj7yraAsLbEwKG2gCLOX2/
+ vyFDIaosyG2tH75Irqev3iBE
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 15:28:44 -0800
+IronPort-SDR: 2dC2eeRUnaGj6Q9dBEBHDxYS8T0oQtar7vtEltNZL3IDfcMwZGf8mS1lXL/SaRbzFBcs9ceVE0
+ bA+BDwkht9xS+3T3BBZw4Psoi8UqhjqorHv7T2oxvc3baTErNr0Pyk4rAKwkuljjH9RAxCcGRD
+ nFXRzl+v84hNwV2iYz1JYAEBnWPlzy0/IQ24xVaDVt2a10ZI/C18NY1gRNppA6T6+AtEMj+mM0
+ fgOoJAR4RhBRR8jIiGnem69M6NW+Mk8O7g/Nv9pfkUmiFABDrYuwT48hSt02eausU5KZRI2gsL
+ JFQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 15:56:45 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jn7QN28c5z1SVp0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 15:56:44 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1643587003; x=1646179004; bh=IbL3PjiyRfSGjP+MCmktAmlDzb3Y8TTYlrk
+        cO9OhZQI=; b=JULyRYtYipNE/m5z1jJGU5ATjuHiE9rnEEW+XL6e1V4x1tPaiAZ
+        xRy10TPAkFvy+a5jqT2e9Rjgu/jlFz2NKJmAqe1KnJUMSvZuY43aIpC0lAr9NnLY
+        ukfDr5ZrwYCNg9tFj2pcv7rIKHDxIAeuNC1MJbe3nkoG79fXD1Y7OoE1PmcanLVD
+        uFU6Zkli4VNI+fGxfDsqrX1QqQQwHnOqkehSd7Yci50vp98nZ9Jq01uQQMkRbIV3
+        W9dlrsyGAtK9ZNKqhvP922EcpkLinSYzAQUIMj3TaYdVLMKV2KoiNTmEqgbk5AoK
+        7LY4dzjh1+zPFAB8pEJSRAo3TXzjvKRWfeQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id VYwbfuphfnGE for <linux-kernel@vger.kernel.org>;
+        Sun, 30 Jan 2022 15:56:43 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jn7QL4KyMz1RvlN;
+        Sun, 30 Jan 2022 15:56:42 -0800 (PST)
+Message-ID: <2b0fa854-16e7-3d0b-a04a-971249646fab@opensource.wdc.com>
+Date:   Mon, 31 Jan 2022 08:56:41 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH] dt-bindings: ata: convert ata/cortina,gemini-sata-bridge
+ to yaml
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220129204004.1009571-1-clabbe@baylibre.com>
+ <CACRpkdb9R-BwdVzyeaQOjagsQU=2-06VNqKPG9fMa7C93eDC7A@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <CACRpkdb9R-BwdVzyeaQOjagsQU=2-06VNqKPG9fMa7C93eDC7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   81e1a6295557a8263b17d815d60dbcbcd09faa08
-commit: ace0a2769c4dcecf591c6ee9dbaf7247ba999eb2 [29/346] xfs: don't track the AGFL buffer in the scrub AG context
-config: sparc64-randconfig-s031-20220130 (https://download.01.org/0day-ci/archive/20220131/202201310744.lVDnY8qA-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=ace0a2769c4dcecf591c6ee9dbaf7247ba999eb2
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout ace0a2769c4dcecf591c6ee9dbaf7247ba999eb2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash fs/xfs/
+On 2022/01/30 9:26, Linus Walleij wrote:
+> Thanks for doing this Corentin!
+> 
+> On Sat, Jan 29, 2022 at 9:40 PM Corentin Labbe <clabbe@baylibre.com> wrote:
+> 
+>> This patch converts ata/cortina,gemini-sata-bridge binding to yaml
+>>
+>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> Knowing that drivers/ata is a bit sparsely maintained I suggest that Rob apply
+> this patch when he feels it looks good.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+What do you mean ? I am doing my best here to maintain ata !
+But I definitely do not have all the hardware supported for testing :)
+
+That said, I am perfectly fine with Rob taking device tree patches if that is
+not a problem for him.
+
+> 
+> Yours,
+> Linus Walleij
 
 
-sparse warnings: (new ones prefixed by >>)
->> fs/xfs/scrub/agheader.c:741:25: sparse: sparse: restricted gfp_t degrades to integer
->> fs/xfs/scrub/agheader.c:741:34: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted gfp_t [usertype] flags @@     got unsigned int @@
-   fs/xfs/scrub/agheader.c:741:34: sparse:     expected restricted gfp_t [usertype] flags
-   fs/xfs/scrub/agheader.c:741:34: sparse:     got unsigned int
-   fs/xfs/scrub/agheader.c:158:23: sparse: sparse: cast truncates bits from constant value (ffff3f8f becomes 3f8f)
-
-vim +741 fs/xfs/scrub/agheader.c
-
-   701	
-   702	/* Scrub the AGFL. */
-   703	int
-   704	xchk_agfl(
-   705		struct xfs_scrub	*sc)
-   706	{
-   707		struct xchk_agfl_info	sai = {
-   708			.sc		= sc,
-   709		};
-   710		struct xfs_agf		*agf;
-   711		xfs_agnumber_t		agno = sc->sm->sm_agno;
-   712		unsigned int		i;
-   713		int			error;
-   714	
-   715		/* Lock the AGF and AGI so that nobody can touch this AG. */
-   716		error = xchk_ag_read_headers(sc, agno, &sc->sa);
-   717		if (!xchk_process_error(sc, agno, XFS_AGFL_BLOCK(sc->mp), &error))
-   718			return error;
-   719		if (!sc->sa.agf_bp)
-   720			return -EFSCORRUPTED;
-   721	
-   722		/* Try to read the AGFL, and verify its structure if we get it. */
-   723		error = xfs_alloc_read_agfl(sc->mp, sc->tp, agno, &sai.agfl_bp);
-   724		if (!xchk_process_error(sc, agno, XFS_AGFL_BLOCK(sc->mp), &error))
-   725			return error;
-   726		xchk_buffer_recheck(sc, sai.agfl_bp);
-   727	
-   728		xchk_agfl_xref(sc);
-   729	
-   730		if (sc->sm->sm_flags & XFS_SCRUB_OFLAG_CORRUPT)
-   731			goto out;
-   732	
-   733		/* Allocate buffer to ensure uniqueness of AGFL entries. */
-   734		agf = sc->sa.agf_bp->b_addr;
-   735		sai.agflcount = be32_to_cpu(agf->agf_flcount);
-   736		if (sai.agflcount > xfs_agfl_size(sc->mp)) {
-   737			xchk_block_set_corrupt(sc, sc->sa.agf_bp);
-   738			goto out;
-   739		}
-   740		sai.entries = kvcalloc(sai.agflcount, sizeof(xfs_agblock_t),
- > 741				GFP_NOFS | ___GFP_RETRY_MAYFAIL);
-   742		if (!sai.entries) {
-   743			error = -ENOMEM;
-   744			goto out;
-   745		}
-   746	
-   747		/* Check the blocks in the AGFL. */
-   748		error = xfs_agfl_walk(sc->mp, sc->sa.agf_bp->b_addr, sai.agfl_bp,
-   749				xchk_agfl_block, &sai);
-   750		if (error == -ECANCELED) {
-   751			error = 0;
-   752			goto out_free;
-   753		}
-   754		if (error)
-   755			goto out_free;
-   756	
-   757		if (sai.agflcount != sai.nr_entries) {
-   758			xchk_block_set_corrupt(sc, sc->sa.agf_bp);
-   759			goto out_free;
-   760		}
-   761	
-   762		/* Sort entries, check for duplicates. */
-   763		sort(sai.entries, sai.nr_entries, sizeof(sai.entries[0]),
-   764				xchk_agblock_cmp, NULL);
-   765		for (i = 1; i < sai.nr_entries; i++) {
-   766			if (sai.entries[i] == sai.entries[i - 1]) {
-   767				xchk_block_set_corrupt(sc, sc->sa.agf_bp);
-   768				break;
-   769			}
-   770		}
-   771	
-   772	out_free:
-   773		kmem_free(sai.entries);
-   774	out:
-   775		return error;
-   776	}
-   777	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Damien Le Moal
+Western Digital Research

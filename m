@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E558D4A370F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E704A371B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355297AbiA3O5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S1355361AbiA3O7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347212AbiA3O5X (ORCPT
+        with ESMTP id S1355335AbiA3O7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:57:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AE8C061714;
-        Sun, 30 Jan 2022 06:57:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4710A61209;
-        Sun, 30 Jan 2022 14:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD710C340F4;
-        Sun, 30 Jan 2022 14:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643554641;
-        bh=JxoHCxPtVM6TBwNWYVTkv4xgv4xXqSSrocAD8RhKPvQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Kos3V8Vk5hA0UEtlbCmKfvDbCn6hgvFJPW0hutP471S22DT8zQZjqZYl8oPtPERRN
-         mHTKJGaAu0B69fJNmAFmItV05nnqnnpRKb/kYsBaVswrhiA3ecXak702UJ1xD+aRyO
-         Cyu417cH+tx6RjZLY1F4C0+gldC8KeEtNsbWOyaylils+pWq32+O/qNqqF6K8vS+Qa
-         DU2SBhQ6eWn63e/dlaU9XUJXP5eg51s3F1n6055BcvsAgOgE2YRIXu5gQZ14MzwtZF
-         RJhpqwiYSrbL56M0Y1luR1ep1hIfdzFS7gAvAKX1Hfe2YnV2vSbhGb9SEapKZC8pBf
-         gYvL1GNaKIrpg==
-Received: by mail-vk1-f177.google.com with SMTP id 48so6819292vki.0;
-        Sun, 30 Jan 2022 06:57:21 -0800 (PST)
-X-Gm-Message-State: AOAM531SRkd//thuARO2vrWnSGybN+UPIiums/Svgjjbto+7QjfzP2Sp
-        NGvD6y/C6qS73OI1JKaTS38670D5BDrYaFvVsh0=
-X-Google-Smtp-Source: ABdhPJwXaD5cftVV1gTUpOLnxRw19SJ6xh2ZrT8jBGfIh39KXnRkloqQEHlrygYgN8HHE2HZ4UXsJQOHGX4lm9oymh8=
-X-Received: by 2002:a05:6122:1c5:: with SMTP id h5mr6907805vko.2.1643554640709;
- Sun, 30 Jan 2022 06:57:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-9-guoren@kernel.org>
- <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
- <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com> <CAK8P3a12CygLFT7qoQ9K=sowvTgNpeRej6Zh6Pv2PL_e2zMhMQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a12CygLFT7qoQ9K=sowvTgNpeRej6Zh6Pv2PL_e2zMhMQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 30 Jan 2022 22:57:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSULHYYvAjfDvHiD-rJFsOy0-x58AKcD2upzpxaVf5sZQ@mail.gmail.com>
-Message-ID: <CAJF2gTSULHYYvAjfDvHiD-rJFsOy0-x58AKcD2upzpxaVf5sZQ@mail.gmail.com>
-Subject: Re: [PATCH V4 08/17] riscv: compat: syscall: Add compat_sys_call_table
- implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        Sun, 30 Jan 2022 09:59:07 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EC9C061714;
+        Sun, 30 Jan 2022 06:59:07 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id h25so8385438qtm.1;
+        Sun, 30 Jan 2022 06:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f+X5yk2roOzmJwzypwQmhOu/mrO4cbF9p7VZTWulkAE=;
+        b=hZn6WRv/zhcXNyjrVUeS9BrgiFa0HgEmEqOPc+zdMag+uwiwEspKvAyWYGgdmCwm7Q
+         YcEtHdH0z0co22/8b/5aWo1NB36LXNTkPlsgUEqMIu6iKmDTUnUZXEzpamnVkR200w+o
+         Gr4VZZJoSr2A9X0i27MLz3kOh/wzYWqc6Jr3031OzAVEU1zlyoi4V5DyBE5/MF0umGpe
+         ELIgVNC4YEiZT19GgDXozTQvgxVjiansUUkFtz8CyUqClyM0mLlUmI5xxLvZzb4j8ARo
+         1Yx8Mc9VRMc3h4MhqEKijxlU2iTfLbxwK2ZIFYz/72gVFREGTqCSpvwT1gvkTxqF8rhI
+         19Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f+X5yk2roOzmJwzypwQmhOu/mrO4cbF9p7VZTWulkAE=;
+        b=Be8s0TJ8b+FTAgotiqWZQ1RXkfYeFE1Nng9Ty//7N8kRGak0s64j5iYB3WttWhnlVU
+         rziEC2109lel5cd3fMAr0Tr96xcpE3MKckEkT4e7OJl9K+yzxtiTwVDcWaTuMBiH858u
+         gkoDix3T2/W7BNfl44UFm64YL6nszbyglB8Uyb8BN45zg0lLUjTKLHJJDCqgnTZ3MSH5
+         BHg9YklK+zGYMGbFs5dtOY4XlcFFIE0dX0Y31Nxt/06I7dT9Z9NG/IfGxvD0hS3S3Ovd
+         vK/r48rUI3e12z6UfkKWFuGJ/ImHJP/4mtn3Eadl1Fdodt7W3LCB7prp9M83BUUmhPbf
+         Yq6A==
+X-Gm-Message-State: AOAM531eGEqMHTUVNzzjiPZg9PMyfS42+yre+8j4oECd91Tol3GWlfEy
+        G4bFG80TKu/jbkWFwUXeyktq0j+wSYI=
+X-Google-Smtp-Source: ABdhPJysO5uJaDMgv+i05X60uWQx4c7I2DJErsRJZonIgGdivOF7DOzdYrpDgddVrms4fR9tronRlQ==
+X-Received: by 2002:a05:622a:447:: with SMTP id o7mr1446288qtx.537.1643554746267;
+        Sun, 30 Jan 2022 06:59:06 -0800 (PST)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id az38sm3436312qkb.124.2022.01.30.06.59.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 06:59:05 -0800 (PST)
+Date:   Sun, 30 Jan 2022 09:59:03 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v12 00/16] iio: afe: add temperature rescaling support
+Message-ID: <Yfant1/USRnKsCaJ@shaak>
+References: <20220108205319.2046348-1-liambeguin@gmail.com>
+ <CAHp75VdyujSuTCr_+oFP9t=tardioG69k7uNkBSRAmPvqiyT7w@mail.gmail.com>
+ <20220130143933.7711025a@jic23-huawei>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130143933.7711025a@jic23-huawei>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 7:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sun, Jan 30, 2022 at 6:54 AM Guo Ren <guoren@kernel.org> wrote:
-> > On Sun, Jan 30, 2022 at 6:41 AM Arnd Bergmann <arnd@arndb.de> wrote:
+Hi Jonathan,
+
+On Sun, Jan 30, 2022 at 02:39:33PM +0000, Jonathan Cameron wrote:
+> On Sun, 9 Jan 2022 15:10:36 +0200
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> 
+> > On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
 > > >
-> > > I would make these endian-specific, and reverse them on big-endian
-> > > architectures. That way it
-> > > should be possible to share them across all compat architectures
-> > > without needing the override
-> > > option.
-> > I hope it could be another patch. Because it's not clear to
-> > _LITTLE_ENDIAN definition in archs.
-> >
-> > eg: Names could be __ORDER_LITTLE_ENDIAN__ CPU_LITTLE_ENDIAN
-> > SYS_SUPPORTS_LITTLE_ENDIAN __LITTLE_ENDIAN
-> >
-> > riscv is little-endian, but no any LITTLE_ENDIAN definition.
-> >
-> > So let's keep them in the patch, first, Thx
->
-> The correct way to do it is to check for CONFIG_CPU_BIG_ENDIAN,
-> which works on all architectures. Since nothing else selects the
-> __ARCH_WANT_COMPAT_* symbols, there is also no risk for
-> regressions, so just use this and leave the #ifndef compat_arg_u64
-> check in place.
-Okay, got it.
+> > > Jonathan, Peter, Andy,
+> > >
+> > > I left out IIO_VAL_INT overflows for now, so that I can focus on getting
+> > > the rest of these changes pulled in, but I don't mind adding a patch for
+> > > that later on.
+> > >
+> > > This series focuses on adding temperature rescaling support to the IIO
+> > > Analog Front End (AFE) driver.
+> > >
+> > > The first few patches address minor bugs in IIO inkernel functions, and
+> > > prepare the AFE driver for the additional features.
+> > >
+> > > The main changes to the AFE driver include an initial Kunit test suite,
+> > > support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
+> > > and temperature transducer sensors.
+> > >
+> > > My apologies Andy for misunderstanding your left-shift comments, I don't
+> > > know where my head was at... Thanks for your patience!  
+> > 
+> > For the patches 1-5
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > 
+> > Jonathan, perhaps you may apply them, so Liam will have less burden in
+> > the near future.
+> > 
+> done, Patches 1-5 applied to the togreg branch of iio.git and pushed out
+> as testing for 0-day to see if it can find anything we missed.
+> 
+> I've marked the fixes for stable, but am taking these the slow way
+> (via next merge window) so as to keep things simple for applying the
+> rest of the series later this cycle.
 
->
->       Arnd
+Thanks for taking these in.
 
+> I got a bit lost in the discussion but seems there are some minor
+> requests for changes so I guess I'll see a v13 of patches 6-12.
 
+I'm rebasing what's left on top of your to-greg branch, and will send
+out v13 today.
 
--- 
-Best Regards
- Guo Ren
+Cheers,
+Liam
 
-ML: https://lore.kernel.org/linux-csky/
+> Thanks,
+> 
+> Jonathan
+> 
+> 

@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 880664A37C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 17:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C2C4A37CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355665AbiA3Qww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 11:52:52 -0500
-Received: from mga11.intel.com ([192.55.52.93]:58248 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355650AbiA3Qwr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 11:52:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643561567; x=1675097567;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JZACT/iyqB2JhN54jTXkwvGud6/ti13dN/JMDd1WVyA=;
-  b=nttdoLp90qJ7fsZB0mBWd0hMalS8rxUJVM3tmXTpHexc+7DFUWoOkXF+
-   BH/dYaKYN3iQCmJOI4gbzNFq8RfeCYfKOlE5ZzfQsPUJ1rFLmxzPuYjw0
-   mx7DwMXn+NokM0Y2oImXnY7NA51tI7k1+Wgn2I3uDzOzA6vAXORCJcUvn
-   QRybgX1zLnPvuhPw516+3y5x2PdsZ8RjYQkS7miqzGJ6320Pdr7CCTwoz
-   8SBSFt2HUB7BNhv1tPWM69mgGZwm9jMSWnC0jl4p1lcjFZxUZpzOnbUu/
-   kh078SqI59US+z5ucDjg9plkzeUcyi1YmSyy1v89B8EGSXftTw6gu8VbK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="244956608"
-X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="244956608"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 08:52:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="770566800"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Jan 2022 08:52:43 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEDRT-000Qkd-8u; Sun, 30 Jan 2022 16:52:43 +0000
-Date:   Mon, 31 Jan 2022 00:52:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        john.stultz@linaro.org, sboyd@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH v3] kernel/time: move timer sysctls to its own file
-Message-ID: <202201310051.QnG1PthP-lkp@intel.com>
-References: <20220130151338.6533-1-tangmeng@uniontech.com>
+        id S1355683AbiA3RBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 12:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355663AbiA3RBr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 12:01:47 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ACEC061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 09:01:47 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id k17so33495592ybk.6
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 09:01:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qaQd05mlVGdtljjPplm19bXyHw3TgnWnnG0abfzVsmQ=;
+        b=QexVEulkcWZY1vqGlsKQwIgi+C+2uRrdXd+x2mch0JjF/2x8uuWQsunZO3ud+TYT/2
+         6Kz7eucYp1/RyglghG1SDjrPqo7VpsE/0jauWvwRg/I/Im46UbhkRrqyx2o3pKSsQP7Y
+         SB0LdYmlpzR5uw9SJiJOlAyWoXSS77Y57nNSLlFaHCzIiybT0ESNCA1lgv+87+fq/P0L
+         PDzzLe8XarrqSn0nlVdPxyB2kKe4CzYw5c2/5GIhql1O6WdELpjsMrCzCY8R6KGgzexe
+         U+SBJKNn8/QlVQieEJ+QS0WBuk33o4JDTVLrw40TPT3RXW24UqccMfbDTdqm59X6O29Q
+         Nonw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qaQd05mlVGdtljjPplm19bXyHw3TgnWnnG0abfzVsmQ=;
+        b=F9DQ6cVRo2Ry3fnMM6b0WV+D/lHrG697vsadLYPDSxsy4q0R5X1p1hi3ET693zSO/R
+         6Kk1+/0NabZ7Dnjq/Fztzsnw33llcGk2bzC5CbkGmM2nP6aY2uEh5Ij0zb9a0I24gvxW
+         JmuxJBF1GMnxvaqk0VqPUkHb5uuwQASC+XmT2NcTQ5JzumisIMRWrZvYpF+6XjMsvs21
+         ObRCzkRlPkDwRWpq2/+GKIpdoEUzE/fE/8KjGsBi0YN0sM8Q7UBuwdI/xHQmSm7A71z8
+         mNLpt7B+OufkqLqu3CejQYbaj0PplHhIXYIQaN+5pGU/i+2mpJBnyncNWorp3JEa87QJ
+         ITkQ==
+X-Gm-Message-State: AOAM532CmTbOSawwrTPToqYncJ1KgsJpCu6bWJVw9P0n/IYIn8pTKPBx
+        FtkgwGz9HXoEx+o2v3QjQ/KPC8SbcJgN3OMAV/Q=
+X-Google-Smtp-Source: ABdhPJzKjzFvH6QZmUOEz0ElMA5jgTZXe9JR95dahSRefCJ7F2uCTTbiLp8Kd6DZbIfsHWjNHik6iIpA/5jAYLlG5c4=
+X-Received: by 2002:a05:6902:920:: with SMTP id bu32mr24586774ybb.693.1643562106249;
+ Sun, 30 Jan 2022 09:01:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130151338.6533-1-tangmeng@uniontech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:7108:3ad0:0:0:0:0 with HTTP; Sun, 30 Jan 2022 09:01:45
+ -0800 (PST)
+Reply-To: mohammadahmed7760@gmail.com
+From:   Mohammad Ahmed <mrzebitit.2002@gmail.com>
+Date:   Sun, 30 Jan 2022 09:01:45 -0800
+Message-ID: <CAO9g0WpoFOkW8Um_7bEEEwVQ3oik9rOPWe1EgDBukQWAtMp-4w@mail.gmail.com>
+Subject: GREETINGS FROM MR.MOHAMMAD AHMED / CAN I TRUST YOU?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi tangmeng,
+My Dear Friend.
 
-Thank you for the patch! Yet something to improve:
+Greetings.
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I know this message will come to you as a surprise; my name is Mr.
+Mohammad Ahmed a banker working with Bank of Africa Burkina Faso West
+Africa as their Auditing Manager, Please i need your urgent assistance
+to transfer an abandoned sum of $13.5 Million United States Dollars
+into your account.
 
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220130-231458
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: hexagon-randconfig-r045-20220130 (https://download.01.org/0day-ci/archive/20220131/202201310051.QnG1PthP-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/40476bc60525c2a3aeffa4af1080bf1c4bfb8f10
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220130-231458
-        git checkout 40476bc60525c2a3aeffa4af1080bf1c4bfb8f10
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
+My dear if my proposal interest you do not hesitate to get back to me
+for us to proceed with the transaction for mutual benefit because I
+know the source of the fund.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+You will provide account for transfer of the fund in your favor and
+once you confirm the fund transferred into your account 50% is for you
+and 50% for me. The transaction is risk free and there will be no
+problem, I will like you to respond back to me immediately after
+reading this message to enable us proceed ahead for mutual benefit and
+I assure you of receiving the fund into your account without any
+problem.
 
-All errors (new ones prefixed by >>):
+I will send you more details on how the fund will be officially
+release and transfer in your account for the transaction will be
+execute in your favor for the only thing i need from you is to be
+honest with me during the transaction official process.
 
->> kernel/time/timer.c:2048:2: error: implicit declaration of function 'timer_sysctl_init' [-Werror,-Wimplicit-function-declaration]
-           timer_sysctl_init();
-           ^
-   1 error generated.
+I am looking forward to have your urgent response along with your
+personal information required bellow for more trust and confident.
 
+1. Full name:.........
+2. Home Address:.........
+3. Phone.............
+4. Occupation:.............
+5. Age:............
+6. Country:........
+7. Sex........
+8. Your Passport or ID card or Driving License
 
-vim +/timer_sysctl_init +2048 kernel/time/timer.c
+Thanks.
 
-  2042	
-  2043	void __init init_timers(void)
-  2044	{
-  2045		init_timer_cpus();
-  2046		posix_cputimers_init_work();
-  2047		open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
-> 2048		timer_sysctl_init();
-  2049	}
-  2050	
+Yours faithfully
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Mr. Mohammad Ahmed.

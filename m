@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26DC4A361C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 13:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9E04A3623
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 13:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354740AbiA3MDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 07:03:21 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34526 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347001AbiA3MDS (ORCPT
+        id S1354750AbiA3MLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 07:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345500AbiA3MLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 07:03:18 -0500
+        Sun, 30 Jan 2022 07:11:01 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D97C061714;
+        Sun, 30 Jan 2022 04:11:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ADDB9CE0B5F;
-        Sun, 30 Jan 2022 12:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C58C340E4;
-        Sun, 30 Jan 2022 12:03:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AAE9BCE0E8B;
+        Sun, 30 Jan 2022 12:10:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F16C340E4;
+        Sun, 30 Jan 2022 12:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643544193;
-        bh=DZuC7c6eZ3ENqwzGY2N1IdAWzXCmj/QuF76kqjUt4SE=;
+        s=k20201202; t=1643544658;
+        bh=3OyJ49EmCju1DvvhXIuA6J36rxsK/GREk9R0i8V2Shg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ilZAjwqqbXYTdal/H1F8bdWhm/trnTsen9ZeJ80YIAIfdDLq5g7IFHLp9M3BcsILG
-         cjqLv0xunlXpSjqHPhvNqRNgUtGPW3oQjrev7ztKv0zTHyNvXQUxB1t3P9VrbHB6j3
-         uRk+8WXA/jSGRUv8JaKlhV17/olG95G/b/lDKvfEVJtb89G64gEqYKEEGi2jRLXSNJ
-         TK3FEO3XRzajDq1BUBLq3PFHfyvZBetnxpN9apwknwbK5BOV6h/VGv20xfCpKQcX2J
-         sWEEKg7Shudx3qdA5+2h6XPMVJMn1xFKGNCaCB0YTTN/dcIubY4jMtiyVKJn2Qw+8y
-         XXQ9bXlgbs02g==
-Date:   Sun, 30 Jan 2022 12:09:37 +0000
+        b=ZOxLAYGXPMZMP0uzaw/EOhD4xLah0MQv4rd+PJQY2p78iszb/D9LtyGAX9JqQzCw1
+         XWWbr/6WBulW6/BOeK5VrG+AtJPZ45kEFjUBX1C6LbqGkbceq4dSF3vIGxEotBzJer
+         +tI7u3O/tfDGtebC+M9dzX1PVlAUnXdbqcc6fU5VHbKXst5sXSmrIMTF0PepdoxSVq
+         RbvADtoxukgJnncQTqw6W58K+OuqL62P0bPLWg01+x2Qiguv3PkNYzHIpqCrVP6Vor
+         cOUN7Wx9sU8Zu9a0cJaDaNTbZ3zXMiHjKb4Rw0F8EyKU7FaWodGvmdnmMicRNQ2ABR
+         0nicgkmVl0omA==
+Date:   Sun, 30 Jan 2022 12:17:21 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/4] Documentation:ABI:testing:admv1014: add ABI docs
-Message-ID: <20220130120937.60c4088c@jic23-huawei>
-In-Reply-To: <20220127105558.59567-3-antoniu.miclaus@analog.com>
-References: <20220127105558.59567-1-antoniu.miclaus@analog.com>
-        <20220127105558.59567-3-antoniu.miclaus@analog.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iio/adc: qcom,spmi-iadc: Fix 'reg'
+ property in example
+Message-ID: <20220130121721.62cc90db@jic23-huawei>
+In-Reply-To: <20220126231217.1633935-1-robh@kernel.org>
+References: <20220126231217.1633935-1-robh@kernel.org>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -47,74 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 12:55:57 +0200
-Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
+On Wed, 26 Jan 2022 17:12:17 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-> Add documentation for the use of the Digital Attenuator gain.
+> The QCom SPMI PMIC child nodes are defined to have a single address cell,
+> but the example has an erroneous size cell. Remove it.
 > 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+Probably should have a fixes tag...
+Fixes: a4e6bf69418c ("dt-bindings:iio:adc:qcom,spmi-iadc: txt to yaml format conversion.")
+
+Given it's been there a long time I'm guessing no great rush on this so I'll
+queue it up for then next merge window.
+
+Shout if you want to pick it up sooner.
+
+Thanks,
+
+Jonathan
+
 > ---
-> changes in v4:
->  - move `in_altvoltage_calibscale` to sysfs-bus-iio
->  Documentation/ABI/testing/sysfs-bus-iio       |  7 ++++++
->  .../testing/sysfs-bus-iio-frequency-admv1014  | 23 +++++++++++++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+>  Documentation/devicetree/bindings/iio/adc/qcom,spmi-iadc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
-> index c551301b33f1..d7d96d3d6b7c 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio
-> @@ -476,6 +476,13 @@ What:		/sys/bus/iio/devices/iio:deviceX/in_voltageY_i_calibscale
->  What:		/sys/bus/iio/devices/iio:deviceX/in_voltageY_q_calibscale
->  What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_i_calibscale
->  What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_q_calibscale
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage_calibscale
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Used in microwave converters to read/write value for the
-> +		digital attenuator gain (I/Q mode).
-> +
-
-You can't add description etc in the middle of a load of What: entries like this.
-Just add the What line.  The generic description text should be sufficient.
-  
->  What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_calibscale
->  What:		/sys/bus/iio/devices/iio:deviceX/in_accel_x_calibscale
->  What:		/sys/bus/iio/devices/iio:deviceX/in_accel_y_calibscale
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
-> new file mode 100644
-> index 000000000000..5bcd96d77f45
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
-> @@ -0,0 +1,23 @@
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibscale_coarse
-> +KernelVersion:
-
-Fill these in.  If something odd happens to delay it getting merged I can fix them up, but
-I may well forget to fill them in if left empty.  Basically make life easy for me in the
-common case. This 'should' be 5.18 material.
-
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_I) with coarse steps.
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibscale_coarse
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_Q) with coarse steps.
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibscale_fine
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_I) with fine steps.
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibscale_fine
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_Q) with fine steps.
+> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-iadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-iadc.yaml
+> index 27e3108661c0..2a94db688830 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-iadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-iadc.yaml
+> @@ -51,7 +51,7 @@ examples:
+>          #size-cells = <0>;
+>          pmic_iadc: adc@3600 {
+>              compatible = "qcom,spmi-iadc";
+> -            reg = <0x3600 0x100>;
+> +            reg = <0x3600>;
+>              interrupts = <0x0 0x36 0x0 IRQ_TYPE_EDGE_RISING>;
+>              qcom,external-resistor-micro-ohms = <10000>;
+>              #io-channel-cells  = <1>;
 

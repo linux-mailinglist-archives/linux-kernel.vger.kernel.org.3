@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AA54A37DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0D24A37E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 18:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355726AbiA3RXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 12:23:48 -0500
-Received: from mga14.intel.com ([192.55.52.115]:25423 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231483AbiA3RXr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 12:23:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643563427; x=1675099427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z41kZajtIAnMiLyXovp+V7S7W4wvza+xH4q2uSbrxTY=;
-  b=cB5KcEwvVWSaYFhNcrAHzEhgj+Q0FD+6LdXu9ehhtMmVVuL4k+5xjY0W
-   Sd5o3fgBfy/WHnLBPuMHSXnytlC1TLunhlNOHSleTuQpeUBwAMaEywwV9
-   GWHSIGb30RFjmfyeR08+CpkpbYocsgUq4g1kiwdJJDCIvrEyXvGe1kmD/
-   ZnUvW45yXe4Ezh7PLWD3nlIQcb2TEd4Hp+cesiu9Wv9+AuDCp/z/mIG/P
-   HEysGFzuW7RMyla+6PV5ymd/8KNEdhHblopAspoMuRZkDkDqO+r72wmGv
-   FZyfh9bKUeStX42+HAx5wQ7+w29/JSje826x3VnbnrX5HMXK1+NIK5Ipk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247581846"
-X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="247581846"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 09:23:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="675540706"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2022 09:23:44 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEDvU-000Qmg-48; Sun, 30 Jan 2022 17:23:44 +0000
-Date:   Mon, 31 Jan 2022 01:23:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        john.stultz@linaro.org, sboyd@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH v3] kernel/time: move timer sysctls to its own file
-Message-ID: <202201310156.2msV5y5H-lkp@intel.com>
-References: <20220130151338.6533-1-tangmeng@uniontech.com>
+        id S1355744AbiA3Rfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 12:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355732AbiA3Rfn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 12:35:43 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AE3C061714;
+        Sun, 30 Jan 2022 09:35:42 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d187so10830533pfa.10;
+        Sun, 30 Jan 2022 09:35:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CzSjPpfTopj6ntF5tKbbTI4PqBmUQrwkOXKtWWFpnX0=;
+        b=GNv1cYfjv36lkUDfimT6iNIcygcJjl46Vg4MJDOy07VkD5iJPBrgJdXTIIypmyQ7jP
+         puZK/Y6bnECQt0p5VSHp0qe/+Ikv5MDCy6i4xj60DKi7GufSfLBrIGzWiCpFYFD+lX/4
+         /sbcMtiEnSAHoknfu8/HlhRJuKrD+WRG7o139PIsj/5zhhNQIjWB88IdNMnN8WEAl+oX
+         cFyn+Ml3r3RImtQ3V+wgg79uWvI7iHwwc/Aw9q989q3cEQ1y+xRaLdsbjNQbUEgv6uvn
+         gc6uuNk7VMluoFKEvfkbBEs+e6VZUbnhWBK8YHyNW3p6yVAn7JFwFcISizcwEvy5iG74
+         BVgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CzSjPpfTopj6ntF5tKbbTI4PqBmUQrwkOXKtWWFpnX0=;
+        b=BvIJWwvH1NEvu80cnp+PfqqRTO3Ykhrps451OZhFHuSjA5ZsQnngUTtB+KUxJyYvAr
+         9qPfwK3MLKB3VstnI0nYwjecuryec5Wyld0o7BU+Hhg+q3QpDfN7JikHI3iX5OKLWERP
+         BuSnbRT1jEAoKySUv8LKNHyT7KtRqMWBPutu7H85Y9c5SgRM2PKTzmWh+g/yjFgTgZLx
+         aOHrwmihDNoH3Bbn1pOBhMfJFLt9fOD/InRnNAwA+bFMbEW0N4/5bH+kmliCLIXP80ub
+         vPq0OgX1eyR92CnfCBe3euQ/YdnHRz2gIOY9Y5dCJxwJ26JQZPO1wFoADxngSU5mhDC+
+         UjQg==
+X-Gm-Message-State: AOAM531ap6Pk/vjLDeHZ05Qh7ogRcfZATQQZRtCMR5Ge4e9laM2t9t6y
+        KfRkG1KhUkvuvC/HNwpA2DL++TujWwU=
+X-Google-Smtp-Source: ABdhPJy9WCDkrOuxpztYSfqjVRveMtMxJUREGGT8k/8UPsbnd4j734PXNmqhIA8n7n+O02Kxk8UyLQ==
+X-Received: by 2002:a63:6c83:: with SMTP id h125mr1096510pgc.342.1643564142358;
+        Sun, 30 Jan 2022 09:35:42 -0800 (PST)
+Received: from ?IPV6:2600:8802:b00:4a48:31be:19f8:e4b4:84c8? ([2600:8802:b00:4a48:31be:19f8:e4b4:84c8])
+        by smtp.gmail.com with ESMTPSA id w12sm27221063pgj.40.2022.01.30.09.35.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jan 2022 09:35:41 -0800 (PST)
+Message-ID: <a9571486-1efd-49a7-aa26-c582d493ead6@gmail.com>
+Date:   Sun, 30 Jan 2022 09:35:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130151338.6533-1-tangmeng@uniontech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML
+ schema
+Content-Language: en-US
+To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211228072645.32341-1-luizluca@gmail.com>
+ <Ydx4+o5TsWZkZd45@robh.at.kernel.org>
+ <CAJq09z4G40ttsTHXtOywjyusNLSjt_BQ9D78PhwSodJr=4p6OA@mail.gmail.com>
+ <7d6231f1-a45d-f53e-77d9-3e8425996662@arinc9.com>
+ <CAJq09z7n_RZpsZS+RNpdzzYzhiogHfWmfpOF5CJCLBL6gurS_Q@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAJq09z7n_RZpsZS+RNpdzzYzhiogHfWmfpOF5CJCLBL6gurS_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi tangmeng,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220130-231458
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: arc-randconfig-r013-20220130 (https://download.01.org/0day-ci/archive/20220131/202201310156.2msV5y5H-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/40476bc60525c2a3aeffa4af1080bf1c4bfb8f10
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220130-231458
-        git checkout 40476bc60525c2a3aeffa4af1080bf1c4bfb8f10
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/time/timer.c: In function 'init_timers':
->> kernel/time/timer.c:2048:9: error: implicit declaration of function 'timer_sysctl_init'; did you mean 'sysctl_init'? [-Werror=implicit-function-declaration]
-    2048 |         timer_sysctl_init();
-         |         ^~~~~~~~~~~~~~~~~
-         |         sysctl_init
-   In file included from include/linux/perf_event.h:25,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:88,
-                    from kernel/time/timer.c:35:
-   At top level:
-   arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' defined but not used [-Wunused-const-variable=]
-     126 | static const unsigned int arc_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
-         |                           ^~~~~~~~~~~~~~~~~
-   arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' defined but not used [-Wunused-const-variable=]
-      91 | static const char * const arc_pmu_ev_hw_map[] = {
-         |                           ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
 
 
-vim +2048 kernel/time/timer.c
+On 1/29/2022 12:52 PM, Luiz Angelo Daros de Luca wrote:
+>> Why not turn realtek-smi.yaml into realtek.yaml which would also contain
+>> information for the mdio interface? The things different with using MDIO
+>> are that we don't use the [mdc,mdio,reset]-gpios properties and don't
+>> handle the PHYs to the DSA ports. Couldn't you present these differences
+>> on a single YAML file?
+> 
+> Hello, Arinç
+> 
+> realtek-mdio is an mdio driver with a couple of less properties. They
+> do share a lot of stuff. But I don't know if I can fit the schema
+> validation into a single file.
+> YAML files are not simply documentation. They are used to validate DTS
+> files. But that's still off-topic. Let's finish SMI version first and
+> then discuss
+> if the MDIO version should be standalone or merged with SMI.
 
-  2042	
-  2043	void __init init_timers(void)
-  2044	{
-  2045		init_timer_cpus();
-  2046		posix_cputimers_init_work();
-  2047		open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
-> 2048		timer_sysctl_init();
-  2049	}
-  2050	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Your YAML file can cover both types of electrical bus, what you are 
+defining is the layout and the properties of the Ethernet switch Device 
+Tree node which is exactly the same whether the switch is the children 
+of a SPI controller or the children of a MDIO bus controller. If there 
+are properties that only apply to SPI or MDIO, you can make use of 
+conditionals within the YAML file to enforce those. Having a single 
+binding file would be very helpful to make sure all eggs are in the same 
+basket.
+-- 
+Florian

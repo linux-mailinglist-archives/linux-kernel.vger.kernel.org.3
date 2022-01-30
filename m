@@ -2,120 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 506214A32BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30A14A32BE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353507AbiA3ADJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:03:09 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:49772
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353476AbiA3ADH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:03:07 -0500
-Received: from [192.168.192.153] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        id S1353519AbiA3AIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:08:23 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:46444 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353509AbiA3AIV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 19:08:21 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 4647D3F07C;
-        Sun, 30 Jan 2022 00:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643500986;
-        bh=7k+y7PJ3gcJlzXgorU2zNnjUpve3rlNlya9TVwYp4hk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jENINqRqw3pqbJmZcbRC9FDajyZ8MAcWWeoUZJOf8ZlWcSzM3o6dXNdkxgL53QmtH
-         1coGNJop/zo/HWBCHCN4IkbM6FKfz/YsdWp43KqLKDfVGH668cEREXFKO4WSABTrIn
-         vYvuL3w5QlTrVm38J5bX/v6yXvverFoBmfFcIscq/lTwhIpJJUcfT1PmFMmkiJz+ge
-         +BEipTyTjA2LrxJe23wa79vmXMHfCcqKi7BZlFay+/E5oJf6gZdw4gMCeNw6Iappzb
-         iqRkDOintBf2DiavnqexfcmXbjY/iWYq6rhpiQ4LH5W00yGE8j3/rbG+N3JV5YP3/6
-         wknNkY6kYzWRQ==
-Message-ID: <9836f3d4-186f-7a6e-448d-8e94be5f634f@canonical.com>
-Date:   Sat, 29 Jan 2022 16:03:03 -0800
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BCCFA1EC0501;
+        Sun, 30 Jan 2022 01:08:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643501295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yfhFxfxF8NarSX8GHfOcK6wOuYA4m73EaIxZ6XycAIA=;
+        b=gTFuF04FbxNGeU3WluPjOgb/UNacljz4S4fCeMcP/EKIhMF5ssl0FZpaZzivrCKXZcRLy1
+        tTTR0ZmrPlnFzmSI7VosAv7/9iO/NQfhISayfyTeUAEjPGg8u5j7TU7qBUEDx+fVTsykVh
+        LCaWqJA3yJZUodFqMeAIdub3FgvFTW0=
+Date:   Sun, 30 Jan 2022 01:08:11 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the edac tree
+Message-ID: <YfXW6+1hTVVTodeI@zn.tnic>
+References: <20220130103712.391407a7@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next 3/3] apparmor: Fix some kernel-doc comments
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, serge@hallyn.com
-Cc:     jmorris@namei.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220129025229.39663-1-yang.lee@linux.alibaba.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20220129025229.39663-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220130103712.391407a7@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 18:52, Yang Li wrote:
-> Don't use /** for non-kernel-doc comments and change function name
-> aa_mangle_name to mangle_name in kernel-doc comment to Remove some
-> warnings found by running scripts/kernel-doc, which is caused by
-> using 'make W=1'.
+On Sun, Jan 30, 2022 at 10:37:12AM +1100, Stephen Rothwell wrote:
+> Fixes tag
 > 
-> security/apparmor/apparmorfs.c:1503: warning: Cannot understand  *
->  on line 1503 - I thought it was a doc line
-> security/apparmor/apparmorfs.c:1530: warning: Cannot understand  *
->  on line 1530 - I thought it was a doc line
-> security/apparmor/apparmorfs.c:1892: warning: Cannot understand  *
->  on line 1892 - I thought it was a doc line
-> security/apparmor/apparmorfs.c:108: warning: expecting prototype for
-> aa_mangle_name(). Prototype was for mangle_name() instead
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+>   Fixes: 0d4429301c4 ("EDAC: Add APM X-Gene SoC EDAC driver")
+    Fixes: 0d4429301c4a ("EDAC: Add APM X-Gene SoC EDAC driver")
 
-just for completeness (this is a dup of [PATCH 3/3] apparmor: Fix some kernel-doc comments)
 
-Acked-by: John Johansen <john.johansen@canonical.com>
+Somebody ate the trailing 'a'. Fixed.
 
-I have pulled this into my tree
+Thx.
 
-> ---
->  security/apparmor/apparmorfs.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
-> index 15efe4076fc4..4d7df859542d 100644
-> --- a/security/apparmor/apparmorfs.c
-> +++ b/security/apparmor/apparmorfs.c
-> @@ -98,7 +98,7 @@ static struct rawdata_f_data *rawdata_f_data_alloc(size_t size)
->  #endif
->  
->  /**
-> - * aa_mangle_name - mangle a profile name to std profile layout form
-> + * mangle_name - mangle a profile name to std profile layout form
->   * @name: profile name to mangle  (NOT NULL)
->   * @target: buffer to store mangled name, same length as @name (MAYBE NULL)
->   *
-> @@ -1499,7 +1499,7 @@ int __aa_fs_create_rawdata(struct aa_ns *ns, struct aa_loaddata *rawdata)
->  
->  /** fns to setup dynamic per profile/namespace files **/
->  
-> -/**
-> +/*
->   *
->   * Requires: @profile->ns->lock held
->   */
-> @@ -1526,7 +1526,7 @@ void __aafs_profile_rmdir(struct aa_profile *profile)
->  	}
->  }
->  
-> -/**
-> +/*
->   *
->   * Requires: @old->ns->lock held
->   */
-> @@ -1888,7 +1888,7 @@ static void __aa_fs_list_remove_rawdata(struct aa_ns *ns)
->  		__aa_fs_remove_rawdata(ent);
->  }
->  
-> -/**
-> +/*
->   *
->   * Requires: @ns->lock held
->   */
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

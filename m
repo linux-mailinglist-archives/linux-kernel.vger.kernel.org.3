@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E8D4A32FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D364A3301
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353629AbiA3BIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 20:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S1353640AbiA3BU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 20:20:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbiA3BIv (ORCPT
+        with ESMTP id S1353633AbiA3BU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 20:08:51 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763CC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:08:50 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id i10so29645488ybt.10
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:08:50 -0800 (PST)
+        Sat, 29 Jan 2022 20:20:26 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6790C061741
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:20:25 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id g14so29671827ybs.8
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=02uHw9l58hh+muQ0KbMFsY5uF5yxmJgiUPQGP+bydes=;
-        b=SFWZj0gBP6IRp9aDFoy+xQUE8PPySKJ2umdyyTH0/76Ude/Sa/8rlfSvjRzOSZuCe1
-         oI6l+vseIe7/wXn6K3j1gw7WNCxH2Kb6dO46ZlmI9ZtUvV+Xsci0jYIZiVFh/GorOMWY
-         XW+NSPF5dIGmv7XqLzUPcuOmN6fqf3R1AombzO9zj2ZVhbhC3PDzYow+rhUZR7RFqf6I
-         DhuknS+cFKrmSjx+0En68Njj7Y9UjJhPu1duqbPCjKZyVWgmstU+nKDqpMZIbfbptud0
-         /yxVS1IUB97IlmE3oa8oTm2CACbtR/U9NOnRpqMQVCt6hx7VqsEcmAoR2bJUzhPGhRKB
-         s55Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=W5LenOWK+Asi/IRJktE/pV+nkUhUa2nycRViHzLQ+ic=;
+        b=Aq5693Yiu7s4IjZy6JR3Qw91dy+XB9rKFZfaOjmRZXvihZldcvdahGA6/mYM0WTnRT
+         MRp2px61vgDL283dbHGK3n3CvqskrUs0XVx/GyWzlqJza23Q17buwpfK4V02AtjpIFB1
+         qK3r2HSj5Cw9wX7/S90mjd4iz0B+QZiFZGLnr2R1dgcIJxwJAVdI6x8VWjuzZlMTBOLW
+         bdxCVQAZs1ZSU0aWFUs/Cuu1bxt2zILopoBFOEiODOqbKu0lEILlp+Huz4lk3FZ+Ikh9
+         kBh/OwEVFfoMINh7ZWvgdFEN3JYz/jiDBi12RV2mJgRHaKoyrelGTZNYyFl6vRAPl4Dl
+         62rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=02uHw9l58hh+muQ0KbMFsY5uF5yxmJgiUPQGP+bydes=;
-        b=Y6Q0L6p0CnsVS5NujLJavV0Zr/dGqJXWXADSHGGKT7veSeCeX8O71GTzlncugQRsgu
-         ot72o/99piGK3BAmsj/wUJjy6hm0HId2nSd51nNWSV53mQ/F5XMaO6fsfNkIyhjGfOgd
-         UfP+6HjDBNk9Sr8Ts54QbvqG6E+lKwLMNd/QLerfZGasVeUCxrthb7XvBz/VU+rsx8nC
-         wIM8flFrDTelU1dibbhwQ0gfs00fbQoBJA0YMMMpz9+JMgXiofwK8HVdDQzc61zcFvqF
-         8YCNKCG+T7Bsh8Jw1dcIwV4LiYxISMadyVPrAoguvsTGzNyWe/14h/bD4mwQKlIzu0kG
-         r6Cw==
-X-Gm-Message-State: AOAM531t5Gj9mLtwGKd/VDRMekKat+r8JCp0TD1SmrcMcUhqS7PZzMyc
-        TW6dSBnR9TOoePdo6sanCtQTvpxDQLOFIzvZ++nawQ==
-X-Google-Smtp-Source: ABdhPJyxe/T6VMm8ymvO6Ahfr5MEhtC4jE74F8HctHiIiYxrOIhRbLOh6y0Ddd9fyCHF8SU029pA7zW3pKDOLCSxsdo=
-X-Received: by 2002:a05:6902:124a:: with SMTP id t10mr20237420ybu.634.1643504929797;
- Sat, 29 Jan 2022 17:08:49 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=W5LenOWK+Asi/IRJktE/pV+nkUhUa2nycRViHzLQ+ic=;
+        b=02r6JQbno5O0tf/QODk4IwH+TKQhxoJdSIA7MdtzpYcyZriXHMsBO9BAkZR6wYyToB
+         TAkjXldYzsVuz8Imn1DhdNY/n2vpSnGA9Wxjmo4pdL07IS7szQXIH1X0fbHeM27pp0g4
+         usfOWg+LluquqcW3JJCw7lH0MYDOD+l71hFcU+gEXZtxU+/tuaoRG2GZ3kBkZz5OLDU/
+         TH96XUhmmRW0VfqJVMAqaWLO1tb9YT34sRIj6uk5G2m9UHqF6yi9F0W3b3mqCxzHHoBa
+         tnabT1+jzAtQJBNiJ+2ZYuPo+4AKpZ5EpNGzolNtuCnfUvTUlZ3pfrps/jS0tRuErCWb
+         siIQ==
+X-Gm-Message-State: AOAM5318zuyfizzRHzzgUT6W4127/n/Wx4KfWczuRCTxXbLmxqugUirC
+        FQ75Ip2q97Wiwc8Nod0lFCN9fqcPW7gS8pJ/fTA=
+X-Google-Smtp-Source: ABdhPJyqL5BiH5c7aZdo1tjaqQqGBEW0n7VpTd5gZsUH6IgJMX1sY2fwYACUSkTV9G9TFIks1+ndJbO51hT+9jv0MVc=
+X-Received: by 2002:a05:6902:4d2:: with SMTP id v18mr22134015ybs.257.1643505624996;
+ Sat, 29 Jan 2022 17:20:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119160715.650535-1-nikita.yoush@cogentembedded.com>
-In-Reply-To: <20220119160715.650535-1-nikita.yoush@cogentembedded.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 30 Jan 2022 02:08:38 +0100
-Message-ID: <CACRpkdZ2rBii88APKacg=LyVY-9m9pxM5z08YawkvjuWmjSJrA@mail.gmail.com>
-Subject: Re: [PATCH/RFC] gpiolib: create irq_domain hierarchy bottom if possible
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Sender: nmesomakalu01@gmail.com
+Received: by 2002:a05:7000:c091:0:0:0:0 with HTTP; Sat, 29 Jan 2022 17:20:24
+ -0800 (PST)
+From:   Jackie James <jackiejames614@gmail.com>
+Date:   Sun, 30 Jan 2022 01:20:24 +0000
+X-Google-Sender-Auth: _pxmej8tbOSGVGxf5jPvGsijn6s
+Message-ID: <CAHMQAuOimXRUN0O-tihGJvLfgyV--t9Bq0KLXc+NZip0ruv-jQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 5:07 PM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
+Gooday my beloved,
 
-> Currently, gpiolib creates irq_domain compatible with hierarchical API
-> only when interrupts provided by gpiochip lay on top of existing
-> hierarchy. Otherwise, legacy API is used.
->
-> With this patch, as soon as
-> - irq_domain hierarchical API is enabled in the kernel config,
-> - chip driver does not request preallocated interrupt numbers,
-> - chip driver does not provide it's own irq_domain_ops,
-> - chip driver provides fwnode, either explicitly or via it's struct
->   device,
-> irq_domain created by gpiolib will use hierarchical API even without
-> parent.
->
-> This allows other irqchips to lay on top of this irq_domain.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs.James Jackie.a widow,I am suffering
+from a long time brain tumor, It has defiled all forms of medical
+treatment, and right now I have about a few months to leave, according
+to medical experts.
 
-I see what you're trying to do, but we definitely need Marc Z to
-provide review for this patch before we merge it.
+ The situation has gotten complicated recently with my inability to
+hear proper, am communicating with you with the help of the chief
+nurse herein the hospital, from all indication my conditions is really
+deteriorating and it is quite obvious that, according to my doctors
+they have advised me that I may not live too long, Because this
+illness has gotten to a very bad stage. I plead that you will not
+expose or betray this trust and confidence that I am about to repose
+on you for the mutual benefit of the orphans and the less privilege. I
+have some funds I inherited from my late husband, the sum of ($
+12,500,000.00 Dollars).Having known my condition, I decided to donate
+this fund to you believing that you will utilize it the way i am going
+to instruct herein.
 
-> @@ -1095,14 +1095,6 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
-(...)
-> +       if (d->parent) {
-
-You have just put a big if (d->parent) around 95% of the code, invent
-a different
-function name and make that do what you want if parent is set, or just
-inline the code you need for that case.
-
->  static bool gpiochip_hierarchy_is_hierarchical(struct gpio_chip *gc)
->  {
-> -       return !!gc->irq.parent_domain;
-> +       if (gc->irq.parent_domain)
-> +               return true;    /* will add to existing hierarchy */
-
-OK the old case...
-
-> +       if (!gc->irq.first && !gc->irq.domain_ops &&
-> +           (gc->irq.fwnode || dev_fwnode(&gc->gpiodev->dev)))
-> +               return true;    /* will create hierarchy bottom */
-
-This will turn a *lot* of GPIO chips created with this helper
-into hierarchical root controllers.
-
-Is this really the right thing to do? (Marc?)
-
-Yours,
-Linus Walleij
+ I need you to assist me and reclaim this money and use it for Charity
+works, for orphanages and gives justice and help to the poor, needy
+and widows says The Lord." Jeremiah 22:15-16.=E2=80=9C and also build schoo=
+ls
+for less privilege that will be named after my late husband if
+possible and to promote the word of God and the effort that the house
+of God is maintained. I do not want a situation where this money will
+be used in an ungodly manner. That's why I'm taking this decision. I'm
+not afraid of death, so I know where I'm going.
+ I accept this decision because I do not have any child who will
+inherit this money after I die. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
+I'm waiting for your immediate reply.
+May God Bless you,
+Respectfully.
+Mrs.James Jackie

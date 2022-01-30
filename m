@@ -2,108 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 141A94A35FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B5E4A3602
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354669AbiA3Lgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 06:36:47 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:41545 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354655AbiA3Lgo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 06:36:44 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MkpjD-1mX4CN3OxT-00mKSp; Sun, 30 Jan 2022 12:36:41 +0100
-Received: by mail-oi1-f182.google.com with SMTP id t199so4771640oie.10;
-        Sun, 30 Jan 2022 03:36:39 -0800 (PST)
-X-Gm-Message-State: AOAM5314Ox/BEinCAcq0fPV8cd3GKJu05gn1BFnwkD48soO66bExzH/x
-        8G4HgiWAuS46vCuxnRu+Kuk18wAjT0tMlFKJAdM=
-X-Google-Smtp-Source: ABdhPJx02/VRPT+lHqxP4cUEJpaptHk8IWYJlq+IlqFxgivaG7fXilNMey5++lAxG71rgAwjbfrXcV/NpMPlqrdhT2Y=
-X-Received: by 2002:aca:f03:: with SMTP id 3mr10491465oip.102.1643542598876;
- Sun, 30 Jan 2022 03:36:38 -0800 (PST)
+        id S1354682AbiA3LiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 06:38:17 -0500
+Received: from mail-bn8nam08on2051.outbound.protection.outlook.com ([40.107.100.51]:9629
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346954AbiA3LiK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 06:38:10 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iYLs6AYcuCwlLBjnk663aqyNKQ4tUQPFCZbV8+v9j064Wb/0TzQz0geH71OQrebkvWoVL9ypA5Opn3SJOTUZNFLvTJC1TDTCauSHsARGlxrwp1v5zfHk9MXA9gmxb43/InPlyVEh2CFiQhS3a43rgWg+d6hF4W76YU4gLFeQ0I+aspaPfI3H3vDi9VDD8z24LpOjKhNrgMc+JTwahJ4BhPB5gvzxvt/jrP8IeE5zLBmnAkJMZ2nOyxUIc1IFoMCKPnRxFpdaWXjj2F1uFa7mIHwx17XeEO9rQx0aEsXT1RCRFYRwWylPYKyviGv9ZntPNRCAPlGyvNzhW2rJu2hIaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nwuxi38BGKCYgFVkoZ+8c+Fyh8ysPg4mFl/zFWqdZk8=;
+ b=jkPwYJMcl1a4hpePRcYAeT03b3fE7VA72h79LWbR3eeTqVeFGi3tT07cN/rV74aKuDRaZFFhf4/izs8pDplfxtnDdJzXFGJT//jnZS986k4WXQRrFO7CL0wzPSs0xbYFb/CnX9sG50dbn//X8XIjAc4St184yaUwxi7c9qCXx+84g/3GbfRR9g2sKdxbMBTBmGMwHNsHQmIbnIm8Vrg5GUdewRPo7xxFAcIQIowXiCHSEDUl9STzqnSmLyj/qbxYt2Hk4UAyh1iBMNvGo9rJzsNkY14U03uEKgb6yHMeKWuRJbJ3tnaAYW138NzkuiFrZrUa9+SXdNJIdhbaioj1LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nwuxi38BGKCYgFVkoZ+8c+Fyh8ysPg4mFl/zFWqdZk8=;
+ b=ADW2uOa8wqzC4/3JII/DcDs8gu026kh7egI+ucpYplTLtHp30KplJOI1KL+yuemh1cr6rH6WDTWvau0bufIlAUcibyrOD3YFn+lkgC+bRaBCE6RYbI3hkrMH/ZsbKdBqTdHNPDN4ihbaTKK30kxxAHAcBESOYOn0haEozYwn5IBfTO8qQZil0hefg7bM+rptqtsk+zUR2F/afJdIP3lGwwcuMOjMQ6vwUrbt8Bps69wxojM0IG/iKthK82D7iQBhBa0GhEtxm8/L4UiEhrgZHk7JPP2Om7p7/Hj4C/XBOdrn5Fm77Ppdqx8F78dLuItkm4fA0mBYu8OXXubng6LQ3A==
+Received: from BN6PR13CA0070.namprd13.prod.outlook.com (2603:10b6:404:11::32)
+ by BY5PR12MB3985.namprd12.prod.outlook.com (2603:10b6:a03:196::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Sun, 30 Jan
+ 2022 11:38:07 +0000
+Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:11:cafe::b2) by BN6PR13CA0070.outlook.office365.com
+ (2603:10b6:404:11::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.10 via Frontend
+ Transport; Sun, 30 Jan 2022 11:38:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4930.15 via Frontend Transport; Sun, 30 Jan 2022 11:38:06 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Sun, 30 Jan 2022 11:38:02 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
+ Sun, 30 Jan 2022 03:38:02 -0800
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Sun, 30 Jan 2022 03:38:00 -0800
+From:   Raed Salem <raeds@nvidia.com>
+To:     <sd@queasysnail.net>, <kuba@kernel.org>,
+        <hannes@stressinduktion.org>
+CC:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Lior Nahmanson <liorna@nvidia.com>,
+        "Raed Salem" <raeds@nvidia.com>
+Subject: [PATCH net] net: macsec: Verify that send_sci is on when setting Tx sci explicitly
+Date:   Sun, 30 Jan 2022 13:37:52 +0200
+Message-ID: <1643542672-29403-1-git-send-email-raeds@nvidia.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-7-guoren@kernel.org>
- <CAK8P3a3_kVB78-26sxdsEjb3MMcco6U55tc7siCBFZbJjyH6Sw@mail.gmail.com> <CAJF2gTThb8_-T0iOFVZoJrvZqeFvjfWB+AdFyOwtGhN9aG-MQQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTThb8_-T0iOFVZoJrvZqeFvjfWB+AdFyOwtGhN9aG-MQQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 30 Jan 2022 12:36:22 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3A9AMyv7ABRpUgrTo3sg+SogoDSG5cudR87iK+PifU4g@mail.gmail.com>
-Message-ID: <CAK8P3a3A9AMyv7ABRpUgrTo3sg+SogoDSG5cudR87iK+PifU4g@mail.gmail.com>
-Subject: Re: [PATCH V4 06/17] riscv: compat: Add basic compat date type implementation
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:qz/9sgDzB4qJJ3+Q/QIzZPuO+2NXM74KRntuyUyYRQ6Q82LLX8q
- 5m29nqq7hI8NgdOZpUSJcmmhtHRIaNk2664vaZqMavt08hkwW5EB1iMikbNA0WaUy2hhFZW
- igASxu07SEzkAuRIeHvw81hHl/RErbhtZDDstsb1vbS0ZVogd98vpQsePnLahyxNWuQp2bZ
- fycIk65CN+YPTIDl0XsEg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t6t6eCcbCi0=:Ildz/xss/+/vz9314TtGHP
- p5xqRwsnhPF3BEgXuo72mHm3SouliMJOMjEvy06dYOOOxKhBk7kIJ0NVWx12x28p4hTxr6nBJ
- am7cCa2hw3wgUy/feRRX3NWojL9VDQ5Fw6NCmV3r/YusXy22pT47+k5M6r5aUhfXEYqeqGSsw
- Y9v7pDKL2ALNfeLqHVGjT4xzKZ0WkLPJrDrK4A8GTNm6f3S1GOIhQ+BKj64VZHIf7i0mW5oT5
- TJO0Cj/t9V4yPslgS/NIlpkP47wHVodUff0PF11I1MEr2cq+bAWdt7qAnNxdiTW3F8Dffwk4R
- FFNyz+pPAAceRtzIU5QcvEuE0zp3WuI+fK6Wu5OG7NOBozw81m5nRGjvyZZX++JKM1ci+hQ3S
- /JfLmJB5sfe+mAneuIluhOlS7o2CuXVtM/P0wyK5v12Z6Uexb8RDLS60CA7x6Vo9iKW50d2OG
- B1KuYUEbfT9nB92Pgpv2ozKCKfBB7Vo0szwOZ3jRRTYXVKeH8Q/us0q3fki7ugaTe0y0FdV2G
- m3gdHN6Y0kJAuzIJttE3nKkrV3CevGA4sbuPZqCJz6J6LXS0RD9wqDM/HyaBgb0rqPUQAzkqV
- htNDhdQuRIYl+kgf6GTl/e8rjsAa1Dj7QMwrjq1MFCIQsNC80wG05KAdWIumyb8uz2e5Z3l/D
- 6XGRsL33Gd0/9s/3IQbzaOnMmwRlLOE09sqaD3njZZ1Yd5eEwbgqcKke7tAM8iRlx+EridEVX
- eYpBI/r5xhKQh9yl+dcvKf5UrxnVn1xOXlztxuXdcpXaJ4jdnIG21kYM4naOoPbo/60N6dMvP
- 8dcM6MZQKj3xzQ4TEqXkBGxkqXUBxDLeBRXF+tmuq6oFu4Dyn0=
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 756f4293-81d6-484c-a651-08d9e3e4fbc1
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3985:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3985AEDEB954087E7E9EC727C9249@BY5PR12MB3985.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Lw216mjhhXzXRnEdaRvpd1xjy2LGb8bl1aqQJZNvhMZFQYeE5YovpG7ZcdwLYieKfvfbmeiF1jF3tJL+H1n7/xWc2/q4oZDhciVl2KcRNPcxl7lIGrWdDK6790uCnXBD+a33V/mNMA3cYNUbtx+GC5mzJFpAXmQD1n+8z2PorUMtU9HuHTD2O+7eFC9G3Egnq2i0qTv2RukNkhNIOERc2ARroiRsW/wiiU5XDtEMs6IMxxoOMtVU36w3HsmcgJxpVBTL7kWgZgBoZcjhZtGJzPvSGa2KTtRZwDIeQjDgl0yfFV+CLregpEZpbG3J8owOLq9xGLjHgJOYONvSpBSFwgaRIQD3OVPGlYjzunvPktvBKu8YFPW2KXEuYlj4RGeB6MJcc4RpIWN30Y0SzvYIgGPoZJNE8wob9ZTobdq5e0sV+fK6GWT0X+XZ4GAv+w/JaptfCfWQat6MYl1Gje2xAf9l6l39SKL5lMTgJf7CxnN9ZvTIYyZcdzkMHFoh2TUYGy93ez2RIC50q/qylTiV0rjVvwzfTx4EzZZxd1y6w+e4z4DPL5AY5CDgg0lQWtak/yVXHg0644M7jZVJ5vsl4XPFma7ymb4d5etQa7oy4QqnCMq3QqCC4HCtgX4Wt/nALMRjlFJWRUxk6eLR4Xzwi6byofp+OWH0XvkW9qmk9ZAJzB6qyMpQsn23bCOMkuNy8GGsSVm2qZuHtObVrCVM+7JzMislUfDc6B+UUpnzvWJtWTG9UbknSCp4U1wTTwGQ
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(8676002)(8936002)(2906002)(508600001)(4326008)(356005)(81166007)(316002)(54906003)(110136005)(6666004)(7696005)(107886003)(2616005)(36860700001)(86362001)(26005)(186003)(336012)(426003)(47076005)(5660300002)(36756003)(70586007)(70206006)(82310400004)(40460700003)(36900700001)(309714004)(20210929001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2022 11:38:06.3738
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 756f4293-81d6-484c-a651-08d9e3e4fbc1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3985
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 6:47 AM Guo Ren <guoren@kernel.org> wrote:
->
-> On Sun, Jan 30, 2022 at 5:56 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Sat, Jan 29, 2022 at 1:17 PM <guoren@kernel.org> wrote:
-> > > +
-> > > +#define COMPAT_RLIM_INFINITY   0x7fffffff
-> > >
-> > > +#define F_GETLK64      12
-> > > +#define F_SETLK64      13
-> > > +#define F_SETLKW64     14
-> >
-> > These now come from the generic definitions I think. The flock definitions
-> > are just the normal ones,
-> Yes, it could be removed after Christoph Hellwig's patch merged.
+From: Lior Nahmanson <liorna@nvidia.com>
 
-Rgiht, I keep forgetting that this is a separate series, so this is fine.
+When setting Tx sci explicit, the Rx side is expected to use this
+sci and not recalculate it from the packet.However, in case of Tx sci
+is explicit and send_sci is off, the receiver is wrongly recalculate
+the sci from the source MAC address which most likely be different
+than the explicit sci.
 
-> > and AFAICT the RLIM_INIFINITY definition here
-> > is actually wrong and should be the default 0xffffffffu to match the
-> > native (~0UL) definition.
-> Yes, native rv32 used ~0UL, although its task_size is only 2.4GB.
+Fix by preventing such configuration when macsec newlink is established
+and return EINVAL error code on such cases.
 
-The rlimit range has very little to do with the virtual memory address
-limits, it is used for a number of other things that are typically more
-limited in practice.
+Fixes: c09440f7dcb3 ("macsec: introduce IEEE 802.1AE driver")
+Signed-off-by: Lior Nahmanson <liorna@nvidia.com>
+Reviewed-by: Raed Salem <raeds@nvidia.com>
+Signed-off-by: Raed Salem <raeds@nvidia.com>
+---
+ drivers/net/macsec.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> I would remove #define COMPAT_RLIM_INFINITY   0x7fffffff
+diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
+index 33ff33c..3d08743 100644
+--- a/drivers/net/macsec.c
++++ b/drivers/net/macsec.c
+@@ -4018,6 +4018,15 @@ static int macsec_newlink(struct net *net, struct net_device *dev,
+ 	    !macsec_check_offload(macsec->offload, macsec))
+ 		return -EOPNOTSUPP;
+ 
++	/* send_sci must be set to true when transmit sci explicitly is set */
++	if ((data && data[IFLA_MACSEC_SCI]) &&
++	    (data && data[IFLA_MACSEC_INC_SCI])) {
++		u8 send_sci = !!nla_get_u8(data[IFLA_MACSEC_INC_SCI]);
++
++		if (!send_sci)
++			return -EINVAL;
++	}
++
+ 	if (data && data[IFLA_MACSEC_ICV_LEN])
+ 		icv_len = nla_get_u8(data[IFLA_MACSEC_ICV_LEN]);
+ 	mtu = real_dev->mtu - icv_len - macsec_extra_len(true);
+-- 
+1.8.3.1
 
-Ok.
-
-       Arnd

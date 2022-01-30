@@ -2,118 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E114A384B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 19:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C534A384E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 20:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355240AbiA3S5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 13:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA3S5S (ORCPT
+        id S1355436AbiA3TAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 14:00:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46722 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbiA3TAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 13:57:18 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEE8C061714;
-        Sun, 30 Jan 2022 10:57:18 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id u18so22343429edt.6;
-        Sun, 30 Jan 2022 10:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+c6u7Ofg/2nJE4oe4zIKTdlG+rAyM0F3JywePufjJYM=;
-        b=fEzMUc2/lvKVYSd05x4eIJdlkVaBNWpsIvFjP53pZMVz4C1ua+SdBIlF2Y71oRMHUn
-         eTNaaAN7jNsnND7UOzgd8hlkdDqwQ8rI8N5+UTu8Gw52Uu9O8kcEHBhM2z4lIkLfPGEm
-         9NbMRJGmO2wYFfBLSiPonjo/yrbgPPH6obYSFo6H7noMA/22I6a3BMqjOdxmazzLs7lB
-         L3r34PZPKPma0fbwwn69FEQqrD0bnhIxRadjedgFW6botXQsxlTcFsL0k3LmgzR8UW0V
-         K+3Wq9Sc+a2NmB4HCJvfkNYXsd6YkrNNE+cHuKsWa7fKRj1Qq4zWPsDXIvWHrBd8sxOp
-         UbSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+c6u7Ofg/2nJE4oe4zIKTdlG+rAyM0F3JywePufjJYM=;
-        b=kp88rnDabFz1dIlI3rbTPmBku4Y0PrOq4h6u8WqEpvbz2ERoDLct3jJxm1U3ZWihA4
-         K8Hf3FC2I1gVHwUq5ys+t5iwlyeBom6yyJ265mIkyGlzo65FRBVKnkkXOY+sYRR4pHx8
-         Cj+XnM9BQQ/i1rPWdLLTZe+rFF9BDlTaRePo9iObCT/RSMhb87SM+h89QmM0MMGojlaj
-         5cHajwEbAAofXBXjL9Lcch+j7fQFaIlDpY1a3CjhbDgdMVaH03gfOsht4gefc57++b4l
-         ca16w9PXFQVWNU6/taOuX57i8hm9gzg3XTeMC17ca2L7vmyoy53nC5Fv0PptbcrCPBOC
-         n5sw==
-X-Gm-Message-State: AOAM533E3EvyjLCbChbgNBNSwwKO/13CaX4sK/+So9KAY1CYcOsPs4bj
-        iJKIsy8f7BhDtWVAViG8exXxFwFA4g/NMxJoeM0=
-X-Google-Smtp-Source: ABdhPJzVRnWp5Ug3XCfyDHGbJBpmeid7psZKR+Hl6hMfm198IpT+7MMWxX5JcvBsHEAdRByxtLhrzDdOGgLcCfsP0iI=
-X-Received: by 2002:aa7:c743:: with SMTP id c3mr17380336eds.270.1643569036193;
- Sun, 30 Jan 2022 10:57:16 -0800 (PST)
+        Sun, 30 Jan 2022 14:00:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E644B829A6
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 19:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326F0C340E4;
+        Sun, 30 Jan 2022 19:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643569232;
+        bh=J5VGqQOy6MMXL8J5ar+eI2vqjBOz9iohKVb1BM9GqWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LMoMrALaOnlYPLk7kPn8+j8QUdsjt0NDubYijeeh/x71chGgfwIB8tedapUb8YnDs
+         TCrvsGAJuTHcUzkHEDwWcLRZ5keYw0ZaAnJZEZ7VcXpZ19aaFuITeGnF+UilU8kq1t
+         fibdXm1SJpWMAqWukPgz7546YKFQbqE0EJjrwUzmDjoDWhfTARFrER8bP2a5f4FGEA
+         Fja7j0iccIi7zvRztUsWE+EptEb9pnJn/CXr3VgfD7pPt5iqFP3HCnuVAlcAXHTJfE
+         pfXZMmvt98W+DBLGvIPd/+sy7h/nJkRTbiIiz2cwHKpe9PpLuxRFxXOUWxglGPwO/W
+         mVhW4c92Wv6ww==
+Date:   Sun, 30 Jan 2022 21:00:22 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, mike.rapoport@gmail.com,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 07/16] tools/include: Add io.h stub
+Message-ID: <YfbgRm8qq7E260UY@kernel.org>
+References: <cover.1643206612.git.karolinadrobnik@gmail.com>
+ <2d9aa000afe81b45157617664134b871207c2067.1643206612.git.karolinadrobnik@gmail.com>
+ <YfKngOPLeI3rQOn3@casper.infradead.org>
+ <48499a57afb3d27df26b39aa4255b4ba583c1148.camel@gmail.com>
+ <Yfa4WMeauvmgkQ9H@kernel.org>
+ <YfbQlMyohx31FhSW@casper.infradead.org>
 MIME-Version: 1.0
-References: <20220130183653.491292-1-keescook@chromium.org>
-In-Reply-To: <20220130183653.491292-1-keescook@chromium.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 30 Jan 2022 20:56:40 +0200
-Message-ID: <CAHp75Vf9S8jKQGAYRrmSET7YJQNoHMzUC6VVTAOT7DbwcCcc4Q@mail.gmail.com>
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfbQlMyohx31FhSW@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 8:36 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Add a simple test for strlen() functionality, including using it as a
-> constant expression.
+On Sun, Jan 30, 2022 at 05:53:24PM +0000, Matthew Wilcox wrote:
+> On Sun, Jan 30, 2022 at 06:10:00PM +0200, Mike Rapoport wrote:
+> > On Fri, Jan 28, 2022 at 12:21:59PM +0100, Karolina Drobnik wrote:
+> > > On Thu, 2022-01-27 at 14:09 +0000, Matthew Wilcox wrote:
+> > > > On Thu, Jan 27, 2022 at 02:21:25PM +0100, Karolina Drobnik wrote:
+> > > > > Add a dummy io.h header.
+> > > > 
+> > > > Rather begs the question of what memblock.c needs from linux/io.h.
+> > > > 
+> > > > Wouldn't it be better to:
+> > > > 
+> > > > +++ b/mm/memblock.c
+> > > > @@ -18,7 +18,6 @@
+> > > >  #include <linux/memblock.h>
+> > > > 
+> > > >  #include <asm/sections.h>
+> > > > -#include <linux/io.h>
+> > > > 
+> > > >  #include "internal.h"
+> > > > 
+> > > 
+> > > That was something I considered in the very beginning, but didn't have
+> > > a chance to verify it works for all architectures. I can take a look
+> > > after I'm finished with other v2 changes.
+> > > 
+> > > > (allmodconfig on x86-64 builds fine with this; I have not done an
+> > > > extended sweep of other arches / build options).
+> > 
+> > I did a sweep for defconfigs for all arches and all were fine.
+> 
+> Thanks for doing the sweep, Mike.
+> 
+> I think I found a deeper problem which is masked due to our maze of
+> header files:
+> 
+> include/asm-generic/io.h:#ifndef virt_to_phys
+> include/asm-generic/io.h:#define virt_to_phys virt_to_phys
+> 
+> so there's an assumption that <asm/io.h> defines virt_to_phys().
+> You can see that in a number of architectures, eg:
+> 
+> arch/alpha/include/asm/io.h:static inline unsigned long virt_to_phys(volatile void *address)
+> arch/ia64/include/asm/io.h:#define virt_to_phys virt_to_phys
+> arch/mips/include/asm/io.h:#define virt_to_phys virt_to_phys
+> arch/nios2/include/asm/io.h:#define virt_to_phys(vaddr) \
+> arch/parisc/include/asm/io.h:#define virt_to_phys(a) ((unsigned long)__pa(a))
+> arch/powerpc/include/asm/io.h:#define virt_to_phys virt_to_phys
+> arch/sh/include/asm/io.h:#define virt_to_phys(address)  ((unsigned long)(address))
+> arch/x86/include/asm/io.h:#define virt_to_phys virt_to_phys
+> 
+> That's clearly not the right place to define it.  Two architectures
+> put it in asm/memory.h:
+> 
+> arch/arm/include/asm/memory.h:#define virt_to_phys virt_to_phys
+> arch/arm64/include/asm/memory.h:#define virt_to_phys virt_to_phys
+> 
+> then:
+> 
+> arch/m68k/include/asm/virtconvert.h:#define virt_to_phys virt_to_phys
+> arch/sparc/include/asm/page_32.h:#define virt_to_phys           __pa
+> arch/sparc/include/asm/page_64.h:#define virt_to_phys __pa
 
-...
+I'd say sparc picked the most appropriate header for it. memory.h could
+also work fine, but it's only present on some arches.
+I'll take a deeper look, thanks for checking this.
+ 
+> This needs to be properly sorted out, but I don't want to tell Karolina
+> that's now her job as a prerequisite for merging this patchset; that
+> would be unfair.
+ 
+Totally agree.
 
-> +/*
-> + * Unlike many other string functions, strlen() can be used in
-> + * static initializers when string lengths are known at compile
-> + * time. (i.e. Under these conditions, strlen() is a constant
-> + * expression.) Make sure it can be used this way.
-> + */
-> +static const int strlen_ce = strlen("tada, a constant expression");
+> Cc'ing Arnd.  This is the kind of awful mess that he loves fixing ;-)
 
-So, the compiler will replace this by a constant and then eliminate
-the condition completely from the code. Did I understand this
-correctly?
-
-> +static __init int strlen_selftest(void)
-> +{
-> +       /* String length ruler:         123456789012345 */
-> +       static const char normal[]   = "I am normal";
-> +       static const char *ptr       = "where do I go?";
-> +       static const char trailing[] = "hidden NULLs\0\0\0";
-> +       static const char leading[]  = "\0\0hidden text";
-> +
-> +       if (strlen(normal) != 11)
-> +               return 0x100001;
-> +       if (strlen(ptr++) != 14)
-> +               return 0x100002;
-> +       if (strlen(ptr++) != 13)
-> +               return 0x100003;
-> +       if (strlen(trailing) != 12)
-> +               return 0x100004;
-> +       if (strlen(leading) != 0)
-> +               return 0x100005;
-
-> +       if (strlen_ce != 27)
-> +               return 0x100006;
-
-...so this part won't ever appear in the assembly (assuming -O2).
-
-Same to the rest? If so, why is this not a part of the compiler tests?
-
-> +       return 0;
-> +}
-
+Heh, me too :)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Sincerely yours,
+Mike.

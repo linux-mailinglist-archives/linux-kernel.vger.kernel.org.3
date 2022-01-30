@@ -2,208 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3ADC4A333B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 03:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1BA4A3333
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 03:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353759AbiA3CLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 21:11:19 -0500
-Received: from vps.xff.cz ([195.181.215.36]:38668 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236098AbiA3CLQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 21:11:16 -0500
-X-Greylist: delayed 349 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jan 2022 21:11:13 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1643508324; bh=QCaFEAKl4lmDsxn776W1aL4aatdwnt4C9rqE/9W3L7g=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=hCDHJ3TkEQjc9TVUu0m3zz4GdWvfM/Ce2fsBKF6f94d1v1Bn754t+14N8La/sjHiU
-         Pky5DLlro8yIsxe6Yp6LiqS57g5nJAYdW1eQd520rikAZvyxDAVDMmdVqA7989araM
-         3qmKXzlBNWkzB6eeGzHoEx2GFHvUMI9xorgKundw=
-Date:   Sun, 30 Jan 2022 03:05:23 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH 4/5] Input: pinephone-keyboard - Support the proxied I2C
- bus
-Message-ID: <20220130020523.f7mx36yj6nlqthoe@core.my.home>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20220129230043.12422-1-samuel@sholland.org>
- <20220129230043.12422-5-samuel@sholland.org>
+        id S1353742AbiA3CIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 21:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236098AbiA3CIT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 21:08:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6499C061714;
+        Sat, 29 Jan 2022 18:08:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A849AB828A8;
+        Sun, 30 Jan 2022 02:08:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB71C340F0;
+        Sun, 30 Jan 2022 02:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643508495;
+        bh=3V6H56NIZMHAqm9Z0fpKVQ/bU1deS6S7JAioTpvD1M4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OTmBDMWld2fPY0IAjwncgvnEnCf2fO27sbM9PKyGKVmvZGp76Fvkp0Mfq1Bnu5kfZ
+         RBKfUWZPecIyhX3i4GX+Fjes8N0dWUxsY0iyWjQb5m8FSRfpn1cPfrofQ8ZNSms4Bg
+         910JJs1mtIep46XPfe3+3FG60Ex20dK0R/MTafeM6MJqN3uL7/yJeifJkPo3pWv1Ib
+         flm/U6ZxXGkM9TvQDoWo9BKW2oM89YN39aJos2toLKp3kzAjIjRWgZOPgTwq5yabFe
+         HtK/pnjZ76MF8+/o8SJ2GVrHexo2IyVEGDDOVUQNWth6jmOsmRLuZWI9X5ZxB1TMYi
+         9CzOHqPqK+yuw==
+Received: by mail-vk1-f176.google.com with SMTP id v192so6201237vkv.4;
+        Sat, 29 Jan 2022 18:08:15 -0800 (PST)
+X-Gm-Message-State: AOAM533XDRkptIDDGhmVVdTR8qW9nB8Lc8i4cz6zPoOPxwg5YX4we0OT
+        dPF4b0mfmcFsbHrkq+RxBb9vxLt/2NIlB4ADm1o=
+X-Google-Smtp-Source: ABdhPJxrzpxI8bv+XrH5itD+/Oj5rPfN0In7EL12ZCBIWAt1HX33g0ojST0LIWmJqwh28IscrmfNOC4zwCeOVQJd6ko=
+X-Received: by 2002:a1f:640e:: with SMTP id y14mr6389746vkb.2.1643508494202;
+ Sat, 29 Jan 2022 18:08:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129230043.12422-5-samuel@sholland.org>
+References: <20220129162726.1154501-1-guoren@kernel.org> <20220129162726.1154501-3-guoren@kernel.org>
+ <87r18qxui9.wl-maz@kernel.org>
+In-Reply-To: <87r18qxui9.wl-maz@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 30 Jan 2022 10:08:02 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTYN0bxnnMtP9L1KvaH0h6ny+Lr3+fC7GP-YWnwjAYd4A@mail.gmail.com>
+Message-ID: <CAJF2gTTYN0bxnnMtP9L1KvaH0h6ny+Lr3+fC7GP-YWnwjAYd4A@mail.gmail.com>
+Subject: Re: [PATCH V6 2/2] irqchip/sifive-plic: Fixup thead,c900-plic dt
+ parse in opensbi
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Samuel,
+On Sun, Jan 30, 2022 at 2:32 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sat, 29 Jan 2022 16:27:26 +0000,
+> guoren@kernel.org wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The thead,c900-plic has been used in opensbi to distinguish
+> > PLIC [1]. Although PLICs have the same behaviors in Linux,
+> > they are different hardware with some custom initializing in
+> > firmware(opensbi).
+> >
+> > [1]: https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd62653b9fb31623a42ced45f38ea6
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Anup Patel <anup@brainfault.org>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Samuel Holland <samuel@sholland.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > ---
+> >  drivers/irqchip/irq-sifive-plic.c | 25 +++++++++++++++++++++++--
+> >  1 file changed, 23 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> > index 259065d271ef..245655928076 100644
+> > --- a/drivers/irqchip/irq-sifive-plic.c
+> > +++ b/drivers/irqchip/irq-sifive-plic.c
+> > @@ -172,7 +172,7 @@ static void plic_irq_eoi(struct irq_data *d)
+> >       }
+> >  }
+> >
+> > -static struct irq_chip plic_chip = {
+> > +static struct irq_chip sifive_plic_chip = {
+> >       .name           = "SiFive PLIC",
+> >       .irq_mask       = plic_irq_mask,
+> >       .irq_unmask     = plic_irq_unmask,
+> > @@ -182,12 +182,24 @@ static struct irq_chip plic_chip = {
+> >  #endif
+> >  };
+> >
+> > +static struct irq_chip thead_plic_chip = {
+> > +     .name           = "T-Head PLIC",
+> > +     .irq_mask       = plic_irq_mask,
+> > +     .irq_unmask     = plic_irq_unmask,
+> > +     .irq_eoi        = plic_irq_eoi,
+> > +#ifdef CONFIG_SMP
+> > +     .irq_set_affinity = plic_set_affinity,
+> > +#endif
+> > +};
+>
+> For pure entertainment, let's compare the two structures:
+>
+> static struct irq_chip plic_chip = {
+>         .name           = "SiFive PLIC",
+>         .irq_mask       = plic_irq_mask,
+>         .irq_unmask     = plic_irq_unmask,
+>         .irq_eoi        = plic_irq_eoi,
+> #ifdef CONFIG_SMP
+>         .irq_set_affinity = plic_set_affinity,
+> #endif
+> };
+>
+> Oh wait: a string. Must be really important. Not.
+No, pls see below comment.
 
-On Sat, Jan 29, 2022 at 05:00:41PM -0600, Samuel Holland wrote:
-> The PinePhone keyboard case contains a battery managed by an integrated
-> power bank IC. The power bank IC communicates over I2C, and the keyboard
-> MCU firmware provides an interface to read and write its registers.
-> Let's use this interface to implement a SMBus adapter, so we can reuse
-> the driver for the power bank IC.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  drivers/input/keyboard/pinephone-keyboard.c | 73 +++++++++++++++++++++
->  1 file changed, 73 insertions(+)
-> 
-> diff --git a/drivers/input/keyboard/pinephone-keyboard.c b/drivers/input/keyboard/pinephone-keyboard.c
-> index 8065bc3e101a..7d2e16e588a0 100644
-> --- a/drivers/input/keyboard/pinephone-keyboard.c
-> +++ b/drivers/input/keyboard/pinephone-keyboard.c
-> @@ -3,6 +3,7 @@
->  // Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
->  
->  #include <linux/crc8.h>
-> +#include <linux/delay.h>
->  #include <linux/i2c.h>
->  #include <linux/input/matrix_keypad.h>
->  #include <linux/interrupt.h>
-> @@ -23,6 +24,11 @@
->  #define PPKB_SCAN_DATA			0x08
->  #define PPKB_SYS_CONFIG			0x20
->  #define PPKB_SYS_CONFIG_DISABLE_SCAN		BIT(0)
-> +#define PPKB_SYS_SMBUS_COMMAND		0x21
-> +#define PPKB_SYS_SMBUS_DATA		0x22
-> +#define PPKB_SYS_COMMAND		0x23
-> +#define PPKB_SYS_COMMAND_SMBUS_READ		0x91
-> +#define PPKB_SYS_COMMAND_SMBUS_WRITE		0xa1
->  
->  #define PPKB_DEFAULT_KEYMAP_ROWS	6
->  #define PPKB_DEFAULT_KEYMAP_COLS	12
-> @@ -132,6 +138,7 @@ static const struct matrix_keymap_data ppkb_default_keymap_data = {
->  };
->  
->  struct pinephone_keyboard {
-> +	struct i2c_adapter adapter;
->  	struct input_dev *input;
->  	unsigned short *fn_keymap;
->  	u8 crc_table[CRC8_TABLE_SIZE];
-> @@ -143,6 +150,57 @@ struct pinephone_keyboard {
->  	u8 buf[];
->  };
->  
-> +static int ppkb_adap_smbus_xfer(struct i2c_adapter *adap, u16 addr,
-> +				unsigned short flags, char read_write,
-> +				u8 command, int size,
-> +				union i2c_smbus_data *data)
-> +{
-> +	struct i2c_client *client = adap->algo_data;
-> +	u8 buf[3];
-> +	int ret;
-> +
-> +	buf[0] = command;
-> +	buf[1] = data->byte;
-> +	buf[2] = read_write == I2C_SMBUS_READ ? PPKB_SYS_COMMAND_SMBUS_READ
-> +					      : PPKB_SYS_COMMAND_SMBUS_WRITE;
-> +
-> +	ret = i2c_smbus_write_i2c_block_data(client, PPKB_SYS_SMBUS_COMMAND,
-> +					     sizeof(buf), buf);
-> +	if (ret)
-> +		return ret;
-  
-  [1]
+>
+> > +
+> > +static struct irq_chip *def_plic_chip = &sifive_plic_chip;
+> > +
+> >  static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+> >                             irq_hw_number_t hwirq)
+> >  {
+> >       struct plic_priv *priv = d->host_data;
+> >
+> > -     irq_domain_set_info(d, irq, hwirq, &plic_chip, d->host_data,
+> > +     irq_domain_set_info(d, irq, hwirq, def_plic_chip, d->host_data,
+> >                           handle_fasteoi_irq, NULL, NULL);
+> >       irq_set_noprobe(irq);
+> >       irq_set_affinity(irq, &priv->lmask);
+> > @@ -396,5 +408,14 @@ static int __init plic_init(struct device_node *node,
+> >       return error;
+> >  }
+> >
+> > +static int __init thead_c900_plic_init(struct device_node *node,
+> > +             struct device_node *parent)
+> > +{
+> > +     def_plic_chip = &thead_plic_chip;
+> > +
+> > +     return plic_init(node, parent);
+> > +}
+> > +
+> >  IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+> >  IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
+> > +IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", thead_c900_plic_init);
+>
+> Sorry, but I can't see any point to this patch.
+You didn't see the link I've put in the patch. In that opensbi patch:
 
-> +	/* Read back the command status until it passes or fails. */
-> +	do {
-> +		usleep_range(300, 500);
-> +		ret = i2c_smbus_read_byte_data(client, PPKB_SYS_COMMAND);
-> +	} while (ret == buf[2]);
-> +	if (ret < 0)
-> +		return ret;
-> +	/* Commands return 0x00 on success and 0xff on failure. */
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	if (read_write == I2C_SMBUS_READ) {
-> +		ret = i2c_smbus_read_byte_data(client, PPKB_SYS_SMBUS_DATA);
-> +		if (ret < 0)
-> +			return ret;
+                intc: interrupt-controller@10000000 {
+                        #interrupt-cells = <1>;
+-                       compatible = "riscv,plic0";
++                       compatible = "allwinner,sun20i-d1-plic",
++                                    "thead,c900-plic";
 
-Please use a single read transfer to get both command result and data.
-There will be less risk that some userspace app will issue another command
-in between command status being read as 0 and data byte being read.
++#define THEAD_PLIC_CTRL_REG 0x1ffffc
++
++static void thead_plic_plat_init(struct plic_data *pd)
++{
++       writel_relaxed(BIT(0), (void *)pd->addr + THEAD_PLIC_CTRL_REG);
++}
++
+ static const struct fdt_match irqchip_plic_match[] = {
+        { .compatible = "riscv,plic0" },
+        { .compatible = "sifive,plic-1.0.0" },
++       { .compatible = "thead,c900-plic",
++         .data = thead_plic_plat_init },
+        { },
+ };
 
-Otherwise if you use this in some read/modify/write operation, you
-may write unexpected value to PMIC. I2C register layout is designed
-to make this as optimal as possible in a single I2C transaction, so
-you only need 3 bytes to start command and 2 bytes to read the result
-and data, both in a single xfer. There's very high likelihood the command
-will complete in those 300 - 500 us anyway, because the timing is
-predictable. If this delay is set right, it's almost guaranteed,
-only two xfers will be necessary to run the command and get the result+
-status.
+We've changed the compatible name for thead,c900-plic, and there is no
+riscv,plic0 / sifive,plic-1.0.0 in dts. Without the patch, the newest
+opensbi + newest Linux would be broken in the Allwinner D1 dev board.
 
-And if possible, it would be best if the bus was somehow made busy for
-other users, until the whole comand/result sequence completes, to eliminate
-the possibility of another command being issued by other bus users
-around [1].
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
 
-Thank you and kind regards,
-	o.
 
-> +		data->byte = ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static u32 ppkg_adap_functionality(struct i2c_adapter *adap)
-> +{
-> +	return I2C_FUNC_SMBUS_BYTE_DATA;
-> +}
-> +
-> +static const struct i2c_algorithm ppkb_adap_algo = {
-> +	.smbus_xfer		= ppkb_adap_smbus_xfer,
-> +	.functionality		= ppkg_adap_functionality,
-> +};
-> +
->  static int ppkb_set_scan(struct i2c_client *client, bool enable)
->  {
->  	struct device *dev = &client->dev;
-> @@ -265,6 +323,7 @@ static int ppkb_probe(struct i2c_client *client)
->  	unsigned int map_rows, map_cols;
->  	struct pinephone_keyboard *ppkb;
->  	u8 info[PPKB_MATRIX_SIZE + 1];
-> +	struct device_node *i2c_bus;
->  	int ret;
->  
->  	ret = i2c_smbus_read_i2c_block_data(client, 0, sizeof(info), info);
-> @@ -312,6 +371,20 @@ static int ppkb_probe(struct i2c_client *client)
->  
->  	i2c_set_clientdata(client, ppkb);
->  
-> +	i2c_bus = of_get_child_by_name(dev->of_node, "i2c-bus");
-> +	if (i2c_bus) {
-> +		ppkb->adapter.owner = THIS_MODULE;
-> +		ppkb->adapter.algo = &ppkb_adap_algo;
-> +		ppkb->adapter.algo_data = client;
-> +		ppkb->adapter.dev.parent = dev;
-> +		ppkb->adapter.dev.of_node = i2c_bus;
-> +		strscpy(ppkb->adapter.name, DRV_NAME, sizeof(ppkb->adapter.name));
-> +
-> +		ret = devm_i2c_add_adapter(dev, &ppkb->adapter);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "Failed to add I2C adapter\n");
-> +	}
-> +
->  	crc8_populate_msb(ppkb->crc_table, PPKB_CRC8_POLYNOMIAL);
->  	ppkb->row_shift = get_count_order(map_cols);
->  	ppkb->rows = map_rows;
-> -- 
-> 2.33.1
-> 
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

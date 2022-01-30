@@ -2,61 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BDE4A36A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE87C4A36A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354986AbiA3O2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:28:03 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58580 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354942AbiA3O2B (ORCPT
+        id S1355000AbiA3Oaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:30:55 -0500
+Received: from mail-yb1-f180.google.com ([209.85.219.180]:41507 "EHLO
+        mail-yb1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354993AbiA3Oaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:28:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76FBD611D3;
-        Sun, 30 Jan 2022 14:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A30C340E4;
-        Sun, 30 Jan 2022 14:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643552880;
-        bh=9n+Aej34FCVMukev6/1ASkZcvRdCG22WgQlY7LcmWqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IVajGh+JzGnWjkfepEabhx1lEbYnVmhTEkQlYg1KQBuMxrUh7tgJvhrvCROiLn1GE
-         qR5sFgkMuJXzcnPvUul2SC5Mk3htp8Jdy2F5yQqu0edLodqxJm1+iGqVVuBq0KjUAb
-         TFWI2ZT5jJNI4rmMjQwBKss6k3jD4yaWTqiPxg4o=
-Date:   Sun, 30 Jan 2022 15:27:57 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     felipe.contreras@gmail.com, lorenzo@kernel.org, nbd@nbd.name,
-        stable-commits@vger.kernel.org
-Subject: Re: Patch "mt76: connac: introduce MCU_CE_CMD macro" has been added
- to the 5.15-stable tree
-Message-ID: <Yfagbdm23OI2LXEA@kroah.com>
-References: <164354739721825@kroah.com>
+        Sun, 30 Jan 2022 09:30:52 -0500
+Received: by mail-yb1-f180.google.com with SMTP id g14so32773239ybs.8;
+        Sun, 30 Jan 2022 06:30:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RaxK62DF2brZUuoILwZG6Sy3u6nklK5nRZA4Svlzegg=;
+        b=G+6it9Z1wVGKPNcPzKLlYRCvuJ10vYgb+Qyv+JWPNvGi7LV47dNmnjQ+aFwoZmETnF
+         wKqchiSaZqsakBdZuUVpEVGXrrtYgmLJe0nT9++DXV48NTJI1A2SEldhy3XuLSxLm4Zp
+         NrkslOw3GiEz0riZ2u97PVpO6Un6cKRjJ3GaNeJjudBgD4S+LczaR9H88Kx9v9nkiV64
+         ZChTsBPTKOSWFFvu4erCynTP0ePY9ZnC9M1MwynFXJRUvSBrD+WbLSU2jFfetQJ0DtvM
+         ZlRbS+gelIsdVhGshpLV3nvrUU10NzKgaEalGZI1ZoZ4Cg49VnKsZODaXdnMNFhvpAr0
+         X0AQ==
+X-Gm-Message-State: AOAM532PIfeXIwcMbz7m7qBuarV8ardfXhp2eBPCzndozzrG2BLmvXLH
+        +ttSBUhS25dNEsuwFGkWhhML7eeegi95TB6DSvU=
+X-Google-Smtp-Source: ABdhPJzWR8xePVFxdG2RbvkLhEC1Xi6Vt9iaBmXP/b8POsGPpLJlCXtoumfEAl0n/L56OHWwuokGYMt2PiXRhc6fB7M=
+X-Received: by 2002:a25:34c4:: with SMTP id b187mr24736922yba.78.1643553050777;
+ Sun, 30 Jan 2022 06:30:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164354739721825@kroah.com>
+References: <20220120000409.2706549-1-rajatja@google.com> <20220121214117.GA1154852@bhelgaas>
+ <Ye5GvQbFKo+CFtRb@lahna> <Ye/X7E2dKb+zem34@lahna> <Ye/btvA1rLB2rp02@kroah.com>
+ <Ye/zTHR5aCG58z87@lahna> <CAJZ5v0gitdeEAxcgSoB1=VHA9FnRdCtmUqA_cN_f1a2yFRDghQ@mail.gmail.com>
+ <CACK8Z6H2DLTJgxgS3pcvfOh=5S8cxEMKvwEPfB9zoVf1g2H_UQ@mail.gmail.com>
+ <YfOf2X7Snm7cvDRV@lahna> <CACK8Z6FMgc5UQY-ZGB9sKYR5Wt6L6huTnEKZaFyVRAmDmQt9XQ@mail.gmail.com>
+In-Reply-To: <CACK8Z6FMgc5UQY-ZGB9sKYR5Wt6L6huTnEKZaFyVRAmDmQt9XQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 30 Jan 2022 15:30:39 +0100
+Message-ID: <CAJZ5v0iuM_qjhPxvhzgvtKM-4pBB2skf9G=R=Qo6NzKnZ2LN=w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 01:56:37PM +0100, gregkh@linuxfoundation.org wrote:
-> 
-> This is a note to let you know that I've just added the patch titled
-> 
->     mt76: connac: introduce MCU_CE_CMD macro
-> 
-> to the 5.15-stable tree which can be found at:
->     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-> 
-> The filename of the patch is:
->      mt76-connac-introduce-mcu_ce_cmd-macro.patch
-> and it can be found in the queue-5.15 subdirectory.
-> 
-> If you, or anyone else, feels it should not be added to the stable tree,
-> please let <stable@vger.kernel.org> know about it.
+On Fri, Jan 28, 2022 at 10:34 PM Rajat Jain <rajatja@google.com> wrote:
+>
+> Hi Mika, All,
+>
+> On Thu, Jan 27, 2022 at 11:49 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > On Thu, Jan 27, 2022 at 02:26:07PM -0800, Rajat Jain wrote:
+> > > Hello Rafael, Bjorn, Mika, Dmitry, Greg,
+> > >
+> > > Thanks a lot for your comments.
+> > >
+> > > On Tue, Jan 25, 2022 at 6:45 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Tue, Jan 25, 2022 at 1:55 PM Mika Westerberg
+> > > > <mika.westerberg@linux.intel.com> wrote:
+> > > > >
+> > > > > On Tue, Jan 25, 2022 at 12:15:02PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > On Tue, Jan 25, 2022 at 12:58:52PM +0200, Mika Westerberg wrote:
+> > > > > > > On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
+> > > > > > > > > > This patch introduces a new "UntrustedDevice" property that can be used
+> > > > > > > > > > by the firmware to mark any device as untrusted.
+> > > > > > > >
+> > > > > > > > I think this new property should be documented somewhere too (also
+> > > > > > > > explain when to use it instead of ExternalFacingPort). If not in the
+> > > > > > > > next ACPI spec or some supplemental doc then perhaps in the DT bindings
+> > > > > > > > under Documentation/devicetree/bindings.
+> > > > > > >
+> > > > > > > Actually Microsoft has similar already:
+> > > > > > >
+> > > > > > > https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+> > > > > > >
+> > > > > > > I think we should use that too here.
+> > >
+> > > But because this property also applies to a root port (only), it only
+> > > helps if the device is downstream a PCIe root port. In our case, we
+> > > have an internal (wifi) device 00:14.3 (sits on the internal PCI bus
+> > > 0), so cannot use this.
+> >
+> > Right. I wonder if we can expand it to cover all internal devices, not
+> > just PCIe root ports? We anyways need to support that property so does
+> > not make much sense to me to invent yet another that does pretty much
+> > the same thing.
+>
+> I'm open to doing so if the others also feel the same way. IMHO
+> though, the semantics of ACPI "DmaProperty" differ from the semantics
+> of the property I'm proposing here.
+>
+> The current (documented) semantics (of "DmaProperty"): *This device
+> (root port) is trusted*, but any devices downstream are not to be
+> trusted.
+>
+> What I need and am proposing (new "UntrustedDevice"): *This device as
+> well as any downstream devices* are untrusted.
+>
+> Note that there may be firmware implementing "DmaProperty" already out
+> there (for windows), and if we decide to use it for my purposes, then
+> there shall be a discrepancy in how Linux uses that property vs
+> Windows. Is that acceptable?
 
-Oops, no, this did not get added here, only in 5.16.y
+It may be confusing, so I'd rather not do that.
+
+The platform firmware will use it with the Windows use case in mind
+and if it has side effects in Linux, problems are likely to appear in
+the field.
+
+So the question is rather not about it being acceptable, but about
+whether or not this is generally going to work.

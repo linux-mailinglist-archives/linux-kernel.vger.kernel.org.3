@@ -2,258 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C67A4A3357
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 03:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DC24A335A
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 03:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240964AbiA3Cnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 21:43:35 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:60129 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230484AbiA3Cnd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 21:43:33 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 95D023200BF9;
-        Sat, 29 Jan 2022 21:43:32 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 29 Jan 2022 21:43:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=U9JcbIOM16hUc2
-        t5ADAkVHd0VUGSahY0TtGmGl7TQ3E=; b=T7wblD8JDI868UsiNj+iPoctBKOe0R
-        FyXLG3DYktdBaGN9UP0C03eruBKRqlohGj0HtYiRCtFILQ7l1YjmhzybDQyY4da/
-        cF4OJhkcdC2DvgMF3R1dN1a2NPzvallSYzFMixuNe5XG490YvKw4ERpFRDu7mBrb
-        bbNMienovIRJ3eU9ghK2HKh+UacO8944+69PuKtqdJDz88gr5uVd0ejRB1Cy4F+z
-        FXDVo2Ru/JvMwKcJPhTaoChjnLcSxc3QU0k8s3BFhhOkIuhdYi6mnpIA8htajAlM
-        R4qHalFSOnDMDu0KCyVddBtPLoGKx0X8mNBZGF8icbmtYKPTHaLxRArg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=U9JcbIOM16hUc2t5ADAkVHd0VUGSahY0TtGmGl7TQ3E=; b=TsFanyXT
-        WUhomasnYw3bez+dEKzshI04ul8k2yiCcfpAvIvftPKKPBtbjeg7WkMWv4jgFBOe
-        AIB2N7oj0ira9uDWijj7Eh6C6OQgvz1+KZTFvWBayccwjtcw61lmcZL6jVsZokOw
-        PjvjFVtljNavCxYtNaaNYt0xLUt1xdQKRnwXEfzLbCqSl6QcPSOS/6udO6r5c+Pp
-        EjFXeUFX4RmtsIDsvnczKPc26iRJnlE1sZOa2a5iUVUV3QqYERgkdTKiNRCjBLu9
-        quEPqQqdqgxNcoOpJkYy80s0+Jnp65ih7tCfnkxJe8uMvhbH1U89s43Ew65VCs2x
-        6krxk7etJdCjJA==
-X-ME-Sender: <xms:U_v1YaF9CcNg7TfF7boEu4pRPo1onJEuyG7xXT0KkI2idi13YmpQ5A>
-    <xme:U_v1YbU_S0hvtb-TodO5qhnq5ai7G_y1yw92Ni6XDDF0yxeWcTPVyVwCIzOH_6QDE
-    E1x6uliTaF8uWktHw>
-X-ME-Received: <xmr:U_v1YUIWgwtqqDQzhFNOV_MVVwfqcgnwEeYx70H-sM7lr3T2FFyFJ5vdZNvl2Gpole5eQOrYXWsO9u4KrmIHYfr1ULQ18vM-tCRpxwAY6Uxy6a5Hfrri5-mVJA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeekgdeftdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgleekudevjedtjefhieelvdfhgeegieeikeelhfeffeffffffgedu
-    teetleeijeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:U_v1YUEyi7JtjO3P53Tx1l9ZEt7qLaHUmtC7SC471AEwJ1TdvnrUjg>
-    <xmx:U_v1YQWQmgKbdWp9q3q5kPYwzwbeA-dLZ1eMrBfSIm-7TZQgTu8AgQ>
-    <xmx:U_v1YXNstpS2F8G1TS-BvfUhjkXoP7DnZKySKAmX6hDakC1uuiqwvw>
-    <xmx:VPv1YSKNxZAwe07-SclwuJtaNMLnPa9KBw7f_eUCWvObIkik4jARBg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Jan 2022 21:43:31 -0500 (EST)
-Subject: Re: [PATCH 4/5] Input: pinephone-keyboard - Support the proxied I2C
- bus
-To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <x@xff.cz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-References: <20220129230043.12422-1-samuel@sholland.org>
- <20220129230043.12422-5-samuel@sholland.org>
- <20220130020523.f7mx36yj6nlqthoe@core.my.home>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <4d642ba4-bd34-814d-8ae1-c90c87fa4bc4@sholland.org>
-Date:   Sat, 29 Jan 2022 20:43:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1353819AbiA3CoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 21:44:17 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:48826 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230484AbiA3CoG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 21:44:06 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACHJsRY+_VhYiYuAA--.39477S2;
+        Sun, 30 Jan 2022 10:43:36 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     justinkb@gmail.com
+Cc:     frank-w@public-files.de, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: BUG: [PATCH v2] isoc: mediatek: Check for error clk pointer
+Date:   Sun, 30 Jan 2022 10:43:35 +0800
+Message-Id: <20220130024335.114461-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220130020523.f7mx36yj6nlqthoe@core.my.home>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACHJsRY+_VhYiYuAA--.39477S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4xtw48uFyfJF4DCry3urg_yoW8GF15pw
+        4Ig3s3tw1qgFWkKwn8A3yrKFn3Zw1rJr15Jw1rGa40yr1UWFWkAF4jyFW3uFZ7Gw4kua43
+        tFZ0qF4UCas8Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWI
+        evJa73UjIFyTuYvjfUO_MaUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/29/22 8:05 PM, Ondřej Jirman wrote:
-> Hello Samuel,
-> 
-> On Sat, Jan 29, 2022 at 05:00:41PM -0600, Samuel Holland wrote:
->> The PinePhone keyboard case contains a battery managed by an integrated
->> power bank IC. The power bank IC communicates over I2C, and the keyboard
->> MCU firmware provides an interface to read and write its registers.
->> Let's use this interface to implement a SMBus adapter, so we can reuse
->> the driver for the power bank IC.
->>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  drivers/input/keyboard/pinephone-keyboard.c | 73 +++++++++++++++++++++
->>  1 file changed, 73 insertions(+)
->>
->> diff --git a/drivers/input/keyboard/pinephone-keyboard.c b/drivers/input/keyboard/pinephone-keyboard.c
->> index 8065bc3e101a..7d2e16e588a0 100644
->> --- a/drivers/input/keyboard/pinephone-keyboard.c
->> +++ b/drivers/input/keyboard/pinephone-keyboard.c
->> @@ -3,6 +3,7 @@
->>  // Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
->>  
->>  #include <linux/crc8.h>
->> +#include <linux/delay.h>
->>  #include <linux/i2c.h>
->>  #include <linux/input/matrix_keypad.h>
->>  #include <linux/interrupt.h>
->> @@ -23,6 +24,11 @@
->>  #define PPKB_SCAN_DATA			0x08
->>  #define PPKB_SYS_CONFIG			0x20
->>  #define PPKB_SYS_CONFIG_DISABLE_SCAN		BIT(0)
->> +#define PPKB_SYS_SMBUS_COMMAND		0x21
->> +#define PPKB_SYS_SMBUS_DATA		0x22
->> +#define PPKB_SYS_COMMAND		0x23
->> +#define PPKB_SYS_COMMAND_SMBUS_READ		0x91
->> +#define PPKB_SYS_COMMAND_SMBUS_WRITE		0xa1
->>  
->>  #define PPKB_DEFAULT_KEYMAP_ROWS	6
->>  #define PPKB_DEFAULT_KEYMAP_COLS	12
->> @@ -132,6 +138,7 @@ static const struct matrix_keymap_data ppkb_default_keymap_data = {
->>  };
->>  
->>  struct pinephone_keyboard {
->> +	struct i2c_adapter adapter;
->>  	struct input_dev *input;
->>  	unsigned short *fn_keymap;
->>  	u8 crc_table[CRC8_TABLE_SIZE];
->> @@ -143,6 +150,57 @@ struct pinephone_keyboard {
->>  	u8 buf[];
->>  };
->>  
->> +static int ppkb_adap_smbus_xfer(struct i2c_adapter *adap, u16 addr,
->> +				unsigned short flags, char read_write,
->> +				u8 command, int size,
->> +				union i2c_smbus_data *data)
->> +{
->> +	struct i2c_client *client = adap->algo_data;
->> +	u8 buf[3];
->> +	int ret;
->> +
->> +	buf[0] = command;
->> +	buf[1] = data->byte;
->> +	buf[2] = read_write == I2C_SMBUS_READ ? PPKB_SYS_COMMAND_SMBUS_READ
->> +					      : PPKB_SYS_COMMAND_SMBUS_WRITE;
->> +
->> +	ret = i2c_smbus_write_i2c_block_data(client, PPKB_SYS_SMBUS_COMMAND,
->> +					     sizeof(buf), buf);
->> +	if (ret)
->> +		return ret;
->   
->   [1]
-> 
->> +	/* Read back the command status until it passes or fails. */
->> +	do {
->> +		usleep_range(300, 500);
->> +		ret = i2c_smbus_read_byte_data(client, PPKB_SYS_COMMAND);
->> +	} while (ret == buf[2]);
->> +	if (ret < 0)
->> +		return ret;
->> +	/* Commands return 0x00 on success and 0xff on failure. */
->> +	if (ret)
->> +		return -EIO;
->> +
->> +	if (read_write == I2C_SMBUS_READ) {
->> +		ret = i2c_smbus_read_byte_data(client, PPKB_SYS_SMBUS_DATA);
->> +		if (ret < 0)
->> +			return ret;
-> 
-> Please use a single read transfer to get both command result and data.
-> There will be less risk that some userspace app will issue another command
-> in between command status being read as 0 and data byte being read.
-> 
-> Otherwise if you use this in some read/modify/write operation, you
-> may write unexpected value to PMIC. I2C register layout is designed
-> to make this as optimal as possible in a single I2C transaction, so
-> you only need 3 bytes to start command and 2 bytes to read the result
-> and data, both in a single xfer. There's very high likelihood the command
-> will complete in those 300 - 500 us anyway, because the timing is
-> predictable. If this delay is set right, it's almost guaranteed,
-> only two xfers will be necessary to run the command and get the result+
-> status.
+On Fri, Jan 28, 2022 at 10:26:51PM +0800, Paul Mulders wrote:
+> I guess this breaks all MT7622 SoCs since it'll prematurely exit
+> init_clks (and subsequently init_scp) completely once devm_clk_get
+> fails to get a reference to the mm clock producer (which happens to be
+> the first one tried). This is because MT7623 has a GPU (so no mm
+> clock) and MT7622 doesn't, and as a result the other clock producer
+> pointers never get initialized (and other stuff in init_scp after
+> returning from the error never happens).
+>
+> The patch seems fundamentally flawed, I guess it was either not tested
+> at all, or only tested on a MT7623. The initialization functions seem
+> designed with the idea that it's ok if some clocks aren't present, so
+> stopping the initialization when one of them isn't present seems
+> wrong. (For example, there is also a MT7622B variant of the MT7622
+> which probably also lacks some clocks MT7622(A) does have).
 
-I did this originally, but it causes a different race condition: since the data
-is read first, the command can complete between when the data is read and when
-the result is read. If this happens, the command will be seen as complete, but
-the data will be garbage.
+I don't think the patch for init_clks() is flawed.
+At most it is incompleted.
+What it did is like fixing a potential error in the tool platform
+providing service for the upper application, like what you said,
+MT7623 and MT7622.
+We should not keep the error in the platform because of the upper
+application.
+And it seems like it is MT7622 that is flawed.
+The better way is to fix both the bug in init_clks() and its caller,
+MT7622.
 
-This caused occasional read errors for the charger's power supply properties,
-because I2C reads sometimes returned nonsensical values for those bytes.
-
-> And if possible, it would be best if the bus was somehow made busy for
-> other users, until the whole comand/result sequence completes, to eliminate
-> the possibility of another command being issued by other bus users
-> around [1].
-
-Yes, I can add a call to i2c_lock_bus() here.
-
-Regards,
-Samuel
-
-> Thank you and kind regards,
-> 	o.
-> 
->> +		data->byte = ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static u32 ppkg_adap_functionality(struct i2c_adapter *adap)
->> +{
->> +	return I2C_FUNC_SMBUS_BYTE_DATA;
->> +}
->> +
->> +static const struct i2c_algorithm ppkb_adap_algo = {
->> +	.smbus_xfer		= ppkb_adap_smbus_xfer,
->> +	.functionality		= ppkg_adap_functionality,
->> +};
->> +
->>  static int ppkb_set_scan(struct i2c_client *client, bool enable)
->>  {
->>  	struct device *dev = &client->dev;
->> @@ -265,6 +323,7 @@ static int ppkb_probe(struct i2c_client *client)
->>  	unsigned int map_rows, map_cols;
->>  	struct pinephone_keyboard *ppkb;
->>  	u8 info[PPKB_MATRIX_SIZE + 1];
->> +	struct device_node *i2c_bus;
->>  	int ret;
->>  
->>  	ret = i2c_smbus_read_i2c_block_data(client, 0, sizeof(info), info);
->> @@ -312,6 +371,20 @@ static int ppkb_probe(struct i2c_client *client)
->>  
->>  	i2c_set_clientdata(client, ppkb);
->>  
->> +	i2c_bus = of_get_child_by_name(dev->of_node, "i2c-bus");
->> +	if (i2c_bus) {
->> +		ppkb->adapter.owner = THIS_MODULE;
->> +		ppkb->adapter.algo = &ppkb_adap_algo;
->> +		ppkb->adapter.algo_data = client;
->> +		ppkb->adapter.dev.parent = dev;
->> +		ppkb->adapter.dev.of_node = i2c_bus;
->> +		strscpy(ppkb->adapter.name, DRV_NAME, sizeof(ppkb->adapter.name));
->> +
->> +		ret = devm_i2c_add_adapter(dev, &ppkb->adapter);
->> +		if (ret)
->> +			return dev_err_probe(dev, ret, "Failed to add I2C adapter\n");
->> +	}
->> +
->>  	crc8_populate_msb(ppkb->crc_table, PPKB_CRC8_POLYNOMIAL);
->>  	ppkb->row_shift = get_count_order(map_cols);
->>  	ppkb->rows = map_rows;
->> -- 
->> 2.33.1
->>
+Sincerely thanks,
+Jiang
 

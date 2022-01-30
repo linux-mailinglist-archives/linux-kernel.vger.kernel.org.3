@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7284A3A7F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 22:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EA44A3A80
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 22:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356862AbiA3VdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 16:33:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21866 "EHLO
+        id S1356755AbiA3Vd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 16:33:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51412 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356528AbiA3VcZ (ORCPT
+        by vger.kernel.org with ESMTP id S1356537AbiA3Vc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:32:25 -0500
+        Sun, 30 Jan 2022 16:32:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643578345;
+        s=mimecast20190719; t=1643578346;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hyabKM8+59CUwT2B0d7qLIZay/RH+beAzDXJmHYL03U=;
-        b=cTNUC0k2uNB2QpVB0SJ6z21f88GmRyl2RdpTDFtBfb6QNmeuzRJB2lzeni0TwJiqPeZfhZ
-        vE+OZw0WZaCewNZ63DvwMNV/7Vk+KWAxDOR0pkIEF/BLq61mBF8Ro8V3Z/QRSPgCz6TbpF
-        C1qBWpfbvRGfk40Y6bX6Ms54AIKoyT0=
+        bh=pUE7TRSTRaoiZ1wlOtXxOCtAqDzvICLX8IMQbGpBGgE=;
+        b=g1cyHKPn9i57svEzHnFHpsG5fTA720dDHRXDVTBGgln+/6sneqS8dwzN5o5QizD6zX0jJB
+        0+GYSyerH5pIiGdytfFk8u48MImuRVPB61qDAlCIp0ptvP/z7w0QEmnd322R1gslNXdhGJ
+        ke5XQ5oG4L/kwBZ4mzjsnl3ZQr2pYzc=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-387-t_JzO0XUMGmUfL_CxU3Vxw-1; Sun, 30 Jan 2022 16:32:23 -0500
-X-MC-Unique: t_JzO0XUMGmUfL_CxU3Vxw-1
-Received: by mail-wm1-f69.google.com with SMTP id l16-20020a1c7910000000b0034e4206ecb7so5135249wme.7
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 13:32:23 -0800 (PST)
+ us-mta-583-R0zRtMAOPl-dlrOEzzco0Q-1; Sun, 30 Jan 2022 16:32:25 -0500
+X-MC-Unique: R0zRtMAOPl-dlrOEzzco0Q-1
+Received: by mail-wm1-f69.google.com with SMTP id f188-20020a1c1fc5000000b0034d79edde84so2542327wmf.0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 13:32:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hyabKM8+59CUwT2B0d7qLIZay/RH+beAzDXJmHYL03U=;
-        b=Y0wLgfBNk2LDpJejyye21NY+PYRj5FHEB/Ycn1FbeGweMVTG8tgORFVHRs0taCxtJr
-         T0yFmtSlXsCw1bQ/OiQhvBYV/9i7k90CEXFWabAsVqJTqxxch0CUHp87ezY0hHiS1RhY
-         v5RzEIlWA/bBjrJSth97yyMfH9zTYQg7yVfAGOOvg5LIQXObxcvETz2g2Z+k8a0VE7N/
-         wu9KGspcDecXOLNGg+Lb3Ispn76xkESniIlQeEU6ujhrzq3/F5wu+ymrUJwCCyaE6Tqx
-         OLphHljoIUN1tRjntYC5z2boQmKebz7t69XFTjdxvrGftzev+afHmqFkP0gqIy2XMdvP
-         BMDw==
-X-Gm-Message-State: AOAM532zAS+di86WPndMmtB9shztihrYrtzy8HksD2FBR4AFa9MltVYm
-        2kv7531MPNBWkxfcwsr3cQYTqC7UcX3kdYuGhOZttUXa0y+AN0eevHHo2xNCLtRE16OLYKacygj
-        UPHdWoAIzsZV1hQ30RLRz0eU=
-X-Received: by 2002:a5d:6a8d:: with SMTP id s13mr14618944wru.280.1643578342408;
-        Sun, 30 Jan 2022 13:32:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy9iOV5OMv/gnyHQLbIxe8/bgndYMZGYUBXI+D8eIusi6O3MhgTP7iKtz7IbLdk3wGD6R+fug==
-X-Received: by 2002:a5d:6a8d:: with SMTP id s13mr14618933wru.280.1643578342171;
-        Sun, 30 Jan 2022 13:32:22 -0800 (PST)
+        bh=pUE7TRSTRaoiZ1wlOtXxOCtAqDzvICLX8IMQbGpBGgE=;
+        b=sF8rkALOZl6o0JcZeLONtCoqRUOaLheNsHhR1ujZRzB98TQ2CM6+HoxMacqmCR4Ij5
+         P/z/h+8vNTybnFg5oqcpUHFLWWoPExr7jqh7iAN9moTrpmve/2FzQ8Y9rPbiW3iFE1eU
+         5sdZzvMp5w+7wuf+A/Piu41Leu5jMy7KxxvOVNTbovdWwTZi652J8mPyhgKhREoM3JOw
+         Eg2GfomlU1mCHygYmAS5KVu8yrjnW2uzR2agADo4gjrbIhBksFcrKDq71OyOgSsOtdXS
+         XJcn1W+yhyvcgXV2p9B311fZh5Nnn2p+tBmmYDzQAsdK+k/bNMIkuUBpzo5NvEZYyFo3
+         zX6Q==
+X-Gm-Message-State: AOAM533f+0WLc5H6uL5jTxq5LhZF6K03AA1Ge9WzuULLZ1vgklpyDWU+
+        mYXs51nn3e3RP8sF5YXBYSCAv+fYtLGrVSEI1w0Oc5eSXCqua557seyc+znbaWVfnYqR0izB0+3
+        TpQyEgjtYffOKTLcBeBa9LpI=
+X-Received: by 2002:a05:600c:3d8c:: with SMTP id bi12mr16054804wmb.109.1643578343951;
+        Sun, 30 Jan 2022 13:32:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwqbRW6GKt1zWz3cu463QUS2dcAe0Zt6f1zElO6WwC0sHHOja9ANvD68R3Z1bShAGRbtS0uXg==
+X-Received: by 2002:a05:600c:3d8c:: with SMTP id bi12mr16054788wmb.109.1643578343759;
+        Sun, 30 Jan 2022 13:32:23 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id v5sm11998503wrx.114.2022.01.30.13.32.21
+        by smtp.gmail.com with ESMTPSA id p190sm7246166wmp.16.2022.01.30.13.32.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 13:32:21 -0800 (PST)
+        Sun, 30 Jan 2022 13:32:23 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -60,9 +60,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         live-patching@vger.kernel.org, atomlin@atomlin.com,
         ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
         joe@perches.com
-Subject: [RFC PATCH v4 04/13] module: Move latched RB-tree support to a separate file
-Date:   Sun, 30 Jan 2022 21:32:05 +0000
-Message-Id: <20220130213214.1042497-5-atomlin@redhat.com>
+Subject: [RFC PATCH v4 05/13] module: Move arch strict rwx support to a separate file
+Date:   Sun, 30 Jan 2022 21:32:06 +0000
+Message-Id: <20220130213214.1042497-6-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220130213214.1042497-1-atomlin@redhat.com>
 References: <20220130213214.1042497-1-atomlin@redhat.com>
@@ -74,347 +74,183 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 No functional change.
 
-This patch migrates module latched RB-tree support
-(e.g. see __module_address()) from core module code
-into kernel/module/tree_lookup.c.
+This patch migrates applicable architecture code
+that support strict module rwx from core module code
+into kernel/module/arch_strict_rwx.c
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- include/linux/module.h      |   4 +-
- kernel/module/Makefile      |   1 +
- kernel/module/internal.h    |  33 +++++++++
- kernel/module/main.c        | 129 +-----------------------------------
- kernel/module/tree_lookup.c | 109 ++++++++++++++++++++++++++++++
- 5 files changed, 147 insertions(+), 129 deletions(-)
- create mode 100644 kernel/module/tree_lookup.c
+ include/linux/module.h          | 17 +++++++++++
+ kernel/module/Makefile          |  1 +
+ kernel/module/arch_strict_rwx.c | 44 ++++++++++++++++++++++++++++
+ kernel/module/main.c            | 51 ---------------------------------
+ 4 files changed, 62 insertions(+), 51 deletions(-)
+ create mode 100644 kernel/module/arch_strict_rwx.c
 
 diff --git a/include/linux/module.h b/include/linux/module.h
-index c7daac4d16ee..faeb7ae49b89 100644
+index faeb7ae49b89..8b75380bc340 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -342,9 +342,9 @@ struct module_layout {
+@@ -339,6 +339,23 @@ struct module_layout {
+ #endif
+ };
+ 
++/*
++ * Modules' sections will be aligned on page boundaries
++ * to ensure complete separation of code and data, but
++ * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
++ */
++#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
++# define debug_align(X) ALIGN(X, PAGE_SIZE)
++
++extern void frob_text(const struct module_layout *layout,
++		      int (*set_memory)(unsigned long start, int num_pages));
++extern void module_enable_x(const struct module *mod);
++#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
++# define debug_align(X) (X)
++
++static void module_enable_x(const struct module *mod) { }
++#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
++
  #ifdef CONFIG_MODULES_TREE_LOOKUP
  /* Only touch one cacheline for common rbtree-for-core-layout case. */
  #define __module_layout_align ____cacheline_aligned
--#else
-+#else /* !CONFIG_MODULES_TREE_LOOKUP */
- #define __module_layout_align
--#endif
-+#endif /* CONFIG_MODULES_TREE_LOOKUP */
- 
- struct mod_kallsyms {
- 	Elf_Sym *symtab;
 diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index ee20d864ad19..fc6d7a053a62 100644
+index fc6d7a053a62..146509978708 100644
 --- a/kernel/module/Makefile
 +++ b/kernel/module/Makefile
-@@ -9,4 +9,5 @@ obj-$(CONFIG_MODULE_SIG) += signing.o
- obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
+@@ -10,4 +10,5 @@ obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
  ifdef CONFIG_MODULES
  obj-$(CONFIG_LIVEPATCH) += livepatch.o
-+obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
+ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
++obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
  endif
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 6150ec5ae042..de28d6bb7b5b 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -81,3 +81,36 @@ static inline void module_decompress_cleanup(struct load_info *info)
- {
- }
- #endif
-+
-+#ifdef CONFIG_MODULES_TREE_LOOKUP
-+struct mod_tree_root {
-+	struct latch_tree_root root;
-+	unsigned long addr_min;
-+	unsigned long addr_max;
-+};
-+
-+extern struct mod_tree_root mod_tree;
-+
-+extern void mod_tree_insert(struct module *mod);
-+extern void mod_tree_remove_init(struct module *mod);
-+extern void mod_tree_remove(struct module *mod);
-+extern struct module *mod_find(unsigned long addr);
-+#else /* !CONFIG_MODULES_TREE_LOOKUP */
-+static unsigned long module_addr_min = -1UL, module_addr_max = 0;
-+
-+static void mod_tree_insert(struct module *mod) { }
-+static void mod_tree_remove_init(struct module *mod) { }
-+static void mod_tree_remove(struct module *mod) { }
-+static struct module *mod_find(unsigned long addr)
-+{
-+	struct module *mod;
-+
-+	list_for_each_entry_rcu(mod, &modules, list,
-+				lockdep_is_held(&module_mutex)) {
-+		if (within_module(addr, mod))
-+			return mod;
-+	}
-+
-+	return NULL;
-+}
-+#endif /* CONFIG_MODULES_TREE_LOOKUP */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c91c7e57bca7..941be7788626 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -90,138 +90,13 @@ static DECLARE_WORK(init_free_wq, do_free_init);
- static LLIST_HEAD(init_free_list);
- 
- #ifdef CONFIG_MODULES_TREE_LOOKUP
--
--/*
-- * Use a latched RB-tree for __module_address(); this allows us to use
-- * RCU-sched lookups of the address from any context.
-- *
-- * This is conditional on PERF_EVENTS || TRACING because those can really hit
-- * __module_address() hard by doing a lot of stack unwinding; potentially from
-- * NMI context.
-- */
--
--static __always_inline unsigned long __mod_tree_val(struct latch_tree_node *n)
--{
--	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
--
--	return (unsigned long)layout->base;
--}
--
--static __always_inline unsigned long __mod_tree_size(struct latch_tree_node *n)
--{
--	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
--
--	return (unsigned long)layout->size;
--}
--
--static __always_inline bool
--mod_tree_less(struct latch_tree_node *a, struct latch_tree_node *b)
--{
--	return __mod_tree_val(a) < __mod_tree_val(b);
--}
--
--static __always_inline int
--mod_tree_comp(void *key, struct latch_tree_node *n)
--{
--	unsigned long val = (unsigned long)key;
--	unsigned long start, end;
--
--	start = __mod_tree_val(n);
--	if (val < start)
--		return -1;
--
--	end = start + __mod_tree_size(n);
--	if (val >= end)
--		return 1;
--
--	return 0;
--}
--
--static const struct latch_tree_ops mod_tree_ops = {
--	.less = mod_tree_less,
--	.comp = mod_tree_comp,
--};
--
--static struct mod_tree_root {
--	struct latch_tree_root root;
--	unsigned long addr_min;
--	unsigned long addr_max;
--} mod_tree __cacheline_aligned = {
-+struct mod_tree_root mod_tree __cacheline_aligned = {
- 	.addr_min = -1UL,
- };
- 
- #define module_addr_min mod_tree.addr_min
- #define module_addr_max mod_tree.addr_max
--
--static noinline void __mod_tree_insert(struct mod_tree_node *node)
--{
--	latch_tree_insert(&node->node, &mod_tree.root, &mod_tree_ops);
--}
--
--static void __mod_tree_remove(struct mod_tree_node *node)
--{
--	latch_tree_erase(&node->node, &mod_tree.root, &mod_tree_ops);
--}
--
--/*
-- * These modifications: insert, remove_init and remove; are serialized by the
-- * module_mutex.
-- */
--static void mod_tree_insert(struct module *mod)
--{
--	mod->core_layout.mtn.mod = mod;
--	mod->init_layout.mtn.mod = mod;
--
--	__mod_tree_insert(&mod->core_layout.mtn);
--	if (mod->init_layout.size)
--		__mod_tree_insert(&mod->init_layout.mtn);
--}
--
--static void mod_tree_remove_init(struct module *mod)
--{
--	if (mod->init_layout.size)
--		__mod_tree_remove(&mod->init_layout.mtn);
--}
--
--static void mod_tree_remove(struct module *mod)
--{
--	__mod_tree_remove(&mod->core_layout.mtn);
--	mod_tree_remove_init(mod);
--}
--
--static struct module *mod_find(unsigned long addr)
--{
--	struct latch_tree_node *ltn;
--
--	ltn = latch_tree_find((void *)addr, &mod_tree.root, &mod_tree_ops);
--	if (!ltn)
--		return NULL;
--
--	return container_of(ltn, struct mod_tree_node, node)->mod;
--}
--
--#else /* MODULES_TREE_LOOKUP */
--
--static unsigned long module_addr_min = -1UL, module_addr_max = 0;
--
--static void mod_tree_insert(struct module *mod) { }
--static void mod_tree_remove_init(struct module *mod) { }
--static void mod_tree_remove(struct module *mod) { }
--
--static struct module *mod_find(unsigned long addr)
--{
--	struct module *mod;
--
--	list_for_each_entry_rcu(mod, &modules, list,
--				lockdep_is_held(&module_mutex)) {
--		if (within_module(addr, mod))
--			return mod;
--	}
--
--	return NULL;
--}
--
--#endif /* MODULES_TREE_LOOKUP */
-+#endif
- 
- /*
-  * Bounds of module text, for speeding up __module_address.
-diff --git a/kernel/module/tree_lookup.c b/kernel/module/tree_lookup.c
+diff --git a/kernel/module/arch_strict_rwx.c b/kernel/module/arch_strict_rwx.c
 new file mode 100644
-index 000000000000..037d6eb2f56f
+index 000000000000..9801cb4fef36
 --- /dev/null
-+++ b/kernel/module/tree_lookup.c
-@@ -0,0 +1,109 @@
++++ b/kernel/module/arch_strict_rwx.c
+@@ -0,0 +1,44 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Modules tree lookup
++ * Module arch strict rwx
 + *
-+ * Copyright (C) 2015 Peter Zijlstra
 + * Copyright (C) 2015 Rusty Russell
 + */
 +
 +#include <linux/module.h>
-+#include <linux/rbtree_latch.h>
-+#include "internal.h"
++#include <linux/set_memory.h>
 +
 +/*
-+ * Use a latched RB-tree for __module_address(); this allows us to use
-+ * RCU-sched lookups of the address from any context.
++ * LKM RO/NX protection: protect module's text/ro-data
++ * from modification and any data from execution.
 + *
-+ * This is conditional on PERF_EVENTS || TRACING because those can really hit
-+ * __module_address() hard by doing a lot of stack unwinding; potentially from
-+ * NMI context.
++ * General layout of module is:
++ *          [text] [read-only-data] [ro-after-init] [writable data]
++ * text_size -----^                ^               ^               ^
++ * ro_size ------------------------|               |               |
++ * ro_after_init_size -----------------------------|               |
++ * size -----------------------------------------------------------|
++ *
++ * These values are always page-aligned (as is base)
 + */
-+
-+__always_inline unsigned long __mod_tree_val(struct latch_tree_node *n)
-+{
-+	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
-+
-+	return (unsigned long)layout->base;
-+}
-+
-+__always_inline unsigned long __mod_tree_size(struct latch_tree_node *n)
-+{
-+	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
-+
-+	return (unsigned long)layout->size;
-+}
-+
-+__always_inline bool
-+mod_tree_less(struct latch_tree_node *a, struct latch_tree_node *b)
-+{
-+	return __mod_tree_val(a) < __mod_tree_val(b);
-+}
-+
-+__always_inline int
-+mod_tree_comp(void *key, struct latch_tree_node *n)
-+{
-+	unsigned long val = (unsigned long)key;
-+	unsigned long start, end;
-+
-+	start = __mod_tree_val(n);
-+	if (val < start)
-+		return -1;
-+
-+	end = start + __mod_tree_size(n);
-+	if (val >= end)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+const struct latch_tree_ops mod_tree_ops = {
-+	.less = mod_tree_less,
-+	.comp = mod_tree_comp,
-+};
-+
-+static noinline void __mod_tree_insert(struct mod_tree_node *node)
-+{
-+	latch_tree_insert(&node->node, &mod_tree.root, &mod_tree_ops);
-+}
-+
-+static void __mod_tree_remove(struct mod_tree_node *node)
-+{
-+	latch_tree_erase(&node->node, &mod_tree.root, &mod_tree_ops);
-+}
 +
 +/*
-+ * These modifications: insert, remove_init and remove; are serialized by the
-+ * module_mutex.
++ * Since some arches are moving towards PAGE_KERNEL module allocations instead
++ * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
++ * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
++ * whether we are strict.
 + */
-+void mod_tree_insert(struct module *mod)
++void frob_text(const struct module_layout *layout,
++		      int (*set_memory)(unsigned long start, int num_pages))
 +{
-+	mod->core_layout.mtn.mod = mod;
-+	mod->init_layout.mtn.mod = mod;
-+
-+	__mod_tree_insert(&mod->core_layout.mtn);
-+	if (mod->init_layout.size)
-+		__mod_tree_insert(&mod->init_layout.mtn);
++	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
++	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
++	set_memory((unsigned long)layout->base,
++		   layout->text_size >> PAGE_SHIFT);
 +}
 +
-+void mod_tree_remove_init(struct module *mod)
++void module_enable_x(const struct module *mod)
 +{
-+	if (mod->init_layout.size)
-+		__mod_tree_remove(&mod->init_layout.mtn);
++	frob_text(&mod->core_layout, set_memory_x);
++	frob_text(&mod->init_layout, set_memory_x);
 +}
-+
-+void mod_tree_remove(struct module *mod)
-+{
-+	__mod_tree_remove(&mod->core_layout.mtn);
-+	mod_tree_remove_init(mod);
-+}
-+
-+struct module *mod_find(unsigned long addr)
-+{
-+	struct latch_tree_node *ltn;
-+
-+	ltn = latch_tree_find((void *)addr, &mod_tree.root, &mod_tree_ops);
-+	if (!ltn)
-+		return NULL;
-+
-+	return container_of(ltn, struct mod_tree_node, node)->mod;
-+}
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 941be7788626..7e98ea12b146 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -13,7 +13,6 @@
+ #include <linux/trace_events.h>
+ #include <linux/init.h>
+ #include <linux/kallsyms.h>
+-#include <linux/buildid.h>
+ #include <linux/file.h>
+ #include <linux/fs.h>
+ #include <linux/sysfs.h>
+@@ -63,17 +62,6 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/module.h>
+ 
+-/*
+- * Modules' sections will be aligned on page boundaries
+- * to ensure complete separation of code and data, but
+- * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
+- */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+-# define debug_align(X) ALIGN(X, PAGE_SIZE)
+-#else
+-# define debug_align(X) (X)
+-#endif
+-
+ /*
+  * Mutex protects:
+  * 1) List of modules (also safely readable with preempt_disable),
+@@ -1794,45 +1782,6 @@ static void mod_sysfs_teardown(struct module *mod)
+ 	mod_sysfs_fini(mod);
+ }
+ 
+-/*
+- * LKM RO/NX protection: protect module's text/ro-data
+- * from modification and any data from execution.
+- *
+- * General layout of module is:
+- *          [text] [read-only-data] [ro-after-init] [writable data]
+- * text_size -----^                ^               ^               ^
+- * ro_size ------------------------|               |               |
+- * ro_after_init_size -----------------------------|               |
+- * size -----------------------------------------------------------|
+- *
+- * These values are always page-aligned (as is base)
+- */
+-
+-/*
+- * Since some arches are moving towards PAGE_KERNEL module allocations instead
+- * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
+- * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
+- * whether we are strict.
+- */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+-static void frob_text(const struct module_layout *layout,
+-		      int (*set_memory)(unsigned long start, int num_pages))
+-{
+-	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
+-	set_memory((unsigned long)layout->base,
+-		   layout->text_size >> PAGE_SHIFT);
+-}
+-
+-static void module_enable_x(const struct module *mod)
+-{
+-	frob_text(&mod->core_layout, set_memory_x);
+-	frob_text(&mod->init_layout, set_memory_x);
+-}
+-#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+-static void module_enable_x(const struct module *mod) { }
+-#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+-
+ #ifdef CONFIG_STRICT_MODULE_RWX
+ static void frob_rodata(const struct module_layout *layout,
+ 			int (*set_memory)(unsigned long start, int num_pages))
 -- 
 2.34.1
 

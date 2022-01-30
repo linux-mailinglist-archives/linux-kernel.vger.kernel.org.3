@@ -2,88 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE764A3311
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D977F4A3313
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353669AbiA3Bea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 20:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S1353688AbiA3BgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 20:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353624AbiA3Be3 (ORCPT
+        with ESMTP id S234657AbiA3BgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 20:34:29 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE67C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:34:28 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id v186so29895780ybg.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:34:28 -0800 (PST)
+        Sat, 29 Jan 2022 20:36:22 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0F6C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:36:22 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id k17so29782911ybk.6
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 17:36:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5LTlwuyoCCeV/lWd1krNXi9YMlj9u74LcL37EapLT6c=;
-        b=UEbsYVKhe5XfrowExYlr9KoSIuYjP747APL7NZkOK/24SiHhBi2vIdbGeuf6Rk9mi8
-         h8FWi9jBzWwX958KuLWqk7YwxPU96e3JEilJSqiyLllYEydUB4HYxaowFwTBNUKLai1V
-         8mBhrZaIhdwT1AjxvseqWfCwDSbTOtBORaEdvKjbauPj6917TVjsfgRqqT/5784kcUcT
-         Uw5M1JjfnKBaF8yKUjm4JRbI9xbopKan5B6RWnH/EvKqCz4bGYcF3HUNh6Erbehgh10B
-         /pDdhOuLL3q/z9Ax3sofUprcxrFFiCxd3ZWCW9kbzAKq7UyIY0JzeCC6hP4F/Kb6bOm2
-         9Y/g==
+        bh=ePWnPQTx8X6MYeBISgp7KTdEgQnoqyN/q/sb9qzde8E=;
+        b=MVYYp87Ald/WvBJI0FeEtTwNTEL8ZX5BKn5Gopf+hawZh0s0006iGXxczWIORh0D9I
+         YAWEfVnJXa1SI6A9PKoXdO7N16Mp3SHAFaWEp9IwpFlfEVxDdkn4E6CbOQDjtbxN91GC
+         QSHcdjfi+G1YzQArUH9SzTkQh5WF9PGNGTef4yrXFnInEja3CgdtoBYinMfqirqRevDb
+         JspXlNrfCynypoWIKPb2yTdvZhuFupywOIazhqK0PfvpTQoWeJSy84O9RAsc4QfPgrLR
+         bbLeVifMqFRRjo2QNoFgZK856VokJFzS3VT96XMJthOnLkwJxAR0W/dRnOfzDeY94TJ4
+         h2vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5LTlwuyoCCeV/lWd1krNXi9YMlj9u74LcL37EapLT6c=;
-        b=ANhLexpO9VnK8nnFGRAPPT3HMtqqKChfslTfR26ppp6zI/QQIixT6t3P3+I3Ff+cV9
-         DLSxBQrYRkWvGyFwvC019ehDSZinW7JBnwO+BJNaaZZlp6c154Ykj3rPlWHIqhlz7K6u
-         NKbdZo/qQebrKbsXLlJGd6ZhCZxe+J/lAMmxBLy5lTzdOaoZNFToC/ahR7tllMFMh/H8
-         5mAZ+XCJ1Pp/5gfWW5MRl0piheQTzSeyhjrUVwnZ09XgmANvupWjCSN9LtHW++ylqyzy
-         CYGb+NBdLhZTAjrTU/fkRHbNhtOkyzASDo/Cvjf+4xFPn50c8MraHVmn/HjgyEANtvuh
-         3C5g==
-X-Gm-Message-State: AOAM530NM0a+/IOWAIKc7XYPpStBYLPulZ5ZLfzZabdbgrt2DakwWDwF
-        3Zzfkf8SF+51UVXurazkd8Jr+4qy1BiHe4MMUwSj5g==
-X-Google-Smtp-Source: ABdhPJyZ61EBOf1VSdW0sVBE2/eKCwZCVy4yEEQ5ONfFg0Sa6Q1a9vuma7d6V5M+Q94TUNGbYcRwaGcPTKwli4B0xk0=
-X-Received: by 2002:a25:8c3:: with SMTP id 186mr21207098ybi.587.1643506467954;
- Sat, 29 Jan 2022 17:34:27 -0800 (PST)
+        bh=ePWnPQTx8X6MYeBISgp7KTdEgQnoqyN/q/sb9qzde8E=;
+        b=mhDFT4MG8KLnR+0nVT765FnByQWKwHYE7YGsoNzLPDPfzfGPwqdzS1L4xsVeDL9Ncs
+         /7opf74eYhR3k8hFaiabLoBaN8UrOcbe13p+NxW4CRCM923LiUIEryugovuRka9mvfbV
+         XU7aadjtWtmVOBYm6uzYt7w7KC5lRGRLzgt6LRVbMZR8/WXr2+aXrDY4J2EI+ZGlxvOq
+         S0NDZOpMWv9AAwcEZJlXahZ1GvvE3rsqki20SCfydCnhHYxBDfB3282DQc8U+c4ckfp0
+         C46EFH04udwLhsHAJzgCMH4XKFsQzA880gd8XDc47QdfTeqfxqTlIgrIPOrURmTtYmhy
+         Q/MQ==
+X-Gm-Message-State: AOAM533zH/jy2DmtF/GXWtNR6eg+pqhDYvw7L6aLByNbvTpZd8n9Bv92
+        YhHSO1SwCjfkxnk2VE4uzAsVggEEpeRrMCB5TorM4Q==
+X-Google-Smtp-Source: ABdhPJxhoLeKPAxrSTTOVHmmuO/wKAH6jov5kna/TtVWgdNXPxRG1wPA5Qbv6Ikjg7GGti3nfiG7wePGvRBsfe1+8cw=
+X-Received: by 2002:a25:5143:: with SMTP id f64mr23694467ybb.520.1643506581687;
+ Sat, 29 Jan 2022 17:36:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127215033.267227-1-f.fainelli@gmail.com>
-In-Reply-To: <20220127215033.267227-1-f.fainelli@gmail.com>
+References: <20220129115352.13274-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220129115352.13274-1-krzysztof.kozlowski@canonical.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 30 Jan 2022 02:34:16 +0100
-Message-ID: <CACRpkdaEnXTDpAVPGkVVNHtYoQtG6fNNZ8xnSJdCzyDHVO4SkQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: bcm2835: Fix a few error paths
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
+Date:   Sun, 30 Jan 2022 02:36:10 +0100
+Message-ID: <CACRpkdYt1qM2gBefaWbWyh-a09c++wgR+12QrHZMneRK1mA9Xg@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: dts/drivers: samsung pinctrl for v5.18
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 10:50 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Sat, Jan 29, 2022 at 12:54 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 
-> After commit 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio
-> hogs") a few error paths would not unwind properly the registration of
-> gpio ranges. Correct that by assigning a single error label and goto it
-> whenever we encounter a fatal error.
->
-> Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Linus,
+> I will send the pinctrl driver bits in separate pull to you.
 
-Patch applied.
+OK I'll wait for it.
 
 Yours,
 Linus Walleij

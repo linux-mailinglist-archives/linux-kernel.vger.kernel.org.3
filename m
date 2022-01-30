@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA4E4A3AD3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09B64A3AD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 00:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356786AbiA3W6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 17:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S1356791AbiA3XFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 18:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiA3W6R (ORCPT
+        with ESMTP id S233819AbiA3XFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 17:58:17 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B84C061714;
-        Sun, 30 Jan 2022 14:58:16 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id b186so17338752oif.1;
-        Sun, 30 Jan 2022 14:58:16 -0800 (PST)
+        Sun, 30 Jan 2022 18:05:18 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A74C061714;
+        Sun, 30 Jan 2022 15:05:18 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id k18so21937262wrg.11;
+        Sun, 30 Jan 2022 15:05:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9Df74O5bzOlukfRZbmLUqfOQQ47feWvT/frNyZtSZgI=;
-        b=Lc0MfJf7Wux1Qlf2poiJ8kmsU1LkxpOYjVBHcUPGp71pVVbX+/spyalzfLM86jGXiB
-         YIl1g8LQJQUhnAz8n9iulARDMREIEl/EI0UCl6cwy2yDhRR8p88KNZfXZ4zL+PeLHwNv
-         9wF37kuBHdaVVuMfcx0ELHMkOfwSZaK0xgXCKaYmbbtIOtWZswYScY+KQ6nJGkaz/ca6
-         dbv4wbEITXk+zBedR2QpqljpBF+geD4lFX2XWqKkXOUqc7hgPyiyl2p1nodNUtNJNtNy
-         +bZPrT5ohfGsEyvtIt0KaEXto7i6EYscaBQqInH7BM7vm80t6Rg9Cp/VUbxcI+UR6mw9
-         LPAw==
+        bh=KLIKePOeCome+/jrAOdUWZSwyKBM/SDtl/LP3yhDNYM=;
+        b=e+clUAX4p9oBLGf9A96fySwmIAjAATRP3Dk8p8FHCvwn5kEVpadYL06GhUQQWY80aP
+         4aMUnP1kuLXcH+z2S9ADV51gj/e5k4LxtC2X7g1GZldbToIcPZ+CqPVtZyS3VK0rXZBM
+         k5FR3elkLENDFbp/Y0maydNFfjQK2k+DjUXvYhbz7Js2WHoAHiid7WnEw02r+YgDYEPc
+         aam8aJkHEo2+YuyOtVy6NAiZmXpmq3rAuSAmjdsdGVdu6zuQiL7l9SbBIa5aMdDIPIq+
+         HV2+wj6HCY58eaM27F6J9b13tGQ7Bn5Wyj64rFZH6f9Zo2VELoZS+ffV9QCC6iLqnCXN
+         WOAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9Df74O5bzOlukfRZbmLUqfOQQ47feWvT/frNyZtSZgI=;
-        b=DOSAcL/mG/9bw+UTW9vpgu+DIgv2Z3KG0WXZ6Gv+BA5Pb5HZ9DWu4D9yeOgbjxzR8h
-         cs2Nt942iNoUbxWK+KCI8DnnxFeVvET4H14ymrnm5DI6GfEZtfmUuhel29rmTthLxv2c
-         H8vIpI/Xvzh3Jl3VefYpUROhbqFNG6KXTeZYgvwU/wgzhIxPoP28VDb2thEAgwbk8tuO
-         /1wGTSSMwYWeecUsEkr1fVlRw/2HYhjU37Xb8+MjCh9zrKbJ6YeN2b0Oy4N70kMk8aIn
-         3savMyzFbJd+WUFF0zcu/cLJuKeHgBo9kqo/F7V9SFLnFtlBHxJhroUfN4iXbLQ7Ogp+
-         Fkqw==
-X-Gm-Message-State: AOAM531WXQ2HyBy3bgBUOsbCQ6NNku/wypqep7Ne6FVRZ50EhC2gFeUR
-        PDC9DeaWNpYH9RHVvqiKYQbddtkRTRCR5Q==
-X-Google-Smtp-Source: ABdhPJw5qC4Lgd7HZVVI15M/HLNZloNIY++bNFPk9Sgimu3r2Ae6uDZevOfSLauiuUwwnnstCDLiQQ==
-X-Received: by 2002:a05:6808:189f:: with SMTP id bi31mr11430338oib.5.1643583495881;
-        Sun, 30 Jan 2022 14:58:15 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g4sm8070621otg.61.2022.01.30.14.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Jan 2022 14:58:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f153d3dc-f4c1-9c4b-aac3-da3a696a3313@roeck-us.net>
-Date:   Sun, 30 Jan 2022 14:58:13 -0800
+        bh=KLIKePOeCome+/jrAOdUWZSwyKBM/SDtl/LP3yhDNYM=;
+        b=6geeyGu3basraW1lyk/YBxeWfWVzs/h29HXjOqhBJ/oKQXnK5BpYxAQSEXnMqNuZvp
+         OfsxT/JbhYbfUC//E2JOhbE2vGr2tDg6r+ADOpoSqO78FlHrkDR+uDnH2c4P2gry3TlS
+         NMpM7YIQNLuKYq23UkcUk08MrvG61JB+mSbzM2+jNUgi18o9KVsrciCVmLDYbg7KMCzN
+         sdACRKA+Rr6yuBsiQJeS/bnJUU9Je+1A68MwgaYSgYUjtDZG9zbLUuTMSIRT09VNsQ2m
+         BveKYGeMBuldcgiwB61YwKvx5Rp+aq2MJw6ETOvXk3VL0RZxDJ0GWAjxUYs+fALx7xpt
+         rteg==
+X-Gm-Message-State: AOAM532LFGZ7My9VVOWpZfekTODtIhm1n1ofO2VO7R2EmOQWGcuWX0u8
+        ZVFJMJdSrUyaJ43Zi08xj00=
+X-Google-Smtp-Source: ABdhPJzb62H0qxffVALn0pUgTOkkID2z8NicfA9VV7LoeIrQoDnLlzgP80EsDJmq7VA5ZU7+b3EBog==
+X-Received: by 2002:adf:e8ce:: with SMTP id k14mr6185249wrn.284.1643583916962;
+        Sun, 30 Jan 2022 15:05:16 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r2sm14226210wrz.99.2022.01.30.15.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 15:05:16 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Corentin Labbe <clabbe@baylibre.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: sl3516: remove redundant initializations of pointers in_sg and out_sg
+Date:   Sun, 30 Jan 2022 23:05:15 +0000
+Message-Id: <20220130230515.8338-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] acpi: require CRC32 to build
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220130223818.16985-1-rdunlap@infradead.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220130223818.16985-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 14:38, Randy Dunlap wrote:
-> ACPI core now requires crc32() but the kernel build can fail when
-> CRC32 is not set/enabled, so select it in the ACPI Kconfig entry.
-> 
-> Fixes this build error:
-> 
-> ia64-linux-ld: drivers/acpi/scan.o: in function `acpi_store_pld_crc':
-> include/acpi/platform/aclinuxex.h:62: undefined reference to `crc32_le'
-> 
-> Fixes: 882c982dada4 ("acpi: Store CRC-32 hash of the _PLD in struct acpi_device")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Pointers in_sg and out_sg are being initialized with values that are
+never read, they are being re-assigned the same values later on. The
+initializations are redundant, remove them in preference to the later
+assignments that are closer to when the pointers are being used.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/crypto/gemini/sl3516-ce-cipher.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->   drivers/acpi/Kconfig |    1 +
->   1 file changed, 1 insertion(+)
-> 
-> --- linux-next-20220128.orig/drivers/acpi/Kconfig
-> +++ linux-next-20220128/drivers/acpi/Kconfig
-> @@ -11,6 +11,7 @@ menuconfig ACPI
->   	depends on ARCH_SUPPORTS_ACPI
->   	select PNP
->   	select NLS
-> +	select CRC32
->   	default y if X86
->   	help
->   	  Advanced Configuration and Power Interface (ACPI) support for
+diff --git a/drivers/crypto/gemini/sl3516-ce-cipher.c b/drivers/crypto/gemini/sl3516-ce-cipher.c
+index c1c2b1d86663..53e3fefb81de 100644
+--- a/drivers/crypto/gemini/sl3516-ce-cipher.c
++++ b/drivers/crypto/gemini/sl3516-ce-cipher.c
+@@ -23,8 +23,8 @@ static bool sl3516_ce_need_fallback(struct skcipher_request *areq)
+ 	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
+ 	struct sl3516_ce_cipher_tfm_ctx *op = crypto_skcipher_ctx(tfm);
+ 	struct sl3516_ce_dev *ce = op->ce;
+-	struct scatterlist *in_sg = areq->src;
+-	struct scatterlist *out_sg = areq->dst;
++	struct scatterlist *in_sg;
++	struct scatterlist *out_sg;
+ 	struct scatterlist *sg;
+ 
+ 	if (areq->cryptlen == 0 || areq->cryptlen % 16) {
+-- 
+2.34.1
 

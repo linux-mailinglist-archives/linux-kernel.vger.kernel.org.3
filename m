@@ -2,173 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5824A35B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 11:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927ED4A35B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 11:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354589AbiA3K2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 05:28:19 -0500
-Received: from mout.gmx.net ([212.227.15.18]:40307 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238803AbiA3K2O (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 05:28:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643538476;
-        bh=hLhVxqGCTT0SP56FBjtCArN7ldgzwA2hHFxUD+0qoX4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=jvwp6E6+c0I1HPRshmZVKx/3PmawessslXIx0iGawpZgTE+JRA7bI7yJlPwrz2STn
-         S4UgugeSjEWGMdakugdAqTlr8wM3l3pJkg0BIqdy82vUlo9rfBOn2qnI6os4oB89Si
-         fFoNLLAoi2vkEA+jqo1tfhiq1KHg5HVEQKR831dA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2W5-1mUrFb2Atz-00k7Ri; Sun, 30
- Jan 2022 11:27:56 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S1354597AbiA3K2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 05:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354443AbiA3K2o (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 05:28:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4EBC061714;
+        Sun, 30 Jan 2022 02:28:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 578F461134;
+        Sun, 30 Jan 2022 10:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD29C340E4;
+        Sun, 30 Jan 2022 10:28:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643538523;
+        bh=JScouu7QJzKlX9zxN9+gJC2kurFCaqhYhzCffJo5CmY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UO1SMJcNJgX2LrIsWjjT4ryauQ1+KZ1t4buAgyl08ZK9ezEUsorn/xeZNdyEJlSrO
+         eIm8CHvEVOJLGXMoYNPBu1QJuFBUX8bKG/T9Zb4bH5e1s05R7KeuRMExjHKwxjUkY4
+         93Ad77S1psNZY/tBpaw+E6a59SLOtloEnP0jA34G1gDYgNrG9aZ3gsq9M1lM37lv9s
+         jErY1u1XUd7ZvHfOlJPLznacSu0fAa5fR7Jqpgz26/AAWpBXFppcmnsBYYNEbleSI7
+         2NeFt7YSLeSu0QJTB93G4wTBr9zkcyAF6PURU3Vc914nRE3kjkx3odTpyJprt9AoZS
+         RshTaMiOqgUew==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nE7Rp-00493J-K8; Sun, 30 Jan 2022 10:28:41 +0000
+Date:   Sun, 30 Jan 2022 10:28:41 +0000
+Message-ID: <87o83ty0ti.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Anup Patel <anup@brainfault.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: timer: nuvoton,npcm7xx-timer: Convert to YAML
-Date:   Sun, 30 Jan 2022 11:27:02 +0100
-Message-Id: <20220130102704.2892072-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KgtyDL+sIGlvIqmFNv5lxED6AgqBgd0MW4vhsZxXY8xPzRN58ac
- pvD1snTbOu6LxvDIvsPXQXg40l3eL6So6P/nIgrnSyGjL6NdoZXO1gI3lWkuj8h9joAoWk0
- U/dFm0n2p/o3s5ujR5/OM2m9t9vuRGqIII2hrMI1ubtRQpe3I2+8A9LobdXZRRUvbx68GrT
- pWNj/e66MU/c9cRlsNUUQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hQ45Lk3Mggk=:R+IrEDbT4qG6RbIBApp5eG
- 0x4AvFnZDxms0Dl9fm/Q0BnXhMkNcQGlH1hR2FgKyUTWEWZDtkwBJ6Fko925mbx9TZH5YPiNO
- Dr6qGq3UQfmIH2ff6AWPAw+6H2pzXAREPJsFViTMB0Yvsvv5JiziHwPIElqReI04WdAeF1Km+
- invSUMnlgLC0C+VC6XC1ZbQQT5XSnI7UTSPXps2bzzQyRX8w/mwb8b+lrM1/6E4NbOTVkmPzI
- Kd7PU7B43cqBziZcuA215YVAU5UcsK9KU4F8uqtmsT8DUGDx3r0U0mIO80/x+aDJXddCspbL3
- FslEmtXsyvNgPuoSoKeVjvA+OZiZTpVhn9IHeV5wrOQt2gJdr0iMrQ0iaiKBsYNkrFB6xnRVz
- j5qWGrjh8tU5TP5en3NniU+ozZdz02aIq0+6mNItk1axPNvUqk8rr1djuU+e69DoLN/iJhXJQ
- ZGSz0JanUaCxNUkR/eisEUfgEJksy25i5D7ihu2E+zuUnO6PXXaSeC9lZY7fgNkDJlrcdvFv9
- hrxpnpHlLVCpFRpPlF4ZQVKP5ZTm97UMoJz7GBgtLXEyT3YbsA9INiRYUqOoYhC+R2YW9+MBT
- T9OuxHHD6FogGvaLr76gDp7A87qRCqsSabcZYXDS89eGjEVcH1Kf6SkzJa/7YOe5H+JzVCwo+
- Ez9msY/8hvNPUhtp0TmadZU1qyk0SgIwmR6hK1ldVTjmkAWJ1jW9eMIRT+yhgg2cnr1f3RACy
- eAlCrGxOk1H28Ychc5mmzIRjrSo5Xu2il3+gU1kvN2hGT4KiQtqHdv/4/X2INy2dHc/nmVqQP
- 3lEpHdViBnqPYgz1KujlbNsoagPgPY/dDjC8qHf8jXrtzpJLqz/GWWid+UwvqqNtWm38H5ofI
- JFlgdZ4WA7gDro425m0pQm0YAEKv5hkRNRGjWfN1VlI6E3QMVy1hiRmzN4ppDIRPFJ2pNd8Mt
- wkDIYR7xbCW/qSbwqNGZziRGdfjDf6pPhfbLD8BNlscffxUVziydvS6YjDet4vYbntuHFjavk
- wDddxQbytywW6lmfGsGonxuO5P/RlLhGwwXfdS0huN2ali557LQQgtrwW/vL71u1kcxrbN9ST
- EuI4r6ZophnO4U=
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V6 2/2] irqchip/sifive-plic: Fixup thead,c900-plic dt parse in opensbi
+In-Reply-To: <CAJF2gTQsi6uT8ea6MTu6oDA-9xsd3fW5ETHAtpzGZxapLpLsWA@mail.gmail.com>
+References: <20220129162726.1154501-1-guoren@kernel.org>
+        <20220129162726.1154501-3-guoren@kernel.org>
+        <87r18qxui9.wl-maz@kernel.org>
+        <CAJF2gTTYN0bxnnMtP9L1KvaH0h6ny+Lr3+fC7GP-YWnwjAYd4A@mail.gmail.com>
+        <35b1838d-ef80-1816-46f6-9cba7afc813e@sholland.org>
+        <CAJF2gTQsi6uT8ea6MTu6oDA-9xsd3fW5ETHAtpzGZxapLpLsWA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: guoren@kernel.org, samuel@sholland.org, anup@brainfault.org, tglx@linutronix.de, palmer@dabbelt.com, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, guoren@linux.alibaba.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's convert this devicetree binding to YAML, to make it easier to
-extend later.
+On Sun, 30 Jan 2022 04:39:34 +0000,
+Guo Ren <guoren@kernel.org> wrote:
+> 
+> On Sun, Jan 30, 2022 at 10:50 AM Samuel Holland <samuel@sholland.org> wrote:
+> >
+> > On 1/29/22 8:08 PM, Guo Ren wrote:
+> > > On Sun, Jan 30, 2022 at 2:32 AM Marc Zyngier <maz@kernel.org> wrote:
+> > >>
+> > >> On Sat, 29 Jan 2022 16:27:26 +0000,
+> > >> guoren@kernel.org wrote:
+> > >>>
+> > >>> From: Guo Ren <guoren@linux.alibaba.com>
+> > >>>
+> > >>> The thead,c900-plic has been used in opensbi to distinguish
+> > >>> PLIC [1]. Although PLICs have the same behaviors in Linux,
+> > >>> they are different hardware with some custom initializing in
+> > >>> firmware(opensbi).
+> > >>>
+> > >>> [1]: https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd62653b9fb31623a42ced45f38ea6
+> > >>>
+> > >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > >>> Cc: Anup Patel <anup@brainfault.org>
+> > >>> Cc: Marc Zyngier <maz@kernel.org>
+> > >>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > >>> Cc: Samuel Holland <samuel@sholland.org>
+> > >>> Cc: Thomas Gleixner <tglx@linutronix.de>
+> > >>> ---
+> > >>>  drivers/irqchip/irq-sifive-plic.c | 25 +++++++++++++++++++++++--
+> > >>>  1 file changed, 23 insertions(+), 2 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> > >>> index 259065d271ef..245655928076 100644
+> > >>> --- a/drivers/irqchip/irq-sifive-plic.c
+> > >>> +++ b/drivers/irqchip/irq-sifive-plic.c
+> > >>> @@ -172,7 +172,7 @@ static void plic_irq_eoi(struct irq_data *d)
+> > >>>       }
+> > >>>  }
+> > >>>
+> > >>> -static struct irq_chip plic_chip = {
+> > >>> +static struct irq_chip sifive_plic_chip = {
+> > >>>       .name           = "SiFive PLIC",
+> > >>>       .irq_mask       = plic_irq_mask,
+> > >>>       .irq_unmask     = plic_irq_unmask,
+> > >>> @@ -182,12 +182,24 @@ static struct irq_chip plic_chip = {
+> > >>>  #endif
+> > >>>  };
+> > >>>
+> > >>> +static struct irq_chip thead_plic_chip = {
+> > >>> +     .name           = "T-Head PLIC",
+> > >>> +     .irq_mask       = plic_irq_mask,
+> > >>> +     .irq_unmask     = plic_irq_unmask,
+> > >>> +     .irq_eoi        = plic_irq_eoi,
+> > >>> +#ifdef CONFIG_SMP
+> > >>> +     .irq_set_affinity = plic_set_affinity,
+> > >>> +#endif
+> > >>> +};
+> > >>
+> > >> For pure entertainment, let's compare the two structures:
+> > >>
+> > >> static struct irq_chip plic_chip = {
+> > >>         .name           = "SiFive PLIC",
+> > >>         .irq_mask       = plic_irq_mask,
+> > >>         .irq_unmask     = plic_irq_unmask,
+> > >>         .irq_eoi        = plic_irq_eoi,
+> > >> #ifdef CONFIG_SMP
+> > >>         .irq_set_affinity = plic_set_affinity,
+> > >> #endif
+> > >> };
+> > >>
+> > >> Oh wait: a string. Must be really important. Not.
+> > > No, pls see below comment.
+> > >
+> > >>
+> > >>> +
+> > >>> +static struct irq_chip *def_plic_chip = &sifive_plic_chip;
+> > >>> +
+> > >>>  static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+> > >>>                             irq_hw_number_t hwirq)
+> > >>>  {
+> > >>>       struct plic_priv *priv = d->host_data;
+> > >>>
+> > >>> -     irq_domain_set_info(d, irq, hwirq, &plic_chip, d->host_data,
+> > >>> +     irq_domain_set_info(d, irq, hwirq, def_plic_chip, d->host_data,
+> > >>>                           handle_fasteoi_irq, NULL, NULL);
+> > >>>       irq_set_noprobe(irq);
+> > >>>       irq_set_affinity(irq, &priv->lmask);
+> > >>> @@ -396,5 +408,14 @@ static int __init plic_init(struct device_node *node,
+> > >>>       return error;
+> > >>>  }
+> > >>>
+> > >>> +static int __init thead_c900_plic_init(struct device_node *node,
+> > >>> +             struct device_node *parent)
+> > >>> +{
+> > >>> +     def_plic_chip = &thead_plic_chip;
+> > >>> +
+> > >>> +     return plic_init(node, parent);
+> > >>> +}
+> > >>> +
+> > >>>  IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+> > >>>  IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
+> > >>> +IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", thead_c900_plic_init);
+> > >>
+> > >> Sorry, but I can't see any point to this patch.
+> > > You didn't see the link I've put in the patch. In that opensbi patch:
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+No. If you can't explain why you need this in the commit message, why
+should I reverse engineer that from some obscure piece of firmware?
 
-v2:
-- Fix nuvoton,npcm750-timer compatible string
-=2D--
- .../bindings/timer/nuvoton,npcm7xx-timer.txt  | 21 ---------
- .../bindings/timer/nuvoton,npcm7xx-timer.yaml | 46 +++++++++++++++++++
- 2 files changed, 46 insertions(+), 21 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/nuvoton,npcm7x=
-x-timer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/nuvoton,npcm7x=
-x-timer.yaml
+> > >                 intc: interrupt-controller@10000000 {
+> > >                         #interrupt-cells = <1>;
+> > > -                       compatible = "riscv,plic0";
+> > > +                       compatible = "allwinner,sun20i-d1-plic",
+> > > +                                    "thead,c900-plic";
+> > >
+> > > +#define THEAD_PLIC_CTRL_REG 0x1ffffc
+> > > +
+> > > +static void thead_plic_plat_init(struct plic_data *pd)
+> > > +{
+> > > +       writel_relaxed(BIT(0), (void *)pd->addr + THEAD_PLIC_CTRL_REG);
+> > > +}
+> > > +
+> > >  static const struct fdt_match irqchip_plic_match[] = {
+> > >         { .compatible = "riscv,plic0" },
+> > >         { .compatible = "sifive,plic-1.0.0" },
+> > > +       { .compatible = "thead,c900-plic",
+> > > +         .data = thead_plic_plat_init },
+> > >         { },
+> > >  };
+> > >
+> > > We've changed the compatible name for thead,c900-plic, and there is no
+> > > riscv,plic0 / sifive,plic-1.0.0 in dts. Without the patch, the newest
+> > > opensbi + newest Linux would be broken in the Allwinner D1 dev board.
 
-diff --git a/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer=
-.txt b/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.txt
-deleted file mode 100644
-index ac3a5e887455d..0000000000000
-=2D-- a/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.txt
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Nuvoton NPCM7xx timer
--
--Nuvoton NPCM7xx have three timer modules, each timer module provides five=
- 24-bit
--timer counters.
--
--Required properties:
-=2D- compatible      : "nuvoton,npcm750-timer" for Poleg NPCM750, or
--                    "nuvoton,wpcm450-timer" for Hermon WPCM450.
-=2D- reg             : Offset and length of the register set for the devic=
-e.
-=2D- interrupts      : Contain the timer interrupt of timer 0.
-=2D- clocks          : phandle of timer reference clock (usually a 25 MHz =
-clock).
--
--Example:
--
--timer@f0008000 {
--    compatible =3D "nuvoton,npcm750-timer";
--    interrupts =3D <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
--    reg =3D <0xf0008000 0x50>;
--    clocks =3D <&clk NPCM7XX_CLK_TIMER>;
--};
--
-diff --git a/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer=
-.yaml b/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
-new file mode 100644
-index 0000000000000..0cbc26a721514
-=2D-- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/nuvoton,npcm7xx-timer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton NPCM7xx timer
-+
-+maintainers:
-+  - Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,wpcm450-timer  # for Hermon WPCM450
-+      - nuvoton,npcm750-timer  # for Poleg NPCM750
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: The timer interrupt of timer 0
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
-+    timer@f0008000 {
-+        compatible =3D "nuvoton,npcm750-timer";
-+        interrupts =3D <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-+        reg =3D <0xf0008000 0x50>;
-+        clocks =3D <&clk NPCM7XX_CLK_TIMER>;
-+    };
-=2D-
-2.34.1
+So the firmware changes things in incompatible ways. Why does it
+matter to Linux? Why isn't the fix directly applied to the firmware
+instead? Why isn't the riscv,plic0 fallback appropriate?
 
+> > Yes, some patch is still necessary, because the hardware is indeed incompatible
+> > with riscv,plic0. However, this driver does not care about the difference. So
+> > all you need to do is hook up the existing code to the new compatible:
+> >
+> > +IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init);
+> I think we should give clear info in /proc/interrupts. I hope we could
+> keep thead_plic_init.
+
+Why? There is no material difference at the driver level, and
+/proc/interrupts won't be the target of a branding exercise (which
+this series seems to be all about).
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

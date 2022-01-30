@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 482DF4A38DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 21:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B3A4A38E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 21:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356069AbiA3UGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 15:06:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiA3UGE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 15:06:04 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A768C061714;
-        Sun, 30 Jan 2022 12:06:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=MowiDE8bpmM9qf7usod++nbiOO8GHb0E9NpRkxe8e/0=; b=NWjEDOcncq8BhlxBCMr4zo7mRs
-        Y7SImgi2DdDjOPj7QcO7zXsFtiUbz0LO38NK31C8XW6NPEMLf4RRJCb2h7oSGyfQ5WGKQk2jZmanm
-        Nqmz4m9IYOjGzCeG66jUgDjj/OoXdMpD216ub1y3NMmexJL7Hcs2eaDqpoFCsPnSUEDH+NVt+RwM0
-        X90wXK1U3EOG25AENKqi1wT9gd85yiz1iRSYvIisFo4z99wyiHXyY7hbEr3/sTsZ/MhZ57efCN+MV
-        f1jduW8tWkzLciayM3FYY7XVjb9dKdbmuJrwtIidV+naRjX95OQILW0wCef2jyu5szzILn1NWRKeJ
-        4bl8IBxg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEGS2-005He6-L1; Sun, 30 Jan 2022 20:05:31 +0000
-Message-ID: <26664eb5-59a2-d8c0-156b-f6a58538f063@infradead.org>
-Date:   Sun, 30 Jan 2022 12:05:23 -0800
+        id S1356088AbiA3UN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 15:13:57 -0500
+Received: from mga02.intel.com ([134.134.136.20]:9758 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356074AbiA3UNy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 15:13:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643573634; x=1675109634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CUGxfIgplr8CR/vNBSqUY2Z6LFy1cI+HK/XEaUaxP70=;
+  b=l4TMDtpGoVbu5eh5eWI+oqrnwKcwGXZWma5A9E15Dk+j30vcWU13b3+j
+   9YvyqaLZlDM4Ksb6MopUuDYtG4d/ugseSFWqmd5X+9RZEJ3KP1AaDeLp7
+   iNPraI8iaIWgZYTVIGvQk73XZrahT9rqQ1co0angF432sE4R7aNfZAKLc
+   OMIRbaAfSRZ2veXSyGiUz7ChGRDL4GWi3Wp9te2xObGZ1hOXJ1S1GaZ1V
+   vTsrKeRgW3Uxh/nN+MmUqfgEzrCNaRh/SiPLKvYqr7d3FNcYFuO0ahp2e
+   T4tEVuCazf+lQvPVY3GHdR9SVfb390fM4LLyh26p+S5BfqFzI/CA4KosA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="234762212"
+X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
+   d="scan'208";a="234762212"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 12:13:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
+   d="scan'208";a="536845470"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Jan 2022 12:13:51 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEGa6-000Qws-Gs; Sun, 30 Jan 2022 20:13:50 +0000
+Date:   Mon, 31 Jan 2022 04:13:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy@kernel.org>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
+Message-ID: <202201310303.HQlCsvvd-lkp@intel.com>
+References: <20220130183653.491292-1-keescook@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/1] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220130193723.2923-1-15330273260@189.cn>
- <20220130193723.2923-2-15330273260@189.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220130193723.2923-2-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130183653.491292-1-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-The Kconfig text is looking good. Just one minor nit below:
+Hi Kees,
 
-On 1/30/22 11:37, Sui Jingfeng wrote:
-> diff --git a/drivers/gpu/drm/lsdc/Kconfig b/drivers/gpu/drm/lsdc/Kconfig
-> new file mode 100644
-> index 000000000000..8c908787b4aa
-> --- /dev/null
-> +++ b/drivers/gpu/drm/lsdc/Kconfig
-> @@ -0,0 +1,38 @@
-> +config DRM_LSDC
-> +	tristate "DRM Support for loongson's display controller"
-> +	depends on DRM && PCI
-> +	depends on MACH_LOONGSON64 || LOONGARCH || MIPS || COMPILE_TEST
-> +	select OF
-> +	select CMA if HAVE_DMA_CONTIGUOUS
-> +	select DMA_CMA if HAVE_DMA_CONTIGUOUS
-> +	select DRM_KMS_HELPER
-> +	select DRM_KMS_FB_HELPER
-> +	select DRM_GEM_CMA_HELPER
-> +	select VIDEOMODE_HELPERS
-> +	select BACKLIGHT_PWM if CPU_LOONGSON2K
-> +	select I2C_GPIO if CPU_LOONGSON2K
-> +	select I2C_LS2X if CPU_LOONGSON2K
-> +	default m
-> +	help
-> +	  This is a KMS driver for the display controller in the LS7A1000
-> +	  bridge chip and LS2K1000 SoC. The display controller has two
-> +	  display pipes and it is a PCI device.
-> +	  When using this driver on LS2K1000/LS2K0500 SoC, its framebuffer
-> +	  is located at system memory.
-> +	  If "M" is selected, the module will be called lsdc.
-> +
-> +	  If in doubt, say "Y".
-> +
-> +config DRM_LSDC_VRAM_DRIVER
-> +	bool "vram helper based device driver support"
-> +	depends on DRM_LSDC
-> +	select DRM_VRAM_HELPER
-> +	default y
-> +	help
-> +	  When using this driver on LS7A1000 + LS3A3000/LS3A4000/LS3A5000
-> +	  platform, the LS7A1000 bridge chip has dedicated video RAM. Using
-> +	  "lsdc.use_vram_helper=1" in the kernel command line will enable
-> +	  this driver mode and then the framebuffer will located at the
+I love your patch! Yet something to improve:
 
-	                                            will be located at the
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> +	  VRAM at the price of losing PRIME support.
+url:    https://github.com/0day-ci/linux/commits/Kees-Cook/lib-test_string-c-Add-test-for-strlen/20220131-023726
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220131/202201310303.HQlCsvvd-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d22fe883339c5141953dbca980b51466ac3e2329
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kees-Cook/lib-test_string-c-Add-test-for-strlen/20220131-023726
+        git checkout d22fe883339c5141953dbca980b51466ac3e2329
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash M=lib/
 
-thanks.
--- 
-~Randy
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> lib/test_string.c:188:30: error: initializer element is not constant
+     188 | static const int strlen_ce = strlen("tada, a constant expression");
+         |                              ^~~~~~
+
+
+vim +188 lib/test_string.c
+
+   181	
+   182	/*
+   183	 * Unlike many other string functions, strlen() can be used in
+   184	 * static initializers when string lengths are known at compile
+   185	 * time. (i.e. Under these conditions, strlen() is a constant
+   186	 * expression.) Make sure it can be used this way.
+   187	 */
+ > 188	static const int strlen_ce = strlen("tada, a constant expression");
+   189	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

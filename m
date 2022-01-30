@@ -2,351 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF124A34C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 08:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C74C4A34CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 08:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354284AbiA3HJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 02:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353446AbiA3HJk (ORCPT
+        id S1354295AbiA3HR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 02:17:28 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:24639 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354286AbiA3HR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 02:09:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F144C061714;
-        Sat, 29 Jan 2022 23:09:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCAA961011;
-        Sun, 30 Jan 2022 07:09:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2352C340E4;
-        Sun, 30 Jan 2022 07:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643526578;
-        bh=tTPAQtDIGEnVU5RkyCGGJre+Trs0HwTrP9s3QlyXJhE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gPCm/gd/id+aX9D4MmZSvMMWgj2AiD2rJHvaeUVb6hHGFn+AdkZ/aX5PfGv00dV/Q
-         9C+8jCi2MEBGwfHLvU42qDi/F4YIJGootA83y3LVIpGyt9UuNZ9h0JsazIhAxVo94Q
-         b0HXMGE0AHiCJCOIQhtpI/lv3EKLdEcGaMhkCjUQaL1+NjMAhckAJ4K56+DK+Q9N7D
-         ql2uC1uSOK1X3h+BdjxgO0VhT92a39iB+g8WBI9g31EcowZ61+pWiQawajtvlHh+vI
-         dWqZ5Edp8xMcfEmgSudT+q6PWE0DIbCK0JsaKN+ZM90mCqTZtXTTgRcgby1mVOv5aa
-         mAg+GaFN4f4aw==
-Date:   Sun, 30 Jan 2022 16:09:32 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v6 07/10] fprobe: Add exit_handler support
-Message-Id: <20220130160932.30f7d4bd0af58eda4ea263c8@kernel.org>
-In-Reply-To: <164338039561.2429999.13188362820100127912.stgit@devnote2>
-References: <164338031590.2429999.6203979005944292576.stgit@devnote2>
-        <164338039561.2429999.13188362820100127912.stgit@devnote2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sun, 30 Jan 2022 02:17:27 -0500
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220130071725epoutp03a9a84fd2f87db46ed05911f9066927c6~O_yPzCGXJ1928019280epoutp039
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 07:17:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220130071725epoutp03a9a84fd2f87db46ed05911f9066927c6~O_yPzCGXJ1928019280epoutp039
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643527045;
+        bh=OqVKBBDdQmDFundTIJwrdp/DGY2Qok3thjIBjRyDscI=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=fKGiciLE1Hkrn+/LIQDamSsIiulFCrJkw+idfzO/VSrBvUTsUIlgvzX7VPS8VS/sV
+         TbOM6bnadHO0RqvmnnjT3sVJYtJaS6HcvrBwQ8tD4VA6xKqlqmpiWMU4guH3Kn8foi
+         XfnczpU1lpGIl3DFeKdCG6ZJ+3ByMf5q81jpzZQY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220130071724epcas5p2e72fb4e5b62cf732e8e68cdbdae1057f~O_yO2JGKC3190031900epcas5p2M;
+        Sun, 30 Jan 2022 07:17:24 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4JmjFF20shz4x9Pq; Sun, 30 Jan
+        2022 07:17:21 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A1.C2.06423.08B36F16; Sun, 30 Jan 2022 16:17:20 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220130071720epcas5p1521c11e9d6cb248e6a453a6a639db61c~O_yK81SUF3035830358epcas5p1K;
+        Sun, 30 Jan 2022 07:17:20 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220130071720epsmtrp298b5fe0004c389389e29ab38859429a2~O_yK7AL4Y2905329053epsmtrp22;
+        Sun, 30 Jan 2022 07:17:20 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-a7-61f63b805b42
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AB.A0.29871.08B36F16; Sun, 30 Jan 2022 16:17:20 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220130071718epsmtip2f490518c357877a1256185d624e2e7d2~O_yJV2cPk0887608876epsmtip2C;
+        Sun, 30 Jan 2022 07:17:18 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Lee Jones'" <lee.jones@linaro.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
+        "'Marek Szyprowski'" <m.szyprowski@samsung.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
+In-Reply-To: <20220129175332.298666-1-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH 1/5] arm64: dts: exynos: align pl330 node name with
+ dtschema
+Date:   Sun, 30 Jan 2022 12:47:17 +0530
+Message-ID: <00d601d815a9$6b509890$41f1c9b0$@samsung.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGkI64pg85Gv5s7Nhqj/7nYjMyAEQFgtqenrNgFj+A=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmhm6D9bdEg09fzCzmHznHatG8eD2b
+        xca3P5gs7n89ymix6fE1VovLu+awWcw4v4/J4sziXnaLtUfuslu07j3CbnH4TTurA7fHrIZe
+        No9NqzrZPO5c28PmsX/uGnaPzUvqPfq2rGL0+LxJLoA9KtsmIzUxJbVIITUvOT8lMy/dVsk7
+        ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB+hGJYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+
+        cYmtUmpBSk6BSYFecWJucWleul5eaomVoYGBkSlQYUJ2xuLDy5gLdkpU/Dj6kLGB8ahIFyMn
+        h4SAicSue1fYuhi5OIQEdjNKXPu5iR3C+cQo8X/LWUYI5xujxNHZ+9hgWvYeu8IKkdjLKHF3
+        0jUmCOclo0TT5RtgVWwCuhI7FreBDRYRuMkssWpLCwtIglPAQ2LPuelgRcICQRLP5/4Fs1kE
+        VCUmzTsJZvMKWEps/36WFcIWlDg58wlYL7OAvMT2t3OYIc5QkPj5dBlYjYiAlcTsy8/ZIGrE
+        JV4ePcIOUbOHQ2LezGAI20Vi9/btUHFhiVfHt0DZUhKf3+0F6uUAsrMlenYZQ4RrJJbOO8YC
+        YdtLHLgyhwWkhFlAU2L9Ln2ITXwSvb+fMEF08kp0tAlBVKtKNL+7CtUpLTGxu5sVwvaQaH34
+        EhpUs4FB1bGXaQKjwiwkT85C8uQsJM/MQti8gJFlFaNkakFxbnpqsWmBYV5qOTzCk/NzNzGC
+        k7CW5w7Guw8+6B1iZOJgPMQowcGsJMI7Y9OnRCHelMTKqtSi/Pii0pzU4kOMpsCQn8gsJZqc
+        D8wDeSXxhiaWBiZmZmYmlsZmhkrivKfTNyQKCaQnlqRmp6YWpBbB9DFxcEo1MOXxhRSFc3tx
+        dOx1ebvyq893bWtbmdWrs74uMAwqDAmKlPx3Wn/WHgW+//+v3Lv+a3bx47+nVi9YyWyvlxZ+
+        88dX8RkJa6TehBmYVzDxyd+4u+7xKxs/5VVf+D0Xak3JnV3+oiDh9sYjW7NCRB/ouK2auTRS
+        5oHg/8eaZ6P7Nt6buuWj0Vb3Wq8JtxUDXcX4jaIsr28+nMX4+LbDVFbHb+yptycnbv6Rpu7w
+        o/Ruufx5qXUyulMnrViWMK9jy+a7T5M5uw5PTPxyXL5xyXzDQAdr4Rz1uhce9i+P/kuUO23O
+        d7lOLcba8Nu0SevWCbFWrvhp65dVoXN90vUwXe/7L/dvFp4qIj5lz1b2U4rTlC4psRRnJBpq
+        MRcVJwIAEAjuzUsEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCIsWRmVeSWpSXmKPExsWy7bCSvG6D9bdEgxOnBSzmHznHatG8eD2b
+        xca3P5gs7n89ymix6fE1VovLu+awWcw4v4/J4sziXnaLtUfuslu07j3CbnH4TTurA7fHrIZe
+        No9NqzrZPO5c28PmsX/uGnaPzUvqPfq2rGL0+LxJLoA9issmJTUnsyy1SN8ugStj8eFlzAU7
+        JSp+HH3I2MB4VKSLkZNDQsBEYu+xK6xdjFwcQgK7GSWaTx5ghEhIS1zfOIEdwhaWWPnvOTtE
+        0XNGiakHHrCBJNgEdCV2LG5jA0mICDxkltj1YxLUqJmMErdOzQOr4hTwkNhzbjqYLSwQIDFt
+        zyomEJtFQFVi0ryTYHFeAUuJ7d/PskLYghInZz5h6WLk4GAW0JNo2wh2EbOAvMT2t3OYIS5S
+        kPj5dBlYuYiAlcTsy8/ZIGrEJV4ePcI+gVFoFpJJsxAmzUIyaRaSjgWMLKsYJVMLinPTc4sN
+        CwzzUsv1ihNzi0vz0vWS83M3MYIjTktzB+P2VR/0DjEycTAeYpTgYFYS4Z2x6VOiEG9KYmVV
+        alF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzub2TX7vvtaLBqnm9z
+        TEXo0rtKtvw/f65ek1S5/+KT0y/vTk/mmr7n6uKIRzIM+fltpk1zm4xY30xm5DsioPnbxeB3
+        3K++ILWgmntObiXhhf2B7wO+fDeIFo2eVvbJv/L1nfp/dks6+qLEZD1jeiotld13uC65fVf5
+        TdeTzhD/9bcTc1KfvxJZ1y692NfrGp/w9pRi7dBj7qLm09bY5D6Sbw2+/7EsILjo/7wLv5+6
+        fM1kXhmgy3G16ESC8KzuT2dOXVVdtvB4EONGiwdSm4QtKkzsFk9pevnikuwULwclQz7u/PgY
+        DovTzn8viZ+K1W6/vS/qytFlr+8HHDimdHxafHSTU7XidXHzz1+2LldiKc5INNRiLipOBAAx
+        fYv2JwMAAA==
+X-CMS-MailID: 20220130071720epcas5p1521c11e9d6cb248e6a453a6a639db61c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220129175341epcas5p480a45065d3d6faee0e405a1efda46a1f
+References: <CGME20220129175341epcas5p480a45065d3d6faee0e405a1efda46a1f@epcas5p4.samsung.com>
+        <20220129175332.298666-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 23:33:15 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Hi Krzysztof
 
-> Add exit_handler to fprobe. fprobe + rethook allows us to hook the kernel
-> function return. The rethook will be enabled only if the
-> fprobe::exit_handler is set.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  Changes in v6:
->   - Update according to the fprobe update.
->  Changes in v5:
->   - Add dependency for HAVE_RETHOOK.
->  Changes in v4:
->   - Check fprobe is disabled in the exit handler.
->  Changes in v3:
->   - Make sure to clear rethook->data before free.
->   - Handler checks the data is not NULL.
->   - Free rethook only if the rethook is using.
-> ---
->  include/linux/fprobe.h |    6 ++
->  kernel/trace/Kconfig   |    2 +
->  kernel/trace/fprobe.c  |  127 +++++++++++++++++++++++++++++++++++++++++++-----
->  3 files changed, 123 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-> index b920dc1b2969..acfdcc37acf6 100644
-> --- a/include/linux/fprobe.h
-> +++ b/include/linux/fprobe.h
-> @@ -5,19 +5,25 @@
->  
->  #include <linux/compiler.h>
->  #include <linux/ftrace.h>
-> +#include <linux/rethook.h>
->  
->  /**
->   * struct fprobe - ftrace based probe.
->   * @ops: The ftrace_ops.
->   * @nmissed: The counter for missing events.
->   * @flags: The status flag.
-> + * @rethook: The rethook data structure. (internal data)
->   * @entry_handler: The callback function for function entry.
-> + * @exit_handler: The callback function for function exit.
->   */
->  struct fprobe {
->  	struct ftrace_ops	ops;
->  	unsigned long		nmissed;
->  	unsigned int		flags;
-> +	struct rethook		*rethook;
-> +
->  	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
-> +	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
->  };
->  
->  #define FPROBE_FL_DISABLED	1
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index 9e66fd29d94e..3c1f808969f1 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -245,6 +245,8 @@ config FPROBE
->  	bool "Kernel Function Probe (fprobe)"
->  	depends on FUNCTION_TRACER
->  	depends on DYNAMIC_FTRACE_WITH_REGS
-> +	depends on HAVE_RETHOOK
-> +	select RETHOOK
->  	default n
->  	help
->  	  This option enables kernel function probe (fprobe) based on ftrace,
-> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> index 081aef6bf531..408dcb6503fe 100644
-> --- a/kernel/trace/fprobe.c
-> +++ b/kernel/trace/fprobe.c
-> @@ -8,12 +8,22 @@
->  #include <linux/fprobe.h>
->  #include <linux/kallsyms.h>
->  #include <linux/kprobes.h>
-> +#include <linux/rethook.h>
->  #include <linux/slab.h>
->  #include <linux/sort.h>
->  
-> +#include "trace.h"
-> +
-> +struct fprobe_rethook_node {
-> +	struct rethook_node node;
-> +	unsigned long entry_ip;
-> +};
-> +
->  static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
->  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
->  {
-> +	struct fprobe_rethook_node *fpr;
-> +	struct rethook_node *rh;
->  	struct fprobe *fp;
->  	int bit;
->  
-> @@ -30,10 +40,37 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
->  	if (fp->entry_handler)
->  		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
->  
-> +	if (fp->exit_handler) {
-> +		rh = rethook_try_get(fp->rethook);
-> +		if (!rh) {
-> +			fp->nmissed++;
-> +			goto out;
-> +		}
-> +		fpr = container_of(rh, struct fprobe_rethook_node, node);
-> +		fpr->entry_ip = ip;
-> +		rethook_hook(rh, ftrace_get_regs(fregs));
-> +	}
-> +
-> +out:
->  	ftrace_test_recursion_unlock(bit);
->  }
->  NOKPROBE_SYMBOL(fprobe_handler);
->  
-> +static void fprobe_exit_handler(struct rethook_node *rh, void *data,
-> +				struct pt_regs *regs)
-> +{
-> +	struct fprobe *fp = (struct fprobe *)data;
-> +	struct fprobe_rethook_node *fpr;
-> +
-> +	if (!fp || fprobe_disabled(fp))
-> +		return;
-> +
-> +	fpr = container_of(rh, struct fprobe_rethook_node, node);
-> +
-> +	fp->exit_handler(fp, fpr->entry_ip, regs);
-> +}
-> +NOKPROBE_SYMBOL(fprobe_exit_handler);
-> +
->  /* Convert ftrace location address from symbols */
->  static unsigned long *get_ftrace_locations(const char **syms, int num)
->  {
-> @@ -76,6 +113,48 @@ static void fprobe_init(struct fprobe *fp)
->  	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
->  }
->  
-> +static int fprobe_init_rethook(struct fprobe *fp, int num)
-> +{
-> +	int i, size;
-> +
-> +	if (num < 0)
-> +		return -EINVAL;
-> +
-> +	if (!fp->exit_handler) {
-> +		fp->rethook = NULL;
-> +		return 0;
-> +	}
-> +
-> +	/* Initialize rethook if needed */
-> +	size = num * num_possible_cpus() * 2;
-> +	if (size < 0)
-> +		return -E2BIG;
-> +
-> +	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler);
-> +	for (i = 0; i < size; i++) {
-> +		struct rethook_node *node;
-> +
-> +		node = kzalloc(sizeof(struct fprobe_rethook_node), GFP_KERNEL);
-> +		if (!node) {
-> +			rethook_free(fp->rethook);
-> +			fp->rethook = NULL;
-> +			return -ENOMEM;
-> +		}
-> +		rethook_add_node(fp->rethook, node);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static void fprobe_fail_cleanup(struct fprobe *fp)
-> +{
-> +	if (fp->rethook) {
-> +		/* Don't need to cleanup rethook->handler because this is not used. */
-> +		rethook_free(fp->rethook);
-> +		fp->rethook = NULL;
-> +	}
-> +	ftrace_free_filter(&fp->ops);
-> +}
-> +
->  /**
->   * register_fprobe() - Register fprobe to ftrace by pattern.
->   * @fp: A fprobe data structure to be registered.
-> @@ -89,6 +168,7 @@ static void fprobe_init(struct fprobe *fp)
->   */
->  int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter)
->  {
-> +	struct ftrace_hash *hash;
->  	unsigned char *str;
->  	int ret, len;
->  
-> @@ -113,10 +193,21 @@ int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter
->  			goto out;
->  	}
->  
-> -	ret = register_ftrace_function(&fp->ops);
-> +	/* TODO:
-> +	 * correctly calculate the total number of filtered symbols
-> +	 * from both filter and notfilter.
-> +	 */
-> +	hash = fp->ops.local_hash.filter_hash;
-> +	if (WARN_ON_ONCE(!hash))
-> +		goto out;
-> +
-> +	ret = fprobe_init_rethook(fp, (int)hash->count);
-> +	if (!ret)
-> +		ret = register_ftrace_function(&fp->ops);
-> +
->  out:
->  	if (ret)
-> -		ftrace_free_filter(&fp->ops);
-> +		fprobe_fail_cleanup(fp);
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(register_fprobe);
-> @@ -144,12 +235,15 @@ int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num)
->  	fprobe_init(fp);
->  
->  	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = fprobe_init_rethook(fp, num);
->  	if (!ret)
->  		ret = register_ftrace_function(&fp->ops);
->  
->  	if (ret)
-> -		ftrace_free_filter(&fp->ops);
-> -
-> +		fprobe_fail_cleanup(fp);
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(register_fprobe_ips);
-> @@ -179,14 +273,16 @@ int register_fprobe_syms(struct fprobe *fp, const char **syms, int num)
->  		return PTR_ERR(addrs);
->  
->  	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
-> +	kfree(addrs);
->  	if (ret)
-> -		goto out;
-> -	ret = register_ftrace_function(&fp->ops);
-> -	if (ret)
-> -		ftrace_free_filter(&fp->ops);
-> +		return ret;
->  
-> -out:
-> -	kfree(addrs);
-> +	ret = fprobe_init_rethook(fp, num);
-> +	if (!ret)
-> +		ret = register_ftrace_function(&fp->ops);
-> +
-> +	if (ret)
-> +		fprobe_fail_cleanup(fp);
->  
->  	return ret;
->  }
-> @@ -210,9 +306,16 @@ int unregister_fprobe(struct fprobe *fp)
->  		return -EINVAL;
->  
->  	ret = unregister_ftrace_function(&fp->ops);
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	if (!ret)
-> -		ftrace_free_filter(&fp->ops);
-> +	if (fp->rethook) {
-> +		/* Make sure to clear rethook->data before freeing. */
-> +		WRITE_ONCE(fp->rethook->data, NULL);
-> +		barrier();
-> +		rethook_free(fp->rethook);
-> +	}
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Saturday, January 29, 2022 11:23 PM
+>To: Lee Jones <lee.jones@linaro.org>; Rob Herring <robh+dt@kernel.org>;
+>Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
+><alim.akhtar@samsung.com>; Greg Kroah-Hartman
+><gregkh@linuxfoundation.org>; Sylwester Nawrocki
+><s.nawrocki@samsung.com>; Marek Szyprowski
+><m.szyprowski@samsung.com>; devicetree@vger.kernel.org; linux-arm-
+>kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+>kernel@vger.kernel.org; linux-serial@vger.kernel.org
+>Subject: [PATCH 1/5] arm64: dts: exynos: align pl330 node name with
+>dtschema
+>
+>Fixes dtbs_check warnings like:
+>
+>  pdma@15610000: $nodename:0: 'pdma@15610000' does not match '^dma-
+>controller(@.*)?$'
+>
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>---
 
-Oops, I felt uncomfortable on this part, and I found that this rethook_free()
-must be called before unregister_ftrace_function() so that no more rethook will
-be used, and also need to wait for rcu before returning (this is also done
-in unregister_ftrace_function().)
-
-Let me update this part.
-
-Thank you,
+Reviewed-by: Alim Akhtar <alim.akhtar@smasung.com>
 
 
-> +	ftrace_free_filter(&fp->ops);
->  
->  	return ret;
->  }
-> 
+> arch/arm64/boot/dts/exynos/exynos5433.dtsi | 6 +++---
+> arch/arm64/boot/dts/exynos/exynos7.dtsi    | 4 ++--
+> 2 files changed, 5 insertions(+), 5 deletions(-)
+>
+>diff --git a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+>b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+>index bfe4ed8a23d6..b4cde77e02d3 100644
+>--- a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+>+++ b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+>@@ -1858,7 +1858,7 @@ mshc_2: mshc@15560000 {
+> 			status = "disabled";
+> 		};
+>
+>-		pdma0: pdma@15610000 {
+>+		pdma0: dma-controller@15610000 {
+> 			compatible = "arm,pl330", "arm,primecell";
+> 			reg = <0x15610000 0x1000>;
+> 			interrupts = <GIC_SPI 228 IRQ_TYPE_LEVEL_HIGH>;
+>@@ -1869,7 +1869,7 @@ pdma0: pdma@15610000 {
+> 			#dma-requests = <32>;
+> 		};
+>
+>-		pdma1: pdma@15600000 {
+>+		pdma1: dma-controller@15600000 {
+> 			compatible = "arm,pl330", "arm,primecell";
+> 			reg = <0x15600000 0x1000>;
+> 			interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
+>@@ -1891,7 +1891,7 @@ audio-subsystem@11400000 {
+> 			#size-cells = <1>;
+> 			ranges;
+>
+>-			adma: adma@11420000 {
+>+			adma: dma-controller@11420000 {
+> 				compatible = "arm,pl330", "arm,primecell";
+> 				reg = <0x11420000 0x1000>;
+> 				interrupts = <GIC_SPI 73
+>IRQ_TYPE_LEVEL_HIGH>; diff --git
+>a/arch/arm64/boot/dts/exynos/exynos7.dtsi
+>b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+>index 960823b8247a..3364b09c3158 100644
+>--- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
+>+++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+>@@ -142,7 +142,7 @@ gic: interrupt-controller@11001000 {
+> 				<0x11006000 0x2000>;
+> 		};
+>
+>-		pdma0: pdma@10e10000 {
+>+		pdma0: dma-controller@10e10000 {
+> 			compatible = "arm,pl330", "arm,primecell";
+> 			reg = <0x10E10000 0x1000>;
+> 			interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
+>@@ -153,7 +153,7 @@ pdma0: pdma@10e10000 {
+> 			#dma-requests = <32>;
+> 		};
+>
+>-		pdma1: pdma@10eb0000 {
+>+		pdma1: dma-controller@10eb0000 {
+> 			compatible = "arm,pl330", "arm,primecell";
+> 			reg = <0x10EB0000 0x1000>;
+> 			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>;
+>--
+>2.32.0
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

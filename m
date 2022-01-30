@@ -2,234 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA4B4A368F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 14:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0404A3692
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354931AbiA3N7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 08:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S1354941AbiA3OE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354916AbiA3N7P (ORCPT
+        with ESMTP id S237553AbiA3OE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 08:59:15 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CC6C061714;
-        Sun, 30 Jan 2022 05:59:14 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id m11so21554921edi.13;
-        Sun, 30 Jan 2022 05:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ycTbeWVF2k4ldeYij/DKOzznuWwYeGFWN8BJHoJuoyE=;
-        b=jN3jnwWsU9nD9Nd8JMncMCVZcuX311nzUmbsFxdvy7+gUZWQ3T3vz+y/AxQ2ejDvea
-         YXEBx+O9LdppbXvRVFLtMvuodYUaXCcJRtJ6+8maueSFcejgdlSn9rZL3tZLhM2fn7bZ
-         KUcIEzPCawuy++O2pmNl7TQOpyMH6Hfshc5EhPLCGSYwvVfQjXi7rVL6MET/3WPJt7Ur
-         LZaqR/2qYjLkoCsOn/MqhTGjujzxzCVpFA5fON7OwkVEJ/aOaiXUX1w5gUGNq/3x8jRU
-         4XtNQMcFkeYwaJvZXD7viueZeY2rmECgB6M0M932ztOGe1yG1PYw/YoESIW4d9Y+6Bex
-         +qKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ycTbeWVF2k4ldeYij/DKOzznuWwYeGFWN8BJHoJuoyE=;
-        b=ZSDrIjwuuE1LMfDlB2ePwK69WPiQXv+Vz/RU6SkQwTmvYkS77MXIWPtQGwPMXsMILy
-         WdZM+0hDP47TzDsjes7dLDtUElz/mMV9T5RB0LK2Jus1Ktp0t6yocbGnQJPTVZxCgzm4
-         t0qFtF8HaqtXnPK2GdhVVEQFsp8SKYNwo3v0Z4g8FRUf7UCpN6CfVD8fpXFvWo98NzuG
-         opZqYC4YJXZjMA9Y2GFKGWLxPD3c4gFsfHPGSBae0Di5zs0itmKXAWY3G6+qwgPMBT9q
-         EPqxHyJK+TuX+Z2hpdloKKQ+XwGKf+IwOaoqWYuYSvn+IexwH+seOUasqNuqd5OG4BjG
-         UJPA==
-X-Gm-Message-State: AOAM533Iw4J34aPEFzCORWBwj0SoEMAJm3M3t21/Gs7D3rlQF32imMcB
-        Bd8Us//1khmwWjlj8tM8u78=
-X-Google-Smtp-Source: ABdhPJxTV8e96JL/W7bqFfbr97rk0tU1Mt3imLw62b0KyMpOWnQ8gObZH/MTkScWlqyrvQkmLf4/Lw==
-X-Received: by 2002:a05:6402:430e:: with SMTP id m14mr16864890edc.86.1643551152898;
-        Sun, 30 Jan 2022 05:59:12 -0800 (PST)
-Received: from Ansuel-xps.localdomain ([87.13.143.9])
-        by smtp.gmail.com with ESMTPSA id bv2sm12176256ejb.154.2022.01.30.05.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 05:59:12 -0800 (PST)
-Date:   Sun, 30 Jan 2022 14:59:10 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 00/16] Add support for qca8k mdio rw in Ethernet
- packet
-Message-ID: <YfaZrsewBMhqr0Db@Ansuel-xps.localdomain>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
+        Sun, 30 Jan 2022 09:04:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0ABC061714;
+        Sun, 30 Jan 2022 06:04:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE9B1611CB;
+        Sun, 30 Jan 2022 14:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AADEC340E4;
+        Sun, 30 Jan 2022 14:04:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643551466;
+        bh=V6j1bLnRiyoxNixikiAnOSimbdOAtXOBFRAv0m7JhRA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=asbqWx3OuGhPdWupvzhf0t1T+FBWU+bKyWOYD4kSu6Ue0mv7u0qxU1zniSNPnjleF
+         Gdc8lb6v0ztR4WDZLrf45fpDz5s8J0O32mT7JxgzmY2gN7EyWmV5hnUdABVrzXhZhP
+         XiMBhXabeeMcVhe1XZSkSjV8HZImS9K5s8kMIL9uBsrXS1Ejh0HFrQs6tCn0O2Yuov
+         ysbSCoJCkZNvVHedoD/VTjcwWLmGQ3vrdmL6IkjVuVoBGGvTyvd5s7tSimw6YSf+he
+         zRDsNeJ5y72yLA0XUIioOqxMcLYwRIhnnFulW9cjTQ/2az5Kv29cMLGNhe6kDGw8uO
+         0YfrZW57FniNg==
+Date:   Sun, 30 Jan 2022 14:10:48 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 3/3] iio: accel: st_accel: Add support for Silan SC7A20
+Message-ID: <20220130141048.31be2554@jic23-huawei>
+In-Reply-To: <20220130034441.15474-4-samuel@sholland.org>
+References: <20220130034441.15474-1-samuel@sholland.org>
+        <20220130034441.15474-4-samuel@sholland.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123013337.20945-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 02:33:21AM +0100, Ansuel Smith wrote:
-> Hi, this is ready but require some additional test on a wider userbase.
-> 
-> The main reason for this is that we notice some routing problem in the
-> switch and it seems assisted learning is needed. Considering mdio is
-> quite slow due to the indirect write using this Ethernet alternative way
-> seems to be quicker.
-> 
-> The qca8k switch supports a special way to pass mdio read/write request
-> using specially crafted Ethernet packet.
-> This works by putting some defined data in the Ethernet header where the
-> mac source and dst should be placed. The Ethernet type header is set to qca
-> header and is set to a mdio read/write type.
-> This is used to communicate to the switch that this is a special packet
-> and should be parsed differently.
-> 
-> Currently we use Ethernet packet for
-> - MIB counter
-> - mdio read/write configuration
-> - phy read/write for each port
-> 
-> Current implementation of this use completion API to wait for the packet
-> to be processed by the tagger and has a timeout that fallback to the
-> legacy mdio way and mutex to enforce one transaction at time.
-> 
-> We now have connect()/disconnect() ops for the tagger. They are used to
-> allocate priv data in the dsa priv. The header still has to be put in
-> global include to make it usable by a dsa driver.
-> They are called when the tag is connect to the dst and the data is freed
-> using discconect on tagger change.
-> 
-> (if someone wonder why the bind function is put at in the general setup
-> function it's because tag is set in the cpu port where the notifier is
-> still not available and we require the notifier to sen the
-> tag_proto_connect() event.
-> 
-> We now have a tag_proto_connect() for the dsa driver used to put
-> additional data in the tagger priv (that is actually the dsa priv).
-> This is called using a switch event DSA_NOTIFIER_TAG_PROTO_CONNECT.
-> Current use for this is adding handler for the Ethernet packet to keep
-> the tagger code as dumb as possible.
-> 
-> The tagger priv implement only the handler for the special packet. All the
-> other stuff is placed in the qca8k_priv and the tagger has to access
-> it under lock.
-> 
-> We use the new API from Vladimir to track if the master port is
-> operational or not. We had to track many thing to reach a usable state.
-> Checking if the port is UP is not enough and tracking a NETDEV_CHANGE is
-> also not enough since it use also for other task. The correct way was
-> both track for interface UP and if a qdisc was assigned to the
-> interface. That tells us the port (and the tagger indirectly) is ready
-> to accept and process packet.
-> 
-> I tested this with multicpu port and with port6 set as the unique port and
-> it's sad.
-> It seems they implemented this feature in a bad way and this is only
-> supported with cpu port0. When cpu port6 is the unique port, the switch
-> doesn't send ack packet. With multicpu port, packet ack are not duplicated
-> and only cpu port0 sends them. This is the same for the MIB counter.
-> For this reason this feature is enabled only when cpu port0 is enabled and
-> operational.
-> 
-> 
-> 
-> 
-> Sorry if I missed any comments. This series is 2 month old so I think it
-> would be good to recheck everything. In the mean time this was tested on
-> and no regression are observed related to random port drop.
-> 
-> v7:
-> - Rebase on net-next changes
-> - Add bulk patches to speedup this even more
-> v6:
-> - Fix some error in ethtool handler caused by rebase/cleanup
-> v5:
-> - Adapt to new API fixes
-> - Fix a wrong logic for noop
-> - Add additional lock for master_state change
-> - Limit mdio Ethernet to cpu port0 (switch limitation)
-> - Add priority to these special packet
-> - Move mdio cache to qca8k_priv
-> v4:
-> - Remove duplicate patch sent by mistake.
-> v3:
-> - Include MIB with Ethernet packet.
-> - Include phy read/write with Ethernet packet.
-> - Reorganize code with new API.
-> - Introuce master tracking by Vladimir
-> v2:
-> - Address all suggestion from Vladimir.
->   Try to generilize this with connect/disconnect function from the
->   tagger and tag_proto_connect for the driver.
-> 
-> Ansuel Smith (14):
->   net: dsa: tag_qca: convert to FIELD macro
->   net: dsa: tag_qca: move define to include linux/dsa
->   net: dsa: tag_qca: enable promisc_on_master flag
->   net: dsa: tag_qca: add define for handling mgmt Ethernet packet
->   net: dsa: tag_qca: add define for handling MIB packet
->   net: dsa: tag_qca: add support for handling mgmt and MIB Ethernet
->     packet
->   net: dsa: qca8k: add tracking state of master port
->   net: dsa: qca8k: add support for mgmt read/write in Ethernet packet
->   net: dsa: qca8k: add support for mib autocast in Ethernet packet
->   net: dsa: qca8k: add support for phy read/write with mgmt Ethernet
->   net: dsa: qca8k: move page cache to driver priv
->   net: dsa: qca8k: cache lo and hi for mdio write
->   net: da: qca8k: add support for larger read/write size with mgmt
->     Ethernet
->   net: dsa: qca8k: introduce qca8k_bulk_read/write function
-> 
-> Vladimir Oltean (2):
->   net: dsa: provide switch operations for tracking the master state
->   net: dsa: replay master state events in
->     dsa_tree_{setup,teardown}_master
-> 
->  drivers/net/dsa/qca8k.c     | 709 +++++++++++++++++++++++++++++++++---
->  drivers/net/dsa/qca8k.h     |  46 ++-
->  include/linux/dsa/tag_qca.h |  82 +++++
->  include/net/dsa.h           |  17 +
->  net/dsa/dsa2.c              |  74 +++-
->  net/dsa/dsa_priv.h          |  13 +
->  net/dsa/slave.c             |  32 ++
->  net/dsa/switch.c            |  15 +
->  net/dsa/tag_qca.c           |  83 +++--
->  9 files changed, 993 insertions(+), 78 deletions(-)
->  create mode 100644 include/linux/dsa/tag_qca.h
-> 
-> -- 
-> 2.33.1
-> 
+On Sat, 29 Jan 2022 21:44:41 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-Hi,
-sorry for the delay in sending v8, it's ready but I'm far from home and
-I still need to check some mdio improvement with pointer handling.
+> This chip appears to be a clone of the LIS2DH. The new description is a
+> copy of the LIS2DH's description with a different WAI value.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+Hi Samuel,
 
-Anyway I have some concern aboutall the skb alloc.
-I wonder if that part can be improved at the cost of some additional
-space used.
+This is nasty as 0x11 is a valid who am I for an LIS3DHH which is a very
+different device.
 
-The idea Is to use the cache stuff also for the eth skb (or duplicate
-it?) And use something like build_skb and recycle the skb space
-everytime...
-This comes from the fact that packet size is ALWAYS the same and it
-seems stupid to allocate and free it everytime. Considering we also
-enforce a one way transaction (we send packet and we wait for response)
-this makes the allocation process even more stupid.
+One request inline for a bit more info in the code about what this device
+is etc.  I've found a Chinese data sheet on one of the datasheet aggregator
+sites.
 
-So I wonder if we would have some perf improvement/less load by
-declaring the mgmt eth space and build an skb that always use that
-preallocate space and just modify data.
+If you know of a stable location to add a
+Datasheet:
+tag to this patch that would also be helpful.
 
-I would really love some feedback considering qca8k is also used in very
-low spec ath79 device where we need to reduce the load in every way
-possible. Also if anyone have more ideas on how to improve this to make
-it less heavy cpu side, feel free to point it out even if it would
-mean that my implemenation is complete sh*t.
+Thanks,
 
-(The use of caching the address would permit us to reduce the write to
-this preallocated space even more or ideally to send the same skb)
+Jonathan
 
--- 
-	Ansuel
+> ---
+> 
+>  drivers/iio/accel/st_accel.h      |  2 +
+>  drivers/iio/accel/st_accel_core.c | 79 +++++++++++++++++++++++++++++++
+>  drivers/iio/accel/st_accel_i2c.c  |  5 ++
+>  3 files changed, 86 insertions(+)
+> 
+> diff --git a/drivers/iio/accel/st_accel.h b/drivers/iio/accel/st_accel.h
+> index 8750dea56fcb..00e056c21bfc 100644
+> --- a/drivers/iio/accel/st_accel.h
+> +++ b/drivers/iio/accel/st_accel.h
+> @@ -36,6 +36,7 @@ enum st_accel_type {
+>  	LIS3DHH,
+>  	LIS2DE12,
+>  	LIS2HH12,
+> +	SC7A20,
+>  	ST_ACCEL_MAX,
+>  };
+>  
+> @@ -61,6 +62,7 @@ enum st_accel_type {
+>  #define LIS3DE_ACCEL_DEV_NAME		"lis3de"
+>  #define LIS2DE12_ACCEL_DEV_NAME		"lis2de12"
+>  #define LIS2HH12_ACCEL_DEV_NAME		"lis2hh12"
+> +#define SC7A20_ACCEL_DEV_NAME		"sc7a20"
+>  
+>  #ifdef CONFIG_IIO_BUFFER
+>  int st_accel_allocate_ring(struct iio_dev *indio_dev);
+> diff --git a/drivers/iio/accel/st_accel_core.c b/drivers/iio/accel/st_accel_core.c
+> index 31ea19d0ba71..d9aa0ff1922b 100644
+> --- a/drivers/iio/accel/st_accel_core.c
+> +++ b/drivers/iio/accel/st_accel_core.c
+> @@ -1087,6 +1087,85 @@ static const struct st_sensor_settings st_accel_sensors_settings[] = {
+>  		.multi_read_bit = true,
+>  		.bootime = 2,
+>  	},
+> +	{
+
+Please add a comment here about the fact it seems to be a clone of the LIS2DH
+despite the wrong WAI.
+
+It's worth noting that a good part of the maintenance of this driver is
+done by ST employees who are probably less than happy with seeing
+a clone (with bugs) supported.  So support is likely to be somewhat best
+effort / not going to deliberately break support for this part but no
+means to test it. Hopefully we'll remember to cc you to test anything new added to
+the driver.  Clones aren't always perfect!
+
+Jonathan
+
+> +		.wai = 0x11,
+> +		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
+> +		.sensors_supported = {
+> +			[0] = SC7A20_ACCEL_DEV_NAME,
+> +		},
+> +		.ch = (struct iio_chan_spec *)st_accel_12bit_channels,
+> +		.odr = {
+> +			.addr = 0x20,
+> +			.mask = 0xf0,
+> +			.odr_avl = {
+> +				{ .hz = 1, .value = 0x01, },
+> +				{ .hz = 10, .value = 0x02, },
+> +				{ .hz = 25, .value = 0x03, },
+> +				{ .hz = 50, .value = 0x04, },
+> +				{ .hz = 100, .value = 0x05, },
+> +				{ .hz = 200, .value = 0x06, },
+> +				{ .hz = 400, .value = 0x07, },
+> +				{ .hz = 1600, .value = 0x08, },
+> +			},
+> +		},
+> +		.pw = {
+> +			.addr = 0x20,
+> +			.mask = 0xf0,
+> +			.value_off = ST_SENSORS_DEFAULT_POWER_OFF_VALUE,
+> +		},
+> +		.enable_axis = {
+> +			.addr = ST_SENSORS_DEFAULT_AXIS_ADDR,
+> +			.mask = ST_SENSORS_DEFAULT_AXIS_MASK,
+> +		},
+> +		.fs = {
+> +			.addr = 0x23,
+> +			.mask = 0x30,
+> +			.fs_avl = {
+> +				[0] = {
+> +					.num = ST_ACCEL_FS_AVL_2G,
+> +					.value = 0x00,
+> +					.gain = IIO_G_TO_M_S_2(1000),
+> +				},
+> +				[1] = {
+> +					.num = ST_ACCEL_FS_AVL_4G,
+> +					.value = 0x01,
+> +					.gain = IIO_G_TO_M_S_2(2000),
+> +				},
+> +				[2] = {
+> +					.num = ST_ACCEL_FS_AVL_8G,
+> +					.value = 0x02,
+> +					.gain = IIO_G_TO_M_S_2(4000),
+> +				},
+> +				[3] = {
+> +					.num = ST_ACCEL_FS_AVL_16G,
+> +					.value = 0x03,
+> +					.gain = IIO_G_TO_M_S_2(12000),
+> +				},
+> +			},
+> +		},
+> +		.bdu = {
+> +			.addr = 0x23,
+> +			.mask = 0x80,
+> +		},
+> +		.drdy_irq = {
+> +			.int1 = {
+> +				.addr = 0x22,
+> +				.mask = 0x10,
+> +			},
+> +			.addr_ihl = 0x25,
+> +			.mask_ihl = 0x02,
+> +			.stat_drdy = {
+> +				.addr = ST_SENSORS_DEFAULT_STAT_ADDR,
+> +				.mask = 0x07,
+> +			},
+> +		},
+> +		.sim = {
+> +			.addr = 0x23,
+> +			.value = BIT(0),
+> +		},
+> +		.multi_read_bit = true,
+> +		.bootime = 2,
+> +	},
+>  };
+>  
+>  /* Default accel DRDY is available on INT1 pin */
+> diff --git a/drivers/iio/accel/st_accel_i2c.c b/drivers/iio/accel/st_accel_i2c.c
+> index c0ce78eebad9..7f5888570e87 100644
+> --- a/drivers/iio/accel/st_accel_i2c.c
+> +++ b/drivers/iio/accel/st_accel_i2c.c
+> @@ -107,6 +107,10 @@ static const struct of_device_id st_accel_of_match[] = {
+>  		.compatible = "st,lis2hh12",
+>  		.data = LIS2HH12_ACCEL_DEV_NAME,
+>  	},
+> +	{
+> +		.compatible = "silan,sc7a20",
+> +		.data = SC7A20_ACCEL_DEV_NAME,
+> +	},
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, st_accel_of_match);
+> @@ -142,6 +146,7 @@ static const struct i2c_device_id st_accel_id_table[] = {
+>  	{ LIS3DE_ACCEL_DEV_NAME },
+>  	{ LIS2DE12_ACCEL_DEV_NAME },
+>  	{ LIS2HH12_ACCEL_DEV_NAME },
+> +	{ SC7A20_ACCEL_DEV_NAME },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(i2c, st_accel_id_table);
+

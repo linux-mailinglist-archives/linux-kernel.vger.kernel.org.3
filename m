@@ -2,100 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216954A35D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326964A35DD
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 12:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243822AbiA3LEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 06:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242270AbiA3LEa (ORCPT
+        id S244532AbiA3LKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 06:10:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44974 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241796AbiA3LKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 06:04:30 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBBCC061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 03:04:29 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id n8so20964965lfq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 03:04:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:user-agent:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bxlyxF/EC8bTAR3d0TLEeaeVlQi35TqmVD7n3vCbavI=;
-        b=Rb+lSRxHbxob/Ic74S73x7dboMK/vjsrOhLRmlHXTY0UcvDe+A01djucQTLJ5aF0ee
-         xaJgTd18lCL2S8NbZijvYwTjO8qchTw30veISMMMDYNrugj94BEtCr15/4cPBQWS+4gU
-         tcauokmFlOU8h724lMEBMYYiRfvei97Sdk61ECGSY1+BmRvyJban3pz4329P7NNUTUF4
-         sVVzfmUYpidWtqVlrS8fKR8LvLk2TqINYr1FU6qvbgRJs3Igr1BcVMcVBtPHlVrMhsLW
-         f3eoZ8ev9id5iL7KT4BWNbCoj5uS+FZO0JUXc8Jd0l0osPFfN7A9UsH5kVWogfQHxXeF
-         8S4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bxlyxF/EC8bTAR3d0TLEeaeVlQi35TqmVD7n3vCbavI=;
-        b=2iuK/29Eq4zoiBdUpeJqNZ9yNQvmXDA8Ttz6JBpeCv3gb6R4zHGWeNCPWmZmLvuRLM
-         KAYLEG1t48zeQy4qNTNyavctQgTjeVmsWgYqMwbFpJl7tSitlYOajCMU6dYdU381tCRR
-         H8vN7UZ8YJlXF576AzWa2bJBtaV4PMZ9kmbDFlH/o4yykYZpehA+0K6lMVzdSZwtrSOD
-         tslB8SENrbpXKy0iFB8Sw74faWB8j020hlYD95aBvx9M12u7HxSL+8XSy/6LLB+2fHka
-         rFFLlNrmhmyvPbEZjrto7yW1INaAXVij0T+/poNgHKYFdmNq2EZF6jOOxk1LYLxfwohH
-         QNwA==
-X-Gm-Message-State: AOAM533/DMCMYDXN+Bj1dMCUlvNMn8ghJ7UAsGvdanFYf32JvDPo4kau
-        jkl5dza4tz6MXMFkUTzWZmQ=
-X-Google-Smtp-Source: ABdhPJwjyY27OzuJcBoolWvFSnRfBiH5kr2z5VBWsTElJy1GUg5fFtub5fpPbFklnrBgvEpgTiJrfw==
-X-Received: by 2002:a05:6512:3223:: with SMTP id f3mr11654547lfe.203.1643540668159;
-        Sun, 30 Jan 2022 03:04:28 -0800 (PST)
-Received: from localhost.localdomain (broadband-95-84-228-163.ip.moscow.rt.ru. [95.84.228.163])
-        by smtp.gmail.com with ESMTPSA id z3sm3247459lfu.8.2022.01.30.03.04.26
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Sun, 30 Jan 2022 03:04:27 -0800 (PST)
-Date:   Sun, 30 Jan 2022 14:10:20 +0300
-From:   Alexander Sergeyev <sergeev917@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        Kailang Yang <kailang@realtek.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jian-Hong Pan <jhp@endlessos.org>,
-        Hui Wang <hui.wang@canonical.com>,
-        PeiSen Hou <pshou@realtek.com>
-Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
- G8
-Message-ID: <20220130111020.44gzrm5ckrakjta2@localhost.localdomain>
-User-Agent: mtt
-References: <s5ha6fy46jt.wl-tiwai@suse.de>
- <20220114183720.n46wealclg6spxkp@localhost.localdomain>
- <s5hsftp3027.wl-tiwai@suse.de>
- <20220115152215.kprws5nja2i43qax@localhost.localdomain>
- <s5hilugw0l0.wl-tiwai@suse.de>
- <20220119093249.eaxem33bjqjxcher@localhost.localdomain>
- <20220122190522.ycaygrqcen7d3hj2@localhost.localdomain>
- <20220122205637.7gzurdu7xl4sthxw@localhost.localdomain>
- <s5ho83yldu3.wl-tiwai@suse.de>
- <20220129144704.xlmeylllvy3b3fum@localhost.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129144704.xlmeylllvy3b3fum@localhost.localdomain>
+        Sun, 30 Jan 2022 06:10:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8445B828F0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 11:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D0ECC340E4;
+        Sun, 30 Jan 2022 11:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643541047;
+        bh=/n1aRJoZRVHIeAQbmMBAduf8TveRpGqhhauLuSMbfwo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Do7nUfXOkZSH+I0J5AiZ7D36HMihwnFPhnlf72b0IrWiqpsQ0SrDjrOlg8O1SgDQ7
+         SUd7wTaO0kWMhBwf5vIWtsocr0/ZcMTEwQ3OmnRrbWB38g41mMjNCFhM4/qevdOecQ
+         kwPM4VAXid0QHhjsw0A0HDjUdTOKmeMpcMbgsQZBnD4WUMRyJXDUjBAdRjWvJ8Iq9B
+         BnFj7ZKzEP/phM4F5gjUDnBAJtSfUzmYJiPA6V9ylHgOR6DzmIjkDfuJYsmZiyzBNg
+         rAkynFZvA7WsZyMg2iMkGblXEWt7nJq0Lh6FkUVXwmvHCupU41oie+9VPi5U1GknZY
+         IuCewRKk7Z42A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7BB27E5D07D;
+        Sun, 30 Jan 2022 11:10:47 +0000 (UTC)
+Subject: Re: [GIT PULL] sched/urgent for v5.17-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YfZw3s6XOmj9rtq1@zn.tnic>
+References: <YfZw3s6XOmj9rtq1@zn.tnic>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YfZw3s6XOmj9rtq1@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v5.17_rc2_p2
+X-PR-Tracked-Commit-Id: 809232619f5b15e31fb3563985e705454f32621f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 24f4db1f3a2725a6308105081d822b26889e1018
+Message-Id: <164354104749.1472.15361449786180333604.pr-tracker-bot@kernel.org>
+Date:   Sun, 30 Jan 2022 11:10:47 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 05:47:07PM +0300, Alexander Sergeyev wrote:
-> But unbind-bind problems with IO_PAGE_FAULT and "out of range cmd" are not 
-> eliminated. IO_PAGE_FAULT are often logged without accompanying "out of range 
-> cmd". And after adding debugging printk() I haven't managed to trigger "out 
-> of range cmd" yet. But IO_PAGE_FAULT are more easily triggered.
+The pull request you sent on Sun, 30 Jan 2022 12:05:02 +0100:
 
-IO_PAGE_FAULTs go away with CONFIG_IOMMU_DEFAULT_PASSTHROUGH enabled. As I 
-understand, this leads to reduced DMA device isolation which is generally not 
-desirable. I was initially thinking about races between some delayed code and 
-io-memory pages unmapping, but first IO_PAGE_FAULTs (running non-passthrough 
-iommu) happen during bind operations as well.
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v5.17_rc2_p2
 
-What is also interesting, unbind & bind consistently fails on 31th bind:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/24f4db1f3a2725a6308105081d822b26889e1018
 
-echo -n '0000:05:00.6' > /sys/bus/pci/drivers/snd_hda_intel/bind
--bash: echo: write error: No such device
+Thank you!
 
-And does not recover from there until a reboot.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

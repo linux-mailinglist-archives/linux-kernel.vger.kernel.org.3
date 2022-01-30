@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E704A371B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E7B4A371E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 16:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355361AbiA3O7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355335AbiA3O7H (ORCPT
+        id S1355347AbiA3O76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:59:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44822 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355329AbiA3O7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:59:07 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EC9C061714;
-        Sun, 30 Jan 2022 06:59:07 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id h25so8385438qtm.1;
-        Sun, 30 Jan 2022 06:59:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f+X5yk2roOzmJwzypwQmhOu/mrO4cbF9p7VZTWulkAE=;
-        b=hZn6WRv/zhcXNyjrVUeS9BrgiFa0HgEmEqOPc+zdMag+uwiwEspKvAyWYGgdmCwm7Q
-         YcEtHdH0z0co22/8b/5aWo1NB36LXNTkPlsgUEqMIu6iKmDTUnUZXEzpamnVkR200w+o
-         Gr4VZZJoSr2A9X0i27MLz3kOh/wzYWqc6Jr3031OzAVEU1zlyoi4V5DyBE5/MF0umGpe
-         ELIgVNC4YEiZT19GgDXozTQvgxVjiansUUkFtz8CyUqClyM0mLlUmI5xxLvZzb4j8ARo
-         1Yx8Mc9VRMc3h4MhqEKijxlU2iTfLbxwK2ZIFYz/72gVFREGTqCSpvwT1gvkTxqF8rhI
-         19Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f+X5yk2roOzmJwzypwQmhOu/mrO4cbF9p7VZTWulkAE=;
-        b=Be8s0TJ8b+FTAgotiqWZQ1RXkfYeFE1Nng9Ty//7N8kRGak0s64j5iYB3WttWhnlVU
-         rziEC2109lel5cd3fMAr0Tr96xcpE3MKckEkT4e7OJl9K+yzxtiTwVDcWaTuMBiH858u
-         gkoDix3T2/W7BNfl44UFm64YL6nszbyglB8Uyb8BN45zg0lLUjTKLHJJDCqgnTZ3MSH5
-         BHg9YklK+zGYMGbFs5dtOY4XlcFFIE0dX0Y31Nxt/06I7dT9Z9NG/IfGxvD0hS3S3Ovd
-         vK/r48rUI3e12z6UfkKWFuGJ/ImHJP/4mtn3Eadl1Fdodt7W3LCB7prp9M83BUUmhPbf
-         Yq6A==
-X-Gm-Message-State: AOAM531eGEqMHTUVNzzjiPZg9PMyfS42+yre+8j4oECd91Tol3GWlfEy
-        G4bFG80TKu/jbkWFwUXeyktq0j+wSYI=
-X-Google-Smtp-Source: ABdhPJysO5uJaDMgv+i05X60uWQx4c7I2DJErsRJZonIgGdivOF7DOzdYrpDgddVrms4fR9tronRlQ==
-X-Received: by 2002:a05:622a:447:: with SMTP id o7mr1446288qtx.537.1643554746267;
-        Sun, 30 Jan 2022 06:59:06 -0800 (PST)
-Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id az38sm3436312qkb.124.2022.01.30.06.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 06:59:05 -0800 (PST)
-Date:   Sun, 30 Jan 2022 09:59:03 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Sun, 30 Jan 2022 09:59:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A51BF61211;
+        Sun, 30 Jan 2022 14:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D82C340E4;
+        Sun, 30 Jan 2022 14:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643554756;
+        bh=W6hUYxXfpCmTkoC0wP2SzdldEImzpCHUF1VB5w/7jH4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GGo6dWALPKTmqwzp/Lti7mY+KzjFixmMjN4KuKwfTYOYYCr3obhINSaRVSRTwBvCf
+         tH6rPniTrgzfxS5M6Q/JxrATzimluByc+mVaezwD7OpqcUN2Z9X/G/Y73dwS2xSUIk
+         vRGwhnCPP3YNEYQZ94kQJkM7PmCXirpDrSaAqgz+fKabuAWeIo/7MEVsjzFYWU/BbZ
+         HmA9V18/seI6F0JjbWckq3Bsm26A+4XFBnBCxzts8f1xZPWQxMrZL9a+J8uViZ0kVp
+         LwoLDx0mVigHW3XHbqGVMG++4Nng9Ljv812gscNC2A9LWnbuIaEWAhJhnoJnvQ3qWo
+         nG0uQmwfXjVjw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nEBfd-004Ak7-Tv; Sun, 30 Jan 2022 14:59:14 +0000
+Date:   Sun, 30 Jan 2022 14:59:13 +0000
+Message-ID: <87mtjdxoam.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Anup Patel <anup@brainfault.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v12 00/16] iio: afe: add temperature rescaling support
-Message-ID: <Yfant1/USRnKsCaJ@shaak>
-References: <20220108205319.2046348-1-liambeguin@gmail.com>
- <CAHp75VdyujSuTCr_+oFP9t=tardioG69k7uNkBSRAmPvqiyT7w@mail.gmail.com>
- <20220130143933.7711025a@jic23-huawei>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130143933.7711025a@jic23-huawei>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V6 2/2] irqchip/sifive-plic: Fixup thead,c900-plic dt parse in opensbi
+In-Reply-To: <CAJF2gTR=Gyw33dt36g+uqDSMckqJW+bifpue2N_+FAMEn4NqAQ@mail.gmail.com>
+References: <20220129162726.1154501-1-guoren@kernel.org>
+        <20220129162726.1154501-3-guoren@kernel.org>
+        <87r18qxui9.wl-maz@kernel.org>
+        <CAJF2gTTYN0bxnnMtP9L1KvaH0h6ny+Lr3+fC7GP-YWnwjAYd4A@mail.gmail.com>
+        <35b1838d-ef80-1816-46f6-9cba7afc813e@sholland.org>
+        <CAJF2gTQsi6uT8ea6MTu6oDA-9xsd3fW5ETHAtpzGZxapLpLsWA@mail.gmail.com>
+        <87o83ty0ti.wl-maz@kernel.org>
+        <CAJF2gTR=Gyw33dt36g+uqDSMckqJW+bifpue2N_+FAMEn4NqAQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: guoren@kernel.org, samuel@sholland.org, anup@brainfault.org, tglx@linutronix.de, palmer@dabbelt.com, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, guoren@linux.alibaba.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
-
-On Sun, Jan 30, 2022 at 02:39:33PM +0000, Jonathan Cameron wrote:
-> On Sun, 9 Jan 2022 15:10:36 +0200
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Sun, 30 Jan 2022 13:09:21 +0000,
+Guo Ren <guoren@kernel.org> wrote:
 > 
-> > On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
+> On Sun, Jan 30, 2022 at 6:28 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Sun, 30 Jan 2022 04:39:34 +0000,
+> > Guo Ren <guoren@kernel.org> wrote:
 > > >
-> > > Jonathan, Peter, Andy,
-> > >
-> > > I left out IIO_VAL_INT overflows for now, so that I can focus on getting
-> > > the rest of these changes pulled in, but I don't mind adding a patch for
-> > > that later on.
-> > >
-> > > This series focuses on adding temperature rescaling support to the IIO
-> > > Analog Front End (AFE) driver.
-> > >
-> > > The first few patches address minor bugs in IIO inkernel functions, and
-> > > prepare the AFE driver for the additional features.
-> > >
-> > > The main changes to the AFE driver include an initial Kunit test suite,
-> > > support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
-> > > and temperature transducer sensors.
-> > >
-> > > My apologies Andy for misunderstanding your left-shift comments, I don't
-> > > know where my head was at... Thanks for your patience!  
-> > 
-> > For the patches 1-5
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > 
-> > Jonathan, perhaps you may apply them, so Liam will have less burden in
-> > the near future.
-> > 
-> done, Patches 1-5 applied to the togreg branch of iio.git and pushed out
-> as testing for 0-day to see if it can find anything we missed.
-> 
-> I've marked the fixes for stable, but am taking these the slow way
-> (via next merge window) so as to keep things simple for applying the
-> rest of the series later this cycle.
+> > > > +IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init);
+> > > I think we should give clear info in /proc/interrupts. I hope we could
+> > > keep thead_plic_init.
+> >
+> > Why? There is no material difference at the driver level, and
+> > /proc/interrupts won't be the target of a branding exercise (which
+> > this series seems to be all about).
+> It's not a branding exercise, the series just correct the broken code
+> & incorrect /proc/interrupts display.
 
-Thanks for taking these in.
+There is *nothing* incorrect in /proc/interrupt. If anything, changing
+the string *is* an ABI change, for no good reason.
 
-> I got a bit lost in the discussion but seems there are some minor
-> requests for changes so I guess I'll see a v13 of patches 6-12.
+	M.
 
-I'm rebasing what's left on top of your to-greg branch, and will send
-out v13 today.
-
-Cheers,
-Liam
-
-> Thanks,
-> 
-> Jonathan
-> 
-> 
+-- 
+Without deviation from the norm, progress is not possible.

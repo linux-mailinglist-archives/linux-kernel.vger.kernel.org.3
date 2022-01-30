@@ -2,80 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B246C4A352B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0884A352D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 09:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353852AbiA3IhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 03:37:04 -0500
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:65529 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242883AbiA3IhC (ORCPT
+        id S1354243AbiA3IkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 03:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242883AbiA3IkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 03:37:02 -0500
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id E5hjnTVltuCn2E5hkn1lig; Sun, 30 Jan 2022 09:37:01 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 30 Jan 2022 09:37:01 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH] surface: surface3-wmi: Simplify resource management
-Date:   Sun, 30 Jan 2022 09:36:54 +0100
-Message-Id: <8b1a6d05036d5d9527241b2345482b369331ce5c.1643531799.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 30 Jan 2022 03:40:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFDFC061714;
+        Sun, 30 Jan 2022 00:40:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E4F3B8284C;
+        Sun, 30 Jan 2022 08:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8C3C340E4;
+        Sun, 30 Jan 2022 08:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643532005;
+        bh=mMLK/fB0QMJ3MNzMIxpx0yDzHoVKivXV5668cDA+aKQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bWG5SwoxI7Lf6y7IDW7qjyM/D+k3pdtHe7MbUgpd9ERfe11UZABkDQInZxHmNpvD0
+         /nwRiVpcr9IjnencMEaf52ZBhwYE6Lyh2BuBzT/lWeMH9Od0RIBbuI0IWLMSY7HdKr
+         hMQJPOJrvFFPdxYTPO5yv8PzM5dmN2eQgdOf88rSqBS63mnC68I3xBoHd0SjbjZWmd
+         pv6DGaXc8zPCDxJABgEUKKSt8Giv59OqfWGbsmkwrs6/ginQl3brxAS03lls3T4uT3
+         PydWZiUMzjueAS/pEs8SyaYrTw7R8TBj3B4chZjdl+sRoS03HmWdb+AajmyoZk0NVq
+         6j7AKTMxbH1xg==
+Date:   Sun, 30 Jan 2022 10:39:52 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 5/7] x86/mm: Reserve unaccepted memory bitmap
+Message-ID: <YfZO2JTIGf3aK/IC@kernel.org>
+References: <20220128205906.27503-1-kirill.shutemov@linux.intel.com>
+ <20220128205906.27503-6-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128205906.27503-6-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'s3_wmi.input' is a managed resource, so there should be no need to free it
-explicitly.
+On Fri, Jan 28, 2022 at 11:59:04PM +0300, Kirill A. Shutemov wrote:
+> A given page of memory can only be accepted once.  The kernel has a need
+> to accept memory both in the early decompression stage and during normal
+> runtime.
+> 
+> Use a bitmap to communicate the acceptance state of each page between
+> the decompression stage and normal runtime.  This eliminates the
+> possibility of attempting to double-accept a page.
+> 
+> Allocate the bitmap during decompression stage and hand it over to the
+> main kernel image via boot_params.
 
-Moreover, 's3_wmi' is a global variable. 's3_wmi.input' should be NULL
-when this error handling path is executed, because it has not been
-assigned yet.
+These two paragraphs imply that you add bitmap allocation to the
+decompression in this patch. Besides, AFAIU the actual allocation happens
+before the decompression in EFI stub. How about slightly rephrasing:
 
-All this is puzzling. So simplify it and remove a few lines of code to have
-it be more straightforward.
+---8<---
+A bitmap used to communicate the acceptance state of each page between the
+decompression stage and normal runtime.  This eliminates the possibility of
+attempting to double-accept a page.
 
-Fixes: 3dda3b3798f9 ("platform/x86: Add custom surface3 platform device for controlling LID")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested only
----
- drivers/platform/surface/surface3-wmi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+The bitmap is allocated in EFI stub, decompression stage updates the state
+of pages used for the kernel and initrd and hands the bitmap over to the
+main kernel image via boot_params.
+---8<---
+ 
+> In the runtime kernel, reserve the bitmap's memory to ensure nothing
+> overwrites it.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-diff --git a/drivers/platform/surface/surface3-wmi.c b/drivers/platform/surface/surface3-wmi.c
-index 09ac9cfc40d8..b9a4b2d81f4b 100644
---- a/drivers/platform/surface/surface3-wmi.c
-+++ b/drivers/platform/surface/surface3-wmi.c
-@@ -190,14 +190,11 @@ static int s3_wmi_create_and_register_input(struct platform_device *pdev)
- 
- 	error = input_register_device(input);
- 	if (error)
--		goto out_err;
-+		return error;
- 
- 	s3_wmi.input = input;
- 
- 	return 0;
-- out_err:
--	input_free_device(s3_wmi.input);
--	return error;
- }
- 
- static int __init s3_wmi_probe(struct platform_device *pdev)
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
+> ---
+>  arch/x86/kernel/e820.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+> index bc0657f0deed..3905bd1ca41d 100644
+> --- a/arch/x86/kernel/e820.c
+> +++ b/arch/x86/kernel/e820.c
+> @@ -1297,6 +1297,16 @@ void __init e820__memblock_setup(void)
+>  	int i;
+>  	u64 end;
+>  
+> +	/* Mark unaccepted memory bitmap reserved */
+> +	if (boot_params.unaccepted_memory) {
+> +		unsigned long size;
+> +
+> +		/* One bit per 2MB */
+> +		size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
+> +				    PMD_SIZE * BITS_PER_BYTE);
+> +		memblock_reserve(boot_params.unaccepted_memory, size);
+> +	}
+> +
+>  	/*
+>  	 * The bootstrap memblock region count maximum is 128 entries
+>  	 * (INIT_MEMBLOCK_REGIONS), but EFI might pass us more E820 entries
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.32.0
-
+Sincerely yours,
+Mike.

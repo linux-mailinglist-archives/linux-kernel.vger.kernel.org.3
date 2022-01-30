@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2764A36C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81C24A36C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347225AbiA3OkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:40:02 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:47382 "EHLO
+        id S1354934AbiA3OkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:40:04 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:29367 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239952AbiA3Oj7 (ORCPT
+        with ESMTP id S1347222AbiA3OkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:39:59 -0500
+        Sun, 30 Jan 2022 09:40:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643553600; x=1675089600;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uEEQeO/Eh89v4YMamB0V1pn92PXWSNezWO1prkfXii8=;
-  b=o7hEYwMruKYekqQx1YgaRIfDnniLAZ94O8xEAssVWo/i9GzAL9X5GhAO
-   1luBbZ/mUDu/uRj4/Uv1qxpa7MJ+ONwMfQJL1x5mzLM7pu7bJrB4Dn+v6
-   OCpNmet4WUkSF11vA3nFksPrSIwXYsPpEWOVY5gTAc6Wn8s2TD8o0V6rP
-   iLxJjG8AQVch2uDnjAUTpXHPotn4fiucteWxFVfJ1kSaggjhTBUf3/YK/
-   4t9QHq0nRVuHAzct7+2ah/1ucJ6ASDExg+3nuTivOtPx7gj1Hz4bXYTTj
-   aabtH4rvm2lIMzvBBLByJHYVBh4v/talNE88vVm/z0q5wByftlfVQEf+g
-   g==;
-IronPort-SDR: vpZEmE08hS48EWNgafJx5PuqniuKSfZr9ksx1uA4mGmGn7G84tNrVHPWN2z/hHAodsSkLdL6lP
- p74UUwG7eB9B5IQs01QaOskF6MQH8o8lUmMxsbryifVBH57bo+l/K76xarhbx3ffl070pdBzhn
- uz6Xcn/SyDA3lF6QIeXHCNdsBo7Ws9eLYnYj80QXNVFjT0JWQBDvI2AfYB6+097RiVdWsAshCk
- kCVc22IaAGoFWWsjfocifGfM949aqLTFAw9jtIYLPxkREr12+HbNJ6I7SwNgvGnAIi1GO9Jfym
- zWA8Bp7ui26kxp9lUGQLmqtJ
+  t=1643553601; x=1675089601;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8MtRu85VEGi0pRjIze7j3jKTfRRFLZYKaHo61yeGeCM=;
+  b=E30CZB8mTptUkssXrqB5gqHunnMNK4ylAqMpts/0+0EE7Um59Bq4nUF+
+   QjsOzqRO6xOslmA0YRVbYQE99T3XW40//qCd3A+08SDMxOjm49UlKRRyO
+   LV+6WcPYFCpxRv3RXCjnu/HFmaSCa6YVhLEbDlEhhzq0shwNdNI/5R2Ut
+   MgBtQ1bm1kBxpPwnQEyTImH7pL1lxAG2xWWY7pFGJvhCLujQ7zutM1WOU
+   Kq5wd6e7zW4Z0ZrttMUx7AJuq5l+crT5ncUEeLnjTP/mbeJqTZfz8x0eQ
+   wEHUOy/EyjoPPoZ6kUXuKNxJReLLcQXnruVuOKmWv74nsGUS3rDzrZDpL
+   w==;
+IronPort-SDR: RYGuPw3yMkHpFKKcPVpMz23VRh+2wST1aM34Oa+uRLeP9yLL9oKBXnOR4G+vHmT4+ARnzLX562
+ 28eq3wAPEeEDKPGMn8pp0PBmvyK5w1tbtcaNB7/dxWHc7gpGml9PMO5xUblXoxQijNqhADgol/
+ RowaKdVCYQUe0AMcLDHDFmSQadNJHLWEMJ/xoizvSZq8YBF0b6fDr1ApmIKQdjcZ4i5LSSf4pc
+ VnxiyqcZlv3s9FXyZ51WC0x2tIZjRrLVMnFGYzGy8OdC0++6hduVW1P7DuoIPfm2LnczVQP7GA
+ k/1cnSzh7eDKu1kANjCTkUQr
 X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="147058376"
+   d="scan'208";a="160486000"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2022 07:39:59 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2022 07:40:00 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 30 Jan 2022 07:39:58 -0700
+ 15.1.2375.17; Sun, 30 Jan 2022 07:40:00 -0700
 Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Sun, 30 Jan 2022 07:39:57 -0700
+ Transport; Sun, 30 Jan 2022 07:39:58 -0700
 From:   <nicolas.ferre@microchip.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
@@ -48,10 +48,12 @@ To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
 CC:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH 1/2] MAINTAINERS: replace a Microchip AT91 maintainer
-Date:   Sun, 30 Jan 2022 15:39:35 +0100
-Message-ID: <23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com>
+Subject: [PATCH 2/2] dt-bindings: ARM: at91: update maintainers entry
+Date:   Sun, 30 Jan 2022 15:39:36 +0100
+Message-ID: <5bf9873eeee3cd49c52a8952a7cd4cb60b61d50a.1643553501.git.nicolas.ferre@microchip.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com>
+References: <23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,48 +63,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-As Ludovic is more focusing on other aspects of the Microchip
-Linux-based development, replace him with Claudiu.
-Entry is added to the CREDITS file.
-
-Thanks Ludovic for these great contributions in the kernel space!
+Align the binding documentation with the newly updated MAINTAINERS
+entry.
 
 Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 ---
- CREDITS     | 6 ++++++
- MAINTAINERS | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/atmel-at91.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/CREDITS b/CREDITS
-index b97256d5bc24..7e85a53b6a88 100644
---- a/CREDITS
-+++ b/CREDITS
-@@ -895,6 +895,12 @@ S: 3000 FORE Drive
- S: Warrendale, Pennsylvania 15086
- S: USA
+diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+index c612e1f48dba..ff91df04f9f4 100644
+--- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
++++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+@@ -8,7 +8,8 @@ title: Atmel AT91 device tree bindings.
  
-+N: Ludovic Desroches
-+E: ludovic.desroches@microchip.com
-+D: Maintainer for ARM/Microchip (AT91) SoC support
-+D: Author of ADC, pinctrl, XDMA and SDHCI drivers for this platform
-+S: France
-+
- N: Martin Devera
- E: devik@cdi.cz
- W: http://luxik.cdi.cz/~devik/qos/
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea3e6c914384..674d13708324 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2250,7 +2250,7 @@ F:	drivers/phy/mediatek/
- ARM/Microchip (AT91) SoC support
- M:	Nicolas Ferre <nicolas.ferre@microchip.com>
- M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
--M:	Ludovic Desroches <ludovic.desroches@microchip.com>
-+M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- W:	http://www.linux4sam.org
+ maintainers:
+   - Alexandre Belloni <alexandre.belloni@bootlin.com>
+-  - Ludovic Desroches <ludovic.desroches@microchip.com>
++  - Claudiu Beznea <claudiu.beznea@microchip.com>
++  - Nicolas Ferre <nicolas.ferre@microchip.com>
+ 
+ description: |
+   Boards with a SoC of the Atmel AT91 or SMART family shall have the following
 -- 
 2.32.0
 

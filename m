@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D16F4A32CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3144A32D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353560AbiA3AW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:22:28 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:43927 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353529AbiA3AWU (ORCPT
+        id S1353573AbiA3AWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:22:30 -0500
+Received: from mail-oo1-f44.google.com ([209.85.161.44]:33658 "EHLO
+        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353551AbiA3AWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:22:20 -0500
-Received: by mail-oi1-f176.google.com with SMTP id t199so3099599oie.10;
-        Sat, 29 Jan 2022 16:22:20 -0800 (PST)
+        Sat, 29 Jan 2022 19:22:23 -0500
+Received: by mail-oo1-f44.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso2335160oop.0;
+        Sat, 29 Jan 2022 16:22:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=ibh5bZb+8onvBhI3GZYIGBn3IOvNBzxGMepZQyo+6ek=;
-        b=sFW172SNZ/RdnODM/VftOIePk+7FP+koZ3V2qgBqi9Xy79g9Sob7cyONtxyvrHzOsM
-         Qo3JnJ+ab8GRUI0Fj3sgq/4jgY257dafsqB580jmhRxI/cvXv/OwHOb4seDULBiv4OQw
-         qQklj/BhRXpP6P1Gq4K/E8M4scDYjyR0TWYCds+Wno3+1rR71kgsXyxE2evKH2WpYw02
-         BDBfL1zUi6qunUvgrcJazwRryh9qjC1LG8LTDfNMJPx45iJOJZTeRhGp9+al5NTWb4i0
-         lI6jJ7OvnRfVyR/TxbtWhbgs8Q+AadAiFDoCgt1A1HajRgS52dadKNLJydTPkG1YB+HT
-         qfVA==
-X-Gm-Message-State: AOAM531JaBvrTzWB3RF5DsF+s0RX7DI+LTOK5+tntgHI2N1TXf7GC7HH
-        t1ewE8HAjqXE3Wzk2RmsMQ==
-X-Google-Smtp-Source: ABdhPJxks5VGix5iWHqoMoUIgzq1MfZ1Qhz2CqmrUq3Gw6cO1IsliqmYZDbUrJ6JnFbO8Tb4RG1vDw==
-X-Received: by 2002:aca:bb07:: with SMTP id l7mr14920384oif.166.1643502139874;
-        Sat, 29 Jan 2022 16:22:19 -0800 (PST)
+        bh=EfijCJEIDI95t04URhCJ7b9hoUPag07U2dCpls06Eik=;
+        b=JhHE04OF2lliw5yGEpzyjqRnUgZoqiiZLd9cWnowQf5M2oxk40vHvBpj20Fq62/JrM
+         ongtsV+8JLKqACT5/NOc8WNvv7pxF9HbaghV1e01uzm76cZCtvkS49Vcidl9/jISTQ2a
+         +wgVan3CbxwO2aO1Az2zGhv4e8dl4wcJuL8n03jQswr6RXqKnPj3hS77uflmgymYi02W
+         Y/IdD7S2AEtaO2KbBQr4udGlOd8TV223VP8nt7qn4/nbXuTprlMfGNLahkGIHVjg4Xy5
+         lofzB2oW2+i3pc5qav9rLNOkwpSKF7R172qIFhlKj3q8IhQuRLMNy1P7VIcE/9fptN61
+         M+lQ==
+X-Gm-Message-State: AOAM533zpir0RVAPTG7DTfRGEUrQSg4chlimopsWqXC+/e7MbT7h1j2H
+        JptL+F42BBv9Eu+93ipF9w==
+X-Google-Smtp-Source: ABdhPJzW9TIDgKljbL7MzxDrITFkNShplHNt3Q47D8MGi0MWITbw0U9uYUJ/2JZjHJ8jPJ4oCclLUg==
+X-Received: by 2002:a4a:1505:: with SMTP id 5mr7233951oon.10.1643502142610;
+        Sat, 29 Jan 2022 16:22:22 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v4sm9027933oou.1.2022.01.29.16.22.18
+        by smtp.gmail.com with ESMTPSA id f17sm1443383ots.40.2022.01.29.16.22.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 16:22:19 -0800 (PST)
-Received: (nullmailer pid 416951 invoked by uid 1000);
+        Sat, 29 Jan 2022 16:22:21 -0800 (PST)
+Received: (nullmailer pid 416954 invoked by uid 1000);
         Sun, 30 Jan 2022 00:22:17 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        openbmc@lists.ozlabs.org, Nancy Yuen <yuenn@google.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220128214427.1990183-1-j.neuschaefer@gmx.net>
-References: <20220128214427.1990183-1-j.neuschaefer@gmx.net>
-Subject: Re: [PATCH] dt-bindings: timer: nuvoton,npcm7xx-timer: Convert to YAML
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>
+In-Reply-To: <20220129175332.298666-4-krzysztof.kozlowski@canonical.com>
+References: <20220129175332.298666-1-krzysztof.kozlowski@canonical.com> <20220129175332.298666-4-krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH 4/5] dt-bindings: mfd: samsung,exynos5433-lpass: Convert to dtschema
 Date:   Sat, 29 Jan 2022 18:22:17 -0600
-Message-Id: <1643502137.246273.416950.nullmailer@robh.at.kernel.org>
+Message-Id: <1643502137.259074.416953.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 22:44:26 +0100, Jonathan Neuschäfer wrote:
-> Let's convert this devicetree binding to YAML, to make it easier to
-> extend later.
+On Sat, 29 Jan 2022 18:53:31 +0100, Krzysztof Kozlowski wrote:
+> Convert the Exynos5433 LPASS bindings to DT schema format.
 > 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../bindings/timer/nuvoton,npcm7xx-timer.txt  | 21 ---------
->  .../bindings/timer/nuvoton,npcm7xx-timer.yaml | 46 +++++++++++++++++++
->  2 files changed, 46 insertions(+), 21 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.txt
->  create mode 100644 Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
+>  .../bindings/mfd/samsung,exynos5433-lpass.txt |  72 -----------
+>  .../mfd/samsung,exynos5433-lpass.yaml         | 119 ++++++++++++++++++
+>  2 files changed, 119 insertions(+), 72 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -76,11 +75,13 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.example.dt.yaml:0:0: /example-0/timer@f0008000: failed to match any schema with compatible: ['nuvoton,npcm750-timer']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.example.dt.yaml: audio-subsystem@11400000: serial@11460000:compatible:0: 'samsung,exynos5433-uart' is not one of ['apple,s5l-uart', 'samsung,s3c2410-uart', 'samsung,s3c2412-uart', 'samsung,s3c2440-uart', 'samsung,s3c6400-uart', 'samsung,s5pv210-uart', 'samsung,exynos4210-uart', 'samsung,exynos850-uart']
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
+Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.example.dt.yaml:0:0: /example-0/audio-subsystem@11400000/serial@11460000: failed to match any schema with compatible: ['samsung,exynos5433-uart']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1585958
+See https://patchwork.ozlabs.org/patch/1586234
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

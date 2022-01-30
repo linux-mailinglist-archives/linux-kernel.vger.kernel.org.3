@@ -2,89 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B504A3AB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CA44A3AB8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356602AbiA3WbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 17:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiA3WbH (ORCPT
+        id S1356607AbiA3WeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 17:34:11 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:50301 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233616AbiA3WeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 17:31:07 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB21C061714;
-        Sun, 30 Jan 2022 14:31:06 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id e2so21917461wra.2;
-        Sun, 30 Jan 2022 14:31:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Qfnq3r8dUjy2WwJMiSILTPUFk/Rn2N79sVKgYgCfIA8=;
-        b=CGrLjjxbIwaiJ0QiDWj4HjawyTXS9SUyVIle+XCoCYYseCvw/4WIpZ7H/Cv3AK+w/e
-         iibmB4C3IVTsXAqIv4laompEA61HpuyW07KLJ6iUe9xEd5RYQBHL3mCU1XQO14AuLqK5
-         8kSFAEnJa2ZFr9byADJCHRPK1QcbQDM/8tTGTor0mOH5IkIdUQeXZslCcG7euzESIkxU
-         ZjP/tAsdMCO7UJO3n2MeyC++CbA4jQrDIu1NNo3ZxiDVQUY9o/ebkE2rSVuBGI74jX/r
-         PpMUMa6LUSuaFWXCeQwzv/hIDWHgjHqQD8DuXgwExaF7AwET+/zydvRkKH8pnlzT5ujd
-         u+nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Qfnq3r8dUjy2WwJMiSILTPUFk/Rn2N79sVKgYgCfIA8=;
-        b=wuspglm2SojoSW8AUs+dOJwAE6GTt1ydc/TIV8VB1qEKCjZ5SOX733QBcFnjonrOH9
-         /y7JDnyUTx9WrjluNFa7FBngm5Zm/m3dwvxb4Zsqv7bMMj3mIySJfbLszKj+DZai0S1T
-         tD+VKQGf+Ix/+Jllr/BTNhv09FuVr0VFZZEE7I3sSCRnBumVipRk/HeVh0O/Kmv2D9HH
-         rgjRVdvqxDHpB6acts4dRGEhVZBkzZQ8P34Jgtvp4ec/Km89kTB2kGYJldnsf++NXtXx
-         dnXM6wfj4waKvOE0ys2bU0D2XM6OYnszmIWNgei+HQUcd/AgqpPaI8Dc9n2F+6a7uIc8
-         LmRA==
-X-Gm-Message-State: AOAM530eQlosXPGpTPrVlwtdP0CJiaicC/H529pSEGKEOSD+YadhdF8k
-        7Hc4mZPyoXJKkzXYvJLbJBc=
-X-Google-Smtp-Source: ABdhPJztqKfhsF0N16NIMVCPm96w/hpZCjhyrZZ8DoCY7fiG0BGbxtI+3WycgftZRZW5I73lu0DSaQ==
-X-Received: by 2002:adf:aad4:: with SMTP id i20mr15166391wrc.463.1643581865204;
-        Sun, 30 Jan 2022 14:31:05 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a15sm10089489wrp.41.2022.01.30.14.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 14:31:04 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: gspca: remove redundant assignment of variable n
-Date:   Sun, 30 Jan 2022 22:31:03 +0000
-Message-Id: <20220130223103.6754-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 30 Jan 2022 17:34:10 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jn5b429Dnz4xcq;
+        Mon, 31 Jan 2022 09:34:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643582048;
+        bh=R2a/s5cswYdl1kcfDiZ5RF7E0kCcUTG0iR5Pfd857Pw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FYfuPHfWnlSfigjLoqb0D0vYsen/+JlooNe1+TmLb0TLqYQclAAIjB0U2hYpbdzBf
+         FUqtAgfVe0yl06y39JQl/qtTkPGn0uwyunyfZKSsVAG4xCggAq0WxV8xzuUrQgNMFd
+         b7KcuKV55DlhqIxH4cQCg+yHoElB3PlsHnPhsUGG/TwSnSeo7GOXCJgwygyNJfaRzR
+         VyHsOPvnlnVhtK6mNMkOBkKm2k8bKz3wEmssRF0JVfpwux80PoT6Q8l7e/yekAEPM8
+         afRy0mCCUaLb6s4CIjy8GH8Gr5hvAo1+s/N/Ch8E0tg1OeP/DEs6FErP7szKqYYcdQ
+         Y0jNDZ9KWqqdA==
+Date:   Mon, 31 Jan 2022 09:34:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Srujana Challa <schalla@marvell.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220131093406.4200546c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/IfyaL2G5XAz9GN4+6TdxnpR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable n is being assigned a value that is never read, it is
-being reassigned a different value a few statements later. The
-assignment is redundant and can be removed.
+--Sig_/IfyaL2G5XAz9GN4+6TdxnpR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Hi all,
+
+After merging the kspp tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+In file included from include/linux/printk.h:555,
+                 from include/asm-generic/bug.h:22,
+                 from arch/x86/include/asm/bug.h:84,
+                 from include/linux/bug.h:5,
+                 from include/linux/mmdebug.h:5,
+                 from include/linux/gfp.h:5,
+                 from include/linux/firmware.h:7,
+                 from drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:5:
+drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c: In function 'otx2_cpt_=
+print_uc_dbg_info':
+include/linux/dynamic_debug.h:162:33: error: array subscript 4 is above arr=
+ay bounds of 'u32[4]' {aka 'unsigned int[4]'} [-Werror=3Darray-bounds]
+  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+      |                                 ^
+include/linux/dynamic_debug.h:134:17: note: in definition of macro '__dynam=
+ic_func_call'
+  134 |                 func(&id, ##__VA_ARGS__);               \
+      |                 ^~~~
+include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_=
+func_call'
+  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+      |         ^~~~~~~~~~~~~~~~~~
+include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
+  570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~~~
+drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1798:41: note: in expan=
+sion of macro 'pr_debug'
+ 1798 |                                         pr_debug("Mask: %8.8x %8.8x=
+ %8.8x %8.8x %8.8x",
+      |                                         ^~~~~~~~
+drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1756:13: note: while re=
+ferencing 'mask'
+ 1756 |         u32 mask[4];
+      |             ^~~~
+
+Caused by commit
+
+  d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups")
+
+from Linus' tree interacting with commit
+
+  a8712a32665f ("Makefile: Enable -Warray-bounds")
+
+from the kspp tree.
+
+I have applied the following patch for now.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 31 Jan 2022 09:28:12 +1100
+Subject: [PATCH] fix up for otx2_cptpf_ucode.c out of bound reference
+
+Fixes: d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups=
+")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/media/usb/gspca/pac7302.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/gspca/pac7302.c b/drivers/media/usb/gspca/pac7302.c
-index 2e8c3ef51ca3..608be0d64f94 100644
---- a/drivers/media/usb/gspca/pac7302.c
-+++ b/drivers/media/usb/gspca/pac7302.c
-@@ -794,7 +794,6 @@ static void sd_pkt_scan(struct gspca_dev *gspca_dev,
- 		n = (sof - data) - (footer_length + sizeof pac_sof_marker);
- 		if (n < 0) {
- 			gspca_dev->image_len += n;
--			n = 0;
- 		} else {
- 			gspca_frame_add(gspca_dev, INTER_PACKET, data, n);
- 		}
--- 
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c b/drivers/=
+crypto/marvell/octeontx2/otx2_cptpf_ucode.c
+index 4c8ebdf671ca..e990405c7f33 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
+@@ -1753,7 +1753,7 @@ void otx2_cpt_print_uc_dbg_info(struct otx2_cptpf_dev=
+ *cptpf)
+ 	char engs_info[2 * OTX2_CPT_NAME_LENGTH];
+ 	struct otx2_cpt_eng_grp_info *grp;
+ 	struct otx2_cpt_engs_rsvd *engs;
+-	u32 mask[4];
++	u32 mask[5];
+ 	int i, j;
+=20
+ 	pr_debug("Engine groups global info");
+--=20
 2.34.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/IfyaL2G5XAz9GN4+6TdxnpR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH3El4ACgkQAVBC80lX
+0Gy3ywgAmTfWly7vylkZG5qCWQN3WRbtZeGDp5vpaEhwZ4kGpYmb4atgGNGgwaOB
+g55ROPbk/d9k70kVYbmqkD5zID/S8htOXnBd2peHbD8Pbzh6kCoUm3JBWcOEXupf
+MUphJW6ReT1nCIMjTWjSrymhKj8UaIGN3ssfTtFu+ulaotaLpweTIaBh/t/WzhHl
+p2QMkIWejUrV8Av2FajLrwXRXD2v1Rd/j9xNEaC3pGcLAJkzOq31GTFJnTobQZ4B
+rLEATlf5Z2d2YwfjNLWEJ0iFdGIp9yqyVpXzRQIeUXxpBHIrkSZOCT0DNvGhRGJh
+TkkoF+T/KONyrB9I3UuyvupHZkLPtQ==
+=nb63
+-----END PGP SIGNATURE-----
+
+--Sig_/IfyaL2G5XAz9GN4+6TdxnpR--

@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7784A3ABB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5794A3AC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356706AbiA3WhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 17:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S1356733AbiA3Wi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 17:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiA3WhS (ORCPT
+        with ESMTP id S233616AbiA3WiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 17:37:18 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFBFC061714;
-        Sun, 30 Jan 2022 14:37:17 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso12416367wmj.2;
-        Sun, 30 Jan 2022 14:37:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LiwpBu4M08AZnkMwgpYj1EoWqXR0OVGxhENJRrnFA6A=;
-        b=FoEuO3+a0JfsU4DDr4PRQHApw0lvIXm+BoXe2F9lzcHY/eHsSYCYu+SRhOiTLeD6Sm
-         T5azkNJuUMmP4yPuUIRHINMDKjAuUHdMXz468ydpTeOEfjVLjeykwBtK5oo73aUNrfIV
-         xqZ2Ysqpy34MlhLH97C35dlNwky+y96Un9uMekx59oDPOTVjo3euL4vEnWAGLjZd3YHa
-         vf5ZkQ0Q2mfZ/DVZ4zcBbvddWWkEpmC8/129arGxufifDSNfp754OwYcKBRdLMnmHtLq
-         XosU4Rg5Fht+HhkxUnqMWsTZ7no8y0KVKHyjilmYpu7Mnl+Ig1mTpjoomf9jFnHgKxrj
-         729w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LiwpBu4M08AZnkMwgpYj1EoWqXR0OVGxhENJRrnFA6A=;
-        b=2f3EzMRzkD12HmlWEz4d8X9G1tcE4ZKmsf6tpqxgE0+MDdkDyTuD6p722E+W2mZ22R
-         8jDelzAQGvNA10usMDnuGjF4ElFsxnk4N7YaGYTWgoZuC0dKsOv83LBc81dXj+Q69X6W
-         2Of+stZCHC2SJmeWVSqjUAUEUYnxuFK7lUQ4Kzrg5g77OgR3+3o3iTlxvg7UnreLtKsU
-         9kY0MwM0aPFYS1b10PyaMNGTjNEDwJ7cf3gN40wPg30KN/NBEA8qb8TRybZmaS50h4+3
-         QXKk4RCymOBXTEVbnrDTruG1qz0qM7XkaYkt45JM0z3eXXDAvAgM/mD4FmverMa7HXu7
-         OYLQ==
-X-Gm-Message-State: AOAM533StdTLHzn5IdcEaXBrg8a+s/vw1/jWzZ6UBcaJpDmnV50Z/jAV
-        4QX7w5TQXmvKodZBfUbZ1aI=
-X-Google-Smtp-Source: ABdhPJwc51UUcKSTBqdxRNwwWogSb6LyzW3Y+WwT70s6utiqC4KvLngvlItXv9qrp8UziP34m+Ep1Q==
-X-Received: by 2002:a05:600c:3d0c:: with SMTP id bh12mr25432131wmb.179.1643582235624;
-        Sun, 30 Jan 2022 14:37:15 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id e9sm3576034wrg.60.2022.01.30.14.37.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 14:37:15 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rtlwifi: remove redundant initialization of variable ul_encalgo
-Date:   Sun, 30 Jan 2022 22:37:14 +0000
-Message-Id: <20220130223714.6999-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 30 Jan 2022 17:38:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BF5C061714;
+        Sun, 30 Jan 2022 14:38:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1t/hAfD4sljpm/fYcrJJQBJptypIl3Z3zsM9UZkZOfw=; b=jJTQZfQ/Zwy2norvJ1sOwqR8SC
+        MJz7VlMpASnp5vU3HVVBfY7JNZs8AuSl8amkjX1lHeaUuXy8SyyZYyxXZZ89DtwnotKdYgUwpQ66f
+        YtdzaTuM3hd9ABp0Cs7UN3BebBupoFueMk/Sxwtw03YJslUQU1Gvvtu5QMd0n1Y3RuEulGr/s281m
+        YoercRcVgXmXVbUS47XPxoLsKUtUiyhLj0k6Vz1pIpNcDkoyZTZTaPMIL/+v9b30z4tFbwv2Bq5MI
+        GS92WGFRdKxWg87lDMbftcJH8hXQqsQgoDRZUdGoGhIQeaPyCZ3WnOIPb6eYHV+xRwqGqhff15z1b
+        wpMpkFRA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEIpv-007aLn-Kx; Sun, 30 Jan 2022 22:38:19 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] acpi: require CRC32 to build
+Date:   Sun, 30 Jan 2022 14:38:18 -0800
+Message-Id: <20220130223818.16985-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable ul_encalgo is initialized with a value that is never read,
-it is being re-assigned a new value in every case in the following
-switch statement. The initialization is redundant and can be removed.
+ACPI core now requires crc32() but the kernel build can fail when
+CRC32 is not set/enabled, so select it in the ACPI Kconfig entry.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Fixes this build error:
+
+ia64-linux-ld: drivers/acpi/scan.o: in function `acpi_store_pld_crc':
+include/acpi/platform/aclinuxex.h:62: undefined reference to `crc32_le'
+
+Fixes: 882c982dada4 ("acpi: Store CRC-32 hash of the _PLD in struct acpi_device")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- drivers/net/wireless/realtek/rtlwifi/cam.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/cam.c b/drivers/net/wireless/realtek/rtlwifi/cam.c
-index 7a0355dc6bab..32970ea4b4e7 100644
---- a/drivers/net/wireless/realtek/rtlwifi/cam.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/cam.c
-@@ -208,7 +208,7 @@ void rtl_cam_empty_entry(struct ieee80211_hw *hw, u8 uc_index)
- 
- 	u32 ul_command;
- 	u32 ul_content;
--	u32 ul_encalgo = rtlpriv->cfg->maps[SEC_CAM_AES];
-+	u32 ul_encalgo;
- 	u8 entry_i;
- 
- 	switch (rtlpriv->sec.pairwise_enc_algorithm) {
--- 
-2.34.1
-
+--- linux-next-20220128.orig/drivers/acpi/Kconfig
++++ linux-next-20220128/drivers/acpi/Kconfig
+@@ -11,6 +11,7 @@ menuconfig ACPI
+ 	depends on ARCH_SUPPORTS_ACPI
+ 	select PNP
+ 	select NLS
++	select CRC32
+ 	default y if X86
+ 	help
+ 	  Advanced Configuration and Power Interface (ACPI) support for 

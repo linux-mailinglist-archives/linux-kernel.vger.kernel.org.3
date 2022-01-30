@@ -2,85 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B994A32F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12D94A32F9
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 02:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353624AbiA3ArC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353614AbiA3Aq5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:46:57 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B6FC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 16:46:56 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id 23so29559740ybf.7
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 16:46:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KAfmV2XPrbcMqVhndkzGzY+w8H1ibzDYb+Ml7huAryE=;
-        b=NaWg7ApeC09EQY/CJ/W25ZLJZoNitSiYuPfGysObv/UTGU9NUNdCXb1DdSbEZodzye
-         IH9OGfSiUYJWivIhzwf/P0P0pqKMXrrtBUTsAwI9HQZW8hUxoSZj3j18sLTfxl5iZjxh
-         o84foTOSgqeFWKqUfUSoKSAosOYXr/Al9fUg3IDcM7+pIgrhM6cJ+t8ogReqnXeIf8vR
-         2/a+8UcnpzyZ0reNAfhX/opnTfQEXw+5IQ/FztUpOP0HA+bgwBHru9uRagVYZTEs3L3C
-         uW4fdpqSBf0N0Yp7TzqcAB+sRrSlp21Zsi90wtzXJtXRJ8+oWx5NkXiMSQmWDsgTREtx
-         hD3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KAfmV2XPrbcMqVhndkzGzY+w8H1ibzDYb+Ml7huAryE=;
-        b=BAFXBZ6pRLHjWusAr9nguVnrFWkAzpFeGVuj4cPUSOGMMDI64/9qYesfvH68Yte7Fw
-         TsMiiWgb0so+PPNY5AlpiXz9MyV0r73iQHiiG2dmCZfTF6HH1aMA6057mzvJIeDg2yt3
-         O7QJGlMqmof6wrub1C3nIUuNxIxfhDtQ6+G4JgZr3DR4RnkEO3LLJlXear8Rlfsh6zd+
-         FTwtMcGtd0LIRhdVcAOAHfmy+goRs2sj45gBJFdfHtd8w8A07W4uDMbQPTvkvK6aPWj7
-         dTptXoJSFrBO6HChF7q0HBXjCitBbn0LAF3xxlnThL0Lb8gmAbvInO6U34DQbwea764k
-         PhIQ==
-X-Gm-Message-State: AOAM532IAo2o7nWUBxt6mPKEIZsg3U1gs+31L3ibGBYVx5DPRjsCW8Bs
-        S578vfmyrR9GBRCT0jGI2d5jkmQgNxentrTUAjRkYw==
-X-Google-Smtp-Source: ABdhPJxgbS1t2Nwj6sfn6p8sKTS1bE8L273N6tr+1TJqhugSlRrkIMo99/GZ+xiBo52oNvQ4sJbVps16o+lrp2z1cBE=
-X-Received: by 2002:a25:5143:: with SMTP id f64mr23512899ybb.520.1643503616244;
- Sat, 29 Jan 2022 16:46:56 -0800 (PST)
+        id S1353615AbiA3BHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 20:07:23 -0500
+Received: from mga03.intel.com ([134.134.136.65]:11829 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232795AbiA3BHW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 20:07:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643504842; x=1675040842;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=HAtiV9xYaZQgR7COoOn8hvU9x5+DlnyBUlJJ0ycfjXE=;
+  b=W3gWegH3kfSl8Ck5HF77kSjBi5o7dhKR7Rh95gzsPNnFi57YEBjAyp2N
+   u6bNWAVqs1ENqas8tTm31qY3RRVB5UNtr8ruHqT7RSV3VN+0NtWvuF97O
+   ZgeHEG7dyhzncq2ZJcIy0/6BqnA63SpK4akqMmpbS8blim2oxdj8BM0i5
+   VZxrMW6qyz++dOjF4S8485S5T7dIXs5CqD2pDaTBlqc8wh5e1sxUTojLF
+   bwyqynbtg69yFISou4fpFWlJmzNcWokOT2rZuLcEH6/yagVSTXJlHJ5oV
+   +/9oTK4RYT0nQR41AwD6sc7retl5CTQyyVB3pvGs+u0g3hpMC/5/A32fk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="247256806"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="247256806"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 17:07:21 -0800
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="582235464"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 17:07:19 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Rik van Riel <riel@surriel.com>
+Subject: Re: [RFC PATCH 1/2] NUMA balancing: fix NUMA topology type for
+ memory tiering system
+References: <20220128023842.1946583-1-ying.huang@intel.com>
+        <20220128052345.GA618915@linux.vnet.ibm.com>
+        <87czkctiz9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <YfQIMmbY7nHusQRK@hirez.programming.kicks-ass.net>
+Date:   Sun, 30 Jan 2022 09:07:17 +0800
+In-Reply-To: <YfQIMmbY7nHusQRK@hirez.programming.kicks-ass.net> (Peter
+        Zijlstra's message of "Fri, 28 Jan 2022 16:13:54 +0100")
+Message-ID: <87sft6rpyy.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com> <20220120150024.646714-5-paul.kocialkowski@bootlin.com>
-In-Reply-To: <20220120150024.646714-5-paul.kocialkowski@bootlin.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 30 Jan 2022 01:46:44 +0100
-Message-ID: <CACRpkdYNCpPUpJmbXNteEJ3kPkLQCMCcBezj8oYhwRZvmA-Vqg@mail.gmail.com>
-Subject: Re: [PATCH v10 4/6] dt-bindings: display: Add compatibles with major
- versions only
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
-<paul.kocialkowski@bootlin.com> wrote:
+Peter Zijlstra <peterz@infradead.org> writes:
 
-> There are lots of different versions of the logicvc block and it
-> makes little sense to list them all in compatibles since all versions
-> with the same major are found to be register-compatible.
+> On Fri, Jan 28, 2022 at 03:30:50PM +0800, Huang, Ying wrote:
+>> Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
+>> 
+>> > * Huang Ying <ying.huang@intel.com> [2022-01-28 10:38:41]:
+>> >
+>> >> 
+>> >> One possible fix is to ignore CPU-less nodes when detecting NUMA
+>> >> topology type in init_numa_topology_type().  That works well for the
+>> >> example system.  Is it good in general for any system with CPU-less
+>> >> nodes?
+>> >> 
+>> >
+>> > A CPUless node at the time online doesn't necessarily mean a CPUless node
+>> > for the entire boot. For example: On PowerVM Lpars, aka powerpc systems,
+>> > some of the nodes may start as CPUless nodes and then CPUS may get
+>> > populated/hotplugged on them.
+>> 
+>> Got it!
+>> 
+>> > Hence I am not sure if adding a check for CPUless nodes at node online may
+>> > work for such systems.
+>> 
+>> How about something as below?
 >
-> Add common compatibles that only list the major version instead.
+> I'm thinking that might not be enough in that scenario; if we're going
+> to consistently skip CPU-less nodes (as I really think we should) then
+> __sched_domains_numa_masks_set() is not sufficient for the hotplug case
+> since sched_domains_numa_levels and sched_max_numa_distance can also
+> change.
 >
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> This means we need to re-do more of sched_init_numa() and possibly
+> re-alloc some of those arrays etc..
+>
+> Same for offline ofc.
 
-Same comment as the other binding patch.
+Got it!  It doesn't make sense to create schedule domains for CPU-less
+nodes.  I can work on this after Chinese New Year holiday week (the
+whole next week).  But if anyone want to work on this, feel free to do
+that.
 
-Yours,
-Linus Walleij
+Best Regards,
+Huang, Ying

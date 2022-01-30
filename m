@@ -2,138 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAED4A32C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F9A4A32C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353471AbiA3ATR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:19:17 -0500
-Received: from mga12.intel.com ([192.55.52.136]:46569 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237062AbiA3ATN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:19:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643501953; x=1675037953;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RMLtXCrrnl0r0X3V3Z5LNdqAk4LiJSv63hxZt/wDrms=;
-  b=RQ6Kc1fmel5hGeOPcHxgeh5Pzm9XLf5+/MiJU0LNHFYQMCkoZH/ZcuTT
-   z1D3i4aX0ciVl1tw5I7k1+wyD50r1BV3CEhgFqDDT3Y0EwnFXog//nGIq
-   9BO6TqarbFSz/y9X2Djya4Vr8MCZKRm6fXY238m4XiNJRbV1onGCfgT/u
-   /dfeuh99N7VcFpo5xS/h6ExbqqT3aVZSLfeJy0AvMg/FegDbLivtUUT1m
-   BrdopA7AshJ0GOoV1V1insdh/t0g7FeZE/LKmBd61f/MQkqYj2RnlYE/A
-   5cutDIilVKLNMpqc2BlND0dOmtYG73Ury3IHgD9hO98B5S3nDP2FXCGow
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="227279237"
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="227279237"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 16:19:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="768231364"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Jan 2022 16:19:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDxvx-000Pnu-2I; Sun, 30 Jan 2022 00:19:09 +0000
-Date:   Sun, 30 Jan 2022 08:19:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 3280/5869] drivers/hwtracing/coresight/coresight-etm4x-core.c:118:5:
- warning: no previous prototype for function 'ete_sysreg_read'
-Message-ID: <202201300813.TO5y2Xbm-lkp@intel.com>
+        id S1353519AbiA3AVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:21:30 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:40353 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237062AbiA3AV3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 19:21:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643502079;
+    s=strato-dkim-0002; d=ko-hh.de;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=HpQus4csLQkn/DjYJTvo0b+BXqtq4ZkCu0u8D/fNCkc=;
+    b=OIvSkHtKhyXY3lMvLo2n6Mks18DwacK8ZiO1sbWPcfZCD4Y85tRCEQNX7Uu3pYbgLt
+    LNu06Q3L6QA4GBEsNWgYc5hx+92KdimgLniChG3b8e4o4qWa/ZgFbx3WCjxfDuJ9wIG9
+    ofOs4y2RayTHX3MZJ1XCFokk1mhAe8iViSbkbvx7DY0e5fqWiPlCtSMqpIc8qEL2Rv3E
+    SkkkFXx+1jQzGi/eenN+TZxr1brwLwOV8iMVjDmMrOgDDhaxb+7r/NXUg3O+FwuHIsWb
+    7r8EiBMFdToJ5ZcGdbB/NOsOfgh2dTrZLw3LWEn2xHb7zeYlozGUtu3g6wMzTjHSqhhD
+    I0Cw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OGQBeUWjaN+znm36YqWmJEx4lU5vgP4am+jDJsl40KLIzDO7mhvQTIqgxZwGBWrYBTQ="
+X-RZG-CLASS-ID: mo00
+Received: from odroid-VirtualBox
+    by smtp.strato.de (RZmta 47.38.0 DYNA|AUTH)
+    with ESMTPSA id L5f488y0U0LI2BD
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 30 Jan 2022 01:21:18 +0100 (CET)
+Date:   Sun, 30 Jan 2022 01:21:08 +0100
+From:   Lutz Koschorreck <theleks@ko-hh.de>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: meson-sm1-odroid: use correct enable-gpio
+ pin for tf-io regulator
+Message-ID: <20220130002108.GA408329@odroid-VirtualBox>
+References: <20220126234325.GA7363@odroid-VirtualBox>
+ <651adde5-4887-4701-5183-6a35a443574c@baylibre.com>
+ <20220127123814.GA152653@odroid-VirtualBox>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220127123814.GA152653@odroid-VirtualBox>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-head:   94a36a1374e79fb3aa3539f8b99aa110fdc7b7a0
-commit: 82ce4a8af88d25d3f75de6e8437de3d2f049cac3 [3280/5869] FROMLIST: coresight: ete: Add support for ETE sysreg access
-config: arm64-buildonly-randconfig-r006-20220130 (https://download.01.org/0day-ci/archive/20220130/202201300813.TO5y2Xbm-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/82ce4a8af88d25d3f75de6e8437de3d2f049cac3
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-        git checkout 82ce4a8af88d25d3f75de6e8437de3d2f049cac3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:118:5: warning: no previous prototype for function 'ete_sysreg_read' [-Wmissing-prototypes]
-   u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
-       ^
-   drivers/hwtracing/coresight/coresight-etm4x-core.c:118:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
-   ^
-   static 
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:135:6: warning: no previous prototype for function 'ete_sysreg_write' [-Wmissing-prototypes]
-   void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
-        ^
-   drivers/hwtracing/coresight/coresight-etm4x-core.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/ete_sysreg_read +118 drivers/hwtracing/coresight/coresight-etm4x-core.c
-
-   117	
- > 118	u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
-   119	{
-   120		u64 res = 0;
-   121	
-   122		switch (offset) {
-   123		ETE_READ_CASES(res)
-   124		default :
-   125			pr_warn_ratelimited("ete: trying to read unsupported register @%x\n",
-   126					    offset);
-   127		}
-   128	
-   129		if (!_relaxed)
-   130			__iormb(res);	/* Imitate the !relaxed I/O helpers */
-   131	
-   132		return res;
-   133	}
-   134	
- > 135	void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
-   136	{
-   137		if (!_relaxed)
-   138			__iowmb();	/* Imitate the !relaxed I/O helpers */
-   139		if (!_64bit)
-   140			val &= GENMASK(31, 0);
-   141	
-   142		switch (offset) {
-   143		ETE_WRITE_CASES(val)
-   144		default :
-   145			pr_warn_ratelimited("ete: trying to write to unsupported register @%x\n",
-   146					    offset);
-   147		}
-   148	}
-   149	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Thu, Jan 27, 2022 at 01:38:14PM +0100, Lutz Koschorreck wrote:
+> On Thu, Jan 27, 2022 at 11:15:12AM +0100, Neil Armstrong wrote:
+> > Hi,
+> > 
+> > On 27/01/2022 00:43, Lutz Koschorreck wrote:
+> > > The interrupt pin of the external ethernet phy is used, instead of the
+> > > enable-gpio pin of the tf-io regulator. The GPIOE_2 pin is located in
+> > > the gpio_ao bank.
+> > > Using open drain prevents reboot issues.
+> > > 
+> > > This causes phy interrupt problems at system startup.
+> > > [   76.645190] irq 36: nobody cared (try booting with the "irqpoll" option)
+> > > [   76.649617] CPU: 0 PID: 1416 Comm: irq/36-0.0:00 Not tainted 5.16.0 #2
+> > > [   76.649629] Hardware name: Hardkernel ODROID-HC4 (DT)
+> > > [   76.649635] Call trace:
+> > > [   76.649638]  dump_backtrace+0x0/0x1c8
+> > > [   76.649658]  show_stack+0x14/0x60
+> > > [   76.649667]  dump_stack_lvl+0x64/0x7c
+> > > [   76.649676]  dump_stack+0x14/0x2c
+> > > [   76.649683]  __report_bad_irq+0x38/0xe8
+> > > [   76.649695]  note_interrupt+0x220/0x3a0
+> > > [   76.649704]  handle_irq_event_percpu+0x58/0x88
+> > > [   76.649713]  handle_irq_event+0x44/0xd8
+> > > [   76.649721]  handle_fasteoi_irq+0xa8/0x130
+> > > [   76.649730]  generic_handle_domain_irq+0x38/0x58
+> > > [   76.649738]  gic_handle_irq+0x9c/0xb8
+> > > [   76.649747]  call_on_irq_stack+0x28/0x38
+> > > [   76.649755]  do_interrupt_handler+0x7c/0x80
+> > > [   76.649763]  el1_interrupt+0x34/0x80
+> > > [   76.649772]  el1h_64_irq_handler+0x14/0x20
+> > > [   76.649781]  el1h_64_irq+0x74/0x78
+> > > [   76.649788]  irq_finalize_oneshot.part.56+0x68/0xf8
+> > > [   76.649796]  irq_thread_fn+0x5c/0x98
+> > > [   76.649804]  irq_thread+0x13c/0x260
+> > > [   76.649812]  kthread+0x144/0x178
+> > > [   76.649822]  ret_from_fork+0x10/0x20
+> > > [   76.649830] handlers:
+> > > [   76.653170] [<0000000025a6cd31>] irq_default_primary_handler threaded [<0000000093580eb7>] phy_interrupt
+> > > [   76.661256] Disabling IRQ #36
+> > > 
+> > > Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
+> > > 
+> > > Signed-off-by: Lutz Koschorreck <theleks@ko-hh.de>
+> > > ---
+> > >  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> > > index 0bd1e98a0eef..ddb1b345397f 100644
+> > > --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> > > +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> > > @@ -48,7 +48,7 @@ tf_io: gpio-regulator-tf_io {
+> > >  		regulator-max-microvolt = <3300000>;
+> > >  		vin-supply = <&vcc_5v>;
+> > >  
+> > > -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
+> > > +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
+> > 
+> > Wow, indeed it's not the right GPIO chip... my bad.
+> > 
+> > >  		enable-active-high;
+> > >  		regulator-always-on;
+> > >  
+> > 
+> > Concerning the GPIO_OPEN_DRAIN, it's right since the line has a pull-up, does it really fix reboot issues ?
+> There is a 10k pull up on the pin of C4 and HC4. Therefore it is fine to
+> set to GPIO_OPEN_DRAIN. If this pin is left ACTIVE_HIGH and I call
+> reboot, the bootloader is does not came up, it is an boot loop. Tobetter
+> fixed that with a reset device driver, but I think using GPIO_OPEN_DRAIN
+> is the right solution.
+Sorry, this comment is not entirely correct. The GPIO_OPEN_DRAIN is
+needed to fix a boot loop at bl2 level. Also it look like that the reset
+driver fixes the boot loop at BL3X boot level and is needed for proper
+operation.
+> > 
+> > Anyway, can you split the changes ? First for gpio_ao, second for GPIO_OPEN_DRAIN ?
+> Yes of cause. I will generate a new patch set.
+> > 
+> > Neil
+> > 
+> > 
+> > _______________________________________________
+> > linux-amlogic mailing list
+> > linux-amlogic@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-amlogic
+> 
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic

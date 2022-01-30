@@ -2,120 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 390D74A3653
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 13:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932EA4A365F
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 13:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354649AbiA3Mp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 07:45:29 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59659 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240805AbiA3MpZ (ORCPT
+        id S1354809AbiA3Mue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 07:50:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60782 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347113AbiA3Mud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 07:45:25 -0500
-Received: from [77.244.183.192] (port=61998 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nE9a7-0009fc-63; Sun, 30 Jan 2022 13:45:23 +0100
-Message-ID: <3a186067-50e9-ce20-0ed6-696ca658de4a@lucaceresoli.net>
-Date:   Sun, 30 Jan 2022 13:45:18 +0100
+        Sun, 30 Jan 2022 07:50:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D38ADB8285B;
+        Sun, 30 Jan 2022 12:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BE7C340E4;
+        Sun, 30 Jan 2022 12:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643547030;
+        bh=iyo+mlHxHiMCbs0SnF8JOaLkc59upPWg3JbFGcSEqpM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yE85WGOJQqUx9mVNtXLXPMTV/8Y4YzBUzS9c7wxTJfFwrZeegbSrNMm+4LlmXAAc/
+         g0kxwwK9OfPRsrbE+lefYqYvfs2oBm1YaMQZu1eXSm+CmdRol2cqE6VD0GfCO8Kzb+
+         bqxLexM8FpZ51CvS4mK/rPK8v56QMsRzXhBwdTKk=
+Date:   Sun, 30 Jan 2022 13:50:27 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH] [Modified for 5.16 and 5.15] powerpc/32s: Fix
+ kasan_init_region() for KASAN
+Message-ID: <YfaJk9dUMmiQOJJT@kroah.com>
+References: <247bff242993dd6c8975a4f1248d822a448701ac.1643476812.git.christophe.leroy@csgroup.eu>
+ <383707b74eac769f971ea72ea3db39aaf08e5111.1643476880.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
- only)
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
- <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
- <4532b372-f16a-7658-623d-71af93306e44@lucaceresoli.net>
- <900e896a-f1c3-aafa-2ed4-a23104d65b74@roeck-us.net>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <900e896a-f1c3-aafa-2ed4-a23104d65b74@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <383707b74eac769f971ea72ea3db39aaf08e5111.1643476880.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
-
-On 30/01/22 02:48, Guenter Roeck wrote:
-> On 1/29/22 00:40, Luca Ceresoli wrote:
->> Hi Lee, all,
->>
->> On 11/01/22 11:10, Luca Ceresoli wrote:
->>> Hi All,
->>>
->>> On 11/12/21 18:59, Luca Ceresoli wrote:
->>>> Hi,
->>>>
->>>> this series adds minimal drivers for the Maxim Semiconductor MAX77714
->>>> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
->>>>
->>>> Only RTC and watchdog are implemented by these patches.
->>>>
->>>> All implemented functionality is tested and working: RTC read/write,
->>>> watchdog start/stop/ping/set_timeout.
->>>>
->>>> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and
->>>> Kconfig
->>>> indentation and can probably be applied easily.
->>>>
->>>> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog
->>>> driver and
->>>> rtc driver.
->>>
->>> A gentle ping about this series. It's at v5, all patches have at least
->>> one ack/review tag and most patches are unchanged since ~v2. It applies
->>> cleanly on current master.
->>>
->>> Is there anything I should do to help making progress?
->>
->> Apologies for pinging again... but as I got no further comments about
->> these patches I guess I can really do nothing at the moment.
->>
->> Lee, is this series completely in charge to you or should it be applied
->> by the respective subsystem maintainers?
->>
+On Sat, Jan 29, 2022 at 05:26:10PM +0000, Christophe Leroy wrote:
+> This is a backport for 5.16 and 5.15.
 > 
-> I hesitated to take the watchdog patches because an earlier patch of the
-> series
-> introduces MFD_MAX77714 and the watchdog Kconfig entry lists it as
-> dependency.
-> I now added patch 7/9 and 8/9 to my watchdog-next tree anyway. If the
-> mfd part
-> doesn't make it we can still decide to take it out at some point.
+> To apply, it also requires commit 37eb7ca91b69 ("powerpc/32s: Allocate
+> one 256k IBAT instead of two consecutives 128k IBATs")
 
-OK, thank you! In the meanwhile the kernel test robot also reported a
-build failure due to missing max77714.h file, which is added by patch 5.
+Thanks for these, now queued up.
 
-> Note that patch 6/9 has already been applied.
-
-Indeed, it's in Linus' master already.
-
-Regards.
--- 
-Luca
+greg k-h

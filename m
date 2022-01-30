@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118604A35C7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 11:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB984A35CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 11:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiA3KjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 05:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbiA3KjJ (ORCPT
+        id S236788AbiA3Kqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 05:46:49 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42330 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231549AbiA3Kqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 05:39:09 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53941C061714;
-        Sun, 30 Jan 2022 02:39:09 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id t7so15391117ljc.10;
-        Sun, 30 Jan 2022 02:39:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gtnyB8ubZiXqYBaZeGR5BpWJct2w6Or8WCdgqTrzOcg=;
-        b=YhDLZ9XN96D1M/SqK99RQPX3oJ9huqLiDu47HQURAlR1JbpNzNBlcdHTCaZHCW0DWn
-         3miFnLdLMfMaxTnsxj50irzyhAoOyz48s88RrfSpOGhixgqPFuWw3Nv5wVea39/x1r8A
-         27KWONjTkNkZcvCdxD6W+f+6JEXldgxzhsiTrvNy5kP7s5UlodDroMr86bRph+jT2ZUn
-         mR2tUHwXKmfkEzfufVdr4Ek19jEojXkq7iZKX3JOw2DfVQ5EYT9oMBbhJ0kDSE7RQzKx
-         1ehjq83NMKEbDa0heZGHfnMzIPh5WDwXgBXLTL7FQq5lqL6vocDKAa/cZLyitZb26Ano
-         Mv3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gtnyB8ubZiXqYBaZeGR5BpWJct2w6Or8WCdgqTrzOcg=;
-        b=hOLO6N0o9wvMuvz7wjHdnlhzU66KsnHzzQR+b7EDWOYLq87myTpQUwE2hMVY2IHrJO
-         U5alwG/4dgKTTqPDWugWjRq5AGhKnwTChwtuD7ZB2Ko1qgBsZlqRfEH4cC8918qCZa94
-         QBl/2UCBkfjP9IxPn1Bp8ilhqVV4qUi7zm4LoEIEY83inyyZTrTDebSYgk5yTEGvwlxW
-         CEBz2mAvQ/7Bfs8OybX9KQgqDpFyGC2yGjaZlOQvsxAphXDMjKc61DRx6AbFtVsfIYna
-         crCSx6A3WVJrzLf2MDeeB85eAcjoCrAbrsJF50x3S/5+HZcRXd1tVZnzKJSoERGwfszO
-         /sWw==
-X-Gm-Message-State: AOAM531loDqMvqeJmdvRJP7RlPxA4JDYA2cTgjWJaP/huaqubXuBWda/
-        nSK7qK73irHa6ocVjrBKXig=
-X-Google-Smtp-Source: ABdhPJzsqk+Vhmf8zRuTlh8LTY+MW7lSEZQl/2XL/czKI9Qrqd9FECtNiuVDMn2NoebdDG39AO4+9w==
-X-Received: by 2002:a05:651c:891:: with SMTP id d17mr10794836ljq.443.1643539147768;
-        Sun, 30 Jan 2022 02:39:07 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
-        by smtp.googlemail.com with ESMTPSA id g8sm3230961lfc.236.2022.01.30.02.39.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Jan 2022 02:39:07 -0800 (PST)
-Message-ID: <22aa3313-3b12-c92f-5955-3a8736cbe8f4@gmail.com>
-Date:   Sun, 30 Jan 2022 13:39:06 +0300
+        Sun, 30 Jan 2022 05:46:49 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 020391F386;
+        Sun, 30 Jan 2022 10:46:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643539608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wTV7TG4QCr8Vwc7uHTFLJLUTShWzA9ro4Or5vnw1T1s=;
+        b=snUra/HKP+RG9ek9JoZA3T8pW/s2a0N8ecJzB2kBV28xtG8rQIXYbROuCBP06Qo00o/hLq
+        smHf+bnYy+yYuCGn88oBUTDhA+B9pTA+g0AZHIGaDB2Rlq/k7Kt0gMEAgsS2wJhfXtW24f
+        23Aa1ztOiY8+Z5ufadpKN5KkzTVgHhA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643539608;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wTV7TG4QCr8Vwc7uHTFLJLUTShWzA9ro4Or5vnw1T1s=;
+        b=xsZ2WlII+HhXKf2iG0DGJNL3NbbWIijK8SciEJY7TevtmMl3m6Jqx+f1a6Byq6kJcuAF/Q
+        L4NTkosyCUs6SCAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC80413638;
+        Sun, 30 Jan 2022 10:46:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Xhx0NZds9mFgZwAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 30 Jan 2022 10:46:47 +0000
+Date:   Sun, 30 Jan 2022 11:46:41 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for v5.17-rc2
+Message-ID: <YfZskTVEDx8AAtYh@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jonathanh@nvidia.com,
-        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, vkoul@kernel.org
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1643474453-32619-1-git-send-email-akhilrajeev@nvidia.com>
- <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-29.01.2022 19:40, Akhil R пишет:
-> +static void tegra_dma_free_chan_resources(struct dma_chan *dc)
-> +{
-> +	struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
-> +
-> +	dev_dbg(tdc2dev(tdc), "Freeing channel %d\n", tdc->id);
-> +
-> +	tegra_dma_terminate_all(dc);
+Hi Linus,
 
-	synchronize_irq(tdc->irq);
+please pull x86/urgent for 5.17.
 
-> +	tasklet_kill(&tdc->vc.task);
+Thx.
 
+---
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.17_rc2
+
+for you to fetch changes up to e464121f2d40eabc7d11823fb26db807ce945df4:
+
+  x86/cpu: Add Xeon Icelake-D to list of CPUs that support PPIN (2022-01-25 18:40:30 +0100)
+
+----------------------------------------------------------------
+- Add another Intel CPU model to the list of CPUs supporting the
+processor inventory unique number
+
+- Allow writing to MCE thresholding sysfs files again - a previous
+change had accidentally disabled it and no one noticed. Goes to show how
+much is this stuff used
+
+----------------------------------------------------------------
+Tony Luck (1):
+      x86/cpu: Add Xeon Icelake-D to list of CPUs that support PPIN
+
+Yazen Ghannam (1):
+      x86/MCE/AMD: Allow thresholding interface updates after init
+
+ arch/x86/kernel/cpu/mce/amd.c   | 2 +-
+ arch/x86/kernel/cpu/mce/intel.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

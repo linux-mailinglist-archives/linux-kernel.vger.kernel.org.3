@@ -2,129 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E135D4A3905
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 21:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBAA4A390E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 21:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356146AbiA3UfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 15:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356140AbiA3UfP (ORCPT
+        id S1356151AbiA3UqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 15:46:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52577 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356140AbiA3UqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 15:35:15 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EDFC061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 12:35:15 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so11735440pjp.0
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 12:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HhCfzXrJfpfzHpYFIeIiF4SObfvNlEvOkXD0dTt9Bes=;
-        b=aI9B7t7nlxry+lWbS6lAs3mP/ob2ZO0xOgR5o3hf6lQhcxUVW2AI2w8Rw/O1FYynpm
-         5Wy4OfR++fmAkF2jXLUfiV0nv5PFrdc2wfTBZ7QplaqtH/CKfgT6DdZRGusktwVOIItR
-         9RmnWVnD0EyNXCq+BL+y3ASpxxKtKcmqgBPOM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HhCfzXrJfpfzHpYFIeIiF4SObfvNlEvOkXD0dTt9Bes=;
-        b=pMuAMX0t0MNKcmvN8KV2cSwCyR8VhOR0snSu0XKHihD76X4vBRtDVV8NpDsQVzMiQ0
-         T6T+Z5qHM7M9tWfNZsZwSmoI5naSFJaRS1hPI+n9cf3U6JPtZoDFZdh4yq6Xh9+0e2W/
-         wgzuAKDcJgtf8UvFOhK1/Be1ik+M/4NZqKIdnYSeX5w513PFRNb3nikA3SESn7Wkq7se
-         8uhpb7upnhf8LQNMApYudVYt4e69dguymeqAQ9gaU1PzhIuxOGvp2cylb9a/xLQvr0W3
-         fR2ndqoqFh+QV4eamsAMNDqom49ahubDn9bq6e68WOnzkVTI9ru+HjAJ25h2KhyTvBLB
-         mGLA==
-X-Gm-Message-State: AOAM5336BhKtGFFqDKj9G2Y1kUmD/I43YboalV9C/eXYUbjFLQBlGeVV
-        FhpsjixIGwzkE2nxd4Qt1tvBuQ==
-X-Google-Smtp-Source: ABdhPJxcxIPFWYWKzE1XOlatp1pBNOxZIXCv9oIzp/3JWkb5ov8UyOIpHcJBVM75drURUF2dFlNWYQ==
-X-Received: by 2002:a17:902:dcc9:: with SMTP id t9mr17491178pll.15.1643574914677;
-        Sun, 30 Jan 2022 12:35:14 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l2sm16080704pfc.183.2022.01.30.12.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 12:35:14 -0800 (PST)
-Date:   Sun, 30 Jan 2022 12:35:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Rosin <peda@axentia.se>,
+        Sun, 30 Jan 2022 15:46:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643575568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bW8DdTVaBX9h2DB7v+Ft01LfwylVxKpkKnPwWem0oPo=;
+        b=cOHmj4pZZ5stbqnz8+9yATOnYXzETHNM8ob6CPBiJYnHv+uGn7/hyA/VKc4T9kpn7nbDc5
+        FNbklQDNMXxTXY8IIjHljarcSsQnFm/c0HkUcMguMncmYmxopDdWmFjAyLSIFA3oXQBdxG
+        N9SEIvIJ7V5Goa2/6W2Qv3PGLzYJ/yk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-omt38AfqMnKZU9BdfYeq2A-1; Sun, 30 Jan 2022 15:46:04 -0500
+X-MC-Unique: omt38AfqMnKZU9BdfYeq2A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 268B31083F60;
+        Sun, 30 Jan 2022 20:46:02 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.60])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3048346975;
+        Sun, 30 Jan 2022 20:45:58 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-Message-ID: <202201301234.D62394C08@keescook>
-References: <20220130183653.491292-1-keescook@chromium.org>
- <202201310303.HQlCsvvd-lkp@intel.com>
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: [PATCH v4 resend 00/20] power-suppy/i2c/extcon: Fix charger setup on Xiaomi Mi Pad 2 and Lenovo Yogabook
+Date:   Sun, 30 Jan 2022 21:45:37 +0100
+Message-Id: <20220130204557.15662-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202201310303.HQlCsvvd-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:13:30AM +0800, kernel test robot wrote:
-> Hi Kees,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on linux/master]
-> [also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220128]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Kees-Cook/lib-test_string-c-Add-test-for-strlen/20220131-023726
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-> config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220131/202201310303.HQlCsvvd-lkp@intel.com/config)
-> compiler: sh4-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/d22fe883339c5141953dbca980b51466ac3e2329
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Kees-Cook/lib-test_string-c-Add-test-for-strlen/20220131-023726
->         git checkout d22fe883339c5141953dbca980b51466ac3e2329
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash M=lib/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> lib/test_string.c:188:30: error: initializer element is not constant
->      188 | static const int strlen_ce = strlen("tada, a constant expression");
->          |                              ^~~~~~
+Hi Sebastian,
 
-Thanks; this is expected -- the strlen() in -next is currently broken
-(and will be fixed in the next -next).
+Here is a resend of v4 of my patch series to fix the charger setup on
+Xiaomi Mi Pad 2 and Lenovo Yogabook devices, as well as fix host/device
+mode switching.
 
--Kees
+I'm resending this because this has not made it into 5.17, this resend has
+been rebased on top of 5.17-rc1.
 
-> 
-> 
-> vim +188 lib/test_string.c
-> 
->    181	
->    182	/*
->    183	 * Unlike many other string functions, strlen() can be used in
->    184	 * static initializers when string lengths are known at compile
->    185	 * time. (i.e. Under these conditions, strlen() is a constant
->    186	 * expression.) Make sure it can be used this way.
->    187	 */
->  > 188	static const int strlen_ce = strlen("tada, a constant expression");
->    189	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Since patches 14-20 rely on the power-supply changes from patch 1-13 and
+since they all touch files which generally do not see much changes, the
+intention is for this entire series to be merged through your (Sebastian's)
+linux-power-supply tree. Patches 14-20 all have ackes from the relevant
+subsystem maintainers for merging them through the linux-power-supply tree.
+
+###
+
+For more details on this series, here is some info from the v2
+cover-letter:
+
+So far almost all the kernel code surrounding the Cherry Trail Whiskey Cove
+PMIC has been developed on the GPD win / pocket devices and it has various
+assumption based on that. In the mean time I've learned (and gotten access
+to) about 2 more designs and none of the 3 now known designs use a single
+standard setup for the charger, fuel-gauge and other chips surrounding the
+PMIC / charging+data USB port:
+
+1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+but the Pocket re-uses the GPD Win's design in a different housing:
+
+The WC PMIC is connected to a TI BQ24292i charger, paired with
+a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+a PI3USB30532 USB switch, for a fully functional Type-C port.
+
+2. The Xiaomi Mi Pad 2:
+
+The WC PMIC is connected to a TI BQ25890 charger, paired with
+a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+detection, for a USB-2 only Type-C port without PD.
+
+3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+
+The WC PMIC is connected to a TI BQ25892 charger, paired with
+a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+
+
+Unlike what is normal on X86 this diversity in designs is not handled /
+abstracted away by the ACPI tables.
+
+This series takes care of making sure that charging and device/host mode
+switching also works on the Xiaomi Mi Pad 2 and the Lenovo Yogabook.
+
+Patches  1-13: Prepare the bq25890 power_supply driver to fully support
+               the Mi Pad 2 and the Yogabook. Note this includes a new
+               version of 2 bq25890 patches send earlier by Yauhen Kharuzhy
+Patch 14:      Adds the intel_cht_wc_get_model() helper
+Patch 15:      Uses this intel_cht_wc_get_model() value to instantiate an
+               i2c-client with the right type and properties for the charger
+               IC used on the board (instead of harcoding the GPD values)
+Patches 16-20: Modify the extcon code to provide charger-detection results
+               to the charger driver and to take care of the Vbus boost
+               regulator control (for host-mode) and device/host mode
+               switching
+
+I've tried to keep the power_supply patches as generic as possible while
+focussing some of the special handling these boards need in the
+WC PMIC MFD and cell drivers, which will only get loaded on these boards.
+
+Regards,
+
+Hans
+
+p.s.
+
+Sebastian, I also have another power-supply series pending
+for merging into -next:
+https://lore.kernel.org/linux-pm/20220106110608.66231-1-hdegoede@redhat.com/
+
+
+Hans de Goede (17):
+  power: supply: core: Refactor
+    power_supply_set_input_current_limit_from_supplier()
+  power: supply: bq25890: Add a bq25890_rw_init_data() helper
+  power: supply: bq25890: Add support to skip reset at probe() /
+    remove()
+  power: supply: bq25890: Add support to read back the settings from the
+    chip
+  power: supply: bq25890: Enable charging on boards where we skip reset
+  power: supply: bq25890: Drop dev->platform_data == NULL check
+  power: supply: bq25890: Add bq25890_set_otg_cfg() helper
+  power: supply: bq25890: Add support for registering the Vbus boost
+    converter as a regulator
+  power: supply: bq25890: On the bq25892 set the IINLIM based on
+    external charger detection
+  power: supply: bq25890: Use the devm_regmap_field_bulk_alloc() helper
+  mfd: intel_soc_pmic_chtwc: Add cht_wc_model data to struct
+    intel_soc_pmic
+  i2c: cht-wc: Make charger i2c-client instantiation board/device-model
+    specific
+  extcon: intel-cht-wc: Use new cht_wc_model intel_soc_pmic field
+  extcon: intel-cht-wc: Support devs with Micro-B / USB-2 only Type-C
+    connectors
+  extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
+  extcon: intel-cht-wc: Add support for registering a power_supply
+    class-device
+  extcon: intel-cht-wc: Report RID_A for ACA adapters
+
+Yauhen Kharuzhy (3):
+  power: supply: bq25890: Rename IILIM field to IINLIM
+  power: supply: bq25890: Reduce reported CONSTANT_CHARGE_CURRENT_MAX
+    for low temperatures
+  power: supply: bq25890: Support higher charging voltages through Pump
+    Express+ protocol
+
+ drivers/extcon/Kconfig                   |   2 +
+ drivers/extcon/extcon-intel-cht-wc.c     | 240 ++++++++++++--
+ drivers/i2c/busses/i2c-cht-wc.c          | 120 +++++--
+ drivers/mfd/intel_soc_pmic_chtwc.c       |  40 +++
+ drivers/power/supply/bq24190_charger.c   |  10 +-
+ drivers/power/supply/bq25890_charger.c   | 396 ++++++++++++++++++-----
+ drivers/power/supply/power_supply_core.c |  57 ++--
+ include/linux/mfd/intel_soc_pmic.h       |   8 +
+ include/linux/power/bq25890_charger.h    |  15 +
+ include/linux/power_supply.h             |   5 +-
+ 10 files changed, 742 insertions(+), 151 deletions(-)
+ create mode 100644 include/linux/power/bq25890_charger.h
 
 -- 
-Kees Cook
+2.33.1
+

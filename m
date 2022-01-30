@@ -2,89 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7104A337E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 04:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA2C4A3381
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 04:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353799AbiA3DRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 22:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
+        id S1353831AbiA3DYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 22:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240964AbiA3DRe (ORCPT
+        with ESMTP id S233631AbiA3DYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 22:17:34 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8396AC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 19:17:34 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id 23so30137805ybf.7
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 19:17:34 -0800 (PST)
+        Sat, 29 Jan 2022 22:24:34 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89745C061714;
+        Sat, 29 Jan 2022 19:24:34 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id x11so9601131plg.6;
+        Sat, 29 Jan 2022 19:24:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=0vdFzD77j37lK4Ur8jhayg9KM1RarxvHv4wkBHnUAZw=;
-        b=lzpFe2W88U5wEnfg2WriJQvX2aaFlSiGDmU7/8EqoukPlV82T1tdcpLoCtBLWqGNyR
-         E2Cp1wpbVWwYSIyKxzw+9g28GMkrZpTjCVSWjiaPJ+Grz4KgRzcCtO0Shn/K11OGSlLG
-         2s/V91dtwCvbNPSOt1nagwBlAwa79MexVwkKUPnrf/qWa5OOjA79JsczndFetCTppn6m
-         2IrbSJe/PzY+Ml4BnbYEwo1nTSVj3VPuh0LmhRKpFCRNko/SCR5vx8SaOF6ioNOTx0py
-         wvVWIrLKElC0HCAa9Tafj6kwncwtYQYmQ4XjzEoePR7UVsR24O2x9t+PcOPae5qMTOUR
-         /RtA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9FFTPRo1ckhhB49b7ONOxUt8kngEsKVIvbF1sVTmt/4=;
+        b=U89GNBjeWygL7EqhNjqrhmmPiksJpQDJKXhXK6hODoZQQJAZiELHz5SsAYNKRMnqsQ
+         4m22UVupd733icWt2/FVKrL89JZpVwnfjhMSDes/sfNJbEb5yTEhEp5RDRJgsztIgPWT
+         F5xx9rNvc1LPAo2Hfs6c5AdJnMn3vFb3iLZpCTrdTIcYSKEJrHZ0ziCB79MeBztqmXz4
+         QBOXq1iRat58ipcdw1pUcFdJbAFMJYtVdGd8c9T8WQwAv7q3RM3RzYj5oMrj359afWLh
+         kGLPaDG99xCEslQgubgLLniKmTjdAbQyHF8EQ7q6Y5e4gxeKsiQgytxMM91yGpZV4aGn
+         ubbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=0vdFzD77j37lK4Ur8jhayg9KM1RarxvHv4wkBHnUAZw=;
-        b=kBQV0iJqtKxsJAO/zFRG/0vxQq3SrsDreixap+6Ca3tfa6zqwngEmRF5J2NIIHcp9E
-         2ZWAggbI24j0WuJfSKGCZ5v3FeYL/I7HISEe+uAb5QGyDi0aw6TH77jiyVABz0N9GthA
-         PsjmLUy/tWH+X5bu5Sk/UA4gqQ2YaG6HnMCKHlxWhXeMufjlkTwPkBUJICzSu7e6pd7v
-         cG4P6Ys1t33MPuWf6oDVe3oYyVG9V+Qwd9+zImLleDeUryeXWbBd9xlSkmFAzNJMfxwN
-         FLZFmLCMrJ9EyRdVPu9mhTyvBD+w8gPbW5kZyp610bhzCwUSuFQus49A8NdeXkTvtJ4s
-         l2nA==
-X-Gm-Message-State: AOAM532NdIQtQTErGznuY8ExNmpiErgli5ZmSwGCqC4nSWh/qya3EtDu
-        2RAjyM7NTgcNdTkMBxAFSt+tIVf9kfy/+pj0SzQ=
-X-Google-Smtp-Source: ABdhPJy2k12DvSUQJZv33AoonOjTiIB0sPWSFhl2HPX/aXc1U3e5lho3qakyx0zofltetUdZ2hX7eK5ucsYbPqsjRfc=
-X-Received: by 2002:a25:414a:: with SMTP id o71mr22050144yba.101.1643512653572;
- Sat, 29 Jan 2022 19:17:33 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9FFTPRo1ckhhB49b7ONOxUt8kngEsKVIvbF1sVTmt/4=;
+        b=0LWp3xAUbtMdIM8899fm2DrinoL6bsfkJvoDaaWBwqasRrJllBmGDclmUDmKVJ0LYt
+         RMwhCygIiQf4UIrz/hgHruyvRGA1l4IvNU3alRXpnUlA8CX6yyTsL12aYPQHXqa8Uc6f
+         1N+NYaKAvTfXw3YiknPJmiuKQdry/+tv8l2mngMjyJmgdsgW/6Qg1J7D9p9ufMkF3PUr
+         5szmDbzsCdTEWJatHpe8Ej71Fqr52hKiTg9fkm4mz4MgI4J7Z3JG0bP+1kcMpG573Ide
+         0zlUmwGRxQaHB2AGINir2mGy9Gp7zTQ7wTnA5xTnMQAgOPVWFJvN60JGucrNNaJzOuMY
+         u/1g==
+X-Gm-Message-State: AOAM533FvHgp0bw7klG8CTj0PaDmdYLzmu1CMitWlWw8tAYWsO1H70fr
+        7evFu+YVKeFsEmplwFGyYvqfUDg1G0hwiEOcS30=
+X-Google-Smtp-Source: ABdhPJww7iq0LVImSpVjIhrRV3uTdPmM26QE4/u/LWzFds87ER0EpkxN5SOIDtsWpLZSNQSMsXUbX4bmU2Kj6x4sGik=
+X-Received: by 2002:a17:902:b682:: with SMTP id c2mr14899085pls.126.1643513073847;
+ Sat, 29 Jan 2022 19:24:33 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: awa8souley@gmail.com
-Sender: carolinmartin250@gmail.com
-Received: by 2002:a05:7000:bc11:0:0:0:0 with HTTP; Sat, 29 Jan 2022 19:17:33
- -0800 (PST)
-From:   Mrs Awa Souley <ri3577443@gmail.com>
-Date:   Sat, 29 Jan 2022 19:17:33 -0800
-X-Google-Sender-Auth: aYA21lh1ieZpwveDv5_4ImFO7KM
-Message-ID: <CAGrhT3AWEFBOqhGDeTyz-QWR9FtM+Sx9eJVj7HPRkUsmpiR4pw@mail.gmail.com>
-Subject: Dear Beloved!
-To:     undisclosed-recipients:;
+References: <20220130030352.2710479-1-hefengqing@huawei.com>
+In-Reply-To: <20220130030352.2710479-1-hefengqing@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 29 Jan 2022 19:24:22 -0800
+Message-ID: <CAADnVQLsom4MQq2oonzfCqrHbhfg9y7YMPCk6Wg6r4bp3Su03g@mail.gmail.com>
+Subject: Re: [bpf-next] bpf: Add CAP_NET_ADMIN for sk_lookup program type
+To:     He Fengqing <hefengqing@huawei.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Marek Majkowski <marek@cloudflare.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Beloved!
+On Sat, Jan 29, 2022 at 6:16 PM He Fengqing <hefengqing@huawei.com> wrote:
+>
+> SK_LOOKUP program type was introduced in commit e9ddbb7707ff
+> ("bpf: Introduce SK_LOOKUP program type with a dedicated attach point"),
+> but the commit did not add SK_LOOKUP program type in net admin prog type.
+> I think SK_LOOKUP program type should need CAP_NET_ADMIN, so add SK_LOOKUP
+> program type in net_admin_prog_type.
 
-I am Mrs Awa Souley, and i have been suffering from ovarian
-cancer disease and the doctor says that i have just a short time to live.
-I am from (Paris) France but based in Burkina Faso in Africa for over
-Twelve years as a business woman dealing on gold exportation.
+I'm afraid it's too late to change.
 
-Now that my life is coming to end and i do not have any family
-members or children. I am writing this letter now through the help of
-my computer beside my sick bed.
+Jakub, Marek, wdyt?
 
-I have $4.5 Million US Dollars deposited in Coris Bank,here in Burkina Faso
-and i will instruct the bank to transfer the fund to you as my foreign Trustee.
-You will apply to the bank, that they should release the fund to you,
-but you will assure me that After receiving the fund you will take 50%
-and the other 50% you are to help the Poor, needy, orphans, victims of war and
-less privileged ones in the society in your country for my soul to
-rest after i have gone.
-In my next email, i will send you the copy of the Certicate of Deposit
-which will enable you apply to the bank and receive the money with ease.
 
-Respond to me immediately via my private email
-address((awa8souley@gmail.com)for further details and instructions
-since
-I am in the end times of my life due to the ovarian cancer disease.
-Hoping to receive your response as soon as possible.
-
-My Regards,
-Mrs Awa Souley,
+> Fixes: e9ddbb7707ff ("bpf: Introduce SK_LOOKUP program type with a dedicated attach point")
+>
+> Signed-off-by: He Fengqing <hefengqing@huawei.com>
+> ---
+>  kernel/bpf/syscall.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 9befb1123770..2a8a4a5266fb 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -2163,6 +2163,7 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+>         case BPF_PROG_TYPE_SK_MSG:
+>         case BPF_PROG_TYPE_LIRC_MODE2:
+>         case BPF_PROG_TYPE_FLOW_DISSECTOR:
+> +       case BPF_PROG_TYPE_SK_LOOKUP:
+>         case BPF_PROG_TYPE_CGROUP_DEVICE:
+>         case BPF_PROG_TYPE_CGROUP_SOCK:
+>         case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+> --
+> 2.25.1
+>

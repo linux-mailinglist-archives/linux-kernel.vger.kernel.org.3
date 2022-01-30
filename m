@@ -2,151 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ECF4A3416
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 06:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BC14A3417
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 06:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234501AbiA3FIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 00:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S236424AbiA3FI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 00:08:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiA3FIq (ORCPT
+        with ESMTP id S235695AbiA3FIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 00:08:46 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A27C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 21:08:46 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id j16so9712889plx.4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 21:08:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=K+srP5VtjGUVfkF3Gd4z8iDliRUZYWBlpiguTbcMjJ0=;
-        b=KN7STkDHGeQZ+/fNT/PQ+6ccsDcfJnLHbvGFF0XJC+T28JDxFH7W55A0ieHnZg5U+C
-         K/y9H+pNTIB/Pddn0z6vP/z6k4eUsng+Pz0ooMsO3VQAKq/pIYK+4PcXNR0iBfUJfolu
-         Z9kAth7ajWR4RyfDMpMYjJgVobBuY+xKVADMP4S4bp/IWqCHzCnZ5baaE/Q+/lRaE22y
-         qE5lFkWNw+Q9uSVntysvwOh5ft/jLQ5wk5TQpO5buEHe/S4v8+RJD/KTFDrLGVbxQQ2E
-         jffDFflrXZps3bkFA2xJFQFyWb9vptBOfEeS1QB6rtT64pXfA2AsyHLWN13CIcC9YttJ
-         9PiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=K+srP5VtjGUVfkF3Gd4z8iDliRUZYWBlpiguTbcMjJ0=;
-        b=V54hBZmn4r11CHhfveur25y1nT4PvuNwOoCQSEyRGi395twQWE+dwFew1LJ1Mb4ZH3
-         zrCmT5scd51bL4kWagtdhpvCeLhqACBuO8FJTLpUKjmGSoyUvdXyGjAdv6HgO/BEa7HL
-         eW6mtYqxcqFO5/9aHUREXGYH9uYazebfMMcZiMSO8OzdtuH7HF/Mtb7kxslYIpvWEll9
-         yQyhHlE/ZCIvSEH/sCq400g8L+CvRy5EVDnoLcNOE6tdNw2yJCSv6epF+rF6Mpm6Ed3F
-         /NluhirS/si1XRIPTnv7iIMp+BIypzR1WKVlze2vqjwzO7gmeqdWRbiCqJWf0UaeUW/A
-         cUXA==
-X-Gm-Message-State: AOAM532FdVo3Ul0u1gY+l0cWdVsbCziaT3cNgvtgdP8Gh44M26YuRUjh
-        G38FiVdWzLBCXQe30k1N2VBn36MhesxbYCOA
-X-Google-Smtp-Source: ABdhPJzg5kvfXicnLxOB+7t6a/SutVJjX2J8kjE0aEuyT7W7WExZP2ys9vjwywim6+Pox8l0rSrYkg==
-X-Received: by 2002:a17:90a:17a5:: with SMTP id q34mr27892356pja.1.1643519325450;
-        Sat, 29 Jan 2022 21:08:45 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id p16sm1081948pgj.79.2022.01.29.21.08.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 21:08:44 -0800 (PST)
-Date:   Sun, 30 Jan 2022 18:08:38 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
-        realwakka@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: remove coding style item from the TODO file
-Message-ID: <YfYdVokxsQ+Adl+T@mail.google.com>
+        Sun, 30 Jan 2022 00:08:55 -0500
+Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D672C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Jan 2022 21:08:55 -0800 (PST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-53-ed;
+ t=1643519334; h=date : from : to : cc : subject : message-id :
+ references : mime-version : content-type : in-reply-to : from;
+ bh=vX0vV2qqpaLl6spjYvOfUd3C2IyxwUlvHcU8mFh5gLI=;
+ b=Rk4aa4Y+i/V1w+L+atEfbHzfdAD1yg3Z/6hWX8vcZ+4p7N0d8L4buoxOl3BeFDFWbFFm8
+ ta6lkZMo9Ld3CybCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
+ i=@lespinasse.org; q=dns/txt; s=srv-53-rsa; t=1643519334; h=date :
+ from : to : cc : subject : message-id : references : mime-version :
+ content-type : in-reply-to : from;
+ bh=vX0vV2qqpaLl6spjYvOfUd3C2IyxwUlvHcU8mFh5gLI=;
+ b=klMblN7uhi2+0sLottyba0dzH+NGyuxbV9aBcNPJLk/vbK2qfhL+qCkdSy2CC5lQSAxjg
+ aEM8w0TPfIJPSMs9eHGo2s34Z2WE0yYIIzXLk4zzo35pqPqy6YXm2S0rA/p8B1HUdY3f4PY
+ I/evHnSaWPJfLTN3p6Lw5CFIZLdzsZiAfEy4VGlVfyMjE5s8iCg1yQvm0IbYiZVEYvY+feU
+ 7pXxBlWwL7pt24I6OeTxuOFWDpUPyqHPKBrI1fHdOmMs1qQ8KHI5WR1x4UrnVFGRGF3HRfY
+ 1jWGkFMcxgnlg1O0PZWuQJYZ+JJ/G8D2SFzdedRHHJG6YwhEbjy25Asa4SyQ==
+Received: by server.lespinasse.org (Postfix, from userid 1000)
+        id 3D987160967; Sat, 29 Jan 2022 21:08:54 -0800 (PST)
+Date:   Sat, 29 Jan 2022 21:08:54 -0800
+From:   Michel Lespinasse <michel@lespinasse.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Michel Lespinasse <michel@lespinasse.org>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Jerome Glisse <jglisse@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Rik van Riel <riel@surriel.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [mm]  fa5331bae2: canonical_address#:#[##]
+Message-ID: <20220130050854.GC18863@lespinasse.org>
+References: <20220128131006.67712-19-michel@lespinasse.org>
+ <20220130025449.GE1351@xsang-OptiPlex-9020>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220130025449.GE1351@xsang-OptiPlex-9020>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After several patches sent by the community along the last couple of
-years, it's possible to remove the coding style item from the TODO file
-in the driver's folder.
+On Sun, Jan 30, 2022 at 10:54:49AM +0800, kernel test robot wrote:
+> +------------------------------------------+------------+------------+
+> |                                          | b19284b7ad | fa5331bae2 |
+> +------------------------------------------+------------+------------+
+> | canonical_address#:#[##]                 | 0          | 10         |
+> | RIP:__handle_mm_fault                    | 0          | 10         |
+> | Kernel_panic-not_syncing:Fatal_exception | 0          | 10         |
+> +------------------------------------------+------------+------------+
 
-This patch addresses the last code formatting inconsistences and remove
-the coding style item from the TODO file.
-
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Patch dependency:
-
-- https://lore.kernel.org/lkml/YfX+llwDWZZMz+NY@mail.google.com/
-
----
- drivers/staging/pi433/TODO       |  1 -
- drivers/staging/pi433/pi433_if.c | 12 ++++--------
- drivers/staging/pi433/rf69.c     |  3 ++-
- 3 files changed, 6 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/staging/pi433/TODO b/drivers/staging/pi433/TODO
-index b9e6c01a0..8d0f1b579 100644
---- a/drivers/staging/pi433/TODO
-+++ b/drivers/staging/pi433/TODO
-@@ -1,4 +1,3 @@
--* coding style does not fully comply with the kernel style guide.
- * still TODOs, annotated in the code
- * currently the code introduces new IOCTLs. I'm afraid this is a bad idea.
-   -> Replace this with another interface, hints are welcome!
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index 74748d3cd..02d4ccebf 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -364,8 +364,7 @@ rf69_set_tx_cfg(struct pi433_device *dev, struct pi433_tx_cfg *tx_cfg)
- 
- /*-------------------------------------------------------------------------*/
- 
--static int
--pi433_start_rx(struct pi433_device *dev)
-+static int pi433_start_rx(struct pi433_device *dev)
- {
- 	int retval;
- 
-@@ -405,8 +404,7 @@ pi433_start_rx(struct pi433_device *dev)
- 
- /*-------------------------------------------------------------------------*/
- 
--static int
--pi433_receive(void *data)
-+static int pi433_receive(void *data)
- {
- 	struct pi433_device *dev = data;
- 	struct spi_device *spi = dev->spi;
-@@ -557,8 +555,7 @@ pi433_receive(void *data)
- 		return bytes_total;
- }
- 
--static int
--pi433_tx_thread(void *data)
-+static int pi433_tx_thread(void *data)
- {
- 	struct pi433_device *device = data;
- 	struct spi_device *spi = device->spi;
-@@ -883,8 +880,7 @@ pi433_write(struct file *filp, const char __user *buf,
- 	return -EAGAIN;
- }
- 
--static long
--pi433_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-+static long pi433_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	struct pi433_instance	*instance;
- 	struct pi433_device	*device;
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index b1a3382f4..2ab3bf46e 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -654,7 +654,8 @@ bool rf69_get_flag(struct spi_device *spi, enum flag flag)
- 		return (rf69_read_reg(spi, REG_IRQFLAGS2) & MASK_IRQFLAGS2_CRC_OK);
- 	case battery_low:
- 		return (rf69_read_reg(spi, REG_IRQFLAGS2) & MASK_IRQFLAGS2_LOW_BAT);
--	default:			 return false;
-+	default:
-+		return false;
- 	}
- }
- 
--- 
-2.34.1
-
+Thanks. I think this might be the direct result of the uninitialized
+vmf variable as previously reported in
+https://lore.kernel.org/linux-mm/202201290445.uKuWeLmf-lkp@intel.com/

@@ -2,115 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E89604A32C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAED4A32C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353534AbiA3ARs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbiA3ARp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:17:45 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCD8C061714;
-        Sat, 29 Jan 2022 16:17:44 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id p63so11472666iod.11;
-        Sat, 29 Jan 2022 16:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rANV6nEu2e4bxIniTc4cVrydOQZuaQWRhvzW9XFD3+A=;
-        b=a73qC0JlDQTpWjpvXPlCOcZg7ltvcmoMlMsnPiXEOmWh9FbypkAJLwph+Rx6QFoskH
-         ervZZFAHAYYtbOYzQKbm21NTzuU0dE0BKAZmADO0ZSb4GsIGaWfIwbRW59ik88nKHKlK
-         yuMqC/+ZNtKFas3SZXQvm/zY/UrswHOb+pbAmgO6h8f+maAb2SwT6eyzeu2fKJmBEwQ5
-         Hs1db3dDG8nkncCqL5a18fYSVZfUF6L8R+rCFqb5ac7TcvpUWuDy+hRlT9Rm+vDI0G8T
-         FE5eXmho2mORpMuFGxT5ybvwrL+8YsW7DZeydzqy8yYxi0o7GP6f3iL9Iy+L1Ci4nbv/
-         v/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rANV6nEu2e4bxIniTc4cVrydOQZuaQWRhvzW9XFD3+A=;
-        b=KMhlAQk8+i0ux14poXcSQZvAjhN9tvM9LPpzRd/HPu1as1XqvsFKxdxkXnS5r0s7GJ
-         QbBEJEBIbsmjILwTxFhCUFr2FdhQPmSnrFkObLKUCp/eKH7plVmJ2vM4jy2YSFch3Vln
-         CacwmT04fUzBnxg2yJusEzBYt0saREodPAGxMK0UkSo3gnlpICOA3lv1ba5WI96UvU4i
-         yDBrUnYwEX/uXRr9i41p2Xg++W9bCtIXafpORocoajtiaAVtjBmRbfu0jZ55OfQmFOD5
-         HWxnweqxRNglqeAxIwWkJCy58ThitmkYFnC0mcE9wT7Qy054uPKPB6NUgDqPPmzeeZJs
-         XEiQ==
-X-Gm-Message-State: AOAM5313tmaVPpUmUI9PzR2oFJIjJYMvOC9FRVkstJEK3cUDXszmtWeF
-        TyVHQ7zQJhZ+qsDVdYiRTnOyfPC83IoF0MMYmHU=
-X-Google-Smtp-Source: ABdhPJwI/rc7H9WwBjrNLup8fE45Vvo6eUPM9DtKYduoCZpu+T4kB4o6Ns/8HOw6vOSBVKbd+aRh3F/WTmlJCApUIM4=
-X-Received: by 2002:a05:6602:2d95:: with SMTP id k21mr8723691iow.107.1643501863887;
- Sat, 29 Jan 2022 16:17:43 -0800 (PST)
+        id S1353471AbiA3ATR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:19:17 -0500
+Received: from mga12.intel.com ([192.55.52.136]:46569 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237062AbiA3ATN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 29 Jan 2022 19:19:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643501953; x=1675037953;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RMLtXCrrnl0r0X3V3Z5LNdqAk4LiJSv63hxZt/wDrms=;
+  b=RQ6Kc1fmel5hGeOPcHxgeh5Pzm9XLf5+/MiJU0LNHFYQMCkoZH/ZcuTT
+   z1D3i4aX0ciVl1tw5I7k1+wyD50r1BV3CEhgFqDDT3Y0EwnFXog//nGIq
+   9BO6TqarbFSz/y9X2Djya4Vr8MCZKRm6fXY238m4XiNJRbV1onGCfgT/u
+   /dfeuh99N7VcFpo5xS/h6ExbqqT3aVZSLfeJy0AvMg/FegDbLivtUUT1m
+   BrdopA7AshJ0GOoV1V1insdh/t0g7FeZE/LKmBd61f/MQkqYj2RnlYE/A
+   5cutDIilVKLNMpqc2BlND0dOmtYG73Ury3IHgD9hO98B5S3nDP2FXCGow
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="227279237"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="227279237"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 16:19:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="768231364"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Jan 2022 16:19:09 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDxvx-000Pnu-2I; Sun, 30 Jan 2022 00:19:09 +0000
+Date:   Sun, 30 Jan 2022 08:19:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 3280/5869] drivers/hwtracing/coresight/coresight-etm4x-core.c:118:5:
+ warning: no previous prototype for function 'ete_sysreg_read'
+Message-ID: <202201300813.TO5y2Xbm-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220104062547.2103016-1-peng.fan@oss.nxp.com> <DU0PR04MB941793A918C5E08C9A48BCAC88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB941793A918C5E08C9A48BCAC88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Sat, 29 Jan 2022 18:17:33 -0600
-Message-ID: <CABb+yY2tFtwFvWGh5OtHYwfvkjv3z51CD3cyemq=4Vd-YnY6aQ@mail.gmail.com>
-Subject: Re: [PATCH 0/7] mailbox: imx: misc fix and SECO MU support
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:28 AM Peng Fan <peng.fan@nxp.com> wrote:
->
-> > Subject: [PATCH 0/7] mailbox: imx: misc fix and SECO MU support
->
-> Ping..
->
-This adds new features, so it will go in the next release.
-Meanwhile you may want to fix the issue in 3/7 reported by lkp test bot.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   94a36a1374e79fb3aa3539f8b99aa110fdc7b7a0
+commit: 82ce4a8af88d25d3f75de6e8437de3d2f049cac3 [3280/5869] FROMLIST: coresight: ete: Add support for ETE sysreg access
+config: arm64-buildonly-randconfig-r006-20220130 (https://download.01.org/0day-ci/archive/20220130/202201300813.TO5y2Xbm-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/82ce4a8af88d25d3f75de6e8437de3d2f049cac3
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 82ce4a8af88d25d3f75de6e8437de3d2f049cac3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
 
-thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:118:5: warning: no previous prototype for function 'ete_sysreg_read' [-Wmissing-prototypes]
+   u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+       ^
+   drivers/hwtracing/coresight/coresight-etm4x-core.c:118:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+   ^
+   static 
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:135:6: warning: no previous prototype for function 'ete_sysreg_write' [-Wmissing-prototypes]
+   void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+        ^
+   drivers/hwtracing/coresight/coresight-etm4x-core.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +/ete_sysreg_read +118 drivers/hwtracing/coresight/coresight-etm4x-core.c
 
+   117	
+ > 118	u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+   119	{
+   120		u64 res = 0;
+   121	
+   122		switch (offset) {
+   123		ETE_READ_CASES(res)
+   124		default :
+   125			pr_warn_ratelimited("ete: trying to read unsupported register @%x\n",
+   126					    offset);
+   127		}
+   128	
+   129		if (!_relaxed)
+   130			__iormb(res);	/* Imitate the !relaxed I/O helpers */
+   131	
+   132		return res;
+   133	}
+   134	
+ > 135	void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+   136	{
+   137		if (!_relaxed)
+   138			__iowmb();	/* Imitate the !relaxed I/O helpers */
+   139		if (!_64bit)
+   140			val &= GENMASK(31, 0);
+   141	
+   142		switch (offset) {
+   143		ETE_WRITE_CASES(val)
+   144		default :
+   145			pr_warn_ratelimited("ete: trying to write to unsupported register @%x\n",
+   146					    offset);
+   147		}
+   148	}
+   149	
 
-> Thanks,
-> Peng.
->
-> >
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > This patchset includes a few fixes for low power and i.MX8 SECO MU support
-> >
-> > Franck LENORMAND (1):
-> >   mailbox: imx: add i.MX8 SECO MU support
-> >
-> > Peng Fan (2):
-> >   dt-bindings: mailbox: imx-mu: add i.MX8 SECO MU support
-> >   mailbox: imx: introduce rxdb callback
-> >
-> > Ranjani Vaidyanathan (2):
-> >   mailbox: imx: Add support for identifying SCU wakeup source from sysfs
-> >   mailbox: imx: enlarge timeout while reading/writing messages to SCFW
-> >
-> > Robin Gong (2):
-> >   mailbox: imx: fix wakeup failure from freeze mode
-> >   mailbox: imx: fix crash in resume on i.mx8ulp
-> >
-> >  .../devicetree/bindings/mailbox/fsl,mu.yaml   |   1 +
-> >  drivers/mailbox/imx-mailbox.c                 | 249
-> > +++++++++++++++++-
-> >  2 files changed, 243 insertions(+), 7 deletions(-)
-> >
-> > --
-> > 2.25.1
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,76 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D38A4A35D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 11:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9374A35AD
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 11:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240590AbiA3KzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 05:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S1354581AbiA3K0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 05:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239076AbiA3KzV (ORCPT
+        with ESMTP id S232545AbiA3K0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 05:55:21 -0500
-X-Greylist: delayed 1780 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Jan 2022 02:55:21 PST
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAD9C061714;
-        Sun, 30 Jan 2022 02:55:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:
-        Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=zynwQsXAChbzANQqprwMGE7qGv9t50Oo07QICLYU9a0=; b=Z
-        K8tRPtlmUhokQQlgSXpHDLec4xjYjkTQl6oFZ1GPCWgQy2YyrGnhNmtUr8GG4q3NR0jhiKh9A2y61
-        pfq1eOPalgLqQ47fxD6JmCK8r/Sb6cXRKYN3OZ8NiEC9yhT8uxEqYe1tTUJL6RVfepb6+yFT5sp2Y
-        Osx4iy/QAibB+/8I6lhU5Tb35eztlYgE+/Mky3gIAhyM5kvHjcj4/S6i6Sw2UW27P3tuvH0JetOT6
-        OFx58fSC5azHX6pNGqx+Na+tHVtfBMkIiOpdumXyswfZDNqGvg6eXTMPsSZUJ269N1dkqPLBB7Mwz
-        jtBcyMpAaEbN7MJWuh2h0DMYmTymlFFrg==;
-Received: from noodles by the.earth.li with local (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1nE7Oi-00A0XI-KA; Sun, 30 Jan 2022 10:25:28 +0000
-Date:   Sun, 30 Jan 2022 10:25:28 +0000
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Luo Jie <luoj@codeaurora.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Marko <robimarko@gmail.com>
-Subject: [PATCH net] net: phy: Fix qca8081 with speeds lower than 2.5Gb/s
-Message-ID: <YfZnmMteVry/A1XR@earth.li>
+        Sun, 30 Jan 2022 05:26:50 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E90DC061714;
+        Sun, 30 Jan 2022 02:26:50 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id q127so15437550ljq.2;
+        Sun, 30 Jan 2022 02:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=PinDelor3CufXvK8+aHhSagfHiFVPHlh3AHqb50TDWs=;
+        b=CR/a4sqPo1ZDp3cFtzWkYcz5JYNrS9kEfWCsIkVssgX/r6S7aiSmUHMk5h1ZYae3Wp
+         +mF4FM3eMny4Cr0OlCIHY9k14jOmVvzqSTQzUtvV4XUaFi+G/jaWmutvx3MYbZtVLSUw
+         zxBTT+UYZ7fhZA4J3CyQ4pBmC7R+YTf8xHxnOkijOZfiBcGdwKzyW4UE1Ivx0612gVC/
+         HqdoD6CLEYSV6eZ6UCG5bXauYg47rkqOxszNj2+TeRbw80fu45OjaucdcHmQxYIBgbrn
+         N0LdmSftUtaqTAg/qdisP1YDSh7h/mNOwV7FBlGNNZ1rFmtRsTvYQdf9RIGkny2MvBEH
+         sweA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=PinDelor3CufXvK8+aHhSagfHiFVPHlh3AHqb50TDWs=;
+        b=3+KM/Fa1WAfH6jxPEMGVljGLwJZWiWPmIFmBh4Yd9n49qt/+Otq5gL8S9YaSFb3Vov
+         liTEJaRjOhmIg4dyoov+OsBXAmiyAQeIkoCcVOCtiO+9e8f+V24Y61/UkefjFczHjUaw
+         biGeU9QgM8I1WKamcXgp8XHYeHN7vtM9G14w9cH+g6Vt38YNy26DKCmf2PcQG/Q8uxCN
+         pWd9f+bnN6EpQIz/t+gZcr1xTKX9qj0/DcRv8yGiR97GjtlPiUVTpiaoIAp4wHUeQ5nl
+         oru7V4tW8ODkBYwMbHawR87B7VY9MbO3CN6Lu0Es+gcE1vNGvxVLQjs+jR5YfQqDgzWd
+         gbgg==
+X-Gm-Message-State: AOAM530E7AhrbQNWuBXmybXOARuv8JjHSzJc7Nq83qHZccGudjcD/CYt
+        GiC+pcqj5GiFsO9HdS50GTtZXpZ8Izs=
+X-Google-Smtp-Source: ABdhPJwhAlPDwTu7+tYsnT42KCytF1fr77kMg+Tc3OK1jBl2LXSEJhu+0E5YVL2itdZxTO002BGXNw==
+X-Received: by 2002:a05:651c:a0f:: with SMTP id k15mr8433823ljq.68.1643538408186;
+        Sun, 30 Jan 2022 02:26:48 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
+        by smtp.googlemail.com with ESMTPSA id m12sm3217332lfj.90.2022.01.30.02.26.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jan 2022 02:26:47 -0800 (PST)
+Message-ID: <dcd4e4db-2999-15c9-0c82-42dd8ca1e61d@gmail.com>
+Date:   Sun, 30 Jan 2022 13:26:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, jonathanh@nvidia.com,
+        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, vkoul@kernel.org
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1643474453-32619-1-git-send-email-akhilrajeev@nvidia.com>
+ <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
+ <ba109465-d7ee-09cb-775b-9b702a3910b0@gmail.com>
+In-Reply-To: <ba109465-d7ee-09cb-775b-9b702a3910b0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A typo in qca808x_read_status means we try to set SMII mode on the port
-rather than SGMII when the link speed is not 2.5Gb/s. This results in no
-traffic due to the mismatch in configuration between the phy and the
-mac.
+30.01.2022 13:05, Dmitry Osipenko пишет:
+> Still nothing prevents interrupt handler to fire during the pause.
+> 
+> What you actually need to do is to disable/enable interrupt. This will
+> prevent the interrupt racing and then pause/resume may look like this:
 
-Fixes: 79c7bc0521545 ("net: phy: add qca8081 read_status")
-Signed-off-by: Jonathan McDowell <noodles@earth.li>
----
- drivers/net/phy/at803x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 5b6c0d120e09..7077e3a92d31 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -1691,7 +1691,7 @@ static int qca808x_read_status(struct phy_device *phydev)
- 	if (phydev->link && phydev->speed == SPEED_2500)
- 		phydev->interface = PHY_INTERFACE_MODE_2500BASEX;
- 	else
--		phydev->interface = PHY_INTERFACE_MODE_SMII;
-+		phydev->interface = PHY_INTERFACE_MODE_SGMII;
- 
- 	/* generate seed as a lower random value to make PHY linked as SLAVE easily,
- 	 * except for master/slave configuration fault detected.
--- 
-2.30.2
+Although, seems this won't work, unfortunately. I see now that
+device_pause() doesn't have might_sleep().
 

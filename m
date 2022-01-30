@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30AA4A32B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506214A32BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 01:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353500AbiA3AAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Jan 2022 19:00:30 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:49486
+        id S1353507AbiA3ADJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Jan 2022 19:03:09 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:49772
         "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353485AbiA3AA2 (ORCPT
+        by vger.kernel.org with ESMTP id S1353476AbiA3ADH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:00:28 -0500
+        Sat, 29 Jan 2022 19:03:07 -0500
 Received: from [192.168.192.153] (unknown [50.126.114.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 9B74F3F07C;
-        Sun, 30 Jan 2022 00:00:24 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 4647D3F07C;
+        Sun, 30 Jan 2022 00:03:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643500825;
-        bh=e5WzvEWToWOPqX3/OmG5C06GGabZdWAfxa8w+ai7Ytc=;
+        s=20210705; t=1643500986;
+        bh=7k+y7PJ3gcJlzXgorU2zNnjUpve3rlNlya9TVwYp4hk=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=XoJcNGaA0c0tO87At0EEruVQbMb2Ipdz26unr3G4L3hNB2qGE/QyNaOGgb5lCZDSd
-         nOjsKMxuOH1kboB2Re9PtyeXTy30sypnc05v0C+rsj/eECm8SfwCBNZi6ICPmFc+FK
-         OyD7ergoXTlmdfSd/gZsER8GwUXKkozcR0AOaGpe6xMVfDYCTN17BRnJZuh2vW3x+Z
-         aQ+Hx156Z2U73ABBTX9yIABp6X4ioK+scavhFx1d6pkYewPXyhj96N8eACYKGjokK9
-         KHDxoySAamGqlj539lUUYAl+PPLYWDQoQnMyzCUC59f/cDIb/E+gcswOcWmtYD3nq9
-         H5RLzJgyPseTg==
-Message-ID: <d2957633-3685-b3dc-d41c-ee0948733783@canonical.com>
-Date:   Sat, 29 Jan 2022 16:00:23 -0800
+        b=jENINqRqw3pqbJmZcbRC9FDajyZ8MAcWWeoUZJOf8ZlWcSzM3o6dXNdkxgL53QmtH
+         1coGNJop/zo/HWBCHCN4IkbM6FKfz/YsdWp43KqLKDfVGH668cEREXFKO4WSABTrIn
+         vYvuL3w5QlTrVm38J5bX/v6yXvverFoBmfFcIscq/lTwhIpJJUcfT1PmFMmkiJz+ge
+         +BEipTyTjA2LrxJe23wa79vmXMHfCcqKi7BZlFay+/E5oJf6gZdw4gMCeNw6Iappzb
+         iqRkDOintBf2DiavnqexfcmXbjY/iWYq6rhpiQ4LH5W00yGE8j3/rbG+N3JV5YP3/6
+         wknNkY6kYzWRQ==
+Message-ID: <9836f3d4-186f-7a6e-448d-8e94be5f634f@canonical.com>
+Date:   Sat, 29 Jan 2022 16:03:03 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] apparmor: Fix some kernel-doc comments
+Subject: Re: [PATCH -next 3/3] apparmor: Fix some kernel-doc comments
 Content-Language: en-US
 To:     Yang Li <yang.lee@linux.alibaba.com>, serge@hallyn.com
 Cc:     jmorris@namei.org, apparmor@lists.ubuntu.com,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220129025101.38355-1-yang.lee@linux.alibaba.com>
- <20220129025101.38355-3-yang.lee@linux.alibaba.com>
+References: <20220129025229.39663-1-yang.lee@linux.alibaba.com>
 From:   John Johansen <john.johansen@canonical.com>
 Organization: Canonical
-In-Reply-To: <20220129025101.38355-3-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220129025229.39663-1-yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 18:51, Yang Li wrote:
+On 1/28/22 18:52, Yang Li wrote:
 > Don't use /** for non-kernel-doc comments and change function name
 > aa_mangle_name to mangle_name in kernel-doc comment to Remove some
 > warnings found by running scripts/kernel-doc, which is caused by
@@ -69,10 +68,11 @@ On 1/28/22 18:51, Yang Li wrote:
 > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
+just for completeness (this is a dup of [PATCH 3/3] apparmor: Fix some kernel-doc comments)
+
 Acked-by: John Johansen <john.johansen@canonical.com>
 
 I have pulled this into my tree
-
 
 > ---
 >  security/apparmor/apparmorfs.c | 8 ++++----

@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A05644A3AD1
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA4E4A3AD3
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 23:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356755AbiA3W5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 17:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S1356786AbiA3W6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 17:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiA3W5u (ORCPT
+        with ESMTP id S233819AbiA3W6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 17:57:50 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B115C061714;
-        Sun, 30 Jan 2022 14:57:50 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id m14so21681399wrg.12;
-        Sun, 30 Jan 2022 14:57:50 -0800 (PST)
+        Sun, 30 Jan 2022 17:58:17 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B84C061714;
+        Sun, 30 Jan 2022 14:58:16 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id b186so17338752oif.1;
+        Sun, 30 Jan 2022 14:58:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QRnVDlUc0cHdmJ1CgTjVStFKbLl2jN4+t3yT8yZoSSM=;
-        b=cEnANCyz3HKi3Fu0/p4/NLI5kIj8zREkE/saQmSCA01QFchsbPst890RIGwBgUMrAM
-         3VQMHLTmb4oCcYBXUHTr6zeSWNcDOOVtiGdfasYYQqvrDem26J9PesJWWx+wPT71ujM2
-         IOL0b5oUML+1FNLLnNVbRSUCLrdrmt7O/D+hGSj0f3ZU8xZlSpWOrYErQYghRTCIAECp
-         rsSDVp4K8cQCrI1MVIf0GnFkGqMv4gmRmDOFyBrI6GEgYGGn06z1JIWxzdfzQQRjXJV3
-         ivbFdgz6yTmxUEYETt/Vdw+ZliHd8YbW5XrvGUBPUUBOWI+CNR4TyLLk8B6X8WXEi+cn
-         3UuA==
+        bh=9Df74O5bzOlukfRZbmLUqfOQQ47feWvT/frNyZtSZgI=;
+        b=Lc0MfJf7Wux1Qlf2poiJ8kmsU1LkxpOYjVBHcUPGp71pVVbX+/spyalzfLM86jGXiB
+         YIl1g8LQJQUhnAz8n9iulARDMREIEl/EI0UCl6cwy2yDhRR8p88KNZfXZ4zL+PeLHwNv
+         9wF37kuBHdaVVuMfcx0ELHMkOfwSZaK0xgXCKaYmbbtIOtWZswYScY+KQ6nJGkaz/ca6
+         dbv4wbEITXk+zBedR2QpqljpBF+geD4lFX2XWqKkXOUqc7hgPyiyl2p1nodNUtNJNtNy
+         +bZPrT5ohfGsEyvtIt0KaEXto7i6EYscaBQqInH7BM7vm80t6Rg9Cp/VUbxcI+UR6mw9
+         LPAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QRnVDlUc0cHdmJ1CgTjVStFKbLl2jN4+t3yT8yZoSSM=;
-        b=yWuy7WJynaOSA/umoBNDDu3ZNhHCD0LpdGjxBrAfhirtpntgnGcKjD9DtO3Ka2u65y
-         TZae33RTpaGh8MF9IUdintCX/+WJgf1LdvRNBve47AromE2xs0dA1FsaeOLPYa8ipw0p
-         LB4oNACKc/zWKNj2T2JL/cgl94fFBDZjzsw1XTRipFhEDKjGe8Fxc15LEyfAETwl1Ic5
-         HyTuldZoMKEqIzkLn3cXx3+yV8UuM8iypVW+BmSkBPiEhrXX/io3QoGSjXbYe5uG0fTY
-         9+aNUjZgdYE0mp9yF8ezVZBzG9V14blHaJ3uw96h0FNk0UXBknUI5NN4PJuuAatIN4sU
-         lizg==
-X-Gm-Message-State: AOAM5314hPld0HU7mD/l/HrlDXgMAtrtRY146BWIVV+QmciTL70bbhFq
-        ImeJxOJyb4zf6Do0IWhkLVg=
-X-Google-Smtp-Source: ABdhPJxT5Snxjy7iAudOO6dXhluR0gkiB5JqxZjtG9osbKD+F9INRgWz1RNQc8Gkcj6XeZx0D65HwQ==
-X-Received: by 2002:a5d:64e3:: with SMTP id g3mr6767428wri.90.1643583468811;
-        Sun, 30 Jan 2022 14:57:48 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r2sm7254070wmq.0.2022.01.30.14.57.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 14:57:48 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-rdma@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] RDMA/mlx4: remove redundant assignment to variable nreq
-Date:   Sun, 30 Jan 2022 22:57:47 +0000
-Message-Id: <20220130225747.8114-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=9Df74O5bzOlukfRZbmLUqfOQQ47feWvT/frNyZtSZgI=;
+        b=DOSAcL/mG/9bw+UTW9vpgu+DIgv2Z3KG0WXZ6Gv+BA5Pb5HZ9DWu4D9yeOgbjxzR8h
+         cs2Nt942iNoUbxWK+KCI8DnnxFeVvET4H14ymrnm5DI6GfEZtfmUuhel29rmTthLxv2c
+         H8vIpI/Xvzh3Jl3VefYpUROhbqFNG6KXTeZYgvwU/wgzhIxPoP28VDb2thEAgwbk8tuO
+         /1wGTSSMwYWeecUsEkr1fVlRw/2HYhjU37Xb8+MjCh9zrKbJ6YeN2b0Oy4N70kMk8aIn
+         3savMyzFbJd+WUFF0zcu/cLJuKeHgBo9kqo/F7V9SFLnFtlBHxJhroUfN4iXbLQ7Ogp+
+         Fkqw==
+X-Gm-Message-State: AOAM531WXQ2HyBy3bgBUOsbCQ6NNku/wypqep7Ne6FVRZ50EhC2gFeUR
+        PDC9DeaWNpYH9RHVvqiKYQbddtkRTRCR5Q==
+X-Google-Smtp-Source: ABdhPJw5qC4Lgd7HZVVI15M/HLNZloNIY++bNFPk9Sgimu3r2Ae6uDZevOfSLauiuUwwnnstCDLiQQ==
+X-Received: by 2002:a05:6808:189f:: with SMTP id bi31mr11430338oib.5.1643583495881;
+        Sun, 30 Jan 2022 14:58:15 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g4sm8070621otg.61.2022.01.30.14.58.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jan 2022 14:58:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f153d3dc-f4c1-9c4b-aac3-da3a696a3313@roeck-us.net>
+Date:   Sun, 30 Jan 2022 14:58:13 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] acpi: require CRC32 to build
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220130223818.16985-1-rdunlap@infradead.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220130223818.16985-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable nreq is being assigned a value that is never read. The
-assignment is redundant and can be removed.
+On 1/30/22 14:38, Randy Dunlap wrote:
+> ACPI core now requires crc32() but the kernel build can fail when
+> CRC32 is not set/enabled, so select it in the ACPI Kconfig entry.
+> 
+> Fixes this build error:
+> 
+> ia64-linux-ld: drivers/acpi/scan.o: in function `acpi_store_pld_crc':
+> include/acpi/platform/aclinuxex.h:62: undefined reference to `crc32_le'
+> 
+> Fixes: 882c982dada4 ("acpi: Store CRC-32 hash of the _PLD in struct acpi_device")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/infiniband/hw/mlx4/srq.c | 1 -
- 1 file changed, 1 deletion(-)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/infiniband/hw/mlx4/srq.c b/drivers/infiniband/hw/mlx4/srq.c
-index 6a381751c0d8..c4cf91235eee 100644
---- a/drivers/infiniband/hw/mlx4/srq.c
-+++ b/drivers/infiniband/hw/mlx4/srq.c
-@@ -320,7 +320,6 @@ int mlx4_ib_post_srq_recv(struct ib_srq *ibsrq, const struct ib_recv_wr *wr,
- 	if (mdev->dev->persist->state & MLX4_DEVICE_STATE_INTERNAL_ERROR) {
- 		err = -EIO;
- 		*bad_wr = wr;
--		nreq = 0;
- 		goto out;
- 	}
- 
--- 
-2.34.1
+> ---
+>   drivers/acpi/Kconfig |    1 +
+>   1 file changed, 1 insertion(+)
+> 
+> --- linux-next-20220128.orig/drivers/acpi/Kconfig
+> +++ linux-next-20220128/drivers/acpi/Kconfig
+> @@ -11,6 +11,7 @@ menuconfig ACPI
+>   	depends on ARCH_SUPPORTS_ACPI
+>   	select PNP
+>   	select NLS
+> +	select CRC32
+>   	default y if X86
+>   	help
+>   	  Advanced Configuration and Power Interface (ACPI) support for
 

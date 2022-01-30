@@ -2,97 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 662544A36EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D774D4A36F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Jan 2022 15:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355190AbiA3OuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 09:50:25 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:9743 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347259AbiA3OuV (ORCPT
+        id S1355204AbiA3Ovg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 09:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355188AbiA3Ovf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:50:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643554222; x=1675090222;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FJIF3Ym7W2GedFgY8vVihKuSIe0hGh7F+YW1ik4rU9M=;
-  b=mzT+FV/bFRsEcTWmRd6N3DU3+HCqelvhRNEPWJCnEIGoOt2K8bnRP3MP
-   rNAAmVAGby4J3dXO3YTzMgPjGgxuNQMnemXTZR64fxJHNoI8g39H/BeN1
-   no5E4toAaIqqcU9O1TIN7E7LUryaNGHUe0JGQ8lohYh1Gu2zf+noQOlbJ
-   B30vN6WZCvGbnpvaVisz+UA2kljGial82/SnHKZoc+8nOJi3Y0OyLMhDm
-   lo/NXX2DjgWtFQglEk+wZ330qAk/RsC6cwiIM0eXsa5Zas3bmuG2L23ZK
-   mny03SK1ezkWii2HkgMASgPAAvpt+oLoo7S9+u4hLz87UYuv+gf17kVn3
-   A==;
-IronPort-SDR: 7bHwPrJtn3Cw+MpFB4tKb5ygCsHG0Yhs5iZOFISiS39dncdf9jmqdolJ+QF0/Cn8Hvp8FmOg/S
- fniARjOU6g2leBOeoXZ7dU5EcMUEVwgORXO+j7WMefheYnxFlAFMXiIrxkI9o9510l953bxDJP
- NEauPgQ9OCCzdU7ntN/PM3rvWuc6b/Jp43ML6py4FaPgbg/75A+4oWwkYZk7TUPLwDGAyXBBeP
- vcgLIgI+COovX/8dHF4iKJiYMe9ucEk/q36q0IB20opoIIiANxDGCw1m+L+A5YEkJ7+9kNrvrn
- esP+YSZbK++RKmeU8fccHskw
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="147058778"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2022 07:50:21 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 30 Jan 2022 07:50:20 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Sun, 30 Jan 2022 07:50:18 -0700
-From:   <nicolas.ferre@microchip.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Jonathan Cameron <jic23@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH 1/1] dt-bindings: iio: adc: at91-sama5d2: update maintainers entry
-Date:   Sun, 30 Jan 2022 15:50:08 +0100
-Message-ID: <6acdb66592baf395a77a431c0cb9a37b0f178097.1643554065.git.nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 30 Jan 2022 09:51:35 -0500
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDDC061714;
+        Sun, 30 Jan 2022 06:51:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=zuMwAtKwAKhJ6tXZBjnRsIGNnEtjFz5TcgOQeseaIuU=; b=TpGpl+qIhYbRJ8YgeIL99jdLaD
+        978oeCUO2qrlfL0ky06yQ84S2IpANUgN+pSAclofFi06hZc8MwPO0SUCtyVA4O275Ikc9VKmWK/jj
+        0asZ+KNcWbihH9xgs4JY57P521xgy5OFopVSVynroTkJArMX5uQ0J9vWEjDOrT+xqfgY=;
+Received: from p200300daa716f900d40f7dfd86c385e0.dip0.t-ipconnect.de ([2003:da:a716:f900:d40f:7dfd:86c3:85e0] helo=Maecks.lan)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1nEBY5-0002if-Do; Sun, 30 Jan 2022 15:51:25 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     soc@kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, john@phrozen.org,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v9 01/13] dt-bindings: Add vendor prefix for Airoha
+Date:   Sun, 30 Jan 2022 15:51:04 +0100
+Message-Id: <20220130145116.88406-2-nbd@nbd.name>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220130145116.88406-1-nbd@nbd.name>
+References: <20220130145116.88406-1-nbd@nbd.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+From: John Crispin <john@phrozen.org>
 
-Update the maintainers entry to match the changes made back in
-mid-2020 with 853fa48717c2 ("MAINTAINERS: adc: at91-sama5d2_adc:
-remove myself as co-maintainer").
+Add vendor prefix "airoha" for Airoha, a subsidiary of MediaTek
 
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: John Crispin <john@phrozen.org>
+Signed-off-by: Bert Vermeulen <bert@biot.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 ---
-Hi,
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Patch for new MAINTAINERS entry is here:
-https://lore.kernel.org/linux-arm-kernel/23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com/
-
-Regards,
-  Nicolas
-
- Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml b/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
-index efed361215b4..9a2292e7defc 100644
---- a/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
-@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: AT91 SAMA5D2 Analog to Digital Converter (ADC)
- 
- maintainers:
--  - Ludovic Desroches <ludovic.desroches@atmel.com>
-   - Eugen Hristev <eugen.hristev@microchip.com>
- 
- properties:
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index eb8ab0d82198..d2f9fd7654bc 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -59,6 +59,8 @@ patternProperties:
+     description: Aeroflex Gaisler AB
+   "^aesop,.*":
+     description: AESOP Embedded Forum
++  "^airoha,.*":
++    description: Airoha
+   "^al,.*":
+     description: Annapurna Labs
+   "^alcatel,.*":
 -- 
-2.32.0
+2.32.0 (Apple Git-132)
 

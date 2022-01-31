@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B01EB4A4865
+	by mail.lfdr.de (Postfix) with ESMTP id 670944A4864
 	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379050AbiAaNi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:38:27 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:39583 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378954AbiAaNho (ORCPT
+        id S1378926AbiAaNiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:38:23 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:34492 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376468AbiAaNhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:37:44 -0500
-Received: by mail-oi1-f169.google.com with SMTP id e81so26662029oia.6;
-        Mon, 31 Jan 2022 05:37:44 -0800 (PST)
+        Mon, 31 Jan 2022 08:37:36 -0500
+Received: by mail-ot1-f44.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so13009741otf.1;
+        Mon, 31 Jan 2022 05:37:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=dRJYxYg6M513ADX19fELFRfGgMGqN9dmswwNJo+15eU=;
-        b=AV2IqK4xRs/rT7tPWZqMx2P8lA4si+tnHS2yLGGezrs7BAuFH+2pB19ePT2Ja5uflH
-         OscYP3X3WIig6k4WNZgU+b56cW27zhwZk7ZRaCg0w09+e60vdSMJVN6Vpbepg1pvzX52
-         UhTtgLeXkCqpduRh9UIYIANTFwMr26epVJBH9eDBD0gHazods54GU/M4CqezLuCWKhOx
-         aiwI1AzH/sNvl4NimEVrFsXokgdbD8WgiKOyMqSZtHUJqG3qkK8frXnLjYWLO590G8C7
-         OyMpmvscUR5sYJvCGA7h5ACS5/khD7TZ6MHbImpWsB5ZcTJvrHNWrvUVIF3YinktcwAx
-         J3Mw==
-X-Gm-Message-State: AOAM533qM2fB1I8JPZ2e1xm1OGeXv80SmJMbq69gaPmrgNYI/sRiweJn
-        BA733UEkOi2hll12t9k4mw==
-X-Google-Smtp-Source: ABdhPJxf7xEF6ASgsS22KYFq2drQaTLC9zin7gpaq+t/OkVYsMOveK/Vxr4nFYjFUepMzMyIvAUqNw==
-X-Received: by 2002:a05:6808:168e:: with SMTP id bb14mr17517593oib.106.1643636259228;
-        Mon, 31 Jan 2022 05:37:39 -0800 (PST)
+        bh=eyKZGeMppzdMnKqFGEAP/XE0vAujCQDh+n/xAG/dtR4=;
+        b=rRFzn1kunyYtJWV5mn/00cs5/0z/9k8O/HXGdJJu9YwK/sDrZkKyuYVZwney0/5kHl
+         CQbeKKQJO+u613zXlLcwgWAUsGiy/hyZwgEDMUWzJZl540TIloHIbbmtZUfpRCOnSscW
+         JjejowVC/JvPkBIklQuOGT9x/yCiTogp8Vj6ybBrAiiYL8vrl6cMsBCXHGZUB9mbH/AR
+         vwSNr+crlFmFcKddKPqR+XSK0ZKQ21qyOakNLUt4GVPXrtSY6dlXdFIrcxoStiBqo276
+         bbOZe8ndWahRgttasiKg0qnCtFM8tCZ3G2YsLqSwWwvgCFehjhtuC25hZk2YxcAxPksq
+         iT7w==
+X-Gm-Message-State: AOAM532ClL0JIC257lc3ZkHOzpVRk5ewv2E/2isJo4wAzc3Nr00C7eiW
+        jOgh2zW84nIKU8DfgPOo2A==
+X-Google-Smtp-Source: ABdhPJwRjL7O/8HCWUdBK+YSkY0A28RmHcoorp6KeBHBAOj+PPMQj/h6dh4utGxfFu9ePS2Ejvizvg==
+X-Received: by 2002:a9d:5c8a:: with SMTP id a10mr11505693oti.248.1643636255294;
+        Mon, 31 Jan 2022 05:37:35 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n66sm14639502oif.35.2022.01.31.05.37.37
+        by smtp.gmail.com with ESMTPSA id bg10sm4545104oib.33.2022.01.31.05.37.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 05:37:38 -0800 (PST)
-Received: (nullmailer pid 140173 invoked by uid 1000);
+        Mon, 31 Jan 2022 05:37:34 -0800 (PST)
+Received: (nullmailer pid 140169 invoked by uid 1000);
         Mon, 31 Jan 2022 13:37:31 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     conor.dooley@microchip.com
-Cc:     linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org,
-        atishp@rivosinc.com, heiko@sntech.de, jassisinghbrar@gmail.com,
+Cc:     bin.meng@windriver.com, linux-riscv@lists.infradead.org,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        palmer@dabbelt.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, lee.jones@linaro.org, brgl@bgdev.pl,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        linus.walleij@linaro.org, paul.walmsley@sifive.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        aou@eecs.berkeley.edu, u.kleine-koenig@pengutronix.de,
+        lewis.hanly@microchip.com, atishp@rivosinc.com,
+        linux-rtc@vger.kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, heiko@sntech.de,
         thierry.reding@gmail.com, linux-i2c@vger.kernel.org,
-        robh+dt@kernel.org, daire.mcnamara@microchip.com,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        brgl@bgdev.pl, geert@linux-m68k.org, aou@eecs.berkeley.edu,
-        linux-rtc@vger.kernel.org, palmer@dabbelt.com,
-        lee.jones@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bin.meng@windriver.com,
-        a.zummo@towertech.it, krzysztof.kozlowski@canonical.com,
-        linus.walleij@linaro.org, u.kleine-koenig@pengutronix.de,
-        ivan.griffin@microchip.com, linux-pwm@vger.kernel.org,
-        lewis.hanly@microchip.com
-In-Reply-To: <20220131114726.973690-7-conor.dooley@microchip.com>
-References: <20220131114726.973690-1-conor.dooley@microchip.com> <20220131114726.973690-7-conor.dooley@microchip.com>
-Subject: Re: [PATCH v5 06/12] dt-bindings: pwm: add microchip corepwm binding
+        jassisinghbrar@gmail.com, geert@linux-m68k.org
+In-Reply-To: <20220131114726.973690-5-conor.dooley@microchip.com>
+References: <20220131114726.973690-1-conor.dooley@microchip.com> <20220131114726.973690-5-conor.dooley@microchip.com>
+Subject: Re: [PATCH v5 04/12] dt-bindings: rtc: add bindings for microchip mpfs rtc
 Date:   Mon, 31 Jan 2022 07:37:31 -0600
-Message-Id: <1643636251.124352.140172.nullmailer@robh.at.kernel.org>
+Message-Id: <1643636251.101853.140168.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 11:47:21 +0000, conor.dooley@microchip.com wrote:
+On Mon, 31 Jan 2022 11:47:19 +0000, conor.dooley@microchip.com wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Add device tree bindings for the Microchip fpga fabric based "core" PWM
-> controller.
+> Add device tree bindings for the real time clock on
+> the Microchip PolarFire SoC.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../bindings/pwm/microchip,corepwm.yaml       | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
+>  .../bindings/rtc/microchip,mfps-rtc.yaml      | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -81,17 +80,17 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/pwm/microchip,corepwm.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
-   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
+Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+   19 |         #include <dt-bindings/clock/microchip,mpfs-clock.h>
       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 compilation terminated.
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/pwm/microchip,corepwm.example.dt.yaml] Error 1
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.example.dt.yaml] Error 1
 make[1]: *** Waiting for unfinished jobs....
 make: *** [Makefile:1398: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1586680
+See https://patchwork.ozlabs.org/patch/1586704
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

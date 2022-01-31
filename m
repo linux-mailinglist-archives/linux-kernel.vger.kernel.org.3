@@ -2,159 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E08E4A3ED4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9736D4A3ED5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345808AbiAaIrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 03:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbiAaIrh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 03:47:37 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706B5C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 00:47:37 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id v13so23818631wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 00:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=t7jPwPhPro6Iv9HSiNOKR1rT0o1K1FCdRP2oY2jpf+w=;
-        b=QzZYqxiaPC9Nq5ye22er2udgF5fExREUxs03Oa7WhWa6T3IpYz+t8negIwYhl+jGHa
-         CgdYaW+6E75ONwCsuBQZMdPmo8762DvgwHsw8SGZ9ywzd0fQedjjAtVEZrI77yxMZhbq
-         4kZAR8qrJmQ2GmQ3iqLVH9jgpMX072Clf65RoR/S/diKjC/XHFDc5ZBR7ad2bARR7vnv
-         FQV+AnulBMJz0XfAWygjxA3XSv5YnwRhjn/Bl+NggIK97vEu6PXPUoN8nzhp6hs5unP5
-         hBSH8uwTk13nzmkUZCwsPV9VJ3XXmCNpySljO21CZHxJxBwdwh9xtSjnfyAwemnt22n6
-         Z3Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=t7jPwPhPro6Iv9HSiNOKR1rT0o1K1FCdRP2oY2jpf+w=;
-        b=YX3l7tNxDbA9hkQyWoa6xWheSv0XnIQu0RgCOV91ARnxVrex7W1f0TILvz6FCFJhsY
-         Qw/Uav3B5gPw9Jh2gzr7rFgjPr8qXwm0hLwAJCc7/Gj/arTirAo8Z5TldYLWp+P9iQRu
-         eWMp+1q87e1Pc7eGUn94IETqqoeXI+8Athd6hLN14yi1YDluoL2YQp7o3iRe+2Cuys1l
-         I5sQCtqznhGNBR0U6tmAL67P8KkTl/SdSx9ChwrJLzI61oke82eVF7Xt4alKe4hEoFuM
-         sKDnKb/oV55bK98gaxnfZLn7+anZo9XMNVpecCNxeKKovuKyOcLGn9awu142IdVa2wia
-         /CjA==
-X-Gm-Message-State: AOAM533R8m3vp56xbEkqiVv5VxXwJzp84mqSehfXDdeqmSdZ+Kv+XKxt
-        9VQlOA84R2p87YeF4sMX0iZi0A==
-X-Google-Smtp-Source: ABdhPJyyc+x7qpUHDAy6jWDjoouaxef+ekdgY+9XelsF9wARb21PUz7MLztASeLFL5087U3C0mFR5A==
-X-Received: by 2002:a05:6000:1848:: with SMTP id c8mr10310760wri.241.1643618855967;
-        Mon, 31 Jan 2022 00:47:35 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id a14sm13421217wri.25.2022.01.31.00.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 00:47:35 -0800 (PST)
-Date:   Mon, 31 Jan 2022 08:47:33 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        katie.morris@in-advantage.com
-Subject: Re: [RFC v6 net-next 5/9] mfd: add interface to check whether a
- device is mfd
-Message-ID: <YfeiJVmAbLa497Ht@google.com>
-References: <20220129220221.2823127-1-colin.foster@in-advantage.com>
- <20220129220221.2823127-6-colin.foster@in-advantage.com>
+        id S1346730AbiAaIsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 03:48:30 -0500
+Received: from mga18.intel.com ([134.134.136.126]:47541 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233613AbiAaIs3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 03:48:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643618909; x=1675154909;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U9+Kpmyr5uRBM9G/zN3IxYzf/txHBMrv8Hy0wqVDIpk=;
+  b=RZPtNIu5AHywThbtBR+s2CEQDUjaSAcdr8RLSgA9YRBngA0+azk/I8o4
+   g19G2KXtftVGhDNGSEGd2kUU1OXWN2Wxvl1GqmoQ5M0zNKPF+oEFdUl10
+   X0aKqYFoWNXSuMkjgUfBnM0sNmtmyR0WPY1acHDE8gyz35aQSkK94Hq/S
+   1/7RRiqBXpY2pAop8aqnophvcVXs9cmB7vxgQV0yoyPCli8gwhkhQHETv
+   roYIJemg0NUK6eeUbzj6p8vJfURDX9XLzil1Tikf5Ac10SG8q2Ctb/BjS
+   Rx/0bSx/k+CGz2kyMalIJ8EgvaEwntoj8iFqFP+8QCKwvdNQbCom6pYg9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="230993741"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="230993741"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 00:48:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="675669007"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 00:48:26 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 10:48:25 +0200
+Date:   Mon, 31 Jan 2022 10:48:25 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Benson Leung <bleung@google.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
+        <chrome-platform@lists.linux.dev>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Make try power role
+ optional
+Message-ID: <YfeiWcPfOX5ctFHu@kuha.fi.intel.com>
+References: <20220127191659.3560810-1-pmalani@chromium.org>
+ <YfOLRBGmwGKwCksR@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220129220221.2823127-6-colin.foster@in-advantage.com>
+In-Reply-To: <YfOLRBGmwGKwCksR@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022, Colin Foster wrote:
+Hi,
 
-> Some drivers will need to create regmaps differently based on whether they
-> are a child of an MFD or a standalone device. An example of this would be
-> if a regmap were directly memory-mapped or an external bus. In the
-> memory-mapped case a call to devm_regmap_init_mmio would return the correct
-> regmap. In the case of an MFD, the regmap would need to be requested from
-> the parent device.
+On Thu, Jan 27, 2022 at 10:20:52PM -0800, Benson Leung wrote:
+> Hi Prashant,
 > 
-> This addition allows the driver to correctly reason about these scenarios.
+> On Thu, Jan 27, 2022 at 07:16:59PM +0000, Prashant Malani wrote:
+> > Some boards prefer not to specify a try-power-role. Update the port
+> > property parsing logic to not error out in case a try-power-role is not
+> > specified.
+> > 
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
 > 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
->  drivers/mfd/mfd-core.c   |  6 ++++++
->  include/linux/mfd/core.h | 10 ++++++++++
->  2 files changed, 16 insertions(+)
+> This looks good to me.
 > 
-> diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
-> index 684a011a6396..2ba6a692499b 100644
-> --- a/drivers/mfd/mfd-core.c
-> +++ b/drivers/mfd/mfd-core.c
-> @@ -33,6 +33,12 @@ static struct device_type mfd_dev_type = {
->  	.name	= "mfd_device",
->  };
->  
-> +int device_is_mfd(struct platform_device *pdev)
-> +{
-> +	return (!strcmp(pdev->dev.type->name, mfd_dev_type.name));
-> +}
-> +EXPORT_SYMBOL(device_is_mfd);
+> Heikki, if this usage of TYPEC_NO_PREFERRED_ROLE looks good to you, I can
+> merge it.
 
-As I said before, I really don't want MFDness leaking out into other
-parts of the kernel.  Please find another way to differentiate between
-devices registered via the MFD API and by other means.
+This is OK by me. FWIW:
 
-I'm happy to help here.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-How else could these devices be enumerated? 
+thanks,
 
->  int mfd_cell_enable(struct platform_device *pdev)
->  {
->  	const struct mfd_cell *cell = mfd_get_cell(pdev);
-> diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
-> index 0bc7cba798a3..c0719436b652 100644
-> --- a/include/linux/mfd/core.h
-> +++ b/include/linux/mfd/core.h
-> @@ -10,6 +10,7 @@
->  #ifndef MFD_CORE_H
->  #define MFD_CORE_H
->  
-> +#include <generated/autoconf.h>
->  #include <linux/platform_device.h>
->  
->  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
-> @@ -123,6 +124,15 @@ struct mfd_cell {
->  	int			num_parent_supplies;
->  };
->  
-> +#ifdef CONFIG_MFD_CORE
-> +int device_is_mfd(struct platform_device *pdev);
-> +#else
-> +static inline int device_is_mfd(struct platform_device *pdev)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  /*
->   * Convenience functions for clients using shared cells.  Refcounting
->   * happens automatically, with the cell's enable/disable callbacks
+> > ---
+> >  drivers/platform/chrome/cros_ec_typec.c | 15 ++++++++-------
+> >  1 file changed, 8 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> > index 5de0bfb0bc4d..ee12658009e5 100644
+> > --- a/drivers/platform/chrome/cros_ec_typec.c
+> > +++ b/drivers/platform/chrome/cros_ec_typec.c
+> > @@ -115,17 +115,18 @@ static int cros_typec_parse_port_props(struct typec_capability *cap,
+> >  		return ret;
+> >  	cap->data = ret;
+> >  
+> > +	/* Try-power-role is optional. */
+> >  	ret = fwnode_property_read_string(fwnode, "try-power-role", &buf);
+> >  	if (ret) {
+> > -		dev_err(dev, "try-power-role not found: %d\n", ret);
+> > -		return ret;
+> > +		dev_warn(dev, "try-power-role not found: %d\n", ret);
+> > +		cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
+> > +	} else {
+> > +		ret = typec_find_power_role(buf);
+> > +		if (ret < 0)
+> > +			return ret;
+> > +		cap->prefer_role = ret;
+> >  	}
+> >  
+> > -	ret = typec_find_power_role(buf);
+> > -	if (ret < 0)
+> > -		return ret;
+> > -	cap->prefer_role = ret;
+> > -
+> >  	cap->fwnode = fwnode;
+> >  
+> >  	return 0;
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+heikki

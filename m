@@ -2,79 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA9E4A4931
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EFB4A4934
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiAaOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiAaOTY (ORCPT
+        id S231828AbiAaOTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 09:19:54 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33266 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231279AbiAaOTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:19:24 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA2FC061714;
-        Mon, 31 Jan 2022 06:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a4B0eVZglBvLjhpb8rwc4GlEmI1TVbpYnqFWjhEU7DU=; b=Wg9cEvqdm7D4eyymW981I3b1j1
-        vwqm/jIdYTi7e/TCblwzueRXDosurN8PXNc9GHNYNq5+PCbpv07OPFUHaS19LcunOYFKdIDLPpfwX
-        C1tQxmFemnMQCpcnPv+jpBWzrJyvsOGCxdO9P0cMxHjMWW8faOxt8UYdOw/BqqWrw9OXk13wy2miU
-        yRyU7FV1grmUa6zzv1Rmv0e+ZbkW3o5zw/esZlynI9yLmNl/K2rnwVxlYDn1T9TJScnTHfVDMmwoT
-        jO0DWAxcwdjUQho64wFgjdgaEG5IiCq7ZI/2CulFOy/nbl8rUeYtxzlouz9LFlSTwr8FQf9tiFJGz
-        uQ4VN94Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56946)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nEXWU-0008Cu-B1; Mon, 31 Jan 2022 14:19:14 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nEXWS-0001BE-G7; Mon, 31 Jan 2022 14:19:12 +0000
-Date:   Mon, 31 Jan 2022 14:19:12 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Luo Jie <luoj@codeaurora.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Marko <robimarko@gmail.com>
-Subject: Re: [PATCH net v2] net: phy: Fix qca8081 with speeds lower than
- 2.5Gb/s
-Message-ID: <Yffv4IVWc0hKcrsX@shell.armlinux.org.uk>
-References: <YfZnmMteVry/A1XR@earth.li>
- <YffqmcR4iC3xKaRm@earth.li>
+        Mon, 31 Jan 2022 09:19:48 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id 72AFF1F43400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643638782;
+        bh=zLq+h2tZmgDHu03aJieo+9a+SBgp6ZkVG1IliN7+T00=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HXQz65hCvY9bYz8XKigKybbauo1roR4Gpy6vWmZ0gg/JcIkQNIonWTYmzrvchsUh6
+         vExlgOOLT7qrog05GTZA+nWclIkA8xtNVw5vbad/goid6fNpDQ3KFvfsiwjlKRCUQc
+         4StIbeVfqOR2bSgmXUZi7Q2CDvI6N0A2zN5Q4ao5vA6gw/Qse/CMEKeVH4uxgDVkBA
+         cGs1RePfA6WC5eJNMsrJVk4D+3LsF+qItYH/msK6Caz9yu4V/nafHBlVarOPhY8+Vg
+         pC1rzQgfRVAJ19eGHWgQic9n08TVmouYfbUhxY/Jf0B6GHDs1UZe4kzCEJLjTHqk6u
+         qWS4MLmDJDZoA==
+Message-ID: <094b3a2d-0829-c34c-3a3d-e9639095f469@collabora.com>
+Date:   Mon, 31 Jan 2022 14:19:40 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YffqmcR4iC3xKaRm@earth.li>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Intel-gfx] [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Matthew Auld <matthew.auld@intel.com>
+References: <20220125193530.3272386-1-bob.beckett@collabora.com>
+ <20220125193530.3272386-2-bob.beckett@collabora.com>
+ <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
+ <19bf8290-9308-b5c6-eb73-4020fa81aa66@collabora.com>
+ <ce91e091-0df1-5c4d-a070-7b82d74d3f42@shipmail.org>
+From:   Robert Beckett <bob.beckett@collabora.com>
+In-Reply-To: <ce91e091-0df1-5c4d-a070-7b82d74d3f42@shipmail.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 01:56:41PM +0000, Jonathan McDowell wrote:
-> A typo in qca808x_read_status means we try to set SMII mode on the port
-> rather than SGMII when the link speed is not 2.5Gb/s. This results in no
-> traffic due to the mismatch in configuration between the phy and the
-> mac.
+
+
+On 27/01/2022 09:37, Thomas Hellström (Intel) wrote:
 > 
-> v2:
->  Only change interface mode when the link is up
+> On 1/26/22 18:11, Robert Beckett wrote:
+>>
+>>
+>> On 26/01/2022 13:49, Thomas Hellström (Intel) wrote:
+>>>
+>>> On 1/25/22 20:35, Robert Beckett wrote:
+>>>> From: Ramalingam C <ramalingam.c@intel.com>
+>>>>
+>>>> Add a new platform flag, needs_compact_pt, to mark the requirement of
+>>>> compact pt layout support for the ppGTT when using 64K GTT pages.
+>>>>
+>>>> With this flag has_64k_pages will only indicate requirement of 64K
+>>>> GTT page sizes or larger for device local memory access.
+>>>>
+>>>> Suggested-by: Matthew Auld <matthew.auld@intel.com>
+>>>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+>>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>>>> ---
+>>>>   drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
+>>>>   drivers/gpu/drm/i915/i915_pci.c          |  2 ++
+>>>>   drivers/gpu/drm/i915/intel_device_info.h |  1 +
+>>>>   3 files changed, 10 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/i915/i915_drv.h 
+>>>> b/drivers/gpu/drm/i915/i915_drv.h
+>>>> index 44c1f98144b4..1258b7779705 100644
+>>>> --- a/drivers/gpu/drm/i915/i915_drv.h
+>>>> +++ b/drivers/gpu/drm/i915/i915_drv.h
+>>>> @@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct drm_i915_private 
+>>>> *i915,
+>>>>   /*
+>>>>    * Set this flag, when platform requires 64K GTT page sizes or 
+>>>> larger for
+>>>> - * device local memory access. Also this flag implies that we 
+>>>> require or
+>>>> - * at least support the compact PT layout for the ppGTT when using 
+>>>> the 64K
+>>>> - * GTT pages.
+>>>
+>>> Why do we remove these comment lines?
+>> Because HAS_64K_PAGES now means just 64K page, it no longer means also 
+>> requires compact pt.
+>> This is to support other products that will have 64K but not have the 
+>> PDE non-sharing restriction in future.
+>>
+>> Those lines moved to the next change NEEDS_COMPACT_PT, which is now 
+>> separate.
 > 
-> Fixes: 79c7bc0521545 ("net: phy: add qca8081 read_status")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jonathan McDowell <noodles@earth.li>
+> Yes, NEEDS_COMPACT_PT indicates that compact is *required* but does 
+> "HAS_64K_PAGES" still mean compact is supported? That information is lost.
+Not any more.
+I discussed the ambiguity of the original wording with mauld on irc.
+We came to the conclusion that HAS_64K_PAGES should mean just that, that 
+the hw has support for 64K pages, and says nothing about compact-pt at all.
 
-Thanks!
+NEEDS_COMPACT_PT means that the hw has compact-pt support and the driver 
+is required to use it as it is a hw limitation.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+There will be other devices that can support compact-pt but do not 
+mandate its use. In this case, the current code would not use them, but 
+there is potential for some future opportunistic use of that in the 
+driver if desired (currently expected to include accelerated 
+move/clear). If any opportunistic use is added to the driver, a new flag 
+can be added along with the code that uses it to indicate compact-pt 
+availability that is not mandatory (HAS_COMPACT_PT most likely), but as 
+there is no code requiring it currently it should not be added yet, and 
+the comments left as this patch does.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> 
+> /Thomas
+> 
+> 

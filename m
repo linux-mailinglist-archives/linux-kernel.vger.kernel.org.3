@@ -2,181 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BFF4A405A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56DF4A405E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358289AbiAaKkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 05:40:51 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:58678 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358280AbiAaKkt (ORCPT
+        id S1358210AbiAaKmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 05:42:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60426 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358150AbiAaKmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:40:49 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VATi8i019158;
-        Mon, 31 Jan 2022 10:40:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=zdxXsbZJ9cFUbvj+RVgWcg9tEmNDWHTJ0ES5ko21pXI=;
- b=QPmGCsMcANqNa48+cwUpiQsuc+Lkxopy96rT9YRNcMhO2K9wQnrFeRAsiH2JtSKPZ0E3
- qLJ/4My+dlbghcy2rB5mo+otlOKvbfUqpk8ENRxOEpIACvVpBlFmL5QsssFiBN7nwles
- RSqzkfZtGhgH/q2CjMaUQgftkTYXtvxoP2YLLQ2Uu09p+OkCKym7//FdEB3Fip0+lS2o
- u3sQJeLp3SNomkISp7m45ooJgqmWn3QJtn9sdn8usfztaW0nLcMLYkUMf0CGzDeOyqn/
- VEX0O7LXlFO6qM9V4pT/EprPIx9snLZ3G9CcmNgOVD8gPA8HA4fZEaRLf8LBSnPtRC4d tg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dvwfb3gec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Jan 2022 10:40:44 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20VAeFrc140878;
-        Mon, 31 Jan 2022 10:40:43 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
-        by userp3020.oracle.com with ESMTP id 3dvy1mdrtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Jan 2022 10:40:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g2dF6DO3MmiQvy5kLCArnYkbkvNXxBTOoAa8KmGwkynYwbzHo7yZdPu3ntdVNSG2gX7rs37wOT+qaQCj9dIBcJ0ApfebzGtCp27M4VKc0krGK/OvkV/6g0OQlXMMnRdCxfDoqKpbilhGc0oojMlyyA0AnK4m3SmyrzygDFtFLObWS2UswAlM2qZaz6TnVDEsBKIHf7AoV/3fapjQTsvDe6o+iukuqv5Vc+Rg53Rh93HOWv0+2KHQV+69t16NkPKwdQbEj5OheSFN0QioDo75H+OyRopj9VJYP4UNuBUlyvMREmZA3VSTd3nnt7j7xs3QfHgnr3Kl1cru1JI6DlK1Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zdxXsbZJ9cFUbvj+RVgWcg9tEmNDWHTJ0ES5ko21pXI=;
- b=KQF6dWn3LLWFuJLLylL9NEYU4wxI1kcCJ7aHgHDbyh+46AKpLFWH7xc60CDOpCMVrlOB5GKAQTekEx9kqxIZSlfqzQhmI1B3xMN593y1tlTMCZCnBsKOT9lYzrSXew3HrWfKGsJGmlABX9/VafxILvyblRk/eWqx/WNOxc6wWP2R3DDbSkDXzaXjqI8qqxdxxOh9fxzyRixX+vgRBk1c/DT7SpD7z36petQzfaf7EndY/niWIIvh4Ty4VO/6mAxvqHFhjCKA889ftq55fkUTc1fnUmBRJ4urqu3bNvHOV9zc6cpx8czykvySEdntfCUPMoiYhy7OUxLfTXDVdHxmLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zdxXsbZJ9cFUbvj+RVgWcg9tEmNDWHTJ0ES5ko21pXI=;
- b=WV3VmUI70bVm22m2dgCyyBdvyPVcHmJOLhnUM2zZkRoNL3vqQn6xsLP9hNWd3rI/QpJ5LmGWbgNs4XmgntN+P+DJL9vG5USFpBAOwCGJts9VjnzhcF6l+uPoZZst2QOglkydhtAG4m0LLeKfCgoIFvsOlXNaTKNf8znbVcUv+U0=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN6PR10MB1586.namprd10.prod.outlook.com
- (2603:10b6:404:48::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 10:40:40 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8%5]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 10:40:40 +0000
-Date:   Mon, 31 Jan 2022 13:40:20 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     gregkh@linuxfoundation.org, realwakka@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: pi433: remove unnecessary new line escape
- sequence characters
-Message-ID: <20220131104020.GI1951@kadam>
-References: <YfYtsiKbOXghIN+5@mail.google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfYtsiKbOXghIN+5@mail.google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0036.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::6)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Mon, 31 Jan 2022 05:42:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643625733;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c3WGJS4EtzYInjhR2Hz+I2adZQDV1KF4dKMn9hLf+44=;
+        b=VHIHXwZCnYrSrSvfUPWQ/8SLWvQEM6NkB6EcFTcEum2CBIu/4i47JXpW+nqe50bKLthxtL
+        EaQcoNSyjv59+BzxXSfUH+/CM5+vM5iuFv3irhZSNrcFA3p+3c4o8bHUZLs+exmqvSvyL5
+        gL8dT9c3CFWWMAscXF5IwhgjJEzH2Eg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656--8cJh1XoNUi-SjCfYZaW4g-1; Mon, 31 Jan 2022 05:42:12 -0500
+X-MC-Unique: -8cJh1XoNUi-SjCfYZaW4g-1
+Received: by mail-wm1-f71.google.com with SMTP id 7-20020a1c1907000000b003471d9bbe8dso3664829wmz.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 02:42:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=c3WGJS4EtzYInjhR2Hz+I2adZQDV1KF4dKMn9hLf+44=;
+        b=neU6/fAs1LU1mJ3vaQOS5jQnJ4H9EaCbY/cFnYv9xt5oOpz4PBaZrLH9zwac/gVSZu
+         6MmVIq3vqkViTR89MHMuknH7bWwr1kdnrZAhfmyJfB28YJocke4L2j/rn3Xuuknads2z
+         hrbnIBjb+G3XexTNXhLDMXyGl7LisBk/HGO6d8ivydJxoyzjwKW/Jq9ld0VqXbA/jhkW
+         VdSmE3Tn7xKrlX2yElCXOhUJfTByvLlycygeTawfQ8Tpgz8cv7+Z0yUvx1WHHSUIHHl7
+         dAy8A/+9xJM2L66Q/N2om2FTg2lSBeIrzJ3qLOXBcv3QeO4l31Nku0whyA+Jko6Imi/g
+         yirA==
+X-Gm-Message-State: AOAM531Wtgb+CvdcpTV3yMVfGWNwDiZ6kRzBGQGgh1shNmNy71jRs1V/
+        fCebi+MwQ0J0WJg9na1M24zur2OD/dIKa7TSbzTKzLdNAM/zrSpF0F/StjcKexRLXy8qHbdI8O9
+        CICKyPeSbCBr0OcbwBvyBpG2dOJpCDPGfeJGR0HqOnQpV//t+fTuHaTrP6y6aQMz/2qSzO2K5
+X-Received: by 2002:a05:6000:1104:: with SMTP id z4mr17168860wrw.268.1643625731027;
+        Mon, 31 Jan 2022 02:42:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyH67E5runx3mv6aljRPRbKginbWLWSG1Kc2VVJTDiFu8CE3TW91+1b03gQpvuHXzqUF6ak1A==
+X-Received: by 2002:a05:6000:1104:: with SMTP id z4mr17168828wrw.268.1643625730735;
+        Mon, 31 Jan 2022 02:42:10 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:b200:f007:5a26:32e7:8ef5? (p200300cbc709b200f0075a2632e78ef5.dip0.t-ipconnect.de. [2003:cb:c709:b200:f007:5a26:32e7:8ef5])
+        by smtp.gmail.com with ESMTPSA id w22sm11682389wra.59.2022.01.31.02.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 02:42:10 -0800 (PST)
+Message-ID: <4632dc1a-e561-f04e-421c-a770f9271bbd@redhat.com>
+Date:   Mon, 31 Jan 2022 11:42:09 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 38406b73-806c-4a94-8a8a-08d9e4a61ff9
-X-MS-TrafficTypeDiagnostic: BN6PR10MB1586:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR10MB15864D4930E9E0DD42CC42648E259@BN6PR10MB1586.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gLIZHdHYGfo92XaBgis8VV8/4yby/5K6Sl8U8PZl1ThVUlHwJbN2JxHjR2UBtBhlDKrEtifDpCIfD0hOrtMacUFkxH0blvPF42/w9lU5Zw9IYjFYzGmz7CL0x+EFwSF3mkov0fu8kkevufHz1RDOf2xaXlkjt7FjyOzgjMx7a2b7WZNm7t+2CiXfUyf/1xIfyPyTO0tyGaAIrfMVVh+432bP1lk66fVjPQbQq6ap68R43z1UyQn8XvQ+zUdKO3GDFqAk3f+I7Ql8RkBxwcyaC03Ec9vChXUA0qEuad+vKZMkBSFroiEtwCBsoo4ZitANsdfEOIgqcezXJiEI6w6cEelZ9IiAb7W5IXHh4kTMffAddVCmxpxHuyju1yWqko5LeKTRLI+UHMEc+d580/WywqrEDI/Na4QZyGDvHvo1V3fipxJxB4FBzPvoh2N/WQ9ctatQDlz/Cyj3mOmEhlcMdOo2AIL3aqyEGODw1erF4BRt/SdQPqpC7xaSWqLsoaw4VVKI+Pcr2pKONLQ5ytcFq2J7r/+nt3Dv9SrqcQ8/LfUoyjf1ljGsPNAcdhZAjyVl1YFQ1uzciepQvmKq4EiYNVd8SaeutpLIDzXfSj4PTTq1eSElvcjB234PRWQth9QETQylWey8luv12hiYlHfPl6jzxwfq6fOladnwESg4ZxDLslnYGT62RS3vR2MSUxhzYHbNHZqgGGjD6qZ0UU+2kR4/jWbtK8fimXsDLsfVEfqBNK1Ao9l3ghK+td0VQ8glY20xpw7Y2u31ZqeCbdk/LCSbeUyY0vIynuxnI5SOQ1uOspZfruLvgNz0oADdj9FuV9feGl11eqh4hSSzdyy1Ow==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(52116002)(5660300002)(6506007)(6512007)(9686003)(1076003)(186003)(26005)(33656002)(83380400001)(2906002)(44832011)(66556008)(86362001)(316002)(38350700002)(66476007)(38100700002)(6486002)(966005)(6916009)(508600001)(6666004)(4326008)(8676002)(8936002)(66946007)(33716001)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j3j6Uz2Dgu+aNRV8BsXO+WQlleQy056o9/fzaYN2xiom5geI9t7vN1y/Kw45?=
- =?us-ascii?Q?LTTDe+wgQOsIOdoLR5jRGv7bgJltEjVYmfT69ycR3X6UyO1podzrnqSJGyS/?=
- =?us-ascii?Q?0yZpqYH+9CYPfjYP7rFQ6B/hQ0O0kVBWsz2q3z73kmx6s1eFidYaeMY6+YBv?=
- =?us-ascii?Q?zCB0jLIiQE4dUop81NUVFzU2hkCTUARU9hggh9xx33Vh5kRwmofuEmleHDTy?=
- =?us-ascii?Q?yvs3I1X3EZbGWqRNybFqe/T2+xf541D9P/VmNpiXUp2ErY5QEb9wBH7YGcT6?=
- =?us-ascii?Q?i/GwWwi4tsgQQee+pNISa0RTnkSpqQNil5ititoSWTJ8U/uUk06jNrMUpisX?=
- =?us-ascii?Q?rR5VIcF1CFbBu95g6NfINYPDTcINQhZc7SlozG5X4v1EilXIZKc8bOB1raOQ?=
- =?us-ascii?Q?xwcRs+qEnq678ZKSKL0+PaXe+pids+14t+1SIewJveL3cGCe6a+EgLG7SvLi?=
- =?us-ascii?Q?94RhQFTTzPqPOwAFAPVaIMUAq4fGZDs+o4o0dvOT8Pkf9t5unjMDQ4pXimoa?=
- =?us-ascii?Q?QvMWKWXORIKyjp7lIujmBQ7MuZMZYPSMjd6asjKHTlLJ38tylzWbAIT0Ubpl?=
- =?us-ascii?Q?mViMiNkTJfbhbhYmjk4axCDgh/HYGPiF2kDRkyhF8VfFf7WEZkhwzZc5TN0s?=
- =?us-ascii?Q?YO+0DHtZUEDxm6/MZMlBRjnx022jz5ire/fQiU7nyDEUiTlWDGSXX6984zFW?=
- =?us-ascii?Q?75fAQ2U9fdT+vghUa2EW1wfRG1L/t2ctV1+RFm/Fetp5tWfsjUbIio8BQjbh?=
- =?us-ascii?Q?utr1QqrRA8jDkPD4dioCNRS4z1rhLmVLawSUHJJDPqXyrFk57qKQsmHCygx/?=
- =?us-ascii?Q?8NPNCrqMtLSutH08VMOBmjDA4Kue9XW0oTjCxvGMNNWAcm3v9gkAzGHivh4G?=
- =?us-ascii?Q?S/y/Um7phgnfhoPptfKmuRgJyKv+65p1IlU3EzW/uIMYEAzIpviitkJS9Jr+?=
- =?us-ascii?Q?sAX/b1Q2ZMBt2CyyFpiuAD+NAMrIRO2N2zzoHW4lRMBftHgvm2cZfkbTNofD?=
- =?us-ascii?Q?6ZrgCAh50Voyy4XB2AgVmpP3Rlrs373a+P1BoAghbb9wxk6LbJvBiYehv7xw?=
- =?us-ascii?Q?QQLSdOyYPNFaN9bxr6EdX32XE7f25Vor9ajk+RKe2ZF7FFww2FO2vBLPg93H?=
- =?us-ascii?Q?T6oqdDLAh8FWb4e0bpmcU4jKY9BGOZ0cyQMP+50CRqeFQk0Brz8wuoYup1W6?=
- =?us-ascii?Q?49nqUjWyuKqRopvotyJ3DWTdeswrP04gGSea++GTc6J6Mh5sXQw2J10IJjqB?=
- =?us-ascii?Q?kodbfrEoE8ngOz4mxnD9j/Fn3qjdighBa2JiHTZW21+miJ1hlHziBOUJ6V8e?=
- =?us-ascii?Q?77cpL2CEkZaikN2jH2D0e+Wo74X/P9EhCK5SkTrC6stWxxmL+reCc1NgLn70?=
- =?us-ascii?Q?dZerXXxWIK+9ENbMGof3vGgEeaVWHFobX3f70I2VGTybMNMuTOvX3mGx4ktR?=
- =?us-ascii?Q?79wnCynmExAeLrkuIlNqEDtQrj7Wm1tTcdHHA4+aXzYEqsTFSZxeSifqhHnO?=
- =?us-ascii?Q?R6rafVxM3Lpo+5t/EVCdkzT7dKOU9NSbGlKXPx/pQ36IeMMizafZ+ySpdQPF?=
- =?us-ascii?Q?ellcn2QkRlejtqHrdd7KbGv6qLG4gmS9oX/VN7Qymf9CbrVrEkw8z2bPq1IS?=
- =?us-ascii?Q?1k40Zbb41Io1t9Ski0KAmS+5w4CHpyNiMyaA3MyncEDW4ZN87usnZv7K/FKk?=
- =?us-ascii?Q?SnlCsg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38406b73-806c-4a94-8a8a-08d9e4a61ff9
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 10:40:40.6943
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r8JihbssCcQmTQhP2ClCYttWdzihMjJzvvWj0MxlkzKM9zezok4jJNXRV/iR9vrQHAKvr4lW9mMQh7Td9GnWJnabtacSxs88753DFJwG1E0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1586
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10243 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201310071
-X-Proofpoint-ORIG-GUID: IvxG8Cs_ixi_zDW5VBouSQYIMaTTyYSk
-X-Proofpoint-GUID: IvxG8Cs_ixi_zDW5VBouSQYIMaTTyYSk
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 2/2] drivers/base/memory: determine and store zone for
+ single-zone memory blocks
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Rafael Parra <rparrazo@redhat.com>
+References: <20220128152620.168715-1-david@redhat.com>
+ <20220128152620.168715-3-david@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220128152620.168715-3-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 07:18:26PM +1300, Paulo Miguel Almeida wrote:
-> In this driver there were occurences of '\n'-ended strings when using
-> dev_dbg function which isn't required which most likely were leftovers
-> from a previous printk/pr_<level> implementation.
-> 
-> This patch removes the extraneous '\n' characters to make it consistent
-> with the other dev_dbg instances.
-> 
-> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-> ---
-> Patch dependencies:
-> 
-> The following patches must be applied first given that changes are made
-> to the same set of files:
-> 
-> - https://lore.kernel.org/lkml/YfYdVokxsQ+Adl+T@mail.google.com/
-> - https://lore.kernel.org/lkml/YfX+llwDWZZMz+NY@mail.google.com/
-> ---
->  drivers/staging/pi433/pi433_if.c | 14 +++++++-------
->  drivers/staging/pi433/rf69.c     | 16 ++++++++--------
->  2 files changed, 15 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-> index 02d4ccebf..db1b092e8 100644
-> --- a/drivers/staging/pi433/pi433_if.c
-> +++ b/drivers/staging/pi433/pi433_if.c
-> @@ -124,13 +124,13 @@ static irqreturn_t DIO0_irq_handler(int irq, void *dev_id)
->  
->  	if (device->irq_state[DIO0] == DIO_PACKET_SENT) {
->  		device->free_in_fifo = FIFO_SIZE;
-> -		dev_dbg(device->dev, "DIO0 irq: Packet sent\n");
-> +		dev_dbg(device->dev, "DIO0 irq: Packet sent");
+>  			 !IS_ALIGNED(start_pfn, pageblock_nr_pages) ||
+> -			 !IS_ALIGNED(start_pfn + nr_pages, PAGES_PER_SECTION)))
+> +			 !IS_ALIGNED(start_pfn + nr_pages, PAGES_PER_SECTION) ||
+> +			 page_zone(pfn_to_page(start_pfn)) != zone ||
+> +			 page_zone(pfn_to_page(end_pfn - 1)) != zone))
 
-Both the old and new code will do the same thing.  You are correct.
-However in terms of style, I believe the preference is to add a newline.
+I just realized that we have to do these sanity checks after our check
+for memory holes.
 
-I don't remember the reasoning behind this.  But a lot of these style
-rules are just decided by consensus.  If you do a
-`git grep -w dev_dbg | grep \;$` then it is 12391 places that add a
-new line and 622 which don't.  Adding a newline is the clear winner.
+-- 
+Thanks,
 
-regards,
-dan carpenter
+David / dhildenb
 

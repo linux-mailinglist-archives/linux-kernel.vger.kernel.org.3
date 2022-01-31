@@ -2,377 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8324A51F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478664A51FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiAaWDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiAaWDP (ORCPT
+        id S230320AbiAaWEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:04:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49551 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229690AbiAaWEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:03:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B39C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:03:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 31 Jan 2022 17:04:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643666669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9aKB5sHqkB4yA/NZkUcPtaZmTB/OCLFJA8xcIjhQ6gw=;
+        b=H+bpJLIA7SEKyTkHdUtskkps5WXY5L7569JP0bica++9nijna64DP8utmWNHL1OHIUzhmo
+        nJqkp/Cd0l8EnfNyGlosasxOB38S9V2lAnJLmTuLnKaMUwFH8UeAlojIbSS0hePYW7b/bX
+        PiM4T7Jb+1itMB7qdjAx30JAlocwZ94=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-AR1_0s-ROqeqVAAzulU2Pw-1; Mon, 31 Jan 2022 17:04:26 -0500
+X-MC-Unique: AR1_0s-ROqeqVAAzulU2Pw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 126A461599
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A59C340E8;
-        Mon, 31 Jan 2022 22:03:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643666594;
-        bh=eRCPZhBUCRuh9pySzCCKRJK6VlI/aU2jhEaMlbgoYAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCD2OfTheo9yAx0eGLpAsMSb+xezIkVhptx+m1yYByFKVNKVLTXQR6YoL5Q73OcsX
-         Y+EinNfrBTmn0AjZ74AvBV2YhYnVHg43XWTfgCmj+CH2MSqbx6EYc9T41SbVQKWo8r
-         SeZXfnW6gv44y7UPIvLJzWDaUHVgDHpiporY2Ai6o7/peLrGeSZsYBwC4CLz4qDsWH
-         RMNbQZcrDRdddWQ5XyCT+WzVYv/MrcHRtUPMUprwomL60+Rf2L/J9ThDU+T8Tax4lI
-         rh62LjOvgDhy+kfJ/eGedBVdTwtx7RiHr+EahmawtS4uJ5j446T31+E6OOi7losQ0I
-         hnwjgMXubxnzQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 348CE40466; Mon, 31 Jan 2022 19:03:12 -0300 (-03)
-Date:   Mon, 31 Jan 2022 19:03:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v13 01/16] perf record: Introduce thread affinity and
- mmap masks
-Message-ID: <YfhcoBf1RPLfqUXO@kernel.org>
-References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <9042bf7daf988e17e17e6acbf5d29590bde869cd.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <YfhN7kTLECDwgPLh@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0CC6192AB73;
+        Mon, 31 Jan 2022 22:04:23 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.244])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E6A36AB9A;
+        Mon, 31 Jan 2022 22:04:21 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 4/4] mm/page_owner: Record task command name
+Date:   Mon, 31 Jan 2022 17:03:28 -0500
+Message-Id: <20220131220328.622162-1-longman@redhat.com>
+In-Reply-To: <20220131192308.608837-5-longman@redhat.com>
+References: <20220131192308.608837-5-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfhN7kTLECDwgPLh@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 31, 2022 at 06:00:31PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Jan 17, 2022 at 09:34:21PM +0300, Alexey Bayduraev escreveu:
-> > Introduce affinity and mmap thread masks. Thread affinity mask
-> > defines CPUs that a thread is allowed to run on. Thread maps
-> > mask defines mmap data buffers the thread serves to stream
-> > profiling data from.
-> > 
-> > Acked-by: Andi Kleen <ak@linux.intel.com>
-> > Acked-by: Namhyung Kim <namhyung@gmail.com>
-> > Reviewed-by: Riccardo Mancini <rickyman7@gmail.com>
-> > Tested-by: Riccardo Mancini <rickyman7@gmail.com>
-> > Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-> 
-> Some simplifications I added here while reviewing this patchkit:
-> 
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 41998f2140cd5119..53b88c8600624237 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -2213,35 +2213,33 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
->  
->  static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
->  {
-> -	mask->nbits = nr_bits;
->  	mask->bits = bitmap_zalloc(mask->nbits);
->  	if (!mask->bits)
->  		return -ENOMEM;
->  
-> +	mask->nbits = nr_bits;
->  	return 0;
+The page_owner information currently includes the pid of the calling
+task. That is useful as long as the task is still running. Otherwise,
+the number is meaningless. To have more information about the allocating
+tasks that had exited by the time the page_owner information is
+retrieved, we need to store the command name of the task.
 
+Add a new comm field into page_owner structure to store the command name
+and display it when the page_owner information is retrieved.
 
-Interesting, building it at this point in the patchkit didn't uncover
-the bug I introduced, only later when this gets used I got the compiler
-error and applied this on top:
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ mm/page_owner.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 53b88c8600624237..6b0e506df20c002a 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -2213,7 +2213,7 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index a471c74c7fe0..485542155483 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -29,6 +29,7 @@ struct page_owner {
+ 	depot_stack_handle_t free_handle;
+ 	u64 ts_nsec;
+ 	u64 free_ts_nsec;
++	char comm[TASK_COMM_LEN];
+ 	pid_t pid;
+ };
  
- static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
- {
--	mask->bits = bitmap_zalloc(mask->nbits);
-+	mask->bits = bitmap_zalloc(nbits);
- 	if (!mask->bits)
+@@ -146,6 +147,7 @@ void __reset_page_owner(struct page *page, unsigned short order)
+ 		page_owner = get_page_owner(page_ext);
+ 		page_owner->free_handle = handle;
+ 		page_owner->free_ts_nsec = free_ts_nsec;
++		page_owner->comm[0] = '\0';
+ 		page_ext = page_ext_next(page_ext);
+ 	}
+ }
+@@ -165,6 +167,8 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
+ 		page_owner->last_migrate_reason = -1;
+ 		page_owner->pid = current->pid;
+ 		page_owner->ts_nsec = local_clock();
++		strlcpy(page_owner->comm, current->comm,
++			sizeof(page_owner->comm));
+ 		__set_bit(PAGE_EXT_OWNER, &page_ext->flags);
+ 		__set_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
+ 
+@@ -232,6 +236,7 @@ void __folio_copy_owner(struct folio *newfolio, struct folio *old)
+ 	new_page_owner->pid = old_page_owner->pid;
+ 	new_page_owner->ts_nsec = old_page_owner->ts_nsec;
+ 	new_page_owner->free_ts_nsec = old_page_owner->ts_nsec;
++	strcpy(new_page_owner->comm, old_page_owner->comm);
+ 
+ 	/*
+ 	 * We don't clear the bit on the old folio as it's going to be freed
+@@ -376,10 +381,11 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
  		return -ENOMEM;
  
-
->  }
->  
->  static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
->  {
->  	bitmap_free(mask->bits);
-> +	mask->bits = NULL;
->  	mask->nbits = 0;
->  }
->  
->  static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
->  {
-> -	int ret;
-> +	int ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
->  
-> -	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
->  	if (ret) {
->  		mask->affinity.bits = NULL;
->  		return ret;
->  	}
->  
->  	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
-> -	if (ret) {
-> +	if (ret)
->  		record__mmap_cpu_mask_free(&mask->maps);
-> -		mask->maps.bits = NULL;
-> -	}
->  
->  	return ret;
->  }
-> @@ -2733,18 +2731,14 @@ struct option *record_options = __record_options;
->  
->  static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
->  {
-> -	int c;
-> -
-> -	for (c = 0; c < cpus->nr; c++)
-> +	for (int c = 0; c < cpus->nr; c++)
->  		set_bit(cpus->map[c].cpu, mask->bits);
->  }
->  
->  static void record__free_thread_masks(struct record *rec, int nr_threads)
->  {
-> -	int t;
-> -
->  	if (rec->thread_masks)
-> -		for (t = 0; t < nr_threads; t++)
-> +		for (int t = 0; t < nr_threads; t++)
->  			record__thread_mask_free(&rec->thread_masks[t]);
->  
->  	zfree(&rec->thread_masks);
-> @@ -2752,7 +2746,7 @@ static void record__free_thread_masks(struct record *rec, int nr_threads)
->  
->  static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
->  {
-> -	int t, ret;
-> +	int ret;
->  
->  	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
->  	if (!rec->thread_masks) {
-> @@ -2760,7 +2754,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
->  		return -ENOMEM;
->  	}
->  
-> -	for (t = 0; t < nr_threads; t++) {
-> +	for (int t = 0; t < nr_threads; t++) {
->  		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
->  		if (ret) {
->  			pr_err("Failed to allocate thread masks[%d]\n", t);
-> @@ -2778,9 +2772,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
->  
->  static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
->  {
-> -	int ret;
-> -
-> -	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
-> +	int ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
->  	if (ret)
->  		return ret;
->  
-> 
-> 
-> > ---
-> >  tools/perf/builtin-record.c | 123 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 123 insertions(+)
-> > 
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index bb716c953d02..41998f2140cd 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -87,6 +87,11 @@ struct switch_output {
-> >  	int		 cur_file;
-> >  };
-> >  
-> > +struct thread_mask {
-> > +	struct mmap_cpu_mask	maps;
-> > +	struct mmap_cpu_mask	affinity;
-> > +};
-> > +
-> >  struct record {
-> >  	struct perf_tool	tool;
-> >  	struct record_opts	opts;
-> > @@ -112,6 +117,8 @@ struct record {
-> >  	struct mmap_cpu_mask	affinity_mask;
-> >  	unsigned long		output_max_size;	/* = 0: unlimited */
-> >  	struct perf_debuginfod	debuginfod;
-> > +	int			nr_threads;
-> > +	struct thread_mask	*thread_masks;
-> >  };
-> >  
-> >  static volatile int done;
-> > @@ -2204,6 +2211,47 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
-> >  	return 0;
-> >  }
-> >  
-> > +static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
-> > +{
-> > +	mask->nbits = nr_bits;
-> > +	mask->bits = bitmap_zalloc(mask->nbits);
-> > +	if (!mask->bits)
-> > +		return -ENOMEM;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
-> > +{
-> > +	bitmap_free(mask->bits);
-> > +	mask->nbits = 0;
-> > +}
-> > +
-> > +static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
-> > +	if (ret) {
-> > +		mask->affinity.bits = NULL;
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
-> > +	if (ret) {
-> > +		record__mmap_cpu_mask_free(&mask->maps);
-> > +		mask->maps.bits = NULL;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static void record__thread_mask_free(struct thread_mask *mask)
-> > +{
-> > +	record__mmap_cpu_mask_free(&mask->maps);
-> > +	record__mmap_cpu_mask_free(&mask->affinity);
-> > +}
-> > +
-> >  static int parse_output_max_size(const struct option *opt,
-> >  				 const char *str, int unset)
-> >  {
-> > @@ -2683,6 +2731,73 @@ static struct option __record_options[] = {
-> >  
-> >  struct option *record_options = __record_options;
-> >  
-> > +static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
-> > +{
-> > +	int c;
-> > +
-> > +	for (c = 0; c < cpus->nr; c++)
-> > +		set_bit(cpus->map[c].cpu, mask->bits);
-> > +}
-> > +
-> > +static void record__free_thread_masks(struct record *rec, int nr_threads)
-> > +{
-> > +	int t;
-> > +
-> > +	if (rec->thread_masks)
-> > +		for (t = 0; t < nr_threads; t++)
-> > +			record__thread_mask_free(&rec->thread_masks[t]);
-> > +
-> > +	zfree(&rec->thread_masks);
-> > +}
-> > +
-> > +static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
-> > +{
-> > +	int t, ret;
-> > +
-> > +	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
-> > +	if (!rec->thread_masks) {
-> > +		pr_err("Failed to allocate thread masks\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	for (t = 0; t < nr_threads; t++) {
-> > +		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
-> > +		if (ret) {
-> > +			pr_err("Failed to allocate thread masks[%d]\n", t);
-> > +			goto out_free;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +
-> > +out_free:
-> > +	record__free_thread_masks(rec, nr_threads);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	record__mmap_cpu_mask_init(&rec->thread_masks->maps, cpus);
-> > +
-> > +	rec->nr_threads = 1;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int record__init_thread_masks(struct record *rec)
-> > +{
-> > +	struct perf_cpu_map *cpus = rec->evlist->core.cpus;
-> > +
-> > +	return record__init_thread_default_masks(rec, cpus);
-> > +}
-> > +
-> >  int cmd_record(int argc, const char **argv)
-> >  {
-> >  	int err;
-> > @@ -2948,6 +3063,12 @@ int cmd_record(int argc, const char **argv)
-> >  		goto out;
-> >  	}
-> >  
-> > +	err = record__init_thread_masks(rec);
-> > +	if (err) {
-> > +		pr_err("Failed to initialize parallel data streaming masks\n");
-> > +		goto out;
-> > +	}
-> > +
-> >  	if (rec->opts.nr_cblocks > nr_cblocks_max)
-> >  		rec->opts.nr_cblocks = nr_cblocks_max;
-> >  	pr_debug("nr_cblocks: %d\n", rec->opts.nr_cblocks);
-> > @@ -2966,6 +3087,8 @@ int cmd_record(int argc, const char **argv)
-> >  	symbol__exit();
-> >  	auxtrace_record__free(rec->itr);
-> >  out_opts:
-> > +	record__free_thread_masks(rec, rec->nr_threads);
-> > +	rec->nr_threads = 0;
-> >  	evlist__close_control(rec->opts.ctl_fd, rec->opts.ctl_fd_ack, &rec->opts.ctl_fd_close);
-> >  	return err;
-> >  }
-> > -- 
-> > 2.19.0
-> 
-> -- 
-> 
-> - Arnaldo
-
+ 	ret = scnprintf(kbuf, count,
+-			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
++			"Page allocated via order %u, mask %#x(%pGg), pid %d (%s), ts %llu ns, free_ts %llu ns\n",
+ 			page_owner->order, page_owner->gfp_mask,
+ 			&page_owner->gfp_mask, page_owner->pid,
+-			page_owner->ts_nsec, page_owner->free_ts_nsec);
++			page_owner->comm, page_owner->ts_nsec,
++			page_owner->free_ts_nsec);
+ 
+ 	/* Print information relevant to grouping pages by mobility */
+ 	pageblock_mt = get_pageblock_migratetype(page);
+@@ -446,9 +452,10 @@ void __dump_page_owner(const struct page *page)
+ 	else
+ 		pr_alert("page_owner tracks the page as freed\n");
+ 
+-	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, ts %llu, free_ts %llu\n",
++	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d (%s), ts %llu, free_ts %llu\n",
+ 		 page_owner->order, migratetype_names[mt], gfp_mask, &gfp_mask,
+-		 page_owner->pid, page_owner->ts_nsec, page_owner->free_ts_nsec);
++		 page_owner->pid, page_owner->comm, page_owner->ts_nsec,
++		 page_owner->free_ts_nsec);
+ 
+ 	handle = READ_ONCE(page_owner->handle);
+ 	if (!handle)
 -- 
+2.27.0
 
-- Arnaldo

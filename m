@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF6C4A4C26
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA864A4C0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349646AbiAaQaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S1380390AbiAaQ2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbiAaQaD (ORCPT
+        with ESMTP id S1380408AbiAaQ2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:30:03 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C37C061714;
-        Mon, 31 Jan 2022 08:30:03 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id k25so44437396ejp.5;
-        Mon, 31 Jan 2022 08:30:03 -0800 (PST)
+        Mon, 31 Jan 2022 11:28:46 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9B5C061401;
+        Mon, 31 Jan 2022 08:28:45 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id n17so17608380iod.4;
+        Mon, 31 Jan 2022 08:28:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vRDplifUhsb5m6qIz40Anhg2xj6DslUkXFz6GsVymy4=;
-        b=D93WKL0bH3y0DsemI7NcPaBG2KnCtuCJsu1Kw+N+S/H4CUAQsHVB2XSUXCiMQXeqJp
-         vSdxRC6Lp34sxJEQZaapbcutOoLdIpe6q0qqcvGnEXInFE/3jRUl2dFKFFAxwCrcsvQz
-         R9OaaN0daXTLHr27vJo3gSJlzS8kcXWUc5yjsuiylmQLpnk6jPlx60odaFILHliLwy2N
-         LMuaJrLRjx+ioy1WHnxzDNgEnu8Zqg7uOl+3phVC4d3EwYl8PyB5dgt8JTyEdy6EemdL
-         th8OghN8ysl/lzJV1BeGWvu/BSp8KfEpWjw5hd17vz26Se44IzXpg2BN3SM9LeLRpORx
-         XREw==
+        bh=FWHxzL6ukBtNWpYV3M+KSic9V4wnJNgq8ieHpEwO93o=;
+        b=Lk+4Y6ArOruh/mtEpbDlxFPKiic/iuo2T1ElyMnsPHR2Aq4mmWKdHn3i7VmFhOBdDX
+         yclLdYUYhqUNRsYItcH0egqJbTLqNoMARlqasFZ3ozi2KKQPwrDmYtgfHd8oE9XTTCtF
+         bddjOHG2rMcWhhjebNImzOPpT2lJhk4MPK5UzOwbeixeUKwNnhQbMwziXWOHUifBf1JJ
+         IViFuD7zxa3n5mQZPDwEjt5C1QNRRNUWWvPqreIJQiRbhYIGUGCE3/BrCMdNZdbR/R5/
+         llk87U+ofsR+KKeSr4XRvHV+1+oedIONg1cbu0GV9C2CF+F1rdIsyTbBBeh1fatMynWU
+         lm6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vRDplifUhsb5m6qIz40Anhg2xj6DslUkXFz6GsVymy4=;
-        b=adz9dvfYFwxHLCb3+6bW7gS8i6tSDL1bwN7f5oFEn+ca1TMtSZYkIhVnjH2Tiu9F0L
-         4VGQl7uo8cHECy2F+50Dte/hFyv83TBr/Be2lDz0H38h4Y77kkyYhJNDU9eAzsKBLy1e
-         4sdrQUD5bfjZ3hcDT3ZiPzsRE7KsHxnMLf+V1h7tA5Rk7fhJ70EAVM6sjkebm35U+WEV
-         /uoVO+g9Nd4s0xQdPmZl4jV9lMpeAvVYvK/R7x+Z+hLcy3k3bLuSxgXZkgXr4MtIBGLq
-         G5SjBI/6QzrEiHGTkRxqctsykuWQbess1xFylUxytTEM3PwUN5iS3YgF2Zg9sW+Wtbhi
-         Kfxg==
-X-Gm-Message-State: AOAM530juDAlGqrjSMEK7/gPwVIcU2TUGxhadM3s5+SUCF9nlr+5WiS3
-        awZLvV5W9ALn1A/sh1yLC9Xc9KTTMHYeI8yJ7bI=
-X-Google-Smtp-Source: ABdhPJwH3lAp3JlumSNQ61ldPCI4Vyq+OLtFCZ0qJsy2dxhZ6fQQm1lW9Qqm6EetQhoC0xmpiPhNQt1zsrbA/2qNhWo=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr17420594ejo.636.1643646601634;
- Mon, 31 Jan 2022 08:30:01 -0800 (PST)
+        bh=FWHxzL6ukBtNWpYV3M+KSic9V4wnJNgq8ieHpEwO93o=;
+        b=hUgdLpW34tazH0HTtxvKVCRtH+dt6/Xp+mHge3/emkWzIqDftDSof91uJpSJOd+zGv
+         vJV7huncLsg4/5W3nrTEeEj9IVKEdvq8QUwd6PROP8wkD1nyQdiu8bjpdpG7G3LJAm7w
+         +/3h4JCo6EyImdfCQmDb7pgbzn4vwPfMNfWGICoM6Xf9tQcjkBIc3YumqCzRobuLcBfN
+         tIUKUR6rYb4I5nwdsDYrhpydCxXI/LDAA9NOL498YtWoiILco/1kb/EGlh7LROs9Oo4c
+         JMbl1++hz4csZm2vaCoBE3ZfXl5S66rYcezVgebydxI9J+xXnCICtejCw2tmVcsHXuIQ
+         H91A==
+X-Gm-Message-State: AOAM5329aFL7v7RE/L6BfvMdBrIat31kq0caFS2sNu8XljaJ5h7yE4YO
+        LdHwP9CRDuT/xYNaHnfcU+sQGllIfY8Dnu+MWK4=
+X-Google-Smtp-Source: ABdhPJxNb3/z0NjiVlXTcilGZskFbZSPKskFhMTsV47EDfmw8oXlq6P8d86Mev/eeZ6FGVTUKhcSVzplXAu06yRfSts=
+X-Received: by 2002:a02:b0c3:: with SMTP id w3mr11342820jah.1.1643646525134;
+ Mon, 31 Jan 2022 08:28:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131160713.245637-1-marcan@marcan.st> <20220131160713.245637-4-marcan@marcan.st>
-In-Reply-To: <20220131160713.245637-4-marcan@marcan.st>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 31 Jan 2022 18:28:25 +0200
-Message-ID: <CAHp75VdgXdYXio8pTDdxsYy-iCXMvVpZM1T6gNmcxo3c1V+uJA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/9] brcmfmac: firmware: Do not crash on a NULL board_type
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Stable <stable@vger.kernel.org>
+References: <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
+In-Reply-To: <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 31 Jan 2022 18:28:34 +0200
+Message-ID: <CAOQ4uxgyfQULxH_ot5eAH1V7uAi4FVn5V4aKEHyJtWvnw0SODQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/5] vfs, overlayfs, cachefiles: Combine I_OVL_INUSE
+ and S_KERNEL_FILE and split out no-remove
+To:     David Howells <dhowells@redhat.com>
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-cachefs@redhat.com, Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 6:07 PM Hector Martin <marcan@marcan.st> wrote:
+On Mon, Jan 31, 2022 at 5:12 PM David Howells <dhowells@redhat.com> wrote:
 >
-> This unbreaks support for USB devices, which do not have a board_type
-> to create an alt_path out of and thus were running into a NULL
-> dereference.
-
-...
-
-> @@ -599,6 +599,9 @@ static char *brcm_alt_fw_path(const char *path, const char *board_type)
->         char alt_path[BRCMF_FW_NAME_LEN];
->         char suffix[5];
 >
-> +       if (!board_type)
-> +               return NULL;
+> Hi Amir,
+>
+> How about this as a set of patches to do what you suggest[1] and hoist the
+> handler functions for I_OVL_INUSE into common code and rename the flag to
+> I_EXCL_INUSE.  This can then be shared with cachefiles - allowing me to get
+> rid of S_KERNEL_FILE.
+>
 
-I still think it's better to have both callers do the same thing.
+They look like what I had in mind.
+Unfortunately, I had forgotten about another use that ovl makes of the flag
+(see comment on patch 1/5). I'd made a suggestion on how to get rid of that use
+case, but I hope this won't complicate things too much for you.
 
-Now it will be the double check in one case,
+> I did split out the functionality for preventing file/dir removal to a
+> separate flag, I_NO_REMOVE, so that it's not tied to I_EXCL_INUSE in case
+> overlayfs doesn't want to use it.  The downside to that, though is that it
+> requires a separate locking of i_lock to set/clear it.
+>
+> I also added four general tracepoints to log successful lock/unlock,
+> failure to lock and a bad unlock.  The lock tracepoints log which driver
+> asked for the lock and all tracepoints allow the driver to log an arbitrary
+> reference number (in cachefiles's case this is the object debug ID).
+>
+> Questions:
+>
+>  (1) Should it be using a flag in i_state or a flag in i_flags?  I'm not
+>      sure what the difference is really.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Me neither.
+
+>
+>  (2) Do we really need to take i_lock when testing I_EXCL_INUSE?  Would
+>      READ_ONCE() suffice?
+>
+
+For ovl_is_inuse() I think READ_ONCE() should suffice.
+
+Thanks,
+Amir.

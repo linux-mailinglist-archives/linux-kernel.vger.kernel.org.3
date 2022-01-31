@@ -2,100 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F544A4786
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC6F4A478A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378175AbiAaMtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:49:25 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:41787 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240768AbiAaMtT (ORCPT
+        id S1378215AbiAaMuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240585AbiAaMuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:49:19 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MzQc2-1mJ6320Q5o-00vQEz; Mon, 31 Jan 2022 13:49:16 +0100
-Received: by mail-oi1-f176.google.com with SMTP id v67so26377549oie.9;
-        Mon, 31 Jan 2022 04:49:15 -0800 (PST)
-X-Gm-Message-State: AOAM530MUhJjxHs4lN8uEOaSb8M+hbaDjaI0XH9LOJMiEFS5TJs59mvW
-        WWl2KRm09sLPH3x0egJ0DrXHFNU9MZs6JEah+R0=
-X-Google-Smtp-Source: ABdhPJy98n+kDWK/9SbbjWdkcIPv//3sxAoIsXTByqyfuSFCJCabGM0ZH14kpP64umFfYvpncQnk8rPRUpmA1wB2kjw=
-X-Received: by 2002:aca:2b16:: with SMTP id i22mr15607147oik.128.1643633354113;
- Mon, 31 Jan 2022 04:49:14 -0800 (PST)
+        Mon, 31 Jan 2022 07:50:10 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1A6C061714;
+        Mon, 31 Jan 2022 04:50:10 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h21so25199746wrb.8;
+        Mon, 31 Jan 2022 04:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IB70YYX8AebCvRAflv6xUAjSyKnP57ih2ZQmgTxAT3w=;
+        b=ZB8N8WxfYYqdMZ04Q3AuVTJPntv5MSSus8rlMBN7+6DgTmU9DPbul2yWob6B5SLQK/
+         s7xVhgLq3XI2eLDZKtRp2TmmAugxDtF/pLbnvcmLqpTFAsTkuwhKnSIgARsfL0WW0XXP
+         qO5x6fjVxfzMto3J/LYdYBPyMzvTe+ILSaMwib83I14qAFl82iO/HWn7h5BBut+PTFq2
+         8XKN0UDVOXtrCol50eGRVbqutsu59KtofBqkxncWEPRE2wvTQcQBJO52fGPG2mFb4kcU
+         IJCL83A+h8PEfUPBTQU7XpyJqkUY3ygX2djiHgt1uTFZ3cyrQ2x6cavvs0ll9iOqxLx2
+         867Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IB70YYX8AebCvRAflv6xUAjSyKnP57ih2ZQmgTxAT3w=;
+        b=YTp24KYbOqDTuUeN83u70TURnuyRDgRnA/5Laaue4cEcz8+84YcOofLyCn0C1Kr+7H
+         4T+HZ54dpxUbcxHmbyZQSAhGNZgary47cO1fPLVYKvoR0MC0MK2fz+cyzYYWMi4oarnL
+         pX3Z/9Qce6uIqW1Ryr/2EB/GaVROh3GrBTot688JYZ5ZrcU2xt76KqRyXloJvSU/ykL9
+         SevRjMDrNu7Vc6WOJ0rOGnrwTvHQI5+3mUKD4qnvmhX+tz2BLygzK+mi7cCIY9h2+/wT
+         jDeRlnI2PbNYSS8NfP1QaX7nrfHQBDOX6+y2/1305StmZEM4YjU73nm3x2XqXrtYT1rJ
+         czEw==
+X-Gm-Message-State: AOAM532vJnmPRSStttktoAYhy/4xs5QCtAWkaAGeQ6kKWuuhaKcabpzh
+        M6z1EY5m9VqXYhlRhHVi4kY=
+X-Google-Smtp-Source: ABdhPJwRfOYYbvnzmbXXO6N7nO9dz5jdzWYkYKTY368TEfGVnA9dSe6ELcS3A9kLumu5GfphY7cU+w==
+X-Received: by 2002:a05:6000:1548:: with SMTP id 8mr17150527wry.242.1643633409194;
+        Mon, 31 Jan 2022 04:50:09 -0800 (PST)
+Received: from [10.18.0.8] ([194.126.177.11])
+        by smtp.gmail.com with ESMTPSA id i19sm9982606wmq.45.2022.01.31.04.50.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 04:50:08 -0800 (PST)
+Message-ID: <321ac205-51f7-88e1-abda-6f601b585ce2@gmail.com>
+Date:   Mon, 31 Jan 2022 13:50:06 +0100
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-6-guoren@kernel.org>
- <YffUqErSVDgbGLTu@infradead.org>
-In-Reply-To: <YffUqErSVDgbGLTu@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 31 Jan 2022 13:48:58 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
-Message-ID: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
-Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup.patel@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:djGQj121T/Up79PV9vFe3c3xFVYWtTtn038P31Wi6YWVhZsb7CH
- EWUc8VlWcickQHCTaodxi2PwS/49NtPQkRJKgVjui3yT2gl4ORQlI1/MiZXJMdpsdD1aZSh
- j5i7ILCBXXo9S6BeA8TxrAWH0lSCHoAJ1aoJOV69A1zT/H8uT9VxlxySVe4GNFkBrMXjAwW
- wzeiuGQ17BqnsLNJLNKtg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZH5LM8F2Bio=:iB3XsXNdUOq9ydk/56//Ap
- ygzKiwd747DPcnWv4JephLLgjcJN/oPQ/nOfySsB/xbDPlB3cme3km4ROyqlWL0CAVzcs01gs
- RhEc5wZoQCuocaDBY/qh20LWX2XgmGzstKMoAdLEJpwDT53xv8/RZzSW1GOS5Ugq/im3mCvEP
- t4j5XvKwXkMuCt0yyWB4fzMIHX/fnyXoT+dt+B7l+hhIw/oFU/O9gV61t0DKpi/9smj22Y0d1
- v1oPXyfkmDoaIclTGygnc9Iu5AcT89Qf7PttG5zsjj6vua8yFCX9thdOTVDI+19rYkmfPD+IN
- CI4fCNvJqDHpArJ9q+d2w6qas4y9eYU9m2jSZu8pheXxCXJBoVhr0op0VwZJ2P8PNYGaYTPW+
- W5W0FzRhsp45xn9G9MVN6/oYQqpV6x8bv8Fi5tTJJ2g4HGsrOc+Md3MvCq88yJiu3uJyYAvsP
- uj1k70QZ4sl7dZpP0p98gD4i9GdncRnk96Mb7jvwt7yt+C05GKbz2rIpxoahiYoStdl0KPenj
- ucYkY65kz7E9mad2H20UiA6Z0348ukzyAmSTaHzS+Mbi8en47i8/WPi3NYlm2duFIsOK2eX2f
- luBlpwT9r5ZQXCXE9s1U7Y8NpBQ79ly7U58oJrc/yU7qmgZtlHLPeRZzObbFxQeWXk/hBBSjF
- iF4lRgIU1qcoUDvnIBgDGwlnfObta2XyKhMT+GSJCXhTEHcoTIpfMR9aPYWV9B7+vvgxkbt9a
- PDLwoWE+daaBhoHuyu7RQcNCXR8OxUI6Zldek/DhFHJjlXS3IGAEOfj+FUryc+sQks/wVfX5L
- 3swFfq8Q/1DJJigRwhmxaY/F702+y0FrL+2b4Ijbzh0YjQOMco=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] surface: surface3-wmi: Simplify resource management
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <8b1a6d05036d5d9527241b2345482b369331ce5c.1643531799.git.christophe.jaillet@wanadoo.fr>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <8b1a6d05036d5d9527241b2345482b369331ce5c.1643531799.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 1:23 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Sat, Jan 29, 2022 at 08:17:16PM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Let's follow the origin patch's spirit:
-> >
-> > The only difference between rv32_defconfig and defconfig is that
-> > rv32_defconfig has  CONFIG_ARCH_RV32I=y.
-> >
-> > This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
-> >
-> > Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
->
-> Wouldn't a common.config that generats both the 32-bit and 64-bit
-> configs a better idea?
+On 1/30/22 09:36, Christophe JAILLET wrote:
+> 's3_wmi.input' is a managed resource, so there should be no need to free it
+> explicitly.
+> 
+> Moreover, 's3_wmi' is a global variable. 's3_wmi.input' should be NULL
+> when this error handling path is executed, because it has not been
+> assigned yet.
+> 
+> All this is puzzling. So simplify it and remove a few lines of code to have
+> it be more straightforward.
+> 
+> Fixes: 3dda3b3798f9 ("platform/x86: Add custom surface3 platform device for controlling LID")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-I thought that is what the patch does, there is already the normal 64-bit
-defconfig, and the new makefile target makes this shared with 32-bit
-to prevent them from diverging again.
+Right, that input_free_device(s3_wmi.input) seems wrong. Patch looks
+good to me.
 
-        Arnd
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+
+> ---
+> Compile tested only
+> ---
+>   drivers/platform/surface/surface3-wmi.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/platform/surface/surface3-wmi.c b/drivers/platform/surface/surface3-wmi.c
+> index 09ac9cfc40d8..b9a4b2d81f4b 100644
+> --- a/drivers/platform/surface/surface3-wmi.c
+> +++ b/drivers/platform/surface/surface3-wmi.c
+> @@ -190,14 +190,11 @@ static int s3_wmi_create_and_register_input(struct platform_device *pdev)
+>   
+>   	error = input_register_device(input);
+>   	if (error)
+> -		goto out_err;
+> +		return error;
+>   
+>   	s3_wmi.input = input;
+>   
+>   	return 0;
+> - out_err:
+> -	input_free_device(s3_wmi.input);
+> -	return error;
+>   }
+>   
+>   static int __init s3_wmi_probe(struct platform_device *pdev)

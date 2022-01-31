@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6341F4A44DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F217F4A43C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377770AbiAaLdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:33:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56054 "EHLO
+        id S1377807AbiAaLXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:23:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47422 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377602AbiAaLXL (ORCPT
+        with ESMTP id S236451AbiAaLOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:23:11 -0500
+        Mon, 31 Jan 2022 06:14:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97C8E60ED0;
-        Mon, 31 Jan 2022 11:23:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91BC5C340E8;
-        Mon, 31 Jan 2022 11:23:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC43A6114D;
+        Mon, 31 Jan 2022 11:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86029C340E8;
+        Mon, 31 Jan 2022 11:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628190;
-        bh=ZOL6rUN3wT1gBttG/d1EVyzJDAYDIoRciQx+cPr5nZE=;
+        s=korg; t=1643627642;
+        bh=4OSZBtWLrvk3XZbaNpArCk8kQ9Usrw+AeQKGcKTYR1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=szAaO1r31LGCd//5g4PfT1CCAUN9c1wrX7bNXdawJDMFBIQnuQlRt/wrCkxjdt0nt
-         KFiEsErAUykWAmyz1cMV29VYmT2OqCpmHLWr7S4244KA14O9BDE5O9R0WFog/5Y3lC
-         HmPeov43AM8oD26JN6PeVa7lMGNWdQ6UQUkWjYFU=
+        b=RV8tdSmzH0ew3IJmHEk7wlBODLd1RZUzZsJTKAElbLrkVDJDHO5uzKg6b7vmutYak
+         qaFh0Uvf+iSB9QciltWr6Ve4Iy0c4geQNB5D2a5CkgBCaHW7niYz/wGMoCr0r5J4yr
+         JZSC9dGocSHozXqLkrIjkVQgevV5x4Pdu9yZUCZk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dylan Yudaken <dylany@fb.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 153/200] io_uring: fix bug in slow unregistering of nodes
+        stable@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 151/171] Revert "drm/ast: Support 1600x900 with 108MHz PCLK"
 Date:   Mon, 31 Jan 2022 11:56:56 +0100
-Message-Id: <20220131105238.710162802@linuxfoundation.org>
+Message-Id: <20220131105235.127760394@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,59 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dylan Yudaken <dylany@fb.com>
+From: Dave Airlie <airlied@redhat.com>
 
-[ Upstream commit b36a2050040b2d839bdc044007cdd57101d7f881 ]
+[ Upstream commit 76cea3d95513fe40000d06a3719c4bb6b53275e2 ]
 
-In some cases io_rsrc_ref_quiesce will call io_rsrc_node_switch_start,
-and then immediately flush the delayed work queue &ctx->rsrc_put_work.
+This reverts commit 9bb7b689274b67ecb3641e399e76f84adc627df1.
 
-However the percpu_ref_put does not immediately destroy the node, it
-will be called asynchronously via RCU. That ends up with
-io_rsrc_node_ref_zero only being called after rsrc_put_work has been
-flushed, and so the process ends up sleeping for 1 second unnecessarily.
+This caused a regression reported to Red Hat.
 
-This patch executes the put code immediately if we are busy
-quiescing.
-
-Fixes: 4a38aed2a0a7 ("io_uring: batch reap of dead file registrations")
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
-Link: https://lore.kernel.org/r/20220121123856.3557884-1-dylany@fb.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 9bb7b689274b ("drm/ast: Support 1600x900 with 108MHz PCLK")
+Signed-off-by: Dave Airlie <airlied@redhat.com>
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220120040527.552068-1-airlied@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/ast/ast_tables.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 15f303180d70c..698db7fb62e06 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -7761,10 +7761,15 @@ static __cold void io_rsrc_node_ref_zero(struct percpu_ref *ref)
- 	struct io_ring_ctx *ctx = node->rsrc_data->ctx;
- 	unsigned long flags;
- 	bool first_add = false;
-+	unsigned long delay = HZ;
+diff --git a/drivers/gpu/drm/ast/ast_tables.h b/drivers/gpu/drm/ast/ast_tables.h
+index d9eb353a4bf09..dbe1cc620f6e6 100644
+--- a/drivers/gpu/drm/ast/ast_tables.h
++++ b/drivers/gpu/drm/ast/ast_tables.h
+@@ -282,8 +282,6 @@ static const struct ast_vbios_enhtable res_1360x768[] = {
+ };
  
- 	spin_lock_irqsave(&ctx->rsrc_ref_lock, flags);
- 	node->done = true;
- 
-+	/* if we are mid-quiesce then do not delay */
-+	if (node->rsrc_data->quiesce)
-+		delay = 0;
-+
- 	while (!list_empty(&ctx->rsrc_ref_list)) {
- 		node = list_first_entry(&ctx->rsrc_ref_list,
- 					    struct io_rsrc_node, node);
-@@ -7777,7 +7782,7 @@ static __cold void io_rsrc_node_ref_zero(struct percpu_ref *ref)
- 	spin_unlock_irqrestore(&ctx->rsrc_ref_lock, flags);
- 
- 	if (first_add)
--		mod_delayed_work(system_wq, &ctx->rsrc_put_work, HZ);
-+		mod_delayed_work(system_wq, &ctx->rsrc_put_work, delay);
- }
- 
- static struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx)
+ static const struct ast_vbios_enhtable res_1600x900[] = {
+-	{1800, 1600, 24, 80, 1000,  900, 1, 3, VCLK108,		/* 60Hz */
+-	 (SyncPP | Charx8Dot | LineCompareOff | WideScreenMode | NewModeInfo), 60, 3, 0x3A },
+ 	{1760, 1600, 48, 32, 926, 900, 3, 5, VCLK97_75,		/* 60Hz CVT RB */
+ 	 (SyncNP | Charx8Dot | LineCompareOff | WideScreenMode | NewModeInfo |
+ 	  AST2500PreCatchCRT), 60, 1, 0x3A },
 -- 
 2.34.1
 

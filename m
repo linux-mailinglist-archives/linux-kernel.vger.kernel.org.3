@@ -2,112 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 357874A4ADA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AD64A4ADE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379786AbiAaPqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S1379808AbiAaPrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359646AbiAaPqO (ORCPT
+        with ESMTP id S1359646AbiAaPrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:46:14 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF99C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:46:13 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id a28so27671229lfl.7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:46:13 -0800 (PST)
+        Mon, 31 Jan 2022 10:47:07 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1ABC06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:47:06 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id a25so19947065lji.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:47:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+RRqSJJn09Nz7vur4CDO+wfsgCCFJSKAUUo5VMt5QBo=;
-        b=o+HrXbzs0dBDHEZpU0ICK1TFCor6ztr1/jZCjYXTmEOVanZ2Q01NNuWJgw+xxFG2+3
-         YIzUEnf1CC4FnBlMZ+KS3qMUup2Kd1kf1NGYCmGVVNMAL/ELy5+Arump/fwrqbYCHmFV
-         gF7dWR9KGVS6WjyjnVez27yGExs1iJ0eVWXtL9DjfZSlTv+mwuMN8AOPxUisS+TEaCYP
-         6fdfrA6Y0UWGmPzM3W9s2PnF+OKBAzTk8wjj7I/yw95N7kNVTsuL6xYr96+aT5Kklnm3
-         uG4VY+tfBr9x2wC3OJYS1H853NdC+AcIhdM1ZjCxOckcThU+J0HajSyGcYZsXa87aMBQ
-         dYWQ==
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:organization:content-transfer-encoding;
+        bh=XS8KE71pw/v2S961RpMqGgaRJTZC7ly+qgOupOr0icQ=;
+        b=ikTdhl3iJphvERLi+185zuAqxR7uh7SolCYuWx5X1x6N3m3COjvArPCXhk9GDMFhkz
+         EZfdhAtmhL0rZ8Xjz7Mp6zgUj9fNHhWfZh1Tr1azmnrXqKxEonTEZXpRFKBP95iSFS4T
+         9ns7RyaaQLoQCugGLCo/dou7if4R8KQrlE7pb1dS8qNA1Xo28cFSRDTAR/g+BeG4EzAn
+         UYXWkLyB0/MXFe2mmFlvn5IC4yRWDYf1rhBpkosvq55PLFHi6/JgK8isQ+wW5WVyIbdK
+         wR6EsX60KxahcpKHpgWAkn2M+jeLYYchOdo1E+nIkv8rMo4+U8Z6q+Ut6vUBsrkCMpnS
+         4p6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+RRqSJJn09Nz7vur4CDO+wfsgCCFJSKAUUo5VMt5QBo=;
-        b=2seaTirQFE789eF97VK1j4EifxnH6DDWw9yA+wvwogkj/t1Dy8z5zZcwDzDklw6d0l
-         LxpZeJjAGv5msxHdC90jafOsk0naenSwlnNs57vDtNhJnLOvVgABM1wTOVulPx8mHpWn
-         oUXkLtY7RefjQlwByJyOcqmrJ4Qp0t2TBmbV4MrJ3ULGUMHiERlndzGTvsT0zOA2bFjs
-         q87JFAvZFB+1B0T2nckRlTU8Go/PU/ykIS2g4pmDv7XFjyMTkSWg329ojST2/Vd/m5x0
-         1rv3uZEwsTkxZWy+k5aM+qAmvIyoQueH6EqYZkQR4UPDaFmu/NgiFAPuostKCdH8GscS
-         xPTA==
-X-Gm-Message-State: AOAM530dwq2Y5+etBoDzhkB2jv3xmN36qAMy6i6PyJvIfpjm5mRLXgI3
-        +cUVI0bfcYVwdV4jRBv+r96dClOSSpU+7CeTfUZ8XA==
-X-Google-Smtp-Source: ABdhPJwP7VR1T0E9THzLZcEhqU9tJdN2MvSRg+Efi9ua8Zp7Lq5q0wg8SnZJLM/f4/yku7Fs71T6U8MLZx+GdWY7xZc=
-X-Received: by 2002:ac2:5f71:: with SMTP id c17mr15676613lfc.167.1643643971878;
- Mon, 31 Jan 2022 07:46:11 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:organization:content-transfer-encoding;
+        bh=XS8KE71pw/v2S961RpMqGgaRJTZC7ly+qgOupOr0icQ=;
+        b=15zyFgyeHh2SNHCNoMZHIIAL0M1yOa3AYHJ1XazU5VI2ULyIixTKvuUTJt1XhBDS8n
+         tVHfhVQckLrwyU6bxDjZ/32Fc/a7GbGi839LOqdgrSxfvPV7nr1IEpfPOibKGO3VF7dc
+         ndniVMfXXFChs2n3v8ocZfGIXjVyWL17qdzyEll9CMCMEsxrqOyZ8RBiF/Sp6R8ddkso
+         I8R7ZrJRTSl7mNBa8BVqVlz2aF1upYyTdRwPr7M+gcci8Q1Os0naCIK6qydFfaFA3AjY
+         oQa3HV5X3UEO6vz4fwtVnFaL0sPyKXnWIyp3yP/fSfIqlXW9s1Qx8Df0fbEO8W4njrH2
+         /nSA==
+X-Gm-Message-State: AOAM531pGeca43oO4q0JQG4gHd20X3m4lFzYiuGtT4zUz/O7SmqhtGvg
+        rp/4hqAQdp1CVwffXa6RUCbXCg==
+X-Google-Smtp-Source: ABdhPJw3hQGmvlGOAlxRdSyWR94f2t6Mk11cIMBOLJAToN2jSPJhxDpDJBsVHUW1YyvLGyGF79I2AA==
+X-Received: by 2002:a05:651c:1681:: with SMTP id bd1mr13366990ljb.446.1643644024650;
+        Mon, 31 Jan 2022 07:47:04 -0800 (PST)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id y36sm3374769lfa.82.2022.01.31.07.47.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 07:47:04 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 1/5] net: dsa: mv88e6xxx: Improve isolation of standalone ports
+Date:   Mon, 31 Jan 2022 16:46:51 +0100
+Message-Id: <20220131154655.1614770-2-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220131154655.1614770-1-tobias@waldekranz.com>
+References: <20220131154655.1614770-1-tobias@waldekranz.com>
 MIME-Version: 1.0
-References: <CAGETcx_4ATDk3nNfu6kBwUVN4nfxcHHUMnCKYsLTDoA1TFLmrw@mail.gmail.com>
-In-Reply-To: <CAGETcx_4ATDk3nNfu6kBwUVN4nfxcHHUMnCKYsLTDoA1TFLmrw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 31 Jan 2022 16:45:35 +0100
-Message-ID: <CAPDyKFqUiydk3hHiKZ92e-W2tC4yv-XhGSz20KYYsTuZu0rWuQ@mail.gmail.com>
-Subject: Re: Relation between MMC_CAP_WAIT_WHILE_BUSY and card_busy()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Jaehoon Chung <jh80.chung@samsung.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+Organization: Westermo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 at 04:46, Saravana Kannan <saravanak@google.com> wrote:
->
-> I'm trying to understand the MMC suspend path a bit.
->
-> I looked at the commit message of 6fa79651cc808f68db6f6f297be5a950ccd5dffb.
->
-> IIUC, if MMC_CAP_WAIT_WHILE_BUSY is set then the mmc framework is
-> going to depend on the card_busy() op to ensure correctness instead of
-> using the S_A_TIMEOUT value from the card.
+Clear MapDA on standalone ports to bypass any ATU lookup that might
+point the packet in the wrong direction. This means that all packets
+are flooded using the PVT config. So make sure that standalone ports
+are only allowed to communicate with the CPU port.
 
-MMC_CAP_WAIT_WHILE_BUSY indicates whether the mmc controller supports
-IRQ based busy detection completion. In other words, the mmc host
-driver can receive an IRQ when busy signaling is completed on DAT0 by
-the eMMC card.
+Here is a scenario in which this is needed:
 
-However, to avoid waiting for the IRQ forever, there is a maximum
-timeout that is specified by the mmc core, for the particular command
-in question. For eMMC sleep, the S_A_TIMEOUT.
+   CPU
+    |     .----.
+.---0---. | .--0--.
+|  sw0  | | | sw1 |
+'-1-2-3-' | '-1-2-'
+      '---'
 
->
-> But I see a lot of mmc host drivers that implement card_busy() but
-> don't set the MMC_CAP_WAIT_WHILE_BUSY flag. That doesn't seem right to
-> me if my understanding is correct.
+- sw0p1 and sw1p1 are bridged
+- sw0p2 and sw1p2 are in standalone mode
+- Learning must be enabled on sw0p3 in order for hardware forwarding
+  to work properly between bridged ports
 
-That's perfectly okay. MMC_CAP_WAIT_WHILE_BUSY is IRQ based, while the
-->card_busy() ops is used to poll for busy completion.
+1. A packet with SA :aa comes in on sw1p2
+   1a. Egresses sw1p0
+   1b. Ingresses sw0p3, ATU adds an entry for :aa towards port 3
+   1c. Egresses sw0p0
 
->
-> If it's supposed to be "we'll use card_busy() if
-> MMC_CAP_WAIT_WHILE_BUSY isn't set", then why do we have some mmc host
-> drivers that have both?
->
-> What am I misunderstanding?
+2. A packet with DA :aa comes in on sw0p2
+   2a. If an ATU lookup is done at this point, the packet will be
+       incorrectly forwarded towards sw0p3. With this change in place,
+       the ATU is pypassed and the packet is forwarded in accordance
+       whith the PVT, which only contains the CPU port.
 
-There are some additional complexity for the corresponding code. This
-has mostly ended up there because we also need to deal with mmc
-controller's HW limitations around this feature.
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 32 +++++++++++++++++++++++++-------
+ drivers/net/dsa/mv88e6xxx/port.c |  7 +++++--
+ drivers/net/dsa/mv88e6xxx/port.h |  2 +-
+ include/net/dsa.h                | 12 ++++++++++++
+ 4 files changed, 43 insertions(+), 10 deletions(-)
 
-For example, some mmc controllers have a HW limit for the length of
-the timeout that can be set. If the needed timeout is longer than what
-can be supported, we can't use IRQ based busy completion.
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 1023e4549359..dde6a8d0ca36 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1290,8 +1290,15 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ 
+ 	pvlan = 0;
+ 
+-	/* Frames from user ports can egress any local DSA links and CPU ports,
+-	 * as well as any local member of their bridge group.
++	/* Frames from standalone user ports can only egress on the
++	 * CPU port.
++	 */
++	if (!dsa_port_bridge_dev_get(dp))
++		return BIT(dsa_switch_upstream_port(ds));
++
++	/* Frames from bridged user ports can egress any local DSA
++	 * links and CPU ports, as well as any local member of their
++	 * bridge group.
+ 	 */
+ 	dsa_switch_for_each_port(other_dp, ds)
+ 		if (other_dp->type == DSA_PORT_TYPE_CPU ||
+@@ -2487,6 +2494,10 @@ static int mv88e6xxx_port_bridge_join(struct dsa_switch *ds, int port,
+ 	if (err)
+ 		goto unlock;
+ 
++	err = mv88e6xxx_port_set_map_da(chip, port, true);
++	if (err)
++		return err;
++
+ 	err = mv88e6xxx_port_commit_pvid(chip, port);
+ 	if (err)
+ 		goto unlock;
+@@ -2521,6 +2532,12 @@ static void mv88e6xxx_port_bridge_leave(struct dsa_switch *ds, int port,
+ 	    mv88e6xxx_port_vlan_map(chip, port))
+ 		dev_err(ds->dev, "failed to remap in-chip Port VLAN\n");
+ 
++	err = mv88e6xxx_port_set_map_da(chip, port, false);
++	if (err)
++		dev_err(ds->dev,
++			"port %d failed to restore map-DA: %pe\n",
++			port, ERR_PTR(err));
++
+ 	err = mv88e6xxx_port_commit_pvid(chip, port);
+ 	if (err)
+ 		dev_err(ds->dev,
+@@ -2918,12 +2935,13 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
+ 		return err;
+ 
+ 	/* Port Control 2: don't force a good FCS, set the MTU size to
+-	 * 10222 bytes, disable 802.1q tags checking, don't discard tagged or
+-	 * untagged frames on this port, do a destination address lookup on all
+-	 * received packets as usual, disable ARP mirroring and don't send a
+-	 * copy of all transmitted/received frames on this port to the CPU.
++	 * 10222 bytes, disable 802.1q tags checking, don't discard
++	 * tagged or untagged frames on this port, skip destination
++	 * address lookup on user ports, disable ARP mirroring and don't
++	 * send a copy of all transmitted/received frames on this port
++	 * to the CPU.
+ 	 */
+-	err = mv88e6xxx_port_set_map_da(chip, port);
++	err = mv88e6xxx_port_set_map_da(chip, port, !dsa_is_user_port(ds, port));
+ 	if (err)
+ 		return err;
+ 
+diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
+index ab41619a809b..ceb450113f88 100644
+--- a/drivers/net/dsa/mv88e6xxx/port.c
++++ b/drivers/net/dsa/mv88e6xxx/port.c
+@@ -1278,7 +1278,7 @@ int mv88e6xxx_port_drop_untagged(struct mv88e6xxx_chip *chip, int port,
+ 	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL2, new);
+ }
+ 
+-int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port)
++int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port, bool map)
+ {
+ 	u16 reg;
+ 	int err;
+@@ -1287,7 +1287,10 @@ int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port)
+ 	if (err)
+ 		return err;
+ 
+-	reg |= MV88E6XXX_PORT_CTL2_MAP_DA;
++	if (map)
++		reg |= MV88E6XXX_PORT_CTL2_MAP_DA;
++	else
++		reg &= ~MV88E6XXX_PORT_CTL2_MAP_DA;
+ 
+ 	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL2, reg);
+ }
+diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
+index 03382b66f800..5c347cc58baf 100644
+--- a/drivers/net/dsa/mv88e6xxx/port.h
++++ b/drivers/net/dsa/mv88e6xxx/port.h
+@@ -425,7 +425,7 @@ int mv88e6185_port_get_cmode(struct mv88e6xxx_chip *chip, int port, u8 *cmode);
+ int mv88e6352_port_get_cmode(struct mv88e6xxx_chip *chip, int port, u8 *cmode);
+ int mv88e6xxx_port_drop_untagged(struct mv88e6xxx_chip *chip, int port,
+ 				 bool drop_untagged);
+-int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port);
++int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port, bool map);
+ int mv88e6095_port_set_upstream_port(struct mv88e6xxx_chip *chip, int port,
+ 				     int upstream_port);
+ int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
+diff --git a/include/net/dsa.h b/include/net/dsa.h
+index 57b3e4e7413b..30f3192616e5 100644
+--- a/include/net/dsa.h
++++ b/include/net/dsa.h
+@@ -581,6 +581,18 @@ static inline bool dsa_is_upstream_port(struct dsa_switch *ds, int port)
+ 	return port == dsa_upstream_port(ds, port);
+ }
+ 
++/* Return the local port used to reach the CPU port */
++static inline unsigned int dsa_switch_upstream_port(struct dsa_switch *ds)
++{
++	int p;
++
++	for (p = 0; p < ds->num_ports; p++)
++		if (!dsa_is_unused_port(ds, p))
++			return dsa_upstream_port(ds, p);
++
++	return ds->num_ports;
++}
++
+ /* Return true if @upstream_ds is an upstream switch of @downstream_ds, meaning
+  * that the routing port from @downstream_ds to @upstream_ds is also the port
+  * which @downstream_ds uses to reach its dedicated CPU.
+-- 
+2.25.1
 
-Did this make it more clear?
-
->
-> -Saravana
-
-Kind regards
-Uffe

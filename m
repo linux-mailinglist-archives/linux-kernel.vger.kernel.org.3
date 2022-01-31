@@ -2,261 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C85D84A4CA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD574A4CAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380677AbiAaRAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380092AbiAaRAb (ORCPT
+        id S1380665AbiAaRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:01:47 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:4534 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380092AbiAaRBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:00:31 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059E5C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:00:31 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id v186so42545010ybg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:00:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+p5607n/Qx4OeoWA5j6F3HYoZ+CHzgiXbMB9onprQMM=;
-        b=mwYPZ1BMvQtpU/lT+ig4svLbDDEM3EWqZoJWXBwHw2x8FEVno2OxtLeLT5LI0hpqMZ
-         dBA3NO8lXFTC5aEsEDU8DCw1LUTxpu8afkxWBsUMl2VNUnVoABysCxd6/DgsGrKdTpTg
-         ZN2ellZYbqRashei1zRvlzAkIZS0XeCM8iqnkYNX3l4Q+9U6BT7IEkL9Azp8RuOqJmPE
-         shhv3xCrL3PB8h8l/GWKSW+wULb8uDHhXcRuYX+Ad3k2cbFalNw/QfH4srw4wEMghoBG
-         bhjuONHrlE63ulRkkeHtHiViYUYUmQqoneBBWZwR0/uBwIdXCM55X9Z9N1pjDtSeBouR
-         cxtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+p5607n/Qx4OeoWA5j6F3HYoZ+CHzgiXbMB9onprQMM=;
-        b=OI8pBaROU3CQPlKF1j/rqILy4+pLKS0R3q4XsSiNM52Ay0XA+D2Gd/RopjGsGCRG0Z
-         m238k9wSnooo5cJpaneYuNoxRYKIR7HCV3zS3Ioi4LfBvIoQu8aDwtwZEzTq4Ua4L74U
-         y0SZ/LaZ/qkxMxtRDQ0h/uT1WnlOfbItg6ecnw+Fwt4sgNrAHuzVLeQ4G1GFTyknZglj
-         3XQsKT+A4PXOtJmNWAtrg/fnPXL+RxU9fSs21mnBEecFGWirKDeM3QzfC84W79SSqJeP
-         Jc7TWopIpeUIaCHWp8xK9Zk3DkJoz+tce1PETC39Hx+swF7nGz/rDyrePdXddCrkCoDc
-         ZZZA==
-X-Gm-Message-State: AOAM5307XuL7R3M01OamvwaXlDUg9nywXJnA+KMStYdNqEbxWs8gSKvW
-        YwleZ3/G7IzB5vN3BRhv40/3Ti0JwTiRU4NtUCBtwQ==
-X-Google-Smtp-Source: ABdhPJz62xJE53ArhJNczOWBtzrWjKaoaUklQ+/ZGbMvTPzwCiMQTfr/SixemAmy2d1KXVzrjs3BWUtVmnQ/sSFzCSA=
-X-Received: by 2002:a25:86d1:: with SMTP id y17mr31980173ybm.243.1643648429801;
- Mon, 31 Jan 2022 09:00:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20220128131006.67712-1-michel@lespinasse.org> <1bfec16f-76c6-9beb-26b2-ca508baa76a3@redhat.com>
-In-Reply-To: <1bfec16f-76c6-9beb-26b2-ca508baa76a3@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 31 Jan 2022 09:00:18 -0800
-Message-ID: <CAJuCfpH+emfOg55Fh6hO90+MeGmg2r5FKR7BeuzPJtsu1ArtZA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/35] Speculative page faults
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Michel Lespinasse <michel@lespinasse.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Jerome Glisse <jglisse@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
+        Mon, 31 Jan 2022 12:01:45 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20VGnUVt005868;
+        Mon, 31 Jan 2022 09:01:30 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=Y4HUQwPeuAbzYap8tBpYSb9KNcPloBhp0o+4zwLzb7s=;
+ b=WmqesgWQT0e/urveuv4u/sp5o892fmT0SwOSn6lorEPgiZI5adxBdwbUz1b0Qbx5rXQh
+ hUGV+Uef9jgjjZSJZGU/0V3aRCt7QRHn7JoVpR7pYuegCeLrPVs7900chOs580donmrC
+ 5/ahSCWZWfsALgNRwUyITfUKQGiEPhLwTsY= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxh0p176t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 31 Jan 2022 09:01:30 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 31 Jan 2022 09:01:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=df2TuqT22zOzsmMvKZeTeBWbGORSx+iQjAObxwZO4sTTNpQKDT6CHa1wkkPx4UnpkarmWNHya55XmR6j1Nt5Vs2sIkfIodPFrGgvqAUC9xnqbQjZA5tiwhlhDQ0PX8F4S61rpOi3Ix3GPccHIaGbXerRC7j0weRFAtocY2LBXFl9kax+VPJ/xeOzIp1+noM8jiFCRAjQmQ9V8mTM07RRlRs2oWxKW8eLkA8tm2OOtHBNfF8NRS+DWHF93AdBhAjKnZMSgzz9nubMNeZrlO7DL7/dyBrChNza+yZdTbw1YqU/ENa/QMu9y48ev26kiFGXe+Pbt2Y9/bx+5TrH0yGvJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y4HUQwPeuAbzYap8tBpYSb9KNcPloBhp0o+4zwLzb7s=;
+ b=Hf1VLmWAyO84IyyupbGoQ/Q1NEMZpczTkRTYH78NYZ6oBytpJYUB9FX0TPFwPyK2z7rsDcGvl5jW7LstzscfWqNU0xaTiK/hFraW+F3sKZGXbFv4RGChdTFinz0vUyKtu6kocug29HNSDpdtc0Muw7X30P/3fzHOr3HueauTAGda7IxbqZdcRIlcFOYTElWSZ+579oO76r6geSlnka9m8D1DAc5Gxlq1pK1GPGI8Q53lyk9knE74zUVFFV7SM/FQ3bc+wXZPUJCVlQ2ojP+CLKelg+kXIgP0hcnxPIEw/KYyQ9c4j5umPcPfkkTW+WaNBQ1DvpI1giBDRvdIQvs9vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by CH2PR15MB3654.namprd15.prod.outlook.com (2603:10b6:610:e::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.22; Mon, 31 Jan
+ 2022 17:01:18 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::d4ac:5796:5198:ecd2]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::d4ac:5796:5198:ecd2%3]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
+ 17:01:17 +0000
+Date:   Mon, 31 Jan 2022 09:01:14 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Waiman Long <longman@redhat.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Rik van Riel <riel@surriel.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Tim Murray <timmurray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-mm@kvack.org>, Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH 1/3] mm, memcg: Don't put offlined memcg into local stock
+Message-ID: <YfgV2iiaVlR0hozD@carbon.dhcp.thefacebook.com>
+References: <20211001190938.14050-1-longman@redhat.com>
+ <20211001190938.14050-2-longman@redhat.com>
+ <YVefHLo1+6lgw3aB@carbon.dhcp.thefacebook.com>
+ <f7026256-4086-6632-569e-5b13594cb3fc@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f7026256-4086-6632-569e-5b13594cb3fc@redhat.com>
+X-ClientProxiedBy: CO2PR04CA0183.namprd04.prod.outlook.com
+ (2603:10b6:104:5::13) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ecea9a1a-71a0-4946-0e83-08d9e4db4c2b
+X-MS-TrafficTypeDiagnostic: CH2PR15MB3654:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR15MB36545AD09ED5847EE196C440BE259@CH2PR15MB3654.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aVZckLg+P2pJbDYQNbsIxMffPR2nDLS36LBVDdNFOf4pVaedhqi7o76A8exZTRxDvMo+Sw4H0DEyq7Klj7ZalU5Py+KvWssxg9k2Sm2bMtyIaqNbtV5me6WWKhbbU+qarijB2u/b2sND8sATIz/0hdU4BCvj4pcShs7vRZY2VeYQW5aPsHRSZ3OwuN34BTLcM+I6jQds0kgRtvdZ4VnjJcc1NkPjb28zXI0BvQFeMq7ai091StasMltF/dqcc1syGPWxcm6hyMRPtO6g5xDAQGPwGPZPpH17xDInG6Ng6gt34JgcxObOulTsvoB0Lmb9fvov36LqSpfgrvZWPwoDP59hbbEXUKfIfZPW3xIKsr8E0E+FBUQRRlU849jyg9EfAdyrPi2t7WnVmNOwVZHBzQnp6dwPuINs5dvaQlQtPTumSBJ3D/caT57UFYmo5sIwo9AAdU1MH2rlc/lx+6zuVY7NMjqR3IIAw+GRaSb1dy5wfwnFnNKmBoFT2zWgO7XWYrsDnfgBy3PBNKwVhgLtyMwwrN5DkrzqdAC/ahNrcL/uWSsgta2v3tjhN7WsQWhMLFzm4pMhFQLTyHPO0Xiak+wDElku2H0tmmK/v4eqB195uKU9JKGyf2sbnNdujzuz1LmOQfxh1FNyOTxLyWQ41BGbzArVHQIQvmK44+YSpSLOhEtb2jPAzOWKbB6boS2K5NhWRIXYdUBo97SjfRYuH9Paw4j+L3GTPcaygssC8ro=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(6506007)(6512007)(6666004)(508600001)(53546011)(52116002)(966005)(5660300002)(6486002)(7416002)(4326008)(2906002)(6916009)(8676002)(54906003)(316002)(86362001)(38100700002)(8936002)(66476007)(66946007)(66556008)(83380400001)(186003)(20210929001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UL9A+gncwP+7GUsNWh7Gs5w2zf+46i8JHV77JjeVVFZ6VjkcdEHmOy3NDZjr?=
+ =?us-ascii?Q?dXJAadknYMnQGg5BXWawiKC5bBz4lObbzqDbyty1tlh1sVjnl6jEUpxEt0mg?=
+ =?us-ascii?Q?V3guvID4GGUVjIOQFhnpfvXapUA+4C7bkog0xXi8+wo0VNJUV4PfrCiouMvT?=
+ =?us-ascii?Q?kgjr6nwVhxkAyOQdOAHC1RHsO9Oqug8o831ITGy9k7GUWlpoHcoz0X048mGt?=
+ =?us-ascii?Q?ai0b6ee3SJ+BQERNkK/6LY7Q2Jr/pqzyDm6+F4FenKXjHhTRCfNJW+ovt2V1?=
+ =?us-ascii?Q?zLqzTs9Jglh6jrieFjopeu/EzEMAkk+e1FN+CADo9JcWI3oHfOdB54yV59Fi?=
+ =?us-ascii?Q?8Y0ywESdB0oVvqMaWBqcn6fgw/5zvWrraeZaNYah49pNDY2naeH51bc2LwQS?=
+ =?us-ascii?Q?7KF/cjdRm/A+t6C9lIpxQrwVB4OsE/mEmAFeFbTsAyiauebzweFFmhj2al2U?=
+ =?us-ascii?Q?OhIuwN/JMbjVwGfkGMf8uHjQMJE9lkMRKQ2y+RM0SACc/w7aGAFI5qaCnzv2?=
+ =?us-ascii?Q?ndkDg2r/aDdzMJw7oWUW5lJKqKID19yiKdzOSPuGQjyKxzfLVZWjTlF218T8?=
+ =?us-ascii?Q?69JT2nq2rlk9vMTNrZQw3Az6YwGf/FGC+NY2k0DEjApLcRwEy1hEgkk2fy/g?=
+ =?us-ascii?Q?oAdlzQvRnP3703XJtACKzvOqy3k5Qz9CYDOSjTvnovxhNDOGCaqUJTPOOWqA?=
+ =?us-ascii?Q?rEfn4mMwSWfgvfsA4c4evVUMKYOHP3fqfIRdWdmzsuUGCipf1wIU5rXWkUlL?=
+ =?us-ascii?Q?Sb8Uf3g1GhyUGUt+ADO3Ozx9+JJAwCwvTb/zfYmk76Jd/913r98u4YC8Rx8g?=
+ =?us-ascii?Q?Q4GeTJ7lXKmRAwIP1kcLHAziRJcYTNaW/yuw8qnHMn3mvhpiijWXxIjMPtd1?=
+ =?us-ascii?Q?7ufqMmVTIxEkDFHKn66hWym+eSxdzTYgFKBQCup0o5F8rHgWoSi/x/abgGlX?=
+ =?us-ascii?Q?4dIUj2FY8gWuxcWu2EESdbmf0wxYpyfKg6YdKuZROyXVpbGpYvnHgr8nFNci?=
+ =?us-ascii?Q?pRXPJnEtiLDO6W0RWgp+NYDKYkyBAR9xO2A4gWtoLDe76kVw+vw7pNzksKV4?=
+ =?us-ascii?Q?iTfdIBJexmBuckA8NX/c+x8nhfHYfw07L6fK3FIyYzfMUgkZeSEvn+IabnkY?=
+ =?us-ascii?Q?6FxPTQJCtXTlxXZbQoz3xnY1RUuW79onmhjfg9t2hXmaAPu/4JRvD2z8VXun?=
+ =?us-ascii?Q?NBvRyGfjIdCZ3E44p+4LJBLzBjVL1KTc+Qq4zxB+jpFugvqo6VPJ2wm7IYzi?=
+ =?us-ascii?Q?fJVYvJi5LfavAFA5YMYlQ/QSPDRqefEmK6rR/U3k3qXXszFqDnXPB+8pr/tH?=
+ =?us-ascii?Q?U1KtlquvyMKp4Z/RWjnQiYpKfiiU+VyVR9q99w4ILh38iLEWhraTajdOtLzH?=
+ =?us-ascii?Q?Q3brtASz+EXEyKmN6ywjBMcLvcIfi+ijxNJuOdOUFBz4yYWf0ixzlDOwBan5?=
+ =?us-ascii?Q?zWdlkS6GQ13kFA6I/kI4M6bombYBZv+VDiFH1pUMvx38cKV8sA1olSU/x+pQ?=
+ =?us-ascii?Q?JaIATrpZ2/fjpl89fz+L5wPVD9KBiQr6CW26NTOAroGLffD1jt1Nbn7ieaPe?=
+ =?us-ascii?Q?GVlJIa68ZPTxLtrM4Ac9/oZkn/P+9pIDAYh7sSt3?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecea9a1a-71a0-4946-0e83-08d9e4db4c2b
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 17:01:17.8684
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CUiJIipV/j+sFPlxTxEcxaamORqckKQGD4hD4u1EwRvBvvV4luNvzuvHXnLhdIGs
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR15MB3654
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: 6m2deS2d4q1BcZ6N52kLfQwrKDf1CF8V
+X-Proofpoint-ORIG-GUID: 6m2deS2d4q1BcZ6N52kLfQwrKDf1CF8V
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=1 clxscore=1011
+ mlxscore=1 mlxlogscore=196 priorityscore=1501 lowpriorityscore=0
+ spamscore=1 phishscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2201310111
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 1:56 AM David Hildenbrand <david@redhat.com> wrote:
->
-> On 28.01.22 14:09, Michel Lespinasse wrote:
->
-> Hi Michel,
->
-> > This patchset is my take on speculative page faults (spf).
-> > It builds on ideas that have been previously proposed by Laurent Dufour,
-> > Peter Zijlstra and others before. While Laurent's previous proposal
-> > was rejected around the time of LSF/MM 2019, I am hoping we can revisit
-> > this now based on what I think is a simpler and more bisectable approach,
-> > much improved scaling numbers in the anonymous vma case, and the Android
-> > use case that has since emerged. I will expand on these points towards
-> > the end of this message.
-> >
-> > The patch series applies on top of linux v5.17-rc1;
-> > a git tree is also available:
-> > git fetch https://github.com/lespinasse/linux.git v5.17-rc1-spf-anon
-> >
-> > I would like these patches to be considered for inclusion into v5.18.
->
-> Just a general note: we certainly need (much more) review. And I think
-> we'll have to make a decision if the maintenance effort +  complexity
-> will be worth the benefit.
->
-> > Several android vendors are using Laurent Dufour's previous SPF work into
-> > their kernel tree in order to improve application startup performance,
-> > want to converge to an upstream accepted solution, and have reported good
-> > numbers with previous versions of this patchset. Also, there is a broader
-> > interest into reducing mmap lock dependencies in critical MM paths,
-> > and I think this patchset would be a good first step in that direction.
-> >
-> >
-> > This patchset follows the same overall structure as the v1 proposal,
-> > with the following differences:
-> > - Commit 12 (mm: separate mmap locked assertion from find_vma) is new.
-> > - The mmu notifier lock is new; this fixes a race in v1 patchset
-> >   between speculative COW faults and registering new MMU notifiers.
-> > - Speculative handling of swap-cache pages has been removed.
-> > - Commit 30 is new; this fixes build issues that showed in some configs.
-> >
-> >
-> > In principle it would also be possible to extend this work for handling
-> > file mapped vmas; I have pending work on such patches too but they are
-> > not mature enough to be submitted for inclusion at this point.
-> >
->
-> I'd have expected a performance evaluation at this point, to highlight
-> the possible benefit and eventually also downsides, if any.
+On Sun, Jan 30, 2022 at 10:55:56PM -0500, Waiman Long wrote:
+> On 10/1/21 19:51, Roman Gushchin wrote:
+> > On Fri, Oct 01, 2021 at 03:09:36PM -0400, Waiman Long wrote:
+> > > When freeing a page associated with an offlined memcg, refill_stock()
+> > > will put it into local stock delaying its demise until another memcg
+> > > comes in to take its place in the stock. To avoid that, we now check
+> > > for offlined memcg and go directly in this case to the slowpath for
+> > > the uncharge via the repurposed cancel_charge() function.
+> > Hi Waiman!
+> > 
+> > I'm afraid it can make a cleanup of a dying cgroup slower: for every
+> > released page we'll potentially traverse the whole cgroup tree and
+> > decrease atomic page counters.
+> > 
+> > I'm not sure I understand the benefits we get from this change which
+> > do justify the slowdown on the cleanup path.
+> > 
+> > Thanks!
+> 
+> I was notified of a lockdep splat that this patch may help to prevent.
 
-Hi David,
-In Android we and several Android vendors reported application start
-time improvements (a critical metric in Android world) on the previous
-SPF posting.
-My test results were included in the cover letter:
-  https://lore.kernel.org/lkml/eee7431c-3dc8-ca3c-02fb-9e059d30e951@kernel.org/T/#m23c5cb33b1a04979c792db6ddd7e3245e5f86bcb
-Android vendors reported their results on the same thread:
-  https://lore.kernel.org/lkml/eee7431c-3dc8-ca3c-02fb-9e059d30e951@kernel.org/T/#m8eb304b67c9a33388e2fe4448a04a74879120b34
-  https://lore.kernel.org/lkml/eee7431c-3dc8-ca3c-02fb-9e059d30e951@kernel.org/T/#maaa58f7072732e5a2a77fe9f65dd3e444c2aed04
-And Axel ran pft (pagefault test) benchmarks on server class machines
-with results reported here:
-  https://lore.kernel.org/lkml/eee7431c-3dc8-ca3c-02fb-9e059d30e951@kernel.org/T/#mc3965e87a702c67909a078a67f8f7964d707b2e0
-The Android performance team had recently reported a case when a
-low-end device was having visible performance issues and after
-applying SPF the device became usable. I'm CC'ing Tim Murray from that
-team to provide more information if possible.
-As a side-note, an older version of SPF has been used for several
-years on Android and many vendors specifically requested us to include
-it in our kernels. It is currently maintained in Android Common Kernel
-as an out-of-tree patchset and getting it upstream would be huge for
-us in terms of getting more testing in a wider ecosystem and
-maintenance efforts.
-Thanks,
-Suren.
+Would you mind to test this patch:
+https://www.spinics.net/lists/cgroups/msg31244.html ?
 
+It should address this dependency.
 
-
-
->
-> >
-> > Patchset summary:
-> >
-> > Classical page fault processing takes the mmap read lock in order to
-> > prevent races with mmap writers. In contrast, speculative fault
-> > processing does not take the mmap read lock, and instead verifies,
-> > when the results of the page fault are about to get committed and
-> > become visible to other threads, that no mmap writers have been
-> > running concurrently with the page fault. If the check fails,
-> > speculative updates do not get committed and the fault is retried
-> > in the usual, non-speculative way (with the mmap read lock held).
-> >
-> > The concurrency check is implemented using a per-mm mmap sequence count.
-> > The counter is incremented at the beginning and end of each mmap write
-> > operation. If the counter is initially observed to have an even value,
-> > and has the same value later on, the observer can deduce that no mmap
-> > writers have been running concurrently with it between those two times.
-> > This is similar to a seqlock, except that readers never spin on the
-> > counter value (they would instead revert to taking the mmap read lock),
-> > and writers are allowed to sleep. One benefit of this approach is that
-> > it requires no writer side changes, just some hooks in the mmap write
-> > lock APIs that writers already use.
-> >
-> > The first step of a speculative page fault is to look up the vma and
-> > read its contents (currently by making a copy of the vma, though in
-> > principle it would be sufficient to only read the vma attributes that
-> > are used in page faults). The mmap sequence count is used to verify
-> > that there were no mmap writers concurrent to the lookup and copy steps.
-> > Note that walking rbtrees while there may potentially be concurrent
-> > writers is not an entirely new idea in linux, as latched rbtrees
-> > are already doing this. This is safe as long as the lookup is
-> > followed by a sequence check to verify that concurrency did not
-> > actually occur (and abort the speculative fault if it did).
-> >
-> > The next step is to walk down the existing page table tree to find the
-> > current pte entry. This is done with interrupts disabled to avoid
-> > races with munmap(). Again, not an entirely new idea, as this repeats
-> > a pattern already present in fast GUP. Similar precautions are also
-> > taken when taking the page table lock.
-> >
-> > Breaking COW on an existing mapping may require firing MMU notifiers.
-> > Some care is required to avoid racing with registering new notifiers.
-> > This patchset adds a new per-cpu rwsem to handle this situation.
->
-> I have to admit that this sounds complicated and possibly dangerous to me.
->
->
-> Here is one of my concerns, I hope you can clarify:
->
-> GUP-fast only ever walks page tables and doesn't actually modify any
-> page table state, including, not taking page table locks which might not
-> reside in the memmap directly but in auxiliary data. It works because we
-> only ever drop the last reference to a page table (to free it) after we
-> synchronized against GUP-fast either via an IPI or synchronize_rcu(), as
-> GUP=fast disables interrupts.
->
->
-> I'd assume that taking page table locks on page tables that might no
-> longer be spanned by a VMA because of concurrent page table
-> deconstruction  is dangerous:
->
->
-> On munmap(), we do the VMA update under mmap_lock in write mode, to the
-> remove the page tables under mmap_lock in read mode.
->
-> Let's take a look at free_pte_range() on x86:
->
-> free_pte_range()
-> -> pte_free_tlb()
->  -> tlb_flush_pmd_range()
->   -> __tlb_adjust_range()
->    /* Doesn't actually flush but only updates the tlb range */
->  -> __pte_free_tlb()
->   -> ___pte_free_tlb()
->    -> pgtable_pte_page_dtor()
->     -> ptlock_free()
->     /* page table lock was freed */
->    -> paravirt_tlb_remove_table()
->     -> tlb_remove_page()
->      -> tlb_remove_page_size()
->       -> __tlb_remove_page_size()
->        /* Page added to TLB batch flushing+freeing */
->
-> The later tlb_flush_mmu() via tlb_flush_mmu_free()->tlb_table_flush()
-> will the free the page tables, after synchronizing against GUP-fast. But
-> at that point we already deconstructed the page tables.
->
-> So just reading your summary here, what prevents in your approach taking
-> a page table lock with racing against page table lock freeing? I cannot
-> see how a seqcount would help.
->
->
-> IIUC, with what you propose we cannot easily have auxiliary data for a
-> page table, at least not via current pgtable_pte_page_dtor(), including
-> page locks, which is a drawback (and currently eventually a BUG in your
-> code?) at least for me. But I only read the cover letter, so I might be
-> missing something important :)
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+Thanks!

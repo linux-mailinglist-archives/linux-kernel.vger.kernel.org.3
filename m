@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944DC4A43AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911324A4227
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377314AbiAaLWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:22:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46618 "EHLO
+        id S1359090AbiAaLK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:10:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40980 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376592AbiAaLNB (ORCPT
+        with ESMTP id S1348507AbiAaLGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:13:01 -0500
+        Mon, 31 Jan 2022 06:06:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DBF611C1;
-        Mon, 31 Jan 2022 11:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C299C340E8;
-        Mon, 31 Jan 2022 11:13:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BBC26104B;
+        Mon, 31 Jan 2022 11:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB5AC36AE3;
+        Mon, 31 Jan 2022 11:06:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627581;
-        bh=tx0AFZR/+x5PM+4Z/GTo32lYuvY+PqI/XgpAT+t3vSw=;
+        s=korg; t=1643627190;
+        bh=i/qDGYIStvA+YTvPwrw5QtUqxP1K+kAf+KVBEzQxREI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qB7p60fnChFZgA3zOApef+66JhH0E1JjkQ0eYjPhaXag1tpoTH0gALc1z4Fhrsvys
-         BZpmptTsiozsmHIy579eNwrIM+ZXhn2kqGTB+dCb2+67UppjHc9lM0nJbIN4HQTRqZ
-         SlKItT/yniaWzBBtU7bzFEcAUF/g7dUXDIvolxdQ=
+        b=1BosN7zXh58OxuN54z9NnVW7AbWtak0/3Hlz5E4dK1D+RdlGpNwFTH90ZqARKazJG
+         qiVwZUKx+/X1dctg3LCtcq/eU5ILSxrSbILOrN/MMybZIiWnY8t93ezi/NIbfmrMHO
+         BqdIEJLKVHmdRV6Rn0DPv7qMMKcfNAHymZOfcTNM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mihai Carabas <mihai.carabas@oracle.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 129/171] efi/libstub: arm64: Fix image check alignment at entry
+Subject: [PATCH 5.10 073/100] net: phy: broadcom: hook up soft_reset for BCM54616S
 Date:   Mon, 31 Jan 2022 11:56:34 +0100
-Message-Id: <20220131105234.377287950@linuxfoundation.org>
+Message-Id: <20220131105222.877560759@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,47 +47,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mihai Carabas <mihai.carabas@oracle.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit e9b7c3a4263bdcfd31bc3d03d48ce0ded7a94635 ]
+[ Upstream commit d15c7e875d44367005370e6a82e8f3a382a04f9b ]
 
-The kernel is aligned at SEGMENT_SIZE and this is the size populated in the PE
-headers:
+A problem was encountered with the Bel-Fuse 1GBT-SFP05 SFP module (which
+is a 1 Gbps copper module operating in SGMII mode with an internal
+BCM54616S PHY device) using the Xilinx AXI Ethernet MAC core, where the
+module would work properly on the initial insertion or boot of the
+device, but after the device was rebooted, the link would either only
+come up at 100 Mbps speeds or go up and down erratically.
 
-arch/arm64/kernel/efi-header.S: .long   SEGMENT_ALIGN // SectionAlignment
+I found no meaningful changes in the PHY configuration registers between
+the working and non-working boots, but the status registers seemed to
+have a lot of error indications set on the SERDES side of the device on
+the non-working boot. I suspect the problem is that whatever happens on
+the SGMII link when the device is rebooted and the FPGA logic gets
+reloaded ends up putting the module's onboard PHY into a bad state.
 
-EFI_KIMG_ALIGN is defined as: (SEGMENT_ALIGN > THREAD_ALIGN ? SEGMENT_ALIGN :
-THREAD_ALIGN)
+Since commit 6e2d85ec0559 ("net: phy: Stop with excessive soft reset")
+the genphy_soft_reset call is not made automatically by the PHY core
+unless the callback is explicitly specified in the driver structure. For
+most of these Broadcom devices, there is probably a hardware reset that
+gets asserted to reset the PHY during boot, however for SFP modules
+(where the BCM54616S is commonly found) no such reset line exists, so if
+the board keeps the SFP cage powered up across a reboot, it will end up
+with no reset occurring during reboots.
 
-So it depends on THREAD_ALIGN. On newer builds this message started to appear
-even though the loader is taking into account the PE header (which is stating
-SEGMENT_ALIGN).
+Hook up the genphy_soft_reset callback for BCM54616S to ensure that a
+PHY reset is performed before the device is initialized. This appears to
+fix the issue with erratic operation after a reboot with this SFP
+module.
 
-Fixes: c32ac11da3f8 ("efi/libstub: arm64: Double check image alignment at entry")
-Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Fixes: 6e2d85ec0559 ("net: phy: Stop with excessive soft reset")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/libstub/arm64-stub.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/phy/broadcom.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/firmware/efi/libstub/arm64-stub.c b/drivers/firmware/efi/libstub/arm64-stub.c
-index 2363fee9211c9..9cc556013d085 100644
---- a/drivers/firmware/efi/libstub/arm64-stub.c
-+++ b/drivers/firmware/efi/libstub/arm64-stub.c
-@@ -119,9 +119,9 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
- 	if (image->image_base != _text)
- 		efi_err("FIRMWARE BUG: efi_loaded_image_t::image_base has bogus value\n");
- 
--	if (!IS_ALIGNED((u64)_text, EFI_KIMG_ALIGN))
--		efi_err("FIRMWARE BUG: kernel image not aligned on %ldk boundary\n",
--			EFI_KIMG_ALIGN >> 10);
-+	if (!IS_ALIGNED((u64)_text, SEGMENT_ALIGN))
-+		efi_err("FIRMWARE BUG: kernel image not aligned on %dk boundary\n",
-+			SEGMENT_ALIGN >> 10);
- 
- 	kernel_size = _edata - _text;
- 	kernel_memsize = kernel_size + (_end - _edata);
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index dbed15dc0fe77..644861366d544 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -789,6 +789,7 @@ static struct phy_driver broadcom_drivers[] = {
+ 	.phy_id_mask	= 0xfffffff0,
+ 	.name		= "Broadcom BCM54616S",
+ 	/* PHY_GBIT_FEATURES */
++	.soft_reset     = genphy_soft_reset,
+ 	.config_init	= bcm54xx_config_init,
+ 	.config_aneg	= bcm54616s_config_aneg,
+ 	.ack_interrupt	= bcm_phy_ack_intr,
 -- 
 2.34.1
 

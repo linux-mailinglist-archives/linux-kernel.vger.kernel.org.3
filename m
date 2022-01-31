@@ -2,204 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE704A436E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEF34A444F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359508AbiAaLV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:21:29 -0500
-Received: from mga11.intel.com ([192.55.52.93]:14349 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359194AbiAaLLD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:11:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643627463; x=1675163463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U3v/Ejg1TqWehoSepyEfalh7OZ7aWlKrYEYrNmIK/cM=;
-  b=fDcU1++foXQsOnmeejwlsac5I4tOUNA/ZOTRedP5QKWPwj64TtUbaxZd
-   QVtpL3J4UgYi5NVaE64vgoEw+xYgxhDDps/H03z7ayJo1+Sh2K0iwUR/z
-   yH4v66NhWAI/WidXEDN8TQlJFfNm4zrYp2fExYhsscfLPoNWWTXw3zL7O
-   N8OQKllK0ZEsKmR9XlDklTxxQW2a754jS9VY6lNRACjGxTh+JFItbCq2h
-   WRjmCGJvwNck6rjlNTO8gAH8XyidIuXHoWLMlOhv1y9wH3pkLje8ZKu6x
-   W5Bj0oMWUU2D7efjIQzGmvBmWhb27IdMlpPLekor0L9vJMCdGGNO1AONC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="245033606"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="245033606"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:10:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="675694572"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 03:10:03 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 13:10:02 +0200
-Date:   Mon, 31 Jan 2022 13:10:02 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] usb: ulpi: Add debugfs support
-Message-ID: <YffDipQOBUvouz+4@kuha.fi.intel.com>
-References: <20220127190004.1446909-1-sean.anderson@seco.com>
- <20220127190004.1446909-4-sean.anderson@seco.com>
+        id S1377977AbiAaL1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378098AbiAaLTn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:19:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927A1C0612F4;
+        Mon, 31 Jan 2022 03:11:56 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3C1B71F4323B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643627515;
+        bh=bih+YpN7Bu9FDncTaHYjpoZqdzNV5LPiHw6/cv1cfhQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hKRtf4cDoo1ygR4TE6AVz3KwgVq9I2wipi4rIcHIGgpe4sBTYjAxOsd2Kf7TyyOys
+         tcCjMJOIJjFy9IwzerMUjdbmP1MW8aRsU1mwqccSQAZGK6MiYYTIVzUU62IJS2evjN
+         v2ybCwImU3qGLqu44MtMpNG+od93c0ze1Jo0k/1WMx5nW1fjzNx4bBNE4dch9yN2in
+         oGRNDJQQjPrfD61oTV/yKPQa7DwOXZzaLfqi9zaMpRFiXS7vY6pcD8Ge8UnXnJhO+p
+         lLERwen3qfXz8zdm4FsGqmtK2XkAK6LBUbHVT0wKUOcY3i1JRCEjeN/hM8NjeMiXXt
+         QKJ6fsA1asRpw==
+Message-ID: <0846872b-03da-ee5d-6a9d-e6c9fa754191@collabora.com>
+Date:   Mon, 31 Jan 2022 12:11:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127190004.1446909-4-sean.anderson@seco.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v22 5/7] soc: mediatek: SVS: add debug commands
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220127033956.24585-1-roger.lu@mediatek.com>
+ <20220127033956.24585-6-roger.lu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220127033956.24585-6-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:00:04PM -0500, Sean Anderson wrote:
-> This adds a debugfs file for ULPI devices which contains a dump of their
-> registers. This is useful for debugging basic connectivity problems. The
-> file is created in ulpi_register because many devices will never have a
-> driver bound (as they are managed in hardware by the USB controller
-> device).
+Il 27/01/22 04:39, Roger Lu ha scritto:
+> The purpose of SVS is to help find the suitable voltages
+> for DVFS. Therefore, if SVS bank voltages are concerned
+> to be wrong, we can adjust SVS bank voltages by this patch.
 > 
-> The root directory of this subsystem is created before we register the
-> bus to ensure that devices can always create their directories.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
-> - Always create debugfs files and ignore errors
-> - Look up dentries dynamically
-> 
->  drivers/usb/common/ulpi.c | 71 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 70 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-> index dedcb749a02f..897e1a374f9e 100644
-> --- a/drivers/usb/common/ulpi.c
-> +++ b/drivers/usb/common/ulpi.c
-> @@ -13,6 +13,7 @@
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/acpi.h>
-> +#include <linux/debugfs.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/clk/clk-conf.h>
-> @@ -229,9 +230,64 @@ static int ulpi_read_id(struct ulpi *ulpi)
->  	return 0;
->  }
->  
-> +static int ulpi_regs_read(struct seq_file *seq, void *data)
-> +{
-> +	struct ulpi *ulpi = seq->private;
-> +
-> +#define ulpi_print(name, reg) do { \
-> +	int ret = ulpi_read(ulpi, reg); \
-> +	if (ret < 0) \
-> +		return ret; \
-> +	seq_printf(seq, name " %.02x\n", ret); \
-> +} while (0)
-> +
-> +	ulpi_print("Vendor ID Low               ", ULPI_VENDOR_ID_LOW);
-> +	ulpi_print("Vendor ID High              ", ULPI_VENDOR_ID_HIGH);
-> +	ulpi_print("Product ID Low              ", ULPI_PRODUCT_ID_LOW);
-> +	ulpi_print("Product ID High             ", ULPI_PRODUCT_ID_HIGH);
-> +	ulpi_print("Function Control            ", ULPI_FUNC_CTRL);
-> +	ulpi_print("Interface Control           ", ULPI_IFC_CTRL);
-> +	ulpi_print("OTG Control                 ", ULPI_OTG_CTRL);
-> +	ulpi_print("USB Interrupt Enable Rising ", ULPI_USB_INT_EN_RISE);
-> +	ulpi_print("USB Interrupt Enable Falling", ULPI_USB_INT_EN_FALL);
-> +	ulpi_print("USB Interrupt Status        ", ULPI_USB_INT_STS);
-> +	ulpi_print("USB Interrupt Latch         ", ULPI_USB_INT_LATCH);
-> +	ulpi_print("Debug                       ", ULPI_DEBUG);
-> +	ulpi_print("Scratch Register            ", ULPI_SCRATCH);
-> +	ulpi_print("Carkit Control              ", ULPI_CARKIT_CTRL);
-> +	ulpi_print("Carkit Interrupt Delay      ", ULPI_CARKIT_INT_DELAY);
-> +	ulpi_print("Carkit Interrupt Enable     ", ULPI_CARKIT_INT_EN);
-> +	ulpi_print("Carkit Interrupt Status     ", ULPI_CARKIT_INT_STS);
-> +	ulpi_print("Carkit Interrupt Latch      ", ULPI_CARKIT_INT_LATCH);
-> +	ulpi_print("Carkit Pulse Control        ", ULPI_CARKIT_PLS_CTRL);
-> +	ulpi_print("Transmit Positive Width     ", ULPI_TX_POS_WIDTH);
-> +	ulpi_print("Transmit Negative Width     ", ULPI_TX_NEG_WIDTH);
-> +	ulpi_print("Receive Polarity Recovery   ", ULPI_POLARITY_RECOVERY);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ulpi_regs_open(struct inode *inode, struct file *f)
-> +{
-> +	struct ulpi *ulpi = inode->i_private;
-> +
-> +	return single_open(f, ulpi_regs_read, ulpi);
-> +}
-> +
-> +static const struct file_operations ulpi_regs_ops = {
-> +	.owner = THIS_MODULE,
-> +	.open = ulpi_regs_open,
-> +	.release = single_release,
-> +	.read = seq_read,
-> +	.llseek = seq_lseek
-> +};
-> +
-> +#define ULPI_ROOT debugfs_lookup(KBUILD_MODNAME, NULL)
-> +
->  static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->  {
->  	int ret;
-> +	struct dentry *root;
->  
->  	ulpi->dev.parent = dev; /* needed early for ops */
->  	ulpi->dev.bus = &ulpi_bus;
-> @@ -256,6 +312,9 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->  		return ret;
->  	}
->  
-> +	root = debugfs_create_dir(dev_name(dev), ULPI_ROOT);
-> +	debugfs_create_file("regs", 0444, root, ulpi, &ulpi_regs_ops);
-> +
->  	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
->  		ulpi->id.vendor, ulpi->id.product);
->  
-> @@ -301,6 +360,8 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
->   */
->  void ulpi_unregister_interface(struct ulpi *ulpi)
->  {
-> +	debugfs_remove_recursive(debugfs_lookup(dev_name(&ulpi->dev),
-> +						ULPI_ROOT));
->  	device_unregister(&ulpi->dev);
->  }
->  EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
-> @@ -309,13 +370,21 @@ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
->  
->  static int __init ulpi_init(void)
->  {
-> -	return bus_register(&ulpi_bus);
-> +	int ret;
-> +	struct dentry *root;
-> +
-> +	root = debugfs_create_dir(KBUILD_MODNAME, NULL);
-> +	ret = bus_register(&ulpi_bus);
-> +	if (ret)
-> +		debugfs_remove(root);
-> +	return ret;
->  }
->  subsys_initcall(ulpi_init);
->  
->  static void __exit ulpi_exit(void)
->  {
->  	bus_unregister(&ulpi_bus);
-> +	debugfs_remove_recursive(ULPI_ROOT);
->  }
->  module_exit(ulpi_exit);
->  
-> -- 
-> 2.25.1
+Hello Roger,
+I was thinking about what this patch is adding... and I have a few considerations.
 
-thanks,
+It's nice to have a debugging mechanism to read the status and dump registers, as
+that's very helpful when doing heavy debugging of the IP... but adding the
+possibility to write a voltage offset may be very dangerous: think about the case
+in which, either for misconfiguration, or for any other reason, the debugfs entry
+that allows writing voffset becomes user-writable, or a user writes an impossibly
+high voffset.
+In case a very low (negative) voffset is entered, the platform would crash (denial
+of service); if a very high voffset is entered, hardware damage may occur.
 
--- 
-heikki
+For this reason, there are two proposals:
+1. If you want to keep the debugfs voffset write, please constrain the permissible
+    voffset to an acceptable range that at least makes it unlikely to damage the HW;
+    Moreover, since voffset write is a feature that would be used in very limited
+    debugging cases, I think that this should be implemented over a build-time
+    configuration barrier... something like CONFIG_MTK_SVS_DEBUG_ALLOW_WRITE, or
+    similar;
+2. Since it's very unlikely for someone to really play that much with a voltage
+    offset during runtime, and since this looks like something very machine specific
+    (perhaps addressing board-specific quirks?), I would suggest to add this as a
+    device-tree parameter instead, such as "mediatek,svs-voffset", as it is indeed
+    possible to specify both positive or negative values in DT.
+
+I would prefer proposal 2, as it looks generally cleaner and way less risky.
+
+Regards,
+Angelo

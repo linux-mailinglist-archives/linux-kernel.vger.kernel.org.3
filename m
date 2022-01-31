@@ -2,90 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD364A4CD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2904A4CE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380782AbiAaRNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S1380854AbiAaRPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380766AbiAaRNY (ORCPT
+        with ESMTP id S1380796AbiAaRPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:13:24 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714B5C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:13:24 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id l25so26675674wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:13:24 -0800 (PST)
+        Mon, 31 Jan 2022 12:15:08 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05752C061757
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:14:11 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id f10so1766460lfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XynZHtvD8T/EbmQgZ15CsiypgVAUseBYZYVWP5WDzHc=;
-        b=AVUm+bRMGdtXuiZWCip2DIRQW5iJMcj+qePn2VTWcKYF6+uKTcOu/jM4N6+qI++sYA
-         FNixHxLQafMjEQ6PesoXKZd9g8scfTZGVUzyUy2d3vwKI13dIbXGEkC2l1hKngnm2JQ+
-         3g8SHiWeiNNlT/iV64hhvN/WoqHYXoK7frnRDsNU0wR3FKpq2BT94gqLQOlbosYe7gpk
-         gqsVPUG+/SgfkO/723wOCbUlUupk0ak/zh1oo/0ro5ueZwN8rsZpXZKO3jHjCpj1SC0o
-         jTbsvN4EZ0qYH1KveyAnrdY3MBUCbmWAhw6MViy4z4z6eWAlIM39Lff947zAUfF0tJ/w
-         3Wrg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LyPS3Szlv9qh4gjOhtDn0yktNtrjffm5++UyP/rn3f4=;
+        b=IGrlP+yBf6s4abW3h/cJFVuo4oT6B/rCIdFAATcNHSETF4LFNBRGHRQs5xKe0zeKvo
+         OTDgTiAvO1hcP64cT6bGl/o/InpN6yki/Q09yOh48jad3z5kgvyM+g2XkwDoGy+eUwN5
+         eJS1HTB/9ONSUcIHEvpuGA4ZZH+VXrDCXnEnR/1kGiclbHgu1nz28DhGjRgkT7ZKUucT
+         Tj5h7gMC94Lu9uAomUqxhJqGFG+JhwECDdChE/WeuOe8/g/fdCSU2hYWBcNGIKc3RfnN
+         +hYN/OUYtpgZKNwvwLQQKwfMQMSXgPtpYn9sD0KyNPB3WE2innFHqvsSG4XF7hHfGfwK
+         dJ4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XynZHtvD8T/EbmQgZ15CsiypgVAUseBYZYVWP5WDzHc=;
-        b=audL82iOloI32S4P4gOoLYnI03zRr/CFsKe8JUE8jqpvU5E0gWvdedWs+SVF43oJsX
-         drZcE/d2430ZhL+gPSf1/3PKC63GjLE0o1qe1R+h0AULf4V/lrqLwyqtUQNzeQgmFWdJ
-         X/v6rFNxv02PeNmJSCx60uA6qasKz8XABD/m6swozylAHfhut5aGZvDeZVkeBZPNjMMR
-         N53csT4AI/gcnaQw8yH99vEcg7ma/OuGRQ9UmmD35VzJwZAbY14zvJ5dxkuyq85rw/vD
-         mYSAABvNtJ/Au04yVr/YfDFVCEIu8xp/lqgzDyfm4p4TwsvXaOXM9au1ThU8LLeHttaG
-         velg==
-X-Gm-Message-State: AOAM533XSFoDX32GmJSNx63dDKCBxvWYxR7hGqxBvDtV0FWKMphI3AZ3
-        b1/wAlnPSVEjFPmMdEzFQPuXvQ==
-X-Google-Smtp-Source: ABdhPJxtwkiQoHsnirCmZonhMfF3H3P6nm+XFOmoUqr9Obwi4ULoMWxKN7nHI9n/JbIS58YFhr07Zg==
-X-Received: by 2002:a05:6000:18a8:: with SMTP id b8mr18144848wri.604.1643649202606;
-        Mon, 31 Jan 2022 09:13:22 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id b15sm12331776wrs.93.2022.01.31.09.13.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 09:13:22 -0800 (PST)
-Date:   Mon, 31 Jan 2022 17:13:20 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] mfd: intel_soc_pmic_crc: Sort cells by IRQ order
-Message-ID: <YfgYsC4hYkuLXUVa@google.com>
-References: <20211225115509.94891-1-hdegoede@redhat.com>
- <20211225115509.94891-2-hdegoede@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LyPS3Szlv9qh4gjOhtDn0yktNtrjffm5++UyP/rn3f4=;
+        b=HcgSJqIf3FVbyWLNYGu2UT0oDC2iYf70Rw4RoXwfMkI1jnhfRqM/Y0VUeDhrccb9ZO
+         n+U/WUCjBn59oOMzjWJlyiFTdK6D3Ces0Rk4NC07xm5mDUfEEaSctla2qGxcPeVv66CV
+         iM9auwIB//MS15jw2gYUdcs9C14Owh9ILnNr363Zk56pfucXcASDr8ApSVBiTWLCNTGg
+         JH/a0h5RZD39/COE9mslyyLOa6ZTgyqFpOJD6LrTQE73X8IxCeeGL742LzMSrhyWFMDF
+         Ldi2q+Xr+m/Py0rr26uaxjI9b+msM5HUU9ESTvDADoZ40Yn9rA1zPMHPWr68z1qUm1Ay
+         udfg==
+X-Gm-Message-State: AOAM532Pki6skpTzZjck3+ZAM6Bi7KIkOXfrIB/kMHEiza9fHTFinv0r
+        zVfpeBbSxdJnLlJhzKZ/Q1d8mFoqAYuxf3uMuaGsyw==
+X-Google-Smtp-Source: ABdhPJxweuySzWpnHG0bnPZw7yNmwgLjQXGJ1V54SkKRiPJ42RiOvY0GQO0vziXQ3O+oZQfZdQKYNMY89gobBQr0vB4=
+X-Received: by 2002:a19:ee04:: with SMTP id g4mr15639705lfb.157.1643649248869;
+ Mon, 31 Jan 2022 09:14:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211225115509.94891-2-hdegoede@redhat.com>
+References: <20220131153740.2396974-1-willy@infradead.org> <871r0nriy4.fsf@email.froward.int.ebiederm.org>
+ <YfgKw5z2uswzMVRQ@casper.infradead.org> <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+ <YfgPwPvopO1aqcVC@casper.infradead.org>
+In-Reply-To: <YfgPwPvopO1aqcVC@casper.infradead.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 31 Jan 2022 18:13:42 +0100
+Message-ID: <CAG48ez3MCs8d8hjBfRSQxwUTW3o64iaSwxF=UEVtk+SEme0chQ@mail.gmail.com>
+Subject: Re: [PATCH] binfmt_elf: Take the mmap lock when walking the VMA list
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Denys Vlasenko <vda.linux@googlemail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <liam.howlett@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Dec 2021, Hans de Goede wrote:
+On Mon, Jan 31, 2022 at 5:35 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Jan 31, 2022 at 10:26:11AM -0600, Eric W. Biederman wrote:
+> > Matthew Wilcox <willy@infradead.org> writes:
+> >
+> > > On Mon, Jan 31, 2022 at 10:03:31AM -0600, Eric W. Biederman wrote:
+> > >> "Matthew Wilcox (Oracle)" <willy@infradead.org> writes:
+> > >>
+> > >> > I'm not sure if the VMA list can change under us, but dump_vma_snapshot()
+> > >> > is very careful to take the mmap_lock in write mode.  We only need to
+> > >> > take it in read mode here as we do not care if the size of the stack
+> > >> > VMA changes underneath us.
+> > >> >
+> > >> > If it can be changed underneath us, this is a potential use-after-free
+> > >> > for a multithreaded process which is dumping core.
+> > >>
+> > >> The problem is not multi-threaded process so much as processes that
+> > >> share their mm.
+> > >
+> > > I don't understand the difference.  I appreciate that another process can
+> > > get read access to an mm through, eg, /proc, but how can another process
+> > > (that isn't a thread of this process) modify the VMAs?
+> >
+> > There are a couple of ways.
+> >
+> > A classic way is a multi-threads process can call vfork, and the
+> > mm_struct is shared with the child until exec is called.
+>
+> While true, I thought the semantics of vfork() were that the parent
+> was suspended.  Given that, it can't core dump until the child execs
+> ... right?
+>
+> > A process can do this more deliberately by forking a child using
+> > clone(CLONE_VM) and not including CLONE_THREAD.   Supporting this case
+> > is a hold over from before CLONE_THREAD was supported in the kernel and
+> > such processes were used to simulate threads.
 
-> The cells for the Crystal Cove PMIC are already mostly sorted by
-> function / IRQ order. Move the ADC cell so that they are fully sorted.
-> 
-> Also move some of the resource definitions so that their order matches
-> the (new) order of the cells.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/mfd/intel_soc_pmic_crc.c | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
+The syscall clone() is kind of the generalized version of fork() and
+vfork(), and it lets you create fun combinations of these things (some
+of which might be useful, others which make little sense), and e.g.
+vfork() is basically just clone() with CLONE_VM (for sharing address
+space) plus CLONE_VFORK (block until child exits or execs) plus
+SIGCHLD (child should send SIGCHLD to parent when it terminates).
 
-Applied, thanks.
+(Some combinations are disallowed, but you can IIRC make things like
+threads with separate FD tables, or processes that share virtual
+memory and signal handler tables but aren't actual threads.)
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+Note that until commit 0258b5fd7c71 ("coredump: Limit coredumps to a
+single thread group", first in 5.16), coredumps would always tear down
+every process that shares the MM before dumping, and the coredumping
+code was trying to rely on that to protect against concurrency. (Which
+at some point didn't actually work anymore, see below...)
+
+> That is a multithreaded process then!  Maybe not in the strict POSIX
+> compliance sense, but the intent is to be a multithreaded process.
+> ie multiple threads of execution, sharing an address space.
+
+current_is_single_threaded() agrees with you. :P
+
+> > It also happens that there are subsystems in the kernel that do things
+> > like kthread_use_mm that can also be modifying the mm during a coredump.
+>
+> Yikes.  That's terrifying.  It's really legitimate for a kthread to
+> attach to a process and start tearing down VMAs?
+
+I don't know anything about kthreads doing this, but a fun way to
+remotely mess with VMAs is userfaultfd. See
+https://bugs.chromium.org/p/project-zero/issues/detail?id=1790 ("Issue
+1790: Linux: missing locking between ELF coredump code and userfaultfd
+VMA modification") for the long version - but the gist is that
+userfaultfd can set/clear flags on virtual address ranges (implemented
+as flags on VMAs), and that may involve splitting VMAs (when the
+boundaries of the specified range don't correspond to existing VMA
+boundaries) or merging VMAs (when the flags of adjacent VMAs become
+equal). And userfaultfd can by design be used remotely on another
+process (so long as that process first created the userfaultfd and
+then handed it over).
+
+That's why I added that locking in the coredumping code.
+
+> > > Uhh .. that seems like it needs a lot more understanding of binfmt_elf
+> > > than I currently possess.  I'd rather spend my time working on folios
+> > > than learning much more about binfmt_elf.  I was just trying to fix an
+> > > assertion failure with the maple tree patches (we now assert that you're
+> > > holding a lock when walking the list of VMAs).
+> >
+> > Fair enough.  I will put it on my list of things to address.
+>
+> Thanks.  Now that I've disclosed it's a UAF, I hope you're able to
+> get to it soon.  Otherwise we should put this band-aid in for now
+> and you can address it properly in the fullness of time.

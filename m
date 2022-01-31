@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC394A3D38
+	by mail.lfdr.de (Postfix) with ESMTP id A50F44A3D37
 	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 06:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357715AbiAaFSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 00:18:03 -0500
-Received: from mail-bn8nam12on2060.outbound.protection.outlook.com ([40.107.237.60]:63104
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S1357701AbiAaFR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 00:17:59 -0500
+Received: from mail-bn1nam07on2073.outbound.protection.outlook.com ([40.107.212.73]:22825
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231718AbiAaFR5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S230185AbiAaFR5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 31 Jan 2022 00:17:57 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MNOds2qVW5zcySTRO3faTQ3kKNP5CptB4XJdt8SPJEu+UCj89qFlMSbrfsYXgJ+0R/YA8tMS/2g+G47tC87kfR4lZb4QqbnhJ0sNhUXQZtS+T4782Q2MR2u5+mloEm1Hq8vl5F3SxgZ/ipAKulRHGQS4UuwYLJvES6mU7qxQj9fHsO6y2NJzu7OF3jalZupbjkeZsJXbmWJ1B+AtwNC92Ez/NaD7oLz1gZZzOF0xN393HVzDHMdgBMcfXHv7NXtlJaDf6eX4AbsJwpkSRn8hy4SDY4AGSuP/ZvhUSTIdLSMvcdqgw17iWO08BQZRZonCYzLbkCvHc2PacuOUo8maTg==
+ b=Q+OciI1BuSx5XasxyycErc2LreWYx2BwZ8JNvNCUv7KCcEYxMyBm6pSyWqDy5smtYHey8FNq4raFu+Y95P5iJPtrD34gDDo7DKWMWkco2Nj0NXBb+mknmny8o5K9kZYdoxwvfMvvCGEQmS+vUNs3ov5nk08pZEYj4yVSa6hjhvN7ingBcreMbU5NqTIu/UD7GwZIZP2nA4hF5BrgOjwwHnQT6T3IJoqzAy8jTIx4m6AzMbdtp5QbDPHzF0vjwUufGJFoQwG5UL3WCpaD6ZgFjsbhXTFhnl/rWGKhxBmPPulkfN05JyMudTAAx/L4S4+WYP+EtYEmZUT1WH6o/BtzXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jg4FdGMRH74oV1E4JC+CBioQaREsN52E0m3RbyifU0o=;
- b=OI2xkMOtLCXxRyDSrm+eaI98SFiG8MuQPkA2/tKI3SticZMwO275KXjpxcN31o0Th9Pnzwg2oxYiEyPUYqXofMJbDjfS2e0xYLJoWWEfkUHnxviWnTrvUHn31+cMWzmGd1QxAz1n8ggjElQN6vct7kNUdHZ8d1YCPYklndHA7eOjKl+IphOJgGbxFrMxmFC79s6QYHi4ZOhKd+9hFka5qaMXQgYoa4aX+/IGGJwGmMtMSnOG5g1oCjyxD9OPnuufdGm+LHLOp1Q2wY0IrI7I75M6BExQwtfVDhn9nMbMTamPo2fsjV6mB4MXtjdxe9YpiS0ozVNYSb65LJUD2bpufQ==
+ bh=X9byx9sl0k994OaiaZa3X5PdM5tM/l2ZQYd7CkJD4zo=;
+ b=XavBqYYAERrpXk+HaOQZFQAUdl204QJsTGYkDO5mgthTOaSVVkbzqvGqlkGWUsm8nlI57TrjekrIcAp2/tLDcE+MQQ0VKHHZAtQPWQe8xvvFyIgvC4UrsQhK7nOjEFU6iLmR4037KqR1/sH0NZZ2FVSygX656XEqqoslv+cOQzI3I7Fy4UliyF3WZ6SD8qpxocEgKdOghBXo2sZfphSAh2k8QDBdAsxGgrB6Q4UdAgHMF+ojawL2+FqABzOOOVe28jWxTgBSeBc84yYE0r6Eh/+nGLao/3VoEKQNWYMPDVQEvmi64jzrROXezbl6j9UulsZDp6Oh91YQgNP2iV61wA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ 12.22.5.236) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jg4FdGMRH74oV1E4JC+CBioQaREsN52E0m3RbyifU0o=;
- b=scqvI+40/8lcrbvb5JmQQ264zAFczChva0puyLRNGwMTO6Z+cxB/BBS2kux8O8C22jZ0E0Qz/BAh7CxaEvclHI0mQFOv9OML/tHOdmzY0qoNYCshFFJaFatUoqBdDpXwui83se/8KrYUBtOC3yvdvD3Pqs7Wt9kH5mtJbdUp7g1bsJ3vUARoGhvNM8Gy9bhaK2CkvknsXCwrRS8vBSWXdoMCawDGNalNWxUkO6own3ZO/Ypc52M98hTpdOSM7RtAwqCqyRpnjzu5Vbb2H/EmlIuc/g9IVkxF98pHR65ZPFXzIMu7vcHZrmqJPMurGQHR7TkpDvvzh7wAv28MuBfMKg==
-Received: from BN9PR03CA0191.namprd03.prod.outlook.com (2603:10b6:408:f9::16)
- by DM6PR12MB3515.namprd12.prod.outlook.com (2603:10b6:5:15f::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.19; Mon, 31 Jan
- 2022 05:17:55 +0000
-Received: from BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f9:cafe::71) by BN9PR03CA0191.outlook.office365.com
- (2603:10b6:408:f9::16) with Microsoft SMTP Server (version=TLS1_2,
+ bh=X9byx9sl0k994OaiaZa3X5PdM5tM/l2ZQYd7CkJD4zo=;
+ b=NbwnEqdXzZDo2SMPXCD2jsu2Jkv875iVhR7MNdIJbUUJknbSKH46+tPtWSkiwYKXrwqF1KBPImbe88Qy5JctDnfjxibrww1ar8YuEBSYPqc36mdzdvg5/Ytp+Qm+oYsXnlAaavK8TVz61BLyKwzkxvDRwScc2trPGCK09geC3dVg8t3n/5J9Fh4YEpDhdLfQ6SLMbAeuNGWYl6u8BIm9NwggReIn+SXF/I00UHVBLiYoVPJgWXGfgxICfGiXEsoPj5IFOGxDv+B7XnTJO/OikflxAfWk0D5veVuU5dZ45L/Bp5NmOJF/n+TN6nJ96hAyEqghs60K6n3LrO9rDkUEyg==
+Received: from DM5PR08CA0041.namprd08.prod.outlook.com (2603:10b6:4:60::30) by
+ DM5PR12MB1609.namprd12.prod.outlook.com (2603:10b6:4:10::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4930.21; Mon, 31 Jan 2022 05:17:55 +0000
+Received: from DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:60:cafe::a7) by DM5PR08CA0041.outlook.office365.com
+ (2603:10b6:4:60::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
- Transport; Mon, 31 Jan 2022 05:17:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ Transport; Mon, 31 Jan 2022 05:17:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT057.mail.protection.outlook.com (10.13.177.49) with Microsoft SMTP
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT029.mail.protection.outlook.com (10.13.173.23) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4930.15 via Frontend Transport; Mon, 31 Jan 2022 05:17:54 +0000
+ 15.20.4930.15 via Frontend Transport; Mon, 31 Jan 2022 05:17:55 +0000
 Received: from drhqmail203.nvidia.com (10.126.190.182) by
- DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
+ DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
  15.0.1497.18; Mon, 31 Jan 2022 05:17:54 +0000
 Received: from drhqmail201.nvidia.com (10.126.190.180) by
  drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
@@ -68,75 +67,96 @@ CC:     Jan Kara <jack@suse.cz>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 0/4] mm/gup: some cleanups
-Date:   Sun, 30 Jan 2022 21:17:48 -0800
-Message-ID: <20220131051752.447699-1-jhubbard@nvidia.com>
+Subject: [PATCH 1/4] mm: Fix invalid page pointer returned with FOLL_PIN gups
+Date:   Sun, 30 Jan 2022 21:17:49 -0800
+Message-ID: <20220131051752.447699-2-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20220131051752.447699-1-jhubbard@nvidia.com>
+References: <20220131051752.447699-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3c4959ee-fe4e-4ad6-dbb0-08d9e479094a
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3515:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB351562879C6049F35C47CB25A8259@DM6PR12MB3515.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
+X-MS-Office365-Filtering-Correlation-Id: 3d31aa22-28cd-4fcf-8285-08d9e47909a8
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1609:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1609F484C82A9488DEE01923A8259@DM5PR12MB1609.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:264;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aoZiEk2sbWomP51O/GyL0Nj8PMP3JVlAutipctSNoV8/ptpt4auZfmQ0WPsVeZlfkW/T9Tx8HJTTPmUdsrX+t6e0y6TtPAp7qYjrCCNsRgGABXuF1r/DfmcM/hty6dIkPTWtOEqeFDbdmyhi+VhCt0hWmx5OQhgWRkCTleuxHxtQ8tJDZBCxJPAIakvIBPa7RLPnr36Q7ICUX84AjtYHBvQ3K7va6Yp3bTaIFHz+TMS9GQMddF2MCIPJFW6fs2tNHvE1xNHzC+AO5vziU2LwEKJzSvqPKPx2sL1CXI0BRPfJ/iXbP8fTKdQUMK7ETCJ/53oAzCYgLy2ZHQKPcsEx20I04rIWaTHVXF1t+rvK0bStl+hz0DMd1+cnvLAc5RO5gXwJ+FHzV8uuVwZ2hQebTTzTDqhSG7fP1h4ylL5uKNAKzuIsNtAA0I2hT9mj0eWE9J69KMF3ZRYZ2B6AJ+atUcWW+fM/zLPVq3m0VCuTZT5i9gxSSlH9tC3T+7VSWEw3oD/X5AyXxJ1aHbesmlbGcgbEkN5EX24mXsGjeCaBNKGIBuOdPnhTsKN3v/5luwjt+0LVeE8O36bO9qNKTW2ztQLV1RgxJ6waZJjaCBIJ9zlHeq8ku+46FqV13+F70SPBHbv+YyRyllJJjd402mCJHCEoJyqTOBkooPdLsGqv8cmTaGv274FKoSjGoL8rbnObQhMzcogmKreBi2KS0ACX9ppiH6sCUMUhhQHmpHbqXZc2ilfJ9bCS2fGlOM2Zx2sWbdEd9R6vpCR2nCbwGaczp8Rw1DLdmiQegYd2kzG+umA=
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(26005)(1076003)(336012)(186003)(2616005)(356005)(426003)(82310400004)(36860700001)(81166007)(47076005)(83380400001)(107886003)(7416002)(5660300002)(4326008)(36756003)(2906002)(8676002)(8936002)(40460700003)(70206006)(508600001)(6666004)(86362001)(70586007)(966005)(316002)(110136005)(54906003)(36900700001)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 2Oul+W9OedlhtS31kz09qqhDURaiqMBieCoygRcZTBy5++bMbAXuI9+twG9Ac/WH6VLrxyZMfJobiyNVrrXExrjBXJN/vAiUs4etnKK+vPe9YDoxob3AsEnt0hOX9m5IIM2v9x1fZy6i/xid5NIqZ95Zjv8ao8mf0C4V4l7EUfBrts071kZdO++A1lCK0IEqEsfC9EbgTzq074HuGCFEcmUbCPnDnGl1M6kGkh+DwyMSRvd5AekjhwH0RPKXHXTB1fS6SwJeLbq7JR0O/szjEJ0pPHEadN8N1IpbIGFHiHMnWu7Dj+CsTu8MIb3Mnyjy0PKL5WyUdvcniM6VMz+8tUDGZY5K3J/xT4kozASjzRR7IDfvQML1gFZcXfRzT1n6IBvxNe7udNPM5j7Vaifqf7uNOhO0gNeI3uaseE6rHXowMUgQEyIg+66n/ESQDs5M2xVCUujdSoO/fzodpSJvNVsUtqP2oIpC1KQG5L22ycV49tQGM430BmWHdnNTqAGNrb1a8lPcmxlFMwo2iwSGdjitVJvbZp0blVw74RpBSLj1j7HBGC84LMt2ee0q1+0fJapTGGEyQ6p1QiSPte3ga9BQ8lfqc0evKecnVEiHaINMU24wdnlmLNn/tS4U66e6dGE3zj6ABzeUJLSkJoHzsX1zk93HNEPcyG3/ldrsFXgXkBkTe4LY8uu/zEjoqDyRR6KFQgEWQqtr/9lAK4UiNw==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(47076005)(40460700003)(356005)(66574015)(6666004)(508600001)(2616005)(2906002)(1076003)(107886003)(7416002)(186003)(70586007)(86362001)(316002)(8936002)(4326008)(70206006)(336012)(83380400001)(36860700001)(81166007)(36756003)(110136005)(82310400004)(26005)(54906003)(8676002)(5660300002)(426003)(36900700001)(20210929001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 05:17:54.6150
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 05:17:55.2443
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c4959ee-fe4e-4ad6-dbb0-08d9e479094a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d31aa22-28cd-4fcf-8285-08d9e47909a8
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3515
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1609
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter, Jason and all,
+From: Peter Xu <peterx@redhat.com>
 
-I'm including Peter's patch as the first one in this tiny series. (The
-commit description has my r-b tag in place of my Cc.) The second patch
-is what I had in mind for a follow-up to that, when we were discussing
-that fix [1].
+Alex reported invalid page pointer returned with pin_user_pages_remote() from
+vfio after upstream commit 4b6c33b32296 ("vfio/type1: Prepare for batched
+pinning with struct vfio_batch").  This problem breaks NVIDIA vfio mdev.
 
-Plus, a couple more small removals that I had queued up:
+It turns out that it's not the fault of the vfio commit; however after vfio
+switches to a full page buffer to store the page pointers it starts to expose
+the problem easier.
 
-The third patch removes a completely unused routine:
-pin_user_pages_locked().
+The problem is for VM_PFNMAP vmas we should normally fail with an -EFAULT then
+vfio will carry on to handle the MMIO regions.  However when the bug triggered,
+follow_page_mask() returned -EEXIST for such a page, which will jump over the
+current page, leaving that entry in **pages untouched.  However the caller is
+not aware of it, hence the caller will reference the page as usual even if the
+pointer data can be anything.
 
-The forth patch removes a similar routine, get_user_pages_locked(), that
-only has one caller--and that caller is not simplified by calling
-get_user_pages_locked().
+We had that -EEXIST logic since commit 1027e4436b6a ("mm: make GUP handle pfn
+mapping unless FOLL_GET is requested") which seems very reasonable.  It could
+be that when we reworked GUP with FOLL_PIN we could have overlooked that
+special path in commit 3faa52c03f44 ("mm/gup: track FOLL_PIN pages"), even if
+that commit rightfully touched up follow_devmap_pud() on checking FOLL_PIN when
+it needs to return an -EEXIST.
 
-[1] https://lore.kernel.org/all/20220125033700.69705-1-peterx@redhat.com/
+Attaching the Fixes to the FOLL_PIN rework commit, as it happened later than
+1027e4436b6a.
 
-thanks,
-John Hubbard
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Fixes: 3faa52c03f44 ("mm/gup: track FOLL_PIN pages")
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Reported-by: Alex Williamson <alex.williamson@redhat.com>
+Debugged-by: Alex Williamson <alex.williamson@redhat.com>
+Tested-by: Alex Williamson <alex.williamson@redhat.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/gup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-John Hubbard (3):
-  mm/gup: clean up follow_pfn_pte() slightly
-  mm/gup: remove unused pin_user_pages_locked()
-  mm/gup: remove get_user_pages_locked()
-
-Peter Xu (1):
-  mm: Fix invalid page pointer returned with FOLL_PIN gups
-
- include/linux/mm.h |   4 --
- mm/gup.c           | 100 ++++-----------------------------------------
- mm/mempolicy.c     |  22 +++++-----
- 3 files changed, 17 insertions(+), 109 deletions(-)
-
-
-base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+diff --git a/mm/gup.c b/mm/gup.c
+index f0af462ac1e2..65575ae3602f 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -440,7 +440,7 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+ 		pte_t *pte, unsigned int flags)
+ {
+ 	/* No page to get reference */
+-	if (flags & FOLL_GET)
++	if (flags & (FOLL_GET | FOLL_PIN))
+ 		return -EFAULT;
+ 
+ 	if (flags & FOLL_TOUCH) {
 -- 
 2.35.0
 

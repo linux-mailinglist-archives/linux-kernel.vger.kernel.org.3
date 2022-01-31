@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35964A3CC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 05:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0472D4A3CD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 05:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357524AbiAaEEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 23:04:09 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:38096 "EHLO
+        id S1357551AbiAaEEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 23:04:24 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38114 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237371AbiAaEEH (ORCPT
+        with ESMTP id S1357535AbiAaEEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 23:04:07 -0500
+        Sun, 30 Jan 2022 23:04:21 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F2A5D1F37B;
-        Mon, 31 Jan 2022 04:04:05 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E18DD1F37B;
+        Mon, 31 Jan 2022 04:04:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643601846; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1643601859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a1hKKv4tQs0IkB2xFQLDfa5QVFGb4OvJBNqopkGrr6k=;
-        b=fiVkEAwxRDflObUldBuKWNJQJVCMu9eTTko+720oBoKH20RkmraMDCjs0Iy00tjy/uphUk
-        128iAjXpmRCycvT2drQM/OATXxz69rsiprFbeB2pPwa9L9eR8aiP2KJRgd4bmESc8+RqhM
-        0lrloqgzFrVvw8R08CSdyUMX4lq4gLg=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TvEfPPeht+6m2tsZLWgUEFf5HAsVvo5FwysookxUClM=;
+        b=pWLJsZQNiOZbmu3eHyMn/kzxEXxEDEFjwUaAFNCgalKi2l2pg/Kyz1XB4Ug4fvmkcYL69j
+        MZqqyni/ZnMvg3P9IUpG5zl6SYCa8+Pm4oyJppurBjd8a0Ssqu1z0Kcg5i3XbqQbZOu7Wh
+        rITudZlWMGA2T0ZLrgSx5ys/XVr3KfY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643601846;
+        s=susede2_ed25519; t=1643601859;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a1hKKv4tQs0IkB2xFQLDfa5QVFGb4OvJBNqopkGrr6k=;
-        b=uob4sOy+PK8E9TZ09Wj6Bhv0xAVwnyLeFUUFdeVvKXtH0q63G8ED3ptWJSVL4uJG3uhlu4
-        DO1m665lXtn3d/Cw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TvEfPPeht+6m2tsZLWgUEFf5HAsVvo5FwysookxUClM=;
+        b=u+H/QuonS17YLO3VoRbzj2f8Ql1DJ8PA4qG9qwIyYO3JFIvSJsBoYhRdZUsgK2hLzNwIDz
+        iTGQ7ht98k8zONDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B1220133A4;
-        Mon, 31 Jan 2022 04:04:02 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFA8A133A4;
+        Mon, 31 Jan 2022 04:04:16 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id B7tCG7Jf92GMCQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 31 Jan 2022 04:04:02 +0000
-Subject: [PATCH 0/3] remove dependence of inode_congested()
+        id spA/H8Bf92GcCQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 31 Jan 2022 04:04:16 +0000
+Subject: [PATCH 2/3] nfs: remove reliance on bdi congestion
 From:   NeilBrown <neilb@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Jeff Layton <jlayton@kernel.org>,
@@ -56,7 +58,9 @@ Cc:     linux-mm@kvack.org, linux-nfs@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, ceph-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 31 Jan 2022 15:03:53 +1100
-Message-ID: <164360127045.4233.2606812444285122570.stgit@noble.brown>
+Message-ID: <164360183350.4233.691070075155620959.stgit@noble.brown>
+In-Reply-To: <164360127045.4233.2606812444285122570.stgit@noble.brown>
+References: <164360127045.4233.2606812444285122570.stgit@noble.brown>
 User-Agent: StGit/0.23
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -65,48 +69,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miklos pointed out that the filesystems which set the bdi congestion
-flags do gain some value from that, and simply removing the code is not
-appropriate.
+The bdi congestion tracking in not widely used and will be removed.
 
-Specifically, readahead and/or writeback are skipped when the congestion
-flags are set.
+NFS is one of a small number of filesystems that uses it, setting just
+the async (write) congestion flag at what it determines are appropriate
+times.
 
-We can mostly move this skipping into the filesystem.
-->readahead can do nothing if reads are congested.
-->writepage and ->wrtepages can do nothing for WB_SYNC_NONE if writes
-  are congested.
+The only remaining effect of the async flag is to cause (some)
+WB_SYNC_NONE writes to be skipped.
 
-Currently only *some* WB_SYNC_NONE writes are skipped due to congestion.
-Those from sync_file_range() and those used for page migration are not.
-Also, shrink_page_list() will now cause PageActive to be set if
-->writepage skips due to congestion.
+So instead of setting the flag, set an internal flag and change:
+ - .writepages to do nothing if WB_SYNC_NONE and the flag is set
+ - .writepage to return AOP_WRITEPAGE_ACTIVATE if WB_SYNC_NONE
+    and the flag is set.
 
-I don't expect these changes to be a problem, but I have no experience
-to base that on.
+The writepages change causes a behavioural change in that pageout() can
+now return PAGE_ACTIVATE instead of PAGE_KEEP, so SetPageActive() will
+be called on the page which (I think) wil further delay the next attempt
+at writeout.  This might be a good thing.
 
-Review/comments most welcome,
-
-Thanks,
-NeilBrown
-
-
-
+Signed-off-by: NeilBrown <neilb@suse.de>
 ---
+ fs/nfs/write.c            |   12 ++++++++++--
+ include/linux/nfs_fs_sb.h |    1 +
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-NeilBrown (3):
-      fuse: remove reliance on bdi congestion
-      nfs: remove reliance on bdi congestion
-      ceph: remove reliance on bdi congestion
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index 987a187bd39a..b7c6721dd36d 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -417,7 +417,7 @@ static void nfs_set_page_writeback(struct page *page)
+ 
+ 	if (atomic_long_inc_return(&nfss->writeback) >
+ 			NFS_CONGESTION_ON_THRESH)
+-		set_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
++		nfss->write_congested = 1;
+ }
+ 
+ static void nfs_end_page_writeback(struct nfs_page *req)
+@@ -433,7 +433,7 @@ static void nfs_end_page_writeback(struct nfs_page *req)
+ 
+ 	end_page_writeback(req->wb_page);
+ 	if (atomic_long_dec_return(&nfss->writeback) < NFS_CONGESTION_OFF_THRESH)
+-		clear_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
++		nfss->write_congested = 0;
+ }
+ 
+ /*
+@@ -672,6 +672,10 @@ static int nfs_writepage_locked(struct page *page,
+ 	struct inode *inode = page_file_mapping(page)->host;
+ 	int err;
+ 
++	if (wbc->sync_mode == WB_SYNC_NONE &&
++	    NFS_SERVER(inode)->write_congested)
++		return AOP_WRITEPAGE_ACTIVATE;
++
+ 	nfs_inc_stats(inode, NFSIOS_VFSWRITEPAGE);
+ 	nfs_pageio_init_write(&pgio, inode, 0,
+ 				false, &nfs_async_write_completion_ops);
+@@ -719,6 +723,10 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
+ 	int priority = 0;
+ 	int err;
+ 
++	if (wbc->sync_mode == WB_SYNC_NONE &&
++	    NFS_SERVER(inode)->write_congested)
++		return 0;
++
+ 	nfs_inc_stats(inode, NFSIOS_VFSWRITEPAGES);
+ 
+ 	if (!(mntflags & NFS_MOUNT_WRITE_EAGER) || wbc->for_kupdate ||
+diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
+index ca0959e51e81..6aa2a200676a 100644
+--- a/include/linux/nfs_fs_sb.h
++++ b/include/linux/nfs_fs_sb.h
+@@ -138,6 +138,7 @@ struct nfs_server {
+ 	struct nlm_host		*nlm_host;	/* NLM client handle */
+ 	struct nfs_iostats __percpu *io_stats;	/* I/O statistics */
+ 	atomic_long_t		writeback;	/* number of writeback pages */
++	unsigned int		write_congested;/* flag set when writeback gets too high */
+ 	unsigned int		flags;		/* various flags */
+ 
+ /* The following are for internal use only. Also see uapi/linux/nfs_mount.h */
 
-
- fs/ceph/addr.c            | 22 +++++++++++++---------
- fs/ceph/super.c           |  1 +
- fs/ceph/super.h           |  1 +
- fs/nfs/write.c            | 12 ++++++++++--
- include/linux/nfs_fs_sb.h |  1 +
- 5 files changed, 26 insertions(+), 11 deletions(-)
-
---
-Signature
 

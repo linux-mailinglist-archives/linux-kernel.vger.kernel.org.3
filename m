@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 914FD4A4432
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E6F4A4158
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343546AbiAaL1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:27:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50266 "EHLO
+        id S1348421AbiAaLDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:03:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34528 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377662AbiAaLSn (ORCPT
+        with ESMTP id S1358809AbiAaLBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:18:43 -0500
+        Mon, 31 Jan 2022 06:01:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF55560ED0;
-        Mon, 31 Jan 2022 11:18:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91235C340E8;
-        Mon, 31 Jan 2022 11:18:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A454A60B2C;
+        Mon, 31 Jan 2022 11:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79602C340E8;
+        Mon, 31 Jan 2022 11:01:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627921;
-        bh=iFZyXwB3fp7Yghq7dtzKHO2MbzTInXZK9KXlXalJrT8=;
+        s=korg; t=1643626899;
+        bh=RlAyw1yro2XvdUgx7Zcqs3E/pvyLS4SrAYRZUEphfIw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXgmCFnOO2Uzb82InKoPQLJdZKm5VC0b8+/uxBwh4qe6ldPHJsvTGFKEwnWlV1pum
-         foyFWLCRWFSN9Mrw7wP08z3E8gbGGV1d6Z5+obdYgjRZ2t/WE303/SSCcBrm9hVwFT
-         GXBBXtPZ6EH1rQC3MpNut2p1VxIghZ8OUXw70S3Q=
+        b=z/1Y/TocN0gRZ7ZmNoPJ0tzJvajHC7UFfuUQkAiS3uMcew3N88PN45xBTLC/uGOFS
+         olbD8l8pO3rFiVV05aRVxgHl2f+0itQEnN21284Ds+DA6yv+JbI/20Iol6ICF5sJyh
+         /f5QeTymU3qG0nhBH8mDCmzlH7xnct5U4rJ5m6eY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH 5.16 068/200] tty: rpmsg: Fix race condition releasing tty port
-Date:   Mon, 31 Jan 2022 11:55:31 +0100
-Message-Id: <20220131105235.870730853@linuxfoundation.org>
+        stable@vger.kernel.org, Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 5.10 011/100] efi: runtime: avoid EFIv2 runtime services on Apple x86 machines
+Date:   Mon, 31 Jan 2022 11:55:32 +0100
+Message-Id: <20220131105220.835281614@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,149 +48,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-commit db7f19c0aa0abcb751ff0ed694a071363f702b1d upstream.
+commit f5390cd0b43c2e54c7cf5506c7da4a37c5cef746 upstream.
 
-The tty_port struct is part of the rpmsg_tty_port structure.
-The issue is that the rpmsg_tty_port structure is freed on
-rpmsg_tty_remove while it is still referenced in the tty_struct.
-Its release is not predictable due to workqueues.
+Aditya reports [0] that his recent MacbookPro crashes in the firmware
+when using the variable services at runtime. The culprit appears to be a
+call to QueryVariableInfo(), which we did not use to call on Apple x86
+machines in the past as they only upgraded from EFI v1.10 to EFI v2.40
+firmware fairly recently, and QueryVariableInfo() (along with
+UpdateCapsule() et al) was added in EFI v2.00.
 
-For instance following ftrace shows that rpmsg_tty_close is called after
-rpmsg_tty_release_cport:
+The only runtime service introduced in EFI v2.00 that we actually use in
+Linux is QueryVariableInfo(), as the capsule based ones are optional,
+generally not used at runtime (all the LVFS/fwupd firmware update
+infrastructure uses helper EFI programs that invoke capsule update at
+boot time, not runtime), and not implemented by Apple machines in the
+first place. QueryVariableInfo() is used to 'safely' set variables,
+i.e., only when there is enough space. This prevents machines with buggy
+firmwares from corrupting their NVRAMs when they run out of space.
 
-     nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
-remove
-             cat-1191    [001] .....   212.095697: tty_release <-__fput
-      nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
-sg_tty_remove
-             cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
-             cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
+Given that Apple machines have been using EFI v1.10 services only for
+the longest time (the EFI v2.0 spec was released in 2006, and Linux
+support for the newly introduced runtime services was added in 2011, but
+the MacbookPro12,1 released in 2015 still claims to be EFI v1.10 only),
+let's avoid the EFI v2.0 ones on all Apple x86 machines.
 
-As consequence, the port must be free only when user has released the TTY
-interface.
+[0] https://lore.kernel.org/all/6D757C75-65B1-468B-842D-10410081A8E4@live.com/
 
-This path :
-- Introduce the .destruct port tty ops function to release the allocated
-  rpmsg_tty_port structure.
-- Introduce the .hangup tty ops function to call tty_port_hangup.
-- Manages the tty port refcounting to trig the .destruct port ops,
-- Introduces the rpmsg_tty_cleanup function to ensure that the TTY is
-  removed before decreasing the port refcount.
-
-Fixes: 7c0408d80579 ("tty: add rpmsg driver")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Link: https://lore.kernel.org/r/20220104163545.34710-1-arnaud.pouliquen@foss.st.com
+Cc: <stable@vger.kernel.org>
+Cc: Jeremy Kerr <jk@ozlabs.org>
+Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+Reported-by: Aditya Garg <gargaditya08@live.com>
+Tested-by: Orlando Chamberlain <redecorating@protonmail.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Tested-by: Aditya Garg <gargaditya08@live.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215277
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/rpmsg_tty.c |   40 ++++++++++++++++++++++++++--------------
- 1 file changed, 26 insertions(+), 14 deletions(-)
+ drivers/firmware/efi/efi.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/tty/rpmsg_tty.c
-+++ b/drivers/tty/rpmsg_tty.c
-@@ -50,10 +50,17 @@ static int rpmsg_tty_cb(struct rpmsg_dev
- static int rpmsg_tty_install(struct tty_driver *driver, struct tty_struct *tty)
- {
- 	struct rpmsg_tty_port *cport = idr_find(&tty_idr, tty->index);
-+	struct tty_port *port;
- 
- 	tty->driver_data = cport;
- 
--	return tty_port_install(&cport->port, driver, tty);
-+	port = tty_port_get(&cport->port);
-+	return tty_port_install(port, driver, tty);
-+}
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -719,6 +719,13 @@ void __init efi_systab_report_header(con
+ 		systab_hdr->revision >> 16,
+ 		systab_hdr->revision & 0xffff,
+ 		vendor);
 +
-+static void rpmsg_tty_cleanup(struct tty_struct *tty)
-+{
-+	tty_port_put(tty->port);
++	if (IS_ENABLED(CONFIG_X86_64) &&
++	    systab_hdr->revision > EFI_1_10_SYSTEM_TABLE_REVISION &&
++	    !strcmp(vendor, "Apple")) {
++		pr_info("Apple Mac detected, using EFI v1.10 runtime services only\n");
++		efi.runtime_version = EFI_1_10_SYSTEM_TABLE_REVISION;
++	}
  }
  
- static int rpmsg_tty_open(struct tty_struct *tty, struct file *filp)
-@@ -106,12 +113,19 @@ static unsigned int rpmsg_tty_write_room
- 	return size;
- }
- 
-+static void rpmsg_tty_hangup(struct tty_struct *tty)
-+{
-+	tty_port_hangup(tty->port);
-+}
-+
- static const struct tty_operations rpmsg_tty_ops = {
- 	.install	= rpmsg_tty_install,
- 	.open		= rpmsg_tty_open,
- 	.close		= rpmsg_tty_close,
- 	.write		= rpmsg_tty_write,
- 	.write_room	= rpmsg_tty_write_room,
-+	.hangup		= rpmsg_tty_hangup,
-+	.cleanup	= rpmsg_tty_cleanup,
- };
- 
- static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
-@@ -137,8 +151,10 @@ static struct rpmsg_tty_port *rpmsg_tty_
- 	return cport;
- }
- 
--static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
-+static void rpmsg_tty_destruct_port(struct tty_port *port)
- {
-+	struct rpmsg_tty_port *cport = container_of(port, struct rpmsg_tty_port, port);
-+
- 	mutex_lock(&idr_lock);
- 	idr_remove(&tty_idr, cport->id);
- 	mutex_unlock(&idr_lock);
-@@ -146,7 +162,10 @@ static void rpmsg_tty_release_cport(stru
- 	kfree(cport);
- }
- 
--static const struct tty_port_operations rpmsg_tty_port_ops = { };
-+static const struct tty_port_operations rpmsg_tty_port_ops = {
-+	.destruct = rpmsg_tty_destruct_port,
-+};
-+
- 
- static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
- {
-@@ -166,7 +185,8 @@ static int rpmsg_tty_probe(struct rpmsg_
- 					   cport->id, dev);
- 	if (IS_ERR(tty_dev)) {
- 		ret = dev_err_probe(dev, PTR_ERR(tty_dev), "Failed to register tty port\n");
--		goto err_destroy;
-+		tty_port_put(&cport->port);
-+		return ret;
- 	}
- 
- 	cport->rpdev = rpdev;
-@@ -177,12 +197,6 @@ static int rpmsg_tty_probe(struct rpmsg_
- 		rpdev->src, rpdev->dst, cport->id);
- 
- 	return 0;
--
--err_destroy:
--	tty_port_destroy(&cport->port);
--	rpmsg_tty_release_cport(cport);
--
--	return ret;
- }
- 
- static void rpmsg_tty_remove(struct rpmsg_device *rpdev)
-@@ -192,13 +206,11 @@ static void rpmsg_tty_remove(struct rpms
- 	dev_dbg(&rpdev->dev, "Removing rpmsg tty device %d\n", cport->id);
- 
- 	/* User hang up to release the tty */
--	if (tty_port_initialized(&cport->port))
--		tty_port_tty_hangup(&cport->port, false);
-+	tty_port_tty_hangup(&cport->port, false);
- 
- 	tty_unregister_device(rpmsg_tty_driver, cport->id);
- 
--	tty_port_destroy(&cport->port);
--	rpmsg_tty_release_cport(cport);
-+	tty_port_put(&cport->port);
- }
- 
- static struct rpmsg_device_id rpmsg_driver_tty_id_table[] = {
+ static __initdata char memory_type_name[][13] = {
 
 

@@ -2,236 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD114A4FE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84624A4FEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378039AbiAaUL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:11:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42351 "EHLO
+        id S1378117AbiAaUMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:12:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54964 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229781AbiAaULz (ORCPT
+        by vger.kernel.org with ESMTP id S1378144AbiAaUMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:11:55 -0500
+        Mon, 31 Jan 2022 15:12:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643659915;
+        s=mimecast20190719; t=1643659962;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o8rYk6jbX3z7S18LDcnIJR9gFkPNH5yqGudlMFBgYTo=;
-        b=Ctr3ScwtdF7dLeoSIHfA+t1WTXPVbTU3gPeB26bKsclePuOBqR4GERkx/B4/0+60UvU7rh
-        onpvU4FVngBMiMtZYFAJA7FrFw5KrkSLZap9cS7G67w4SnYx2lR2/SosVEK1R64y1sa0IC
-        4QlQsWdtkJWFFCTJB5WexBdKEvgo+I8=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cCZTFH2Jz9n7CnT5wyJgHCMwnAI//gCfT+1J887Hbp8=;
+        b=KCS28XXIetTekTMg2A/bj4cNrmUp7ZCdcI9azNk28A7OSkcucZBBVN+c7MV4rSNg4/8h3A
+        X7Yttif8nEulITO0eI6rXx+Jk6p9UkS9tEIOZcQCUj8dDZXnQqCq934CyTO7mV4DT/aS6Q
+        tcI14uVRWA0o2Gza+ZDbI4lMOJRQ4Ig=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-an-qqbCdPli2_ViWAIFsMg-1; Mon, 31 Jan 2022 15:11:53 -0500
-X-MC-Unique: an-qqbCdPli2_ViWAIFsMg-1
-Received: by mail-oi1-f198.google.com with SMTP id bl33-20020a05680830a100b002cf47784c5bso7272165oib.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:11:53 -0800 (PST)
+ us-mta-628-qAnUNmoiM0akpxVL3T5lWQ-1; Mon, 31 Jan 2022 15:12:40 -0500
+X-MC-Unique: qAnUNmoiM0akpxVL3T5lWQ-1
+Received: by mail-wr1-f72.google.com with SMTP id z1-20020adfbbc1000000b001df54394cebso4428554wrg.20
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:12:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=o8rYk6jbX3z7S18LDcnIJR9gFkPNH5yqGudlMFBgYTo=;
-        b=GNVC5wSm45fqFH3atnP7FG3kl2UanAQZ82SZ2osbFy3iCisaelVc3TF/WLPyZPVa1I
-         u4trbW6ocL1CnxKLqld3sH1ObYla7yMg86mPCF6IzADXiNRv3liluRystnAZMzx+o1zy
-         webWvPjmnFE4ed+mtLy4gST79jU0GWilt0j44HpLiwhZq7IvA0T7W3tav0rwv6o7SRZi
-         gMulamVWmuHsJRSUO2lHjSlx8c8aQ6JnKP7T4AkOn0oTluZp28CZb+AQjr6RNHjin1/e
-         WOhDNjlIEjXQcgXHZR0KdAMAVql9WwzBR8h4WWXD95V583cqH59b1leKQUYu/c4loapz
-         BFjg==
-X-Gm-Message-State: AOAM533QMdGL/dN2+LV5EZ3vxl8rjOlkPNsMMC0+SHwrNWbjs4VG/v1C
-        tobSGhmUnhgdcqlthj9mE8xqfdDEtEj6zxcGIAU+XA+B/H29bmkGl+CGjC9l2N/NQN4WeRE7DuW
-        ztnK2as03TxyucblvQ1rW/E1u
-X-Received: by 2002:a05:6808:170c:: with SMTP id bc12mr18203845oib.171.1643659912772;
-        Mon, 31 Jan 2022 12:11:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy0ZyWEcjpyYII8lC/faJI6EhpnLF4aHxfD1v1QX0qdI00S04WpcgySbYAs5vuTriyD0kz/PQ==
-X-Received: by 2002:a05:6808:170c:: with SMTP id bc12mr18203833oib.171.1643659912516;
-        Mon, 31 Jan 2022 12:11:52 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id n67sm9584822oib.31.2022.01.31.12.11.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cCZTFH2Jz9n7CnT5wyJgHCMwnAI//gCfT+1J887Hbp8=;
+        b=Iz7xNqAzg2W+W6zwGjrb+tJAkgL/LzBksor00uABap1yuM1yGO3a5lmA+RDsuRh88k
+         362J72OEBXqthr7Epo4QPeUFXull4CdQUbcqnl09x4lPXYsQld0rlf11okp2NVTc7GGi
+         STVY5p0aWwusxBRjfnbIfnG4AQCvojjEAPKaQK9avEolpqWyW1N3n3DQlA4c5Y+CD6tB
+         emf2PoaSseCtaf0ozc55NBclFN0C+AbQP+eV+CDKjt/lChTc4euj0q3eeLsyDEvWOg1u
+         GOZ24nAzrW7MjZ6OJHITt9DddsR2idprpeY+9sqFnjHaajf0ETov5lLCfJ+rWTjPZbY8
+         3cLQ==
+X-Gm-Message-State: AOAM5323qFtsTExq8zqAw2olXsRTpRpxQZiwzTXqMeJor14KS86XwdvL
+        WjgIfLGBEZGb1/P4goFDwTEPaDNmY4fR2UTn20QpmsD6FY8mN/i3CMzI+PNhoFkWH/C6B/bV5/b
+        UH4JwiTY6Uao6LP9rVb1+gAdGOxF8lg9wkIn1Kjh6FFdk01JLGkC7Bv25STqSbDQ4Dt4bH+cAKK
+        A=
+X-Received: by 2002:a05:600c:358d:: with SMTP id p13mr8847549wmq.107.1643659958859;
+        Mon, 31 Jan 2022 12:12:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyVR5gg/GkWjplwAp2GCFjYULewNFaqtbWuaY9/kEdRUVdrcLHpHcgr6Utqd0EVs24QXTKHkA==
+X-Received: by 2002:a05:600c:358d:: with SMTP id p13mr8847515wmq.107.1643659958507;
+        Mon, 31 Jan 2022 12:12:38 -0800 (PST)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i9sm15124660wry.32.2022.01.31.12.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 12:11:52 -0800 (PST)
-Date:   Mon, 31 Jan 2022 13:11:51 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     <kvm@vger.kernel.org>, Cornelia Huck <cohuck@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] vfio/pci: fix memory leak during D3hot to D0
- transition
-Message-ID: <20220131131151.4f113557.alex.williamson@redhat.com>
-In-Reply-To: <20220131112450.3550-1-abhsahu@nvidia.com>
-References: <20220131112450.3550-1-abhsahu@nvidia.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Mon, 31 Jan 2022 12:12:38 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org
+Subject: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED displays
+Date:   Mon, 31 Jan 2022 21:12:20 +0100
+Message-Id: <20220131201225.2324984-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 16:54:50 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
+SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
 
-> If needs_pm_restore is set (PCI device does not have support for no
-> soft reset), then the current PCI state will be saved during D0->D3hot
-> transition and same will be restored back during D3hot->D0 transition.
-> For saving the PCI state locally, pci_store_saved_state() is being
-> used and the pci_load_and_free_saved_state() will free the allocated
-> memory.
-> 
-> But for reset related IOCTLs, vfio driver calls PCI reset related
-> API's which will internally change the PCI power state back to D0. So,
-> when the guest resumes, then it will get the current state as D0 and it
-> will skip the call to vfio_pci_set_power_state() for changing the
-> power state to D0 explicitly. In this case, the memory pointed by
-> pm_save will never be freed. In a malicious sequence, the state changing
-> to D3hot followed by VFIO_DEVICE_RESET/VFIO_DEVICE_PCI_HOT_RESET can be
-> run in a loop and it can cause an OOM situation.
-> 
-> Also, pci_pm_reset() returns -EINVAL if we try to reset a device that
-> isn't currently in D0. Therefore any path where we're triggering a
-> function reset that could use a PM reset and we don't know if the device
-> is in D0, should wake up the device before we try that reset.
-> 
-> This patch changes the device power state to D0 by invoking
-> vfio_pci_set_power_state() before calling reset related API's.
-> It will help in fixing the mentioned memory leak and making sure
-> that the device is in D0 during reset. Also, to prevent any similar
-> memory leak for future development, this patch frees memory first
-> before overwriting 'pm_save'.
-> 
-> Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
-> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> ---
-> 
-> * Changes in v2
-> 
-> - Add the Fixes tag and sent this patch independently. 
-> - Invoke vfio_pci_set_power_state() before invoking reset related API's.
-> - Removed saving of power state locally.
-> - Removed warning before 'kfree(vdev->pm_save)'.
-> - Updated comments and commit message according to updated changes.
-> 
-> * v1 of this patch was sent in 
-> https://lore.kernel.org/lkml/20220124181726.19174-4-abhsahu@nvidia.com/
-> 
->  drivers/vfio/pci/vfio_pci_core.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index f948e6cd2993..d6dd4f7c4b2c 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -228,6 +228,13 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
->  	if (!ret) {
->  		/* D3 might be unsupported via quirk, skip unless in D3 */
->  		if (needs_save && pdev->current_state >= PCI_D3hot) {
-> +			/*
-> +			 * If somehow, the vfio driver was not able to free the
-> +			 * memory allocated in pm_save, then free the earlier
-> +			 * memory first before overwriting pm_save to prevent
-> +			 * memory leak.
-> +			 */
-> +			kfree(vdev->pm_save);
->  			vdev->pm_save = pci_store_saved_state(pdev);
->  		} else if (needs_restore) {
->  			pci_load_and_free_saved_state(pdev, &vdev->pm_save);
-> @@ -322,6 +329,12 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
->  	/* For needs_reset */
->  	lockdep_assert_held(&vdev->vdev.dev_set->lock);
->  
-> +	/*
-> +	 * This function can be invoked while the power state is non-D0,
-> +	 * Change the device power state to D0 first.
+Using the DRM fb emulation, all the tests from Geert Uytterhoeven's fbtest
+(https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git) passes:
 
-I think we need to describe more why we're doing this than what we're
-doing.  We need to make sure the device is in D0 in case we have a
-reset method that depends on that directly, ex. pci_pm_reset(), or
-possibly device specific resets that may access device BAR resources.
-I think it's placed here in the function so that the config space
-changes below aren't overwritten by restoring the saved state and maybe
-also because the set_irqs_ioctl() call might access device MMIO space.
+     ./fbtest -f /dev/fb1
+    Using drawops cfb32 (32 bpp packed pixels)
+    Available visuals:
+      Monochrome
+      Grayscale 256
+      Truecolor 8:8:8:0
+    Using visops truecolor
+    Running all tests
+    test001: PASSED
+    test002: PASSED
+    test003: PASSED
+    test004: PASSED
+    test005: PASSED
+    test006: PASSED
+    test008: PASSED
+    test009: PASSED
+    test010: PASSED
+    Benchmarking... 10x10 squares: 412.99 Mpixels/s
+    Benchmarking... 20x20 squares: 857.46 Mpixels/s
+    Benchmarking... 50x50 squares: 1593.51 Mpixels/s
+    test012: PASSED
+    Benchmarking... R5 circles: 237.07 Mpixels/s
+    Benchmarking... R10 circles: 501.24 Mpixels/s
+    Benchmarking... R25 circles: 947.86 Mpixels/s
+    test013: PASSED
 
-> +	 */
-> +	vfio_pci_set_power_state(vdev, PCI_D0);
-> +
->  	/* Stop the device from further DMA */
->  	pci_clear_master(pdev);
->  
-> @@ -921,6 +934,13 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
->  			return -EINVAL;
->  
->  		vfio_pci_zap_and_down_write_memory_lock(vdev);
-> +
-> +		/*
-> +		 * This function can be invoked while the power state is non-D0,
-> +		 * Change the device power state to D0 before doing reset.
-> +		 */
+Patch #1 adds an I2C connector type since currently there isn't one and
+I2C drivers use DRM_MODE_CONNECTOR_Unknown or DRM_MODE_CONNECTOR_VIRTUAL.
 
-See below, reconsidering this...
+Patch #2 adds a drm_fb_gray8_to_mono_reversed() DRM format helper since
+most DRM/KMS user-space don't support bpp 1 displays, so drivers expose
+a common format that's converted to greyscale and then to monochrome.
 
-> +		vfio_pci_set_power_state(vdev, PCI_D0);
-> +
->  		ret = pci_try_reset_function(vdev->pdev);
->  		up_write(&vdev->memory_lock);
->  
-> @@ -2055,6 +2075,13 @@ static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
->  	}
->  	cur_mem = NULL;
->  
-> +	/*
-> +	 * This function can be invoked while the power state is non-D0.
-> +	 * Change power state of all devices to D0 before doing reset.
-> +	 */
+Patch #3 adds the driver. The name ssd1307 was used instead of ssd130x
+(which would be more accurate) to avoid confusion for users who want to
+migrate from the existing ssd1307fb fbdev driver.
 
-Here I have trouble convincing myself exactly what we're doing.  As you
-note in patch 1/ of the RFC series, pci_reset_bus(), or more precisely
-pci_dev_save_and_disable(), wakes the device to D0 before reset, so we
-can't be doing this only to get the device into D0.  The function level
-resets do the same.
+Patch #4 just adds a MAINTAINERS entry for this new DRM driver.
 
-Actually, now I'm remembering and debugging where I got myself confused
-previously with pci_pm_reset().  The scenario was a Windows guest with
-an assigned Intel 82574L NIC.  When doing a shutdown from the guest the
-device is placed in D3hot and we enter vfio_pci_core_disable() in that
-state.  That function however uses __pci_reset_function_locked(), which
-skips the pci_dev_save_and_disable() since much of it is redundant for
-that call path (I think I generalized this to all flavors of
-pci_reset_function() in my head).
-
-The standard call to pci_try_reset_function(), as in the previous
-chunk, will make use of pci_dev_save_and_disable(), so for either of
-these latter cases the concern cannot be simply having the device in D0,
-we need a reason that we want the previously saved state restored on the
-device before the reset, and thus restored to the device after the
-reset as the rationale for the change.
-
-> +	list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list)
-> +		vfio_pci_set_power_state(cur, PCI_D0);
-> +
->  	ret = pci_reset_bus(pdev);
->  
->  err_undo:
+Best regards,
+Javier
 
 
-We also call pci_reset_bus() in vfio_pci_dev_set_try_reset().  In that
-case, none of the other devices can be in use by the user, but they can
-certainly be in D3hot with previous device state saved off into our
-pm_save cache.  If we don't have a good reason to restore in that case,
-I'm wondering if we really have a good reason to restore in the above
-two cases.
+Javier Martinez Canillas (4):
+  drm: Add I2C connector type
+  drm/format-helper: Add drm_fb_gray8_to_mono_reversed()
+  drm/tiny: Add driver for Solomon SSD1307 OLED displays
+  MAINTAINERS: Add entry for Solomon SSD1307 OLED displays DRM driver
 
-Perhaps we just need the first chunk above to resolve the memory leak,
-and the second chunk as a separate patch to resolve the issue with
-devices entering vfio_pci_core_disable() in non-D0 state.  Sorry if I
-mislead you that we had a more widespread issue with pci_pm_reset(), it
-wasn't clear in my head until now that it was only the
-__pci_reset_function_locked() caller that had the issue.  Thanks,
+ MAINTAINERS                         |   7 +
+ drivers/gpu/drm/drm_connector.c     |   1 +
+ drivers/gpu/drm/drm_format_helper.c |  35 +
+ drivers/gpu/drm/tiny/Kconfig        |  12 +
+ drivers/gpu/drm/tiny/Makefile       |   1 +
+ drivers/gpu/drm/tiny/ssd1307.c      | 976 ++++++++++++++++++++++++++++
+ include/drm/drm_format_helper.h     |   2 +
+ include/uapi/drm/drm_mode.h         |   1 +
+ 8 files changed, 1035 insertions(+)
+ create mode 100644 drivers/gpu/drm/tiny/ssd1307.c
 
-Alex
+-- 
+2.34.1
 

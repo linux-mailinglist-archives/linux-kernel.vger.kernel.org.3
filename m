@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E28D04A4692
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40A24A469B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350277AbiAaMGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:06:52 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:35044 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349744AbiAaMGv (ORCPT
+        id S1351538AbiAaMI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351380AbiAaMIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:06:51 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9229D1F380;
-        Mon, 31 Jan 2022 12:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643630810; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=au++jgF3hU5FpkHd303MYYokLkB+gG3lUSiPbhg7U68=;
-        b=L4yFauK8DPlTNaX8IHOVwsd6E3sD7KLLrzgnivMK+98d3UqJwEIEgGguAmkkS8+wbafwYo
-        xfJ792Yfrnh7VSnD2FvVW2w1nsaz+Z93lrVRBRctz97ddUE8WsYF57DvckwL3RXSABghcs
-        IlW/IIc6qaRzBWjj5ThoS9GoQPqLuiA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643630810;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=au++jgF3hU5FpkHd303MYYokLkB+gG3lUSiPbhg7U68=;
-        b=lwxUKuxzi2DzF7sbefT2HnQtscVPok8yLPfTYP8kxZKgyXS7L1Klw4MTC9E64rzSrln/9Q
-        EUVC4QPardoIbpCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B55413C40;
-        Mon, 31 Jan 2022 12:06:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tauBHNrQ92EkZAAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 31 Jan 2022 12:06:50 +0000
-Date:   Mon, 31 Jan 2022 13:06:45 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: vmlinux.o: warning: objtool: do_machine_check()+0x5fa: call to
- memset() leaves .noinstr.text section
-Message-ID: <YffQ1XJ+9YAVa163@zn.tnic>
-References: <20220119102250.7e20b3df@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <YehZsGAqgd3tJyDV@zn.tnic>
- <20220119104017.31e5ecc7@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <20220119111523.71f8e9e3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <Yeh013gIveIKdFMP@zn.tnic>
- <20220119123714.22b54d4c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <Yeh/oEYGyg2+XYSJ@zn.tnic>
- <20220119145727.2034a180@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <YeicA7BKdstxbteX@zn.tnic>
- <20220119153218.02ee6789@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        Mon, 31 Jan 2022 07:08:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90E6C061714;
+        Mon, 31 Jan 2022 04:08:54 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j2so26154220edj.8;
+        Mon, 31 Jan 2022 04:08:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TvB/L+qgB/BhC4HvCjJPFFAzV5TyQ93kn0tMstVAmJQ=;
+        b=VwsBbQ45g/pUtJRiPkmGzxG5OSP5GN+tsFTi4a5YNsaPeTgMiIePfq7/ZIVUGPPE5R
+         2DxyDpUJQprDVf63ECXz/nutFX7nNSdi1A+zTo0A9E1znFnUQMmSLpZQItMYwv/KUsbY
+         RbaHnsGAxcXWYNkDy//DS3OHJwxlFySIrUyV4owrnKblqxbQTh9JC9N8FH0lvA2zEjDG
+         zSj3JagWm2gEVkHcGJMFc22AkNXcMQZsDlAeyiNLyNmSeYQSwr2Lca8MRuoeUQIBfA42
+         +QsB0/N8EoNlY/81lBB2R5itYgRJCRI6hAjiw2HODcbmgx4h/dSWHgxjS6P2EOBIEsjI
+         8oWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TvB/L+qgB/BhC4HvCjJPFFAzV5TyQ93kn0tMstVAmJQ=;
+        b=cMxEoo/+5T1qqFTShCOqsdbT75+uz8Qz85rPkvdOLfHtV9SNkk4VBe/rdI1HvQCsKn
+         8Jip2KhkODtyJ7OKTmUY95neoozoL8o2GiwBzeaTJae/vuwVA/8kBOUtYY4wnHu6JysK
+         8VDSdia53XM8yaribjNV/BxkyjBtLifIfM5EImiA9zIRE1BhYK4S9Aips21dFWwE/UA6
+         wfJzvkKknvIGzz3gVpJ+RsliKktav7lF9GBBJZyZVSLOxMnesRrn0Ks5wKbT+ZGn7CPS
+         aDigize0h9ULlUyUqb/sjOIEpzpe5/jsfn2+MqYEcmJQxtSvmNwda3dEwDvCn8GBNLQI
+         pW+w==
+X-Gm-Message-State: AOAM5315k67GyLptIQ4ddGRivrjzMR4xX9WDVgQ7O6nON+nJmiI7ztEj
+        SwzDOD7ssBmZ4GA3tNc26YkrkNEoKh6QmQ==
+X-Google-Smtp-Source: ABdhPJzEP40J2JXVpgaxe9rVh7Cse9HqtcmIvV4DKsJg9fevNePmM4dFZdEZYEM36CglMbo5SINBhA==
+X-Received: by 2002:a05:6402:3514:: with SMTP id b20mr20298146edd.65.1643630933175;
+        Mon, 31 Jan 2022 04:08:53 -0800 (PST)
+Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
+        by smtp.gmail.com with ESMTPSA id j2sm13380735ejc.223.2022.01.31.04.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 04:08:52 -0800 (PST)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: [PATCH] PCI: cadence: respond to received PTM Requests
+Date:   Mon, 31 Jan 2022 13:08:27 +0100
+Message-Id: <20220131120841.118833-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220119153218.02ee6789@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 03:32:18PM -0800, Jakub Kicinski wrote:
-> On Thu, 20 Jan 2022 00:17:23 +0100 Borislav Petkov wrote:
-> > So, I'd like to reproduce that here and play with it a bit. What iso
-> > can I install in a guest here so that I can get pretty close to your
-> > environment?
-> 
-> It's CentOS Stream 8. It may have some extra backports done by my $corp
-> but I don't think the compiler is backported.
+This enables the Controller [RP] to automatically respond
+with Response/ResponseD messages.
 
-Ok, while trying to boot an externally supplied kernel with qemu -kernel
-and with a guest install of centos8, I managed to trigger the issues on
-the test box.
+Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+---
+ drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
+ drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
+ 2 files changed, 14 insertions(+)
 
-I've pushed a branch here for you to test:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/log/?h=rc1%2bmce-noinstr
-
-Lemme know how that goes.
-
-Thx.
-
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+index fb96d37a135c..940c7dd701d6 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-host.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+@@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
+ 	return ret;
+ }
+ 
++static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
++{
++	u32 val;
++
++	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
++	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
++}
++
+ static int cdns_pcie_host_start_link(struct cdns_pcie_rc *rc)
+ {
+ 	struct cdns_pcie *pcie = &rc->pcie;
+@@ -501,6 +509,8 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
+ 	if (rc->quirk_detect_quiet_flag)
+ 		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
+ 
++	cdns_pcie_host_enable_ptm_response(pcie);
++
+ 	ret = cdns_pcie_start_link(pcie);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to start link\n");
+diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
+index c8a27b6290ce..9510ea513b8a 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence.h
++++ b/drivers/pci/controller/cadence/pcie-cadence.h
+@@ -116,6 +116,10 @@
+ #define LM_RC_BAR_CFG_APERTURE(bar, aperture)		\
+ 					(((aperture) - 2) << ((bar) * 8))
+ 
++/* PTM Control Register */
++#define CDNS_PCIE_LM_PTM_CTRL 	(CDNS_PCIE_LM_BASE + 0x0DA8)
++#define CDNS_PCIE_LM_TPM_CTRL_PTMRSEN 	BIT(17)
++
+ /*
+  * Endpoint Function Registers (PCI configuration space for endpoint functions)
+  */
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

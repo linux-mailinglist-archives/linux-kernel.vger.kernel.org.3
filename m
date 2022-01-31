@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A124A42BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3E64A44E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376538AbiAaLM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377072AbiAaLJg (ORCPT
+        id S1377974AbiAaLds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:33:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41460 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377786AbiAaLXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C291C0613E7;
-        Mon, 31 Jan 2022 03:06:21 -0800 (PST)
+        Mon, 31 Jan 2022 06:23:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F195B82A65;
-        Mon, 31 Jan 2022 11:06:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6F8C340E8;
-        Mon, 31 Jan 2022 11:06:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA3AB82A60;
+        Mon, 31 Jan 2022 11:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C86C340E8;
+        Mon, 31 Jan 2022 11:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627178;
-        bh=bZ6ukf/XeQnZfTLzn0CS/fdzDUU9lgLzWoBo03yH37s=;
+        s=korg; t=1643628202;
+        bh=42keL3IE7xfYYTuDFGFSXIoBuVeHfX3O1QQtmA7j5bI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FiSNH/rlUtEazYOQnE971InUJ1M2Rz2/nwZKFtV7eLtoODRjm9xuzQFUnkxnZE6Qj
-         mQzq4p7IbP6qH245N3yy7TXdj7nmkPaCRpwqavD+4llJRJEK6YnW25q2Mg9/2QoSmG
-         /YqhP8rSbyg/xKJemZ0VLHNxzEjLeGj9z7txrJl0=
+        b=owGcVUmO3uLI7mFA27T9jiUKgjBQOKPA7OWIYn3Clr3sXJoCfLQlKbe7R1gIoGUqQ
+         jGRZ6/niO5GyX9NnOcHfn/rYfLj5BETw10ACjoLAdz/5rMl42f8KxMS8jDWrfcEIW3
+         S7F1FUDJ203MjLouAIEgq4JPD/v2v5hKJiNdMYeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Dmitry V. Levin" <ldv@altlinux.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 5.10 098/100] usr/include/Makefile: add linux/nfc.h to the compile-test coverage
-Date:   Mon, 31 Jan 2022 11:56:59 +0100
-Message-Id: <20220131105223.745422665@linuxfoundation.org>
+        stable@vger.kernel.org, Josh Lehan <krellan@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 157/200] hwmon: (lm90) Mark alert as broken for MAX6654
+Date:   Mon, 31 Jan 2022 11:57:00 +0100
+Message-Id: <20220131105238.841140778@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,32 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry V. Levin <ldv@altlinux.org>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 10756dc5b02bff370ddd351d7744bc99ada659c2 upstream.
+[ Upstream commit a53fff96f35763d132a36c620b183fdf11022d7a ]
 
-As linux/nfc.h userspace compilation was finally fixed by commits
-79b69a83705e ("nfc: uapi: use kernel size_t to fix user-space builds")
-and 7175f02c4e5f ("uapi: fix linux/nfc.h userspace compilation errors"),
-there is no need to keep the compile-test exception for it in
-usr/include/Makefile.
+Experiments with MAX6654 show that its alert function is broken,
+similar to other chips supported by the lm90 driver. Mark it accordingly.
 
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 229d495d8189 ("hwmon: (lm90) Add max6654 support to lm90 driver")
+Cc: Josh Lehan <krellan@google.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- usr/include/Makefile |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/hwmon/lm90.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -34,7 +34,6 @@ no-header-test += linux/hdlc/ioctl.h
- no-header-test += linux/ivtv.h
- no-header-test += linux/kexec.h
- no-header-test += linux/matroxfb.h
--no-header-test += linux/nfc.h
- no-header-test += linux/omap3isp.h
- no-header-test += linux/omapfb.h
- no-header-test += linux/patchkey.h
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index e4ecf3440d7cf..280ae5f58187b 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -400,6 +400,7 @@ static const struct lm90_params lm90_params[] = {
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[max6654] = {
++		.flags = LM90_HAVE_BROKEN_ALERT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 7,
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+-- 
+2.34.1
+
 
 

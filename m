@@ -2,227 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A30E24A468F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704CC4A4694
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348414AbiAaMGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:06:10 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:34978 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350341AbiAaMGE (ORCPT
+        id S1350849AbiAaMHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:07:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23151 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350321AbiAaMHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:06:04 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B926D1F381;
-        Mon, 31 Jan 2022 12:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643630763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 31 Jan 2022 07:07:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643630825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lqNijKTz7QzsNvM1Y20CF0Dy7Qx16blcjfJ9npCqma8=;
-        b=1j6CxPTaG+3Dksr/6bSTSPPYPYTu+u5QyuH9T7RsgsiyVbAg6CluqEaFSzxs11yw5xUpnD
-        1Z/kcRtnBADXbnneQSEHm2XanbjIpX0eBOXrrjGq/BGfesGLbzhYAgAwne4I8jqLSk5H4n
-        hOh/5cX1sTF3l3l9X90WQ06tTAE4bfw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643630763;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lqNijKTz7QzsNvM1Y20CF0Dy7Qx16blcjfJ9npCqma8=;
-        b=LrDoJYTG+hLQzqNBvwnM0Qze9PZu3NMvwPtGX1OberJlXW2OYVLs9eSmcSlmFZ0iBA6YYG
-        BLozY6UX/c0oUvAA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8CF93A3B87;
-        Mon, 31 Jan 2022 12:06:03 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D101AA05B9; Mon, 31 Jan 2022 13:05:57 +0100 (CET)
-Date:   Mon, 31 Jan 2022 13:05:57 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jan Kara <jack@suse.cz>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH 4/4] mm/gup: remove get_user_pages_locked()
-Message-ID: <20220131120557.rwde6sphc245pzu7@quack3.lan>
-References: <20220131051752.447699-1-jhubbard@nvidia.com>
- <20220131051752.447699-5-jhubbard@nvidia.com>
+        bh=k+DYbhvcbUytWZeA8bcgfAsvYrRe7fudO+Mz41JEQpA=;
+        b=JJNaroa3E7V/Wv8uABrbbVfoe6XxEebMu+7dsA+wCPSdAuK4Zz9t5qkX2AuT8AUtTY1Oip
+        /XAv+N82YOw2okN8/41yY5MIdiTKl4babBQlIKxgfu+MLeHA2LmWVS5bvMzHaRKo1Z6exH
+        1UEbELbFtqPs6pn+cfziAj1yjeNUc6s=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-186-LcGvfjzBOA-p_D3mM7ILkA-1; Mon, 31 Jan 2022 07:07:01 -0500
+X-MC-Unique: LcGvfjzBOA-p_D3mM7ILkA-1
+Received: by mail-yb1-f198.google.com with SMTP id a125-20020a25ca83000000b00619442ade1cso17293017ybg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:07:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k+DYbhvcbUytWZeA8bcgfAsvYrRe7fudO+Mz41JEQpA=;
+        b=JVvxAhNmTFYSCJM/Ng/3r+EG1SQ4cer+hBqPiLzsYOTPTXbMXRIpcQOmFwj20Jy1Io
+         or5JAlqmbDBNrYTY1T29AAiKs0yjotNmk7iiD+ZPVSi6VzXiXCWceuwpM/dzvH2YziW6
+         80KyW5HC2DHTAk0QgffXuihMgPo5Lj4vzPNzgAI6u9SpV7HhGfL0sdYEJYUgV++TFWRg
+         fqvyXvn6LjTrnquwifjMiqinQXCj4dEIcJ1VPBraLULjuoCNBCWNs/xMDeXfDszs2Hpl
+         9ZTON0pAmAg0gIySKVVutp2xSskbnU5ZnY++b5xfK/pHkRAwmDPtRsR0TZr9JYZUEdLT
+         QHCQ==
+X-Gm-Message-State: AOAM5320yNv1pjGkV1u0y6TsJXKi59XfnLVnkzLEz0V4IgEFhD3AVmNK
+        f5F+vv4qG0i7tLP1XIE4gzme4htq8/Aog1WQ10qxBG57pZxgIPmTk71XtTqL8RlNPP5bpn05m1S
+        Ux7dxvMXpdNc2e/8MZ/QMocvWQAehJ7FC56EaDnln
+X-Received: by 2002:a25:d90a:: with SMTP id q10mr29679735ybg.253.1643630821345;
+        Mon, 31 Jan 2022 04:07:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy4XU5YfszLGQp4N9C+7Wcm6G7P3VJo0M1H3K29i4UnrahCCIj1CDSm3JxETTQm5Ow1SBCcgSEmb0cR2Dt3ZPQ=
+X-Received: by 2002:a25:d90a:: with SMTP id q10mr29679717ybg.253.1643630821159;
+ Mon, 31 Jan 2022 04:07:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131051752.447699-5-jhubbard@nvidia.com>
+References: <20220128202858.96935-1-vbendel@redhat.com>
+In-Reply-To: <20220128202858.96935-1-vbendel@redhat.com>
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Mon, 31 Jan 2022 13:06:43 +0100
+Message-ID: <CAFqZXNvG+-8FcEgcbKxmUeMznVp6NBAoPctN4EHCc3i-DZA8jQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] selinux: Fix and clean policydb->cond_list error paths
+To:     vbendel@redhat.com
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 30-01-22 21:17:52, John Hubbard wrote:
-> Unraveling the rat's nest set of APIs in mm/gup.c a bit more.
-> get_user_pages_locked() was not helping at all, so remove it.
-> 
-> Also, lookup_node() has only a single caller, but it is still worth
-> having a clearer locking policy there. Changing it so that the caller
-> both takes and releases the mmap_lock, thus leaving lookup_node() with
-> the sole job of translating a virtual address into a numa node ID.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On Fri, Jan 28, 2022 at 9:29 PM <vbendel@redhat.com> wrote:
+> There are two users of policydb->cond_list: cond_read_list()
+> and duplicate_policydb_cond_list(). If any of them gets an error,
+> usually an -ENOMEM, the error-path-cleanup *_destroy() functions
+> get called twice: firstly from these two and secondly from
+> the caller functions' error paths.
+>
+> In case such -ENOMEM happens while assigning cond_node data, i.e.
+> while ->cond_list_len is already non-zero, it leads to inappropriate
+> dereferencing of policydb->cond_list[] data in the second called
+> cond_list_destroy() from the caller functions' error paths, resulting
+> with:
+> - NULL pointer deref from cond_read_list();
+> - use-after-free + double-free from duplicate_policydb_cond_list().
+> (the cond_read_list() manages to set ->cond_list to NULL)
+>
+> Patch 1/3 simply makes the error behavior consistent by always setting
+> ->cond_list to NULL.
+>
+> Patch 2/3 fixes the actual bug by resetting ->cond_list_len to 0,
+> so any subsequent cond_list_destroy() calls would become noop.
+>
+> Patch 3/3 cleans up the duplicate *_destroy calls on these error paths,
+> albeit it's a bit questionable and I'm looking for feedback on it:
+> - on one hand the idea is that the caller functions call the *_destroy()
+> bits anyway, hence removing duplicate efforts (which also fixes the bug,
+> but I'd still prefer to apply patches 1 and 2 regardless);
+> - on the other hand it's appropriate and more bug-proof for a function
+> to clean everything it allocated on error.
+> Hence I'm looking forward to seeing what approach the upstream would find
+> more appropriate.
+>
+> Signed-off-by: Vratislav Bendel <vbendel@redhat.com>
 
-Well, the point of _locked() GUP variants is that we can unlock mmap_sem
-when reading a page from the disk during a page fault (hidden behind
-VM_FAULT_RETRY). So as such _locked() variants are about reducing mmap_sem
-latency rather than code readability.  In this particular case, I don't
-think using _locked() variant in lookup_node() is very beneficial
-(generally I would not expect to take a fault there) but at least a
-justification in the commit message should be different :).
+For the series (with or without the last patch):
+Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
 
-								Honza
+--
+Ondrej Mosnacek
+Software Engineer, Linux Security - SELinux kernel
+Red Hat, Inc.
 
-> ---
->  include/linux/mm.h |  2 --
->  mm/gup.c           | 59 ----------------------------------------------
->  mm/mempolicy.c     | 22 ++++++++---------
->  3 files changed, 10 insertions(+), 73 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 80c540c17d83..528ef1cb4f3a 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1916,8 +1916,6 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
->  long pin_user_pages(unsigned long start, unsigned long nr_pages,
->  		    unsigned int gup_flags, struct page **pages,
->  		    struct vm_area_struct **vmas);
-> -long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
-> -		    unsigned int gup_flags, struct page **pages, int *locked);
->  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
->  		    struct page **pages, unsigned int gup_flags);
->  long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 58d01a96ab30..4a43c79f0972 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2119,65 +2119,6 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
->  }
->  EXPORT_SYMBOL(get_user_pages);
->  
-> -/**
-> - * get_user_pages_locked() - variant of get_user_pages()
-> - *
-> - * @start:      starting user address
-> - * @nr_pages:   number of pages from start to pin
-> - * @gup_flags:  flags modifying lookup behaviour
-> - * @pages:      array that receives pointers to the pages pinned.
-> - *              Should be at least nr_pages long. Or NULL, if caller
-> - *              only intends to ensure the pages are faulted in.
-> - * @locked:     pointer to lock flag indicating whether lock is held and
-> - *              subsequently whether VM_FAULT_RETRY functionality can be
-> - *              utilised. Lock must initially be held.
-> - *
-> - * It is suitable to replace the form:
-> - *
-> - *      mmap_read_lock(mm);
-> - *      do_something()
-> - *      get_user_pages(mm, ..., pages, NULL);
-> - *      mmap_read_unlock(mm);
-> - *
-> - *  to:
-> - *
-> - *      int locked = 1;
-> - *      mmap_read_lock(mm);
-> - *      do_something()
-> - *      get_user_pages_locked(mm, ..., pages, &locked);
-> - *      if (locked)
-> - *          mmap_read_unlock(mm);
-> - *
-> - * We can leverage the VM_FAULT_RETRY functionality in the page fault
-> - * paths better by using either get_user_pages_locked() or
-> - * get_user_pages_unlocked().
-> - *
-> - */
-> -long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
-> -			   unsigned int gup_flags, struct page **pages,
-> -			   int *locked)
-> -{
-> -	/*
-> -	 * FIXME: Current FOLL_LONGTERM behavior is incompatible with
-> -	 * FAULT_FLAG_ALLOW_RETRY because of the FS DAX check requirement on
-> -	 * vmas.  As there are no users of this flag in this call we simply
-> -	 * disallow this option for now.
-> -	 */
-> -	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
-> -		return -EINVAL;
-> -	/*
-> -	 * FOLL_PIN must only be set internally by the pin_user_pages*() APIs,
-> -	 * never directly by the caller, so enforce that:
-> -	 */
-> -	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
-> -		return -EINVAL;
-> -
-> -	return __get_user_pages_locked(current->mm, start, nr_pages,
-> -				       pages, NULL, locked,
-> -				       gup_flags | FOLL_TOUCH);
-> -}
-> -EXPORT_SYMBOL(get_user_pages_locked);
-> -
->  /*
->   * get_user_pages_unlocked() is suitable to replace the form:
->   *
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 028e8dd82b44..040d88354cfa 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -907,17 +907,15 @@ static void get_policy_nodemask(struct mempolicy *p, nodemask_t *nodes)
->  static int lookup_node(struct mm_struct *mm, unsigned long addr)
->  {
->  	struct page *p = NULL;
-> -	int err;
-> +	int ret;
->  
-> -	int locked = 1;
-> -	err = get_user_pages_locked(addr & PAGE_MASK, 1, 0, &p, &locked);
-> -	if (err > 0) {
-> -		err = page_to_nid(p);
-> +	mmap_assert_locked(mm);
-> +	ret = get_user_pages(addr & PAGE_MASK, 1, 0, &p, NULL);
-> +	if (ret > 0) {
-> +		ret = page_to_nid(p);
->  		put_page(p);
->  	}
-> -	if (locked)
-> -		mmap_read_unlock(mm);
-> -	return err;
-> +	return ret;
->  }
->  
->  /* Retrieve NUMA policy */
-> @@ -968,15 +966,15 @@ static long do_get_mempolicy(int *policy, nodemask_t *nmask,
->  	if (flags & MPOL_F_NODE) {
->  		if (flags & MPOL_F_ADDR) {
->  			/*
-> -			 * Take a refcount on the mpol, lookup_node()
-> -			 * will drop the mmap_lock, so after calling
-> -			 * lookup_node() only "pol" remains valid, "vma"
-> -			 * is stale.
-> +			 * Take a refcount on the mpol, because we are about to
-> +			 * drop the mmap_lock, after which only "pol" remains
-> +			 * valid, "vma" is stale.
->  			 */
->  			pol_refcount = pol;
->  			vma = NULL;
->  			mpol_get(pol);
->  			err = lookup_node(mm, addr);
-> +			mmap_read_unlock(mm);
->  			if (err < 0)
->  				goto out;
->  			*policy = err;
-> -- 
-> 2.35.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR

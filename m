@@ -2,1099 +2,940 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8A84A3FC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9F84A3FD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357995AbiAaKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 05:01:15 -0500
-Received: from mga14.intel.com ([192.55.52.115]:47906 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348228AbiAaKBL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:01:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643623271; x=1675159271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C5DlFuo1rwqkxakQRl2PvTqNFKvEYfpf9sJPti71ey4=;
-  b=IJqdasknw3Etj/bo/VsduTzZb+CKChwc6/fAJ/OT4K4oDOqDyd2kKry+
-   Vi7K9Kov/1KH21Ba/vKYVveVcmlRzSatw2iRN0x8gINMMjceGCHyt8o8j
-   CeQ3JOu+Dq9FaqEzJDSKpS8nOe8AqexVMCzz9oWBo7J2UNxA7n5BAzAV7
-   hEr5ejeklOAqoWl8+U+crZxnM0Qgl7RKfF0DhGoAnSBuAYOB8evlhwf+7
-   4VcfZrol9bspI7Q3iHKDf6CcQMdMIjs7zjC6EW4PwQkxfXec0bfWgNNF4
-   v0qIODqwUO98mD49oYZhj87Jn5JcJUxAqZQ9/dAWs5v/YgB5eNCMyKmF7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247648728"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="247648728"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 02:01:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="675683000"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 02:00:59 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 12:00:58 +0200
-Date:   Mon, 31 Jan 2022 12:00:58 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cy_huang@richtek.com
-Subject: Re: [PATCH v2 2/2] usb: typec: rt1719: Add support for Richtek RT1719
-Message-ID: <YfezWtp2z9wvKmJQ@kuha.fi.intel.com>
-References: <1642208191-7254-1-git-send-email-u0084500@gmail.com>
- <1642208191-7254-3-git-send-email-u0084500@gmail.com>
+        id S1357967AbiAaKCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 05:02:22 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:4870 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348301AbiAaKCU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 05:02:20 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20V4EBGf000722;
+        Mon, 31 Jan 2022 05:02:17 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dx8jbrkje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 05:02:17 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 20VA2GZm023781
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Jan 2022 05:02:16 -0500
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 31 Jan 2022 05:02:15 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 31 Jan 2022 05:02:14 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 31 Jan 2022 05:02:14 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.119])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20VA26eN009375;
+        Mon, 31 Jan 2022 05:02:09 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH v5 1/4] iio:frequency:admv1014: add support for ADMV1014
+Date:   Mon, 31 Jan 2022 12:00:59 +0200
+Message-ID: <20220131100102.15372-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1642208191-7254-3-git-send-email-u0084500@gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: W1NFctFdnMMAg-h8cu9FpoND3Bl0LEPy
+X-Proofpoint-ORIG-GUID: W1NFctFdnMMAg-h8cu9FpoND3Bl0LEPy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_02,2022-01-28_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310067
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The ADMV1014 is a silicon germanium (SiGe), wideband,
+microwave downconverter optimized for point to point microwave
+radio designs operating in the 24 GHz to 44 GHz frequency range.
 
-On Sat, Jan 15, 2022 at 08:56:31AM +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Richtek RT1719 is a sink-only Type-C PD controller it complies with
-> latest USB Type-C and PD standards. It integrates the physical layer of
-> USB power delivery protocol to allow up to 100W of power.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADMV1014.pdf
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+changes in v5:
+ - use `devm_add_action_or_reset` to disable regulators
+ drivers/iio/frequency/Kconfig    |  10 +
+ drivers/iio/frequency/Makefile   |   1 +
+ drivers/iio/frequency/admv1014.c | 820 +++++++++++++++++++++++++++++++
+ 3 files changed, 831 insertions(+)
+ create mode 100644 drivers/iio/frequency/admv1014.c
 
-This looked OK to me, but one nitpick. Don't return ENOTSUPP, use
-EOPNOTSUPP instead.
-
-I'm pretty sure that scripts/checkpatch.pl will also tell you to do
-so, so please run that script and fix all the errors and warnings that
-it finds while at it.
-
-thanks,
-
-> ---
->  drivers/usb/typec/Kconfig  |  12 +
->  drivers/usb/typec/Makefile |   1 +
->  drivers/usb/typec/rt1719.c | 976 +++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 989 insertions(+)
->  create mode 100644 drivers/usb/typec/rt1719.c
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index ab480f3..bc918ca 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -52,6 +52,18 @@ source "drivers/usb/typec/ucsi/Kconfig"
->  
->  source "drivers/usb/typec/tipd/Kconfig"
->  
-> +config TYPEC_RT1719
-> +	tristate "Richtek RT1719 Sink Only Type-C controller driver"
-> +	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  Say Y or M here if your system has Richtek RT1719 sink only
-> +	  Type-C port controller driver.
-> +
-> +	  If you choose to build this driver as a dynamically linked module, the
-> +	  module will be called rt1719.ko
-> +
->  config TYPEC_HD3SS3220
->  	tristate "TI HD3SS3220 Type-C DRP Port controller driver"
->  	depends on I2C
-> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> index 57870a2..441dd6c 100644
-> --- a/drivers/usb/typec/Makefile
-> +++ b/drivers/usb/typec/Makefile
-> @@ -9,4 +9,5 @@ obj-$(CONFIG_TYPEC_TPS6598X)	+= tipd/
->  obj-$(CONFIG_TYPEC_HD3SS3220)	+= hd3ss3220.o
->  obj-$(CONFIG_TYPEC_QCOM_PMIC)	+= qcom-pmic-typec.o
->  obj-$(CONFIG_TYPEC_STUSB160X) 	+= stusb160x.o
-> +obj-$(CONFIG_TYPEC_RT1719)	+= rt1719.o
->  obj-$(CONFIG_TYPEC)		+= mux/
-> diff --git a/drivers/usb/typec/rt1719.c b/drivers/usb/typec/rt1719.c
-> new file mode 100644
-> index 00000000..9da65ee
-> --- /dev/null
-> +++ b/drivers/usb/typec/rt1719.c
-> @@ -0,0 +1,976 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/completion.h>
-> +#include <linux/i2c.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/power_supply.h>
-> +#include <linux/regmap.h>
-> +#include <linux/usb/pd.h>
-> +#include <linux/usb/role.h>
-> +#include <linux/usb/typec.h>
-> +
-> +#define RT1719_REG_TXCTRL1	0x03
-> +#define RT1719_REG_TXCTRL2	0x04
-> +#define RT1719_REG_POLICYINFO	0x0E
-> +#define RT1719_REG_SRCPDO1	0x11
-> +#define RT1719_REG_MASKS	0x2D
-> +#define RT1719_REG_EVENTS	0x33
-> +#define RT1719_REG_STATS	0x37
-> +#define RT1719_REG_PSELINFO	0x3C
-> +#define RT1719_REG_USBSETINFO	0x3E
-> +#define RT1719_REG_VENID	0x82
-> +
-> +#define RT1719_UNIQUE_PID	0x1719
-> +#define RT1719_REQDRSWAP_MASK	BIT(7)
-> +#define RT1719_EVALMODE_MASK	BIT(4)
-> +#define RT1719_REQSRCPDO_MASK	GENMASK(2, 0)
-> +#define RT1719_TXSPDOREQ_MASK	BIT(7)
-> +#define RT1719_INT_DRSW_ACCEPT	BIT(23)
-> +#define RT1719_INT_RX_SRCCAP	BIT(21)
-> +#define RT1719_INT_VBUS_DCT	BIT(6)
-> +#define RT1719_INT_VBUS_PRESENT	BIT(5)
-> +#define RT1719_INT_PE_SNK_RDY	BIT(2)
-> +#define RT1719_CC1_STAT		GENMASK(9, 8)
-> +#define RT1719_CC2_STAT		GENMASK(11, 10)
-> +#define RT1719_POLARITY_MASK	BIT(23)
-> +#define RT1719_DATAROLE_MASK	BIT(22)
-> +#define RT1719_PDSPECREV_MASK	GENMASK(21, 20)
-> +#define RT1719_SPDOSEL_MASK	GENMASK(18, 16)
-> +#define RT1719_SPDONUM_MASK	GENMASK(15, 13)
-> +#define RT1719_ATTACH_VBUS	BIT(12)
-> +#define RT1719_ATTACH_DBG	BIT(10)
-> +#define RT1719_ATTACH_SNK	BIT(9)
-> +#define RT1719_ATTACHDEV_MASK	(RT1719_ATTACH_VBUS | RT1719_ATTACH_DBG | \
-> +				 RT1719_ATTACH_SNK)
-> +#define RT1719_PE_EXP_CONTRACT	BIT(2)
-> +#define RT1719_PSEL_SUPPORT	BIT(15)
-> +#define RT1719_TBLSEL_MASK	BIT(6)
-> +#define RT1719_LATPSEL_MASK	GENMASK(5, 0)
-> +#define RT1719_USBINFO_MASK	GENMASK(1, 0)
-> +#define RT1719_USB_DFPUFP	3
-> +#define RT1719_MAX_SRCPDO	7
-> +
-> +enum {
-> +	SNK_PWR_OPEN = 0,
-> +	SNK_PWR_DEF,
-> +	SNK_PWR_1P5A,
-> +	SNK_PWR_3A
-> +};
-> +
-> +enum {
-> +	USBPD_SPECREV_1_0 = 0,
-> +	USBPD_SPECREV_2_0,
-> +	USBPD_SPECREV_3_0
-> +};
-> +
-> +enum rt1719_snkcap {
-> +	RT1719_SNKCAP_5V = 0,
-> +	RT1719_SNKCAP_9V,
-> +	RT1719_SNKCAP_12V,
-> +	RT1719_SNKCAP_15V,
-> +	RT1719_SNKCAP_20V,
-> +	RT1719_MAX_SNKCAP
-> +};
-> +
-> +struct rt1719_psel_cap {
-> +	u8 lomask;
-> +	u8 himask;
-> +	u32 milliwatt;
-> +	u32 milliamp;
-> +};
-> +
-> +struct rt1719_data {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	struct typec_port *port;
-> +	struct usb_role_switch *role_sw;
-> +	struct power_supply *psy;
-> +	struct typec_partner *partner;
-> +	struct power_supply_desc psy_desc;
-> +	struct usb_pd_identity partner_ident;
-> +	struct typec_partner_desc partner_desc;
-> +	struct completion req_completion;
-> +	enum power_supply_usb_type usb_type;
-> +	bool attached;
-> +	bool pd_capable;
-> +	bool drswap_support;
-> +	u32 voltage;
-> +	u32 req_voltage;
-> +	u32 max_current;
-> +	u32 op_current;
-> +	u32 spdos[RT1719_MAX_SRCPDO];
-> +	u16 snkcaps[RT1719_MAX_SNKCAP];
-> +	int spdo_num;
-> +	int spdo_sel;
-> +	u32 conn_info;
-> +	u16 conn_stat;
-> +};
-> +
-> +static const enum power_supply_usb_type rt1719_psy_usb_types[] = {
-> +	POWER_SUPPLY_USB_TYPE_C,
-> +	POWER_SUPPLY_USB_TYPE_PD,
-> +	POWER_SUPPLY_USB_TYPE_PD_PPS
-> +};
-> +
-> +static const enum power_supply_property rt1719_psy_properties[] = {
-> +	POWER_SUPPLY_PROP_ONLINE,
-> +	POWER_SUPPLY_PROP_USB_TYPE,
-> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> +	POWER_SUPPLY_PROP_CURRENT_MAX,
-> +	POWER_SUPPLY_PROP_CURRENT_NOW
-> +};
-> +
-> +static int rt1719_read16(struct rt1719_data *data, unsigned int reg, u16 *val)
-> +{
-> +	__le16 regval;
-> +	int ret;
-> +
-> +	ret = regmap_raw_read(data->regmap, reg, &regval, sizeof(regval));
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = le16_to_cpu(regval);
-> +	return 0;
-> +}
-> +
-> +static int rt1719_read32(struct rt1719_data *data, unsigned int reg, u32 *val)
-> +{
-> +	__le32 regval;
-> +	int ret;
-> +
-> +	ret = regmap_raw_read(data->regmap, reg, &regval, sizeof(regval));
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = le32_to_cpu(regval);
-> +	return 0;
-> +}
-> +
-> +static int rt1719_write32(struct rt1719_data *data, unsigned int reg, u32 val)
-> +{
-> +	__le32 regval = cpu_to_le32(val);
-> +
-> +	return regmap_raw_write(data->regmap, reg, &regval, sizeof(regval));
-> +}
-> +
-> +static enum typec_pwr_opmode rt1719_get_pwr_opmode(u32 conn, u16 stat)
-> +{
-> +	u16 cc1, cc2, cc_stat;
-> +
-> +	cc1 = FIELD_GET(RT1719_CC1_STAT, stat);
-> +	cc2 = FIELD_GET(RT1719_CC2_STAT, stat);
-> +
-> +	if (conn & RT1719_ATTACH_SNK) {
-> +		if (conn & RT1719_POLARITY_MASK)
-> +			cc_stat = cc2;
-> +		else
-> +			cc_stat = cc1;
-> +
-> +		switch (cc_stat) {
-> +		case SNK_PWR_3A:
-> +			return TYPEC_PWR_MODE_3_0A;
-> +		case SNK_PWR_1P5A:
-> +			return TYPEC_PWR_MODE_1_5A;
-> +		}
-> +	} else if (conn & RT1719_ATTACH_DBG) {
-> +		if ((cc1 == SNK_PWR_1P5A && cc2 == SNK_PWR_DEF) ||
-> +		    (cc1 == SNK_PWR_DEF && cc2 == SNK_PWR_1P5A))
-> +			return TYPEC_PWR_MODE_1_5A;
-> +		else if ((cc1 == SNK_PWR_3A && cc2 == SNK_PWR_DEF) ||
-> +			 (cc1 == SNK_PWR_DEF && cc2 == SNK_PWR_3A))
-> +			return TYPEC_PWR_MODE_3_0A;
-> +	}
-> +
-> +	return TYPEC_PWR_MODE_USB;
-> +}
-> +
-> +static enum typec_data_role rt1719_get_data_role(u32 conn)
-> +{
-> +	if (conn & RT1719_DATAROLE_MASK)
-> +		return TYPEC_HOST;
-> +	return TYPEC_DEVICE;
-> +}
-> +
-> +static void rt1719_set_data_role(struct rt1719_data *data,
-> +				 enum typec_data_role data_role,
-> +				 bool attached)
-> +{
-> +	enum usb_role usb_role = USB_ROLE_NONE;
-> +
-> +	if (attached) {
-> +		if (data_role == TYPEC_HOST)
-> +			usb_role = USB_ROLE_HOST;
-> +		else
-> +			usb_role = USB_ROLE_DEVICE;
-> +	}
-> +
-> +	usb_role_switch_set_role(data->role_sw, usb_role);
-> +	typec_set_data_role(data->port, data_role);
-> +}
-> +
-> +static void rt1719_update_data_role(struct rt1719_data *data)
-> +{
-> +	if (!data->attached)
-> +		return;
-> +
-> +	rt1719_set_data_role(data, rt1719_get_data_role(data->conn_info), true);
-> +}
-> +
-> +static void rt1719_register_partner(struct rt1719_data *data)
-> +{
-> +	u16 spec_rev = 0;
-> +
-> +	if (data->pd_capable) {
-> +		u32 rev;
-> +
-> +		rev = FIELD_GET(RT1719_PDSPECREV_MASK, data->conn_info);
-> +		switch (rev) {
-> +		case USBPD_SPECREV_3_0:
-> +			spec_rev = 0x0300;
-> +			break;
-> +		case USBPD_SPECREV_2_0:
-> +			spec_rev = 0x0200;
-> +			break;
-> +		default:
-> +			spec_rev = 0x0100;
-> +			break;
-> +		}
-> +	}
-> +
-> +	/* Just to prevent multiple times attach */
-> +	if (data->partner)
-> +		typec_unregister_partner(data->partner);
-> +
-> +	memset(&data->partner_ident, 0, sizeof(data->partner_ident));
-> +	data->partner_desc.usb_pd = data->pd_capable;
-> +	data->partner_desc.pd_revision = spec_rev;
-> +
-> +	if (data->conn_info & RT1719_ATTACH_DBG)
-> +		data->partner_desc.accessory = TYPEC_ACCESSORY_DEBUG;
-> +	else
-> +		data->partner_desc.accessory = TYPEC_ACCESSORY_NONE;
-> +
-> +	data->partner = typec_register_partner(data->port, &data->partner_desc);
-> +}
-> +
-> +static void rt1719_attach(struct rt1719_data *data)
-> +{
-> +	enum typec_pwr_opmode pwr_opmode;
-> +	enum typec_data_role data_role;
-> +	u32 volt = 5000, curr = 500;
-> +
-> +	if (!(data->conn_info & RT1719_ATTACHDEV_MASK))
-> +		return;
-> +
-> +	pwr_opmode = rt1719_get_pwr_opmode(data->conn_info, data->conn_stat);
-> +	data_role = rt1719_get_data_role(data->conn_info);
-> +
-> +	typec_set_pwr_opmode(data->port, pwr_opmode);
-> +	rt1719_set_data_role(data, data_role, true);
-> +
-> +	if (data->conn_info & RT1719_ATTACH_SNK)
-> +		rt1719_register_partner(data);
-> +
-> +	if (pwr_opmode == TYPEC_PWR_MODE_3_0A)
-> +		curr = 3000;
-> +	else if (pwr_opmode == TYPEC_PWR_MODE_1_5A)
-> +		curr = 1500;
-> +
-> +	data->voltage = volt * 1000;
-> +	data->max_current = data->op_current = curr * 1000;
-> +	data->attached = true;
-> +
-> +	power_supply_changed(data->psy);
-> +}
-> +
-> +static void rt1719_detach(struct rt1719_data *data)
-> +{
-> +	if (!data->attached || (data->conn_info & RT1719_ATTACHDEV_MASK))
-> +		return;
-> +
-> +	typec_unregister_partner(data->partner);
-> +	data->partner = NULL;
-> +
-> +	typec_set_pwr_opmode(data->port, TYPEC_PWR_MODE_USB);
-> +	rt1719_set_data_role(data, TYPEC_DEVICE, false);
-> +
-> +	memset32(data->spdos, 0, RT1719_MAX_SRCPDO);
-> +	data->spdo_num = 0;
-> +	data->voltage = data->max_current = data->op_current = 0;
-> +	data->attached = data->pd_capable = false;
-> +
-> +	data->usb_type = POWER_SUPPLY_USB_TYPE_C;
-> +
-> +	power_supply_changed(data->psy);
-> +}
-> +
-> +static void rt1719_update_operating_status(struct rt1719_data *data)
-> +{
-> +	enum power_supply_usb_type usb_type = POWER_SUPPLY_USB_TYPE_PD;
-> +	u32 voltage, max_current, op_current;
-> +	int i, snk_sel;
-> +
-> +	for (i = 0; i < data->spdo_num; i++) {
-> +		u32 pdo = data->spdos[i];
-> +		enum pd_pdo_type type = pdo_type(pdo);
-> +
-> +		if (type == PDO_TYPE_APDO) {
-> +			usb_type = POWER_SUPPLY_USB_TYPE_PD_PPS;
-> +			break;
-> +		}
-> +	}
-> +
-> +	data->spdo_sel = FIELD_GET(RT1719_SPDOSEL_MASK, data->conn_info);
-> +	if (data->spdo_sel <= 0)
-> +		return;
-> +
-> +	data->usb_type = usb_type;
-> +
-> +	voltage = pdo_fixed_voltage(data->spdos[data->spdo_sel -1]);
-> +	max_current = pdo_max_current(data->spdos[data->spdo_sel - 1]);
-> +
-> +	switch (voltage) {
-> +	case 5000:
-> +		snk_sel = RT1719_SNKCAP_5V;
-> +		break;
-> +	case 9000:
-> +		snk_sel = RT1719_SNKCAP_9V;
-> +		break;
-> +	case 12000:
-> +		snk_sel = RT1719_SNKCAP_12V;
-> +		break;
-> +	case 15000:
-> +		snk_sel = RT1719_SNKCAP_15V;
-> +		break;
-> +	case 20000:
-> +		snk_sel = RT1719_SNKCAP_20V;
-> +		break;
-> +	default:
-> +		return;
-> +	}
-> +
-> +	op_current = min(max_current, pdo_max_current(data->snkcaps[snk_sel]));
-> +
-> +	/* covert mV/mA to uV/uA */
-> +	data->voltage = voltage * 1000;
-> +	data->max_current = max_current * 1000;
-> +	data->op_current = op_current * 1000;
-> +
-> +	power_supply_changed(data->psy);
-> +}
-> +
-> +static void rt1719_update_pwr_opmode(struct rt1719_data *data)
-> +{
-> +	if (!data->attached)
-> +		return;
-> +
-> +	if (!data->pd_capable) {
-> +		data->pd_capable = true;
-> +
-> +		typec_set_pwr_opmode(data->port, TYPEC_PWR_MODE_PD);
-> +		rt1719_register_partner(data);
-> +	}
-> +
-> +	rt1719_update_operating_status(data);
-> +}
-> +
-> +static void rt1719_update_source_pdos(struct rt1719_data *data)
-> +{
-> +	int spdo_num = FIELD_GET(RT1719_SPDONUM_MASK, data->conn_info);
-> +	__le32 src_pdos[RT1719_MAX_SRCPDO] = { };
-> +	int i, ret;
-> +
-> +	if (!data->attached)
-> +		return;
-> +
-> +	ret = regmap_raw_read(data->regmap, RT1719_REG_SRCPDO1, src_pdos,
-> +			      sizeof(__le32) * spdo_num);
-> +	if (ret)
-> +		return;
-> +
-> +	data->spdo_num = spdo_num;
-> +	for (i = 0; i < spdo_num; i++)
-> +		data->spdos[i] = le32_to_cpu(src_pdos[i]);
-> +}
-> +
-> +static int rt1719_dr_set(struct typec_port *port, enum typec_data_role role)
-> +{
-> +	struct rt1719_data *data = typec_get_drvdata(port);
-> +	enum typec_data_role cur_role;
-> +	int ret;
-> +
-> +	if (!data->attached || !data->pd_capable || !data->drswap_support)
-> +		return -EINVAL;
-> +
-> +	if (data->spdo_num > 0 && !(data->spdos[0] & PDO_FIXED_DATA_SWAP))
-> +		return -EINVAL;
-> +
-> +	cur_role = rt1719_get_data_role(data->conn_info);
-> +	if (cur_role == role)
-> +		return 0;
-> +
-> +	ret = regmap_update_bits(data->regmap, RT1719_REG_TXCTRL1,
-> +				 RT1719_REQDRSWAP_MASK, RT1719_REQDRSWAP_MASK);
-> +	if (ret)
-> +		return ret;
-> +
-> +	reinit_completion(&data->req_completion);
-> +	ret = wait_for_completion_timeout(&data->req_completion,
-> +					  msecs_to_jiffies(400));
-> +	if (ret == 0)
-> +		return -ETIMEDOUT;
-> +
-> +	cur_role = rt1719_get_data_role(data->conn_info);
-> +	if (cur_role != role)
-> +		return -ENOTSUPP;
-> +
-> +	rt1719_set_data_role(data, role, true);
-> +	return 0;
-> +}
-> +
-> +static const struct typec_operations rt1719_port_ops = {
-> +	.dr_set = rt1719_dr_set,
-> +};
-> +
-> +static int rt1719_usbpd_request_voltage(struct rt1719_data *data)
-> +{
-> +	u32 src_voltage;
-> +	int snk_sel, src_sel = -1;
-> +	int i, ret;
-> +
-> +	if (!data->attached || !data->pd_capable || data->spdo_sel <= 0)
-> +		return -EINVAL;
-> +
-> +	src_voltage = pdo_fixed_voltage(data->spdos[data->spdo_sel - 1]);
-> +	if (src_voltage == data->req_voltage)
-> +		return 0;
-> +
-> +	switch (data->req_voltage) {
-> +	case 5000:
-> +		snk_sel = RT1719_SNKCAP_5V;
-> +		break;
-> +	case 9000:
-> +		snk_sel = RT1719_SNKCAP_9V;
-> +		break;
-> +	case 12000:
-> +		snk_sel = RT1719_SNKCAP_12V;
-> +		break;
-> +	case 15000:
-> +		snk_sel = RT1719_SNKCAP_15V;
-> +		break;
-> +	case 20000:
-> +		snk_sel = RT1719_SNKCAP_20V;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!(data->snkcaps[snk_sel] & RT1719_PSEL_SUPPORT))
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < data->spdo_num; i++) {
-> +		enum pd_pdo_type type = pdo_type(data->spdos[i]);
-> +
-> +		if (type != PDO_TYPE_FIXED)
-> +			continue;
-> +
-> +		src_voltage = pdo_fixed_voltage(data->spdos[i]);
-> +		if (src_voltage == data->req_voltage) {
-> +			src_sel = i;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (src_sel == -1)
-> +		return -ENOTSUPP;
-> +
-> +	ret = regmap_update_bits(data->regmap, RT1719_REG_TXCTRL1,
-> +				 RT1719_EVALMODE_MASK | RT1719_REQSRCPDO_MASK,
-> +				 RT1719_EVALMODE_MASK | (src_sel + 1));
-> +	ret |= regmap_update_bits(data->regmap, RT1719_REG_TXCTRL2,
-> +				  RT1719_TXSPDOREQ_MASK, RT1719_TXSPDOREQ_MASK);
-> +	if (ret)
-> +		return ret;
-> +
-> +	reinit_completion(&data->req_completion);
-> +	ret = wait_for_completion_timeout(&data->req_completion,
-> +					  msecs_to_jiffies(400));
-> +	if (!ret)
-> +		return -ETIMEDOUT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int rt1719_psy_set_property(struct power_supply *psy,
-> +				   enum power_supply_property psp,
-> +				   const union power_supply_propval *val)
-> +{
-> +	struct rt1719_data *data = power_supply_get_drvdata(psy);
-> +	int ret = -ENOTSUPP;
-> +
-> +	if (psp == POWER_SUPPLY_PROP_VOLTAGE_NOW) {
-> +		data->req_voltage = val->intval / 1000;
-> +		ret = rt1719_usbpd_request_voltage(data);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int rt1719_psy_get_property(struct power_supply *psy,
-> +				   enum power_supply_property psp,
-> +				   union power_supply_propval *val)
-> +{
-> +	struct rt1719_data *data = power_supply_get_drvdata(psy);
-> +	int ret = 0;
-> +
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_ONLINE:
-> +		val->intval = data->attached ? 1 : 0;
-> +		break;
-> +	case POWER_SUPPLY_PROP_USB_TYPE:
-> +		val->intval = data->usb_type;
-> +		break;
-> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> +		val->intval = data->voltage;
-> +		break;
-> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
-> +		val->intval = data->max_current;
-> +		break;
-> +	case POWER_SUPPLY_PROP_CURRENT_NOW:
-> +		val->intval = data->op_current;
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int rt1719_psy_property_is_writeable(struct power_supply *psy,
-> +					    enum power_supply_property psp)
-> +{
-> +	if (psp == POWER_SUPPLY_PROP_VOLTAGE_NOW)
-> +		return 1;
-> +	return 0;
-> +}
-> +
-> +static int devm_rt1719_psy_register(struct rt1719_data *data)
-> +{
-> +	static const char *rt1719_psy_name_prefix = "rt1719-source-psy-";
-> +	const char *port_dev_name = dev_name(data->dev);
-> +	struct power_supply_config psy_cfg = { };
-> +	size_t psy_name_len = strlen(rt1719_psy_name_prefix) +
-> +				       strlen(port_dev_name) + 1;
-> +	char *psy_name;
-> +
-> +	psy_cfg.fwnode = dev_fwnode(data->dev);
-> +	psy_cfg.drv_data = data;
-> +
-> +	psy_name = devm_kzalloc(data->dev, psy_name_len, GFP_KERNEL);
-> +	if (!psy_name)
-> +		return -ENOMEM;
-> +
-> +	snprintf(psy_name, psy_name_len, "%s%s", rt1719_psy_name_prefix,
-> +		 port_dev_name);
-> +	data->psy_desc.name = psy_name;
-> +	data->psy_desc.type = POWER_SUPPLY_TYPE_USB;
-> +	data->psy_desc.usb_types = rt1719_psy_usb_types;
-> +	data->psy_desc.num_usb_types = ARRAY_SIZE(rt1719_psy_usb_types);
-> +	data->psy_desc.properties = rt1719_psy_properties;
-> +	data->psy_desc.num_properties = ARRAY_SIZE(rt1719_psy_properties);
-> +	data->psy_desc.get_property = rt1719_psy_get_property;
-> +	data->psy_desc.set_property = rt1719_psy_set_property;
-> +	data->psy_desc.property_is_writeable = rt1719_psy_property_is_writeable;
-> +
-> +	data->usb_type = POWER_SUPPLY_USB_TYPE_C;
-> +
-> +	data->psy = devm_power_supply_register(data->dev, &data->psy_desc,
-> +					       &psy_cfg);
-> +
-> +	return PTR_ERR_OR_ZERO(data->psy);
-> +}
-> +
-> +static irqreturn_t rt1719_irq_handler(int irq, void *priv)
-> +{
-> +	struct rt1719_data *data = priv;
-> +	u32 events, conn_info;
-> +	u16 conn_stat;
-> +	int ret;
-> +
-> +	ret = rt1719_read32(data, RT1719_REG_EVENTS, &events);
-> +	ret |= rt1719_read32(data, RT1719_REG_POLICYINFO, &conn_info);
-> +	ret |= rt1719_read16(data, RT1719_REG_STATS, &conn_stat);
-> +	if (ret)
-> +		return IRQ_NONE;
-> +
-> +	data->conn_info = conn_info;
-> +	data->conn_stat = conn_stat;
-> +
-> +	events &= (RT1719_INT_DRSW_ACCEPT | RT1719_INT_RX_SRCCAP |
-> +		   RT1719_INT_VBUS_PRESENT | RT1719_INT_VBUS_DCT |
-> +		   RT1719_INT_PE_SNK_RDY);
-> +
-> +	if (events & RT1719_INT_DRSW_ACCEPT)
-> +		rt1719_update_data_role(data);
-> +
-> +	if (events & RT1719_INT_VBUS_PRESENT)
-> +		rt1719_attach(data);
-> +
-> +	if (events & RT1719_INT_VBUS_DCT)
-> +		rt1719_detach(data);
-> +
-> +	if (events & RT1719_INT_RX_SRCCAP)
-> +		rt1719_update_source_pdos(data);
-> +
-> +	if (events & RT1719_INT_PE_SNK_RDY) {
-> +		complete(&data->req_completion);
-> +		rt1719_update_pwr_opmode(data);
-> +	}
-> +
-> +	/* Write 1 to clear already handled events */
-> +	rt1719_write32(data, RT1719_REG_EVENTS, events);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int rt1719_irq_init(struct rt1719_data *data)
-> +{
-> +	struct i2c_client *i2c = to_i2c_client(data->dev);
-> +	u32 irq_enable;
-> +	int ret;
-> +
-> +	irq_enable = RT1719_INT_DRSW_ACCEPT | RT1719_INT_RX_SRCCAP |
-> +		     RT1719_INT_VBUS_DCT | RT1719_INT_VBUS_PRESENT |
-> +		     RT1719_INT_PE_SNK_RDY;
-> +
-> +	ret = rt1719_write32(data, RT1719_REG_MASKS, irq_enable);
-> +	if (ret) {
-> +		dev_err(&i2c->dev, "Failed to config irq enable\n");
-> +		return ret;
-> +	}
-> +
-> +	return devm_request_threaded_irq(&i2c->dev, i2c->irq, NULL,
-> +					 rt1719_irq_handler, IRQF_ONESHOT,
-> +					 dev_name(&i2c->dev), data);
-> +}
-> +
-> +static int rt1719_init_attach_state(struct rt1719_data *data)
-> +{
-> +	u32 conn_info, irq_clear;
-> +	u16 conn_stat;
-> +	int ret;
-> +
-> +	irq_clear = RT1719_INT_DRSW_ACCEPT | RT1719_INT_RX_SRCCAP |
-> +		    RT1719_INT_VBUS_DCT | RT1719_INT_VBUS_PRESENT |
-> +		    RT1719_INT_PE_SNK_RDY;
-> +
-> +	ret = rt1719_read32(data, RT1719_REG_POLICYINFO, &conn_info);
-> +	ret |= rt1719_read16(data, RT1719_REG_STATS, &conn_stat);
-> +	ret |= rt1719_write32(data, RT1719_REG_EVENTS, irq_clear);
-> +	if (ret)
-> +		return ret;
-> +
-> +	data->conn_info = conn_info;
-> +	data->conn_stat = conn_stat;
-> +
-> +	if (conn_info & RT1719_ATTACHDEV_MASK)
-> +		rt1719_attach(data);
-> +
-> +	if (conn_info & RT1719_PE_EXP_CONTRACT) {
-> +		rt1719_update_source_pdos(data);
-> +		rt1719_update_pwr_opmode(data);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +#define RT1719_PSEL_CAPINFO(_lomask, _milliwatt, _himask, _milliamp) { \
-> +	.lomask		= _lomask, \
-> +	.milliwatt	= _milliwatt, \
-> +	.himask		= _himask, \
-> +	.milliamp	= _milliamp, \
-> +}
-> +
-> +static const struct rt1719_psel_cap rt1719_psel_caps[] = {
-> +	RT1719_PSEL_CAPINFO(0x18, 75000, 0x10, 5000),
-> +	RT1719_PSEL_CAPINFO(0x18, 60000, 0x10, 4500),
-> +	RT1719_PSEL_CAPINFO(0x18, 45000, 0x10, 4000),
-> +	RT1719_PSEL_CAPINFO(0x18, 30000, 0x10, 3500),
-> +	RT1719_PSEL_CAPINFO(0x18, 25000, 0x10, 3000),
-> +	RT1719_PSEL_CAPINFO(0x18, 20000, 0x10, 2500),
-> +	RT1719_PSEL_CAPINFO(0x18, 15000, 0x10, 2000),
-> +	RT1719_PSEL_CAPINFO(0x18, 10000, 0x10, 1000),
-> +	RT1719_PSEL_CAPINFO(0x1C, 60000, 0x1F, 5000),
-> +	RT1719_PSEL_CAPINFO(0x1C, 45000, 0x1F, 4500),
-> +	RT1719_PSEL_CAPINFO(0x1C, 30000, 0x1F, 4000),
-> +	RT1719_PSEL_CAPINFO(0x1C, 24000, 0x1F, 3500),
-> +	RT1719_PSEL_CAPINFO(0x1C, 15000, 0x1F, 3000),
-> +	RT1719_PSEL_CAPINFO(0x1C, 10000, 0x1F, 2500),
-> +	RT1719_PSEL_CAPINFO(0x0C, 60000, 0x1F, 2000),
-> +	RT1719_PSEL_CAPINFO(0x0C, 45000, 0x1F, 1000),
-> +	RT1719_PSEL_CAPINFO(0x0C, 36000, 0x08, 5000),
-> +	RT1719_PSEL_CAPINFO(0x0C, 30000, 0x08, 4500),
-> +	RT1719_PSEL_CAPINFO(0x0C, 24000, 0x08, 4000),
-> +	RT1719_PSEL_CAPINFO(0x0C, 15000, 0x08, 3500),
-> +	RT1719_PSEL_CAPINFO(0x0C, 10000, 0x08, 3000),
-> +	RT1719_PSEL_CAPINFO(0x1E, 45000, 0x08, 2500),
-> +	RT1719_PSEL_CAPINFO(0x1E, 36000, 0x08, 2000),
-> +	RT1719_PSEL_CAPINFO(0x1E, 27000, 0x08, 1500),
-> +	RT1719_PSEL_CAPINFO(0x1E, 20000, 0x08, 1000),
-> +	RT1719_PSEL_CAPINFO(0x1E, 15000, 0x0F, 5000),
-> +	RT1719_PSEL_CAPINFO(0x1E, 9000, 0x0F, 4500),
-> +	RT1719_PSEL_CAPINFO(0x0E, 45000, 0x0F, 4000),
-> +	RT1719_PSEL_CAPINFO(0x0E, 36000, 0x0F, 3500),
-> +	RT1719_PSEL_CAPINFO(0x0E, 27000, 0x0F, 3000),
-> +	RT1719_PSEL_CAPINFO(0x0E, 20000, 0x0F, 2500),
-> +	RT1719_PSEL_CAPINFO(0x0E, 15000, 0x0F, 2000),
-> +	RT1719_PSEL_CAPINFO(0x0E, 9000, 0x0F, 1500),
-> +	RT1719_PSEL_CAPINFO(0x06, 45000, 0x0F, 1000),
-> +	RT1719_PSEL_CAPINFO(0x06, 36000, 0x0F, 500),
-> +	RT1719_PSEL_CAPINFO(0x06, 27000, 0x04, 5000),
-> +	RT1719_PSEL_CAPINFO(0x06, 24000, 0x04, 4500),
-> +	RT1719_PSEL_CAPINFO(0x06, 18000, 0x04, 4000),
-> +	RT1719_PSEL_CAPINFO(0x06, 12000, 0x04, 3500),
-> +	RT1719_PSEL_CAPINFO(0x06, 9000, 0x04, 3000),
-> +	RT1719_PSEL_CAPINFO(0x1F, 25000, 0x04, 2500),
-> +	RT1719_PSEL_CAPINFO(0x1F, 20000, 0x04, 2000),
-> +	RT1719_PSEL_CAPINFO(0x1F, 15000, 0x04, 1500),
-> +	RT1719_PSEL_CAPINFO(0x1F, 10000, 0x04, 1000),
-> +	RT1719_PSEL_CAPINFO(0x1F, 7500, 0x07, 5000),
-> +	RT1719_PSEL_CAPINFO(0x0F, 25000, 0x07, 4500),
-> +	RT1719_PSEL_CAPINFO(0x0F, 20000, 0x07, 4000),
-> +	RT1719_PSEL_CAPINFO(0x0F, 15000, 0x07, 3500),
-> +	RT1719_PSEL_CAPINFO(0x0F, 10000, 0x07, 3000),
-> +	RT1719_PSEL_CAPINFO(0x0F, 7500, 0x07, 2500),
-> +	RT1719_PSEL_CAPINFO(0x07, 25000, 0x07, 2000),
-> +	RT1719_PSEL_CAPINFO(0x07, 20000, 0x07, 1500),
-> +	RT1719_PSEL_CAPINFO(0x07, 15000, 0x07, 1000),
-> +	RT1719_PSEL_CAPINFO(0x07, 10000, 0x07, 500),
-> +	RT1719_PSEL_CAPINFO(0x07, 7500, 0x03, 5000),
-> +	RT1719_PSEL_CAPINFO(0x03, 25000, 0x03, 4500),
-> +	RT1719_PSEL_CAPINFO(0x03, 20000, 0x03, 4000),
-> +	RT1719_PSEL_CAPINFO(0x03, 15000, 0x03, 3500),
-> +	RT1719_PSEL_CAPINFO(0x03, 10000, 0x03, 3000),
-> +	RT1719_PSEL_CAPINFO(0x03, 7500, 0x03, 2500),
-> +	RT1719_PSEL_CAPINFO(0x01, 15000, 0x03, 2000),
-> +	RT1719_PSEL_CAPINFO(0x01, 10000, 0x03, 1500),
-> +	RT1719_PSEL_CAPINFO(0x01, 7500, 0x03, 1000),
-> +	RT1719_PSEL_CAPINFO(0x01, 2500, 0x03, 500)
-> +};
-> +
-> +static u16 rt1719_gen_snkcap_by_current(const struct rt1719_psel_cap *psel_cap,
-> +					enum rt1719_snkcap capsel)
-> +{
-> +	u16 cap = RT1719_PSEL_SUPPORT;
-> +
-> +	if (!(psel_cap->himask & BIT(capsel)))
-> +		return 0;
-> +
-> +	cap |= psel_cap->milliamp / 10;
-> +	return cap;
-> +}
-> +
-> +static u16 rt1719_gen_snkcap_by_watt(const struct rt1719_psel_cap *psel_cap,
-> +				     enum rt1719_snkcap capsel)
-> +{
-> +	u32 volt_div[RT1719_MAX_SNKCAP] = { 5, 9, 12, 15, 20 };
-> +	u16 cap = RT1719_PSEL_SUPPORT;
-> +
-> +	if (!(psel_cap->lomask & BIT(capsel)))
-> +		return 0;
-> +
-> +	cap |= min(psel_cap->milliwatt / volt_div[capsel], (u32)5000) / 10;
-> +	return cap;
-> +}
-> +
-> +static u16 rt1719_gen_snkcap(unsigned int pselinfo, enum rt1719_snkcap capsel)
-> +{
-> +	int psel = FIELD_GET(RT1719_LATPSEL_MASK, pselinfo);
-> +	const struct rt1719_psel_cap *psel_cap;
-> +	bool by_current = false;
-> +
-> +	if (pselinfo & RT1719_TBLSEL_MASK)
-> +		by_current = true;
-> +
-> +	psel_cap = rt1719_psel_caps + psel;
-> +	if (by_current)
-> +		return rt1719_gen_snkcap_by_current(psel_cap, capsel);
-> +
-> +	return rt1719_gen_snkcap_by_watt(psel_cap, capsel);
-> +}
-> +
-> +static int rt1719_get_caps(struct rt1719_data *data)
-> +{
-> +	unsigned int pselinfo, usbinfo;
-> +	int i, ret;
-> +
-> +	ret = regmap_read(data->regmap, RT1719_REG_PSELINFO, &pselinfo);
-> +	ret |= regmap_read(data->regmap, RT1719_REG_USBSETINFO, &usbinfo);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < RT1719_MAX_SNKCAP; i++)
-> +		data->snkcaps[i] = rt1719_gen_snkcap(pselinfo, i);
-> +
-> +	usbinfo = FIELD_GET(RT1719_USBINFO_MASK, usbinfo);
-> +	if (usbinfo == RT1719_USB_DFPUFP)
-> +		data->drswap_support = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int rt1719_check_exist(struct rt1719_data *data)
-> +{
-> +	u16 pid;
-> +	int ret;
-> +
-> +	ret = rt1719_read16(data, RT1719_REG_VENID, &pid);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (pid != RT1719_UNIQUE_PID) {
-> +		dev_err(data->dev, "Incorrect PID 0x%04x\n", pid);
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct regmap_config rt1719_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = 0xff,
-> +};
-> +
-> +static int rt1719_probe(struct i2c_client *i2c)
-> +{
-> +	struct rt1719_data *data;
-> +	struct fwnode_handle *fwnode;
-> +	struct typec_capability typec_cap = { };
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&i2c->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->dev = &i2c->dev;
-> +	init_completion(&data->req_completion);
-> +
-> +	data->regmap = devm_regmap_init_i2c(i2c, &rt1719_regmap_config);
-> +	if (IS_ERR(data->regmap)) {
-> +		ret = PTR_ERR(data->regmap);
-> +		dev_err(&i2c->dev, "Failed to init regmap (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = rt1719_check_exist(data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = rt1719_get_caps(data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * This fwnode has a "compatible" property, but is never populated as a
-> +	 * struct device. Instead we simply parse it to read the properties.
-> +	 * This it breaks fw_devlink=on. To maintain backward compatibility
-> +	 * with existing DT files, we work around this by deleting any
-> +	 * fwnode_links to/from this fwnode.
-> +	 */
-> +	fwnode = device_get_named_child_node(&i2c->dev, "connector");
-> +	if (!fwnode)
-> +		return -ENODEV;
-> +
-> +	fw_devlink_purge_absent_suppliers(fwnode);
-> +
-> +	data->role_sw = fwnode_usb_role_switch_get(fwnode);
-> +	if (IS_ERR(data->role_sw)) {
-> +		ret = PTR_ERR(data->role_sw);
-> +		dev_err(&i2c->dev, "Failed to get usb role switch (%d)\n", ret);
-> +		goto err_fwnode_put;
-> +	}
-> +
-> +	ret = devm_rt1719_psy_register(data);
-> +	if (ret) {
-> +		dev_err(&i2c->dev, "Failed to register psy (%d)\n", ret);
-> +		goto err_role_put;
-> +	}
-> +
-> +	typec_cap.revision = USB_TYPEC_REV_1_2;
-> +	typec_cap.pd_revision = 0x300;	/* USB-PD spec release 3.0 */
-> +	typec_cap.type = TYPEC_PORT_SNK;
-> +	typec_cap.data = TYPEC_PORT_DRD;
-> +	typec_cap.ops = &rt1719_port_ops;
-> +	typec_cap.fwnode = fwnode;
-> +	typec_cap.driver_data = data;
-> +	typec_cap.accessory[0] = TYPEC_ACCESSORY_DEBUG;
-> +
-> +	data->partner_desc.identity = &data->partner_ident;
-> +
-> +	data->port = typec_register_port(&i2c->dev, &typec_cap);
-> +	if (IS_ERR(data->port)) {
-> +		ret = PTR_ERR(data->port);
-> +		dev_err(&i2c->dev, "Failed to register typec port (%d)\n", ret);
-> +		goto err_role_put;
-> +	}
-> +
-> +	ret = rt1719_init_attach_state(data);
-> +	if (ret) {
-> +		dev_err(&i2c->dev, "Failed to init attach state (%d)\n", ret);
-> +		goto err_role_put;
-> +	}
-> +
-> +	ret = rt1719_irq_init(data);
-> +	if (ret) {
-> +		dev_err(&i2c->dev, "Failed to init irq\n");
-> +		goto err_role_put;
-> +	}
-> +
-> +	fwnode_handle_put(fwnode);
-> +
-> +	i2c_set_clientdata(i2c, data);
-> +
-> +	return 0;
-> +
-> +err_role_put:
-> +	usb_role_switch_put(data->role_sw);
-> +err_fwnode_put:
-> +	fwnode_handle_put(fwnode);
-> +
-> +	return ret;
-> +}
-> +
-> +static int rt1719_remove(struct i2c_client *i2c)
-> +{
-> +	struct rt1719_data *data = i2c_get_clientdata(i2c);
-> +
-> +	typec_unregister_port(data->port);
-> +	usb_role_switch_put(data->role_sw);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id __maybe_unused rt1719_device_table[] = {
-> +	{ .compatible = "richtek,rt1719", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, rt1719_device_table);
-> +
-> +static struct i2c_driver rt1719_driver = {
-> +	.driver = {
-> +		.name = "rt1719",
-> +		.of_match_table = rt1719_device_table,
-> +	},
-> +	.probe_new = rt1719_probe,
-> +	.remove = rt1719_remove,
-> +};
-> +module_i2c_driver(rt1719_driver);
-> +
-> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-> +MODULE_DESCRIPTION("Richtek RT1719 Sink Only USBPD Controller Driver");
-> +MODULE_LICENSE("GPL v2");
-
+diff --git a/drivers/iio/frequency/Kconfig b/drivers/iio/frequency/Kconfig
+index 2c9e0559e8a4..493221f42077 100644
+--- a/drivers/iio/frequency/Kconfig
++++ b/drivers/iio/frequency/Kconfig
+@@ -50,6 +50,16 @@ config ADF4371
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called adf4371.
+ 
++config ADMV1014
++	tristate "Analog Devices ADMV1014 Microwave Downconverter"
++	depends on SPI && COMMON_CLK && 64BIT
++	help
++	  Say yes here to build support for Analog Devices ADMV1014
++	  24 GHz to 44 GHz, Wideband, Microwave Downconverter.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called admv1014.
++
+ config ADRF6780
+         tristate "Analog Devices ADRF6780 Microwave Upconverter"
+         depends on SPI
+diff --git a/drivers/iio/frequency/Makefile b/drivers/iio/frequency/Makefile
+index ae3136c79202..5f0348e5eb53 100644
+--- a/drivers/iio/frequency/Makefile
++++ b/drivers/iio/frequency/Makefile
+@@ -7,4 +7,5 @@
+ obj-$(CONFIG_AD9523) += ad9523.o
+ obj-$(CONFIG_ADF4350) += adf4350.o
+ obj-$(CONFIG_ADF4371) += adf4371.o
++obj-$(CONFIG_ADMV1014) += admv1014.o
+ obj-$(CONFIG_ADRF6780) += adrf6780.o
+diff --git a/drivers/iio/frequency/admv1014.c b/drivers/iio/frequency/admv1014.c
+new file mode 100644
+index 000000000000..905ded58410f
+--- /dev/null
++++ b/drivers/iio/frequency/admv1014.c
+@@ -0,0 +1,820 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * ADMV1014 driver
++ *
++ * Copyright 2022 Analog Devices Inc.
++ */
++
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/clk.h>
++#include <linux/clkdev.h>
++#include <linux/clk-provider.h>
++#include <linux/device.h>
++#include <linux/iio/iio.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/notifier.h>
++#include <linux/property.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
++#include <linux/units.h>
++
++#include <asm/unaligned.h>
++
++/* ADMV1014 Register Map */
++#define ADMV1014_REG_SPI_CONTROL		0x00
++#define ADMV1014_REG_ALARM			0x01
++#define ADMV1014_REG_ALARM_MASKS		0x02
++#define ADMV1014_REG_ENABLE			0x03
++#define ADMV1014_REG_QUAD			0x04
++#define ADMV1014_REG_LO_AMP_PHASE_ADJUST1	0x05
++#define ADMV1014_REG_MIXER			0x07
++#define ADMV1014_REG_IF_AMP			0x08
++#define ADMV1014_REG_IF_AMP_BB_AMP		0x09
++#define ADMV1014_REG_BB_AMP_AGC			0x0A
++#define ADMV1014_REG_VVA_TEMP_COMP		0x0B
++
++/* ADMV1014_REG_SPI_CONTROL Map */
++#define ADMV1014_PARITY_EN_MSK			BIT(15)
++#define ADMV1014_SPI_SOFT_RESET_MSK		BIT(14)
++#define ADMV1014_CHIP_ID_MSK			GENMASK(11, 4)
++#define ADMV1014_CHIP_ID			0x9
++#define ADMV1014_REVISION_ID_MSK		GENMASK(3, 0)
++
++/* ADMV1014_REG_ALARM Map */
++#define ADMV1014_PARITY_ERROR_MSK		BIT(15)
++#define ADMV1014_TOO_FEW_ERRORS_MSK		BIT(14)
++#define ADMV1014_TOO_MANY_ERRORS_MSK		BIT(13)
++#define ADMV1014_ADDRESS_RANGE_ERROR_MSK	BIT(12)
++
++/* ADMV1014_REG_ENABLE Map */
++#define ADMV1014_IBIAS_PD_MSK			BIT(14)
++#define ADMV1014_P1DB_COMPENSATION_MSK		GENMASK(13, 12)
++#define ADMV1014_IF_AMP_PD_MSK			BIT(11)
++#define ADMV1014_QUAD_BG_PD_MSK			BIT(9)
++#define ADMV1014_BB_AMP_PD_MSK			BIT(8)
++#define ADMV1014_QUAD_IBIAS_PD_MSK		BIT(7)
++#define ADMV1014_DET_EN_MSK			BIT(6)
++#define ADMV1014_BG_PD_MSK			BIT(5)
++
++/* ADMV1014_REG_QUAD Map */
++#define ADMV1014_QUAD_SE_MODE_MSK		GENMASK(9, 6)
++#define ADMV1014_QUAD_FILTERS_MSK		GENMASK(3, 0)
++
++/* ADMV1014_REG_LO_AMP_PHASE_ADJUST1 Map */
++#define ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK	GENMASK(15, 9)
++#define ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK	GENMASK(8, 2)
++
++/* ADMV1014_REG_MIXER Map */
++#define ADMV1014_MIXER_VGATE_MSK		GENMASK(15, 9)
++#define ADMV1014_DET_PROG_MSK			GENMASK(6, 0)
++
++/* ADMV1014_REG_IF_AMP Map */
++#define ADMV1014_IF_AMP_COARSE_GAIN_I_MSK	GENMASK(11, 8)
++#define ADMV1014_IF_AMP_FINE_GAIN_Q_MSK		GENMASK(7, 4)
++#define ADMV1014_IF_AMP_FINE_GAIN_I_MSK		GENMASK(3, 0)
++
++/* ADMV1014_REG_IF_AMP_BB_AMP Map */
++#define ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK	GENMASK(15, 12)
++#define ADMV1014_BB_AMP_OFFSET_Q_MSK		GENMASK(9, 5)
++#define ADMV1014_BB_AMP_OFFSET_I_MSK		GENMASK(4, 0)
++
++/* ADMV1014_REG_BB_AMP_AGC Map */
++#define ADMV1014_BB_AMP_REF_GEN_MSK		GENMASK(6, 3)
++#define ADMV1014_BB_AMP_GAIN_CTRL_MSK		GENMASK(2, 1)
++#define ADMV1014_BB_SWITCH_HIGH_LOW_CM_MSK	BIT(0)
++
++/* ADMV1014_REG_VVA_TEMP_COMP Map */
++#define ADMV1014_VVA_TEMP_COMP_MSK		GENMASK(15, 0)
++
++/* ADMV1014 Miscellaneous Defines */
++#define ADMV1014_READ				BIT(7)
++#define ADMV1014_REG_ADDR_READ_MSK		GENMASK(6, 1)
++#define ADMV1014_REG_ADDR_WRITE_MSK		GENMASK(22, 17)
++#define ADMV1014_REG_DATA_MSK			GENMASK(16, 1)
++#define ADMV1014_NUM_REGULATORS			9
++
++enum {
++	ADMV1014_IQ_MODE,
++	ADMV1014_IF_MODE
++};
++
++enum {
++	ADMV1014_SE_MODE_POS = 6,
++	ADMV1014_SE_MODE_NEG = 9,
++	ADMV1014_SE_MODE_DIFF = 12
++};
++
++enum {
++	ADMV1014_CALIBSCALE_COARSE,
++	ADMV1014_CALIBSCALE_FINE,
++};
++
++static const int detector_table[] = {0, 1, 2, 4, 8, 16, 32, 64};
++
++struct admv1014_state {
++	struct spi_device		*spi;
++	struct clk			*clkin;
++	struct notifier_block		nb;
++	/* Protect against concurrent accesses to the device and to data*/
++	struct mutex			lock;
++	struct regulator_bulk_data	regulators[ADMV1014_NUM_REGULATORS];
++	unsigned int			input_mode;
++	unsigned int			quad_se_mode;
++	unsigned int			p1db_comp;
++	bool				det_en;
++	u8				data[3] ____cacheline_aligned;
++};
++
++static const int mixer_vgate_table[] = {106, 107, 108, 110, 111, 112, 113, 114,
++					117, 118, 119, 120, 122, 123, 44, 45};
++
++static int __admv1014_spi_read(struct admv1014_state *st, unsigned int reg,
++			       unsigned int *val)
++{
++	int ret;
++	struct spi_transfer t = {0};
++
++	st->data[0] = ADMV1014_READ | FIELD_PREP(ADMV1014_REG_ADDR_READ_MSK, reg);
++	st->data[1] = 0x0;
++	st->data[2] = 0x0;
++
++	t.rx_buf = &st->data[0];
++	t.tx_buf = &st->data[0];
++	t.len = 3;
++
++	ret = spi_sync_transfer(st->spi, &t, 1);
++	if (ret)
++		return ret;
++
++	*val = FIELD_GET(ADMV1014_REG_DATA_MSK, get_unaligned_be24(&st->data[0]));
++
++	return ret;
++}
++
++static int admv1014_spi_read(struct admv1014_state *st, unsigned int reg,
++			     unsigned int *val)
++{
++	int ret;
++
++	mutex_lock(&st->lock);
++	ret = __admv1014_spi_read(st, reg, val);
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int __admv1014_spi_write(struct admv1014_state *st,
++				unsigned int reg,
++				unsigned int val)
++{
++	put_unaligned_be24(FIELD_PREP(ADMV1014_REG_DATA_MSK, val) |
++			   FIELD_PREP(ADMV1014_REG_ADDR_WRITE_MSK, reg), &st->data[0]);
++
++	return spi_write(st->spi, &st->data[0], 3);
++}
++
++static int admv1014_spi_write(struct admv1014_state *st, unsigned int reg,
++			      unsigned int val)
++{
++	int ret;
++
++	mutex_lock(&st->lock);
++	ret = __admv1014_spi_write(st, reg, val);
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int __admv1014_spi_update_bits(struct admv1014_state *st, unsigned int reg,
++				      unsigned int mask, unsigned int val)
++{
++	int ret;
++	unsigned int data, temp;
++
++	ret = __admv1014_spi_read(st, reg, &data);
++	if (ret)
++		return ret;
++
++	temp = (data & ~mask) | (val & mask);
++
++	return __admv1014_spi_write(st, reg, temp);
++}
++
++static int admv1014_spi_update_bits(struct admv1014_state *st, unsigned int reg,
++				    unsigned int mask, unsigned int val)
++{
++	int ret;
++
++	mutex_lock(&st->lock);
++	ret = __admv1014_spi_update_bits(st, reg, mask, val);
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int admv1014_update_quad_filters(struct admv1014_state *st)
++{
++	unsigned int filt_raw;
++	u64 rate = clk_get_rate(st->clkin);
++
++	if (rate >= (5400 * HZ_PER_MHZ) && rate <= (7000 * HZ_PER_MHZ))
++		filt_raw = 15;
++	else if (rate >= (5400 * HZ_PER_MHZ) && rate <= (8000 * HZ_PER_MHZ))
++		filt_raw = 10;
++	else if (rate >= (6600 * HZ_PER_MHZ) && rate <= (9200 * HZ_PER_MHZ))
++		filt_raw = 5;
++	else
++		filt_raw = 0;
++
++	return __admv1014_spi_update_bits(st, ADMV1014_REG_QUAD,
++					ADMV1014_QUAD_FILTERS_MSK,
++					FIELD_PREP(ADMV1014_QUAD_FILTERS_MSK, filt_raw));
++}
++
++static int admv1014_update_vcm_settings(struct admv1014_state *st)
++{
++	unsigned int i, vcm_mv, vcm_comp, bb_sw_hl_cm;
++	int ret;
++
++	vcm_mv = regulator_get_voltage(st->regulators[0].consumer) / 1000;
++	for (i = 0; i < ARRAY_SIZE(mixer_vgate_table); i++) {
++		vcm_comp = 1050 + (i * 50) + (i / 8 * 50);
++		if (vcm_mv != vcm_comp)
++			continue;
++
++		ret = __admv1014_spi_update_bits(st, ADMV1014_REG_MIXER,
++						 ADMV1014_MIXER_VGATE_MSK,
++						 FIELD_PREP(ADMV1014_MIXER_VGATE_MSK,
++							    mixer_vgate_table[i]));
++		if (ret)
++			return ret;
++
++		bb_sw_hl_cm = ~(i / 8);
++		bb_sw_hl_cm = FIELD_PREP(ADMV1014_BB_SWITCH_HIGH_LOW_CM_MSK, bb_sw_hl_cm);
++
++		return __admv1014_spi_update_bits(st, ADMV1014_REG_BB_AMP_AGC,
++						  ADMV1014_BB_AMP_REF_GEN_MSK |
++						  ADMV1014_BB_SWITCH_HIGH_LOW_CM_MSK,
++						  FIELD_PREP(ADMV1014_BB_AMP_REF_GEN_MSK, i) |
++						  bb_sw_hl_cm);
++	}
++
++	return -EINVAL;
++}
++
++static int admv1014_read_raw(struct iio_dev *indio_dev,
++			     struct iio_chan_spec const *chan,
++			     int *val, int *val2, long info)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++	unsigned int data;
++	int ret;
++
++	switch (info) {
++	case IIO_CHAN_INFO_OFFSET:
++		ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP_BB_AMP, &data);
++		if (ret)
++			return ret;
++
++		if (chan->channel2 == IIO_MOD_I)
++			*val = FIELD_GET(ADMV1014_BB_AMP_OFFSET_I_MSK, data);
++		else
++			*val = FIELD_GET(ADMV1014_BB_AMP_OFFSET_Q_MSK, data);
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_PHASE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_LO_AMP_PHASE_ADJUST1, &data);
++		if (ret)
++			return ret;
++
++		if (chan->channel2 == IIO_MOD_I)
++			*val = FIELD_GET(ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK, data);
++		else
++			*val = FIELD_GET(ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK, data);
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_MIXER, &data);
++		if (ret)
++			return ret;
++
++		*val = FIELD_GET(ADMV1014_DET_PROG_MSK, data);
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_CALIBSCALE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_BB_AMP_AGC, &data);
++		if (ret)
++			return ret;
++
++		*val = FIELD_GET(ADMV1014_BB_AMP_GAIN_CTRL_MSK, data);
++		return IIO_VAL_INT;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int admv1014_write_raw(struct iio_dev *indio_dev,
++			      struct iio_chan_spec const *chan,
++			      int val, int val2, long info)
++{
++	int data;
++	unsigned int msk;
++	struct admv1014_state *st = iio_priv(indio_dev);
++
++	switch (info) {
++	case IIO_CHAN_INFO_OFFSET:
++		if (chan->channel2 == IIO_MOD_I) {
++			msk = ADMV1014_BB_AMP_OFFSET_I_MSK;
++			data = FIELD_PREP(ADMV1014_BB_AMP_OFFSET_I_MSK, val);
++		} else {
++			msk = ADMV1014_BB_AMP_OFFSET_Q_MSK;
++			data = FIELD_PREP(ADMV1014_BB_AMP_OFFSET_Q_MSK, val);
++		}
++
++		return admv1014_spi_update_bits(st, ADMV1014_REG_IF_AMP_BB_AMP, msk, data);
++	case IIO_CHAN_INFO_PHASE:
++		if (chan->channel2 == IIO_MOD_I) {
++			msk = ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK;
++			data = FIELD_PREP(ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK, val);
++		} else {
++			msk = ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK;
++			data = FIELD_PREP(ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK, val);
++		}
++
++		return admv1014_spi_update_bits(st, ADMV1014_REG_LO_AMP_PHASE_ADJUST1, msk, data);
++	case IIO_CHAN_INFO_SCALE:
++		return admv1014_spi_update_bits(st, ADMV1014_REG_MIXER,
++						ADMV1014_DET_PROG_MSK,
++						FIELD_PREP(ADMV1014_DET_PROG_MSK, val));
++	case IIO_CHAN_INFO_CALIBSCALE:
++		return admv1014_spi_update_bits(st, ADMV1014_REG_BB_AMP_AGC,
++						ADMV1014_BB_AMP_GAIN_CTRL_MSK,
++						FIELD_PREP(ADMV1014_BB_AMP_GAIN_CTRL_MSK, val));
++	default:
++		return -EINVAL;
++	}
++}
++
++static ssize_t admv1014_read(struct iio_dev *indio_dev,
++			     uintptr_t private,
++			     const struct iio_chan_spec *chan,
++			     char *buf)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++	unsigned int data;
++	int ret;
++
++	switch ((u32)private) {
++	case ADMV1014_CALIBSCALE_COARSE:
++		if (chan->channel2 == IIO_MOD_I) {
++			ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP, &data);
++			if (ret)
++				return ret;
++
++			data = FIELD_GET(ADMV1014_IF_AMP_COARSE_GAIN_I_MSK, data);
++		} else {
++			ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP_BB_AMP, &data);
++			if (ret)
++				return ret;
++
++			data = FIELD_GET(ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK, data);
++		}
++		break;
++	case ADMV1014_CALIBSCALE_FINE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP, &data);
++		if (ret)
++			return ret;
++
++		if (chan->channel2 == IIO_MOD_I)
++			data = FIELD_GET(ADMV1014_IF_AMP_FINE_GAIN_I_MSK, data);
++		else
++			data = FIELD_GET(ADMV1014_IF_AMP_FINE_GAIN_Q_MSK, data);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return sysfs_emit(buf, "%u\n", data);
++}
++
++static ssize_t admv1014_write(struct iio_dev *indio_dev,
++			      uintptr_t private,
++			      const struct iio_chan_spec *chan,
++			      const char *buf, size_t len)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++	unsigned int data, addr, msk;
++	int ret;
++
++	ret = kstrtou32(buf, 10, &data);
++	if (ret)
++		return ret;
++
++	switch ((u32)private) {
++	case ADMV1014_CALIBSCALE_COARSE:
++		if (chan->channel2 == IIO_MOD_I) {
++			addr = ADMV1014_REG_IF_AMP;
++			msk = ADMV1014_IF_AMP_COARSE_GAIN_I_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_COARSE_GAIN_I_MSK, data);
++		} else {
++			addr = ADMV1014_REG_IF_AMP_BB_AMP;
++			msk = ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK, data);
++		}
++		break;
++	case ADMV1014_CALIBSCALE_FINE:
++		addr = ADMV1014_REG_IF_AMP;
++
++		if (chan->channel2 == IIO_MOD_I) {
++			msk = ADMV1014_IF_AMP_FINE_GAIN_I_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_FINE_GAIN_I_MSK, data);
++		} else {
++			msk = ADMV1014_IF_AMP_FINE_GAIN_Q_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_FINE_GAIN_Q_MSK, data);
++		}
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = admv1014_spi_update_bits(st, addr, msk, data);
++
++	return ret ? ret : len;
++}
++
++static int admv1014_read_avail(struct iio_dev *indio_dev,
++			       struct iio_chan_spec const *chan,
++			       const int **vals, int *type, int *length,
++			       long info)
++{
++	switch (info) {
++	case IIO_CHAN_INFO_SCALE:
++		*vals = detector_table;
++		*type = IIO_VAL_INT;
++		*length = ARRAY_SIZE(detector_table);
++
++		return IIO_AVAIL_LIST;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int admv1014_reg_access(struct iio_dev *indio_dev,
++			       unsigned int reg,
++			       unsigned int write_val,
++			       unsigned int *read_val)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++
++	if (read_val)
++		return admv1014_spi_read(st, reg, read_val);
++	else
++		return admv1014_spi_write(st, reg, write_val);
++}
++
++static const struct iio_info admv1014_info = {
++	.read_raw = admv1014_read_raw,
++	.write_raw = admv1014_write_raw,
++	.read_avail = &admv1014_read_avail,
++	.debugfs_reg_access = &admv1014_reg_access,
++};
++
++static const char * const admv1014_reg_name[] = {
++	 "vcm", "vcc-if-bb", "vcc-vga", "vcc-vva", "vcc-lna-3p3", "vcc-lna-1p5",
++	 "vcc-bg", "vcc-quad", "vcc-mixer"
++};
++
++static int admv1014_freq_change(struct notifier_block *nb, unsigned long action, void *data)
++{
++	struct admv1014_state *st = container_of(nb, struct admv1014_state, nb);
++	int ret;
++
++	if (action == POST_RATE_CHANGE) {
++		mutex_lock(&st->lock);
++		ret = notifier_from_errno(admv1014_update_quad_filters(st));
++		mutex_unlock(&st->lock);
++		return ret;
++	}
++
++	return NOTIFY_OK;
++}
++
++#define _ADMV1014_EXT_INFO(_name, _shared, _ident) { \
++		.name = _name, \
++		.read = admv1014_read, \
++		.write = admv1014_write, \
++		.private = _ident, \
++		.shared = _shared, \
++}
++
++static const struct iio_chan_spec_ext_info admv1014_ext_info[] = {
++	_ADMV1014_EXT_INFO("calibscale_coarse", IIO_SEPARATE, ADMV1014_CALIBSCALE_COARSE),
++	_ADMV1014_EXT_INFO("calibscale_fine", IIO_SEPARATE, ADMV1014_CALIBSCALE_FINE),
++	{ }
++};
++
++#define ADMV1014_CHAN_IQ(_channel, rf_comp) {				\
++	.type = IIO_ALTVOLTAGE,						\
++	.modified = 1,							\
++	.output = 0,							\
++	.indexed = 1,							\
++	.channel2 = IIO_MOD_##rf_comp,					\
++	.channel = _channel,						\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_PHASE) |		\
++		BIT(IIO_CHAN_INFO_OFFSET),				\
++	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_CALIBSCALE)	\
++	}
++
++#define ADMV1014_CHAN_IF(_channel, rf_comp) {				\
++	.type = IIO_ALTVOLTAGE,						\
++	.modified = 1,							\
++	.output = 0,							\
++	.indexed = 1,							\
++	.channel2 = IIO_MOD_##rf_comp,					\
++	.channel = _channel,						\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_PHASE) |		\
++		BIT(IIO_CHAN_INFO_OFFSET)				\
++	}
++
++#define ADMV1014_CHAN_POWER(_channel) {					\
++	.type = IIO_POWER,						\
++	.output = 0,							\
++	.indexed = 1,							\
++	.channel = _channel,						\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_SCALE),			\
++	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_SCALE)	\
++	}
++
++#define ADMV1014_CHAN_CALIBSCALE(_channel, rf_comp, _admv1014_ext_info) {	\
++	.type = IIO_ALTVOLTAGE,							\
++	.modified = 1,								\
++	.output = 0,								\
++	.indexed = 1,								\
++	.channel2 = IIO_MOD_##rf_comp,						\
++	.channel = _channel,							\
++	.ext_info = _admv1014_ext_info						\
++	}
++
++static const struct iio_chan_spec admv1014_channels_iq[] = {
++	ADMV1014_CHAN_IQ(0, I),
++	ADMV1014_CHAN_IQ(0, Q),
++	ADMV1014_CHAN_POWER(0)
++};
++
++static const struct iio_chan_spec admv1014_channels_if[] = {
++	ADMV1014_CHAN_IF(0, I),
++	ADMV1014_CHAN_IF(0, Q),
++	ADMV1014_CHAN_CALIBSCALE(0, I, admv1014_ext_info),
++	ADMV1014_CHAN_CALIBSCALE(0, Q, admv1014_ext_info),
++	ADMV1014_CHAN_POWER(0)
++};
++
++static void admv1014_clk_disable(void *data)
++{
++	clk_disable_unprepare(data);
++}
++
++static void admv1014_reg_disable(void *data)
++{
++	regulator_bulk_disable(ADMV1014_NUM_REGULATORS, data);
++}
++
++static void admv1014_powerdown(void *data)
++{
++	unsigned int enable_reg, enable_reg_msk;
++
++	/* Disable all components in the Enable Register */
++	enable_reg_msk = ADMV1014_IBIAS_PD_MSK |
++			ADMV1014_IF_AMP_PD_MSK |
++			ADMV1014_QUAD_BG_PD_MSK |
++			ADMV1014_BB_AMP_PD_MSK |
++			ADMV1014_QUAD_IBIAS_PD_MSK |
++			ADMV1014_BG_PD_MSK;
++
++	enable_reg = FIELD_PREP(ADMV1014_IBIAS_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_IF_AMP_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_QUAD_BG_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_BB_AMP_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_QUAD_IBIAS_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_BG_PD_MSK, 1);
++
++	admv1014_spi_update_bits(data, ADMV1014_REG_ENABLE,
++				 enable_reg_msk, enable_reg);
++}
++
++static int admv1014_init(struct admv1014_state *st)
++{
++	int ret;
++	unsigned int chip_id, enable_reg, enable_reg_msk;
++	struct spi_device *spi = st->spi;
++
++	ret = regulator_bulk_enable(ADMV1014_NUM_REGULATORS, st->regulators);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to enable regulators");
++		return ret;
++	}
++
++	ret = devm_add_action_or_reset(&spi->dev, admv1014_reg_disable, st->regulators);
++	if (ret)
++		return ret;
++
++	ret = clk_prepare_enable(st->clkin);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&spi->dev, admv1014_clk_disable, st->clkin);
++	if (ret)
++		return ret;
++
++	st->nb.notifier_call = admv1014_freq_change;
++	ret = devm_clk_notifier_register(&spi->dev, st->clkin, &st->nb);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&spi->dev, admv1014_powerdown, st);
++	if (ret)
++		return ret;
++
++	/* Perform a software reset */
++	ret = __admv1014_spi_update_bits(st, ADMV1014_REG_SPI_CONTROL,
++					 ADMV1014_SPI_SOFT_RESET_MSK,
++					 FIELD_PREP(ADMV1014_SPI_SOFT_RESET_MSK, 1));
++	if (ret) {
++		dev_err(&spi->dev, "ADMV1014 SPI software reset failed.\n");
++		return ret;
++	}
++
++	ret = __admv1014_spi_update_bits(st, ADMV1014_REG_SPI_CONTROL,
++					 ADMV1014_SPI_SOFT_RESET_MSK,
++					 FIELD_PREP(ADMV1014_SPI_SOFT_RESET_MSK, 0));
++	if (ret) {
++		dev_err(&spi->dev, "ADMV1014 SPI software reset disable failed.\n");
++		return ret;
++	}
++
++	ret = __admv1014_spi_write(st, ADMV1014_REG_VVA_TEMP_COMP, 0x727C);
++	if (ret) {
++		dev_err(&spi->dev, "Writing default Temperature Compensation value failed.\n");
++		return ret;
++	}
++
++	ret = __admv1014_spi_read(st, ADMV1014_REG_SPI_CONTROL, &chip_id);
++	if (ret)
++		return ret;
++
++	chip_id = (chip_id & ADMV1014_CHIP_ID_MSK) >> 4;
++	if (chip_id != ADMV1014_CHIP_ID) {
++		dev_err(&spi->dev, "Invalid Chip ID.\n");
++		ret = -EINVAL;
++		return ret;
++	}
++
++	ret = __admv1014_spi_update_bits(st, ADMV1014_REG_QUAD,
++					 ADMV1014_QUAD_SE_MODE_MSK,
++					 FIELD_PREP(ADMV1014_QUAD_SE_MODE_MSK,
++						    st->quad_se_mode));
++	if (ret) {
++		dev_err(&spi->dev, "Writing Quad SE Mode failed.\n");
++		return ret;
++	}
++
++	ret = admv1014_update_quad_filters(st);
++	if (ret) {
++		dev_err(&spi->dev, "Update Quad Filters failed.\n");
++		return ret;
++	}
++
++	ret = admv1014_update_vcm_settings(st);
++	if (ret) {
++		dev_err(&spi->dev, "Update VCM Settings failed.\n");
++		return ret;
++	}
++
++	enable_reg_msk = ADMV1014_P1DB_COMPENSATION_MSK |
++			 ADMV1014_IF_AMP_PD_MSK |
++			 ADMV1014_BB_AMP_PD_MSK |
++			 ADMV1014_DET_EN_MSK;
++
++	enable_reg = FIELD_PREP(ADMV1014_P1DB_COMPENSATION_MSK, st->p1db_comp ? 3 : 0) |
++		     FIELD_PREP(ADMV1014_IF_AMP_PD_MSK, !(st->input_mode)) |
++		     FIELD_PREP(ADMV1014_BB_AMP_PD_MSK, st->input_mode) |
++		     FIELD_PREP(ADMV1014_DET_EN_MSK, st->det_en);
++
++	return __admv1014_spi_update_bits(st, ADMV1014_REG_ENABLE, enable_reg_msk, enable_reg);
++}
++
++static int admv1014_properties_parse(struct admv1014_state *st)
++{
++	const char *str;
++	unsigned int i;
++	struct spi_device *spi = st->spi;
++	int ret;
++
++	st->det_en = device_property_read_bool(&spi->dev, "adi,detector-enable");
++
++	st->p1db_comp = device_property_read_bool(&spi->dev, "adi,p1db-compensation-enable");
++
++	str = "iq";
++	device_property_read_string(&spi->dev, "adi,input-mode", &str);
++
++	if (!strcmp(str, "iq"))
++		st->input_mode = ADMV1014_IQ_MODE;
++	else if (!strcmp(str, "if"))
++		st->input_mode = ADMV1014_IF_MODE;
++	else
++		return -EINVAL;
++
++	str = "diff";
++	device_property_read_string(&spi->dev, "adi,quad-se-mode", &str);
++
++	if (!strcmp(str, "diff"))
++		st->quad_se_mode = ADMV1014_SE_MODE_DIFF;
++	else if (!strcmp(str, "se-pos"))
++		st->quad_se_mode = ADMV1014_SE_MODE_POS;
++	else if (!strcmp(str, "se-neg"))
++		st->quad_se_mode = ADMV1014_SE_MODE_NEG;
++	else
++		return -EINVAL;
++
++	for (i = 0; i < ADMV1014_NUM_REGULATORS; ++i)
++		st->regulators[i].supply = admv1014_reg_name[i];
++
++	ret = devm_regulator_bulk_get(&st->spi->dev, ADMV1014_NUM_REGULATORS,
++				      st->regulators);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to request regulators");
++		return ret;
++	}
++
++	st->clkin = devm_clk_get(&spi->dev, "lo_in");
++	if (IS_ERR(st->clkin))
++		return dev_err_probe(&spi->dev, PTR_ERR(st->clkin),
++				     "failed to get the LO input clock\n");
++
++	return 0;
++}
++
++static int admv1014_probe(struct spi_device *spi)
++{
++	struct iio_dev *indio_dev;
++	struct admv1014_state *st;
++	int ret;
++
++	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
++	if (!indio_dev)
++		return -ENOMEM;
++
++	st = iio_priv(indio_dev);
++
++	ret = admv1014_properties_parse(st);
++	if (ret)
++		return ret;
++
++	indio_dev->info = &admv1014_info;
++	indio_dev->name = "admv1014";
++
++	if (st->input_mode == ADMV1014_IQ_MODE) {
++		indio_dev->channels = admv1014_channels_iq;
++		indio_dev->num_channels = ARRAY_SIZE(admv1014_channels_iq);
++	} else {
++		indio_dev->channels = admv1014_channels_if;
++		indio_dev->num_channels = ARRAY_SIZE(admv1014_channels_if);
++	}
++
++	st->spi = spi;
++
++	mutex_init(&st->lock);
++
++	ret = admv1014_init(st);
++	if (ret)
++		return ret;
++
++	return devm_iio_device_register(&spi->dev, indio_dev);
++}
++
++static const struct spi_device_id admv1014_id[] = {
++	{ "admv1014", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(spi, admv1014_id);
++
++static const struct of_device_id admv1014_of_match[] = {
++	{ .compatible = "adi,admv1014" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, admv1014_of_match);
++
++static struct spi_driver admv1014_driver = {
++	.driver = {
++		.name = "admv1014",
++		.of_match_table = admv1014_of_match,
++	},
++	.probe = admv1014_probe,
++	.id_table = admv1014_id,
++};
++module_spi_driver(admv1014_driver);
++
++MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com");
++MODULE_DESCRIPTION("Analog Devices ADMV1014");
++MODULE_LICENSE("GPL v2");
 -- 
-heikki
+2.35.0
+

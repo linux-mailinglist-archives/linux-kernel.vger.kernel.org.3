@@ -2,110 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F284A4BE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A06A4A4BFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380303AbiAaQZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S236516AbiAaQ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245196AbiAaQZf (ORCPT
+        with ESMTP id S1380451AbiAaQ17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:25:35 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94872C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:25:34 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id v74so13302348pfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:25:34 -0800 (PST)
+        Mon, 31 Jan 2022 11:27:59 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F44C06173E;
+        Mon, 31 Jan 2022 08:27:37 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id j2so44245003ejk.6;
+        Mon, 31 Jan 2022 08:27:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tH4Dt4VfD+f2v5yRHdWa89N16xlCoMNOcH1dEff8QrA=;
-        b=esoJHuFWJuRYH89Lq143BAKhwHoiqJwjnoXsYbx2bmRYpJFO180G1vxNSfZ+Icd7Bp
-         M6a1pOoVNMGUZskUPl1PEDmx4Qmbo8woVamQs8dCEZvgserXopUfCrdPhk9W7eOLioaX
-         1TgQmNv8RYLneEjejDfEZgFZFJLerQDzApiFlUk7J3G3UwEoQhhvV6bFcYSHFggWKefA
-         HV0PDonrmnrk86JLcR0QIEZJ7RFBdWIHUvU+Ku+BLgEKZSoL9xpi0+K/9g35aWZ+Wij2
-         0zKmOblDkVXxxsDqXQYmGvDC3ZV8vnJeQL2ebaNRabmYyOlTU2uVrkgCy36ln+vsP0Ns
-         cDKw==
+        bh=dZOePB9QjNAYiNKauHeirK5pevUoAsv4ueKQKshpJRQ=;
+        b=hGHagcalOH44drGxxD/MoK2ikGX9zfIpfchIap8oo/rceJSg+nq+21ioGi065pAh5r
+         ADeLZw54l/wVIzekDoI6t50DWHGfx3qsIg7xzRYPTcffLU8sJCLVNpEbT4uNznCORRlA
+         LKU89jp5E3jc3XllI++4zxlXcqyupEk5mr++4uh92JAv/s3/EZzSEtKbmlOq+bXRXiVn
+         3tYAqa2l3m4aoLvEmo3d4GCOnNWWfPERGJeTTovaUv2uxt6zAFuyxzOyNks4+FT3GiPP
+         GFEg+0mxMxT7bHX7HDKPKYD6QRFagwQRLtz175HK0h/eWuIgO1a175TLWaPpjuJosNuQ
+         6Ssw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tH4Dt4VfD+f2v5yRHdWa89N16xlCoMNOcH1dEff8QrA=;
-        b=mA/VykqZ0B+syN2bPTHJ8vr8Q8MoHt9hwXpyictjKZ/ZrM0tZg+39MOIlOCormt2aa
-         NLb5n+nxCBngIqRXargkawpbQMyeowToiIPGOcOO5tQ1JWBXwPlRkOM4rwL+XpM213lO
-         EMg0Dpy56fOwjkfLi5WCw0YQDexkYNzvMnuEmPVLOjm1jlh5nsHk6Cwy30Yvu+XVfYHF
-         BdyRsMdZ46/DL6rnMPFnpMTDVvz8lKHTZxiEjV1F4SC5wxX8XyWmsiq7O9oo9ebxSI/s
-         kyzeKBeJnmV2/kwpWdFpCM4zTR/VW6AN4azNJE63ROMF/AouVVFxU+Fk1K1g4EWOoaj+
-         yywQ==
-X-Gm-Message-State: AOAM532+1pdFQdwQyRh3KhZxETuGGrIXymVUm5+XWb/ozTPr6Fwu026W
-        9CBivtFMoBdIGr7CSjXuPpDJF2E3vKylnSpVBZHGRg==
-X-Google-Smtp-Source: ABdhPJwENZbL1Q+TBrnar+Rgwvb0PPSNZUScFAwdzFtfG/EkQzbwzbSc1S0LLCdkRYee1cv7+KDyPaKyJ9FQMuMBAK0=
-X-Received: by 2002:aa7:8490:: with SMTP id u16mr20808783pfn.1.1643646333972;
- Mon, 31 Jan 2022 08:25:33 -0800 (PST)
+        bh=dZOePB9QjNAYiNKauHeirK5pevUoAsv4ueKQKshpJRQ=;
+        b=fnTCsRu970SS4wUJMQp7bPSHHw1k/CkUO0xgFuPKXDjqQMlPGV72I5m6EHdl8UtdH8
+         CplNLmzEjOULlazJZvaBNeQUskZreR/JCeVJpMuppuQAk13/o6x4BGc8lh7Fufr/fBcM
+         EwPdkUQwD49dk9QA1a/+D8nr4rin55LV9/LMvMI36/xhWAOaRZbuopUSXjMLqbwJ9xVg
+         3/x/YVlRBnPkFEbJgMNZlfu54onBmUH+zq991Fe5i6lrCfj+BD8eF8MNzz5q6DLc47nA
+         bOHMZ8G2NEeRvceVTiZGPbFnUhYgLt7XmxQe1n4Vi9KY6b8xcLNHxaFO487L5/e4PPIX
+         eFZQ==
+X-Gm-Message-State: AOAM5326JLiN0EDGUkffkESuhrVxXQhkvsyuF7F5ACvhQNyLy0QvCs/d
+        sUJDL+9TEe8zWW22MR0ZOaJcZn9x0sQDryandWM=
+X-Google-Smtp-Source: ABdhPJw4dOYqjyaB/vjErRBa74ILdESAo1tCkt164uJa/5L7WNYYYgCX57bs03CT9s6H5/HjHQc1Qxm4lT2628BCptE=
+X-Received: by 2002:a17:907:2d92:: with SMTP id gt18mr17177209ejc.579.1643646453901;
+ Mon, 31 Jan 2022 08:27:33 -0800 (PST)
 MIME-Version: 1.0
-References: <9c20eb74d42f6d4128e58e3e46aa320482472b77.1643468761.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <9c20eb74d42f6d4128e58e3e46aa320482472b77.1643468761.git.christophe.jaillet@wanadoo.fr>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 31 Jan 2022 17:25:22 +0100
-Message-ID: <CAG3jFytrA4D2-JrABb+iG2kFQHVB5-_UQWoQyFJ3R=rfarre-A@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: lt9611: Fix an error handling path in lt9611_probe()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220131160713.245637-1-marcan@marcan.st> <20220131160713.245637-10-marcan@marcan.st>
+In-Reply-To: <20220131160713.245637-10-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 31 Jan 2022 18:25:58 +0200
+Message-ID: <CAHp75Vcvtm1EvsEAaX8ii+qA_09iJ2-J9gFjSzsUPyOUzPoUBg@mail.gmail.com>
+Subject: Re: [PATCH v4 9/9] brcmfmac: pcie: Read the console on init and shutdown
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Christophe,
+On Mon, Jan 31, 2022 at 6:08 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> This allows us to get console messages if the firmware crashed during
+> early init, or if an operation failed and we're about to shut down.
 
-Thanks for submitting this fix.
+fails
 
-On Sat, 29 Jan 2022 at 16:06, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> If lt9611_audio_init() fails, some resources still need to be released
-> before returning an error code.
->
-> Add the missing goto the error handling path.
->
-> Fixes: 23278bf54afe ("drm/bridge: Introduce LT9611 DSI to HDMI bridge")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  drivers/gpu/drm/bridge/lontium-lt9611.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-> index dafb1b47c15f..00597eb54661 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-> @@ -1164,7 +1164,11 @@ static int lt9611_probe(struct i2c_client *client,
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index 3ff4997e1c97..4fe341376a16 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -744,6 +744,8 @@ static void brcmf_pcie_bus_console_read(struct brcmf_pciedev_info *devinfo,
+>                 return;
 >
->         lt9611_enable_hpd_interrupts(lt9611);
+>         console = &devinfo->shared.console;
+> +       if (!console->base_addr)
+> +               return;
+>         addr = console->base_addr + BRCMF_CONSOLE_WRITEIDX_OFFSET;
+>         newidx = brcmf_pcie_read_tcm32(devinfo, addr);
+>         while (newidx != console->read_idx) {
+> @@ -1520,6 +1522,7 @@ brcmf_pcie_init_share_ram_info(struct brcmf_pciedev_info *devinfo,
+>                   shared->max_rxbufpost, shared->rx_dataoffset);
 >
-> -       return lt9611_audio_init(dev, lt9611);
-> +       ret = lt9611_audio_init(dev, lt9611);
-> +       if (ret)
-> +               goto err_remove_bridge;
-> +
-> +       return 0;
+>         brcmf_pcie_bus_console_init(devinfo);
+> +       brcmf_pcie_bus_console_read(devinfo, false);
 >
->  err_remove_bridge:
->         drm_bridge_remove(&lt9611->bridge);
+>         return 0;
+>  }
+> @@ -1959,6 +1962,7 @@ brcmf_pcie_remove(struct pci_dev *pdev)
+>                 return;
+>
+>         devinfo = bus->bus_priv.pcie->devinfo;
+> +       brcmf_pcie_bus_console_read(devinfo, false);
+>
+>         devinfo->state = BRCMFMAC_PCIE_STATE_DOWN;
+>         if (devinfo->ci)
 > --
-> 2.32.0
+> 2.33.0
 >
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+
+-- 
+With Best Regards,
+Andy Shevchenko

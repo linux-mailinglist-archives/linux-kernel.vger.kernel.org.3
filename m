@@ -2,113 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB974A4942
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444724A4949
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbiAaOZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:25:22 -0500
-Received: from mout.gmx.net ([212.227.15.15]:53037 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233565AbiAaOZV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:25:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643639113;
-        bh=ehSjDK/Iae1v2IccId5qAltsF3KOLcwapIX39KqVTCY=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=f2nlwxzMyT4UvPl2ucXe3p4zKEAgQpat1eqJajqh7JNep3Ir1kZgEDwfJFVT6K+2e
-         b4hGBd57jiZhA0N7xe71YrxROIeB9cWYAd/s+M3h+XFUdp4Ypp1mVZRh+8/ZSNWQRZ
-         ao/WNM9QAdQwSmLyXJx3q2gBtNOMJyul1LstFBA4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8QWA-1nA7lx2Eeu-004SB1; Mon, 31
- Jan 2022 15:25:13 +0100
-Date:   Mon, 31 Jan 2022 15:25:12 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] ARM: dts: wpcm450: Enable watchdog by default
-Message-ID: <YffxSG5DnSlqcExz@latitude>
-References: <20220128221054.2002911-1-j.neuschaefer@gmx.net>
- <CACPK8XfMm7jJ9QYOBr1HiR_22xPEzx9MZXO_CX7MpQt2QAVSUg@mail.gmail.com>
+        id S235367AbiAaO1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 09:27:15 -0500
+Received: from mail-oo1-f53.google.com ([209.85.161.53]:35777 "EHLO
+        mail-oo1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233565AbiAaO1N (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 09:27:13 -0500
+Received: by mail-oo1-f53.google.com with SMTP id p4-20020a4a8e84000000b002e598a51d60so3257081ook.2;
+        Mon, 31 Jan 2022 06:27:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YVSaVxDORTFSvkH7r+avQcGLbthfWsafYf2hEJH7UWY=;
+        b=1Nwuw7Nlp7WopZbC7guWzolhP0xSwYXymaX9sd2U1AzZFPM9RCNli4WOkmpgrqNAye
+         YT/WxwfIj5fe8Xvn4PUY2DnGKsLIW8T7O+GCTocg533hTnhHnncAAgF1gyiHt2J6o6oN
+         XaeTVnWAcIqzfn0z3V9qBaJ6JUwaNKjx0kAesD+vpJmqpFozf68MamcNk5Nvzqpev7e5
+         jCxvvwr4LKSqWXW2/zAGXx9NS5Py/IKjfAelYXPMcSnJE7yAwiLLUB0AVdEdB/1k7oFU
+         vipzMs0X1XobrddRSkXD1YpyaQ9EWGl8v+Byi/YhJqZjILEVBIiKaAXfAnG6ndCclCmU
+         eK0w==
+X-Gm-Message-State: AOAM530INn5FoMWUi92fRXdjBRCf1zp7stEAdUDnYB4ldUAr+5J3Swmz
+        qXPJKYka1VBu8HzqFd/+Ig==
+X-Google-Smtp-Source: ABdhPJzWraRGq7BgWkZ0iBlhnlBkkc6X3At8CSL892iiZw9aZSPrzL8F5R8iqfjhIc8Jo3mCprELLA==
+X-Received: by 2002:a4a:a5d0:: with SMTP id k16mr10254233oom.48.1643639233155;
+        Mon, 31 Jan 2022 06:27:13 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o12sm14534842ooi.18.2022.01.31.06.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 06:27:12 -0800 (PST)
+Received: (nullmailer pid 226419 invoked by uid 1000);
+        Mon, 31 Jan 2022 14:27:11 -0000
+Date:   Mon, 31 Jan 2022 08:27:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suman Anna <s-anna@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: remoteproc: ti: Add mailbox provider
+ nodes to example
+Message-ID: <Yffxv491pLMJ5K5R@robh.at.kernel.org>
+References: <20220119181053.3846613-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w4V948X9R1/Z8oOO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACPK8XfMm7jJ9QYOBr1HiR_22xPEzx9MZXO_CX7MpQt2QAVSUg@mail.gmail.com>
-X-Provags-ID: V03:K1:XTUAjSTdTaeMdJB8cJ6hq3TWxlKJx0T5ZE597sEMtbUHI/T+Wqm
- rtGsQCftyp2e9VIkmdyKNSCMyNnNWTnHdO1QX2KKvxeC5vyzluk2rLF2rMYH6NULJe6x+N4
- rK62fTEYumDcBswXh0Min4gubiq5KSu4FpLhSp2BoWXZpEjEpLfxlPwfQFsa7vUTJqldJni
- VenLVdm3JCKUeDBP3uI/A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HCHlTGcWjZM=:KAUBrVP9gV6eaPxbMX6HHk
- 84w2czrQzw6kHH0OszKlc0nIM24rHbWicbyjoq6044PTBZKbX6ShoI5SGJm69E8ahdE7Zrgp0
- kP7uyqronMwOctJCQ54sc41JLAvcXBlAL2yw6JN8Ar8UgszSPJv45ppanCAVakT0vH1EH5tbB
- w9LQ+78SFKVKGzA6qitmpwm4LDwAI7aCvI3SDxVDeeE+rdc4Lm8zPrpTRpEhdVIh3itzexTu5
- yulsHpSpVFEeuwRGrb4QUG3/7HpzVgpky5HC6oFzdyXND18GxTdx5DwlT3sMdWAatqftmFmHw
- Fk3LwrjB9aCYpg52OFGZFHqtAOZWR+Ue5s7LedGGbKjhFr4vQiapzdGyTWlMgMD3YhbyyFcy5
- n+VQU4VYPs6i1eH3h0YYXE7H/mJu8NVEhRNsFr2XysEy7zv+23+HJhANxb951hKGnuxdJCbV/
- sojHLo4zs+8Q0ZJyhmlWdU83ofdZxiS4uRC05EZ1hsjDIX3G4rEsMyvo3WssC/x9C8QlZRcRI
- /Kb/NH/txQN2yCevbahw67mlCHNOnvyuw8aMbTyED33OtUrUHbrQvYBZ9A2qyyDArK1gLwXK6
- 7CWGBnvs0d+VWU5VlL5nbnMLYpku9dLh8tW6GvkEwbBKEkQY9M5UPfyygap66YyhP/HSD7znh
- 7cbdD+S6I9ji5BHwI/eswO0nPUpGa/ChyC709RoEVdb8qe8t+uQnpAoPLM3L1PAqRf7Gpjmcz
- VgSr5zAZxbgCQnrZ1ffLxhJFEvBAPTcBoWEsjegClnAlHAlkHUpyBIK6qlf4yoPJKbHYPlr6V
- J5HtmHHN5qInSfgoha1wDOMAxnJgiPeo8ql4YguTsLUVqq7dvxdV5nvI9mUJ2RhmQQ+L76lA5
- dudZs9BzyFbTocfmye7phgCSTu0Wt/9JhPwRGMlAryLlqfFzqKsD3fYpjFOw3OvixXnJE+hzE
- qmfxwE0laG94mocZaQr3AMw82Wbr8f8Ke3lemZqdUC4eVhnqeT71QagICvhe9oiF/Typ0h+8L
- SCJDM5NQe3ZajB28PkTmf2ponz41DYvTkcI0h/+Qe9pilhwI82Y9n6J9dQ+ksV+PTQk8TI8+q
- sCAHLRmrl2uCLQ=
+In-Reply-To: <20220119181053.3846613-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 19 Jan 2022 12:10:54 -0600, Rob Herring wrote:
+> In order to make the 'mboxes' property in the TI remoteproc examples
+> parseable, mailbox provider nodes are needed. Normally, the examples
+> have a __fixup__ node which can be used for determining each
+> phandle+arg entry. However, for this binding the arg cells contain a
+> phandle, and the __fixups__ information can't be used.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2: Fix the example rather than changing the schema which was correct
+> 
+>  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml   | 8 ++++++++
+>  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml   | 8 ++++++++
+>  2 files changed, 16 insertions(+)
+> 
 
---w4V948X9R1/Z8oOO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jan 31, 2022 at 06:37:51AM +0000, Joel Stanley wrote:
-> On Fri, 28 Jan 2022 at 22:11, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx=
-=2Enet> wrote:
-> >
-> > The watchdog timer is always usable, regardless of board design, so
-> > there is no point in marking the watchdog device as disabled-by-default
-> > in nuvoton-wpcm450.dtsi.
-> >
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
->=20
-> I assume this makes it always available for rebooting the system too?
-
-Yes, that should be the case.
-
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-
-Thanks,
-Jonathan
-
---w4V948X9R1/Z8oOO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH38ScACgkQCDBEmo7z
-X9tFYw/3bxM4Wd2fFljFXp8dKC2PZhF7cFvy58oTsrE1/vNSpIUNWscWFmE5lR8i
-nUFUDPCjt+7s0eesw85tpZ/xZELXJ9HOImTMa65itII/c6bKOivWy/4cV0XUE3pI
-d+4T5rGN972krFdkMWK0gXxjzEfUXxmwskuyVmdZIiDBrEg872YL3uJw8DeDn8tW
-QNYhF6bx+z5RDeTVvRYk8TzvEiw+klqGdIvNo+HNUPSSAyJwcX1tDtXvCYOgxJIU
-Lw+8e5ErQm9XFYykDpOPtbqeJB11p2i7I+buoBR+33nQ06JWXPw7DkHdgEzNMYMb
-rsuui5i1hpDpCMmdGJSZEWsmOYPFgOJld04wjsMuWsn98KaQZkjU7zNWXt1ckI9h
-3UOEPktkRw+vVzlgH+hdbdjmf1eA9P/ue9CiX5bAi86wrT4Ivhdl3OarhkYIaKuZ
-P8S7IsVxrZtBo6JrxLrkVV5Al60831Wc73qDrHWGRcz7olnQJfv4Eq4LtRIFllKQ
-YH+8e5lIJdEHGxJSWBGBz8XcIjF9DHJ9++SauOoFOJ8QkRr2HtiWz4HxFaZrXgxX
-2h29zyo04HHAvzVCWwT4WAShNhaLIFFCtt6BlJl52T9XRbbTevDkYkbs8lQ50FyC
-5fdJkwITCEtrolWiSEM/dHnFUUtj8wgdz72HnBq/iNZjA582sA==
-=GM37
------END PGP SIGNATURE-----
-
---w4V948X9R1/Z8oOO--
+Applied, thanks!

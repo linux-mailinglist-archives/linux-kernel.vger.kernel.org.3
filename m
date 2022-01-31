@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1F94A42E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CB04A45A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359559AbiAaLOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:14:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41228 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359206AbiAaLGq (ORCPT
+        id S1359275AbiAaLqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376986AbiAaLcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:06:46 -0500
+        Mon, 31 Jan 2022 06:32:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B7BC0604CB;
+        Mon, 31 Jan 2022 03:21:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03B0C60F08;
-        Mon, 31 Jan 2022 11:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 182DDC340E8;
-        Mon, 31 Jan 2022 11:06:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D0C0B82A66;
+        Mon, 31 Jan 2022 11:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936C1C340E8;
+        Mon, 31 Jan 2022 11:21:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627205;
-        bh=T61eFx1WKYVrpzdomxYKH/1JoAQh96Z/sdw+rP1LNLQ=;
+        s=korg; t=1643628111;
+        bh=zq0eIqyEOraPAsidksoElf7gEdCbjdbpAhnUeeYukTw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BnaFlHA7bB5/ccYol7bL2ADSbsx4kXCVlAvTO25qoWsKowQeIWiBPVFJlSpzEpwUF
-         9vYtaahRaAx17knTrkC6VsqK/fMDEi3A+6iv1MLnDIExd13MH5108hkUJchDPSsWWW
-         +TTBHCb2wvsOPDNmWadKMzRyO/yGgBq54KpG1+5E=
+        b=oEgZCusmyeFjGePPuDzLFacT88J2wNspfxsEIH2g7DIzOEt3dx6mML/64YJ7fmaYB
+         RPT+/DDTCqTQyjggqKTnkvAnqZqVKEwFN/dXt0nkyAeW+nhuNeLuBhTG+X7eIWn46L
+         IJDUftr/sSVLBm1BzhivAhpL08QXNd1LK7KFtdk8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 068/100] powerpc64/bpf: Limit ldbrx to processors compliant with ISA v2.06
-Date:   Mon, 31 Jan 2022 11:56:29 +0100
-Message-Id: <20220131105222.723944006@linuxfoundation.org>
+Subject: [PATCH 5.16 127/200] remoteproc: qcom: q6v5: fix service routines build errors
+Date:   Mon, 31 Jan 2022 11:56:30 +0100
+Message-Id: <20220131105237.835248185@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,102 +54,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 3f5f766d5f7f95a69a630da3544a1a0cee1cdddf ]
+[ Upstream commit eee412e968f7b950564880bc6a7a9f00f49034da ]
 
-Johan reported the below crash with test_bpf on ppc64 e5500:
+When CONFIG_QCOM_AOSS_QMP=m and CONFIG_QCOM_Q6V5_MSS=y, the builtin
+driver cannot call into the loadable module's low-level service
+functions. Trying to build with that config combo causes linker errors.
 
-  test_bpf: #296 ALU_END_FROM_LE 64: 0x0123456789abcdef -> 0x67452301 jited:1
-  Oops: Exception in kernel mode, sig: 4 [#1]
-  BE PAGE_SIZE=4K SMP NR_CPUS=24 QEMU e500
-  Modules linked in: test_bpf(+)
-  CPU: 0 PID: 76 Comm: insmod Not tainted 5.14.0-03771-g98c2059e008a-dirty #1
-  NIP:  8000000000061c3c LR: 80000000006dea64 CTR: 8000000000061c18
-  REGS: c0000000032d3420 TRAP: 0700   Not tainted (5.14.0-03771-g98c2059e008a-dirty)
-  MSR:  0000000080089000 <EE,ME>  CR: 88002822  XER: 20000000 IRQMASK: 0
-  <...>
-  NIP [8000000000061c3c] 0x8000000000061c3c
-  LR [80000000006dea64] .__run_one+0x104/0x17c [test_bpf]
-  Call Trace:
-   .__run_one+0x60/0x17c [test_bpf] (unreliable)
-   .test_bpf_init+0x6a8/0xdc8 [test_bpf]
-   .do_one_initcall+0x6c/0x28c
-   .do_init_module+0x68/0x28c
-   .load_module+0x2460/0x2abc
-   .__do_sys_init_module+0x120/0x18c
-   .system_call_exception+0x110/0x1b8
-   system_call_common+0xf0/0x210
-  --- interrupt: c00 at 0x101d0acc
-  <...>
-  ---[ end trace 47b2bf19090bb3d0 ]---
+There are two problems here. First, drivers/remoteproc/qcom_q6v5.c
+should #include <linux/soc/qcom/qcom_aoss.h> for the definitions of
+the service functions, depending on whether CONFIG_QCOM_AOSS_QMP is
+set/enabled or not. Second, the qcom remoteproc drivers should depend
+on QCOM_AOSS_QMP iff it is enabled (=y or =m) so that the qcom
+remoteproc drivers can be built properly.
 
-  Illegal instruction
+This prevents these build errors:
 
-The illegal instruction turned out to be 'ldbrx' emitted for
-BPF_FROM_[L|B]E, which was only introduced in ISA v2.06. Guard use of
-the same and implement an alternative approach for older processors.
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `q6v5_load_state_toggle':
+qcom_q6v5.c:(.text+0xc4): undefined reference to `qmp_send'
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_deinit':
+(.text+0x2e4): undefined reference to `qmp_put'
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_init':
+(.text+0x778): undefined reference to `qmp_get'
+aarch64-linux-ld: (.text+0x7d8): undefined reference to `qmp_put'
 
-Fixes: 156d0e290e969c ("powerpc/ebpf/jit: Implement JIT compiler for extended BPF")
-Reported-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Tested-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/d1e51c6fdf572062cf3009a751c3406bda01b832.1641468127.git.naveen.n.rao@linux.vnet.ibm.com
+Fixes: c1fe10d238c0 ("remoteproc: qcom: q6v5: Use qmp_send to update co-processor load state")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: linux-remoteproc@vger.kernel.org
+Cc: Sibi Sankar <sibis@codeaurora.org>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220115011338.2973-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/ppc-opcode.h |  1 +
- arch/powerpc/net/bpf_jit_comp64.c     | 22 +++++++++++++---------
- 2 files changed, 14 insertions(+), 9 deletions(-)
+ drivers/remoteproc/Kconfig     | 4 ++++
+ drivers/remoteproc/qcom_q6v5.c | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include/asm/ppc-opcode.h
-index a6e3700c4566a..f0c0816f57270 100644
---- a/arch/powerpc/include/asm/ppc-opcode.h
-+++ b/arch/powerpc/include/asm/ppc-opcode.h
-@@ -449,6 +449,7 @@
- #define PPC_RAW_LDX(r, base, b)		(0x7c00002a | ___PPC_RT(r) | ___PPC_RA(base) | ___PPC_RB(b))
- #define PPC_RAW_LHZ(r, base, i)		(0xa0000000 | ___PPC_RT(r) | ___PPC_RA(base) | IMM_L(i))
- #define PPC_RAW_LHBRX(r, base, b)	(0x7c00062c | ___PPC_RT(r) | ___PPC_RA(base) | ___PPC_RB(b))
-+#define PPC_RAW_LWBRX(r, base, b)	(0x7c00042c | ___PPC_RT(r) | ___PPC_RA(base) | ___PPC_RB(b))
- #define PPC_RAW_LDBRX(r, base, b)	(0x7c000428 | ___PPC_RT(r) | ___PPC_RA(base) | ___PPC_RB(b))
- #define PPC_RAW_STWCX(s, a, b)		(0x7c00012d | ___PPC_RS(s) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_CMPWI(a, i)		(0x2c000000 | ___PPC_RA(a) | IMM_L(i))
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 8936090acb579..0d47514e8870d 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -651,17 +651,21 @@ bpf_alu32_trunc:
- 				EMIT(PPC_RAW_MR(dst_reg, b2p[TMP_REG_1]));
- 				break;
- 			case 64:
--				/*
--				 * Way easier and faster(?) to store the value
--				 * into stack and then use ldbrx
--				 *
--				 * ctx->seen will be reliable in pass2, but
--				 * the instructions generated will remain the
--				 * same across all passes
--				 */
-+				/* Store the value to stack and then use byte-reverse loads */
- 				PPC_BPF_STL(dst_reg, 1, bpf_jit_stack_local(ctx));
- 				EMIT(PPC_RAW_ADDI(b2p[TMP_REG_1], 1, bpf_jit_stack_local(ctx)));
--				EMIT(PPC_RAW_LDBRX(dst_reg, 0, b2p[TMP_REG_1]));
-+				if (cpu_has_feature(CPU_FTR_ARCH_206)) {
-+					EMIT(PPC_RAW_LDBRX(dst_reg, 0, b2p[TMP_REG_1]));
-+				} else {
-+					EMIT(PPC_RAW_LWBRX(dst_reg, 0, b2p[TMP_REG_1]));
-+					if (IS_ENABLED(CONFIG_CPU_LITTLE_ENDIAN))
-+						EMIT(PPC_RAW_SLDI(dst_reg, dst_reg, 32));
-+					EMIT(PPC_RAW_LI(b2p[TMP_REG_2], 4));
-+					EMIT(PPC_RAW_LWBRX(b2p[TMP_REG_2], b2p[TMP_REG_2], b2p[TMP_REG_1]));
-+					if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
-+						EMIT(PPC_RAW_SLDI(b2p[TMP_REG_2], b2p[TMP_REG_2], 32));
-+					EMIT(PPC_RAW_OR(dst_reg, dst_reg, b2p[TMP_REG_2]));
-+				}
- 				break;
- 			}
- 			break;
+diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+index f2e961f998ca2..341156e2a29b9 100644
+--- a/drivers/remoteproc/Kconfig
++++ b/drivers/remoteproc/Kconfig
+@@ -180,6 +180,7 @@ config QCOM_Q6V5_ADSP
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_PIL_INFO
+ 	select QCOM_MDT_LOADER
+@@ -199,6 +200,7 @@ config QCOM_Q6V5_MSS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_MDT_LOADER
+ 	select QCOM_PIL_INFO
+@@ -218,6 +220,7 @@ config QCOM_Q6V5_PAS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_PIL_INFO
+ 	select QCOM_MDT_LOADER
+@@ -239,6 +242,7 @@ config QCOM_Q6V5_WCSS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_MDT_LOADER
+ 	select QCOM_PIL_INFO
+diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+index eada7e34f3af5..442a388f81028 100644
+--- a/drivers/remoteproc/qcom_q6v5.c
++++ b/drivers/remoteproc/qcom_q6v5.c
+@@ -10,6 +10,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
++#include <linux/soc/qcom/qcom_aoss.h>
+ #include <linux/soc/qcom/smem.h>
+ #include <linux/soc/qcom/smem_state.h>
+ #include <linux/remoteproc.h>
 -- 
 2.34.1
 

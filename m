@@ -2,99 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 515924A4AC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFB24A4ACA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379696AbiAaPjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:39:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39228 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359303AbiAaPjm (ORCPT
+        id S1379779AbiAaPkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350284AbiAaPkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:39:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F804B82B58;
-        Mon, 31 Jan 2022 15:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CEDC340F9;
-        Mon, 31 Jan 2022 15:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643643579;
-        bh=S+JVtyhrSwII/6pN71WYrrMXzhomHDBQD0dIDcv+A3s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b1bUpP7W0k8lVttZ79Iy9olvsgkhxTgxATRvcRr3Yn++XSImeY+aAYItRLoNsUxCF
-         1DbgVjAgQUGTcST3UO8HkeNzjtQRzl5Fhj0evS+VAtTBDnMPzZpMZcwYGxL9waoO6/
-         Bbn2yqPJj0wrPJWCDChZLm9jYaiVPUEYdjJkZaPBYjapPqgggBVxlYRZkcCPaRuRZk
-         mtMF7V/p+gU9vC+68lsK7PQ02AZCvZNym99dMIan517mkVqxyBK0BIXRGOZ4s5mVt3
-         iwv6hqfyShk4glxkPv1UETPuRTFwZ2ADflyV38JIMwUNQ/+D36xDYvW/xHAM2WSi4X
-         J3rBA9txv1I2A==
-Received: by mail-qt1-f178.google.com with SMTP id e16so11732186qtq.6;
-        Mon, 31 Jan 2022 07:39:39 -0800 (PST)
-X-Gm-Message-State: AOAM5334gQ22ptm/SP/4L9dY7+9D3+LYDgUTiqBCsFJzNwZAEBv44uTy
-        hAIK8z6IOtytIss6+QTpjSJyvKzALGeXY0fQTg==
-X-Google-Smtp-Source: ABdhPJxu+B59w9DW0M1geYs68HEGp28ZLv4SyMZIUN/C1CH9RYxmLWUL6y5b/4WKDRWIhQTI6X5cawEeoSNHZY1s0PM=
-X-Received: by 2002:ac8:5b86:: with SMTP id a6mr8557369qta.511.1643643578122;
- Mon, 31 Jan 2022 07:39:38 -0800 (PST)
+        Mon, 31 Jan 2022 10:40:35 -0500
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B22CC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:40:35 -0800 (PST)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id E61894DC; Mon, 31 Jan 2022 16:40:33 +0100 (CET)
+Date:   Mon, 31 Jan 2022 16:40:32 +0100
+From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Subject: Re: nvme: IO_PAGE_FAULT logged with Intel SSDPEKKF512G8
+Message-ID: <YfgC8H/EJRLRpgES@8bytes.org>
+References: <366b1545-fdea-3423-10a7-308ca2bef746@molgen.mpg.de>
+ <20220118165325.GA3301052@dhcp-10-100-145-180.wdc.com>
+ <fd1c1767-0029-58d2-3878-5bc1a85b8e2c@molgen.mpg.de>
 MIME-Version: 1.0
-References: <20220131114726.973690-1-conor.dooley@microchip.com> <20220131114726.973690-4-conor.dooley@microchip.com>
-In-Reply-To: <20220131114726.973690-4-conor.dooley@microchip.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 31 Jan 2022 09:39:26 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJkFaGmpAi3eEUROWyOr_PQEZ209TneLhsOkpf3w8jQdw@mail.gmail.com>
-Message-ID: <CAL_JsqJkFaGmpAi3eEUROWyOr_PQEZ209TneLhsOkpf3w8jQdw@mail.gmail.com>
-Subject: Re: [PATCH v5 03/12] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        "heiko@sntech.de" <heiko@sntech.de>, lewis.hanly@microchip.com,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        ivan.griffin@microchip.com, Atish Patra <atishp@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd1c1767-0029-58d2-3878-5bc1a85b8e2c@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 5:45 AM <conor.dooley@microchip.com> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Add device tree bindings for the i2c controller on
-> the Microchip PolarFire SoC.
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
->
+On Tue, Jan 18, 2022 at 06:01:06PM +0100, Paul Menzel wrote:
+> > >      $ dmesg --level=err
+> > >      [    4.194306] nvme 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000c address=0xffffc080 flags=0x0050]
+> > >      [    4.206970] nvme 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000c address=0xffffc000 flags=0x0050]
 
-There should not be a blank line here.
+This was caused by a DMA read to a write-only page. Looks like a bug in
+the driver or the devices firmware.
 
-Also, tags should be in chronological order typically. If Daire sent
-this patch out with my tag, then the order is correct. If I gave it on
-a version you sent, then it goes between Daire's and your S-o-b which
-is the case here.
+Regards,
 
-
-Rob
-
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+	Joerg

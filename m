@@ -2,134 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C1C4A47AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22714A47B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378391AbiAaNAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S1378455AbiAaNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344156AbiAaNAh (ORCPT
+        with ESMTP id S1378383AbiAaNAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:00:37 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43E4C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:00:36 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id i2so2539562ilm.12
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:00:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dSdj6+/sfksSA1uArlRQHiUhIJOWxGXX+eQ0rGayhu4=;
-        b=J1xqT4WdO+z9nBPjGXWQQTsijFA3X8Ksw+wJJXK/vOuUo/cQKQcSRkP5Omdgcy5luX
-         +YmdWF7nH2oHD1AnotOBWD3ovK3VpPU/K7wYAp8uClL91ZxAzVa2hL2bQbhUcWw4D3q2
-         kb4ruW5s2SjojUtylRCcErcbp0cbk0B9pLObgbOW3Kc83ER/eeONMSyt0LXa/LL0RzaT
-         HExbqB9d3n0761mfKYbc5JGfZZmn/sXQNPq7E7YSVI6UIIT70VvQWmV7bEUwLMgwIYWE
-         CqfWaOtTiweXrQPG8s0Pc8aV+XmKDXybEJnzIYgKIzgBMgl9vO3kyxcoZkgdOiROC2+B
-         i5Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dSdj6+/sfksSA1uArlRQHiUhIJOWxGXX+eQ0rGayhu4=;
-        b=rLIKKYkUY9CeC224rBFTw7E2lemgurBbcHfkVYAQ+zDWcn2bK5rEqLGUkzZQBldDt2
-         IoiSl6ZBZdZDdV7vhKW/y16SoTEDC99mSbmtabn2NrrT+upWkX2S/sPq7mNlJIZfKlwd
-         LVij1TzXq9cBjf1xRyUuLEY1dFSTY+XcaTEYLcsgzKOQ59dgwTlmZNaBpY2KKxKVRkHE
-         Gfj9Q3OuAoMp4QKQ1sSWKhiDvj+yTha7VTekXrQIkEHYw47EZSw2YVq97Wxy6GtLmd3/
-         APhAjIO+xCjPjIihzaaAHhSUglZJP/OsgPkl9CmVAYmVcpObV3sS138CbJUU+KYRY1CV
-         Rq0w==
-X-Gm-Message-State: AOAM5334vG/TS+P1kNrKAQRPO1a7VaGP2fLQJ+ls5n/N9GU3VNevBwjm
-        RkKA151cTCaBFH+GGwJjPAbHW5k7mN2PnH5VVLsd9A==
-X-Google-Smtp-Source: ABdhPJzz9PBIZoI54/Sn7+tK+W6MwqqxsuFaxpqQ+8QZ+g2GlJrc0cvmg6zXfBoXxvr8tHXNTYJYIUAxBAWDvjNcVUE=
-X-Received: by 2002:a92:8e0d:: with SMTP id c13mr11729336ild.159.1643634036343;
- Mon, 31 Jan 2022 05:00:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20220130145116.88406-1-nbd@nbd.name> <20220130145116.88406-4-nbd@nbd.name>
- <CAKQ-crhDHXZptWr5rO5Rb9JttQREoPqE4YO-6nzC2OWc-z06_g@mail.gmail.com> <04c91b4e-e7c8-ac6a-f60a-0453a49122fa@nbd.name>
-In-Reply-To: <04c91b4e-e7c8-ac6a-f60a-0453a49122fa@nbd.name>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Mon, 31 Jan 2022 14:00:25 +0100
-Message-ID: <CA+HBbNE5nRmFAR44gYMW+Uqi_5e4s+4wBGoQTUbnhC0Pdkc6iw@mail.gmail.com>
-Subject: Re: [PATCH v9 03/13] ARM: Add basic support for Airoha EN7523 SoC
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Luka Perkov <luka.perkov@sartura.hr>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        John Crispin <john@phrozen.org>,
+        Mon, 31 Jan 2022 08:00:38 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C2AC06173B;
+        Mon, 31 Jan 2022 05:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xQCGsDUYFp6pvF7xS5natfKk/35QMnRgqEC4IjicK74=; b=mHJI8Uwd/igPBdxzDh546BJtm0
+        3P8015UYpCjufDCns11sMr4x4XUTUoYmfCaooJOyET6T9puzam2oqO0WypPYwq2pKdcSuaPipjLiW
+        B54WN/m8CyjVD7EkWHu3Vcr4EKgt111QlQLPPpBGftjmVPXXBsrYAJm+SBrF6xwNxgjYaz6lsyyjl
+        OqMfckwxHhGtAK/jiXrwhjJ2LjgfPq0zeoIXQoShFWBQ+NXVmVKtZ3hKGJjxPERwP1qd2aL46jaf/
+        cSpxFYoFfUeKlCrE1Br5Do3/1Mq7ACbodTF9yJVCqzUUsSBFaHW2sQgwMV0hHULJwCSHU8zuCfWr+
+        /Yet86BQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEWIG-009PaF-Ds; Mon, 31 Jan 2022 13:00:28 +0000
+Date:   Mon, 31 Jan 2022 05:00:28 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup.patel@wdc.com>
+Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
+Message-ID: <YffdbErmAjAWYuD9@infradead.org>
+References: <20220129121728.1079364-1-guoren@kernel.org>
+ <20220129121728.1079364-6-guoren@kernel.org>
+ <YffUqErSVDgbGLTu@infradead.org>
+ <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 1:57 PM Felix Fietkau <nbd@nbd.name> wrote:
->
->
-> On 31.01.22 11:51, Luka Perkov wrote:
-> > Hello Felix,
-> >
-> > On Sun, Jan 30, 2022 at 3:56 PM Felix Fietkau <nbd@nbd.name> wrote:
-> >>
-> >> From: John Crispin <john@phrozen.org>
-> >>
-> >> EN7523 is an armv8 based silicon used inside broadband access type devices
-> >> such as xPON and xDSL. It shares various silicon blocks with MediaTek
-> >> silicon such as the MT7622.
-> >>
-> >> Add basic support for Airoha EN7523, enough for booting to console.
-> >>
-> >> The UART is basically 8250-compatible, except for the clock selection.
-> >> A clock-frequency value is synthesized to get this to run at 115200 bps.
-> >>
-> >> Signed-off-by: John Crispin <john@phrozen.org>
-> >> Signed-off-by: Bert Vermeulen <bert@biot.com>
-> >> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> >> ---
-> >> index 000000000000..ea23b5abb478
-> >> --- /dev/null
-> >> +++ b/arch/arm/mach-airoha/airoha.c
-> >> @@ -0,0 +1,16 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >> +/*
-> >> + * Device Tree support for Airoha SoCs
-> >> + *
-> >> + * Copyright (c) 2022 Felix Fietkau <nbd@nbd.name>
-> >> + */
-> >> +#include <asm/mach/arch.h>
-> >> +
-> >> +static const char * const airoha_board_dt_compat[] = {
-> >> +       "airoha,en7523",
-> >> +       NULL,
-> >> +};
-> >> +
-> >> +DT_MACHINE_START(MEDIATEK_DT, "Airoha Cortex-A53 (Device Tree)")
-> >
-> > Since this is Cortex-A53 core is there a reason why this is not placed
-> > within arm64 directory?
->  From what I can tell, it's a stripped-down core that only runs in
-> 32-bit mode.
+On Mon, Jan 31, 2022 at 01:48:58PM +0100, Arnd Bergmann wrote:
+> I thought that is what the patch does, there is already the normal 64-bit
+> defconfig, and the new makefile target makes this shared with 32-bit
+> to prevent them from diverging again.
 
-Hmm, this is new for me that you could do that to an ARMv8 (A53) core.
-I know that you can run ARMv7 code but not that you can reduce it to
-32 bit only.
-
-Regards,
-Robert
->
-> - Felix
-
-
-
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+I ment using a common fragment and the deriving both 32-bit and 64-bit
+configs from it. The 64-bit specific fragment will be empty for now,
+but we will sooner or later have an option that can only go into the
+64-bit defconfig.

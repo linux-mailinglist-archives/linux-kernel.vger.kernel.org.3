@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252624A47A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862234A47A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378327AbiAaM5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S1378362AbiAaM7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378326AbiAaM5b (ORCPT
+        with ESMTP id S1378006AbiAaM7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:57:31 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16394C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:57:31 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id g23so11652935vsf.7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:57:31 -0800 (PST)
+        Mon, 31 Jan 2022 07:59:05 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134CDC061714;
+        Mon, 31 Jan 2022 04:59:04 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id i62so40091966ybg.5;
+        Mon, 31 Jan 2022 04:59:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rbf16twz9E2vQcds9ElwMC4NaHHcAIWkmNblQF1s7dE=;
-        b=oVFUKsTxctFJ9Ff3uaNasrGMTC7Ugev6jQKgxQC1ggyS7wkwIyGdayyO7IhmmWev2F
-         VKYf7yIUis+IAgHuCVyEibDIOWaAuA5qSXvMmTIOreMq+6wd+6nLpcrobYzpqv9uxPpm
-         JLuQARSUk86hyBVzWLLXeIatzjkZoaLjlZVW3SaKTECTcEW5qMAV/6XuI1JE3yKWVscv
-         hN+OdQ92V+bh3A7jf6kYjct/BC22qgZDNeB2OP/cT3Yb1EUCPUZP6flG4QdPZLjOhOfH
-         TQSuonGfNfuGKSXHRy77tMlC6NRRZOnnThqgZbJDHLITv/Xk52AotmttIF6OQ8T046Wu
-         07lw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=InIT7e5sFjYCe8zq5a/i4pLqMB2jT9u1LGZEZm0evPs=;
+        b=dbw5zLDsiECQGvigQuV3Kz0S/5Cl4P62hvPQ6hPeSx0fz8w4h09E3UYKQeBWgT9uWV
+         JvC9ei1cx7+LwaGt4AKCEE8GbgCWV0Wn7d4sKEP4aNJxZKK1oICIYi+HEwUSzPnd8iOp
+         RY+oVSqBv0D+0RPIvtoT0A27+Maqzu0njQqtGEuhowvbDYNmvPHLvQbf32ihBttdpo8G
+         T4BD8hPfxP53yu6mDLbAqFEChre13xuaI6ltIdj+DachImfwRlsolNQBQfToOcCJtvs/
+         AXe9PmabQvmPX44K5XUnvL26/tLBfCpDfIurlRU86dmTWjw/U3mLugSDMQnZ1YNbYcal
+         owjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rbf16twz9E2vQcds9ElwMC4NaHHcAIWkmNblQF1s7dE=;
-        b=IydpDNRWdJ32TbG8BL7kzTKwpKqrzYcM96FJQxbLjd+uGJsuTQ8vHbg9HMXGaaVx7H
-         zncGD5Ga+KW1a7P/uHI6ugP0EAUo7H901tqx9P2LgYbY82suIJm1pTcUWMTxrgu5NF1v
-         aT0ITZKCwtplgVva7yT4BdZWaNgxWh7ULJ9EY43lStaFg/IykQnS0DRCNQbkBnxnrdNl
-         mjFBhdDKWd5YxRnwZOmbhmB8nTL87qPnlJC8n782BjIiWGQRKLPwnegAi0GkZAF3gwVZ
-         6gCRSx97Qokqtcj6TUcsi6nBnFfIzSCtxdCPUtQfdM4qZUrNiIodl+/dGVhBLJd8gq2B
-         1wog==
-X-Gm-Message-State: AOAM533GxikBb+GF53uVejpC7pUNY6vFRspOVNwLhihpkgrlj+5aZmTn
-        1Bk8qx7qe8csGCVU00ejDoGQy5VInf4DF0qASls=
-X-Google-Smtp-Source: ABdhPJyHGA3UHEJc73bJ1Z50AXXiF1vX0bY0qTVSZkMndyXvRiQIVUJkeLS16jnuPSzU1ye3M1L7KnvtJb4NlnsgIt8=
-X-Received: by 2002:a05:6102:c47:: with SMTP id y7mr5928253vss.20.1643633850001;
- Mon, 31 Jan 2022 04:57:30 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=InIT7e5sFjYCe8zq5a/i4pLqMB2jT9u1LGZEZm0evPs=;
+        b=53KuaFguGTD4qLJS3zOin8m6C3jchNHtDxnUNvSWaFuCofQQe6meVZRUmlCcbO+I4i
+         cd/GkZu8M/FH5KKrUXdVuuaqmjHa/uQCLomv2VRwodnbYIN4H56vY0R1cH72UoY5WSM0
+         MoSlKJc3A3WJ8dW3H5C4Ir7QEnHYueZksNSxM5fAztX7s400ry4GCflTivDDvUTilXdv
+         FAw4U0f2VboihxhCQI12y/CSBr7k0sMLFd4nMCKo+6dDcxbBF5nfv2Gr2VG6524+qYSu
+         QkpKCwBZfCzUeLzMAOFl9OwWgYZx3KyIzHidOx7crqJzdl/6WSFaCpT68fVM9tEws+Hc
+         3Eew==
+X-Gm-Message-State: AOAM530Vz/VuWh4iHysJrXSWNySbur3u+8YzoXcB1IWNy0BYfVXSxXQz
+        vJFKYRhNBvib6wczD1QKJwJ444lHIaSFPaQjJ7qpQBpr3io=
+X-Google-Smtp-Source: ABdhPJxEV6XfFqeB7qv8A/LMjexHNkkX+WcwYj87dKbD2/AN8Ird4zYeHbiVht5lA86xLhOPsN3IJfN9DsNOpoCP2lY=
+X-Received: by 2002:a25:b950:: with SMTP id s16mr27145694ybm.748.1643633944152;
+ Mon, 31 Jan 2022 04:59:04 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:612c:228b:b0:271:b221:8e62 with HTTP; Mon, 31 Jan 2022
- 04:57:29 -0800 (PST)
-Reply-To: docamr8@gmail.com
-From:   Dominic Amar <docamr326@gmail.com>
-Date:   Mon, 31 Jan 2022 04:57:29 -0800
-Message-ID: <CALNEt4UnSyOv0w6qFPwNUpLJ3KqKvBDZph3p8-7tLqAonsx0GA@mail.gmail.com>
-Subject: Fund released
-To:     undisclosed-recipients:;
+References: <YfMpk7DM9zA7NfmI@debian> <CAAq0SUnNtS8b3419egw-WVH8ic+MxH8oQELm1K0s4iqt8pYKnQ@mail.gmail.com>
+In-Reply-To: <CAAq0SUnNtS8b3419egw-WVH8ic+MxH8oQELm1K0s4iqt8pYKnQ@mail.gmail.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Mon, 31 Jan 2022 12:58:28 +0000
+Message-ID: <CADVatmM5=sZLaT8SWcvmFtcMhVJsuVCu66nCnhL6i2p062ZhXA@mail.gmail.com>
+Subject: Re: Regression with 5021d709b31b ("tty: serial: Use fifo in 8250
+ console driver")
+To:     Wander Costa <wcosta@redhat.com>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+Hi Wander,
 
-I am Mr. Dominic Amar. A computer scientist with UBA Bank. I am 28
-years old, just started work with UBA Bank. I came across your file
-which was marked X and your released Disk painted RED, I took time to
-study it and found out that you have paid VIRTUALLY all fees and
-certificate but the fund has not been release to you. The most
-annoying thing is that they cannot tell you the truth that on no
-account will they ever release the fund to you, Please this is like a
-Mafia setting in Benin Republic; you may not understand it because you
-are not from this country.
+On Fri, Jan 28, 2022 at 12:31 PM Wander Costa <wcosta@redhat.com> wrote:
+>
+> On Thu, Jan 27, 2022 at 8:24 PM Sudip Mukherjee
+> <sudipm.mukherjee@gmail.com> wrote:
+> >
+> > Hi Wander,
+> >
 
-The only thing I will need to release this fund to you is a special
-HARD DISK we call it HD120 GIG. I will buy two of it, recopy your
-information, destroy the previous one, and punch the computer to
-reflect in your bank within 24 banking hours. I will clean up the
-tracer and destroy your old file, after which I will run away from
-Benin Republic to meet with you.
+<snip>
 
-If you are interested kindly get in touch with me immediately, You
-should send to me your convenient phone numbers for easy communication
-and also re-confirm your banking details, so that there won't be any
-mistake.
+>
+> Thanks for the report. As Greg said, the patch has been reverted. In
+> the meantime, could you please apply this patch and report if the
+> problem still happens:
 
-Regards,
-Mr. Dominic Amar.
+Thanks for the patch, and I can confirm after applying the patch the
+problem is not there any more.
+Log at https://lava.qa.codethink.co.uk/scheduler/job/602
+
+
+-- 
+Regards
+Sudip

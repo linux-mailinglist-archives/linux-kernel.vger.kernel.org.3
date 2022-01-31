@@ -2,298 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960094A3E3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2244A3E3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348035AbiAaHc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 02:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348127AbiAaHcu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:32:50 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B516AC06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 23:32:49 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id i62so37645921ybg.5
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 23:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=TGUXorpSDAKgj0QsOiF2A9Dkgmv8D/UrY5CjKLgD/kA=;
-        b=PhjzCwvHcmYXp6njfB6W+ohC4edEQdVQGgFYuJx/9gDRmzmuB+axox3UttISgp4Np9
-         4ppBzzrcfGZcXJw2GlBJSUFBYaytsPPW1la6fD4K256PgZMR2BOrdnlIsQaMjq19Ykcv
-         +rH7UjL4iwTXDNlBTmGl4Y2gTiyfqNUG1WFwaOI73H//vqDWw7RsqRTnDalHYroYcS3o
-         F9nteZLTVHUbf/BJrMVdmnFfZWudeTl/0C/BkGtqE7QCdvt26A0mc1OPhEWD5XdrNzG3
-         IJxuUWfT4UbwvnBq5ckclF8+kcaA6WfNVngDNiqe0TGjFg8ofalYcOtLtmqXWA/cWbTL
-         A+Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=TGUXorpSDAKgj0QsOiF2A9Dkgmv8D/UrY5CjKLgD/kA=;
-        b=KJOu92vlMSbDh+ADmPfbPoAD7VU7ImHFk9/oUwlYcDH1pitfrFcNZeB8UYVY85ERy/
-         yajqJ4LWujZDVKLV+Mx+zEy0rQg9+NNZ/dii/JDXwZBM+VOwlQmtMiTGQwmwHYombBLa
-         m2LXohcv9UOHodM1J0OZXhVhK32Odxm6I+/j37Jvjjr8mfPg/UHTbN++/WWgO2G4XViM
-         Hal+hsfu7hYZvvP1piaj+fUd2G9bmrKZF9lIZY9NZ3pOoTc9nnSO6ODbPAzSlgcOmVh1
-         vCFJZzUK9n7Bk6wiTg+Vnu7DCydc+GeSM/H8D6QUNQHi0IhVl20s0rpmVMGGgCnkjvWE
-         njiA==
-X-Gm-Message-State: AOAM531idbsRHMEZuDF541/W7S6rKhgzaTPqoCcbU9wBHKDOhgaHIrpQ
-        QF8em6yeSynL/bV/Sr8A92x5UTY05wRk0mag84akFg==
-X-Google-Smtp-Source: ABdhPJyl2aP+0wY4wB+SmxvfCUrtBeMO9Ao11MdNpzPUCnLAZg/hzDhtnWtrflFHBxJnUwjqSz5dqOZ8+puYdLfJJI0=
-X-Received: by 2002:a25:97c4:: with SMTP id j4mr29211965ybo.108.1643614368772;
- Sun, 30 Jan 2022 23:32:48 -0800 (PST)
+        id S1348134AbiAaHdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 02:33:44 -0500
+Received: from mga01.intel.com ([192.55.52.88]:14643 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347972AbiAaHdd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 02:33:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643614413; x=1675150413;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rWUUeMylw7j7eadB8PUS30HUTqec98BR59N33yGXgSM=;
+  b=hWZIwvDkVgjy/4FHaDWlj1ybIZoikOuTf+vhib0kviuBw67QrwULNZoD
+   SFn3c2FTAIgkjbZhxk1ZHdX6p5zNQGUwaV3FLEMRp4CF/buogOxHzUQ7W
+   nAuK8vDUYVpOneBE0xImosUv3kIgJInDNT1n/H8W5LudztYg1k8SpSIor
+   C2TzuqmIqWeD5G0TyE1yrE6OSYSMDHOxgL+BX3vqSdf4ysNHAiIoaknuO
+   lYl1Du080CBzQyIhA5r8Xuh8fjvH36VkJ9O2aUB+3WEQGOijSI8ETMmNp
+   XNjOs4AB1h/wjEKReuawntqu1CSEw2I2O6ezD572EPiY4k5djX27zbPjY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="271881420"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="271881420"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 23:33:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="675654496"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 30 Jan 2022 23:33:26 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 09:33:25 +0200
+Date:   Mon, 31 Jan 2022 09:33:25 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] ACPI: device_sysfs: Add sysfs support for _PLD
+Message-ID: <YfeQxYNzWltRQ7mq@kuha.fi.intel.com>
+References: <20220128180832.2329149-1-wonchung@google.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 31 Jan 2022 13:02:37 +0530
-Message-ID: <CA+G9fYt4JnOkZeRu9ASXbgbDE+C8AYua+UzBuvWi9sUtEXd7Lw@mail.gmail.com>
-Subject: [next] mips: cavium-octeon/octeon-memcpy.o] Error 1
-To:     linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220128180832.2329149-1-wonchung@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build errors noticed on Linux next 20220131 mips with
-cavium_octeon_defconfig
-  - mips  cavium_octeon_defconfig gcc-8 - FAILED
-  - mips  cavium_octeon_defconfig gcc-10 - FAILED
+On Fri, Jan 28, 2022 at 06:08:32PM +0000, Won Chung wrote:
+> When ACPI table includes _PLD fields for a device, create a new file
+> (pld) in sysfs to share _PLD fields.
+> 
+> Signed-off-by: Won Chung <wonchung@google.com>
+> ---
+>  Documentation/ABI/testing/sysfs-bus-acpi | 53 ++++++++++++++++++++++++
+>  drivers/acpi/device_sysfs.c              | 42 +++++++++++++++++++
+>  2 files changed, 95 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/ABI/testing/sysfs-bus-acpi
+> index 58abacf59b2a..3a9c6a4f4603 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-acpi
+> +++ b/Documentation/ABI/testing/sysfs-bus-acpi
+> @@ -96,3 +96,56 @@ Description:
+>  		hardware, if the _HRV control method is present.  It is mostly
+>  		useful for non-PCI devices because lspci can list the hardware
+>  		version for PCI devices.
+> +
+> +What:		/sys/bus/acpi/devices/.../pld
+> +Date:		Jan, 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		This attribute contains the output of the device object's
+> +		_PLD control method, if present. This information provides
+> +		details on physical location of a port.
+> +
+> +		Description on each _PLD field from ACPI specification:
+> +
+> +		===============	============================================
+> +		GROUP_TOKEN	Unique numerical value identifying a group.
+> +		GROUP_POSITION	Identifies this device connection point’s
+> +				position in the group.
+> +		USER_VISIBLE	Set if the device connection point can be
+> +				seen by the user without disassembly.
+> +		DOCK		Set if the device connection point resides
+> +				in a docking station or port replicator.
+> +		BAY		Set if describing a device in a bay or if
+> +				device connection point is a bay.
+> +		LID		Set if this device connection point resides
+> +				on the lid of laptop system.
+> +		PANEL		Describes which panel surface of the system’s
+> +				housing the device connection point resides on:
+> +				0 - Top
+> +				1 - Bottom
+> +				2 - Left
+> +				3 - Right
+> +				4 - Front
+> +				5 - Back
+> +				6 - Unknown (Vertical Position and Horizontal
+> +				Position will be ignored)
+> +		HORIZONTAL_	0 - Left
+> +		POSITION	1 - Center
+> +				2 - Right
+> +		VERTICAL_	0 - Upper
+> +		POSITION	1 - Center
+> +				2 - Lower
+> +		SHAPE		Describes the shape of the device connection
+> +				point.
+> +				0 - Round
+> +				1 - Oval
+> +				2 - Square
+> +				3 - Vertical Rectangle
+> +				4 - Horizontal Rectangle
+> +				5 - Vertical Trapezoid
+> +				6 - Horizontal Trapezoid
+> +				7 - Unknown - Shape rendered as a Rectangle
+> +				with dotted lines
+> +				8 - Chamfered
+> +				15:9 - Reserved
+> +		===============	===============================================
+> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> index d5d6403ba07b..8d4df5fb1c45 100644
+> --- a/drivers/acpi/device_sysfs.c
+> +++ b/drivers/acpi/device_sysfs.c
+> @@ -509,6 +509,40 @@ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(status);
+>  
+> +static ssize_t pld_show(struct device *dev, struct device_attribute *attr,
+> +			char *buf)
+> +{
+> +	struct acpi_device *acpi_dev = to_acpi_device(dev);
+> +	acpi_status status;
+> +	struct acpi_pld_info *pld;
+> +
+> +	status = acpi_get_physical_device_location(acpi_dev->handle, &pld);
+> +	if (ACPI_FAILURE(status))
+> +		return -ENODEV;
+> +
+> +	return sprintf(buf, "GROUP_TOKEN=%u\n"
+> +		"GROUP_POSITION=%u\n"
+> +		"USER_VISIBLE=%u\n"
+> +		"DOCK=%u\n"
+> +		"BAY=%u\n"
+> +		"LID=%u\n"
+> +		"PANEL=%u\n"
+> +		"HORIZONTAL_POSITION=%u\n"
+> +		"VERTICAL_POSITION=%u\n"
+> +		"SHAPE=%u\n",
+> +		pld->group_token,
+> +		pld->group_position,
+> +		pld->user_visible,
+> +		pld->dock,
+> +		pld->bay,
+> +		pld->lid,
+> +		pld->panel,
+> +		pld->horizontal_position,
+> +		pld->vertical_position,
+> +		pld->shape);
+> +}
+> +static DEVICE_ATTR_RO(pld);
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' cavium_octeon_defconfig
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S: Assembler messages:
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:187: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:188: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:189: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:190: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:192: Error:
-unrecognized opcode `ptr 9b,s_exc_p16u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:193: Error:
-unrecognized opcode `ptr 9b,s_exc_p15u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:194: Error:
-unrecognized opcode `ptr 9b,s_exc_p14u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:195: Error:
-unrecognized opcode `ptr 9b,s_exc_p13u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:196: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:197: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:198: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:199: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:200: Error:
-unrecognized opcode `ptr 9b,s_exc_p12u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:201: Error:
-unrecognized opcode `ptr 9b,s_exc_p11u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:202: Error:
-unrecognized opcode `ptr 9b,s_exc_p10u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:204: Error:
-unrecognized opcode `ptr 9b,s_exc_p9u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:206: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:207: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:208: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:209: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:210: Error:
-unrecognized opcode `ptr 9b,s_exc_p8u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:211: Error:
-unrecognized opcode `ptr 9b,s_exc_p7u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:212: Error:
-unrecognized opcode `ptr 9b,s_exc_p6u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:213: Error:
-unrecognized opcode `ptr 9b,s_exc_p5u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:214: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:215: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:216: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:217: Error:
-unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:218: Error:
-unrecognized opcode `ptr 9b,s_exc_p4u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:219: Error:
-unrecognized opcode `ptr 9b,s_exc_p3u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:220: Error:
-unrecognized opcode `ptr 9b,s_exc_p2u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:221: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:235: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:236: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:237: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:238: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:240: Error:
-unrecognized opcode `ptr 9b,s_exc_p8u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:241: Error:
-unrecognized opcode `ptr 9b,s_exc_p7u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:242: Error:
-unrecognized opcode `ptr 9b,s_exc_p6u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:243: Error:
-unrecognized opcode `ptr 9b,s_exc_p5u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:244: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:245: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:246: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:247: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:248: Error:
-unrecognized opcode `ptr 9b,s_exc_p4u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:249: Error:
-unrecognized opcode `ptr 9b,s_exc_p3u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:250: Error:
-unrecognized opcode `ptr 9b,s_exc_p2u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:251: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:262: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:263: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:264: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:265: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:267: Error:
-unrecognized opcode `ptr 9b,s_exc_p4u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:268: Error:
-unrecognized opcode `ptr 9b,s_exc_p3u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:269: Error:
-unrecognized opcode `ptr 9b,s_exc_p2u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:270: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:285: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:288: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:295: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:298: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:305: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:310: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:324: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:325: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:327: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:328: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:329: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:330: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:331: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:332: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:334: Error:
-unrecognized opcode `ptr 9b,s_exc_p4u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:335: Error:
-unrecognized opcode `ptr 9b,s_exc_p3u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:336: Error:
-unrecognized opcode `ptr 9b,s_exc_p2u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:337: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:347: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:348: Error:
-unrecognized opcode `ptr 9b,l_exc_copy'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:350: Error:
-unrecognized opcode `ptr 9b,s_exc_p1u'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:366: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:366: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:367: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:367: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:368: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:368: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:369: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:369: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:370: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:370: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:371: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:371: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:372: Error:
-unrecognized opcode `ptr 9b,l_exc'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:375: Error:
-unrecognized opcode `ptr 9b,s_exc_p1'
-/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:399: Error:
-unrecognized opcode `ptr 9b,l_exc'
-make[3]: *** [/builds/linux/scripts/Makefile.build:411:
-arch/mips/cavium-octeon/octeon-memcpy.o] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [/builds/linux/scripts/Makefile.build:572:
-arch/mips/cavium-octeon] Error 2
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [/builds/linux/Makefile:1965: arch/mips] Error 2
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-meta data:
------------
-    git describe: next-20220131
-    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-    git_sha: 887a333c44eb67973622e530e43cd5e4cf9af927
-    target_arch: mips
-    kconfig: cavium_octeon_defconfig
-    toolchain: gcc-10
-
-Build log:
--------------
-https://builds.tuxbuild.com/24RxfqNGrh0Y5VPGCY9Ixeo6ejf/
-
-Steps to reproduce:
---------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig cavium_octeon_defconfig
+Why not have a pld group (directory) and a separate attribute file for
+each field?
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+thanks,
+
+-- 
+heikki

@@ -2,210 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F02524A4CD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E76C4A4CD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380755AbiAaRMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:12:54 -0500
-Received: from mga01.intel.com ([192.55.52.88]:19764 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380753AbiAaRMo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:12:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643649164; x=1675185164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eLSPOn9wNcCBpQFdvY19r2J/AzPe22vJrtaej4/hWbc=;
-  b=cz+fv2v9LiLlfLRv+h+H1+k9WvGslV494SX84Hk0uOa+uAIESDic40R0
-   r2Lwf5Nsrkkuq9btjEMgAulz+VI0eAptLIdYzpHqp66oPCUPwMDwPcy+G
-   y/XrUogMth/OH65ol9vyPB+/1qHNxxXlwQm8g0d801+8/eU/XHRn7fd75
-   iuWOkMxjS9QO0Gp0vpFD91x4rdJyQ6cBS/1W9bt8SFOdJUDi/BvHEmw25
-   slXnD/AgNhkBBgOMiZ05PhOEqlGO9fmeJ5aKDCxANZxc7ViJxeEBlqn1U
-   vfnJR86wBBVYADiXXnNQwlNEsOpyLtUPO+4aSaSMbPH2KKTQ8NHU7XScO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="271981357"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="271981357"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 09:12:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="496992439"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2022 09:12:40 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEaEJ-000SBT-VE; Mon, 31 Jan 2022 17:12:39 +0000
-Date:   Tue, 1 Feb 2022 01:11:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Emil Renner Berthing <kernel@esmil.dk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [esmil:visionfive 57/62]
- drivers/soc/sifive/sifive_l2_cache.c:158:17: error: implicit declaration of
- function 'writeq'; did you mean 'writel'?
-Message-ID: <202202010133.vBBeLOsj-lkp@intel.com>
+        id S1380761AbiAaRNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:13:23 -0500
+Received: from mail-eopbgr80074.outbound.protection.outlook.com ([40.107.8.74]:57353
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1380741AbiAaRNV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 12:13:21 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jRg2EkTjP9NlZnPSWJunVKGKS3HrE8CwNuWAnLwOLKfrEjlAf0c2E7/aDpuRztf0kK70IOMlwpD9HUYH0OnyjdX1NBhDfFqS7z7lU7PmDIL7dkK15+oYulYtOFuxBlpepwhxymuOeqx4OFYHRq3xqyk6H/XqnuhWBZYbLb/xglhBg/qJpLzge1CGGQzK8gNq0WGx0uuvkShC0zubnJbhWD1GYwpw+4c7a487FyUvD+CHub9BV7Xzi3REtw/M46pAT8YbUv9UypRf8eb0kub1jlG4BtBCmBFLrBSnSJYotoUzjG64njiEWNJ8BACEHXRK1VbbZZFK+VdPgwXk04uflA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r13/LMTjYYU+INPuxyZKt5O+ymNh5bv87qwzG82D5Sk=;
+ b=kcIWqQn9lriRdNHvr6HAiyd4F2OMdkLFro8DSEgf1FQhAp585sIbPToTtWW3HVo/9Fxeaz2XsT04cvsM6VmNtyBlf42AATQd7eRQ9lLRifL5kWnx2GO27mpUFvRS4CPfwjEfzKq6Fv77VN5DrgnmTOTySYhxytB/oN7AdVzHcre3haEmiVo88qfGzlhJoZV7c5Xh/FXo1NGz8ZfVdVNA1h+ogpJr8TLHYhQ35QVYXN+jHvT5vJ02EN6nP1j/UxAJ3nvvam0DhnIdUMaYbpi1L35QBXUVkyR7ivn5CevV1s/TcRg89dPGh2JR/am2HhnvGfaLybN2Tx0c2cp7AzJNAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r13/LMTjYYU+INPuxyZKt5O+ymNh5bv87qwzG82D5Sk=;
+ b=bRkdTkSVsm6Rka2F0kkwDFFoqAit5niwrBLIARsatH4di5XZrjCkUK9FgwzN8Dz3jOpqfnuNvL3KsR0Sck7iqNCtQ4xo3zXUOSAf/3zaOGR2kiB6zY3gPPqbwWeCgmoVzcOiN+Yl20n5G1zuSxl6uzBAOyhPVC/tfGsUZ5IItcs=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (20.177.49.83) by
+ PAXPR04MB9156.eurprd04.prod.outlook.com (10.141.87.237) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4930.21; Mon, 31 Jan 2022 17:13:19 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::f4d7:e110:4789:67b1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::f4d7:e110:4789:67b1%5]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
+ 17:13:19 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "katie.morris@in-advantage.com" <katie.morris@in-advantage.com>
+Subject: Re: [RFC v6 net-next 4/9] net: mdio: mscc-miim: add ability to
+ externally register phy reset control
+Thread-Topic: [RFC v6 net-next 4/9] net: mdio: mscc-miim: add ability to
+ externally register phy reset control
+Thread-Index: AQHYFVv0asWdnHBRe0uYWzT4HTrVl6x9YPYA
+Date:   Mon, 31 Jan 2022 17:13:19 +0000
+Message-ID: <20220131171318.ryule6y6ffowbrsm@skbuf>
+References: <20220129220221.2823127-1-colin.foster@in-advantage.com>
+ <20220129220221.2823127-5-colin.foster@in-advantage.com>
+In-Reply-To: <20220129220221.2823127-5-colin.foster@in-advantage.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c27f38de-b6f8-4d72-3603-08d9e4dcfa3e
+x-ms-traffictypediagnostic: PAXPR04MB9156:EE_
+x-microsoft-antispam-prvs: <PAXPR04MB9156E2EF510A942421F0229EE0259@PAXPR04MB9156.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DKnT3pl6T8zGiFaKOt4J552Ecvg22/WQHt3Yul6HvazwKH4Nqqp/rf2YQEmj2AwxW/aKtee6lYFMrA2W+I/gmYFwHJWi7CAtrIaeXWRU3WgJYw7bZlo3bvTPOoIzMHZxQx7wxMBEsV3zNpvUl4KZE13NCD1EPOwGCyl0T00qUxNKf1t7+frmGbyAJrQM35Eus5bmgUJ7+bRXSDX4CJaR1IMFdWWHaK3dkKGw/BRxdj3dhPvlD3v0HouqApKadjUDI2R+lVoNX8FS3B0GYmWFipbe2OgkDIUb10AiANI0q9D5l0q75XVf5X6EX2nn+S00O6pGpj3jSHBdNCkx3o9ARaTmreLjuKjXqmoCqgc7tuByHZfYvluS7aEInBMIZzA/8lU+J9CPycbbuo7X9n1CnPmQUcdO89tA2UcgNPag0gLk9vLHB7h/qmPWdkZkqrle3m9Hhz99FbGKUlKpgTgVqdwNxQzImBSGbUdzn/GoWLigIyJUbZM9Z3gwS6WU8KIxf3cSDIaG0qGPQtPY32VAxDIKD35c4PTA6rWJaGkyjrhqnqCyvUvfxjpP8swzYvUqgev3jXnhEkLuaE4agJgjgAlQTpCa9eVysKyNqIuCpV7nfwSOcvm1rig3aCgcoqQAHID/0rjBMVr1Bq8C+tnp3N9WX/Z5MNyYwWf/flgXZu50LPhTYgkJdhFxk5f/1HDTPzysPeB2L39XhNci9cdsJw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(38100700002)(91956017)(5660300002)(4744005)(44832011)(7416002)(4326008)(6506007)(8676002)(86362001)(6512007)(9686003)(64756008)(66946007)(76116006)(66446008)(66476007)(66556008)(8936002)(2906002)(38070700005)(54906003)(26005)(71200400001)(33716001)(83380400001)(6916009)(316002)(122000001)(1076003)(508600001)(186003)(6486002)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YiQfq5lUmQnEiB4hh0obnfxUFJBSX+Tkr06h5L0qZTUpzkrOtbjboD8O3BWd?=
+ =?us-ascii?Q?RwMg4sKKiszYJ693N1Y2Thw/7AIYgZFlUI46zPmdIBLnLRJFtnAWDrb0kXLz?=
+ =?us-ascii?Q?71HqrgSSTTO7irqUiqjOlax08rRuY3n1a/rLYt5R73YSTaqd/FmdWcEqD2TY?=
+ =?us-ascii?Q?m3PGhDkoecmrdyVfqECnIvO/Z34LbaeMFq4Tjf1KpN8vI3IpI+zaiNObgKQT?=
+ =?us-ascii?Q?Id6XzvQL8wX8gPsfAxPhDSfuGyNYRPwjk1CDCv78oA6mLMKyK/mRhQscGE+s?=
+ =?us-ascii?Q?06eBcmQmHpazT79LGlCcBC0I4TZ/f3PkUFckd1cO303jmj9QvsMR0tKTYtai?=
+ =?us-ascii?Q?1SM2vU7Xzne46IayWcpEUY1Qv2RCJ3hGkrmcovT5sMv00qdgijh9fQCBGevO?=
+ =?us-ascii?Q?7i9wgdJxG1bdjMuox6iu59ebOkZxiL9IwNHz4I5taU2ThppLIOQVqZef+yhW?=
+ =?us-ascii?Q?MRw6rrcDaxYdOPuIkp+XnLXvUOSpeCyormZP/ZaWDHMrvwmcFimLhFjZkEZC?=
+ =?us-ascii?Q?SBJZYw9nX/8orcCxhVTKbUAyo5lSgbjkDTXedDmFG+Elj2QRe0Z3ffF5hNTV?=
+ =?us-ascii?Q?wCWsHi4LwK8bn8w40aYOIIH45N4eRbO85kzmUPlIwJQJS5fuHPVNEEiCPZM9?=
+ =?us-ascii?Q?jVI07q3JPjY5nN/x2okkm9U7j3P+SQKGY8o0/KgjiTgy1DdQxhNCDbASGcI9?=
+ =?us-ascii?Q?Z7dctiW8dTwBPDODsgBpebivp49GTOaV8lrVNinx8gq0iQEKMJW8ityjhb/p?=
+ =?us-ascii?Q?sHXdrYR+MmfV8EpCGm1wyP058gsLVoyhj1fUfGroMJCq0rUCgo+NAefwciFW?=
+ =?us-ascii?Q?A1hX8xSWyyRSNjrCnpMwjq0NC6EorFfavW/d+rh5zDjyxnHQH2E36j9U4yH8?=
+ =?us-ascii?Q?rQ+xUw+iB8IfEZ13+a0E/ag8BT4gDURQ9uAmHVgU8KCktfSipTp+30uGz5id?=
+ =?us-ascii?Q?ApojcNm2Pt7zErf7ncYvxzkm4sHgrxmNhaD3XyErkezCISbSf6z/yAa0G6q4?=
+ =?us-ascii?Q?rTovpCM+qMQ0YotSmuRDKisokapIkLMWmgujVDfKi1m4L2BxGL2d49+pIX3q?=
+ =?us-ascii?Q?zwGdATqaVqUuvOBenn2p9uP081mIdLlbNqZf5xR7c90ChGNZRZK6qFi9bQuK?=
+ =?us-ascii?Q?APQFt7+qfsu9j+IoSmcEf1x3jdNpXHcYPt/4tKBnsvkySND/6S4qrQOvu9ng?=
+ =?us-ascii?Q?Eozmit5r3XGvCF4sy7X9FRbfxpHcoQwa2/4Q0BENRg2g/wZIyuPlIg3Po+/n?=
+ =?us-ascii?Q?t41NaeyDJTMG2V2dXl/AJis91RzO8h3R58vSffo8jqM551mft7+sOXc1zc74?=
+ =?us-ascii?Q?KIems3T0057lN4I5y3yzUSOFS8adu8zgne2XKyEMvx2EN7ei6dIqkc3m7fcb?=
+ =?us-ascii?Q?j/fpc+hdTqRq2sv/ctbFAZgXwnQKn7hwpldXWZVw8lrP0Q7ivJMjTB+8hK8f?=
+ =?us-ascii?Q?JVY+3J8SJuS3Xw/krMnqR0ON7pOcWJ/9F7aWpiJ1RhWPIKT3obSix2GAC4G5?=
+ =?us-ascii?Q?e5H5A3CSgO93M9oed2mq/1UerQXlJpmLeejmvUfGRZL2Nqajrv5u+52oInuf?=
+ =?us-ascii?Q?ENI+NSfKyWMDkc6w2uEYb2oB+ikJaAjXhTAbGxESef+Xk+zu3sOFGxLN4De/?=
+ =?us-ascii?Q?HJ+ZYOjsBQTwgyz/VN+8op4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F72DD5EB1572B4438E08098CBC088719@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c27f38de-b6f8-4d72-3603-08d9e4dcfa3e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 17:13:19.0861
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fkZvpP/n4FmVBz45pB5KXzmqYA1tr/p2J/qoegnNjB4Aps/UqMwvZuTTxQDv+XtG0D/+VFmgRkK0QmS9XSV2Ng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9156
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Emil,
+On Sat, Jan 29, 2022 at 02:02:16PM -0800, Colin Foster wrote:
+> @@ -257,15 +260,14 @@ static int mscc_miim_probe(struct platform_device *=
+pdev)
+>  		}
+>  	}
+> =20
+> -	ret =3D mscc_miim_setup(dev, &bus, "mscc_miim", mii_regmap, 0);
+> +	ret =3D mscc_miim_setup(&pdev->dev, &bus, "mscc_miim", mii_regmap, 0,
+> +			      phy_regmap, 0);
+>  	if (ret < 0) {
+>  		dev_err(dev, "Unable to setup the MDIO bus\n");
+>  		return ret;
+>  	}
+> =20
+>  	miim =3D bus->priv;
 
-First bad commit (maybe != root cause):
+You left this variable set but not used. Please delete it.
 
-tree:   https://github.com/esmil/linux visionfive
-head:   8c758048edfd830baceb991167131c9d55786544
-commit: 8ee233dc08b97b5cde863d4be4f9b331ac586963 [57/62] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
-config: riscv-randconfig-r003-20220131 (https://download.01.org/0day-ci/archive/20220201/202202010133.vBBeLOsj-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/8ee233dc08b97b5cde863d4be4f9b331ac586963
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 8ee233dc08b97b5cde863d4be4f9b331ac586963
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/starfive/ drivers/soc/sifive/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/soc/sifive/sifive_l2_cache.c: In function 'sifive_l2_flush64_range':
->> drivers/soc/sifive/sifive_l2_cache.c:158:17: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-     158 |                 writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-         |                 ^~~~~~
-         |                 writel
-   cc1: some warnings being treated as errors
---
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from include/linux/io.h:11,
-                    from include/linux/dma-buf-map.h:9,
-                    from include/linux/dma-buf.h:16,
-                    from drivers/gpu/drm/starfive/starfive_drm_gem.c:5:
-   drivers/gpu/drm/starfive/starfive_drm_gem.c: In function 'starfive_drm_gem_alloc_dma':
->> include/linux/kern_levels.h:5:25: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 2 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/drm/drm_print.h:494:9: note: in expansion of macro 'printk'
-     494 |         printk##once(KERN_##level "[" DRM_NAME "] " fmt, ##__VA_ARGS__)
-         |         ^~~~~~
-   include/linux/kern_levels.h:14:25: note: in expansion of macro 'KERN_SOH'
-      14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
-         |                         ^~~~~~~~
-   include/drm/drm_print.h:494:22: note: in expansion of macro 'KERN_INFO'
-     494 |         printk##once(KERN_##level "[" DRM_NAME "] " fmt, ##__VA_ARGS__)
-         |                      ^~~~~
-   include/drm/drm_print.h:498:9: note: in expansion of macro '_DRM_PRINTK'
-     498 |         _DRM_PRINTK(, INFO, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~
-   drivers/gpu/drm/starfive/starfive_drm_gem.c:132:9: note: in expansion of macro 'DRM_INFO'
-     132 |         DRM_INFO("dma_addr = 0x%llx, size = %lu\n", starfive_obj->dma_addr, obj->size);
-         |         ^~~~~~~~
->> include/linux/kern_levels.h:5:25: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/drm/drm_print.h:494:9: note: in expansion of macro 'printk'
-     494 |         printk##once(KERN_##level "[" DRM_NAME "] " fmt, ##__VA_ARGS__)
-         |         ^~~~~~
-   include/linux/kern_levels.h:14:25: note: in expansion of macro 'KERN_SOH'
-      14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
-         |                         ^~~~~~~~
-   include/drm/drm_print.h:494:22: note: in expansion of macro 'KERN_INFO'
-     494 |         printk##once(KERN_##level "[" DRM_NAME "] " fmt, ##__VA_ARGS__)
-         |                      ^~~~~
-   include/drm/drm_print.h:498:9: note: in expansion of macro '_DRM_PRINTK'
-     498 |         _DRM_PRINTK(, INFO, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~
-   drivers/gpu/drm/starfive/starfive_drm_gem.c:132:9: note: in expansion of macro 'DRM_INFO'
-     132 |         DRM_INFO("dma_addr = 0x%llx, size = %lu\n", starfive_obj->dma_addr, obj->size);
-         |         ^~~~~~~~
-   At top level:
-   drivers/gpu/drm/starfive/starfive_drm_gem.c:17:42: warning: 'mmap_mem_ops' defined but not used [-Wunused-const-variable=]
-      17 | static const struct vm_operations_struct mmap_mem_ops = {
-         |                                          ^~~~~~~~~~~~
---
-   drivers/gpu/drm/starfive/starfive_drm_crtc.c: In function 'starfive_crtc_atomic_flush':
->> drivers/gpu/drm/starfive/starfive_drm_crtc.c:204:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     204 |         int ret;
-         |             ^~~
-   drivers/gpu/drm/starfive/starfive_drm_crtc.c: In function 'starfive_crtc_atomic_enable':
-   drivers/gpu/drm/starfive/starfive_drm_crtc.c:221:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     221 |         int ret;
-         |             ^~~
-   drivers/gpu/drm/starfive/starfive_drm_crtc.c: At top level:
->> drivers/gpu/drm/starfive/starfive_drm_crtc.c:272:5: warning: no previous prototype for 'starfive_crtc_create' [-Wmissing-prototypes]
-     272 | int starfive_crtc_create(struct drm_device *drm_dev,
-         |     ^~~~~~~~~~~~~~~~~~~~
---
-   drivers/gpu/drm/starfive/starfive_drm_vpp.c: In function 'vpp1_isr_handler':
->> drivers/gpu/drm/starfive/starfive_drm_vpp.c:590:13: warning: variable 'intr_status' set but not used [-Wunused-but-set-variable]
-     590 |         u32 intr_status = 0;
-         |             ^~~~~~~~~~~
-
-
-vim +158 drivers/soc/sifive/sifive_l2_cache.c
-
-a967a289f169695 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  126  
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  #ifdef CONFIG_SIFIVE_L2_FLUSH
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  {
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  	unsigned long line;
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  	if(!l2_base) {
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  		return;
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  	}
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	/* TODO: if (len == 0), skipping flush or going on? */
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  	if(!len) {
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  		return;
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  	}
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  142  
-b4d19807f25f01a drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
-b4d19807f25f01a drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
-b4d19807f25f01a drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  145  
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	/* make sure the address is in the range */
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  148  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  149  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-e53ad16756cae6c drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  150  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		     start, len);
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  		return;
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  	}
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	mb();	/* sync */
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	for (line = start; line < start + len;
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  157  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @158  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  		mb();
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  	}
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  }
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  #endif
-601a2f4e945153e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  164  
-
-:::::: The code at line 158 was first introduced by commit
-:::::: 601a2f4e945153ebae8645596eda50ea39369c88 sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-
-:::::: TO: Tom <support@vamrs.com>
-:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> -	miim->phy_regs =3D phy_regmap;
+> -	miim->phy_reset_offset =3D 0;
+> =20
+>  	ret =3D of_mdiobus_register(bus, dev->of_node);
+>  	if (ret < 0) {=

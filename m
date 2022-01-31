@@ -2,100 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FC94A4FC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8620B4A4FC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377672AbiAaTzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:55:01 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:43643 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231670AbiAaTzA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:55:00 -0500
-Received: from localhost.localdomain (unknown [77.235.169.38])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S1377724AbiAaT41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:56:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42322 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229627AbiAaT4Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 14:56:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 35B3A61E6478B;
-        Mon, 31 Jan 2022 20:54:55 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ata: ahci: Skip 200 ms debounce delay for Marvell 88SE9235
-Date:   Mon, 31 Jan 2022 20:54:20 +0100
-Message-Id: <20220131195421.15317-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.34.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9B8C61453;
+        Mon, 31 Jan 2022 19:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7729C340E8;
+        Mon, 31 Jan 2022 19:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643658983;
+        bh=vU4Z/wxnuRJijqxNOIHjuu8s4/C9L0yvdnHKwgU/Lig=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RxhqrfzYfJwLsScPRrzN9VIqEgpbePmoKCxsIvS6Gmg4GtYq3chsMT3Jv3LZsnVDZ
+         GvOS/fpXYqAF5cG1MLX/qy/Cl5ym4bsep7Btn+JMwUnUFL9VgalicU/KlgKMFRK15d
+         hU8tMdAZ79IMXUVNDbT+JgYuQj/zit2yXQmA1hU74e+DBVhfIPoNLXseCiFntecTL7
+         HAZ+gEvcAACWRXmEZY3TL8UAFOCC74q6A6fStETnuGP1FvlmHvCX/OZtPiw01cpf2U
+         x35AEY5F9Jh2qVhfCsnC2GFDXSZrULfpy3ynjKTqe94H0hxFcWBar88t3UfhGOhClL
+         qf3CzaYlBV3LA==
+Date:   Mon, 31 Jan 2022 11:56:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v4 net-next 0/2] use bulk reads for ocelot statistics
+Message-ID: <20220131115621.50296adf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220128200549.1634446-1-colin.foster@in-advantage.com>
+References: <20220128200549.1634446-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
-not needed for the Marvell 88SE9235.
+On Fri, 28 Jan 2022 12:05:47 -0800 Colin Foster wrote:
+> Ocelot loops over memory regions to gather stats on different ports.
+> These regions are mostly continuous, and are ordered. This patch set
+> uses that information to break the stats reads into regions that can get
+> read in bulk.
+> 
+> The motiviation is for general cleanup, but also for SPI. Performing two
+> back-to-back reads on a SPI bus require toggling the CS line, holding,
+> re-toggling the CS line, sending 3 address bytes, sending N padding
+> bytes, then actually performing the read. Bulk reads could reduce almost
+> all of that overhead, but require that the reads are performed via
+> regmap_bulk_read.
 
-    $ lspci -nn -s 0021:0e:00.0
-    0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Ltd. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11)
+This got into Changes Requested state in patchwork, I'm not sure why.
 
-So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
-
-Currently, without this patch (with 200 ms delay), device probe for ata1
-takes 485 ms:
-
-    [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000100 irq 39
-    [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000180 irq 39
-    [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000200 irq 39
-    [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000280 irq 39
-    […]
-    [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
-    [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
-    [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.841796] ata2.00: configured for UDMA/133
-    [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.846043] ata1.00: configured for UDMA/133
-
-With this patch (no delay) device probe for ata1 takes 273 ms:
-
-    [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000100 irq 39
-    [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000180 irq 39
-    [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000200 irq 39
-    [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000280 irq 39
-    […]
-    [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
-    [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
-    [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.900070] ata1.00: configured for UDMA/133
-    [    3.900166] ata2.00: configured for UDMA/133
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
- drivers/ata/ahci.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index ab5811ef5a53..edca4e8fd44e 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	  .driver_data = board_ahci_yes_fbs },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
- 	  .driver_data = board_ahci_yes_fbs },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
-+	  .driver_data = board_ahci_no_debounce_delay },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 642L */
- 	  .driver_data = board_ahci_yes_fbs },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 644L */
--- 
-2.34.1
-
+I revived it and will apply it by the end of the day PST if nobody
+raises comments.

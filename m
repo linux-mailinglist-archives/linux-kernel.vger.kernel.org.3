@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5A24A3CB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 04:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AF14A3CBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 04:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357500AbiAaDZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 22:25:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:53890 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236781AbiAaDZT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 22:25:19 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92B49ED1;
-        Sun, 30 Jan 2022 19:25:18 -0800 (PST)
-Received: from [10.163.44.9] (unknown [10.163.44.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 303A33F774;
-        Sun, 30 Jan 2022 19:25:15 -0800 (PST)
-Subject: Re: [RFC V1 02/31] mm/mmap: Clarify protection_map[] indices
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        hch@infradead.org, akpm@linux-foundation.org
-References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
- <1643029028-12710-3-git-send-email-anshuman.khandual@arm.com>
- <YfKSn6u3YsErB/Ky@kernel.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <904f9623-0f02-9530-1d66-017baa082349@arm.com>
-Date:   Mon, 31 Jan 2022 08:55:12 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S237101AbiAaD33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 22:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229885AbiAaD31 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 22:29:27 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267B4C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 19:29:27 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id v6so10227511vsp.11
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 19:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5gp9PmRzu/IxyYft6SYlBpTpSszCTP5U4t3M+O26jr4=;
+        b=PaR1uNkQZP0iGLt4ce+4ed1NQHwrr+c1aEmloMitshrmoWTY1g0e1Ocrz1HeTUTQxg
+         m5lN/Ow+Mx4MCfi/834vkOzyx37bh5aCfiLaldVP42Q+NzM8+O6LaqRZYai1XiaObJvI
+         r+cM3ZNu9xU4WV5dDOLgIeozWFMQI7qy1ND5nGG0GBGI2tnwIrxJybn/o1j1NsKjqeky
+         y+Od3VC7iFb8Gy+fXU9GgQ99ip3+aHDDHbN+v2VsZQiJBM2CSAkcCkaqAt4x2/5r8yLC
+         GTPFaNcjRUD7KEUdlmlbT62/9Z9o4gFX7XwR8apBriNMJOdP1KzFdef5hUOzqE+q1v/U
+         /VZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5gp9PmRzu/IxyYft6SYlBpTpSszCTP5U4t3M+O26jr4=;
+        b=sDuKVrtKpF2sRItYRGNx8SmehZqUWiSXS80uerl0dw7S+s84WuuVBsQifLo9BQ/yaX
+         4QKRkPIVdXxRjx+8ePYd1S1sIB+XL6PiEmcIZu1tAkLhLnI9RJ58a0zvp68JawU69I39
+         4vGTTQfy5LfZO0wU37CXdSaQKYX6L9aa3CFkoExNcXFNxWESgOtgOimF8QSaOAoRWXfr
+         nXsJiMuAa8eHYkA+KDejOsJf3zVCedP+8q3QoOKefPf41aHsigkPVINz7fIXsMqN1Oq4
+         o4rz+Voq/m3u3SGjaHrE/dqZU7X6yJVkQr5nFSPskIlJwwutUSbG/L6QjomNMtWOA6pv
+         +kFw==
+X-Gm-Message-State: AOAM532oDtws7PDlSpjlAoCmg5/WSgJ01VDI9NA5441igsGW5MtV6bUf
+        e9Bj7zIqlLF55GYdMEMkujq67t9XE6Xdkv4z4zw=
+X-Google-Smtp-Source: ABdhPJwEgxYM/vDk4eQ30yrze/+6OxxpGM0rK/oFuhM3RVGYWteGE/wFSsfyc4N7OrvJLoaTTawS3AZSkjmE1YxP1U4=
+X-Received: by 2002:a67:d98e:: with SMTP id u14mr7730604vsj.2.1643599765578;
+ Sun, 30 Jan 2022 19:29:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YfKSn6u3YsErB/Ky@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:612c:2814:b0:281:5ab6:d8fe with HTTP; Sun, 30 Jan 2022
+ 19:29:24 -0800 (PST)
+Reply-To: pastor.johnvincent11@gmail.com
+From:   Mr Johnson Robert <location.westernunion2@gmail.com>
+Date:   Sun, 30 Jan 2022 19:29:24 -0800
+Message-ID: <CABXgaoKRv5mpHmAhBPDSToq_dequTNhXUy3+_S=LwSUXCmSKTA@mail.gmail.com>
+Subject: Contact my Secretary Pastor John
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Dear Partner
 
+It is my pleasure to reach you after our unsuccessful attempt on our
+business transaction, Well i just want to use this medium to thank you
+very much for your earlier assistance to help me in receiving the
+funds without any positive outcome.
 
-On 1/27/22 6:09 PM, Mike Rapoport wrote:
-> On Mon, Jan 24, 2022 at 06:26:39PM +0530, Anshuman Khandual wrote:
->> protection_map[] maps vm_flags access combinations into page protection
->> value as defined by the platform via __PXXX and __SXXX macros. The array
->> indices in protection_map[], represents vm_flags access combinations but
->> it's not very intuitive to derive. This makes it clear and explicit.
-> 
-> The protection_map is going to be removed in one of the next patches, why
-> bother with this patch at all?
-This makes the transition from protection_map[] into __vm_get_page_prot()
-more intuitive, where protection_map[] gets dropped. This helps platforms
-(first ones subscribing ARCH_HAS_VM_GET_PAGE_PROT before this drop) create
-/formulate the required switch case elements in their vm_get_page_prot().
+Contact Reverend Pastor John /e-mail: (  pastor.johnvincent11@gmail.com  )
+Call and What's App Phone Number: +229-53812455
 
-The existing protection_map[] is not clear in demonstrating how exactly
-the vm_flags combination is mapped into page protection map. This helps
-clarify the underlying switch before we move on defining it on platforms.
+I have kept the ATM VISA CARD  with Him at amount worth of US$ 1.5
+million for your compensation and you are expecting to send him your
+full address via mail to deliver your card to you. you are required to
+send him the following infromation as listed ,so that he will direct
+you how you Atm Visa Card can been deliver to your destination.
 
->  
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: linux-mm@kvack.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  mm/mmap.c | 18 ++++++++++++++++--
->>  1 file changed, 16 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/mmap.c b/mm/mmap.c
->> index 1e8fdb0b51ed..254d716220df 100644
->> --- a/mm/mmap.c
->> +++ b/mm/mmap.c
->> @@ -102,8 +102,22 @@ static void unmap_region(struct mm_struct *mm,
->>   *								x: (yes) yes
->>   */
->>  pgprot_t protection_map[16] __ro_after_init = {
->> -	__P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
->> -	__S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
->> +	[VM_NONE]				= __P000,
->> +	[VM_READ]				= __P001,
->> +	[VM_WRITE]				= __P010,
->> +	[VM_READ|VM_WRITE]			= __P011,
->> +	[VM_EXEC]				= __P100,
->> +	[VM_EXEC|VM_READ]			= __P101,
->> +	[VM_EXEC|VM_WRITE]			= __P110,
->> +	[VM_EXEC|VM_READ|VM_WRITE]		= __P111,
->> +	[VM_SHARED]				= __S000,
->> +	[VM_SHARED|VM_READ]			= __S001,
->> +	[VM_SHARED|VM_WRITE]			= __S010,
->> +	[VM_SHARED|VM_READ|VM_WRITE]		= __S011,
->> +	[VM_SHARED|VM_EXEC]			= __S100,
->> +	[VM_SHARED|VM_READ|VM_EXEC]		= __S101,
->> +	[VM_SHARED|VM_WRITE|VM_EXEC]		= __S110,
->> +	[VM_SHARED|VM_READ|VM_WRITE|VM_EXEC]	= __S111
->>  };
->>  
->>  #ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
->> -- 
->> 2.25.1
->>
->>
-> 
+1. Your full name....................
+2. Your Occupation................
+3. Your address......................
+4. Your phone number...........
+5. Age:..................
+6. Nationality:.........
+7. whatsapp Number.......
+
+Kind Regards
+
+Yours Sincerely,
+
+Mr Johnson Robert

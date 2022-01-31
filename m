@@ -2,128 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 745654A5357
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C576F4A5369
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiAaXiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:38:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29954 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229629AbiAaXiE (ORCPT
+        id S229663AbiAaXle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229649AbiAaXld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:38:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643672284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C3CTm7Bs/ix/5LXGiIgLCJVvM0GoznV6Mmk0dN1zWSQ=;
-        b=SW47u5qHU4hHVvCqDnwNl/HjsK2T7+dO/efjQ7pXGyt6ROVViNalbFD9N4vRbsm+qSHy1K
-        NIDLunq3XYtzgfSNnLCAvk/JJ7kYz8JQSnrwW9HHtJIfOwC05rvcntgTDFI9a8UPdI6sAA
-        ihHvWupobdx9ypQ/fUKSMfby4Fbp05A=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-tRsHfguJPbyHH_uN9eYTqQ-1; Mon, 31 Jan 2022 18:38:02 -0500
-X-MC-Unique: tRsHfguJPbyHH_uN9eYTqQ-1
-Received: by mail-wm1-f69.google.com with SMTP id i132-20020a1c3b8a000000b0035399bb7e85so213408wma.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:38:02 -0800 (PST)
+        Mon, 31 Jan 2022 18:41:33 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDD2C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:41:33 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id i16-20020a056830011000b005a3cc8d20fbso8157514otp.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:41:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=77+HksFUsOVcQq4vStx69pmlR18iG3QVLa69zKDYps4=;
+        b=uQdQSAwL1YeEVGJSOPaPCVEG/3wmqggEuVKUbB9OFFsPRRHhVz8JZKHZjc07pIVpOi
+         Ek1u9DV2dUy7xC/UzDn1QK7jC6YgCEkHeTEvOVRUdYCRuMjBjcnJFGlKC8Rrx+gubFxF
+         Eqy5cSB4Su6os7S0hrIr/tBUVy8BWLbgTlf1GrY2lbybA/e38QT1/rkOE5jQySKeh9XT
+         3tN0bv0VhEsNdcVvUVqQay38rKc1W71owR0dHmFo0v+ZSHZbiJBG9Hv9NczqX/vdY+f2
+         9KgT4dlI0/sXFcLFM+ugaNckp53N9uteAaQP8CvO25EMa8iqsS+JMRrONSuHi+l6LkDN
+         jbvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C3CTm7Bs/ix/5LXGiIgLCJVvM0GoznV6Mmk0dN1zWSQ=;
-        b=AHfzJiSqTvHAMwWucEsOtthG2zUIGd4DNfqkj/HsRnM71BgkxoQSFEiBsaJZyARPo2
-         Dp2v6XBUcKnSvWTCG8ek3P5Wpe3pgjF1gvZNWx1jEOhUNd9KrWogrnGYEa1JeK7mfIBl
-         6Aoh6RH+UKMZ5/xi77WjvM+vfAwkA+mg6LXc+Tv/Qacuz0fQM9Vjy4uwpS3ZUGRujGRq
-         cekQ6594XQ1Hb6DlDi4w+1cu+zA7UdwLSIMpVa8RbGrxa06IujbBGH571X6G6yPT/ilu
-         rEIyEwPLxKChTT3vSm4sk25K1OQGuVcqusGhMmM7S/QN1BVbt5zXp+0KSAxLC3I05AQw
-         rZmQ==
-X-Gm-Message-State: AOAM5300pWbL5YgKvk0PQ7yL7A+u53Bmh1Fpq5x+BNKLmIKpwNqIktbh
-        +MqJBr/7gPQgJC87sBQT7rVz+27j+KbtShKpxJNMlFmH8qQYv4HYVJEwYtALn5Dhe2L0qXVNcKC
-        RdA6MOSvxTjlhyTqUG7AddRP2
-X-Received: by 2002:a05:6000:15c5:: with SMTP id y5mr19192568wry.94.1643672281298;
-        Mon, 31 Jan 2022 15:38:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyVQSH23aLGjRqSo4FwmBefiCFx1sZwod/Bbj1r+ksyBNqib6t/bplSkWRXeqqfzdh6Ym8gbQ==
-X-Received: by 2002:a05:6000:15c5:: with SMTP id y5mr19192561wry.94.1643672281120;
-        Mon, 31 Jan 2022 15:38:01 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id 8sm603298wmg.0.2022.01.31.15.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 15:38:00 -0800 (PST)
-Message-ID: <0924dfdc-a8c3-5e0f-9362-6c27811b4bd6@redhat.com>
-Date:   Tue, 1 Feb 2022 00:37:59 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=77+HksFUsOVcQq4vStx69pmlR18iG3QVLa69zKDYps4=;
+        b=45g5nBEzRfTBnpZ50Y4z+oSv5kYDAoGvjTfXs/Qhe1bwHqVe+o6+8ox56OFYen78/6
+         iHOsn3tK5Fq8l9+HbVUV7nUAHc3SL/TREgRNy0OmOSyB9NHnR8GOPpoqD4dv4t3E9/+I
+         mPE5rTXT7IhkKL/aykOay4ajyd9BEIuysuWPuk44bzAuj4LpDdssA2rfrJWIMl6oAmLI
+         Q4nItgTb4MbLVJq+a3MAjGWVmcMRRs3RyU5Y0FlpvfPm5NHlXBsTvoUbCLF3HDTeBs3G
+         pohkLMWkci5TtdFf6AWTo34oXYEbXSKJpnTD4YNwSy1bqzhUhc07HuTcUSUd/dRQlaf2
+         WItQ==
+X-Gm-Message-State: AOAM531t7F06cVJPC+l3cLRQXsqXrr/fo6sEcj5mt0AANue2FDqNEKkP
+        QUhM1MLcviQ0kxp9xvdOJHnAyg==
+X-Google-Smtp-Source: ABdhPJyXXdx4oXfebwfsRRFl5sKct5LDYu4LmbFA/XD8KJAw54e2YBKoUrfdgSQv2xXJwBCLXLqiMg==
+X-Received: by 2002:a9d:4794:: with SMTP id b20mr12766231otf.361.1643672492848;
+        Mon, 31 Jan 2022 15:41:32 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id y19sm3630574oti.49.2022.01.31.15.41.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 15:41:32 -0800 (PST)
+Date:   Mon, 31 Jan 2022 17:41:30 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: add qcom,tcsr bindings
+Message-ID: <Yfhzqvrj6bIPmV2S@builder.lan>
+References: <20220122001609.15904-1-ansuelsmth@gmail.com>
+ <20220122001609.15904-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <YfhM97cVH3+lJKg0@ravnborg.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YfhM97cVH3+lJKg0@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220122001609.15904-2-ansuelsmth@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 21:56, Sam Ravnborg wrote:
-> Hi Javier,
-> On Mon, Jan 31, 2022 at 09:12:20PM +0100, Javier Martinez Canillas wrote:
->> This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
->> SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
->>
->> Using the DRM fb emulation, all the tests from Geert Uytterhoeven's fbtest
->> (https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git) passes:
+On Fri 21 Jan 18:16 CST 2022, Ansuel Smith wrote:
+
+> Add qcom,tcsr-ipq8064 and qcom,tcsr-ipq4019 Documentation for the
+> tcsr present in ipq8064 and ipa4019 required to configure and
+> set various peripherals present in the SoC.
 > 
-> Impressed how fast you did this!
-> Saw the picture you posted a link to on irc - nice.
->
-
-Thanks :)
-
-What's impressive is how many helper functions the DRM core has, so typing a
-new DRM driver is something that could be achieved in a few hours. Which was
-one of my goals with this experiment, to understand how much effort would be
-for a developer with no prior experience with DRM to port a fbdev driver.
- 
->> Patch #3 adds the driver. The name ssd1307 was used instead of ssd130x
->> (which would be more accurate) to avoid confusion for users who want to
->> migrate from the existing ssd1307fb fbdev driver.
-> Looking forward the name ssd130x would make more sense. There is only so
-> many existing users and a potential of much more new users.
-> So in my color of the world the naming that benefits the most users
-> wins.
->
-
-Agreed. That's also what Andy suggested and makes a lot of sense to me.
- 
-> 	Sam
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/soc/qcom/qcom,tcsr-ipq4019.yaml  | 93 +++++++++++++++++++
+>  .../bindings/soc/qcom/qcom,tcsr-ipq8064.yaml  | 47 ++++++++++
+>  2 files changed, 140 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
+> new file mode 100644
+> index 000000000000..3a82ccbb6588
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq4019.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm Top Control and Status Registers binding for IPQ4019
+> +
+> +maintainers:
+> +  - Ansuel Smith <ansuelsmth@gmail.com>
+> +
+> +description: |
+> +  This binding describes the Qualcomm Top Control and Status Registers, used
+> +  for accessing configuration and mux settings for a variety of peripherals
+> +  for ipq4019.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: qcom,tcsr-ipq4019
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  qcom,usb-hsphy-mode-select:
+> +    description: Select usb hsphy mode for ipq4019
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Why isn't this driven by the USB node, where I presume you otherwise
+need to duplicate this decision?
 
+Is this platform not capable of OTG?
+
+> +    enum:
+> +      - 'host'
+> +      - 'device'
+> +
+> +  qcom,ess-interface-select:
+> +    description: Select ess interface mode for ipq4019
+> +    enum:
+> +      - 'psgmii'
+> +      - 'rgmii5'
+> +      - 'rmii0'
+> +      - 'rmii1'
+> +      - 'rmii0_rmii1'
+> +      - 'rgmii4'
+> +
+> +  qcom,wifi-glb-cfg-enable-axid:
+> +    description: Enable AXI master bus Axid translating
+> +                  to confirm all txn submitted by order for ipq4019
+> +    type: boolean
+> +
+> +  qcom,wifi-glb-cfg-socslv-mode:
+> +    description: Select wifi socslv mode for ipq4019
+> +                  snoc use SNOC socslv_wxi_bvalid.
+> +                  local use locally generate socslv_wxi_bvalid for performance.
+> +    enum:
+> +      - 'snoc'
+> +      - 'local'
+> +
+> +  qcom,wifi_noc_memtype_m0_m2:
+> +    description: Configure special wifi memory type needed for
+> +                  some IPQ40xx devicesfor ipq4019
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    tcsr@194b000 {
+> +      compatible = "qcom,tcsr-ipq4019", "syscon";
+
+There's a single "tcsr" register block at 0x1937000 of size 0x21000.
+The binding should describe that entire block, not convenient pieces of
+it.
+
+> +      reg = <0x194b000 0x100>;
+> +      qcom,usb-hsphy-mode-select = "host";
+> +    };
+> +
+> +    tcsr@1949000 {
+> +      compatible = "qcom,tcsr-ipq4019", "syscon";
+> +      reg = <0x1949000 0x100>;
+> +      qcom,wifi-glb-cfg-enable-axid;
+> +      qcom,wifi-glb-cfg-socslv-mode = "local";
+> +    };
+> +
+> +    ess_tcsr@1953000 {
+> +      compatible = "qcom,tcsr-ipq4019", "syscon";
+> +      reg = <0x1953000 0x1000>;
+> +      qcom,ess-interface-select = "psgmii";
+> +    };
+> +
+> +    tcsr@1957000 {
+> +      compatible = "qcom,tcsr-ipq4019", "syscon";
+> +      reg = <0x1957000 0x100>;
+> +      qcom,wifi_noc_memtype_m0_m2;
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
+> new file mode 100644
+> index 000000000000..4ccc0bfccec5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq8064.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm Top Control and Status Registers binding for IPQ8064
+> +
+> +maintainers:
+> +  - Ansuel Smith <ansuelsmth@gmail.com>
+> +
+> +description: |
+> +  This binding describes the Qualcomm Top Control and Status Registers, used
+> +  for accessing configuration and mux settings for a variety of peripherals
+> +  for ipq8064.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: qcom,tcsr-ipq8064
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  qcom,usb-ctrl-select:
+> +    description: Select usb3 ctrl type for ipq8064
+> +    enum:
+> +      - 'p0'
+> +      - 'p1'
+> +      - 'dual'
+
+Again, it seems reasonable to get this form the dwc3 node, rather than
+duplicating the configuration.
+
+Regards,
+Bjorn
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    tcsr: syscon@1a400000 {
+> +      compatible = "qcom,tcsr-ipq8064", "syscon";
+> +      reg = <0x1a400000 0x100>;
+> +      qcom,usb-ctrl-select = "dual";
+> +    };
+> +
+> +...
+> -- 
+> 2.33.1
+> 

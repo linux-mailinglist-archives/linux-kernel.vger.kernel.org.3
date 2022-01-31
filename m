@@ -2,111 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4717A4A4FD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45D24A4FDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343872AbiAaUKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S1378049AbiAaUKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiAaUKP (ORCPT
+        with ESMTP id S229534AbiAaUKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:10:15 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2FC061714;
-        Mon, 31 Jan 2022 12:10:15 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id q8so14439538oiw.7;
-        Mon, 31 Jan 2022 12:10:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=md82yNcHzb9hUMdO0D3wtsJDnKHtblS8Ove1AcpVwL4=;
-        b=oXTOBWrpW2gl4tIhPPYXSYCdP3/cyVxxxJjLIU/H6PIvlisO2smazTA843hl8ym1lu
-         UQ7nFj5dP4YilaIX47t5/UUo3/rF1VOovK3M3N2EaKiJGlRHmJX3+FjlpirLm3l1VzQJ
-         rTInEmWelM97XSI0pjbfRPDkUZWpKI/Dx/4W61B0pNtP215V96YLYxf9HE8o5Kuboq3Z
-         NIit3Xta78XA6PRj0xsV3mDcMaibY61xh8H5qnodjaHfE+ADK0mi2swPIdYKxgmuVmXr
-         yMBQfMmLflXEcCe0vR8b9sX+XFzGMouCZTpVbj0PuFA78c5fM8NvMXqdOtzsD4X4snjM
-         EA7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=md82yNcHzb9hUMdO0D3wtsJDnKHtblS8Ove1AcpVwL4=;
-        b=cMFAB+MOAzCT6M1T3tWMF6FduCB+S5wbtnRvUWBY/KID8MS6abpH4V0xP1DraTPsL9
-         xENOacZXbdo3xRUSM9Q+6+S/ncOZVvqC4+cKcVRXAzEbNNCHRSfgTgjJETiNuIz8p5+m
-         8NAUCV0lIIlX5TxhPtMFOR31EaYik0PzZW2hHr+IrANvfm3Fm+vPbePo/IFrrHXOWmYB
-         AtgyHhvJkF6HDxhSgdCgKpTsec79PPsv+xCMQWaH2h9q1wAzAw6FCjMZli3VjLJnOllR
-         oA2xs4lC535jMWg78vwBGRIMDfZOJfhX7lwAkHqSlbuEv9T4bJcrk0j2z2jyr13b9n6V
-         S2YQ==
-X-Gm-Message-State: AOAM533nCrcqHOoJbyWAHsai8wFTlMSF7RA2HZU7TDit3IAv2kJ9a82v
-        jJvSrih4ETqA3YotkPUfuVagiuYp1/pWRQ==
-X-Google-Smtp-Source: ABdhPJxGKaP8CEQPw0ggAidZHCs0odovFzUCuaCNznTdQv7o1VKhCNXQn2SGRGodc/39NDolZDqXOA==
-X-Received: by 2002:a05:6808:1443:: with SMTP id x3mr13850490oiv.40.1643659814832;
-        Mon, 31 Jan 2022 12:10:14 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t21sm8177727otq.81.2022.01.31.12.10.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 12:10:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
-Date:   Mon, 31 Jan 2022 12:10:12 -0800
+        Mon, 31 Jan 2022 15:10:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5972C061714;
+        Mon, 31 Jan 2022 12:10:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28BE161483;
+        Mon, 31 Jan 2022 20:10:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CED1C340E8;
+        Mon, 31 Jan 2022 20:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643659831;
+        bh=db3019ER3yHKwYvfr1vDrkC0pSuWFsBGKycjXxPwonk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b0BjUSE02/Lk9W7l6kNn8GCVBmeFqqRvSdMJB07B0CUhVQyPW1NURhoB+dnhBiU+W
+         JBtWhDM36yQbPoBdEN96aO+suz6byn7zIJ6Eq6jO2bocu5K/blX9MyRaU/oaLJB92y
+         FIro4AT9qeG6/0KFZv/ZvSlzM9COMAqqAY9MkSpSUmHGDdcSwzONr1LAsQAXgUAgEo
+         9wi374x5enP+6A2x50TIBWRdDa34SvB37UqbV2NfGYIcWDP1OykvHH5AlrFFKGZbyU
+         I7Zfogab/rvVHRDnpTn5D9o0mHdsCIV5+zCngZSy+ddRUPNUUW3TOomCt/K7JOMzTc
+         ljRqLy0jmlm9w==
+Date:   Mon, 31 Jan 2022 12:10:27 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Saeed Mahameed <saeed@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mark Einon <mark.einon@gmail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        David Awogbemila <awogbemila@google.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Simon Horman <simon.horman@corigine.com>,
+        Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
+        rafal@milecki.pl, Edwin Peer <edwin.peer@broadcom.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Liming Sun <limings@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Omkar Kulkarni <okulkarni@marvell.com>,
+        Shai Malin <smalin@marvell.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
+        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs
+ to y
+Message-ID: <20220131121027.4fe3e8dc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <30ed8220-e24d-4b40-c7a6-4b09c84f9a1f@gmail.com>
+References: <20220131172450.4905-1-saeed@kernel.org>
+        <20220131095905.08722670@hermes.local>
+        <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
+        <20220131183540.6ekn3z7tudy5ocdl@sx1>
+        <30ed8220-e24d-4b40-c7a6-4b09c84f9a1f@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/4] hwmon: (sch56xx-common) Replace msleep() with
- usleep_range()
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220131193137.3684-1-W_Armin@gmx.de>
- <20220131193137.3684-4-W_Armin@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220131193137.3684-4-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 11:31, Armin Wolf wrote:
-> msleep(1) will often sleep more than 20ms, slowing down sensor
-> and watchdog reads/writes. Use usleep_range() as recommended
-> in timers-howto.rst to fix that.
+On Mon, 31 Jan 2022 10:40:38 -0800 Florian Fainelli wrote:
+> >> And changing the defaults means all defconfigs must be updated first,
+> >> else the user's configs will end up without drivers needed.
+> >>  
+> > 
+> > As I understand correctly, at least for most common net drivers, having 
+> > NET_VENDOR_XYZ=y doesn't actually build anything, we have flags per
+> > module for each vendor and those are defaulted to N.  
 > 
-> Tested on a Fujitsu Esprimo P720.
+> Right, but once you start hiding NET_VENDOR_DRIVER_XYZ under a 
+> NET_VENDOR_XYZ Kconfig symbol dependency, if NET_VENDOR_XYZ is not set 
+> to Y, then you have no way to select NET_VENDOR_DRIVER_XYZ and so your 
+> old defconfig breaks.
+
+To be clear do we actually care about *old* configs or *def* configs?
+
+Breaking defconfigs seems bad, but I don't think we can break
+reasonable oldconfigs at this point?
+
+> >> It might make sense to tune some of the defaults (i.e. change to
+> >> "default y if ARCH_*") for drivers with clear platform dependencies.
+> >>  
+> > 
+> > either set hard default to 'n' or just keep it as is, anything else is just
+> > more confusion.  
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
->   drivers/hwmon/sch56xx-common.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-> index 0172aa16dc0c..f66e1ed4b1aa 100644
-> --- a/drivers/hwmon/sch56xx-common.c
-> +++ b/drivers/hwmon/sch56xx-common.c
-> @@ -139,7 +139,7 @@ static int sch56xx_send_cmd(u16 addr, u8 cmd, u16 reg, u8 v)
->   	/* EM Interface Polling "Algorithm" */
->   	for (i = 0; i < max_busy_polls + max_lazy_polls; i++) {
->   		if (i >= max_busy_polls)
-> -			msleep(1);
-> +			usleep_range(1, 2);
+> Maybe the rule should go like this: any new driver vendor defaults to n, 
+> and existing ones remain set to y, until we deprecate doing that and 
+> switching them all off to n by 5.18?
 
-This replaces a 1-millisecond sleep with a 1-2 microsecond sleep.
-
-Are you sure this is what you want to do ? Given that task switches typically
-take several microseconds, the new code is pretty much identical to a busy
-loop, and the maximum sleep time is reduced significantly.
-
-Guenter
-
->   		/* Read Interrupt source Register */
->   		val = inb(addr + 8);
->   		/* Write Clear the interrupt source bits */
-> --
-> 2.30.2
-> 
-
+I'd be afraid that given the work of fixing up defconfigs is
+non-trivial we may end up never switching old drivers. And then we'd
+have a semi-random soup of defaults :(

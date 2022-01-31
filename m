@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3B24A4351
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B294A4358
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiAaLUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:20:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58138 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358682AbiAaLKm (ORCPT
+        id S1358847AbiAaLVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:21:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43790 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359064AbiAaLKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:42 -0500
+        Mon, 31 Jan 2022 06:10:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3414CB82A5C;
-        Mon, 31 Jan 2022 11:10:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A52C340EE;
-        Mon, 31 Jan 2022 11:10:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A41761163;
+        Mon, 31 Jan 2022 11:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449FDC36B1C;
+        Mon, 31 Jan 2022 11:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627439;
-        bh=5KbiUx6X5HZdRKu9eFEQMOeG+LLKQ/WIBXG4G8PLDGc=;
+        s=korg; t=1643627442;
+        bh=16Eq/lpWWXdcNk6xXNLp8lLAp5bdW0/R1zVW2JRPpCc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tw6AOTu+M4I0mUxNOE/dR5nREBOUykPsK8z0GKU2vh/JQVGlA4iaQgZWTv9teLoc5
-         K9jspf6ICSKvj9jiZdOiAJXuerFio+SxYMSx4PpyKcmauyOjkRsgBCs9IU3zAWE4AM
-         M2moHqK9QHS8D5op7KATc6XIE8BQVqBeNsB1JJQA=
+        b=hwW7dUWRDOayDivazjq7ZIDca2MzRfNm3QhM84zy1vW69j7AevN6GMlVoT0f4Y/S7
+         nPRHeFk3deg3QFVk1dM8U6i6h1anNz7mzT6+6W+4YOgYCl+UTmnp5Fup6YlqBjGjw0
+         LI8cNra9fYq/qIKHRODnEWs4qyjY4s/tQA/T1XJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guangwu Zhang <guazhang@redhat.com>,
-        Maurizio Lombardi <mlombard@redhat.com>,
-        John Meneghini <jmeneghi@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 084/171] scsi: bnx2fc: Flush destroy_work queue before calling bnx2fc_interface_put()
-Date:   Mon, 31 Jan 2022 11:55:49 +0100
-Message-Id: <20220131105232.870875250@linuxfoundation.org>
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 085/171] ipv6_tunnel: Rate limit warning messages
+Date:   Mon, 31 Jan 2022 11:55:50 +0100
+Message-Id: <20220131105232.910437581@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 References: <20220131105229.959216821@linuxfoundation.org>
@@ -47,146 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Meneghini <jmeneghi@redhat.com>
+From: Ido Schimmel <idosch@nvidia.com>
 
-commit 847f9ea4c5186fdb7b84297e3eeed9e340e83fce upstream.
+commit 6cee105e7f2ced596373951d9ea08dacc3883c68 upstream.
 
-The bnx2fc_destroy() functions are removing the interface before calling
-destroy_work. This results multiple WARNings from sysfs_remove_group() as
-the controller rport device attributes are removed too early.
+The warning messages can be invoked from the data path for every packet
+transmitted through an ip6gre netdev, leading to high CPU utilization.
 
-Replace the fcoe_port's destroy_work queue. It's not needed.
+Fix that by rate limiting the messages.
 
-The problem is easily reproducible with the following steps.
-
-Example:
-
-  $ dmesg -w &
-  $ systemctl enable --now fcoe
-  $ fipvlan -s -c ens2f1
-  $ fcoeadm -d ens2f1.802
-  [  583.464488] host2: libfc: Link down on port (7500a1)
-  [  583.472651] bnx2fc: 7500a1 - rport not created Yet!!
-  [  583.490468] ------------[ cut here ]------------
-  [  583.538725] sysfs group 'power' not found for kobject 'rport-2:0-0'
-  [  583.568814] WARNING: CPU: 3 PID: 192 at fs/sysfs/group.c:279 sysfs_remove_group+0x6f/0x80
-  [  583.607130] Modules linked in: dm_service_time 8021q garp mrp stp llc bnx2fc cnic uio rpcsec_gss_krb5 auth_rpcgss nfsv4 ...
-  [  583.942994] CPU: 3 PID: 192 Comm: kworker/3:2 Kdump: loaded Not tainted 5.14.0-39.el9.x86_64 #1
-  [  583.984105] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
-  [  584.016535] Workqueue: fc_wq_2 fc_rport_final_delete [scsi_transport_fc]
-  [  584.050691] RIP: 0010:sysfs_remove_group+0x6f/0x80
-  [  584.074725] Code: ff 5b 48 89 ef 5d 41 5c e9 ee c0 ff ff 48 89 ef e8 f6 b8 ff ff eb d1 49 8b 14 24 48 8b 33 48 c7 c7 ...
-  [  584.162586] RSP: 0018:ffffb567c15afdc0 EFLAGS: 00010282
-  [  584.188225] RAX: 0000000000000000 RBX: ffffffff8eec4220 RCX: 0000000000000000
-  [  584.221053] RDX: ffff8c1586ce84c0 RSI: ffff8c1586cd7cc0 RDI: ffff8c1586cd7cc0
-  [  584.255089] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffb567c15afc00
-  [  584.287954] R10: ffffb567c15afbf8 R11: ffffffff8fbe7f28 R12: ffff8c1486326400
-  [  584.322356] R13: ffff8c1486326480 R14: ffff8c1483a4a000 R15: 0000000000000004
-  [  584.355379] FS:  0000000000000000(0000) GS:ffff8c1586cc0000(0000) knlGS:0000000000000000
-  [  584.394419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [  584.421123] CR2: 00007fe95a6f7840 CR3: 0000000107674002 CR4: 00000000000606e0
-  [  584.454888] Call Trace:
-  [  584.466108]  device_del+0xb2/0x3e0
-  [  584.481701]  device_unregister+0x13/0x60
-  [  584.501306]  bsg_unregister_queue+0x5b/0x80
-  [  584.522029]  bsg_remove_queue+0x1c/0x40
-  [  584.541884]  fc_rport_final_delete+0xf3/0x1d0 [scsi_transport_fc]
-  [  584.573823]  process_one_work+0x1e3/0x3b0
-  [  584.592396]  worker_thread+0x50/0x3b0
-  [  584.609256]  ? rescuer_thread+0x370/0x370
-  [  584.628877]  kthread+0x149/0x170
-  [  584.643673]  ? set_kthread_struct+0x40/0x40
-  [  584.662909]  ret_from_fork+0x22/0x30
-  [  584.680002] ---[ end trace 53575ecefa942ece ]---
-
-Link: https://lore.kernel.org/r/20220115040044.1013475-1-jmeneghi@redhat.com
-Fixes: 0cbf32e1681d ("[SCSI] bnx2fc: Avoid calling bnx2fc_if_destroy with unnecessary locks")
-Tested-by: Guangwu Zhang <guazhang@redhat.com>
-Co-developed-by: Maurizio Lombardi <mlombard@redhat.com>
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-Signed-off-by: John Meneghini <jmeneghi@redhat.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 09c6bbf090ec ("[IPV6]: Do mandatory IPv6 tunnel endpoint checks in realtime")
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Tested-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Amit Cohen <amcohen@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c |   20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+ net/ipv6/ip6_tunnel.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -82,7 +82,7 @@ static int bnx2fc_bind_pcidev(struct bnx
- static void bnx2fc_unbind_pcidev(struct bnx2fc_hba *hba);
- static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
- 				  struct device *parent, int npiv);
--static void bnx2fc_destroy_work(struct work_struct *work);
-+static void bnx2fc_port_destroy(struct fcoe_port *port);
+--- a/net/ipv6/ip6_tunnel.c
++++ b/net/ipv6/ip6_tunnel.c
+@@ -1036,14 +1036,14 @@ int ip6_tnl_xmit_ctl(struct ip6_tnl *t,
  
- static struct bnx2fc_hba *bnx2fc_hba_lookup(struct net_device *phys_dev);
- static struct bnx2fc_interface *bnx2fc_interface_lookup(struct net_device
-@@ -907,9 +907,6 @@ static void bnx2fc_indicate_netevent(voi
- 				__bnx2fc_destroy(interface);
- 		}
- 		mutex_unlock(&bnx2fc_dev_lock);
--
--		/* Ensure ALL destroy work has been completed before return */
--		flush_workqueue(bnx2fc_wq);
- 		return;
- 
- 	default:
-@@ -1215,8 +1212,8 @@ static int bnx2fc_vport_destroy(struct f
- 	mutex_unlock(&n_port->lp_mutex);
- 	bnx2fc_free_vport(interface->hba, port->lport);
- 	bnx2fc_port_shutdown(port->lport);
-+	bnx2fc_port_destroy(port);
- 	bnx2fc_interface_put(interface);
--	queue_work(bnx2fc_wq, &port->destroy_work);
- 	return 0;
- }
- 
-@@ -1525,7 +1522,6 @@ static struct fc_lport *bnx2fc_if_create
- 	port->lport = lport;
- 	port->priv = interface;
- 	port->get_netdev = bnx2fc_netdev;
--	INIT_WORK(&port->destroy_work, bnx2fc_destroy_work);
- 
- 	/* Configure fcoe_port */
- 	rc = bnx2fc_lport_config(lport);
-@@ -1653,8 +1649,8 @@ static void __bnx2fc_destroy(struct bnx2
- 	bnx2fc_interface_cleanup(interface);
- 	bnx2fc_stop(interface);
- 	list_del(&interface->list);
-+	bnx2fc_port_destroy(port);
- 	bnx2fc_interface_put(interface);
--	queue_work(bnx2fc_wq, &port->destroy_work);
- }
- 
- /**
-@@ -1694,15 +1690,12 @@ netdev_err:
- 	return rc;
- }
- 
--static void bnx2fc_destroy_work(struct work_struct *work)
-+static void bnx2fc_port_destroy(struct fcoe_port *port)
- {
--	struct fcoe_port *port;
- 	struct fc_lport *lport;
- 
--	port = container_of(work, struct fcoe_port, destroy_work);
- 	lport = port->lport;
--
--	BNX2FC_HBA_DBG(lport, "Entered bnx2fc_destroy_work\n");
-+	BNX2FC_HBA_DBG(lport, "Entered %s, destroying lport %p\n", __func__, lport);
- 
- 	bnx2fc_if_destroy(lport);
- }
-@@ -2556,9 +2549,6 @@ static void bnx2fc_ulp_exit(struct cnic_
- 			__bnx2fc_destroy(interface);
- 	mutex_unlock(&bnx2fc_dev_lock);
- 
--	/* Ensure ALL destroy work has been completed before return */
--	flush_workqueue(bnx2fc_wq);
--
- 	bnx2fc_ulp_stop(hba);
- 	/* unregister cnic device */
- 	if (test_and_clear_bit(BNX2FC_CNIC_REGISTERED, &hba->reg_with_cnic))
+ 		if (unlikely(!ipv6_chk_addr_and_flags(net, laddr, ldev, false,
+ 						      0, IFA_F_TENTATIVE)))
+-			pr_warn("%s xmit: Local address not yet configured!\n",
+-				p->name);
++			pr_warn_ratelimited("%s xmit: Local address not yet configured!\n",
++					    p->name);
+ 		else if (!(p->flags & IP6_TNL_F_ALLOW_LOCAL_REMOTE) &&
+ 			 !ipv6_addr_is_multicast(raddr) &&
+ 			 unlikely(ipv6_chk_addr_and_flags(net, raddr, ldev,
+ 							  true, 0, IFA_F_TENTATIVE)))
+-			pr_warn("%s xmit: Routing loop! Remote address found on this node!\n",
+-				p->name);
++			pr_warn_ratelimited("%s xmit: Routing loop! Remote address found on this node!\n",
++					    p->name);
+ 		else
+ 			ret = 1;
+ 		rcu_read_unlock();
 
 

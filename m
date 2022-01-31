@@ -2,192 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C7D4A3E1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B924A3E1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357893AbiAaHRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 02:17:03 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:64269 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242021AbiAaHQ5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:16:57 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1643613417; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=fAF4RUanAymGBY1R99T3dcm3q68uxZwCLqf/mQJa+u8=; b=Y4WtT5kO4ex0vjt5stHDgnOr1Td5TqraYc23pm0raTuS2yhik62qGrBwNJyBX1i/luNf+Wau
- oQGE3F+4rs/qSIZMkJIEKiAWzRNPNw3fJaamIvlZXdxhzZkeUKi5Y+8FqxIFviYLFa751K3K
- 2pA5uXNfsBBqg3/WI971kstlffY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 61f78bfed9d8618172194a2f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 31 Jan 2022 07:13:02
- GMT
-Sender: quic_vjitta=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 275A8C4361A; Mon, 31 Jan 2022 07:13:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.0
-Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: vjitta)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 06BBEC4360C;
-        Mon, 31 Jan 2022 07:12:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 06BBEC4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-From:   Vijayanand Jitta <quic_vjitta@quicinc.com>
-To:     robin.murphy@arm.com, joro@8bytes.org, will@kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, vjitta@codeaurora.org,
-        Vijayanand Jitta <quic_vjitta@quicinc.com>
-Subject: [REPOST PATCH v4] iommu: Fix potential use-after-free during probe
-Date:   Mon, 31 Jan 2022 12:42:35 +0530
-Message-Id: <1643613155-20215-1-git-send-email-quic_vjitta@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        id S1357882AbiAaHPU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 31 Jan 2022 02:15:20 -0500
+Received: from mail-eopbgr90089.outbound.protection.outlook.com ([40.107.9.89]:21093
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239774AbiAaHPO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 02:15:14 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BUO1tXczrSNeJECLJHmtcWDF8wQ/nFHSMAozGvwpsGj7zdbGO5gJDrzmtsAL1EPw9wmXnXM203w2q2I96Z+aOGwzFr7Ll3mRoukB0jpBEOGzrlp5Fam5v5owPrAvXJsRj3sNo5ZCuAQVeYT67/1ms/7+/aIKOCEZIUcvP7b7Qv1DIwEWujQYeja3/HcDWCFb7uLKv4tK5Mq1CXHNgCk/qsgJ6amG5kBnSgVKxZ8GTzSKq9109J3lhHBebC0B8fh6WHfydZIIDSaIAXBZhAJSpOLvvPmPcBzhACTOlofrnL7Kdt7N31MJejti0n1lWO1xOnGVEigOL3R53juhGQoA5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ncunWZo1zlaP7DI8kZp9PROBhpSZplPQs/0cNakHQ5Y=;
+ b=IxUiwsDyxI+3EQXqtkrw3UvWPfUL9wAmZsAZcyeoasbt9nOFxWh95zBdR4OWbJeIlARGsy4PwbwmjPIzmUSYJkm9s+ikrjBKvkp+mbYs1H0QK1+ddTRtXeBzPUSYDgRqj8mNZjV2DrO8GxE8kcXrd+NNFWtZGjZmnhJSuwI7MfGxB/80BuMTX8/HXp0aSyauVN/DjnPtLnPDmazURVXkz1r4+14M6f5TPxlhltH2NX53H4O8RtCiDPfOJpkJnZJOy6GgZvGDnUIm40qJwSDNDkyuZnAiuMQWpNq+6ikc8wEXH2sIHu6DKU+K9oq19+OVJeHGID5qBxwWjGTmqvi/dA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRXP264MB0405.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:17::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Mon, 31 Jan
+ 2022 07:15:12 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.020; Mon, 31 Jan 2022
+ 07:15:12 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: [PATCH] powerpc/603: Remove outdated comment
+Thread-Topic: [PATCH] powerpc/603: Remove outdated comment
+Thread-Index: AQHYFnJJstMpforeEU2l/M5eRfg0Ig==
+Date:   Mon, 31 Jan 2022 07:15:12 +0000
+Message-ID: <38b1ffefd2146fa56bf8aa605d476ad9736bbb37.1643613296.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a0444bd4-2b54-4c59-3689-08d9e4896c3e
+x-ms-traffictypediagnostic: MRXP264MB0405:EE_
+x-microsoft-antispam-prvs: <MRXP264MB0405FBCFF8D96A339B633BA3ED259@MRXP264MB0405.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YHBZHgl0J1vAArq8UiK6TZfRRlXGfkC9WVHXmiSB1EeomcStTHRS//VZUNOhRxOg4/KUWDc+rSYVzYt/x9V7YOph9/M31TJdf6kPpgWQR+VN/YAC3xP/KMzY4lRg3zk8BxeD3FQdUmsnmerQ2etLpPgf4goVM1O26btnLLnNcd0LnieUKPPl3mI+82sUKKowSuuXaXwFAQQReBDXaFeL4Q31DbtYRofUOlKKUn0RwyCzjVECn0QEGMrm1Ya/2hS8aLiey8hXGsDvSIRuP6bfmkDiWOm0Apb1hjfLYdou8Nb5qSISK3Ws6oAIxlqc/og6y2UZ9irBty02HYB1KT12MFd4G3Gv0PjSsa9nPbu2y8SsvDp9Yv9b8gslRbxmU0lT8urHrOVTJMS6BrLrdMpKKlCfcoS3UfEZcLD5PK7il/W85QgbsSVuE9msm37E3ZdBG5gpYY6K/+i4DM9W6hFxYOQqoVqfKGKEiiZHeUnPwATBre4hbZ3U9BaL373zttKZNQhyDnAtD8ZBiSlqQVlP2s1thbmWsbx5EZLzf78GUugq+M1lbPEFpetTjm5IEaLaAeTx0Cpa/WlCT8pYWA0+D60oZCzdlSIQsnJEyle1Sf0C+K19VJq6fBkzo2SiukTOkXOyeiBpHPyO6GMMJoMGj3ux3UhSfzGDJovO4EVODjKML3z5FRwPj/+dEuOmY0VoxfAc3fJQn2BhusOzBO+iOQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(91956017)(76116006)(83380400001)(8676002)(44832011)(64756008)(66446008)(66476007)(4326008)(71200400001)(66556008)(186003)(5660300002)(26005)(2616005)(2906002)(66946007)(8936002)(6506007)(6512007)(6486002)(110136005)(54906003)(122000001)(508600001)(38100700002)(86362001)(38070700005)(316002)(36756003)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?pxJTGHiXJ9FCxqKJ409JoWcbc/E9FheKx/u0A4v3tlm+0V3d/xQb7odMpl?=
+ =?iso-8859-1?Q?FlReRKC0j8nYMNHGepgSVz41mob4kkBeK6Ij8/53L8+7MYH6n1a66Z/z7A?=
+ =?iso-8859-1?Q?xWVakEcBQray6KMQ706XdTYVbg31TJ1cDEHXqQ0uxG/zWX59Phx6qxiZRY?=
+ =?iso-8859-1?Q?dMOio7mB+xhJYVFCcai8dXM/cNtgVr1UxccufgUIy73+iyglDSs5vmFFtb?=
+ =?iso-8859-1?Q?MD6+WjiZljz37w9QZkRCDMo+gz6k6Uczuc/CE7F3izIt8b8lPzN8waIr+2?=
+ =?iso-8859-1?Q?8LvjjzHhuudl/xOshT2AqvyJUxTzUSscoYYP9HdVbCFRWidEr47ZgexIZ3?=
+ =?iso-8859-1?Q?KyMZXyf1OLHzxHY2/0GoB1EvLx+94H1EPEDTTV9Mf66ApLRlmBuphpaEFt?=
+ =?iso-8859-1?Q?yaVu+7MYqAzTGiCK119f1svgrVw5aZ3MFSMaoN6TZIE0hxpUt7L85wKd+j?=
+ =?iso-8859-1?Q?cweLmZw+tyG2GchufUm0eTyT26x74BjI1tDzXgbOQ5nSdRmIKEs9sqt1SU?=
+ =?iso-8859-1?Q?0f6tDeFaEzROuYl//PP/4izqjPVzkbSXN1xdioM2YmMFinEYtpshBPyoH3?=
+ =?iso-8859-1?Q?DD118hVmDuPm5puYyb51IdGyTAHq9SDfV1JuGANC+lqKmKfMy7uJH8Z/kj?=
+ =?iso-8859-1?Q?37wRrVsrPpzarehyGQMpZzXSlAV0QFMrP+7qwsk/3e2nCXNrCkGmm+3kUL?=
+ =?iso-8859-1?Q?0nnhry7I5Epav+7mimpSlqyqMEy6a51r+W50pBmkkjm24qsm2OEURmULYM?=
+ =?iso-8859-1?Q?2KlpNA/dR7UjHsPMOgqtCrN/Wif9AacG2TzWiLsvdOpbFTndczV4B8z6iV?=
+ =?iso-8859-1?Q?cbci27irvDnwuQG5jZS+Xkq40Vtsuu2OO7JopPcX9IdGGR02BzNrvJMqLf?=
+ =?iso-8859-1?Q?buPITmUc4tWAUI03542j/Wd+9JjVaDOIg4MfOaVteBvhbX2dHLVhmzFxY0?=
+ =?iso-8859-1?Q?3swQM/YlaACi6hA5LWXb9SAoqCk9yClo0JS/Ndh4CJB3j+cgblhZRmlJE8?=
+ =?iso-8859-1?Q?38QE47r0d4A5hPAgHnBRTqGoMAmZbEW5ZhZufoRB7z+kJZ52miVBfb8uEk?=
+ =?iso-8859-1?Q?U9Pan+w2tpd9Jx7IbL1Rgeqgefw0OQcTzX78HVqwDfznMM+KRk4WoWNL/o?=
+ =?iso-8859-1?Q?xj2xduXr4tsQI9xjpVemhy9dUkTTRaO2MdGOBPGY+uF+gc+nC8hLT0gOPd?=
+ =?iso-8859-1?Q?LbjKxsVbIhvkkvL8uZzwrmg58s2Y0b9XvnMJrkpAtaCq7HpeZ35svOmilo?=
+ =?iso-8859-1?Q?8V5ZKD+ipvqOuc3Eidq54Ab3+xvYkmhaIuJC9YsG7v2bqpu/1EJ60RySPA?=
+ =?iso-8859-1?Q?qRHO2WVCTbJh6B+dgLkzcwW5CUKOVFMaLzlhOS8cSIfTD8zGsN52TyChdB?=
+ =?iso-8859-1?Q?Ah2Z0+RfnCAY8ZZ9BeB1D28AGt+/lmhNRpZ/5UubrimF0L/PuPzm6AS917?=
+ =?iso-8859-1?Q?NTo8oKUg/Xl/kGMEVnzRrpCA7fZ1/qMy/VrBs9QN5BCbCyBaLCyOm7SoZz?=
+ =?iso-8859-1?Q?G3pVliXBRxbbrcUT4RJt23k9fJkrnYj0ibw2ZoY3SZjbSMtRy2Kc+u4FPr?=
+ =?iso-8859-1?Q?ZG3rNxtJmNdBGmNLgO0wpOgM1oQXeMP8DY93Q0qopNaU/7wh5/spVLm4Ra?=
+ =?iso-8859-1?Q?+S4nlPKY8mUwIq1xrWoXWnU+Ni2QN61SUttwXayLQ6XVZFHt6/gTdN/sZn?=
+ =?iso-8859-1?Q?oKxd1jbrRutPSbPYtjX6nBjYzj3TQ1zEN7QCZ5cx1GpwsanFpZueqie5lh?=
+ =?iso-8859-1?Q?fEupLqwI9DjY2Sl5tbJg6g6vA=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0444bd4-2b54-4c59-3689-08d9e4896c3e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 07:15:12.6679
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Y4c/+JITCxdFgvrUtjJViTfYCh024MUVG26M31RUiooV7wNAP67LWUsrIkhlJSn+UCB4A0A4dozNWuT4k5S5LNdYxMxc8k1R2+aWmHSF988=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0405
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kasan has reported the following use after free on dev->iommu.
-when a device probe fails and it is in process of freeing dev->iommu
-in dev_iommu_free function, a deferred_probe_work_func runs in parallel
-and tries to access dev->iommu->fwspec in of_iommu_configure path thus
-causing use after free.
+Since commit 84de6ab0e904 ("powerpc/603: don't handle PAGE_ACCESSED
+in TLB miss handlers.") page table is not updated anymore by
+TLB miss handlers.
 
-BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
-Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
+Remove the comment.
 
-Workqueue: events_unbound deferred_probe_work_func
-Call trace:
- dump_backtrace+0x0/0x33c
- show_stack+0x18/0x24
- dump_stack_lvl+0x16c/0x1e0
- print_address_description+0x84/0x39c
- __kasan_report+0x184/0x308
- kasan_report+0x50/0x78
- __asan_load8+0xc0/0xc4
- of_iommu_configure+0xb4/0x4a4
- of_dma_configure_id+0x2fc/0x4d4
- platform_dma_configure+0x40/0x5c
- really_probe+0x1b4/0xb74
- driver_probe_device+0x11c/0x228
- __device_attach_driver+0x14c/0x304
- bus_for_each_drv+0x124/0x1b0
- __device_attach+0x25c/0x334
- device_initial_probe+0x24/0x34
- bus_probe_device+0x78/0x134
- deferred_probe_work_func+0x130/0x1a8
- process_one_work+0x4c8/0x970
- worker_thread+0x5c8/0xaec
- kthread+0x1f8/0x220
- ret_from_fork+0x10/0x18
-
-Allocated by task 1:
- ____kasan_kmalloc+0xd4/0x114
- __kasan_kmalloc+0x10/0x1c
- kmem_cache_alloc_trace+0xe4/0x3d4
- __iommu_probe_device+0x90/0x394
- probe_iommu_group+0x70/0x9c
- bus_for_each_dev+0x11c/0x19c
- bus_iommu_probe+0xb8/0x7d4
- bus_set_iommu+0xcc/0x13c
- arm_smmu_bus_init+0x44/0x130 [arm_smmu]
- arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
- platform_drv_probe+0xe4/0x13c
- really_probe+0x2c8/0xb74
- driver_probe_device+0x11c/0x228
- device_driver_attach+0xf0/0x16c
- __driver_attach+0x80/0x320
- bus_for_each_dev+0x11c/0x19c
- driver_attach+0x38/0x48
- bus_add_driver+0x1dc/0x3a4
- driver_register+0x18c/0x244
- __platform_driver_register+0x88/0x9c
- init_module+0x64/0xff4 [arm_smmu]
- do_one_initcall+0x17c/0x2f0
- do_init_module+0xe8/0x378
- load_module+0x3f80/0x4a40
- __se_sys_finit_module+0x1a0/0x1e4
- __arm64_sys_finit_module+0x44/0x58
- el0_svc_common+0x100/0x264
- do_el0_svc+0x38/0xa4
- el0_svc+0x20/0x30
- el0_sync_handler+0x68/0xac
- el0_sync+0x160/0x180
-
-Freed by task 1:
- kasan_set_track+0x4c/0x84
- kasan_set_free_info+0x28/0x4c
- ____kasan_slab_free+0x120/0x15c
- __kasan_slab_free+0x18/0x28
- slab_free_freelist_hook+0x204/0x2fc
- kfree+0xfc/0x3a4
- __iommu_probe_device+0x284/0x394
- probe_iommu_group+0x70/0x9c
- bus_for_each_dev+0x11c/0x19c
- bus_iommu_probe+0xb8/0x7d4
- bus_set_iommu+0xcc/0x13c
- arm_smmu_bus_init+0x44/0x130 [arm_smmu]
- arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
- platform_drv_probe+0xe4/0x13c
- really_probe+0x2c8/0xb74
- driver_probe_device+0x11c/0x228
- device_driver_attach+0xf0/0x16c
- __driver_attach+0x80/0x320
- bus_for_each_dev+0x11c/0x19c
- driver_attach+0x38/0x48
- bus_add_driver+0x1dc/0x3a4
- driver_register+0x18c/0x244
- __platform_driver_register+0x88/0x9c
- init_module+0x64/0xff4 [arm_smmu]
- do_one_initcall+0x17c/0x2f0
- do_init_module+0xe8/0x378
- load_module+0x3f80/0x4a40
- __se_sys_finit_module+0x1a0/0x1e4
- __arm64_sys_finit_module+0x44/0x58
- el0_svc_common+0x100/0x264
- do_el0_svc+0x38/0xa4
- el0_svc+0x20/0x30
- el0_sync_handler+0x68/0xac
- el0_sync+0x160/0x180
-
-Fix this by setting dev->iommu to NULL first and
-then freeing dev_iommu structure in dev_iommu_free
-function.
-
-Suggested-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/iommu/iommu.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/powerpc/kernel/head_book3s_32.S | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index d410311..1d320ee 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -186,9 +186,14 @@ static struct dev_iommu *dev_iommu_get(struct device *dev)
- 
- static void dev_iommu_free(struct device *dev)
- {
--	iommu_fwspec_free(dev);
--	kfree(dev->iommu);
-+	struct dev_iommu *param = dev->iommu;
-+
- 	dev->iommu = NULL;
-+	if (param->fwspec) {
-+		fwnode_handle_put(param->fwspec->iommu_fwnode);
-+		kfree(param->fwspec);
-+	}
-+	kfree(param);
- }
- 
- static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
+diff --git a/arch/powerpc/kernel/head_book3s_32.S b/arch/powerpc/kernel/head_book3s_32.S
+index 937c79b8ad0f..6c739beb938c 100644
+--- a/arch/powerpc/kernel/head_book3s_32.S
++++ b/arch/powerpc/kernel/head_book3s_32.S
+@@ -501,10 +501,6 @@ DataLoadTLBMiss:
+ 	lwz	r0,0(r2)		/* get linux-style pte */
+ 	andc.	r1,r1,r0		/* check access & ~permission */
+ 	bne-	DataAddressInvalid	/* return if access not permitted */
+-	/*
+-	 * NOTE! We are assuming this is not an SMP system, otherwise
+-	 * we would need to update the pte atomically with lwarx/stwcx.
+-	 */
+ 	/* Convert linux-style PTE to low word of PPC-style PTE */
+ 	rlwinm	r1,r0,32-9,30,30	/* _PAGE_RW -> PP msb */
+ 	rlwimi	r0,r0,32-1,30,30	/* _PAGE_USER -> PP msb */
+@@ -585,10 +581,6 @@ DataStoreTLBMiss:
+ 	lwz	r0,0(r2)		/* get linux-style pte */
+ 	andc.	r1,r1,r0		/* check access & ~permission */
+ 	bne-	DataAddressInvalid	/* return if access not permitted */
+-	/*
+-	 * NOTE! We are assuming this is not an SMP system, otherwise
+-	 * we would need to update the pte atomically with lwarx/stwcx.
+-	 */
+ 	/* Convert linux-style PTE to low word of PPC-style PTE */
+ 	rlwimi	r0,r0,32-2,31,31	/* _PAGE_USER -> PP lsb */
+ 	li	r1,0xe06		/* clear out reserved bits & PP msb */
 -- 
-2.7.4
-
+2.33.1

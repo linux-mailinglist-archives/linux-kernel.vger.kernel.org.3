@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7844A43DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E284A420C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377670AbiAaLYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:24:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48722 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376334AbiAaLPO (ORCPT
+        id S1376561AbiAaLIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:08:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53422 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359429AbiAaLFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:15:14 -0500
+        Mon, 31 Jan 2022 06:05:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9818961163;
-        Mon, 31 Jan 2022 11:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAF6C340E8;
-        Mon, 31 Jan 2022 11:15:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D812CB82A5F;
+        Mon, 31 Jan 2022 11:05:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00BA6C340EF;
+        Mon, 31 Jan 2022 11:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627713;
-        bh=wL8nTd/sz25318tQXHOLFPuOZ8c1XAuCF4RH8JAfl98=;
+        s=korg; t=1643627129;
+        bh=ae8R5cR9og/FxynuOn/VIw3QPeA3VAi0XqcCVhZbz3A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OYNhS/3Gyq7ULwFqcxJRw50yt/RCSnRxhM4GUBDdt6bQZaY9Lz/KUr46CRnBlwynW
-         /OIdvywRTQ8i9q0hjrkuJs0AAKtGOiVqP2qq2+xmuyQABS+eU7RsSc1XFd2RHtRmPQ
-         KnEiFNvYqdFE14+6nXKKJYDxd3BWoBRCqOnNdRbY=
+        b=1uacvQwVTPGI6SjWRLWx/D3oAEFcUug3cFDuhkKuERWG1q5cgmld+MWY4G1FlU9Ul
+         4Q/nJ6VPdBclrygP59EMd9f9RYuPc29f2XzaJDu2ijaNu7JqrrfMQ9PmEIyILE5xHI
+         NgjsxxpalgOkLg3tOpGYUeDUBJQsvj6fgHGvQ3vw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dany Madden <drt@linux.ibm.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 140/171] ibmvnic: dont spin in tasklet
+Subject: [PATCH 5.10 084/100] ibmvnic: dont spin in tasklet
 Date:   Mon, 31 Jan 2022 11:56:45 +0100
-Message-Id: <20220131105234.741675005@linuxfoundation.org>
+Message-Id: <20220131105223.274263195@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
-index a3dd5c648fecd..5c7371dc83848 100644
+index 232c68af4c60a..c7be7ab131b19 100644
 --- a/drivers/net/ethernet/ibm/ibmvnic.c
 +++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -5317,12 +5317,6 @@ static void ibmvnic_tasklet(struct tasklet_struct *t)
+@@ -5075,12 +5075,6 @@ static void ibmvnic_tasklet(struct tasklet_struct *t)
  			ibmvnic_handle_crq(crq, adapter);
  			crq->generic.first = 0;
  		}

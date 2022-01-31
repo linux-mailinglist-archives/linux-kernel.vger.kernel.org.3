@@ -2,103 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0E04A4809
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 837194A4806
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378691AbiAaNZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:25:53 -0500
-Received: from mga09.intel.com ([134.134.136.24]:53304 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232369AbiAaNZw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:25:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643635552; x=1675171552;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PV2NMENejzNWL/eUmut4tFJ0nE85m4L6jACezcDdRYI=;
-  b=BAgjqFXraVnm4S5ETe5f2/FhOeSUKQH/0lZ7JTxxkD65OugcKTYwFYNF
-   3M2VYv3OwDeOvKT6wjj9Y5wEqFNGKceTqiOAg0cbP+Bl1rXpe2PryPrxz
-   xfx2f1SWr5KH9ZIQ1Zf2tu812F1LCYnUPLkyoLnZjRmMYOMRpxGVZgkur
-   FV9COnv95F3ZptcS4BwbI8rr6AQr1HQQMPtfv/Bfg4QEPqT/K2uVJwfc2
-   /KnKaVRn4KlE/D5LzDMSGYjTqYQbkQYpetgcTW1q3JHSsg0qlBJo9FCte
-   rLylGHfzHyrzRc/LJM1cJ6P41c6CLsgiLumDMzOovuwBGJuKDfRQ8ug0i
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247229308"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="247229308"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:25:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="481748551"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:25:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nEWfh-00GseD-PN;
-        Mon, 31 Jan 2022 15:24:41 +0200
-Date:   Mon, 31 Jan 2022 15:24:41 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-Message-ID: <YffjGQY4KgsAqniL@smile.fi.intel.com>
-References: <YfEv7OQs98O9wJdJ@kroah.com>
- <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
- <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
- <YfFV4EJosayH+e6C@smile.fi.intel.com>
- <YfFWPmG2D093gz4N@smile.fi.intel.com>
- <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com>
- <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
- <YffJujbpUGUqpIk/@smile.fi.intel.com>
- <5a3fffc8-b2d8-6ac3-809e-e8e71b66a8ea@redhat.com>
- <YffiwCiFnqF1X1pD@smile.fi.intel.com>
+        id S1378672AbiAaNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:25:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54294 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232369AbiAaNZ0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:25:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89830B82AFC;
+        Mon, 31 Jan 2022 13:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD075C340E8;
+        Mon, 31 Jan 2022 13:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643635524;
+        bh=6cJEJGctXWg2ouM0AW7ItCpTitZ5jZpRhQHIutezKfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SeLbkLH6CgxPzavN+y1x/PZsXep/NIzZf854UHtRB1Ns7ysCS6yWOzNKa8USejqFj
+         w0zslfJAWtCcljNBqEEQWDm/3h6NMcUsTCR0Lp9MnlAiXGZUidc8BEBbZlsW0yTNjS
+         /dY8k7xAgv6T73620+KnNWo1795gVJfNHZ5B3eKY=
+Date:   Mon, 31 Jan 2022 14:25:21 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yunhao Tian <t123yh.xyz@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: audio: fix indent
+Message-ID: <YffjQcKiI4gVVeW3@kroah.com>
+References: <20220129023753.1494755-1-t123yh.xyz@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YffiwCiFnqF1X1pD@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220129023753.1494755-1-t123yh.xyz@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 03:23:13PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 31, 2022 at 01:08:32PM +0100, Javier Martinez Canillas wrote:
-> > On 1/31/22 12:36, Andy Shevchenko wrote:
-
-...
-
-> > I actually added this dependency deliberative. It's true that the driver is using
-> > the device properties API and so there isn't anything from the properties parsing
-> > point of view that depends on OF. And the original driver didn't depend on OF.
-> > 
-> > But the original driver also only would had worked with Device Trees since the
-> > of_device_id table is the only one that contains the device specific data info.
-> > 
-> > The i2c_device_id table only listed the devices supported to match, but then it
-> > would only had worked with the default values that are set by the driver.
-> > 
-> > So in practice it *does* depend on OF. I'll be happy to drop that dependency if
-> > you provide an acpi_device_id table to match.
+On Sat, Jan 29, 2022 at 10:37:53AM +0800, Yunhao Tian wrote:
+> This fixes indents of f_uac2.c and u_audio.c introduced by
+> previous commits.
 > 
-> The code is deceptive and you become to a wrong conclusion. No, the driver
-> does NOT depend on OF as a matter of fact. The tricky part is the PRP0001
-> ACPI PNP ID that allows to reuse it on ACPI-based platforms.
-> 
-> That said, please drop OF dependency.
+> Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c  | 16 +++++++-------
+>  drivers/usb/gadget/function/u_audio.c | 30 +++++++++++++--------------
+>  2 files changed, 23 insertions(+), 23 deletions(-)
 
-Side note: 72915994e028 ("video: ssd1307fb: Make use of device properties")
+Does not apply to my usb-next branch at all.  Please rebase and resend.
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
 
-
+greg k-h

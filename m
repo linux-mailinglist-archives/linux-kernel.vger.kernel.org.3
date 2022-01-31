@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4ABC4A44B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D314A43B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358567AbiAaLcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:32:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55130 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377002AbiAaLWU (ORCPT
+        id S1377363AbiAaLWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:22:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58344 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376574AbiAaLNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:22:20 -0500
+        Mon, 31 Jan 2022 06:13:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5972A61298;
-        Mon, 31 Jan 2022 11:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35676C340E8;
-        Mon, 31 Jan 2022 11:22:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E546B82A65;
+        Mon, 31 Jan 2022 11:12:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA3FC340EE;
+        Mon, 31 Jan 2022 11:12:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628139;
-        bh=tcdbW/8UqgiCGn1wuJRWV1j3SX/4Fj4DznIlan+YDvo=;
+        s=korg; t=1643627577;
+        bh=hRKTuIsnl4WN0VxrzUwjAAfV/KmgykqxL+AVfx9ryCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ITemSXb4Mw+AlxiC/pViOyB8Cqk/JjeROoQDoNbJ2P5fI1Xifg6qlFK1fzirTnqak
-         6IDLqq1KPyptEHAjLFVBTCOSiwJNRolGpfmBrQkgvJfDJ9wikwu5tj/Ll9cI70YRFo
-         VSXNiy/Rs4WsfdJWvdUfnT0oNu0UfCU0R8aoR7KE=
+        b=IdNhGdN0v63028yEJabwvDv4UO5mVqP84TUjX4uuIgYyr3DA2GjcZVTmms0O6GGGJ
+         mAnVDrTcp8s76Xcz9B1P+03om75EyNZGCUrH9GPuKebHcOc5WcckKprMg6xF3gXf1m
+         VUedUhFroGI8unW/0zCty0wP7FML/Qmbf9xo3jh8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rick Yiu <rickyiu@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Sachin Sant <sachinp@linux.ibm.com>,
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 130/200] sched/pelt: Relax the sync of util_sum with util_avg
+Subject: [PATCH 5.15 128/171] rxrpc: Adjust retransmission backoff
 Date:   Mon, 31 Jan 2022 11:56:33 +0100
-Message-Id: <20220131105237.926644981@linuxfoundation.org>
+Message-Id: <20220131105234.345893969@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,103 +48,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Guittot <vincent.guittot@linaro.org>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 98b0d890220d45418cfbc5157b3382e6da5a12ab ]
+[ Upstream commit 2c13c05c5ff4b9fc907b07f7311821910ebaaf8a ]
 
-Rick reported performance regressions in bugzilla because of cpu frequency
-being lower than before:
-    https://bugzilla.kernel.org/show_bug.cgi?id=215045
+Improve retransmission backoff by only backing off when we retransmit data
+packets rather than when we set the lost ack timer.
 
-He bisected the problem to:
-commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
+To this end:
 
-This commit forces util_sum to be synced with the new util_avg after
-removing the contribution of a task and before the next periodic sync. By
-doing so util_sum is rounded to its lower bound and might lost up to
-LOAD_AVG_MAX-1 of accumulated contribution which has not yet been
-reflected in util_avg.
+ (1) In rxrpc_resend(), use rxrpc_get_rto_backoff() when setting the
+     retransmission timer and only tell it that we are retransmitting if we
+     actually have things to retransmit.
 
-Instead of always setting util_sum to the low bound of util_avg, which can
-significantly lower the utilization of root cfs_rq after propagating the
-change down into the hierarchy, we revert the change of util_sum and
-propagate the difference.
+     Note that it's possible for the retransmission algorithm to race with
+     the processing of a received ACK, so we may see no packets needing
+     retransmission.
 
-In addition, we also check that cfs's util_sum always stays above the
-lower bound for a given util_avg as it has been observed that
-sched_entity's util_sum is sometimes above cfs one.
+ (2) In rxrpc_send_data_packet(), don't bump the backoff when setting the
+     ack_lost_at timer, as it may then get bumped twice.
 
-Fixes: 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
-Reported-by: Rick Yiu <rickyiu@google.com>
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-Link: https://lkml.kernel.org/r/20220111134659.24961-2-vincent.guittot@linaro.org
+With this, when looking at one particular packet, the retransmission
+intervals were seen to be 1.5ms, 2ms, 3ms, 5ms, 9ms, 17ms, 33ms, 71ms,
+136ms, 264ms, 544ms, 1.088s, 2.1s, 4.2s and 8.3s.
+
+Fixes: c410bf01933e ("rxrpc: Fix the excessive initial retransmission timeout")
+Suggested-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/164138117069.2023386.17446904856843997127.stgit@warthog.procyon.org.uk/
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/fair.c | 16 +++++++++++++---
- kernel/sched/pelt.h |  4 +++-
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ net/rxrpc/call_event.c | 8 +++-----
+ net/rxrpc/output.c     | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f2cf047b25e56..069e01772d922 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3382,7 +3382,6 @@ void set_task_rq_fair(struct sched_entity *se,
- 	se->avg.last_update_time = n_last_update_time;
- }
- 
--
- /*
-  * When on migration a sched_entity joins/leaves the PELT hierarchy, we need to
-  * propagate its contribution. The key to this propagation is the invariant
-@@ -3450,7 +3449,6 @@ void set_task_rq_fair(struct sched_entity *se,
-  * XXX: only do this for the part of runnable > running ?
-  *
-  */
--
- static inline void
- update_tg_cfs_util(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)
+diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
+index 6be2672a65eab..df864e6922679 100644
+--- a/net/rxrpc/call_event.c
++++ b/net/rxrpc/call_event.c
+@@ -157,7 +157,7 @@ static void rxrpc_congestion_timeout(struct rxrpc_call *call)
+ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
  {
-@@ -3682,7 +3680,19 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+ 	struct sk_buff *skb;
+-	unsigned long resend_at, rto_j;
++	unsigned long resend_at;
+ 	rxrpc_seq_t cursor, seq, top;
+ 	ktime_t now, max_age, oldest, ack_ts;
+ 	int ix;
+@@ -165,10 +165,8 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
  
- 		r = removed_util;
- 		sub_positive(&sa->util_avg, r);
--		sa->util_sum = sa->util_avg * divider;
-+		sub_positive(&sa->util_sum, r * divider);
-+		/*
-+		 * Because of rounding, se->util_sum might ends up being +1 more than
-+		 * cfs->util_sum. Although this is not a problem by itself, detaching
-+		 * a lot of tasks with the rounding problem between 2 updates of
-+		 * util_avg (~1ms) can make cfs->util_sum becoming null whereas
-+		 * cfs_util_avg is not.
-+		 * Check that util_sum is still above its lower bound for the new
-+		 * util_avg. Given that period_contrib might have moved since the last
-+		 * sync, we are only sure that util_sum must be above or equal to
-+		 *    util_avg * minimum possible divider
-+		 */
-+		sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * PELT_MIN_DIVIDER);
+ 	_enter("{%d,%d}", call->tx_hard_ack, call->tx_top);
  
- 		r = removed_runnable;
- 		sub_positive(&sa->runnable_avg, r);
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index e06071bf3472c..c336f5f481bca 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -37,9 +37,11 @@ update_irq_load_avg(struct rq *rq, u64 running)
- }
- #endif
+-	rto_j = call->peer->rto_j;
+-
+ 	now = ktime_get_real();
+-	max_age = ktime_sub(now, jiffies_to_usecs(rto_j));
++	max_age = ktime_sub(now, jiffies_to_usecs(call->peer->rto_j));
  
-+#define PELT_MIN_DIVIDER	(LOAD_AVG_MAX - 1024)
-+
- static inline u32 get_pelt_divider(struct sched_avg *avg)
- {
--	return LOAD_AVG_MAX - 1024 + avg->period_contrib;
-+	return PELT_MIN_DIVIDER + avg->period_contrib;
- }
+ 	spin_lock_bh(&call->lock);
  
- static inline void cfs_se_util_change(struct sched_avg *avg)
+@@ -213,7 +211,7 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
+ 	}
+ 
+ 	resend_at = nsecs_to_jiffies(ktime_to_ns(ktime_sub(now, oldest)));
+-	resend_at += jiffies + rto_j;
++	resend_at += jiffies + rxrpc_get_rto_backoff(call->peer, retrans);
+ 	WRITE_ONCE(call->resend_at, resend_at);
+ 
+ 	if (unacked)
+diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
+index 10f2bf2e9068a..a45c83f22236e 100644
+--- a/net/rxrpc/output.c
++++ b/net/rxrpc/output.c
+@@ -468,7 +468,7 @@ done:
+ 			if (call->peer->rtt_count > 1) {
+ 				unsigned long nowj = jiffies, ack_lost_at;
+ 
+-				ack_lost_at = rxrpc_get_rto_backoff(call->peer, retrans);
++				ack_lost_at = rxrpc_get_rto_backoff(call->peer, false);
+ 				ack_lost_at += nowj;
+ 				WRITE_ONCE(call->ack_lost_at, ack_lost_at);
+ 				rxrpc_reduce_call_timer(call, ack_lost_at, nowj,
 -- 
 2.34.1
 

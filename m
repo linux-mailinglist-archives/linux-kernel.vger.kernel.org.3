@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBCB4A52D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5504A52DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbiAaXCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:02:37 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:24737 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236245AbiAaXCd (ORCPT
+        id S231355AbiAaXEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:04:25 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:53090 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231213AbiAaXEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:02:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643670153; x=1675206153;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=H1a9HxdVODmInEXv6RwN+8BAn3XyLCuEMoPx5epZaR4=;
-  b=rps5f03A5+3O/kMI9rfg8zOfLZul9VoJrdEERrcy3BAycxGF6YCVobLE
-   PF+PevJ6LKfmY9IVkdTFzazSxASPnlvJV403SxRgk33qs+p4qsV1GYfXP
-   HDVKtaJwqkenBDSZFt6UMCSCIYiE630+j4DCyEUYzE6Tc97gyet/bNuCC
-   I=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 31 Jan 2022 15:02:33 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 15:02:32 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 31 Jan 2022 15:02:32 -0800
-Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 31 Jan
- 2022 15:02:32 -0800
-Subject: Re: [PATCH 1/3] dt-bindings: spmi: convert Qualcomm SPMI PMIC ARB to
- dtschema
+        Mon, 31 Jan 2022 18:04:23 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1643670262; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=zw1Yj5FBLCHqW7QysextbS43RRIoASpz2CYOQrDzFu4=; b=eebB2j66Nf4c1iyqT5T+wndi3QBD6PFSA2DSJmmhlzltdVpLZAlzx7SmN++viiWmkVWkse6i
+ lq+hpskhjhLTONZJpgZlD8qOpbm+7J6jhyIvRb0hevcvVG0TF1Zvu+sKt71PqT1CdeOy2tsw
+ 1g4muToJWi5uVTiBiifV80dJMrU=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 61f86af6e42a102d96a5e9d4 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 31 Jan 2022 23:04:22
+ GMT
+Sender: subbaram=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 351B1C43618; Mon, 31 Jan 2022 23:04:22 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.47.233.232] (Global_NAT1.qualcomm.com [129.46.96.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: subbaram)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E4443C4338F;
+        Mon, 31 Jan 2022 23:04:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org E4443C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH 3/3] spmi: pmic-arb: Add support for PMIC v7
 To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         David Collins <quic_collinsd@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
+Cc:     linux-arm-msm@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         David Dai <daidavid1@codeaurora.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220131172450.2528065-1-vkoul@kernel.org>
- <20220131172450.2528065-2-vkoul@kernel.org>
-From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Message-ID: <ec54ccc7-ae27-f19c-bb4c-db3d207f4182@quicinc.com>
-Date:   Mon, 31 Jan 2022 15:02:07 -0800
+ <20220131172450.2528065-4-vkoul@kernel.org>
+From:   Subbaraman Narayanamurthy <subbaram@codeaurora.org>
+Message-ID: <b28ad431-a760-ed02-5bcc-3fc421061759@codeaurora.org>
+Date:   Mon, 31 Jan 2022 15:04:20 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20220131172450.2528065-2-vkoul@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220131172450.2528065-4-vkoul@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 1/31/22 9:24 AM, Vinod Koul wrote:
-> Convert Qualcomm SPMI PMIC  arb binding to dtschema format.
+> From: David Dai <daidavid1@codeaurora.org>
+>
+> PMIC v7 has different offset values and seqeunces, so add support for
+> this new version of PMIC
+>
+> Signed-off-by: David Dai <daidavid1@codeaurora.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
 
-No concerns but, there are many patches going around for this.
+Can you please fix the author based on my comments [1]?
 
-Fenglin Wu had it in his v4 series [1] which he had dropped in his v5
-series [2] as this one [3] from David H got a "Reviewed-by".
-
-So, wondering if this can be dropped off?
-
-[1] https://lore.kernel.org/linux-arm-msm/1640071211-31462-12-git-send-email-quic_fenglinw@quicinc.com/
-[2] https://lore.kernel.org/linux-arm-msm/1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com/
-[3] https://lore.kernel.org/linux-arm-msm/20211227170151.73116-1-david@ixit.cz/
+[1] https://lore.kernel.org/linux-arm-msm/8f6645ff-0753-bcd3-f692-6be205cf71b8@quicinc.com/
 
 -Subbaraman
-

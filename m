@@ -2,176 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22A44A4832
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825E04A4833
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378872AbiAaNdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:33:09 -0500
-Received: from mga09.intel.com ([134.134.136.24]:53848 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379103AbiAaNcz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:32:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643635975; x=1675171975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=21GzmZFe7LvEpvmmANbf4casorIY5q1J72Vb+xIjsBY=;
-  b=DwekNq4aEQrFaYegLaNkdMJZKC01D59bisJk9H+Uxe2yZVOPTC19nC2v
-   cjiJ+sLCi07LXJ55icTJgk6u3HJrE2ahNG0S2GlkWIuggB/a4lHF9qLFs
-   r4xG6JUqtUxt0a5QE9aHBLBAevV1Y/o39G6Ll+LnkENX76QeKJ0ydBm7c
-   ZqZqiJsKCc0SvVuhmMGPREYTH3rISPU1LcrNVR3czsYGrqV6OS2W3JRCL
-   SDaBLIaKBZ/kCuzxEThCY9KoU4ebowjTwbq+T+Ad5WKX9es6NDai1QAyG
-   a0hvU3DH+7LskxLs8VgaF3GWpZ5V68THz6x7F2lkijmTzUTYrpSBb5PdQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247230404"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="247230404"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:32:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="534176210"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:32:51 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nEWmZ-00Gslu-NT;
-        Mon, 31 Jan 2022 15:31:47 +0200
-Date:   Mon, 31 Jan 2022 15:31:47 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 2/2] i2c: designware: Add AMD PSP I2C bus support
-Message-ID: <YffkwwxtZ/cul5CF@smile.fi.intel.com>
-References: <20220120001621.705352-2-jsd@semihalf.com>
- <20220128144811.783279-1-jsd@semihalf.com>
- <20220128144811.783279-3-jsd@semihalf.com>
- <CAOtMz3MnM6knabs0kF6urpE+Thm6rj++6Yy9G=ky2r9uOByH5Q@mail.gmail.com>
- <YfQQeWdciv/JtqLD@smile.fi.intel.com>
- <CAOtMz3Oryr7mmRKf+secix_6=ZD_Lq+pMUoP=5T6AS6BPoqyQw@mail.gmail.com>
+        id S1378957AbiAaNdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:33:12 -0500
+Received: from relay040.a.hostedemail.com ([64.99.140.40]:41791 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1379207AbiAaNdG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:33:06 -0500
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 759F320CE6;
+        Mon, 31 Jan 2022 13:33:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 971C233;
+        Mon, 31 Jan 2022 13:32:47 +0000 (UTC)
+Message-ID: <8faabe9985a330afc41d774db3ac899e1453c88d.camel@perches.com>
+Subject: Re: [PATCH v2] staging: media: atomisp: Use BIT macro instead of
+ left shifting
+From:   Joe Perches <joe@perches.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
+        kitakar@gmail.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, tomi.valkeinen@ideasonboard.com
+Date:   Mon, 31 Jan 2022 05:33:00 -0800
+In-Reply-To: <20220131073624.GH1951@kadam>
+References: <YfVstOJ38OTtd43n@smile.fi.intel.com>
+         <20220130180655.22970-1-mosescb.dev@gmail.com>
+         <20220131073624.GH1951@kadam>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOtMz3Oryr7mmRKf+secix_6=ZD_Lq+pMUoP=5T6AS6BPoqyQw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 971C233
+X-Spam-Status: No, score=-2.99
+X-Stat-Signature: yyiar3d9dom5ro6b3omwwrzjn55z5zrd
+X-Rspamd-Server: rspamout06
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+wLKO2r8bL7xWLkEInCdDfMKblV0U7hAY=
+X-HE-Tag: 1643635967-396179
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:56:27PM +0100, Jan Dąbroś wrote:
-> pt., 28 sty 2022 o 16:50 Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> napisał(a):
-> > On Fri, Jan 28, 2022 at 03:59:40PM +0100, Jan Dąbroś wrote:
-> > > pt., 28 sty 2022 o 15:48 Jan Dabros <jsd@semihalf.com> napisał(a):
-
-...
-
-> > > > +struct psp_mbox {
-> > > > +       u32 cmd_fields;
-> >
-> > > > +       phys_addr_t i2c_req_addr;
-> >
-> > But phys_addr_t is platform-dependent type. Perhaps you meant to use u64
-> > here
-> > always?
+On Mon, 2022-01-31 at 10:36 +0300, Dan Carpenter wrote:
+> On Sun, Jan 30, 2022 at 07:06:55PM +0100, Moses Christopher Bollavarapu wrote:
+> > There is a BIT(nr) macro available in Linux Kernel,
+> > which does the same thing.
+> > Example: BIT(7) = (1UL << 7)
+> > 
+> > Also use GENMASK for masking
+> > Example: GENMASK(3, 0) = 0b00001111 (same as (1 << 4) - 1)
+> > 
+> > Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 > 
-> Once I remove the "depends on X86_64" I believe this should be left
-> platform-dependent.
-
-If it's a protocol or HW layout, it may not be platform-dependent.
-
-> > > > +} __packed;
-
-...
-
-> > > > +       if (psp_send_cmd(req))
-> >
-> > > > +               return -EIO;
-> >
-> > Why is error code shadowed?
-> >
+> This patch does a couple unrelated things.  Break out the GENMASK()
+> change into its own patch.
 > 
-> Just as a side note - it wasn't modified in v2 when moving above to
-> psp_send_check_i2c_req(), but let me explain why I have introduced this
-> initially.
+> > @@ -65,7 +66,7 @@ enum ia_css_fw_type {
+> >  	ia_css_sp_firmware,		/** Firmware for the SP */
+> >  	ia_css_isp_firmware,		/** Firmware for the ISP */
+> >  	ia_css_bootloader_firmware,	/** Firmware for the BootLoader */
+> > -	ia_css_acc_firmware		/** Firmware for accelrations */
+> > +	ia_css_acc_firmware,		/** Firmware for accelrations */
+> >  };
 > 
-> We have two means of timeouts in the context of this driver:
-> 1. Timeout of internal mailbox, which means we cannot communicate with a
-> PSP for a programmed timeout. This timeout is encountered inside
-> psp_send_cmd().
-> 2. Timeout of i2c arbitration - which means that we can communicate with
-> PSP, but PSP refuses to release i2c bus for too long. This timeout is
-> returned by psp_send_i2c_req() in case of error.
-> (side note: both error conditions are very unlikely to happen at runtime)
+> This change needs to be in its own patch.
+
+Because it's unrelated.  As is the repetitive use of 'Firmware for'
+and the typo/misspelling of accelerations.
+
+Another possibility would be to change the /** to /* or maybe
+change to // and remove the ' */' trailing comment termination
+also in a separate patch.
+
+> > diff --git a/drivers/staging/media/atomisp/pci/ia_css_env.h b/drivers/staging/media/atomisp/pci/ia_css_env.h
+[]
+> >  enum ia_css_rx_irq_info {
+> > -	IA_CSS_RX_IRQ_INFO_BUFFER_OVERRUN   = 1U << 0, /** buffer overrun */
+> > -	IA_CSS_RX_IRQ_INFO_ENTER_SLEEP_MODE = 1U << 1, /** entering sleep mode */
+> > -	IA_CSS_RX_IRQ_INFO_EXIT_SLEEP_MODE  = 1U << 2, /** exited sleep mode */
+> > -	IA_CSS_RX_IRQ_INFO_ECC_CORRECTED    = 1U << 3, /** ECC corrected */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_SOT          = 1U << 4,
+> > +	IA_CSS_RX_IRQ_INFO_BUFFER_OVERRUN   = BIT(0), /** buffer overrun */
+> > +	IA_CSS_RX_IRQ_INFO_ENTER_SLEEP_MODE = BIT(1), /** entering sleep mode */
+> > +	IA_CSS_RX_IRQ_INFO_EXIT_SLEEP_MODE  = BIT(2), /** exited sleep mode */
+> > +	IA_CSS_RX_IRQ_INFO_ECC_CORRECTED    = BIT(3), /** ECC corrected */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_SOT          = BIT(4),
+> >  	/** Start of transmission */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_SOT_SYNC     = 1U << 5, /** SOT sync (??) */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_CONTROL      = 1U << 6, /** Control (??) */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_ECC_DOUBLE   = 1U << 7, /** Double ECC */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_CRC          = 1U << 8, /** CRC error */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ID   = 1U << 9, /** Unknown ID */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_FRAME_SYNC   = 1U << 10,/** Frame sync error */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_FRAME_DATA   = 1U << 11,/** Frame data error */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_DATA_TIMEOUT = 1U << 12,/** Timeout occurred */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ESC  = 1U << 13,/** Unknown escape seq. */
+> > -	IA_CSS_RX_IRQ_INFO_ERR_LINE_SYNC    = 1U << 14,/** Line Sync error */
+> > -	IA_CSS_RX_IRQ_INFO_INIT_TIMEOUT     = 1U << 15,
+> > +	IA_CSS_RX_IRQ_INFO_ERR_SOT_SYNC     = BIT(5), /** SOT sync (??) */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_CONTROL      = BIT(6), /** Control (??) */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_ECC_DOUBLE   = BIT(7), /** Double ECC */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_CRC          = BIT(8), /** CRC error */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ID   = BIT(9), /** Unknown ID */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_FRAME_SYNC   = BIT(10),/** Frame sync error */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_FRAME_DATA   = BIT(11),/** Frame data error */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_DATA_TIMEOUT = BIT(12),/** Timeout occurred */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ESC  = BIT(13),/** Unknown escape seq. */
+> > +	IA_CSS_RX_IRQ_INFO_ERR_LINE_SYNC    = BIT(14),/** Line Sync error */
 > 
-> I wanted to clearly distinguish between these two and thus put all errors
-> around mailbox into "-EIO category", which is actually true.
+> The comment is kind of messed up.  There should be a space after the
+> comma and just /* Line Sync error */
 
-At very least this code needs more or less the above to be put as a comment.
-
-...
-
-> > > > +cleanup:
-> > > > +       mutex_unlock(&psp_i2c_access_mutex);
-> > > > +       return 0;
-> >
-> > Not sure I understand why we ignore all above errors here.
-> >
-> 
-> Actually we are not ignoring them, since each error sets "psp_i2c_mbox_fail
-> = true;". This means that if there is any error on x86-PSP interface, we
-> are ignoring i2c-arbitration and just fall back to normal (that is
-> no-quirk) operation.
-> 
-> From the i2c-client perspective (who is eventually gathering error code
-> from above) I think we can claim that everything is fine, since bus is
-> granted to it. For developers there is an error message in case some debug
-> will be necessary.
-
-Perhaps needs a comment (sorry, if I overlooked it).
-
-...
-
-> > > > +       if (!dev || !dev->dev)
-> > > > +               return -ENODEV;
-> >
-> > At which circumstances may we get
-> >         dev != NULL
-> >         dev->dev == NULL
-> > ?
-> >
-> > ...
-> >
-> > > >         if (!dev || !dev->dev)
-> > > > -               return 0;
-> > > > +               return -ENODEV;
-> >
-> > I see the same here, perhaps Hans knows the answer :-)
-> 
-> Right, so I must admit that I simply used *-baytrail.c as a reference and
-> thinking that additional check shouldn't hurt us (always better than not
-> enough safety..). Looking more at this now - `dw_i2c_plat_probe()` will
-> boil-out earlier if `dev->dev == NULL`. Should I remove this extra check in
-> *-baytrail.c in the same commit?
-
-Maybe. Please, double check that it's not needed indeed.
-
--- 
-With Best Regards,
-Andy Shevchenko
+or just a tab before all of the comments
 
 

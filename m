@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4B04A41AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDFB4A449C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358888AbiAaLFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359078AbiAaLCx (ORCPT
+        id S241889AbiAaLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:31:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39570 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358707AbiAaLVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB44C06177E;
-        Mon, 31 Jan 2022 03:01:13 -0800 (PST)
+        Mon, 31 Jan 2022 06:21:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 470CEB82A61;
-        Mon, 31 Jan 2022 11:01:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD24C340E8;
-        Mon, 31 Jan 2022 11:01:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82138B82A5D;
+        Mon, 31 Jan 2022 11:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF059C340EE;
+        Mon, 31 Jan 2022 11:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626871;
-        bh=cyrUHQ/bV6GZ/AT9V/xmKq9w0SJfnB1JiyEl7DchvfA=;
+        s=korg; t=1643628095;
+        bh=RQ4L08h1IUK7PpYk9Wr7oozTMHL0Zyc7vLxsWVZV6O4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Psk3tClGfUpy1N6sIQKGYILfn7TPhdspaplBXLuA2Qj/kZXQ/bgzMvR6JjQlrDjZq
-         xBGKBVcKbaJ4BoX2Mpk8Mxq/OIMjp2ZKiMqpMgHLQFfz6KtzJGLAAKxMMT7ulBJcZm
-         gKv1p+KkCE0TWO7y8KGawUroCbeoUXTWvw3RK+0s=
+        b=FqotgQ3oxv1PtiCBR4bU23zo0+qCuGU3cDREX0vNZleqYd63KVaHG6rHZ2UslgSGD
+         XhdFQYXU+RC8+DK75fRyW3LV17WCCdOeZ/xxPfgQV5pQQCTAOMpJMxX2FM0kgwv2B4
+         uiptjMUQk6yByJ107VbJAHQJL/EbkpjSen8fGCA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 39/64] hwmon: (lm90) Reduce maximum conversion rate for G781
-Date:   Mon, 31 Jan 2022 11:56:24 +0100
-Message-Id: <20220131105217.001644228@linuxfoundation.org>
+Subject: [PATCH 5.16 122/200] NFS: Ensure the server has an up to date ctime before renaming
+Date:   Mon, 31 Jan 2022 11:56:25 +0100
+Message-Id: <20220131105237.665782839@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-References: <20220131105215.644174521@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,39 +47,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit a66c5ed539277b9f2363bbace0dba88b85b36c26 ]
+[ Upstream commit 6ff9d99bb88faebf134ca668842349d9718e5464 ]
 
-According to its datasheet, G781 supports a maximum conversion rate value
-of 8 (62.5 ms). However, chips labeled G781 and G780 were found to only
-support a maximum conversion rate value of 7 (125 ms). On the other side,
-chips labeled G781-1 and G784 were found to support a conversion rate value
-of 8. There is no known means to distinguish G780 from G781 or G784; all
-chips report the same manufacturer ID and chip revision.
-Setting the conversion rate register value to 8 on chips not supporting
-it causes unexpected behavior since the real conversion rate is set to 0
-(16 seconds) if a value of 8 is written into the conversion rate register.
-Limit the conversion rate register value to 7 for all G78x chips to avoid
-the problem.
+Renaming a file is required by POSIX to update the file ctime, so
+ensure that the file data is synced to disk so that we don't clobber the
+updated ctime by writing back after creating the hard link.
 
-Fixes: ae544f64cc7b ("hwmon: (lm90) Add support for GMT G781")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: f2c2c552f119 ("NFS: Move delegation recall into the NFSv4 callback for rename_setup()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/lm90.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfs/dir.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -373,7 +373,7 @@ static const struct lm90_params lm90_par
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT,
- 		.alert_alarms = 0x7c,
--		.max_convrate = 8,
-+		.max_convrate = 7,
- 	},
- 	[lm86] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -2488,6 +2488,8 @@ int nfs_rename(struct user_namespace *mn
+ 		}
+ 	}
+ 
++	if (S_ISREG(old_inode->i_mode))
++		nfs_sync_inode(old_inode);
+ 	task = nfs_async_rename(old_dir, new_dir, old_dentry, new_dentry, NULL);
+ 	if (IS_ERR(task)) {
+ 		error = PTR_ERR(task);
 
 

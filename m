@@ -2,148 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBBE4A497C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40194A4983
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238432AbiAaOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:39:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35065 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238406AbiAaOjk (ORCPT
+        id S238997AbiAaOlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 09:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236916AbiAaOlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:39:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643639979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R0oDEaFGdibME6lqfi97Zey91X/PgbW0htlflxKdk5k=;
-        b=Lt718/7zxLrylDXof826XEVZDl4FuiQ8DOBycpbkeXeIdoiTHs98UryBeOJI9OBQhJE/q4
-        TLQqH3hAuawP5RviXQ9ATkoaSZWGptIZZyOD5gVg8yiXGMrmwYBR3NwBoiQuFZNLQIhqoO
-        r9MJnZgL1hH8/eBPKacUqkmsqfFDs2c=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-228-JLZ4TfytPPKBBdCvi3jlmA-1; Mon, 31 Jan 2022 09:39:38 -0500
-X-MC-Unique: JLZ4TfytPPKBBdCvi3jlmA-1
-Received: by mail-ej1-f69.google.com with SMTP id x16-20020a170906135000b006b5b4787023so5107798ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 06:39:38 -0800 (PST)
+        Mon, 31 Jan 2022 09:41:09 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8ACC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 06:41:09 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id o12so27232628lfg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 06:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YTDMLLL9wbIhmayIu01fXxrx4uBIFemwXrq+zvvqr2U=;
+        b=ax77L6WROLWBWjZyRjxBD2S90Qc8JR3gPPDnwsNDKYZ+XqnWYWNi/0wjub1MGKDivX
+         1bcy/RAJkOlPsVkePVfs2xcYgVbn37CV+l/4Sr9u6R93NWDzayPgrywZeHz/RLhk0iZF
+         EJgsZHqUVOYRGhRza9L0JKFLil4bQ/rQ8jtED+aczIeVHo6X7QJdaFRrAeRsmAiMlFpQ
+         vZP8A2W2aQGDHFQRoyeM/ldCDBUT+8gVtm9P7VtzGNDYq0xaoqemLbkIdGFAn2hx3H7R
+         Vn04XnxKK1NM37KD/ZJi/XEUd8y9wy4qVYQSUl7ndtkrJRN9zLTizkU8KPeONzYFfiCp
+         3gYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=R0oDEaFGdibME6lqfi97Zey91X/PgbW0htlflxKdk5k=;
-        b=o1HwQnnJRgtT3DnsK4EfryrQXvZlFuFftGIBw3ixHLQTDUcP5DNk9Mp0AUw4piQEOt
-         5D4BTKmGzErM0GTRblaTpVFmQHWNrzmCXLcURSiDX62Vvy3jGwbBZiDmkkpgjWIPUYkd
-         OHvrAEaRxI7wklD8Gbq6rsYtR8OEhrxVkm+r3ntlJbFXMFeEl0iXk+QFczAt3zIsodVQ
-         Fa9l8SW6gxQ0cIujAw/f8sFXC0vvZDaxSy0cUTLzioAMhL2ouhxdUMgGI+FfP1QdDefZ
-         KweDqHGF3dUjavhyMQa3IXWm+EEuJHy2lebfX32XYJAb0W/IJI86n8+ig5Vf+F+D3E84
-         hYZw==
-X-Gm-Message-State: AOAM532tdVgZpEfjk73N6wrCrfWf6EwQrueDZrCZ34XcLgziO/lIsocu
-        eM+OtjcI4EgLyVvsZWpm7PSJALGeo24RsY3YFuYz9pjVPlFNfjDvraO21XW46jS+MHFXu+lbQ2S
-        ntlunMfJ3ukynp/3B2KHRvQnH
-X-Received: by 2002:a17:907:3d01:: with SMTP id gm1mr1106338ejc.695.1643639977301;
-        Mon, 31 Jan 2022 06:39:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzix88rypjQ9PzeqG917MJ5ZswKyPWRnGuIiC5bkUAy88MpUabwzv3XiWV6ICCl8U202+QhVQ==
-X-Received: by 2002:a17:907:3d01:: with SMTP id gm1mr1106311ejc.695.1643639977039;
-        Mon, 31 Jan 2022 06:39:37 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id s20sm13504159ejc.189.2022.01.31.06.39.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 06:39:36 -0800 (PST)
-Message-ID: <91bfb535-9442-9413-cfca-1b5cb08826ed@redhat.com>
-Date:   Mon, 31 Jan 2022 15:39:35 +0100
+        bh=YTDMLLL9wbIhmayIu01fXxrx4uBIFemwXrq+zvvqr2U=;
+        b=yUXj2wAPth8KcftmSgETG1tVhMHUuZc3nmoy9uR7CwiiJnP4x6xuZLMzDJ4C+vV0l+
+         Hof7TiSHLnghXW1yFT5HhlrMB8OvPzlkF4BIT5jUtOXisl5UQIAIPYwUkrnstCS0x/wz
+         xXB9xlPdJYREzOuu2IDqTB2pcNRZYOECufExniJa1wfL8fVslvCsvfl562MLZiGB+9HX
+         lZECL4c4W59Pi3FixCqzjWqIR7V3NMmVKau2UQYx4aIWwHoYfNqTUIdQZQBpxeu0Q2Ql
+         y2OOF3t+N99lXD08kCu56dbcx9ln9LmXmIAFGdVUV+EIsOvzzANVOKFCj8TKSCnb1v+J
+         x5UA==
+X-Gm-Message-State: AOAM531LYa+rohx54f91KN5WHjVYtpWnclbv4MezA42OGzr6QzDYjSmi
+        zzc5HY02fTwcuBTti1xCsTg=
+X-Google-Smtp-Source: ABdhPJzUixN6LMjgbInq2cdJPPTgt/c+gGvYkyRxjepVyzNznLE0T9ElCf8vFjsYVk3sdhGkpTc/Xw==
+X-Received: by 2002:a05:6512:2144:: with SMTP id s4mr13972034lfr.504.1643640067474;
+        Mon, 31 Jan 2022 06:41:07 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id y32sm3670582lfa.15.2022.01.31.06.41.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 06:41:06 -0800 (PST)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Subject: [PATCH v3 1/1] mm/vmalloc: Move draining areas out of caller context
+Date:   Mon, 31 Jan 2022 15:40:58 +0100
+Message-Id: <20220131144058.35608-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 01/20] power: supply: core: Refactor
- power_supply_set_input_current_limit_from_supplier()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-References: <20220130204557.15662-1-hdegoede@redhat.com>
- <20220130204557.15662-2-hdegoede@redhat.com>
- <YffmDCHY6csr0uyD@smile.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YffmDCHY6csr0uyD@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+A caller initiates the drain procces from its context once the
+drain threshold is reached or passed. There are at least two
+drawbacks of doing so:
 
-Thank you for the reviews.
+a) a caller can be a high-prio or RT task. In that case it can
+   stuck in doing the actual drain of all lazily freed areas.
+   This is not optimal because such tasks usually are latency
+   sensitive where the control should be returned back as soon
+   as possible in order to drive such workloads in time. See
+   96e2db456135 ("mm/vmalloc: rework the drain logic")
 
-On 1/31/22 14:37, Andy Shevchenko wrote:
-> On Sun, Jan 30, 2022 at 09:45:38PM +0100, Hans de Goede wrote:
->> Some (USB) charger ICs have variants with USB D+ and D- pins to do their
->> own builtin charger-type detection, like e.g. the bq24190 and bq25890 and
->> also variants which lack this functionality, e.g. the bq24192 and bq25892.
->>
->> In case the charger-type; and thus the input-current-limit detection is
->> done outside the charger IC then we need some way to communicate this to
->> the charger IC. In the past extcon was used for this, but if the external
->> detection does e.g. full USB PD negotiation then the extcon cable-types do
->> not convey enough information.
->>
->> For these setups it was decided to model the external charging "brick"
->> and the parameters negotiated with it as a power_supply class-device
->> itself; and power_supply_set_input_current_limit_from_supplier() was
->> introduced to allow drivers to get the input-current-limit this way.
->>
->> But in some cases psy drivers may want to know other properties, e.g. the
->> bq25892 can do "quick-charge" negotiation by pulsing its current draw,
->> but this should only be done if the usb_type psy-property of its supplier
->> is set to DCP (and device-properties indicate the board allows higher
->> voltages).
->>
->> Instead of adding extra helper functions for each property which
->> a psy-driver wants to query from its supplier, refactor
->> power_supply_set_input_current_limit_from_supplier() into a
->> more generic power_supply_get_property_from_supplier() function.
-> 
-> ...
-> 
->> +	ret = power_supply_get_property_from_supplier(bdi->charger,
->> +						      POWER_SUPPLY_PROP_CURRENT_MAX,
->> +						      &val);
->> +	if (ret == 0)
-> 
-> Can it be as simple as
-> 
-> 	if (ret)
-> 		return;
-> 
-> 	...
-> 
-> 
-> ?
-> 
-> Or did I misunderstand the meaning of 0?
+b) It is not safe to call vfree() during holding a spinlock due
+   to the vmap_purge_lock mutex. The was a report about this from
+   Zeal Robot <zealci@zte.com.cn> here:
+   https://lore.kernel.org/all/20211222081026.484058-1-chi.minghao@zte.com.cn
 
-Yes that would be better and together with some of the other tweaks
-you've suggested I believe that this warrants a version 5. So I'll
-address a v5 addressing all your comment.
+Moving the drain to the separate work context addresses those
+issues.
 
-Regards,
+v1->v2:
+   - Added prefix "_work" to the drain worker function.
+v2->v3:
+   - Remove the drain_vmap_work_in_progress. Extra queuing
+     is expectable under heavy load but it can be disregarded
+     because a work will bail out if nothing to be done.
 
-Hans
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ mm/vmalloc.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index bdc7222f87d4..5d721542bed7 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -793,6 +793,8 @@ RB_DECLARE_CALLBACKS_MAX(static, free_vmap_area_rb_augment_cb,
+ static void purge_vmap_area_lazy(void);
+ static BLOCKING_NOTIFIER_HEAD(vmap_notify_list);
+ static unsigned long lazy_max_pages(void);
++static void drain_vmap_area_work(struct work_struct *work);
++static DECLARE_WORK(drain_vmap_work, drain_vmap_area_work);
+ 
+ static atomic_long_t nr_vmalloc_pages;
+ 
+@@ -1719,18 +1721,6 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
+ 	return true;
+ }
+ 
+-/*
+- * Kick off a purge of the outstanding lazy areas. Don't bother if somebody
+- * is already purging.
+- */
+-static void try_purge_vmap_area_lazy(void)
+-{
+-	if (mutex_trylock(&vmap_purge_lock)) {
+-		__purge_vmap_area_lazy(ULONG_MAX, 0);
+-		mutex_unlock(&vmap_purge_lock);
+-	}
+-}
+-
+ /*
+  * Kick off a purge of the outstanding lazy areas.
+  */
+@@ -1742,6 +1732,20 @@ static void purge_vmap_area_lazy(void)
+ 	mutex_unlock(&vmap_purge_lock);
+ }
+ 
++static void drain_vmap_area_work(struct work_struct *work)
++{
++	unsigned long nr_lazy;
++
++	do {
++		mutex_lock(&vmap_purge_lock);
++		__purge_vmap_area_lazy(ULONG_MAX, 0);
++		mutex_unlock(&vmap_purge_lock);
++
++		/* Recheck if further work is required. */
++		nr_lazy = atomic_long_read(&vmap_lazy_nr);
++	} while (nr_lazy > lazy_max_pages());
++}
++
+ /*
+  * Free a vmap area, caller ensuring that the area has been unmapped
+  * and flush_cache_vunmap had been called for the correct range
+@@ -1768,7 +1772,7 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+ 
+ 	/* After this point, we may free va at any time */
+ 	if (unlikely(nr_lazy > lazy_max_pages()))
+-		try_purge_vmap_area_lazy();
++		schedule_work(&drain_vmap_work);
+ }
+ 
+ /*
+-- 
+2.30.2
 

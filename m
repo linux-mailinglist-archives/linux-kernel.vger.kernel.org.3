@@ -2,189 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ABA4A3E7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8B04A3E80
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243445AbiAaILF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 03:11:05 -0500
-Received: from mail-eopbgr150087.outbound.protection.outlook.com ([40.107.15.87]:23606
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230124AbiAaILD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 03:11:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SomcsPK8lIRQc0ywaslb+fpQ5OxBCdNO+Wpo47Ch6Bw=;
- b=lg8gB7YZrUoHSnq2KEL8t0d37W3kyg8qqAKbqjVoFSEepT7lTbNDv6xZRgGRLasdT7IH8dFBCBTziOhAai8t6wTnNovDBHHZC4MeRe/WPzyL+fMRA3YNh4DYt6WXnzBoJRQlWFHe4gvXZgDHmVGDOEr0y8ngN2nGmGI52LDQxXk=
-Received: from DB6PR0301CA0033.eurprd03.prod.outlook.com (2603:10a6:4:3e::43)
- by AM5PR0802MB2545.eurprd08.prod.outlook.com (2603:10a6:203:a2::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 08:10:59 +0000
-Received: from DB5EUR03FT015.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:4:3e:cafe::57) by DB6PR0301CA0033.outlook.office365.com
- (2603:10a6:4:3e::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.21 via Frontend
- Transport; Mon, 31 Jan 2022 08:10:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DB5EUR03FT015.mail.protection.outlook.com (10.152.20.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4930.15 via Frontend Transport; Mon, 31 Jan 2022 08:10:59 +0000
-Received: ("Tessian outbound 31aeb3346a45:v113"); Mon, 31 Jan 2022 08:10:59 +0000
-X-CR-MTA-TID: 64aa7808
-Received: from 8b8996ea6eb4.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 7EC790E1-42A3-444D-8733-D9C6E76C6505.1;
-        Mon, 31 Jan 2022 08:10:49 +0000
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 8b8996ea6eb4.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Mon, 31 Jan 2022 08:10:49 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TQncBIljdUGXWJjw4Csqply906ixY/MKZTEMK1aMqc6fbjF2qla4qc3VgQEuy9UBIWaS7zwAjr6RZxBdg5UV5c7ETfRI8VP7HBk9Z2LH0PptfOMVoYULYYCxYdG2Jz7r9YZn+a/YVKpPVB3BwbnI0ZIJUq0uZt100OypWcMQq8R10lOdiSyZYDcGTZ4PXwDVATTPGVUqedCK6Y8/TK0TodTNsCb4MRmslbEm7B+lomRNqWjFZbLURtp6jrfVAGk0EB0DWBNIQK3/RsyXfm0OQWsb7s+IFaNAL8f6r9brA6d642iwqXLYLVAVJDC1Hfc/MozAU1GSaZ1rtYq2gw3H1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SomcsPK8lIRQc0ywaslb+fpQ5OxBCdNO+Wpo47Ch6Bw=;
- b=AiUOempirVs72U19fJ5T+PUpKu3NK7x1UeZprOAQ+NLNH2pozo+8LVfansk+UweYG7zS4o9+Npb6QQA+2SCfLDqFS8/oluUNGTkGGqZNR/omZN0M36gJeaCIQgpQ3YSuSkecnfXnxwMeNrdLvIrsQMTtad3yvY6XVw+yeErurX4yotPcU4wXH1R8xfcuRm4U7kumc7mf8+9vh0UYZPmpVs2nHKUzVGAsJwCiDr2wwKITiq3DTmSCROowIoeY0UMoEnfHpc01KQQGJC6MSnIvOrXlS81ZOfL+KVIwzOXpwxRDL19Xa3oFOxQB8jmOlt+dB5gbsBbRTXDS11fV7BS/oA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SomcsPK8lIRQc0ywaslb+fpQ5OxBCdNO+Wpo47Ch6Bw=;
- b=lg8gB7YZrUoHSnq2KEL8t0d37W3kyg8qqAKbqjVoFSEepT7lTbNDv6xZRgGRLasdT7IH8dFBCBTziOhAai8t6wTnNovDBHHZC4MeRe/WPzyL+fMRA3YNh4DYt6WXnzBoJRQlWFHe4gvXZgDHmVGDOEr0y8ngN2nGmGI52LDQxXk=
-Received: from AM9PR08MB7276.eurprd08.prod.outlook.com (2603:10a6:20b:437::11)
- by AM9PR08MB6866.eurprd08.prod.outlook.com (2603:10a6:20b:2fc::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Mon, 31 Jan
- 2022 08:10:46 +0000
-Received: from AM9PR08MB7276.eurprd08.prod.outlook.com
- ([fe80::8019:e2fd:66c7:aa4e]) by AM9PR08MB7276.eurprd08.prod.outlook.com
- ([fe80::8019:e2fd:66c7:aa4e%7]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 08:10:45 +0000
-From:   Jianyong Wu <Jianyong.Wu@arm.com>
-To:     David Hildenbrand <david@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>
-CC:     Justin He <Justin.He@arm.com>, "will@kernel.org" <will@kernel.org>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
-Subject: RE: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Thread-Topic: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Thread-Index: AQHX8lbt013/nzm8RUa6mdFr92d9v6xU2ImAgAELwWCAAGL4AIABFwGwgAAjrYCAHXF+gIAAR6QAgAAGaOCAABRIgIAAAXgAgAABfiCAAAIvAIAAAEEAgAFJh/CAAGfSgIAGAnDw
-Date:   Mon, 31 Jan 2022 08:10:44 +0000
-Message-ID: <AM9PR08MB72760F336E9D198FB4A1E6D5F4259@AM9PR08MB7276.eurprd08.prod.outlook.com>
-References: <20211216082812.165387-1-jianyong.wu@arm.com>
- <YdXdjcJ7jbnkFsqp@arm.com>
- <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdcRLohx777jzWah@arm.com>
- <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdgZJ/mBG+BCxmEv@arm.com>
- <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
- <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com>
- <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
- <3e6513f9-77ca-79e5-d185-7e9a11ec7689@redhat.com>
- <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <65fdd873-1f93-56e3-c7a5-98d621c5dbd8@redhat.com>
- <7eb4bc77-c1db-99c4-4c77-ae9ddd159abb@redhat.com>
- <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com>
-In-Reply-To: <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ts-tracking-id: 4040AE2493AEEA438DC8C695A07B358C.0
-x-checkrecipientchecked: true
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-MS-Office365-Filtering-Correlation-Id: e5d6454e-a412-4b96-3510-08d9e4913702
-x-ms-traffictypediagnostic: AM9PR08MB6866:EE_|DB5EUR03FT015:EE_|AM5PR0802MB2545:EE_
-X-Microsoft-Antispam-PRVS: <AM5PR0802MB2545D608DE9530365FDB4EA7F4259@AM5PR0802MB2545.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-nodisclaimer: true
-x-ms-oob-tlc-oobclassifiers: OLM:9508;OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: j75N6bIlRB39RJ4vfdNIVBwAVEHD+TeN8p72kxEpiVOxrnbQXMDJytH8hUdpCCqHwKXnGtj2Z6pDl5Fkdt3nd9Ht8haCvHp7ACs/SLXBLdAW5TwY48WZZzpXQqiav6prAN9yn+4KXnbFz9tquJL5oieRKa8Lkh6KThpxw1wnDF+rkZ3dBlCL+pWZXyMO9gBH3yWfRxKbrskfXLKH3fmpUjHyWYDPCH7fAVpYES99N/y0gXAS3tQ0jNLm737e1PmqWb0EnNZBhFjDSL253zEPCVrez3mM2sng5GiAOzin05TDYW3FV06Aw21ixQmuu0UNBFTpNqhXc3NG4kcIK4hi69fVaY/84DkzpcD/R7hIGDZFJtI5RwvmI0bMCWI/hl+2J84XG1nFDEWtYZGI7juoPkAYtyxxN1fp+8s7W2NfkIlchgr57zdV4llq8DoBnHPXIBKbw5UpOzyyzB+OqJWhjA+iFrbjQSfI7iPjZr0Z3p7tl6TuJkw2AMikYS00EQnU3RsGmAWvGxHA2fEloq3aJUtO6Am0T2LRYiBxL6N0I395cG7O81zIs2lpTrsKLwdIT6x96rOZ2N/nEPLDmflLhyzbdoNsh9DWmoAK93pwjyrFMAx+IzAMa3cw8inxo7Ccl5eXtZhCw5T0DRrgUOXXlwMI1JbB0+rR+Vtyt1tL005uuU32zBr37tSlOghfFQisOWbiBD6yx3pRvHPpkLLKVg==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB7276.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(508600001)(71200400001)(83380400001)(66476007)(8676002)(76116006)(8936002)(64756008)(66946007)(38100700002)(66556008)(66446008)(7696005)(316002)(9686003)(4326008)(6506007)(122000001)(33656002)(54906003)(2906002)(38070700005)(6636002)(110136005)(52536014)(5660300002)(86362001)(26005)(53546011)(186003)(20210929001);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S244916AbiAaILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 03:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230124AbiAaILf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 03:11:35 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D64C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 00:11:35 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id s18so23681925wrv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 00:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=LzBo+qZfYgsc3DpL31g6/Y58gAL+IatCA1mpbV8SqCA=;
+        b=IKK/WUAziglEsYPesGOVaApR/hIrHlnn441Stu298Yt6FxqI2AB02A7m/fTZmNTW0s
+         N6jHCwRmXawzvwdWj9aRM5AZbr/QHn4EpFBqj4QDhhTEKYg1g6+H24TU6n4bDl7uPger
+         DWUcMM5QGRNduDizYUzqHqCSuu9qLaWcWaXEygdNG+jZqnGrPkXm8m9wewb7N8PAaPWr
+         UH0tKHcyPRT9Uaf8Iqwpj86ml2bAnlzcl68NvQ084PmnAxeK4KTH5XaQltq6cBI/A1S8
+         GkAEKtbGNjQBGpDCf/Rd/Ok0Suv34t3GM1LcbQ+hrxoxHdiektgoPsXDGS45HrQ7E6IN
+         D5Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LzBo+qZfYgsc3DpL31g6/Y58gAL+IatCA1mpbV8SqCA=;
+        b=q7D92Ok/H0AWYudY0JYHiduYucCS2dTG8VvL71SaBAKljc6ozQlEfs8/I4n1X/zcHh
+         PcmUYqdmYcUCiJzhj4aLivicEJcTkIQjuJSkSsecxEb5/TBjSkpXM688t7mwkgIGB7lU
+         Z+sUL/PjayMFKbzg/5ijJT2y/nB+DubNIErUej04BPcgum+TiZiHA0MLwLHV9v7nsW/D
+         SGtGv5dfKUeMnlMgfL2tuQYgS7hH3GiWDds63xXrHCil3SHgNj/2DkEcKXxqf94h7r4n
+         ssdLEeKwI2fc+1N3Yr7ZIzEBE6bx1eCJfKTCLv+7hzB8YZwKVjqKtcTNlcJ362AWnZ9D
+         FpKg==
+X-Gm-Message-State: AOAM531kZaYzJNkGqdr6kGRbXWOC5tSQUn0RXvS1PKkmcWAXW8zK3C4m
+        O6M0PqVg69keJmnUFQIG1m0OmA==
+X-Google-Smtp-Source: ABdhPJxzy67mDG/u4p5XJJcAdyf6Zvq5P9L55f4JTOcksviLQW/dY0y/TNu+z2gYC+QSyVEnHNvqQw==
+X-Received: by 2002:a05:6000:1707:: with SMTP id n7mr16588513wrc.234.1643616693635;
+        Mon, 31 Jan 2022 00:11:33 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id t5sm11492990wrw.92.2022.01.31.00.11.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 00:11:33 -0800 (PST)
+Date:   Mon, 31 Jan 2022 09:11:31 +0100
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: ata: convert ata/cortina,gemini-sata-bridge
+ to yaml
+Message-ID: <YfeZs//CcSqWPjhl@Red>
+References: <20220129204004.1009571-1-clabbe@baylibre.com>
+ <c827a283-a2ba-b89c-2361-627f24e5f86f@opensource.wdc.com>
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6866
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT015.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 54788f6e-92cb-4a6b-4068-08d9e4912ea3
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pYlOFxXtN9qI99iz8+JQ7NjcmiAnN8rC3nIRFzWWU3b/5Ms2PZfJOXlpWw9B1FoS2p7FW4PJj1H8dW8cey1BDeYCsKlBM19hy+sV9aFIIo315AOOg/luSzFyXcRIc8Lefs8nHFGMKXcd39+lKCkM+BaHlwA5NR1FLN5a9WpqHibfI83Pbcl5m74dBwLmtLO43t524x4rNFlRHlqbYc7Fc8eaV05BHzPUqXtHAAfc2R/O/U7ssHrLTQ4CwMtJr80pQGaNMK5Mo65x/dHaMcdeXtIU+BHAFJvg97Ob7aPSwkoA8B4neHUWJKX8MSw/Kdlyh28m4IlkfjU1bKfF+UTlWGhBum0sUdqrtDfk6gbvl/dD40cuf7xwGXYUnBMUROejt8BKMOC2Ity2g/5CzoO0eK/fM+P/W1/a85gV32VPx84PMSFFvM3krSyeFGLjIcdX9lz4Y0/H5GqZtcQNAeE/QYzTJthAAztUl1db2TOrZGSt1LLhvnGiR9i2jD2yqVTdLylNc90ao5lD86xAOlYE+twQO6pjJNbp/gwAxfne/CHTGcL9+tZXyEyIQK1qJTFw5q2ajSLSrF5ilUWSrpFRbiKiYYzx2Kt0lBhwhzAuMwuJfJijvDbkSxpujszhWmyAwLzpE8GMXeC5T2N+GMrz+I0cy+EVlg1xOSQcYppiemqyBUQ8isONKKSqwpyrVeDY
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(9686003)(52536014)(6506007)(5660300002)(7696005)(70586007)(70206006)(53546011)(8936002)(8676002)(4326008)(55016003)(83380400001)(36860700001)(86362001)(47076005)(40460700003)(82310400004)(33656002)(336012)(186003)(356005)(54906003)(26005)(6636002)(316002)(508600001)(81166007)(110136005)(2906002)(20210929001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 08:10:59.3838
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5d6454e-a412-4b96-3510-08d9e4913702
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT015.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0802MB2545
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c827a283-a2ba-b89c-2361-627f24e5f86f@opensource.wdc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRGF2aWQsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRGF2aWQg
-SGlsZGVuYnJhbmQgPGRhdmlkQHJlZGhhdC5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBKYW51YXJ5
-IDI3LCAyMDIyIDg6MjMgUE0NCj4gVG86IEppYW55b25nIFd1IDxKaWFueW9uZy5XdUBhcm0uY29t
-PjsgQXJkIEJpZXNoZXV2ZWwNCj4gPGFyZGJAa2VybmVsLm9yZz47IENhdGFsaW4gTWFyaW5hcyA8
-Q2F0YWxpbi5NYXJpbmFzQGFybS5jb20+DQo+IENjOiBKdXN0aW4gSGUgPEp1c3Rpbi5IZUBhcm0u
-Y29tPjsgd2lsbEBrZXJuZWwub3JnOyBBbnNodW1hbiBLaGFuZHVhbA0KPiA8QW5zaHVtYW4uS2hh
-bmR1YWxAYXJtLmNvbT47IGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmc7DQo+IHF1aWNfcWlhbmNh
-aUBxdWljaW5jLmNvbTsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLQ0K
-PiBrZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgZ3NoYW5AcmVkaGF0LmNvbTsgbmQgPG5kQGFy
-bS5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjNdIGFybTY0L21tOiBhdm9pZCBmaXhtYXAg
-cmFjZSBjb25kaXRpb24gd2hlbiBjcmVhdGUNCj4gcHVkIG1hcHBpbmcNCj4gDQo+ID4NCj4gPiBZ
-ZXMsIHN5c3RlbV9zdGF0ZSBjYW4gcm91Z2hseSBzZXBhcmF0ZSB0aGVzZSBjYWxsZXJzIG9mDQo+
-IF9fY3JlYXRlX3BnZF9tYXBwaW5nLiBXaGVuIHN5c3RlbV9zdGF0ZSA+IFNZU1RFTV9CT09USU5H
-IHdlIGNhbg0KPiBhZGQgdGhlIGxvY2suDQo+ID4gVGh1cywgSSBoYXZlIHRoZSBmb2xsb3dpbmcg
-Y2hhbmdlOg0KPiA+DQo+ID4gc3RhdGljIERFRklORV9TUElOTE9DSyhzd2FwcGVyX3BnZGlyX2xv
-Y2spOw0KPiA+ICtzdGF0aWMgREVGSU5FX01VVEVYKGZpeG1hcF9sb2NrKTsNCj4gPg0KPiA+ICB2
-b2lkIHNldF9zd2FwcGVyX3BnZChwZ2RfdCAqcGdkcCwgcGdkX3QgcGdkKSAgeyBAQCAtMzI5LDYg
-KzMzMCw4IEBADQo+ID4gc3RhdGljIHZvaWQgYWxsb2NfaW5pdF9wdWQocGdkX3QgKnBnZHAsIHVu
-c2lnbmVkIGxvbmcgYWRkciwgdW5zaWduZWQgbG9uZw0KPiBlbmQsDQo+ID4gICAgICAgICB9DQo+
-ID4gICAgICAgICBCVUdfT04ocDRkX2JhZChwNGQpKTsNCj4gPg0KPiA+ICsgICAgICAgaWYgKHN5
-c3RlbV9zdGF0ZSA+IFNZU1RFTV9CT09USU5HKQ0KPiANCj4gQXMgdGhlcmUgaXMgbm90aGluZyBz
-bWFsbGVyIHRoYW4gU1lTVEVNX0JPT1RJTkcsIHlvdSBjYW4gdXNlDQo+IAlpZiAoc3lzdGVtX3N0
-YXRlICE9IFNZU1RFTV9CT09USU5HKQ0KPiANCj4gLi4uDQpPSywNCg0KPiANCj4gPg0KPiA+IEl0
-IHNlZW1zIHdvcmsgYW5kIHNvbWVob3cgc2ltcGVyLiBCdXQgSSBkb24ndCBrbm93IGlmIGl0IGlz
-IHJlYXNvbmFibGUNCj4gPiB0byBkbyB0aGlzLiBTbywgYW55IGlkZWE/IEBBcmQgQmllc2hldXZl
-bCAgQENhdGFsaW4gTWFyaW5hcw0KPiANCj4gSXQncyB3b3J0aCBsb29raW5nIGF0IGtlcm5lbC9u
-b3RpZmllci5jLCBlLmcuLA0KPiBibG9ja2luZ19ub3RpZmllcl9jaGFpbl9yZWdpc3RlcigpDQo+
-IA0KPiBpZiAodW5saWtlbHkoc3lzdGVtX3N0YXRlID09IFNZU1RFTV9CT09USU5HKSkNCj4gCXJl
-dHVybiBub3RpZmllcl9jaGFpbl9yZWdpc3RlcigmbmgtPmhlYWQsIG4pOw0KPiANCj4gZG93bl93
-cml0ZSgmbmgtPnJ3c2VtKTsNCj4gcmV0ID0gbm90aWZpZXJfY2hhaW5fcmVnaXN0ZXIoJm5oLT5o
-ZWFkLCBuKTsgdXBfd3JpdGUoJm5oLT5yd3NlbSk7DQo+IA0KPiANCj4gDQo+IElmIHdlIGRlY2lk
-ZSB0byBnbyBkb3duIHRoYXQgcGF0aCwgd2Ugc2hvdWxkIG1ha2Ugc3VyZSB0byBhZGQgYSBjb21t
-ZW50DQo+IGxpa2UNCj4gDQo+IC8qDQo+ICAqIE5vIG5lZWQgZm9yIGxvY2tpbmcgZHVyaW5nIGVh
-cmx5IGJvb3QuIEFuZCBpdCBkb2Vzbid0IHdvcmsgYXMNCj4gICogZXhwZWN0ZWQgd2l0aCBLQVNM
-UiBlbmFibGVkIHdoZXJlIHdlIG1pZ2h0IGNsZWFyIEJTUyB0d2ljZS4NCj4gICovDQo+IA0KDQpU
-aGFua3MgRGF2aWQsIGl0J3MgdmVyeSBoZWxwZnVsLg0KDQpUaGFua3MNCkppYW55b25nDQoNCj4g
-LS0NCj4gVGhhbmtzLA0KPiANCj4gRGF2aWQgLyBkaGlsZGVuYg0KDQo=
+Le Mon, Jan 31, 2022 at 09:48:20AM +0900, Damien Le Moal a écrit :
+> On 2022/01/30 5:40, Corentin Labbe wrote:
+> > This patch converts ata/cortina,gemini-sata-bridge binding to yaml
+> > 
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> >  .../ata/cortina,gemini-sata-bridge.txt        |  55 ----------
+> >  .../ata/cortina,gemini-sata-bridge.yaml       | 100 ++++++++++++++++++
+> >  2 files changed, 100 insertions(+), 55 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
+> >  create mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
+> > deleted file mode 100644
+> > index 1c3d3cc70051..000000000000
+> > --- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
+> > +++ /dev/null
+> > @@ -1,55 +0,0 @@
+> > -* Cortina Systems Gemini SATA Bridge
+> > -
+> > -The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
+> > -takes two Faraday Technology FTIDE010 PATA controllers and bridges
+> > -them in different configurations to two SATA ports.
+> > -
+> > -Required properties:
+> > -- compatible: should be
+> > -  "cortina,gemini-sata-bridge"
+> > -- reg: registers and size for the block
+> > -- resets: phandles to the reset lines for both SATA bridges
+> > -- reset-names: must be "sata0", "sata1"
+> > -- clocks: phandles to the compulsory peripheral clocks
+> > -- clock-names: must be "SATA0_PCLK", "SATA1_PCLK"
+> > -- syscon: a phandle to the global Gemini system controller
+> > -- cortina,gemini-ata-muxmode: tell the desired multiplexing mode for
+> > -  the ATA controller and SATA bridges. Values 0..3:
+> > -  Mode 0: ata0 master <-> sata0
+> > -          ata1 master <-> sata1
+> > -          ata0 slave interface brought out on IDE pads
+> > -  Mode 1: ata0 master <-> sata0
+> > -          ata1 master <-> sata1
+> > -          ata1 slave interface brought out on IDE pads
+> > -  Mode 2: ata1 master <-> sata1
+> > -          ata1 slave  <-> sata0
+> > -          ata0 master and slave interfaces brought out
+> > -               on IDE pads
+> > -  Mode 3: ata0 master <-> sata0
+> > -          ata0 slave  <-> sata1
+> > -          ata1 master and slave interfaces brought out
+> > -               on IDE pads
+> > -
+> > -Optional boolean properties:
+> > -- cortina,gemini-enable-ide-pins: enables the PATA to IDE connection.
+> > -  The muxmode setting decides whether ATA0 or ATA1 is brought out,
+> > -  and whether master, slave or both interfaces get brought out.
+> > -- cortina,gemini-enable-sata-bridge: enables the PATA to SATA bridge
+> > -  inside the Gemnini SoC. The Muxmode decides what PATA blocks will
+> > -  be muxed out and how.
+> > -
+> > -Example:
+> > -
+> > -sata: sata@46000000 {
+> > -	compatible = "cortina,gemini-sata-bridge";
+> > -	reg = <0x46000000 0x100>;
+> > -	resets = <&rcon 26>, <&rcon 27>;
+> > -	reset-names = "sata0", "sata1";
+> > -	clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
+> > -		 <&gcc GEMINI_CLK_GATE_SATA1>;
+> > -	clock-names = "SATA0_PCLK", "SATA1_PCLK";
+> > -	syscon = <&syscon>;
+> > -	cortina,gemini-ata-muxmode = <3>;
+> > -	cortina,gemini-enable-ide-pins;
+> > -	cortina,gemini-enable-sata-bridge;
+> > -};
+> > diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+> > new file mode 100644
+> > index 000000000000..ff27e4884e21
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+> > @@ -0,0 +1,100 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/ata/cortina,gemini-sata-bridge.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Cortina Systems Gemini SATA Bridge
+> > +
+> > +maintainers:
+> > +  - Linus Walleij <linus.walleij@linaro.org>
+> > +
+> > +description: |
+> > +    The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
+> > +    takes two Faraday Technology FTIDE010 PATA controllers and bridges
+> > +    them in different configurations to two SATA ports.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: "cortina,gemini-sata-bridge"
+> > +  reg:
+> > +    minItems: 1
+> > +  resets:
+> > +    minItems: 2
+> > +    description: phandles to the reset lines for both SATA bridges
+> > +  reset-names:
+> > +    items:
+> > +      - const: "sata0"
+> > +      - const: "sata1"
+> > +  clocks:
+> > +    minItems: 2
+> > +    description: phandles to the compulsory peripheral clocks
+> > +  clock-names:
+> > +    items:
+> > +      - const: "SATA0_PCLK"
+> > +      - const: "SATA1_PCLK"
+> > +  syscon:
+> > +    minItems: 1
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: a phandle to the global Gemini system controller
+> 
+> s/a phandle/phandle ?
+> 
+> Saying "a phandle" seems to imply that there may be many. I am not sure here though.
+> 
+> > +  cortina,gemini-ata-muxmode:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum:
+> > +      - 0
+> > +      - 1
+> > +      - 2
+> > +      - 3
+> > +    description: |
+> > +      tell the desired multiplexing mode for the ATA controller and SATA bridges. Values 0..3:
+> 
+> Nit: Start the sentence with an uppercase "Tell...".
+> 
+> > +      Mode 0: ata0 master <-> sata0
+> > +              ata1 master <-> sata1
+> > +              ata0 slave interface brought out on IDE pads
+> > +      Mode 1: ata0 master <-> sata0
+> > +              ata1 master <-> sata1
+> > +              ata1 slave interface brought out on IDE pads
+> > +      Mode 2: ata1 master <-> sata1
+> > +              ata1 slave  <-> sata0
+> > +              ata0 master and slave interfaces brought out on IDE pads
+> > +      Mode 3: ata0 master <-> sata0
+> > +              ata0 slave  <-> sata1
+> > +              ata1 master and slave interfaces brought out on IDE pads
+> > +
+> > +  cortina,gemini-enable-ide-pins:
+> > +    type: boolean
+> > +    description: enables the PATA to IDE connection.
+> 
+> Same here.
+> 
+> > +                 The muxmode setting decides whether ATA0 or ATA1 is brought out,
+> > +                 and whether master, slave or both interfaces get brought out.
+> > +  cortina,gemini-enable-sata-bridge:
+> > +    type: boolean
+> > +    description: enables the PATA to SATA bridge
+> 
+> Ditto. And the line break is a little early. The first line could be longer so
+> that everything fits in 2 lines.
+> 
+> > +                 inside the Gemnini SoC. The Muxmode decides what PATA blocks will
+> > +                 be muxed out and how.
+> > +
+> > +required:
+> > +  - clocks
+> > +  - clock-names
+> > +  - cortina,gemini-ata-muxmode
+> > +  - resets
+> > +  - reset-names
+> > +  - compatible
+> > +  - reg
+> > +  - syscon
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/cortina,gemini-clock.h>
+> > +    sata: sata@46000000 {
+> > +      compatible = "cortina,gemini-sata-bridge";
+> > +      reg = <0x46000000 0x100>;
+> > +      resets = <&rcon 26>, <&rcon 27>;
+> > +      reset-names = "sata0", "sata1";
+> > +      clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
+> > +               <&gcc GEMINI_CLK_GATE_SATA1>;
+> > +      clock-names = "SATA0_PCLK", "SATA1_PCLK";
+> > +      syscon = <&syscon>;
+> > +      cortina,gemini-ata-muxmode = <3>;
+> > +      cortina,gemini-enable-ide-pins;
+> > +      cortina,gemini-enable-sata-bridge;
+> > +    };
+> 
+> With the above cosmetic nits addressed (if necessary):
+> 
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> 
+
+Hello
+
+I will fix all thoses in v2.
+
+Thanks!

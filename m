@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C644A4208
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCC44A43BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376448AbiAaLI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:08:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39646 "EHLO
+        id S1378271AbiAaLXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:23:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48110 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359331AbiAaLFM (ORCPT
+        with ESMTP id S1359149AbiAaLOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:05:12 -0500
+        Mon, 31 Jan 2022 06:14:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0425F60FD2;
-        Mon, 31 Jan 2022 11:05:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4085C340E8;
-        Mon, 31 Jan 2022 11:05:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7C6160E76;
+        Mon, 31 Jan 2022 11:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9110FC340E8;
+        Mon, 31 Jan 2022 11:14:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627111;
-        bh=z3hZqaG3OAOpTGubGmzQdXcuX5HhIvzRJ1/enbB/OB0=;
+        s=korg; t=1643627679;
+        bh=d4NMCRYFez7Dv/xaGO0VoOIytB742aa78WOrxB63pdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nnvBcVYL9CGRZSiqjq9I/ROrQjPTTpN0pU51B8L0iwuaZQBJxmurYBdb+LzAxvSyn
-         wQpbxBExEnt+qQGF8I9bxxMYi2bnbQErfPSQ1huQEYHaOHwj+rphs4jvncT9q7HQ9k
-         ufUkkHQTkOHgk/muabH4WuZ2c/r8RQvwE+BSvoN8=
+        b=jcsXmGOCy8ioKbJ+l6/U62+bFs+LlwJOEWXLdJhDBr5GjhHr+7K+sv3xZSdcwBCt7
+         GL/JBPQ/2gVCRLR2NtjRDwbJLuC5mD+zPQ8FNfQhRGS2dD1p4UmMaQKBhB7O4PabHW
+         wpz5wiWqk70VRy2Iop9Oh7+PmC/+tLO6bjLmPxy8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Lehan <krellan@google.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 078/100] hwmon: (lm90) Mark alert as broken for MAX6654
-Date:   Mon, 31 Jan 2022 11:56:39 +0100
-Message-Id: <20220131105223.055021917@linuxfoundation.org>
+Subject: [PATCH 5.15 135/171] hwmon: (adt7470) Prevent divide by zero in adt7470_fan_write()
+Date:   Mon, 31 Jan 2022 11:56:40 +0100
+Message-Id: <20220131105234.571572094@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit a53fff96f35763d132a36c620b183fdf11022d7a ]
+[ Upstream commit c1ec0cabc36718efc7fe8b4157d41b82d08ec1d2 ]
 
-Experiments with MAX6654 show that its alert function is broken,
-similar to other chips supported by the lm90 driver. Mark it accordingly.
+The "val" variable is controlled by the user and comes from
+hwmon_attr_store().  The FAN_RPM_TO_PERIOD() macro divides by "val"
+so a zero will crash the system.  Check for that and return -EINVAL.
+Negatives are also invalid so return -EINVAL for those too.
 
-Fixes: 229d495d8189 ("hwmon: (lm90) Add max6654 support to lm90 driver")
-Cc: Josh Lehan <krellan@google.com>
+Fixes: fc958a61ff6d ("hwmon: (adt7470) Convert to devm_hwmon_device_register_with_info API")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/lm90.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/adt7470.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index fef02bcfedbcf..6841d0401bbd4 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -400,6 +400,7 @@ static const struct lm90_params lm90_params[] = {
- 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
- 	},
- 	[max6654] = {
-+		.flags = LM90_HAVE_BROKEN_ALERT,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index d519aca4a9d64..fb6d14d213a18 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -662,6 +662,9 @@ static int adt7470_fan_write(struct device *dev, u32 attr, int channel, long val
+ 	struct adt7470_data *data = dev_get_drvdata(dev);
+ 	int err;
+ 
++	if (val <= 0)
++		return -EINVAL;
++
+ 	val = FAN_RPM_TO_PERIOD(val);
+ 	val = clamp_val(val, 1, 65534);
+ 
 -- 
 2.34.1
 

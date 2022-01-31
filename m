@@ -2,140 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D754A508D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8F64A5090
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378889AbiAaUvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:51:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38838 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378462AbiAaUvt (ORCPT
+        id S1379182AbiAaUw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:52:27 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63956 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1377191AbiAaUwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:51:49 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VKbxlM019317;
-        Mon, 31 Jan 2022 20:51:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=IfFG2icOgeTcRGGdsSdqmUiXr02BVOtC/GnDf5j3uNI=;
- b=tuaCegeG9QnE+M8L1gvNV4gn2N3NrzM+i5C6ihen8ZtYouge5nUWayE6iNUlUNE1mM/R
- MPdKdE1fKeyrU/N8CitudDuv/etk5BGeRCRft0zP1+aUvM43PLORdjYTy0gMBIOA+Ckn
- lCFfv5Uz3QD3SlA/1zxloKjLRTxREWakf0FhGwOn9Tr6J20ElCx0N/4cVNqLS8gPZXnK
- /+Yr0MGWYNphboRaQybCw9KkA0ME+n9YXawIwfyq04RN1ElZwHZu5U6xEQk6GdwMOsQd
- PmDrV9p6fuU33XO3N8P6Tlw8zwKA4w3FEOr4llIMc87mNM4PZZ9HrM7/G2qDU0EoISvi Dw== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxjcaqcyk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Jan 2022 20:51:42 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VKmLxQ012846;
-        Mon, 31 Jan 2022 20:51:40 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma05wdc.us.ibm.com with ESMTP id 3dvw7abe1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Jan 2022 20:51:40 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VKpeIA32768302
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Jan 2022 20:51:40 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 33BE9B2066;
-        Mon, 31 Jan 2022 20:51:40 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE577B2064;
-        Mon, 31 Jan 2022 20:51:39 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 31 Jan 2022 20:51:39 +0000 (GMT)
-Message-ID: <b36b49c9-479f-8a33-c6d6-1cb00939150f@linux.ibm.com>
-Date:   Mon, 31 Jan 2022 15:51:39 -0500
+        Mon, 31 Jan 2022 15:52:21 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20VJxNdU001174;
+        Mon, 31 Jan 2022 12:51:55 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=95JG+QtaVSGl2156CP5p8h6tN0m4sX9mBTEerW8F5EI=;
+ b=FUKalRO0Yw9Ya3qvrDMkCm9QSxzwRbcInhP/rk+OTbJyKil7/aTKgkrpCG+H8DRPVu1+
+ Z63JoW10noHuAlYHbtHBCEfNBQ1qhmxDImlMfdnqvrHnZrga7L2j0gLiah4imOiubqij
+ EimctkSTchWVDZneedV3g7e7vCMovfou2QI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxm4a1bfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 31 Jan 2022 12:51:55 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 31 Jan 2022 12:51:54 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QNOvnkMCUBlvqmG4Ltkqtb2y9oTO64lZZbFSZENM0y3bUxCveuMRM0VC3ugzJSIO2w3givyX0pSXDntVryhMhH5EBZiAKiscwVksM+Hr4jOI1aZOWAC7JqHPsDLsa8zyvvlx9cloGXqP4S9QQtC68Qnza780fD9YOiOjV232xCA+t9UbiM9qCFoF32BemJwO/TX6qPf5gjBtNSdfcpvHhTPD/zwhVr52zoEjhitIFw0xNU5SMH1A/ENxrCYVAym2+5KRa4VvBAlwcLfQL1WbEyCK/O379YQ7tbnCdNcs6yACqMs41UIukB7AdC2T6EtA3iq/uogs8dMX3qIt1vSwcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=95JG+QtaVSGl2156CP5p8h6tN0m4sX9mBTEerW8F5EI=;
+ b=jrqIVFpWx78OVWY+d5uT0UX1W4O178AsnuNsWIQ2EExbNz8ggSOn9IdFssO3Cg0beEdUz/nMm82cefBRN8wjuWD5s3pO43eKVAN2GeMWrRQEZi2eOB+0GrD0pR4WCJTq4N50MtJ0bWiDDVCTfP7VZgcIla4c4O2TxYkyoxCsG4ljk+cOA8Ht0l7bLGSKfPyKLNpC4g50nBtKsIKoTsuIKrCmZv2AoMwUZRTjxLMxQPB4PJB+Vo31+BLHGPTD324KIOo/LUeve3atwAmtJElNf6uqcPrDN+0UcGl0fuVrKnUiWrkj+ZWZ399RgAPyAZPgZ0obqpvOTLTaiysJwlD3TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by MW4PR15MB4364.namprd15.prod.outlook.com (2603:10b6:303:bd::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.21; Mon, 31 Jan
+ 2022 20:51:53 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::d4ac:5796:5198:ecd2]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::d4ac:5796:5198:ecd2%3]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
+ 20:51:53 +0000
+Date:   Mon, 31 Jan 2022 12:51:48 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Waiman Long <longman@redhat.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-mm@kvack.org>, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v3 3/4] mm/page_owner: Print memcg information
+Message-ID: <YfhL5FIoFWuqWaEN@carbon.dhcp.thefacebook.com>
+References: <20220131192308.608837-1-longman@redhat.com>
+ <20220131192308.608837-4-longman@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220131192308.608837-4-longman@redhat.com>
+X-ClientProxiedBy: MW4PR04CA0181.namprd04.prod.outlook.com
+ (2603:10b6:303:86::6) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
- signatures (alternative)
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
- <YfLz8NftvbZtKvLT@sol.localdomain> <YfL0+q/ekv4H8lZg@sol.localdomain>
- <d122893c426f44aa95d5168773b60b9d@huawei.com>
- <YfRRUBZpQv2Hi1sL@sol.localdomain>
- <9af14af14beb46a28f57559e4b1dc1a7@huawei.com>
- <b262cb06-37fd-9760-8f6e-1dcacbf738b4@linux.ibm.com>
- <YfhFgtg4X1DLJtAQ@gmail.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YfhFgtg4X1DLJtAQ@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: o7_XE9-Hh7P0BMQXHullAo0lFjXb7rKf
-X-Proofpoint-ORIG-GUID: o7_XE9-Hh7P0BMQXHullAo0lFjXb7rKf
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b9329a63-6bb3-4c9f-64f7-08d9e4fb82c7
+X-MS-TrafficTypeDiagnostic: MW4PR15MB4364:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR15MB436409607FEE3EAF873E4E89BE259@MW4PR15MB4364.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rBYrPwRbYYLKwNyJFvjAWS7E8/2SlMybV2sy6WZ3RExeP+dzgLgZGRCztP4iTW9U+Picdx/YV21AxPp77zQeveO+cdjiMnf05WqhSNOwd0QG3MJO7bX59Y+B24IaACI+8e1UVvps/H8rxzt65L7F6GBCQRb8Ja1YdR07w7yMDn/ZIA7nPpKnw8Fz2fHmW4PTm+n7JYrZ+PwTAJk7+KkBv7p8fBEEHCYo0verbczZYKm6D/3Op6EVEsLNV0c5Fr1KOcBPGTCfqJ8S6eCX/6USFCm7JUCgZNX1+P3Av/e6Mqgl1ehoJ4NBE3/znymqIiJ7AMjmAOe9pW6ZdD0UbUecUhZyjV0EdmHkCXuBTOXVrXjPLuc2BGfiK6KcgYhiwv2BJbt+1QZ2kLZJB8LnEyzL3QF0KWd8BL/sc3miaYFafHzVuSauGTqH9pX+MNjVShXPF18ema7a3lSSmnJ5sCSVyUDLVCXx6XQTQUT8cYZz39ijGMbNadaPw2/vxxNIEOl53+ZGyq9XmY/Ckymof8DgcksJqWKjhThYhM2nUKlqnoTFC9K8Q7LxXL6lPnNTQ2qMUKqwHW+A7l5hZc9eISQSAT4aqkfn1ADmJ3H7I9dWBVEU27CfaWw/D7vvH+/spSqxxqlj4nWl8kuaOvzANjsLQw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(38100700002)(83380400001)(54906003)(6512007)(6666004)(6916009)(316002)(6506007)(4744005)(186003)(7416002)(8676002)(508600001)(4326008)(2906002)(66556008)(66476007)(8936002)(66946007)(9686003)(5660300002)(52116002)(6486002)(20210929001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iEF1teq35nBJ65OTxYjQGsAyn7qJlmj1C7m9lWwtpvRfqRivhgyOqtbTzS0o?=
+ =?us-ascii?Q?ZjsRBx7/AFQEsGm76XJ0NExZ0QR6ARKSNZufN6SdFKXAEfSpEUVaJDfeO2bw?=
+ =?us-ascii?Q?mcenQdB5nppBGRKpA7d7mPQf0C0VlO7OtebZJRupKY852l/XEFzAnDOzJ9yW?=
+ =?us-ascii?Q?YgLyguhlAMco3cUGqgTvLoRh6RNFguJ2un6WQoQmHgIagCWSAdO/Vdm1jLtZ?=
+ =?us-ascii?Q?L9gFadM2h6TUCu9vDRbh4Eymt9XzPTsdIEnpCZcjTZ8oAUb+VMu+lqQB6GVa?=
+ =?us-ascii?Q?6fIz3PR6KnJwU4lVNPh2mrKTMQaH9v0T5COdln7zm0T0xvaLVN6ngfsW1xZF?=
+ =?us-ascii?Q?5FVhDD5YoW7LT80uGG3zpstp2RH/sqPLfGWjZcK91EBJIUgPdSzEtEES90UL?=
+ =?us-ascii?Q?jyqX/r7Bl7esf+ItrgMoVHzAvXrdNJC4LObaVZPFt90siWejVdYiNBL2ciO3?=
+ =?us-ascii?Q?8/t3EL22GxFRVaB5Ae+gUJ+725pDxpdnXx7L4LCeOmcsl5JjvNUfLN3p11ay?=
+ =?us-ascii?Q?iLXffltQA8UlrYwrO/KjEVkHJmGKQ5RR7dqDQxviV0Gb5jEdW3hIgKJzdiWZ?=
+ =?us-ascii?Q?L1jLvHwoT8FmuNntUq+rBGOJn6zdnxKQE3oXHjC4WOoqa2jF6gZhEV/aiqQH?=
+ =?us-ascii?Q?rhBxVGwwo3Fm8KMnHRiOBLYthgZFpuGmTHzuzJVBQJCyYwu5K4CrONgPyqjP?=
+ =?us-ascii?Q?1qyYItPRtObDklyLZrQ6EuFdJ7wCHc/R88QwsI091NEwOv6ZTmD30cREgdwv?=
+ =?us-ascii?Q?lsekJBtudPcu0OLCAHbvPqidACis5punJesr6NIgJtaWZQxpVUtvCyeh1zv0?=
+ =?us-ascii?Q?YyjyKgTE3hpo0Pa6QipyR13o/JqPbMaI1ZLl1DnQ4GLpHfbV3I2z8TL0ydSZ?=
+ =?us-ascii?Q?9bzGUA50hou8kQ1gdKRY5sqpWjNl6K53LsFB1sC/HrnS3iIzZ6cWMmsZJCMV?=
+ =?us-ascii?Q?OSKwSk+sjm91DdXOghHQG9dcJmTXWSgSlEJg27NnAcBumXXv345Xg+8A+jVd?=
+ =?us-ascii?Q?upRsb0y/kBwYUukyop5B1J5LdrAvRG52Eeqclptso0oywxdyqskgZrtNQhYo?=
+ =?us-ascii?Q?8kDfJlf/JQ+Q0OlPuM3UxySlYr+nwymsIMFG8/wwnb/nadKNmAwTLkUd+k8F?=
+ =?us-ascii?Q?ibggJAhe/3WrKsyVgzCz7s82haW7oacYkzxNck5dhdWHqQYMqXnBXdlwSjQe?=
+ =?us-ascii?Q?t5lrGAUdKXg4YebClk1faxJt0fgyZf/1vt3+ExAh5891kCZOhuHd5/IAPZCY?=
+ =?us-ascii?Q?qUsXlRf4DCjZYVBZu+FR8Rh0ULMinnVTevrpY5njGRk9kB9afzSqGYcw8aer?=
+ =?us-ascii?Q?aZsMcVfzupAHupimDanYOaGAiiX5FsxIePgL0y5jefBcGYFXk+aRF8qgfSlT?=
+ =?us-ascii?Q?68P/GlXZxWOAjRRwXuyIDLE+8TCdcmeV2EEq0FjHhNho7de038bmN3NM5Ecy?=
+ =?us-ascii?Q?9lgy7bUkK/SSi5YF2AXEsZq56QMr//Ox1o23RB/ZlSCJEirvvubE9UECNf85?=
+ =?us-ascii?Q?Vo0+M83W2XRQnoGgap1TtwYcINaEr3kYmD+mmHBuA4Zt1XYEJ5PLhoQ0wcbL?=
+ =?us-ascii?Q?rYFDB6dhTzTJ30+XYJEZDadDi5EURyUOMKO/4c/C?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9329a63-6bb3-4c9f-64f7-08d9e4fb82c7
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 20:51:53.3384
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r7F2/0ei2c4soFyJ+PayDxSCI0PRtZX/iGqE6wfUybNN5ctgzAKsbfJQI9fcPjmQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4364
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: VtOWx2ZsIY2sO0ycXZHGoZh4vNUlOebl
+X-Proofpoint-GUID: VtOWx2ZsIY2sO0ycXZHGoZh4vNUlOebl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 phishscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201310130
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 spamscore=0 mlxscore=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=782 malwarescore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310132
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 31, 2022 at 02:23:07PM -0500, Waiman Long wrote:
+> It was found that a number of offlined memcgs were not freed because
+> they were pinned by some charged pages that were present. Even "echo
+> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
+> offlined but not freed memcgs tend to increase in number over time with
+> the side effect that percpu memory consumption as shown in /proc/meminfo
+> also increases over time.
+> 
+> In order to find out more information about those pages that pin
+> offlined memcgs, the page_owner feature is extended to print memory
+> cgroup information especially whether the cgroup is offlined or not.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: David Rientjes <rientjes@google.com>
 
-On 1/31/22 15:24, Eric Biggers wrote:
-> On Mon, Jan 31, 2022 at 02:29:19PM -0500, Stefan Berger wrote:
->>>> don't think I realized there was a more direct, PKCS#7-less way to do it and
->>>> that IMA used that way.)  However, it would be better to use this as an
->>>> opportunity to move people off of the built-in signatures entirely, either by
->>>> switching to a full userspace solution or by switching to IMA.
->>> If what we sign remains the same, then we could support multiple
->>> methods and use a selector to let fsverity_verify_signature() know
->>> how it should verify the signature. I don't know what would be a
->>> proper place for the selector.
->>>
->>> PKCS#7 seems ok, as it is used for kernel modules. IMA would be
->>> also ok, as it can verify the signature more directly. I would also
->>> be interested in supporting PGP, to avoid the requirement for
->>> Linux distributions to manage a secondary key. I have a small
->>> extension for rpmsign, that I would like to test in the Fedora
->>> infrastructure.
->>>
->>> Both the PKCS#7 and the PGP methods don't require additional
->>> support from outside, the functions verify_pkcs7_signature()
->>> and verify_pgp_signature() (proposed, not yet in the upstream
->>> kernel) would be sufficient.
->> FYI: An empty file signed with pkcs7 and an ecc key for NIST p256 generates
->> a signature of size 817 bytes. If an RPM needs to carry such signatures on a
->> per-file basis we are back to the size increase of nearly an RSA signature.
->> I would say for packages this is probably too much size increase.. and this
->> is what drove the implementation of ECC support.
-> I am getting 256 bytes for an ECC signature in PKCS#7 format:
->
-> 	cd src/fsverity-utils
-> 	make
-> 	openssl ecparam -name prime256v1 -genkey -noout -out key.pem
-> 	openssl req -new -x509 -key key.pem -out cert.pem -days 360
-> 	touch file
-> 	./fsverity sign file file.sig --key=key.pem --cert=cert.pem
-> 	stat -c %s file.sig
->
-> Probably you accidentally included the whole certificate in the PKCS#7 message.
-> That's not required here.
->
-> There are definitely problems with PKCS#7, and it does have space overhead.  But
-> the space overhead is not as bad as you state.
+Acked-by: Roman Gushchin <guro@fb.com>
 
-You are right. I used openssl cms without -nocerts and -noattr 
-(unintentionately). Though 256 bytes is RSA 2048 signature size again. 
-ECDSA with NIST p256 key is around 70 bytes.
-
-
->
-> - Eric
+Thanks!

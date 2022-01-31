@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DAF4A4CE9
+	by mail.lfdr.de (Postfix) with ESMTP id C26194A4CEB
 	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380892AbiAaRPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380825AbiAaRPK (ORCPT
+        id S1380929AbiAaRPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:15:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50666 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380795AbiAaRP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:15:10 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7577C061759
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:15:00 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id k18so26793197wrg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:15:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Bv5ugI/0207ARKbS3VyEyXTJNR8X5OcucA/nkFS7+t8=;
-        b=sE+Q6ElKhJO1zbpOihO6oifUcmmkdKXOHsPkBorcRSz6SttyxmLuJG9m3LF3Qliqx2
-         Tm093HE4pe+uTGfqXRs3K1nLnUUBS0sV2WZiBAuh12ujJrjLD6W8IzQcjynimIpMqYXr
-         Fmg1oXG77CmGUshzAwV5y/WLPgLrmy27Fhd3DG/RcMPYMpTzlXL/2qTCUsrjWQ1p6LlH
-         yVKVBTz3nhZ+1yd1BqQqgH6gSLrxttR0TaVY+f03KFaLW3u5VvT1H3GRHb4cUknr2Las
-         O30iJCXX57mcjFR7pY3GOT58ZL6dDWGiqqnuHUB1Tx5I03/JFEq91SoTpV3t3XBg72qH
-         stjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Bv5ugI/0207ARKbS3VyEyXTJNR8X5OcucA/nkFS7+t8=;
-        b=dv8F0asdDO6r9SEIDjY9lnAeB+D3O4JjUqsMiM3U9y9KvqfLj8pW0NEhaDqXcCnaaA
-         rDdjYhC/vv7ypsNsepl9NUgYLCOdbVKQwY/dG8orq1Eh0xu80p5n4yDzu0p9beI1B/R7
-         uKVxC/tEbm+0ppvf/ChNzIpvx/RVXTbTF0kLDzUjd2uuMRs0SNKld9huq0sAk0XbQvpy
-         zK+MPrsP08Pt51D6mvP7JQCn4HLdOoKC4HVUM7kl2NmJQq193+4NxnZpT2EZKrYjodvY
-         LbvvOdvA7F/1GLnMy4TdpuIeoJAlzRgNBl3TDZvAnpG2yXQKRKU1dnqU6UZJyRhJ3rfi
-         6QkA==
-X-Gm-Message-State: AOAM533ZvM52l7arnszVtzjQmhoCJdM1gjPgpkSWfy/G4VvMBpVhJlYN
-        L1RnLMO2H4YV9UOsfSPIUdmWPQ==
-X-Google-Smtp-Source: ABdhPJwXJwqrDTKIzGbVgsjhxDeYvQ/YRm2P4684skSLDyMrYxp/9mbin0NVRaHjOnZiLDUqs2+FEg==
-X-Received: by 2002:a5d:64ad:: with SMTP id m13mr18782942wrp.671.1643649299419;
-        Mon, 31 Jan 2022 09:14:59 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id y6sm9208984wma.48.2022.01.31.09.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 09:14:59 -0800 (PST)
-Date:   Mon, 31 Jan 2022 17:14:57 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] mfd: intel_soc_pmic_crc: Set main IRQ domain bus
- token to DOMAIN_BUS_NEXUS
-Message-ID: <YfgZEeje9RPO6a28@google.com>
-References: <20211225115509.94891-1-hdegoede@redhat.com>
- <20211225115509.94891-4-hdegoede@redhat.com>
+        Mon, 31 Jan 2022 12:15:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643649328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=517osVusanMuP0Y4/rkshkWytofYaoASsE2dV7IDjz4=;
+        b=GQoIFbBRWeiRf4N9CsF7PdyA0eHlVE0YH4YINazUsLg4a7bkjpLgZF3NFAMlskNnqT162r
+        E2eoG6s0dx7uYIBUn1CIgvlylD2reMkd7hvr8CyfbQEBfN56xPixSd5sXU1Y4sWiWycTKm
+        HOozRL7UumCIGKepaPq4mst2yEZa4Eg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-ccm5_wRKMk-Plwz2607tUA-1; Mon, 31 Jan 2022 12:15:24 -0500
+X-MC-Unique: ccm5_wRKMk-Plwz2607tUA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A21701006AA3;
+        Mon, 31 Jan 2022 17:15:21 +0000 (UTC)
+Received: from [10.22.16.244] (unknown [10.22.16.244])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 483A77744B;
+        Mon, 31 Jan 2022 17:15:20 +0000 (UTC)
+Message-ID: <c950a93d-bb70-9a97-dabe-a1d58d755dad@redhat.com>
+Date:   Mon, 31 Jan 2022 12:15:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211225115509.94891-4-hdegoede@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/3] mm, memcg: Don't put offlined memcg into local stock
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20211001190938.14050-1-longman@redhat.com>
+ <20211001190938.14050-2-longman@redhat.com>
+ <YVefHLo1+6lgw3aB@carbon.dhcp.thefacebook.com>
+ <f7026256-4086-6632-569e-5b13594cb3fc@redhat.com>
+ <YfgV2iiaVlR0hozD@carbon.dhcp.thefacebook.com>
+ <95ba1931-e9c9-45c3-b080-d28f2ad368a7@redhat.com>
+In-Reply-To: <95ba1931-e9c9-45c3-b080-d28f2ad368a7@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Dec 2021, Hans de Goede wrote:
+On 1/31/22 12:09, Waiman Long wrote:
+> On 1/31/22 12:01, Roman Gushchin wrote:
+>> On Sun, Jan 30, 2022 at 10:55:56PM -0500, Waiman Long wrote:
+>>> On 10/1/21 19:51, Roman Gushchin wrote:
+>>>> On Fri, Oct 01, 2021 at 03:09:36PM -0400, Waiman Long wrote:
+>>>>> When freeing a page associated with an offlined memcg, refill_stock()
+>>>>> will put it into local stock delaying its demise until another memcg
+>>>>> comes in to take its place in the stock. To avoid that, we now check
+>>>>> for offlined memcg and go directly in this case to the slowpath for
+>>>>> the uncharge via the repurposed cancel_charge() function.
+>>>> Hi Waiman!
+>>>>
+>>>> I'm afraid it can make a cleanup of a dying cgroup slower: for every
+>>>> released page we'll potentially traverse the whole cgroup tree and
+>>>> decrease atomic page counters.
+>>>>
+>>>> I'm not sure I understand the benefits we get from this change which
+>>>> do justify the slowdown on the cleanup path.
+>>>>
+>>>> Thanks!
+>>> I was notified of a lockdep splat that this patch may help to prevent.
+>> Would you mind to test this patch:
+>> https://www.spinics.net/lists/cgroups/msg31244.html ?
+>>
+>> It should address this dependency.
+>
+> Thanks for the pointer. I believe that your patch should be able to 
+> address this circular locking dependency.
+>
+> Feel free to add my
+>
+> Reviewed-by: Waiman Long <longman@redhat.com>
 
-> For the CRC PMIC we end up with multiple IRQ domains with the same fwnode.
-> One for the irqchip which demultiplexes the actual PMIC interrupt into
-> interrupts for the various cells (known as the level 1 interrupts);
-> 
-> And 2 more for the irqchips which are part of the crystal_cove_gpio
-> and crystal_cove_charger cells.
-> 
-> This leads to the following error being printed when
-> CONFIG_GENERIC_IRQ_DEBUGFS is enabled:
->  debugfs: File '\_SB.I2C7.PMIC' in directory 'domains' already present!
-> 
-> Set the bus token of the main IRQ domain to DOMAIN_BUS_NEXUS to avoid
-> this error, this also allows irq_find_matching_fwspec() to find the
-> right domain if necessary.
-> 
-> Note all 3 domain registering drivers need to set the IRQ domain bus token.
-> This is necessary because the IRQ domain code defaults to creating
-> the debugfs dir with just the fwnode name and then renames it when
-> the bus token is set. So each one starts with the same default name and
-> all 3 must be given a different name to avoid problems when one of the
-> other drivers loads and starts with the same default name.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/mfd/intel_soc_pmic_core.c | 4 ++++
->  1 file changed, 4 insertions(+)
+BTW, have you posted it to lkml? If not, would you mind doing so?
 
-Applied, thanks.
+Thanks,
+Longman
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

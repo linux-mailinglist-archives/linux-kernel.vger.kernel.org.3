@@ -2,114 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450694A3E0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AB24A3E17
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357845AbiAaHEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 02:04:16 -0500
-Received: from mx5.ucr.edu ([138.23.62.67]:23022 "EHLO mx5.ucr.edu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233543AbiAaHEM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:04:12 -0500
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Mon, 31 Jan 2022 02:04:11 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1643612652; x=1675148652;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eEsk92A0ZXPnX2Ki88PFE3IgBq8wg+0W/+nONtlHHnA=;
-  b=Ny1qr0QjIvnaKr6FEyVe+I+vIMKFV/+nRLji6vK0p7uWygqcAddvY+k7
-   liEpPB+Q79T7DVTuiCoGFCzSYpjtn8v6g12m8PSCjr8A7UWNoimvBTCCG
-   0QEEzVT390FhP3j1Jt8nWAUm2LciLZZWEBpibikPExitjvolQi0v2JpsN
-   ADn5hNnpuc3aYC89ZZNoN41D94mDdFqVCEGzJOgovK3HbcsAs1WsTqah8
-   qL6EMCfRXRCw2du2n2z7uzp+wPs/G8ugLF7zHq5vj5ve7bCuccCov1Op1
-   N59M0E7EWUvSZg84RWvnjqxdZXzEOMd+2Z38f/8aaeWfz8ybCcJlH07Ge
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="272607408"
-Received: from mail-pl1-f200.google.com ([209.85.214.200])
-  by smtpmx5.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jan 2022 22:57:01 -0800
-Received: by mail-pl1-f200.google.com with SMTP id k7-20020a170902ba8700b0014c7e2870d4so4717795pls.21
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 22:57:00 -0800 (PST)
+        id S1357862AbiAaHKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 02:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357857AbiAaHKa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 02:10:30 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BE6C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 23:10:29 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id l13so2957362plg.9
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 23:10:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=N9mTVzsHAHJ5mTM22d2IAe55DJRgo8Pr7F09OYCu4c4=;
-        b=dEYxCn3BfV+JihG8ONV/WUGd8IamJ2JvzSSyxN0Yc69fn81moYaQ7zA8iO84UMQDkP
-         uhUF08FkXagVOD5CW2tvG0POmWwZjo4ZdNbloTwew5BnwG9z64bC6i7JLYIlTLgUkphJ
-         +ztQFc98NYZfDzfi41jfdivXxHpiLrzU8f/cE=
+        bh=EXoGqYo2y+bCVaCTIHHUoSe6xGzYWrBda92ceekLMjA=;
+        b=IUI94W6n5iT79oWzjyBLQGuamO21vxqmVQMbbhrrI/ooBx6w7D0ATiQwThBpm8xtHs
+         zmUPFLYuh9VEk6llfYtjR3sTqpT3fxMSFeAGuE+WY2VtExUnhBzlsO+dWrJdyQtoHoJA
+         F77UARbNDFsgURHrDF0aP301QW7Nx+50r0bO9/9nUlcVzMs6oUjsqXvSlwZVApQJk1rJ
+         Aiiw9NOTN8C9lltj2Z+qbNZokCa/YJDtJIcKub35lXCJ00P1zn15z2iOwLSzhFqpLJXv
+         yLivBcbp1+Vc2/O9Go+m3WWPLIyphMJmRIvc+/t0s6R04l3MQu1iSpzk3hzFCSdXACQs
+         tAPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=N9mTVzsHAHJ5mTM22d2IAe55DJRgo8Pr7F09OYCu4c4=;
-        b=mKFlb8oT9np0l92FvJhjyzRUmreoNHdxIB/4C8OmoAoX/ldcY9EVBnqeTmKrRlYJtl
-         lxRzGP89NFSNnANjgxO2nXyZ1y35sDQNRobeVe38kjMb5gvW4D0FpzK2cIZN1He1Z5+0
-         PQTcNKu5NrmBk5j6C8RBwFaAIpJX3/F4CHRktavX7PRIaPPfd23G443n8cszX2DfzFmV
-         y10GTvyTo8NN35BQDTQ9NALzDfH3GCDJBPTcwNcI2gkj7uCgv4PTIv5lt5A4s8xcxWXi
-         C11yDKGDR5kF00tGL6fcytOEk/KYNmVBqLJkeZdMmJ7yOd59X1SvKj1nuWU0U9vXICBX
-         r4bg==
-X-Gm-Message-State: AOAM530IaYaeXByCo6q+SS3GZlgIcyiBRnpqj+UaB+msIjoQjvJTAagu
-        fjhArZdoVx9m5keyN9n5PAzC+sYhM/QSZp0RvYKgOGHdY873w9GeeCVn1qln5oz9FvKXuQGUNS1
-        CZHZT/l5Bwc8QaDJoReZ29nsPJQ==
-X-Received: by 2002:a05:6a00:1394:: with SMTP id t20mr19171341pfg.70.1643612219929;
-        Sun, 30 Jan 2022 22:56:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyYqb47bfhGvFHVqHFtNpiuYQ+NsZNuHIRbT+5N2iRk9p02bVcswfTGcUNfips3vZNzbIN8WQ==
-X-Received: by 2002:a05:6a00:1394:: with SMTP id t20mr19171333pfg.70.1643612219691;
-        Sun, 30 Jan 2022 22:56:59 -0800 (PST)
-Received: from kq.cs.ucr.edu (kq.cs.ucr.edu. [169.235.27.223])
-        by smtp.googlemail.com with ESMTPSA id h3sm9641434pfo.66.2022.01.30.22.56.58
+        bh=EXoGqYo2y+bCVaCTIHHUoSe6xGzYWrBda92ceekLMjA=;
+        b=Wdhq1lIi4+DUjY/VgARllhQR5CtfznWAGXI/pm3iJn9ffWuYeij0zor28og5bSIY33
+         JV0e3/Olb93yZipZfyfMBLv8w5rPc7jaerEXRhrY1abvnYPOPCgqLZvLDLGt4aAteX0M
+         XL7VVRryF0UopcJ5AdCW4yxfXdigHKNiqfxllaXh4e2c4Z6WevJ+cpe2oTNPhR5kf4cV
+         k5nEyVYn4sBQRhg27VwXyn+7cDFvfx5wXhtAXvkt+dNBphwG4nTEz86yvV9UGkm+5zUN
+         oCpwJrt6yyAeUrYsKnGO+ePaDQhmekKmXpoMv/Vnc2YEyJHLcQVXIFAGjiWiWAV7IdbK
+         Bzvg==
+X-Gm-Message-State: AOAM530LfRTw2F7VxBRCVzVExXmkqzKYO966x2uZSylJVGS/YxEd0FSv
+        ctRwsHR9rsKHf3Fw8f41akY=
+X-Google-Smtp-Source: ABdhPJwEZXaIPTB6mkYByUXxajcLnSoq5qDsRUeG6ZEQr9iLGroanZi9GSC/0lAPmCmGeWsxxh2s2Q==
+X-Received: by 2002:a17:902:7048:: with SMTP id h8mr8005725plt.40.1643613029103;
+        Sun, 30 Jan 2022 23:10:29 -0800 (PST)
+Received: from localhost.localdomain (bb42-60-144-185.singnet.com.sg. [42.60.144.185])
+        by smtp.gmail.com with ESMTPSA id q16sm17404392pfu.194.2022.01.30.23.10.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 22:56:59 -0800 (PST)
-From:   Yizhuo Zhai <yzhai003@ucr.edu>
-Cc:     Yizhuo Zhai <yzhai003@ucr.edu>, Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: fbmem: Fix the implicit type casting
-Date:   Sun, 30 Jan 2022 22:57:17 -0800
-Message-Id: <20220131065719.1552958-1-yzhai003@ucr.edu>
+        Sun, 30 Jan 2022 23:10:28 -0800 (PST)
+From:   Nguyen Dinh Phi <phind.uet@gmail.com>
+To:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nguyen Dinh Phi <phind.uet@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: vc04_services: make a couple of functions static
+Date:   Mon, 31 Jan 2022 15:10:06 +0800
+Message-Id: <20220131071006.1764343-1-phind.uet@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In function do_fb_ioctl(), the "arg" is the type of unsigned long,
-and in "case FBIOBLANK:" this argument is casted into an int before
-passig to fb_blank(). In fb_blank(), the comparision
-if (blank > FB_BLANK_POWERDOWN) would be bypass if the original
-"arg" is a large number, which is possible because it comes from
-the user input.
+Functions vchiq_platform_init and vchiq_platform_get_arm_state are used
+locally in vchiq_arm.c file, so make them static.
 
-Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+Cleans up sparse warnings:
+warning: symbol 'vchiq_platform_init' was not declared. Should it be
+static?
+warning: warning: symbol 'vchiq_platform_get_arm_state' was not declared.
+Should it be static?
+
+Signed-off-by: Nguyen Dinh Phi <phind.uet@gmail.com>
 ---
- drivers/video/fbdev/core/fbmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 0fa7ede94fa6..a5f71c191122 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1064,7 +1064,7 @@ fb_set_var(struct fb_info *info, struct fb_var_screeninfo *var)
- EXPORT_SYMBOL(fb_set_var);
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index 54ab6208ddae..b1054550ed27 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -466,7 +466,7 @@ free_pagelist(struct vchiq_pagelist_info *pagelistinfo,
+ 	cleanup_pagelistinfo(pagelistinfo);
+ }
  
- int
--fb_blank(struct fb_info *info, int blank)
-+fb_blank(struct fb_info *info, unsigned long blank)
+-int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
++static int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
  {
- 	struct fb_event event;
- 	int ret = -EINVAL;
+ 	struct device *dev = &pdev->dev;
+ 	struct vchiq_drvdata *drvdata = platform_get_drvdata(pdev);
+@@ -593,7 +593,7 @@ vchiq_platform_init_state(struct vchiq_state *state)
+ 	return 0;
+ }
+ 
+-struct vchiq_arm_state*
++static struct vchiq_arm_state*
+ vchiq_platform_get_arm_state(struct vchiq_state *state)
+ {
+ 	struct vchiq_2835_state *platform_state;
 -- 
 2.25.1
 

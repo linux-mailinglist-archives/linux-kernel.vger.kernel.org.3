@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE0E4A446E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCE84A4340
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379007AbiAaL3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:29:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52264 "EHLO
+        id S1377642AbiAaLSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:18:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43414 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378455AbiAaLUM (ORCPT
+        with ESMTP id S1377748AbiAaLKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:20:12 -0500
+        Mon, 31 Jan 2022 06:10:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E69560B98;
-        Mon, 31 Jan 2022 11:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB208C340E8;
-        Mon, 31 Jan 2022 11:20:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 592A860ED0;
+        Mon, 31 Jan 2022 11:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9FAC340E8;
+        Mon, 31 Jan 2022 11:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628011;
-        bh=kbjFMXoRMtc4U9Oa+ibffCyvoiXCyLaA/lmIK/CuFx0=;
+        s=korg; t=1643627424;
+        bh=gOB0qW5mpoVbfHMiPHf4l2UoTQFpZUMr9AmBl6RFO6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0FC9zEGhXUmaHnAFAX6uWFkZobR9OAe23VyB6re/zbCN0FIvaEW0ssgz2sLLffB+b
-         297YJT4xsPJ9FkzEf3LckfdXg7KUIDyBBtvHnKyK0AiReD5gYzCX2ojeGTRXhMp9yL
-         awA7sm9+aZ1CseC8ok35J30lFqFeT/TN39sQaPI0=
+        b=owk8MG7TiyG7I29X/ZuH2EI77poD/jtigbaCwkYFxfIW9k9x90k798dDKsi8Ti+0m
+         QXs5iq8Kd2elwN630KKdK5fSqR2q/b/j5XvGqbKbTE6jbVGMmf9cfScuqaCRciB8eC
+         zUGXbO0uzArm4VAWIwSZKguCk1O6QqXxmWldM+LE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 063/200] block: add bio_start_io_acct_time() to control start_time
-Date:   Mon, 31 Jan 2022 11:55:26 +0100
-Message-Id: <20220131105235.695349937@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Subject: [PATCH 5.15 062/171] usb: typec: tcpm: Do not disconnect while receiving VBUS off
+Date:   Mon, 31 Jan 2022 11:55:27 +0100
+Message-Id: <20220131105232.128608115@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,93 +46,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Snitzer <snitzer@redhat.com>
+From: Badhri Jagan Sridharan <badhri@google.com>
 
-commit e45c47d1f94e0cc7b6b079fdb4bcce2995e2adc4 upstream.
+commit 90b8aa9f5b09edae6928c0561f933fec9f7a9987 upstream.
 
-bio_start_io_acct_time() interface is like bio_start_io_acct() that
-allows start_time to be passed in. This gives drivers the ability to
-defer starting accounting until after IO is issued (but possibily not
-entirely due to bio splitting).
+With some chargers, vbus might momentarily raise above VSAFE5V and fall
+back to 0V before tcpm gets to read port->tcpc->get_vbus. This will
+will report a VBUS off event causing TCPM to transition to
+SNK_UNATTACHED where it should be waiting in either SNK_ATTACH_WAIT
+or SNK_DEBOUNCED state. This patch makes TCPM avoid vbus off events
+while in SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
-Link: https://lore.kernel.org/r/20220128155841.39644-2-snitzer@redhat.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Stub from the spec:
+    "4.5.2.2.4.2 Exiting from AttachWait.SNK State
+    A Sink shall transition to Unattached.SNK when the state of both
+    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+    A DRP shall transition to Unattached.SRC when the state of both
+    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+
+[23.194131] CC1: 0 -> 0, CC2: 0 -> 5 [state SNK_UNATTACHED, polarity 0, connected]
+[23.201777] state change SNK_UNATTACHED -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[23.209949] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[23.300579] VBUS off
+[23.300668] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [rev3 NONE_AMS]
+[23.301014] VBUS VSAFE0V
+[23.301111] Start toggling
+
+Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Cc: stable@vger.kernel.org
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Link: https://lore.kernel.org/r/20220122015520.332507-1-badhri@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-core.c       |   25 +++++++++++++++++++------
- include/linux/blkdev.h |    1 +
- 2 files changed, 20 insertions(+), 6 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -1258,22 +1258,34 @@ void __blk_account_io_start(struct reque
- }
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5156,7 +5156,8 @@ static void _tcpm_pd_vbus_off(struct tcp
+ 	case SNK_TRYWAIT_DEBOUNCE:
+ 		break;
+ 	case SNK_ATTACH_WAIT:
+-		tcpm_set_state(port, SNK_UNATTACHED, 0);
++	case SNK_DEBOUNCED:
++		/* Do nothing, as TCPM is still waiting for vbus to reaach VSAFE5V to connect */
+ 		break;
  
- static unsigned long __part_start_io_acct(struct block_device *part,
--					  unsigned int sectors, unsigned int op)
-+					  unsigned int sectors, unsigned int op,
-+					  unsigned long start_time)
- {
- 	const int sgrp = op_stat_group(op);
--	unsigned long now = READ_ONCE(jiffies);
- 
- 	part_stat_lock();
--	update_io_ticks(part, now, false);
-+	update_io_ticks(part, start_time, false);
- 	part_stat_inc(part, ios[sgrp]);
- 	part_stat_add(part, sectors[sgrp], sectors);
- 	part_stat_local_inc(part, in_flight[op_is_write(op)]);
- 	part_stat_unlock();
- 
--	return now;
-+	return start_time;
- }
- 
- /**
-+ * bio_start_io_acct_time - start I/O accounting for bio based drivers
-+ * @bio:	bio to start account for
-+ * @start_time:	start time that should be passed back to bio_end_io_acct().
-+ */
-+void bio_start_io_acct_time(struct bio *bio, unsigned long start_time)
-+{
-+	__part_start_io_acct(bio->bi_bdev, bio_sectors(bio),
-+			     bio_op(bio), start_time);
-+}
-+EXPORT_SYMBOL_GPL(bio_start_io_acct_time);
-+
-+/**
-  * bio_start_io_acct - start I/O accounting for bio based drivers
-  * @bio:	bio to start account for
-  *
-@@ -1281,14 +1293,15 @@ static unsigned long __part_start_io_acc
-  */
- unsigned long bio_start_io_acct(struct bio *bio)
- {
--	return __part_start_io_acct(bio->bi_bdev, bio_sectors(bio), bio_op(bio));
-+	return __part_start_io_acct(bio->bi_bdev, bio_sectors(bio),
-+				    bio_op(bio), jiffies);
- }
- EXPORT_SYMBOL_GPL(bio_start_io_acct);
- 
- unsigned long disk_start_io_acct(struct gendisk *disk, unsigned int sectors,
- 				 unsigned int op)
- {
--	return __part_start_io_acct(disk->part0, sectors, op);
-+	return __part_start_io_acct(disk->part0, sectors, op, jiffies);
- }
- EXPORT_SYMBOL(disk_start_io_acct);
- 
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1254,6 +1254,7 @@ unsigned long disk_start_io_acct(struct
- void disk_end_io_acct(struct gendisk *disk, unsigned int op,
- 		unsigned long start_time);
- 
-+void bio_start_io_acct_time(struct bio *bio, unsigned long start_time);
- unsigned long bio_start_io_acct(struct bio *bio);
- void bio_end_io_acct_remapped(struct bio *bio, unsigned long start_time,
- 		struct block_device *orig_bdev);
+ 	case SNK_NEGOTIATE_CAPABILITIES:
 
 

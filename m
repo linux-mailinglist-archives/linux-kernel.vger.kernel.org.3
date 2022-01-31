@@ -2,174 +2,657 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 928164A507E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7422C4A5084
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350888AbiAaUtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:49:42 -0500
-Received: from mail-dm6nam10on2051.outbound.protection.outlook.com ([40.107.93.51]:23104
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231301AbiAaUtj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:49:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jt40wrjJCDAbrLno6o1o2CI19vH5Bwo8N7argEjFTvAsfdklZPw5CrkSUfpLVXjdFrYUbu4215fMVj3BD4ZhDHq8h+lTrkBateWwnhffsV/ZTi/0jzuoU1+0gxF45vRxzjwzHM+W+0xMb/AmPc4U/6IsRx9klp+UNFwVAv2ho6tRYgY4JT0tLkyIysbGXhEOlsa/SydBcHS9taNKApc6eLFH/TXEI4LR6OI/u9oSkGzrhT2ykrj5Evwm+Ekmun4FoNsS74mbKmYW0HIyVJwAF7ryXvT3UrPEwOzanOcHPqSD2Zqm+EtNtqrBUDREGUAfnovz/QqLML4fvn5HwC4KmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+neI5nFZK2gQAMsihHSWH8yTTxmMHy0dVAfuyzjxwsM=;
- b=YMlTGjo2ESGJQFyBAX/i6OdABnwUeovrIhy58m1POVPKNW9fgf7Skb4F7smvqNrMz/T5zQJC9nVqi3V7BIHjk9Mh0FcuOPYCpIu6N9XYkNMVZhpdqg7PqYKgWYExkspaxWXCh8v62lVtLjZ6J7G2bfWX1cD/imCsJ9QSEYK8g/y1jAOn+VkigEO31/PLgRMXVpneoiV+MZo0+ntM1v66Rg5rnCvT+SY/GQIE/BcmUlDCMjdCDijFiUYYzaswY4WG3xZBdJcxQ3M+v7x5ReygxKIQGaZ8C/HgDGyJf1IZp3RlIfmNQgtr7NsmRBaOVhp7BLZGiHTFKp6kxA5uludaXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+neI5nFZK2gQAMsihHSWH8yTTxmMHy0dVAfuyzjxwsM=;
- b=ekrVm487t/sKSbo5O1GUdRPK8Aps4oBRD8aTrNnH+hT8Kcev4MdTStommM4szWAOTuqtk6j3OgxwDqRmlI8vPRnaFLUAqfv2zd2YrUMFxdP6PnQ3w8DDScb/lRQ9R4b/G4IdNMOIDvs5P5/F0C71Me0SQtmJ/CMjFfXkxVnZ4bsUokpFJ2zvMOZ5dOxiZzF0qGqtRuW84xeA7m/ULdgyb1qaBirBlPfi7xFWYCEg7BxEhAqWHXuBh0yrWEqfDDxgEldZfa9/agUnPysyXn79vyq9ENNDOa/2BXs7skOKiZLIURyV1iXzO1BJSRfuwkAmi5diC85rPIbnum3xaP1UjA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BN8PR12MB3459.namprd12.prod.outlook.com (2603:10b6:408:65::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Mon, 31 Jan
- 2022 20:49:36 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2d75:a464:eaed:5f99]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2d75:a464:eaed:5f99%7]) with mapi id 15.20.4930.022; Mon, 31 Jan 2022
- 20:49:36 +0000
-Message-ID: <27e5f98a-0709-1a80-18ed-e4ccaaf39fe6@nvidia.com>
-Date:   Mon, 31 Jan 2022 12:49:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v1 1/1] mm/gup: skip pinnable check for refs==1
-Content-Language: en-US
-To:     Will McVicker <willmcvicker@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel-team@android.com, Minchan Kim <minchan@google.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220131203504.3458775-1-willmcvicker@google.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220131203504.3458775-1-willmcvicker@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0213.namprd13.prod.outlook.com
- (2603:10b6:a03:2c1::8) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        id S1354941AbiAaUum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:50:42 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:1265 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231301AbiAaUuk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 15:50:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643662240; x=1675198240;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5EhpV1q1D17nqKZSDwNPU/G4HqjlwffTc/nffFL2SR0=;
+  b=JaYaQBCaVunli7De6VbAUr6P/KEGoGfKqSjKIUMdsSFeW9vAhXPpq0hW
+   Ldiw5q6X590smBh6c82q+zLZlInVeXdeXGq0S7c1O3zGu5hpQ8AzGAZA8
+   TV9nlL4T/Vw9tU3Th4UTV1002HGrOAeqQMzbEw0h6fOAVaST9gc1cE6LW
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 Jan 2022 12:50:40 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 12:50:38 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 31 Jan 2022 12:50:37 -0800
+Received: from [10.110.21.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 31 Jan
+ 2022 12:50:36 -0800
+Message-ID: <ff150ae7-808e-9194-94d4-8976cd21c396@quicinc.com>
+Date:   Mon, 31 Jan 2022 12:50:35 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d3ddc10-71d5-41ac-45c0-08d9e4fb315d
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3459:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3459F54CD9F34D11CE229DDEA8259@BN8PR12MB3459.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1468;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OAkGNGszOmZSxXlLik2zFbmsWFHTd6GgTMn0LDM6YlpxIC7cjGA5LQVTRNIlIW65V34+MEWCJRwDrvdOIW95zqD+qGXkyjWxvzN+GWhImJQXR66mXONLKsrqhVteLRXmE/GENEj5al8adERqsao0OmlXvDSxXxU8lvbvwEaFi8kedwSwUzRtUmQ35ghwaEA70Qhyqt08gV030JikfO//xsdQGJb6Dc5AnzhcIFWPY/U+ohLzsJFruWh8ZQfNFkLkevfCm7Mk2DaHDij3IELnojE2vr0GWakcuk3sGppse/UnjHDHyrAnSSVekMTUpGZ3gpYgujSGAOqCE0mDHj67Wp0cWRXszX6wtxiAIA9UEvv9imZ5rnE1gZF0z6Ye+jb45fSLEdY21E3nWh0CI8SNQPa9mE2Wk4pwRGPYuaO5IWCYFCUIfsT4vvZF2UC1fR12tvaK/W8xTDDpUg65uIN2V6efjP/Se6O0caqPacqlfWLsGY1sti2b0X2kf5iL0lqGzN4rTBsYvwUujMYZXIaPZOoF42m0nNpEmiY++w43WKMfsiP7CA1SCn81rBfJf4+xHYOMt9mAy4IBURkxMmLTJiqpUY48DIPxn2kdK+x8G1GuYEarntqX4WRaTc38/1mDU7YfxZ5z+Xo80LDKPY4M87VeAuxXpw444yMv5Hb5hoQgWWGEoRrazgdNJBgc2mrXIWyHoDw9JSdGcTo/1G683BYtvsYC8DRkYxtU6p3ow8LfprR961W+9nUAX42bZzOH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(38100700002)(36756003)(86362001)(26005)(186003)(8936002)(508600001)(31696002)(8676002)(66946007)(83380400001)(66556008)(6512007)(53546011)(4326008)(6506007)(110136005)(31686004)(2906002)(6486002)(316002)(2616005)(5660300002)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmNlZ1JsbEtGa1gwamFBU3ovRGZZQ3MxZ2J2NE5ZcmlRVUk1WDFFS3FaU2Mw?=
- =?utf-8?B?R3FjOGQ3bThaY2thV2RmS0t4NFJ6aW1laVhqd3cxVUZrYWxuUVQxYzAxLzNt?=
- =?utf-8?B?TWxRZkd5Z1U2OFlkcFJ4a2RiY01MbkJQNXB3UDl5RmlTeFBoUkhJOGRuK056?=
- =?utf-8?B?d3NqUzJwMUFRb3FtOUVQY2l2RmE2T1dsMGRrOWhHZzRyQkZNMW9SNkpZaHZi?=
- =?utf-8?B?NUhvWk1Xdm5RWHcvN3Y5eWVSYWlTM3YyRXptV3NmeDRMQWhWQzBLY0NtbUZK?=
- =?utf-8?B?bE81dTFSeXNFS1pNRndiSldIc3FiUEN1T2RPYklRam93WjFSbG9Hc0xQSjZx?=
- =?utf-8?B?NzJici9tNTdCM2h5aGtJaUtVYkJGSGhqaDJKNE4wYXNWNkVWbkdQYldYL0Zt?=
- =?utf-8?B?Zlo0UUpUSllMd044QUZDMVBxTGlDRTR0NlkvcDVqZWkzbE4vakNzam9ZYWI3?=
- =?utf-8?B?NFFFaGxTb2ZVdjFtS2VNS3pKSlhxd3laYllHZ0lBdkxRMWdzSXdmR200N3hQ?=
- =?utf-8?B?N2pVczh4Y2xBZzBaUUUzbDArRjhrU253SmZyUXpRMng2Q3h3Y0FLOS9XZTRO?=
- =?utf-8?B?RzVBcUcvWTU3WGJ2WTlXNWdVY3BPMFRKNEF0a283ZU5HOGkwK2pGSXNxOVV4?=
- =?utf-8?B?ZEpRSSs1ZGVOM2dRMEZ6VnFJeDFnQjFvai9GOWVUbXcrQmNCemJQaFEwYlJR?=
- =?utf-8?B?R3VJYTcvNWVkaXRyVDEwMVZINDd6MlQ5L1VBdlRPRHY3QU1URTIvSTJrWEdM?=
- =?utf-8?B?b2V5YlovbDB4c0d0OVlOUGF1SE9vZnFDbkxFNHlYT2JrSXAxNFdYTllWRkFM?=
- =?utf-8?B?OEREMTFvVGNkdnU3bkdrR3J3Q050Sy91cEcvK1FqN3ZpNjE0SWE1dDB5SjRh?=
- =?utf-8?B?TFB4M1dnT2h3NjNkbmJhMkYzNzFZSlhBS205YVUvL0daZ2xSVGJicmdtUFRW?=
- =?utf-8?B?MGttL282NTVpSmhGUTN0OS9UM0lvMFU2NXd5anJ1NWxMUnRuNXRzMk96K1pz?=
- =?utf-8?B?eGVYRklaTE9mYWJVd1dsSzc1KzFCNDFNLzBteldVcnBPUGJQNVpZeHZ3MDhs?=
- =?utf-8?B?SnQ1a1RPK1J2Q1BDOXNwRVhmT1pjb2xYUCttZEJFTlFWK0xRSGdhMzB1Ryt5?=
- =?utf-8?B?UzNtZjdPQlAyQ0dEQ3cxd29ORWFsZ1R5aVA3clpUaHdRN0NRR1hOQmNtSGd6?=
- =?utf-8?B?emV4bUEyY091STNxVUVabVlMNitSbmtjQldpY3NCeXVUMkRDZGxFVXBtNHY5?=
- =?utf-8?B?bjJ0WmNwdU1wd0g0d3NqQmF3ay9YdDN6Z3hiZ3RsTXorSW11WjdXTUJlRDdm?=
- =?utf-8?B?MDJWSWoyeGJ3Sy9YNXp3cmk4SFNuMDhyV1VqZVordVpuYVJxeW5QTkVJQzd6?=
- =?utf-8?B?bzZ3VW40TE1PSHl0Nm0xR09wZ0l1cUdqQmlQVWpyTUV4WFBkWHkvZFRTeFcw?=
- =?utf-8?B?Qi8zZXVxOFVHUTRGTlppcVhZSmt1VVBjYXpTTkNEeStBb29qNEZVK2o1d21M?=
- =?utf-8?B?VW1vUDdyMEVDVTJUdW9KL3ppYjVURlJLMWtjYXJWOFhaR0tpenllWjZFeHQr?=
- =?utf-8?B?V0VmSnFPWW9WSlFSSStBYllTOURDcnNWVFZSbTZUKzFWcTNwSHczOS9pWnJM?=
- =?utf-8?B?SHZvd09RMytlams2WXJvZTI4eWcvbkNWNCtOYVU5K09WS3U1SHNnbm1UY0cv?=
- =?utf-8?B?aGFuVFhRdTVEQTBsUXVSakdXTm4xSzVrSHJIQkhWOVJjd3I4UHlER2ozTWx4?=
- =?utf-8?B?VU5oWGFzS0tMVWRxQ1E5UU5kTnZ5UW5oelNERENEa0FrNnVoWUhuWWZzZHpO?=
- =?utf-8?B?eFRNQ096WmpFbzZjR2xiOFB5eDlVaEZkb3VpblVtTnBxTUZtYmR4aCtHdkNR?=
- =?utf-8?B?ejlWcUY3bjRRODdZbU5qdU44a1ZjV1lxZE5HS09aRUNJRmJlNGcrRlZYVlN5?=
- =?utf-8?B?TDlRbGhXNmlIUkt0QmVjdDFxdENnVjZ5Ynp5QkVaVlg1SkhvV01icWQ0UFIx?=
- =?utf-8?B?L0RJNlkzRmxLRXBmV3NobkhTKzlzRTR5dW02V2tHU3M4cjNJVWlRS1NROFda?=
- =?utf-8?B?Q3BtRGhkb3JYaFpPUGlnMDdENGN3TGo1RllDeW55b3RsTlAwcENFRzBYWkdy?=
- =?utf-8?B?aXBVYzJUUUtlQS9zZTExblpKSlJsbCthYTNQc01YaTl4cGthS1BQNjMxT3pt?=
- =?utf-8?Q?GseIvAJQ+zxz/Oqg+hS5kgM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d3ddc10-71d5-41ac-45c0-08d9e4fb315d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 20:49:36.7487
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jYlkz6+QDf6WamXOgPfRU2LPsSRetTbO/dRxMkjdgzatK67Re7u4QK3wbZWvl7vLg4mt1OVPlBasxX6gO6eitA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3459
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/msm/dp: add wide bus support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1643390945-10813-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJpqVAB31uzav-qMsBEBk0j2dk-qy1cRRRccCRLgJRqCS2g@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAA8EJpqVAB31uzav-qMsBEBk0j2dk-qy1cRRRccCRLgJRqCS2g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 12:35, Will McVicker wrote:
-> This fixes commit 54d516b1d62f ("mm/gup: small refactoring: simplify
-> try_grab_page()") which refactors try_grab_page() to call
-> try_grab_compound_head() with refs=1. The refactor commit is causing
-> pin_user_pages() to return -ENOMEM when we try to pin one user page that
-> is migratable and not in the movable zone. Previously, try_grab_page()
-> didn't check if the page was pinnable for FOLL_PIN. To match the same
-> functionality, this fix adds the check `refs > 1 &&` to skip the call to
-> is_pinnable_page().
+
+On 1/28/2022 8:59 PM, Dmitry Baryshkov wrote:
+> Hi,
 >
+> Thank you for your patch.
+>
+> On Fri, 28 Jan 2022 at 20:29, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>> Normally, mdp will push one pixel of data per pixel clock to
+>> interface to display. Wide bus feature will increase bus
+>> width from 32 bits to 64 bits so that it can push two
+>> pixel of data per pixel clock to interface to display.
+>> This feature is pre requirement to support 4k resolution.
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  16 ++-
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |   2 +
+>>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  14 +++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 108 +++++++++++++++------
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |   5 +
+>>   drivers/gpu/drm/msm/dp/dp_catalog.c                |  11 ++-
+>>   drivers/gpu/drm/msm/dp/dp_catalog.h                |   1 +
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.c                   |   9 +-
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   1 +
+>>   drivers/gpu/drm/msm/dp/dp_display.c                |  17 ++++
+>>   drivers/gpu/drm/msm/dp/dp_display.h                |   3 +
+>>   drivers/gpu/drm/msm/dp/dp_parser.c                 |  26 +++++
+>>   drivers/gpu/drm/msm/dp/dp_parser.h                 |   2 +
+>>   drivers/gpu/drm/msm/msm_drv.h                      |   9 ++
+> Can we get this split into logical chunks please?
+>
+>>   14 files changed, 190 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> index 1e648db..e2fb5bc 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> @@ -199,6 +199,8 @@ struct dpu_encoder_virt {
+>>
+>>          struct msm_display_info disp_info;
+>>
+>> +       struct msm_op_info op_info;
+>> +
+>>          bool idle_pc_supported;
+>>          struct mutex rc_lock;
+>>          enum dpu_enc_rc_states rc_state;
+>> @@ -217,6 +219,13 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>>          15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>>   };
+>>
+>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
+>> +{
+>> +       struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+>> +
+>> +       return dpu_enc->op_info.wide_bus_en;
+>> +}
+>> +
+>>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>>   {
+>>          struct dpu_hw_dither_cfg dither_cfg = { 0 };
+>> @@ -2112,6 +2121,7 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+>>          struct dpu_kms *dpu_kms = to_dpu_kms(priv->kms);
+>>          struct drm_encoder *drm_enc = NULL;
+>>          struct dpu_encoder_virt *dpu_enc = NULL;
+>> +       struct msm_op_info *op_info;
+>>          int ret = 0;
+>>
+>>          dpu_enc = to_dpu_encoder_virt(enc);
+>> @@ -2128,8 +2138,12 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+>>                  timer_setup(&dpu_enc->vsync_event_timer,
+>>                                  dpu_encoder_vsync_event_handler,
+>>                                  0);
+>> -       else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
+>> +       else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
+>>                  dpu_enc->dp = priv->dp[disp_info->h_tile_instance[0]];
+>> +               op_info = &priv->op_info[disp_info->h_tile_instance[0]];
+> op_info should be defined per INTF rather than per h_tile. This way
+> you won't have to check for intf_type here.
+>
+>> +               dpu_enc->op_info = *op_info;
+> So... we set this data in msm_drm_private only to copy it to
+> dpu_encoder_virt? Please don't do this.
+> Allow one to query the data from the DP rather than blindly copying it
+> over and over again.
+>
+>> +
+>> +       }
+>>
+>>          INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+>>                          dpu_encoder_off_work);
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> index e241914..0d73550 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
+>>    */
+>>   int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
+>>
+>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
+>> +
+>>   #endif /* __DPU_ENCODER_H__ */
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>> index ddd9d89..04ac2dc 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
+>>                  timing->v_back_porch += timing->v_front_porch;
+>>                  timing->v_front_porch = 0;
+>>          }
+>> +
+>> +       timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
+>> +
+>> +       /*
+>> +        * for DP, divide the horizonal parameters by 2 when
+>> +        * widebus is enabled
+>> +        */
+>> +       if (phys_enc->hw_intf->cap->type == INTF_DP && timing->wide_bus_en) {
+> What about INTF_eDP?
+> I suspect that intf type check is unnecessary here.
+>
+>> +               timing->width = timing->width >> 1;
+>> +               timing->xres = timing->xres >> 1;
+>> +               timing->h_back_porch = timing->h_back_porch >> 1;
+>> +               timing->h_front_porch = timing->h_front_porch >> 1;
+>> +               timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
+>> +       }
+>>   }
+>>
+>>   static u32 get_horizontal_total(const struct intf_timing_params *timing)
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> index 116e2b5..f072bd5 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> @@ -33,6 +33,7 @@
+>>   #define INTF_TP_COLOR1                  0x05C
+>>   #define INTF_CONFIG2                    0x060
+>>   #define INTF_DISPLAY_DATA_HCTL          0x064
+>> +#define INTF_ACTIVE_DATA_HCTL           0x068
+>>   #define INTF_FRAME_LINE_COUNT_EN        0x0A8
+>>   #define INTF_FRAME_COUNT                0x0AC
+>>   #define   INTF_LINE_COUNT               0x0B0
+>> @@ -90,67 +91,109 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>          u32 hsync_period, vsync_period;
+>>          u32 display_v_start, display_v_end;
+>>          u32 hsync_start_x, hsync_end_x;
+>> +       u32 hsync_data_start_x, hsync_data_end_x;
+>>          u32 active_h_start, active_h_end;
+>>          u32 active_v_start, active_v_end;
+>>          u32 active_hctl, display_hctl, hsync_ctl;
+>>          u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
+>>          u32 panel_format;
+>> -       u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
+>> +       u32 intf_cfg, intf_cfg2 = 0;
+>> +       u32 display_data_hctl = 0, active_data_hctl = 0;
+>> +       u32 data_width;
+>> +       bool dp_intf = false;
+>>
+>>          /* read interface_cfg */
+>>          intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
+>> +
+>> +       if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
+>> +               dp_intf = true;
+>> +
+>>          hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
+>>          p->h_front_porch;
+>>          vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
+>>          p->v_front_porch;
+>>
+>>          display_v_start = ((p->vsync_pulse_width + p->v_back_porch) *
+>> -       hsync_period) + p->hsync_skew;
+>> +                       hsync_period) + p->hsync_skew;
+> Unnecessary whitespace changes complicate reviewing. I'll try groking
+> this piece of code later.
+>
+>>          display_v_end = ((vsync_period - p->v_front_porch) * hsync_period) +
+>> -       p->hsync_skew - 1;
+>> +                       p->hsync_skew - 1;
+>> +
+>> +       hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>>
+>>          hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
+>>          hsync_end_x = hsync_period - p->h_front_porch - 1;
+>>
+>> -       if (p->width != p->xres) {
+>> -               active_h_start = hsync_start_x;
+>> -               active_h_end = active_h_start + p->xres - 1;
+>> -       } else {
+>> -               active_h_start = 0;
+>> -               active_h_end = 0;
+>> -       }
+>> +       /*
+>> +        * DATA_HCTL_EN controls data timing which can be different from
+>> +        * video timing. It is recommended to enable it for all cases, except
+>> +        * if compression is enabled in 1 pixel per clock mode
+>> +        */
+>> +       if (!p->compression_en || p->wide_bus_en)
+>> +               intf_cfg2 |= BIT(4);
+>>
+>> -       if (p->height != p->yres) {
+>> -               active_v_start = display_v_start;
+>> -               active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>> -       } else {
+>> -               active_v_start = 0;
+>> -               active_v_end = 0;
+>> -       }
+>> +       if (p->wide_bus_en)
+>> +               intf_cfg2 |= BIT(0);
+>> +
+>> +       /*
+>> +        * If widebus is disabled:
+>> +        * For uncompressed stream, the data is valid for the entire active
+>> +        * window period.
+>> +        * For compressed stream, data is valid for a shorter time period
+>> +        * inside the active window depending on the compression ratio.
+>> +        *
+>> +        * If widebus is enabled:
+>> +        * For uncompressed stream, data is valid for only half the active
+>> +        * window, since the data rate is doubled in this mode.
+>> +        * p->width holds the adjusted width for DP but unadjusted width for DSI
+>> +        * For compressed stream, data validity window needs to be adjusted for
+>> +        * compression ratio and then further halved.
+>> +        */
+>> +       data_width = p->width;
+>> +
+>> +       if (p->compression_en) {
+>> +               data_width = DIV_ROUND_UP(p->dce_bytes_per_line, 3);
+>>
+>> -       if (active_h_end) {
+>> -               active_hctl = (active_h_end << 16) | active_h_start;
+>> -               intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
+>> +               if (p->wide_bus_en)
+>> +                       data_width >>= 1;
+>> +       } else if (!dp_intf && p->wide_bus_en) {
+>> +               data_width = p->width >> 1;
+>>          } else {
+>> -               active_hctl = 0;
+>> +               data_width = p->width;
+>>          }
+>>
+>> -       if (active_v_end)
+>> -               intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
+>> +       hsync_data_start_x = hsync_start_x;
+>> +       hsync_data_end_x =  hsync_start_x + data_width - 1;
+>>
+>> -       hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>>          display_hctl = (hsync_end_x << 16) | hsync_start_x;
+>> +       display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
+>>
+>> -       if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
+>> -               active_h_start = hsync_start_x;
+>> -               active_h_end = active_h_start + p->xres - 1;
+>> -               active_v_start = display_v_start;
+>> -               active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>> -
+>> +       if (dp_intf) {
+>> +               // DP timing adjustment
+>>                  display_v_start += p->hsync_pulse_width + p->h_back_porch;
+>> +               display_v_end   -= p->h_front_porch;
+>> +       }
+>>
+>> -               active_hctl = (active_h_end << 16) | active_h_start;
+>> +
+>> +       active_h_start = hsync_start_x;
+>> +       active_h_end = active_h_start + p->xres - 1;
+>> +
+>> +       active_v_start = display_v_start;
+>> +       active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>> +
+>> +       intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
+>> +       intf_cfg |= BIT(30);    /* ACTIVE_V_ENABLE */
+>> +
+>> +       active_hctl = (active_h_end << 16) | active_h_start;
+>> +
+>> +       if (dp_intf) {
+>>                  display_hctl = active_hctl;
+>> +               if (p->compression_en) {
+> I assume that compression_en is a part of DSC support for the DP, isn't it?
+> If so, it should definitely come as a separate patch.
+>
+>> +                       active_data_hctl = (hsync_start_x +
+>> +                                       p->extra_dto_cycles) << 16;
+>> +                       active_data_hctl += hsync_start_x;
+>> +
+>> +                       display_data_hctl = active_data_hctl;
+>> +               }
+>>          }
+>>
+>>          den_polarity = 0;
+>> @@ -204,6 +247,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>          DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
+>>          DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
+>>          DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
+>> +       DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+>> +       DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+>> +       DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
+> Are these registers present on all supported hardware (like sdm845)?
+> Does msm8998 support them? msm8996?
 
-That's a clear write-up of what you're seeing, what caused it, and how
-you'd like to correct it. The previous code had a loophole, and you want
-to keep that loophole. More below...
+no, i  think they are start from sm8250 (Kona).
 
-> This issue is reproducible with the Pixel 6 on the 5.15 LTS kernel. Here
-> is the call stack to reproduce the -ENOMEM error:
-...
-> Fixes: 54d516b1d62f ("mm/gup: small refactoring: simplify try_grab_page()")
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Minchan Kim <minchan@google.com>
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> ---
->   mm/gup.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index f0af462ac1e2..0509c49c46a3 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -135,7 +135,7 @@ struct page *try_grab_compound_head(struct page *page,
->   		 * right zone, so fail and let the caller fall back to the slow
->   		 * path.
->   		 */
-> -		if (unlikely((flags & FOLL_LONGTERM) &&
-> +		if (refs > 1 && unlikely((flags & FOLL_LONGTERM) &&
->   			     !is_pinnable_page(page)))
->   			return NULL;
->   
+But they should be no effects after write.
 
-...but are you really sure that this is the best way to "fix" the
-problem? This trades correctness for "bug-for-bug compatibility" with
-the previous code. It says, "it's OK to violate the pinnable and
-longterm checks, as long as you do it one page at a time, rather than in
-larger chunks.
-
-Wouldn't it be better to try to fix up the calling code so that it's
-not in violation of these zone rules?
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+>>   }
+>>
+>>   static void dpu_hw_intf_enable_timing_engine(
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> index 3568be8..8fc71ce 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> @@ -30,6 +30,11 @@ struct intf_timing_params {
+>>          u32 border_clr;
+>>          u32 underflow_clr;
+>>          u32 hsync_skew;
+>> +
+>> +       bool wide_bus_en;
+>> +       bool compression_en;
+>> +       u32 extra_dto_cycles;   /* for DP only */
+>> +       u32 dce_bytes_per_line;
+> All compression-related items should come in a separate patch.
+>
+>>   };
+>>
+>>   struct intf_prog_fetch {
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> index 6d6850e..d738e2e 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> @@ -745,6 +745,7 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>>   {
+>>          struct dp_catalog_private *catalog = container_of(dp_catalog,
+>>                                  struct dp_catalog_private, dp_catalog);
+>> +       u32 reg;
+>>
+>>          dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
+>>                                  dp_catalog->total);
+>> @@ -753,7 +754,15 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>>          dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
+>>                                  dp_catalog->width_blanking);
+>>          dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER, dp_catalog->dp_active);
+>> -       dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
+>> +
+>> +        reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
+>> +
+>> +        if (dp_catalog->wide_bus_en)
+>> +                reg |= BIT(4);
+>> +        else
+>> +                reg &= ~BIT(4);
+>> +
+>> +        dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
+>>          return 0;
+>>   }
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+>> index 7dea101..6ca563f 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+>> @@ -70,6 +70,7 @@ struct dp_catalog {
+>>          enum dp_catalog_audio_sdp_type sdp_type;
+>>          enum dp_catalog_audio_header_type sdp_header;
+>>          u32 audio_data;
+>> +       bool wide_bus_en;
+>>   };
+>>
+>>   /* Debug module */
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> index 53ad3af..401ae57 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> @@ -1812,6 +1812,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>          int ret = 0;
+>>          bool mainlink_ready = false;
+>>          struct dp_ctrl_private *ctrl;
+>> +       u32 pixel_rate_orig;
+>>
+>>          if (!dp_ctrl)
+>>                  return -EINVAL;
+>> @@ -1820,6 +1821,10 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>
+>>          ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>>
+>> +       pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
+>> +       if (dp_ctrl->wide_bus_en)
+>> +               ctrl->dp_ctrl.pixel_rate >>= 1;
+>> +
+>>          drm_dbg_dp((struct drm_device *)NULL, "rate=%d, num_lanes=%d, pixel_rate=%d\n",
+>>                  ctrl->link->link_params.rate,
+>>                  ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
+>> @@ -1855,11 +1860,13 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>           */
+>>          reinit_completion(&ctrl->video_comp);
+>>
+>> +       ctrl->catalog->wide_bus_en = dp_ctrl->wide_bus_en;
+> Can you limit the DP's knowledge of wide_bus_en to a single place
+> (e.g. only in dp_catalog or in dp_ctrl)? Just copying the data bit
+> means that we have two places which must be kept in sync.
+>
+>> +
+>>          dp_ctrl_configure_source_params(ctrl);
+>>
+>>          dp_catalog_ctrl_config_msa(ctrl->catalog,
+>>                  ctrl->link->link_params.rate,
+>> -               ctrl->dp_ctrl.pixel_rate, dp_ctrl_use_fixed_nvid(ctrl));
+>> +               pixel_rate_orig, dp_ctrl_use_fixed_nvid(ctrl));
+>>
+>>          dp_ctrl_setup_tr_unit(ctrl);
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> index 2433edb..4dff44d 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> @@ -17,6 +17,7 @@ struct dp_ctrl {
+>>          bool orientation;
+>>          atomic_t aborted;
+>>          u32 pixel_rate;
+>> +       bool wide_bus_en;
+>>   };
+>>
+>>   int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index f89f3ed..924c9e2 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -873,6 +873,8 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+>>                  return 0;
+>>          }
+>>
+>> +       dp->ctrl->wide_bus_en = dp_display->wide_bus_en;
+> Ugh. This adds a third place. dp_display, dp_ctrl and dp_catalog. Too
+> much for a single bit.
+>
+>> +
+>>          rc = dp_ctrl_on_stream(dp->ctrl);
+>>          if (!rc)
+>>                  dp_display->power_on = true;
+>> @@ -1004,6 +1006,8 @@ int dp_display_get_modes(struct msm_dp *dp,
+>>                  dp->connector, dp_mode);
+>>          if (dp_mode->drm_mode.clock)
+>>                  dp->max_pclk_khz = dp_mode->drm_mode.clock;
+>> +
+>> +       DRM_DEBUG_DP("wide_bus_en=%d\n", dp->wide_bus_en);
+>>          return ret;
+>>   }
+>>
+>> @@ -1503,6 +1507,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>>   {
+>>          struct msm_drm_private *priv;
+>>          struct dp_display_private *dp_priv;
+>> +       struct msm_op_info *op;
+>> +       struct dp_display_private *dp;
+>>          int ret;
+>>
+>>          if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
+>> @@ -1545,6 +1551,17 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>>
+>>          priv->bridges[priv->num_bridges++] = dp_display->bridge;
+>>
+>> +       dp = container_of(dp_display, struct dp_display_private, dp_display);
+>> +
+>> +       dp_display->wide_bus_en = dp->parser->has_widebus;
+>> +       dp_display->compression_en = dp->parser->has_compression;
+>> +
+>> +       op = &priv->op_info[dp->id];
+>> +       op->wide_bus_en = dp_display->wide_bus_en;
+>> +       op->compression_en = dp_display->compression_en;
+>> +
+>> +       drm_dbg_dp(dp->drm_dev, "id=%d widebus=%d compression=%d\n",
+>> +                       dp->id, op->wide_bus_en, op->compression_en);
+>>          return 0;
+>>   }
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+>> index e3adcd5..b1057cb 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+>> @@ -24,6 +24,9 @@ struct msm_dp {
+>>
+>>          hdmi_codec_plugged_cb plugged_cb;
+>>
+>> +       bool wide_bus_en;
+>> +       bool compression_en;
+>> +
+>>          u32 max_pclk_khz;
+>>
+>>          u32 max_dp_lanes;
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
+>> index e74012d..fd48eb8 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
+>> @@ -286,6 +286,28 @@ static int dp_parser_find_panel(struct dp_parser *parser)
+>>          return 0;
+>>   }
+>>
+>> +static void dp_parser_compression(struct dp_parser *parser)
+>> +{
+>> +       struct device *dev = &parser->pdev->dev;
+>> +
+>> +       parser->has_compression = of_property_read_bool(dev->of_node,
+>> +                               "qcom,compression-enable");
+>> +
+>> +       DRM_DEBUG_DP("compression parsing successful. compression:%d\n",
+>> +                       parser->has_compression);
+>> +}
+>> +
+>> +static void dp_parser_widebus(struct dp_parser *parser)
+>> +{
+>> +       struct device *dev = &parser->pdev->dev;
+>> +
+>> +       parser->has_widebus = of_property_read_bool(dev->of_node,
+>> +                               "qcom,widebus-enable");
+>> +
+>> +       DRM_DEBUG_DP("widebus parsing successful. widebus:%d\n",
+>> +                       parser->has_widebus);
+>> +}
+> All new properties should be described in the dt-bindings document.
+>
+> However I have a bigger question here. Who and how decides whether
+> compression or widebus should be enabled?
+>
+> Should we enable widebus for all generations that support it? If so,
+> this should be a part of msm_dp_config rather than the DTS property.
+> And I'm completely puzzled about the compression-enable here.
+>
+>
+>> +
+>>   static int dp_parser_parse(struct dp_parser *parser, int connector_type)
+>>   {
+>>          int rc = 0;
+>> @@ -319,6 +341,10 @@ static int dp_parser_parse(struct dp_parser *parser, int connector_type)
+>>           */
+>>          parser->regulator_cfg = &sdm845_dp_reg_cfg;
+>>
+>> +        dp_parser_widebus(parser);
+>> +
+>> +        dp_parser_compression(parser);
+>> +
+>>          return 0;
+>>   }
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
+>> index 3172da0..7531fe2 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+>> @@ -123,6 +123,8 @@ struct dp_parser {
+>>          struct dp_display_data disp_data;
+>>          const struct dp_regulator_cfg *regulator_cfg;
+>>          u32 max_dp_lanes;
+>> +       bool has_widebus;
+>> +       bool has_compression;
+>>          struct drm_bridge *panel_bridge;
+>>
+>>          int (*parse)(struct dp_parser *parser, int connector_type);
+>> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+>> index d7574e6..1a5f3e9 100644
+>> --- a/drivers/gpu/drm/msm/msm_drv.h
+>> +++ b/drivers/gpu/drm/msm/msm_drv.h
+>> @@ -127,6 +127,11 @@ struct msm_display_info {
+>>          bool is_te_using_watchdog_timer;
+>>   };
+>>
+>> +struct msm_op_info {
+>> +       bool wide_bus_en;
+>> +       bool compression_en;
+>> +};
+>> +
+>>   /* Commit/Event thread specific structure */
+>>   struct msm_drm_thread {
+>>          struct drm_device *dev;
+>> @@ -156,6 +161,8 @@ struct msm_drm_private {
+>>
+>>          struct msm_dp *dp[MSM_DP_CONTROLLER_COUNT];
+>>
+>> +       struct msm_op_info op_info[MSM_DP_CONTROLLER_COUNT];
+>> +
+> As I said before, it should be INTF_MAX. Or you can retrieve it from
+> priv->dp as needed instead.
+>
+>>          /* when we have more than one 'msm_gpu' these need to be an array: */
+>>          struct msm_gpu *gpu;
+>>
+>> @@ -338,6 +345,8 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi, struct drm_device *dev,
+>>   void __init msm_hdmi_register(void);
+>>   void __exit msm_hdmi_unregister(void);
+>>
+>> +struct msm_dp;
+>> +
+>>   struct msm_dsi;
+>>   #ifdef CONFIG_DRM_MSM_DSI
+>>   int dsi_dev_attach(struct platform_device *pdev);
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+>

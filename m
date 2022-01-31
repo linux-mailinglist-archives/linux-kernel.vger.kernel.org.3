@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050704A433D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFD14A4337
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377566AbiAaLS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S1377360AbiAaLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377569AbiAaLKM (ORCPT
+        with ESMTP id S1377588AbiAaLKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:12 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43410C061757
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:09:30 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id k17so39205707ybk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:09:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AlZH+tDYLmF3Zzrk3imgIWNOsXQVmniQWCFRf+PIgeM=;
-        b=jEFfnaCKWNR3SNY3xucQ07Pa9aApMh/R25SgjXNpurSnsC4mxVp4CpMsYdrBTWBkaD
-         wlmTYCCDBYlp+7UAVZ8qKZOy3obMT5TzjBU3wyShfZfXtMEZdBfHDRXRxYv0GUgbkLUY
-         h2o72aBH7Y60v0Txm0KFgrgHLpLiRvwOK0mIXeoosTikjjCP5b/8j49Ls3D+43WBmTCG
-         ghgea+oiGYiXYvn24Ojs4/1UJibWyrgr68IJgSDosb4Hk6LG7pZvonwZv2hn6DjolZ0P
-         /R/fWGp0LHR4R7xOzQlyYCVkydVOSHnNqy+LFOLU+tR8Fm+v8/zbI/rfxajvr/qBNAdP
-         N/tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AlZH+tDYLmF3Zzrk3imgIWNOsXQVmniQWCFRf+PIgeM=;
-        b=7G2O8z4accq7CJKi5f0vQkrNrMHAv18IYHyKUfCIX5st8CZf0tdHbAZdHaRbTIKOfR
-         u1zl58ln38bFSLLG3lz2+GiE6gDJK6ARSjpQsEWElceqqqvl0AbnwJdEh1l05IJQGn0P
-         A9hv/v6togBw3yumvA4z9TbqYfG27Eb1Zh67rTiZ01xhN7aNAzO2vY+8iZdnQanKZbso
-         6D+N57444/ZgUt7iE5Y9rzYAilnfp+012d4/mk3JxXch8UZ2oH2F3sgKcGrm0uFHIT4o
-         3Ul6vmhHNkmY0O+9LFCPoUWHl6keusQgcxLdixwldlrZlHoOJgvLWHz47sJu5+p7Zuul
-         oQNQ==
-X-Gm-Message-State: AOAM530xJSOiUz9qg3OKUhw+FB3r1HMtQP+X67ORJtiKTBmglO3pXXXZ
-        bApzLrfNGKuVqSK8sEtLTPh4pGuArYDoL/mCUx5DfA==
-X-Google-Smtp-Source: ABdhPJxwl5kAKtfrO02F1W5bcEFmhrWdTklWGteiWHcX9Rg5J/4UmKrYw6TZuMEvz4WSj/2Gk9hSILJrEgLFS68S+bA=
-X-Received: by 2002:a05:6902:124a:: with SMTP id t10mr26381408ybu.634.1643627369543;
- Mon, 31 Jan 2022 03:09:29 -0800 (PST)
+        Mon, 31 Jan 2022 06:10:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDE0C06175B;
+        Mon, 31 Jan 2022 03:10:05 -0800 (PST)
+Date:   Mon, 31 Jan 2022 12:10:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643627404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VU/JLz6tZsfDSK1NGHlZJZDBKesuKZckLqSjhO2EaU4=;
+        b=MlRIySoABztrXXhRXSWmvo2UV3/cD+W5Hip49G7RuhEGWfXMve9+967C7hina7NbgL0gsA
+        aUsyVHVYqGGLzEAbCDnSBVARPcsyU62kssRd0FSyDb89J9lITtt7CgXLZ0DSZlUdLN5T/w
+        qHNlm/789QXdfRSQ37F2M6KewwXuqn/+0LdECa+8B6SFUBy6IZuEV8ZmutujHGlddT6mSy
+        LNUV9GJiEmtcb0UHeocT/ZyR7a+euq531BP7TAhXOFfSViefgJbswq1Ben8f0CIQKhfO4J
+        DX/KxI7Aj22VxGxM8DU0CabHTBLnbrQsayoEQ4Y/4pFVta2+UVm6Q+TlXVYbSw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643627404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VU/JLz6tZsfDSK1NGHlZJZDBKesuKZckLqSjhO2EaU4=;
+        b=EsmtkMsJP6d5SP/mA+91F7XriKaPzaz7coj7QQMGILO4ncBzqs3VZj2EY51lcXyjhTegar
+        UlifgoPYSZH9lYAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, greybus-dev@lists.linaro.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: Re: [PATCH 3/7] i2c: cht-wc: Use generic_handle_irq_safe().
+Message-ID: <YffDiv+NNWYFXJkX@linutronix.de>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-4-bigeasy@linutronix.de>
+ <YfLThZsBwAucs2vp@shikoro>
 MIME-Version: 1.0
-References: <20220131085201.307031-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220131085201.307031-1-horatiu.vultur@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 31 Jan 2022 12:09:17 +0100
-Message-ID: <CACRpkdZgzd7_h9qnKeq2c4ERPzeOk0YdkQho5=4GcvY_zSvWjA@mail.gmail.com>
-Subject: Re: [PATCH v2] pinctrl: microchip-sgpio: Fix support for regmap
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
-        UNGLinuxDriver@microchip.com, colin.foster@in-advantage.com,
-        andy.shevchenko@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YfLThZsBwAucs2vp@shikoro>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 9:50 AM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
+On 2022-01-27 18:16:53 [+0100], Wolfram Sang wrote:
+> On Thu, Jan 27, 2022 at 12:32:59PM +0100, Sebastian Andrzej Siewior wrote:
+> > Instead of manually disabling interrupts before invoking use
+> > generic_handle_irq() which can be invoked with enabled and disabled
+> 
+> generic_handle_irq_safe()
 
-> Initially the driver accessed the registers using u32 __iomem but then
-> in the blamed commit it changed it to use regmap. The problem is that now
-> the offset of the registers is not calculated anymore at word offset but
-> at byte offset. Therefore make sure to multiply the offset with word size.
->
-> Acked-by: Steen Hegelund <Steen.Hegelund@microchip.com>
-> Reviewed-by: Colin Foster <colin.foster@in-advantage.com>
-> Fixes: 2afbbab45c261a ("pinctrl: microchip-sgpio: update to support regmap")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Yes, thank you.
 
-Patch applied for fixes.
-
-I didn't get last weeks fixes to Torvalds this weekend because linux-next
-wasn't being compiled, will send the lot with this on top this week.
-
-Yours,
-Linus Walleij
+Sebastian

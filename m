@@ -2,269 +2,453 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 428234A4767
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7BE4A4769
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377878AbiAaMl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:41:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55466 "EHLO
+        id S1377973AbiAaMli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:41:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39179 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234545AbiAaMlY (ORCPT
+        by vger.kernel.org with ESMTP id S1378116AbiAaMle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:41:24 -0500
+        Mon, 31 Jan 2022 07:41:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643632882;
+        s=mimecast20190719; t=1643632894;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qt1+nFSvJqevzO6PMZIwNYLup/Fi9aN0xmv9H7RymyU=;
-        b=V+3gBUtMS3wPWlazshBVNPcCGy6yp8uGYyR84O/OFxr5PdxxAxzsj+rwJ18KO2+Mm1zyH8
-        eqVihrbtSwo0JMW9uer6Cvw0EBVkTzkIzGTEl1HLop78MRmV0JNMsnB3zpifoWq+YKCYvu
-        3G5yNChSfny6FpO9rxiOiTu1PrwKnuw=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=CDU/PbmPIIic7u3U136Oq6S6BV92vi5mi8vSPPmxqbw=;
+        b=IbePxhzDp1D7/wbOxTH9M/KLUBvswPbb75ZKrNY7Tv8m+IB6tWS+LtLEFgjcVkbISOTmG1
+        f2JLF2lgo4FmuHpzWdYkIT17b7QdN81I2bGYG/a8H+nBhSBWT6g3rPMDoth40gtN+20fzE
+        iBEc4op73+9CJWKiAtVfnrRjjiuXpH8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-537-6ZS1JBshMlm-BFh2Mt0e4g-1; Mon, 31 Jan 2022 07:41:21 -0500
-X-MC-Unique: 6ZS1JBshMlm-BFh2Mt0e4g-1
-Received: by mail-ej1-f70.google.com with SMTP id q21-20020a17090622d500b006bb15a59a68so3007482eja.18
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:41:21 -0800 (PST)
+ us-mta-184-zXd7OxK2NwaMPlDj__x1ZQ-1; Mon, 31 Jan 2022 07:41:32 -0500
+X-MC-Unique: zXd7OxK2NwaMPlDj__x1ZQ-1
+Received: by mail-wm1-f69.google.com with SMTP id q71-20020a1ca74a000000b003507f38e330so10243038wme.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:41:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qt1+nFSvJqevzO6PMZIwNYLup/Fi9aN0xmv9H7RymyU=;
-        b=4RcLljkrLQKQzHn27MMN1tU6JvNu7ko4GQ2Fo4LfdsZJOHPoFuCeyss0cdZm3yGnD+
-         5p14Tpymzb74Xrr4KZ/LSzNnFV5eW0QLq5G84384pPP0d5LcQgCis3/tO2kKOT15Ea+H
-         ZO1f9cl3Rv2akBOk8wNxniuoJ3OLO3nGnjcVkKfYJ9mpF+bEgLXpJBzrBV/OBtpgDy+y
-         kPg8mulDOQ0GKLqPVF1j2xJZGcmVKzH6OXntB6HUtjPCpMF0zwR6FAfuCtI1gi+w8upo
-         JtknbY5MsN9+/SFhH1suvyNW/Uh7/Il9NZLH2fknxdJYKzwpYO4pMo1ID/Ir3wANZirv
-         XtsQ==
-X-Gm-Message-State: AOAM533WCQ2to8P7SJ4vGhGA3ZSkW7c/bIRN7u6PGa7c/LH5wgpl0naG
-        ZkdjjbFolU65Kav6dNcD9Qan7OMzVtKA255UiPFWHvVLRp8mToO8IT/+MZk+GU1ARWxJgPLQivu
-        /9VfyAaW+4A+bj5cVTgBIq5WZ
-X-Received: by 2002:a50:ef16:: with SMTP id m22mr20200853eds.340.1643632880115;
-        Mon, 31 Jan 2022 04:41:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwQ6d7vknpVMrqsiFrnxh7Kz+ptHRrnjLItook1VhqGXJmnCpynol6i83bZWb5jVzaQfdyLgw==
-X-Received: by 2002:a50:ef16:: with SMTP id m22mr20200834eds.340.1643632879835;
-        Mon, 31 Jan 2022 04:41:19 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id fn3sm13371826ejc.58.2022.01.31.04.41.18
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=CDU/PbmPIIic7u3U136Oq6S6BV92vi5mi8vSPPmxqbw=;
+        b=p6w8ZKU5fhxGfGlWddzXrWTnJBpvsuhlmG4VNFiSIdDuvmWIQGjX8MJphrG2EYh+Yv
+         opghDQ7jR/qzUfpzi3FlPhc3cW4TaVVF86WqzY8WsNuUw5fVXfbzGwxVS6wLLw8fVEoI
+         vEK1jWT7vcYUqzORYH2c+LBBx/j7QwKNIiV3tn8WNizfxVkOy5CPmto/zszioshK5vAU
+         J+FW7uPKDrO96PxDtKIeocHVt9g1Pon4T2fBBrKk9X0cpzr9eXobaE4+Nx3DF+iGuxoJ
+         zAR4xfb7NrBs0QWmtxPrrkH2oyuuc4CeHv4EQpwwee+U5t5c7F3J+FKKkFu5KuaI1ZvE
+         /RdA==
+X-Gm-Message-State: AOAM530Lv3EZvQWHK1z/6OK4U7fA2MpnRS+xicIwtIjneY1KizmP167P
+        z0mr2htbt4dt8YbLS/NvVjEbmCkt9VC6nWnVTPf3XkvpGtA3yJvFbeZsDiBwMahE2PePNr5WCAp
+        yltriqquJTzzRCA8pRqwbutWc
+X-Received: by 2002:a05:6000:18a4:: with SMTP id b4mr17638828wri.228.1643632891366;
+        Mon, 31 Jan 2022 04:41:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyGLJ0IIMIS4bUy0MKugE+gu+NmQNX5zBq1/U7gyKRv0u4bklGYNpX673EyLtY0qahw1pY+nA==
+X-Received: by 2002:a05:6000:18a4:: with SMTP id b4mr17638811wri.228.1643632891044;
+        Mon, 31 Jan 2022 04:41:31 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:b200:f007:5a26:32e7:8ef5? (p200300cbc709b200f0075a2632e78ef5.dip0.t-ipconnect.de. [2003:cb:c709:b200:f007:5a26:32e7:8ef5])
+        by smtp.gmail.com with ESMTPSA id m12sm13761169wrp.61.2022.01.31.04.41.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 04:41:19 -0800 (PST)
-Message-ID: <bf11034c-54c1-c4eb-dc26-0a6872e04121@redhat.com>
-Date:   Mon, 31 Jan 2022 13:41:18 +0100
+        Mon, 31 Jan 2022 04:41:30 -0800 (PST)
+Message-ID: <104ed89c-ce37-9526-6f9b-4eb2a4c33a8d@redhat.com>
+Date:   Mon, 31 Jan 2022 13:41:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH 2/3] Input: elan_i2c - Use PM subsystem to manage wake irq
 Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raul E Rangel <rrangel@chromium.org>,
-        linux-kernel@vger.kernel.org, Mario.Limonciello@amd.com,
-        linux-input@vger.kernel.org, dianders@chromium.org,
-        "jingle.wu" <jingle.wu@emc.com.tw>
-References: <20211220234346.2798027-1-rrangel@chromium.org>
- <20211220163823.2.Id022caf53d01112188308520915798f08a33cd3e@changeid>
- <YcE+xrSnS7qw0G1/@google.com>
- <9b004b3d-deed-1b63-2344-a445a9e53b61@redhat.com>
- <YcToUCQ8gzzSWbrm@google.com>
- <a71d4e73-6db8-16e7-2a3c-e50e26c0a07e@redhat.com>
- <CAAd53p4UbV=M_GrDMFz7qqqWRF23mXD=D7bDj-4b6rxgWupDMA@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAAd53p4UbV=M_GrDMFz7qqqWRF23mXD=D7bDj-4b6rxgWupDMA@mail.gmail.com>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bharata B Rao <bharata@amd.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-4-nikunj@amd.com>
+ <99248ffb-2c7c-ba25-5d56-2c577e58da4c@redhat.com>
+ <c7918558-4eb3-0592-f3e1-9a1c4f36f7c0@amd.com>
+ <ef8dcee4-8ce7-cb91-6938-feb39f0bdaba@redhat.com>
+ <bd8e94d6-e2fd-16a9-273e-c2563af235df@amd.com>
+ <99e39466-513b-6db9-6b3a-f40e68997cec@redhat.com>
+ <6597e635-b488-3a4c-ce84-8c17d225747e@redhat.com>
+ <50bdcaf5-274d-91e0-2126-1cbc8e61b9f8@amd.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
+In-Reply-To: <50bdcaf5-274d-91e0-2126-1cbc8e61b9f8@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/25/21 14:51, Kai-Heng Feng wrote:
-> On Fri, Dec 24, 2021 at 7:11 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 12/23/21 22:21, Dmitry Torokhov wrote:
->>> On Thu, Dec 23, 2021 at 03:42:24PM +0100, Hans de Goede wrote:
->>>> Hi,
->>>>
->>>> On 12/21/21 03:41, Dmitry Torokhov wrote:
->>>>> Hi Raul,
->>>>>
->>>>> On Mon, Dec 20, 2021 at 04:43:45PM -0700, Raul E Rangel wrote:
->>>>>> @@ -1368,11 +1367,13 @@ static int elan_probe(struct i2c_client *client,
->>>>>>    }
+On 31.01.22 13:18, Nikunj A. Dadhania wrote:
+> On 1/31/2022 5:26 PM, David Hildenbrand wrote:
+>> On 28.01.22 12:08, David Hildenbrand wrote:
+>>> On 28.01.22 12:04, Nikunj A. Dadhania wrote:
+>>>> On 1/28/2022 1:57 PM, David Hildenbrand wrote:
+>>>>> On 28.01.22 07:57, Nikunj A. Dadhania wrote:
+>>>>>> On 1/26/2022 4:16 PM, David Hildenbrand wrote:
+>>>>>>> On 18.01.22 12:06, Nikunj A Dadhania wrote:
+>>>>>>>> Use the memslot metadata to store the pinned data along with the pfns.
+>>>>>>>> This improves the SEV guest startup time from O(n) to a constant by
+>>>>>>>> deferring guest page pinning until the pages are used to satisfy nested
+>>>>>>>> page faults. The page reference will be dropped in the memslot free
+>>>>>>>> path.
+>>>>>>>>
+>>>>>>>> Remove the enc_region structure definition and the code which did
+>>>>>>>> upfront pinning, as they are no longer needed in view of the demand
+>>>>>>>> pinning support.
+>>>>>>>>
+>>>>>>>> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
+>>>>>>>> since qemu is dependent on this API.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>>>>>>>> ---
+>>>>>>>>  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
+>>>>>>>>  arch/x86/kvm/svm/svm.c |   1 +
+>>>>>>>>  arch/x86/kvm/svm/svm.h |   3 +-
+>>>>>>>>  3 files changed, 81 insertions(+), 131 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>>>>>>>> index d972ab4956d4..a962bed97a0b 100644
+>>>>>>>> --- a/arch/x86/kvm/svm/sev.c
+>>>>>>>> +++ b/arch/x86/kvm/svm/sev.c
+>>>>>>>> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
+>>>>>>>>  static unsigned long *sev_asid_bitmap;
+>>>>>>>>  static unsigned long *sev_reclaim_asid_bitmap;
+>>>>>>>>  
+>>>>>>>> -struct enc_region {
+>>>>>>>> -	struct list_head list;
+>>>>>>>> -	unsigned long npages;
+>>>>>>>> -	struct page **pages;
+>>>>>>>> -	unsigned long uaddr;
+>>>>>>>> -	unsigned long size;
+>>>>>>>> -};
+>>>>>>>> -
+>>>>>>>>  /* Called with the sev_bitmap_lock held, or on shutdown  */
+>>>>>>>>  static int sev_flush_asids(int min_asid, int max_asid)
+>>>>>>>>  {
+>>>>>>>> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>>>>>  	if (ret)
+>>>>>>>>  		goto e_free;
+>>>>>>>>  
+>>>>>>>> -	INIT_LIST_HEAD(&sev->regions_list);
+>>>>>>>> -
+>>>>>>>>  	return 0;
+>>>>>>>>  
+>>>>>>>>  e_free:
+>>>>>>>> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+>>>>>>>>  	src->handle = 0;
+>>>>>>>>  	src->pages_locked = 0;
+>>>>>>>>  	src->enc_context_owner = NULL;
+>>>>>>>> -
+>>>>>>>> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+>>>>>>>>  }
+>>>>>>>>  
+>>>>>>>>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+>>>>>>>> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
+>>>>>>>>  int svm_register_enc_region(struct kvm *kvm,
+>>>>>>>>  			    struct kvm_enc_region *range)
+>>>>>>>>  {
+>>>>>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>> -	struct enc_region *region;
+>>>>>>>> -	int ret = 0;
+>>>>>>>> -
+>>>>>>>> -	if (!sev_guest(kvm))
+>>>>>>>> -		return -ENOTTY;
+>>>>>>>> -
+>>>>>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+>>>>>>>> -	if (is_mirroring_enc_context(kvm))
+>>>>>>>> -		return -EINVAL;
+>>>>>>>> -
+>>>>>>>> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
+>>>>>>>> -		return -EINVAL;
+>>>>>>>> -
+>>>>>>>> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
+>>>>>>>> -	if (!region)
+>>>>>>>> -		return -ENOMEM;
+>>>>>>>> -
+>>>>>>>> -	mutex_lock(&kvm->lock);
+>>>>>>>> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
+>>>>>>>> -	if (IS_ERR(region->pages)) {
+>>>>>>>> -		ret = PTR_ERR(region->pages);
+>>>>>>>> -		mutex_unlock(&kvm->lock);
+>>>>>>>> -		goto e_free;
+>>>>>>>> -	}
+>>>>>>>> -
+>>>>>>>> -	region->uaddr = range->addr;
+>>>>>>>> -	region->size = range->size;
+>>>>>>>> -
+>>>>>>>> -	list_add_tail(&region->list, &sev->regions_list);
+>>>>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>>>> -
+>>>>>>>> -	/*
+>>>>>>>> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
+>>>>>>>> -	 * or vice versa for this memory range. Lets make sure caches are
+>>>>>>>> -	 * flushed to ensure that guest data gets written into memory with
+>>>>>>>> -	 * correct C-bit.
+>>>>>>>> -	 */
+>>>>>>>> -	sev_clflush_pages(region->pages, region->npages);
+>>>>>>>> -
+>>>>>>>> -	return ret;
+>>>>>>>> -
+>>>>>>>> -e_free:
+>>>>>>>> -	kfree(region);
+>>>>>>>> -	return ret;
+>>>>>>>> -}
+>>>>>>>> -
+>>>>>>>> -static struct enc_region *
+>>>>>>>> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
+>>>>>>>> -{
+>>>>>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>> -	struct list_head *head = &sev->regions_list;
+>>>>>>>> -	struct enc_region *i;
+>>>>>>>> -
+>>>>>>>> -	list_for_each_entry(i, head, list) {
+>>>>>>>> -		if (i->uaddr == range->addr &&
+>>>>>>>> -		    i->size == range->size)
+>>>>>>>> -			return i;
+>>>>>>>> -	}
+>>>>>>>> -
+>>>>>>>> -	return NULL;
+>>>>>>>> -}
+>>>>>>>> -
+>>>>>>>> -static void __unregister_enc_region_locked(struct kvm *kvm,
+>>>>>>>> -					   struct enc_region *region)
+>>>>>>>> -{
+>>>>>>>> -	sev_unpin_memory(kvm, region->pages, region->npages);
+>>>>>>>> -	list_del(&region->list);
+>>>>>>>> -	kfree(region);
+>>>>>>>> +	return 0;
+>>>>>>>>  }
+>>>>>>>>  
+>>>>>>>>  int svm_unregister_enc_region(struct kvm *kvm,
+>>>>>>>>  			      struct kvm_enc_region *range)
+>>>>>>>>  {
+>>>>>>>> -	struct enc_region *region;
+>>>>>>>> -	int ret;
+>>>>>>>> -
+>>>>>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+>>>>>>>> -	if (is_mirroring_enc_context(kvm))
+>>>>>>>> -		return -EINVAL;
+>>>>>>>> -
+>>>>>>>> -	mutex_lock(&kvm->lock);
+>>>>>>>> -
+>>>>>>>> -	if (!sev_guest(kvm)) {
+>>>>>>>> -		ret = -ENOTTY;
+>>>>>>>> -		goto failed;
+>>>>>>>> -	}
+>>>>>>>> -
+>>>>>>>> -	region = find_enc_region(kvm, range);
+>>>>>>>> -	if (!region) {
+>>>>>>>> -		ret = -EINVAL;
+>>>>>>>> -		goto failed;
+>>>>>>>> -	}
+>>>>>>>> -
+>>>>>>>> -	/*
+>>>>>>>> -	 * Ensure that all guest tagged cache entries are flushed before
+>>>>>>>> -	 * releasing the pages back to the system for use. CLFLUSH will
+>>>>>>>> -	 * not do this, so issue a WBINVD.
+>>>>>>>> -	 */
+>>>>>>>> -	wbinvd_on_all_cpus();
+>>>>>>>> -
+>>>>>>>> -	__unregister_enc_region_locked(kvm, region);
+>>>>>>>> -
+>>>>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>>>>  	return 0;
+>>>>>>>> -
+>>>>>>>> -failed:
+>>>>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>>>> -	return ret;
+>>>>>>>>  }
+>>>>>>>>  
+>>>>>>>>  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>>>> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>>>>  	mirror_sev->fd = source_sev->fd;
+>>>>>>>>  	mirror_sev->es_active = source_sev->es_active;
+>>>>>>>>  	mirror_sev->handle = source_sev->handle;
+>>>>>>>> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
+>>>>>>>>  	ret = 0;
+>>>>>>>>  
+>>>>>>>>  	/*
+>>>>>>>> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>>>>  void sev_vm_destroy(struct kvm *kvm)
+>>>>>>>>  {
+>>>>>>>>  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>> -	struct list_head *head = &sev->regions_list;
+>>>>>>>> -	struct list_head *pos, *q;
+>>>>>>>>  
+>>>>>>>>  	WARN_ON(sev->num_mirrored_vms);
+>>>>>>>>  
+>>>>>>>> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
+>>>>>>>>  	 */
+>>>>>>>>  	wbinvd_on_all_cpus();
+>>>>>>>>  
+>>>>>>>> -	/*
+>>>>>>>> -	 * if userspace was terminated before unregistering the memory regions
+>>>>>>>> -	 * then lets unpin all the registered memory.
+>>>>>>>> -	 */
+>>>>>>>> -	if (!list_empty(head)) {
+>>>>>>>> -		list_for_each_safe(pos, q, head) {
+>>>>>>>> -			__unregister_enc_region_locked(kvm,
+>>>>>>>> -				list_entry(pos, struct enc_region, list));
+>>>>>>>> -			cond_resched();
+>>>>>>>> -		}
+>>>>>>>> -	}
+>>>>>>>> -
+>>>>>>>>  	sev_unbind_asid(kvm, sev->handle);
+>>>>>>>>  	sev_asid_free(sev);
+>>>>>>>>  }
+>>>>>>>> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
+>>>>>>>>  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
+>>>>>>>>  }
+>>>>>>>>  
+>>>>>>>> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+>>>>>>>> +		  kvm_pfn_t pfn)
+>>>>>>>> +{
+>>>>>>>> +	struct kvm_arch_memory_slot *aslot;
+>>>>>>>> +	struct kvm_memory_slot *slot;
+>>>>>>>> +	gfn_t rel_gfn, pin_pfn;
+>>>>>>>> +	unsigned long npages;
+>>>>>>>> +	kvm_pfn_t old_pfn;
+>>>>>>>> +	int i;
+>>>>>>>> +
+>>>>>>>> +	if (!sev_guest(kvm))
+>>>>>>>> +		return;
+>>>>>>>> +
+>>>>>>>> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
+>>>>>>>> +		return;
+>>>>>>>> +
+>>>>>>>> +	/* Tested till 1GB pages */
+>>>>>>>> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
+>>>>>>>> +		return;
+>>>>>>>> +
+>>>>>>>> +	slot = gfn_to_memslot(kvm, gfn);
+>>>>>>>> +	if (!slot || !slot->arch.pfns)
+>>>>>>>> +		return;
+>>>>>>>> +
+>>>>>>>> +	/*
+>>>>>>>> +	 * Use relative gfn index within the memslot for the bitmap as well as
+>>>>>>>> +	 * the pfns array
+>>>>>>>> +	 */
+>>>>>>>> +	rel_gfn = gfn - slot->base_gfn;
+>>>>>>>> +	aslot = &slot->arch;
+>>>>>>>> +	pin_pfn = pfn;
+>>>>>>>> +	npages = KVM_PAGES_PER_HPAGE(level);
+>>>>>>>> +
+>>>>>>>> +	/* Pin the page, KVM doesn't yet support page migration. */
+>>>>>>>> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
+>>>>>>>> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
+>>>>>>>> +			old_pfn = aslot->pfns[rel_gfn];
+>>>>>>>> +			if (old_pfn == pin_pfn)
+>>>>>>>> +				continue;
+>>>>>>>> +
+>>>>>>>> +			put_page(pfn_to_page(old_pfn));
+>>>>>>>> +		}
+>>>>>>>> +
+>>>>>>>> +		set_bit(rel_gfn, aslot->pinned_bitmap);
+>>>>>>>> +		aslot->pfns[rel_gfn] = pin_pfn;
+>>>>>>>> +		get_page(pfn_to_page(pin_pfn));
+>>>>>>>
+>>>>>>>
+>>>>>>> I assume this is to replace KVM_MEMORY_ENCRYPT_REG_REGION, which ends up
+>>>>>>> calling svm_register_enc_region()->sev_pin_memory(), correct?
 >>>>>>
->>>>>>    /*
->>>>>> -   * Systems using device tree should set up wakeup via DTS,
->>>>>> +   * Systems using device tree or ACPI should set up wakeup via DTS/ACPI,
->>>>>>     * the rest will configure device as wakeup source by default.
->>>>>>     */
->>>>>> -  if (!dev->of_node)
->>>>>> +  if (!dev->of_node && !ACPI_COMPANION(dev)) {
+>>>>>> Yes, that is correct.
+>>>>>>>
+>>>>>>> sev_pin_memory() correctly checks the RLIMIT_MEMLOCK and uses
+>>>>>>> pin_user_pages_fast().
+>>>>>>>
+>>>>>>> I have to strongly assume that sev_pin_memory() is *wrong* as is because
+>>>>>>> it's supposed to supply FOLL_LONGTERM -- after all we're pinning these
+>>>>>>> pages possibly forever.
+>>>>>>>
+>>>>>>>
+>>>>>>> I might be wrong but
+>>>>>>>
+>>>>>>> 1. You are missing the RLIMIT_MEMLOCK check
+>>>>>>
+>>>>>> Yes, I will add this check during the enc_region registration.
+>>>>>>
+>>>>>>> 2. get_page() is the wong way of long-term pinning a page. You would
+>>>>>>> have to mimic what pin_user_pages_fast(FOLL_LONGTERM) does to eventually
+>>>>>>> get it right (e.g., migrate the page off of MIGRATE_CMA or ZONE_MOVABLE).
+>>>>>>
+>>>>>> Let me go through this and I will come back. Thanks for pointing this out.
 >>>>>
->>>>> I think this will break our Rambis that use ACPI for enumeration but
->>>>> actually lack _PRW. As far as I remember their trackpads were capable
->>>>> of waking up the system.
+>>>>> I asusme the "issue" is that KVM uses mmu notifier and does a simple
+>>>>> get_user_pages() to obtain the references, to drop the reference when
+>>>>> the entry is invalidated via a mmu notifier call. So once you intent to
+>>>>> long-term pin, it's already to late.
 >>>>>
->>>>> I think we should remove this chunk completely and instead add necessary
->>>>> code to drivers/platform/chrome/chrome-laptop.c (I suppose we need to
->>>>> have additional member in struct acpi_peripheral to indicate whether
->>>>> device needs to be configured for wakeup and then act upon it in
->>>>> chromeos_laptop_adjust_client().
->>>
->>> FWIW I looked at Rambi some more and I see that it actually defines a
->>> separate device an ACPI to handle wakeups, it is separate from the ACPI
->>> node for the trackpad:
->>>
->>> Scope (\_SB)
->>> {
->>> #ifdef BOARD_TRACKPAD_IRQ
->>>         /* Wake device for touchpad */
->>>         Device (TPAD)
->>>         {
->>>                 Name (_HID, EisaId ("PNP0C0E"))
->>>                 Name (_UID, 1)
->>>                 Name (_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x3 })
->>>
->>>                 Name (RBUF, ResourceTemplate()
->>>                 {
->>>                         Interrupt (ResourceConsumer, Level, ActiveLow)
->>>                         {
->>>                                 BOARD_TRACKPAD_IRQ
->>>                         }
->>>                 })
->>>
->>>                 Method (_CRS)
->>>                 {
->>>                         /* Only return interrupt if I2C1 is PCI mode */
->>>                         If (LEqual (\S1EN, 0)) {
->>>                                 Return (^RBUF)
->>>                         }
->>>
->>>                         /* Return empty resource template otherwise */
->>>                         Return (ResourceTemplate() {})
->>>                 }
->>>         }
->>> #endif
->>>
->>> I am not quite sure why we did this...
->>>
+>>>>> If you could teach KVM to do a long-term pin when stumbling over these
+>>>>> special encrypted memory regions (requires a proper matching
+>>>>> unpin_user_pages() call from KVM), then you could "take over" that pin
+>>>>> by get_page(), and let KVM do the ordinary put_page(), while you would
+>>>>> do the unpin_user_pages().
 >>>>>
->>>>>>            device_init_wakeup(dev, true);
->>>>>> +          dev_pm_set_wake_irq(dev, client->irq);
->>>>>> +  }
 >>>>
->>>> As I already mentioned in my other reply in this thread:
+>>>> The fault path looks like this in KVM x86 mmu code:
 >>>>
->>>> https://lore.kernel.org/linux-input/f594afab-8c1a-8821-a775-e5512e17ce8f@redhat.com/
+>>>> direct_page_fault()
+>>>> -> kvm_faultin_pfn()
+>>>>    -> __gfn_to_pfn_memslot()
+>>>>       -> hva_to_pfn()
+>>>>          -> hva_to_pfn_{slow,fast}()
+>>>>             -> get_user_pages_*()      <<<<==== This is where the
+>>>>                                                 reference is taken
 >>>>
->>>> AFAICT most x86 ACPI laptops do not use GPEs for wakeup by touchpad and
->>>> as such they do not have a _PRW method.
+>>>> Next step is to create the mappings which is done in below functions:
 >>>>
->>>> So for wakeup by elan_i2c touchpads to keep working this code is not
->>>> just necessary for some ChromeOS devices, but it is necessary on
->>>> most ACPI devices.
+>>>> -> kvm_tdp_mmu_map() / __direct_map()
 >>>>
->>>> The problem of not making these calls on devices where a GPE is actually
->>>> used for touchpad wakeup (which at least for now is the exception not
->>>> the rule) should probably be fixed by no running this "chunk"
->>>> when the device has an ACPI_COMPANION (as this patch already checks)
->>>> *and* that ACPI_COMPANION has a valid _PRW method.
+>>>>    -> Within this function (patch 1/6), I call sev_pin_spte to take an extra 
+>>>>       reference to pin it using get_page. 
 >>>>
->>>> Simply removing this chunk, or taking this patch as is will very
->>>> likely lead to regressions on various x86 laptop models.
+>>>>       Is it possible to use pin_user_pages(FOLL_LONGTERM) here? Wouldn't that 
+>>>>       be equivalent to "take over" solution that you are suggesting?
+>>>>
 >>>
->>> Hans, could you share a couple of DSDTs for devices that do not use GPEs
->>> for wakeup?
+>>> The issue is that pin_user_pages(FOLL_LONGTERM) might have to migrate
+>>> the page, which will fail if there is already an additional reference
+>>> from get_user_pages_*().
 >>>
->>> For OF we already recognize that wakeup source/interrupt might differ
->>> from "main" I2C interrupt, I guess we need to do similar for ACPI cases.
->>> The question is to how determine if a device is supposed to be a wakeup
->>> source if it does not have _PRW.
 >>
->> With s2idle (rather then S3) we never really suspend, we just put
->> everything in an as low power state as possible and call halt on the
->> CPU and then hope that the SoC power-management-unit shuts of a whole
->> bunch of power-planes based on all the devices being in a low power
->> state.
->>
->> This means that in practice with s2idle any device can be a wakeup
->> device since regular IRQs work fine as wakeup sources in s2idle.
->>
->> This is what the s2idle support in the i2c-hid code is based on:
->> drivers/hid/i2c-hid/i2c-hid-acpi.c:
->>
->>         if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) {
->>                 device_set_wakeup_capable(dev, true);
->>                 device_set_wakeup_enable(dev, false);
->>         }
->>
->> So I did just test this on a Lenovo ThinkPad X1 carbon gen 8, which
->> uses i2c_hid_acpi as driver for its touchpad and if I echo
->> enabled to the wakeup attr there, then wakeup by touchpad does work.
->>
->> One interesting thing there is that the touchpad ACPI node does not
->> have _PS0 and _PS3. Which means that the touchpad working as wakeup
->> device makes sense, since it can not be turned off at all.
->>
->> So I guess we could extend the above check in the i2c-hid-acpi
->> code to read:
->>
->>         if ((acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) &&
->>             !adev->flags.power_manageable) {
->>                 device_set_wakeup_capable(dev, true);
->>                 device_set_wakeup_enable(dev, false);
->>         }
->>
->> Because if there is a _PS3, which presumably is the case for
->> the troublesome touchscreen Raul is trying to fix, then we
->> will call that on suspend; and after that it is likely that
->> the device will not work as a wakeup source.
->>
->> And I just checked the DSDT of a couple of devices where I'm
->> reasonable sure that the touchpad uses I2C-HID and none of
->> them define _PS0/_PS3 methods on the touchpad ACPI node.
->>
->> So I think that the above suggestion should fix things
->> for the i2c-hid case.
->>
->> I've added Kai-Heng, the author of the original change
->> introducing the device_set_wakeup_capable() call, to the Cc.
->> Kai-Heng what do you think about this ?
->>
->> Raul, can you check if this resolves your issue?
->>
->> FWIW here is an acpidump of the X1C8:
->> https://fedorapeople.org/~jwrdegoede/acpidump-lenovo-x1c8
->>
->> Regards,
->>
->> Hans
->>
->>
->> p.s.
->>
->> An other interesting datapoint is that despite not declaring
->> a _PRW method the DSDTs which I've checked do all 3 contain
->> an _S0W method, returning 3 or 4. Which suggests that maybe the
->> ACPI code should look at _S0W even when no GPE is being used?
->>
+>> Minor addition: hva_to_pfn_{slow,fast}() *don't* take a reference,
+> 
+> hva_to_pfn_fast() does take a reference, not able to find in _slow() though.
 
-Sorry for being slow to respond.
+Ah, my fault, you're correct and my memory is wrong.
 
-> Maybe "ExclusiveAndWake" in _CRS is enough? ACPI spec says "whether it
-> is capable of waking the system from a low-power idle or system sleep
-> state" without mentioning the need for _PRW.
+> 
+> ->get_user_page_fast_only()
+>   -> get_user_pages_fast_only()
+>      ...
+>      gup_flags |= FOLL_GET | FOLL_FAST_ONLY;
+>      ...
 
-Ah yes checking for that is probable even better. We probably need to
-add some ACPI helper for that though.
+__get_user_pages_locked() has
 
-Regards,
+if (pages && !(flags & FOLL_PIN))
+	flags |= FOLL_GET;$
 
-hans
+
+I could have sworn we'd have code to lookup a page without the need to
+grab a reference for MMU notifier purposes in KVM's MMU.
+
+But looking into the details, I think we simply get a reference, map the
+page, and then release the reference.
+
+-- 
+Thanks,
+
+David / dhildenb
 

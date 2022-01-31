@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B294A4358
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6C84A4452
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358847AbiAaLVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:21:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43790 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359064AbiAaLKp (ORCPT
+        id S1378188AbiAaL2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:28:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37606 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378177AbiAaLTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:45 -0500
+        Mon, 31 Jan 2022 06:19:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A41761163;
-        Mon, 31 Jan 2022 11:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449FDC36B1C;
-        Mon, 31 Jan 2022 11:10:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9630B82A61;
+        Mon, 31 Jan 2022 11:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044EEC340E8;
+        Mon, 31 Jan 2022 11:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627442;
-        bh=16Eq/lpWWXdcNk6xXNLp8lLAp5bdW0/R1zVW2JRPpCc=;
+        s=korg; t=1643627986;
+        bh=JhNyRXEnciQM5KD9GQGTUIzpN68e3QP+BIvXRa1scdU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hwW7dUWRDOayDivazjq7ZIDca2MzRfNm3QhM84zy1vW69j7AevN6GMlVoT0f4Y/S7
-         nPRHeFk3deg3QFVk1dM8U6i6h1anNz7mzT6+6W+4YOgYCl+UTmnp5Fup6YlqBjGjw0
-         LI8cNra9fYq/qIKHRODnEWs4qyjY4s/tQA/T1XJU=
+        b=mrvRgI2UJfvfFnyzns6GQOIDhaCBKR3H91PMaHaRwd78YmWR+leQQ0lDquOc9qr9P
+         wqGiaU68DMC0RsGPTl8ypDVMWB1/mAdPBu6naor2e6sMdhwqIvq9QHUsVrH8GGN85Q
+         AS1fGKN3/LYJmCcG43ispPTk/NkRinzHLT5c2SsI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 085/171] ipv6_tunnel: Rate limit warning messages
+        stable@vger.kernel.org, Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Junxiao Bi <junxiao.bi@oracle.com>,
+        Changwei Ge <gechangwei@live.cn>, Gang He <ghe@suse.com>,
+        Jun Piao <piaojun@huawei.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Gautham Ananthakrishna <gautham.ananthakrishna@oracle.com>,
+        Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>,
+        "Theodore Tso" <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 087/200] jbd2: export jbd2_journal_[grab|put]_journal_head
 Date:   Mon, 31 Jan 2022 11:55:50 +0100
-Message-Id: <20220131105232.910437581@linuxfoundation.org>
+Message-Id: <20220131105236.539401298@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,47 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ido Schimmel <idosch@nvidia.com>
+From: Joseph Qi <joseph.qi@linux.alibaba.com>
 
-commit 6cee105e7f2ced596373951d9ea08dacc3883c68 upstream.
+commit 4cd1103d8c66b2cdb7e64385c274edb0ac5e8887 upstream.
 
-The warning messages can be invoked from the data path for every packet
-transmitted through an ip6gre netdev, leading to high CPU utilization.
+Patch series "ocfs2: fix a deadlock case".
 
-Fix that by rate limiting the messages.
+This fixes a deadlock case in ocfs2.  We firstly export jbd2 symbols
+jbd2_journal_[grab|put]_journal_head as preparation and later use them
+in ocfs2 insread of jbd_[lock|unlock]_bh_journal_head to fix the
+deadlock.
 
-Fixes: 09c6bbf090ec ("[IPV6]: Do mandatory IPv6 tunnel endpoint checks in realtime")
-Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
-Tested-by: Maksym Yaremchuk <maksymy@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+This patch (of 2):
+
+This exports symbols jbd2_journal_[grab|put]_journal_head, which will be
+used outside modules, e.g.  ocfs2.
+
+Link: https://lkml.kernel.org/r/20220121071205.100648-2-joseph.qi@linux.alibaba.com
+Signed-off-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc: Mark Fasheh <mark@fasheh.com>
+Cc: Joel Becker <jlbec@evilplan.org>
+Cc: Junxiao Bi <junxiao.bi@oracle.com>
+Cc: Changwei Ge <gechangwei@live.cn>
+Cc: Gang He <ghe@suse.com>
+Cc: Jun Piao <piaojun@huawei.com>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: Gautham Ananthakrishna <gautham.ananthakrishna@oracle.com>
+Cc: Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/ip6_tunnel.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/jbd2/journal.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -1036,14 +1036,14 @@ int ip6_tnl_xmit_ctl(struct ip6_tnl *t,
+--- a/fs/jbd2/journal.c
++++ b/fs/jbd2/journal.c
+@@ -2970,6 +2970,7 @@ struct journal_head *jbd2_journal_grab_j
+ 	jbd_unlock_bh_journal_head(bh);
+ 	return jh;
+ }
++EXPORT_SYMBOL(jbd2_journal_grab_journal_head);
  
- 		if (unlikely(!ipv6_chk_addr_and_flags(net, laddr, ldev, false,
- 						      0, IFA_F_TENTATIVE)))
--			pr_warn("%s xmit: Local address not yet configured!\n",
--				p->name);
-+			pr_warn_ratelimited("%s xmit: Local address not yet configured!\n",
-+					    p->name);
- 		else if (!(p->flags & IP6_TNL_F_ALLOW_LOCAL_REMOTE) &&
- 			 !ipv6_addr_is_multicast(raddr) &&
- 			 unlikely(ipv6_chk_addr_and_flags(net, raddr, ldev,
- 							  true, 0, IFA_F_TENTATIVE)))
--			pr_warn("%s xmit: Routing loop! Remote address found on this node!\n",
--				p->name);
-+			pr_warn_ratelimited("%s xmit: Routing loop! Remote address found on this node!\n",
-+					    p->name);
- 		else
- 			ret = 1;
- 		rcu_read_unlock();
+ static void __journal_remove_journal_head(struct buffer_head *bh)
+ {
+@@ -3022,6 +3023,7 @@ void jbd2_journal_put_journal_head(struc
+ 		jbd_unlock_bh_journal_head(bh);
+ 	}
+ }
++EXPORT_SYMBOL(jbd2_journal_put_journal_head);
+ 
+ /*
+  * Initialize jbd inode head
 
 

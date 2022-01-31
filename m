@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BC94A4204
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183834A462A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376348AbiAaLIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:08:16 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52684 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348750AbiAaLEw (ORCPT
+        id S1378388AbiAaLuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377942AbiAaLdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:04:52 -0500
+        Mon, 31 Jan 2022 06:33:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CACC0604D9;
+        Mon, 31 Jan 2022 03:21:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7740DB82A59;
-        Mon, 31 Jan 2022 11:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BE8C340E8;
-        Mon, 31 Jan 2022 11:04:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FCCFB82A4C;
+        Mon, 31 Jan 2022 11:21:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C8CC340EE;
+        Mon, 31 Jan 2022 11:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627090;
-        bh=Zy/7wJoEBkcy3hAg4JIzp40lgboP5C93DThdpp8EI0w=;
+        s=korg; t=1643628117;
+        bh=GQCI7RBVW0ex3uiYAQNe3UR52tlP5on/Kt1jiANIWBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kkdL/Y8C5n7J3f3adbd701pSXWzzW0OqG87RxEyciiw3ftpriWcHn1sJ7vzve+p3y
-         V3JTx5KdOUjyH1CMJtBcNC3VZ+WWmNEV2DxiSO/00HsBUwh+1M72TcGcmNQbu3DkKp
-         NoAiQST1UGOYDjYNf/mZEl4txK2KgdhgViAHsiNg=
+        b=t3NKCdFFX57IegzIxvE6xBV05SsP6XSbC/aHU+FpTX8aoDUKzqLdjFbvbA5mMOv0r
+         5qohd2lnlph+t9rGviJJU7HDwI+pd9dJ66txHvrMo53TpcthpGnzVmGY7XgIIvtP1h
+         gKKzQpklZu8PDcqLB5P/auhsaCyttLeH1ChDcStI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yazen Ghannam <yazen.ghannam@amd.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.10 038/100] x86/MCE/AMD: Allow thresholding interface updates after init
+        stable@vger.kernel.org,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.16 096/200] i40e: Increase delay to 1 s after global EMP reset
 Date:   Mon, 31 Jan 2022 11:55:59 +0100
-Message-Id: <20220131105221.726260203@linuxfoundation.org>
+Message-Id: <20220131105236.836578839@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,39 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+From: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
 
-commit 1f52b0aba6fd37653416375cb8a1ca673acf8d5f upstream.
+commit 9b13bd53134c9ddd544a790125199fdbdb505e67 upstream.
 
-Changes to the AMD Thresholding sysfs code prevents sysfs writes from
-updating the underlying registers once CPU init is completed, i.e.
-"threshold_banks" is set.
+Recently simplified i40e_rebuild causes that FW sometimes
+is not ready after NVM update, the ping does not return.
 
-Allow the registers to be updated if the thresholding interface is
-already initialized or if in the init path. Use the "set_lvt_off" value
-to indicate if running in the init path, since this value is only set
-during init.
+Increase the delay in case of EMP reset.
+Old delay of 300 ms was introduced for specific cards for 710 series.
+Now it works for all the cards and delay was increased.
 
-Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220117161328.19148-1-yazen.ghannam@amd.com
+Fixes: 1fa51a650e1d ("i40e: Add delay after EMP reset for firmware to recover")
+Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/mce/amd.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c |   12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -387,7 +387,7 @@ static void threshold_restart_bank(void
- 	u32 hi, lo;
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -10574,15 +10574,9 @@ static void i40e_rebuild(struct i40e_pf
+ 	}
+ 	i40e_get_oem_version(&pf->hw);
  
- 	/* sysfs write might race against an offline operation */
--	if (this_cpu_read(threshold_banks))
-+	if (!this_cpu_read(threshold_banks) && !tr->set_lvt_off)
- 		return;
+-	if (test_bit(__I40E_EMP_RESET_INTR_RECEIVED, pf->state) &&
+-	    ((hw->aq.fw_maj_ver == 4 && hw->aq.fw_min_ver <= 33) ||
+-	     hw->aq.fw_maj_ver < 4) && hw->mac.type == I40E_MAC_XL710) {
+-		/* The following delay is necessary for 4.33 firmware and older
+-		 * to recover after EMP reset. 200 ms should suffice but we
+-		 * put here 300 ms to be sure that FW is ready to operate
+-		 * after reset.
+-		 */
+-		mdelay(300);
++	if (test_and_clear_bit(__I40E_EMP_RESET_INTR_RECEIVED, pf->state)) {
++		/* The following delay is necessary for firmware update. */
++		mdelay(1000);
+ 	}
  
- 	rdmsr(tr->b->address, lo, hi);
+ 	/* re-verify the eeprom if we just had an EMP reset */
 
 

@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E8B4A442A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50814A43A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377590AbiAaL1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377399AbiAaLSL (ORCPT
+        id S1377024AbiAaLWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:22:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59942 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359858AbiAaLMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:18:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741E6C061341;
-        Mon, 31 Jan 2022 03:11:43 -0800 (PST)
+        Mon, 31 Jan 2022 06:12:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 419C2B82A61;
-        Mon, 31 Jan 2022 11:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E3EC340EF;
-        Mon, 31 Jan 2022 11:11:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE33EB82A5D;
+        Mon, 31 Jan 2022 11:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F781C340EE;
+        Mon, 31 Jan 2022 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627501;
-        bh=qqoB7EHQVor5f/OMG+syvKtFAeHTFIo6BetQX1TMjn0=;
+        s=korg; t=1643627534;
+        bh=ewX69j8ofpIkICtrjA96velRbMHtZQSv5JOQg+8Owmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JwejdGVXzwmBxtzThM156vDaape/tIeQrYJCoiAF5Oamh20Stn0a/oCixsMo3MfJT
-         UdlXgcMvJ8xrfJ9CkLGpbiE7EjSvqkXpWqMV0E44BUZcmHMSTTtaTw87EMEPcWc7KP
-         aho2+A1xi/hcfxoDCZzPS11dC26pR8IN6twAlNGk=
+        b=FyZlwo0TF+quGZzXVwQFjh15ticbXohhNzGm94WKGFrjnr4XcNTERaPLpU982Lc3U
+         b5lL9e4koOPucMxx+6YHa/UuACYT4sgC/jqU88wcIZw0NnzyfyYgbaeaLfE1XXOaNn
+         MLUl9MJ3hamppJqNHt3Bd8wLjlVSPZpSM2xDJVVw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH 5.15 097/171] drm/msm/dsi: Fix missing put_device() call in dsi_get_phy
-Date:   Mon, 31 Jan 2022 11:56:02 +0100
-Message-Id: <20220131105233.316426858@linuxfoundation.org>
+Subject: [PATCH 5.15 098/171] drm/msm/dsi: invalid parameter check in msm_dsi_phy_enable
+Date:   Mon, 31 Jan 2022 11:56:03 +0100
+Message-Id: <20220131105233.355835390@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 References: <20220131105229.959216821@linuxfoundation.org>
@@ -48,39 +46,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-commit c04c3148ca12227d92f91b355b4538cc333c9922 upstream.
+commit 5e761a2287234bc402ba7ef07129f5103bcd775c upstream.
 
-If of_find_device_by_node() succeeds, dsi_get_phy() doesn't
-a corresponding put_device(). Thus add put_device() to fix the exception
-handling.
+The function performs a check on the "phy" input parameter, however, it
+is used before the check.
 
-Fixes: ec31abf ("drm/msm/dsi: Separate PHY to another platform device")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Initialize the "dev" variable after the sanity check to avoid a possible
+NULL pointer dereference.
+
+Fixes: 5c8290284402b ("drm/msm/dsi: Split PHY drivers to separate files")
+Addresses-Coverity-ID: 1493860 ("Null pointer dereference")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20211230070943.18116-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220116181844.7400-1-jose.exposito89@gmail.com
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/msm/dsi/dsi.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi.c
-@@ -40,7 +40,12 @@ static int dsi_get_phy(struct msm_dsi *m
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+@@ -806,12 +806,14 @@ int msm_dsi_phy_enable(struct msm_dsi_ph
+ 			struct msm_dsi_phy_clk_request *clk_req,
+ 			struct msm_dsi_phy_shared_timings *shared_timings)
+ {
+-	struct device *dev = &phy->pdev->dev;
++	struct device *dev;
+ 	int ret;
  
- 	of_node_put(phy_node);
+ 	if (!phy || !phy->cfg->ops.enable)
+ 		return -EINVAL;
  
--	if (!phy_pdev || !msm_dsi->phy) {
-+	if (!phy_pdev) {
-+		DRM_DEV_ERROR(&pdev->dev, "%s: phy driver is not ready\n", __func__);
-+		return -EPROBE_DEFER;
-+	}
-+	if (!msm_dsi->phy) {
-+		put_device(&phy_pdev->dev);
- 		DRM_DEV_ERROR(&pdev->dev, "%s: phy driver is not ready\n", __func__);
- 		return -EPROBE_DEFER;
- 	}
++	dev = &phy->pdev->dev;
++
+ 	ret = dsi_phy_enable_resource(phy);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "%s: resource enable failed, %d\n",
 
 

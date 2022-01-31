@@ -2,181 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8C64A5395
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561CC4A5397
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiAaXx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S229852AbiAaX4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiAaXxZ (ORCPT
+        with ESMTP id S229626AbiAaX4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:53:25 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F54C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:53:25 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id h12so15456645pjq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:53:25 -0800 (PST)
+        Mon, 31 Jan 2022 18:56:36 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B916AC061714;
+        Mon, 31 Jan 2022 15:56:35 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id y17so13926775plg.7;
+        Mon, 31 Jan 2022 15:56:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
-        b=YW4/gspNKInMiiqNd58ZCH4h0W4EUl91RhRmEY/57BXNbZ/hMUAkcEwc7FoOjBI4Nt
-         E45rvZBie5zy3Gz0IT/MtOePAEx+D4c06rSLJ0MR4nhBOzD0JqXtbe/3lYMrtOi4Ixjn
-         OBYyuErvU48oU1yNCmORPoTqATZguV8v3Oeuc=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=ASc0QdUIAk6Y/qox9xZbv3MFamTMdzPLX28teiDe900=;
+        b=PGfG2wLagFdyh3utS6ZoDA7ZDWhj8J+bY0omsxYmxx7zePhDIdasnw3wP0g+potsIJ
+         m0h/RQF9rzof1Lq4sSUyDlMqBph8WKz/lkF1iG5cw8oKhM/H65UGTKzP/iedbIkj6Z7b
+         h1sIiXy/7JcAL8o3AKxR7DFsUhXoXRCssTlhKdvw5ty0kg7QdPHCGqFHO6CjE7sCr06m
+         ss7T8M0x3V3ruEbkyUD3T7XoDqqFcjTixMaiMJRDk6GF8x42bWA4N7IDuMtRsHpjq/o8
+         DXdX9dQU5EVSp9Q96l53wkBmeQajiCBbrNn7h6IrVoljQheopbg7z6tiGnss12kCfJQd
+         VuFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
-        b=MzrJW/IYB1whzioigavzbQwwPCGnpfWZ8WWS2jdcI5YZ1ZXcNEP5ULslY4GHieDMHP
-         TS5JJ6kPdlpUNuFdQOFO14He8IZPstaYTBPEGO6/fyybLM1SKc8uTitKZcZmCsJnNZTX
-         IE9+oPyGdgk1G6XMHQc4/5UIl3EKtOl1bGnX8x3y1BwpoUKGJa/vJ16/qGm6a5c3fTJ5
-         fLlQxx6l3aVMWnU4W6yJZJZqdlhwWW830t+2bdzek4Jd8GpbJvvt5E+WURTM8WITWxTS
-         UtN6YXCPYZfMP4Rpbg1TmqRM/ui5RZ8hGepvFxgPsdL+0wHYr2bQUl66PuyG1B7wv7bw
-         Wa8g==
-X-Gm-Message-State: AOAM531nNX6hsagrRNGx0CYdzTGeZtAyYDRNIzGcnbHU8Sjwxz73Rq0n
-        OfNzQTT+a+8yFZLnZCupHCnjTg==
-X-Google-Smtp-Source: ABdhPJwQoJTVTbWyz7yUWp71cBeTkkBUzx+D+EJf+jHOTWJCSO09eDNSyMoJg+E1UEDubWnSmjvFOg==
-X-Received: by 2002:a17:902:d512:: with SMTP id b18mr24084400plg.24.1643673204493;
-        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ha21sm392379pjb.48.2022.01.31.15.53.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
-Date:   Mon, 31 Jan 2022 15:53:23 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Len Baker <len.baker@gmx.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier()
- substitute
-Message-ID: <202201311550.31EF589B2@keescook>
-References: <20220131225250.409564-1-ndesaulniers@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=ASc0QdUIAk6Y/qox9xZbv3MFamTMdzPLX28teiDe900=;
+        b=x+hyy+SeyHX9qCNyFbAGyoQfOI1KQN8nLcRJMVJvAWMUs5j1UBzoY3vnuRzz3Gs9rQ
+         hSlfhdF36NbeETFO8w4VaWFrlwVOL89KccCaIdvtgNiWWg3fU9eoRu4GOwBETfMiN4pq
+         GwSkt72o8qs0hj8/g39b6mQBBX/diJUKJGkZYnG1wIapQBVD4bC6JHLloLiKTkRjQspr
+         v2u75EwKAIv0Kr0H39+T3DKh840ISNucj+Bc4biyzPQOgfayaeKUdH3uB8lfNGTGRSGr
+         d4wRbFR5K1VTpKYPvl70ZJOx1KJp0BqQKoEgzLSG/qDthN3YAaNqOsRp7P+ECT2/0z2f
+         Nf9g==
+X-Gm-Message-State: AOAM533+t7tq4ezdkP5NghbIyE2Lv3BvTIEaHxfEKeou4/DAr75jVfh8
+        uVDKE93DMCmyzsi7seFDQ5M=
+X-Google-Smtp-Source: ABdhPJzLZvetdGIXEW1s9FTrX8NejTliyZWjj5RmttyIZ34SohLKBs1AXCwi7LrjJ2aaOrWBAE9ZCQ==
+X-Received: by 2002:a17:902:d2c8:: with SMTP id n8mr22948453plc.41.1643673395032;
+        Mon, 31 Jan 2022 15:56:35 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id u2sm21432612pfk.15.2022.01.31.15.56.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 15:56:34 -0800 (PST)
+Message-ID: <b5b948b7-8e41-3bd6-1a52-44785c89c965@gmail.com>
+Date:   Tue, 1 Feb 2022 08:56:29 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131225250.409564-1-ndesaulniers@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH 0/5] docs: pdfdocs: Improve LaTeX preamble (TOC, CJK fonts)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 02:52:47PM -0800, Nick Desaulniers wrote:
-> Add text to memory-barriers.txt and deprecated.rst to denote that
-> volatile-qualifying an asm statement is not a substitute for either a
-> compiler barrier (``barrier();``) or a clobber list.
-> 
-> This way we can point to this in code that strengthens existing
-> volatile-qualified asm statements to use a compiler barrier.
-> 
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Example: https://godbolt.org/z/8PW549zz9
-> 
->  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
->  Documentation/process/deprecated.rst | 17 +++++++++++++++++
->  2 files changed, 41 insertions(+)
-> 
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index b12df9137e1c..f3908c0812da 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1726,6 +1726,30 @@ of optimizations:
->       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
->       though the CPU of course need not do so.
->  
-> + (*) Similarly, the compiler is within its rights to reorder instructions
-> +     around an asm statement so long as clobbers are not violated. For example,
-> +
-> +	asm volatile ("");
-> +	flag = true;
-> +
-> +     May be modified by the compiler to:
-> +
-> +	flag = true;
-> +	asm volatile ("");
-> +
-> +     Marking an asm statement as volatile is not a substitute for barrier(),
-> +     and is implicit for asm goto statements and asm statements that do not
-> +     have outputs (like the above example). Prefer either:
-> +
-> +	asm ("":::"memory");
-> +	flag = true;
-> +
-> +     Or:
-> +
-> +	asm ("");
-> +	barrier();
-> +	flag = true;
-> +
+Hi,
 
-I like this!
+This is a follow-up series to the CJK font setting patch series [1]
+upstreamed in v5.15.
 
->   (*) The compiler is within its rights to invent stores to a variable,
->       as in the following example:
->  
-> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-> index 388cb19f5dbb..432816e2f79e 100644
-> --- a/Documentation/process/deprecated.rst
-> +++ b/Documentation/process/deprecated.rst
-> @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
->          instance->count = count;
->  
->          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
-> +
-> +Volatile Qualified asm Statements
-> +=================================
+[1]: https://lore.kernel.org/r/39d0fb0f-b248-bca4-2dac-df69e8d697b1@gmail.com
 
-I would open with an example, like:
+There is still a lot of room for improvement in the layout of PDF docs.
 
-Instead of::
+This series resolves issues listed below:
 
-	volatile asm("...");
+ 1. Some of chapter and section counts in Table of Contents (TOC) in
+    large PDF docs collide with chapter/section titles, e.g., Chapters 10,
+    11, 12, and 13 and Section 10.10 in userspace-api.pdf.
+ 2. In docs of more than 99 pages, page counts in TOC are not aligned
+    properly when maxdepth >= 2 is specified in toctree, e.g., Chapters 10,
+    12, and 13 in userspace-api.pdf
+ 3. In TOC of Latin-script docs, quotation and apostrophe symbols look too
+    wide, e.g., Section 2.2 in userspace-api.pdf.
+ 4. In TOC of translations, Korean chapter titles lose inter-phrase spaces.
+ 5. On systems without "Noto Sans CJK" fonts, CJK chapters in translations
+    results in full of "TOFU" boxes, with a long build time and a large
+    log file containing lots of missing-font warnings.
+ 6. In translations.pdf built by "make pdfdocs", ascii-art diagrams in CJK
+    are not aligned properly.
 
-just use::
+Patch 1/5 resolves issues #1 and #2 by tweaking width parameters for TOC.
 
-	asm("...");
+Patch 2/5 resolves issue #3 by switching CJK default font to the KR variant,
+whose quotation and apostrophe symbols are half width.
+
+Patch 3/5 resolves issue #4 by enabling CJKspace in TOC by default.
+
+Patch 4/5 resolves issue #5 by conditionally skipping CJK contents in
+PDF docs.
+
+Patch 5/5 resolves issue #6 by moving font settings under
+translations/conf.py to CJK-specific macros in main conf.py
+
+This series is tested against Sphinx versions 1.7.9, 2.4.4, and 4.4.0.
+It does not affect HTML docs.
+
+        Thanks, Akira
+--
+Akira Yokosawa (5):
+  docs: pdfdocs: Tweak width params of TOC
+  docs: pdfdocs: Switch default CJK font to KR variants
+  docs: pdfdocs: Enable CJKspace in TOC for Korean titles
+  docs/translations: Skip CJK contents if suitable fonts not found
+  docs: pdfdocs: Move CJK monospace font setting to main conf.py
+
+ Documentation/conf.py                      | 81 ++++++++++++++++++----
+ Documentation/translations/conf.py         | 12 ----
+ Documentation/translations/ja_JP/index.rst |  4 +-
+ Documentation/translations/ko_KR/index.rst |  5 +-
+ Documentation/translations/zh_CN/index.rst |  4 +-
+ Documentation/translations/zh_TW/index.rst |  4 +-
+ 6 files changed, 75 insertions(+), 35 deletions(-)
+ delete mode 100644 Documentation/translations/conf.py
 
 
-> +
-> +According to `the GCC docs on inline asm
-> +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
-> +
-> +  asm statements that have no output operands and asm goto statements,
-> +  are implicitly volatile.
-
-Does this mean "volatile" _is_ needed when there are operands, etc?
-
-> +
-> +For many uses of asm statements, that means adding a volatile qualifier won't
-> +hurt (making the implicit explicit), but it will not strengthen the semantics
-> +for such cases where it would have been implied. Care should be taken not to
-> +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
-> +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
-> +
-> +.. [memory-barriers] Documentation/memory-barriers.txt
-> -- 
-> 2.35.0.rc2.247.g8bbb082509-goog
-> 
-
+base-commit: 854d0982eef0e424e8108d09d9275aaf445b1597
 -- 
-Kees Cook
+2.17.1
+

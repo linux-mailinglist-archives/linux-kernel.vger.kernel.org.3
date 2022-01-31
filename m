@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5734A41A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EB74A42BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358708AbiAaLE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:04:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51100 "EHLO
+        id S1376960AbiAaLNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:13:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57578 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359098AbiAaLC5 (ORCPT
+        with ESMTP id S1377266AbiAaLJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:57 -0500
+        Mon, 31 Jan 2022 06:09:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BF39B82A57;
-        Mon, 31 Jan 2022 11:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0968C340EF;
-        Mon, 31 Jan 2022 11:02:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1FA0B82A4D;
+        Mon, 31 Jan 2022 11:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F38C340E8;
+        Mon, 31 Jan 2022 11:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626975;
-        bh=7BpYgPwu1UsHm+ODdEAtD9Qh4ktMDhSuWtddKky/638=;
+        s=korg; t=1643627390;
+        bh=SdIECVcmzvG7Ae7fwzWMZkHzLtG0FTcE/FlWXeR9vOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=no9CZfXCBw2DV7/GXje1ss3geJTUUu9joFx17Fa2cE0pMjAB13EjhVeNmKrubRqfu
-         QxleRpZbojowtLjXhylR/NzK7mYpNG995JUf5nYwYEIcNlg92Xza8Zekxl0D8FUd7J
-         GQF6nG1pqRlDgPfoUFmISCyhTnleP4jRkqzFiMe8=
+        b=vPKog7Ch50SW8vbqW/vQ7X5aQNTCatQ37MR/VSGJ/8jsfhLdkZKyutacpdzY8Bng9
+         B05Dr4w93C1bzCEXDSdYDN15qOamE+GTKo267s/LkXMPTqaclcn3AlpXzaYeNtGNPi
+         Cr9FE961t/2fYB7AN8uQyijTq36VoLLEIXoXyp3Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 004/100] net: stmmac: skip only stmmac_ptp_register when resume from suspend
-Date:   Mon, 31 Jan 2022 11:55:25 +0100
-Message-Id: <20220131105220.583649704@linuxfoundation.org>
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: [PATCH 5.15 061/171] usb: typec: tcpci: dont touch CC line if its Vconn source
+Date:   Mon, 31 Jan 2022 11:55:26 +0100
+Message-Id: <20220131105232.089036475@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,75 +46,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+From: Xu Yang <xu.yang_2@nxp.com>
 
-commit 0735e639f129dff455aeb91da291f5c578cc33db upstream.
+commit 5638b0dfb6921f69943c705383ff40fb64b987f2 upstream.
 
-When resume from suspend, besides skipping PTP registration, it also
-skipping PTP HW initialization. This could cause PTP clock not able to
-operate properly when resume from suspend.
+With the AMS and Collision Avoidance, tcpm often needs to change the CC's
+termination. When one CC line is sourcing Vconn, if we still change its
+termination, the voltage of the another CC line is likely to be fluctuant
+and unstable.
 
-To fix this, only stmmac_ptp_register() is skipped when resume from
-suspend.
+Therefore, we should verify whether a CC line is sourcing Vconn before
+changing its termination and only change the termination that is not
+a Vconn line. This can be done by reading the Vconn Present bit of
+POWER_ STATUS register. To determine the polarity, we can read the
+Plug Orientation bit of TCPC_CONTROL register. Since Vconn can only be
+sourced if Plug Orientation is set.
 
-Fixes: fe1319291150 ("stmmac: Don't init ptp again when resume from suspend/hibernation")
-Cc: <stable@vger.kernel.org> # 5.15.x
-Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
+cc: <stable@vger.kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Link: https://lore.kernel.org/r/20220113092943.752372-1-xu.yang_2@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |   20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ drivers/usb/typec/tcpm/tcpci.c |   26 ++++++++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci.h |    1 +
+ 2 files changed, 27 insertions(+)
 
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -816,8 +816,6 @@ static int stmmac_init_ptp(struct stmmac
- 	priv->hwts_tx_en = 0;
- 	priv->hwts_rx_en = 0;
- 
--	stmmac_ptp_register(priv);
--
- 	return 0;
- }
- 
-@@ -2691,7 +2689,7 @@ static void stmmac_safety_feat_configura
- /**
-  * stmmac_hw_setup - setup mac in a usable state.
-  *  @dev : pointer to the device structure.
-- *  @init_ptp: initialize PTP if set
-+ *  @ptp_register: register PTP if set
-  *  Description:
-  *  this is the main function to setup the HW in a usable state because the
-  *  dma engine is reset, the core registers are configured (e.g. AXI,
-@@ -2701,7 +2699,7 @@ static void stmmac_safety_feat_configura
-  *  0 on success and an appropriate (-)ve integer as defined in errno.h
-  *  file on failure.
-  */
--static int stmmac_hw_setup(struct net_device *dev, bool init_ptp)
-+static int stmmac_hw_setup(struct net_device *dev, bool ptp_register)
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -75,9 +75,25 @@ static int tcpci_write16(struct tcpci *t
+ static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
  {
- 	struct stmmac_priv *priv = netdev_priv(dev);
- 	u32 rx_cnt = priv->plat->rx_queues_to_use;
-@@ -2757,13 +2755,13 @@ static int stmmac_hw_setup(struct net_de
+ 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
++	bool vconn_pres;
++	enum typec_cc_polarity polarity = TYPEC_POLARITY_CC1;
+ 	unsigned int reg;
+ 	int ret;
  
- 	stmmac_mmc_setup(priv);
++	ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS, &reg);
++	if (ret < 0)
++		return ret;
++
++	vconn_pres = !!(reg & TCPC_POWER_STATUS_VCONN_PRES);
++	if (vconn_pres) {
++		ret = regmap_read(tcpci->regmap, TCPC_TCPC_CTRL, &reg);
++		if (ret < 0)
++			return ret;
++
++		if (reg & TCPC_TCPC_CTRL_ORIENTATION)
++			polarity = TYPEC_POLARITY_CC2;
++	}
++
+ 	switch (cc) {
+ 	case TYPEC_CC_RA:
+ 		reg = (TCPC_ROLE_CTRL_CC_RA << TCPC_ROLE_CTRL_CC1_SHIFT) |
+@@ -112,6 +128,16 @@ static int tcpci_set_cc(struct tcpc_dev
+ 		break;
+ 	}
  
--	if (init_ptp) {
--		ret = stmmac_init_ptp(priv);
--		if (ret == -EOPNOTSUPP)
--			netdev_warn(priv->dev, "PTP not supported by HW\n");
--		else if (ret)
--			netdev_warn(priv->dev, "PTP init failed\n");
--	}
-+	ret = stmmac_init_ptp(priv);
-+	if (ret == -EOPNOTSUPP)
-+		netdev_warn(priv->dev, "PTP not supported by HW\n");
-+	else if (ret)
-+		netdev_warn(priv->dev, "PTP init failed\n");
-+	else if (ptp_register)
-+		stmmac_ptp_register(priv);
++	if (vconn_pres) {
++		if (polarity == TYPEC_POLARITY_CC2) {
++			reg &= ~(TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT);
++			reg |= (TCPC_ROLE_CTRL_CC_OPEN << TCPC_ROLE_CTRL_CC1_SHIFT);
++		} else {
++			reg &= ~(TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT);
++			reg |= (TCPC_ROLE_CTRL_CC_OPEN << TCPC_ROLE_CTRL_CC2_SHIFT);
++		}
++	}
++
+ 	ret = regmap_write(tcpci->regmap, TCPC_ROLE_CTRL, reg);
+ 	if (ret < 0)
+ 		return ret;
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/drivers/usb/typec/tcpm/tcpci.h
+@@ -98,6 +98,7 @@
+ #define TCPC_POWER_STATUS_SOURCING_VBUS	BIT(4)
+ #define TCPC_POWER_STATUS_VBUS_DET	BIT(3)
+ #define TCPC_POWER_STATUS_VBUS_PRES	BIT(2)
++#define TCPC_POWER_STATUS_VCONN_PRES	BIT(1)
+ #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
  
- 	priv->eee_tw_timer = STMMAC_DEFAULT_TWT_LS;
- 
+ #define TCPC_FAULT_STATUS		0x1f
 
 

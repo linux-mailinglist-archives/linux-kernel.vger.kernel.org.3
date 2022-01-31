@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F954A4336
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E2B4A41BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377336AbiAaLSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:18:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57770 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377535AbiAaLKL (ORCPT
+        id S1359475AbiAaLFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358557AbiAaLDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:11 -0500
+        Mon, 31 Jan 2022 06:03:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892A4C0619D0;
+        Mon, 31 Jan 2022 03:02:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36345B82A59;
-        Mon, 31 Jan 2022 11:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2E3C340EF;
-        Mon, 31 Jan 2022 11:10:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4436AB82A61;
+        Mon, 31 Jan 2022 11:02:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4278AC340E8;
+        Mon, 31 Jan 2022 11:02:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627409;
-        bh=GQCI7RBVW0ex3uiYAQNe3UR52tlP5on/Kt1jiANIWBE=;
+        s=korg; t=1643626930;
+        bh=hIkFO2I3lmGEmGDltcRJMnRhfcQ7QQuEO3j2VNgMPQg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y8km3tBCIw+JELKof+VctBasdco0wYPzz6E5eszajXrkNnGDPgdwNyK+LufQuxMwz
-         iQJU1I1xlKh3xxXz1ZKXqrGoO9TmFzFiis4i5JLmkS7VLKBx+NZXNo5rAYrp9ul1sV
-         mu3giXiamSmKt9Ka/Mltx9TbERUp9wipT94YkLfw=
+        b=YYvFV7HD06/c+kAaHtseodRTWMqNsGF1luZqNWW3w7dXJrdvL/XS7rLfND3Ijl4kU
+         NVH+M2AXhsIZ+8S9R7UtmPhgg3kYJ15n18eMLubKsmc1W6FA886LiYSSIF5pvjrrr+
+         W5YsHmIsxuXGr40xs+lN6/J2pN9vIvSGhqJ9HwdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 075/171] i40e: Increase delay to 1 s after global EMP reset
-Date:   Mon, 31 Jan 2022 11:55:40 +0100
-Message-Id: <20220131105232.580384291@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Subject: [PATCH 5.10 020/100] drm/etnaviv: relax submit size limits
+Date:   Mon, 31 Jan 2022 11:55:41 +0100
+Message-Id: <20220131105221.144240536@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,47 +48,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-commit 9b13bd53134c9ddd544a790125199fdbdb505e67 upstream.
+commit e3d26528e083e612314d4dcd713f3d5a26143ddc upstream.
 
-Recently simplified i40e_rebuild causes that FW sometimes
-is not ready after NVM update, the ping does not return.
+While all userspace tried to limit commandstreams to 64K in size,
+a bug in the Mesa driver lead to command streams of up to 128K
+being submitted. Allow those to avoid breaking existing userspace.
 
-Increase the delay in case of EMP reset.
-Old delay of 300 ms was introduced for specific cards for 710 series.
-Now it works for all the cards and delay was increased.
-
-Fixes: 1fa51a650e1d ("i40e: Add delay after EMP reset for firmware to recover")
-Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 6dfa2fab8ddd ("drm/etnaviv: limit submit sizes")
+Cc: stable@vger.kernel.org
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c |   12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -10574,15 +10574,9 @@ static void i40e_rebuild(struct i40e_pf
- 	}
- 	i40e_get_oem_version(&pf->hw);
- 
--	if (test_bit(__I40E_EMP_RESET_INTR_RECEIVED, pf->state) &&
--	    ((hw->aq.fw_maj_ver == 4 && hw->aq.fw_min_ver <= 33) ||
--	     hw->aq.fw_maj_ver < 4) && hw->mac.type == I40E_MAC_XL710) {
--		/* The following delay is necessary for 4.33 firmware and older
--		 * to recover after EMP reset. 200 ms should suffice but we
--		 * put here 300 ms to be sure that FW is ready to operate
--		 * after reset.
--		 */
--		mdelay(300);
-+	if (test_and_clear_bit(__I40E_EMP_RESET_INTR_RECEIVED, pf->state)) {
-+		/* The following delay is necessary for firmware update. */
-+		mdelay(1000);
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
+@@ -469,8 +469,8 @@ int etnaviv_ioctl_gem_submit(struct drm_
+ 		return -EINVAL;
  	}
  
- 	/* re-verify the eeprom if we just had an EMP reset */
+-	if (args->stream_size > SZ_64K || args->nr_relocs > SZ_64K ||
+-	    args->nr_bos > SZ_64K || args->nr_pmrs > 128) {
++	if (args->stream_size > SZ_128K || args->nr_relocs > SZ_128K ||
++	    args->nr_bos > SZ_128K || args->nr_pmrs > 128) {
+ 		DRM_ERROR("submit arguments out of size limits\n");
+ 		return -EINVAL;
+ 	}
 
 

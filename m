@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B92604A417E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1637E4A4401
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358469AbiAaLET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S1359590AbiAaLZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359156AbiAaLDC (ORCPT
+        with ESMTP id S1349721AbiAaLQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:03:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FDDC0612FD;
-        Mon, 31 Jan 2022 03:01:37 -0800 (PST)
+        Mon, 31 Jan 2022 06:16:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877C0C0613F7;
+        Mon, 31 Jan 2022 03:11:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98FEF60B2C;
-        Mon, 31 Jan 2022 11:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FADBC340E8;
-        Mon, 31 Jan 2022 11:01:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50E35B82A61;
+        Mon, 31 Jan 2022 11:11:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EC0C340E8;
+        Mon, 31 Jan 2022 11:11:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626896;
-        bh=fYSbzGiZZ+SKixvbaWp+OzSqY+xqh5FdmGkaZVvd178=;
+        s=korg; t=1643627486;
+        bh=JhNyRXEnciQM5KD9GQGTUIzpN68e3QP+BIvXRa1scdU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q2oVb/WGuQyNRrpG059oS46NIbogxCZCTXOhsthS7QRhKP6d1Db1UPHUvpMpt6/5S
-         fUoPT3t/bzpPqZv5ZFGPalJy+SBbDP9M5WpXJiIQEETU/5C/X0B2EfXrVILJctpBmX
-         UkGt0YyjwqVAQhhaKTPe6YN2mqdvvQT1SQ9OOTS0=
+        b=jwUxm9owMBPx3WbWipqncC9XysHutlQIXkyMiLFPxMAuEzLKaMejTCL/XiqNxGQ1z
+         5YkKOatEsQ7vcD9Z6+hpIIpGLi2lo/AgFBpyRsgyKBrcpw9XOY/LcRWqV2+nU8YCs4
+         Vjq/63JyswANaB1kAlnEG3MfgNKzcCn5e3fqSRHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, butt3rflyh4ck <butterflyhuangxx@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 5.10 010/100] udf: Fix NULL ptr deref when converting from inline format
+        stable@vger.kernel.org, Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Junxiao Bi <junxiao.bi@oracle.com>,
+        Changwei Ge <gechangwei@live.cn>, Gang He <ghe@suse.com>,
+        Jun Piao <piaojun@huawei.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Gautham Ananthakrishna <gautham.ananthakrishna@oracle.com>,
+        Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>,
+        "Theodore Tso" <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 066/171] jbd2: export jbd2_journal_[grab|put]_journal_head
 Date:   Mon, 31 Jan 2022 11:55:31 +0100
-Message-Id: <20220131105220.804921515@linuxfoundation.org>
+Message-Id: <20220131105232.273781500@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,64 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Joseph Qi <joseph.qi@linux.alibaba.com>
 
-commit 7fc3b7c2981bbd1047916ade327beccb90994eee upstream.
+commit 4cd1103d8c66b2cdb7e64385c274edb0ac5e8887 upstream.
 
-udf_expand_file_adinicb() calls directly ->writepage to write data
-expanded into a page. This however misses to setup inode for writeback
-properly and so we can crash on inode->i_wb dereference when submitting
-page for IO like:
+Patch series "ocfs2: fix a deadlock case".
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000158
-  #PF: supervisor read access in kernel mode
-...
-  <TASK>
-  __folio_start_writeback+0x2ac/0x350
-  __block_write_full_page+0x37d/0x490
-  udf_expand_file_adinicb+0x255/0x400 [udf]
-  udf_file_write_iter+0xbe/0x1b0 [udf]
-  new_sync_write+0x125/0x1c0
-  vfs_write+0x28e/0x400
+This fixes a deadlock case in ocfs2.  We firstly export jbd2 symbols
+jbd2_journal_[grab|put]_journal_head as preparation and later use them
+in ocfs2 insread of jbd_[lock|unlock]_bh_journal_head to fix the
+deadlock.
 
-Fix the problem by marking the page dirty and going through the standard
-writeback path to write the page. Strictly speaking we would not even
-have to write the page but we want to catch e.g. ENOSPC errors early.
+This patch (of 2):
 
-Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
-CC: stable@vger.kernel.org
-Fixes: 52ebea749aae ("writeback: make backing_dev_info host cgroup-specific bdi_writebacks")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jan Kara <jack@suse.cz>
+This exports symbols jbd2_journal_[grab|put]_journal_head, which will be
+used outside modules, e.g.  ocfs2.
+
+Link: https://lkml.kernel.org/r/20220121071205.100648-2-joseph.qi@linux.alibaba.com
+Signed-off-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc: Mark Fasheh <mark@fasheh.com>
+Cc: Joel Becker <jlbec@evilplan.org>
+Cc: Junxiao Bi <junxiao.bi@oracle.com>
+Cc: Changwei Ge <gechangwei@live.cn>
+Cc: Gang He <ghe@suse.com>
+Cc: Jun Piao <piaojun@huawei.com>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: Gautham Ananthakrishna <gautham.ananthakrishna@oracle.com>
+Cc: Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/udf/inode.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ fs/jbd2/journal.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/udf/inode.c
-+++ b/fs/udf/inode.c
-@@ -257,10 +257,6 @@ int udf_expand_file_adinicb(struct inode
- 	char *kaddr;
- 	struct udf_inode_info *iinfo = UDF_I(inode);
- 	int err;
--	struct writeback_control udf_wbc = {
--		.sync_mode = WB_SYNC_NONE,
--		.nr_to_write = 1,
--	};
+--- a/fs/jbd2/journal.c
++++ b/fs/jbd2/journal.c
+@@ -2970,6 +2970,7 @@ struct journal_head *jbd2_journal_grab_j
+ 	jbd_unlock_bh_journal_head(bh);
+ 	return jh;
+ }
++EXPORT_SYMBOL(jbd2_journal_grab_journal_head);
  
- 	WARN_ON_ONCE(!inode_is_locked(inode));
- 	if (!iinfo->i_lenAlloc) {
-@@ -304,8 +300,10 @@ int udf_expand_file_adinicb(struct inode
- 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
- 	/* from now on we have normal address_space methods */
- 	inode->i_data.a_ops = &udf_aops;
-+	set_page_dirty(page);
-+	unlock_page(page);
- 	up_write(&iinfo->i_data_sem);
--	err = inode->i_data.a_ops->writepage(page, &udf_wbc);
-+	err = filemap_fdatawrite(inode->i_mapping);
- 	if (err) {
- 		/* Restore everything back so that we don't lose data... */
- 		lock_page(page);
+ static void __journal_remove_journal_head(struct buffer_head *bh)
+ {
+@@ -3022,6 +3023,7 @@ void jbd2_journal_put_journal_head(struc
+ 		jbd_unlock_bh_journal_head(bh);
+ 	}
+ }
++EXPORT_SYMBOL(jbd2_journal_put_journal_head);
+ 
+ /*
+  * Initialize jbd inode head
 
 

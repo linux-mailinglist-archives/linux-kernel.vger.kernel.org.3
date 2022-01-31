@@ -2,89 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 898D74A3C4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 01:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F55E4A3C4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 01:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357196AbiAaAca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 19:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
+        id S1357208AbiAaAgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 19:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357181AbiAaAc1 (ORCPT
+        with ESMTP id S1357015AbiAaAgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 19:32:27 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6C3C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 16:32:27 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id r65so35503231ybc.11
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 16:32:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ids2P9zdNRZ0i8dcrt76jILnjHIJTXIWEZONpz4utdg=;
-        b=MF+8Mj+YUU1xTY3VkpGuAwciEZNBJadB6L7lfLpH0h/EDUCspIV4gJL5vC/HtbvI2w
-         c69XZLAc8unI3PNck/RJDavlF8zzWLjnCr01JyCfky2HlG3O5gt+V+38df7d1SZIP1sk
-         dGNe8TIHgmfMwjcp5c8MIL1f5Cy2R1no+gsa8Ueb0gIrJtRDtK51hBsA3Q8vMahUigGu
-         cYbp49iacZ0wekkZ8kBRKwWi2ZPaLmL1MSg4SiijrvKAHkqYdxWtJ9ed6T1aaRSMz2vQ
-         n/iLRAfQJKIaw8cWmaP7duCI7qwwztr9FlMblEIEg8eXFwZ8L+iFcnwmi6UDMWX1Ooxm
-         pHWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ids2P9zdNRZ0i8dcrt76jILnjHIJTXIWEZONpz4utdg=;
-        b=T8hgENzdsHvEHHS2qryT7v3H3GBrkyXdZmcwCTtkdwoBq986tsLt2LoJSik+gDHojs
-         R3hiiTNndRdkWvKfNdq3qcaNPvNF4Y02tt6CyfBUoT389eIFKx3Y8njqhaVtZLMAgc1e
-         6Ay7Uijwz/fWPARnexqGum/eATmNXkVPrABD2l0fZVdy5oKMIHgZxASXd7G46Y33A/EQ
-         z7PeWN21C/FOQe0EsdZiw1WRyATSOAjqc+cDF/jqsTYIUDbLtXo2VoVzULpJ02NSBHXP
-         rq2079ARL1/hvSIEVZ7HUnlJIPDhYB3+3mG1zbivwdVKc/4Ndwm4FJzSY5za1aEFL4P5
-         BtAA==
-X-Gm-Message-State: AOAM533vyauNAYi0zHsQwvaVi0fXZi17IWh/3BRl0/nIEM7oY6SGJmE3
-        WfHoQqITsIwISteu4dJvpowvDecVx1uH8Ze2gmNeNg==
-X-Google-Smtp-Source: ABdhPJwo2QNY3IDvE9KFTcTr268nBBKnNiLEJJMMR1jfg1SUwEVAWR8tYNcUicd7x2P6m3dZ70a9gDetUAJ/mLXhIIU=
-X-Received: by 2002:a25:8011:: with SMTP id m17mr26212682ybk.284.1643589146392;
- Sun, 30 Jan 2022 16:32:26 -0800 (PST)
+        Sun, 30 Jan 2022 19:36:39 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF7FC061714;
+        Sun, 30 Jan 2022 16:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=RAr/avbZ9dvrmyFHTddz+fhHj1lJqbBwGsig25CiDDI=; b=Q5pgL7x9/+uPI4odK3PwxZmPOO
+        Aw4n1NJ8HdAvRhqj2TmO7BmuTY2cyrmdHpl4qm+nU1c12LL2f+MPmVmvTrnVsCjTB2QdltSYaLU+x
+        5a7HFjlT1PMJP+CuE3IZeC4V4mlJe9f5dV8hubhOjAteYaYwMHUZh//R5G1fCDwwzNhWjACw0OWR2
+        QFB6d5VlykzSOkRtGCxwkrn5KU99IDefWAH1BOLThEzHcWFZgkJwuUCBlUWlWMGzc+jlxzfBpKg3n
+        vNkO9sIPJQWN9GI4zqYTMPj6l+Wh16KntfRNtvV2A7xWBdXCZEcG8ZKrbQacDPmnKlWUpC/rhXG5Z
+        +HZRb7QA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEKgQ-007mQL-GL; Mon, 31 Jan 2022 00:36:38 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, Rae Moar <rmoar@google.com>,
+        David Gow <davidgow@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH] Docs: ktap: add code-block type
+Date:   Sun, 30 Jan 2022 16:36:37 -0800
+Message-Id: <20220131003637.14274-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220129204004.1009571-1-clabbe@baylibre.com> <CACRpkdb9R-BwdVzyeaQOjagsQU=2-06VNqKPG9fMa7C93eDC7A@mail.gmail.com>
- <2b0fa854-16e7-3d0b-a04a-971249646fab@opensource.wdc.com>
-In-Reply-To: <2b0fa854-16e7-3d0b-a04a-971249646fab@opensource.wdc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 31 Jan 2022 01:32:15 +0100
-Message-ID: <CACRpkdbJ2c0X4Oh8-Daw9O4Qk3ZWJQSkN171Ox7K9DnGbVhp3Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: ata: convert ata/cortina,gemini-sata-bridge
- to yaml
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Corentin Labbe <clabbe@baylibre.com>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:56 AM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
-> On 2022/01/30 9:26, Linus Walleij wrote:
-> > Thanks for doing this Corentin!
-> >
-> > On Sat, Jan 29, 2022 at 9:40 PM Corentin Labbe <clabbe@baylibre.com> wrote:
-> >
-> >> This patch converts ata/cortina,gemini-sata-bridge binding to yaml
-> >>
-> >> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> >
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> >
-> > Knowing that drivers/ata is a bit sparsely maintained I suggest that Rob apply
-> > this patch when he feels it looks good.
->
-> What do you mean ? I am doing my best here to maintain ata !
+Fix multiple "code-block::" warnings by adding "none" as the type of
+code-block. Mends these warnings:
 
-I am referring to the situation before
-commit 5ac749a57e0ebb334b1b2c3d28d4d5b1ef85f8ed
-I am happy that this is now solved!
+Documentation/dev-tools/ktap.rst:71: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:120: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:126: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:132: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:139: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:145: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:195: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:208: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+Documentation/dev-tools/ktap.rst:238: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
 
-Sorry for not being up-to-date.
+Fixes: a32fa6b2e8b4 ("Documentation: dev-tools: Add KTAP specification")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Rae Moar <rmoar@google.com>
+Cc: David Gow <davidgow@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+---
+ Documentation/dev-tools/ktap.rst |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Yours,
-Linus Walleij
+--- linux-next-20220128.orig/Documentation/dev-tools/ktap.rst
++++ linux-next-20220128/Documentation/dev-tools/ktap.rst
+@@ -68,7 +68,7 @@ Test case result lines
+ Test case result lines indicate the final status of a test.
+ They are required and must have the format:
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	<result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+ 
+@@ -117,32 +117,32 @@ separator.
+ 
+ Example result lines include:
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	ok 1 test_case_name
+ 
+ The test "test_case_name" passed.
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	not ok 1 test_case_name
+ 
+ The test "test_case_name" failed.
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	ok 1 test # SKIP necessary dependency unavailable
+ 
+ The test "test" was SKIPPED with the diagnostic message "necessary dependency
+ unavailable".
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	not ok 1 test # TIMEOUT 30 seconds
+ 
+ The test "test" timed out, with diagnostic data "30 seconds".
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	ok 5 check return code # rcode=0
+ 
+@@ -192,7 +192,7 @@ line and should end before the parent te
+ 
+ An example of a test with two nested subtests:
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	KTAP version 1
+ 	1..1
+@@ -205,7 +205,7 @@ An example of a test with two nested sub
+ 
+ An example format with multiple levels of nested testing:
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	KTAP version 1
+ 	1..2
+@@ -235,7 +235,7 @@ nested version line, uses a line of the
+ 
+ Example KTAP output
+ --------------------
+-.. code-block::
++.. code-block:: none
+ 
+ 	KTAP version 1
+ 	1..1

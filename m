@@ -2,583 +2,526 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 700434A46B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3674A46BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376635AbiAaMRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:17:34 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47718 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376355AbiAaMR3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:17:29 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9AB86212C9;
-        Mon, 31 Jan 2022 12:17:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643631448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w0J5qsEULaGdStUQG1tCq3jYf4FW+3nyxfh1A8mb1zI=;
-        b=jZjlrZdG/PZEg0JUDxRqonrhJxrMcWC2CX7478aBiASWCSOeIr5ODAzQjJSfEQUPHjKcT6
-        tj5EzyCjmeYg7wbHQ2/npvtxVSlwKiJQBXWT/1GPU5mvbfKENyUhmGPRL0JMjZ16RUWthS
-        jxITMw+21LX2r4qfzwu5jASzz1eXWGM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643631448;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w0J5qsEULaGdStUQG1tCq3jYf4FW+3nyxfh1A8mb1zI=;
-        b=O61pz9tKeMENnqaDd21EbvwJP5FqbVRyCDUcIZEuFhta/Gelyou0Y/HKMv47/0IHyOnmZP
-        +FFTuB3CVLOmYkCQ==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BAC72A3B8D;
-        Mon, 31 Jan 2022 12:17:27 +0000 (UTC)
-Date:   Mon, 31 Jan 2022 12:17:26 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        dishaa.talreja@amd.com, Wei Huang <wei.huang2@amd.com>
-Subject: Re: [RFC PATCH v0 3/3] sched/numa: Add adaptive scan period
- calculation
-Message-ID: <20220131121726.GZ3301@suse.de>
-References: <20220128052851.17162-1-bharata@amd.com>
- <20220128052851.17162-4-bharata@amd.com>
+        id S1376682AbiAaMSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:18:52 -0500
+Received: from mail-bn1nam07on2084.outbound.protection.outlook.com ([40.107.212.84]:63651
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1376614AbiAaMSe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 07:18:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nGPouC5zts+RDsqGecyan2GbPSPB+R08uxW9DnyLWtyouYkhi0NhUqWsv4kR3kZKPRJmpQRgxcj4YFKzBqcNj77dhWO17FZeUUqBMMV03ljrqis31VMwC8IcixmVcuPmY3J+qccLD+sMO7+ucaAp2tUniecHInNRq/ytdG38svIEvb2/7Y3zBbUWLCPNS6EtBNFawO/TFLGpbo3TZ+BAbzn8KEBwdr5aMedeKGDRyRVgJswGfUSbRNWXCyXTwyE1VnZE09uWqGUF54YMHE4qvFR48X5+MqqbsFFe/nkzE5vhEw0S2Dzq6bemfqRdivJ3qgBzP+cJlvkfnzY9auX9MQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qkAUGuEvvwRmdTz+IOaflOY5kShX7BwVUt23TQ6jiGw=;
+ b=FucY5Q/aBfPr1twih9RNIP4wLeTmoMBpbAN6nNwqByM55tP3xpD6wpnmzEF6j+85jbmvf1VkVgP1G+6UHrr8EsnnWgyY2W5zpCLro8szgbjgtAXZwFXwXMF47QU2igUHPcclZ7v6c2wUhIDy9RATfkXit0Z1DCw8VsCB9iAmJ+MpxLBWtEa3odEu0tP9KhY9rSGXMTusK55ZmV7m0XlbmLjIZAQxxPuQWlHd+GAIK1paFbI9in9PCqlfuoGC43OoEGRZJk92Il2JLIMz1uR10XCq53VqKRgMKd+yhADzXjPyQTpbx7K9nxTBa4axsLOGccJFdGAa30swJ8cR8IHSaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qkAUGuEvvwRmdTz+IOaflOY5kShX7BwVUt23TQ6jiGw=;
+ b=yXAZaj9vpV8KLqQs7vh90J+RXWik7J+MLTYFh+0J8wV+0DtMemjUjFazkM2Yx2MQAg1c3d3gDu21wXQvX8idgd61aWDRTpv8gqnRt0GYtpjVIcfPS3tw1a9OxqPXfJlMixMcvhyh1dGJRoUB+pz7cAcFjfG4/ZkFcIj05r/1v2U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN1PR12MB2477.namprd12.prod.outlook.com (2603:10b6:802:28::21)
+ by SJ0PR12MB5422.namprd12.prod.outlook.com (2603:10b6:a03:3ac::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Mon, 31 Jan
+ 2022 12:18:31 +0000
+Received: from SN1PR12MB2477.namprd12.prod.outlook.com
+ ([fe80::85db:a822:eb43:fc9c]) by SN1PR12MB2477.namprd12.prod.outlook.com
+ ([fe80::85db:a822:eb43:fc9c%4]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
+ 12:18:29 +0000
+Message-ID: <50bdcaf5-274d-91e0-2126-1cbc8e61b9f8@amd.com>
+Date:   Mon, 31 Jan 2022 17:48:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bharata B Rao <bharata@amd.com>
+Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-4-nikunj@amd.com>
+ <99248ffb-2c7c-ba25-5d56-2c577e58da4c@redhat.com>
+ <c7918558-4eb3-0592-f3e1-9a1c4f36f7c0@amd.com>
+ <ef8dcee4-8ce7-cb91-6938-feb39f0bdaba@redhat.com>
+ <bd8e94d6-e2fd-16a9-273e-c2563af235df@amd.com>
+ <99e39466-513b-6db9-6b3a-f40e68997cec@redhat.com>
+ <6597e635-b488-3a4c-ce84-8c17d225747e@redhat.com>
+From:   "Nikunj A. Dadhania" <nikunj@amd.com>
+In-Reply-To: <6597e635-b488-3a4c-ce84-8c17d225747e@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BM1PR01CA0110.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00::26)
+ To SN1PR12MB2477.namprd12.prod.outlook.com (2603:10b6:802:28::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20220128052851.17162-4-bharata@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9b38d836-68d0-4442-09bb-08d9e4b3ca33
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5422:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR12MB5422C7449ACE4D1FB7954F42E2259@SJ0PR12MB5422.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AEK8mlp9D02XwT+esOYPlQ22zpiZfVIDxH8bxE+9OrL4Sv3/bTCMcSONubH6C8ydZzt7YUKvpWgIARutiLjkcdYnWAjf6FQmXv9zTygoo9NAl3uIeMkkP0GRQotUppXRlxW1k4KSzGQEGBm0eeoUj3ikpeHLwjT99bj31glal2pb7FrMRd2LXtQPE3u+PFhhVn+CIXat9M7kYOvpC5GdmM3Ab7z/Ue+uNAXWSBnNahbi/z88heqAtNaiaYtFAvplfmSkPB+IsyNuhh5CvGctTxJc032kNluiCWS3AIYQatTH2JWmzqeZvuoq8zVQj93C4/Y5OTJymPEpHmE1FJyWQJ9//wIj3I5zmbftejkOPo9dw8NC02h71w3wzImX3fm6X2mFIiytKFEj4ElymIX549L0jPuuuIPkmJOKUMR5DlL3P2cRg5Icuws+AFqincnd/Ia2RZE8w4//IFkj6+JmhdrRM+xV9kOJwQBLgbUpcvNzKjJO9z6vWC6/zBAcpEbsMUM3qkAUpxJ++ooiEON/+RZM1H9tjRLtGK/j2wXzjOQRhlTygIVe8pCKAOsWUtudtpS4hF2mqkKMvuc9KLZOGkWd31/HFG+H+fJME1Hu8dWncvGFI0qdiW+b5S4cj39c+fpi24KD75fwWhvQs6u6/eTLq6VeOTVg/BQM/98OwZ55LWS9gFHC3pLI7Rn1ZNepsXCRQ6LX7qjEN8aRTl/nxJeRRXBHhBD3FR9JwQqLhZw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2477.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(30864003)(31686004)(6512007)(5660300002)(7416002)(2616005)(83380400001)(53546011)(6506007)(2906002)(26005)(6666004)(186003)(66946007)(66476007)(66556008)(8936002)(8676002)(4326008)(31696002)(6486002)(508600001)(54906003)(110136005)(316002)(38100700002)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?czU3ekUxYVFqSGtucU5KUmFlUllUNjBVSXRJT1ZaTC94R0VyU0Rnck82Q1BH?=
+ =?utf-8?B?b2lxdFFYYTNDakVOM2FnK2ZBL3ZSZ0xyNTNRL00xcnRIMm1rTXM3ei9wM0pE?=
+ =?utf-8?B?ajJ5Tjl1ZWJvTi8wTllMODBzWW5oZG03SUxmNHVKTXpVVitKSmg4Z1pMRmFY?=
+ =?utf-8?B?RUlJRWg2Q1hKcThHY0RtU0ZtMUlDTTNhK2Zxd09PazNsa0xBaHVYTk1sUHBq?=
+ =?utf-8?B?UFdDalQwVWQvQXhSQ0UvRTBhQTdwYVdUWjJaRXhINmdCY0oyRnVqdmkvbUZ2?=
+ =?utf-8?B?NURtKzQwOWszM014Z2dXNk54aGtTUER4QUNXTThGLzNlOHIzZ28wWkcyYkVD?=
+ =?utf-8?B?RTdmNkFleHg2Z3A5SVdyMUhWc3dtbzNJcE5VODdqajlWdStiYmdBSDRlY1NS?=
+ =?utf-8?B?YU9TbllvaUtJVU9YZ0pqOUlkb0wzNEVFSGl5OUxmU3g5RGFzVnZsOGdKTGJy?=
+ =?utf-8?B?eEdTVmtKS0FmY3pVN1lZbFJRUWZPNm1zajhlTHlBYy81OFBpZE5kaUIvS0t6?=
+ =?utf-8?B?Z3Y5bDVGYnlmam1wY2d4OGY4RnpFSzEzcTRkV1pjS1BSWVZ3djVuc0t4Qkla?=
+ =?utf-8?B?YVNNYUdsbGJPN0NoTG1ML1hlYk9RWXc3cGZUeFlEZVZoN2RCOUpPMUorRVNQ?=
+ =?utf-8?B?bFBTM3VqcThTREFZRW54ckRvd253WHVxZUlPcUhmOGxjQmV6SzVjeU9DMWFD?=
+ =?utf-8?B?R01aVTUzblM3OXBSYVpDYW1JQUR2NnlOSTVZK3l6alVUa2p1Z2RHbFVpRlFL?=
+ =?utf-8?B?SFZmcjc0cDZCbkQzMEoxYlFkYkl3QU1kSnFjWlozTTR3OE5VRmVzRFBnaG9D?=
+ =?utf-8?B?NkRmMlZIcG1ENzkwekZ2d3pNUmk1bWxLN2hlZFNHcU05WVJvV2dEc2E2SFYw?=
+ =?utf-8?B?V1hDM3l1YUxvNURkU0hWZmdoLzlmR0dkeUNFZ2RjSHQ4enZKUSsxaXdPUzlF?=
+ =?utf-8?B?N1EyMCtlSHBHcDRHY05pS1VJeC9mclFHNWNlMWsvUzM3WHVpMTJPVUNhVGpW?=
+ =?utf-8?B?RzlBSUphN254VXZ2blhnNUtPb2VjWU13NUxCWFh4VTljbjBubU1oWFVTZUEx?=
+ =?utf-8?B?bFB4L1VmMGtBVUtHTWV3MTYvWUlHY2RXUXd5K1l1OVVNcU92ekt5dTFOYlBW?=
+ =?utf-8?B?WWNvV0JuYmp3eGJMUEtDUHRaYU5XdExwbC9iU3ZMdExPTnZUNjZCUFZOS2NU?=
+ =?utf-8?B?Z0kvWWVtTnowYm9qVFdGRVJMWkJpM216dG1Qc0tIZTVWUUQwWE02L1R0MzB2?=
+ =?utf-8?B?Y3RHSTVNUU12ZXErc2svVzhyalNkRGdHNzhnT2JUUmZ3dGhLSEsxbVprZjlV?=
+ =?utf-8?B?NVE2b2VMa2FQVUNIakNZWU45a0NnbGxQM1dVaTZKR0d1UlVoWkdnY1BscDZy?=
+ =?utf-8?B?Y0VjMDRmVkNFalYwK09IQitKZ0ptM3FOYk56K1VUcWpCaWZFL2dOOGJtSDFH?=
+ =?utf-8?B?R3krcXk3VVpaclM0SXVod1VCOTNydG9CeUtwS29VdkMyQWtHNE41ejBiTEY2?=
+ =?utf-8?B?UmJ0ZGdSazFDTnlZYllkRVFWbVM1d3IzbWJ1TDAvMDJrenZKcU9kcTIrVVhk?=
+ =?utf-8?B?L0grL3owYnVTc1ExMDA0VisyTHhMSmpJZjBBK0U5L1ZvcmpJSWRGL05hYjVZ?=
+ =?utf-8?B?b2gvdXg1UGhVL0VBb2hSdG82dVc3WEdjUTh1T05qelZ3VDR5bXVYK25WQXgr?=
+ =?utf-8?B?bGh5K1dWajM2WWdzZlY3cmNkaG5XTFpmOEVvUzQvYUZaT3IzbHRSK1NIanMz?=
+ =?utf-8?B?eDJtd0VsNUJXbFNMWUFubDErYTg1QXg4ckhFWVFhcTF6d3NYc2VpMlZpa052?=
+ =?utf-8?B?SHdFUys2b1k1ZXdoczVmV3l4ZHZDTjAzb2s0YXg3ZVRDVHVHc2x5UkJhOTM1?=
+ =?utf-8?B?Y0R5WktCUXhsVjAzZlhPUUxmUkZ2bVhFM1Y0L1pGbDQ5dDNuS29aQ25kdFhj?=
+ =?utf-8?B?Ylc4UWUzcXNFOUNrUUNaTmxLb1lmQXZSUWtaSXFoZU1sRXF1WFp0bFBpeUww?=
+ =?utf-8?B?R3krYnpOa1FLbktSd3BxZXBrQ3h3Q3dKYU90SVF4SmN6d2hWQS9EbThyRk1w?=
+ =?utf-8?B?TXRRV0Y5STRqb0x6TlFrZTlPS2JRa05hQ1NDa2t2RkMycWZzd2V0WlV1Wjdh?=
+ =?utf-8?B?THoyNjUxTU9xbitYa0NBVFRzcEVUanJ6YlhmN2VCRmhiWCtxWDVpd2tJWlZH?=
+ =?utf-8?Q?ANjoil98kvu+EvnMbc8sly0=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b38d836-68d0-4442-09bb-08d9e4b3ca33
+X-MS-Exchange-CrossTenant-AuthSource: SN1PR12MB2477.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 12:18:29.7100
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eE/3UcQdGpIN3hD0zbKz0NQaL33C6oRX8bfaVNTPgqfMwYbgUq/nbhNbZqnpwFlGkKVP9OKLss1G+VDeipQL5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5422
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:58:51AM +0530, Bharata B Rao wrote:
-> From: Disha Talreja <dishaa.talreja@amd.com>
+On 1/31/2022 5:26 PM, David Hildenbrand wrote:
+> On 28.01.22 12:08, David Hildenbrand wrote:
+>> On 28.01.22 12:04, Nikunj A. Dadhania wrote:
+>>> On 1/28/2022 1:57 PM, David Hildenbrand wrote:
+>>>> On 28.01.22 07:57, Nikunj A. Dadhania wrote:
+>>>>> On 1/26/2022 4:16 PM, David Hildenbrand wrote:
+>>>>>> On 18.01.22 12:06, Nikunj A Dadhania wrote:
+>>>>>>> Use the memslot metadata to store the pinned data along with the pfns.
+>>>>>>> This improves the SEV guest startup time from O(n) to a constant by
+>>>>>>> deferring guest page pinning until the pages are used to satisfy nested
+>>>>>>> page faults. The page reference will be dropped in the memslot free
+>>>>>>> path.
+>>>>>>>
+>>>>>>> Remove the enc_region structure definition and the code which did
+>>>>>>> upfront pinning, as they are no longer needed in view of the demand
+>>>>>>> pinning support.
+>>>>>>>
+>>>>>>> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
+>>>>>>> since qemu is dependent on this API.
+>>>>>>>
+>>>>>>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>>>>>>> ---
+>>>>>>>  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
+>>>>>>>  arch/x86/kvm/svm/svm.c |   1 +
+>>>>>>>  arch/x86/kvm/svm/svm.h |   3 +-
+>>>>>>>  3 files changed, 81 insertions(+), 131 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>>>>>>> index d972ab4956d4..a962bed97a0b 100644
+>>>>>>> --- a/arch/x86/kvm/svm/sev.c
+>>>>>>> +++ b/arch/x86/kvm/svm/sev.c
+>>>>>>> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
+>>>>>>>  static unsigned long *sev_asid_bitmap;
+>>>>>>>  static unsigned long *sev_reclaim_asid_bitmap;
+>>>>>>>  
+>>>>>>> -struct enc_region {
+>>>>>>> -	struct list_head list;
+>>>>>>> -	unsigned long npages;
+>>>>>>> -	struct page **pages;
+>>>>>>> -	unsigned long uaddr;
+>>>>>>> -	unsigned long size;
+>>>>>>> -};
+>>>>>>> -
+>>>>>>>  /* Called with the sev_bitmap_lock held, or on shutdown  */
+>>>>>>>  static int sev_flush_asids(int min_asid, int max_asid)
+>>>>>>>  {
+>>>>>>> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>>>>  	if (ret)
+>>>>>>>  		goto e_free;
+>>>>>>>  
+>>>>>>> -	INIT_LIST_HEAD(&sev->regions_list);
+>>>>>>> -
+>>>>>>>  	return 0;
+>>>>>>>  
+>>>>>>>  e_free:
+>>>>>>> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+>>>>>>>  	src->handle = 0;
+>>>>>>>  	src->pages_locked = 0;
+>>>>>>>  	src->enc_context_owner = NULL;
+>>>>>>> -
+>>>>>>> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+>>>>>>>  }
+>>>>>>>  
+>>>>>>>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+>>>>>>> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
+>>>>>>>  int svm_register_enc_region(struct kvm *kvm,
+>>>>>>>  			    struct kvm_enc_region *range)
+>>>>>>>  {
+>>>>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>> -	struct enc_region *region;
+>>>>>>> -	int ret = 0;
+>>>>>>> -
+>>>>>>> -	if (!sev_guest(kvm))
+>>>>>>> -		return -ENOTTY;
+>>>>>>> -
+>>>>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+>>>>>>> -	if (is_mirroring_enc_context(kvm))
+>>>>>>> -		return -EINVAL;
+>>>>>>> -
+>>>>>>> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
+>>>>>>> -		return -EINVAL;
+>>>>>>> -
+>>>>>>> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
+>>>>>>> -	if (!region)
+>>>>>>> -		return -ENOMEM;
+>>>>>>> -
+>>>>>>> -	mutex_lock(&kvm->lock);
+>>>>>>> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
+>>>>>>> -	if (IS_ERR(region->pages)) {
+>>>>>>> -		ret = PTR_ERR(region->pages);
+>>>>>>> -		mutex_unlock(&kvm->lock);
+>>>>>>> -		goto e_free;
+>>>>>>> -	}
+>>>>>>> -
+>>>>>>> -	region->uaddr = range->addr;
+>>>>>>> -	region->size = range->size;
+>>>>>>> -
+>>>>>>> -	list_add_tail(&region->list, &sev->regions_list);
+>>>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>>> -
+>>>>>>> -	/*
+>>>>>>> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
+>>>>>>> -	 * or vice versa for this memory range. Lets make sure caches are
+>>>>>>> -	 * flushed to ensure that guest data gets written into memory with
+>>>>>>> -	 * correct C-bit.
+>>>>>>> -	 */
+>>>>>>> -	sev_clflush_pages(region->pages, region->npages);
+>>>>>>> -
+>>>>>>> -	return ret;
+>>>>>>> -
+>>>>>>> -e_free:
+>>>>>>> -	kfree(region);
+>>>>>>> -	return ret;
+>>>>>>> -}
+>>>>>>> -
+>>>>>>> -static struct enc_region *
+>>>>>>> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
+>>>>>>> -{
+>>>>>>> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>> -	struct list_head *head = &sev->regions_list;
+>>>>>>> -	struct enc_region *i;
+>>>>>>> -
+>>>>>>> -	list_for_each_entry(i, head, list) {
+>>>>>>> -		if (i->uaddr == range->addr &&
+>>>>>>> -		    i->size == range->size)
+>>>>>>> -			return i;
+>>>>>>> -	}
+>>>>>>> -
+>>>>>>> -	return NULL;
+>>>>>>> -}
+>>>>>>> -
+>>>>>>> -static void __unregister_enc_region_locked(struct kvm *kvm,
+>>>>>>> -					   struct enc_region *region)
+>>>>>>> -{
+>>>>>>> -	sev_unpin_memory(kvm, region->pages, region->npages);
+>>>>>>> -	list_del(&region->list);
+>>>>>>> -	kfree(region);
+>>>>>>> +	return 0;
+>>>>>>>  }
+>>>>>>>  
+>>>>>>>  int svm_unregister_enc_region(struct kvm *kvm,
+>>>>>>>  			      struct kvm_enc_region *range)
+>>>>>>>  {
+>>>>>>> -	struct enc_region *region;
+>>>>>>> -	int ret;
+>>>>>>> -
+>>>>>>> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+>>>>>>> -	if (is_mirroring_enc_context(kvm))
+>>>>>>> -		return -EINVAL;
+>>>>>>> -
+>>>>>>> -	mutex_lock(&kvm->lock);
+>>>>>>> -
+>>>>>>> -	if (!sev_guest(kvm)) {
+>>>>>>> -		ret = -ENOTTY;
+>>>>>>> -		goto failed;
+>>>>>>> -	}
+>>>>>>> -
+>>>>>>> -	region = find_enc_region(kvm, range);
+>>>>>>> -	if (!region) {
+>>>>>>> -		ret = -EINVAL;
+>>>>>>> -		goto failed;
+>>>>>>> -	}
+>>>>>>> -
+>>>>>>> -	/*
+>>>>>>> -	 * Ensure that all guest tagged cache entries are flushed before
+>>>>>>> -	 * releasing the pages back to the system for use. CLFLUSH will
+>>>>>>> -	 * not do this, so issue a WBINVD.
+>>>>>>> -	 */
+>>>>>>> -	wbinvd_on_all_cpus();
+>>>>>>> -
+>>>>>>> -	__unregister_enc_region_locked(kvm, region);
+>>>>>>> -
+>>>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>>>  	return 0;
+>>>>>>> -
+>>>>>>> -failed:
+>>>>>>> -	mutex_unlock(&kvm->lock);
+>>>>>>> -	return ret;
+>>>>>>>  }
+>>>>>>>  
+>>>>>>>  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>>> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>>>  	mirror_sev->fd = source_sev->fd;
+>>>>>>>  	mirror_sev->es_active = source_sev->es_active;
+>>>>>>>  	mirror_sev->handle = source_sev->handle;
+>>>>>>> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
+>>>>>>>  	ret = 0;
+>>>>>>>  
+>>>>>>>  	/*
+>>>>>>> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>>>>>>>  void sev_vm_destroy(struct kvm *kvm)
+>>>>>>>  {
+>>>>>>>  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>> -	struct list_head *head = &sev->regions_list;
+>>>>>>> -	struct list_head *pos, *q;
+>>>>>>>  
+>>>>>>>  	WARN_ON(sev->num_mirrored_vms);
+>>>>>>>  
+>>>>>>> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
+>>>>>>>  	 */
+>>>>>>>  	wbinvd_on_all_cpus();
+>>>>>>>  
+>>>>>>> -	/*
+>>>>>>> -	 * if userspace was terminated before unregistering the memory regions
+>>>>>>> -	 * then lets unpin all the registered memory.
+>>>>>>> -	 */
+>>>>>>> -	if (!list_empty(head)) {
+>>>>>>> -		list_for_each_safe(pos, q, head) {
+>>>>>>> -			__unregister_enc_region_locked(kvm,
+>>>>>>> -				list_entry(pos, struct enc_region, list));
+>>>>>>> -			cond_resched();
+>>>>>>> -		}
+>>>>>>> -	}
+>>>>>>> -
+>>>>>>>  	sev_unbind_asid(kvm, sev->handle);
+>>>>>>>  	sev_asid_free(sev);
+>>>>>>>  }
+>>>>>>> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
+>>>>>>>  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
+>>>>>>>  }
+>>>>>>>  
+>>>>>>> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+>>>>>>> +		  kvm_pfn_t pfn)
+>>>>>>> +{
+>>>>>>> +	struct kvm_arch_memory_slot *aslot;
+>>>>>>> +	struct kvm_memory_slot *slot;
+>>>>>>> +	gfn_t rel_gfn, pin_pfn;
+>>>>>>> +	unsigned long npages;
+>>>>>>> +	kvm_pfn_t old_pfn;
+>>>>>>> +	int i;
+>>>>>>> +
+>>>>>>> +	if (!sev_guest(kvm))
+>>>>>>> +		return;
+>>>>>>> +
+>>>>>>> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
+>>>>>>> +		return;
+>>>>>>> +
+>>>>>>> +	/* Tested till 1GB pages */
+>>>>>>> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
+>>>>>>> +		return;
+>>>>>>> +
+>>>>>>> +	slot = gfn_to_memslot(kvm, gfn);
+>>>>>>> +	if (!slot || !slot->arch.pfns)
+>>>>>>> +		return;
+>>>>>>> +
+>>>>>>> +	/*
+>>>>>>> +	 * Use relative gfn index within the memslot for the bitmap as well as
+>>>>>>> +	 * the pfns array
+>>>>>>> +	 */
+>>>>>>> +	rel_gfn = gfn - slot->base_gfn;
+>>>>>>> +	aslot = &slot->arch;
+>>>>>>> +	pin_pfn = pfn;
+>>>>>>> +	npages = KVM_PAGES_PER_HPAGE(level);
+>>>>>>> +
+>>>>>>> +	/* Pin the page, KVM doesn't yet support page migration. */
+>>>>>>> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
+>>>>>>> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
+>>>>>>> +			old_pfn = aslot->pfns[rel_gfn];
+>>>>>>> +			if (old_pfn == pin_pfn)
+>>>>>>> +				continue;
+>>>>>>> +
+>>>>>>> +			put_page(pfn_to_page(old_pfn));
+>>>>>>> +		}
+>>>>>>> +
+>>>>>>> +		set_bit(rel_gfn, aslot->pinned_bitmap);
+>>>>>>> +		aslot->pfns[rel_gfn] = pin_pfn;
+>>>>>>> +		get_page(pfn_to_page(pin_pfn));
+>>>>>>
+>>>>>>
+>>>>>> I assume this is to replace KVM_MEMORY_ENCRYPT_REG_REGION, which ends up
+>>>>>> calling svm_register_enc_region()->sev_pin_memory(), correct?
+>>>>>
+>>>>> Yes, that is correct.
+>>>>>>
+>>>>>> sev_pin_memory() correctly checks the RLIMIT_MEMLOCK and uses
+>>>>>> pin_user_pages_fast().
+>>>>>>
+>>>>>> I have to strongly assume that sev_pin_memory() is *wrong* as is because
+>>>>>> it's supposed to supply FOLL_LONGTERM -- after all we're pinning these
+>>>>>> pages possibly forever.
+>>>>>>
+>>>>>>
+>>>>>> I might be wrong but
+>>>>>>
+>>>>>> 1. You are missing the RLIMIT_MEMLOCK check
+>>>>>
+>>>>> Yes, I will add this check during the enc_region registration.
+>>>>>
+>>>>>> 2. get_page() is the wong way of long-term pinning a page. You would
+>>>>>> have to mimic what pin_user_pages_fast(FOLL_LONGTERM) does to eventually
+>>>>>> get it right (e.g., migrate the page off of MIGRATE_CMA or ZONE_MOVABLE).
+>>>>>
+>>>>> Let me go through this and I will come back. Thanks for pointing this out.
+>>>>
+>>>> I asusme the "issue" is that KVM uses mmu notifier and does a simple
+>>>> get_user_pages() to obtain the references, to drop the reference when
+>>>> the entry is invalidated via a mmu notifier call. So once you intent to
+>>>> long-term pin, it's already to late.
+>>>>
+>>>> If you could teach KVM to do a long-term pin when stumbling over these
+>>>> special encrypted memory regions (requires a proper matching
+>>>> unpin_user_pages() call from KVM), then you could "take over" that pin
+>>>> by get_page(), and let KVM do the ordinary put_page(), while you would
+>>>> do the unpin_user_pages().
+>>>>
+>>>
+>>> The fault path looks like this in KVM x86 mmu code:
+>>>
+>>> direct_page_fault()
+>>> -> kvm_faultin_pfn()
+>>>    -> __gfn_to_pfn_memslot()
+>>>       -> hva_to_pfn()
+>>>          -> hva_to_pfn_{slow,fast}()
+>>>             -> get_user_pages_*()      <<<<==== This is where the
+>>>                                                 reference is taken
+>>>
+>>> Next step is to create the mappings which is done in below functions:
+>>>
+>>> -> kvm_tdp_mmu_map() / __direct_map()
+>>>
+>>>    -> Within this function (patch 1/6), I call sev_pin_spte to take an extra 
+>>>       reference to pin it using get_page. 
+>>>
+>>>       Is it possible to use pin_user_pages(FOLL_LONGTERM) here? Wouldn't that 
+>>>       be equivalent to "take over" solution that you are suggesting?
+>>>
+>>
+>> The issue is that pin_user_pages(FOLL_LONGTERM) might have to migrate
+>> the page, which will fail if there is already an additional reference
+>> from get_user_pages_*().
+>>
 > 
-> This patch implements an adaptive algorithm for calculating
-> the autonuma scan period. In the existing mechanism of scan
-> period calculation,
+> Minor addition: hva_to_pfn_{slow,fast}() *don't* take a reference,
+
+hva_to_pfn_fast() does take a reference, not able to find in _slow() though.
+
+->get_user_page_fast_only()
+  -> get_user_pages_fast_only()
+     ...
+     gup_flags |= FOLL_GET | FOLL_FAST_ONLY;
+     ...
+
+> because we neither supply FOLL_GET nor FOLL_PIN. GUP users that rely on
+> memory notifiers don't require refernces.
 > 
-> - scan period is derived from the per-thread stats.
-> - static threshold (NUMA_PERIOD_THRESHOLD) is used for changing
->   the scan rate.
+> I don't know what the implications would be if you FOLL_PIN |
+> FOLL_LONGTERM after already having a reference via
+> hva_to_pfn_{slow,fast}() in your hand in the callpath. Migration code
+> would effectively want to unmap the old page and call mmu notifiers to
+> properly invalidate the KVM MMU ...
 > 
-> In this new approach (Process Adaptive autoNUMA), we gather NUMA
-> fault stats at per-process level which allows for capturing the
-> application behaviour better. In addition, the algorithm learns
-> and adjusts the scan rate based on remote fault rate. By not
-> sticking to a static threshold, the algorithm can respond better
-> to different workload behaviours.
-> 
-
-This appears to replace the per-task numa_scan_period with a per-mm
-numa_scan_period. This likely leads to more stable rate overall but it
-potentially misses that some threads are more active than others and
-miss that different threads may have different local/remote faults and
-private/shared faults. I think this may be smoothing the average while
-potentially missing outliers.
-
-After the patch, p->numa_scan_period appears to primarily affect if a
-page is retried for migration but a lot of infrastructure is still left
-behind and it's unclear what purpose it serves.
-
-> Since the threads of a processes are already considered as a group,
-> we add a bunch of metrics to the task's mm to track the various
-> types of faults and derive the scan rate from them.
-> 
-> The new per-process fault stats contribute only to the per-process
-> scan period calculation, while the existing per-thread stats
-> continue to contribute towards the numa_group stats which
-> eventually determine the thresholds for migrating memory and
-> threads across nodes.
-> 
-> In this algorithm, the remote fault rates are maintained for
-> the previous two scan windows. These historical remote fault
-> rates along with the remote fault rate from the current window
-> are used to determine the intended trend of the scanning period.
-> 
-> An increase in the trend implies an increased period thereby
-> resulting in slower scanning. A decrease in the trend implies
-> decreased period and hence faster scanning.
-> 
-
-Clarify what affects the trend in the changelog. e.g. how do differences
-in local vs remote and private vs shared affect trend?
-
-What happens if one thread is primarily local faults while another is
-primarily remote faults, how does that affect the trend and overall
-scan period? The per-task scanning is flawed in terms that more active
-threads can scan address space regions that the task is uninterested in
-but I worry that masking that with an address space average may delay
-the correction of an imbalance in one thread because an overall trend
-misses the details.
-
-> The intended trends for the last two windows are tracked and
-> the actual trend is reversed (thereby increasing or decreasing
-> the scan period in that window) only if the same trend reversal
-> has been intended in the previous two windows.
-> 
-> While the remote fault rate metric is derived from the accumulated
-> remote and local faults from all the threads of the mm, the
-> per-mm private and shared faults also contribute in deciding
-> the trend of the scan period.
-> 
-> Co-developed-by: Wei Huang <wei.huang2@amd.com>
-> Signed-off-by: Wei Huang <wei.huang2@amd.com>
-> Signed-off-by: Disha Talreja <dishaa.talreja@amd.com>
-> Signed-off-by: Bharata B Rao <bharata@amd.com>
-> ---
->  include/linux/mm_types.h |   5 +
->  kernel/sched/debug.c     |   2 +
->  kernel/sched/fair.c      | 265 ++++++++++++++++++++++++++++++++++++++-
->  kernel/sched/sched.h     |   2 +
->  4 files changed, 268 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 2c6f119b947f..d57cd96d8df0 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -619,6 +619,11 @@ struct mm_struct {
->  
->  		spinlock_t pan_numa_lock;
->  		unsigned int numa_scan_period;
-> +		int remote_fault_rates[2]; /* histogram of remote fault rate */
-> +		long scanned_pages;
-
-Why signed? What happens if it wraps (either negative if signed or back
-to 0 if unsigned)?
-
-> +		bool trend;
-> +		int slope;
-> +		u8 hist_trend;
-
-Document the fields.
-
->  #endif
->  		/*
->  		 * An operation with batched TLB flushing is going on. Anything
-> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-> index aa29211de1bf..060bb46166a6 100644
-> --- a/kernel/sched/debug.c
-> +++ b/kernel/sched/debug.c
-> @@ -334,6 +334,8 @@ static __init int sched_init_debug(void)
->  	debugfs_create_u32("scan_period_min_ms", 0644, numa, &sysctl_numa_balancing_scan_period_min);
->  	debugfs_create_u32("scan_period_max_ms", 0644, numa, &sysctl_numa_balancing_scan_period_max);
->  	debugfs_create_u32("scan_size_mb", 0644, numa, &sysctl_numa_balancing_scan_size);
-> +	debugfs_create_u32("pan_scan_period_min", 0644, numa, &sysctl_pan_scan_period_min);
-> +	debugfs_create_u32("pan_scan_period_max", 0644, numa, &sysctl_pan_scan_period_max);
->  #endif
-
-Update Documentation and what relationship if any scan_period_*_ms has
-with pan_scan_period_*. Add the units to be consistent.
-
->  
->  	debugfs_create_file("debug", 0444, debugfs_sched, NULL, &sched_debug_fops);
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 4911b3841d00..5a9cacfbf9ec 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -1026,6 +1026,10 @@ unsigned int sysctl_numa_balancing_scan_size = 256;
->  /* Scan @scan_size MB every @scan_period after an initial @scan_delay in ms */
->  unsigned int sysctl_numa_balancing_scan_delay = 1000;
->  
-> +/* Clips of max and min scanning periods */
-> +unsigned int sysctl_pan_scan_period_min = 50;
-> +unsigned int sysctl_pan_scan_period_max = 5000;
-> +
-
-Why are the period different to the min/max for the previous per-task
-values? (admittedly, those values were pulled out of a hat).
-
->  struct numa_group {
->  	refcount_t refcount;
->  
-> @@ -2102,6 +2106,242 @@ static void numa_group_count_active_nodes(struct numa_group *numa_group)
->  /**********************************************/
->  /*  Process-based Adaptive NUMA (PAN) Design  */
->  /**********************************************/
-> +#define SLOPE(N, D) ((N)/(D))
-> +
-
-Document. N/D implies numerator and denominator. Usage implies a
-percentage change in remote faults but not always and there are a lot of
-magic numers with limited explanation.
-
-> +static unsigned int pan_scan_max(struct task_struct *p)
-> +{
-> +	unsigned long smax, nr_scan_pages;
-> +	unsigned long rss = 0;
-> +
-> +	smax = sysctl_pan_scan_period_max;
-> +	nr_scan_pages = sysctl_numa_balancing_scan_size << (20 - PAGE_SHIFT);
-> +
-> +	rss = get_mm_rss(p->mm);
-> +	if (!rss)
-> +		rss = nr_scan_pages;
-> +
-> +	if (READ_ONCE(p->mm->numa_scan_seq) == 0) {
-> +		smax = p->mm->scanned_pages * sysctl_pan_scan_period_max;
-> +		smax = smax / rss;
-> +		smax = max_t(unsigned long, sysctl_pan_scan_period_min, smax);
-> +	}
-> +
-
-rss is not necessarily related to virtual address space size e.g. sparse
-mappings. May not be relevant but worth commenting on why it doesn't
-matter.
-
-> +	return smax;
-> +}
-> +
-> +/*
-> + * Process-based Adaptive NUMA scan period update alogirthm
-> + *
-> + * These are the important concepts behind the scan period update:
-> + *
-> + * - increase trend (of scan period)
-> + *   scan period => up, memory coverage => down, overhead => down,
-> + *   accuracy => down
-> + * - decrease trend
-> + *   scan period => down, memory coverage => up, overhead => up,
-> + *   accuracy => up
-> + * - trend: Reflects the current active trend
-> + *   1 means increasing trend, 0 means decreasing trend
-> + * - slope
-> + *   it controls scan_period: new_scan_period = current_scan_period *
-> + *                                              100 / slope
-> + * - hist_trend: Reflects the intended trend in the last two
-> + *   windows. Uses the last two bits (bit0 and bit1) for the same.
-> + *   1 if increasing trend was intended, 0 if decreasing was intended.
-> + */
-> +
-> +/*
-> + * Check if the scan period needs updation when the remote fault
-> + * rate has changed (delta > 5)
-> + *
-> + * Returns TRUE if scan period needs updation, else FALSE.
-> + */
-> +static bool pan_changed_rate_update(struct mm_struct *mm, int ps_ratio,
-> +				    int oldest_remote_fault_rate,
-> +				    int fault_rate_diff)
-> +{
-> +	u8 value;
-> +
-> +	/*
-> +	 * Set the intended trend for the current window.
-> +	 * - If the remote fault rate has decreased, set the
-> +	 *   intended trend to increasing.
-> +	 * - Otherwise leave the intended trend as decreasing.
-> +	 */
-> +	mm->hist_trend = mm->hist_trend << 1;
-> +	if (fault_rate_diff < 5)
-> +		mm->hist_trend |= 0x01;
-> +
-
-Why 5? Presumably 50% but not clear.
-
-> +	value = mm->hist_trend & 0x03;
-> +
-
-Document better what is contained in this u8 value.
-
-> +	if (fault_rate_diff < -5 && value == 3) {
-> +		/*
-
-Document magic numbers.
-
-> +		 * The remote fault rate has decreased and the intended
-> +		 * trend was set to increasing in the previous window.
-> +		 *
-> +		 * If on decreasing trend, reverse the trend and change
-> +		 * the slope using the fault rates from (current-1)
-> +		 * and (current-2) windows.
-> +		 *
-> +		 * If already on increasing trend, change the slope using
-> +		 * the fault rates from (current) and (current-1) windows.
-> +		 */
-> +		if (!mm->trend) {
-> +			mm->trend = true;
-> +			mm->slope = SLOPE(mm->remote_fault_rates[0] * 100,
-> +					  oldest_remote_fault_rate);
-> +		} else {
-> +			mm->slope = SLOPE(mm->remote_fault_rates[1] * 100,
-> +					  mm->remote_fault_rates[0]);
-> +		}
-> +	} else if (fault_rate_diff > 5 && value == 0) {
-> +		/*
-> +		 * The remote fault rate has increased and the intended
-> +		 * trend was set to decreasing in the previous window.
-> +		 *
-> +		 * If on increasing trend,
-> +		 *  - If shared fault ratio is more than 30%, don't yet
-> +		 *  reverse the trend, just mark the intended trend as
-> +		 *  increasing.
-> +		 *  - Otherwise reverse the trend. Change the slope using
-> +		 *  the fault rates from (current-1) and (current-2) windows.
-> +		 *
-> +		 *  If on decreasing trend
-> +		 *  - Continue with a changed slope using the fault
-> +		 *  rates from (current) and (current-1) windows.
-> +		 */
-> +		if (mm->trend) {
-> +			if (ps_ratio < 7) {
-> +				mm->hist_trend |= 0x01;
-> +				return true;
-> +			}
-> +
-> +			mm->trend = false;
-> +			mm->slope = SLOPE(mm->remote_fault_rates[0] * 100,
-> +					  oldest_remote_fault_rate);
-> +		} else {
-> +			mm->slope = SLOPE(mm->remote_fault_rates[1] * 100,
-> +					  mm->remote_fault_rates[0]);
-> +		}
-> +	} else if (value == 1 || value == 2) {
-> +		/*
-> +		 * The intended trend is oscillating
-> +		 *
-> +		 * If on decreasing trend and the shared fault ratio
-> +		 * is more than 30%, reverse the trend and change the slope.
-> +		 *
-> +		 * If on increasing trend, continue as is.
-> +		 */
-> +		if (!mm->trend && ps_ratio < 7) {
-> +			mm->hist_trend |= 0x01;
-> +			mm->trend = true;
-> +			mm->slope = SLOPE(100 * 100,
-> +					  100 + ((7 - ps_ratio) * 10));
-> +		}
-> +		return false;
-> +	}
-> +	return true;
-> +}
-> +
-> +/*
-> + * Check if the scan period needs updation when the remote fault
-> + * rate has remained more or less the same (delta <= 5)
-> + *
-> + * Returns TRUE if scan period needs updation, else FALSE.
-> + */
-
-
-s/updation/updating/
-
-> +static bool pan_const_rate_update(struct mm_struct *mm, int ps_ratio,
-> +				  int oldest_remote_fault_rate)
-
-Document the intent behind the difference between pan_const_rate_update
-and pan_changed_rate_update.
-
-> +{
-> +	int diff1, diff2;
-> +
-
-Clarify what diff1 and diff2 are the differences between in the naming.
-
-> +	mm->hist_trend = mm->hist_trend << 1;
-> +
-> +	/*
-> +	 * If we are in the increasing trend, don't change anything
-> +	 * except the intended trend for this window that was reset
-> +	 * to decreasing by default.
-> +	 */
-> +	if (mm->trend)
-> +		return false;
-> +
-> +	/* We are in the decreasing trend, reverse under some condidtions. */
-> +	diff1 = oldest_remote_fault_rate - mm->remote_fault_rates[0];
-> +	diff2 = mm->remote_fault_rates[0] - mm->remote_fault_rates[1];
-> +
-> +	if (ps_ratio < 7) {
-> +		/*
-> +		 * More than 30% of the pages are shared, so no point in
-> +		 * further reducing the scan period. If increasing trend
-> +		 * was intended in the previous window also, then reverse
-> +		 * the trend to increasing. Else just record the increasing
-> +		 * intended trend for this window and return.
-> +		 */
-> +		mm->hist_trend |= 0x01;
-> +		if ((mm->hist_trend & 0x03) == 3) {
-> +			mm->trend = true;
-> +			mm->slope = SLOPE(100 * 100,
-> +					  (100 + ((7 - ps_ratio) * 10)));
-> +		} else
-> +			return false;
-> +	} else if (diff1 >= 0 && diff2 >= 0 && mm->numa_scan_seq > 1) {
-> +		/*
-> +		 * Remote fault rate has reduced successively in the last
-> +		 * two windows and address space has been scanned at least
-> +		 * once. If increasing trend was intended in the previous
-> +		 * window also, then reverse the trend to increasing. Else
-> +		 * just record the increasing trend for this window and return.
-> +		 */
-> +		mm->hist_trend |= 0x01;
-> +		if ((mm->hist_trend & 0x03) == 3) {
-> +			mm->trend = true;
-> +			mm->slope = SLOPE(100 * 100, 110);
-> +			mm->hist_trend |= 0x03;
-> +		} else
-> +			return false;
-> +	}
-> +	return true;
-> +}
-> +
-> +static void pan_calculate_scan_period(struct task_struct *p)
-> +{
-> +	int remote_fault_rate, oldest_remote_fault_rate, ps_ratio, i, diff;
-> +	struct mm_struct *mm = p->mm;
-> +	unsigned long remote_hist = mm->faults_locality_history[0];
-> +	unsigned long local_hist = mm->faults_locality_history[1];
-> +	unsigned long shared_hist = mm->faults_shared_history[0];
-> +	unsigned long priv_hist = mm->faults_shared_history[1];
-> +	bool need_update;
-> +
-> +	ps_ratio = (priv_hist * 10) / (priv_hist + shared_hist + 1);
-> +	remote_fault_rate = (remote_hist * 100) / (local_hist + remote_hist + 1);
-> +
-> +	/* Keep the remote fault ratio at least 1% */
-> +	remote_fault_rate = max(remote_fault_rate, 1);
-> +	for (i = 0; i < 2; i++)
-> +		if (mm->remote_fault_rates[i] == 0)
-> +			mm->remote_fault_rates[i] = 1;
-> +
-
-What if there is one thread in the entire address that is responsible
-for all of the remote faults if it's a shared region? Does this skew the
-scan rates for unrelated threads?
-
-> +	/* Shift right in mm->remote_fault_rates[] to keep track of history */
-> +	oldest_remote_fault_rate = mm->remote_fault_rates[0];
-> +	mm->remote_fault_rates[0] = mm->remote_fault_rates[1];
-> +	mm->remote_fault_rates[1] = remote_fault_rate;
-> +	diff = remote_fault_rate - oldest_remote_fault_rate;
-> +
-> +	if (abs(diff) <= 5)
-> +		need_update = pan_const_rate_update(mm, ps_ratio,
-> +						    oldest_remote_fault_rate);
-> +	else
-> +		need_update = pan_changed_rate_update(mm, ps_ratio,
-> +						      oldest_remote_fault_rate,
-> +						      diff);
-> +
-> +	if (need_update) {
-> +		if (mm->slope == 0)
-> +			mm->slope = 100;
-> +		mm->numa_scan_period = (100 * mm->numa_scan_period) / mm->slope;
-> +	}
-> +}
-> +
->  /*
->   * Update the cumulative history of local/remote and private/shared
->   * statistics. If the numbers are too small worthy of updating,
-> @@ -2145,14 +2385,17 @@ static bool pan_update_history(struct task_struct *p)
->  
->  /*
->   * Updates mm->numa_scan_period under mm->pan_numa_lock.
-> - * Returns p->numa_scan_period now but updated to return
-> - * p->mm->numa_scan_period in a later patch.
->   */
-
-But p->numa_scan_period still exists so it's harder to evaluate the
-overall result.
-
->  static unsigned long pan_get_scan_period(struct task_struct *p)
->  {
-> -	pan_update_history(p);
-> +	if (pan_update_history(p))
-> +		pan_calculate_scan_period(p);
-> +
-> +	p->mm->numa_scan_period = clamp(p->mm->numa_scan_period,
-> +					READ_ONCE(sysctl_pan_scan_period_min),
-> +					pan_scan_max(p));
->  
-> -	return p->numa_scan_period;
-> +	return p->mm->numa_scan_period;
->  }
->  
->  /*
-> @@ -2860,6 +3103,7 @@ static void task_numa_work(struct callback_head *work)
->  		mm->numa_scan_offset = start;
->  	else
->  		reset_ptenuma_scan(p);
-> +	mm->scanned_pages += ((sysctl_numa_balancing_scan_size << (20 - PAGE_SHIFT)) - pages);
->  	mmap_read_unlock(mm);
->  
->  	/*
-> @@ -2882,10 +3126,15 @@ static void pan_init_numa(struct task_struct *p)
->  
->  	spin_lock_init(&mm->pan_numa_lock);
->  	mm->numa_scan_period = sysctl_numa_balancing_scan_delay;
-> +	mm->scanned_pages = 0;
-> +	mm->trend = false;
-> +	mm->hist_trend = 0;
-> +	mm->slope = 100;
->  
->  	for (i = 0; i < 2; i++) {
->  		mm->faults_locality_history[i] = 0;
->  		mm->faults_shared_history[i] = 0;
-> +		mm->remote_fault_rates[i] = 1;
->  	}
->  }
->  
-> @@ -2948,6 +3197,9 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
->  	if ((curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
->  		return;
->  
-> +	if (!spin_trylock(&curr->mm->pan_numa_lock))
-> +		return;
-> +
->  	/*
->  	 * Using runtime rather than walltime has the dual advantage that
->  	 * we (mostly) drive the selection from busy threads and that the
-
-This potentially misses triggering of scans in general but again, the
-more stable scan rates may be due to mm-wide averaging while missing
-per-task specifics.
-
-> @@ -2955,16 +3207,17 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
->  	 * NUMA placement.
->  	 */
->  	now = curr->se.sum_exec_runtime;
-> -	period = (u64)curr->numa_scan_period * NSEC_PER_MSEC;
-> +	period = (u64)curr->mm->numa_scan_period * NSEC_PER_MSEC;
->  
->  	if (now > curr->node_stamp + period) {
->  		if (!curr->node_stamp)
-> -			curr->numa_scan_period = task_scan_start(curr);
-> +			curr->mm->numa_scan_period = task_scan_start(curr);
->  		curr->node_stamp += period;
->  
->  		if (!time_before(jiffies, curr->mm->numa_next_scan))
->  			task_work_add(curr, work, TWA_RESUME);
->  	}
-> +	spin_unlock(&curr->mm->pan_numa_lock);
->  }
->  
->  static void update_scan_period(struct task_struct *p, int new_cpu)
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index de53be905739..635f96bc989d 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2424,6 +2424,8 @@ extern unsigned int sysctl_numa_balancing_scan_delay;
->  extern unsigned int sysctl_numa_balancing_scan_period_min;
->  extern unsigned int sysctl_numa_balancing_scan_period_max;
->  extern unsigned int sysctl_numa_balancing_scan_size;
-> +extern unsigned int sysctl_pan_scan_period_min;
-> +extern unsigned int sysctl_pan_scan_period_max;
->  #endif
->  
->  #ifdef CONFIG_SCHED_HRTICK
-> -- 
-> 2.25.1
+> In an ideal word, you'd really do a FOLL_PIN | FOLL_LONGTERM right away,
+> not doing the  get_user_pages_*()  first.
 > 
 
--- 
-Mel Gorman
-SUSE Labs
+I am thinking on the same line:
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index eff3ef64722b..fd7c878ab03d 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2379,9 +2379,10 @@ static inline int check_user_page_hwpoison(unsigned long addr)
+  * only part that runs if we can in atomic context.
+  */
+ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
+-                           bool *writable, kvm_pfn_t *pfn)
++                           bool *writable, kvm_pfn_t *pfn, bool pin_longterm)
+ {
+        struct page *page[1];
++       bool ret;
+
+        /*
+         * Fast pin a writable pfn only if it is a write fault request
+@@ -2391,7 +2392,12 @@ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
+        if (!(write_fault || writable))
+                return false;
+
+-       if (get_user_page_fast_only(addr, FOLL_WRITE, page)) {
++       if (!pin_longterm)
++               ret = get_user_page_fast_only(addr, FOLL_WRITE, page);
++       else
++               ret = pin_user_pages_fast(addr, 1, FOLL_WRITE | FOLL_LONGTERM, page);
++
++       if (ret) {
+                *pfn = page_to_pfn(page[0]);
+
+
+And the pin_longterm could be determined using a memslot flags:
+
+#define KVM_MEMSLOT_LONGTERM    (1UL << 17)
+
+Regards
+Nikunj
+

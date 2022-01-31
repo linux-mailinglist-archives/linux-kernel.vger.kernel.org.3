@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 996D14A42B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DDC4A4464
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377116AbiAaLNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377539AbiAaLKL (ORCPT
+        id S1378788AbiAaL3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:29:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50168 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377523AbiAaLSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF016C061749;
-        Mon, 31 Jan 2022 03:08:01 -0800 (PST)
+        Mon, 31 Jan 2022 06:18:23 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EEE160ECF;
-        Mon, 31 Jan 2022 11:08:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289D9C340EE;
-        Mon, 31 Jan 2022 11:07:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 446856114D;
+        Mon, 31 Jan 2022 11:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C843C340E8;
+        Mon, 31 Jan 2022 11:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627280;
-        bh=ntHB1EwPANzHF9BsgsFhEVLHwKVhjJU/F0L+D+K/BxE=;
+        s=korg; t=1643627902;
+        bh=8bbaXZER4a2mhUTdrkD8ZgmE7ImLm7ZobG8EiC1hc94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mGEWx+as8AHxLMa9dmVkkxu96qlrJz+y9RMI7n1uCx9P26J5vqml+DNRg6a6+hXwq
-         +N7zyq/TkqBBY+3+5RbWIhGZQ8bsO7cihG33o7NfalEo7VlT4Ey6NWmyynb8B6ZRuV
-         9Y6PMcmsAn1x5BrYjdwo8Gf8QsMiMupP/j+uU+GA=
+        b=RlJ0p4QVHqbmwRul9ZoZcEpVCFotwuPWocC5ESOAcQ/lzn2vx3XqQVzr4KBSzp8mL
+         fj0irXYdkiyGgfdrA9yVF9deYjRaRKoa/Uan1SmN72IG4wRYgvFAlyBqKeEvwrPsWM
+         EnUsz2pR/t4eVbly29TIrd6KAphq5T0wD7mNJJxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ivan Delalande <colona@arista.com>,
-        Amir Goldstein <amir73il@gmail.com>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 5.15 025/171] fsnotify: fix fsnotify hooks in pseudo filesystems
-Date:   Mon, 31 Jan 2022 11:54:50 +0100
-Message-Id: <20220131105230.872592417@linuxfoundation.org>
+        stable@vger.kernel.org, Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 5.16 028/200] efi: runtime: avoid EFIv2 runtime services on Apple x86 machines
+Date:   Mon, 31 Jan 2022 11:54:51 +0100
+Message-Id: <20220131105234.520022336@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,124 +48,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-commit 29044dae2e746949ad4b9cbdbfb248994d1dcdb4 upstream.
+commit f5390cd0b43c2e54c7cf5506c7da4a37c5cef746 upstream.
 
-Commit 49246466a989 ("fsnotify: move fsnotify_nameremove() hook out of
-d_delete()") moved the fsnotify delete hook before d_delete() so fsnotify
-will have access to a positive dentry.
+Aditya reports [0] that his recent MacbookPro crashes in the firmware
+when using the variable services at runtime. The culprit appears to be a
+call to QueryVariableInfo(), which we did not use to call on Apple x86
+machines in the past as they only upgraded from EFI v1.10 to EFI v2.40
+firmware fairly recently, and QueryVariableInfo() (along with
+UpdateCapsule() et al) was added in EFI v2.00.
 
-This allowed a race where opening the deleted file via cached dentry
-is now possible after receiving the IN_DELETE event.
+The only runtime service introduced in EFI v2.00 that we actually use in
+Linux is QueryVariableInfo(), as the capsule based ones are optional,
+generally not used at runtime (all the LVFS/fwupd firmware update
+infrastructure uses helper EFI programs that invoke capsule update at
+boot time, not runtime), and not implemented by Apple machines in the
+first place. QueryVariableInfo() is used to 'safely' set variables,
+i.e., only when there is enough space. This prevents machines with buggy
+firmwares from corrupting their NVRAMs when they run out of space.
 
-To fix the regression in pseudo filesystems, convert d_delete() calls
-to d_drop() (see commit 46c46f8df9aa ("devpts_pty_kill(): don't bother
-with d_delete()") and move the fsnotify hook after d_drop().
+Given that Apple machines have been using EFI v1.10 services only for
+the longest time (the EFI v2.0 spec was released in 2006, and Linux
+support for the newly introduced runtime services was added in 2011, but
+the MacbookPro12,1 released in 2015 still claims to be EFI v1.10 only),
+let's avoid the EFI v2.0 ones on all Apple x86 machines.
 
-Add a missing fsnotify_unlink() hook in nfsdfs that was found during
-the audit of fsnotify hooks in pseudo filesystems.
+[0] https://lore.kernel.org/all/6D757C75-65B1-468B-842D-10410081A8E4@live.com/
 
-Note that the fsnotify hooks in simple_recursive_removal() follow
-d_invalidate(), so they require no change.
-
-Link: https://lore.kernel.org/r/20220120215305.282577-2-amir73il@gmail.com
-Reported-by: Ivan Delalande <colona@arista.com>
-Link: https://lore.kernel.org/linux-fsdevel/YeNyzoDM5hP5LtGW@visor/
-Fixes: 49246466a989 ("fsnotify: move fsnotify_nameremove() hook out of d_delete()")
-Cc: stable@vger.kernel.org # v5.3+
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Cc: <stable@vger.kernel.org>
+Cc: Jeremy Kerr <jk@ozlabs.org>
+Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+Reported-by: Aditya Garg <gargaditya08@live.com>
+Tested-by: Orlando Chamberlain <redecorating@protonmail.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Tested-by: Aditya Garg <gargaditya08@live.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215277
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/configfs/dir.c     |    6 +++---
- fs/devpts/inode.c     |    2 +-
- fs/nfsd/nfsctl.c      |    5 +++--
- net/sunrpc/rpc_pipe.c |    4 ++--
- 4 files changed, 9 insertions(+), 8 deletions(-)
+ drivers/firmware/efi/efi.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/fs/configfs/dir.c
-+++ b/fs/configfs/dir.c
-@@ -1780,8 +1780,8 @@ void configfs_unregister_group(struct co
- 	configfs_detach_group(&group->cg_item);
- 	d_inode(dentry)->i_flags |= S_DEAD;
- 	dont_mount(dentry);
-+	d_drop(dentry);
- 	fsnotify_rmdir(d_inode(parent), dentry);
--	d_delete(dentry);
- 	inode_unlock(d_inode(parent));
- 
- 	dput(dentry);
-@@ -1922,10 +1922,10 @@ void configfs_unregister_subsystem(struc
- 	configfs_detach_group(&group->cg_item);
- 	d_inode(dentry)->i_flags |= S_DEAD;
- 	dont_mount(dentry);
--	fsnotify_rmdir(d_inode(root), dentry);
- 	inode_unlock(d_inode(dentry));
- 
--	d_delete(dentry);
-+	d_drop(dentry);
-+	fsnotify_rmdir(d_inode(root), dentry);
- 
- 	inode_unlock(d_inode(root));
- 
---- a/fs/devpts/inode.c
-+++ b/fs/devpts/inode.c
-@@ -621,8 +621,8 @@ void devpts_pty_kill(struct dentry *dent
- 
- 	dentry->d_fsdata = NULL;
- 	drop_nlink(dentry->d_inode);
--	fsnotify_unlink(d_inode(dentry->d_parent), dentry);
- 	d_drop(dentry);
-+	fsnotify_unlink(d_inode(dentry->d_parent), dentry);
- 	dput(dentry);	/* d_alloc_name() in devpts_pty_new() */
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -722,6 +722,13 @@ void __init efi_systab_report_header(con
+ 		systab_hdr->revision >> 16,
+ 		systab_hdr->revision & 0xffff,
+ 		vendor);
++
++	if (IS_ENABLED(CONFIG_X86_64) &&
++	    systab_hdr->revision > EFI_1_10_SYSTEM_TABLE_REVISION &&
++	    !strcmp(vendor, "Apple")) {
++		pr_info("Apple Mac detected, using EFI v1.10 runtime services only\n");
++		efi.runtime_version = EFI_1_10_SYSTEM_TABLE_REVISION;
++	}
  }
  
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -1249,7 +1249,8 @@ static void nfsdfs_remove_file(struct in
- 	clear_ncl(d_inode(dentry));
- 	dget(dentry);
- 	ret = simple_unlink(dir, dentry);
--	d_delete(dentry);
-+	d_drop(dentry);
-+	fsnotify_unlink(dir, dentry);
- 	dput(dentry);
- 	WARN_ON_ONCE(ret);
- }
-@@ -1340,8 +1341,8 @@ void nfsd_client_rmdir(struct dentry *de
- 	dget(dentry);
- 	ret = simple_rmdir(dir, dentry);
- 	WARN_ON_ONCE(ret);
-+	d_drop(dentry);
- 	fsnotify_rmdir(dir, dentry);
--	d_delete(dentry);
- 	dput(dentry);
- 	inode_unlock(dir);
- }
---- a/net/sunrpc/rpc_pipe.c
-+++ b/net/sunrpc/rpc_pipe.c
-@@ -600,9 +600,9 @@ static int __rpc_rmdir(struct inode *dir
- 
- 	dget(dentry);
- 	ret = simple_rmdir(dir, dentry);
-+	d_drop(dentry);
- 	if (!ret)
- 		fsnotify_rmdir(dir, dentry);
--	d_delete(dentry);
- 	dput(dentry);
- 	return ret;
- }
-@@ -613,9 +613,9 @@ static int __rpc_unlink(struct inode *di
- 
- 	dget(dentry);
- 	ret = simple_unlink(dir, dentry);
-+	d_drop(dentry);
- 	if (!ret)
- 		fsnotify_unlink(dir, dentry);
--	d_delete(dentry);
- 	dput(dentry);
- 	return ret;
- }
+ static __initdata char memory_type_name[][13] = {
 
 

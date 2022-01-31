@@ -2,225 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CC74A52E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66244A52E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236429AbiAaXKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:10:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56416 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiAaXK3 (ORCPT
+        id S237090AbiAaXKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:10:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236748AbiAaXKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:10:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F750B82CC6;
-        Mon, 31 Jan 2022 23:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6E3C340E8;
-        Mon, 31 Jan 2022 23:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643670627;
-        bh=Hkjw6+MAcCgqVnvifUYtv2EIGwOteYf/ehOvmNFrF8o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=iygtNL1+vX1CeRgtp2DWx5gyjnV+/FtYS2FTwBemH+FnH6PSZF+C9at4UuMgL59wl
-         lz9dimQJDnbin5MWq4xSqgPzuzRQ+PPg5XD1mtIn4ld6R2O9hYfGnn7r+fPe/wiGYJ
-         q/DdnP8k49bATixK3Ef/JTZqp42W5H/CdKlaVpPZ4EX7/Dhraz8SyaSyNUTHfMmE3h
-         rQuBCSS9lSOT043Wj66mzvgziF+/HJdGSgEi/cSUX39R+GtREtxljY6I1qrdYYjQ7h
-         BdbbD649yXB7F/aPlZzegoPbaBJMjTmofn9DQHB/AAv6v7rw7yM8eJKc1OA5yIjAFG
-         IOLuDHTikBj6A==
-Date:   Mon, 31 Jan 2022 17:10:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] Revert "PCI: j721e: Drop redundant struct device *"
-Message-ID: <20220131231025.GA516499@bhelgaas>
+        Mon, 31 Jan 2022 18:10:41 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483FCC061714;
+        Mon, 31 Jan 2022 15:10:41 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id r59so15379978pjg.4;
+        Mon, 31 Jan 2022 15:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+AFas4eyf4Zh1v28tTIizNCM2qF5or23R3vjZUoqzZQ=;
+        b=evzdLdFD/ApdmyNvtQPbdj9gdJQ423guwarOCwdGmve7PIWO3SHZYNQNKUSvq8hRhK
+         e50DjvPCFtuFmyu9w5RQfgNr4/iRZ/0QetgfwXIcCP4ZHkM+H4gQkERwyBcMWeb1LXHz
+         rXS+ciByR0KD0OCaX01I5fk6NCde6Rfj3xZkPL3eNPw+M9BszqznrnYA+nwHy5hqcLLZ
+         DmPilPk0lbilDtEoT1uKDEEbn9zBtzMuPdigSpyedTfwh4EbNw36Efe2s2d9tztiSE6C
+         WKIBZdtddQ3vm63UZR2aHkhfWlZIsQDDjIn801WM0xfonxN3St9EC313E0sc7x6AS9y6
+         qr1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+AFas4eyf4Zh1v28tTIizNCM2qF5or23R3vjZUoqzZQ=;
+        b=xZY2G8KJPByyosd1+3+H3mdkgfWxhWuD08ig+Pzr7hUOpGCeymX5D5nwbBBHLWsTtT
+         YQioRlv3osuRbhm8mQtttD/ru/CyVUPuFPoNg7waEK5zwEzKzYgWi6KPVOYUA5T3ueaO
+         utWTzthyN/3re47m2OUxCvA05Hjl+BCYfe1BJ1kEdPfLJ5Ckq057AKVxm6SttY0EHKGl
+         3ZhVSDR9puSX4ig7c2L6xPMTd3pvBId9xLHKFzZmIVvB24A2g3mLQbvagR9oc6b2Hu0u
+         HbSyr3kwuRJenAIVqESknlSOHULRezQZYXJ+0TGmlbU/rnn2yL9FRk1TGY+W7rc/TUCi
+         i7SA==
+X-Gm-Message-State: AOAM530k2inDOypQDbxAUX+KX2IzfVGFOesr40s4ej8wO0HR81P7UMh3
+        y1Ev0aWzXOXS+YTfB8l4VkM=
+X-Google-Smtp-Source: ABdhPJwbFGJPeXdAdKqumuziuUyNyiMh0kFFaWHsssSAB79/mwwz54MKY/qVfdssnY8SEzltmVGNwg==
+X-Received: by 2002:a17:902:a512:: with SMTP id s18mr22793343plq.51.1643670640717;
+        Mon, 31 Jan 2022 15:10:40 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id u18sm19887799pfk.14.2022.01.31.15.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 15:10:40 -0800 (PST)
+Message-ID: <99993fab-226e-190f-5b4a-54f2b978d4fd@gmail.com>
+Date:   Mon, 31 Jan 2022 15:10:38 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH9NwWeFm1UsBtGgHWhmhM2GgR5ciDXCi8H_p2KB01vfLPz6kQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 000/200] 5.16.5-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com
+References: <20220131105233.561926043@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:06:21PM +0100, Christian Gmeiner wrote:
-> Am Do., 27. Jan. 2022 um 23:29 Uhr schrieb Bjorn Helgaas <helgaas@kernel.org>:
-> >
-> > On Mon, Jan 24, 2022 at 01:21:22PM +0100, Christian Gmeiner wrote:
-> > > This reverts commit 19e863828acf6d8ac8475ba1fd93c0fe17fdc4ef.
-> > >
-> > > Fixes the following oops:
-> > >  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> >
-> > Hi Christian,
-> >
-> > Would you mind trying this patch?
-> >
-> 
-> Works - thanks. You can add my Tested-by.
 
-Thanks, applied to for-linus for v5.17.
 
+On 1/31/2022 2:54 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.5 release.
+> There are 200 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > commit 9d36a93af8fe ("PCI: j721e: Initialize pcie->cdns_pcie before using it")
-> > Author: Bjorn Helgaas <bhelgaas@google.com>
-> > Date:   Thu Jan 27 15:49:49 2022 -0600
-> >
-> >     PCI: j721e: Initialize pcie->cdns_pcie before using it
-> >
-> >     Christian reported a NULL pointer dereference in j721e_pcie_probe() caused
-> >     by 19e863828acf ("PCI: j721e: Drop redundant struct device *"), which
-> >     removed struct j721e_pcie.dev since there's another copy in struct
-> >     cdns_pcie.dev reachable via j721e_pcie->cdns_pcie->dev.
-> >
-> >     The problem is that j721e_pcie->cdns_pcie was dereferenced before being
-> >     initialized:
-> >
-> >       j721e_pcie_probe
-> >         pcie = devm_kzalloc()             # struct j721e_pcie
-> >         j721e_pcie_ctrl_init(pcie)
-> >           dev = pcie->cdns_pcie->dev      <-- dereference cdns_pcie
-> >         switch (mode) {
-> >         case PCI_MODE_RC:
-> >           cdns_pcie = ...                 # alloc as part of pci_host_bridge
-> >           pcie->cdns_pcie = cdns_pcie     <-- initialize pcie->cdns_pcie
-> >
-> >     Initialize pcie->cdns_pcie before it is used.
-> >
-> >     Fixes: 19e863828acf ("PCI: j721e: Drop redundant struct device *")
-> >     Reported-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> >     Link: https://lore.kernel.org/r/20220124122132.435743-1-christian.gmeiner@gmail.com
-> >     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-> > index 489586a4cdc7..5d950c1d9fd0 100644
-> > --- a/drivers/pci/controller/cadence/pci-j721e.c
-> > +++ b/drivers/pci/controller/cadence/pci-j721e.c
-> > @@ -372,10 +372,48 @@ static int j721e_pcie_probe(struct platform_device *pdev)
-> >
-> >         mode = (u32)data->mode;
-> >
-> > +       switch (mode) {
-> > +       case PCI_MODE_RC:
-> > +               if (!IS_ENABLED(CONFIG_PCIE_CADENCE_HOST))
-> > +                       return -ENODEV;
-> > +
-> > +               bridge = devm_pci_alloc_host_bridge(dev, sizeof(*rc));
-> > +               if (!bridge)
-> > +                       return -ENOMEM;
-> > +
-> > +               if (!data->byte_access_allowed)
-> > +                       bridge->ops = &cdns_ti_pcie_host_ops;
-> > +               rc = pci_host_bridge_priv(bridge);
-> > +               rc->quirk_retrain_flag = data->quirk_retrain_flag;
-> > +               rc->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
-> > +
-> > +               cdns_pcie = &rc->pcie;
-> > +               break;
-> > +       case PCI_MODE_EP:
-> > +               if (!IS_ENABLED(CONFIG_PCIE_CADENCE_EP))
-> > +                       return -ENODEV;
-> > +
-> > +               ep = devm_kzalloc(dev, sizeof(*ep), GFP_KERNEL);
-> > +               if (!ep)
-> > +                       return -ENOMEM;
-> > +
-> > +               ep->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
-> > +
-> > +               cdns_pcie = &ep->pcie;
-> > +               break;
-> > +       default:
-> > +               dev_err(dev, "INVALID device type %d\n", mode);
-> > +               return 0;
-> > +       }
-> > +
-> > +       cdns_pcie->dev = dev;
-> > +       cdns_pcie->ops = &j721e_pcie_ops;
-> > +
-> >         pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
-> >         if (!pcie)
-> >                 return -ENOMEM;
-> >
-> > +       pcie->cdns_pcie = cdns_pcie;
-> >         pcie->mode = mode;
-> >         pcie->linkdown_irq_regfield = data->linkdown_irq_regfield;
-> >
-> > @@ -426,28 +464,6 @@ static int j721e_pcie_probe(struct platform_device *pdev)
-> >
-> >         switch (mode) {
-> >         case PCI_MODE_RC:
-> > -               if (!IS_ENABLED(CONFIG_PCIE_CADENCE_HOST)) {
-> > -                       ret = -ENODEV;
-> > -                       goto err_get_sync;
-> > -               }
-> > -
-> > -               bridge = devm_pci_alloc_host_bridge(dev, sizeof(*rc));
-> > -               if (!bridge) {
-> > -                       ret = -ENOMEM;
-> > -                       goto err_get_sync;
-> > -               }
-> > -
-> > -               if (!data->byte_access_allowed)
-> > -                       bridge->ops = &cdns_ti_pcie_host_ops;
-> > -               rc = pci_host_bridge_priv(bridge);
-> > -               rc->quirk_retrain_flag = data->quirk_retrain_flag;
-> > -               rc->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
-> > -
-> > -               cdns_pcie = &rc->pcie;
-> > -               cdns_pcie->dev = dev;
-> > -               cdns_pcie->ops = &j721e_pcie_ops;
-> > -               pcie->cdns_pcie = cdns_pcie;
-> > -
-> >                 gpiod = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> >                 if (IS_ERR(gpiod)) {
-> >                         ret = PTR_ERR(gpiod);
-> > @@ -497,23 +513,6 @@ static int j721e_pcie_probe(struct platform_device *pdev)
-> >
-> >                 break;
-> >         case PCI_MODE_EP:
-> > -               if (!IS_ENABLED(CONFIG_PCIE_CADENCE_EP)) {
-> > -                       ret = -ENODEV;
-> > -                       goto err_get_sync;
-> > -               }
-> > -
-> > -               ep = devm_kzalloc(dev, sizeof(*ep), GFP_KERNEL);
-> > -               if (!ep) {
-> > -                       ret = -ENOMEM;
-> > -                       goto err_get_sync;
-> > -               }
-> > -               ep->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
-> > -
-> > -               cdns_pcie = &ep->pcie;
-> > -               cdns_pcie->dev = dev;
-> > -               cdns_pcie->ops = &j721e_pcie_ops;
-> > -               pcie->cdns_pcie = cdns_pcie;
-> > -
-> >                 ret = cdns_pcie_init_phy(dev, cdns_pcie);
-> >                 if (ret) {
-> >                         dev_err(dev, "Failed to init phy\n");
-> > @@ -525,8 +524,6 @@ static int j721e_pcie_probe(struct platform_device *pdev)
-> >                         goto err_pcie_setup;
-> >
-> >                 break;
-> > -       default:
-> > -               dev_err(dev, "INVALID device type %d\n", mode);
-> >         }
-> >
-> >         return 0;
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.5-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
 > 
+> thanks,
 > 
-> -- 
-> greets
-> --
-> Christian Gmeiner, MSc
-> 
-> https://christian-gmeiner.info/privacypolicy
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

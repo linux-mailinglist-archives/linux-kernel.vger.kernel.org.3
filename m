@@ -2,141 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A424A4FD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4717A4A4FD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378035AbiAaUGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:06:09 -0500
-Received: from mail-eopbgr140041.outbound.protection.outlook.com ([40.107.14.41]:6768
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229534AbiAaUGH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:06:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y0ANX9no67En4cl59lJ1mDS6m0o21pepeXQ6tAKUrgsHvCpU77I5etiOYysJWowQrL65m6b8YtbEBhLzBcJsAGb8QIng67D7tMvbU0EXfkNrSPne+xZXGlXI2sToO5WdSiHDEwFa/RUTFd6b98ssmNtvUHJTtTsOqfl4O4+1cneYBZ+ZOiBsalsE455zxrS3B5Ng/aE6icj583HGQiUy+EM887pNYF+UR5PbIJbBVq3pN7a4lIuw+azbh+B9w6bF74cKAWhHZBrU8X2bwfSM4w+x2laG8szRrQiVpzWTyqz/HucYFZb/XRTEx+kDRSswUPpQMRDwdu+sSMBRy99A4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L/l75HWt94P3qDYDnOa/lHyZABvTI2YpDUfRu7q19zY=;
- b=eQCyHFd7iB/nCdqJyiBZk97ULdvE09Ks+JMzcqKRP+v86ERVnpBjQN2/H6kozWOsqpx7nNhQocUXqrkm17r2AqdyNosqlUE6xquDqZtNr2hI4X589UFr71vyNwDD4a0s4OLM9FhZLIZztSWlVKQSJE9KztQnxBjy2QbsGsD4FqD9CMUXKgHjuHLqeq8wCYYQy6hURlkbJmFiNqMXZ9uzZAytWfub4KhsecbKFPpCqCYrk/gM8Gi8kbFhCSPG6j4jJpXQCtmQQ5Vte3IFzcXdoGJGhyIBKkUO3f1C5HqBFjl0K+VOiW8eHe7hL9gu5fJ0QW8WYq5Ce8FSQwU8Jbxg6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L/l75HWt94P3qDYDnOa/lHyZABvTI2YpDUfRu7q19zY=;
- b=jhYJLgORNJiZp5Eeibjf/hfxK1hyuRW8vq+UM3SHn5xB2kMNXgvrVE1o86bLaFqVAKZNJx81tk2F/8YNAtFGX8JnjTp0xHqMfaCBFXGBg3e0y9JJHgczGZsJQx9d5vVNLQRTOQBLc6CIOXaG8CBolc6GhxwzZvgG3vlQeAS8PrY=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM0PR04MB6977.eurprd04.prod.outlook.com (2603:10a6:208:189::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.22; Mon, 31 Jan
- 2022 20:06:05 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::f4d7:e110:4789:67b1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::f4d7:e110:4789:67b1%5]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 20:06:05 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Colin Foster <colin.foster@in-advantage.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v4 net-next 0/2] use bulk reads for ocelot statistics
-Thread-Topic: [PATCH v4 net-next 0/2] use bulk reads for ocelot statistics
-Thread-Index: AQHYFIJ8ACyf1j3JaEubMb+rEidhLqx9kDeAgAACtwA=
-Date:   Mon, 31 Jan 2022 20:06:05 +0000
-Message-ID: <20220131200604.orl7da2oyljh626c@skbuf>
-References: <20220128200549.1634446-1-colin.foster@in-advantage.com>
- <20220131115621.50296adf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220131115621.50296adf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 84f88152-6ea4-4b10-ce2f-08d9e4f51d20
-x-ms-traffictypediagnostic: AM0PR04MB6977:EE_
-x-microsoft-antispam-prvs: <AM0PR04MB697758C10A2B4C3BDB35E99AE0259@AM0PR04MB6977.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KHzymhapRqFn9e0olWM3hurdwg2KuB9OJZzeU4C6oNs9Y5aO3ptjKOjpUtojrVemtjQDjUA46MqUFx0GoMUi3EnIrX52TCWnIu4ak7gKMTv/tR7QYtEwy1RJz3MP3CaAQu3hgeTRN6wmqDjGD4AOr+Y4LSteO/6dWFGXEPqKbiRkC/FUJjS95z4OUspoCAcd3umtisceo1Q3WuiI0fnOONOhKsMmZpDxc/qXWH7wWwTmqcGTCSAkHxwwWMV8uu47lu1HDFDYMLIXuOVGvglEVr6F7pXaFguo0ekuWjFz1rgffrV+gOQi7KSEGSnp23VgHOkLUbYfwy3iR77mOt3oAIFOC+tQ01YsUYx4vEGfm6At6ztcAvbcAh4x7opmhwyYaqc8gzYszZiE8JDTPUPuU6EFCELaGn02O2BwrdujxjsYlKWbP2n5SeGLFeuwHtENmG2lKSrrJBHXXxSzULxBwd1DeacpHxlgu0SZNXhMekBC2Vc37VG9k2p1FlsgicSgSrvuTuY2kQ1w+YDD5wJzrnEZscwDmZmaZ6959Ik3eyxz56pBy/n6Zrur+qEBFhddBv22B/ugf8BnwOE/6Gq6ZSBzOvFp65nK8i8pWnqpBasGzROTyG+bTb2DzgMyeZTJ2vWUHyKLWwqpIOCnghqD/DT2Mikfo7/nyeJ4w85AXQIKjs077A3YhfkoZDxolOlJcE/wplo2Bhe/abPY9j1mzL4CVSs3Yplm3kCJJ1q4dqC86zx0wojxZ6DItWlgYXh1gxT/D+ZRGytsEZPbjZapgiFaXbOidWZAnm5f2rTP//M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6506007)(6512007)(9686003)(38070700005)(71200400001)(508600001)(5660300002)(44832011)(2906002)(122000001)(1076003)(186003)(83380400001)(26005)(76116006)(66946007)(54906003)(91956017)(38100700002)(66556008)(66476007)(6486002)(966005)(86362001)(4326008)(66446008)(64756008)(8936002)(316002)(33716001)(8676002)(6916009)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jRlLcHQ70YyEteVnlnZPLy4DpMqghzAYDgbKykTQ4WdFKsNXZwqiJbc7+sqp?=
- =?us-ascii?Q?yBLON7lMG/0eId9Yzd8SqdHzhRm5ImC3Xoi9ncy2Lk0cprIrXk3+B5Z1whDF?=
- =?us-ascii?Q?tcThxf3muNUm8oxFVYgumUeuoXVgvtAXOlQzk0kmveKWgnu/VtaCZv3Pb/zw?=
- =?us-ascii?Q?HDmk2v5tAUAMO4xzNSLpNSygHlskDc5Msp4VKExd8fBw/SJNKBsElH+7EIaj?=
- =?us-ascii?Q?L5I6HaawbfoSCoxDvGo6gUK2N/Ez60hKdJroa6NrtEQG7ymshDIGACFnCgsM?=
- =?us-ascii?Q?beB9J0yPXJkDN1xo3rD392Th0H6gA2iIf8Z625m6l7XIipMFeGUgSV54MLP8?=
- =?us-ascii?Q?vSfaGAHCxSLWhSlrq+4D6zLvY73AXMbvG7zI2qoHt2TKSDgx0nyiFbSCFx5x?=
- =?us-ascii?Q?VFrbNsj48rYdSRG3ck7rgD1edSh0kVTCrcakuhpwjfExLw6OZbVO2e6v5ux3?=
- =?us-ascii?Q?9dRzjIcr9URjXYGHf/OuHkvC8dhHUTWVgvPY5E8zj0lK/MOMnDyu23dC8M4D?=
- =?us-ascii?Q?3/3V08g1s1S4YVPdK34eR5vSJqJZXoxOsHLZUhCUVU8G+xhLG2oaGDrx/66i?=
- =?us-ascii?Q?4Zscn38WTRikXlLEVOCqzILHcADT/fDj/nSYqwpn5X8XPNDxEx4wjVl5uSCj?=
- =?us-ascii?Q?kCfi4entySbRPVgnrfE21WH5aBmyCA4iW4yyvSZFdjLB4Nxb53MTRhI2TWg8?=
- =?us-ascii?Q?W8OvYTP2mjlxYa9ZV7GD4An6m4uDbaMcUPk+55vW/3KGL1BoD4nzSuBSTRMV?=
- =?us-ascii?Q?TN1nVzUc4CIyWLBCSADxD19UUZcay08Ynm9gtAvrqEX9EqKd8+WQn5V8cZif?=
- =?us-ascii?Q?/2feVMM5ZHBNEl6++4/EEefU/B4Mecrp1oAybojqimseiZ8Dg+i4H2xCiRk9?=
- =?us-ascii?Q?uXZ9pMLSdZ7RZ7oxWX2Jno6q86uIBxUY5wZsyKq97b5t7SyYpFG0lFl0vrYs?=
- =?us-ascii?Q?iZnDw1iwlF+zmDzHa/gtPGjAs/NQ5wyICJARlUQz56Rbmh4rA3qAkvJl+60n?=
- =?us-ascii?Q?yqSHcX1KIyLrkdeymQq3Dkrpz5T02KVlQNXm36VH95xNlfgbJdd/EdQGg+j0?=
- =?us-ascii?Q?HIyv7EHEwAByFGLAzoO+mEY3RdoVm1MKFoixWFlCf/1q30qYW6u0XEESWb3d?=
- =?us-ascii?Q?/O87QjT+XPKQoojqt87hgis+XaUEC6OqGK7/lPegR14aoE6qaYXnJMU/lAT3?=
- =?us-ascii?Q?pjhSkzrakMWONkuoBbL0IbjLurr/Lr2ZLxCe+8IJyNeIAY4mIc/aBlBpHs2P?=
- =?us-ascii?Q?Y5vD8JwR5qTLm/4vxwAQ6Yji/lBsWUCF+Wq50jNYVwCcNhsGaKypa2YzXT46?=
- =?us-ascii?Q?EeEkKRZKWP2XvfKobyy/zuGOTAfzUEs6+16cdKeztW7hqPlgjsCpm4Jk8PDC?=
- =?us-ascii?Q?9X0bO7QX2dbDE8sgX4h9PHMfrjp7hHYT+0SIdYfpdxJTf3sw7FxXzQtvoV5F?=
- =?us-ascii?Q?PqVrSYUVZtGPMUEoSc3bF9CtCMgGLllMKV/jt9RjZhJYYTzb4JHlvgLbnEsJ?=
- =?us-ascii?Q?RHaaNpu/lc92CJIJj64AiDHr/aUymw7MQ++zOTLo3TLmcKaH3/qlsj+s8Fsl?=
- =?us-ascii?Q?SfLOKHgmL4rv1g5T5dT83jjctXpdkQz5kTzI8xLb42ghktJaN6AayqAiQdrb?=
- =?us-ascii?Q?xu/EizyQMYoknbTsnMeSbNI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <933FB3B4C9FF0C4CB60B42316FC2FF73@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1343872AbiAaUKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbiAaUKP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 15:10:15 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2FC061714;
+        Mon, 31 Jan 2022 12:10:15 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id q8so14439538oiw.7;
+        Mon, 31 Jan 2022 12:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=md82yNcHzb9hUMdO0D3wtsJDnKHtblS8Ove1AcpVwL4=;
+        b=oXTOBWrpW2gl4tIhPPYXSYCdP3/cyVxxxJjLIU/H6PIvlisO2smazTA843hl8ym1lu
+         UQ7nFj5dP4YilaIX47t5/UUo3/rF1VOovK3M3N2EaKiJGlRHmJX3+FjlpirLm3l1VzQJ
+         rTInEmWelM97XSI0pjbfRPDkUZWpKI/Dx/4W61B0pNtP215V96YLYxf9HE8o5Kuboq3Z
+         NIit3Xta78XA6PRj0xsV3mDcMaibY61xh8H5qnodjaHfE+ADK0mi2swPIdYKxgmuVmXr
+         yMBQfMmLflXEcCe0vR8b9sX+XFzGMouCZTpVbj0PuFA78c5fM8NvMXqdOtzsD4X4snjM
+         EA7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=md82yNcHzb9hUMdO0D3wtsJDnKHtblS8Ove1AcpVwL4=;
+        b=cMFAB+MOAzCT6M1T3tWMF6FduCB+S5wbtnRvUWBY/KID8MS6abpH4V0xP1DraTPsL9
+         xENOacZXbdo3xRUSM9Q+6+S/ncOZVvqC4+cKcVRXAzEbNNCHRSfgTgjJETiNuIz8p5+m
+         8NAUCV0lIIlX5TxhPtMFOR31EaYik0PzZW2hHr+IrANvfm3Fm+vPbePo/IFrrHXOWmYB
+         AtgyHhvJkF6HDxhSgdCgKpTsec79PPsv+xCMQWaH2h9q1wAzAw6FCjMZli3VjLJnOllR
+         oA2xs4lC535jMWg78vwBGRIMDfZOJfhX7lwAkHqSlbuEv9T4bJcrk0j2z2jyr13b9n6V
+         S2YQ==
+X-Gm-Message-State: AOAM533nCrcqHOoJbyWAHsai8wFTlMSF7RA2HZU7TDit3IAv2kJ9a82v
+        jJvSrih4ETqA3YotkPUfuVagiuYp1/pWRQ==
+X-Google-Smtp-Source: ABdhPJxGKaP8CEQPw0ggAidZHCs0odovFzUCuaCNznTdQv7o1VKhCNXQn2SGRGodc/39NDolZDqXOA==
+X-Received: by 2002:a05:6808:1443:: with SMTP id x3mr13850490oiv.40.1643659814832;
+        Mon, 31 Jan 2022 12:10:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t21sm8177727otq.81.2022.01.31.12.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 12:10:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
+Date:   Mon, 31 Jan 2022 12:10:12 -0800
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84f88152-6ea4-4b10-ce2f-08d9e4f51d20
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 20:06:05.5195
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ffxb5K0dCRtCB2YZ/gIyxkvMg5rrgjnmq5+EzA9/XbGIsS3U1v3YL+nyge4O2WBO968H3rv7tfvIIZn5DIG3QA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6977
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/4] hwmon: (sch56xx-common) Replace msleep() with
+ usleep_range()
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220131193137.3684-1-W_Armin@gmx.de>
+ <20220131193137.3684-4-W_Armin@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220131193137.3684-4-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 11:56:21AM -0800, Jakub Kicinski wrote:
-> On Fri, 28 Jan 2022 12:05:47 -0800 Colin Foster wrote:
-> > Ocelot loops over memory regions to gather stats on different ports.
-> > These regions are mostly continuous, and are ordered. This patch set
-> > uses that information to break the stats reads into regions that can ge=
-t
-> > read in bulk.
-> >=20
-> > The motiviation is for general cleanup, but also for SPI. Performing tw=
-o
-> > back-to-back reads on a SPI bus require toggling the CS line, holding,
-> > re-toggling the CS line, sending 3 address bytes, sending N padding
-> > bytes, then actually performing the read. Bulk reads could reduce almos=
-t
-> > all of that overhead, but require that the reads are performed via
-> > regmap_bulk_read.
->=20
-> This got into Changes Requested state in patchwork, I'm not sure why.
->=20
-> I revived it and will apply it by the end of the day PST if nobody
-> raises comments.
+On 1/31/22 11:31, Armin Wolf wrote:
+> msleep(1) will often sleep more than 20ms, slowing down sensor
+> and watchdog reads/writes. Use usleep_range() as recommended
+> in timers-howto.rst to fix that.
+> 
+> Tested on a Fujitsu Esprimo P720.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   drivers/hwmon/sch56xx-common.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
+> index 0172aa16dc0c..f66e1ed4b1aa 100644
+> --- a/drivers/hwmon/sch56xx-common.c
+> +++ b/drivers/hwmon/sch56xx-common.c
+> @@ -139,7 +139,7 @@ static int sch56xx_send_cmd(u16 addr, u8 cmd, u16 reg, u8 v)
+>   	/* EM Interface Polling "Algorithm" */
+>   	for (i = 0; i < max_busy_polls + max_lazy_polls; i++) {
+>   		if (i >= max_busy_polls)
+> -			msleep(1);
+> +			usleep_range(1, 2);
 
-Maybe this is the reason?
-https://patchwork.kernel.org/project/netdevbpf/patch/20220125071531.1181948=
--3-colin.foster@in-advantage.com/#24717872=
+This replaces a 1-millisecond sleep with a 1-2 microsecond sleep.
+
+Are you sure this is what you want to do ? Given that task switches typically
+take several microseconds, the new code is pretty much identical to a busy
+loop, and the maximum sleep time is reduced significantly.
+
+Guenter
+
+>   		/* Read Interrupt source Register */
+>   		val = inb(addr + 8);
+>   		/* Write Clear the interrupt source bits */
+> --
+> 2.30.2
+> 
+

@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6579F4A465B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 294384A467C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378654AbiAaLzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:55:31 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:63242 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376700AbiAaLqi (ORCPT
+        id S1351133AbiAaMAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351043AbiAaMAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:46:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643629598; x=1675165598;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+uRMhA1+KXMC9lDrbzc/2dceALsFfl6ymRO67+ImIZ8=;
-  b=F179MNUPZM2fsMy5wjNEUABHHyk8l1i7vZOkKZP4N2dv46T4fWPPGkZu
-   m07rVP01/Fge5zDNHM/xXev3pNGRX2fxSU+21/wgutxOd167eCq4lGG8c
-   MYVQaFJ9WF50K6gpK2yG3LXMYBdbsMexa9eLE9TSDOLzRT4AnO6n+//K7
-   7tW4Dq/8lT9Wjc+DksQ1k5QIl7ZO/hy+gGGE3gROsmeQZ1MP6F3X9Mgvr
-   Qvm3kHtggkj97RRF/HgSokb5K4LFoRqXajNLtD03chdBOhAmqb4Y+PPPB
-   cMdJmyEyRsmoILDMyQGCiJ/xMV4zo5oYAUtUOq2L8wl/jhUREFMPbg7UN
-   A==;
-IronPort-SDR: eajPSZH4pSMNBX4KdOiq8o1PyCBQHxIJ2eFvu6iAjHVHssM7If3nsVEHy5O4csYUG1ycv9gwsu
- 3GjRxfWiQGnALyTTWJk2Kt1TKcVE9qKOxuC4UiDqeOelPKvogG53n01YMBIvBX5ZyXfCoB0jBi
- d93t6wVH4MHczqlfJwi+Hxpk/6/XjjhJ9Z/vEuqMob0IbGRKrkhXqjiYmFmtGfjxUBvuzBWiDJ
- vDN8nS8rTTkRY4+DMYVdRRqGRSMf0Elvg1AxO+XG0T9zqlGoas/D2641PfwOJGRrMbEs5sA1Ch
- TJEJVYB8u1pm/qg/7CPC0k5U
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="151966756"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Jan 2022 04:46:37 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 31 Jan 2022 04:46:36 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 31 Jan 2022 04:46:31 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <geert@linux-m68k.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <bin.meng@windriver.com>,
-        <heiko@sntech.de>, <lewis.hanly@microchip.com>,
-        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
-        <ivan.griffin@microchip.com>, <atishp@rivosinc.com>
-Subject: [PATCH v5 12/12] MAINTAINERS: update riscv/microchip entry
-Date:   Mon, 31 Jan 2022 11:47:27 +0000
-Message-ID: <20220131114726.973690-13-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220131114726.973690-1-conor.dooley@microchip.com>
-References: <20220131114726.973690-1-conor.dooley@microchip.com>
+        Mon, 31 Jan 2022 07:00:15 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABB1C0698FE
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:52:29 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id v186so39690313ybg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oCrgxN4VWPwO2NSx1YgglKpDyhAIv+oHFIsRJHf8Sqs=;
+        b=P5/CBU+VkTVCOr11YeYZnIgg2piEHKB6344rXUEQbhavnq+DiwAtxUCq7zcuT/QF8r
+         WCgPc4QwAMV555FE40rhJOFwHRW50SLTHP1n7Tso72LU90fn/KXhSVXyq7nc5HmteqJ2
+         ECfyo7HChDqpaBcixiI8bOPzQ9qDXELdj5NiWcaLqZK6kbeDFoao/8KBAkb6ZNAoNDU7
+         INvwjygqvVepP8kAdxOAh+ojZwC13lrFtppVUby2BEENWTSlAiSn4KdvpsTflF9q6mdT
+         nTxf0YAlntzOzbeRivvMIQnpThwGlcPWMJI5xdxzW9Ulnx1GRnR6pnONd50JKRUFYS29
+         oDaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oCrgxN4VWPwO2NSx1YgglKpDyhAIv+oHFIsRJHf8Sqs=;
+        b=A6gzdzwm9HdO0jsGsPGi1a2z9Yq3n36+3aT4PkcTuMK+o0YYASjSR5IIqOz4uCpJOr
+         Yvq+p02amCUeIrJ+mQeORqSFrzTw8h38o8LCWG8DviLKaLZx7zV9/BafrAlIWMXW2WxL
+         X2fMfPkWTIGu33M6j3F5mJhZHMv8tDF9M37DcWm5zN7Orador/WN1HOukg06O2iYWUpK
+         W6NIG9XH2/Qz270dPZ4cMtxjlSR3/U/6puNL2tBDlS4cds2WHwRYoghSJcrLULvXwD/Y
+         gbmBnohbx4qNYg3oeiLNcMh2k4h8P9Ls3o4gy0aoP55PZ4cMmGYq4R761sW7h3wbna5s
+         wlGQ==
+X-Gm-Message-State: AOAM531jWEdAXjT7wotKXJoN+pypbMIVB6ZrsKYozIFXYDhY5Z0URdSd
+        crfQuDmrm+zNquvOb8LNVjvQjb77dCho7GC/0Lw=
+X-Google-Smtp-Source: ABdhPJxgYAhxLm4lfbY5aB36JRXMHKPC/qJeI9ND2zXPs+nd9fH8jC0gcZNQkAt4/hK36E/81CLSunAh6OWckIcqhhY=
+X-Received: by 2002:a05:6902:1028:: with SMTP id x8mr26668743ybt.716.1643629949010;
+ Mon, 31 Jan 2022 03:52:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+From:   Amy Happer <productdatareachers@gmail.com>
+Date:   Mon, 31 Jan 2022 05:52:18 -0600
+Message-ID: <CA+7SvfC4ecduQaGOYL9szoNocG1VdbmkB8HZjy-5M269S+EHFg@mail.gmail.com>
+Subject: Re: Register HIMSS Attendee Mailing Lists-2022
+To:     Amy Happer <productdatareachers@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hi,
 
-Update the RISC-V/Microchip entry by adding the microchip dts
-directory and myself as maintainer
+Wishing you all the best for HIMSS Show 2022!
 
-Reviewed-by: Lewis Hanly <lewis.hanly@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Would you be interested to acquire HIMSS Global Health Conference
+Attendees Email Lists-2022?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea3e6c914384..779a550dc95b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16575,8 +16575,10 @@ K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
-+M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
--- 
-2.35.0
+List Includes:- Org-Name, First Name, Last Name, Contact Job Title,
+Verified Email Address, Website URL, Mailing Address, Phone Number,
+Fax Number, Industry and many more=E2=80=A6
 
+Number of Contacts:  46,567 Verified Contacts.
+Cost:                        : $1,937
+
+Any future attendee who will register to this HIMSS 2022 conference
+till the date, we will supply the updated list every 25 days once, and
+after the conference also at no additional cost
+
+Kind Regards,
+Amy Happer
+Marketing Coordinator
+
+If you do not wish to receive future emails from us, please reply as
+'leave out=E2=80=99.

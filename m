@@ -2,733 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C27564A50AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F12C4A50B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350888AbiAaU5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbiAaU5r (ORCPT
+        id S1379235AbiAaVAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:00:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60740 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbiAaVAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:57:47 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373ADC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:57:47 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id o12so29427063lfg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ti6sbyCNtG0Rir4OeBmQzp+McWwr6UWvIaWvl90oGvA=;
-        b=lG/1mNBJQmD0tvBEtFS5/bs/0iYOC9e8Sdial4O5cSv6O9rDIwSPnvaWdUA2MQM7Wg
-         zul0Eh6Stb3Y1Wzb/QPAYucnPoM4yco3J96TVbtdya407kKJCxNbXGPIAzTFkHOg2naf
-         D/hsyzviqiJ/LDwQRu8abmd4hpRcNAq4+BY4u76/kvdMQ8Ie1KPIGP2gGwOlPa8o4P1j
-         nlhsWwTUKFzQizyEdW+2pa9S43x0hOagddQZObXFzqMP5GoSlzgarxWFPqfRGp+SIDc1
-         q6ugGyw1YBvJqC+aezKuf4l+xGBhEO+uny45pD55iDzMqqlh6mK1WGYv9lT5yJiz4Fbv
-         vOew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ti6sbyCNtG0Rir4OeBmQzp+McWwr6UWvIaWvl90oGvA=;
-        b=NFdjNzdk0lA6XHZYss7FKXwr2jS27H407ExlxaVqrzQw0I4ikCStrmdNOryAixtW8g
-         gD+OEuHVfziuxciv+7bNNOKUuhFaPl8yIL8TqQnxs9Fmd8dMdw/Rr2VDYfa1yOqI83pm
-         7PC5M9Yp0jy9cYlOZMa/flHeY3+uaclkZWmCQ8PSqc/wkpPe59RWS1UcUEpdjjJ0hol+
-         W9YCxDOnp7sXbs8uxSP/hlUWGsg9VV1LaLlgMMmGNlwNvY+VYmlbgbXm0fqSTz4tzGJU
-         eBWQ/O4kNwuuqPwy4n99Tb4nOF44TeklaTe9DjEnNi/BtA05+1XXzqc6/eKuD1WOcR3F
-         wTcw==
-X-Gm-Message-State: AOAM531YqL+GlSpl4rUOq8ulbBqZyEI+XY5FyT8udV3WPslvri1tuCSQ
-        4opMLRwIMGFzmUtfFkgHJGzXGhQ5uzjlNA==
-X-Google-Smtp-Source: ABdhPJyzX1hlCm3kDKQ9x2UYT16JO37tSigN+fgHXOWrm2jscJGAeusREgkM7tIwpv/eiVIRp7VapA==
-X-Received: by 2002:a05:6512:3991:: with SMTP id j17mr16586490lfu.391.1643662665348;
-        Mon, 31 Jan 2022 12:57:45 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id i12sm2727008lfl.265.2022.01.31.12.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 12:57:44 -0800 (PST)
-Message-ID: <087a4dc0-d892-20aa-2caf-6d055fe523c3@linaro.org>
-Date:   Mon, 31 Jan 2022 23:57:44 +0300
+        Mon, 31 Jan 2022 16:00:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1153B82CA1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE55C340E8;
+        Mon, 31 Jan 2022 21:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643662834;
+        bh=DpJUErWPwWkdNUiiVPwKDwl8WphcjgIX7O9Awu23mV0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=icNmKUGrzjGMyLL7ZfuBmvbNnNLUlbrcf0zBquTm3x6gIrysD2DQ5NQcR9Gm6Gx1P
+         k3DO4UvhWma071CluecfJ2l0KNg499cNzRKQFI1P1+/15ON/eDIWFSX5xtEWMcfHIE
+         lCpIb8EE4BDhGbqYJOOAC5VWNJ2nRDT/ciC4mRWE11v2jeFVy3RvEoAsuW+TrZ3oUL
+         nGjqloNbK+W5OoGf5/iqJq9SM+dFcIO5nI6iC5sGZMU5kUr+F7Oqu6GnrTaGv7bUWK
+         qR0fhO2wYY0vKlajYX6u90dQtbdJuLOfJJ9aa2itc6jxdC/Bu/3asYBO7aCqYvhmNB
+         cMkhyhACKewZQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 05D2540466; Mon, 31 Jan 2022 18:00:30 -0300 (-03)
+Date:   Mon, 31 Jan 2022 18:00:30 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexei Budankov <abudankov@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>
+Subject: Re: [PATCH v13 01/16] perf record: Introduce thread affinity and
+ mmap masks
+Message-ID: <YfhN7kTLECDwgPLh@kernel.org>
+References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+ <9042bf7daf988e17e17e6acbf5d29590bde869cd.1642440724.git.alexey.v.bayduraev@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/msm/dp: add wide bus support
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1643390945-10813-1-git-send-email-quic_khsieh@quicinc.com>
- <CAA8EJpqVAB31uzav-qMsBEBk0j2dk-qy1cRRRccCRLgJRqCS2g@mail.gmail.com>
- <ff150ae7-808e-9194-94d4-8976cd21c396@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <ff150ae7-808e-9194-94d4-8976cd21c396@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9042bf7daf988e17e17e6acbf5d29590bde869cd.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2022 23:50, Kuogee Hsieh wrote:
+Em Mon, Jan 17, 2022 at 09:34:21PM +0300, Alexey Bayduraev escreveu:
+> Introduce affinity and mmap thread masks. Thread affinity mask
+> defines CPUs that a thread is allowed to run on. Thread maps
+> mask defines mmap data buffers the thread serves to stream
+> profiling data from.
 > 
-> On 1/28/2022 8:59 PM, Dmitry Baryshkov wrote:
->> Hi,
->>
->> Thank you for your patch.
->>
->> On Fri, 28 Jan 2022 at 20:29, Kuogee Hsieh <quic_khsieh@quicinc.com> 
->> wrote:
->>> Normally, mdp will push one pixel of data per pixel clock to
->>> interface to display. Wide bus feature will increase bus
->>> width from 32 bits to 64 bits so that it can push two
->>> pixel of data per pixel clock to interface to display.
->>> This feature is pre requirement to support 4k resolution.
->>>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  16 ++-
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |   2 +
->>>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  14 +++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 108 
->>> +++++++++++++++------
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |   5 +
->>>   drivers/gpu/drm/msm/dp/dp_catalog.c                |  11 ++-
->>>   drivers/gpu/drm/msm/dp/dp_catalog.h                |   1 +
->>>   drivers/gpu/drm/msm/dp/dp_ctrl.c                   |   9 +-
->>>   drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   1 +
->>>   drivers/gpu/drm/msm/dp/dp_display.c                |  17 ++++
->>>   drivers/gpu/drm/msm/dp/dp_display.h                |   3 +
->>>   drivers/gpu/drm/msm/dp/dp_parser.c                 |  26 +++++
->>>   drivers/gpu/drm/msm/dp/dp_parser.h                 |   2 +
->>>   drivers/gpu/drm/msm/msm_drv.h                      |   9 ++
->> Can we get this split into logical chunks please?
->>
->>>   14 files changed, 190 insertions(+), 34 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> index 1e648db..e2fb5bc 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> @@ -199,6 +199,8 @@ struct dpu_encoder_virt {
->>>
->>>          struct msm_display_info disp_info;
->>>
->>> +       struct msm_op_info op_info;
->>> +
->>>          bool idle_pc_supported;
->>>          struct mutex rc_lock;
->>>          enum dpu_enc_rc_states rc_state;
->>> @@ -217,6 +219,13 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
->>>          15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
->>>   };
->>>
->>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
->>> +{
->>> +       struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
->>> +
->>> +       return dpu_enc->op_info.wide_bus_en;
->>> +}
->>> +
->>>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong 
->>> *hw_pp, unsigned bpc)
->>>   {
->>>          struct dpu_hw_dither_cfg dither_cfg = { 0 };
->>> @@ -2112,6 +2121,7 @@ int dpu_encoder_setup(struct drm_device *dev, 
->>> struct drm_encoder *enc,
->>>          struct dpu_kms *dpu_kms = to_dpu_kms(priv->kms);
->>>          struct drm_encoder *drm_enc = NULL;
->>>          struct dpu_encoder_virt *dpu_enc = NULL;
->>> +       struct msm_op_info *op_info;
->>>          int ret = 0;
->>>
->>>          dpu_enc = to_dpu_encoder_virt(enc);
->>> @@ -2128,8 +2138,12 @@ int dpu_encoder_setup(struct drm_device *dev, 
->>> struct drm_encoder *enc,
->>>                  timer_setup(&dpu_enc->vsync_event_timer,
->>>                                  dpu_encoder_vsync_event_handler,
->>>                                  0);
->>> -       else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
->>> +       else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
->>>                  dpu_enc->dp = priv->dp[disp_info->h_tile_instance[0]];
->>> +               op_info = &priv->op_info[disp_info->h_tile_instance[0]];
->> op_info should be defined per INTF rather than per h_tile. This way
->> you won't have to check for intf_type here.
->>
->>> +               dpu_enc->op_info = *op_info;
->> So... we set this data in msm_drm_private only to copy it to
->> dpu_encoder_virt? Please don't do this.
->> Allow one to query the data from the DP rather than blindly copying it
->> over and over again.
->>
->>> +
->>> +       }
->>>
->>>          INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
->>>                          dpu_encoder_off_work);
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
->>> index e241914..0d73550 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
->>> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder 
->>> *drm_enc);
->>>    */
->>>   int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
->>>
->>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
->>> +
->>>   #endif /* __DPU_ENCODER_H__ */
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
->>> index ddd9d89..04ac2dc 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
->>> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
->>>                  timing->v_back_porch += timing->v_front_porch;
->>>                  timing->v_front_porch = 0;
->>>          }
->>> +
->>> +       timing->wide_bus_en = 
->>> dpu_encoder_is_widebus_enabled(phys_enc->parent);
->>> +
->>> +       /*
->>> +        * for DP, divide the horizonal parameters by 2 when
->>> +        * widebus is enabled
->>> +        */
->>> +       if (phys_enc->hw_intf->cap->type == INTF_DP && 
->>> timing->wide_bus_en) {
->> What about INTF_eDP?
->> I suspect that intf type check is unnecessary here.
->>
->>> +               timing->width = timing->width >> 1;
->>> +               timing->xres = timing->xres >> 1;
->>> +               timing->h_back_porch = timing->h_back_porch >> 1;
->>> +               timing->h_front_porch = timing->h_front_porch >> 1;
->>> +               timing->hsync_pulse_width = timing->hsync_pulse_width 
->>> >> 1;
->>> +       }
->>>   }
->>>
->>>   static u32 get_horizontal_total(const struct intf_timing_params 
->>> *timing)
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>> index 116e2b5..f072bd5 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>> @@ -33,6 +33,7 @@
->>>   #define INTF_TP_COLOR1                  0x05C
->>>   #define INTF_CONFIG2                    0x060
->>>   #define INTF_DISPLAY_DATA_HCTL          0x064
->>> +#define INTF_ACTIVE_DATA_HCTL           0x068
->>>   #define INTF_FRAME_LINE_COUNT_EN        0x0A8
->>>   #define INTF_FRAME_COUNT                0x0AC
->>>   #define   INTF_LINE_COUNT               0x0B0
->>> @@ -90,67 +91,109 @@ static void 
->>> dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>>          u32 hsync_period, vsync_period;
->>>          u32 display_v_start, display_v_end;
->>>          u32 hsync_start_x, hsync_end_x;
->>> +       u32 hsync_data_start_x, hsync_data_end_x;
->>>          u32 active_h_start, active_h_end;
->>>          u32 active_v_start, active_v_end;
->>>          u32 active_hctl, display_hctl, hsync_ctl;
->>>          u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
->>>          u32 panel_format;
->>> -       u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
->>> +       u32 intf_cfg, intf_cfg2 = 0;
->>> +       u32 display_data_hctl = 0, active_data_hctl = 0;
->>> +       u32 data_width;
->>> +       bool dp_intf = false;
->>>
->>>          /* read interface_cfg */
->>>          intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
->>> +
->>> +       if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
->>> +               dp_intf = true;
->>> +
->>>          hsync_period = p->hsync_pulse_width + p->h_back_porch + 
->>> p->width +
->>>          p->h_front_porch;
->>>          vsync_period = p->vsync_pulse_width + p->v_back_porch + 
->>> p->height +
->>>          p->v_front_porch;
->>>
->>>          display_v_start = ((p->vsync_pulse_width + p->v_back_porch) *
->>> -       hsync_period) + p->hsync_skew;
->>> +                       hsync_period) + p->hsync_skew;
->> Unnecessary whitespace changes complicate reviewing. I'll try groking
->> this piece of code later.
->>
->>>          display_v_end = ((vsync_period - p->v_front_porch) * 
->>> hsync_period) +
->>> -       p->hsync_skew - 1;
->>> +                       p->hsync_skew - 1;
->>> +
->>> +       hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
->>>
->>>          hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
->>>          hsync_end_x = hsync_period - p->h_front_porch - 1;
->>>
->>> -       if (p->width != p->xres) {
->>> -               active_h_start = hsync_start_x;
->>> -               active_h_end = active_h_start + p->xres - 1;
->>> -       } else {
->>> -               active_h_start = 0;
->>> -               active_h_end = 0;
->>> -       }
->>> +       /*
->>> +        * DATA_HCTL_EN controls data timing which can be different from
->>> +        * video timing. It is recommended to enable it for all 
->>> cases, except
->>> +        * if compression is enabled in 1 pixel per clock mode
->>> +        */
->>> +       if (!p->compression_en || p->wide_bus_en)
->>> +               intf_cfg2 |= BIT(4);
->>>
->>> -       if (p->height != p->yres) {
->>> -               active_v_start = display_v_start;
->>> -               active_v_end = active_v_start + (p->yres * 
->>> hsync_period) - 1;
->>> -       } else {
->>> -               active_v_start = 0;
->>> -               active_v_end = 0;
->>> -       }
->>> +       if (p->wide_bus_en)
->>> +               intf_cfg2 |= BIT(0);
->>> +
->>> +       /*
->>> +        * If widebus is disabled:
->>> +        * For uncompressed stream, the data is valid for the entire 
->>> active
->>> +        * window period.
->>> +        * For compressed stream, data is valid for a shorter time 
->>> period
->>> +        * inside the active window depending on the compression ratio.
->>> +        *
->>> +        * If widebus is enabled:
->>> +        * For uncompressed stream, data is valid for only half the 
->>> active
->>> +        * window, since the data rate is doubled in this mode.
->>> +        * p->width holds the adjusted width for DP but unadjusted 
->>> width for DSI
->>> +        * For compressed stream, data validity window needs to be 
->>> adjusted for
->>> +        * compression ratio and then further halved.
->>> +        */
->>> +       data_width = p->width;
->>> +
->>> +       if (p->compression_en) {
->>> +               data_width = DIV_ROUND_UP(p->dce_bytes_per_line, 3);
->>>
->>> -       if (active_h_end) {
->>> -               active_hctl = (active_h_end << 16) | active_h_start;
->>> -               intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
->>> +               if (p->wide_bus_en)
->>> +                       data_width >>= 1;
->>> +       } else if (!dp_intf && p->wide_bus_en) {
->>> +               data_width = p->width >> 1;
->>>          } else {
->>> -               active_hctl = 0;
->>> +               data_width = p->width;
->>>          }
->>>
->>> -       if (active_v_end)
->>> -               intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
->>> +       hsync_data_start_x = hsync_start_x;
->>> +       hsync_data_end_x =  hsync_start_x + data_width - 1;
->>>
->>> -       hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
->>>          display_hctl = (hsync_end_x << 16) | hsync_start_x;
->>> +       display_data_hctl = (hsync_data_end_x << 16) | 
->>> hsync_data_start_x;
->>>
->>> -       if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
->>> -               active_h_start = hsync_start_x;
->>> -               active_h_end = active_h_start + p->xres - 1;
->>> -               active_v_start = display_v_start;
->>> -               active_v_end = active_v_start + (p->yres * 
->>> hsync_period) - 1;
->>> -
->>> +       if (dp_intf) {
->>> +               // DP timing adjustment
->>>                  display_v_start += p->hsync_pulse_width + 
->>> p->h_back_porch;
->>> +               display_v_end   -= p->h_front_porch;
->>> +       }
->>>
->>> -               active_hctl = (active_h_end << 16) | active_h_start;
->>> +
->>> +       active_h_start = hsync_start_x;
->>> +       active_h_end = active_h_start + p->xres - 1;
->>> +
->>> +       active_v_start = display_v_start;
->>> +       active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>> +
->>> +       intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
->>> +       intf_cfg |= BIT(30);    /* ACTIVE_V_ENABLE */
->>> +
->>> +       active_hctl = (active_h_end << 16) | active_h_start;
->>> +
->>> +       if (dp_intf) {
->>>                  display_hctl = active_hctl;
->>> +               if (p->compression_en) {
->> I assume that compression_en is a part of DSC support for the DP, 
->> isn't it?
->> If so, it should definitely come as a separate patch.
->>
->>> +                       active_data_hctl = (hsync_start_x +
->>> +                                       p->extra_dto_cycles) << 16;
->>> +                       active_data_hctl += hsync_start_x;
->>> +
->>> +                       display_data_hctl = active_data_hctl;
->>> +               }
->>>          }
->>>
->>>          den_polarity = 0;
->>> @@ -204,6 +247,9 @@ static void 
->>> dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>>          DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
->>>          DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
->>>          DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
->>> +       DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
->>> +       DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
->>> +       DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
->> Are these registers present on all supported hardware (like sdm845)?
->> Does msm8998 support them? msm8996?
-> 
-> no, i  think they are start from sm8250 (Kona).
-> 
-> But they should be no effects after write.
+> Acked-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Namhyung Kim <namhyung@gmail.com>
+> Reviewed-by: Riccardo Mancini <rickyman7@gmail.com>
+> Tested-by: Riccardo Mancini <rickyman7@gmail.com>
+> Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
 
-ok. Let's see how would this code fragment evolve if you remove dp_intf 
-and compression_en.
+Some simplifications I added here while reviewing this patchkit:
 
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 41998f2140cd5119..53b88c8600624237 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -2213,35 +2213,33 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
+ 
+ static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
+ {
+-	mask->nbits = nr_bits;
+ 	mask->bits = bitmap_zalloc(mask->nbits);
+ 	if (!mask->bits)
+ 		return -ENOMEM;
+ 
++	mask->nbits = nr_bits;
+ 	return 0;
+ }
+ 
+ static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
+ {
+ 	bitmap_free(mask->bits);
++	mask->bits = NULL;
+ 	mask->nbits = 0;
+ }
+ 
+ static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
+ {
+-	int ret;
++	int ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
+ 
+-	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
+ 	if (ret) {
+ 		mask->affinity.bits = NULL;
+ 		return ret;
+ 	}
+ 
+ 	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
+-	if (ret) {
++	if (ret)
+ 		record__mmap_cpu_mask_free(&mask->maps);
+-		mask->maps.bits = NULL;
+-	}
+ 
+ 	return ret;
+ }
+@@ -2733,18 +2731,14 @@ struct option *record_options = __record_options;
+ 
+ static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+ {
+-	int c;
+-
+-	for (c = 0; c < cpus->nr; c++)
++	for (int c = 0; c < cpus->nr; c++)
+ 		set_bit(cpus->map[c].cpu, mask->bits);
+ }
+ 
+ static void record__free_thread_masks(struct record *rec, int nr_threads)
+ {
+-	int t;
+-
+ 	if (rec->thread_masks)
+-		for (t = 0; t < nr_threads; t++)
++		for (int t = 0; t < nr_threads; t++)
+ 			record__thread_mask_free(&rec->thread_masks[t]);
+ 
+ 	zfree(&rec->thread_masks);
+@@ -2752,7 +2746,7 @@ static void record__free_thread_masks(struct record *rec, int nr_threads)
+ 
+ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
+ {
+-	int t, ret;
++	int ret;
+ 
+ 	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
+ 	if (!rec->thread_masks) {
+@@ -2760,7 +2754,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
+ 		return -ENOMEM;
+ 	}
+ 
+-	for (t = 0; t < nr_threads; t++) {
++	for (int t = 0; t < nr_threads; t++) {
+ 		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
+ 		if (ret) {
+ 			pr_err("Failed to allocate thread masks[%d]\n", t);
+@@ -2778,9 +2772,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
+ 
+ static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
+ {
+-	int ret;
+-
+-	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
++	int ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
+ 	if (ret)
+ 		return ret;
+ 
+
+
+> ---
+>  tools/perf/builtin-record.c | 123 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 123 insertions(+)
 > 
->>>   }
->>>
->>>   static void dpu_hw_intf_enable_timing_engine(
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>> index 3568be8..8fc71ce 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>> @@ -30,6 +30,11 @@ struct intf_timing_params {
->>>          u32 border_clr;
->>>          u32 underflow_clr;
->>>          u32 hsync_skew;
->>> +
->>> +       bool wide_bus_en;
->>> +       bool compression_en;
->>> +       u32 extra_dto_cycles;   /* for DP only */
->>> +       u32 dce_bytes_per_line;
->> All compression-related items should come in a separate patch.
->>
->>>   };
->>>
->>>   struct intf_prog_fetch {
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c 
->>> b/drivers/gpu/drm/msm/dp/dp_catalog.c
->>> index 6d6850e..d738e2e 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
->>> @@ -745,6 +745,7 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog 
->>> *dp_catalog)
->>>   {
->>>          struct dp_catalog_private *catalog = container_of(dp_catalog,
->>>                                  struct dp_catalog_private, dp_catalog);
->>> +       u32 reg;
->>>
->>>          dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
->>>                                  dp_catalog->total);
->>> @@ -753,7 +754,15 @@ int dp_catalog_panel_timing_cfg(struct 
->>> dp_catalog *dp_catalog)
->>>          dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
->>>                                  dp_catalog->width_blanking);
->>>          dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER, 
->>> dp_catalog->dp_active);
->>> -       dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
->>> +
->>> +        reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
->>> +
->>> +        if (dp_catalog->wide_bus_en)
->>> +                reg |= BIT(4);
->>> +        else
->>> +                reg &= ~BIT(4);
->>> +
->>> +        dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
->>>          return 0;
->>>   }
->>>
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h 
->>> b/drivers/gpu/drm/msm/dp/dp_catalog.h
->>> index 7dea101..6ca563f 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
->>> @@ -70,6 +70,7 @@ struct dp_catalog {
->>>          enum dp_catalog_audio_sdp_type sdp_type;
->>>          enum dp_catalog_audio_header_type sdp_header;
->>>          u32 audio_data;
->>> +       bool wide_bus_en;
->>>   };
->>>
->>>   /* Debug module */
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
->>> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>> index 53ad3af..401ae57 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>> @@ -1812,6 +1812,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>>          int ret = 0;
->>>          bool mainlink_ready = false;
->>>          struct dp_ctrl_private *ctrl;
->>> +       u32 pixel_rate_orig;
->>>
->>>          if (!dp_ctrl)
->>>                  return -EINVAL;
->>> @@ -1820,6 +1821,10 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>>
->>>          ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
->>>
->>> +       pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
->>> +       if (dp_ctrl->wide_bus_en)
->>> +               ctrl->dp_ctrl.pixel_rate >>= 1;
->>> +
->>>          drm_dbg_dp((struct drm_device *)NULL, "rate=%d, 
->>> num_lanes=%d, pixel_rate=%d\n",
->>>                  ctrl->link->link_params.rate,
->>>                  ctrl->link->link_params.num_lanes, 
->>> ctrl->dp_ctrl.pixel_rate);
->>> @@ -1855,11 +1860,13 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>>           */
->>>          reinit_completion(&ctrl->video_comp);
->>>
->>> +       ctrl->catalog->wide_bus_en = dp_ctrl->wide_bus_en;
->> Can you limit the DP's knowledge of wide_bus_en to a single place
->> (e.g. only in dp_catalog or in dp_ctrl)? Just copying the data bit
->> means that we have two places which must be kept in sync.
->>
->>> +
->>>          dp_ctrl_configure_source_params(ctrl);
->>>
->>>          dp_catalog_ctrl_config_msa(ctrl->catalog,
->>>                  ctrl->link->link_params.rate,
->>> -               ctrl->dp_ctrl.pixel_rate, dp_ctrl_use_fixed_nvid(ctrl));
->>> +               pixel_rate_orig, dp_ctrl_use_fixed_nvid(ctrl));
->>>
->>>          dp_ctrl_setup_tr_unit(ctrl);
->>>
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h 
->>> b/drivers/gpu/drm/msm/dp/dp_ctrl.h
->>> index 2433edb..4dff44d 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
->>> @@ -17,6 +17,7 @@ struct dp_ctrl {
->>>          bool orientation;
->>>          atomic_t aborted;
->>>          u32 pixel_rate;
->>> +       bool wide_bus_en;
->>>   };
->>>
->>>   int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->>> b/drivers/gpu/drm/msm/dp/dp_display.c
->>> index f89f3ed..924c9e2 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->>> @@ -873,6 +873,8 @@ static int dp_display_enable(struct 
->>> dp_display_private *dp, u32 data)
->>>                  return 0;
->>>          }
->>>
->>> +       dp->ctrl->wide_bus_en = dp_display->wide_bus_en;
->> Ugh. This adds a third place. dp_display, dp_ctrl and dp_catalog. Too
->> much for a single bit.
->>
->>> +
->>>          rc = dp_ctrl_on_stream(dp->ctrl);
->>>          if (!rc)
->>>                  dp_display->power_on = true;
->>> @@ -1004,6 +1006,8 @@ int dp_display_get_modes(struct msm_dp *dp,
->>>                  dp->connector, dp_mode);
->>>          if (dp_mode->drm_mode.clock)
->>>                  dp->max_pclk_khz = dp_mode->drm_mode.clock;
->>> +
->>> +       DRM_DEBUG_DP("wide_bus_en=%d\n", dp->wide_bus_en);
->>>          return ret;
->>>   }
->>>
->>> @@ -1503,6 +1507,8 @@ int msm_dp_modeset_init(struct msm_dp 
->>> *dp_display, struct drm_device *dev,
->>>   {
->>>          struct msm_drm_private *priv;
->>>          struct dp_display_private *dp_priv;
->>> +       struct msm_op_info *op;
->>> +       struct dp_display_private *dp;
->>>          int ret;
->>>
->>>          if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
->>> @@ -1545,6 +1551,17 @@ int msm_dp_modeset_init(struct msm_dp 
->>> *dp_display, struct drm_device *dev,
->>>
->>>          priv->bridges[priv->num_bridges++] = dp_display->bridge;
->>>
->>> +       dp = container_of(dp_display, struct dp_display_private, 
->>> dp_display);
->>> +
->>> +       dp_display->wide_bus_en = dp->parser->has_widebus;
->>> +       dp_display->compression_en = dp->parser->has_compression;
->>> +
->>> +       op = &priv->op_info[dp->id];
->>> +       op->wide_bus_en = dp_display->wide_bus_en;
->>> +       op->compression_en = dp_display->compression_en;
->>> +
->>> +       drm_dbg_dp(dp->drm_dev, "id=%d widebus=%d compression=%d\n",
->>> +                       dp->id, op->wide_bus_en, op->compression_en);
->>>          return 0;
->>>   }
->>>
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h 
->>> b/drivers/gpu/drm/msm/dp/dp_display.h
->>> index e3adcd5..b1057cb 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
->>> @@ -24,6 +24,9 @@ struct msm_dp {
->>>
->>>          hdmi_codec_plugged_cb plugged_cb;
->>>
->>> +       bool wide_bus_en;
->>> +       bool compression_en;
->>> +
->>>          u32 max_pclk_khz;
->>>
->>>          u32 max_dp_lanes;
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c 
->>> b/drivers/gpu/drm/msm/dp/dp_parser.c
->>> index e74012d..fd48eb8 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
->>> @@ -286,6 +286,28 @@ static int dp_parser_find_panel(struct dp_parser 
->>> *parser)
->>>          return 0;
->>>   }
->>>
->>> +static void dp_parser_compression(struct dp_parser *parser)
->>> +{
->>> +       struct device *dev = &parser->pdev->dev;
->>> +
->>> +       parser->has_compression = of_property_read_bool(dev->of_node,
->>> +                               "qcom,compression-enable");
->>> +
->>> +       DRM_DEBUG_DP("compression parsing successful. compression:%d\n",
->>> +                       parser->has_compression);
->>> +}
->>> +
->>> +static void dp_parser_widebus(struct dp_parser *parser)
->>> +{
->>> +       struct device *dev = &parser->pdev->dev;
->>> +
->>> +       parser->has_widebus = of_property_read_bool(dev->of_node,
->>> +                               "qcom,widebus-enable");
->>> +
->>> +       DRM_DEBUG_DP("widebus parsing successful. widebus:%d\n",
->>> +                       parser->has_widebus);
->>> +}
->> All new properties should be described in the dt-bindings document.
->>
->> However I have a bigger question here. Who and how decides whether
->> compression or widebus should be enabled?
->>
->> Should we enable widebus for all generations that support it? If so,
->> this should be a part of msm_dp_config rather than the DTS property.
->> And I'm completely puzzled about the compression-enable here.
->>
->>
->>> +
->>>   static int dp_parser_parse(struct dp_parser *parser, int 
->>> connector_type)
->>>   {
->>>          int rc = 0;
->>> @@ -319,6 +341,10 @@ static int dp_parser_parse(struct dp_parser 
->>> *parser, int connector_type)
->>>           */
->>>          parser->regulator_cfg = &sdm845_dp_reg_cfg;
->>>
->>> +        dp_parser_widebus(parser);
->>> +
->>> +        dp_parser_compression(parser);
->>> +
->>>          return 0;
->>>   }
->>>
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h 
->>> b/drivers/gpu/drm/msm/dp/dp_parser.h
->>> index 3172da0..7531fe2 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
->>> @@ -123,6 +123,8 @@ struct dp_parser {
->>>          struct dp_display_data disp_data;
->>>          const struct dp_regulator_cfg *regulator_cfg;
->>>          u32 max_dp_lanes;
->>> +       bool has_widebus;
->>> +       bool has_compression;
->>>          struct drm_bridge *panel_bridge;
->>>
->>>          int (*parse)(struct dp_parser *parser, int connector_type);
->>> diff --git a/drivers/gpu/drm/msm/msm_drv.h 
->>> b/drivers/gpu/drm/msm/msm_drv.h
->>> index d7574e6..1a5f3e9 100644
->>> --- a/drivers/gpu/drm/msm/msm_drv.h
->>> +++ b/drivers/gpu/drm/msm/msm_drv.h
->>> @@ -127,6 +127,11 @@ struct msm_display_info {
->>>          bool is_te_using_watchdog_timer;
->>>   };
->>>
->>> +struct msm_op_info {
->>> +       bool wide_bus_en;
->>> +       bool compression_en;
->>> +};
->>> +
->>>   /* Commit/Event thread specific structure */
->>>   struct msm_drm_thread {
->>>          struct drm_device *dev;
->>> @@ -156,6 +161,8 @@ struct msm_drm_private {
->>>
->>>          struct msm_dp *dp[MSM_DP_CONTROLLER_COUNT];
->>>
->>> +       struct msm_op_info op_info[MSM_DP_CONTROLLER_COUNT];
->>> +
->> As I said before, it should be INTF_MAX. Or you can retrieve it from
->> priv->dp as needed instead.
->>
->>>          /* when we have more than one 'msm_gpu' these need to be an 
->>> array: */
->>>          struct msm_gpu *gpu;
->>>
->>> @@ -338,6 +345,8 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi, 
->>> struct drm_device *dev,
->>>   void __init msm_hdmi_register(void);
->>>   void __exit msm_hdmi_unregister(void);
->>>
->>> +struct msm_dp;
->>> +
->>>   struct msm_dsi;
->>>   #ifdef CONFIG_DRM_MSM_DSI
->>>   int dsi_dev_attach(struct platform_device *pdev);
->>> -- 
->>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->>> Forum,
->>> a Linux Foundation Collaborative Project
->>>
->>
-
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index bb716c953d02..41998f2140cd 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -87,6 +87,11 @@ struct switch_output {
+>  	int		 cur_file;
+>  };
+>  
+> +struct thread_mask {
+> +	struct mmap_cpu_mask	maps;
+> +	struct mmap_cpu_mask	affinity;
+> +};
+> +
+>  struct record {
+>  	struct perf_tool	tool;
+>  	struct record_opts	opts;
+> @@ -112,6 +117,8 @@ struct record {
+>  	struct mmap_cpu_mask	affinity_mask;
+>  	unsigned long		output_max_size;	/* = 0: unlimited */
+>  	struct perf_debuginfod	debuginfod;
+> +	int			nr_threads;
+> +	struct thread_mask	*thread_masks;
+>  };
+>  
+>  static volatile int done;
+> @@ -2204,6 +2211,47 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
+>  	return 0;
+>  }
+>  
+> +static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
+> +{
+> +	mask->nbits = nr_bits;
+> +	mask->bits = bitmap_zalloc(mask->nbits);
+> +	if (!mask->bits)
+> +		return -ENOMEM;
+> +
+> +	return 0;
+> +}
+> +
+> +static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
+> +{
+> +	bitmap_free(mask->bits);
+> +	mask->nbits = 0;
+> +}
+> +
+> +static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
+> +{
+> +	int ret;
+> +
+> +	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
+> +	if (ret) {
+> +		mask->affinity.bits = NULL;
+> +		return ret;
+> +	}
+> +
+> +	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
+> +	if (ret) {
+> +		record__mmap_cpu_mask_free(&mask->maps);
+> +		mask->maps.bits = NULL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void record__thread_mask_free(struct thread_mask *mask)
+> +{
+> +	record__mmap_cpu_mask_free(&mask->maps);
+> +	record__mmap_cpu_mask_free(&mask->affinity);
+> +}
+> +
+>  static int parse_output_max_size(const struct option *opt,
+>  				 const char *str, int unset)
+>  {
+> @@ -2683,6 +2731,73 @@ static struct option __record_options[] = {
+>  
+>  struct option *record_options = __record_options;
+>  
+> +static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+> +{
+> +	int c;
+> +
+> +	for (c = 0; c < cpus->nr; c++)
+> +		set_bit(cpus->map[c].cpu, mask->bits);
+> +}
+> +
+> +static void record__free_thread_masks(struct record *rec, int nr_threads)
+> +{
+> +	int t;
+> +
+> +	if (rec->thread_masks)
+> +		for (t = 0; t < nr_threads; t++)
+> +			record__thread_mask_free(&rec->thread_masks[t]);
+> +
+> +	zfree(&rec->thread_masks);
+> +}
+> +
+> +static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
+> +{
+> +	int t, ret;
+> +
+> +	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
+> +	if (!rec->thread_masks) {
+> +		pr_err("Failed to allocate thread masks\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (t = 0; t < nr_threads; t++) {
+> +		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
+> +		if (ret) {
+> +			pr_err("Failed to allocate thread masks[%d]\n", t);
+> +			goto out_free;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +out_free:
+> +	record__free_thread_masks(rec, nr_threads);
+> +
+> +	return ret;
+> +}
+> +
+> +static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
+> +{
+> +	int ret;
+> +
+> +	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
+> +	if (ret)
+> +		return ret;
+> +
+> +	record__mmap_cpu_mask_init(&rec->thread_masks->maps, cpus);
+> +
+> +	rec->nr_threads = 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int record__init_thread_masks(struct record *rec)
+> +{
+> +	struct perf_cpu_map *cpus = rec->evlist->core.cpus;
+> +
+> +	return record__init_thread_default_masks(rec, cpus);
+> +}
+> +
+>  int cmd_record(int argc, const char **argv)
+>  {
+>  	int err;
+> @@ -2948,6 +3063,12 @@ int cmd_record(int argc, const char **argv)
+>  		goto out;
+>  	}
+>  
+> +	err = record__init_thread_masks(rec);
+> +	if (err) {
+> +		pr_err("Failed to initialize parallel data streaming masks\n");
+> +		goto out;
+> +	}
+> +
+>  	if (rec->opts.nr_cblocks > nr_cblocks_max)
+>  		rec->opts.nr_cblocks = nr_cblocks_max;
+>  	pr_debug("nr_cblocks: %d\n", rec->opts.nr_cblocks);
+> @@ -2966,6 +3087,8 @@ int cmd_record(int argc, const char **argv)
+>  	symbol__exit();
+>  	auxtrace_record__free(rec->itr);
+>  out_opts:
+> +	record__free_thread_masks(rec, rec->nr_threads);
+> +	rec->nr_threads = 0;
+>  	evlist__close_control(rec->opts.ctl_fd, rec->opts.ctl_fd_ack, &rec->opts.ctl_fd_close);
+>  	return err;
+>  }
+> -- 
+> 2.19.0
 
 -- 
-With best wishes
-Dmitry
+
+- Arnaldo

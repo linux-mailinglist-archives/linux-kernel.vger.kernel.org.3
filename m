@@ -2,131 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 561CC4A5397
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218794A539F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiAaX4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S229897AbiBAAAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiAaX4g (ORCPT
+        with ESMTP id S229820AbiBAAAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:56:36 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B916AC061714;
-        Mon, 31 Jan 2022 15:56:35 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id y17so13926775plg.7;
-        Mon, 31 Jan 2022 15:56:35 -0800 (PST)
+        Mon, 31 Jan 2022 19:00:04 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB3C061714;
+        Mon, 31 Jan 2022 16:00:04 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id i65so14268728pfc.9;
+        Mon, 31 Jan 2022 16:00:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=ASc0QdUIAk6Y/qox9xZbv3MFamTMdzPLX28teiDe900=;
-        b=PGfG2wLagFdyh3utS6ZoDA7ZDWhj8J+bY0omsxYmxx7zePhDIdasnw3wP0g+potsIJ
-         m0h/RQF9rzof1Lq4sSUyDlMqBph8WKz/lkF1iG5cw8oKhM/H65UGTKzP/iedbIkj6Z7b
-         h1sIiXy/7JcAL8o3AKxR7DFsUhXoXRCssTlhKdvw5ty0kg7QdPHCGqFHO6CjE7sCr06m
-         ss7T8M0x3V3ruEbkyUD3T7XoDqqFcjTixMaiMJRDk6GF8x42bWA4N7IDuMtRsHpjq/o8
-         DXdX9dQU5EVSp9Q96l53wkBmeQajiCBbrNn7h6IrVoljQheopbg7z6tiGnss12kCfJQd
-         VuFg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pOvdxwNu0aCxPhjOkTQG4+wa9GYqirD+kwvDetyDjpk=;
+        b=Sho7e8/eoHtTyCU8+A18o2EYGFcGkbVajS2+AUq75ecTJ/FzwIqwCO7QtCmbkP3D6C
+         C90Fy9K+cyhpDJxx1vH3bXofZNiiGBhM52AotrcPLpmZTA+ASOsTWH2ru6qxNvFEdZgU
+         egeVWjrqnpTqgmnoKT3rdp2DGmSVjI5Y519e+X6bHrEnwNW/U0s18vRI19ff7Szq4AWL
+         M3XmbBX3yJXMLhOJn123ykp+GU7gANfpA51V7iRnf+nB9z/ZImbpj/l/gxQMjUpZL37S
+         uY5nG4N55laW66tTHtOh2uu4d40BmmSLT1l3tNjR0isuchF++R/rWpS9btrSkI3CzUxf
+         RI0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=ASc0QdUIAk6Y/qox9xZbv3MFamTMdzPLX28teiDe900=;
-        b=x+hyy+SeyHX9qCNyFbAGyoQfOI1KQN8nLcRJMVJvAWMUs5j1UBzoY3vnuRzz3Gs9rQ
-         hSlfhdF36NbeETFO8w4VaWFrlwVOL89KccCaIdvtgNiWWg3fU9eoRu4GOwBETfMiN4pq
-         GwSkt72o8qs0hj8/g39b6mQBBX/diJUKJGkZYnG1wIapQBVD4bC6JHLloLiKTkRjQspr
-         v2u75EwKAIv0Kr0H39+T3DKh840ISNucj+Bc4biyzPQOgfayaeKUdH3uB8lfNGTGRSGr
-         d4wRbFR5K1VTpKYPvl70ZJOx1KJp0BqQKoEgzLSG/qDthN3YAaNqOsRp7P+ECT2/0z2f
-         Nf9g==
-X-Gm-Message-State: AOAM533+t7tq4ezdkP5NghbIyE2Lv3BvTIEaHxfEKeou4/DAr75jVfh8
-        uVDKE93DMCmyzsi7seFDQ5M=
-X-Google-Smtp-Source: ABdhPJzLZvetdGIXEW1s9FTrX8NejTliyZWjj5RmttyIZ34SohLKBs1AXCwi7LrjJ2aaOrWBAE9ZCQ==
-X-Received: by 2002:a17:902:d2c8:: with SMTP id n8mr22948453plc.41.1643673395032;
-        Mon, 31 Jan 2022 15:56:35 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pOvdxwNu0aCxPhjOkTQG4+wa9GYqirD+kwvDetyDjpk=;
+        b=Vhv9IgrV1uRkpJdWZU4bhtYVxQyTJn7WdwHO4Yu/EIYyVkaDRthUXbiVdXSQIErB2X
+         wiGEjpzphhvlHImESuFfNOuFZukKXgZkdLBtDDeH2Rx8kiJCUyMO7rJ3nTNsyIxhfsFe
+         TAVuraXriVkNfMQOYQbl3uMAduFlia5VrTnTz45N86JVnFuqo+fZh952tJ8Ym4t6pCvw
+         acDjB/WtKqewhU2+mrtuYgulspu/yCd4fb9gQ0yrLiycShQchsdLh7x5WMRUsk3ddHMX
+         CTXwH+w+WpicH2VTrBDpbfHmRuyrk9sP2tPt3MpuYKTZcqggT+mEk3T6aa9LJBQCvJGy
+         zu3w==
+X-Gm-Message-State: AOAM530UzFqqbGIRtHlgbpiEcfEghMxfPuCV8kRu+iMa0Eb112lKng92
+        pfnA1zMLWYLfWb4fzqARnGMZtiMBrAI=
+X-Google-Smtp-Source: ABdhPJwnw80vuMi8nIQOiUXPls0N87Lns5agH4rI24kKwyY/obU2gdUtbkQtKicxKj3gulyq4I+Raw==
+X-Received: by 2002:a62:15c3:: with SMTP id 186mr22294832pfv.59.1643673603549;
+        Mon, 31 Jan 2022 16:00:03 -0800 (PST)
 Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id u2sm21432612pfk.15.2022.01.31.15.56.33
+        by smtp.gmail.com with ESMTPSA id pc4sm437936pjb.3.2022.01.31.16.00.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 15:56:34 -0800 (PST)
-Message-ID: <b5b948b7-8e41-3bd6-1a52-44785c89c965@gmail.com>
-Date:   Tue, 1 Feb 2022 08:56:29 +0900
+        Mon, 31 Jan 2022 16:00:02 -0800 (PST)
+Message-ID: <e52b4718-7909-25be-fbc1-76800aa62ae3@gmail.com>
+Date:   Tue, 1 Feb 2022 08:59:58 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: [PATCH 1/5] docs: pdfdocs: Tweak width params of TOC
 Content-Language: en-US
 To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Akira Yokosawa <akiyks@gmail.com>
+References: <b5b948b7-8e41-3bd6-1a52-44785c89c965@gmail.com>
 From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH 0/5] docs: pdfdocs: Improve LaTeX preamble (TOC, CJK fonts)
+In-Reply-To: <b5b948b7-8e41-3bd6-1a52-44785c89c965@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Sphinx has its own set of width parameters of Table of Contents (TOC)
+for LaTeX defined in its class definition of sphinxmanual.cls.
+It also inherits parameters for chapter entries from report.cls of
+original LaTeX base.
 
-This is a follow-up series to the CJK font setting patch series [1]
-upstreamed in v5.15.
+However, they are optimized assuming small documents with tens of
+pages and chapters/sections of less than 10.
 
-[1]: https://lore.kernel.org/r/39d0fb0f-b248-bca4-2dac-df69e8d697b1@gmail.com
+To cope with some of kernel-doc documents with more than 1000
+pages and several tens of chapters/sections, definitions of those
+parameters need to be adjusted.
 
-There is still a lot of room for improvement in the layout of PDF docs.
+Unfortunately, those parameters are hard coded in the class
+definitions and need low-level LaTeX coding tricks to redefine.
 
-This series resolves issues listed below:
+As Sphinx 1.7.9 does not have \sphinxtableofcontentshook,
+which defines those parameters in later Sphinx versions,
+for compatibility with both pre-1.8 and later Sphinx versions,
+empty the hook altogether and redefine \@pnumwidth, \l@chapter,
+\l@section, and \@subsection commands originally defined in
+report.cls.
 
- 1. Some of chapter and section counts in Table of Contents (TOC) in
-    large PDF docs collide with chapter/section titles, e.g., Chapters 10,
-    11, 12, and 13 and Section 10.10 in userspace-api.pdf.
- 2. In docs of more than 99 pages, page counts in TOC are not aligned
-    properly when maxdepth >= 2 is specified in toctree, e.g., Chapters 10,
-    12, and 13 in userspace-api.pdf
- 3. In TOC of Latin-script docs, quotation and apostrophe symbols look too
-    wide, e.g., Section 2.2 in userspace-api.pdf.
- 4. In TOC of translations, Korean chapter titles lose inter-phrase spaces.
- 5. On systems without "Noto Sans CJK" fonts, CJK chapters in translations
-    results in full of "TOFU" boxes, with a long build time and a large
-    log file containing lots of missing-font warnings.
- 6. In translations.pdf built by "make pdfdocs", ascii-art diagrams in CJK
-    are not aligned properly.
+Summary of parameter changes:
 
-Patch 1/5 resolves issues #1 and #2 by tweaking width parameters for TOC.
+  Width of page number (\@pnumwidth): 1.55em  -> 2.7em
+  Width of chapter number:  1.5em -> 1.8em
+  Indent of section number: 1.5em -> 1.8em
+  Width of section number:  2.6em -> 3.2em
+  Indent of subsection number: 4.1em -> 5em
+  Width of subsection number:  3.5em -> 4.3em
 
-Patch 2/5 resolves issue #3 by switching CJK default font to the KR variant,
-whose quotation and apostrophe symbols are half width.
+Notes:
+1. Parameters for subsection become relevant only when
+   ":maxdepth: 3" is specified under "toctree::" (e.g., RCU/index.rst).
+   They can hold subsection numbers up to 5 digits such as "18.7.13"
+   (in RCU.pdf).
 
-Patch 3/5 resolves issue #4 by enabling CJKspace in TOC by default.
+2. Number of chapters in driver-api.pdf is getting closer to 100.
+   When it reaches 100, another set of tweaks will be necessary.
 
-Patch 4/5 resolves issue #5 by conditionally skipping CJK contents in
-PDF docs.
+3. The low-level LaTeX trick is mentioned in "Unofficial LaTeX2e
+   reference manual" at:
+        http://latexref.xyz/Table-of-contents-etc_002e.html
 
-Patch 5/5 resolves issue #6 by moving font settings under
-translations/conf.py to CJK-specific macros in main conf.py
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+---
+ Documentation/conf.py | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-This series is tested against Sphinx versions 1.7.9, 2.4.4, and 4.4.0.
-It does not affect HTML docs.
-
-        Thanks, Akira
---
-Akira Yokosawa (5):
-  docs: pdfdocs: Tweak width params of TOC
-  docs: pdfdocs: Switch default CJK font to KR variants
-  docs: pdfdocs: Enable CJKspace in TOC for Korean titles
-  docs/translations: Skip CJK contents if suitable fonts not found
-  docs: pdfdocs: Move CJK monospace font setting to main conf.py
-
- Documentation/conf.py                      | 81 ++++++++++++++++++----
- Documentation/translations/conf.py         | 12 ----
- Documentation/translations/ja_JP/index.rst |  4 +-
- Documentation/translations/ko_KR/index.rst |  5 +-
- Documentation/translations/zh_CN/index.rst |  4 +-
- Documentation/translations/zh_TW/index.rst |  4 +-
- 6 files changed, 75 insertions(+), 35 deletions(-)
- delete mode 100644 Documentation/translations/conf.py
-
-
-base-commit: 854d0982eef0e424e8108d09d9275aaf445b1597
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index f07f2e9b9f2c..e5c13dee2de8 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -409,6 +409,37 @@ latex_elements = {
+ 
+     # Additional stuff for the LaTeX preamble.
+     'preamble': '''
++	% Custom width parameters for TOC --- Redefine low-level commands
++	% defined in report.cls
++	\\makeatletter
++	%% Redefine \\@pnumwidth (page number width)
++	\\renewcommand*\\@pnumwidth{2.7em}
++	%% Redefine \\l@chapter (chapter list entry)
++	\\renewcommand*\\l@chapter[2]{%
++	  \\ifnum \\c@tocdepth >\\m@ne
++	    \\addpenalty{-\\@highpenalty}%
++	    \\vskip 1.0em \\@plus\\p@
++	    \\setlength\\@tempdima{1.8em}%
++	    \\begingroup
++	      \\parindent \\z@ \\rightskip \\@pnumwidth
++	      \\parfillskip -\\@pnumwidth
++	      \\leavevmode \\bfseries
++	      \\advance\\leftskip\\@tempdima
++	      \\hskip -\\leftskip
++	      #1\\nobreak\\hfil
++	      \\nobreak\\hb@xt@\\@pnumwidth{\\hss #2%
++	                                 \\kern-\\p@\\kern\\p@}\\par
++	      \\penalty\\@highpenalty
++	    \\endgroup
++	  \\fi}
++	%% Redefine \\l@section and \\l@subsection
++	\\renewcommand*\\l@section{\\@dottedtocline{1}{1.8em}{3.2em}}
++	\\renewcommand*\\l@subsection{\\@dottedtocline{2}{5em}{4.3em}}
++	\\makeatother
++	%% Sphinx < 1.8 doesn't have \\sphinxtableofcontentshook
++	\\providecommand{\\sphinxtableofcontentshook}{}
++	%% Undefine it for compatibility with Sphinx 1.7.9
++	\\renewcommand{\\sphinxtableofcontentshook}{} % Empty the hook
+ 	% Prevent column squeezing of tabulary.
+ 	\\setlength{\\tymin}{20em}
+         % Use some font with UTF-8 support with XeLaTeX
 -- 
 2.17.1
+
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7254A42DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106AC4A4487
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359235AbiAaLOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:14:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53918 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359584AbiAaLGG (ORCPT
+        id S1379883AbiAaLao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359047AbiAaLU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:06:06 -0500
+        Mon, 31 Jan 2022 06:20:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC8EC07979E;
+        Mon, 31 Jan 2022 03:14:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC82FB82A70;
-        Mon, 31 Jan 2022 11:06:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C14C340E8;
-        Mon, 31 Jan 2022 11:06:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CC14B82A71;
+        Mon, 31 Jan 2022 11:14:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B81BC340F1;
+        Mon, 31 Jan 2022 11:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627163;
-        bh=YCch70a1xuaiG3umi4jdkuzRFuQOW2nax+is+noWyYA=;
+        s=korg; t=1643627638;
+        bh=v/KTG0JoVANla8KrXIDp5eDmxjtVzBY/1WzGazbHr2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XmINA14dD37ib8KiUUEo7RKt5viWzzqZyFAkwCIckNbgXcSMb4vz4UbcuHwlUWAOL
-         xCFxqSHcgqgA38Hbf2Uvdb1wFlu1CMPk2Eo5q7b5M+1ENvBD8BzIP9UM6yWoQ5x5TP
-         Ch/CV1eVREcgangkGpZH1lJbVp5VUY/c+5MCEU80=
+        b=lWO4Cv0fQZvyN6IPh2/WVlzHfCvTW9VgxYqsE9pcj5WdUhJPx5EhgCeFWH0zV5sqj
+         D1X+PEdGFgjnjnl08vBzRwlYL35Xtua6INOCvGK6WXUnQw5kNS5qFex/fmjiBZ+2Al
+         pX+arl97h0rFaUZcTFfGHloXtasbG5sEpR9TjLgo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Ray Che <xijiache@gmail.com>, David Ahern <dsahern@kernel.org>,
-        Geoff Alexander <alexandg@cs.unm.edu>,
-        Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/100] ipv4: tcp: send zero IPID in SYNACK messages
+Subject: [PATCH 5.15 150/171] sch_htb: Fail on unsupported parameters when offload is requested
 Date:   Mon, 31 Jan 2022 11:56:55 +0100
-Message-Id: <20220131105223.613060330@linuxfoundation.org>
+Message-Id: <20220131105235.090964819@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,75 +50,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 970a5a3ea86da637471d3cd04d513a0755aba4bf ]
+[ Upstream commit 429c3be8a5e2695b5b92a6a12361eb89eb185495 ]
 
-In commit 431280eebed9 ("ipv4: tcp: send zero IPID for RST and
-ACK sent in SYN-RECV and TIME-WAIT state") we took care of some
-ctl packets sent by TCP.
+The current implementation of HTB offload doesn't support some
+parameters. Instead of ignoring them, actively return the EINVAL error
+when they are set to non-defaults.
 
-It turns out we need to use a similar strategy for SYNACK packets.
+As this patch goes to stable, the driver API is not changed here. If
+future drivers support more offload parameters, the checks can be moved
+to the driver side.
 
-By default, they carry IP_DF and IPID==0, but there are ways
-to ask them to use the hashed IP ident generator and thus
-be used to build off-path attacks.
-(Ref: Off-Path TCP Exploits of the Mixed IPID Assignment)
+Note that the buffer and cbuffer parameters are also not supported, but
+the tc userspace tool assigns some default values derived from rate and
+ceil, and identifying these defaults in sch_htb would be unreliable, so
+they are still ignored.
 
-One of this way is to force (before listener is started)
-echo 1 >/proc/sys/net/ipv4/ip_no_pmtu_disc
-
-Another way is using forged ICMP ICMP_FRAG_NEEDED
-with a very small MTU (like 68) to force a false return from
-ip_dont_fragment()
-
-In this patch, ip_build_and_send_pkt() uses the following
-heuristics.
-
-1) Most SYNACK packets are smaller than IPV4_MIN_MTU and therefore
-can use IP_DF regardless of the listener or route pmtu setting.
-
-2) In case the SYNACK packet is bigger than IPV4_MIN_MTU,
-we use prandom_u32() generator instead of the IPv4 hashed ident one.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Ray Che <xijiache@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Cc: Geoff Alexander <alexandg@cs.unm.edu>
-Cc: Willy Tarreau <w@1wt.eu>
+Fixes: d03b195b5aa0 ("sch_htb: Hierarchical QoS hardware offload")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220125100654.424570-1-maximmi@nvidia.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_output.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ net/sched/sch_htb.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 4f76e8183f403..5e48b3d3a00db 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -162,12 +162,19 @@ int ip_build_and_send_pkt(struct sk_buff *skb, const struct sock *sk,
- 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
- 	iph->saddr    = saddr;
- 	iph->protocol = sk->sk_protocol;
--	if (ip_dont_fragment(sk, &rt->dst)) {
-+	/* Do not bother generating IPID for small packets (eg SYNACK) */
-+	if (skb->len <= IPV4_MIN_MTU || ip_dont_fragment(sk, &rt->dst)) {
- 		iph->frag_off = htons(IP_DF);
- 		iph->id = 0;
- 	} else {
- 		iph->frag_off = 0;
--		__ip_select_ident(net, iph, 1);
-+		/* TCP packets here are SYNACK with fat IPv4/TCP options.
-+		 * Avoid using the hashed IP ident generator.
-+		 */
-+		if (sk->sk_protocol == IPPROTO_TCP)
-+			iph->id = (__force __be16)prandom_u32();
-+		else
-+			__ip_select_ident(net, iph, 1);
- 	}
+diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
+index 5067a6e5d4fde..5cbc32fee8674 100644
+--- a/net/sched/sch_htb.c
++++ b/net/sched/sch_htb.c
+@@ -1803,6 +1803,26 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
+ 	if (!hopt->rate.rate || !hopt->ceil.rate)
+ 		goto failure;
  
- 	if (opt && opt->opt.optlen) {
++	if (q->offload) {
++		/* Options not supported by the offload. */
++		if (hopt->rate.overhead || hopt->ceil.overhead) {
++			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the overhead parameter");
++			goto failure;
++		}
++		if (hopt->rate.mpu || hopt->ceil.mpu) {
++			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the mpu parameter");
++			goto failure;
++		}
++		if (hopt->quantum) {
++			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the quantum parameter");
++			goto failure;
++		}
++		if (hopt->prio) {
++			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the prio parameter");
++			goto failure;
++		}
++	}
++
+ 	/* Keeping backward compatible with rate_table based iproute2 tc */
+ 	if (hopt->rate.linklayer == TC_LINKLAYER_UNAWARE)
+ 		qdisc_put_rtab(qdisc_get_rtab(&hopt->rate, tb[TCA_HTB_RTAB],
 -- 
 2.34.1
 

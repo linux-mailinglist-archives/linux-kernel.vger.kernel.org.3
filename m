@@ -2,115 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12634A5138
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AF64A5139
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351142AbiAaVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S1355762AbiAaVQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiAaVPb (ORCPT
+        with ESMTP id S232007AbiAaVQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:15:31 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EF4C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:15:30 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id y17so13627143plg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:15:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cxXm9S9rBUGO+n/qf1n3on2rs5DZHI4UmQ2+ms2iYP4=;
-        b=Qo7cE3plH59PbdtmImyac1lX+en/JDRgSaa4LMeLw6ph0k1EzlPT/BWVNjItFxgULh
-         uYEe69YWJNHzuLftpsMRKtLU9Yx+i9KI7fKy9zSLAwleJOGwAdqbSQ8bIZt8/KNOt0iP
-         XZyBHj77OOJEJ+b4ZrtXZqGJFZNNPAs6Aio2E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cxXm9S9rBUGO+n/qf1n3on2rs5DZHI4UmQ2+ms2iYP4=;
-        b=h+b5J6WPv9704tvC9fyET8vmHzLJ2sEg8rr4eFj3fbmF0xxckaRJdeWtkxxaqDDp5u
-         OHdX8QPMId2BzxkxH6I0DM7UyU7bTtNGKG/7p7PL6F2+qe3K4fqdybm7t2jP8DoJt2FG
-         Wt1wT8l5q/lUW6r4xO/oDWjrZyIDCufa1+7FcyoQ4pWO0TWWbvrtSR7ikeQoEt4bK/d7
-         mBA3CnMCwYEHAMm6aNnpcMHkpSRqJVuVcin7ATiiDQ3Rl/BENC/DIpCuawJLthGP03MF
-         O3/qp8rkEYhbPfFyMz5FSnS9DWNYKl1MyeQRV/Z6irRMXjgIpuhvUP+2VNUkZWlhE5Eq
-         t7CQ==
-X-Gm-Message-State: AOAM530Z8Y2msqHbC1LQBmZLQrXqPNHoSODLZj3sqpaYiu01AlbMa4hk
-        1zsFmmJYNr9xyMT+XMjIg+dwMg==
-X-Google-Smtp-Source: ABdhPJyul6M9uc+iYppo5Cuy0vy4tnGlURb4dMZAIkzric/Dse5pGkQPhJdFSZKL4eflCMSBcXWnew==
-X-Received: by 2002:a17:902:d509:: with SMTP id b9mr22602105plg.3.1643663730410;
-        Mon, 31 Jan 2022 13:15:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mi18sm219840pjb.35.2022.01.31.13.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:15:30 -0800 (PST)
-Date:   Mon, 31 Jan 2022 13:15:29 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Mon, 31 Jan 2022 16:16:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168C8C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:16:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 596EFB82C49
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:16:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A1CC340E8;
+        Mon, 31 Jan 2022 21:16:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643663766;
+        bh=vzE2jLt9R1/HggBo0ShJsq7J8kKVbOlzKBF54397jgE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jE4GpYSAm6f3R03QUv6AaS+DvAscwWRksVcqLejqg2j+X6OatuQHNNYPrchZbkUq9
+         n1QK07/28sFohanQ0zKuonZ1oqzYTwrPsiRrB1gXcXwaGX5aC9Z7SASY6nOK+qs0Ak
+         k44mbu/LLJdINkj+Fw+NDFJSetiHf/6Z7673t3D6V9oLaTMJ4Vgmm3BBbWE/ZkUHVL
+         XKwqN25hM0BflkfHssOCxwMYxIi8qZ0DKWJQM6hownseZCdVCZ1pPVMeq9DbuK8tYU
+         KzeU+TWAyscMNj6PZxqJ8aF/yS/lasDvQFD1ovMI76km0VwKSqw3qy3hr1vRNunnxJ
+         qVinVrrzoJBrQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3008B40466; Mon, 31 Jan 2022 18:16:03 -0300 (-03)
+Date:   Mon, 31 Jan 2022 18:16:03 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] stack: Constrain and fix stack offset
- randomization with Clang builds
-Message-ID: <202201311315.B9FDD0A@keescook>
-References: <20220131090521.1947110-1-elver@google.com>
- <20220131090521.1947110-2-elver@google.com>
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexei Budankov <abudankov@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>
+Subject: Re: [PATCH v13 01/16] perf record: Introduce thread affinity and
+ mmap masks
+Message-ID: <YfhRkx0Ntp+g029v@kernel.org>
+References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+ <9042bf7daf988e17e17e6acbf5d29590bde869cd.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+ <YfhN7kTLECDwgPLh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131090521.1947110-2-elver@google.com>
+In-Reply-To: <YfhN7kTLECDwgPLh@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:05:21AM +0100, Marco Elver wrote:
-> All supported versions of Clang perform auto-init of __builtin_alloca()
-> when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
+Em Mon, Jan 31, 2022 at 06:00:31PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Jan 17, 2022 at 09:34:21PM +0300, Alexey Bayduraev escreveu:
+> > Introduce affinity and mmap thread masks. Thread affinity mask
+> > defines CPUs that a thread is allowed to run on. Thread maps
+> > mask defines mmap data buffers the thread serves to stream
+> > profiling data from.
+> > 
+> > Acked-by: Andi Kleen <ak@linux.intel.com>
+> > Acked-by: Namhyung Kim <namhyung@gmail.com>
+> > Reviewed-by: Riccardo Mancini <rickyman7@gmail.com>
+> > Tested-by: Riccardo Mancini <rickyman7@gmail.com>
+> > Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
 > 
-> add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> enabled, add_random_kstack_offset() will auto-init that unused portion
-> of the stack used to add an offset.
-> 
-> There are several problems with this:
-> 
-> 	1. These offsets can be as large as 1023 bytes. Performing
-> 	   memset() on them isn't exactly cheap, and this is done on
-> 	   every syscall entry.
-> 
-> 	2. Architectures adding add_random_kstack_offset() to syscall
-> 	   entry implemented in C require them to be 'noinstr' (e.g. see
-> 	   x86 and s390). The potential problem here is that a call to
-> 	   memset may occur, which is not noinstr.
-> 
-> A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> 
->  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> 
-> Clang 14 (unreleased) will introduce a way to skip alloca initialization
-> via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
-> 
-> Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
-> auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
-> __builtin_alloca_uninitialized() if the compiler provides it, as is done
-> by Clang 14.
-> 
-> Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
-> Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
-> Signed-off-by: Marco Elver <elver@google.com>
+> Some simplifications I added here while reviewing this patchkit:
 
-Thanks for the tweaks; this looks good to me now.
+But then, why allocate these even without using them? I.e. the init
+should be left for when we are sure that we'll actually use this, i.e.
+when the user asks for parallel mode.
 
-Acked-by: Kees Cook <keescook@chromium.org>
+We already have lots of needless initializations, reading of files that
+may not be needed, so we should avoid doing things till we really know
+that we'll use those allocations, readings, etc.
+
+Anyway, continuing to review, will leave what I have at a separata
+branch so that we can continue from there.
+
+- Arnaldo
+ 
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 41998f2140cd5119..53b88c8600624237 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -2213,35 +2213,33 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
+>  
+>  static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
+>  {
+> -	mask->nbits = nr_bits;
+>  	mask->bits = bitmap_zalloc(mask->nbits);
+>  	if (!mask->bits)
+>  		return -ENOMEM;
+>  
+> +	mask->nbits = nr_bits;
+>  	return 0;
+>  }
+>  
+>  static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
+>  {
+>  	bitmap_free(mask->bits);
+> +	mask->bits = NULL;
+>  	mask->nbits = 0;
+>  }
+>  
+>  static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
+>  {
+> -	int ret;
+> +	int ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
+>  
+> -	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
+>  	if (ret) {
+>  		mask->affinity.bits = NULL;
+>  		return ret;
+>  	}
+>  
+>  	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
+> -	if (ret) {
+> +	if (ret)
+>  		record__mmap_cpu_mask_free(&mask->maps);
+> -		mask->maps.bits = NULL;
+> -	}
+>  
+>  	return ret;
+>  }
+> @@ -2733,18 +2731,14 @@ struct option *record_options = __record_options;
+>  
+>  static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+>  {
+> -	int c;
+> -
+> -	for (c = 0; c < cpus->nr; c++)
+> +	for (int c = 0; c < cpus->nr; c++)
+>  		set_bit(cpus->map[c].cpu, mask->bits);
+>  }
+>  
+>  static void record__free_thread_masks(struct record *rec, int nr_threads)
+>  {
+> -	int t;
+> -
+>  	if (rec->thread_masks)
+> -		for (t = 0; t < nr_threads; t++)
+> +		for (int t = 0; t < nr_threads; t++)
+>  			record__thread_mask_free(&rec->thread_masks[t]);
+>  
+>  	zfree(&rec->thread_masks);
+> @@ -2752,7 +2746,7 @@ static void record__free_thread_masks(struct record *rec, int nr_threads)
+>  
+>  static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
+>  {
+> -	int t, ret;
+> +	int ret;
+>  
+>  	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
+>  	if (!rec->thread_masks) {
+> @@ -2760,7 +2754,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
+>  		return -ENOMEM;
+>  	}
+>  
+> -	for (t = 0; t < nr_threads; t++) {
+> +	for (int t = 0; t < nr_threads; t++) {
+>  		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
+>  		if (ret) {
+>  			pr_err("Failed to allocate thread masks[%d]\n", t);
+> @@ -2778,9 +2772,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
+>  
+>  static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
+>  {
+> -	int ret;
+> -
+> -	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
+> +	int ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
+>  	if (ret)
+>  		return ret;
+>  
+> 
+> 
+> > ---
+> >  tools/perf/builtin-record.c | 123 ++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 123 insertions(+)
+> > 
+> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> > index bb716c953d02..41998f2140cd 100644
+> > --- a/tools/perf/builtin-record.c
+> > +++ b/tools/perf/builtin-record.c
+> > @@ -87,6 +87,11 @@ struct switch_output {
+> >  	int		 cur_file;
+> >  };
+> >  
+> > +struct thread_mask {
+> > +	struct mmap_cpu_mask	maps;
+> > +	struct mmap_cpu_mask	affinity;
+> > +};
+> > +
+> >  struct record {
+> >  	struct perf_tool	tool;
+> >  	struct record_opts	opts;
+> > @@ -112,6 +117,8 @@ struct record {
+> >  	struct mmap_cpu_mask	affinity_mask;
+> >  	unsigned long		output_max_size;	/* = 0: unlimited */
+> >  	struct perf_debuginfod	debuginfod;
+> > +	int			nr_threads;
+> > +	struct thread_mask	*thread_masks;
+> >  };
+> >  
+> >  static volatile int done;
+> > @@ -2204,6 +2211,47 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
+> >  	return 0;
+> >  }
+> >  
+> > +static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
+> > +{
+> > +	mask->nbits = nr_bits;
+> > +	mask->bits = bitmap_zalloc(mask->nbits);
+> > +	if (!mask->bits)
+> > +		return -ENOMEM;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
+> > +{
+> > +	bitmap_free(mask->bits);
+> > +	mask->nbits = 0;
+> > +}
+> > +
+> > +static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
+> > +	if (ret) {
+> > +		mask->affinity.bits = NULL;
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
+> > +	if (ret) {
+> > +		record__mmap_cpu_mask_free(&mask->maps);
+> > +		mask->maps.bits = NULL;
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void record__thread_mask_free(struct thread_mask *mask)
+> > +{
+> > +	record__mmap_cpu_mask_free(&mask->maps);
+> > +	record__mmap_cpu_mask_free(&mask->affinity);
+> > +}
+> > +
+> >  static int parse_output_max_size(const struct option *opt,
+> >  				 const char *str, int unset)
+> >  {
+> > @@ -2683,6 +2731,73 @@ static struct option __record_options[] = {
+> >  
+> >  struct option *record_options = __record_options;
+> >  
+> > +static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+> > +{
+> > +	int c;
+> > +
+> > +	for (c = 0; c < cpus->nr; c++)
+> > +		set_bit(cpus->map[c].cpu, mask->bits);
+> > +}
+> > +
+> > +static void record__free_thread_masks(struct record *rec, int nr_threads)
+> > +{
+> > +	int t;
+> > +
+> > +	if (rec->thread_masks)
+> > +		for (t = 0; t < nr_threads; t++)
+> > +			record__thread_mask_free(&rec->thread_masks[t]);
+> > +
+> > +	zfree(&rec->thread_masks);
+> > +}
+> > +
+> > +static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
+> > +{
+> > +	int t, ret;
+> > +
+> > +	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
+> > +	if (!rec->thread_masks) {
+> > +		pr_err("Failed to allocate thread masks\n");
+> > +		return -ENOMEM;
+> > +	}
+> > +
+> > +	for (t = 0; t < nr_threads; t++) {
+> > +		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
+> > +		if (ret) {
+> > +			pr_err("Failed to allocate thread masks[%d]\n", t);
+> > +			goto out_free;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +
+> > +out_free:
+> > +	record__free_thread_masks(rec, nr_threads);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	record__mmap_cpu_mask_init(&rec->thread_masks->maps, cpus);
+> > +
+> > +	rec->nr_threads = 1;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int record__init_thread_masks(struct record *rec)
+> > +{
+> > +	struct perf_cpu_map *cpus = rec->evlist->core.cpus;
+> > +
+> > +	return record__init_thread_default_masks(rec, cpus);
+> > +}
+> > +
+> >  int cmd_record(int argc, const char **argv)
+> >  {
+> >  	int err;
+> > @@ -2948,6 +3063,12 @@ int cmd_record(int argc, const char **argv)
+> >  		goto out;
+> >  	}
+> >  
+> > +	err = record__init_thread_masks(rec);
+> > +	if (err) {
+> > +		pr_err("Failed to initialize parallel data streaming masks\n");
+> > +		goto out;
+> > +	}
+> > +
+> >  	if (rec->opts.nr_cblocks > nr_cblocks_max)
+> >  		rec->opts.nr_cblocks = nr_cblocks_max;
+> >  	pr_debug("nr_cblocks: %d\n", rec->opts.nr_cblocks);
+> > @@ -2966,6 +3087,8 @@ int cmd_record(int argc, const char **argv)
+> >  	symbol__exit();
+> >  	auxtrace_record__free(rec->itr);
+> >  out_opts:
+> > +	record__free_thread_masks(rec, rec->nr_threads);
+> > +	rec->nr_threads = 0;
+> >  	evlist__close_control(rec->opts.ctl_fd, rec->opts.ctl_fd_ack, &rec->opts.ctl_fd_close);
+> >  	return err;
+> >  }
+> > -- 
+> > 2.19.0
+> 
+> -- 
+> 
+> - Arnaldo
 
 -- 
-Kees Cook
+
+- Arnaldo

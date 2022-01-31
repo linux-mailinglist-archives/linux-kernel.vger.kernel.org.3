@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCDA4A4A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 917544A4A66
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377474AbiAaPTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:19:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58280 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358630AbiAaPTk (ORCPT
+        id S1379346AbiAaPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:20:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43399 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379163AbiAaPUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:19:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 31 Jan 2022 10:20:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643642401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=51s/H7CPhdBcCYJZdO78Kl5hIb9+WtEbkmwC56ZgtGY=;
+        b=AWruhXTA1SJdWY99GFurEU+c71AwyQt2xSZvFhktRch7i/eyjFtYrsg5zKMmAr3owhEnae
+        ikmr4JiFuAUu1R1j+SIUbySuuTcAo2R8ykglH8I7GA9SPsTXCv97UrPs2ra3z6XWf4mFPP
+        i6bKGxCRZxVlJcaqYdrEQQlzc8MEceY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-368-IYhhTc-eNS2u5b808v0H8A-1; Mon, 31 Jan 2022 10:19:59 -0500
+X-MC-Unique: IYhhTc-eNS2u5b808v0H8A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 964086136E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:19:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99572C340E8;
-        Mon, 31 Jan 2022 15:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643642380;
-        bh=U81rLjtR8IWf25YlfkzFt9hF10+zIQLW61njAr/UKkQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LcMKN1a7e9Uw3CSgeFnrAQbtA21WcvH0Nn8y0UfSFiYYR0GBigo5Y+dlss2oK4IIq
-         UU9gg2u0WFpYZibW9LuMHXsVWCet5yd1j7EaP9tC8FKwcq9C/l8kcrnQzsRLaDaIJv
-         FgYzxi7MfY72iNyor0lhbgHzB3LCaiPPU7ApzW2JSWF/07OHL/Ixtz8dDfnC4pAjXu
-         RVqGrhTeu8LZ8MO/rAMeertOSRMvfZpGAKL4VpkeUesX2W91Iv1mt+bLI0licqIL6D
-         hJFwAPFvseu/SsZJgNtHTPaoBpBM8Zxj72y9N9y8QjPg93jACT7WBhdTp5edMdyOVl
-         CLZ3S25dkawUg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Takashi Iwai <tiwai@suse.com>,
-        Alejandro Tafalla <atafalla@dnyon.com>,
-        alsa-devel@alsa-project.org, kernel test robot <lkp@intel.com>
-In-Reply-To: <20220129080259.19964-1-rdunlap@infradead.org>
-References: <20220129080259.19964-1-rdunlap@infradead.org>
-Subject: Re: [PATCH] ASoC: max98927: add missing header file
-Message-Id: <164364237834.3159101.12950435355735915006.b4-ty@kernel.org>
-Date:   Mon, 31 Jan 2022 15:19:38 +0000
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A75DF1091DA3;
+        Mon, 31 Jan 2022 15:19:56 +0000 (UTC)
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8477584D06;
+        Mon, 31 Jan 2022 15:19:53 +0000 (UTC)
+Message-ID: <864b41e42a88a92586b1c2361bebaf04446a98d5.camel@redhat.com>
+Subject: Re: [PATCH 01/22] KVM: x86: Drop unnecessary and confusing
+ KVM_X86_OP_NULL macro
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Date:   Mon, 31 Jan 2022 17:19:52 +0200
+In-Reply-To: <6979e482-1f07-4148-b9d7-d91cfa98c081@redhat.com>
+References: <20220128005208.4008533-1-seanjc@google.com>
+         <20220128005208.4008533-2-seanjc@google.com>
+         <152db376-b0f3-3102-233c-a0dbb4011d0c@redhat.com>
+         <YfQO+ADS1wnefoSr@google.com>
+         <6979e482-1f07-4148-b9d7-d91cfa98c081@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 00:02:59 -0800, Randy Dunlap wrote:
-> Add a header file that provides the missing function prototypes
-> and macro to fix these build errors (seen on arch/alpha/):
+On Mon, 2022-01-31 at 15:56 +0100, Paolo Bonzini wrote:
+> On 1/28/22 16:42, Sean Christopherson wrote:
+> > On Fri, Jan 28, 2022, Paolo Bonzini wrote:
+> > > On 1/28/22 01:51, Sean Christopherson wrote:
+> > > > Drop KVM_X86_OP_NULL, which is superfluous and confusing.  The macro is
+> > > > just a "pass-through" to KVM_X86_OP; it was added with the intent of
+> > > > actually using it in the future, but that obviously never happened.  The
+> > > > name is confusing because its intended use was to provide a way for
+> > > > vendor implementations to specify a NULL pointer, and even if it were
+> > > > used, wouldn't necessarily be synonymous with declaring a kvm_x86_op as
+> > > > DEFINE_STATIC_CALL_NULL.
+> > > > 
+> > > > Lastly, actually using KVM_X86_OP_NULL as intended isn't a maintanable
+> > > > approach, e.g. bleeds vendor details into common x86 code, and would
+> > > > either be prone to bit rot or would require modifying common x86 code
+> > > > when modifying a vendor implementation.
+> > > 
+> > > I have some patches that redefine KVM_X86_OP_NULL as "must be used with
+> > > static_call_cond".  That's a more interesting definition, as it can be used
+> > > to WARN if KVM_X86_OP is used with a NULL function pointer.
+> > 
+> > I'm skeptical that will actually work well and be maintainble.  E.g. sync_pir_to_ir()
+> > must be explicitly check for NULL in apic_has_interrupt_for_ppr(), forcing that path
+> > to do static_call_cond() will be odd.  Ditto for ops that are wired up to ioctl()s,
+> > e.g. the confidential VM stuff, and for ops that are guarded by other stuff, e.g. the
+> > hypervisor timer.
+> > 
+> > Actually, it won't just be odd, it will be impossible to disallow NULL a pointer
+> > for KVM_X86_OP and require static_call_cond() for KVM_X86_OP_NULL.  static_call_cond()
+> > forces the return to "void", so any path that returns a value needs to be manually
+> > guarded and can't use static_call_cond(), e.g.
 > 
-> ../sound/soc/codecs/max98927.c: In function 'max98927_i2c_probe':
-> ../sound/soc/codecs/max98927.c:902:19: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
->   902 |                 = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_HIGH);
->       |                   ^~~~~~~~~~~~~~~~~~~~~~~
-> ../sound/soc/codecs/max98927.c:902:63: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
->   902 |                 = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_HIGH);
->       |                                                               ^~~~~~~~~~~~~~
-> ../sound/soc/codecs/max98927.c:909:17: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
->   909 |                 gpiod_set_value_cansleep(max98927->reset_gpio, 0);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+> You're right and I should have looked up the series instead of going by 
+> memory.  What I did was mostly WARNing on KVM_X86_OP that sets NULL, as 
+> non-NULL ops are the common case.  I also added KVM_X86_OP_RET0 to 
+> remove some checks on kvm_x86_ops for ops that return a value.
 > 
-> [...]
+> All in all I totally agree with patches 2-11 and will apply them (patch 
+> 2 to 5.17 even, as a prerequisite to fix the AVIC race).  Several of 
+> patches 13-21 are also mostly useful as it clarifies the code, and the 
+> others I guess are okay in the context of a coherent series though 
+> probably they would have been rejected as one-offs.  However, patches 12 
+> and 22 are unnecessary uses of the C preprocessor in my opinion.
+> 
 
-Applied to
+I will send my patches very very soon - I'll rebase on top of this,
+and review this patch series soon as well.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Best regards,
+	Maxim Levitsky
 
-Thanks!
+> Paolo
+> 
 
-[1/1] ASoC: max98927: add missing header file
-      commit: bb45f689fa62110c263c86070bfcb9ecbb6e1e23
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

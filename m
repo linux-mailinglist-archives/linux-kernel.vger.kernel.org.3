@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B488C4A440B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BC94A4204
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377040AbiAaLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359274AbiAaLOq (ORCPT
+        id S1376348AbiAaLIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:08:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52684 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348750AbiAaLEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:14:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9400C06176D;
-        Mon, 31 Jan 2022 03:11:11 -0800 (PST)
+        Mon, 31 Jan 2022 06:04:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B036102A;
-        Mon, 31 Jan 2022 11:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6784CC340F0;
-        Mon, 31 Jan 2022 11:11:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7740DB82A59;
+        Mon, 31 Jan 2022 11:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BE8C340E8;
+        Mon, 31 Jan 2022 11:04:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627471;
-        bh=gNro4jchHl68UabiyF/qrFRq8Ox7eePANnwqkwm5xzo=;
+        s=korg; t=1643627090;
+        bh=Zy/7wJoEBkcy3hAg4JIzp40lgboP5C93DThdpp8EI0w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vzqSnFgiDR+a/ie4dPnyYboSC5Y6gyYWvWUFXtayKRPNcHwyBOmMvFdW2rhapFmIc
-         d+gyrDOM+V+9pdvFxR1ElGqAcdmqzeNMm+SGSZKjSp3rrsHvGo1ECuNwMjEh5aDF6q
-         QtzhR3V7E+0petu07D2wOesY9dcdpORQKIMxysQI=
+        b=kkdL/Y8C5n7J3f3adbd701pSXWzzW0OqG87RxEyciiw3ftpriWcHn1sJ7vzve+p3y
+         V3JTx5KdOUjyH1CMJtBcNC3VZ+WWmNEV2DxiSO/00HsBUwh+1M72TcGcmNQbu3DkKp
+         NoAiQST1UGOYDjYNf/mZEl4txK2KgdhgViAHsiNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyu Tao <tao.lyu@epfl.ch>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [PATCH 5.15 093/171] NFSv4: Handle case where the lookup of a directory fails
-Date:   Mon, 31 Jan 2022 11:55:58 +0100
-Message-Id: <20220131105233.181528345@linuxfoundation.org>
+        stable@vger.kernel.org, Yazen Ghannam <yazen.ghannam@amd.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.10 038/100] x86/MCE/AMD: Allow thresholding interface updates after init
+Date:   Mon, 31 Jan 2022 11:55:59 +0100
+Message-Id: <20220131105221.726260203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,47 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-commit ac795161c93699d600db16c1a8cc23a65a1eceaf upstream.
+commit 1f52b0aba6fd37653416375cb8a1ca673acf8d5f upstream.
 
-If the application sets the O_DIRECTORY flag, and tries to open a
-regular file, nfs_atomic_open() will punt to doing a regular lookup.
-If the server then returns a regular file, we will happily return a
-file descriptor with uninitialised open state.
+Changes to the AMD Thresholding sysfs code prevents sysfs writes from
+updating the underlying registers once CPU init is completed, i.e.
+"threshold_banks" is set.
 
-The fix is to return the expected ENOTDIR error in these cases.
+Allow the registers to be updated if the thresholding interface is
+already initialized or if in the init path. Use the "set_lvt_off" value
+to indicate if running in the init path, since this value is only set
+during init.
 
-Reported-by: Lyu Tao <tao.lyu@epfl.ch>
-Fixes: 0dd2b474d0b6 ("nfs: implement i_op->atomic_open()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220117161328.19148-1-yazen.ghannam@amd.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/dir.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/x86/kernel/cpu/mce/amd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -1982,6 +1982,19 @@ out:
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -387,7 +387,7 @@ static void threshold_restart_bank(void
+ 	u32 hi, lo;
  
- no_open:
- 	res = nfs_lookup(dir, dentry, lookup_flags);
-+	if (!res) {
-+		inode = d_inode(dentry);
-+		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
-+		    !S_ISDIR(inode->i_mode))
-+			res = ERR_PTR(-ENOTDIR);
-+	} else if (!IS_ERR(res)) {
-+		inode = d_inode(res);
-+		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
-+		    !S_ISDIR(inode->i_mode)) {
-+			dput(res);
-+			res = ERR_PTR(-ENOTDIR);
-+		}
-+	}
- 	if (switched) {
- 		d_lookup_done(dentry);
- 		if (!res)
+ 	/* sysfs write might race against an offline operation */
+-	if (this_cpu_read(threshold_banks))
++	if (!this_cpu_read(threshold_banks) && !tr->set_lvt_off)
+ 		return;
+ 
+ 	rdmsr(tr->b->address, lo, hi);
 
 

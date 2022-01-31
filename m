@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C992F4A50DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A444A5109
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379738AbiAaVGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S1380999AbiAaVH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379625AbiAaVGl (ORCPT
+        with ESMTP id S1379502AbiAaVGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:06:41 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B75C061741
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:39 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso300838wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:39 -0800 (PST)
+        Mon, 31 Jan 2022 16:06:44 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C341C06174A
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:40 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id m14so27679671wrg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9elcEF+FUVtrFo+P664bpKhWxlWsFcRwRHhOMNgwzW0=;
-        b=XHfO/wn8IkfHT202i85gyvWrkloyUnQE6uoga9lWrzNazjOOPB/rjjTQiTJ02imTWA
-         54VOxqV1+ChwVtmjS9FUQkPhKTM2bbY7b8fBwefpQdOiYS10EBKZRaaoaHE+LsfiEOsv
-         p7W/lx2r1iXlJDKVVMadBVoM3d+pe9DFQ63FU=
+        bh=maVDh36g+mbMxDQqKVsClyM2EENbHZLdIj/dxYmw5do=;
+        b=Qcsxhy2o/dS11RJsdCfS9Bxk3l2q8JaeoimOSXKdnQQwY7aFMOzBCGs3z75BZLUfjP
+         G5PY5jJU5KSJ23gLrVGnPRmbSww2IYvxZ0Ieehv+Gk524P056aEZJfV+u7yvV1LmpBj6
+         v0MRUtj2qEfuN8Rj2tN9HSteIZLF/+MTHdjd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9elcEF+FUVtrFo+P664bpKhWxlWsFcRwRHhOMNgwzW0=;
-        b=7meq/D8YF5T16sJC8tmLsQDXgFkuHhGzw8r0JlmKNE5dhCZAPgW7OxKJdIn1k/8lSi
-         zR/W6fwR0+68CHtYBI//4hXcgXbd9J+O0HnZ6En/fzJ4YT7cu52tpbKKy/whIwwO17bV
-         OgRwZny+kjvz7yeU7X+SMMt025NBwlg7qhPhLWeDdJPpq59yTYlYhv+o+5y24MJa+ffg
-         BW+D5G3xT01+aumS00EQJg9FrQq5WjBajmrIc0BuJPWlDIXyO12dmc4RQ0F4moTfxmFa
-         YvhcIBEwF4hkHirte8D+eWyX2LvGguZ9wLKRHKgbR3UUoHlQUE4KPcCPUXJ7ob9w3wM9
-         2a6Q==
-X-Gm-Message-State: AOAM533eAH2Hwjxz/nRnEbDLSv5VPtOqzRriNo4Ce52wAZfLWWAOLdjp
-        cEhkHO94rRG3mDgTfOLyUnwLJA==
-X-Google-Smtp-Source: ABdhPJzFYJxnbuwjv7BgWbSbiYaq6SzlYYSYRiulgLOPdfd4aJ33/Z0Erh9dIHL4H0VhctMf+XoN4Q==
-X-Received: by 2002:a05:600c:3593:: with SMTP id p19mr19647246wmq.172.1643663197952;
-        Mon, 31 Jan 2022 13:06:37 -0800 (PST)
+        bh=maVDh36g+mbMxDQqKVsClyM2EENbHZLdIj/dxYmw5do=;
+        b=EP91hICLb0dfBZ/RdCBCoC/sgeN5feOsHjLPyhvEDQfMccxHpfm5RJUUNjorKKo8PL
+         ljs9CgTJ/teliGQczUI9hfJQtm1CqNKfWays7cXr4LRxHcSyvUcVSMeB/6CEVnQKzTZA
+         GddzL6JKF7ZzH7i3x07j0aWOTL96HqmqNWrEF7+XfUpXHyNHw+fBAnJ0jlTrPumg/g4C
+         zO/6iM7o6DfBvSbXc+KJw+n2IQZpQ2bqtZMEDiRz3pFrqwEO32zpD0I7jyyWvzfFIIl+
+         pINyl9cWYPB08aZdEVH21XybdW3stTK6jDICOHWrT+2VN3VitrT4/KZwladdcoA/+PJU
+         OK7w==
+X-Gm-Message-State: AOAM533U8UDTqa39kRDrtgNFsM8Jacx2cYy0rUpO6oNNghern4Qe79ps
+        /vxI8V9p6hniITQWa6DDo7QNBA==
+X-Google-Smtp-Source: ABdhPJwUiYtIFsmkn1+ZKECUjh4jElDblVWqzeBW7WDzEcxIsGU9rssDBdn9pVrrCKK6rcDF8iLQ3w==
+X-Received: by 2002:a05:6000:104e:: with SMTP id c14mr19310924wrx.252.1643663198814;
+        Mon, 31 Jan 2022 13:06:38 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id b11sm314961wmq.46.2022.01.31.13.06.36
+        by smtp.gmail.com with ESMTPSA id b11sm314961wmq.46.2022.01.31.13.06.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:06:37 -0800 (PST)
+        Mon, 31 Jan 2022 13:06:38 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, stable@vger.kernel.org,
-        Claudio Suarez <cssk@net-c.es>,
-        Dave Airlie <airlied@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         Daniel Vetter <daniel.vetter@intel.com>,
-        Sven Schnelle <svens@stackframe.org>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Subject: [PATCH 03/21] fbcon: Restore fbcon scrolling acceleration
-Date:   Mon, 31 Jan 2022 22:05:34 +0100
-Message-Id: <20220131210552.482606-4-daniel.vetter@ffwll.ch>
+        Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 04/21] fbcon: delete a few unneeded forward decl
+Date:   Mon, 31 Jan 2022 22:05:35 +0100
+Message-Id: <20220131210552.482606-5-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
 References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
@@ -76,113 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This functionally undoes 39aead8373b3 ("fbcon: Disable accelerated
-scrolling"), but behind the FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
-option.
+I didn't bother with any code movement to fix the others, these just
+got a bit in the way.
 
-References: https://lore.kernel.org/dri-devel/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de/
-Fixes: 39aead8373b3 ("fbcon: Disable accelerated scrolling")
-Cc: Helge Deller <deller@gmx.de>
-Cc: <stable@vger.kernel.org> # v5.11+
-Cc: Claudio Suarez <cssk@net-c.es>
-Cc: Dave Airlie <airlied@gmail.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux Fbdev development list <linux-fbdev@vger.kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Javier Martinez Canillas <javierm@redhat.com>
-Cc: DRI Development <dri-devel@lists.freedesktop.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: Claudio Suarez <cssk@net-c.es>
-Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Sven Schnelle <svens@stackframe.org>
-Cc: Gerd Hoffmann <kraxel@redhat.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Du Cheng <ducheng2@gmail.com>
+Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: Claudio Suarez <cssk@net-c.es>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbcon.c | 48 ++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 6 deletions(-)
+ drivers/video/fbdev/core/fbcon.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
 diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index 2ff90061c7f3..39dc18a5de86 100644
+index 39dc18a5de86..2a575620ef59 100644
 --- a/drivers/video/fbdev/core/fbcon.c
 +++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1125,13 +1125,15 @@ static void fbcon_init(struct vc_data *vc, int init)
+@@ -163,18 +163,7 @@ static int fbcon_cursor_noblink;
+  *  Interface used by the world
+  */
  
- 	ops->graphics = 0;
+-static const char *fbcon_startup(void);
+-static void fbcon_init(struct vc_data *vc, int init);
+-static void fbcon_deinit(struct vc_data *vc);
+-static void fbcon_clear(struct vc_data *vc, int sy, int sx, int height,
+-			int width);
+-static void fbcon_putc(struct vc_data *vc, int c, int ypos, int xpos);
+-static void fbcon_putcs(struct vc_data *vc, const unsigned short *s,
+-			int count, int ypos, int xpos);
+ static void fbcon_clear_margins(struct vc_data *vc, int bottom_only);
+-static void fbcon_cursor(struct vc_data *vc, int mode);
+-static int fbcon_switch(struct vc_data *vc);
+-static int fbcon_blank(struct vc_data *vc, int blank, int mode_switch);
+ static void fbcon_set_palette(struct vc_data *vc, const unsigned char *table);
  
--	/*
--	 * No more hw acceleration for fbcon.
--	 *
--	 * FIXME: Garbage collect all the now dead code after sufficient time
--	 * has passed.
--	 */
-+#ifdef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
-+	if ((info->flags & FBINFO_HWACCEL_COPYAREA) &&
-+	    !(info->flags & FBINFO_HWACCEL_DISABLED))
-+		p->scrollmode = SCROLL_MOVE;
-+	else /* default to something safe */
-+		p->scrollmode = SCROLL_REDRAW;
-+#else
- 	p->scrollmode = SCROLL_REDRAW;
-+#endif
- 
- 	/*
- 	 *  ++guenther: console.c:vc_allocate() relies on initializing
-@@ -1971,15 +1973,49 @@ static void updatescrollmode(struct fbcon_display *p,
- {
- 	struct fbcon_ops *ops = info->fbcon_par;
- 	int fh = vc->vc_font.height;
-+	int cap = info->flags;
-+	u16 t = 0;
-+	int ypan = FBCON_SWAP(ops->rotate, info->fix.ypanstep,
-+			      info->fix.xpanstep);
-+	int ywrap = FBCON_SWAP(ops->rotate, info->fix.ywrapstep, t);
- 	int yres = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
- 	int vyres = FBCON_SWAP(ops->rotate, info->var.yres_virtual,
- 				   info->var.xres_virtual);
-+	int good_pan = (cap & FBINFO_HWACCEL_YPAN) &&
-+		divides(ypan, vc->vc_font.height) && vyres > yres;
-+	int good_wrap = (cap & FBINFO_HWACCEL_YWRAP) &&
-+		divides(ywrap, vc->vc_font.height) &&
-+		divides(vc->vc_font.height, vyres) &&
-+		divides(vc->vc_font.height, yres);
-+	int reading_fast = cap & FBINFO_READS_FAST;
-+	int fast_copyarea = (cap & FBINFO_HWACCEL_COPYAREA) &&
-+		!(cap & FBINFO_HWACCEL_DISABLED);
-+	int fast_imageblit = (cap & FBINFO_HWACCEL_IMAGEBLIT) &&
-+		!(cap & FBINFO_HWACCEL_DISABLED);
- 
- 	p->vrows = vyres/fh;
- 	if (yres > (fh * (vc->vc_rows + 1)))
- 		p->vrows -= (yres - (fh * vc->vc_rows)) / fh;
- 	if ((yres % fh) && (vyres % fh < yres % fh))
- 		p->vrows--;
+ /*
+@@ -184,8 +173,8 @@ static void fbcon_set_disp(struct fb_info *info, struct fb_var_screeninfo *var,
+ 			   int unit);
+ static void fbcon_modechanged(struct fb_info *info);
+ static void fbcon_set_all_vcs(struct fb_info *info);
+-static void fbcon_start(void);
+ static void fbcon_exit(void);
 +
-+	if (good_wrap || good_pan) {
-+		if (reading_fast || fast_copyarea)
-+			p->scrollmode = good_wrap ?
-+				SCROLL_WRAP_MOVE : SCROLL_PAN_MOVE;
-+		else
-+			p->scrollmode = good_wrap ? SCROLL_REDRAW :
-+				SCROLL_PAN_REDRAW;
-+	} else {
-+		if (reading_fast || (fast_copyarea && !fast_imageblit))
-+			p->scrollmode = SCROLL_MOVE;
-+		else
-+			p->scrollmode = SCROLL_REDRAW;
-+	}
-+
-+#ifndef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
-+	p->scrollmode = SCROLL_REDRAW;
-+#endif
- }
+ static struct device *fbcon_device;
  
- #define PITCH(w) (((w) + 7) >> 3)
+ #ifdef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
 -- 
 2.33.0
 

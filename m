@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE6B4A4448
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61D34A41DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377441AbiAaL1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377740AbiAaLSx (ORCPT
+        id S236497AbiAaLGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:06:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38196 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358345AbiAaLDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:18:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59728C06134C;
-        Mon, 31 Jan 2022 03:11:45 -0800 (PST)
+        Mon, 31 Jan 2022 06:03:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC53E6102A;
-        Mon, 31 Jan 2022 11:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C12DDC340E8;
-        Mon, 31 Jan 2022 11:11:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C9E60EDB;
+        Mon, 31 Jan 2022 11:03:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA59C340E8;
+        Mon, 31 Jan 2022 11:03:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627504;
-        bh=SgGumDnicN2QeEZGwfbrCV7bTVD6rS+dcb6bMzFZ8yo=;
+        s=korg; t=1643627023;
+        bh=8kwQ4IlCL4lt3evFQMydDkoqm2Wx6KwGPAVive888gE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hPLxrATX3SY904blhwbpDH8Xy6N2KWVsKGFgvgoujChtJTGEQZMJj0bp8l5iNN5ZC
-         oOXnXMZTG9j4OlOVkRaMkc9VYVBuGzpXJvyUmu2a1OEbyrwRvZxZLvHfluG1L4CfVv
-         +P2E3Adhfg7Qr3EOjSlZ8DHHxadfs57UqwNaFMtA=
+        b=eLUnr8Z981yUUJiRFgfEuve5y9mbv3d41+TyT6L4JMQXhe5ghtpxjVdT6mMnjyWty
+         AEElYYdY3HmB/fpk71Rpni+LKePYQa3l4hj2abMa6w2BTnhEgQ4/JHGXdkaCCNeuIn
+         1+arZfQjafGIz0k7FX+PFJgGOiy+pbfHrMLwxr2k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 106/171] netfilter: conntrack: dont increment invalid counter on NF_REPEAT
-Date:   Mon, 31 Jan 2022 11:56:11 +0100
-Message-Id: <20220131105233.631674405@linuxfoundation.org>
+Subject: [PATCH 5.10 051/100] ipv6_tunnel: Rate limit warning messages
+Date:   Mon, 31 Jan 2022 11:56:12 +0100
+Message-Id: <20220131105222.155835649@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,51 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Ido Schimmel <idosch@nvidia.com>
 
-[ Upstream commit 830af2eba40327abec64325a5b08b1e85c37a2e0 ]
+commit 6cee105e7f2ced596373951d9ea08dacc3883c68 upstream.
 
-The packet isn't invalid, REPEAT means we're trying again after cleaning
-out a stale connection, e.g. via tcp tracker.
+The warning messages can be invoked from the data path for every packet
+transmitted through an ip6gre netdev, leading to high CPU utilization.
 
-This caused increases of invalid stat counter in a test case involving
-frequent connection reuse, even though no packet is actually invalid.
+Fix that by rate limiting the messages.
 
-Fixes: 56a62e2218f5 ("netfilter: conntrack: fix NF_REPEAT handling")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 09c6bbf090ec ("[IPV6]: Do mandatory IPv6 tunnel endpoint checks in realtime")
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Tested-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Amit Cohen <amcohen@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ net/ipv6/ip6_tunnel.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-index 4712a90a1820c..7f79974607643 100644
---- a/net/netfilter/nf_conntrack_core.c
-+++ b/net/netfilter/nf_conntrack_core.c
-@@ -1922,15 +1922,17 @@ repeat:
- 		pr_debug("nf_conntrack_in: Can't track with proto module\n");
- 		nf_conntrack_put(&ct->ct_general);
- 		skb->_nfct = 0;
--		NF_CT_STAT_INC_ATOMIC(state->net, invalid);
--		if (ret == -NF_DROP)
--			NF_CT_STAT_INC_ATOMIC(state->net, drop);
- 		/* Special case: TCP tracker reports an attempt to reopen a
- 		 * closed/aborted connection. We have to go back and create a
- 		 * fresh conntrack.
- 		 */
- 		if (ret == -NF_REPEAT)
- 			goto repeat;
-+
-+		NF_CT_STAT_INC_ATOMIC(state->net, invalid);
-+		if (ret == -NF_DROP)
-+			NF_CT_STAT_INC_ATOMIC(state->net, drop);
-+
- 		ret = -ret;
- 		goto out;
- 	}
--- 
-2.34.1
-
+--- a/net/ipv6/ip6_tunnel.c
++++ b/net/ipv6/ip6_tunnel.c
+@@ -1066,14 +1066,14 @@ int ip6_tnl_xmit_ctl(struct ip6_tnl *t,
+ 
+ 		if (unlikely(!ipv6_chk_addr_and_flags(net, laddr, ldev, false,
+ 						      0, IFA_F_TENTATIVE)))
+-			pr_warn("%s xmit: Local address not yet configured!\n",
+-				p->name);
++			pr_warn_ratelimited("%s xmit: Local address not yet configured!\n",
++					    p->name);
+ 		else if (!(p->flags & IP6_TNL_F_ALLOW_LOCAL_REMOTE) &&
+ 			 !ipv6_addr_is_multicast(raddr) &&
+ 			 unlikely(ipv6_chk_addr_and_flags(net, raddr, ldev,
+ 							  true, 0, IFA_F_TENTATIVE)))
+-			pr_warn("%s xmit: Routing loop! Remote address found on this node!\n",
+-				p->name);
++			pr_warn_ratelimited("%s xmit: Routing loop! Remote address found on this node!\n",
++					    p->name);
+ 		else
+ 			ret = 1;
+ 		rcu_read_unlock();
 
 

@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B54254A5228
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC804A522A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiAaWOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:14:38 -0500
-Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:47570 "EHLO
-        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231950AbiAaWOf (ORCPT
+        id S232079AbiAaWOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231950AbiAaWOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:14:35 -0500
-Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id B2B1F8051FA0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:14:32 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id C580F1004751F
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:14:30 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id EewQnFBAmkku4EewQnVPeb; Mon, 31 Jan 2022 22:14:30 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Y5o9DjSN c=1 sm=1 tr=0 ts=61f85f46
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=L2Toy1UqQ5WKP967YkNm62x9G2pBVmS1JshR4oMiKhk=; b=iXpbwI+fsFVADsHVYfPxEajNOF
-        b1BXNBJDa3qa2fq3asWMic3+E54TSVuUHcCmXGsk82K91PpzKfDir0cJMlH48sAKGfYHFsX9mjUNF
-        sgzJHK832qAQ0yZXVcBJCk+E8;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33708 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nEewP-002TD3-W2; Mon, 31 Jan 2022 15:14:30 -0700
-Message-ID: <a36095c7-df1e-921a-19a2-737adc5720b7@w6rz.net>
-Date:   Mon, 31 Jan 2022 14:14:28 -0800
+        Mon, 31 Jan 2022 17:14:42 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71FBC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:14:42 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id x193so29711924oix.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:14:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kX4vv41O521cqb/Mmwr+SoFy/57SVrz0KMGJ5f1fPRE=;
+        b=wf/6iZqCoedJnvxF79ng3qS6/4Z/jyUagYvpSeL5nM2YSKno3QUY7NUPBUTO7BWHxR
+         ALnUrXUHMIXd0JVmcBcqoZnB8WqfMCAxh4xp4CjLv1+HqrCD06tdzq/4U6lXA88R7ysH
+         YNZN+p6oOArJkbBEEGFcRc4aYrcAyWjYnLDUP7NgZaeWgsfIZAtzXCwZgSkmGBwHUjIn
+         6sXGZOSpgdKyzJzSMqdSO5OjOsAcV747d1RKX83opf1GeNyUTfrGUy9IoqRLAdGpHmho
+         /ftlOL74Hv4HZAZ4ClR6LwCOWKkWvNn2xKOU/zjumXj8X60VMtZzZomU3NaQVRDq6JPu
+         1WYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kX4vv41O521cqb/Mmwr+SoFy/57SVrz0KMGJ5f1fPRE=;
+        b=YVo7OjHw6unTdZbnwMt4k+YYjMp8EvnMN1+CMfSa5NVrRHHZWKqCg2y6fXzJYxA9TM
+         u0Glk7ycVujxxLMFQhsqC40xzYjqfZZlJJxDsF9+rQiYWS10Ntzfcyb5Zwcg2lAB6zC+
+         Um7AFZHuAniTqGPbdXCkfHKYtXQ6tSrtC5eVY9rQ8q990bsLnDhYaPH1Z4xzGw0W+OGn
+         /DU0KbiRosPM9lEBaCdVv+ymZV2jClVf4cSWFZl49YTLym5777x51kHn2gmv8sP/Dr6V
+         I9sZovYgS3LCH9FoGprOT+Ha3Vwtyh/UG7fARqgqRXzddCSw6XsWkUGC1/OJDnqJoTRA
+         17nA==
+X-Gm-Message-State: AOAM531D44fetO0rFReYr3VLlJ05xDtB/yNw+gQoLdvsAgu63ILlqpfk
+        khwWS8ENV8GmSW7DcQBBCkrc6w==
+X-Google-Smtp-Source: ABdhPJw9+6wJu8RmraUx7H9QDDjBebC5U0a57nzJ3ZyXK9TbFdn3cQkVSYOloKkrpZQDH6CClBQntg==
+X-Received: by 2002:a05:6808:219d:: with SMTP id be29mr18881055oib.77.1643667282197;
+        Mon, 31 Jan 2022 14:14:42 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id j6sm3945195otq.76.2022.01.31.14.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 14:14:41 -0800 (PST)
+Date:   Mon, 31 Jan 2022 16:14:39 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>, Luca Weiss <luca@z3ntu.xyz>,
+        Brian Masney <masneyb@onstation.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: qcom: ocmem: Fix missing put_device() call in
+ of_get_ocmem
+Message-ID: <YfhfT0EC393GxSRd@builder.lan>
+References: <20220107073126.2335-1-linmq006@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/171] 5.15.19-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com
-References: <20220131105229.959216821@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nEewP-002TD3-W2
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:33708
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 12
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220107073126.2335-1-linmq006@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 02:54, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.19 release.
-> There are 171 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.19-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri 07 Jan 01:31 CST 2022, Miaoqian Lin wrote:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> The reference taken by 'of_find_device_by_node()' must be released when
+> not needed anymore.
+> Add the corresponding 'put_device()' in the error handling path.
+> 
+> Fixes: 01f937ffc468 ("soc: qcom: ocmem: don't return NULL in of_get_ocmem")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Tested-by: Ron Economos <re@w6rz.net>
+Your patch solves the particular problem, so I'm applying it.
 
+But it seems that we never release pdev in the case of successfully
+return the ocmem object either... So there's more to improve here.
+
+Regards,
+Bjorn
+
+> ---
+>  drivers/soc/qcom/ocmem.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
+> index d2dacbbaafbd..97fd24c178f8 100644
+> --- a/drivers/soc/qcom/ocmem.c
+> +++ b/drivers/soc/qcom/ocmem.c
+> @@ -206,6 +206,7 @@ struct ocmem *of_get_ocmem(struct device *dev)
+>  	ocmem = platform_get_drvdata(pdev);
+>  	if (!ocmem) {
+>  		dev_err(dev, "Cannot get ocmem\n");
+> +		put_device(&pdev->dev);
+>  		return ERR_PTR(-ENODEV);
+>  	}
+>  	return ocmem;
+> -- 
+> 2.17.1
+> 

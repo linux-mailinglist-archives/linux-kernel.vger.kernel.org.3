@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A6A4A3CA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 03:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5EC4A3CA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 03:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357453AbiAaCyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 21:54:22 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:43845 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357428AbiAaCyH (ORCPT
+        id S1357448AbiAaC6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 21:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241493AbiAaC6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 21:54:07 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20V2rf6V3003389, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20V2rf6V3003389
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 31 Jan 2022 10:53:41 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 31 Jan 2022 10:53:41 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 31 Jan 2022 10:53:41 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Mon, 31 Jan 2022 10:53:41 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtlwifi: remove redundant initialization of variable ul_encalgo
-Thread-Topic: [PATCH] rtlwifi: remove redundant initialization of variable
- ul_encalgo
-Thread-Index: AQHYFinyAYEbu+NX9kauX8snRBxGHqx76QqA
-Date:   Mon, 31 Jan 2022 02:53:40 +0000
-Message-ID: <55f8c7f2c75b18cd628d02a25ed96fae676eace2.camel@realtek.com>
-References: <20220130223714.6999-1-colin.i.king@gmail.com>
-In-Reply-To: <20220130223714.6999-1-colin.i.king@gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [111.252.224.243]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMzAg5LiL5Y2IIDEwOjIxOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AF69B66F0AB8C44397B963849C6B24DA@realtek.com>
-Content-Transfer-Encoding: base64
+        Sun, 30 Jan 2022 21:58:48 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D33DC061714
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 18:58:48 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so9509646pjq.3
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 18:58:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UKwameRoPfgLHWpBXoqOSY31hKTED2y4WM3/cMREqYQ=;
+        b=ie36z+3JbZH6BpcGWoA8u8BouUWN7xsL3fl1f4YoG1CTP82izOviQ8uJeRSWesrmi0
+         SdWI6A0H7yGOF4A02a4ZCDGnvB8dgzI0l6WNB2l6lcim35Ft20EXinLNlIA2m0HzJZro
+         iWeB2iq9vReukiu+pPL2Qswox9STXWvm1FfDc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UKwameRoPfgLHWpBXoqOSY31hKTED2y4WM3/cMREqYQ=;
+        b=CweuLFtSKAsyVTLAQgdWYLbnqmcauVVQVGdWnHzoXUy8AB6wLGTz8a7NpGbxYeSy/0
+         Khy2wiwJmQZvMhe+0SMAiq5NMAtZTboKjCLx1DQt0AoeSP/PBN3yQFhS6cOjneJffyD7
+         dkSv/jqkTO9nP/NYjTmpYQ0br5346sG6VyWi9lYNIlTrBMQV2LnO29dFpanB4lafsOrE
+         Mg3CaZtPifOTV3L/by9a1SD35LottFIGjNHp4IaFos27PuPgkD928DsuPeMZv1xnRTsi
+         xgRnqJtY1M7lXDhQmuBcntJRl1G+TbIGVX30oyw+FxvQvqMfL9ERKrjAtsiKWY/2QSI4
+         fHKQ==
+X-Gm-Message-State: AOAM532DkZX6NXPgvuYPRbZ2ua0dQ1JlwQgkTH+iEZAzt93EBvrB0+Lw
+        R4EvJBbtpt6ytrLynxm3ZR2mYg==
+X-Google-Smtp-Source: ABdhPJzC803twXWB9gJWO7ckQkbQydjauPxbn+wK2Zrz3p/u8T15jAhCVbBRrUJeQ+UwY1smWH5+XA==
+X-Received: by 2002:a17:90a:ed03:: with SMTP id kq3mr21942288pjb.136.1643597927548;
+        Sun, 30 Jan 2022 18:58:47 -0800 (PST)
+Received: from google.com ([2401:fa00:8f:203:c6d0:3c7:e220:605c])
+        by smtp.gmail.com with ESMTPSA id s30sm5169120pfw.63.2022.01.30.18.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 18:58:47 -0800 (PST)
+Date:   Mon, 31 Jan 2022 11:58:41 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v2 2/3] mm/page_owner: Use scnprintf() to avoid excessive
+ buffer overrun check
+Message-ID: <YfdQYdFKdH0WQMVO@google.com>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-3-longman@redhat.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129205315.478628-3-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCAyMDIyLTAxLTMwIGF0IDIyOjM3ICswMDAwLCBDb2xpbiBJYW4gS2luZyB3cm90ZToN
-Cj4gVmFyaWFibGUgdWxfZW5jYWxnbyBpcyBpbml0aWFsaXplZCB3aXRoIGEgdmFsdWUgdGhhdCBp
-cyBuZXZlciByZWFkLA0KPiBpdCBpcyBiZWluZyByZS1hc3NpZ25lZCBhIG5ldyB2YWx1ZSBpbiBl
-dmVyeSBjYXNlIGluIHRoZSBmb2xsb3dpbmcNCj4gc3dpdGNoIHN0YXRlbWVudC4gVGhlIGluaXRp
-YWxpemF0aW9uIGlzIHJlZHVuZGFudCBhbmQgY2FuIGJlIHJlbW92ZWQuDQo+IA0KPiBTaWduZWQt
-b2ZmLWJ5OiBDb2xpbiBJYW4gS2luZyA8Y29saW4uaS5raW5nQGdtYWlsLmNvbT4NCg0KQWNrZWQt
-Ynk6IFBpbmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KDQo+IC0tLQ0KPiAgZHJpdmVy
-cy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL2NhbS5jIHwgMiArLQ0KPiAgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL2NhbS5jDQo+IGIvZHJpdmVycy9u
-ZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL2NhbS5jDQo+IGluZGV4IDdhMDM1NWRjNmJhYi4u
-MzI5NzBlYTRiNGU3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVr
-L3J0bHdpZmkvY2FtLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3
-aWZpL2NhbS5jDQo+IEBAIC0yMDgsNyArMjA4LDcgQEAgdm9pZCBydGxfY2FtX2VtcHR5X2VudHJ5
-KHN0cnVjdCBpZWVlODAyMTFfaHcgKmh3LCB1OCB1Y19pbmRleCkNCj4gIA0KPiAgCXUzMiB1bF9j
-b21tYW5kOw0KPiAgCXUzMiB1bF9jb250ZW50Ow0KPiAtCXUzMiB1bF9lbmNhbGdvID0gcnRscHJp
-di0+Y2ZnLT5tYXBzW1NFQ19DQU1fQUVTXTsNCj4gKwl1MzIgdWxfZW5jYWxnbzsNCj4gIAl1OCBl
-bnRyeV9pOw0KPiAgDQo+ICAJc3dpdGNoIChydGxwcml2LT5zZWMucGFpcndpc2VfZW5jX2FsZ29y
-aXRobSkgew0KPiAtLSANCg0KV2hlbiBJIGNoZWNrIHRoaXMgcGF0Y2gsIEkgZmluZCB0aGVyZSBp
-cyBubyAnYnJlYWsnIGZvciBkZWZhdWx0IGNhc2UuDQpEbyB3ZSBuZWVkIG9uZT8gbGlrZQ0KDQpA
-QCAtMjI2LDYgKzIyNiw3IEBAIHZvaWQgcnRsX2NhbV9lbXB0eV9lbnRyeShzdHJ1Y3QgaWVlZTgw
-MjExX2h3ICpodywgdTggdWNfaW5kZXgpDQogICAgICAgICAgICAgICAgYnJlYWs7DQogICAgICAg
-IGRlZmF1bHQ6DQogICAgICAgICAgICAgICAgdWxfZW5jYWxnbyA9IHJ0bHByaXYtPmNmZy0+bWFw
-c1tTRUNfQ0FNX0FFU107DQorICAgICAgICAgICAgICAgYnJlYWs7DQogICAgICAgIH0NCiANCiAg
-ICAgICAgZm9yIChlbnRyeV9pID0gMDsgZW50cnlfaSA8IENBTV9DT05URU5UX0NPVU5UOyBlbnRy
-eV9pKyspIHsNCg0KLS0NClBpbmctS2UNCg0KDQo=
+On (22/01/29 15:53), Waiman Long wrote:
+> The snprintf() function can return a length greater than the given
+> input size. That will require a check for buffer overrun after each
+> invocation of snprintf(). scnprintf(), on the other hand, will never
+> return a greater length. By using scnprintf() in selected places, we
+> can avoid some buffer overrun checks except after stack_depot_snprint()
+> and after the last snprintf().
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>

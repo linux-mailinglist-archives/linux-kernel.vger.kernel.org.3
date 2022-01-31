@@ -2,131 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6650C4A3CC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 05:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE874A3CD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 05:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237404AbiAaEEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 23:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237080AbiAaEEB (ORCPT
+        id S1357573AbiAaEGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 23:06:31 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:43783 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357515AbiAaEG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 23:04:01 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BA9C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 20:04:01 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so11359338pjq.0
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 20:04:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V2PZ2ReSGHGAeYkAGF3C+7HR5tVC3KUspbF6aihY8lw=;
-        b=ap9zalU88EN14mCGhIlwOi3lyOiy1tSHIN9Dgj8MbpB7hm6WVRgIThMmRbxCKh4Ge8
-         vhxsrIiPAZfv4cemi+veflb8TZK+AcnYvFVKOjvxyimqOOydDYuR/fYfS7kr4u6r/eeG
-         QFYgLz9j2Q/RQA8dkxxDaFAkuuvdVIjAPa7qA=
+        Sun, 30 Jan 2022 23:06:26 -0500
+Received: by mail-io1-f72.google.com with SMTP id a185-20020a6bcac2000000b00604c268546dso9030918iog.10
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 20:06:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V2PZ2ReSGHGAeYkAGF3C+7HR5tVC3KUspbF6aihY8lw=;
-        b=DR7JNVsmHQ9x5C3JDOJvsVbM8b/YLZv9XkkVqGTcfJgSbvAMBx1cgnaxxDXsLteaxd
-         GvocWklsKoXVsbBp4jeSMlsM/pWGKb1j/ijaB5fjOf953nVp1fWboLQwNkdTADaMFahG
-         +XRaRW4I1GdllaOIdVD8/K4VLbESMzxltHrzYjiov4mqXt9jOYoHWhRy/sfHOlZbbEhx
-         qn7HBfDOMPcUwV3eu93d3yP0K+oAHN/rcBMiMNf8Gn5eR6sp5w3DF22Mo0VjVoscrMcL
-         pKDKnK3MpEcIgeg+q+gw00pwdFsxXkqI9h4BPAjzIoRHwsa7fXKmfw4xKKuoBNiRcfeD
-         oh3w==
-X-Gm-Message-State: AOAM53207k4VQR7RO0KGo0T4yiJkni8O2+J8VOCNSI556MEdjX+U2dNv
-        ZriXuXHqBYLPyOqx0ao9vXUICQ==
-X-Google-Smtp-Source: ABdhPJwCRAvTo+IGLvTNbpeFRUozTHodb0xd/zFfx+Ke0YLQiks4V+5XnWU60xBWogwGZxrYLwCzZA==
-X-Received: by 2002:a17:902:e74a:: with SMTP id p10mr19170222plf.16.1643601841131;
-        Sun, 30 Jan 2022 20:04:01 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id il18sm9460439pjb.27.2022.01.30.20.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 20:04:00 -0800 (PST)
-Date:   Sun, 30 Jan 2022 20:04:00 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201302002.41A8DDA2@keescook>
-References: <20220131100954.74a2034f@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=g94eSPEms4siUdIAdsRyOE4Be2jkZcPOC6JzxK9ZLK8=;
+        b=00nKfjM/PBYsVTng7VY4I4K5TJSaYZouaNsm8ENEG1vdWQhwyoN7YorAW9R78oR4cv
+         uivLd6GBCq3ZhCZOJtqVJTlMx6zewecW9mN5+ToqKLHjJvIGr8PBh869d+JgxejBcHaf
+         OnBsFdq/ZppXdNclxVwIWUPatIiTwBByq/JeJsaHjLZmv+Mu7OWhNGteEjCuGvXRYnpk
+         cG9hVmKplDIPOsYst+rbEHLaqmwEDcDcCP/7Qwby0zeH8c2ZiQr1AIjTn6mE25467lpA
+         LsJzKoiRWKeED/aQG+q5VM8ObKjx50Dt1ozNAdQwWWvztf+mtRsNYqldTQ4uSiZrC8Sk
+         Z6XQ==
+X-Gm-Message-State: AOAM530tmpCDKFrCt3El1cFlVZ0xBU273CrZcURJw9RIQqHzKX2F+yPw
+        9aMJ+sAkRP8ZkvIjQgrJlSomQIytTd3DoVy3GlvjvKo4zYq2
+X-Google-Smtp-Source: ABdhPJxvB0QpL9iq7aqUHusv5YGj0nOjyxGkqWzz3tjPSN1ALfuPK1LnSE49Vc+mBj26HXvhNUNEQ6IhDqTSr/mTs9iS8sw/WAXx
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131100954.74a2034f@canb.auug.org.au>
+X-Received: by 2002:a05:6638:24d0:: with SMTP id y16mr8925319jat.170.1643601986334;
+ Sun, 30 Jan 2022 20:06:26 -0800 (PST)
+Date:   Sun, 30 Jan 2022 20:06:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008c32e305d6d8e802@google.com>
+Subject: [syzbot] general protection fault in submit_bio_checks
+From:   syzbot <syzbot+2b3f18414c37b42dcc94@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, axboe@kernel.dk,
+        bpf@vger.kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:09:54AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from arch/x86/include/asm/cpumask.h:5,
->                  from arch/x86/include/asm/msr.h:11,
->                  from arch/x86/include/asm/processor.h:22,
->                  from arch/x86/include/asm/timex.h:5,
->                  from include/linux/timex.h:65,
->                  from include/linux/time32.h:13,
->                  from include/linux/time.h:60,
->                  from include/linux/skbuff.h:15,
->                  from include/linux/tcp.h:17,
->                  from drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:33:
-> In function 'fortify_memcpy_chk',
->     inlined from 'mlx5e_insert_vlan' at drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:211:2,
->     inlined from 'mlx5e_sq_xmit_wqe' at drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:496:4:
-> include/linux/fortify-string.h:325:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   325 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hello,
 
-This should be fixed by:
-https://lore.kernel.org/linux-hardening/20220124172242.2410996-1-keescook@chromium.org/
-(I was expecting this to be in netdev by now.)
+syzbot found the following issue on:
 
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from arch/x86/include/asm/cpumask.h:5,
->                  from arch/x86/include/asm/msr.h:11,
->                  from arch/x86/include/asm/processor.h:22,
->                  from arch/x86/include/asm/timex.h:5,
->                  from include/linux/timex.h:65,
->                  from include/linux/time32.h:13,
->                  from include/linux/time.h:60,
->                  from include/linux/ktime.h:24,
->                  from include/linux/timer.h:6,
->                  from include/linux/netdevice.h:24,
->                  from include/trace/events/xdp.h:8,
->                  from include/linux/bpf_trace.h:5,
->                  from drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:33:
-> In function 'fortify_memcpy_chk',
->     inlined from 'mlx5e_xmit_xdp_frame' at drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:344:3:
-> include/linux/fortify-string.h:325:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   325 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HEAD commit:    b605fdc54c2b Add linux-next specific files for 20220128
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=150084b8700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=da5090473475f3ca
+dashboard link: https://syzkaller.appspot.com/bug?extid=2b3f18414c37b42dcc94
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-This should be fixed in:
-https://lore.kernel.org/linux-hardening/20220124172028.2410761-1-keescook@chromium.org/
-(Again, this was expected to be in netdev by now.)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> Caused by various commits in the mlx5 driver interacting with the new
-> memcpy checking.
-> 
-> I have disabled CONFIG_MLX5_CORE_EN for today while this gets sorted
-> out properly.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2b3f18414c37b42dcc94@syzkaller.appspotmail.com
 
-Thanks!
+general protection fault, probably for non-canonical address 0xdffffc000000002f: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000178-0x000000000000017f]
+CPU: 1 PID: 3642 Comm: syz-executor.5 Not tainted 5.17.0-rc1-next-20220128-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:blk_throtl_bio block/blk-throttle.h:175 [inline]
+RIP: 0010:submit_bio_checks+0x7c0/0x1bf0 block/blk-core.c:765
+Code: 08 3c 03 0f 8e 4a 11 00 00 48 b8 00 00 00 00 00 fc ff df 44 8b 6d 10 41 83 e5 01 4a 8d bc 2b 7c 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 09 11 00 00
+RSP: 0018:ffffc900028cf680 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000002f RSI: ffffffff83d5f41e RDI: 000000000000017d
+RBP: ffff88801e8be500 R08: ffffffff8a241580 R09: 0000000000000000
+R10: ffffffff83d5f410 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000001 R14: 00000000fffffffe R15: ffff88801ad9a4cc
+FS:  0000555556299400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fed92bd5ec9 CR3: 000000003b65d000 CR4: 00000000003526e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __submit_bio+0xaf/0x360 block/blk-core.c:802
+ __submit_bio_noacct_mq block/blk-core.c:881 [inline]
+ submit_bio_noacct block/blk-core.c:907 [inline]
+ submit_bio_noacct+0x6c9/0x8a0 block/blk-core.c:896
+ submit_bio block/blk-core.c:968 [inline]
+ submit_bio+0x1ea/0x430 block/blk-core.c:926
+ write_dev_flush fs/btrfs/disk-io.c:4243 [inline]
+ barrier_all_devices fs/btrfs/disk-io.c:4293 [inline]
+ write_all_supers+0x3038/0x4440 fs/btrfs/disk-io.c:4388
+ btrfs_commit_transaction+0x1be3/0x3180 fs/btrfs/transaction.c:2362
+ btrfs_commit_super+0xc1/0x100 fs/btrfs/disk-io.c:4562
+ close_ctree+0x314/0xccc fs/btrfs/disk-io.c:4671
+ generic_shutdown_super+0x14c/0x400 fs/super.c:462
+ kill_anon_super+0x36/0x60 fs/super.c:1056
+ btrfs_kill_super+0x38/0x50 fs/btrfs/super.c:2365
+ deactivate_locked_super+0x94/0x160 fs/super.c:332
+ deactivate_super+0xad/0xd0 fs/super.c:363
+ cleanup_mnt+0x3a2/0x540 fs/namespace.c:1159
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fe814b274c7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe14eb15c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fe814b274c7
+RDX: 00007ffe14eb169b RSI: 000000000000000a RDI: 00007ffe14eb1690
+RBP: 00007ffe14eb1690 R08: 00000000ffffffff R09: 00007ffe14eb1460
+R10: 000055555629a8b3 R11: 0000000000000246 R12: 00007fe814b7f1ea
+R13: 00007ffe14eb2750 R14: 000055555629a810 R15: 00007ffe14eb2790
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:blk_throtl_bio block/blk-throttle.h:175 [inline]
+RIP: 0010:submit_bio_checks+0x7c0/0x1bf0 block/blk-core.c:765
+Code: 08 3c 03 0f 8e 4a 11 00 00 48 b8 00 00 00 00 00 fc ff df 44 8b 6d 10 41 83 e5 01 4a 8d bc 2b 7c 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 09 11 00 00
+RSP: 0018:ffffc900028cf680 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000002f RSI: ffffffff83d5f41e RDI: 000000000000017d
+RBP: ffff88801e8be500 R08: ffffffff8a241580 R09: 0000000000000000
+R10: ffffffff83d5f410 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000001 R14: 00000000fffffffe R15: ffff88801ad9a4cc
+FS:  0000555556299400(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffeece8b278 CR3: 000000003b65d000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	08 3c 03             	or     %bh,(%rbx,%rax,1)
+   3:	0f 8e 4a 11 00 00    	jle    0x1153
+   9:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  10:	fc ff df
+  13:	44 8b 6d 10          	mov    0x10(%rbp),%r13d
+  17:	41 83 e5 01          	and    $0x1,%r13d
+  1b:	4a 8d bc 2b 7c 01 00 	lea    0x17c(%rbx,%r13,1),%rdi
+  22:	00
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 09 11 00 00    	jne    0x1149
 
--Kees
 
--- 
-Kees Cook
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

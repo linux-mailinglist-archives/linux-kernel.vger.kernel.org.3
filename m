@@ -2,275 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86884A46AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB454A46AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359355AbiAaMN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:13:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35578 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1359140AbiAaMNy (ORCPT
+        id S1359597AbiAaMOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:14:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40318 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359489AbiAaMOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:13:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643631233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qY7y58M4Z9dUeNje0RD9EQDvDaWgy0c7Wz/zTz2kkX4=;
-        b=RAhJik0bBdj+IUv4bGSk8quy71Ivc/92emIzsMiiDruqQj7gcYBUtDoUyGnk4q2OLC6d4o
-        2tyGr/8k35K1DyppizZWgB5I1bt8su/skBU6XSy5vVuB1cye1R7/pQ3OKiJyKNPTToCB8J
-        R3IKIlFCWrmqWWhvRDipBNBs65lQ+aI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-597-bBVhutlrMTegSQlyAE2KNg-1; Mon, 31 Jan 2022 07:13:52 -0500
-X-MC-Unique: bBVhutlrMTegSQlyAE2KNg-1
-Received: by mail-ed1-f69.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso6782790edk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:13:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=qY7y58M4Z9dUeNje0RD9EQDvDaWgy0c7Wz/zTz2kkX4=;
-        b=JIUexGcVOXB9Nxq5UT5F11S9IiiQoZzbUIfC2R+nGdbixWJbozCPsxRiXMpiNXuPFu
-         w9dMApbUWqCcADbP0nfFLmjBCN/HUZKjlvI5iLoKFfzmigv7LZDQfDNO//AauBWgWqiY
-         /xKEFu1mNaRo21LnP3bQqgKwTtSwjOWZhRiyPwSE9PXj8XDul1+sj4X9xdIx2NsAjgwF
-         yoogDMTDeqcFK1rDtmtQkt9biCSV0HX7k+gR4/QIIGcX77TS28I+HN9wy2Voszkhn0tR
-         6Hf7/92Xav3ulqorGzwQsaSS6+6aZiZDTunh8xyiXXwJinioSwOyP40JqVbYD/x/tRIs
-         Wogw==
-X-Gm-Message-State: AOAM5309xPAX4vKF8Kg/+KTWDik+OoEvTC3i03YbnWElPhyCSyUnP/KQ
-        xTRaCDE5mElDIvcocwHGXyl+3Y4S/UcOPJqgEytd1UNyG+BoKCRaApyeYqQTvoByeUsjCV/rEAw
-        efiOyK2vZr3SCBUAX2xkgVN6j
-X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr13862934edz.206.1643631231502;
-        Mon, 31 Jan 2022 04:13:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzACLQH+N8dJfW+/bzLKkdD1VbwpDi/uzAqTCLL0kVJw2L9Gr70F8Y3XECH+bTM+vezdbLMGg==
-X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr13862903edz.206.1643631231261;
-        Mon, 31 Jan 2022 04:13:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:b200:f007:5a26:32e7:8ef5? (p200300cbc709b200f0075a2632e78ef5.dip0.t-ipconnect.de. [2003:cb:c709:b200:f007:5a26:32e7:8ef5])
-        by smtp.gmail.com with ESMTPSA id m12sm3786247ejr.218.2022.01.31.04.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 04:13:50 -0800 (PST)
-Message-ID: <acc12d73-a7d1-014c-9c07-33251d7d07ee@redhat.com>
-Date:   Mon, 31 Jan 2022 13:13:49 +0100
+        Mon, 31 Jan 2022 07:14:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AB660FB5;
+        Mon, 31 Jan 2022 12:14:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF5EC340E8;
+        Mon, 31 Jan 2022 12:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643631281;
+        bh=tKoPLp67gjFjMhDzuFz3EmTYWN5hO2IqTUY/OW5vmLI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FR0hgiRXzb71oLsnXUHru/qJmCbaojPo4/mNPPHYJOGWksYFKnth+2bpGNHIk9Rkj
+         IlrsquLPbRBKKpzDK6R9ffpGrXQIgAqWzR1G8WLqIU3hNcPaJe0uBqKAfkWROkp2e+
+         uGg6MKDRAWfeegMjftke98DqcBTVfo+ERhTAUELO3iE8FOLnTZ5Gebt28wRXzU8cWw
+         6pUJCE9WW+xlL9wngdgqMqwfWWqdITbkG27fuCByFk4YH06wvnMkWqmpzpttGHrn0y
+         8ZwjB7bT6HtKTdbE/ad7blJn7q2B8KKdO5Zc7Ro+MtUeQFUreHbNhNEhJzqyKlYJxH
+         AA0QvoJbUDbPg==
+Received: by mail-wr1-f51.google.com with SMTP id c23so25015614wrb.5;
+        Mon, 31 Jan 2022 04:14:41 -0800 (PST)
+X-Gm-Message-State: AOAM532Rry2Hg3BU3wLimzQdPq2OOC+vS+OJeQMAk3TeFUg5+TX1/F/Y
+        ujbTlnWO1Fb0IbhoKc/i+uD49tgGeDf3EU5PXEQ=
+X-Google-Smtp-Source: ABdhPJwtJICpdNQtjXyznRxLoXhSaZ1cdbyP+Vst6bgTfhhQ4vqvLkq7mPZnBWfDFwPmkthzouwRa5H/48CryKZXw8Q=
+X-Received: by 2002:a05:6000:1107:: with SMTP id z7mr17231316wrw.189.1643631279820;
+ Mon, 31 Jan 2022 04:14:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        rppt@kernel.org
-Cc:     ak@linux.intel.com, akpm@linux-foundation.org, ardb@kernel.org,
-        bp@alien8.de, brijesh.singh@amd.com, dave.hansen@intel.com,
-        dfaggioli@suse.com, jroedel@suse.de, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, peterz@infradead.org, rientjes@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, thomas.lendacky@amd.com, varad.gautam@suse.com,
-        vbabka@suse.cz, x86@kernel.org, Mike Rapoport <rppt@linux.ibm.com>
-References: <YfZJQedck2YxZcWA@kernel.org>
- <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCHv3.1 1/7] mm: Add support for unaccepted memory
-In-Reply-To: <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220131105215.644174521@linuxfoundation.org> <20220131105216.796938973@linuxfoundation.org>
+In-Reply-To: <20220131105216.796938973@linuxfoundation.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 31 Jan 2022 13:14:28 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEOTRBdSXrmWSZ2hj+cksWYHeZOnoZAxwVHcPtowUhFSg@mail.gmail.com>
+Message-ID: <CAMj1kXEOTRBdSXrmWSZ2hj+cksWYHeZOnoZAxwVHcPtowUhFSg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 33/64] ARM: 9170/1: fix panic when kasan and kprobe
+ are enabled
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        huangshaobo <huangshaobo6@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.01.22 17:45, Kirill A. Shutemov wrote:
-> UEFI Specification version 2.9 introduces the concept of memory
-> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
-> SEV-SNP, requiring memory to be accepted before it can be used by the
-> guest. Accepting happens via a protocol specific for the Virtual Machine
-> platform.
-> 
-> Accepting memory is costly and it makes VMM allocate memory for the
-> accepted guest physical address range. It's better to postpone memory
-> acceptance until memory is needed. It lowers boot time and reduces
-> memory overhead.
-> 
-> Support of such memory requires a few changes in core-mm code:
-> 
->   - memblock has to accept memory on allocation;
-> 
->   - page allocator has to accept memory on the first allocation of the
->     page;
-> 
-> Memblock change is trivial.
-> 
-> The page allocator is modified to accept pages on the first allocation.
-> PageBuddyUnaccepted() is used to indicate that the page requires acceptance.
-> 
-> Kernel only need to accept memory once after boot, so during the boot
-> and warm up phase there will be a lot of memory acceptance. After things
-> are settled down the only price of the feature if couple of checks for
-> PageBuddyUnaccepted() in alloc and free paths. The check refers a hot
-> variable (that also encodes PageBuddy()), so it is cheap and not visible
-> on profiles.
-> 
-> Architecture has to provide three helpers if it wants to support
-> unaccepted memory:
-> 
->  - accept_memory() makes a range of physical addresses accepted.
-> 
->  - maybe_mark_page_unaccepted() marks a page PageBuddyUnaccepted() if it
->    requires acceptance. Used during boot to put pages on free lists.
-> 
->  - accept_page() makes a page accepted and clears PageBuddyUnaccepted().
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+On Mon, 31 Jan 2022 at 11:59, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> From: sparkhuang <huangshaobo6@huawei.com>
+>
+> commit 8b59b0a53c840921b625378f137e88adfa87647e upstream.
+>
+> arm32 uses software to simulate the instruction replaced
+> by kprobe. some instructions may be simulated by constructing
+> assembly functions. therefore, before executing instruction
+> simulation, it is necessary to construct assembly function
+> execution environment in C language through binding registers.
+> after kasan is enabled, the register binding relationship will
+> be destroyed, resulting in instruction simulation errors and
+> causing kernel panic.
+>
+> the kprobe emulate instruction function is distributed in three
+> files: actions-common.c actions-arm.c actions-thumb.c, so disable
+> KASAN when compiling these files.
+>
+> for example, use kprobe insert on cap_capable+20 after kasan
+> enabled, the cap_capable assembly code is as follows:
+> <cap_capable>:
+> e92d47f0        push    {r4, r5, r6, r7, r8, r9, sl, lr}
+> e1a05000        mov     r5, r0
+> e280006c        add     r0, r0, #108    ; 0x6c
+> e1a04001        mov     r4, r1
+> e1a06002        mov     r6, r2
+> e59fa090        ldr     sl, [pc, #144]  ;
+> ebfc7bf8        bl      c03aa4b4 <__asan_load4>
+> e595706c        ldr     r7, [r5, #108]  ; 0x6c
+> e2859014        add     r9, r5, #20
+> ......
+> The emulate_ldr assembly code after enabling kasan is as follows:
+> c06f1384 <emulate_ldr>:
+> e92d47f0        push    {r4, r5, r6, r7, r8, r9, sl, lr}
+> e282803c        add     r8, r2, #60     ; 0x3c
+> e1a05000        mov     r5, r0
+> e7e37855        ubfx    r7, r5, #16, #4
+> e1a00008        mov     r0, r8
+> e1a09001        mov     r9, r1
+> e1a04002        mov     r4, r2
+> ebf35462        bl      c03c6530 <__asan_load4>
+> e357000f        cmp     r7, #15
+> e7e36655        ubfx    r6, r5, #12, #4
+> e205a00f        and     sl, r5, #15
+> 0a000001        beq     c06f13bc <emulate_ldr+0x38>
+> e0840107        add     r0, r4, r7, lsl #2
+> ebf3545c        bl      c03c6530 <__asan_load4>
+> e084010a        add     r0, r4, sl, lsl #2
+> ebf3545a        bl      c03c6530 <__asan_load4>
+> e2890010        add     r0, r9, #16
+> ebf35458        bl      c03c6530 <__asan_load4>
+> e5990010        ldr     r0, [r9, #16]
+> e12fff30        blx     r0
+> e356000f        cm      r6, #15
+> 1a000014        bne     c06f1430 <emulate_ldr+0xac>
+> e1a06000        mov     r6, r0
+> e2840040        add     r0, r4, #64     ; 0x40
+> ......
+>
+> when running in emulate_ldr to simulate the ldr instruction, panic
+> occurred, and the log is as follows:
+> Unable to handle kernel NULL pointer dereference at virtual address
+> 00000090
+> pgd = ecb46400
+> [00000090] *pgd=2e0fa003, *pmd=00000000
+> Internal error: Oops: 206 [#1] SMP ARM
+> PC is at cap_capable+0x14/0xb0
+> LR is at emulate_ldr+0x50/0xc0
+> psr: 600d0293 sp : ecd63af8  ip : 00000004  fp : c0a7c30c
+> r10: 00000000  r9 : c30897f4  r8 : ecd63cd4
+> r7 : 0000000f  r6 : 0000000a  r5 : e59fa090  r4 : ecd63c98
+> r3 : c06ae294  r2 : 00000000  r1 : b7611300  r0 : bf4ec008
+> Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+> Control: 32c5387d  Table: 2d546400  DAC: 55555555
+> Process bash (pid: 1643, stack limit = 0xecd60190)
+> (cap_capable) from (kprobe_handler+0x218/0x340)
+> (kprobe_handler) from (kprobe_trap_handler+0x24/0x48)
+> (kprobe_trap_handler) from (do_undefinstr+0x13c/0x364)
+> (do_undefinstr) from (__und_svc_finish+0x0/0x30)
+> (__und_svc_finish) from (cap_capable+0x18/0xb0)
+> (cap_capable) from (cap_vm_enough_memory+0x38/0x48)
+> (cap_vm_enough_memory) from
+> (security_vm_enough_memory_mm+0x48/0x6c)
+> (security_vm_enough_memory_mm) from
+> (copy_process.constprop.5+0x16b4/0x25c8)
+> (copy_process.constprop.5) from (_do_fork+0xe8/0x55c)
+> (_do_fork) from (SyS_clone+0x1c/0x24)
+> (SyS_clone) from (__sys_trace_return+0x0/0x10)
+> Code: 0050a0e1 6c0080e2 0140a0e1 0260a0e1 (f801f0e7)
+>
+> Fixes: 35aa1df43283 ("ARM kprobes: instruction single-stepping support")
+> Fixes: 421015713b30 ("ARM: 9017/2: Enable KASan for ARM")
+> Signed-off-by: huangshaobo <huangshaobo6@huawei.com>
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+Probably a bit late to mention this but v5.4 does not support KASAN on
+ARM, so this patch is fairly pointless.
 
-You should somehow document+check+enforce that page poisoning cannot be
-enabled concurrently, because it cannot possibly work IIUC.
-
-[...]
-
-> + /*
-> +  * PageBuddyUnaccepted() indicates that the page has to be "accepted" before
-> +  * it can be used. Page allocator has to call accept_page() before returning
-> +  * the page to the caller.
-> +  *
-> +  * PageBuddyUnaccepted() encoded with the same bit as PageOffline().
-> +  * PageOffline() pages are never on free list of buddy allocator, so there's
-> +  * not conflict.
-> +  */
-> +#ifdef CONFIG_UNACCEPTED_MEMORY
-> +PAGE_TYPE_OPS(BuddyUnaccepted, offline)
-> +#else
-> +PAGE_TYPE_OPS_FALSE(BuddyUnaccepted)
-> +#endif
-
-Much better.
-
-> +
->  extern void page_offline_freeze(void);
->  extern void page_offline_thaw(void);
->  extern void page_offline_begin(void);
-> diff --git a/mm/internal.h b/mm/internal.h
-> index d80300392a19..26e5d7cb6aff 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -718,4 +718,19 @@ void vunmap_range_noflush(unsigned long start, unsigned long end);
->  int numa_migrate_prep(struct page *page, struct vm_area_struct *vma,
->  		      unsigned long addr, int page_nid, int *flags);
->  
-> +#ifndef CONFIG_UNACCEPTED_MEMORY
-> +static inline void maybe_mark_page_unaccepted(struct page *page,
-> +					      unsigned int order)
-> +{
-> +}
-> +
-> +static inline void accept_page(struct page *page, unsigned int order)
-> +{
-> +}
-> +
-> +static inline void accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +}
-> +#endif
-> +
->  #endif	/* __MM_INTERNAL_H */
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 1018e50566f3..6c109b3b2a02 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -1400,6 +1400,15 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
->  		 */
->  		kmemleak_alloc_phys(found, size, 0, 0);
->  
-> +	/*
-> +	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
-> +	 * require memory to be accepted before it can be used by the
-> +	 * guest.
-> +	 *
-> +	 * Accept the memory of the allocated buffer.
-> +	 */
-> +	accept_memory(found, found + size);
-> +
->  	return found;
->  }
->  
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 3589febc6d31..27b9bd20e675 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1077,6 +1077,7 @@ static inline void __free_one_page(struct page *page,
->  	unsigned int max_order;
->  	struct page *buddy;
->  	bool to_tail;
-> +	bool unaccepted = PageBuddyUnaccepted(page);
->  
->  	max_order = min_t(unsigned int, MAX_ORDER - 1, pageblock_order);
->  
-> @@ -1110,6 +1111,10 @@ static inline void __free_one_page(struct page *page,
->  			clear_page_guard(zone, buddy, order, migratetype);
->  		else
->  			del_page_from_free_list(buddy, zone, order);
-> +
-> +		if (PageBuddyUnaccepted(buddy))
-> +			unaccepted = true;
-> +
->  		combined_pfn = buddy_pfn & pfn;
->  		page = page + (combined_pfn - pfn);
->  		pfn = combined_pfn;
-> @@ -1143,6 +1148,10 @@ static inline void __free_one_page(struct page *page,
->  done_merging:
->  	set_buddy_order(page, order);
->  
-> +	/* Mark page unaccepted if any of merged pages were unaccepted */
-> +	if (unaccepted)
-> +		__SetPageBuddyUnaccepted(page);
-> +
->  	if (fpi_flags & FPI_TO_TAIL)
->  		to_tail = true;
->  	else if (is_shuffle_order(order))
-> @@ -1168,7 +1177,8 @@ static inline void __free_one_page(struct page *page,
->  static inline bool page_expected_state(struct page *page,
->  					unsigned long check_flags)
->  {
-> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
-> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
-> +	    !PageBuddyUnaccepted(page))
->  		return false;
->  
->  	if (unlikely((unsigned long)page->mapping |
-> @@ -1749,6 +1759,8 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
->  {
->  	if (early_page_uninitialised(pfn))
->  		return;
-> +
-> +	maybe_mark_page_unaccepted(page, order);
->  	__free_pages_core(page, order);
-
-You'll be setting the page as unaccepted even before it's actually
-PageBuddy(). While that works, I wonder why we call
-maybe_mark_page_unaccepted() at these points.
-
-Why are we not moving that deeper into the buddy? __free_pages_core() is
-used for any fresh pages that enter the buddy, used outside of
-page_alloc.c only for memory hot(un)plug, so I'd suggest moving it at
-least into there.
-
-But maybe we'd even move it further down, to the place where we actually
-establish PageBuddy().
-
-One idea would be adding a new FPI_UNACCEPTED flag, passing it from
-__free_pages_core() only, and calling maybe_mark_page_unaccepted() from
-__free_one_page() after set_buddy_order().
-
-If in-lining would do its job properly, we'd be left with the
-FPI_UNACCEPTED checks only when called via __free_pages_core(), and we'd
-have that call at a single place right where we mess with PageBuddy().
-
--- 
-Thanks,
-
-David / dhildenb
-
+> ---
+>  arch/arm/probes/kprobes/Makefile |    3 +++
+>  1 file changed, 3 insertions(+)
+>
+> --- a/arch/arm/probes/kprobes/Makefile
+> +++ b/arch/arm/probes/kprobes/Makefile
+> @@ -1,4 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +KASAN_SANITIZE_actions-common.o := n
+> +KASAN_SANITIZE_actions-arm.o := n
+> +KASAN_SANITIZE_actions-thumb.o := n
+>  obj-$(CONFIG_KPROBES)          += core.o actions-common.o checkers-common.o
+>  obj-$(CONFIG_ARM_KPROBES_TEST) += test-kprobes.o
+>  test-kprobes-objs              := test-core.o
+>
+>

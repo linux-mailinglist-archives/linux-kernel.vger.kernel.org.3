@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5EC4A3CA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 03:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A884A3CAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 04:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357448AbiAaC6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 21:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241493AbiAaC6s (ORCPT
+        id S1357466AbiAaDGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 22:06:40 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:44541 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236668AbiAaDGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 21:58:48 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D33DC061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 18:58:48 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so9509646pjq.3
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 18:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UKwameRoPfgLHWpBXoqOSY31hKTED2y4WM3/cMREqYQ=;
-        b=ie36z+3JbZH6BpcGWoA8u8BouUWN7xsL3fl1f4YoG1CTP82izOviQ8uJeRSWesrmi0
-         SdWI6A0H7yGOF4A02a4ZCDGnvB8dgzI0l6WNB2l6lcim35Ft20EXinLNlIA2m0HzJZro
-         iWeB2iq9vReukiu+pPL2Qswox9STXWvm1FfDc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UKwameRoPfgLHWpBXoqOSY31hKTED2y4WM3/cMREqYQ=;
-        b=CweuLFtSKAsyVTLAQgdWYLbnqmcauVVQVGdWnHzoXUy8AB6wLGTz8a7NpGbxYeSy/0
-         Khy2wiwJmQZvMhe+0SMAiq5NMAtZTboKjCLx1DQt0AoeSP/PBN3yQFhS6cOjneJffyD7
-         dkSv/jqkTO9nP/NYjTmpYQ0br5346sG6VyWi9lYNIlTrBMQV2LnO29dFpanB4lafsOrE
-         Mg3CaZtPifOTV3L/by9a1SD35LottFIGjNHp4IaFos27PuPgkD928DsuPeMZv1xnRTsi
-         xgRnqJtY1M7lXDhQmuBcntJRl1G+TbIGVX30oyw+FxvQvqMfL9ERKrjAtsiKWY/2QSI4
-         fHKQ==
-X-Gm-Message-State: AOAM532DkZX6NXPgvuYPRbZ2ua0dQ1JlwQgkTH+iEZAzt93EBvrB0+Lw
-        R4EvJBbtpt6ytrLynxm3ZR2mYg==
-X-Google-Smtp-Source: ABdhPJzC803twXWB9gJWO7ckQkbQydjauPxbn+wK2Zrz3p/u8T15jAhCVbBRrUJeQ+UwY1smWH5+XA==
-X-Received: by 2002:a17:90a:ed03:: with SMTP id kq3mr21942288pjb.136.1643597927548;
-        Sun, 30 Jan 2022 18:58:47 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:c6d0:3c7:e220:605c])
-        by smtp.gmail.com with ESMTPSA id s30sm5169120pfw.63.2022.01.30.18.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 18:58:47 -0800 (PST)
-Date:   Mon, 31 Jan 2022 11:58:41 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v2 2/3] mm/page_owner: Use scnprintf() to avoid excessive
- buffer overrun check
-Message-ID: <YfdQYdFKdH0WQMVO@google.com>
-References: <20220129205315.478628-1-longman@redhat.com>
- <20220129205315.478628-3-longman@redhat.com>
+        Sun, 30 Jan 2022 22:06:38 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20V36DdA4004765, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20V36DdA4004765
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 31 Jan 2022 11:06:13 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 31 Jan 2022 11:06:13 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 31 Jan 2022 11:06:13 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Mon, 31 Jan 2022 11:06:13 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>
+CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "eswierk@gh.st" <eswierk@gh.st>
+Subject: Re: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
+Thread-Topic: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
+Thread-Index: AQHYBCp/WStseF16x0uJ7VAbWo+1y6xqJTFAgAMM/BCAA1dIAIAA+BTwgAWAeYCAALM9AIAEADQAgABbFwA=
+Date:   Mon, 31 Jan 2022 03:06:12 +0000
+Message-ID: <8afdfa15dd548019f8808085efe584d216a4ac67.camel@realtek.com>
+References: <20220108005533.947787-1-martin.blumenstingl@googlemail.com>
+         <423f474e15c948eda4db5bc9a50fd391@realtek.com>
+         <CAFBinCBVEndU0t-6d5atE31OFYHzPyk7pOe78v0XrrFWcBec9w@mail.gmail.com>
+         <5ef8ab4f78e448df9f823385d0daed88@realtek.com>
+         <CAFBinCDjfKK3+WOXP2xbcAK-KToWof+kSzoxYztqRcc=7T1eyg@mail.gmail.com>
+         <53bea965043548539b995514d36f48e5@realtek.com>
+         <CAFBinCBcgEKB3Zak9oGrZ-azqgot691gFSRGGeOP-hr4e+9C4Q@mail.gmail.com>
+In-Reply-To: <CAFBinCBcgEKB3Zak9oGrZ-azqgot691gFSRGGeOP-hr4e+9C4Q@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [111.252.224.243]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMzAg5LiL5Y2IIDEwOjIxOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3B53DD61DDFF5D4E9D3B72A1A503E0E8@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129205315.478628-3-longman@redhat.com>
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/01/29 15:53), Waiman Long wrote:
-> The snprintf() function can return a length greater than the given
-> input size. That will require a check for buffer overrun after each
-> invocation of snprintf(). scnprintf(), on the other hand, will never
-> return a greater length. By using scnprintf() in selected places, we
-> can avoid some buffer overrun checks except after stack_depot_snprint()
-> and after the last snprintf().
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+SGksDQoNCk9uIFN1biwgMjAyMi0wMS0zMCBhdCAyMjo0MCArMDEwMCwgTWFydGluIEJsdW1lbnN0
+aW5nbCB3cm90ZToNCj4gDQo+IE9uIEZyaSwgSmFuIDI4LCAyMDIyIGF0IDE6NTEgQU0gUGtzaGlo
+IDxwa3NoaWhAcmVhbHRlay5jb20+IHdyb3RlOg0KPiBbLi4uXQ0KPiA+ID4gPiBUbyBhdm9pZCB0
+aGlzLCB3ZSBjYW4gYWRkIGEgZmxhZyB0byBzdHJ1Y3QgcnR3X3ZpZiwgYW5kIHNldCB0aGlzIGZs
+YWcNCj4gPiA+ID4gd2hlbiA6OnJlbW92ZV9pbnRlcmZhY2UuIFRoZW4sIG9ubHkgY29sbGVjdCB2
+aWYgd2l0aG91dCB0aGlzIGZsYWcgaW50byBsaXN0DQo+ID4gPiA+IHdoZW4gd2UgdXNlIGl0ZXJh
+dGVfYWN0aW9tKCkuDQo+ID4gPiA+IA0KPiA+ID4gPiBBcyB3ZWxsIGFzIGllZWU4MDIxMV9zdGEg
+Y2FuIGRvIHNpbWlsYXIgZml4Lg0KPiA+ID4gPiANCj4gPiANCj4gPiBJIHdvdWxkIHByZWZlciBt
+eSBtZXRob2QgdGhhdCBhZGRzIGEgJ2Jvb2wgZGlzYWJsZWQnIGZsYWcgdG8gc3RydWN0IHJ0d192
+aWYvcnR3X3N0YQ0KPiA+IGFuZCBzZXQgaXQgd2hlbiA6OnJlbW92ZV9pbnRlcmZhY2UvOjpzdGFf
+cmVtb3ZlLiBUaGVuIHJ0d19pdGVyYXRlX3N0YXMoKSBjYW4NCj4gPiBjaGVjayB0aGlzIGZsYWcg
+dG8gZGVjaWRlIHdoZXRoZXIgZG9lcyB0aGluZyBvciBub3QuDQo+IFRoYXQgd291bGQgaW5kZWVk
+IGJlIGEgdmVyeSBzdHJhaWdodCBmb3J3YXJkIGFwcHJvYWNoIGFuZCBlYXN5IHRvIHJlYWQuDQo+
+IEluIG5ldC9tYWM4MDIxMS9pZmFjZS5jIHRoZXJlJ3Mgc29tZSBjYXNlcyB3aGVyZSBhZnRlcg0K
+PiBkcnZfcmVtb3ZlX2ludGVyZmFjZSgpICh3aGljaCBpbnRlcm5hbGx5IGNhbGxzIG91ciAucmVt
+b3ZlX2ludGVyZmFjZQ0KPiBvcCkgd2lsbCBrZnJlZSB0aGUgdmlmIChzZGF0YSkuIERvZXNuJ3Qg
+dGhhdCB0aGVuIHJlc3VsdCBpbiBhDQo+IHVzZS1hZnRlci1mcmVlIGlmIHdlIHJlbHkgb24gYSBi
+b29sZWFuIHdpdGhpbiBydHdfdmlmPw0KDQpUaGUgcnR3X3ZpZiBpcyBkcnZfcHJpdiBvZiBpZWVl
+ODAyMTFfdmlmLCBhbmQgdGhleSB3aWxsIGJlIGZyZWVkIGF0DQp0aGUgc2FtZSB0aW1lLiBXZSBt
+dXN0IHNldCAnYm9vbCBkaXNhYmxlZCcgYWZ0ZXIgaG9sZGluZyBydHdkZXYtPm11dGV4DQpsb2Nr
+LCBhbmQgY2hlY2sgdGhpcyBmbGFnIGluIGl0ZXJhdG9yIG9mIGllZWU4MDIxMV9pdGVyYXRlX2Fj
+dGl2ZV9pbnRlcmZhY2VzX2F0b21pYygpDQp0byBjb250cnVjdCBhIGxpc3Qgb2YgdmlmLg0KDQpU
+aGF0IG1lYW5zIHdlIG5ldmVyIGFjY2VzcyB0aGlzIGZsYWcgb3V0IG9mIHJ0d2Rldi0+bXV0eCBv
+ciBpdGVyYXRvci4NCkRvZXMgaXQgbWFrZSBzZW5zZT8NCg0KLS0NClBpbmctS2UNCg0KDQo=

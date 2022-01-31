@@ -2,95 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4204A48F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC284A4901
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377168AbiAaOGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:06:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60037 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1359088AbiAaOGr (ORCPT
+        id S1377842AbiAaOIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 09:08:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49770 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244552AbiAaOIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:06:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643638007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lq4puUkj4hgrag1BwbEA+M/NEvqmLEeOxbVsYJ+Z5vo=;
-        b=NXaiQz2ogwQi2v+UsH3XJXPOsVktObvfOPO3K4v8pabgycMiayLkTFzpqXxnH23rvWIDay
-        atVs1MI7kTiSNnDDwQ69la49yAK5Jx1SGtooePOmF/d6YdtKKypa/XDCpseRsoUqnxnOzc
-        3nIlaY6lc2dXU3WePF5XXJOhZBRTOOc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-277-O5_NTByiOxiHJpcdU2q3ZA-1; Mon, 31 Jan 2022 09:06:46 -0500
-X-MC-Unique: O5_NTByiOxiHJpcdU2q3ZA-1
-Received: by mail-ed1-f72.google.com with SMTP id l16-20020aa7c3d0000000b004070ea10e7fso6949420edr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 06:06:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=lq4puUkj4hgrag1BwbEA+M/NEvqmLEeOxbVsYJ+Z5vo=;
-        b=MTkFCm6cKTupoZuqF6s8BFj5oRx1ev44u3wQ4MqMr9tuNFpHtx4VYjgmfhTtvG9M5d
-         IL7v6SXbauGQUgvCZFb6lDxO26rMLksfFM/RWpLTjEyShICKU8cKusEgEl/NUiIcv5JN
-         JXGC5/y74Oi82WHHEcJsvxciW3sp1EIGGJohF4b0tzJJ+SeoAiaU5ICmA/tLOdtmRJEh
-         RPfKqpWJn8o4YzkyO7aN1Kmlmr27sBmtfzflF7Lpe96GPJMiJu8Pewz2ASGbpqP2VCsC
-         guHx1948WQw/sbyx5AYOn33r+D3NWCzxptI4MSG7OUfKGnrzV+UssE3eaii1HfTeE7lx
-         zNIA==
-X-Gm-Message-State: AOAM531D9caPhOBN2odxFfYb3K7RTFgOePwdRhjeQsgNwSRVuviTr4NC
-        P7Xr12jKGbvCQMXxaPHxvqzpJjzFVLX4U2JvQgKe+PQAgHKUZWj6ADbvxMo4V4OjtG2y7N/JwkM
-        xfLYeRojDDnWHqZTXQQRuDFsJ
-X-Received: by 2002:a17:906:6a19:: with SMTP id qw25mr17483340ejc.558.1643638005079;
-        Mon, 31 Jan 2022 06:06:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxAO4eS7yGV8BJ6dApQRUxgeb4fW4AamF/LYz6ovahRis752lzaJ3TJIm62SEUFaDMA+X5X2Q==
-X-Received: by 2002:a17:906:6a19:: with SMTP id qw25mr17483320ejc.558.1643638004923;
-        Mon, 31 Jan 2022 06:06:44 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:b200:f007:5a26:32e7:8ef5? (p200300cbc709b200f0075a2632e78ef5.dip0.t-ipconnect.de. [2003:cb:c709:b200:f007:5a26:32e7:8ef5])
-        by smtp.gmail.com with ESMTPSA id p29sm17930429edi.11.2022.01.31.06.06.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 06:06:44 -0800 (PST)
-Message-ID: <c668a7a2-35c1-dea7-440a-bffaf2868701@redhat.com>
-Date:   Mon, 31 Jan 2022 15:06:43 +0100
+        Mon, 31 Jan 2022 09:08:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E937B612E5;
+        Mon, 31 Jan 2022 14:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1CFC36AE2;
+        Mon, 31 Jan 2022 14:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643638109;
+        bh=eYNdHLqQouEIEhZH230lPkO0ptNEzAszqaQ0pmPK8Lw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PxXYypcJwsQ2m0t6g9bljx68WvpzIN4zqV9ct0oJJXhCiIFTFKroRRGXMWU4dGnws
+         YdwFEQhVrmb0uSyJDmX7sJsrDrcohYg53W/BIasigkTUZp20CzlgO494mS+TAtFAaM
+         qP7UhBjbU757pi4yBSDl5i34bEG6lNLLq3HVBUB81K2Y/jS0PbwVxSgTE1RNL4hznr
+         XMhUo3dkKfjg9o0oOkqXjiz6SleFNlFMfINocSYu2xfKtsqH/QpV7BMiUuTASn/vQ8
+         BnEDsRliveCaKA/FHULHxRk+HI7l/BRCYnDea3zt5vCR+7ml6b2uw2qWd3frKLk5TP
+         PgjKVfpdtWLcg==
+Received: by mail-ej1-f41.google.com with SMTP id j2so43004971ejk.6;
+        Mon, 31 Jan 2022 06:08:29 -0800 (PST)
+X-Gm-Message-State: AOAM530cGs958J/ElGDPf0zAojjmzvVWRwlLSfhUAxHXhCigac4Dh8v2
+        pBlDGjFv4HWtbyNqfJEAzDEfa/C1sBCKJ1LV7w==
+X-Google-Smtp-Source: ABdhPJzXwYNlL2rg8h8DgR2AIEf+6Xiadu7eYPnmrZWIFGRW/jNuygzOHHd2oGX4mt7a+wmRM80ssdnTYzv2Cf4zggo=
+X-Received: by 2002:a17:907:2d1e:: with SMTP id gs30mr17061887ejc.14.1643638107612;
+ Mon, 31 Jan 2022 06:08:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 3/4] mm/gup: remove unused pin_user_pages_locked()
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Jan Kara <jack@suse.cz>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-References: <20220131051752.447699-1-jhubbard@nvidia.com>
- <20220131051752.447699-4-jhubbard@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220131051752.447699-4-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <1643337290-1376-1-git-send-email-lhjeff911@gmail.com>
+In-Reply-To: <1643337290-1376-1-git-send-email-lhjeff911@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 31 Jan 2022 08:08:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLZT2+wJO-tLVt9psWSRoCisjM+=iQa9jryvjjP8sxSOA@mail.gmail.com>
+Message-ID: <CAL_JsqLZT2+wJO-tLVt9psWSRoCisjM+=iQa9jryvjjP8sxSOA@mail.gmail.com>
+Subject: Re: [PATCH -next] dt-bindings:spi: Fix error for test.
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        "LH.Kuo" <lh.kuo@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.22 06:17, John Hubbard wrote:
-> This routine was used for a short while, but then the calling code was
-> refactored and the only caller was removed.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On Thu, Jan 27, 2022 at 8:34 PM Li-hao Kuo <lhjeff911@gmail.com> wrote:
+>
+> Fix error for test remove the include path and modify parameters
 > ---
+>  Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> index 24382cd..3dd164d 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> @@ -20,8 +20,7 @@ properties:
+>
+>    reg:
+>      items:
+> -      - the SPI master registers
+> -      - the SPI slave registers
+> +    minItems: 2
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+items:
+  - description: SPI master registers
+  - description: SPI slave registers

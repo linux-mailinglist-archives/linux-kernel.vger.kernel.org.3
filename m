@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2FD4A3C07
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 01:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BD64A3C10
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 01:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347815AbiAaAAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 19:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245559AbiAaAAE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 19:00:04 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DA5C061714;
-        Sun, 30 Jan 2022 16:00:04 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id a28so23342377lfl.7;
-        Sun, 30 Jan 2022 16:00:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cLMbzDUhFlSgdQoGKuc6SBBSjoGSeYRwJlFPN5QbfOY=;
-        b=RK73TNDnpRXvhBX8A5kt8T9bMKrFqOWo89YfW3gK2p/ab1wByjnGog7fEXd3UVT+C3
-         rHoNnE2KHQTRVgXgEbxLf8rq2dfS7RN2uauA94bDVKW9t7hI2Itkv6D/Uq9pEptbrU4B
-         MvyYxY9eImtQTwr9x1xgphwI65LXw+PgF4X53+7EbnHJ6VlxsKylOfKocaC1+hwE8j+Y
-         g8DqFpkq2bE3Fa6cxe4EJMV5QFxB9EbJQREG6E6dm9HB8VwRdFbjW8VZEaPRMYWxh0Fi
-         xS0fx3jW1XZkk9AdVDpBkuIL04m469ZyC/8J5X48ZOiIy9CvayEu9GPYKAk+UziJs7Sz
-         EAXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cLMbzDUhFlSgdQoGKuc6SBBSjoGSeYRwJlFPN5QbfOY=;
-        b=thpKcpWyhgXMSg+5kKL5nRUwZQ87iPz9cl8n5ttetspjfZH0OdJ2mFllM2pR/8utm2
-         6bMaQvo7KJTN5H2SYMnYEZLsYQfErx65ggenwwsw2/2sepwOmRulprLCgQH5pepM/1NL
-         DB7LLLeEUs28wGsH/l02kvMa97IG8VXWyDYoUaU3hqumQp4ea5BIB+GYctD5lnwc/hsl
-         RgEUgdwxxmi8atRwnnM5g+dfcfRwYjK5uMXSp9JPuxaJkPxG/PUO5nGGVyTslIL624mL
-         D6AyJKtN1B2Rdbn4HU4op2vzEP/c3G8g5gZ8vvdN6SOoA0psxyfHigmpn5ucmI1llSG3
-         fhHw==
-X-Gm-Message-State: AOAM531p9vl/1V5madiUdhP58V+eyjcGr8MN8gCwUlgEnfK+Q5nM9DqO
-        ZS94iSZB6xfmI7TIwovshAY=
-X-Google-Smtp-Source: ABdhPJzQA1KKnOEKivxU5yFBm8z9Pa+/47HYUYIyiKAkcrhL57RR7avlrclppEY2U8tedf0Iy3kCEg==
-X-Received: by 2002:a05:6512:1587:: with SMTP id bp7mr13852830lfb.671.1643587202164;
-        Sun, 30 Jan 2022 16:00:02 -0800 (PST)
-Received: from localhost.localdomain (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
-        by smtp.gmail.com with ESMTPSA id e7sm3443193lfb.17.2022.01.30.16.00.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 16:00:01 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        id S243863AbiAaADo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 19:03:44 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:55888 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235023AbiAaADn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 30 Jan 2022 19:03:43 -0500
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nEKAS-0003bh-DW; Mon, 31 Jan 2022 01:03:36 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Jagan Teki <jagan@amarulasolutions.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] drm/panel: simple: Add support for HannStar HSD101PWW2 panel
-Date:   Mon, 31 Jan 2022 02:59:45 +0300
-Message-Id: <20220130235945.22746-4-digetx@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220130235945.22746-1-digetx@gmail.com>
-References: <20220130235945.22746-1-digetx@gmail.com>
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] drm/panel: feiyang-fy07024di26a30d: make reset gpio optional
+Date:   Mon, 31 Jan 2022 01:03:35 +0100
+Message-ID: <4380260.tF47cCTlra@diego>
+In-Reply-To: <20220107051335.3812535-3-pgwipeout@gmail.com>
+References: <20220107051335.3812535-1-pgwipeout@gmail.com> <20220107051335.3812535-3-pgwipeout@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Svyatoslav Ryhel <clamor95@gmail.com>
+Hi Peter,
 
-Add definition of the HannStar HSD101PWW2 Rev0-A00/A01 LCD
-SuperIPS+ HD panel.
+Am Freitag, 7. Januar 2022, 06:13:33 CET schrieb Peter Geis:
+> Some implementations do not use the reset signal, instead tying it to dvdd.
+> Make the reset gpio optional to permit this.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c b/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
+> index 581661b506f8..1c88d752b14e 100644
+> --- a/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
+> +++ b/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
+> @@ -65,7 +65,8 @@ static int feiyang_prepare(struct drm_panel *panel)
+>  	/* T3 (dvdd rise + avdd start + avdd rise) T3 >= 20ms */
+>  	msleep(20);
+>  
+> -	gpiod_set_value(ctx->reset, 0);
+> +	if (ctx->reset)
+> +		gpiod_set_value(ctx->reset, 0);
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/gpu/drm/panel/panel-simple.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+gpio_set_value does 
+	VALIDATE_DESC_VOID(desc);
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 9e46db5e359c..1bfa2d1b61fd 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -1927,6 +1927,31 @@ static const struct panel_desc hannstar_hsd100pxn1 = {
- 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
- };
- 
-+static const struct display_timing hannstar_hsd101pww2_timing = {
-+	.pixelclock = { 64300000, 71100000, 82000000 },
-+	.hactive = { 1280, 1280, 1280 },
-+	.hfront_porch = { 1, 1, 10 },
-+	.hback_porch = { 1, 1, 10 },
-+	.hsync_len = { 58, 158, 661 },
-+	.vactive = { 800, 800, 800 },
-+	.vfront_porch = { 1, 1, 10 },
-+	.vback_porch = { 1, 1, 10 },
-+	.vsync_len = { 1, 21, 203 },
-+	.flags = DISPLAY_FLAGS_DE_HIGH,
-+};
-+
-+static const struct panel_desc hannstar_hsd101pww2 = {
-+	.timings = &hannstar_hsd101pww2_timing,
-+	.num_timings = 1,
-+	.bpc = 8,
-+	.size = {
-+		.width = 217,
-+		.height = 136,
-+	},
-+	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.connector_type = DRM_MODE_CONNECTOR_LVDS,
-+};
-+
- static const struct drm_display_mode hitachi_tx23d38vm0caa_mode = {
- 	.clock = 33333,
- 	.hdisplay = 800,
-@@ -3802,6 +3827,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "hannstar,hsd100pxn1",
- 		.data = &hannstar_hsd100pxn1,
-+	}, {
-+		.compatible = "hannstar,hsd101pww2",
-+		.data = &hannstar_hsd101pww2,
- 	}, {
- 		.compatible = "hit,tx23d38vm0caa",
- 		.data = &hitachi_tx23d38vm0caa
--- 
-2.34.1
+which checks for "desc" (ctx->reset in this case) to be valid and especially
+not null and simply returns when this is the case.
+
+So from what I see, we don't need all the added conditionals here and below
+and would just need the switch to devm_gpiod_get_optional alone.
+
+Heiko
+
+>  
+>  	/*
+>  	 * T5 + T6 (avdd rise + video & logic signal rise)
+> @@ -73,7 +74,8 @@ static int feiyang_prepare(struct drm_panel *panel)
+>  	 */
+>  	msleep(20);
+>  
+> -	gpiod_set_value(ctx->reset, 1);
+> +	if (ctx->reset)
+> +		gpiod_set_value(ctx->reset, 1);
+>  
+>  	/* T12 (video & logic signal rise + backlight rise) T12 >= 200ms */
+>  	msleep(200);
+> @@ -126,7 +128,8 @@ static int feiyang_unprepare(struct drm_panel *panel)
+>  	/* T13 (backlight fall + video & logic signal fall) T13 >= 200ms */
+>  	msleep(200);
+>  
+> -	gpiod_set_value(ctx->reset, 0);
+> +	if (ctx->reset)
+> +		gpiod_set_value(ctx->reset, 0);
+>  
+>  	regulator_disable(ctx->avdd);
+>  
+> @@ -211,7 +214,7 @@ static int feiyang_dsi_probe(struct mipi_dsi_device *dsi)
+>  		return PTR_ERR(ctx->avdd);
+>  	}
+>  
+> -	ctx->reset = devm_gpiod_get(&dsi->dev, "reset", GPIOD_OUT_LOW);
+> +	ctx->reset = devm_gpiod_get_optional(&dsi->dev, "reset", GPIOD_OUT_LOW);
+>  	if (IS_ERR(ctx->reset)) {
+>  		dev_err(&dsi->dev, "Couldn't get our reset GPIO\n");
+>  		return PTR_ERR(ctx->reset);
+> 
+
+
+
 

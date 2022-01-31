@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 917544A4A66
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47DE4A4A6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379346AbiAaPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:20:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43399 "EHLO
+        id S1349575AbiAaPVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:21:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44078 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379163AbiAaPUB (ORCPT
+        by vger.kernel.org with ESMTP id S241253AbiAaPVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:20:01 -0500
+        Mon, 31 Jan 2022 10:21:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643642401;
+        s=mimecast20190719; t=1643642502;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=51s/H7CPhdBcCYJZdO78Kl5hIb9+WtEbkmwC56ZgtGY=;
-        b=AWruhXTA1SJdWY99GFurEU+c71AwyQt2xSZvFhktRch7i/eyjFtYrsg5zKMmAr3owhEnae
-        ikmr4JiFuAUu1R1j+SIUbySuuTcAo2R8ykglH8I7GA9SPsTXCv97UrPs2ra3z6XWf4mFPP
-        i6bKGxCRZxVlJcaqYdrEQQlzc8MEceY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=MdfkzDy8NOhTBqtuHXtxmiymZAS5QYBSRJm2QyyoNdY=;
+        b=Dom73B6F2YvZhSL4LhX6bZQZnRfbZUq5psB7lXBMbkm4eKPLWrvnrQYVSLUMhXvPdTXBqx
+        R8r/R43x33kJRn5Hkk7sVDoFkpRe38C7DdiaOjSOGep7LTJN//tt6i/6qoUwfQ7IzIAxyJ
+        1qLEMg1jbDbCXToqLsepUVgWRsoQ7HQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-368-IYhhTc-eNS2u5b808v0H8A-1; Mon, 31 Jan 2022 10:19:59 -0500
-X-MC-Unique: IYhhTc-eNS2u5b808v0H8A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A75DF1091DA3;
-        Mon, 31 Jan 2022 15:19:56 +0000 (UTC)
-Received: from starship (unknown [10.40.192.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8477584D06;
-        Mon, 31 Jan 2022 15:19:53 +0000 (UTC)
-Message-ID: <864b41e42a88a92586b1c2361bebaf04446a98d5.camel@redhat.com>
-Subject: Re: [PATCH 01/22] KVM: x86: Drop unnecessary and confusing
- KVM_X86_OP_NULL macro
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Date:   Mon, 31 Jan 2022 17:19:52 +0200
-In-Reply-To: <6979e482-1f07-4148-b9d7-d91cfa98c081@redhat.com>
-References: <20220128005208.4008533-1-seanjc@google.com>
-         <20220128005208.4008533-2-seanjc@google.com>
-         <152db376-b0f3-3102-233c-a0dbb4011d0c@redhat.com>
-         <YfQO+ADS1wnefoSr@google.com>
-         <6979e482-1f07-4148-b9d7-d91cfa98c081@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+ us-mta-110-Qns22p66PWygsCAPJG1VmA-1; Mon, 31 Jan 2022 10:21:40 -0500
+X-MC-Unique: Qns22p66PWygsCAPJG1VmA-1
+Received: by mail-ed1-f70.google.com with SMTP id c23-20020a056402159700b00406aa42973eso7132249edv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:21:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MdfkzDy8NOhTBqtuHXtxmiymZAS5QYBSRJm2QyyoNdY=;
+        b=mAplK/hvveU0zUG0KXbUaEyGL5ReO3bvLnVCbX8XJPmjuvQ+xqVf/y7aXllUJ4Pr4u
+         bFw9luwl93Jz549ma3hxKQ5KQR5AjdjMZXttBwVQQxMa0sWF3Y2SDFwhhGG0m36PYSff
+         JhNb5GamUILs0HhEpAQkTwN5WHFre2HLzswSRSN0wOG5toJpQST6k69L/HQgHJLZRGhu
+         HeKfNwVrkJrzXh5Vvuz6853Rz5yt8loG0ryB/kGixk84I9rqJS2dLziSMJUnMWIu+0GE
+         UWX9QZ+y+LqlJFYnBm20YVH5DGHc8GdPoIWpitLdznjdwi3+BMddhFjWpGgI0+1pcZ1M
+         VJJQ==
+X-Gm-Message-State: AOAM531jumJfTF2FGDa18QUyrU9tzTGSk5i6o/IDlT7YA/5XJRJBmJAl
+        sCtmYoKHjzWusgijcoC7WdBqqAZwWNOZyzdMmu+OjtEhQ0kTc9vxAR8+2CG5ShLooyL/3udcIDq
+        R5gRlmryr65rNUKVDCFW+1yBS
+X-Received: by 2002:a17:906:4781:: with SMTP id cw1mr17627273ejc.264.1643642499341;
+        Mon, 31 Jan 2022 07:21:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzL6ut6uoXdZKf0ORkBSmscT1UsWg0LyIbjDV6wxHssSTU4bpAYPSIeeR88zu/rPpO0EsoiQg==
+X-Received: by 2002:a17:906:4781:: with SMTP id cw1mr17627255ejc.264.1643642499185;
+        Mon, 31 Jan 2022 07:21:39 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id j26sm9941299edt.65.2022.01.31.07.21.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 07:21:38 -0800 (PST)
+Message-ID: <48dad73d-7632-3367-98f7-98f7739d0c21@redhat.com>
+Date:   Mon, 31 Jan 2022 16:21:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 17/20] extcon: intel-cht-wc: Support devs with Micro-B
+ / USB-2 only Type-C connectors
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+References: <20220130204557.15662-1-hdegoede@redhat.com>
+ <20220130204557.15662-18-hdegoede@redhat.com>
+ <YffqAchYMoSVqMTz@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YffqAchYMoSVqMTz@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-31 at 15:56 +0100, Paolo Bonzini wrote:
-> On 1/28/22 16:42, Sean Christopherson wrote:
-> > On Fri, Jan 28, 2022, Paolo Bonzini wrote:
-> > > On 1/28/22 01:51, Sean Christopherson wrote:
-> > > > Drop KVM_X86_OP_NULL, which is superfluous and confusing.  The macro is
-> > > > just a "pass-through" to KVM_X86_OP; it was added with the intent of
-> > > > actually using it in the future, but that obviously never happened.  The
-> > > > name is confusing because its intended use was to provide a way for
-> > > > vendor implementations to specify a NULL pointer, and even if it were
-> > > > used, wouldn't necessarily be synonymous with declaring a kvm_x86_op as
-> > > > DEFINE_STATIC_CALL_NULL.
-> > > > 
-> > > > Lastly, actually using KVM_X86_OP_NULL as intended isn't a maintanable
-> > > > approach, e.g. bleeds vendor details into common x86 code, and would
-> > > > either be prone to bit rot or would require modifying common x86 code
-> > > > when modifying a vendor implementation.
-> > > 
-> > > I have some patches that redefine KVM_X86_OP_NULL as "must be used with
-> > > static_call_cond".  That's a more interesting definition, as it can be used
-> > > to WARN if KVM_X86_OP is used with a NULL function pointer.
-> > 
-> > I'm skeptical that will actually work well and be maintainble.  E.g. sync_pir_to_ir()
-> > must be explicitly check for NULL in apic_has_interrupt_for_ppr(), forcing that path
-> > to do static_call_cond() will be odd.  Ditto for ops that are wired up to ioctl()s,
-> > e.g. the confidential VM stuff, and for ops that are guarded by other stuff, e.g. the
-> > hypervisor timer.
-> > 
-> > Actually, it won't just be odd, it will be impossible to disallow NULL a pointer
-> > for KVM_X86_OP and require static_call_cond() for KVM_X86_OP_NULL.  static_call_cond()
-> > forces the return to "void", so any path that returns a value needs to be manually
-> > guarded and can't use static_call_cond(), e.g.
-> 
-> You're right and I should have looked up the series instead of going by 
-> memory.  What I did was mostly WARNing on KVM_X86_OP that sets NULL, as 
-> non-NULL ops are the common case.  I also added KVM_X86_OP_RET0 to 
-> remove some checks on kvm_x86_ops for ops that return a value.
-> 
-> All in all I totally agree with patches 2-11 and will apply them (patch 
-> 2 to 5.17 even, as a prerequisite to fix the AVIC race).  Several of 
-> patches 13-21 are also mostly useful as it clarifies the code, and the 
-> others I guess are okay in the context of a coherent series though 
-> probably they would have been rejected as one-offs.  However, patches 12 
-> and 22 are unnecessary uses of the C preprocessor in my opinion.
-> 
+Hi,
 
-I will send my patches very very soon - I'll rebase on top of this,
-and review this patch series soon as well.
-
-Best regards,
-	Maxim Levitsky
-
-> Paolo
+On 1/31/22 14:54, Andy Shevchenko wrote:
+> On Sun, Jan 30, 2022 at 09:45:54PM +0100, Hans de Goede wrote:
+>> So far the extcon-intel-cht-wc code has only been tested on devices with
+>> a Type-C connector with USB-PD, USB3 (superspeed) and DP-altmode support
+>> through a FUSB302 Type-C controller.
+>>
+>> Some devices with the intel-cht-wc PMIC however come with an USB-micro-B
+>> connector, or an USB-2 only Type-C connector without USB-PD.
+>>
+>> Which device-model we are running on can be identified with the new
+>> cht_wc_model intel_soc_pmic field. On models without a Type-C controller
+>> the extcon code must control the Vbus 5V boost converter and the USB role
+>> switch depending on the detected cable-type.
 > 
+> ...
+> 
+>> +	if (ext->vbus_boost && ext->vbus_boost_enabled != enable) {
+>> +		if (enable)
+>> +			ret = regulator_enable(ext->vbus_boost);
+>> +		else
+>> +			ret = regulator_disable(ext->vbus_boost);
+> 
+>> +		if (ret == 0)
+>> +			ext->vbus_boost_enabled = enable;
+>> +		else
+>> +			dev_err(ext->dev, "Error updating Vbus boost regulator: %d\n", ret);
+> 
+> Can we go with
+> 
+> 		if (ret)
+> 			dev_err(ext->dev, "Error updating Vbus boost regulator: %d\n", ret);
+> 		else
+> 			ext->vbus_boost_enabled = enable;
+> 
+> ?
 
+Ack, fixed for v5.
+
+Regards,
+
+Hans
 

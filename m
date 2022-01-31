@@ -2,184 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CCB4A5001
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A097B4A5003
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378531AbiAaURi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S1378582AbiAaUSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiAaURc (ORCPT
+        with ESMTP id S1378534AbiAaUSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:17:32 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ECBC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:17:31 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id f10so2785611lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:17:31 -0800 (PST)
+        Mon, 31 Jan 2022 15:18:08 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FCC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:18:08 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id y23so28893399oia.13
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:18:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O6VKZKKyIdq3g+N3XZft2261A1LgNMUgx3vPs4xCSjk=;
-        b=Ah2Yd3veC2m6f5T/74U0jzdt0p5btJfuVBmFunyJcgq6TLZhhdiAMr4076jXVS+Yz9
-         qCu1ElnK6NiB3/LI7/jleMqqHvPRLnco5pHWhJc5hGvkizGxCt1raOWk9vnmVH2wE7ln
-         y5Qc+gnNzIZP93NBdZOOtNmKhWedE8+uzDGzpozmLA/bG7jDVgONjirc+PC2rbayiXVL
-         eBe8WvWc/wRLJ0eCgWLAOSKQOeF4iSnOJDh9adtd5XTmIV3JZRQZFmTzCuf8t+0ah7E/
-         WimPA8ajzuB1eKEWuWLmKCPYT7wchEMba8WWdTbP1hD0379uab4QSmuthRFt+z7Y4T+d
-         qF8g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u+6Hlw5bi1mRKnGmEwqEzr0N+3dJ3SBtS+eV/8eoOzY=;
+        b=ePD2H90c1U2FfI6edAE4mJ7tIzRLoeAVgOYLn0Cf8okDIFvKYoylzirAc3R9maIznD
+         O/Je25AqBL6ZOLaZSLRjeN1HHaI8bk2M/jOcoMl2M1GCzhb6bmNgr4dMNrSirQCrMZnn
+         CuufUOFMzg0MF2D57oEhO0yF9xLMeXoLsCaY6FeH9zUJFYtanv86rHaE0MjgJcN/SSqO
+         A5ftWLUzUmyzk0/xbhFyeMbmYLCgrueFQ3DYB4caUCVtMahVHeFMGL9bv4lGjsUjQYc0
+         0cCDaNVPdVA/F76hB/l1Xv0V9rZJzZzjNUB1vxT2on46W0d/Rxft9O+rrCWTWv2VzzfR
+         3XzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O6VKZKKyIdq3g+N3XZft2261A1LgNMUgx3vPs4xCSjk=;
-        b=Hgz6W67wAH5KhvFp0dcTxydK9g5HHq/cznz5IrwVZu14fZiwJP5oPPgiMcbudVY1wh
-         5qwHEzk07Jc+hOz1hCi9SRrJK0KtijfGcet4/8iS4dHHkz0OmtF787Wdk0dgdsxVWMKa
-         0rnQbkcKg11mGCJlBOAqKJGKf/R5cSIwazADxi9IXsVrxxxMMIqXTQiPB3isjAf6XZUb
-         B9gjgqMZCgmntF+ZFDTDA8MVhQt/usQzfqIOZ0OGNXqP2Fjbx+LXKYb/l5gbeYlAVZsX
-         saps1pxaBS7aXEr9bmXIhLRf0Rge0rrxw4nlkrrw6bP4XWb4RQQ3F/uBrwW00TSABOD6
-         Zuog==
-X-Gm-Message-State: AOAM533trv0oNuundMrMM/DdUMWa3p1t/Qnf2RuQ/mTO72lJsQBBQTFM
-        iNv+L5Hjgg6Bu6jCBK38w3hg3WtsKaCciw==
-X-Google-Smtp-Source: ABdhPJwV8qrc6QshCj8tZe21mpS37iIzE87HOLv6hPeoS3poaA3jb2sBvRLSm2nL4cLbT9FSHffHMw==
-X-Received: by 2002:a05:6512:76:: with SMTP id i22mr17083107lfo.294.1643660249254;
-        Mon, 31 Jan 2022 12:17:29 -0800 (PST)
-Received: from localhost ([146.66.199.134])
-        by smtp.gmail.com with ESMTPSA id d25sm1348810lfe.297.2022.01.31.12.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 12:17:28 -0800 (PST)
-From:   Azat Khuzhin <a3at.mail@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Azat Khuzhin <a3at.mail@gmail.com>,
-        Chris Kennelly <ckennelly@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Song Liu <songliubraving@fb.com>,
-        David Rientjes <rientjes@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "H . J . Lu" <hjl.tools@gmail.com>
-Subject: [PATCH] fs/binfmt_elf: use ELF_ET_DYN_BASE for PIE (ET_DYN with INTERP) binaries
-Date:   Mon, 31 Jan 2022 23:17:16 +0300
-Message-Id: <20220131201716.5198-1-a3at.mail@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u+6Hlw5bi1mRKnGmEwqEzr0N+3dJ3SBtS+eV/8eoOzY=;
+        b=ELwkmz6ditdUgEn4s2KvD2iRjQ7ZROJ7is7GIb2YOkCF2ylPLb7NyRbk2GSPdMSkz6
+         h4Hvo1DvSuPPqXax4rTlqli+YvrajySxGdilK855PZjWGbLCjZBYnKSLzCtJHBRHctwD
+         C/GXBQIwyr6a9lHrWfoMMEt0Ul5QbP4BWVnJp627OJdThnlcP2Zp+2y5Ft57icBsm+NH
+         OqpeWgERyUq+F9OZ9PP9tjXf1giFxcgmL3bwsMnASDOAkoBnE7vSed63oiP6jkhKjieb
+         KdARtbpFJcmHbrLH7Q0GWhq0ZTqpOoBbnFSWIlYV2xv1qTO+Vtngbt7NFx3ml9zTQy1+
+         rv3A==
+X-Gm-Message-State: AOAM530yekTFZQj4GqryZi1affrAeCf7FtQNKHCrVZYGd5fhvYVElmk9
+        +yJafrSlLGEhXivmVSCJEHpwlB4ifI1Pl3u0sFo=
+X-Google-Smtp-Source: ABdhPJzvGcXiMK6fhyQRD4f8b79aSskovJO2s2WLmPVT+ibyd29b/52aG8mRWZnXNHt/np854hlGLi/yrAnhmpox/tE=
+X-Received: by 2002:a05:6808:2189:: with SMTP id be9mr19136202oib.93.1643660287560;
+ Mon, 31 Jan 2022 12:18:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <139A7689-463E-4AD9-A2D1-A9969C3958D0@live.com>
+ <CADnq5_OLpgEJjpN5y9b3gNwCmvdfNTA=puUv8UjOCDH96JgvOQ@mail.gmail.com>
+ <58B7B0D4-BA3B-43EA-9F54-06CCEB7EF833@live.com> <0932bbf6-409e-0d3e-2824-b33914033f81@amd.com>
+ <5CC8BCC9-176A-4478-B03B-3E4B4D7D88E6@live.com>
+In-Reply-To: <5CC8BCC9-176A-4478-B03B-3E4B4D7D88E6@live.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 31 Jan 2022 15:17:56 -0500
+Message-ID: <CADnq5_NsTJm5YazeM8O7C2hUS_7vCVw_CX2ZwYV0w5=iBUMeCA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amd/display: Force link_rate as LINK_RATE_RBR2 for
+ 2018 15" Apple Retina panels
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Harry Wentland <hwentlan@amd.com>,
+        "harry.wentland@amd.com" <harry.wentland@amd.com>,
+        "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
+        "Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
+        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Felix.Kuehling@amd.com" <Felix.Kuehling@amd.com>,
+        "evan.quan@amd.com" <evan.quan@amd.com>,
+        "stylon.wang@amd.com" <stylon.wang@amd.com>,
+        "wesley.chalmers@amd.com" <wesley.chalmers@amd.com>,
+        "qingqing.zhuo@amd.com" <qingqing.zhuo@amd.com>,
+        "George.Shen@amd.com" <George.Shen@amd.com>,
+        "roman.li@amd.com" <roman.li@amd.com>,
+        "solomon.chiu@amd.com" <solomon.chiu@amd.com>,
+        "Aurabindo.Pillai@amd.com" <Aurabindo.Pillai@amd.com>,
+        "wayne.lin@amd.com" <wayne.lin@amd.com>,
+        "mikita.lipski@amd.com" <mikita.lipski@amd.com>,
+        "Bhawanpreet.Lakha@amd.com" <Bhawanpreet.Lakha@amd.com>,
+        "agustin.gutierrez@amd.com" <agustin.gutierrez@amd.com>,
+        "pavle.kotarac@amd.com" <pavle.kotarac@amd.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 9630f0d60fec ELF_ET_DYN_BASE is not used as a load_bias anymore
-and this breaks PIE binaries, since after this change data segment
-became too nearby the stack:
+Applied.  Thanks!
 
-Before 9630f0d60fec:
+Alex
 
-    $ strace -febrk /tmp/test-stack |& head
-    brk(NULL)                               = 0x555555559000
-    $ /tmp/test-stack
-    bottom_of_stack = 0x7fffffffc5c0
-    recursion depth: 1 (stack diff: 32)
-    ...
-    recursion depth: 7690 (stack diff: 8365664)
-    Segmentation fault (core dumped)
-
-After 9630f0d60fec:
-
-    $ strace -ebrk /tmp/test-stack  |& head
-    brk(NULL)                               = 0x7ffff7fff000
-
-    $ /tmp/test-stack
-    bottom_of_stack = 0x7fffffffc640
-    recursion depth: 1 (stack diff: 32)
-    ...
-    recursion depth: 146 (stack diff: 157792)
-    Segmentation fault (core dumped)
-
-Found this during compiling with clang, that started to randomly
-SIGSEGV when it eats some heap.
-
-Reproducer:
-
-    #include <stdio.h>
-    #include <stddef.h>
-    #include <stdlib.h>
-
-    static int depth = 0;
-    static void* bottom_of_stack;
-
-    int inner()
-    {
-    	char buffer[1024];
-    	ptrdiff_t diff;
-    	int ret;
-
-    	++depth;
-    	diff = bottom_of_stack - __builtin_frame_address(0);
-
-    	fprintf(stderr,
-    		"recursion depth: %i (stack diff: %zu)\n",
-    		depth, (size_t)diff);
-
-    	for (size_t i = 0; i < 1024; ++i)
-    		ret += buffer[i];
-
-    	ret += inner();
-
-    	return ret;
-    }
-
-    int main()
-    {
-    	for (size_t size = 0; size < 128<<20; size += 16<<10)
-    		malloc(16<<10);
-
-    	bottom_of_stack = __builtin_frame_address(0);
-    	fprintf(stderr, "bottom_of_stack = %p\n", bottom_of_stack);
-    	inner();
-    }
-
-Fixes: 9630f0d60fec ("fs/binfmt_elf: use PT_LOAD p_align values for static PIE")
-Signed-off-by: Azat Khuzhin <a3at.mail@gmail.com>
-Cc: Chris Kennelly <ckennelly@google.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: Fangrui Song <maskray@google.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: H.J. Lu <hjl.tools@gmail.com>
----
- fs/binfmt_elf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 605017eb9349..9e11e6f13e83 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1117,7 +1117,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			 * without MAP_FIXED nor MAP_FIXED_NOREPLACE).
- 			 */
- 			alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
--			if (alignment > ELF_MIN_ALIGN) {
-+			if (interpreter || alignment > ELF_MIN_ALIGN) {
- 				load_bias = ELF_ET_DYN_BASE;
- 				if (current->flags & PF_RANDOMIZE)
- 					load_bias += arch_mmap_rnd();
--- 
-2.35.1
-
+On Sat, Jan 29, 2022 at 12:50 AM Aditya Garg <gargaditya08@live.com> wrote:
+>
+> From: Aun-Ali Zaidi <admin@kodeit.net>
+>
+> The eDP link rate reported by the DP_MAX_LINK_RATE dpcd register (0xa) is
+> contradictory to the highest rate supported reported by
+> EDID (0xc = LINK_RATE_RBR2). The effects of this compounded with commit
+> '4a8ca46bae8a ("drm/amd/display: Default max bpc to 16 for eDP")' results
+> in no display modes being found and a dark panel.
+>
+> For now, simply force the maximum supported link rate for the eDP attached
+> 2018 15" Apple Retina panels.
+>
+> Additionally, we must also check the firmware revision since the device ID
+> reported by the DPCD is identical to that of the more capable 16,1,
+> incorrectly quirking it. We also use said firmware check to quirk the
+> refreshed 15,1 models with Vega graphics as they use a slightly newer
+> firmware version.
+>
+> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
+> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> ---
+> v2 :- Use C styled comments
+>  .../gpu/drm/amd/display/dc/core/dc_link_dp.c  | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> index 05e216524..086f7ee2c 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> @@ -5597,6 +5597,26 @@ static bool retrieve_link_cap(struct dc_link *link)
+>                 dp_hw_fw_revision.ieee_fw_rev,
+>                 sizeof(dp_hw_fw_revision.ieee_fw_rev));
+>
+> +       /* Quirk for Apple MBP 2018 15" Retina panels: wrong DP_MAX_LINK_RATE */
+> +       {
+> +               uint8_t str_mbp_2018[] = { 101, 68, 21, 103, 98, 97 };
+> +               uint8_t fwrev_mbp_2018[] = { 7, 4 };
+> +               uint8_t fwrev_mbp_2018_vega[] = { 8, 4 };
+> +
+> +               /* We also check for the firmware revision as 16,1 models have an
+> +                * identical device id and are incorrectly quirked otherwise.
+> +                */
+> +               if ((link->dpcd_caps.sink_dev_id == 0x0010fa) &&
+> +                   !memcmp(link->dpcd_caps.sink_dev_id_str, str_mbp_2018,
+> +                            sizeof(str_mbp_2018)) &&
+> +                   (!memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018,
+> +                            sizeof(fwrev_mbp_2018)) ||
+> +                   !memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018_vega,
+> +                            sizeof(fwrev_mbp_2018_vega)))) {
+> +                       link->reported_link_cap.link_rate = LINK_RATE_RBR2;
+> +               }
+> +       }
+> +
+>         memset(&link->dpcd_caps.dsc_caps, '\0',
+>                         sizeof(link->dpcd_caps.dsc_caps));
+>         memset(&link->dpcd_caps.fec_cap, '\0', sizeof(link->dpcd_caps.fec_cap));
+> --
+> 2.25.1
+>
+>

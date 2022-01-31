@@ -2,93 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EEF4A4635
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8E14A454D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345257AbiAaLvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379780AbiAaLoO (ORCPT
+        id S1379542AbiAaLjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:39:13 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56750 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378790AbiAaL3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:44:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC5C034003;
-        Mon, 31 Jan 2022 03:27:59 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643628478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=4vunJSw+29nMhKwarhIq3XOACVtrs68uDOcnGTjBogA=;
-        b=08+adjG5kvqly9R27r6UQqPVlHuuR0wvg7AraR+yb44p1SYXk6tzK2abtw7IGSi2A3wXfI
-        6U1PBy/jkvuCM3fKrPHG2APL7p9nnSGR9rg89/6St5G9+Iod6wSzgG4//1TPbjInXUs8YN
-        AwxB3zkSRCSMca4ho01kA/XiGI4WDXwyqGA/Q1QoCwvYXEwS/NWbubISSEMuoN2RNNZk6X
-        k+mIQEs2lRbseraKMG1ylwlb9XmMSJiXrB/5Msv2UG1+iYWWGnwuZaVGTtIizxYMk1wpBk
-        7RxcI8ct1tXsnuKIrqrBOd4gsj7C5lweoLU2Rx7EKaWcOJBL6ltT48oEiUJlEw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643628478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=4vunJSw+29nMhKwarhIq3XOACVtrs68uDOcnGTjBogA=;
-        b=F4vMMMS/RR2647UpQl2u4kgknqNjM8y1uiJemITMdVUuEzICexEkSEXuPmcOo4kKXCPGTF
-        66aXb64gMDoB5SDg==
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Kevin Tian <kevin.tian@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cedric Le Goater <clg@kaod.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Mon, 31 Jan 2022 06:29:13 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D2EE61F381;
+        Mon, 31 Jan 2022 11:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643628551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zPNgT+q/xCKlHkk0NSxMXUpAG7WHosAzjep0b1A8ezM=;
+        b=lKSXmvHjOIOlrrCXwbW4K0iLQAck2LuyaNX6qflNmUAeoSr7BL5hii9qNzgMhsPfIMtOHU
+        WPdoKeGRitFIxnG8yMQDhoWwKWtIiIsCFhshk6NsrDTw047ub768uwI4yOgjKshSFnzNMz
+        VXExSJzB0ijMPhL+RVX/zuPaXve6UBs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643628551;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zPNgT+q/xCKlHkk0NSxMXUpAG7WHosAzjep0b1A8ezM=;
+        b=jjVPeQGL8OIm5kTWIXgqdb+cNASKA4AuzhPOxpzJ6YIwDwRFvTjEwnjihZ5lp7phyQVaKF
+        Nw7A01/hvRTWRWAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D74413C23;
+        Mon, 31 Jan 2022 11:29:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lDF5CwfI92EZTgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Mon, 31 Jan 2022 11:29:11 +0000
+Date:   Mon, 31 Jan 2022 12:29:09 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        dmaengine@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V3 28/35] PCI/MSI: Simplify pci_irq_get_affinity()
-In-Reply-To: <20220130171210.GA3545402@roeck-us.net>
-Date:   Mon, 31 Jan 2022 12:27:57 +0100
-Message-ID: <87mtjc2lhe.ffs@tglx>
+        Michal Hocko <mhocko@suse.com>,
+        Rafael Parra <rparrazo@redhat.com>
+Subject: Re: [PATCH v1 2/2] drivers/base/memory: determine and store zone for
+ single-zone memory blocks
+Message-ID: <20220131112909.GB18027@linux>
+References: <20220128152620.168715-1-david@redhat.com>
+ <20220128152620.168715-3-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128152620.168715-3-david@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30 2022 at 09:12, Guenter Roeck wrote:
-> On Fri, Dec 10, 2021 at 11:19:26PM +0100, Thomas Gleixner wrote:
-> This patch results in the following runtime warning when booting x86
-> (32 bit) nosmp images from NVME in qemu.
->
-> [   14.825482] nvme nvme0: 1/0/0 default/read/poll queues
-> ILLOPC: ca7c6d10: 0f 0b
-> [   14.826188] ------------[ cut here ]------------
-> [   14.826307] WARNING: CPU: 0 PID: 7 at drivers/pci/msi/msi.c:1114 pci_irq_get_affinity+0x80/0x90
+On Fri, Jan 28, 2022 at 04:26:20PM +0100, David Hildenbrand wrote:
+> For memory hot(un)plug, we only really care about memory blocks that:
+> * span a single zone (and, thereby, a single node)
+> * are completely System RAM (IOW, no holes, no ZONE_DEVICE)
+> If one of these conditions is not met, we reject memory offlining.
+> Hotplugged memory blocks (starting out offline), always meet both
+> conditions.
 
-This complains about msi_desc->affinity being NULL.
+This has been always hard for me to follow, so bear with me.
 
-> git bisect bad f48235900182d64537c6e8f8dc0932b57a1a0638
-> # first bad commit: [f48235900182d64537c6e8f8dc0932b57a1a0638] PCI/MSI: Simplify pci_irq_get_affinity()
+I remember we changed the memory-hotplug policy, not long ago, wrt.
+what we can online/offline so we could get rid of certain assumptions like
+"there are no holes in this memblock, so it can go" etc.
 
-Hrm. Can you please provide dmesg and /proc/interrupts from a
-kernel before that commit?
+AFAIR, we can only offline if the memory
 
-Thanks,
+1) belongs to a single node ("which is always the case for
+   hotplugged-memory, boot memory is trickier")
+2) does not have any holes
+3) spans a single zone
 
-        tglx
+These are the only requeriments we have atm, right?
 
+By default, hotplugged memory already complies with they all three,
+only in case of ZONE_DEVICE stuff we might violate 2) and 3).
+
+> There are three scenarios to handle:
+...
+...
+
+> @@ -225,6 +226,9 @@ static int memory_block_offline(struct memory_block *mem)
+>  	unsigned long nr_vmemmap_pages = mem->nr_vmemmap_pages;
+>  	int ret;
+>  
+> +	if (!mem->zone)
+> +		return -EBUSY;
+
+Should not we return -EINVAL? I mean, -EBUSY reads like this might be a
+temporary error which might get fixed later on, but that isn't the case.
+
+> @@ -234,7 +238,7 @@ static int memory_block_offline(struct memory_block *mem)
+>  					  -nr_vmemmap_pages);
+>  
+>  	ret = offline_pages(start_pfn + nr_vmemmap_pages,
+> -			    nr_pages - nr_vmemmap_pages, mem->group);
+> +			    nr_pages - nr_vmemmap_pages, mem->zone, mem->group);
+
+Why not passing the node as well? 
+
+> +static struct zone *early_node_zone_for_memory_block(struct memory_block *mem,
+> +						     int nid)
+> +{
+> +	const unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
+> +	const unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
+> +	struct zone *zone, *matching_zone = NULL;
+> +	pg_data_t *pgdat = NODE_DATA(nid);
+
+I was about to complain because in init_memory_block() you call
+early_node_zone_for_memory_block() with nid == NUMA_NODE_NODE, but then
+I saw that NODE_DATA on !CONFIG_NUMA falls to contig_page_data.
+So, I guess we cannot really reach this on CONFIG_NUMA machines with nid
+being NUMA_NO_NODE, right? (do we want to add a check just in case?)
+
+> +#ifdef CONFIG_NUMA
+> +void memory_block_set_nid(struct memory_block *mem, int nid,
+> +			  enum meminit_context context)
+
+But we also set the zone? (Only for boot memory)
+
+> @@ -663,6 +734,17 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
+>  	mem->nr_vmemmap_pages = nr_vmemmap_pages;
+>  	INIT_LIST_HEAD(&mem->group_next);
+>  
+> +#ifndef CONFIG_NUMA
+> +	if (state == MEM_ONLINE)
+> +		/*
+> +		 * MEM_ONLINE at this point imples early memory. With NUMA,
+                                            implies
+
+
+-- 
+Oscar Salvador
+SUSE Labs

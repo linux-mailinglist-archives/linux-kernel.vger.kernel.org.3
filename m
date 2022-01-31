@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FDF4A441C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5AC4A4595
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359558AbiAaL0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:26:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35162 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376700AbiAaLRn (ORCPT
+        id S1378418AbiAaLmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378674AbiAaL24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:17:43 -0500
+        Mon, 31 Jan 2022 06:28:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CB9C0613E6;
+        Mon, 31 Jan 2022 03:17:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 829C4B82A69;
-        Mon, 31 Jan 2022 11:17:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE1FC340E8;
-        Mon, 31 Jan 2022 11:17:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2138061170;
+        Mon, 31 Jan 2022 11:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C07C340E8;
+        Mon, 31 Jan 2022 11:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627858;
-        bh=lYE0kPtmAxVnvZiILyZXlKVGIUYUal1vKVXiK+ZR2cE=;
+        s=korg; t=1643627861;
+        bh=k70UCGaKdelyUX4hLZO2WfvpGsnNzGI95PXnQiEeiXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oH5UMKI6+J9bGgGygz/tPE/jByeuI9noOn8IWDP5muIvcuvlXmxHQ5AiqJoFq7nOn
-         1s3rmtmuhxEmKvqnGUsrRiT6R+C9aGQOHna4rI/UJUv5O7xQ+jR9I4ZjsH6lsmF5EC
-         o6P4iC8fCk3iYS3j9y78aM7MoQIjchLTaykhUh30=
+        b=EW2mhGLHNTSZ3wVMGR9aYxExye7r/wLCNp/5uc6zsfPG8gp5Hx/GeC6zlyUjgXqv+
+         QIZt3CUQwLLvNLRlFz9bKggaw5Uie/P6A71CIYynJ3siacc+KNInufCuovTFQHtWZ6
+         CEzvu4RZrMZpylxGW/vKub6lR7lfVkmOAbY1cikU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.16 047/200] drm/amd/display: Wrap dcn301_calculate_wm_and_dlg for FPU.
-Date:   Mon, 31 Jan 2022 11:55:10 +0100
-Message-Id: <20220131105235.140761493@linuxfoundation.org>
+        stable@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 048/200] KVM: LAPIC: Also cancel preemption timer during SET_LAPIC
+Date:   Mon, 31 Jan 2022 11:55:11 +0100
+Message-Id: <20220131105235.177585417@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
 References: <20220131105233.561926043@linuxfoundation.org>
@@ -46,64 +48,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-commit 25f1488bdbba63415239ff301fe61a8546140d9f upstream.
+commit 35fe7cfbab2e81f1afb23fc4212210b1de6d9633 upstream.
 
-Mirrors the logic for dcn30. Cue lots of WARNs and some
-kernel panics without this fix.
+The below warning is splatting during guest reboot.
 
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 1931 at arch/x86/kvm/x86.c:10322 kvm_arch_vcpu_ioctl_run+0x874/0x880 [kvm]
+  CPU: 0 PID: 1931 Comm: qemu-system-x86 Tainted: G          I       5.17.0-rc1+ #5
+  RIP: 0010:kvm_arch_vcpu_ioctl_run+0x874/0x880 [kvm]
+  Call Trace:
+   <TASK>
+   kvm_vcpu_ioctl+0x279/0x710 [kvm]
+   __x64_sys_ioctl+0x83/0xb0
+   do_syscall_64+0x3b/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+  RIP: 0033:0x7fd39797350b
+
+This can be triggered by not exposing tsc-deadline mode and doing a reboot in
+the guest. The lapic_shutdown() function which is called in sys_reboot path
+will not disarm the flying timer, it just masks LVTT. lapic_shutdown() clears
+APIC state w/ LVT_MASKED and timer-mode bit is 0, this can trigger timer-mode
+switch between tsc-deadline and oneshot/periodic, which can result in preemption
+timer be cancelled in apic_update_lvtt(). However, We can't depend on this when
+not exposing tsc-deadline mode and oneshot/periodic modes emulated by preemption
+timer. Qemu will synchronise states around reset, let's cancel preemption timer
+under KVM_SET_LAPIC.
+
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Message-Id: <1643102220-35667-1-git-send-email-wanpengli@tencent.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c |   11 +++++++++++
- drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c  |    2 +-
- drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.h  |    2 +-
- 3 files changed, 13 insertions(+), 2 deletions(-)
+ arch/x86/kvm/lapic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-@@ -1391,6 +1391,17 @@ static void set_wm_ranges(
- 	pp_smu->nv_funcs.set_wm_ranges(&pp_smu->nv_funcs.pp_smu, &ranges);
- }
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2623,7 +2623,7 @@ int kvm_apic_set_state(struct kvm_vcpu *
+ 	kvm_apic_set_version(vcpu);
  
-+static void dcn301_calculate_wm_and_dlg(
-+		struct dc *dc, struct dc_state *context,
-+		display_e2e_pipe_params_st *pipes,
-+		int pipe_cnt,
-+		int vlevel)
-+{
-+	DC_FP_START();
-+	dcn301_calculate_wm_and_dlg_fp(dc, context, pipes, pipe_cnt, vlevel);
-+	DC_FP_END();
-+}
-+
- static struct resource_funcs dcn301_res_pool_funcs = {
- 	.destroy = dcn301_destroy_resource_pool,
- 	.link_enc_create = dcn301_link_encoder_create,
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
-@@ -327,7 +327,7 @@ void dcn301_fpu_init_soc_bounding_box(st
- 		dcn3_01_soc.sr_exit_time_us = bb_info.dram_sr_exit_latency_100ns * 10;
- }
- 
--void dcn301_calculate_wm_and_dlg(struct dc *dc,
-+void dcn301_calculate_wm_and_dlg_fp(struct dc *dc,
- 		struct dc_state *context,
- 		display_e2e_pipe_params_st *pipes,
- 		int pipe_cnt,
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.h
-@@ -34,7 +34,7 @@ void dcn301_fpu_set_wm_ranges(int i,
- 
- void dcn301_fpu_init_soc_bounding_box(struct bp_soc_bb_info bb_info);
- 
--void dcn301_calculate_wm_and_dlg(struct dc *dc,
-+void dcn301_calculate_wm_and_dlg_fp(struct dc *dc,
- 		struct dc_state *context,
- 		display_e2e_pipe_params_st *pipes,
- 		int pipe_cnt,
+ 	apic_update_ppr(apic);
+-	hrtimer_cancel(&apic->lapic_timer.timer);
++	cancel_apic_timer(apic);
+ 	apic->lapic_timer.expired_tscdeadline = 0;
+ 	apic_update_lvtt(apic);
+ 	apic_manage_nmi_watchdog(apic, kvm_lapic_get_reg(apic, APIC_LVT0));
 
 

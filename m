@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3454A4F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A54A4F96
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377191AbiAaTiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377171AbiAaTiE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:38:04 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C45C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 11:38:03 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id d5so14923708pjk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 11:38:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xzVa+kpI2P5pcrQ6q9RAyjwxclzwOqeJjWm5GlzFQtk=;
-        b=lCV+OL9RHYZ/y/+aXRVJx2OIAAk0VGu75AVLXk973DnP+4Uwd6/Cj9rEh20rTDlKEi
-         rj2JW+wENteqcF2sGP6/NWTC09K/TcLD2m4MBwdq+W4L9fFCtjbATklhgukmkdEfXEl/
-         Suexv0Rr3NSjxuExdqiCP7gjqNX2RI0YjQG4kIkKtO9Vdw998ruMyLRQbsuI75KceBBy
-         A0Orfx7aghxdVM9M7o+Cl0ZWbj48dgXwmj4IS3hODlMuREEPl+vAG8Hh4nhGGdi4tr7Z
-         iBPfQVgGcEyGg/eJTSJeiTbRhnIetVgGjOU2XdmX17QwdxywBxcNVhq9nzJmrxy0qhVk
-         gRjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xzVa+kpI2P5pcrQ6q9RAyjwxclzwOqeJjWm5GlzFQtk=;
-        b=hpymqc7jnEFbd9RHhOKqYh0eCxbZr8LNud5wnBB3ITJsuOpKT6nm0BGnZ12cMLrJxM
-         11b/bfvuZQSK6WdrsCtYbDtuWMPwFhFag4qlnHRsB1bmqEZbkdcMop+kCXFXW5WIuuuH
-         PxJFc46LC7gWv6ayovlZ2N4WXvHLC3LzoiYXrq1CIsQdXSv+eclK+KxeZ2hrL2ImxrCo
-         kE1J9+sJfhwWcsWQ5bHy4ONBjjz3DsvXMX59tNjcOcAAimo7BKuIEnt7xGXPMVcKy6Dp
-         CKtpqKD+EqhtXkzp9M6xTiuIy3Qh6ZDpM28218lUOaLvRgFZkAC9XxUUKuc1gb5Ogjqb
-         vi4g==
-X-Gm-Message-State: AOAM533mZ61/IDBpsQrxCnIf8avYdP/wRZqtJcDEr7rk/fchKXys/lPI
-        x3Gr0QzFH5nV9kFoWX1pCz0=
-X-Google-Smtp-Source: ABdhPJzxdWGPv1XAWrMDsXWHrZgoHwdcemerau22RVBNPdYWRaF6qMmCgG/0CwqjNt0cfHA8s+aI4g==
-X-Received: by 2002:a17:902:ec86:: with SMTP id x6mr22630459plg.96.1643657883448;
-        Mon, 31 Jan 2022 11:38:03 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id j10sm19471459pfu.93.2022.01.31.11.38.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 11:38:02 -0800 (PST)
-Date:   Tue, 1 Feb 2022 08:37:57 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     gregkh@linuxfoundation.org, realwakka@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: pi433: add debugfs interface
-Message-ID: <Yfg6laurUQF02TPR@mail.google.com>
-References: <20220126132116.GA1951@kadam>
- <YfX+llwDWZZMz+NY@mail.google.com>
- <20220131134558.GL1951@kadam>
+        id S1377249AbiAaTlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:41:24 -0500
+Received: from mga03.intel.com ([134.134.136.65]:38143 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230238AbiAaTlT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 14:41:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643658079; x=1675194079;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=NwGTMczbQMThAqZmfQgLYf4uDMg7Njphl/er97g7hpc=;
+  b=FqOGa1+bEP9cNXpppS1XO6AyCFKidfl6rTWN4zgBeY6mekl1KaChtG/E
+   utrG3b35deqnfaHYVsWrzgrxuPiSg9bKGfPkzOnYGJdSOhb1kVRBcy8u3
+   j+fofAFTx8yuFGlH+iLJ5YsJjGBAOPYn7wPHcYpDHGRJ2oV4xnIntfYfD
+   /Kunxp2+Qhc/zOBN/T7dEzZ572dxIrZViTgTSh0fkNEN03K1EquzumAj/
+   ftbYks0FfA/dv24b6t0I/o04OZHWJjIsHhnn6gp3gmM/XV72sOimsJFYA
+   YxfgQsdFMZ0mcoEWP2gH291QLLZr3x4UmcwxyuAo0cDvCXKdPUn9EZr+V
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247489399"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="247489399"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:41:19 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="537446277"
+Received: from abilal-mobl1.amr.corp.intel.com ([10.212.252.235])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:41:19 -0800
+Date:   Mon, 31 Jan 2022 11:41:19 -0800 (PST)
+From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Davide Caratti <dcaratti@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: Re: [PATCH 5.16 136/200] mptcp: allow changing the "backup" bit by
+ endpoint id
+In-Reply-To: <20220131105238.136417203@linuxfoundation.org>
+Message-ID: <829f1665-31d7-af15-36f-c34ccfd31829@linux.intel.com>
+References: <20220131105233.561926043@linuxfoundation.org> <20220131105238.136417203@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131134558.GL1951@kadam>
+Content-Type: text/plain; format=flowed; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:45:58PM +0300, Dan Carpenter wrote:
-> On Sun, Jan 30, 2022 at 03:57:26PM +1300, Paulo Miguel Almeida wrote:
-> > +	dev = m->private;
-> > +
-> > +	mutex_lock(&dev->tx_fifo_lock);
-> > +	mutex_lock(&dev->rx_lock);
-> > +
-> > +	// wait for on-going operations to finish
-> > +	ret = wait_event_interruptible(dev->rx_wait_queue, !dev->tx_active);
-> > +	if (ret)
-> > +		return ret;
-> 
-> Drop the two mutexes before returning.
-> 
+On Mon, 31 Jan 2022, Greg Kroah-Hartman wrote:
+
+> From: Davide Caratti <dcaratti@redhat.com>
+>
+> [ Upstream commit 602837e8479d20d49559b4b97b79d34c0efe7ecb ]
+>
+
+Please drop this from both the 5.15 and 5.16 queues. This patch adds a new 
+feature (doesn't appear to meet the stable rules). It is fairly self 
+contained and probably won't break anything, but it wasn't intended to be 
+backported.
 
 
-thanks for taking the time for reviewing this patch.
+Thanks,
+Mat
 
-good catch, I completely missed it. Thanks a lot!
 
-thanks,
+> a non-zero 'id' is sufficient to identify MPTCP endpoints: allow changing
+> the value of 'backup' bit by simply specifying the endpoint id.
+>
+> Link: https://github.com/multipath-tcp/mptcp_net-next/issues/158
+> Signed-off-by: Davide Caratti <dcaratti@redhat.com>
+> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+> net/mptcp/pm_netlink.c | 14 ++++++++++----
+> 1 file changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+> index 65764c8171b37..d18b13e3e74c6 100644
+> --- a/net/mptcp/pm_netlink.c
+> +++ b/net/mptcp/pm_netlink.c
+> @@ -1711,22 +1711,28 @@ next:
+>
+> static int mptcp_nl_cmd_set_flags(struct sk_buff *skb, struct genl_info *info)
+> {
+> +	struct mptcp_pm_addr_entry addr = { .addr = { .family = AF_UNSPEC }, }, *entry;
+> 	struct nlattr *attr = info->attrs[MPTCP_PM_ATTR_ADDR];
+> 	struct pm_nl_pernet *pernet = genl_info_pm_nl(info);
+> -	struct mptcp_pm_addr_entry addr, *entry;
+> 	struct net *net = sock_net(skb->sk);
+> -	u8 bkup = 0;
+> +	u8 bkup = 0, lookup_by_id = 0;
+> 	int ret;
+>
+> -	ret = mptcp_pm_parse_addr(attr, info, true, &addr);
+> +	ret = mptcp_pm_parse_addr(attr, info, false, &addr);
+> 	if (ret < 0)
+> 		return ret;
+>
+> 	if (addr.flags & MPTCP_PM_ADDR_FLAG_BACKUP)
+> 		bkup = 1;
+> +	if (addr.addr.family == AF_UNSPEC) {
+> +		lookup_by_id = 1;
+> +		if (!addr.addr.id)
+> +			return -EOPNOTSUPP;
+> +	}
+>
+> 	list_for_each_entry(entry, &pernet->local_addr_list, list) {
+> -		if (addresses_equal(&entry->addr, &addr.addr, true)) {
+> +		if ((!lookup_by_id && addresses_equal(&entry->addr, &addr.addr, true)) ||
+> +		    (lookup_by_id && entry->addr.id == addr.addr.id)) {
+> 			mptcp_nl_addr_backup(net, &entry->addr, bkup);
+>
+> 			if (bkup)
+> -- 
+> 2.34.1
+>
+>
+>
+>
 
-Paulo Almeida
+--
+Mat Martineau
+Intel

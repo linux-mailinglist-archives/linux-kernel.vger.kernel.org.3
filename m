@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909494A41FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636B14A456D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359162AbiAaLHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S1359763AbiAaLki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359083AbiAaLET (ORCPT
+        with ESMTP id S1379453AbiAaLaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:04:19 -0500
+        Mon, 31 Jan 2022 06:30:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B858C061741;
-        Mon, 31 Jan 2022 03:03:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2296EC0617BD;
+        Mon, 31 Jan 2022 03:20:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1A9860B98;
-        Mon, 31 Jan 2022 11:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4B4C340EE;
-        Mon, 31 Jan 2022 11:03:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B79CB611DB;
+        Mon, 31 Jan 2022 11:20:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C8DC340E8;
+        Mon, 31 Jan 2022 11:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627014;
-        bh=MU457nlaBzqUkUiehB3MbrbuxJNSlNvVyeoL3/f57qM=;
+        s=korg; t=1643628042;
+        bh=K8uS/L0iTWLq7FlRCD2DFohHBclcjVpDwfvTy1cfNPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dQ1M0W6ykEpC8cGMHUeD4b+myn5Npg3lFveKgJStan3VgITN0Zk6UqoIY8eF7jpwZ
-         HE87ySZKH0/aY6+K/ODU7TLvfsXi1+rr+p1YjsZJ1rOqCGf2wNwAUfoyvsgCkMv7+n
-         yte5mkx0OTcs5uk6b9q5p4sU8omzcF0Rq/+JN4bE=
+        b=NczWrz4NDp3kZFMabt2fXC3Y7XkgwAjGM0eVwi1QPhOzREnaK45yANvasVTigYfuf
+         EkwxTk2+EEKJlQeXm/BGpXLQbGYh6sQbnyZOGEQrX41cWOQc6qzB31kYf+r2S6vDFT
+         NWXCmrMPo1IdPkmfA8bcBOtqNCcyIe8x4NZ67Kuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sujit Kautkar <sujitka@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 5.10 048/100] rpmsg: char: Fix race between the release of rpmsg_ctrldev and cdev
-Date:   Mon, 31 Jan 2022 11:56:09 +0100
-Message-Id: <20220131105222.056104924@linuxfoundation.org>
+        stable@vger.kernel.org, huangshaobo <huangshaobo6@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.16 107/200] ARM: 9170/1: fix panic when kasan and kprobe are enabled
+Date:   Mon, 31 Jan 2022 11:56:10 +0100
+Message-Id: <20220131105237.176823572@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,112 +49,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sujit Kautkar <sujitka@chromium.org>
+From: sparkhuang <huangshaobo6@huawei.com>
 
-commit b7fb2dad571d1e21173c06cef0bced77b323990a upstream.
+commit 8b59b0a53c840921b625378f137e88adfa87647e upstream.
 
-struct rpmsg_ctrldev contains a struct cdev. The current code frees
-the rpmsg_ctrldev struct in rpmsg_ctrldev_release_device(), but the
-cdev is a managed object, therefore its release is not predictable
-and the rpmsg_ctrldev could be freed before the cdev is entirely
-released, as in the backtrace below.
+arm32 uses software to simulate the instruction replaced
+by kprobe. some instructions may be simulated by constructing
+assembly functions. therefore, before executing instruction
+simulation, it is necessary to construct assembly function
+execution environment in C language through binding registers.
+after kasan is enabled, the register binding relationship will
+be destroyed, resulting in instruction simulation errors and
+causing kernel panic.
 
-[   93.625603] ODEBUG: free active (active state 0) object type: timer_list hint: delayed_work_timer_fn+0x0/0x7c
-[   93.636115] WARNING: CPU: 0 PID: 12 at lib/debugobjects.c:488 debug_print_object+0x13c/0x1b0
-[   93.644799] Modules linked in: veth xt_cgroup xt_MASQUERADE rfcomm algif_hash algif_skcipher af_alg uinput ip6table_nat fuse uvcvideo videobuf2_vmalloc venus_enc venus_dec videobuf2_dma_contig hci_uart btandroid btqca snd_soc_rt5682_i2c bluetooth qcom_spmi_temp_alarm snd_soc_rt5682v
-[   93.715175] CPU: 0 PID: 12 Comm: kworker/0:1 Tainted: G    B             5.4.163-lockdep #26
-[   93.723855] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
-[   93.730055] Workqueue: events kobject_delayed_cleanup
-[   93.735271] pstate: 60c00009 (nZCv daif +PAN +UAO)
-[   93.740216] pc : debug_print_object+0x13c/0x1b0
-[   93.744890] lr : debug_print_object+0x13c/0x1b0
-[   93.749555] sp : ffffffacf5bc7940
-[   93.752978] x29: ffffffacf5bc7940 x28: dfffffd000000000
-[   93.758448] x27: ffffffacdb11a800 x26: dfffffd000000000
-[   93.763916] x25: ffffffd0734f856c x24: dfffffd000000000
-[   93.769389] x23: 0000000000000000 x22: ffffffd0733c35b0
-[   93.774860] x21: ffffffd0751994a0 x20: ffffffd075ec27c0
-[   93.780338] x19: ffffffd075199100 x18: 00000000000276e0
-[   93.785814] x17: 0000000000000000 x16: dfffffd000000000
-[   93.791291] x15: ffffffffffffffff x14: 6e6968207473696c
-[   93.796768] x13: 0000000000000000 x12: ffffffd075e2b000
-[   93.802244] x11: 0000000000000001 x10: 0000000000000000
-[   93.807723] x9 : d13400dff1921900 x8 : d13400dff1921900
-[   93.813200] x7 : 0000000000000000 x6 : 0000000000000000
-[   93.818676] x5 : 0000000000000080 x4 : 0000000000000000
-[   93.824152] x3 : ffffffd0732a0fa4 x2 : 0000000000000001
-[   93.829628] x1 : ffffffacf5bc7580 x0 : 0000000000000061
-[   93.835104] Call trace:
-[   93.837644]  debug_print_object+0x13c/0x1b0
-[   93.841963]  __debug_check_no_obj_freed+0x25c/0x3c0
-[   93.846987]  debug_check_no_obj_freed+0x18/0x20
-[   93.851669]  slab_free_freelist_hook+0xbc/0x1e4
-[   93.856346]  kfree+0xfc/0x2f4
-[   93.859416]  rpmsg_ctrldev_release_device+0x78/0xb8
-[   93.864445]  device_release+0x84/0x168
-[   93.868310]  kobject_cleanup+0x12c/0x298
-[   93.872356]  kobject_delayed_cleanup+0x10/0x18
-[   93.876948]  process_one_work+0x578/0x92c
-[   93.881086]  worker_thread+0x804/0xcf8
-[   93.884963]  kthread+0x2a8/0x314
-[   93.888303]  ret_from_fork+0x10/0x18
+the kprobe emulate instruction function is distributed in three
+files: actions-common.c actions-arm.c actions-thumb.c, so disable
+KASAN when compiling these files.
 
-The cdev_device_add/del() API was created to address this issue (see
-commit '233ed09d7fda ("chardev: add helper function to register char
-devs with a struct device")'), use it instead of cdev add/del().
+for example, use kprobe insert on cap_capable+20 after kasan
+enabled, the cap_capable assembly code is as follows:
+<cap_capable>:
+e92d47f0	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+e1a05000	mov	r5, r0
+e280006c	add	r0, r0, #108    ; 0x6c
+e1a04001	mov	r4, r1
+e1a06002	mov	r6, r2
+e59fa090	ldr	sl, [pc, #144]  ;
+ebfc7bf8	bl	c03aa4b4 <__asan_load4>
+e595706c	ldr	r7, [r5, #108]  ; 0x6c
+e2859014	add	r9, r5, #20
+......
+The emulate_ldr assembly code after enabling kasan is as follows:
+c06f1384 <emulate_ldr>:
+e92d47f0	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+e282803c	add	r8, r2, #60     ; 0x3c
+e1a05000	mov	r5, r0
+e7e37855	ubfx	r7, r5, #16, #4
+e1a00008	mov	r0, r8
+e1a09001	mov	r9, r1
+e1a04002	mov	r4, r2
+ebf35462	bl	c03c6530 <__asan_load4>
+e357000f	cmp	r7, #15
+e7e36655	ubfx	r6, r5, #12, #4
+e205a00f	and	sl, r5, #15
+0a000001	beq	c06f13bc <emulate_ldr+0x38>
+e0840107	add	r0, r4, r7, lsl #2
+ebf3545c	bl	c03c6530 <__asan_load4>
+e084010a	add	r0, r4, sl, lsl #2
+ebf3545a	bl	c03c6530 <__asan_load4>
+e2890010	add	r0, r9, #16
+ebf35458	bl	c03c6530 <__asan_load4>
+e5990010	ldr	r0, [r9, #16]
+e12fff30	blx	r0
+e356000f	cm	r6, #15
+1a000014	bne	c06f1430 <emulate_ldr+0xac>
+e1a06000	mov	r6, r0
+e2840040	add	r0, r4, #64     ; 0x40
+......
 
-Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
-Signed-off-by: Sujit Kautkar <sujitka@chromium.org>
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220110104706.v6.1.Iaac908f3e3149a89190ce006ba166e2d3fd247a3@changeid
+when running in emulate_ldr to simulate the ldr instruction, panic
+occurred, and the log is as follows:
+Unable to handle kernel NULL pointer dereference at virtual address
+00000090
+pgd = ecb46400
+[00000090] *pgd=2e0fa003, *pmd=00000000
+Internal error: Oops: 206 [#1] SMP ARM
+PC is at cap_capable+0x14/0xb0
+LR is at emulate_ldr+0x50/0xc0
+psr: 600d0293 sp : ecd63af8  ip : 00000004  fp : c0a7c30c
+r10: 00000000  r9 : c30897f4  r8 : ecd63cd4
+r7 : 0000000f  r6 : 0000000a  r5 : e59fa090  r4 : ecd63c98
+r3 : c06ae294  r2 : 00000000  r1 : b7611300  r0 : bf4ec008
+Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+Control: 32c5387d  Table: 2d546400  DAC: 55555555
+Process bash (pid: 1643, stack limit = 0xecd60190)
+(cap_capable) from (kprobe_handler+0x218/0x340)
+(kprobe_handler) from (kprobe_trap_handler+0x24/0x48)
+(kprobe_trap_handler) from (do_undefinstr+0x13c/0x364)
+(do_undefinstr) from (__und_svc_finish+0x0/0x30)
+(__und_svc_finish) from (cap_capable+0x18/0xb0)
+(cap_capable) from (cap_vm_enough_memory+0x38/0x48)
+(cap_vm_enough_memory) from
+(security_vm_enough_memory_mm+0x48/0x6c)
+(security_vm_enough_memory_mm) from
+(copy_process.constprop.5+0x16b4/0x25c8)
+(copy_process.constprop.5) from (_do_fork+0xe8/0x55c)
+(_do_fork) from (SyS_clone+0x1c/0x24)
+(SyS_clone) from (__sys_trace_return+0x0/0x10)
+Code: 0050a0e1 6c0080e2 0140a0e1 0260a0e1 (f801f0e7)
+
+Fixes: 35aa1df43283 ("ARM kprobes: instruction single-stepping support")
+Fixes: 421015713b30 ("ARM: 9017/2: Enable KASan for ARM")
+Signed-off-by: huangshaobo <huangshaobo6@huawei.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rpmsg/rpmsg_char.c |   11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ arch/arm/probes/kprobes/Makefile |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -458,7 +458,6 @@ static void rpmsg_ctrldev_release_device
- 
- 	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
- 	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
--	cdev_del(&ctrldev->cdev);
- 	kfree(ctrldev);
- }
- 
-@@ -493,19 +492,13 @@ static int rpmsg_chrdev_probe(struct rpm
- 	dev->id = ret;
- 	dev_set_name(&ctrldev->dev, "rpmsg_ctrl%d", ret);
- 
--	ret = cdev_add(&ctrldev->cdev, dev->devt, 1);
-+	ret = cdev_device_add(&ctrldev->cdev, &ctrldev->dev);
- 	if (ret)
- 		goto free_ctrl_ida;
- 
- 	/* We can now rely on the release function for cleanup */
- 	dev->release = rpmsg_ctrldev_release_device;
- 
--	ret = device_add(dev);
--	if (ret) {
--		dev_err(&rpdev->dev, "device_add failed: %d\n", ret);
--		put_device(dev);
--	}
--
- 	dev_set_drvdata(&rpdev->dev, ctrldev);
- 
- 	return ret;
-@@ -531,7 +524,7 @@ static void rpmsg_chrdev_remove(struct r
- 	if (ret)
- 		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
- 
--	device_del(&ctrldev->dev);
-+	cdev_device_del(&ctrldev->cdev, &ctrldev->dev);
- 	put_device(&ctrldev->dev);
- }
- 
+--- a/arch/arm/probes/kprobes/Makefile
++++ b/arch/arm/probes/kprobes/Makefile
+@@ -1,4 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
++KASAN_SANITIZE_actions-common.o := n
++KASAN_SANITIZE_actions-arm.o := n
++KASAN_SANITIZE_actions-thumb.o := n
+ obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
+ obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
+ test-kprobes-objs		:= test-core.o
 
 

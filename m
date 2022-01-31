@@ -2,90 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEC44A4015
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C7E4A401A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358150AbiAaKZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 05:25:20 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33454 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239964AbiAaKYw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:24:52 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 46283210FF;
-        Mon, 31 Jan 2022 10:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643624690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0hz3FVY2lD48V2ZTs1+H/0RTN7r8b6FNhKGlpEPpz9E=;
-        b=i6Qyz0PTXKJ3XKNRimsaM9gR6PIQS+yhAtKrfdOLffZRt63ky/wDOUXpvLJsEXA217lcIS
-        jAsuj/sR2a19yrcKUCNU7tJoepMREw9nkQ762UfdlPjCHsgaytbDrx9icLfWC/W8wf3bBB
-        HLbCfi//fWOOk841kUiKI7xoS4K7qKs=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7D597A3B83;
-        Mon, 31 Jan 2022 10:24:49 +0000 (UTC)
-Date:   Mon, 31 Jan 2022 11:24:48 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memory_hotplug: build zonelist for managed_zone
-Message-ID: <Yfe48O7eBWSe0LjK@dhcp22.suse.cz>
-References: <20220127012023.18095-1-richard.weiyang@gmail.com>
- <YfJXoSVkQ3X5u44F@dhcp22.suse.cz>
- <20220129002628.2cwr35glahq5f5md@master>
+        id S1358158AbiAaK0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 05:26:19 -0500
+Received: from mga17.intel.com ([192.55.52.151]:38123 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358132AbiAaK0R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 05:26:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643624778; x=1675160778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rnpGhLBeO/HdBBinrNjhSH3ZdFwzc3ZAIZeFErKuU6A=;
+  b=SkcJ7eA6RZTlScMiOO024trJbZNNtkF46WMRtc2T2aFFxeynxquzaHMG
+   GhnJnnYlvl14f/ZDy0DtaeKE0lvPuhPRWlXvxUSqS3asEStOYSn7IqF7I
+   uIN57GTBjzXVJeEqWPILmoFwjpYuN02ISa1hUgjUepUy/0ztd1JyiEoD9
+   bJTa7VtP8nlsxJ9Fwby4r24R8edKGLqyUIn+3pcAE23OxEHfKTeOKq2jt
+   2pwzLcWHD7EmiwPWG2PO9LtV4L9MzLlFZCN6ZnU1Y9joQXMA6uh7iCKuz
+   f25Ge8H6B1ZAycugVAwCfF/19f4sB1sI3VjMkcTYag0xSaIVe1HeAAhoZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="228097216"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="228097216"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 02:26:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="598799829"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 02:26:13 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nETrx-00GpLQ-JX;
+        Mon, 31 Jan 2022 12:25:09 +0200
+Date:   Mon, 31 Jan 2022 12:25:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Rientjes <rientjes@google.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v2 1/3] lib/vsprintf: Avoid redundant work with 0 size
+Message-ID: <Yfe5Bb3U6Uil7Y6g@smile.fi.intel.com>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-2-longman@redhat.com>
+ <d99b3c4b-7b6e-529-6e4b-b91b65c92d81@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220129002628.2cwr35glahq5f5md@master>
+In-Reply-To: <d99b3c4b-7b6e-529-6e4b-b91b65c92d81@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 29-01-22 00:26:28, Wei Yang wrote:
-> On Thu, Jan 27, 2022 at 09:28:17AM +0100, Michal Hocko wrote:
-> >On Thu 27-01-22 01:20:23, Wei Yang wrote:
-> >> During memory hotplug, when online/offline a zone, we need to rebuild
-> >> the zonelist for all node. There are two checks to decide whether a zone
-> >> would be added to zonelist:
-> >> 
-> >>   * one in online_pages/offline_pages to decide necessity
-> >>   * one in build_zonerefs_node to do real add
-> >> 
-> >> Currently we use different criteria at these two places, which is
-> >> different from the original behavior.
-> >> 
-> >> Originally during memory hotplug, zonelist is re-built when zone hasn't
-> >> been populated. This in introduced in 'commit 6811378e7d8b ("[PATCH]
-> >> wait_table and zonelist initializing for memory hotadd: update zonelists")'.
-> >> And at that moment, build_zonelists_node() also use populated_zone() to
-> >> decide whether the zone should be added to zonelist.
-> >> 
-> >> While in 'commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim
-> >> from zones with pages managed by the buddy allocator")',
-> >> build_zonelists_node() changed to use managed_zone() to add zonelist.
-> >> But we still use populated_zone() to decide the necessity.
-> >> 
-> >> This patch restore the original behavior by using the same criteria to
-> >> add a zone in zonelist during memory hotplug.
-> >
-> >Why?
-> >
+On Sun, Jan 30, 2022 at 12:49:37PM -0800, David Rientjes wrote:
+> On Sat, 29 Jan 2022, Waiman Long wrote:
 > 
-> In case we online a populated zone, but not managed. Then this zone will not
-> be in zonelist. Right?
+> > For *scnprintf(), vsnprintf() is always called even if the input size is
+> > 0. That is a waste of time, so just return 0 in this case.
 
-yeah. We can theoretically end up with a zone without any managed menory
-on the zonelists. But my primary question is why do we need this change?
-Does it fix any existing problem? Does it make the code easier to
-read/understand? Does it improve performance? Every patch should have a
-justification. Your changelog merely lists the history and then states
-the new behavior without any explanation of why that is needed or
-desired. See?
+Why do you think it's not legit?
+
 -- 
-Michal Hocko
-SUSE Labs
+With Best Regards,
+Andy Shevchenko
+
+

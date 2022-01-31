@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC804A522A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C904A522C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiAaWOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S232213AbiAaWPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbiAaWOm (ORCPT
+        with ESMTP id S231950AbiAaWPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:14:42 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71FBC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:14:42 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id x193so29711924oix.0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:14:42 -0800 (PST)
+        Mon, 31 Jan 2022 17:15:51 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B906C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:15:51 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id i2so3970018ilm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:15:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kX4vv41O521cqb/Mmwr+SoFy/57SVrz0KMGJ5f1fPRE=;
-        b=wf/6iZqCoedJnvxF79ng3qS6/4Z/jyUagYvpSeL5nM2YSKno3QUY7NUPBUTO7BWHxR
-         ALnUrXUHMIXd0JVmcBcqoZnB8WqfMCAxh4xp4CjLv1+HqrCD06tdzq/4U6lXA88R7ysH
-         YNZN+p6oOArJkbBEEGFcRc4aYrcAyWjYnLDUP7NgZaeWgsfIZAtzXCwZgSkmGBwHUjIn
-         6sXGZOSpgdKyzJzSMqdSO5OjOsAcV747d1RKX83opf1GeNyUTfrGUy9IoqRLAdGpHmho
-         /ftlOL74Hv4HZAZ4ClR6LwCOWKkWvNn2xKOU/zjumXj8X60VMtZzZomU3NaQVRDq6JPu
-         1WYA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4WIAAI1YyTvDXovf91hwEptzHInPStTeN3fbxZKa7ZY=;
+        b=K0hwEHsiNUfEgHoL27BAk1HZYvaxr/kAD1ShrexM1dvZrYkcLyK5bmxNUb6BIRK+jj
+         DTeD/axsxnjifcP4BS91/rQcA53+C6ZbRgW+ShfRChgCsG8gZc2lrlMKpeghyKk/Tz94
+         5KvElx1aK0ZOo1ieHO3jMEkMeNGnzTkcjaxAs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kX4vv41O521cqb/Mmwr+SoFy/57SVrz0KMGJ5f1fPRE=;
-        b=YVo7OjHw6unTdZbnwMt4k+YYjMp8EvnMN1+CMfSa5NVrRHHZWKqCg2y6fXzJYxA9TM
-         u0Glk7ycVujxxLMFQhsqC40xzYjqfZZlJJxDsF9+rQiYWS10Ntzfcyb5Zwcg2lAB6zC+
-         Um7AFZHuAniTqGPbdXCkfHKYtXQ6tSrtC5eVY9rQ8q990bsLnDhYaPH1Z4xzGw0W+OGn
-         /DU0KbiRosPM9lEBaCdVv+ymZV2jClVf4cSWFZl49YTLym5777x51kHn2gmv8sP/Dr6V
-         I9sZovYgS3LCH9FoGprOT+Ha3Vwtyh/UG7fARqgqRXzddCSw6XsWkUGC1/OJDnqJoTRA
-         17nA==
-X-Gm-Message-State: AOAM531D44fetO0rFReYr3VLlJ05xDtB/yNw+gQoLdvsAgu63ILlqpfk
-        khwWS8ENV8GmSW7DcQBBCkrc6w==
-X-Google-Smtp-Source: ABdhPJw9+6wJu8RmraUx7H9QDDjBebC5U0a57nzJ3ZyXK9TbFdn3cQkVSYOloKkrpZQDH6CClBQntg==
-X-Received: by 2002:a05:6808:219d:: with SMTP id be29mr18881055oib.77.1643667282197;
-        Mon, 31 Jan 2022 14:14:42 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id j6sm3945195otq.76.2022.01.31.14.14.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 14:14:41 -0800 (PST)
-Date:   Mon, 31 Jan 2022 16:14:39 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Luca Weiss <luca@z3ntu.xyz>,
-        Brian Masney <masneyb@onstation.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: qcom: ocmem: Fix missing put_device() call in
- of_get_ocmem
-Message-ID: <YfhfT0EC393GxSRd@builder.lan>
-References: <20220107073126.2335-1-linmq006@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4WIAAI1YyTvDXovf91hwEptzHInPStTeN3fbxZKa7ZY=;
+        b=fKtsfsOxx1+5RUGI+oFSiVBhy4vRgDwUyBSi9Enh/a13TTar+gPxKbcC29Oe6vXS6m
+         I7gf848m3/rSQzcQT2SbtRo6sac7O93dH4QYfg+GH1g2R0z2lWoomS07FMPtXm9hh/yj
+         4MmLLEgSem1igYqcI9/eZv/09oaF6gFCIsymx1S4K6WhExSrMJ/bNNvvfWOEd60zDVzU
+         nqjL4Xk7bQ/rHmlVp5zH29+bVMWW1Lhcnp3LmG+uxXEis5N24dJTfxOY4ftd5Et6Wla0
+         j3c/jMpzpRHHwESauOAVdlJeDkc/hni4lfZbz80G76GfwPIB+FgxesdsiVoZYKyAnM0f
+         EtJg==
+X-Gm-Message-State: AOAM5316sKxUSqGCJHvm67mffL1Wr6OxlumnvlzxtSs4QfeamXD07wcq
+        Gi5HNnSbUalsZJWI4g3oE/xhOA==
+X-Google-Smtp-Source: ABdhPJwAGB75HkpJV+hmWtYYbrikRpPLL5ZAx/Nex4Buj/2Sxu7MU4WzWsU2kp0RoUBrg5VyEi4xFw==
+X-Received: by 2002:a05:6e02:1a4f:: with SMTP id u15mr2168857ilv.245.1643667350527;
+        Mon, 31 Jan 2022 14:15:50 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id r64sm15480536iod.25.2022.01.31.14.15.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 14:15:50 -0800 (PST)
+Subject: Re: [PATCH 5.16 000/200] 5.16.5-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <55b6e728-f613-da6d-bbe0-df123eed6ba0@linuxfoundation.org>
+Date:   Mon, 31 Jan 2022 15:15:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107073126.2335-1-linmq006@gmail.com>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 07 Jan 01:31 CST 2022, Miaoqian Lin wrote:
-
-> The reference taken by 'of_find_device_by_node()' must be released when
-> not needed anymore.
-> Add the corresponding 'put_device()' in the error handling path.
+On 1/31/22 3:54 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.5 release.
+> There are 200 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Fixes: 01f937ffc468 ("soc: qcom: ocmem: don't return NULL in of_get_ocmem")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-
-Your patch solves the particular problem, so I'm applying it.
-
-But it seems that we never release pdev in the case of successfully
-return the ocmem object either... So there's more to improve here.
-
-Regards,
-Bjorn
-
-> ---
->  drivers/soc/qcom/ocmem.c | 1 +
->  1 file changed, 1 insertion(+)
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-> index d2dacbbaafbd..97fd24c178f8 100644
-> --- a/drivers/soc/qcom/ocmem.c
-> +++ b/drivers/soc/qcom/ocmem.c
-> @@ -206,6 +206,7 @@ struct ocmem *of_get_ocmem(struct device *dev)
->  	ocmem = platform_get_drvdata(pdev);
->  	if (!ocmem) {
->  		dev_err(dev, "Cannot get ocmem\n");
-> +		put_device(&pdev->dev);
->  		return ERR_PTR(-ENODEV);
->  	}
->  	return ocmem;
-> -- 
-> 2.17.1
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.5-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
 > 
+> thanks,
+> 
+> greg k-h
+> 
+
+Compiled and booted on my test system. No dmesg regressions.
+
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

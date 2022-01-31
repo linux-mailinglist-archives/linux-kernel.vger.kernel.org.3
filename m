@@ -2,185 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BAB4A3D89
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 06:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A108A4A3D92
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 07:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbiAaF7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 00:59:14 -0500
-Received: from mga05.intel.com ([192.55.52.43]:29021 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232130AbiAaF7N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:59:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643608753; x=1675144753;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qSMFveX5lVTif1dekQa1h/+KX8io6E0LwxZv+DKJcis=;
-  b=Vfs+DEMAfzgmsz5ZiOxc6g8yardRZalNNWHKYd/zQxkPhAt+qzEoJt5p
-   0FsdZK0UfUawfHskhRHTHEKEwSq4Ozf+GuiX00NMZCWurYDW/AHs026gr
-   Jf1eCVu6SEwr8HIdQ5ea8Zx1gVrUg4JevF8QyY7+AQuU0lcYKyDN34rim
-   wfu+BrFVZCnz/9YP5hCcuWTrKZzZ1F50y75JuIWytUT+0gozLkV5C0FE9
-   BH4f2AFyjC8ifoo+aoQl96uKRatVooai0E9trs28xyBEONTq0nY/hM6l3
-   u0FrhH4DePNcPizl7Yxh5EOPK/ylsG366x7SC60+U6xaRvT3qYnvd4Biq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="333763378"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="333763378"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:59:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="522530559"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2022 21:59:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEPiW-000RUE-Mz; Mon, 31 Jan 2022 05:59:08 +0000
-Date:   Mon, 31 Jan 2022 13:58:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH v4 3/4] Watchdog: sp5100_tco: Add initialization using
- EFCH MMIO
-Message-ID: <202201311323.CdxiFZ8V-lkp@intel.com>
-References: <20220130191225.303115-4-terry.bowman@amd.com>
+        id S235331AbiAaGTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 01:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235225AbiAaGTV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 01:19:21 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DD1C06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 22:19:21 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id o64so12955224pjo.2
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 22:19:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RWO002SpFOd8uawnx2ITIWsWY5Ybr4ZPMY6ndLr8PcI=;
+        b=MT6bztnDkA7L14dyGihT+ldI3f1g0uJWTia61QuIISZX6y3AkQ3aBfoNJZqDiXW0fK
+         zX7a8bAzW0zfygJqbUkkBsYW+9CCV6vsbzUrsW5MfjdsunoudNsZmmaN55pU8i0rjqyF
+         NZbf5/2nd4WgI00EcN5TfV/hJzYj5ioDnqdC8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RWO002SpFOd8uawnx2ITIWsWY5Ybr4ZPMY6ndLr8PcI=;
+        b=PtBppFWeBaqWH8GhYtsydRTWazt3fx6WnXIwF/w/WUADF82wmec4j0jghUVManhEgC
+         jNzUbrRMzj2CO4EVZC87PaO1OaQZvwXr6zWQ8OcQAUAzrmvt5WYOrjOA/yE5Iibi4aMI
+         6e9uPoADqU/EB88KN1efbD4yWoXGHOttzGlg0QBNHd/UEtpPzPevVkRoD8L1ziRjkM1A
+         idm5Bfu+XRAUqQJ0ed6Ymg1Cu5jOd3wYT9rzQ5BA9aJSebi7OJMHYg+OJpeVI7ibwjyW
+         cBLdPuz66pDuk5Zgps0+RkxRX/4U3XavdTMzJ5co5LBDdm7CA1CM6AISYN8+Su9TCZjB
+         gf2Q==
+X-Gm-Message-State: AOAM5338Imj17lVtAQ4FzPwDrGM3/ZkN2xdntiaLn0/yCqKCVDHVkFWL
+        h5Gn0wHdVCFeCWlD2MQlzdZCXRHCqkTj2Q==
+X-Google-Smtp-Source: ABdhPJx8uGhOx1N/0k+W4QxJSBGwbWBu/Qs5b8SdFyJXSSt1A+89LnUjeSPlLcDKWbauV7DQrWwWqQ==
+X-Received: by 2002:a17:90b:1bc9:: with SMTP id oa9mr22590195pjb.217.1643609961066;
+        Sun, 30 Jan 2022 22:19:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f9sm27092957pgf.94.2022.01.30.22.19.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 22:19:20 -0800 (PST)
+Date:   Sun, 30 Jan 2022 22:19:19 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Leon Romanovsky <leon@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201302216.97F2691@keescook>
+References: <20220131100954.74a2034f@canb.auug.org.au>
+ <202201302002.41A8DDA2@keescook>
+ <20220131155932.3f88ec71@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220130191225.303115-4-terry.bowman@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220131155932.3f88ec71@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
+On Mon, Jan 31, 2022 at 03:59:32PM +1100, Stephen Rothwell wrote:
+> On Sun, 30 Jan 2022 20:04:00 -0800 Kees Cook <keescook@chromium.org> wrote:
+> >
+> > This should be fixed by:
+> > https://lore.kernel.org/linux-hardening/20220124172242.2410996-1-keescook@chromium.org/
+> > (I was expecting this to be in netdev by now.)
+> > 
+> > This should be fixed in:
+> > https://lore.kernel.org/linux-hardening/20220124172028.2410761-1-keescook@chromium.org/
+> > (Again, this was expected to be in netdev by now.)
+> > 
+> 
+> yeah, neither has made it yet.  However, it would not have helped as I
+> am merging the kspp tree very early so that new bugs get fixed in the
+> trees that introduce them.  These 2 are in Linus tree (for a long time)
+> and so it would be better if these fixes went int the net tree and then
+> Linus' tree as bug fixes.
 
-Thank you for the patch! Perhaps something to improve:
+Okay, understood. I'll leave them in my tree until I see them duplicated
+in their respective trees (or in Linus's tree).
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> I will use these in the merge of the kspp tree from tomorrow until they
+> appear earlier (or you could put them back in your tree).  Cross tree
+> dependencies are a pain :-(   BTW Linus would have the same problem I
+> am having if he merges your tree during the merge window before he
+> merges the net-next tree ...
 
-url:    https://github.com/0day-ci/linux/commits/Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311323.CdxiFZ8V-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
-        git checkout 92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
+Yeah, I'm used to going "late" in the -rc1 from these kinds of things. :)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All warnings (new ones prefixed by >>):
-
-   drivers/watchdog/sp5100_tco.c:272:60: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
-           dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
-                                  ~~~~                               ^~~~~~~~~~~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                    ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-                 ^
->> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
-
-
-vim +345 drivers/watchdog/sp5100_tco.c
-
-   333	
-   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
-   335					       struct watchdog_device *wdd)
-   336	{
-   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-   338		const char *dev_name = SB800_DEVNAME;
-   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
-   340		struct resource *res;
-   341		void __iomem *addr;
-   342		int ret;
-   343		u32 val;
-   344	
- > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
-   347					       "sp5100_tco");
-   348	
-   349		if (!res) {
-   350			dev_err(dev,
-   351				"Memory region 0x%08x already in use\n",
-   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
-   353			return -EBUSY;
-   354		}
-   355	
-   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
-   357		if (!addr) {
-   358			dev_err(dev, "Address mapping failed\n");
-   359			ret = -ENOMEM;
-   360			goto out;
-   361		}
-   362	
-   363		/*
-   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
-   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
-   366		 * also starts the timer operation. Enable if not already enabled.
-   367		 */
-   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
-   371					    EFCH_PM_DECODEEN_WDT_TMREN);
-   372		}
-   373	
-   374		/* Error if the timer could not be enabled */
-   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   377			dev_err(dev, "Failed to enable the timer\n");
-   378			ret = -EFAULT;
-   379			goto out;
-   380		}
-   381	
-   382		mmio_addr = EFCH_PM_WDT_ADDR;
-   383	
-   384		/* Determine alternate MMIO base address */
-   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
-   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
-   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
-   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
-   389	
-   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
-   391		if (!ret) {
-   392			tco_timer_enable_mmio(addr);
-   393			ret = sp5100_tco_timer_init(tco);
-   394		}
-   395	
-   396	out:
-   397		if (addr)
-   398			iounmap(addr);
-   399	
-   400		release_resource(res);
-   401	
-   402		return ret;
-   403	}
-   404	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook

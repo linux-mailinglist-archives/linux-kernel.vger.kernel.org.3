@@ -2,206 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0504A49F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1558A4A4A30
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377168AbiAaPOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:14:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22111 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376969AbiAaPNw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:13:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643642032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WNY27SrxhFfcwywq83/THIY3BfDtPTJRz689v8YiT4I=;
-        b=MT/UVdjkczb3b2kfvH+QP3lMN2Rsygg7x5FSejNtSiLXUddWO0gtbJvOmHMWPXxx6pOUFW
-        OodCC2AJPcElsLwldL9GLrP+mv3GbU3IEjvOa1dSg44gQ9PEbVrpyvKg+1+edUIkf80TZ0
-        kSZ4TGzMH7IFRvr8JwIPaW9GJFhiMV8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-t4OMMK1zNEC5MGQtsuW1Xw-1; Mon, 31 Jan 2022 10:13:48 -0500
-X-MC-Unique: t4OMMK1zNEC5MGQtsuW1Xw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B50351006AA7;
-        Mon, 31 Jan 2022 15:13:46 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F97970F60;
-        Mon, 31 Jan 2022 15:13:44 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 2/5] vfs: Add tracepoints for inode_excl_inuse_trylock/unlock
-From:   David Howells <dhowells@redhat.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
-        linux-cachefs@redhat.com, dhowells@redhat.com,
-        Christoph Hellwig <hch@infradead.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Jeff Layton <jlayton@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        torvalds@linux-foundation.org, linux-unionfs@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 31 Jan 2022 15:13:43 +0000
-Message-ID: <164364202369.1476539.452557132083658522.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
-References: <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        id S1379648AbiAaPPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:15:06 -0500
+Received: from mga07.intel.com ([134.134.136.100]:19436 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1378546AbiAaPOS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 10:14:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643642058; x=1675178058;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DQQn7QRxsnft+dSOK1ITrRsadeRRoBZ/hz1rB+81nUA=;
+  b=FnMFIWHeXawEQKxj6Bzn6m8O87VKwraDygqouSlAEzJaFhOni6A4yHj+
+   m/VxTo3do7PaApSNE276bxbn6u0ALfRySjfj/GuDZm1X4ZdRCLgCC60zB
+   KYZjqeBWL8WMp9duEcGTrWIMnhgEEKhtq9X7NDPFOOJamBRm8MxHJN+OC
+   DNwM/IACn1rsLDI7hzPvNKSvbWSrBsbZbZHwm9chBVRkAgQ1oiDaIpLLs
+   PYmRp4lSBC8PqUUhGC+iJHaffwOvE2bLQvtcE7OMxWD1MJTavv+iCXLw4
+   SHpAde+T6iXrLIdiMOc1zqic7lHJWtxW2fiIvLtP/1gC9yNiTLG5UF/on
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="310787744"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="310787744"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 07:14:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="619408651"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 31 Jan 2022 07:14:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 175D7496; Mon, 31 Jan 2022 17:14:16 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v4 6/8] i2c: i801: convert to use common P2SB accessor
+Date:   Mon, 31 Jan 2022 17:13:44 +0200
+Message-Id: <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tracepoints for inode_excl_inuse_trylock/unlock() to record successful
-and lock, failed lock, successful unlock and unlock when it wasn't locked.
+Since we have a common P2SB accessor in tree we may use it instead of
+open coded variants.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Amir Goldstein <amir73il@gmail.com>
-cc: Miklos Szeredi <miklos@szeredi.hu>
-cc: linux-unionfs@vger.kernel.org
-cc: linux-cachefs@redhat.com
+Replace custom code by p2sb_bar() call.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 ---
+ drivers/i2c/busses/Kconfig        |  1 +
+ drivers/i2c/busses/i2c-i801.c     | 39 +++++++------------------------
+ drivers/platform/x86/intel/p2sb.c |  6 +++++
+ 3 files changed, 16 insertions(+), 30 deletions(-)
 
- fs/inode.c           |   21 +++++++++++++++++----
- fs/overlayfs/super.c |   10 ++++++----
- include/linux/fs.h   |    9 +++++++--
- 3 files changed, 30 insertions(+), 10 deletions(-)
-
-diff --git a/fs/inode.c b/fs/inode.c
-index 954719f66113..61b93a89853f 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -22,6 +22,8 @@
- #include <linux/iversion.h>
- #include <trace/events/writeback.h>
- #include "internal.h"
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/vfs.h>
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 42da31c1ab70..286f3b14712b 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -101,6 +101,7 @@ config I2C_HIX5HD2
+ config I2C_I801
+ 	tristate "Intel 82801 (ICH/PCH)"
+ 	depends on PCI
++	select P2SB if X86
+ 	select CHECK_SIGNATURE if X86 && DMI
+ 	select I2C_SMBUS
+ 	help
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 7428cc6af5cc..950a9b444adf 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -110,6 +110,7 @@
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+ #include <linux/platform_data/itco_wdt.h>
++#include <linux/platform_data/x86/p2sb.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/mutex.h>
  
- /*
-  * Inode locking rules:
-@@ -2409,11 +2411,14 @@ EXPORT_SYMBOL(current_time);
- /**
-  * inode_excl_inuse_trylock - Try to exclusively lock an inode for kernel access
-  * @dentry: Reference to the inode to be locked
-+ * @o: Private reference for the kernel service
-+ * @who: Which kernel service is trying to gain the lock
-  *
-  * Try to gain exclusive access to an inode for a kernel service, returning
-  * true if successful.
-  */
--bool inode_excl_inuse_trylock(struct dentry *dentry)
-+bool inode_excl_inuse_trylock(struct dentry *dentry, unsigned int o,
-+			      enum inode_excl_inuse_by who)
- {
- 	struct inode *inode = d_inode(dentry);
- 	bool locked = false;
-@@ -2421,7 +2426,10 @@ bool inode_excl_inuse_trylock(struct dentry *dentry)
- 	spin_lock(&inode->i_lock);
- 	if (!(inode->i_state & I_EXCL_INUSE)) {
- 		inode->i_state |= I_EXCL_INUSE;
-+		trace_inode_excl_inuse_lock(inode, o, who);
- 		locked = true;
-+	} else {
-+		trace_inode_excl_inuse_lock_failed(inode, o, who);
- 	}
- 	spin_unlock(&inode->i_lock);
+@@ -139,7 +140,6 @@
+ #define TCOBASE		0x050
+ #define TCOCTL		0x054
  
-@@ -2432,18 +2440,23 @@ EXPORT_SYMBOL(inode_excl_inuse_trylock);
- /**
-  * inode_excl_inuse_unlock - Unlock exclusive kernel access to an inode
-  * @dentry: Reference to the inode to be unlocked
-+ * @o: Private reference for the kernel service
-  *
-  * Drop exclusive access to an inode for a kernel service.  A warning is given
-  * if the inode was not marked for exclusive access.
-  */
--void inode_excl_inuse_unlock(struct dentry *dentry)
-+void inode_excl_inuse_unlock(struct dentry *dentry, unsigned int o)
- {
- 	if (dentry) {
- 		struct inode *inode = d_inode(dentry);
+-#define SBREG_BAR		0x10
+ #define SBREG_SMBCTRL		0xc6000c
+ #define SBREG_SMBCTRL_DNV	0xcf000c
  
- 		spin_lock(&inode->i_lock);
--		WARN_ON(!(inode->i_state & I_EXCL_INUSE));
--		inode->i_state &= ~I_EXCL_INUSE;
-+		if (WARN_ON(!(inode->i_state & I_EXCL_INUSE))) {
-+			trace_inode_excl_inuse_unlock_bad(inode, o);
-+		} else {
-+			inode->i_state &= ~I_EXCL_INUSE;
-+			trace_inode_excl_inuse_unlock(inode, o);
-+		}
- 		spin_unlock(&inode->i_lock);
- 	}
- }
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index 5c3361a2dc7c..6434ae11496d 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -224,10 +224,10 @@ static void ovl_free_fs(struct ovl_fs *ofs)
- 	dput(ofs->indexdir);
- 	dput(ofs->workdir);
- 	if (ofs->workdir_locked)
--		inode_excl_inuse_unlock(ofs->workbasedir);
-+		inode_excl_inuse_unlock(ofs->workbasedir, 0);
- 	dput(ofs->workbasedir);
- 	if (ofs->upperdir_locked)
--		inode_excl_inuse_unlock(ovl_upper_mnt(ofs)->mnt_root);
-+		inode_excl_inuse_unlock(ovl_upper_mnt(ofs)->mnt_root, 0);
+@@ -1474,45 +1474,24 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		.version = 4,
+ 	};
+ 	struct resource *res;
+-	unsigned int devfn;
+-	u64 base64_addr;
+-	u32 base_addr;
+-	u8 hidden;
++	int ret;
  
- 	/* Hack!  Reuse ofs->layers as a vfsmount array before freeing it */
- 	mounts = (struct vfsmount **) ofs->layers;
-@@ -1239,7 +1239,8 @@ static int ovl_get_upper(struct super_block *sb, struct ovl_fs *ofs,
- 	if (upper_mnt->mnt_sb->s_flags & SB_NOSEC)
- 		sb->s_flags |= SB_NOSEC;
+ 	/*
+ 	 * We must access the NO_REBOOT bit over the Primary to Sideband
+-	 * bridge (P2SB). The BIOS prevents the P2SB device from being
+-	 * enumerated by the PCI subsystem, so we need to unhide/hide it
+-	 * to lookup the P2SB BAR.
++	 * (P2SB) bridge.
+ 	 */
+-	pci_lock_rescan_remove();
+-
+-	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 1);
+-
+-	/* Unhide the P2SB device, if it is hidden */
+-	pci_bus_read_config_byte(pci_dev->bus, devfn, 0xe1, &hidden);
+-	if (hidden)
+-		pci_bus_write_config_byte(pci_dev->bus, devfn, 0xe1, 0x0);
+-
+-	pci_bus_read_config_dword(pci_dev->bus, devfn, SBREG_BAR, &base_addr);
+-	base64_addr = base_addr & 0xfffffff0;
+-
+-	pci_bus_read_config_dword(pci_dev->bus, devfn, SBREG_BAR + 0x4, &base_addr);
+-	base64_addr |= (u64)base_addr << 32;
+-
+-	/* Hide the P2SB device, if it was hidden before */
+-	if (hidden)
+-		pci_bus_write_config_byte(pci_dev->bus, devfn, 0xe1, hidden);
+-	pci_unlock_rescan_remove();
  
--	if (inode_excl_inuse_trylock(ovl_upper_mnt(ofs)->mnt_root)) {
-+	if (inode_excl_inuse_trylock(ovl_upper_mnt(ofs)->mnt_root, 0,
-+				     inode_excl_inuse_by_overlayfs)) {
- 		ofs->upperdir_locked = true;
- 	} else {
- 		err = ovl_report_in_use(ofs, "upperdir");
-@@ -1499,7 +1500,8 @@ static int ovl_get_workdir(struct super_block *sb, struct ovl_fs *ofs,
- 
- 	ofs->workbasedir = dget(workpath.dentry);
- 
--	if (inode_excl_inuse_trylock(ofs->workbasedir)) {
-+	if (inode_excl_inuse_trylock(ofs->workbasedir, 0,
-+				     inode_excl_inuse_by_overlayfs)) {
- 		ofs->workdir_locked = true;
- 	} else {
- 		err = ovl_report_in_use(ofs, "workdir");
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 4c15e270f1ac..f461883d66a8 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2389,8 +2389,13 @@ static inline bool inode_is_dirtytime_only(struct inode *inode)
- 				  I_FREEING | I_WILL_FREE)) == I_DIRTY_TIME;
- }
- 
--bool inode_excl_inuse_trylock(struct dentry *dentry);
--void inode_excl_inuse_unlock(struct dentry *dentry);
-+enum inode_excl_inuse_by {
-+	inode_excl_inuse_by_overlayfs,
-+};
+ 	res = &tco_res[1];
++	ret = p2sb_bar(pci_dev->bus, 0, res);
++	if (ret)
++		return ERR_PTR(ret);
 +
-+bool inode_excl_inuse_trylock(struct dentry *dentry, unsigned int o,
-+			      enum inode_excl_inuse_by who);
-+void inode_excl_inuse_unlock(struct dentry *dentry, unsigned int o);
+ 	if (pci_dev->device == PCI_DEVICE_ID_INTEL_DNV_SMBUS)
+-		res->start = (resource_size_t)base64_addr + SBREG_SMBCTRL_DNV;
++		res->start += SBREG_SMBCTRL_DNV;
+ 	else
+-		res->start = (resource_size_t)base64_addr + SBREG_SMBCTRL;
++		res->start += SBREG_SMBCTRL;
  
- static inline bool inode_is_excl_inuse(struct dentry *dentry)
- {
-
+ 	res->end = res->start + 3;
+-	res->flags = IORESOURCE_MEM;
+ 
+ 	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+ 					tco_res, 2, &pldata, sizeof(pldata));
+diff --git a/drivers/platform/x86/intel/p2sb.c b/drivers/platform/x86/intel/p2sb.c
+index 8c12882d0bde..644cdee4853b 100644
+--- a/drivers/platform/x86/intel/p2sb.c
++++ b/drivers/platform/x86/intel/p2sb.c
+@@ -29,6 +29,12 @@
+ 
+ static const struct x86_cpu_id p2sb_cpu_ids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	PCI_DEVFN(13, 0)),
++	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,	PCI_DEVFN(31, 1)),
++	X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT_D,	PCI_DEVFN(31, 1)),
++	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,		PCI_DEVFN(31, 1)),
++	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,		PCI_DEVFN(31, 1)),
++	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE,		PCI_DEVFN(31, 1)),
++	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L,		PCI_DEVFN(31, 1)),
+ 	{}
+ };
+ 
+-- 
+2.34.1
 

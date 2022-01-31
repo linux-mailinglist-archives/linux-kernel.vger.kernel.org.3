@@ -2,141 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6304A5327
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AE34A5329
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiAaXXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiAaXXm (ORCPT
+        id S229517AbiAaXZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:25:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26687 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229483AbiAaXZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:23:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5FAC061714;
-        Mon, 31 Jan 2022 15:23:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC36260B74;
-        Mon, 31 Jan 2022 23:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0BEC340E8;
-        Mon, 31 Jan 2022 23:23:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643671421;
-        bh=lqSX0aoQIGN96BLzSundbxGHzVX1dMX9SwLuAAeQx6g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yzOivcZb1NBXcGG4WBvrbyiZDztKZxmkAVRwqz8kuA3d9PxoavglnZLUSsjFaxnhj
-         322Ykf0iYN5a8Zw1lk1PYzMuFugPz2L4gHRUKX2YDaVl0T2vRgZDTizZjmCJvTK2Sx
-         dMz0IoghaJLdiRRhqENw66mbks//HIw+jWz1yE6w=
-Date:   Mon, 31 Jan 2022 15:23:40 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     zhanglianjie <zhanglianjie@uniontech.com>
-Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        yzaikin@google.com, mcgrof@kernel.org
-Subject: Re: [PATCH v2] mm: move page-writeback sysctls to is own file
-Message-Id: <20220131152340.98e6bb584df772875f48f184@linux-foundation.org>
-In-Reply-To: <20220129012955.26594-1-zhanglianjie@uniontech.com>
-References: <20220129012955.26594-1-zhanglianjie@uniontech.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 31 Jan 2022 18:25:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643671502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sOB8RYRPIuXt9XuC1duDz579Ebb678cvofpXB4sR8RI=;
+        b=Rn23NxkCQunRrrSeTd7hGJhkH7SXnGY7iwt7V0xNmey1Kv1ixB9n6z7ALW1ifSMQkz2dYB
+        +P35ftGTE1L2Uu9bO7Yq9Z5QyCgAxlsZhrbavxod2JOyclu64ZvhSB5stg8exvLYCc/EjT
+        UM4MKZW64+wja7opxherNr8cI1p5p9k=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-367-joV4nOaaPWKZpLyNl3g8Hw-1; Mon, 31 Jan 2022 18:25:00 -0500
+X-MC-Unique: joV4nOaaPWKZpLyNl3g8Hw-1
+Received: by mail-wr1-f70.google.com with SMTP id v28-20020adfa1dc000000b001dd1cb24081so5310846wrv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:25:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sOB8RYRPIuXt9XuC1duDz579Ebb678cvofpXB4sR8RI=;
+        b=LkbOiiUaPZFAEi+I61MHz9bCYW1KhtBXhY6UYdMp43KticQ76NXprF8k2OYVR6tKkJ
+         fg5AjUFB/SYGJnPDS7mfGm1Dv3SOsEDX3QOYHp1PrbkigfGY7S6prg3g4Mm3kBi1xpsg
+         HDyglRvV6mAbvp4Ra+xyVOaFFsjYOKpd+SDV7at7gS69zxC/FWBA4W4QR29CJ/efYqY8
+         t7JaVMoN3sSwJVfRVTIyZI70xjxerYOUkGOO2nL8dYcu3SmYiiSAr8NeIWCfK60L6KrB
+         DUoQ0M56fTOsV8qmClnqRdJi8y1pPG68eoY7MDUHz7HIkUWsi7Zw9F+ezYZq5PTUf+bx
+         Zb6A==
+X-Gm-Message-State: AOAM531+ISFzIvYxDAzCg3emzUgPrGc/HQkwXDAqb1ieuYCZwF0hJDLo
+        apEzXCYS8YLVof5leT+rRf2S5X9OJRSLXB1mu5KYO9rROurmS1RMDAV5CS5TaTbPzTfCvNNu6xO
+        6uTjn0NBMdukHj4Y1s1k93xz7
+X-Received: by 2002:a7b:c0d0:: with SMTP id s16mr20585925wmh.169.1643671499288;
+        Mon, 31 Jan 2022 15:24:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwXct5Vi006IAsnWX7pGg6l9TgY49Hkt7Zu/EEEoWSUyfvrEDOXAziQ+K8kEvGmrE5W4zQmHQ==
+X-Received: by 2002:a7b:c0d0:: with SMTP id s16mr20585920wmh.169.1643671499121;
+        Mon, 31 Jan 2022 15:24:59 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f13sm577284wmq.29.2022.01.31.15.24.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 15:24:58 -0800 (PST)
+Message-ID: <9e9808c0-5a92-b2c3-c1c5-158608f49e6b@redhat.com>
+Date:   Tue, 1 Feb 2022 00:24:57 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/4] MAINTAINERS: Add entry for Solomon SSD1307 OLED
+ displays DRM driver
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220131201537.2325487-1-javierm@redhat.com>
+ <YfhKrznFzRmDcZa6@ravnborg.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YfhKrznFzRmDcZa6@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 09:29:55 +0800 zhanglianjie <zhanglianjie@uniontech.com> wrote:
+Hello Sam,
 
-> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-> dishes, this makes it very difficult to maintain.
+Thanks a lot for your feedback.
+
+On 1/31/22 21:46, Sam Ravnborg wrote:
+> Hi Javier,
 > 
-> To help with this maintenance let's start by moving sysctls to places
-> where they actually belong.  The proc sysctl maintainers do not want to
-> know what sysctl knobs you wish to add for your own piece of code, we
-> just care about the core logic.
+> On Mon, Jan 31, 2022 at 09:15:37PM +0100, Javier Martinez Canillas wrote:
+>> To make sure that tools like the get_maintainer.pl script will suggest
+>> to Cc me if patches are posted for this driver.
+>>
+>> Also include the Device Tree binding for the old ssd1307fb fbdev driver
+>> since the new DRM driver was made compatible with the existing binding.
 > 
-> So move the page-writeback sysctls to its own file.
-> 
-> ...
+> To avoid any confusion add yourself as Maintainer in the
+> solomon,ssd1307fb.yaml file too.
 >
-> --- a/mm/page-writeback.c
-> +++ b/mm/page-writeback.c
-> @@ -70,30 +70,33 @@ static long ratelimit_pages = 32;
->  /*
->   * Start background writeback (via writeback threads) at this percentage
->   */
-> -int dirty_background_ratio = 10;
-> +static int dirty_background_ratio = 10;
 
-These conversions will generate warnings when CONFIG_SYSCTL=n.
-
-mm/page-writeback.c:2002:12: warning: 'dirty_writeback_centisecs_handler' defined but not used [-Wunused-function]
- 2002 | static int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mm/page-writeback.c:545:12: warning: 'dirty_bytes_handler' defined but not used [-Wunused-function]
-  545 | static int dirty_bytes_handler(struct ctl_table *table, int write,
-      |            ^~~~~~~~~~~~~~~~~~~
-mm/page-writeback.c:531:12: warning: 'dirty_ratio_handler' defined but not used [-Wunused-function]
-  531 | static int dirty_ratio_handler(struct ctl_table *table, int write, void *buffer,
-      |            ^~~~~~~~~~~~~~~~~~~
-mm/page-writeback.c:520:12: warning: 'dirty_background_bytes_handler' defined but not used [-Wunused-function]
-  520 | static int dirty_background_bytes_handler(struct ctl_table *table, int write,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mm/page-writeback.c:509:12: warning: 'dirty_background_ratio_handler' defined but not used [-Wunused-function]
-  509 | static int dirty_background_ratio_handler(struct ctl_table *table, int write,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: mm-move-page-writeback-sysctls-to-is-own-file-fix
-
-fix CONFIG_SYSCTL=n warnings
-
-Cc: Iurii Zaikin <yzaikin@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: zhanglianjie <zhanglianjie@uniontech.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- mm/page-writeback.c |    4 ++++
- 1 file changed, 4 insertions(+)
-
---- a/mm/page-writeback.c~mm-move-page-writeback-sysctls-to-is-own-file-fix
-+++ a/mm/page-writeback.c
-@@ -506,6 +506,7 @@ bool node_dirty_ok(struct pglist_data *p
- 	return nr_pages <= limit;
- }
+Agreed. You mentioned in another email though to diverge from the existing
+DT binding for ssd1307fb. If we decide to keep the backward compatibility
+then I'll add another patch to the set to list myself as a co-maintainer.
  
-+#ifdef CONFIG_SYSCTL
- static int dirty_background_ratio_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -555,6 +556,7 @@ static int dirty_bytes_handler(struct ct
- 	}
- 	return ret;
- }
-+#endif
+> With that done:
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+>
+
+Thanks!
  
- static unsigned long wp_next_time(unsigned long cur_time)
- {
-@@ -1996,6 +1998,7 @@ bool wb_over_bg_thresh(struct bdi_writeb
- 	return false;
- }
- 
-+#ifdef CONFIG_SYSCTL
- /*
-  * sysctl handler for /proc/sys/vm/dirty_writeback_centisecs
-  */
-@@ -2020,6 +2023,7 @@ static int dirty_writeback_centisecs_han
- 
- 	return ret;
- }
-+#endif
- 
- void laptop_mode_timer_fn(struct timer_list *t)
- {
-_
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

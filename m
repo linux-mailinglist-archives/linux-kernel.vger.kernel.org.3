@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB8C4A4E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED11E4A4E42
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355254AbiAaS1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:27:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S1355490AbiAaS1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355318AbiAaS1n (ORCPT
+        with ESMTP id S1355120AbiAaS1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:27:43 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622DFC06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:27:43 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id t199so11734064oie.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:27:43 -0800 (PST)
+        Mon, 31 Jan 2022 13:27:47 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA1BC061401
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:27:46 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id v67so28325845oie.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:27:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YCCLljOzkZTWVhp4UcnxVmYpwCgumhAeXuk5FTxJkB0=;
-        b=HZ220OEWLABp3aSXvxPQNJay8YMq8judO11CWtgvZ1gyUaqL8ZYaudw7PMHX1V580g
-         GnLIYZLGx8ohGTmZqFeiMGuxWkyzqIYWKO1yOdgweCylB5F7apPKMWg+2jbdBj1QBL4f
-         QRhAFMHIY6iKV5heV2a92ydHpDNOqeSWaiLm1Rw/Mw+ukfv/7L3FRcS7lYzFLjERFhJ2
-         iwY3FA4Yw55OFcZFnoAy7FkSGZz0yWbw9ooKFwXbqENn1d5FC/MZQPlQIf3P/WEEWmMf
-         1luCJH36Asqiac3lcfPC1Ta9PpPS9elHcNxDORDJZqlYkNzvcx1CgAKYpKMrGE4XjEYo
-         mcRQ==
+        bh=du1Y7EMk87RkBVDbWmaUJHf7VmzL/EHA98mqnBTL1m8=;
+        b=og5vAQIkW5rwK4FcgqUejbZe5BvHJp7z5dWrFIctJpiqbcWlsF7qDqbm8g03q9I9tC
+         n7mjd7N+e9+5dr9FQ+2D998SNzyeqqweHFgLLgQGuZJWo8cIMxzXfja8f39jrl91NMv/
+         JDjbaH49mr2lXGZO4/NDc14t5wM2LY0XYsMmHL6I1AgiVv1yj7XcI1bclZSRPmlLGlq4
+         X6j4SKdUxabPcqxZvK7v9aLxLBNjCgIa64imttiUf4lAw4uxCbR0bWtblayv7sZ4sdrs
+         2z/dICXwRgTAyYfXFPahkblvSrhTDqTNPROEIzcG5svI0OIgiyMPUHMy4OCUZM9NodiG
+         eq6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=YCCLljOzkZTWVhp4UcnxVmYpwCgumhAeXuk5FTxJkB0=;
-        b=vuFM/aSM9wCp2PQkAhD8KsVoW7FE4JRdmk48Snd+FYf5QUWeq9zATnJj7V5sG935Tx
-         55MiT129YvlV/gHwYDndayxLB0r2hJDrLn+DjHXcCMZrzDhegqLA+G2r6mOQmjgEO/1i
-         dODMJIjKEmQWKKg3dDeCZzBnEy8xrjxjZCsPMMUk6qy+ulrZs/RftE5HTmXl1gtrV5xv
-         pR4Zq/+LROLxTEd/CRuIKATKpPD+sR/MtvojHBlx9+BfCvBSHhm8phV8NMRrLs3H0PAI
-         EIkaoIQaRVpINyFL1GEIGLF0iwD8ZDvlzVx+5QhQHJgnK2erdU2qTEccQQXfjPJKHPSi
-         TCBg==
-X-Gm-Message-State: AOAM533duueseuDNN9qMe862J+gq2AkfzT6Ra9VIBV8EQC/i9l8M53n6
-        +ukGUKSEDMIzvSVu0bPY+Us=
-X-Google-Smtp-Source: ABdhPJwKrM5CvEkYXnzGhb6PF6RnsL6qpETWKpCPSqV4wqkW4E6AQWHPesBXyiHuVEjJ+So+Z8fShg==
-X-Received: by 2002:a05:6808:1897:: with SMTP id bi23mr6779955oib.217.1643653662815;
-        Mon, 31 Jan 2022 10:27:42 -0800 (PST)
+        bh=du1Y7EMk87RkBVDbWmaUJHf7VmzL/EHA98mqnBTL1m8=;
+        b=ViOQa7jA/PeOemmKqa5KUoARehE0aotMFnMggBj1x23vDsG6SRNZDJDHl/H9pIpMFl
+         CYEooVOo4pxXI5TZTs6DohnxNU2X4+q5geLMk9VW3MDwN+yst4TqP64uAEFNELWiucVy
+         7dcTkw5AZaexhPCKuLtKJgoRgkPx6hEwKM2CnxdMAdsngPPNqKAGgWFthta496tAId/k
+         FIMXIEV/M7GfW/ouPmVwL9Xz2WOnxW3s/klDKxaXF7y0FB4VkIltksopJyCmQJkpuRxI
+         +Hr5CZa8LWQfHr/jXEH8yWEH1domUvsgNXD9uPrHGV/kCxp4Go0BrZbX5tpamv91pVJ4
+         hvTA==
+X-Gm-Message-State: AOAM530AmoojdHQuJFDHAfA9ZJuF1IyXY/Ebu927tfnxKUSqFgCf3Jex
+        v2G2+eapKjKLQshWuS2MaPg=
+X-Google-Smtp-Source: ABdhPJzmVwVaBHBeVjzYqlgwPLhys193gC9c7mnDoam6RNxuZlsOqvSxnUe8uPQriZgfLaYiA3E0qA==
+X-Received: by 2002:a05:6808:228b:: with SMTP id bo11mr14614704oib.113.1643653666269;
+        Mon, 31 Jan 2022 10:27:46 -0800 (PST)
 Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id a26sm16041676oiy.26.2022.01.31.10.27.39
+        by smtp.gmail.com with ESMTPSA id a26sm16041676oiy.26.2022.01.31.10.27.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 10:27:42 -0800 (PST)
+        Mon, 31 Jan 2022 10:27:45 -0800 (PST)
 Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
 From:   Emil Renner Berthing <kernel@esmil.dk>
 To:     linux-riscv@lists.infradead.org
@@ -63,9 +63,9 @@ Cc:     Emil Renner Berthing <kernel@esmil.dk>,
         Alexandre Ghiti <alex@ghiti.fr>,
         Jisheng Zhang <jszhang@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/7] riscv: Remove unneeded definitions from asm/module.h
-Date:   Mon, 31 Jan 2022 19:27:14 +0100
-Message-Id: <20220131182720.236065-2-kernel@esmil.dk>
+Subject: [PATCH v2 2/7] riscv: Avoid unaligned access when relocating modules
+Date:   Mon, 31 Jan 2022 19:27:15 +0100
+Message-Id: <20220131182720.236065-3-kernel@esmil.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131182720.236065-1-kernel@esmil.dk>
 References: <20220131182720.236065-1-kernel@esmil.dk>
@@ -75,227 +75,382 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The inline functions previously defined here are only ever
-used in kernel/module-sections.c, so there is no need to
-include them in every user of asm/module.h. Through
-linux/module.h this is just about every driver.
+With the C-extension regular 32bit instructions are not
+necessarily aligned on 4-byte boundaries. RISC-V instructions
+are in fact an ordered list of 16bit native-endian
+"parcels", so access the instruction as such.
 
-Now that these functions are static in a single file
-remove the inline marker to allow the compiler to make
-its own decisions.
+This should also make the code work in case someone builds
+a big-endian RISC-V machine.
+
+Fix rcv -> rvc typo while we're at it.
 
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 ---
- arch/riscv/include/asm/module.h     | 87 ----------------------------
- arch/riscv/kernel/module-sections.c | 90 +++++++++++++++++++++++++++++
- 2 files changed, 90 insertions(+), 87 deletions(-)
+ arch/riscv/kernel/module.c | 151 +++++++++++++++++++------------------
+ 1 file changed, 76 insertions(+), 75 deletions(-)
 
-diff --git a/arch/riscv/include/asm/module.h b/arch/riscv/include/asm/module.h
-index 76aa96a9fc08..570cd025f220 100644
---- a/arch/riscv/include/asm/module.h
-+++ b/arch/riscv/include/asm/module.h
-@@ -22,93 +22,6 @@ struct mod_arch_specific {
- 	struct mod_section plt;
- 	struct mod_section got_plt;
- };
--
--struct got_entry {
--	unsigned long symbol_addr;	/* the real variable address */
--};
--
--static inline struct got_entry emit_got_entry(unsigned long val)
--{
--	return (struct got_entry) {val};
--}
--
--static inline struct got_entry *get_got_entry(unsigned long val,
--					      const struct mod_section *sec)
--{
--	struct got_entry *got = (struct got_entry *)(sec->shdr->sh_addr);
--	int i;
--	for (i = 0; i < sec->num_entries; i++) {
--		if (got[i].symbol_addr == val)
--			return &got[i];
--	}
--	return NULL;
--}
--
--struct plt_entry {
--	/*
--	 * Trampoline code to real target address. The return address
--	 * should be the original (pc+4) before entring plt entry.
--	 */
--	u32 insn_auipc;		/* auipc t0, 0x0                       */
--	u32 insn_ld;		/* ld    t1, 0x10(t0)                  */
--	u32 insn_jr;		/* jr    t1                            */
--};
--
--#define OPC_AUIPC  0x0017
--#define OPC_LD     0x3003
--#define OPC_JALR   0x0067
--#define REG_T0     0x5
--#define REG_T1     0x6
--
--static inline struct plt_entry emit_plt_entry(unsigned long val,
--					      unsigned long plt,
--					      unsigned long got_plt)
--{
--	/*
--	 * U-Type encoding:
--	 * +------------+----------+----------+
--	 * | imm[31:12] | rd[11:7] | opc[6:0] |
--	 * +------------+----------+----------+
--	 *
--	 * I-Type encoding:
--	 * +------------+------------+--------+----------+----------+
--	 * | imm[31:20] | rs1[19:15] | funct3 | rd[11:7] | opc[6:0] |
--	 * +------------+------------+--------+----------+----------+
--	 *
--	 */
--	unsigned long offset = got_plt - plt;
--	u32 hi20 = (offset + 0x800) & 0xfffff000;
--	u32 lo12 = (offset - hi20);
--	return (struct plt_entry) {
--		OPC_AUIPC | (REG_T0 << 7) | hi20,
--		OPC_LD | (lo12 << 20) | (REG_T0 << 15) | (REG_T1 << 7),
--		OPC_JALR | (REG_T1 << 15)
--	};
--}
--
--static inline int get_got_plt_idx(unsigned long val, const struct mod_section *sec)
--{
--	struct got_entry *got_plt = (struct got_entry *)sec->shdr->sh_addr;
--	int i;
--	for (i = 0; i < sec->num_entries; i++) {
--		if (got_plt[i].symbol_addr == val)
--			return i;
--	}
--	return -1;
--}
--
--static inline struct plt_entry *get_plt_entry(unsigned long val,
--					      const struct mod_section *sec_plt,
--					      const struct mod_section *sec_got_plt)
--{
--	struct plt_entry *plt = (struct plt_entry *)sec_plt->shdr->sh_addr;
--	int got_plt_idx = get_got_plt_idx(val, sec_got_plt);
--	if (got_plt_idx >= 0)
--		return plt + got_plt_idx;
--	else
--		return NULL;
--}
--
- #endif /* CONFIG_MODULE_SECTIONS */
+diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+index 68a9e3d1fe16..3d33442226e7 100644
+--- a/arch/riscv/kernel/module.c
++++ b/arch/riscv/kernel/module.c
+@@ -13,68 +13,86 @@
+ #include <linux/pgtable.h>
+ #include <asm/sections.h>
  
- #endif /* _ASM_RISCV_MODULE_H */
-diff --git a/arch/riscv/kernel/module-sections.c b/arch/riscv/kernel/module-sections.c
-index e264e59e596e..39d4ac681c2a 100644
---- a/arch/riscv/kernel/module-sections.c
-+++ b/arch/riscv/kernel/module-sections.c
-@@ -10,6 +10,28 @@
- #include <linux/module.h>
- #include <linux/moduleloader.h>
- 
-+struct got_entry {
-+	unsigned long symbol_addr;	/* the real variable address */
-+};
-+
-+static struct got_entry emit_got_entry(unsigned long val)
+-static int apply_r_riscv_32_rela(struct module *me, u32 *location, Elf_Addr v)
++static int riscv_insn_rmw(void *location, u32 keep, u32 set)
 +{
-+	return (struct got_entry) {val};
++	u16 *parcel = location;
++	u32 insn = (u32)parcel[0] | (u32)parcel[1] << 16;
++
++	insn &= keep;
++	insn |= set;
++
++	parcel[0] = insn;
++	parcel[1] = insn >> 16;
++	return 0;
 +}
 +
-+static struct got_entry *get_got_entry(unsigned long val,
-+				       const struct mod_section *sec)
++static int riscv_insn_rvc_rmw(void *location, u16 keep, u16 set)
 +{
-+	struct got_entry *got = (struct got_entry *)(sec->shdr->sh_addr);
-+	int i;
++	u16 *parcel = location;
 +
-+	for (i = 0; i < sec->num_entries; i++) {
-+		if (got[i].symbol_addr == val)
-+			return &got[i];
-+	}
-+	return NULL;
++	*parcel = (*parcel & keep) | set;
++	return 0;
 +}
 +
- unsigned long module_emit_got_entry(struct module *mod, unsigned long val)
++static int apply_r_riscv_32_rela(struct module *me, void *location, Elf_Addr v)
  {
- 	struct mod_section *got_sec = &mod->arch.got;
-@@ -29,6 +51,74 @@ unsigned long module_emit_got_entry(struct module *mod, unsigned long val)
- 	return (unsigned long)&got[i];
+ 	if (v != (u32)v) {
+ 		pr_err("%s: value %016llx out of range for 32-bit field\n",
+ 		       me->name, (long long)v);
+ 		return -EINVAL;
+ 	}
+-	*location = v;
++	*(u32 *)location = v;
+ 	return 0;
  }
  
-+struct plt_entry {
-+	/*
-+	 * Trampoline code to real target address. The return address
-+	 * should be the original (pc+4) before entring plt entry.
-+	 */
-+	u32 insn_auipc;		/* auipc t0, 0x0                       */
-+	u32 insn_ld;		/* ld    t1, 0x10(t0)                  */
-+	u32 insn_jr;		/* jr    t1                            */
-+};
-+
-+#define OPC_AUIPC  0x0017
-+#define OPC_LD     0x3003
-+#define OPC_JALR   0x0067
-+#define REG_T0     0x5
-+#define REG_T1     0x6
-+
-+static struct plt_entry emit_plt_entry(unsigned long val,
-+				       unsigned long plt,
-+				       unsigned long got_plt)
-+{
-+	/*
-+	 * U-Type encoding:
-+	 * +------------+----------+----------+
-+	 * | imm[31:12] | rd[11:7] | opc[6:0] |
-+	 * +------------+----------+----------+
-+	 *
-+	 * I-Type encoding:
-+	 * +------------+------------+--------+----------+----------+
-+	 * | imm[31:20] | rs1[19:15] | funct3 | rd[11:7] | opc[6:0] |
-+	 * +------------+------------+--------+----------+----------+
-+	 *
-+	 */
-+	unsigned long offset = got_plt - plt;
-+	u32 hi20 = (offset + 0x800) & 0xfffff000;
-+	u32 lo12 = (offset - hi20);
-+
-+	return (struct plt_entry) {
-+		OPC_AUIPC | (REG_T0 << 7) | hi20,
-+		OPC_LD | (lo12 << 20) | (REG_T0 << 15) | (REG_T1 << 7),
-+		OPC_JALR | (REG_T1 << 15)
-+	};
-+}
-+
-+static int get_got_plt_idx(unsigned long val, const struct mod_section *sec)
-+{
-+	struct got_entry *got_plt = (struct got_entry *)sec->shdr->sh_addr;
-+	int i;
-+
-+	for (i = 0; i < sec->num_entries; i++) {
-+		if (got_plt[i].symbol_addr == val)
-+			return i;
-+	}
-+	return -1;
-+}
-+
-+static struct plt_entry *get_plt_entry(unsigned long val,
-+				       const struct mod_section *sec_plt,
-+				       const struct mod_section *sec_got_plt)
-+{
-+	struct plt_entry *plt = (struct plt_entry *)sec_plt->shdr->sh_addr;
-+	int got_plt_idx = get_got_plt_idx(val, sec_got_plt);
-+
-+	if (got_plt_idx >= 0)
-+		return plt + got_plt_idx;
-+	else
-+		return NULL;
-+}
-+
- unsigned long module_emit_plt_entry(struct module *mod, unsigned long val)
+-static int apply_r_riscv_64_rela(struct module *me, u32 *location, Elf_Addr v)
++static int apply_r_riscv_64_rela(struct module *me, void *location, Elf_Addr v)
  {
- 	struct mod_section *got_plt_sec = &mod->arch.got_plt;
+ 	*(u64 *)location = v;
+ 	return 0;
+ }
+ 
+-static int apply_r_riscv_branch_rela(struct module *me, u32 *location,
++static int apply_r_riscv_branch_rela(struct module *me, void *location,
+ 				     Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
++	ptrdiff_t offset = (void *)v - location;
+ 	u32 imm12 = (offset & 0x1000) << (31 - 12);
+ 	u32 imm11 = (offset & 0x800) >> (11 - 7);
+ 	u32 imm10_5 = (offset & 0x7e0) << (30 - 10);
+ 	u32 imm4_1 = (offset & 0x1e) << (11 - 4);
+ 
+-	*location = (*location & 0x1fff07f) | imm12 | imm11 | imm10_5 | imm4_1;
+-	return 0;
++	return riscv_insn_rmw(location, 0x1fff07f, imm12 | imm11 | imm10_5 | imm4_1);
+ }
+ 
+-static int apply_r_riscv_jal_rela(struct module *me, u32 *location,
++static int apply_r_riscv_jal_rela(struct module *me, void *location,
+ 				  Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
++	ptrdiff_t offset = (void *)v - location;
+ 	u32 imm20 = (offset & 0x100000) << (31 - 20);
+ 	u32 imm19_12 = (offset & 0xff000);
+ 	u32 imm11 = (offset & 0x800) << (20 - 11);
+ 	u32 imm10_1 = (offset & 0x7fe) << (30 - 10);
+ 
+-	*location = (*location & 0xfff) | imm20 | imm19_12 | imm11 | imm10_1;
+-	return 0;
++	return riscv_insn_rmw(location, 0xfff, imm20 | imm19_12 | imm11 | imm10_1);
+ }
+ 
+-static int apply_r_riscv_rcv_branch_rela(struct module *me, u32 *location,
++static int apply_r_riscv_rvc_branch_rela(struct module *me, void *location,
+ 					 Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
++	ptrdiff_t offset = (void *)v - location;
+ 	u16 imm8 = (offset & 0x100) << (12 - 8);
+ 	u16 imm7_6 = (offset & 0xc0) >> (6 - 5);
+ 	u16 imm5 = (offset & 0x20) >> (5 - 2);
+ 	u16 imm4_3 = (offset & 0x18) << (12 - 5);
+ 	u16 imm2_1 = (offset & 0x6) << (12 - 10);
+ 
+-	*(u16 *)location = (*(u16 *)location & 0xe383) |
+-		    imm8 | imm7_6 | imm5 | imm4_3 | imm2_1;
+-	return 0;
++	return riscv_insn_rvc_rmw(location, 0xe383,
++			imm8 | imm7_6 | imm5 | imm4_3 | imm2_1);
+ }
+ 
+-static int apply_r_riscv_rvc_jump_rela(struct module *me, u32 *location,
++static int apply_r_riscv_rvc_jump_rela(struct module *me, void *location,
+ 				       Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
++	ptrdiff_t offset = (void *)v - location;
+ 	u16 imm11 = (offset & 0x800) << (12 - 11);
+ 	u16 imm10 = (offset & 0x400) >> (10 - 8);
+ 	u16 imm9_8 = (offset & 0x300) << (12 - 11);
+@@ -84,16 +102,14 @@ static int apply_r_riscv_rvc_jump_rela(struct module *me, u32 *location,
+ 	u16 imm4 = (offset & 0x10) << (12 - 5);
+ 	u16 imm3_1 = (offset & 0xe) << (12 - 10);
+ 
+-	*(u16 *)location = (*(u16 *)location & 0xe003) |
+-		    imm11 | imm10 | imm9_8 | imm7 | imm6 | imm5 | imm4 | imm3_1;
+-	return 0;
++	return riscv_insn_rvc_rmw(location, 0xe003,
++			imm11 | imm10 | imm9_8 | imm7 | imm6 | imm5 | imm4 | imm3_1);
+ }
+ 
+-static int apply_r_riscv_pcrel_hi20_rela(struct module *me, u32 *location,
++static int apply_r_riscv_pcrel_hi20_rela(struct module *me, void *location,
+ 					 Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
+-	s32 hi20;
++	ptrdiff_t offset = (void *)v - location;
+ 
+ 	if (offset != (s32)offset) {
+ 		pr_err(
+@@ -102,23 +118,20 @@ static int apply_r_riscv_pcrel_hi20_rela(struct module *me, u32 *location,
+ 		return -EINVAL;
+ 	}
+ 
+-	hi20 = (offset + 0x800) & 0xfffff000;
+-	*location = (*location & 0xfff) | hi20;
+-	return 0;
++	return riscv_insn_rmw(location, 0xfff, (offset + 0x800) & 0xfffff000);
+ }
+ 
+-static int apply_r_riscv_pcrel_lo12_i_rela(struct module *me, u32 *location,
++static int apply_r_riscv_pcrel_lo12_i_rela(struct module *me, void *location,
+ 					   Elf_Addr v)
+ {
+ 	/*
+ 	 * v is the lo12 value to fill. It is calculated before calling this
+ 	 * handler.
+ 	 */
+-	*location = (*location & 0xfffff) | ((v & 0xfff) << 20);
+-	return 0;
++	return riscv_insn_rmw(location, 0xfffff, (v & 0xfff) << 20);
+ }
+ 
+-static int apply_r_riscv_pcrel_lo12_s_rela(struct module *me, u32 *location,
++static int apply_r_riscv_pcrel_lo12_s_rela(struct module *me, void *location,
+ 					   Elf_Addr v)
+ {
+ 	/*
+@@ -128,15 +141,12 @@ static int apply_r_riscv_pcrel_lo12_s_rela(struct module *me, u32 *location,
+ 	u32 imm11_5 = (v & 0xfe0) << (31 - 11);
+ 	u32 imm4_0 = (v & 0x1f) << (11 - 4);
+ 
+-	*location = (*location & 0x1fff07f) | imm11_5 | imm4_0;
+-	return 0;
++	return riscv_insn_rmw(location, 0x1fff07f, imm11_5 | imm4_0);
+ }
+ 
+-static int apply_r_riscv_hi20_rela(struct module *me, u32 *location,
++static int apply_r_riscv_hi20_rela(struct module *me, void *location,
+ 				   Elf_Addr v)
+ {
+-	s32 hi20;
+-
+ 	if (IS_ENABLED(CONFIG_CMODEL_MEDLOW)) {
+ 		pr_err(
+ 		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
+@@ -144,22 +154,20 @@ static int apply_r_riscv_hi20_rela(struct module *me, u32 *location,
+ 		return -EINVAL;
+ 	}
+ 
+-	hi20 = ((s32)v + 0x800) & 0xfffff000;
+-	*location = (*location & 0xfff) | hi20;
+-	return 0;
++	return riscv_insn_rmw(location, 0xfff, ((s32)v + 0x800) & 0xfffff000);
+ }
+ 
+-static int apply_r_riscv_lo12_i_rela(struct module *me, u32 *location,
++static int apply_r_riscv_lo12_i_rela(struct module *me, void *location,
+ 				     Elf_Addr v)
+ {
+ 	/* Skip medlow checking because of filtering by HI20 already */
+ 	s32 hi20 = ((s32)v + 0x800) & 0xfffff000;
+ 	s32 lo12 = ((s32)v - hi20);
+-	*location = (*location & 0xfffff) | ((lo12 & 0xfff) << 20);
+-	return 0;
++
++	return riscv_insn_rmw(location, 0xfffff, (lo12 & 0xfff) << 20);
+ }
+ 
+-static int apply_r_riscv_lo12_s_rela(struct module *me, u32 *location,
++static int apply_r_riscv_lo12_s_rela(struct module *me, void *location,
+ 				     Elf_Addr v)
+ {
+ 	/* Skip medlow checking because of filtering by HI20 already */
+@@ -167,20 +175,18 @@ static int apply_r_riscv_lo12_s_rela(struct module *me, u32 *location,
+ 	s32 lo12 = ((s32)v - hi20);
+ 	u32 imm11_5 = (lo12 & 0xfe0) << (31 - 11);
+ 	u32 imm4_0 = (lo12 & 0x1f) << (11 - 4);
+-	*location = (*location & 0x1fff07f) | imm11_5 | imm4_0;
+-	return 0;
++
++	return riscv_insn_rmw(location, 0x1fff07f, imm11_5 | imm4_0);
+ }
+ 
+-static int apply_r_riscv_got_hi20_rela(struct module *me, u32 *location,
++static int apply_r_riscv_got_hi20_rela(struct module *me, void *location,
+ 				       Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
+-	s32 hi20;
++	ptrdiff_t offset = (void *)v - location;
+ 
+ 	/* Always emit the got entry */
+ 	if (IS_ENABLED(CONFIG_MODULE_SECTIONS)) {
+-		offset = module_emit_got_entry(me, v);
+-		offset = (void *)offset - (void *)location;
++		offset = (void *)module_emit_got_entry(me, v) - location;
+ 	} else {
+ 		pr_err(
+ 		  "%s: can not generate the GOT entry for symbol = %016llx from PC = %p\n",
+@@ -188,23 +194,20 @@ static int apply_r_riscv_got_hi20_rela(struct module *me, u32 *location,
+ 		return -EINVAL;
+ 	}
+ 
+-	hi20 = (offset + 0x800) & 0xfffff000;
+-	*location = (*location & 0xfff) | hi20;
+-	return 0;
++	return riscv_insn_rmw(location, 0xfff, (offset + 0x800) & 0xfffff000);
+ }
+ 
+-static int apply_r_riscv_call_plt_rela(struct module *me, u32 *location,
++static int apply_r_riscv_call_plt_rela(struct module *me, void *location,
+ 				       Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
++	ptrdiff_t offset = (void *)v - location;
+ 	s32 fill_v = offset;
+ 	u32 hi20, lo12;
+ 
+ 	if (offset != fill_v) {
+ 		/* Only emit the plt entry if offset over 32-bit range */
+ 		if (IS_ENABLED(CONFIG_MODULE_SECTIONS)) {
+-			offset = module_emit_plt_entry(me, v);
+-			offset = (void *)offset - (void *)location;
++			offset = (void *)module_emit_plt_entry(me, v) - location;
+ 		} else {
+ 			pr_err(
+ 			  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
+@@ -215,15 +218,14 @@ static int apply_r_riscv_call_plt_rela(struct module *me, u32 *location,
+ 
+ 	hi20 = (offset + 0x800) & 0xfffff000;
+ 	lo12 = (offset - hi20) & 0xfff;
+-	*location = (*location & 0xfff) | hi20;
+-	*(location + 1) = (*(location + 1) & 0xfffff) | (lo12 << 20);
+-	return 0;
++	riscv_insn_rmw(location, 0xfff, hi20);
++	return riscv_insn_rmw(location + 4, 0xfffff, lo12 << 20);
+ }
+ 
+-static int apply_r_riscv_call_rela(struct module *me, u32 *location,
++static int apply_r_riscv_call_rela(struct module *me, void *location,
+ 				   Elf_Addr v)
+ {
+-	ptrdiff_t offset = (void *)v - (void *)location;
++	ptrdiff_t offset = (void *)v - location;
+ 	s32 fill_v = offset;
+ 	u32 hi20, lo12;
+ 
+@@ -236,18 +238,17 @@ static int apply_r_riscv_call_rela(struct module *me, u32 *location,
+ 
+ 	hi20 = (offset + 0x800) & 0xfffff000;
+ 	lo12 = (offset - hi20) & 0xfff;
+-	*location = (*location & 0xfff) | hi20;
+-	*(location + 1) = (*(location + 1) & 0xfffff) | (lo12 << 20);
+-	return 0;
++	riscv_insn_rmw(location, 0xfff, hi20);
++	return riscv_insn_rmw(location + 4, 0xfffff, lo12 << 20);
+ }
+ 
+-static int apply_r_riscv_relax_rela(struct module *me, u32 *location,
++static int apply_r_riscv_relax_rela(struct module *me, void *location,
+ 				    Elf_Addr v)
+ {
+ 	return 0;
+ }
+ 
+-static int apply_r_riscv_align_rela(struct module *me, u32 *location,
++static int apply_r_riscv_align_rela(struct module *me, void *location,
+ 				    Elf_Addr v)
+ {
+ 	pr_err(
+@@ -256,41 +257,41 @@ static int apply_r_riscv_align_rela(struct module *me, u32 *location,
+ 	return -EINVAL;
+ }
+ 
+-static int apply_r_riscv_add32_rela(struct module *me, u32 *location,
++static int apply_r_riscv_add32_rela(struct module *me, void *location,
+ 				    Elf_Addr v)
+ {
+ 	*(u32 *)location += (u32)v;
+ 	return 0;
+ }
+ 
+-static int apply_r_riscv_add64_rela(struct module *me, u32 *location,
++static int apply_r_riscv_add64_rela(struct module *me, void *location,
+ 				    Elf_Addr v)
+ {
+ 	*(u64 *)location += (u64)v;
+ 	return 0;
+ }
+ 
+-static int apply_r_riscv_sub32_rela(struct module *me, u32 *location,
++static int apply_r_riscv_sub32_rela(struct module *me, void *location,
+ 				    Elf_Addr v)
+ {
+ 	*(u32 *)location -= (u32)v;
+ 	return 0;
+ }
+ 
+-static int apply_r_riscv_sub64_rela(struct module *me, u32 *location,
++static int apply_r_riscv_sub64_rela(struct module *me, void *location,
+ 				    Elf_Addr v)
+ {
+ 	*(u64 *)location -= (u64)v;
+ 	return 0;
+ }
+ 
+-static int (*reloc_handlers_rela[]) (struct module *me, u32 *location,
++static int (*reloc_handlers_rela[]) (struct module *me, void *location,
+ 				Elf_Addr v) = {
+ 	[R_RISCV_32]			= apply_r_riscv_32_rela,
+ 	[R_RISCV_64]			= apply_r_riscv_64_rela,
+ 	[R_RISCV_BRANCH]		= apply_r_riscv_branch_rela,
+ 	[R_RISCV_JAL]			= apply_r_riscv_jal_rela,
+-	[R_RISCV_RVC_BRANCH]		= apply_r_riscv_rcv_branch_rela,
++	[R_RISCV_RVC_BRANCH]		= apply_r_riscv_rvc_branch_rela,
+ 	[R_RISCV_RVC_JUMP]		= apply_r_riscv_rvc_jump_rela,
+ 	[R_RISCV_PCREL_HI20]		= apply_r_riscv_pcrel_hi20_rela,
+ 	[R_RISCV_PCREL_LO12_I]		= apply_r_riscv_pcrel_lo12_i_rela,
+@@ -314,9 +315,9 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+ 		       struct module *me)
+ {
+ 	Elf_Rela *rel = (void *) sechdrs[relsec].sh_addr;
+-	int (*handler)(struct module *me, u32 *location, Elf_Addr v);
++	int (*handler)(struct module *me, void *location, Elf_Addr v);
+ 	Elf_Sym *sym;
+-	u32 *location;
++	void *location;
+ 	unsigned int i, type;
+ 	Elf_Addr v;
+ 	int res;
 -- 
 2.35.1
 

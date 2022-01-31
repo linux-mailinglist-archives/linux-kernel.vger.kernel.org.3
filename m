@@ -2,132 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 193B14A5060
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514574A5067
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbiAaUn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:43:27 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:45754 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239860AbiAaUn0 (ORCPT
+        id S1350846AbiAaUoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240076AbiAaUoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:43:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6AEBDCE1281;
-        Mon, 31 Jan 2022 20:43:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A37EC340E8;
-        Mon, 31 Jan 2022 20:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643661802;
-        bh=JFWeeOeX6cMALtKM2vqlyIArFqrtqdWgyAlR/K0BiiM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DsVbUZNgXSXX7Vp5kx/hp3fv7i7TnEaNCHHSpAWfjrnPft8jTlVvpAtPufljeq1NE
-         eWe1mBdkC1Z4+gVowCiXW4qrWXlG2iwlJHSclBz0Ux7V/VbeAhwYNo3LAWkId15GsC
-         iCXP+yboTKXgO/3Z8VOFu4eqSFjgRzQmv4DcT9MBx5gdlm+b2EN5teo5zHx3JIxVZW
-         ABTIfiVdi1r3KpasmC4hvjLckFnXafw1C+MWr8F09FOv59/iWA+Ce4rtL4NU7Snm4h
-         e0K5GjuDAMQ0xiipMEOk4LXXyCYRoCMw8mcsE+MEGhucgc+MlcVcKkyCmS7Afh08PT
-         gcVkJDy3o3j/w==
-Date:   Mon, 31 Jan 2022 22:43:09 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Mon, 31 Jan 2022 15:44:00 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2356C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:43:59 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id v74so13923063pfc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:43:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dvY93mLK+gCkLFyqPjkC7SO502H46e/BmHAFAde7pmA=;
+        b=VnaPaLUE79ByM8yxlggAAFwqCLbFIwHYSnwowqWnqMYsC3OgGiS1ToIUXd8N7wK5WS
+         dIFaCM5pOMfQ1J/hUl7v9c5JoiyS6MZaxuMQw2gMtg7ucEwuKSG9xdMypFTCXm3IDQoA
+         7CeWl1HJ3RfJ+RvxNluYPe/tjQw4aj7Gfleog=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dvY93mLK+gCkLFyqPjkC7SO502H46e/BmHAFAde7pmA=;
+        b=QBBLOw+h+rMjmxpfhuIqWetMxNnJPEJutDC7vrklxqlnmfts7mNz9SdCOws/Bo2SwB
+         I+Kp3hTbp9NloXSjwjUq3H+VlTX8JBwJioEcSqhz7Wl2/aMQXvF+7GbiCDf9MpZ/RqoK
+         zjC5CdPaan//TCHwhPZI3W+Ve19dVW/9vEoLSTDmBFEhiL7KMbqBzNIumCCG/Vn5tS6r
+         E8LUPwJ1UIbFmXQihVJ+qlLCNIpvdKH64ioWiQNFsN37KewctsEMpvxR/PLksIuQe86P
+         iyJfWb2zvDZAY/5O19WlttitKmde1qddV5JqhtALnqHtWgjX8xGA69t0HbEKhIpJhZzh
+         1HJQ==
+X-Gm-Message-State: AOAM532lgtkIRy2oukmXap39WbJiU5B0XK1F9ITyUz8p9FMx2k3ZZVRk
+        fUCYL41qg/T7gohjdKGqtZONow==
+X-Google-Smtp-Source: ABdhPJyMZ/cWvABsZIf40YJbzvSbf2yYk+yDlKZi9uzmJOn1juWqB1Qh+dV/l9giNKX/hZOoOf0/PA==
+X-Received: by 2002:a63:9346:: with SMTP id w6mr18350241pgm.65.1643661839508;
+        Mon, 31 Jan 2022 12:43:59 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h18sm19549618pfh.51.2022.01.31.12.43.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 12:43:59 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v3 2/4] mm/page_owner: Use scnprintf() to avoid excessive
- buffer overrun check
-Message-ID: <YfhJ3VT8KCjd3iGR@kernel.org>
-References: <20220131192308.608837-1-longman@redhat.com>
- <20220131192308.608837-3-longman@redhat.com>
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] linux/const.h: Explain how __is_constexpr() works
+Date:   Mon, 31 Jan 2022 12:43:57 -0800
+Message-Id: <20220131204357.1133674-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131192308.608837-3-longman@redhat.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2675; h=from:subject; bh=WlNK1x9BZiL8PdVBf+UDla5QbcDoyx4RBmBre4o9x84=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+EoMr8eEAxIe/o1NGdfWCDk8aFcQzwQVoNeu5FZ/ ZAhP5D+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfhKDAAKCRCJcvTf3G3AJtgoD/ sGCz9a8AssZAQB5fVsmWfX5b+plDMlTy+hmWrQ1KL04znEA2Ju1fh43Iv1MvyfWYxO06Oxl5ZFfMvs F9K+sfSnb5IE91FXjDx+mBjQ57kzHI9anob0KWKPxmIeCXfr1RFTTbLepyF7vQU83jlttFMvPGjiLV 1Okkt9dxBFoFXstRu9x/nx5v/El7bDRdrsk/nka+ZvuAFiqJQXL9RLAkuSgV+2l/P60RLOB3g6SFLs Nbf3EFlIUcN76X+QfhqcYHeohmywr0hCJtX8kvwhEpb0QSUocOPVXjZf6qDCI5HWDr/fNGtfHn1yEd RiQei0uJLVmH1EKHt2ZcahLv4LQyQq/cFG1u6VUnRJXVJRBL89zdqW8iiYirdHTmJ2wg4Ay8SJo69E 7tZpQ9HfQS9QwbIMeQwGYA8sHB90DoJgFehqMxnwoXDFJRCKSmIOzesglOo9B+4yqFJw3UnTeSldre rLSGF217GOQfzzcXXMgGRIeyxYRwwzqTyMGM5+U8SAlcswtDbakvP7aT9bctGV1LfUUUpI6RlicNK0 uOk07acYE93Cu2a5NUMH5GJhA8xb7SxT4Asp7IQZgzlTtBjcv2DYx4rMI/0VpbA4/Xa5b/gwaSWFgD DnHzo+Vxqd8CcB7ztHxX+Za2OqabUhA50217kdRVCT8PRtH0ZO+ZrdKqKHhw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 02:23:06PM -0500, Waiman Long wrote:
-> The snprintf() function can return a length greater than the given
-> input size. That will require a check for buffer overrun after each
-> invocation of snprintf(). scnprintf(), on the other hand, will never
-> return a greater length. By using scnprintf() in selected places, we
-> can avoid some buffer overrun checks except after stack_depot_snprint()
-> and after the last snprintf().
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> Acked-by: David Rientjes <rientjes@google.com>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+The __is_constexpr() macro is dark magic. Shed some light on it with
+a comment to explain how and why it works.
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-doc@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Jon, since this is pure comment, do you want to take it through the docs tree?
+---
+ include/linux/const.h | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-> ---
->  mm/page_owner.c | 14 +++-----------
->  1 file changed, 3 insertions(+), 11 deletions(-)
-> 
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 99e360df9465..28dac73e0542 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -338,19 +338,16 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->  	if (!kbuf)
->  		return -ENOMEM;
->  
-> -	ret = snprintf(kbuf, count,
-> +	ret = scnprintf(kbuf, count,
->  			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
->  			page_owner->order, page_owner->gfp_mask,
->  			&page_owner->gfp_mask, page_owner->pid,
->  			page_owner->ts_nsec, page_owner->free_ts_nsec);
->  
-> -	if (ret >= count)
-> -		goto err;
-> -
->  	/* Print information relevant to grouping pages by mobility */
->  	pageblock_mt = get_pageblock_migratetype(page);
->  	page_mt  = gfp_migratetype(page_owner->gfp_mask);
-> -	ret += snprintf(kbuf + ret, count - ret,
-> +	ret += scnprintf(kbuf + ret, count - ret,
->  			"PFN %lu type %s Block %lu type %s Flags %pGp\n",
->  			pfn,
->  			migratetype_names[page_mt],
-> @@ -358,19 +355,14 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->  			migratetype_names[pageblock_mt],
->  			&page->flags);
->  
-> -	if (ret >= count)
-> -		goto err;
-> -
->  	ret += stack_depot_snprint(handle, kbuf + ret, count - ret, 0);
->  	if (ret >= count)
->  		goto err;
->  
->  	if (page_owner->last_migrate_reason != -1) {
-> -		ret += snprintf(kbuf + ret, count - ret,
-> +		ret += scnprintf(kbuf + ret, count - ret,
->  			"Page has been migrated, last migrate reason: %s\n",
->  			migrate_reason_names[page_owner->last_migrate_reason]);
-> -		if (ret >= count)
-> -			goto err;
->  	}
->  
->  	ret += snprintf(kbuf + ret, count - ret, "\n");
-> -- 
-> 2.27.0
-> 
-> 
-
+diff --git a/include/linux/const.h b/include/linux/const.h
+index 435ddd72d2c4..7122d6a1f8ce 100644
+--- a/include/linux/const.h
++++ b/include/linux/const.h
+@@ -7,6 +7,30 @@
+  * This returns a constant expression while determining if an argument is
+  * a constant expression, most importantly without evaluating the argument.
+  * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
++ *
++ * Details:
++ * - sizeof() is an integer constant expression, and does not evaluate the
++ *   value of its operand; it only examines the type of its operand.
++ * - The results of comparing two integer constant expressions is also
++ *   an integer constant expression.
++ * - The use of literal "8" is to avoid warnings about unaligned pointers;
++ *   these could otherwise just be "1"s.
++ * - (long)(x) is used to avoid warnings about 64-bit types on 32-bit
++ *   architectures.
++ * - The C standard defines an "integer constant expression" as different
++ *   from a "null pointer constant" (an integer constant 0 pointer).
++ * - The conditional operator ("... ? ... : ...") returns the type of the
++ *   operand that isn't a null pointer constant. This behavior is the
++ *   central mechanism of the macro.
++ * - If (x) is an integer constant expression, then the "* 0l" resolves it
++ *   into a null pointer constant, which forces the conditional operator
++ *   to return the type of the last operand: "(int *)".
++ * - If (x) is not an integer constant expression, then the type of the
++ *   conditional operator is from the first operand: "(void *)".
++ * - sizeof(int) == 4 and sizeof(void) == 1.
++ * - The ultimate comparison to "sizeof(int)" chooses between either:
++ *     sizeof(*((int *) (8)) == sizeof(int)   (x was a constant expression)
++ *     sizeof(*((void *)(8)) == sizeof(void)  (x was not a constant expression)
+  */
+ #define __is_constexpr(x) \
+ 	(sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
 -- 
-Sincerely yours,
-Mike.
+2.30.2
+

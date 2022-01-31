@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C5D4A4310
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058A54A44DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376925AbiAaLQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377130AbiAaLJn (ORCPT
+        id S1377883AbiAaLdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:33:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56172 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377819AbiAaLX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF6C0604C5;
-        Mon, 31 Jan 2022 03:06:23 -0800 (PST)
+        Mon, 31 Jan 2022 06:23:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3DD5B82A65;
-        Mon, 31 Jan 2022 11:06:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B7FC340EE;
-        Mon, 31 Jan 2022 11:06:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A5161257;
+        Mon, 31 Jan 2022 11:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27224C340E8;
+        Mon, 31 Jan 2022 11:23:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627181;
-        bh=xpJRa1/Hqa4J8TOwr9A3cijO2CHMQKV430HfQznfbS0=;
+        s=korg; t=1643628205;
+        bh=02YNfxBTAXGk1kudiryNLknHRfDdaEviTnNWVcDeb3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFiMa59K9cxN/pzfLs6G1UMLaDL04NRpdofAdrj6sH5rjIu+twCTQ7s+u02C3ZooX
-         d0Eiar52KAg86LHIHX+yFnH+D376HIk+yWMYbnK6T6yWz8RGN/ws6mKrop5QGkEo43
-         qb8I8nMed92rTGUPTSA1I8LwUNig8fC5Yhw1nF7U=
+        b=gIcsMstJ2VHvd6mtRxJRnEpQ5v3htCjmaSreaE1lLSAsv0urXSppQAl6PQCmc5/b5
+         2H2W7g1tivP2IYpEuTK2V5At8kDkyrCvel3Kk8GaI8/HNiS7ZIzns/7clTUSovCIW6
+         Kio9zqnazAJ89PougbHh0eTB9svACzhlFQ/3lbrk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ivan Delalande <colona@arista.com>,
-        Amir Goldstein <amir73il@gmail.com>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 5.10 099/100] fsnotify: invalidate dcache before IN_DELETE event
-Date:   Mon, 31 Jan 2022 11:57:00 +0100
-Message-Id: <20220131105223.775234099@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 158/200] hwmon: (lm90) Fix sysfs and udev notifications
+Date:   Mon, 31 Jan 2022 11:57:01 +0100
+Message-Id: <20220131105238.871005763@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,173 +46,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit a37d9a17f099072fe4d3a9048b0321978707a918 upstream.
+[ Upstream commit d379880d9adb9f1ada3f1266aa49ea2561328e08 ]
 
-Apparently, there are some applications that use IN_DELETE event as an
-invalidation mechanism and expect that if they try to open a file with
-the name reported with the delete event, that it should not contain the
-content of the deleted file.
+sysfs and udev notifications need to be sent to the _alarm
+attributes, not to the value attributes.
 
-Commit 49246466a989 ("fsnotify: move fsnotify_nameremove() hook out of
-d_delete()") moved the fsnotify delete hook before d_delete() so fsnotify
-will have access to a positive dentry.
-
-This allowed a race where opening the deleted file via cached dentry
-is now possible after receiving the IN_DELETE event.
-
-To fix the regression, create a new hook fsnotify_delete() that takes
-the unlinked inode as an argument and use a helper d_delete_notify() to
-pin the inode, so we can pass it to fsnotify_delete() after d_delete().
-
-Backporting hint: this regression is from v5.3. Although patch will
-apply with only trivial conflicts to v5.4 and v5.10, it won't build,
-because fsnotify_delete() implementation is different in each of those
-versions (see fsnotify_link()).
-
-A follow up patch will fix the fsnotify_unlink/rmdir() calls in pseudo
-filesystem that do not need to call d_delete().
-
-Link: https://lore.kernel.org/r/20220120215305.282577-1-amir73il@gmail.com
-Reported-by: Ivan Delalande <colona@arista.com>
-Link: https://lore.kernel.org/linux-fsdevel/YeNyzoDM5hP5LtGW@visor/
-Fixes: 49246466a989 ("fsnotify: move fsnotify_nameremove() hook out of d_delete()")
-Cc: stable@vger.kernel.org # v5.3+
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 94dbd23ed88c ("hwmon: (lm90) Use hwmon_notify_event()")
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/ioctl.c         |    6 +----
- fs/namei.c               |   10 ++++-----
- include/linux/fsnotify.h |   48 +++++++++++++++++++++++++++++++++++++++++------
- 3 files changed, 49 insertions(+), 15 deletions(-)
+ drivers/hwmon/lm90.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -3103,10 +3103,8 @@ static noinline int btrfs_ioctl_snap_des
- 	inode_lock(inode);
- 	err = btrfs_delete_subvolume(dir, dentry);
- 	inode_unlock(inode);
--	if (!err) {
--		fsnotify_rmdir(dir, dentry);
--		d_delete(dentry);
--	}
-+	if (!err)
-+		d_delete_notify(dir, dentry);
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index ba01127c1deb1..1c9493c708132 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1808,22 +1808,22 @@ static bool lm90_is_tripped(struct i2c_client *client, u16 *status)
  
- out_dput:
- 	dput(dentry);
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3709,13 +3709,12 @@ int vfs_rmdir(struct inode *dir, struct
- 	dentry->d_inode->i_flags |= S_DEAD;
- 	dont_mount(dentry);
- 	detach_mounts(dentry);
--	fsnotify_rmdir(dir, dentry);
+ 	if (st & LM90_STATUS_LLOW)
+ 		hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+-				   hwmon_temp_min, 0);
++				   hwmon_temp_min_alarm, 0);
+ 	if (st & LM90_STATUS_RLOW)
+ 		hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+-				   hwmon_temp_min, 1);
++				   hwmon_temp_min_alarm, 1);
+ 	if (st2 & MAX6696_STATUS2_R2LOW)
+ 		hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+-				   hwmon_temp_min, 2);
++				   hwmon_temp_min_alarm, 2);
+ 	if (st & LM90_STATUS_LHIGH)
+ 		hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+-				   hwmon_temp_max, 0);
++				   hwmon_temp_max_alarm, 0);
+ 	if (st & LM90_STATUS_RHIGH)
+ 		hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+-				   hwmon_temp_max, 1);
++				   hwmon_temp_max_alarm, 1);
+ 	if (st2 & MAX6696_STATUS2_R2HIGH)
+ 		hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+-				   hwmon_temp_max, 2);
++				   hwmon_temp_max_alarm, 2);
  
- out:
- 	inode_unlock(dentry->d_inode);
- 	dput(dentry);
- 	if (!error)
--		d_delete(dentry);
-+		d_delete_notify(dir, dentry);
- 	return error;
+ 	return true;
  }
- EXPORT_SYMBOL(vfs_rmdir);
-@@ -3825,7 +3824,6 @@ int vfs_unlink(struct inode *dir, struct
- 			if (!error) {
- 				dont_mount(dentry);
- 				detach_mounts(dentry);
--				fsnotify_unlink(dir, dentry);
- 			}
- 		}
- 	}
-@@ -3833,9 +3831,11 @@ out:
- 	inode_unlock(target);
- 
- 	/* We don't d_delete() NFS sillyrenamed files--they still exist. */
--	if (!error && !(dentry->d_flags & DCACHE_NFSFS_RENAMED)) {
-+	if (!error && dentry->d_flags & DCACHE_NFSFS_RENAMED) {
-+		fsnotify_unlink(dir, dentry);
-+	} else if (!error) {
- 		fsnotify_link_count(target);
--		d_delete(dentry);
-+		d_delete_notify(dir, dentry);
- 	}
- 
- 	return error;
---- a/include/linux/fsnotify.h
-+++ b/include/linux/fsnotify.h
-@@ -204,16 +204,52 @@ static inline void fsnotify_link(struct
- }
- 
- /*
-+ * fsnotify_delete - @dentry was unlinked and unhashed
-+ *
-+ * Caller must make sure that dentry->d_name is stable.
-+ *
-+ * Note: unlike fsnotify_unlink(), we have to pass also the unlinked inode
-+ * as this may be called after d_delete() and old_dentry may be negative.
-+ */
-+static inline void fsnotify_delete(struct inode *dir, struct inode *inode,
-+				   struct dentry *dentry)
-+{
-+	__u32 mask = FS_DELETE;
-+
-+	if (S_ISDIR(inode->i_mode))
-+		mask |= FS_ISDIR;
-+
-+	fsnotify_name(dir, mask, inode, &dentry->d_name, 0);
-+}
-+
-+/**
-+ * d_delete_notify - delete a dentry and call fsnotify_delete()
-+ * @dentry: The dentry to delete
-+ *
-+ * This helper is used to guaranty that the unlinked inode cannot be found
-+ * by lookup of this name after fsnotify_delete() event has been delivered.
-+ */
-+static inline void d_delete_notify(struct inode *dir, struct dentry *dentry)
-+{
-+	struct inode *inode = d_inode(dentry);
-+
-+	ihold(inode);
-+	d_delete(dentry);
-+	fsnotify_delete(dir, inode, dentry);
-+	iput(inode);
-+}
-+
-+/*
-  * fsnotify_unlink - 'name' was unlinked
-  *
-  * Caller must make sure that dentry->d_name is stable.
-  */
- static inline void fsnotify_unlink(struct inode *dir, struct dentry *dentry)
- {
--	/* Expected to be called before d_delete() */
--	WARN_ON_ONCE(d_is_negative(dentry));
-+	if (WARN_ON_ONCE(d_is_negative(dentry)))
-+		return;
- 
--	fsnotify_dirent(dir, dentry, FS_DELETE);
-+	fsnotify_delete(dir, d_inode(dentry), dentry);
- }
- 
- /*
-@@ -233,10 +269,10 @@ static inline void fsnotify_mkdir(struct
-  */
- static inline void fsnotify_rmdir(struct inode *dir, struct dentry *dentry)
- {
--	/* Expected to be called before d_delete() */
--	WARN_ON_ONCE(d_is_negative(dentry));
-+	if (WARN_ON_ONCE(d_is_negative(dentry)))
-+		return;
- 
--	fsnotify_dirent(dir, dentry, FS_DELETE | FS_ISDIR);
-+	fsnotify_delete(dir, d_inode(dentry), dentry);
- }
- 
- /*
+-- 
+2.34.1
+
 
 

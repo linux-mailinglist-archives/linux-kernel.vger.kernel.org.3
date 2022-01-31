@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137C24A513C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA654A5141
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379577AbiAaVQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:16:44 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34332 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiAaVQn (ORCPT
+        id S1379706AbiAaVRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232007AbiAaVRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:16:43 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643663802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tU8NK9NTEirj5O/+bd9d0PukMKUVqECyFzPD3aLKDXk=;
-        b=KmPtM4XylI1QpBV825qhL/YVm9F73QsW9H0dQ5UPcPGil3mXgUuoX3HprH/+a3ZG/ShNJr
-        BjlGsc1ndAOmgHyQvIvZUOUD6HLDHOBCi/Ji6X9uEEf7jDK1BzH1apOdzDHBzBMfjkAtXZ
-        8BD8lWMmiKDXbdlCTK3THWqdS9xoq1KFr2G35OtVX67EMI6vGc6c9cosnIZIpe5sYh+au2
-        PL1LZWmdvONdEfE18CsyjWjHM6gOUgcS0xyBIooTsaH48TF002qdkFf00iF1dJ2JVj/0SI
-        eh6W7ozcJJE4CPYA3I/LgUWnchhhUB5lvUTPvZV1OWQ8MM0o/wu35qDKV5db6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643663802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tU8NK9NTEirj5O/+bd9d0PukMKUVqECyFzPD3aLKDXk=;
-        b=+0otG72AhE6uKJBBtoOAEgmDIjBRXfGv02FMllL7V8PEVFVne4ebGZPaDcAGYon+0st4ER
-        /th5pds4YqGCrMCA==
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Kevin Tian <kevin.tian@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cedric Le Goater <clg@kaod.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        dmaengine@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V3 28/35] PCI/MSI: Simplify pci_irq_get_affinity()
-In-Reply-To: <c78df469-1a9f-5778-24d1-8f08a6bf5bcc@roeck-us.net>
-References: <87mtjc2lhe.ffs@tglx>
- <c78df469-1a9f-5778-24d1-8f08a6bf5bcc@roeck-us.net>
-Date:   Mon, 31 Jan 2022 22:16:41 +0100
-Message-ID: <87ee4n38sm.ffs@tglx>
+        Mon, 31 Jan 2022 16:17:06 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49ACC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:17:05 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id j2so31386879ybu.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oE1YmZoSx/nWIRjEIBPwgNw6U3IPmomCkQFroxME2e0=;
+        b=V+ftJE9mj5wwBvEQpQsLqauQoF0wWGdfdpcMkv8T2la3XBRSFMcv8w8dnnHhnUaCB5
+         3ojC0xP6TrnU27Sc2qKY4DbqCNKiJrm4jW/GehbOx12GBIY+WMMpO8S26rJFRe624VfR
+         7BH45NDDgnlxdDynfnrKUg6PdwT1TAckp6R5A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oE1YmZoSx/nWIRjEIBPwgNw6U3IPmomCkQFroxME2e0=;
+        b=QbkxAQRIKx4V+v0O4nFrEZbYNwqqNO9EH75OKt5z8GFePDCMP9JYmmGmUsaADLxLi/
+         RwED/LhLtVpWm82KOxIUvX4J8z+EGSRwf2q+M5D1E4aLOzGK8edUz+Sh8XUpyR/gfr03
+         OTvGDfAOP1RZ3EeR7EAZ2qn5G3EoW4uPubZOXXA6yUqOZRCdkNl9kUd+QreplR8fv8sj
+         sXwyuxNklyXQxc4dEB12If/wVkkSHw8ehtpNxlY8llVeG86H9o9Ai3QIC+CwsDp/B8S4
+         d8Ox1DHhl27DOS7ICWT5CfHsjmKrS3m2Qwb9c5bCefKXphjlpmcUIJvvKcvjhQp8Wfc4
+         pn3w==
+X-Gm-Message-State: AOAM531d2vr5O/Fd5iSnn3uStT2KFawsqk7macfasZeoh53cGI9ArymA
+        tt3MQrNDlQ8pM6nwSPV3BwHUAZqlihKC6J/6kDzHMjSUI0x4
+X-Google-Smtp-Source: ABdhPJyobHoVTaYvZPuG5ukRPdncvn3ScCVvPWllSJaJ3m2s7Px6ynK2uGfLdn+Yx1gIy4RJSQxM+49wTVK18fahP6Y=
+X-Received: by 2002:a5b:44:: with SMTP id e4mr33205228ybp.713.1643663824956;
+ Mon, 31 Jan 2022 13:17:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <cover.1643635156.git.geert@linux-m68k.org> <35936f19a9727b14e4fdb7f5fadfabfa29d53d96.1643635156.git.geert@linux-m68k.org>
+In-Reply-To: <35936f19a9727b14e4fdb7f5fadfabfa29d53d96.1643635156.git.geert@linux-m68k.org>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 31 Jan 2022 13:16:54 -0800
+Message-ID: <CAOnJCUKXOMgn=RmMDGBSS_Zy4J4Ng7EHwWnS5PnRKPTntDHk0Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] RISC-V: Fix handling of empty cpu masks
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guenter,
+On Mon, Jan 31, 2022 at 5:26 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> The cpumask rework slightly changed the behavior of the code.  Fix this
+> by treating an empty cpumask as meaning all online CPUs.
+>
+> Extracted from a patch by Atish Patra <atishp@rivosinc.com>.
+>
+> Reported-by: Jessica Clarke <jrtc27@jrtc27.com>
+> Fixes: 26fb751ca37846c9 ("RISC-V: Do not use cpumask data structure for hartid bitmap")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  arch/riscv/kernel/sbi.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+> index f93bc75f2bc43c8e..22444cfcd56cc646 100644
+> --- a/arch/riscv/kernel/sbi.c
+> +++ b/arch/riscv/kernel/sbi.c
+> @@ -161,7 +161,7 @@ static int __sbi_send_ipi_v01(const struct cpumask *cpu_mask)
+>  {
+>         unsigned long hart_mask;
+>
+> -       if (!cpu_mask)
+> +       if (!cpu_mask || cpumask_empty(cpu_mask))
+>                 cpu_mask = cpu_online_mask;
+>         hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
+>
+> @@ -177,7 +177,7 @@ static int __sbi_rfence_v01(int fid, const struct cpumask *cpu_mask,
+>         int result = 0;
+>         unsigned long hart_mask;
+>
+> -       if (!cpu_mask)
+> +       if (!cpu_mask || cpumask_empty(cpu_mask))
+>                 cpu_mask = cpu_online_mask;
+>         hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
+>
+> @@ -254,7 +254,7 @@ static int __sbi_send_ipi_v02(const struct cpumask *cpu_mask)
+>         struct sbiret ret = {0};
+>         int result;
+>
+> -       if (!cpu_mask)
+> +       if (!cpu_mask || cpumask_empty(cpu_mask))
+>                 cpu_mask = cpu_online_mask;
+>
+>         for_each_cpu(cpuid, cpu_mask) {
+> @@ -348,7 +348,7 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
+>         unsigned long hartid, cpuid, hmask = 0, hbase = 0;
+>         int result;
+>
+> -       if (!cpu_mask)
+> +       if (!cpu_mask || cpumask_empty(cpu_mask))
+>                 cpu_mask = cpu_online_mask;
+>
+>         for_each_cpu(cpuid, cpu_mask) {
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-On Mon, Jan 31 2022 at 07:21, Guenter Roeck wrote:
-> Sure. Please see http://server.roeck-us.net/qemu/x86/.
-> The logs are generated with with v5.16.4.
 
-thanks for providing the data. It definitely helped me to leave the
-state of not seeing the wood for the trees. Fix below.
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-Thanks,
 
-        tglx
----
-Subject: PCI/MSI: Remove bogus warning in pci_irq_get_affinity()
-From: Thomas Gleixner <tglx@linutronix.de>
-Date: Mon, 31 Jan 2022 22:02:46 +0100
-
-The recent overhaul of pci_irq_get_affinity() introduced a regression when
-pci_irq_get_affinity() is called for an MSI-X interrupt which was not
-allocated with affinity descriptor information.
-
-The original code just returned a NULL pointer in that case, but the rework
-added a WARN_ON() under the assumption that the corresponding WARN_ON() in
-the MSI case can be applied to MSI-X as well.
-
-In fact the MSI warning in the original code does not make sense either
-because it's legitimate to invoke pci_irq_get_affinity() for a MSI
-interrupt which was not allocated with affinity descriptor information.
-
-Remove it and just return NULL as the original code did.
-
-Fixes: f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- drivers/pci/msi/msi.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -1111,7 +1111,8 @@ const struct cpumask *pci_irq_get_affini
- 	if (!desc)
- 		return cpu_possible_mask;
- 
--	if (WARN_ON_ONCE(!desc->affinity))
-+	/* MSI[X] interrupts can be allocated without affinity descriptor */
-+	if (!desc->affinity)
- 		return NULL;
- 
- 	/*
+-- 
+Regards,
+Atish

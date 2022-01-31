@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825E04A4833
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28954A483C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378957AbiAaNdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:33:12 -0500
-Received: from relay040.a.hostedemail.com ([64.99.140.40]:41791 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1379207AbiAaNdG (ORCPT
+        id S1349051AbiAaNdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:33:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31970 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235633AbiAaNdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:33:06 -0500
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 759F320CE6;
-        Mon, 31 Jan 2022 13:33:04 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 971C233;
-        Mon, 31 Jan 2022 13:32:47 +0000 (UTC)
-Message-ID: <8faabe9985a330afc41d774db3ac899e1453c88d.camel@perches.com>
-Subject: Re: [PATCH v2] staging: media: atomisp: Use BIT macro instead of
- left shifting
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
-        kitakar@gmail.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, tomi.valkeinen@ideasonboard.com
-Date:   Mon, 31 Jan 2022 05:33:00 -0800
-In-Reply-To: <20220131073624.GH1951@kadam>
-References: <YfVstOJ38OTtd43n@smile.fi.intel.com>
-         <20220130180655.22970-1-mosescb.dev@gmail.com>
-         <20220131073624.GH1951@kadam>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 31 Jan 2022 08:33:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643636024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VfFqvSMV9Otew6WwuduSbrALdReBxJUaJj+oMXEGVOY=;
+        b=jENr9/180kLfwkhAPpOiL/D0c4pP4Q9sVwAXpM2veNjCxeUwnlPaDL2r2WElVkJlTKDRnG
+        tIGVDDBupnkUkH4BAmWtm/yVlgHEizW26sQ3vizHHy4m4I2/ieEEAeZCHI0IsqE8oguSUN
+        WgspDEF4YbEPrqIGSQ8PVx8oV2KeRFY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-KPdmslGGNqWItuQwAUZLOA-1; Mon, 31 Jan 2022 08:33:43 -0500
+X-MC-Unique: KPdmslGGNqWItuQwAUZLOA-1
+Received: by mail-qv1-f70.google.com with SMTP id gg10-20020a056214252a00b0041eeb1c2684so12598345qvb.21
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:33:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VfFqvSMV9Otew6WwuduSbrALdReBxJUaJj+oMXEGVOY=;
+        b=yoBzZXhRZFHOFh/FPfKKjCyRrdbpoMLbqGrUxXgLkxh+ySPdQ2o+/3Vd3Q29yaKLsW
+         YRvsgWXgE9QGLye9nLm7/VH3QhGKL/aGx4CO1BheP+C1/h6iB8nj+ODyyHMHSkh2/q0Q
+         2PewjUfaVBUZIXmyYGWLZXpMtVd0yQcdUSNKGHErULpdPNY5qzjdkzhxwIDo7rBDpijO
+         twQ4MrCIkHJKrJObTQQa82KbYXbDcMUVTWdHE4zgZm8WcYFnwZjYwXaOwT8DEiygHB70
+         Ev0E+EaRE6pQ8yJdLW1vUO+UEjbJDZMfzXAT0oqoEByzFJKf1L2AQC0xMy3IbFKisoES
+         nBww==
+X-Gm-Message-State: AOAM530lU583lxjL41zf5MJgK/fqEu5d7B/aZBI5oTBhpfCG3wBP0QOt
+        9h7bDIN6a2kQlDvcPmYmF6sWjCnaO9jbmRENC+7Z3uzcxufxzFaiwEO+Gv3goHybIO6Y9ra/Gwb
+        Vy9sRNTgDY1P+SEomQD+7Q5wW
+X-Received: by 2002:a05:620a:1792:: with SMTP id ay18mr13373133qkb.12.1643636022755;
+        Mon, 31 Jan 2022 05:33:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0RwA9z2nQfn12ZGFBT5t9iGfjKQ2Az19u0I4r0E5BKCJkPncDYJOi+4lmU54lStlau3WU/A==
+X-Received: by 2002:a05:620a:1792:: with SMTP id ay18mr13373119qkb.12.1643636022563;
+        Mon, 31 Jan 2022 05:33:42 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id u16sm2047274qtx.46.2022.01.31.05.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 05:33:42 -0800 (PST)
+From:   trix@redhat.com
+To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] ACPICA: cleanup double word in comment
+Date:   Mon, 31 Jan 2022 05:33:37 -0800
+Message-Id: <20220131133337.1556355-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 971C233
-X-Spam-Status: No, score=-2.99
-X-Stat-Signature: yyiar3d9dom5ro6b3omwwrzjn55z5zrd
-X-Rspamd-Server: rspamout06
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+wLKO2r8bL7xWLkEInCdDfMKblV0U7hAY=
-X-HE-Tag: 1643635967-396179
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-31 at 10:36 +0300, Dan Carpenter wrote:
-> On Sun, Jan 30, 2022 at 07:06:55PM +0100, Moses Christopher Bollavarapu wrote:
-> > There is a BIT(nr) macro available in Linux Kernel,
-> > which does the same thing.
-> > Example: BIT(7) = (1UL << 7)
-> > 
-> > Also use GENMASK for masking
-> > Example: GENMASK(3, 0) = 0b00001111 (same as (1 << 4) - 1)
-> > 
-> > Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-> 
-> This patch does a couple unrelated things.  Break out the GENMASK()
-> change into its own patch.
-> 
-> > @@ -65,7 +66,7 @@ enum ia_css_fw_type {
-> >  	ia_css_sp_firmware,		/** Firmware for the SP */
-> >  	ia_css_isp_firmware,		/** Firmware for the ISP */
-> >  	ia_css_bootloader_firmware,	/** Firmware for the BootLoader */
-> > -	ia_css_acc_firmware		/** Firmware for accelrations */
-> > +	ia_css_acc_firmware,		/** Firmware for accelrations */
-> >  };
-> 
-> This change needs to be in its own patch.
+From: Tom Rix <trix@redhat.com>
 
-Because it's unrelated.  As is the repetitive use of 'Firmware for'
-and the typo/misspelling of accelerations.
+Remove the second 'know'.
 
-Another possibility would be to change the /** to /* or maybe
-change to // and remove the ' */' trailing comment termination
-also in a separate patch.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/acpi/acpica/exfldio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > diff --git a/drivers/staging/media/atomisp/pci/ia_css_env.h b/drivers/staging/media/atomisp/pci/ia_css_env.h
-[]
-> >  enum ia_css_rx_irq_info {
-> > -	IA_CSS_RX_IRQ_INFO_BUFFER_OVERRUN   = 1U << 0, /** buffer overrun */
-> > -	IA_CSS_RX_IRQ_INFO_ENTER_SLEEP_MODE = 1U << 1, /** entering sleep mode */
-> > -	IA_CSS_RX_IRQ_INFO_EXIT_SLEEP_MODE  = 1U << 2, /** exited sleep mode */
-> > -	IA_CSS_RX_IRQ_INFO_ECC_CORRECTED    = 1U << 3, /** ECC corrected */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_SOT          = 1U << 4,
-> > +	IA_CSS_RX_IRQ_INFO_BUFFER_OVERRUN   = BIT(0), /** buffer overrun */
-> > +	IA_CSS_RX_IRQ_INFO_ENTER_SLEEP_MODE = BIT(1), /** entering sleep mode */
-> > +	IA_CSS_RX_IRQ_INFO_EXIT_SLEEP_MODE  = BIT(2), /** exited sleep mode */
-> > +	IA_CSS_RX_IRQ_INFO_ECC_CORRECTED    = BIT(3), /** ECC corrected */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_SOT          = BIT(4),
-> >  	/** Start of transmission */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_SOT_SYNC     = 1U << 5, /** SOT sync (??) */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_CONTROL      = 1U << 6, /** Control (??) */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_ECC_DOUBLE   = 1U << 7, /** Double ECC */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_CRC          = 1U << 8, /** CRC error */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ID   = 1U << 9, /** Unknown ID */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_FRAME_SYNC   = 1U << 10,/** Frame sync error */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_FRAME_DATA   = 1U << 11,/** Frame data error */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_DATA_TIMEOUT = 1U << 12,/** Timeout occurred */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ESC  = 1U << 13,/** Unknown escape seq. */
-> > -	IA_CSS_RX_IRQ_INFO_ERR_LINE_SYNC    = 1U << 14,/** Line Sync error */
-> > -	IA_CSS_RX_IRQ_INFO_INIT_TIMEOUT     = 1U << 15,
-> > +	IA_CSS_RX_IRQ_INFO_ERR_SOT_SYNC     = BIT(5), /** SOT sync (??) */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_CONTROL      = BIT(6), /** Control (??) */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_ECC_DOUBLE   = BIT(7), /** Double ECC */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_CRC          = BIT(8), /** CRC error */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ID   = BIT(9), /** Unknown ID */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_FRAME_SYNC   = BIT(10),/** Frame sync error */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_FRAME_DATA   = BIT(11),/** Frame data error */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_DATA_TIMEOUT = BIT(12),/** Timeout occurred */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ESC  = BIT(13),/** Unknown escape seq. */
-> > +	IA_CSS_RX_IRQ_INFO_ERR_LINE_SYNC    = BIT(14),/** Line Sync error */
-> 
-> The comment is kind of messed up.  There should be a space after the
-> comma and just /* Line Sync error */
-
-or just a tab before all of the comments
-
+diff --git a/drivers/acpi/acpica/exfldio.c b/drivers/acpi/acpica/exfldio.c
+index bdc7a30d1217c..b92605df3872c 100644
+--- a/drivers/acpi/acpica/exfldio.c
++++ b/drivers/acpi/acpica/exfldio.c
+@@ -104,7 +104,7 @@ acpi_ex_setup_region(union acpi_operand_object *obj_desc,
+ #ifdef ACPI_UNDER_DEVELOPMENT
+ 	/*
+ 	 * If the Field access is any_acc, we can now compute the optimal
+-	 * access (because we know know the length of the parent region)
++	 * access (because we know the length of the parent region)
+ 	 */
+ 	if (!(obj_desc->common.flags & AOPOBJ_DATA_VALID)) {
+ 		if (ACPI_FAILURE(status)) {
+-- 
+2.26.3
 

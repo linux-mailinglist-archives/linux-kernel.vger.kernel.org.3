@@ -2,241 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 455954A4F04
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9954A4F07
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357560AbiAaS4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:56:46 -0500
-Received: from out2.migadu.com ([188.165.223.204]:24197 "EHLO out2.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232915AbiAaS4p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:56:45 -0500
-Message-ID: <c725798d-48da-2993-cc48-0ec0b314455f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643655403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c/Ch63bJctNf9QVTZKCEvsLX1+etquC6AF86UHoNYQM=;
-        b=kWyls4uSwgafhck97EAH48F82wrfX1sG7bf2UiJGBsZ6E7Ik/quiWKTHipoo8vkphexbQV
-        myDA12KzydncCp/wpMhcNWf9nJrkJDZKOviEN3jh728f3TNzuxKgFqSQdpfSMtFNotH6Lz
-        jMcWyPgRMq1uWDXOiPLTxcYaTsLE3zE=
-Date:   Mon, 31 Jan 2022 11:56:36 -0700
+        id S1358539AbiAaS5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:57:25 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30676 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1358218AbiAaS5W (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 13:57:22 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VHW8wf018646;
+        Mon, 31 Jan 2022 18:56:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OoBmDdOiqugOKX+t2tC8Z6K0AKa0cLylyvApIRSkk5I=;
+ b=n4RqKA6nlmWnmrghvMD2CRaKMSvPCuChxumTowm2RPuW47np/HcETsr/QQ+cx7Gjnawj
+ tG6geMo8+UCl80Bp8/YoPxt4F1ydV8yOz2eOqbpqmxuTSfX5ALHbBrRWID9xZ2n9j1nb
+ E3j11pGu3R3nt7JyNpzQFWcQT0OMpeOc6p3MrBaWOwA4Dyk2jCy5e3o682EQnmt4G1qI
+ 0H3lbUcHzRZkZ+XCq2PnB3/2QBnVwRP26aPxZFHaxmtJhZPYgYIgYZTpB/o6ikQRbFu7
+ +dNrfPSIIHRVM5cprlFemWd0Zci3e+RHJI0G+lTcfJaiiU2uU+DBpIo5Ud1aaU5mtIib 8g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxm8khyam-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 18:56:55 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20VIpdpv018370;
+        Mon, 31 Jan 2022 18:56:54 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxm8khya9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 18:56:54 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VIqJrA019182;
+        Mon, 31 Jan 2022 18:56:53 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02wdc.us.ibm.com with ESMTP id 3dvw7a9k3w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 18:56:53 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VIuoDJ31850960
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 18:56:50 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAF92124070;
+        Mon, 31 Jan 2022 18:56:50 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 67E35124055;
+        Mon, 31 Jan 2022 18:56:48 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jan 2022 18:56:48 +0000 (GMT)
+Message-ID: <83d32ac3-6633-3ccc-1377-91caaf709445@linux.ibm.com>
+Date:   Mon, 31 Jan 2022 13:56:48 -0500
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 00/24] Userspace P2PDMA with O_DIRECT NVMe devices
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 16/23] ima: Implement ima_free_policy_rules() for
+ freeing of an ima_namespace
 Content-Language: en-US
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org
-Cc:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-References: <20220128002614.6136-1-logang@deltatee.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <20220128002614.6136-1-logang@deltatee.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-17-stefanb@linux.vnet.ibm.com>
+ <258c7c5e1aebfc9376560549794d43e744654713.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <258c7c5e1aebfc9376560549794d43e744654713.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZplDHnseCm730yNs_Y20Zp5bXUuJIEF_
+X-Proofpoint-ORIG-GUID: LXRGMp9mqGG5FubM1xYAo-EY0g0LYkV7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310120
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Logan,
 
-On 1/27/2022 5:25 PM, Logan Gunthorpe wrote:
-> Hi,
-> 
-> This patchset continues my work to add userspace P2PDMA access using
-> O_DIRECT NVMe devices. This posting fixes a lot of issues that were
-> addresed in the last posting, which is here[1].
-> 
-> The patchset is rebased onto v5.17-rc1 as well as a rebased version of
-> Ralph Campbell's patches to drop the ZONE_DEVICE page ref count offset.
-> My understanding is this patch has some problems that are yet to be
-> resolved but this will be the direction taken going forward and is
-> included here to show that it is compatible with this patchset.
-> 
-> The patchset enables userspace P2PDMA by allowing userspace to mmap()
-> allocated chunks of the CMB. The resulting VMA can be passed only
-> to O_DIRECT IO on NVMe backed files or block devices. A flag is added
-> to GUP() in Patch 16, then Patches 17 through 21 wire this flag up based
-> on whether the block queue indicates P2PDMA support. Patches 22
-> through 24 enable the CMB to be mapped into userspace by mmaping
-> the nvme char device.
-> 
-> This is relatively straightforward, however the one significant
-> problem is that, presently, pci_p2pdma_map_sg() requires a homogeneous
-> SGL with all P2PDMA pages or all regular pages. Enhancing GUP to
-> support enforcing this rule would require a huge hack that I don't
-> expect would be all that pallatable. So patches 3 to 16 add
-> support for P2PDMA pages to dma_map_sg[table]() to the dma-direct
-> and dma-iommu implementations. Thus systems without an IOMMU plus
-> Intel and AMD IOMMUs are supported. (Other IOMMU implementations would
-> then be unsupported, notably ARM and PowerPC but support would be added
-> when they convert to dma-iommu).
-Am I understanding that an IO may use a mix of p2pdma and system pages?
-Would that cause inconsistent latencies?
+On 1/28/22 09:02, Mimi Zohar wrote:
+> Hi Stefan,
+>
+> On Tue, 2022-01-25 at 17:46 -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Implement ima_free_policy_rules() that is needed when an ima_namespace
+>> is freed.
+>>
+>> Only reset temp_ima_appraise when using init_ima_ns.
+> Instead of having to walk the policy rules to know if there are any
+> "appraise" rules, the ima_appraise flag is set.  For now, only reset
+> temp_ima_appraise flag on failed policy rule updates for init_ima_ns.
 
-> 
-> dma_map_sgtable() is preferred when dealing with P2PDMA memory as it
-> will return -EREMOTEIO when the DMA device cannot map specific P2PDMA
-> pages based on the existing rules in calc_map_type_and_dist().
-> 
-> The other issue is dma_unmap_sg() needs a flag to determine whether a
-> given dma_addr_t was mapped regularly or as a PCI bus address. To allow
-> this, a third flag is added to the page_link field in struct
-> scatterlist. This effectively means support for P2PDMA will now depend
-> on CONFIG_64BIT.
-> 
-> Feedback welcome.
-> 
-> This series is based on v5.17-rc1. A git branch is available here:
-> 
->    https://github.com/sbates130272/linux-p2pmem/  p2pdma_user_cmb_v5
-> 
-> Thanks,
-> 
-> Logan
-> 
-> [1] https://lore.kernel.org/all/20211117215410.3695-1-logang@deltatee.com/T/#u
-> 
-> --
-> 
-> Changes since v4:
->    - Rebase onto v5.17-rc1.
->    - Included Ralph Cambell's patches which removes the ZONE_DEVICE page
->      reference count offset. This is just to demonstrate that this
->      series is compatible with that direction.
->    - Added a comment in pci_p2pdma_map_sg_attrs(), per Chaitanya and
->      included his Reviewed-by tags.
->    - Patch 1 in the last series which cleaned up scatterlist.h
->      has been upstreamed.
->    - Dropped NEED_SG_DMA_BUS_ADDR_FLAG seeing depends on doesn't
->      work with selected symbols, per Christoph.
->    - Switched iov_iter_get_pages_[alloc_]flags to be exported with
->      EXPORT_SYMBOL_GPL, per Christoph.
->    - Renamed zone_device_pages_are_mergeable() to
->      zone_device_pages_have_same_pgmap(), per Christoph.
->    - Renamed .mmap_file_open operation in nvme_ctrl_ops to
->      cdev_file_open(), per Christoph.
-> 
-> Changes since v3:
->    - Add some comment and commit message cleanups I had missed for v3,
->      also moved the prototypes for some of the p2pdma helpers to
->      dma-map-ops.h (which I missed in v3 and was suggested in v2).
->    - Add separate cleanup patch for scatterlist.h and change the macros
->      to functions. (Suggested by Chaitanya and Jason, respectively)
->    - Rename sg_dma_mark_pci_p2pdma() and sg_is_dma_pci_p2pdma() to
->      sg_dma_mark_bus_address() and sg_is_dma_bus_address() which
->      is a more generic name (As requested by Jason)
->    - Fixes to some comments and commit messages as suggested by Bjorn
->      and Jason.
->    - Ensure swiotlb is not used with P2PDMA pages. (Per Jason)
->    - The sgtable coversion in RDMA was split out and sent upstream
->      separately, the new patch is only the removal. (Per Jason)
->    - Moved the FOLL_PCI_P2PDMA check outside of get_dev_pagemap() as
->      Jason suggested this will be removed in the near term.
->    - Add two patches to ensure that zone device pages with different
->      pgmaps are never merged in the block layer or
->      sg_alloc_append_table_from_pages() (Per Jason)
->    - Ensure synchronize_rcu() or call_rcu() is used before returning
->      pages to the genalloc. (Jason pointed out that pages are not
->      gauranteed to be unused in all architectures until at least
->      after an RCU grace period, and that synchronize_rcu() was likely
->      too slow to use in the vma close operation.
->    - Collected Acks and Reviews by Bjorn, Jason and Max.
-> 
-> Logan Gunthorpe (22):
->    lib/scatterlist: add flag for indicating P2PDMA segments in an SGL
->    PCI/P2PDMA: Attempt to set map_type if it has not been set
->    PCI/P2PDMA: Expose pci_p2pdma_map_type()
->    PCI/P2PDMA: Introduce helpers for dma_map_sg implementations
->    dma-mapping: allow EREMOTEIO return code for P2PDMA transfers
->    dma-direct: support PCI P2PDMA pages in dma-direct map_sg
->    dma-mapping: add flags to dma_map_ops to indicate PCI P2PDMA support
->    iommu/dma: support PCI P2PDMA pages in dma-iommu map_sg
->    nvme-pci: check DMA ops when indicating support for PCI P2PDMA
->    nvme-pci: convert to using dma_map_sgtable()
->    RDMA/core: introduce ib_dma_pci_p2p_dma_supported()
->    RDMA/rw: drop pci_p2pdma_[un]map_sg()
->    PCI/P2PDMA: Remove pci_p2pdma_[un]map_sg()
->    mm: introduce FOLL_PCI_P2PDMA to gate getting PCI P2PDMA pages
->    iov_iter: introduce iov_iter_get_pages_[alloc_]flags()
->    block: add check when merging zone device pages
->    lib/scatterlist: add check when merging zone device pages
->    block: set FOLL_PCI_P2PDMA in __bio_iov_iter_get_pages()
->    block: set FOLL_PCI_P2PDMA in bio_map_user_iov()
->    mm: use custom page_free for P2PDMA pages
->    PCI/P2PDMA: Introduce pci_mmap_p2pmem()
->    nvme-pci: allow mmaping the CMB in userspace
-> 
-> Ralph Campbell (2):
->    ext4/xfs: add page refcount helper
->    mm: remove extra ZONE_DEVICE struct page refcount
-> 
->   arch/powerpc/kvm/book3s_hv_uvmem.c     |   2 +-
->   block/bio.c                            |  10 +-
->   block/blk-map.c                        |   7 +-
->   drivers/gpu/drm/nouveau/nouveau_dmem.c |   2 +-
->   drivers/infiniband/core/rw.c           |  45 +--
->   drivers/iommu/dma-iommu.c              |  67 +++-
->   drivers/nvme/host/core.c               |  18 +-
->   drivers/nvme/host/nvme.h               |   4 +-
->   drivers/nvme/host/pci.c                |  97 +++---
->   drivers/nvme/target/rdma.c             |   2 +-
->   drivers/pci/Kconfig                    |   5 +
->   drivers/pci/p2pdma.c                   | 441 +++++++++++++++++++++----
->   fs/dax.c                               |   8 +-
->   fs/ext4/inode.c                        |   5 +-
->   fs/fuse/dax.c                          |   4 +-
->   fs/xfs/xfs_file.c                      |   4 +-
->   include/linux/dax.h                    |  10 +
->   include/linux/dma-map-ops.h            |  76 +++++
->   include/linux/dma-mapping.h            |   5 +
->   include/linux/memremap.h               |   7 +-
->   include/linux/mm.h                     |  68 ++--
->   include/linux/pci-p2pdma.h             |  38 +--
->   include/linux/scatterlist.h            |  44 ++-
->   include/linux/uio.h                    |   6 +
->   include/rdma/ib_verbs.h                |  11 +
->   include/uapi/linux/magic.h             |   1 +
->   kernel/dma/direct.c                    |  43 ++-
->   kernel/dma/direct.h                    |   7 +-
->   kernel/dma/mapping.c                   |  22 +-
->   lib/iov_iter.c                         |  25 +-
->   lib/scatterlist.c                      |  25 +-
->   lib/test_hmm.c                         |   2 +-
->   mm/gup.c                               |  22 +-
->   mm/internal.h                          |   8 +
->   mm/memcontrol.c                        |   6 +-
->   mm/memremap.c                          |  75 ++---
->   mm/migrate.c                           |   5 -
->   mm/page_alloc.c                        |   3 +
->   mm/swap.c                              |  45 +--
->   39 files changed, 904 insertions(+), 371 deletions(-)
-> 
-> 
-> base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
-> --
-> 2.30.2
+
+Ok, I am taking this whole text.
+
+
+>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> ---
+>>   v9:
+>>    - Only reset temp_ima_appraise when using init_ima_ns.
+>> ---
+>>   security/integrity/ima/ima.h        |  1 +
+>>   security/integrity/ima/ima_policy.c | 20 +++++++++++++++++++-
+>>   2 files changed, 20 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index aea8fb8d2854..8c757223d549 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -329,6 +329,7 @@ void ima_update_policy_flags(struct ima_namespace *ns);
+>>   ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule);
+>>   void ima_delete_rules(struct ima_namespace *ns);
+>>   int ima_check_policy(struct ima_namespace *ns);
+>> +void ima_free_policy_rules(struct ima_namespace *ns);
+>>   void *ima_policy_start(struct seq_file *m, loff_t *pos);
+>>   void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos);
+>>   void ima_policy_stop(struct seq_file *m, void *v);
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index e8140e73d80b..47f2d1b5d156 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -1880,13 +1880,31 @@ void ima_delete_rules(struct ima_namespace *ns)
+>>   {
+>>   	struct ima_rule_entry *entry, *tmp;
+>>   
+>> -	temp_ima_appraise = 0;
+>> +	if (ns == &init_ima_ns)
+>> +		temp_ima_appraise = 0;
+>> +
+>>   	list_for_each_entry_safe(entry, tmp, &ns->ima_temp_rules, list) {
+>>   		list_del(&entry->list);
+>>   		ima_free_rule(entry);
+>>   	}
+>>   }
+>>   
+>> +/**
+>> + * ima_free_policy_rules - free all policy rules
+>> + * @ns: IMA namespace that has the policy
+>> + */
+>> +void ima_free_policy_rules(struct ima_namespace *ns)
+>> +{
+>> +	struct ima_rule_entry *entry, *tmp;
+>> +
+>> +	ima_delete_rules(ns);
+> When the IMA policy is being extended, new rules are temporarily added
+> to the ima_temp_rules list.  If the entire set of rules being added are
+> valid, they're appended to the tail.
+>
+> There shouldn't be any rules on the ima_temp_rules list unless the
+> policy is currently being extended.  Is that possible at this point?
+
+Actually, no. Nothing can be left. I am removing this call.
+
+I wonder whether to split this patch into into two patches?
+
+
+>
+>> +
+>> +	list_for_each_entry_safe(entry, tmp, &ns->ima_policy_rules, list) {
+>> +		list_del(&entry->list);
+>> +		ima_free_rule(entry);
+>> +	}
+>> +}
+>> +
+>>   #define __ima_hook_stringify(func, str)	(#func),
+>>   
+>>   const char *const func_tokens[] = {
+> thanks,
+>
+> Mimi
+>

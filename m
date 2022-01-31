@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA5E4A41B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E27444A429F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344467AbiAaLFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S1376386AbiAaLMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359013AbiAaLCr (ORCPT
+        with ESMTP id S1376816AbiAaLJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:47 -0500
+        Mon, 31 Jan 2022 06:09:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B5CC06176D;
-        Mon, 31 Jan 2022 03:00:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0D3C061A27;
+        Mon, 31 Jan 2022 03:05:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B7D60A75;
-        Mon, 31 Jan 2022 11:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC65C340E8;
-        Mon, 31 Jan 2022 11:00:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 202B260FB5;
+        Mon, 31 Jan 2022 11:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DB3C340EF;
+        Mon, 31 Jan 2022 11:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626858;
-        bh=DoZ1E/+8ix+OgIbNqPUNVDPpuSpcbXv83pH9UB60g/M=;
+        s=korg; t=1643627135;
+        bh=rPxomZGLw2T0AeFweigh+gNKt3+WX6XmgfGi+QBKnqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ov1UPJhItPnWCL9eFPn4NVZwlr+1XNM87qkZLhlmpZt44N686PuGlbBVL4Kzqq4pa
-         T3rsi0XUVGmcJarlIgXZNM7ViyoPygsXjxPOgOIogi4Lw5sQj0cBZFKFMN/UbyAqYu
-         AclrFwrSIxcayWHMtch8btkPW7tyepcY4RG80BvA=
+        b=kW1OVtmxFxyqkLQP6VVYZKwHTEcGd5II8dTE6mV6EJLuVhjIWEHRTsUCcLJu/0wN5
+         +vJtSo7E3ZX63QtoKj05Oq24nwASYc8IpnR1FIUau/KCO8nuCOvxcLUaerD0IzM3yG
+         LiTJaxrTFbAKUvOynWZ7CSVXpTZeoJmeUqI5RYFs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.4 62/64] dt-bindings: can: tcan4x5x: fix mram-cfg RX FIFO config
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 086/100] drm/msm/hdmi: Fix missing put_device() call in msm_hdmi_get_phy
 Date:   Mon, 31 Jan 2022 11:56:47 +0100
-Message-Id: <20220131105217.757376575@linuxfoundation.org>
+Message-Id: <20220131105223.346360687@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-References: <20220131105215.644174521@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,31 +49,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 17a30422621c0e04cb6060d20d7edcefd7463347 upstream.
+[ Upstream commit 774fe0cd838d1b1419d41ab4ea0613c80d4ecbd7 ]
 
-This tcan4x5x only comes with 2K of MRAM, a RX FIFO with a dept of 32
-doesn't fit into the MRAM. Use a depth of 16 instead.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling path.
 
-Fixes: 4edd396a1911 ("dt-bindings: can: tcan4x5x: Add DT bindings for TCAN4x5X driver")
-Link: https://lore.kernel.org/all/20220119062951.2939851-1-mkl@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e00012b256d4 ("drm/msm/hdmi: Make HDMI core get its PHY")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220107085026.23831-1-linmq006@gmail.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/net/can/tcan4x5x.txt |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/hdmi/hdmi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-+++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-@@ -31,7 +31,7 @@ tcan4x5x: tcan4x5x@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		spi-max-frequency = <10000000>;
--		bosch,mram-cfg = <0x0 0 0 32 0 0 1 1>;
-+		bosch,mram-cfg = <0x0 0 0 16 0 0 1 1>;
- 		interrupt-parent = <&gpio1>;
- 		interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
- 		device-state-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+index 737453b6e5966..94f948ef279d1 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+@@ -97,10 +97,15 @@ static int msm_hdmi_get_phy(struct hdmi *hdmi)
+ 
+ 	of_node_put(phy_node);
+ 
+-	if (!phy_pdev || !hdmi->phy) {
++	if (!phy_pdev) {
+ 		DRM_DEV_ERROR(&pdev->dev, "phy driver is not ready\n");
+ 		return -EPROBE_DEFER;
+ 	}
++	if (!hdmi->phy) {
++		DRM_DEV_ERROR(&pdev->dev, "phy driver is not ready\n");
++		put_device(&phy_pdev->dev);
++		return -EPROBE_DEFER;
++	}
+ 
+ 	hdmi->phy_dev = get_device(&phy_pdev->dev);
+ 
+-- 
+2.34.1
+
 
 

@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F434A4307
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C5D4A4165
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359082AbiAaLQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:16:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42854 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376945AbiAaLJX (ORCPT
+        id S1358346AbiAaLDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:03:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50160 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358918AbiAaLCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:23 -0500
+        Mon, 31 Jan 2022 06:02:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51BE860E76;
-        Mon, 31 Jan 2022 11:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A95DC340E8;
-        Mon, 31 Jan 2022 11:09:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0439BB82A63;
+        Mon, 31 Jan 2022 11:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18676C340E8;
+        Mon, 31 Jan 2022 11:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627362;
-        bh=lAg1e2oPaAdy0h+YKy48zIGdGuDhjdDaxDk/g/xpYQ4=;
+        s=korg; t=1643626927;
+        bh=roTSABubN/Wi/NZrtktszAYxy/Lk9Du0dr9/MHsZBl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xz/puXsFDxe0sVT6MkVbvMnova+LdH36U2opbMOXa/Brli1uh0pOcwCT/xd3mjIvo
-         XSEEH/RbEfOz9xk4Brty3Fv75JhrxU9KX8TBaTFTc3t2O5t4GQ+Ax6iXICbT+fnSoZ
-         LE3Eoo/MqUy6hN+lQKCRpydYp24zb/OUmGGXqS0I=
+        b=eYFrd1U3FFANIpgpYn81v8KfRWbfa4LDTav8UjwzL83JVbvM8yZr7okldw7HXaPy1
+         XMu8XKT+Vb74LI0c0mepfZ+X/FLlsRl9bjDlzIb+7L5+6o86f+GD4qndpcqVu8Sgfy
+         VueXcp4bR+K3I5UxBlvNoHKbbMtn9nnzabbr0Gqc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH 5.15 058/171] usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode
+        stable@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Martin Faltesek <mfaltesek@google.com>,
+        Guenter Roeck <groeck@google.com>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH 5.10 002/100] media: venus: core: Drop second v4l2 device unregister
 Date:   Mon, 31 Jan 2022 11:55:23 +0100
-Message-Id: <20220131105231.989823795@linuxfoundation.org>
+Message-Id: <20220131105220.504209945@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,56 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-commit 9678f3361afc27a3124cd2824aec0227739986fb upstream.
+commit ddbcd0c58a6a53e2f1600b9de0ce6a20667c031c upstream.
 
-It appears that the PIPE clock should not be selected when only USB 2.0
-is being used in the design and no USB 3.0 reference clock is used.
-Also, the core resets are not required if a USB3 PHY is not in use, and
-will break things if USB3 is actually used but the PHY entry is not
-listed in the device tree.
+Wrong solution of rebase conflict leads to calling twice
+v4l2_device_unregister in .venus_remove. Delete the second one.
 
-Skip core resets and register settings that are only required for
-USB3 mode when no USB3 PHY is specified in the device tree.
-
-Fixes: 84770f028fab ("usb: dwc3: Add driver for Xilinx platforms")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Link: https://lore.kernel.org/r/20220126000253.1586760-2-robert.hancock@calian.com
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Martin Faltesek <mfaltesek@google.com>
+Cc: Guenter Roeck <groeck@google.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/dwc3-xilinx.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/media/platform/qcom/venus/core.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -110,6 +110,18 @@ static int dwc3_xlnx_init_zynqmp(struct
- 		usb3_phy = NULL;
- 	}
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -375,8 +375,6 @@ static int venus_remove(struct platform_
  
-+	/*
-+	 * The following core resets are not required unless a USB3 PHY
-+	 * is used, and the subsequent register settings are not required
-+	 * unless a core reset is performed (they should be set properly
-+	 * by the first-stage boot loader, but may be reverted by a core
-+	 * reset). They may also break the configuration if USB3 is actually
-+	 * in use but the usb3-phy entry is missing from the device tree.
-+	 * Therefore, skip these operations in this case.
-+	 */
-+	if (!usb3_phy)
-+		goto skip_usb3_phy;
-+
- 	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
- 	if (IS_ERR(crst)) {
- 		ret = PTR_ERR(crst);
-@@ -188,6 +200,7 @@ static int dwc3_xlnx_init_zynqmp(struct
- 		goto err;
- 	}
+ 	hfi_destroy(core);
  
-+skip_usb3_phy:
- 	/*
- 	 * This routes the USB DMA traffic to go through FPD path instead
- 	 * of reaching DDR directly. This traffic routing is needed to
+-	v4l2_device_unregister(&core->v4l2_dev);
+-
+ 	mutex_destroy(&core->pm_lock);
+ 	mutex_destroy(&core->lock);
+ 	venus_dbgfs_deinit(core);
 
 

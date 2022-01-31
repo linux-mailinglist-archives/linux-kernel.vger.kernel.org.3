@@ -2,80 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0134A5242
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A79F4A5248
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbiAaWVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S233166AbiAaWXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiAaWVQ (ORCPT
+        with ESMTP id S229658AbiAaWXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:21:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EADAC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:21:16 -0800 (PST)
+        Mon, 31 Jan 2022 17:23:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982CBC061714;
+        Mon, 31 Jan 2022 14:23:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 190A8B82CBE
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F4CCC340E8;
-        Mon, 31 Jan 2022 22:21:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F613615C6;
+        Mon, 31 Jan 2022 22:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B9D5C340E8;
+        Mon, 31 Jan 2022 22:23:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643667673;
-        bh=8qMR6brikdgeVt/6tuePPh0LX5UMZ/856Zhi1gbN+ls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sG+RHJaU+chKiMncxD6MaAr4hhWObMKDUcCgkTdTyZpihVAgdWML4X6DeP8yMoDMY
-         /pk4B89xl6cpZGPF5/ysuxRKaGyej3MKFUKxtaYPJmIY5dyXGuST729yeAUPfQAolq
-         dVwDR9eqEy0Ya9Nux3Bmkn37O2X//CHTWZgtjqI8pxs3oKepDVIES26ZiXYZ+vBXW6
-         r395tSBUphpE5uA5JmbkVPG5ERFSHbTD506mW6fzOBL7qM96geGFE0KqlI7qYZwYa6
-         kqwYeojs2vlYVPbUAmNg1UbV3Sd2I2LYCrv9j72hPRz1Vn9Ws3DiPqyvldpkxykojH
-         2WaOjcEzMUQEg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C0A2040466; Mon, 31 Jan 2022 19:21:11 -0300 (-03)
-Date:   Mon, 31 Jan 2022 19:21:11 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v13 03/16] perf record: Introduce thread specific data
- array
-Message-ID: <Yfhg1zH9rQ3lBP9N@kernel.org>
-References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <fc9f74af6f822d9c0fa0e145c3564a760dbe3d4b.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <YfhXG5yEHhrGDjvl@kernel.org>
+        s=k20201202; t=1643667824;
+        bh=0Y3rqgHlAMjH8w1RLY+36FufBDg9B2bU0SqT42dDkig=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VJGnBnmU3SXGd+G8IsHvhCOl83XvQO75dgqmOmMAvwsNtgc7jUQIDgXypI4KMnd6O
+         Bm8HkYi16UX7+jZJu+BTLKhPD1I2BXJ5tvRSymVdDkzsYffNO+Rg9LNRsuS1YbM1bG
+         kgivmCN/59omZJUGTrFfb3YHyg4PpE4QXH8Pq91DaF7XgqbU69sv5u/CIvPX+orVIJ
+         EPuv0ZngdPeFm7gHFKwl4Xt3DkT+0m1g8rsYaSqJ7dsn0zdxNvPNEPIWrw33fJFm/s
+         fnAxKaPT4d+di9wmjOfNwKLI61t3b+6q76AIr+03hGGZv7IIiMazLbJy1RRaXb1xrW
+         RJpMQ65e/JnFA==
+Date:   Mon, 31 Jan 2022 16:23:42 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v8 00/10] vgaarb: Rework default VGA device selection
+Message-ID: <20220131222342.GA517488@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfhXG5yEHhrGDjvl@kernel.org>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220106000658.243509-1-helgaas@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 31, 2022 at 06:39:39PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Some changes to reduce patch size, I have them in my local tree, will
-> publish later.
+[+to Maarten, Maxime, Thomas; beginning of thread:
+https://lore.kernel.org/r/20220106000658.243509-1-helgaas@kernel.org]
 
-Its in perf/threaded at:
+On Wed, Jan 05, 2022 at 06:06:48PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Current default VGA device selection fails in some cases because part of it
+> is done in the vga_arb_device_init() subsys_initcall, and some arches
+> enumerate PCI devices in pcibios_init(), which runs *after* that.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+Where are we at with this series?  Is there anything I can do to move
+it forward?
 
-Will continue tomorrow, testing it and checking the speedups on my
-5950x, I think the things I found so far can be fixed in follow up
-patches, to make progress and have this merged sooner.
+Bjorn
 
-I'll try and add committer notes with the test for some 'perf bench'
-workload without/with parallel recording, something I missed in your
-patch descriptions.
-
-- Arnaldo
+> For example:
+> 
+>   - On BMC system, the AST2500 bridge [1a03:1150] does not implement
+>     PCI_BRIDGE_CTL_VGA.  This is perfectly legal but means the legacy VGA
+>     resources won't reach downstream devices unless they're included in the
+>     usual bridge windows.
+> 
+>   - vga_arb_select_default_device() will set a device below such a bridge
+>     as the default VGA device as long as it has PCI_COMMAND_IO and
+>     PCI_COMMAND_MEMORY enabled.
+> 
+>   - vga_arbiter_add_pci_device() is called for every VGA device, either at
+>     boot-time or at hot-add time, and it will also set the device as the
+>     default VGA device, but ONLY if all bridges leading to it implement
+>     PCI_BRIDGE_CTL_VGA.
+> 
+>   - This difference between vga_arb_select_default_device() and
+>     vga_arbiter_add_pci_device() means that a device below an AST2500 or
+>     similar bridge can only be set as the default if it is enumerated
+>     before vga_arb_device_init().
+> 
+>   - On ACPI-based systems, PCI devices are enumerated by acpi_init(), which
+>     runs before vga_arb_device_init().
+> 
+>   - On non-ACPI systems, like on MIPS system, they are enumerated by
+>     pcibios_init(), which typically runs *after* vga_arb_device_init().
+> 
+> This series consolidates all the default VGA device selection in
+> vga_arbiter_add_pci_device(), which is always called after enumerating a
+> PCI device.
+> 
+> Almost all the work here is Huacai's.  I restructured it a little bit and
+> added a few trivial patches on top.
+> 
+> I'd like to move vgaarb.c to drivers/pci eventually, but there's another
+> initcall ordering snag that needs to be resolved first, so this leaves 
+> it where it is.
+> 
+> Bjorn
+> 
+> Version history:
+> V0 original implementation as final quirk to set default device.
+> https://lore.kernel.org/r/20210514080025.1828197-6-chenhuacai@loongson.cn
+> 
+> V1 rework vgaarb to do all default device selection in
+> vga_arbiter_add_pci_device().
+> https://lore.kernel.org/r/20210705100503.1120643-1-chenhuacai@loongson.cn
+> 
+> V2 move arbiter to PCI subsystem, fix nits.
+> https://lore.kernel.org/r/20210722212920.347118-1-helgaas@kernel.org
+> 
+> V3 rewrite the commit log of the last patch (which is also summarized
+> by Bjorn).
+> https://lore.kernel.org/r/20210820100832.663931-1-chenhuacai@loongson.cn
+> 
+> V4 split the last patch to two steps.
+> https://lore.kernel.org/r/20210827083129.2781420-1-chenhuacai@loongson.cn
+> 
+> V5 split Patch-9 again and sort the patches.
+> https://lore.kernel.org/r/20210911093056.1555274-1-chenhuacai@loongson.cn
+> 
+> V6 split Patch-5 again and sort the patches again.
+> https://lore.kernel.org/r/20210916082941.3421838-1-chenhuacai@loongson.cn
+> 
+> V7 stop moving vgaarb to drivers/pci because of ordering issues with
+> misc_init().
+> https://lore.kernel.org/r/20211015061512.2941859-1-chenhuacai@loongson.cn
+> https://lore.kernel.org/r/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU27KHWcyWKkMftEsA@mail.gmail.com
+> 
+> 
+> Bjorn Helgaas (8):
+>   vgaarb: Factor out vga_select_framebuffer_device()
+>   vgaarb: Factor out default VGA device selection
+>   vgaarb: Move framebuffer detection to ADD_DEVICE path
+>   vgaarb: Move non-legacy VGA detection to ADD_DEVICE path
+>   vgaarb: Move disabled VGA device detection to ADD_DEVICE path
+>   vgaarb: Remove empty vga_arb_device_card_gone()
+>   vgaarb: Use unsigned format string to print lock counts
+>   vgaarb: Replace full MIT license text with SPDX identifier
+> 
+> Huacai Chen (2):
+>   vgaarb: Move vga_arb_integrated_gpu() earlier in file
+>   vgaarb: Log bridge control messages when adding devices
+> 
+>  drivers/gpu/vga/vgaarb.c | 311 +++++++++++++++++++--------------------
+>  1 file changed, 154 insertions(+), 157 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 

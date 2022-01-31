@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCD24A48C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5464A48C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359259AbiAaNxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiAaNxM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:53:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A4FC061714;
-        Mon, 31 Jan 2022 05:53:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1377287AbiAaNx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:53:57 -0500
+Received: from mga17.intel.com ([192.55.52.151]:7957 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232774AbiAaNx4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:53:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643637236; x=1675173236;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AEaiGMVj7unyqE7VbRmUuqcbF86FB7Qs3mepDVHeyeU=;
+  b=h0P2hU0knm3eJLXavKEaJHC+qsjFw518ImSKH3XXc1GSOov6bJ4O4Ur5
+   wPyWxcfSluoff5sAmKo55dA+g8X5VRjoa7cJb1L/KcOp2dXbOuZTNausR
+   ChZwEx3jtQ57E6yQINP5wY/YOjLYPImlWKGBgMwSbTqQWy8IwYw3sHURV
+   aASJdQs7A7qB04ZIa0sxxEid08e2xYfw16moLz4BCyYs7LH2dujx6BoxB
+   uvHP5GgNdHuwWAg51qltZXJJhPzLvChkTQjbvWrsu+5pFg0RnZG/RqrP5
+   FsQIN1KTUaGLameQtwMilyHLTyEXmk/qejbxuGKM94uLEWE31T1Xo7j5C
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="228124509"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="228124509"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:53:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="619385285"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 31 Jan 2022 05:53:55 -0800
+Received: from [10.209.18.139] (kliang2-MOBL.ccr.corp.intel.com [10.209.18.139])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DA31B82B2E;
-        Mon, 31 Jan 2022 13:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25FBEC340F9;
-        Mon, 31 Jan 2022 13:53:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643637190;
-        bh=ubnmPmWzE8WZHK6ZDIgiYDZ8V5Auo9sjXu6gY0DackM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tE6Azk07ef7p3PyY9nPWsvB4UG0ym7aIa7c0/Aq4ps9A01ne0MZvdOrWsFqal0AiU
-         0P7V4TI/ZhF33PhVXme354y8saJj86gikF7RnUZvdvua8uDRQHsud7M0acourjCUn9
-         zdR16D1WrF68aNJlsNa9P3qBuqWtesfv8rw5IF2hNE5wWlmhVz2+xC6JL/7OFxTrUu
-         iYRe6d4g7Gbq/Qos37N0Q1pmKEbdxburfCFLWH+4ZWaTzMUR00B3+zFQtir0xTCFaf
-         b1l+X6y8wEge0g7mMXhya3HjmyH2u/XnQNDpSggCfTYPXq4wmSCGpISV7WE9u1iTrZ
-         WZsj7ejW6v9Gw==
-Received: by mail-vs1-f47.google.com with SMTP id t20so11856012vsq.12;
-        Mon, 31 Jan 2022 05:53:10 -0800 (PST)
-X-Gm-Message-State: AOAM533xM7vLzjc1c+Jr/9SLC4MLJIS9l/ZE3ZEtR+Zx6Svsl29tEbKy
-        cS7j7wNW7cKzT6P29gHs4G13w0D1UG6pIl3/EPw=
-X-Google-Smtp-Source: ABdhPJwJr063nx9nXXC4e7XbyWpioW1G/tD5r4ayyBqg50Z49dU59MzIv8eNccq661nAVS/wEBLJ08MiD/T+S+t5NT0=
-X-Received: by 2002:a67:e947:: with SMTP id p7mr7925194vso.59.1643637189058;
- Mon, 31 Jan 2022 05:53:09 -0800 (PST)
+        by linux.intel.com (Postfix) with ESMTPS id A3D1C5809EB;
+        Mon, 31 Jan 2022 05:53:53 -0800 (PST)
+Message-ID: <c574f164-e1f4-0166-492d-b5feaf219f54@linux.intel.com>
+Date:   Mon, 31 Jan 2022 08:53:52 -0500
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-4-guoren@kernel.org>
- <YffURrqD0pfXnEkV@infradead.org>
-In-Reply-To: <YffURrqD0pfXnEkV@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 31 Jan 2022 21:52:58 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSQafQxzAyaD90n-O6pPo22RCDXdsrOn=csUJBur0u-Ew@mail.gmail.com>
-Message-ID: <CAJF2gTSQafQxzAyaD90n-O6pPo22RCDXdsrOn=csUJBur0u-Ew@mail.gmail.com>
-Subject: Re: [PATCH V4 03/17] asm-generic: compat: Cleanup duplicate definitions
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 03/26] perf vendor events: Update metrics for Broadwell DE
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220129080929.837293-1-irogers@google.com>
+ <20220129080929.837293-4-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220129080929.837293-4-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 8:21 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Sat, Jan 29, 2022 at 08:17:14PM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > There are 7 64bit architectures that support Linux COMPAT mode to
-> > run 32bit applications. A lot of definitions are duplicate:
-> >  - COMPAT_USER_HZ
-> >  - COMPAT_RLIM_INFINITY
-> >  - COMPAT_OFF_T_MAX
-> >  - __compat_uid_t, __compat_uid_t
-> >  - compat_dev_t
-> >  - compat_ipc_pid_t
-> >  - struct compat_flock
-> >  - struct compat_flock64
-> >  - struct compat_statfs
-> >  - struct compat_ipc64_perm, compat_semid64_ds,
-> >         compat_msqid64_ds, compat_shmid64_ds
-> >
-> > Cleanup duplicate definitions and merge them into asm-generic.
->
-> The flock part seems to clash with the general compat_flock
-> consolidation.  Otherwise this looks like a good idea.
-Okay, In the next version, I would rebase on general compat_flock
-consolidation v4.
 
 
+On 1/29/2022 3:09 AM, Ian Rogers wrote:
+> Based on TMA_metrics-full.csv version 4.3 at 01.org:
+>      https://download.01.org/perfmon/
+> Events are still at version 7:
+>      https://download.01.org/perfmon/BDW-DE
+> Json files generated by:
+>      https://github.com/intel/event-converter-for-linux-perf
+> 
+> This adds TopdownL1_SMT metrics to bdwde-metrics.json as
+> generated by the extract-tmam.py script.
+> 
+> Tested:
+> ...
+>    6: Parse event definition strings                                  : Ok
+>    7: Simple expression parser                                        : Ok
+> ...
+>    9: Parse perf pmu format                                           : Ok
+>   10: PMU events                                                      :
+>   10.1: PMU event table sanity                                        : Ok
+>   10.2: PMU event map aliases                                         : Ok
+>   10.3: Parsing of PMU event table metrics                            : Skip (some metrics failed)
+>   10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> ...
+>   68: Parse and process metrics                                       : Ok
+> ...
+>   88: perf stat metrics (shadow stat) test                            : Ok
+>   89: perf all metricgroups test                                      : FAILED!
+>   90: perf all metrics test                                           : FAILED!
+>   91: perf all PMU test                                               : Ok
+> ...
+> The failures/skips relate to:
+> event syntax error: '{arb/event=0x84,umask=0x1,metric-id=arb!3event!20x84!0umask!20x1!3/,arb/even..'
+>                       \___ Cannot find PMU `arb'. Missing kernel support?
+> 
 
--- 
-Best Regards
- Guo Ren
+ARB is an uncore unit for client platforms. Broadwell DE should be a 
+server platform. It looks like an issue of TMA_metrics-full.csv.
+I will check and see whether we can fix the TMA file.
 
-ML: https://lore.kernel.org/linux-csky/
+Thanks,
+Kan
+
+> Signed-off-by: Ian Rogers<irogers@google.com>
+> ---
+>   .../arch/x86/broadwellde/bdwde-metrics.json   |  401 +++-
+>   .../arch/x86/broadwellde/cache.json           | 1122 +++++-----
+>   .../arch/x86/broadwellde/floating-point.json  |  222 +-
+>   .../arch/x86/broadwellde/frontend.json        |  335 +--
+>   .../arch/x86/broadwellde/memory.json          |  608 +++---
+>   .../arch/x86/broadwellde/other.json           |   28 +-
+>   .../arch/x86/broadwellde/pipeline.json        | 1892 ++++++++---------
+>   .../arch/x86/broadwellde/virtual-memory.json  |  394 ++--
+>   8 files changed, 2646 insertions(+), 2356 deletions(-)

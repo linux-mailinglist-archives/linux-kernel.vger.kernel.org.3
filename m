@@ -2,205 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2AA4A4EA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C08D4A4EA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356700AbiAaSkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234175AbiAaSks (ORCPT
+        id S1356878AbiAaSlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:41:05 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:30917 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356741AbiAaSlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:40:48 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9869C061714;
-        Mon, 31 Jan 2022 10:40:47 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id t32so13026846pgm.7;
-        Mon, 31 Jan 2022 10:40:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vUcVq5xhDtsVnawQOYBHe0I2uMjtSwKHFuB7P9A9ZPE=;
-        b=Qks15jLuTdFfJB7Yimcf6CFubiKZSrG+lgYbEXhv5CmcREhbsO9I3sHSkFpZJtXCKr
-         92ULlrJ1jbtZTyDNycEEatYwo/lYVGPSpPf1Eb96b6UbfuVheN/P13CAiMWNG2SWTU/7
-         3kMaW8gywhhLuK1ffBR6cWAnDfHfkbkT4gdENSpeUmj5WtcK+xKXA3d7Ir+6P1b6ySez
-         5aKGnhEZanxzbauIs3sIeQq7luxkHgr8QY9yfq7EiP8YuRrN+QQlfEvf8cqeTrWlxUPM
-         eHVw4/o/IfeCDvEz6RYo2vuKGwnbY5xuw8UU3STuPVmvw/DN71+Hg6YDgx6nHJknnlYG
-         GImA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vUcVq5xhDtsVnawQOYBHe0I2uMjtSwKHFuB7P9A9ZPE=;
-        b=ia+G/kkMpdhlz7I34OSZZZ3D+DWS+OOAC5m5QUYrVmpW6pMAfypjCxeVFCT63GL/r+
-         KmUyh0phqGNg3lLvPVKGrAOj2xGxBUACokTZYqTlfPznj56qfFPhIKB4MQ0MQ8IiZqXE
-         pcrG8N8pTD3j6ffHe6T8B4D/W9K2fvcVmBbt61ZcMIrwmQkAtOI63CBuTGSQtOGjRI6u
-         1bxbl/8aCPGOQMHkAHWu6RwB9M+m8vA89NN8TDWlnBANP1DQylh99GgP0Srr3SkuDL0G
-         fpsg4Eh0jtoAL+74Ai2CExcAiVWMVXX8F8R5AmhNnoTWotNHHfxTgytyxjvvtjEIo6Bv
-         ft3g==
-X-Gm-Message-State: AOAM532o2l7kBberK9UmucXY561EzaplpD4DvfVUEQurCi3lQ3gu4imN
-        2FjE4S3AAOhyZOZDbaeJXbk=
-X-Google-Smtp-Source: ABdhPJwFcPJi/t2hparKLY2t08LTiTgjCaME1xBLmUfnatI03eGBlVkElbTxSt6cAsqmyFb4Kfa8FA==
-X-Received: by 2002:a05:6a00:b51:: with SMTP id p17mr12524853pfo.35.1643654447151;
-        Mon, 31 Jan 2022 10:40:47 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id s14sm18562705pfk.65.2022.01.31.10.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 10:40:45 -0800 (PST)
-Message-ID: <30ed8220-e24d-4b40-c7a6-4b09c84f9a1f@gmail.com>
-Date:   Mon, 31 Jan 2022 10:40:38 -0800
+        Mon, 31 Jan 2022 13:41:03 -0500
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220131184102epoutp031161ef40c8902d172dfbdfb37d5a4574~PbwZas0Gw1735617356epoutp03S
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:41:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220131184102epoutp031161ef40c8902d172dfbdfb37d5a4574~PbwZas0Gw1735617356epoutp03S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643654462;
+        bh=+Eb/ge6U8qUjxg2a+FfLkVgW+b7TqJ+I4nHa/jChYAQ=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=hyecUWzEii5i7bzuDkk7K21gMlfP5kq+qGx5YYAd7ylXfjIuKZX7g4fn5emsHF6sU
+         0UKnSteGucVpZoRSMCV6BypyONhRluhdSWSUkeJpmTpacPbnBUOwm/F8j8lgHj2WWM
+         cAL59gk10PG+EJyfH8wMBrdxIBHLFz8LP8KuDnJ8=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220131184101epcas5p28175108bbc81852fac172c5dc1c22f83~PbwY8-1gN1134311343epcas5p2F;
+        Mon, 31 Jan 2022 18:41:01 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.182]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4JncMV74B0z4x9Pt; Mon, 31 Jan
+        2022 18:40:54 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0A.AF.05590.63D28F16; Tue,  1 Feb 2022 03:40:55 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220131184054epcas5p35bb3491004ca6c7ceaea16d71cf6ac72~PbwSRnELA0527205272epcas5p3U;
+        Mon, 31 Jan 2022 18:40:54 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220131184054epsmtrp1f144e4eea65586c8a5a7aa7d88865fa4~PbwSQgks80798507985epsmtrp1f;
+        Mon, 31 Jan 2022 18:40:54 +0000 (GMT)
+X-AuditID: b6c32a4b-723ff700000015d6-e8-61f82d36d765
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9C.33.08738.33D28F16; Tue,  1 Feb 2022 03:40:51 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220131184053epsmtip25d2058f1bc952c10a4e195cfbe87c92d~PbwRQqUuh1034310343epsmtip20;
+        Mon, 31 Jan 2022 18:40:53 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Cc:     <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>
+In-Reply-To: <164361952065.14120.582076973615108824.b4-ty@canonical.com>
+Subject: RE: [PATCH 1/3] ARM: dts: exynos: update dma nodename for
+ exynos3250
+Date:   Tue, 1 Feb 2022 00:10:51 +0530
+Message-ID: <02cb01d816d2$13f75870$3be60950$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs to
- y
-Content-Language: en-US
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Saeed Mahameed <saeed@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Einon <mark.einon@gmail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        David Awogbemila <awogbemila@google.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Simon Horman <simon.horman@corigine.com>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
-        rafal@milecki.pl, Edwin Peer <edwin.peer@broadcom.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Prabhakar Kushwaha <pkushwaha@marvell.com>,
-        Omkar Kulkarni <okulkarni@marvell.com>,
-        Shai Malin <smalin@marvell.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
-        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20220131172450.4905-1-saeed@kernel.org>
- <20220131095905.08722670@hermes.local>
- <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
- <20220131183540.6ekn3z7tudy5ocdl@sx1>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220131183540.6ekn3z7tudy5ocdl@sx1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJST+FB4v64CXjUV2A/uk/xJfagJgFYGszNAVup0+erc2XuYA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnk+LIzCtJLcpLzFFi42LZdlhTQ9dc90eiwYelTBbzj5xjtdj49geT
+        xabH11gtLu+aw2Yx4/w+JovWvUfYHdg8ZjX0snlsWtXJ5rF5Sb3H501yASxR2TYZqYkpqUUK
+        qXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QLuVFMoSc0qBQgGJxcVK
+        +nY2RfmlJakKGfnFJbZKqQUpOQUmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZV9dtYynYy1Xx
+        bFkHUwPjG44uRk4OCQETiUkHrzN2MXJxCAnsZpR4uuEJlPOJUeL16y1sEM5nRokX3xeww7Q8
+        7L3MBJHYxSix/NgWVgjnJaPE95trwKrYBHQldixuA2sXEehklFj9/ScTSIJZIFbi7v7PzF2M
+        HBycAh4SnbNiQcLCAv4Sz9ZtB+tlEVCR+HdoOZjNK2ApMeP7flYIW1Di5MwnLBBj5CW2v53D
+        DHGRgsTPp8vAakQEnCTuvD8DVSMu8fLoEXaQGyQEOjkkOu6/Z4JocJF4ML2XFcIWlnh1fAvU
+        a1ISL/vb2EFukxDIlujZZQwRrpFYOu8YC4RtL3HgyhwWkBJmAU2J9bv0IVbxSfT+fsIE0ckr
+        0dEmBFGtKtH87ipUp7TExO5uqKUeEp/P/mWfwKg4C8ljs5A8NgvJA7MQli1gZFnFKJlaUJyb
+        nlpsWmCcl1oOj+/k/NxNjOCUqeW9g/HRgw96hxiZOBgPMUpwMCuJ8O5d+D1RiDclsbIqtSg/
+        vqg0J7X4EKMpMLQnMkuJJucDk3ZeSbyhiaWBiZmZmYmlsZmhkjjvqfQNiUIC6YklqdmpqQWp
+        RTB9TBycUg1MRnsibpqJuxbaK7jv7T2kVrvc1nx3UNnv2N25jvZ9HXwvH5rOZYxUdp55rMib
+        1af7pe5NF7GlBfNUn/ydY7rkpNxGsQ8+GXYSBo5Oe02v55ee5Vr0cM2Lb0/Pv//eYqcWwHN9
+        u+3VKy5fp/249H/GUrs9m2I2XfyyZbnY6ziFeq4Nc4M/nuad90V0l9rThlfVTY9YY9tfJ38J
+        YXvUcvFWKPOTi0rP0ngup/39a143/W42u0z5rbgrE5m19nBcOdZ96n5ZskSGeMOGgEOyl/q8
+        ROQlqsJ9xRV+lrIaNP7IlVh0u7h2+v12d0FDHQ7TbdN+/d7n1v3LemrhErODYqbcjwVaVuz8
+        KXpdN2XRLx8OJZbijERDLeai4kQAIZRIDSIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBLMWRmVeSWpSXmKPExsWy7bCSvK6x7o9Eg1MLRC3mHznHarHx7Q8m
+        i02Pr7FaXN41h81ixvl9TBate4+wO7B5zGroZfPYtKqTzWPzknqPz5vkAliiuGxSUnMyy1KL
+        9O0SuDKurtvGUrCXq+LZsg6mBsY3HF2MnBwSAiYSD3svM3UxcnEICexglFjZNIsNIiEtcX3j
+        BHYIW1hi5b/nYLaQwHNGiRPPykFsNgFdiR2L29hAmkUEuhklrvTMZARJMAvES8y71MEMMfUU
+        o8SBzc0sXYwcHJwCHhKds2JBaoQFfCVOL53KCmKzCKhI/Du0HGwBr4ClxIzv+1khbEGJkzOf
+        sEDM1JZ4evMplC0vsf3tHGaI4xQkfj5dBlYvIuAkcef9GagacYmXR4+wT2AUnoVk1Cwko2Yh
+        GTULScsCRpZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBkaOltYNxz6oPeocYmTgY
+        DzFKcDArifDuXfg9UYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZ
+        Jg5OqQamMycWzT0baLY87OrnnitzP+hamTcxl178wbfunp6EmcuzgztUps37e8wv16+8ejaH
+        veafm+ETRfacm7Pqy8+rrJsmuHk8lMh3kX5+WuHNiaR1vEniN88mSXM12F+o8vmm+jjr2uET
+        T7d1HSgU4IlrXcST0vJOxLdjlWpuybQ1uleX2/33vsA+x+hz6EkF664VuSuXuC+4d0C1bBuf
+        mHHNt82HjGZMffbFi/HmIqa1Wy7M9Sxs7n0bUrnll842u4vTlvzXuKnAFurgw+smv23v0ysf
+        J3LKHti45PSK0BVdB9I2nVBOYyhrEpte7ifPXK2zXysiuerEvqZu8Wc1lW/qfd+86UkufuP+
+        6GPpj1v8FUosxRmJhlrMRcWJAMgQ3gULAwAA
+X-CMS-MailID: 20220131184054epcas5p35bb3491004ca6c7ceaea16d71cf6ac72
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220130080810epcas5p425f29e7a017b4b1690509e60651d4245
+References: <CGME20220130080810epcas5p425f29e7a017b4b1690509e60651d4245@epcas5p4.samsung.com>
+        <20220130075520.49193-1-alim.akhtar@samsung.com>
+        <164361952065.14120.582076973615108824.b4-ty@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/31/2022 10:35 AM, Saeed Mahameed wrote:
-> On 31 Jan 19:30, Geert Uytterhoeven wrote:
->> On Mon, Jan 31, 2022 at 6:59 PM Stephen Hemminger
->> <stephen@networkplumber.org> wrote:
->>> On Mon, 31 Jan 2022 09:24:50 -0800
->>> Saeed Mahameed <saeed@kernel.org> wrote:
->>>
->>> > From: Saeed Mahameed <saeedm@nvidia.com>
->>> >
->>> > NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
->>> >
->>> > Since all drivers belonging to a vendor are supposed to default to 
->>> 'n',
->>> > defaulting all vendors to 'n' shouldn't be an issue, and aligns well
->>> > with the 'no new drivers' by default mentality.
->>> >
->>> > Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
->>>
->>> This was done back when vendors were introduced in the network 
->>> drivers tree.
->>> The default of Y allowed older configurations to just work.
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Monday, January 31, 2022 2:29 PM
+>To: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Alim
+>Akhtar <alim.akhtar@samsung.com>
+>Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; linux-samsung-
+>soc@vger.kernel.org; devicetree@vger.kernel.org; robh+dt@kernel.org
+>Subject: Re: [PATCH 1/3] ARM: dts: exynos: update dma nodename for
+>exynos3250
+>
+>On Sun, 30 Jan 2022 13:25:18 +0530, Alim Akhtar wrote:
+>> Currently dma node name does not matches the pl330 dt schema and make
+>> dtbs_check report below warning
 >>
->> And changing the defaults means all defconfigs must be updated first,
->> else the user's configs will end up without drivers needed.
+>> 'pdma@12680000' does not match '^dma-controller(@.*)?$'
 >>
-> 
-> As I understand correctly, at least for most common net drivers, having 
-> NET_VENDOR_XYZ=y doesn't actually build anything, we have flags per
-> module for each vendor and those are defaulted to N.
+>> Update the dma node name to match pl330 dt schema
+>>
+>> [...]
+>
+>Squashed into one commit, that's a tiny change in each file.
+>
+Ok, Thanks Krzysztof.
 
-Right, but once you start hiding NET_VENDOR_DRIVER_XYZ under a 
-NET_VENDOR_XYZ Kconfig symbol dependency, if NET_VENDOR_XYZ is not set 
-to Y, then you have no way to select NET_VENDOR_DRIVER_XYZ and so your 
-old defconfig breaks.
 
-> 
->>> So there was a reason, not sure if it matters anymore.
->>> But it seems like useless repainting to change it now.
->>
->> It might make sense to tune some of the defaults (i.e. change to
->> "default y if ARCH_*") for drivers with clear platform dependencies.
->>
-> 
-> either set hard default to 'n' or just keep it as is, anything else is just
-> more confusion.
+>Applied, thanks!
+>
+>[1/3] ARM: dts: exynos: update dma nodename for exynos3250
+>      commit: a5a881a33f8d6d5427a4150ee1a24a8790ada270
+>[2/3] ARM: dts: exynos: update dma nodename for exynos4
+>      commit: 0e1434e19717309c2c3a0770bd4ef5c3a937fe03
+>[3/3] ARM: dts: exynos: update dma nodename for exynos5
+>      commit: 51d6d2cb2523c3d979e94efc065a7c88a9c8dd61
+>
+>Best regards,
+>--
+>Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Maybe the rule should go like this: any new driver vendor defaults to n, 
-and existing ones remain set to y, until we deprecate doing that and 
-switching them all off to n by 5.18?
--- 
-Florian

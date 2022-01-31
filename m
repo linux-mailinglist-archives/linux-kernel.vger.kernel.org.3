@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C684A4420
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47214A4252
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343807AbiAaL03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:26:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47934 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377200AbiAaLRt (ORCPT
+        id S1359513AbiAaLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:11:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56220 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359387AbiAaLHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:17:49 -0500
+        Mon, 31 Jan 2022 06:07:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB5386114C;
-        Mon, 31 Jan 2022 11:17:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54151C340E8;
-        Mon, 31 Jan 2022 11:17:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF6A3B82A4C;
+        Mon, 31 Jan 2022 11:07:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10ED9C340EF;
+        Mon, 31 Jan 2022 11:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627868;
-        bh=+73rGfCBgLJesVwuPl33Zlp4csAarRXlaZuKTqeiMYk=;
+        s=korg; t=1643627250;
+        bh=7opjUJhub79r6zwtVoRoknIviCjszJdFquO2gnMKlAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RnidJSWRhO5WRE/AvGaK8zgOd+3bfOTFlSq0jxiMGFckYydsR2CHY6TNCW42tkOFA
-         oc/A8fK4WVl/h0ZrDD+Yvw0Q4qRM5GG55mjProDzAGcUHPHdFBnPfVAgCM0LP8hjUs
-         YkB/SDGXVcBjwA2sXXI8nrXxj1IyuGIutBVJyA1s=
+        b=nau2ywgQOUb3z5556rXgLpcvXPVUfRiNwb6vdMxL29UDT2stXt1Zw1Vp3NweOxX9X
+         utNjrvdBNxRQ/zdknAcqQoqL7HqtqQOetni4sieDRg64bz+6tWINNaegF1/abZ6x9g
+         /jIVQCPDieGGbiGiQaBJKKgRoyPmGG+yTawEg+CU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 023/200] powerpc/bpf: Update ldimm64 instructions during extra pass
-Date:   Mon, 31 Jan 2022 11:54:46 +0100
-Message-Id: <20220131105234.344489321@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Zanussi <zanussi@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.15 022/171] tracing: Dont inc err_log entry count if entry allocation fails
+Date:   Mon, 31 Jan 2022 11:54:47 +0100
+Message-Id: <20220131105230.769670120@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,137 +45,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+From: Tom Zanussi <zanussi@kernel.org>
 
-commit f9320c49993ca3c0ec0f9a7026b313735306bb8b upstream.
+commit 67ab5eb71b37b55f7c5522d080a1b42823351776 upstream.
 
-These instructions are updated after the initial JIT, so redo codegen
-during the extra pass. Rename bpf_jit_fixup_subprog_calls() to clarify
-that this is more than just subprog calls.
+tr->n_err_log_entries should only be increased if entry allocation
+succeeds.
 
-Fixes: 69c087ba6225b5 ("bpf: Add bpf_for_each_map_elem() helper")
-Cc: stable@vger.kernel.org # v5.15
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Tested-by: Jiri Olsa <jolsa@redhat.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/7cc162af77ba918eb3ecd26ec9e7824bc44b1fae.1641468127.git.naveen.n.rao@linux.vnet.ibm.com
+Doing it when it fails won't cause any problems other than wasting an
+entry, but should be fixed anyway.
+
+Link: https://lkml.kernel.org/r/cad1ab28f75968db0f466925e7cba5970cec6c29.1643319703.git.zanussi@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: 2f754e771b1a6 ("tracing: Don't inc err_log entry count if entry allocation fails")
+Signed-off-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/net/bpf_jit_comp.c   |   29 +++++++++++++++++++++++------
- arch/powerpc/net/bpf_jit_comp32.c |    6 ++++++
- arch/powerpc/net/bpf_jit_comp64.c |    7 ++++++-
- 3 files changed, 35 insertions(+), 7 deletions(-)
+ kernel/trace/trace.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -23,15 +23,15 @@ static void bpf_jit_fill_ill_insns(void
- 	memset32(area, BREAKPOINT_INSTRUCTION, size / 4);
- }
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -7749,7 +7749,8 @@ static struct tracing_log_err *get_traci
+ 		err = kzalloc(sizeof(*err), GFP_KERNEL);
+ 		if (!err)
+ 			err = ERR_PTR(-ENOMEM);
+-		tr->n_err_log_entries++;
++		else
++			tr->n_err_log_entries++;
  
--/* Fix the branch target addresses for subprog calls */
--static int bpf_jit_fixup_subprog_calls(struct bpf_prog *fp, u32 *image,
--				       struct codegen_context *ctx, u32 *addrs)
-+/* Fix updated addresses (for subprog calls, ldimm64, et al) during extra pass */
-+static int bpf_jit_fixup_addresses(struct bpf_prog *fp, u32 *image,
-+				   struct codegen_context *ctx, u32 *addrs)
- {
- 	const struct bpf_insn *insn = fp->insnsi;
- 	bool func_addr_fixed;
- 	u64 func_addr;
- 	u32 tmp_idx;
--	int i, ret;
-+	int i, j, ret;
- 
- 	for (i = 0; i < fp->len; i++) {
- 		/*
-@@ -66,6 +66,23 @@ static int bpf_jit_fixup_subprog_calls(s
- 			 * of the JITed sequence remains unchanged.
- 			 */
- 			ctx->idx = tmp_idx;
-+		} else if (insn[i].code == (BPF_LD | BPF_IMM | BPF_DW)) {
-+			tmp_idx = ctx->idx;
-+			ctx->idx = addrs[i] / 4;
-+#ifdef CONFIG_PPC32
-+			PPC_LI32(ctx->b2p[insn[i].dst_reg] - 1, (u32)insn[i + 1].imm);
-+			PPC_LI32(ctx->b2p[insn[i].dst_reg], (u32)insn[i].imm);
-+			for (j = ctx->idx - addrs[i] / 4; j < 4; j++)
-+				EMIT(PPC_RAW_NOP());
-+#else
-+			func_addr = ((u64)(u32)insn[i].imm) | (((u64)(u32)insn[i + 1].imm) << 32);
-+			PPC_LI64(b2p[insn[i].dst_reg], func_addr);
-+			/* overwrite rest with nops */
-+			for (j = ctx->idx - addrs[i] / 4; j < 5; j++)
-+				EMIT(PPC_RAW_NOP());
-+#endif
-+			ctx->idx = tmp_idx;
-+			i++;
- 		}
+ 		return err;
  	}
- 
-@@ -193,13 +210,13 @@ skip_init_ctx:
- 		/*
- 		 * Do not touch the prologue and epilogue as they will remain
- 		 * unchanged. Only fix the branch target address for subprog
--		 * calls in the body.
-+		 * calls in the body, and ldimm64 instructions.
- 		 *
- 		 * This does not change the offsets and lengths of the subprog
- 		 * call instruction sequences and hence, the size of the JITed
- 		 * image as well.
- 		 */
--		bpf_jit_fixup_subprog_calls(fp, code_base, &cgctx, addrs);
-+		bpf_jit_fixup_addresses(fp, code_base, &cgctx, addrs);
- 
- 		/* There is no need to perform the usual passes. */
- 		goto skip_codegen_passes;
---- a/arch/powerpc/net/bpf_jit_comp32.c
-+++ b/arch/powerpc/net/bpf_jit_comp32.c
-@@ -292,6 +292,8 @@ int bpf_jit_build_body(struct bpf_prog *
- 		bool func_addr_fixed;
- 		u64 func_addr;
- 		u32 true_cond;
-+		u32 tmp_idx;
-+		int j;
- 
- 		/*
- 		 * addrs[] maps a BPF bytecode address into a real offset from
-@@ -839,8 +841,12 @@ int bpf_jit_build_body(struct bpf_prog *
- 		 * 16 byte instruction that uses two 'struct bpf_insn'
- 		 */
- 		case BPF_LD | BPF_IMM | BPF_DW: /* dst = (u64) imm */
-+			tmp_idx = ctx->idx;
- 			PPC_LI32(dst_reg_h, (u32)insn[i + 1].imm);
- 			PPC_LI32(dst_reg, (u32)insn[i].imm);
-+			/* padding to allow full 4 instructions for later patching */
-+			for (j = ctx->idx - tmp_idx; j < 4; j++)
-+				EMIT(PPC_RAW_NOP());
- 			/* Adjust for two bpf instructions */
- 			addrs[++i] = ctx->idx * 4;
- 			break;
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -318,6 +318,7 @@ int bpf_jit_build_body(struct bpf_prog *
- 		u64 imm64;
- 		u32 true_cond;
- 		u32 tmp_idx;
-+		int j;
- 
- 		/*
- 		 * addrs[] maps a BPF bytecode address into a real offset from
-@@ -806,9 +807,13 @@ emit_clear:
- 		case BPF_LD | BPF_IMM | BPF_DW: /* dst = (u64) imm */
- 			imm64 = ((u64)(u32) insn[i].imm) |
- 				    (((u64)(u32) insn[i+1].imm) << 32);
-+			tmp_idx = ctx->idx;
-+			PPC_LI64(dst_reg, imm64);
-+			/* padding to allow full 5 instructions for later patching */
-+			for (j = ctx->idx - tmp_idx; j < 5; j++)
-+				EMIT(PPC_RAW_NOP());
- 			/* Adjust for two bpf instructions */
- 			addrs[++i] = ctx->idx * 4;
--			PPC_LI64(dst_reg, imm64);
- 			break;
- 
- 		/*
 
 

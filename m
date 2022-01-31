@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F1B4A4450
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2974A448B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378010AbiAaL14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378144AbiAaLTq (ORCPT
+        id S1380057AbiAaLaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39306 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359489AbiAaLVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:19:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7628EC0619CA;
-        Mon, 31 Jan 2022 03:12:06 -0800 (PST)
+        Mon, 31 Jan 2022 06:21:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13DC9611C3;
-        Mon, 31 Jan 2022 11:12:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE44BC340E8;
-        Mon, 31 Jan 2022 11:12:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFF30B82A61;
+        Mon, 31 Jan 2022 11:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2731C340E8;
+        Mon, 31 Jan 2022 11:21:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627525;
-        bh=F+KcQCjkUXziZuww+nEM5pVstxxMaDKgDUy5oz4R+24=;
+        s=korg; t=1643628073;
+        bh=8pC7zi+x+Nwfp2vVMr81Kz8GvyFvgdehqb2HvP18y6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iKKUiiG68YX8OG++S+9WAJ5NDcOqHd0wKLRC194nnJMHSb013l5t5mP6rIfBIpI4b
-         2+fJs5JZo8jrpc0eXnfdzc20CiZOIsQyI7voDvz4aMneFwJHZFTavb/emTRSwMaxM9
-         9PzK1T9hSAQnChIfuDCJXeDaDtgLsBMReGL9sRqQ=
+        b=vZpylrU37F7CdHxpA9bivckjSZ1+koEVxFZ1z+YOp1Y33JyBJrQap+VnPtPzUBk9C
+         rBOci+nEu+LxdX39T2Q3b7fWnHOdM85Te/lmRpUGubuqq7D0iiRplNEwTnLU6OZiwy
+         q+Cy2QZQlr71FLkaQXmEIryZ1x0Pdbdha+azM7cs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 113/171] phylib: fix potential use-after-free
-Date:   Mon, 31 Jan 2022 11:56:18 +0100
-Message-Id: <20220131105233.857125202@linuxfoundation.org>
+        stable@vger.kernel.org, Jianguo Wu <wujianguo@chinatelecom.cn>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 116/200] net-procfs: show net devices bound packet types
+Date:   Mon, 31 Jan 2022 11:56:19 +0100
+Message-Id: <20220131105237.479975552@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,55 +45,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <kabel@kernel.org>
+From: Jianguo Wu <wujianguo@chinatelecom.cn>
 
-[ Upstream commit cbda1b16687580d5beee38273f6241ae3725960c ]
+commit 1d10f8a1f40b965d449e8f2d5ed7b96a7c138b77 upstream.
 
-Commit bafbdd527d56 ("phylib: Add device reset GPIO support") added call
-to phy_device_reset(phydev) after the put_device() call in phy_detach().
+After commit:7866a621043f ("dev: add per net_device packet type chains"),
+we can not get packet types that are bound to a specified net device by
+/proc/net/ptype, this patch fix the regression.
 
-The comment before the put_device() call says that the phydev might go
-away with put_device().
+Run "tcpdump -i ens192 udp -nns0" Before and after apply this patch:
 
-Fix potential use-after-free by calling phy_device_reset() before
-put_device().
+Before:
+  [root@localhost ~]# cat /proc/net/ptype
+  Type Device      Function
+  0800          ip_rcv
+  0806          arp_rcv
+  86dd          ipv6_rcv
 
-Fixes: bafbdd527d56 ("phylib: Add device reset GPIO support")
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220119162748.32418-1-kabel@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+After:
+  [root@localhost ~]# cat /proc/net/ptype
+  Type Device      Function
+  ALL  ens192   tpacket_rcv
+  0800          ip_rcv
+  0806          arp_rcv
+  86dd          ipv6_rcv
+
+v1 -> v2:
+  - fix the regression rather than adding new /proc API as
+    suggested by Stephen Hemminger.
+
+Fixes: 7866a621043f ("dev: add per net_device packet type chains")
+Signed-off-by: Jianguo Wu <wujianguo@chinatelecom.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/phy_device.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/core/net-procfs.c |   35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 4f9990b47a377..28f4a383aba72 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -1746,6 +1746,9 @@ void phy_detach(struct phy_device *phydev)
- 	    phy_driver_is_genphy_10g(phydev))
- 		device_release_driver(&phydev->mdio.dev);
+--- a/net/core/net-procfs.c
++++ b/net/core/net-procfs.c
+@@ -190,12 +190,23 @@ static const struct seq_operations softn
+ 	.show  = softnet_seq_show,
+ };
  
-+	/* Assert the reset signal */
-+	phy_device_reset(phydev, 1);
+-static void *ptype_get_idx(loff_t pos)
++static void *ptype_get_idx(struct seq_file *seq, loff_t pos)
+ {
++	struct list_head *ptype_list = NULL;
+ 	struct packet_type *pt = NULL;
++	struct net_device *dev;
+ 	loff_t i = 0;
+ 	int t;
+ 
++	for_each_netdev_rcu(seq_file_net(seq), dev) {
++		ptype_list = &dev->ptype_all;
++		list_for_each_entry_rcu(pt, ptype_list, list) {
++			if (i == pos)
++				return pt;
++			++i;
++		}
++	}
 +
- 	/*
- 	 * The phydev might go away on the put_device() below, so avoid
- 	 * a use-after-free bug by reading the underlying bus first.
-@@ -1757,9 +1760,6 @@ void phy_detach(struct phy_device *phydev)
- 		ndev_owner = dev->dev.parent->driver->owner;
- 	if (ndev_owner != bus->owner)
- 		module_put(bus->owner);
--
--	/* Assert the reset signal */
--	phy_device_reset(phydev, 1);
+ 	list_for_each_entry_rcu(pt, &ptype_all, list) {
+ 		if (i == pos)
+ 			return pt;
+@@ -216,22 +227,40 @@ static void *ptype_seq_start(struct seq_
+ 	__acquires(RCU)
+ {
+ 	rcu_read_lock();
+-	return *pos ? ptype_get_idx(*pos - 1) : SEQ_START_TOKEN;
++	return *pos ? ptype_get_idx(seq, *pos - 1) : SEQ_START_TOKEN;
  }
- EXPORT_SYMBOL(phy_detach);
  
--- 
-2.34.1
-
+ static void *ptype_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ {
++	struct net_device *dev;
+ 	struct packet_type *pt;
+ 	struct list_head *nxt;
+ 	int hash;
+ 
+ 	++*pos;
+ 	if (v == SEQ_START_TOKEN)
+-		return ptype_get_idx(0);
++		return ptype_get_idx(seq, 0);
+ 
+ 	pt = v;
+ 	nxt = pt->list.next;
++	if (pt->dev) {
++		if (nxt != &pt->dev->ptype_all)
++			goto found;
++
++		dev = pt->dev;
++		for_each_netdev_continue_rcu(seq_file_net(seq), dev) {
++			if (!list_empty(&dev->ptype_all)) {
++				nxt = dev->ptype_all.next;
++				goto found;
++			}
++		}
++
++		nxt = ptype_all.next;
++		goto ptype_all;
++	}
++
+ 	if (pt->type == htons(ETH_P_ALL)) {
++ptype_all:
+ 		if (nxt != &ptype_all)
+ 			goto found;
+ 		hash = 0;
 
 

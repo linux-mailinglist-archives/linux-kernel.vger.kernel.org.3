@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A59144A4461
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B33D4A42B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378721AbiAaL3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:29:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37606 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377402AbiAaLSM (ORCPT
+        id S1377033AbiAaLNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377388AbiAaLJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:18:12 -0500
+        Mon, 31 Jan 2022 06:09:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB38C0604EE;
+        Mon, 31 Jan 2022 03:07:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5336EB82A61;
-        Mon, 31 Jan 2022 11:18:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976A9C340E8;
-        Mon, 31 Jan 2022 11:18:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E6F660E76;
+        Mon, 31 Jan 2022 11:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AECC340EE;
+        Mon, 31 Jan 2022 11:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627890;
-        bh=zQGbytej+hfBcd7CzPG1kNgAXhdOl0s9NMF5c/xeaWE=;
+        s=korg; t=1643627253;
+        bh=TEQ4QtW897KUpyACEqK/a2F+QVmtupwqDs42RMlB7oc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bDrZm5o+Ud6MsANM2c2iC9ECTrA7QC71lAr6Zb7Oo7mX9TPjPm/LvKsJ2OTLkpmBS
-         6AFQNsT3AQtSoafXgrkUIHZMHy6MTRpPwzpMictZu1qRkFgRw5SIZN9Qi7MK5dMhzE
-         H7Fa1sFfOXbghPrmheNeD5JKUfEftBPGg4ufdTTI=
+        b=1LjTjTWJ2WKsaJDBD9aHrTwuTAJ5hplR8xBao1yrLrN4PtKEwXLHqUPo1yXLSOC7O
+         am7i/z8Ps2YGV6o1qlcGzuPzu57PhdMrEQvpS12nP52x8tWXPXsUljt9Nmziy0BmCs
+         e1ja2nwmFVuo4K+b0awPNkGH+TtHkNsXk37SGfCc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        Mathias Krause <minipli@grsecurity.net>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.16 024/200] ucount:  Make get_ucount a safe get_user replacement
-Date:   Mon, 31 Jan 2022 11:54:47 +0100
-Message-Id: <20220131105234.384457549@linuxfoundation.org>
+        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Subject: [PATCH 5.15 023/171] ceph: properly put ceph_string reference after async create attempt
+Date:   Mon, 31 Jan 2022 11:54:48 +0100
+Message-Id: <20220131105230.806451264@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,57 +48,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Jeff Layton <jlayton@kernel.org>
 
-commit f9d87929d451d3e649699d0f1d74f71f77ad38f5 upstream.
+commit 932a9b5870d38b87ba0a9923c804b1af7d3605b9 upstream.
 
-When the ucount code was refactored to create get_ucount it was missed
-that some of the contexts in which a rlimit is kept elevated can be
-the only reference to the user/ucount in the system.
+The reference acquired by try_prep_async_create is currently leaked.
+Ensure we put it.
 
-Ordinary ucount references exist in places that also have a reference
-to the user namspace, but in POSIX message queues, the SysV shm code,
-and the SIGPENDING code there is no independent user namespace
-reference.
-
-Inspection of the the user_namespace show no instance of circular
-references between struct ucounts and the user_namespace.  So
-hold a reference from struct ucount to i's user_namespace to
-resolve this problem.
-
-Link: https://lore.kernel.org/lkml/YZV7Z+yXbsx9p3JN@fixkernel.com/
-Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-Reported-by: Mathias Krause <minipli@grsecurity.net>
-Tested-by: Mathias Krause <minipli@grsecurity.net>
-Reviewed-by: Mathias Krause <minipli@grsecurity.net>
-Reviewed-by: Alexey Gladkov <legion@kernel.org>
-Fixes: d64696905554 ("Reimplement RLIMIT_SIGPENDING on top of ucounts")
-Fixes: 6e52a9f0532f ("Reimplement RLIMIT_MSGQUEUE on top of ucounts")
-Fixes: d7c9e99aee48 ("Reimplement RLIMIT_MEMLOCK on top of ucounts")
 Cc: stable@vger.kernel.org
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Fixes: 9a8d03ca2e2c ("ceph: attempt to do async create when possible")
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Reviewed-by: Ilya Dryomov <idryomov@gmail.com>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/ucount.c |    2 ++
+ fs/ceph/file.c |    2 ++
  1 file changed, 2 insertions(+)
 
---- a/kernel/ucount.c
-+++ b/kernel/ucount.c
-@@ -190,6 +190,7 @@ struct ucounts *alloc_ucounts(struct use
- 			kfree(new);
- 		} else {
- 			hlist_add_head(&new->node, hashent);
-+			get_user_ns(new->ns);
- 			spin_unlock_irq(&ucounts_lock);
- 			return new;
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -744,8 +744,10 @@ retry:
+ 				restore_deleg_ino(dir, req->r_deleg_ino);
+ 				ceph_mdsc_put_request(req);
+ 				try_async = false;
++				ceph_put_string(rcu_dereference_raw(lo.pool_ns));
+ 				goto retry;
+ 			}
++			ceph_put_string(rcu_dereference_raw(lo.pool_ns));
+ 			goto out_req;
  		}
-@@ -210,6 +211,7 @@ void put_ucounts(struct ucounts *ucounts
- 	if (atomic_dec_and_lock_irqsave(&ucounts->count, &ucounts_lock, flags)) {
- 		hlist_del_init(&ucounts->node);
- 		spin_unlock_irqrestore(&ucounts_lock, flags);
-+		put_user_ns(ucounts->ns);
- 		kfree(ucounts);
  	}
- }
 
 

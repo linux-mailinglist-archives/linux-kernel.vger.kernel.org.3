@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B5B4A4C31
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C164A4C32
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350112AbiAaQdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:33:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49085 "EHLO
+        id S1380488AbiAaQd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:33:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50339 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380491AbiAaQdQ (ORCPT
+        by vger.kernel.org with ESMTP id S1350073AbiAaQdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:33:16 -0500
+        Mon, 31 Jan 2022 11:33:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643646796;
+        s=mimecast20190719; t=1643646801;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ybmiamaJyQbtkZkDBfGYUzoim24eO3SbNNrD1ZW6zsM=;
-        b=HufdRVIMeyoxVgGXGRLJKg02MSsor6adzUdYnC5cYLgtYg9bMoj99k0Sx02ev68joA/+pW
-        pru3qWwxsuZTozxkTDLgP8YHDeMCCdixPKetmsL4JcoiFx56AR6LTKYo+flyaQNHxIYRd0
-        OPurkKwydnGZj+u1OO5oL43v1Qb9RGY=
+        bh=yJs7IHJWJFW3BFUXsLfDUvtzfhZ2GWsqY1Ai0k1O2Gw=;
+        b=SdKlk7xd9oEMAQWaqeq5omyhqsfVosuCSVkjYD47Yt04WooGMj6YpUK4g+nVZTxu//xvqd
+        A0YiHKIB5szrOoT5pC43Jlr+HifAV9g6MU0kVhF6atgKsh9Jb91boqH+y/7uXzH0gC+yOO
+        GY//SiiqBMVuGkmELKLiXOy61jcWA54=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-edoI-CQNOSet1yuZVdhQBA-1; Mon, 31 Jan 2022 11:33:12 -0500
-X-MC-Unique: edoI-CQNOSet1yuZVdhQBA-1
+ us-mta-631-D365DQlVNt-QUhpVEQfznQ-1; Mon, 31 Jan 2022 11:33:17 -0500
+X-MC-Unique: D365DQlVNt-QUhpVEQfznQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E80A7760C1;
-        Mon, 31 Jan 2022 16:33:08 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0DE75760C1;
+        Mon, 31 Jan 2022 16:33:15 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.193.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30980798C6;
-        Mon, 31 Jan 2022 16:33:03 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 720FD798CD;
+        Mon, 31 Jan 2022 16:33:09 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -60,9 +60,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
         Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v3 5/9] mm/huge_memory: streamline COW logic in do_huge_pmd_wp_page()
-Date:   Mon, 31 Jan 2022 17:29:35 +0100
-Message-Id: <20220131162940.210846-6-david@redhat.com>
+Subject: [PATCH v3 6/9] mm/khugepaged: remove reuse_swap_page() usage
+Date:   Mon, 31 Jan 2022 17:29:36 +0100
+Message-Id: <20220131162940.210846-7-david@redhat.com>
 In-Reply-To: <20220131162940.210846-1-david@redhat.com>
 References: <20220131162940.210846-1-david@redhat.com>
 MIME-Version: 1.0
@@ -72,118 +72,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We currently have a different COW logic for anon THP than we have for
-ordinary anon pages in do_wp_page(): the effect is that the issue reported
-in CVE-2020-29374 is currently still possible for anon THP: an unintended
-information leak from the parent to the child.
+reuse_swap_page() currently indicates if we can write to an anon page
+without COW. A COW is required if the page is shared by multiple
+processes (either already mapped or via swap entries) or if there is
+concurrent writeback that cannot tolerate concurrent page modifications.
 
-Let's apply the same logic (page_count() == 1), with similar
-optimizations to remove additional references first as we really want to
-avoid PTE-mapping the THP and copying individual pages best we can.
+However, in the context of khugepaged we're not actually going to write
+to a read-only mapped page, we'll copy the page content to our newly
+allocated THP and map that THP writable. All we have to make sure
+is that the read-only mapped page we're about to copy won't get reused
+by another process sharing the page, otherwise, page content would
+get modified. But that is already guaranteed via multiple mechanisms
+(e.g., holding a reference, holding the page lock, removing the rmap after
+ copying the page).
 
-If we end up with a page that has page_count() != 1, we'll have to PTE-map
-the THP and fallback to do_wp_page(), which will always copy the page.
+The swapcache handling was introduced in commit 10359213d05a ("mm:
+incorporate read-only pages into transparent huge pages") and it sounds
+like it merely wanted to mimic what do_swap_page() would do when trying
+to map a page obtained via the swapcache writable.
 
-Note that KSM does not apply to THP.
-
-I. Interaction with the swapcache and writeback
-
-While a THP is in the swapcache, the swapcache holds one reference on each
-subpage of the THP. So with PageSwapCache() set, we expect as many
-additional references as we have subpages. If we manage to remove the
-THP from the swapcache, all these references will be gone.
-
-Usually, a THP is not split when entered into the swapcache and stays a
-compound page. However, try_to_unmap() will PTE-map the THP and use PTE
-swap entries. There are no PMD swap entries for that purpose, consequently,
-we always only swapin subpages into PTEs.
-
-Removing a page from the swapcache can fail either when there are remaining
-swap entries (in which case COW is the right thing to do) or if the page is
-currently under writeback.
-
-Having a locked, R/O PMD-mapped THP that is in the swapcache seems to be
-possible only in corner cases, for example, if try_to_unmap() failed
-after adding the page to the swapcache. However, it's comparatively easy to
-handle.
-
-As we have to fully unmap a THP before starting writeback, and swapin is
-always done on the PTE level, we shouldn't find a R/O PMD-mapped THP in the
-swapcache that is under writeback. This should at least leave writeback
-out of the picture.
-
-II. Interaction with GUP references
-
-Having a R/O PMD-mapped THP with GUP references (i.e., R/O references)
-will result in PTE-mapping the THP on a write fault. Similar to ordinary
-anon pages, do_wp_page() will have to copy sub-pages and result in a
-disconnect between the GUP references and the pages actually mapped into
-the page tables. To improve the situation in the future, we'll need
-additional handling to mark anonymous pages as definitely exclusive to a
-single process, only allow GUP pins on exclusive anon pages, and
-disallow sharing of exclusive anon pages with GUP pins e.g., during
-fork().
-
-III. Interaction with references from LRU pagevecs
-
-There is no need to try draining the (local) LRU pagevecs in case we would
-stumble over a !PageLRU() page: folio_add_lru() and friends will always
-flush the affected pagevec after adding a compound page to it
-immediately -- pagevec_add_and_need_flush() always returns "true" for them.
-Note that the LRU pagevecs will hold a reference on the compound page for
-a very short time, between adding the page to the pagevec and draining it
-immediately afterwards.
-
-IV. Interaction with speculative/temporary references
-
-Similar to ordinary anon pages, other speculative/temporary references on
-the THP, for example, from the pagecache or page migration code, will
-disallow exclusive reuse of the page. We'll have to PTE-map the THP.
+As that logic is unnecessary, let's just remove it, removing the last
+user of reuse_swap_page().
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/huge_memory.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ include/trace/events/huge_memory.h |  1 -
+ mm/khugepaged.c                    | 11 -----------
+ 2 files changed, 12 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 406a3c28c026..f34ebc5cb827 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1303,7 +1303,6 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 	page = pmd_page(orig_pmd);
- 	VM_BUG_ON_PAGE(!PageHead(page), page);
+diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
+index 4fdb14a81108..d651f3437367 100644
+--- a/include/trace/events/huge_memory.h
++++ b/include/trace/events/huge_memory.h
+@@ -29,7 +29,6 @@
+ 	EM( SCAN_VMA_NULL,		"vma_null")			\
+ 	EM( SCAN_VMA_CHECK,		"vma_check_failed")		\
+ 	EM( SCAN_ADDRESS_RANGE,		"not_suitable_address_range")	\
+-	EM( SCAN_SWAP_CACHE_PAGE,	"page_swap_cache")		\
+ 	EM( SCAN_DEL_PAGE_LRU,		"could_not_delete_page_from_lru")\
+ 	EM( SCAN_ALLOC_HUGE_PAGE_FAIL,	"alloc_huge_page_failed")	\
+ 	EM( SCAN_CGROUP_CHARGE_FAIL,	"ccgroup_charge_failed")	\
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 35f14d0a00a6..9da9325ab4d4 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -45,7 +45,6 @@ enum scan_result {
+ 	SCAN_VMA_NULL,
+ 	SCAN_VMA_CHECK,
+ 	SCAN_ADDRESS_RANGE,
+-	SCAN_SWAP_CACHE_PAGE,
+ 	SCAN_DEL_PAGE_LRU,
+ 	SCAN_ALLOC_HUGE_PAGE_FAIL,
+ 	SCAN_CGROUP_CHARGE_FAIL,
+@@ -682,16 +681,6 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
+ 			result = SCAN_PAGE_COUNT;
+ 			goto out;
+ 		}
+-		if (!pte_write(pteval) && PageSwapCache(page) &&
+-				!reuse_swap_page(page)) {
+-			/*
+-			 * Page is in the swap cache and cannot be re-used.
+-			 * It cannot be collapsed into a THP.
+-			 */
+-			unlock_page(page);
+-			result = SCAN_SWAP_CACHE_PAGE;
+-			goto out;
+-		}
  
--	/* Lock page for reuse_swap_page() */
- 	if (!trylock_page(page)) {
- 		get_page(page);
- 		spin_unlock(vmf->ptl);
-@@ -1319,10 +1318,15 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 	}
- 
- 	/*
--	 * We can only reuse the page if nobody else maps the huge page or it's
--	 * part.
-+	 * See do_wp_page(): we can only map the page writable if there are
-+	 * no additional references. Note that we always drain the LRU
-+	 * pagevecs immediately after adding a THP.
- 	 */
--	if (reuse_swap_page(page)) {
-+	if (page_count(page) > 1 + PageSwapCache(page) * thp_nr_pages(page))
-+		goto unlock_fallback;
-+	if (PageSwapCache(page))
-+		try_to_free_swap(page);
-+	if (page_count(page) == 1) {
- 		pmd_t entry;
- 		entry = pmd_mkyoung(orig_pmd);
- 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
-@@ -1333,6 +1337,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 		return VM_FAULT_WRITE;
- 	}
- 
-+unlock_fallback:
- 	unlock_page(page);
- 	spin_unlock(vmf->ptl);
- fallback:
+ 		/*
+ 		 * Isolate the page to avoid collapsing an hugepage
 -- 
 2.34.1
 

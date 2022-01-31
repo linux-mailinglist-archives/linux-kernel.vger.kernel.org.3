@@ -2,93 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9022A4A3F01
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBCC4A3F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbiAaJDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 04:03:03 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:34058
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234270AbiAaJC7 (ORCPT
+        id S234674AbiAaJH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 04:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234358AbiAaJHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:02:59 -0500
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0B2603F043
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643619778;
-        bh=ppUyIZk21EsCgtGpUgqpX7jhTbWdZVwa2chlS2CUxiA=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=j00SFBrf8UW70lRs3Qv0PqUQIbeIp+uEs/o5ILeNhFPwSKRZDD/qCOpR5YudqX900
-         B7D/i18OcG8wnWqXoNIDIOAE6jQHae3onit0u2b8m9xkwg5SWJ/eytMLxEq8FN9J0/
-         sH+xRZP4fGljwvUa5/TXiymnGpZCOM80iq66ZIjko40XsDciFPFUr2bV/Fj12VaHZ6
-         2NbBboxRHD7wh21WhQK3kUz4qcrrDcT0USqn1jHOgYJq+kkRfHoliiTWJNTOxhhsfn
-         6s2SqKBoQAYgjoTBn1ZkMv95Yn9b2j2a+mReQIUxv0AOHM7RTbpDN509cBBzfUaJUU
-         ITHunvxUecMtw==
-Received: by mail-wm1-f72.google.com with SMTP id q127-20020a1ca785000000b00352a4860babso1822239wme.0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 01:02:58 -0800 (PST)
+        Mon, 31 Jan 2022 04:07:47 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2752C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 01:07:43 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id g8-20020adfa488000000b001d8e6467fe8so4545116wrb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 01:07:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PGLVIgpx7K8YPtd39QgkpU42R1uwUVJe3VkPkvQuvOo=;
+        b=YlfBbeCg9MP9aWSNeAsDkv+aT9+uOzfFIOsWSG2YJUVqfbnwYsz5e2XF4/DRfg5+aj
+         NyDx3X+NZYcHJ6nJeSJK3DzerGlQw4eMknMKueGgrfd1BpHx2RtwTFHJL7MeOzKgmP2n
+         QOOUTF3U+KhQhCy8+6UK55z5b904y1g8GunBT9MSxXyaJyUrpf0hgZ47NmbvNFYvozDZ
+         S0O3KZHKdsdNAMM1uBL6XCy4EkUlWuUMlSHX5Tk/YaTDwKScW7+itcpnf1JMYM1UK/Xx
+         EER5yR6XgGvT8/nnhuWtj2ScsY+843EKbFk+kriDrbD7zbmg8sdUMHkD+VEQy1In42vB
+         gAyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ppUyIZk21EsCgtGpUgqpX7jhTbWdZVwa2chlS2CUxiA=;
-        b=rr0hfEYDMSUFAGEiuCvoPZPmzZAKgmeWc6ntEWCuYxOQg771oO2WpS/IJuPAsSU6Ft
-         AWhrz1UJ9EpNaYklkNSWUJMdVmmuOeEHrzfy2g7F/qO/6k1cDjXS9Y+uA1q9xe/miPf0
-         x9OAbPMLor6yErdyxakT1m+lDJytdqTAeNy5ox4Jc02o48cEdWVOLDtVgnaOXpPbh9bP
-         D7IYF42xQv4MEjb7D/cs35Hl/sEoqHrddZAKRiiqtPC87UUUmdpxkTWHsEY19Asv2jtj
-         Eq4Ds/NYAM3uTwZVAccbTHexGp1ueud2FtMtJpXXvL0CP1uDpk+oGmjbOktWnu9uHUwi
-         QDrg==
-X-Gm-Message-State: AOAM533gey+Rv+lXYMOI0i0zaVo/NFo4LIw/u8fuetJnO6IIncyQKNSk
-        Z5Iy2Y0EVNY6rB8Di7Uv2vSIct4N91GlEOHeCIRl106eu0rOklLTc4C6XBJe8QB0XHc2ixXpaAy
-        hLOir6H3pqj6XxyCotybEpbHp6eVBhugs4jjkALwE5g==
-X-Received: by 2002:adf:f9ca:: with SMTP id w10mr16922950wrr.624.1643619777821;
-        Mon, 31 Jan 2022 01:02:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIXwL3SArzS0IsRbkLooNyKwIGddVuNDzfmyMXBjK4sAwNO3wv+Nkhpfa309F808WUtqkcLQ==
-X-Received: by 2002:adf:f9ca:: with SMTP id w10mr16922933wrr.624.1643619777693;
-        Mon, 31 Jan 2022 01:02:57 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id c8sm9219866wmq.34.2022.01.31.01.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 01:02:56 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
-Subject: Re: (subset) [PATCH 2/5] arm64: dts: exynos: drop unneeded syscon phandle in Exynos5433 LPASS
-Date:   Mon, 31 Jan 2022 10:02:54 +0100
-Message-Id: <164361966594.14585.5432470637577397205.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220129175332.298666-2-krzysztof.kozlowski@canonical.com>
-References: <20220129175332.298666-1-krzysztof.kozlowski@canonical.com> <20220129175332.298666-2-krzysztof.kozlowski@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PGLVIgpx7K8YPtd39QgkpU42R1uwUVJe3VkPkvQuvOo=;
+        b=Ipckw+wjghYS3dkTL+NncxEyC8li4Mz3tN3PXD9B5BbtuRRIDHS1zQpn4wnHx4lstx
+         v/pyLEak1umVyWk6rMJ1Qz8wCgGxVTUCZKIhxCoFTRaNCXv0jyMHgBEl08Jk+GJ1A1lq
+         OuSptJQLcYh34CNHS/kgDz7chPmiZ5/NRYMJtTcwMzpBzOgIDUAYmm/sxo/VNWJcpFfW
+         toCNvPf5irKqRzApdoWb8nHaX4NbQww20gJQMNzDMy/MDu5Fe+sUdjEBzpRwMAyseaGA
+         UIjqGpl61HQ4hbduzdq5BBC/W0QnlyC/agomb+TKfBUnqe0r49Ka2QqvCNfJMeOYC3qD
+         tjxQ==
+X-Gm-Message-State: AOAM5312KUBnXgwrx1riheBadoAxthq5RBwqR+ey600jIJll1xM+di8j
+        xFPb70mNbWh5fKgjs1NG4GyKz5kb9Q==
+X-Google-Smtp-Source: ABdhPJyI5AvPihK6ZnPDWgmdkvKFOrVo/w859xAmb33XpJy9pkRwfhNZiFIW76PqstZoFJYqbtSTmsxxSA==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:9caa:cc34:599f:ecd4])
+ (user=elver job=sendgmr) by 2002:a5d:4c88:: with SMTP id z8mr16383561wrs.209.1643620061954;
+ Mon, 31 Jan 2022 01:07:41 -0800 (PST)
+Date:   Mon, 31 Jan 2022 10:05:20 +0100
+Message-Id: <20220131090521.1947110-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH v2 1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 18:53:29 +0100, Krzysztof Kozlowski wrote:
-> Exynos5433 LPASS audio node does not use syscon phandle since commit
-> addebf1588ab ("mfd: exynos-lpass: Remove pad retention control").  It
-> was also dropped from bindings.
-> 
-> 
+The randomize_kstack_offset feature is unconditionally compiled in when
+the architecture supports it.
 
-Applied, thanks!
+To add constraints on compiler versions, we require a dedicated Kconfig
+variable. Therefore, introduce RANDOMIZE_KSTACK_OFFSET.
 
-[2/5] arm64: dts: exynos: drop unneeded syscon phandle in Exynos5433 LPASS
-      commit: f1afd24c3f532defa77c2d6e069b82dc7d6a9129
+Furthermore, this option is now also configurable by EXPERT kernels:
+while the feature is supposed to have zero performance overhead when
+disabled, due to its use of static branches, there are few cases where
+giving a distribution the option to disable the feature entirely makes
+sense. For example, in very resource constrained environments, which
+would never enable the feature to begin with, in which case the
+additional kernel code size increase would be redundant.
 
-Best regards,
+Signed-off-by: Marco Elver <elver@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/Kconfig                     | 23 ++++++++++++++++++-----
+ include/linux/randomize_kstack.h |  5 +++++
+ init/main.c                      |  2 +-
+ 3 files changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 678a80713b21..2cde48d9b77c 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1159,16 +1159,29 @@ config HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+ 	  to the compiler, so it will attempt to add canary checks regardless
+ 	  of the static branch state.
+ 
+-config RANDOMIZE_KSTACK_OFFSET_DEFAULT
+-	bool "Randomize kernel stack offset on syscall entry"
++config RANDOMIZE_KSTACK_OFFSET
++	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
++	default y
+ 	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+ 	help
+ 	  The kernel stack offset can be randomized (after pt_regs) by
+ 	  roughly 5 bits of entropy, frustrating memory corruption
+ 	  attacks that depend on stack address determinism or
+-	  cross-syscall address exposures. This feature is controlled
+-	  by kernel boot param "randomize_kstack_offset=on/off", and this
+-	  config chooses the default boot state.
++	  cross-syscall address exposures.
++
++	  The feature is controlled via the "randomize_kstack_offset=on/off"
++	  kernel boot param, and if turned off has zero overhead due to its use
++	  of static branches (see JUMP_LABEL).
++
++	  If unsure, say Y.
++
++config RANDOMIZE_KSTACK_OFFSET_DEFAULT
++	bool "Default state of kernel stack offset randomization"
++	depends on RANDOMIZE_KSTACK_OFFSET
++	help
++	  Kernel stack offset randomization is controlled by kernel boot param
++	  "randomize_kstack_offset=on/off", and this config chooses the default
++	  boot state.
+ 
+ config ARCH_OPTIONAL_KERNEL_RWX
+ 	def_bool n
+diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
+index bebc911161b6..91f1b990a3c3 100644
+--- a/include/linux/randomize_kstack.h
++++ b/include/linux/randomize_kstack.h
+@@ -2,6 +2,7 @@
+ #ifndef _LINUX_RANDOMIZE_KSTACK_H
+ #define _LINUX_RANDOMIZE_KSTACK_H
+ 
++#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+ #include <linux/kernel.h>
+ #include <linux/jump_label.h>
+ #include <linux/percpu-defs.h>
+@@ -50,5 +51,9 @@ void *__builtin_alloca(size_t size);
+ 		raw_cpu_write(kstack_offset, offset);			\
+ 	}								\
+ } while (0)
++#else /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
++#define add_random_kstack_offset()		do { } while (0)
++#define choose_random_kstack_offset(rand)	do { } while (0)
++#endif /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
+ 
+ #endif
+diff --git a/init/main.c b/init/main.c
+index 65fa2e41a9c0..560f45c27ffe 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -853,7 +853,7 @@ static void __init mm_init(void)
+ 	pti_init();
+ }
+ 
+-#ifdef CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
++#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+ DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
+ 			   randomize_kstack_offset);
+ DEFINE_PER_CPU(u32, kstack_offset);
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+2.35.0.rc2.247.g8bbb082509-goog
+

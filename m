@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613004A44CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DAD4A43B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376863AbiAaLcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:32:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55766 "EHLO
+        id S1377646AbiAaLXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:23:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45430 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377349AbiAaLWq (ORCPT
+        with ESMTP id S1377160AbiAaLNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:22:46 -0500
+        Mon, 31 Jan 2022 06:13:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 548C460B98;
-        Mon, 31 Jan 2022 11:22:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 186D7C340E8;
-        Mon, 31 Jan 2022 11:22:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ED756114C;
+        Mon, 31 Jan 2022 11:13:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4ACFC340E8;
+        Mon, 31 Jan 2022 11:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628164;
-        bh=snsD1HBDq0IUrhswABMiH7ZQhyb/2bTDJidnpoFqPzw=;
+        s=korg; t=1643627623;
+        bh=GCvIH/oJjBW/EhQKy4afOvfc/4c+zPQYSjPhbyL4AIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AQjHL1rc2c9gifPicgBFdly6H8ygfUfQS1kGfJcsP44oIQvDiKtyrw6ikWOpkdTN+
-         iHdG9y791BLBxw+VNTj5HW3EIJHZSasT8LQnYm32HlgGLjQZ5fJ6wZIrqzU4pqcz0c
-         kB+FPaNkWZmLirCohxhg8EkAPzyBoUOEuN1gCuBY=
+        b=MzbacnBsx8Gtn99hE4szt7e7jZ6l1jrnO/o9+qRqgPzKL5OrEy/WwFHXjMfYiO0LG
+         wC6Vc190SfPRRqIxn248hwo1pQBqpG5qBw/uB1S5mDgq3slKTInBIoYkqD/14gpWQV
+         zCtScl/lt1KCnfdWkAxRgO6wWc0l/UYjrtO8NrRo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 146/200] octeontx2-pf: cn10k: Ensure valid pointers are freed to aura
-Date:   Mon, 31 Jan 2022 11:56:49 +0100
-Message-Id: <20220131105238.475690592@linuxfoundation.org>
+Subject: [PATCH 5.15 145/171] drm/msm/dpu: invalid parameter check in dpu_setup_dspp_pcc
+Date:   Mon, 31 Jan 2022 11:56:50 +0100
+Message-Id: <20220131105234.925338510@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,52 +47,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geetha sowjanya <gakula@marvell.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit c5d731c54a17677939bd59ee8be4ed74d7485ba4 ]
+[ Upstream commit 170b22234d5495f5e0844246e23f004639ee89ba ]
 
-While freeing SQB pointers to aura, driver first memcpy to
-target address and then triggers lmtst operation to free pointer
-to the aura. We need to ensure(by adding dmb barrier)that memcpy
-is finished before pointers are freed to the aura. This patch also
-adds the missing sq context structure entry in debugfs.
+The function performs a check on the "ctx" input parameter, however, it
+is used before the check.
 
-Fixes: ef6c8da71eaf ("octeontx2-pf: cn10K: Reserve LMTST lines per core")
-Signed-off-by: Geetha sowjanya <gakula@marvell.com>
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Initialize the "base" variable after the sanity check to avoid a
+possible NULL pointer dereference.
+
+Fixes: 4259ff7ae509e ("drm/msm/dpu: add support for pcc color block in dpu driver")
+Addresses-Coverity-ID: 1493866 ("Null pointer dereference")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Link: https://lore.kernel.org/r/20220109192431.135949-1-jose.exposito89@gmail.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c  | 2 ++
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h | 1 +
- 2 files changed, 3 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-index a09a507369ac3..d1eddb769a419 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-@@ -1224,6 +1224,8 @@ static void print_nix_cn10k_sq_ctx(struct seq_file *m,
- 	seq_printf(m, "W3: head_offset\t\t\t%d\nW3: smenq_next_sqb_vld\t\t%d\n\n",
- 		   sq_ctx->head_offset, sq_ctx->smenq_next_sqb_vld);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
+index a98e964c3b6fa..355894a3b48c3 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
+@@ -26,9 +26,16 @@ static void dpu_setup_dspp_pcc(struct dpu_hw_dspp *ctx,
+ 		struct dpu_hw_pcc_cfg *cfg)
+ {
  
-+	seq_printf(m, "W3: smq_next_sq_vld\t\t%d\nW3: smq_pend\t\t\t%d\n",
-+		   sq_ctx->smq_next_sq_vld, sq_ctx->smq_pend);
- 	seq_printf(m, "W4: next_sqb \t\t\t%llx\n\n", sq_ctx->next_sqb);
- 	seq_printf(m, "W5: tail_sqb \t\t\t%llx\n\n", sq_ctx->tail_sqb);
- 	seq_printf(m, "W6: smenq_sqb \t\t\t%llx\n\n", sq_ctx->smenq_sqb);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-index 61e52812983fa..14509fc64cce9 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-@@ -603,6 +603,7 @@ static inline void __cn10k_aura_freeptr(struct otx2_nic *pfvf, u64 aura,
- 			size++;
- 		tar_addr |=  ((size - 1) & 0x7) << 4;
+-	u32 base = ctx->cap->sblk->pcc.base;
++	u32 base;
+ 
+-	if (!ctx || !base) {
++	if (!ctx) {
++		DRM_ERROR("invalid ctx %pK\n", ctx);
++		return;
++	}
++
++	base = ctx->cap->sblk->pcc.base;
++
++	if (!base) {
+ 		DRM_ERROR("invalid ctx %pK pcc base 0x%x\n", ctx, base);
+ 		return;
  	}
-+	dma_wmb();
- 	memcpy((u64 *)lmt_info->lmt_addr, ptrs, sizeof(u64) * num_ptrs);
- 	/* Perform LMTST flush */
- 	cn10k_lmt_flush(val, tar_addr);
 -- 
 2.34.1
 

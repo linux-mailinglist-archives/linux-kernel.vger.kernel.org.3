@@ -2,121 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 623E34A4892
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCD44A48A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379107AbiAaNsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358762AbiAaNsb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:48:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6724C061714;
-        Mon, 31 Jan 2022 05:48:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34350612B4;
-        Mon, 31 Jan 2022 13:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22C1C340E8;
-        Mon, 31 Jan 2022 13:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643636909;
-        bh=hvWGq6EEMPf49OBk4zZ3xW/NpC/UiTcIU8yTkJHSgi4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oi9IYx8GQc7DsFlm2dleVl8AmVY7R4AbkIcb8hBxQtJSL+69TqptjpsvTjCgQSeC3
-         WOW9qJLVLRyavDFwb3XsXJ+tl3/p6Z0kT60jtxlf5WdkyNIyP1tU0AeJZ135A5BQLQ
-         E1R+3Zz36ZllzAuCAPSiO62pyVGyMD24cKFowLUg=
-Date:   Mon, 31 Jan 2022 14:48:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH v6 02/35] component: Introduce the aggregate bus_type
-Message-ID: <YffoqgmeUdxZ56zB@kroah.com>
-References: <20220127200141.1295328-1-swboyd@chromium.org>
- <20220127200141.1295328-3-swboyd@chromium.org>
+        id S1379163AbiAaNt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:49:56 -0500
+Received: from mga14.intel.com ([192.55.52.115]:62889 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379143AbiAaNtv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:49:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643636991; x=1675172991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CCvnVIfnnsg4Om7JyESlCrRRmCTTcyTfYzN4cwo7ytw=;
+  b=DeFdaTz/knNxNi+CbMLscPuDPIF/G1uOhVFBngH1Z8QYIAC7vel14gl7
+   e3EJOsU0cElivTIfHeTWQ00BS2yqh3uI34HmabpH5q4x7ca/OW3CDFmx9
+   zlAEFaspslHC1lfmhFbt4c8pOjt/PjM8izGkNLe1TTz7TB479pQcceak5
+   o8DCbhh2fwsT/UADRfgFB+cATjsY5MjEfFlOgwdvtKMF8SAlvI4kdoSTb
+   Nc8+IChA9KXVfSNFx5Ql+nYdxDVGAJtyWarHVraFZZ9NpPm8muNI1mZOg
+   E3xjJ6XCwLjqtXW1IfTccqM3WlMLAtWxfli5YW5nh72884h3w8Irnfx4F
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247677792"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="247677792"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:49:49 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="481753169"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:49:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1nEX2v-00Gt4F-Iy;
+        Mon, 31 Jan 2022 15:48:41 +0200
+Date:   Mon, 31 Jan 2022 15:48:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: Re: [PATCH v4 12/20] power: supply: bq25890: Support higher charging
+ voltages through Pump Express+ protocol
+Message-ID: <YffouVvL9M4fch0I@smile.fi.intel.com>
+References: <20220130204557.15662-1-hdegoede@redhat.com>
+ <20220130204557.15662-13-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127200141.1295328-3-swboyd@chromium.org>
+In-Reply-To: <20220130204557.15662-13-hdegoede@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:01:08PM -0800, Stephen Boyd wrote:
-> The component framework only provides 'bind' and 'unbind' callbacks to
-> tell the host driver that it is time to assemble the aggregate driver
-> now that all the components have probed. The component framework doesn't
-> attempt to resolve runtime PM or suspend/resume ordering, and explicitly
-> mentions this in the code. This lack of support leads to some pretty
-> gnarly usages of the 'prepare' and 'complete' power management hooks in
-> drivers that host the aggregate device, and it fully breaks down when
-> faced with ordering shutdown between the various components, the
-> aggregate driver, and the host driver that registers the whole thing.
+On Sun, Jan 30, 2022 at 09:45:49PM +0100, Hans de Goede wrote:
+> From: Yauhen Kharuzhy <jekhor@gmail.com>
 > 
-> In a concrete example, the MSM display driver at drivers/gpu/drm/msm is
-> using 'prepare' and 'complete' to call the drm helpers
-> drm_mode_config_helper_suspend() and drm_mode_config_helper_resume()
-> respectively, so that it can move the aggregate driver suspend/resume
-> callbacks to be before and after the components that make up the drm
-> device call any suspend/resume hooks they have. This only works as long
-> as the component devices don't do anything in their own 'prepare' and
-> 'complete' callbacks. If they did, then the ordering would be incorrect
-> and we would be doing something in the component drivers before the
-> aggregate driver could do anything. Yuck!
+> Add a "linux,pump-express-vbus-max" property which indicates if the Pump
+> Express+ protocol should be used to increase the charging protocol.
 > 
-> Similarly, when trying to add shutdown support to the MSM driver we run
-> across a problem where we're trying to shutdown the drm device via
-> drm_atomic_helper_shutdown(), but some of the devices in the encoder
-> chain have already been shutdown. This time, the component devices
-> aren't the problem (although they could be if they did anything in their
-> shutdown callbacks), but there's a DSI to eDP bridge in the encoder
-> chain that has already been shutdown before the driver hosting the
-> aggregate device runs shutdown. The ordering of driver probe is like
-> this:
+> If this new property is set and a DCP charger is detected then request
+> a higher charging voltage through the Pump Express+ protocol.
 > 
->  1. msm_pdev_probe() (host driver)
->  2. DSI bridge
->  3. aggregate bind
+> So far this new property is only used on x86/ACPI (non devicetree) devs,
+> IOW it is not used in actual devicetree files. The devicetree-bindings
+> maintainers have requested properties like these to not be added to the
+> devicetree-bindings, so the new property is deliberately not added
+> to the existing devicetree-bindings.
 > 
-> When it comes to shutdown we have this order:
-> 
->  1. DSI bridge
->  2. msm_pdev_shutdown() (host driver)
-> 
-> and so the bridge is already off, but we want to communicate to it to
-> turn things off on the display during msm_pdev_shutdown(). Double yuck!
-> Unfortunately, this time we can't split shutdown into multiple phases
-> and swap msm_pdev_shutdown() with the DSI bridge.
-> 
-> Let's make the component_master_ops into an actual device driver that has
-> probe/remove/shutdown functions. The driver will only be bound to the
-> aggregate device once all component drivers have called component_add()
-> to indicate they're ready to assemble the aggregate driver. This allows
-> us to attach shutdown logic (and in the future runtime PM logic) to the
-> aggregate driver so that it runs the hooks in the correct order.
+> Changes by Hans de Goede:
+> - Port to my bq25890 patch-series + various cleanups
+> - Make behavior configurable through a new "linux,pump-express-vbus-max"
+>   device-property
+> - Sleep 1 second before re-checking the Vbus voltage after requesting
+>   it to be raised, to ensure that the ADC has time to sampled the new Vbus
+> - Add VBUSV bq25890_tables[] entry and use it in bq25890_get_vbus_voltage()
+> - Tweak commit message
 
-I know I asked before, but I can not remember the answer.
+...
 
-This really looks like it is turning into the aux bus code.  Why can't
-you just use that instead here for this type of thing?  You are creating
-another bus and drivers for that bus that are "fake" which is great, but
-that's what the aux bus code was supposed to help out with, so we
-wouldn't have to write more of these.
+> +static void bq25890_pump_express_work(struct work_struct *data)
+> +{
+> +	struct bq25890_device *bq =
+> +		container_of(data, struct bq25890_device, pump_express_work.work);
+> +	int voltage, i, ret;
+> +
+> +	dev_dbg(bq->dev, "Start to request input voltage increasing\n");
+> +
+> +	/* Enable current pulse voltage control protocol */
+> +	ret = bq25890_field_write(bq, F_PUMPX_EN, 1);
+> +	if (ret < 0)
+> +		goto error_print;
+> +
+> +	for (i = 0; i < PUMP_EXPRESS_MAX_TRIES; i++) {
 
-So, if this really is different, can you document it here so I remember
-next time you resend this patch series?
+> +		voltage = bq25890_get_vbus_voltage(bq);
+> +		if (voltage < 0)
+> +			goto error_print;
 
-thanks,
+It also can be (at least in align with the rest error paths)
 
-greg k-h
+		ret = bq25890_get_vbus_voltage(bq);
+		if (ret < 0)
+			goto error_print;
+		voltage = ret;
+
+followed up (but not necessarily)...
+
+> +		dev_dbg(bq->dev, "input voltage = %d uV\n", voltage);
+> +
+> +		if ((voltage + PUMP_EXPRESS_VBUS_MARGIN_uV) >
+> +					bq->pump_express_vbus_max)
+> +			break;
+> +
+> +		ret = bq25890_field_write(bq, F_PUMPX_UP, 1);
+> +		if (ret < 0)
+> +			goto error_print;
+> +
+> +		/* Note a single PUMPX up pulse-sequence takes 2.1s */
+> +		ret = regmap_field_read_poll_timeout(bq->rmap_fields[F_PUMPX_UP],
+> +						     ret, !ret, 100000, 3000000);
+> +		if (ret < 0)
+> +			goto error_print;
+> +
+> +		/* Make sure ADC has sampled Vbus before checking again */
+> +		msleep(1000);
+> +	}
+> +
+> +	bq25890_field_write(bq, F_PUMPX_EN, 0);
+> +
+> +	dev_info(bq->dev, "Hi-voltage charging requested, input voltage is %d mV\n",
+> +		 voltage);
+
+> +	return;
+> +error_print:
+
+	if (ret < 0)
+
+But it's up to you.
+
+> +	dev_err(bq->dev, "Failed to request hi-voltage charging\n");
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

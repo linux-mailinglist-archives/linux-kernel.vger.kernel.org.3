@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5844A4F53
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA72F4A4F5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359467AbiAaTVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235454AbiAaTVc (ORCPT
+        id S1359656AbiAaTXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:23:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51788 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359517AbiAaTX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:21:32 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ADBC061714;
-        Mon, 31 Jan 2022 11:21:32 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id s16so13034293pgs.13;
-        Mon, 31 Jan 2022 11:21:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z4fgthDT3x2CEIImte/CKnYW9ye9UcnzsCmxp0s9Vks=;
-        b=kOrsCyFpAdlSWDG167+C7QFyFhW+7sBYPpoG7/XQNbD+9GZndgkz0z77mTGVNW1cq1
-         EUhG+hkVFqOp0nZrZNtaBifFQ09Wg8VjHs/c2eXSb7XqHGh1QPW7wnabEXLko9U7RBC5
-         PSPOtWzlkL9I61L5OeD0sgGYYlyyaXmMUsK1dnYSdP5nApm/D/8gwmGz9/rYrkZ4kba9
-         YRmJZZA80yAIA/3PHjemRIbzOPfXAb/gU9n10q2I/jNKt2iuBkY4zPzBma0ySwrjxoko
-         U3032YumaOeEZ52NqHiGcrUAYq0wOCVmKfJXY+D+3GqLAQGG3SUkAHRSB5Hg/Tr54Xju
-         aPgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z4fgthDT3x2CEIImte/CKnYW9ye9UcnzsCmxp0s9Vks=;
-        b=X65hg26yvdi8cE6xiH+BBhYXzsondylB3OK3Kxaemokci4plX5uR8rVCW48/6QelZ9
-         NkzfAnDwyBMiykDYr4wyqB3MLpIb1ntXOJmP149MW+03HdaM4XF1DnJ+ag7Pzk2VoVqK
-         hYv20JxT36A/O2N4ZhdUtStg/iACFAvyo09ZDQUkwxsKwSI7h0cKPzcld3PkQrSm5rEQ
-         H1Xs+2lM6+3X/xOF7Ta6YUkSyD7uoEzPJHm4L6gnmckPjS5SYsjPYRndtQHWuSgJa8Zw
-         +eJLqV7Q1C1AijMHSBGUuwdOBzjvK+xrJV6BjN32WfAyuLjv47Y9p28u2PJ0TGa/7B+y
-         o1Gw==
-X-Gm-Message-State: AOAM530yrnejVWVe7XWIslpeMDlN97qX6tSP6vqQzLzY0ErqgnI9Sbry
-        l5S3HUXtbxUVlHFaPvPHBBpOsA5sx+I=
-X-Google-Smtp-Source: ABdhPJz0bFZQaFHN5cN/+A5kKAOeKb3894s7s0ePyGNqTjez/HVKmyHjmkHluopPQ5990K4WlN5fqg==
-X-Received: by 2002:a65:6296:: with SMTP id f22mr17602402pgv.320.1643656891836;
-        Mon, 31 Jan 2022 11:21:31 -0800 (PST)
-Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
-        by smtp.gmail.com with ESMTPSA id n2sm29791218pga.39.2022.01.31.11.21.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 11:21:31 -0800 (PST)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: Prioritize extcon over USB role switching API
-Date:   Mon, 31 Jan 2022 11:21:02 -0800
-Message-Id: <20220131192102.4115473-1-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 31 Jan 2022 14:23:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643657007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=r2v/Wpxpyf53Gc+td9aFV8h4H9KkP9JhzJaU9W2Ncas=;
+        b=OYNnFYEX83tX1cAeisMpYbBJWia2nevTeS7bUAsqUdEPAR8lKUrHjS8mZRcHyJKlXFIErg
+        +xXCitGWsMemZRuGXxL0WqUH8eFjfmVrgKcclZFg6M+ZCsUMBSMeTKopue/U1S2/46ZRWZ
+        hQ/9SAiY5Fpfqn4+jCS7PwcaT8js034=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-wGadArTENUapG0zdubBHnQ-1; Mon, 31 Jan 2022 14:23:23 -0500
+X-MC-Unique: wGadArTENUapG0zdubBHnQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2B6971083F67;
+        Mon, 31 Jan 2022 19:23:21 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.244])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DFD2810013C1;
+        Mon, 31 Jan 2022 19:23:18 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v3 0/4] mm/page_owner: Extend page_owner to show memcg information
+Date:   Mon, 31 Jan 2022 14:23:04 -0500
+Message-Id: <20220131192308.608837-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is necessary that:
+ v3:
+  - Add unlikely() to patch 1 and clarify that -1 will not be returned.
+  - Use a helper function to print out memcg information in patch 3.
+  - Add a new patch 4 to store task command name in page_owner
+    structure.
 
-   ROLE_SWITCH && device_property_read_bool(dwc->dev, "usb-role-switch")
+ v2:
+  - Remove the SNPRINTF() macro as suggested by Ira and use scnprintf()
+    instead to remove some buffer overrun checks.
+  - Add a patch to optimize vscnprintf with a size parameter of 0.
 
-is true in order for dwc3_get_dr_mode() to _not_ force us from OTG to
-PERIPHERAL mode here:
+While debugging the constant increase in percpu memory consumption on
+a system that spawned large number of containers, it was found that a
+lot of offlined mem_cgroup structures remained in place without being
+freed. Further investigation indicated that those mem_cgroup structures
+were pinned by some pages.
 
-   if (mode == USB_DR_MODE_OTG &&
-       (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
-        !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
-	!DWC3_VER_IS_PRIOR(DWC3, 330A))
-	mode = USB_DR_MODE_PERIPHERAL;
+In order to find out what those pages are, the existing page_owner
+debugging tool is extended to show memory cgroup information and whether
+those memcgs are offlined or not. With the enhanced page_owner tool,
+the following is a typical page that pinned the mem_cgroup structure
+in my test case:
 
-and dwc3_drd_init() to be called later in dwc3_core_init_mode(). So,
-to avoid always ignoring extcon device returned by dwc3_get_extcon()
-change dwc3_drd_init() to check and use it first, before checking if
-dwc3_setup_role_switch() should be called.
+Page allocated via order 0, mask 0x1100cca(GFP_HIGHUSER_MOVABLE), pid 162970 (podman), ts 1097761405537 ns, free_ts 1097760838089 ns
+PFN 1925700 type Movable Block 3761 type Movable Flags 0x17ffffc00c001c(uptodate|dirty|lru|reclaim|swapbacked|node=0|zone=2|lastcpupid=0x1fffff)
+ prep_new_page+0xac/0xe0
+ get_page_from_freelist+0x1327/0x14d0
+ __alloc_pages+0x191/0x340
+ alloc_pages_vma+0x84/0x250
+ shmem_alloc_page+0x3f/0x90
+ shmem_alloc_and_acct_page+0x76/0x1c0
+ shmem_getpage_gfp+0x281/0x940
+ shmem_write_begin+0x36/0xe0
+ generic_perform_write+0xed/0x1d0
+ __generic_file_write_iter+0xdc/0x1b0
+ generic_file_write_iter+0x5d/0xb0
+ new_sync_write+0x11f/0x1b0
+ vfs_write+0x1ba/0x2a0
+ ksys_write+0x59/0xd0
+ do_syscall_64+0x37/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+Charged to offlined memcg libpod-conmon-15e4f9c758422306b73b2dd99f9d50a5ea53cbb16b4a13a2c2308a4253cc0ec8.
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
+So the page was not freed because it was part of a shmem segment. That
+is useful information that can help users to diagnose similar problems.
 
-Hopefully I didn't miss something important making this patch
-unnecessary. Don't know if this is a good solution or not, part of me
-thinks than maybe changing the aforementioned code in
-dwc3_get_dr_mode() to account for extcon wopuld be
-simpler/better. Happy to rework this.
+Waiman Long (4):
+  lib/vsprintf: Avoid redundant work with 0 size
+  mm/page_owner: Use scnprintf() to avoid excessive buffer overrun check
+  mm/page_owner: Print memcg information
+  mm/page_owner: Record task command name
 
- drivers/usb/dwc3/drd.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ lib/vsprintf.c  |  8 +++---
+ mm/page_owner.c | 69 ++++++++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 59 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index e2b68bb770d1..835bd0be87d5 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -579,12 +579,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
- 	if (IS_ERR(dwc->edev))
- 		return PTR_ERR(dwc->edev);
+-- 
+2.27.0
 
--	if (ROLE_SWITCH &&
--	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
--		ret = dwc3_setup_role_switch(dwc);
--		if (ret < 0)
--			return ret;
--	} else if (dwc->edev) {
-+	if (dwc->edev) {
- 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
- 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
- 					       &dwc->edev_nb);
-@@ -594,6 +589,11 @@ int dwc3_drd_init(struct dwc3 *dwc)
- 		}
-
- 		dwc3_drd_update(dwc);
-+	} else if (ROLE_SWITCH &&
-+		   device_property_read_bool(dwc->dev, "usb-role-switch")) {
-+		ret = dwc3_setup_role_switch(dwc);
-+		if (ret < 0)
-+			return ret;
- 	} else {
- 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
- 		dwc->current_dr_role = DWC3_GCTL_PRTCAP_OTG;
---
-2.25.1

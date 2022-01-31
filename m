@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C319A4A5237
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28834A523D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiAaWRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiAaWRk (ORCPT
+        id S232761AbiAaWT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:19:56 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:44207 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232213AbiAaWTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:17:40 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E875C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:17:40 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id p63so18001252iod.11
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:17:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ixSsSZNNXa1x0EU5SgRGr7tTrFXXVuJli1qeIsbs3L0=;
-        b=MWljJdprLwmkQTcNqqSfprof3T4jcAc1+EkLTD4QAA1lyGJNGmQV9uMsB5U8n+JPMG
-         RUGubujhlzkdn5cHsFCtsMIACiT9V6qy3F2CYqTxGHctzGG4mFe4fF5x+/BoY29WObtV
-         a5APtOLnQPyRbBqwo+aYvj4aX2EhbZVTuO5bM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ixSsSZNNXa1x0EU5SgRGr7tTrFXXVuJli1qeIsbs3L0=;
-        b=I2xxy26BC66905Y0WilaBf/C7TiH9lkc6fgLGdAWWgXUT9o96biuCFicthuHlk/sAe
-         jAk3oWiuAYa0c1TlNvVjBzSlTF3QrmaLo8gKRKBWesjR1ySpsJiUzEzNmsqqJAwY+DzV
-         aKyarcIyg+TCqwh7YSkERJJYD0GPWw1ceDDBN94LuzZ53iCfJl2mJzwmiqBECP6Y2c4a
-         jbvV2iR58Se8G2HqXH4JQzVi4YizzyFkPiuG0TUYKFNPWmkIMuWicqKlH3Ty2KUNO/ms
-         /hO1Fk0Tq6cBYAZul8Vulj1+SOHEVXWa19RyK5WpC0TiZZT0mjzHPxONBPSoQ2ZCCetz
-         c6qg==
-X-Gm-Message-State: AOAM531NNQ9XcABX7t74vv2iP1/AlKdruZORtwL0rKfACiBy5gjee5ov
-        F0A5u7FAKt6oKjU3W0UyFm29lw==
-X-Google-Smtp-Source: ABdhPJxlqifQ06snSOWXPp15iE48EJ5pC2ndgnxyFOYGPnXk3a6d9xtXczxLe7pPWVcVku1Uou1ueg==
-X-Received: by 2002:a6b:8bd3:: with SMTP id n202mr12197088iod.114.1643667459900;
-        Mon, 31 Jan 2022 14:17:39 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g5sm20136413ila.59.2022.01.31.14.17.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 14:17:39 -0800 (PST)
-Subject: Re: [PATCH 5.4 00/64] 5.4.176-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220131105215.644174521@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b2eb630f-d362-13c6-38b1-b5270c615873@linuxfoundation.org>
-Date:   Mon, 31 Jan 2022 15:17:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 31 Jan 2022 17:19:53 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M8QFi-1nAHJO2u12-004S46; Mon, 31 Jan 2022 23:19:50 +0100
+Received: by mail-ot1-f47.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so14447815otp.4;
+        Mon, 31 Jan 2022 14:19:49 -0800 (PST)
+X-Gm-Message-State: AOAM5300s7H3HiZT7/ALZlbQL4+XMBMcpcRCqxXse+CMwLgyREt7CTVh
+        ReWIzABKLRLNgXPntwPlS7C6QAO1JxlT/LE6Q+o=
+X-Google-Smtp-Source: ABdhPJzNvIQa/ifQ4mpIl/LfU521F5G6KLcdIXkWgKV/jA7MRG2n/k6e84fLlMfFqeGk7bXCvjxkFnVtwxdt/dBnQNc=
+X-Received: by 2002:a9d:654f:: with SMTP id q15mr12902241otl.119.1643667588784;
+ Mon, 31 Jan 2022 14:19:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220131064933.3780271-1-hch@lst.de>
+In-Reply-To: <20220131064933.3780271-1-hch@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 31 Jan 2022 23:19:32 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+Message-ID: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+Subject: Re: consolidate the compat fcntl definitions v2
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Oz3mvogPccg/7xXrnVYc1t/5reQ5uLC3I9ySHFqCfH22nktDZk2
+ GiO2dxDqCqyaYLIVwvk51XQiOo3ffvYcODm+qVyNbWffBolCk5kBCIdNwuJYUoz/U0M04P7
+ YHPXOhWvKBhmn7zB1/uVYYlbhSUZG2fW6bmi32+wpXkhigUNfqpwvyzTmUcex77PxItycdN
+ hIkWF+6OjrEKXlrkvjnAw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aSNwj6GN85Q=:6u43FVFakJeCUyjujdXZAJ
+ nH1Eb1BCXn0p06iSS1ZrO055xSbokdvwGcAVA5hsWPMSsXvKy87UdhVhRzrdb9Uqf8TSfGHWg
+ m/rTBm4dsO9IxFqzCZBXGSz1a8FeujW//AujuH47pp41pjzE/CXFAukbGKA2gMs1idFSIbP4N
+ YUuRhRON1JoIpyXjxfwSoBqeBH6Iw/7yHika7VEJf8kTLTt288ET8b+Y/3/dHdqYLqTJIpiby
+ u+GSgygb0FARlJqqStxb7IbhwpPBW/F28dNddp/A5ETdLGn2UeGS5ILnDIEZpFwh3D5sYa3vw
+ KvkxeMQD5RHL0RU6ABF3VwKCNoh+HbLQ1shYXxgqr/vVkCzEcEDvbMps/iCVjzlB1av/EiLMO
+ 3bZ7FjR4cmvVVEGsCy3pkZJodILX2o5u3fFzoRb3sUZHXtl0KrRCE5Y1KpSjEQ6yhhXBZpdI8
+ wopTxBWbnQoinQjtRjMcROObLew2B4rJ6dBqJ7uAPiKXBPp031Kv0jbqAphCyfpS0pgEROnJr
+ X70gzHhsnbhgAENY3wlEN5xEOuwVOU0PPuTptiZATzOYBUagezvXWz1RAYR+5/RMRhpQ2OJrA
+ W1kH50NLO2Ar7eKx23ya8N8jQDQgb3PUHIOYVOeD1YQAl870H1Mosoh94GYKTaeieLlnKv0fj
+ uurqEyb9ilCd/OB27VlNBel/Xj8IJKutEccZMwF+6plyO69uWSiaMhkEs9Zxhfskzk/E=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 3:55 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.176 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.176-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, Jan 31, 2022 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Hi all,
+>
+> currenty the compat fcnt definitions are duplicate for all compat
+> architectures, and the native fcntl64 definitions aren't even usable
+> from userspace due to a bogus CONFIG_64BIT ifdef.  This series tries
+> to sort out all that.
+>
+> Changes since v1:
+>  - only make the F*64 defines uapi visible for 32-bit architectures
 
-Compiled and booted on my test system. No dmesg regressions.
+Looks all good to me,
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-thanks,
--- Shuah
+I think it would be best to merge this through the risc-v tree along
+with the coming compat support
+that depends on it. Alternatively, I can put it into my asm-generic
+tree for 5.18.
+
+         Arnd

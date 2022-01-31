@@ -2,61 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABC94A5231
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8314A5234
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiAaWQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
+        id S232464AbiAaWRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbiAaWQt (ORCPT
+        with ESMTP id S231968AbiAaWRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:16:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B952EC061714;
-        Mon, 31 Jan 2022 14:16:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13140B82CB6;
-        Mon, 31 Jan 2022 22:16:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5486BC340E8;
-        Mon, 31 Jan 2022 22:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643667406;
-        bh=l2z+lAUe/+F6BZPZI6f7qXZoGRCMMHhZIn0CHGQl3Nk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qj1RwbOA2eih9YWp46SPpm1Br65lLRzdJp20ake/jCWpIvH/YaXcdseDLHaGL1EV7
-         Q4RqxWvUglPguB2c0iD+Pu6siiVTc6sFUpdvdkSuAIcyQFEItUxRWex80yd0pp4/0u
-         JkqrOxLUXVzGIPVaatF8vd59IV/4g+qYx1fyVvp6qBJB4aGwGpAvN+vbninrddAZBu
-         wNSd72vZ2da8h+xKIDtXPNpWDN/oFVARuG3kX6UTx6Mg1y49nmuxb5ngKkjSqzMYIW
-         FeKKqQK5jJw8veLLqLavjL4o/s99OmyKfUMxOG0F7zuQXT/OXLiX2xSfAXIYJEpRRj
-         jLebys6Qd+8JQ==
-Date:   Mon, 31 Jan 2022 16:16:44 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        regressions@lists.linux.dev
-Subject: Re: 100 ms boot time increase regression in
- acpi_init()/acpi_scan_bus()
-Message-ID: <20220131221644.GA516851@bhelgaas>
+        Mon, 31 Jan 2022 17:17:12 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7268C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:17:11 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id y84so18948779iof.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:17:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4LJ7NCNiEiXtxFGZ6pxZyvHdh9yeGGVrpPotZxH0zYw=;
+        b=GBlbJ9W15OO7ERVEsKV4c3BfZ4O7MRCqyhmsTXBIKm6ayNEgyB4Z1/Zi0I731bqTb/
+         Mmoezq3MmJQIO+e3oTdj/p5FP3FWd/4dH/iM12QQgkJqfeZ0HtaxcYth48JiOOnfUAly
+         mD+FJxtxnU6ajMfzU/uQzZljYev/ItsIpBtKk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4LJ7NCNiEiXtxFGZ6pxZyvHdh9yeGGVrpPotZxH0zYw=;
+        b=cyH/zwfceViYIW2UBEJ1hF++JDxhWjwTJ6aDJsF7bRMTPV0ymR5VVm4s7+G8g+P5kA
+         kiZWWKvMItdOJq+ad2JwKmTS48I5qpq8GCR9w2QaRhOJdZcQ/hSBzCTigg0kVJSXi6RB
+         53gpOcNaT9ESXMGO1wgY1Eb/i1d5YF+eEwBrmYQtfwXtzJfSxN4bWq1kUVG2iievJecC
+         xCl9RSGDTJ6YHDK8voUSuO9IsG4VCBZE+Ppf209f8bFeBEk4rcjXtaLbzi8PR0ro7Rz/
+         WztEpL6nxyDfYzGolXec+jTPli3+jCj9vBfhSD6j8cJeMJADLTru6+PT+WSRJSWDEBuA
+         oyEQ==
+X-Gm-Message-State: AOAM533jrZ3fBUZdjtC29Gl32dx5w3PV5LZSC717YNSk73Pu2hgzexV/
+        zsxjwqi4WXzs90qdGPki3Q6LwQ==
+X-Google-Smtp-Source: ABdhPJzhvQe2AZqsRoS0h4hkdSuxFo/HzWtsgHMly5C0QAVd7CT0Npm6KjD135JXtX0Ha0A3oI38pw==
+X-Received: by 2002:a05:6602:1507:: with SMTP id g7mr7312691iow.7.1643667431350;
+        Mon, 31 Jan 2022 14:17:11 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id k13sm18606930ili.22.2022.01.31.14.17.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 14:17:11 -0800 (PST)
+Subject: Re: [PATCH 5.10 000/100] 5.10.96-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <bc036010-8f68-53c4-ad65-c3df0f6773e9@linuxfoundation.org>
+Date:   Mon, 31 Jan 2022 15:17:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b177cb21-aa01-2408-9b26-164c028b6593@molgen.mpg.de>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 12:29:44PM +0100, Paul Menzel wrote:
-> PS: Do you know of GNU/Linux live systems that are available for all Linux
-> kernel releases and have an initrd, that just stores/uploads the output of
-> `dmesg`?
+On 1/31/22 3:55 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.96 release.
+> There are 100 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.96-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-That would be pretty slick.
+Compiled and booted on my test system. No dmesg regressions.
 
-There is a collection of dmesg logs at https://github.com/linuxhw/Dmesg,
-mentioned earlier:
-https://lore.kernel.org/r/82035130-d810-9f0b-259e-61280de1d81f@redhat.com 
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

@@ -2,40 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1F24A444B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE56A4A433E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377830AbiAaL1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:27:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51856 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377929AbiAaLTU (ORCPT
+        id S1377589AbiAaLSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377635AbiAaLKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:19:20 -0500
+        Mon, 31 Jan 2022 06:10:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2674C06175C;
+        Mon, 31 Jan 2022 03:10:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9854260B28;
-        Mon, 31 Jan 2022 11:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D556C340E8;
-        Mon, 31 Jan 2022 11:19:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72247B82A4E;
+        Mon, 31 Jan 2022 11:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C10C340E8;
+        Mon, 31 Jan 2022 11:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627959;
-        bh=/O5ULg9U3NkwqzR/0Avq3jo3LXQjoxTI7QzSubb6GLA=;
+        s=korg; t=1643627415;
+        bh=7A4qnYHNOgw7UEy2wv9i8aSmgdn8cU6m8yfXH/2Kx2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JZA2o2iwNAvZhKuorIJ+B2SXic8lLQBznuX2c5QLBaYZ9r76dn33M+A4xkTsZz9Uq
-         cdMC77ao5i6M5yi4hbzzrivCTu9/0kOE04CT23XHq3PzBSGMddMvB8H99qhB1Udwdi
-         aGN6SH540M76DExZvAeMX3nZdNpTgFJPczMe4z10=
+        b=mXUc5Pl2nNSCkcp8T/KkLV1r7A3HQR6X3EqOZmH6Fp2XSKjl/beuI/6BSCpfLN/vP
+         d9CCVJI70qmSXuFE5DMGjQKHFOoduLsTn4RVou+nMzNefI6s9uduA5bhfof3ymDoab
+         UnH4C6zicnfTwSip/uLbGnDfDjVN1TrCOpI3raBA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH 5.16 079/200] usb: dwc3: xilinx: Fix error handling when getting USB3 PHY
+        stable@vger.kernel.org,
+        Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Kiran Bhandare <kiranx.bhandare@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.15 077/171] i40e: Fix queues reservation for XDP
 Date:   Mon, 31 Jan 2022 11:55:42 +0100
-Message-Id: <20220131105236.257332377@linuxfoundation.org>
+Message-Id: <20220131105232.641240839@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,44 +52,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
 
-commit 2cc9b1c93b1c4caa2d971856c0780fb5f7d04692 upstream.
+commit 92947844b8beee988c0ce17082b705c2f75f0742 upstream.
 
-The code that looked up the USB3 PHY was ignoring all errors other than
-EPROBE_DEFER in an attempt to handle the PHY not being present. Fix and
-simplify the code by using devm_phy_optional_get and dev_err_probe so
-that a missing PHY is not treated as an error and unexpected errors
-are handled properly.
+When XDP was configured on a system with large number of CPUs
+and X722 NIC there was a call trace with NULL pointer dereference.
 
-Fixes: 84770f028fab ("usb: dwc3: Add driver for Xilinx platforms")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Link: https://lore.kernel.org/r/20220126000253.1586760-3-robert.hancock@calian.com
+i40e 0000:87:00.0: failed to get tracking for 256 queues for VSI 0 err -12
+i40e 0000:87:00.0: setup of MAIN VSI failed
+
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+RIP: 0010:i40e_xdp+0xea/0x1b0 [i40e]
+Call Trace:
+? i40e_reconfig_rss_queues+0x130/0x130 [i40e]
+dev_xdp_install+0x61/0xe0
+dev_xdp_attach+0x18a/0x4c0
+dev_change_xdp_fd+0x1e6/0x220
+do_setlink+0x616/0x1030
+? ahci_port_stop+0x80/0x80
+? ata_qc_issue+0x107/0x1e0
+? lock_timer_base+0x61/0x80
+? __mod_timer+0x202/0x380
+rtnl_setlink+0xe5/0x170
+? bpf_lsm_binder_transaction+0x10/0x10
+? security_capable+0x36/0x50
+rtnetlink_rcv_msg+0x121/0x350
+? rtnl_calcit.isra.0+0x100/0x100
+netlink_rcv_skb+0x50/0xf0
+netlink_unicast+0x1d3/0x2a0
+netlink_sendmsg+0x22a/0x440
+sock_sendmsg+0x5e/0x60
+__sys_sendto+0xf0/0x160
+? __sys_getsockname+0x7e/0xc0
+? _copy_from_user+0x3c/0x80
+? __sys_setsockopt+0xc8/0x1a0
+__x64_sys_sendto+0x20/0x30
+do_syscall_64+0x33/0x40
+entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f83fa7a39e0
+
+This was caused by PF queue pile fragmentation due to
+flow director VSI queue being placed right after main VSI.
+Because of this main VSI was not able to resize its
+queue allocation for XDP resulting in no queues allocated
+for main VSI when XDP was turned on.
+
+Fix this by always allocating last queue in PF queue pile
+for a flow director VSI.
+
+Fixes: 41c445ff0f48 ("i40e: main driver core")
+Fixes: 74608d17fe29 ("i40e: add support for XDP_TX action")
+Signed-off-by: Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Kiran Bhandare <kiranx.bhandare@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/dwc3-xilinx.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -102,12 +102,12 @@ static int dwc3_xlnx_init_zynqmp(struct
- 	int			ret;
- 	u32			reg;
- 
--	usb3_phy = devm_phy_get(dev, "usb3-phy");
--	if (PTR_ERR(usb3_phy) == -EPROBE_DEFER) {
--		ret = -EPROBE_DEFER;
-+	usb3_phy = devm_phy_optional_get(dev, "usb3-phy");
-+	if (IS_ERR(usb3_phy)) {
-+		ret = PTR_ERR(usb3_phy);
-+		dev_err_probe(dev, ret,
-+			      "failed to get USB3 PHY\n");
- 		goto err;
--	} else if (IS_ERR(usb3_phy)) {
--		usb3_phy = NULL;
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -210,6 +210,20 @@ static int i40e_get_lump(struct i40e_pf
+ 		return -EINVAL;
  	}
  
- 	/*
++	/* Allocate last queue in the pile for FDIR VSI queue
++	 * so it doesn't fragment the qp_pile
++	 */
++	if (pile == pf->qp_pile && pf->vsi[id]->type == I40E_VSI_FDIR) {
++		if (pile->list[pile->num_entries - 1] & I40E_PILE_VALID_BIT) {
++			dev_err(&pf->pdev->dev,
++				"Cannot allocate queue %d for I40E_VSI_FDIR\n",
++				pile->num_entries - 1);
++			return -ENOMEM;
++		}
++		pile->list[pile->num_entries - 1] = id | I40E_PILE_VALID_BIT;
++		return pile->num_entries - 1;
++	}
++
+ 	i = 0;
+ 	while (i < pile->num_entries) {
+ 		/* skip already allocated entries */
 
 

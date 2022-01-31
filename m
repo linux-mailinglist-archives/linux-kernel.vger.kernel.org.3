@@ -2,189 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B39B64A5179
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0E24A517E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358076AbiAaVbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S1359860AbiAaVeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241365AbiAaVbP (ORCPT
+        with ESMTP id S241365AbiAaVes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:31:15 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62CCC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:31:14 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id p125so13452201pga.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:31:14 -0800 (PST)
+        Mon, 31 Jan 2022 16:34:48 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA20C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:34:48 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id p27so29706598lfa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=euvri5MbsGrE+v+kTfVEgObI2Y6QhDM6kqPkM69TlfQ=;
-        b=KRMwnS74hwkMxr23OMbJ0cdMukWTu4tX3Qey8TTzo+qha901QdnqqBFjhhHQK8us3i
-         Ucijw5hKEl8XXCuZ5k1ndLzR3eWmVIdOYileed7eyEXS45AL0AcdQWPTwM2qL01RdLbh
-         wBj1ezhpUHOr8DR8m707uPLqbSmTzcxVSrHPFNeIZTVcmWm23CVcDT9cbzNp4d5i3j9Z
-         QnuExooFeYMRvN5ghvgcBST5VzIkv6uWt/JVFEYusLET52YjxtKuRByyenPC8/B6GGVX
-         /LxZbtsd2CwNfvf/IxbmC5sLPO09qO49Pf5mEJZavPdcpkz0s8O6YUYEAEoqB8zL6OcY
-         liAg==
+        bh=fY293kK68vvdcex/3vE1UuGsMyzMf3hMzbBW0CECXWo=;
+        b=sbuqsKlKtbosk9vnW8XyVA7uztBNuHZfZtcNYRiovUgAycS22JZkJ7MxOjZiMGYokE
+         xhXCNkbCRNT88OXvTMndIJGfh2RMckU46x0hrSqGUrxA1AJFOX8bMhXN3oqNP8+elCU0
+         lvDAlF8N3I1u2nhtJaNaqw50gxUEox/7eGGrd2H8M1MqUxiEK4xBNMrtaG72GFm6gQLD
+         qpV2iT3ZgC3M5XpLy/d3zAQeGz90PRYlxIDLCQX2VGb4CyN+fEuNTon7uZ+TdCW3h+Lm
+         bOazphReVxD2+MfnXlHtsZydG2omK43C943jxFBmLXKyDFoYPGqR1UCZxsGliywnVtxc
+         xU9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=euvri5MbsGrE+v+kTfVEgObI2Y6QhDM6kqPkM69TlfQ=;
-        b=j9miaugANFuuV7XO19ARhuU2Cv90l6Dc/KRURvkVIgpvBD4WMnwzHRI1RLsk6cOukt
-         M5SXG1Y64dxZcfsnZUYaO8JVGFwYidQR6Q7SJCawGnKJ7JVRga+n5+TqyRpQjk5kQCV0
-         BjYd9xFbhS5HGcghVGcyEGzv6BKp7/97/Hmp2HSZpcos/5ZYPi+WlnuKXeFlD2B+JHKh
-         BWntVOtt6J2fw/12PBwGAkZcGrGzIkv52MVUrR8CbqWS7ElRF0P5i8LCdrVYxWbIiX8a
-         wvrZec2zFf2M3LK8cCJTTODE6vyNO0Zq5hXw9Y8ZvZ6xDpvB18HY3nGY4EvDDwvXRYmw
-         /J5w==
-X-Gm-Message-State: AOAM531cNwIxMFRduUeeN59MPIx5RPB8G+wh/hkeYhOl+50WwjxjmjFJ
-        tTfWIcbgCj2WzjrDV67ch2H+GbSHwlBSE0CZJbA=
-X-Google-Smtp-Source: ABdhPJwy55TI7QG154oSq4OE+hBkDxPt8mlCSSssff55lGgIARdfkbVDMVT1Y0vdQSeuprxdLVoHrbA/fllTiTQPZbg=
-X-Received: by 2002:aa7:888b:: with SMTP id z11mr16428972pfe.76.1643664674047;
- Mon, 31 Jan 2022 13:31:14 -0800 (PST)
+        bh=fY293kK68vvdcex/3vE1UuGsMyzMf3hMzbBW0CECXWo=;
+        b=hcO2HT7WPiRQmIOdQlK0eCxzzhW6LzPBO3wQ/m4GGYjf46IhAlKAQnVSNqanZE7izr
+         8r5RWVQkdA0+vpXgmDQ4mlQhM5a6kKkCqzaqByCuzX15UIX/nW/rdGhfNzI/98ZSqdfD
+         9HLVPQBm5ziE46Ark9g1zTJEClIfcPbnJ6f2KDZeufwMoO2/ND8Dw4N8MlhRwNksOrlN
+         Oa7q3u8AtLpfMFP1h7WCOp8wWtyTX91whBnCp5/VTiAyKu++TPOukzNkQd+qdDK1plqp
+         3KXeqksBd0wBNXqiN/K44lgu+PFOZax8/n8HUh9McuQsstNnNkaaJwnlkJmE79xxqqYD
+         rW/w==
+X-Gm-Message-State: AOAM533TbnughG0wuuVyjcWxRkgtcMnhxKOHxiqSv0wTyunPXwupVNi/
+        Oar8fTUpkuEh8csM8HutQv+XWqoAdN7XrSVC/E04mg==
+X-Google-Smtp-Source: ABdhPJzxDldmaLxKkITPTgpnzqLDLhm+/u9GBYoFF9PlNaTLN1bwfw05dn5ekB7WpU3SJDjImTN/TnaMqBt9M4u2EEc=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr17500223lfr.444.1643664886497;
+ Mon, 31 Jan 2022 13:34:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131201716.5198-1-a3at.mail@gmail.com>
-In-Reply-To: <20220131201716.5198-1-a3at.mail@gmail.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Mon, 31 Jan 2022 13:30:38 -0800
-Message-ID: <CAMe9rOqoPy6jsWrodnc41M4+b2onwkfbfr=pZ9qRWzOU2Uisgg@mail.gmail.com>
-Subject: Re: [PATCH] fs/binfmt_elf: use ELF_ET_DYN_BASE for PIE (ET_DYN with
- INTERP) binaries
-To:     Azat Khuzhin <a3at.mail@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Chris Kennelly <ckennelly@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Song Liu <songliubraving@fb.com>,
-        David Rientjes <rientjes@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>
+References: <20220130181616.420092-1-keescook@chromium.org>
+ <CAKwvOdmETY-j9B9vms4d31kAc0xb1yE902KijiH2baY5-M=fLQ@mail.gmail.com> <202201311306.0FC6E303@keescook>
+In-Reply-To: <202201311306.0FC6E303@keescook>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 31 Jan 2022 13:34:34 -0800
+Message-ID: <CAKwvOdnXKfhJQimh6rLe6nU2NrrovbKDGqujinqptoyHyiTKYQ@mail.gmail.com>
+Subject: Re: [PATCH] fortify: Update compile-time tests for Clang 14
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:17 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
+On Mon, Jan 31, 2022 at 1:09 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Since 9630f0d60fec ELF_ET_DYN_BASE is not used as a load_bias anymore
-> and this breaks PIE binaries, since after this change data segment
-> became too nearby the stack:
+> On Mon, Jan 31, 2022 at 11:09:27AM -0800, Nick Desaulniers wrote:
+> > On Sun, Jan 30, 2022 at 10:16 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Clang 14 introduces support for compiletime_assert(). Update the
+> > > compile-time warning regex to catch Clang's variant of the warning text
+> > > in preparation for Clang supporting CONFIG_FORTIFY_SOURCE.
+> >
+> > https://twitter.com/ifosteve/status/1190348262500421634?lang=en
+> > error messages can change over time. More thoughts below.
 >
-> Before 9630f0d60fec:
+> Sure, but I don't want the compile-time checks to silently regress,
+> which requires looking specifically for the error.
 >
->     $ strace -febrk /tmp/test-stack |& head
->     brk(NULL)                               = 0x555555559000
->     $ /tmp/test-stack
->     bottom_of_stack = 0x7fffffffc5c0
->     recursion depth: 1 (stack diff: 32)
->     ...
->     recursion depth: 7690 (stack diff: 8365664)
->     Segmentation fault (core dumped)
+> > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Cc: linux-hardening@vger.kernel.org
+> > > Cc: llvm@lists.linux.dev
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > > I'm splitting this patch out of the main Clang FORTIFY enabling patch.
+> > > ---
+> > >  scripts/test_fortify.sh | 8 ++++++--
+> > >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
+> > > index a4da365508f0..c2688ab8281d 100644
+> > > --- a/scripts/test_fortify.sh
+> > > +++ b/scripts/test_fortify.sh
+> > > @@ -46,8 +46,12 @@ if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
+> > >                 status="warning: unsafe ${FUNC}() usage lacked '$WANT' symbol in $IN"
+> > >         fi
+> > >  else
+> > > -       # If the build failed, check for the warning in the stderr (gcc).
+> > > -       if ! grep -q -m1 "error: call to .\b${WANT}\b." "$TMP" ; then
+> > > +       # If the build failed, check for the warning in the stderr.
+> > > +       # GCC:
+> > > +       # ./include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+> > > +       # Clang 14:
+> > > +       # ./include/linux/fortify-string.h:316:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> > > +       if ! grep -Eq -m1 "error: call to .?\b${WANT}\b.?" "$TMP" ; then
+> >
+> > Doesn't this depend on -Werror being set? I guess it did so before
+> > hand, too, but couldn't I unset CONFIG_WERROR then this check would
+> > still fail (since instead of `error:` we'd have `warning:`)? If we
+> > used __attribute__((error(""))) then this would always be an error.
+> > Right now, it is only because -Werror is set promoting the warning
+> > diagnostic to an error.
 >
-> After 9630f0d60fec:
+> Right, see earlier up in the script. "-Werror" is explicitly set:
 >
->     $ strace -ebrk /tmp/test-stack  |& head
->     brk(NULL)                               = 0x7ffff7fff000
->
->     $ /tmp/test-stack
->     bottom_of_stack = 0x7fffffffc640
->     recursion depth: 1 (stack diff: 32)
->     ...
->     recursion depth: 146 (stack diff: 157792)
->     Segmentation fault (core dumped)
->
-> Found this during compiling with clang, that started to randomly
-> SIGSEGV when it eats some heap.
+> line 40: if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
 
-How do I reproduce it on x86-64?
+Yep, I missed that.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-> Reproducer:
 >
->     #include <stdio.h>
->     #include <stddef.h>
->     #include <stdlib.h>
->
->     static int depth = 0;
->     static void* bottom_of_stack;
->
->     int inner()
->     {
->         char buffer[1024];
->         ptrdiff_t diff;
->         int ret;
->
->         ++depth;
->         diff = bottom_of_stack - __builtin_frame_address(0);
->
->         fprintf(stderr,
->                 "recursion depth: %i (stack diff: %zu)\n",
->                 depth, (size_t)diff);
->
->         for (size_t i = 0; i < 1024; ++i)
->                 ret += buffer[i];
->
->         ret += inner();
->
->         return ret;
->     }
->
->     int main()
->     {
->         for (size_t size = 0; size < 128<<20; size += 16<<10)
->                 malloc(16<<10);
->
->         bottom_of_stack = __builtin_frame_address(0);
->         fprintf(stderr, "bottom_of_stack = %p\n", bottom_of_stack);
->         inner();
->     }
->
-> Fixes: 9630f0d60fec ("fs/binfmt_elf: use PT_LOAD p_align values for static PIE")
-> Signed-off-by: Azat Khuzhin <a3at.mail@gmail.com>
-> Cc: Chris Kennelly <ckennelly@google.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Alexey Dobriyan <adobriyan@gmail.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> Cc: Sandeep Patil <sspatil@google.com>
-> Cc: Fangrui Song <maskray@google.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: H.J. Lu <hjl.tools@gmail.com>
-> ---
->  fs/binfmt_elf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index 605017eb9349..9e11e6f13e83 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-> @@ -1117,7 +1117,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
->                          * without MAP_FIXED nor MAP_FIXED_NOREPLACE).
->                          */
->                         alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
-> -                       if (alignment > ELF_MIN_ALIGN) {
-> +                       if (interpreter || alignment > ELF_MIN_ALIGN) {
->                                 load_bias = ELF_ET_DYN_BASE;
->                                 if (current->flags & PF_RANDOMIZE)
->                                         load_bias += arch_mmap_rnd();
 > --
-> 2.35.1
->
+> Kees Cook
+
 
 
 -- 
-H.J.
+Thanks,
+~Nick Desaulniers

@@ -2,160 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3A34A51D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89744A51DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381222AbiAaVrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345541AbiAaVr3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:47:29 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076BC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:47:29 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id u13so13244880oie.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i4ZNON8jjEqhdUhXt2lm8yAa37L58m4tSj1GfdxY8fY=;
-        b=hYQh9jnUfIqiLu881VQDp+oCeamuUvhXtTawHjvucMbffYwqzgdl9YuT5XOQW30ztY
-         oQemAMYrcEB6QlQemd2uNZWPymLOuISHd5Lj3aV+VTxyEaDNU6pJEUZW/2sgx4xxuEQz
-         Z8cruvZT0/q9rqGmqFStKqU27q0xtM1VSVs28k7xbB2ZekSekWGney+HB2oDdLcB5sXJ
-         isR2t5jZDAdOak3nzs06IIoeKkRHhEQrqOfQwy2hslIV/ugLAxLY2j6zWD6tzyK/hX2G
-         iEoB0Kh58qWypHKItSpBtL/a5GcUlwLmoHZjToXJL+G1Vxke1DSo6E7+zOkGsANE3Qy1
-         y0aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i4ZNON8jjEqhdUhXt2lm8yAa37L58m4tSj1GfdxY8fY=;
-        b=z3y1XfkZoakGVYJlqKM4/+NmvMwr1iZPApsYf3PXu9FvPNhGCe0950VI0DKdo7XCFG
-         VT2qIioFirIjOE/nHCSFZAhKrjDTh6oAhIbW8F9qFFRV7GhVPKUupgF2cwhYJNY0P33+
-         hFV25NVxAFq4qNNBn6Y1OXNa8B3YGPtHHG2Gnu+poeL7Cln/w/HcIDh84LpRbmTtiDMX
-         AeutpHjKARXFpttZKcVExzAKO3VfMXY4ms0cQ0cbajb8ZPJyl6JiVZfpok91KmD4KdGP
-         9xs3Z2zQvJvWEMX3ycFEpU9K4C+QzZjK9teLBB0mveWfBGjoAglinLd+eFaq4jSUjHxK
-         Ww5Q==
-X-Gm-Message-State: AOAM531brzKhs+V5oxAfkwKdE3Q3SOLxwrBCXtEAo/xstdDVHUyg63L+
-        Fe8tz6Wpvcy/b/Ip4W7DD4RfqA==
-X-Google-Smtp-Source: ABdhPJxv2BQ99VhEEybtEde4R7t1XK2VPNj5P94cmRD1qpbZ70xYPRLnqD31ijFF4oVSs3O/Arlt6A==
-X-Received: by 2002:a05:6808:f0a:: with SMTP id m10mr10743268oiw.127.1643665648575;
-        Mon, 31 Jan 2022 13:47:28 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id w42sm12923738ooi.40.2022.01.31.13.47.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:47:27 -0800 (PST)
-Date:   Mon, 31 Jan 2022 15:47:26 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: qcom: fix timer node clock-frequency
-Message-ID: <YfhY7vwTfRhJ2UWx@builder.lan>
-References: <20211224234631.109315-1-david@ixit.cz>
+        id S1376644AbiAaVvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:51:48 -0500
+Received: from first.geanix.com ([116.203.34.67]:37720 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345541AbiAaVvr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 16:51:47 -0500
+Received: from zen.. (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id 63061126B7D;
+        Mon, 31 Jan 2022 21:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1643665904; bh=iIJNpft2xL+n2vE0wSgEc/ganWtCw9JUh/zcBq4c1so=;
+        h=From:To:Cc:Subject:Date;
+        b=BpCK9Qn/VAPuo+A4mc1RLxUpVtffpFFJElctH9OSnBdLu5FLSY4JqZPA0sqjMPszx
+         tdSv2KU5a+KkHjqA7zzV3h6LbZi8LvHqQBNm2Dywa3vRzAJM1Fxh4hEEEHAt/pXwHK
+         Zi3y9Mcyu6JN2PUzfSkCmzOjgnPg6Zuusz3qRJi75FGm/n5cB5yflRZ8lm9lVevJrV
+         El6kwrPipC9nFPgWrcBqmSpbzpj+ABfkqZnXxwZAa6hHFfD1Vl8X7svhfAEyZIB6Up
+         LuVYz8jppKoYpQgCqSC0LzT1gfTZUorAFwGqN9Q4RHsgq/nTYtG20d8/bzf5lxMaN9
+         +LqQzD5P+5AsQ==
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>
+Cc:     Sean Nyekjaer <sean@geanix.com>, stable@vger.kernel.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mtd: rawnand: protect access to rawnand devices while in suspend
+Date:   Mon, 31 Jan 2022 22:51:38 +0100
+Message-Id: <20220131215138.2013649-1-sean@geanix.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211224234631.109315-1-david@ixit.cz>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=disabled version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 24 Dec 17:46 CST 2021, David Heidelberg wrote:
+Prevent rawnend access while in a suspended state.
 
-> Clock frequency is read by driver a single uint32,
-> so the second value was never processed.
-> 
+Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
+rawnand layer to return errors rather than waiting in a blocking wait.
 
-I'm not familiar with the reasoning behind this, but the binding says
-that we should have > 1 clock-frequency specified.
+Tested on a iMX6ULL.
 
-Regards,
-Bjorn
+Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+---
+Follow-up on discussion in:
+https://lkml.org/lkml/2021/10/4/41
+https://lkml.org/lkml/2021/10/11/435
+https://lkml.org/lkml/2021/10/20/184
+https://lkml.org/lkml/2021/10/25/288
+https://lkml.org/lkml/2021/10/26/55
+https://lkml.org/lkml/2021/11/2/352
 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  arch/arm/boot/dts/qcom-apq8064.dtsi | 3 +--
->  arch/arm/boot/dts/qcom-ipq8064.dtsi | 3 +--
->  arch/arm/boot/dts/qcom-mdm9615.dtsi | 3 +--
->  arch/arm/boot/dts/qcom-msm8660.dtsi | 3 +--
->  arch/arm/boot/dts/qcom-msm8960.dtsi | 3 +--
->  5 files changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-> index 2d539d77bad4..3d5d9ffb66af 100644
-> --- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-> @@ -380,8 +380,7 @@ timer@200a000 {
->  				     <1 2 0x301>,
->  				     <1 3 0x301>;
->  			reg = <0x0200a000 0x100>;
-> -			clock-frequency = <27000000>,
-> -					  <32768>;
-> +			clock-frequency = <27000000>;
->  			cpu-offset = <0x80000>;
->  		};
->  
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index 996f4458d9fc..d663521bdd02 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -458,8 +458,7 @@ IRQ_TYPE_EDGE_RISING)>,
->  				     <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) |
->  						 IRQ_TYPE_EDGE_RISING)>;
->  			reg = <0x0200a000 0x100>;
-> -			clock-frequency = <25000000>,
-> -					  <32768>;
-> +			clock-frequency = <25000000>;
->  			clocks = <&sleep_clk>;
->  			clock-names = "sleep";
->  			cpu-offset = <0x80000>;
-> diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> index c32415f0e66d..8b58f80093e8 100644
-> --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> @@ -120,8 +120,7 @@ timer@200a000 {
->  				     <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
->  				     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>;
->  			reg = <0x0200a000 0x100>;
-> -			clock-frequency = <27000000>,
-> -					  <32768>;
-> +			clock-frequency = <27000000>;
->  			cpu-offset = <0x80000>;
->  		};
->  
-> diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
-> index 1e8aab357f9c..b16060b65593 100644
-> --- a/arch/arm/boot/dts/qcom-msm8660.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
-> @@ -105,8 +105,7 @@ timer@2000000 {
->  				     <1 1 0x301>,
->  				     <1 2 0x301>;
->  			reg = <0x02000000 0x100>;
-> -			clock-frequency = <27000000>,
-> -					  <32768>;
-> +			clock-frequency = <27000000>;
->  			cpu-offset = <0x40000>;
->  		};
->  
-> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-> index 2a0ec97a264f..ca093b89c9ea 100644
-> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-> @@ -99,8 +99,7 @@ timer@200a000 {
->  				     <1 2 0x301>,
->  				     <1 3 0x301>;
->  			reg = <0x0200a000 0x100>;
-> -			clock-frequency = <27000000>,
-> -					  <32768>;
-> +			clock-frequency = <27000000>;
->  			cpu-offset = <0x80000>;
->  		};
->  
-> -- 
-> 2.34.1
-> 
+Changes since v1:
+ - fixed uninitialized return
+
+ drivers/mtd/nand/raw/nand_base.c | 44 +++++++++++++++-----------------
+ include/linux/mtd/rawnand.h      |  1 +
+ 2 files changed, 21 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
+index e7b2ba016d8c..8daaba96edb2 100644
+--- a/drivers/mtd/nand/raw/nand_base.c
++++ b/drivers/mtd/nand/raw/nand_base.c
+@@ -338,16 +338,19 @@ static int nand_isbad_bbm(struct nand_chip *chip, loff_t ofs)
+  *
+  * Return: -EBUSY if the chip has been suspended, 0 otherwise
+  */
+-static int nand_get_device(struct nand_chip *chip)
++static void nand_get_device(struct nand_chip *chip)
+ {
+-	mutex_lock(&chip->lock);
+-	if (chip->suspended) {
++	/* Wait until the device is resumed. */
++	while (1) {
++		mutex_lock(&chip->lock);
++		if (!chip->suspended) {
++			mutex_lock(&chip->controller->lock);
++			return;
++		}
+ 		mutex_unlock(&chip->lock);
+-		return -EBUSY;
+-	}
+-	mutex_lock(&chip->controller->lock);
+ 
+-	return 0;
++		wait_event(chip->resume_wq, !chip->suspended);
++	}
+ }
+ 
+ /**
+@@ -576,9 +579,7 @@ static int nand_block_markbad_lowlevel(struct nand_chip *chip, loff_t ofs)
+ 		nand_erase_nand(chip, &einfo, 0);
+ 
+ 		/* Write bad block marker to OOB */
+-		ret = nand_get_device(chip);
+-		if (ret)
+-			return ret;
++		nand_get_device(chip);
+ 
+ 		ret = nand_markbad_bbm(chip, ofs);
+ 		nand_release_device(chip);
+@@ -3826,9 +3827,7 @@ static int nand_read_oob(struct mtd_info *mtd, loff_t from,
+ 	    ops->mode != MTD_OPS_RAW)
+ 		return -ENOTSUPP;
+ 
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	if (!ops->datbuf)
+ 		ret = nand_do_read_oob(chip, from, ops);
+@@ -4415,13 +4414,11 @@ static int nand_write_oob(struct mtd_info *mtd, loff_t to,
+ 			  struct mtd_oob_ops *ops)
+ {
+ 	struct nand_chip *chip = mtd_to_nand(mtd);
+-	int ret;
++	int ret = 0;
+ 
+ 	ops->retlen = 0;
+ 
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	switch (ops->mode) {
+ 	case MTD_OPS_PLACE_OOB:
+@@ -4481,9 +4478,7 @@ int nand_erase_nand(struct nand_chip *chip, struct erase_info *instr,
+ 		return -EIO;
+ 
+ 	/* Grab the lock and see if the device is available */
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	/* Shift to get first page */
+ 	page = (int)(instr->addr >> chip->page_shift);
+@@ -4570,7 +4565,7 @@ static void nand_sync(struct mtd_info *mtd)
+ 	pr_debug("%s: called\n", __func__);
+ 
+ 	/* Grab the lock and see if the device is available */
+-	WARN_ON(nand_get_device(chip));
++	nand_get_device(chip);
+ 	/* Release it and go back */
+ 	nand_release_device(chip);
+ }
+@@ -4587,9 +4582,7 @@ static int nand_block_isbad(struct mtd_info *mtd, loff_t offs)
+ 	int ret;
+ 
+ 	/* Select the NAND device */
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	nand_select_target(chip, chipnr);
+ 
+@@ -4660,6 +4653,8 @@ static void nand_resume(struct mtd_info *mtd)
+ 			__func__);
+ 	}
+ 	mutex_unlock(&chip->lock);
++
++	wake_up_all(&chip->resume_wq);
+ }
+ 
+ /**
+@@ -5437,6 +5432,7 @@ static int nand_scan_ident(struct nand_chip *chip, unsigned int maxchips,
+ 	chip->cur_cs = -1;
+ 
+ 	mutex_init(&chip->lock);
++	init_waitqueue_head(&chip->resume_wq);
+ 
+ 	/* Enforce the right timings for reset/detection */
+ 	chip->current_interface_config = nand_get_reset_interface_config();
+diff --git a/include/linux/mtd/rawnand.h b/include/linux/mtd/rawnand.h
+index 5b88cd51fadb..99d50a15a263 100644
+--- a/include/linux/mtd/rawnand.h
++++ b/include/linux/mtd/rawnand.h
+@@ -1294,6 +1294,7 @@ struct nand_chip {
+ 	/* Internals */
+ 	struct mutex lock;
+ 	unsigned int suspended : 1;
++	wait_queue_head_t resume_wq;
+ 	int cur_cs;
+ 	int read_retries;
+ 	struct nand_secure_region *secure_regions;
+-- 
+2.34.1
+

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF624A448D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C50F4A438E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377921AbiAaLbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:31:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39350 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359570AbiAaLVT (ORCPT
+        id S1376707AbiAaLV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:21:56 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45836 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359817AbiAaLMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:21:19 -0500
+        Mon, 31 Jan 2022 06:12:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D75B9B82A59;
-        Mon, 31 Jan 2022 11:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1029AC340E8;
-        Mon, 31 Jan 2022 11:21:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1979661170;
+        Mon, 31 Jan 2022 11:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAAACC340E8;
+        Mon, 31 Jan 2022 11:12:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628076;
-        bh=ONqPtQyT+Qr9b9fvAQ6sWM6yt7g2eLytTn5yBWZogV4=;
+        s=korg; t=1643627531;
+        bh=syVE4GZKFypRsf0nIIvCwfJnwSh7ZYn+wdukRofgwOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SvtQuYVb+VxZS+ETnQc/MbXbRsOTIJPRJ+lm2Qr9A2B9jN9awSeWj1f2E+t7yaqMN
-         /o62C1Hi4lzz1EpqsF3QwbfKYx/kdAXpMlhxucyy/TVvmuRFHdxOJj58pOq5XikBC3
-         HKY08hkVe7i4+JYncWfuzRnEpHw25D1ngLjklVH4=
+        b=bwnmynZtc7U7YulLOlSmQrHZP+oFvSzEGnXawOjoviuHqnsFRkRIPUzlpk1Me0UyX
+         JybQcV9fw1J5aLx8AMO2tE1Siwn1gnrOTFLk+/gi0LSKPqfqB2lVElO3JlvnDPOzZr
+         4yRhee+fyJLu8AKQNPuThtp3xQ19QY7kxB9cRHBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jean Sacren <sakiwit@gmail.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 117/200] drm/msm: Fix wrong size calculation
+Subject: [PATCH 5.15 115/171] mptcp: clean up harmless false expressions
 Date:   Mon, 31 Jan 2022 11:56:20 +0100
-Message-Id: <20220131105237.512081047@linuxfoundation.org>
+Message-Id: <20220131105233.934653316@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,42 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xianting Tian <xianting.tian@linux.alibaba.com>
+From: Jean Sacren <sakiwit@gmail.com>
 
-commit 0a727b459ee39bd4c5ced19d6024258ac87b6b2e upstream.
+[ Upstream commit 59060a47ca50bbdb1d863b73667a1065873ecc06 ]
 
-For example, memory-region in .dts as below,
-	reg = <0x0 0x50000000 0x0 0x20000000>
+entry->addr.id is u8 with a range from 0 to 255 and MAX_ADDR_ID is 255.
+We should drop both false expressions of (entry->addr.id > MAX_ADDR_ID).
 
-We can get below values,
-struct resource r;
-r.start = 0x50000000;
-r.end	= 0x6fffffff;
+We should also remove the obsolete parentheses in the first if branch.
 
-So the size should be:
-size = r.end - r.start + 1 = 0x20000000
+Use U8_MAX for MAX_ADDR_ID and add a comment to show the link to
+mptcp_addr_info.id as suggested by Mr. Matthieu Baerts.
 
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-Fixes: 072f1f9168ed ("drm/msm: add support for "stolen" mem")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220112123334.749776-1-xianting.tian@linux.alibaba.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Jean Sacren <sakiwit@gmail.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_drv.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/mptcp/pm_netlink.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -466,7 +466,7 @@ static int msm_init_vram(struct drm_devi
- 		of_node_put(node);
- 		if (ret)
- 			return ret;
--		size = r.end - r.start;
-+		size = r.end - r.start + 1;
- 		DRM_INFO("using VRAM carveout: %lx@%pa\n", size, &r.start);
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index 3be10bf22cf7c..15c89d4fea4d2 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -38,7 +38,8 @@ struct mptcp_pm_add_entry {
+ 	u8			retrans_times;
+ };
  
- 		/* if we have no IOMMU, then we need to use carveout allocator.
+-#define MAX_ADDR_ID		255
++/* max value of mptcp_addr_info.id */
++#define MAX_ADDR_ID		U8_MAX
+ #define BITMAP_SZ DIV_ROUND_UP(MAX_ADDR_ID + 1, BITS_PER_LONG)
+ 
+ struct pm_nl_pernet {
+@@ -831,14 +832,13 @@ find_next:
+ 		entry->addr.id = find_next_zero_bit(pernet->id_bitmap,
+ 						    MAX_ADDR_ID + 1,
+ 						    pernet->next_id);
+-		if ((!entry->addr.id || entry->addr.id > MAX_ADDR_ID) &&
+-		    pernet->next_id != 1) {
++		if (!entry->addr.id && pernet->next_id != 1) {
+ 			pernet->next_id = 1;
+ 			goto find_next;
+ 		}
+ 	}
+ 
+-	if (!entry->addr.id || entry->addr.id > MAX_ADDR_ID)
++	if (!entry->addr.id)
+ 		goto out;
+ 
+ 	__set_bit(entry->addr.id, pernet->id_bitmap);
+-- 
+2.34.1
+
 
 

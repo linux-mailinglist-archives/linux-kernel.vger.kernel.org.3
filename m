@@ -2,204 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89744A51DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747A14A51E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376644AbiAaVvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:51:48 -0500
-Received: from first.geanix.com ([116.203.34.67]:37720 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345541AbiAaVvr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:51:47 -0500
-Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 63061126B7D;
-        Mon, 31 Jan 2022 21:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1643665904; bh=iIJNpft2xL+n2vE0wSgEc/ganWtCw9JUh/zcBq4c1so=;
-        h=From:To:Cc:Subject:Date;
-        b=BpCK9Qn/VAPuo+A4mc1RLxUpVtffpFFJElctH9OSnBdLu5FLSY4JqZPA0sqjMPszx
-         tdSv2KU5a+KkHjqA7zzV3h6LbZi8LvHqQBNm2Dywa3vRzAJM1Fxh4hEEEHAt/pXwHK
-         Zi3y9Mcyu6JN2PUzfSkCmzOjgnPg6Zuusz3qRJi75FGm/n5cB5yflRZ8lm9lVevJrV
-         El6kwrPipC9nFPgWrcBqmSpbzpj+ABfkqZnXxwZAa6hHFfD1Vl8X7svhfAEyZIB6Up
-         LuVYz8jppKoYpQgCqSC0LzT1gfTZUorAFwGqN9Q4RHsgq/nTYtG20d8/bzf5lxMaN9
-         +LqQzD5P+5AsQ==
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <bbrezillon@kernel.org>
-Cc:     Sean Nyekjaer <sean@geanix.com>, stable@vger.kernel.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mtd: rawnand: protect access to rawnand devices while in suspend
-Date:   Mon, 31 Jan 2022 22:51:38 +0100
-Message-Id: <20220131215138.2013649-1-sean@geanix.com>
-X-Mailer: git-send-email 2.34.1
+        id S1350600AbiAaVw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345541AbiAaVw0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 16:52:26 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBADDC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:52:25 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id e8so12630124ilm.13
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:52:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=MvksuHShdo5C7SWbdBSuidzz86NTZYVYdIk6979/9jk=;
+        b=Oh3zFvezgmFYuG1aTRHGQD84XhucshaqYKH8Sh6yVd5EKupzdeHLaJ4r7CrBhyag0K
+         xmghCnjWzGzhT3CIvVzuvtH91HzLGr0I6mtB5WBHlUlCyQ62XD7fbHSK/mN1MN9zLhLH
+         SSShUrpuu//+LF9xSxGuiou8DtZdRzStBu1co=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=MvksuHShdo5C7SWbdBSuidzz86NTZYVYdIk6979/9jk=;
+        b=kC44H+ZQGMBnI5cPSc4U7E+iznm+XSlb89naO7gtACRuku0ynIO521Dhn2DFJlUHJV
+         jCGkMVvmPw9I7r3xwaHo1dhACeazhGePV7I8g44iwVhst9PhWdehecDdTJfHF5CKJVe5
+         OrL+r10TXfrI4/ndE13Ujkfyds6nnO1x0O9KSk3IWKV0I4YhWBNV7nfOEsJ5HSCY32Ta
+         o9WyMXeMoT/9gHm6yLIKfmZ4Z4qsiYQLan5Wb5UxhC5N64l5UrRZCASOJ9M4kmBPTGvt
+         NasR1B8XkSuIp6fXxxrlFyO3fMzWqmCnlsk8zyzYWgvRwE6Y0uHM9RaFUpwJm0Dd2vvT
+         azWw==
+X-Gm-Message-State: AOAM530hc/+W6uYyo99RM25/dN14WDZ/9bxaxLv4l21EsmTPBdli1auk
+        P33nlV6faojXgTsTZ5hx3iXPEw==
+X-Google-Smtp-Source: ABdhPJxpcirdkzc7uOT8HkKnAc5aGpsJWddaUC75LEiX6aQp9Dh0qxfu8p/wb/9aY4NgD9lI9wqsFA==
+X-Received: by 2002:a05:6e02:20c9:: with SMTP id 9mr9920122ilq.267.1643665945260;
+        Mon, 31 Jan 2022 13:52:25 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id z5sm19774768ioq.47.2022.01.31.13.52.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 13:52:24 -0800 (PST)
+Subject: Re: [PATCH] docs/kselftest: clarify running mainline tests on stables
+To:     Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220126201341.55771-1-skhan@linuxfoundation.org>
+ <7ba5e99a-9169-75c4-2324-f9a3ce9a506e@intel.com>
+ <bb1ba6f5-4cd8-742c-62b7-a62a6f4cef91@linuxfoundation.org>
+ <6f9083e2-d633-d483-702e-f974317133b7@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3e830fee-2402-0ba5-4e31-75d87e864b73@linuxfoundation.org>
+Date:   Mon, 31 Jan 2022 14:52:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <6f9083e2-d633-d483-702e-f974317133b7@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=disabled version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent rawnend access while in a suspended state.
+Hi Reinette,
 
-Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
-rawnand layer to return errors rather than waiting in a blocking wait.
+On 1/31/22 2:20 PM, Reinette Chatre wrote:
+> Hi Shuah,
+> 
+> On 1/31/2022 12:34 PM, Shuah Khan wrote:
+>> On 1/31/22 12:37 PM, Reinette Chatre wrote:
+>>> On 1/26/2022 12:13 PM, Shuah Khan wrote:
+>>>> Update the document to clarifiy support for running mainline
+>>>> kselftest on stable releases and the reasons for not removing
+>>>> test code that can test older kernels.
+>>>>
+>>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>>>> ---
+>>>>    Documentation/dev-tools/kselftest.rst | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+>>>> index dcefee707ccd..a833ecf12fbc 100644
+>>>> --- a/Documentation/dev-tools/kselftest.rst
+>>>> +++ b/Documentation/dev-tools/kselftest.rst
+>>>> @@ -7,6 +7,14 @@ directory. These are intended to be small tests to exercise individual code
+>>>>    paths in the kernel. Tests are intended to be run after building, installing
+>>>>    and booting a kernel.
+>>>>    +Kselftest from mainline can be run on older stable kernels. Running tests
+>>>> +from mainline offers the best coverage. Several test rings run mainline
+>>>> +kselftest suite on stable releases. The reason is that when a new test
+>>>> +gets added to test existing code to regression test a bug, we should be
+>>>> +able to run that test on an older kernel. Hence, it is important to keep
+>>>> +code that can still test an older kernel and make sure it skips the test
+>>>> +gracefully on newer releases.
+>>>> +
+>>>>    You can find additional information on Kselftest framework, how to
+>>>>    write new tests using the framework on Kselftest wiki:
+>>>>    
+>>>
+>>> (My apologies if this is already documented, I was not able to find this guidance
+>>> in Documentation/dev-tools/kselftest.rst nor when looking at the
+>>> "Kselftest use-cases..." slides linked from https://kselftest.wiki.kernel.org/)
+>>>
+>>> Could you please clarify what the requirement/expectation is regarding fixes
+>>> to tests? Since the recommendation in the above change is that Kselftest from
+>>> mainline should be run on older stable kernels, is it required to backport
+>>> fixes to the tests themselves to stable kernels?
+>>>
+>>
+>> Couple of things to consider.
+>>
+>> - A new test gets added to regression test a bug in stable and mainline
+>> - A new test gets added to test a kernel module/feature/API that has been
+>>    supported by stable and mainline releases
+>>
+>> In both of these cases, running mainline kselftest on stables gives you the
+>> best coverage.
+>>
+>> Kselftest fixes get pulled into stables like any other kernel fixes. If a few
+>> fixes are missing, it is a good idea to back-port if they fall into above two
+>> categories. If the test is for a new feature then, it doesn't make sense to
+>> back-port.
+>>
+>> Hope this is helpful.
+> 
+> This is helpful, thank you very much. In summary I understand this to mean that
+> when testing a stable kernel it is recommended to run tests from mainline, but
+> running the tests from the same stable kernel version as the kernel being tested
+> is also a supported use case and thus fixes to tests should be back-ported.
+>
 
-Tested on a iMX6ULL.
+Correct. Right. In the slide set you referenced, I included a slide that shows
+the combination and one of them is indeed rev matching kselftest and kernel.
 
-Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
----
-Follow-up on discussion in:
-https://lkml.org/lkml/2021/10/4/41
-https://lkml.org/lkml/2021/10/11/435
-https://lkml.org/lkml/2021/10/20/184
-https://lkml.org/lkml/2021/10/25/288
-https://lkml.org/lkml/2021/10/26/55
-https://lkml.org/lkml/2021/11/2/352
+Some tests such as bpf require rev match with the kernel i.e running kselftest from
+the same release.
 
-Changes since v1:
- - fixed uninitialized return
-
- drivers/mtd/nand/raw/nand_base.c | 44 +++++++++++++++-----------------
- include/linux/mtd/rawnand.h      |  1 +
- 2 files changed, 21 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
-index e7b2ba016d8c..8daaba96edb2 100644
---- a/drivers/mtd/nand/raw/nand_base.c
-+++ b/drivers/mtd/nand/raw/nand_base.c
-@@ -338,16 +338,19 @@ static int nand_isbad_bbm(struct nand_chip *chip, loff_t ofs)
-  *
-  * Return: -EBUSY if the chip has been suspended, 0 otherwise
-  */
--static int nand_get_device(struct nand_chip *chip)
-+static void nand_get_device(struct nand_chip *chip)
- {
--	mutex_lock(&chip->lock);
--	if (chip->suspended) {
-+	/* Wait until the device is resumed. */
-+	while (1) {
-+		mutex_lock(&chip->lock);
-+		if (!chip->suspended) {
-+			mutex_lock(&chip->controller->lock);
-+			return;
-+		}
- 		mutex_unlock(&chip->lock);
--		return -EBUSY;
--	}
--	mutex_lock(&chip->controller->lock);
- 
--	return 0;
-+		wait_event(chip->resume_wq, !chip->suspended);
-+	}
- }
- 
- /**
-@@ -576,9 +579,7 @@ static int nand_block_markbad_lowlevel(struct nand_chip *chip, loff_t ofs)
- 		nand_erase_nand(chip, &einfo, 0);
- 
- 		/* Write bad block marker to OOB */
--		ret = nand_get_device(chip);
--		if (ret)
--			return ret;
-+		nand_get_device(chip);
- 
- 		ret = nand_markbad_bbm(chip, ofs);
- 		nand_release_device(chip);
-@@ -3826,9 +3827,7 @@ static int nand_read_oob(struct mtd_info *mtd, loff_t from,
- 	    ops->mode != MTD_OPS_RAW)
- 		return -ENOTSUPP;
- 
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	if (!ops->datbuf)
- 		ret = nand_do_read_oob(chip, from, ops);
-@@ -4415,13 +4414,11 @@ static int nand_write_oob(struct mtd_info *mtd, loff_t to,
- 			  struct mtd_oob_ops *ops)
- {
- 	struct nand_chip *chip = mtd_to_nand(mtd);
--	int ret;
-+	int ret = 0;
- 
- 	ops->retlen = 0;
- 
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	switch (ops->mode) {
- 	case MTD_OPS_PLACE_OOB:
-@@ -4481,9 +4478,7 @@ int nand_erase_nand(struct nand_chip *chip, struct erase_info *instr,
- 		return -EIO;
- 
- 	/* Grab the lock and see if the device is available */
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	/* Shift to get first page */
- 	page = (int)(instr->addr >> chip->page_shift);
-@@ -4570,7 +4565,7 @@ static void nand_sync(struct mtd_info *mtd)
- 	pr_debug("%s: called\n", __func__);
- 
- 	/* Grab the lock and see if the device is available */
--	WARN_ON(nand_get_device(chip));
-+	nand_get_device(chip);
- 	/* Release it and go back */
- 	nand_release_device(chip);
- }
-@@ -4587,9 +4582,7 @@ static int nand_block_isbad(struct mtd_info *mtd, loff_t offs)
- 	int ret;
- 
- 	/* Select the NAND device */
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	nand_select_target(chip, chipnr);
- 
-@@ -4660,6 +4653,8 @@ static void nand_resume(struct mtd_info *mtd)
- 			__func__);
- 	}
- 	mutex_unlock(&chip->lock);
-+
-+	wake_up_all(&chip->resume_wq);
- }
- 
- /**
-@@ -5437,6 +5432,7 @@ static int nand_scan_ident(struct nand_chip *chip, unsigned int maxchips,
- 	chip->cur_cs = -1;
- 
- 	mutex_init(&chip->lock);
-+	init_waitqueue_head(&chip->resume_wq);
- 
- 	/* Enforce the right timings for reset/detection */
- 	chip->current_interface_config = nand_get_reset_interface_config();
-diff --git a/include/linux/mtd/rawnand.h b/include/linux/mtd/rawnand.h
-index 5b88cd51fadb..99d50a15a263 100644
---- a/include/linux/mtd/rawnand.h
-+++ b/include/linux/mtd/rawnand.h
-@@ -1294,6 +1294,7 @@ struct nand_chip {
- 	/* Internals */
- 	struct mutex lock;
- 	unsigned int suspended : 1;
-+	wait_queue_head_t resume_wq;
- 	int cur_cs;
- 	int read_retries;
- 	struct nand_secure_region *secure_regions;
--- 
-2.34.1
+thanks,
+-- Shuah
 

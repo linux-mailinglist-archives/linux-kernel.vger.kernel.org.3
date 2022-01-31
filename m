@@ -2,197 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A7F4A4F01
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455954A4F04
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244238AbiAaS43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:56:29 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:20151 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232915AbiAaS41 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:56:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643655388; x=1675191388;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kaj4j/1RJd1d+1eIhFnvpmOvCmlsLKxbfI0yMzUfdds=;
-  b=E/rFZc6HzUxRK1VsSZVipmBuoAVPbJ6ahoAQD5ZyyaSWQw9f17sH1aU3
-   I+GrP1h8J6dnmhpQWcU4AnOkZXaMKY7mmy6p391q6jOJm+Lmn51M9z3BT
-   udeYb9MHPnOv6Wojna62yKNNEC1E7p2+pAyE8IhcU2p0ccUUDv2vJ0frZ
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 31 Jan 2022 10:56:27 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 10:56:27 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 31 Jan 2022 10:56:26 -0800
-Received: from [10.50.31.158] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 31 Jan
- 2022 10:56:22 -0800
-Message-ID: <ae3db4cc-67ab-e968-44da-0d88f1b5092b@quicinc.com>
-Date:   Tue, 1 Feb 2022 00:26:18 +0530
+        id S1357560AbiAaS4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:56:46 -0500
+Received: from out2.migadu.com ([188.165.223.204]:24197 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232915AbiAaS4p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 13:56:45 -0500
+Message-ID: <c725798d-48da-2993-cc48-0ec0b314455f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1643655403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c/Ch63bJctNf9QVTZKCEvsLX1+etquC6AF86UHoNYQM=;
+        b=kWyls4uSwgafhck97EAH48F82wrfX1sG7bf2UiJGBsZ6E7Ik/quiWKTHipoo8vkphexbQV
+        myDA12KzydncCp/wpMhcNWf9nJrkJDZKOviEN3jh728f3TNzuxKgFqSQdpfSMtFNotH6Lz
+        jMcWyPgRMq1uWDXOiPLTxcYaTsLE3zE=
+Date:   Mon, 31 Jan 2022 11:56:36 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCHv9 0/5] lib/rwmmio/arm64: Add support to trace register
- reads/writes
+Subject: Re: [PATCH v5 00/24] Userspace P2PDMA with O_DIRECT NVMe devices
 Content-Language: en-US
-To:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     gregkh <gregkh@linuxfoundation.org>, <quic_psodagud@quicinc.com>,
-        "Trilok Soni" <quic_tsoni@quicinc.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>
-References: <cover.1642482334.git.quic_saipraka@quicinc.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <cover.1642482334.git.quic_saipraka@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org
+Cc:     Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>
+References: <20220128002614.6136-1-logang@deltatee.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <20220128002614.6136-1-logang@deltatee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd, Steve
+Hi Logan,
 
-On 1/24/2022 12:03 PM, Sai Prakash Ranjan wrote:
-> Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
-> are typically used to read/write from/to memory mapped registers
-> and can cause hangs or some undefined behaviour in following cases,
->
-> * If the access to the register space is unclocked, for example: if
->    there is an access to multimedia(MM) block registers without MM
->    clocks.
->
-> * If the register space is protected and not set to be accessible from
->    non-secure world, for example: only EL3 (EL: Exception level) access
->    is allowed and any EL2/EL1 access is forbidden.
->
-> * If xPU(memory/register protection units) is controlling access to
->    certain memory/register space for specific clients.
->
-> and more...
->
-> Such cases usually results in instant reboot/SErrors/NOC or interconnect
-> hangs and tracing these register accesses can be very helpful to debug
-> such issues during initial development stages and also in later stages.
->
-> So use ftrace trace events to log such MMIO register accesses which
-> provides rich feature set such as early enablement of trace events,
-> filtering capability, dumping ftrace logs on console and many more.
->
-> Sample output:
->
-> rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
-> rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
-> rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
-> rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
->
-> This series is a follow-up for the series [1] and a recent series [2] making use
-> of both.
->
-> [1] https://lore.kernel.org/lkml/cover.1536430404.git.saiprakash.ranjan@codeaurora.org/
-> [2] https://lore.kernel.org/lkml/1604631386-178312-1-git-send-email-psodagud@codeaurora.org/
->
-> Note in previous v4 version, Arnd suggested to benchmark and compare size with callback
-> based implementation, please see [3] for more details on that with brief comparison below.
->
->
-> **Inline version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
-> $ size vmlinux
->     text           data             bss     dec             hex         filename
->   23884219        14284468         532568 38701255        24e88c7        vmlinux
->
-> **Callback version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
-> $ size vmlinux
->      text          data             bss     dec             hex        filename
->   24108179        14279596         532568 38920343        251e097       vmlinux
->
-> $ ./scripts/bloat-o-meter inline-vmlinux callback-vmlinux
-> add/remove: 8/3 grow/shrink: 4889/89 up/down: 242244/-11564 (230680)
-> Total: Before=25812612, After=26043292, chg +0.89%
->
-> [3] https://lore.kernel.org/lkml/466449a1-36da-aaa9-7e4f-477f36b52c9e@quicinc.com/
->
-> Changes in v9:
->   * Use TRACE_EVENT_CLASS for rwmmio_write and post_write (Steven Rostedt)
->
-> Changes in v8:
->   * Fix build error reported by kernel test robot.
->
-> Changes in v7:
->   * Use lib/ instead of kernel/trace/ based on review comment by Steven Rostedt.
->
-> Changes in v6:
->   * Implemented suggestions by Arnd Bergmann:
->     - Use arch independent IO barriers in arm64/asm
->     - Add ARCH_HAVE_TRACE_MMIO_ACCESS
->     - Add post read and post write logging support
->     - Remove tracepoint_active check
->   * Fix build error reported by kernel test robot.
->
-> Changes in v5:
->   * Move arm64 to use asm-generic provided high level MMIO accessors (Arnd).
->   * Add inline logging for MMIO relaxed and non-relaxed accessors.
->   * Move nVHE KVM comment to makefile (Marc).
->   * Fix overflow warning due to switch to inline accessors instead of macro.
->   * Modify trace event field to include caller and parent details for more detailed logs.
->
-> Changes in v4:
->   * Drop dynamic debug based filter support since that will be developed later with
->     the help from Steven (Ftrace maintainer).
->   * Drop value passed to writel as it is causing hangs when tracing is enabled.
->   * Code cleanup for trace event as suggested by Steven for earlier version.
->   * Fixed some build errors reported by 0-day bot.
->
-> Changes in v3:
->   * Create a generic mmio header for instrumented version (Earlier suggested in [1]
->     by Will Deacon and recently [2] by Greg to have a generic version first).
->   * Add dynamic debug support to filter out traces which can be very useful for targeted
->     debugging specific to subsystems or drivers.
->   * Few modifications to the rwmmio trace event fields to include the mmio width and print
->     addresses in hex.
->   * Rewrote commit msg to explain some more about usecases.
->
-> Prasad Sodagudi (1):
->    lib: Add register read/write tracing support
->
-> Sai Prakash Ranjan (4):
->    arm64: io: Use asm-generic high level MMIO accessors
->    irqchip/tegra: Fix overflow implicit truncation warnings
->    drm/meson: Fix overflow implicit truncation warnings
->    asm-generic/io: Add logging support for MMIO accessors
->
->   arch/Kconfig                      |  3 +
->   arch/arm64/Kconfig                |  1 +
->   arch/arm64/include/asm/io.h       | 41 +++----------
->   arch/arm64/kvm/hyp/nvhe/Makefile  |  7 ++-
->   drivers/gpu/drm/meson/meson_viu.c | 22 +++----
->   drivers/irqchip/irq-tegra.c       | 10 ++--
->   include/asm-generic/io.h          | 82 ++++++++++++++++++++++++--
->   include/trace/events/rwmmio.h     | 97 +++++++++++++++++++++++++++++++
->   lib/Kconfig                       |  7 +++
->   lib/Makefile                      |  2 +
->   lib/trace_readwrite.c             | 47 +++++++++++++++
->   11 files changed, 265 insertions(+), 54 deletions(-)
->   create mode 100644 include/trace/events/rwmmio.h
->   create mode 100644 lib/trace_readwrite.c
->
->
-> base-commit: bd8d9cef2a7932e688ca267ea1adf5ea6557c777
+On 1/27/2022 5:25 PM, Logan Gunthorpe wrote:
+> Hi,
+> 
+> This patchset continues my work to add userspace P2PDMA access using
+> O_DIRECT NVMe devices. This posting fixes a lot of issues that were
+> addresed in the last posting, which is here[1].
+> 
+> The patchset is rebased onto v5.17-rc1 as well as a rebased version of
+> Ralph Campbell's patches to drop the ZONE_DEVICE page ref count offset.
+> My understanding is this patch has some problems that are yet to be
+> resolved but this will be the direction taken going forward and is
+> included here to show that it is compatible with this patchset.
+> 
+> The patchset enables userspace P2PDMA by allowing userspace to mmap()
+> allocated chunks of the CMB. The resulting VMA can be passed only
+> to O_DIRECT IO on NVMe backed files or block devices. A flag is added
+> to GUP() in Patch 16, then Patches 17 through 21 wire this flag up based
+> on whether the block queue indicates P2PDMA support. Patches 22
+> through 24 enable the CMB to be mapped into userspace by mmaping
+> the nvme char device.
+> 
+> This is relatively straightforward, however the one significant
+> problem is that, presently, pci_p2pdma_map_sg() requires a homogeneous
+> SGL with all P2PDMA pages or all regular pages. Enhancing GUP to
+> support enforcing this rule would require a huge hack that I don't
+> expect would be all that pallatable. So patches 3 to 16 add
+> support for P2PDMA pages to dma_map_sg[table]() to the dma-direct
+> and dma-iommu implementations. Thus systems without an IOMMU plus
+> Intel and AMD IOMMUs are supported. (Other IOMMU implementations would
+> then be unsupported, notably ARM and PowerPC but support would be added
+> when they convert to dma-iommu).
+Am I understanding that an IO may use a mix of p2pdma and system pages?
+Would that cause inconsistent latencies?
 
-Any comments on this version?
-
-Thanks,
-Sai
+> 
+> dma_map_sgtable() is preferred when dealing with P2PDMA memory as it
+> will return -EREMOTEIO when the DMA device cannot map specific P2PDMA
+> pages based on the existing rules in calc_map_type_and_dist().
+> 
+> The other issue is dma_unmap_sg() needs a flag to determine whether a
+> given dma_addr_t was mapped regularly or as a PCI bus address. To allow
+> this, a third flag is added to the page_link field in struct
+> scatterlist. This effectively means support for P2PDMA will now depend
+> on CONFIG_64BIT.
+> 
+> Feedback welcome.
+> 
+> This series is based on v5.17-rc1. A git branch is available here:
+> 
+>    https://github.com/sbates130272/linux-p2pmem/  p2pdma_user_cmb_v5
+> 
+> Thanks,
+> 
+> Logan
+> 
+> [1] https://lore.kernel.org/all/20211117215410.3695-1-logang@deltatee.com/T/#u
+> 
+> --
+> 
+> Changes since v4:
+>    - Rebase onto v5.17-rc1.
+>    - Included Ralph Cambell's patches which removes the ZONE_DEVICE page
+>      reference count offset. This is just to demonstrate that this
+>      series is compatible with that direction.
+>    - Added a comment in pci_p2pdma_map_sg_attrs(), per Chaitanya and
+>      included his Reviewed-by tags.
+>    - Patch 1 in the last series which cleaned up scatterlist.h
+>      has been upstreamed.
+>    - Dropped NEED_SG_DMA_BUS_ADDR_FLAG seeing depends on doesn't
+>      work with selected symbols, per Christoph.
+>    - Switched iov_iter_get_pages_[alloc_]flags to be exported with
+>      EXPORT_SYMBOL_GPL, per Christoph.
+>    - Renamed zone_device_pages_are_mergeable() to
+>      zone_device_pages_have_same_pgmap(), per Christoph.
+>    - Renamed .mmap_file_open operation in nvme_ctrl_ops to
+>      cdev_file_open(), per Christoph.
+> 
+> Changes since v3:
+>    - Add some comment and commit message cleanups I had missed for v3,
+>      also moved the prototypes for some of the p2pdma helpers to
+>      dma-map-ops.h (which I missed in v3 and was suggested in v2).
+>    - Add separate cleanup patch for scatterlist.h and change the macros
+>      to functions. (Suggested by Chaitanya and Jason, respectively)
+>    - Rename sg_dma_mark_pci_p2pdma() and sg_is_dma_pci_p2pdma() to
+>      sg_dma_mark_bus_address() and sg_is_dma_bus_address() which
+>      is a more generic name (As requested by Jason)
+>    - Fixes to some comments and commit messages as suggested by Bjorn
+>      and Jason.
+>    - Ensure swiotlb is not used with P2PDMA pages. (Per Jason)
+>    - The sgtable coversion in RDMA was split out and sent upstream
+>      separately, the new patch is only the removal. (Per Jason)
+>    - Moved the FOLL_PCI_P2PDMA check outside of get_dev_pagemap() as
+>      Jason suggested this will be removed in the near term.
+>    - Add two patches to ensure that zone device pages with different
+>      pgmaps are never merged in the block layer or
+>      sg_alloc_append_table_from_pages() (Per Jason)
+>    - Ensure synchronize_rcu() or call_rcu() is used before returning
+>      pages to the genalloc. (Jason pointed out that pages are not
+>      gauranteed to be unused in all architectures until at least
+>      after an RCU grace period, and that synchronize_rcu() was likely
+>      too slow to use in the vma close operation.
+>    - Collected Acks and Reviews by Bjorn, Jason and Max.
+> 
+> Logan Gunthorpe (22):
+>    lib/scatterlist: add flag for indicating P2PDMA segments in an SGL
+>    PCI/P2PDMA: Attempt to set map_type if it has not been set
+>    PCI/P2PDMA: Expose pci_p2pdma_map_type()
+>    PCI/P2PDMA: Introduce helpers for dma_map_sg implementations
+>    dma-mapping: allow EREMOTEIO return code for P2PDMA transfers
+>    dma-direct: support PCI P2PDMA pages in dma-direct map_sg
+>    dma-mapping: add flags to dma_map_ops to indicate PCI P2PDMA support
+>    iommu/dma: support PCI P2PDMA pages in dma-iommu map_sg
+>    nvme-pci: check DMA ops when indicating support for PCI P2PDMA
+>    nvme-pci: convert to using dma_map_sgtable()
+>    RDMA/core: introduce ib_dma_pci_p2p_dma_supported()
+>    RDMA/rw: drop pci_p2pdma_[un]map_sg()
+>    PCI/P2PDMA: Remove pci_p2pdma_[un]map_sg()
+>    mm: introduce FOLL_PCI_P2PDMA to gate getting PCI P2PDMA pages
+>    iov_iter: introduce iov_iter_get_pages_[alloc_]flags()
+>    block: add check when merging zone device pages
+>    lib/scatterlist: add check when merging zone device pages
+>    block: set FOLL_PCI_P2PDMA in __bio_iov_iter_get_pages()
+>    block: set FOLL_PCI_P2PDMA in bio_map_user_iov()
+>    mm: use custom page_free for P2PDMA pages
+>    PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+>    nvme-pci: allow mmaping the CMB in userspace
+> 
+> Ralph Campbell (2):
+>    ext4/xfs: add page refcount helper
+>    mm: remove extra ZONE_DEVICE struct page refcount
+> 
+>   arch/powerpc/kvm/book3s_hv_uvmem.c     |   2 +-
+>   block/bio.c                            |  10 +-
+>   block/blk-map.c                        |   7 +-
+>   drivers/gpu/drm/nouveau/nouveau_dmem.c |   2 +-
+>   drivers/infiniband/core/rw.c           |  45 +--
+>   drivers/iommu/dma-iommu.c              |  67 +++-
+>   drivers/nvme/host/core.c               |  18 +-
+>   drivers/nvme/host/nvme.h               |   4 +-
+>   drivers/nvme/host/pci.c                |  97 +++---
+>   drivers/nvme/target/rdma.c             |   2 +-
+>   drivers/pci/Kconfig                    |   5 +
+>   drivers/pci/p2pdma.c                   | 441 +++++++++++++++++++++----
+>   fs/dax.c                               |   8 +-
+>   fs/ext4/inode.c                        |   5 +-
+>   fs/fuse/dax.c                          |   4 +-
+>   fs/xfs/xfs_file.c                      |   4 +-
+>   include/linux/dax.h                    |  10 +
+>   include/linux/dma-map-ops.h            |  76 +++++
+>   include/linux/dma-mapping.h            |   5 +
+>   include/linux/memremap.h               |   7 +-
+>   include/linux/mm.h                     |  68 ++--
+>   include/linux/pci-p2pdma.h             |  38 +--
+>   include/linux/scatterlist.h            |  44 ++-
+>   include/linux/uio.h                    |   6 +
+>   include/rdma/ib_verbs.h                |  11 +
+>   include/uapi/linux/magic.h             |   1 +
+>   kernel/dma/direct.c                    |  43 ++-
+>   kernel/dma/direct.h                    |   7 +-
+>   kernel/dma/mapping.c                   |  22 +-
+>   lib/iov_iter.c                         |  25 +-
+>   lib/scatterlist.c                      |  25 +-
+>   lib/test_hmm.c                         |   2 +-
+>   mm/gup.c                               |  22 +-
+>   mm/internal.h                          |   8 +
+>   mm/memcontrol.c                        |   6 +-
+>   mm/memremap.c                          |  75 ++---
+>   mm/migrate.c                           |   5 -
+>   mm/page_alloc.c                        |   3 +
+>   mm/swap.c                              |  45 +--
+>   39 files changed, 904 insertions(+), 371 deletions(-)
+> 
+> 
+> base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
+> --
+> 2.30.2

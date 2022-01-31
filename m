@@ -2,248 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B0F4A4876
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6EB4A487C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348887AbiAaNjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243165AbiAaNiw (ORCPT
+        id S1377977AbiAaNkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:40:06 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13312 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238832AbiAaNkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:38:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6D8C061714;
-        Mon, 31 Jan 2022 05:38:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1A6B612A4;
-        Mon, 31 Jan 2022 13:38:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C51C340F1;
-        Mon, 31 Jan 2022 13:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643636331;
-        bh=RA0FVrl6eXQy361ALGzH978zET9hjuNIFCrB+wSQl5g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eoqRFG/nNASJJ2ghO0MXaXsK3x/8sEn8zE461QkX/XqEoCrM+7t03dyPlvxMBHb+k
-         JAOJOlobIJ9uwC3m0p9hZslwyi8MmrWp7XctqfDk3aNQVTztmJdAoKx0G5T46WCDvx
-         FVf5uZQpfFlXO7kTriG+6gC9ZyG9lp9Rkwu5ZzREucONL6xrL9S8y0ywvz81puGMFG
-         6UFgcJm0rSH87vxfufgrMEuZzWHwofArqB8Mq99Y+G54jP00gtmHudJ8RGZv+KXZfc
-         9G3Ao0gulozIwDQ7Toq1aobwn0Ka/WDqBVFF+ZI6xE6GItxG035MGBofMrfqH1X4bZ
-         sZyS7e9CU2t7g==
-Received: by mail-vk1-f171.google.com with SMTP id b77so8236608vka.11;
-        Mon, 31 Jan 2022 05:38:51 -0800 (PST)
-X-Gm-Message-State: AOAM533zRWs8QltLbia7wO67IHxIt1ctP+Bcv72SFujF2Qdo+H9TEf98
-        wRP0YOppg7C9dSvUyH2HzLtHery0fC9TouvYDzU=
-X-Google-Smtp-Source: ABdhPJzfz8qCfL1NXgodda1dSRl1VLyno35z1oJfIiOI1wGeFTV33rxyeukjw8DnP7wlrRwRPc0y9bOoMBTRs/ZlfGU=
-X-Received: by 2002:a1f:640e:: with SMTP id y14mr8256495vkb.2.1643636330386;
- Mon, 31 Jan 2022 05:38:50 -0800 (PST)
+        Mon, 31 Jan 2022 08:40:05 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VDWHNE028641;
+        Mon, 31 Jan 2022 13:40:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=1b8E52D7subxzHhYPkwF2V8bjyBoMxQ/AeKVhSntdms=;
+ b=lt2f7xNEVA91f0hrEyxn2E9xlq/MonQnYFEMiZURLkSrsBZSu5ABmu8fx8zh+6FgFmQi
+ ojz+ajjo6zb26a1lyXVPA/6pOrB8mAH207T3nprehY/VXcxHNReuSfrELRwUjmG/VmXG
+ FnlkTZ80aPqhWUMRJrWci+EuVEd+naWbZIfzSIGPRmt8bfw6K+zAc/lqpp90CjHjH7Ep
+ hhYwwaEYE25frFUwVMjIFn8h5BwnAnysTn4v+XmwNEru/DA9/bs2WYF04HEvc7qN3UZc
+ r7DLtwWyII8aTnD+qS1yytYYiD924Vgab8vey2zrO3nGZwueSsJiamibegUXNTcci+B9 xg== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxgr685p4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 13:40:02 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VDWMJN008778;
+        Mon, 31 Jan 2022 13:40:00 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3dvw78u6k9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 13:40:00 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VDdtNa34144528
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 13:39:56 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DCAE2AE057;
+        Mon, 31 Jan 2022 13:39:55 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 88459AE05A;
+        Mon, 31 Jan 2022 13:39:55 +0000 (GMT)
+Received: from [9.171.76.125] (unknown [9.171.76.125])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jan 2022 13:39:55 +0000 (GMT)
+Message-ID: <ebe26b3f-704c-fb75-4055-0a0b248d89e5@linux.ibm.com>
+Date:   Mon, 31 Jan 2022 14:39:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 0/2] uaccess: Add mechanism for key checked access to
+ user memory
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+References: <20220126173358.2951879-1-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220126173358.2951879-1-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Al-f9nZ4_eO9ULmEYFGv-dC2J1IW_ppS
+X-Proofpoint-ORIG-GUID: Al-f9nZ4_eO9ULmEYFGv-dC2J1IW_ppS
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220131064933.3780271-1-hch@lst.de> <20220131064933.3780271-5-hch@lst.de>
-In-Reply-To: <20220131064933.3780271-5-hch@lst.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 31 Jan 2022 21:38:39 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSo+wk93a5ybmC9GCK7H6W8OmuQFF84tqyXapKRajAP0g@mail.gmail.com>
-Message-ID: <CAJF2gTSo+wk93a5ybmC9GCK7H6W8OmuQFF84tqyXapKRajAP0g@mail.gmail.com>
-Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_05,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0
+ phishscore=0 clxscore=1011 adultscore=0 impostorscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310090
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Am 26.01.22 um 18:33 schrieb Janis Schoetterl-Glausch:
+> Something like this patch series is required as part of KVM supporting
+> storage keys on s390.
+> See https://lore.kernel.org/kvm/20220118095210.1651483-1-scgl@linux.ibm.com/
 
-On Mon, Jan 31, 2022 at 2:49 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> The F_GETLK64/F_SETLK64/F_SETLKW64 fcntl opcodes are only implemented
-> for the 32-bit syscall APIs, but are also needed for compat handling
-> on 64-bit kernels.
->
-> Consolidate them in unistd.h instead of definining the internal compat
-> definitions in compat.h, which is rather errror prone (e.g. parisc
-> gets the values wrong currently).
->
-> Note that before this change they were never visible to userspace due
-> to the fact that CONFIG_64BIT is only set for kernel builds.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/arm64/include/asm/compat.h        | 4 ----
->  arch/mips/include/asm/compat.h         | 4 ----
->  arch/mips/include/uapi/asm/fcntl.h     | 4 ++--
->  arch/powerpc/include/asm/compat.h      | 4 ----
->  arch/s390/include/asm/compat.h         | 4 ----
->  arch/sparc/include/asm/compat.h        | 4 ----
->  arch/x86/include/asm/compat.h          | 4 ----
->  include/uapi/asm-generic/fcntl.h       | 4 ++--
->  tools/include/uapi/asm-generic/fcntl.h | 2 --
->  9 files changed, 4 insertions(+), 30 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
-> index eaa6ca062d89b..2763287654081 100644
-> --- a/arch/arm64/include/asm/compat.h
-> +++ b/arch/arm64/include/asm/compat.h
-> @@ -73,10 +73,6 @@ struct compat_flock {
->         compat_pid_t    l_pid;
->  };
->
-> -#define F_GETLK64      12      /*  using 'struct flock64' */
-> -#define F_SETLK64      13
-> -#define F_SETLKW64     14
-> -
->  struct compat_flock64 {
->         short           l_type;
->         short           l_whence;
-> diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
-> index bbb3bc5a42fd8..6a350c1f70d7e 100644
-> --- a/arch/mips/include/asm/compat.h
-> +++ b/arch/mips/include/asm/compat.h
-> @@ -65,10 +65,6 @@ struct compat_flock {
->         s32             pad[4];
->  };
->
-> -#define F_GETLK64      33
-> -#define F_SETLK64      34
-> -#define F_SETLKW64     35
-> -
->  struct compat_flock64 {
->         short           l_type;
->         short           l_whence;
-> diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
-> index 9e44ac810db94..0369a38e3d4f2 100644
-> --- a/arch/mips/include/uapi/asm/fcntl.h
-> +++ b/arch/mips/include/uapi/asm/fcntl.h
-> @@ -44,11 +44,11 @@
->  #define F_SETOWN       24      /*  for sockets. */
->  #define F_GETOWN       23      /*  for sockets. */
->
-> -#ifndef __mips64
-> +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
->  #define F_GETLK64      33      /*  using 'struct flock64' */
->  #define F_SETLK64      34
->  #define F_SETLKW64     35
-> -#endif
-> +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
->
->  #if _MIPS_SIM != _MIPS_SIM_ABI64
->  #define __ARCH_FLOCK_EXTRA_SYSID       long l_sysid;
-> diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
-> index 7afc96fb6524b..83d8f70779cbc 100644
-> --- a/arch/powerpc/include/asm/compat.h
-> +++ b/arch/powerpc/include/asm/compat.h
-> @@ -52,10 +52,6 @@ struct compat_flock {
->         compat_pid_t    l_pid;
->  };
->
-> -#define F_GETLK64      12      /*  using 'struct flock64' */
-> -#define F_SETLK64      13
-> -#define F_SETLKW64     14
-> -
->  struct compat_flock64 {
->         short           l_type;
->         short           l_whence;
-> diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
-> index cdc7ae72529d8..0f14b3188b1bb 100644
-> --- a/arch/s390/include/asm/compat.h
-> +++ b/arch/s390/include/asm/compat.h
-> @@ -110,10 +110,6 @@ struct compat_flock {
->         compat_pid_t    l_pid;
->  };
->
-> -#define F_GETLK64       12
-> -#define F_SETLK64       13
-> -#define F_SETLKW64      14
-> -
->  struct compat_flock64 {
->         short           l_type;
->         short           l_whence;
-> diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
-> index bd949fcf9d63b..108078751bb5a 100644
-> --- a/arch/sparc/include/asm/compat.h
-> +++ b/arch/sparc/include/asm/compat.h
-> @@ -84,10 +84,6 @@ struct compat_flock {
->         short           __unused;
->  };
->
-> -#define F_GETLK64      12
-> -#define F_SETLK64      13
-> -#define F_SETLKW64     14
-> -
->  struct compat_flock64 {
->         short           l_type;
->         short           l_whence;
-> diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
-> index 7516e4199b3c6..8d19a212f4f26 100644
-> --- a/arch/x86/include/asm/compat.h
-> +++ b/arch/x86/include/asm/compat.h
-> @@ -58,10 +58,6 @@ struct compat_flock {
->         compat_pid_t    l_pid;
->  };
->
-> -#define F_GETLK64      12      /*  using 'struct flock64' */
-> -#define F_SETLK64      13
-> -#define F_SETLKW64     14
-> -
->  /*
->   * IA32 uses 4 byte alignment for 64 bit quantities,
->   * so we need to pack this structure.
-> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-> index 98f4ff165b776..8c05d3d89ff18 100644
-> --- a/include/uapi/asm-generic/fcntl.h
-> +++ b/include/uapi/asm-generic/fcntl.h
-> @@ -116,13 +116,13 @@
->  #define F_GETSIG       11      /* for sockets. */
->  #endif
->
-> -#ifndef CONFIG_64BIT
-> +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
->  #ifndef F_GETLK64
->  #define F_GETLK64      12      /*  using 'struct flock64' */
->  #define F_SETLK64      13
->  #define F_SETLKW64     14
->  #endif
-> -#endif
-> +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
->
->  #ifndef F_SETOWN_EX
->  #define F_SETOWN_EX    15
-> diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
-> index bf961a71802e0..6e16722026f39 100644
-> --- a/tools/include/uapi/asm-generic/fcntl.h
-> +++ b/tools/include/uapi/asm-generic/fcntl.h
-> @@ -115,13 +115,11 @@
->  #define F_GETSIG       11      /* for sockets. */
->  #endif
->
-> -#ifndef CONFIG_64BIT
->  #ifndef F_GETLK64
->  #define F_GETLK64      12      /*  using 'struct flock64' */
->  #define F_SETLK64      13
->  #define F_SETLKW64     14
->  #endif
-> -#endif
->
->  #ifndef F_SETOWN_EX
->  #define F_SETOWN_EX    15
-> --
-> 2.30.2
->
+Just to give some more context. In theory we could confine the alternative
+uaccess functions in s390x architecture code, after all we only have one
+place in KVM code where we call it. But this will be very likely
+result in future changes not being synced. This would very likely also
+continue to work but it might miss security and functionality enhancements.
+And I think we want our KVM uaccess to also do the kasan, error-inject and
+so on. After all there is a reason why all copy_*user functions were merged
+and now architectures only provide raw_*_user functions.
 
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+> 
+> On s390 each physical page is associated with 4 access control bits.
+> On access, these are compared with an access key, which is either
+> provided by the instruction or taken from the CPU state.
+> Based on that comparison, the access either succeeds or is prevented.
+> 
+> KVM on s390 needs to be able emulate this behavior, for example during
+> instruction emulation, when it makes accesses on behalf of the guest.
+> In order to do that, we need variants of __copy_from/to_user that pass
+> along an access key to the architecture specific implementation of
+> __copy_from/to_user. That is the only difference, variants do the same
+> might_fault(), instrument_copy_to_user(), etc. calls as the normal
+> functions do and need to be kept in sync with those.
+> If these __copy_from/to_user_key functions were to be maintained
+> in architecture specific code they would be prone to going out of sync
+> with their non key counterparts if there were code changes.
+> So, instead, add these variants to include/linux/uaccess.h.
+> 
+> Considerations:
+>   * The key argument is an unsigned long, in order to make the functions
+>     less specific to s390, which would only need an u8.
+>     This could also be generalized further, i.e. by having the type be
+>     defined by the architecture, with the default being a struct without
+>     any members.
+>     Also the functions could be renamed ..._opaque, ..._arg, or similar.
+>   * Which functions do we provide _key variants for? Just defining
+>     __copy_from/to_user_key would make it rather specific to our use
+>     case.
+>   * Should ...copy_from/to_user_key functions be callable from common
+>     code? The patch defines the functions to be functionally identical
+>     to the normal functions if the architecture does not define
+>     raw_copy_from/to_user_key, so that this would be possible, however it
+>     is not required for our use case.
+> 
+> For the minimal functionality we require see the diff below.
+> 
+> bloat-o-meter reported a .03% kernel size increase.
+> 
+> Comments are much appreciated.
+> 
+> Janis Schoetterl-Glausch (2):
+>    uaccess: Add mechanism for key checked access to user memory
+>    s390/uaccess: Provide raw_copy_from/to_user_key
+> 
+>   arch/s390/include/asm/uaccess.h |  22 ++++++-
+>   arch/s390/lib/uaccess.c         |  48 ++++++++------
+>   include/linux/uaccess.h         | 107 ++++++++++++++++++++++++++++++++
+>   lib/usercopy.c                  |  33 ++++++++++
+>   4 files changed, 188 insertions(+), 22 deletions(-)
+> 
+> 
+> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> index ac0394087f7d..b3c58b7605d6 100644
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -114,6 +114,20 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
+>   	return raw_copy_from_user(to, from, n);
+>   }
+>   
+> +#ifdef raw_copy_from_user_key
+> +static __always_inline __must_check unsigned long
+> +__copy_from_user_key(void *to, const void __user *from, unsigned long n,
+> +			  unsigned long key)
+> +{
+> +	might_fault();
+> +	if (should_fail_usercopy())
+> +		return n;
+> +	instrument_copy_from_user(to, from, n);
+> +	check_object_size(to, n, false);
+> +	return raw_copy_from_user_key(to, from, n, key);
+> +}
+> +#endif /* raw_copy_from_user_key */
+> +
+>   /**
+>    * __copy_to_user_inatomic: - Copy a block of data into user space, with less checking.
+>    * @to:   Destination address, in user space.
+> @@ -148,6 +162,20 @@ __copy_to_user(void __user *to, const void *from, unsigned long n)
+>   	return raw_copy_to_user(to, from, n);
+>   }
+>   
+> +#ifdef raw_copy_to_user_key
+> +static __always_inline __must_check unsigned long
+> +__copy_to_user_key(void __user *to, const void *from, unsigned long n,
+> +			unsigned long key)
+> +{
+> +	might_fault();
+> +	if (should_fail_usercopy())
+> +		return n;
+> +	instrument_copy_to_user(to, from, n);
+> +	check_object_size(from, n, true);
+> +	return raw_copy_to_user_key(to, from, n, key);
+> +}
+> +#endif /* raw_copy_to_user_key */
+> +
+>   #ifdef INLINE_COPY_FROM_USER
+>   static inline __must_check unsigned long
+>   _copy_from_user(void *to, const void __user *from, unsigned long n)
+> 
+> base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8

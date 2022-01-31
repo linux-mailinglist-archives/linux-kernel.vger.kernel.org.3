@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FF54A446B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C6F4A4481
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378916AbiAaL3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:29:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:47680 "EHLO foss.arm.com"
+        id S1379610AbiAaLa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:28 -0500
+Received: from out0.migadu.com ([94.23.1.103]:53048 "EHLO out0.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378380AbiAaLUG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:20:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BB62D6E;
-        Mon, 31 Jan 2022 03:20:04 -0800 (PST)
-Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E600C3F774;
-        Mon, 31 Jan 2022 03:20:02 -0800 (PST)
-Date:   Mon, 31 Jan 2022 11:19:57 +0000
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kernel/cpu.c: fix init_cpu_online
-Message-ID: <YffF3e+uUIDVO7hm@FVFF7649Q05P>
-References: <20220131014648.941629-1-yury.norov@gmail.com>
+        id S239602AbiAaLUl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:20:41 -0500
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=laumann.xyz; s=key1;
+        t=1643628038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JYDB1xSWY0WQHZmHLRS3w1xwDpScfvJzKuT7JY80/Ek=;
+        b=iKFJRGlz2zomgwYB1L4Jc7x3tKNUjkI+C833pHGQFd0XCzX51U5/XBC4VJHR4gyGgj1ybI
+        QMfbX/97K/4H3cIuvNuvhTRqGF7hcFKjkMHUXyQHwSGJhvDMPXKJrrLh7b3vVwF2IdgEWo
+        vz2F7hxj294AYe7RKzvr3MjRUyeidUa5pTw9UszFxC4+4cJGGqXWqHHz6ukMw5Sv3ye50g
+        NuVZ2K4f+E3HU+EZlqo4XZrJazCBFvZRCsTd8F8d0rRtwZ28basaJ+o/sPYWDJSV86gZlX
+        LUXED4jhOQqRIsNe93azT8ZZZep+lffupkYRSKcWvkjZmF+qogCug6t2FnHm0A==
+From:   Thomas Bracht Laumann Jespersen <t@laumann.xyz>
+To:     robh+dt@kernel.org, frowand.list@gmail.com
+Cc:     masahiroy@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bracht Laumann Jespersen <t@laumann.xyz>
+Subject: [PATCH] scripts/dtc: Call pkg-config POSIXly correct
+Date:   Mon, 31 Jan 2022 12:20:28 +0100
+Message-Id: <20220131112028.7907-1-t@laumann.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131014648.941629-1-yury.norov@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: laumann.xyz
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yury,
+Running with POSIXLY_CORRECT=1 in the environment the scripts/dtc build
+fails, because pkg-config doesn't output anything when the flags come
+after the arguments.
 
-On Sun, Jan 30, 2022 at 05:46:48PM -0800, Yury Norov wrote:
-> cpu_online_mask has an associate counter of online cpus, which must be
-> initialized in init_cpu_online().
-> 
-> Fixes: 0c09ab96fc82010 (cpu/hotplug: Cache number of online CPUs)
+Fixes: f8d8b46cd20e ("scripts/dtc: use pkg-config to include <yaml.h> in non-standard path")
+Signed-off-by: Thomas Bracht Laumann Jespersen <t@laumann.xyz>
+---
+I'm aware that the full kernel doesn't build with POSIXLY_CORRECT set, but I
+asked around and was told just to submit a patch.
 
-Aren't the increments/decrements from set_cpu_online() enough?
+This is based on the v5.17-rc2 tag, not sure if that's the right tree to work
+from, I'll happily cherry-pick to another tree if desired.
 
-I guess we could argue that this isn't a private function and the
-num_online_cpus should be updated here. But unless I missed something,
-init_cpu_online() is only called in ia64 arch, in the !SMP case. Is
-this the problem you're trying to tackle? If not, I'm not sure that warrants a
-"Fixes:" tag
+ scripts/dtc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  kernel/cpu.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 407a2568f35e..cd7605204d4d 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -2616,6 +2616,7 @@ void init_cpu_possible(const struct cpumask *src)
->  void init_cpu_online(const struct cpumask *src)
->  {
->  	cpumask_copy(&__cpu_online_mask, src);
-> +	atomic_set(&__num_online_cpus, cpumask_weight(cpu_online_mask));
->  }
->  
->  void set_cpu_online(unsigned int cpu, bool online)
-> -- 
-> 2.30.2
-> 
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 95aaf7431bff..1cba78e1dce6 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -29,7 +29,7 @@ dtc-objs	+= yamltree.o
+ # To include <yaml.h> installed in a non-default path
+ HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
+ # To link libyaml installed in a non-default path
+-HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
++HOSTLDLIBS_dtc	:= $(shell pkg-config --libs yaml-0.1)
+ endif
+ 
+ # Generated files need one more search path to include headers in source tree
+-- 
+2.34.1
+

@@ -2,141 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018A44A4D9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084844A4DA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350415AbiAaR4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S235245AbiAaR7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240641AbiAaR4V (ORCPT
+        with ESMTP id S230033AbiAaR7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:56:21 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90545C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:56:20 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id y23so28086053oia.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:56:20 -0800 (PST)
+        Mon, 31 Jan 2022 12:59:10 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865A6C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:59:10 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so14549553pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:59:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=BVD0NSbX3nj02sBgzS26Hzi8d1ZIOHSSU47jm/3MiI0=;
-        b=kEM6rNetZF01SR0pi5B+qDDKi3p/QNb3xolAKlDE3PbprwbOww1d0ZRLalVqU9fwHY
-         1kKtnwvoE65sHCs7JX+ZVlBmfLYE4sslG9hvPFVcL104Gy/BhEQd+zKVCXZppeg4xMUe
-         3wh4tKonjg/Zp7Qm9yrxLgQzZ3i575Hj5ddAai/sxziVCoaVs8cEl1my7e0R0TWl4EdV
-         GBlDZX6fxsr3P33VRf0nN1pGgqVQK9uJLFdzVeOlxjzvPfNBKXHPlaEZ9Zz0nAuzp/q5
-         ICqxDNCecVtvhOx8QLvMJTu26eovXTbxs/0HflbKs4Tf8qIaYjw30c8LFME3hXPs5mOB
-         VmaQ==
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GTfk5dtnofD+DwQSBTggrf944TpHjURpGaUt6sHxP1Q=;
+        b=zo7PV8Zd2Z7HIVMtmOiMcabS1N6sxBbjo3wwW81zQa4IENFd+3e1qlBJHlUZq9ntz+
+         XqfG3FiwQvk7BkMKzEkrTK8KhKl8bZCQp61R1xdJf1S9wF/56YoXbTILPq45QQEx1fSh
+         qDbMCmpmLx42v5eiBQi+snTnumsDFMmyNi7p2J7qmEpf/Q0W+tWRSYxd7R6rXO23yKNp
+         eMGd4RXtD6PUL8AwbxNTR7tmpDMAYcRkYwTmmCgt3rFO3CXoS8g4hf8QkYIQwr1yPT2W
+         YKmY+awyasNFLlw+dtDGpSReBp1a0X8b4c5W4Zbb1H5Li7iemUtlEkg083LPRVdpWVvw
+         ce3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=BVD0NSbX3nj02sBgzS26Hzi8d1ZIOHSSU47jm/3MiI0=;
-        b=Z4TZLo0BkihgF3jQ3EAgJvW7AZULNB+2Fl5qeHRG6LqH0YmLqaPl5tMyqjoVlDP2kE
-         HjxDm829uI6IVEbN/NbAZ5DsZA5hjRnFDnmQFuXuFYfXRf0JjN8sEScJH//OUxmloAix
-         1dszKE+ShNOkPEQ+BRPEmWF/NhvfJw3m0EjdxkObQ/rHg0yb7W6Ba2P7gpf2AEjksR7P
-         KPWjQ+fGf8sSQ+g7PHQAUlffwAkUMFSWgXoopk2eflU31Jtr0xa8Be39xCa9TuORX5bI
-         cDH5OZgpRJcFs+gPKXZ3xeGck7tNyifNNZEK1YUP8fJmh+UbzHXkRmwRGI2kNs214LHF
-         /PBA==
-X-Gm-Message-State: AOAM532NMfQbhLwsRNuMBkYxNnGOSReYNipmaxN0V2CBQVtymDzUo07m
-        a+dVYhFUo3DfWqcK6LGtdHj8mA==
-X-Google-Smtp-Source: ABdhPJxTt13DSu5K/UgSNfsHqPrBctZ8yNK463AzxV13RIocT8h2aaYGcoAZcFFPegFyhHACuSBw/Q==
-X-Received: by 2002:a05:6808:1583:: with SMTP id t3mr18106273oiw.248.1643651779818;
-        Mon, 31 Jan 2022 09:56:19 -0800 (PST)
-Received: from fedora ([187.36.236.204])
-        by smtp.gmail.com with ESMTPSA id w191sm13425965oiw.42.2022.01.31.09.56.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GTfk5dtnofD+DwQSBTggrf944TpHjURpGaUt6sHxP1Q=;
+        b=0i2lXwcKBvSJBIAwcai30oKG/dqa1FQZa8EKGlRBomfdBIgYfYq9fdWRT9Uq9KT5K4
+         gOGtp/N7k9c95GDiYxnhJPfIKLiz1IajF6IJaRPxmTJRBCDIhIFiNlwmDO0s79n7phGw
+         /SsEL3NIYOkt0lgtKIVsg/0yjZCUB037qcLpr8ZXb3GOgoH+cM4CNXlLG/z5XzgH5CC/
+         D0oP8uUoOZ0edgL8DDOd/tpA7qUoRz0Wh8qbk8tRXWUMfM5h3+WLHKXohIWDgfcomxSC
+         JOzKuqPkBK2NjgdnymiT4KHHN9Mq/BdRCGavGdlYiXMolfIwcFRcGYUzO8oWJcnucDnU
+         RF1g==
+X-Gm-Message-State: AOAM531ubhGfpfrKGmyaNZz+leHgeGG81400nAyuVcWvOHhO+OWBDPem
+        t/GHBypu0wDsxBJpA4b/HI+ljg==
+X-Google-Smtp-Source: ABdhPJwUpbKpp1BF/RE/P7pFaFs95WxKDdCWSlLhnXYDb8ikckCTeUYHjKtVxjHYzKFZsy5bOe8h5g==
+X-Received: by 2002:a17:90b:1d8d:: with SMTP id pf13mr35398210pjb.232.1643651949935;
+        Mon, 31 Jan 2022 09:59:09 -0800 (PST)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id o1sm20431282pfu.88.2022.01.31.09.59.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 09:56:19 -0800 (PST)
-Date:   Mon, 31 Jan 2022 14:56:13 -0300
-From:   =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-To:     gregkh@linuxfoundation.org, tj@kernel.org, viro@zeniv.linux.org.uk,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v2] seq_file: fix NULL pointer arithmetic warning
-Message-ID: <YfgivbCgwKjJu9ec@fedora>
+        Mon, 31 Jan 2022 09:59:09 -0800 (PST)
+Date:   Mon, 31 Jan 2022 09:59:05 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Saeed Mahameed <saeed@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Einon <mark.einon@gmail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        David Awogbemila <awogbemila@google.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Jon Mason <jdmason@kudzu.us>,
+        Simon Horman <simon.horman@corigine.com>,
+        Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
+        rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
+        Edwin Peer <edwin.peer@broadcom.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Liming Sun <limings@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Omkar Kulkarni <okulkarni@marvell.com>,
+        Shai Malin <smalin@marvell.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
+        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs
+ to y
+Message-ID: <20220131095905.08722670@hermes.local>
+In-Reply-To: <20220131172450.4905-1-saeed@kernel.org>
+References: <20220131172450.4905-1-saeed@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement conditional logic in order to replace NULL pointer arithmetic.
+On Mon, 31 Jan 2022 09:24:50 -0800
+Saeed Mahameed <saeed@kernel.org> wrote:
 
-The use of NULL pointer arithmetic was pointed out by clang with the
-following warning:
+> From: Saeed Mahameed <saeedm@nvidia.com>
+> 
+> NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
+> 
+> Since all drivers belonging to a vendor are supposed to default to 'n',
+> defaulting all vendors to 'n' shouldn't be an issue, and aligns well
+> with the 'no new drivers' by default mentality.
+> 
+> Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 
-fs/kernfs/file.c:128:15: warning: performing pointer arithmetic on a
-null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-                return NULL + !*ppos;
-                       ~~~~ ^
-fs/seq_file.c:559:14: warning: performing pointer arithmetic on a
-null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-        return NULL + (*pos == 0);
+This was done back when vendors were introduced in the network drivers tree.
+The default of Y allowed older configurations to just work.
 
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
----
-V1 -> V2:
-- Use SEQ_START_TOKEN instead of open-coding it
-- kernfs_seq_start call single_start instead of open-coding it
----
- fs/kernfs/file.c         | 7 +------
- fs/seq_file.c            | 5 +++--
- include/linux/seq_file.h | 1 +
- 3 files changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index 9414a7a60a9f..7aefaca876a0 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -120,13 +120,8 @@ static void *kernfs_seq_start(struct seq_file *sf, loff_t *ppos)
- 		if (next == ERR_PTR(-ENODEV))
- 			kernfs_seq_stop_active(sf, next);
- 		return next;
--	} else {
--		/*
--		 * The same behavior and code as single_open().  Returns
--		 * !NULL if pos is at the beginning; otherwise, NULL.
--		 */
--		return NULL + !*ppos;
- 	}
-+	return single_start(sf, ppos);
- }
- 
- static void *kernfs_seq_next(struct seq_file *sf, void *v, loff_t *ppos)
-diff --git a/fs/seq_file.c b/fs/seq_file.c
-index f8e1f4ee87ff..bb2b15d3f1c5 100644
---- a/fs/seq_file.c
-+++ b/fs/seq_file.c
-@@ -554,10 +554,11 @@ int seq_dentry(struct seq_file *m, struct dentry *dentry, const char *esc)
- }
- EXPORT_SYMBOL(seq_dentry);
- 
--static void *single_start(struct seq_file *p, loff_t *pos)
-+void *single_start(struct seq_file *p, loff_t *pos)
- {
--	return NULL + (*pos == 0);
-+	return *pos ? NULL : SEQ_START_TOKEN;
- }
-+EXPORT_SYMBOL(single_start);
- 
- static void *single_next(struct seq_file *p, void *v, loff_t *pos)
- {
-diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
-index 88cc16444b43..60820ab511d2 100644
---- a/include/linux/seq_file.h
-+++ b/include/linux/seq_file.h
-@@ -162,6 +162,7 @@ int seq_dentry(struct seq_file *, struct dentry *, const char *);
- int seq_path_root(struct seq_file *m, const struct path *path,
- 		  const struct path *root, const char *esc);
- 
-+void *single_start(struct seq_file *, loff_t *);
- int single_open(struct file *, int (*)(struct seq_file *, void *), void *);
- int single_open_size(struct file *, int (*)(struct seq_file *, void *), void *, size_t);
- int single_release(struct inode *, struct file *);
--- 
-2.34.1
-
+So there was a reason, not sure if it matters anymore.
+But it seems like useless repainting to change it now.

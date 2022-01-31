@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDEB4A4285
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2EA4A43D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359834AbiAaLMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376504AbiAaLIe (ORCPT
+        id S1377605AbiAaLYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:24:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44196 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359746AbiAaLPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:08:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C859BC0619C0;
-        Mon, 31 Jan 2022 03:05:19 -0800 (PST)
+        Mon, 31 Jan 2022 06:15:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92001B82A5F;
-        Mon, 31 Jan 2022 11:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA563C340E8;
-        Mon, 31 Jan 2022 11:05:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50DAD60B98;
+        Mon, 31 Jan 2022 11:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6CAC340E8;
+        Mon, 31 Jan 2022 11:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627117;
-        bh=I0uXQkDbhcrgFlOrWUKs2lEyJYwQN3pii/jlSjzk5Z0=;
+        s=korg; t=1643627703;
+        bh=wOrCoH8cZQ5RYeR+TboB30xbv1JXHCedW2gBQ1rg2yk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v4YoXnq0U2NoZGCn/J83NydPWzjXIUpBk7HxFCNFazQZHnR5MOqWrTezbOYQbuO1l
-         PMK+shbyDDOGR4JLMQOp5nlPVJUPAX/KN9wTXtFS5eB5F3VPFtcejR7SajtBMrsLrc
-         YlOMVIVvPlvVtQVOfbU5lcPDNdxE73QxFPtVmVGw=
+        b=MlR/jLqVXNHJWq5Z+EQhQ3pk+bfX9yKQ0pE4SG+df06WcydH0k7pl0DDfa4QSufDf
+         Skl66UJQxFc5Fj7wa23rpzexlLpVidBp+0ZwVU9JOUGX/sGT21UFDCmEFSq5POt8vL
+         z/FwhE6vQoE/R1oTf2iF0erXEcXy2Kgr5M0u+B7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
+        stable@vger.kernel.org, caixf <ooppublic@163.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 080/100] net: ipv4: Move ip_options_fragment() out of loop
-Date:   Mon, 31 Jan 2022 11:56:41 +0100
-Message-Id: <20220131105223.127439495@linuxfoundation.org>
+Subject: [PATCH 5.15 137/171] ipv4: fix ip option filtering for locally generated fragments
+Date:   Mon, 31 Jan 2022 11:56:42 +0100
+Message-Id: <20220131105234.642643745@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,77 +47,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yajun Deng <yajun.deng@linux.dev>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit faf482ca196a5b16007190529b3b2dd32ab3f761 ]
+[ Upstream commit 27a8caa59babb96c5890569e131bc0eb6d45daee ]
 
-The ip_options_fragment() only called when iter->offset is equal to zero,
-so move it out of loop, and inline 'Copy the flags to each fragment.'
-As also, remove the unused parameter in ip_frag_ipcb().
+During IP fragmentation we sanitize IP options. This means overwriting
+options which should not be copied with NOPs. Only the first fragment
+has the original, full options.
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+ip_fraglist_prepare() copies the IP header and options from previous
+fragment to the next one. Commit 19c3401a917b ("net: ipv4: place control
+buffer handling away from fragmentation iterators") moved sanitizing
+options before ip_fraglist_prepare() which means options are sanitized
+and then overwritten again with the old values.
+
+Fixing this is not enough, however, nor did the sanitization work
+prior to aforementioned commit.
+
+ip_options_fragment() (which does the sanitization) uses ipcb->opt.optlen
+for the length of the options. ipcb->opt of fragments is not populated
+(it's 0), only the head skb has the state properly built. So even when
+called at the right time ip_options_fragment() does nothing. This seems
+to date back all the way to v2.5.44 when the fast path for pre-fragmented
+skbs had been introduced. Prior to that ip_options_build() would have been
+called for every fragment (in fact ever since v2.5.44 the fragmentation
+handing in ip_options_build() has been dead code, I'll clean it up in
+-next).
+
+In the original patch (see Link) caixf mentions fixing the handling
+for fragments other than the second one, but I'm not sure how _any_
+fragment could have had their options sanitized with the code
+as it stood.
+
+Tested with python (MTU on lo lowered to 1000 to force fragmentation):
+
+  import socket
+  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+  s.setsockopt(socket.IPPROTO_IP, socket.IP_OPTIONS,
+               bytearray([7,4,5,192, 20|0x80,4,1,0]))
+  s.sendto(b'1'*2000, ('127.0.0.1', 1234))
+
+Before:
+
+IP (tos 0x0, ttl 64, id 1053, offset 0, flags [+], proto UDP (17), length 996, options (RR [bad length 4] [bad ptr 5] 192.148.4.1,,RA value 256))
+    localhost.36500 > localhost.search-agent: UDP, length 2000
+IP (tos 0x0, ttl 64, id 1053, offset 968, flags [+], proto UDP (17), length 996, options (RR [bad length 4] [bad ptr 5] 192.148.4.1,,RA value 256))
+    localhost > localhost: udp
+IP (tos 0x0, ttl 64, id 1053, offset 1936, flags [none], proto UDP (17), length 100, options (RR [bad length 4] [bad ptr 5] 192.148.4.1,,RA value 256))
+    localhost > localhost: udp
+
+After:
+
+IP (tos 0x0, ttl 96, id 42549, offset 0, flags [+], proto UDP (17), length 996, options (RR [bad length 4] [bad ptr 5] 192.148.4.1,,RA value 256))
+    localhost.51607 > localhost.search-agent: UDP, bad length 2000 > 960
+IP (tos 0x0, ttl 96, id 42549, offset 968, flags [+], proto UDP (17), length 996, options (NOP,NOP,NOP,NOP,RA value 256))
+    localhost > localhost: udp
+IP (tos 0x0, ttl 96, id 42549, offset 1936, flags [none], proto UDP (17), length 100, options (NOP,NOP,NOP,NOP,RA value 256))
+    localhost > localhost: udp
+
+RA (20 | 0x80) is now copied as expected, RR (7) is "NOPed out".
+
+Link: https://lore.kernel.org/netdev/20220107080559.122713-1-ooppublic@163.com/
+Fixes: 19c3401a917b ("net: ipv4: place control buffer handling away from fragmentation iterators")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: caixf <ooppublic@163.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_output.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+ net/ipv4/ip_output.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
 diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 10d4cde31c6bf..fb91a466b2d34 100644
+index 9bca57ef8b838..ff38b46bd4b0f 100644
 --- a/net/ipv4/ip_output.c
 +++ b/net/ipv4/ip_output.c
-@@ -614,18 +614,6 @@ void ip_fraglist_init(struct sk_buff *skb, struct iphdr *iph,
- }
- EXPORT_SYMBOL(ip_fraglist_init);
- 
--static void ip_fraglist_ipcb_prepare(struct sk_buff *skb,
--				     struct ip_fraglist_iter *iter)
--{
--	struct sk_buff *to = iter->frag;
--
--	/* Copy the flags to each fragment. */
--	IPCB(to)->flags = IPCB(skb)->flags;
--
--	if (iter->offset == 0)
--		ip_options_fragment(to);
--}
--
- void ip_fraglist_prepare(struct sk_buff *skb, struct ip_fraglist_iter *iter)
- {
- 	unsigned int hlen = iter->hlen;
-@@ -671,7 +659,7 @@ void ip_frag_init(struct sk_buff *skb, unsigned int hlen,
- EXPORT_SYMBOL(ip_frag_init);
- 
- static void ip_frag_ipcb(struct sk_buff *from, struct sk_buff *to,
--			 bool first_frag, struct ip_frag_state *state)
-+			 bool first_frag)
- {
- 	/* Copy the flags to each fragment. */
- 	IPCB(to)->flags = IPCB(from)->flags;
-@@ -845,12 +833,13 @@ int ip_do_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
- 
+@@ -826,15 +826,24 @@ int ip_do_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
  		/* Everything is OK. Generate! */
  		ip_fraglist_init(skb, iph, hlen, &iter);
-+		ip_options_fragment(iter.frag);
  
+-		if (iter.frag)
+-			ip_options_fragment(iter.frag);
+-
  		for (;;) {
  			/* Prepare header of the next frame,
  			 * before previous one went down. */
  			if (iter.frag) {
--				ip_fraglist_ipcb_prepare(skb, &iter);
-+				IPCB(iter.frag)->flags = IPCB(skb)->flags;
++				bool first_frag = (iter.offset == 0);
++
+ 				IPCB(iter.frag)->flags = IPCB(skb)->flags;
  				ip_fraglist_prepare(skb, &iter);
++				if (first_frag && IPCB(skb)->opt.optlen) {
++					/* ipcb->opt is not populated for frags
++					 * coming from __ip_make_skb(),
++					 * ip_options_fragment() needs optlen
++					 */
++					IPCB(iter.frag)->opt.optlen =
++						IPCB(skb)->opt.optlen;
++					ip_options_fragment(iter.frag);
++					ip_send_check(iter.iph);
++				}
  			}
  
-@@ -905,7 +894,7 @@ slow_path:
- 			err = PTR_ERR(skb2);
- 			goto fail;
- 		}
--		ip_frag_ipcb(skb, skb2, first_frag, &state);
-+		ip_frag_ipcb(skb, skb2, first_frag);
- 
- 		/*
- 		 *	Put this fragment into the sending queue.
+ 			skb->tstamp = tstamp;
 -- 
 2.34.1
 

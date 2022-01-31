@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 281DC4A50B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140274A50C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379401AbiAaVBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:01:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53877 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231445AbiAaVBc (ORCPT
+        id S1356903AbiAaVGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbiAaVGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:01:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643662891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QPBUUUSIbdCMKHscebuvK+qxfZIc2zafw8L5TR48Ec8=;
-        b=GlZmo6PLqF0LgSCzptDMaKgmKaHdkqoDyQwFVvqbyhewksDH4zMiG1Z9XbLr+9KkGl50rt
-        ykoAZDxrAHayoKS3Wdputjv7/+DGpYzkTK3pbQf0/E0SeSbFkwDsxmWC2AaSFjCVoie42A
-        hVVc2TPjryanJXQ03lYgFNGkhjDJ4lE=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-Y7DuA8lJMS2TmL6p6Lwm3A-1; Mon, 31 Jan 2022 16:01:30 -0500
-X-MC-Unique: Y7DuA8lJMS2TmL6p6Lwm3A-1
-Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so7586546edb.23
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:01:29 -0800 (PST)
+        Mon, 31 Jan 2022 16:06:36 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6FFC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:36 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m13-20020a05600c3b0d00b00353951c3f62so119228wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YEN1WalulXHp5psdK77RRQL6YIodekwef+OLqnVkw3U=;
+        b=BXlMSbrQQm45vIk8G32qbGBElJQXMtQzu20EGflvpycDYmJI5dd/dpdizoRxFh9F6A
+         Q12yPGrID201GhrqQY0R0n9gUPWn9gxBXaGIedKulXZuktfd/I9uM7X8oO7R29VT8fzx
+         NV157eRcr1zgYtAH7SrPMYSIVYhCix3PV5+i8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QPBUUUSIbdCMKHscebuvK+qxfZIc2zafw8L5TR48Ec8=;
-        b=VIJWeJkEB1P9jAu0Bjk1JO7/L1oTqTxQg4cmu+oLA5U4WRY1neHue+akyjWk0gXOeG
-         YHkQvVc6bq0u3wsEAwqg62T3PWuscEfs3xOfnjv0LGaaNYV6pNoGkZk1D0NT6HMzghz3
-         rfRlCY3kCLyZ9ncVYGF4PkHr9WvA8PYDsPc7jXJqKT07OqldqY0fbuC6X/I22/r/SM1Y
-         Jtb18OlPCijSifzpeOvBoH0lTx1nLWv6CMmVgxrXDl9BlBYVLNufHabHvCH/0o5K7Ygk
-         KkwALJKQiSlPG+pc8+YCtUALyCjrjopevMVGW/lSCRikCRTt/3OORA4dzIHobsLe3mSL
-         fC5g==
-X-Gm-Message-State: AOAM533VUoAefq4AQr5rgaMmFZuU40NpGFEmBsF7SmTl5nJhYqaJZzDf
-        tNEGZ4g+qpWwgvAmK5XDcYiTR7NEYxZCKZupsd/miDaUce7dgqBikH8tr6kQTFcSC3edIeuufc9
-        M3+A/hIJAATMptRDSPBw41LFJ
-X-Received: by 2002:a05:6402:34ca:: with SMTP id w10mr22805812edc.145.1643662888879;
-        Mon, 31 Jan 2022 13:01:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQNpwY4VLzE85jbEqyTtYB3+udLiLxDc3EUrydHMlJ567geR0t5numq2jG5NKxlB0w9Q46VQ==
-X-Received: by 2002:a05:6402:34ca:: with SMTP id w10mr22805800edc.145.1643662888671;
-        Mon, 31 Jan 2022 13:01:28 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id lo15sm13780659ejb.28.2022.01.31.13.01.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 13:01:28 -0800 (PST)
-Message-ID: <e1ac452b-0c72-6f22-764a-f34532ae6cce@redhat.com>
-Date:   Mon, 31 Jan 2022 22:01:27 +0100
+        bh=YEN1WalulXHp5psdK77RRQL6YIodekwef+OLqnVkw3U=;
+        b=GZW2nwjkCpWDjstJy4yPTXLDSJxDz8rS8qYjR39skfSN26YmXb07+hFHNkM8KuyaMR
+         3LtfWxiPQDzwJYZon82kJa98AcfM8eSePyGOoX7u5+xk1c3T/Q6S4uk5F0FX3wtSf0bt
+         kmj4kdOblDt5SkWNn1zP6N4HLfaqPIBq6eRMEBjobCXSGhg+spq6yuJOm6+o2Cfauu7L
+         uZNTgCIO2gcdZJ7uwLWuoPtvnBF2I+0X6kOaBIw5fUeRAvHlL2naZp+qDlDh5uMUS+Ei
+         E4GESRBS0bSyG17HCHg1fSoetyfSAT1uReTQDzskdAeFikB7tHHUzA4vuNGQe82IpUmE
+         HmRg==
+X-Gm-Message-State: AOAM531Dk8ZC1Llz5Bad6vco6aqfemOI6VtuRivk8/tV7YbP0RED1Exh
+        Co29MRjoczwXh1+MHnqP9zArRg==
+X-Google-Smtp-Source: ABdhPJyB1hSzGYw1XHzZs/Ba7cdy3A7msMyTjt4I8mWUBqVQeVt4E+n2y/Bz/unKl/ZTEyvt8+HEIQ==
+X-Received: by 2002:a05:600c:288:: with SMTP id 8mr28455267wmk.25.1643663194637;
+        Mon, 31 Jan 2022 13:06:34 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id b11sm314961wmq.46.2022.01.31.13.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 13:06:34 -0800 (PST)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH 00/21] some fbcon patches, mostly locking
+Date:   Mon, 31 Jan 2022 22:05:31 +0100
+Message-Id: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 3/4] hwmon: (sch56xx-common) Replace msleep() with
- usleep_range()
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220131193137.3684-1-W_Armin@gmx.de>
- <20220131193137.3684-4-W_Armin@gmx.de>
- <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi all,
 
-On 1/31/22 21:10, Guenter Roeck wrote:
-> On 1/31/22 11:31, Armin Wolf wrote:
->> msleep(1) will often sleep more than 20ms, slowing down sensor
->> and watchdog reads/writes. Use usleep_range() as recommended
->> in timers-howto.rst to fix that.
->>
->> Tested on a Fujitsu Esprimo P720.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   drivers/hwmon/sch56xx-common.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
->> index 0172aa16dc0c..f66e1ed4b1aa 100644
->> --- a/drivers/hwmon/sch56xx-common.c
->> +++ b/drivers/hwmon/sch56xx-common.c
->> @@ -139,7 +139,7 @@ static int sch56xx_send_cmd(u16 addr, u8 cmd, u16 reg, u8 v)
->>       /* EM Interface Polling "Algorithm" */
->>       for (i = 0; i < max_busy_polls + max_lazy_polls; i++) {
->>           if (i >= max_busy_polls)
->> -            msleep(1);
->> +            usleep_range(1, 2);
-> 
-> This replaces a 1-millisecond sleep with a 1-2 microsecond sleep.
-> 
-> Are you sure this is what you want to do ? Given that task switches typically
-> take several microseconds, the new code is pretty much identical to a busy
-> loop, and the maximum sleep time is reduced significantly.
+This took way longer than I hoped, but well I got lost in head-scratching
+locking problems. Anyway ended up typing a pile of fbcon patches. Rough
+overview:
 
-Ah good catch, I missed that will reviewing v1, sorry about that.
+- MAINTAINER entry for fbdev core in drm-misc, with the usual group
+  maintainering
 
-The issue is actually worse then busy-waiting the max wait time
-in this code is expressed in a maximum number of polls, so
-if usleep_range(1, 2) would really only sleep 1 usec, we would
-wait much too short and may hit a false-positive timeout condition
-here.
+- The reverts, but with a compile time option. I looked into combining
+  this with the RFC from Helge, but it looked like worse than either
+  approach, so I've kept mine. I think merging either is fine, no personal
+  stake here on the bikeshed color.
 
-Regards,
+- The real distraction, aka a bunch of cleanups and mostly locking work
+  for fbcon. I managed to ditch at least one locking FIXME from fbcon.c.
 
-Hans
+The bad news that I spent a bunch more time pondering about the bigger
+locking issues in fbcon.c, and I think as-is they're unfixable. We need
+the threaded printk support to land first, so that we're not adding
+lock_fb_info() to all printk() contexts. Because that just cannot work.
 
+That also means we'll likely have another fbcon regression to face, in the
+form of worse oops printing ability. And that one I don't think we can fix
+with clever application of #ifdef, because changing locking rules at
+compile time in fundamental ways is just not a very good idea.
 
+Anyway, testing, review, feedback and all that very much welcome, as
+usual.
+
+Cheers, Daniel
+
+Daniel Vetter (21):
+  MAINTAINERS: Add entry for fbdev core
+  fbcon: Resurrect fbcon accelerated scrolling code
+  fbcon: Restore fbcon scrolling acceleration
+  fbcon: delete a few unneeded forward decl
+  fbcon: Introduce wrapper for console->fb_info lookup
+  fbcon: delete delayed loading code
+  fbdev/sysfs: Fix locking
+  fbcon: Use delayed work for cursor
+  fbcon: Replace FBCON_FLAGS_INIT with a boolean
+  fb: Delete fb_info->queue
+  fbcon: Extract fbcon_open/release helpers
+  fbcon: Ditch error handling for con2fb_release_oldinfo
+  fbcon: move more common code into fb_open()
+  fbcon: use lock_fb_info in fbcon_open/release
+  fbcon: Consistently protect deferred_takeover with console_lock()
+  fbcon: Move console_lock for register/unlink/unregister
+  fbcon: Move more code into fbcon_release
+  fbcon: untangle fbcon_exit
+  fbcon: Maintain a private array of fb_info
+  Revert "fbdev: Prevent probing generic drivers if a FB is already
+    registered"
+  fbdev: Make registered_fb[] private to fbmem.c
+
+ Documentation/gpu/todo.rst              |   13 +-
+ MAINTAINERS                             |    6 +
+ drivers/video/console/Kconfig           |   11 +
+ drivers/video/fbdev/core/bitblit.c      |   16 +
+ drivers/video/fbdev/core/fbcon.c        | 1072 +++++++++++++++++------
+ drivers/video/fbdev/core/fbcon.h        |   67 +-
+ drivers/video/fbdev/core/fbcon_ccw.c    |   28 +-
+ drivers/video/fbdev/core/fbcon_cw.c     |   28 +-
+ drivers/video/fbdev/core/fbcon_rotate.h |   21 +
+ drivers/video/fbdev/core/fbcon_ud.c     |   37 +-
+ drivers/video/fbdev/core/fbmem.c        |   35 +-
+ drivers/video/fbdev/core/fbsysfs.c      |    2 +
+ drivers/video/fbdev/core/tileblit.c     |   16 +
+ drivers/video/fbdev/efifb.c             |   11 -
+ drivers/video/fbdev/simplefb.c          |   11 -
+ drivers/video/fbdev/skeletonfb.c        |   12 +-
+ include/linux/fb.h                      |   10 +-
+ 17 files changed, 1017 insertions(+), 379 deletions(-)
+
+-- 
+2.33.0
 

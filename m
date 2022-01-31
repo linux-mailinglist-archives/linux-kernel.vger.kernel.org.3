@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD74D4A430C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613004A44CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359156AbiAaLQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376861AbiAaLJN (ORCPT
+        id S1376863AbiAaLcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:32:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55766 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377349AbiAaLWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89D9C06176C;
-        Mon, 31 Jan 2022 03:05:45 -0800 (PST)
+        Mon, 31 Jan 2022 06:22:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46DB960FD3;
-        Mon, 31 Jan 2022 11:05:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE44C340E8;
-        Mon, 31 Jan 2022 11:05:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 548C460B98;
+        Mon, 31 Jan 2022 11:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 186D7C340E8;
+        Mon, 31 Jan 2022 11:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627144;
-        bh=GZs9L7T9/6ZSXdD31buqSGJavwQTf+8MmVZed58b7SQ=;
+        s=korg; t=1643628164;
+        bh=snsD1HBDq0IUrhswABMiH7ZQhyb/2bTDJidnpoFqPzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p76fQLriKmSUuTPzcKBuxW2DNmq1Yi592q4rAeznuPJXRSjSaW3oaHH6ELuCytZwq
-         LHxnjKG0ywQSk96zQZAWZTQqq3xZ9QVsI5csvk7ffkTHd/0ZqBj5iIuo3k6ZsA7LaM
-         sDaI3LOfYVZdtV7BKV1wSaZPyBOchxZDlhaW/fTk=
+        b=AQjHL1rc2c9gifPicgBFdly6H8ygfUfQS1kGfJcsP44oIQvDiKtyrw6ikWOpkdTN+
+         iHdG9y791BLBxw+VNTj5HW3EIJHZSasT8LQnYm32HlgGLjQZ5fJ6wZIrqzU4pqcz0c
+         kB+FPaNkWZmLirCohxhg8EkAPzyBoUOEuN1gCuBY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        stable@vger.kernel.org, Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 088/100] yam: fix a memory leak in yam_siocdevprivate()
+Subject: [PATCH 5.16 146/200] octeontx2-pf: cn10k: Ensure valid pointers are freed to aura
 Date:   Mon, 31 Jan 2022 11:56:49 +0100
-Message-Id: <20220131105223.422990110@linuxfoundation.org>
+Message-Id: <20220131105238.475690592@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,35 +48,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Geetha sowjanya <gakula@marvell.com>
 
-[ Upstream commit 29eb31542787e1019208a2e1047bb7c76c069536 ]
+[ Upstream commit c5d731c54a17677939bd59ee8be4ed74d7485ba4 ]
 
-ym needs to be free when ym->cmd != SIOCYAMSMCS.
+While freeing SQB pointers to aura, driver first memcpy to
+target address and then triggers lmtst operation to free pointer
+to the aura. We need to ensure(by adding dmb barrier)that memcpy
+is finished before pointers are freed to the aura. This patch also
+adds the missing sq context structure entry in debugfs.
 
-Fixes: 0781168e23a2 ("yam: fix a missing-check bug")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Fixes: ef6c8da71eaf ("octeontx2-pf: cn10K: Reserve LMTST lines per core")
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
+Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hamradio/yam.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c  | 2 ++
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/net/hamradio/yam.c b/drivers/net/hamradio/yam.c
-index 5ab53e9942f30..5d30b3e1806ab 100644
---- a/drivers/net/hamradio/yam.c
-+++ b/drivers/net/hamradio/yam.c
-@@ -951,9 +951,7 @@ static int yam_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
- 				 sizeof(struct yamdrv_ioctl_mcs));
- 		if (IS_ERR(ym))
- 			return PTR_ERR(ym);
--		if (ym->cmd != SIOCYAMSMCS)
--			return -EINVAL;
--		if (ym->bitrate > YAM_MAXBITRATE) {
-+		if (ym->cmd != SIOCYAMSMCS || ym->bitrate > YAM_MAXBITRATE) {
- 			kfree(ym);
- 			return -EINVAL;
- 		}
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+index a09a507369ac3..d1eddb769a419 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+@@ -1224,6 +1224,8 @@ static void print_nix_cn10k_sq_ctx(struct seq_file *m,
+ 	seq_printf(m, "W3: head_offset\t\t\t%d\nW3: smenq_next_sqb_vld\t\t%d\n\n",
+ 		   sq_ctx->head_offset, sq_ctx->smenq_next_sqb_vld);
+ 
++	seq_printf(m, "W3: smq_next_sq_vld\t\t%d\nW3: smq_pend\t\t\t%d\n",
++		   sq_ctx->smq_next_sq_vld, sq_ctx->smq_pend);
+ 	seq_printf(m, "W4: next_sqb \t\t\t%llx\n\n", sq_ctx->next_sqb);
+ 	seq_printf(m, "W5: tail_sqb \t\t\t%llx\n\n", sq_ctx->tail_sqb);
+ 	seq_printf(m, "W6: smenq_sqb \t\t\t%llx\n\n", sq_ctx->smenq_sqb);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index 61e52812983fa..14509fc64cce9 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -603,6 +603,7 @@ static inline void __cn10k_aura_freeptr(struct otx2_nic *pfvf, u64 aura,
+ 			size++;
+ 		tar_addr |=  ((size - 1) & 0x7) << 4;
+ 	}
++	dma_wmb();
+ 	memcpy((u64 *)lmt_info->lmt_addr, ptrs, sizeof(u64) * num_ptrs);
+ 	/* Perform LMTST flush */
+ 	cn10k_lmt_flush(val, tar_addr);
 -- 
 2.34.1
 

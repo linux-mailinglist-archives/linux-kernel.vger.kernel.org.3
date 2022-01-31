@@ -2,142 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAE54A4C36
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF544A4C2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380511AbiAaQdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:33:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21761 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380493AbiAaQdm (ORCPT
+        id S1380451AbiAaQdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:33:02 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:50565 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379566AbiAaQc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:33:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643646821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yS2LXvHJpQ6J5JWRMEEhchS65pUuAfYv0luhTwYX+Ho=;
-        b=XnD85oe7daW6XOljNbzAK18e+Oz7ZKGRqmPkiiI1pMKRoYGQBFRPejPMkxYxP+jYEC6drP
-        3lj0LxpuFHTYUBFe9wZO1TFzliRJI2zEgSvlLtZw2InjT2NIsgm6wPxq0Q0P+k83zeIFaH
-        mtnMx2a0k75j/PSfvb+nnnIRrLMBXpo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-ysRcGFu6Pn2U572AOTfgrQ-1; Mon, 31 Jan 2022 11:33:37 -0500
-X-MC-Unique: ysRcGFu6Pn2U572AOTfgrQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 24C001091DA1;
-        Mon, 31 Jan 2022 16:33:34 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BB34798C6;
-        Mon, 31 Jan 2022 16:33:27 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH v3 9/9] mm/huge_memory: remove stale locking logic from __split_huge_pmd()
-Date:   Mon, 31 Jan 2022 17:29:39 +0100
-Message-Id: <20220131162940.210846-10-david@redhat.com>
-In-Reply-To: <20220131162940.210846-1-david@redhat.com>
-References: <20220131162940.210846-1-david@redhat.com>
+        Mon, 31 Jan 2022 11:32:58 -0500
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 160CC1C0009;
+        Mon, 31 Jan 2022 16:32:52 +0000 (UTC)
+From:   quentin.schulz@theobroma-systems.com
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, heiko@sntech.de,
+        andriy.shevchenko@linux.intel.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>
+Subject: [PATCH] clk: rockchip: re-add rational best approximation algorithm to the fractional divider
+Date:   Mon, 31 Jan 2022 17:32:24 +0100
+Message-Id: <20220131163224.708002-1-quentin.schulz@theobroma-systems.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's remove the stale logic that was required for reuse_swap_page().
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
+In commit 4e7cf74fa3b2 ("clk: fractional-divider: Export approximation
+algorithm to the CCF users"), the code handling the rational best
+approximation algorithm was replaced by a call to the core
+clk_fractional_divider_general_approximation function which did the same
+thing back then.
+
+However, in commit 82f53f9ee577 ("clk: fractional-divider: Introduce
+POWER_OF_TWO_PS flag"), this common code was made conditional on
+CLK_FRAC_DIVIDER_POWER_OF_TWO_PS flag which was not added back to the
+rockchip clock driver.
+
+This broke the ltk050h3146w-a2 MIPI DSI display present on a PX30-based
+downstream board.
+
+Let's add the flag to the fractional divider flags so that the original
+and intended behavior is brought back to the rockchip clock drivers.
+
+Fixes: 82f53f9ee577 ("clk: fractional-divider: Introduce POWER_OF_TWO_PS flag")
+Cc: stable@vger.kernel.org
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- mm/huge_memory.c | 32 +-------------------------------
- 1 file changed, 1 insertion(+), 31 deletions(-)
+ drivers/clk/rockchip/clk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index a6dc5af1a763..cda88d8ac1bd 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2152,8 +2152,6 @@ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
+diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+index b7be7e11b0df..bb8a844309bf 100644
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -180,6 +180,7 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 		unsigned long rate, unsigned long *parent_rate,
+ 		unsigned long *m, unsigned long *n)
  {
- 	spinlock_t *ptl;
- 	struct mmu_notifier_range range;
--	bool do_unlock_page = false;
--	pmd_t _pmd;
++	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long p_rate, p_parent_rate;
+ 	struct clk_hw *p_parent;
  
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
- 				address & HPAGE_PMD_MASK,
-@@ -2172,35 +2170,9 @@ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- 			goto out;
+@@ -190,6 +191,8 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 		*parent_rate = p_parent_rate;
  	}
  
--repeat:
- 	if (pmd_trans_huge(*pmd)) {
--		if (!page) {
-+		if (!page)
- 			page = pmd_page(*pmd);
--			/*
--			 * An anonymous page must be locked, to ensure that a
--			 * concurrent reuse_swap_page() sees stable mapcount;
--			 * but reuse_swap_page() is not used on shmem or file,
--			 * and page lock must not be taken when zap_pmd_range()
--			 * calls __split_huge_pmd() while i_mmap_lock is held.
--			 */
--			if (PageAnon(page)) {
--				if (unlikely(!trylock_page(page))) {
--					get_page(page);
--					_pmd = *pmd;
--					spin_unlock(ptl);
--					lock_page(page);
--					spin_lock(ptl);
--					if (unlikely(!pmd_same(*pmd, _pmd))) {
--						unlock_page(page);
--						put_page(page);
--						page = NULL;
--						goto repeat;
--					}
--					put_page(page);
--				}
--				do_unlock_page = true;
--			}
--		}
- 		if (PageMlocked(page))
- 			clear_page_mlock(page);
- 	} else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
-@@ -2208,8 +2180,6 @@ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- 	__split_huge_pmd_locked(vma, pmd, range.start, freeze);
- out:
- 	spin_unlock(ptl);
--	if (do_unlock_page)
--		unlock_page(page);
- 	/*
- 	 * No need to double call mmu_notifier->invalidate_range() callback.
- 	 * They are 3 cases to consider inside __split_huge_pmd_locked():
++	fd->flags |= CLK_FRAC_DIVIDER_POWER_OF_TWO_PS;
++
+ 	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
+ }
+ 
 -- 
 2.34.1
 

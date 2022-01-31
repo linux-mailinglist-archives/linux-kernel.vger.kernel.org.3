@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDB94A4313
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54654A44F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359456AbiAaLQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377159AbiAaLJp (ORCPT
+        id S242036AbiAaLfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:35:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41558 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377945AbiAaLXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B2EC0604C8;
-        Mon, 31 Jan 2022 03:06:26 -0800 (PST)
+        Mon, 31 Jan 2022 06:23:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0B68B82A5C;
-        Mon, 31 Jan 2022 11:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F370DC340EF;
-        Mon, 31 Jan 2022 11:06:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 410BAB82A75;
+        Mon, 31 Jan 2022 11:23:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645CAC340E8;
+        Mon, 31 Jan 2022 11:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627184;
-        bh=JJG8FPMAU2MXhrU12vj6pVtNxghJpIL8qz7OMrp+rNM=;
+        s=korg; t=1643628212;
+        bh=d4NMCRYFez7Dv/xaGO0VoOIytB742aa78WOrxB63pdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mjsVgmoH7vgvJnyuW+q31Ta9StpGAWD83p2KwzZZie4FfneblOsBKYP2QKSJWNXpe
-         Oh7yXuXxlI1OVzdlqt4nJdu4nLKcHc3g5TAgc1y9FJnW8KX1i0k8DrvUGQ8BviCriN
-         xybWx9qJ6GMeo5KySxMvLOQ496OjlPgmL482DNNk=
+        b=yxhw+/VFjmrn+Nikg+LkKXTBuN67skWNCqBz3pxDR+0xzjbPjxvCpHkEcNgnAOYcD
+         +YXPdlULN7IPAgNI7Dk/m/TIcCXZUr7sgMPpRrjNSUyQO/NypBPNT44+mv/f/v3uGb
+         xGbH7ai2YKDnLy+P6np8ka37JlEv/o0zBBOgtFec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+ac94ae5f68b84197f41c@syzkaller.appspotmail.com,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 100/100] block: Fix wrong offset in bio_truncate()
-Date:   Mon, 31 Jan 2022 11:57:01 +0100
-Message-Id: <20220131105223.808036007@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 159/200] hwmon: (adt7470) Prevent divide by zero in adt7470_fan_write()
+Date:   Mon, 31 Jan 2022 11:57:02 +0100
+Message-Id: <20220131105238.901810839@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +46,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 3ee859e384d453d6ac68bfd5971f630d9fa46ad3 upstream.
+[ Upstream commit c1ec0cabc36718efc7fe8b4157d41b82d08ec1d2 ]
 
-bio_truncate() clears the buffer outside of last block of bdev, however
-current bio_truncate() is using the wrong offset of page. So it can
-return the uninitialized data.
+The "val" variable is controlled by the user and comes from
+hwmon_attr_store().  The FAN_RPM_TO_PERIOD() macro divides by "val"
+so a zero will crash the system.  Check for that and return -EINVAL.
+Negatives are also invalid so return -EINVAL for those too.
 
-This happened when both of truncated/corrupted FS and userspace (via
-bdev) are trying to read the last of bdev.
-
-Reported-by: syzbot+ac94ae5f68b84197f41c@syzkaller.appspotmail.com
-Signed-off-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/875yqt1c9g.fsf@mail.parknet.co.jp
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fc958a61ff6d ("hwmon: (adt7470) Convert to devm_hwmon_device_register_with_info API")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bio.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hwmon/adt7470.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -575,7 +575,8 @@ void bio_truncate(struct bio *bio, unsig
- 				offset = new_size - done;
- 			else
- 				offset = 0;
--			zero_user(bv.bv_page, offset, bv.bv_len - offset);
-+			zero_user(bv.bv_page, bv.bv_offset + offset,
-+				  bv.bv_len - offset);
- 			truncated = true;
- 		}
- 		done += bv.bv_len;
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index d519aca4a9d64..fb6d14d213a18 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -662,6 +662,9 @@ static int adt7470_fan_write(struct device *dev, u32 attr, int channel, long val
+ 	struct adt7470_data *data = dev_get_drvdata(dev);
+ 	int err;
+ 
++	if (val <= 0)
++		return -EINVAL;
++
+ 	val = FAN_RPM_TO_PERIOD(val);
+ 	val = clamp_val(val, 1, 65534);
+ 
+-- 
+2.34.1
+
 
 

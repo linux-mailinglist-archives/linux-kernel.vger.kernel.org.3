@@ -2,479 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2144A4F89
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2D94A4F8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377011AbiAaTgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:36:35 -0500
-Received: from mga01.intel.com ([192.55.52.88]:32665 "EHLO mga01.intel.com"
+        id S1377159AbiAaThN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:37:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:5486 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358606AbiAaTgd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:36:33 -0500
+        id S1377035AbiAaThK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 14:37:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643657793; x=1675193793;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=p4AgpdivF+LEcALPYQCFjsYNfEfJNCBOkFwqujlwW+M=;
-  b=DmL0gu8UnFe8Rq+ZenpW815/sfQIAfSEgEfPSyEKnoUtEFUpNIKyRnWh
-   0Tk9H1VyiMC9vSvV8aP+B0Rie9xS2131CmgLzKijRtekfdv8bS2q5M6jt
-   ShrbinqANteeSEEE10Z2dM2nfXyGcAwgGaJnwGCBmxogRlHPcXLgnx8U+
-   EZ2msFVLALO0fiB2lSsnecPDCB9iizhs54H4M/aKiqTfb95P9K2jXLXm2
-   HWqZ1mRrxkznEr9K9F8GQHO+APS3qcvavKwZ0XPpKxKQR25K1pmlw+U5O
-   rUX+AMQN57eqXfrbp/ibAnTKJfso1MRqIQIX1Q6TeHTe+aiUzfY8IwMin
+  t=1643657830; x=1675193830;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=bWJgS1PY1Z8m4rdALJP0z3w3a5qdSQk44rOWiXNknTs=;
+  b=ejavWDuwcMqdjlFU1IJ4XkLW1OSEpedPNUvOwswoWSJFM7KNghSn3qL3
+   nQh/w7twBe1Omd0obC+nXI1dbvwQ3yRNyFeHrUi8SxjQ3Va3L0Udn9VHi
+   47Ys3vyVtZZOUzQgSJwKrJwczzpDCD70mUUf+9lgvdEka4k8v+NH8Cu6O
+   WQMPRSEASnufIhWUbz9P4p179gRhlhGZ2NwIU9fS2K6Z67LoJ4MNTvDBl
+   QuPrqYp6GI6Qh0sXvjoqOVXhgr3UEdV/WEc0X261Jw9SyjeB1AW4JYBHr
+   T6NwQ3OpWtH5kPYDSqw/TrzqbVReSWgOGlvQ0L08i+e6d7a+od6hoPvxe
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="272010033"
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308268175"
 X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="272010033"
+   d="scan'208";a="308268175"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:36:33 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:37:09 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="537441891"
-Received: from abilal-mobl1.amr.corp.intel.com ([10.212.252.235])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:36:33 -0800
-Date:   Mon, 31 Jan 2022 11:36:32 -0800 (PST)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: Re: [PATCH 5.16 138/200] mptcp: keep track of local endpoint still
- available for each msk
-In-Reply-To: <20220131105238.198209212@linuxfoundation.org>
-Message-ID: <26d216d1-355-e132-a868-529f15c9b660@linux.intel.com>
-References: <20220131105233.561926043@linuxfoundation.org> <20220131105238.198209212@linuxfoundation.org>
+   d="scan'208";a="537442493"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga008.jf.intel.com with ESMTP; 31 Jan 2022 11:37:09 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 31 Jan 2022 11:37:08 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 31 Jan 2022 11:37:08 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 31 Jan 2022 11:37:08 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DcCK9Wv/a+JV8ZJS2Eryk5Q48ATC/NYYIsguAcRAD46q+ZKKm/eMdmzqM+0MceuExFn0uQj8O3mEcgG6s7cZd7BGhcgKuigBKhSHY9BUrXh7y5nlNtijYM7GaWRfwVFiGNGb/1GI1YDWehyFquH39f8KOVt/9rWQeMbOyEtEhTDMpTmvM2XVYAuc+iSFOugdrT8ENqJ3Cp/dfF6CfPrmrPP8ETeATbga6wf04IUX6C7jVxebk3D5eBRgAg5WvyFPO66JkchUY91i45ozyQ+raJcZmouJ0GuHw/k2Gn4huNcR7hdQ1iCdx230tk3JgtVwpOS9ABAeiO5YGKRoRAUIsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f1+k1IdfMz5VvX5gaMRI7oargi1SSzvMv1uzFqZrMoA=;
+ b=SzuLTV/GNIHQXFE+C/Nu+tWirb0iuIm28VfhiLH+upNL+EpsT/qNfDw5aIXm967+da25Cfoii2DO98uHI0P08pp8vvFKAkYswrEWhZHTLei5qnpVcJ2vqzl8IRP03lJaQxvn375IdKAfA0cmvPq8XqDROpuAmRrySZwae/SfZpuL3ElPw5B8RhbEGOAYRC9tG5m3Bbu3+JjMRPMoZ/YZluZAC3sbBzwsxMOD9ESN7wU9WSzO+pYtiIqsxs5phKQNWYHargljPXlt3DKXRTm2EyDjAysaAbpYbC7ljOh1SGT2If9ewPmVz1xzCFHa01brJilwfnsQue9phUQGhKv7NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by MN2PR11MB4094.namprd11.prod.outlook.com (2603:10b6:208:152::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Mon, 31 Jan
+ 2022 19:37:07 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::a113:192a:3201:1e0]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::a113:192a:3201:1e0%9]) with mapi id 15.20.4930.022; Mon, 31 Jan 2022
+ 19:37:07 +0000
+Message-ID: <7ba5e99a-9169-75c4-2324-f9a3ce9a506e@intel.com>
+Date:   Mon, 31 Jan 2022 11:37:02 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.1
+Subject: Re: [PATCH] docs/kselftest: clarify running mainline tests on stables
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>, <shuah@kernel.org>,
+        <corbet@lwn.net>
+CC:     <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220126201341.55771-1-skhan@linuxfoundation.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20220126201341.55771-1-skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0148.namprd04.prod.outlook.com
+ (2603:10b6:303:84::33) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 140fe86a-3378-419f-b87c-08d9e4f110c8
+X-MS-TrafficTypeDiagnostic: MN2PR11MB4094:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR11MB409407B0F22E6DC0F5E7A0F6F8259@MN2PR11MB4094.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HqYI5gqxbU8E4sRtWoisVnSvESKpcsxmyH+Y/wabObSnRF7p0TwYDQLe//6mtUiYWV/cI1o+smNyUyCk1iPB90aOQTLBYKyCqqJuQ51s/mFAjJByMRCqbstG0nzhnIRt1/uAYggMLHYDi1V7+f4Cv0m/+HhphiX8O5Yj76q9070rrQkLtZvK9HzkV1SLg42ZkC2zFWdpERbnZk2LojTJbmekkVMjJqU3GO2awD8XXgV5CJRqjPn0K1uZ04gUMqfvc/Uhq1rnjCtGCmCYJHEw3qirYDl83lWElGY2PeVoBDHe90DcO5yMPAHlWIdDYOx2ZXCBI5E9AadLbsscYgVfMc8NYwBDAOm4cC5sADGJUDpUr10mxhv7jbZs1fUyyOG/voliw76ficYnrdQbNH9SsBTxdhpLAniH0EGKVsNvr9czWnGPTlwRONpEdbFI67yhLP/06tTRrADZ1dAbAUMAjZMWiZ80KwghvzwxFX8wj/ScUlxe7IlvyascMuWEeXLE9sUfPAd5U1RXCh7gZFIK3pgfohf2h5CARNSlg6PMty7WRV+dZ06jOn82BnkvozE643+yf0fxUiKGzQHnBMUmsBTFaUdymPh/R10crxT4cjB/bRFfhG2vPBeH6OrxZxTfHGbjGNHkbvQY8942XAqGxfs7GAvnGUydtWWNd5HGWcXqSz+l4YDV21An1KDesrJnxMZ5aaW7j56hCVz1xmWzxo8ahoz9oN4ViFE35DzNLmU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66946007)(66556008)(2906002)(8936002)(8676002)(4326008)(36756003)(31686004)(82960400001)(5660300002)(6666004)(2616005)(26005)(31696002)(186003)(6486002)(966005)(38100700002)(83380400001)(316002)(44832011)(53546011)(6506007)(86362001)(6512007)(508600001)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGNWSGhkT215bVgyN3dCdEZjWUVRaCtEUkdqQUVpUmFzcXdYRzRLYmljVndE?=
+ =?utf-8?B?aVVzUVprdXpLV1RtZUpKazhxU0dzbzJLUnVzek1NelkvRHFDdDhCQW0wQ3JJ?=
+ =?utf-8?B?MDE4elZsWnh6OG9QNmI0d1lZajBGMy8rRFJEM0lzVTZqNDFlNU4razF4YWxS?=
+ =?utf-8?B?NmMzS1ZFeUFRTFdYVGFlTkdmQkExNUZIdmYwTkRtQTkrNkJ4clVlNDhZcVhP?=
+ =?utf-8?B?YVFIZGZ6UmlIVEJDMk1yMDBNNEdmbUgzcVdQb2paNXg5djNxMFhnNXlnY1Av?=
+ =?utf-8?B?N2dicEtZanRUYzZZM2NpU095OS9JV3JyQjh1ZmFQdkRhWkhVc2FiczkvWTlY?=
+ =?utf-8?B?dmxKTFRHaHYxYVBIZXFWTXZKQ1NOQ1JXZU8yS0lzNmlqNVNBN09Meit4bFJT?=
+ =?utf-8?B?TjhhRWpEbkNOQU9zcUxTRHBOdzRMdE95TzVsbXk1V0FlSXRmOVpOOHZwL0ta?=
+ =?utf-8?B?djZyejFQcEZBZHdQNWQ3NXB3NWFEYzFYZ2p2UGNHa0RPME5qcWw5UFREVkhJ?=
+ =?utf-8?B?cDZEUnBuUTdiQ1VMUUhOUW5pY1VMa3lGUm5Gc0N2SnBIUldpMmhNckppTU1m?=
+ =?utf-8?B?eVRKMEtwN1hSVnVOc0FSanY0VnVoMG5pUlR0U1lDdnlEOTA3TW5xT1lVZmVk?=
+ =?utf-8?B?QzZzcmFRREZQRU5welBPd2oyVy80VkN2SW5GU1RqT0k3Z3dkdlpCUUFjZVNK?=
+ =?utf-8?B?UHhjaFE1ZVFjdWltZ1haS0Y3QTgya2xJKy94YnpCWk9lL3puQ2hzRURuTUpw?=
+ =?utf-8?B?YXdjS0NVUzJxdmlrZ05LaDllQkJxQ2dCQnhJanJnQ21uU1dxanYxcE53NGVU?=
+ =?utf-8?B?c2thZkpxTVVhZlkyZEVzbGJReFpSbXRzejRzMUdGTnZPSUJyNUIxYmdNQjhH?=
+ =?utf-8?B?dVlWOGdVM2xqNXhsaEdhd2Y0L2dUcTU1bTl3WUs5MFpEbmhvRnpZWjQ0Wkwr?=
+ =?utf-8?B?YjllaGx5MVhrMmVENWN1eFJIWGg4MEVGcnZWNjM4OFFtYnBMNkFnTUF4MXdH?=
+ =?utf-8?B?aU1RZlRIUVI1b2Qwakk2TXYvNElwazYvQWk2NU5LQVNZTUNaem04MGJvS2lZ?=
+ =?utf-8?B?by9NZ2gveThmRXNTQk1BZFJCNW1YYjZ2RTZiRlA0QXBPZ29QTFF2UmYzRVFi?=
+ =?utf-8?B?N05YRnVJT3ROL1NxVW0waGY2NHVsWlJpbjVjbFV1R2JmTFNSMkNIcE9LdlRO?=
+ =?utf-8?B?bkVaQldVVlpTaHhRQVBCbjdBalEwaG5WNUJVUEtDbXU2Rm55S1dZRllkNXow?=
+ =?utf-8?B?Rm5jU1E1U2dONzNlKzNZUzNEeUtwZWxJWW1UVjFQQ24zbTEvNnUveHJCK0Z1?=
+ =?utf-8?B?QnVWNDJ5NkJwc2tmTHMzOUpQM0pvK0hFclRnL0dPVHJsYlUrbHBzeDV6WUJI?=
+ =?utf-8?B?MHh3RDI3Q2pHMGJDcDhlbDRxZFJyVUNqeVQ2Rk5WM1NxMG5UYU83a011RUFo?=
+ =?utf-8?B?Y3M0SW92akNDWjRQZGgrUHFhRmRKZnRaY3JzUkhxZlNaOVpCUXFiS0R3S0d6?=
+ =?utf-8?B?L1Y3UFJsOEgyVEhwUzdqKzNBQkhoQWtiUHBuS2NPRjNjRkdJMTRSUzBxZmRv?=
+ =?utf-8?B?akxNcWVNTmVOVndJa3ZNbSt5cXdLdS9HSlg2VUNhY2YwMHZQU1piQXlXcUxF?=
+ =?utf-8?B?aVhrSTZqb3hsTkh3cEo0WlpFTStaNldpSkJUTm94OXlYdmxVOHc2QmlobzJ3?=
+ =?utf-8?B?Wnd0V1poTFI5VWZBa2ZrS1FRMFJ4bVI5TXo5bUFoZkp5S1FvRnUwUjA1UEdD?=
+ =?utf-8?B?alE4VUNRSzkrSVJZVTFESW40SVJBR3lrOUFYc0JISzQ0MndHNzRaVVBGQ1RH?=
+ =?utf-8?B?aFAxekhqemx1YmIwNGEvSDlSYWoxbW9yK0ZPNjR2RGJvZWtXb0xHKzV4L1pC?=
+ =?utf-8?B?RUdQeE9Pb1pwYTZpVnFWeUlvUURMN0F1dUNqVXNQUlpSaFdXRnVaSmhIZ1Nt?=
+ =?utf-8?B?ZHV1OUFvVTJpM0pzaEprQXpTK1QwOTJXMHptSjNTRmxzNkxDRmFXeHFhZVla?=
+ =?utf-8?B?N1FUVllTMnJhMUhwb1ZYWEt5QVJ0SFduU3ZYenJpbkM2ZUpTUmhQWW5CTStk?=
+ =?utf-8?B?V2ZMenFrUjV0cmRQV3dLZWdFcGl4OWhDcUhQb24wSXQ2dFlYTWpsUUFaa0x4?=
+ =?utf-8?B?ZWhYeHdYbVVqSHBvWUtJSzRwdHd2YTMzYUxrMXdGMHgwNUloS0lmZnlqVzVV?=
+ =?utf-8?B?WjhSd0VVUjUyYUtpQUg2M1ZiNWgrc3JCOUdOVm9DdVBjbkYxaXd2bnhha1l6?=
+ =?utf-8?B?Wlg3MC9rQ3VzZ0ZlSXd5Q0hjckJnPT0=?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 140fe86a-3378-419f-b87c-08d9e4f110c8
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 19:37:07.2445
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7Drk2pXqlqFoLa1fQXXFX7T13VIt3H1H8CkBO0tXxFPRmYzKQ1+IPyEcYv/zTakwisXytL24e6Fn5aTWvDq2jo1AmzCmP7Qu1yaRqsWpYaY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4094
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022, Greg Kroah-Hartman wrote:
+Hi Shuah,
 
-> From: Paolo Abeni <pabeni@redhat.com>
->
-> [ Upstream commit 86e39e04482b0aadf3ee3ed5fcf2d63816559d36 ]
-
-Hi Greg -
-
-Please drop this from the stable queue for both 5.16 and 5.15. It wasn't 
-intended for backporting and we haven't checked for dependencies with 
-other changes in this part of MPTCP subsystem.
-
-In the mptcp tree we make sure to add Fixes: tags on every patch we 
-think is eligible for the -stable tree. I know you're sifting through a 
-lot of patches from subsystems that end up with important fixes arriving 
-from the "-next" branches, and it seems like the scripts scooped up 
-several MPTCP patches this time around that don't meet the -stable rules.
-
-
-Thanks,
-
-Mat
-
->
-> Include into the path manager status a bitmap tracking the list
-> of local endpoints still available - not yet used - for the
-> relevant mptcp socket.
->
-> Keep such map updated at endpoint creation/deletion time, so
-> that we can easily skip already used endpoint at local address
-> selection time.
->
-> The endpoint used by the initial subflow is lazyly accounted at
-> subflow creation time: the usage bitmap is be up2date before
-> endpoint selection and we avoid such unneeded task in some relevant
-> scenarios - e.g. busy servers accepting incoming subflows but
-> not creating any additional ones nor annuncing additional addresses.
->
-> Overall this allows for fair local endpoints usage in case of
-> subflow failure.
->
-> As a side effect, this patch also enforces that each endpoint
-> is used at most once for each mptcp connection.
->
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-> Signed-off-by: David S. Miller <davem@davemloft.net>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On 1/26/2022 12:13 PM, Shuah Khan wrote:
+> Update the document to clarifiy support for running mainline
+> kselftest on stable releases and the reasons for not removing
+> test code that can test older kernels.
+> 
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 > ---
-> net/mptcp/pm.c                                |   1 +
-> net/mptcp/pm_netlink.c                        | 125 +++++++++++-------
-> net/mptcp/protocol.c                          |   3 +-
-> net/mptcp/protocol.h                          |  12 +-
-> .../testing/selftests/net/mptcp/mptcp_join.sh |   5 +-
-> 5 files changed, 91 insertions(+), 55 deletions(-)
->
-> diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-> index 6ab386ff32944..332ac6eda3ba4 100644
-> --- a/net/mptcp/pm.c
-> +++ b/net/mptcp/pm.c
-> @@ -370,6 +370,7 @@ void mptcp_pm_data_init(struct mptcp_sock *msk)
-> 	WRITE_ONCE(msk->pm.accept_subflow, false);
-> 	WRITE_ONCE(msk->pm.remote_deny_join_id0, false);
-> 	msk->pm.status = 0;
-> +	bitmap_fill(msk->pm.id_avail_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
->
-> 	spin_lock_init(&msk->pm.lock);
-> 	INIT_LIST_HEAD(&msk->pm.anno_list);
-> diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-> index 27427aeeee0e5..ad3dc9c6c5310 100644
-> --- a/net/mptcp/pm_netlink.c
-> +++ b/net/mptcp/pm_netlink.c
-> @@ -38,10 +38,6 @@ struct mptcp_pm_add_entry {
-> 	u8			retrans_times;
-> };
->
-> -/* max value of mptcp_addr_info.id */
-> -#define MAX_ADDR_ID		U8_MAX
-> -#define BITMAP_SZ DIV_ROUND_UP(MAX_ADDR_ID + 1, BITS_PER_LONG)
-> -
-> struct pm_nl_pernet {
-> 	/* protects pernet updates */
-> 	spinlock_t		lock;
-> @@ -53,14 +49,14 @@ struct pm_nl_pernet {
-> 	unsigned int		local_addr_max;
-> 	unsigned int		subflows_max;
-> 	unsigned int		next_id;
-> -	unsigned long		id_bitmap[BITMAP_SZ];
-> +	DECLARE_BITMAP(id_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
-> };
->
-> #define MPTCP_PM_ADDR_MAX	8
-> #define ADD_ADDR_RETRANS_MAX	3
->
-> static bool addresses_equal(const struct mptcp_addr_info *a,
-> -			    struct mptcp_addr_info *b, bool use_port)
-> +			    const struct mptcp_addr_info *b, bool use_port)
-> {
-> 	bool addr_equals = false;
->
-> @@ -174,6 +170,9 @@ select_local_address(const struct pm_nl_pernet *pernet,
-> 		if (!(entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW))
-> 			continue;
->
-> +		if (!test_bit(entry->addr.id, msk->pm.id_avail_bitmap))
-> +			continue;
+>  Documentation/dev-tools/kselftest.rst | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index dcefee707ccd..a833ecf12fbc 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -7,6 +7,14 @@ directory. These are intended to be small tests to exercise individual code
+>  paths in the kernel. Tests are intended to be run after building, installing
+>  and booting a kernel.
+>  
+> +Kselftest from mainline can be run on older stable kernels. Running tests
+> +from mainline offers the best coverage. Several test rings run mainline
+> +kselftest suite on stable releases. The reason is that when a new test
+> +gets added to test existing code to regression test a bug, we should be
+> +able to run that test on an older kernel. Hence, it is important to keep
+> +code that can still test an older kernel and make sure it skips the test
+> +gracefully on newer releases.
 > +
-> 		if (entry->addr.family != sk->sk_family) {
-> #if IS_ENABLED(CONFIG_MPTCP_IPV6)
-> 			if ((entry->addr.family == AF_INET &&
-> @@ -184,23 +183,17 @@ select_local_address(const struct pm_nl_pernet *pernet,
-> 				continue;
-> 		}
->
-> -		/* avoid any address already in use by subflows and
-> -		 * pending join
-> -		 */
-> -		if (!lookup_subflow_by_saddr(&msk->conn_list, &entry->addr)) {
-> -			ret = entry;
-> -			break;
-> -		}
-> +		ret = entry;
-> +		break;
-> 	}
-> 	rcu_read_unlock();
-> 	return ret;
-> }
->
-> static struct mptcp_pm_addr_entry *
-> -select_signal_address(struct pm_nl_pernet *pernet, unsigned int pos)
-> +select_signal_address(struct pm_nl_pernet *pernet, struct mptcp_sock *msk)
-> {
-> 	struct mptcp_pm_addr_entry *entry, *ret = NULL;
-> -	int i = 0;
->
-> 	rcu_read_lock();
-> 	/* do not keep any additional per socket state, just signal
-> @@ -209,12 +202,14 @@ select_signal_address(struct pm_nl_pernet *pernet, unsigned int pos)
-> 	 * can lead to additional addresses not being announced.
-> 	 */
-> 	list_for_each_entry_rcu(entry, &pernet->local_addr_list, list) {
-> +		if (!test_bit(entry->addr.id, msk->pm.id_avail_bitmap))
-> +			continue;
-> +
-> 		if (!(entry->flags & MPTCP_PM_ADDR_FLAG_SIGNAL))
-> 			continue;
-> -		if (i++ == pos) {
-> -			ret = entry;
-> -			break;
-> -		}
-> +
-> +		ret = entry;
-> +		break;
-> 	}
-> 	rcu_read_unlock();
-> 	return ret;
-> @@ -258,9 +253,11 @@ EXPORT_SYMBOL_GPL(mptcp_pm_get_local_addr_max);
->
-> static void check_work_pending(struct mptcp_sock *msk)
-> {
-> -	if (msk->pm.add_addr_signaled == mptcp_pm_get_add_addr_signal_max(msk) &&
-> -	    (msk->pm.local_addr_used == mptcp_pm_get_local_addr_max(msk) ||
-> -	     msk->pm.subflows == mptcp_pm_get_subflows_max(msk)))
-> +	struct pm_nl_pernet *pernet = net_generic(sock_net((struct sock *)msk), pm_nl_pernet_id);
-> +
-> +	if (msk->pm.subflows == mptcp_pm_get_subflows_max(msk) ||
-> +	    (find_next_and_bit(pernet->id_bitmap, msk->pm.id_avail_bitmap,
-> +			       MPTCP_PM_MAX_ADDR_ID + 1, 0) == MPTCP_PM_MAX_ADDR_ID + 1))
-> 		WRITE_ONCE(msk->pm.work_pending, false);
-> }
->
-> @@ -460,6 +457,35 @@ static unsigned int fill_remote_addresses_vec(struct mptcp_sock *msk, bool fullm
-> 	return i;
-> }
->
-> +static struct mptcp_pm_addr_entry *
-> +__lookup_addr_by_id(struct pm_nl_pernet *pernet, unsigned int id)
-> +{
-> +	struct mptcp_pm_addr_entry *entry;
-> +
-> +	list_for_each_entry(entry, &pernet->local_addr_list, list) {
-> +		if (entry->addr.id == id)
-> +			return entry;
-> +	}
-> +	return NULL;
-> +}
-> +
-> +static int
-> +lookup_id_by_addr(struct pm_nl_pernet *pernet, const struct mptcp_addr_info *addr)
-> +{
-> +	struct mptcp_pm_addr_entry *entry;
-> +	int ret = -1;
-> +
-> +	rcu_read_lock();
-> +	list_for_each_entry(entry, &pernet->local_addr_list, list) {
-> +		if (addresses_equal(&entry->addr, addr, entry->addr.port)) {
-> +			ret = entry->addr.id;
-> +			break;
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +	return ret;
-> +}
-> +
-> static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
-> {
-> 	struct sock *sk = (struct sock *)msk;
-> @@ -475,6 +501,19 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
-> 	local_addr_max = mptcp_pm_get_local_addr_max(msk);
-> 	subflows_max = mptcp_pm_get_subflows_max(msk);
->
-> +	/* do lazy endpoint usage accounting for the MPC subflows */
-> +	if (unlikely(!(msk->pm.status & BIT(MPTCP_PM_MPC_ENDPOINT_ACCOUNTED))) && msk->first) {
-> +		struct mptcp_addr_info local;
-> +		int mpc_id;
-> +
-> +		local_address((struct sock_common *)msk->first, &local);
-> +		mpc_id = lookup_id_by_addr(pernet, &local);
-> +		if (mpc_id < 0)
-> +			__clear_bit(mpc_id, msk->pm.id_avail_bitmap);
-> +
-> +		msk->pm.status |= BIT(MPTCP_PM_MPC_ENDPOINT_ACCOUNTED);
-> +	}
-> +
-> 	pr_debug("local %d:%d signal %d:%d subflows %d:%d\n",
-> 		 msk->pm.local_addr_used, local_addr_max,
-> 		 msk->pm.add_addr_signaled, add_addr_signal_max,
-> @@ -482,21 +521,16 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
->
-> 	/* check first for announce */
-> 	if (msk->pm.add_addr_signaled < add_addr_signal_max) {
-> -		local = select_signal_address(pernet,
-> -					      msk->pm.add_addr_signaled);
-> +		local = select_signal_address(pernet, msk);
->
-> 		if (local) {
-> 			if (mptcp_pm_alloc_anno_list(msk, local)) {
-> +				__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
-> 				msk->pm.add_addr_signaled++;
-> 				mptcp_pm_announce_addr(msk, &local->addr, false);
-> 				mptcp_pm_nl_addr_send_ack(msk);
-> 			}
-> -		} else {
-> -			/* pick failed, avoid fourther attempts later */
-> -			msk->pm.local_addr_used = add_addr_signal_max;
-> 		}
-> -
-> -		check_work_pending(msk);
-> 	}
->
-> 	/* check if should create a new subflow */
-> @@ -510,19 +544,16 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
-> 			int i, nr;
->
-> 			msk->pm.local_addr_used++;
-> -			check_work_pending(msk);
-> 			nr = fill_remote_addresses_vec(msk, fullmesh, addrs);
-> +			if (nr)
-> +				__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
-> 			spin_unlock_bh(&msk->pm.lock);
-> 			for (i = 0; i < nr; i++)
-> 				__mptcp_subflow_connect(sk, &local->addr, &addrs[i]);
-> 			spin_lock_bh(&msk->pm.lock);
-> -			return;
-> 		}
-> -
-> -		/* lookup failed, avoid fourther attempts later */
-> -		msk->pm.local_addr_used = local_addr_max;
-> -		check_work_pending(msk);
-> 	}
-> +	check_work_pending(msk);
-> }
->
-> static void mptcp_pm_nl_fully_established(struct mptcp_sock *msk)
-> @@ -736,6 +767,7 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
-> 			msk->pm.subflows--;
-> 			__MPTCP_INC_STATS(sock_net(sk), rm_type);
-> 		}
-> +		__set_bit(rm_list->ids[1], msk->pm.id_avail_bitmap);
-> 		if (!removed)
-> 			continue;
->
-> @@ -765,6 +797,9 @@ void mptcp_pm_nl_work(struct mptcp_sock *msk)
->
-> 	msk_owned_by_me(msk);
->
-> +	if (!(pm->status & MPTCP_PM_WORK_MASK))
-> +		return;
-> +
-> 	spin_lock_bh(&msk->pm.lock);
->
-> 	pr_debug("msk=%p status=%x", msk, pm->status);
-> @@ -810,7 +845,7 @@ static int mptcp_pm_nl_append_new_local_addr(struct pm_nl_pernet *pernet,
-> 	/* to keep the code simple, don't do IDR-like allocation for address ID,
-> 	 * just bail when we exceed limits
-> 	 */
-> -	if (pernet->next_id == MAX_ADDR_ID)
-> +	if (pernet->next_id == MPTCP_PM_MAX_ADDR_ID)
-> 		pernet->next_id = 1;
-> 	if (pernet->addrs >= MPTCP_PM_ADDR_MAX)
-> 		goto out;
-> @@ -830,7 +865,7 @@ static int mptcp_pm_nl_append_new_local_addr(struct pm_nl_pernet *pernet,
-> 	if (!entry->addr.id) {
-> find_next:
-> 		entry->addr.id = find_next_zero_bit(pernet->id_bitmap,
-> -						    MAX_ADDR_ID + 1,
-> +						    MPTCP_PM_MAX_ADDR_ID + 1,
-> 						    pernet->next_id);
-> 		if (!entry->addr.id && pernet->next_id != 1) {
-> 			pernet->next_id = 1;
-> @@ -1197,18 +1232,6 @@ static int mptcp_nl_cmd_add_addr(struct sk_buff *skb, struct genl_info *info)
-> 	return 0;
-> }
->
-> -static struct mptcp_pm_addr_entry *
-> -__lookup_addr_by_id(struct pm_nl_pernet *pernet, unsigned int id)
-> -{
-> -	struct mptcp_pm_addr_entry *entry;
-> -
-> -	list_for_each_entry(entry, &pernet->local_addr_list, list) {
-> -		if (entry->addr.id == id)
-> -			return entry;
-> -	}
-> -	return NULL;
-> -}
-> -
-> int mptcp_pm_get_flags_and_ifindex_by_id(struct net *net, unsigned int id,
-> 					 u8 *flags, int *ifindex)
-> {
-> @@ -1467,7 +1490,7 @@ static int mptcp_nl_cmd_flush_addrs(struct sk_buff *skb, struct genl_info *info)
-> 	list_splice_init(&pernet->local_addr_list, &free_list);
-> 	__reset_counters(pernet);
-> 	pernet->next_id = 1;
-> -	bitmap_zero(pernet->id_bitmap, MAX_ADDR_ID + 1);
-> +	bitmap_zero(pernet->id_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
-> 	spin_unlock_bh(&pernet->lock);
-> 	mptcp_nl_remove_addrs_list(sock_net(skb->sk), &free_list);
-> 	synchronize_rcu();
-> @@ -1577,7 +1600,7 @@ static int mptcp_nl_cmd_dump_addrs(struct sk_buff *msg,
-> 	pernet = net_generic(net, pm_nl_pernet_id);
->
-> 	spin_lock_bh(&pernet->lock);
-> -	for (i = id; i < MAX_ADDR_ID + 1; i++) {
-> +	for (i = id; i < MPTCP_PM_MAX_ADDR_ID + 1; i++) {
-> 		if (test_bit(i, pernet->id_bitmap)) {
-> 			entry = __lookup_addr_by_id(pernet, i);
-> 			if (!entry)
-> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> index 0cd55e4c30fab..70a3cac85f7b8 100644
-> --- a/net/mptcp/protocol.c
-> +++ b/net/mptcp/protocol.c
-> @@ -2416,8 +2416,7 @@ static void mptcp_worker(struct work_struct *work)
->
-> 	mptcp_check_fastclose(msk);
->
-> -	if (msk->pm.status)
-> -		mptcp_pm_nl_work(msk);
-> +	mptcp_pm_nl_work(msk);
->
-> 	if (test_and_clear_bit(MPTCP_WORK_EOF, &msk->flags))
-> 		mptcp_check_for_eof(msk);
-> diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-> index d87cc040352e3..0387ad9fb43f7 100644
-> --- a/net/mptcp/protocol.h
-> +++ b/net/mptcp/protocol.h
-> @@ -174,16 +174,25 @@ enum mptcp_pm_status {
-> 	MPTCP_PM_ADD_ADDR_SEND_ACK,
-> 	MPTCP_PM_RM_ADDR_RECEIVED,
-> 	MPTCP_PM_ESTABLISHED,
-> -	MPTCP_PM_ALREADY_ESTABLISHED,	/* persistent status, set after ESTABLISHED event */
-> 	MPTCP_PM_SUBFLOW_ESTABLISHED,
-> +	MPTCP_PM_ALREADY_ESTABLISHED,	/* persistent status, set after ESTABLISHED event */
-> +	MPTCP_PM_MPC_ENDPOINT_ACCOUNTED /* persistent status, set after MPC local address is
-> +					 * accounted int id_avail_bitmap
-> +					 */
-> };
->
-> +/* Status bits below MPTCP_PM_ALREADY_ESTABLISHED need pm worker actions */
-> +#define MPTCP_PM_WORK_MASK ((1 << MPTCP_PM_ALREADY_ESTABLISHED) - 1)
-> +
-> enum mptcp_addr_signal_status {
-> 	MPTCP_ADD_ADDR_SIGNAL,
-> 	MPTCP_ADD_ADDR_ECHO,
-> 	MPTCP_RM_ADDR_SIGNAL,
-> };
->
-> +/* max value of mptcp_addr_info.id */
-> +#define MPTCP_PM_MAX_ADDR_ID		U8_MAX
-> +
-> struct mptcp_pm_data {
-> 	struct mptcp_addr_info local;
-> 	struct mptcp_addr_info remote;
-> @@ -202,6 +211,7 @@ struct mptcp_pm_data {
-> 	u8		local_addr_used;
-> 	u8		subflows;
-> 	u8		status;
-> +	DECLARE_BITMAP(id_avail_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
-> 	struct mptcp_rm_list rm_list_tx;
-> 	struct mptcp_rm_list rm_list_rx;
-> };
-> diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-> index 7ef639a9d4a6f..bbafa4cf54538 100755
-> --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-> +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-> @@ -1071,7 +1071,10 @@ signal_address_tests()
-> 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.3.2 flags signal
-> 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.4.2 flags signal
-> 	run_tests $ns1 $ns2 10.0.1.1
-> -	chk_add_nr 4 4
-> +
-> +	# the server will not signal the address terminating
-> +	# the MPC subflow
-> +	chk_add_nr 3 3
-> }
->
-> link_failure_tests()
-> -- 
-> 2.34.1
->
->
->
->
+>  You can find additional information on Kselftest framework, how to
+>  write new tests using the framework on Kselftest wiki:
+>  
 
---
-Mat Martineau
-Intel
+(My apologies if this is already documented, I was not able to find this guidance
+in Documentation/dev-tools/kselftest.rst nor when looking at the
+"Kselftest use-cases..." slides linked from https://kselftest.wiki.kernel.org/)
+
+Could you please clarify what the requirement/expectation is regarding fixes
+to tests? Since the recommendation in the above change is that Kselftest from
+mainline should be run on older stable kernels, is it required to backport
+fixes to the tests themselves to stable kernels?
+
+Thank you very much
+
+Reinette

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7404A44EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E644A43DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244517AbiAaLe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:34:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52422 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377120AbiAaLWd (ORCPT
+        id S1378432AbiAaLYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:24:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34718 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376411AbiAaLPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:22:33 -0500
+        Mon, 31 Jan 2022 06:15:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D5461120;
-        Mon, 31 Jan 2022 11:22:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C690FC340E8;
-        Mon, 31 Jan 2022 11:22:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30150B82A4C;
+        Mon, 31 Jan 2022 11:15:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79376C340E8;
+        Mon, 31 Jan 2022 11:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628152;
-        bh=CrbS+RmJJJc3/CFi/FDjnWD6WFhLdoMFpbJ096EsT1E=;
+        s=korg; t=1643627715;
+        bh=a507W/y4irl+68QJWxOJvR5ERU6MgSxRpkScSXBKGhE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RAfkO4E1K9PMhaQmFpo0TVRPEbmJc8XzlM0RSAsu7nfDlZSN45cwhHwo1JwC31Z+1
-         ryTn6chJ89DNowFkGaQXubQlFi7b03GvgbO4Ld7rNLYpMSl0Kz5ZypqQh6jKPeNp6b
-         83r90+f3rGPNcpL2PfMGgVPjt25X0doBH6xpbHqo=
+        b=RPsGunC2hH5ohtiSw41ca/x33kP6EpXKDWaZ6Id9EdwWCL9a/+mRG8p0wKE5nI8CX
+         zciA3xMlspCXiuwtYujc44LXMTybEfkT6UmBUTUMzOgwvgJGrsY8TFob6duDiYUYfi
+         ItRtKWvZdrURDBS9c6jdhDwBB9sxYUQRHSIw2wbM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Subbaraya Sundeep <sbhatta@marvell.com>,
-        Naveen Mamindlapalli <naveenm@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
+        stable@vger.kernel.org, Wen Gu <guwen@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 142/200] octeontx2-af: Do not fixup all VF action entries
-Date:   Mon, 31 Jan 2022 11:56:45 +0100
-Message-Id: <20220131105238.335403475@linuxfoundation.org>
+Subject: [PATCH 5.15 141/171] net/smc: Transitional solution for clcsock race issue
+Date:   Mon, 31 Jan 2022 11:56:46 +0100
+Message-Id: <20220131105234.777775476@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,129 +47,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Subbaraya Sundeep <sbhatta@marvell.com>
+From: Wen Gu <guwen@linux.alibaba.com>
 
-[ Upstream commit d225c449ab2be25273a3674f476c6c0b57c50254 ]
+[ Upstream commit c0bf3d8a943b6f2e912b7c1de03e2ef28e76f760 ]
 
-AF modifies all the rules destined for VF to use
-the action same as default RSS action. This fixup
-was needed because AF only installs default rules with
-RSS action. But the action in rules installed by a PF
-for its VFs should not be changed by this fixup.
-This is because action can be drop or direct to
-queue as specified by user(ntuple filters).
-This patch fixes that problem.
+We encountered a crash in smc_setsockopt() and it is caused by
+accessing smc->clcsock after clcsock was released.
 
-Fixes: 967db3529eca ("octeontx2-af: add support for multicast/promisc packet")
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+ BUG: kernel NULL pointer dereference, address: 0000000000000020
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 1 PID: 50309 Comm: nginx Kdump: loaded Tainted: G E     5.16.0-rc4+ #53
+ RIP: 0010:smc_setsockopt+0x59/0x280 [smc]
+ Call Trace:
+  <TASK>
+  __sys_setsockopt+0xfc/0x190
+  __x64_sys_setsockopt+0x20/0x30
+  do_syscall_64+0x34/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7f16ba83918e
+  </TASK>
+
+This patch tries to fix it by holding clcsock_release_lock and
+checking whether clcsock has already been released before access.
+
+In case that a crash of the same reason happens in smc_getsockopt()
+or smc_switch_to_fallback(), this patch also checkes smc->clcsock
+in them too. And the caller of smc_switch_to_fallback() will identify
+whether fallback succeeds according to the return value.
+
+Fixes: fd57770dd198 ("net/smc: wait for pending work before clcsock release_sock")
+Link: https://lore.kernel.org/lkml/5dd7ffd1-28e2-24cc-9442-1defec27375e@linux.ibm.com/T/
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/marvell/octeontx2/af/rvu_npc.c   | 22 ++++++++++++++++---
- .../marvell/octeontx2/af/rvu_npc_fs.c         | 20 ++++++++++-------
- 2 files changed, 31 insertions(+), 11 deletions(-)
+ net/smc/af_smc.c | 63 +++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 51 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-index c0005a1feee69..91f86d77cd41b 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-@@ -402,6 +402,7 @@ static void npc_fixup_vf_rule(struct rvu *rvu, struct npc_mcam *mcam,
- 			      int blkaddr, int index, struct mcam_entry *entry,
- 			      bool *enable)
- {
-+	struct rvu_npc_mcam_rule *rule;
- 	u16 owner, target_func;
- 	struct rvu_pfvf *pfvf;
- 	u64 rx_action;
-@@ -423,6 +424,12 @@ static void npc_fixup_vf_rule(struct rvu *rvu, struct npc_mcam *mcam,
- 	      test_bit(NIXLF_INITIALIZED, &pfvf->flags)))
- 		*enable = false;
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 07ff719f39077..34608369b426f 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -548,12 +548,17 @@ static void smc_stat_fallback(struct smc_sock *smc)
+ 	mutex_unlock(&net->smc.mutex_fback_rsn);
+ }
  
-+	/* fix up not needed for the rules added by user(ntuple filters) */
-+	list_for_each_entry(rule, &mcam->mcam_rules, list) {
-+		if (rule->entry == index)
-+			return;
+-static void smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
++static int smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
+ {
+ 	wait_queue_head_t *smc_wait = sk_sleep(&smc->sk);
+-	wait_queue_head_t *clc_wait = sk_sleep(smc->clcsock->sk);
++	wait_queue_head_t *clc_wait;
+ 	unsigned long flags;
+ 
++	mutex_lock(&smc->clcsock_release_lock);
++	if (!smc->clcsock) {
++		mutex_unlock(&smc->clcsock_release_lock);
++		return -EBADF;
 +	}
-+
- 	/* copy VF default entry action to the VF mcam entry */
- 	rx_action = npc_get_default_entry_action(rvu, mcam, blkaddr,
- 						 target_func);
-@@ -489,8 +496,8 @@ static void npc_config_mcam_entry(struct rvu *rvu, struct npc_mcam *mcam,
+ 	smc->use_fallback = true;
+ 	smc->fallback_rsn = reason_code;
+ 	smc_stat_fallback(smc);
+@@ -567,18 +572,30 @@ static void smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
+ 		 * smc socket->wq, which should be removed
+ 		 * to clcsocket->wq during the fallback.
+ 		 */
++		clc_wait = sk_sleep(smc->clcsock->sk);
+ 		spin_lock_irqsave(&smc_wait->lock, flags);
+ 		spin_lock_nested(&clc_wait->lock, SINGLE_DEPTH_NESTING);
+ 		list_splice_init(&smc_wait->head, &clc_wait->head);
+ 		spin_unlock(&clc_wait->lock);
+ 		spin_unlock_irqrestore(&smc_wait->lock, flags);
  	}
++	mutex_unlock(&smc->clcsock_release_lock);
++	return 0;
+ }
  
- 	/* PF installing VF rule */
--	if (intf == NIX_INTF_RX && actindex < mcam->bmap_entries)
--		npc_fixup_vf_rule(rvu, mcam, blkaddr, index, entry, &enable);
-+	if (is_npc_intf_rx(intf) && actindex < mcam->bmap_entries)
-+		npc_fixup_vf_rule(rvu, mcam, blkaddr, actindex, entry, &enable);
- 
- 	/* Set 'action' */
- 	rvu_write64(rvu, blkaddr,
-@@ -916,7 +923,8 @@ static void npc_update_vf_flow_entry(struct rvu *rvu, struct npc_mcam *mcam,
- 				     int blkaddr, u16 pcifunc, u64 rx_action)
+ /* fall back during connect */
+ static int smc_connect_fallback(struct smc_sock *smc, int reason_code)
  {
- 	int actindex, index, bank, entry;
--	bool enable;
-+	struct rvu_npc_mcam_rule *rule;
-+	bool enable, update;
- 
- 	if (!(pcifunc & RVU_PFVF_FUNC_MASK))
+-	smc_switch_to_fallback(smc, reason_code);
++	struct net *net = sock_net(&smc->sk);
++	int rc = 0;
++
++	rc = smc_switch_to_fallback(smc, reason_code);
++	if (rc) { /* fallback fails */
++		this_cpu_inc(net->smc.smc_stats->clnt_hshake_err_cnt);
++		if (smc->sk.sk_state == SMC_INIT)
++			sock_put(&smc->sk); /* passive closing */
++		return rc;
++	}
+ 	smc_copy_sock_settings_to_clc(smc);
+ 	smc->connect_nonblock = 0;
+ 	if (smc->sk.sk_state == SMC_INIT)
+@@ -1384,11 +1401,12 @@ static void smc_listen_decline(struct smc_sock *new_smc, int reason_code,
+ {
+ 	/* RDMA setup failed, switch back to TCP */
+ 	smc_conn_abort(new_smc, local_first);
+-	if (reason_code < 0) { /* error, no fallback possible */
++	if (reason_code < 0 ||
++	    smc_switch_to_fallback(new_smc, reason_code)) {
++		/* error, no fallback possible */
+ 		smc_listen_out_err(new_smc);
  		return;
-@@ -924,6 +932,14 @@ static void npc_update_vf_flow_entry(struct rvu *rvu, struct npc_mcam *mcam,
- 	mutex_lock(&mcam->lock);
- 	for (index = 0; index < mcam->bmap_entries; index++) {
- 		if (mcam->entry2target_pffunc[index] == pcifunc) {
-+			update = true;
-+			/* update not needed for the rules added via ntuple filters */
-+			list_for_each_entry(rule, &mcam->mcam_rules, list) {
-+				if (rule->entry == index)
-+					update = false;
-+			}
-+			if (!update)
-+				continue;
- 			bank = npc_get_bank(mcam, index);
- 			actindex = index;
- 			entry = index & (mcam->banksize - 1);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-index ff2b21999f36f..19c53e591d0da 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-@@ -1098,14 +1098,6 @@ find_rule:
- 		write_req.cntr = rule->cntr;
+ 	}
+-	smc_switch_to_fallback(new_smc, reason_code);
+ 	if (reason_code && reason_code != SMC_CLC_DECL_PEERDECL) {
+ 		if (smc_clc_send_decline(new_smc, reason_code, version) < 0) {
+ 			smc_listen_out_err(new_smc);
+@@ -1761,8 +1779,11 @@ static void smc_listen_work(struct work_struct *work)
+ 
+ 	/* check if peer is smc capable */
+ 	if (!tcp_sk(newclcsock->sk)->syn_smc) {
+-		smc_switch_to_fallback(new_smc, SMC_CLC_DECL_PEERNOSMC);
+-		smc_listen_out_connected(new_smc);
++		rc = smc_switch_to_fallback(new_smc, SMC_CLC_DECL_PEERNOSMC);
++		if (rc)
++			smc_listen_out_err(new_smc);
++		else
++			smc_listen_out_connected(new_smc);
+ 		return;
  	}
  
--	err = rvu_mbox_handler_npc_mcam_write_entry(rvu, &write_req,
--						    &write_rsp);
--	if (err) {
--		rvu_mcam_remove_counter_from_rule(rvu, owner, rule);
--		if (new)
--			kfree(rule);
--		return err;
--	}
- 	/* update rule */
- 	memcpy(&rule->packet, &dummy.packet, sizeof(rule->packet));
- 	memcpy(&rule->mask, &dummy.mask, sizeof(rule->mask));
-@@ -1132,6 +1124,18 @@ find_rule:
- 	if (req->default_rule)
- 		pfvf->def_ucast_rule = rule;
+@@ -2048,7 +2069,9 @@ static int smc_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
  
-+	/* write to mcam entry registers */
-+	err = rvu_mbox_handler_npc_mcam_write_entry(rvu, &write_req,
-+						    &write_rsp);
-+	if (err) {
-+		rvu_mcam_remove_counter_from_rule(rvu, owner, rule);
-+		if (new) {
-+			list_del(&rule->list);
-+			kfree(rule);
-+		}
-+		return err;
+ 	if (msg->msg_flags & MSG_FASTOPEN) {
+ 		if (sk->sk_state == SMC_INIT && !smc->connect_nonblock) {
+-			smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
++			rc = smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
++			if (rc)
++				goto out;
+ 		} else {
+ 			rc = -EINVAL;
+ 			goto out;
+@@ -2241,6 +2264,11 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 	/* generic setsockopts reaching us here always apply to the
+ 	 * CLC socket
+ 	 */
++	mutex_lock(&smc->clcsock_release_lock);
++	if (!smc->clcsock) {
++		mutex_unlock(&smc->clcsock_release_lock);
++		return -EBADF;
 +	}
-+
- 	/* VF's MAC address is being changed via PF  */
- 	if (pf_set_vfs_mac) {
- 		ether_addr_copy(pfvf->default_mac, req->packet.dmac);
+ 	if (unlikely(!smc->clcsock->ops->setsockopt))
+ 		rc = -EOPNOTSUPP;
+ 	else
+@@ -2250,6 +2278,7 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 		sk->sk_err = smc->clcsock->sk->sk_err;
+ 		sk_error_report(sk);
+ 	}
++	mutex_unlock(&smc->clcsock_release_lock);
+ 
+ 	if (optlen < sizeof(int))
+ 		return -EINVAL;
+@@ -2266,7 +2295,7 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 	case TCP_FASTOPEN_NO_COOKIE:
+ 		/* option not supported by SMC */
+ 		if (sk->sk_state == SMC_INIT && !smc->connect_nonblock) {
+-			smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
++			rc = smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
+ 		} else {
+ 			rc = -EINVAL;
+ 		}
+@@ -2309,13 +2338,23 @@ static int smc_getsockopt(struct socket *sock, int level, int optname,
+ 			  char __user *optval, int __user *optlen)
+ {
+ 	struct smc_sock *smc;
++	int rc;
+ 
+ 	smc = smc_sk(sock->sk);
++	mutex_lock(&smc->clcsock_release_lock);
++	if (!smc->clcsock) {
++		mutex_unlock(&smc->clcsock_release_lock);
++		return -EBADF;
++	}
+ 	/* socket options apply to the CLC socket */
+-	if (unlikely(!smc->clcsock->ops->getsockopt))
++	if (unlikely(!smc->clcsock->ops->getsockopt)) {
++		mutex_unlock(&smc->clcsock_release_lock);
+ 		return -EOPNOTSUPP;
+-	return smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+-					     optval, optlen);
++	}
++	rc = smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
++					   optval, optlen);
++	mutex_unlock(&smc->clcsock_release_lock);
++	return rc;
+ }
+ 
+ static int smc_ioctl(struct socket *sock, unsigned int cmd,
 -- 
 2.34.1
 

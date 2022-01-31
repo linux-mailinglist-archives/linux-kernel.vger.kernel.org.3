@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5041B4A4F51
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5844A4F53
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244405AbiAaTU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:20:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31468 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235454AbiAaTU0 (ORCPT
+        id S1359467AbiAaTVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235454AbiAaTVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:20:26 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VHcgTC016494;
-        Mon, 31 Jan 2022 19:20:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=aDTwYpmcoZyK+955pUPN/Okv23O0tyd1fhGzfHXBoHw=;
- b=ULr8gzad6YLNEVXV69QxgoHQNB1lapemssaqADHK52oVygqkLEFfIwamFYZF4WSxlcjw
- pFg2pf6DY6DYnepECEazRKm50afEzdlYmtbUJrsONHM6yxuoI2HIJQgQ1wWrunNsoKYz
- qRZJaV22AqsE+6C0O34D0UGA28FaBg5/Uav17QGRtgN/A678+ViBCuDUITFDPAfYp6GG
- it/buhoJPymOA81ozwJM8yNkfpwOj8k5YxpDnyz4+1dWRmtePc2TMM/pRgDNN0jgdvUC
- HCBJUbDZmgcte3JQnrdpP7/l856leKiQCYRjh4GKNpvVWrUR2x0D0zduLBME+LueAVnv EQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dx98uh5qp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Jan 2022 19:20:20 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VJ8PH3010151;
-        Mon, 31 Jan 2022 19:20:18 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dvw79eg5x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Jan 2022 19:20:18 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VJATKU49217880
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Jan 2022 19:10:29 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2429D11C05B;
-        Mon, 31 Jan 2022 19:20:16 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C91A11C058;
-        Mon, 31 Jan 2022 19:20:15 +0000 (GMT)
-Received: from sig-9-65-69-222.ibm.com (unknown [9.65.69.222])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 31 Jan 2022 19:20:15 +0000 (GMT)
-Message-ID: <09c63b7bfb7e58702f7dcfc71a2e79b866ad9e7d.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Allow template selection with ima_template[_fmt]=
- after ima_hash=
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guozihua@huawei.com,
-        stable@vger.kernel.org
-Date:   Mon, 31 Jan 2022 14:20:14 -0500
-In-Reply-To: <20220131171139.3024883-1-roberto.sassu@huawei.com>
-References: <20220131171139.3024883-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CHQAydc0mmQnMNRBhdQQRiFTKY874JrU
-X-Proofpoint-GUID: CHQAydc0mmQnMNRBhdQQRiFTKY874JrU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- phishscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201310124
+        Mon, 31 Jan 2022 14:21:32 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ADBC061714;
+        Mon, 31 Jan 2022 11:21:32 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id s16so13034293pgs.13;
+        Mon, 31 Jan 2022 11:21:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z4fgthDT3x2CEIImte/CKnYW9ye9UcnzsCmxp0s9Vks=;
+        b=kOrsCyFpAdlSWDG167+C7QFyFhW+7sBYPpoG7/XQNbD+9GZndgkz0z77mTGVNW1cq1
+         EUhG+hkVFqOp0nZrZNtaBifFQ09Wg8VjHs/c2eXSb7XqHGh1QPW7wnabEXLko9U7RBC5
+         PSPOtWzlkL9I61L5OeD0sgGYYlyyaXmMUsK1dnYSdP5nApm/D/8gwmGz9/rYrkZ4kba9
+         YRmJZZA80yAIA/3PHjemRIbzOPfXAb/gU9n10q2I/jNKt2iuBkY4zPzBma0ySwrjxoko
+         U3032YumaOeEZ52NqHiGcrUAYq0wOCVmKfJXY+D+3GqLAQGG3SUkAHRSB5Hg/Tr54Xju
+         aPgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z4fgthDT3x2CEIImte/CKnYW9ye9UcnzsCmxp0s9Vks=;
+        b=X65hg26yvdi8cE6xiH+BBhYXzsondylB3OK3Kxaemokci4plX5uR8rVCW48/6QelZ9
+         NkzfAnDwyBMiykDYr4wyqB3MLpIb1ntXOJmP149MW+03HdaM4XF1DnJ+ag7Pzk2VoVqK
+         hYv20JxT36A/O2N4ZhdUtStg/iACFAvyo09ZDQUkwxsKwSI7h0cKPzcld3PkQrSm5rEQ
+         H1Xs+2lM6+3X/xOF7Ta6YUkSyD7uoEzPJHm4L6gnmckPjS5SYsjPYRndtQHWuSgJa8Zw
+         +eJLqV7Q1C1AijMHSBGUuwdOBzjvK+xrJV6BjN32WfAyuLjv47Y9p28u2PJ0TGa/7B+y
+         o1Gw==
+X-Gm-Message-State: AOAM530yrnejVWVe7XWIslpeMDlN97qX6tSP6vqQzLzY0ErqgnI9Sbry
+        l5S3HUXtbxUVlHFaPvPHBBpOsA5sx+I=
+X-Google-Smtp-Source: ABdhPJz0bFZQaFHN5cN/+A5kKAOeKb3894s7s0ePyGNqTjez/HVKmyHjmkHluopPQ5990K4WlN5fqg==
+X-Received: by 2002:a65:6296:: with SMTP id f22mr17602402pgv.320.1643656891836;
+        Mon, 31 Jan 2022 11:21:31 -0800 (PST)
+Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
+        by smtp.gmail.com with ESMTPSA id n2sm29791218pga.39.2022.01.31.11.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 11:21:31 -0800 (PST)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Prioritize extcon over USB role switching API
+Date:   Mon, 31 Jan 2022 11:21:02 -0800
+Message-Id: <20220131192102.4115473-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-31 at 18:11 +0100, Roberto Sassu wrote:
-> Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
-> ima_template_fmt") introduced an additional check on the ima_template
-> variable to avoid multiple template selection.
-> 
-> Unfortunately, ima_template could be also set by the setup function of the
-> ima_hash= parameter, when it calls ima_template_desc_current(). This causes
-> attempts to choose a new template with ima_template= or with
-> ima_template_fmt=, after ima_hash=, to be ignored.
-> 
-> Achieve the goal of the commit mentioned with the new static variable
-> template_setup_done, so that template selection requests after ima_hash=
-> are not ignored.
-> 
-> Finally, call ima_init_template_list(), if not already done, to initialize
-> the list of templates before lookup_template_desc() is called.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+It is necessary that:
 
-Thanks, Roberto.
+   ROLE_SWITCH && device_property_read_bool(dwc->dev, "usb-role-switch")
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+is true in order for dwc3_get_dr_mode() to _not_ force us from OTG to
+PERIPHERAL mode here:
 
-Mimi
+   if (mode == USB_DR_MODE_OTG &&
+       (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+        !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+	!DWC3_VER_IS_PRIOR(DWC3, 330A))
+	mode = USB_DR_MODE_PERIPHERAL;
 
+and dwc3_drd_init() to be called later in dwc3_core_init_mode(). So,
+to avoid always ignoring extcon device returned by dwc3_get_extcon()
+change dwc3_drd_init() to check and use it first, before checking if
+dwc3_setup_role_switch() should be called.
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
+
+Hopefully I didn't miss something important making this patch
+unnecessary. Don't know if this is a good solution or not, part of me
+thinks than maybe changing the aforementioned code in
+dwc3_get_dr_mode() to account for extcon wopuld be
+simpler/better. Happy to rework this.
+
+ drivers/usb/dwc3/drd.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index e2b68bb770d1..835bd0be87d5 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -579,12 +579,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ 	if (IS_ERR(dwc->edev))
+ 		return PTR_ERR(dwc->edev);
+
+-	if (ROLE_SWITCH &&
+-	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+-		ret = dwc3_setup_role_switch(dwc);
+-		if (ret < 0)
+-			return ret;
+-	} else if (dwc->edev) {
++	if (dwc->edev) {
+ 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+ 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+ 					       &dwc->edev_nb);
+@@ -594,6 +589,11 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ 		}
+
+ 		dwc3_drd_update(dwc);
++	} else if (ROLE_SWITCH &&
++		   device_property_read_bool(dwc->dev, "usb-role-switch")) {
++		ret = dwc3_setup_role_switch(dwc);
++		if (ret < 0)
++			return ret;
+ 	} else {
+ 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
+ 		dwc->current_dr_role = DWC3_GCTL_PRTCAP_OTG;
+--
+2.25.1

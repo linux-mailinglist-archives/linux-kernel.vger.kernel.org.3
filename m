@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B754A3EC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185344A3EC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344769AbiAaImi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 03:42:38 -0500
-Received: from mga07.intel.com ([134.134.136.100]:48485 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344458AbiAaImh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 03:42:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643618557; x=1675154557;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nSRR41iCdd3beXRbCXNgN9ZSboYXpnyQtwxxNPrpg2s=;
-  b=Q4nFdauLJo0TngGzEQ7AJsvBXlwpRPkFotRLs1kk2toJDoJiUdMHZJxg
-   l6gJhFvcZVymPYsAlTFDR3sLqX6XzWeoYK9CUOzBFxUEpfNrWhYGAEnry
-   G5DBJ3rlwM7gRGLwQXT3Xc0ONiLvC9vb03pal8g/Kq1hV6onW1I0K3fOg
-   m1PE9e0rRXDC9wfsqWsmgcumM4j/XKoCBsYE4S/1ptR6GbPwz6l2lwIai
-   +1/pj7O2MEU+B1TC/q42nRN2KiNoGeJtGWZ/MQSg4/ff+lpK51/S1OPt5
-   ucTYXCe+8BgvJmXE9gprrHy8rmdQYunrjuBmJVfZKp920QY4k6b3z4tL1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="310732878"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="310732878"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 00:42:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="675667925"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 00:42:32 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 10:42:31 +0200
-Date:   Mon, 31 Jan 2022 10:42:31 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] usb: typec: mux: select not-visible INTEL_SCU_IPC
-Message-ID: <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
-References: <20220130185032.29298-1-rdunlap@infradead.org>
+        id S1345545AbiAaIn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 03:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344458AbiAaInU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 03:43:20 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34269C061714;
+        Mon, 31 Jan 2022 00:43:20 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id c190-20020a1c9ac7000000b0035081bc722dso8793510wme.5;
+        Mon, 31 Jan 2022 00:43:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qi/zABG7gb+Ye7V/MnSI6gU9BC7CUhBAHbHLsfakjjg=;
+        b=ilm+gX1nWIdPMtjzH4LqVjrzofZ696k8Ch3KNgYXZKsWOwDCQliegGhpCKO2KtUlI1
+         w8mEhQFXfpPBy1U8LHO+wUpJ8Kg5aQ0Uz25gOjpOYezx9RU4rRNp6E6LHFZPQHE4ex8E
+         ECSs5dRtIR6oo06ArkejwMwzqFvza6d8gmenHBOQCHYU/+3+Q2frrRXKH820dspOD5yz
+         BQmSm0E/rVkfBXh+5U+UVRqpQdhdIC+VMkPdc9od71bmjUDKEA17RXrshciYIKOAKVYR
+         W9yWnWKJ4GGqzkqVOiW/ShdECI85UdS/7q166dF8//izRTORCSOWNAITEaR0fUHNcx+C
+         BpnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qi/zABG7gb+Ye7V/MnSI6gU9BC7CUhBAHbHLsfakjjg=;
+        b=qS20DZuZC4a1KV8aqgR6yP19IXv9r/oiOIH0xB5Zf4H6cpVHa9SGdkE372FuwXkoFy
+         tkkWun5d3wSIzS36ijtvVzOrkZYJi7qRHSq3fIepBLpSTHlSPa4Jy0Q/amZCqQNAKrgQ
+         NDtfI69yGNga1HVXz87SvPErq6mtLp7xP9xUkpcFezw7eKnzxC2/6ThB7eu2nf5Ooh2n
+         lxf/LJDm4lDWHB3Xzdeg5IZjoOZvzl5IcvUMdPvtyS0QfSglg8zzgdD/DvxC3rm5TTF/
+         efNwH0cjLHytuQQbCPWecB7uWKEEsCA50wu1q7GGO/zlTnHBxlejqc7VsWm/QINUzdNi
+         x78Q==
+X-Gm-Message-State: AOAM533e6myjUqYaWyJJSs7RKhsRROwlzyDGG191w9PBs50+nfJ6ZXxo
+        BhktLP62dxYdmTOFtwbE9ZQ=
+X-Google-Smtp-Source: ABdhPJzHvE1IQ6rmKoRZ07ClcR/2PZ+8R8gDBkyt60+ezc0zvMeoI+wS/4xKMMpqZzZ70aREXPwukg==
+X-Received: by 2002:a1c:1dd2:: with SMTP id d201mr17530355wmd.141.1643618598742;
+        Mon, 31 Jan 2022 00:43:18 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n15sm13421102wrf.37.2022.01.31.00.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 00:43:18 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Roi Dayan <roid@nvidia.com>,
+        Oz Shlomo <ozsh@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] net/mlx5e: Fix spelling mistake "supoported" -> "supported"
+Date:   Mon, 31 Jan 2022 08:43:17 +0000
+Message-Id: <20220131084317.8058-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130185032.29298-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 10:50:32AM -0800, Randy Dunlap wrote:
-> Use "select INTEL_SCU_IPC" instead of depending on it since it is
-> not a visible Kconfig symbol and it may not otherwise be set/enabled.
-> 
-> Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: kernel test robot <lkp@intel.com>
-> ---
-> v2: add dependency on X86_PLATFORM_DEVICES to fix build error that was
->     Reported_by: kernel test robot <lkp@intel.com>
-> 
->  drivers/usb/typec/mux/Kconfig |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
-> +++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
-> @@ -11,8 +11,8 @@ config TYPEC_MUX_PI3USB30532
->  
->  config TYPEC_MUX_INTEL_PMC
->  	tristate "Intel PMC mux control"
-> -	depends on ACPI
-> -	depends on INTEL_SCU_IPC
-> +	depends on ACPI && X86_PLATFORM_DEVICES
-> +	select INTEL_SCU_IPC
->  	select USB_ROLE_SWITCH
->  	help
->  	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
+There is a spelling mistake in a NL_SET_ERR_MSG_MOD error
+message.  Fix it.
 
-This will cause the driver to fail at probe time if there are no SCU
-device drivers enabled.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The idea is that the SCU device drivers select the SCU IPC library,
-not the users of the library like this mux driver.
-
-thanks,
-
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
+index 85f0cb88127f..9fb1a9a8bc02 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
+@@ -21,7 +21,7 @@ tc_act_can_offload_ct(struct mlx5e_tc_act_parse_state *parse_state,
+ 	}
+ 
+ 	if (parse_state->ct && !clear_action) {
+-		NL_SET_ERR_MSG_MOD(extack, "Multiple CT actions are not supoported");
++		NL_SET_ERR_MSG_MOD(extack, "Multiple CT actions are not supported");
+ 		return false;
+ 	}
+ 
 -- 
-heikki
+2.34.1
+

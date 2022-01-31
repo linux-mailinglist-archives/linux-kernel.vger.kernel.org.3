@@ -2,242 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A454A4E78
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF024A4E88
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356609AbiAaSfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:35:48 -0500
-Received: from mail-bn8nam08on2051.outbound.protection.outlook.com ([40.107.100.51]:21345
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238324AbiAaSfp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:35:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M5OlH/XZwU8ZvAH/CgH1hond4fsS3fl41xQ0dMGxx8uqZpgBOajBOiVML4JM/789u7xV0yxod0964E1J76/pTGei+Lb8mK6LpLIYM/uwszHtwKLysHqMoglnnbcNNf825A8SDMmP7FxruZ0fzSlEIYD8zrab1dif3OFHrBovGpcijxOnEQ7q/9GLTRUPHCV8etWTGJMcP5DFg8wMkKFeOQkhPHiavORkXvgUpWINHyhUvLNsd/YBbmpsFIfWVeM2D9CREfKWkWp2H2ZjKAT9bWLsGytVHuNt4TUjcb0MF1skiiHWlQBEqxZeVlO0TJ6+UqnF2pyi6Fxdevxz/RTqDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YwuD5vIXHOWuJnJEcF0XRpYEFBaaPL6OrECkwmo/RDw=;
- b=YuOa+92UCrJ91JtbcK52Str2ujFu9/9+oEFhjBKLDKKhA0yk81WFZHucGeK0yqH9UNXk6gUbbvoz+HOZp6XJ0VNxJnUFF6UNEX8zumN1/Gww2Bd8+/4EVjlBVXIYsfgOkdDy3lFPIwj/+us38OslUiCl3F0ui0K7e/bvRrUCxF8ZMiyuN55S42RqtfJDW1n8LpShzbeoqEO+GHFjJiB81ARZ9io+R0Zll8VSBpGyKrwnOgzOUCVZKd5u8YKYDoZHsDDdSDEQZEEh4ZFMIj/7eq6x5wTMMJ4lzw/cZB5h2qNXGGiUYBmyCWk9hLzVpyCeEtt4MBszYL5to7+vzjEf6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YwuD5vIXHOWuJnJEcF0XRpYEFBaaPL6OrECkwmo/RDw=;
- b=mhfh7mAKzgEGa348G9CF5DRO3CAPXvb2u+yOFGUcBd9eu32cg2HDkjybUlSnvvEuH1T+ritaV9BK9indUIRMg6BvaGCt+Q2tgfzixO6OGfRdwnjAK7O5jCAmcWbi3iO6J2H4wUJvPDlHDVmIDJZCKpHfkOHoCVeWZA/YOhPjVq1hAkf0O34xuSYmiLYE1s5nZlOCPv1ZPl+paon96SBxwOqeafULsISAftNFmTWI1AxXtJoB5KJnXUKJJbRUoLfmsqqLMgaWUUkBAjweeMYNMVFCKpOecM9syhMqMnCqZHT9RPZMRkr0vjlVgzUCuSpiFNEitWd1b43AoqU14YjzUg==
-Received: from BN6PR12MB1284.namprd12.prod.outlook.com (2603:10b6:404:17::17)
- by DM6PR12MB2970.namprd12.prod.outlook.com (2603:10b6:5:3b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Mon, 31 Jan
- 2022 18:35:43 +0000
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
- by BN6PR12MB1284.namprd12.prod.outlook.com (2603:10b6:404:17::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 18:35:42 +0000
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::35a1:8b68:d0f7:7496]) by BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::35a1:8b68:d0f7:7496%4]) with mapi id 15.20.4930.022; Mon, 31 Jan 2022
- 18:35:41 +0000
-Date:   Mon, 31 Jan 2022 10:35:40 -0800
-From:   Saeed Mahameed <saeedm@nvidia.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Saeed Mahameed <saeed@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Einon <mark.einon@gmail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        David Awogbemila <awogbemila@google.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Simon Horman <simon.horman@corigine.com>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
-        rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
-        Edwin Peer <edwin.peer@broadcom.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Prabhakar Kushwaha <pkushwaha@marvell.com>,
-        Omkar Kulkarni <okulkarni@marvell.com>,
-        Shai Malin <smalin@marvell.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
-        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs
- to y
-Message-ID: <20220131183540.6ekn3z7tudy5ocdl@sx1>
-References: <20220131172450.4905-1-saeed@kernel.org>
- <20220131095905.08722670@hermes.local>
- <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
-X-ClientProxiedBy: SJ0PR03CA0123.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::8) To BY5PR12MB4209.namprd12.prod.outlook.com
- (2603:10b6:a03:20d::22)
+        id S1356757AbiAaSg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:36:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355341AbiAaSgx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 13:36:53 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC684C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:36:53 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id r59so14805708pjg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:36:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jVP1HoXA+fkjiP7dYZEx1JX7fEwo0mBNJ8T54jUWwpw=;
+        b=XfhmwR2k8wqx6HUMq6ZupVxiE0Wdd7dCjnqYGD7rZZuDiyRZFhEpyT3IU+nyUz+Tge
+         qPQCJxrP3ecoE6CXTV5vRrCVepB8RHbRptQtQf4d/GUg9z/3fpFD25W6GclQxbGIpkmf
+         P4kYt8Xw+mhsiezNivRxgw1rhC63mmCkzWeRLJgKciEaPpsWmQNpJ9Bj/Z0es+p9rUfI
+         5FZ7kFPCUwATfhF6oKx8iM7CM1Hn9Qo7776Vnjtil3VXt80RvtUziCWWkwHa1uonkDkc
+         B8NioUeunqVoGvNGpm8YeeroaXqZ5ijGO5nHrcqIIs/Yf6RL/DOUlREz30cV1arb7fLl
+         +T0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jVP1HoXA+fkjiP7dYZEx1JX7fEwo0mBNJ8T54jUWwpw=;
+        b=PpO6edCdOqmIfqJETfoB/zQKlmv2NgNT1DLrbOFI5Sxi2Ur2Su5goOnaXpvn31EZHP
+         mQDdHt9VA7uNWB6JRS2ow361DryurAIIZj6VxQrJQe5TWbOlHZ3RN7b0lx/FXb7vDCz+
+         vFY31uPK15vYG5Jh6fQBGLZNAV2YbGly/Cjz9gYTEkXTOotS1q98/c/DFfbc8mh8vgID
+         q6cdFjzDwa2arw3/WrjTIHKQZ4Ec1kvrFrIrhwvFB7N1iCWIxGEqfsQO55/LuhN/GCdk
+         JHs8o6+R+oOiAqFTvH9Q06q1G94v8Pb/JjojqyDiwqh2k1/LvACORxlOaAFtTU/+2e6n
+         PV2w==
+X-Gm-Message-State: AOAM530qzC8H+0GHuZyzr/9HddBHYC0F34CSkFHiwigVPd5FW84Bd8mI
+        duSHyp1buhroBrTTWbzXX4dCr9769Dx2tMrMrpkWRQ==
+X-Google-Smtp-Source: ABdhPJxCbA+UQG5DBRt46s+7C8j0EEXnshLl5hVCa52l6TVZnQPrsgHmMu98JhjPS4p0imQZYu4Q5i9X4KXBxLVSHgg=
+X-Received: by 2002:a17:90b:1802:: with SMTP id lw2mr26223360pjb.232.1643654213164;
+ Mon, 31 Jan 2022 10:36:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0377cf89-0b6d-444e-004f-08d9e4e87bce
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1284:EE_|DM6PR12MB2970:EE_
-X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN6PR12MB128479F6D1F0BC3AF5CFD9BFB3259@BN6PR12MB1284.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AI0cnteOD61mDeApjAKpNlbxO26EMtiDjk9ikthpDwC4zgQOTTWJCBn/uX6ShSWM0xCXsxjC9sz+qc4W1zzdzhrWJiQoSIOfdD1zzSsW5tW7NRnYzdMkbs/px4otkVEO77GyiPmWwDiLcoDJcg0ydugB7QF0/GgMIxPKhpB5IgnDzp2O5CzeKi4HiZJIT2CbMK+AOZNgNzxx5PnTuBDafZjsJlF5uCeIgFP/+4HgQCRMStXlkTiv3Vfmg5tF5FyLINWf6m5aXbiHMEB1P3FkcqntdrTPkI9tCbROnRnCE/VaLR87VfG0TRVSzp/HDZz/P+NYbLZyHXLjCRLESi3GjmYo4punMY7n0mrZ988SZCcef3yP4k4iJXxkePtMLEvHPeVi5BFm4TlNEpzfV8mSMw9raWWzREUqsSs/eRCiCUwNOOeRYUSU59865bVB7PXcML7OKFg09BLKHAvnMSVqQBkgs5eEyhS9dxgwn/azyTLHJzB19LZ659A8y0HQ2nkukR0ShkgFy8H0wn+FacM0ADsJkR0P0PU+sjeVIZsczH9deMqGRA1x3A2Z8hRldq6y6FIS+ymhJ0VB6f9NpWcoW57Vnksk9hTU5Y/L4Jqd/8L+mlL6y+R0z4vJMUjmJxcF7z5FbEyKRTx5tBS6VSQbxQwd+X5nTUTDMQ4iJhj2JzB9q6AzAxeHu3VBoKrwHgrSy0bYn0YThyZp6y1x8+X6cbJnghUzzk4L97anaY0Rb7E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR12MB1284.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(66946007)(186003)(6506007)(52116002)(26005)(6486002)(316002)(1076003)(33716001)(9686003)(54906003)(66476007)(6512007)(6916009)(4326008)(508600001)(8936002)(8676002)(38100700002)(83380400001)(38350700002)(5660300002)(86362001)(66556008)(2906002)(7406005)(7416002)(7336002)(7366002)(129723003)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ivo1wHeq5JAa6C6utzDOSxsdL66cT2qCqkvqHYZ72sLzx6cAk3VvURBLypuY?=
- =?us-ascii?Q?uqz3cBrbH8ooWa7+sDwKJWwpnWzRnaPMJpCYkz6NBqOJaFCleUdKe8Wq5IUj?=
- =?us-ascii?Q?P794xTKMdyfK3aXza0/1akucDByHX+f7ykSPpluoRvAV+okDZZnTF2WG9eqI?=
- =?us-ascii?Q?ZT0P25eNRhbIHptn8oSzrTCF2s+O8p/VKZLiaRwTd1/etjY83kPYBc9CVqAG?=
- =?us-ascii?Q?Zspp395/gZ7RxZmH8cQqyQxCllSXSY6Bpx6S+/9GRiCP2sgSoJMgpsAugjkj?=
- =?us-ascii?Q?Qh12ZyAlUAOp4z4z0g9s1XpOQmHuDlWO8KA58oycLb8f+1U+H/SZ+d4loLIt?=
- =?us-ascii?Q?KpMciz4fvhjuuG+31EnayIhuKaF5vew1umDplkHuAxbnCY6bdEcKjXYIS7/R?=
- =?us-ascii?Q?v9igS1a7Lmn8H0WDonAE5p9KKhXq7wgKqOPgoWzNpOu37oL5P0ySVwc9gohG?=
- =?us-ascii?Q?ocuhtdT237qxtg8MYgKdeSIl5CLdmCwdbw2LApTU7H/jAVc1VjThQcryvWx7?=
- =?us-ascii?Q?4l/FK9PsjKn/GE942fXiXv1Stq+6+L33sC0s596hj/R/TJKRBf+2FugW0VuQ?=
- =?us-ascii?Q?4Ayan03BYvtVj+fUpYBYxHkkbIUrFCBlYvYjKMyxy7gAKWIGN/nMAz2nr9/d?=
- =?us-ascii?Q?evOw8UHO9lFJxCSBS9XofolzJZNbCeD4FzMpekr4yCT+3fbqYL5bFUqR6JbU?=
- =?us-ascii?Q?Rfug0KxiX8GbGkJmxnhhPrLV0jcVbbhEQ8u6polnk0oFWo5FcKyf7U+6HHkV?=
- =?us-ascii?Q?Hm3A7mXfbnltvSqbLmyBC1Jy9GWwMbSIU31YumwlO5MXweRTyOC9XLKuIYF/?=
- =?us-ascii?Q?z2DWeuUXUXQGMg57uytEF/uojJe0Tl/aRTViaNiJCyizYPxBtw54ZdPyw2qn?=
- =?us-ascii?Q?+uYstvkXjB155AspUbI/ltKW5gHs8T4g8pBsCQEN//RwoT6hog/5V0ZqiQoG?=
- =?us-ascii?Q?I6VchMx4dRoD6bhmZLa0J1i3CJZHj6Fh38sSw/uqkntDhNDjCmQzvyS09yi7?=
- =?us-ascii?Q?d/4AmW+iSEtkMbqLVBSQwDQXgF3I9knxg/94R4pyze+3G3+kGv7M760hV5qu?=
- =?us-ascii?Q?6nAzpf+4qCwgeXasdsv+z6Liz/r6TnRp94eQf1beNT8XcoBKioW+MUsWRiQy?=
- =?us-ascii?Q?xU27TJfX9oaHrqrnkI6dXgeSZfkASaAxAOcd+IyHDo5l42yuMCy2pkgPV/J9?=
- =?us-ascii?Q?ZhaUvP9d48+1tLN4cjAY4/b+CFbl88od8eIqS7Byq2EX/b06tyZ1SGcYL774?=
- =?us-ascii?Q?Wuj97yb7QKj9ikgqyctF9U5VNLwSkx8JoX46Luv+yic25C3yOV9O6tpEit6c?=
- =?us-ascii?Q?CUG1fHLrUTpmkR+nx9Y0zxZaFrC74ew8Z0rW/hnXfAXBVpvu0NBgTNL8lqj5?=
- =?us-ascii?Q?pTYWi+BFcZp68uD40N7krCWlVbFbq4apbO8dg9YWOGJinIIqq1nQg5RXkAmA?=
- =?us-ascii?Q?X3/2MJOfslK/Rzz6Hkwpj2Ej4IqVc+hWGPxTia4Y7MLb7hR82OtpBBMZ0mKr?=
- =?us-ascii?Q?XTgO8igu6ARA4IKYCAfkIG08X1tCc9IJOFxKJN5wC18D7O83tzjzjmlAcBqQ?=
- =?us-ascii?Q?Tj8+Vc4lUqCY1TTpwjvK5l+fB228RKX9smIsJ1V8Fq2WNjOgtJbEOGQYPgQH?=
- =?us-ascii?Q?gO3YrXEtpQU6mw7RqKokUNg=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0377cf89-0b6d-444e-004f-08d9e4e87bce
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4209.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 18:35:41.5122
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HbhP/vrOeyqyR6IsOZJx2nhyCU9T75DcHbkng7KgEgvDY2P1vUry8vRkyUtnrqA9TNsGL5FkQxCHIJnJ+mmGLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2970
+References: <20220114091502.333083-1-allen.chen@ite.com.tw>
+ <f4696a8d-5c1d-1007-7814-b2e6cbe334ae@collabora.com> <CAG3jFytN9iu0BteAxFCLVRorxM20Q3Zrfn1T4k8bnDYy5oL7bg@mail.gmail.com>
+ <CAJMQK-i6M1hwESSA5OJ6TpdBBBEG8K9esSbLv-Xjb_zqCoB5ug@mail.gmail.com>
+In-Reply-To: <CAJMQK-i6M1hwESSA5OJ6TpdBBBEG8K9esSbLv-Xjb_zqCoB5ug@mail.gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 31 Jan 2022 19:36:41 +0100
+Message-ID: <CAG3jFyvgvfjo-HgL8wWWXtaoJvUupd2zJt=neVJZn5uVESyZFA@mail.gmail.com>
+Subject: Re: [PATCH v11] drm/bridge: add it6505 driver
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        allen <allen.chen@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Hsin-Yi Wang <hsinyi@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31 Jan 19:30, Geert Uytterhoeven wrote:
->On Mon, Jan 31, 2022 at 6:59 PM Stephen Hemminger
-><stephen@networkplumber.org> wrote:
->> On Mon, 31 Jan 2022 09:24:50 -0800
->> Saeed Mahameed <saeed@kernel.org> wrote:
->>
->> > From: Saeed Mahameed <saeedm@nvidia.com>
->> >
->> > NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
->> >
->> > Since all drivers belonging to a vendor are supposed to default to 'n',
->> > defaulting all vendors to 'n' shouldn't be an issue, and aligns well
->> > with the 'no new drivers' by default mentality.
->> >
->> > Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
->>
->> This was done back when vendors were introduced in the network drivers tree.
->> The default of Y allowed older configurations to just work.
+On Mon, 31 Jan 2022 at 17:55, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
 >
->And changing the defaults means all defconfigs must be updated first,
->else the user's configs will end up without drivers needed.
->
+> On Tue, Feb 1, 2022 at 12:37 AM Robert Foss <robert.foss@linaro.org> wrote:
+> >
+> > On Thu, 20 Jan 2022 at 16:25, AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> > >
+> > > Il 14/01/22 10:14, allen ha scritto:
+> > > > This adds support for the iTE IT6505.
+> > > > This device can convert DPI signal to DP output.
+> > > >
+> > > > From: Allen Chen <allen.chen@ite.com.tw>
+> > > > Tested-by: Hsin-yi Wang <hsinyi@chromium.org>
+> > > > Signed-off-by: Hermes Wu <hermes.wu@ite.com.tw>
+> > > > Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+> > > > ---
+> > > > v10 -> v11 : remove drm_bridge_new_crtc_state
+> > > > ---
+> > > >   drivers/gpu/drm/bridge/Kconfig      |    8 +
+> > > >   drivers/gpu/drm/bridge/Makefile     |    1 +
+> > > >   drivers/gpu/drm/bridge/ite-it6505.c | 3352 +++++++++++++++++++++++++++
+> > > >   3 files changed, 3361 insertions(+)
+> > > >   create mode 100644 drivers/gpu/drm/bridge/ite-it6505.c
+> > > >
+> > >
+> > > ...snip...
+> > >
+> > > > +static const struct of_device_id it6505_of_match[] = {
+> > > > +     { .compatible = "ite,it6505" },
+> > > > +     { }
+> > > > +};
+> > >
+> > > If you want to have a DT compatible and DT properties, you have to also add
+> > > dt-bindings (yaml) for this driver, otherwise, any SoC/device DT will fail
+> > > the dt binding check.... So, please, add that.
+> >
+> > Let me second this. A dt-binding is needed for this driver to be
+> > complete, it functions as both documentation and a way to test the DTS
+> > that use this device, so it is really important.
+> >
+> The binding seems to be accepted before the driver:
+> https://elixir.bootlin.com/linux/v5.16.4/source/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
 
-As I understand correctly, at least for most common net drivers, 
-having NET_VENDOR_XYZ=y doesn't actually build anything, we have flags per
-module for each vendor and those are defaulted to N.
+I completely missed that. In that case we're only missing the
+reviewed-by tag from someone.
 
->> So there was a reason, not sure if it matters anymore.
->> But it seems like useless repainting to change it now.
 >
->It might make sense to tune some of the defaults (i.e. change to
->"default y if ARCH_*") for drivers with clear platform dependencies.
->
-
-either set hard default to 'n' or just keep it as is, anything else is just
-more confusion.
-
->Gr{oetje,eeting}s,
->
->                        Geert
->
->--
->Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
->In personal conversations with technical people, I call myself a hacker. But
->when I'm talking to journalists I just say "programmer" or something like that.
->                                -- Linus Torvalds
+> > >
+> > > For the driver by itself, though:
+> > >
+> > > Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > >
+> > > > +
+> > > > +static struct i2c_driver it6505_i2c_driver = {
+> > > > +     .driver = {
+> > > > +             .name = "it6505",
+> > > > +             .of_match_table = it6505_of_match,
+> > > > +             .pm = &it6505_bridge_pm_ops,
+> > > > +     },
+> > > > +     .probe = it6505_i2c_probe,
+> > > > +     .remove = it6505_i2c_remove,
+> > > > +     .shutdown = it6505_shutdown,
+> > > > +     .id_table = it6505_id,
+> > > > +};
+> > > > +
+> > > > +module_i2c_driver(it6505_i2c_driver);
+> > > > +
+> > > > +MODULE_AUTHOR("Allen Chen <allen.chen@ite.com.tw>");
+> > > > +MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
+> > > > +MODULE_LICENSE("GPL v2");
+> > > >
+> > >

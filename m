@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803FC4A4803
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A884A4801
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378711AbiAaNY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S1378657AbiAaNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349080AbiAaNYk (ORCPT
+        with ESMTP id S1378676AbiAaNYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:24:40 -0500
+        Mon, 31 Jan 2022 08:24:33 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7422DC061714;
-        Mon, 31 Jan 2022 05:24:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9AEC06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:24:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=gLpx9hy/oiTEly0zb70xuTv8+vbtKCxmHi4U36k1x0I=; b=VhFXysylwTUhplXWCWTvvNJTfw
-        wNNPEko4h4jazxU2xoTkBfinjKWRend9jxNmttkHXb7NNR8+Qp9FuUzlBWxR7HxaeiB9KoWWQG5Cy
-        TcF9W8RkRcQGIEJkVtY+V4tIUFTAYroBqLhiHQRcRRiORQ2g83hdFUVfYpIakJNSTt5mBTZ+rz+KI
-        n+iAjZRlRUHBg8ucSU/k0YEwH2qnciKsdps63WU4pTUdOGTrnySLHSHa6Hqe4bu8TBobo0mtx6saM
-        KmBEFq+1VAVmfEYuJwgXZzVeDuEYEQLRWHolLzGBhtOUlF4RT06YYSN3iMqv7gwq+pXGhnEeZLHk+
-        4YnjY/bw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEWfU-009tds-5Z; Mon, 31 Jan 2022 13:24:28 +0000
-Message-ID: <747b437d-6d7d-e35f-c7e8-79f81ad2e691@infradead.org>
-Date:   Mon, 31 Jan 2022 05:24:21 -0800
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=OTKoir2+xcoumP1Iky+cUAgPj3dlbdxo9BpxQp1yt8Q=; b=aQq2lT8Hv17Vxf87P/InoA66Ph
+        RTKgC9KXM797g48rjI1n9nUP9Efhq28xRamieYhQs0gsOvwmP/M/ie+MZl9Nr19b51ny5F7D20Q9u
+        VUzAX5ekOyGkk1bX2dh6D7TlrjPoJSRfdTHHMcTrDA8IZfih1J5wI/ITt1phKIhslvDJwb2rjbiON
+        AMRMSoRzVGlMuc7yvYUy/AJ1mPIoc94tBrWCa0zYHjd8a3oPQ9jFvMalcQycH3u9zuDCgummzvnJf
+        VE/m9mnL5jjhdLgo/TzeiIjy455XvQbEEoRAmde9rn8a3ITn2qOJfl4XW/zhFzkgHVu6Py4RhzdpU
+        lcbAaH7g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEWfT-009teD-24; Mon, 31 Jan 2022 13:24:27 +0000
+Date:   Mon, 31 Jan 2022 13:24:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
+        <naoya.horiguchi@nec.com>
+Cc:     David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/hwpoison: Check the subpage, not the head page
+Message-ID: <YffjC9+JsrZB5ekr@casper.infradead.org>
+References: <20220130013042.1906881-1-willy@infradead.org>
+ <dcfa1ee5-1512-5e49-92c2-4a33ab59080@google.com>
+ <Yfb/rVg1HYHkKBgO@casper.infradead.org>
+ <20220131054432.GA856839@hori.linux.bs1.fc.nec.co.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] staging: media: atomisp: Use BIT macro instead of left
- shifting
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
-        kitakar@gmail.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, tomi.valkeinen@ideasonboard.com,
-        joe@perches.com
-References: <YfVstOJ38OTtd43n@smile.fi.intel.com>
- <20220130180655.22970-1-mosescb.dev@gmail.com> <20220131073624.GH1951@kadam>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220131073624.GH1951@kadam>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220131054432.GA856839@hori.linux.bs1.fc.nec.co.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/30/22 23:36, Dan Carpenter wrote:
-> On Sun, Jan 30, 2022 at 07:06:55PM +0100, Moses Christopher Bollavarapu wrote:
->> There is a BIT(nr) macro available in Linux Kernel,
->> which does the same thing.
->> Example: BIT(7) = (1UL << 7)
->>
->> Also use GENMASK for masking
->> Example: GENMASK(3, 0) = 0b00001111 (same as (1 << 4) - 1)
->>
->> Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+On Mon, Jan 31, 2022 at 05:44:35AM +0000, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Sun, Jan 30, 2022 at 09:14:21PM +0000, Matthew Wilcox wrote:
+> > On Sun, Jan 30, 2022 at 12:58:17PM -0800, David Rientjes wrote:
+> > > On Sun, 30 Jan 2022, Matthew Wilcox (Oracle) wrote:
+> > > 
+> > > > Hardware poison is tracked on a per-page basis, not on the head page.
+> > > > 
+> > > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > > ---
+> > > >  mm/rmap.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/mm/rmap.c b/mm/rmap.c
+> > > > index 6a1e8c7f6213..09b08888120e 100644
+> > > > --- a/mm/rmap.c
+> > > > +++ b/mm/rmap.c
+> > > > @@ -1553,7 +1553,7 @@ static bool try_to_unmap_one(struct page *page, struct vm_area_struct *vma,
+> > > >  		/* Update high watermark before we lower rss */
+> > > >  		update_hiwater_rss(mm);
+> > > >  
+> > > > -		if (PageHWPoison(page) && !(flags & TTU_IGNORE_HWPOISON)) {
+> > > > +		if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+> > > >  			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> > > >  			if (PageHuge(page)) {
+> > > >  				hugetlb_count_sub(compound_nr(page), mm);
+> > > > @@ -1873,7 +1873,7 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
+> > > >  			 * memory are supported.
+> > > >  			 */
+> > > >  			subpage = page;
+> > > > -		} else if (PageHWPoison(page)) {
+> > > > +		} else if (PageHWPoison(subpage)) {
+> > > >  			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> > > >  			if (PageHuge(page)) {
+> > > >  				hugetlb_count_sub(compound_nr(page), mm);
+> > > 
+> > > This looks correct.  Correct me if I'm wrong that this is for consistency 
+> > > and cleanup and that there is no bug being fixed by this, however.
+> > 
+> > Oh, no, I think there's a real bug here.  It's just that we're looking
+> > at an uncommon & hence rarely-tested scenario -- a memory fault in the
+> > middle of a THP (in mainline; obviously it'll be a little more common
+> > with arbitrary sized folios).  I don't do HWPoison testing myself, so
+> > this was by inspection and not from testing.  A scenario where things
+> > would go wrong is a memory error on a non-head-page would go unnoticed
+> > when migrating or unmapping.  Contrariwise, if there's a hardware error
+> > on a head page, all the subpages get treated as poisoned, even though
+> > they shouldn't be.
 > 
+> Thank you for reporting.  As you point out, the current check does not
+> handle thp properly.  The reason of checking head page here is to handle
+> hwpoisoned hugetlb (which has PG_hwpoison on the head page even if the error
+> is on any of tail page).  So I think that the proper fix is to add a helper
+> function to check page type (normal, thp, or hugetlb) as well as PageHWPoison.
 
->> diff --git a/drivers/staging/media/atomisp/pci/ia_css_env.h b/drivers/staging/media/atomisp/pci/ia_css_env.h
->> index 3b89bbd837a0..b9ebc14441a1 100644
->> --- a/drivers/staging/media/atomisp/pci/ia_css_env.h
->> +++ b/drivers/staging/media/atomisp/pci/ia_css_env.h
->> @@ -18,6 +18,7 @@
->>  
->>  #include <type_support.h>
->>  #include <linux/stdarg.h> /* va_list */
->> +#include <linux/bits.h> /* BIT(nr) */
-> 
-> This comment is not required.
-> 
->>  enum ia_css_rx_irq_info {
->> -	IA_CSS_RX_IRQ_INFO_BUFFER_OVERRUN   = 1U << 0, /** buffer overrun */
->> -	IA_CSS_RX_IRQ_INFO_ENTER_SLEEP_MODE = 1U << 1, /** entering sleep mode */
->> -	IA_CSS_RX_IRQ_INFO_EXIT_SLEEP_MODE  = 1U << 2, /** exited sleep mode */
->> -	IA_CSS_RX_IRQ_INFO_ECC_CORRECTED    = 1U << 3, /** ECC corrected */
->> -	IA_CSS_RX_IRQ_INFO_ERR_SOT          = 1U << 4,
->> +	IA_CSS_RX_IRQ_INFO_BUFFER_OVERRUN   = BIT(0), /** buffer overrun */
->> +	IA_CSS_RX_IRQ_INFO_ENTER_SLEEP_MODE = BIT(1), /** entering sleep mode */
->> +	IA_CSS_RX_IRQ_INFO_EXIT_SLEEP_MODE  = BIT(2), /** exited sleep mode */
->> +	IA_CSS_RX_IRQ_INFO_ECC_CORRECTED    = BIT(3), /** ECC corrected */
->> +	IA_CSS_RX_IRQ_INFO_ERR_SOT          = BIT(4),
->>  	/** Start of transmission */
->> -	IA_CSS_RX_IRQ_INFO_ERR_SOT_SYNC     = 1U << 5, /** SOT sync (??) */
->> -	IA_CSS_RX_IRQ_INFO_ERR_CONTROL      = 1U << 6, /** Control (??) */
->> -	IA_CSS_RX_IRQ_INFO_ERR_ECC_DOUBLE   = 1U << 7, /** Double ECC */
->> -	IA_CSS_RX_IRQ_INFO_ERR_CRC          = 1U << 8, /** CRC error */
->> -	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ID   = 1U << 9, /** Unknown ID */
->> -	IA_CSS_RX_IRQ_INFO_ERR_FRAME_SYNC   = 1U << 10,/** Frame sync error */
->> -	IA_CSS_RX_IRQ_INFO_ERR_FRAME_DATA   = 1U << 11,/** Frame data error */
->> -	IA_CSS_RX_IRQ_INFO_ERR_DATA_TIMEOUT = 1U << 12,/** Timeout occurred */
->> -	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ESC  = 1U << 13,/** Unknown escape seq. */
->> -	IA_CSS_RX_IRQ_INFO_ERR_LINE_SYNC    = 1U << 14,/** Line Sync error */
->> -	IA_CSS_RX_IRQ_INFO_INIT_TIMEOUT     = 1U << 15,
->> +	IA_CSS_RX_IRQ_INFO_ERR_SOT_SYNC     = BIT(5), /** SOT sync (??) */
->> +	IA_CSS_RX_IRQ_INFO_ERR_CONTROL      = BIT(6), /** Control (??) */
->> +	IA_CSS_RX_IRQ_INFO_ERR_ECC_DOUBLE   = BIT(7), /** Double ECC */
->> +	IA_CSS_RX_IRQ_INFO_ERR_CRC          = BIT(8), /** CRC error */
->> +	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ID   = BIT(9), /** Unknown ID */
->> +	IA_CSS_RX_IRQ_INFO_ERR_FRAME_SYNC   = BIT(10),/** Frame sync error */
->> +	IA_CSS_RX_IRQ_INFO_ERR_FRAME_DATA   = BIT(11),/** Frame data error */
->> +	IA_CSS_RX_IRQ_INFO_ERR_DATA_TIMEOUT = BIT(12),/** Timeout occurred */
->> +	IA_CSS_RX_IRQ_INFO_ERR_UNKNOWN_ESC  = BIT(13),/** Unknown escape seq. */
->> +	IA_CSS_RX_IRQ_INFO_ERR_LINE_SYNC    = BIT(14),/** Line Sync error */
-> 
-> The comment is kind of messed up.  There should be a space after the
-> comma and just /* Line Sync error */
+I think this handles HugeTLB pages correctly:
 
-Yeah, all of those /** should just be /*
+                subpage = page - page_to_pfn(page) + pte_pfn(*pvmw.pte);
 
-thanks.
-
--- 
-~Randy
+As I understand the HugeTLB code, pvmw.pte refers to the head page, not
+the subpage (unlike a PTE-mapped THP page, where it would refer to the
+precise page).  But I cheerfully admit that the intricacies of the
+HugeTLB code are not something I'm an expert on.

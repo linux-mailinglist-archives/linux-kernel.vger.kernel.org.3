@@ -2,106 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403A54A4FFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93ECA4A4FFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378477AbiAaUPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:15:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46706 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378385AbiAaUPv (ORCPT
+        id S1378462AbiAaUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357590AbiAaUQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:15:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643660150;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=P/KHNPBIlcRDaY5ETa8oTdy0xiJiz17FpbXZqN4X7V4=;
-        b=OoLJot0H+vf0ohfIJX9ItZagq+Z/conCPSuJkpAUZfSlGZeOlb1E8f/RtjqYFREau6lJgE
-        5LMWM7IsRPx2DOTUn9LJEPfE+RNvDwRGC00AoWFA6fF9k8I83duu78sh1hXeN90FrrsKa1
-        yEH9JyG7A3VDyXPXFqbDD+bRHZuOtAI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-Pt5AZmh4PnCOeVpE23pDfQ-1; Mon, 31 Jan 2022 15:15:48 -0500
-X-MC-Unique: Pt5AZmh4PnCOeVpE23pDfQ-1
-Received: by mail-wm1-f69.google.com with SMTP id o194-20020a1ca5cb000000b00350b177fb22so137519wme.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:15:48 -0800 (PST)
+        Mon, 31 Jan 2022 15:16:54 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F513C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:16:54 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id j2so28937313edj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:16:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ElmqSwJVBzLRdymkidLRHU92c3XiMz6dPagZM80K0VM=;
+        b=H/PSQTAsEACoMYEshXq8nQnD+1aZ4zyKYG5vwkTo1FvN1Ru50ymHVzLdQip+RmCavm
+         dHZuVl2jm7lyi3IiEcW2uaKAQj7VlDVKJfxr2fSJyt6lPYAyBzdYWd6ks7vk02hMuO9i
+         tGZcAN0YaDapIsGJywltkf/jWtgmwkmlPUa4vTdqX92vZQKCc5748rt/ATy9ZewIBnt3
+         o1WqRaTl0OgFZQKGQKEfPKfGP3THlckNA/bIp8qLv0ls0IrrIlw7hWXbwU4GBUlcLus1
+         LVYvIbIjdnAWinqgnakZCdtR/ZgY9obqZYeTp2eCGhHQDzk4ggEN7evAnzJlmswSAq6z
+         62zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P/KHNPBIlcRDaY5ETa8oTdy0xiJiz17FpbXZqN4X7V4=;
-        b=IMVhWnY+B3QcKbkWzb7JweUXmCHJXIHayCfEVUGL1kgSEYaMLbrZWn3+y2sQ+XzJnt
-         Jk+6L6130uB7v9bq/xONMUf6BpXmBdM/jvuLaTlY0nrvmfpNjVE7ODqA7fvf0ovpPzI6
-         upPIRi7WduUM32ohSpM7tqo1a/XAeXGpelcNYYCyGPNZSNfBJHepBS9cb8pTgTV2vRPF
-         GH1v2PYi2R1lgxXWI4/+lKfuKleU2SUmAVUaAiUqk/c5XN7D7i5yBdBgnjl2e/iA2j+c
-         AAk0XNvLgvylUDYTRj+Go1MEVseIkoHKt2lrDWEf+JW17bm2uGhFkqoLAip/uE69lQQZ
-         se2w==
-X-Gm-Message-State: AOAM533UT/nrManPadeNMqTVCi+kl7bm9jLEH3qALlsWreTUGV5ez24k
-        BRqzBbnbezMDvleT75cRQhxnxrsRx8VOEgZ//2eQ+HOU6QJeXWnEc8t9QuDnpyC/6a/B/HOI3Zo
-        Gq0yZYCUbxp92ybF1/BD7A86ptW363r0nqS412PR+cZu05q4OtYEM3zpznEd6VFq1sVmYoJdSva
-        8=
-X-Received: by 2002:a05:6000:1568:: with SMTP id 8mr19296564wrz.54.1643660147670;
-        Mon, 31 Jan 2022 12:15:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwkX67HueJQ6/s9AOMuGXHq/iOmq0TwIP4aXBdkOVjFwHzTVLicQvA1eGq6qlRfaX+3usULDg==
-X-Received: by 2002:a05:6000:1568:: with SMTP id 8mr19296541wrz.54.1643660147387;
-        Mon, 31 Jan 2022 12:15:47 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o3sm12574638wrq.70.2022.01.31.12.15.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 12:15:47 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: [PATCH 4/4] MAINTAINERS: Add entry for Solomon SSD1307 OLED displays DRM driver
-Date:   Mon, 31 Jan 2022 21:15:37 +0100
-Message-Id: <20220131201537.2325487-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ElmqSwJVBzLRdymkidLRHU92c3XiMz6dPagZM80K0VM=;
+        b=RFGRWn6I5VI0yTumXYF3UvYmRKTihQN34b77LGq/8teoVk7LZN0ges7ekZ3GOrhHwy
+         QueBjJU93LL7H6pPodRYR5k56k3ql/nBdgX2e5LssDknYy7z2pgE/R54eK7/xIGnf42q
+         Uw0hUO+2601jBt7larZKuKys20yeb32kAPUSIcI1QCjNy30BrGd38umhyt6LUtnweIjI
+         HIQsZq7dycpm7CQtjNVrNehQGMd7653v1gny/wcxn+DeAjbCwHBVHNF4YtTq9f4CpN/O
+         kI9RnPEcdks1l1E7kUDYLBeX7jtuMBs0NVDEEyAC1iYHL80/8uibrIkvoD6Rm8bPl/LG
+         HyNA==
+X-Gm-Message-State: AOAM531nHMVkomD3cKPKAzb9UrLo8vKP/qFNxq4s92Iq7XSlQybUvmN5
+        7tfWjgGYZUHQwZfFLwNnfu01LZY7ehjD2kF0PRyYYh3qRn5j7w==
+X-Google-Smtp-Source: ABdhPJzIUUl4G7WdUAaKdggGxBgr9xFsU/swK9Lwj1faVqVpZADzA4uf+/PiLpoBz5BxXrjGBpsEUTfN2wzTZ22Ou64=
+X-Received: by 2002:aa7:c497:: with SMTP id m23mr22423562edq.72.1643660213057;
+ Mon, 31 Jan 2022 12:16:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220126183637.1840960-1-pasha.tatashin@soleen.com>
+ <20220126183637.1840960-5-pasha.tatashin@soleen.com> <CAAPL-u-yo4LuFdudYMEccUYTOMpvnqEjzMZRjOhUBkR4t=BSDw@mail.gmail.com>
+In-Reply-To: <CAAPL-u-yo4LuFdudYMEccUYTOMpvnqEjzMZRjOhUBkR4t=BSDw@mail.gmail.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 31 Jan 2022 15:16:15 -0500
+Message-ID: <CA+CK2bDYhzQ7wP0Ef3n6YGDo2=C0cdhYnEq9XkbOGzPKBp4SSQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] mm/page_table_check: check entries at pmd levels
+To:     Wei Xu <weixugc@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, Greg Thelen <gthelen@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Fusion Future <qydwhotmail@gmail.com>,
+        Hugh Dickins <hughd@google.com>, Zi Yan <ziy@nvidia.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make sure that tools like the get_maintainer.pl script will suggest
-to Cc me if patches are posted for this driver.
+On Fri, Jan 28, 2022 at 6:39 PM Wei Xu <weixugc@google.com> wrote:
+>
+> On Wed, Jan 26, 2022 at 10:36 AM Pasha Tatashin
+> <pasha.tatashin@soleen.com> wrote:
+> >
+> > syzbot detected a case where the page table counters were not properly
+> > updated.
+> >
+> > syzkaller login:  ------------[ cut here ]------------
+> > kernel BUG at mm/page_table_check.c:162!
+> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> > CPU: 0 PID: 3099 Comm: pasha Not tainted 5.16.0+ #48
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO4
+> > RIP: 0010:__page_table_check_zero+0x159/0x1a0
+> > Code: 7d 3a b2 ff 45 39 f5 74 2a e8 43 38 b2 ff 4d 85 e4 01
+> > RSP: 0018:ffff888010667418 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000
+> > RDX: ffff88800cea8680 RSI: ffffffff81becaf9 RDI: 0000000003
+> > RBP: ffff888010667450 R08: 0000000000000001 R09: 0000000000
+> > R10: ffffffff81becaab R11: 0000000000000001 R12: ffff888008
+> > R13: 0000000000000001 R14: 0000000000000200 R15: dffffc0000
+> > FS:  0000000000000000(0000) GS:ffff888035e00000(0000) knlG0
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007ffd875cad00 CR3: 00000000094ce000 CR4: 0000000000
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000
+> > Call Trace:
+> >  <TASK>
+> >  free_pcp_prepare+0x3be/0xaa0
+> >  free_unref_page+0x1c/0x650
+> >  ? trace_hardirqs_on+0x6a/0x1d0
+> >  free_compound_page+0xec/0x130
+> >  free_transhuge_page+0x1be/0x260
+> >  __put_compound_page+0x90/0xd0
+> >  release_pages+0x54c/0x1060
+> >  ? filemap_remove_folio+0x161/0x210
+> >  ? lock_downgrade+0x720/0x720
+> >  ? __put_page+0x150/0x150
+> >  ? filemap_free_folio+0x164/0x350
+> >  __pagevec_release+0x7c/0x110
+> >  shmem_undo_range+0x85e/0x1250
+> > ...
+> >
+> > The repro involved having a huge page that is split due to uprobe event
+> > temporarily replacing one of the pages in the huge page. Later the huge
+> > page was combined again, but the counters were off, as the PTE level
+> > was not properly updated.
+> >
+> > Make sure that when PMD is cleared and prior to freeing the level the
+> > PTEs are updated.
+> >
+> > Fixes: df4e817b7108 ("mm: page table check")
+> >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > ---
+> >  include/linux/page_table_check.h | 18 ++++++++++++++++++
+> >  mm/khugepaged.c                  |  3 +++
+> >  mm/page_table_check.c            | 21 +++++++++++++++++++++
+> >  3 files changed, 42 insertions(+)
+> >
+> > diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+> > index 38cace1da7b6..e88bbe37727b 100644
+> > --- a/include/linux/page_table_check.h
+> > +++ b/include/linux/page_table_check.h
+> > @@ -26,6 +26,8 @@ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+> >                                 pmd_t *pmdp, pmd_t pmd);
+> >  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+> >                                 pud_t *pudp, pud_t pud);
+> > +void __page_table_check_pmd_clear_full(struct mm_struct *mm, unsigned long addr,
+> > +                                      pmd_t pmd);
+> >
+> >  static inline void page_table_check_alloc(struct page *page, unsigned int order)
+> >  {
+> > @@ -100,6 +102,16 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
+> >         __page_table_check_pud_set(mm, addr, pudp, pud);
+> >  }
+> >
+> > +static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
+> > +                                                  unsigned long addr,
+> > +                                                  pmd_t pmd)
+> > +{
+> > +       if (static_branch_likely(&page_table_check_disabled))
+> > +               return;
+> > +
+> > +       __page_table_check_pmd_clear_full(mm, addr, pmd);
+> > +}
+> > +
+> >  #else
+> >
+> >  static inline void page_table_check_alloc(struct page *page, unsigned int order)
+> > @@ -143,5 +155,11 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
+> >  {
+> >  }
+> >
+> > +static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
+> > +                                                  unsigned long addr,
+> > +                                                  pmd_t pmd)
+> > +{
+> > +}
+> > +
+> >  #endif /* CONFIG_PAGE_TABLE_CHECK */
+> >  #endif /* __LINUX_PAGE_TABLE_CHECK_H */
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 30e59e4af272..d84977c6dc0d 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -16,6 +16,7 @@
+> >  #include <linux/hashtable.h>
+> >  #include <linux/userfaultfd_k.h>
+> >  #include <linux/page_idle.h>
+> > +#include <linux/page_table_check.h>
+> >  #include <linux/swapops.h>
+> >  #include <linux/shmem_fs.h>
+> >
+> > @@ -1422,10 +1423,12 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+> >         spinlock_t *ptl;
+> >         pmd_t pmd;
+> >
+> > +       mmap_assert_write_locked(mm);
+> >         ptl = pmd_lock(vma->vm_mm, pmdp);
+> >         pmd = pmdp_collapse_flush(vma, addr, pmdp);
+> >         spin_unlock(ptl);
+> >         mm_dec_nr_ptes(mm);
+> > +       page_table_check_pmd_clear_full(mm, addr, pmd);
+>
 
-Also include the Device Tree binding for the old ssd1307fb fbdev driver
-since the new DRM driver was made compatible with the existing binding.
+Hi Wei,
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+Thank you for your feedback,
 
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+> pmdp_collapse_flush() already calls page_table_check_pmd_clear() via
+> pmdp_huge_get_and_clean().  Both pmdp_table_check_pmd_clear() and
+> page_table_check_pmd_clear_full() can call
+> __page_table_check_pmd_clear(). If that happens, then the page table
+> check counters can be messed up.  Certainly, there is no bug here
+> because the pmd is not huge and __page_table_check_pmd_clear() should
+> be skipped in both calls. But it would be better to avoid this
+> unnecessary subtlety by renaming page_table_check_pmd_clear_full() to
+> page_table_check_clear_pte_range() and not calling
+> __page_table_check_pmd_clear() there.  To make the code even more
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d03ad8da1f36..2e6c3aad5d71 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6102,6 +6102,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/repaper.txt
- F:	drivers/gpu/drm/tiny/repaper.c
- 
-+DRM DRIVER FOR SOLOMON SSD1307 OLED DISPLAYS
-+M:	Javier Martinez Canillas <javierm@redhat.com>
-+S:	Maintained
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-+F:	drivers/gpu/drm/tiny/ssd1307.c
-+
- DRM DRIVER FOR QEMU'S CIRRUS DEVICE
- M:	Dave Airlie <airlied@redhat.com>
- M:	Gerd Hoffmann <kraxel@redhat.com>
--- 
-2.34.1
+Makes sense, I will rename page_table_check_pmd_clear_full() to
+page_table_check_clear_pte_range()
+and remove the call to __page_table_check_pmd_clear().
 
+> clear, __page_table_check_pmd_clear() can also be renamed as
+> __page_table_check_huge_pmd_clear() (similar for its callers).
+
+Let's keep the current names for now as this does not affect the bug
+fix. Perhaps, I can rename it later when working on ARM64 support.
+
+Pasha

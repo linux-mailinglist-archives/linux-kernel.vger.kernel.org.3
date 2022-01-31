@@ -2,235 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4264A4A2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0504A49F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379614AbiAaPO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:14:59 -0500
-Received: from mga12.intel.com ([192.55.52.136]:35557 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378533AbiAaPOS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:14:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643642058; x=1675178058;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kNqQAeh3j4ZJT0YpbJe8SqWP96sjQK0T/qP1fr08Ghs=;
-  b=mwpcISgExdbD7jitTES311bKx+iSE86o3QJKVbc6CcqmcmplNoyKhXUX
-   LxseMAuNr7cmMNKQ2RCWFXFVJs9xM33OmNWn8pnYDkM63R8UjKhFQaMAa
-   RHCXrcdD6AHLCm5+0wvI/rAl9W3Ain1S8pyKS1IPfEEtmeWLGYZpCYooJ
-   1OAIngnb4Njq/CcQuWNGTp2uVXfhDgxN9E7FMhBEC517yBMNM1Ycpd9gq
-   XUExnb4qYE3uM/GRGZhkFDzpuLSPI49D0WjJmu2aPTXEtNPpfxL3qoBqS
-   vCgwlWzzmxqPJ0OUYWTH1c+FYB9p35eABDuTfMHDvEAYthYbySbjnHZIv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="227448242"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="227448242"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 07:14:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="626393675"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 31 Jan 2022 07:14:08 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0AC2B48B; Mon, 31 Jan 2022 17:14:16 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI system
-Date:   Mon, 31 Jan 2022 17:13:43 +0200
-Message-Id: <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+        id S1377168AbiAaPOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:14:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22111 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376969AbiAaPNw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 10:13:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643642032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNY27SrxhFfcwywq83/THIY3BfDtPTJRz689v8YiT4I=;
+        b=MT/UVdjkczb3b2kfvH+QP3lMN2Rsygg7x5FSejNtSiLXUddWO0gtbJvOmHMWPXxx6pOUFW
+        OodCC2AJPcElsLwldL9GLrP+mv3GbU3IEjvOa1dSg44gQ9PEbVrpyvKg+1+edUIkf80TZ0
+        kSZ4TGzMH7IFRvr8JwIPaW9GJFhiMV8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-t4OMMK1zNEC5MGQtsuW1Xw-1; Mon, 31 Jan 2022 10:13:48 -0500
+X-MC-Unique: t4OMMK1zNEC5MGQtsuW1Xw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B50351006AA7;
+        Mon, 31 Jan 2022 15:13:46 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F97970F60;
+        Mon, 31 Jan 2022 15:13:44 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH 2/5] vfs: Add tracepoints for inode_excl_inuse_trylock/unlock
+From:   David Howells <dhowells@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
+        linux-cachefs@redhat.com, dhowells@redhat.com,
+        Christoph Hellwig <hch@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Jeff Layton <jlayton@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        torvalds@linux-foundation.org, linux-unionfs@vger.kernel.org,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 31 Jan 2022 15:13:43 +0000
+Message-ID: <164364202369.1476539.452557132083658522.stgit@warthog.procyon.org.uk>
+In-Reply-To: <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
+References: <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tan Jui Nee <jui.nee.tan@intel.com>
+Add tracepoints for inode_excl_inuse_trylock/unlock() to record successful
+and lock, failed lock, successful unlock and unlock when it wasn't locked.
 
-Add support for non-ACPI systems, such as system that uses
-Advanced Boot Loader (ABL) whereby a platform device has to be created
-in order to bind with pin control and GPIO.
-
-At the moment, Intel Apollo Lake In-Vehicle Infotainment (IVI) system
-requires a driver to hide and unhide P2SB to lookup P2SB BAR and pass
-the PCI BAR address to GPIO.
-
-Signed-off-by: Tan Jui Nee <jui.nee.tan@intel.com>
-Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Amir Goldstein <amir73il@gmail.com>
+cc: Miklos Szeredi <miklos@szeredi.hu>
+cc: linux-unionfs@vger.kernel.org
+cc: linux-cachefs@redhat.com
 ---
- drivers/mfd/lpc_ich.c | 101 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 100 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
-index 95dca5434917..e1bca5325ce7 100644
---- a/drivers/mfd/lpc_ich.c
-+++ b/drivers/mfd/lpc_ich.c
-@@ -8,7 +8,8 @@
-  *  Configuration Registers.
-  *
-  *  This driver is derived from lpc_sch.
--
-+ *
-+ *  Copyright (c) 2017, 2021-2022 Intel Corporation
-  *  Copyright (c) 2011 Extreme Engineering Solution, Inc.
-  *  Author: Aaron Sierra <asierra@xes-inc.com>
-  *
-@@ -42,6 +43,7 @@
- #include <linux/errno.h>
- #include <linux/acpi.h>
- #include <linux/pci.h>
-+#include <linux/pinctrl/pinctrl.h>
- #include <linux/mfd/core.h>
- #include <linux/mfd/lpc_ich.h>
- #include <linux/platform_data/itco_wdt.h>
-@@ -140,6 +142,70 @@ static struct mfd_cell lpc_ich_gpio_cell = {
- 	.ignore_resource_conflicts = true,
- };
+ fs/inode.c           |   21 +++++++++++++++++----
+ fs/overlayfs/super.c |   10 ++++++----
+ include/linux/fs.h   |    9 +++++++--
+ 3 files changed, 30 insertions(+), 10 deletions(-)
+
+diff --git a/fs/inode.c b/fs/inode.c
+index 954719f66113..61b93a89853f 100644
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -22,6 +22,8 @@
+ #include <linux/iversion.h>
+ #include <trace/events/writeback.h>
+ #include "internal.h"
++#define CREATE_TRACE_POINTS
++#include <trace/events/vfs.h>
  
-+#define APL_GPIO_NORTH		0
-+#define APL_GPIO_NORTHWEST	1
-+#define APL_GPIO_WEST		2
-+#define APL_GPIO_SOUTHWEST	3
-+#define APL_GPIO_NR_DEVICES	4
-+
-+/* Offset data for Apollo Lake GPIO controllers */
-+#define APL_GPIO_NORTH_OFFSET		0xc50000
-+#define APL_GPIO_NORTHWEST_OFFSET	0xc40000
-+#define APL_GPIO_WEST_OFFSET		0xc70000
-+#define APL_GPIO_SOUTHWEST_OFFSET	0xc00000
-+
-+#define APL_GPIO_IRQ			14
-+
-+static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
-+	[APL_GPIO_NORTH] = {
-+		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
-+		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-+	},
-+	[APL_GPIO_NORTHWEST] = {
-+		DEFINE_RES_MEM(APL_GPIO_NORTHWEST_OFFSET, 0x1000),
-+		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-+	},
-+	[APL_GPIO_WEST] = {
-+		DEFINE_RES_MEM(APL_GPIO_WEST_OFFSET, 0x1000),
-+		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-+	},
-+	[APL_GPIO_SOUTHWEST] = {
-+		DEFINE_RES_MEM(APL_GPIO_SOUTHWEST_OFFSET, 0x1000),
-+		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-+	},
-+};
-+
-+/* The order must be in sync with apl_pinctrl_soc_data */
-+static const struct mfd_cell apl_gpio_devices[APL_GPIO_NR_DEVICES] = {
-+	[APL_GPIO_NORTH] = {
-+		.name = "apollolake-pinctrl",
-+		.id = APL_GPIO_NORTH,
-+		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTH]),
-+		.resources = apl_gpio_resources[APL_GPIO_NORTH],
-+		.ignore_resource_conflicts = true,
-+	},
-+	[APL_GPIO_NORTHWEST] = {
-+		.name = "apollolake-pinctrl",
-+		.id = APL_GPIO_NORTHWEST,
-+		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTHWEST]),
-+		.resources = apl_gpio_resources[APL_GPIO_NORTHWEST],
-+		.ignore_resource_conflicts = true,
-+	},
-+	[APL_GPIO_WEST] = {
-+		.name = "apollolake-pinctrl",
-+		.id = APL_GPIO_WEST,
-+		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_WEST]),
-+		.resources = apl_gpio_resources[APL_GPIO_WEST],
-+		.ignore_resource_conflicts = true,
-+	},
-+	[APL_GPIO_SOUTHWEST] = {
-+		.name = "apollolake-pinctrl",
-+		.id = APL_GPIO_SOUTHWEST,
-+		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_SOUTHWEST]),
-+		.resources = apl_gpio_resources[APL_GPIO_SOUTHWEST],
-+		.ignore_resource_conflicts = true,
-+	},
-+};
+ /*
+  * Inode locking rules:
+@@ -2409,11 +2411,14 @@ EXPORT_SYMBOL(current_time);
+ /**
+  * inode_excl_inuse_trylock - Try to exclusively lock an inode for kernel access
+  * @dentry: Reference to the inode to be locked
++ * @o: Private reference for the kernel service
++ * @who: Which kernel service is trying to gain the lock
+  *
+  * Try to gain exclusive access to an inode for a kernel service, returning
+  * true if successful.
+  */
+-bool inode_excl_inuse_trylock(struct dentry *dentry)
++bool inode_excl_inuse_trylock(struct dentry *dentry, unsigned int o,
++			      enum inode_excl_inuse_by who)
+ {
+ 	struct inode *inode = d_inode(dentry);
+ 	bool locked = false;
+@@ -2421,7 +2426,10 @@ bool inode_excl_inuse_trylock(struct dentry *dentry)
+ 	spin_lock(&inode->i_lock);
+ 	if (!(inode->i_state & I_EXCL_INUSE)) {
+ 		inode->i_state |= I_EXCL_INUSE;
++		trace_inode_excl_inuse_lock(inode, o, who);
+ 		locked = true;
++	} else {
++		trace_inode_excl_inuse_lock_failed(inode, o, who);
+ 	}
+ 	spin_unlock(&inode->i_lock);
  
- static struct mfd_cell lpc_ich_spi_cell = {
- 	.name = "intel-spi",
-@@ -1083,6 +1149,33 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
- 	return ret;
+@@ -2432,18 +2440,23 @@ EXPORT_SYMBOL(inode_excl_inuse_trylock);
+ /**
+  * inode_excl_inuse_unlock - Unlock exclusive kernel access to an inode
+  * @dentry: Reference to the inode to be unlocked
++ * @o: Private reference for the kernel service
+  *
+  * Drop exclusive access to an inode for a kernel service.  A warning is given
+  * if the inode was not marked for exclusive access.
+  */
+-void inode_excl_inuse_unlock(struct dentry *dentry)
++void inode_excl_inuse_unlock(struct dentry *dentry, unsigned int o)
+ {
+ 	if (dentry) {
+ 		struct inode *inode = d_inode(dentry);
+ 
+ 		spin_lock(&inode->i_lock);
+-		WARN_ON(!(inode->i_state & I_EXCL_INUSE));
+-		inode->i_state &= ~I_EXCL_INUSE;
++		if (WARN_ON(!(inode->i_state & I_EXCL_INUSE))) {
++			trace_inode_excl_inuse_unlock_bad(inode, o);
++		} else {
++			inode->i_state &= ~I_EXCL_INUSE;
++			trace_inode_excl_inuse_unlock(inode, o);
++		}
+ 		spin_unlock(&inode->i_lock);
+ 	}
+ }
+diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+index 5c3361a2dc7c..6434ae11496d 100644
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -224,10 +224,10 @@ static void ovl_free_fs(struct ovl_fs *ofs)
+ 	dput(ofs->indexdir);
+ 	dput(ofs->workdir);
+ 	if (ofs->workdir_locked)
+-		inode_excl_inuse_unlock(ofs->workbasedir);
++		inode_excl_inuse_unlock(ofs->workbasedir, 0);
+ 	dput(ofs->workbasedir);
+ 	if (ofs->upperdir_locked)
+-		inode_excl_inuse_unlock(ovl_upper_mnt(ofs)->mnt_root);
++		inode_excl_inuse_unlock(ovl_upper_mnt(ofs)->mnt_root, 0);
+ 
+ 	/* Hack!  Reuse ofs->layers as a vfsmount array before freeing it */
+ 	mounts = (struct vfsmount **) ofs->layers;
+@@ -1239,7 +1239,8 @@ static int ovl_get_upper(struct super_block *sb, struct ovl_fs *ofs,
+ 	if (upper_mnt->mnt_sb->s_flags & SB_NOSEC)
+ 		sb->s_flags |= SB_NOSEC;
+ 
+-	if (inode_excl_inuse_trylock(ovl_upper_mnt(ofs)->mnt_root)) {
++	if (inode_excl_inuse_trylock(ovl_upper_mnt(ofs)->mnt_root, 0,
++				     inode_excl_inuse_by_overlayfs)) {
+ 		ofs->upperdir_locked = true;
+ 	} else {
+ 		err = ovl_report_in_use(ofs, "upperdir");
+@@ -1499,7 +1500,8 @@ static int ovl_get_workdir(struct super_block *sb, struct ovl_fs *ofs,
+ 
+ 	ofs->workbasedir = dget(workpath.dentry);
+ 
+-	if (inode_excl_inuse_trylock(ofs->workbasedir)) {
++	if (inode_excl_inuse_trylock(ofs->workbasedir, 0,
++				     inode_excl_inuse_by_overlayfs)) {
+ 		ofs->workdir_locked = true;
+ 	} else {
+ 		err = ovl_report_in_use(ofs, "workdir");
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 4c15e270f1ac..f461883d66a8 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2389,8 +2389,13 @@ static inline bool inode_is_dirtytime_only(struct inode *inode)
+ 				  I_FREEING | I_WILL_FREE)) == I_DIRTY_TIME;
  }
  
-+static int lpc_ich_init_pinctrl(struct pci_dev *dev)
-+{
-+	struct resource base;
-+	unsigned int i;
-+	int ret;
+-bool inode_excl_inuse_trylock(struct dentry *dentry);
+-void inode_excl_inuse_unlock(struct dentry *dentry);
++enum inode_excl_inuse_by {
++	inode_excl_inuse_by_overlayfs,
++};
 +
-+	/* Check, if GPIO has been exported as an ACPI device */
-+	if (acpi_dev_present("INT3452", NULL, -1))
-+		return -EEXIST;
-+
-+	ret = p2sb_bar(dev->bus, 0, &base);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
-+		struct resource *mem = &apl_gpio_resources[i][0];
-+
-+		/* Fill MEM resource */
-+		mem->start += base.start;
-+		mem->end += base.start;
-+		mem->flags = base.flags;
-+	}
-+
-+	return mfd_add_devices(&dev->dev, 0, apl_gpio_devices,
-+			       ARRAY_SIZE(apl_gpio_devices), NULL, 0, NULL);
-+}
-+
- static void lpc_ich_test_spi_write(struct pci_dev *dev, unsigned int devfn,
- 				   struct intel_spi_boardinfo *info)
- {
-@@ -1199,6 +1292,12 @@ static int lpc_ich_probe(struct pci_dev *dev,
- 			cell_added = true;
- 	}
++bool inode_excl_inuse_trylock(struct dentry *dentry, unsigned int o,
++			      enum inode_excl_inuse_by who);
++void inode_excl_inuse_unlock(struct dentry *dentry, unsigned int o);
  
-+	if (priv->chipset == LPC_APL) {
-+		ret = lpc_ich_init_pinctrl(dev);
-+		if (!ret)
-+			cell_added = true;
-+	}
-+
- 	if (lpc_chipset_info[priv->chipset].spi_type) {
- 		ret = lpc_ich_init_spi(dev);
- 		if (!ret)
--- 
-2.34.1
+ static inline bool inode_is_excl_inuse(struct dentry *dentry)
+ {
+
 

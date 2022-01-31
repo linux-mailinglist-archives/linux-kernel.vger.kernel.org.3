@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D34A42B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBB34A4509
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376815AbiAaLNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377243AbiAaLJu (ORCPT
+        id S1359494AbiAaLfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:35:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41794 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378339AbiAaLYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0493FC0613A2;
-        Mon, 31 Jan 2022 03:06:45 -0800 (PST)
+        Mon, 31 Jan 2022 06:24:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8284B82A5C;
-        Mon, 31 Jan 2022 11:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034D4C340EE;
-        Mon, 31 Jan 2022 11:06:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A0BFB82A69;
+        Mon, 31 Jan 2022 11:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67685C340EE;
+        Mon, 31 Jan 2022 11:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627202;
-        bh=Bw3JlHcsA59KK7BZytbzclqcj9Dlm72ho+5EOc7ejeo=;
+        s=korg; t=1643628240;
+        bh=5KWzA4AfI8HVUxyFlZgUqfeJSf59g4119hh9HmUO5uQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v2S3I6uyYBNZK0LZYJ9zCPMhA+Adp7vsF0e3DmUQ3F7OxNB+vxSFJ/mjAKTvzYjsY
-         J7EpU9iDUJJlPmY2Kz3BDred7pNWOVqx5BIoFzskva1cTXjc3TcfQ6yMBmidSzS0pr
-         KWim36KzvLW67kt7E6JB1HVLvU3BtsJ9hSbExu78=
+        b=brulv/rzTDO/UvAvDVB1IyeBq/QYsjZ7ePh6NdU8ppJ36G48biRehA+qRu0CBN+gp
+         styOTxheshfHYyAH0BU+qXItnR5Cclt/AgyQ/oZ0JvKleBiOPY4ULBcWyA2KriRrHH
+         Ab7r7WT0cUZaYkRp7BIft414MMuk3aWXDBe182/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mihai Carabas <mihai.carabas@oracle.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        stable@vger.kernel.org, Davide Caratti <dcaratti@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 077/100] efi/libstub: arm64: Fix image check alignment at entry
-Date:   Mon, 31 Jan 2022 11:56:38 +0100
-Message-Id: <20220131105223.021387714@linuxfoundation.org>
+Subject: [PATCH 5.16 136/200] mptcp: allow changing the "backup" bit by endpoint id
+Date:   Mon, 31 Jan 2022 11:56:39 +0100
+Message-Id: <20220131105238.136417203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,47 +47,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mihai Carabas <mihai.carabas@oracle.com>
+From: Davide Caratti <dcaratti@redhat.com>
 
-[ Upstream commit e9b7c3a4263bdcfd31bc3d03d48ce0ded7a94635 ]
+[ Upstream commit 602837e8479d20d49559b4b97b79d34c0efe7ecb ]
 
-The kernel is aligned at SEGMENT_SIZE and this is the size populated in the PE
-headers:
+a non-zero 'id' is sufficient to identify MPTCP endpoints: allow changing
+the value of 'backup' bit by simply specifying the endpoint id.
 
-arch/arm64/kernel/efi-header.S: .long   SEGMENT_ALIGN // SectionAlignment
-
-EFI_KIMG_ALIGN is defined as: (SEGMENT_ALIGN > THREAD_ALIGN ? SEGMENT_ALIGN :
-THREAD_ALIGN)
-
-So it depends on THREAD_ALIGN. On newer builds this message started to appear
-even though the loader is taking into account the PE header (which is stating
-SEGMENT_ALIGN).
-
-Fixes: c32ac11da3f8 ("efi/libstub: arm64: Double check image alignment at entry")
-Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://github.com/multipath-tcp/mptcp_net-next/issues/158
+Signed-off-by: Davide Caratti <dcaratti@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/libstub/arm64-stub.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/mptcp/pm_netlink.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/arm64-stub.c b/drivers/firmware/efi/libstub/arm64-stub.c
-index c1b57dfb12776..415a971e76947 100644
---- a/drivers/firmware/efi/libstub/arm64-stub.c
-+++ b/drivers/firmware/efi/libstub/arm64-stub.c
-@@ -119,9 +119,9 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
- 	if (image->image_base != _text)
- 		efi_err("FIRMWARE BUG: efi_loaded_image_t::image_base has bogus value\n");
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index 65764c8171b37..d18b13e3e74c6 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -1711,22 +1711,28 @@ next:
  
--	if (!IS_ALIGNED((u64)_text, EFI_KIMG_ALIGN))
--		efi_err("FIRMWARE BUG: kernel image not aligned on %ldk boundary\n",
--			EFI_KIMG_ALIGN >> 10);
-+	if (!IS_ALIGNED((u64)_text, SEGMENT_ALIGN))
-+		efi_err("FIRMWARE BUG: kernel image not aligned on %dk boundary\n",
-+			SEGMENT_ALIGN >> 10);
+ static int mptcp_nl_cmd_set_flags(struct sk_buff *skb, struct genl_info *info)
+ {
++	struct mptcp_pm_addr_entry addr = { .addr = { .family = AF_UNSPEC }, }, *entry;
+ 	struct nlattr *attr = info->attrs[MPTCP_PM_ATTR_ADDR];
+ 	struct pm_nl_pernet *pernet = genl_info_pm_nl(info);
+-	struct mptcp_pm_addr_entry addr, *entry;
+ 	struct net *net = sock_net(skb->sk);
+-	u8 bkup = 0;
++	u8 bkup = 0, lookup_by_id = 0;
+ 	int ret;
  
- 	kernel_size = _edata - _text;
- 	kernel_memsize = kernel_size + (_end - _edata);
+-	ret = mptcp_pm_parse_addr(attr, info, true, &addr);
++	ret = mptcp_pm_parse_addr(attr, info, false, &addr);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	if (addr.flags & MPTCP_PM_ADDR_FLAG_BACKUP)
+ 		bkup = 1;
++	if (addr.addr.family == AF_UNSPEC) {
++		lookup_by_id = 1;
++		if (!addr.addr.id)
++			return -EOPNOTSUPP;
++	}
+ 
+ 	list_for_each_entry(entry, &pernet->local_addr_list, list) {
+-		if (addresses_equal(&entry->addr, &addr.addr, true)) {
++		if ((!lookup_by_id && addresses_equal(&entry->addr, &addr.addr, true)) ||
++		    (lookup_by_id && entry->addr.id == addr.addr.id)) {
+ 			mptcp_nl_addr_backup(net, &entry->addr, bkup);
+ 
+ 			if (bkup)
 -- 
 2.34.1
 

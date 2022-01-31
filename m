@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD164A4881
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157404A4887
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240507AbiAaNnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiAaNnQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:43:16 -0500
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54653C061714;
-        Mon, 31 Jan 2022 05:43:15 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 8F55A200014;
-        Mon, 31 Jan 2022 13:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643636592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fNzzdrv2WUeULNwAyESjeTV+GL3fcftB5PM2h9pueek=;
-        b=McTkn4xGuStHaGZwMMzwEHdXEZ1ZTskZtYmiln/jpDbssu2slFXlEV0LkL+BjV1Csi94cy
-        9TAoEDRKoFgK8o8b+26uxzMYFbqL3EsqyKjcjPu5iI+T7Dh6DRmHzr7zbhBvFvureek5L/
-        9j/d0wKtOMG8f/th0CbBOcF/rGk46muyGCzJeghyKaqufm7fHi36K62rU+SDmKYBXbrqxM
-        lIYN4k8ATVj/mEXwnVfqp0O0/aKlOqxLVb0U7umRvs6JOiIRznkOhckJWye/Uxd3p4i9Gl
-        JYhRsEVxixoBHmncpmVbF2B8JcDv36S8ZniYGtWZ8dzuAUbt7c4aFH2KcxDIVA==
-Date:   Mon, 31 Jan 2022 14:43:09 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christophe Kerello <christophe.kerello@foss.st.com>
-Cc:     <richard@nod.at>, <vigneshr@ti.com>, <robh+dt@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH v2 4/4] mtd: core: Fix a conflict between MTD and NVMEM
- on wp-gpios property
-Message-ID: <20220131144309.0ffe7cc8@xps13>
-In-Reply-To: <20220131095755.8981-5-christophe.kerello@foss.st.com>
-References: <20220131095755.8981-1-christophe.kerello@foss.st.com>
-        <20220131095755.8981-5-christophe.kerello@foss.st.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1379067AbiAaNpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:45:08 -0500
+Received: from mga03.intel.com ([134.134.136.65]:7571 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229671AbiAaNpH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:45:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643636707; x=1675172707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CasoBmym73K2cb88XgHZZ0eFeBOjjcRUmQE9cD7PlDA=;
+  b=NlR5rJPHQNSFcSR8sAr3+/bmxDJwMPm+glPB4qlWuij3FxJIstDkGQST
+   BRkIxdl6HTkYsixCKmvSHy/PeqE/EjdcAxzAFntZwZdF22Wlk42ce+7RH
+   Q0As2ao6hEbXe0o1e0OclraFohX8WB5YSE227f85IfeCaf4JKs+jXr2jC
+   JMJdCCGKl3PSUol2a3pL6dqfhB4sDwaWLxcvECpQtC1KxsSzgSTaObYEr
+   Y6deSIbiJ38biZpPWRXfFAM1MQLn1WIg2GSOoe1qujoJsdlx3/euJOXzY
+   Vp1J4/Egb32JTzRQbh+wHO4zvhRQ9DoaABHStytfClZRVBIk+HGRbJ+41
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247415336"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="247415336"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:45:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="496924804"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:45:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nEWyM-00Gsyj-IS;
+        Mon, 31 Jan 2022 15:43:58 +0200
+Date:   Mon, 31 Jan 2022 15:43:58 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: Re: [PATCH v4 01/20] power: supply: core: Refactor
+ power_supply_set_input_current_limit_from_supplier()
+Message-ID: <Yffnnom1qTRFbo/o@smile.fi.intel.com>
+References: <20220130204557.15662-1-hdegoede@redhat.com>
+ <20220130204557.15662-2-hdegoede@redhat.com>
+ <YffmDCHY6csr0uyD@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YffmDCHY6csr0uyD@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vignesh, Tudory, Pratyush,
+On Mon, Jan 31, 2022 at 03:37:16PM +0200, Andy Shevchenko wrote:
+> On Sun, Jan 30, 2022 at 09:45:38PM +0100, Hans de Goede wrote:
+> > Some (USB) charger ICs have variants with USB D+ and D- pins to do their
+> > own builtin charger-type detection, like e.g. the bq24190 and bq25890 and
+> > also variants which lack this functionality, e.g. the bq24192 and bq25892.
+> > 
+> > In case the charger-type; and thus the input-current-limit detection is
+> > done outside the charger IC then we need some way to communicate this to
+> > the charger IC. In the past extcon was used for this, but if the external
+> > detection does e.g. full USB PD negotiation then the extcon cable-types do
+> > not convey enough information.
+> > 
+> > For these setups it was decided to model the external charging "brick"
+> > and the parameters negotiated with it as a power_supply class-device
+> > itself; and power_supply_set_input_current_limit_from_supplier() was
+> > introduced to allow drivers to get the input-current-limit this way.
+> > 
+> > But in some cases psy drivers may want to know other properties, e.g. the
+> > bq25892 can do "quick-charge" negotiation by pulsing its current draw,
+> > but this should only be done if the usb_type psy-property of its supplier
+> > is set to DCP (and device-properties indicate the board allows higher
+> > voltages).
+> > 
+> > Instead of adding extra helper functions for each property which
+> > a psy-driver wants to query from its supplier, refactor
+> > power_supply_set_input_current_limit_from_supplier() into a
+> > more generic power_supply_get_property_from_supplier() function.
+> 
+> ...
+> 
+> > +	ret = power_supply_get_property_from_supplier(bdi->charger,
+> > +						      POWER_SUPPLY_PROP_CURRENT_MAX,
+> > +						      &val);
+> > +	if (ret == 0)
+> 
+> Can it be as simple as
+> 
+> 	if (ret)
+> 		return;
+> 
+> 	...
+> 
+> 
+> ?
+> 
+> Or did I misunderstand the meaning of 0?
 
-+ Tudor and Pratyush
+Despite on this comment being addressed or not, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-christophe.kerello@foss.st.com wrote on Mon, 31 Jan 2022 10:57:55 +0100:
+I don't see any blocking issues with the bq25890 part neither, so
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+for the BQ25890 part.
 
-> Wp-gpios property can be used on NVMEM nodes and the same property can
-> be also used on MTD NAND nodes. In case of the wp-gpios property is
-> defined at NAND level node, the GPIO management is done at NAND driver
-> level. Write protect is disabled when the driver is probed or resumed
-> and is enabled when the driver is released or suspended.
->=20
-> When no partitions are defined in the NAND DT node, then the NAND DT node
-> will be passed to NVMEM framework. If wp-gpios property is defined in
-> this node, the GPIO resource is taken twice and the NAND controller
-> driver fails to probe.
->=20
-> A new Boolean flag named skip_wp_gpio has been added in nvmem_config.
-> In case skip_wp_gpio is set, it means that the GPIO is handled by the
-> provider. Lets set this flag in MTD layer to avoid the conflict on
-> wp_gpios property.
->=20
-> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-> ---
->  drivers/mtd/mtdcore.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-> index 70f492dce158..e6d251594def 100644
-> --- a/drivers/mtd/mtdcore.c
-> +++ b/drivers/mtd/mtdcore.c
-> @@ -546,6 +546,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
->  	config.stride =3D 1;
->  	config.read_only =3D true;
->  	config.root_only =3D true;
-> +	config.skip_wp_gpio =3D true;
->  	config.no_of_node =3D !of_device_is_compatible(node, "nvmem-cells");
->  	config.priv =3D mtd;
-> =20
-> @@ -833,6 +834,7 @@ static struct nvmem_device *mtd_otp_nvmem_register(st=
-ruct mtd_info *mtd,
->  	config.owner =3D THIS_MODULE;
->  	config.type =3D NVMEM_TYPE_OTP;
->  	config.root_only =3D true;
-> +	config.skip_wp_gpio =3D true;
->  	config.reg_read =3D reg_read;
->  	config.size =3D size;
->  	config.of_node =3D np;
+-- 
+With Best Regards,
+Andy Shevchenko
 
-TLDR: There is a conflict between MTD and NVMEM, who should handle the
-WP pin when there is one? At least for raw NAND devices, I don't want
-the NVMEM core to handle the wp pin. So we've introduced this
-skip_wp_gpio nvmem config option. But there are two places where this
-boolean can be set and one of these is for otp regions (see above). In
-this case, I don't know if it is safe or if CFI/SPI-NOR rely on the
-nvmem protection. Please tell us if you think this is fine for you.
 
-Thanks,
-Miqu=C3=A8l

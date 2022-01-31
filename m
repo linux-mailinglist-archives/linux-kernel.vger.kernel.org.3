@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD144A447A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F59B4A447C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379325AbiAaLaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:30:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52422 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378663AbiAaLUa (ORCPT
+        id S1379378AbiAaLaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378697AbiAaLUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:20:30 -0500
+        Mon, 31 Jan 2022 06:20:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA63C0604E5;
+        Mon, 31 Jan 2022 03:13:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7206760B28;
-        Mon, 31 Jan 2022 11:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3254AC340E8;
-        Mon, 31 Jan 2022 11:20:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B0C6114F;
+        Mon, 31 Jan 2022 11:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8334DC340E8;
+        Mon, 31 Jan 2022 11:13:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628029;
-        bh=sGtb7XmLTJ08oegV1tBbS9O4MF7N9lsnWCMTQzVTpX4=;
+        s=korg; t=1643627596;
+        bh=2XoMdHyhCWacHgDF8xxYDHMPmrEmzbHUGPWlSLAPgFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TQBZ8TJsgJyAR16S9K5vHtzBSS0rIYOD1J6aMekDgfZ9wKIJhNpckgZx9T2WXHycq
-         eOMrHmMYrTO2P01+/UibUl54r7kI5pQpJnW2H6nWSmGbKLPorVJKLO9GQ4tR8tooJ9
-         3HduUl3W5GjeL7GjVrYXJNm/4pnS8VK9XPqRbyc4=
+        b=Ag9AICwFUjSz1txX8z4SzFK7cJ0bk+iISZRdfidyqkvgkVcKfwe3HfXU6dlNEff4G
+         59oh5OO9S/apxV7ZnhrFfLuqEjzJnkfpvBg9Gc3SUf4qflYABvrMyh14E9YpG9D3+N
+         TsvHMuFnsCBoswrvvBbpc7U0oeTICSC/jnSSo9KU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 5.16 103/200] rpmsg: char: Fix race between the release of rpmsg_eptdev and cdev
-Date:   Mon, 31 Jan 2022 11:56:06 +0100
-Message-Id: <20220131105237.053802986@linuxfoundation.org>
+        stable@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 102/171] KVM: arm64: pkvm: Use the mm_ops indirection for cache maintenance
+Date:   Mon, 31 Jan 2022 11:56:07 +0100
+Message-Id: <20220131105233.502358533@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,71 +48,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias Kaehlcke <mka@chromium.org>
+From: Marc Zyngier <maz@kernel.org>
 
-commit 7a534ae89e34e9b51acb5a63dd0f88308178b46a upstream.
+[ Upstream commit 094d00f8ca58c5d29b25e23b4daaed1ff1f13b41 ]
 
-struct rpmsg_eptdev contains a struct cdev. The current code frees
-the rpmsg_eptdev struct in rpmsg_eptdev_destroy(), but the cdev is
-a managed object, therefore its release is not predictable and the
-rpmsg_eptdev could be freed before the cdev is entirely released.
+CMOs issued from EL2 cannot directly use the kernel helpers,
+as EL2 doesn't have a mapping of the guest pages. Oops.
 
-The cdev_device_add/del() API was created to address this issue
-(see commit '233ed09d7fda ("chardev: add helper function to register
-char devs with a struct device")'), use it instead of cdev add/del().
+Instead, use the mm_ops indirection to use helpers that will
+perform a mapping at EL2 and allow the CMO to be effective.
 
-Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
-Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220110104706.v6.2.Idde68b05b88d4a2e6e54766c653f3a6d9e419ce6@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 25aa28691bb9 ("KVM: arm64: Move guest CMOs to the fault handlers")
+Reviewed-by: Quentin Perret <qperret@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220114125038.1336965-1-maz@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rpmsg/rpmsg_char.c |   11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ arch/arm64/kvm/hyp/pgtable.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -90,7 +90,7 @@ static int rpmsg_eptdev_destroy(struct d
- 	/* wake up any blocked readers */
- 	wake_up_interruptible(&eptdev->readq);
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index f8ceebe4982eb..4c77ff556f0ae 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -921,13 +921,9 @@ static int stage2_unmap_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+ 	 */
+ 	stage2_put_pte(ptep, mmu, addr, level, mm_ops);
  
--	device_del(&eptdev->dev);
-+	cdev_device_del(&eptdev->cdev, &eptdev->dev);
- 	put_device(&eptdev->dev);
+-	if (need_flush) {
+-		kvm_pte_t *pte_follow = kvm_pte_follow(pte, mm_ops);
+-
+-		dcache_clean_inval_poc((unsigned long)pte_follow,
+-				    (unsigned long)pte_follow +
+-					    kvm_granule_size(level));
+-	}
++	if (need_flush && mm_ops->dcache_clean_inval_poc)
++		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(pte, mm_ops),
++					       kvm_granule_size(level));
  
+ 	if (childp)
+ 		mm_ops->put_page(childp);
+@@ -1089,15 +1085,13 @@ static int stage2_flush_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+ 	struct kvm_pgtable *pgt = arg;
+ 	struct kvm_pgtable_mm_ops *mm_ops = pgt->mm_ops;
+ 	kvm_pte_t pte = *ptep;
+-	kvm_pte_t *pte_follow;
+ 
+ 	if (!kvm_pte_valid(pte) || !stage2_pte_cacheable(pgt, pte))
+ 		return 0;
+ 
+-	pte_follow = kvm_pte_follow(pte, mm_ops);
+-	dcache_clean_inval_poc((unsigned long)pte_follow,
+-			    (unsigned long)pte_follow +
+-				    kvm_granule_size(level));
++	if (mm_ops->dcache_clean_inval_poc)
++		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(pte, mm_ops),
++					       kvm_granule_size(level));
  	return 0;
-@@ -333,7 +333,6 @@ static void rpmsg_eptdev_release_device(
- 
- 	ida_simple_remove(&rpmsg_ept_ida, dev->id);
- 	ida_simple_remove(&rpmsg_minor_ida, MINOR(eptdev->dev.devt));
--	cdev_del(&eptdev->cdev);
- 	kfree(eptdev);
  }
  
-@@ -378,19 +377,13 @@ static int rpmsg_eptdev_create(struct rp
- 	dev->id = ret;
- 	dev_set_name(dev, "rpmsg%d", ret);
- 
--	ret = cdev_add(&eptdev->cdev, dev->devt, 1);
-+	ret = cdev_device_add(&eptdev->cdev, &eptdev->dev);
- 	if (ret)
- 		goto free_ept_ida;
- 
- 	/* We can now rely on the release function for cleanup */
- 	dev->release = rpmsg_eptdev_release_device;
- 
--	ret = device_add(dev);
--	if (ret) {
--		dev_err(dev, "device_add failed: %d\n", ret);
--		put_device(dev);
--	}
--
- 	return ret;
- 
- free_ept_ida:
+-- 
+2.34.1
+
 
 

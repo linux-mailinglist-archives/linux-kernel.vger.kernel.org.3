@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFA84A45CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA01C4A463F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376865AbiAaLqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378596AbiAaLe1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:34:27 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78E5C07979B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:23:34 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id r65so39232765ybc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mfeb88SgNAu3DA1TovWLpJ9GU00PuBZKgL/FgGbBmOk=;
-        b=WEK5URMbKWCEr+E+XSH0mpKLZ+NhV27Btn5eGtzM0qtsPnwScOdv3xZzIPTCqgEXkd
-         5IrPm6HUBpHLkaMBntp2Q90o723ZIyceD03Py/EOAGUwggrikLy2WBW30V/1gqVEqzte
-         m//HNeElTBBpiQnu7E14yOvYxlyN1fE2Umbli6ezeZOqMehNSiKEUDTKkUDJhSf654gb
-         yZQ6W8qJbKO4paW+GirnnW2dtgHJ5YhbjinKCcaeqI/dBy8gAzoC5GPbEmHFG6nOPq9P
-         w72bIYMVbxwxPaXynRmRE65tDAgfs4MUNpWyexop42dJE7znS/t6pADy+cffZbrcgrOS
-         fmdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mfeb88SgNAu3DA1TovWLpJ9GU00PuBZKgL/FgGbBmOk=;
-        b=7+XRInUsVk/wRk49GfOonUy9Wld+WzCJ9aISwWlfqdq4VZpXNo/MtVg+S3A3TKm/4F
-         lH7Xj84yrCrhMjruKw3SfodxRDh/nlj6MP8o+rlBcGS/Fsuc4JK+wsvCcGospLBzGq5d
-         59yqvYkKE38lTJWqgPW9MJB5gcFmCl3nJl1/+aFhN7Dl/0C6UFDEOIR15C1AHs8hcE66
-         DRqq5TAngSdQgTibAfh1L8n2xRkncR19gSezMqegGV4gIw75NtmtHKb0pnyDJe7GQjiP
-         B6q3MAvGMhkgIrj5wRl7ahpeUIAsKcuS6Es04Cv2SBnRArZAhqVmYqavmih8wbFgDtMY
-         SeJA==
-X-Gm-Message-State: AOAM532rHzo0lrqoZN3E9bt0dSw9oDaxWtPubqb1PfUY/lCDDeZHWl6/
-        GBZXPJ+IePfuskVm0am7QcMjphoBEKOAVj0vptKylQ==
-X-Google-Smtp-Source: ABdhPJyJF4KcmkIVlYy6MWPxlek8Lb/gigZvypCrGUGQiwZhktVI00QkPs/ebeWHJlJba0FitxHDSwERyWccpovX9XQ=
-X-Received: by 2002:a25:cfc6:: with SMTP id f189mr27662344ybg.322.1643628213945;
- Mon, 31 Jan 2022 03:23:33 -0800 (PST)
+        id S1377219AbiAaLv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:51:26 -0500
+Received: from mga02.intel.com ([134.134.136.20]:11337 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1377892AbiAaLdm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:33:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643628823; x=1675164823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r2zU0vRwxWHr5Wrk87f5nIJZlDMOAovObT6GySVXQkE=;
+  b=L/TEpVI5BkG6uR/p3qgeKg8ejxmzYMwvpxVlyTS3CPlgcNskBJb9g5RM
+   CeyRTaqO+/uU2zGXlSDefVjVy8ZP6Sw77156n0TMeIwnA61APEkh+Qt3p
+   08Wac65qlPs7FytEIhvg5cyrGg55v+iRG5ThlrHoNhZDaG/SzUP1DBEJr
+   6c1IJYs/79eebt09fysZc9rApBqLjv/lhCFUO5uS/HHop9IZJd+w2flVn
+   t7zvPDDVOe/MUjfsGpi1Zk5AJGLkY8Ayo/kNQQcNMcRUJbpP+D495EELn
+   m79KuzoghM/2AErIOtAixfSNfqOhGRq/RBKqPlym+ru6wUrbH+9e4UCTX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="234832591"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="234832591"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:25:30 -0800
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="629991075"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:25:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nEUnJ-00GqaD-2Z;
+        Mon, 31 Jan 2022 13:24:25 +0200
+Date:   Mon, 31 Jan 2022 13:24:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH] surface: surface3-wmi: Simplify resource management
+Message-ID: <YffG6JKmGCS1/h08@smile.fi.intel.com>
+References: <8b1a6d05036d5d9527241b2345482b369331ce5c.1643531799.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220130034441.15474-1-samuel@sholland.org> <20220130034441.15474-4-samuel@sholland.org>
- <20220130141048.31be2554@jic23-huawei>
-In-Reply-To: <20220130141048.31be2554@jic23-huawei>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 31 Jan 2022 12:23:22 +0100
-Message-ID: <CACRpkdb407XmMGSM+7okOx50ZNTK3UuHWSFSH+CZ_2bQS0NJ=w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] iio: accel: st_accel: Add support for Silan SC7A20
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Denis Ciocca <denis.ciocca@st.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b1a6d05036d5d9527241b2345482b369331ce5c.1643531799.git.christophe.jaillet@wanadoo.fr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 3:04 PM Jonathan Cameron <jic23@kernel.org> wrote:
+On Sun, Jan 30, 2022 at 09:36:54AM +0100, Christophe JAILLET wrote:
+> 's3_wmi.input' is a managed resource, so there should be no need to free it
+> explicitly.
+> 
+> Moreover, 's3_wmi' is a global variable. 's3_wmi.input' should be NULL
+> when this error handling path is executed, because it has not been
+> assigned yet.
+> 
+> All this is puzzling. So simplify it and remove a few lines of code to have
+> it be more straightforward.
 
-> This is nasty as 0x11 is a valid who am I for an LIS3DHH which is a very
-> different device.
 
-The WAI value is just a second line check anyway, the device is probed
-from the compatible, this is just checked to make sure the device is
-what it says it is. Annoying, but it will do the job.
+Seems correct cleanup / fix to me
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> It's worth noting that a good part of the maintenance of this driver is
-> done by ST employees who are probably less than happy with seeing
-> a clone (with bugs) supported.  So support is likely to be somewhat best
-> effort / not going to deliberately break support for this part but no
-> means to test it. Hopefully we'll remember to cc you to test anything new added to
-> the driver.  Clones aren't always perfect!
+> Fixes: 3dda3b3798f9 ("platform/x86: Add custom surface3 platform device for controlling LID")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested only
+> ---
+>  drivers/platform/surface/surface3-wmi.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/platform/surface/surface3-wmi.c b/drivers/platform/surface/surface3-wmi.c
+> index 09ac9cfc40d8..b9a4b2d81f4b 100644
+> --- a/drivers/platform/surface/surface3-wmi.c
+> +++ b/drivers/platform/surface/surface3-wmi.c
+> @@ -190,14 +190,11 @@ static int s3_wmi_create_and_register_input(struct platform_device *pdev)
+>  
+>  	error = input_register_device(input);
+>  	if (error)
+> -		goto out_err;
+> +		return error;
+>  
+>  	s3_wmi.input = input;
+>  
+>  	return 0;
+> - out_err:
+> -	input_free_device(s3_wmi.input);
+> -	return error;
+>  }
+>  
+>  static int __init s3_wmi_probe(struct platform_device *pdev)
+> -- 
+> 2.32.0
+> 
 
-Linux began with people running it on IBM PC clones... ;)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I would assume good faith, especially with the silicon shortage
-plaguing us it is
-perfectly possible that this is a fully licensed copy. I think the two
-derivatives of the AK8974 magnetometer for example are
-legally transferred IP, we just don't know the details behind the curtain.
 
-Yours,
-Linus Walleij

@@ -2,176 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C68A4A52B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8D44A52C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiAaW5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiAaW5f (ORCPT
+        id S235496AbiAaXAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:00:35 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:34870 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231403AbiAaXAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:57:35 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2575C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:57:35 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so3562583oov.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:57:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dN1eWoFdpgCZVld6VXRl4qQRQ3uz/MKpz+wMFlzFQrA=;
-        b=R023hhJF5fERNWKU07shRsYyUTlQD46lARD776Z3yLzpInKwAIAhFMxDclzomELD5Y
-         SFJvs3fnHI2JMYG4SaMPxn3qe7yoZEwwAduV3xjCC0UpIiKSOyaWYsQKMRR/eeSMgtOu
-         BKtUkN3Yk+33I5v/VM8aMY5DqG1vfXAVTAf8R0IY83pBT3xP3zqyPbFMQiaZZ7LBTB8A
-         nq6Zd+sY+7bo9+xrhBEsf92mPrbE6bZFAOGaJZVo/TbdWVWAcp+uiiFPKfpehCLGL11J
-         6FVnTB+addNSCn5wcrMQXVE9iDy3WJrXeY0z897DS6SPZrGUAVQmSPDua4LhZ+vU8OV2
-         yIYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dN1eWoFdpgCZVld6VXRl4qQRQ3uz/MKpz+wMFlzFQrA=;
-        b=NH4x9iSvLGpA04NSRMPnAUHxP3lEXPZn7jzwGrXVDNMAI/r0PyzoEH81sWMEqas/qK
-         M3sTE5S6f6zX4qwK6piolGlAq2Rx9GpBuq1cvVfIfpFvzPxXgdna56n7m1lhooFClg+s
-         AzGpPRQtaLkBS5+GinWyeOUfV3GVqU6MZj7TZCr5+IZYGP8gHCan7sK+dmb7uixIlHsO
-         ASHo+UqonmKwQvXLN2qdrFTIyicAlFVU9GrckE0tSg8oo5qCIhIKuRDwrPiBQx9pic58
-         nAgyg2R48hk34Ot7QjQ2wY+xxddtF172xbIGzEv8/UQOzsC1kpP4TO9DQD2iB+DFPQSv
-         PINg==
-X-Gm-Message-State: AOAM5331k4YIU0cOVrXxr3GU9BnhvZzkRSvCH8j5S3wUQnMnKMbIWgcT
-        pLSsyJuzyXZKu9zqO7rE7GcypA==
-X-Google-Smtp-Source: ABdhPJwRn6LacBFjex+kHprwEqwpJmOke2/IQAUMOEKO+ejw3nSLsT3YbO/WmS6me/j05Nej/NHk6w==
-X-Received: by 2002:a9d:5c8a:: with SMTP id a10mr12764932oti.248.1643669855224;
-        Mon, 31 Jan 2022 14:57:35 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id 31sm12099372otr.13.2022.01.31.14.57.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 14:57:34 -0800 (PST)
-Date:   Mon, 31 Jan 2022 16:57:32 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sc7280: Support gpu speedbin
-Message-ID: <YfhpXFNcl4L+1rah@builder.lan>
-References: <20220119205012.v2.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
- <20220119205012.v2.2.I4c2cb95f06f0c37038c80cc1ad20563fdf0618e2@changeid>
+        Mon, 31 Jan 2022 18:00:34 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D0A4C1F380;
+        Mon, 31 Jan 2022 23:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643670032; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IljsixcEjc3xrld9Nu5EuyjOHQ/tnbkGIqjw9m1QExA=;
+        b=fsAf9O8IM7yigQiRbwYGvosRn1kNjcqV7r/JdY9FLb8efSzYQe5vN1S36TI5PkIubpIv65
+        zbWyiuCqJb6DgHLFZC79GnI5XHI2YLCZnM4Xaf3hzMYoUZTbwI3H6n/qPIBPEJ0RFU37G+
+        rZ9UKFfY71yeielfXcipBAEkpEijFkw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643670032;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IljsixcEjc3xrld9Nu5EuyjOHQ/tnbkGIqjw9m1QExA=;
+        b=+hW84kZGs/Q7UiOk7HAn/cszUmvI6EZclnHek/eXNoL2DlgZHvdzVuRFmGrXaeiS4ppWAI
+        x50pk5uFSM9F2iDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1001413CCD;
+        Mon, 31 Jan 2022 23:00:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1GYyLwxq+GF8HgAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 31 Jan 2022 23:00:28 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119205012.v2.2.I4c2cb95f06f0c37038c80cc1ad20563fdf0618e2@changeid>
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Matthew Wilcox" <willy@infradead.org>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "Ilya Dryomov" <idryomov@gmail.com>,
+        "Miklos Szeredi" <miklos@szeredi.hu>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Anna Schumaker" <anna.schumaker@netapp.com>, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] fuse: remove reliance on bdi congestion
+In-reply-to: <YffgKva2Dz3cTwhr@casper.infradead.org>
+References: <164360127045.4233.2606812444285122570.stgit@noble.brown>,
+ <164360183348.4233.761031466326833349.stgit@noble.brown>,
+ <YfdlbxezYSOSYmJf@casper.infradead.org>,
+ <164360446180.18996.6767388833611575467@noble.neil.brown.name>,
+ <YffgKva2Dz3cTwhr@casper.infradead.org>
+Date:   Tue, 01 Feb 2022 10:00:23 +1100
+Message-id: <164367002370.18996.7242801209611375112@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 19 Jan 09:21 CST 2022, Akhil P Oommen wrote:
+On Tue, 01 Feb 2022, Matthew Wilcox wrote:
+> On Mon, Jan 31, 2022 at 03:47:41PM +1100, NeilBrown wrote:
+> > On Mon, 31 Jan 2022, Matthew Wilcox wrote:
+> > > > +++ b/fs/fuse/file.c
+> > > > @@ -958,6 +958,8 @@ static void fuse_readahead(struct readahead_contr=
+ol *rac)
+> > > > =20
+> > > >  	if (fuse_is_bad(inode))
+> > > >  		return;
+> > > > +	if (fc->num_background >=3D fc->congestion_threshold)
+> > > > +		return;
+> > >=20
+> > > This seems like a bad idea to me.  If we don't even start reads on
+> > > readahead pages, they'll get ->readpage called on them one at a time
+> > > and the reading thread will block.  It's going to lead to some nasty
+> > > performance problems, exactly when you don't want them.  Better to
+> > > queue the reads internally and wait for congestion to ease before
+> > > submitting the read.
+> > >=20
+> >=20
+> > Isn't that exactly what happens now? page_cache_async_ra() sees that
+> > inode_read_congested() returns true, so it doesn't start readahead.
+> > ???
+>=20
+> It's rather different.  Imagine the readahead window has expanded to
+> 256kB (64 pages).  Today, we see congestion and don't do anything.
+> That means we miss the async readahed opportunity, find a missing
+> page and end up calling into page_cache_sync_ra(), by which time
+> we may or may not be congested.
+>=20
+> If the inode_read_congested() in page_cache_async_ra() is removed and
+> the patch above is added to replace it, we'll allocate those 64 pages and
+> add them to the page cache.  But then we'll return without starting IO.
+> When we hit one of those !uptodate pages, we'll call ->readpage on it,
+> but we won't do anything to the other 63 pages.  So we'll go through a
+> protracted slow period of sending 64 reads, one at a time, whether or
+> not congestion has eased.  Then we'll hit a missing page and proceed
+> to the sync ra case as above.
 
-> Add the speedbin fuse and the required opps to support gpu sku.
-> 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> ---
-> 
-> (no changes since v1)
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 46 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 365a2e0..f8fc8b8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -605,6 +605,11 @@
->  			power-domains = <&rpmhpd SC7280_MX>;
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> +
-> +			gpu_speed_bin: gpu_speed_bin@1e9 {
+Hmmm... where is all this documented?
+The entry for readahead in vfs.rst says:
 
-No underscores in node names please.
+    If the filesystem decides to stop attempting I/O before reaching the
+    end of the readahead window, it can simply return.
 
-Regards,
-Bjorn
+but you are saying that if it simply returns, it'll most likely just get
+called again.  So maybe it shouldn't say that?
 
-> +				reg = <0x1e9 0x2>;
-> +				bits = <5 8>;
-> +			};
->  		};
->  
->  		sdhc_1: sdhci@7c4000 {
-> @@ -1762,6 +1767,9 @@
->  			interconnect-names = "gfx-mem";
->  			#cooling-cells = <2>;
->  
-> +			nvmem-cells = <&gpu_speed_bin>;
-> +			nvmem-cell-names = "speed_bin";
-> +
->  			gpu_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
-> @@ -1769,18 +1777,56 @@
->  					opp-hz = /bits/ 64 <315000000>;
->  					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
->  					opp-peak-kBps = <1804000>;
-> +					opp-supported-hw = <0x03>;
->  				};
->  
->  				opp-450000000 {
->  					opp-hz = /bits/ 64 <450000000>;
->  					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
->  					opp-peak-kBps = <4068000>;
-> +					opp-supported-hw = <0x03>;
->  				};
->  
->  				opp-550000000 {
->  					opp-hz = /bits/ 64 <550000000>;
->  					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
->  					opp-peak-kBps = <6832000>;
-> +					opp-supported-hw = <0x03>;
-> +				};
-> +
-> +				opp-608000000 {
-> +					opp-hz = /bits/ 64 <608000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
-> +					opp-peak-kBps = <8368000>;
-> +					opp-supported-hw = <0x02>;
-> +				};
-> +
-> +				opp-700000000 {
-> +					opp-hz = /bits/ 64 <700000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
-> +					opp-peak-kBps = <8532000>;
-> +					opp-supported-hw = <0x02>;
-> +				};
-> +
-> +				opp-812000000 {
-> +					opp-hz = /bits/ 64 <812000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
-> +					opp-peak-kBps = <8532000>;
-> +					opp-supported-hw = <0x02>;
-> +				};
-> +
-> +				opp-840000000 {
-> +					opp-hz = /bits/ 64 <840000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
-> +					opp-peak-kBps = <8532000>;
-> +					opp-supported-hw = <0x02>;
-> +				};
-> +
-> +				opp-900000000 {
-> +					opp-hz = /bits/ 64 <900000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
-> +					opp-peak-kBps = <8532000>;
-> +					opp-supported-hw = <0x02>;
->  				};
->  			};
->  		};
-> -- 
-> 2.7.4
-> 
+What do other filesystems do?
+ext4 sets REQ_RAHEAD, but otherwise just pushes ahead and submits all
+requests. btrfs seems much the same.
+xfs uses iomp_readahead ..  which again sets REQ_RAHEAD but otherwise
+just does a normal read.
+
+The effect of REQ_RAHEAD seems to be primarily to avoid retries on
+failure.
+
+So it seems that core read-ahead code it not set up to expect readahead
+to fail, though it is (begrudgingly) permitted.
+
+The current inode_read_congested() test in page_cache_async_ra() seems
+to be just delaying the inevitable (and in fairness, the comment does
+say "Defer....").  Maybe just blocking on the congestion is an equally
+good way to delay it...
+
+I note that ->readahead isn't told if the read-ahead is async or not, so
+my patch will drop sync read-ahead on congestion, which the current code
+doesn't do.
+
+So maybe this congestion tracking really is useful, and we really want
+to keep it.
+
+I really would like to see that high-level documentation!!
+
+Thanks,
+NeilBrown
+
+=20

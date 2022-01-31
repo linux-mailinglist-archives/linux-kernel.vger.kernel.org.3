@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BB04A5117
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A8C4A511B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380331AbiAaVIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S1380569AbiAaVI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380237AbiAaVG7 (ORCPT
+        with ESMTP id S1380436AbiAaVHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:06:59 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E66C061753
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:51 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso230560wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:51 -0800 (PST)
+        Mon, 31 Jan 2022 16:07:04 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCC0C061757
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:52 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n8so11190524wmk.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DLCFktF5bXfVELdSs1sFnaEEXohencjsFb8X+BTPOv4=;
-        b=IHzC2SevZm5+o9SbqNmhgWdJDul0iEkmYGyVGe/SmayW6tHVYAPf+A5/26FIZeTE+D
-         0VOw3ADfS5vBpiQTuUGs2n8y+G19uSujvFy7DZ7THok1dM7BC3LIlrb046oFUnkEtglA
-         ktiGzuVyyG84pbn82uIEzbyH2elqAexWphQIk=
+        bh=xR2Cpj9NPzd3PMXMumK8tGjLNRzMjrUh58YqCebhDEo=;
+        b=ZXAAWHU3cxYjQqaynKuzlDitJZki2ld78sfGg5BvoOXCxWUICbZVwllmG72oQjrJqV
+         MFAF6FjmGHluZ4RcYolzuSjzNn2P05ro9f3pwcZjHwx7b9I20PuWxiFZLgb3boxLRRsu
+         DLoJLArEnqol2fPTAyDdyu3SOHyLveDYE6buc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DLCFktF5bXfVELdSs1sFnaEEXohencjsFb8X+BTPOv4=;
-        b=GTG5CwIM5MJnN2j1i4BrxSUA0xGlNOWQGoxNM4L8GIYdDIofWXQx6pA3FBISbyegze
-         D3xi50Czm2pbjIV8apYvU3XdjjqJjTUT0LCG6H4ZVTHwWTG6SP+u1LjRsfIkuaYQu7X2
-         EdifWZ3k1FVYbxeydSwSpaouVs8xxHNUtZ5O43n3UVdzXPVwP1AXHA6pQETfJXGvHbY0
-         0dy4OZfI6wnCmTrSX6JOjqBMUgKGO7P9ZaR2ibcB7SZ5b2geb7uUy7jYXX5wdCDnKHP0
-         9G7U4cMfLYYaKUKGdWGB3GfKc5S3KCuwi2ckxQ52eyUod/4QZLVblr9NqgF7FZ7+lxY1
-         ERvQ==
-X-Gm-Message-State: AOAM532NjHyxXeTGQnqx9GKMY3PRz2L/r0ntUJqndV8lAOGK2AEOkowh
-        C+PFFazKlcLGo5ysRpvirEP3zw==
-X-Google-Smtp-Source: ABdhPJwL5EQol13tK1r2sH3cLNG0kbIqqGvoNKhVRDedFDmv74vH5tVE+s2M6mlbGpn9cwEZu83+7w==
-X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr28651132wmq.44.1643663210600;
-        Mon, 31 Jan 2022 13:06:50 -0800 (PST)
+        bh=xR2Cpj9NPzd3PMXMumK8tGjLNRzMjrUh58YqCebhDEo=;
+        b=fWdd6N79fVKtuVFktCx/mOqR//BMEAOCd1d9+crvieCc2mMOOlBgBLDAwaoKEko/sb
+         yxFW7IzOYDeMeEahKBjwLkwtOHX7Z5FhDGLan5+hqIjyL0rBqljQ651pufaRguFMoBs3
+         F8BvFUye5fheLoPDtpYvD8o88/cwRuQgin6g8ZNniJTz0ZMm/5+shurgzUvkuBHEccTx
+         nMO8LtSyQoiWNG5dKn0jQSidVIdNFVOPIpHDEMTt+l2eScrraH3r/F6/Btw0+yvcCNen
+         HHODZdrw+2L+FTJKyeBAE1jnUblmw0QGJ/VRHWV/dMANCStm1dmPuX3QJcoUvYdnpUwq
+         5m/w==
+X-Gm-Message-State: AOAM5309pvucUUrpVIVRDZDq3xYk6l75DXI0eTK58xY1WPXJPWTInWmi
+        KnWPImrKwoZN9uGWZvD55RRHgQ==
+X-Google-Smtp-Source: ABdhPJwsHKFlXJjctslIwLzw0eq71bo0GChWx/OaKsX1kI+rSPX9G1EgnGiUQOnkpJ2lxJyTJPvEfw==
+X-Received: by 2002:a05:600c:38a:: with SMTP id w10mr23340953wmd.12.1643663211423;
+        Mon, 31 Jan 2022 13:06:51 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id b11sm314961wmq.46.2022.01.31.13.06.49
+        by smtp.gmail.com with ESMTPSA id b11sm314961wmq.46.2022.01.31.13.06.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:06:50 -0800 (PST)
+        Mon, 31 Jan 2022 13:06:51 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
@@ -52,12 +52,12 @@ Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Du Cheng <ducheng2@gmail.com>, Claudio Suarez <cssk@net-c.es>
-Subject: [PATCH 17/21] fbcon: Move more code into fbcon_release
-Date:   Mon, 31 Jan 2022 22:05:48 +0100
-Message-Id: <20220131210552.482606-18-daniel.vetter@ffwll.ch>
+        Claudio Suarez <cssk@net-c.es>, Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH 18/21] fbcon: untangle fbcon_exit
+Date:   Mon, 31 Jan 2022 22:05:49 +0100
+Message-Id: <20220131210552.482606-19-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
 References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
@@ -67,84 +67,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-con2fb_release_oldinfo() has a bunch more kfree() calls than
-fbcon_exit(), but since kfree() on NULL is harmless doing that in both
-places should be ok. This is also a bit more symmetric now again with
-fbcon_open also allocating the fbcon_ops structure.
+There's a bunch of confusions going on here:
+- The deferred fbcon setup notifier should only be cleaned up from
+  fb_console_exit(), to be symmetric with fb_console_init()
+- We also need to make sure we don't race with the work, which means
+  temporarily dropping the console lock (or we can deadlock)
+- That also means no point in clearing deferred_takeover, we are
+  unloading everything anyway.
+- Finally rename fbcon_exit to fbcon_release_all and move it, since
+  that's what's it doing when being called from consw->con_deinit
+  through fbcon_deinit.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Du Cheng <ducheng2@gmail.com>
 Cc: Claudio Suarez <cssk@net-c.es>
+Cc: Du Cheng <ducheng2@gmail.com>
+Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 ---
- drivers/video/fbdev/core/fbcon.c | 33 +++++++++++++-------------------
- 1 file changed, 13 insertions(+), 20 deletions(-)
+ drivers/video/fbdev/core/fbcon.c | 63 ++++++++++++++++----------------
+ 1 file changed, 32 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index e5e8aaf6f60d..5c14e24d14a1 100644
+index 5c14e24d14a1..22581952b4fd 100644
 --- a/drivers/video/fbdev/core/fbcon.c
 +++ b/drivers/video/fbdev/core/fbcon.c
-@@ -688,6 +688,18 @@ static void fbcon_release(struct fb_info *info)
- 	unlock_fb_info(info);
+@@ -185,7 +185,6 @@ static void fbcon_set_disp(struct fb_info *info, struct fb_var_screeninfo *var,
+ 			   int unit);
+ static void fbcon_modechanged(struct fb_info *info);
+ static void fbcon_set_all_vcs(struct fb_info *info);
+-static void fbcon_exit(void);
  
- 	module_put(info->fbops->owner);
+ static struct device *fbcon_device;
+ 
+@@ -1149,6 +1148,27 @@ static void fbcon_free_font(struct fbcon_display *p, bool freefont)
+ 
+ static void set_vc_hi_font(struct vc_data *vc, bool set);
+ 
++static void fbcon_release_all(void)
++{
++	struct fb_info *info;
++	int i, j, mapped;
 +
-+	if (info->fbcon_par) {
-+		struct fbcon_ops *ops = info->fbcon_par;
++	for_each_registered_fb(i) {
++		mapped = 0;
++		info = registered_fb[i];
 +
-+		fbcon_del_cursor_work(info);
-+		kfree(ops->cursor_state.mask);
-+		kfree(ops->cursor_data);
-+		kfree(ops->cursor_src);
-+		kfree(ops->fontbuffer);
-+		kfree(info->fbcon_par);
-+		info->fbcon_par = NULL;
-+	}
- }
- 
- static int fbcon_open(struct fb_info *info)
-@@ -741,18 +753,10 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
- static void con2fb_release_oldinfo(struct vc_data *vc, struct fb_info *oldinfo,
- 				   struct fb_info *newinfo)
- {
--	struct fbcon_ops *ops = oldinfo->fbcon_par;
- 	int ret;
- 
- 	fbcon_release(oldinfo);
- 
--	fbcon_del_cursor_work(oldinfo);
--	kfree(ops->cursor_state.mask);
--	kfree(ops->cursor_data);
--	kfree(ops->cursor_src);
--	kfree(ops->fontbuffer);
--	kfree(oldinfo->fbcon_par);
--	oldinfo->fbcon_par = NULL;
- 	/*
- 	  If oldinfo and newinfo are driving the same hardware,
- 	  the fb_release() method of oldinfo may attempt to
-@@ -3335,19 +3339,8 @@ static void fbcon_exit(void)
- 			}
- 		}
- 
--		if (mapped) {
--			if (info->fbcon_par) {
--				struct fbcon_ops *ops = info->fbcon_par;
--
--				fbcon_del_cursor_work(info);
--				kfree(ops->cursor_src);
--				kfree(ops->cursor_state.mask);
--				kfree(info->fbcon_par);
--				info->fbcon_par = NULL;
--			}
--
++		for (j = first_fb_vc; j <= last_fb_vc; j++) {
++			if (con2fb_map[j] == i) {
++				mapped = 1;
++				con2fb_map[j] = -1;
++			}
++		}
++
 +		if (mapped)
- 			fbcon_release(info);
--		}
- 	}
++			fbcon_release(info);
++	}
++}
++
+ static void fbcon_deinit(struct vc_data *vc)
+ {
+ 	struct fbcon_display *p = &fb_display[vc->vc_num];
+@@ -1188,7 +1208,7 @@ static void fbcon_deinit(struct vc_data *vc)
+ 		set_vc_hi_font(vc, false);
+ 
+ 	if (!con_is_bound(&fb_con))
+-		fbcon_exit();
++		fbcon_release_all();
+ 
+ 	if (vc->vc_num == logo_shown)
+ 		logo_shown = FBCON_LOGO_CANSHOW;
+@@ -3316,34 +3336,6 @@ static void fbcon_start(void)
+ #endif
  }
  
+-static void fbcon_exit(void)
+-{
+-	struct fb_info *info;
+-	int i, j, mapped;
+-
+-#ifdef CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER
+-	if (deferred_takeover) {
+-		dummycon_unregister_output_notifier(&fbcon_output_nb);
+-		deferred_takeover = false;
+-	}
+-#endif
+-
+-	for_each_registered_fb(i) {
+-		mapped = 0;
+-		info = registered_fb[i];
+-
+-		for (j = first_fb_vc; j <= last_fb_vc; j++) {
+-			if (con2fb_map[j] == i) {
+-				mapped = 1;
+-				con2fb_map[j] = -1;
+-			}
+-		}
+-
+-		if (mapped)
+-			fbcon_release(info);
+-	}
+-}
+-
+ void __init fb_console_init(void)
+ {
+ 	int i;
+@@ -3383,10 +3375,19 @@ static void __exit fbcon_deinit_device(void)
+ 
+ void __exit fb_console_exit(void)
+ {
++#ifdef CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER
++	console_lock();
++	if (deferred_takeover)
++		dummycon_unregister_output_notifier(&fbcon_output_nb);
++	console_unlock();
++
++	cancel_work_sync(&fbcon_deferred_takeover_work);
++#endif
++
+ 	console_lock();
+ 	fbcon_deinit_device();
+ 	device_destroy(fb_class, MKDEV(0, 0));
+-	fbcon_exit();
++
+ 	do_unregister_con_driver(&fb_con);
+ 	console_unlock();
+ }	
 -- 
 2.33.0
 

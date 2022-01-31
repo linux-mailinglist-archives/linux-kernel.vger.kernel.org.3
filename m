@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 209174A420A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801EA4A44C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376490AbiAaLIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:08:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38682 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358994AbiAaLFV (ORCPT
+        id S1359614AbiAaLc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:32:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40904 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377066AbiAaLW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:05:21 -0500
+        Mon, 31 Jan 2022 06:22:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1207360B98;
-        Mon, 31 Jan 2022 11:05:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0558BC340EF;
-        Mon, 31 Jan 2022 11:05:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63A3FB82A74;
+        Mon, 31 Jan 2022 11:22:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA84C340E8;
+        Mon, 31 Jan 2022 11:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627120;
-        bh=hRGw969o3xfx3kaJXxvceU8n0eam0mIvnot3klzJX4g=;
+        s=korg; t=1643628146;
+        bh=KeSCS5JSeW0z2O3YsGsaW4UWS4R/ZiOqcq2qFNg7iRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YkZSV1x0U2qugzhKdw2ieREP3/qwmM4D5ggY8m//DZdbjNcUecLBEbov9uzIY2Yc/
-         HTnA9RgoqgCyue1AP8/RmAS1rTH7RtVYsh+8zaFzNn8cT2MgAj6NBJ/81Bv42eUSaN
-         DuYh8Yqs2pZnpGynlu8q26Cf7Znwue4QGTCKBoVo=
+        b=oR8TnpEEWwrybB3I1mALK9pZNBRO1gIKTzDPbZx8d8fo5aOBWMCnKIQqGs3nlDNp+
+         FXNXDKVD/IwCDFHEDIO/Vzf7/cqbr2tDAEAIU5qDTyhsyr0x5PpLYjLJGqIPlAP3eH
+         r0+VnwBgsDDx0paNHIzLtceZ7R3pckm87PxQbdQ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 081/100] net: ipv4: Fix the warning for dereference
-Date:   Mon, 31 Jan 2022 11:56:42 +0100
-Message-Id: <20220131105223.166114763@linuxfoundation.org>
+Subject: [PATCH 5.16 140/200] mptcp: fix removing ids bitmap setting
+Date:   Mon, 31 Jan 2022 11:56:43 +0100
+Message-Id: <20220131105238.259851443@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,44 +48,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yajun Deng <yajun.deng@linux.dev>
+From: Geliang Tang <geliang.tang@suse.com>
 
-[ Upstream commit 1b9fbe813016b08e08b22ddba4ddbf9cb1b04b00 ]
+[ Upstream commit a4c0214fbee97c46e3f41fee37931d66c0fc3cb1 ]
 
-Add a if statements to avoid the warning.
+In mptcp_pm_nl_rm_addr_or_subflow(), the bit of rm_list->ids[i] in the
+id_avail_bitmap should be set, not rm_list->ids[1]. This patch fixed it.
 
-Dan Carpenter report:
-The patch faf482ca196a: "net: ipv4: Move ip_options_fragment() out of
-loop" from Aug 23, 2021, leads to the following Smatch complaint:
-
-    net/ipv4/ip_output.c:833 ip_do_fragment()
-    warn: variable dereferenced before check 'iter.frag' (see line 828)
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Fixes: faf482ca196a ("net: ipv4: Move ip_options_fragment() out of loop")
-Link: https://lore.kernel.org/netdev/20210830073802.GR7722@kadam/T/#t
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 86e39e04482b ("mptcp: keep track of local endpoint still available for each msk")
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_output.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/mptcp/pm_netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index fb91a466b2d34..e77afaecc9818 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -833,7 +833,9 @@ int ip_do_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index 35abcce604b4d..14e6d6f745186 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -781,7 +781,7 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
+ 			msk->pm.subflows--;
+ 			__MPTCP_INC_STATS(sock_net(sk), rm_type);
+ 		}
+-		__set_bit(rm_list->ids[1], msk->pm.id_avail_bitmap);
++		__set_bit(rm_list->ids[i], msk->pm.id_avail_bitmap);
+ 		if (!removed)
+ 			continue;
  
- 		/* Everything is OK. Generate! */
- 		ip_fraglist_init(skb, iph, hlen, &iter);
--		ip_options_fragment(iter.frag);
-+
-+		if (iter.frag)
-+			ip_options_fragment(iter.frag);
- 
- 		for (;;) {
- 			/* Prepare header of the next frame,
 -- 
 2.34.1
 

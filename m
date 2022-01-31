@@ -2,160 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 638294A3F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7714A3F1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236544AbiAaJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 04:12:28 -0500
-Received: from mail-ma1ind01olkn0166.outbound.protection.outlook.com ([104.47.100.166]:24096
-        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234358AbiAaJM1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:12:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CE+8GdQDF7Kg22UklnWIS61fL8M31NShhiFt6HogqLyaeD0fjF16TMCGFrGvEIu9zwD4hSKfWwuyUj3mOYQRjj6+4lwWJf4aZPzZ6nrWtbOqgFNRwDaUT3x/4M4l9+iaTEHrjwtT/vEjd7g2gfSowZ2+4Vl7ZKBMBGt9HM5qdamG1C7fvj6dZs/OfOu5WZMVuQthaKtMjsg1ycGgGu0vOcrz/T98koQJ5NVuen/0InhgVWgKjX6O4U9UNTymYXyOxrE/buyWwoATq8RpfXs8oPrto0IV+eAqEBbH3wluA7JEizMQxchA+5Tv8p7ZYaKeI2NJPSAOBG2C1NZv4Ku43Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ut/jOtQM5LCb8mFPta98FQAA/quSe1o5jhYRMGHmOkQ=;
- b=Dz1v+MM3FjBj7G4iQLz6kNJviMuxqP2F/RPwS9LCZc/XH2sHQdnhUMBW58Yq5mJfq1ntg+VDOuES5mCP8dEqkhQ2j478aD/Ra2QFBwPcvXufJOY+2jQxPrswj+V24d2/jYYjrs3WQVrcjWk8yxD3HVQWgvA8xndy9FoNLuoNS/ijBWG9+KFbJjW8EnqSyELH4sKgPZU9Z668u8zrkpG/imKZBauxjhvuQEWrJrQZei29CB3CgD3Y3rVIOA4/lNYsx6t3V20/GyHc3wALPJWqbutlS/TDunoXAFMNwpWNCUrV24syHbFxiM+RFSdLR+VCUrhk079ghR9WylY9UhUx6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ut/jOtQM5LCb8mFPta98FQAA/quSe1o5jhYRMGHmOkQ=;
- b=gXXBC8u+DV3JR/ipV7e1fJVlSh6pDhP90bABspiPhAD7jZ9DfJJjIundoHtH2EwnV4RBjkf6/q5xAnQpf+4p+87F8znirM/ygEhv1GRbEVa2XznXelLAXEnKEFS2FapkM+FWM+2Ht7Nt09S7uNFoQbGLnZCGWz15xphLtApM65B73SgmB78T0dbMs1ojRdjbnbaNr2AwkbwpF+RCpzDEiHW0xm7dXByJXxxdi1MCWYq9aGVcJa5C81znHdQkrpOgouxzE1j8G4XXpRfoNpEjmsnln0bLaUgDv6mLVLjXjS0DNTkn1Pm4YgkGsPA7uwM09U3OZRIA1fqJuR6BJw8rlw==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PN0PR01MB7800.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:b0::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Mon, 31 Jan
- 2022 09:12:20 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 09:12:20 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
-        "ribalda@chromium.org" <ribalda@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-CC:     Orlando Chamberlain <redecorating@protonmail.com>,
-        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH RESEND] media: uvcvideo: Add support for Apple T2-attached
- FaceTime HD Camera
-Thread-Topic: [PATCH RESEND] media: uvcvideo: Add support for Apple
- T2-attached FaceTime HD Camera
-Thread-Index: AQHYEqCuFa0IUQWRI0uS4fqZrMlb86x84AqA
-Date:   Mon, 31 Jan 2022 09:12:20 +0000
-Message-ID: <9BD1D373-F588-44EE-AFC0-3D691B4134DA@live.com>
-References: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
-In-Reply-To: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [LfaQ6fnhm/9MEVCpIA596LzhoRqO/QbO]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8893891f-548d-44a1-78a7-08d9e499c91d
-x-ms-traffictypediagnostic: PN0PR01MB7800:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v2EXFYp/1f/wqo1IiqIx1Hf9a665j+Yk8o6zI3Os4jv1tqqiNJFkvuF5BYM80PxLzYnyqC6wUtOYOpNxIQ1ZttmOCbdDFXCWQjwy3Rob4ID4PbRN3xfVyDRqmJhg0KbjcR6SEqduSJnsr7k4QfUbz2Mh6FFUZkOiY4r3ALayeXmsoY1d6CGh4h4sVuvs2+v6wQgys420CjAeFst+9qJMb3qTprr9k9aDrGmGNJcUOG7wZdyBZ1Yw8cdKYQZgpb8K89KX41kzzIz2IqiFfKIrQIPHOQF8ysRxn/2jND43AbWRUYTD4+2ky7wuo05vP0eMqB3LrTcBr/n88ootkcB+Jtyb015cQqks0QRBVJIAQDZ8CHB0uo3jFoa9Ihxbzm5QZvr1d+dnNLFqjePxU4bNBtc4UQn1O7FvwSSUm7RH7Kii5CjPoMhiELJo8qOG4hFpJTpyeQjsBqmcoYuLobZs9UtCYh8RDURIeDg24wox0y/+J1eKTfY1EyRGhGwqIcdOnOZM5se+ZxqQe/sdlCcP6CnIzPhop8+psk48hwcGmRMvhaS58bSAv44emq30aW/HQ3r1oyyz9GkXGenSVb1+aw==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mizWvnyulvGqPH1o5LqRidsX7Y17ngWi5Q/rqZwcOfFyxN5tYGnHkMp+s5uR?=
- =?us-ascii?Q?G3YnN+V2hZBpMDO40qJ2mELzFV87ueMAbL6KE0+gV0xAPZRG+2je1JUmJ0mj?=
- =?us-ascii?Q?CTi5L0TNSW5kFDiCeiURjPaB+lsvQM3vYnFwQG5fNvNcw0qNnTFxdasC/Ddd?=
- =?us-ascii?Q?RCAmI15E9CZ1hkae8f2crJnPODieo9LXZuvZsXIzhg7RV89pjGyA/daYAwW8?=
- =?us-ascii?Q?BIJHtHbf9PPaxKLSPUpVlLyOEuJxVUj/s4SFFsj1ipgL/6jh6Ml1CBwy+YRK?=
- =?us-ascii?Q?QdZ+2eOAmSvEGdgl/vLM9NMYR4pSXbRUmJe+Pi7f54wtAqn8CpEnro/qkPkC?=
- =?us-ascii?Q?4tBfqVipkZFDWprURHzoIMnDQShjqLXhWUpn1vSsM5khdUNfTvQqieq0FOSD?=
- =?us-ascii?Q?g5OiCtz/+kehCmn1BE5MIXi2T53RUVWrZI345XMNduNBuCyyI3UpTD22eT+f?=
- =?us-ascii?Q?GZkrSWfgxAdX8OXvI6r0wOkD0YpK6jPSRwpZ+azawBpJ55R0wGKWeHjrjNUm?=
- =?us-ascii?Q?HRrKqbZBgWpCxOJDD+HZZWr4kPg/tnE72z/vJq7eLvAHzrTerFQU1tu3moxB?=
- =?us-ascii?Q?bmiqE49U4/5Gd5MbNb94WP/kbtbrjs8bVPX6TCpXHS69kpWbw+BAhTKmdoUa?=
- =?us-ascii?Q?GtB01kc1z40SY4i22JSazrJBmSsuk1W8KtPmrnXWv8O3bdM2wfz09WRywtUi?=
- =?us-ascii?Q?K2FsGou+/JAlChBU5FGwqFibyv5kqaDy1H7pmQboxaKdS5q39XikGj7Whs5t?=
- =?us-ascii?Q?ahQNVddYK6ueYTFeBk2HMdjX21akgHp73YxWUTzk1rBpKg8/Z54dXNNQ7JgH?=
- =?us-ascii?Q?/XVZ3kekx6T2p7A3zkN4EQkDTe8A1RdQ37fYuxsNfWvFO/xN850lKd0kZVox?=
- =?us-ascii?Q?CJmTzByBACtJqvgGyQbNEJTS5EVRCnASIwDDr13NQYlTV3ugspINXQXLQ7lX?=
- =?us-ascii?Q?UHDSSqrBzfhmIx6aGzKFPg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C8E79CAD9CAAA94C96A3D626DAD9BE18@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S236544AbiAaJQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 04:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234151AbiAaJQO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:16:14 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4101C061714;
+        Mon, 31 Jan 2022 01:16:13 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id n8so25456406lfq.4;
+        Mon, 31 Jan 2022 01:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8dIClAuzGyxeW1QA6Ear5GK8ux1d20BAvE6o8CT4Cco=;
+        b=BJhA9yxnQUJ7EZm6dlq4u+EasZJSnOy54DZvD7NgK2XTAYMAwGjf+TF1j7fSanKXfM
+         5VAuhI2xanC9R4xYdOq7dFDf96HVx0UYKIjhxlGWDsEQFye/mz0F82vHN0Eb0zdiHkNT
+         ZyCmUMqnTGD/9jABG5NEKYxbGAR+sD9VaWmHDyZrq3x+gnnI4mWwBClZOZ+DIxjX/x2R
+         fM1M3lIc6jlv+f29f9yTl0lpgyMhiK6Hyngv52FMb00w3oSJFthn2OH08NAkWupiOfeE
+         NStujjtgOPIhVJjON/NbzVy2InMfFbNRw7UYScB0mMc0Poh2i8uYmb+PoqiknKr2t/vc
+         PYZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8dIClAuzGyxeW1QA6Ear5GK8ux1d20BAvE6o8CT4Cco=;
+        b=OQHg3fCROd3toUjEQyXRG87tdht7LGbrWTw+INtWYothbl3/BrqVtVadnjuo9IaVt2
+         GYY2THRGXxc4xWe6jdhtZb7pOxa7gh0Zs5EXmj4HiUEGQkg7wgmmuEGZfB9VTNdZtIqK
+         S6FpGJ36XFwGh0KYeg9q3opLIrRY9BOSYjukq8lyRfCQZnWvBB8Mp1xRjECYNZA4CO66
+         EjHq/JlPxyAFRlwKkvs8K2pRIJWzBESNicw11/uO69Rzkm3IuTlExCfbZz4dYAJp4Wen
+         /45YCre8yjhXXsPmsmRtvEcYkw8wzqWvbKscg5Ffj7enDMtCJQxXccRkcQ06sKy4ReYB
+         /cuA==
+X-Gm-Message-State: AOAM533b7LiTnQjG75xjJJYNVFVGqN215MVunjhuGfN9Hj9hQn+BHF70
+        1zp2oV7nWmu2Tn2RGoQyj80zwBZIKEI=
+X-Google-Smtp-Source: ABdhPJyKUAYZUePEH7wJ9+flCUQH/6so6zdX2aIW4XPVMcESBDN8QhjR2Y5tVvD34H9nki+t80GOVQ==
+X-Received: by 2002:a05:6512:1303:: with SMTP id x3mr14623943lfu.77.1643620572071;
+        Mon, 31 Jan 2022 01:16:12 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
+        by smtp.googlemail.com with ESMTPSA id l9sm1406963lfc.304.2022.01.31.01.16.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 01:16:11 -0800 (PST)
+Message-ID: <8abf2da8-9a11-8f16-b495-d8ef2d00ab51@gmail.com>
+Date:   Mon, 31 Jan 2022 12:16:10 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8893891f-548d-44a1-78a7-08d9e499c91d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 09:12:20.1635
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB7800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1643474453-32619-1-git-send-email-akhilrajeev@nvidia.com>
+ <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
+ <ba109465-d7ee-09cb-775b-9b702a3910b0@gmail.com>
+ <DM5PR12MB1850D836ACDF95008EF74CC7C0249@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <08f6571e-af75-b6b3-443e-e86e3bdb365b@gmail.com>
+ <DM5PR12MB1850FD5F3EF5CBFEA97B3611C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <20220131094205.73f5f8c3@dimatab>
+ <DM5PR12MB1850D677140466EC74C621A4C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <DM5PR12MB1850D677140466EC74C621A4C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maintainers
+31.01.2022 12:09, Akhil R пишет:
+>> В Mon, 31 Jan 2022 04:25:14 +0000
+>> Akhil R <akhilrajeev@nvidia.com> пишет:
+>>
+>>>> 30.01.2022 19:34, Akhil R пишет:
+>>>>>> 29.01.2022 19:40, Akhil R пишет:
+>>>>>>> +static int tegra_dma_device_pause(struct dma_chan *dc) {
+>>>>>>> +     struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+>>>>>>> +     unsigned long wcount, flags;
+>>>>>>> +     int ret = 0;
+>>>>>>> +
+>>>>>>> +     if (!tdc->tdma->chip_data->hw_support_pause)
+>>>>>>> +             return 0;
+>>>>>>
+>>>>>> It's wrong to return zero if pause unsupported, please see what
+>>>>>> dmaengine_pause() returns.
+>>>>>>
+>>>>>>> +
+>>>>>>> +     spin_lock_irqsave(&tdc->vc.lock, flags);
+>>>>>>> +     if (!tdc->dma_desc)
+>>>>>>> +             goto out;
+>>>>>>> +
+>>>>>>> +     ret = tegra_dma_pause(tdc);
+>>>>>>> +     if (ret) {
+>>>>>>> +             dev_err(tdc2dev(tdc), "DMA pause timed out\n");
+>>>>>>> +             goto out;
+>>>>>>> +     }
+>>>>>>> +
+>>>>>>> +     wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
+>>>>>>> +     tdc->dma_desc->bytes_xfer +=
+>>>>>>> +                     tdc->dma_desc->bytes_req - (wcount * 4);
+>>>>>>
+>>>>>> Why transfer is accumulated?
+>>>>>>
+>>>>>> Why do you need to update xfer size at all on pause?
+>>>>>
+>>>>> I will verify the calculation. This looks correct only for single
+>>>>> sg transaction.
+>>>>>
+>>>>> Updating xfer_size is added to support drivers which pause the
+>>>>> transaction and read the status before terminating.
+>>>>> Eg.
+>>>>
+>>>> Why you couldn't update the status in tegra_dma_terminate_all()?
+>>> Is it useful to update the status in terminate_all()? I assume the
+>>> descriptor Is freed in vchan_dma_desc_free_list() or am I getting it
+>>> wrong?
+>>
+>> Yes, it's not useful. Then you only need to fix the tx_status() and
+>> don't touch dma_desc on pause.
+> If the bytes_xfer is updated in tx_status(), I suppose 
+> DMA_RESIDUE_GRANULARITY_BURST can be kept as is, correct?
 
-I sent this patch on 12.01.22 and then resent it on 26.01.22. I still haven=
-'t received a reply yet. Maybe I am not sending the mail to the correct mai=
-ntainer? I request someone to reply cause no reply seems to create a confus=
-ion.
-
-Linus, I am sending this mail to you too, since you are the ultimate mainta=
-iner.
-
-Regards
-Aditya
-> On 26-Jan-2022, at 4:07 PM, Aditya Garg <gargaditya08@live.com> wrote:
->=20
-> From: Paul Pawlowski <paul@mrarm.io>
->=20
-> Adds the requisite device id to support detection of the Apple FaceTime
-> HD webcam exposed over the T2 BCE VHCI interface.
->=20
-> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
-> Signed-off-by: Paul Pawlowski <paul@mrarm.io>
-> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-> ---
-> drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
-> 1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/u=
-vc_driver.c
-> index 7c007426e..88dc9e7aa 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] =3D {
-> 	  .bInterfaceProtocol	=3D 0,
-> 	  .driver_info		=3D UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
-> 					| UVC_QUIRK_BUILTIN_ISIGHT) },
-> +	/* Apple FaceTime HD Camera (Built-In) */
-> +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		=3D 0x05ac,
-> +	  .idProduct		=3D 0x8514,
-> +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	=3D 1,
-> +	  .bInterfaceProtocol	=3D 0,
-> +	  .driver_info		=3D (kernel_ulong_t)&uvc_quirk_probe_def },
-> 	/* Apple Built-In iSight via iBridge */
-> 	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
-> 				| USB_DEVICE_ID_MATCH_INT_INFO,
-> --=20
-> 2.25.1
->=20
->=20
+You don't need to update bytes_xfer in tx_status(). Please see Tegra20
+DMA driver for the example, which supports GRANULARITY_BURST properly.
 

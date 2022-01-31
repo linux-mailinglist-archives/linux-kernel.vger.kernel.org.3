@@ -2,153 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DB84A4D6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 660774A4D6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381039AbiAaRjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:39:01 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:34846 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350348AbiAaRi7 (ORCPT
+        id S1381062AbiAaRkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:40:13 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:59658 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350348AbiAaRkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:38:59 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:39938)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nEadm-006TnZ-D3; Mon, 31 Jan 2022 10:38:58 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:53122 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nEadk-00Ek8G-Sm; Mon, 31 Jan 2022 10:38:57 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Denys Vlasenko <vda.linux@googlemail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>
-References: <20220131153740.2396974-1-willy@infradead.org>
-        <871r0nriy4.fsf@email.froward.int.ebiederm.org>
-        <YfgKw5z2uswzMVRQ@casper.infradead.org>
-        <877dafq3bw.fsf@email.froward.int.ebiederm.org>
-        <YfgPwPvopO1aqcVC@casper.infradead.org>
-Date:   Mon, 31 Jan 2022 11:38:49 -0600
-In-Reply-To: <YfgPwPvopO1aqcVC@casper.infradead.org> (Matthew Wilcox's message
-        of "Mon, 31 Jan 2022 16:35:12 +0000")
-Message-ID: <87pmo7olee.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
+        Mon, 31 Jan 2022 12:40:12 -0500
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VFx55f010608;
+        Mon, 31 Jan 2022 17:40:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=1f9rGbk0sYaI209wSkeYHu93klJ7vh6k7PlK9Lb3d4c=;
+ b=OjMrgHdE7HBEriz6Yv29Ec+yY4xgPFnGn/kOvp2KXkVLbPn8RvN+53b8YWDi2mXu5jYY
+ C9JXxWOO2sP/iQhTrFPDPdHvwiadt9BY3iSGjYPGfTU31VtbYPUTftG/o+voVGam287I
+ EghG2puf9syCJkUrkIdk5V02ZxfPrqmgslIU/xvEI/jzlzIgBh+oX0PRRnbQk7ML0EjE
+ lvgZDAeKhXBYZDg4oqQkMtaMG2qTtO3scpKREjwJq7bQzRyp494eeqPi8mPBg3sECrNn
+ XTvgZ6ROr1/XCRaC/05BXAf++v1I2nONiGaekWjcchvFtndklx4ncW71qtugO6A/CXD4 7w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxjatrhe2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 17:40:06 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20VHZKHK149140;
+        Mon, 31 Jan 2022 17:40:04 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
+        by userp3030.oracle.com with ESMTP id 3dvtpxf23v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 17:40:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DUd//A6xrfOFkHUvpySBhTpWlIJC2iWL7DdP9hPxpb/sLJS37ZcwSQNe5NGep+haXOC+hG/FcHHXlJbQByc//w/ZREiOZssWY1xNGqgb/xbq23Se92zE+aTFVdlAo3Rqqh+7Vrbd8gignAXaEyPCsHXvsUvMpj7l0vXaTUIhhKxUDWL7BqtSa/qPQmdX/HYguzARcwzn5kDqk2LZTHLtEM5nHT2KvDutBbQyMNkd/XjMyHnvvKNGXXdZ2SnkZxbnk2A1o9YLfmL4W2gWF93uMuUBufLbnD8kqggj4SiulIrpcOZcLwbYXOjaiM8N5hP2J/fwrtY78bA1cuFrcAHjMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1f9rGbk0sYaI209wSkeYHu93klJ7vh6k7PlK9Lb3d4c=;
+ b=nt3gSbuJheRU/FhVjzco36SvVgzQLW4UId4hhUhzkKiZCqKuTEWL7EmOpMhTBYbzES7u7SSHPkhnyjuXOg4jCxUfbt5gJs3m3hY1pT7akVrBTb7qbr4ZdYIRGo6tQrxItb8DldJcVFqUkeObsq9chmXP+GuwGijwVZvjwqR6u8ggcRmbDQO1dPhhXc5/tbZCqRD5WkyUJUL9zEFh8Rl8WcjeHn6JxroTLELp/Ymj3Va+U5uTSgX6qE8HoZyJRVylGrZMPk9PRCPGBcSI24GpWXw6d1leOuzom+s5bzjUuOCtUE9gso9hpSSLlJ/c3KlatEwVjwrcAUKQO92+RSKzHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1f9rGbk0sYaI209wSkeYHu93klJ7vh6k7PlK9Lb3d4c=;
+ b=RCCIYuhDJWEa6YifZBo6YAyAL2eymaoJg/NJ98ZVL7d6mOsCsY9H2iHt3yS9O5/LZR9q6tPRIiiir7IknFHJRjC85siriilmoOYHNN6mP87skmTz/VirQQlMsxeRLFkMQfoXNqqnjPUkfc0zFcPPbcNmDsjCuItnOkGPCxVnUGg=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CY4PR10MB1272.namprd10.prod.outlook.com (2603:10b6:910:7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Mon, 31 Jan
+ 2022 17:40:02 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::1caa:b242:d255:65f3]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::1caa:b242:d255:65f3%9]) with mapi id 15.20.4930.022; Mon, 31 Jan 2022
+ 17:40:02 +0000
+To:     John Meneghini <jmeneghi@redhat.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        "mlombard@redhat.com" <mlombard@redhat.com>,
+        "guazhang@redhat.com" <guazhang@redhat.com>
+Subject: Re: [EXT] [PATCH] scsi: bnx2fc: make bnx2fc_recv_frame mp safe
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1k0efajrr.fsf@ca-mkp.ca.oracle.com>
+References: <20220124145110.442335-1-jmeneghi@redhat.com>
+        <DM6PR18MB3034D4C12A94CF3121F8B565D2219@DM6PR18MB3034.namprd18.prod.outlook.com>
+        <fc2ddce7-d5f7-b9ce-3413-b6ffa87a7251@redhat.com>
+Date:   Mon, 31 Jan 2022 12:40:00 -0500
+In-Reply-To: <fc2ddce7-d5f7-b9ce-3413-b6ffa87a7251@redhat.com> (John
+        Meneghini's message of "Fri, 28 Jan 2022 15:48:46 -0500")
 Content-Type: text/plain
-X-XM-SPF: eid=1nEadk-00Ek8G-Sm;;;mid=<87pmo7olee.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX195xKksb9tu1SBZnByujzw772B/SHtjq3k=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_SCC_BODY_TEXT_LINE,T_TM2_M_HEADER_IN_MSG,
-        XMSubLong,XM_B_SpammyWords autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Matthew Wilcox <willy@infradead.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 648 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 11 (1.7%), b_tie_ro: 10 (1.5%), parse: 0.95
-        (0.1%), extract_message_metadata: 13 (2.0%), get_uri_detail_list: 2.1
-        (0.3%), tests_pri_-1000: 11 (1.7%), tests_pri_-950: 1.28 (0.2%),
-        tests_pri_-900: 1.12 (0.2%), tests_pri_-90: 260 (40.2%), check_bayes:
-        254 (39.3%), b_tokenize: 8 (1.3%), b_tok_get_all: 8 (1.3%),
-        b_comp_prob: 3.1 (0.5%), b_tok_touch_all: 231 (35.7%), b_finish: 1.02
-        (0.2%), tests_pri_0: 317 (49.0%), check_dkim_signature: 0.59 (0.1%),
-        check_dkim_adsp: 2.7 (0.4%), poll_dns_idle: 17 (2.7%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 26 (4.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] binfmt_elf: Take the mmap lock when walking the VMA list
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-ClientProxiedBy: SA0PR11CA0172.namprd11.prod.outlook.com
+ (2603:10b6:806:1bb::27) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cd7b0439-78a1-4c91-8ca8-08d9e4e0b5b0
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1272:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB12721E88BD2CCF99E10FA8F38E259@CY4PR10MB1272.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: thPf0BqqKj3pMOWA/VOr+c4R+pSGmKTE30U1+kLTfJ45HP+quT5hEle0q3YUws/QNt1ON/pyNZfOv1b64l8istHMV2K7MWD6rLrE9qjWqeIGPS9smHf9GZ/AmXzKscKXfWyFuVSS3XGjbu40hwFZ29+XR6+9YSFyaBYLtALj38Hcrpl5gRXBVYExlcyp9w6LIbF25KDQATCOPpCV1FEXf+0wvWVU7B6C5wCFD2CSw6m9AVg+dQCm9U3j9JAoIwQh6WwZ5Bh/U71VNed4ImWD4crn35CUm9TUDMdygbfCuqmxhbcXnEDlPNBEZzsUiF7Gfsjj9jOOMVTCrkwnj8YLcC4rjwoINh+2PY45Gm/QNg2p2vZcbv2+W0ELvFLuA5SRLFvXBOGJDHTrdaC6kIjz+d1KGPnngmsM0Q9mdV+R3wX6kibPeyJ+eZY0m7AkDn8AUoHesxv50dys9NWJ1xNU6HRsntbY4pMuDBEWo0Gx/n7+hFrdR75Mabj63KD4dFA4/zd9gIMqypRc7WfnFKg741NvONJiasUE/pwjFCbQu+FomYKBS5YOt/W5iKCuLmb2hV8QYQLnXQ8tIiDQ+OKECymtXhqDe8V5m3Rpp2tzx9M8mei5IfGdG8ZXryz+xEdVWwxTio47qN57ZY4hOYDPQ2vUC/KgqpEsuvt6fUGbJiwt0iVDf84wpeyQwF9nA3YuftZ/NrYnEfQLrS3j3vwL5A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(52116002)(38100700002)(38350700002)(36916002)(5660300002)(54906003)(316002)(508600001)(6916009)(86362001)(6486002)(6506007)(66946007)(8676002)(8936002)(66476007)(6512007)(66556008)(558084003)(2906002)(26005)(186003)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1cSfAkQFoXGS9xhlD1QD6ZmXddy/xfRb0i7mFTSBI4C5/RHSfcb5nt+20nlV?=
+ =?us-ascii?Q?AFpIFVrwK2B9M/pWlJUtrOt7vsrXp8pbp6M/DoUj8+jcVnChImvX37kAYvVw?=
+ =?us-ascii?Q?PscUsuSLjh01z6ZPTn+sRokJNi6zgyAUdtObJlZsSUmSjCR+RIvuAavCJ/1/?=
+ =?us-ascii?Q?FLmlpN/cKZL/N5CGV6miG+3MIXB04RV8WLYuMiyQYTKzd2SISsrxkTAJR+GL?=
+ =?us-ascii?Q?Vw2Ju+ZHWR6NYlYnFGQKSFaojWW7bx8egTwCz0hdAE4v779geWopwbl18Lnr?=
+ =?us-ascii?Q?0XV3ztEgrzKgqsL6jq0odMioIUV7lNU/sWLsMVWz2a5bb4YVzur9FMycrSSw?=
+ =?us-ascii?Q?6mrW2+MgAofOp2CJBEn8jfaTqaLOd8ThP50i+uk01ZaE1LpAkv189LRmfnMu?=
+ =?us-ascii?Q?BO/Q2MKM0WISctTP9mNhPe090NGjPS+fsB15WPXFOnXB3slpUf1+g3RzUpnk?=
+ =?us-ascii?Q?eQTjVP0PkyWFZMeVabML9EilTRfCk7pin15qHZejS7BDdrR1RcygD/VQdWEZ?=
+ =?us-ascii?Q?VN7VZ51xort/c8HQZ91Dfv5p+uIZRM/jqW1NOYQaj739FCHmCYZs9ghPbxaw?=
+ =?us-ascii?Q?R0ZG2Su/vyvJTGGUlGlq8ZGbcyvlH9BKKJtul0KCouiIOVVC+j9H6Dstr16b?=
+ =?us-ascii?Q?9h2eTmziEe6W8OuTJcQLHRrCGMP98NCTltrwABKMkWBuqQrWSrwQH3mT+Llk?=
+ =?us-ascii?Q?6bPdBrrHz34rPrT9soEmnNIpoqy8dcu5WWQvwnDGAoQmFdDKb9lAXDYiiGUK?=
+ =?us-ascii?Q?8rfpqjG4RYjK+z10GKo/6bJRRd/EvlGGm278P4aD6M1hy2xOvMLEBsIs1QOx?=
+ =?us-ascii?Q?3e5Nzn+Sjhyrllqwm4lLd5AUVsBISQRKdsRT/Qgxl5zmobm46J3wKSchm5jM?=
+ =?us-ascii?Q?gcfiMBs33tMeSa3sR93VL0n89IrsL5bdde/dd2w9jqDOPH+RlmcvCM9/r2h4?=
+ =?us-ascii?Q?S1wqODE4nnxq4aNLUzoGqo90wl9/iocimRAKrk9B3tGB/nBn2XIjw2RPAal6?=
+ =?us-ascii?Q?CYljWoC6pcxrYK3tvtPL7cAxpAysz29LPVyqt6cgrsEviegkgolqDcSyTJEt?=
+ =?us-ascii?Q?XvFE6DEGS0jv8mMHLPKCvnstsD34Vs3uRi081Qq7QIqaqtJw2+8jZPzqVwcv?=
+ =?us-ascii?Q?5iM3kMT+nw1i0Ul51reoWK49BgiYhDTuH6SnBi6Ul2PbvA75QYUr53EbNiWT?=
+ =?us-ascii?Q?rOyj5E+SNM7zE3v2J3o310jhZpesD3t0qxfhzQPvrHxh4jofEu+3UJjhoR79?=
+ =?us-ascii?Q?y/H+CVqe4iiaEkGBkjlMiqMldi97bgw5kKIWIyGJnI8k8dj8FjXtMPDnmQ5Z?=
+ =?us-ascii?Q?PB+QDPAUd/GgxYIeJuzSB7g2DQrYGUy05TA+KMX5NLXJdnesGkq+3/s1VIDC?=
+ =?us-ascii?Q?sfuF1WQtqi7rAvoKR+qpqnPSxogK8i6//9SvhwcOSK1TN23dg2IWdPpoCxJW?=
+ =?us-ascii?Q?ukPft3v53HTtbfqKhKNU3dNcYY4Si722rv75gmt/BUjoUY6VESSRuR72Gp+s?=
+ =?us-ascii?Q?RwApjVERRM3UDJmxqZOBNJVlaKqm5SzNLvUoQ1EQ1e+a8hEJeXkmo7SouQKD?=
+ =?us-ascii?Q?PGyU2V2Gj87BFm1EqDazJGlFbgfofK8fdnzTlmXDAxhxMU7G+xp14RxGH+Qc?=
+ =?us-ascii?Q?QO2+T7cwrnCbsOYcJhOVbue1U6LsCnk1YJZx+NM9O9ECX1I1HYUK810tqPZ6?=
+ =?us-ascii?Q?4epHlQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd7b0439-78a1-4c91-8ca8-08d9e4e0b5b0
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 17:40:02.2783
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EOSAapGokStp6l7sKYIn8qNALlkdunZYvOwU0jZlu0Wbye/9rXHurvdl3CJpvTz6qIrZRJd1fGHGBEYBPeMh+yQMPLp776mjXZnXcuOaWhM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1272
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10244 signatures=673430
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=838
+ adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310114
+X-Proofpoint-GUID: dtGjdWS07gwdRoYEyofC-jtW-SY4qq7Q
+X-Proofpoint-ORIG-GUID: dtGjdWS07gwdRoYEyofC-jtW-SY4qq7Q
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> writes:
 
-> On Mon, Jan 31, 2022 at 10:26:11AM -0600, Eric W. Biederman wrote:
->> Matthew Wilcox <willy@infradead.org> writes:
->> 
->> > On Mon, Jan 31, 2022 at 10:03:31AM -0600, Eric W. Biederman wrote:
->> >> "Matthew Wilcox (Oracle)" <willy@infradead.org> writes:
->> >> 
->> >> > I'm not sure if the VMA list can change under us, but dump_vma_snapshot()
->> >> > is very careful to take the mmap_lock in write mode.  We only need to
->> >> > take it in read mode here as we do not care if the size of the stack
->> >> > VMA changes underneath us.
->> >> >
->> >> > If it can be changed underneath us, this is a potential use-after-free
->> >> > for a multithreaded process which is dumping core.
->> >> 
->> >> The problem is not multi-threaded process so much as processes that
->> >> share their mm.
->> >
->> > I don't understand the difference.  I appreciate that another process can
->> > get read access to an mm through, eg, /proc, but how can another process
->> > (that isn't a thread of this process) modify the VMAs?
->> 
->> There are a couple of ways.
->> 
->> A classic way is a multi-threads process can call vfork, and the
->> mm_struct is shared with the child until exec is called.
->
-> While true, I thought the semantics of vfork() were that the parent
-> was suspended.  Given that, it can't core dump until the child execs
-> ... right?
+John,
 
-The thread that called vfork is suspended.  The other threads can
-continue to execute.
+Erm. Hit the wrong key. Applied to 5.17/scsi-fixes, of course.
 
->> A process can do this more deliberately by forking a child using
->> clone(CLONE_VM) and not including CLONE_THREAD.   Supporting this case
->> is a hold over from before CLONE_THREAD was supported in the kernel and
->> such processes were used to simulate threads.
->
-> That is a multithreaded process then!  Maybe not in the strict POSIX
-> compliance sense, but the intent is to be a multithreaded process.
-> ie multiple threads of execution, sharing an address space.
+> Martin, is it too late to get this into staging for v5.17-rc2?
 
-Sometimes.  From a coredump perspective it is just another process
-that happens to share the mm.  Like the vfork process.
+Patches sit in linux-next for about a week before they get sent to
+Linus.
 
-For a while the coredump code was trying to kill and possibly dump all
-of these ``threads'' that shared a vm.  The practical problem was that
-a failing exec after vfork could trigger a coredump that would kill
-it's parent process.
-
-So when I look at these from a coredump or signal perspective I just
-treat them as weird processes that happen to share an mm_struct.
-
->> It also happens that there are subsystems in the kernel that do things
->> like kthread_use_mm that can also be modifying the mm during a coredump.
->
-> Yikes.  That's terrifying.  It's really legitimate for a kthread to
-> attach to a process and start tearing down VMAs?
-
-I don't know how much VMA manipulation makes sense but it is legitimate
-to attach to an mm and do those things as Jann pointed out.
-
-> Thanks.  Now that I've disclosed it's a UAF, I hope you're able to
-> get to it soon.  Otherwise we should put this band-aid in for now
-> and you can address it properly in the fullness of time.
-
-Working on it now.
-
-Eric
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering

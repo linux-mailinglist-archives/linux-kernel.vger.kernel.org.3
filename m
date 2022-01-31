@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C8E4A4032
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF4F4A4027
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358224AbiAaKa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 05:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
+        id S1358171AbiAaK3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 05:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358190AbiAaK32 (ORCPT
+        with ESMTP id S239904AbiAaK3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:29:28 -0500
+        Mon, 31 Jan 2022 05:29:04 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4978C061755
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 02:29:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B153C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 02:29:04 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nETvR-0008WF-Oj; Mon, 31 Jan 2022 11:28:45 +0100
+        id 1nETvR-0008WG-Oh; Mon, 31 Jan 2022 11:28:45 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nETvO-008Cc0-Dc; Mon, 31 Jan 2022 11:28:42 +0100
+        id 1nETvO-008Cc9-Ei; Mon, 31 Jan 2022 11:28:42 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -32,16 +32,17 @@ To:     Mark Rutland <mark.rutland@arm.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
         devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v2 2/5] ARM: dts: imx6dl-prtvt7: Add missing tvp5150 video decoder node
-Date:   Mon, 31 Jan 2022 11:28:38 +0100
-Message-Id: <20220131102841.1955032-3-o.rempel@pengutronix.de>
+Subject: [PATCH v2 3/5] ARM: dts: imx6qdl-vicut1: add CAN termination support
+Date:   Mon, 31 Jan 2022 11:28:39 +0100
+Message-Id: <20220131102841.1955032-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220131102841.1955032-1-o.rempel@pengutronix.de>
 References: <20220131102841.1955032-1-o.rempel@pengutronix.de>
@@ -55,87 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin van der Gracht <robin@protonic.nl>
+The gpio1 0 pin is controlling CAN termination, not USB H1 VBUS. So,
+remove wrong regulator and assign this gpio to new DT CAN termnation
+property.
 
-Signed-off-by: Robin van der Gracht <robin@protonic.nl>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm/boot/dts/imx6dl-prtvt7.dts | 42 +++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ arch/arm/boot/dts/imx6qdl-vicut1.dtsi | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6dl-prtvt7.dts b/arch/arm/boot/dts/imx6dl-prtvt7.dts
-index be7c4cb339e7..baaa6ffc4df9 100644
---- a/arch/arm/boot/dts/imx6dl-prtvt7.dts
-+++ b/arch/arm/boot/dts/imx6dl-prtvt7.dts
-@@ -6,6 +6,7 @@
- /dts-v1/;
- #include "imx6dl.dtsi"
- #include "imx6qdl-prti6q.dtsi"
-+#include <dt-bindings/display/sdtv-standards.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/leds/common.h>
- #include <dt-bindings/sound/fsl-imx-audmux.h>
-@@ -171,6 +172,18 @@ panel_in: endpoint {
- 		};
+diff --git a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
+index b9e305774fed..1ac7e13249d2 100644
+--- a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
+@@ -126,15 +126,6 @@ reg_3v3: regulator-3v3 {
+ 		regulator-max-microvolt = <3300000>;
  	};
  
-+	connector {
-+		compatible = "composite-video-connector";
-+		label = "Composite0";
-+		sdtv-standards = <SDTV_STD_PAL_B>;
-+
-+		port {
-+			comp0_out: endpoint {
-+				remote-endpoint = <&tvp5150_comp0_in>;
-+			};
-+		};
-+	};
-+
- 	reg_bl_12v0: regulator-bl-12v0 {
+-	reg_h1_vbus: regulator-h1-vbus {
+-		compatible = "regulator-fixed";
+-		regulator-name = "h1-vbus";
+-		regulator-min-microvolt = <5000000>;
+-		regulator-max-microvolt = <5000000>;
+-		gpio = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+-		enable-active-high;
+-	};
+-
+ 	reg_otg_vbus: regulator-otg-vbus {
  		compatible = "regulator-fixed";
- 		pinctrl-names = "default";
-@@ -295,6 +308,31 @@ sgtl5000: audio-codec@a {
- 		VDDIO-supply = <&reg_3v3>;
- 		VDDD-supply = <&reg_1v8>;
- 	};
-+
-+	video@5c {
-+		compatible = "ti,tvp5150";
-+		reg = <0x5c>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+
-+			tvp5150_comp0_in: endpoint {
-+				remote-endpoint = <&comp0_out>;
-+			};
-+		};
-+
-+		/* Output port 2 is video output pad */
-+		port@2 {
-+			reg = <2>;
-+
-+			tvp5151_to_ipu1_csi0_mux: endpoint {
-+				remote-endpoint = <&ipu1_csi0_mux_from_parallel_sensor>;
-+			};
-+		};
-+	};
- };
- 
- &i2c3 {
-@@ -322,6 +360,10 @@ &ipu1_di0_disp0 {
- 	remote-endpoint = <&display_in>;
- };
- 
-+&ipu1_csi0_mux_from_parallel_sensor {
-+	remote-endpoint = <&tvp5151_to_ipu1_csi0_mux>;
-+};
-+
- &pwm1 {
+ 		regulator-name = "otg-vbus";
+@@ -212,6 +203,8 @@ IMX_AUDMUX_V2_PTCR_SYN		IMX_AUDMUX_V2_PDCR_RXDSEL(0)
+ &can1 {
  	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm1>;
+ 	pinctrl-0 = <&pinctrl_can1>;
++	termination-gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
++	termination-ohms = <150>;
+ 	status = "okay";
+ };
+ 
+@@ -492,7 +485,6 @@ &uart5 {
+ };
+ 
+ &usbh1 {
+-	vbus-supply = <&reg_h1_vbus>;
+ 	pinctrl-names = "default";
+ 	phy_type = "utmi";
+ 	dr_mode = "host";
 -- 
 2.30.2
 

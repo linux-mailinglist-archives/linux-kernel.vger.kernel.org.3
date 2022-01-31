@@ -2,102 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D064A477B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F544A4786
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378104AbiAaMqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:46:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50826 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378063AbiAaMqw (ORCPT
+        id S1378175AbiAaMtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:49:25 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:41787 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240768AbiAaMtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:46:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643633211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xbb7oKj7pGqcFFQvVLEG96fF5LM89XRk6kAiNWwlPYQ=;
-        b=M0Ar9MCOE2xJFnUP6eN2Hp8grewCNTM0SrC2DaNhW1UN03H1NibZnGy1zlAST681H7X58y
-        H8JhYBvuHOAgEbsY/zX1bmGN3PLpfiRBwJaa6OTw7dXwXx2NHHZvYkmY0+C30O/sqc4z+Z
-        eDu+SOpFgw0W9YloCeFsJ0m2a5CSzXc=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-509-aQPoDx6tPO-vKt16KPCLbg-1; Mon, 31 Jan 2022 07:46:50 -0500
-X-MC-Unique: aQPoDx6tPO-vKt16KPCLbg-1
-Received: by mail-yb1-f197.google.com with SMTP id u185-20020a2560c2000000b0060fd98540f7so26597220ybb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:46:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xbb7oKj7pGqcFFQvVLEG96fF5LM89XRk6kAiNWwlPYQ=;
-        b=K/lGDzh5YIbBivZLDUAXosaPkTu1kWlvUzBktldCtfGobabccgppBr9+hBiGfuVRpy
-         ttVYg9aBWOJIrqGdgUq3BTbUpoXVA7BWPB3hSH7o023gNmbNhqcePjKy6OEheY4+fWmX
-         ZwpQF0qw2e08h1/QGc4i7PqW1rfC+oDa8qUN4s+eeYuGav3IawvD1zEavwKvY3145Lak
-         ZUllLGsb4t+Qp3prUO7kTCuoE2KoRya+PJisuTjU/Zj8apYTbrvDB3nA6a5/r8KwDrdp
-         +D6pkwa895VjtWT6EGO1S+suS9aOxhfpQz42oL5JM4Vgwric4gZjYlni4Du3q+cXZ3lR
-         KHSg==
-X-Gm-Message-State: AOAM530i7DOCEH/hXucs9lDaBOfD5lengnvgflZ0GF5d3tpv8MISgAB5
-        +TMz1rbDFmx1J4YwvMQCUEwstduBcRaPqI/gO9plyCKm20VI0bFrtiejIBGKFJAm1J5Kp1JTJMK
-        Ud8iz2Df0lqbPziii7YUzk9hqs9uJgh7AkbTWzysG
-X-Received: by 2002:a25:b003:: with SMTP id q3mr26931228ybf.767.1643633209483;
-        Mon, 31 Jan 2022 04:46:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwXf5DsrdCafeJ+jbkokGucWXiUD4d5CaBpbjPavzB13XtyY3keprMZq0LSYrIY7UgOHJXQUOmX4OcssUPQW5A=
-X-Received: by 2002:a25:b003:: with SMTP id q3mr26931208ybf.767.1643633209321;
- Mon, 31 Jan 2022 04:46:49 -0800 (PST)
+        Mon, 31 Jan 2022 07:49:19 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MzQc2-1mJ6320Q5o-00vQEz; Mon, 31 Jan 2022 13:49:16 +0100
+Received: by mail-oi1-f176.google.com with SMTP id v67so26377549oie.9;
+        Mon, 31 Jan 2022 04:49:15 -0800 (PST)
+X-Gm-Message-State: AOAM530MUhJjxHs4lN8uEOaSb8M+hbaDjaI0XH9LOJMiEFS5TJs59mvW
+        WWl2KRm09sLPH3x0egJ0DrXHFNU9MZs6JEah+R0=
+X-Google-Smtp-Source: ABdhPJy98n+kDWK/9SbbjWdkcIPv//3sxAoIsXTByqyfuSFCJCabGM0ZH14kpP64umFfYvpncQnk8rPRUpmA1wB2kjw=
+X-Received: by 2002:aca:2b16:: with SMTP id i22mr15607147oik.128.1643633354113;
+ Mon, 31 Jan 2022 04:49:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
- <CAFqZXNv7=ROfyzZGojy2DQvY0xp4Dd5oHW_0KG6BLiD7A8zeKQ@mail.gmail.com> <CAHC9VhQKVdbLNn=eOqebWaktDVeq5bjTjXea68MmcAhKoSa09w@mail.gmail.com>
-In-Reply-To: <CAHC9VhQKVdbLNn=eOqebWaktDVeq5bjTjXea68MmcAhKoSa09w@mail.gmail.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 31 Jan 2022 13:46:32 +0100
-Message-ID: <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Scott Mayhew <smayhew@redhat.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-6-guoren@kernel.org>
+ <YffUqErSVDgbGLTu@infradead.org>
+In-Reply-To: <YffUqErSVDgbGLTu@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 31 Jan 2022 13:48:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+Message-ID: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup.patel@wdc.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:djGQj121T/Up79PV9vFe3c3xFVYWtTtn038P31Wi6YWVhZsb7CH
+ EWUc8VlWcickQHCTaodxi2PwS/49NtPQkRJKgVjui3yT2gl4ORQlI1/MiZXJMdpsdD1aZSh
+ j5i7ILCBXXo9S6BeA8TxrAWH0lSCHoAJ1aoJOV69A1zT/H8uT9VxlxySVe4GNFkBrMXjAwW
+ wzeiuGQ17BqnsLNJLNKtg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZH5LM8F2Bio=:iB3XsXNdUOq9ydk/56//Ap
+ ygzKiwd747DPcnWv4JephLLgjcJN/oPQ/nOfySsB/xbDPlB3cme3km4ROyqlWL0CAVzcs01gs
+ RhEc5wZoQCuocaDBY/qh20LWX2XgmGzstKMoAdLEJpwDT53xv8/RZzSW1GOS5Ugq/im3mCvEP
+ t4j5XvKwXkMuCt0yyWB4fzMIHX/fnyXoT+dt+B7l+hhIw/oFU/O9gV61t0DKpi/9smj22Y0d1
+ v1oPXyfkmDoaIclTGygnc9Iu5AcT89Qf7PttG5zsjj6vua8yFCX9thdOTVDI+19rYkmfPD+IN
+ CI4fCNvJqDHpArJ9q+d2w6qas4y9eYU9m2jSZu8pheXxCXJBoVhr0op0VwZJ2P8PNYGaYTPW+
+ W5W0FzRhsp45xn9G9MVN6/oYQqpV6x8bv8Fi5tTJJ2g4HGsrOc+Md3MvCq88yJiu3uJyYAvsP
+ uj1k70QZ4sl7dZpP0p98gD4i9GdncRnk96Mb7jvwt7yt+C05GKbz2rIpxoahiYoStdl0KPenj
+ ucYkY65kz7E9mad2H20UiA6Z0348ukzyAmSTaHzS+Mbi8en47i8/WPi3NYlm2duFIsOK2eX2f
+ luBlpwT9r5ZQXCXE9s1U7Y8NpBQ79ly7U58oJrc/yU7qmgZtlHLPeRZzObbFxQeWXk/hBBSjF
+ iF4lRgIU1qcoUDvnIBgDGwlnfObta2XyKhMT+GSJCXhTEHcoTIpfMR9aPYWV9B7+vvgxkbt9a
+ PDLwoWE+daaBhoHuyu7RQcNCXR8OxUI6Zldek/DhFHJjlXS3IGAEOfj+FUryc+sQks/wVfX5L
+ 3swFfq8Q/1DJJigRwhmxaY/F702+y0FrL+2b4Ijbzh0YjQOMco=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 3:28 AM Paul Moore <paul@paul-moore.com> wrote:
-> On Thu, Jan 27, 2022 at 4:54 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> > I wonder if we could make this all much simpler by *always* doing the
-> > label parsing in selinux_add_opt() and just returning an error when
-> > !selinux_initialized(&selinux_state). Before the new mount API, mount
-> > options were always passed directly to the mount(2) syscall, so it
-> > wasn't possible to pass any SELinux mount options before the SELinux
-> > policy was loaded. I don't see why we need to jump through hoops here
-> > just to support this pseudo-feature of stashing an unparsed label into
-> > an fs_context before policy is loaded... Userspace should never need
-> > to do that.
+On Mon, Jan 31, 2022 at 1:23 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> I could agree with that, although part of my mind is a little nervous
-> about the "userspace should *never* ..." because that always seems to
-> bite us.  Although I'm struggling to think of a case where userspace
-> would need to set explicit SELinux mount options without having a
-> policy loaded.
+> On Sat, Jan 29, 2022 at 08:17:16PM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Let's follow the origin patch's spirit:
+> >
+> > The only difference between rv32_defconfig and defconfig is that
+> > rv32_defconfig has  CONFIG_ARCH_RV32I=y.
+> >
+> > This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
+> >
+> > Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+>
+> Wouldn't a common.config that generats both the 32-bit and 64-bit
+> configs a better idea?
 
-I get that, but IMO this is enough of an odd "use case" that I
-wouldn't worry too much. To be affected by this, someone would need
-to:
-1. Use the new mount API, which:
-    a) doesn't even have man pages yet,
-    b) isn't even used by the mount(8) utility yet.
-2. Call fsconfig(2) with a SELinux mount option before policy is loaded.
-3. Call fsmount(2) with the same fd after policy is loaded.
+I thought that is what the patch does, there is already the normal 64-bit
+defconfig, and the new makefile target makes this shared with 32-bit
+to prevent them from diverging again.
 
-And racing with the policy load doesn't count - that could fail
-randomly with or without the change. I honestly can't imagine any
-realistic scenario where someone would do this...
-
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
-
+        Arnd

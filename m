@@ -2,214 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4314A4ED8
+	by mail.lfdr.de (Postfix) with ESMTP id 45DBE4A4ED7
 	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358212AbiAaSsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357946AbiAaSrx (ORCPT
+        id S1357719AbiAaSsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:48:05 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:59644 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357716AbiAaSro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:47:53 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D2DC06173B;
-        Mon, 31 Jan 2022 10:47:37 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id j2so30170934ybu.0;
-        Mon, 31 Jan 2022 10:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=317J+b5PpSz9x/w2XV3+0c4wYcSD3IlZCWiQWA5Ipxk=;
-        b=eI8S6HU4hdhKI33oB2A77jQ5V2CxkG5J0sRSnPNQRR/LWUgBL44/AI5I8DKXpLtgAk
-         U3PwrJjmLcA//CNKNXw6eUCi7hsWc7xfM6ZvWHSVzdZaO6AonSqjVCxah1otkOsB1fiV
-         rc4oYNGl9hSbQmVH2LA72zjrYXbyTJmvzlodkB7nvGFsfK7ID1KN3R40xBYtv4Q30cVN
-         8jW0eKe7PAMFCwnGKwCzLODuvWtJ8VSf4lEsfr20OOCS2aXyETlK5OnePtwIAx62UmO0
-         MZzcycHt4kZ9O2mBjYD2cpDXOaARyCiN9A05TO0u8LqajMvO8LSm+nf4dhD7InRd7BwA
-         x0aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=317J+b5PpSz9x/w2XV3+0c4wYcSD3IlZCWiQWA5Ipxk=;
-        b=Z1Q6BXvMOG6KBvKe8WtbimM6NI8cDxI17S0HQ2picZPOtLqa2UXh1RHaIrcH+RGv8a
-         mC/JCU6rpxnzE9deUiOrA8do6kApvOIxKTy/GH3O5Nr/nJYGWZRLakrv3LfmvcnfLgEk
-         Qr+H2pqXCfLGCi0bRmP08sowq7p/g7hI3glhtc41VC5Gd+M9tH0K/pplP485hmgpavj+
-         GnP8BhBD4HMIAyHTAqbLawPtOiVaC2f89ABiM5MbGYSyll3P+fxhtGLasRH/RPSKu88t
-         zFgBwd5icBliNuEeBORDpJsCj3eBeQqrCoLva95nzIwHn1IQ23Al6zeTx05TcLDSPetW
-         UPcg==
-X-Gm-Message-State: AOAM530NnspZBtJ+hKJylxPucL3/1LixGiLgkvq+CqdBntm/iTXytrPV
-        /LeDLvdnohrk6LB8feJzQJkqtnEBVhbXj9yxbQY=
-X-Google-Smtp-Source: ABdhPJwarLPQqvXwzoY39z9HgOmm8G1lObZ3heCf+jF3pngw5pMw8uAoV92YPAxkOQa+IkVbXlcm+32aAbpjxHzUAl4=
-X-Received: by 2002:a25:50cf:: with SMTP id e198mr31706710ybb.398.1643654857132;
- Mon, 31 Jan 2022 10:47:37 -0800 (PST)
+        Mon, 31 Jan 2022 13:47:44 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:42370)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nEbiI-00HXSu-1F; Mon, 31 Jan 2022 11:47:43 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:56392 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nEbiG-007mQf-FJ; Mon, 31 Jan 2022 11:47:41 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Denys Vlasenko <vda.linux@googlemail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <liam.howlett@oracle.com>
+References: <20220131153740.2396974-1-willy@infradead.org>
+        <871r0nriy4.fsf@email.froward.int.ebiederm.org>
+        <YfgKw5z2uswzMVRQ@casper.infradead.org>
+        <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+        <YfgPwPvopO1aqcVC@casper.infradead.org>
+        <CAG48ez3MCs8d8hjBfRSQxwUTW3o64iaSwxF=UEVtk+SEme0chQ@mail.gmail.com>
+        <87bkzroica.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Mon, 31 Jan 2022 12:47:34 -0600
+In-Reply-To: <87bkzroica.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Mon, 31 Jan 2022 12:44:53 -0600")
+Message-ID: <87iltzn3nd.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220113150846.1570738-1-rad@semihalf.ocm> <CABBYNZJn1ej18ERtgnF_wvbvBEm0N=cBRHHtr8bu+nfAotjg2Q@mail.gmail.com>
- <CAOs-w0+W_BHTdZkOnu-EPme2dpoO_6bQi_2LRH7Xw0Ge=i9TOA@mail.gmail.com> <CABBYNZLinzOxJWgHwVbeEWe2zkz_y4BrXVYX4e0op580YO1OeA@mail.gmail.com>
-In-Reply-To: <CABBYNZLinzOxJWgHwVbeEWe2zkz_y4BrXVYX4e0op580YO1OeA@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 31 Jan 2022 10:47:26 -0800
-Message-ID: <CABBYNZL3ozczAK2mWXVd+x2NtZhaAbfnUFoA3ot1AQLNHSeL5w@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: Fix skb allocation in mgmt_remote_name()
-To:     =?UTF-8?Q?Rados=C5=82aw_Biernacki?= <rad@semihalf.com>
-Cc:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Miao-chen Chou <mcchou@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        upstream@semihalf.com, Angela Czubak <acz@semihalf.com>,
-        Marek Maslanka <mm@semihalf.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-XM-SPF: eid=1nEbiG-007mQf-FJ;;;mid=<87iltzn3nd.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/oGpZ9UFLzbnQWhkV7XiMYkWr0BtePZic=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_SCC_BODY_TEXT_LINE,T_TooManySym_01,XMNoVowels,
+        XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.7 XMSubLong Long Subject
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Jann Horn <jannh@google.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 547 ms - load_scoreonly_sql: 0.12 (0.0%),
+        signal_user_changed: 11 (1.9%), b_tie_ro: 9 (1.6%), parse: 1.14 (0.2%),
+         extract_message_metadata: 17 (3.0%), get_uri_detail_list: 3.0 (0.6%),
+        tests_pri_-1000: 24 (4.4%), tests_pri_-950: 1.28 (0.2%),
+        tests_pri_-900: 1.08 (0.2%), tests_pri_-90: 77 (14.0%), check_bayes:
+        75 (13.7%), b_tokenize: 21 (3.8%), b_tok_get_all: 12 (2.1%),
+        b_comp_prob: 4.8 (0.9%), b_tok_touch_all: 34 (6.2%), b_finish: 1.00
+        (0.2%), tests_pri_0: 403 (73.7%), check_dkim_signature: 0.69 (0.1%),
+        check_dkim_adsp: 3.6 (0.7%), poll_dns_idle: 0.41 (0.1%), tests_pri_10:
+        1.89 (0.3%), tests_pri_500: 7 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 5/5] coredump: Use the vma snapshot in fill_files_note
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rados=C5=82aw,
 
-On Thu, Jan 13, 2022 at 2:23 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Rados=C5=82aw,
->
-> On Thu, Jan 13, 2022 at 2:07 PM Rados=C5=82aw Biernacki <rad@semihalf.com=
-> wrote:
-> >
-> > Hi Luiz,
-> >
-> > czw., 13 sty 2022 o 17:17 Luiz Augusto von Dentz
-> > <luiz.dentz@gmail.com> napisa=C5=82(a):
-> > >
-> > > Hi Radoslaw,
-> > >
-> > > On Thu, Jan 13, 2022 at 7:09 AM Radoslaw Biernacki <rad@semihalf.com>=
- wrote:
-> > > >
-> > > > From: Radoslaw Biernacki <rad@semihalf.com>
-> > > >
-> > > > This patch fixes skb allocation, as lack of space for ev might push=
- skb
-> > > > tail beyond its end.
-> > > > Also introduce eir_precalc_len() that can be used instead of magic
-> > > > numbers for similar eir operations on skb.
-> > > >
-> > > > Fixes: cf1bce1de7eeb ("Bluetooth: mgmt: Make use of mgmt_send_event=
-_skb in MGMT_EV_DEVICE_FOUND")
-> > > > Signed-off-by: Angela Czubak <acz@semihalf.com>
-> > > > Signed-off-by: Marek Maslanka <mm@semihalf.com>
-> > > > Signed-off-by: Radoslaw Biernacki <rad@semihalf.com>
-> > > > ---
-> > > >  net/bluetooth/eir.h  |  5 +++++
-> > > >  net/bluetooth/mgmt.c | 12 ++++--------
-> > > >  2 files changed, 9 insertions(+), 8 deletions(-)
-> > > >
-> > > > diff --git a/net/bluetooth/eir.h b/net/bluetooth/eir.h
-> > > > index 05e2e917fc25..e5876751f07e 100644
-> > > > --- a/net/bluetooth/eir.h
-> > > > +++ b/net/bluetooth/eir.h
-> > > > @@ -15,6 +15,11 @@ u8 eir_create_scan_rsp(struct hci_dev *hdev, u8 =
-instance, u8 *ptr);
-> > > >  u8 eir_append_local_name(struct hci_dev *hdev, u8 *eir, u8 ad_len)=
-;
-> > > >  u8 eir_append_appearance(struct hci_dev *hdev, u8 *ptr, u8 ad_len)=
-;
-> > > >
-> > > > +static inline u16 eir_precalc_len(u8 data_len)
-> > > > +{
-> > > > +       return sizeof(u8) * 2 + data_len;
-> > > > +}
-> > > > +
-> > > >  static inline u16 eir_append_data(u8 *eir, u16 eir_len, u8 type,
-> > > >                                   u8 *data, u8 data_len)
-> > > >  {
-> > > > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-> > > > index 37087cf7dc5a..d517fd847730 100644
-> > > > --- a/net/bluetooth/mgmt.c
-> > > > +++ b/net/bluetooth/mgmt.c
-> > > > @@ -9680,13 +9680,11 @@ void mgmt_remote_name(struct hci_dev *hdev,=
- bdaddr_t *bdaddr, u8 link_type,
-> > > >  {
-> > > >         struct sk_buff *skb;
-> > > >         struct mgmt_ev_device_found *ev;
-> > > > -       u16 eir_len;
-> > > > -       u32 flags;
-> > > > +       u16 eir_len =3D 0;
-> > > > +       u32 flags =3D 0;
-> > > >
-> > > > -       if (name_len)
-> > > > -               skb =3D mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, =
-2 + name_len);
-> > > > -       else
-> > > > -               skb =3D mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, =
-0);
-> > > > +       skb =3D mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
-> > > > +                            sizeof(*ev) + (name ? eir_precalc_len(=
-name_len) : 0));
-> > >
-> > > Looks like mgmt_device_connected also has a similar problem.
-> >
-> > Yes, I was planning to send a patch to this one though it will not be a=
-s slick.
-> > It would be nice to have a helper which will call skb_put() and add
-> > eir data at once.
-> > Basically skb operation in pair to, what eir_append_data() does with
-> > help of eir_len but without awkwardness when passing return value to
-> > skb_put() (as it returns offset not size).
->
-> Hmm, that might be a good idea indeed something like eir_append_skb,
-> if only we could grow the skb with skb_put directly that would
-> eliminate the problem with having to reserve enough space for the
-> worse case.
->
-> > I will send V2 with two patches. I hope they will align with your
-> > original goal of eliminating the necessity of intermediary buffers at
-> > some point in future.
+Matthew Wilcox reported that there is a missing mmap_lock in
+file_files_note that could possibly lead to a user after free.
 
-Are you still planning to send the v2?
+Solve this by using the existing vma snapshot for consistency
+and to avoid the need to take the mmap_lock anywhere in the
+coredump code except for dump_vma_snapshot.
 
-> > >
-> > > >         ev =3D skb_put(skb, sizeof(*ev));
-> > > >         bacpy(&ev->addr.bdaddr, bdaddr);
-> > > > @@ -9696,10 +9694,8 @@ void mgmt_remote_name(struct hci_dev *hdev, =
-bdaddr_t *bdaddr, u8 link_type,
-> > > >         if (name) {
-> > > >                 eir_len =3D eir_append_data(ev->eir, 0, EIR_NAME_CO=
-MPLETE, name,
-> > > >                                           name_len);
-> > > > -               flags =3D 0;
-> > > >                 skb_put(skb, eir_len);
-> > > >         } else {
-> > > > -               eir_len =3D 0;
-> > > >                 flags =3D MGMT_DEV_FOUND_NAME_REQUEST_FAILED;
-> > > >         }
-> > >
-> > > These changes would leave flags and eir_len uninitialized.
-> >
-> > Both are initialized to 0 by this patch.
->
-> Sorry, I must be blind that I didn't see you had changed that to be
-> initialized in their declaration.
->
-> > >
-> > > > --
-> > > > 2.34.1.703.g22d0c6ccf7-goog
-> > > >
-> > >
-> > >
-> > > --
-> > > Luiz Augusto von Dentz
->
->
->
-> --
-> Luiz Augusto von Dentz
+Update the dump_vma_snapshot to capture vm_pgoff and vm_file
+that are neeeded by fill_files_note.
 
+Add free_vma_snapshot to free the captured values of vm_file.
 
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Link: https://lkml.kernel.org/r/20220131153740.2396974-1-willy@infradead.org
+Cc: stable@vger.kernel.org
+Fixes: a07279c9a8cd ("binfmt_elf, binfmt_elf_fdpic: use a VMA list snapshot")
+Fixes: 2aa362c49c31 ("coredump: extend core dump note section to contain file names of mapped files")
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ fs/binfmt_elf.c          | 19 ++++++++++---------
+ fs/coredump.c            | 22 +++++++++++++++++++++-
+ include/linux/coredump.h |  2 ++
+ 3 files changed, 33 insertions(+), 10 deletions(-)
 
---=20
-Luiz Augusto von Dentz
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 272032b1f9a2..5fcaa01d211e 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1619,14 +1619,14 @@ static void fill_siginfo_note(struct memelfnote *note, user_siginfo_t *csigdata,
+  *   long file_ofs
+  * followed by COUNT filenames in ASCII: "FILE1" NUL "FILE2" NUL...
+  */
+-static int fill_files_note(struct memelfnote *note)
++static int fill_files_note(struct memelfnote *note, struct coredump_params *cprm)
+ {
+ 	struct mm_struct *mm = current->mm;
+-	struct vm_area_struct *vma;
+ 	unsigned count, size, names_ofs, remaining, n;
+ 	user_long_t *data;
+ 	user_long_t *start_end_ofs;
+ 	char *name_base, *name_curpos;
++	int i;
+ 
+ 	/* *Estimated* file count and total data size needed */
+ 	count = mm->map_count;
+@@ -1651,11 +1651,12 @@ static int fill_files_note(struct memelfnote *note)
+ 	name_base = name_curpos = ((char *)data) + names_ofs;
+ 	remaining = size - names_ofs;
+ 	count = 0;
+-	for (vma = mm->mmap; vma != NULL; vma = vma->vm_next) {
++	for (i = 0; i < cprm->vma_count; i++) {
++		struct core_vma_metadata *m = &cprm->vma_meta[i];
+ 		struct file *file;
+ 		const char *filename;
+ 
+-		file = vma->vm_file;
++		file = m->file;
+ 		if (!file)
+ 			continue;
+ 		filename = file_path(file, name_curpos, remaining);
+@@ -1675,9 +1676,9 @@ static int fill_files_note(struct memelfnote *note)
+ 		memmove(name_curpos, filename, n);
+ 		name_curpos += n;
+ 
+-		*start_end_ofs++ = vma->vm_start;
+-		*start_end_ofs++ = vma->vm_end;
+-		*start_end_ofs++ = vma->vm_pgoff;
++		*start_end_ofs++ = m->start;
++		*start_end_ofs++ = m->end;
++		*start_end_ofs++ = m->pgoff;
+ 		count++;
+ 	}
+ 
+@@ -1887,7 +1888,7 @@ static int fill_note_info(struct elfhdr *elf, int phdrs,
+ 	fill_auxv_note(&info->auxv, current->mm);
+ 	info->size += notesize(&info->auxv);
+ 
+-	if (fill_files_note(&info->files) == 0)
++	if (fill_files_note(&info->files, cprm) == 0)
+ 		info->size += notesize(&info->files);
+ 
+ 	return 1;
+@@ -2076,7 +2077,7 @@ static int fill_note_info(struct elfhdr *elf, int phdrs,
+ 	fill_auxv_note(info->notes + 3, current->mm);
+ 	info->numnote = 4;
+ 
+-	if (fill_files_note(info->notes + info->numnote) == 0) {
++	if (fill_files_note(info->notes + info->numnote, cprm) == 0) {
+ 		info->notes_files = info->notes + info->numnote;
+ 		info->numnote++;
+ 	}
+diff --git a/fs/coredump.c b/fs/coredump.c
+index c5e7d63525c6..6a97a8ea7295 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -54,6 +54,7 @@
+ #include <trace/events/sched.h>
+ 
+ static bool dump_vma_snapshot(struct coredump_params *cprm);
++static void free_vma_snapshot(struct coredump_params *cprm);
+ 
+ static int core_uses_pid;
+ static unsigned int core_pipe_limit;
+@@ -764,7 +765,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 			dump_emit(&cprm, "", 1);
+ 		}
+ 		file_end_write(cprm.file);
+-		kvfree(cprm.vma_meta);
++		free_vma_snapshot(&cprm);
+ 	}
+ 	if (ispipe && core_pipe_limit)
+ 		wait_for_dump_helpers(cprm.file);
+@@ -1085,6 +1086,20 @@ static struct vm_area_struct *next_vma(struct vm_area_struct *this_vma,
+ 	return gate_vma;
+ }
+ 
++static void free_vma_snapshot(struct coredump_params *cprm)
++{
++	if (cprm->vma_meta) {
++		int i;
++		for (i = 0; i < cprm->vma_count; i++) {
++			struct file *file = cprm->vma_meta[i].file;
++			if (file)
++				fput(file);
++		}
++		kvfree(cprm->vma_meta);
++		cprm->vma_meta = NULL;
++	}
++}
++
+ /*
+  * Under the mmap_lock, take a snapshot of relevant information about the task's
+  * VMAs.
+@@ -1121,6 +1136,11 @@ static bool dump_vma_snapshot(struct coredump_params *cprm)
+ 		m->end = vma->vm_end;
+ 		m->flags = vma->vm_flags;
+ 		m->dump_size = vma_dump_size(vma, cprm->mm_flags);
++		m->pgoff = vma->vm_pgoff;
++
++		m->file = vma->vm_file;
++		if (m->file)
++			get_file(m->file);
+ 
+ 		cprm->vma_data_size += m->dump_size;
+ 	}
+diff --git a/include/linux/coredump.h b/include/linux/coredump.h
+index 7d05370e555e..08a1d3e7e46d 100644
+--- a/include/linux/coredump.h
++++ b/include/linux/coredump.h
+@@ -12,6 +12,8 @@ struct core_vma_metadata {
+ 	unsigned long start, end;
+ 	unsigned long flags;
+ 	unsigned long dump_size;
++	unsigned long pgoff;
++	struct file   *file;
+ };
+ 
+ struct coredump_params {
+-- 
+2.29.2
+

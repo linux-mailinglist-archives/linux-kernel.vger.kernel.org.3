@@ -2,109 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D7F4A4C8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0E04A4C8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380648AbiAaQxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        id S1380656AbiAaQzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbiAaQxs (ORCPT
+        with ESMTP id S232421AbiAaQzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:53:48 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7994C061714;
-        Mon, 31 Jan 2022 08:53:47 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id AFC5A419BC;
-        Mon, 31 Jan 2022 16:53:38 +0000 (UTC)
-Subject: Re: [PATCH v4 3/9] brcmfmac: firmware: Do not crash on a NULL
- board_type
-To:     Kalle Valo <kvalo@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Stable <stable@vger.kernel.org>
-References: <20220131160713.245637-1-marcan@marcan.st>
- <20220131160713.245637-4-marcan@marcan.st>
- <CAHp75VdgXdYXio8pTDdxsYy-iCXMvVpZM1T6gNmcxo3c1V+uJA@mail.gmail.com>
- <878ruvetpy.fsf@kernel.org>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <c6e1bf98-55d6-1828-f19d-a3e13692da94@marcan.st>
-Date:   Tue, 1 Feb 2022 01:53:36 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 31 Jan 2022 11:55:02 -0500
+X-Greylist: delayed 434 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Jan 2022 08:55:01 PST
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B914BC061714;
+        Mon, 31 Jan 2022 08:55:01 -0800 (PST)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 09D8F1BF204;
+        Mon, 31 Jan 2022 16:54:56 +0000 (UTC)
+From:   quentin.schulz@theobroma-systems.com
+Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Quentin Schulz <foss+kernel@0leil.net>
+Subject: [PATCH] dt-bindings: ltk050h3146w: replace Heiko Stuebner by myself as maintainer
+Date:   Mon, 31 Jan 2022 17:54:39 +0100
+Message-Id: <20220131165439.717713-1-quentin.schulz@theobroma-systems.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <878ruvetpy.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2022 01.49, Kalle Valo wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> 
->> On Mon, Jan 31, 2022 at 6:07 PM Hector Martin <marcan@marcan.st> wrote:
->>>
->>> This unbreaks support for USB devices, which do not have a board_type
->>> to create an alt_path out of and thus were running into a NULL
->>> dereference.
->>
->> ...
->>
->>> @@ -599,6 +599,9 @@ static char *brcm_alt_fw_path(const char *path,
->>> const char *board_type)
->>>         char alt_path[BRCMF_FW_NAME_LEN];
->>>         char suffix[5];
->>>
->>> +       if (!board_type)
->>> +               return NULL;
->>
->> I still think it's better to have both callers do the same thing.
->>
->> Now it will be the double check in one case,
-> 
-> I already applied a similar patch:
-> 
-> https://git.kernel.org/wireless/wireless/c/665408f4c3a5
-> 
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-Feel free to drop this one from the series then, if everything else
-looks good.
+Heiko does not work at Theobroma Systems anymore and the boards using
+those panels are downstream, maintained internally by the company, so
+let's relieve Heiko of maintainership duties.
 
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
+ .../devicetree/bindings/display/panel/leadtek,ltk050h3146w.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/display/panel/leadtek,ltk050h3146w.yaml b/Documentation/devicetree/bindings/display/panel/leadtek,ltk050h3146w.yaml
+index 63d2a00348e9..a40ab887ada7 100644
+--- a/Documentation/devicetree/bindings/display/panel/leadtek,ltk050h3146w.yaml
++++ b/Documentation/devicetree/bindings/display/panel/leadtek,ltk050h3146w.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Leadtek LTK050H3146W 5.0in 720x1280 DSI panel
+ 
+ maintainers:
+-  - Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
++  - Quentin Schulz <quentin.schulz@theobroma-systems.com>
+ 
+ allOf:
+   - $ref: panel-common.yaml#
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.34.1
+

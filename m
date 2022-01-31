@@ -2,216 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B15D94A3E83
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF6F4A3E86
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245439AbiAaINe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 03:13:34 -0500
-Received: from mail-eopbgr80052.outbound.protection.outlook.com ([40.107.8.52]:20296
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230124AbiAaINX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 03:13:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0NnxIL+SQFIPep3WBTtHlDI6JP2df1FwP475e+qiSNU=;
- b=BvI0Guh5e/EEbKNYluEY6EBPr2MmZ25xvtqwLYRblcL1ml3Yco981z696c2hdGuQQeN2XoGSEBMJU637szOoRWKbgqQAzzWlJpuZzW+EuSHERrITKsrQuezwuqGDSMYhmB3U6UsBEy3+RczL46OTxGahAg7uE32307yKgsvNBG4=
-Received: from AM5PR0301CA0028.eurprd03.prod.outlook.com
- (2603:10a6:206:14::41) by AM6PR08MB5543.eurprd08.prod.outlook.com
- (2603:10a6:20b:b5::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 08:13:20 +0000
-Received: from VE1EUR03FT036.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:206:14:cafe::51) by AM5PR0301CA0028.outlook.office365.com
- (2603:10a6:206:14::41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.21 via Frontend
- Transport; Mon, 31 Jan 2022 08:13:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VE1EUR03FT036.mail.protection.outlook.com (10.152.19.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4930.15 via Frontend Transport; Mon, 31 Jan 2022 08:13:19 +0000
-Received: ("Tessian outbound 1f399c739551:v113"); Mon, 31 Jan 2022 08:13:19 +0000
-X-CR-MTA-TID: 64aa7808
-Received: from 27c54c7ad817.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id B320A10A-5BE9-446E-A1EC-668816BF7A8D.1;
-        Mon, 31 Jan 2022 08:13:08 +0000
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 27c54c7ad817.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Mon, 31 Jan 2022 08:13:08 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W875wnnJMdM0KStKQxYOcZ4N6fzFzssHUhbWJdHnml3W0o154xh1376DDFD0Ca8oiThbLf35udGWlPF0l05AdkqCpjnhjhLa4+2om/NbqN537HD/yEvGRp0P7Mznqdg2eOZeyPHRtypZo5IPfFaP/sfLio/ve2j9kBUG7X9rUfi0s2V9HOKDs35xWWy7xsPyJBQUjC+Lacrc4KL6Z4euE+4XYM4qd0zxjDXU5Ygv8eXx+QiJOjmjJ4dbMbv8Wh9Ltd4qWxSiKteTAYE8LRU/pRCchVPaae8eKmaJ167wMBSb+nNnp7IksNC6tztwZS2Oe3pvVftFONruxDll0/BMfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0NnxIL+SQFIPep3WBTtHlDI6JP2df1FwP475e+qiSNU=;
- b=ftgy0r5c01KjWtL3RG2AYN5GcQWdVsZaBaOGBAbMrDKde7U3KxDE7uKoqxIb4yDd0zCZ7/0BlVg60acwrMWAnM7feW1aVuxceQB0vOXD/6f1mLRgzGxUJ+YZ/CsTF9GkyN8opGETmczg8hkoag4evSfNAIesETzOC/H686ohMINhcNlB/pczinty5j3b3ZqZzLlVsbKTIrCtGluFAwYHqHnp/pN5F3b7aMJXBK31dCgcRxr0E24wLwvmxctVoJlaVOl8EgduxRxGZ4JHC52f7HX6y1dVVvUWlBXy/8P/+/b5eQzSi5P07qfWR6tqlYp9O6hUCVji0ddedAQwhqBo9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0NnxIL+SQFIPep3WBTtHlDI6JP2df1FwP475e+qiSNU=;
- b=BvI0Guh5e/EEbKNYluEY6EBPr2MmZ25xvtqwLYRblcL1ml3Yco981z696c2hdGuQQeN2XoGSEBMJU637szOoRWKbgqQAzzWlJpuZzW+EuSHERrITKsrQuezwuqGDSMYhmB3U6UsBEy3+RczL46OTxGahAg7uE32307yKgsvNBG4=
-Received: from AM9PR08MB7276.eurprd08.prod.outlook.com (2603:10a6:20b:437::11)
- by AM9PR08MB6866.eurprd08.prod.outlook.com (2603:10a6:20b:2fc::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Mon, 31 Jan
- 2022 08:13:05 +0000
-Received: from AM9PR08MB7276.eurprd08.prod.outlook.com
- ([fe80::8019:e2fd:66c7:aa4e]) by AM9PR08MB7276.eurprd08.prod.outlook.com
- ([fe80::8019:e2fd:66c7:aa4e%7]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 08:13:05 +0000
-From:   Jianyong Wu <Jianyong.Wu@arm.com>
-To:     Catalin Marinas <Catalin.Marinas@arm.com>,
-        David Hildenbrand <david@redhat.com>
-CC:     Ard Biesheuvel <ardb@kernel.org>, Justin He <Justin.He@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
-Subject: RE: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Thread-Topic: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Thread-Index: AQHX8lbt013/nzm8RUa6mdFr92d9v6xU2ImAgAELwWCAAGL4AIABFwGwgAAjrYCAHXF+gIAAR6QAgAAGaOCAABRIgIAAAXgAgAABfiCAAAIvAIAAAEEAgAFJh/CAAGfSgIAAA0QAgAX/utA=
-Date:   Mon, 31 Jan 2022 08:13:05 +0000
-Message-ID: <AM9PR08MB72760D717ACE24811C4EA221F4259@AM9PR08MB7276.eurprd08.prod.outlook.com>
-References: <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
- <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com>
- <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
- <3e6513f9-77ca-79e5-d185-7e9a11ec7689@redhat.com>
- <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <65fdd873-1f93-56e3-c7a5-98d621c5dbd8@redhat.com>
- <7eb4bc77-c1db-99c4-4c77-ae9ddd159abb@redhat.com>
- <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com> <YfKRVJlWrgluqD9e@arm.com>
-In-Reply-To: <YfKRVJlWrgluqD9e@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ts-tracking-id: 678F4802190FA54E8C0ABFAA24DD1E6F.0
-x-checkrecipientchecked: true
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-MS-Office365-Filtering-Correlation-Id: 11145a12-4c57-4962-fc1b-08d9e4918ada
-x-ms-traffictypediagnostic: AM9PR08MB6866:EE_|VE1EUR03FT036:EE_|AM6PR08MB5543:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR08MB55438A0E946DCDAE4474BEE4F4259@AM6PR08MB5543.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-nodisclaimer: true
-x-ms-oob-tlc-oobclassifiers: OLM:10000;OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: r8rQMinuI3obOb0Sx0lfF8iSUk4GsMVKs89KrfljF85rckEqwo47yih76w3xm1C5xhbF1mPvapDuTFccmbImmojmKuwyRD0LZeEwOoy7WobuI3T0ejl+XvzC0dxaTOzith52RhHjxDhXJqpOEJjCsxSqV4TqkQTEMB0f6sEyurAu6gHvIkUak2TG879ECGvbhLVhhEvggVIS1GfJip3AYIgowroOpJQ1tGCIu5g1PqV5akCrwPDWoWnlrov4o8jpatDh3Rx8m1jJ1rvVYZTUVbU29q9vm6pMI/Fq7/Jb1h8DHh865lQsv0tyJ292keLMm/QcsMLy6I6Qo3KItzWqyfh7/vYsY0DJW7D/SA/sqvimAjMq/Hgm+JuVz3dRqgHqTBib07gzRytRossCNsybYuqB7vWv+MgHNxnR9+f3PBVACKXgwxhCtsnOQteIYuHXFMp1YIz/p/RrUEB9VY0nSdD677mXTfbHyufH6QORH33VIUdnl75+BYvb71U0iOeQug84i1O3SWht3z7uuFQJNihF6HPhZCpt0RtGKgqsPOD8ujMvEPFuV5KiIdbDgmnXNznvurav+q3vcbGNnzYD/9llu7jqIXA9975S3JZYaQoyG68M664YvZMtTeyn16vbmPo6YFw2Z/qPd7tXFvLGqITGMd7CYsT5hUZd3y1lXLdnPFnOXWnO86yjFsZ9klztQfYhlefm/lAHf9ZH6eq4wQ==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB7276.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(508600001)(71200400001)(83380400001)(66476007)(8676002)(76116006)(8936002)(64756008)(66946007)(38100700002)(66556008)(66446008)(7696005)(316002)(9686003)(4326008)(6506007)(122000001)(33656002)(54906003)(2906002)(38070700005)(110136005)(52536014)(5660300002)(86362001)(26005)(53546011)(186003)(20210929001);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S244916AbiAaIOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 03:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbiAaIOe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 03:14:34 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051CCC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 00:14:34 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id c23so23717042wrb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 00:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lg5fXn15IhK+/P0Jol3gdVtWDSJ61JNmTIm53AdAK/k=;
+        b=4LxFmTLwWkrOWwgG1Y6ntsgZWZwAOZTmupyqDvK4IPgpb+py5MNhN7pxL/KokMrVlf
+         kSGOvWlXBPtemE5HkeffCYS2Re5PppgXXfzQsk48zslbf8SQlIh63Rf3QsqpxJikrhYL
+         o1dt/XgbQXVZzEgcdU7izGgVECLtiG9oEeYCP4C8sCjnfl25RxNbMjSwlJu6JJAex5G3
+         Nuj+0VTcBeFR9rjGAD2hxN6RDm3oW18F+sY4Ek0mFp9O5yU1el875WBsr4D60j8UJjqu
+         WUlY4uiH48Y5V2bbTOKUWtik7XEGqcpzhAB/1JNp9KNQh9g9lX3wdTScYLd5DPCpAvuX
+         kkTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lg5fXn15IhK+/P0Jol3gdVtWDSJ61JNmTIm53AdAK/k=;
+        b=xQfaOe1Y36WJgwhEN6Gb6mz8PF0fNnsf2f39iqzUE1hYjzjUr952zKWbVmfwAD8yMZ
+         HHClpVtWsuDGhg/yVeGEWynN1lqNARX3wuF/FARNbfrNAl+iMyxnAvrGpeFUaVVeswI2
+         jv75TSL0CzlbbRULZH2xFanT5Kt+3Y5q5g/4GZEJC0xzCJ0/9sLJ5HDroCHNdvTNSEIb
+         rOp01bpNQwE3YYG6ZhCDlCrEykIGyH7dil5flvpp+t2AC/v7LzQ0BqeUJ47XkTEAYO0d
+         TgUPmYr3ANrGSKEYqRZgQddeKQGLJontP2TQG2c48ci6U9kK2Sa9aVlDqT6D33PNEgDK
+         hdrg==
+X-Gm-Message-State: AOAM530YfmKrbYvjkG0MpNpTiMrkPFGSyaaLTTIXjjBGjmSxwA5wy+Bn
+        kvIllFuTYhDmk62Asbq99utDqg==
+X-Google-Smtp-Source: ABdhPJy9awOmH+YltRFzK9gvP9YhaiAtrC/K76tTgNaBKxk8RftIMPMtOdnzdf/b9O2MQozbECO7tA==
+X-Received: by 2002:a5d:4888:: with SMTP id g8mr16219617wrq.65.1643616872530;
+        Mon, 31 Jan 2022 00:14:32 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id n11sm9959600wms.3.2022.01.31.00.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 00:14:32 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     damien.lemoal@opensource.wdc.com, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2] dt-bindings: convert ata/cortina,gemini-sata-bridge to yaml
+Date:   Mon, 31 Jan 2022 08:14:27 +0000
+Message-Id: <20220131081427.1780897-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6866
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT036.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: fdef300a-e368-4bad-835a-08d9e4918240
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: //d6WeJPBRoKYzCRtDGRUGXzajV2GaCB5obZ23JPig13VLKWD9ScBtxRci27uVzvgY7tnK1nUT36C4WYi8ckYJf8rRmIByj7q1MHSoGsQGeij/gU5WWwjNDVVBW2XgfD9Eev/x+SThfpX1e1v5bBQyi5noLpgCNQ4XflTSShInR1msTZIbPh0WuWVuyx7ojvD8qA2l7s9z2OdCU5ifdzIz9CHeSN3LfUy7NDanC/srfE+sgwHXERuVuHLQ2abjC30HdPRomqYom8KU8JP+TAKKISPOisHIDK+LtwWOyOqvQgZeQ5Y1JVblJywYLoP114us6iNrXVHXXh0ucYH/1Y9PSa5CGDulLWLigVIc/RGVaQ9ODwypZlv8wtLGEJOk49QqKQVY3tzxA48uirg4lKMVVCebu6koVI1Jj6LTyGCAnsLqsQmrZFo7srw2MSavg02pPoSWpMpdOKVQ4HGnR0L2qrZPJI5W2PbfJCV5YU9+tnTiDHbNhjFxReD90nenfs5LozRMc2kOAEm/bBOTi04TorskAVzaWKUXG/cJTgkMNv6RqwhopcC6aJdlmCtctEPvakGjOcDflrVlUM2fLSY31X0xc8ExiFTICwOZgSw/ak6o2zoDiLp3GPcjpK9o/CkBoeuCjHOW+S/YVJYr4T7uSXhFd9BsOJMR3V0uhdlQFKtCD6Qq1fFbKpUEycfxq8
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(83380400001)(186003)(26005)(2906002)(336012)(356005)(40460700003)(86362001)(82310400004)(36860700001)(81166007)(4326008)(5660300002)(9686003)(6506007)(33656002)(55016003)(70586007)(70206006)(8936002)(7696005)(8676002)(508600001)(53546011)(54906003)(110136005)(52536014)(316002)(47076005)(20210929001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 08:13:19.9580
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11145a12-4c57-4962-fc1b-08d9e4918ada
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT036.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB5543
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
+This patch converts ata/cortina,gemini-sata-bridge binding to yaml
 
-> -----Original Message-----
-> From: Catalin Marinas <catalin.marinas@arm.com>
-> Sent: Thursday, January 27, 2022 8:34 PM
-> To: David Hildenbrand <david@redhat.com>
-> Cc: Jianyong Wu <Jianyong.Wu@arm.com>; Ard Biesheuvel
-> <ardb@kernel.org>; Justin He <Justin.He@arm.com>; will@kernel.org;
-> Anshuman Khandual <Anshuman.Khandual@arm.com>; akpm@linux-
-> foundation.org; quic_qiancai@quicinc.com; linux-kernel@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; gshan@redhat.com; nd <nd@arm.com>
-> Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create
-> pud mapping
->=20
-> On Thu, Jan 27, 2022 at 01:22:47PM +0100, David Hildenbrand wrote:
-> > > Yes, system_state can roughly separate these callers of
-> __create_pgd_mapping. When system_state > SYSTEM_BOOTING we can
-> add the lock.
-> > > Thus, I have the following change:
-> > >
-> > > static DEFINE_SPINLOCK(swapper_pgdir_lock);
-> > > +static DEFINE_MUTEX(fixmap_lock);
-> > >
-> > >  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)  { @@ -329,6 +330,8
-> @@
-> > > static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned =
-long
-> end,
-> > >         }
-> > >         BUG_ON(p4d_bad(p4d));
-> > >
-> > > +       if (system_state > SYSTEM_BOOTING)
-> >
-> > As there is nothing smaller than SYSTEM_BOOTING, you can use
-> > 	if (system_state !=3D SYSTEM_BOOTING)
-> >
-> > ...
-> >
-> > >
-> > > It seems work and somehow simper. But I don't know if it is
-> > > reasonable to do this. So, any idea? @Ard Biesheuvel  @Catalin
-> > > Marinas
-> >
-> > It's worth looking at kernel/notifier.c, e.g.,
-> > blocking_notifier_chain_register()
-> >
-> > if (unlikely(system_state =3D=3D SYSTEM_BOOTING))
-> > 	return notifier_chain_register(&nh->head, n);
-> >
-> > down_write(&nh->rwsem);
-> > ret =3D notifier_chain_register(&nh->head, n); up_write(&nh->rwsem);
-> >
-> > If we decide to go down that path, we should make sure to add a
-> > comment like
-> >
-> > /*
-> >  * No need for locking during early boot. And it doesn't work as
-> >  * expected with KASLR enabled where we might clear BSS twice.
-> >  */
->=20
-> A similar approach sounds fine to me.
->=20
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+Change since v1:
+- fixed cosmetic nits reported by Damien Le Moal
 
-OK, I'll send the next version based on David's comments.
+ .../ata/cortina,gemini-sata-bridge.txt        | 55 -----------
+ .../ata/cortina,gemini-sata-bridge.yaml       | 99 +++++++++++++++++++
+ 2 files changed, 99 insertions(+), 55 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
+ create mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
 
-Thanks
-Jianyong
+diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
+deleted file mode 100644
+index 1c3d3cc70051..000000000000
+--- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+-* Cortina Systems Gemini SATA Bridge
+-
+-The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
+-takes two Faraday Technology FTIDE010 PATA controllers and bridges
+-them in different configurations to two SATA ports.
+-
+-Required properties:
+-- compatible: should be
+-  "cortina,gemini-sata-bridge"
+-- reg: registers and size for the block
+-- resets: phandles to the reset lines for both SATA bridges
+-- reset-names: must be "sata0", "sata1"
+-- clocks: phandles to the compulsory peripheral clocks
+-- clock-names: must be "SATA0_PCLK", "SATA1_PCLK"
+-- syscon: a phandle to the global Gemini system controller
+-- cortina,gemini-ata-muxmode: tell the desired multiplexing mode for
+-  the ATA controller and SATA bridges. Values 0..3:
+-  Mode 0: ata0 master <-> sata0
+-          ata1 master <-> sata1
+-          ata0 slave interface brought out on IDE pads
+-  Mode 1: ata0 master <-> sata0
+-          ata1 master <-> sata1
+-          ata1 slave interface brought out on IDE pads
+-  Mode 2: ata1 master <-> sata1
+-          ata1 slave  <-> sata0
+-          ata0 master and slave interfaces brought out
+-               on IDE pads
+-  Mode 3: ata0 master <-> sata0
+-          ata0 slave  <-> sata1
+-          ata1 master and slave interfaces brought out
+-               on IDE pads
+-
+-Optional boolean properties:
+-- cortina,gemini-enable-ide-pins: enables the PATA to IDE connection.
+-  The muxmode setting decides whether ATA0 or ATA1 is brought out,
+-  and whether master, slave or both interfaces get brought out.
+-- cortina,gemini-enable-sata-bridge: enables the PATA to SATA bridge
+-  inside the Gemnini SoC. The Muxmode decides what PATA blocks will
+-  be muxed out and how.
+-
+-Example:
+-
+-sata: sata@46000000 {
+-	compatible = "cortina,gemini-sata-bridge";
+-	reg = <0x46000000 0x100>;
+-	resets = <&rcon 26>, <&rcon 27>;
+-	reset-names = "sata0", "sata1";
+-	clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
+-		 <&gcc GEMINI_CLK_GATE_SATA1>;
+-	clock-names = "SATA0_PCLK", "SATA1_PCLK";
+-	syscon = <&syscon>;
+-	cortina,gemini-ata-muxmode = <3>;
+-	cortina,gemini-enable-ide-pins;
+-	cortina,gemini-enable-sata-bridge;
+-};
+diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+new file mode 100644
+index 000000000000..59ccbc83361c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+@@ -0,0 +1,99 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/ata/cortina,gemini-sata-bridge.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cortina Systems Gemini SATA Bridge
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++
++description: |
++    The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
++    takes two Faraday Technology FTIDE010 PATA controllers and bridges
++    them in different configurations to two SATA ports.
++
++properties:
++  compatible:
++    const: "cortina,gemini-sata-bridge"
++  reg:
++    minItems: 1
++  resets:
++    minItems: 2
++    description: phandles to the reset lines for both SATA bridges
++  reset-names:
++    items:
++      - const: "sata0"
++      - const: "sata1"
++  clocks:
++    minItems: 2
++    description: phandles to the compulsory peripheral clocks
++  clock-names:
++    items:
++      - const: "SATA0_PCLK"
++      - const: "SATA1_PCLK"
++  syscon:
++    minItems: 1
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: a phandle to the global Gemini system controller
++  cortina,gemini-ata-muxmode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum:
++      - 0
++      - 1
++      - 2
++      - 3
++    description: |
++      Tell the desired multiplexing mode for the ATA controller and SATA bridges. Values 0..3:
++      Mode 0: ata0 master <-> sata0
++              ata1 master <-> sata1
++              ata0 slave interface brought out on IDE pads
++      Mode 1: ata0 master <-> sata0
++              ata1 master <-> sata1
++              ata1 slave interface brought out on IDE pads
++      Mode 2: ata1 master <-> sata1
++              ata1 slave  <-> sata0
++              ata0 master and slave interfaces brought out on IDE pads
++      Mode 3: ata0 master <-> sata0
++              ata0 slave  <-> sata1
++              ata1 master and slave interfaces brought out on IDE pads
++
++  cortina,gemini-enable-ide-pins:
++    type: boolean
++    description: Enables the PATA to IDE connection.
++                 The muxmode setting decides whether ATA0 or ATA1 is brought out,
++                 and whether master, slave or both interfaces get brought out.
++  cortina,gemini-enable-sata-bridge:
++    type: boolean
++    description: Enables the PATA to SATA bridge inside the Gemnini SoC.
++                 The Muxmode decides what PATA blocks will be muxed out and how.
++
++required:
++  - clocks
++  - clock-names
++  - cortina,gemini-ata-muxmode
++  - resets
++  - reset-names
++  - compatible
++  - reg
++  - syscon
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/cortina,gemini-clock.h>
++    sata: sata@46000000 {
++      compatible = "cortina,gemini-sata-bridge";
++      reg = <0x46000000 0x100>;
++      resets = <&rcon 26>, <&rcon 27>;
++      reset-names = "sata0", "sata1";
++      clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
++               <&gcc GEMINI_CLK_GATE_SATA1>;
++      clock-names = "SATA0_PCLK", "SATA1_PCLK";
++      syscon = <&syscon>;
++      cortina,gemini-ata-muxmode = <3>;
++      cortina,gemini-enable-ide-pins;
++      cortina,gemini-enable-sata-bridge;
++    };
+-- 
+2.34.1
 
-> --
-> Catalin

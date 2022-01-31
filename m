@@ -2,144 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7F24A4C34
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A034A4C3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380461AbiAaQdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:33:43 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:60944 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350168AbiAaQdd (ORCPT
+        id S1380508AbiAaQed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:34:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37580 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234087AbiAaQeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:33:33 -0500
-Date:   Mon, 31 Jan 2022 17:33:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643646810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=exI5XAnOP3c+SKAPaEnrOM53ifT6P3/UqF4RqlLtsHo=;
-        b=wTex/RCYMinlzrUx+wSeZycFxINruiKY/4y5iOU9OdDqWGF8TeN81vnVSOk5phEQmRN9PU
-        fxA0HTlOuJkErfz+avG2m0phmvDPXXfKu/sSbuA9b6G6oMeJ+/LitLlf5eb8a6SpzkgAob
-        AG12WRMoxNb1EN/zJRoUofOkJwdAcpCH3+7iHLncnV1AtH8pWwkcyxNARBi6xuLoaPBVIH
-        TVQgmdtZTtgnFz1OegMiO44yAYIbcexNd5seP2m822FsVCmLEijeCybtFXh2fFIyAh7stC
-        IeF2YQMQjdeXAk/Yg10l7JhgMTbiDwDsTNYy4O8Zi2NREM38FHYPMOSAtmG0sw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643646810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=exI5XAnOP3c+SKAPaEnrOM53ifT6P3/UqF4RqlLtsHo=;
-        b=CK+gvrtfNmEvHZbcwj3ALRQ6KD6Ty1hnPIDMZgjzNBjnhB5/EpF5Dh/duY7/dDEz0EN4Fa
-        Q4d/WiylN4bubQDg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH 5/5] random: Defer processing of randomness on PREEMPT_RT.
-Message-ID: <YfgPWatDzkn2ozhm@linutronix.de>
-References: <20211207121737.2347312-1-bigeasy@linutronix.de>
- <20211207121737.2347312-6-bigeasy@linutronix.de>
- <CAHmME9q2Yid56ZZ9sBQWjEWEK2B06g3H9KYRwWqExXRoCdbPdA@mail.gmail.com>
- <20211207201037.h46573oa5nfj33xq@linutronix.de>
- <CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com>
- <Yd8Ujw4t8DKYuhZK@linutronix.de>
- <CAHmME9oXSx4JS0ZJeZTb7VC3gXoackuH389V9FDknHf_-rDJyA@mail.gmail.com>
+        Mon, 31 Jan 2022 11:34:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F6D4B82BA1;
+        Mon, 31 Jan 2022 16:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D037C340EE;
+        Mon, 31 Jan 2022 16:34:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643646869;
+        bh=iUPEf5V4PpA5R8OvwYP58mWshnJmeklBvgOMRATEx9o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wva8EIbvnpW8cJPrNOPi+vyyASSZjyTjskajx/dF10/n8F3bIGaVKIiaGLS/dIiVF
+         +NaVLElqlW7pXYo3Ml8/CRm6lErj2lAS3OtI+fZvRHOPpRpT3Wrsf5ZADohL28FVfC
+         avygLh9k4T1iLF5gEuyiIxxPiYLP4KEFI8RADcoo=
+Date:   Mon, 31 Jan 2022 17:34:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH v6 02/35] component: Introduce the aggregate bus_type
+Message-ID: <YfgPkliOLorgXwVE@kroah.com>
+References: <20220127200141.1295328-1-swboyd@chromium.org>
+ <20220127200141.1295328-3-swboyd@chromium.org>
+ <YffoqgmeUdxZ56zB@kroah.com>
+ <CAKMK7uFYyQ9siB5ENHku+yVPWWM1H=TEn-NZofEKqpJnuEvMmw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAHmME9oXSx4JS0ZJeZTb7VC3gXoackuH389V9FDknHf_-rDJyA@mail.gmail.com>
+In-Reply-To: <CAKMK7uFYyQ9siB5ENHku+yVPWWM1H=TEn-NZofEKqpJnuEvMmw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-30 23:55:09 [+0100], Jason A. Donenfeld wrote:
-> Hey Sebastian,
-Hi,
+On Mon, Jan 31, 2022 at 04:15:09PM +0100, Daniel Vetter wrote:
+> On Mon, Jan 31, 2022 at 2:48 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Jan 27, 2022 at 12:01:08PM -0800, Stephen Boyd wrote:
+> > > The component framework only provides 'bind' and 'unbind' callbacks to
+> > > tell the host driver that it is time to assemble the aggregate driver
+> > > now that all the components have probed. The component framework doesn't
+> > > attempt to resolve runtime PM or suspend/resume ordering, and explicitly
+> > > mentions this in the code. This lack of support leads to some pretty
+> > > gnarly usages of the 'prepare' and 'complete' power management hooks in
+> > > drivers that host the aggregate device, and it fully breaks down when
+> > > faced with ordering shutdown between the various components, the
+> > > aggregate driver, and the host driver that registers the whole thing.
+> > >
+> > > In a concrete example, the MSM display driver at drivers/gpu/drm/msm is
+> > > using 'prepare' and 'complete' to call the drm helpers
+> > > drm_mode_config_helper_suspend() and drm_mode_config_helper_resume()
+> > > respectively, so that it can move the aggregate driver suspend/resume
+> > > callbacks to be before and after the components that make up the drm
+> > > device call any suspend/resume hooks they have. This only works as long
+> > > as the component devices don't do anything in their own 'prepare' and
+> > > 'complete' callbacks. If they did, then the ordering would be incorrect
+> > > and we would be doing something in the component drivers before the
+> > > aggregate driver could do anything. Yuck!
+> > >
+> > > Similarly, when trying to add shutdown support to the MSM driver we run
+> > > across a problem where we're trying to shutdown the drm device via
+> > > drm_atomic_helper_shutdown(), but some of the devices in the encoder
+> > > chain have already been shutdown. This time, the component devices
+> > > aren't the problem (although they could be if they did anything in their
+> > > shutdown callbacks), but there's a DSI to eDP bridge in the encoder
+> > > chain that has already been shutdown before the driver hosting the
+> > > aggregate device runs shutdown. The ordering of driver probe is like
+> > > this:
+> > >
+> > >  1. msm_pdev_probe() (host driver)
+> > >  2. DSI bridge
+> > >  3. aggregate bind
+> > >
+> > > When it comes to shutdown we have this order:
+> > >
+> > >  1. DSI bridge
+> > >  2. msm_pdev_shutdown() (host driver)
+> > >
+> > > and so the bridge is already off, but we want to communicate to it to
+> > > turn things off on the display during msm_pdev_shutdown(). Double yuck!
+> > > Unfortunately, this time we can't split shutdown into multiple phases
+> > > and swap msm_pdev_shutdown() with the DSI bridge.
+> > >
+> > > Let's make the component_master_ops into an actual device driver that has
+> > > probe/remove/shutdown functions. The driver will only be bound to the
+> > > aggregate device once all component drivers have called component_add()
+> > > to indicate they're ready to assemble the aggregate driver. This allows
+> > > us to attach shutdown logic (and in the future runtime PM logic) to the
+> > > aggregate driver so that it runs the hooks in the correct order.
+> >
+> > I know I asked before, but I can not remember the answer.
+> >
+> > This really looks like it is turning into the aux bus code.  Why can't
+> > you just use that instead here for this type of thing?  You are creating
+> > another bus and drivers for that bus that are "fake" which is great, but
+> > that's what the aux bus code was supposed to help out with, so we
+> > wouldn't have to write more of these.
+> >
+> > So, if this really is different, can you document it here so I remember
+> > next time you resend this patch series?
+> 
+> aux takes a device and splits it into a lot of sub-devices, each with
+> their own driver.
+> 
+> This takes a pile of devices, and turns it into a single logical
+> device with a single driver.
+> 
+> So aux is 1:N, component is N:1.
+> 
+> And yes you asked this already, I typed this up already :-)
 
-> I spent the weekend thinking about this some more. I'm actually
-> warming up a bit to the general approach of the original solution
-> here, though still have questions. To summarize my understanding of
-> where we are:
->=20
-> Alternative solution we've been discussing:
-> - Replace spinlock_t with raw spinlocks.
-> - Ratelimit userspace-triggered latency inducing ioctls with
-> ratelimit() and an additional mutex of sorts.
-> - Result: pretty much the same structure we have now, but with some
-> added protection for PREEMPT_RT.
->=20
-> Your original solution:
-> - Absorb into the fast pool during the actual IRQ, but never dump it
-> into the main pool (nor fast load into the crng directly if
-> crng_init=3D=3D0) from the hard irq.
-> - Instead, have irq_thread() check to see if the calling CPU's fast
-> pool is >=3D 64, and if so, dump it into the main pool (or fast load
-> into the crng directly if crng_init=3D=3D0).
->=20
-> I have two questions about the implications of your original solution:
->=20
-> 1) How often does irq_thread() run? With what we have now, we dump the
+Ok, thanks.  But then why is a bus needed if there's a single driver?
+I guess a bus for that driver?  So one bus, one driver, and one device?
 
-Mostly every interrupt gets threaded. After the primary handler (the
-in hard irq) was invoked, the threaded handler gets woken up. The
-threaded handler runs before the primary can run again.
-Not every interrupt gets threaded. For instance interrupts that are not
-threaded are marked as TIMER, PER_CPU, ONESHOT and NO_THREAD.
-So on a system with 4 CPUs you can move all peripheral interrupts to
-CPU0 leaving CPU1-3 with TIMER interrupts only. In that case, there
-would be no irq_thread() invocations on CPU1-3.
+I think we need better documentation here...
 
-> fast pool into the main pool at exactly 64 events. With what you're
-> proposing, we're now in >=3D 64 territory. How do we conceptualize how
-> far beyond 64 it's likely to grow before irq_thread() does something?
+thanks,
 
-in theory on a busy RT system (on the previously mentioned one) you
-could process all HW interrupts (on CPU0) and wake interrupt threads but
-the threads are blocked by a user task (the user land task has a higher
-priority than the interrupt thread). In that time further HW interrupts
-can trigger on CPU0 for the non-threaded interrupts like the timer
-interrupt.
-
-> Is it easy to make guarantees like, "at most, probably around 17"? Or
-> is it potentially unbounded? Growing beyond isn't actually necessarily
-> a bad thing, but it could potentially *slow* the collection of
-> entropy. That probably matters more in the crng_init=3D=3D0 mode, where
-> we're just desperate to get whatever we can as fast as we can. But
-> depending on how large that is, it could matter for the main case too.
-> Having some handle on the latency added here would be helpful for
-> thinking about this.
-
-I have a bigger system which has only network and SATA and here:
-PREEMPT, unpatched
-[   10.545739] random: crng init done
-[   10.549548] random: 7 urandom warning(s) missed due to ratelimiting
-
-PREEMPT_RT, patched
-[   11.884035] random: crng init done
-[   11.884037] random: 7 urandom warning(s) missed due to ratelimiting
-
-just from two boots, no real testing. I wouldn't even mention this as a
-problem during boot-up.
-
-> 2) If we went with this solution, I think I'd prefer to actually do it
-> unconditionally, for PREEMPT_RT=3Dy and PREEMPT_RT=3Dn. It's easier to
-> track how this thing works if the state machine always works in one
-> way instead of two. It also makes thinking about performance margins
-> for the various components easier if there's only one way used. Do you
-> see any downsides in doing this unconditionally?
-
-On !PREEMPT_RT you need to specify `threadirq` on the kernel command
-line to enable threaded interrupts which are otherwise force-enabled on
-PREEMPT_RT. To compensate for that, we would need something as backup.
-Say a time or so=E2=80=A6
-
-> Regards,
-> Jason
-
-Sebastian
+greg k-h

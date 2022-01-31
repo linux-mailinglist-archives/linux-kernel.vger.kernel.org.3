@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F474A42B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9834A454F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376727AbiAaLNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:13:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57144 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377223AbiAaLJt (ORCPT
+        id S1379588AbiAaLjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378759AbiAaL3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:09:49 -0500
+        Mon, 31 Jan 2022 06:29:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38438C0613EC;
+        Mon, 31 Jan 2022 03:18:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD382B82A4C;
-        Mon, 31 Jan 2022 11:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFED7C340E8;
-        Mon, 31 Jan 2022 11:09:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFF7BB82A60;
+        Mon, 31 Jan 2022 11:18:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9A2C340E8;
+        Mon, 31 Jan 2022 11:18:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627387;
-        bh=GRxFcrspBDZRFlASEt8oRRx66DaP085lVTs5yNE/Bvk=;
+        s=korg; t=1643627899;
+        bh=Qaq1eYmEKuHp4EfSym8gVoXa+XNpJfoIhWl2rY8NBjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aMhjUnZAyimGGAEzcEq4Wcs5Cym+Ruo6KsxNzDtVbq/AfKOZ5yefxzQGEu9lRdUuz
-         Bhg6JehVkqF1XxaZRH0mOZ4dF5ucqI90hG6ATi+OzcdNXmQ/5Ypp/3n53A2IASCk3q
-         dkyUBf8eYB8nmRJosAxZB1HYFvKNTOaeB5Y+L6nM=
+        b=CJjMNZvwB5fsqVMFDwGusrHQGDDJXxJgUZUzBEb6OIKeDfcEIZVVTOWbsqN9PqIKW
+         3xyTTQfy5GwvJRN9jwFvKwKEUkRN0xl+HoN86gQzSyglbpoA+6TdLawKd9OFGvJ9X9
+         B3bUYoTkjSejnhrdmBVTPSLlAoAsIyKgc/tgEtuc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan van der Ster <dan@vanderster.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 5.15 024/171] ceph: set pool_ns in new inode layout for async creates
-Date:   Mon, 31 Jan 2022 11:54:49 +0100
-Message-Id: <20220131105230.842077669@linuxfoundation.org>
+        stable@vger.kernel.org, butt3rflyh4ck <butterflyhuangxx@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>
+Subject: [PATCH 5.16 027/200] udf: Fix NULL ptr deref when converting from inline format
+Date:   Mon, 31 Jan 2022 11:54:50 +0100
+Message-Id: <20220131105234.484099734@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,52 +48,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Layton <jlayton@kernel.org>
+From: Jan Kara <jack@suse.cz>
 
-commit 4584a768f22b7669cdebabc911543621ac661341 upstream.
+commit 7fc3b7c2981bbd1047916ade327beccb90994eee upstream.
 
-Dan reported that he was unable to write to files that had been
-asynchronously created when the client's OSD caps are restricted to a
-particular namespace.
+udf_expand_file_adinicb() calls directly ->writepage to write data
+expanded into a page. This however misses to setup inode for writeback
+properly and so we can crash on inode->i_wb dereference when submitting
+page for IO like:
 
-The issue is that the layout for the new inode is only partially being
-filled. Ensure that we populate the pool_ns_data and pool_ns_len in the
-iinfo before calling ceph_fill_inode.
+  BUG: kernel NULL pointer dereference, address: 0000000000000158
+  #PF: supervisor read access in kernel mode
+...
+  <TASK>
+  __folio_start_writeback+0x2ac/0x350
+  __block_write_full_page+0x37d/0x490
+  udf_expand_file_adinicb+0x255/0x400 [udf]
+  udf_file_write_iter+0xbe/0x1b0 [udf]
+  new_sync_write+0x125/0x1c0
+  vfs_write+0x28e/0x400
 
-Cc: stable@vger.kernel.org
-URL: https://tracker.ceph.com/issues/54013
-Fixes: 9a8d03ca2e2c ("ceph: attempt to do async create when possible")
-Reported-by: Dan van der Ster <dan@vanderster.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Reviewed-by: Ilya Dryomov <idryomov@gmail.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+Fix the problem by marking the page dirty and going through the standard
+writeback path to write the page. Strictly speaking we would not even
+have to write the page but we want to catch e.g. ENOSPC errors early.
+
+Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
+CC: stable@vger.kernel.org
+Fixes: 52ebea749aae ("writeback: make backing_dev_info host cgroup-specific bdi_writebacks")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/file.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/udf/inode.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -577,6 +577,7 @@ static int ceph_finish_async_create(stru
- 	struct ceph_inode_info *ci = ceph_inode(dir);
- 	struct inode *inode;
- 	struct timespec64 now;
-+	struct ceph_string *pool_ns;
- 	struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(dir->i_sb);
- 	struct ceph_vino vino = { .ino = req->r_deleg_ino,
- 				  .snap = CEPH_NOSNAP };
-@@ -626,6 +627,12 @@ static int ceph_finish_async_create(stru
- 	in.max_size = cpu_to_le64(lo->stripe_unit);
+--- a/fs/udf/inode.c
++++ b/fs/udf/inode.c
+@@ -258,10 +258,6 @@ int udf_expand_file_adinicb(struct inode
+ 	char *kaddr;
+ 	struct udf_inode_info *iinfo = UDF_I(inode);
+ 	int err;
+-	struct writeback_control udf_wbc = {
+-		.sync_mode = WB_SYNC_NONE,
+-		.nr_to_write = 1,
+-	};
  
- 	ceph_file_layout_to_legacy(lo, &in.layout);
-+	/* lo is private, so pool_ns can't change */
-+	pool_ns = rcu_dereference_raw(lo->pool_ns);
-+	if (pool_ns) {
-+		iinfo.pool_ns_len = pool_ns->len;
-+		iinfo.pool_ns_data = pool_ns->str;
-+	}
- 
- 	down_read(&mdsc->snap_rwsem);
- 	ret = ceph_fill_inode(inode, NULL, &iinfo, NULL, req->r_session,
+ 	WARN_ON_ONCE(!inode_is_locked(inode));
+ 	if (!iinfo->i_lenAlloc) {
+@@ -305,8 +301,10 @@ int udf_expand_file_adinicb(struct inode
+ 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
+ 	/* from now on we have normal address_space methods */
+ 	inode->i_data.a_ops = &udf_aops;
++	set_page_dirty(page);
++	unlock_page(page);
+ 	up_write(&iinfo->i_data_sem);
+-	err = inode->i_data.a_ops->writepage(page, &udf_wbc);
++	err = filemap_fdatawrite(inode->i_mapping);
+ 	if (err) {
+ 		/* Restore everything back so that we don't lose data... */
+ 		lock_page(page);
 
 

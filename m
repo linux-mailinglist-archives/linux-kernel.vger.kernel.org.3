@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A704A4CB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910F14A4CBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380696AbiAaRGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:06:44 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4576 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbiAaRGl (ORCPT
+        id S1380711AbiAaRHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:07:25 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55928 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236802AbiAaRHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:06:41 -0500
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JnZBT0rMfz67Pf9;
-        Tue,  1 Feb 2022 01:02:57 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Mon, 31 Jan 2022 18:06:39 +0100
-Received: from [10.47.91.239] (10.47.91.239) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 31 Jan
- 2022 17:06:39 +0000
-Subject: Re: [PATCH] iommu/amd: Fix loop timeout issue in
- iommu_ga_log_enable()
-To:     Joerg Roedel <joro@8bytes.org>, <iommu@lists.linux-foundation.org>
-CC:     Joerg Roedel <jroedel@suse.de>, <linux-kernel@vger.kernel.org>,
-        "Maxim Levitsky" <mlevitsk@redhat.com>,
-        Will Deacon <will@kernel.org>
-References: <20220131161749.4021-1-joro@8bytes.org>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <48a674ae-f5cd-fc06-4505-6d863e6dad69@huawei.com>
-Date:   Mon, 31 Jan 2022 17:06:03 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 31 Jan 2022 12:07:21 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20VH7Dgx004911;
+        Mon, 31 Jan 2022 11:07:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643648833;
+        bh=Y5ubGFQwLXLIAyG1M+qn3V/jyqUuK8grcewfac8oAY0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LDSh9FNE7lpjO8sCs0kzIK2xu2bRRwNoNh+4h8htvrrewZ7pvXC/k8hdr/WHidiwV
+         8/Kp/kdvjE5tKJ9OWB28FdSxQuKsLFBYxrByVdUj57/NhMeFQHZwp2tDPG104EHRu4
+         Kyf6PW8/xL7RYv//A6yQLgSij7ZSrO0RkOpCmESI=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20VH7DmI035872
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Jan 2022 11:07:13 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 31
+ Jan 2022 11:07:12 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 31 Jan 2022 11:07:12 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20VH7BXX075932;
+        Mon, 31 Jan 2022 11:07:12 -0600
+Date:   Mon, 31 Jan 2022 22:37:11 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takahiro Kuwano <tkuw584924@gmail.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
+Message-ID: <20220131170711.ydydtx3jeu3fl7pu@ti.com>
+References: <20220131114508.1028306-1-p.yadav@ti.com>
+ <YffqNEzjIkApR1HS@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20220131161749.4021-1-joro@8bytes.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.239]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YffqNEzjIkApR1HS@sirena.org.uk>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2022 16:17, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
+On 31/01/22 01:55PM, Mark Brown wrote:
+> On Mon, Jan 31, 2022 at 05:15:08PM +0530, Pratyush Yadav wrote:
+> > The buffers passed in the data phase must be DMA-able. Programmers often
+> > don't realise this requirement and pass in buffers that reside on the
+> > stack. This can be hard to spot when reviewing code. Reject ops if their
+> > data buffer is on the stack to avoid this.
 > 
-> The polling loop for the register change in iommu_ga_log_enable() needs
-> to have a udelay() in it.  Otherwise the CPU might be faster than the
-> IOMMU hardware and wrongly trigger the WARN_ON() further down the code
-> stream.
+> Acked-by: Mark Brown <broonie@kernel.org>
+
+Thanks. But seems like this is breaking build on arm-socfpga_defconfig. 
+Let me take a look into it.
+
 > 
-> Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
-> ---
->   drivers/iommu/amd/init.c | 1 +
->   1 file changed, 1 insertion(+)
+> > +	/* Buffers must be DMA-able. */
+> > +	if (op->data.dir == SPI_MEM_DATA_IN &&
+> > +	    object_is_on_stack(op->data.buf.in))
 > 
-> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-> index dc338acf3338..d2e09d53851f 100644
-> --- a/drivers/iommu/amd/init.c
-> +++ b/drivers/iommu/amd/init.c
-> @@ -834,6 +834,7 @@ static int iommu_ga_log_enable(struct amd_iommu *iommu)
->   		status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
->   		if (status & (MMIO_STATUS_GALOG_RUN_MASK))
->   			break;
-> +		udelay(1);
+> Might be worth a WARN_ON_ONCE() for debuggability?
 
-Maybe readl_relaxed_poll_timeout_atomic() could be used instead
+Okay, I'll add it.
 
-Thanks,
-John
-
->   	}
->   
->   	if (WARN_ON(i >= LOOP_TIMEOUT))
-> 
-
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

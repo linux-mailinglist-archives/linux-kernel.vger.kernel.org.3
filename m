@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EFB4A4934
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E7D4A4937
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiAaOTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:19:54 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:33266 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiAaOTs (ORCPT
+        id S232447AbiAaOWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 09:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231178AbiAaOWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:19:48 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id 72AFF1F43400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643638782;
-        bh=zLq+h2tZmgDHu03aJieo+9a+SBgp6ZkVG1IliN7+T00=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HXQz65hCvY9bYz8XKigKybbauo1roR4Gpy6vWmZ0gg/JcIkQNIonWTYmzrvchsUh6
-         vExlgOOLT7qrog05GTZA+nWclIkA8xtNVw5vbad/goid6fNpDQ3KFvfsiwjlKRCUQc
-         4StIbeVfqOR2bSgmXUZi7Q2CDvI6N0A2zN5Q4ao5vA6gw/Qse/CMEKeVH4uxgDVkBA
-         cGs1RePfA6WC5eJNMsrJVk4D+3LsF+qItYH/msK6Caz9yu4V/nafHBlVarOPhY8+Vg
-         pC1rzQgfRVAJ19eGHWgQic9n08TVmouYfbUhxY/Jf0B6GHDs1UZe4kzCEJLjTHqk6u
-         qWS4MLmDJDZoA==
-Message-ID: <094b3a2d-0829-c34c-3a3d-e9639095f469@collabora.com>
-Date:   Mon, 31 Jan 2022 14:19:40 +0000
+        Mon, 31 Jan 2022 09:22:21 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9575C061714;
+        Mon, 31 Jan 2022 06:22:20 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id u15so25765714wrt.3;
+        Mon, 31 Jan 2022 06:22:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=epZCgtRDGQmeZnI22oh+prdRoR4meGsNZ1G4F0nBuuM=;
+        b=D8nxhTyhA1svClYRBCifjcmjBPll4xh40nG3vU02PFtBqk2yUXb/MvUBspIM1OuylZ
+         3bTbr6L8ip2wkWPSfmWnnwhkaFk1CaBH0b8g2ezphXwayKDkK0TS5x65zFnoJF++MRCp
+         dfox9M9sk7kKE5RFfi0RxOYGrsRKYsihBIz4mJdtvhe4j+P6AIOwrEKJRXVeTs60KN94
+         URBWNdcSmgOPX+d/Oy6GEZGBt2gpI7gOpoQRTtSsosiLdWqI+rXi1Hu4ofrfpBIwYWyn
+         q+I34GPwIQ6ABk7Lwg9qwMpP+PY574gwxiLXS1uOro5p9xGisaHcpmsRmSNYBPCqhbfM
+         Ogdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=epZCgtRDGQmeZnI22oh+prdRoR4meGsNZ1G4F0nBuuM=;
+        b=BhRbtUWHFDnZ4n1psJAAoHJi+CbsIIzFf9JHolljKb3owl4LhH1wIBd1TWxiKmX9dO
+         282qmkfI1O6P2HyFqXryGL+78L+OOXk8MHPDzb/8N5INJol/wnyGM1Jb291Jydh3S+O0
+         ooVVc4XUYhlxibWnH/eqJsTTfQ27/vyfbwM4Ovriti9lvzXKtN9tVGln4GIE0LYWkkf+
+         WDOgul39b/dZksrldTw4l6XN6ykFS9QbiXO9Wep1hKZoNsm7XTtKIEzX9DYkJ3RnXea4
+         eRIpw1aoeTPPMhJilnqQM+T4kmyNm18TgxRndFgjzYK0c9n6KteD4c1dzgl/CF9Mb5QR
+         W+9Q==
+X-Gm-Message-State: AOAM5316PgrdEX9h3WKGpGbJY2tCdItIvwH1RVKeEIUCITlrPgpgi8Oo
+        rZklhVuKbxq8Z0A0RVL1o6QGjz+Ptoc=
+X-Google-Smtp-Source: ABdhPJwt2j3IKptHM8KFnTXa7Q1gjquSm9HfdHDFX0qMW9IQNq16gP60qpMuzW4XbuggwI3v5BVQKQ==
+X-Received: by 2002:a5d:60c5:: with SMTP id x5mr17551684wrt.376.1643638938993;
+        Mon, 31 Jan 2022 06:22:18 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id y3sm13619535wry.109.2022.01.31.06.22.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 06:22:18 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <8396dda5-d82c-8b5d-f94e-28ba84ec422d@redhat.com>
+Date:   Mon, 31 Jan 2022 15:22:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [Intel-gfx] [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
+Subject: Re: [PATCH] kvm: Move KVM_GET_XSAVE2 IOCTL definition at the end of
+ kvm.h
 Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
-        <thomas_os@shipmail.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Matthew Auld <matthew.auld@intel.com>
-References: <20220125193530.3272386-1-bob.beckett@collabora.com>
- <20220125193530.3272386-2-bob.beckett@collabora.com>
- <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
- <19bf8290-9308-b5c6-eb73-4020fa81aa66@collabora.com>
- <ce91e091-0df1-5c4d-a070-7b82d74d3f42@shipmail.org>
-From:   Robert Beckett <bob.beckett@collabora.com>
-In-Reply-To: <ce91e091-0df1-5c4d-a070-7b82d74d3f42@shipmail.org>
+To:     Janosch Frank <frankja@linux.ibm.com>, linux-kernel@vger.kernel.org
+Cc:     kvm@vger.kernel.org, guang.zeng@intel.com, jing2.liu@intel.com,
+        kevin.tian@intel.com, seanjc@google.com, tglx@linutronix.de,
+        wei.w.wang@intel.com, yang.zhong@intel.com
+References: <20220128154025.102666-1-frankja@linux.ibm.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220128154025.102666-1-frankja@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27/01/2022 09:37, Thomas Hellström (Intel) wrote:
+On 1/28/22 16:40, Janosch Frank wrote:
+> This way we can more easily find the next free IOCTL number when
+> adding new IOCTLs.
 > 
-> On 1/26/22 18:11, Robert Beckett wrote:
->>
->>
->> On 26/01/2022 13:49, Thomas Hellström (Intel) wrote:
->>>
->>> On 1/25/22 20:35, Robert Beckett wrote:
->>>> From: Ramalingam C <ramalingam.c@intel.com>
->>>>
->>>> Add a new platform flag, needs_compact_pt, to mark the requirement of
->>>> compact pt layout support for the ppGTT when using 64K GTT pages.
->>>>
->>>> With this flag has_64k_pages will only indicate requirement of 64K
->>>> GTT page sizes or larger for device local memory access.
->>>>
->>>> Suggested-by: Matthew Auld <matthew.auld@intel.com>
->>>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
->>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->>>> ---
->>>>   drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
->>>>   drivers/gpu/drm/i915/i915_pci.c          |  2 ++
->>>>   drivers/gpu/drm/i915/intel_device_info.h |  1 +
->>>>   3 files changed, 10 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/i915/i915_drv.h 
->>>> b/drivers/gpu/drm/i915/i915_drv.h
->>>> index 44c1f98144b4..1258b7779705 100644
->>>> --- a/drivers/gpu/drm/i915/i915_drv.h
->>>> +++ b/drivers/gpu/drm/i915/i915_drv.h
->>>> @@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct drm_i915_private 
->>>> *i915,
->>>>   /*
->>>>    * Set this flag, when platform requires 64K GTT page sizes or 
->>>> larger for
->>>> - * device local memory access. Also this flag implies that we 
->>>> require or
->>>> - * at least support the compact PT layout for the ppGTT when using 
->>>> the 64K
->>>> - * GTT pages.
->>>
->>> Why do we remove these comment lines?
->> Because HAS_64K_PAGES now means just 64K page, it no longer means also 
->> requires compact pt.
->> This is to support other products that will have 64K but not have the 
->> PDE non-sharing restriction in future.
->>
->> Those lines moved to the next change NEEDS_COMPACT_PT, which is now 
->> separate.
+> Fixes: be50b2065dfa ("kvm: x86: Add support for getting/setting expanded xstate buffer")
+> Signed-off-by: Janosch Frank <frankja@linux.ibm.com>
+> ---
+>   include/uapi/linux/kvm.h | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> Yes, NEEDS_COMPACT_PT indicates that compact is *required* but does 
-> "HAS_64K_PAGES" still mean compact is supported? That information is lost.
-Not any more.
-I discussed the ambiguity of the original wording with mauld on irc.
-We came to the conclusion that HAS_64K_PAGES should mean just that, that 
-the hw has support for 64K pages, and says nothing about compact-pt at all.
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 9563d294f181..efe81fef25eb 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1623,9 +1623,6 @@ struct kvm_enc_region {
+>   #define KVM_S390_NORMAL_RESET	_IO(KVMIO,   0xc3)
+>   #define KVM_S390_CLEAR_RESET	_IO(KVMIO,   0xc4)
+>   
+> -/* Available with KVM_CAP_XSAVE2 */
+> -#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
+> -
+>   struct kvm_s390_pv_sec_parm {
+>   	__u64 origin;
+>   	__u64 length;
+> @@ -2047,4 +2044,7 @@ struct kvm_stats_desc {
+>   
+>   #define KVM_GET_STATS_FD  _IO(KVMIO,  0xce)
+>   
+> +/* Available with KVM_CAP_XSAVE2 */
+> +#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
+> +
+>   #endif /* __LINUX_KVM_H */
 
-NEEDS_COMPACT_PT means that the hw has compact-pt support and the driver 
-is required to use it as it is a hw limitation.
-
-There will be other devices that can support compact-pt but do not 
-mandate its use. In this case, the current code would not use them, but 
-there is potential for some future opportunistic use of that in the 
-driver if desired (currently expected to include accelerated 
-move/clear). If any opportunistic use is added to the driver, a new flag 
-can be added along with the code that uses it to indicate compact-pt 
-availability that is not mandatory (HAS_COMPACT_PT most likely), but as 
-there is no code requiring it currently it should not be added yet, and 
-the comments left as this patch does.
-
-> 
-> /Thomas
-> 
-> 
+Queued, thanks.

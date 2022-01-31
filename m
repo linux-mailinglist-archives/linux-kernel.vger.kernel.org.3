@@ -2,140 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A06A4A4BFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 998824A4BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236516AbiAaQ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380451AbiAaQ17 (ORCPT
+        id S1380312AbiAaQ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:26:24 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:48490 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236485AbiAaQ0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:27:59 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F44C06173E;
-        Mon, 31 Jan 2022 08:27:37 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id j2so44245003ejk.6;
-        Mon, 31 Jan 2022 08:27:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dZOePB9QjNAYiNKauHeirK5pevUoAsv4ueKQKshpJRQ=;
-        b=hGHagcalOH44drGxxD/MoK2ikGX9zfIpfchIap8oo/rceJSg+nq+21ioGi065pAh5r
-         ADeLZw54l/wVIzekDoI6t50DWHGfx3qsIg7xzRYPTcffLU8sJCLVNpEbT4uNznCORRlA
-         LKU89jp5E3jc3XllI++4zxlXcqyupEk5mr++4uh92JAv/s3/EZzSEtKbmlOq+bXRXiVn
-         3tYAqa2l3m4aoLvEmo3d4GCOnNWWfPERGJeTTovaUv2uxt6zAFuyxzOyNks4+FT3GiPP
-         GFEg+0mxMxT7bHX7HDKPKYD6QRFagwQRLtz175HK0h/eWuIgO1a175TLWaPpjuJosNuQ
-         6Ssw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dZOePB9QjNAYiNKauHeirK5pevUoAsv4ueKQKshpJRQ=;
-        b=fnTCsRu970SS4wUJMQp7bPSHHw1k/CkUO0xgFuPKXDjqQMlPGV72I5m6EHdl8UtdH8
-         CplNLmzEjOULlazJZvaBNeQUskZreR/JCeVJpMuppuQAk13/o6x4BGc8lh7Fufr/fBcM
-         EwPdkUQwD49dk9QA1a/+D8nr4rin55LV9/LMvMI36/xhWAOaRZbuopUSXjMLqbwJ9xVg
-         3/x/YVlRBnPkFEbJgMNZlfu54onBmUH+zq991Fe5i6lrCfj+BD8eF8MNzz5q6DLc47nA
-         bOHMZ8G2NEeRvceVTiZGPbFnUhYgLt7XmxQe1n4Vi9KY6b8xcLNHxaFO487L5/e4PPIX
-         eFZQ==
-X-Gm-Message-State: AOAM5326JLiN0EDGUkffkESuhrVxXQhkvsyuF7F5ACvhQNyLy0QvCs/d
-        sUJDL+9TEe8zWW22MR0ZOaJcZn9x0sQDryandWM=
-X-Google-Smtp-Source: ABdhPJw4dOYqjyaB/vjErRBa74ILdESAo1tCkt164uJa/5L7WNYYYgCX57bs03CT9s6H5/HjHQc1Qxm4lT2628BCptE=
-X-Received: by 2002:a17:907:2d92:: with SMTP id gt18mr17177209ejc.579.1643646453901;
- Mon, 31 Jan 2022 08:27:33 -0800 (PST)
+        Mon, 31 Jan 2022 11:26:21 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:36204)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nEZVT-00HFE2-D7; Mon, 31 Jan 2022 09:26:20 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:49826 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nEZVS-007Isd-8C; Mon, 31 Jan 2022 09:26:18 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Denys Vlasenko <vda.linux@googlemail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>
+References: <20220131153740.2396974-1-willy@infradead.org>
+        <871r0nriy4.fsf@email.froward.int.ebiederm.org>
+        <YfgKw5z2uswzMVRQ@casper.infradead.org>
+Date:   Mon, 31 Jan 2022 10:26:11 -0600
+In-Reply-To: <YfgKw5z2uswzMVRQ@casper.infradead.org> (Matthew Wilcox's message
+        of "Mon, 31 Jan 2022 16:13:55 +0000")
+Message-ID: <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220131160713.245637-1-marcan@marcan.st> <20220131160713.245637-10-marcan@marcan.st>
-In-Reply-To: <20220131160713.245637-10-marcan@marcan.st>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 31 Jan 2022 18:25:58 +0200
-Message-ID: <CAHp75Vcvtm1EvsEAaX8ii+qA_09iJ2-J9gFjSzsUPyOUzPoUBg@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] brcmfmac: pcie: Read the console on init and shutdown
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1nEZVS-007Isd-8C;;;mid=<877dafq3bw.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19qvjPe966AmDjlX0+1SCeNTH6o1CCUNsg=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_SCC_BODY_TEXT_LINE,T_TM2_M_HEADER_IN_MSG,
+        XMSubLong,XM_B_Investor,XM_B_SpammyWords autolearn=disabled
+        version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 XM_B_Investor BODY: Commonly used business phishing phrases
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Matthew Wilcox <willy@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 537 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 10 (1.9%), b_tie_ro: 9 (1.6%), parse: 1.07 (0.2%),
+         extract_message_metadata: 14 (2.6%), get_uri_detail_list: 1.97 (0.4%),
+         tests_pri_-1000: 15 (2.8%), tests_pri_-950: 1.35 (0.3%),
+        tests_pri_-900: 1.09 (0.2%), tests_pri_-90: 153 (28.4%), check_bayes:
+        149 (27.8%), b_tokenize: 11 (2.0%), b_tok_get_all: 26 (4.9%),
+        b_comp_prob: 4.3 (0.8%), b_tok_touch_all: 103 (19.2%), b_finish: 1.03
+        (0.2%), tests_pri_0: 328 (61.1%), check_dkim_signature: 0.61 (0.1%),
+        check_dkim_adsp: 2.9 (0.5%), poll_dns_idle: 0.71 (0.1%), tests_pri_10:
+        2.0 (0.4%), tests_pri_500: 8 (1.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] binfmt_elf: Take the mmap lock when walking the VMA list
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 6:08 PM Hector Martin <marcan@marcan.st> wrote:
->
-> This allows us to get console messages if the firmware crashed during
-> early init, or if an operation failed and we're about to shut down.
+Matthew Wilcox <willy@infradead.org> writes:
 
-fails
+> On Mon, Jan 31, 2022 at 10:03:31AM -0600, Eric W. Biederman wrote:
+>> "Matthew Wilcox (Oracle)" <willy@infradead.org> writes:
+>> 
+>> > I'm not sure if the VMA list can change under us, but dump_vma_snapshot()
+>> > is very careful to take the mmap_lock in write mode.  We only need to
+>> > take it in read mode here as we do not care if the size of the stack
+>> > VMA changes underneath us.
+>> >
+>> > If it can be changed underneath us, this is a potential use-after-free
+>> > for a multithreaded process which is dumping core.
+>> 
+>> The problem is not multi-threaded process so much as processes that
+>> share their mm.
+>
+> I don't understand the difference.  I appreciate that another process can
+> get read access to an mm through, eg, /proc, but how can another process
+> (that isn't a thread of this process) modify the VMAs?
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+There are a couple of ways.
 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> index 3ff4997e1c97..4fe341376a16 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> @@ -744,6 +744,8 @@ static void brcmf_pcie_bus_console_read(struct brcmf_pciedev_info *devinfo,
->                 return;
->
->         console = &devinfo->shared.console;
-> +       if (!console->base_addr)
-> +               return;
->         addr = console->base_addr + BRCMF_CONSOLE_WRITEIDX_OFFSET;
->         newidx = brcmf_pcie_read_tcm32(devinfo, addr);
->         while (newidx != console->read_idx) {
-> @@ -1520,6 +1522,7 @@ brcmf_pcie_init_share_ram_info(struct brcmf_pciedev_info *devinfo,
->                   shared->max_rxbufpost, shared->rx_dataoffset);
->
->         brcmf_pcie_bus_console_init(devinfo);
-> +       brcmf_pcie_bus_console_read(devinfo, false);
->
->         return 0;
->  }
-> @@ -1959,6 +1962,7 @@ brcmf_pcie_remove(struct pci_dev *pdev)
->                 return;
->
->         devinfo = bus->bus_priv.pcie->devinfo;
-> +       brcmf_pcie_bus_console_read(devinfo, false);
->
->         devinfo->state = BRCMFMAC_PCIE_STATE_DOWN;
->         if (devinfo->ci)
-> --
-> 2.33.0
->
+A classic way is a multi-threads process can call vfork, and the
+mm_struct is shared with the child until exec is called.
+
+A process can do this more deliberately by forking a child using
+clone(CLONE_VM) and not including CLONE_THREAD.   Supporting this case
+is a hold over from before CLONE_THREAD was supported in the kernel and
+such processes were used to simulate threads.
+
+The practical difference between a CLONE_THREAD thread and a
+non-CLONE_THREAD process is that the signal handling is not shared.
+Without sharing the signal handlers it does not make sense for a fatal
+signal to kill the other process.
+
+From the perspective of coredump generation it stops the execution of
+all CLONE_THREAD threads that are going to be part of the coredump
+and allows anyone else who shared the mm_struct to keep running.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+It also happens that there are subsystems in the kernel that do things
+like kthread_use_mm that can also be modifying the mm during a coredump.
+
+Which is why we have dump_vma_snapshot.  Preventing the mm_struct and
+the vmas from being modified during a coredump is not really practical.
+
+
+>> I think rather than take a lock we should be using the snapshot captured
+>> with dump_vma_snapshot.  Otherwise we have the very real chance that the
+>> two get out of sync.  Which would result in a non-sense core file.
+>> 
+>> Probably that means that dump_vma_snapshot needs to call get_file on
+>> vma->vm_file store it in core_vma_metadata.
+>> 
+>> Do you think you can fix it something like that?
+>
+> Uhh .. that seems like it needs a lot more understanding of binfmt_elf
+> than I currently possess.  I'd rather spend my time working on folios
+> than learning much more about binfmt_elf.  I was just trying to fix an
+> assertion failure with the maple tree patches (we now assert that you're
+> holding a lock when walking the list of VMAs).
+
+Fair enough.  I will put it on my list of things to address.
+
+Eric
+

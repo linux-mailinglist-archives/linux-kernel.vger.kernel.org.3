@@ -2,133 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9074A4FB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531FC4A4FBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377518AbiAaTvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:51:47 -0500
-Received: from mga18.intel.com ([134.134.136.126]:42806 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232738AbiAaTvX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:51:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643658683; x=1675194683;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=AuQjRb5W+n0pT7rLWvB6cY+pUQDPFpGw+PwT3Eo7hgY=;
-  b=WjmMyeQNo6IR0Y2JhIdaxUldK2ixlGH5pAxtFiUungGbIio+s9TiYtq3
-   BKtz05+3XT5x2u9zP0Mpi21cdZ2UcteyAW31cxK7yXVYyWmRn9s+15wZ4
-   qP0o+ng+gAGu75TYqIcN0kIRuzeJ1jdGE+jk9Q1f2a1f84vOQH0umRpFD
-   IhYvAKYtceO4LLjI1w4tJtPGIG5PEdUqDkIMu1w8j1x1wsegZAjOcm9Ik
-   9iumkfxXU8idl1DWpZyqKPD8nJDjxHBdx8z7KJX4BY6KIRduT4QuNBFHD
-   S6RfyiPsCitVZ2hJsatW1Jrjqao3VjbDV3h1nOe/bHqUJ3u/HwLiImT8n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="231109334"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="231109334"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:51:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="537455738"
-Received: from abilal-mobl1.amr.corp.intel.com ([10.212.252.235])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:51:21 -0800
-Date:   Mon, 31 Jan 2022 11:51:21 -0800 (PST)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Jean Sacren <sakiwit@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.16 137/200] mptcp: clean up harmless false
- expressions
-In-Reply-To: <20220131105238.167982722@linuxfoundation.org>
-Message-ID: <b1fa42c0-bd8f-9090-a7b9-275b6b245aaf@linux.intel.com>
-References: <20220131105233.561926043@linuxfoundation.org> <20220131105238.167982722@linuxfoundation.org>
+        id S1348770AbiAaTxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232738AbiAaTxo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 14:53:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E261C061714;
+        Mon, 31 Jan 2022 11:53:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 009BDB82C0E;
+        Mon, 31 Jan 2022 19:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A059C340E8;
+        Mon, 31 Jan 2022 19:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643658821;
+        bh=EDQuNJF48Jmdwz5qs4umub4BwHAxjhbYK2lLWFVQOR8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WR+8Z21EAy8g6REqUmO4l7AQuL+VaV4qmdb04HA3CyVeYZhioHWKbfUFznrwU4ydH
+         nDjULY3ZwZuNmRX4TePS9KKgR2/DxjNGh8ccpUX+twP8LoSUh+PU1AcWdA1PFu5A1+
+         qxodfXsYNyaNQTKMnYw7rV2vv20ojazwWENyrEdwq/AxHgcuRYROtdYnsT+PRPs0xM
+         hvcXzjlihpwMSSU3CshZF227ZUXOwai23pEgYTcEf1x9BY4IjiZeN3dSYfJwsledxU
+         ScjMu1+5EmksyYAa89fgGSAs4slPs4SVCqoiE9qumZhMCKhaomLdeygvBRvLdw7DNy
+         Sq5AvT+L/YteA==
+Date:   Mon, 31 Jan 2022 11:53:39 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        decui@microsoft.com, kys@microsoft.com, sthemmin@microsoft.com,
+        paulros@microsoft.com, shacharr@microsoft.com, olaf@aepfle.de,
+        vkuznets@redhat.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next, 0/3] net: mana: Add XDP counters, reuse
+ dropped pages
+Message-ID: <20220131115336.6b37cb43@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1643421818-14259-1-git-send-email-haiyangz@microsoft.com>
+References: <1643421818-14259-1-git-send-email-haiyangz@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022, Greg Kroah-Hartman wrote:
+On Fri, 28 Jan 2022 18:03:35 -0800 Haiyang Zhang wrote:
+> Add drop, tx counters for XDP.
+> Reuse dropped pages
 
-> From: Jean Sacren <sakiwit@gmail.com>
->
-> [ Upstream commit 59060a47ca50bbdb1d863b73667a1065873ecc06 ]
->
-
-Please drop this from the stable queue for both 5.15 and 5.16. This is a 
-code cleanup (no functional change) patch that was originally merged in 
-net-next and then got selected for stable.
-
-It's pretty harmless to backport this one, but I hope this feedback is 
-useful for tuning your scripts or manual patch review processes. If it's 
-more helpful for me to let something like this slide by, or I'm 
-misunderstanding how this might belong in the stable trees, I am likewise 
-open to feedback!
-
-
-Thanks,
-Mat
-
-
-> entry->addr.id is u8 with a range from 0 to 255 and MAX_ADDR_ID is 255.
-> We should drop both false expressions of (entry->addr.id > MAX_ADDR_ID).
->
-> We should also remove the obsolete parentheses in the first if branch.
->
-> Use U8_MAX for MAX_ADDR_ID and add a comment to show the link to
-> mptcp_addr_info.id as suggested by Mr. Matthieu Baerts.
->
-> Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> Signed-off-by: Jean Sacren <sakiwit@gmail.com>
-> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> net/mptcp/pm_netlink.c | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-> index d18b13e3e74c6..27427aeeee0e5 100644
-> --- a/net/mptcp/pm_netlink.c
-> +++ b/net/mptcp/pm_netlink.c
-> @@ -38,7 +38,8 @@ struct mptcp_pm_add_entry {
-> 	u8			retrans_times;
-> };
->
-> -#define MAX_ADDR_ID		255
-> +/* max value of mptcp_addr_info.id */
-> +#define MAX_ADDR_ID		U8_MAX
-> #define BITMAP_SZ DIV_ROUND_UP(MAX_ADDR_ID + 1, BITS_PER_LONG)
->
-> struct pm_nl_pernet {
-> @@ -831,14 +832,13 @@ find_next:
-> 		entry->addr.id = find_next_zero_bit(pernet->id_bitmap,
-> 						    MAX_ADDR_ID + 1,
-> 						    pernet->next_id);
-> -		if ((!entry->addr.id || entry->addr.id > MAX_ADDR_ID) &&
-> -		    pernet->next_id != 1) {
-> +		if (!entry->addr.id && pernet->next_id != 1) {
-> 			pernet->next_id = 1;
-> 			goto find_next;
-> 		}
-> 	}
->
-> -	if (!entry->addr.id || entry->addr.id > MAX_ADDR_ID)
-> +	if (!entry->addr.id)
-> 		goto out;
->
-> 	__set_bit(entry->addr.id, pernet->id_bitmap);
-> -- 
-> 2.34.1
->
->
->
->
-
---
-Mat Martineau
-Intel
+I believe this is now b43471cc1032 ("Merge branch 'mana-XDP-counters'")
+in net-next, thanks!

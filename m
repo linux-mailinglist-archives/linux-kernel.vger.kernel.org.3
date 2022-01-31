@@ -2,128 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2EB4A4B9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7ED4A4BA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380181AbiAaQQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S1380227AbiAaQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380155AbiAaQP6 (ORCPT
+        with ESMTP id S1380198AbiAaQQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:15:58 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCA4C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:15:58 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id t9so20066881lji.12
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:15:58 -0800 (PST)
+        Mon, 31 Jan 2022 11:16:14 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AD3C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:16:14 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id k25so44311896ejp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:16:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PAJsiarXhqLynLw8D9oX/LriyOgm/RU72Cl9jucAmp4=;
-        b=v3ZkRrFDlZs2mIz3bFyv/Y0d/v3qLb1rif8VBO0qXmQwMjhx+gev5Dlw3gDkpaeJRe
-         8dnrQCXDqCdM5WRwH3QrJo2hPz5WLW5lSixO+zoWOzhcpFMyduzdBl/k2TIOgnnUy6qp
-         L2d4t6zyfkAvzI4LaRR7utS9BtQSwYTsMZTF5CYcYlx7eeKC+b4A2ddw13I1TQvF4RQT
-         A4uZg7pqYZbqvGGHHqtp/PB2iyQE4z/QLGC3BNdcgM3evN74/4mRmT/5wdoizV8EIZQR
-         166XKN+zyZ2M4+Z3JYoNuMtasqtm+1czdarWcqRJc/vjDH2LuqM7juCVsHYaMCDPWofi
-         ierg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UmMfeMOSCoAqBhA7BUwY3tTWcLdWTL1PSKYY7qnHSNo=;
+        b=GRVTCtzu9/MyTVuHPjTnQ0zxTS6EdpUso5MVxp1FHPJAu+cQfMtGjsj1EGc053Re66
+         HJw78dmJitgpCkRH2aNJ79u+EOoEtA475Pp0mIDQRgpMvUauy7YdyKBf1LyvFL9iBpuq
+         dVkCxouvtRDEFM5eN6A38VlYveIKLSMqWpJSOacxAwyxO9jptgAi5E6yqr1yGSQXZBpx
+         TXQ6z4K8eSo7miaPpr1Mfo0C7GdRius8EJM0YqnCK1WRdRyHuX0jw76vxH18QVaPfOcs
+         8Mx91M/OXiYQnO2wAtw7rLcdRF+51Vn/SJafIABc4WKLX6zN9UJ06Ku91Gd/ZTEvj9+X
+         KJ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PAJsiarXhqLynLw8D9oX/LriyOgm/RU72Cl9jucAmp4=;
-        b=kpfRs8kX/q3FCtUNqZwfYziyBxk3DaSBhca8lZ3wQUCC+OxNRwxMX82XlGq99H4h4f
-         D2VorS7x5glXMfxKzgy5OffEHBaJt4QjpmJ1NjfiTvSPHVU4mBvfM5nUv3f+ahe0k3db
-         VIcc0Khew+4TI7PQdm6kDvhOAS2msks8ZGP3761uEGglrOqfFYn51TkUfETPNyBVnpsy
-         4wrtzk8fv3NW6BVPrYKnOMHzKdEpNh2ut29VUQ1pRtjPo2JEyGh1tK64z2fjxoSS7apH
-         stogNiJs427ek30b7hgYAvsdGlfPGkvmyKyWG3+Z0OQpBI0Kfkc2Vcl/LEScDc3VsZ7M
-         DG2w==
-X-Gm-Message-State: AOAM533AcYCLZKC32w+ZGv6D5CbeOSoAzgpP/xK9mZ3Nf9unIO1hGSRK
-        n9Q3tjrF+jl9t6npOPVaAsdIRVIpj75wXQ==
-X-Google-Smtp-Source: ABdhPJwewMmRrBwkubc+o6bfPzhnxUBAGcHo8KgbJc+QrmnKzTqWfh0QHTVz5P55+AvuKi8MkqGljQ==
-X-Received: by 2002:a2e:b7d6:: with SMTP id p22mr13954610ljo.182.1643645756531;
-        Mon, 31 Jan 2022 08:15:56 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a7sm3158253lff.44.2022.01.31.08.15.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 08:15:55 -0800 (PST)
-Message-ID: <266f6609-94c9-704c-548c-14351a05679e@linaro.org>
-Date:   Mon, 31 Jan 2022 19:15:55 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UmMfeMOSCoAqBhA7BUwY3tTWcLdWTL1PSKYY7qnHSNo=;
+        b=xLEpoWxP/U7HSnGmcTG/oWgMJ1TgfykyCgbu9encnwz+tB7hIIiysDGY1gWe0tbVD1
+         72IcEYHyEMISHOGiG3Rnm4NzHSm8l6ExgwlW/8nSodc0wnlwywahinaxHXOPhF7pG650
+         sU/i0j4m3bp26T2JitN3F13nPCkjFgaHsT1ynpb4PTkJ1RdIM5ZVH1BvZqvP5oAQ/0/5
+         eBuSzkitB3jrr3d/x3S2gWG1cAGwhDwJIs2E2o3IdTSmCbEs/byq3pZblodZ3GVkShRu
+         IHnQ5hi11lmwr67sbl9FEh3Kk6c3evJMQnPhkdZAl9gGy4o+8cJyYwoY9T4l983nFDrb
+         lAZw==
+X-Gm-Message-State: AOAM530s1860XjZziIoZsg0VKFKciRCszfsMsscNMQhlNM66qRtfXnQY
+        ov0YFY6jXjujiFOWBZbJTcU4hmEMamsKK5Sq2HR/laF0yg==
+X-Google-Smtp-Source: ABdhPJxq72VkfEyMRdYvqdL8DBh09y6vJc7UuNH+cjMYMvqj8xzzu7N5A30X1zKYjBRhbE33sZLKMDvkmFkjAMIsqsA=
+X-Received: by 2002:a17:906:1e06:: with SMTP id g6mr17519185ejj.517.1643645772623;
+ Mon, 31 Jan 2022 08:16:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 7/8] clk: qcom: dispcc-sm8250: stop using mmcx
- regulator
-Content-Language: en-GB
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20210829154757.784699-1-dmitry.baryshkov@linaro.org>
- <20210829154757.784699-8-dmitry.baryshkov@linaro.org>
- <YV8WsQb9H7+CaLjP@ripper>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <YV8WsQb9H7+CaLjP@ripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
+ <CAFqZXNv7=ROfyzZGojy2DQvY0xp4Dd5oHW_0KG6BLiD7A8zeKQ@mail.gmail.com>
+ <CAHC9VhQKVdbLNn=eOqebWaktDVeq5bjTjXea68MmcAhKoSa09w@mail.gmail.com> <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
+In-Reply-To: <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 31 Jan 2022 11:16:01 -0500
+Message-ID: <CAHC9VhQE4JPhTjkKwV3ovRSuPceiHDrP3MDW4RPDcNtLkb7tAQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Scott Mayhew <smayhew@redhat.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10/2021 18:48, Bjorn Andersson wrote:
-> On Sun 29 Aug 08:47 PDT 2021, Dmitry Baryshkov wrote:
-> 
->> Now as the common qcom clock controller code has been taught about power
->> domains, stop mentioning mmcx supply as a way to power up the clock
->> controller's gdsc.
->>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Once we merge these, I expect that the boards will start crashing if
-> the kernel is booted using an existing DTB?
-> 
-> Is it okay to just merge the first 6 patches in the series now and
-> postpone these two until we've had the dts change sitting for a while?
+On Mon, Jan 31, 2022 at 7:46 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> On Fri, Jan 28, 2022 at 3:28 AM Paul Moore <paul@paul-moore.com> wrote:
+> > On Thu, Jan 27, 2022 at 4:54 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> > > I wonder if we could make this all much simpler by *always* doing the
+> > > label parsing in selinux_add_opt() and just returning an error when
+> > > !selinux_initialized(&selinux_state). Before the new mount API, mount
+> > > options were always passed directly to the mount(2) syscall, so it
+> > > wasn't possible to pass any SELinux mount options before the SELinux
+> > > policy was loaded. I don't see why we need to jump through hoops here
+> > > just to support this pseudo-feature of stashing an unparsed label into
+> > > an fs_context before policy is loaded... Userspace should never need
+> > > to do that.
+> >
+> > I could agree with that, although part of my mind is a little nervous
+> > about the "userspace should *never* ..." because that always seems to
+> > bite us.  Although I'm struggling to think of a case where userspace
+> > would need to set explicit SELinux mount options without having a
+> > policy loaded.
+>
+> I get that, but IMO this is enough of an odd "use case" that I
+> wouldn't worry too much ...
 
-Bjorn, the changes 1-6 went into 5.15. I suppose it's time to merge the 
-last two patches?
+I understand, but seeing as I'm the only one that defends these things
+with Linus and others lets do this:
 
-> 
-> Regards,
-> Bjorn
-> 
->> ---
->>   drivers/clk/qcom/dispcc-sm8250.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
->> index 108dd1249b6a..cf0bb12eb6e1 100644
->> --- a/drivers/clk/qcom/dispcc-sm8250.c
->> +++ b/drivers/clk/qcom/dispcc-sm8250.c
->> @@ -1129,7 +1129,6 @@ static struct gdsc mdss_gdsc = {
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   	.flags = HW_CTRL,
->> -	.supply = "mmcx",
->>   };
->>   
->>   static struct clk_regmap *disp_cc_sm8250_clocks[] = {
->> -- 
->> 2.33.0
->>
+1. Fix what we have now using Scott's patches once he incorporates the feedback.
+2. Merge another patch (separate patch(set) please!) which does the
+parsing in selinux_add_opt().
 
+... this was if we have to revert #2 we still have the fixes in #1.
 
 -- 
-With best wishes
-Dmitry
+paul-moore.com

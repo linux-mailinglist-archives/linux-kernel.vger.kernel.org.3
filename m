@@ -2,157 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 201BA4A4CCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F404A4CDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380748AbiAaRKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377208AbiAaRKt (ORCPT
+        id S1377036AbiAaRNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:13:52 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4577 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380775AbiAaRNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:10:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADC3C061714;
-        Mon, 31 Jan 2022 09:10:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AE61B82B94;
-        Mon, 31 Jan 2022 17:10:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D27C340E8;
-        Mon, 31 Jan 2022 17:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643649046;
-        bh=/r/ZnBTV4TiO+z1dN1aEerUQVoNaGQNdyWQJyouZjw4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uq/6QeXDFVrsVE/P4NqpoOwCEWHijusiEbATGsytAcD3hkBKM5VcMy7oedybZEyb6
-         OeRqpU6xLzPJ4ud7I0eYV8d2uQmounckED3bvUA5sKQyDCaF2obksU2yeE8/DA8lmC
-         6KXLezv/ZSfD3VOtnv68F9nDQZOk/RN2pXApKEvYwWsqEoz1390K9U5AYppbx6FpSt
-         8BsaxlEkrugpQV3HQgp9iYlvA9kNY96L+G+Qr9/V2uPHch3AhmGIL39NT3qz/IRc9T
-         UT3xJgkpIn01Q68pkZ0AHi/Od0KAYJS5sEunv9H+eYl8yTOGmAz2dl4JPjLAUfnyOj
-         aI3g3zGfvNuMQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Eryu Guan <guan@eryu.me>, fstests@vger.kernel.org
-Cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        Kees Cook <keescook@chromium.org>,
-        Rich Felker <dalias@libc.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        Eryu Guan <guaneryu@gmail.com>
-Subject: [PATCH] generic/633: adapt execveat() invocations
-Date:   Mon, 31 Jan 2022 18:10:23 +0100
-Message-Id: <20220131171023.2836753-1-brauner@kernel.org>
+        Mon, 31 Jan 2022 12:13:49 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JnZQN2X6hz67lD0;
+        Tue,  1 Feb 2022 01:13:16 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 31 Jan 2022 18:13:46 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <guozihua@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] ima: Allow template selection with ima_template[_fmt]= after ima_hash=
+Date:   Mon, 31 Jan 2022 18:11:39 +0100
+Message-ID: <20220131171139.3024883-1-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2797; h=from:subject; bh=/r/ZnBTV4TiO+z1dN1aEerUQVoNaGQNdyWQJyouZjw4=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMST+EI9iEZ7JdPJTSNsz4Y8rpFcHMN0wiwh6pvlU5gx3ZmKf DpdyRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwETWf2Zk+P6Q1aBZZe/EnVa7nqwQbP h37e6mcwtjWoMnxJq1zw55NZPhf772msorPKtl7TOeie+OrJjPy6Mzd6JV2Uq23q8t3sWzmQE=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a push by Ariadne to enforce that argv[0] cannot be NULL. So far
-we've allowed this. Fix the execveat() invocations to set argv[0] to the
-name of the file we're about to execute.
+Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
+ima_template_fmt") introduced an additional check on the ima_template
+variable to avoid multiple template selection.
 
-Cc: Ariadne Conill <ariadne@dereferenced.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Rich Felker <dalias@libc.org>
-Cc: Eryu Guan <guaneryu@gmail.com>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: fstests@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org
-Signed-off-by: Christian Brauner <brauner@kernel.org>
+Unfortunately, ima_template could be also set by the setup function of the
+ima_hash= parameter, when it calls ima_template_desc_current(). This causes
+attempts to choose a new template with ima_template= or with
+ima_template_fmt=, after ima_hash=, to be ignored.
+
+Achieve the goal of the commit mentioned with the new static variable
+template_setup_done, so that template selection requests after ima_hash=
+are not ignored.
+
+Finally, call ima_init_template_list(), if not already done, to initialize
+the list of templates before lookup_template_desc() is called.
+
+Cc: stable@vger.kernel.org
+Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- src/idmapped-mounts/idmapped-mounts.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ security/integrity/ima/ima_template.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/src/idmapped-mounts/idmapped-mounts.c b/src/idmapped-mounts/idmapped-mounts.c
-index 4cf6c3bb..76b559ae 100644
---- a/src/idmapped-mounts/idmapped-mounts.c
-+++ b/src/idmapped-mounts/idmapped-mounts.c
-@@ -3598,7 +3598,7 @@ static int setid_binaries(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 694560396be0..db1ad6d7a57f 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -29,6 +29,7 @@ static struct ima_template_desc builtin_templates[] = {
  
- 		if (!expected_uid_gid(t_dir1_fd, FILE1, 0, 5000, 5000))
-@@ -3726,7 +3726,7 @@ static int setid_binaries_idmapped_mounts(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+ static LIST_HEAD(defined_templates);
+ static DEFINE_SPINLOCK(template_list);
++static int template_setup_done;
  
- 		if (!expected_uid_gid(open_tree_fd, FILE1, 0, 15000, 15000))
-@@ -3865,7 +3865,7 @@ static int setid_binaries_idmapped_mounts_in_userns(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+ static const struct ima_template_field supported_fields[] = {
+ 	{.field_id = "d", .field_init = ima_eventdigest_init,
+@@ -101,10 +102,11 @@ static int __init ima_template_setup(char *str)
+ 	struct ima_template_desc *template_desc;
+ 	int template_len = strlen(str);
  
- 		if (!switch_userns(attr.userns_fd, 0, 0, false))
-@@ -3924,7 +3924,7 @@ static int setid_binaries_idmapped_mounts_in_userns(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+-	if (ima_template)
++	if (template_setup_done)
+ 		return 1;
  
- 		if (!caps_supported()) {
-@@ -3992,7 +3992,7 @@ static int setid_binaries_idmapped_mounts_in_userns(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+-	ima_init_template_list();
++	if (!ima_template)
++		ima_init_template_list();
  
- 		if (!switch_userns(attr.userns_fd, 0, 0, false))
-@@ -4150,7 +4150,7 @@ static int setid_binaries_idmapped_mounts_in_userns_separate_userns(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+ 	/*
+ 	 * Verify that a template with the supplied name exists.
+@@ -128,6 +130,7 @@ static int __init ima_template_setup(char *str)
+ 	}
  
- 		userns_fd = get_userns_fd(0, 10000, 10000);
-@@ -4214,7 +4214,7 @@ static int setid_binaries_idmapped_mounts_in_userns_separate_userns(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+ 	ima_template = template_desc;
++	template_setup_done = 1;
+ 	return 1;
+ }
+ __setup("ima_template=", ima_template_setup);
+@@ -136,7 +139,7 @@ static int __init ima_template_fmt_setup(char *str)
+ {
+ 	int num_templates = ARRAY_SIZE(builtin_templates);
  
- 		userns_fd = get_userns_fd(0, 10000, 10000);
-@@ -4286,7 +4286,7 @@ static int setid_binaries_idmapped_mounts_in_userns_separate_userns(void)
- 			NULL,
- 		};
- 		static char *argv[] = {
--			NULL,
-+			"",
- 		};
+-	if (ima_template)
++	if (template_setup_done)
+ 		return 1;
  
- 		userns_fd = get_userns_fd(0, 10000, 10000);
-
-base-commit: d8dee1222ecdfa1cff1386a61248e587eb3b275d
+ 	if (template_desc_init_fields(str, NULL, NULL) < 0) {
+@@ -147,6 +150,7 @@ static int __init ima_template_fmt_setup(char *str)
+ 
+ 	builtin_templates[num_templates - 1].fmt = str;
+ 	ima_template = builtin_templates + num_templates - 1;
++	template_setup_done = 1;
+ 
+ 	return 1;
+ }
 -- 
 2.32.0
 

@@ -2,137 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A48164A4E4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E919F4A4E57
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350914AbiAaS3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350968AbiAaS3K (ORCPT
+        id S243114AbiAaSbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:31:16 -0500
+Received: from mail-qv1-f53.google.com ([209.85.219.53]:46982 "EHLO
+        mail-qv1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350610AbiAaSbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:29:10 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8466C06173D;
-        Mon, 31 Jan 2022 10:29:09 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id y15so28620794lfa.9;
-        Mon, 31 Jan 2022 10:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qOOYqQyirhJ4gHyrf0pQn6wWDcf9SoG9lpkJduxhv4k=;
-        b=cxtxBVJfaZ53YZqjv1zCKieiVOePdMVid12olZKkMqf4013+GlYyz+g479stJ3s1Iw
-         bPLdtG7kphKcEoXRJMThS1JkynntZ9CZ4v8Ub0N/c6NcpJk2UgbAmxZbIOde+MbPalS0
-         s68iETvNFwYmVSimrr5K33F5tK+25t9oWuLxARl690aL9rHQJzKQ3KbPxQDA6g38jE6w
-         fUPZNftw+S4S7HttOvfn6iSwdxPPi3Ddgh7nl/8S3+G/h95wnNVxfq1wbweC6ZoHRWo/
-         3qwEZOyoNXqsn9X1ixp5nCDFgdnA+oMZvtb2fYSXuoFrDMyeihtjl9wY2DzaEZVp+lUg
-         /Tow==
+        Mon, 31 Jan 2022 13:31:14 -0500
+Received: by mail-qv1-f53.google.com with SMTP id o9so13594767qvy.13;
+        Mon, 31 Jan 2022 10:31:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qOOYqQyirhJ4gHyrf0pQn6wWDcf9SoG9lpkJduxhv4k=;
-        b=3PEeW6cGR2fi8Yq9//jAIwgl3mcu62A1unZPUsf1rpJ2D9ILOtOssQgiEZ1YiWZP/Z
-         IRtWe0lqQtN081IfvsJ2XFMBSLzgQcJMCy8zHeeGdCFnD1vVEHXlr1sz8g3cPhB8R1Ei
-         c7vHq6/yti2RH/W3XQtRiT2vfL0R6G4xFPTPPwMpwrI0XJw0oiI3Tj0wA2wIBKg17Q1e
-         qp2GGnb5sib6lv5MsP9fzq8hq+IYTf7uVH2QZvM/W3CjF30HrElACYVNoGMNbezS+Jcm
-         CQsSHb0QkozHonlRnJ4TZxEpHRy6TOL18cZgsRWk7LUaqx4i4tGH55NmyMi70wY51ARt
-         bJLw==
-X-Gm-Message-State: AOAM533nGkBj/eWwf+fD4oufNZlZOF7S7g3yQFoB3hU7uNOAxuGicXhC
-        EUxbWSnYUXtQZuqXMBx1H/w=
-X-Google-Smtp-Source: ABdhPJzgBn4YsT0MM8VrBY4KBgqjRFnemm3wEAwyeGfcRcpHOiEjYkpLJGEL27XmR1wbhKFaWTkp9w==
-X-Received: by 2002:a05:6512:3f27:: with SMTP id y39mr17652645lfa.347.1643653748190;
-        Mon, 31 Jan 2022 10:29:08 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-136.dynamic.spd-mgts.ru. [109.252.138.136])
-        by smtp.googlemail.com with ESMTPSA id t27sm2435829ljk.138.2022.01.31.10.29.07
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tAq3Aw1ybEeRSqT/qCBaoBSWDhM07pp4fGD0hDfaeXE=;
+        b=2QDsW5SuXyhmGB5cv8ZmX9skjTH/M49/cHeOcwnPvrfZLhwwqwaKTU4XWblXcEnJSG
+         8uDjjTgbRAYo4QxbioNFGGqsLZzPDgpVuKCJej7bURZ3Z/3uttqY8E7RoFBT129xQGf+
+         XHHN/QF+c29yu6zhc05aFQ2iypz4Ci0tQiMZYp8Z4UCfs8ZVeVXwI+lHaE1fs/RHRw+8
+         RASZCcdLpHgySwb7Kigjvxnmmi8HTJKoJqrmyZeYFnO6ylRKbUH83ZwSVFJ5/CcvfFLB
+         FMjXjT2C9YTyfF4/3tBX2L/CdLLjLy8jfTPXvOYSBRgB+DB2Gj5ULKibQpRm7SlSNBoD
+         IcLg==
+X-Gm-Message-State: AOAM5300Q5dPHAsp5rirDcRcHZ9DGK2Sx3QaJ9vRM5n3Zj4JAITYMzKE
+        2+uaBR59/p4DoLgJld6AF+eIZTGooW+bt2nV
+X-Google-Smtp-Source: ABdhPJzq3enqzJRFLnEFxdmRVXs7d2EFm9ZdR0EM+sF3t6B/7H7vYeqs0ppP1jup2uQa0T66JLyLlA==
+X-Received: by 2002:a05:6214:d0c:: with SMTP id 12mr19148531qvh.93.1643653873140;
+        Mon, 31 Jan 2022 10:31:13 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id s14sm8459533qkp.79.2022.01.31.10.31.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 10:29:07 -0800 (PST)
-Message-ID: <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
-Date:   Mon, 31 Jan 2022 21:29:06 +0300
+        Mon, 31 Jan 2022 10:31:12 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id c6so43286968ybk.3;
+        Mon, 31 Jan 2022 10:31:11 -0800 (PST)
+X-Received: by 2002:ab0:44c:: with SMTP id 70mr9021725uav.78.1643653861178;
+ Mon, 31 Jan 2022 10:31:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
- in deepest state
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
+References: <20220131172450.4905-1-saeed@kernel.org> <20220131095905.08722670@hermes.local>
+In-Reply-To: <20220131095905.08722670@hermes.local>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 31 Jan 2022 19:30:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
+Message-ID: <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs to y
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Saeed Mahameed <saeed@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Einon <mark.einon@gmail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        David Awogbemila <awogbemila@google.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Simon Horman <simon.horman@corigine.com>,
+        Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
+        rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
+        Edwin Peer <edwin.peer@broadcom.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-References: <20220131113743.52265-1-ulf.hansson@linaro.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220131113743.52265-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Michael Chan <michael.chan@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Liming Sun <limings@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Omkar Kulkarni <okulkarni@marvell.com>,
+        Shai Malin <smalin@marvell.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
+        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-31.01.2022 14:37, Ulf Hansson пишет:
-> A PM domain managed by genpd may support multiple idlestates. During
-> genpd_power_off() a genpd governor may be asked to select one of the
-> idlestates based upon the dev PM QoS constraints, for example.
-> 
-> However, there is a problem with the behaviour around this in genpd. More
-> precisely, a parent-domain is allowed to be powered off, no matter of what
-> idlestate that has been selected for the child-domain.
-> 
-> So far, we have not received any reports about errors, possibly because
-> there might not be platform with this hierarchical configuration, yet.
-> Nevertheless, it seems reasonable to change the behaviour into preventing
-> the parent-domain from being powered off, unless the deepest idlestate has
-> been selected for the child-domain, so let's do that.
-> 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/base/power/domain.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5db704f02e71..7f97c5cabdc2 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
->  			atomic_read(&genpd->sd_count) > 0)
->  		return -EBUSY;
->  
-> +	/*
-> +	 * The children must be in their deepest states to allow the parent to
-> +	 * be powered off. Note that, there's no need for additional locking, as
-> +	 * powering on a child, requires the parent's lock to be acquired first.
-> +	 */
-> +	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> +		struct generic_pm_domain *child = link->child;
-> +		if (child->state_idx < child->state_count - 1)
-> +			return -EBUSY;
-> +	}
-> +
->  	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
->  		enum pm_qos_flags_status stat;
->  
-> @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
->  	    || atomic_read(&genpd->sd_count) > 0)
->  		return;
->  
-> +	/* Check that the children are in their deepest state. */
-> +	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> +		struct generic_pm_domain *child = link->child;
-> +		if (child->state_idx < child->state_count - 1)
-> +			return;
-> +	}
-> +
->  	/* Choose the deepest state when suspending */
->  	genpd->state_idx = genpd->state_count - 1;
->  	if (_genpd_power_off(genpd, false))
+On Mon, Jan 31, 2022 at 6:59 PM Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+> On Mon, 31 Jan 2022 09:24:50 -0800
+> Saeed Mahameed <saeed@kernel.org> wrote:
+>
+> > From: Saeed Mahameed <saeedm@nvidia.com>
+> >
+> > NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
+> >
+> > Since all drivers belonging to a vendor are supposed to default to 'n',
+> > defaulting all vendors to 'n' shouldn't be an issue, and aligns well
+> > with the 'no new drivers' by default mentality.
+> >
+> > Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+>
+> This was done back when vendors were introduced in the network drivers tree.
+> The default of Y allowed older configurations to just work.
 
-Hello Ulf,
+And changing the defaults means all defconfigs must be updated first,
+else the user's configs will end up without drivers needed.
 
-Is this needed by a concrete SoC? It needs to be clarified in the commit
-message, otherwise looks like this patch wasn't tested and it's unclear
-whether this change is really needed.
+> So there was a reason, not sure if it matters anymore.
+> But it seems like useless repainting to change it now.
+
+It might make sense to tune some of the defaults (i.e. change to
+"default y if ARCH_*") for drivers with clear platform dependencies.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

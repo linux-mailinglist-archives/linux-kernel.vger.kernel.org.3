@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F014A47A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252624A47A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378282AbiAaM5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S1378327AbiAaM5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239213AbiAaM5Y (ORCPT
+        with ESMTP id S1378326AbiAaM5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:57:24 -0500
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341DCC061714;
-        Mon, 31 Jan 2022 04:57:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a4c0lJULIYhZL9lSY0iYSY6PkI9m9JaIMExgqqqU4N0=; b=GkaD/SxJ9buika23MArYqvcBBq
-        7/TF3Z14dg3YGX5m6IqyrAtIMqVKEBOJGsr5gagrr6LZzr4FgJzzhjvjxNMCM9YeJpZxzouT5jPSH
-        iUOOXcOFg54FEERYqWbnM61Dim/sINEfz/CilGpD5CS5r3w7S7DREUC8RCBjHApuByt0=;
-Received: from p200300daa71e0b007047aa2ce81d99ce.dip0.t-ipconnect.de ([2003:da:a71e:b00:7047:aa2c:e81d:99ce] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1nEWF8-0005lH-5M; Mon, 31 Jan 2022 13:57:14 +0100
-Message-ID: <04c91b4e-e7c8-ac6a-f60a-0453a49122fa@nbd.name>
-Date:   Mon, 31 Jan 2022 13:57:13 +0100
+        Mon, 31 Jan 2022 07:57:31 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16394C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:57:31 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id g23so11652935vsf.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:57:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Rbf16twz9E2vQcds9ElwMC4NaHHcAIWkmNblQF1s7dE=;
+        b=oVFUKsTxctFJ9Ff3uaNasrGMTC7Ugev6jQKgxQC1ggyS7wkwIyGdayyO7IhmmWev2F
+         VKYf7yIUis+IAgHuCVyEibDIOWaAuA5qSXvMmTIOreMq+6wd+6nLpcrobYzpqv9uxPpm
+         JLuQARSUk86hyBVzWLLXeIatzjkZoaLjlZVW3SaKTECTcEW5qMAV/6XuI1JE3yKWVscv
+         hN+OdQ92V+bh3A7jf6kYjct/BC22qgZDNeB2OP/cT3Yb1EUCPUZP6flG4QdPZLjOhOfH
+         TQSuonGfNfuGKSXHRy77tMlC6NRRZOnnThqgZbJDHLITv/Xk52AotmttIF6OQ8T046Wu
+         07lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Rbf16twz9E2vQcds9ElwMC4NaHHcAIWkmNblQF1s7dE=;
+        b=IydpDNRWdJ32TbG8BL7kzTKwpKqrzYcM96FJQxbLjd+uGJsuTQ8vHbg9HMXGaaVx7H
+         zncGD5Ga+KW1a7P/uHI6ugP0EAUo7H901tqx9P2LgYbY82suIJm1pTcUWMTxrgu5NF1v
+         aT0ITZKCwtplgVva7yT4BdZWaNgxWh7ULJ9EY43lStaFg/IykQnS0DRCNQbkBnxnrdNl
+         mjFBhdDKWd5YxRnwZOmbhmB8nTL87qPnlJC8n782BjIiWGQRKLPwnegAi0GkZAF3gwVZ
+         6gCRSx97Qokqtcj6TUcsi6nBnFfIzSCtxdCPUtQfdM4qZUrNiIodl+/dGVhBLJd8gq2B
+         1wog==
+X-Gm-Message-State: AOAM533GxikBb+GF53uVejpC7pUNY6vFRspOVNwLhihpkgrlj+5aZmTn
+        1Bk8qx7qe8csGCVU00ejDoGQy5VInf4DF0qASls=
+X-Google-Smtp-Source: ABdhPJyHGA3UHEJc73bJ1Z50AXXiF1vX0bY0qTVSZkMndyXvRiQIVUJkeLS16jnuPSzU1ye3M1L7KnvtJb4NlnsgIt8=
+X-Received: by 2002:a05:6102:c47:: with SMTP id y7mr5928253vss.20.1643633850001;
+ Mon, 31 Jan 2022 04:57:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v9 03/13] ARM: Add basic support for Airoha EN7523 SoC
-Content-Language: en-US
-To:     Luka Perkov <luka.perkov@sartura.hr>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>
-References: <20220130145116.88406-1-nbd@nbd.name>
- <20220130145116.88406-4-nbd@nbd.name>
- <CAKQ-crhDHXZptWr5rO5Rb9JttQREoPqE4YO-6nzC2OWc-z06_g@mail.gmail.com>
-From:   Felix Fietkau <nbd@nbd.name>
-In-Reply-To: <CAKQ-crhDHXZptWr5rO5Rb9JttQREoPqE4YO-6nzC2OWc-z06_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:612c:228b:b0:271:b221:8e62 with HTTP; Mon, 31 Jan 2022
+ 04:57:29 -0800 (PST)
+Reply-To: docamr8@gmail.com
+From:   Dominic Amar <docamr326@gmail.com>
+Date:   Mon, 31 Jan 2022 04:57:29 -0800
+Message-ID: <CALNEt4UnSyOv0w6qFPwNUpLJ3KqKvBDZph3p8-7tLqAonsx0GA@mail.gmail.com>
+Subject: Fund released
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Friend,
 
-On 31.01.22 11:51, Luka Perkov wrote:
-> Hello Felix,
-> 
-> On Sun, Jan 30, 2022 at 3:56 PM Felix Fietkau <nbd@nbd.name> wrote:
->>
->> From: John Crispin <john@phrozen.org>
->>
->> EN7523 is an armv8 based silicon used inside broadband access type devices
->> such as xPON and xDSL. It shares various silicon blocks with MediaTek
->> silicon such as the MT7622.
->>
->> Add basic support for Airoha EN7523, enough for booting to console.
->>
->> The UART is basically 8250-compatible, except for the clock selection.
->> A clock-frequency value is synthesized to get this to run at 115200 bps.
->>
->> Signed-off-by: John Crispin <john@phrozen.org>
->> Signed-off-by: Bert Vermeulen <bert@biot.com>
->> Signed-off-by: Felix Fietkau <nbd@nbd.name>
->> ---
->> index 000000000000..ea23b5abb478
->> --- /dev/null
->> +++ b/arch/arm/mach-airoha/airoha.c
->> @@ -0,0 +1,16 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * Device Tree support for Airoha SoCs
->> + *
->> + * Copyright (c) 2022 Felix Fietkau <nbd@nbd.name>
->> + */
->> +#include <asm/mach/arch.h>
->> +
->> +static const char * const airoha_board_dt_compat[] = {
->> +       "airoha,en7523",
->> +       NULL,
->> +};
->> +
->> +DT_MACHINE_START(MEDIATEK_DT, "Airoha Cortex-A53 (Device Tree)")
-> 
-> Since this is Cortex-A53 core is there a reason why this is not placed
-> within arm64 directory?
- From what I can tell, it's a stripped-down core that only runs in 
-32-bit mode.
+I am Mr. Dominic Amar. A computer scientist with UBA Bank. I am 28
+years old, just started work with UBA Bank. I came across your file
+which was marked X and your released Disk painted RED, I took time to
+study it and found out that you have paid VIRTUALLY all fees and
+certificate but the fund has not been release to you. The most
+annoying thing is that they cannot tell you the truth that on no
+account will they ever release the fund to you, Please this is like a
+Mafia setting in Benin Republic; you may not understand it because you
+are not from this country.
 
-- Felix
+The only thing I will need to release this fund to you is a special
+HARD DISK we call it HD120 GIG. I will buy two of it, recopy your
+information, destroy the previous one, and punch the computer to
+reflect in your bank within 24 banking hours. I will clean up the
+tracer and destroy your old file, after which I will run away from
+Benin Republic to meet with you.
+
+If you are interested kindly get in touch with me immediately, You
+should send to me your convenient phone numbers for easy communication
+and also re-confirm your banking details, so that there won't be any
+mistake.
+
+Regards,
+Mr. Dominic Amar.

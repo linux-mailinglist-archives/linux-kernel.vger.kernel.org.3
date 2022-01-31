@@ -2,348 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F12C4A50B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281DC4A50B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379235AbiAaVAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:00:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60740 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiAaVAh (ORCPT
+        id S1379401AbiAaVBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:01:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53877 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231445AbiAaVBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:00:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1153B82CA1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:00:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE55C340E8;
-        Mon, 31 Jan 2022 21:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643662834;
-        bh=DpJUErWPwWkdNUiiVPwKDwl8WphcjgIX7O9Awu23mV0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=icNmKUGrzjGMyLL7ZfuBmvbNnNLUlbrcf0zBquTm3x6gIrysD2DQ5NQcR9Gm6Gx1P
-         k3DO4UvhWma071CluecfJ2l0KNg499cNzRKQFI1P1+/15ON/eDIWFSX5xtEWMcfHIE
-         lCpIb8EE4BDhGbqYJOOAC5VWNJ2nRDT/ciC4mRWE11v2jeFVy3RvEoAsuW+TrZ3oUL
-         nGjqloNbK+W5OoGf5/iqJq9SM+dFcIO5nI6iC5sGZMU5kUr+F7Oqu6GnrTaGv7bUWK
-         qR0fhO2wYY0vKlajYX6u90dQtbdJuLOfJJ9aa2itc6jxdC/Bu/3asYBO7aCqYvhmNB
-         cMkhyhACKewZQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 05D2540466; Mon, 31 Jan 2022 18:00:30 -0300 (-03)
-Date:   Mon, 31 Jan 2022 18:00:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v13 01/16] perf record: Introduce thread affinity and
- mmap masks
-Message-ID: <YfhN7kTLECDwgPLh@kernel.org>
-References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <9042bf7daf988e17e17e6acbf5d29590bde869cd.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+        Mon, 31 Jan 2022 16:01:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643662891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QPBUUUSIbdCMKHscebuvK+qxfZIc2zafw8L5TR48Ec8=;
+        b=GlZmo6PLqF0LgSCzptDMaKgmKaHdkqoDyQwFVvqbyhewksDH4zMiG1Z9XbLr+9KkGl50rt
+        ykoAZDxrAHayoKS3Wdputjv7/+DGpYzkTK3pbQf0/E0SeSbFkwDsxmWC2AaSFjCVoie42A
+        hVVc2TPjryanJXQ03lYgFNGkhjDJ4lE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-628-Y7DuA8lJMS2TmL6p6Lwm3A-1; Mon, 31 Jan 2022 16:01:30 -0500
+X-MC-Unique: Y7DuA8lJMS2TmL6p6Lwm3A-1
+Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so7586546edb.23
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:01:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QPBUUUSIbdCMKHscebuvK+qxfZIc2zafw8L5TR48Ec8=;
+        b=VIJWeJkEB1P9jAu0Bjk1JO7/L1oTqTxQg4cmu+oLA5U4WRY1neHue+akyjWk0gXOeG
+         YHkQvVc6bq0u3wsEAwqg62T3PWuscEfs3xOfnjv0LGaaNYV6pNoGkZk1D0NT6HMzghz3
+         rfRlCY3kCLyZ9ncVYGF4PkHr9WvA8PYDsPc7jXJqKT07OqldqY0fbuC6X/I22/r/SM1Y
+         Jtb18OlPCijSifzpeOvBoH0lTx1nLWv6CMmVgxrXDl9BlBYVLNufHabHvCH/0o5K7Ygk
+         KkwALJKQiSlPG+pc8+YCtUALyCjrjopevMVGW/lSCRikCRTt/3OORA4dzIHobsLe3mSL
+         fC5g==
+X-Gm-Message-State: AOAM533VUoAefq4AQr5rgaMmFZuU40NpGFEmBsF7SmTl5nJhYqaJZzDf
+        tNEGZ4g+qpWwgvAmK5XDcYiTR7NEYxZCKZupsd/miDaUce7dgqBikH8tr6kQTFcSC3edIeuufc9
+        M3+A/hIJAATMptRDSPBw41LFJ
+X-Received: by 2002:a05:6402:34ca:: with SMTP id w10mr22805812edc.145.1643662888879;
+        Mon, 31 Jan 2022 13:01:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQNpwY4VLzE85jbEqyTtYB3+udLiLxDc3EUrydHMlJ567geR0t5numq2jG5NKxlB0w9Q46VQ==
+X-Received: by 2002:a05:6402:34ca:: with SMTP id w10mr22805800edc.145.1643662888671;
+        Mon, 31 Jan 2022 13:01:28 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id lo15sm13780659ejb.28.2022.01.31.13.01.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 13:01:28 -0800 (PST)
+Message-ID: <e1ac452b-0c72-6f22-764a-f34532ae6cce@redhat.com>
+Date:   Mon, 31 Jan 2022 22:01:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9042bf7daf988e17e17e6acbf5d29590bde869cd.1642440724.git.alexey.v.bayduraev@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 3/4] hwmon: (sch56xx-common) Replace msleep() with
+ usleep_range()
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220131193137.3684-1-W_Armin@gmx.de>
+ <20220131193137.3684-4-W_Armin@gmx.de>
+ <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 17, 2022 at 09:34:21PM +0300, Alexey Bayduraev escreveu:
-> Introduce affinity and mmap thread masks. Thread affinity mask
-> defines CPUs that a thread is allowed to run on. Thread maps
-> mask defines mmap data buffers the thread serves to stream
-> profiling data from.
+Hi,
+
+On 1/31/22 21:10, Guenter Roeck wrote:
+> On 1/31/22 11:31, Armin Wolf wrote:
+>> msleep(1) will often sleep more than 20ms, slowing down sensor
+>> and watchdog reads/writes. Use usleep_range() as recommended
+>> in timers-howto.rst to fix that.
+>>
+>> Tested on a Fujitsu Esprimo P720.
+>>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>>   drivers/hwmon/sch56xx-common.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
+>> index 0172aa16dc0c..f66e1ed4b1aa 100644
+>> --- a/drivers/hwmon/sch56xx-common.c
+>> +++ b/drivers/hwmon/sch56xx-common.c
+>> @@ -139,7 +139,7 @@ static int sch56xx_send_cmd(u16 addr, u8 cmd, u16 reg, u8 v)
+>>       /* EM Interface Polling "Algorithm" */
+>>       for (i = 0; i < max_busy_polls + max_lazy_polls; i++) {
+>>           if (i >= max_busy_polls)
+>> -            msleep(1);
+>> +            usleep_range(1, 2);
 > 
-> Acked-by: Andi Kleen <ak@linux.intel.com>
-> Acked-by: Namhyung Kim <namhyung@gmail.com>
-> Reviewed-by: Riccardo Mancini <rickyman7@gmail.com>
-> Tested-by: Riccardo Mancini <rickyman7@gmail.com>
-> Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-
-Some simplifications I added here while reviewing this patchkit:
-
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 41998f2140cd5119..53b88c8600624237 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -2213,35 +2213,33 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
- 
- static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
- {
--	mask->nbits = nr_bits;
- 	mask->bits = bitmap_zalloc(mask->nbits);
- 	if (!mask->bits)
- 		return -ENOMEM;
- 
-+	mask->nbits = nr_bits;
- 	return 0;
- }
- 
- static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
- {
- 	bitmap_free(mask->bits);
-+	mask->bits = NULL;
- 	mask->nbits = 0;
- }
- 
- static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
- {
--	int ret;
-+	int ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
- 
--	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
- 	if (ret) {
- 		mask->affinity.bits = NULL;
- 		return ret;
- 	}
- 
- 	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
--	if (ret) {
-+	if (ret)
- 		record__mmap_cpu_mask_free(&mask->maps);
--		mask->maps.bits = NULL;
--	}
- 
- 	return ret;
- }
-@@ -2733,18 +2731,14 @@ struct option *record_options = __record_options;
- 
- static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
- {
--	int c;
--
--	for (c = 0; c < cpus->nr; c++)
-+	for (int c = 0; c < cpus->nr; c++)
- 		set_bit(cpus->map[c].cpu, mask->bits);
- }
- 
- static void record__free_thread_masks(struct record *rec, int nr_threads)
- {
--	int t;
--
- 	if (rec->thread_masks)
--		for (t = 0; t < nr_threads; t++)
-+		for (int t = 0; t < nr_threads; t++)
- 			record__thread_mask_free(&rec->thread_masks[t]);
- 
- 	zfree(&rec->thread_masks);
-@@ -2752,7 +2746,7 @@ static void record__free_thread_masks(struct record *rec, int nr_threads)
- 
- static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
- {
--	int t, ret;
-+	int ret;
- 
- 	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
- 	if (!rec->thread_masks) {
-@@ -2760,7 +2754,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
- 		return -ENOMEM;
- 	}
- 
--	for (t = 0; t < nr_threads; t++) {
-+	for (int t = 0; t < nr_threads; t++) {
- 		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
- 		if (ret) {
- 			pr_err("Failed to allocate thread masks[%d]\n", t);
-@@ -2778,9 +2772,7 @@ static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr
- 
- static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
- {
--	int ret;
--
--	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
-+	int ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
- 	if (ret)
- 		return ret;
- 
-
-
-> ---
->  tools/perf/builtin-record.c | 123 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 123 insertions(+)
+> This replaces a 1-millisecond sleep with a 1-2 microsecond sleep.
 > 
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index bb716c953d02..41998f2140cd 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -87,6 +87,11 @@ struct switch_output {
->  	int		 cur_file;
->  };
->  
-> +struct thread_mask {
-> +	struct mmap_cpu_mask	maps;
-> +	struct mmap_cpu_mask	affinity;
-> +};
-> +
->  struct record {
->  	struct perf_tool	tool;
->  	struct record_opts	opts;
-> @@ -112,6 +117,8 @@ struct record {
->  	struct mmap_cpu_mask	affinity_mask;
->  	unsigned long		output_max_size;	/* = 0: unlimited */
->  	struct perf_debuginfod	debuginfod;
-> +	int			nr_threads;
-> +	struct thread_mask	*thread_masks;
->  };
->  
->  static volatile int done;
-> @@ -2204,6 +2211,47 @@ static int record__parse_affinity(const struct option *opt, const char *str, int
->  	return 0;
->  }
->  
-> +static int record__mmap_cpu_mask_alloc(struct mmap_cpu_mask *mask, int nr_bits)
-> +{
-> +	mask->nbits = nr_bits;
-> +	mask->bits = bitmap_zalloc(mask->nbits);
-> +	if (!mask->bits)
-> +		return -ENOMEM;
-> +
-> +	return 0;
-> +}
-> +
-> +static void record__mmap_cpu_mask_free(struct mmap_cpu_mask *mask)
-> +{
-> +	bitmap_free(mask->bits);
-> +	mask->nbits = 0;
-> +}
-> +
-> +static int record__thread_mask_alloc(struct thread_mask *mask, int nr_bits)
-> +{
-> +	int ret;
-> +
-> +	ret = record__mmap_cpu_mask_alloc(&mask->maps, nr_bits);
-> +	if (ret) {
-> +		mask->affinity.bits = NULL;
-> +		return ret;
-> +	}
-> +
-> +	ret = record__mmap_cpu_mask_alloc(&mask->affinity, nr_bits);
-> +	if (ret) {
-> +		record__mmap_cpu_mask_free(&mask->maps);
-> +		mask->maps.bits = NULL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static void record__thread_mask_free(struct thread_mask *mask)
-> +{
-> +	record__mmap_cpu_mask_free(&mask->maps);
-> +	record__mmap_cpu_mask_free(&mask->affinity);
-> +}
-> +
->  static int parse_output_max_size(const struct option *opt,
->  				 const char *str, int unset)
->  {
-> @@ -2683,6 +2731,73 @@ static struct option __record_options[] = {
->  
->  struct option *record_options = __record_options;
->  
-> +static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
-> +{
-> +	int c;
-> +
-> +	for (c = 0; c < cpus->nr; c++)
-> +		set_bit(cpus->map[c].cpu, mask->bits);
-> +}
-> +
-> +static void record__free_thread_masks(struct record *rec, int nr_threads)
-> +{
-> +	int t;
-> +
-> +	if (rec->thread_masks)
-> +		for (t = 0; t < nr_threads; t++)
-> +			record__thread_mask_free(&rec->thread_masks[t]);
-> +
-> +	zfree(&rec->thread_masks);
-> +}
-> +
-> +static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
-> +{
-> +	int t, ret;
-> +
-> +	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
-> +	if (!rec->thread_masks) {
-> +		pr_err("Failed to allocate thread masks\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	for (t = 0; t < nr_threads; t++) {
-> +		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
-> +		if (ret) {
-> +			pr_err("Failed to allocate thread masks[%d]\n", t);
-> +			goto out_free;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +
-> +out_free:
-> +	record__free_thread_masks(rec, nr_threads);
-> +
-> +	return ret;
-> +}
-> +
-> +static int record__init_thread_default_masks(struct record *rec, struct perf_cpu_map *cpus)
-> +{
-> +	int ret;
-> +
-> +	ret = record__alloc_thread_masks(rec, 1, cpu__max_cpu().cpu);
-> +	if (ret)
-> +		return ret;
-> +
-> +	record__mmap_cpu_mask_init(&rec->thread_masks->maps, cpus);
-> +
-> +	rec->nr_threads = 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int record__init_thread_masks(struct record *rec)
-> +{
-> +	struct perf_cpu_map *cpus = rec->evlist->core.cpus;
-> +
-> +	return record__init_thread_default_masks(rec, cpus);
-> +}
-> +
->  int cmd_record(int argc, const char **argv)
->  {
->  	int err;
-> @@ -2948,6 +3063,12 @@ int cmd_record(int argc, const char **argv)
->  		goto out;
->  	}
->  
-> +	err = record__init_thread_masks(rec);
-> +	if (err) {
-> +		pr_err("Failed to initialize parallel data streaming masks\n");
-> +		goto out;
-> +	}
-> +
->  	if (rec->opts.nr_cblocks > nr_cblocks_max)
->  		rec->opts.nr_cblocks = nr_cblocks_max;
->  	pr_debug("nr_cblocks: %d\n", rec->opts.nr_cblocks);
-> @@ -2966,6 +3087,8 @@ int cmd_record(int argc, const char **argv)
->  	symbol__exit();
->  	auxtrace_record__free(rec->itr);
->  out_opts:
-> +	record__free_thread_masks(rec, rec->nr_threads);
-> +	rec->nr_threads = 0;
->  	evlist__close_control(rec->opts.ctl_fd, rec->opts.ctl_fd_ack, &rec->opts.ctl_fd_close);
->  	return err;
->  }
-> -- 
-> 2.19.0
+> Are you sure this is what you want to do ? Given that task switches typically
+> take several microseconds, the new code is pretty much identical to a busy
+> loop, and the maximum sleep time is reduced significantly.
 
--- 
+Ah good catch, I missed that will reviewing v1, sorry about that.
 
-- Arnaldo
+The issue is actually worse then busy-waiting the max wait time
+in this code is expressed in a maximum number of polls, so
+if usleep_range(1, 2) would really only sleep 1 usec, we would
+wait much too short and may hit a false-positive timeout condition
+here.
+
+Regards,
+
+Hans
+
+
+

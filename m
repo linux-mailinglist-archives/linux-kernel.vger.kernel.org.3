@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81594A4187
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B87284A448C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358667AbiAaLE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359145AbiAaLDB (ORCPT
+        id S1377612AbiAaLa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53424 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359019AbiAaLVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:03:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B4C0612F4;
-        Mon, 31 Jan 2022 03:01:30 -0800 (PST)
+        Mon, 31 Jan 2022 06:21:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2D760B2C;
-        Mon, 31 Jan 2022 11:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 336D4C340E8;
-        Mon, 31 Jan 2022 11:01:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B6461207;
+        Mon, 31 Jan 2022 11:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C7BDC340E8;
+        Mon, 31 Jan 2022 11:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626889;
-        bh=7E9ERDVZttx1BEkbi9cB6zU2U3oaHnyBYoXJvVBibGo=;
+        s=korg; t=1643628079;
+        bh=qqoB7EHQVor5f/OMG+syvKtFAeHTFIo6BetQX1TMjn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y3LjrInQv9UWJA3SJixuti5031CoKQddjkGKFWdPIuJ4k+z1Y0PjFM3QOIeTGGYNp
-         XHPVjQOyXICWPxovOwbZfh9QODwPrxoVjyClhMCMYYOBzW/6FT6ZdMKuHu/GDoQwG2
-         hUv3VcBBWvW6PJf4FIcGwyFSgrymqmncMeSxf8CM=
+        b=jk0bd4I9gi8l+MhpU1XdnBxAEDeqO4N9YOKl4QHdxphzZx61K2X8RTxrfIQK54/Vl
+         Jyifobx5jbuqrZhcsqTG8sWm4WD1a0fL8K04SFK0rMJWeJe51MJQNni6FATzQk62xY
+         D13TsTSbtYohy5cI8/WZEoSrraix7D7afMDz5IY8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.4 35/64] hwmon: (lm90) Mark alert as broken for MAX6646/6647/6649
-Date:   Mon, 31 Jan 2022 11:56:20 +0100
-Message-Id: <20220131105216.868584958@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH 5.16 118/200] drm/msm/dsi: Fix missing put_device() call in dsi_get_phy
+Date:   Mon, 31 Jan 2022 11:56:21 +0100
+Message-Id: <20220131105237.543570296@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-References: <20220131105215.644174521@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,31 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit f614629f9c1080dcc844a8430e3fb4c37ebbf05d upstream.
+commit c04c3148ca12227d92f91b355b4538cc333c9922 upstream.
 
-Experiments with MAX6646 and MAX6648 show that the alert function of those
-chips is broken, similar to other chips supported by the lm90 driver.
-Mark it accordingly.
+If of_find_device_by_node() succeeds, dsi_get_phy() doesn't
+a corresponding put_device(). Thus add put_device() to fix the exception
+handling.
 
-Fixes: 4667bcb8d8fc ("hwmon: (lm90) Introduce chip parameter structure")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: ec31abf ("drm/msm/dsi: Separate PHY to another platform device")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20211230070943.18116-1-linmq006@gmail.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/lm90.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dsi/dsi.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -394,7 +394,7 @@ static const struct lm90_params lm90_par
- 		.max_convrate = 9,
- 	},
- 	[max6646] = {
--		.flags = LM90_HAVE_CRIT,
-+		.flags = LM90_HAVE_CRIT | LM90_HAVE_BROKEN_ALERT,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 6,
- 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+--- a/drivers/gpu/drm/msm/dsi/dsi.c
++++ b/drivers/gpu/drm/msm/dsi/dsi.c
+@@ -40,7 +40,12 @@ static int dsi_get_phy(struct msm_dsi *m
+ 
+ 	of_node_put(phy_node);
+ 
+-	if (!phy_pdev || !msm_dsi->phy) {
++	if (!phy_pdev) {
++		DRM_DEV_ERROR(&pdev->dev, "%s: phy driver is not ready\n", __func__);
++		return -EPROBE_DEFER;
++	}
++	if (!msm_dsi->phy) {
++		put_device(&phy_pdev->dev);
+ 		DRM_DEV_ERROR(&pdev->dev, "%s: phy driver is not ready\n", __func__);
+ 		return -EPROBE_DEFER;
+ 	}
 
 

@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 941F54A4C3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9234A4C47
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380519AbiAaQfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S243114AbiAaQhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380512AbiAaQfQ (ORCPT
+        with ESMTP id S1380516AbiAaQhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:35:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9C0C061714;
-        Mon, 31 Jan 2022 08:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uxNZYP3LGCky/ZKmDFz/8zNFJ/WaFMrh5Ih+cZEMlts=; b=XZVTYtHjrOi/dz9ct7Y6VN7aL+
-        igs/tFjbkhhZiIlBOBWn1fOIDa49M5C+aKAyluZFWKsDn4ZLtTqUt/9fLr5QO3lQ3G2CvpZMHD6p9
-        uA4aDjgsMbmXxHST4Punkm+KumfyRKFStZRe/JHF40DHKG2oCCFtenKt9gXMhAgXlUhWr/mMSZUzo
-        nJq4iw4fI8iipgcT1jmL1sYgkuOhGmLqV0uelUIuAThItlKHUGkhBfVQ6KwoRJlw7AWrO0M6uAdpj
-        oyZq+teZb44xsQ2q5NWYscPCA9k1UC4JUC6GlfyiK8AdR33L18xRB1CMAnIKDNIPj1bP97Jo/NsJ1
-        7I3bVl/w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEZe4-00AAB1-JG; Mon, 31 Jan 2022 16:35:12 +0000
-Date:   Mon, 31 Jan 2022 16:35:12 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Denys Vlasenko <vda.linux@googlemail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>
-Subject: Re: [PATCH] binfmt_elf: Take the mmap lock when walking the VMA list
-Message-ID: <YfgPwPvopO1aqcVC@casper.infradead.org>
-References: <20220131153740.2396974-1-willy@infradead.org>
- <871r0nriy4.fsf@email.froward.int.ebiederm.org>
- <YfgKw5z2uswzMVRQ@casper.infradead.org>
- <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+        Mon, 31 Jan 2022 11:37:15 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E06FC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:37:15 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id g20so12686400pgn.10
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pq2lioXdRgfbbAgrjb+0HwzuycY8mIpT20OJghTqzwk=;
+        b=TV/ZHqyoB8BfyZubWHTiSyaTd4Bua2KKp6Wgz7Rx3QwKn5TZ06c6vsokHA3UGOLxZL
+         qWV/9fXEn3FqJLBb3Qro2sPIGrnMgLRjPXlsEu8tbjg4Ou23uszuDYI7LvzZ3aF6LON4
+         WrjsyTSo3K4SZESxazXNyefQwMNEhKeNcgT6KZcuwzUeOiver0zXC9qBU/iDjf7xq/mA
+         Ljl1sNSX07CLemNmdnB9vnLl3icovO3JsF/Tuj4xu/FRcgBIxeKyuonmWfJCDHiJIs8q
+         L6XgOVvpf3m15iqIe762QVHp/+IDzYUDntA2QuUVFV+fW9BttgARPXmkbW3SYIcp/AmN
+         C3AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pq2lioXdRgfbbAgrjb+0HwzuycY8mIpT20OJghTqzwk=;
+        b=eVSlXhjhu/o3FDGG+SiwSnacxVzwGDZM0iDv+1xZKzXqaxAI9DkUfi5cZ2iSG1RbvY
+         1Hf+Zo+LT60IsMaKDNmGxTWgbCQFEax2t9SU+5BtY+3vY8FPKKrM+/otmdVz+HQmD8d9
+         Z4m9HbMPnxBPkpI02A1LrK9jETyC+IVjqoH65ysQ1W2qRzcZVi8i2Ap3ByHFV0kK7mXA
+         EO7AC1vWCxI0g06dXI617qMH1hoWEXNSoAaGW+Um2n9RavhIkSX6GyOzJEkDANjdV17o
+         zBnXLM9sukOcbZcFGPmpWHtiZo4lRN8ly89uBI3fSJ6bbrwitdkbGJxrrpFxRTubBCEs
+         JN2w==
+X-Gm-Message-State: AOAM531HaIbUog9Ot1H9gQbn/B/527udVreNFskrexiRdbHfHlpgFQqb
+        IcDxL1yQtBb4G3um6yaKa1nuCtvclRpUL+18+38Itg==
+X-Google-Smtp-Source: ABdhPJxCVjGCmcB+SRLMnrxP4w9hsLJuDvvvXUNn/mVl7jcD6wQqJ/j68/Ao/S71VIOvwOEhPqZ6xemhbuhfGR2YRb4=
+X-Received: by 2002:aa7:8490:: with SMTP id u16mr20859502pfn.1.1643647035064;
+ Mon, 31 Jan 2022 08:37:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+References: <20220114091502.333083-1-allen.chen@ite.com.tw> <f4696a8d-5c1d-1007-7814-b2e6cbe334ae@collabora.com>
+In-Reply-To: <f4696a8d-5c1d-1007-7814-b2e6cbe334ae@collabora.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 31 Jan 2022 17:37:03 +0100
+Message-ID: <CAG3jFytN9iu0BteAxFCLVRorxM20Q3Zrfn1T4k8bnDYy5oL7bg@mail.gmail.com>
+Subject: Re: [PATCH v11] drm/bridge: add it6505 driver
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     allen <allen.chen@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Hsin-yi Wang <hsinyi@chromium.org>,
+        Hsin-Yi Wang <hsinyi@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:26:11AM -0600, Eric W. Biederman wrote:
-> Matthew Wilcox <willy@infradead.org> writes:
-> 
-> > On Mon, Jan 31, 2022 at 10:03:31AM -0600, Eric W. Biederman wrote:
-> >> "Matthew Wilcox (Oracle)" <willy@infradead.org> writes:
-> >> 
-> >> > I'm not sure if the VMA list can change under us, but dump_vma_snapshot()
-> >> > is very careful to take the mmap_lock in write mode.  We only need to
-> >> > take it in read mode here as we do not care if the size of the stack
-> >> > VMA changes underneath us.
-> >> >
-> >> > If it can be changed underneath us, this is a potential use-after-free
-> >> > for a multithreaded process which is dumping core.
-> >> 
-> >> The problem is not multi-threaded process so much as processes that
-> >> share their mm.
+On Thu, 20 Jan 2022 at 16:25, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 14/01/22 10:14, allen ha scritto:
+> > This adds support for the iTE IT6505.
+> > This device can convert DPI signal to DP output.
 > >
-> > I don't understand the difference.  I appreciate that another process can
-> > get read access to an mm through, eg, /proc, but how can another process
-> > (that isn't a thread of this process) modify the VMAs?
-> 
-> There are a couple of ways.
-> 
-> A classic way is a multi-threads process can call vfork, and the
-> mm_struct is shared with the child until exec is called.
+> > From: Allen Chen <allen.chen@ite.com.tw>
+> > Tested-by: Hsin-yi Wang <hsinyi@chromium.org>
+> > Signed-off-by: Hermes Wu <hermes.wu@ite.com.tw>
+> > Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+> > ---
+> > v10 -> v11 : remove drm_bridge_new_crtc_state
+> > ---
+> >   drivers/gpu/drm/bridge/Kconfig      |    8 +
+> >   drivers/gpu/drm/bridge/Makefile     |    1 +
+> >   drivers/gpu/drm/bridge/ite-it6505.c | 3352 +++++++++++++++++++++++++++
+> >   3 files changed, 3361 insertions(+)
+> >   create mode 100644 drivers/gpu/drm/bridge/ite-it6505.c
+> >
+>
+> ...snip...
+>
+> > +static const struct of_device_id it6505_of_match[] = {
+> > +     { .compatible = "ite,it6505" },
+> > +     { }
+> > +};
+>
+> If you want to have a DT compatible and DT properties, you have to also add
+> dt-bindings (yaml) for this driver, otherwise, any SoC/device DT will fail
+> the dt binding check.... So, please, add that.
 
-While true, I thought the semantics of vfork() were that the parent
-was suspended.  Given that, it can't core dump until the child execs
-... right?
+Let me second this. A dt-binding is needed for this driver to be
+complete, it functions as both documentation and a way to test the DTS
+that use this device, so it is really important.
 
-> A process can do this more deliberately by forking a child using
-> clone(CLONE_VM) and not including CLONE_THREAD.   Supporting this case
-> is a hold over from before CLONE_THREAD was supported in the kernel and
-> such processes were used to simulate threads.
-
-That is a multithreaded process then!  Maybe not in the strict POSIX
-compliance sense, but the intent is to be a multithreaded process.
-ie multiple threads of execution, sharing an address space.
-
-> It also happens that there are subsystems in the kernel that do things
-> like kthread_use_mm that can also be modifying the mm during a coredump.
-
-Yikes.  That's terrifying.  It's really legitimate for a kthread to
-attach to a process and start tearing down VMAs?
-
-> > Uhh .. that seems like it needs a lot more understanding of binfmt_elf
-> > than I currently possess.  I'd rather spend my time working on folios
-> > than learning much more about binfmt_elf.  I was just trying to fix an
-> > assertion failure with the maple tree patches (we now assert that you're
-> > holding a lock when walking the list of VMAs).
-> 
-> Fair enough.  I will put it on my list of things to address.
-
-Thanks.  Now that I've disclosed it's a UAF, I hope you're able to
-get to it soon.  Otherwise we should put this band-aid in for now
-and you can address it properly in the fullness of time.
+>
+> For the driver by itself, though:
+>
+> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>
+> > +
+> > +static struct i2c_driver it6505_i2c_driver = {
+> > +     .driver = {
+> > +             .name = "it6505",
+> > +             .of_match_table = it6505_of_match,
+> > +             .pm = &it6505_bridge_pm_ops,
+> > +     },
+> > +     .probe = it6505_i2c_probe,
+> > +     .remove = it6505_i2c_remove,
+> > +     .shutdown = it6505_shutdown,
+> > +     .id_table = it6505_id,
+> > +};
+> > +
+> > +module_i2c_driver(it6505_i2c_driver);
+> > +
+> > +MODULE_AUTHOR("Allen Chen <allen.chen@ite.com.tw>");
+> > +MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
+> > +MODULE_LICENSE("GPL v2");
+> >
+>

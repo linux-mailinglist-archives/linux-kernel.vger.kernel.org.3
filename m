@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 296DA4A5226
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54254A5228
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiAaWO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiAaWO1 (ORCPT
+        id S231968AbiAaWOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:14:38 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:47570 "EHLO
+        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231950AbiAaWOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:14:27 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAA8C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:14:26 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id d3so12685790ilr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=odVN5zr5EM78SbEFrOlCqjhjAfIyP/M1WivpRxjpnJM=;
-        b=VZivi5qfDr/2lgNx22v+J+rv+wtYxONIcECOJBj86BBBy/khDySjEKLFIYTLB17WrY
-         ZvUZMA56rH4HF9t6IcoTRi+raBRozCNqC0EV+tq4h3CHYGzcXVdyNxkzfEQmpnAOTA0a
-         PQ25vMNXxJ2JMNDc+boSfXtD3l3eN2uAe99z8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=odVN5zr5EM78SbEFrOlCqjhjAfIyP/M1WivpRxjpnJM=;
-        b=YsRqO0Lq5L2wYbecI4/5zP6pQ9V4bOjuvvZP1YSdMoD93fecjP1uZyvMsPypUD72R0
-         WXcNVmjJxnTohd09FIec3JWdSLKM8yySp63+jMeySiM56nE+0O0iGQDuEJRzUNjeG32Q
-         h0EvhQIBCTEL/s/uzPqpRd7gDB2mdmWeTvLMFFMuBl1iLxlKcDJA9UR7c+fgJPHIx22W
-         V/sgIyNFlUD/WIbr7EMuwJZPLihpchwG+Z0ygUjASH+o6MIAFHE2FjFcKjCpdzb1Rx3u
-         LuZq/Bv4JnUiKo66/ZEHgPO7d2RvtN1Szoq/rQZHNRkCuZENSZeigA700PiA8+yQifYK
-         PLqg==
-X-Gm-Message-State: AOAM533YmgIiiK9lm36lhjURdQ2UYfY33A3vICLsDLuuv+E9OI6UlUeM
-        UerSDfmqpSdrb5wQJW9jEIszGQ==
-X-Google-Smtp-Source: ABdhPJx98f8ah61PCDON2+6eeiNa/KDxDutSrePIxB9D7p5Zhwqfh4MJcIYrLHeeo21AUoJUqeVIyw==
-X-Received: by 2002:a05:6e02:1648:: with SMTP id v8mr13914266ilu.282.1643667265810;
-        Mon, 31 Jan 2022 14:14:25 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id 8sm19624045ilq.14.2022.01.31.14.14.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 14:14:25 -0800 (PST)
-Subject: Re: [PATCH] docs: add rtla documentation kernel docs index
-To:     corbet@lwn.net, rostedt@goodmis.org, bristot@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220131201149.446609-1-skhan@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <eefff224-e3c0-5113-d238-7b046ccac652@linuxfoundation.org>
-Date:   Mon, 31 Jan 2022 15:14:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 31 Jan 2022 17:14:35 -0500
+Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id B2B1F8051FA0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:14:32 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id C580F1004751F
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:14:30 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id EewQnFBAmkku4EewQnVPeb; Mon, 31 Jan 2022 22:14:30 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Y5o9DjSN c=1 sm=1 tr=0 ts=61f85f46
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=L2Toy1UqQ5WKP967YkNm62x9G2pBVmS1JshR4oMiKhk=; b=iXpbwI+fsFVADsHVYfPxEajNOF
+        b1BXNBJDa3qa2fq3asWMic3+E54TSVuUHcCmXGsk82K91PpzKfDir0cJMlH48sAKGfYHFsX9mjUNF
+        sgzJHK832qAQ0yZXVcBJCk+E8;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33708 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nEewP-002TD3-W2; Mon, 31 Jan 2022 15:14:30 -0700
+Message-ID: <a36095c7-df1e-921a-19a2-737adc5720b7@w6rz.net>
+Date:   Mon, 31 Jan 2022 14:14:28 -0800
 MIME-Version: 1.0
-In-Reply-To: <20220131201149.446609-1-skhan@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 000/171] 5.15.19-rc1 review
 Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com
+References: <20220131105229.959216821@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nEewP-002TD3-W2
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:33708
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 12
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 1:11 PM, Shuah Khan wrote:
-> Link rtla documentation to kernel docs. This patch adds index files under
-> tools and rtla directories linking them to the kernel docs index.
-> 
-> This patch doesn't make any changes to the rtla Makefile and rtla files,
-> hence no changes to rtla doc build and install.
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->   Documentation/index.rst            | 10 ++++++++++
->   Documentation/tools/index.rst      | 17 +++++++++++++++++
->   Documentation/tools/rtla/index.rst | 19 +++++++++++++++++++
->   3 files changed, 46 insertions(+)
->   create mode 100644 Documentation/tools/index.rst
->   create mode 100644 Documentation/tools/rtla/index.rst
-> 
+On 1/31/22 02:54, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.19 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.19-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Ignore this one as well. rc2 has the hook.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-commit 941518d6538afa5ea0edc26e6c009d0b3163d422
-Author: Jonathan Corbet <corbet@lwn.net>
-Date:   Thu Jan 20 17:00:33 2022 -0700
-
-     docs: Hook the RTLA documents into the kernel docs build
-
-thanks,
--- Shuah
+Tested-by: Ron Economos <re@w6rz.net>
 

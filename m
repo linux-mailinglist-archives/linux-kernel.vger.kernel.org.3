@@ -2,63 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA474A5278
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB774A527B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiAaWg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 17:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbiAaWgY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:36:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8983CC061714;
-        Mon, 31 Jan 2022 14:36:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4069CB82C8D;
-        Mon, 31 Jan 2022 22:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56872C340E8;
-        Mon, 31 Jan 2022 22:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643668581;
-        bh=1JoJCnoSkTjuoMaPr44ixmEVlbNRYqEL/DOdLmDrv1k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MDvZuVHYqwuPV46o0TbHvDZjgaF9tt1yumFPV8NdVibS+QJwS4/uFLexxFzrTmkBd
-         PvdDP7T1WiOpe6ADElmDyXx+qLwjBwUnMTSKNIMCWK5F5JCCSE7uLWzVjjobUm4BD6
-         Erv5O5Vhdaf1Yc4OA2QlAIX4f80bBdqqrWhrTorI=
-Date:   Mon, 31 Jan 2022 14:36:20 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, vdavydov.dev@gmail.com,
-        shakeelb@google.com, guro@fb.com, vbabka@suse.cz,
-        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
- from unspecified node
-Message-Id: <20220131143620.b619f24f5246b26bce2b717d@linux-foundation.org>
-In-Reply-To: <20220131014742.oxcrctcg6sqwvzij@master>
-References: <20220111010302.8864-1-richard.weiyang@gmail.com>
-        <20220131014742.oxcrctcg6sqwvzij@master>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S234138AbiAaWir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:38:47 -0500
+Received: from mga11.intel.com ([192.55.52.93]:5448 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229712AbiAaWiq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 17:38:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643668726; x=1675204726;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M7mZJap8bWp6kqusTez3NXr8dHFfMt8bmhpv8eupywQ=;
+  b=AAWhacRXe1FJSRQAkBcgW3RVMYyEJX+MmpSOY4+e3h9WpRRwg5Sx6fmy
+   rIqZ6q1Qo7TkRrz2/MLBuwrWjtH0O2At3RXF+y2JRruYCOir6COq7H1Ie
+   510BAw8/vWUqLx+UxRCNiIMgCCRfOP+YMpPXBX4GnE8ALLjnv0TKWB9lj
+   ompiHdG1NsMw+zRKc0L6lpaA/AuVpJpgq6NbSp3bevvr4i3YL7PtZNBaO
+   OitxDqBHLmXiNn6Hot+kDXrtydPpaIyfkSiYCsPtM6KzJDtWjEMRzqav5
+   CSF3e1LpsvCte6iMC52erEFB1nW41/KRyTlzFUFzGXwaBLwGkHPYi01S6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="245156731"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="245156731"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 14:38:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="630180014"
+Received: from kcoopwoo-mobl1.amr.corp.intel.com (HELO [10.252.132.7]) ([10.252.132.7])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 14:38:45 -0800
+Message-ID: <101a4497-ae17-ab69-640d-667c79da639b@intel.com>
+Date:   Mon, 31 Jan 2022 14:38:42 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv3 2/7] efi/x86: Get full memory map in allocate_e820()
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220128205906.27503-1-kirill.shutemov@linux.intel.com>
+ <20220128205906.27503-3-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220128205906.27503-3-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 01:47:42 +0000 Wei Yang <richard.weiyang@gmail.com> wrote:
+On 1/28/22 12:59, Kirill A. Shutemov wrote:
+> Modify allocate_e820() to get a full memory map.
 
-> Hi, Andrew
-> 
-> Would you pick up this patch set, or prefer me to send a v2?
-> 
-
-It's unclear to me what's happening with [4/4].  At least a new
-changelog with more justification is expected?
-
-So yes, please resend?
+Dumb question time: why doesn't the current code get a full memory map?
+ This looks simpler.  What's the downside?  Memory consumption?

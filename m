@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2D44A445D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8D94A43D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378624AbiAaL2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S1377644AbiAaLYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358957AbiAaLOq (ORCPT
+        with ESMTP id S1359820AbiAaLPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:14:46 -0500
+        Mon, 31 Jan 2022 06:15:07 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057EFC06176F;
-        Mon, 31 Jan 2022 03:11:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B8BC061774;
+        Mon, 31 Jan 2022 03:11:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99846611EA;
-        Mon, 31 Jan 2022 11:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE26C340E8;
-        Mon, 31 Jan 2022 11:11:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C55D6610B1;
+        Mon, 31 Jan 2022 11:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBACC340E8;
+        Mon, 31 Jan 2022 11:11:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627474;
-        bh=KNeIGLaJULb8ZWWcntvz+PmSfEYYRsngV4QDwM9bi20=;
+        s=korg; t=1643627477;
+        bh=8pC7zi+x+Nwfp2vVMr81Kz8GvyFvgdehqb2HvP18y6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=npVEQvE1gqOZ5zbuXi/WE0+jEWXcGV7iZGj2ijxm6ibuOIwNUSKN3579DqeFw+B75
-         txbO3R8SIG9x1T6sDn0tW5VVwMCxx+bP4yldl88omZGhssQtlU0TVPCv4MGQzGxd9v
-         Uq3d95fkUgnXINqi/D6OL6xU1nzGDMCJOBdI/TpY=
+        b=zTb0qxmJUxx0L3CcBlcgWHz6tLTBSOfAQNCIG2+PoOrMoxrUPOT7rI9fPY8C98qUN
+         D7N3cgyThCuGAHmiAIdr+8e7wHqrkFJC3pi643cceANcPTagoXF+1pphcAOZqHTuCm
+         X5EqemSCyS7rDwrewsZZHQuRTFam1G0uVGfOlFJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [PATCH 5.15 094/171] NFSv4: nfs_atomic_open() can race when looking up a non-regular file
-Date:   Mon, 31 Jan 2022 11:55:59 +0100
-Message-Id: <20220131105233.221372623@linuxfoundation.org>
+        stable@vger.kernel.org, Jianguo Wu <wujianguo@chinatelecom.cn>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 095/171] net-procfs: show net devices bound packet types
+Date:   Mon, 31 Jan 2022 11:56:00 +0100
+Message-Id: <20220131105233.252404337@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 References: <20220131105229.959216821@linuxfoundation.org>
@@ -49,40 +48,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Jianguo Wu <wujianguo@chinatelecom.cn>
 
-commit 1751fc1db36f6f411709e143d5393f92d12137a9 upstream.
+commit 1d10f8a1f40b965d449e8f2d5ed7b96a7c138b77 upstream.
 
-If the file type changes back to being a regular file on the server
-between the failed OPEN and our LOOKUP, then we need to re-run the OPEN.
+After commit:7866a621043f ("dev: add per net_device packet type chains"),
+we can not get packet types that are bound to a specified net device by
+/proc/net/ptype, this patch fix the regression.
 
-Fixes: 0dd2b474d0b6 ("nfs: implement i_op->atomic_open()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Run "tcpdump -i ens192 udp -nns0" Before and after apply this patch:
+
+Before:
+  [root@localhost ~]# cat /proc/net/ptype
+  Type Device      Function
+  0800          ip_rcv
+  0806          arp_rcv
+  86dd          ipv6_rcv
+
+After:
+  [root@localhost ~]# cat /proc/net/ptype
+  Type Device      Function
+  ALL  ens192   tpacket_rcv
+  0800          ip_rcv
+  0806          arp_rcv
+  86dd          ipv6_rcv
+
+v1 -> v2:
+  - fix the regression rather than adding new /proc API as
+    suggested by Stephen Hemminger.
+
+Fixes: 7866a621043f ("dev: add per net_device packet type chains")
+Signed-off-by: Jianguo Wu <wujianguo@chinatelecom.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/dir.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ net/core/net-procfs.c |   35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -1987,12 +1987,17 @@ no_open:
- 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
- 		    !S_ISDIR(inode->i_mode))
- 			res = ERR_PTR(-ENOTDIR);
-+		else if (inode && S_ISREG(inode->i_mode))
-+			res = ERR_PTR(-EOPENSTALE);
- 	} else if (!IS_ERR(res)) {
- 		inode = d_inode(res);
- 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
- 		    !S_ISDIR(inode->i_mode)) {
- 			dput(res);
- 			res = ERR_PTR(-ENOTDIR);
-+		} else if (inode && S_ISREG(inode->i_mode)) {
-+			dput(res);
-+			res = ERR_PTR(-EOPENSTALE);
- 		}
- 	}
- 	if (switched) {
+--- a/net/core/net-procfs.c
++++ b/net/core/net-procfs.c
+@@ -190,12 +190,23 @@ static const struct seq_operations softn
+ 	.show  = softnet_seq_show,
+ };
+ 
+-static void *ptype_get_idx(loff_t pos)
++static void *ptype_get_idx(struct seq_file *seq, loff_t pos)
+ {
++	struct list_head *ptype_list = NULL;
+ 	struct packet_type *pt = NULL;
++	struct net_device *dev;
+ 	loff_t i = 0;
+ 	int t;
+ 
++	for_each_netdev_rcu(seq_file_net(seq), dev) {
++		ptype_list = &dev->ptype_all;
++		list_for_each_entry_rcu(pt, ptype_list, list) {
++			if (i == pos)
++				return pt;
++			++i;
++		}
++	}
++
+ 	list_for_each_entry_rcu(pt, &ptype_all, list) {
+ 		if (i == pos)
+ 			return pt;
+@@ -216,22 +227,40 @@ static void *ptype_seq_start(struct seq_
+ 	__acquires(RCU)
+ {
+ 	rcu_read_lock();
+-	return *pos ? ptype_get_idx(*pos - 1) : SEQ_START_TOKEN;
++	return *pos ? ptype_get_idx(seq, *pos - 1) : SEQ_START_TOKEN;
+ }
+ 
+ static void *ptype_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ {
++	struct net_device *dev;
+ 	struct packet_type *pt;
+ 	struct list_head *nxt;
+ 	int hash;
+ 
+ 	++*pos;
+ 	if (v == SEQ_START_TOKEN)
+-		return ptype_get_idx(0);
++		return ptype_get_idx(seq, 0);
+ 
+ 	pt = v;
+ 	nxt = pt->list.next;
++	if (pt->dev) {
++		if (nxt != &pt->dev->ptype_all)
++			goto found;
++
++		dev = pt->dev;
++		for_each_netdev_continue_rcu(seq_file_net(seq), dev) {
++			if (!list_empty(&dev->ptype_all)) {
++				nxt = dev->ptype_all.next;
++				goto found;
++			}
++		}
++
++		nxt = ptype_all.next;
++		goto ptype_all;
++	}
++
+ 	if (pt->type == htons(ETH_P_ALL)) {
++ptype_all:
+ 		if (nxt != &ptype_all)
+ 			goto found;
+ 		hash = 0;
 
 

@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7834A4D90
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF8A4A4D94
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354821AbiAaRxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:53:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38620 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354941AbiAaRxF (ORCPT
+        id S1354624AbiAaRxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230440AbiAaRxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:53:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643651585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Dad+NRO6CeianVL7/Op9DvhkqOApC5yos9M42t9RgSs=;
-        b=ABHjVJKvPKF2LGeTk23j0ywc91OcF0QA5h4Pn60Y6y4LzZnPOKg63GgZJsNAV+xCs3oa6o
-        xjZBhdI1fAG1SKFYhEipxFaw1fW8pUI4VzQZNMXe3u93iPbaxxWZclzh+H5pV+ofL6PdvR
-        PRZMXU0kbswdMkIf3WZPYITGhynpRE8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-ExP3oVaSOZW5qjvIia2n6A-1; Mon, 31 Jan 2022 12:53:01 -0500
-X-MC-Unique: ExP3oVaSOZW5qjvIia2n6A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4EE3101F001;
-        Mon, 31 Jan 2022 17:52:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A3D0838D2;
-        Mon, 31 Jan 2022 17:52:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] cachefiles: Fix the volume coherency check
-From:   David Howells <dhowells@redhat.com>
-To:     smfrench@gmail.com
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-cachefs@redhat.com, dhowells@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 31 Jan 2022 17:52:47 +0000
-Message-ID: <164365156782.2040161.8222945480682704501.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Mon, 31 Jan 2022 12:53:42 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09CDC061714;
+        Mon, 31 Jan 2022 09:53:42 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id c188so17951356iof.6;
+        Mon, 31 Jan 2022 09:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U19SOwgEN9NWU8jRTy76U3BvJNJSKaGDXy3EURqG428=;
+        b=DiVA9KgYG2K0UUj+cEBwdYN2YkQqnNNLVGyMMtcSsnK3g7IPzoBVQqt2JSn/bR+nGt
+         z06tLmLdo4qB5hqU0nBo4ueGIu4CoxmawPFCJKICXAV3fjtXZwvCeompFpWqF82fWw0N
+         GmE4wzCywzV+BXOrKniZJ9/yvGsNmyqhud2CUyy7HTuMYNa+/El32l69Zj/rsEkMYeTk
+         hDudCYttv5Q1+678OBZvjQICIFLaNryso7saxAOoJ7t37cB7jT8J+8HAeV2mg7sB3qK6
+         crK5mWxxUtw6oPvaf6QooCyN/KlXXqhcMwsu9KxgzOzm48Gm14nUh6WrbUIJMw5ppdtI
+         3Mfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U19SOwgEN9NWU8jRTy76U3BvJNJSKaGDXy3EURqG428=;
+        b=YcPKCWcCrrFpRwcbszXWG9QRAreCwFkJwXnltkwYo606DhkQBSxQfdbisDU6HtLFGV
+         UowuQFX8Wt5bALmIK+5B7TTfMo5lH9ASsS2dBjexTuvXjH13Pc92U0XsrAf/zo9CZ5Dn
+         ietAqnqAP+pKI/4IDjdzeFU8nH3NwjLZ7Bdo66kmyjlh7DT+3HImb/4030agyg/D2LON
+         Cwd9ndQr4o+cZTQNOg5XlrCacInaigQiEq8yG/XyRM6JJxLmP/ZYdzgfAlwC+ix+0D/A
+         B5njjvw583HgCn3OnHuKpbsnKAJ0ROmRhFySHHaTPTABfDQ+QWoGuLiLEpGCzJHsAcKQ
+         XWPQ==
+X-Gm-Message-State: AOAM532rvbQ9vyItpP9xBAqKFqbRQIRJlJnJCUXe6HI4qemMdhAPvNf2
+        tobFVQ5j+BoIrdMHk93LJS8=
+X-Google-Smtp-Source: ABdhPJwLmntUtgQBn8Jt9z3nqUWg2DkWFh63AJYcZ25u9+GyXgGDoc5XI05TP0qY0rAjTcBE7Wen/g==
+X-Received: by 2002:a05:6638:53a:: with SMTP id j26mr3204202jar.136.1643651622115;
+        Mon, 31 Jan 2022 09:53:42 -0800 (PST)
+Received: from ?IPV6:2601:282:800:dc80:8870:ce19:2c7:3513? ([2601:282:800:dc80:8870:ce19:2c7:3513])
+        by smtp.googlemail.com with ESMTPSA id i15sm18585139iog.14.2022.01.31.09.53.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 09:53:41 -0800 (PST)
+Message-ID: <4fa7b7bc-6d86-1ed5-8f9b-04cfef5f13ee@gmail.com>
+Date:   Mon, 31 Jan 2022 10:53:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH v3 net-next 7/7] net: udp: use kfree_skb_reason() in
+ __udp_queue_rcv_skb()
+Content-Language: en-US
+To:     menglong8.dong@gmail.com, dsahern@kernel.org, kuba@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, pablo@netfilter.org, kadlec@netfilter.org,
+        fw@strlen.de, imagedong@tencent.com, edumazet@google.com,
+        alobakin@pm.me, paulb@nvidia.com, keescook@chromium.org,
+        talalahmad@google.com, haokexin@gmail.com, memxor@gmail.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        cong.wang@bytedance.com, mengensun@tencent.com
+References: <20220128073319.1017084-1-imagedong@tencent.com>
+ <20220128073319.1017084-8-imagedong@tencent.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220128073319.1017084-8-imagedong@tencent.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the cache volume coherency attribute check.  It was copied from the
-file coherency check which uses as struct to lay out the xattr, and so
-needs to add a bit on to find the coherency data - but the volume coherency
-attribute only contains the coherency data, so we shouldn't be using the
-layout struct for it.
+On 1/28/22 12:33 AM, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> Replace kfree_skb() with kfree_skb_reason() in __udp_queue_rcv_skb().
+> Following new drop reasons are introduced:
+> 
+> SKB_DROP_REASON_SOCKET_RCVBUFF
+> SKB_DROP_REASON_PROTO_MEM
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  include/linux/skbuff.h     |  5 +++++
+>  include/trace/events/skb.h |  2 ++
+>  net/ipv4/udp.c             | 10 +++++++---
+>  3 files changed, 14 insertions(+), 3 deletions(-)
+> 
 
-This has passed unnoticed so far because it only affects cifs at the
-moment, and cifs had its fscache component disabled.
-
-This can now be checked by enabling CONFIG_CIFS_FSCACHE, enabling the
-following tracepoint:
-
-	/sys/kernel/debug/tracing/events/cachefiles/cachefiles_vol_coherency/enable
-
-and making a cifs mount.  Without this change, the trace shows a
-cachefiles_vol_coherency line with "VOL BAD cmp" in it; with this change it
-shows "VOL OK" instead.
-
-Fixes: 32e150037dce ("fscache, cachefiles: Store the volume coherency data")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Steve French <smfrench@gmail.com>
-cc: linux-cifs@vger.kernel.org
-cc: linux-cachefs@redhat.com
----
-
- fs/cachefiles/xattr.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/cachefiles/xattr.c b/fs/cachefiles/xattr.c
-index 83f41bd0c3a9..c6171e818a7c 100644
---- a/fs/cachefiles/xattr.c
-+++ b/fs/cachefiles/xattr.c
-@@ -218,10 +218,10 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
-  */
- int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
- {
--	struct cachefiles_xattr *buf;
- 	struct dentry *dentry = volume->dentry;
- 	unsigned int len = volume->vcookie->coherency_len;
- 	const void *p = volume->vcookie->coherency;
-+	void *buf;
- 	enum cachefiles_coherency_trace why;
- 	ssize_t xlen;
- 	int ret = -ESTALE;
-@@ -245,7 +245,7 @@ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
- 					"Failed to read xattr with error %zd", xlen);
- 		}
- 		why = cachefiles_coherency_vol_check_xattr;
--	} else if (memcmp(buf->data, p, len) != 0) {
-+	} else if (memcmp(buf, p, len) != 0) {
- 		why = cachefiles_coherency_vol_check_cmp;
- 	} else {
- 		why = cachefiles_coherency_vol_check_ok;
-
+Reviewed-by: David Ahern <dsahern@kernel.org>
 

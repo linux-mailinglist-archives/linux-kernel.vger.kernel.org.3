@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFA04A42C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B5E4A42FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240507AbiAaLOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377564AbiAaLKM (ORCPT
+        id S244783AbiAaLP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:15:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42662 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376717AbiAaLIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED51C06173B;
-        Mon, 31 Jan 2022 03:08:52 -0800 (PST)
+        Mon, 31 Jan 2022 06:08:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C34361139;
-        Mon, 31 Jan 2022 11:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42055C340E8;
-        Mon, 31 Jan 2022 11:08:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB6A360ECF;
+        Mon, 31 Jan 2022 11:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E1F0C340E8;
+        Mon, 31 Jan 2022 11:08:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627331;
-        bh=l5n9EoLiSTCIVosUiCFzhvPYXWqO3rq1EB8MKnb1+N0=;
+        s=korg; t=1643627335;
+        bh=CF/4MY7FKckAGskhdW8kSRtZt/dF4cnf9veiaqT7nkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HapNBTCIMn7iLagp5bh0WvwXNjO3zvHzAxJvUQaJHKeOtbcqYrMlTSPLSJ7n0uZf9
-         8jp43CrJ9ig35YLNLwmUP3dBZkcUXgA8iRa+4hW+QLe7ZQOWjD2iABn873whyskUsq
-         SuGMEl8fXLFfxLtbxhVAKLVi16HVAL1CkdhLzIGI=
+        b=tyWoezdi7gRs0se67aSL1Z1MUhUXH/qh8E/sIfimsozvmHz6GeKB0H+6iiAN2ilUL
+         eJocobwj4n0rKpBdqUc9gx0yz4wpXi0zxxoG/A5jIiYz4bX5bKNAkBlg1LtJnPMvU8
+         ExuIF3WwTCQKWhHAtT/0ZU1TZgy2E1kkbCDEoG88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.15 049/171] tty: n_gsm: fix SW flow control encoding/handling
-Date:   Mon, 31 Jan 2022 11:55:14 +0100
-Message-Id: <20220131105231.689275464@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        "Maciej W. Rozycki" <macro@embecosm.com>
+Subject: [PATCH 5.15 050/171] tty: Partially revert the removal of the Cyclades public API
+Date:   Mon, 31 Jan 2022 11:55:15 +0100
+Message-Id: <20220131105231.721191500@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 References: <20220131105229.959216821@linuxfoundation.org>
@@ -47,64 +45,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: daniel.starke@siemens.com <daniel.starke@siemens.com>
+From: Maciej W. Rozycki <macro@embecosm.com>
 
-commit 8838b2af23caf1ff0610caef2795d6668a013b2d upstream.
+commit f23653fe64479d96910bfda2b700b1af17c991ac upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.2.7.3 states that DC1 (XON) and DC3 (XOFF)
-are the control characters defined in ISO/IEC 646. These shall be quoted if
-seen in the data stream to avoid interpretation as flow control characters.
+Fix a user API regression introduced with commit f76edd8f7ce0 ("tty:
+cyclades, remove this orphan"), which removed a part of the API and
+caused compilation errors for user programs using said part, such as
+GCC 9 in its libsanitizer component[1]:
 
-ISO/IEC 646 refers to the set of ISO standards described as the ISO
-7-bit coded character set for information interchange. Its final version
-is also known as ITU T.50.
-See https://www.itu.int/rec/T-REC-T.50-199209-I/en
+.../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:160:10: fatal error: linux/cyclades.h: No such file or directory
+  160 | #include <linux/cyclades.h>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [Makefile:664: sanitizer_platform_limits_posix.lo] Error 1
 
-To abide the standard it is needed to quote DC1 and DC3 correctly if these
-are seen as data bytes and not as control characters. The current
-implementation already tries to enforce this but fails to catch all
-defined cases. 3GPP 27.010 chapter 5.2.7.3 clearly states that the most
-significant bit shall be ignored for DC1 and DC3 handling. The current
-implementation handles only the case with the most significant bit set 0.
-Cases in which DC1 and DC3 have the most significant bit set 1 are left
-unhandled.
+As the absolute minimum required bring `struct cyclades_monitor' and
+ioctl numbers back then so as to make the library build again.  Add a
+preprocessor warning as to the obsolescence of the features provided.
 
-This patch fixes this by masking the data bytes with ISO_IEC_646_MASK (only
-the 7 least significant bits set 1) before comparing them with XON
-(a.k.a. DC1) and XOFF (a.k.a. DC3) when testing which byte values need
-quotation via byte stuffing.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220120101857.2509-1-daniel.starke@siemens.com
+[1] GCC PR sanitizer/100379, "cyclades.h is removed from linux kernel
+    header files", <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379>
+
+Fixes: f76edd8f7ce0 ("tty: cyclades, remove this orphan")
+Cc: stable@vger.kernel.org # v5.13+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Maciej W. Rozycki <macro@embecosm.com>
+Link: https://lore.kernel.org/r/alpine.DEB.2.20.2201260733430.11348@tpp.orcam.me.uk
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/uapi/linux/cyclades.h |   35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 include/uapi/linux/cyclades.h
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -318,6 +318,7 @@ static struct tty_driver *gsm_tty_driver
- #define GSM1_ESCAPE_BITS	0x20
- #define XON			0x11
- #define XOFF			0x13
-+#define ISO_IEC_646_MASK	0x7F
- 
- static const struct tty_port_operations gsm_port_ops;
- 
-@@ -527,7 +528,8 @@ static int gsm_stuff_frame(const u8 *inp
- 	int olen = 0;
- 	while (len--) {
- 		if (*input == GSM1_SOF || *input == GSM1_ESCAPE
--		    || *input == XON || *input == XOFF) {
-+		    || (*input & ISO_IEC_646_MASK) == XON
-+		    || (*input & ISO_IEC_646_MASK) == XOFF) {
- 			*output++ = GSM1_ESCAPE;
- 			*output++ = *input++ ^ GSM1_ESCAPE_BITS;
- 			olen++;
+--- /dev/null
++++ b/include/uapi/linux/cyclades.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++
++#ifndef _UAPI_LINUX_CYCLADES_H
++#define _UAPI_LINUX_CYCLADES_H
++
++#warning "Support for features provided by this header has been removed"
++#warning "Please consider updating your code"
++
++struct cyclades_monitor {
++	unsigned long int_count;
++	unsigned long char_count;
++	unsigned long char_max;
++	unsigned long char_last;
++};
++
++#define CYGETMON		0x435901
++#define CYGETTHRESH		0x435902
++#define CYSETTHRESH		0x435903
++#define CYGETDEFTHRESH		0x435904
++#define CYSETDEFTHRESH		0x435905
++#define CYGETTIMEOUT		0x435906
++#define CYSETTIMEOUT		0x435907
++#define CYGETDEFTIMEOUT		0x435908
++#define CYSETDEFTIMEOUT		0x435909
++#define CYSETRFLOW		0x43590a
++#define CYGETRFLOW		0x43590b
++#define CYSETRTSDTR_INV		0x43590c
++#define CYGETRTSDTR_INV		0x43590d
++#define CYZSETPOLLCYCLE		0x43590e
++#define CYZGETPOLLCYCLE		0x43590f
++#define CYGETCD1400VER		0x435910
++#define CYSETWAIT		0x435912
++#define CYGETWAIT		0x435913
++
++#endif /* _UAPI_LINUX_CYCLADES_H */
 
 

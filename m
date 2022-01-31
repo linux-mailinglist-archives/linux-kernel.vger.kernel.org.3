@@ -2,97 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFAA4A538F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8C64A5395
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiAaXvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S229844AbiAaXx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiAaXvI (ORCPT
+        with ESMTP id S229663AbiAaXxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:51:08 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E17C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:51:07 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id m10so4965741oie.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:51:07 -0800 (PST)
+        Mon, 31 Jan 2022 18:53:25 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F54C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:53:25 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id h12so15456645pjq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:53:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=N66B/zUeupRdiK6j9+YxGVkqTJzroVbLV/gi+PEAAqs=;
-        b=VeQ6g7VBzwMDAzOx55SBs8lPKj2ZcqyklN0g5Q+AqJ8BXmXJ8ARuAkn6yzDkrfvDmo
-         uu2u7qNcVTkMr0pQDFfPsMzVNsEfZdi9Fvno+92OsK+ZvlBDDjwbeJlmqTZssnaHfcR8
-         6O8vJ9ZdsPgLqhbLITnMe63oJE1shxt4rKXm1h9Yj0qnV0hRf9wKPRW/jeoIj2ypqhVu
-         I0ilaSmvBI8/6e5QUL//rb5GDmlnW9/VeTy96+WL+61Iy1rb0ohYDfeE61s1H0636oux
-         9KbS7DYwUB+AJoaYAw1oVq88jWyPn7OftXqqhAitDUoGX7byO9oAn8MJLuhfUAWX/Gjg
-         x90A==
+        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
+        b=YW4/gspNKInMiiqNd58ZCH4h0W4EUl91RhRmEY/57BXNbZ/hMUAkcEwc7FoOjBI4Nt
+         E45rvZBie5zy3Gz0IT/MtOePAEx+D4c06rSLJ0MR4nhBOzD0JqXtbe/3lYMrtOi4Ixjn
+         OBYyuErvU48oU1yNCmORPoTqATZguV8v3Oeuc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=N66B/zUeupRdiK6j9+YxGVkqTJzroVbLV/gi+PEAAqs=;
-        b=aJNxLscsl/TTyKeIlDuMB5Q086+fh6n6NwuZ3miChsbwD6dnVCc5QAxKN0mrlzwjN7
-         sbUyIZgAYcmbKaMnDSO1L6CmGZlRe4iD0WWB18A0bmrvduxPB3tgUmPZAExR1VG2/O4y
-         2YoxrH74gIdXZO1yRnE3wDj1KOZn5AZVZBI5NZHLWNP7iu2RKxnM+dN/79Nt4BZmuF+z
-         bMD7oic6Rhu8yDLZJaaQNWOI7l+Rx6hF+fsY2Iw+gWYO0rev5rmgfcJNlUR+//H1y7t/
-         ZRgFx8alK2ST9Jvkwt2Y4pHhuJCZs6qGfdScfm84NceOX0flYdBNDP+ESQI7xyQ/CjsT
-         53ng==
-X-Gm-Message-State: AOAM532Ur/6R4amSknW1viL7K7mkiFthBgeLa/tTs5N5TX3sgpiRd+wx
-        P90VffYpQxy6qbVPQwbd++vyBQ==
-X-Google-Smtp-Source: ABdhPJyZpgTgyRdq3gRjlMkwnuIEQyi6iWY7bf98FclX26jW8k/kO0JDKNafceTbQdkAH9+tcMWjRQ==
-X-Received: by 2002:aca:f102:: with SMTP id p2mr18083052oih.325.1643673066964;
-        Mon, 31 Jan 2022 15:51:06 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id f20sm9297496ooh.10.2022.01.31.15.51.06
+        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
+        b=MzrJW/IYB1whzioigavzbQwwPCGnpfWZ8WWS2jdcI5YZ1ZXcNEP5ULslY4GHieDMHP
+         TS5JJ6kPdlpUNuFdQOFO14He8IZPstaYTBPEGO6/fyybLM1SKc8uTitKZcZmCsJnNZTX
+         IE9+oPyGdgk1G6XMHQc4/5UIl3EKtOl1bGnX8x3y1BwpoUKGJa/vJ16/qGm6a5c3fTJ5
+         fLlQxx6l3aVMWnU4W6yJZJZqdlhwWW830t+2bdzek4Jd8GpbJvvt5E+WURTM8WITWxTS
+         UtN6YXCPYZfMP4Rpbg1TmqRM/ui5RZ8hGepvFxgPsdL+0wHYr2bQUl66PuyG1B7wv7bw
+         Wa8g==
+X-Gm-Message-State: AOAM531nNX6hsagrRNGx0CYdzTGeZtAyYDRNIzGcnbHU8Sjwxz73Rq0n
+        OfNzQTT+a+8yFZLnZCupHCnjTg==
+X-Google-Smtp-Source: ABdhPJwQoJTVTbWyz7yUWp71cBeTkkBUzx+D+EJf+jHOTWJCSO09eDNSyMoJg+E1UEDubWnSmjvFOg==
+X-Received: by 2002:a17:902:d512:: with SMTP id b18mr24084400plg.24.1643673204493;
+        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ha21sm392379pjb.48.2022.01.31.15.53.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 15:51:06 -0800 (PST)
-Date:   Mon, 31 Jan 2022 17:51:04 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rayyan Ansari <rayyan@ansari.sh>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: pinctrl: qcom,pmic-mpp: Document PM8226
- compatible
-Message-ID: <Yfh16GWpkjOOLpQZ@builder.lan>
-References: <20220124171538.18088-1-rayyan@ansari.sh>
+        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
+Date:   Mon, 31 Jan 2022 15:53:23 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Len Baker <len.baker@gmx.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier()
+ substitute
+Message-ID: <202201311550.31EF589B2@keescook>
+References: <20220131225250.409564-1-ndesaulniers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124171538.18088-1-rayyan@ansari.sh>
+In-Reply-To: <20220131225250.409564-1-ndesaulniers@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24 Jan 11:15 CST 2022, Rayyan Ansari wrote:
-
-> Document the Device Tree binding for PM8226 MPPs.
+On Mon, Jan 31, 2022 at 02:52:47PM -0800, Nick Desaulniers wrote:
+> Add text to memory-barriers.txt and deprecated.rst to denote that
+> volatile-qualifying an asm statement is not a substitute for either a
+> compiler barrier (``barrier();``) or a clobber list.
 > 
-> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
+> This way we can point to this in code that strengthens existing
+> volatile-qualified asm statements to use a compiler barrier.
+> 
+> Suggested-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 > ---
->  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Example: https://godbolt.org/z/8PW549zz9
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> index 35c846f59979..df79274d0ec3 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> @@ -21,6 +21,7 @@ properties:
->            - qcom,pm8019-mpp
->            - qcom,pm8038-mpp
->            - qcom,pm8058-mpp
-> +          - qcom,pm8226-mpp
->            - qcom,pm8821-mpp
->            - qcom,pm8841-mpp
->            - qcom,pm8916-mpp
+>  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
+>  Documentation/process/deprecated.rst | 17 +++++++++++++++++
+>  2 files changed, 41 insertions(+)
+> 
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index b12df9137e1c..f3908c0812da 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1726,6 +1726,30 @@ of optimizations:
+>       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
+>       though the CPU of course need not do so.
+>  
+> + (*) Similarly, the compiler is within its rights to reorder instructions
+> +     around an asm statement so long as clobbers are not violated. For example,
+> +
+> +	asm volatile ("");
+> +	flag = true;
+> +
+> +     May be modified by the compiler to:
+> +
+> +	flag = true;
+> +	asm volatile ("");
+> +
+> +     Marking an asm statement as volatile is not a substitute for barrier(),
+> +     and is implicit for asm goto statements and asm statements that do not
+> +     have outputs (like the above example). Prefer either:
+> +
+> +	asm ("":::"memory");
+> +	flag = true;
+> +
+> +     Or:
+> +
+> +	asm ("");
+> +	barrier();
+> +	flag = true;
+> +
+
+I like this!
+
+>   (*) The compiler is within its rights to invent stores to a variable,
+>       as in the following example:
+>  
+> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+> index 388cb19f5dbb..432816e2f79e 100644
+> --- a/Documentation/process/deprecated.rst
+> +++ b/Documentation/process/deprecated.rst
+> @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
+>          instance->count = count;
+>  
+>          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
+> +
+> +Volatile Qualified asm Statements
+> +=================================
+
+I would open with an example, like:
+
+Instead of::
+
+	volatile asm("...");
+
+just use::
+
+	asm("...");
+
+
+> +
+> +According to `the GCC docs on inline asm
+> +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
+> +
+> +  asm statements that have no output operands and asm goto statements,
+> +  are implicitly volatile.
+
+Does this mean "volatile" _is_ needed when there are operands, etc?
+
+> +
+> +For many uses of asm statements, that means adding a volatile qualifier won't
+> +hurt (making the implicit explicit), but it will not strengthen the semantics
+> +for such cases where it would have been implied. Care should be taken not to
+> +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
+> +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
+> +
+> +.. [memory-barriers] Documentation/memory-barriers.txt
 > -- 
-> 2.34.1
+> 2.35.0.rc2.247.g8bbb082509-goog
 > 
+
+-- 
+Kees Cook

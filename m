@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 837194A4806
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F53A4A480D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378672AbiAaNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:25:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54294 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiAaNZ0 (ORCPT
+        id S1378792AbiAaN0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348723AbiAaN0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:25:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89830B82AFC;
-        Mon, 31 Jan 2022 13:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD075C340E8;
-        Mon, 31 Jan 2022 13:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643635524;
-        bh=6cJEJGctXWg2ouM0AW7ItCpTitZ5jZpRhQHIutezKfg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SeLbkLH6CgxPzavN+y1x/PZsXep/NIzZf854UHtRB1Ns7ysCS6yWOzNKa8USejqFj
-         w0zslfJAWtCcljNBqEEQWDm/3h6NMcUsTCR0Lp9MnlAiXGZUidc8BEBbZlsW0yTNjS
-         /dY8k7xAgv6T73620+KnNWo1795gVJfNHZ5B3eKY=
-Date:   Mon, 31 Jan 2022 14:25:21 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yunhao Tian <t123yh.xyz@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: audio: fix indent
-Message-ID: <YffjQcKiI4gVVeW3@kroah.com>
-References: <20220129023753.1494755-1-t123yh.xyz@gmail.com>
+        Mon, 31 Jan 2022 08:26:32 -0500
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25573C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:26:31 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:58b3:216b:d287:833])
+        by michel.telenet-ops.be with bizsmtp
+        id pRSU2600b2lsq0X06RSUsG; Mon, 31 Jan 2022 14:26:29 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nEWhQ-00CaW7-Kc; Mon, 31 Jan 2022 14:26:28 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nEWhP-00H7GS-To; Mon, 31 Jan 2022 14:26:27 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>
+Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH 0/3] RISC-V: Fix cpumask rework falloout
+Date:   Mon, 31 Jan 2022 14:26:19 +0100
+Message-Id: <cover.1643635156.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129023753.1494755-1-t123yh.xyz@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 10:37:53AM +0800, Yunhao Tian wrote:
-> This fixes indents of f_uac2.c and u_audio.c introduced by
-> previous commits.
-> 
-> Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_uac2.c  | 16 +++++++-------
->  drivers/usb/gadget/function/u_audio.c | 30 +++++++++++++--------------
->  2 files changed, 23 insertions(+), 23 deletions(-)
+	Hi all,
 
-Does not apply to my usb-next branch at all.  Please rebase and resend.
+This patch series intends to fix the fall-out from commit
+26fb751ca37846c9 ("RISC-V: Do not use cpumask data structure for hartid
+bitmap"), cfr. the discussion in thread[1].
 
-thanks,
+Thanks for your comments!
 
-greg k-h
+[1] "[PATCH v3 6/6] RISC-V: Do not use cpumask data structure for hartid
+     bitmap"
+    https://lore.kernel.org/r/20220120090918.2646626-7-atishp@rivosinc.com/
+
+Geert Uytterhoeven (3):
+  RISC-V: Fix hartid mask handling for hartid 31 and up
+  RISC-V: Fix handling of empty cpu masks
+  RISC-V: Fix IPI/RFENCE hmask on non-monotonic hartid ordering
+
+ arch/riscv/kernel/sbi.c | 72 +++++++++++++++++++++++++++--------------
+ 1 file changed, 47 insertions(+), 25 deletions(-)
+
+-- 
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

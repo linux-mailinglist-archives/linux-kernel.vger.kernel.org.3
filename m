@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570D14A415A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE264A4161
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358802AbiAaLDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:03:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49522 "EHLO
+        id S1358947AbiAaLDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:03:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49566 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358835AbiAaLBx (ORCPT
+        with ESMTP id S1358412AbiAaLB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:01:53 -0500
+        Mon, 31 Jan 2022 06:01:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A04C0B82A57;
-        Mon, 31 Jan 2022 11:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09FAC340E8;
-        Mon, 31 Jan 2022 11:01:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1F7DB82A62;
+        Mon, 31 Jan 2022 11:01:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1708AC340EF;
+        Mon, 31 Jan 2022 11:01:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626911;
-        bh=/sgwyjPGk2ekIOjkWWWkrHy58bJWv7F+ny5Cg039Gyo=;
+        s=korg; t=1643626914;
+        bh=GRxFcrspBDZRFlASEt8oRRx66DaP085lVTs5yNE/Bvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mo4sX6JV2TyPTm0hz14WHbsdFOj4JZhaX6NtgPUMVHSIv1pGuaA+TnyUFrzGuuXih
-         M+qmGyv77iFLzo5TdjHguCt1dX3ESEIb0imx8HdRfXN5Pq8sJ89btoxlG+pYEbzfk6
-         mMchDUOMV2U7UD020Lh1gPzkCAYx932Zc9DyNiBs=
+        b=PhA5rpgAwzh1tJMjto3IYP3sdWkmiDknoy8TLtgRG2Ajb8mteGHRI6dLuB35PFmjt
+         Px/SHpm4smH7eZ62uMiH6zcBiKR1fI/sQUCRPdK/UEfQm935RUeR1b62wYIoT6nuTQ
+         02UIBdCVJzEEJd+1SBOjyJXfMpU3ImwYgu7eJOyw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        stable@vger.kernel.org, Dan van der Ster <dan@vanderster.com>,
+        Jeff Layton <jlayton@kernel.org>,
         Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 5.10 015/100] ceph: properly put ceph_string reference after async create attempt
-Date:   Mon, 31 Jan 2022 11:55:36 +0100
-Message-Id: <20220131105220.973722937@linuxfoundation.org>
+Subject: [PATCH 5.10 016/100] ceph: set pool_ns in new inode layout for async creates
+Date:   Mon, 31 Jan 2022 11:55:37 +0100
+Message-Id: <20220131105221.005308257@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
 References: <20220131105220.424085452@linuxfoundation.org>
@@ -47,33 +48,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jeff Layton <jlayton@kernel.org>
 
-commit 932a9b5870d38b87ba0a9923c804b1af7d3605b9 upstream.
+commit 4584a768f22b7669cdebabc911543621ac661341 upstream.
 
-The reference acquired by try_prep_async_create is currently leaked.
-Ensure we put it.
+Dan reported that he was unable to write to files that had been
+asynchronously created when the client's OSD caps are restricted to a
+particular namespace.
+
+The issue is that the layout for the new inode is only partially being
+filled. Ensure that we populate the pool_ns_data and pool_ns_len in the
+iinfo before calling ceph_fill_inode.
 
 Cc: stable@vger.kernel.org
+URL: https://tracker.ceph.com/issues/54013
 Fixes: 9a8d03ca2e2c ("ceph: attempt to do async create when possible")
+Reported-by: Dan van der Ster <dan@vanderster.com>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 Reviewed-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/file.c |    2 ++
- 1 file changed, 2 insertions(+)
+ fs/ceph/file.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 --- a/fs/ceph/file.c
 +++ b/fs/ceph/file.c
-@@ -743,8 +743,10 @@ retry:
- 				restore_deleg_ino(dir, req->r_deleg_ino);
- 				ceph_mdsc_put_request(req);
- 				try_async = false;
-+				ceph_put_string(rcu_dereference_raw(lo.pool_ns));
- 				goto retry;
- 			}
-+			ceph_put_string(rcu_dereference_raw(lo.pool_ns));
- 			goto out_req;
- 		}
- 	}
+@@ -577,6 +577,7 @@ static int ceph_finish_async_create(stru
+ 	struct ceph_inode_info *ci = ceph_inode(dir);
+ 	struct inode *inode;
+ 	struct timespec64 now;
++	struct ceph_string *pool_ns;
+ 	struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(dir->i_sb);
+ 	struct ceph_vino vino = { .ino = req->r_deleg_ino,
+ 				  .snap = CEPH_NOSNAP };
+@@ -626,6 +627,12 @@ static int ceph_finish_async_create(stru
+ 	in.max_size = cpu_to_le64(lo->stripe_unit);
+ 
+ 	ceph_file_layout_to_legacy(lo, &in.layout);
++	/* lo is private, so pool_ns can't change */
++	pool_ns = rcu_dereference_raw(lo->pool_ns);
++	if (pool_ns) {
++		iinfo.pool_ns_len = pool_ns->len;
++		iinfo.pool_ns_data = pool_ns->str;
++	}
+ 
+ 	down_read(&mdsc->snap_rwsem);
+ 	ret = ceph_fill_inode(inode, NULL, &iinfo, NULL, req->r_session,
 
 

@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E40A24A469B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759CE4A4697
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351538AbiAaMI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351380AbiAaMIz (ORCPT
+        id S1351340AbiAaMIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:08:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54475 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348589AbiAaMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:08:55 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90E6C061714;
-        Mon, 31 Jan 2022 04:08:54 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id j2so26154220edj.8;
-        Mon, 31 Jan 2022 04:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TvB/L+qgB/BhC4HvCjJPFFAzV5TyQ93kn0tMstVAmJQ=;
-        b=VwsBbQ45g/pUtJRiPkmGzxG5OSP5GN+tsFTi4a5YNsaPeTgMiIePfq7/ZIVUGPPE5R
-         2DxyDpUJQprDVf63ECXz/nutFX7nNSdi1A+zTo0A9E1znFnUQMmSLpZQItMYwv/KUsbY
-         RbaHnsGAxcXWYNkDy//DS3OHJwxlFySIrUyV4owrnKblqxbQTh9JC9N8FH0lvA2zEjDG
-         zSj3JagWm2gEVkHcGJMFc22AkNXcMQZsDlAeyiNLyNmSeYQSwr2Lca8MRuoeUQIBfA42
-         +QsB0/N8EoNlY/81lBB2R5itYgRJCRI6hAjiw2HODcbmgx4h/dSWHgxjS6P2EOBIEsjI
-         8oWQ==
+        Mon, 31 Jan 2022 07:08:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643630916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uHCsLAta/MrnmBGDia3vIQcCGWeVAhBjLYDNsArZji0=;
+        b=hSll4ygTTE1M/cbUHdqELAGX+CVlhiATDBBf2KFZoRjlgDOc/KxHLccf3U+jaHNR2VniTc
+        Rv4vUn5VjvXy2wPF96RPRdMRvnpHpHI1WaAz5uPU5V4rMBxZeNP0m7W93Yg4XR18SWAzDa
+        5pymTT11JCSbJ66BOg0dKeCYQ+g92OA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-295-FV4CWOOxMRimWP7QkeGPcw-1; Mon, 31 Jan 2022 07:08:35 -0500
+X-MC-Unique: FV4CWOOxMRimWP7QkeGPcw-1
+Received: by mail-wr1-f69.google.com with SMTP id b3-20020a5d4b83000000b001d676462248so4751022wrt.17
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:08:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TvB/L+qgB/BhC4HvCjJPFFAzV5TyQ93kn0tMstVAmJQ=;
-        b=cMxEoo/+5T1qqFTShCOqsdbT75+uz8Qz85rPkvdOLfHtV9SNkk4VBe/rdI1HvQCsKn
-         8Jip2KhkODtyJ7OKTmUY95neoozoL8o2GiwBzeaTJae/vuwVA/8kBOUtYY4wnHu6JysK
-         8VDSdia53XM8yaribjNV/BxkyjBtLifIfM5EImiA9zIRE1BhYK4S9Aips21dFWwE/UA6
-         wfJzvkKknvIGzz3gVpJ+RsliKktav7lF9GBBJZyZVSLOxMnesRrn0Ks5wKbT+ZGn7CPS
-         aDigize0h9ULlUyUqb/sjOIEpzpe5/jsfn2+MqYEcmJQxtSvmNwda3dEwDvCn8GBNLQI
-         pW+w==
-X-Gm-Message-State: AOAM5315k67GyLptIQ4ddGRivrjzMR4xX9WDVgQ7O6nON+nJmiI7ztEj
-        SwzDOD7ssBmZ4GA3tNc26YkrkNEoKh6QmQ==
-X-Google-Smtp-Source: ABdhPJzEP40J2JXVpgaxe9rVh7Cse9HqtcmIvV4DKsJg9fevNePmM4dFZdEZYEM36CglMbo5SINBhA==
-X-Received: by 2002:a05:6402:3514:: with SMTP id b20mr20298146edd.65.1643630933175;
-        Mon, 31 Jan 2022 04:08:53 -0800 (PST)
-Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
-        by smtp.gmail.com with ESMTPSA id j2sm13380735ejc.223.2022.01.31.04.08.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 04:08:52 -0800 (PST)
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: [PATCH] PCI: cadence: respond to received PTM Requests
-Date:   Mon, 31 Jan 2022 13:08:27 +0100
-Message-Id: <20220131120841.118833-1-christian.gmeiner@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=uHCsLAta/MrnmBGDia3vIQcCGWeVAhBjLYDNsArZji0=;
+        b=erCdLktQCODSvt1m74s2H5XrhLqiQEHyAxYD6AUN/0pFrf7FT8ij4tr9IvGvYfsYjz
+         aBpZUfB4pTgvdwv4MTez/YV6y8y0RMFhh3f6iB6jSe+Cr6HX/UTACK2aP57c268SjrBv
+         nTL+KaNKu1KBya0ktPuF/BKy3IfucXUZ3mh7J86B1sZz+/Xq+mN6o8mBWsWtYjjoko0G
+         pQLyqgNHrB0e3U0aD3TdiLkr2nQL5e8T9Gv82k3O2pUuYZP9pNldbI3LHug4EYxzNJ6S
+         7MEIZLUzoD0BpHidlzkX8AYlkwj5HQ8Olw6n6kppog/S9zGGrOs6qW8EEBrttmz2QBq6
+         mQ0g==
+X-Gm-Message-State: AOAM530MrMzOjjKD/Hbb37L9O37dtVUu1EnGrDmEmyz+ctyQpQ3qaH2k
+        8Kl2ZDAX9OygkleqNSf9Zl2KdqHFvAEEew3sWWyGH71RxQJ6j4fSyrvHoOnhD8FdS01RHJg/zwL
+        n/uvGn25Dm/EvNxnWpMAHxNw4
+X-Received: by 2002:a5d:4888:: with SMTP id g8mr17557001wrq.555.1643630913955;
+        Mon, 31 Jan 2022 04:08:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxOkunZZ+NozHmO2zpg9dYPVUqcOa3zg1KoXbyOc53eC4f8o5sv32htjcm8qKyMeiwchXjSIQ==
+X-Received: by 2002:a5d:4888:: with SMTP id g8mr17556980wrq.555.1643630913738;
+        Mon, 31 Jan 2022 04:08:33 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id t5sm12054594wrw.92.2022.01.31.04.08.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 04:08:33 -0800 (PST)
+Message-ID: <5a3fffc8-b2d8-6ac3-809e-e8e71b66a8ea@redhat.com>
+Date:   Mon, 31 Jan 2022 13:08:32 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <YfEG2qVO9K9G+g1d@kroah.com>
+ <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
+ <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
+ <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
+ <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+ <YfFV4EJosayH+e6C@smile.fi.intel.com> <YfFWPmG2D093gz4N@smile.fi.intel.com>
+ <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com>
+ <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
+ <YffJujbpUGUqpIk/@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YffJujbpUGUqpIk/@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables the Controller [RP] to automatically respond
-with Response/ResponseD messages.
+Hello Andy,
 
-Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
----
- drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
- drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
- 2 files changed, 14 insertions(+)
+Thanks a lot for your feedback.
 
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index fb96d37a135c..940c7dd701d6 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-@@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
- 	return ret;
- }
+On 1/31/22 12:36, Andy Shevchenko wrote:
+
+[snip]
+
+>>
+>> Another hack is that I am just hardcoding the {width, height}_mm, but I don't
+>> know what DPI could be used for these panels nor how I could calculate the mm.
+> 
+> I think the hacks is the first what should be eliminated, also see below.
+>
+
+Yes, agreed. But as we discussed with Thomas I'll post anyways since these could
+be addressed as a follow-up.
  
-+static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
-+{
-+	u32 val;
-+
-+	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-+	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
-+}
-+
- static int cdns_pcie_host_start_link(struct cdns_pcie_rc *rc)
- {
- 	struct cdns_pcie *pcie = &rc->pcie;
-@@ -501,6 +509,8 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
- 	if (rc->quirk_detect_quiet_flag)
- 		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
- 
-+	cdns_pcie_host_enable_ptm_response(pcie);
-+
- 	ret = cdns_pcie_start_link(pcie);
- 	if (ret) {
- 		dev_err(dev, "Failed to start link\n");
-diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-index c8a27b6290ce..9510ea513b8a 100644
---- a/drivers/pci/controller/cadence/pcie-cadence.h
-+++ b/drivers/pci/controller/cadence/pcie-cadence.h
-@@ -116,6 +116,10 @@
- #define LM_RC_BAR_CFG_APERTURE(bar, aperture)		\
- 					(((aperture) - 2) << ((bar) * 8))
- 
-+/* PTM Control Register */
-+#define CDNS_PCIE_LM_PTM_CTRL 	(CDNS_PCIE_LM_BASE + 0x0DA8)
-+#define CDNS_PCIE_LM_TPM_CTRL_PTMRSEN 	BIT(17)
-+
- /*
-  * Endpoint Function Registers (PCI configuration space for endpoint functions)
-  */
+> ...
+> 
+>> +config TINYDRM_SSD130X
+>> +	tristate "DRM support for Solomon SSD130X OLED displays"
+>> +	depends on DRM && OF && I2C
+> 
+> Please, make sure that it does NOT dependent on OF.
+> 
+
+I actually added this dependency deliberative. It's true that the driver is using
+the device properties API and so there isn't anything from the properties parsing
+point of view that depends on OF. And the original driver didn't depend on OF.
+
+But the original driver also only would had worked with Device Trees since the
+of_device_id table is the only one that contains the device specific data info.
+
+The i2c_device_id table only listed the devices supported to match, but then it
+would only had worked with the default values that are set by the driver.
+
+So in practice it *does* depend on OF. I'll be happy to drop that dependency if
+you provide an acpi_device_id table to match.
+
+> ...
+> 
+>> +obj-$(CONFIG_TINYDRM_SSD130X)		+= ssd130x.o
+> 
+> I would keep the original name since we have I2C (fbdev) implementation, SPI
+> and platform (fbtft), and now i2c (drm). I would like to avoid more confusion
+> that we already have.
+> 
+
+I see. That makes sense. Will I keep the original ssd1307 name then and not
+rename it to ssd130x (even though it would be more precise since supports a
+family of displays).
+
+Best regards,
 -- 
-2.34.1
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

@@ -2,180 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA254A5318
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E364A531E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbiAaXUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237951AbiAaXUF (ORCPT
+        id S229457AbiAaXVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:21:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59725 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238116AbiAaXVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:20:05 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D339C061714;
-        Mon, 31 Jan 2022 15:20:05 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id p125so13670736pga.2;
-        Mon, 31 Jan 2022 15:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hnC6Z6Q65VdAgTCIurldNfb7wdu2fNyh9pkO9iIDICk=;
-        b=Z5MZq2xNg6nMK1mXw+qO2hcJb3Tz4m7kBDjuxolAyGm+4ubLMy6tQDcyBNzElWZSOd
-         G5ecbnM5ar7DLV4W+1emFpS7l5EuuqTtBOj5Naxzs89K8S1+lBafQ7jVn+SL5sIl+Suk
-         GA8R1h/dXiKQ7aMypq+MkTbEaabr4UHQwGq/UcyD6M4vfwOyC1nGKKaNC4v1imW8fOUv
-         TldBMFlAZ9/MQsgrPJoHDkxlJpN+iBcUTAYzc4Hi6K0YGjkiVwICUx2igdu6DV8OLYD5
-         FpnItpUdFsMgTGoqi2w89mGkRM+mIinMfgGeMKeePKlNdT6+SLsReDrcqTEfHkU3QuaA
-         UJtQ==
+        Mon, 31 Jan 2022 18:21:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643671305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PrT+G3tPg9tF+5XuIAQ32IRnOTQfqMCqOg72JDwqGHg=;
+        b=higE1g8RBLhn4JLthHt4+p/oJk3aMk+sXfP3A4c2XCW1IdlK78QTTFhbrsZuoW/GHHcWkE
+        rlbm5YOUeBbnpiaHKs/pj5tmRum/e4FWWplPu5tNeydZnrIqGVLzD7Y8w1UTd6mOvO7v9B
+        mZ8WjdXL9qJ+uUS6im84+L6zFDl4Kkw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-L0vcv8bbOYqtCHXIoKvIlQ-1; Mon, 31 Jan 2022 18:21:44 -0500
+X-MC-Unique: L0vcv8bbOYqtCHXIoKvIlQ-1
+Received: by mail-wm1-f69.google.com with SMTP id o194-20020a1ca5cb000000b00350b177fb22so427817wme.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:21:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hnC6Z6Q65VdAgTCIurldNfb7wdu2fNyh9pkO9iIDICk=;
-        b=2wZ4v0rydo7OYjtiVICEpaDgOuOkkldLOAS8f1BYF2PoKss61FPcp7t1pdwgdHPglz
-         ItQ0DkGxzmii0OCrPY4AvXAIAWpfSRw+8n20WRDDQI3wYdyl33np1jLMYKJSBQBDkduU
-         zfWhwNTN4WN0TV0BkyMsKJxBIUxlmYEGKOLLNOpvdiG7X1cGaDo3ypaf30X/brnwwqCo
-         yNEDqHmXii+SsoZjP7NpJX6VYqte55sgpvnbV+GFAIvPCTXSrmfLJUeR0cDOPx43Oel2
-         Sypuus6ZP+ZNq+mF7SUE1lfD+QZRx6sozH9cOsWW6YfvUWCSTHa13xWZA4+K1Usl59cB
-         njTg==
-X-Gm-Message-State: AOAM533ztbtejuyGrXvJQqa1qMpwv3gkfu8maQnWBcaTM61U717UpfTk
-        M+cUKNqr3ut9ilAn0u9SviY=
-X-Google-Smtp-Source: ABdhPJycbTtXw2lmt7UbWvdEsej8/fkc3gFa/rosbqIgkbMppZhW1w32qbf2yIx+skbzfEUc4SpUew==
-X-Received: by 2002:a63:c156:: with SMTP id p22mr18269679pgi.215.1643671204652;
-        Mon, 31 Jan 2022 15:20:04 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id u19sm19919367pfi.150.2022.01.31.15.19.59
+        bh=PrT+G3tPg9tF+5XuIAQ32IRnOTQfqMCqOg72JDwqGHg=;
+        b=xwmRmNJPpMCIL1EfLp43DFxMFp/ICX2M+c7piBxbHSzMlwFdUkgLekZizTDGxt1yRF
+         sL6j05XdS003iczvCVIufwsdUSvaX9dKaMullN3NftA0adqN2DPIS2VcXkh8zHelyfIK
+         XPmROKRd9f3+6kmQbokoviT+z4jlxaKPEykdAONrdvVB9bOejIq1y1TETRul/XAguOGO
+         21MOx5TMc1J+FkT2KWXvPRJGqWrv8DzrWM3y1xBabDq2CbIzVERMNbfWt4Ra+GAjlx86
+         UonO5rpQuyMb7tEE1VgesVOLOnj8xH7Ny6xb3dON68qDQ9RtBJp1R05jojo3bZIRu6Oz
+         a/dA==
+X-Gm-Message-State: AOAM531NEe6Dy9k26+52mbJ32BnNuvBcEs6ZbiKcmdcPJJ51rBLGypTK
+        /ZSDIFi5oywzHxVd0mE8ucdjkzV6YO+pI+asRJxV4RhHWf6vst3mPPMOMkeKTjR/j1+mfvWFFQQ
+        NF+ROod50lfL9Y2di6QpR7sXJ
+X-Received: by 2002:a7b:c44d:: with SMTP id l13mr28332779wmi.46.1643671303289;
+        Mon, 31 Jan 2022 15:21:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz+5Kta65CM2LqtBZ8N7f7NRu724ZDFebRcaJ9B9wuQH3sMcUBfk67n6fa4xazee4fo9ruHBg==
+X-Received: by 2002:a7b:c44d:: with SMTP id l13mr28332767wmi.46.1643671303032;
+        Mon, 31 Jan 2022 15:21:43 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id p3sm515814wmq.40.2022.01.31.15.21.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 15:20:04 -0800 (PST)
-Message-ID: <dd1497ca-b1da-311a-e5fc-7c7265eb3ddf@gmail.com>
-Date:   Mon, 31 Jan 2022 15:19:58 -0800
+        Mon, 31 Jan 2022 15:21:42 -0800 (PST)
+Message-ID: <c7818782-ab41-b526-9e81-e769259baa52@redhat.com>
+Date:   Tue, 1 Feb 2022 00:21:41 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs to
- y
+Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
+ displays
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+To:     Simon Ser <contact@emersion.fr>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Saeed Mahameed <saeed@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mark Einon <mark.einon@gmail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        David Awogbemila <awogbemila@google.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Simon Horman <simon.horman@corigine.com>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
-        rafal@milecki.pl, Edwin Peer <edwin.peer@broadcom.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Prabhakar Kushwaha <pkushwaha@marvell.com>,
-        Omkar Kulkarni <okulkarni@marvell.com>,
-        Shai Malin <smalin@marvell.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
-        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20220131172450.4905-1-saeed@kernel.org>
- <20220131095905.08722670@hermes.local>
- <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
- <20220131183540.6ekn3z7tudy5ocdl@sx1>
- <30ed8220-e24d-4b40-c7a6-4b09c84f9a1f@gmail.com>
- <20220131121027.4fe3e8dc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <7dc930c6-4ffc-0dd0-8385-d7956e7d16ff@gmail.com>
- <20220131151315.4ec5f2d3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220131151315.4ec5f2d3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>
+References: <20220131201225.2324984-1-javierm@redhat.com>
+ <tIMIWqepcZGntnez-1ss4Kn4K8btXnzDRL7EWd19-745WK90YIC19E_4di9RNvB3gtx-PzWEjBEGQLPNJE_x0T1yyyaWFCoFcCiG4StR9RU=@emersion.fr>
+ <wuXPJN-K-rvjoV51c4EBmTBScov8rcJTPoYmlfHe04_-4wD1khVxo9HnUsP7UFd5m4AkzGSw2hXe_c77jbSRhjEJ0JZIYwuvuIkcv_KsR-Y=@emersion.fr>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <wuXPJN-K-rvjoV51c4EBmTBScov8rcJTPoYmlfHe04_-4wD1khVxo9HnUsP7UFd5m4AkzGSw2hXe_c77jbSRhjEJ0JZIYwuvuIkcv_KsR-Y=@emersion.fr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Simon,
 
+Thanks for your feedback.
 
-On 1/31/2022 3:13 PM, Jakub Kicinski wrote:
-> On Mon, 31 Jan 2022 15:06:01 -0800 Florian Fainelli wrote:
->>>> Right, but once you start hiding NET_VENDOR_DRIVER_XYZ under a
->>>> NET_VENDOR_XYZ Kconfig symbol dependency, if NET_VENDOR_XYZ is not set
->>>> to Y, then you have no way to select NET_VENDOR_DRIVER_XYZ and so your
->>>> old defconfig breaks.
->>>
->>> To be clear do we actually care about *old* configs or *def* configs?
->>
->> I think we care about oldconfig but maybe less so about defconfigs which
->> are in tree and can be updated.
+On 1/31/22 21:39, Simon Ser wrote:
+> On Monday, January 31st, 2022 at 21:36, Simon Ser <contact@emersion.fr> wrote:
 > 
-> The oldconfigs would have to not be updated on any intervening kernel
-> in the last 10+ years to break, right? Or is there another way that an
-> oldconfig would not have the vendor config set to y at this point?
+>> This driver only advertises XRGB8888 in ssd1307_formats. It would be nice to
+>> expose R8 as well so that user-space can directly produce suitable buffers.
+>> It would also be nice to have some kind of preferred format, so that user-space
+>> knows R8 is preferred over XRGB8888.
+> 
+> Hm, since the format used by the hw is actually R1, adding that to drm_fourcc.h
+> would be even better.
+> 
 
-That sounds very unrealistic, so yes, I don't think at this point that 
-would happen. Even if you had your 15 year old .config file and ran make 
-oldconfig today, you would have some work to do to make sure it still 
-runs on your hardware.
+Yes, agreed that would be nice. We discussed this already with Thomas and my
+suggestion was to land the driver as is, advertising XRGB8888. Which is also
+what the other driver using monochrome does (drivers/gpu/drm/tiny/repaper.c):
+
+https://www.spinics.net/lists/dri-devel/msg331328.html
+
+As a follow-up we can wire up al the needed bits to have a DRM/KMS driver that
+could expose a R1 format.
+
+> Let me know if you want me to type up any of the user-space bits.
+> 
+
+Thanks! I also could help to add the needed support in the user-space stack.
+
+Best reagards,
 -- 
-Florian
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

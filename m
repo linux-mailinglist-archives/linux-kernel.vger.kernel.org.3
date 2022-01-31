@@ -2,30 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE124A4209
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4434A45BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376467AbiAaLIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:08:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53200 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359357AbiAaLFR (ORCPT
+        id S1376649AbiAaLqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349840AbiAaLYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:05:17 -0500
+        Mon, 31 Jan 2022 06:24:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327E6C08E879;
+        Mon, 31 Jan 2022 03:15:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A4E8B82A5E;
-        Mon, 31 Jan 2022 11:05:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA41C340E8;
-        Mon, 31 Jan 2022 11:05:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6C77B82A72;
+        Mon, 31 Jan 2022 11:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368E9C340EF;
+        Mon, 31 Jan 2022 11:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627114;
-        bh=UZqAeWaT4UU0ub23NmEW130ffEa5NGj+ACSVG0Tkre8=;
+        s=korg; t=1643627700;
+        bh=GjGO6KS8Wz7i9WHvfILtYVTbWhOHZcSOqBUaV99E+jw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNr/BTh28u2Lmv5Vn95gAayqgrWbI4lGA82hJcryCnk2pSGvRmwBANmH5c9b5wa6B
-         htT1rqTWVHLmlLtGLwmYKmz32VyROOsFfseoKXvZ7BLGybsaNsqMNQyZ3u9Bvtg9jN
-         nmDbjwwusK5O5c0Xl6JmH9EIf2pGQXc30JVY2R/M=
+        b=0RDcbeYt4H/Qmu0LD29PWChUX8oCq2hWHrW1DlPvYSguXncz9COOlccY3Tki7/CfR
+         E7XmywRZzxWBUo1k0HImarsTE38M9+09qPeNtAR6DqoZMT9xCYR55tDPVD4U1ytP/I
+         8phobTVc9Lz3Q25aQO+TiGdUFHXpwrrqbj+LDHu4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 079/100] powerpc/perf: Fix power_pmu_disable to call clear_pmi_irq_pending only if PMI is pending
-Date:   Mon, 31 Jan 2022 11:56:40 +0100
-Message-Id: <20220131105223.086890433@linuxfoundation.org>
+Subject: [PATCH 5.15 136/171] powerpc/perf: Fix power_pmu_disable to call clear_pmi_irq_pending only if PMI is pending
+Date:   Mon, 31 Jan 2022 11:56:41 +0100
+Message-Id: <20220131105234.610987056@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -107,10 +110,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/arch/powerpc/perf/core-book3s.c b/arch/powerpc/perf/core-book3s.c
-index bd34e062bd290..e49aa8fc6a491 100644
+index bef6b1abce702..e78de70509472 100644
 --- a/arch/powerpc/perf/core-book3s.c
 +++ b/arch/powerpc/perf/core-book3s.c
-@@ -1273,9 +1273,20 @@ static void power_pmu_disable(struct pmu *pmu)
+@@ -1326,9 +1326,20 @@ static void power_pmu_disable(struct pmu *pmu)
  		 * Otherwise provide a warning if there is PMI pending, but
  		 * no counter is found overflown.
  		 */

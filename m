@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B54D34A4BFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A0B4A4C06
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380348AbiAaQ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:28:29 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:34201 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380319AbiAaQ1J (ORCPT
+        id S1380374AbiAaQ2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380370AbiAaQ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:27:09 -0500
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MsqMq-1mLlwK15mS-00tDJZ for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022
- 17:27:08 +0100
-Received: by mail-wr1-f42.google.com with SMTP id l25so26405091wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:27:08 -0800 (PST)
-X-Gm-Message-State: AOAM532i9lyo2q1C+1FBLBre9OdXRyCkgjqKVneI0TXasqiwTLvhM6iY
-        xoNdYQC6ziiMzdS26pP/d01y7LIEg+kpB12n3Bc=
-X-Google-Smtp-Source: ABdhPJw5WXWOtEfVHwBtJr9i/bYiuCJx1Ly/hLzOudt+D8XpOUk5vJjnUBlFxn7b/sQ7ZA4Ehm2ZJbb10G4njdZxc9Q=
-X-Received: by 2002:a05:6000:144f:: with SMTP id v15mr18771802wrx.407.1643646427924;
- Mon, 31 Jan 2022 08:27:07 -0800 (PST)
+        Mon, 31 Jan 2022 11:28:34 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED60C06173B;
+        Mon, 31 Jan 2022 08:28:33 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id p7so27757180edc.12;
+        Mon, 31 Jan 2022 08:28:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dwt+S+xaQOb5oolekdBKMH+fGFi5CzTZ33U4PJNpXnE=;
+        b=XbUONObw9m3FeEzG8kzzGOJWeQjOCK9wirykP4FDExl5B/1dbMR8BtSh9kkOYF3yQe
+         eUJfi+QOYsFQnKvZJZmBR2+gm3vdnl5dGuvjC4RaV3LPOwFiNi25VQpe2kw4ikxgJvqi
+         r5oEJSbkV7qby8nT8R0fhesITOQShBmhjsrTYlraw2qpoNgDHH9q0567RyXRDIQrvzpW
+         WiTMf4ODMq//41ZC0RbVpi3jhxUZfeV+oJlNM5+xOHspbVD0yOYbBBGze5iTRBgf9Ssq
+         oXaOYs6eCQn0mHh7MarPkl2a28yjSULvkoD8A3j/mxP+7gZgyGTI1IqYErNLJ+SVg0UX
+         OfnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dwt+S+xaQOb5oolekdBKMH+fGFi5CzTZ33U4PJNpXnE=;
+        b=VgBqXY5xEobCQJzAiN7z9iy5SovzNVCmb1a4sQWPKYcrR2oxMMl4PWGSb0bWMydUPW
+         w097uFX/4yuHrIgdus4cOcNjTS9P3iAcNGuxM9C+B+P9cG4e0sHGQZasVqNXdH74ZvTS
+         owHGJGP4fAvCnb4OcGVkwAqxcf1w3cqKHr/URtFBn+sxk9GxgsZVsjbe5GJZO9ayN2mu
+         gn12p/ZR71bNwHdp/QCRgSpi9/ptU+T97f0wcZSp/j25tWRwApKURzXk0FL0IGAAxCV8
+         cbbx8pnTsCCpfI6BvqPOyPVlxsY/CtE+lMRWrgWf2lUUJmQd93SZxjKy+HLxRv0lENkG
+         Oyng==
+X-Gm-Message-State: AOAM5303PK83iaxBpiSfvQHIGBEAWLSDGkp16AZPqyJPfa4y9KUEiRNl
+        3N6h4wrMDz6w7KIrOLK+zYWe9Eki934mX7kkuZU=
+X-Google-Smtp-Source: ABdhPJxSBz18NwyW86CThCeoCdkkXwq6+Gjg58B4suZ/8V/WkVaJw3IipwwO7vMKIpFbTBJGMyRYHQ29vDLeDxuWYeg=
+X-Received: by 2002:aa7:d1d4:: with SMTP id g20mr21531766edp.296.1643646512457;
+ Mon, 31 Jan 2022 08:28:32 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1643206612.git.karolinadrobnik@gmail.com>
- <2d9aa000afe81b45157617664134b871207c2067.1643206612.git.karolinadrobnik@gmail.com>
- <YfKngOPLeI3rQOn3@casper.infradead.org> <48499a57afb3d27df26b39aa4255b4ba583c1148.camel@gmail.com>
- <Yfa4WMeauvmgkQ9H@kernel.org> <YfbQlMyohx31FhSW@casper.infradead.org>
- <CAK8P3a1UcY7Lkm0U5igQCq2K5kpqpjVi-sW3R=JzpciS-+c-gQ@mail.gmail.com> <Yff9r+NdshpNKRk8@kernel.org>
-In-Reply-To: <Yff9r+NdshpNKRk8@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 31 Jan 2022 17:26:51 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3O4gdZZA_ON1efO7hp+3KskpdX68MHW5P=6n8ZTXj0SQ@mail.gmail.com>
-Message-ID: <CAK8P3a3O4gdZZA_ON1efO7hp+3KskpdX68MHW5P=6n8ZTXj0SQ@mail.gmail.com>
-Subject: Re: [PATCH 07/16] tools/include: Add io.h stub
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <mike.rapoport@gmail.com>,
+References: <20220131160713.245637-1-marcan@marcan.st> <20220131160713.245637-2-marcan@marcan.st>
+In-Reply-To: <20220131160713.245637-2-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 31 Jan 2022 18:26:56 +0200
+Message-ID: <CAHp75VcQ=BRkVb3QT0brAO7P_L47tyaymfkM-syOPDMAKG5R3A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/9] brcmfmac: pcie: Release firmwares in the
+ brcmf_pcie_setup error path
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fnjsJ0KQ7qVmm84wYaA3SXO/ZUdVHlY7Gb7/3605rKITL618+WW
- bAOkmJcACnYBCoTXlfUFkLp9z81HAt2RuD8BkHlnkLy7dG/tlqec7fqIplsADr1/E9seQIF
- yhfByvQ/q4616VXKc0BENJRAL/M1Cz828ZPlbkhAI9ABqAWwzB4EaBUuKQWh2NepTawgsQP
- 5vYArwm2ZutjMMdQpD0nA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GVRrPhEzCYM=:V6eCnHxJlPeJq83ky2++vp
- 6cPwSIFadBguNUKeuWP4FS8Sw7tyA6kS5GoFtTYs9SV1Sivvtk3sx0wYT7uAyPQTb66OOMSDh
- PlkbdyYbn8vabOC+pBRv9pWYGIg5++XA24K7FLbjUBrSws2ZZQRPnwzMxyc5PerlDBbWCxEZE
- GsZDJO+n8mw30yIiMnDUyuPm4hFnvEbY2sBjeG7it8A2faX7nQGpzKxCtXCpVSC6ZXyc5pefe
- h6XNpTr41hN/axRIky19nFXTnvdmgwOqo9oABtM/eVaYjFiBAAZ+9ge4uAPObtnw8KNFAqI38
- mo2K+UzpRb/Z4HYMTH6g9IdfHpMCL9N+sZT1v8puMl4jsNSKGBdbKZe6TpnQeVOeH5XJmpEXF
- 8WiVHeCj7rZCk596oVfMgNA+xnu7E1tiN3iKqdf1zDZpKztWRkDOaEPHK6xcVQlby4J85lFJM
- pokvs9nwmPQbO21XovnlREQlc8WkxxSw6N/9+9/Rutb5mcWbnJxty6P8mUSEJkomLfVsar6/s
- Utlytajgyy/v2/E3ZkUJqJ8n4jy4mw5pP/FFJOFI37t+qbl45CVCvz6dKfT/BJ3cPaI4rxagV
- ujxVmXtx1uCylDBxOgZ6mp4ZhOF5Sdx4hZ8gjPd/ilVU+JzduN5/dETdTZKZz74T3gA+H64z2
- phwNP4Weey70/4feBsYncWVYHYi/Blv09YCrRWr2sYjC5xyFvajfwFGlnSbrqWC/Aa26uc0Zj
- vs3MUbfkph8crGyLUGaN8YLyg68JS4R92VXvi6mdJGs01iKERV55q1wSiXeBJq73vYqtU8zaJ
- 6omS6YMmfu1lEWxDYI2qe/Z4WHmXRaZub/7YqIu/0BI5spCslk=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 4:18 PM Mike Rapoport <rppt@kernel.org> wrote:
-> On Mon, Jan 31, 2022 at 02:30:32PM +0100, Arnd Bergmann wrote:
-> > On Sun, Jan 30, 2022 at 6:53 PM Matthew Wilcox <willy@infradead.org> wrote:
-
-> I actually liked m68k's name for a header with virt_to_phys/phys_to_virt
-> definitions - virtconvert.h.
+On Mon, Jan 31, 2022 at 6:07 PM Hector Martin <marcan@marcan.st> wrote:
 >
-> As an experiment I pulled out address translations from
-> arch/arm/include/memory.h to arch/arm/include/virtconvert.h, it wasn't that
-> bad:
->
->  arch/arm/include/asm/dma-mapping.h |   2 +
->  arch/arm/include/asm/io.h          |   1 +
->  arch/arm/include/asm/memory.h      | 244 ----------------------------------
->  arch/arm/include/asm/pgtable.h     |   1 +
->  arch/arm/include/asm/virtconvert.h | 264 +++++++++++++++++++++++++++++++++++++
->  arch/arm/kernel/psci_smp.c         |   1 +
->  6 files changed, 269 insertions(+), 244 deletions(-)
->
-> (https://git.kernel.org/rppt/linux/c/4c34ec16319fc85280aad89d7a74df845c1614fc)
+> This avoids leaking memory if brcmf_chip_get_raminfo fails. Note that
+> the CLM blob is released in the device remove path.
 
-Right, that doesn't look too bad, especially since it seems you managed to avoid
-any further indirect inlcudes. Doing the same consistently for all architectures
-may end up a bit harder but would be a great help.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-       Arnd
+
+> Fixes: 82f93cf46d60 ("brcmfmac: get chip's default RAM info during PCIe setup")
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index 8b149996fc00..f876b1d8d00d 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -1777,6 +1777,8 @@ static void brcmf_pcie_setup(struct device *dev, int ret,
+>         ret = brcmf_chip_get_raminfo(devinfo->ci);
+>         if (ret) {
+>                 brcmf_err(bus, "Failed to get RAM info\n");
+> +               release_firmware(fw);
+> +               brcmf_fw_nvram_free(nvram);
+>                 goto fail;
+>         }
+>
+> --
+> 2.33.0
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

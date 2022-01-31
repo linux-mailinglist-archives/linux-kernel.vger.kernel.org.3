@@ -2,95 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 776EE4A3F5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7A34A3F61
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbiAaJih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 04:38:37 -0500
-Received: from mout.gmx.net ([212.227.17.21]:44793 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240686AbiAaJia (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:38:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643621893;
-        bh=M8VxZrM69T8fzVT7HtYVnghJWaulQqQeYn5dd1DXrAA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=CwMBW/ysfcJWiL+ER3SYZ17Eknj9kDFRU98lseUJd7akCMQZq9t6t3gSNYS+azKp+
-         sKZHexUhCMyV6QUZMdgtGGoCtcEd6StwA7hikEwNNB5ILAyrz9Jqfrlo5KeJhucyXh
-         KWE3sl7RitsxNtc1te/R+eS6RsCIsZmizzBF530Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N4hzj-1mCqAc24vP-011gXw; Mon, 31 Jan 2022 10:38:13 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 4/4] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-Date:   Mon, 31 Jan 2022 10:37:56 +0100
-Message-Id: <20220131093756.8075-5-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220131093756.8075-1-W_Armin@gmx.de>
-References: <20220131093756.8075-1-W_Armin@gmx.de>
+        id S240719AbiAaJiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 04:38:55 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36172 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238819AbiAaJix (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:38:53 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 82D841F381;
+        Mon, 31 Jan 2022 09:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643621932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gFfYneuXxxyIxBAM26QGb5mPJgkTqy82COvXmXoG2U4=;
+        b=GMBKwIRjiio5uHYtjsHX5SKOBDrnxWSy8DukbeDOPJQleviNEbItB3o3m1N/LZjjEGZVAr
+        rZJm32G3ziPltbFmd7NNMW1esOGj+61VxPiAimMbWMU0g9EkStqQpAYsPEgLmzCHMaECD1
+        h7SFZ8qG3T157yf1RvTbA0Qh25FCw8M=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 802F1A3B84;
+        Mon, 31 Jan 2022 09:38:51 +0000 (UTC)
+Date:   Mon, 31 Jan 2022 10:38:51 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v2 3/3] mm/page_owner: Dump memcg information
+Message-ID: <YfeuK5j7cbgM+Oo+@dhcp22.suse.cz>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-4-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9QBdxLpwQraj2RF0DjGnbPUr64KV/UJiV0ngLb/rPcGIGhUtmZY
- aOgreswTTk/TemZzQEUZPuN6ImKxtTkRFQf1G+/iBzdb/iL8dfUbrmN6VA67l+hutHAcCl4
- htrWaSDwRm102+DqcHVdqBTsjVL4E7v08tDrXFJ/uelCqGXAUPu8JfDBSsdPmsoKeHP2CPW
- 2NZNlBoP+QBJdGHZymrxw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wruDPY0hL/E=:FSYCl1tY/CCeoaGaTWlljW
- d6efG0vEpOG5Carnk4rXdjqAvWslHAi7FiqN9cL4EvaQhzxVvXz32aJmmW8GikZurQP4OjS0f
- Bul/BaDtHFojGcLrW5/MdFEIw0Dv3HsgXAadLRkU1gN1jlKKDwTryfipmNo4b3GoC1lOz3UZ9
- lwnVNfNAHL6HRN4pbyVmuUWYl+5b655jOl0xhTFDx5MoIMaIx0KsL0xmqnBdi7LIc99yCviDN
- 4OX7lLzRlfNOUeIMCo3NGiv3G7pZcn050o2GW7DhDidfyNzfj49rtq/c3n5QQOGgDCG+4glj7
- iXaDLFzPuANANK2Gbg8XgyJqNOZxyo9G67yMWmU1Lgf5ygbMGI1xeWwQ3+11wXwipEeV6NFEq
- H2som6psHeh7GZhW99V9+ex+NG3DCFUFC29wJ5E/KjRVVRqECbel1bH9yijKcO+tNeZ+UMWFJ
- ai/77bgFbxyL86vK9FDre8xAVfn4RPvNAncirWoo7xMyL9eZvCUpdx5YTj0/9Uvay5fkqqaMD
- sfge8efI+JbfAhoQiKxiotd8XmGrBsw2bE+NYQxuyZ1sUKseFK1OZT8PG/0/c+2EW5JOX3Wag
- b0jYkC8fH9LDenmNkJD9TLUigRoOxf4chUQEWINqgOTInT06Y9p0kPluYzPUekRnJknQZ45if
- sYP+jYdGgnjEGAUdUhLu5GsgkTDC1vi5j8nW9+1jwnFvVAWF1VHTGQ1uoDC8hyF3rfo00TilH
- xxk876pKFRIjnWfXlp2Vu0W5EODwqBifXKkRDYhzKcMIG9RC6JUHO/aKDvb7ZSi78n/abuCWw
- P/n5Lm4bZrGVZNW/EpE1yF/wWTbVDMhkI/O1yhYYZ6ZivAGKWZBJ9OY31GZ7z8DZ8qvXYDHPS
- z6E2b9bbBQILHFY48hsKlpCistgTQaE9k3P/yho8UiSPK/Hx1wIOsf9v4bReJ36cXFddRNV3w
- hxlQfBzHZvN1qPZ/C4PlTqNwVD6SH9/ovTymnk6GYBOix+JXqUfvXV0CDCTaeu/YnwOdylvHa
- 42TbVG8VWHnGS6Zwle9LCciMTc6ix9QoUkbbwOjWjaeBdd9nAhXZqJgS4a7R6kIB80wCIBk3s
- v3VSX5/b3DLaNY=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129205315.478628-4-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the watchdog was already enabled by the BIOS after booting, the
-watchdog infrastructure needs to regularly send keepalives to
-prevent a unexpected reset.
-WDOG_ACTIVE only serves as an status indicator for userspace,
-we want to use WDOG_HW_RUNNING instead.
+On Sat 29-01-22 15:53:15, Waiman Long wrote:
+> It was found that a number of offlined memcgs were not freed because
+> they were pinned by some charged pages that were present. Even "echo
+> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
+> offlined but not freed memcgs tend to increase in number over time with
+> the side effect that percpu memory consumption as shown in /proc/meminfo
+> also increases over time.
+> 
+> In order to find out more information about those pages that pin
+> offlined memcgs, the page_owner feature is extended to dump memory
+> cgroup information especially whether the cgroup is offlined or not.
 
-Since my Fujitsu Esprimo P720 does not support the watchdog,
-this change is compile-tested only.
+It is not really clear to me how this is supposed to be used. Are you
+really dumping all the pages in the system to find out offline memcgs?
+That looks rather clumsy to me. I am not against adding memcg
+information to the page owner output. That can be useful in other
+contexts.
 
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/sch56xx-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  mm/page_owner.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index 28dac73e0542..8dc5cd0fa227 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/migrate.h>
+>  #include <linux/stackdepot.h>
+>  #include <linux/seq_file.h>
+> +#include <linux/memcontrol.h>
+>  #include <linux/sched/clock.h>
+>  
+>  #include "internal.h"
+> @@ -331,6 +332,7 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  		depot_stack_handle_t handle)
+>  {
+>  	int ret, pageblock_mt, page_mt;
+> +	unsigned long __maybe_unused memcg_data;
+>  	char *kbuf;
+>  
+>  	count = min_t(size_t, count, PAGE_SIZE);
+> @@ -365,6 +367,35 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  			migrate_reason_names[page_owner->last_migrate_reason]);
+>  	}
+>  
+> +#ifdef CONFIG_MEMCG
 
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
-.c
-index f66e1ed4b1aa..2cd146fd0562 100644
-=2D-- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -427,7 +427,7 @@ void sch56xx_watchdog_register(struct device *parent, =
-u16 addr, u32 revision,
- 	data->wddev.max_timeout =3D 255 * 60;
- 	watchdog_set_nowayout(&data->wddev, nowayout);
- 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
--		set_bit(WDOG_ACTIVE, &data->wddev.status);
-+		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
+This really begs to be in a dedicated function. page_owner_print_memcg
+or something like that.
 
- 	/* Since the watchdog uses a downcounter there is no register to read
- 	   the BIOS set timeout from (if any was set at all) ->
-=2D-
-2.30.2
+> +	/*
+> +	 * Look for memcg information and print it out
+> +	 */
+> +	memcg_data = READ_ONCE(page->memcg_data);
+> +	if (memcg_data) {
+> +		struct mem_cgroup *memcg = page_memcg_check(page);
+> +		bool onlined;
+> +		char name[80];
 
+What does prevent memcg to go away and being reused for a different
+purpose?
+
+> +
+> +		if (memcg_data & MEMCG_DATA_OBJCGS)
+> +			ret += scnprintf(kbuf + ret, count - ret,
+> +					"Slab cache page\n");
+> +
+> +		if (!memcg)
+> +			goto copy_out;
+> +
+> +		onlined = (memcg->css.flags & CSS_ONLINE);
+> +		cgroup_name(memcg->css.cgroup, name, sizeof(name));
+> +		ret += scnprintf(kbuf + ret, count - ret,
+> +				"Charged %sto %smemcg %s\n",
+> +				PageMemcgKmem(page) ? "(via objcg) " : "",
+> +				onlined ? "" : "offlined ",
+> +				name);
+> +	}
+> +
+> +copy_out:
+> +#endif
+-- 
+Michal Hocko
+SUSE Labs

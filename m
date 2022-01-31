@@ -2,97 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7ED4A4BA4
+	by mail.lfdr.de (Postfix) with ESMTP id 8BACD4A4BA5
 	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380227AbiAaQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380198AbiAaQQO (ORCPT
+        id S1380250AbiAaQQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:16:36 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:50581 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380193AbiAaQQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 31 Jan 2022 11:16:14 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AD3C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:16:14 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id k25so44311896ejp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UmMfeMOSCoAqBhA7BUwY3tTWcLdWTL1PSKYY7qnHSNo=;
-        b=GRVTCtzu9/MyTVuHPjTnQ0zxTS6EdpUso5MVxp1FHPJAu+cQfMtGjsj1EGc053Re66
-         HJw78dmJitgpCkRH2aNJ79u+EOoEtA475Pp0mIDQRgpMvUauy7YdyKBf1LyvFL9iBpuq
-         dVkCxouvtRDEFM5eN6A38VlYveIKLSMqWpJSOacxAwyxO9jptgAi5E6yqr1yGSQXZBpx
-         TXQ6z4K8eSo7miaPpr1Mfo0C7GdRius8EJM0YqnCK1WRdRyHuX0jw76vxH18QVaPfOcs
-         8Mx91M/OXiYQnO2wAtw7rLcdRF+51Vn/SJafIABc4WKLX6zN9UJ06Ku91Gd/ZTEvj9+X
-         KJ8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UmMfeMOSCoAqBhA7BUwY3tTWcLdWTL1PSKYY7qnHSNo=;
-        b=xLEpoWxP/U7HSnGmcTG/oWgMJ1TgfykyCgbu9encnwz+tB7hIIiysDGY1gWe0tbVD1
-         72IcEYHyEMISHOGiG3Rnm4NzHSm8l6ExgwlW/8nSodc0wnlwywahinaxHXOPhF7pG650
-         sU/i0j4m3bp26T2JitN3F13nPCkjFgaHsT1ynpb4PTkJ1RdIM5ZVH1BvZqvP5oAQ/0/5
-         eBuSzkitB3jrr3d/x3S2gWG1cAGwhDwJIs2E2o3IdTSmCbEs/byq3pZblodZ3GVkShRu
-         IHnQ5hi11lmwr67sbl9FEh3Kk6c3evJMQnPhkdZAl9gGy4o+8cJyYwoY9T4l983nFDrb
-         lAZw==
-X-Gm-Message-State: AOAM530s1860XjZziIoZsg0VKFKciRCszfsMsscNMQhlNM66qRtfXnQY
-        ov0YFY6jXjujiFOWBZbJTcU4hmEMamsKK5Sq2HR/laF0yg==
-X-Google-Smtp-Source: ABdhPJxq72VkfEyMRdYvqdL8DBh09y6vJc7UuNH+cjMYMvqj8xzzu7N5A30X1zKYjBRhbE33sZLKMDvkmFkjAMIsqsA=
-X-Received: by 2002:a17:906:1e06:: with SMTP id g6mr17519185ejj.517.1643645772623;
- Mon, 31 Jan 2022 08:16:12 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 77408C0002;
+        Mon, 31 Jan 2022 16:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1643645773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gQZNpFwpLCJ2QyIMMCx53V4RScNFk6vSypQeECK4z4c=;
+        b=NTnrvH4RJ0iYZUySnPLyEFtsw7hdyFpmXXaxYfRvf4A3oB2RQmWvP82HDlpnVT6zZDejcc
+        yTFsBLtBz5DqIPbN+H06NMTb6Y7+uHUENEsCZvHZp492AHbg2rjLCFPLZpSRsZ8MvZjRRQ
+        UZWGhs0QiHgHUn/8X4Y5ZwOoutcg4cRAlmQSrt3fWAyenVzewJ/5SlKAzeQAMRdrArCt4D
+        D10feyLYD0zSL7OQriWl1VeVrZbKxPfQ0UEZpkr4RuJm8YyJHG0UHj6wER3s0Gz/kvab9L
+        6RkRBbWqf07yn9B8QKjxLSYAR4KdniVXfMWbZsVj8pKFbayiVy1cebVNGquauw==
+Date:   Mon, 31 Jan 2022 17:16:06 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Xin Xiong <xiongx18@fudan.edu.cn>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        yuanxzhang@fudan.edu.cn, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: Re: [PATCH] mtd: rawnand: atmel: fix refcount issue in
+ atmel_nand_controller_init
+Message-ID: <20220131171606.2733d1a3@xps13>
+In-Reply-To: <20220127084104.3683-1-xiongx18@fudan.edu.cn>
+References: <20220127084104.3683-1-xiongx18@fudan.edu.cn>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
- <CAFqZXNv7=ROfyzZGojy2DQvY0xp4Dd5oHW_0KG6BLiD7A8zeKQ@mail.gmail.com>
- <CAHC9VhQKVdbLNn=eOqebWaktDVeq5bjTjXea68MmcAhKoSa09w@mail.gmail.com> <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
-In-Reply-To: <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 31 Jan 2022 11:16:01 -0500
-Message-ID: <CAHC9VhQE4JPhTjkKwV3ovRSuPceiHDrP3MDW4RPDcNtLkb7tAQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Scott Mayhew <smayhew@redhat.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 7:46 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> On Fri, Jan 28, 2022 at 3:28 AM Paul Moore <paul@paul-moore.com> wrote:
-> > On Thu, Jan 27, 2022 at 4:54 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> > > I wonder if we could make this all much simpler by *always* doing the
-> > > label parsing in selinux_add_opt() and just returning an error when
-> > > !selinux_initialized(&selinux_state). Before the new mount API, mount
-> > > options were always passed directly to the mount(2) syscall, so it
-> > > wasn't possible to pass any SELinux mount options before the SELinux
-> > > policy was loaded. I don't see why we need to jump through hoops here
-> > > just to support this pseudo-feature of stashing an unparsed label into
-> > > an fs_context before policy is loaded... Userspace should never need
-> > > to do that.
-> >
-> > I could agree with that, although part of my mind is a little nervous
-> > about the "userspace should *never* ..." because that always seems to
-> > bite us.  Although I'm struggling to think of a case where userspace
-> > would need to set explicit SELinux mount options without having a
-> > policy loaded.
->
-> I get that, but IMO this is enough of an odd "use case" that I
-> wouldn't worry too much ...
+Hi Xin,
 
-I understand, but seeing as I'm the only one that defends these things
-with Linus and others lets do this:
+xiongx18@fudan.edu.cn wrote on Thu, 27 Jan 2022 16:41:05 +0800:
 
-1. Fix what we have now using Scott's patches once he incorporates the feedback.
-2. Merge another patch (separate patch(set) please!) which does the
-parsing in selinux_add_opt().
+> The reference counting issue happens in several error handling paths
+> on a refcounted object "nc->dmac". In these paths, the function simply
+> returns the error code, forgetting to balance the reference count of
+> "nc->dmac", increased earlier by dma_request_channel(), which may
+> cause refcount leaks.
+>=20
+> Fix it by decrementing the refcount of specific object in those error
+> paths.
+>=20
+> Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
+> Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
+> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+> Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+> ---
+>  drivers/mtd/nand/raw/atmel/nand-controller.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/n=
+and/raw/atmel/nand-controller.c
+> index f3276ee9e4fe..7003877632fb 100644
+> --- a/drivers/mtd/nand/raw/atmel/nand-controller.c
+> +++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
+> @@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atme=
+l_nand_controller *nc,
+>  	nc->mck =3D of_clk_get(dev->parent->of_node, 0);
+>  	if (IS_ERR(nc->mck)) {
+>  		dev_err(dev, "Failed to retrieve MCK clk\n");
+> -		return PTR_ERR(nc->mck);
+> +		ret =3D PTR_ERR(nc->mck);
+> +		goto out_release_dma;
+>  	}
+> =20
+>  	np =3D of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
+>  	if (!np) {
+>  		dev_err(dev, "Missing or invalid atmel,smc property\n");
+> -		return -EINVAL;
+> +		ret =3D -EINVAL;
+> +		goto out_release_dma;
+>  	}
+> =20
+>  	nc->smc =3D syscon_node_to_regmap(np);
+> @@ -2074,10 +2076,20 @@ static int atmel_nand_controller_init(struct atme=
+l_nand_controller *nc,
+>  	if (IS_ERR(nc->smc)) {
+>  		ret =3D PTR_ERR(nc->smc);
+>  		dev_err(dev, "Could not get SMC regmap (err =3D %d)\n", ret);
+> -		return ret;
+> +		goto out_release_dma;
+>  	}
+> =20
+>  	return 0;
+> +
+> +out_release_dma:
+> +	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
+> +		if (!IS_ERR_OR_NULL(nc->dmac)) {
 
-... this was if we have to revert #2 we still have the fixes in #1.
+if (!nc->dmac) {
 
--- 
-paul-moore.com
+> +			dma_release_channel(nc->dmac);
+> +			nc->dmac =3D NULL;
+
+This is then unnecessary and the whole block and the two first checks
+can then be ignored as dmac will not be set otherwise (and will stay
+NULL).
+
+> +		}
+> +	}
+> +
+> +	return ret;
+>  }
+> =20
+>  static int
+
+
+Thanks,
+Miqu=C3=A8l

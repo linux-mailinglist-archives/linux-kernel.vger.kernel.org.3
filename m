@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4F54A417B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8F84A4451
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359012AbiAaLEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:04:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50688 "EHLO
+        id S1378138AbiAaL2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:28:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38400 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358981AbiAaLCi (ORCPT
+        with ESMTP id S1378132AbiAaLTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:38 -0500
+        Mon, 31 Jan 2022 06:19:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F64BB82A66;
-        Mon, 31 Jan 2022 11:02:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC42EC340EE;
-        Mon, 31 Jan 2022 11:02:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE704B82A4C;
+        Mon, 31 Jan 2022 11:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB4FC340E8;
+        Mon, 31 Jan 2022 11:19:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626956;
-        bh=p9gzYhntkEFFU0kZCVkx2X3WS7L38CrCbtyOn9AY4Z0=;
+        s=korg; t=1643627983;
+        bh=pz05IZcGWACADVBvxdAq92ZPbMNlGCY/ENYXnBkp9pc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=btusDWGH9m2g+conM9hL9mJ5ES/M1rwiP+r1kaEPNB9uhkQqz6B5xc6cT7LLyqNjT
-         0Yph1ME1jbZJ+ymaE6h8YiTf5I79XXdZY6tJwIfiWR13oFA7dmTfEFIg4hMZBDHpJq
-         FjfqZSc4b8ZxuEQnAuhZlZbZ8PKi80ElWRm7SazU=
+        b=JaYGlTs6icTqL4du7ZZUwBNXoiHNffpxLtG2FyC3WLp2bFts/AnzfMgtYQm60BHgp
+         AxQdhWFBJ12Xpwzy64sTvfL6FRQ3u70a5T9wosQKugGZfGz5aORjMr+NYus2AteCUU
+         p8hbprcY5qChsu2f476P4bHIERvdY98WqBz7SZtE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, DocMAX <mail@vacharakis.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 5.10 028/100] usb-storage: Add unusual-devs entry for VL817 USB-SATA bridge
+        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 086/200] mm, kasan: use compare-exchange operation to set KASAN page tag
 Date:   Mon, 31 Jan 2022 11:55:49 +0100
-Message-Id: <20220131105221.403298633@linuxfoundation.org>
+Message-Id: <20220131105236.503859012@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,56 +48,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Peter Collingbourne <pcc@google.com>
 
-commit 5b67b315037250a61861119683e7fcb509deea25 upstream.
+commit 27fe73394a1c6d0b07fa4d95f1bca116d1cc66e9 upstream.
 
-Two people have reported (and mentioned numerous other reports on the
-web) that VIA's VL817 USB-SATA bridge does not work with the uas
-driver.  Typical log messages are:
+It has been reported that the tag setting operation on newly-allocated
+pages can cause the page flags to be corrupted when performed
+concurrently with other flag updates as a result of the use of
+non-atomic operations.
 
-[ 3606.232149] sd 14:0:0:0: [sdg] tag#2 uas_zap_pending 0 uas-tag 1 inflight: CMD
-[ 3606.232154] sd 14:0:0:0: [sdg] tag#2 CDB: Write(16) 8a 00 00 00 00 00 18 0c c9 80 00 00 00 80 00 00
-[ 3606.306257] usb 4-4.4: reset SuperSpeed Plus Gen 2x1 USB device number 11 using xhci_hcd
-[ 3606.328584] scsi host14: uas_eh_device_reset_handler success
+Fix the problem by using a compare-exchange loop to update the tag.
 
-Surprisingly, the devices do seem to work okay for some other people.
-The cause of the differing behaviors is not known.
-
-In the hope of getting the devices to work for the most users, even at
-the possible cost of degraded performance for some, this patch adds an
-unusual_devs entry for the VL817 to block it from binding to the uas
-driver by default.  Users will be able to override this entry by means
-of a module parameter, if they want.
-
-CC: <stable@vger.kernel.org>
-Reported-by: DocMAX <mail@vacharakis.de>
-Reported-and-tested-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/Ye8IsK2sjlEv1rqU@rowland.harvard.edu
+Link: https://lkml.kernel.org/r/20220120020148.1632253-1-pcc@google.com
+Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
+Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_devs.h |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ include/linux/mm.h |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2301,6 +2301,16 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x
- 		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
- 		US_FL_SCM_MULT_TARG ),
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1524,11 +1524,18 @@ static inline u8 page_kasan_tag(const st
  
-+/*
-+ * Reported by DocMAX <mail@vacharakis.de>
-+ * and Thomas Weißschuh <linux@weissschuh.net>
-+ */
-+UNUSUAL_DEV( 0x2109, 0x0715, 0x9999, 0x9999,
-+		"VIA Labs, Inc.",
-+		"VL817 SATA Bridge",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
+ static inline void page_kasan_tag_set(struct page *page, u8 tag)
+ {
+-	if (kasan_enabled()) {
+-		tag ^= 0xff;
+-		page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
+-		page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
+-	}
++	unsigned long old_flags, flags;
 +
- UNUSUAL_DEV( 0x2116, 0x0320, 0x0001, 0x0001,
- 		"ST",
- 		"2A",
++	if (!kasan_enabled())
++		return;
++
++	tag ^= 0xff;
++	old_flags = READ_ONCE(page->flags);
++	do {
++		flags = old_flags;
++		flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
++		flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
++	} while (unlikely(!try_cmpxchg(&page->flags, &old_flags, flags)));
+ }
+ 
+ static inline void page_kasan_tag_reset(struct page *page)
 
 

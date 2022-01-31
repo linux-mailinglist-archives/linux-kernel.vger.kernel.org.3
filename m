@@ -2,129 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470A54A4F96
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611CB4A4FA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377249AbiAaTlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:41:24 -0500
-Received: from mga03.intel.com ([134.134.136.65]:38143 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230238AbiAaTlT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:41:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643658079; x=1675194079;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=NwGTMczbQMThAqZmfQgLYf4uDMg7Njphl/er97g7hpc=;
-  b=FqOGa1+bEP9cNXpppS1XO6AyCFKidfl6rTWN4zgBeY6mekl1KaChtG/E
-   utrG3b35deqnfaHYVsWrzgrxuPiSg9bKGfPkzOnYGJdSOhb1kVRBcy8u3
-   j+fofAFTx8yuFGlH+iLJ5YsJjGBAOPYn7wPHcYpDHGRJ2oV4xnIntfYfD
-   /Kunxp2+Qhc/zOBN/T7dEzZ572dxIrZViTgTSh0fkNEN03K1EquzumAj/
-   ftbYks0FfA/dv24b6t0I/o04OZHWJjIsHhnn6gp3gmM/XV72sOimsJFYA
-   YxfgQsdFMZ0mcoEWP2gH291QLLZr3x4UmcwxyuAo0cDvCXKdPUn9EZr+V
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247489399"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="247489399"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:41:19 -0800
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="537446277"
-Received: from abilal-mobl1.amr.corp.intel.com ([10.212.252.235])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:41:19 -0800
-Date:   Mon, 31 Jan 2022 11:41:19 -0800 (PST)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Davide Caratti <dcaratti@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: Re: [PATCH 5.16 136/200] mptcp: allow changing the "backup" bit by
- endpoint id
-In-Reply-To: <20220131105238.136417203@linuxfoundation.org>
-Message-ID: <829f1665-31d7-af15-36f-c34ccfd31829@linux.intel.com>
-References: <20220131105233.561926043@linuxfoundation.org> <20220131105238.136417203@linuxfoundation.org>
+        id S1377418AbiAaTqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240770AbiAaTp6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 14:45:58 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F88C061714;
+        Mon, 31 Jan 2022 11:45:58 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso145559pjm.4;
+        Mon, 31 Jan 2022 11:45:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=006/8OHX6+u1AjFJpDJySc+x8beZciHLwH0JdA+GUO8=;
+        b=SntdH3KcRPQuJaaaWW/tEIrTqX0yFOqperUWrHPQOV39kP/sJnfoYUrHuY9Y742lUy
+         FDG4oakJInYuEmGnFUZcVgtz6ShkUMCX4Mis18QoVpScnASqCO+MHONdqh8u2CkQYZge
+         O95oArvcKJ/8gGZKnTKrou3HNkpcGGwH/+4DH2vTZzwY/fQJLrXNuyI0plNINYArAODi
+         C7I6DdDJX1i1PfxTZUa04ce+I7Y/3zMQSTsHdDC2i2e8y1oO3p23IfB5FeEOtwxefEcJ
+         manz77JprbE3RQBrkvimBH4ULR0OnWaRwaTpMhyQFovSDGxQzPB+iXR6jQzxTucUqFLD
+         4XMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=006/8OHX6+u1AjFJpDJySc+x8beZciHLwH0JdA+GUO8=;
+        b=PuSg8kpECE8kzUN87hz4dHMa9HHAKZFfYhDUvIL8QNxkJQICgJw3dYqHqALogd+5/g
+         CzA2Su8UzoH6dltwhh1Ibd7sq5GDjI08F6VP2ld42F78EAFpy7x3FhBdFrX9AZmOW/Qy
+         UQdYcq5SjzP/NmdiLe6X3ZmAeGG9M8vcAT51OF1ClpLplx+azGXCWu/w9DGRzsCoQDSD
+         PpEQuFksV+8ggGpfy1p3b3nWuEIJu5gI/r9MLQhlu2W4BkuQ0ADiWw/4NZDvF7k98D2L
+         G1piHU993/dZ6Bk8n1UMZQWh75rJtVm5QxZGZF7lhimQcdBXIgfhKLvl5WbO+BCfn0Cr
+         JK2w==
+X-Gm-Message-State: AOAM533G3Y172xI6wKWu6aVC6CQuRHimlBY3dTM+WMipIj5AIxTuPk5W
+        cMhSbfWhzuNFHw6SQfIXYUk=
+X-Google-Smtp-Source: ABdhPJxdho/GYn9CZr1JaFtmoVh/TWWDKrfEjn7oaS42OK1py2xdKQ/BKiZd9f9EgA9xgHL7ZffBTQ==
+X-Received: by 2002:a17:90a:8c8b:: with SMTP id b11mr3732073pjo.197.1643658358046;
+        Mon, 31 Jan 2022 11:45:58 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:6213:1c4:865f:204c])
+        by smtp.gmail.com with ESMTPSA id j12sm19276170pgf.63.2022.01.31.11.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 11:45:56 -0800 (PST)
+Date:   Mon, 31 Jan 2022 11:45:54 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Ondrej Jirman <x@xff.cz>
+Subject: Re: [PATCH 3/5] Input: pinephone-keyboard - Build in the default
+ keymap
+Message-ID: <Yfg8crUuCLO0SxVj@google.com>
+References: <20220129230043.12422-1-samuel@sholland.org>
+ <20220129230043.12422-4-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129230043.12422-4-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022, Greg Kroah-Hartman wrote:
+Hi Samuel,
 
-> From: Davide Caratti <dcaratti@redhat.com>
->
-> [ Upstream commit 602837e8479d20d49559b4b97b79d34c0efe7ecb ]
->
+On Sat, Jan 29, 2022 at 05:00:40PM -0600, Samuel Holland wrote:
+> The PinePhone keyboard comes with removable keys, but there is a default
+> layout labeled from the factory. Use this keymap if none is provided in
+> the devicetree.
 
-Please drop this from both the 5.15 and 5.16 queues. This patch adds a new 
-feature (doesn't appear to meet the stable rules). It is fairly self 
-contained and probably won't break anything, but it wasn't intended to be 
-backported.
+Why can't we require to have it in device tree?
 
+Thanks.
 
-Thanks,
-Mat
-
-
-> a non-zero 'id' is sufficient to identify MPTCP endpoints: allow changing
-> the value of 'backup' bit by simply specifying the endpoint id.
->
-> Link: https://github.com/multipath-tcp/mptcp_net-next/issues/158
-> Signed-off-by: Davide Caratti <dcaratti@redhat.com>
-> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> net/mptcp/pm_netlink.c | 14 ++++++++++----
-> 1 file changed, 10 insertions(+), 4 deletions(-)
->
-> diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-> index 65764c8171b37..d18b13e3e74c6 100644
-> --- a/net/mptcp/pm_netlink.c
-> +++ b/net/mptcp/pm_netlink.c
-> @@ -1711,22 +1711,28 @@ next:
->
-> static int mptcp_nl_cmd_set_flags(struct sk_buff *skb, struct genl_info *info)
-> {
-> +	struct mptcp_pm_addr_entry addr = { .addr = { .family = AF_UNSPEC }, }, *entry;
-> 	struct nlattr *attr = info->attrs[MPTCP_PM_ATTR_ADDR];
-> 	struct pm_nl_pernet *pernet = genl_info_pm_nl(info);
-> -	struct mptcp_pm_addr_entry addr, *entry;
-> 	struct net *net = sock_net(skb->sk);
-> -	u8 bkup = 0;
-> +	u8 bkup = 0, lookup_by_id = 0;
-> 	int ret;
->
-> -	ret = mptcp_pm_parse_addr(attr, info, true, &addr);
-> +	ret = mptcp_pm_parse_addr(attr, info, false, &addr);
-> 	if (ret < 0)
-> 		return ret;
->
-> 	if (addr.flags & MPTCP_PM_ADDR_FLAG_BACKUP)
-> 		bkup = 1;
-> +	if (addr.addr.family == AF_UNSPEC) {
-> +		lookup_by_id = 1;
-> +		if (!addr.addr.id)
-> +			return -EOPNOTSUPP;
-> +	}
->
-> 	list_for_each_entry(entry, &pernet->local_addr_list, list) {
-> -		if (addresses_equal(&entry->addr, &addr.addr, true)) {
-> +		if ((!lookup_by_id && addresses_equal(&entry->addr, &addr.addr, true)) ||
-> +		    (lookup_by_id && entry->addr.id == addr.addr.id)) {
-> 			mptcp_nl_addr_backup(net, &entry->addr, bkup);
->
-> 			if (bkup)
-> -- 
-> 2.34.1
->
->
->
->
-
---
-Mat Martineau
-Intel
+-- 
+Dmitry

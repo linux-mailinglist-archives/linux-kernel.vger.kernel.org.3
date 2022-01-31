@@ -2,91 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF6B4A463C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A66F4A464E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376685AbiAaLvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:51:12 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:53120 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380347AbiAaLpV (ORCPT
+        id S1378198AbiAaLwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:52:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20535 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380480AbiAaLpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:45:21 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20VBjBt6033104;
-        Mon, 31 Jan 2022 05:45:11 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643629511;
-        bh=0lGG21FbBmtcnqY5LOZGFiDh425t7aE/LEQNN+eDmA0=;
-        h=From:To:CC:Subject:Date;
-        b=v2G1sbiv4K9KpR69BQ4AreddokOiMb4Z8WZvd3gwPxr3D9Gz/34DQcJ2cEoRqEsFE
-         sQB/lOyfstfvdVQX/Q1gGfCwNTZmJfd2N8irxJHUlQqxnWdFzevr084hFHAi7N1KUS
-         5xKSWRjzKKyhtHj+LCbGZeMPzuC7gFK4Y5xc3X8A=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20VBjB7g065494
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Jan 2022 05:45:11 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 31
- Jan 2022 05:45:11 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 31 Jan 2022 05:45:11 -0600
-Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20VBj8FN008117;
-        Mon, 31 Jan 2022 05:45:09 -0600
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Takahiro Kuwano <tkuw584924@gmail.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] spi: spi-mem: check if data buffers are on stack
-Date:   Mon, 31 Jan 2022 17:15:08 +0530
-Message-ID: <20220131114508.1028306-1-p.yadav@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 31 Jan 2022 06:45:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643629533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hoFYGfluPusdpIx0z7ulqarblavPkRMbOpbOY+hsnMc=;
+        b=MV737yRD1x/d8P8JQ1cDvzQJ6y0CKGxZMuhHOQwDKfvhfWoNTa+1KdU0p8czjKWh7kkLuq
+        mXFURA07tN6Qzrnumv7/QY2qQLx9/NxBMRogFPUQ+yJ9NPPpQ4GAlxgd4Yuq+YFtUsTwN/
+        Bkk4GsMl4wpGEFXdzyt7+djx4kb8cI0=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-mWmEK7ZDOFKaiZvBFMUGqQ-1; Mon, 31 Jan 2022 06:45:32 -0500
+X-MC-Unique: mWmEK7ZDOFKaiZvBFMUGqQ-1
+Received: by mail-ej1-f70.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so4884380ejk.16
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:45:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hoFYGfluPusdpIx0z7ulqarblavPkRMbOpbOY+hsnMc=;
+        b=x+eBjHeOSLETEF6DstVLVf8RLofzU9S4dYZqnkq0h4AAp7Okw9IKwyufGZ8rSQGMmN
+         1ysp+Y3XFcwTK0EzRMawScaJdF2zGD1m5Ty2aY5Xu6gpAgHX7GmQwohexiusMo+8miUa
+         7SwlPKXFQqPkb/Oxl06x31bAxobGXm8Aav+I5/PYDiD/39Kzfd/1TYVlRK7mKaMVcGBP
+         VOG/3ymeogg9dFO1oh/HWApvKeiyTO252eaLm2cQQO5oICzg/6iHTSbTbj0J0u0Mlx24
+         DTngEwLjyLdAEoVrZbbq/OXdNshVa7ksWv4/irHQiQMk5tVnTDWz0aakBB08xWt3u34V
+         QkAQ==
+X-Gm-Message-State: AOAM530rVz/eCbWPAL8AXUUzg06xQAPB7wy78dIS2lL79rMaTCuTYGV9
+        ckRlexn8aHn/UPJPMJTI3gIR75LBrg76OA37Kgq7TcWnTg09HpNqBPOJoJ5wIT1b858cxE0/Rp8
+        fMrx3V1Zun3w3UxjWqN5cmSxw
+X-Received: by 2002:a17:907:3da8:: with SMTP id he40mr16485024ejc.146.1643629530793;
+        Mon, 31 Jan 2022 03:45:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCPhmof2SHR2F4XPyoMObAr+XVZm4kbJ1j/8/xs2Yhwh/IbSeGoCugGupte2SySXNP0UDA1w==
+X-Received: by 2002:a17:907:3da8:: with SMTP id he40mr16485014ejc.146.1643629530591;
+        Mon, 31 Jan 2022 03:45:30 -0800 (PST)
+Received: from krava ([83.240.63.12])
+        by smtp.gmail.com with ESMTPSA id y23sm13375678ejp.116.2022.01.31.03.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 03:45:30 -0800 (PST)
+Date:   Mon, 31 Jan 2022 12:45:28 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v7 00/10] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-ID: <YffL2G7XCAhB2cC1@krava>
+References: <164360522462.65877.1891020292202285106.stgit@devnote2>
+ <20220131183642.aba575006314b3988110a7e5@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131183642.aba575006314b3988110a7e5@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The buffers passed in the data phase must be DMA-able. Programmers often
-don't realise this requirement and pass in buffers that reside on the
-stack. This can be hard to spot when reviewing code. Reject ops if their
-data buffer is on the stack to avoid this.
+On Mon, Jan 31, 2022 at 06:36:42PM +0900, Masami Hiramatsu wrote:
+> Hi Jiri,
+> 
+> On Mon, 31 Jan 2022 14:00:24 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > Hi,
+> > 
+> > Here is the 7th version of fprobe. This version fixes unregister_fprobe()
+> > ensures that exit_handler is not called after returning from the
+> > unregister_fprobe(), and fixes some comments and documents.
+> > 
+> > The previous version is here[1];
+> > 
+> > [1] https://lore.kernel.org/all/164338031590.2429999.6203979005944292576.stgit@devnote2/T/#u
+> > 
+> > This series introduces the fprobe, the function entry/exit probe
+> > with multiple probe point support. This also introduces the rethook
+> > for hooking function return as same as the kretprobe does. This
+> > abstraction will help us to generalize the fgraph tracer,
+> > because we can just switch to it from the rethook in fprobe,
+> > depending on the kernel configuration.
+> > 
+> > The patch [1/10] is from Jiri's series[2].
+> > 
+> > [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+> > 
+> > And the patch [9/10] adds the FPROBE_FL_KPROBE_SHARED flag for the case
+> > if user wants to share the same code (or share a same resource) on the
+> > fprobe and the kprobes.
+> 
+> If you want to work on this series, I pushed my working branch on here;
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/ kprobes/fprobe
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
----
- drivers/spi/spi-mem.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+great, I was going to ask for that ;-) thanks
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 37f4443ce9a0..b3793a2979ee 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -207,6 +207,15 @@ static int spi_mem_check_op(const struct spi_mem_op *op)
- 	    !spi_mem_buswidth_is_valid(op->data.buswidth))
- 		return -EINVAL;
- 
-+	/* Buffers must be DMA-able. */
-+	if (op->data.dir == SPI_MEM_DATA_IN &&
-+	    object_is_on_stack(op->data.buf.in))
-+		return -EINVAL;
-+
-+	if (op->data.dir == SPI_MEM_DATA_OUT &&
-+	    object_is_on_stack(op->data.buf.out))
-+		return -EINVAL;
-+
- 	return 0;
- }
- 
--- 
-2.34.1
+jirka
+
+> 
+> Thank you,
+> 
+> > 
+> > Thank you,
+> > 
+> > ---
+> > 
+> > Jiri Olsa (1):
+> >       ftrace: Add ftrace_set_filter_ips function
+> > 
+> > Masami Hiramatsu (9):
+> >       fprobe: Add ftrace based probe APIs
+> >       rethook: Add a generic return hook
+> >       rethook: x86: Add rethook x86 implementation
+> >       ARM: rethook: Add rethook arm implementation
+> >       arm64: rethook: Add arm64 rethook implementation
+> >       fprobe: Add exit_handler support
+> >       fprobe: Add sample program for fprobe
+> >       fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+> >       docs: fprobe: Add fprobe description to ftrace-use.rst
+> > 
+> > 
+> >  Documentation/trace/fprobe.rst                |  171 +++++++++++++
+> >  Documentation/trace/index.rst                 |    1 
+> >  arch/arm/Kconfig                              |    1 
+> >  arch/arm/include/asm/stacktrace.h             |    4 
+> >  arch/arm/kernel/stacktrace.c                  |    6 
+> >  arch/arm/probes/Makefile                      |    1 
+> >  arch/arm/probes/rethook.c                     |   71 +++++
+> >  arch/arm64/Kconfig                            |    1 
+> >  arch/arm64/include/asm/stacktrace.h           |    2 
+> >  arch/arm64/kernel/probes/Makefile             |    1 
+> >  arch/arm64/kernel/probes/rethook.c            |   25 ++
+> >  arch/arm64/kernel/probes/rethook_trampoline.S |   87 ++++++
+> >  arch/arm64/kernel/stacktrace.c                |    7 -
+> >  arch/x86/Kconfig                              |    1 
+> >  arch/x86/include/asm/unwind.h                 |    8 +
+> >  arch/x86/kernel/Makefile                      |    1 
+> >  arch/x86/kernel/kprobes/common.h              |    1 
+> >  arch/x86/kernel/rethook.c                     |  115 ++++++++
+> >  include/linux/fprobe.h                        |   97 +++++++
+> >  include/linux/ftrace.h                        |    3 
+> >  include/linux/kprobes.h                       |    3 
+> >  include/linux/rethook.h                       |  100 +++++++
+> >  include/linux/sched.h                         |    3 
+> >  kernel/exit.c                                 |    2 
+> >  kernel/fork.c                                 |    3 
+> >  kernel/trace/Kconfig                          |   26 ++
+> >  kernel/trace/Makefile                         |    2 
+> >  kernel/trace/fprobe.c                         |  341 +++++++++++++++++++++++++
+> >  kernel/trace/ftrace.c                         |   58 ++++
+> >  kernel/trace/rethook.c                        |  313 +++++++++++++++++++++++
+> >  samples/Kconfig                               |    7 +
+> >  samples/Makefile                              |    1 
+> >  samples/fprobe/Makefile                       |    3 
+> >  samples/fprobe/fprobe_example.c               |  120 +++++++++
+> >  34 files changed, 1572 insertions(+), 14 deletions(-)
+> >  create mode 100644 Documentation/trace/fprobe.rst
+> >  create mode 100644 arch/arm/probes/rethook.c
+> >  create mode 100644 arch/arm64/kernel/probes/rethook.c
+> >  create mode 100644 arch/arm64/kernel/probes/rethook_trampoline.S
+> >  create mode 100644 arch/x86/kernel/rethook.c
+> >  create mode 100644 include/linux/fprobe.h
+> >  create mode 100644 include/linux/rethook.h
+> >  create mode 100644 kernel/trace/fprobe.c
+> >  create mode 100644 kernel/trace/rethook.c
+> >  create mode 100644 samples/fprobe/Makefile
+> >  create mode 100644 samples/fprobe/fprobe_example.c
+> > 
+> > --
+> > Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
+> 
 

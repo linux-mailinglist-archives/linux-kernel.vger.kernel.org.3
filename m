@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21C04A4C67
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91A74A4C6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380591AbiAaQrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S1380615AbiAaQs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380586AbiAaQrs (ORCPT
+        with ESMTP id S1380446AbiAaQsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:47:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0544DC061714;
-        Mon, 31 Jan 2022 08:47:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C2E460AF5;
-        Mon, 31 Jan 2022 16:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B75C340E8;
-        Mon, 31 Jan 2022 16:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643647667;
-        bh=ihC7CKxsu5UE3SaXojecPLPQFwujiHzaZSVm3or2b4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7DzlGSirhJjYDNfrh2yEgqwSBG2W5ZcYdzZ+/JepOKBesYeqXwtbJojEIR04YRrq
-         b8D38BY+rDj8n9clnH+zPH4UNHe+lrUHOExgtZTQO9m2faeuLpM89C4l6KTtOVkGE2
-         FqPT2WpfuuP9pEnChEsDUrjqMCJ24R9LrZLNy/xf820stV5386LV3kn6m8gB3wuAuX
-         eJbqoWpNoJeofTGuFPKtHMYGwKsF3Gp9q4vXtWgWXypDvaLnAlcWpdAV8zzQeEi66+
-         CPSj/bVm+gLWOFkizAsAiJkq6PAH27AWK/ZJD9bfjloXw9uc5G074qsyaVXmtWfjJm
-         tjAIQbsFrHarQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nEZq0-0008Cx-Cr; Mon, 31 Jan 2022 17:47:33 +0100
-Date:   Mon, 31 Jan 2022 17:47:32 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, kbuild-all@lists.01.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Florian Eckert <fe@dev.tdt.de>
-Subject: Re: [PATCH v1 1/1] docs: process: submitting-patches: Clarify the
- Reported-by usage
-Message-ID: <YfgSpArfoL9LUaBO@hovoldconsulting.com>
-References: <20220127155334.47154-1-andriy.shevchenko@linux.intel.com>
- <87o83xrwk9.fsf@meer.lwn.net>
- <YfPzNNvK8Sy8YmGW@casper.infradead.org>
- <Yff9xoh873aEikY4@hovoldconsulting.com>
- <YfgBi9dn8LI8d/bo@smile.fi.intel.com>
+        Mon, 31 Jan 2022 11:48:50 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA33C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:48:50 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id n32so13323442pfv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FEXr3o9AVVAks3RYUsTP9ea9gUTvinZzKepGOgcXzQM=;
+        b=CW7N8M304J+53WVf/BpkUCwdN1l2ThMJkFVGdx/RKeMHvjg2uK6Xjpx8dXRPP8rS/c
+         p4ubkcKXYA35I4zzDM9YCoMf6NADbiKz6/dDavZc6uWO9XesixO+I8FkD2MtAJp3wKnC
+         zAgONa5UCwXbeXugTRaPjstTepe5i36fjsF27t+L0vEpmx4EJkPSW6YwcoDE/ePoQqTY
+         9Qd9gl6MEHoe27rot4jLcrnELB7OSiVUYA07UwS0zLsssrFn6SCgyxsrVn1FtFg8Xn6z
+         CVhKEfEEaYyjegdOYG+cNF5a1BWunM6fb0Vk4SwAWEV2b5Sn8zcldFw1vwOYUtSV7YZF
+         Jf6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FEXr3o9AVVAks3RYUsTP9ea9gUTvinZzKepGOgcXzQM=;
+        b=frUTGhbB/rbudBx80BdGkyLjoG/rbresYsLMs3BiUdEgnFmLYIEEB3xzLJWXCLgqpB
+         F27keqeD45FKGP7CbXlEE1GhOgp3beVJ2KCJ4WE689zI7lbwLY/FT1GFmttvm6w/GH4C
+         I02T4wwFRfPW7mMdatHEF2H+1vEKc+F4TdMcaV8lsE7HIzIM87K2nyZg2UH0CVuMVhHm
+         Fjpvg5914ydfq5jb37f3iZaplsk/uMTDbkat9AydMJaSQssEs6JcRu1M/N+kX+h1EtPS
+         b3CXspYcx6nFzWL/hinz61qVU/kLzQQf9aFhEbBnaM4aKHiTjJVqyaj5+VEeKH4GmAfH
+         YDVA==
+X-Gm-Message-State: AOAM530Ut/i5Oz9B2GdhR1mjTW+j6r4diRT7nf6oLKsfhVH0zg6fgfIK
+        6kPBykY/7L5oVk4hGlv9vCJAIw==
+X-Google-Smtp-Source: ABdhPJygTSsEQFeDUTdJLfXm3w9hO9zbkOUUbSfeLfaH891QI0/yWPvqUvyRT1YeP+wiW0q4JquI9g==
+X-Received: by 2002:a63:1c10:: with SMTP id c16mr17282685pgc.275.1643647729876;
+        Mon, 31 Jan 2022 08:48:49 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k16sm20792277pgh.45.2022.01.31.08.48.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 08:48:49 -0800 (PST)
+Date:   Mon, 31 Jan 2022 16:48:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH 01/22] KVM: x86: Drop unnecessary and confusing
+ KVM_X86_OP_NULL macro
+Message-ID: <YfgS7VIp8fpGJvyD@google.com>
+References: <20220128005208.4008533-1-seanjc@google.com>
+ <20220128005208.4008533-2-seanjc@google.com>
+ <152db376-b0f3-3102-233c-a0dbb4011d0c@redhat.com>
+ <YfQO+ADS1wnefoSr@google.com>
+ <6979e482-1f07-4148-b9d7-d91cfa98c081@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfgBi9dn8LI8d/bo@smile.fi.intel.com>
+In-Reply-To: <6979e482-1f07-4148-b9d7-d91cfa98c081@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 05:34:35PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 31, 2022 at 04:18:30PM +0100, Johan Hovold wrote:
-> > On Fri, Jan 28, 2022 at 01:44:20PM +0000, Matthew Wilcox wrote:
+On Mon, Jan 31, 2022, Paolo Bonzini wrote:
+> On 1/28/22 16:42, Sean Christopherson wrote:
+> All in all I totally agree with patches 2-11 and will apply them (patch 2 to
+> 5.17 even, as a prerequisite to fix the AVIC race).  Several of patches
+> 13-21 are also mostly useful as it clarifies the code, and the others I
+> guess are okay in the context of a coherent series though probably they
+> would have been rejected as one-offs.
 
-> > > I think this misunderstands the problem that Andy is trying to fix.
-> > > 
-> > > The situation: I write a patch.  I post it for review.  A bot does
-> > > something and finds a bug (could be compile-error, could be boot
-> > > problem).  That bot sends a bug report with a suggestion to add
-> > > Reported-by:.  That suggestion is inappropriate because the bug never
-> > > made it upstream, so it looks like the bot reported the "problem"
-> > > that the patch "fixes".
-> > > 
-> > > It's not unique to "new feature" patches.  If I'm fixing a bug and
-> > > my fix also contains a bug spotted by a bot, adding Reported-by
-> > > makes it look like the bot spotted the original bug, rather than
-> > > spotting a bug in the fix.
-> > > 
-> > > The best thing to do in this case is nothing.  Do not credit the bot.
-> > > Maybe add a Checked-by:, but that would be a new trailer and I really
-> > > don't think we need a new kind of trailer to get wrong.
-> > 
-> > It seems like the only way to fix this is to fix the bots. Adding more
-> > documentation is unlikely to help in this case.
-> 
-> Links to the documentation at least may clarify the point in case of a
-> review.
+Yeah, the SEV changes in particular are a bit forced.  The only one I care deeply
+about is mem_enc_op() => mem_enc_ioctl().  If the macro shenanigans are rejected,
+I'd say drop patches 20 and 21, drop most of 19, and maybe give 18 (svm=>avic) the
+boot as well.  I'd prefer to keep patch 17 (TLB tweak) to clarify the scope of
+SVM's TLB flush.  Many of the changelogs would need to be tweaked as well, i.e. a
+v2 is in order.
 
-Sure.
+> However, patches 12 and 22 are unnecessary uses of the C preprocessor in my
+> opinion.  
 
-> > Can't we file a bug to whoever is running the bots (Intel?) and ask them
-> > to remove the suggestion to add a Reported-by when the bot is testing a
-> > patch (as opposed to mainline or even -next)?
-> 
-> The granularity here is not a repo. It's a code itself and in some cases
-> it might be easy to distinguish new feature from the code modifications,
-> but when code is already there and feature is just an extension of the
-> existing file(s), it's hard to tell. And it might be true or not.
+And 14 :-)
 
-Not sure I understand what you're saying here. Perhaps you and Matthew
-are talking about different things after all.
+I don't have a super strong opinion.  I mostly worked on this because the idea
+had been discussed multiple times in the past.  And because I wanted an excuse to
+rename vmx_free_vcpu => vmx_vcpu_free, which for some reason I can never find :-)
 
-But for Matthew's issue, the case where the bots are testing posted
-patches ("Thank you for the patch! Yet something to improve:) should be
-easy to fix by simply dropping or rephrasing the "kindly add following
-tag as appropriate" suggestion.
+I was/am concerned that the macro approach will make it more difficult to find a
+vendor's implementation, though forcing a conforming name will mitigate that to
+some degree.
 
-When testing merged code, it may be harder to tell whether the branch in
-question can be rebased or not (and an incremental fix with a
-reported-by tag is warranted).
+The pros, in order of importance (IMO)
 
-Johan
+  1. Mostly forces vendor implementation name to match hook name
+  2. Forces new hooks to get an entry in kvm-x86-ops.h
+  3. Provides a bit of documentation for specialized hooks (APICv, etc...)
+  4. Forces vendors to explicitly define something for non-conforming hooks

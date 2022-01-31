@@ -2,142 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1774A4AA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447C14A4AA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379729AbiAaPd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379665AbiAaPdP (ORCPT
+        id S1379662AbiAaPdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:33:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32994 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379575AbiAaPdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:33:15 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62179C061714;
-        Mon, 31 Jan 2022 07:33:15 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 03CE21447;
-        Mon, 31 Jan 2022 16:33:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643643193;
-        bh=eMAheiDAIWDxrcMKCOAT+TMinkKp+mNuDD2YkGykmEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PBaZx92jmIQ7yqnZiQLYizdQiTlGCn6AdWkP7elcXV9pe4j8FFi5kNz8+n1pBi7vU
-         XLeOlunA+ixdDCKWBcEy7jaGXPvuRXBnFtOcdBOx2zkkgDsKwGRuPO7LH+b9z0EnTd
-         4Z5dMSOvUrQmHhP7JAcOU1e+ArXmA64MvoNyUFH0=
-Date:   Mon, 31 Jan 2022 17:32:50 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH v6 02/35] component: Introduce the aggregate bus_type
-Message-ID: <YfgBIgqbCVSNGjfv@pendragon.ideasonboard.com>
-References: <20220127200141.1295328-1-swboyd@chromium.org>
- <20220127200141.1295328-3-swboyd@chromium.org>
- <YffoqgmeUdxZ56zB@kroah.com>
- <CAKMK7uFYyQ9siB5ENHku+yVPWWM1H=TEn-NZofEKqpJnuEvMmw@mail.gmail.com>
+        Mon, 31 Jan 2022 10:33:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643643187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MqkwAw4wuOZd8apS0xcc2rXhPmZK3L0to+YK8fdXzXQ=;
+        b=RHasLybC9fZjdhEXw0DhS7ZTUJgqXUSOBQme9PyyjYlmSpuzPfTL3mqDiCEotNuS89sqjv
+        8oiY5g0AhKmEhhhy4VpyvLTFLiCgzO+1zAou1/tRKvP6TgcXwV8N268CwBd0h70M+oJVxY
+        XHBRIND5AoJkhWJOz94SI1+fCaIKcQw=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-244-WaVWqpWUOUCi6W8R4y4oUQ-1; Mon, 31 Jan 2022 10:33:03 -0500
+X-MC-Unique: WaVWqpWUOUCi6W8R4y4oUQ-1
+Received: by mail-ot1-f69.google.com with SMTP id w25-20020a9d70d9000000b0059fa6c78406so8105722otj.22
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:33:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MqkwAw4wuOZd8apS0xcc2rXhPmZK3L0to+YK8fdXzXQ=;
+        b=6yyThtozUx9ke5RGEWTp9fx3fBKxtNPnDUJBRUtqeer3ESPx/g6BDBuw9IH0Gu02cE
+         1XuuTaZA/XoFFawNJ4HoYrnXaKPyuNVssRxAK9PkZBaFkNvtSwZgCrJ942NQp8Alm1wK
+         lACO/ysNF1VXZs1xsTGeLAKgUBI6aCI49YRrA7PYNEZ0XRLvtv27UUwsG0zNdpEHYMo9
+         +0b13H+WGBEHVrGELFV/xBqCtTwcEOjhc3I3GTe7o/M8MRqRH8QzFLZCKH7zdPIGC6ZG
+         7Gq/2CgSPQ0VOcQf3cseTB+OQ+oUzTNoDLBWr7t2jCHxpaCAyxRlDtOsdblrUwjFnPyk
+         fdYA==
+X-Gm-Message-State: AOAM5301b9PqMSSxalBbzxw0M5awb3cWwZGcufmQmZI5GRyJYZG52Ocq
+        7PWqYAtSg/YLmNSxWHNhYZBk1kiW/7TI1k9ZgG6M4y9QAl0E65YMuL8GyZORZyGkncLeCFA18jH
+        YHCbwI4+JgNHYwmb3gUMnedoJ
+X-Received: by 2002:aca:aa96:: with SMTP id t144mr19411039oie.132.1643643182464;
+        Mon, 31 Jan 2022 07:33:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJymr2dsBCKlgP7OeGj6aD5XCERLPQYOTSNplzQW6dStWy8SIH9lqk49likkpXiG7dI3/kwJvw==
+X-Received: by 2002:aca:aa96:: with SMTP id t144mr19411018oie.132.1643643182208;
+        Mon, 31 Jan 2022 07:33:02 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id bb16sm1343181oob.42.2022.01.31.07.33.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 07:33:01 -0800 (PST)
+Date:   Mon, 31 Jan 2022 08:33:00 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     kvm@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 3/5] vfio/pci: fix memory leak during D3hot to D0
+ tranistion
+Message-ID: <20220131083300.50045695.alex.williamson@redhat.com>
+In-Reply-To: <b0f25525-362a-c2dc-f255-22fa533fda26@nvidia.com>
+References: <20220124181726.19174-1-abhsahu@nvidia.com>
+        <20220124181726.19174-4-abhsahu@nvidia.com>
+        <20220127170525.51043f23.alex.williamson@redhat.com>
+        <b0f25525-362a-c2dc-f255-22fa533fda26@nvidia.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uFYyQ9siB5ENHku+yVPWWM1H=TEn-NZofEKqpJnuEvMmw@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, 31 Jan 2022 17:04:12 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-On Mon, Jan 31, 2022 at 04:15:09PM +0100, Daniel Vetter wrote:
-> On Mon, Jan 31, 2022 at 2:48 PM Greg Kroah-Hartman wrote:
-> > On Thu, Jan 27, 2022 at 12:01:08PM -0800, Stephen Boyd wrote:
-> > > The component framework only provides 'bind' and 'unbind' callbacks to
-> > > tell the host driver that it is time to assemble the aggregate driver
-> > > now that all the components have probed. The component framework doesn't
-> > > attempt to resolve runtime PM or suspend/resume ordering, and explicitly
-> > > mentions this in the code. This lack of support leads to some pretty
-> > > gnarly usages of the 'prepare' and 'complete' power management hooks in
-> > > drivers that host the aggregate device, and it fully breaks down when
-> > > faced with ordering shutdown between the various components, the
-> > > aggregate driver, and the host driver that registers the whole thing.
-> > >
-> > > In a concrete example, the MSM display driver at drivers/gpu/drm/msm is
-> > > using 'prepare' and 'complete' to call the drm helpers
-> > > drm_mode_config_helper_suspend() and drm_mode_config_helper_resume()
-> > > respectively, so that it can move the aggregate driver suspend/resume
-> > > callbacks to be before and after the components that make up the drm
-> > > device call any suspend/resume hooks they have. This only works as long
-> > > as the component devices don't do anything in their own 'prepare' and
-> > > 'complete' callbacks. If they did, then the ordering would be incorrect
-> > > and we would be doing something in the component drivers before the
-> > > aggregate driver could do anything. Yuck!
-> > >
-> > > Similarly, when trying to add shutdown support to the MSM driver we run
-> > > across a problem where we're trying to shutdown the drm device via
-> > > drm_atomic_helper_shutdown(), but some of the devices in the encoder
-> > > chain have already been shutdown. This time, the component devices
-> > > aren't the problem (although they could be if they did anything in their
-> > > shutdown callbacks), but there's a DSI to eDP bridge in the encoder
-> > > chain that has already been shutdown before the driver hosting the
-> > > aggregate device runs shutdown. The ordering of driver probe is like
-> > > this:
-> > >
-> > >  1. msm_pdev_probe() (host driver)
-> > >  2. DSI bridge
-> > >  3. aggregate bind
-> > >
-> > > When it comes to shutdown we have this order:
-> > >
-> > >  1. DSI bridge
-> > >  2. msm_pdev_shutdown() (host driver)
-> > >
-> > > and so the bridge is already off, but we want to communicate to it to
-> > > turn things off on the display during msm_pdev_shutdown(). Double yuck!
-> > > Unfortunately, this time we can't split shutdown into multiple phases
-> > > and swap msm_pdev_shutdown() with the DSI bridge.
-> > >
-> > > Let's make the component_master_ops into an actual device driver that has
-> > > probe/remove/shutdown functions. The driver will only be bound to the
-> > > aggregate device once all component drivers have called component_add()
-> > > to indicate they're ready to assemble the aggregate driver. This allows
-> > > us to attach shutdown logic (and in the future runtime PM logic) to the
-> > > aggregate driver so that it runs the hooks in the correct order.
-> >
-> > I know I asked before, but I can not remember the answer.
-> >
-> > This really looks like it is turning into the aux bus code.  Why can't
-> > you just use that instead here for this type of thing?  You are creating
-> > another bus and drivers for that bus that are "fake" which is great, but
-> > that's what the aux bus code was supposed to help out with, so we
-> > wouldn't have to write more of these.
-> >
-> > So, if this really is different, can you document it here so I remember
-> > next time you resend this patch series?
+> On 1/28/2022 5:35 AM, Alex Williamson wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Mon, 24 Jan 2022 23:47:24 +0530
+> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> >   
+> >> If needs_pm_restore is set (PCI device does not have support for no
+> >> soft reset), then the current PCI state will be saved during D0->D3hot
+> >> transition and same will be restored back during D3hot->D0 transition.
+> >> For saving the PCI state locally, pci_store_saved_state() is being
+> >> used and the pci_load_and_free_saved_state() will free the allocated
+> >> memory.
+> >>
+> >> But for reset related IOCTLs, vfio driver calls PCI reset related
+> >> API's which will internally change the PCI power state back to D0. So,
+> >> when the guest resumes, then it will get the current state as D0 and it
+> >> will skip the call to vfio_pci_set_power_state() for changing the
+> >> power state to D0 explicitly. In this case, the memory pointed by
+> >> pm_save will never be freed.
+> >>
+> >> Also, in malicious sequence, the state changing to D3hot followed by
+> >> VFIO_DEVICE_RESET/VFIO_DEVICE_PCI_HOT_RESET can be run in loop and
+> >> it can cause an OOM situation. This patch stores the power state locally
+> >> and uses the same for comparing the current power state. For the
+> >> places where D0 transition can happen, call vfio_pci_set_power_state()
+> >> to transition to D0 state. Since the vfio power state is still D3hot,
+> >> so this D0 transition will help in running the logic required
+> >> from D3hot->D0 transition. Also, to prevent any miss during
+> >> future development to detect this condition, this patch puts a
+> >> check and frees the memory after printing warning.
+> >>
+> >> This locally saved power state will help in subsequent patches
+> >> also.  
+> > 
+> > Ideally let's put fixes patches at the start of the series, or better
+> > yet send them separately, and don't include changes that only make
+> > sense in the context of a subsequent patch.
+> > 
+> > Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
+> >   
 > 
-> aux takes a device and splits it into a lot of sub-devices, each with
-> their own driver.
+>  Thanks Alex for reviewing this patch.
+>  I have added Fixes tag and sent this patch separately.
 > 
-> This takes a pile of devices, and turns it into a single logical
-> device with a single driver.
-> 
-> So aux is 1:N, component is N:1.
-> 
-> And yes you asked this already, I typed this up already :-)
+>  Should I update this patch series or you are planning to review the
+>  other patches first of this patch series first. 
 
-That's clear, but I'm still not sure why we need a bus for this :-) I'm
-not very enthousiastic about that. Some of our problems come from the
-fact we need to coordinate many devices, adding new ones hardly seem to
-be a solution to that. Granted, the components framework doesn't work
-nicely, and is in dire need of love (and documentation), or possibly
-better a complete replacement. I'll try to review the series this week
-and see if alternatives would be possible.
+Thanks for splitting this out.  I'll keep the remainder of the series
+on the review queue, I expect I'll have some comments and it will be
+easy enough to imagine vfio_pci_core_device.power_state being declared
+in another patch if there's still a worthwhile use for it.  Thanks,
 
--- 
-Regards,
+Alex
 
-Laurent Pinchart

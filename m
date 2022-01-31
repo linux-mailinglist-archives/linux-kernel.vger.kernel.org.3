@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BACD4A4BA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD34F4A4BAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380250AbiAaQQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:16:36 -0500
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:50581 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380193AbiAaQQO (ORCPT
+        id S1380211AbiAaQR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380288AbiAaQRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:16:14 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 77408C0002;
-        Mon, 31 Jan 2022 16:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643645773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gQZNpFwpLCJ2QyIMMCx53V4RScNFk6vSypQeECK4z4c=;
-        b=NTnrvH4RJ0iYZUySnPLyEFtsw7hdyFpmXXaxYfRvf4A3oB2RQmWvP82HDlpnVT6zZDejcc
-        yTFsBLtBz5DqIPbN+H06NMTb6Y7+uHUENEsCZvHZp492AHbg2rjLCFPLZpSRsZ8MvZjRRQ
-        UZWGhs0QiHgHUn/8X4Y5ZwOoutcg4cRAlmQSrt3fWAyenVzewJ/5SlKAzeQAMRdrArCt4D
-        D10feyLYD0zSL7OQriWl1VeVrZbKxPfQ0UEZpkr4RuJm8YyJHG0UHj6wER3s0Gz/kvab9L
-        6RkRBbWqf07yn9B8QKjxLSYAR4KdniVXfMWbZsVj8pKFbayiVy1cebVNGquauw==
-Date:   Mon, 31 Jan 2022 17:16:06 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Xin Xiong <xiongx18@fudan.edu.cn>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        yuanxzhang@fudan.edu.cn, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: Re: [PATCH] mtd: rawnand: atmel: fix refcount issue in
- atmel_nand_controller_init
-Message-ID: <20220131171606.2733d1a3@xps13>
-In-Reply-To: <20220127084104.3683-1-xiongx18@fudan.edu.cn>
-References: <20220127084104.3683-1-xiongx18@fudan.edu.cn>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 31 Jan 2022 11:17:50 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BB8C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:17:50 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 133so12708376pgb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:17:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6dW6Paekh2M3q0AKO8Nn9qo5GhbHWr+f3LHux6ppjjc=;
+        b=VkKWKKTJ3llEDCuYXX58J/Van2BWr42/g0fFruRyO6A6IJ1Ey0+QdtOAFBk2DvKf+d
+         QwGPZP5vklGLbvsxff02lAyYYXg57KkLhSFp1qgxA1R/i0KaH0l55sDniuT/VAHN0h/7
+         g01P6xBckDtgxsHOe4IjZ1acKEaK3DZS19iiUm66fcSPbB3ymZcpbPCDXGq/bWne2+Ut
+         hDDhXr2qbivYhNkT+P5QqfJq1uGrrcaioLZS2ThSGuZdGdEb/ZeTv1Bl2c0Mgj1v953/
+         vL3vt+sypWD/I9GTFPiNqfXdL3qr0LmG2OW6CK02kLsaIQYrI2Iiwecnv+MiyqIDsAus
+         V8Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6dW6Paekh2M3q0AKO8Nn9qo5GhbHWr+f3LHux6ppjjc=;
+        b=2RxEfGV/HR/XeqymqsXUUgrePdx9XFrHwJ6MLVqT2AIKtbka7x5o5cyTcJuPzqAYgW
+         rtxOTbiRyPg8MtmPmvmpe5zyG6gzz/dSfmg7KJwzQqc08I1JGs63i/WOv4Efugm07zYf
+         ywZ6qscBbqRBPoqtrw9rsdygobr6suc0/zOd85KItWChy+sQOpQ5A8qbcsFijBByFCzf
+         FvT+fKwauPTA3kCQP/IlCRNKw3RhZfg3gPyQcVd+rxiEqE6pXN1Mr7Ria6xyr1EmxEn6
+         6mkDkb7OJsPnlhXO4oBHNx8ZVS44vpG98j24vehnA2BnI2g9pdGE8ZgteKFbsYQ+fFmn
+         oL6Q==
+X-Gm-Message-State: AOAM530mLrpc1nx3E5cZ+xodLiddE9W7wGnqSBuFJy1v5LzsQaWI1hnh
+        rdrEizqG3NhmIpgYnGpIQnmvBAu20AIyW2WTmBS10g==
+X-Google-Smtp-Source: ABdhPJyYEfOTlfcPo2Rc+tEKMntaZtsEDls8xaX5GIagij1mfThuKofuLRYN4ivvCrNxgQwweXv2dwSWORZti1M2rEg=
+X-Received: by 2002:a63:4a49:: with SMTP id j9mr17019055pgl.178.1643645870158;
+ Mon, 31 Jan 2022 08:17:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20220120224204.773117-1-nfraprado@collabora.com> <29069a98-a839-4fb6-5b83-7877402aaf30@collabora.com>
+In-Reply-To: <29069a98-a839-4fb6-5b83-7877402aaf30@collabora.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 31 Jan 2022 17:17:39 +0100
+Message-ID: <CAG3jFytzxD9aAFGNhZ5djgqjgU7QmKOei077TYn7t3QpQdMb-g@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mt8183: jacuzzi: Fix bus properties in anx's
+ DSI endpoint
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Xin Ji <xji@analogixsemi.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+Hey,
 
-xiongx18@fudan.edu.cn wrote on Thu, 27 Jan 2022 16:41:05 +0800:
+On Fri, 21 Jan 2022 at 12:46, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 20/01/22 23:42, N=C3=ADcolas F. R. A. Prado ha scritto:
+> > mt8183-kukui-jacuzzi has an anx7625 bridge connected to the output of
+> > its DSI host. However, after fd0310b6fe7d ("drm/bridge: anx7625: add
+> > MIPI DPI input feature"), a bus-type property started being required in
+> > the endpoint node by the driver to indicate whether it is DSI or DPI.
+> >
+> > Add the missing bus-type property and set it to 5
+> > (V4L2_FWNODE_BUS_TYPE_PARALLEL) so that the driver has its input
+> > configured to DSI and the display pipeline can probe correctly.
+> >
+> > While at it, also set the data-lanes property that was also introduced
+> > in that same commit, so that we don't rely on the default value.
+> >
+> > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> > Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/a=
+rch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> > index 8f7bf33f607d..e8f133dc96b9 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> > @@ -171,6 +171,8 @@ port@0 {
+> >
+> >                       anx7625_in: endpoint {
+> >                               remote-endpoint =3D <&dsi_out>;
+> > +                             bus-type =3D <5>;
+> > +                             data-lanes =3D <0 1 2 3>;
+> >                       };
+> >               };
+> >
+> >
 
-> The reference counting issue happens in several error handling paths
-> on a refcounted object "nc->dmac". In these paths, the function simply
-> returns the error code, forgetting to balance the reference count of
-> "nc->dmac", increased earlier by dma_request_channel(), which may
-> cause refcount leaks.
->=20
-> Fix it by decrementing the refcount of specific object in those error
-> paths.
->=20
-> Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-> Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-> Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-> Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-> ---
->  drivers/mtd/nand/raw/atmel/nand-controller.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/n=
-and/raw/atmel/nand-controller.c
-> index f3276ee9e4fe..7003877632fb 100644
-> --- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-> +++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-> @@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atme=
-l_nand_controller *nc,
->  	nc->mck =3D of_clk_get(dev->parent->of_node, 0);
->  	if (IS_ERR(nc->mck)) {
->  		dev_err(dev, "Failed to retrieve MCK clk\n");
-> -		return PTR_ERR(nc->mck);
-> +		ret =3D PTR_ERR(nc->mck);
-> +		goto out_release_dma;
->  	}
-> =20
->  	np =3D of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
->  	if (!np) {
->  		dev_err(dev, "Missing or invalid atmel,smc property\n");
-> -		return -EINVAL;
-> +		ret =3D -EINVAL;
-> +		goto out_release_dma;
->  	}
-> =20
->  	nc->smc =3D syscon_node_to_regmap(np);
-> @@ -2074,10 +2076,20 @@ static int atmel_nand_controller_init(struct atme=
-l_nand_controller *nc,
->  	if (IS_ERR(nc->smc)) {
->  		ret =3D PTR_ERR(nc->smc);
->  		dev_err(dev, "Could not get SMC regmap (err =3D %d)\n", ret);
-> -		return ret;
-> +		goto out_release_dma;
->  	}
-> =20
->  	return 0;
-> +
-> +out_release_dma:
-> +	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
-> +		if (!IS_ERR_OR_NULL(nc->dmac)) {
-
-if (!nc->dmac) {
-
-> +			dma_release_channel(nc->dmac);
-> +			nc->dmac =3D NULL;
-
-This is then unnecessary and the whole block and the two first checks
-can then be ignored as dmac will not be set otherwise (and will stay
-NULL).
-
-> +		}
-> +	}
-> +
-> +	return ret;
->  }
-> =20
->  static int
+This patch does not pass checkpatch --strict, please add the word
+commit before the hash in the commit message to fix this.
 
 
-Thanks,
-Miqu=C3=A8l
+Rob.

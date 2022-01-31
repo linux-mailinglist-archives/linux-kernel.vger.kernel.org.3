@@ -2,166 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3854E4A508A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D754A508D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376473AbiAaUvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:51:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44608 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355850AbiAaUvi (ORCPT
+        id S1378889AbiAaUvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:51:53 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38838 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1378462AbiAaUvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:51:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5788614EA;
-        Mon, 31 Jan 2022 20:51:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B64C340E8;
-        Mon, 31 Jan 2022 20:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643662297;
-        bh=tX6vpO5C4zkX8VHS8hum/62LQzSNztcbGvWYKWQl7YE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ATkv6m2+GD3ZcijSZcw0eXCmRFRyUcncCfGLiwwxFRMBGVP/hL2/OESM2+Bm3BHSI
-         jlJH35lFKnZYbczbzb/FHB3rFk1nPEj2ShQz7aM96eLsi1UbGVbFwn1Ms4sP35M9kc
-         M8An6au1QzZfQdF3xzKgDywd0cp1yPLla9MoGki7NOLZipmkcWXTpbRuHa61iuI3oQ
-         K9uBC9RYQ/nKdzj9xBLog3e02+1k7q0Ifg3TzvbMAIdZwk2Gr05ydV6fkPzsie9pdF
-         TycV2WnZsNinTpOhpHvELyAGCTfj5jR1CA6bwyZCxWBzwLdeK4/55DZ0N+WwR9Kff8
-         smsdfdS1XajQQ==
-Date:   Mon, 31 Jan 2022 22:51:24 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v3 3/4] mm/page_owner: Print memcg information
-Message-ID: <YfhLzI+RLRGgexmr@kernel.org>
-References: <20220131192308.608837-1-longman@redhat.com>
- <20220131192308.608837-4-longman@redhat.com>
+        Mon, 31 Jan 2022 15:51:49 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VKbxlM019317;
+        Mon, 31 Jan 2022 20:51:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=IfFG2icOgeTcRGGdsSdqmUiXr02BVOtC/GnDf5j3uNI=;
+ b=tuaCegeG9QnE+M8L1gvNV4gn2N3NrzM+i5C6ihen8ZtYouge5nUWayE6iNUlUNE1mM/R
+ MPdKdE1fKeyrU/N8CitudDuv/etk5BGeRCRft0zP1+aUvM43PLORdjYTy0gMBIOA+Ckn
+ lCFfv5Uz3QD3SlA/1zxloKjLRTxREWakf0FhGwOn9Tr6J20ElCx0N/4cVNqLS8gPZXnK
+ /+Yr0MGWYNphboRaQybCw9KkA0ME+n9YXawIwfyq04RN1ElZwHZu5U6xEQk6GdwMOsQd
+ PmDrV9p6fuU33XO3N8P6Tlw8zwKA4w3FEOr4llIMc87mNM4PZZ9HrM7/G2qDU0EoISvi Dw== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxjcaqcyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 20:51:42 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VKmLxQ012846;
+        Mon, 31 Jan 2022 20:51:40 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma05wdc.us.ibm.com with ESMTP id 3dvw7abe1g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 20:51:40 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VKpeIA32768302
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 20:51:40 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33BE9B2066;
+        Mon, 31 Jan 2022 20:51:40 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE577B2064;
+        Mon, 31 Jan 2022 20:51:39 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jan 2022 20:51:39 +0000 (GMT)
+Message-ID: <b36b49c9-479f-8a33-c6d6-1cb00939150f@linux.ibm.com>
+Date:   Mon, 31 Jan 2022 15:51:39 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131192308.608837-4-longman@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
+ signatures (alternative)
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
+ <YfLz8NftvbZtKvLT@sol.localdomain> <YfL0+q/ekv4H8lZg@sol.localdomain>
+ <d122893c426f44aa95d5168773b60b9d@huawei.com>
+ <YfRRUBZpQv2Hi1sL@sol.localdomain>
+ <9af14af14beb46a28f57559e4b1dc1a7@huawei.com>
+ <b262cb06-37fd-9760-8f6e-1dcacbf738b4@linux.ibm.com>
+ <YfhFgtg4X1DLJtAQ@gmail.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <YfhFgtg4X1DLJtAQ@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: o7_XE9-Hh7P0BMQXHullAo0lFjXb7rKf
+X-Proofpoint-ORIG-GUID: o7_XE9-Hh7P0BMQXHullAo0lFjXb7rKf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 phishscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310130
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 02:23:07PM -0500, Waiman Long wrote:
-> It was found that a number of offlined memcgs were not freed because
-> they were pinned by some charged pages that were present. Even "echo
-> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
-> offlined but not freed memcgs tend to increase in number over time with
-> the side effect that percpu memory consumption as shown in /proc/meminfo
-> also increases over time.
-> 
-> In order to find out more information about those pages that pin
-> offlined memcgs, the page_owner feature is extended to print memory
-> cgroup information especially whether the cgroup is offlined or not.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> Acked-by: David Rientjes <rientjes@google.com>
-> ---
->  mm/page_owner.c | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 28dac73e0542..a471c74c7fe0 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -10,6 +10,7 @@
->  #include <linux/migrate.h>
->  #include <linux/stackdepot.h>
->  #include <linux/seq_file.h>
-> +#include <linux/memcontrol.h>
->  #include <linux/sched/clock.h>
->  
->  #include "internal.h"
-> @@ -325,6 +326,42 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
->  	seq_putc(m, '\n');
->  }
->  
-> +#ifdef CONFIG_MEMCG
-> +/*
-> + * Looking for memcg information and print it out
-> + */
-> +static inline void print_page_owner_memcg(char *kbuf, size_t count, int *pret,
-> +					  struct page *page)
-> +{
-> +	unsigned long memcg_data = READ_ONCE(page->memcg_data);
-> +	struct mem_cgroup *memcg;
-> +	bool onlined;
-> +	char name[80];
-> +
-> +	if (!memcg_data)
-> +		return;
-> +
-> +	if (memcg_data & MEMCG_DATA_OBJCGS)
-> +		*pret += scnprintf(kbuf + *pret, count - *pret,
-> +				"Slab cache page\n");
 
-Don't we need to check for overflow here?
+On 1/31/22 15:24, Eric Biggers wrote:
+> On Mon, Jan 31, 2022 at 02:29:19PM -0500, Stefan Berger wrote:
+>>>> don't think I realized there was a more direct, PKCS#7-less way to do it and
+>>>> that IMA used that way.)  However, it would be better to use this as an
+>>>> opportunity to move people off of the built-in signatures entirely, either by
+>>>> switching to a full userspace solution or by switching to IMA.
+>>> If what we sign remains the same, then we could support multiple
+>>> methods and use a selector to let fsverity_verify_signature() know
+>>> how it should verify the signature. I don't know what would be a
+>>> proper place for the selector.
+>>>
+>>> PKCS#7 seems ok, as it is used for kernel modules. IMA would be
+>>> also ok, as it can verify the signature more directly. I would also
+>>> be interested in supporting PGP, to avoid the requirement for
+>>> Linux distributions to manage a secondary key. I have a small
+>>> extension for rpmsign, that I would like to test in the Fedora
+>>> infrastructure.
+>>>
+>>> Both the PKCS#7 and the PGP methods don't require additional
+>>> support from outside, the functions verify_pkcs7_signature()
+>>> and verify_pgp_signature() (proposed, not yet in the upstream
+>>> kernel) would be sufficient.
+>> FYI: An empty file signed with pkcs7 and an ecc key for NIST p256 generates
+>> a signature of size 817 bytes. If an RPM needs to carry such signatures on a
+>> per-file basis we are back to the size increase of nearly an RSA signature.
+>> I would say for packages this is probably too much size increase.. and this
+>> is what drove the implementation of ECC support.
+> I am getting 256 bytes for an ECC signature in PKCS#7 format:
+>
+> 	cd src/fsverity-utils
+> 	make
+> 	openssl ecparam -name prime256v1 -genkey -noout -out key.pem
+> 	openssl req -new -x509 -key key.pem -out cert.pem -days 360
+> 	touch file
+> 	./fsverity sign file file.sig --key=key.pem --cert=cert.pem
+> 	stat -c %s file.sig
+>
+> Probably you accidentally included the whole certificate in the PKCS#7 message.
+> That's not required here.
+>
+> There are definitely problems with PKCS#7, and it does have space overhead.  But
+> the space overhead is not as bad as you state.
 
-> +
-> +	memcg = page_memcg_check(page);
-> +	if (!memcg)
-> +		return;
-> +
-> +	onlined = (memcg->css.flags & CSS_ONLINE);
-> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
-> +	*pret += scnprintf(kbuf + *pret, count - *pret,
-> +			"Charged %sto %smemcg %s\n",
-> +			PageMemcgKmem(page) ? "(via objcg) " : "",
-> +			onlined ? "" : "offlined ",
-> +			name);
+You are right. I used openssl cms without -nocerts and -noattr 
+(unintentionately). Though 256 bytes is RSA 2048 signature size again. 
+ECDSA with NIST p256 key is around 70 bytes.
 
-Ditto
 
-> +}
-> +#else /* CONFIG_MEMCG */
-> +static inline void print_page_owner_memcg(char *kbuf, size_t count, int *pret,
-> +					  struct page *page) { }
-
-I think #ifdef inside the print_page_owner_memcg() functions will be
-simpler and clearer.
-
-> +#endif /* CONFIG_MEMCG */
-> +
->  static ssize_t
->  print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->  		struct page *page, struct page_owner *page_owner,
-> @@ -365,6 +402,8 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
->  			migrate_reason_names[page_owner->last_migrate_reason]);
->  	}
->  
-> +	print_page_owner_memcg(kbuf, count, &ret, page);
-> +
-
-ret can go over count here.
-Why not make print_page_owner_memcg() an int so that the call will be
-consistent with other calls in print_page_owner():
-
-	ret += print_page_owner_memcg(kbuf, count, page);
-	if (ret >= count)
-		goto err;
-
->  	ret += snprintf(kbuf + ret, count - ret, "\n");
->  	if (ret >= count)
->  		goto err;
-> -- 
-> 2.27.0
-> 
-
--- 
-Sincerely yours,
-Mike.
+>
+> - Eric

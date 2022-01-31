@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8BA4A496A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3164F4A4971
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237035AbiAaOfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:35:48 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47646
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236840AbiAaOfq (ORCPT
+        id S237583AbiAaOgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 09:36:04 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:38673 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237401AbiAaOgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:35:46 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7E6773F1D9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 14:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643639739;
-        bh=mN1fqbFpMzpoEmtDuIC6Dm/iTWIjedREVpcgBANl36k=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=v34Oew5qCDIwwmEhPjtMinFxId7UG7xobhvEKyqWKyxjGjeQZnh7Jgaes+YLIJS18
-         It5D9yX/+mxuOHC/KlGKiN6SGIyO1CCA5TLbhoXfs55NlvLHWdqZR7JhhjqWjdBSV7
-         XEE2Egb8ZkoZySepjye3gZE/bgGSpU8vUe86l3EVDMGH/St3PPZvxlqhLSshzLKJ36
-         EpJFHy7BmAWdg9aqcabyITZX2T5USHsCmrWBPrUkQ8Vm89cfP685d27KXj21lNZibl
-         hxsf35B2TAhGMcz7KdIHvbHuPifE/dUa4LyR7zqOndCGEoZChg99w69UaZE1JlO2Py
-         RWCI6XJAr4lDQ==
-Received: by mail-ed1-f69.google.com with SMTP id en7-20020a056402528700b00404aba0a6ffso7035424edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 06:35:39 -0800 (PST)
+        Mon, 31 Jan 2022 09:36:02 -0500
+Received: by mail-oi1-f177.google.com with SMTP id u13so10770579oie.5;
+        Mon, 31 Jan 2022 06:36:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mN1fqbFpMzpoEmtDuIC6Dm/iTWIjedREVpcgBANl36k=;
-        b=lAXLhfDHRTu0fyzsqACxdfdLgs6zo00opJabKhLc8zxdL2j1GoY3hUHib4LINcYxX6
-         r20RAgk0GU5ntTDIyvm0uFlxC8gGMkTSM0KYUqSHk89CuH974k0Ci6O5K4NX75s436kA
-         dn/gfDzEAoRRuRjuTi5qMhBAVPGHRGTfse97GUIioMtnGyxIpWJ+jVDJ1Wtq9d2v7yyE
-         A2GpFsDLarsq3RTQT+2XpIcVsdr9InR8HDGaXsbLI3fVHSGpY6kQslh9lm+HNtx59N8D
-         pBTHZ1+5c22JG7TC2L4I07AsCif+g6BtTnIgd6uqi8upMNKmKKGeQ3QwEdnrq7cgzklo
-         uITw==
-X-Gm-Message-State: AOAM530vL2QPDLGU3+vLiJ93X5zcnHhjUGBhc6IN4HUyyspasG2bqrT8
-        5owYDNH1WkvTrRMhBncDAwFEqCn8pFx+pX+0h5y9bSNtKf7gyXHTUzAN6rmmPl5uHBYlmWuCLZd
-        aekO+EYWn2vLSTeMzRjrHI+z3yOQVgeJCvQDlBXiNDw==
-X-Received: by 2002:a17:907:3da1:: with SMTP id he33mr16949202ejc.603.1643639738963;
-        Mon, 31 Jan 2022 06:35:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy4GNJxyhqwfB03F6E6tsE1hPORTToge8FEFloC2ibh4V7CNNEKMKGR1HGsnKFgfIpvlFrbiw==
-X-Received: by 2002:a17:907:3da1:: with SMTP id he33mr16949190ejc.603.1643639738818;
-        Mon, 31 Jan 2022 06:35:38 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id m16sm9971298eji.110.2022.01.31.06.35.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pfdI/msp2EEF60n2/W2IHw8NFo4NiQGu3x9duB2ff4c=;
+        b=s2FR6X3ULD+Y7/ZDKE7Sf0FpmvTmWClm4OhRg7zskhYUET8ltH4wNh5gRgU2sxojIm
+         CX6V3DLfqS+WC95tLmptCp74V2ZVJ59WPrZse8uvifQS1URbvFDJBE4DeJXvNc5T+/9I
+         QfFy7CsZ2zT6IudxR5B3BUEyJ2JljkcsYtMzNyZWwnNLrcf2jX+fXUcB0jtTH5RfAj3O
+         mX89EzbVRgTFAVH6Vqxc+4o6nBZjtrUYKdj1tb45T9v/5wqM4daX3B69BJBm1IWV8Y7m
+         1OvwP3g4H7lU82CsQOs4DZAM5fQMdDyY8Vm9bNPM5LiyMrQRW0nm51PYLF8Iq/eg5fkI
+         DwIA==
+X-Gm-Message-State: AOAM530GH4sdwosgNx0P9u/Emea1SJlKzY6xdVY85UTlbiGYmKGsr76n
+        edFT/LLYBsXlmHre/RWS6w==
+X-Google-Smtp-Source: ABdhPJx2W9Crdo8mDtmOVEiBkmJsylVqY9X1kVrK15XfI7aPqroxmSMBNyCYnEvcu/asNcC4qWk30g==
+X-Received: by 2002:a05:6808:1a0c:: with SMTP id bk12mr17821828oib.64.1643639761224;
+        Mon, 31 Jan 2022 06:36:01 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c9sm14906025oog.43.2022.01.31.06.36.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 06:35:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Virag <virag.david003@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Tomasz Figa <tomasz.figa@gmail.com>
-Subject: Re: [PATCH v6 0/2] arm64: dts: exynos: Add E850-96 board support
-Date:   Mon, 31 Jan 2022 15:35:00 +0100
-Message-Id: <164363969164.158734.10738186621268035629.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220131130849.2667-1-semen.protsenko@linaro.org>
-References: <20220131130849.2667-1-semen.protsenko@linaro.org>
+        Mon, 31 Jan 2022 06:36:00 -0800 (PST)
+Received: (nullmailer pid 243357 invoked by uid 1000);
+        Mon, 31 Jan 2022 14:35:59 -0000
+Date:   Mon, 31 Jan 2022 08:35:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     frowand.list@gmail.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/1] of: unittest: update text of expected warnings
+Message-ID: <Yffzz0xuJ44hO1Cy@robh.at.kernel.org>
+References: <20220127192643.2534941-1-frowand.list@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127192643.2534941-1-frowand.list@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 15:08:47 +0200, Sam Protsenko wrote:
-> WinLink's E850-96 is a dev board based on Exynos850 SoC [1]. The board's
-> design follows 96boards specifications, hence it's compatible with
-> 96boards mezzanines [2].
+On Thu, 27 Jan 2022 13:26:43 -0600, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> This patch series adds the initial support for E850-96 board and
-> Exynos850 SoC. Only basic platform components are enabled at the moment
-> (like serial, I2C, eMMC, RTC, WDT, clock driver, etc). Right now with
-> this patch series it's possible to run the kernel with BusyBox rootfs as
-> a RAM disk. More features are coming soon.
+> The text of various warning messages triggered by unittest has
+> changed.  Update the text of expected warnings to match.
 > 
-> [...]
+> The expected vs actual warnings are most easily seen by filtering
+> the boot console messages with the of_unittest_expect program at
+> https://github.com/frowand/dt_tools.git.  The filter prefixes
+> problem lines with '***', and prefixes lines that match expected
+> errors with 'ok '.  All other lines are prefixed with '   '.
+> Unrelated lines have been deleted in the following examples.
+> 
+> The mismatch appears as:
+> 
+> -> ### dt-test ### start of unittest - you will see error messages
+>       OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found 1
+>    ** of_unittest_expect WARNING - not found ---> OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found -1
+>       OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found 1
+>    ** of_unittest_expect WARNING - not found ---> OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found -1
+>       OF: /testcase-data/phandle-tests/consumer-b: #phandle-cells = 2 found 1
+>    ** of_unittest_expect WARNING - not found ---> OF: /testcase-data/phandle-tests/consumer-b: #phandle-cells = 2 found -1
+>       platform testcase-data:testcase-device2: error -ENXIO: IRQ index 0 not found
+>    ** of_unittest_expect WARNING - not found ---> platform testcase-data:testcase-device2: IRQ index 0 not found
+>    -> ### dt-test ### end of unittest - 254 passed, 0 failed
+>    ** EXPECT statistics:
+>    **
+>    **   EXPECT found          :   42
+>    **   EXPECT not found      :    4
+> 
+> With this commit applied, the mismatch is resolved:
+> 
+>    -> ### dt-test ### start of unittest - you will see error messages
+>    ok OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found 1
+>    ok OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found 1
+>    ok OF: /testcase-data/phandle-tests/consumer-b: #phandle-cells = 2 found 1
+>    ok platform testcase-data:testcase-device2: error -ENXIO: IRQ index 0 not found
+>    -> ### dt-test ### end of unittest - 254 passed, 0 failed
+>    ** EXPECT statistics:
+>    **
+>    **   EXPECT found          :   46
+>    **   EXPECT not found      :    0
+> 
+> Fixes: 2043727c2882 ("driver core: platform: Make use of the helper function dev_err_probe()")
+> Fixes: 94a4950a4acf ("of: base: Fix phandle argument length mismatch error message")
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+>  drivers/of/unittest.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
 
 Applied, thanks!
-
-[1/2] arm64: dts: exynos: Add initial Exynos850 SoC support
-      commit: bfb3c7fa3950f2dece0bfec1df5fbce7117345af
-[2/2] arm64: dts: exynos: Add initial E850-96 board support
-      commit: 363e52998c839ce77d7d5dd6f3e575bb68449afd
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

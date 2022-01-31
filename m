@@ -2,76 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A5B4A4A81
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB584A4A82
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349408AbiAaP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241253AbiAaP0A (ORCPT
+        id S1379487AbiAaP02 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 31 Jan 2022 10:26:28 -0500
+Received: from mxchg01.rrz.uni-hamburg.de ([134.100.38.111]:50697 "EHLO
+        mxchg01.rrz.uni-hamburg.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379496AbiAaP0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:26:00 -0500
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C538C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:26:00 -0800 (PST)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id E3CD84DC; Mon, 31 Jan 2022 16:25:57 +0100 (CET)
-Date:   Mon, 31 Jan 2022 16:25:56 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Krishna Reddy <vdumpa@nvidia.com>, Will Deacon <will@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/tegra-smmu: Fix missing put_device() call in
- tegra_smmu_find
-Message-ID: <Yff/hImeZQiQ9iYV@8bytes.org>
-References: <20220107080915.12686-1-linmq006@gmail.com>
+        Mon, 31 Jan 2022 10:26:24 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mxchg01.rrz.uni-hamburg.de (Postfix) with ESMTP id 1B8AEA1795;
+        Mon, 31 Jan 2022 16:26:22 +0100 (CET)
+X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
+Received: from mxchg04.rrz.uni-hamburg.de (mxchg04.rrz.uni-hamburg.de [134.100.38.114])
+        by mxchg01.rrz.uni-hamburg.de (Postfix) with ESMTPS;
+        Mon, 31 Jan 2022 16:26:22 +0100 (CET)
+X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
+Received: from exchange.uni-hamburg.de (UN-EX-MR08.uni-hamburg.de [134.100.84.75])
+        by mxchg04.rrz.uni-hamburg.de (Postfix) with ESMTPS;
+        Mon, 31 Jan 2022 16:26:22 +0100 (CET)
+Received: from plasteblaster (89.244.206.241) by UN-EX-MR08.uni-hamburg.de
+ (134.100.84.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.18; Mon, 31 Jan
+ 2022 16:26:21 +0100
+Date:   Mon, 31 Jan 2022 16:26:21 +0100
+From:   "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
+To:     Balbir Singh <bsingharora@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: Re: **SPAM** [PATCH 1/2] taskstats: version 11 with tgid
+Message-ID: <20220131162621.11fc8f59@plasteblaster>
+In-Reply-To: <20220110194417.147d4eff@plasteblaster>
+References: <20220110194417.147d4eff@plasteblaster>
+Organization: =?UTF-8?B?VW5pdmVyc2l0w6R0?= Hamburg
+X-Mailer: Claws Mail (x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107080915.12686-1-linmq006@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [89.244.206.241]
+X-ClientProxiedBy: UN-EX-MR04.uni-hamburg.de (134.100.84.71) To
+ UN-EX-MR08.uni-hamburg.de (134.100.84.75)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thierry,
+Hi,
 
-does this look correct to you?
+any hints on this one? Should I group this into one patch with the
+other one to increase the struct version only once? I figured that the
+other changes in patch 2 are more controversial and need more discussion.
 
-Thanks,
+Or should I rather work on a taskstats mode that consinstently returns
+TGID stats (and possibly only those) with accumulated fields like CPU
+time for the whole process? This is more like what I am after in the
+end (plus a task count for this process to tell if it was
+multithreaded), but just providing the tgid enables userspace to do
+that accumulation.
 
-	Joerg
+Or should I abandon taskstats in total and look elsewhere? So far I did
+not see a place that gives me equivalent data (e.g. the limited fields
+of BSD process accounting).
 
-On Fri, Jan 07, 2022 at 08:09:11AM +0000, Miaoqian Lin wrote:
-> The reference taken by 'of_find_device_by_node()' must be released when
-> not needed anymore.
-> Add the corresponding 'put_device()' in the error handling path.
+Am Mon, 10 Jan 2022 19:44:17 +0100
+schrieb "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>: 
+
+> From 9d3d915c4e0c1e4ff3a54d73851cedb613c7df44 Mon Sep 17 00:00:00 2001
+> From: "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
+> Date: Mon, 10 Jan 2022 17:10:41 +0100
+> Subject: [PATCH 1/2] taskstats: version 11 with tgid
 > 
-> Fixes: 765a9d1d02b2 ("iommu/tegra-smmu: Fix mc errors on tegra124-nyan")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> This adds the ac_tgid field to the taskstats struct, to be able to tell
+> apart (additional) threads and processes when a client application monitors
+> task exit events.
+> 
+> I need this for giving HPC users an overview over how many instances of
+> which programs they ran and how much resources each one used, including
+> the distinction between multithreaded programs (parallelized scientific
+> applications) and many process instances (script calling lots of
+> short-running programs). It is nice to get this information accurately via
+> taskstats with a data set once for each task that exits, as opposed to
+> expensive/inaccurate sampling of any sort.
+> 
+> There are process ID and parent process ID already in the struct. The
+> thread group ID seems like something that should accompany those, anyway.
+> 
+> base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
+> 
+> Signed-off-by: Dr. Thomas Orgis <thomas.orgis@uni-hamburg.de>
 > ---
->  drivers/iommu/tegra-smmu.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  include/uapi/linux/taskstats.h | 4 +++-
+>  kernel/tsacct.c                | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-> index e900e3c46903..2561ce8a2ce8 100644
-> --- a/drivers/iommu/tegra-smmu.c
-> +++ b/drivers/iommu/tegra-smmu.c
-> @@ -808,8 +808,10 @@ static struct tegra_smmu *tegra_smmu_find(struct device_node *np)
->  		return NULL;
+> diff --git a/include/uapi/linux/taskstats.h b/include/uapi/linux/taskstats.h
+> index ccbd08709321..9248dc6bcb4a 100644
+> --- a/include/uapi/linux/taskstats.h
+> +++ b/include/uapi/linux/taskstats.h
+> @@ -34,7 +34,7 @@
+>   */
 >  
->  	mc = platform_get_drvdata(pdev);
-> -	if (!mc)
-> +	if (!mc) {
-> +		put_device(&pdev->dev);
->  		return NULL;
-> +	}
 >  
->  	return mc->smmu;
->  }
+> -#define TASKSTATS_VERSION	10
+> +#define TASKSTATS_VERSION	11
+>  #define TS_COMM_LEN		32	/* should be >= TASK_COMM_LEN
+>  					 * in linux/sched.h */
+>  
+> @@ -172,6 +172,8 @@ struct taskstats {
+>  
+>  	/* v10: 64-bit btime to avoid overflow */
+>  	__u64	ac_btime64;		/* 64-bit begin time */
+> +	/* v11: thread group ID to identify process vs. (non-leader) thread */
+> +	__u32   ac_tgid;
+>  };
+>  
+>  
+> diff --git a/kernel/tsacct.c b/kernel/tsacct.c
+> index f00de83d0246..959ae3a26f1b 100644
+> --- a/kernel/tsacct.c
+> +++ b/kernel/tsacct.c
+> @@ -52,6 +52,7 @@ void bacct_add_tsk(struct user_namespace *user_ns,
+>  	stats->ac_nice	 = task_nice(tsk);
+>  	stats->ac_sched	 = tsk->policy;
+>  	stats->ac_pid	 = task_pid_nr_ns(tsk, pid_ns);
+> +	stats->ac_tgid   = task_tgid_nr_ns(tsk, pid_ns);
+>  	rcu_read_lock();
+>  	tcred = __task_cred(tsk);
+>  	stats->ac_uid	 = from_kuid_munged(user_ns, tcred->uid);
+> 
+> base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
 > -- 
-> 2.17.1
+> 2.29.2
+
+
+Alrighty then,
+
+Thomas
+
+-- 
+Dr. Thomas Orgis
+HPC @ Universität Hamburg

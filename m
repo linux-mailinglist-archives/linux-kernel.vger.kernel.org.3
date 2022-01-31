@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6804A4571
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8724A41D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376749AbiAaLk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S1358729AbiAaLGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379409AbiAaLaR (ORCPT
+        with ESMTP id S1358325AbiAaLDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:30:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD97C0617AF;
-        Mon, 31 Jan 2022 03:20:16 -0800 (PST)
+        Mon, 31 Jan 2022 06:03:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F37C06173E;
+        Mon, 31 Jan 2022 03:03:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B805B82A5D;
-        Mon, 31 Jan 2022 11:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FA9C340E8;
-        Mon, 31 Jan 2022 11:20:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 249AA604F5;
+        Mon, 31 Jan 2022 11:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED652C340E8;
+        Mon, 31 Jan 2022 11:03:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628014;
-        bh=dBu42MrnqeKGNNg7unlA+oZ+dotkMkyhoERN96fJpAg=;
+        s=korg; t=1643626984;
+        bh=6eerhe6GybZvHheLPKe41Qbtj3MPhuJL4PFcSgB4LXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z10GHwLZAy8aWX2TyBP7bXtkTZSliyGkyQUqfXq7g5fWWwdTTM5t1e/KBK1cHG55c
-         ktNgM76KhmKrV51sGiwpNj0zyTUN+Q9Dw1xvhPgWjQ+TlCMv5qUnRU0NbhBliqNMlm
-         R/ABg4XVIhFKVGUvOpqOmHZ8IEww8ANo0nDj4txU=
+        b=2jd52qGaPbJLm8q6z+l7rvBtO7NAG9xL9whBdgxmtviehfFlDVHG2b28jeBfICuwz
+         jCxFS+Y4gu28OLgViSnah9rJuCQH3+us4Js6MJx/OD/SRoInbE9nfNZ0eFdZfMAIah
+         Ew0/iwnvZ+4fSbu9ebSl/TWqQH62/Ut+6IaofjLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bud Brown <bubrown@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 064/200] dm: properly fix redundant bio-based IO accounting
-Date:   Mon, 31 Jan 2022 11:55:27 +0100
-Message-Id: <20220131105235.725751726@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 007/100] bpf: Guard against accessing NULL pt_regs in bpf_get_task_stack()
+Date:   Mon, 31 Jan 2022 11:55:28 +0100
+Message-Id: <20220131105220.683243480@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,56 +50,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Snitzer <snitzer@redhat.com>
+From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-commit b879f915bc48a18d4f4462729192435bb0f17052 upstream.
+commit b992f01e66150fc5e90be4a96f5eb8e634c8249e upstream.
 
-Record the start_time for a bio but defer the starting block core's IO
-accounting until after IO is submitted using bio_start_io_acct_time().
+task_pt_regs() can return NULL on powerpc for kernel threads. This is
+then used in __bpf_get_stack() to check for user mode, resulting in a
+kernel oops. Guard against this by checking return value of
+task_pt_regs() before trying to obtain the call chain.
 
-This approach avoids the need to mess around with any of the
-individual IO stats in response to a bio_split() that follows bio
-submission.
-
-Reported-by: Bud Brown <bubrown@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Cc: stable@vger.kernel.org
-Depends-on: e45c47d1f94e ("block: add bio_start_io_acct_time() to control start_time")
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
-Link: https://lore.kernel.org/r/20220128155841.39644-4-snitzer@redhat.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: fa28dcb82a38f8 ("bpf: Introduce helper bpf_get_task_stack()")
+Cc: stable@vger.kernel.org # v5.9+
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/d5ef83c361cc255494afd15ff1b4fb02a36e1dcf.1641468127.git.naveen.n.rao@linux.vnet.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm.c |    5 +++--
+ kernel/bpf/stackmap.c |    5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -489,7 +489,7 @@ static void start_io_acct(struct dm_io *
- 	struct mapped_device *md = io->md;
- 	struct bio *bio = io->orig_bio;
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -664,13 +664,14 @@ BPF_CALL_4(bpf_get_task_stack, struct ta
+ 	   u32, size, u64, flags)
+ {
+ 	struct pt_regs *regs;
+-	long res;
++	long res = -EINVAL;
  
--	io->start_time = bio_start_io_acct(bio);
-+	bio_start_io_acct_time(bio, io->start_time);
- 	if (unlikely(dm_stats_used(&md->stats)))
- 		dm_stats_account_io(&md->stats, bio_data_dir(bio),
- 				    bio->bi_iter.bi_sector, bio_sectors(bio),
-@@ -535,7 +535,7 @@ static struct dm_io *alloc_io(struct map
- 	io->md = md;
- 	spin_lock_init(&io->endio_lock);
+ 	if (!try_get_task_stack(task))
+ 		return -EFAULT;
  
--	start_io_acct(io);
-+	io->start_time = jiffies;
+ 	regs = task_pt_regs(task);
+-	res = __bpf_get_stack(regs, task, NULL, buf, size, flags);
++	if (regs)
++		res = __bpf_get_stack(regs, task, NULL, buf, size, flags);
+ 	put_task_stack(task);
  
- 	return io;
- }
-@@ -1550,6 +1550,7 @@ static void __split_and_process_bio(stru
- 			submit_bio_noacct(bio);
- 		}
- 	}
-+	start_io_acct(ci.io);
- 
- 	/* drop the extra reference count */
- 	dm_io_dec_pending(ci.io, errno_to_blk_status(error));
+ 	return res;
 
 

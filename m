@@ -2,131 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 219A84A46EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1B94A46F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359767AbiAaMYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:24:46 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46302
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241079AbiAaMYn (ORCPT
+        id S1377125AbiAaMZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:25:20 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39964 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241079AbiAaMZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:24:43 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 434793F1C6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643631878;
-        bh=RS8b/Wq/sjAzqIIpV7S5JBsz6wb8tK0SUM0mXHn4sk0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=pmUWDbCKKoffVwJ9D5QMiDkTZ1JxHgH7bMYMLFlhKhr2e7tPoZI1gxxLHFODD2jjZ
-         MNwSCRslOlXJI6kXsySJozf26UI03A1FiJqf1GI/Z1bBCRpailLThDvqgWNuTCTKxP
-         PIj/zjRpyeW0qubSIK+h+7vwDsFMIB7J4s8AeAFly9sN6rim1Riynos7LSCt5uUQY5
-         3R3si0JRm3yVltCNZahzGdiHCQItb4QQajVkiXvUfLV0sgCVp63b/o8HlChSudsXDv
-         PqnsBlrJXIQMDJ1H1GmXuoL18n+VYCYbefEtQ+6ASOM/wHhwa0FoKw2K3fLimXm+V9
-         6vu4gYk6OnHtw==
-Received: by mail-ed1-f69.google.com with SMTP id k10-20020a50cb8a000000b00403c8326f2aso6876823edi.6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:24:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RS8b/Wq/sjAzqIIpV7S5JBsz6wb8tK0SUM0mXHn4sk0=;
-        b=Smt29xIaN2b+c5cqLCVytHlrhgqa3VkOIu6qCdfTV93TF8aHpJlznYBSXuFRVcekZI
-         R1MrrQOEha+gSMuOqy84edZQ2QHkIWHPSSZyQlddUEkj0AJ/kAzaxUjY6Levioq0tO0z
-         0l+FI5r0AZ8OUcsQfJ5iA7gfJQyHqPU2w1g9QTJjgMeprFINdP5Ry0yTccdtirCLGkvj
-         Pz3GcqFouiRaMr6NgJIJu6jr5ran+Z8ijD0Llvz1a4ct/Xz8ARNbKUwLu6RocGkTHfWG
-         o+uvDWae2N0DpDvwTz090U6WSdqKE8mpFDDt9t4sSQvRnNPbQq5m4smKdixvs168Oiwq
-         Vbhw==
-X-Gm-Message-State: AOAM530AHE91BjkwPeln7AyJw5bOaboR8grn1jXcD9LqY9M5RDaE74AC
-        Ut2KnKXXpm79Ctcw9Jkvsle91BIx8XMukhKpN+0W6x+Y80q/XWr7iILNxg3QVViCBlaqTPkFQKy
-        gCAzkXSoJqZi2rRJZBrVQXF13KZnLEuXttY2Bm6no5g==
-X-Received: by 2002:a17:906:5d0e:: with SMTP id g14mr16809389ejt.211.1643631877674;
-        Mon, 31 Jan 2022 04:24:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyNtuvn5vB5b3DM+JHOgOOezTxGo5qVfsW4JApSUhBXJObPfK5NT15b1j1a986n8t0sT14T+w==
-X-Received: by 2002:a17:906:5d0e:: with SMTP id g14mr16809378ejt.211.1643631877535;
-        Mon, 31 Jan 2022 04:24:37 -0800 (PST)
-Received: from [192.168.0.73] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id a23sm17585360eda.94.2022.01.31.04.24.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 04:24:37 -0800 (PST)
-Message-ID: <1b04c8b0-389b-8937-ef2c-47719e771a25@canonical.com>
-Date:   Mon, 31 Jan 2022 13:24:36 +0100
+        Mon, 31 Jan 2022 07:25:16 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VBBRq8026075;
+        Mon, 31 Jan 2022 12:25:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=O4wtQYp6ALZab4bMarZJKmfsVhNP5vqFbU9c7Z5Ke4U=;
+ b=mo2hwcwIuNUqiChyjNqU4w+6B97xNkZU+bYVrkK/siSyYp8OmTAZEViOuYoyT7Ouz2sW
+ t0UQWGK9/HfQHqUlnlFtO9/l7dcyRRI93i7zVPi/YnJyy5wS+I2GfUgZ1ehqcNnbZ7em
+ 5Iyq5SGWrJSos6wpcidsyyg+ZFMxBVfynh3Ubv8vDAdQVekv/zygaWRXgMMBwvpAmlnN
+ YTr99Ac5gnvFCzPGQ1xz51SXlwji6aL84zTCVO8EgLQL2KjCfsZ9vhZ6QqJPbuSFhXSM
+ 1ttPZGf2sGE13mrMjy4rIJS/s7NtQG5jayDQNmnaRagbBhGGYcNcmSyyqPyu+LopXN9g ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxbwa4s21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 12:25:12 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20VBWXVC019044;
+        Mon, 31 Jan 2022 12:25:12 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxbwa4s1g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 12:25:12 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VC8AlR024134;
+        Mon, 31 Jan 2022 12:25:10 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3dvw792gem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 12:25:10 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VCP4bE21496296
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 12:25:04 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 560E711C066;
+        Mon, 31 Jan 2022 12:25:04 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6819E11C054;
+        Mon, 31 Jan 2022 12:25:03 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.30.167])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Mon, 31 Jan 2022 12:25:03 +0000 (GMT)
+Date:   Mon, 31 Jan 2022 13:24:59 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Petr =?UTF-8?B?VGVzYcWZw61r?= <ptesarik@suse.cz>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Michael Mueller <mimu@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH 1/1] KVM: s390: index kvm->arch.idle_mask by vcpu_idx
+Message-ID: <20220131132459.125e560c.pasic@linux.ibm.com>
+In-Reply-To: <76a1c7b0-a073-02bb-1612-a74ca97105ec@suse.cz>
+References: <20210827125429.1912577-1-pasic@linux.ibm.com>
+        <3ca4de98-8f4d-9937-923e-f8865c96f82c@suse.cz>
+        <20220131125337.05f73251.pasic@linux.ibm.com>
+        <76a1c7b0-a073-02bb-1612-a74ca97105ec@suse.cz>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ARM: dts: add 533 MHz step to p4note GPU opp table
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220129221452.GA36524@adroid>
- <131c9bd9-b035-8a75-ca27-f9c2b3993566@canonical.com>
- <20220131121559.GA4022@adroid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220131121559.GA4022@adroid>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UigN8Km17PMrofHcejV2lTkNHQs6wt41
+X-Proofpoint-ORIG-GUID: lvwfGf52pHtBj7sbVl-RSQSQmkiwO2wS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_04,2022-01-28_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 impostorscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310081
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2022 13:15, Martin Jücker wrote:
-> On Mon, Jan 31, 2022 at 09:54:00AM +0100, Krzysztof Kozlowski wrote:
->> On 29/01/2022 23:14, Martin Jücker wrote:
->>> The p4note devices support 533 MHz GPU speed, so let's make use of it.
->>>
->>
->> If there is going to be resend, please add prefix "exynos:" in subject.
->> Just like other commits (git log --oneline arch/arm/boot/dts/exynos*).
->>
->>> Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
->>> ---
->>>  arch/arm/boot/dts/exynos4412-p4note.dtsi | 7 +++++++
->>>  1 file changed, 7 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
->>> index 4ae6eb3091c4..d277b2337ae0 100644
->>> --- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
->>> +++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
->>> @@ -355,6 +355,13 @@ &gpu {
->>>  	status = "okay";
->>>  };
->>>  
->>> +&gpu_opp_table {
->>> +	opp-533000000 {
->>> +		opp-hz = /bits/ 64 <533000000>;
->>> +		opp-microvolt = <1075000>;
->>> +	};
->>> +};
->>
->> This looks like Exynos4412 Prime. Please check also CPU frequencies and
->> if they match, just include exynos4412-prime.dtsi (like Odroid U3).
->>
->>> +
->>>  &hsotg {
->>>  	vusb_a-supply = <&ldo12_reg>;
->>>  	dr_mode = "peripheral";
->>
->>
->> Best regards,
->> Krzysztof
+On Mon, 31 Jan 2022 13:09:26 +0100
+Petr Tesařík <ptesarik@suse.cz> wrote:
+
+> Hi Halil,
 > 
-> I just noticed, that I overlooked a condition in the code which
-> decreases the step count by one which eliminates the 533 MHz step.
-> Please ignore this patch.
+> Dne 31. 01. 22 v 12:53 Halil Pasic napsal(a):
+> > On Mon, 31 Jan 2022 11:13:18 +0100
+> > Petr Tesařík <ptesarik@suse.cz> wrote:
+> >   
+> >> Hi Halil,
+> >>
+> >> Dne 27. 08. 21 v 14:54 Halil Pasic napsal(a):  
+> >>> While in practice vcpu->vcpu_idx ==  vcpu->vcp_id is often true,
+> >>> it may not always be, and we must not rely on this.
+> >>>
+> >>> Currently kvm->arch.idle_mask is indexed by vcpu_id, which implies
+> >>> that code like
+> >>> for_each_set_bit(vcpu_id, kvm->arch.idle_mask, online_vcpus) {
+> >>>                   vcpu = kvm_get_vcpu(kvm, vcpu_id);
+> >>> 		do_stuff(vcpu);
+> >>> }
+> >>> is not legit. The trouble is, we do actually use kvm->arch.idle_mask
+> >>> like this. To fix this problem we have two options. Either use
+> >>> kvm_get_vcpu_by_id(vcpu_id), which would loop to find the right vcpu_id,
+> >>> or switch to indexing via vcpu_idx. The latter is preferable for obvious
+> >>> reasons.  
+> >>
+> >> I'm just backporting this fix to SLES 12 SP5, and I've noticed that
+> >> there is still this code in __floating_irq_kick():
+> >>
+> >> 	/* find idle VCPUs first, then round robin */
+> >> 	sigcpu = find_first_bit(fi->idle_mask, online_vcpus);
+> >> /* ... round robin loop removed ...
+> >> 	dst_vcpu = kvm_get_vcpu(kvm, sigcpu);
+> >>
+> >> It seems to me that this does exactly the thing that is not legit, but
+> >> I'm no expert. Did I miss something?
+> >>  
+> > 
+> > We made that legit by making the N-th bit in idle_mask correspond to the
+> > vcpu whose vcpu_idx == N. The second argument of kvm_get_vcpu() is the
+> > vcpu_idx. IMHO that ain't super-intuitive because it ain't spelled out.
+> > 
+> > So before this was a mismatch (with a vcpu_id based bitmap we would have
+> > to use kvm_get_vcpu_by_id()), and with this patch applied this code
+> > becomes legit because both idle_mask and kvm_get_vcpu() operate with
+> > vcpu_idx.
+> > 
+> > Does that make sense?  
+> 
+> Yes!
+> 
+> > I'm sorry the commit message did not convey this clearly enough...  
+> 
+> No, it's not your fault. I didn't pay enough attention to the change, 
+> and with vcpu_id and vcpu_idx being so similar I got confused.
 
-Yeah:
-	if(samsung_rev() < EXYNOS4412_REV_2_0)
-		step_num = MALI_DVFS_STEPS - 1;
+No problem at all!
 
-Your case, although possible, would be unlikely.
+> 
+> In short, there's no bug now, indeed. Thanks for your patience.
+> 
 
-Best regards,
-Krzysztof
+Thank you for being mindful when backporting!
+
+Regards,
+Halil
+

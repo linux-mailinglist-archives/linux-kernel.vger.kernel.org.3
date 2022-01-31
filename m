@@ -2,101 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE9C4A4008
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E404A4011
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358109AbiAaKVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 05:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358090AbiAaKVf (ORCPT
+        id S1358149AbiAaKYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 05:24:04 -0500
+Received: from smtpbg701.qq.com ([203.205.195.86]:46828 "EHLO
+        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1358126AbiAaKX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:21:35 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201F4C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 02:21:35 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id y192so7920368vkc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 02:21:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Lm3cgz6DtmL9tpisEfrfuo7Wj8QCaI1ocVGLYB2Y2U=;
-        b=Lind02/Njzrr7eWAupL32iIHm4GhlbxdTkXaEnTW2OV0dgNWX/rudjG6+pcPbPpIFq
-         C69XJIFu0uAQHgKg9yzKqDEaKe2dTryF/XVS7u5Fs51eNy1ypgdGDsx2HWFQUKmKA/Qj
-         gsFWvFnWm3m6cKgmcrNeOadSQiHcKT9p9vJ3c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Lm3cgz6DtmL9tpisEfrfuo7Wj8QCaI1ocVGLYB2Y2U=;
-        b=kPLfGQlL26OEgNI8LOSezyCHYD5cZSVSRQPYZkpA6uuddRd/JsP3SCdqeBN6OPavuy
-         iQTbNi0Sy0i459D3obzj9CZvEZxE6IT0fQCCu7UwnoAEJo6Kpa/kN4nSiT78s44sO8Uz
-         zOdrDPoh1csJCnGyDqwX6vPEhAWt/D1lySF49xOABq55rVo8NhtPZJdYL3yhTR1YfYo1
-         goI3O0n44IFustb2zM5ZO1QPKkMx7jUFYAJjTmuizy7V8W0dH9/BLlQ/EKi+aBkWTUY+
-         H84xzZVqloCTzO6kO9iwu+XqkZHzLjDq+saJfbE56minJMfMNHSv7mStESI/MPMGxECz
-         Mmkg==
-X-Gm-Message-State: AOAM531cgwS4D/1DfVT4eXG+tPyv5EZv5sUv2NmIvFGP2c0VWwsjJt5G
-        IOrRtmD2srfCHlh1Skh+i69aSLzgStEd646xnSwT2g==
-X-Google-Smtp-Source: ABdhPJwOQtCABzU+9UXwt+UwQamDQBcR3aBXOuhKxfwoBl2Am0C/bqSbVLQ7zPuyDB0UYMDY2raQ+Hlv8DNEyXB5kK8=
-X-Received: by 2002:a1f:a753:: with SMTP id q80mr8215440vke.1.1643624494313;
- Mon, 31 Jan 2022 02:21:34 -0800 (PST)
+        Mon, 31 Jan 2022 05:23:56 -0500
+X-QQ-mid: bizesmtp11t1643624627tmhf9c2q
+Received: from localhost.localdomain (unknown [180.105.58.61])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 31 Jan 2022 18:22:47 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000B00A0000000
+X-QQ-FEAT: YSwSv5UBo8jqRMsFPvrPuKGE1HHFTE5HH6gTbBe1i0Gh8eAUIPWPPhTYKcMqY
+        sFlA1wslD7Xu5go8t4ZC0LBMYLw2PBtAxWoYpFf8waY1logbhaZrinkuOu0LvOMUYwDA383
+        FuE4V9ikrDLJ7/w9J9hO2ZZpcGDNxMV2v0U7FPZNdvfRUlxN4T/Jm9duQ84hjNnonQYL45x
+        LGYnzc9ai/bhc4Vtv7sjseXdXbTrN6XRquSnbwa8yxb32VM73BfeEUZ2Tf6X9VW16KCsSeV
+        fDbX2SGJQGbqKGBVuapHW5Xd6B6Lc0UEIUNhwGyx2vTcryA29UhQS0fQ5uSOnL+IaI1NcE3
+        4NKUO1gcdhjSQGIdf1/dTk1cSLuIyBAfAlJOaWH
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH v5] kernel/time: move timer sysctls to its own file
+Date:   Mon, 31 Jan 2022 18:22:14 +0800
+Message-Id: <20220131102214.2284-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <164360127045.4233.2606812444285122570.stgit@noble.brown>
- <164360183348.4233.761031466326833349.stgit@noble.brown> <YfdlbxezYSOSYmJf@casper.infradead.org>
- <164360446180.18996.6767388833611575467@noble.neil.brown.name>
-In-Reply-To: <164360446180.18996.6767388833611575467@noble.neil.brown.name>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 31 Jan 2022 11:21:23 +0100
-Message-ID: <CAJfpeguPJLpJcyC2_FU3pVNk0FhiKJvVuMdQR_wZAgY0Wnsqzg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] fuse: remove reliance on bdi congestion
-To:     NeilBrown <neilb@suse.de>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux NFS list <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 at 05:47, NeilBrown <neilb@suse.de> wrote:
+kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
+dishes, this makes it very difficult to maintain.
 
-> > > +++ b/fs/fuse/file.c
-> > > @@ -958,6 +958,8 @@ static void fuse_readahead(struct readahead_control *rac)
-> > >
-> > >     if (fuse_is_bad(inode))
-> > >             return;
-> > > +   if (fc->num_background >= fc->congestion_threshold)
-> > > +           return;
-> >
-> > This seems like a bad idea to me.  If we don't even start reads on
-> > readahead pages, they'll get ->readpage called on them one at a time
-> > and the reading thread will block.  It's going to lead to some nasty
-> > performance problems, exactly when you don't want them.  Better to
-> > queue the reads internally and wait for congestion to ease before
-> > submitting the read.
-> >
->
-> Isn't that exactly what happens now? page_cache_async_ra() sees that
-> inode_read_congested() returns true, so it doesn't start readahead.
-> ???
+To help with this maintenance let's start by moving sysctls to places
+where they actually belong.  The proc sysctl maintainers do not want to
+know what sysctl knobs you wish to add for your own piece of code, we
+just care about the core logic.
 
-I agree.
+So move the timer_migration sysctls to its own file.
 
-Fuse throttles async requests even before allocating them, which
-precludes placing them on any queue.  I guess it was done to limit the
-amount of kernel memory pinned by a task (sync requests allow just one
-request per task).
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ include/linux/timer.h |  4 ----
+ kernel/sysctl.c       | 11 -----------
+ kernel/time/timer.c   | 26 ++++++++++++++++++++++++--
+ 3 files changed, 24 insertions(+), 17 deletions(-)
 
-This has worked well, and I haven't heard complaints about performance
-loss due to readahead throttling.
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..793b6b7c5a3e 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -198,10 +198,6 @@ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
+ 
+ #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+ struct ctl_table;
+-
+-extern unsigned int sysctl_timer_migration;
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos);
+ #endif
+ 
+ unsigned long __round_jiffies(unsigned long j, int cpu);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..d6d133423e5d 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2292,17 +2292,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	{
+-		.procname	= "timer_migration",
+-		.data		= &sysctl_timer_migration,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= timer_migration_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_BPF_SYSCALL
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..2d3f4295614b 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -44,6 +44,7 @@
+ #include <linux/slab.h>
+ #include <linux/compat.h>
+ #include <linux/random.h>
++#include <linux/sysctl.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -223,7 +224,7 @@ static void timer_update_keys(struct work_struct *work);
+ static DECLARE_WORK(timer_update_work, timer_update_keys);
+ 
+ #ifdef CONFIG_SMP
+-unsigned int sysctl_timer_migration = 1;
++static unsigned int sysctl_timer_migration = 1;
+ 
+ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+ 
+@@ -251,7 +252,8 @@ void timers_update_nohz(void)
+ 	schedule_work(&timer_update_work);
+ }
+ 
+-int timer_migration_handler(struct ctl_table *table, int write,
++#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
++static int timer_migration_handler(struct ctl_table *table, int write,
+ 			    void *buffer, size_t *lenp, loff_t *ppos)
+ {
+ 	int ret;
+@@ -264,6 +266,26 @@ int timer_migration_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static struct ctl_table timer_sysctl[] = {
++	{
++		.procname       = "timer_migration",
++		.data           = &sysctl_timer_migration,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = timer_migration_handler,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static int __init timer_sysctl_init(void)
++{
++	register_sysctl_init("kernel", timer_sysctl);
++	return 0;
++}
++__initcall(timer_sysctl_init);
++#endif
+ static inline bool is_timers_nohz_active(void)
+ {
+ 	return static_branch_unlikely(&timers_nohz_active);
+-- 
+2.20.1
 
-Thanks,
-Miklos
+
+

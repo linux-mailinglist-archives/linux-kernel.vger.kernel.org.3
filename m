@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EBE4A4C44
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FBC4A4C48
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380535AbiAaQhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:37:17 -0500
-Received: from marcansoft.com ([212.63.210.85]:42382 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376682AbiAaQhP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:37:15 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 57D0341982;
-        Mon, 31 Jan 2022 16:37:06 +0000 (UTC)
-Subject: Re: [PATCH v2 27/35] brcmfmac: pcie: Add IDs/properties for BCM4387
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-28-marcan@marcan.st>
- <1f37951b-aed7-64ca-7452-7332df791931@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <dbf841a7-a848-fed0-484d-1c7c8ced94d6@marcan.st>
-Date:   Tue, 1 Feb 2022 01:37:04 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1380545AbiAaQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378272AbiAaQiR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 11:38:17 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE67C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:38:17 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id z19so27931087lfq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AIOLUSIJu0tNp0OuaV9P5L9B3qaObFHnZycKiVkaU1A=;
+        b=64X94uv2GH6qSSKTOedtresZbziebe8LNz//gjVK5gXLXntHF6gFaSY2yq9aSpj3fl
+         q+Scl/+1/aE58Fnf0PmqwEmDzMztFQulvCQmY1kcKd5/pekrhvDwi1EfDaDA2a6bqW1v
+         7Ly3w260lrbuYKkvVH5sRXcHzRRIdW03HgvFRVcj9vZ/y6zZCqreLokXL3AXqbyF9LmU
+         sdhVHteMGk2zR7r9Tc+dBwkGTcS7y4HkYycT1xARbt/MjFyL7Tt3JGPtXr2a7iQETSGn
+         RHFeF9j+NZvss75Gb+Z0Y9kem8rsYZ79mDBYvBKhR4L9ff84UUPKcxv+gicOYEM+UK4I
+         Njtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AIOLUSIJu0tNp0OuaV9P5L9B3qaObFHnZycKiVkaU1A=;
+        b=AGiYzo0snJce1MLxSelXScIAWRwcv15aRbesURX1E4myorSnLyn2KVcXXvZxNqE27Y
+         bnJLbos+Z9fTI7PiIM4DYR/Ki154kNDaur3SCIVVKxwqmYyfT2fhQEDfOgMZR1J69Jck
+         XhsLtUlVSKm2iby+TLyE5P3LqoGrC1ZVqXfKzzaGIOmlItAlwcYwmx+DBZqwgeiDRiHL
+         Bi1TJ/1wVZKN0NBZlD6nOY6BY2klxtlxNUh5D4BZgoV2zui/D6JLevDV3col8gzB12Mb
+         JGfKO3B1afoHkn+CLZBh9Z+W1JZtwUxzfijHHNHaiCbttuFMPFbBz/+WjBKN2yWUbupJ
+         kB/g==
+X-Gm-Message-State: AOAM530fGebTu0qA0d4f01J51bOU2zW1EbXZAQ3XK0g60v28YfqW+Sjf
+        1A24GfcqDzCy6ytcLCFp6nw94U/kNKaPcw==
+X-Google-Smtp-Source: ABdhPJyoCcErQX0vsg98FdoDAMuRvyMa+2GRoObUDbZMEQ+bUB/ipXLT4CCABJpkI1hQHUdkoPexXg==
+X-Received: by 2002:a05:6512:3e18:: with SMTP id i24mr15837511lfv.522.1643647095637;
+        Mon, 31 Jan 2022 08:38:15 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id r14sm3704681lfr.129.2022.01.31.08.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 08:38:14 -0800 (PST)
+Message-ID: <a7d0b013-6114-07b3-0a7b-0d17db8a3982@cogentembedded.com>
+Date:   Mon, 31 Jan 2022 19:38:13 +0300
 MIME-Version: 1.0
-In-Reply-To: <1f37951b-aed7-64ca-7452-7332df791931@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/bridge_connector: enable HPD by default if supported
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com>
+ <Yczy3UYpU2UMFQ6N@pendragon.ideasonboard.com>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+In-Reply-To: <Yczy3UYpU2UMFQ6N@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/01/2022 16.35, Arend van Spriel wrote:
-> On 1/4/2022 8:26 AM, Hector Martin wrote:
->> @@ -96,6 +97,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->>   	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
->>   	BRCMF_FW_ENTRY(BRCM_CC_4377_CHIP_ID, 0xFFFFFFFF, 4377B3), /* 4 */
->>   	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* 3 */
->> +	BRCMF_FW_ENTRY(BRCM_CC_4387_CHIP_ID, 0xFFFFFFFF, 4387C2), /* 7 */
+>> Hotplug events reported by bridge drivers over drm_bridge_hpd_notify()
+>> get ignored unless somebody calls drm_bridge_hpd_enable(). When the
+>> connector for the bridge is bridge_connector, such a call is done from
+>> drm_bridge_connector_enable_hpd().
+>>
+>> However drm_bridge_connector_enable_hpd() is never called on init paths,
+>> documentation suggests that it is intended for suspend/resume paths.
 > 
-> Regarding the revmask in this firmware mapping table my common practice 
-> was to disable older revisions and enable for given revision and newer 
-> until proven otherwise. So for the 4387c2 that would have to following 
-> mask 0xFFFFFF80 (if rev 7 indeed matches with c2).
+> Hmmmm... I'm in two minds about this. The problem description is
+> correct, but I wonder if HPD should be enabled unconditionally here, or
+> if this should be left to display drivers to control.
+> drivers/gpu/drm/imx/dcss/dcss-kms.c enables HPD manually at init time,
+> other drivers don't.
 > 
+> It feels like this should be under control of the display controller
+> driver, but I can't think of a use case for not enabling HPD at init
+> time. Any second opinion from anyone ?
 
-Makes sense, I changed it to that for all the additions :)
+Hi.
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Can we somehow move forward here?..

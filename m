@@ -2,311 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C434A3DF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 07:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAC34A3E02
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 07:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357869AbiAaGuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 01:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357779AbiAaGty (ORCPT
+        id S1357753AbiAaG6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 01:58:18 -0500
+Received: from smtpbg701.qq.com ([203.205.195.86]:33336 "EHLO
+        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1357855AbiAaG6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 01:49:54 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD90C061714;
-        Sun, 30 Jan 2022 22:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=6AGTRKiyo3n1kN0MLVro9fLjev96qAcQ9JxUzJQ4Exg=; b=OX44eeG08FsSiBoK0NTB6AN//9
-        WIu9AG+Z0SnsQjPns4+rLEeJ03tiJ9hIOYUGPKGs1Kdsg18vV6uNY0yFPObKBNjxOUNM6qc4+gtPM
-        qId7I7d85PzGJ5Gyqf4lAqPHZQTor9mjoU7h4CVHaZxXVNnaNwcnx7xoCAkSEQVpRIB0MoI/n13xY
-        Ks30Ydhqt+0/wKst8QRww4+WaYdOEHk8FLpjLOAAqu5Zh+JyOF/Col3NH6cQiH+CEV37HfA5L1+0S
-        VVVpT2KgipBJputRepPJaYMifn502BXBVHQPx2JUJYoTlgug2M85LVPyT1Rx5R5TJSOgHKSUaq598
-        S1nRQ8xw==;
-Received: from [2001:4bb8:191:327d:13f5:1d0a:e266:6974] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEQVb-008AX1-F1; Mon, 31 Jan 2022 06:49:51 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guo Ren <guoren@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Date:   Mon, 31 Jan 2022 07:49:33 +0100
-Message-Id: <20220131064933.3780271-6-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220131064933.3780271-1-hch@lst.de>
-References: <20220131064933.3780271-1-hch@lst.de>
+        Mon, 31 Jan 2022 01:58:16 -0500
+X-QQ-mid: bizesmtp6t1643612288td0m6dc0b
+Received: from localhost.localdomain (unknown [180.105.58.61])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 31 Jan 2022 14:58:01 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000B00A0000000
+X-QQ-FEAT: a4niRxydalGEIRaLD5i0kl2MyqHHO7oEJVHodigFOMYIBLiR/6UhuYxVQzOEQ
+        vajdUbjtFqzaqpmBmLzcYP+6kFdRB/xTHKNAJ7dtKpv1OjT31Ktj1DU62RoHvQ6cCyM7XSg
+        EwzQXGKOGVbHzrFHVqdkecOvnN6/bktjOKtHU8oh6sOQ8EqvW2U/VPY59NEmAhRioGPj1C8
+        QSQ0V7o8sLIyj4HlbGIWZ/ifjLeETtx+yBw/1Wd0bpACYmVul3YiBGYqJPDqWSQFLaZtRYb
+        cmhZMNitd0+wU7bYCQX/s51mVmtjemUlyPO9gbbZGVgCZBf++X57nOWL94zALj/ZRJZk2d1
+        EbUXkkyj/8FdUqGnbk=
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH v4] kernel/time: move timer sysctls to its own file
+Date:   Mon, 31 Jan 2022 14:57:28 +0800
+Message-Id: <20220131065728.6823-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a single common definition for the compat_flock and
-compat_flock64 structures using the same tricks as for the native
-variants.  Another extra define is added for the packing required on
-x86.
+This moves the kernel/timer/timer.c respective sysctls to its own file.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
 ---
- arch/arm64/include/asm/compat.h   | 16 ----------------
- arch/mips/include/asm/compat.h    | 19 ++-----------------
- arch/parisc/include/asm/compat.h  | 16 ----------------
- arch/powerpc/include/asm/compat.h | 16 ----------------
- arch/s390/include/asm/compat.h    | 16 ----------------
- arch/sparc/include/asm/compat.h   | 18 +-----------------
- arch/x86/include/asm/compat.h     | 20 +++-----------------
- include/linux/compat.h            | 31 +++++++++++++++++++++++++++++++
- 8 files changed, 37 insertions(+), 115 deletions(-)
+ include/linux/timer.h |  4 ----
+ kernel/sysctl.c       | 11 -----------
+ kernel/time/timer.c   | 26 ++++++++++++++++++++++++--
+ 3 files changed, 24 insertions(+), 17 deletions(-)
 
-diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
-index 2763287654081..e0faec1984a1c 100644
---- a/arch/arm64/include/asm/compat.h
-+++ b/arch/arm64/include/asm/compat.h
-@@ -65,22 +65,6 @@ struct compat_stat {
- 	compat_ulong_t	__unused4[2];
- };
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..793b6b7c5a3e 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -198,10 +198,6 @@ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
  
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
+ #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+ struct ctl_table;
 -
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- struct compat_statfs {
- 	int		f_type;
- 	int		f_bsize;
-diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
-index 6a350c1f70d7e..6d6e5a451f4d9 100644
---- a/arch/mips/include/asm/compat.h
-+++ b/arch/mips/include/asm/compat.h
-@@ -55,23 +55,8 @@ struct compat_stat {
- 	s32		st_pad4[14];
- };
+-extern unsigned int sysctl_timer_migration;
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos);
+ #endif
  
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	s32		l_sysid;
--	compat_pid_t	l_pid;
--	s32		pad[4];
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
-+#define __ARCH_COMPAT_FLOCK_EXTRA_SYSID		s32 l_sysid;
-+#define __ARCH_COMPAT_FLOCK_PAD			s32 pad[4];
+ unsigned long __round_jiffies(unsigned long j, int cpu);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..d6d133423e5d 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2292,17 +2292,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	{
+-		.procname	= "timer_migration",
+-		.data		= &sysctl_timer_migration,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= timer_migration_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_BPF_SYSCALL
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..2d3f4295614b 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -44,6 +44,7 @@
+ #include <linux/slab.h>
+ #include <linux/compat.h>
+ #include <linux/random.h>
++#include <linux/sysctl.h>
  
- struct compat_statfs {
- 	int		f_type;
-diff --git a/arch/parisc/include/asm/compat.h b/arch/parisc/include/asm/compat.h
-index c04f5a637c390..a1e4534d80509 100644
---- a/arch/parisc/include/asm/compat.h
-+++ b/arch/parisc/include/asm/compat.h
-@@ -53,22 +53,6 @@ struct compat_stat {
- 	u32			st_spare4[3];
- };
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -223,7 +224,7 @@ static void timer_update_keys(struct work_struct *work);
+ static DECLARE_WORK(timer_update_work, timer_update_keys);
  
--struct compat_flock {
--	short			l_type;
--	short			l_whence;
--	compat_off_t		l_start;
--	compat_off_t		l_len;
--	compat_pid_t		l_pid;
--};
--
--struct compat_flock64 {
--	short			l_type;
--	short			l_whence;
--	compat_loff_t		l_start;
--	compat_loff_t		l_len;
--	compat_pid_t		l_pid;
--};
--
- struct compat_statfs {
- 	s32		f_type;
- 	s32		f_bsize;
-diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
-index 83d8f70779cbc..5ef3c7c83c343 100644
---- a/arch/powerpc/include/asm/compat.h
-+++ b/arch/powerpc/include/asm/compat.h
-@@ -44,22 +44,6 @@ struct compat_stat {
- 	u32		__unused4[2];
- };
+ #ifdef CONFIG_SMP
+-unsigned int sysctl_timer_migration = 1;
++static unsigned int sysctl_timer_migration = 1;
  
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- struct compat_statfs {
- 	int		f_type;
- 	int		f_bsize;
-diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
-index 0f14b3188b1bb..07f04d37068b6 100644
---- a/arch/s390/include/asm/compat.h
-+++ b/arch/s390/include/asm/compat.h
-@@ -102,22 +102,6 @@ struct compat_stat {
- 	u32		__unused5;
- };
+ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
  
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- struct compat_statfs {
- 	u32		f_type;
- 	u32		f_bsize;
-diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
-index 108078751bb5a..d78fb44942e0f 100644
---- a/arch/sparc/include/asm/compat.h
-+++ b/arch/sparc/include/asm/compat.h
-@@ -75,23 +75,7 @@ struct compat_stat64 {
- 	unsigned int	__unused5;
- };
+@@ -251,7 +252,8 @@ void timers_update_nohz(void)
+ 	schedule_work(&timer_update_work);
+ }
  
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--	short		__unused;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--	short		__unused;
--};
-+#define __ARCH_COMPAT_FLOCK_PAD		short __unused;
+-int timer_migration_handler(struct ctl_table *table, int write,
++#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
++static int timer_migration_handler(struct ctl_table *table, int write,
+ 			    void *buffer, size_t *lenp, loff_t *ppos)
+ {
+ 	int ret;
+@@ -264,6 +266,26 @@ int timer_migration_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
  
- struct compat_statfs {
- 	int		f_type;
-diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
-index 8d19a212f4f26..de794d8958663 100644
---- a/arch/x86/include/asm/compat.h
-+++ b/arch/x86/include/asm/compat.h
-@@ -50,25 +50,11 @@ struct compat_stat {
- 	u32		__unused5;
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- /*
-- * IA32 uses 4 byte alignment for 64 bit quantities,
-- * so we need to pack this structure.
-+ * IA32 uses 4 byte alignment for 64 bit quantities, so we need to pack the
-+ * compat flock64 structure.
-  */
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--} __attribute__((packed));
-+#define __ARCH_NEED_COMPAT_FLOCK64_PACKED
- 
- struct compat_statfs {
- 	int		f_type;
-diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 1c758b0e03598..a0481fe6c5d51 100644
---- a/include/linux/compat.h
-+++ b/include/linux/compat.h
-@@ -258,6 +258,37 @@ struct compat_rlimit {
- 	compat_ulong_t	rlim_max;
- };
- 
-+#ifdef __ARCH_NEED_COMPAT_FLOCK64_PACKED
-+#define __ARCH_COMPAT_FLOCK64_PACK	__attribute__((packed))
-+#else
-+#define __ARCH_COMPAT_FLOCK64_PACK
-+#endif
-+
-+struct compat_flock {
-+	short			l_type;
-+	short			l_whence;
-+	compat_off_t		l_start;
-+	compat_off_t		l_len;
-+#ifdef __ARCH_COMPAT_FLOCK_EXTRA_SYSID
-+	__ARCH_COMPAT_FLOCK_EXTRA_SYSID
-+#endif
-+	compat_pid_t		l_pid;
-+#ifdef __ARCH_COMPAT_FLOCK_PAD
-+	__ARCH_COMPAT_FLOCK_PAD
-+#endif
++static struct ctl_table timer_sysctl[] = {
++	{
++		.procname       = "timer_migration",
++		.data           = &sysctl_timer_migration,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = timer_migration_handler,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
 +};
 +
-+struct compat_flock64 {
-+	short		l_type;
-+	short		l_whence;
-+	compat_loff_t	l_start;
-+	compat_loff_t	l_len;
-+	compat_pid_t	l_pid;
-+#ifdef __ARCH_COMPAT_FLOCK64_PAD
-+	__ARCH_COMPAT_FLOCK64_PAD
++static int __init timer_sysctl_init(void)
++{
++	register_sysctl_init("kernel", timer_sysctl);
++	return 0;
++}
++__initcall(timer_sysctl_init);
 +#endif
-+} __ARCH_COMPAT_FLOCK64_PACK;
-+
- struct compat_rusage {
- 	struct old_timeval32 ru_utime;
- 	struct old_timeval32 ru_stime;
+ static inline bool is_timers_nohz_active(void)
+ {
+ 	return static_branch_unlikely(&timers_nohz_active);
 -- 
-2.30.2
+2.20.1
+
+
 

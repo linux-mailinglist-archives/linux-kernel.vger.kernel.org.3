@@ -2,91 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D28954A483C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EEF4A4844
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349051AbiAaNdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:33:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31970 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235633AbiAaNdo (ORCPT
+        id S1348797AbiAaNfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:35:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235633AbiAaNfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:33:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643636024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VfFqvSMV9Otew6WwuduSbrALdReBxJUaJj+oMXEGVOY=;
-        b=jENr9/180kLfwkhAPpOiL/D0c4pP4Q9sVwAXpM2veNjCxeUwnlPaDL2r2WElVkJlTKDRnG
-        tIGVDDBupnkUkH4BAmWtm/yVlgHEizW26sQ3vizHHy4m4I2/ieEEAeZCHI0IsqE8oguSUN
-        WgspDEF4YbEPrqIGSQ8PVx8oV2KeRFY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-KPdmslGGNqWItuQwAUZLOA-1; Mon, 31 Jan 2022 08:33:43 -0500
-X-MC-Unique: KPdmslGGNqWItuQwAUZLOA-1
-Received: by mail-qv1-f70.google.com with SMTP id gg10-20020a056214252a00b0041eeb1c2684so12598345qvb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:33:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VfFqvSMV9Otew6WwuduSbrALdReBxJUaJj+oMXEGVOY=;
-        b=yoBzZXhRZFHOFh/FPfKKjCyRrdbpoMLbqGrUxXgLkxh+ySPdQ2o+/3Vd3Q29yaKLsW
-         YRvsgWXgE9QGLye9nLm7/VH3QhGKL/aGx4CO1BheP+C1/h6iB8nj+ODyyHMHSkh2/q0Q
-         2PewjUfaVBUZIXmyYGWLZXpMtVd0yQcdUSNKGHErULpdPNY5qzjdkzhxwIDo7rBDpijO
-         twQ4MrCIkHJKrJObTQQa82KbYXbDcMUVTWdHE4zgZm8WcYFnwZjYwXaOwT8DEiygHB70
-         Ev0E+EaRE6pQ8yJdLW1vUO+UEjbJDZMfzXAT0oqoEByzFJKf1L2AQC0xMy3IbFKisoES
-         nBww==
-X-Gm-Message-State: AOAM530lU583lxjL41zf5MJgK/fqEu5d7B/aZBI5oTBhpfCG3wBP0QOt
-        9h7bDIN6a2kQlDvcPmYmF6sWjCnaO9jbmRENC+7Z3uzcxufxzFaiwEO+Gv3goHybIO6Y9ra/Gwb
-        Vy9sRNTgDY1P+SEomQD+7Q5wW
-X-Received: by 2002:a05:620a:1792:: with SMTP id ay18mr13373133qkb.12.1643636022755;
-        Mon, 31 Jan 2022 05:33:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0RwA9z2nQfn12ZGFBT5t9iGfjKQ2Az19u0I4r0E5BKCJkPncDYJOi+4lmU54lStlau3WU/A==
-X-Received: by 2002:a05:620a:1792:: with SMTP id ay18mr13373119qkb.12.1643636022563;
-        Mon, 31 Jan 2022 05:33:42 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id u16sm2047274qtx.46.2022.01.31.05.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 05:33:42 -0800 (PST)
-From:   trix@redhat.com
-To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] ACPICA: cleanup double word in comment
-Date:   Mon, 31 Jan 2022 05:33:37 -0800
-Message-Id: <20220131133337.1556355-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Mon, 31 Jan 2022 08:35:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F56C061714;
+        Mon, 31 Jan 2022 05:35:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78701B82ADB;
+        Mon, 31 Jan 2022 13:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E68C340E8;
+        Mon, 31 Jan 2022 13:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643636143;
+        bh=QrkimEX74xj+Tvz3rNeNpKEQmjz6JrJN7PGpRIyz3b0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f0rRPazR/9+C94SxiifNdocl3SGFxenxe07xtZaYXDxyaby+hohZ350sabvBU03W/
+         bv6wpF7eOjV+0O/OEM3dir4bt0AfcWOMdlY5hvQUnMt740xEXr9hzKGpx2+ZtOaTRg
+         0+jrwmQe5I9JXq0nwyFJ3Xxujmb8ZWlSZyROcnd0WFNSLyEZpbZLESZrq5dbge+ymj
+         NKBixHPDf3WXLMWKSibCG0hX9kHUoAoosS5Jj64qJ9l5wch1b0u1iMhlO9jB2qq7v+
+         K/EwmpwM/cZ3wx0LaYkR7mSy5o/48YZNaZA0EVFXmhh6FG7GIWbvJbd/kLixuXOISL
+         tAWrsbLlN432w==
+Received: by mail-vk1-f172.google.com with SMTP id b77so8231311vka.11;
+        Mon, 31 Jan 2022 05:35:42 -0800 (PST)
+X-Gm-Message-State: AOAM532Xm3DyzUvIrGxalQdMFqjRyRSaEGUXWNlhO9VbVnpuHnJxzIgk
+        S8Al5oIw92nMjOpzRCfJtdeRuFxpsTLIdKPmYFI=
+X-Google-Smtp-Source: ABdhPJxZNMeC16XdmOigVkjvMRdj8icFIyGyUX0uDul1X33dvN0Ph1ZLc80xzQSa/ftMMNKUf+Q3pGt5DpewCG2Ojxw=
+X-Received: by 2002:a05:6122:d07:: with SMTP id az7mr8146058vkb.35.1643636142047;
+ Mon, 31 Jan 2022 05:35:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220131064933.3780271-1-hch@lst.de> <20220131064933.3780271-3-hch@lst.de>
+In-Reply-To: <20220131064933.3780271-3-hch@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 31 Jan 2022 21:35:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRU=0KS5r=Q9tAcVz8aXbaYL7jGyxfxPCYkxWc4rEBG2g@mail.gmail.com>
+Message-ID: <CAJF2gTRU=0KS5r=Q9tAcVz8aXbaYL7jGyxfxPCYkxWc4rEBG2g@mail.gmail.com>
+Subject: Re: [PATCH 2/5] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Mon, Jan 31, 2022 at 2:49 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Don't bother to define the symbols empty, just don't use them.  That
+> makes the intent a little more clear.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  include/uapi/asm-generic/fcntl.h       | 12 ++++--------
+>  tools/include/uapi/asm-generic/fcntl.h | 12 ++++--------
+>  2 files changed, 8 insertions(+), 16 deletions(-)
+>
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> index caa482e3b01af..c53897ca5d402 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -193,22 +193,16 @@ struct f_owner_ex {
+>  #define F_LINUX_SPECIFIC_BASE  1024
+>
+>  #ifndef HAVE_ARCH_STRUCT_FLOCK
+> -#ifndef __ARCH_FLOCK_PAD
+> -#define __ARCH_FLOCK_PAD
+> -#endif
+> -
+>  struct flock {
+>         short   l_type;
+>         short   l_whence;
+>         __kernel_off_t  l_start;
+>         __kernel_off_t  l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK_PAD
+>         __ARCH_FLOCK_PAD
+> -};
+>  #endif
+> -
+> -#ifndef __ARCH_FLOCK64_PAD
+> -#define __ARCH_FLOCK64_PAD
+> +};
+>  #endif
+>
+>  struct flock64 {
+> @@ -217,7 +211,9 @@ struct flock64 {
+>         __kernel_loff_t l_start;
+>         __kernel_loff_t l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK64_PAD
+>         __ARCH_FLOCK64_PAD
+> +#endif
+>  };
+>
+>  #endif /* _ASM_GENERIC_FCNTL_H */
+> diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+> index 4a49d33ca4d55..82054502b9748 100644
+> --- a/tools/include/uapi/asm-generic/fcntl.h
+> +++ b/tools/include/uapi/asm-generic/fcntl.h
+> @@ -188,22 +188,16 @@ struct f_owner_ex {
+>  #define F_LINUX_SPECIFIC_BASE  1024
+>
+>  #ifndef HAVE_ARCH_STRUCT_FLOCK
+> -#ifndef __ARCH_FLOCK_PAD
+> -#define __ARCH_FLOCK_PAD
+> -#endif
+> -
+>  struct flock {
+>         short   l_type;
+>         short   l_whence;
+>         __kernel_off_t  l_start;
+>         __kernel_off_t  l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK_PAD
+>         __ARCH_FLOCK_PAD
+> -};
+>  #endif
+> -
+> -#ifndef __ARCH_FLOCK64_PAD
+> -#define __ARCH_FLOCK64_PAD
+> +};
+>  #endif
+>
+>  struct flock64 {
+> @@ -212,7 +206,9 @@ struct flock64 {
+>         __kernel_loff_t l_start;
+>         __kernel_loff_t l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK64_PAD
+>         __ARCH_FLOCK64_PAD
+> +#endif
+>  };
+>
+>  #endif /* _ASM_GENERIC_FCNTL_H */
+> --
+> 2.30.2
+>
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-Remove the second 'know'.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/acpi/acpica/exfldio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/acpi/acpica/exfldio.c b/drivers/acpi/acpica/exfldio.c
-index bdc7a30d1217c..b92605df3872c 100644
---- a/drivers/acpi/acpica/exfldio.c
-+++ b/drivers/acpi/acpica/exfldio.c
-@@ -104,7 +104,7 @@ acpi_ex_setup_region(union acpi_operand_object *obj_desc,
- #ifdef ACPI_UNDER_DEVELOPMENT
- 	/*
- 	 * If the Field access is any_acc, we can now compute the optimal
--	 * access (because we know know the length of the parent region)
-+	 * access (because we know the length of the parent region)
- 	 */
- 	if (!(obj_desc->common.flags & AOPOBJ_DATA_VALID)) {
- 		if (ACPI_FAILURE(status)) {
 -- 
-2.26.3
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

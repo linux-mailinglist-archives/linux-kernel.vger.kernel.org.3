@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C9F4A45A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3DF4A42E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378987AbiAaLn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S1358921AbiAaLO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379950AbiAaLas (ORCPT
+        with ESMTP id S1349210AbiAaLGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:30:48 -0500
+        Mon, 31 Jan 2022 06:06:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4109C061362;
-        Mon, 31 Jan 2022 03:21:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334DBC061394;
+        Mon, 31 Jan 2022 03:04:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 686FEB82A5D;
-        Mon, 31 Jan 2022 11:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 624F6C340E8;
-        Mon, 31 Jan 2022 11:21:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2D22B82A59;
+        Mon, 31 Jan 2022 11:04:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3979FC340E8;
+        Mon, 31 Jan 2022 11:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628092;
-        bh=cwtwlYgAv/JlO2bKYsQ6eIWumQYgPraGE5TBaPhsXr8=;
+        s=korg; t=1643627086;
+        bh=A87i1zJgpgfpgVNLS/bYqudetWowmmB8GJRnlDrhw9M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GcRyFKKlR1RJK8/5wy34R/EJ+vjV/2mdWqqSnVdNAmP8JFAtc20kog47nJE+i7wFh
-         IHzs8uOZTdEapc6gyH6ToqeE/jYW7oLhsTjctmvFM/IIKC1YUnldpJv1/l8hqgCvXt
-         pEoTD0soF+Eloa2sOK7uhUeB56aT9bVVl6IXp5zM=
+        b=qzvc0p+oQf2nZqzS5n6jfCvaioZK6f0IDsX+/uyRehccWYf+s+Nb4iNphDVlcb0Un
+         3ysgIzOJfmliAxEMgR5c0q6LbmXN5eAjGS0rmhn8/LN6YWht2Qq728U7P3V50T6kBU
+         Hnyxc0ZoHrtUSulKriZPH8YjxTZIuydrpFVOc0h4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 095/200] powerpc/32: Fix boot failure with GCC latent entropy plugin
+        stable@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.10 037/100] sched/membarrier: Fix membarrier-rseq fence command missing from query bitmask
 Date:   Mon, 31 Jan 2022 11:55:58 +0100
-Message-Id: <20220131105236.806668426@linuxfoundation.org>
+Message-Id: <20220131105221.694727913@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,54 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit bba496656a73fc1d1330b49c7f82843836e9feb1 upstream.
+commit 809232619f5b15e31fb3563985e705454f32621f upstream.
 
-Boot fails with GCC latent entropy plugin enabled.
+The membarrier command MEMBARRIER_CMD_QUERY allows querying the
+available membarrier commands. When the membarrier-rseq fence commands
+were added, a new MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK was
+introduced with the intent to expose them with the MEMBARRIER_CMD_QUERY
+command, the but it was never added to MEMBARRIER_CMD_BITMASK.
 
-This is due to early boot functions trying to access 'latent_entropy'
-global data while the kernel is not relocated at its final
-destination yet.
+The membarrier-rseq fence commands are therefore not wired up with the
+query command.
 
-As there is no way to tell GCC to use PTRRELOC() to access it,
-disable latent entropy plugin in early_32.o and feature-fixups.o and
-code-patching.o
+Rename MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK to
+MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK (the bitmask is not a command
+per-se), and change the erroneous
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_BITMASK (which does not
+actually exist) to MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ.
 
-Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-Cc: stable@vger.kernel.org # v4.9+
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215217
-Link: https://lore.kernel.org/r/2bac55483b8daf5b1caa163a45fa5f9cdbe18be4.1640178426.git.christophe.leroy@csgroup.eu
+Wire up MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK in
+MEMBARRIER_CMD_BITMASK. Fixing this allows discovering availability of
+the membarrier-rseq fence feature.
+
+Fixes: 2a36ab717e8f ("rseq/membarrier: Add MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: <stable@vger.kernel.org> # 5.10+
+Link: https://lkml.kernel.org/r/20220117203010.30129-1-mathieu.desnoyers@efficios.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/Makefile |    1 +
- arch/powerpc/lib/Makefile    |    3 +++
- 2 files changed, 4 insertions(+)
+ kernel/sched/membarrier.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -11,6 +11,7 @@ CFLAGS_prom_init.o      += -fPIC
- CFLAGS_btext.o		+= -fPIC
- endif
+--- a/kernel/sched/membarrier.c
++++ b/kernel/sched/membarrier.c
+@@ -19,11 +19,11 @@
+ #endif
  
-+CFLAGS_early_32.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_cputable.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_prom_init.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_btext.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -19,6 +19,9 @@ CFLAGS_code-patching.o += -DDISABLE_BRAN
- CFLAGS_feature-fixups.o += -DDISABLE_BRANCH_PROFILING
- endif
+ #ifdef CONFIG_RSEQ
+-#define MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK		\
++#define MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK		\
+ 	(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ			\
+-	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
++	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ)
+ #else
+-#define MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK	0
++#define MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK	0
+ #endif
  
-+CFLAGS_code-patching.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+CFLAGS_feature-fixups.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+
- obj-y += alloc.o code-patching.o feature-fixups.o pmem.o test_code-patching.o
+ #define MEMBARRIER_CMD_BITMASK						\
+@@ -31,7 +31,8 @@
+ 	| MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED			\
+ 	| MEMBARRIER_CMD_PRIVATE_EXPEDITED				\
+ 	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED			\
+-	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK)
++	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK		\
++	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
  
- ifndef CONFIG_KASAN
+ static void ipi_mb(void *info)
+ {
 
 

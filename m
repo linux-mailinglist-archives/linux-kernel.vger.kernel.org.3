@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 586FE4A4F82
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646644A4F83
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 20:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377071AbiAaTcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 14:32:19 -0500
-Received: from mout.gmx.net ([212.227.15.18]:34937 "EHLO mout.gmx.net"
+        id S1376852AbiAaTe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 14:34:56 -0500
+Received: from mga05.intel.com ([192.55.52.43]:2065 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376841AbiAaTcO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:32:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643657517;
-        bh=M8VxZrM69T8fzVT7HtYVnghJWaulQqQeYn5dd1DXrAA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=bF86srVel9qMm4UJ+cyEqgH/yBbxUdgo0HwK7MVyXWou73CBq43PL8hUgHCEb+BAk
-         55bzcMFeKSrVRJlmsEJpOl7couN7p4YG/rr53tu++P690IB1DKy5rM3TofBQQVGdT4
-         fGNuw4ge1EibMvS3hRMF5Q8/J+3XDrZYa6RLE8Go=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M5wLZ-1n8oqc2lh5-007UBB; Mon, 31 Jan 2022 20:31:57 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-Date:   Mon, 31 Jan 2022 20:31:37 +0100
-Message-Id: <20220131193137.3684-5-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220131193137.3684-1-W_Armin@gmx.de>
-References: <20220131193137.3684-1-W_Armin@gmx.de>
+        id S1343885AbiAaTey (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 14:34:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643657694; x=1675193694;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cChH8+znn3t0kReebLQbywe4khYSpVp1da+Pn8uCcTo=;
+  b=mCETvXtJXK+70Uapbi+fO43Zdjo43b11eoyj4krMY9tejSQJ7g79ek2x
+   eldoNVjHhWdN/nG7zfudtH69hw/VqRwwL6cLQhMUndyCOnPNMANKA/QqB
+   y8kpmTWImy1OlPXvO+qD9jVJtHAU7zDp3mcGqi9P/oF9SnEbl2SufO/7/
+   d0hRFia7oDJlZ+dwDRUMmWfd1UEYqO330Rr16GPJeWm3Ts50QnFhrOo2I
+   iByC2ddliLxmji4/2umswPhPHQ6y/LEXzXPxJiGr/mbDUyqxSe25imWrk
+   NHKrMw/+RyiZGBzYAuxdqmkMqfcSAm8LRr5OxSUx0UGKPgS1GzVE9Cxez
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="333891481"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="333891481"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:34:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="675836719"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Jan 2022 11:34:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEcRo-000SHh-D0; Mon, 31 Jan 2022 19:34:44 +0000
+Date:   Tue, 1 Feb 2022 03:34:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tom <support@vamrs.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 29/62] drivers/soc/sifive/sifive_l2_cache.c:152:3:
+ error: implicit declaration of function 'writeq'
+Message-ID: <202202010337.bSdnhIBF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:EVlEM/o2j4ih3tYP1AEJiMC8rIk32vvZTCzjpa4NBx1+hZB4vtx
- JJTBBoW3yuerS1F5Deib520NoWkps9QX9scjB3TEkU6xAfgCER8L7EHtcfsICirVLYi7wJx
- OEluf1hYsFD3ifbSgSlqxpSd9Pk6/OYpRpYoGA0EKVb8rQYKpgekWHPUpVW8czorIMYlOzX
- 8RuPS5rHY6Nj5ci6+vnXw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gJ61MFJziLA=:kP4t8y1BzCOAu5fBJHUWF/
- YEcsVMbkXuSeEd1yIuc3ehKVFnYhiuP8oDeSkrm9rKPlAFHYOboSZGN1h+aZtg237Rw8mCKO0
- BUNw7AmS2cPks/3kCwJeXtKJ5I1tmPPTr9VYm5foeNg4o2Rb4PDAkLfQTfqtKaPH0Y5iIS300
- lACUQc3CiPMVldyhDvnlc8ElKMsnp36cf/5o9NUY2VMWvoWlgrlY+8RTIwJylQ8fbjCyuJUDA
- a3tMHLMkNhQZKDFooYBZtPvB/plJiA5iyTMMjmBac0sVNSjp8xwBKzUQd+eGYcJs9JwldBuxd
- c8tsl3X9YXpc9/rK/0YF2fS6aPZTeHSHwPie8Q66PUGZmX+0anNZx+c4dROAxepNqAparRIUc
- jO9HqzcpxIqwOi9PsNAvdjMagldkX2QysKKXIFoY6Hhpfcqzg1WddGmPsDr4zBzctsHf/ZWeO
- IhWj5jxaYGWAw23PmpWBew1tzqBsMAG4cmlaxwbUpV374DmE7arffL7PvBL9f5MUstjbGDg0R
- nC2RYoEJM2ollX8pvuCsMEPYlIxT7IHw0vWKer5dNUlO7BSZ3QBxS4H7YMZGHW2NxPP1PSL4E
- Ls3RiMNQntyYWHOglrRCJIoTGx4thm1aH9P3V6zxzDUAA0BJvBUlb2ihiTPQPZ9Zs0avfV5d4
- BU6Sv0WjOvmKjUYGUsMUjzHUvK3wCR3WdxIjM8kS/07vVgpeJ9FNna+yfMXuz1La7/Mi4Quj+
- cBdnu6aBRdP9cTwvM6+QQLJp2/lwu7ng6Hp/F8DKs36aNEKVoqrjoVEWg2YnfC05Nvn+Zidkr
- kdG2T+Q7I/Ts0sR68/em3UtOwPhouwOXLrPHTaUGbyV/8PF+Rd+i8N7wcKsrDV0kr++IVclAQ
- 1Gbhu593ZO4j3FkaXrXanr5osAZTnHxXxCGTsdKD8iXyF6Hv/IqbM5VoGZJefgD2IzaUgMQoq
- hEHGSz8rVZLYULsAvKxpSBykWMvggLgEtNwgbXkgXVYcXUjqnAhG5ZTnVYsVRF3mzBur31UJL
- zxzZUh8l/9Eg+Glp4vJBb0bXfdY4KVeEicVv1az7+Jq59OiDn3mDfPRexW5+W+051X7XL9eSq
- iRGPdIJboreXpY=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the watchdog was already enabled by the BIOS after booting, the
-watchdog infrastructure needs to regularly send keepalives to
-prevent a unexpected reset.
-WDOG_ACTIVE only serves as an status indicator for userspace,
-we want to use WDOG_HW_RUNNING instead.
+tree:   https://github.com/esmil/linux visionfive
+head:   8c758048edfd830baceb991167131c9d55786544
+commit: 601a2f4e945153ebae8645596eda50ea39369c88 [29/62] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202010337.bSdnhIBF-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/601a2f4e945153ebae8645596eda50ea39369c88
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 601a2f4e945153ebae8645596eda50ea39369c88
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Since my Fujitsu Esprimo P720 does not support the watchdog,
-this change is compile-tested only.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/sch56xx-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
-.c
-index f66e1ed4b1aa..2cd146fd0562 100644
-=2D-- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -427,7 +427,7 @@ void sch56xx_watchdog_register(struct device *parent, =
-u16 addr, u32 revision,
- 	data->wddev.max_timeout =3D 255 * 60;
- 	watchdog_set_nowayout(&data->wddev, nowayout);
- 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
--		set_bit(WDOG_ACTIVE, &data->wddev.status);
-+		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
+>> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+   drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
- 	/* Since the watchdog uses a downcounter there is no register to read
- 	   the BIOS set timeout from (if any was set at all) ->
-=2D-
-2.30.2
 
+vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
+
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+   142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

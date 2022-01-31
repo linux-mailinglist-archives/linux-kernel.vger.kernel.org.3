@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2F74A4DB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60C74A4DB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbiAaSEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S236637AbiAaSEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiAaSE2 (ORCPT
+        with ESMTP id S236378AbiAaSEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:04:28 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CFBC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:04:28 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id g14so42956291ybs.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:04:28 -0800 (PST)
+        Mon, 31 Jan 2022 13:04:50 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3221BC061401
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:04:50 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so355674pjl.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:04:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jKOkqEsF/LF5CvREpOhl/oWeS4V81mya8jnYw1wCDFw=;
-        b=ZoEoPhFI/SkB8VO31hL0sxmvpM9bvkaNazc4+33voZ+d+Jq5CVfcf/4q4i0xfFVF+K
-         6K3x1JC51OSZS84XuLrcAnSAKYqNlF3njdyY4m4M/pKKeCHTbzs+Xq85lzme9M8UxF4I
-         1WfKC4mIWOsksRwShjtGW08RG0g2y8tChKAdjmFXp7Q3TjfNzMl9p/WhNHEqW/+QkIFr
-         Yr5a3t+LeDzoi58dWsvqQRJ8qK6GGOHZzpXWEpXhYHvp2noblx7S6Gzn1tb7BLZHKN7X
-         e23AKSODY44B7jDfGz4rsRiFIXwRylsE/dpWc9z9mafZeHrt3om02GsVon7YI8i/miOP
-         c+Mg==
+        d=pensando.io; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=c4Q5GbHlG477GDu8eKVa3wxvGBbayrQI0q4Ora6UJKM=;
+        b=tqRPGJPSBTirucVoZRcW3Pfn8BwsifiN/2zFudpAcytP87mX6mRx+Z2+R8wpSJO6rJ
+         E21sG6i5x1UJi7SIERlnMvo8Jw0MLeFM6mvgDhxTj45ED5x+ylbmR3r1yaZ8mJx2fzpx
+         udWsOYVxp3K/E4/g+A1Uv/ovIRjY7g5AdBlMS01qOGp/RnNoU+KHggkPTU0eVD0DU8s9
+         0BeQOAnHzHWADyIK4Vu+WAIlTn0apQDnBPfgCcsWeZOXKK9/5IWZ2oh4MKVGtqnRvPWe
+         5941r9GmvDJ9BaTRBHT9nHnwJ9e+INLC12aBfS+Ob2isiRQG967ObJegi9wJYUDWinQX
+         qgZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jKOkqEsF/LF5CvREpOhl/oWeS4V81mya8jnYw1wCDFw=;
-        b=GMFZVyRQiyzYcryFBYwZdIWcC6iTBLvngQTRYRrZ7ei80gsFCoBxBXVnjo5NaT7tWm
-         cGy/Unrff0iGmGi7aYuccOxqQqYxopVLppLctIQAqKteLRwIG9o3GH4nrl9ENtHvaSJX
-         n5I0qrplutN7oxmFbRwmh6k9b3DLnPBXYEfj7+pCqMRE9Q+lhlBLi8HOiQptVve0BwXT
-         q2wSEn85JUtMeyc8aMxBOa8Ch/89uB8ABaeRcVav8y1DwblIfOiI5K/m9Xf7f8BP+Hsb
-         NzMPy1VBrumHvZ8kuwwDQzyJ8EFWQ5Lf1WiHMxj3JBPBEk8tMQLOG8qsvJiujYFzmi3p
-         9Chg==
-X-Gm-Message-State: AOAM530krmdnpzefL5XJjPE/KI4j/fFsdJYBmTbwQilfQrsrQMY+64V0
-        weaqd7cE3NUdONvrrpRAx2zgTrTMVBo0CzMp/qzfYg==
-X-Google-Smtp-Source: ABdhPJxSm9PiQ3U9z6FjArWXy90UeaLFc3caonzQOEh5hkATCDM1i9WF3dnhHFARISw+yK8dDaKgygwIlt49Rck/uf0=
-X-Received: by 2002:a25:be41:: with SMTP id d1mr33068235ybm.488.1643652267644;
- Mon, 31 Jan 2022 10:04:27 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=c4Q5GbHlG477GDu8eKVa3wxvGBbayrQI0q4Ora6UJKM=;
+        b=Jon97u9gMoLesnvC0qLviCMuCND6AhmUsI9pBnlWxC6xXUXwagDTRfbzJTMieWKggp
+         Z79vZHlsX7L+AVhaKHIPYKqc/z3vTOMplcxkshKAvKZ5XOgDKxvp0c85HA4cdyc/BpAm
+         M24J72kqlM7x/OQtHtlsPQm4TNxbkHbTvlW5MQuQCBzZ2AgTMWwopCIyWapHhQMvKxhG
+         p2/f2uYNK/0g5ZXLSi2/s9IUol4U+XBvl1ECP2HrcQ1Te8PFTs1aukBlJKvEWDixsdCU
+         3rcUY+XSaHqYDJYwkS158PJhpiIRKcpL6rpV16Pe736eUum2ba15g8KuzLCaQdmSS7Xh
+         pV+w==
+X-Gm-Message-State: AOAM532NDRSnvMffF+TdadPmIwPW7YQb9+poQhUVw/FgTrm3R8lAgZSu
+        ooj0MGgONk88zDTUs/u7p95IHg==
+X-Google-Smtp-Source: ABdhPJwiCZ3y7ls9K5IfS1T6T0ClceNUAK7SZtIbNYVDQUzoxeIbETevQnD06wi4x9WLSkmqa1d5tw==
+X-Received: by 2002:a17:902:d2c3:: with SMTP id n3mr21984876plc.45.1643652289541;
+        Mon, 31 Jan 2022 10:04:49 -0800 (PST)
+Received: from [192.168.0.2] ([50.53.47.17])
+        by smtp.gmail.com with ESMTPSA id y42sm19810173pfa.5.2022.01.31.10.04.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 10:04:49 -0800 (PST)
+Message-ID: <e9e124b0-4ea0-e84c-cd8e-1c6ad4df9d74@pensando.io>
+Date:   Mon, 31 Jan 2022 10:04:40 -0800
 MIME-Version: 1.0
-References: <20220128131006.67712-1-michel@lespinasse.org> <20220128131006.67712-23-michel@lespinasse.org>
- <20220129121319.3593-1-hdanton@sina.com>
-In-Reply-To: <20220129121319.3593-1-hdanton@sina.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 31 Jan 2022 10:04:16 -0800
-Message-ID: <CAJuCfpHBfSQBuz8=LHYhX-aOgZ1ng6nNfpv_jeBLz+KVr1OU5w@mail.gmail.com>
-Subject: Re: [PATCH v2 22/35] percpu-rwsem: enable percpu_sem destruction in
- atomic context
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Michel Lespinasse <michel@lespinasse.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs to
+ y
+Content-Language: en-US
+To:     Saeed Mahameed <saeed@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Mark Einon <mark.einon@gmail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        David Awogbemila <awogbemila@google.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Jon Mason <jdmason@kudzu.us>,
+        Simon Horman <simon.horman@corigine.com>,
+        Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>, drivers@pensando.io,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
+        rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
+        Edwin Peer <edwin.peer@broadcom.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Liming Sun <limings@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Omkar Kulkarni <okulkarni@marvell.com>,
+        Shai Malin <smalin@marvell.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
+        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20220131172450.4905-1-saeed@kernel.org>
+From:   Shannon Nelson <snelson@pensando.io>
+In-Reply-To: <20220131172450.4905-1-saeed@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 4:13 AM Hillf Danton <hdanton@sina.com> wrote:
+On 1/31/22 9:24 AM, Saeed Mahameed wrote:
+> From: Saeed Mahameed <saeedm@nvidia.com>
 >
-> On Fri, 28 Jan 2022 05:09:53 -0800 Michel Lespinasse wrote:
-> > +
-> > +static LIST_HEAD(destroy_list);
-> > +static DEFINE_SPINLOCK(destroy_list_lock);
+> NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
 >
->    static bool destroyer_running;
+> Since all drivers belonging to a vendor are supposed to default to 'n',
+> defaulting all vendors to 'n' shouldn't be an issue, and aligns well
+> with the 'no new drivers' by default mentality.
 >
-> > +
-> > +static void destroy_list_workfn(struct work_struct *work)
-> > +{
-> > +     struct percpu_rw_semaphore *sem, *sem2;
-> > +     LIST_HEAD(to_destroy);
-> > +
+> Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 >
-> again:
->
-> > +     spin_lock(&destroy_list_lock);
->
->         if (list_empty(&destroy_list)) {
->                 destroyer_running = false;
->                 spin_unlock(&destroy_list_lock);
->                 return;
->         }
->         destroyer_running = true;
->
-> > +     list_splice_init(&destroy_list, &to_destroy);
-> > +     spin_unlock(&destroy_list_lock);
-> > +
-> > +     if (list_empty(&to_destroy))
-> > +             return;
-> > +
-> > +     list_for_each_entry_safe(sem, sem2, &to_destroy, destroy_list_entry) {
->
->                 list_del(&sem->destroy_list_entry);
->
-> > +             percpu_free_rwsem(sem);
-> > +             kfree(sem);
-> > +     }
->
->         goto again;
-> > +}
-> > +
-> > +static DECLARE_WORK(destroy_list_work, destroy_list_workfn);
-> > +
-> > +void percpu_rwsem_async_destroy(struct percpu_rw_semaphore *sem)
-> > +{
-> > +     spin_lock(&destroy_list_lock);
-> > +     list_add_tail(&sem->destroy_list_entry, &destroy_list);
-> > +     spin_unlock(&destroy_list_lock);
-> > +     schedule_work(&destroy_list_work);
->
-> Nits
->         spin_lock(&destroy_list_lock);
-> 1/      /* LIFO */
->         list_add(&sem->destroy_list_entry, &destroy_list);
-> 2/      /* spawn worker if it is idle */
->         if (!destroyer_running)
-> 3/              /* this is not critical work */
->                 queue_work(system_unbound_wq, &destroy_list_work);
->         spin_unlock(&destroy_list_lock);
 
-Thanks for the review! Just to clarify, are you suggesting
-simplifications to the current patch or do you see a function issue?
+Is there a particular reason to change this?
+Broken compiles?  Bad drivers?  Over-sized output?
 
-> > +}
-> > --
-> > 2.20.1
->
+sln
+

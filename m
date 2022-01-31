@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840AF4A43B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C334A4530
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377440AbiAaLWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:22:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44196 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376685AbiAaLNI (ORCPT
+        id S1378032AbiAaLhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350380AbiAaLYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:13:08 -0500
+        Mon, 31 Jan 2022 06:24:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3ABC08E90D;
+        Mon, 31 Jan 2022 03:15:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB9EE61132;
-        Mon, 31 Jan 2022 11:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C53DC340E8;
-        Mon, 31 Jan 2022 11:13:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DCAEB82A76;
+        Mon, 31 Jan 2022 11:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD92C340E8;
+        Mon, 31 Jan 2022 11:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627587;
-        bh=MdEWgjRKDfc9GzOB4w6Dt4/YiyXxToHdfVqILfT/0eE=;
+        s=korg; t=1643627719;
+        bh=6KaW5Y5nA33xZyeLXiMYIERa4OTwAfNGh5VGj+IhCh8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AEt6KMey/h4991LyJS0kZtk0r5sCXcfdc6FYbeLk0CGrtO75+ndhh3zWl4VGt92DV
-         ARSzH4cccKedlKb+fEVj3za02aYvP9+9ZX4GlqqnTkXBRpIzUamFib+GjxCLAm+430
-         3mqL79eacfUeKD4Y4jQre03obleHluteR0CqFWF0=
+        b=U2hU0I6uLWLpaqXRk0tfG0DwbjAmUm+ldsR1rW1L2fd18gb0Q4ZTsdWG5MSiIVRqs
+         7qQpAtTzt3qNQOAlk0Dn2aFhyapNLiyyTlDpC9vKC1m2n+s1L1dcl6uNY1bEPyp1Vo
+         3OPY5wUoLStyutdK/BXwy99f+6LqGUaQfyof6AGE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Yanming Liu <yanminglr@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 131/171] Drivers: hv: balloon: account for vmbus packet header in max_pkt_size
-Date:   Mon, 31 Jan 2022 11:56:36 +0100
-Message-Id: <20220131105234.440348179@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 132/171] hwmon: (lm90) Re-enable interrupts after alert clears
+Date:   Mon, 31 Jan 2022 11:56:37 +0100
+Message-Id: <20220131105234.476637088@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 References: <20220131105229.959216821@linuxfoundation.org>
@@ -48,56 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yanming Liu <yanminglr@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit 96d9d1fa5cd505078534113308ced0aa56d8da58 ]
+[ Upstream commit bc341a1a98827925082e95db174734fc8bd68af6 ]
 
-Commit adae1e931acd ("Drivers: hv: vmbus: Copy packets sent by Hyper-V
-out of the ring buffer") introduced a notion of maximum packet size in
-vmbus channel and used that size to initialize a buffer holding all
-incoming packet along with their vmbus packet header. hv_balloon uses
-the default maximum packet size VMBUS_DEFAULT_MAX_PKT_SIZE which matches
-its maximum message size, however vmbus_open expects this size to also
-include vmbus packet header. This leads to 4096 bytes
-dm_unballoon_request messages being truncated to 4080 bytes. When the
-driver tries to read next packet it starts from a wrong read_index,
-receives garbage and prints a lot of "Unhandled message: type:
-<garbage>" in dmesg.
+If alert handling is broken, interrupts are disabled after an alert and
+re-enabled after the alert clears. However, if there is an interrupt
+handler, this does not apply if alerts were originally disabled and enabled
+when the driver was loaded. In that case, interrupts will stay disabled
+after an alert was handled though the alert handler even after the alert
+condition clears. Address the situation by always re-enabling interrupts
+after the alert condition clears if there is an interrupt handler.
 
-Allocate the buffer with HV_HYP_PAGE_SIZE more bytes to make room for
-the header.
-
-Fixes: adae1e931acd ("Drivers: hv: vmbus: Copy packets sent by Hyper-V out of the ring buffer")
-Suggested-by: Michael Kelley (LINUX) <mikelley@microsoft.com>
-Suggested-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Signed-off-by: Yanming Liu <yanminglr@gmail.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Link: https://lore.kernel.org/r/20220119202052.3006981-1-yanminglr@gmail.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Fixes: 2abdc357c55d9 ("hwmon: (lm90) Unmask hardware interrupt")
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/hv_balloon.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/hwmon/lm90.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index ca873a3b98dbe..f2d05bff42453 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1660,6 +1660,13 @@ static int balloon_connect_vsp(struct hv_device *dev)
- 	unsigned long t;
- 	int ret;
- 
-+	/*
-+	 * max_pkt_size should be large enough for one vmbus packet header plus
-+	 * our receive buffer size. Hyper-V sends messages up to
-+	 * HV_HYP_PAGE_SIZE bytes long on balloon channel.
-+	 */
-+	dev->channel->max_pkt_size = HV_HYP_PAGE_SIZE * 2;
-+
- 	ret = vmbus_open(dev->channel, dm_ring_size, dm_ring_size, NULL, 0,
- 			 balloon_onchannelcallback, dev);
- 	if (ret)
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index cc5e48fe304b1..e4ecf3440d7cf 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -848,7 +848,7 @@ static int lm90_update_device(struct device *dev)
+ 		 * Re-enable ALERT# output if it was originally enabled and
+ 		 * relevant alarms are all clear
+ 		 */
+-		if (!(data->config_orig & 0x80) &&
++		if ((client->irq || !(data->config_orig & 0x80)) &&
+ 		    !(data->alarms & data->alert_alarms)) {
+ 			if (data->config & 0x80) {
+ 				dev_dbg(&client->dev, "Re-enabling ALERT#\n");
 -- 
 2.34.1
 

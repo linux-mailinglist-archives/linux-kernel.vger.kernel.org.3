@@ -2,146 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF9B4A3E42
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7314A3E48
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiAaHgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 02:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347972AbiAaHgv (ORCPT
+        id S237927AbiAaHjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 02:39:54 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10272 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235089AbiAaHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:36:51 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6233C061714;
-        Sun, 30 Jan 2022 23:36:50 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nERF0-0003mt-Ng; Mon, 31 Jan 2022 08:36:47 +0100
-Message-ID: <95bf594b-250c-5a6d-aa3b-d428dbf9c203@leemhuis.info>
-Date:   Mon, 31 Jan 2022 08:36:46 +0100
+        Mon, 31 Jan 2022 02:39:53 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20V7XuvW027604;
+        Mon, 31 Jan 2022 07:39:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7iwIc/0uE4CQI9sIaooSotPFRwTQ6Q0TOGBw0+rbzVI=;
+ b=V4Bnui0et6VzYKWMi/2UscyssXNBi5osQvrON9KGYXca9XkSElmm60w1RyZhhKW4vEUl
+ whM6ZZG4xv+hE0XROjl/5Tn0TOmAHksOwGSt2itaYdSk4fiNTnHmbLad7ufkwNyjgkWL
+ HMHX0zivavhBEkE07zKa+sDFkbB6IDoWtnr3NA1SfK3VVyNUO9ddSHsp77FO9U7ymaGI
+ ODnImXapRkcPbDoQhpZxWGRDVakbvUzGFgJUBJTKTHsY/R7dSXUe4k1XKx5tTUd3Df08
+ Do1Nw82gd+ZLd4PG2l5LbITyqIu58ceWSYkxsqITW5NSbL95LMrKuoRREBrJTeDgOhaW AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dwexp4q9g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 07:39:42 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20V7Z6uJ030865;
+        Mon, 31 Jan 2022 07:39:41 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dwexp4q98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 07:39:41 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20V7cF5h030563;
+        Mon, 31 Jan 2022 07:39:39 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dvw798tbx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 07:39:39 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20V7dbFk41943450
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 07:39:37 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 550A611C052;
+        Mon, 31 Jan 2022 07:39:37 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F386111C050;
+        Mon, 31 Jan 2022 07:39:36 +0000 (GMT)
+Received: from [9.145.79.147] (unknown [9.145.79.147])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jan 2022 07:39:36 +0000 (GMT)
+Message-ID: <a11cc19d-a2c0-32e0-7534-11dac5f6753e@linux.ibm.com>
+Date:   Mon, 31 Jan 2022 08:39:52 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Content-Language: en-BS
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <b177cb21-aa01-2408-9b26-164c028b6593@molgen.mpg.de>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: 100 ms boot time increase regression in
- acpi_init()/acpi_scan_bus()
-In-Reply-To: <b177cb21-aa01-2408-9b26-164c028b6593@molgen.mpg.de>
+Subject: Re: [PATCH net] net/smc: Forward wakeup to smc socket waitqueue after
+ fallback
+Content-Language: en-US
+To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1643211184-53645-1-git-send-email-guwen@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <1643211184-53645-1-git-send-email-guwen@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1643614610;7995cc82;
-X-HE-SMSGID: 1nERF0-0003mt-Ng
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MU1qctkQpv0rWYqh9LbEmKUDcYOrsmCD
+X-Proofpoint-ORIG-GUID: 8yjufBpds7F-sxT2dp7SXWLbUdxFUSlD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_02,2022-01-28_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ phishscore=0 malwarescore=0 adultscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310050
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+On 26/01/2022 16:33, Wen Gu wrote:
+> When we replace TCP with SMC and a fallback occurs, there may be
+> some socket waitqueue entries remaining in smc socket->wq, such
+> as eppoll_entries inserted by userspace applications.
+> 
+> After the fallback, data flows over TCP/IP and only clcsocket->wq
+> will be woken up. Applications can't be notified by the entries
+> which were inserted in smc socket->wq before fallback. So we need
+> a mechanism to wake up smc socket->wq at the same time if some
+> entries remaining in it.
 
-On 10.01.22 12:29, Paul Menzel wrote:
-> #regzbot introduced: v5.13..v5.14-rc1
-> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215419
-
-Thx for getting regzbot involved!
-
-Nothing happened since you reported the issue three weeks ago; sure,
-it's not a pressing issue, but I wonder what the status is.
-
-@pm people: isn't this at least worth a reply?
-@paul: did you perform any additional checks?
-
-Or did anything happen somewhere else and I just missed it?
-
-#regzbot poke
-
-Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat)
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply, that's in everyone's interest.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
-> On the Intel T4500 laptop Acer TravelMate 5735Z with Debian
-> sid/unstable, there is a 100 ms introduced between Linux 5.10.46 and
-> 5.13.9, and is still present in Linux 5.15.5.
-> 
->     [    0.000000] microcode: microcode updated early to revision 0xa0b,
-> date = 2010-09-28
->     [    0.000000] Linux version 5.15.0-2-amd64
-> (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-13) 11.2.0, GNU
-> ld (GNU Binutils for Debian) 2.37) #1 SMP Debian 5.15.5-2 (2021-12-18)
->     [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.15.0-2-amd64
-> root=UUID=e17cec4f-d2b8-4cc3-bd39-39a10ed422f4 ro quiet noisapnp
-> cryptomgr.notests random.trust_cpu=on initcall_debug log_buf_len=4M
->     […]
->     [    0.262243] calling  acpi_init+0x0/0x487 @ 1
->     […]
->     [    0.281655] ACPI: Enabled 15 GPEs in block 00 to 3F
->     [    0.394855] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
->     […]
->     [    0.570908] initcall acpi_init+0x0/0x487 returned 0 after 300781
-> usecs
-> 
-> I attached all the log files to the Kernel.org Bugzilla bug report
-> #215419 [1].
-> 
-> Unfortunately, I am unable to bisect the issue, as it’s not my machine,
-> and I do not have a lot of access to it.
-> 
-> Using ftrace, unfortunately, I didn’t save all of them, I think the path is
-> 
->     acpi_init() → acpi_scan_init() → acpi_bus_scan(ACPI_ROOT_OBJECT)
-> 
-> But this path hasn’t changed as far as I can see. Anyway, from that
-> path, somehow
-> 
->     acpi_bus_check_add_1() → acpi_bus_check_add() → … →
-> acpi_bus_check_add() → acpi_add_single_object() → acpi_bus_get_status()
-> 
-> is called, and the `acpi_bus_get_status()` call takes 100 ms on the
-> system – also the cause for bug #208705 [2] –, but that code path wasn’t
-> taken before.
-> 
-> Do you know from the top of your head, what changed? I am going to have
-> short access to the system every two weeks or so, so debugging is
-> unfortunately quite hard.
-> 
-> What is already on my to-do list:
-> 
-> 1.  Use dynamic debug `drivers/acpi/scan.c`
-> 2.  Trace older Linux kernel (5.10.46) to see the differences
-> 3.  Booting some GNU/Linux system to test 5.11 (Ubuntu 20.10) and 5.12
-> 4.  Unrelated to the regression, but trace `acpi_bus_get_status()` to
-> understand the 100 ms delay to solve bug #208705 [2]
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
-> PS: Do you know of GNU/Linux live systems that are available for all
-> Linux kernel releases and have an initrd, that just stores/uploads the
-> output of `dmesg`?
-> 
-> 
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=215419
->      "100 ms regression in boottime before `ACPI: PCI Root Bridge [PCI0]"
-> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=208705
->      "boot performance: 100 ms delay in PCI initialization - Acer
-> TravelMate 5735Z"
-> 
-
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>

@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC2A4A43A0
+	by mail.lfdr.de (Postfix) with ESMTP id 96BAF4A43A1
 	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376969AbiAaLWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:22:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45474 "EHLO
+        id S1377008AbiAaLWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:22:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45592 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359688AbiAaLL5 (ORCPT
+        with ESMTP id S1359717AbiAaLMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:11:57 -0500
+        Mon, 31 Jan 2022 06:12:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E72B6610B1;
-        Mon, 31 Jan 2022 11:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11A2C340EF;
-        Mon, 31 Jan 2022 11:11:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFF8061120;
+        Mon, 31 Jan 2022 11:11:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5C1C340E8;
+        Mon, 31 Jan 2022 11:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627516;
-        bh=sUC1HgVOnkKu10wxMxJshj6DYaGKxn0UwTEkmc22aXY=;
+        s=korg; t=1643627519;
+        bh=RUXOglG/eM0aDadg+wbP1jBITM6bw4xQ1x3s9eMpf/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NnUq/wPumdZ7O+rHRUhENZmETlSEj0RSm9XNQloQE4N1WJgHNo2B0jzUG/CV9+T6y
-         OsRncpMStH6KbwLvkdsxYf2FET+R5ODmHMZ+tWDdEykUBFhSsRmsXCsirbk6prnS3W
-         TL/j/vWPKW/MufGaW9NpUd5vf0czjqenp+m2+zeM=
+        b=h4xjsSxN37ej1Mya2M4S/JvVJZuMNEEhTXyQTF8LfFA/mCg2TbFWaIzDE/T2Wl+SH
+         KJqdgghEe0mZq8Lsc1nphu+wigI7+VcimNehytptPBj4f5jhetSCH/kKldgCApUFUg
+         UFD4Qeli6Vt3frwqSGdIcronAP7zr2oO71vK0Qi8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 110/171] net: phy: broadcom: hook up soft_reset for BCM54616S
-Date:   Mon, 31 Jan 2022 11:56:15 +0100
-Message-Id: <20220131105233.757871162@linuxfoundation.org>
+Subject: [PATCH 5.15 111/171] net: stmmac: dwmac-visconti: Fix bit definitions for ETHER_CLK_SEL
+Date:   Mon, 31 Jan 2022 11:56:16 +0100
+Message-Id: <20220131105233.788072043@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 References: <20220131105229.959216821@linuxfoundation.org>
@@ -47,59 +48,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 
-[ Upstream commit d15c7e875d44367005370e6a82e8f3a382a04f9b ]
+[ Upstream commit 1ba1a4a90fa416a6f389206416c5f488cf8b1543 ]
 
-A problem was encountered with the Bel-Fuse 1GBT-SFP05 SFP module (which
-is a 1 Gbps copper module operating in SGMII mode with an internal
-BCM54616S PHY device) using the Xilinx AXI Ethernet MAC core, where the
-module would work properly on the initial insertion or boot of the
-device, but after the device was rebooted, the link would either only
-come up at 100 Mbps speeds or go up and down erratically.
+just 0 should be used to represent cleared bits
 
-I found no meaningful changes in the PHY configuration registers between
-the working and non-working boots, but the status registers seemed to
-have a lot of error indications set on the SERDES side of the device on
-the non-working boot. I suspect the problem is that whatever happens on
-the SGMII link when the device is rebooted and the FPGA logic gets
-reloaded ends up putting the module's onboard PHY into a bad state.
+* ETHER_CLK_SEL_DIV_SEL_20
+* ETHER_CLK_SEL_TX_CLK_EXT_SEL_IN
+* ETHER_CLK_SEL_RX_CLK_EXT_SEL_IN
+* ETHER_CLK_SEL_TX_CLK_O_TX_I
+* ETHER_CLK_SEL_RMII_CLK_SEL_IN
 
-Since commit 6e2d85ec0559 ("net: phy: Stop with excessive soft reset")
-the genphy_soft_reset call is not made automatically by the PHY core
-unless the callback is explicitly specified in the driver structure. For
-most of these Broadcom devices, there is probably a hardware reset that
-gets asserted to reset the PHY during boot, however for SFP modules
-(where the BCM54616S is commonly found) no such reset line exists, so if
-the board keeps the SFP cage powered up across a reboot, it will end up
-with no reset occurring during reboots.
-
-Hook up the genphy_soft_reset callback for BCM54616S to ensure that a
-PHY reset is performed before the device is initialized. This appears to
-fix the issue with erratic operation after a reboot with this SFP
-module.
-
-Fixes: 6e2d85ec0559 ("net: phy: Stop with excessive soft reset")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: b38dd98ff8d0 ("net: stmmac: Add Toshiba Visconti SoCs glue driver")
+Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/broadcom.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
-index 83aea5c5cd03c..db26ff8ce7dbb 100644
---- a/drivers/net/phy/broadcom.c
-+++ b/drivers/net/phy/broadcom.c
-@@ -768,6 +768,7 @@ static struct phy_driver broadcom_drivers[] = {
- 	.phy_id_mask	= 0xfffffff0,
- 	.name		= "Broadcom BCM54616S",
- 	/* PHY_GBIT_FEATURES */
-+	.soft_reset     = genphy_soft_reset,
- 	.config_init	= bcm54xx_config_init,
- 	.config_aneg	= bcm54616s_config_aneg,
- 	.config_intr	= bcm_phy_config_intr,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+index fac788718c045..1c599a005aab6 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+@@ -22,21 +22,21 @@
+ #define ETHER_CLK_SEL_RMII_CLK_EN BIT(2)
+ #define ETHER_CLK_SEL_RMII_CLK_RST BIT(3)
+ #define ETHER_CLK_SEL_DIV_SEL_2 BIT(4)
+-#define ETHER_CLK_SEL_DIV_SEL_20 BIT(0)
++#define ETHER_CLK_SEL_DIV_SEL_20 0
+ #define ETHER_CLK_SEL_FREQ_SEL_125M	(BIT(9) | BIT(8))
+ #define ETHER_CLK_SEL_FREQ_SEL_50M	BIT(9)
+ #define ETHER_CLK_SEL_FREQ_SEL_25M	BIT(8)
+ #define ETHER_CLK_SEL_FREQ_SEL_2P5M	0
+-#define ETHER_CLK_SEL_TX_CLK_EXT_SEL_IN BIT(0)
++#define ETHER_CLK_SEL_TX_CLK_EXT_SEL_IN 0
+ #define ETHER_CLK_SEL_TX_CLK_EXT_SEL_TXC BIT(10)
+ #define ETHER_CLK_SEL_TX_CLK_EXT_SEL_DIV BIT(11)
+-#define ETHER_CLK_SEL_RX_CLK_EXT_SEL_IN  BIT(0)
++#define ETHER_CLK_SEL_RX_CLK_EXT_SEL_IN  0
+ #define ETHER_CLK_SEL_RX_CLK_EXT_SEL_RXC BIT(12)
+ #define ETHER_CLK_SEL_RX_CLK_EXT_SEL_DIV BIT(13)
+-#define ETHER_CLK_SEL_TX_CLK_O_TX_I	 BIT(0)
++#define ETHER_CLK_SEL_TX_CLK_O_TX_I	 0
+ #define ETHER_CLK_SEL_TX_CLK_O_RMII_I	 BIT(14)
+ #define ETHER_CLK_SEL_TX_O_E_N_IN	 BIT(15)
+-#define ETHER_CLK_SEL_RMII_CLK_SEL_IN	 BIT(0)
++#define ETHER_CLK_SEL_RMII_CLK_SEL_IN	 0
+ #define ETHER_CLK_SEL_RMII_CLK_SEL_RX_C	 BIT(16)
+ 
+ #define ETHER_CLK_SEL_RX_TX_CLK_EN (ETHER_CLK_SEL_RX_CLK_EN | ETHER_CLK_SEL_TX_CLK_EN)
 -- 
 2.34.1
 

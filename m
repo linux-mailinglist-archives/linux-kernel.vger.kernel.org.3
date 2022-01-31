@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDFA4A488F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 623E34A4892
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378653AbiAaNsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        id S1379107AbiAaNsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358762AbiAaNsS (ORCPT
+        with ESMTP id S1358762AbiAaNsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:48:18 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6892BC061714;
-        Mon, 31 Jan 2022 05:48:17 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AF11E60015;
-        Mon, 31 Jan 2022 13:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643636895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=scmOkaI+TyjdmDOiGryj2VGEm54oTCgShwxEMvffMbI=;
-        b=TYR4x20jM7rkpL42uk3v6X38JHHvKdvx9xC0tvx3KK0ckg4lL/O/Cr785l+KJ8gPTcmDNV
-        RdHs/8edUCO2UoaQ93qfep88JSepBsPZJSDjpab2Af5XtasM0dBX+320Jvw2BCp5bEiski
-        cYI3KvEeMeayMlwrVh5EX7UDpLVY7BicXCSxXeRwQILRQ/fZw1qWQUxJzraUz1qH81R1m5
-        OE2L4GOEJnI7Ej2mc4Zab/u+y/cFTxuOHvyMw4Bo5ObXF2KYS3H1AfOC9w2ILPCGzDDLt3
-        RmnQdcDcfTIWlMEHkwHj5S85oPbqjwa9J1qwDJZFg/Te9NSQXWgXBjSQu2aI4A==
-Date:   Mon, 31 Jan 2022 14:48:13 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Takahiro Kuwano <tkuw584924@gmail.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
-Message-ID: <20220131144813.725f0736@xps13>
-In-Reply-To: <20220131114508.1028306-1-p.yadav@ti.com>
-References: <20220131114508.1028306-1-p.yadav@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 31 Jan 2022 08:48:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6724C061714;
+        Mon, 31 Jan 2022 05:48:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34350612B4;
+        Mon, 31 Jan 2022 13:48:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22C1C340E8;
+        Mon, 31 Jan 2022 13:48:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643636909;
+        bh=hvWGq6EEMPf49OBk4zZ3xW/NpC/UiTcIU8yTkJHSgi4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oi9IYx8GQc7DsFlm2dleVl8AmVY7R4AbkIcb8hBxQtJSL+69TqptjpsvTjCgQSeC3
+         WOW9qJLVLRyavDFwb3XsXJ+tl3/p6Z0kT60jtxlf5WdkyNIyP1tU0AeJZ135A5BQLQ
+         E1R+3Zz36ZllzAuCAPSiO62pyVGyMD24cKFowLUg=
+Date:   Mon, 31 Jan 2022 14:48:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH v6 02/35] component: Introduce the aggregate bus_type
+Message-ID: <YffoqgmeUdxZ56zB@kroah.com>
+References: <20220127200141.1295328-1-swboyd@chromium.org>
+ <20220127200141.1295328-3-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127200141.1295328-3-swboyd@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pratyush,
+On Thu, Jan 27, 2022 at 12:01:08PM -0800, Stephen Boyd wrote:
+> The component framework only provides 'bind' and 'unbind' callbacks to
+> tell the host driver that it is time to assemble the aggregate driver
+> now that all the components have probed. The component framework doesn't
+> attempt to resolve runtime PM or suspend/resume ordering, and explicitly
+> mentions this in the code. This lack of support leads to some pretty
+> gnarly usages of the 'prepare' and 'complete' power management hooks in
+> drivers that host the aggregate device, and it fully breaks down when
+> faced with ordering shutdown between the various components, the
+> aggregate driver, and the host driver that registers the whole thing.
+> 
+> In a concrete example, the MSM display driver at drivers/gpu/drm/msm is
+> using 'prepare' and 'complete' to call the drm helpers
+> drm_mode_config_helper_suspend() and drm_mode_config_helper_resume()
+> respectively, so that it can move the aggregate driver suspend/resume
+> callbacks to be before and after the components that make up the drm
+> device call any suspend/resume hooks they have. This only works as long
+> as the component devices don't do anything in their own 'prepare' and
+> 'complete' callbacks. If they did, then the ordering would be incorrect
+> and we would be doing something in the component drivers before the
+> aggregate driver could do anything. Yuck!
+> 
+> Similarly, when trying to add shutdown support to the MSM driver we run
+> across a problem where we're trying to shutdown the drm device via
+> drm_atomic_helper_shutdown(), but some of the devices in the encoder
+> chain have already been shutdown. This time, the component devices
+> aren't the problem (although they could be if they did anything in their
+> shutdown callbacks), but there's a DSI to eDP bridge in the encoder
+> chain that has already been shutdown before the driver hosting the
+> aggregate device runs shutdown. The ordering of driver probe is like
+> this:
+> 
+>  1. msm_pdev_probe() (host driver)
+>  2. DSI bridge
+>  3. aggregate bind
+> 
+> When it comes to shutdown we have this order:
+> 
+>  1. DSI bridge
+>  2. msm_pdev_shutdown() (host driver)
+> 
+> and so the bridge is already off, but we want to communicate to it to
+> turn things off on the display during msm_pdev_shutdown(). Double yuck!
+> Unfortunately, this time we can't split shutdown into multiple phases
+> and swap msm_pdev_shutdown() with the DSI bridge.
+> 
+> Let's make the component_master_ops into an actual device driver that has
+> probe/remove/shutdown functions. The driver will only be bound to the
+> aggregate device once all component drivers have called component_add()
+> to indicate they're ready to assemble the aggregate driver. This allows
+> us to attach shutdown logic (and in the future runtime PM logic) to the
+> aggregate driver so that it runs the hooks in the correct order.
 
-p.yadav@ti.com wrote on Mon, 31 Jan 2022 17:15:08 +0530:
+I know I asked before, but I can not remember the answer.
 
-> The buffers passed in the data phase must be DMA-able. Programmers often
-> don't realise this requirement and pass in buffers that reside on the
-> stack. This can be hard to spot when reviewing code. Reject ops if their
-> data buffer is on the stack to avoid this.
->=20
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> ---
->  drivers/spi/spi-mem.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index 37f4443ce9a0..b3793a2979ee 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -207,6 +207,15 @@ static int spi_mem_check_op(const struct spi_mem_op =
-*op)
->  	    !spi_mem_buswidth_is_valid(op->data.buswidth))
->  		return -EINVAL;
-> =20
-> +	/* Buffers must be DMA-able. */
-> +	if (op->data.dir =3D=3D SPI_MEM_DATA_IN &&
-> +	    object_is_on_stack(op->data.buf.in))
-> +		return -EINVAL;
-> +
-> +	if (op->data.dir =3D=3D SPI_MEM_DATA_OUT &&
-> +	    object_is_on_stack(op->data.buf.out))
-> +		return -EINVAL;
+This really looks like it is turning into the aux bus code.  Why can't
+you just use that instead here for this type of thing?  You are creating
+another bus and drivers for that bus that are "fake" which is great, but
+that's what the aux bus code was supposed to help out with, so we
+wouldn't have to write more of these.
 
-Definitely a good idea.
+So, if this really is different, can you document it here so I remember
+next time you resend this patch series?
 
-This change will depend on the spi-mem-ecc series. I will soon merge
-this branch into mtd/next so that any change that depends on it can be
-merged in mtd/next directly, if nobody disagrees.
+thanks,
 
-Thanks,
-Miqu=C3=A8l
+greg k-h

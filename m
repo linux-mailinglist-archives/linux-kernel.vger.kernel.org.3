@@ -2,254 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C576F4A5369
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D0B4A537B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 00:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiAaXle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 18:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiAaXld (ORCPT
+        id S229738AbiAaXnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 18:43:53 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41026 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229721AbiAaXnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 18:41:33 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDD2C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:41:33 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id i16-20020a056830011000b005a3cc8d20fbso8157514otp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 15:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=77+HksFUsOVcQq4vStx69pmlR18iG3QVLa69zKDYps4=;
-        b=uQdQSAwL1YeEVGJSOPaPCVEG/3wmqggEuVKUbB9OFFsPRRHhVz8JZKHZjc07pIVpOi
-         Ek1u9DV2dUy7xC/UzDn1QK7jC6YgCEkHeTEvOVRUdYCRuMjBjcnJFGlKC8Rrx+gubFxF
-         Eqy5cSB4Su6os7S0hrIr/tBUVy8BWLbgTlf1GrY2lbybA/e38QT1/rkOE5jQySKeh9XT
-         3tN0bv0VhEsNdcVvUVqQay38rKc1W71owR0dHmFo0v+ZSHZbiJBG9Hv9NczqX/vdY+f2
-         9KgT4dlI0/sXFcLFM+ugaNckp53N9uteAaQP8CvO25EMa8iqsS+JMRrONSuHi+l6LkDN
-         jbvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=77+HksFUsOVcQq4vStx69pmlR18iG3QVLa69zKDYps4=;
-        b=45g5nBEzRfTBnpZ50Y4z+oSv5kYDAoGvjTfXs/Qhe1bwHqVe+o6+8ox56OFYen78/6
-         iHOsn3tK5Fq8l9+HbVUV7nUAHc3SL/TREgRNy0OmOSyB9NHnR8GOPpoqD4dv4t3E9/+I
-         mPE5rTXT7IhkKL/aykOay4ajyd9BEIuysuWPuk44bzAuj4LpDdssA2rfrJWIMl6oAmLI
-         Q4nItgTb4MbLVJq+a3MAjGWVmcMRRs3RyU5Y0FlpvfPm5NHlXBsTvoUbCLF3HDTeBs3G
-         pohkLMWkci5TtdFf6AWTo34oXYEbXSKJpnTD4YNwSy1bqzhUhc07HuTcUSUd/dRQlaf2
-         WItQ==
-X-Gm-Message-State: AOAM531t7F06cVJPC+l3cLRQXsqXrr/fo6sEcj5mt0AANue2FDqNEKkP
-        QUhM1MLcviQ0kxp9xvdOJHnAyg==
-X-Google-Smtp-Source: ABdhPJyXXdx4oXfebwfsRRFl5sKct5LDYu4LmbFA/XD8KJAw54e2YBKoUrfdgSQv2xXJwBCLXLqiMg==
-X-Received: by 2002:a9d:4794:: with SMTP id b20mr12766231otf.361.1643672492848;
-        Mon, 31 Jan 2022 15:41:32 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id y19sm3630574oti.49.2022.01.31.15.41.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 15:41:32 -0800 (PST)
-Date:   Mon, 31 Jan 2022 17:41:30 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: add qcom,tcsr bindings
-Message-ID: <Yfhzqvrj6bIPmV2S@builder.lan>
-References: <20220122001609.15904-1-ansuelsmth@gmail.com>
- <20220122001609.15904-2-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220122001609.15904-2-ansuelsmth@gmail.com>
+        Mon, 31 Jan 2022 18:43:52 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VNcagq027610;
+        Mon, 31 Jan 2022 23:43:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=QDBpzUi3ZY1eikTOFV3lYd5DAOwGomSFhKa5tX6DqG0=;
+ b=Wjo5CnJe00YwVcSCj7Ch+zMlETbSXRXO4Iqcj/o9mKv8+FBfKHQjTMP95ClgRxl7m6bO
+ d0JDfFZEVWLIZteSojfnjr9IrF0ZzrJca61Pi+Ug/jz5sun/CDRTBU7MN/jX+x5aIMfY
+ PgabrLUa44mPHO/3+gP1NhbGIaKjfyfcBElzpeIFywCYWM8UlOg74V3CALD1TIGlqoQy
+ G7scCS8j1wKESmg5PVdJrvNyIh/BA8PbIpoC4XySGUxIq6LM9EcY8LTOwCGdxc5f7FqZ
+ 9Dn44VxGsKZ5UJwK55PC/WyYjTUK0bSbPsZ6CF4Iwuqs72R6V+4T8BqTiEd7wJjy9hkZ pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxm8dy0n4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 23:43:22 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20VNhMgW020606;
+        Mon, 31 Jan 2022 23:43:22 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxm8dy0mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 23:43:22 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VNIPgu003180;
+        Mon, 31 Jan 2022 23:43:19 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3dvw79fnfj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 23:43:19 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VNhFlU31654292
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 23:43:16 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEE8542045;
+        Mon, 31 Jan 2022 23:43:15 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CAA6A42041;
+        Mon, 31 Jan 2022 23:43:12 +0000 (GMT)
+Received: from sig-9-65-69-222.ibm.com (unknown [9.65.69.222])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jan 2022 23:43:12 +0000 (GMT)
+Message-ID: <b811c99ee635704cf42cf35dbe9df15460df9c1f.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 04/23] securityfs: Extend securityfs with namespacing
+ support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Christian Brauner <brauner@kernel.org>
+Date:   Mon, 31 Jan 2022 18:43:12 -0500
+In-Reply-To: <d31e8276-9303-fff8-427f-afc859131202@linux.ibm.com>
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+         <20220125224645.79319-5-stefanb@linux.vnet.ibm.com>
+         <dc60e85030ac6423fb2af7361d9e47b01f8c63f7.camel@linux.ibm.com>
+         <d31e8276-9303-fff8-427f-afc859131202@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FjEF1v7r_J3fddyO-XoFlYiTF9Uskek7
+X-Proofpoint-GUID: -YqOWc-yNNSxk7jckltKzx6mptrzUvFU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201310144
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 21 Jan 18:16 CST 2022, Ansuel Smith wrote:
-
-> Add qcom,tcsr-ipq8064 and qcom,tcsr-ipq4019 Documentation for the
-> tcsr present in ipq8064 and ipa4019 required to configure and
-> set various peripherals present in the SoC.
+On Mon, 2022-01-31 at 17:28 -0500, Stefan Berger wrote:
+> On 1/27/22 11:53, Mimi Zohar wrote:
+> > On Tue, 2022-01-25 at 17:46 -0500, Stefan Berger wrote:
+> >> From: Stefan Berger <stefanb@linux.ibm.com>
+> >>
+> >> Enable multiple instances of securityfs by keying each instance with a
+> >> pointer to the user namespace it belongs to.
+> >>
+> >> Since we do not need the pinning of the filesystem for the virtualization
+> >> case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
+> >> case when the init_user_ns is active. This simplifies the cleanup for the
+> >> virtualization case where usage of securityfs_remove() to free dentries
+> >> is not needed anymore.
+> > Could you add a sentence here explaining why securityfs_remove() isn't
+> > needed in the virtualization case?
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/soc/qcom/qcom,tcsr-ipq4019.yaml  | 93 +++++++++++++++++++
->  .../bindings/soc/qcom/qcom,tcsr-ipq8064.yaml  | 47 ++++++++++
->  2 files changed, 140 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
+> At this point the reason is that simple_pin_fs() is not used for the 
+> virtualization case.
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
-> new file mode 100644
-> index 000000000000..3a82ccbb6588
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
-> @@ -0,0 +1,93 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq4019.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm Top Control and Status Registers binding for IPQ4019
-> +
-> +maintainers:
-> +  - Ansuel Smith <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  This binding describes the Qualcomm Top Control and Status Registers, used
-> +  for accessing configuration and mux settings for a variety of peripherals
-> +  for ipq4019.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: qcom,tcsr-ipq4019
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  qcom,usb-hsphy-mode-select:
-> +    description: Select usb hsphy mode for ipq4019
+> Maybe it should say: ... to free dentries is *therefore* not needed anymore.
 
-Why isn't this driven by the USB node, where I presume you otherwise
-need to duplicate this decision?
+Probably it's obvious, but I was looking for something along the lines
+of, "The securityfs file or directory is automatically removed based on
+reference count."
 
-Is this platform not capable of OTG?
+No need to update it.
 
-> +    enum:
-> +      - 'host'
-> +      - 'device'
-> +
-> +  qcom,ess-interface-select:
-> +    description: Select ess interface mode for ipq4019
-> +    enum:
-> +      - 'psgmii'
-> +      - 'rgmii5'
-> +      - 'rmii0'
-> +      - 'rmii1'
-> +      - 'rmii0_rmii1'
-> +      - 'rgmii4'
-> +
-> +  qcom,wifi-glb-cfg-enable-axid:
-> +    description: Enable AXI master bus Axid translating
-> +                  to confirm all txn submitted by order for ipq4019
-> +    type: boolean
-> +
-> +  qcom,wifi-glb-cfg-socslv-mode:
-> +    description: Select wifi socslv mode for ipq4019
-> +                  snoc use SNOC socslv_wxi_bvalid.
-> +                  local use locally generate socslv_wxi_bvalid for performance.
-> +    enum:
-> +      - 'snoc'
-> +      - 'local'
-> +
-> +  qcom,wifi_noc_memtype_m0_m2:
-> +    description: Configure special wifi memory type needed for
-> +                  some IPQ40xx devicesfor ipq4019
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    tcsr@194b000 {
-> +      compatible = "qcom,tcsr-ipq4019", "syscon";
+thanks,
 
-There's a single "tcsr" register block at 0x1937000 of size 0x21000.
-The binding should describe that entire block, not convenient pieces of
-it.
+Mimi
 
-> +      reg = <0x194b000 0x100>;
-> +      qcom,usb-hsphy-mode-select = "host";
-> +    };
-> +
-> +    tcsr@1949000 {
-> +      compatible = "qcom,tcsr-ipq4019", "syscon";
-> +      reg = <0x1949000 0x100>;
-> +      qcom,wifi-glb-cfg-enable-axid;
-> +      qcom,wifi-glb-cfg-socslv-mode = "local";
-> +    };
-> +
-> +    ess_tcsr@1953000 {
-> +      compatible = "qcom,tcsr-ipq4019", "syscon";
-> +      reg = <0x1953000 0x1000>;
-> +      qcom,ess-interface-select = "psgmii";
-> +    };
-> +
-> +    tcsr@1957000 {
-> +      compatible = "qcom,tcsr-ipq4019", "syscon";
-> +      reg = <0x1957000 0x100>;
-> +      qcom,wifi_noc_memtype_m0_m2;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
-> new file mode 100644
-> index 000000000000..4ccc0bfccec5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq8064.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm Top Control and Status Registers binding for IPQ8064
-> +
-> +maintainers:
-> +  - Ansuel Smith <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  This binding describes the Qualcomm Top Control and Status Registers, used
-> +  for accessing configuration and mux settings for a variety of peripherals
-> +  for ipq8064.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: qcom,tcsr-ipq8064
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  qcom,usb-ctrl-select:
-> +    description: Select usb3 ctrl type for ipq8064
-> +    enum:
-> +      - 'p0'
-> +      - 'p1'
-> +      - 'dual'
-
-Again, it seems reasonable to get this form the dwc3 node, rather than
-duplicating the configuration.
-
-Regards,
-Bjorn
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    tcsr: syscon@1a400000 {
-> +      compatible = "qcom,tcsr-ipq8064", "syscon";
-> +      reg = <0x1a400000 0x100>;
-> +      qcom,usb-ctrl-select = "dual";
-> +    };
-> +
-> +...
-> -- 
-> 2.33.1
-> 

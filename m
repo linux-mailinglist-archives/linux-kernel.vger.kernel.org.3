@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E722B4A4DF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C484A4DFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 19:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348732AbiAaSXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 13:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354821AbiAaSWt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 13:22:49 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6382EC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:22:49 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id j38-20020a9d1926000000b0059fa6de6c71so13808000ota.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 10:22:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=5vGwoTC1e4kUUVS5mywGbNPZbTA57tIfGZpAbVJZdPc=;
-        b=uPAa/sk2IOzeJCHeNYiZWThya96U6MZM4TNQ3W7xElP3WnOciW2NWRUaZxJqVc/BWD
-         SL9+Z0BaL2cO27liA1EJhEw4sAE9ciMh8O+O4iz/CJqfzFRMEHGzU+1OOZ5WFXzR/YE+
-         g1Q8GfZ4Hpqk2ocPtEBaUT3M8xpubQ9wvpghAK6NWnS0MkjnNLfCK55fLZFBoSyXYCnP
-         tdF07TqTEznFa0zfc2THo6oHqjc6ZackuizbICp61oOu6IHX6qQ5K3OycwutEP6Fv99c
-         X34D8BlZb6UKTusYwwckqKWB+lmWP1YmTeOEbtEUUsy+0rEg1FJl/gbV3AzZWoYGZkhC
-         VCWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=5vGwoTC1e4kUUVS5mywGbNPZbTA57tIfGZpAbVJZdPc=;
-        b=CTXnJjT/RuMb2VrLHAz5hMy7JszzZpsDH9KNYD4C2N+vIsdxYu2NEjM0C0d6ITviMD
-         d8PrDQWyTcjzpt6heHUOGTCQFUWgjQJ8ogm7vDxuSXtTNfMB3gnwhu8UVUdCmlHuoNwz
-         e8hMEl/IFIrlBe4GBOo2jgrYqc0OGAW5EZYResBbfUedCiD6mK9YqSLVyIFdxLOnEN2i
-         rgB08daoDdgEnv8mVKNQAZ55d9HR4Ky9PIIC+NhrE3i/mKu9z0HqXwHBF73IqW2s4EkI
-         4yP3t0YwENGo5olDj58KA75htLknEgKNujkY8R2quXUNXXwfxq6ii27PJWs4RoWiJpw3
-         VGBg==
-X-Gm-Message-State: AOAM530eHvwf9ymlXg4Rmh6soHR6LTntLi5FocXFIYP98AKd8pCbADzY
-        EqInpz0hGpCvGvUh70C2OtEctw==
-X-Google-Smtp-Source: ABdhPJyFkngoaC74FUTn3EaXxXFZljpAATvXAlAMBERI5eghY/B2TUgZRyyVHgs4KNqPSAnjGDqyIw==
-X-Received: by 2002:a9d:1f0:: with SMTP id e103mr9137176ote.234.1643653368677;
-        Mon, 31 Jan 2022 10:22:48 -0800 (PST)
-Received: from fedora ([187.36.236.204])
-        by smtp.gmail.com with ESMTPSA id m14sm1003163ooj.22.2022.01.31.10.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 10:22:48 -0800 (PST)
-Date:   Mon, 31 Jan 2022 15:22:42 -0300
-From:   =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-To:     gregkh@linuxfoundation.org, tj@kernel.org, viro@zeniv.linux.org.uk,
-        nathan@kernel.org, ndesaulniers@google.com, willy@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v3] seq_file: fix NULL pointer arithmetic warning
-Message-ID: <Yfgo8p6Vk+h4+YHY@fedora>
+        id S1348458AbiAaSYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 13:24:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:37369 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232361AbiAaSYJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 13:24:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643653449; x=1675189449;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lQzhqiT47y+P20hA+SEuOwsKyR/X5oa3XuqnTl9IAME=;
+  b=RYvcL6jn8KFub9GXAPfdhNqPURVuE8o+GvRK12Y47EOUD3rYe0tVAgH9
+   XcllJAOfni6KXpDrAFnbHFBWT2tLYzrD1lS6drAcjzY7LSXNfrqto9wpC
+   GV7Sa50Z855WUqmnK7aikfE3TTJwRsoD+lSuT63UnjBiMzfITqPQDFxCX
+   tVM0GvoINRjiQILbWFTIwsX3+rKGE4Xn0wONL4fPP3PbxXHYGN6qH1HMl
+   nO5qQzviTqmpw0qSl7mVjImPfp/g5E/hTCn62IRXAtNgRWqsfxK3dosq8
+   sdt7LlD2V8+alqdNAfyDEhaifchk6WQJkuigu/JdEgw471yg70lPotO6r
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="310831524"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="310831524"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 10:24:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="630111551"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 10:24:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nEbKM-00GzDb-HB;
+        Mon, 31 Jan 2022 20:22:58 +0200
+Date:   Mon, 31 Jan 2022 20:22:58 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     quentin.schulz@theobroma-systems.com,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, heiko@sntech.de,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>
+Subject: Re: [PATCH] clk: rockchip: re-add rational best approximation
+ algorithm to the fractional divider
+Message-ID: <YfgpAu2fjxMZrzxe@smile.fi.intel.com>
+References: <20220131163224.708002-1-quentin.schulz@theobroma-systems.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220131163224.708002-1-quentin.schulz@theobroma-systems.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement conditional logic in order to replace NULL pointer arithmetic.
+On Mon, Jan 31, 2022 at 05:32:24PM +0100, quentin.schulz@theobroma-systems.com wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-The use of NULL pointer arithmetic was pointed out by clang with the
-following warning:
+Thanks for your report.
 
-fs/kernfs/file.c:128:15: warning: performing pointer arithmetic on a
-null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-                return NULL + !*ppos;
-                       ~~~~ ^
-fs/seq_file.c:559:14: warning: performing pointer arithmetic on a
-null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-        return NULL + (*pos == 0);
+> In commit 4e7cf74fa3b2 ("clk: fractional-divider: Export approximation
+> algorithm to the CCF users"), the code handling the rational best
+> approximation algorithm was replaced by a call to the core
+> clk_fractional_divider_general_approximation function which did the same
+> thing back then.
+> 
+> However, in commit 82f53f9ee577 ("clk: fractional-divider: Introduce
+> POWER_OF_TWO_PS flag"), this common code was made conditional on
+> CLK_FRAC_DIVIDER_POWER_OF_TWO_PS flag which was not added back to the
+> rockchip clock driver.
+> 
+> This broke the ltk050h3146w-a2 MIPI DSI display present on a PX30-based
+> downstream board.
+> 
+> Let's add the flag to the fractional divider flags so that the original
+> and intended behavior is brought back to the rockchip clock drivers.
 
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
----
-V1 -> V2:
-- Use SEQ_START_TOKEN instead of open-coding it
-- kernfs_seq_start call single_start instead of open-coding it
-V2 -> V3:
-- Remove the EXPORT of the single_start symbol
----
- fs/kernfs/file.c         | 7 +------
- fs/seq_file.c            | 4 ++--
- include/linux/seq_file.h | 1 +
- 3 files changed, 4 insertions(+), 8 deletions(-)
+I believe this was the result of the discussion about 1000 in DRM code.
 
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index 9414a7a60a9f..7aefaca876a0 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -120,13 +120,8 @@ static void *kernfs_seq_start(struct seq_file *sf, loff_t *ppos)
- 		if (next == ERR_PTR(-ENODEV))
- 			kernfs_seq_stop_active(sf, next);
- 		return next;
--	} else {
--		/*
--		 * The same behavior and code as single_open().  Returns
--		 * !NULL if pos is at the beginning; otherwise, NULL.
--		 */
--		return NULL + !*ppos;
- 	}
-+	return single_start(sf, ppos);
- }
- 
- static void *kernfs_seq_next(struct seq_file *sf, void *v, loff_t *ppos)
-diff --git a/fs/seq_file.c b/fs/seq_file.c
-index f8e1f4ee87ff..7ab8a58c29b6 100644
---- a/fs/seq_file.c
-+++ b/fs/seq_file.c
-@@ -554,9 +554,9 @@ int seq_dentry(struct seq_file *m, struct dentry *dentry, const char *esc)
- }
- EXPORT_SYMBOL(seq_dentry);
- 
--static void *single_start(struct seq_file *p, loff_t *pos)
-+void *single_start(struct seq_file *p, loff_t *pos)
- {
--	return NULL + (*pos == 0);
-+	return *pos ? NULL : SEQ_START_TOKEN;
- }
- 
- static void *single_next(struct seq_file *p, void *v, loff_t *pos)
-diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
-index 88cc16444b43..60820ab511d2 100644
---- a/include/linux/seq_file.h
-+++ b/include/linux/seq_file.h
-@@ -162,6 +162,7 @@ int seq_dentry(struct seq_file *, struct dentry *, const char *);
- int seq_path_root(struct seq_file *m, const struct path *path,
- 		  const struct path *root, const char *esc);
- 
-+void *single_start(struct seq_file *, loff_t *);
- int single_open(struct file *, int (*)(struct seq_file *, void *), void *);
- int single_open_size(struct file *, int (*)(struct seq_file *, void *), void *, size_t);
- int single_release(struct inode *, struct file *);
+I Cc'ed this to the people from 64ec4912c51a ("drm/rockchip: Update crtc
+fixup to account for fractional clk change").
+
+> Fixes: 82f53f9ee577 ("clk: fractional-divider: Introduce POWER_OF_TWO_PS flag")
+> Cc: stable@vger.kernel.org
+> Cc: Quentin Schulz <foss+kernel@0leil.net>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>  drivers/clk/rockchip/clk.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+> index b7be7e11b0df..bb8a844309bf 100644
+> --- a/drivers/clk/rockchip/clk.c
+> +++ b/drivers/clk/rockchip/clk.c
+> @@ -180,6 +180,7 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+>  		unsigned long rate, unsigned long *parent_rate,
+>  		unsigned long *m, unsigned long *n)
+>  {
+> +	struct clk_fractional_divider *fd = to_clk_fd(hw);
+>  	unsigned long p_rate, p_parent_rate;
+>  	struct clk_hw *p_parent;
+>  
+> @@ -190,6 +191,8 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+>  		*parent_rate = p_parent_rate;
+>  	}
+>  
+> +	fd->flags |= CLK_FRAC_DIVIDER_POWER_OF_TWO_PS;
+> +
+>  	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
+>  }
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 

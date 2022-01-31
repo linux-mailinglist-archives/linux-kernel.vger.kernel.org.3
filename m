@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 102EF4A51F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308554A51F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 23:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiAaV7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:59:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54776 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiAaV7o (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:59:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70E1961581;
-        Mon, 31 Jan 2022 21:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55909C340E8;
-        Mon, 31 Jan 2022 21:59:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643666381;
-        bh=vNlLgrPBYYVLtyrSiMdjfL/qJCb4K3K6IhJIJV2Y96U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ddqgOcAOpEQDMmnkqDH9mzjGwcK0/itBNcvh7267A1cu82AEZgDp2XVFoUkWCSqJs
-         22jOnS9lho9WOAKWSJ0xmydlBWAs9YjhMVXTneKGEWiP2NEMeqO05sZiir4V9mEdrW
-         +oS4crPs0fdnLGL4EFqaUDEwmhclMXIqcKvly5vc=
-Date:   Mon, 31 Jan 2022 13:59:40 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        0day robot <lkp@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Subject: Re: [fs/exec]  80bd5afdd8: xfstests.generic.633.fail
-Message-Id: <20220131135940.20790cff1747e79dd855aaf4@linux-foundation.org>
-In-Reply-To: <20220131171344.77iifun5wdilbqdz@wittgenstein>
-References: <20220127000724.15106-1-ariadne@dereferenced.org>
-        <20220131144352.GE16385@xsang-OptiPlex-9020>
-        <20220131150819.iuqlz3rz6q7cheap@wittgenstein>
-        <Yff9+tIDAvYM5EO/@casper.infradead.org>
-        <20220131153707.oe45h7tuci2cbfuv@wittgenstein>
-        <YfgFeWbZPl+gAUYE@casper.infradead.org>
-        <20220131161415.wlvtsd4ecehyg3x5@wittgenstein>
-        <20220131171344.77iifun5wdilbqdz@wittgenstein>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S230174AbiAaWDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 17:03:03 -0500
+Received: from mga09.intel.com ([134.134.136.24]:31632 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230040AbiAaWDC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 17:03:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643666582; x=1675202582;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=2hBfv68g/bsbEA/EkV8e5vXXCiFkl03znizEdtVRQzc=;
+  b=EPp6VcJGZAf24IsiV3JSizyu+isNElDWZxPEtiQEUji2CYBoBxlsNG6m
+   cD22VU0YxBI75jKy3uCUESUfSqSIeTmS+1DM5tSSGiV43/myS9rOh747l
+   OArvcZ3SEYYRl1+SRRGJ9aCia8ALmtFV0S0U3o8g5cQXPPiHTXRFwv64j
+   aObyGr9sxVVZEOBXpEAvUzJ01Ebz2GmY5+4Zrc9HsioIkmj88MyIbPbrX
+   r7x5/M0aFmKxeOFZ6lmXL5uOokdART3PGe8x4HekCyrzk4qpPRv38lTGY
+   dh6eRdkKhQpefIIBcJ9qfp1m/lL2RH/M9OlcNmf4mWcTDHtyV9qdSAvbs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247328985"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="247328985"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 14:03:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="675873215"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Jan 2022 14:03:01 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 31 Jan 2022 14:03:01 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 31 Jan 2022 14:03:00 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
+ Mon, 31 Jan 2022 14:03:00 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Smita Koralahalli Channabasappa 
+        <smita.koralahallichannabasappa@amd.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH v2 0/6] PPIN (Protected Processor Inventory Number)
+ updates
+Thread-Topic: [PATCH v2 0/6] PPIN (Protected Processor Inventory Number)
+ updates
+Thread-Index: AQHYDu8D4O0fiLdYEEuSQ7RARvcUdqx9pUeA///LWoCAAJWVAP//goCAgACL84D//32JIAAWLoaAABCt/PA=
+Date:   Mon, 31 Jan 2022 22:03:00 +0000
+Message-ID: <1d42e9edfb56449c82083ddf59e847e0@intel.com>
+References: <20220107225442.1690165-1-tony.luck@intel.com>
+ <20220121174743.1875294-1-tony.luck@intel.com> <YffWtTq2y6K8+gHF@zn.tnic>
+ <YfgbCFNeNEkypCmC@agluck-desk2.amr.corp.intel.com> <YfgoBgwgfoiKkPa9@zn.tnic>
+ <YfgvPD6AUPIwQgyf@agluck-desk2.amr.corp.intel.com> <Yfg0JauShcFw1WPc@zn.tnic>
+ <30cc529e01b64ca7aa8efe0c89eb5ed0@intel.com> <Yfhbj7Q99dqRIYaL@zn.tnic>
+In-Reply-To: <Yfhbj7Q99dqRIYaL@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 18:13:44 +0100 Christian Brauner <brauner@kernel.org> wrote:
-
-> > in other words, the changes that you see CMD_ARGS[0] == NULL for
-> > execveat() seem higher than for path-based exec.
-> > 
-> > To counter that we should probably at least update the execveat()
-> > manpage with a recommendation what CMD_ARGS[0] should be set to if it
-> > isn't allowed to be set to NULL anymore. This is why was asking what
-> > argv[0] is supposed to be if the binary doesn't take any arguments.
-> 
-> Sent a fix to our fstests now replacing the argv[0] as NULL with "".
-
-As we hit this check so quickly, I'm thinking that Ariadne's patch
-"fs/exec: require argv[0] presence in do_execveat_common()" (which
-added the check) isn't something we'll be able to merge into mainline?
+PiBPayB0aGVuLiBJIGd1ZXNzIEkgY2FuIHF1ZXVlIHlvdXIgbmV4dCB2ZXJzaW9uIGFuZCB3ZSds
+bCBzZWUgd2hhdA0KPiBoYXBwZW5zLg0KDQpUaGFua3MuIEknbGwgbW92ZSB0aG9zZSBib2d1cyBp
+bml0aWFsaXphdGlvbnMgb2YgLm1zcl9wcGluIHRvIHRoZSByaWdodA0KcGF0Y2guIEFkZCBHcmVn
+J3MgQWNrJ3MgYW5kIHJlcG9zdCBhIG5ldyB2ZXJzaW9uIGFmdGVyIHJlLXRlc3RpbmcuDQoNCi1U
+b255DQo=

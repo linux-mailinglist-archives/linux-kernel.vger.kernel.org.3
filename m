@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6754A41C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511FB4A43C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359095AbiAaLGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:06:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37790 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358746AbiAaLD3 (ORCPT
+        id S1377466AbiAaLW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:22:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33200 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376817AbiAaLNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:03:29 -0500
+        Mon, 31 Jan 2022 06:13:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE3860B28;
-        Mon, 31 Jan 2022 11:03:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFE0C36AE7;
-        Mon, 31 Jan 2022 11:03:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E973B82A61;
+        Mon, 31 Jan 2022 11:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644A0C340E8;
+        Mon, 31 Jan 2022 11:13:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627008;
-        bh=LBjMIYSFdfwWonFoziv0O80iq9570hobhBy3lRFZDNg=;
+        s=korg; t=1643627599;
+        bh=VVFlRxXq3A5E85ti0MGg4WcaiubDLDuQRc9Mef1tSPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g2EqypvJR+YTcPlLyAjYlpGGJcnJuwIr/XtkjJhFnXHNxIzYTf5oM3s/gelPmdcIF
-         PQd+v9EtIfqK63jScW1+veTC3Cy+jbONAfhC/FZ09p/yc0TICXWELQpO5zveMUnmUW
-         gh6KjezWh781V9VllokiwGRwfWA9TzEaZJOWAylc=
+        b=lhynsmbYhmflOvhWvl+MML98YJRa89wg+jvnNoAzij97BHGCH2A3XlEyZA0ouWRsW
+         it7C/gpJy30lPTgzOp87iumgb1Pci4ti6Ir4Mqmy5U5LQT4UNysNfyGZuXVe7/8CFU
+         tW7QYxP7fwpRvLBfpyI4aznWP1mNXHMEIKAZ0aQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Damato <jdamato@fastly.com>,
-        kernel test robot <lkp@intel.com>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.10 046/100] i40e: fix unsigned stat widths
-Date:   Mon, 31 Jan 2022 11:56:07 +0100
-Message-Id: <20220131105221.988803752@linuxfoundation.org>
+        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 103/171] SUNRPC: Use BIT() macro in rpc_show_xprt_state()
+Date:   Mon, 31 Jan 2022 11:56:08 +0100
+Message-Id: <20220131105233.538017557@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,70 +46,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Damato <jdamato@fastly.com>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-commit 3b8428b84539c78fdc8006c17ebd25afd4722d51 upstream.
+[ Upstream commit 76497b1adb89175eee85afc437f08a68247314b3 ]
 
-Change i40e_update_vsi_stats and struct i40e_vsi to use u64 fields to match
-the width of the stats counters in struct i40e_rx_queue_stats.
+Clean up: BIT() is preferred over open-coding the shift.
 
-Update debugfs code to use the correct format specifier for u64.
-
-Fixes: 41c445ff0f48 ("i40e: main driver core")
-Signed-off-by: Joe Damato <jdamato@fastly.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e.h         |    8 ++++----
- drivers/net/ethernet/intel/i40e/i40e_debugfs.c |    2 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c    |    4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ include/trace/events/sunrpc.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e.h
-+++ b/drivers/net/ethernet/intel/i40e/i40e.h
-@@ -754,12 +754,12 @@ struct i40e_vsi {
- 	struct rtnl_link_stats64 net_stats_offsets;
- 	struct i40e_eth_stats eth_stats;
- 	struct i40e_eth_stats eth_stats_offsets;
--	u32 tx_restart;
--	u32 tx_busy;
-+	u64 tx_restart;
-+	u64 tx_busy;
- 	u64 tx_linearize;
- 	u64 tx_force_wb;
--	u32 rx_buf_failed;
--	u32 rx_page_failed;
-+	u64 rx_buf_failed;
-+	u64 rx_page_failed;
+diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
+index 2d04eb96d4183..312507cb341f4 100644
+--- a/include/trace/events/sunrpc.h
++++ b/include/trace/events/sunrpc.h
+@@ -925,18 +925,18 @@ TRACE_EVENT(rpc_socket_nospace,
  
- 	/* These are containers of ring pointers, allocated at run-time */
- 	struct i40e_ring **rx_rings;
---- a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-@@ -240,7 +240,7 @@ static void i40e_dbg_dump_vsi_seid(struc
- 		 (unsigned long int)vsi->net_stats_offsets.rx_compressed,
- 		 (unsigned long int)vsi->net_stats_offsets.tx_compressed);
- 	dev_info(&pf->pdev->dev,
--		 "    tx_restart = %d, tx_busy = %d, rx_buf_failed = %d, rx_page_failed = %d\n",
-+		 "    tx_restart = %llu, tx_busy = %llu, rx_buf_failed = %llu, rx_page_failed = %llu\n",
- 		 vsi->tx_restart, vsi->tx_busy,
- 		 vsi->rx_buf_failed, vsi->rx_page_failed);
- 	rcu_read_lock();
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -777,9 +777,9 @@ static void i40e_update_vsi_stats(struct
- 	struct rtnl_link_stats64 *ns;   /* netdev stats */
- 	struct i40e_eth_stats *oes;
- 	struct i40e_eth_stats *es;     /* device's eth stats */
--	u32 tx_restart, tx_busy;
-+	u64 tx_restart, tx_busy;
- 	struct i40e_ring *p;
--	u32 rx_page, rx_buf;
-+	u64 rx_page, rx_buf;
- 	u64 bytes, packets;
- 	unsigned int start;
- 	u64 tx_linearize;
+ #define rpc_show_xprt_state(x)						\
+ 	__print_flags(x, "|",						\
+-		{ (1UL << XPRT_LOCKED),		"LOCKED"},		\
+-		{ (1UL << XPRT_CONNECTED),	"CONNECTED"},		\
+-		{ (1UL << XPRT_CONNECTING),	"CONNECTING"},		\
+-		{ (1UL << XPRT_CLOSE_WAIT),	"CLOSE_WAIT"},		\
+-		{ (1UL << XPRT_BOUND),		"BOUND"},		\
+-		{ (1UL << XPRT_BINDING),	"BINDING"},		\
+-		{ (1UL << XPRT_CLOSING),	"CLOSING"},		\
+-		{ (1UL << XPRT_OFFLINE),	"OFFLINE"},		\
+-		{ (1UL << XPRT_REMOVE),		"REMOVE"},		\
+-		{ (1UL << XPRT_CONGESTED),	"CONGESTED"},		\
+-		{ (1UL << XPRT_CWND_WAIT),	"CWND_WAIT"},		\
+-		{ (1UL << XPRT_WRITE_SPACE),	"WRITE_SPACE"})
++		{ BIT(XPRT_LOCKED),		"LOCKED" },		\
++		{ BIT(XPRT_CONNECTED),		"CONNECTED" },		\
++		{ BIT(XPRT_CONNECTING),		"CONNECTING" },		\
++		{ BIT(XPRT_CLOSE_WAIT),		"CLOSE_WAIT" },		\
++		{ BIT(XPRT_BOUND),		"BOUND" },		\
++		{ BIT(XPRT_BINDING),		"BINDING" },		\
++		{ BIT(XPRT_CLOSING),		"CLOSING" },		\
++		{ BIT(XPRT_OFFLINE),		"OFFLINE" },		\
++		{ BIT(XPRT_REMOVE),		"REMOVE" },		\
++		{ BIT(XPRT_CONGESTED),		"CONGESTED" },		\
++		{ BIT(XPRT_CWND_WAIT),		"CWND_WAIT" },		\
++		{ BIT(XPRT_WRITE_SPACE),	"WRITE_SPACE" })
+ 
+ DECLARE_EVENT_CLASS(rpc_xprt_lifetime_class,
+ 	TP_PROTO(
+-- 
+2.34.1
+
 
 

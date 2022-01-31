@@ -2,173 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3AD4A3F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638294A3F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236323AbiAaJJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 04:09:31 -0500
-Received: from mail-dm6nam11on2056.outbound.protection.outlook.com ([40.107.223.56]:23840
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S236544AbiAaJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 04:12:28 -0500
+Received: from mail-ma1ind01olkn0166.outbound.protection.outlook.com ([104.47.100.166]:24096
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234358AbiAaJJX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:09:23 -0500
+        id S234358AbiAaJM1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:12:27 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d/zrtG+aRMWRykM/mLzv91/VjP5Dos9+SDU+yL6qI4zw4kQtc+5Mm8SMuqAnpFyo4Al4jpJfodo8IxlX6K7SAAFqrDW9jruIw32Z3BnZjDsK0+/abwqKEWIGKBtoXDhSk3z2aP1FEIOvl8Eq7yZeLBzYh76QlpEKHgP2YwHlWY8ZFE0LuiRxdGxHEvlot6/61XxWVUrab7z6O5Cj9foobE+FnfYLyorQ+Lu+kJa0lktkw48ek41wgEBqTpk5/e+sIE7Vr8Euk0pIhDao/GY4rJcpEeuWsKBpiuE8ap2IPZwPrZUFLATkDnhkG+Bu7QhtTD1hmKRA6x7FF7Gdw4EL/w==
+ b=CE+8GdQDF7Kg22UklnWIS61fL8M31NShhiFt6HogqLyaeD0fjF16TMCGFrGvEIu9zwD4hSKfWwuyUj3mOYQRjj6+4lwWJf4aZPzZ6nrWtbOqgFNRwDaUT3x/4M4l9+iaTEHrjwtT/vEjd7g2gfSowZ2+4Vl7ZKBMBGt9HM5qdamG1C7fvj6dZs/OfOu5WZMVuQthaKtMjsg1ycGgGu0vOcrz/T98koQJ5NVuen/0InhgVWgKjX6O4U9UNTymYXyOxrE/buyWwoATq8RpfXs8oPrto0IV+eAqEBbH3wluA7JEizMQxchA+5Tv8p7ZYaKeI2NJPSAOBG2C1NZv4Ku43Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GyBSqI1ypmD/MJtu1nwNDJuAveK+bqgqyVihm8Fa/9I=;
- b=h2CxOvuYUXc9KdWUiEkrsHYRQ9cjYsou6r7UEbOK4Dmu/74+9euIromLhP8Y34OuKoJewqZiOO0AJozYoPkT9ajiVuFw2vph3yA5KSeF9BzWDyhOvHjcCkB7S4G9mpUCHXUlM4RmZyPFIlCleD2Xv1diAhtVsBaEeGhhEtSLVyXwvo0NKZYkNtXy46EM1WeYyMFFzFj5esyVFOukJAt4GLzqJDFAjcz2cxYArl+6WzXvjT9Hh9SPfz9TrHDJQrsMCNQ0FS4eyT9Mx6HxGIMtk0ED1kONQSPDSxx5ikEocMuTkuvNOGFttNstJZFZOikSrIFtU6pUIjAsZuQv981BFg==
+ bh=ut/jOtQM5LCb8mFPta98FQAA/quSe1o5jhYRMGHmOkQ=;
+ b=Dz1v+MM3FjBj7G4iQLz6kNJviMuxqP2F/RPwS9LCZc/XH2sHQdnhUMBW58Yq5mJfq1ntg+VDOuES5mCP8dEqkhQ2j478aD/Ra2QFBwPcvXufJOY+2jQxPrswj+V24d2/jYYjrs3WQVrcjWk8yxD3HVQWgvA8xndy9FoNLuoNS/ijBWG9+KFbJjW8EnqSyELH4sKgPZU9Z668u8zrkpG/imKZBauxjhvuQEWrJrQZei29CB3CgD3Y3rVIOA4/lNYsx6t3V20/GyHc3wALPJWqbutlS/TDunoXAFMNwpWNCUrV24syHbFxiM+RFSdLR+VCUrhk079ghR9WylY9UhUx6A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GyBSqI1ypmD/MJtu1nwNDJuAveK+bqgqyVihm8Fa/9I=;
- b=dzMf3PMBCm+xMVEIin78p3jYdBGf4mf+3w3crXXgewBbV5oRtUwl4lmRyXRlUHygkmqabokgh0//47uXbM45ON+lQLinNW691iLBY2Up2cbIvj3GYkWzAjH6UJ73H794SmOLSMJomiJI5ZzQp1ymGDJVeNQ9k292NHsImBQcsTcJUl+Z5csLZHIcloSHx/42Oz6DdtSaGQqpQiAyD5cCQIZir0KVr4N0nHULyGyQCpnLWs+FpKvn+YaEPtl26XrtHno7c15o8II0ERWKzpEqf5vLFtG2cDsKrVwKM5Irsomj8ImA8fQsQlaXez6ywNEACHRrCbzrkzMWlS6klKqXqQ==
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
- by BN8PR12MB2883.namprd12.prod.outlook.com (2603:10b6:408:98::22) with
+ bh=ut/jOtQM5LCb8mFPta98FQAA/quSe1o5jhYRMGHmOkQ=;
+ b=gXXBC8u+DV3JR/ipV7e1fJVlSh6pDhP90bABspiPhAD7jZ9DfJJjIundoHtH2EwnV4RBjkf6/q5xAnQpf+4p+87F8znirM/ygEhv1GRbEVa2XznXelLAXEnKEFS2FapkM+FWM+2Ht7Nt09S7uNFoQbGLnZCGWz15xphLtApM65B73SgmB78T0dbMs1ojRdjbnbaNr2AwkbwpF+RCpzDEiHW0xm7dXByJXxxdi1MCWYq9aGVcJa5C81znHdQkrpOgouxzE1j8G4XXpRfoNpEjmsnln0bLaUgDv6mLVLjXjS0DNTkn1Pm4YgkGsPA7uwM09U3OZRIA1fqJuR6BJw8rlw==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PN0PR01MB7800.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:b0::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 09:09:21 +0000
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::94d8:5850:e33d:b133]) by DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::94d8:5850:e33d:b133%4]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 09:09:21 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Pavan Kunapuli <pkunapuli@nvidia.com>
-Subject: RE: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Thread-Topic: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Thread-Index: AQHYFS8ttZm9vnsYMkmLjfwGSkse9qx7V3sAgABn8UCAAHOwgIAAU3IwgAAqZYCAACYYkA==
-Date:   Mon, 31 Jan 2022 09:09:21 +0000
-Message-ID: <DM5PR12MB1850D677140466EC74C621A4C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
-References: <1643474453-32619-1-git-send-email-akhilrajeev@nvidia.com>
-        <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
-        <ba109465-d7ee-09cb-775b-9b702a3910b0@gmail.com>
-        <DM5PR12MB1850D836ACDF95008EF74CC7C0249@DM5PR12MB1850.namprd12.prod.outlook.com>
-        <08f6571e-af75-b6b3-443e-e86e3bdb365b@gmail.com>
-        <DM5PR12MB1850FD5F3EF5CBFEA97B3611C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
- <20220131094205.73f5f8c3@dimatab>
-In-Reply-To: <20220131094205.73f5f8c3@dimatab>
-Accept-Language: en-IN, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Mon, 31 Jan
+ 2022 09:12:20 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
+ 09:12:20 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
+        "ribalda@chromium.org" <ribalda@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+CC:     Orlando Chamberlain <redecorating@protonmail.com>,
+        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH RESEND] media: uvcvideo: Add support for Apple T2-attached
+ FaceTime HD Camera
+Thread-Topic: [PATCH RESEND] media: uvcvideo: Add support for Apple
+ T2-attached FaceTime HD Camera
+Thread-Index: AQHYEqCuFa0IUQWRI0uS4fqZrMlb86x84AqA
+Date:   Mon, 31 Jan 2022 09:12:20 +0000
+Message-ID: <9BD1D373-F588-44EE-AFC0-3D691B4134DA@live.com>
+References: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
+In-Reply-To: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [LfaQ6fnhm/9MEVCpIA596LzhoRqO/QbO]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3ba9a74a-c804-4921-0015-08d9e4995e76
-x-ms-traffictypediagnostic: BN8PR12MB2883:EE_
-x-microsoft-antispam-prvs: <BN8PR12MB28831EA83A8E9ED84F601549C0259@BN8PR12MB2883.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
+x-ms-office365-filtering-correlation-id: 8893891f-548d-44a1-78a7-08d9e499c91d
+x-ms-traffictypediagnostic: PN0PR01MB7800:EE_
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: k6YDUlAOzBDIJiWTWWCGJ0p1yM56Xpqx1Rt76B+staCqHcZRnGkfvCwx/ot2xTpp8zJhjNYpDImuEdj54MipqV1tjoSbcvM5FkCZRbP+aI3UhiUmqfTpvRGJ4HyYm6ZS3arP1dFYXxiREne6/T2/u7+aVC6BlI4RWXz4ZnMH3BeJPIY6I8xO7glu6QQaafkAlKzGt5SPmiI+wisv/N5IfqeeR+qjVcxxct9Gy1NTFPdbKRYttOA2aEEBA9J2SNEKb4ZJUFhJFxRPd5EpColURLXCqEIGjIPlG3gJApMOHEVFIAUDVT3BuPCbqHUa4kQhwhcWk+5iqBc3IjWvB2CvkO9WT/QDNIxt0vFpfFh8g6PFvjQ02muuUxjucBLJRvsLLOZO1viHxj/qN1I0tdLR9T6VM3QpRiM0auGQ0G7iBiowQv0aFUL/A+G2Ymuz7QBPVyu2JsLlL9f84C9fgVjapnvcA9FBpsHmyQCjXkKBWrEZe7oTFPMTixn9EpZZPIpj5sX1tDPwEXMAxORdV6M/i7fiOY2M8gzKcs0jK9v1M31BXYGVFbiGhzqHr8iYylBsx0fOtrB5yKOgzx2f5j6ZpVuNfqvnx9GITXlHdSEtWQMullv5tELhV1e/4XYlH2NBLsEctgA0jFbUpI0tH/BqqTev1W9SSsPKwgBr3oms8bpeaZecARIt/hHAcaToI+XTXnZMw7fRQXjmcKCYfZWNOg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(4326008)(8676002)(86362001)(107886003)(83380400001)(55016003)(66556008)(8936002)(66946007)(38100700002)(66476007)(122000001)(66446008)(38070700005)(64756008)(6916009)(76116006)(54906003)(6506007)(7696005)(52536014)(9686003)(55236004)(33656002)(316002)(508600001)(26005)(5660300002)(71200400001)(186003)(20210929001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: v2EXFYp/1f/wqo1IiqIx1Hf9a665j+Yk8o6zI3Os4jv1tqqiNJFkvuF5BYM80PxLzYnyqC6wUtOYOpNxIQ1ZttmOCbdDFXCWQjwy3Rob4ID4PbRN3xfVyDRqmJhg0KbjcR6SEqduSJnsr7k4QfUbz2Mh6FFUZkOiY4r3ALayeXmsoY1d6CGh4h4sVuvs2+v6wQgys420CjAeFst+9qJMb3qTprr9k9aDrGmGNJcUOG7wZdyBZ1Yw8cdKYQZgpb8K89KX41kzzIz2IqiFfKIrQIPHOQF8ysRxn/2jND43AbWRUYTD4+2ky7wuo05vP0eMqB3LrTcBr/n88ootkcB+Jtyb015cQqks0QRBVJIAQDZ8CHB0uo3jFoa9Ihxbzm5QZvr1d+dnNLFqjePxU4bNBtc4UQn1O7FvwSSUm7RH7Kii5CjPoMhiELJo8qOG4hFpJTpyeQjsBqmcoYuLobZs9UtCYh8RDURIeDg24wox0y/+J1eKTfY1EyRGhGwqIcdOnOZM5se+ZxqQe/sdlCcP6CnIzPhop8+psk48hwcGmRMvhaS58bSAv44emq30aW/HQ3r1oyyz9GkXGenSVb1+aw==
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vm1TN256QzhqYUpwaGdvVGZHZGhWaDJqalN5ZkNwRkpIbWR0aGRsSE1pdjc3?=
- =?utf-8?B?NTJUVVRGUnJzUURWV0h3VVRqN29RczNubHgrbXRaenQ0NFg5WGlWWWREb29o?=
- =?utf-8?B?MGp5UjFGVU9ZeU8zOXpPTU84V2VaVmt2NVJQcSswcEJHb0FtVkxHdUFNRG5J?=
- =?utf-8?B?U2cwUWQxckJCampSRVRJZkxpRjZwNUQ4dTBVbmlkaWw4bmx5Y1FrQ2paSC9R?=
- =?utf-8?B?NVAvdlFhRUFHMHdvdlhHQS9HZjBubGZQR3pwdkh3YVhsN0kyOGJaN2VkclBw?=
- =?utf-8?B?YmU0VjdXZlIxdjBmTlFVdnV1NlN0OGFJb2VtVGxlS2RLbjhWd3g0bEFYeHhG?=
- =?utf-8?B?L0g3bkJPS1lNaWdRdnBBQ3lDRDl0WXM4aHJvalZKRkRjNmx2NjZIYzhXRjlM?=
- =?utf-8?B?cUhkWWRHRFpVQmJOZVdWUkNBZi9PUWVrYjg1amVPci9MVy9rMHlieWxGNm1l?=
- =?utf-8?B?cnZ1S1Uvdk5KNFA4NUY4VXBvbVNXc09xSFh4cWZmbWloOWtlS1VnSWsvZS9y?=
- =?utf-8?B?RStwaEZrSmloOVpIby9zUVZZS3QzMGhPK0pzdDdWcGtoMWtxaGVlS1RxclY5?=
- =?utf-8?B?RUw0cDc5TWpreWZLdzhkNmZWNVF2SDJrd3VvdVBTeG1IYXM1eUFNRkZXQVY1?=
- =?utf-8?B?V2IrenZHNXNMekVFanZzYnIyK0xtRDF6Q0xwaXM5THhsVktYaDVkQU5manU2?=
- =?utf-8?B?aVBacXBBUEhadXRFOXM0STJlNWdjeWV6dzE0VkszeFVzZUg2am5wRzA1Nnlh?=
- =?utf-8?B?SUFpRzFFVFd1bWUwY1ovbHdJZkRZSVFHaU9ETmwveDRreUdqRlM5N0dSa3pH?=
- =?utf-8?B?Nnk3U1RwSzJIYTJNcFAxNG9tWWpIUXFSeHhlcldWd08yWW5ZblJVRWowWXJk?=
- =?utf-8?B?N295MHFpcjhkOW8rK2NDc3dRMURMZWNmdnZWVllZSnl2Z3FsRlVzb0YzTW4z?=
- =?utf-8?B?dGt6TC94SUREb0s3UlNvY1BGeTdDNGhZYjlFd29qU0F5ZTRibXlzaU1pakFt?=
- =?utf-8?B?aXREL0tKT1lOY2ZQWEJ0cFg1aEtOYkcyQjhPK3NBTGJZYVFTaHorTE96Wk5s?=
- =?utf-8?B?TWZWMmplOEVRVE9IakN0OXY2NXhkNzhLbWZXMmZUK2tkL0E3NXJkT3dyQkFJ?=
- =?utf-8?B?a0l2ckV2cWkyRllTN0g3eVVHN21RMmpoQXVrQ2ozMDFuTjBZUHFhVlBHVHk3?=
- =?utf-8?B?akpiTVVLUVRuVG9xV3pQYTZEUUhhdUlBNnA3MDlIL0ZpUkN0R09CN2FKVFdI?=
- =?utf-8?B?UFJzUk5BQnV0d3ZRbmxjM2RwdTU5cUNXeTZEaXlXYnpxUC9kdDNUa1dUZ2xP?=
- =?utf-8?B?ZmN4eFZQSGFvUDBtb2pUQVZPb2ZTWm1lNzg4NXl1cURsaG8rRnR1amtqaXBw?=
- =?utf-8?B?ekpSNWJtVEs0UDVJWlEyR0R1M3AxUW50NWdkSDlKWUpaNGc1M0o3TmJjdHVE?=
- =?utf-8?B?SWJQVWFpWER2UHpjVUxWcit3N3ltWnQwWUEvdWgvYUNtakh4b2x5QTI5RjY0?=
- =?utf-8?B?TkpLVUVEMWpUZFovZ3I4VVZ3enFxdTJBMjk4ajNRTzc1NUc3SmZvUVdrN3FK?=
- =?utf-8?B?Y3BNZ1MwREJwb3pOM3BETDBLZTl3azZxMzBneVdlMHlXaHBrNkJwVGJ5a3NR?=
- =?utf-8?B?QTJubFJGZ2tuR3JsbTloYWg3eUZBQVhUSWpLNGlwM1Y1NkFQYzFVZHlVOXRI?=
- =?utf-8?B?L2hCNUpwYUZTTlZiODBta1YxTmwvbDJ5OWwyS0NjRHJoTXJqUEdKa1p2bTJx?=
- =?utf-8?B?RjFwK0w4cU1KOGc0b01JSFppalN0a0FIRTMzRHJGRFllbXNQTFdVQnFlbnBL?=
- =?utf-8?B?bHBDZE9VNlV6UWcyNEtnZFF6UjBqUWxDMnQwUzVJbGpkMnQ3SFNvLytTM1E2?=
- =?utf-8?B?R295Ulo3S1F0a2c0VFp6VjJJOGIzdTUxN0h6YlBiK1ovNTlCd3labTdoT25C?=
- =?utf-8?B?bjFLbnN0L0czclJFc2ZEM1puc2NiTGw0RDZuZFRoQzA0WThoTlczZUh5MzFH?=
- =?utf-8?B?aDV3SGtkak1nWUxYaWxXRG9EUGplSjhmMzhYRXZMQUZkandzMXhtWll6NDIr?=
- =?utf-8?B?UVp6UVg2NjUyZVNvM3hJZjdKMk1BdS8vTWg5dGxrVU5xdE5PaTNWL0VheUpY?=
- =?utf-8?B?NHlXdXBvT281Mkdibi9VNDlRSE51dmZOVmFuM2hsbThTaG5tbGFNQkNjWnla?=
- =?utf-8?Q?DVcv3R6XmJAdiKDjDa1PzXw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mizWvnyulvGqPH1o5LqRidsX7Y17ngWi5Q/rqZwcOfFyxN5tYGnHkMp+s5uR?=
+ =?us-ascii?Q?G3YnN+V2hZBpMDO40qJ2mELzFV87ueMAbL6KE0+gV0xAPZRG+2je1JUmJ0mj?=
+ =?us-ascii?Q?CTi5L0TNSW5kFDiCeiURjPaB+lsvQM3vYnFwQG5fNvNcw0qNnTFxdasC/Ddd?=
+ =?us-ascii?Q?RCAmI15E9CZ1hkae8f2crJnPODieo9LXZuvZsXIzhg7RV89pjGyA/daYAwW8?=
+ =?us-ascii?Q?BIJHtHbf9PPaxKLSPUpVlLyOEuJxVUj/s4SFFsj1ipgL/6jh6Ml1CBwy+YRK?=
+ =?us-ascii?Q?QdZ+2eOAmSvEGdgl/vLM9NMYR4pSXbRUmJe+Pi7f54wtAqn8CpEnro/qkPkC?=
+ =?us-ascii?Q?4tBfqVipkZFDWprURHzoIMnDQShjqLXhWUpn1vSsM5khdUNfTvQqieq0FOSD?=
+ =?us-ascii?Q?g5OiCtz/+kehCmn1BE5MIXi2T53RUVWrZI345XMNduNBuCyyI3UpTD22eT+f?=
+ =?us-ascii?Q?GZkrSWfgxAdX8OXvI6r0wOkD0YpK6jPSRwpZ+azawBpJ55R0wGKWeHjrjNUm?=
+ =?us-ascii?Q?HRrKqbZBgWpCxOJDD+HZZWr4kPg/tnE72z/vJq7eLvAHzrTerFQU1tu3moxB?=
+ =?us-ascii?Q?bmiqE49U4/5Gd5MbNb94WP/kbtbrjs8bVPX6TCpXHS69kpWbw+BAhTKmdoUa?=
+ =?us-ascii?Q?GtB01kc1z40SY4i22JSazrJBmSsuk1W8KtPmrnXWv8O3bdM2wfz09WRywtUi?=
+ =?us-ascii?Q?K2FsGou+/JAlChBU5FGwqFibyv5kqaDy1H7pmQboxaKdS5q39XikGj7Whs5t?=
+ =?us-ascii?Q?ahQNVddYK6ueYTFeBk2HMdjX21akgHp73YxWUTzk1rBpKg8/Z54dXNNQ7JgH?=
+ =?us-ascii?Q?/XVZ3kekx6T2p7A3zkN4EQkDTe8A1RdQ37fYuxsNfWvFO/xN850lKd0kZVox?=
+ =?us-ascii?Q?CJmTzByBACtJqvgGyQbNEJTS5EVRCnASIwDDr13NQYlTV3ugspINXQXLQ7lX?=
+ =?us-ascii?Q?UHDSSqrBzfhmIx6aGzKFPg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C8E79CAD9CAAA94C96A3D626DAD9BE18@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ba9a74a-c804-4921-0015-08d9e4995e76
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 09:09:21.3681
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8893891f-548d-44a1-78a7-08d9e499c91d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 09:12:20.1635
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9lMUahcD6l2zlH9T7OVjl+ll8JuzzXBaitNPeGxrmgR+VJl9mND3g2W68P1f/kdK+lXHkM1WvBImbdfRVM6ouw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2883
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB7800
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiDQkiBNb24sIDMxIEphbiAyMDIyIDA0OjI1OjE0ICswMDAwDQo+IEFraGlsIFIgPGFraGlscmFq
-ZWV2QG52aWRpYS5jb20+INC/0LjRiNC10YI6DQo+IA0KPiA+ID4gMzAuMDEuMjAyMiAxOTozNCwg
-QWtoaWwgUiDQv9C40YjQtdGCOg0KPiA+ID4gPj4gMjkuMDEuMjAyMiAxOTo0MCwgQWtoaWwgUiDQ
-v9C40YjQtdGCOg0KPiA+ID4gPj4+ICtzdGF0aWMgaW50IHRlZ3JhX2RtYV9kZXZpY2VfcGF1c2Uo
-c3RydWN0IGRtYV9jaGFuICpkYykgew0KPiA+ID4gPj4+ICsgICAgIHN0cnVjdCB0ZWdyYV9kbWFf
-Y2hhbm5lbCAqdGRjID0gdG9fdGVncmFfZG1hX2NoYW4oZGMpOw0KPiA+ID4gPj4+ICsgICAgIHVu
-c2lnbmVkIGxvbmcgd2NvdW50LCBmbGFnczsNCj4gPiA+ID4+PiArICAgICBpbnQgcmV0ID0gMDsN
-Cj4gPiA+ID4+PiArDQo+ID4gPiA+Pj4gKyAgICAgaWYgKCF0ZGMtPnRkbWEtPmNoaXBfZGF0YS0+
-aHdfc3VwcG9ydF9wYXVzZSkNCj4gPiA+ID4+PiArICAgICAgICAgICAgIHJldHVybiAwOw0KPiA+
-ID4gPj4NCj4gPiA+ID4+IEl0J3Mgd3JvbmcgdG8gcmV0dXJuIHplcm8gaWYgcGF1c2UgdW5zdXBw
-b3J0ZWQsIHBsZWFzZSBzZWUgd2hhdA0KPiA+ID4gPj4gZG1hZW5naW5lX3BhdXNlKCkgcmV0dXJu
-cy4NCj4gPiA+ID4+DQo+ID4gPiA+Pj4gKw0KPiA+ID4gPj4+ICsgICAgIHNwaW5fbG9ja19pcnFz
-YXZlKCZ0ZGMtPnZjLmxvY2ssIGZsYWdzKTsNCj4gPiA+ID4+PiArICAgICBpZiAoIXRkYy0+ZG1h
-X2Rlc2MpDQo+ID4gPiA+Pj4gKyAgICAgICAgICAgICBnb3RvIG91dDsNCj4gPiA+ID4+PiArDQo+
-ID4gPiA+Pj4gKyAgICAgcmV0ID0gdGVncmFfZG1hX3BhdXNlKHRkYyk7DQo+ID4gPiA+Pj4gKyAg
-ICAgaWYgKHJldCkgew0KPiA+ID4gPj4+ICsgICAgICAgICAgICAgZGV2X2Vycih0ZGMyZGV2KHRk
-YyksICJETUEgcGF1c2UgdGltZWQgb3V0XG4iKTsNCj4gPiA+ID4+PiArICAgICAgICAgICAgIGdv
-dG8gb3V0Ow0KPiA+ID4gPj4+ICsgICAgIH0NCj4gPiA+ID4+PiArDQo+ID4gPiA+Pj4gKyAgICAg
-d2NvdW50ID0gdGRjX3JlYWQodGRjLCBURUdSQV9HUENETUFfQ0hBTl9YRkVSX0NPVU5UKTsNCj4g
-PiA+ID4+PiArICAgICB0ZGMtPmRtYV9kZXNjLT5ieXRlc194ZmVyICs9DQo+ID4gPiA+Pj4gKyAg
-ICAgICAgICAgICAgICAgICAgIHRkYy0+ZG1hX2Rlc2MtPmJ5dGVzX3JlcSAtICh3Y291bnQgKiA0
-KTsNCj4gPiA+ID4+DQo+ID4gPiA+PiBXaHkgdHJhbnNmZXIgaXMgYWNjdW11bGF0ZWQ/DQo+ID4g
-PiA+Pg0KPiA+ID4gPj4gV2h5IGRvIHlvdSBuZWVkIHRvIHVwZGF0ZSB4ZmVyIHNpemUgYXQgYWxs
-IG9uIHBhdXNlPw0KPiA+ID4gPg0KPiA+ID4gPiBJIHdpbGwgdmVyaWZ5IHRoZSBjYWxjdWxhdGlv
-bi4gVGhpcyBsb29rcyBjb3JyZWN0IG9ubHkgZm9yIHNpbmdsZQ0KPiA+ID4gPiBzZyB0cmFuc2Fj
-dGlvbi4NCj4gPiA+ID4NCj4gPiA+ID4gVXBkYXRpbmcgeGZlcl9zaXplIGlzIGFkZGVkIHRvIHN1
-cHBvcnQgZHJpdmVycyB3aGljaCBwYXVzZSB0aGUNCj4gPiA+ID4gdHJhbnNhY3Rpb24gYW5kIHJl
-YWQgdGhlIHN0YXR1cyBiZWZvcmUgdGVybWluYXRpbmcuDQo+ID4gPiA+IEVnLg0KPiA+ID4NCj4g
-PiA+IFdoeSB5b3UgY291bGRuJ3QgdXBkYXRlIHRoZSBzdGF0dXMgaW4gdGVncmFfZG1hX3Rlcm1p
-bmF0ZV9hbGwoKT8NCj4gPiBJcyBpdCB1c2VmdWwgdG8gdXBkYXRlIHRoZSBzdGF0dXMgaW4gdGVy
-bWluYXRlX2FsbCgpPyBJIGFzc3VtZSB0aGUNCj4gPiBkZXNjcmlwdG9yIElzIGZyZWVkIGluIHZj
-aGFuX2RtYV9kZXNjX2ZyZWVfbGlzdCgpIG9yIGFtIEkgZ2V0dGluZyBpdA0KPiA+IHdyb25nPw0K
-PiANCj4gWWVzLCBpdCdzIG5vdCB1c2VmdWwuIFRoZW4geW91IG9ubHkgbmVlZCB0byBmaXggdGhl
-IHR4X3N0YXR1cygpIGFuZA0KPiBkb24ndCB0b3VjaCBkbWFfZGVzYyBvbiBwYXVzZS4NCklmIHRo
-ZSBieXRlc194ZmVyIGlzIHVwZGF0ZWQgaW4gdHhfc3RhdHVzKCksIEkgc3VwcG9zZSANCkRNQV9S
-RVNJRFVFX0dSQU5VTEFSSVRZX0JVUlNUIGNhbiBiZSBrZXB0IGFzIGlzLCBjb3JyZWN0Pw0KDQpU
-aGFua3MsDQpBa2hpbCANCg==
+Hi Maintainers
+
+I sent this patch on 12.01.22 and then resent it on 26.01.22. I still haven=
+'t received a reply yet. Maybe I am not sending the mail to the correct mai=
+ntainer? I request someone to reply cause no reply seems to create a confus=
+ion.
+
+Linus, I am sending this mail to you too, since you are the ultimate mainta=
+iner.
+
+Regards
+Aditya
+> On 26-Jan-2022, at 4:07 PM, Aditya Garg <gargaditya08@live.com> wrote:
+>=20
+> From: Paul Pawlowski <paul@mrarm.io>
+>=20
+> Adds the requisite device id to support detection of the Apple FaceTime
+> HD webcam exposed over the T2 BCE VHCI interface.
+>=20
+> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
+> Signed-off-by: Paul Pawlowski <paul@mrarm.io>
+> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> ---
+> drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+> 1 file changed, 9 insertions(+)
+>=20
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/u=
+vc_driver.c
+> index 7c007426e..88dc9e7aa 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] =3D {
+> 	  .bInterfaceProtocol	=3D 0,
+> 	  .driver_info		=3D UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
+> 					| UVC_QUIRK_BUILTIN_ISIGHT) },
+> +	/* Apple FaceTime HD Camera (Built-In) */
+> +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		=3D 0x05ac,
+> +	  .idProduct		=3D 0x8514,
+> +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	=3D 1,
+> +	  .bInterfaceProtocol	=3D 0,
+> +	  .driver_info		=3D (kernel_ulong_t)&uvc_quirk_probe_def },
+> 	/* Apple Built-In iSight via iBridge */
+> 	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> 				| USB_DEVICE_ID_MATCH_INT_INFO,
+> --=20
+> 2.25.1
+>=20
+>=20
+

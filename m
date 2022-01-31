@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92ECB4A458B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926B74A429B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350566AbiAaLm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378685AbiAaL25 (ORCPT
+        id S1376358AbiAaLMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:12:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56974 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376667AbiAaLIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:28:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B244BC02C3EE;
-        Mon, 31 Jan 2022 03:17:45 -0800 (PST)
+        Mon, 31 Jan 2022 06:08:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5056F60B98;
-        Mon, 31 Jan 2022 11:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148E6C340E8;
-        Mon, 31 Jan 2022 11:17:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1455AB82A4E;
+        Mon, 31 Jan 2022 11:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E17C340E8;
+        Mon, 31 Jan 2022 11:08:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627864;
-        bh=2RMF7AsfJSmyy2o2Abh6kXZeNWBMz1Kcbl0O/Pmfk30=;
+        s=korg; t=1643627328;
+        bh=Ptmp80Y5+Ak9glksGMpn04O9rsKaxAULBmUBfj8gucw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jic/XKo+FjPn1Ppat777aKbCsVQ/A9dPIKFI9QC15KVWiKa6JJr9fHClL7lPolND2
-         FiIqUF0LuJnJUdu9FV7SSgHLQiXN4aaGCMTqSHIe+OPZmgJR5AL6fpHj2qV5ppAN6m
-         soUYx7QFl1MEfPAqeKoW+Mc3Fs0DDMAmL/JXrWyU=
+        b=z8FIQfnCqUgbi4QHAiSRIXEvZj/RwOLQ4+JOS3bOmsxQ7ZLejHVeqmQLO3+VnAcDN
+         4ghAjzjgZ8T1Ss6/+7N1So5ECx7doAgOg/gTjbgW4gLcrJkrfykQsNafSr9yIITOSO
+         mV+pPQYnr+DqIH0Tw7HNL6q3FpsW6WqVjNh384Hw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 049/200] KVM: SVM: Never reject emulation due to SMAP errata for !SEV guests
-Date:   Mon, 31 Jan 2022 11:55:12 +0100
-Message-Id: <20220131105235.216738651@linuxfoundation.org>
+        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH 5.15 048/171] serial: stm32: fix software flow control transfer
+Date:   Mon, 31 Jan 2022 11:55:13 +0100
+Message-Id: <20220131105231.650554206@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,55 +45,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Valentin Caron <valentin.caron@foss.st.com>
 
-commit 55467fcd55b89c622e62b4afe60ac0eb2fae91f2 upstream.
+commit 037b91ec7729524107982e36ec4b40f9b174f7a2 upstream.
 
-Always signal that emulation is possible for !SEV guests regardless of
-whether or not the CPU provided a valid instruction byte stream.  KVM can
-read all guest state (memory and registers) for !SEV guests, i.e. can
-fetch the code stream from memory even if the CPU failed to do so because
-of the SMAP errata.
+x_char is ignored by stm32_usart_start_tx() when xmit buffer is empty.
 
-Fixes: 05d5a4863525 ("KVM: SVM: Workaround errata#1096 (insn_len maybe zero on SMAP violation)")
-Cc: stable@vger.kernel.org
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
-Message-Id: <20220120010719.711476-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fix start_tx condition to allow x_char to be sent.
+
+Fixes: 48a6092fb41f ("serial: stm32-usart: Add STM32 USART Driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Link: https://lore.kernel.org/r/20220111164441.6178-3-valentin.caron@foss.st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/svm/svm.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/tty/serial/stm32-usart.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4464,8 +4464,13 @@ static bool svm_can_emulate_instruction(
- 	bool smep, smap, is_user;
- 	unsigned long cr4;
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -575,7 +575,7 @@ static void stm32_usart_start_tx(struct
+ 	struct serial_rs485 *rs485conf = &port->rs485;
+ 	struct circ_buf *xmit = &port->state->xmit;
  
-+	/* Emulation is always possible when KVM has access to all guest state. */
-+	if (!sev_guest(vcpu->kvm))
-+		return true;
-+
- 	/*
--	 * When the guest is an SEV-ES guest, emulation is not possible.
-+	 * Emulation is impossible for SEV-ES guests as KVM doesn't have access
-+	 * to guest register state.
- 	 */
- 	if (sev_es_guest(vcpu->kvm))
- 		return false;
-@@ -4518,9 +4523,6 @@ static bool svm_can_emulate_instruction(
- 	smap = cr4 & X86_CR4_SMAP;
- 	is_user = svm_get_cpl(vcpu) == 3;
- 	if (smap && (!smep || is_user)) {
--		if (!sev_guest(vcpu->kvm))
--			return true;
--
- 		pr_err_ratelimited("KVM: SEV Guest triggered AMD Erratum 1096\n");
- 		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
- 	}
+-	if (uart_circ_empty(xmit))
++	if (uart_circ_empty(xmit) && !port->x_char)
+ 		return;
+ 
+ 	if (rs485conf->flags & SER_RS485_ENABLED) {
 
 

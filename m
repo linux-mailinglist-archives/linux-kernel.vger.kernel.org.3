@@ -2,148 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FC24A49D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3DA4A49E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344650AbiAaPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235301AbiAaPI2 (ORCPT
+        id S1358708AbiAaPMt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 31 Jan 2022 10:12:49 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4567 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358836AbiAaPMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:08:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48854C061714;
-        Mon, 31 Jan 2022 07:08:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04705B82B3A;
-        Mon, 31 Jan 2022 15:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7F2C340E8;
-        Mon, 31 Jan 2022 15:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643641705;
-        bh=DJv8QiHD+2J/NbX3ujdDj7noq1FHPrQE+g5GGbv7o0Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LDkxIsuTE0aBZUOT/fEgGwsiZaz+f1oc1RWFEYgeEraqnxW/NtRoxAiyk9SOphpkT
-         F41eyvm/sLrTo6vlJjMgpxGZKNF3wuS+yBJnxy8Jqn5UQQURoeP1CduMAjB8FakLoJ
-         ErjD7ZQ9oKjBFGdnnLzG9hoUwGO840Tzn76GWTAAX/f+Ifc+s1uqhfF+PX1gTshwqZ
-         LYIoJDvLumom64rKjQIYUgLmvoGSnWb8l+R/2F23ng4DVN/it1ucqvpMpSHrS/HUPU
-         XEUsJW4yIliFm4txFkdeRLoJXjLx6moKAWH7mjHg+LDmhCzJSv/zR0DuTOLFo3RS4v
-         yTsxjbq3Y3niQ==
-Date:   Mon, 31 Jan 2022 16:08:19 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     kernel test robot <oliver.sang@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ariadne Conill <ariadne@dereferenced.org>
-Cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        0day robot <lkp@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Subject: Re: [fs/exec]  80bd5afdd8: xfstests.generic.633.fail
-Message-ID: <20220131150819.iuqlz3rz6q7cheap@wittgenstein>
-References: <20220127000724.15106-1-ariadne@dereferenced.org>
- <20220131144352.GE16385@xsang-OptiPlex-9020>
+        Mon, 31 Jan 2022 10:12:44 -0500
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JnWfz7491z67PMg;
+        Mon, 31 Jan 2022 23:08:59 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 31 Jan 2022 16:12:42 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Mon, 31 Jan 2022 16:12:42 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "stefanb@linux.ibm.com" <stefanb@linux.ibm.com>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
+ signatures (alternative)
+Thread-Topic: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
+ signatures (alternative)
+Thread-Index: AQHYE64xQMi+Kgkov0iDDqwbxhwgiax3MeAAgAABPQCAAOKyQIAAvI4AgAQic5A=
+Date:   Mon, 31 Jan 2022 15:12:42 +0000
+Message-ID: <9af14af14beb46a28f57559e4b1dc1a7@huawei.com>
+References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
+ <YfLz8NftvbZtKvLT@sol.localdomain> <YfL0+q/ekv4H8lZg@sol.localdomain>
+ <d122893c426f44aa95d5168773b60b9d@huawei.com>
+ <YfRRUBZpQv2Hi1sL@sol.localdomain>
+In-Reply-To: <YfRRUBZpQv2Hi1sL@sol.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220131144352.GE16385@xsang-OptiPlex-9020>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:43:52PM +0800, kernel test robot wrote:
+> From: Eric Biggers [mailto:ebiggers@kernel.org]
+> Sent: Friday, January 28, 2022 9:26 PM
+> On Fri, Jan 28, 2022 at 09:05:01AM +0000, Roberto Sassu wrote:
+> > > From: Eric Biggers [mailto:ebiggers@kernel.org]
+> > > Sent: Thursday, January 27, 2022 8:40 PM
+> > > On Thu, Jan 27, 2022 at 11:35:12AM -0800, Eric Biggers wrote:
+> > > > On Thu, Jan 27, 2022 at 07:46:09PM +0100, Roberto Sassu wrote:
+> > > > > I wanted to propose a different approach for handling fsverity digests
+> and
+> > > > > signatures, compared to:
+> > > > >
+> > > > > https://lore.kernel.org/linux-integrity/20220126000658.138345-1-
+> > > zohar@linux.ibm.com/
+> > > > >
+> > > > > In the original proposal, a new signature version has been introduced (v3)
+> > > > > to allow the possibility of signing the digest of a more flexible data
+> > > > > structure, ima_file_id, which could also include the fsverity file digest.
+> > > > >
+> > > > > While the new signature type would be sufficient to handle fsverity file
+> > > > > digests, the problem is that its format would not be compatible with the
+> > > > > signature format supported by the built-in verification module in fsverity.
+> > > > > The rpm package manager already has an extension to include fsverity
+> > > > > signatures, with the existing format, in the RPM header.
+> > > > >
+> > > > > Given that the fsverity signature is in the PKCS#7 format, IMA has already
+> > > > > the capability of handling it with the existing code, more specifically the
+> > > > > modsig code. It would be sufficient to provide to modsig the correct data
+> > > > > to avoid introducing a new signature format.
+> > > >
+> > > > I think it would be best to get people moved off of the fs-verity built-in
+> > > > signatures, rather than further extend the use of it.  PKCS#7 is a pretty
+> > > > terrible signature format.  The IMA one is better, though it's unfortunate
+> that
+> > > > IMA still relies on X.509 for keys.
+> > >
+> > > Note, the only reason that support for fs-verity built-in signatures was added
+> > > to RPM is that people didn't want to use IMA:
+> > > https://lore.kernel.org/linux-fscrypt/b49b4367-51e7-f62a-6209-
+> > > b46a6880824b@gmail.com
+> > >
+> > > If people are going to use IMA anyway, then there would be no point.
+> >
+> > Hi Eric
+> >
+> > I thought that the solution I came with could satisfy multiple needs.
+> >
+> > For people that don't want to use IMA, they could still continue
+> > to use the existing signature format, and wait for an LSM that
+> > satisfy their needs. They also have the option to migrate to the
+> > new signature format you are defining. But will those people be
+> > willing to switch to something IMA-specific?
+> >
+> > For people that use IMA, they could benefit from the effort
+> > of people creating packages with the original fsverity signature.
+> >
+> > For people that are skeptical about IMA, they could be interested
+> > in trying the full solution, which would probably be more easily
+> > available if the efforts from both sides converge.
+> >
+> > If, as you say, you have concerns about the existing signature
+> > format, wouldn't it be better that you address them from the
+> > fsverity side, so that all users of fsverity can benefit from it?
+> >
+> > Currently, fsverity hashes the formatted digest whose format
+> > is FSVerity<digest algo><digest size><digest>. Couldn't IMA
+> > hash the same data as well?
+> >
+> > An idea could be to always sign the formatted digest, and have
+> > a selector for the signature format: IMA, PKCS#7 or PGP.
 > 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-9):
-> 
-> commit: 80bd5afdd8568e41fc3a75c695bb179e0d9eee4d ("[PATCH v3] fs/exec: require argv[0] presence in do_execveat_common()")
-> url: https://github.com/0day-ci/linux/commits/Ariadne-Conill/fs-exec-require-argv-0-presence-in-do_execveat_common/20220127-080829
-> base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-> patch link: https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org
-> 
-> in testcase: xfstests
-> version: xfstests-x86_64-972d710-1_20220127
-> with following parameters:
-> 
-> 	disk: 4HDD
-> 	fs: f2fs
-> 	test: generic-group-31
-> 	ucode: 0xe2
-> 
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> 
-> 
-> on test machine: 4 threads Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz with 32G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> 
-> 
-> user  :warn  : [  208.077271] run fstests generic/633 at 2022-01-30 04:50:49
-> kern  :warn  : [  208.529090] Attempted to run process '/dev/fd/5/file1' with NULL argv
-> user  :notice: [  208.806756] generic/633       [failed, exit status 1]- output mismatch (see /lkp/benchmarks/xfstests/results//generic/633.out.bad)
-> 
-> user  :notice: [  208.826454]     --- tests/generic/633.out     2022-01-27 11:54:16.000000000 +0000
-> 
-> user  :notice: [  208.842458]     +++ /lkp/benchmarks/xfstests/results//generic/633.out.bad     2022-01-30 04:50:49.769538285 +0000
-> 
-> user  :notice: [  208.859622]     @@ -1,2 +1,4 @@
-> 
-> user  :warn  : [  208.860623] run fstests generic/634 at 2022-01-30 04:50:49
-> user  :notice: [  208.866037]      QA output created by 633
-> 
-> user  :notice: [  208.889262]      Silence is golden
-> 
-> user  :notice: [  208.901240]     +idmapped-mounts.c: 3608: setid_binaries - Invalid argument - failure: sys_execveat
+> Adding support for the new IMA signature format to fsverity_verify_signature()
+> *might* make sense.  (When I added this code, my understanding was that it
+> was
+> just verifying signatures the way the kernel usually verifies signatures.  I
 
-This is from the generic part of the vfs testsuite.
-It verifies that set*id binaries are executed with the right e{g,u}id.
-Part of that test calls execveat() as:
+Ok. Do we need something more to sign other than the fsverity
+formatted digest? If not, this could be the same for any method
+we support.
 
-static char *argv[] = {
-	NULL,
-};
+> don't think I realized there was a more direct, PKCS#7-less way to do it and
+> that IMA used that way.)  However, it would be better to use this as an
+> opportunity to move people off of the built-in signatures entirely, either by
+> switching to a full userspace solution or by switching to IMA.
 
-static char *envp[] = {
-	"EXPECTED_EUID=5000",
-	"EXPECTED_EGID=5000",
-	NULL,
-};
+If what we sign remains the same, then we could support multiple
+methods and use a selector to let fsverity_verify_signature() know
+how it should verify the signature. I don't know what would be a
+proper place for the selector.
 
-syscall(__NR_execveat, fd, some_path, argv, envp, 0);
+PKCS#7 seems ok, as it is used for kernel modules. IMA would be
+also ok, as it can verify the signature more directly. I would also
+be interested in supporting PGP, to avoid the requirement for
+Linux distributions to manage a secondary key. I have a small
+extension for rpmsign, that I would like to test in the Fedora
+infrastructure.
 
-I can fix this rather simply in our upstream fstests with:
+Both the PKCS#7 and the PGP methods don't require additional
+support from outside, the functions verify_pkcs7_signature()
+and verify_pgp_signature() (proposed, not yet in the upstream
+kernel) would be sufficient.
 
-static char *argv[] = {
-	"",
-};
+The IMA method instead would require the signature_v2_hdr
+structure to be exported to user space, so that rpm could
+produce a blob that can be interpreted by the kernel (this
+work could also be done by evmctl). Also, IMA should pass
+its .ima keyring to fsverity for signature verification, or should
+simply get the signature and do the verification internally.
 
-I guess.
+Given that fsverity has already the capability of managing the
+signature blob, it would make sense to still keep it. Adding it
+in an xattr could be possible, but it would introduce more
+constraints (requiring the filesystem to support xattrs). And,
+an user of fsverity willing to use the IMA method would have
+to look at security.ima.
 
-But doesn't
+To summarize: I would prefer a method that relies on an
+existing signature verification mechanism (PKCS#7) or that
+has an equivalent API and simplify support for Linux distributions
+(PGP). If we add the IMA method, available outside IMA, we
+need to also add support for user space so that it can produces
+the signature in the desired format, and preferably should use
+the fsverity way of getting the signature. If the IMA method
+would be used by IMA only, then IMA could store the signature
+in its xattr and do the verification independently.
 
-static char *argv[] = {
-	NULL,
-};
+Roberto
 
-seem something that should work especially with execveat()?
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
 
-Christian
+> Part of the problem with IMA is that no one wants to use it because it has
+> terrible documentation.  It sounds like it's really complicated, and tied to
+> specific TCG standards and to TPMs.  I think if it was documented better, people
+> would find it more attractive and wouldn't be trying to avoid it at all costs.
+> 
+> - Eric

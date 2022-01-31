@@ -2,191 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A562C4A4B14
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668DA4A4B26
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379940AbiAaPzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:55:38 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:7739 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379897AbiAaPzg (ORCPT
+        id S1379970AbiAaP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:59:30 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4569 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239569AbiAaP73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:55:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643644536; x=1675180536;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=TSXdf6Xp7bzDB87xsUL/3NMEmkx5ON/vq+fYe6c980M=;
-  b=WOpOI1EBiny0r3G2YL6s5qq4xmsx59xiMwd6R+oAoqlYCEKHQAh0bfOB
-   VCqVjyWoGqezez+ZlXtsWoymEhFxxtw6ncxm6EuKG7N8fMgTuCIRALrPe
-   j64tzBd/9n28f3TxkSDk5sAmIti5I7ffjt3gFPpbyR8kI6lI5VPPEuuFm
-   qd/4zNxJn/xU08Xt1J1zQyrsHd1lgMU78J5AgkILm9eBiA75hof3g0uhU
-   StKyQxpg0TIjsaHpcPWu7HALe9tpvSvpdj3kp7H9LA7bYFoJPhla0ySEe
-   P3ARUOVHkGqPbJZXzyW1eVeeDFQx2qyPhVilJTR5bYQoUVp16tyviIPQz
-   g==;
-IronPort-SDR: 3umtJfL6/uXc714W4Ka3KKzr/RA1TSuhATY3tH3YKcPNkpN+qUpgqmucgSix3TWAjOHPQi5VaJ
- Sfmtok6DE34muxCbQc3uCT0xqnI595/pIgtjac5UIEIRR6IHZsNb5+HWJm3la/VizTy2MpQscX
- yjPxEr+A/5dm9mTOJnwiQfo4AuLGjSLbZ3E2ccvKNk/0WRLU69M9lN5/XHkTHuE86fl1Vz9RDv
- ZR4JYg398PmAId8fIBBOQl8q+3qAWwhiUuzXXVdS7Lu0iuSDnlHLcbonU+M42Zi1d2Bl28RzsI
- UQww9o79tI/9WaHMmlh1o2p6
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="84207470"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Jan 2022 08:55:34 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+        Mon, 31 Jan 2022 10:59:29 -0500
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JnXmc1p3Dz67k8Z;
+        Mon, 31 Jan 2022 23:58:56 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 31 Jan 2022 08:55:34 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 31 Jan 2022 08:55:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RUdw9T5TTwKx9Fj0Jw/BXu3OBY1UiRPqHnsxU+M1HWwOOwKg+dDvcBTBn7LzlCBsslCGDjaA340rmMDXj6I+tyXf0nEc0D0t3mioSxfismgAHuWhRRdy7Q7CxxxwnE76EWWjBvCk60deaz4fTj44nzAt6tfozoUza0ooHvQKiZTcUVMbHMdhYBrVYhgbdlUH7gt/+FUHzsVfg1vTXooQqvts0MUXjnT6rRhJvsHOpVAam43yImUHR2y9kymUeO6eUVTO+hjQtCFj73u/wixJkjHr0XxtObx+92T6aGWoAE65dpppiK1foLEpcM/V4hEfwlX24mAfmayya2jm3NNNJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TSXdf6Xp7bzDB87xsUL/3NMEmkx5ON/vq+fYe6c980M=;
- b=hnSVlcihysiiZKVSXW/CHCwIh4PjcGWVep3cHw4aE77kpxmTY2DG4hv2Pmvw+WlkWsLn4bfyGHLQfuBFxW5sg6nB5UynJpyTjtX49tu+TONTPG00bzr50hXMDxhO/UK5r9jo88rL51mrBU1Z0RhgDk/nTge2KqRorCoOhz34SDiRUOxAWu/LXHesllKCEE1UN8ZmTKfqJo3/6SPu/UzXi5KXQJUjc21hH1uSrNmpbhTjwOfmoi1lzx1Kbrwq3FjzwoMSqhoEQ5pLnlE+/TmMwYextrEz2bZAN/aptHSgh0NX7A9IZpPkd0D/tjb9vVqJvJhVc3pUAXB0UUm5TEPURQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TSXdf6Xp7bzDB87xsUL/3NMEmkx5ON/vq+fYe6c980M=;
- b=NBfhln+X5w4eoFtzaswcJe/U8se+U7L2ahAyRQKT22sTclkM9xxbAJm89ZQB98gcGh6tAH0yPZknQIfvspE2U+iAEIzWnzdPACSWvYKQ5eH1P1qzTqWqgfqxFoBkewIpTHm4LVo6aCk7vLXf0arvNFd23P5UDTW9xij97NucQAU=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:95::7)
- by MW3PR11MB4649.namprd11.prod.outlook.com (2603:10b6:303:5b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 15:55:33 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::6032:bbb2:b522:2ac3]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::6032:bbb2:b522:2ac3%9]) with mapi id 15.20.4909.019; Mon, 31 Jan 2022
- 15:55:32 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <robh+dt@kernel.org>
-CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
-        <jassisinghbrar@gmail.com>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <geert@linux-m68k.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        <krzysztof.kozlowski@canonical.com>, <bin.meng@windriver.com>,
-        <heiko@sntech.de>, <Lewis.Hanly@microchip.com>,
-        <Daire.McNamara@microchip.com>, <Ivan.Griffin@microchip.com>,
-        <atishp@rivosinc.com>
-Subject: Re: [PATCH v5 03/12] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-Thread-Topic: [PATCH v5 03/12] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-Thread-Index: AQHYFpggxOHKEpwSFU23yi0MmUGdS6x9REQAgAAFVIA=
-Date:   Mon, 31 Jan 2022 15:55:32 +0000
-Message-ID: <84e1d43f-4d3d-1501-5bc1-c982272e1ce3@microchip.com>
-References: <20220131114726.973690-1-conor.dooley@microchip.com>
- <20220131114726.973690-4-conor.dooley@microchip.com>
- <CAL_JsqJkFaGmpAi3eEUROWyOr_PQEZ209TneLhsOkpf3w8jQdw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJkFaGmpAi3eEUROWyOr_PQEZ209TneLhsOkpf3w8jQdw@mail.gmail.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4d0bbff2-320d-4977-f9a3-08d9e4d21cf8
-x-ms-traffictypediagnostic: MW3PR11MB4649:EE_
-x-microsoft-antispam-prvs: <MW3PR11MB4649A6A1ACEFD6901B639F5698259@MW3PR11MB4649.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2MoDtsGmTrz4facBwEKgWGdgfduTc3X51nNcbf+OmCQlMXVX0MdO0RPJQnAoYs2g3cBxT/Slk+XSUkOjO/1p8m0qaPvkIHwjwNBZRdpzXfoH6sLKVA6TmQFjf5vVMk4RM7e0q4zpk6MAAmkbbWKKYhvkrI0zbb8GxAm4X+6j6Y3G5BnaWP8v3mC8Yf05V0A7Qluae5ogbdTpup07ztkE6bgKfki8k3dSB/6ENoQi/JptCFiIR+zrLTtD4u9PcnaxrD3UAW8b7GjYdkLmjqg6qZcQ6l0lkhItzeFatp0HQP0juitCgihOYfkjS8d4djw3MG7fEyWA3MOCE9uUVcgXta48i/21/WQnxS/3xQwboz6bfR19SCxSXWXSv2uHRleugA8celMCRozg0G3ZxkcRo4BkoXhzxRX9+DFmJv7bV3ZakWoCUjpaAyZBbHvIe4QRiJViU4gW2jGE/5FhwYtMxqz+p+WVfhWG4yKPbx+QkV8kz42ntsmQ8WhX6VztieL0Za8TSiV4+qj92DJhA6/BGr8WDIxqxRrlChAyjH0SpWdxjuRUWXsBfpK2QruLo4B49ONgTeZM8N1l7rY9g60fPMvxgtxkex/g1ZFmkGlEJynLp54BhNqN/wrywF2Z3+VEooc2IWyELCvoK5AZm0IV3m8pjeZxz117U598BgegSBM5VdXW6E9NIgOCqddabIlNGuzXyB5ePVZfrI3l7aeSK1ciYvdQYwdAW7vui0shV8HAAxqBvpMSOr/pQAWshIDsGOl7dldIFpCGYE4Zi9x04g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(7416002)(5660300002)(6506007)(6512007)(186003)(26005)(83380400001)(4744005)(2616005)(2906002)(66476007)(122000001)(8936002)(38070700005)(31696002)(86362001)(316002)(38100700002)(6486002)(31686004)(91956017)(54906003)(71200400001)(508600001)(4326008)(8676002)(36756003)(76116006)(66946007)(66446008)(66556008)(64756008)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cm1iVUl2d29ydWxPYUg3eXVqcWJ4WEhiTG81R0VWZzZmQ0FsT2Irbmsxd3RD?=
- =?utf-8?B?U2pFWE80MVBjc1pLSk9YVlVoaWdNSlVndVJlOU11MDZkZ2x3WS9CWVJEUW8x?=
- =?utf-8?B?Y3l5TlAra3RocnBGZE1XeWllbE5SdVBRWmg1U1dnQSs3RzRPdXAwWGVpZDdi?=
- =?utf-8?B?QytCTUpPdkxqK2xiMDFwTy9MWWZ3U0dDYXJZeEdNbElmd052TFplWWdYSXdp?=
- =?utf-8?B?VkFaOGRmMmp4cmJlZDhEa09DSTFwaTMvZVlkNTFkSzJVNllqZG9vSnRvbUQ4?=
- =?utf-8?B?QTZjdGxyaHBhM1NndjMyd2dqNjFLWGM2dlFkTzNRK3U4WWRuMDZ1ZzVrSHdy?=
- =?utf-8?B?d1ZmYlNrQk15NC90czhKRzRwNE5mMEdvWVprazBOV3RJcGF4aUM2MCtpZkU5?=
- =?utf-8?B?STMzWHM1aVlxalZBYTRGZHNXcGN6UlQ5MmlVTmVlQ2JNOWJKOG12d1RDaHUw?=
- =?utf-8?B?QmZVM1FaL3hwdmpCMm9oTmRmUjYzSklIMlVpbStBNnFJMjJJR0R6ZUZmZFIx?=
- =?utf-8?B?N2ZSZG0vQjJPNXIxVmVJWUo3cDRMeWplUENJNXNvRVYwN3JKUDQva044d3hJ?=
- =?utf-8?B?VVFlVEo1c1l1TW0zZk9KK01DM0p2NW1HVnhXRm4xUitwWlNDdWlGSkRkQUVh?=
- =?utf-8?B?UnpIallmZE9MNzB1azgyYWpsaXdNMXNDMVpudXBjU0JjL29RUzcvK1lGcXRH?=
- =?utf-8?B?c2UxSE03TUJTY3RCSS9kcmV4WFVIdlB6UjBOem8zQ21MM2ZuVWRXMGFpR2x2?=
- =?utf-8?B?Y0NGNlZNTGlXNHdCUk1nOENoL0Mvd1A4Ry93MjhqTjVHVXkxcjYvUm5ScEFr?=
- =?utf-8?B?N0hDSWNpTEZkNm5QaXR2UzVNa0NQaUs2NWt6WU1lQXlwQ3NJSnY2dVd1Zll4?=
- =?utf-8?B?NEh6SkpxN2dUWkl2N2NabkJWaVA4VnN0VVBhZjhDOVBqb1czSjBicGE5R2Fs?=
- =?utf-8?B?eERCTWIvZDk4VVJVUHAxYVNSaWU0bVVFNXpRRThJZjg3d0pZSmhsRU81OXdl?=
- =?utf-8?B?UVFNNHBNRHJleEltOUU1THRSNWZ6aUMrelNLVlBNUFg1L3VEZ3BtWGd4OTN3?=
- =?utf-8?B?cGxlVFBOKzZOTEdDaThnMkw4VTNmVDUzcEYrZyt5cWw4d0dOY0ZPeDVCTHZP?=
- =?utf-8?B?UHlzQzRyUktUcjFzaXZhSlljV1dnOGltMzRhNXlwOEthOXNxblNNbHlSeHNB?=
- =?utf-8?B?NkFKcTdVYUlPS2xZS2RIaWJwWDI2UkMyeDFDa1ViLzBiRkRYMzg2QThJV0dM?=
- =?utf-8?B?NTJMb3Z6MVJNZE1FNndTNXVQYnl5aWFBVTFaUXRKTWg0UDhBeDZRZ1N6OTd2?=
- =?utf-8?B?NmpkSUtJbHNrOEEwNE5GZTdxWkpmT0l5RUx3UWRhZU90OHg0OHoxNHlGTkRo?=
- =?utf-8?B?MEsydHlwNHN4eHdWeWszMjVWcUpreFZqZ1hMUVMwOXZJOGp4MC9NY0RhYWpX?=
- =?utf-8?B?ZWtSYnVFSzZhMlVDMmlNYVR1ZnVJSFZkb091ZlNBb3B5U0JRbDFLNWhGSTkv?=
- =?utf-8?B?YUxyWmxSOUNTc2p6VGd3SjBXeG5YNnlTbHMydkY0Z2U4akIzU2x4c0ZFYWZo?=
- =?utf-8?B?cUxXc2ltMDluTHhUZ29rMmxqaFAyR0FwcERabXRkR2VEZDY0RVV0V0VXSloz?=
- =?utf-8?B?ZVhuQVlUaGhPMFZ0WHR5MkEvcWJJaEM1NUYwem42MjJWd0Z3NzhUa3ZuS2tz?=
- =?utf-8?B?N2RtcW5WbFlOVnVybmZ3TGZRKzkzd0ZxeUVPTlpkdGJUc2ZKRXU4eWJSaFVa?=
- =?utf-8?B?azI2N3hvZUZPeERkWXo5UFE4bU5rd1FoVCt5bUQ0MDZNYTdNT1FIMXZCRUlE?=
- =?utf-8?B?Q0dGUlU0Wkt0T3pBTEg1T251UXY5V3ZJcTJKK1ZVVElWVFdYR04xVkJwaUhW?=
- =?utf-8?B?eXEvbEp4ZDdTUkd6M1JZWWw3d0RVS3NmS0JsU25Ec2VneE91aDRxeGJoNng3?=
- =?utf-8?B?cC9KVit4ZW1tdmZRSTBxOFRSTG5wNFUvNmJyMUxOdFlaTkNqQkdCZDZrWXJL?=
- =?utf-8?B?TVp3SFIrd25lMFU4eC9TU2VZUFF2cFp6QlozK2grY0x2ZktPNEdlTncwbnRm?=
- =?utf-8?B?MlhZYkNDeEoweWVrZEdpZndPRGxyMDVxUFBSb2N3c2VUOFJScytUVk9aOWty?=
- =?utf-8?B?VWFrZDAyVEJucGYvbDZTOFNnOWhQazhUZFF5UmEvT2djSGMraCtHL2lRKytF?=
- =?utf-8?B?K2QvQkpOOElqMlNIVTc5a0R2UFVXcklZK3o3UktKUGRIVFgrWWsvMHhONWZU?=
- =?utf-8?B?ZS9yeFpnUmJsbWVLTStlUG9WNi93PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8A006E2EB69DC9459A804710045569BC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 15.1.2308.21; Mon, 31 Jan 2022 16:59:26 +0100
+Received: from [10.47.91.239] (10.47.91.239) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 31 Jan
+ 2022 15:59:26 +0000
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 00/16] scsi: libsas and users: Factor out LLDD TMF code
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
+        <chenxiang66@hisilicon.com>, <Ajish.Koshy@microchip.com>
+CC:     <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <Viswas.G@microchip.com>
+References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
+ <1893d9ef-042b-af3b-74ea-dd4d0210c493@opensource.wdc.com>
+ <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
+ <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
+ <a2de1656-b1ec-2fb7-caab-657e27dacb48@huawei.com>
+Message-ID: <49da4d80-5cc3-35c3-ccaa-6def8165eb65@huawei.com>
+Date:   Mon, 31 Jan 2022 15:58:50 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d0bbff2-320d-4977-f9a3-08d9e4d21cf8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 15:55:32.6699
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MyNR7EanWwe3GpcM1xvz+N/a00iMewlkSp2+vTFKysPpa5rcWxSP0SNxcb2W5OEtUNJSvi99d+iWUZM5ScerDGbJFz298WvBMX1Wkamd20k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4649
+In-Reply-To: <a2de1656-b1ec-2fb7-caab-657e27dacb48@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.91.239]
+X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMzEvMDEvMjAyMiAxNTozOSwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlM
-OiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cg
-dGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gT24gTW9uLCBKYW4gMzEsIDIwMjIgYXQgNTo0NSBB
-TSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+IHdyb3RlOg0KPj4NCj4+IEZyb206IENvbm9y
-IERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQo+Pg0KPj4gQWRkIGRldmljZSB0
-cmVlIGJpbmRpbmdzIGZvciB0aGUgaTJjIGNvbnRyb2xsZXIgb24NCj4+IHRoZSBNaWNyb2NoaXAg
-UG9sYXJGaXJlIFNvQy4NCj4+DQo+PiBSZXZpZXdlZC1ieTogUm9iIEhlcnJpbmcgPHJvYmhAa2Vy
-bmVsLm9yZz4NCj4+DQo+IA0KPiBUaGVyZSBzaG91bGQgbm90IGJlIGEgYmxhbmsgbGluZSBoZXJl
-Lg0KPiANCj4gQWxzbywgdGFncyBzaG91bGQgYmUgaW4gY2hyb25vbG9naWNhbCBvcmRlciB0eXBp
-Y2FsbHkuIElmIERhaXJlIHNlbnQNCj4gdGhpcyBwYXRjaCBvdXQgd2l0aCBteSB0YWcsIHRoZW4g
-dGhlIG9yZGVyIGlzIGNvcnJlY3QuIElmIEkgZ2F2ZSBpdCBvbg0KPiBhIHZlcnNpb24geW91IHNl
-bnQsIHRoZW4gaXQgZ29lcyBiZXR3ZWVuIERhaXJlJ3MgYW5kIHlvdXIgUy1vLWIgd2hpY2gNCj4g
-aXMgdGhlIGNhc2UgaGVyZS4NCk9oLCB0aGFua3MuIFByb2JhYmx5IGJlZW4gbWVzc2luZyB0aGlz
-IHVwIHJpZ2h0L2xlZnQvY2VudHJlLg0KDQpPbiBhbm90aGVyIG5vdGUsIEkga25vdyBJJ20gc3Rp
-bGwgbWlzc2luZyBhIFJCIHN0aWxsIG9uIHNvbWUgb2YgdGhlIA0KYmluZGluZ3MsIGJ1dCB3aGF0
-IGlzIHRoZSBhY2NlcHRhbmNlIHBhdGggZm9yIHRoaXMgc2VyaWVzPw0KQW55IGxlZnQgb3ZlciBi
-aW5kaW5ncyBub3QgdGFrZW4gYnkgc3Vic3lzdGVtcyB2aWEgeW91cnNlbGYgYW5kIHRoZSBkdHMg
-DQpjaGFuZ2VzIHZpYSBQYWxtZXIncyB0cmVlPw0KPiANCj4gDQo+IFJvYg0KPiANCj4+IFNpZ25l
-ZC1vZmYtYnk6IERhaXJlIE1jTmFtYXJhIDxkYWlyZS5tY25hbWFyYUBtaWNyb2NoaXAuY29tPg0K
-Pj4gU2lnbmVkLW9mZi1ieTogQ29ub3IgRG9vbGV5IDxjb25vci5kb29sZXlAbWljcm9jaGlwLmNv
-bT4NCg0K
+On 28/01/2022 09:09, John Garry wrote:
+>> I ran some more tests. In particular, I ran libzbc compliance tests on a
+>> 20TB SMR drives. All tests pass with 5.17-rc1, but after applying your
+>> series, I see command timeout that take forever to recover from, with
+>> the drive revalidation failing after that.
+>>
+>> [  385.102073] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
+>> [  385.108026] sas: sas_scsi_find_task: aborting task 0x000000007068ed73
+>> [  405.561099] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
+>> timeout.
+>> [  405.568236] sas: sas_scsi_find_task: task 0x000000007068ed73 is 
+>> aborted
+>> [  405.574930] sas: sas_eh_handle_sas_errors: task 0x000000007068ed73 is
+>> aborted
+>> [  411.192602] ata21.00: qc timeout (cmd 0xec)
+>> [  431.672122] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
+>> timeout.
+>> [  431.679282] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> [  431.685544] ata21.00: revalidation failed (errno=-5)
+>> [  441.911948] ata21.00: qc timeout (cmd 0xec)
+>> [  462.391545] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
+>> timeout.
+>> [  462.398696] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> [  462.404992] ata21.00: revalidation failed (errno=-5)
+>> [  492.598769] ata21.00: qc timeout (cmd 0xec)
+>> ...
+>>
+>> So there is a problem. Need to dig into this. I see this issue only with
+>> libzbc passthrough tests. fio runs with libaio are fine.
+> 
+> Thanks for the notice. I think that I also saw a hang, but, IIRC, it 
+> happened on mainline for me - but it's hard to know if I broke something 
+> if it is already broke in another way. That is why I wanted this card 
+> working properly...
+
+Hi Damien,
+
+ From testing mainline, I can see a hang on my arm64 system for SAS 
+disks. I think that the reason is the we don't finish some commands in 
+EH properly for pm8001:
+- In EH, we attempt to abort the task in sas_scsi_find_task() -> 
+lldd_abort_task()
+The default return from pm8001_exec_internal_tmf_task() is 
+-TMF_RESP_FUNC_FAILED, so if the TMF does not execute properly we return 
+this value
+- sas_scsi_find_task() cannot handle -TMF_RESP_FUNC_FAILED, and returns 
+-TMF_RESP_FUNC_FAILED directly to sas_eh_handle_sas_errors(), which, 
+again, does not handle -TMF_RESP_FUNC_FAILED. So we don't progress to 
+ever finish the comand.
+
+This looks like the correct fix for mainline:
+
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -766,7 +766,7 @@ static int pm8001_exec_internal_tmf_task(struct 
+domain_device *dev,
+pm8001_dev, DS_OPERATIONAL);
+wait_for_completion(&completion_setstate);
+}
+- res = -TMF_RESP_FUNC_FAILED;
++ res = TMF_RESP_FUNC_FAILED;
+
+That's effectively the same as what I have in this series in 
+sas_execute_tmf().
+
+However your testing is a SATA device, which I'll check further.
+
+Thanks,
+John

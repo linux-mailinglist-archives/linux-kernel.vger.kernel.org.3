@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E69E4A4454
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EED74A4364
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378285AbiAaL2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:28:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38490 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378270AbiAaLTz (ORCPT
+        id S1359142AbiAaLVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:21:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43930 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358774AbiAaLKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:19:55 -0500
+        Mon, 31 Jan 2022 06:10:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A066B82A5C;
-        Mon, 31 Jan 2022 11:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4227AC340E8;
-        Mon, 31 Jan 2022 11:19:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE0961187;
+        Mon, 31 Jan 2022 11:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B5DC340EE;
+        Mon, 31 Jan 2022 11:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627992;
-        bh=IaqLZl+CdXYL64x6EZzxtDxk/aOj4h8gnttrGM8rZnM=;
+        s=korg; t=1643627449;
+        bh=YHrvJnXa5X1wfQtF+Ogrm85EqxRyOSldBMesQslQ2Pw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ly49jgZKwtqnlozoATkQN7uM1bB0k023+3EJpLEpsYoERnWTMQOhygGI5EkQd+8UT
-         Wd/tCWRbj++dC2b4Fhr6JkvyUSfW9HwPkbZK9YXGclO+ZnN2XK+R1anPiSWsQRiEYP
-         x6IAbuYiCqoNmNvUQ1cz/CABtUINPUqXzZ5rU0kY=
+        b=d8C+PCkr2c/s2DhjFw7Ulpt4akd/8DbKXeoV76ETlUmQ0ZyFQHLRYyrprF3RBK4Yp
+         yLaQp+hX7cECIp3iajgWuLJLinP2VHWgBipBsJjifALo/CQCZqaWZk39HHW0CUxrbq
+         nYcxMiM+ePwoq1JxNKoJBq305iZ9fJ0KhBFNtuoE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.16 089/200] sched/membarrier: Fix membarrier-rseq fence command missing from query bitmask
+        stable@vger.kernel.org, Congyu Liu <liu3101@purdue.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 087/171] net: fix information leakage in /proc/net/ptype
 Date:   Mon, 31 Jan 2022 11:55:52 +0100
-Message-Id: <20220131105236.604221272@linuxfoundation.org>
+Message-Id: <20220131105232.971619785@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,65 +46,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Congyu Liu <liu3101@purdue.edu>
 
-commit 809232619f5b15e31fb3563985e705454f32621f upstream.
+commit 47934e06b65637c88a762d9c98329ae6e3238888 upstream.
 
-The membarrier command MEMBARRIER_CMD_QUERY allows querying the
-available membarrier commands. When the membarrier-rseq fence commands
-were added, a new MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK was
-introduced with the intent to expose them with the MEMBARRIER_CMD_QUERY
-command, the but it was never added to MEMBARRIER_CMD_BITMASK.
+In one net namespace, after creating a packet socket without binding
+it to a device, users in other net namespaces can observe the new
+`packet_type` added by this packet socket by reading `/proc/net/ptype`
+file. This is minor information leakage as packet socket is
+namespace aware.
 
-The membarrier-rseq fence commands are therefore not wired up with the
-query command.
+Add a net pointer in `packet_type` to keep the net namespace of
+of corresponding packet socket. In `ptype_seq_show`, this net pointer
+must be checked when it is not NULL.
 
-Rename MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK to
-MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK (the bitmask is not a command
-per-se), and change the erroneous
-MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_BITMASK (which does not
-actually exist) to MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ.
-
-Wire up MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK in
-MEMBARRIER_CMD_BITMASK. Fixing this allows discovering availability of
-the membarrier-rseq fence feature.
-
-Fixes: 2a36ab717e8f ("rseq/membarrier: Add MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: <stable@vger.kernel.org> # 5.10+
-Link: https://lkml.kernel.org/r/20220117203010.30129-1-mathieu.desnoyers@efficios.com
+Fixes: 2feb27dbe00c ("[NETNS]: Minor information leak via /proc/net/ptype file.")
+Signed-off-by: Congyu Liu <liu3101@purdue.edu>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/membarrier.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/linux/netdevice.h |    1 +
+ net/core/net-procfs.c     |    3 ++-
+ net/packet/af_packet.c    |    2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
---- a/kernel/sched/membarrier.c
-+++ b/kernel/sched/membarrier.c
-@@ -147,11 +147,11 @@
- #endif
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -2636,6 +2636,7 @@ struct packet_type {
+ 					      struct net_device *);
+ 	bool			(*id_match)(struct packet_type *ptype,
+ 					    struct sock *sk);
++	struct net		*af_packet_net;
+ 	void			*af_packet_priv;
+ 	struct list_head	list;
+ };
+--- a/net/core/net-procfs.c
++++ b/net/core/net-procfs.c
+@@ -260,7 +260,8 @@ static int ptype_seq_show(struct seq_fil
  
- #ifdef CONFIG_RSEQ
--#define MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK		\
-+#define MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK		\
- 	(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ			\
--	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
-+	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ)
- #else
--#define MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK	0
-+#define MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK	0
- #endif
+ 	if (v == SEQ_START_TOKEN)
+ 		seq_puts(seq, "Type Device      Function\n");
+-	else if (pt->dev == NULL || dev_net(pt->dev) == seq_file_net(seq)) {
++	else if ((!pt->af_packet_net || net_eq(pt->af_packet_net, seq_file_net(seq))) &&
++		 (!pt->dev || net_eq(dev_net(pt->dev), seq_file_net(seq)))) {
+ 		if (pt->type == htons(ETH_P_ALL))
+ 			seq_puts(seq, "ALL ");
+ 		else
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -1738,6 +1738,7 @@ static int fanout_add(struct sock *sk, s
+ 		match->prot_hook.dev = po->prot_hook.dev;
+ 		match->prot_hook.func = packet_rcv_fanout;
+ 		match->prot_hook.af_packet_priv = match;
++		match->prot_hook.af_packet_net = read_pnet(&match->net);
+ 		match->prot_hook.id_match = match_fanout_group;
+ 		match->max_num_members = args->max_num_members;
+ 		list_add(&match->list, &fanout_list);
+@@ -3323,6 +3324,7 @@ static int packet_create(struct net *net
+ 		po->prot_hook.func = packet_rcv_spkt;
  
- #define MEMBARRIER_CMD_BITMASK						\
-@@ -159,7 +159,8 @@
- 	| MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED			\
- 	| MEMBARRIER_CMD_PRIVATE_EXPEDITED				\
- 	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED			\
--	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK)
-+	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK		\
-+	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
+ 	po->prot_hook.af_packet_priv = sk;
++	po->prot_hook.af_packet_net = sock_net(sk);
  
- static void ipi_mb(void *info)
- {
+ 	if (proto) {
+ 		po->prot_hook.type = proto;
 
 

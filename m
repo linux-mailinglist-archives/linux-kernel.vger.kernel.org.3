@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A9B4A45DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC284A421B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377978AbiAaLrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378564AbiAaLeZ (ORCPT
+        id S1358872AbiAaLKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:10:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53886 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235281AbiAaLGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:34:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C137AC0698FC;
-        Mon, 31 Jan 2022 03:23:04 -0800 (PST)
+        Mon, 31 Jan 2022 06:06:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61F2360ED0;
-        Mon, 31 Jan 2022 11:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B9EC340E8;
-        Mon, 31 Jan 2022 11:23:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AA2FB82A5D;
+        Mon, 31 Jan 2022 11:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B782BC340E8;
+        Mon, 31 Jan 2022 11:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628183;
-        bh=hRKTuIsnl4WN0VxrzUwjAAfV/KmgykqxL+AVfx9ryCM=;
+        s=korg; t=1643627160;
+        bh=8QpPn/EcYTTWSowcI/ZY+gOqZOAzFOy0LCORVktrvLE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0v9Z/Zp/6TiKko4LJF3TQ4bxCE/lJVSXCxAn+HGJltg9ZvcLFWmwXJxkvkJk1FaVm
-         I3EjclcBt+0P35cCbg+87VGDqx/W4ejwz1eW3DZpL707t7C8lXiz8jz7dp76FxWXBW
-         PLd5PFLs20Xkolt0j0/xewBos6yidu/va7wZC6B0=
+        b=f4GQWfyzoN+ZFT3ywCh2pxZgwhDXPJBZWxrVY7qrD0CF8eDEVml8b/hlnMEL7D5xI
+         AouwoWKllYPLYX8Sg3mFnfZh06VRnjriVJ4jYaSA67DK6TyGZx1/TiiX6hRKL1mhAG
+         0I5yL0Tsvvtf2LA9WlSBTZL5COJ94WiblGNX+Who=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-afs@lists.infradead.org,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 151/200] rxrpc: Adjust retransmission backoff
+Subject: [PATCH 5.10 093/100] ipv4: raw: lock the socket in raw_bind()
 Date:   Mon, 31 Jan 2022 11:56:54 +0100
-Message-Id: <20220131105238.637530165@linuxfoundation.org>
+Message-Id: <20220131105223.580898656@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+References: <20220131105220.424085452@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,91 +47,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 2c13c05c5ff4b9fc907b07f7311821910ebaaf8a ]
+[ Upstream commit 153a0d187e767c68733b8e9f46218eb1f41ab902 ]
 
-Improve retransmission backoff by only backing off when we retransmit data
-packets rather than when we set the lost ack timer.
+For some reason, raw_bind() forgot to lock the socket.
 
-To this end:
+BUG: KCSAN: data-race in __ip4_datagram_connect / raw_bind
 
- (1) In rxrpc_resend(), use rxrpc_get_rto_backoff() when setting the
-     retransmission timer and only tell it that we are retransmitting if we
-     actually have things to retransmit.
+write to 0xffff8881170d4308 of 4 bytes by task 5466 on cpu 0:
+ raw_bind+0x1b0/0x250 net/ipv4/raw.c:739
+ inet_bind+0x56/0xa0 net/ipv4/af_inet.c:443
+ __sys_bind+0x14b/0x1b0 net/socket.c:1697
+ __do_sys_bind net/socket.c:1708 [inline]
+ __se_sys_bind net/socket.c:1706 [inline]
+ __x64_sys_bind+0x3d/0x50 net/socket.c:1706
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-     Note that it's possible for the retransmission algorithm to race with
-     the processing of a received ACK, so we may see no packets needing
-     retransmission.
+read to 0xffff8881170d4308 of 4 bytes by task 5468 on cpu 1:
+ __ip4_datagram_connect+0xb7/0x7b0 net/ipv4/datagram.c:39
+ ip4_datagram_connect+0x2a/0x40 net/ipv4/datagram.c:89
+ inet_dgram_connect+0x107/0x190 net/ipv4/af_inet.c:576
+ __sys_connect_file net/socket.c:1900 [inline]
+ __sys_connect+0x197/0x1b0 net/socket.c:1917
+ __do_sys_connect net/socket.c:1927 [inline]
+ __se_sys_connect net/socket.c:1924 [inline]
+ __x64_sys_connect+0x3d/0x50 net/socket.c:1924
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
- (2) In rxrpc_send_data_packet(), don't bump the backoff when setting the
-     ack_lost_at timer, as it may then get bumped twice.
+value changed: 0x00000000 -> 0x0003007f
 
-With this, when looking at one particular packet, the retransmission
-intervals were seen to be 1.5ms, 2ms, 3ms, 5ms, 9ms, 17ms, 33ms, 71ms,
-136ms, 264ms, 544ms, 1.088s, 2.1s, 4.2s and 8.3s.
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 5468 Comm: syz-executor.5 Not tainted 5.17.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 
-Fixes: c410bf01933e ("rxrpc: Fix the excessive initial retransmission timeout")
-Suggested-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/164138117069.2023386.17446904856843997127.stgit@warthog.procyon.org.uk/
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rxrpc/call_event.c | 8 +++-----
- net/rxrpc/output.c     | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ net/ipv4/raw.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index 6be2672a65eab..df864e6922679 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -157,7 +157,7 @@ static void rxrpc_congestion_timeout(struct rxrpc_call *call)
- static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
- {
- 	struct sk_buff *skb;
--	unsigned long resend_at, rto_j;
-+	unsigned long resend_at;
- 	rxrpc_seq_t cursor, seq, top;
- 	ktime_t now, max_age, oldest, ack_ts;
- 	int ix;
-@@ -165,10 +165,8 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
+diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
+index 7d26e0f8bdaeb..5d95f80314f95 100644
+--- a/net/ipv4/raw.c
++++ b/net/ipv4/raw.c
+@@ -721,6 +721,7 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
+ 	int ret = -EINVAL;
+ 	int chk_addr_ret;
  
- 	_enter("{%d,%d}", call->tx_hard_ack, call->tx_top);
++	lock_sock(sk);
+ 	if (sk->sk_state != TCP_CLOSE || addr_len < sizeof(struct sockaddr_in))
+ 		goto out;
  
--	rto_j = call->peer->rto_j;
--
- 	now = ktime_get_real();
--	max_age = ktime_sub(now, jiffies_to_usecs(rto_j));
-+	max_age = ktime_sub(now, jiffies_to_usecs(call->peer->rto_j));
+@@ -740,7 +741,9 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
+ 		inet->inet_saddr = 0;  /* Use device */
+ 	sk_dst_reset(sk);
+ 	ret = 0;
+-out:	return ret;
++out:
++	release_sock(sk);
++	return ret;
+ }
  
- 	spin_lock_bh(&call->lock);
- 
-@@ -213,7 +211,7 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
- 	}
- 
- 	resend_at = nsecs_to_jiffies(ktime_to_ns(ktime_sub(now, oldest)));
--	resend_at += jiffies + rto_j;
-+	resend_at += jiffies + rxrpc_get_rto_backoff(call->peer, retrans);
- 	WRITE_ONCE(call->resend_at, resend_at);
- 
- 	if (unacked)
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index 10f2bf2e9068a..a45c83f22236e 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -468,7 +468,7 @@ done:
- 			if (call->peer->rtt_count > 1) {
- 				unsigned long nowj = jiffies, ack_lost_at;
- 
--				ack_lost_at = rxrpc_get_rto_backoff(call->peer, retrans);
-+				ack_lost_at = rxrpc_get_rto_backoff(call->peer, false);
- 				ack_lost_at += nowj;
- 				WRITE_ONCE(call->ack_lost_at, ack_lost_at);
- 				rxrpc_reduce_call_timer(call, ack_lost_at, nowj,
+ /*
 -- 
 2.34.1
 

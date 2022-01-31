@@ -2,161 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084844A4DA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898714A4DAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbiAaR7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S236074AbiAaR7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiAaR7K (ORCPT
+        with ESMTP id S230033AbiAaR7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:59:10 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865A6C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:59:10 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so14549553pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:59:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GTfk5dtnofD+DwQSBTggrf944TpHjURpGaUt6sHxP1Q=;
-        b=zo7PV8Zd2Z7HIVMtmOiMcabS1N6sxBbjo3wwW81zQa4IENFd+3e1qlBJHlUZq9ntz+
-         XqfG3FiwQvk7BkMKzEkrTK8KhKl8bZCQp61R1xdJf1S9wF/56YoXbTILPq45QQEx1fSh
-         qDbMCmpmLx42v5eiBQi+snTnumsDFMmyNi7p2J7qmEpf/Q0W+tWRSYxd7R6rXO23yKNp
-         eMGd4RXtD6PUL8AwbxNTR7tmpDMAYcRkYwTmmCgt3rFO3CXoS8g4hf8QkYIQwr1yPT2W
-         YKmY+awyasNFLlw+dtDGpSReBp1a0X8b4c5W4Zbb1H5Li7iemUtlEkg083LPRVdpWVvw
-         ce3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GTfk5dtnofD+DwQSBTggrf944TpHjURpGaUt6sHxP1Q=;
-        b=0i2lXwcKBvSJBIAwcai30oKG/dqa1FQZa8EKGlRBomfdBIgYfYq9fdWRT9Uq9KT5K4
-         gOGtp/N7k9c95GDiYxnhJPfIKLiz1IajF6IJaRPxmTJRBCDIhIFiNlwmDO0s79n7phGw
-         /SsEL3NIYOkt0lgtKIVsg/0yjZCUB037qcLpr8ZXb3GOgoH+cM4CNXlLG/z5XzgH5CC/
-         D0oP8uUoOZ0edgL8DDOd/tpA7qUoRz0Wh8qbk8tRXWUMfM5h3+WLHKXohIWDgfcomxSC
-         JOzKuqPkBK2NjgdnymiT4KHHN9Mq/BdRCGavGdlYiXMolfIwcFRcGYUzO8oWJcnucDnU
-         RF1g==
-X-Gm-Message-State: AOAM531ubhGfpfrKGmyaNZz+leHgeGG81400nAyuVcWvOHhO+OWBDPem
-        t/GHBypu0wDsxBJpA4b/HI+ljg==
-X-Google-Smtp-Source: ABdhPJwUpbKpp1BF/RE/P7pFaFs95WxKDdCWSlLhnXYDb8ikckCTeUYHjKtVxjHYzKFZsy5bOe8h5g==
-X-Received: by 2002:a17:90b:1d8d:: with SMTP id pf13mr35398210pjb.232.1643651949935;
-        Mon, 31 Jan 2022 09:59:09 -0800 (PST)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id o1sm20431282pfu.88.2022.01.31.09.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 09:59:09 -0800 (PST)
-Date:   Mon, 31 Jan 2022 09:59:05 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Saeed Mahameed <saeed@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Einon <mark.einon@gmail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        David Awogbemila <awogbemila@google.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Jon Mason <jdmason@kudzu.us>,
-        Simon Horman <simon.horman@corigine.com>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Rob Herring <robh@kernel.org>, l.stelmach@samsung.com,
-        rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
-        Edwin Peer <edwin.peer@broadcom.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, Slark Xiao <slark_xiao@163.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Prabhakar Kushwaha <pkushwaha@marvell.com>,
-        Omkar Kulkarni <okulkarni@marvell.com>,
-        Shai Malin <smalin@marvell.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Gary Guo <gary@garyguo.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
-        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH net-next] net: kbuild: Don't default net vendor configs
- to y
-Message-ID: <20220131095905.08722670@hermes.local>
-In-Reply-To: <20220131172450.4905-1-saeed@kernel.org>
-References: <20220131172450.4905-1-saeed@kernel.org>
+        Mon, 31 Jan 2022 12:59:41 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA92C061714;
+        Mon, 31 Jan 2022 09:59:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=5M0PbMjiefbHwaqC/xj3mKHbM/DDkEnbZsPZmLX0dkE=; b=bchYUUPdYofR/UGjyRDBKDanVg
+        6v9vLjVpyVEYmAkLEY1KUR7Ks1GHOFdD7NVqrBuYR4rECcRp6nGc42EOgn/CeuWV5lxjuvLpRswnB
+        BaWISLCKnCIiMW+VC20wsT120QEOOPywQnqV8P9vBjXnIGv0knalUgfRWGhscRr7w0EkEMnRV4+MT
+        UXt9Ke6UFWt5s6It/ku7vJX1NeClyI8pbwp39itLyzRpL9q1pwRZUjcfwnzW4D9ZnM948/eaP9iKi
+        6m+JEEx7dtLBOciyz3xLX6PuXPxMX/wViUuycERe9hwhFnx6IT0ouowL0iVG3SOR/yrgqPOjOjGAl
+        5Thpz2sw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEaxi-00AKG0-KN; Mon, 31 Jan 2022 17:59:34 +0000
+Date:   Mon, 31 Jan 2022 17:59:34 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+Cc:     gregkh@linuxfoundation.org, tj@kernel.org, viro@zeniv.linux.org.uk,
+        nathan@kernel.org, ndesaulniers@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2] seq_file: fix NULL pointer arithmetic warning
+Message-ID: <Yfgjhq6LIzhKNaTU@casper.infradead.org>
+References: <YfgivbCgwKjJu9ec@fedora>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfgivbCgwKjJu9ec@fedora>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 09:24:50 -0800
-Saeed Mahameed <saeed@kernel.org> wrote:
+On Mon, Jan 31, 2022 at 02:56:13PM -0300, Maíra Canal wrote:
+> +EXPORT_SYMBOL(single_start);
 
-> From: Saeed Mahameed <saeedm@nvidia.com>
-> 
-> NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
-> 
-> Since all drivers belonging to a vendor are supposed to default to 'n',
-> defaulting all vendors to 'n' shouldn't be an issue, and aligns well
-> with the 'no new drivers' by default mentality.
-> 
-> Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-
-This was done back when vendors were introduced in the network drivers tree.
-The default of Y allowed older configurations to just work.
-
-So there was a reason, not sure if it matters anymore.
-But it seems like useless repainting to change it now.
+kernfs is a 'bool', which means it can't be a module, so there's
+no need to EXPORT this symbol.

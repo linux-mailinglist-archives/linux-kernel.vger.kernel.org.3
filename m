@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D2B4A4549
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3274A4332
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379355AbiAaLi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S1377234AbiAaLRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377988AbiAaL1y (ORCPT
+        with ESMTP id S1377541AbiAaLKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:27:54 -0500
+        Mon, 31 Jan 2022 06:10:11 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6138CC094265;
-        Mon, 31 Jan 2022 03:17:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1278CC06174E;
+        Mon, 31 Jan 2022 03:08:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FCD9B82A5D;
-        Mon, 31 Jan 2022 11:17:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56491C340EF;
-        Mon, 31 Jan 2022 11:17:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4562B82A5E;
+        Mon, 31 Jan 2022 11:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DB0C340EF;
+        Mon, 31 Jan 2022 11:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627829;
-        bh=3tSqRNYVVEdgFU/5z8VN14xz614uvr0H+s+4uqrS/JM=;
+        s=korg; t=1643627292;
+        bh=HRSLQn0z6LNxbCa6iskITmAgvh9vAe/2BIM6raJ4kg0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xB+uNL073H5EQO4xgL7RjvRg24Bhdb2klWM3HiXeLPLKjWk5aNAniFXl1Iz4IA1+4
-         lxikQtgiq+3JO0gRRA7B91buBaFzZeO8MbVK7ak/hTdIdsLgyvKBRx9GNkT7yyfMBA
-         T6n3iwGkmG4idAJ7FJmDC3+1Ihq2SF59Su18J8Bg=
+        b=gRm3yV6GQY9vw55IpA7NKuHGZk/XH50/MCFH83q3ICw5riBF/YOesoiVzFC68633B
+         niXgwc9A1yzzPxI+19M7/rfNQuUv/M+PZ2Oi8m+uuwwcJ7BtDDVtOoiGqipkjwgglw
+         YLBcmGDXPvgEugY8L6ENtyqfdblCbIPr3lyHCj5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Dmitry V. Levin" <ldv@altlinux.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 039/200] powerpc/audit: Fix syscall_get_arch()
+        stable@vger.kernel.org, Denis Valeev <lemniscattaden@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 037/171] KVM: x86: nSVM: skip eax alignment check for non-SVM instructions
 Date:   Mon, 31 Jan 2022 11:55:02 +0100
-Message-Id: <20220131105234.870772429@linuxfoundation.org>
+Message-Id: <20220131105231.271283678@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,65 +48,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Denis Valeev <lemniscattaden@gmail.com>
 
-commit 252745240ba0ae774d2f80c5e185ed59fbc4fb41 upstream.
+commit 47c28d436f409f5b009dc82bd82d4971088aa391 upstream.
 
-Commit 770cec16cdc9 ("powerpc/audit: Simplify syscall_get_arch()")
-and commit 898a1ef06ad4 ("powerpc/audit: Avoid unneccessary #ifdef
-in syscall_get_arguments()")
-replaced test_tsk_thread_flag(task, TIF_32BIT)) by is_32bit_task().
+The bug occurs on #GP triggered by VMware backdoor when eax value is
+unaligned. eax alignment check should not be applied to non-SVM
+instructions because it leads to incorrect omission of the instructions
+emulation.
+Apply the alignment check only to SVM instructions to fix.
 
-But is_32bit_task() applies on current task while be want the test
-done on task 'task'
-
-So add a new macro is_tsk_32bit_task() to check any task.
-
-Fixes: 770cec16cdc9 ("powerpc/audit: Simplify syscall_get_arch()")
-Fixes: 898a1ef06ad4 ("powerpc/audit: Avoid unneccessary #ifdef in syscall_get_arguments()")
+Fixes: d1cba6c92237 ("KVM: x86: nSVM: test eax for 4K alignment for GP errata workaround")
+Signed-off-by: Denis Valeev <lemniscattaden@gmail.com>
+Message-Id: <Yexlhaoe1Fscm59u@q>
 Cc: stable@vger.kernel.org
-Reported-by: Dmitry V. Levin <ldv@altlinux.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/c55cddb8f65713bf5859ed675d75a50cb37d5995.1642159570.git.christophe.leroy@csgroup.eu
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/syscall.h     |    4 ++--
- arch/powerpc/include/asm/thread_info.h |    2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ arch/x86/kvm/svm/svm.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/arch/powerpc/include/asm/syscall.h
-+++ b/arch/powerpc/include/asm/syscall.h
-@@ -90,7 +90,7 @@ static inline void syscall_get_arguments
- 	unsigned long val, mask = -1UL;
- 	unsigned int n = 6;
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -2238,10 +2238,6 @@ static int gp_interception(struct kvm_vc
+ 	if (error_code)
+ 		goto reinject;
  
--	if (is_32bit_task())
-+	if (is_tsk_32bit_task(task))
- 		mask = 0xffffffff;
+-	/* All SVM instructions expect page aligned RAX */
+-	if (svm->vmcb->save.rax & ~PAGE_MASK)
+-		goto reinject;
+-
+ 	/* Decode the instruction for usage later */
+ 	if (x86_decode_emulated_instruction(vcpu, 0, NULL, 0) != EMULATION_OK)
+ 		goto reinject;
+@@ -2259,8 +2255,13 @@ static int gp_interception(struct kvm_vc
+ 		if (!is_guest_mode(vcpu))
+ 			return kvm_emulate_instruction(vcpu,
+ 				EMULTYPE_VMWARE_GP | EMULTYPE_NO_DECODE);
+-	} else
++	} else {
++		/* All SVM instructions expect page aligned RAX */
++		if (svm->vmcb->save.rax & ~PAGE_MASK)
++			goto reinject;
++
+ 		return emulate_svm_instr(vcpu, opcode);
++	}
  
- 	while (n--) {
-@@ -105,7 +105,7 @@ static inline void syscall_get_arguments
- 
- static inline int syscall_get_arch(struct task_struct *task)
- {
--	if (is_32bit_task())
-+	if (is_tsk_32bit_task(task))
- 		return AUDIT_ARCH_PPC;
- 	else if (IS_ENABLED(CONFIG_CPU_LITTLE_ENDIAN))
- 		return AUDIT_ARCH_PPC64LE;
---- a/arch/powerpc/include/asm/thread_info.h
-+++ b/arch/powerpc/include/asm/thread_info.h
-@@ -168,8 +168,10 @@ static inline bool test_thread_local_fla
- 
- #ifdef CONFIG_COMPAT
- #define is_32bit_task()	(test_thread_flag(TIF_32BIT))
-+#define is_tsk_32bit_task(tsk)	(test_tsk_thread_flag(tsk, TIF_32BIT))
- #else
- #define is_32bit_task()	(IS_ENABLED(CONFIG_PPC32))
-+#define is_tsk_32bit_task(tsk)	(IS_ENABLED(CONFIG_PPC32))
- #endif
- 
- #if defined(CONFIG_PPC64)
+ reinject:
+ 	kvm_queue_exception_e(vcpu, GP_VECTOR, error_code);
 
 

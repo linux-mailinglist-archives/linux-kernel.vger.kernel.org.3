@@ -2,107 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29EF4A434D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6704A42BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349796AbiAaLUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:20:51 -0500
-Received: from mga03.intel.com ([134.134.136.65]:8631 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244984AbiAaLKl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:10:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643627441; x=1675163441;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3Qe71J8eT5usx5RJhTq+fzVJR188euFd7ew8XpamjHc=;
-  b=ItJuix0pFVGpy3MyepBW71SfS+Oedw+cf+zfgj0GuZYvTpuh9gbUYhhq
-   c8ABdGbkY/HtITbdWqwbEevDtpXF1UbYG917RmTNgc16BxjIlkQOPbudJ
-   n4+azqT+8/RwCk50ixzdO8DcmPmUpn4UEg67EOhpkCwVWGRi3PLCyJijH
-   4cBl1vnC6RHGMYVTBfneHsSfElewjhCL+nri36TSgV0RTJdm6sdP7Rzfw
-   Jtlxq0QbVXukINZw+Mb4e7LpjDv9X5jVy+ENRjwSsjjUElt2tqk8+Qzvv
-   FEuG9toLY77AJ0hLtL6Q9LTOs7XE1mr5PlEnEmyVE2PKO8zYJe4UD2upc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247393448"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="247393448"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:08:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="675694290"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 03:08:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 13:08:37 +0200
-Date:   Mon, 31 Jan 2022 13:08:37 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] usb: ulpi: Call of_node_put correctly
-Message-ID: <YffDNS3uArqg6rm8@kuha.fi.intel.com>
-References: <20220127190004.1446909-1-sean.anderson@seco.com>
- <20220127190004.1446909-3-sean.anderson@seco.com>
+        id S1376430AbiAaLMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:12:43 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:58840 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376845AbiAaLJM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:09:12 -0500
+Date:   Mon, 31 Jan 2022 12:09:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643627350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3CXtlXLTYIfo3z5h+Q2OsJCQ12poAJsYf5yCuql9h1s=;
+        b=c+YABeix0gi4ppJRFkLpKFxjY+Ytig8FpkSfuk/SZHFOHJ1gJQsbiGwZ6nfjejBPU8ERO5
+        CYdn0GkZDT+VVJqI1WdZkpwPUQpeAi/n4+glk2vYUpuJetL9z4UGT2NCM1k/ey8x3dsRp9
+        22j7zX0gciD3hf8NQNSeO/JfDgjz1zaZ+hpQUKYpH4ZYqdfBI2wJUOWRtUSCH4Zb2PAmtN
+        ncatMzLntfDNR4ypAo4d8tRT+tx1CW0JOzEBBZf539Y0AVqw30qfM8cxcAmLcJYpBUMkVJ
+        GkpokhJd/lbvLcVc5JPDox7q2v01KvGzwvT1wi0qPHNLn0SSKDrfzERT+GrNZQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643627350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3CXtlXLTYIfo3z5h+Q2OsJCQ12poAJsYf5yCuql9h1s=;
+        b=5s9Py6ARZQ6qDeei7b7BBr531WGkrJ236qvkaU0qhDyMd7g05rEbO+FeMqY4ay3u5mDJzN
+        PY0FMItDPWWIGpAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Michael Below <below@judiz.de>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: Re: [PATCH 2/7] i2c: core: Use generic_handle_irq_safe() in
+ i2c_handle_smbus_host_notify().
+Message-ID: <YffDVXN7fGFqYs1Y@linutronix.de>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-3-bigeasy@linutronix.de>
+ <4929165.31r3eYUQgx@natalenko.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220127190004.1446909-3-sean.anderson@seco.com>
+In-Reply-To: <4929165.31r3eYUQgx@natalenko.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:00:03PM -0500, Sean Anderson wrote:
-> of_node_put should always be called on device nodes gotten from
-> of_get_*. Additionally, it should only be called after there are no
-> remaining users. To address the first issue, call of_node_put if later
-> steps in ulpi_register fail. To address the latter, call put_device if
-> device_register fails, which will call ulpi_dev_release if necessary.
-> 
-> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+On 2022-01-27 15:41:24 [+0100], Oleksandr Natalenko wrote:
+> Hello.
+Hi,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> 
+> Worth linking [1] [2] and [3] as well maybe?
 
-> ---
-> 
-> Changes in v3:
-> - Add Fixes tag
-> - Call put_device if device_register fails
-> 
-> Changes in v2:
-> - New
-> 
->  drivers/usb/common/ulpi.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-> index c90a1ab705a3..dedcb749a02f 100644
-> --- a/drivers/usb/common/ulpi.c
-> +++ b/drivers/usb/common/ulpi.c
-> @@ -245,12 +245,16 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->  		return ret;
->  
->  	ret = ulpi_read_id(ulpi);
-> -	if (ret)
-> +	if (ret) {
-> +		of_node_put(ulpi->dev.of_node);
->  		return ret;
-> +	}
->  
->  	ret = device_register(&ulpi->dev);
-> -	if (ret)
-> +	if (ret) {
-> +		put_device(&ulpi->dev);
->  		return ret;
-> +	}
->  
->  	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
->  		ulpi->id.vendor, ulpi->id.product);
-> -- 
-> 2.25.1
+no, they are fixed since commit
+   81e2073c175b8 ("genirq: Disable interrupts for force threaded handlers")
 
-thanks,
+> [1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1873673
+> [2] https://bugzilla.kernel.org/show_bug.cgi?id=202453
+> [3] https://lore.kernel.org/lkml/20201204201930.vtvitsq6xcftjj3o@spock.localdomain/
 
--- 
-heikki
+Sebastian

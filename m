@@ -2,140 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E82914A4CBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB9C4A4CC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 18:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380718AbiAaRH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 12:07:56 -0500
-Received: from mail-db8eur05on2048.outbound.protection.outlook.com ([40.107.20.48]:43744
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1380717AbiAaRHv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:07:51 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dMTVTYErgNL9FssyyX6VmLnOi7785fqpI/QVApQSqE0MJqRT8ZgrQrv+bgSPqUuICfSWVPTgfCdPuwnK7FY+c+k+o3RqOV5ic1WSoAO/lcPqlPxSp2CkVQjsonV8Zs0n45zUVM4PI1KJcD52YO2+Y1QD7FPFq/jcGo1QYZU3WuR2KNVlfRQZosCe54Vvc+VT0bL4Ph5vyTZaHIBFe3mcBrpiMB0uFauItybgnFgl467DfCLhO7SFb9/O1quQB/oCrqXDk8nnwG9GswQNeU19sk4EgYV/4GKcnHCIWvPwkZBxOQ4NlsudHjTfbaGn1loRd5rQvicXcLQoa8jEbgPH4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q/pBfhZiYvrpaI0x4KmA8dhcAGOB46eA5HOxTVlrUDw=;
- b=oJZ0uhJRn5REl75yK7EusX6wFAvXi5I32tHMVNHayupprCJFftArZKTA6NSF1JHBgPZxFWgCUT5eRkzOZMjhzRF4NjIlKNZ/Sx+zhB8aHKBe8J7HwJqm1Nruq5bGeLSUEGditdlAUPsCJDTH27Dr0i7veCCUbsiz3DTVCfJO3ukN7hHk01UktyTiEpyBNSo13pYDwz03smFSTm9mVSwRQSOy9V0GTfCb+l/XNMiAVGyZqp7PSA0JcVlN+PmZsUGSVUznhWOCMhxBx5q41GdoHXTMobAF7yeM95/3XFO6mYjVob1BxiZtHlMt1vbMGC293I4MlWTQ5YbXQPjM42qpBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q/pBfhZiYvrpaI0x4KmA8dhcAGOB46eA5HOxTVlrUDw=;
- b=SUGlt4ODR1Xsxme73cUqnYa6AegmrxdiDQrilsp0PmWaeur4E3gUgwfG3/BFYUzP8twBV3e8ULS11fMeWz3hHoCZqhQehPwTHiTnhAcaDnJpux9HEqPWcQJvA5CGe0cDbQVmdtdSTpQN3XrHgmUMhweVd06Yo9pZ9/PqhcJqkxg=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM6PR0402MB3941.eurprd04.prod.outlook.com (2603:10a6:209:23::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.21; Mon, 31 Jan
- 2022 17:07:48 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::f4d7:e110:4789:67b1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::f4d7:e110:4789:67b1%5]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 17:07:48 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "katie.morris@in-advantage.com" <katie.morris@in-advantage.com>
-Subject: Re: [RFC v6 net-next 3/9] net: mdio: mscc-miim: add local dev
- variable to cleanup probe function
-Thread-Topic: [RFC v6 net-next 3/9] net: mdio: mscc-miim: add local dev
- variable to cleanup probe function
-Thread-Index: AQHYFVv0sXEJGX07hkuoOxykEY1ac6x9X2uA
-Date:   Mon, 31 Jan 2022 17:07:48 +0000
-Message-ID: <20220131170747.kv6cudnahld3ssvq@skbuf>
-References: <20220129220221.2823127-1-colin.foster@in-advantage.com>
- <20220129220221.2823127-4-colin.foster@in-advantage.com>
-In-Reply-To: <20220129220221.2823127-4-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8b444578-a06e-4930-5e13-08d9e4dc351d
-x-ms-traffictypediagnostic: AM6PR0402MB3941:EE_
-x-microsoft-antispam-prvs: <AM6PR0402MB3941EF4DFD7DB3ABD5C1A46FE0259@AM6PR0402MB3941.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zgfbeDopT4E8m6Hz5iJVu7L7RAYbaWlX/bE4TaDWsWirjdIWHjHttrP2iElOZVAgmj2J7ZaYviMpNWVHpbn2UnOULjFsS8GBQX42pd4fVwHwcsdRPDnfd1lz3tntGGILX7iQoXIe7+hT7PQTRtIxIjLn20Jp6VjKDonsygYsu1wT9KOWzrcJ9mTvF3zSccWnWZxoJGB0AFb/qk8iwMERMshI5Ekh5auQOGg7IKPHOwYrEOi7s/fmf0oaS+ohDvmH1wRrgCH1THvtnmXVQxN35YoWBwJ9oO5lLJck7ccGXViXutlByrXgi7PeRxN05J032FJn9fdSUvLqXgMnwlO7QGB5orHq2CsH8Xoh6CaouB3YEMDFFwGgPmhnwDttKayaXL0jF0tv5YjkoNru/DA2spg0+c7vMhmjcp4hRdFp3/Rb2KWmXOR7ZR1TqbqBLAtFFtGmajoEOpvzz3peiii/mkNGq9201DQxnEwjCACHl0jeFWT8dWhLbZtVnjoaqdKYazK7nYv6EvvY9ManGiajdfrhidpqetvTqMw/6SudhlEbcTzNSRRhNrqm2JctWVZHKj6igh/llti+OCTDwPqp79118pX4gykMnLdaTZFrPXpLA8On3tRU1xeueIL7yeraiHk7Gp73U58JEbD0+bOmwMOo7OFmKDudu68QXHl7jIbwcbPIaL5vEDiXN24SJbW9BFTr306TudtPPcJ2oefUbQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(1076003)(186003)(86362001)(66556008)(71200400001)(83380400001)(26005)(7416002)(5660300002)(44832011)(76116006)(66946007)(33716001)(66476007)(66446008)(64756008)(4326008)(38070700005)(122000001)(508600001)(2906002)(8676002)(8936002)(6916009)(6486002)(6506007)(6512007)(38100700002)(9686003)(558084003)(54906003)(316002)(91956017)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zyS/rYZK6SrvBZpwoJM+txBgjjau3Ykg7eTNUqufNd6O2xjXihJUM2Ax29KX?=
- =?us-ascii?Q?8sSDEIyUECj6haOwfz4KKAMrHFqVOGkYiI97nwCx/O1wUqLj0nsuliNqhVhW?=
- =?us-ascii?Q?j2Q+WEIMOQYP1jbr+0vqRfXWxp7KKI8Ch7rnmaFyaZvBQYdss8nI4oUNqz13?=
- =?us-ascii?Q?Q4So2rBVaiFEp9CZHsgwIQoyKjPipwY/YUqUHR6+nbtxuAioQgGENw2tKOeC?=
- =?us-ascii?Q?nIJ8WHfebGqlH13jyJJ5Vh8edWw7HAZSINHgDQsVAFnej4pQu+jpi7VkFfAN?=
- =?us-ascii?Q?8ug1oV14rhcwd4s5Xex4k+4kQ0wlcL5BdRV+A3yQxQHhFaCEP3ooP0o80Evt?=
- =?us-ascii?Q?tcaxYgY+xqSiMEGYais7uaEuXR/ud2NCloXCAdj95UsbVeGncHUjtmanslw7?=
- =?us-ascii?Q?ug5+2ZnSaQnIQKB8ej+fYiLA3FF/UYkjPWZpyxJSIxfKqdqvlZruS/3ChjCI?=
- =?us-ascii?Q?hVZx4mbI3K06wTIFFOHjA0bGX4TABWyBbRKKvqFLPV41zcMlijrftCILKTrV?=
- =?us-ascii?Q?e0E2mqEoP4dpN61TW4AohCOObSEgX0H84ae4OFDOj6+u9xImk+b5NTUPlSYw?=
- =?us-ascii?Q?jcGOp5t9aamqY13zJIwsWaxi70hmYsSHdKhu2kYrPcLq6J8um/ghI54+ARSl?=
- =?us-ascii?Q?Oog/dDRD5o/GslHg6Pr/T1ofg4YyZCPonEfHxBaBd+RJUsWWqGAj36JSSu9r?=
- =?us-ascii?Q?K99p+4KQD3HuD5Gu8bNvqiokv1/Co2FjiSzIjtLkB4g6K1sDNm0ougytGRBV?=
- =?us-ascii?Q?CEphyESu3eBlX2KhubcbSZyAs+I/P0THtFT+TsvQMWPB0dyvq443cy9sAjNF?=
- =?us-ascii?Q?H3bIeMwET1hDjrZ1wWm15F+0EpPHOUtToOR5cDSeG5IkHj/4/gxTshMpWGV1?=
- =?us-ascii?Q?DspB1l2mtyBOhUotUFZSgGDvqMRzgSra9r3RpXBHi/rA44KzflMysDvCSkkH?=
- =?us-ascii?Q?8XUQ1O7Q/l8a8o7BmFwRaZPH+2dZIsrv/JRNDi5KJQS2RfncUS2TbGzfHtZt?=
- =?us-ascii?Q?USXbxZQJHoCe6vGSjzmMdtp5lJu2dF8tARzymtO1BctYmQgTPtow4YuWSagw?=
- =?us-ascii?Q?fOw3yWE38bwKaCdddTYth+J6dTptNj5MsqyKkcF5oP6WqvWKc9SwnG7gEEGr?=
- =?us-ascii?Q?vd8e+9BSeZG5yQUr45dFf85iM3tpJAyqcZVQHcGqknF8Ay2cAE/gMVdjW09/?=
- =?us-ascii?Q?i9YjtywnzZPBBRSAaRLHIM0BqvkZel6UyfjhYxjZPiLBQbh2aT5JRiis/S/2?=
- =?us-ascii?Q?pXJgxf9QRSY8lakOoa6Cxd2REHrPPtM3TKt5bO+rlOZcJl6TzaZJS2q18Qaa?=
- =?us-ascii?Q?D4dqy7FrzX1qC4PGpxVCeBPROFdatEwwaWTRJ1XVO9AAMVPk/wfOmruC4uaN?=
- =?us-ascii?Q?4kw4SB+pdYzy4xhvgpaciFULIrlpUBEwXM5z7AM8RFq4zUl2IPF1QBB/YeSF?=
- =?us-ascii?Q?xyvNHcIsZmbvn05iILL83vCRhGt5isKA192gkYJQ02NTCM6+205QVPXLBUaN?=
- =?us-ascii?Q?LGhb9Zmcr/tbRtm95SLbnPgv+xWnSWo2JZU2lhRbEdcKkMQfkiiDHx0gMLmf?=
- =?us-ascii?Q?mVDSsIhK44H/lu7NPlEWNqe2jNKVvh83I3KEQkATNkzO2N6sUjiJlMiATEkI?=
- =?us-ascii?Q?ADCz2+szw3NNJAs+9SUBh9E=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <BB70584662C622438793E0C307BA6C8D@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1380725AbiAaRIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 12:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380729AbiAaRIJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 12:08:09 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A4BC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:08:08 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id t14so20288071ljh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 09:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/EaEyhzCIbFmfpodVJ7dpacp2ypf7n4AgPuvkTEGOOY=;
+        b=tUT4f9kYXLCkyG9XMROhPCHEj/blRGVVztFd+cV7Mx2DGtlcl8PBHZslsSYiO6TwmQ
+         e4D7YIygY66wgIphUWZBHxKmZs6LURwhSHNGVWYIHWSMasjL5bUGfInGWWPQhKPY9W6z
+         tQUJBeM+P3Yju8UJEvN5XiSZhNRXjccyLleTpYn0ipKdIXeORBzaExfcb0PgoVef2+om
+         KGVNrAo6flepE1iE0JgLQw0l9CXpjUdLUMzV0/wfilFsqhvjOi/OeHjnzljdIhfaDlO2
+         EPTgGcZOmoc9tsKYwqzYJTeMnyIDifwgAlN9JQQ7MbU9Zx66FuKRi1T6swFVOOzoi0gc
+         482g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/EaEyhzCIbFmfpodVJ7dpacp2ypf7n4AgPuvkTEGOOY=;
+        b=AYIs/ROJFjY6Yc1hFsfNtaEbD5Q7RxmoJaZ9G0nn0Ll+l2TXIbfla2wumPBJVrPb2W
+         zv6iYu3r6x+Jg+xBiNmMGlo9HJyr6MQ/dTWiKPf/FMLv+tKSNz6HpGksRGEFgA/c+jH8
+         3mqOec/RxxOy+i+j+DmptM7omQoWoldT20+njBqrIAg6GJ6W/zRWV2tozOG/joHiNuv/
+         Zf9EJJirKY6x++dgFw9DGH/z6ULvPU6b+fcJKwmjUAfbumVi56IX6DTZy7zQ71YpAiqw
+         MNeKU8oY7XndXlkZ5VjLLbR+vacHP2jz/4FaCwzpXAHcKTa623NBu9cBQRFqvdjdZ0S0
+         LzqA==
+X-Gm-Message-State: AOAM530nfKYYxaqX0Ch3+8DXiR1NWwWI1zIh3Cy4yfnrzOAqY/myBY2h
+        diROn2syuZJQQRIycRUf6n9Lj9KlRLTlZg==
+X-Google-Smtp-Source: ABdhPJzmrb4zy6Nh2fq3C0Gxf2HNJj9/nitZcM9OhiZ9fF07QxAg1rXwYAgYRfxqDdzLQA/Cxlb48g==
+X-Received: by 2002:a2e:3509:: with SMTP id z9mr14239807ljz.488.1643648887038;
+        Mon, 31 Jan 2022 09:08:07 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f11sm2799798lfg.132.2022.01.31.09.08.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 09:08:06 -0800 (PST)
+Message-ID: <29240a62-c498-0fe6-221f-64177750ac35@linaro.org>
+Date:   Mon, 31 Jan 2022 20:08:05 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b444578-a06e-4930-5e13-08d9e4dc351d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 17:07:48.3441
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rvwbz/XSvmWw2XvDBFXYNYmYWZnq815sK5jMHhjGJRCcrt0GsCiw2HQkCzDmK26SgExUE8W1+AS0CPBypdFfvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3941
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [v5 3/3] drm/msm/dsi: Add 10nm dsi phy tuning configuration
+ support
+Content-Language: en-GB
+To:     Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
+        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
+        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
+        jonathan@marek.ca, airlied@linux.ie, daniel@ffwll.ch,
+        swboyd@chromium.org
+References: <1643573719-32095-1-git-send-email-quic_rajeevny@quicinc.com>
+ <1643573719-32095-4-git-send-email-quic_rajeevny@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1643573719-32095-4-git-send-email-quic_rajeevny@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 02:02:15PM -0800, Colin Foster wrote:
-> Create a local device *dev in order to not dereference the platform_devic=
-e
-> several times throughout the probe function.
->=20
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
+On 30/01/2022 23:15, Rajeev Nandan wrote:
+> The clock and data lanes of the DSI PHY have a calibration circuitry
+> feature. As per the MSM DSI PHY tuning guidelines, the drive strength
+> tuning can be done by adjusting rescode offset for hstop/hsbot, and
+> the drive level tuning can be done by adjusting the LDO output level
+> for the HSTX drive.
+> 
+> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>=
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+> 
+> Changes in v2:
+>   - Split into generic code and 10nm-specific part (Dmitry Baryshkov)
+>   - Fix the backward compatibility (Dmitry Baryshkov)
+> 
+> Changes in v3:
+>   - Address comments for phy tuning data structure (Dmitry Baryshkov)
+>   - Make changes as per updated dt-bindings
+> 
+> Changes in v4:
+>   - Return error in case of out of range values (Dmitry Baryshkov)
+>   - Return error if dt property is present but parsing is failing
+> 
+> Changes in v5:
+>   - Added missing printk arg ldo_level
+> 
+> 
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c | 118 +++++++++++++++++++++++++++--
+>   1 file changed, 112 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> index d8128f5..86a6954 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> @@ -83,6 +83,18 @@ struct dsi_pll_10nm {
+>   
+>   #define to_pll_10nm(x)	container_of(x, struct dsi_pll_10nm, clk_hw)
+>   
+> +/**
+> + * struct dsi_phy_10nm_tuning_cfg - Holds 10nm PHY tuning config parameters.
+> + * @rescode_offset_top: Offset for pull-up legs rescode.
+> + * @rescode_offset_bot: Offset for pull-down legs rescode.
+> + * @vreg_ctrl: vreg ctrl to drive LDO level
+> + */
+> +struct dsi_phy_10nm_tuning_cfg {
+> +	u8 rescode_offset_top[DSI_LANE_MAX];
+> +	u8 rescode_offset_bot[DSI_LANE_MAX];
+> +	u8 vreg_ctrl;
+> +};
+> +
+>   /*
+>    * Global list of private DSI PLL struct pointers. We need this for bonded DSI
+>    * mode, where the master PLL's clk_ops needs access the slave's private data
+> @@ -747,6 +759,7 @@ static void dsi_phy_hw_v3_0_lane_settings(struct msm_dsi_phy *phy)
+>   	int i;
+>   	u8 tx_dctrl[] = { 0x00, 0x00, 0x00, 0x04, 0x01 };
+>   	void __iomem *lane_base = phy->lane_base;
+> +	struct dsi_phy_10nm_tuning_cfg *tuning_cfg = phy->tuning_cfg;
+>   
+>   	if (phy->cfg->quirks & DSI_PHY_10NM_QUIRK_OLD_TIMINGS)
+>   		tx_dctrl[3] = 0x02;
+> @@ -775,10 +788,13 @@ static void dsi_phy_hw_v3_0_lane_settings(struct msm_dsi_phy *phy)
+>   		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG2(i), 0x0);
+>   		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG3(i),
+>   			      i == 4 ? 0x80 : 0x0);
+> -		dsi_phy_write(lane_base +
+> -			      REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i), 0x0);
+> -		dsi_phy_write(lane_base +
+> -			      REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i), 0x0);
+> +
+> +		/* platform specific dsi phy drive strength adjustment */
+> +		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i),
+> +				tuning_cfg->rescode_offset_top[i]);
+> +		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i),
+> +				tuning_cfg->rescode_offset_bot[i]);
+> +
+>   		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_TX_DCTRL(i),
+>   			      tx_dctrl[i]);
+>   	}
+> @@ -799,6 +815,7 @@ static int dsi_10nm_phy_enable(struct msm_dsi_phy *phy,
+>   	u32 const timeout_us = 1000;
+>   	struct msm_dsi_dphy_timing *timing = &phy->timing;
+>   	void __iomem *base = phy->base;
+> +	struct dsi_phy_10nm_tuning_cfg *tuning_cfg = phy->tuning_cfg;
+>   	u32 data;
+>   
+>   	DBG("");
+> @@ -834,8 +851,9 @@ static int dsi_10nm_phy_enable(struct msm_dsi_phy *phy,
+>   	/* Select MS1 byte-clk */
+>   	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_GLBL_CTRL, 0x10);
+>   
+> -	/* Enable LDO */
+> -	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL, 0x59);
+> +	/* Enable LDO with platform specific drive level/amplitude adjustment */
+> +	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL,
+> +		      tuning_cfg->vreg_ctrl);
+>   
+>   	/* Configure PHY lane swap (TODO: we need to calculate this) */
+>   	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_LANE_CFG0, 0x21);
+> @@ -922,6 +940,92 @@ static void dsi_10nm_phy_disable(struct msm_dsi_phy *phy)
+>   	DBG("DSI%d PHY disabled", phy->id);
+>   }
+>   
+> +static int dsi_10nm_phy_parse_dt(struct msm_dsi_phy *phy)
+> +{
+> +	struct device *dev = &phy->pdev->dev;
+> +	struct dsi_phy_10nm_tuning_cfg *tuning_cfg;
+> +	s8 offset_top[DSI_LANE_MAX] = { 0 }; /* No offset */
+> +	s8 offset_bot[DSI_LANE_MAX] = { 0 }; /* No offset */
+> +	u32 ldo_level = 400; /* 400mV */
+> +	u8 level;
+> +	int ret, i;
+> +
+> +	tuning_cfg = devm_kzalloc(dev, sizeof(*tuning_cfg), GFP_KERNEL);
+> +	if (!tuning_cfg)
+> +		return -ENOMEM;
+> +
+> +	/* Drive strength adjustment parameters */
+> +	ret = of_property_read_u8_array(dev->of_node, "qcom,phy-rescode-offset-top",
+> +					offset_top, DSI_LANE_MAX);
+> +	if (ret && ret != -EINVAL) {
+> +		DRM_DEV_ERROR(dev, "failed to parse qcom,phy-rescode-offset-top, %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	for (i = 0; i < DSI_LANE_MAX; i++) {
+> +		if (offset_top[i] < -32 || offset_top[i] > 31) {
+> +			DRM_DEV_ERROR(dev,
+> +				"qcom,phy-rescode-offset-top value %d is not in range [-32..31]\n",
+> +				offset_top[i]);
+> +			return -EINVAL;
+> +		}
+> +		tuning_cfg->rescode_offset_top[i] = 0x3f & offset_top[i];
+> +	}
+> +
+> +	ret = of_property_read_u8_array(dev->of_node, "qcom,phy-rescode-offset-bot",
+> +					offset_bot, DSI_LANE_MAX);
+> +	if (ret && ret != -EINVAL) {
+> +		DRM_DEV_ERROR(dev, "failed to parse qcom,phy-rescode-offset-bot, %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	for (i = 0; i < DSI_LANE_MAX; i++) {
+> +		if (offset_bot[i] < -32 || offset_bot[i] > 31) {
+> +			DRM_DEV_ERROR(dev,
+> +				"qcom,phy-rescode-offset-bot value %d is not in range [-32..31]\n",
+> +				offset_bot[i]);
+> +			return -EINVAL;
+> +		}
+> +		tuning_cfg->rescode_offset_bot[i] = 0x3f & offset_bot[i];
+> +	}
+> +
+> +	/* Drive level/amplitude adjustment parameters */
+> +	ret = of_property_read_u32(dev->of_node, "qcom,phy-drive-ldo-level", &ldo_level);
+> +	if (ret && ret != -EINVAL) {
+> +		DRM_DEV_ERROR(dev, "failed to parse qcom,phy-drive-ldo-level, %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	switch (ldo_level) {
+> +	case 375:
+> +		level = 0;
+> +		break;
+> +	case 400:
+> +		level = 1;
+> +		break;
+> +	case 425:
+> +		level = 2;
+> +		break;
+> +	case 450:
+> +		level = 3;
+> +		break;
+> +	case 475:
+> +		level = 4;
+> +		break;
+> +	case 500:
+> +		level = 5;
+> +		break;
+> +	default:
+> +		DRM_DEV_ERROR(dev, "qcom,phy-drive-ldo-level %d is not supported\n", ldo_level);
+> +		return -EINVAL;
+> +	}
+> +	tuning_cfg->vreg_ctrl = 0x58 | (0x7 & level);
+> +
+> +	phy->tuning_cfg = tuning_cfg;
+> +
+> +	return 0;
+> +}
+> +
+>   const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
+>   	.has_phy_lane = true,
+>   	.reg_cfg = {
+> @@ -936,6 +1040,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
+>   		.pll_init = dsi_pll_10nm_init,
+>   		.save_pll_state = dsi_10nm_pll_save_state,
+>   		.restore_pll_state = dsi_10nm_pll_restore_state,
+> +		.parse_dt_properties = dsi_10nm_phy_parse_dt,
+>   	},
+>   	.min_pll_rate = 1000000000UL,
+>   	.max_pll_rate = 3500000000UL,
+> @@ -957,6 +1062,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
+>   		.pll_init = dsi_pll_10nm_init,
+>   		.save_pll_state = dsi_10nm_pll_save_state,
+>   		.restore_pll_state = dsi_10nm_pll_restore_state,
+> +		.parse_dt_properties = dsi_10nm_phy_parse_dt,
+>   	},
+>   	.min_pll_rate = 1000000000UL,
+>   	.max_pll_rate = 3500000000UL,
+
+
+-- 
+With best wishes
+Dmitry

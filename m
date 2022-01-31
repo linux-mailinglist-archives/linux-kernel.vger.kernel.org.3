@@ -2,226 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ECA4A4FFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CCB4A5001
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378462AbiAaUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S1378531AbiAaURi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357590AbiAaUQy (ORCPT
+        with ESMTP id S229577AbiAaURc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:16:54 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F513C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:16:54 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id j2so28937313edj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:16:54 -0800 (PST)
+        Mon, 31 Jan 2022 15:17:32 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ECBC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:17:31 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id f10so2785611lfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ElmqSwJVBzLRdymkidLRHU92c3XiMz6dPagZM80K0VM=;
-        b=H/PSQTAsEACoMYEshXq8nQnD+1aZ4zyKYG5vwkTo1FvN1Ru50ymHVzLdQip+RmCavm
-         dHZuVl2jm7lyi3IiEcW2uaKAQj7VlDVKJfxr2fSJyt6lPYAyBzdYWd6ks7vk02hMuO9i
-         tGZcAN0YaDapIsGJywltkf/jWtgmwkmlPUa4vTdqX92vZQKCc5748rt/ATy9ZewIBnt3
-         o1WqRaTl0OgFZQKGQKEfPKfGP3THlckNA/bIp8qLv0ls0IrrIlw7hWXbwU4GBUlcLus1
-         LVYvIbIjdnAWinqgnakZCdtR/ZgY9obqZYeTp2eCGhHQDzk4ggEN7evAnzJlmswSAq6z
-         62zg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O6VKZKKyIdq3g+N3XZft2261A1LgNMUgx3vPs4xCSjk=;
+        b=Ah2Yd3veC2m6f5T/74U0jzdt0p5btJfuVBmFunyJcgq6TLZhhdiAMr4076jXVS+Yz9
+         qCu1ElnK6NiB3/LI7/jleMqqHvPRLnco5pHWhJc5hGvkizGxCt1raOWk9vnmVH2wE7ln
+         y5Qc+gnNzIZP93NBdZOOtNmKhWedE8+uzDGzpozmLA/bG7jDVgONjirc+PC2rbayiXVL
+         eBe8WvWc/wRLJ0eCgWLAOSKQOeF4iSnOJDh9adtd5XTmIV3JZRQZFmTzCuf8t+0ah7E/
+         WimPA8ajzuB1eKEWuWLmKCPYT7wchEMba8WWdTbP1hD0379uab4QSmuthRFt+z7Y4T+d
+         qF8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ElmqSwJVBzLRdymkidLRHU92c3XiMz6dPagZM80K0VM=;
-        b=RFGRWn6I5VI0yTumXYF3UvYmRKTihQN34b77LGq/8teoVk7LZN0ges7ekZ3GOrhHwy
-         QueBjJU93LL7H6pPodRYR5k56k3ql/nBdgX2e5LssDknYy7z2pgE/R54eK7/xIGnf42q
-         Uw0hUO+2601jBt7larZKuKys20yeb32kAPUSIcI1QCjNy30BrGd38umhyt6LUtnweIjI
-         HIQsZq7dycpm7CQtjNVrNehQGMd7653v1gny/wcxn+DeAjbCwHBVHNF4YtTq9f4CpN/O
-         kI9RnPEcdks1l1E7kUDYLBeX7jtuMBs0NVDEEyAC1iYHL80/8uibrIkvoD6Rm8bPl/LG
-         HyNA==
-X-Gm-Message-State: AOAM531nHMVkomD3cKPKAzb9UrLo8vKP/qFNxq4s92Iq7XSlQybUvmN5
-        7tfWjgGYZUHQwZfFLwNnfu01LZY7ehjD2kF0PRyYYh3qRn5j7w==
-X-Google-Smtp-Source: ABdhPJzIUUl4G7WdUAaKdggGxBgr9xFsU/swK9Lwj1faVqVpZADzA4uf+/PiLpoBz5BxXrjGBpsEUTfN2wzTZ22Ou64=
-X-Received: by 2002:aa7:c497:: with SMTP id m23mr22423562edq.72.1643660213057;
- Mon, 31 Jan 2022 12:16:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20220126183637.1840960-1-pasha.tatashin@soleen.com>
- <20220126183637.1840960-5-pasha.tatashin@soleen.com> <CAAPL-u-yo4LuFdudYMEccUYTOMpvnqEjzMZRjOhUBkR4t=BSDw@mail.gmail.com>
-In-Reply-To: <CAAPL-u-yo4LuFdudYMEccUYTOMpvnqEjzMZRjOhUBkR4t=BSDw@mail.gmail.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 31 Jan 2022 15:16:15 -0500
-Message-ID: <CA+CK2bDYhzQ7wP0Ef3n6YGDo2=C0cdhYnEq9XkbOGzPKBp4SSQ@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] mm/page_table_check: check entries at pmd levels
-To:     Wei Xu <weixugc@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O6VKZKKyIdq3g+N3XZft2261A1LgNMUgx3vPs4xCSjk=;
+        b=Hgz6W67wAH5KhvFp0dcTxydK9g5HHq/cznz5IrwVZu14fZiwJP5oPPgiMcbudVY1wh
+         5qwHEzk07Jc+hOz1hCi9SRrJK0KtijfGcet4/8iS4dHHkz0OmtF787Wdk0dgdsxVWMKa
+         0rnQbkcKg11mGCJlBOAqKJGKf/R5cSIwazADxi9IXsVrxxxMMIqXTQiPB3isjAf6XZUb
+         B9gjgqMZCgmntF+ZFDTDA8MVhQt/usQzfqIOZ0OGNXqP2Fjbx+LXKYb/l5gbeYlAVZsX
+         saps1pxaBS7aXEr9bmXIhLRf0Rge0rrxw4nlkrrw6bP4XWb4RQQ3F/uBrwW00TSABOD6
+         Zuog==
+X-Gm-Message-State: AOAM533trv0oNuundMrMM/DdUMWa3p1t/Qnf2RuQ/mTO72lJsQBBQTFM
+        iNv+L5Hjgg6Bu6jCBK38w3hg3WtsKaCciw==
+X-Google-Smtp-Source: ABdhPJwV8qrc6QshCj8tZe21mpS37iIzE87HOLv6hPeoS3poaA3jb2sBvRLSm2nL4cLbT9FSHffHMw==
+X-Received: by 2002:a05:6512:76:: with SMTP id i22mr17083107lfo.294.1643660249254;
+        Mon, 31 Jan 2022 12:17:29 -0800 (PST)
+Received: from localhost ([146.66.199.134])
+        by smtp.gmail.com with ESMTPSA id d25sm1348810lfe.297.2022.01.31.12.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 12:17:28 -0800 (PST)
+From:   Azat Khuzhin <a3at.mail@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Azat Khuzhin <a3at.mail@gmail.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Song Liu <songliubraving@fb.com>,
         David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, Greg Thelen <gthelen@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Fusion Future <qydwhotmail@gmail.com>,
-        Hugh Dickins <hughd@google.com>, Zi Yan <ziy@nvidia.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ian Rogers <irogers@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "H . J . Lu" <hjl.tools@gmail.com>
+Subject: [PATCH] fs/binfmt_elf: use ELF_ET_DYN_BASE for PIE (ET_DYN with INTERP) binaries
+Date:   Mon, 31 Jan 2022 23:17:16 +0300
+Message-Id: <20220131201716.5198-1-a3at.mail@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 6:39 PM Wei Xu <weixugc@google.com> wrote:
->
-> On Wed, Jan 26, 2022 at 10:36 AM Pasha Tatashin
-> <pasha.tatashin@soleen.com> wrote:
-> >
-> > syzbot detected a case where the page table counters were not properly
-> > updated.
-> >
-> > syzkaller login:  ------------[ cut here ]------------
-> > kernel BUG at mm/page_table_check.c:162!
-> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 0 PID: 3099 Comm: pasha Not tainted 5.16.0+ #48
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO4
-> > RIP: 0010:__page_table_check_zero+0x159/0x1a0
-> > Code: 7d 3a b2 ff 45 39 f5 74 2a e8 43 38 b2 ff 4d 85 e4 01
-> > RSP: 0018:ffff888010667418 EFLAGS: 00010293
-> > RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000
-> > RDX: ffff88800cea8680 RSI: ffffffff81becaf9 RDI: 0000000003
-> > RBP: ffff888010667450 R08: 0000000000000001 R09: 0000000000
-> > R10: ffffffff81becaab R11: 0000000000000001 R12: ffff888008
-> > R13: 0000000000000001 R14: 0000000000000200 R15: dffffc0000
-> > FS:  0000000000000000(0000) GS:ffff888035e00000(0000) knlG0
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007ffd875cad00 CR3: 00000000094ce000 CR4: 0000000000
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000
-> > Call Trace:
-> >  <TASK>
-> >  free_pcp_prepare+0x3be/0xaa0
-> >  free_unref_page+0x1c/0x650
-> >  ? trace_hardirqs_on+0x6a/0x1d0
-> >  free_compound_page+0xec/0x130
-> >  free_transhuge_page+0x1be/0x260
-> >  __put_compound_page+0x90/0xd0
-> >  release_pages+0x54c/0x1060
-> >  ? filemap_remove_folio+0x161/0x210
-> >  ? lock_downgrade+0x720/0x720
-> >  ? __put_page+0x150/0x150
-> >  ? filemap_free_folio+0x164/0x350
-> >  __pagevec_release+0x7c/0x110
-> >  shmem_undo_range+0x85e/0x1250
-> > ...
-> >
-> > The repro involved having a huge page that is split due to uprobe event
-> > temporarily replacing one of the pages in the huge page. Later the huge
-> > page was combined again, but the counters were off, as the PTE level
-> > was not properly updated.
-> >
-> > Make sure that when PMD is cleared and prior to freeing the level the
-> > PTEs are updated.
-> >
-> > Fixes: df4e817b7108 ("mm: page table check")
-> >
-> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> >  include/linux/page_table_check.h | 18 ++++++++++++++++++
-> >  mm/khugepaged.c                  |  3 +++
-> >  mm/page_table_check.c            | 21 +++++++++++++++++++++
-> >  3 files changed, 42 insertions(+)
-> >
-> > diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
-> > index 38cace1da7b6..e88bbe37727b 100644
-> > --- a/include/linux/page_table_check.h
-> > +++ b/include/linux/page_table_check.h
-> > @@ -26,6 +26,8 @@ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
-> >                                 pmd_t *pmdp, pmd_t pmd);
-> >  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
-> >                                 pud_t *pudp, pud_t pud);
-> > +void __page_table_check_pmd_clear_full(struct mm_struct *mm, unsigned long addr,
-> > +                                      pmd_t pmd);
-> >
-> >  static inline void page_table_check_alloc(struct page *page, unsigned int order)
-> >  {
-> > @@ -100,6 +102,16 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
-> >         __page_table_check_pud_set(mm, addr, pudp, pud);
-> >  }
-> >
-> > +static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
-> > +                                                  unsigned long addr,
-> > +                                                  pmd_t pmd)
-> > +{
-> > +       if (static_branch_likely(&page_table_check_disabled))
-> > +               return;
-> > +
-> > +       __page_table_check_pmd_clear_full(mm, addr, pmd);
-> > +}
-> > +
-> >  #else
-> >
-> >  static inline void page_table_check_alloc(struct page *page, unsigned int order)
-> > @@ -143,5 +155,11 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
-> >  {
-> >  }
-> >
-> > +static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
-> > +                                                  unsigned long addr,
-> > +                                                  pmd_t pmd)
-> > +{
-> > +}
-> > +
-> >  #endif /* CONFIG_PAGE_TABLE_CHECK */
-> >  #endif /* __LINUX_PAGE_TABLE_CHECK_H */
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index 30e59e4af272..d84977c6dc0d 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/hashtable.h>
-> >  #include <linux/userfaultfd_k.h>
-> >  #include <linux/page_idle.h>
-> > +#include <linux/page_table_check.h>
-> >  #include <linux/swapops.h>
-> >  #include <linux/shmem_fs.h>
-> >
-> > @@ -1422,10 +1423,12 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
-> >         spinlock_t *ptl;
-> >         pmd_t pmd;
-> >
-> > +       mmap_assert_write_locked(mm);
-> >         ptl = pmd_lock(vma->vm_mm, pmdp);
-> >         pmd = pmdp_collapse_flush(vma, addr, pmdp);
-> >         spin_unlock(ptl);
-> >         mm_dec_nr_ptes(mm);
-> > +       page_table_check_pmd_clear_full(mm, addr, pmd);
->
+Since 9630f0d60fec ELF_ET_DYN_BASE is not used as a load_bias anymore
+and this breaks PIE binaries, since after this change data segment
+became too nearby the stack:
 
-Hi Wei,
+Before 9630f0d60fec:
 
-Thank you for your feedback,
+    $ strace -febrk /tmp/test-stack |& head
+    brk(NULL)                               = 0x555555559000
+    $ /tmp/test-stack
+    bottom_of_stack = 0x7fffffffc5c0
+    recursion depth: 1 (stack diff: 32)
+    ...
+    recursion depth: 7690 (stack diff: 8365664)
+    Segmentation fault (core dumped)
 
-> pmdp_collapse_flush() already calls page_table_check_pmd_clear() via
-> pmdp_huge_get_and_clean().  Both pmdp_table_check_pmd_clear() and
-> page_table_check_pmd_clear_full() can call
-> __page_table_check_pmd_clear(). If that happens, then the page table
-> check counters can be messed up.  Certainly, there is no bug here
-> because the pmd is not huge and __page_table_check_pmd_clear() should
-> be skipped in both calls. But it would be better to avoid this
-> unnecessary subtlety by renaming page_table_check_pmd_clear_full() to
-> page_table_check_clear_pte_range() and not calling
-> __page_table_check_pmd_clear() there.  To make the code even more
+After 9630f0d60fec:
 
-Makes sense, I will rename page_table_check_pmd_clear_full() to
-page_table_check_clear_pte_range()
-and remove the call to __page_table_check_pmd_clear().
+    $ strace -ebrk /tmp/test-stack  |& head
+    brk(NULL)                               = 0x7ffff7fff000
 
-> clear, __page_table_check_pmd_clear() can also be renamed as
-> __page_table_check_huge_pmd_clear() (similar for its callers).
+    $ /tmp/test-stack
+    bottom_of_stack = 0x7fffffffc640
+    recursion depth: 1 (stack diff: 32)
+    ...
+    recursion depth: 146 (stack diff: 157792)
+    Segmentation fault (core dumped)
 
-Let's keep the current names for now as this does not affect the bug
-fix. Perhaps, I can rename it later when working on ARM64 support.
+Found this during compiling with clang, that started to randomly
+SIGSEGV when it eats some heap.
 
-Pasha
+Reproducer:
+
+    #include <stdio.h>
+    #include <stddef.h>
+    #include <stdlib.h>
+
+    static int depth = 0;
+    static void* bottom_of_stack;
+
+    int inner()
+    {
+    	char buffer[1024];
+    	ptrdiff_t diff;
+    	int ret;
+
+    	++depth;
+    	diff = bottom_of_stack - __builtin_frame_address(0);
+
+    	fprintf(stderr,
+    		"recursion depth: %i (stack diff: %zu)\n",
+    		depth, (size_t)diff);
+
+    	for (size_t i = 0; i < 1024; ++i)
+    		ret += buffer[i];
+
+    	ret += inner();
+
+    	return ret;
+    }
+
+    int main()
+    {
+    	for (size_t size = 0; size < 128<<20; size += 16<<10)
+    		malloc(16<<10);
+
+    	bottom_of_stack = __builtin_frame_address(0);
+    	fprintf(stderr, "bottom_of_stack = %p\n", bottom_of_stack);
+    	inner();
+    }
+
+Fixes: 9630f0d60fec ("fs/binfmt_elf: use PT_LOAD p_align values for static PIE")
+Signed-off-by: Azat Khuzhin <a3at.mail@gmail.com>
+Cc: Chris Kennelly <ckennelly@google.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: H.J. Lu <hjl.tools@gmail.com>
+---
+ fs/binfmt_elf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 605017eb9349..9e11e6f13e83 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1117,7 +1117,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 			 * without MAP_FIXED nor MAP_FIXED_NOREPLACE).
+ 			 */
+ 			alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
+-			if (alignment > ELF_MIN_ALIGN) {
++			if (interpreter || alignment > ELF_MIN_ALIGN) {
+ 				load_bias = ELF_ET_DYN_BASE;
+ 				if (current->flags & PF_RANDOMIZE)
+ 					load_bias += arch_mmap_rnd();
+-- 
+2.35.1
+

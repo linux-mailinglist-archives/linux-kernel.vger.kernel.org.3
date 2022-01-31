@@ -2,177 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B074A3E19
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C7D4A3E1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357884AbiAaHLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 02:11:30 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:6458 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357875AbiAaHLW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:11:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643613082; x=1675149082;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=28D6/WwhC1f7LUnDeETQVtrJxEJQlhfekiMeg8dltgM=;
-  b=0+SXgdeuPVhM5tkbb4IrtYxTH1yF7oKX9Xns16S/k2St1avqIaeJIJp6
-   9GvU2onh70rW6j5c3nLmxHBItTRjCp6k0iU4GxynLPPh159yQWoO8yC2b
-   ABfJuWLnUJgHCGoXXdNw5H5amW9kwuI2p/zHs5rmFVMNfpUnBYw+aSzep
-   WnvsDKert3SZe8EHxZMKt6A+LqVajWkJoKjgKvDMRF6YMfM0gFTLB9tZD
-   yCfnzdsNp/2KmxI1dKeTQAR774nlNYtobLKeC2tRQyF/7Wp4TgmXVkeXC
-   0gehYeeeuIsGWIr/LUfH67gMSPCNaXB2famtBg2eg0BiaO+fcSWfJgX9S
-   g==;
-IronPort-SDR: fZ0F1MF4oahw3gYltyy2Dn57gl5j8WZMrkRQPjG4q32F3E3T4GHdu1lqJrwgCQdI8HMtWEZrOq
- Wo0GcBJ8946I3lR1W97tj7Y37lwDsFT1bSc8dNoRazWz4fHgq4VBwLySWMWlTe4lb1J4wNfpUX
- Y3a9O6FqQc28slBIGON3zTiDlayg/HOXX7WDo+hsrxobG0wOToT9OBoGBzDLWu4UjiFIONAkjx
- 1QcqDgnnNosSINiGdn4bUGyZpvoxw6R3LC1dJTkKOZDN3s2voC2BsF0Pmu4DfKoL3b8kGX5TMB
- hgK27btEZVJ4b/FfvdChRu/2
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="84161889"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Jan 2022 00:11:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 31 Jan 2022 00:11:20 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 31 Jan 2022 00:11:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wz2pezIzLh0cL9wiC6hAMrcwrpMhoN8Yed44ncvoRnP7yoyvmxSjweGoutPn1Wm7ky3E8RTXFLtTCItdVzQPV5uKLu3uQOQAfxf4RBykGQPGpFioMkm9Rg2ZD9ah2N1+CwdvI5HKe5hbKcJGQBxWY5tZccKoB8yMWjcE+qADTUDEHUAlE1Fk0WSV5kYtM2o5J5Rros5XLNBds+hgKq0MQAWA4DR8UDptuSExYokLS151pUIXqDk5xia4Qz+gvNBApANXVkaLm3J4/TEkiOPpItlZQ9/QMPJZcjiXyNnItOu/+p1bJe4+F73Ctxvw8S1757YvG0bWoMhPV6llN1kebg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=28D6/WwhC1f7LUnDeETQVtrJxEJQlhfekiMeg8dltgM=;
- b=PFO2H6cZKdDeEO+wThlg/Vv6Ktv3C30Vgf2/++QmGNFERu3S+pQ47E4psfuSuWWhMB5m1CNVzKpFbiXVyCnsOgqDHh3A5oFldkB1jAc9f3tHfqB796o0rb5D6WnmHqXscaGJVQ1H61Yy2imjUHalCgPSi7lExLfNHx4fpQl8037/3bjwgnV4LtI61zwqddE7F0UMTOQD6Gzq4yviniUB67PBCfjYYIuZeNDmwTcAcIoOPHYiOHXwsOkjV3UVkn4sdkc9Ns07qsvb7CGJ5IDJ6WVqzuzB4GKd5ZNq6fowioNMKv2jUdEbA25itkjPPb1s3QtmpKgd0eM7L6GzSOuzog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=28D6/WwhC1f7LUnDeETQVtrJxEJQlhfekiMeg8dltgM=;
- b=o8l32nRDY1DxkTBJoNkwXhxk0TS+dEcErZMS6Plz2byHNiTcxA1vWNqkchYBRJYrTZ+y1Mm0FzpBZdPw5QaHtvHFwFP4I7jsmd+1+Upi3px32b6b6bLk7h/rivTZBlu/EPwQG+X7DkvEbT2CYnyJUNV91unRJlmtQ0doVcdhCk0=
-Received: from PH0PR11MB5192.namprd11.prod.outlook.com (2603:10b6:510:3b::9)
- by MN2PR11MB4287.namprd11.prod.outlook.com (2603:10b6:208:189::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Mon, 31 Jan
- 2022 07:11:15 +0000
-Received: from PH0PR11MB5192.namprd11.prod.outlook.com
- ([fe80::a588:b481:2154:c45e]) by PH0PR11MB5192.namprd11.prod.outlook.com
- ([fe80::a588:b481:2154:c45e%5]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 07:11:15 +0000
-From:   <Ludovic.Desroches@microchip.com>
-To:     <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <Claudiu.Beznea@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/2] dt-bindings: ARM: at91: update maintainers entry
-Thread-Topic: [PATCH 2/2] dt-bindings: ARM: at91: update maintainers entry
-Thread-Index: AQHYFedFAAug4U8NE0+4XvVD0Lai+ax8t6gA
-Date:   Mon, 31 Jan 2022 07:11:14 +0000
-Message-ID: <eb3f4e8d-cde1-4d1d-ff65-35e046afd13c@microchip.com>
-References: <23819d8baa635815d0893955197561fe4f044d5e.1643553501.git.nicolas.ferre@microchip.com>
- <5bf9873eeee3cd49c52a8952a7cd4cb60b61d50a.1643553501.git.nicolas.ferre@microchip.com>
-In-Reply-To: <5bf9873eeee3cd49c52a8952a7cd4cb60b61d50a.1643553501.git.nicolas.ferre@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5031dba2-e9c3-4004-0fb1-08d9e488de94
-x-ms-traffictypediagnostic: MN2PR11MB4287:EE_
-x-microsoft-antispam-prvs: <MN2PR11MB4287630DC9D241D5A67902F3EF259@MN2PR11MB4287.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:949;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kydyjBKNxPerMK7s5ulvBEl8mq2DMK5K2rJXyhfxAu+Aku4TWAwc4URwZbhBvSu9X5jdKK5aSTCpriYu1/r8Xv50bETufozjsYxcpBji5HYIbuBQZuxRI+MRupIVSjurfisxYRvXBPcIIPtdg4gRnizCkMPMofiOj2n7SCjEMUkS07URiWZIGcPg4KIv9VjvLBB56DTBFmypsHIYXuWbwUfCDckqCAi6S0PmV86+DR3NSrOBUtKYdq0iC1d9QCF9LIFCNoGEOCy066dzOaUX1cutviBrEjJXCfmLj5yy2+D4fsHuoUl/mghCCwdfbN8EHCZlaNM0ZIMDByDfr3QS4KEObVV1MoiAPK4CkEH2yRWnQWClu45SSI7SbTy6iKoXkadfP/ASMDXmFNmJPaa44Ja6w/eAHhZLY2/1POp2UOhe50guBu0fmy4toTgoaliCdPtc3t53h3mbpePNw1jU1HU0k1M8GYfewwRaVTqjOofvp0gmjc4R4okEmnpKYRZQ0F9EknzsVjoPQyJ4bRmdn5fWMrNPcjkMijhpMOlWdgkwDY6pvGmrTJI8r6FXnl0XhFOj4pEeW7n4Mwt5hgoPzUCHX+XSixwu8T2aQXP75Q09vFdI0gM67cwmFpAxaMjEqcmyAst+9kQv4667KqqGcHXN59aoTAqK4ciwx3mfX7vFPokfK0tND3af9t3tpIviET7FbN+Zm3/XmI+l72MjLQODYwPOlZ+3CiIau6sYDx/r5t8JQgWbnfLB8X6FwKcTw0nSSsOMgYaI79XvL/iQmg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5192.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(5660300002)(6486002)(2906002)(4744005)(53546011)(6506007)(6512007)(83380400001)(86362001)(31696002)(122000001)(186003)(26005)(38070700005)(2616005)(71200400001)(38100700002)(76116006)(91956017)(64756008)(66446008)(66476007)(66946007)(15650500001)(66556008)(110136005)(8936002)(36756003)(54906003)(6636002)(4326008)(8676002)(316002)(31686004)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TVkzMjJRQWdKY0ZaWTUzY1J3V3ozRXd1NkwvY0V2ZWVkc1Q0dGxCWUVodnFH?=
- =?utf-8?B?MDJPSzNWWlRZd1RYZkV2bWpYb2NZY1k3dCttMy9tdjYvS0pCbk4yRFRlak5s?=
- =?utf-8?B?Y2VqQmQ4V1E5K1dYa0lKcEh2Mk1UZEhEQVQ2NkhmUzNvWmhPajErY1diRnd3?=
- =?utf-8?B?VWF1Q3lTTkpxT2F2UmtRZWdheFFaYUdWT3FCZ0JFejFRcmNlK1ZGemVvSity?=
- =?utf-8?B?TW91STkrWEhzek1qejVwdkdtWXFJNktLanFSK1pPZVlMb1dJWXFQWFdSTlNL?=
- =?utf-8?B?NDJqV1p3RTRqZ2N3eFlSOWF2N0YvTGNXSWNyN0hLTCtleEZ1T3R5QW5lM0RV?=
- =?utf-8?B?N3lzVVhaL1BiVUpLTHRYdnRsVmx3MVFaVUFDZThHRkZEbjdsQVZpOEh0T1l1?=
- =?utf-8?B?aG5vOEpBM09YdkRaNUxYY25yYnF4aVJlcUEzZVFaY0xXZVhtS0FWSXlyeFRP?=
- =?utf-8?B?TzQyLy9uRkJDSFY3K3d6VEgrMVROLzVIL3k0N1dPMnlKZFQ3Ty9GOXVEZEd6?=
- =?utf-8?B?ek5GMU9QR1hTaG9Zc2tDSUVNbVFaWExTOVMxTStsQloyY0NOUnpaM2ZrWHpH?=
- =?utf-8?B?bEp0MjRzMFRnOEhVc0s1SGNZSEdoVHgwbDA2VmRST253TnRIT0haR0NuQXFq?=
- =?utf-8?B?TU4vcFlyZWtxa0dTYVN6WHhyQUwxNGplWGZOeDBtdXRoWVJYbXFtZ1Qxckdk?=
- =?utf-8?B?YkpZeFdGVkxQVFFIaTJlUFY4N2JpdFdhUHcyTGdZTDhCYzZKcjZOQnNXYmhj?=
- =?utf-8?B?bmp3SldwU29iYkY0WU15Z001MEJIbTVQeHR3ZHJ5TFRvMGErYkNqK1JjUy9k?=
- =?utf-8?B?Zm1QcjFpd0RySkdyL2dqVFdXam5NZWJQUG1QWE0xcWVYUXFCWVBBRFZ4ZXZv?=
- =?utf-8?B?UDBoVDBNR0s4eDlPQzRJbHdpT2dHNURwVVdDSEVPdFlSM2d5cnY3Szlxd2I4?=
- =?utf-8?B?Q2JtaDFuNlRIN2VzL3FOcXQ4VnArWlk4Rm03R0pQdTFQMGJIYzlsWU13ZTdF?=
- =?utf-8?B?M0dKaHRQNE81OHZibjk4aVQ2L3ZpaVRsL0JMb3M1cjdFQm93Qkgvb3c0TVZM?=
- =?utf-8?B?UGdtbEtXR1Vza1VoVzk0MStmM2IyTDE2cXMzUE81M1diYnZ4cGZXTGFsOXVX?=
- =?utf-8?B?VkdXK3pmUHdHa2YzWDJDZEl2c1hEbE5QSjVJd29UaklZUWdGUjVBbjUwQnFr?=
- =?utf-8?B?bjlnY0szaWNZaXBBMVdSL0hMZlJDZlkxOTdpSEdXV1crSlVzMVRYdCt6MVhm?=
- =?utf-8?B?am5mVXpmaElzci9sMWRDcm9mU3owb2dDZXo3Z29tQW5sK3pGbEFyT0RPVWUx?=
- =?utf-8?B?N2JFaU14MmRKQWYzWER4RjlaUjY0VU9jU1l6V08yWEIxTFVueHl2RkdMazd1?=
- =?utf-8?B?K255MWRYeWY1K2VFbWpKZFNLaVB2R01RT1M4SjVYMzhwdGlwbkhTcSszSXN0?=
- =?utf-8?B?R1p2MDNPK3FLWnZXWmdRWTNiY3JZTXMwQnF5ck5KY2tqWGR4aVB5ODVTZ2o2?=
- =?utf-8?B?MzUybUhmZWNiV3hscy90eG9XWG1URFVNcWZnUDBlYzh4YmZxelBJa3l0SWk5?=
- =?utf-8?B?THlkd3FTbGZMK3kraTdkZW9NYXhTeFVXeXg4ZTVvMFowYjY1bzBRdFVZZUhR?=
- =?utf-8?B?Mk5MN2t4TDhJR2xBcGI2OHhQZm9iQUVjaXVXRFgwQUM0SUpkT0ZFK1FZQy92?=
- =?utf-8?B?dDBFN1Q0MWUwWCs4YmgvSm5SNEx6NHBpRXBLSVpScVViekNOeExQUmdSa0V3?=
- =?utf-8?B?QndKRGNHUVJRSlh4bUFBRzgydHpYSFU1czBJMW9Pb1hOcndQNVBZcTRjanhu?=
- =?utf-8?B?THBmaHAxa3pmNlphcEVjRzgvY3gvUi82YlN6TU5CRFpGWVI3ZnZEd2JxOFA5?=
- =?utf-8?B?cnRhTVM4eWFhTzFVQ3lsUkZhTTdnTis1WEI4TDhMa3plRThLQnVvb24xSmNK?=
- =?utf-8?B?ejJ0em5KTFhxRnZhUGtKRlRZSWxRYldrSm5rT3FsRnl1Q055TGpNR3JpSkxY?=
- =?utf-8?B?d1hQVzVyRkh5UEZtOTZ1SEVtb0U5NmxPb3A0M2F0T1FucVpDcEpUS2xqWjhr?=
- =?utf-8?B?MVBtcVFiNXErYmtVNVJ3TWEvZ1VDT0owVk0ydVpHMGVDL2FhdVFQZ012ZXdN?=
- =?utf-8?B?eW42d2c3QkluamNUSVYvWEVJRitGclM5UXhVZjA0azFETXpZSC9GUDRrOHpx?=
- =?utf-8?B?ZXU0aWdma3FvVWZQbGp2b2tUK0RTWEI2Ump3UXBZTXpnTXRCSFJnRkZ2aHA3?=
- =?utf-8?B?NGF3MnRSNWpPRDFJTnZJaDhjTWdnPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DA2EACD5F2910C459B0E09363811559A@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5192.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5031dba2-e9c3-4004-0fb1-08d9e488de94
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 07:11:14.9473
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IGw25sVjeDk1rfVAaLHKMyCQj59DUVYhsuPJ5E1RJE376GE2dWnjFfPbr+p3SsADxA+EK+bJi4micS9Bt5clj6kUqrSZ+8CXiFaorlf6hY8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4287
+        id S1357893AbiAaHRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 02:17:03 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:64269 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242021AbiAaHQ5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 02:16:57 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1643613417; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=fAF4RUanAymGBY1R99T3dcm3q68uxZwCLqf/mQJa+u8=; b=Y4WtT5kO4ex0vjt5stHDgnOr1Td5TqraYc23pm0raTuS2yhik62qGrBwNJyBX1i/luNf+Wau
+ oQGE3F+4rs/qSIZMkJIEKiAWzRNPNw3fJaamIvlZXdxhzZkeUKi5Y+8FqxIFviYLFa751K3K
+ 2pA5uXNfsBBqg3/WI971kstlffY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 61f78bfed9d8618172194a2f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 31 Jan 2022 07:13:02
+ GMT
+Sender: quic_vjitta=quicinc.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 275A8C4361A; Mon, 31 Jan 2022 07:13:02 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.0
+Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vjitta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 06BBEC4360C;
+        Mon, 31 Jan 2022 07:12:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 06BBEC4360C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
+From:   Vijayanand Jitta <quic_vjitta@quicinc.com>
+To:     robin.murphy@arm.com, joro@8bytes.org, will@kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, vjitta@codeaurora.org,
+        Vijayanand Jitta <quic_vjitta@quicinc.com>
+Subject: [REPOST PATCH v4] iommu: Fix potential use-after-free during probe
+Date:   Mon, 31 Jan 2022 12:42:35 +0530
+Message-Id: <1643613155-20215-1-git-send-email-quic_vjitta@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8zMC8yMDIyIDM6MzkgUE0sIG5pY29sYXMuZmVycmVAbWljcm9jaGlwLmNvbSB3cm90ZToN
-Cj4gRnJvbTogTmljb2xhcyBGZXJyZSA8bmljb2xhcy5mZXJyZUBtaWNyb2NoaXAuY29tPg0KPiAN
-Cj4gQWxpZ24gdGhlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiB3aXRoIHRoZSBuZXdseSB1cGRhdGVk
-IE1BSU5UQUlORVJTDQo+IGVudHJ5Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogTmljb2xhcyBGZXJy
-ZSA8bmljb2xhcy5mZXJyZUBtaWNyb2NoaXAuY29tPg0KDQpBY2tlZC1ieTogTHVkb3ZpYyBEZXNy
-b2NoZXMgPGx1ZG92aWMuZGVzcm9jaGVzQG1pY3JvY2hpcC5jb20+DQoNCj4gLS0tDQo+ICAgRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hdG1lbC1hdDkxLnlhbWwgfCAzICsr
-LQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4g
-DQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2F0
-bWVsLWF0OTEueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXRt
-ZWwtYXQ5MS55YW1sDQo+IGluZGV4IGM2MTJlMWY0OGRiYS4uZmY5MWRmMDRmOWY0IDEwMDY0NA0K
-PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2F0bWVsLWF0OTEu
-eWFtbA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2F0bWVs
-LWF0OTEueWFtbA0KPiBAQCAtOCw3ICs4LDggQEAgdGl0bGU6IEF0bWVsIEFUOTEgZGV2aWNlIHRy
-ZWUgYmluZGluZ3MuDQo+ICAgDQo+ICAgbWFpbnRhaW5lcnM6DQo+ICAgICAtIEFsZXhhbmRyZSBC
-ZWxsb25pIDxhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNvbT4NCj4gLSAgLSBMdWRvdmljIERl
-c3JvY2hlcyA8bHVkb3ZpYy5kZXNyb2NoZXNAbWljcm9jaGlwLmNvbT4NCj4gKyAgLSBDbGF1ZGl1
-IEJlem5lYSA8Y2xhdWRpdS5iZXpuZWFAbWljcm9jaGlwLmNvbT4NCj4gKyAgLSBOaWNvbGFzIEZl
-cnJlIDxuaWNvbGFzLmZlcnJlQG1pY3JvY2hpcC5jb20+DQo+ICAgDQo+ICAgZGVzY3JpcHRpb246
-IHwNCj4gICAgIEJvYXJkcyB3aXRoIGEgU29DIG9mIHRoZSBBdG1lbCBBVDkxIG9yIFNNQVJUIGZh
-bWlseSBzaGFsbCBoYXZlIHRoZSBmb2xsb3dpbmcNCg0K
+Kasan has reported the following use after free on dev->iommu.
+when a device probe fails and it is in process of freeing dev->iommu
+in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+causing use after free.
+
+BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
+
+Workqueue: events_unbound deferred_probe_work_func
+Call trace:
+ dump_backtrace+0x0/0x33c
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x16c/0x1e0
+ print_address_description+0x84/0x39c
+ __kasan_report+0x184/0x308
+ kasan_report+0x50/0x78
+ __asan_load8+0xc0/0xc4
+ of_iommu_configure+0xb4/0x4a4
+ of_dma_configure_id+0x2fc/0x4d4
+ platform_dma_configure+0x40/0x5c
+ really_probe+0x1b4/0xb74
+ driver_probe_device+0x11c/0x228
+ __device_attach_driver+0x14c/0x304
+ bus_for_each_drv+0x124/0x1b0
+ __device_attach+0x25c/0x334
+ device_initial_probe+0x24/0x34
+ bus_probe_device+0x78/0x134
+ deferred_probe_work_func+0x130/0x1a8
+ process_one_work+0x4c8/0x970
+ worker_thread+0x5c8/0xaec
+ kthread+0x1f8/0x220
+ ret_from_fork+0x10/0x18
+
+Allocated by task 1:
+ ____kasan_kmalloc+0xd4/0x114
+ __kasan_kmalloc+0x10/0x1c
+ kmem_cache_alloc_trace+0xe4/0x3d4
+ __iommu_probe_device+0x90/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
+
+Freed by task 1:
+ kasan_set_track+0x4c/0x84
+ kasan_set_free_info+0x28/0x4c
+ ____kasan_slab_free+0x120/0x15c
+ __kasan_slab_free+0x18/0x28
+ slab_free_freelist_hook+0x204/0x2fc
+ kfree+0xfc/0x3a4
+ __iommu_probe_device+0x284/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
+
+Fix this by setting dev->iommu to NULL first and
+then freeing dev_iommu structure in dev_iommu_free
+function.
+
+Suggested-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
+---
+ drivers/iommu/iommu.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index d410311..1d320ee 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -186,9 +186,14 @@ static struct dev_iommu *dev_iommu_get(struct device *dev)
+ 
+ static void dev_iommu_free(struct device *dev)
+ {
+-	iommu_fwspec_free(dev);
+-	kfree(dev->iommu);
++	struct dev_iommu *param = dev->iommu;
++
+ 	dev->iommu = NULL;
++	if (param->fwspec) {
++		fwnode_handle_put(param->fwspec->iommu_fwnode);
++		kfree(param->fwspec);
++	}
++	kfree(param);
+ }
+ 
+ static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
+-- 
+2.7.4
+

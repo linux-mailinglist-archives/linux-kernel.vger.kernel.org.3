@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F274A4A41F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 741514A4489
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359010AbiAaLH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:07:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52000 "EHLO
+        id S1380005AbiAaLau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39258 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358914AbiAaLEE (ORCPT
+        with ESMTP id S236724AbiAaLVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:04:04 -0500
+        Mon, 31 Jan 2022 06:21:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79B12B82A5F;
-        Mon, 31 Jan 2022 11:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2874AC340E8;
-        Mon, 31 Jan 2022 11:04:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DEADB82A60;
+        Mon, 31 Jan 2022 11:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B0AC340EF;
+        Mon, 31 Jan 2022 11:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627042;
-        bh=pprbZsg+C92F/5sdWdHZshcc/eOL9hMtUXknEI2V4gg=;
+        s=korg; t=1643628067;
+        bh=WLQ26RHE/xOeDgBXZ1JjZPLrVq1aL2E3bOVJqLyonmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=td+DGUpxjSOaXI5NN1SMoxpVnTIQ0bMNa7ZK/R7YrGElXmInW4iXRIStmKjE0g2xy
-         UEn/gT4HK9QyFC+obVfpPHfSe9M6VsHkN2+DkoXWkISrgpWlYg4enAX+rDDgUxMuNr
-         7BPV9kQjFvY9/jSqR2kat/1PZFJuBQr0kraGMRLA=
+        b=LqEOgAc/1j8p6ShFzdN050h0vjPA9YIkokvLid/ibipjqklb9ztgTz1ktyPptnrBJ
+         ZXcXGu6wV8aszFTr24ZG8OH3BTXUM9YmFI1xhKl44KEUJd2QK5e47WT/BMwzWUqCOd
+         11MnLgppN/x008NfLLbHbxJ21dzA8ZznsFASPDTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 056/100] ping: fix the sk_bound_dev_if match in ping_lookup
+        stable@vger.kernel.org, Lyu Tao <tao.lyu@epfl.ch>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 5.16 114/200] NFSv4: Handle case where the lookup of a directory fails
 Date:   Mon, 31 Jan 2022 11:56:17 +0100
-Message-Id: <20220131105222.322270181@linuxfoundation.org>
+Message-Id: <20220131105237.415872921@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
-References: <20220131105220.424085452@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,47 +46,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 2afc3b5a31f9edf3ef0f374f5d70610c79c93a42 upstream.
+commit ac795161c93699d600db16c1a8cc23a65a1eceaf upstream.
 
-When 'ping' changes to use PING socket instead of RAW socket by:
+If the application sets the O_DIRECTORY flag, and tries to open a
+regular file, nfs_atomic_open() will punt to doing a regular lookup.
+If the server then returns a regular file, we will happily return a
+file descriptor with uninitialised open state.
 
-   # sysctl -w net.ipv4.ping_group_range="0 100"
+The fix is to return the expected ENOTDIR error in these cases.
 
-the selftests 'router_broadcast.sh' will fail, as such command
-
-  # ip vrf exec vrf-h1 ping -I veth0 198.51.100.255 -b
-
-can't receive the response skb by the PING socket. It's caused by mismatch
-of sk_bound_dev_if and dif in ping_rcv() when looking up the PING socket,
-as dif is vrf-h1 if dif's master was set to vrf-h1.
-
-This patch is to fix this regression by also checking the sk_bound_dev_if
-against sdif so that the packets can stil be received even if the socket
-is not bound to the vrf device but to the real iif.
-
-Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: Lyu Tao <tao.lyu@epfl.ch>
+Fixes: 0dd2b474d0b6 ("nfs: implement i_op->atomic_open()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ping.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/nfs/dir.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -220,7 +220,8 @@ static struct sock *ping_lookup(struct n
- 			continue;
- 		}
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1967,6 +1967,19 @@ out:
  
--		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif)
-+		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
-+		    sk->sk_bound_dev_if != inet_sdif(skb))
- 			continue;
- 
- 		sock_hold(sk);
+ no_open:
+ 	res = nfs_lookup(dir, dentry, lookup_flags);
++	if (!res) {
++		inode = d_inode(dentry);
++		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
++		    !S_ISDIR(inode->i_mode))
++			res = ERR_PTR(-ENOTDIR);
++	} else if (!IS_ERR(res)) {
++		inode = d_inode(res);
++		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
++		    !S_ISDIR(inode->i_mode)) {
++			dput(res);
++			res = ERR_PTR(-ENOTDIR);
++		}
++	}
+ 	if (switched) {
+ 		d_lookup_done(dentry);
+ 		if (!res)
 
 

@@ -2,154 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A097B4A5003
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63794A5005
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378582AbiAaUSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378534AbiAaUSI (ORCPT
+        id S1378609AbiAaUSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:18:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57504 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1378534AbiAaUSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:18:08 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FCC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:18:08 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id y23so28893399oia.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:18:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u+6Hlw5bi1mRKnGmEwqEzr0N+3dJ3SBtS+eV/8eoOzY=;
-        b=ePD2H90c1U2FfI6edAE4mJ7tIzRLoeAVgOYLn0Cf8okDIFvKYoylzirAc3R9maIznD
-         O/Je25AqBL6ZOLaZSLRjeN1HHaI8bk2M/jOcoMl2M1GCzhb6bmNgr4dMNrSirQCrMZnn
-         CuufUOFMzg0MF2D57oEhO0yF9xLMeXoLsCaY6FeH9zUJFYtanv86rHaE0MjgJcN/SSqO
-         A5ftWLUzUmyzk0/xbhFyeMbmYLCgrueFQ3DYB4caUCVtMahVHeFMGL9bv4lGjsUjQYc0
-         0cCDaNVPdVA/F76hB/l1Xv0V9rZJzZzjNUB1vxT2on46W0d/Rxft9O+rrCWTWv2VzzfR
-         3XzQ==
+        Mon, 31 Jan 2022 15:18:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643660313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UR1qnuWWHKtGOuSRNx9fqkhQWixSIDEP01FlH+p7F5s=;
+        b=ZxRZiJGs1EhxT/wsbDq+PauZQqHDzaugJF586GMdDOotlgYXAo2Tz4rPV8yj5ekrdO2eZ9
+        pSBSf5SKJqj6Wg2tb+ny3cTSIFQbm95PLMjYMQtJdsm0783dcJQpzFFtaLgOKvg5TFELg9
+        xUCNRq63i6CUDo6crIt+CkLUd95dzbo=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-WEg2UzbNMl-vyasKQ4T_6g-1; Mon, 31 Jan 2022 15:18:32 -0500
+X-MC-Unique: WEg2UzbNMl-vyasKQ4T_6g-1
+Received: by mail-qk1-f200.google.com with SMTP id a134-20020ae9e88c000000b0047ebe47102dso10567024qkg.18
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:18:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u+6Hlw5bi1mRKnGmEwqEzr0N+3dJ3SBtS+eV/8eoOzY=;
-        b=ELwkmz6ditdUgEn4s2KvD2iRjQ7ZROJ7is7GIb2YOkCF2ylPLb7NyRbk2GSPdMSkz6
-         h4Hvo1DvSuPPqXax4rTlqli+YvrajySxGdilK855PZjWGbLCjZBYnKSLzCtJHBRHctwD
-         C/GXBQIwyr6a9lHrWfoMMEt0Ul5QbP4BWVnJp627OJdThnlcP2Zp+2y5Ft57icBsm+NH
-         OqpeWgERyUq+F9OZ9PP9tjXf1giFxcgmL3bwsMnASDOAkoBnE7vSed63oiP6jkhKjieb
-         KdARtbpFJcmHbrLH7Q0GWhq0ZTqpOoBbnFSWIlYV2xv1qTO+Vtngbt7NFx3ml9zTQy1+
-         rv3A==
-X-Gm-Message-State: AOAM530yekTFZQj4GqryZi1affrAeCf7FtQNKHCrVZYGd5fhvYVElmk9
-        +yJafrSlLGEhXivmVSCJEHpwlB4ifI1Pl3u0sFo=
-X-Google-Smtp-Source: ABdhPJzvGcXiMK6fhyQRD4f8b79aSskovJO2s2WLmPVT+ibyd29b/52aG8mRWZnXNHt/np854hlGLi/yrAnhmpox/tE=
-X-Received: by 2002:a05:6808:2189:: with SMTP id be9mr19136202oib.93.1643660287560;
- Mon, 31 Jan 2022 12:18:07 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=UR1qnuWWHKtGOuSRNx9fqkhQWixSIDEP01FlH+p7F5s=;
+        b=4ysMNBT7sC1tHikpdBaX54PRRxRYbvsURIOCWyW+2bj1JCLdNICX7QuiZgro3a4A1q
+         DsLA7XrBWdfoutontvTgc73AWbW4XT1DESyA/SIpXDXGozopl0fSj4A8qbkgAtHx5d/w
+         djPW8a5Dgg7s2lZgifDF9968K/137oGxPq+gBRhAIqG214sHyx6mUuR3JinqpW5QCBWW
+         XI4EB8+p0qbOY5EVpj8Z7aTTYCv4P5ouuvVD405VVt1/uS2Gf9Ye4BBgnlxOxburW56T
+         7WqFY23vIMLfwDLhfpjNKxGl0dv7bL+Ys7Xp07eDhwkD6wx4RFRkBupwcviLC9Fl6jeL
+         Lkpg==
+X-Gm-Message-State: AOAM5302WaFnl4ZNzNCGO2CaGse+eeL/5rCykNjGEKhPWw/W8eGCy/s1
+        s02LRiP6j8iVSMEaVRYjtAV9PS4KDyCKs+LKUKEeq9OvypN0B2EdOLlU03LVn9JrsGxKVVq/xDC
+        Idd3ExFta5l9GRwc2En3UFkfpg3RNEV9VaK9FlCxUvN0RfNg9rg1ac5+hqn5RIW+YKLbxKU0=
+X-Received: by 2002:a05:622a:15d2:: with SMTP id d18mr2796960qty.627.1643660311584;
+        Mon, 31 Jan 2022 12:18:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwGwO0NBU7bn3wTwpfumrhnTMD09THL9KCsJv4cw+l+J902R+8ySnhdFLDbQAGPKTfR2o2zoQ==
+X-Received: by 2002:a05:622a:15d2:: with SMTP id d18mr2796941qty.627.1643660311314;
+        Mon, 31 Jan 2022 12:18:31 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id y15sm9466742qko.95.2022.01.31.12.18.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 12:18:30 -0800 (PST)
+Subject: Re: [PATCH] ACPICA: cleanup double word in comment
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Robert Moore <robert.moore@intel.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220131133337.1556355-1-trix@redhat.com>
+ <CAJZ5v0g5Xxd9kBPUdsC6D4fVHfZafKiGgkTONo2mpqvfgoFDgw@mail.gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <69d0ac2f-f953-0890-b2d7-1c43c61be43f@redhat.com>
+Date:   Mon, 31 Jan 2022 12:18:28 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <139A7689-463E-4AD9-A2D1-A9969C3958D0@live.com>
- <CADnq5_OLpgEJjpN5y9b3gNwCmvdfNTA=puUv8UjOCDH96JgvOQ@mail.gmail.com>
- <58B7B0D4-BA3B-43EA-9F54-06CCEB7EF833@live.com> <0932bbf6-409e-0d3e-2824-b33914033f81@amd.com>
- <5CC8BCC9-176A-4478-B03B-3E4B4D7D88E6@live.com>
-In-Reply-To: <5CC8BCC9-176A-4478-B03B-3E4B4D7D88E6@live.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 31 Jan 2022 15:17:56 -0500
-Message-ID: <CADnq5_NsTJm5YazeM8O7C2hUS_7vCVw_CX2ZwYV0w5=iBUMeCA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/amd/display: Force link_rate as LINK_RATE_RBR2 for
- 2018 15" Apple Retina panels
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Harry Wentland <hwentlan@amd.com>,
-        "harry.wentland@amd.com" <harry.wentland@amd.com>,
-        "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
-        "Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
-        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Felix.Kuehling@amd.com" <Felix.Kuehling@amd.com>,
-        "evan.quan@amd.com" <evan.quan@amd.com>,
-        "stylon.wang@amd.com" <stylon.wang@amd.com>,
-        "wesley.chalmers@amd.com" <wesley.chalmers@amd.com>,
-        "qingqing.zhuo@amd.com" <qingqing.zhuo@amd.com>,
-        "George.Shen@amd.com" <George.Shen@amd.com>,
-        "roman.li@amd.com" <roman.li@amd.com>,
-        "solomon.chiu@amd.com" <solomon.chiu@amd.com>,
-        "Aurabindo.Pillai@amd.com" <Aurabindo.Pillai@amd.com>,
-        "wayne.lin@amd.com" <wayne.lin@amd.com>,
-        "mikita.lipski@amd.com" <mikita.lipski@amd.com>,
-        "Bhawanpreet.Lakha@amd.com" <Bhawanpreet.Lakha@amd.com>,
-        "agustin.gutierrez@amd.com" <agustin.gutierrez@amd.com>,
-        "pavle.kotarac@amd.com" <pavle.kotarac@amd.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0g5Xxd9kBPUdsC6D4fVHfZafKiGgkTONo2mpqvfgoFDgw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
 
-Alex
+On 1/31/22 10:51 AM, Rafael J. Wysocki wrote:
+> On Mon, Jan 31, 2022 at 2:33 PM <trix@redhat.com> wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Remove the second 'know'.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> This is ACPICA material, so it needs to be submitted to the upstream
+> project via https://github.com/acpica/acpica/
+>
+> Also, it would be good to combine all of the analogous changes in one patch.
 
-On Sat, Jan 29, 2022 at 12:50 AM Aditya Garg <gargaditya08@live.com> wrote:
+I am not sure if this is the last one for acpica, the finder script is 
+very slow.
+
+I will wait a bit and combine these in a day or two.
+
+And take care of the other repo.
+
+Tom
+
 >
-> From: Aun-Ali Zaidi <admin@kodeit.net>
->
-> The eDP link rate reported by the DP_MAX_LINK_RATE dpcd register (0xa) is
-> contradictory to the highest rate supported reported by
-> EDID (0xc = LINK_RATE_RBR2). The effects of this compounded with commit
-> '4a8ca46bae8a ("drm/amd/display: Default max bpc to 16 for eDP")' results
-> in no display modes being found and a dark panel.
->
-> For now, simply force the maximum supported link rate for the eDP attached
-> 2018 15" Apple Retina panels.
->
-> Additionally, we must also check the firmware revision since the device ID
-> reported by the DPCD is identical to that of the more capable 16,1,
-> incorrectly quirking it. We also use said firmware check to quirk the
-> refreshed 15,1 models with Vega graphics as they use a slightly newer
-> firmware version.
->
-> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-> ---
-> v2 :- Use C styled comments
->  .../gpu/drm/amd/display/dc/core/dc_link_dp.c  | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> index 05e216524..086f7ee2c 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> @@ -5597,6 +5597,26 @@ static bool retrieve_link_cap(struct dc_link *link)
->                 dp_hw_fw_revision.ieee_fw_rev,
->                 sizeof(dp_hw_fw_revision.ieee_fw_rev));
->
-> +       /* Quirk for Apple MBP 2018 15" Retina panels: wrong DP_MAX_LINK_RATE */
-> +       {
-> +               uint8_t str_mbp_2018[] = { 101, 68, 21, 103, 98, 97 };
-> +               uint8_t fwrev_mbp_2018[] = { 7, 4 };
-> +               uint8_t fwrev_mbp_2018_vega[] = { 8, 4 };
-> +
-> +               /* We also check for the firmware revision as 16,1 models have an
-> +                * identical device id and are incorrectly quirked otherwise.
-> +                */
-> +               if ((link->dpcd_caps.sink_dev_id == 0x0010fa) &&
-> +                   !memcmp(link->dpcd_caps.sink_dev_id_str, str_mbp_2018,
-> +                            sizeof(str_mbp_2018)) &&
-> +                   (!memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018,
-> +                            sizeof(fwrev_mbp_2018)) ||
-> +                   !memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018_vega,
-> +                            sizeof(fwrev_mbp_2018_vega)))) {
-> +                       link->reported_link_cap.link_rate = LINK_RATE_RBR2;
-> +               }
-> +       }
-> +
->         memset(&link->dpcd_caps.dsc_caps, '\0',
->                         sizeof(link->dpcd_caps.dsc_caps));
->         memset(&link->dpcd_caps.fec_cap, '\0', sizeof(link->dpcd_caps.fec_cap));
-> --
-> 2.25.1
->
->
+>> ---
+>>   drivers/acpi/acpica/exfldio.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/acpi/acpica/exfldio.c b/drivers/acpi/acpica/exfldio.c
+>> index bdc7a30d1217c..b92605df3872c 100644
+>> --- a/drivers/acpi/acpica/exfldio.c
+>> +++ b/drivers/acpi/acpica/exfldio.c
+>> @@ -104,7 +104,7 @@ acpi_ex_setup_region(union acpi_operand_object *obj_desc,
+>>   #ifdef ACPI_UNDER_DEVELOPMENT
+>>          /*
+>>           * If the Field access is any_acc, we can now compute the optimal
+>> -        * access (because we know know the length of the parent region)
+>> +        * access (because we know the length of the parent region)
+>>           */
+>>          if (!(obj_desc->common.flags & AOPOBJ_DATA_VALID)) {
+>>                  if (ACPI_FAILURE(status)) {
+>> --
+>> 2.26.3
+>>
+

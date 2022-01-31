@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A184A4B95
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84294A4B9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380030AbiAaQOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:14:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32988 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244114AbiAaQOW (ORCPT
+        id S1380145AbiAaQPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244114AbiAaQPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:14:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED6446149E;
-        Mon, 31 Jan 2022 16:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F2C5C340E8;
-        Mon, 31 Jan 2022 16:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643645661;
-        bh=Yvsx7evK35eNpN0sVeiSMgT9bC+KI8aBrOulVEWuUyg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ajPQF5B9ScrdUEL30QTR543MJCm3m/1Js2EOp4+OP4H3LnRpu8xpOUeC1ILd6qmZf
-         22k28akAMUkeJLBN5OGT1W/OKZZ8ivBgeFDCP7WlQiY1Lpxv7O1HGl8zUmSrKTg10N
-         bOjgn72QrbhdeVu7+5INs36cVLZS+o+0fCRBbtgZzqDT3VQN0ISAAblKei5E5Osvvh
-         q5Bbwy6ulQR4RLDKF8U+knXigYy0CfF//utgGE7+5f/+6ISUIL2LMKJZvH75NglGRc
-         23IC1ARREs6ghCZAorFMxPpF5uaRBc+WUBt/J0WXL1jNzY9KypVzCAu7INvYwHKVr1
-         eDb+ptBXUf+Cg==
-Date:   Mon, 31 Jan 2022 17:14:15 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        0day robot <lkp@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Subject: Re: [fs/exec]  80bd5afdd8: xfstests.generic.633.fail
-Message-ID: <20220131161415.wlvtsd4ecehyg3x5@wittgenstein>
-References: <20220127000724.15106-1-ariadne@dereferenced.org>
- <20220131144352.GE16385@xsang-OptiPlex-9020>
- <20220131150819.iuqlz3rz6q7cheap@wittgenstein>
- <Yff9+tIDAvYM5EO/@casper.infradead.org>
- <20220131153707.oe45h7tuci2cbfuv@wittgenstein>
- <YfgFeWbZPl+gAUYE@casper.infradead.org>
+        Mon, 31 Jan 2022 11:15:23 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE48AC061714;
+        Mon, 31 Jan 2022 08:15:23 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so11355814pjq.3;
+        Mon, 31 Jan 2022 08:15:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5uZdVWjoxhGFYA4YBIqUe/MBlikRDu2EIuXigUfny90=;
+        b=oXRLDPEH8AVlANH6vdTalKtCkhVKMT14DaYRCck6DHCJtoJIp7tn4u2SjCdVrsSBFu
+         E7pvcJtSFTlVSsUlEz3Fawx+zkcF1yoaxq+mrG3GFJrV82bTJDyx0IT6HxZw/R92X2UR
+         AP9DK1Z/KXKi9dHcxc9kqOkbdQ7dT7QYYWihCwfziuMdr83llOUxMJK1CL4UBORzK3cR
+         T06LKgZRO0yzboIbTUNT1viraucpCjk9NbhcoBBlubmFMKWRmf5h8j0A0UnIdAsS5vol
+         +S3Asl1ysNFX5VIQqZqOf7m/P77iECcXg+C6yK8pNWvuSkv2bBXjK9qjnpTElxz4uv3Y
+         wiAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5uZdVWjoxhGFYA4YBIqUe/MBlikRDu2EIuXigUfny90=;
+        b=ukj+0HW/IHm6eS2lI7Y3HnsMRkblnjGxjGn7nOWcUmJb7tNfWLXZZK2Z5JXShs3R6X
+         APlIOIE5vCZJEir1MxEuguM0xyDKt7jTTS2YgrvN+8xzplM92kx9RxNNVhNsdObNz9+n
+         dUtbriK+K6h10hqu6tIfaTKhzLMwbNik0Aqcuq31BEK7kYMfLzSmhuPDKW/VIjE4EqKm
+         Lr1B7fQqM86QizvNrzxMIsmI1hD1xjQ19SoirUNmyphhHdkl0mVpvD7e4Q/PmtNBlO1q
+         73sC98RriV97HZlQlXTUI7N7LT/Jda/6vTnxmJFrhPEHw5D2DNaakVoEBr0w9YUWg4/v
+         SrcQ==
+X-Gm-Message-State: AOAM530S8b1S163ialcpN23So2aqlmMKJx7fUB927Sh79ms+0cPoSxEc
+        eymCjoppG+Us00d44D8cn54=
+X-Google-Smtp-Source: ABdhPJzqfE5lcy9pvkNWJyr+blfeSltYancWrC5kZUylapUH26mElwHhpAQoZJzAGqJzNJILftolYQ==
+X-Received: by 2002:a17:90a:c68c:: with SMTP id n12mr20218277pjt.219.1643645723102;
+        Mon, 31 Jan 2022 08:15:23 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:6213:1c4:865f:204c])
+        by smtp.gmail.com with ESMTPSA id u16sm19342543pfg.192.2022.01.31.08.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 08:15:21 -0800 (PST)
+Date:   Mon, 31 Jan 2022 08:15:17 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: spear-keyboard - Simplify resource management
+Message-ID: <YfgLFXZkbsIFJzP6@google.com>
+References: <c4b6e8b122259198ce76f42bf786b75cfd0cbffc.1643530826.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfgFeWbZPl+gAUYE@casper.infradead.org>
+In-Reply-To: <c4b6e8b122259198ce76f42bf786b75cfd0cbffc.1643530826.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 03:51:21PM +0000, Matthew Wilcox wrote:
-> On Mon, Jan 31, 2022 at 04:37:07PM +0100, Christian Brauner wrote:
-> > On Mon, Jan 31, 2022 at 03:19:22PM +0000, Matthew Wilcox wrote:
-> > > On Mon, Jan 31, 2022 at 04:08:19PM +0100, Christian Brauner wrote:
-> > > > On Mon, Jan 31, 2022 at 10:43:52PM +0800, kernel test robot wrote:
-> > > > I can fix this rather simply in our upstream fstests with:
-> > > > 
-> > > > static char *argv[] = {
-> > > > 	"",
-> > > > };
-> > > > 
-> > > > I guess.
-> > > > 
-> > > > But doesn't
-> > > > 
-> > > > static char *argv[] = {
-> > > > 	NULL,
-> > > > };
-> > > > 
-> > > > seem something that should work especially with execveat()?
-> > > 
-> > > The problem is that the exec'ed program sees an argc of 0, which is the
-> > > problem we're trying to work around in the kernel (instead of leaving
-> > > it to ld.so to fix for suid programs).
-> > 
-> > Ok, just seems a bit more intuitive for path-based exec than for
-> > fd-based execveat().
-> > 
-> > What's argv[0] supposed to contain in these cases?
-> > 
-> > 1. execveat(fd, NULL, ..., AT_EMPTY_PATH)
-> > 2. execveat(fd, "my-file", ..., )
-> > 
-> > "" in both 1. and 2.?
-> > "" in 1. and "my-file" in 2.?
+On Sun, Jan 30, 2022 at 09:20:44AM +0100, Christophe JAILLET wrote:
+> Since the commit in the Fixes tag below, 'kbd->input' is a managed resource
+> that doesn't need to be explicitly unregistered or freed (see
+> devm_input_allocate_device() documentation)
 > 
-> You didn't specify argv for either of those, so I have no idea.
-> Programs shouldn't be assuming anything about argv[0]; it's purely
-> advisory.  Unfortunately, some of them do.  And some of them are suid.
+> So, remove a unless line of code to slightly simplify it.
+> 
+> Fixes: 6102752eb354 ("Input: spear-keyboard - switch to using managed resources")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested only
+> ---
+>  drivers/input/keyboard/spear-keyboard.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/input/keyboard/spear-keyboard.c b/drivers/input/keyboard/spear-keyboard.c
+> index 9838c79cb288..c36836159fb3 100644
+> --- a/drivers/input/keyboard/spear-keyboard.c
+> +++ b/drivers/input/keyboard/spear-keyboard.c
+> @@ -278,7 +278,6 @@ static int spear_kbd_remove(struct platform_device *pdev)
+>  {
+>  	struct spear_kbd *kbd = platform_get_drvdata(pdev);
+>  
+> -	input_unregister_device(kbd->input);
+>  	clk_unprepare(kbd->clk);
 
-Yes, programs shouldn't assume anything about argv[0]. But a lot of
-programs are used to setting argv[0] to the name of the executed binary.
-The exec* manpages examples do this. Just looking at a random selftest, e.g.
+This is wrong for the same reason as the other patch: it changes the
+order of operations.
 
-bpf/prog_tests/test_lsm.c
+>  
+>  	return 0;
+> -- 
+> 2.32.0
+> 
 
-where we find:
+Thanks.
 
-	char *CMD_ARGS[] = {"true", NULL};
-	execvp(CMD_ARGS[0], CMD_ARGS);
-
-I'm just wondering how common this is for execveat() because it is not
-as clear what the actual name of the binary is in these two examples
-
-	1.
-	fd = open("/bin/true", );
-	char *CMD_ARGS[] = {"", NULL};
-	execveat(fd, NULL, ..., AT_EMPTY_PATH)
-	
-	2.
-	fd = open("/bin", );
-	char *CMD_ARGS[] = {"true", NULL};
-	execveat(fd, CMD_ARGS[0], CMD_ARGS 0)
-
-in other words, the changes that you see CMD_ARGS[0] == NULL for
-execveat() seem higher than for path-based exec.
-
-To counter that we should probably at least update the execveat()
-manpage with a recommendation what CMD_ARGS[0] should be set to if it
-isn't allowed to be set to NULL anymore. This is why was asking what
-argv[0] is supposed to be if the binary doesn't take any arguments.
+-- 
+Dmitry

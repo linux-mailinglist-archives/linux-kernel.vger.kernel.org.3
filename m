@@ -2,160 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1D24A3E88
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD33B4A3E8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 09:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbiAaIQx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 31 Jan 2022 03:16:53 -0500
-Received: from mail-eopbgr90052.outbound.protection.outlook.com ([40.107.9.52]:41664
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229514AbiAaIQv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 03:16:51 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZM3Jh05/2VqzB40drhgRdzdeHZ705RRTq5bmLemJLgD6BKLtzYFlGDyPRq9pAw/ht3vTsyOMYWWTkEWk9fjLTLErE++faXN87i0mSOWcGyOm7IFuFTQ6SPWDYSfcNKDOcme4L6P/Rlrcs7BGjMS4vkqrWG4YtbBpnYUCs10c+BGyU0YKubefxU8IfzqeULC7A+GDl/Tu5ipVVU/vvvhnr0r8dw4obbE8oQwN/R/qdH11XBocK6RjqmNjqJxzcZ2dN6gY/O6zfaNWtd/SLyMOv64vTfzMmTtNn6ZUi+IxS/Fypv5QVRxEd6FcMdECu4+MSdK/fZV8HXKiMsrFIe/UvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YWQqgnxvqI3lL7g5C8plmPGDH7WaxydCkFOX8gKIU5o=;
- b=kPsgXnY6LYioT1PpgOz7PNZ/uVPcvJeRAuE+Y9lo3t9EBsJj8rmY3bCpgWou9q/T862xUQfOI4IcA5EFJWtOweKRxbA6uZDx3hHacGkgORblLBDCyAiI3q1pS7ZSKhhs37lwVaZtB2kghQQmyJ7ipQlXS3Rh5HT1sHcmvWZhk1pLO3f1n0CtFI9Swm9oQxGeVUZpPxZ15b4rUzVg1xeReWrLDpjz94/Kc69tryU2cffRsTTGXEYqRIEDH0f6sPE821qFlradh2kNT4G9KiQuna2J4QbAEnHneOVcRNxJD3KdB0dBzlzs0tFIFp83mLg6SNWEiIko6h+C4Cd5C7nApA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3842.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:24::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Mon, 31 Jan
- 2022 08:16:48 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.020; Mon, 31 Jan 2022
- 08:16:48 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH] powerpc/nohash: Remove pte_same()
-Thread-Topic: [PATCH] powerpc/nohash: Remove pte_same()
-Thread-Index: AQHYFnrkkg2ktYQR+kCVvQTrvN3q6w==
-Date:   Mon, 31 Jan 2022 08:16:48 +0000
-Message-ID: <83c97bd58a3596ef1b0ff28b1e41fd492d005520.1643616989.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2c2a4cc3-e9e3-4e13-305b-08d9e492072e
-x-ms-traffictypediagnostic: MR1P264MB3842:EE_
-x-microsoft-antispam-prvs: <MR1P264MB38426233D99831739A2532D1ED259@MR1P264MB3842.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:1751;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m0xjmebowYlF7eS/OkpyZwdnPIQwik0o9U0g2ujhK3cuKPw9nCLAlMA4IYfGbmrZocLOZAAsZV4mzewvT7Nf04KhDrAz5fYqKe/2Evq3YUhYqEjYrrX03/6zbn05zRL23DZ32cTNM/cJneHWSqAbJAMQCYVLVq9ayj0k/0Vp0FDS/gS6dX9VXcqV13RJPZqho9VmxcCWS+WFXSys8QgGqo+hJyrE4cOuy3wFe27r5RRWbP6vXvHPuxj+riGbbFhjoOHqxWDmyaVwusdo8l06hv+GL8/zhdVE+lmEfwSZKFf8bb18opn9y56Rc7OT3/rVl5uR5A4BZYKtm7cNsXqGTr2YzQ48lwxr5DTTX3/YvhYxKboxfxF0hOyNcUf08ppD+E0fQhsaceBydH5X6FIRqocRLOOWDAWzd2THWCJnZmV5rmprPsw/7veL7tRzWZQ+CrC8oNxcQ4RpQrkaWAMIb9OSIlVpabpeE86tw1ckLbK5xPziEAyn+JgYWO06y/TjXWDCGPgJdCjMrMKUlvghaxgCNEQ6Eui0mrC+WF6L97gCkAFVcVMjhW4H0jNdAtYVkC2Jo35SZu91bMCyFCIT088BsQTrYlWE/autcfzr8lttJGw3Sf4AhoHOR5x7lMXwrbJOdz0yygcaljptK0AUdrq/RiqCGwI0Y9sYJTC87RAs6HC027pCg/rnfAlOR2LQ+5CQ4cebA1StomxgYpvZ5Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(44832011)(6512007)(54906003)(316002)(5660300002)(508600001)(186003)(86362001)(26005)(2616005)(2906002)(83380400001)(6486002)(4326008)(36756003)(38070700005)(64756008)(66556008)(66476007)(66446008)(76116006)(8936002)(8676002)(66946007)(71200400001)(91956017)(6506007)(122000001)(38100700002)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?6V73n1sq5BNCirj9LEDxKHvPT7wLCC7VQxGwCs1atXo9ajyhtahgnnuK61?=
- =?iso-8859-1?Q?L/lPezMe76IRCYk8pA/lpJRAfnGKPbjOznZQhciktBEq9aIt2nrqGhnyYp?=
- =?iso-8859-1?Q?otfeSKV1NkDNPiNDmZFpeIStefLxAy0jcMhbiyk8pZDS1sQozOb0CivdDC?=
- =?iso-8859-1?Q?kT25llW6KP5U+GI2dY8fJgYwEuqpoUlIJ8c+HFU77sCD7EhqDbMIhTIg/F?=
- =?iso-8859-1?Q?aQ/DnFWeHhBlI5uMYNGv+uiCG/B2b+VOpahOSiSuqJu1L0uds/5MOsyinY?=
- =?iso-8859-1?Q?S9LArVXqPF+KyteP1ab8iZcB4pzh6Qw70i60JKpbfqBe33ldlQ4S+d9QO+?=
- =?iso-8859-1?Q?6eCu2NsLtbFOmDJEdPmeXhSRH20k9k14Dwkog+dwAHYtpqlg1jvHAgLnkx?=
- =?iso-8859-1?Q?7It+6KoPf+0GY6itWFzr0UVFNgEXWoSwXP3QIHM/wu/FlJBM4ty+N7Y2W8?=
- =?iso-8859-1?Q?UhN2jMg+ecWKUR3b7KQOs0kapzloWUWAwY4L4j6BDAee39LNXyzwU/+Dxb?=
- =?iso-8859-1?Q?3xSmiXJt11iWLou5qdDiZz00OrGA0f1DfL/aNAt/K4TdqE2FTugow3ZVb5?=
- =?iso-8859-1?Q?bNL4DC7kuil+xRBYre5kdbRpqZsgE3Jc59AeFEBzCLEQLRwLIrTjodBEwn?=
- =?iso-8859-1?Q?3GEthqyfkrKS2yoXuAFDSg2pJRubYNWIq/7dw1Tpg0/DbYKcRaRnoHKLeV?=
- =?iso-8859-1?Q?Cu27MBN4CiO0FY2wz3B4cQN5aWKd+f1bpBeG3AvBtuS4zos+V3N3TJl4+d?=
- =?iso-8859-1?Q?w0PbUCawotcQGui0EqRJSK2K9Zfg4E8ofXryIUhPnd1Y/OG2x9SCKS1/5o?=
- =?iso-8859-1?Q?nTD7gZ5tSe/wy1kz6xVqZSEH7GqhQLg8sNyETOBPUt7lvAJM4vdmn85s4Z?=
- =?iso-8859-1?Q?YJo7MdNjPH1JEJ7tMjCBzsGPFmOTCO3Jl4Jw2R9zj72dBrF2gXO66LL+x+?=
- =?iso-8859-1?Q?5QvubPpxk7/QF0x93wt2+CgU8ie587+5BMLW/nxwOST/xtOYFijem7jmi5?=
- =?iso-8859-1?Q?lfBpQPCTIHUn4aIkSKDui0QeY40w3Q/4QH0J/yL5KyWi1pkel8Mkkut68Q?=
- =?iso-8859-1?Q?c5xnmvy+InY5HLSy/bzO5K6PuinJpgraeu1jfQnaLra31mWJrFpTQQFyES?=
- =?iso-8859-1?Q?NnYJOr4IzhTO6mdxGPtxXgLL7n6VPzq6pShoh9e2BhhxSqkbYPryXfa8IQ?=
- =?iso-8859-1?Q?rB9MpZicbnap728splR1eefxKxYHRydSISGkTpbeUgsQk74nFlfM6wEhhP?=
- =?iso-8859-1?Q?a5oY1Pr8S6tcGVKJEF6+VXjBrWoYH22OCrkFwIuA5Ojc/IVUOx8irhjYJE?=
- =?iso-8859-1?Q?6n/3bGNzBZtzWtSJydhp2Bhit/1DrtXuk16yYmTYAnyJdlI8m52nCNzac0?=
- =?iso-8859-1?Q?Dw85zI2B4tnUIt6M0VxMg1cdXT+/YijUeuNSKyO3jbgPHan+e487OGNdJ3?=
- =?iso-8859-1?Q?qx7ODylxUt9oLlxJyUSPAlpEKFYBEjn0Jd8pvpoVkbH9tXeVujjFPQwQro?=
- =?iso-8859-1?Q?lTUBlVAEIVxHaImDXnYzHmW2oVmv6161PR3QEcbtbWF9MMHsh74V9W6TL1?=
- =?iso-8859-1?Q?i0ZQ06dvm9VeVYHVkOvvL/YFRrzIGXa05QVunJ4ulGSny3nOLcCYYDYlfW?=
- =?iso-8859-1?Q?ExwWXo/yto8ZCyc21bwSTtRjFzuGkyG9nUC5W530jwnKS3/KdvtbLwE//r?=
- =?iso-8859-1?Q?aq8rTf/S0VGMofHkc9boMAFtuOzDh6qWPA9vP7eDURmSMC/Nq9ytb14O7R?=
- =?iso-8859-1?Q?OgD89jP+TuRNsEQ/LrDVPseHI=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c2a4cc3-e9e3-4e13-305b-08d9e492072e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 08:16:48.5836
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gQOWEuB6oH13R10vZS5zM1wKdoyEsFMGpSLdUCP4Gg03Xmct53jyg/rv5pAqou/vYH+zBq099JRANDjqvGH9vtIZG8LZb4gh7QLIeTbofig=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3842
+        id S245274AbiAaISy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 03:18:54 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43718 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbiAaISw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 03:18:52 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id EBE54212B9;
+        Mon, 31 Jan 2022 08:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643617130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M5ATpzd25e+Sy/RCew0oyKft2+Dk493GtVbeEoXo7c0=;
+        b=O98YnZJulMDnlClCc7g/XuZFuDXrv8AbQ0q1flmfnHGlulJ0DN074srYGKW5g095TT3UTt
+        /9doB+C0oQJM8+6bktFqK1HM2bdJL8zjqUjUlfsW4EsbGzqFJUT4vNJ3vLzWrDk0OUzL3n
+        C1Lbj5an1YSMMMfhhp0a5kz9xMdPHI8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643617130;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M5ATpzd25e+Sy/RCew0oyKft2+Dk493GtVbeEoXo7c0=;
+        b=VE6j3yVAchvW60GzVd1DoxCun9XLJHEQ5hX4TRnK5puDZEUh/33GNhVUiwe1kWhtio+ZJI
+        adZUbRGpzFIupMBg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id AF6B9A3B85;
+        Mon, 31 Jan 2022 08:18:50 +0000 (UTC)
+Date:   Mon, 31 Jan 2022 09:18:50 +0100
+Message-ID: <s5htudkco7p.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH v6 29/35] sound: hdac: Migrate to aggregate driver
+In-Reply-To: <20220127200141.1295328-30-swboyd@chromium.org>
+References: <20220127200141.1295328-1-swboyd@chromium.org>
+        <20220127200141.1295328-30-swboyd@chromium.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/powerpc/include/asm/nohash/{32/64}/pgtable.h has
+On Thu, 27 Jan 2022 21:01:35 +0100,
+Stephen Boyd wrote:
+> 
+> Use an aggregate driver instead of component ops so that we can get
+> proper driver probe ordering of the aggregate device with respect to all
+> the component devices that make up the aggregate device.
+> 
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Rob Clark <robdclark@gmail.com>
+> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-	#define __HAVE_ARCH_PTE_SAME
-	#define pte_same(A,B)      ((pte_val(A) ^ pte_val(B)) == 0)
+The patch looks good, but just a minor concern:
 
-include/linux/pgtable.h has
+> +static struct aggregate_driver hdac_aggregate_driver = {
+> +	.probe = hdac_component_master_bind,
+> +	.remove = hdac_component_master_unbind,
+> +	.driver = {
+> +		.name = "hdac_agg",
 
-	#ifndef __HAVE_ARCH_PTE_SAME
-	static inline int pte_same(pte_t pte_a, pte_t pte_b)
-	{
-		return pte_val(pte_a) == pte_val(pte_b);
-	}
-	#endif
+Shouldn't we define some standard name scheme?
+This one has "hdac_agg", while the patch for HD-audio Realtek stuff
+has "realtek_aggregate".
 
-Remove the powerpc version which is similar to the generic one.
+(And maybe the latter one should be something like
+"hda_realtek_agg" or such, as Realtek covers pretty different devices
+and there might be conflict in future.)
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/nohash/32/pgtable.h | 3 ---
- arch/powerpc/include/asm/nohash/64/pgtable.h | 3 ---
- 2 files changed, 6 deletions(-)
+With those considered: please take my ack
+Acked-by: Takashi Iwai <tiwai@suse.de>
 
-diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/include/asm/nohash/32/pgtable.h
-index d959c2a73fbf..a0525765c7bb 100644
---- a/arch/powerpc/include/asm/nohash/32/pgtable.h
-+++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
-@@ -338,9 +338,6 @@ static inline int pte_young(pte_t pte)
- 	return pte_val(pte) & _PAGE_ACCESSED;
- }
- 
--#define __HAVE_ARCH_PTE_SAME
--#define pte_same(A,B)	((pte_val(A) ^ pte_val(B)) == 0)
--
- /*
-  * Note that on Book E processors, the pmd contains the kernel virtual
-  * (lowmem) address of the pte page.  The physical address is less useful
-diff --git a/arch/powerpc/include/asm/nohash/64/pgtable.h b/arch/powerpc/include/asm/nohash/64/pgtable.h
-index 2816d158280a..a441056b3eba 100644
---- a/arch/powerpc/include/asm/nohash/64/pgtable.h
-+++ b/arch/powerpc/include/asm/nohash/64/pgtable.h
-@@ -281,9 +281,6 @@ static inline void __ptep_set_access_flags(struct vm_area_struct *vma,
- 	flush_tlb_page(vma, address);
- }
- 
--#define __HAVE_ARCH_PTE_SAME
--#define pte_same(A,B)	((pte_val(A) ^ pte_val(B)) == 0)
--
- #define pte_ERROR(e) \
- 	pr_err("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, pte_val(e))
- #define pmd_ERROR(e) \
--- 
-2.33.1
+
+thanks,
+
+Takashi

@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA2F4A5161
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51C04A5163
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380665AbiAaVWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344273AbiAaVWQ (ORCPT
+        id S1358112AbiAaVW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:22:27 -0500
+Received: from mail.efficios.com ([167.114.26.124]:47656 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344273AbiAaVW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:22:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5BAC061714;
-        Mon, 31 Jan 2022 13:22:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 895C661551;
-        Mon, 31 Jan 2022 21:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A0FC340E8;
-        Mon, 31 Jan 2022 21:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643664134;
-        bh=OQPPff+VNVexuaIwDaQ8HqPGB/uPTD1j/rHAOfVFiMI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=AqZHizyBRhG45rzMuoD+Vra5tgjAeeehuwfA1tAof3XNzN3+W73/AReushgs8nHJv
-         rdN3NoLN+/A2aoHNVFDI6247LmTPJKEKJRqiAjWOWORKVYhV0f4jiTbMmIuW0yEGIj
-         0EaLG3/olUiI360YFxQsJ5S8jEcTojbtyLczP1JHSsuHbjLe4VI6Wzx/MsWfMiEkN0
-         jAg1ZUCHUjDPr54OZoi2/Wtx1XRJqLjJXgGYLhGFhqtFzzStAFk1j5U9NvLVZrIE2F
-         ehJyQXKpqRu/+4efAI80IS8kNoxOXdG4LKgQdK0fZYScmo4W03CFTWnmntK7j4KveY
-         8/N73vQ1uMtLA==
-Date:   Mon, 31 Jan 2022 15:22:13 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Brent Spillner <spillner@acm.org>, bhelgaas@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arch:x86:pci:irq.c: Improve log message when IRQ cannot
- be identified
-Message-ID: <20220131212213.GA510910@bhelgaas>
+        Mon, 31 Jan 2022 16:22:27 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 857BB2DEED3;
+        Mon, 31 Jan 2022 16:22:26 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id jXE3ALfzYyaf; Mon, 31 Jan 2022 16:22:26 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id E5F762DEED2;
+        Mon, 31 Jan 2022 16:22:25 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com E5F762DEED2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643664145;
+        bh=txvdeBRJIDSoZj38nmz9gg5nsHrUcXP/5rIWAEfpaso=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=L4rsQtMLGx0I48XwJvbPkrjb+MHXSUlRGQDhWqBk9q75a7Ixqy6+F59FUewmwSH1L
+         z2eij1ecOAagoOfYqAvag1UlC+ogUHlKUdChHI+EjXY4jAU9fXlQRKkrH4Z6Lu4w9f
+         KF0iK50urDnOzHrcUBWsr9XgfEh/CAs+NsjB9V98TYDODttmSBuBTNoLlKyHu4jBC+
+         FEPSadXstQlIyG563ejCLe42HYkXaHMJSRBE5nHBMOGajgmDpPNzLbsnIc1k/mwceD
+         ah4QJ7Z3s/3g9z3u5gIwCKI7drjNXVjxHHEz8hDge86JykcPZ5Oqg8Pv4+YHPQdHQc
+         4zfe1l5oWWrpQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9AYpGWRqql9X; Mon, 31 Jan 2022 16:22:25 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id CC5CE2DF13A;
+        Mon, 31 Jan 2022 16:22:25 -0500 (EST)
+Date:   Mon, 31 Jan 2022 16:22:25 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@ACULAB.COM>,
+        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
+Message-ID: <1978385715.23580.1643664145710.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220131205531.17873-1-mathieu.desnoyers@efficios.com>
+References: <20220131205531.17873-1-mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH 1/2] rseq: extend struct rseq with numa node id
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f820849-6940-4271-e678-1ae037cdfb64@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: rseq: extend struct rseq with numa node id
+Thread-Index: 3gTKn3cvSA+Z8hanV+kH2gipUJJE8w==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 01:36:53PM -0800, Dave Hansen wrote:
-> On 1/28/22 12:48, Brent Spillner wrote:
-> > It seems like the multiline string literal is your main pain point--- would
-> > 
-> > +#ifdef CONFIG_ACPI
-> > +                       if (acpi_noirq)
-> > +                               msg = "; consider removing acpi=noirq";
-> > +                       else
-> > +                               msg = "; recommend verifying UEFI/BIOS
-> > IRQ options";
-> > +#else
-> > +                       msg = "; recommend verifying UEFI/BIOS IRQ
-> > options or enabling ACPI";
-> > +#endif
-> > 
-> > be OK without going to IS_ENABLED()?  (Personally, I think the #ifdef
-> > style is more readable.)
+----- On Jan 31, 2022, at 3:55 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+
+> Adding the NUMA node id to struct rseq is a straightforward thing to do,
+> and a good way to figure out if anything in the user-space ecosystem
+> prevents extending struct rseq.
 > 
-> I think that's _better_ than what was in the patch.  But, even with it,
-> I still think the #ifdef mess borders on unreadable.
+> This NUMA node id field allows memory allocators such as tcmalloc to
+> take advantage of fast access to the current NUMA node id to perform
+> NUMA-aware memory allocation.
 > 
-> But, if Bjorn likes it, then go for it. :)
+> It is also useful for implementing NUMA-aware user-space mutexes.
+> 
 
-I was hoping to avoid commenting at all ;)
+[...]
 
-I'm a little bit averse to suggesting *any* command-line options
-because users shouldn't have to use options like these.  It would be
-better if we got a bug report and could fix the bug or add a quirk to
-work around a firmware issue automatically.
+> +	__u32 padding1[3];
+> +
+> +	/*
+> +	 * This is the end of the original rseq ABI.
+> +	 * This is a valid end of rseq ABI for the purpose of rseq registration
+> +	 * rseq_len.
+> +	 * The original rseq ABI use "sizeof(struct rseq)" on registration,
+> +	 * thus requiring the padding above.
+> +	 */
+> +
+> +	/*
+> +	 * Restartable sequences node_id_start field. Updated by the
+> +	 * kernel. Read by user-space with single-copy atomicity
+> +	 * semantics. This field should only be read by the thread which
+> +	 * registered this data structure. Aligned on 32-bit. Always
+> +	 * contains a value in the range of possible NUMA node IDs, although the
+> +	 * value may not be the actual current NUMA node ID (e.g. if rseq is not
+> +	 * initialized). This NUMA node ID number value should always be compared
+> +	 * against the value of the node_id field before performing a rseq
+> +	 * commit or returning a value read from a data structure indexed using
+> +	 * the node_id_start value.
+> +	 */
+> +	__u32 node_id_start;
 
-If a user finds a command-line option that "works," the problem is
-solved as far as they are concerned, but it doesn't help the next
-person who trips over it.
+Considering that the same "node id" is shared across various cores, I don't expect
+it to be of much use in a rseq critical section comparison. That differs from the
+"cpu id" (really the core ID), or the eventual concept of "vcpu id" as developed
+internally at Google, which are identifiers which are guaranteed to be unique
+within a process, and unchanged, for the duration of the rseq critical section.
 
-I think pci_acpi_init() should warn when "acpi=noirq" was used because
-the only reason to use it should be to work around a firmware defect,
-and ideally, we could make a quirk to do that.  Maybe the doc should
-suggest a bug report.
+Also, having these node_id* fields after the original end of the struct rseq
+means user-space would have to check whether the glibc's __rseq_size is large
+enough to contain those node_id* fields before loading them, which means there
+needs to be at least one comparison before using the fields, therefore defeating
+the purpose of the "*_id_start" trick.
 
-What does "verifying UEFI/BIOS IRQ options" mean?  I could go look at
-the BIOS setup menu, but I would have no idea what to look for, so the
-only thing I could do would be to try randomly changing IRQ-related
-things.  If that happens to hit on a working configuration, I might
-be happy, but it wouldn't help the next person at all.  I'd rather see
-a bug report.  Then we could at least try to make a quirk so no
-command line option would be needed.
+So for those two reasons, I think just the "node_id" field would be sufficient
+(no node_id_start field).
 
-Bjorn
+This brings another question though: should we then place the "node_id" field
+in the original struct rseq padding or after ?
+
+If we place it in the original padding, then glibc-2.35 would have enough
+space to contain this field, but we would need to add a new sys_rseq flag to
+query whether the node_id field is supported by the kernel, for use by
+applications and glibc.
+
+However, if we choose to place the new node_id field after the original
+padding, applications can simply check with the __rseq_size exposed by
+glibc to detect whether this field is there and populated. I have a
+preference for this last approach as this looks less like a "one-off"
+hack, and a more future-proof way to extend struct rseq.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+> +
+> +	/*
+> +	 * Restartable sequences node_id field. Updated by the kernel.
+> +	 * Read by user-space with single-copy atomicity semantics. This
+> +	 * field should only be read by the thread which registered this
+> +	 * data structure. Aligned on 32-bit. Values
+> +	 * RSEQ_ID_UNINITIALIZED and RSEQ_ID_REGISTRATION_FAILED
+> +	 * have a special semantic: the former means "rseq uninitialized",
+> +	 * and latter means "rseq initialization failed". This value is
+> +	 * meant to be read within rseq critical sections and compared
+> +	 * with the node_id_start value previously read, before performing
+> +	 * the commit instruction, or read and compared with the
+> +	 * node_id_start value before returning a value loaded from a data
+> +	 * structure indexed using the node_id_start value.
+> +	 */
+> +	__u32 node_id;
+> +
+> +	/*
+> +	 * This is a valid end of rseq ABI for the purpose of rseq registration
+> +	 * rseq_len. Use the offset immediately after the node_id field as
+> +	 * rseq_len.
+> +	 */
+> } __attribute__((aligned(4 * sizeof(__u64))));
+> 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

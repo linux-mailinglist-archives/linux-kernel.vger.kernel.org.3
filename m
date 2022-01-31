@@ -2,187 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E708A4A3DB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 07:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8495B4A3DB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 07:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243220AbiAaGfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 01:35:07 -0500
-Received: from verein.lst.de ([213.95.11.211]:53678 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235726AbiAaGe4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 01:34:56 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id BC76868AFE; Mon, 31 Jan 2022 07:34:51 +0100 (CET)
-Date:   Mon, 31 Jan 2022 07:34:51 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     hch@lst.de, jgg@nvidia.com, jani.nikula@linux.intel.com,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Vivi Rodrigo <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Terrence Xu <terrence.xu@intel.com>
-Subject: Re: [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to support
- VFIO new mdev API
-Message-ID: <20220131063451.GA4390@lst.de>
-References: <20220127120508.11330-1-zhi.a.wang@intel.com>
+        id S1347941AbiAaGiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 01:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231875AbiAaGiD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 01:38:03 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E520C061714;
+        Sun, 30 Jan 2022 22:38:03 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id i19so11947536qvx.12;
+        Sun, 30 Jan 2022 22:38:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZmJmzbYJdSz7NylPj17Q8RGKEXMSub9wumTNZ+fAg8U=;
+        b=Xy2fms+AqaxyVKZTW4zyYJ+aN04U3xviqKmYn35+s3p2unWf9DXdGnXBcb4lxdu8DH
+         AtaPGxa8K+opiTflXIZWKZvl3sqaMg6BcftR99n57Xyny3cmZneGpR/jh4q2pP5/+2BB
+         9pFtmZbmfXUuWQAhXBfW48I5A4SYS5fIqTL80=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZmJmzbYJdSz7NylPj17Q8RGKEXMSub9wumTNZ+fAg8U=;
+        b=n8qMnQmC9QQHj39mOSgDdw38tnJLwzcho9dWQcXkeMI7ccnWHPXS4dWQ98VmNDwvn9
+         lxhLtnjvWruuhJsR1bQ0KBE1CULvivXis6vFumcxhkVMZeF0STeXudI2Yj/KjtmF4YYY
+         KwpIFz1SMbZjTjyzToNwvyk/Bjk61jSlxt1Uf7u/RGZHYXgzA4ohhWEahMEhggocOFjh
+         VyDpQALjiCBZw74ILaPzD89RtWs3kdS67q1DO5sKwMrpAb76LDammqdjNrx3Um2er8KD
+         uOEMB30UL1LLmnHnEX2Buu5M4xZ56dgQqJWReIHd6rcvEJFxS8kAwx8xSpRXLfaK9wuF
+         2ULw==
+X-Gm-Message-State: AOAM530HBv2pfDGGRSwfFg0dccCgphwrOI/VRmH++uolefZnIQRmTP0H
+        hurnJo0ydGoEllyTZuUY+/cZS1i4S5qI2m5wzjAy5KoC
+X-Google-Smtp-Source: ABdhPJx1020Led5CofoA3z+V3gy1g+2fDQqlgS0Xv7rjVb+e3dfv58hq0e7zyqgRD60MdN/0J1KfxNEzSFCbgMZezwk=
+X-Received: by 2002:ad4:5f89:: with SMTP id jp9mr16312804qvb.130.1643611082608;
+ Sun, 30 Jan 2022 22:38:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127120508.11330-1-zhi.a.wang@intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+References: <20220128221054.2002911-1-j.neuschaefer@gmx.net>
+In-Reply-To: <20220128221054.2002911-1-j.neuschaefer@gmx.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 31 Jan 2022 06:37:51 +0000
+Message-ID: <CACPK8XfMm7jJ9QYOBr1HiR_22xPEzx9MZXO_CX7MpQt2QAVSUg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: wpcm450: Enable watchdog by default
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  ifeq ($(CONFIG_DRM_I915_GVT),y)
-> -i915-y += intel_gvt.o
-> +i915-y += intel_gvt.o gvt/mmio_table.o
+On Fri, 28 Jan 2022 at 22:11, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.n=
+et> wrote:
+>
+> The watchdog timer is always usable, regardless of board design, so
+> there is no point in marking the watchdog device as disabled-by-default
+> in nuvoton-wpcm450.dtsi.
+>
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 
-With the split from my series in mind that builds all of the gvt/
-subdirectory into a separate module I'd be tempted to places this new
-file into the main i915 directory as e.g. intel_gvt_mmio_table.c, given
-that it will have to be built into the main i915 module.
+I assume this makes it always available for rebooting the system too?
 
-> -static void init_device_info(struct intel_gvt *gvt)
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-I'd keep this function as-is, as the newly added caller isn't actually
-needed (I'll comment on this more on the next patch).
-
-> -/* Describe per-platform limitations. */
-> -struct intel_gvt_device_info {
-> -	u32 max_support_vgpus;
-> -	u32 cfg_space_size;
-> -	u32 mmio_size;
-> -	u32 mmio_bar;
-> -	unsigned long msi_cap_offset;
-> -	u32 gtt_start_offset;
-> -	u32 gtt_entry_size;
-> -	u32 gtt_entry_size_shift;
-> -	int gmadr_bytes_in_cmd;
-> -	u32 max_surface_size;
+> ---
+>  arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts | 4 ----
+>  arch/arm/boot/dts/nuvoton-wpcm450.dtsi                      | 1 -
+>  2 files changed, 5 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts =
+b/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+> index 3ee61251a16d0..1ae7ae4804275 100644
+> --- a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+> +++ b/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+> @@ -77,7 +77,3 @@ &serial1 {
+>         /* "Serial over LAN" port. Connected to ttyS2 of the host system.=
+ */
+>         status =3D "okay";
+>  };
+> -
+> -&watchdog0 {
+> -       status =3D "okay";
 > -};
-
-.. and with that there should be no need to move this declaration
-as well.
-
-> -struct gvt_mmio_block {
-> +struct intel_gvt_mmio_block {
-
-Any good reason for this rename?  It just seems to create a lot of
-churn without muchof a reason.
-
-> +static int do_mmio(u32 offset, u16 flags, u32 size, u32 addr_mask,
-> +		   u32 ro_mask, u32 device,
-> +		   struct intel_gvt_mmio_table_iter *iter)
-
-Nit:  I'd pass the iter first to these kinds of callbacks.
-Also the do_ name (including for the method name in the struct itself)
-looks odd.  I'd rather use a _cb or _fn postfix.
-
-> +	for (i = start; i < end; i += 4) {
-> +		info = kzalloc(sizeof(*info), GFP_KERNEL);
-> +		if (!info)
-> +			return -ENOMEM;
-> +
-> +		info->offset = i;
-> +		p = intel_gvt_find_mmio_info(gvt, info->offset);
-> +		if (p) {
-> +			WARN(1, "dup mmio definition offset %x\n",
-> +				info->offset);
-> +			kfree(info);
-> +
-> +			/* We return -EEXIST here to make GVT-g load fail.
-> +			 * So duplicated MMIO can be found as soon as
-> +			 * possible.
-> +			 */
-> +			return -EEXIST;
-> +		}
-
-I'd allocate the new structure only after the lookup to simplify this
-a bit.
-
-> +
-> +		info->ro_mask = ro_mask;
-
-The r/o mask is only used here, so why not move it into the local
-declarations in handlers.c instead of the table built into i915.ko?
-
-> +		info->device = device;
-> +		info->read = intel_vgpu_default_mmio_read;
-> +		info->write = intel_vgpu_default_mmio_write;
-
-Given that we always initialize ->read and ->write here,
-setup_mmio_handler can be simplified a bit and only needs to override
-the handlers if actually specified in the table.
-
-> +static int init_mmio_info(struct intel_gvt *gvt)
-> +{
-> +	struct intel_gvt_mmio_table_iter iter;
-> +
-> +	iter.i915 = gvt->gt->i915;
-> +	iter.data = gvt;
-> +	iter.do_mmio = do_mmio;
-> +	iter.do_mmio_block = do_mmio_block;
-
-Nit: This and the other caller could initialize the iter structure
-statically:
-
-	struct intel_gvt_mmio_table_iter iter = {
-		.i915		= gvt->gt->i915,
-		.data		= gvt,
-		.mmio_cb	= intel_gvt_setup_mmio_cb,
-		.mmio_block_cb	= intel_gvt_setup_mmio_block_cb,
-	};
-
-> +	block = find_mmio_block(gvt, VGT_PVINFO_PAGE);
-> +	block->read = pvinfo_mmio_read;
-> +	block->write = pvinfo_mmio_write;
-
-Check for NULL here?
-
->  	} else if (IS_SKYLAKE(i915) ||
-> -		   IS_KABYLAKE(i915) ||
-> -		   IS_COFFEELAKE(i915) ||
-> -		   IS_COMETLAKE(i915)) {
-> -		ret = init_bdw_mmio_info(gvt);
-> +			IS_KABYLAKE(i915) ||
-> +			IS_COFFEELAKE(i915) ||
-> +			IS_COMETLAKE(i915)) {
-> +		ret = init_bdw_mmio_handlers(gvt);
-
-Why the spurious reformatting?
-
-> +/**
-> + * intel_gvt_get_device_type - return the device flag of a GVT device
-> + * @i915: drm i915 private data
-> + *
-> + * This function will return the device flag of a GVT device.
-> + */
-> +unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
-> +{
-> +	if (IS_BROADWELL(i915))
-> +		return D_BDW;
-> +	else if (IS_SKYLAKE(i915))
-> +		return D_SKL;
-> +	else if (IS_KABYLAKE(i915))
-> +		return D_KBL;
-> +	else if (IS_BROXTON(i915))
-> +		return D_BXT;
-> +	else if (IS_COFFEELAKE(i915) || IS_COMETLAKE(i915))
-> +		return D_CFL;
-> +
-> +	return 0;
-> +}
-
-I'd move this into intel_gvt.c, next to is_supported_device which
-also lists all the supported platforms.  Preferably as a prep patch
-that does the move and change of argument before the main MMIO table
-patch.
-
-> +++ b/drivers/gpu/drm/i915/gvt/mmio_table.h
-
-Do we really need this new header vs just using intel_gvt.h?
+> diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/n=
+uvoton-wpcm450.dtsi
+> index 93595850a4c3c..b9b669cd632f1 100644
+> --- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
+> +++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
+> @@ -81,7 +81,6 @@ watchdog0: watchdog@b800101c {
+>                         interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
+>                         reg =3D <0xb800101c 0x4>;
+>                         clocks =3D <&clk24m>;
+> -                       status =3D "disabled";
+>                 };
+>
+>                 aic: interrupt-controller@b8002000 {
+> --
+> 2.34.1
+>

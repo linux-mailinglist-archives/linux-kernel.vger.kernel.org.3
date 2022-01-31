@@ -2,241 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9034A3D85
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 06:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BAB4A3D89
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 06:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235166AbiAaF4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 00:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiAaF4l (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:56:41 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75996C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 21:56:40 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id a7so11936266qvl.1
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 21:56:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c4RcLnij2Gc2mO9NDMLPeqJGpX7x9puJhAk+zOLg87U=;
-        b=ZmShtDTChKkK8HPg3hOqDGPhaNAC3aWAuUTtF+zHHCb46fRZQaGsSjdUC7X7cZqm9b
-         uwY3/RSRk1U6yW1KMkcyuPNCTWOSWxQ/MgXQQXbvpHrq9zoBvvN9RPDB6yWL6m/ng4K3
-         DBjd+0FZfYllfs2BErPBaE0cJzjB+jzWhJ1sE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c4RcLnij2Gc2mO9NDMLPeqJGpX7x9puJhAk+zOLg87U=;
-        b=KHdDrTcodcd4LmRruIiLRhyrJurZcYW9WgBzaY8RxEZkWwcPQ1dqJ6jHJdhq1pwt3q
-         xNcjgjX4yAjdfI65byPkIYtG/Xvf4xIRq8W+DhruzhdeMuh8RWILDTOSQ6j6XJjn0YiD
-         hgDW8z/Q2XZLPwU44VHp+nVe5k9lOTSqTSCiVYuecBLc4+GbdJHRcwYsc0qDEKoopuII
-         xeXKPANdh1TjhVyLWmZcdmaYSwRup+QVIP4M+eiqNT05XxNSTq6zJIb5kCgeEnFKe0wp
-         PU60cGD3FKQqbmzCQZKmr0uS1BRvooPsElPDF1opJSKJTkiogPOHE0B8cIQGK1kd4Lti
-         UCPQ==
-X-Gm-Message-State: AOAM531BGWmxpLfIUs655hZCZT0NxFBLC2xpqAe8rGpa2aJ9rZxUCNkO
-        H9CQpCU3VWaEVDQ2uNjsSM1g3XD4LngBVkq9jsI=
-X-Google-Smtp-Source: ABdhPJzlAJKd/R8qWDU3a0Ds/mtSrdwjVsFem/X3czsKz5h02BsfLFkHo5AfK4PAI97BLbdwKMzXXEb6djd5uOh2Frg=
-X-Received: by 2002:a05:6214:301e:: with SMTP id ke30mr16693614qvb.49.1643608599287;
- Sun, 30 Jan 2022 21:56:39 -0800 (PST)
+        id S235225AbiAaF7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 00:59:14 -0500
+Received: from mga05.intel.com ([192.55.52.43]:29021 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232130AbiAaF7N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 00:59:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643608753; x=1675144753;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qSMFveX5lVTif1dekQa1h/+KX8io6E0LwxZv+DKJcis=;
+  b=Vfs+DEMAfzgmsz5ZiOxc6g8yardRZalNNWHKYd/zQxkPhAt+qzEoJt5p
+   0FsdZK0UfUawfHskhRHTHEKEwSq4Ozf+GuiX00NMZCWurYDW/AHs026gr
+   Jf1eCVu6SEwr8HIdQ5ea8Zx1gVrUg4JevF8QyY7+AQuU0lcYKyDN34rim
+   wfu+BrFVZCnz/9YP5hCcuWTrKZzZ1F50y75JuIWytUT+0gozLkV5C0FE9
+   BH4f2AFyjC8ifoo+aoQl96uKRatVooai0E9trs28xyBEONTq0nY/hM6l3
+   u0FrhH4DePNcPizl7Yxh5EOPK/ylsG366x7SC60+U6xaRvT3qYnvd4Biq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="333763378"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="333763378"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:59:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="522530559"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2022 21:59:09 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEPiW-000RUE-Mz; Mon, 31 Jan 2022 05:59:08 +0000
+Date:   Mon, 31 Jan 2022 13:58:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org
+Subject: Re: [PATCH v4 3/4] Watchdog: sp5100_tco: Add initialization using
+ EFCH MMIO
+Message-ID: <202201311323.CdxiFZ8V-lkp@intel.com>
+References: <20220130191225.303115-4-terry.bowman@amd.com>
 MIME-Version: 1.0
-References: <20220110155827.13976-1-eajames@linux.ibm.com>
-In-Reply-To: <20220110155827.13976-1-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 31 Jan 2022 05:56:27 +0000
-Message-ID: <CACPK8XdgOYTwy5aOQgSuSJaQUjxnobN2c3ph=dkAcWYJDVbN+w@mail.gmail.com>
-Subject: Re: [PATCH] fsi: occ: Improve response status checking
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <alistair@popple.id.au>,
-        Jeremy Kerr <jk@ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130191225.303115-4-terry.bowman@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 at 15:58, Eddie James <eajames@linux.ibm.com> wrote:
->
-> If the driver sequence number coincidentally equals the previous
-> command response sequence number, the driver may proceed with
-> fetching the entire buffer before the OCC has processed the current
-> command. To be sure the correct response is obtained, check the
-> command type and also retry if any of the response parameters have
-> changed when the rest of the buffer is fetched.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/fsi/fsi-occ.c | 63 ++++++++++++++++++++++++++++++-------------
->  1 file changed, 44 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-> index 7eaab1be0aa4..67569282dd69 100644
-> --- a/drivers/fsi/fsi-occ.c
-> +++ b/drivers/fsi/fsi-occ.c
-> @@ -451,6 +451,15 @@ static int occ_trigger_attn(struct occ *occ)
->         return rc;
->  }
->
-> +static void fsi_occ_print_timeout(struct occ *occ, struct occ_response *resp,
-> +                                 u8 seq_no, u8 cmd_type)
-> +{
-> +       dev_err(occ->dev,
-> +               "resp timeout status=%02x seq=%d cmd=%d, our seq=%d cmd=%d\n",
-> +               resp->return_status, resp->seq_no, resp->cmd_type, seq_no,
-> +               cmd_type);
-> +}
-> +
->  int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->                    void *response, size_t *resp_len)
->  {
-> @@ -461,12 +470,14 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->         struct occ_response *resp = response;
->         size_t user_resp_len = *resp_len;
->         u8 seq_no;
-> +       u8 cmd_type;
->         u16 checksum = 0;
->         u16 resp_data_length;
->         const u8 *byte_request = (const u8 *)request;
-> -       unsigned long start;
-> +       unsigned long end;
->         int rc;
->         size_t i;
-> +       bool retried = false;
->
->         *resp_len = 0;
->
-> @@ -478,6 +489,8 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->                 return -EINVAL;
->         }
->
-> +       cmd_type = byte_request[1];
-> +
->         /* Checksum the request, ignoring first byte (sequence number). */
->         for (i = 1; i < req_len - 2; ++i)
->                 checksum += byte_request[i];
-> @@ -509,30 +522,30 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->         if (rc)
->                 goto done;
->
-> -       /* Read occ response header */
-> -       start = jiffies;
-> +retry:
-> +       end = jiffies + timeout;
->         do {
-> +               /* Read occ response header */
->                 rc = occ_getsram(occ, 0, resp, 8);
->                 if (rc)
->                         goto done;
->
->                 if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
->                     resp->return_status == OCC_RESP_CRIT_INIT ||
-> -                   resp->seq_no != seq_no) {
-> -                       rc = -ETIMEDOUT;
-> -
-> -                       if (time_after(jiffies, start + timeout)) {
-> -                               dev_err(occ->dev, "resp timeout status=%02x "
-> -                                       "resp seq_no=%d our seq_no=%d\n",
-> -                                       resp->return_status, resp->seq_no,
-> -                                       seq_no);
-> +                   resp->seq_no != seq_no || resp->cmd_type != cmd_type) {
+Hi Terry,
 
-You're testing for two different types of conditions. The first is
-when the SBE is busy doing something else:
+Thank you for the patch! Perhaps something to improve:
 
-                if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
-                     resp->return_status == OCC_RESP_CRIT_INIT ||
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-And the others are when the message is not for the current user:
+url:    https://github.com/0day-ci/linux/commits/Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311323.CdxiFZ8V-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
+        git checkout 92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
 
-                      resp->seq_no != seq_no || resp->cmd_type != cmd_type) {
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Should we be separating them out? It makes sense that the first means
-we should keep trying. For the second case should we bail straight
-away, instead of waiting for the timeout?
+All warnings (new ones prefixed by >>):
 
-How often do we see one vs the other?
+   drivers/watchdog/sp5100_tco.c:272:60: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
+           dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+                                  ~~~~                               ^~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
+           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+                 ^
+>> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
+           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
-> +                       if (time_after(jiffies, end)) {
-> +                               fsi_occ_print_timeout(occ, resp, seq_no,
-> +                                                     cmd_type);
-> +                               rc = -ETIMEDOUT;
->                                 goto done;
->                         }
->
->                         set_current_state(TASK_UNINTERRUPTIBLE);
->                         schedule_timeout(wait_time);
-> +               } else {
-> +                       break;
->                 }
-> -       } while (rc);
-> +       } while (true);
 
-Use while (true) instead of do { } while (true) to make it clearer
-what's going on. Or refactor it to put the time_after in the while(),
-as this is what the loop is waiting on.
+vim +345 drivers/watchdog/sp5100_tco.c
 
->
->         /* Extract size of response data */
->         resp_data_length = get_unaligned_be16(&resp->data_length);
-> @@ -543,17 +556,29 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->                 goto done;
->         }
->
-> -       dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
-> -               resp->return_status, resp_data_length);
-> -
-> -       /* Grab the rest */
-> +       /* Now get the entire response; get header again in case it changed */
->         if (resp_data_length > 1) {
-> -               /* already got 3 bytes resp, also need 2 bytes checksum */
-> -               rc = occ_getsram(occ, 8, &resp->data[3], resp_data_length - 1);
-> +               rc = occ_getsram(occ, 0, resp, resp_data_length + 7);
->                 if (rc)
->                         goto done;
-> +
-> +               if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
-> +                   resp->return_status == OCC_RESP_CRIT_INIT ||
-> +                   resp->seq_no != seq_no || resp->cmd_type != cmd_type) {
-> +                       if (!retried) {
-> +                               retried = true;
-> +                               goto retry;
+   333	
+   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
+   335					       struct watchdog_device *wdd)
+   336	{
+   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
+   338		const char *dev_name = SB800_DEVNAME;
+   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
+   340		struct resource *res;
+   341		void __iomem *addr;
+   342		int ret;
+   343		u32 val;
+   344	
+ > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
+   347					       "sp5100_tco");
+   348	
+   349		if (!res) {
+   350			dev_err(dev,
+   351				"Memory region 0x%08x already in use\n",
+   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
+   353			return -EBUSY;
+   354		}
+   355	
+   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
+   357		if (!addr) {
+   358			dev_err(dev, "Address mapping failed\n");
+   359			ret = -ENOMEM;
+   360			goto out;
+   361		}
+   362	
+   363		/*
+   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
+   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
+   366		 * also starts the timer operation. Enable if not already enabled.
+   367		 */
+   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
+   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
+   371					    EFCH_PM_DECODEEN_WDT_TMREN);
+   372		}
+   373	
+   374		/* Error if the timer could not be enabled */
+   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
+   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+   377			dev_err(dev, "Failed to enable the timer\n");
+   378			ret = -EFAULT;
+   379			goto out;
+   380		}
+   381	
+   382		mmio_addr = EFCH_PM_WDT_ADDR;
+   383	
+   384		/* Determine alternate MMIO base address */
+   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
+   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
+   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
+   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
+   389	
+   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
+   391		if (!ret) {
+   392			tco_timer_enable_mmio(addr);
+   393			ret = sp5100_tco_timer_init(tco);
+   394		}
+   395	
+   396	out:
+   397		if (addr)
+   398			iounmap(addr);
+   399	
+   400		release_resource(res);
+   401	
+   402		return ret;
+   403	}
+   404	
 
-Not sure about this.
-
-How often did this situation come up?
-
-Did you consider instead returning an error here?
-
-> +                       }
-> +
-> +                       fsi_occ_print_timeout(occ, resp, seq_no, cmd_type);
-> +                       rc = -ETIMEDOUT;
-> +                       goto done;
-> +               }
->         }
->
-> +       dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
-> +               resp->return_status, resp_data_length);
-> +
->         occ->client_response_size = resp_data_length + 7;
->         rc = occ_verify_checksum(occ, resp, resp_data_length);
->
-> @@ -598,7 +623,7 @@ static int occ_probe(struct platform_device *pdev)
->         occ->version = (uintptr_t)of_device_get_match_data(dev);
->         occ->dev = dev;
->         occ->sbefifo = dev->parent;
-> -       occ->sequence_number = 1;
-> +       occ->sequence_number = (u8)((jiffies % 0xff) + 1);
-
-This is interesting. You didn't mention this in the commit message;
-you're trying to get a random number for the sequence number?
-
->         mutex_init(&occ->occ_lock);
->
->         if (dev->of_node) {
-> --
-> 2.27.0
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

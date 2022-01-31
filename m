@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4463E4A46B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A1B4A46B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376283AbiAaMRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:17:19 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47682 "EHLO
+        id S1359642AbiAaMRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:17:31 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47706 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358749AbiAaMRR (ORCPT
+        with ESMTP id S1376583AbiAaMRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:17:17 -0500
+        Mon, 31 Jan 2022 07:17:23 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D7F61210F8;
-        Mon, 31 Jan 2022 12:17:16 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id D563A212CB;
+        Mon, 31 Jan 2022 12:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643631436; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1643631442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qHBt4c+Xhy7OqCvnrOC9JlR18pNnSJzhVo60R72j03c=;
-        b=CQ4TsyMmpsX+LHwnJ0RbjkHGjXSxIASk8H/1xkg6Vgqv15Kiho829GTkq08LfofdTQLPvo
-        buTN6oXDa042Vb+Qe7VAHjdnq8RiEtVBPeaZjT/INOcaX+uYcK1CORS36njutAOWkkBqDx
-        0ldxgd20+COArZN2bipuC/OhyiZD+Bw=
+        bh=wlgmVKDLoRDbXBxlr0Qq/CN3SOuVki91W5nT54POkl0=;
+        b=LUyNpNPjoJN40DI7nAn9YpG9p72l5wIRS1/JQqy4ktp4IechOVFBDXTGwQ7dKs7W7M9+cg
+        hSxXBcwEJtOYs8yKcYncLVhXMbc2ttX9s8XmSVmLf9nf9qm3hiuLGNEJUiKX77SuQhU98t
+        MiLN/+/mEVrKnW8MXO+LRLHdzs8waZg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643631436;
+        s=susede2_ed25519; t=1643631442;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qHBt4c+Xhy7OqCvnrOC9JlR18pNnSJzhVo60R72j03c=;
-        b=IdplAjrZN2+6jifmRRPIOOz9PMQWNfR8kgT9yMG5CFY/vY9lxIfddkYStAMkqlCKdOPdFJ
-        q8WgdtS922Z8meBQ==
+        bh=wlgmVKDLoRDbXBxlr0Qq/CN3SOuVki91W5nT54POkl0=;
+        b=TIPXxSKPDc8TgleFMmphT35633T+u3VxzWrBjMp5Q1iRC0ytUOZ4UH3oV8ryV1n+rtGzH8
+        cOyW7y2wwcTteDCQ==
 Received: from suse.de (unknown [10.163.43.106])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 425A0A3B81;
-        Mon, 31 Jan 2022 12:17:16 +0000 (UTC)
-Date:   Mon, 31 Jan 2022 12:17:14 +0000
+        by relay2.suse.de (Postfix) with ESMTPS id CA911A3B87;
+        Mon, 31 Jan 2022 12:17:21 +0000 (UTC)
+Date:   Mon, 31 Jan 2022 12:17:20 +0000
 From:   Mel Gorman <mgorman@suse.de>
 To:     Bharata B Rao <bharata@amd.com>
 Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
@@ -44,165 +44,147 @@ Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
         dishaa.talreja@amd.com, Wei Huang <wei.huang2@amd.com>
-Subject: Re: [RFC PATCH v0 1/3] sched/numa: Process based autonuma scan
- period framework
-Message-ID: <20220131121714.GX3301@suse.de>
+Subject: Re: [RFC PATCH v0 2/3] sched/numa: Add cumulative history of
+ per-process fault stats
+Message-ID: <20220131121720.GY3301@suse.de>
 References: <20220128052851.17162-1-bharata@amd.com>
- <20220128052851.17162-2-bharata@amd.com>
+ <20220128052851.17162-3-bharata@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20220128052851.17162-2-bharata@amd.com>
+In-Reply-To: <20220128052851.17162-3-bharata@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:58:49AM +0530, Bharata B Rao wrote:
+On Fri, Jan 28, 2022 at 10:58:50AM +0530, Bharata B Rao wrote:
 > From: Disha Talreja <dishaa.talreja@amd.com>
 > 
-> Add a new framework that calculates autonuma scan period
-> based on per-process NUMA fault stats.
-> 
-> NUMA faults can be classified into different categories, such
-> as local vs. remote, or private vs. shared. It is also important
-> to understand such behavior from the perspective of a process.
-> The per-process fault stats added here will be used for
-> calculating the scan period in the adaptive NUMA algorithm.
+> The cumulative history of local/remote (lr) and private/shared (ps)
+> will be used for calculating adaptive scan period.
 > 
 
-Be more specific no how the local vs remote, private vs shared states
-are reflections of per-task activity of the same.
+How it used to calculate adaptive scan period?
 
-> The actual scan period is still using the original value
-> p->numa_scan_period before the real implementation is added in
-> place in a later commit.
-> 
+As it is likely used in a later patch, note here that the per-thread
+stats are simply accumulated in the address space for now.
+
 > Co-developed-by: Wei Huang <wei.huang2@amd.com>
 > Signed-off-by: Wei Huang <wei.huang2@amd.com>
 > Signed-off-by: Disha Talreja <dishaa.talreja@amd.com>
 > Signed-off-by: Bharata B Rao <bharata@amd.com>
 > ---
->  include/linux/mm_types.h |  7 +++++++
->  kernel/sched/fair.c      | 40 ++++++++++++++++++++++++++++++++++++++--
->  2 files changed, 45 insertions(+), 2 deletions(-)
+>  include/linux/mm_types.h |  2 ++
+>  kernel/sched/fair.c      | 49 +++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 50 insertions(+), 1 deletion(-)
 > 
 > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 9db36dc5d4cf..4f978c09d3db 100644
+> index 4f978c09d3db..2c6f119b947f 100644
 > --- a/include/linux/mm_types.h
 > +++ b/include/linux/mm_types.h
-> @@ -610,6 +610,13 @@ struct mm_struct {
+> @@ -614,6 +614,8 @@ struct mm_struct {
+>  		/* Process-based Adaptive NUMA */
+>  		atomic_long_t faults_locality[2];
+>  		atomic_long_t faults_shared[2];
+> +		unsigned long faults_locality_history[2];
+> +		unsigned long faults_shared_history[2];
 >  
->  		/* numa_scan_seq prevents two threads setting pte_numa */
->  		int numa_scan_seq;
-> +
-> +		/* Process-based Adaptive NUMA */
-> +		atomic_long_t faults_locality[2];
-> +		atomic_long_t faults_shared[2];
-> +
-> +		spinlock_t pan_numa_lock;
-
-Document what this lock protects. In the context of this patch it appears
-to protect a read of p->numa_scan_period and it's overkill to use a
-spinlock for that.  Also, given that it's a trylock, the task_numa_work
-ends up doing no scanning or updates. This might have some value in
-terms of avoiding multiple threads doing updates if they happen to start
-at the same time but that's a narrow side-effect given the short hold
-time of the lock.
-
-> +		unsigned int numa_scan_period;
-
-Document how the per-mm numa_scan_period is related to the per-task
-numa_scan_period.
-
-Maybe it's done in a later patch, I haven't read that far yet.
-
->  #endif
->  		/*
->  		 * An operation with batched TLB flushing is going on. Anything
+>  		spinlock_t pan_numa_lock;
+>  		unsigned int numa_scan_period;
 > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 095b0aa378df..1d6404b2d42e 100644
+> index 1d6404b2d42e..4911b3841d00 100644
 > --- a/kernel/sched/fair.c
 > +++ b/kernel/sched/fair.c
-> @@ -2099,6 +2099,20 @@ static void numa_group_count_active_nodes(struct numa_group *numa_group)
->  	numa_group->active_nodes = active_nodes;
->  }
->  
-> +/**********************************************/
-> +/*  Process-based Adaptive NUMA (PAN) Design  */
-> +/**********************************************/
+> @@ -2102,14 +2102,56 @@ static void numa_group_count_active_nodes(struct numa_group *numa_group)
+>  /**********************************************/
+>  /*  Process-based Adaptive NUMA (PAN) Design  */
+>  /**********************************************/
 > +/*
-> + * Updates mm->numa_scan_period under mm->pan_numa_lock.
-> + *
-> + * Returns p->numa_scan_period now but updated to return
-> + * p->mm->numa_scan_period in a later patch.
+> + * Update the cumulative history of local/remote and private/shared
+> + * statistics. If the numbers are too small worthy of updating,
+> + * return FALSE, otherwise return TRUE.
 > + */
-> +static unsigned long pan_get_scan_period(struct task_struct *p)
+> +static bool pan_update_history(struct task_struct *p)
 > +{
-> +	return p->numa_scan_period;
+> +	unsigned long local, remote, shared, private;
+> +	long diff;
+> +	int i;
+> +
+> +	remote = atomic_long_read(&p->mm->faults_locality[0]);
+> +	local = atomic_long_read(&p->mm->faults_locality[1]);
+> +	shared = atomic_long_read(&p->mm->faults_shared[0]);
+> +	private = atomic_long_read(&p->mm->faults_shared[1]);
+> +
+> +	/* skip if the activities in this window are too small */
+> +	if (local + remote < 100)
+> +		return false;
+> +
+
+Why 100?
+
+> +	/* decay over the time window by 1/4 */
+> +	diff = local - (long)(p->mm->faults_locality_history[1] / 4);
+> +	p->mm->faults_locality_history[1] += diff;
+> +	diff = remote - (long)(p->mm->faults_locality_history[0] / 4);
+> +	p->mm->faults_locality_history[0] += diff;
+> +
+> +	/* decay over the time window by 1/2 */
+> +	diff = shared - (long)(p->mm->faults_shared_history[0] / 2);
+> +	p->mm->faults_shared_history[0] += diff;
+> +	diff = private - (long)(p->mm->faults_shared_history[1] / 2);
+> +	p->mm->faults_shared_history[1] += diff;
+> +
+
+Why are the decay windows different?
+
+
+> +	/* clear the statistics for the next window */
+> +	for (i = 0; i < 2; i++) {
+> +		atomic_long_set(&(p->mm->faults_locality[i]), 0);
+> +		atomic_long_set(&(p->mm->faults_shared[i]), 0);
+> +	}
+> +
+> +	return true;
 > +}
 > +
 >  /*
->   * When adapting the scan rate, the period is divided into NUMA_PERIOD_SLOTS
->   * increments. The more local the fault statistics are, the higher the scan
-> @@ -2616,6 +2630,9 @@ void task_numa_fault(int last_cpupid, int mem_node, int pages, int flags)
->  			task_numa_group(p, last_cpupid, flags, &priv);
->  	}
->  
-> +	atomic_long_add(pages, &(p->mm->faults_locality[local]));
-> +	atomic_long_add(pages, &(p->mm->faults_shared[priv]));
+>   * Updates mm->numa_scan_period under mm->pan_numa_lock.
+> - *
+>   * Returns p->numa_scan_period now but updated to return
+>   * p->mm->numa_scan_period in a later patch.
+>   */
+
+Spurious whitespace change.
+
+>  static unsigned long pan_get_scan_period(struct task_struct *p)
+>  {
+> +	pan_update_history(p);
 > +
->  	/*
->  	 * If a workload spans multiple NUMA nodes, a shared fault that
->  	 * occurs wholly within the set of nodes that the workload is
-> @@ -2702,12 +2719,20 @@ static void task_numa_work(struct callback_head *work)
->  	if (time_before(now, migrate))
->  		return;
->  
-> -	if (p->numa_scan_period == 0) {
-> +	if (p->mm->numa_scan_period == 0) {
-> +		p->numa_scan_period_max = task_scan_max(p);
-> +		p->numa_scan_period = task_scan_start(p);
-> +		mm->numa_scan_period = p->numa_scan_period;
-> +	} else if (p->numa_scan_period == 0) {
->  		p->numa_scan_period_max = task_scan_max(p);
->  		p->numa_scan_period = task_scan_start(p);
->  	}
->  
-> -	next_scan = now + msecs_to_jiffies(p->numa_scan_period);
-> +	if (!spin_trylock(&p->mm->pan_numa_lock))
-> +		return;
-> +	next_scan = now + msecs_to_jiffies(pan_get_scan_period(p));
-> +	spin_unlock(&p->mm->pan_numa_lock);
-> +
->  	if (cmpxchg(&mm->numa_next_scan, migrate, next_scan) != migrate)
->  		return;
->  
-> @@ -2807,6 +2832,16 @@ static void task_numa_work(struct callback_head *work)
->  	}
+>  	return p->numa_scan_period;
 >  }
 >  
-> +/* Init Process-based Adaptive NUMA */
-> +static void pan_init_numa(struct task_struct *p)
-> +{
-> +	struct mm_struct *mm = p->mm;
-> +
-> +	spin_lock_init(&mm->pan_numa_lock);
-> +	mm->numa_scan_period = sysctl_numa_balancing_scan_delay;
-> +
-> +}
-> +
->  void init_numa_balancing(unsigned long clone_flags, struct task_struct *p)
+
+Ok, so the spinlock is protecting the RMW of the PAN history. It still
+may be a concern that task_numa_work gets aborted if the spinlock cannot
+be acquired.
+
+> @@ -2836,10 +2878,15 @@ static void task_numa_work(struct callback_head *work)
+>  static void pan_init_numa(struct task_struct *p)
 >  {
->  	int mm_users = 0;
-> @@ -2817,6 +2852,7 @@ void init_numa_balancing(unsigned long clone_flags, struct task_struct *p)
->  		if (mm_users == 1) {
->  			mm->numa_next_scan = jiffies + msecs_to_jiffies(sysctl_numa_balancing_scan_delay);
->  			mm->numa_scan_seq = 0;
-> +			pan_init_numa(p);
->  		}
->  	}
->  	p->node_stamp			= 0;
+>  	struct mm_struct *mm = p->mm;
+> +	int i;
+>  
+>  	spin_lock_init(&mm->pan_numa_lock);
+>  	mm->numa_scan_period = sysctl_numa_balancing_scan_delay;
+>  
+> +	for (i = 0; i < 2; i++) {
+> +		mm->faults_locality_history[i] = 0;
+> +		mm->faults_shared_history[i] = 0;
+> +	}
+>  }
+>  
+>  void init_numa_balancing(unsigned long clone_flags, struct task_struct *p)
 > -- 
 > 2.25.1
 > 

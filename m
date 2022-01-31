@@ -2,180 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 657714A5079
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 217FD4A507C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 21:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347931AbiAaUrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 15:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345242AbiAaUq2 (ORCPT
+        id S1348462AbiAaUsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 15:48:31 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:57089 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236753AbiAaUs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 15:46:28 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2F2C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:46:28 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id x11so13576872plg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:46:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+BsN29vy50mQ0rcfufEYwcAhhrHDPt+P7YFUglKY9Ds=;
-        b=NP1Miv1XqZHNNVJnYWhU3y0QZ5mm3+IM/s7ffE7vxxHdfG+O+MejSqx5VCUdQs+HWQ
-         zV3CUOZdBt+TmVv4pxza86qYXQUwO8w2VFAsVBnoXrAQWicVyOo+snzpieC36du4LCrk
-         iY/hepaMTVqGB+Jo3JwQeCjCCi0Xw0kkeAqlA=
+        Mon, 31 Jan 2022 15:48:29 -0500
+Received: by mail-il1-f197.google.com with SMTP id t15-20020a92c90f000000b002ba55086cc6so10270792ilp.23
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 12:48:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+BsN29vy50mQ0rcfufEYwcAhhrHDPt+P7YFUglKY9Ds=;
-        b=eDQayoAHaVdmXhKRbJZmozXnV9x2ZVVGC/qfhj0WQY48cP7ZvBZ3OyfC6e9j0xuFB4
-         Y0YiuYjX7OFf0TtSbmhPlNhyjk7ceTZM5uI0d6lzPVm0Q4B40R8hAsiF1xF/oFF3byd8
-         OU8ltdx7sZ3dhA4oYl9tssYExKHVYxBPXBGDgXSFLHVmZfaC4qIOKdG1Hgi8Z9pcGOu5
-         Of8dHBC2G6drpJKyE3M6tKmKSSE4OrJcMEeFjESdp7SwmHyHskuazR6xxwMAoA3aQPEn
-         /G2/ksP15cgVdlyohGlFvrMBIXKVVFi8azU8rg/pXzWi4GgTgTNdCrUvoYDXRRU7aYYf
-         pFTw==
-X-Gm-Message-State: AOAM530N30dWEFiSf3PY7pMfZTfuwUcip8zPxRJe6/DoE8fY5WYwNuN1
-        w99SK+50RkD2hiotexwdDOod6g==
-X-Google-Smtp-Source: ABdhPJyJBMWnDx/3gahqXRSRXLulliMQHWttPKN7aRTD1ZMbdG4c5/xeR3hmw/6ZEfG1jFNLUFOYiw==
-X-Received: by 2002:a17:902:6a83:: with SMTP id n3mr22115880plk.139.1643661988093;
-        Mon, 31 Jan 2022 12:46:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e2sm12576165pgr.52.2022.01.31.12.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 12:46:27 -0800 (PST)
-Date:   Mon, 31 Jan 2022 12:46:27 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Eryu Guan <guan@eryu.me>, fstests@vger.kernel.org,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Rich Felker <dalias@libc.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eryu Guan <guaneryu@gmail.com>
-Subject: Re: [PATCH] generic/633: adapt execveat() invocations
-Message-ID: <202201311245.0B2126B468@keescook>
-References: <20220131171023.2836753-1-brauner@kernel.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=T9rjZ+M8Y1i2lpTl6W7/0kER7Ge+gG5iNvXt/wJcle8=;
+        b=i3N0wHt1+VUTpBRisjrmXgChbGjMkN8D1F3Zb7vL3/mglJyxi84XYgN15oSHBqX+mX
+         OW2b38kXOowLw9J5aKOS+5rOAKMDDrsbqnau3gVIgR+F4Qi/FCKm9DkOEN7tqk5kF7j5
+         YE9RS83DyeWOUSvDR7E9BZN4TKetg/htYkgc6/5TOfd3hMV+2TQpBSJhPn388mRwBQ0B
+         TLgO4MXvJchm8le3tRWEA73/uxLlD4WqU1CNXWQ5XWJ/BhOgiIQILu4GzNSGtSMByYTN
+         cYU3fFMYddPxBWmBoVjN8ZSh6h81Zd9tstfc0skCY0TU4IXHzlB3Lh0uF1Qm8Ce554uG
+         DGGA==
+X-Gm-Message-State: AOAM531PteGUrbitkWjDDk/n3vJ0RmJpZ9tJzDD+2ogtpkPiCvc4u40i
+        p3o9VGgpLrxactC/xtj53OPf8SdOws1a955rj/0voz7wsPC6
+X-Google-Smtp-Source: ABdhPJz5pmOYq4Mwfg2X0YrpgIxDTixme3aXabI5umXBhD6whhdooP7V0wMm+BCJr4cJWlhDmfwSOk6TYCpHIJGtRaMYO4A/uTVY
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131171023.2836753-1-brauner@kernel.org>
+X-Received: by 2002:a05:6638:24d5:: with SMTP id y21mr5149211jat.115.1643662109299;
+ Mon, 31 Jan 2022 12:48:29 -0800 (PST)
+Date:   Mon, 31 Jan 2022 12:48:29 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000027db6705d6e6e88a@google.com>
+Subject: [syzbot] possible deadlock in ___neigh_create
+From:   syzbot <syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com>
+To:     daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, roopa@nvidia.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 06:10:23PM +0100, Christian Brauner wrote:
-> There's a push by Ariadne to enforce that argv[0] cannot be NULL. So far
-> we've allowed this. Fix the execveat() invocations to set argv[0] to the
-> name of the file we're about to execute.
+Hello,
 
-To be clear, these tests are also trying to launch set-id binaries with
-argc == 0, so narrowing the kernel check to only set-id binaries
-wouldn't help here, yes?
+syzbot found the following issue on:
 
--Kees
+HEAD commit:    6449520391df net: stmmac: properly handle with runtime pm ..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=111187e0700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a6620d0aab7dd315
+dashboard link: https://syzkaller.appspot.com/bug?extid=5239d0e1778a500d477a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> 
-> Cc: Ariadne Conill <ariadne@dereferenced.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Eryu Guan <guaneryu@gmail.com>
-> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: fstests@vger.kernel.org
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Link: https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->  src/idmapped-mounts/idmapped-mounts.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/src/idmapped-mounts/idmapped-mounts.c b/src/idmapped-mounts/idmapped-mounts.c
-> index 4cf6c3bb..76b559ae 100644
-> --- a/src/idmapped-mounts/idmapped-mounts.c
-> +++ b/src/idmapped-mounts/idmapped-mounts.c
-> @@ -3598,7 +3598,7 @@ static int setid_binaries(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		if (!expected_uid_gid(t_dir1_fd, FILE1, 0, 5000, 5000))
-> @@ -3726,7 +3726,7 @@ static int setid_binaries_idmapped_mounts(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		if (!expected_uid_gid(open_tree_fd, FILE1, 0, 15000, 15000))
-> @@ -3865,7 +3865,7 @@ static int setid_binaries_idmapped_mounts_in_userns(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		if (!switch_userns(attr.userns_fd, 0, 0, false))
-> @@ -3924,7 +3924,7 @@ static int setid_binaries_idmapped_mounts_in_userns(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		if (!caps_supported()) {
-> @@ -3992,7 +3992,7 @@ static int setid_binaries_idmapped_mounts_in_userns(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		if (!switch_userns(attr.userns_fd, 0, 0, false))
-> @@ -4150,7 +4150,7 @@ static int setid_binaries_idmapped_mounts_in_userns_separate_userns(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		userns_fd = get_userns_fd(0, 10000, 10000);
-> @@ -4214,7 +4214,7 @@ static int setid_binaries_idmapped_mounts_in_userns_separate_userns(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		userns_fd = get_userns_fd(0, 10000, 10000);
-> @@ -4286,7 +4286,7 @@ static int setid_binaries_idmapped_mounts_in_userns_separate_userns(void)
->  			NULL,
->  		};
->  		static char *argv[] = {
-> -			NULL,
-> +			"",
->  		};
->  
->  		userns_fd = get_userns_fd(0, 10000, 10000);
-> 
-> base-commit: d8dee1222ecdfa1cff1386a61248e587eb3b275d
-> -- 
-> 2.32.0
-> 
+Unfortunately, I don't have any reproducer for this issue yet.
 
--- 
-Kees Cook
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com
+
+============================================
+WARNING: possible recursive locking detected
+5.17.0-rc1-syzkaller-00210-g6449520391df #0 Not tainted
+--------------------------------------------
+kworker/0:16/14617 is trying to acquire lock:
+ffffffff8d4dd370 (&tbl->lock){++-.}-{2:2}, at: ___neigh_create+0x9e1/0x2990 net/core/neighbour.c:652
+
+but task is already holding lock:
+ffffffff8d4dd370 (&tbl->lock){++-.}-{2:2}, at: neigh_managed_work+0x35/0x250 net/core/neighbour.c:1572
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&tbl->lock);
+  lock(&tbl->lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+5 locks held by kworker/0:16/14617:
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:631 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:658 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_one_work+0x890/0x1650 kernel/workqueue.c:2278
+ #1: ffffc9000293fdb8 ((work_completion)(&(&tbl->managed_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8c4/0x1650 kernel/workqueue.c:2282
+ #2: ffffffff8d4dd370 (&tbl->lock){++-.}-{2:2}, at: neigh_managed_work+0x35/0x250 net/core/neighbour.c:1572
+ #3: ffffffff8bb83ae0 (rcu_read_lock){....}-{1:2}, at: ip6_nd_hdr net/ipv6/ndisc.c:466 [inline]
+ #3: ffffffff8bb83ae0 (rcu_read_lock){....}-{1:2}, at: ndisc_send_skb+0x84b/0x17f0 net/ipv6/ndisc.c:502
+ #4: ffffffff8bb83a80 (rcu_read_lock_bh){....}-{1:2}, at: lwtunnel_xmit_redirect include/net/lwtunnel.h:95 [inline]
+ #4: ffffffff8bb83a80 (rcu_read_lock_bh){....}-{1:2}, at: ip6_finish_output2+0x2ad/0x14f0 net/ipv6/ip6_output.c:112
+
+stack backtrace:
+CPU: 0 PID: 14617 Comm: kworker/0:16 Not tainted 5.17.0-rc1-syzkaller-00210-g6449520391df #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_power_efficient neigh_managed_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
+ check_deadlock kernel/locking/lockdep.c:2999 [inline]
+ validate_chain kernel/locking/lockdep.c:3788 [inline]
+ __lock_acquire.cold+0x149/0x3ab kernel/locking/lockdep.c:5027
+ lock_acquire kernel/locking/lockdep.c:5639 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+ __raw_write_lock_bh include/linux/rwlock_api_smp.h:202 [inline]
+ _raw_write_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:334
+ ___neigh_create+0x9e1/0x2990 net/core/neighbour.c:652
+ ip6_finish_output2+0x1070/0x14f0 net/ipv6/ip6_output.c:123
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ __ip6_finish_output+0x61e/0xe90 net/ipv6/ip6_output.c:170
+ ip6_finish_output+0x32/0x200 net/ipv6/ip6_output.c:201
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip6_output+0x1e4/0x530 net/ipv6/ip6_output.c:224
+ dst_output include/net/dst.h:451 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ndisc_send_skb+0xa99/0x17f0 net/ipv6/ndisc.c:508
+ ndisc_send_ns+0x3a9/0x840 net/ipv6/ndisc.c:650
+ ndisc_solicit+0x2cd/0x4f0 net/ipv6/ndisc.c:742
+ neigh_probe+0xc2/0x110 net/core/neighbour.c:1040
+ __neigh_event_send+0x37d/0x1570 net/core/neighbour.c:1201
+ neigh_event_send include/net/neighbour.h:470 [inline]
+ neigh_managed_work+0x162/0x250 net/core/neighbour.c:1574
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

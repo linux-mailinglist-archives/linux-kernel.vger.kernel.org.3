@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A22714A47B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D77244A47B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378455AbiAaNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S1376764AbiAaNCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378383AbiAaNAi (ORCPT
+        with ESMTP id S234504AbiAaNCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:00:38 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C2AC06173B;
-        Mon, 31 Jan 2022 05:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xQCGsDUYFp6pvF7xS5natfKk/35QMnRgqEC4IjicK74=; b=mHJI8Uwd/igPBdxzDh546BJtm0
-        3P8015UYpCjufDCns11sMr4x4XUTUoYmfCaooJOyET6T9puzam2oqO0WypPYwq2pKdcSuaPipjLiW
-        B54WN/m8CyjVD7EkWHu3Vcr4EKgt111QlQLPPpBGftjmVPXXBsrYAJm+SBrF6xwNxgjYaz6lsyyjl
-        OqMfckwxHhGtAK/jiXrwhjJ2LjgfPq0zeoIXQoShFWBQ+NXVmVKtZ3hKGJjxPERwP1qd2aL46jaf/
-        cSpxFYoFfUeKlCrE1Br5Do3/1Mq7ACbodTF9yJVCqzUUsSBFaHW2sQgwMV0hHULJwCSHU8zuCfWr+
-        /Yet86BQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEWIG-009PaF-Ds; Mon, 31 Jan 2022 13:00:28 +0000
-Date:   Mon, 31 Jan 2022 05:00:28 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup.patel@wdc.com>
-Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
-Message-ID: <YffdbErmAjAWYuD9@infradead.org>
-References: <20220129121728.1079364-1-guoren@kernel.org>
- <20220129121728.1079364-6-guoren@kernel.org>
- <YffUqErSVDgbGLTu@infradead.org>
- <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+        Mon, 31 Jan 2022 08:02:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE824C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 05:02:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73967B82AD0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:02:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F90C340E8;
+        Mon, 31 Jan 2022 13:01:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643634119;
+        bh=r0W8Gj/VL3LXX5y5QJNhuybggxhVx0F7D/TQcGOrsn8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iCqMjBWhHVpaHTpMpKzjTAxPNswIfnV+8/OlzNjb1ItJsuA4E0kYTEZ49uCTv+Ssj
+         uVSW/yvSU42kCZI2V1FizRq5xlVl/D7Cn1nDrTlvkrwGYxrbTjYB3bBI5DFIvXv9aP
+         KUp99RujR+d9+IvTpLsuP6pywarLQK8hrFKSOpQU=
+Date:   Mon, 31 Jan 2022 14:01:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: Re: [PATCH] staging: r8188eu: clean up phy_BB8188E_Config_ParaFile
+Message-ID: <YffdxLhsijWz957M@kroah.com>
+References: <20220130182249.712034-1-martin@kaiser.cx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20220130182249.712034-1-martin@kaiser.cx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 01:48:58PM +0100, Arnd Bergmann wrote:
-> I thought that is what the patch does, there is already the normal 64-bit
-> defconfig, and the new makefile target makes this shared with 32-bit
-> to prevent them from diverging again.
+On Sun, Jan 30, 2022 at 07:22:49PM +0100, Martin Kaiser wrote:
+> Clean up the code of the phy_BB8188E_Config_ParaFile function.
+> 
+> Replace a TAB with a space in the function definition.
+> 
+> Put the HAL_STATUS_FAILURE on the right-hand side of the comparisons.
+> 
+> Simplify the error handling. Exit directly if we detect an error.
+> 
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+> This should be applied on top of
+> [PATCH] staging: rt8188eu: Remove dead code.
+> 
+>  drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 20 ++++++-------------
+>  1 file changed, 6 insertions(+), 14 deletions(-)
 
-I ment using a common fragment and the deriving both 32-bit and 64-bit
-configs from it. The 64-bit specific fragment will be empty for now,
-but we will sooner or later have an option that can only go into the
-64-bit defconfig.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

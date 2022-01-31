@@ -2,141 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD0C4A4618
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0364A465E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377474AbiAaLtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:49:36 -0500
-Received: from mga05.intel.com ([192.55.52.43]:12109 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379079AbiAaLie (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:38:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643629114; x=1675165114;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lI9J06ShMDzX4snLdMSWm2sVJLb4bsM0sL6ARCPRO8s=;
-  b=FOt930E8Q1AfSd0j7ONGBh91vtdCIMnhKjdvTbf6oDSE09xeKyr+Eh5m
-   o3qNDf9mi+5B0lXzR57NCz+jiwz38Ppcea8lY37ILBwMBWGzFO0c9vcCi
-   sueCfP9qfqNBH4ec3CE0iSHTGkGI1QcyUN8zvpFNvtZ+MtKMukWRQxktx
-   Kgzh+d4waUcVxophQCSRN8gqbdmeLuDaq4OYdOwS/irPa16fxH5/nmbtR
-   WY6FmXK5PWs1K0pJWmStU/5sI744Wf8A2eULXdL9iwkQ3a4VROMCvP3Ak
-   eIuCDT+GzEesg0D5CHRlTaHjQAw8CtM3xPWuRKzWz2Rqi1ctAWdbVu7+y
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="333800323"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="333800323"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:37:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="619355861"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:37:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nEUyx-00Gqnl-AM;
-        Mon, 31 Jan 2022 13:36:27 +0200
-Date:   Mon, 31 Jan 2022 13:36:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-Message-ID: <YffJujbpUGUqpIk/@smile.fi.intel.com>
-References: <YfEG2qVO9K9G+g1d@kroah.com>
- <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
- <YfEv7OQs98O9wJdJ@kroah.com>
- <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
- <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
- <YfFV4EJosayH+e6C@smile.fi.intel.com>
- <YfFWPmG2D093gz4N@smile.fi.intel.com>
- <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com>
- <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
+        id S1343849AbiAaLzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378850AbiAaLwq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:52:46 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F13AC0797A1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:38:06 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id c7so18476970ljr.13
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W8c20o6vm+QehnaH5SGz0nEPnQS7Uvpo1uJWmbdFZlc=;
+        b=TBoqWZUVCECQVtQsmAoVuSv+8zXX5npwQzMT/o7dAdNDzUXMGpnR7gdfY0Qc+cV519
+         DiMH8bfdYRd7qr2zaAy0/wwBxhIw0RZvqfmwviAjJgsXdFySxShr6sN6RsptFTN962o7
+         65YJ0XJmI70G0PcoXT5IMxq86oClWUgzvIuafSL2K2UjGKhkGFS0RJ5usVIPs/HRPhnm
+         r/cKHF+Nw7n5qe+Yw+34qwlAyP5vX/PKL+mTe+K+2wCL2yklRn83o2kFXCeFCbEW9t5O
+         7BX4O+9Coot60HOEmq9nxcy9c7at/ZjIkDq/QhHfCW+Xj5KuJlSHAEU9kIQz0Bi8lRNz
+         MKfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W8c20o6vm+QehnaH5SGz0nEPnQS7Uvpo1uJWmbdFZlc=;
+        b=IzjLlZxZ2D8Ihjs39JNbQ6NkIdEykDcTquwFxfEjBNBJGZfREBMt41RPnzo0yW1Mj7
+         9WPQns2dS1SoP++ad1n233et/+nVnzF8hHKl03g6fRWPsNHyYtbf4CaWH1kNeyAcPahz
+         m2GlkgkIo7Q49JJc30XmdiWSfwfoyH4rJ1hy1a25GEYO1XLl+4WQUEK7eSPLAJZaLK1D
+         LaeGV2h7DxYw6TFfkcWbFQ/zTasrefOFldb/MwY95+3VZYd0+5e+XHFpxJJ+eFpWOydi
+         HmbvcREZBItY+KOZ8ZImW/U0p2+KW6gJwVTmLzfpnjcUM71pI2ZKyygA328WRMGz7OD0
+         gH5g==
+X-Gm-Message-State: AOAM532I1AMnkAkH3+R2Qi0WXcZGbfmTpyPRoY2MIYRnkXqU5GdtUiND
+        3TmUKcEYn45/WHdSXvrsC7TXFg==
+X-Google-Smtp-Source: ABdhPJy8MOQDAw//y5jxcHDGs1rFLfsXGOtR/s7UPuFneVxw+5BAwdjjbS/0n0t0JHKdNGYX6XNjpA==
+X-Received: by 2002:a2e:a4bb:: with SMTP id g27mr13623432ljm.469.1643629083336;
+        Mon, 31 Jan 2022 03:38:03 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-129-21.NA.cust.bahnhof.se. [155.4.129.21])
+        by smtp.gmail.com with ESMTPSA id b8sm597682lfp.34.2022.01.31.03.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 03:38:02 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] PM: domains: Prevent power off for parent unless child is in deepest state
+Date:   Mon, 31 Jan 2022 12:37:43 +0100
+Message-Id: <20220131113743.52265-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 09:29:33AM +0100, Javier Martinez Canillas wrote:
-> On 1/26/22 15:15, Javier Martinez Canillas wrote:
-> > On 1/26/22 15:10, Andy Shevchenko wrote:
-> >> On Wed, Jan 26, 2022 at 04:08:32PM +0200, Andy Shevchenko wrote:
-> >>> On Wed, Jan 26, 2022 at 02:46:08PM +0100, Javier Martinez Canillas wrote:
-> >>>> On 1/26/22 14:12, Andy Shevchenko wrote:
-> >>
-> >> ...
-> >>
-> >>>> I've just bought a SSD1306 (I2C) based one and will attempt to write a DRM
-> >>>> driver using drivers/staging/fbtft/fb_ssd1306.c as a reference.
-> >>>
-> >>> You should take ssd1307fb.c instead. And basically create a MIPI based driver
-> >>> for I2C. Then we won't go same road again for other similar devices.
-> >>
-> >> For the record it supports your device:
-> >>
-> >> static const struct i2c_device_id ssd1307fb_i2c_id[] = {
-> >> { "ssd1305fb", 0 },
-> >> { "ssd1306fb", 0 },
-> >> { "ssd1307fb", 0 },
-> >> { "ssd1309fb", 0 },
-> >>
-> >>
-> > 
-> > Thanks a lot for the pointer. I was only looking at drivers/staging
-> > and didn't check drivers/video. I'll try to convert that one then
-> > once I get the display.
-> > 
-> 
-> I got some time this weekend and was able to port the ssd1306 fbdev driver
-> to DRM [0]. I'm not that familiar with the simple display pipe helpers, so
-> there may be some wrong things there. But it does work and all the fbtests
-> from https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git pass.
+A PM domain managed by genpd may support multiple idlestates. During
+genpd_power_off() a genpd governor may be asked to select one of the
+idlestates based upon the dev PM QoS constraints, for example.
 
-Thanks! Good news, everybody!
+However, there is a problem with the behaviour around this in genpd. More
+precisely, a parent-domain is allowed to be powered off, no matter of what
+idlestate that has been selected for the child-domain.
 
-> There are some hacks in the driver though. For example it exposes an XRGB8888
-> format even thought the OLED display is monochromatic and has 1 bit per pixel.
-> 
-> The driver then goes and converts the XRGB8888 pixels first to grayscale and
-> then to reverse mono. I took that idea from the repaper driver but that gives
-> us the multiple copies that Geert was complaining about.
-> 
-> Another hack is that I am just hardcoding the {width, height}_mm, but I don't
-> know what DPI could be used for these panels nor how I could calculate the mm.
+So far, we have not received any reports about errors, possibly because
+there might not be platform with this hierarchical configuration, yet.
+Nevertheless, it seems reasonable to change the behaviour into preventing
+the parent-domain from being powered off, unless the deepest idlestate has
+been selected for the child-domain, so let's do that.
 
-I think the hacks is the first what should be eliminated, also see below.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/base/power/domain.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-...
-
-> +config TINYDRM_SSD130X
-> +	tristate "DRM support for Solomon SSD130X OLED displays"
-> +	depends on DRM && OF && I2C
-
-Please, make sure that it does NOT dependent on OF.
-
-...
-
-> +obj-$(CONFIG_TINYDRM_SSD130X)		+= ssd130x.o
-
-I would keep the original name since we have I2C (fbdev) implementation, SPI
-and platform (fbtft), and now i2c (drm). I would like to avoid more confusion
-that we already have.
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 5db704f02e71..7f97c5cabdc2 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+ 			atomic_read(&genpd->sd_count) > 0)
+ 		return -EBUSY;
+ 
++	/*
++	 * The children must be in their deepest states to allow the parent to
++	 * be powered off. Note that, there's no need for additional locking, as
++	 * powering on a child, requires the parent's lock to be acquired first.
++	 */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		struct generic_pm_domain *child = link->child;
++		if (child->state_idx < child->state_count - 1)
++			return -EBUSY;
++	}
++
+ 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+ 		enum pm_qos_flags_status stat;
+ 
+@@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+ 	    || atomic_read(&genpd->sd_count) > 0)
+ 		return;
+ 
++	/* Check that the children are in their deepest state. */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		struct generic_pm_domain *child = link->child;
++		if (child->state_idx < child->state_count - 1)
++			return;
++	}
++
+ 	/* Choose the deepest state when suspending */
+ 	genpd->state_idx = genpd->state_count - 1;
+ 	if (_genpd_power_off(genpd, false))
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 

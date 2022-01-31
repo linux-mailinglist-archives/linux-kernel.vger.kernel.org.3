@@ -2,97 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 675574A4AFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36974A4B07
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 16:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379915AbiAaPvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 10:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S1379920AbiAaPyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 10:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379903AbiAaPvj (ORCPT
+        with ESMTP id S1377460AbiAaPyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:51:39 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F87C061714;
-        Mon, 31 Jan 2022 07:51:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jhKpcZkEDowSCd8hPiP4aOrjjBOOXWKUBDEZ4Umsnng=; b=ovC3C4cA6GsB7Jcp5zm/3ubOKO
-        Wa9/sp7MaghHHz+SSng/nlpGk9Mc4DQkHSxMjKH3ajQr43FNVnP5btg07SOmzREk31vrplC2ltroF
-        QtXnImYdOc3Q9mjAmuSSNOblBwKyqArsoLD8aI0nJ7Q08DEwSOMyPssK2+9fPQqbIRbPAaY1rcLEl
-        eImwHgLXjz6VYbMjMQLCRrDR+3e7q4MTfuM/KjufxXHShHBHHbOcb/WwfdD+mQv+KDTSNorSsRdyz
-        fqJlR7ssST58P/CvJnJJcs5D6woDyHLJO6ik3KwmCieDBOcRTg58vG3ysBmdZDaqu0ZbVKXKBe3j9
-        qp84V1Fg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEYxd-00A506-QH; Mon, 31 Jan 2022 15:51:21 +0000
-Date:   Mon, 31 Jan 2022 15:51:21 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        0day robot <lkp@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Subject: Re: [fs/exec]  80bd5afdd8: xfstests.generic.633.fail
-Message-ID: <YfgFeWbZPl+gAUYE@casper.infradead.org>
-References: <20220127000724.15106-1-ariadne@dereferenced.org>
- <20220131144352.GE16385@xsang-OptiPlex-9020>
- <20220131150819.iuqlz3rz6q7cheap@wittgenstein>
- <Yff9+tIDAvYM5EO/@casper.infradead.org>
- <20220131153707.oe45h7tuci2cbfuv@wittgenstein>
+        Mon, 31 Jan 2022 10:54:07 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420EEC06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:54:07 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id s9so26258595wrb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 07:54:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=7Gy5UW1fWfYNjiBYU6VT4K4G1ACnF1QWzkEUjeRjyVM=;
+        b=QC8Hbp3YDZL1XPZQtcsDsq3tgT37d1hv4VhJGbgqIYCUyf8N8FD7u9yJxnhJVb3Mtr
+         zfVcqhkaxtb1/jyAPQFInfEyWQMxQRgGKibIR0sIERVHoXCf0+28dGENmQvyeLw1t/eU
+         J/Jd5gnNokoM+9G31GufeEjj+RhMvR9EoV8iwvDnV0NvPvqAdgej3b6kKbzI3wNNEQcG
+         VuSJlNx7P5lj2MUxXNI56MjeGtAaIKKtex68om4cEDGqKLuAx26xnWV2rousTmXXI7QH
+         sgpXPhsde06UtIx4gOTALN8K+7YfHLHJh7QzbBNTkLp9oUWVXOPRVuXhdJ7PUJgAd7Qd
+         FJZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=7Gy5UW1fWfYNjiBYU6VT4K4G1ACnF1QWzkEUjeRjyVM=;
+        b=mjE0NYviB+cFtMPM50YzNHQ9Znrx3utkoTKQCwUFbH9xK0+JHVoWH6TGOSv06TZ11a
+         ZLZMUWiXY9JdA0EHug2e+3gAaS2Tbz19TaRPK1STXcQeBmmeZ+czwau0WdWWoZesU0+y
+         pvpGXLSzEl1VfYTLByu37oEf/VKTY03mLe5JW112KmJrDYdSn8+jloRZSqexCt8qNcI3
+         0pKPBrFUaNM0DJe30Hc0VAEyzp5kWu9qcQKMtREDgmS4hDhRKRW4lsI6iwXO5f3bwvLt
+         PSpvcQU+6kNHIOLl2kdBOBwnYe4rN4D7cKexRJ/tscakW3XSeNN5bwTe1PqskhhdeBzO
+         S2zQ==
+X-Gm-Message-State: AOAM530EJoW0Wd6KbCfWFfue3DMEGwyC4flvTEuTDU82STleGmMX2Ed4
+        5CFhtTw/nudlurjtHutGj0ZgIQ==
+X-Google-Smtp-Source: ABdhPJwR5vQXkMM6SlNUC6W39RCaocup+suVldKGwB3rvUuLoX1E9Y2tm0+t3CiCdEKCpzkvw5fsaw==
+X-Received: by 2002:a05:6000:15c5:: with SMTP id y5mr17937388wry.94.1643644445795;
+        Mon, 31 Jan 2022 07:54:05 -0800 (PST)
+Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
+        by smtp.gmail.com with ESMTPSA id f14sm9743053wmq.40.2022.01.31.07.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 07:54:05 -0800 (PST)
+Date:   Mon, 31 Jan 2022 15:54:03 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: Re: [PATCH v2 4/7] mfd: hi6421-spmi-pmic: Use
+ generic_handle_irq_safe().
+Message-ID: <YfgGG0v/zhQp41tr@google.com>
+References: <20220131123404.175438-1-bigeasy@linutronix.de>
+ <20220131123404.175438-5-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220131153707.oe45h7tuci2cbfuv@wittgenstein>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220131123404.175438-5-bigeasy@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:37:07PM +0100, Christian Brauner wrote:
-> On Mon, Jan 31, 2022 at 03:19:22PM +0000, Matthew Wilcox wrote:
-> > On Mon, Jan 31, 2022 at 04:08:19PM +0100, Christian Brauner wrote:
-> > > On Mon, Jan 31, 2022 at 10:43:52PM +0800, kernel test robot wrote:
-> > > I can fix this rather simply in our upstream fstests with:
-> > > 
-> > > static char *argv[] = {
-> > > 	"",
-> > > };
-> > > 
-> > > I guess.
-> > > 
-> > > But doesn't
-> > > 
-> > > static char *argv[] = {
-> > > 	NULL,
-> > > };
-> > > 
-> > > seem something that should work especially with execveat()?
-> > 
-> > The problem is that the exec'ed program sees an argc of 0, which is the
-> > problem we're trying to work around in the kernel (instead of leaving
-> > it to ld.so to fix for suid programs).
-> 
-> Ok, just seems a bit more intuitive for path-based exec than for
-> fd-based execveat().
-> 
-> What's argv[0] supposed to contain in these cases?
-> 
-> 1. execveat(fd, NULL, ..., AT_EMPTY_PATH)
-> 2. execveat(fd, "my-file", ..., )
-> 
-> "" in both 1. and 2.?
-> "" in 1. and "my-file" in 2.?
+On Mon, 31 Jan 2022, Sebastian Andrzej Siewior wrote:
 
-You didn't specify argv for either of those, so I have no idea.
-Programs shouldn't be assuming anything about argv[0]; it's purely
-advisory.  Unfortunately, some of them do.  And some of them are suid.
+> generic_handle_irq() is invoked from a regular interrupt service
+> routine. This handler will become a forced-threaded handler on
+> PREEMPT_RT and will be invoked with enabled interrupts. The
+> generic_handle_irq() must be invoked with disabled interrupts in order
+> to avoid deadlocks.
+> 
+> Instead of manually disabling interrupts before invoking use
+> generic_handle_irq_safe() which can be invoked with enabled and disabled
+> interrupts.
+> 
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  drivers/misc/hi6421v600-irq.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
+The subject line should be "misc".
+
+> diff --git a/drivers/misc/hi6421v600-irq.c b/drivers/misc/hi6421v600-irq.c
+> index 1c763796cf1fa..caa3de37698b0 100644
+> --- a/drivers/misc/hi6421v600-irq.c
+> +++ b/drivers/misc/hi6421v600-irq.c
+> @@ -117,8 +117,8 @@ static irqreturn_t hi6421v600_irq_handler(int irq, void *__priv)
+>  			 * If both powerkey down and up IRQs are received,
+>  			 * handle them at the right order
+>  			 */
+> -			generic_handle_irq(priv->irqs[POWERKEY_DOWN]);
+> -			generic_handle_irq(priv->irqs[POWERKEY_UP]);
+> +			generic_handle_irq_safe(priv->irqs[POWERKEY_DOWN]);
+> +			generic_handle_irq_safe(priv->irqs[POWERKEY_UP]);
+>  			pending &= ~HISI_IRQ_POWERKEY_UP_DOWN;
+>  		}
+>  
+> @@ -126,7 +126,7 @@ static irqreturn_t hi6421v600_irq_handler(int irq, void *__priv)
+>  			continue;
+>  
+>  		for_each_set_bit(offset, &pending, BITS_PER_BYTE) {
+> -			generic_handle_irq(priv->irqs[offset + i * BITS_PER_BYTE]);
+> +			generic_handle_irq_safe(priv->irqs[offset + i * BITS_PER_BYTE]);
+>  		}
+>  	}
+>  
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

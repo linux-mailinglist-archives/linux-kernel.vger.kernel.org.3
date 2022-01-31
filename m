@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD164A4BF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCC64A4C1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380339AbiAaQ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S1380454AbiAaQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380319AbiAaQ0n (ORCPT
+        with ESMTP id S1380486AbiAaQ2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:26:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070D4C06173D;
-        Mon, 31 Jan 2022 08:26:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=GEwATrS8QyZwxwEyKt9LncyWi/r/xnwpQIPKwhOCdNw=; b=mYrisjOodfhbzF6aT3BqYPvfVx
-        arCZ2gkbDftYehgG2gkPMXIZu4PoPMjnZZ6jyfFbKhAaE8AlOWtBozklCVRheAehK9CzSHvZnkk8K
-        czb74/oMM0iO3ZqTSaOar+C4lYmiSTgocCKNo1+/SozcpltwXiOl9WmJv/iclw6lVIwnR8bsTVHC/
-        Gfk6o/Z1X0zrEYwqzMIm/1F/M07a32o/4i83b4iQjiRuSuiCxY5FVIxttNyCygudd1Djz4EGQUa6p
-        zITnsVExJ5bgfFAs4b7rf3JG0rqHI9mcC98AA7TXW88AzbOtscZVf8Qmx2EI3f3fWX+WXjRg4Ba1f
-        HOHH5guQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEZVn-00A8Vj-Jk; Mon, 31 Jan 2022 16:26:40 +0000
-Message-ID: <bc370384-f852-eedf-5bd8-ed39bf671aba@infradead.org>
-Date:   Mon, 31 Jan 2022 08:26:36 -0800
+        Mon, 31 Jan 2022 11:28:17 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3DCC061401;
+        Mon, 31 Jan 2022 08:28:16 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id r10so28040231edt.1;
+        Mon, 31 Jan 2022 08:28:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SRGWD5HujtGaIfy6YI6sQxXDCuS1sXnoBeyNAfdeYfw=;
+        b=ChnztWGFCtrmF8AR1r+RxPbBgCvUh0CFlJUcnaF52cf5G1sjhuI7GzfAEFXFuzTQkM
+         JxycPhTVhoZtFs7XinEr+TOKblJu49ps9qXeBjK0ScLdwojro28qNzmRh10OqkWGwHhV
+         vtBa+0kLeIc6limAZBPJAZC9EgPv4VCTLX07epyDEu+yiwKgbL9tsOV0KKnmC5ZnAHvn
+         uH0fE/7Il/g8fhtNHrIh1RMxTB06zccccFG7TUwimrwW0oFiMF4+B9DkJlFQzDG04Sk9
+         CxTtObvrEBHH9Cb9TRsJY4DhJHo9u5ENG96hEs47e66AFhqodn6kekntyKOXZRDPHCEY
+         nqfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SRGWD5HujtGaIfy6YI6sQxXDCuS1sXnoBeyNAfdeYfw=;
+        b=T1aG/0uPrrDJp4vfq+mKAMaGTA77ov1vzrTLtiNd7XWrQts0QYgbvnBasn/+aUAnr7
+         xkHhvYNXs7uFSMHXS9UGBnsopwN9T65OFxvm2V+RMMnkK27QsPLJE2J46UgvcGnc9i3N
+         QNQfKLkXxujvSS77a+yuvWmdgrF8SFOXf6ye2qIPlyTaha6s8Rbcd+BnJ0OYxo88JKsM
+         csii3ZoeebIDq+uCbBCIC9xrqe2JIBUkcx76ypsac2xGzMWqrPUROFphprxLm9YztLJy
+         yOxAymO/tp8+8E5UaGQQRHou5Qy+1BQ6VnWpSMKK/Fpjp1gTpDyu/hvD6sBNIZYcxv4U
+         X/gg==
+X-Gm-Message-State: AOAM530GuvSnHY2NtfjxNxvwbT7zySvKplP5Vs5XWpQjCetsQP1qh1PI
+        u1zDdFcSfhp7k18lKi4Zp4KlEiet5ALJVlIA3A0=
+X-Google-Smtp-Source: ABdhPJxN6zodTFR1sUdARmDocQ6DqGl7M4lBjebz7UFYoBxZ4kMltyMXUVtIA2lfAdrmFf2GE2DGhFAXGCGauiLOqqI=
+X-Received: by 2002:aa7:d6c5:: with SMTP id x5mr20979293edr.29.1643646494962;
+ Mon, 31 Jan 2022 08:28:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] usb: typec: mux: select not-visible INTEL_SCU_IPC
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220130185032.29298-1-rdunlap@infradead.org>
- <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220131160713.245637-1-marcan@marcan.st> <20220131160713.245637-3-marcan@marcan.st>
+In-Reply-To: <20220131160713.245637-3-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 31 Jan 2022 18:26:39 +0200
+Message-ID: <CAHp75Vd8Yut7fSnyVnr-rYcK22DiZdnfofb+-DCJ6A5M9Y_VDg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] brcmfmac: firmware: Allocate space for default
+ boardrev in nvram
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 31, 2022 at 6:07 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> If boardrev is missing from the NVRAM we add a default one, but this
+> might need more space in the output buffer than was allocated. Ensure
+> we have enough padding for this in the buffer.
 
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-On 1/31/22 00:42, Heikki Krogerus wrote:
-> On Sun, Jan 30, 2022 at 10:50:32AM -0800, Randy Dunlap wrote:
->> Use "select INTEL_SCU_IPC" instead of depending on it since it is
->> not a visible Kconfig symbol and it may not otherwise be set/enabled.
->>
->> Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
->> Cc: Lee Jones <lee.jones@linaro.org>
->> Cc: linux-usb@vger.kernel.org
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: kernel test robot <lkp@intel.com>
->> ---
->> v2: add dependency on X86_PLATFORM_DEVICES to fix build error that was
->>     Reported_by: kernel test robot <lkp@intel.com>
->>
->>  drivers/usb/typec/mux/Kconfig |    4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> --- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
->> +++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
->> @@ -11,8 +11,8 @@ config TYPEC_MUX_PI3USB30532
->>  
->>  config TYPEC_MUX_INTEL_PMC
->>  	tristate "Intel PMC mux control"
->> -	depends on ACPI
->> -	depends on INTEL_SCU_IPC
->> +	depends on ACPI && X86_PLATFORM_DEVICES
->> +	select INTEL_SCU_IPC
->>  	select USB_ROLE_SWITCH
->>  	help
->>  	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
-> 
-> This will cause the driver to fail at probe time if there are no SCU
-> device drivers enabled.
-> 
-> The idea is that the SCU device drivers select the SCU IPC library,
-> not the users of the library like this mux driver.
+> Fixes: 46f2b38a91b0 ("brcmfmac: insert default boardrev in nvram data if missing")
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+> index 0eb13e5df517..1001c8888bfe 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+> @@ -207,6 +207,8 @@ static int brcmf_init_nvram_parser(struct nvram_parser *nvp,
+>                 size = BRCMF_FW_MAX_NVRAM_SIZE;
+>         else
+>                 size = data_len;
+> +       /* Add space for properties we may add */
+> +       size += strlen(BRCMF_FW_DEFAULT_BOARDREV) + 1;
+>         /* Alloc for extra 0 byte + roundup by 4 + length field */
+>         size += 1 + 3 + sizeof(u32);
+>         nvp->nvram = kzalloc(size, GFP_KERNEL);
+> --
+> 2.33.0
+>
 
-OK. Thanks.
 
 -- 
-~Randy
+With Best Regards,
+Andy Shevchenko

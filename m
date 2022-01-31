@@ -2,183 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0374A3E06
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 07:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53FF4A3E09
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357838AbiAaG7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 01:59:19 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:22511 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357820AbiAaG7Q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 01:59:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643612355; x=1675148355;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ewBCsxFsd8fFkzv/ulWWJ8h9q0mecz7KTuknf3I0FaI=;
-  b=KYnCW8k05Psds3dgutZd9mP5+5K+Eew1882ZXfAMEdaNFYg8py17T67M
-   HjE1ANwTEfE521U2rTQ1x/zYlKp4t9WXbHVvju+qua7vQSgiTimZToNem
-   0PFBbrSvC2cY2ELpXBWBV2nndT2zCqBz7cYzj05duOzuKIeMAtGjACvUM
-   Ya/DHEgImSKL7PDC6C77OenzjnjvdI65G9B3LLwb5FmhJ5LkYZu3JBNet
-   VyY9pryhpVkxbATwj06UxIc/6pXz1yYbtHNi+TLM42XtaYxWARBTl971f
-   sd7hhxYpqJPMEwk55+jQisVs8/AkMnBPZke+5Vlr6/uMlwRUdjjT76XLl
-   Q==;
-IronPort-SDR: A1zBDsW66dlhTuw0BpJm1SYDMpMZ7gUi1UjdfIlBYJCxwfCVEtMl3yvqFxgAluzdu+c2KIRXRr
- ShX9K1PBkcQ2BiC89iRo4HTnjodeNpOHKFWC8iqFaGl5yvNgvUj5z0YrwKH40ttmO3IrI9z5YB
- xkXGZm3ejTqkU+3s5/baOyrf6p36EnYMUD+qxg+9UEwO4cp3agSEKmC9M2mihKVQlQ1cLN4YO8
- zGt5GNd25QTvgEHolOoS/+pbXYAvA75JcI4IV4zqQfuAcvtE1xZGehXMSIIdkFfQGphyTtoLZK
- hB0eDzrWTT6h0aBwR3Hl4Vzd
+        id S1357840AbiAaHBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 02:01:20 -0500
+Received: from mga06.intel.com ([134.134.136.31]:6602 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237178AbiAaHBQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 02:01:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643612476; x=1675148476;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bIIPSPk9j3893WY4BHn/uAWFa+5hVRenFO3kph0qOEc=;
+  b=f9cS/pTg/pEkxEb7Df09bV7puuSIoAq9A6rW12Scmycc/411wK/l260K
+   VTCUvfyVm2iieqQGMBiPMtWshCutPLRulBKTzkc2giSAc4oYw+1ymnjjb
+   tRDJA8oB4UVoXdodS3hL/ZZPoorvC7y0PInaOrKcAoT9xB76QdcOaHG4o
+   RJYqT5u1H2K2myoP8068OEjinrFY3ggfT1LwBoZ0Rek/F4ddEeBO8ARMy
+   USZPUTaBqSUjZuXmSEjWeX6u2M5eHfztI6Ooe4Zfvoohv8mjx0JJTzh/1
+   oGV8a6LMtk2YVFUosT+cWVFpcV0ZhMMwhWB5U6LmL5mwGKFdtoQ8b7FuC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308140117"
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="151943928"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2022 23:59:14 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 30 Jan 2022 23:59:13 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Sun, 30 Jan 2022 23:59:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=itrrE1MOzYmXMwu7H1POVhiYpVPqACGp3p/46SjeOCh9DEixF+OKcM+6HNTgCgEA12alVuaRZQZ4KMaqppCac/3PjxMjpyDS+Tlp9H6oIHa3defgoOUUCccuse8SjdQX91SYl0tAJCP4U9wg46eSVNdqxXUdVNqv5wYont0yolxwQlgzkwZHP4s9b3KTXulpjkFudSh4NyC3NOENoNuNvCOUt1A27WJ5jE91cIthJ7lgavgOqho6U7BKA1n950k1BK5QoNmL+G4cMmQ6HpCz2eKodcLQ/JJseAZHpuSUKMTO3EafcIkZ9N9o8DkyKVuMGiXjchW7w5o1/qonYq4/ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ewBCsxFsd8fFkzv/ulWWJ8h9q0mecz7KTuknf3I0FaI=;
- b=QIg+Q52CkG0eGB6QnMBkmbEm+UDbtmRpPSx66M7TV0woFrJzgOWmi5pPE3mMJaBG1B3L4s6vd0SIeLKfaW8mv6yvGtiu2xhchA1+dP6udb9k4hANVPxcCjcjF0jxQuM21G6BAtYLkroyHJZ+xXHCp5ZQwJrhY6vAorG+8vRIWMzf+KoZfiwgItRuPpdzP+SQ+AI4UZxpDkZMRE987C6RVKSHAlPvBahjLiL9VfF5937675D6yl5IMKlTpIpGBa5PnPPq/22Xt2pGH2mGiES2BcQTiYd72AFKCEI51iWZB4zHQ9wGLSzhu6ZOPHn+s5WMcsvxsRnGtkwaeKEyGPA2uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ewBCsxFsd8fFkzv/ulWWJ8h9q0mecz7KTuknf3I0FaI=;
- b=nbJj0KX7vXbiQLU1ezVBfTIsFt3r/r/v9QOybiIxrQGbxOb1wEC5lg1MQ2mIFKXX6qol5VUca1tCXCvCOZBI1ZiP1IFVyB3KaLmpseRQp0W6gY7C1guIv+5kuoLLj2uX+R4RsHEK1Vh2XFwt/prCE0bQMcb5xvBuUjFMlULHkd4=
-Received: from PH0PR11MB5192.namprd11.prod.outlook.com (2603:10b6:510:3b::9)
- by MN2PR11MB4478.namprd11.prod.outlook.com (2603:10b6:208:179::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Mon, 31 Jan
- 2022 06:59:02 +0000
-Received: from PH0PR11MB5192.namprd11.prod.outlook.com
- ([fe80::a588:b481:2154:c45e]) by PH0PR11MB5192.namprd11.prod.outlook.com
- ([fe80::a588:b481:2154:c45e%5]) with mapi id 15.20.4930.021; Mon, 31 Jan 2022
- 06:59:02 +0000
-From:   <Ludovic.Desroches@microchip.com>
-To:     <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <Claudiu.Beznea@microchip.com>, <linux-crypto@vger.kernel.org>,
-        <herbert@gondor.apana.org.au>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: rng: atmel,at91-trng: update maintainers
- entry
-Thread-Topic: [PATCH] dt-bindings: rng: atmel,at91-trng: update maintainers
- entry
-Thread-Index: AQHYFehOYK8eoSGCXkO/YdROoSAVYqx8tD0A
-Date:   Mon, 31 Jan 2022 06:59:02 +0000
-Message-ID: <aee5a70d-fcc1-f7a8-75f4-b82905f7883e@microchip.com>
-References: <d84760e0b81c338e01f7856e1ce3c5b600b08f23.1643553619.git.nicolas.ferre@microchip.com>
-In-Reply-To: <d84760e0b81c338e01f7856e1ce3c5b600b08f23.1643553619.git.nicolas.ferre@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6afcff53-0978-4261-cbe4-08d9e4872a0b
-x-ms-traffictypediagnostic: MN2PR11MB4478:EE_
-x-microsoft-antispam-prvs: <MN2PR11MB4478D95AD7CD32BE1CDA5C9BEF259@MN2PR11MB4478.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1388;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 03nwbca+zqf4vUJUocTkjd5zUmg1N/ftjldDiFI2ymiqpHTplcndjG6PJD13i5dM/mrW2tj9DwfRnZjlXwd9bGyrUcmNELlFENPGzDu9dv/m2AfVcnhZIJQqXeLSjb8qHQb6mK3nVxB/Nl410W0OyFAd1v72NN5BySnlf1EWftdu9pS0y75RekuT0VYmGtFx6VaYHDJfN4y7ybaSbi2OiVIdcxva8CCRk0eravPhivyOPUXDjIH/gExRoTbIB1gBWECyFuDXmDGcqmDEyshUO8gcudDWR7gZnIOlTJbOQUz0Jxo6fuMfzMX0p5p610FL13aOFMKZOl3AQUGM3NIokjaPs/Wqrtx/d6QHTzrCMzDbNv8f+x9f+glaMwgwsmPqNFfJUvIcAptQDdkdSnphOMKqnvmzUQoS7Z0SS7+kG3UOZbWp0XiHS5c6gEocQl8MRSAO7Cjhf+kUOmE1ZgUbUqeHulWQ2h+LWOBBSXan1WxU8uN5W++IinPZBurkKGoZhoyTVcR1vTvPcrUup8NwLVVhsbrC25N6RKUEf1bvl1GdgVD+Ij4RRADs5cRnVOmOY4MapCeHO6t41Ih7ndM/rbhiL9fjJKwpqS8tWLE0dyOyGz6ESpYwPmfBagIKL37/tBwUnAvv450ww52kLRcXOym8gl5iMishOjYY4LFkIqZCA1vHgYLAo+7z7AZaV4WiwIcslhGHgbWF9efclwonS1wMCT+ItShRv9+Td2kpTX0/rnOcPGSkSn1loTO7ucLDz+t4aXUfP8EWQtqV/E0ujl4k1zQc+xBz5pL17rPUE6ZPmcLypkttYVJ0ky0cgTVPYim14CChabVOCJNXdajG9qh4GcOy9Xb4rTbucVecmPw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5192.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(54906003)(36756003)(508600001)(110136005)(71200400001)(31686004)(316002)(76116006)(91956017)(966005)(2616005)(6486002)(186003)(26005)(8676002)(8936002)(5660300002)(53546011)(38070700005)(2906002)(4326008)(6512007)(122000001)(15650500001)(6506007)(38100700002)(31696002)(86362001)(64756008)(66556008)(66476007)(66446008)(66946007)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NWdkZEQ3MStHaGdVNnhvWE05REthSGtEMnBNNkFwNkNoSVRjTjl6bG5WREYr?=
- =?utf-8?B?UVp2RDJlK3BQVC8yRGVpZ3ZWbDBTNEd1R2JwNUhlSitLQk1jajJpaDVPZ0Za?=
- =?utf-8?B?VFFlSDdBY2hQaE41dnoyVXg0bjhBQkpmN08wV0F3ZWFjZWJKSmw3UUxSVnFa?=
- =?utf-8?B?ZEtHdE1IL3hRenpMTmM3cFZNaEZnVVZvYWNOT2NIZENidkFQY1B0azY1c2tv?=
- =?utf-8?B?RUIwa2VmWGZOZ25IM2UvZDdmQWw4SnBKc2pCTFd3akRTa2NqQUVEa3cwNGZ6?=
- =?utf-8?B?MHo3UXoySnUrUkFZa0w0WThScjAvY2tlTjV2NWxNODI0R1ZjbDBMNGV2elFz?=
- =?utf-8?B?UjBJQTZLUkw1ZG11bXZQNTFnZjV5MlpLMXNtZjFsU3FuZmtHK3NQQlFaRzRk?=
- =?utf-8?B?V3VGL3R0dDFpS01nS3lZdXZ1TG1kcmx5SFdEaGQxOUQ2bXNQWnlDOE44dWgz?=
- =?utf-8?B?SStNZjhLY1NsSTRIcjVNcmJTWXBuRWl4d2pCTkd0WTZKR2NueGJtQXF5THlK?=
- =?utf-8?B?WHd0OW1SQ1h4aFRabHMrRHBrNEVyQ3JWUU9xZGJXdU1tZSs5QjdacFB0a1I2?=
- =?utf-8?B?SWVCT0dmSE9VRThRTnlYTlR2Z3J3c1FLMkQ0dFZXcDgwRDJPYWsxbkN4RHNC?=
- =?utf-8?B?ZnlCY2Z1dnhvWnZBOXdZK3JsM0xNS3NRdTAzOXd3V2hubXZURmlrWnNLZXRW?=
- =?utf-8?B?ZytXaHFUTUJDTzcvRyt2a2dZb2JpM3VkN016SGZyeW0zVDBzaXJRNnF0U0dz?=
- =?utf-8?B?US9kRTIrWmRZUjZQZXhnMmhZK0liUjZ1eVlvZXNxUVNHRGVUYW9Fc1AvZEI3?=
- =?utf-8?B?TEY4YnFEL085SGU2N1RmdHN6enNBQzVSZXZtRDlEWlZFNkxGeHdJVWFDN0wr?=
- =?utf-8?B?OUtBdmRJV0oxeitROThlR3kzNHVnT0tpME4vemZzUlU3T05SaS9CQ2RMUlND?=
- =?utf-8?B?bGRoQ1phajVZZDFkemtpN2p5cVNmM1V4dUs1anhrTWZuTXFIRUwxZHRoSng3?=
- =?utf-8?B?ZHRPZVZlNHcyRVVjWjFxTFZvRjVXTTlGajZHVDNPdDNUSTdtV0JqQnYrekRu?=
- =?utf-8?B?QkxuUmFqTXFNRFA1T3JPU2Y2dUI3RkVCWE14QnhZZWxoNVNyVlFnRUgySUZR?=
- =?utf-8?B?WHdFU0l6ZVhhb29ZeFF4WW5maDFERDJlQ0ZaOXpGUHJmSGRKbmpSYUh5SVA5?=
- =?utf-8?B?dXZFQWNad3BEN2Rtb2k4ZEsxZ1E5TlNRbC9nbmI4TFlDTmVENmhUT0ltaXZO?=
- =?utf-8?B?dStJMUpBYkhsRExxSEJVVzZkR2VqcXAwRk9UR0MrdExINjdPOXIwVTdVanpH?=
- =?utf-8?B?Tks4anpnU3hUczB4YWN3TFVibDhQaWJnYUJhS0JGTEJPQkVSaGQ0Rk4xWnox?=
- =?utf-8?B?cG9JdC9adzgvMWtWc3F3WXVVOXBKUnAvQUdDaXU3UkdBYWFJZ0FTa0hIb2xN?=
- =?utf-8?B?MVdtSmdUSE94T2t4Qy92Vk5kS1lKMjJqbjk5OUpsTjFoU0t6UlEwek9GT0Jx?=
- =?utf-8?B?RzVCdzlHZ1Z2emQ3dXZQRnBWWkVHOUdSMlJZTlhoU2dRbHZuSG81aW9GY0V0?=
- =?utf-8?B?VWZoc2IvLy9hbEFNYURGbDJhUFZrTzdWeCtXTzk0QkpqLzhMSDVVWHZraWhr?=
- =?utf-8?B?bXF4UnNhak5rWDMycUMvLzhVYmFKT245bkJqN2xlVDZFbUVQYUs1cmdnTVlo?=
- =?utf-8?B?NjczU3hHbWtPS2RvNkRSci96cThsbmJoY0xac20rMjE3T0JlMGlPSXVmOGo1?=
- =?utf-8?B?N245amFvM24zVUlmL0xOR1hsemVKSkxNVFdFTndiTktkVE5SQytBclB5TDZJ?=
- =?utf-8?B?TFlPTklRQUxHM0RmYytpQ0tEVVZxbXl5ZE5VOTJDQVlielVmUkVjNzZlb2Jz?=
- =?utf-8?B?WXpXdkRObWthZ1Z1QTRNeFhnU2NXdDFSMm1zRG9YMGY2Tk9yNHo3U3VkTkZ1?=
- =?utf-8?B?UnRPeTgwM3c2cjJXK3JrZmphTDRJcnZ3amdabjI0SGc4WmJVQVZhdXkwTmdj?=
- =?utf-8?B?SUVYTEw4ZnNua3l1NWdOTFIxQlA0RjdxWFhpZ0psemV5NDhGQUx0OU1RRENm?=
- =?utf-8?B?QjRQUEtpYzRsQkY1NXMrTlc0anZwZGlmS1lkUWlxWWZNZ1R6U1B5eWN5bllW?=
- =?utf-8?B?TnVTTFhzTXlFd2tkYThtVi9FZG8zeXFiUzdkMDJlWnR5QURHVUpRY3A2UFY0?=
- =?utf-8?B?aGhXUURCdC90OXhMajgvR3duRFVIalJ4WmROVUgxeS8wWlowaUZrR1VYR2F3?=
- =?utf-8?B?R3JKNitQbXJhQzJHZUZEa0UraFN3PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CF112F9E69C98B4BBEFB65FBCB0CE9B5@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="308140117"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 23:01:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="481649049"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2022 23:01:13 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEQga-000RcP-O0; Mon, 31 Jan 2022 07:01:12 +0000
+Date:   Mon, 31 Jan 2022 15:00:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.18/g12-dsi-wip 11/14]
+ drivers/gpu/drm/meson/meson_venc.c:1595:24: error: implicit declaration of
+ function 'FIELD_PREP'
+Message-ID: <202201311418.VbkoxAhu-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5192.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6afcff53-0978-4261-cbe4-08d9e4872a0b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2022 06:59:02.5832
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FtojinoJqfH5Rqx0FxeAO82YEMuRPAuU8GhlOa+by/URNothNwwXHNmS/8Y0fnzu08LvxMOKarKWVnDfRFLum2UXcDyQSviMDNsyT35aHeY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4478
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8zMC8yMDIyIDM6NDcgUE0sIG5pY29sYXMuZmVycmVAbWljcm9jaGlwLmNvbSB3cm90ZToN
-Cj4gRnJvbTogTmljb2xhcyBGZXJyZSA8bmljb2xhcy5mZXJyZUBtaWNyb2NoaXAuY29tPg0KPiAN
-Cj4gVXBkYXRlIGFjY29yZGluZyB0byBuZXcgTUFJTlRBSU5FUlMgZW50cnkuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBOaWNvbGFzIEZlcnJlIDxuaWNvbGFzLmZlcnJlQG1pY3JvY2hpcC5jb20+DQoN
-CkFja2VkLWJ5OiBMdWRvdmljIERlc3JvY2hlcyA8bHVkb3ZpYy5kZXNyb2NoZXNAbWljcm9jaGlw
-LmNvbT4NCg0KPiAtLS0NCj4gSGksDQo+IA0KPiBQYXRjaCBmb3IgbmV3IE1BSU5UQUlORVJTIGVu
-dHJ5IGlzIGhlcmU6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWFybS1rZXJuZWwv
-MjM4MTlkOGJhYTYzNTgxNWQwODkzOTU1MTk3NTYxZmU0ZjA0NGQ1ZS4xNjQzNTUzNTAxLmdpdC5u
-aWNvbGFzLmZlcnJlQG1pY3JvY2hpcC5jb20vDQo+IA0KPiBSZWdhcmRzLA0KPiAgICBOaWNvbGFz
-DQo+IA0KPiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9ybmcvYXRtZWwsYXQ5
-MS10cm5nLnlhbWwgfCAyICstDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAx
-IGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
-L2JpbmRpbmdzL3JuZy9hdG1lbCxhdDkxLXRybmcueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNl
-dHJlZS9iaW5kaW5ncy9ybmcvYXRtZWwsYXQ5MS10cm5nLnlhbWwNCj4gaW5kZXggYzE1Mjc2Mzdl
-Yjc0Li4zY2U0NTQ1NmQ4NjcgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9ybmcvYXRtZWwsYXQ5MS10cm5nLnlhbWwNCj4gKysrIGIvRG9jdW1lbnRhdGlv
-bi9kZXZpY2V0cmVlL2JpbmRpbmdzL3JuZy9hdG1lbCxhdDkxLXRybmcueWFtbA0KPiBAQCAtOSw3
-ICs5LDcgQEAgdGl0bGU6IEF0bWVsIEFUOTEgVHJ1ZSBSYW5kb20gTnVtYmVyIEdlbmVyYXRvcg0K
-PiAgIG1haW50YWluZXJzOg0KPiAgICAgLSBOaWNvbGFzIEZlcnJlIDxuaWNvbGFzLmZlcnJlQG1p
-Y3JvY2hpcC5jb20+DQo+ICAgICAtIEFsZXhhbmRyZSBCZWxsb25pIDxhbGV4YW5kcmUuYmVsbG9u
-aUBib290bGluLmNvbT4NCj4gLSAgLSBMdWRvdmljIERlc3JvY2hlcyA8bHVkb3ZpYy5kZXNyb2No
-ZXNAbWljcm9jaGlwLmNvbT4NCj4gKyAgLSBDbGF1ZGl1IEJlem5lYSA8Y2xhdWRpdS5iZXpuZWFA
-bWljcm9jaGlwLmNvbT4NCj4gICANCj4gICBwcm9wZXJ0aWVzOg0KPiAgICAgY29tcGF0aWJsZToN
-Cg0K
+tree:   https://github.com/superna9999/linux amlogic/v5.18/g12-dsi-wip
+head:   fbcc0a7f53880919dc415da44339313dd59768f0
+commit: edf28ef6ab9df27f29b301443df825cf6a5ce233 [11/14] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220131/202201311418.VbkoxAhu-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/superna9999/linux/commit/edf28ef6ab9df27f29b301443df825cf6a5ce233
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.18/g12-dsi-wip
+        git checkout edf28ef6ab9df27f29b301443df825cf6a5ce233
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/swab.h:5,
+                    from include/uapi/linux/byteorder/big_endian.h:13,
+                    from include/linux/byteorder/big_endian.h:5,
+                    from arch/arm/include/uapi/asm/byteorder.h:20,
+                    from include/asm-generic/bitops/le.h:7,
+                    from arch/arm/include/asm/bitops.h:268,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:13,
+                    from include/linux/iopoll.h:9,
+                    from drivers/gpu/drm/meson/meson_venc.c:9:
+   drivers/gpu/drm/meson/meson_venc.c: In function 'meson_encl_set_gamma_table':
+>> drivers/gpu/drm/meson/meson_venc.c:1595:24: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+    1595 |                        FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+         |                        ^~~~~~~~~~
+   include/uapi/linux/swab.h:115:54: note: in definition of macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   include/linux/byteorder/generic.h:88:21: note: in expansion of macro '__cpu_to_le32'
+      88 | #define cpu_to_le32 __cpu_to_le32
+         |                     ^~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_venc.c:1594:9: note: in expansion of macro 'writel_relaxed'
+    1594 |         writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+         |         ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_PREP +1595 drivers/gpu/drm/meson/meson_venc.c
+
+  1579	
+  1580	static void meson_encl_set_gamma_table(struct meson_drm *priv, u16 *data,
+  1581					       u32 rgb_mask)
+  1582	{
+  1583		int i, ret;
+  1584		u32 reg;
+  1585	
+  1586		writel_bits_relaxed(L_GAMMA_CNTL_PORT_EN, 0,
+  1587				    priv->io_base + _REG(L_GAMMA_CNTL_PORT));
+  1588	
+  1589		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1590						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1591		if (ret)
+  1592			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1593	
+  1594		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+> 1595			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+  1596			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1597	
+  1598		for (i = 0; i < 256; i++) {
+  1599			ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1600							 reg, reg & L_GAMMA_CNTL_PORT_WR_RDY,
+  1601							 10, 10000);
+  1602			if (ret)
+  1603				pr_warn_once("%s: GAMMA WR_RDY timeout\n", __func__);
+  1604	
+  1605			writel_relaxed(data[i], priv->io_base + _REG(L_GAMMA_DATA_PORT));
+  1606		}
+  1607	
+  1608		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1609						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1610		if (ret)
+  1611			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1612	
+  1613		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+  1614			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0x23),
+  1615			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1616	}
+  1617	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

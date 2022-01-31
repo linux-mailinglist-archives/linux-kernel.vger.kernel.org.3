@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFE54A43C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6032B4A45A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378076AbiAaLXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:23:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S1378882AbiAaLnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377059AbiAaLNj (ORCPT
+        with ESMTP id S1378982AbiAaL3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:13:39 -0500
+        Mon, 31 Jan 2022 06:29:40 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C91C06175D;
-        Mon, 31 Jan 2022 03:10:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038F7C0613F0;
+        Mon, 31 Jan 2022 03:18:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F272461139;
-        Mon, 31 Jan 2022 11:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C5CC340E8;
-        Mon, 31 Jan 2022 11:10:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96830611DB;
+        Mon, 31 Jan 2022 11:18:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D71BC340E8;
+        Mon, 31 Jan 2022 11:18:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627458;
-        bh=wkmgY9tv0bWhmBo3+tNenMqi2h+T3VVLoWGvfFfuTjE=;
+        s=korg; t=1643627915;
+        bh=5tY0CAlJUzcoaiWnUY4WMVkJA9mAYKR3uGYW2xPE+5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SBKSXX23q0B0ZQ8nSiJmWL/025tKqV6g/UEsTqcA+nz9ZhjxssqpuoTaQqGamMbVp
-         5BOJoBLD5Gs925HsdRix6cKIDtrNxmq4wdXfdTdlSslxnIXBBOcuMUGu95flPECEXc
-         ZSS9tYEnBiyPD3G69y7uXwIz6BQQ6zkcgRUj9/FM=
+        b=VHMlfKUKqKCdgKMHIK/lFyhD0mJuvhWcghTzz+Jf4mp2r56RmMSvuHy+BaQpQ7rZv
+         3M0G91Rm0WRY4y3/Z2VWXjiBbq65LJ5AV16oEr8Grtne8QdstRS1yTV3iPZSmAKFwY
+         Bals0+HLH40MtVsIcUm1PirTp0O75v6r4ZnUo+qo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Subject: [PATCH 5.15 063/171] usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
-Date:   Mon, 31 Jan 2022 11:55:28 +0100
-Message-Id: <20220131105232.167332623@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>
+Subject: [PATCH 5.16 066/200] serial: 8250: of: Fix mapped region size when using reg-offset property
+Date:   Mon, 31 Jan 2022 11:55:29 +0100
+Message-Id: <20220131105235.800044609@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,54 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Badhri Jagan Sridharan <badhri@google.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit 746f96e7d6f7a276726860f696671766bfb24cf0 upstream.
+commit d06b1cf28297e27127d3da54753a3a01a2fa2f28 upstream.
 
-With some chargers, vbus might momentarily raise above VSAFE5V and fall
-back to 0V causing VSAFE0V to be triggered. This will
-will report a VBUS off event causing TCPM to transition to
-SNK_UNATTACHED state where it should be waiting in either SNK_ATTACH_WAIT
-or SNK_DEBOUNCED state. This patch makes TCPM avoid VSAFE0V events
-while in SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
+8250_of supports a reg-offset property which is intended to handle
+cases where the device registers start at an offset inside the region
+of memory allocated to the device. The Xilinx 16550 UART, for which this
+support was initially added, requires this. However, the code did not
+adjust the overall size of the mapped region accordingly, causing the
+driver to request an area of memory past the end of the device's
+allocation. For example, if the UART was allocated an address of
+0xb0130000, size of 0x10000 and reg-offset of 0x1000 in the device
+tree, the region of memory reserved was b0131000-b0140fff, which caused
+the driver for the region starting at b0140000 to fail to probe.
 
-Stub from the spec:
-    "4.5.2.2.4.2 Exiting from AttachWait.SNK State
-    A Sink shall transition to Unattached.SNK when the state of both
-    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-    A DRP shall transition to Unattached.SRC when the state of both
-    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+Fix this by subtracting reg-offset from the mapped region size.
 
-[23.194131] CC1: 0 -> 0, CC2: 0 -> 5 [state SNK_UNATTACHED, polarity 0, connected]
-[23.201777] state change SNK_UNATTACHED -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-[23.209949] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-[23.300579] VBUS off
-[23.300668] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [rev3 NONE_AMS]
-[23.301014] VBUS VSAFE0V
-[23.301111] Start toggling
-
-Fixes: 28b43d3d746b8 ("usb: typec: tcpm: Introduce vsafe0v for vbus")
-Cc: stable@vger.kernel.org
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Link: https://lore.kernel.org/r/20220122015520.332507-2-badhri@google.com
+Fixes: b912b5e2cfb3 ([POWERPC] Xilinx: of_serial support for Xilinx uart 16550.)
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Link: https://lore.kernel.org/r/20220112194214.881844-1-robert.hancock@calian.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/tcpm/tcpm.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/tty/serial/8250/8250_of.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5264,6 +5264,10 @@ static void _tcpm_pd_vbus_vsafe0v(struct
- 	case PR_SWAP_SNK_SRC_SOURCE_ON:
- 		/* Do nothing, vsafe0v is expected during transition */
- 		break;
-+	case SNK_ATTACH_WAIT:
-+	case SNK_DEBOUNCED:
-+		/*Do nothing, still waiting for VSAFE5V for connect */
-+		break;
- 	default:
- 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
- 			tcpm_set_state(port, SNK_UNATTACHED, 0);
+--- a/drivers/tty/serial/8250/8250_of.c
++++ b/drivers/tty/serial/8250/8250_of.c
+@@ -83,8 +83,17 @@ static int of_platform_serial_setup(stru
+ 		port->mapsize = resource_size(&resource);
+ 
+ 		/* Check for shifted address mapping */
+-		if (of_property_read_u32(np, "reg-offset", &prop) == 0)
++		if (of_property_read_u32(np, "reg-offset", &prop) == 0) {
++			if (prop >= port->mapsize) {
++				dev_warn(&ofdev->dev, "reg-offset %u exceeds region size %pa\n",
++					 prop, &port->mapsize);
++				ret = -EINVAL;
++				goto err_unprepare;
++			}
++
+ 			port->mapbase += prop;
++			port->mapsize -= prop;
++		}
+ 
+ 		port->iotype = UPIO_MEM;
+ 		if (of_property_read_u32(np, "reg-io-width", &prop) == 0) {
 
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E477E4A4195
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7404A44EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358948AbiAaLEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358796AbiAaLCf (ORCPT
+        id S244517AbiAaLe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:34:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52422 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377120AbiAaLWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A5C06136C;
-        Mon, 31 Jan 2022 03:00:54 -0800 (PST)
+        Mon, 31 Jan 2022 06:22:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44601B82A69;
-        Mon, 31 Jan 2022 11:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC15BC340EE;
-        Mon, 31 Jan 2022 11:00:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D5461120;
+        Mon, 31 Jan 2022 11:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C690FC340E8;
+        Mon, 31 Jan 2022 11:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626852;
-        bh=krk3JK/6W2Uck8W8Qsdm4XLEPCdioCNoGKl/TvaDwy4=;
+        s=korg; t=1643628152;
+        bh=CrbS+RmJJJc3/CFi/FDjnWD6WFhLdoMFpbJ096EsT1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eh5gvIoVVs6T2Ifa+buAzEnu1dN2qI+ql6u7wxKim7nBsXvOmXef9XvIF2UcjmbfW
-         BWoKXu78dUe+OL3cd2f/UHop/5aoMb58ciuIEhRF+mosfVjeon67XULhByjQa8CVad
-         1I55LrYfF0b85fGAKtyILnjDU3qI4zZdhv796cYM=
+        b=RAfkO4E1K9PMhaQmFpo0TVRPEbmJc8XzlM0RSAsu7nfDlZSN45cwhHwo1JwC31Z+1
+         ryTn6chJ89DNowFkGaQXubQlFi7b03GvgbO4Ld7rNLYpMSl0Kz5ZypqQh6jKPeNp6b
+         83r90+f3rGPNcpL2PfMGgVPjt25X0doBH6xpbHqo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Ray Che <xijiache@gmail.com>, David Ahern <dsahern@kernel.org>,
-        Geoff Alexander <alexandg@cs.unm.edu>,
-        Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Subbaraya Sundeep <sbhatta@marvell.com>,
+        Naveen Mamindlapalli <naveenm@marvell.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 60/64] ipv4: tcp: send zero IPID in SYNACK messages
+Subject: [PATCH 5.16 142/200] octeontx2-af: Do not fixup all VF action entries
 Date:   Mon, 31 Jan 2022 11:56:45 +0100
-Message-Id: <20220131105217.695729664@linuxfoundation.org>
+Message-Id: <20220131105238.335403475@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-References: <20220131105215.644174521@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,75 +48,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Subbaraya Sundeep <sbhatta@marvell.com>
 
-[ Upstream commit 970a5a3ea86da637471d3cd04d513a0755aba4bf ]
+[ Upstream commit d225c449ab2be25273a3674f476c6c0b57c50254 ]
 
-In commit 431280eebed9 ("ipv4: tcp: send zero IPID for RST and
-ACK sent in SYN-RECV and TIME-WAIT state") we took care of some
-ctl packets sent by TCP.
+AF modifies all the rules destined for VF to use
+the action same as default RSS action. This fixup
+was needed because AF only installs default rules with
+RSS action. But the action in rules installed by a PF
+for its VFs should not be changed by this fixup.
+This is because action can be drop or direct to
+queue as specified by user(ntuple filters).
+This patch fixes that problem.
 
-It turns out we need to use a similar strategy for SYNACK packets.
-
-By default, they carry IP_DF and IPID==0, but there are ways
-to ask them to use the hashed IP ident generator and thus
-be used to build off-path attacks.
-(Ref: Off-Path TCP Exploits of the Mixed IPID Assignment)
-
-One of this way is to force (before listener is started)
-echo 1 >/proc/sys/net/ipv4/ip_no_pmtu_disc
-
-Another way is using forged ICMP ICMP_FRAG_NEEDED
-with a very small MTU (like 68) to force a false return from
-ip_dont_fragment()
-
-In this patch, ip_build_and_send_pkt() uses the following
-heuristics.
-
-1) Most SYNACK packets are smaller than IPV4_MIN_MTU and therefore
-can use IP_DF regardless of the listener or route pmtu setting.
-
-2) In case the SYNACK packet is bigger than IPV4_MIN_MTU,
-we use prandom_u32() generator instead of the IPv4 hashed ident one.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Ray Che <xijiache@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Cc: Geoff Alexander <alexandg@cs.unm.edu>
-Cc: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 967db3529eca ("octeontx2-af: add support for multicast/promisc packet")
+Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
+Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
+Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_output.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../ethernet/marvell/octeontx2/af/rvu_npc.c   | 22 ++++++++++++++++---
+ .../marvell/octeontx2/af/rvu_npc_fs.c         | 20 ++++++++++-------
+ 2 files changed, 31 insertions(+), 11 deletions(-)
 
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 0ec529d77a56e..418e939878004 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -161,12 +161,19 @@ int ip_build_and_send_pkt(struct sk_buff *skb, const struct sock *sk,
- 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
- 	iph->saddr    = saddr;
- 	iph->protocol = sk->sk_protocol;
--	if (ip_dont_fragment(sk, &rt->dst)) {
-+	/* Do not bother generating IPID for small packets (eg SYNACK) */
-+	if (skb->len <= IPV4_MIN_MTU || ip_dont_fragment(sk, &rt->dst)) {
- 		iph->frag_off = htons(IP_DF);
- 		iph->id = 0;
- 	} else {
- 		iph->frag_off = 0;
--		__ip_select_ident(net, iph, 1);
-+		/* TCP packets here are SYNACK with fat IPv4/TCP options.
-+		 * Avoid using the hashed IP ident generator.
-+		 */
-+		if (sk->sk_protocol == IPPROTO_TCP)
-+			iph->id = (__force __be16)prandom_u32();
-+		else
-+			__ip_select_ident(net, iph, 1);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
+index c0005a1feee69..91f86d77cd41b 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
+@@ -402,6 +402,7 @@ static void npc_fixup_vf_rule(struct rvu *rvu, struct npc_mcam *mcam,
+ 			      int blkaddr, int index, struct mcam_entry *entry,
+ 			      bool *enable)
+ {
++	struct rvu_npc_mcam_rule *rule;
+ 	u16 owner, target_func;
+ 	struct rvu_pfvf *pfvf;
+ 	u64 rx_action;
+@@ -423,6 +424,12 @@ static void npc_fixup_vf_rule(struct rvu *rvu, struct npc_mcam *mcam,
+ 	      test_bit(NIXLF_INITIALIZED, &pfvf->flags)))
+ 		*enable = false;
+ 
++	/* fix up not needed for the rules added by user(ntuple filters) */
++	list_for_each_entry(rule, &mcam->mcam_rules, list) {
++		if (rule->entry == index)
++			return;
++	}
++
+ 	/* copy VF default entry action to the VF mcam entry */
+ 	rx_action = npc_get_default_entry_action(rvu, mcam, blkaddr,
+ 						 target_func);
+@@ -489,8 +496,8 @@ static void npc_config_mcam_entry(struct rvu *rvu, struct npc_mcam *mcam,
  	}
  
- 	if (opt && opt->opt.optlen) {
+ 	/* PF installing VF rule */
+-	if (intf == NIX_INTF_RX && actindex < mcam->bmap_entries)
+-		npc_fixup_vf_rule(rvu, mcam, blkaddr, index, entry, &enable);
++	if (is_npc_intf_rx(intf) && actindex < mcam->bmap_entries)
++		npc_fixup_vf_rule(rvu, mcam, blkaddr, actindex, entry, &enable);
+ 
+ 	/* Set 'action' */
+ 	rvu_write64(rvu, blkaddr,
+@@ -916,7 +923,8 @@ static void npc_update_vf_flow_entry(struct rvu *rvu, struct npc_mcam *mcam,
+ 				     int blkaddr, u16 pcifunc, u64 rx_action)
+ {
+ 	int actindex, index, bank, entry;
+-	bool enable;
++	struct rvu_npc_mcam_rule *rule;
++	bool enable, update;
+ 
+ 	if (!(pcifunc & RVU_PFVF_FUNC_MASK))
+ 		return;
+@@ -924,6 +932,14 @@ static void npc_update_vf_flow_entry(struct rvu *rvu, struct npc_mcam *mcam,
+ 	mutex_lock(&mcam->lock);
+ 	for (index = 0; index < mcam->bmap_entries; index++) {
+ 		if (mcam->entry2target_pffunc[index] == pcifunc) {
++			update = true;
++			/* update not needed for the rules added via ntuple filters */
++			list_for_each_entry(rule, &mcam->mcam_rules, list) {
++				if (rule->entry == index)
++					update = false;
++			}
++			if (!update)
++				continue;
+ 			bank = npc_get_bank(mcam, index);
+ 			actindex = index;
+ 			entry = index & (mcam->banksize - 1);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
+index ff2b21999f36f..19c53e591d0da 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
+@@ -1098,14 +1098,6 @@ find_rule:
+ 		write_req.cntr = rule->cntr;
+ 	}
+ 
+-	err = rvu_mbox_handler_npc_mcam_write_entry(rvu, &write_req,
+-						    &write_rsp);
+-	if (err) {
+-		rvu_mcam_remove_counter_from_rule(rvu, owner, rule);
+-		if (new)
+-			kfree(rule);
+-		return err;
+-	}
+ 	/* update rule */
+ 	memcpy(&rule->packet, &dummy.packet, sizeof(rule->packet));
+ 	memcpy(&rule->mask, &dummy.mask, sizeof(rule->mask));
+@@ -1132,6 +1124,18 @@ find_rule:
+ 	if (req->default_rule)
+ 		pfvf->def_ucast_rule = rule;
+ 
++	/* write to mcam entry registers */
++	err = rvu_mbox_handler_npc_mcam_write_entry(rvu, &write_req,
++						    &write_rsp);
++	if (err) {
++		rvu_mcam_remove_counter_from_rule(rvu, owner, rule);
++		if (new) {
++			list_del(&rule->list);
++			kfree(rule);
++		}
++		return err;
++	}
++
+ 	/* VF's MAC address is being changed via PF  */
+ 	if (pf_set_vfs_mac) {
+ 		ether_addr_copy(pfvf->default_mac, req->packet.dmac);
 -- 
 2.34.1
 

@@ -2,231 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 354A34A41D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BF14A41C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358765AbiAaLGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S1358374AbiAaLGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358321AbiAaLDn (ORCPT
+        with ESMTP id S1358809AbiAaLDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:03:43 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16C1C061757;
-        Mon, 31 Jan 2022 03:03:12 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id d10so41845996eje.10;
-        Mon, 31 Jan 2022 03:03:12 -0800 (PST)
+        Mon, 31 Jan 2022 06:03:31 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D71C0617BC
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:02:32 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id i34so5710489lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 03:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lHhE3f5URE6BLjfBVO6YxPD3S6EHHoqiVeEIRI6+PoI=;
-        b=KNkDYzpvSqX1Odi3cvkvqIEeL0A/pUO7cJYMojQCL8/uuchS1Z3Cd3kx4HgWsgrevF
-         7Lfl/FSUrK9gAmwvohd3YVJMBjaqiKPRttf+ziroIbi9RDAVHoyUWdLq2lsAHf0+qmqC
-         QtFTCZqKy30F9PvblZkTOydxZq6S+sK9Wr5sBRzi7phPD7/wlW7CiRApc8kXTHzIfJRC
-         fB2354cIW4Ex9qUEPY9Ex3TqpA4F71EnoHdLVWcuponITJBciLbZkTYGGQm9cG/PgqIB
-         vnF+GxB1KBORJEibk/eVCQH8Saqik4RNl2WpjauSLuNEH4Y+hTr68MYC9koc+yt8lGqN
-         Ptgw==
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=czeOm2pkfIYtlH8bieE/wFkWMyQace30JcDwxXQeWDY=;
+        b=NAM+paj077GlbsSEbAhREf9Ku6Zelpm258xyJs/uNE2AuRvKnCy48gfwZAgwyslTFR
+         m3FwDtohPmEJwRAkIVNJawuANbhmN7JaxgRofyQ/AdWTlQb60iLuWwhb63Vy8Kso+QP0
+         7e2+p6p/6JWa/AfN5eIUs1nzVxb1IJYuYjzQA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lHhE3f5URE6BLjfBVO6YxPD3S6EHHoqiVeEIRI6+PoI=;
-        b=78EmMDpYyKGIxVMSNlJpWNN4iX5LTbUrLeEMLnszLd+flwnGfxwFnAqgUS7qfKt1Q4
-         X+HVvDsNg/92vEa7LrEDWso5rjOPvmDGoTf8xxJWO7+rZTrbD+XGgiUTxthRKJFwzhxc
-         BHPNGoUyc8BKKvelv1W5b5Ja7eiAOhyVBq7ZxsHVz056Neitcet/+MST3HBFW65WG4Gr
-         c467wjSr+Y07I1wgXXRGzkp+//EwnY8RZV6wDPhHSgOL+Gx+7r77J5uOBZKuKtfnbbZf
-         U9xgWmyO9emT+HiSUZ/yElzxYlVIjOQsoKTTAvwFnEo83ZJqWI8CsuftlFxennaIZ9Aw
-         JInA==
-X-Gm-Message-State: AOAM532vQPZttCjj8KjRZhgbmMX9fHcZbbeIA8RQ0+BGTN5ttrcNpEo8
-        UURiGWgOnMmi1SSE2LT4pQLzuCezxe9wahR+bS8=
-X-Google-Smtp-Source: ABdhPJy9nbmDPwmRP19l8CyQvoKmS1hmhX5vpMG/XY8VWbP5NgRvaCq0yVxBiwggc5Tpp7wsdYV3aNbBay2m+cnGZGs=
-X-Received: by 2002:a17:906:c14d:: with SMTP id dp13mr17044132ejc.132.1643626991447;
- Mon, 31 Jan 2022 03:03:11 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=czeOm2pkfIYtlH8bieE/wFkWMyQace30JcDwxXQeWDY=;
+        b=5OH9flTwaNilJWtepeowFM89w55S1DLYiMs8qa99IvQIhksZd13wjR4mxuUq/Qz7nZ
+         QA/VK4HN76hjgwmoh1Mb/6uJIFWKGIfvC9W+n6bEw/hOeRomJiSUeE/KlWMaYPyoO1RJ
+         6OPqL03oTXY5mpFIIEmWCc57ok2SJcoh+8ZO3EIplDLYde9ZSjmuov9sZeg4WPOsq/F6
+         tMrI3SP0erDk/hhzUtk2Vz2FKyW2DzGTqI/UJfZ1S4LmVCqMVCXdPG6mNZp9z21nV7qi
+         RxS36mmDlO3MAdOt/6At68sUz3tgiFzb57k+qLcA2pYpSr4f02tdYPSq0eFaj+hRTEJp
+         oVJQ==
+X-Gm-Message-State: AOAM532yr0Pb4HD0A/aHz7gF0XpPPsjw3krNj4I2c0YezDHMq82Pelm1
+        Jk42GhQoNRk7dlVw0sv8xYo2MA==
+X-Google-Smtp-Source: ABdhPJz1ok/mMVMmC6806RcAq8MH2XjtwH5h47J/+uzZ8Kh+q34vMsAK2Yo0+uhGrtutG1qy+aMGMg==
+X-Received: by 2002:a05:6512:12c5:: with SMTP id p5mr16013020lfg.89.1643626951003;
+        Mon, 31 Jan 2022 03:02:31 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id g7sm1962543ljk.83.2022.01.31.03.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 03:02:30 -0800 (PST)
+Subject: Re: [PATCH v2 1/3] lib/vsprintf: Avoid redundant work with 0 size
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Rientjes <rientjes@google.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-2-longman@redhat.com>
+ <d99b3c4b-7b6e-529-6e4b-b91b65c92d81@google.com>
+ <Yfe5Bb3U6Uil7Y6g@smile.fi.intel.com> <Yfe6SfG4CqzWSaMM@smile.fi.intel.com>
+ <Yfe7Q5cx+MoaOev/@smile.fi.intel.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <d44824d4-2dd1-a8ab-d3ee-ac67b749ca6f@rasmusvillemoes.dk>
+Date:   Mon, 31 Jan 2022 12:02:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220130184130.176646-1-terry.bowman@amd.com>
-In-Reply-To: <20220130184130.176646-1-terry.bowman@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 31 Jan 2022 13:01:35 +0200
-Message-ID: <CAHp75VdOLDCMzS+uRxLY1=0CX8tD4sfkeE6=5Sk2quNTn8z12A@mail.gmail.com>
-Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
- with MMIO accesses
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Yfe7Q5cx+MoaOev/@smile.fi.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 8:41 PM Terry Bowman <terry.bowman@amd.com> wrote:
->
-> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
-> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
-> disabled on later AMD processors.
->
-> This series includes patches with MMIO accesses to register
-> FCH::PM::DECODEEN. The same register is also accessed by the sp5100_tco
-> driver.[1] Synchronization to the MMIO register is required in both
-> drivers.
->
-> The first patch creates a macro to request MMIO region using the 'muxed'
-> retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
->
-> The second patch replaces a hardcoded region size with a #define. This is
-> to improve maintainability and was requested from v2 review.
->
-> The third patch moves duplicated region request/release code into
-> functions. This locates related code into functions and reduces code line
-> count. This will also make adding MMIO support in patch 6 easier.
->
-> The fourth patch moves SMBus controller address detection into a function.
-> This is in preparation for adding MMIO region support.
->
-> The fifth patch moves EFCH port selection into a function. This is in
-> preparation for adding MMIO region support.
->
-> The sixth patch adds MMIO support for region requesting/releasing and
-> mapping. This is necessary for using MMIO to detect SMBus controller
-> address, enable SMBbus controller region, and control the port select.
->
-> The seventh patch updates the SMBus controller address detection to support
-> using MMIO. This is necessary because the driver accesses register
-> FCH::PM::DECODEEN during initialization and only available using MMIO on
-> later AMD processors.
->
-> The eighth patch updates the SMBus port selection to support MMIO. This is
-> required because port selection control resides in the
-> FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later AMD
-> processors.
->
-> The ninth patch enables the EFCH MMIO functionality added earlier in this
-> series. The SMBus controller's PCI revision ID is used to check if EFCH
-> MMIO is supported by HW and should be enabled in the driver.
+On 31/01/2022 11.34, Andy Shevchenko wrote:
+> On Mon, Jan 31, 2022 at 12:30:33PM +0200, Andy Shevchenko wrote:
+>> On Mon, Jan 31, 2022 at 12:25:09PM +0200, Andy Shevchenko wrote:
+>>> On Sun, Jan 30, 2022 at 12:49:37PM -0800, David Rientjes wrote:
+>>>> On Sat, 29 Jan 2022, Waiman Long wrote:
+>>>>
+>>>>> For *scnprintf(), vsnprintf() is always called even if the input size is
+>>>>> 0. That is a waste of time, so just return 0 in this case.
+>>>
+>>> Why do you think it's not legit?
+>>
+>> I have to elaborate.
+>>
+>> For *nprintf() the size=0 is quite useful to have.
+>> For *cnprintf() the size=0 makes less sense, but, if we read `man snprintf()`:
+>>
+>>   The  functions  snprintf() and vsnprintf() do not write more than size bytes
+>>   (including the terminating null byte ('\0')). If the output was truncated due
+>>   to this limit, then the return value is the  number of  characters (excluding
+>>   the terminating null byte) which would have been written to the final string
+>>   if enough space had been available. Thus, a return value of size or more
+>>   means  that  the  output  was truncated.  (See also below under NOTES.)
+>>
+>>   If an output error is encountered, a negative value is returned.
+>>
+>> Note the last sentence there. You need to answer to it in the commit message
+>> why your change is okay and it will show that you thought through all possible
+>> scenarios.
+> 
+> Also it seems currently the kernel documentation is not aligned with the code
+> 
+>   "If @size is == 0 the function returns 0."
+> 
+> It should mention the (theoretical?) possibility of getting negative value,
+> if vsnprintf() returns negative value.
+> 
 
-I'm not against the series, but I am still concerned that we are using
-_p IO without clear understanding why. With cleaning them up, this can
-be simpler and cleaner.
+The kernel's vsnprintf _will never_ return a negative value. There is
+way too much code which relies on that. It also has to work from any
+context, so we'll never do any memory allocation or anything else that
+could possibly force us to error out, and even if we encounter some
+impossible situation, we do not return a negative value, but just stop
+the output where we are.
 
-For the i2c patches:
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-if it helps somebody.
+So yes, micro-optimizing [v]scnprintf() is completely valid, but I've
+never bothered to send the patch because the use case for scnprintf() is
+primarily the
 
-> Based on v5.16.
+  ret += scnprintf(buf + ret, size - ret, ...);
 
-v5.17-rc2 is out :-)
+pattern, with ret starting out at 0 and size being some non-zero number.
+When given a non-zero size, scnprintf() is guaranteed to return
+something _strictly less_ than that value; that invariant guarantees
+that the size-ret expression never becomes 0. So if scnprintf() is
+properly used, I can't think of any situation where size will be 0,
+hence I see that patch as correct-but-mostly-pointless.
 
->
-> Testing:
->   Tested on family 19h using:
->     i2cdetect -y 0
->     i2cdetect -y 2
->
->   - Results using v5.16 and this pachset applied. Below
->     shows the devices detected on the busses:
->
->     # i2cdetect -y 0
->          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->     00:                         -- -- -- -- -- -- -- --
->     10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- --
->     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->     30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- --
->     40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- --
->     50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->     70: -- -- -- 73 -- -- -- --
->     # i2cdetect -y 2
->          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->     00:                         -- -- -- -- -- -- -- --
->     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->     30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->     40: -- -- -- -- -- -- -- -- -- -- -- -- 4c -- -- --
->     50: -- 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- --
->     60: 60 -- -- 63 -- -- 66 -- -- -- -- 6b -- -- 6e --
->     70: 70 71 72 73 74 75 -- 77
->
->   Also tested using sp5100_tco submitted series listed below.[1]
->   I applied the sp5100_tco v4 series and ran:
->     cat  >> /dev/watchdog
->
-> [1] sp5100_tco v4 patchset is in process but not sent yet. Below is v3
->     upstream review:
-> Link: https://lore.kernel.org/linux-watchdog/20220118202234.410555-1-terry.bowman@amd.com/
->
-> Changes in v4:
->  - Changed request_muxed_mem_region() macro to request_mem_region_muxed()
->    in patch 1. (Andy Shevchenko)
->  - Removed unnecessary newline where possible in calls to
->    request_muxed_region() in patch 2. (Terry Bowman)
->  - Changed piix4_sb800_region_setup() to piix4_sb800_region_request().
->    Patch 3. (Jean Delvare)
->  - Reordered piix4_setup_sb800() local variables from longest name length
->    to shortest name length. Patch 4. (Terry Bowman)
->  - Changed piix4_sb800_region_request() and piix4_sb800_region_release() by
->    adding early return() to remove 'else' improving readability. Patch 6.
->    (Terry Bowman)
->  - Removed iowrite32(ioread32(...), ...). Unnecessary because MMIO is
->    already enabled. (Terry Bowman)
->  - Refactored piix4_sb800_port_sel() to simplify the 'if' statement using
->    temp variable. Patch 8. (Terry Bowman)
->  - Added mmio_cfg.use_mmio assignment in piix4_add_adapter(). This is
->    needed for calls to piix4_sb800_port_sel() after initialization during
->    normal operation. Patch 9. (Terry Bowman)
->
-> Changes in v3:
->  - Added request_muxed_mem_region() patch (Wolfram, Guenter)
->  - Reduced To/Cc list length. (Andy)
->
-> Changes in v2:
->  - Split single patch. (Jean Delvare)
->  - Replace constant 2 with SB800_PIIX4_SMB_MAP_SIZE where appropriate.
->    (Jean Delvare)
->  - Shorten SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN name length to
->    SB800_PIIX4_FCH_PM_DECODEEN_MMIO. (Jean Delvare)
->  - Change AMD_PCI_SMBUS_REVISION_MMIO from 0x59 to 0x51. (Terry Bowman)
->  - Change piix4_sb800_region_setup() to piix4_sb800_region_request().
->    (Jean Delvare)
->  - Change 'SMB' text in  logging to 'SMBus' (Jean Delvare)
->  - Remove unnecessary NULL assignment in piix4_sb800_region_release().
->    (Jean Delvare)
->  - Move 'u8' variable definitions to single line. (Jean Delvare)
->  - Hardcode piix4_setup_sb800_smba() return value to 0 since it is always
->    0. (Jean Delvare)
->
-> Terry Bowman (9):
->   kernel/resource: Introduce request_mem_region_muxed()
->   i2c: piix4: Replace hardcoded memory map size with a #define
->   i2c: piix4: Move port I/O region request/release code into functions
->   i2c: piix4: Move SMBus controller base address detect into function
->   i2c: piix4: Move SMBus port selection into function
->   i2c: piix4: Add EFCH MMIO support to region request and release
->   i2c: piix4: Add EFCH MMIO support to SMBus base address detect
->   i2c: piix4: Add EFCH MMIO support for SMBus port select
->   i2c: piix4: Enable EFCH MMIO for Family 17h+
->
->  drivers/i2c/busses/i2c-piix4.c | 207 ++++++++++++++++++++++++++-------
->  include/linux/ioport.h         |   2 +
->  2 files changed, 164 insertions(+), 45 deletions(-)
->
-> --
-> 2.30.2
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Rasmus

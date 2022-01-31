@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81974A4466
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFDF4A4484
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378831AbiAaL3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377884AbiAaLTO (ORCPT
+        id S1379749AbiAaLaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:30:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52718 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244984AbiAaLUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:19:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADD2C06135E;
-        Mon, 31 Jan 2022 03:11:48 -0800 (PST)
+        Mon, 31 Jan 2022 06:20:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF58E60F96;
-        Mon, 31 Jan 2022 11:11:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA610C36AE2;
-        Mon, 31 Jan 2022 11:11:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43D9361267;
+        Mon, 31 Jan 2022 11:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256BDC340F0;
+        Mon, 31 Jan 2022 11:20:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627507;
-        bh=rEqdq7v63HYoM1RUtMY3FTYSi4VVJnZarw6/dAiwbJE=;
+        s=korg; t=1643628051;
+        bh=0EFvWCyzPTR972W2aSbT7/hxxvBhl8DPD0Oj9l1LhLE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=biLKh+mxPlcr9kkfT2gmwdXWXNiVUid9ptMKbDjyooN0VRErAJwdy9fAYnUjac8/5
-         EHyKVVVxilvoPX0LGIDVfjA4IfUEWfTxa5zpl0NQxpsIwSU+o6IEqsxd/4Y68B1j7q
-         Xs8fu0giwjfZvjsfhiCCR8nUHJAUOCMr+kAHKiTw=
+        b=TuhqXskAaQ08fjZD9AVa90Rd/hKaY47MntzK+N0oRQLaEIT45GdQrFn40tycSWzXB
+         W32khKoDyAVIxUBd6AIiFzCis5d1m6fCGukosUMkEMJePdzHjzyVqPVUW5hKy/mqgt
+         iP7rSAdxl4dkxCctL28+iKsn9fr9nHcKmvzyEH40=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 107/171] powerpc/64s: Mask SRR0 before checking against the masked NIP
-Date:   Mon, 31 Jan 2022 11:56:12 +0100
-Message-Id: <20220131105233.660265910@linuxfoundation.org>
+Subject: [PATCH 5.16 110/200] hwmon: (lm90) Mark alert as broken for MAX6680
+Date:   Mon, 31 Jan 2022 11:56:13 +0100
+Message-Id: <20220131105237.286503791@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,59 +45,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit aee101d7b95a03078945681dd7f7ea5e4a1e7686 ]
+commit 94746b0ba479743355e0d3cc1cb9cfe3011fb8be upstream.
 
-Commit 314f6c23dd8d ("powerpc/64s: Mask NIP before checking against
-SRR0") masked off the low 2 bits of the NIP value in the interrupt
-stack frame in case they are non-zero and mis-compare against a SRR0
-register value of a CPU which always reads back 0 from the 2 low bits
-which are reserved.
+Experiments with MAX6680 and MAX6681 show that the alert function of those
+chips is broken, similar to other chips supported by the lm90 driver.
+Mark it accordingly.
 
-This now causes the opposite problem that an implementation which does
-implement those bits in SRR0 will mis-compare against the masked NIP
-value in which they have been cleared. QEMU is one such implementation,
-and this is allowed by the architecture.
-
-This can be triggered by sigfuz by setting low bits of PT_NIP in the
-signal context.
-
-Fix this for now by masking the SRR0 bits as well. Cleaner is probably
-to sanitise these values before putting them in registers or stack, but
-this is the quick and backportable fix.
-
-Fixes: 314f6c23dd8d ("powerpc/64s: Mask NIP before checking against SRR0")
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220117134403.2995059-1-npiggin@gmail.com
+Fixes: 4667bcb8d8fc ("hwmon: (lm90) Introduce chip parameter structure")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/interrupt_64.S | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/lm90.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/interrupt_64.S b/arch/powerpc/kernel/interrupt_64.S
-index 4b1ff94e67eb4..4c6d1a8dcefed 100644
---- a/arch/powerpc/kernel/interrupt_64.S
-+++ b/arch/powerpc/kernel/interrupt_64.S
-@@ -30,6 +30,7 @@ COMPAT_SYS_CALL_TABLE:
- 	.ifc \srr,srr
- 	mfspr	r11,SPRN_SRR0
- 	ld	r12,_NIP(r1)
-+	clrrdi  r11,r11,2
- 	clrrdi  r12,r12,2
- 100:	tdne	r11,r12
- 	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
-@@ -40,6 +41,7 @@ COMPAT_SYS_CALL_TABLE:
- 	.else
- 	mfspr	r11,SPRN_HSRR0
- 	ld	r12,_NIP(r1)
-+	clrrdi  r11,r11,2
- 	clrrdi  r12,r12,2
- 100:	tdne	r11,r12
- 	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
--- 
-2.34.1
-
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -418,7 +418,7 @@ static const struct lm90_params lm90_par
+ 	},
+ 	[max6680] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_CRIT
+-		  | LM90_HAVE_CRIT_ALRM_SWP,
++		  | LM90_HAVE_CRIT_ALRM_SWP | LM90_HAVE_BROKEN_ALERT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 7,
+ 	},
 
 

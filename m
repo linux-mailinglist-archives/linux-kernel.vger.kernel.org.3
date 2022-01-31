@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3251D4A51D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3A34A51D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381197AbiAaVqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:46:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30760 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1381154AbiAaVqi (ORCPT
+        id S1381222AbiAaVrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345541AbiAaVr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:46:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643665597;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lrfhAK5TTZj4g7edUXER7YgS33zywQPgQldaDuFqoqY=;
-        b=ERj8YSsDD7j5vYIesYVwirOEilcLnFRAvbhWCS/qXBtJeAPSyhXs8ax7WwLFhr0YiOZsnO
-        oZ22BXT60RUIA4Ms1NypIJmBmY6HQV6oIFhu21W0fptLYAqw6bVfUOoGdKID/BJWjkmK3j
-        +Q+IQarHcMC1DbGxBD7KIaIzjSVf4D8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-442-Gq8PbYdIPL29PDftlnn-kA-1; Mon, 31 Jan 2022 16:46:32 -0500
-X-MC-Unique: Gq8PbYdIPL29PDftlnn-kA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D63C2190B2A0;
-        Mon, 31 Jan 2022 21:46:29 +0000 (UTC)
-Received: from [10.22.16.244] (unknown [10.22.16.244])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D44F16AB95;
-        Mon, 31 Jan 2022 21:46:27 +0000 (UTC)
-Message-ID: <12f62103-d0e9-3010-4c7b-7b80f086734d@redhat.com>
-Date:   Mon, 31 Jan 2022 16:46:27 -0500
+        Mon, 31 Jan 2022 16:47:29 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076BC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:47:29 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id u13so13244880oie.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i4ZNON8jjEqhdUhXt2lm8yAa37L58m4tSj1GfdxY8fY=;
+        b=hYQh9jnUfIqiLu881VQDp+oCeamuUvhXtTawHjvucMbffYwqzgdl9YuT5XOQW30ztY
+         oQemAMYrcEB6QlQemd2uNZWPymLOuISHd5Lj3aV+VTxyEaDNU6pJEUZW/2sgx4xxuEQz
+         Z8cruvZT0/q9rqGmqFStKqU27q0xtM1VSVs28k7xbB2ZekSekWGney+HB2oDdLcB5sXJ
+         isR2t5jZDAdOak3nzs06IIoeKkRHhEQrqOfQwy2hslIV/ugLAxLY2j6zWD6tzyK/hX2G
+         iEoB0Kh58qWypHKItSpBtL/a5GcUlwLmoHZjToXJL+G1Vxke1DSo6E7+zOkGsANE3Qy1
+         y0aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i4ZNON8jjEqhdUhXt2lm8yAa37L58m4tSj1GfdxY8fY=;
+        b=z3y1XfkZoakGVYJlqKM4/+NmvMwr1iZPApsYf3PXu9FvPNhGCe0950VI0DKdo7XCFG
+         VT2qIioFirIjOE/nHCSFZAhKrjDTh6oAhIbW8F9qFFRV7GhVPKUupgF2cwhYJNY0P33+
+         hFV25NVxAFq4qNNBn6Y1OXNa8B3YGPtHHG2Gnu+poeL7Cln/w/HcIDh84LpRbmTtiDMX
+         AeutpHjKARXFpttZKcVExzAKO3VfMXY4ms0cQ0cbajb8ZPJyl6JiVZfpok91KmD4KdGP
+         9xs3Z2zQvJvWEMX3ycFEpU9K4C+QzZjK9teLBB0mveWfBGjoAglinLd+eFaq4jSUjHxK
+         Ww5Q==
+X-Gm-Message-State: AOAM531brzKhs+V5oxAfkwKdE3Q3SOLxwrBCXtEAo/xstdDVHUyg63L+
+        Fe8tz6Wpvcy/b/Ip4W7DD4RfqA==
+X-Google-Smtp-Source: ABdhPJxv2BQ99VhEEybtEde4R7t1XK2VPNj5P94cmRD1qpbZ70xYPRLnqD31ijFF4oVSs3O/Arlt6A==
+X-Received: by 2002:a05:6808:f0a:: with SMTP id m10mr10743268oiw.127.1643665648575;
+        Mon, 31 Jan 2022 13:47:28 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id w42sm12923738ooi.40.2022.01.31.13.47.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 13:47:27 -0800 (PST)
+Date:   Mon, 31 Jan 2022 15:47:26 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: fix timer node clock-frequency
+Message-ID: <YfhY7vwTfRhJ2UWx@builder.lan>
+References: <20211224234631.109315-1-david@ixit.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 4/4] mm/page_owner: Record task command name
-Content-Language: en-US
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Rafael Aquini <aquini@redhat.com>
-References: <20220131192308.608837-1-longman@redhat.com>
- <20220131192308.608837-5-longman@redhat.com>
- <YfhMd5LTzTHu9zMD@carbon.dhcp.thefacebook.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YfhMd5LTzTHu9zMD@carbon.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224234631.109315-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 15:54, Roman Gushchin wrote:
-> On Mon, Jan 31, 2022 at 02:23:08PM -0500, Waiman Long wrote:
->> The page_owner information currently includes the pid of the calling
->> task. That is useful as long as the task is still running. Otherwise,
->> the number is meaningless. To have more information about the allocating
->> tasks that had exited by the time the page_owner information is
->> retrieved, we need to store the command name of the task.
->>
->> Add a new comm field into page_owner structure to store the command name
->> and display it when the page_owner information is retrieved. Only the
->> first 15 characters of the command name will be copied, but that should
->> be enough in most cases. Even for those commands with longer names,
->> it shouldn't be hard to guess what they are.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   mm/page_owner.c | 16 ++++++++++++----
->>   1 file changed, 12 insertions(+), 4 deletions(-)
->>
->> diff --git a/mm/page_owner.c b/mm/page_owner.c
->> index a471c74c7fe0..8b2b381fd986 100644
->> --- a/mm/page_owner.c
->> +++ b/mm/page_owner.c
->> @@ -20,6 +20,7 @@
->>    * to use off stack temporal storage
->>    */
->>   #define PAGE_OWNER_STACK_DEPTH (16)
->> +#define PAGE_OWNER_COMM_LEN	16
-> Not sure I understand why not simply use TASK_COMM_LEN ?
+On Fri 24 Dec 17:46 CST 2021, David Heidelberg wrote:
 
-Yes, you are right. I thought TASK_COMM_LEN is larger than 16 without 
-actually checking it. Will fix that.
+> Clock frequency is read by driver a single uint32,
+> so the second value was never processed.
+> 
 
-Cheers,
-Longman
+I'm not familiar with the reasoning behind this, but the binding says
+that we should have > 1 clock-frequency specified.
 
+Regards,
+Bjorn
+
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  arch/arm/boot/dts/qcom-apq8064.dtsi | 3 +--
+>  arch/arm/boot/dts/qcom-ipq8064.dtsi | 3 +--
+>  arch/arm/boot/dts/qcom-mdm9615.dtsi | 3 +--
+>  arch/arm/boot/dts/qcom-msm8660.dtsi | 3 +--
+>  arch/arm/boot/dts/qcom-msm8960.dtsi | 3 +--
+>  5 files changed, 5 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> index 2d539d77bad4..3d5d9ffb66af 100644
+> --- a/arch/arm/boot/dts/qcom-apq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> @@ -380,8 +380,7 @@ timer@200a000 {
+>  				     <1 2 0x301>,
+>  				     <1 3 0x301>;
+>  			reg = <0x0200a000 0x100>;
+> -			clock-frequency = <27000000>,
+> -					  <32768>;
+> +			clock-frequency = <27000000>;
+>  			cpu-offset = <0x80000>;
+>  		};
+>  
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index 996f4458d9fc..d663521bdd02 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -458,8 +458,7 @@ IRQ_TYPE_EDGE_RISING)>,
+>  				     <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) |
+>  						 IRQ_TYPE_EDGE_RISING)>;
+>  			reg = <0x0200a000 0x100>;
+> -			clock-frequency = <25000000>,
+> -					  <32768>;
+> +			clock-frequency = <25000000>;
+>  			clocks = <&sleep_clk>;
+>  			clock-names = "sleep";
+>  			cpu-offset = <0x80000>;
+> diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+> index c32415f0e66d..8b58f80093e8 100644
+> --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
+> +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+> @@ -120,8 +120,7 @@ timer@200a000 {
+>  				     <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
+>  				     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>;
+>  			reg = <0x0200a000 0x100>;
+> -			clock-frequency = <27000000>,
+> -					  <32768>;
+> +			clock-frequency = <27000000>;
+>  			cpu-offset = <0x80000>;
+>  		};
+>  
+> diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
+> index 1e8aab357f9c..b16060b65593 100644
+> --- a/arch/arm/boot/dts/qcom-msm8660.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
+> @@ -105,8 +105,7 @@ timer@2000000 {
+>  				     <1 1 0x301>,
+>  				     <1 2 0x301>;
+>  			reg = <0x02000000 0x100>;
+> -			clock-frequency = <27000000>,
+> -					  <32768>;
+> +			clock-frequency = <27000000>;
+>  			cpu-offset = <0x40000>;
+>  		};
+>  
+> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> index 2a0ec97a264f..ca093b89c9ea 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> @@ -99,8 +99,7 @@ timer@200a000 {
+>  				     <1 2 0x301>,
+>  				     <1 3 0x301>;
+>  			reg = <0x0200a000 0x100>;
+> -			clock-frequency = <27000000>,
+> -					  <32768>;
+> +			clock-frequency = <27000000>;
+>  			cpu-offset = <0x80000>;
+>  		};
+>  
+> -- 
+> 2.34.1
+> 

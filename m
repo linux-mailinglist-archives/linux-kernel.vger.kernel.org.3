@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A84754A486B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BD04A485F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 14:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378968AbiAaNi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 08:38:29 -0500
-Received: from mga11.intel.com ([192.55.52.93]:24460 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379018AbiAaNiZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 08:38:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643636305; x=1675172305;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vV+EosjS0aKdpssFXwRRe5Zc72CZWBXPL31TLfqD2Qo=;
-  b=LrBChNDJEmmY9fiUoCF5N8DXv4N6BqeYV2BZupqQGD419QCqiP/xUWFI
-   otOkDxz3Impmq5BIvvUPsbb5ddcvlwXM0R5Jr1wsDIb1BQbtLkHWbsfgd
-   CyulMbgKIoGS17SzxvcLWv1QiEBnrUzGiQWN+6k0+BLjDCV36cQIstPyx
-   mTo8NUl9GX8rI1KAD+JmrsXi+pgXUiJJx0TEyXTwgmTHp3Z9bm6RB+3Vr
-   9DiZIExoBNN1dHQZB+7DlTFGpvLapzIQJ+8L/ifVlW8vd7zDILnxBhtHU
-   Ao36KCw1mXN9fkLPrElK83jAP2QB1cYlvP7YV/UKUEITjhptRbaptkM0E
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="245053765"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="245053765"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:38:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="565010093"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:38:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1nEWrs-00Gsrq-Ge;
-        Mon, 31 Jan 2022 15:37:16 +0200
-Date:   Mon, 31 Jan 2022 15:37:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH v4 01/20] power: supply: core: Refactor
- power_supply_set_input_current_limit_from_supplier()
-Message-ID: <YffmDCHY6csr0uyD@smile.fi.intel.com>
-References: <20220130204557.15662-1-hdegoede@redhat.com>
- <20220130204557.15662-2-hdegoede@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130204557.15662-2-hdegoede@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1378998AbiAaNiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 08:38:18 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:46834 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378878AbiAaNhm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:37:42 -0500
+Received: by mail-ot1-f45.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso4851692otv.13;
+        Mon, 31 Jan 2022 05:37:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=hmPqqMH89APxATVRducOHUhrVsYSdhK58FU8hjuJFYU=;
+        b=YODoObUX5rMRyvWW21oR1+43/6LuUq545MHuMwqknaFc/iYIB/Xvc67jRg1Go6fShQ
+         wwCZlrCAmS6n0pegsxFbvKIi2ajSL21NEpRaRxELpQqoTj03liW2kZnT4QVymr2nHRkU
+         Q98IVasJqvp4JBzIaLFrLph2sT3wiaD1vos6D30TYVDZVB0wJyzSZwnI2TpDNdAJ2X5+
+         +EMGeC2Lq9q/4jfAUZjZx1XWN3mgN/oGFR8HSSY4eGWVBLy0dpZEzsl+yxDm2/gOwpHo
+         7+IyS/viiF8HM/YUW46MAkNo3YnaVi9EfPOYaL/pbo0WH1rC4E8i0aqCX4eOcHdsbeK8
+         PnOw==
+X-Gm-Message-State: AOAM530p2SkbRF8tPqMWi4kzAApzKf2VSRnew+AgaW0rbejfgDXpcQ+Y
+        g24yn63o4Mw/+g2uhcRKqg==
+X-Google-Smtp-Source: ABdhPJxRn59r1bJ55L4bUsinNm/Dim5FdPonnilsaHoyZ/qmjUHFKSeP/tTIxH3eXslra7duYbwfsg==
+X-Received: by 2002:a9d:eca:: with SMTP id 68mr1879048otj.274.1643636257269;
+        Mon, 31 Jan 2022 05:37:37 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q9sm9487122oif.9.2022.01.31.05.37.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 05:37:36 -0800 (PST)
+Received: (nullmailer pid 140171 invoked by uid 1000);
+        Mon, 31 Jan 2022 13:37:31 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     alexandre.belloni@bootlin.com, geert@linux-m68k.org,
+        heiko@sntech.de, paul.walmsley@sifive.com,
+        ivan.griffin@microchip.com, linux-pwm@vger.kernel.org,
+        thierry.reding@gmail.com, jassisinghbrar@gmail.com,
+        atishp@rivosinc.com, lewis.hanly@microchip.com,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-riscv@lists.infradead.org, bin.meng@windriver.com,
+        devicetree@vger.kernel.org, daire.mcnamara@microchip.com,
+        lee.jones@linaro.org, krzysztof.kozlowski@canonical.com,
+        u.kleine-koenig@pengutronix.de, a.zummo@towertech.it,
+        linux-gpio@vger.kernel.org, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu
+In-Reply-To: <20220131114726.973690-6-conor.dooley@microchip.com>
+References: <20220131114726.973690-1-conor.dooley@microchip.com> <20220131114726.973690-6-conor.dooley@microchip.com>
+Subject: Re: [PATCH v5 05/12] dt-bindings: gpio: add bindings for microchip mpfs gpio
+Date:   Mon, 31 Jan 2022 07:37:31 -0600
+Message-Id: <1643636251.114216.140170.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 09:45:38PM +0100, Hans de Goede wrote:
-> Some (USB) charger ICs have variants with USB D+ and D- pins to do their
-> own builtin charger-type detection, like e.g. the bq24190 and bq25890 and
-> also variants which lack this functionality, e.g. the bq24192 and bq25892.
+On Mon, 31 Jan 2022 11:47:20 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> In case the charger-type; and thus the input-current-limit detection is
-> done outside the charger IC then we need some way to communicate this to
-> the charger IC. In the past extcon was used for this, but if the external
-> detection does e.g. full USB PD negotiation then the extcon cable-types do
-> not convey enough information.
+> Add device tree bindings for the gpio controller on
+> the Microchip PolarFire SoC.
 > 
-> For these setups it was decided to model the external charging "brick"
-> and the parameters negotiated with it as a power_supply class-device
-> itself; and power_supply_set_input_current_limit_from_supplier() was
-> introduced to allow drivers to get the input-current-limit this way.
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> But in some cases psy drivers may want to know other properties, e.g. the
-> bq25892 can do "quick-charge" negotiation by pulsing its current draw,
-> but this should only be done if the usb_type psy-property of its supplier
-> is set to DCP (and device-properties indicate the board allows higher
-> voltages).
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/gpio/microchip,mpfs-gpio.yaml    | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
 > 
-> Instead of adding extra helper functions for each property which
-> a psy-driver wants to query from its supplier, refactor
-> power_supply_set_input_current_limit_from_supplier() into a
-> more generic power_supply_get_property_from_supplier() function.
 
-...
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +	ret = power_supply_get_property_from_supplier(bdi->charger,
-> +						      POWER_SUPPLY_PROP_CURRENT_MAX,
-> +						      &val);
-> +	if (ret == 0)
+yamllint warnings/errors:
 
-Can it be as simple as
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1398: dt_binding_check] Error 2
 
-	if (ret)
-		return;
+doc reference errors (make refcheckdocs):
 
-	...
+See https://patchwork.ozlabs.org/patch/1586677
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-?
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Or did I misunderstand the meaning of 0?
+pip3 install dtschema --upgrade
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+Please check and re-submit.
 

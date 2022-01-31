@@ -2,79 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B204A4BC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41794A4BCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380297AbiAaQVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:21:41 -0500
-Received: from marcansoft.com ([212.63.210.85]:38398 "EHLO mail.marcansoft.com"
+        id S1380336AbiAaQWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:22:17 -0500
+Received: from mga06.intel.com ([134.134.136.31]:51587 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380259AbiAaQV3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:21:29 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A809B419BC;
-        Mon, 31 Jan 2022 16:21:20 +0000 (UTC)
-Subject: Re: [PATCH v2 22/35] brcmfmac: chip: Handle 1024-unit sizes for TCM
- blocks
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-23-marcan@marcan.st>
- <ed387a90-586d-5071-baa6-bc66d4e7f22f@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <b150396e-83f0-6d6e-4b80-5ecfc04ec1a0@marcan.st>
-Date:   Tue, 1 Feb 2022 01:21:17 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1380270AbiAaQVk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 11:21:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643646100; x=1675182100;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bQftNr7Q2K+6XC4daDnGC8Js8mVg9hLNSQs8LTMJNvk=;
+  b=RgdRDQIgB8D3pVSJNqZ4r5dbuK0hkAe4cxQzzCPbdahNtIiqW82GMRkI
+   TK1neg+WCgpFpVd/CV0+QWRz49LRSYnSNylNRODHB+9yk0DbrMh2Px65w
+   aRIg89an6R7AX3TFvG+OEk5SojD1DKzrpJxXD+RaCpIFQNzaYzaIxC0JQ
+   Wk9c78RVmQ0LP1TEtQWAIVBFokAFAAMnawqEj9cUKkNvIKCLCn2bajYDR
+   ykWlYm6CuzbAWAn1ed9DWTzBLLFpMghKsI/4ROwxzjr8f6RCtfRzQ1VIJ
+   adjXL6qXLZYiKp2OymLghGMRWtPJqJ3z1QZtoTSzuuHANmMqRmoJ8EZ44
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308227744"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="308227744"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 08:21:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="496974037"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2022 08:21:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEZQw-000S93-At; Mon, 31 Jan 2022 16:21:38 +0000
+Date:   Tue, 1 Feb 2022 00:21:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Julien Massot <julien.massot@iot.bzh>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: drivers/remoteproc/rcar_rproc.c:28:12: sparse: sparse: incorrect
+ type in assignment (different address spaces)
+Message-ID: <202202010048.Xq8X0kfI-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <ed387a90-586d-5071-baa6-bc66d4e7f22f@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2022 21.36, Arend van Spriel wrote:
->>   /** Return the TCM-RAM size of the ARMCR4 core. */
->> -static u32 brcmf_chip_tcm_ramsize(struct brcmf_core_priv *cr4)
->> +static u32 brcmf_chip_tcm_ramsize(struct brcmf_chip_priv *ci,
->> +				  struct brcmf_core_priv *cr4)
-> 
-> Not sure why you add ci parameter here. It is not used below or am I 
-> overlooking something.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   26291c54e111ff6ba87a164d85d4a4e134b7315c
+commit: 285892a74f1370a12249f765c6a4e3b16194852e remoteproc: Add Renesas rcar driver
+date:   7 weeks ago
+config: ia64-randconfig-s032-20220130 (https://download.01.org/0day-ci/archive/20220201/202202010048.Xq8X0kfI-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=285892a74f1370a12249f765c6a4e3b16194852e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 285892a74f1370a12249f765c6a4e3b16194852e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/remoteproc/
 
-Oops, looks like junk left behind from when I was trying to figure this
-out. Removed. Sorry about that.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/rcar_rproc.c:28:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
+   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     expected void *va
+   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     got void [noderef] __iomem *
+>> drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *va @@
+   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     got void *va
+
+vim +28 drivers/remoteproc/rcar_rproc.c
+
+    20	
+    21	static int rcar_rproc_mem_alloc(struct rproc *rproc,
+    22					 struct rproc_mem_entry *mem)
+    23	{
+    24		struct device *dev = &rproc->dev;
+    25		void *va;
+    26	
+    27		dev_dbg(dev, "map memory: %pa+%zx\n", &mem->dma, mem->len);
+  > 28		va = ioremap_wc(mem->dma, mem->len);
+    29		if (!va) {
+    30			dev_err(dev, "Unable to map memory region: %pa+%zx\n",
+    31				&mem->dma, mem->len);
+    32			return -ENOMEM;
+    33		}
+    34	
+    35		/* Update memory entry va */
+    36		mem->va = va;
+    37	
+    38		return 0;
+    39	}
+    40	
+    41	static int rcar_rproc_mem_release(struct rproc *rproc,
+    42					   struct rproc_mem_entry *mem)
+    43	{
+    44		dev_dbg(&rproc->dev, "unmap memory: %pa\n", &mem->dma);
+  > 45		iounmap(mem->va);
+    46	
+    47		return 0;
+    48	}
+    49	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6327A4A4175
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9524A44C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358919AbiAaLEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358800AbiAaLCf (ORCPT
+        id S1359781AbiAaLcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:32:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52560 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377274AbiAaLWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50854C06136E;
-        Mon, 31 Jan 2022 03:00:56 -0800 (PST)
+        Mon, 31 Jan 2022 06:22:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E586460B28;
-        Mon, 31 Jan 2022 11:00:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA944C340F0;
-        Mon, 31 Jan 2022 11:00:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E67A611E3;
+        Mon, 31 Jan 2022 11:22:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC18C340E8;
+        Mon, 31 Jan 2022 11:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643626855;
-        bh=/JNizw2DE/Nlkh/hEPWIG7X7g8UTIItZA4wTHSrZrjM=;
+        s=korg; t=1643628158;
+        bh=WbNPvf9fPdTSG1gQ5NTJjcnoAUVPuHZ4gNLdjHQIV3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P/jzkdWNXmXiTPXWFfBSpR4PMjawCu3c+VkTQv8BJcg5y2ZgXv5qw3nRKMCs5JlZf
-         /zFufVZxB7UGv806EcKG3MUnbtvnxMGfmRHxsO56L2kutozvNlW4H6ff8HNGjedtaB
-         Lg6ceGjYfKdWwzqRTBOwF5QZBNN0PRyxAwrLXdIo=
+        b=J2L6VchRBSoThSyJu34052tZ3mNw7XiBF7A6l80otxayT9uLQL9PwuCQsFi/7g4oR
+         Hdz9E5bC7nR4t97wibwJfGmLsMANF3ZOKhwkO3kmASt0798jObNAVgnIyMc26qhtC3
+         K5s1LfMCXm4Bsu5hVxpPqASTS6J2RAI/NFC2BJDE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 61/64] ipv4: remove sparse error in ip_neigh_gw4()
-Date:   Mon, 31 Jan 2022 11:56:46 +0100
-Message-Id: <20220131105217.726529190@linuxfoundation.org>
+Subject: [PATCH 5.16 144/200] octeontx2-af: Retry until RVU block reset complete
+Date:   Mon, 31 Jan 2022 11:56:47 +0100
+Message-Id: <20220131105238.401824516@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-References: <20220131105215.644174521@linuxfoundation.org>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,37 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Geetha sowjanya <gakula@marvell.com>
 
-[ Upstream commit 3c42b2019863b327caa233072c50739d4144dd16 ]
+[ Upstream commit 03ffbc9914bd1130fba464f0a41c01372e5fc359 ]
 
-./include/net/route.h:373:48: warning: incorrect type in argument 2 (different base types)
-./include/net/route.h:373:48:    expected unsigned int [usertype] key
-./include/net/route.h:373:48:    got restricted __be32 [usertype] daddr
+Few RVU blocks like SSO require more time for reset on some
+silicons. Hence retrying the block reset until success.
 
-Fixes: 5c9f7c1dfc2e ("ipv4: Add helpers for neigh lookup for nexthop")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220127013404.1279313-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: c0fa2cff8822c ("octeontx2-af: Handle return value in block reset")
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
+Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/route.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/marvell/octeontx2/af/rvu.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/route.h b/include/net/route.h
-index 6c516840380db..b85d1912d84fd 100644
---- a/include/net/route.h
-+++ b/include/net/route.h
-@@ -359,7 +359,7 @@ static inline struct neighbour *ip_neigh_gw4(struct net_device *dev,
- {
- 	struct neighbour *neigh;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+index 3ca6b942ebe25..54e1b27a7dfec 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+@@ -520,8 +520,11 @@ static void rvu_block_reset(struct rvu *rvu, int blkaddr, u64 rst_reg)
  
--	neigh = __ipv4_neigh_lookup_noref(dev, daddr);
-+	neigh = __ipv4_neigh_lookup_noref(dev, (__force u32)daddr);
- 	if (unlikely(!neigh))
- 		neigh = __neigh_create(&arp_tbl, &daddr, dev, false);
+ 	rvu_write64(rvu, blkaddr, rst_reg, BIT_ULL(0));
+ 	err = rvu_poll_reg(rvu, blkaddr, rst_reg, BIT_ULL(63), true);
+-	if (err)
+-		dev_err(rvu->dev, "HW block:%d reset failed\n", blkaddr);
++	if (err) {
++		dev_err(rvu->dev, "HW block:%d reset timeout retrying again\n", blkaddr);
++		while (rvu_poll_reg(rvu, blkaddr, rst_reg, BIT_ULL(63), true) == -EBUSY)
++			;
++	}
+ }
  
+ static void rvu_reset_all_blocks(struct rvu *rvu)
 -- 
 2.34.1
 

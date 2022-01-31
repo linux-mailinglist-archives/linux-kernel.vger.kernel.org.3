@@ -2,148 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2204A4BB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F8C4A4BBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380236AbiAaQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 11:20:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60132 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380243AbiAaQTu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 11:19:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643645988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7XAQrszQc36R3ke0TAxdHZ08nKa5sNGKhk1YO8Fovj8=;
-        b=IFFS7/Tl7usmJHDERSWl9Vae2UapkbnZffdG8fqSG97S419uja5PZUvbhO2h0aq8bChGhs
-        Y0EVyadYua+XF+qBPH214IHrKiJXX2YdTeUdsWZGSLKmsdRl4pDyjX5DMK6i98E+lM0yn2
-        QBAPAe/tCeTOiOWHj+Uo6yWZlIiZqQE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-Ccu9IJISPn2Ja3Aa6EMUKg-1; Mon, 31 Jan 2022 11:19:47 -0500
-X-MC-Unique: Ccu9IJISPn2Ja3Aa6EMUKg-1
-Received: by mail-wr1-f71.google.com with SMTP id r2-20020adfa142000000b001e176ac1ec3so847816wrr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 08:19:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=7XAQrszQc36R3ke0TAxdHZ08nKa5sNGKhk1YO8Fovj8=;
-        b=3bn0KtWSwSvM84t3W0hAsadYjfs+K9F+dAXDbKOObe6FlGbkA8LDFJdJFF1MQ40Vvg
-         Wtk+4DTL5VsVrfkaCvifT3aQaGlXNCNrbv9pj2DTBtFhYyaUIv7QDWO6slH7MFHz0Ukf
-         AynYIYOl4cbH1SB20WOLMOXZOFCuCHz5bAEw8dCtYzHUgSRlHhLG7fkjfSYdDMoTGWFq
-         E895c1CWxmQc82xxXEljUPxpwB3kRZ7FetxUup7hDc9ZMAy92bNNJyQ86AtFkSsgcMol
-         pHk26/i/Vj9h2HCEDmVSV4SRahklBj/84wrPNEv+GaLaA+BxT+Q4CZKrBCWxApfs9Cik
-         YAaA==
-X-Gm-Message-State: AOAM530wjrqWhSjkyVzg9y2Ecnh0UUBDdO85mBUt3l6u4lxWHmG+IXTX
-        vVAWjmvoKqiar/pAQe6jfZ6Mu6DgfZeXjdrXRjsjcoP9tjwjMdARJDiorQDc8a7KI4WcXNMjWIS
-        H2hJ0bSgAb8qiKyq6VphaKEmt
-X-Received: by 2002:a5d:59a2:: with SMTP id p2mr17317634wrr.664.1643645986188;
-        Mon, 31 Jan 2022 08:19:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjTqFOp4VER/3BLKVfseVZxxqwlCXqz39uMizZQGUFjVQiLnivMq8zfHMjAGzTIq/UZ02yGg==
-X-Received: by 2002:a5d:59a2:: with SMTP id p2mr17317622wrr.664.1643645985976;
-        Mon, 31 Jan 2022 08:19:45 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id y3sm14007593wry.109.2022.01.31.08.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 08:19:45 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH 09/22] KVM: x86: Uninline and export hv_track_root_tdp()
-In-Reply-To: <20220128005208.4008533-10-seanjc@google.com>
-References: <20220128005208.4008533-1-seanjc@google.com>
- <20220128005208.4008533-10-seanjc@google.com>
-Date:   Mon, 31 Jan 2022 17:19:44 +0100
-Message-ID: <87ee4ng9nj.fsf@redhat.com>
+        id S1380271AbiAaQVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:21:32 -0500
+Received: from mga01.intel.com ([192.55.52.88]:13463 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1380116AbiAaQVW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 11:21:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643646082; x=1675182082;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r4B9aWmQfZmAaLbnAQfzd6iHm0LZz0ye6Jl1awPoYCg=;
+  b=EoE5yYS+QdBksyJd8PQKO3R2+BegmG94DXYMrjmG2VYfiuu9IXrihrOZ
+   SoZORi4QrRCVl+zQ84UCq4fqXqkG34qNA3VYEKEPzA2752odt3AVxVuEp
+   CALNZFezIgCpfWL8P01Gaori3g7MyvrF1wfhP8Gp+bymD+loIyL1to79t
+   WMeHbgtW1E+j03AmmlwnBf97uM4x8zd9vJkfX103xIsYOEW1lnhyG2nRG
+   gikvS7u926HOd9AMOMUnQuRlIaDwF3d5mJ5BLWVZyuzBadYKoVN5pAifX
+   dZGOU3D6Mc8NRgiOw1zRkhDu6jGTERtF5iGhTIrEeAbsfeyWbRyEYSoeK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="271966417"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="271966417"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 08:20:56 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="565181799"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 08:20:51 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1nEZPA-00Gw7r-2E;
+        Mon, 31 Jan 2022 18:19:48 +0200
+Date:   Mon, 31 Jan 2022 18:19:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: Re: [PATCH v4 12/20] power: supply: bq25890: Support higher charging
+ voltages through Pump Express+ protocol
+Message-ID: <YfgMI2Qq4tMAiEn7@smile.fi.intel.com>
+References: <20220130204557.15662-1-hdegoede@redhat.com>
+ <20220130204557.15662-13-hdegoede@redhat.com>
+ <YffouVvL9M4fch0I@smile.fi.intel.com>
+ <bc465932-b2e5-7ff4-1b9a-cf2d76079251@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc465932-b2e5-7ff4-1b9a-cf2d76079251@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Mon, Jan 31, 2022 at 04:18:23PM +0100, Hans de Goede wrote:
+> On 1/31/22 14:48, Andy Shevchenko wrote:
+> > On Sun, Jan 30, 2022 at 09:45:49PM +0100, Hans de Goede wrote:
 
-> Uninline and export Hyper-V's hv_track_root_tdp(), which is (somewhat
-> indirectly) the last remaining reference to kvm_x86_ops from vendor
-> modules, i.e. will allow unexporting kvm_x86_ops.  Reloading the TDP PGD
-> isn't the fastest of paths, hv_track_root_tdp() isn't exactly tiny, and
-> disallowing vendor code from accessing kvm_x86_ops provides nice-to-have
-> encapsulation of common x86 code (and of Hyper-V code for that
-> matter).
+...
 
-We can add a static branch for "kvm_x86_ops.tlb_remote_flush ==
-hv_remote_flush_tlb" condition and check it in vendor modules prior to
-calling into hv_track_root_tdp() but I seriously doubt it'll bring us
-noticable performance gain.
+> >> +	for (i = 0; i < PUMP_EXPRESS_MAX_TRIES; i++) {
+> > 
+> >> +		voltage = bq25890_get_vbus_voltage(bq);
+> >> +		if (voltage < 0)
+> >> +			goto error_print;
+> > 
+> > It also can be (at least in align with the rest error paths)
+> > 
+> > 		ret = bq25890_get_vbus_voltage(bq);
+> > 		if (ret < 0)
+> > 			goto error_print;
+> > 		voltage = ret;
+> > 
+> > followed up (but not necessarily)...
+> 
+> The suggested pattern is useful when ret needs to be set on the error-exit
+> path, but we are not doing that here. So I prefer to just keep this as is.
 
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/kvm_onhyperv.c | 14 ++++++++++++++
->  arch/x86/kvm/kvm_onhyperv.h | 14 +-------------
->  2 files changed, 15 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/x86/kvm/kvm_onhyperv.c b/arch/x86/kvm/kvm_onhyperv.c
-> index b469f45e3fe4..ee4f696a0782 100644
-> --- a/arch/x86/kvm/kvm_onhyperv.c
-> +++ b/arch/x86/kvm/kvm_onhyperv.c
-> @@ -92,3 +92,17 @@ int hv_remote_flush_tlb(struct kvm *kvm)
->  	return hv_remote_flush_tlb_with_range(kvm, NULL);
->  }
->  EXPORT_SYMBOL_GPL(hv_remote_flush_tlb);
-> +
-> +void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
-> +{
-> +	struct kvm_arch *kvm_arch = &vcpu->kvm->arch;
-> +
-> +	if (kvm_x86_ops.tlb_remote_flush == hv_remote_flush_tlb) {
-> +		spin_lock(&kvm_arch->hv_root_tdp_lock);
-> +		vcpu->arch.hv_root_tdp = root_tdp;
-> +		if (root_tdp != kvm_arch->hv_root_tdp)
-> +			kvm_arch->hv_root_tdp = INVALID_PAGE;
-> +		spin_unlock(&kvm_arch->hv_root_tdp_lock);
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(hv_track_root_tdp);
-> diff --git a/arch/x86/kvm/kvm_onhyperv.h b/arch/x86/kvm/kvm_onhyperv.h
-> index 1c67abf2eba9..287e98ef9df3 100644
-> --- a/arch/x86/kvm/kvm_onhyperv.h
-> +++ b/arch/x86/kvm/kvm_onhyperv.h
-> @@ -10,19 +10,7 @@
->  int hv_remote_flush_tlb_with_range(struct kvm *kvm,
->  		struct kvm_tlb_range *range);
->  int hv_remote_flush_tlb(struct kvm *kvm);
-> -
-> -static inline void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
-> -{
-> -	struct kvm_arch *kvm_arch = &vcpu->kvm->arch;
-> -
-> -	if (kvm_x86_ops.tlb_remote_flush == hv_remote_flush_tlb) {
-> -		spin_lock(&kvm_arch->hv_root_tdp_lock);
-> -		vcpu->arch.hv_root_tdp = root_tdp;
-> -		if (root_tdp != kvm_arch->hv_root_tdp)
-> -			kvm_arch->hv_root_tdp = INVALID_PAGE;
-> -		spin_unlock(&kvm_arch->hv_root_tdp_lock);
-> -	}
-> -}
-> +void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp);
->  #else /* !CONFIG_HYPERV */
->  static inline void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
->  {
+Are you talking about above proposal?
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Still wouldn't be better to use it that if we want, for example, to print an
+error code, it can be done easily? For the sake of consistency.
+
+> >> +	}
+> >> +
+> >> +	bq25890_field_write(bq, F_PUMPX_EN, 0);
+> >> +
+> >> +	dev_info(bq->dev, "Hi-voltage charging requested, input voltage is %d mV\n",
+> >> +		 voltage);
+> > 
+> >> +	return;
+> >> +error_print:
+> > 
+> > 	if (ret < 0)
+> > 
+> > But it's up to you.
+> > 
+> >> +	dev_err(bq->dev, "Failed to request hi-voltage charging\n");
 
 -- 
-Vitaly
+With Best Regards,
+Andy Shevchenko
+
 

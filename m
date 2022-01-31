@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 940DF4A4615
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7389C4A43B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377686AbiAaLrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378563AbiAaLeZ (ORCPT
+        id S1377721AbiAaLXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:23:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33852 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349077AbiAaLOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:34:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEEAC0698FD;
-        Mon, 31 Jan 2022 03:23:15 -0800 (PST)
+        Mon, 31 Jan 2022 06:14:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C36AB82A64;
-        Mon, 31 Jan 2022 11:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3559C340E8;
-        Mon, 31 Jan 2022 11:23:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD6BCB82A75;
+        Mon, 31 Jan 2022 11:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E80BDC340E8;
+        Mon, 31 Jan 2022 11:14:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628193;
-        bh=cbobtbtWjowQxXmR99UJcmfS3g7Vir1jTIU17Q3iYDY=;
+        s=korg; t=1643627651;
+        bh=csNx4aRV6nnIStm0/SjxuLsdYt8xDxxHkjpJHAs2bOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gMH16if/1CwcMDt1ciIZ/r+AuMCxaAy3Zb6O0t974AXvzgQ40zyGeEu+DgCbYOsyO
-         weH/lPEWEOvwywi6l3G1iPEkj6ywHfZTTzvsNBhjzFfJRkTU9uPXmgba2GJ8Rb/iwL
-         OBvRfHiZ1iuXPsYgjGaqggb3PEWN6ZXTtT/0KXPM=
+        b=ObsWQzrIOVZWczgdWQooJnwnTY5vWRT63w5uOzgP1WUYqgvw74HtWEBsCcsRm0yp+
+         Lmmt8QrOm57ehsIp+zHY4m+3XqdOrrxtTmMKu6VFP0jAoHy+o/nVz6nskKrt7fVMaz
+         riJZgBH0b8spi2z2F//YAznBUPSC8bb4z/djWvHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 154/200] block: fix memory leak in disk_register_independent_access_ranges
-Date:   Mon, 31 Jan 2022 11:56:57 +0100
-Message-Id: <20220131105238.739717948@linuxfoundation.org>
+        stable@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+        Venky Shankar <vshankar@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 153/171] ceph: put the requests/sessions when it fails to alloc memory
+Date:   Mon, 31 Jan 2022 11:56:58 +0100
+Message-Id: <20220131105235.197677275@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,42 +48,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Xiubo Li <xiubli@redhat.com>
 
-[ Upstream commit 83114df32ae779df57e0af99a8ba6c3968b2ba3d ]
+[ Upstream commit 89d43d0551a848e70e63d9ba11534aaeabc82443 ]
 
-kobject_init_and_add() takes reference even when it fails.
-According to the doc of kobject_init_and_add()
+When failing to allocate the sessions memory we should make sure
+the req1 and req2 and the sessions get put. And also in case the
+max_sessions decreased so when kreallocate the new memory some
+sessions maybe missed being put.
 
-   If this function returns an error, kobject_put() must be called to
-   properly clean up the memory associated with the object.
+And if the max_sessions is 0 krealloc will return ZERO_SIZE_PTR,
+which will lead to a distinct access fault.
 
-Fix this issue by adding kobject_put().
-Callback function blk_ia_ranges_sysfs_release() in kobject_put()
-can handle the pointer "iars" properly.
-
-Fixes: a2247f19ee1c ("block: Add independent access ranges support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Link: https://lore.kernel.org/r/20220120101025.22411-1-linmq006@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+URL: https://tracker.ceph.com/issues/53819
+Fixes: e1a4541ec0b9 ("ceph: flush the mdlog before waiting on unsafe reqs")
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+Reviewed-by: Venky Shankar <vshankar@redhat.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-ia-ranges.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ceph/caps.c | 55 +++++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 37 insertions(+), 18 deletions(-)
 
-diff --git a/block/blk-ia-ranges.c b/block/blk-ia-ranges.c
-index b925f3db3ab7a..18c68d8b9138e 100644
---- a/block/blk-ia-ranges.c
-+++ b/block/blk-ia-ranges.c
-@@ -144,7 +144,7 @@ int disk_register_independent_access_ranges(struct gendisk *disk,
- 				   &q->kobj, "%s", "independent_access_ranges");
- 	if (ret) {
- 		q->ia_ranges = NULL;
--		kfree(iars);
-+		kobject_put(&iars->kobj);
- 		return ret;
+diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
+index 8be4da2e2b826..09900a9015ea6 100644
+--- a/fs/ceph/caps.c
++++ b/fs/ceph/caps.c
+@@ -2217,6 +2217,7 @@ static int unsafe_request_wait(struct inode *inode)
+ 	struct ceph_mds_client *mdsc = ceph_sb_to_client(inode->i_sb)->mdsc;
+ 	struct ceph_inode_info *ci = ceph_inode(inode);
+ 	struct ceph_mds_request *req1 = NULL, *req2 = NULL;
++	unsigned int max_sessions;
+ 	int ret, err = 0;
+ 
+ 	spin_lock(&ci->i_unsafe_lock);
+@@ -2234,37 +2235,45 @@ static int unsafe_request_wait(struct inode *inode)
  	}
+ 	spin_unlock(&ci->i_unsafe_lock);
+ 
++	/*
++	 * The mdsc->max_sessions is unlikely to be changed
++	 * mostly, here we will retry it by reallocating the
++	 * sessions array memory to get rid of the mdsc->mutex
++	 * lock.
++	 */
++retry:
++	max_sessions = mdsc->max_sessions;
++
+ 	/*
+ 	 * Trigger to flush the journal logs in all the relevant MDSes
+ 	 * manually, or in the worst case we must wait at most 5 seconds
+ 	 * to wait the journal logs to be flushed by the MDSes periodically.
+ 	 */
+-	if (req1 || req2) {
++	if ((req1 || req2) && likely(max_sessions)) {
+ 		struct ceph_mds_session **sessions = NULL;
+ 		struct ceph_mds_session *s;
+ 		struct ceph_mds_request *req;
+-		unsigned int max;
+ 		int i;
+ 
+-		/*
+-		 * The mdsc->max_sessions is unlikely to be changed
+-		 * mostly, here we will retry it by reallocating the
+-		 * sessions arrary memory to get rid of the mdsc->mutex
+-		 * lock.
+-		 */
+-retry:
+-		max = mdsc->max_sessions;
+-		sessions = krealloc(sessions, max * sizeof(s), __GFP_ZERO);
+-		if (!sessions)
+-			return -ENOMEM;
++		sessions = kzalloc(max_sessions * sizeof(s), GFP_KERNEL);
++		if (!sessions) {
++			err = -ENOMEM;
++			goto out;
++		}
+ 
+ 		spin_lock(&ci->i_unsafe_lock);
+ 		if (req1) {
+ 			list_for_each_entry(req, &ci->i_unsafe_dirops,
+ 					    r_unsafe_dir_item) {
+ 				s = req->r_session;
+-				if (unlikely(s->s_mds >= max)) {
++				if (unlikely(s->s_mds >= max_sessions)) {
+ 					spin_unlock(&ci->i_unsafe_lock);
++					for (i = 0; i < max_sessions; i++) {
++						s = sessions[i];
++						if (s)
++							ceph_put_mds_session(s);
++					}
++					kfree(sessions);
+ 					goto retry;
+ 				}
+ 				if (!sessions[s->s_mds]) {
+@@ -2277,8 +2286,14 @@ retry:
+ 			list_for_each_entry(req, &ci->i_unsafe_iops,
+ 					    r_unsafe_target_item) {
+ 				s = req->r_session;
+-				if (unlikely(s->s_mds >= max)) {
++				if (unlikely(s->s_mds >= max_sessions)) {
+ 					spin_unlock(&ci->i_unsafe_lock);
++					for (i = 0; i < max_sessions; i++) {
++						s = sessions[i];
++						if (s)
++							ceph_put_mds_session(s);
++					}
++					kfree(sessions);
+ 					goto retry;
+ 				}
+ 				if (!sessions[s->s_mds]) {
+@@ -2299,7 +2314,7 @@ retry:
+ 		spin_unlock(&ci->i_ceph_lock);
+ 
+ 		/* send flush mdlog request to MDSes */
+-		for (i = 0; i < max; i++) {
++		for (i = 0; i < max_sessions; i++) {
+ 			s = sessions[i];
+ 			if (s) {
+ 				send_flush_mdlog(s);
+@@ -2316,15 +2331,19 @@ retry:
+ 					ceph_timeout_jiffies(req1->r_timeout));
+ 		if (ret)
+ 			err = -EIO;
+-		ceph_mdsc_put_request(req1);
+ 	}
+ 	if (req2) {
+ 		ret = !wait_for_completion_timeout(&req2->r_safe_completion,
+ 					ceph_timeout_jiffies(req2->r_timeout));
+ 		if (ret)
+ 			err = -EIO;
+-		ceph_mdsc_put_request(req2);
+ 	}
++
++out:
++	if (req1)
++		ceph_mdsc_put_request(req1);
++	if (req2)
++		ceph_mdsc_put_request(req2);
+ 	return err;
+ }
  
 -- 
 2.34.1

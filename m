@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 431944A446A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF23C4A4190
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378894AbiAaL3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        id S1359226AbiAaLEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378388AbiAaLUF (ORCPT
+        with ESMTP id S1358449AbiAaLCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:20:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E7C0610EC;
-        Mon, 31 Jan 2022 03:12:21 -0800 (PST)
+        Mon, 31 Jan 2022 06:02:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B613C061769;
+        Mon, 31 Jan 2022 03:00:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 632C360E76;
-        Mon, 31 Jan 2022 11:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406BAC340E8;
-        Mon, 31 Jan 2022 11:12:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08196B82A5F;
+        Mon, 31 Jan 2022 11:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6370EC340E8;
+        Mon, 31 Jan 2022 11:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643627540;
-        bh=fVlo420avUhmp+OSCpJHITks02oYo6ASqkbt0PYVoZo=;
+        s=korg; t=1643626833;
+        bh=pprbZsg+C92F/5sdWdHZshcc/eOL9hMtUXknEI2V4gg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zxo6bCvG9JsYx/K2kI9SCH5+WEbnZrNNt89mOcF3+bJBgU9A6SvMxMcn7oJSpB8+y
-         PAb0Fb/M9M9HmiVdD/Kd6yJj7r/zSBhOEyYRvmGXSRJ7nDR83OWI2XPQeeSzSVoiMc
-         QJFcEd59xKOvbxRyVv7pc8A5VtO46vyzRcMW87dU=
+        b=XotECHmPjk9O0L5lvD/cEr/tH6iE418LtXaPGdAdsxzokpA+NWo4zBpW8mq6E67x+
+         ycDuBTikh0v3hWZrAkEC0KPqh1Iz3KtX7IqUwuf7JDtRcB941wYT9qwWWaT2Xi4M1L
+         6/emaA0T9OCkwh4ZohjQz7WtFU4l+1D9F7dgIWmg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 117/171] mptcp: fix msk traversal in mptcp_nl_cmd_set_flags()
+Subject: [PATCH 5.4 37/64] ping: fix the sk_bound_dev_if match in ping_lookup
 Date:   Mon, 31 Jan 2022 11:56:22 +0100
-Message-Id: <20220131105234.003753473@linuxfoundation.org>
+Message-Id: <20220131105216.930543828@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
-References: <20220131105229.959216821@linuxfoundation.org>
+In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
+References: <20220131105215.644174521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,85 +50,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-[ Upstream commit 8e9eacad7ec7a9cbf262649ebf1fa6e6f6cc7d82 ]
+commit 2afc3b5a31f9edf3ef0f374f5d70610c79c93a42 upstream.
 
-The MPTCP endpoint list is under RCU protection, guarded by the
-pernet spinlock. mptcp_nl_cmd_set_flags() traverses the list
-without acquiring the spin-lock nor under the RCU critical section.
+When 'ping' changes to use PING socket instead of RAW socket by:
 
-This change addresses the issue performing the lookup and the endpoint
-update under the pernet spinlock.
+   # sysctl -w net.ipv4.ping_group_range="0 100"
 
-Fixes: 0f9f696a502e ("mptcp: add set_flags command in PM netlink")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+the selftests 'router_broadcast.sh' will fail, as such command
+
+  # ip vrf exec vrf-h1 ping -I veth0 198.51.100.255 -b
+
+can't receive the response skb by the PING socket. It's caused by mismatch
+of sk_bound_dev_if and dif in ping_rcv() when looking up the PING socket,
+as dif is vrf-h1 if dif's master was set to vrf-h1.
+
+This patch is to fix this regression by also checking the sk_bound_dev_if
+against sdif so that the packets can stil be received even if the socket
+is not bound to the vrf device but to the real iif.
+
+Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+Reported-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 37 +++++++++++++++++++++++++++----------
- 1 file changed, 27 insertions(+), 10 deletions(-)
+ net/ipv4/ping.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index bba166ddacc78..7f11eb3e35137 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -469,6 +469,20 @@ __lookup_addr_by_id(struct pm_nl_pernet *pernet, unsigned int id)
- 	return NULL;
- }
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -220,7 +220,8 @@ static struct sock *ping_lookup(struct n
+ 			continue;
+ 		}
  
-+static struct mptcp_pm_addr_entry *
-+__lookup_addr(struct pm_nl_pernet *pernet, const struct mptcp_addr_info *info,
-+	      bool lookup_by_id)
-+{
-+	struct mptcp_pm_addr_entry *entry;
-+
-+	list_for_each_entry(entry, &pernet->local_addr_list, list) {
-+		if ((!lookup_by_id && addresses_equal(&entry->addr, info, true)) ||
-+		    (lookup_by_id && entry->addr.id == info->id))
-+			return entry;
-+	}
-+	return NULL;
-+}
-+
- static int
- lookup_id_by_addr(struct pm_nl_pernet *pernet, const struct mptcp_addr_info *addr)
- {
-@@ -1753,18 +1767,21 @@ static int mptcp_nl_cmd_set_flags(struct sk_buff *skb, struct genl_info *info)
- 			return -EOPNOTSUPP;
- 	}
+-		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif)
++		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
++		    sk->sk_bound_dev_if != inet_sdif(skb))
+ 			continue;
  
--	list_for_each_entry(entry, &pernet->local_addr_list, list) {
--		if ((!lookup_by_id && addresses_equal(&entry->addr, &addr.addr, true)) ||
--		    (lookup_by_id && entry->addr.id == addr.addr.id)) {
--			mptcp_nl_addr_backup(net, &entry->addr, bkup);
--
--			if (bkup)
--				entry->flags |= MPTCP_PM_ADDR_FLAG_BACKUP;
--			else
--				entry->flags &= ~MPTCP_PM_ADDR_FLAG_BACKUP;
--		}
-+	spin_lock_bh(&pernet->lock);
-+	entry = __lookup_addr(pernet, &addr.addr, lookup_by_id);
-+	if (!entry) {
-+		spin_unlock_bh(&pernet->lock);
-+		return -EINVAL;
- 	}
- 
-+	if (bkup)
-+		entry->flags |= MPTCP_PM_ADDR_FLAG_BACKUP;
-+	else
-+		entry->flags &= ~MPTCP_PM_ADDR_FLAG_BACKUP;
-+	addr = *entry;
-+	spin_unlock_bh(&pernet->lock);
-+
-+	mptcp_nl_addr_backup(net, &addr.addr, bkup);
- 	return 0;
- }
- 
--- 
-2.34.1
-
+ 		sock_hold(sk);
 
 

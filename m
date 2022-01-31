@@ -2,274 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BFE4A3CC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 04:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C992C4A3CD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 05:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbiAaD4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Jan 2022 22:56:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52518 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229885AbiAaD4G (ORCPT
+        id S1357589AbiAaEEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Jan 2022 23:04:38 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38156 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357588AbiAaEE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Jan 2022 22:56:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643601365;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Sun, 30 Jan 2022 23:04:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 435991F380;
+        Mon, 31 Jan 2022 04:04:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643601867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=B7pCh7cso6UhMDVYM0raa9qRlRsS2NwAWhyuB/0+4Xk=;
-        b=KOwApSvRzGwuguCDE3Qss/H9+jCuZrJKdh2Wr4KFTGFu2cXmJo5FQ6hshePgLm4w9Z9H0M
-        +HBb9IrvpcYJa+S3By9QYWuyWueCZON8LDRd8FaXOwQNh2Jx30sPunU1PTK6PkL9AiDpP4
-        N19611y14b9x2m6Ad0+iWiAke81263I=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-5kSMH5M_O3aJWcyic-QoSw-1; Sun, 30 Jan 2022 22:56:01 -0500
-X-MC-Unique: 5kSMH5M_O3aJWcyic-QoSw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=eBfA0J1VAN4vDciFet8kyITCSUUXphOKJM0dbNgQDlg=;
+        b=Ofj5AEGA0fxxWQPfqW7x0jLel3xWl8XT6L5fetgIF/2zgvKWRovZIPYb4YSKIXDP+PGHPG
+        UngLYZnASIj/Qz5rz62dxrd5f4fbDfByyvJbDIDy3thpDGhQ2Itksmpg6Qvdypf2EbsmG9
+        EusHYq42IUHL7aS/3q9Jmgr8INeiYUI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643601867;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eBfA0J1VAN4vDciFet8kyITCSUUXphOKJM0dbNgQDlg=;
+        b=ROmts99OvVVAZHj8yfkpJgXn9fzfmP7rcXgJgqzmaUVof4cKw4M5pOuMwuG61ib9oi3dvS
+        tRPQVeyFRV5zV5Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 25C92802C87;
-        Mon, 31 Jan 2022 03:55:59 +0000 (UTC)
-Received: from [10.22.16.114] (unknown [10.22.16.114])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 19FE85E24E;
-        Mon, 31 Jan 2022 03:55:57 +0000 (UTC)
-Message-ID: <f7026256-4086-6632-569e-5b13594cb3fc@redhat.com>
-Date:   Sun, 30 Jan 2022 22:55:56 -0500
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2CA6A133A4;
+        Mon, 31 Jan 2022 04:04:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /XIbN8Zf92GpCQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 31 Jan 2022 04:04:22 +0000
+Subject: [PATCH 3/3] ceph: remove reliance on bdi congestion
+From:   NeilBrown <neilb@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>
+Cc:     linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 31 Jan 2022 15:03:53 +1100
+Message-ID: <164360183350.4233.6414417882019645917.stgit@noble.brown>
+In-Reply-To: <164360127045.4233.2606812444285122570.stgit@noble.brown>
+References: <164360127045.4233.2606812444285122570.stgit@noble.brown>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/3] mm, memcg: Don't put offlined memcg into local stock
-Content-Language: en-US
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20211001190938.14050-1-longman@redhat.com>
- <20211001190938.14050-2-longman@redhat.com>
- <YVefHLo1+6lgw3aB@carbon.dhcp.thefacebook.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YVefHLo1+6lgw3aB@carbon.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/1/21 19:51, Roman Gushchin wrote:
-> On Fri, Oct 01, 2021 at 03:09:36PM -0400, Waiman Long wrote:
->> When freeing a page associated with an offlined memcg, refill_stock()
->> will put it into local stock delaying its demise until another memcg
->> comes in to take its place in the stock. To avoid that, we now check
->> for offlined memcg and go directly in this case to the slowpath for
->> the uncharge via the repurposed cancel_charge() function.
-> Hi Waiman!
->
-> I'm afraid it can make a cleanup of a dying cgroup slower: for every
-> released page we'll potentially traverse the whole cgroup tree and
-> decrease atomic page counters.
->
-> I'm not sure I understand the benefits we get from this change which
-> do justify the slowdown on the cleanup path.
->
-> Thanks!
+The bdi congestion tracking in not widely used and will be removed.
 
-I was notified of a lockdep splat that this patch may help to prevent.
+CEPHfs is one of a small number of filesystems that uses it, setting
+just the async (write) congestion flags at what it determines are
+appropriate times.
 
-[18073.102101] ======================================================
-[18073.102101] WARNING: possible circular locking dependency detected
-[18073.102101] 5.14.0-42.el9.x86_64+debug #1 Not tainted
-[18073.102101] ------------------------------------------------------
-[18073.102101] bz1567074_bin/420270 is trying to acquire lock:
-[18073.102101] ffffffff9bdfc478 (css_set_lock){..-.}-{2:2}, at: 
-obj_cgroup_release+0x79/0x210
-[18073.102101]
-[18073.102101] but task is already holding lock:
-[18073.102101] ffff88806ba4ef18 (&sighand->siglock){-...}-{2:2}, at: 
-force_sig_info_to_task+0x6c/0x370
-[18073.102101]
-[18073.102101] which lock already depends on the new lock.
-[18073.102101]
-[18073.102101]
-[18073.102101] the existing dependency chain (in reverse order) is:
-[18073.102101]
-[18073.102101] -> #1 (&sighand->siglock){-...}-{2:2}:
-[18073.102101]        __lock_acquire+0xb72/0x1870
-[18073.102101]        lock_acquire.part.0+0x117/0x340
-[18073.102101]        _raw_spin_lock_irqsave+0x43/0x90
-[18073.102101]        __lock_task_sighand+0xa0/0x210
-[18073.102101]        cgroup_freeze_task+0x6f/0x150
-[18073.102101]        cgroup_migrate_execute+0x25f/0xf90
-[18073.102101]        cgroup_update_dfl_csses+0x417/0x4f0
-[18073.102101]        cgroup_subtree_control_write+0x67b/0xa10
-[18073.102101]        cgroup_file_write+0x1ef/0x6a0
-[18073.102101]        kernfs_fop_write_iter+0x2c7/0x460
-[18073.102101]        new_sync_write+0x36f/0x610
-[18073.102101]        vfs_write+0x5c6/0x890
-[18073.102101]        ksys_write+0xf9/0x1d0
-[18073.102101]        do_syscall_64+0x3b/0x90
-[18073.102101]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-[18073.102101]
-[18073.102101] -> #0 (css_set_lock){..-.}-{2:2}:
-[18073.102101]        check_prev_add+0x15e/0x20f0
-[18073.102101]        validate_chain+0xac6/0xde0
-[18073.102101]        __lock_acquire+0xb72/0x1870
-[18073.102101]        lock_acquire.part.0+0x117/0x340
-[18073.102101]        _raw_spin_lock_irqsave+0x43/0x90
-[18073.102101]        obj_cgroup_release+0x79/0x210
-[18073.102101]        percpu_ref_put_many.constprop.0+0x16b/0x1a0
-[18073.102101]        drain_obj_stock+0x1a8/0x310
-[18073.102101]        refill_obj_stock+0xa4/0x480
-[18073.102101]        obj_cgroup_charge+0x104/0x240
-[18073.102101]        kmem_cache_alloc+0x94/0x400
-[18073.102101]        __sigqueue_alloc+0x1b9/0x460
-[18073.102101]        __send_signal+0x4b2/0xf60
-[18073.102101]        force_sig_info_to_task+0x226/0x370
-[18073.102101]        force_sig_fault+0xb0/0xf0
-[18073.102101]        noist_exc_debug+0xec/0x110
-[18073.102101]        asm_exc_debug+0x2b/0x30
-[18073.102101]
-[18073.102101] other info that might help us debug this:
-[18073.102101]
-[18073.102101]  Possible unsafe locking scenario:
-[18073.102101]
-[18073.102101]        CPU0                    CPU1
-[18073.102101]        ----                    ----
-[18073.102101]   lock(&sighand->siglock);
-[18073.102101]                                lock(css_set_lock);
-[18073.102101] lock(&sighand->siglock);
-[18073.102101]   lock(css_set_lock);
-[18073.102101]
-[18073.102101]  *** DEADLOCK ***
-[18073.102101]
-[18073.102101] 2 locks held by bz1567074_bin/420270:
-[18073.102101]  #0: ffff88806ba4ef18 (&sighand->siglock){-...}-{2:2}, 
-at: force_sig_info_to_task+0x6c/0x370
-[18073.102101]  #1: ffffffff9bd0ea00 (rcu_read_lock){....}-{1:2}, at: 
-percpu_ref_put_many.constprop.0+0x0/0x1a0
-[18073.102101]
-[18073.102101] stack backtrace:
-[18073.102101] CPU: 0 PID: 420270 Comm: bz1567074_bin Kdump: loaded Not 
-tainted 5.14.0-42.el9.x86_64+debug #1
-[18073.102101] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2007
-[18073.102101] Call Trace:
-[18073.102101]  dump_stack_lvl+0x57/0x7d
-[18073.102101]  check_noncircular+0x26a/0x310
-[18073.102101]  ? pvclock_clocksource_read+0x2b8/0x520
-[18073.102101]  ? print_circular_bug+0x1f0/0x1f0
-[18073.102101]  ? alloc_chain_hlocks+0x1de/0x530
-[18073.102101]  check_prev_add+0x15e/0x20f0
-[18073.102101]  validate_chain+0xac6/0xde0
-[18073.102101]  ? check_prev_add+0x20f0/0x20f0
-[18073.102101]  __lock_acquire+0xb72/0x1870
-[18073.102101]  ? __lock_acquire+0xb72/0x1870
-[18073.102101]  lock_acquire.part.0+0x117/0x340
-[18073.102101]  ? obj_cgroup_release+0x79/0x210
-[18073.102101]  ? rcu_read_unlock+0x40/0x40
-[18073.102101]  ? rcu_read_lock_sched_held+0x3f/0x70
-[18073.102101]  ? lock_acquire+0x224/0x2d0
-[18073.102101]  ? obj_cgroup_release+0x79/0x210
-[18073.102101]  _raw_spin_lock_irqsave+0x43/0x90
-[18073.102101]  ? obj_cgroup_release+0x79/0x210
-[18073.102101]  obj_cgroup_release+0x79/0x210
-[18073.102101]  percpu_ref_put_many.constprop.0+0x16b/0x1a0
-[18073.102101]  drain_obj_stock+0x1a8/0x310
-[18073.102101]  refill_obj_stock+0xa4/0x480
-[18073.102101]  obj_cgroup_charge+0x104/0x240
-[18073.102101]  ? __sigqueue_alloc+0x1b9/0x460
-[18073.102101]  kmem_cache_alloc+0x94/0x400
-[18073.102101]  ? __sigqueue_alloc+0x129/0x460
-[18073.102101]  __sigqueue_alloc+0x1b9/0x460
-[18073.102101]  __send_signal+0x4b2/0xf60
-[18073.102101]  ? send_signal+0x9f/0x580
-[18073.102101]  force_sig_info_to_task+0x226/0x370
-[18073.102101]  force_sig_fault+0xb0/0xf0
-[18073.102101]  ? force_sig_fault_to_task+0xe0/0xe0
-[18073.102101]  ? asm_exc_debug+0x23/0x30
-[18073.102101]  ? notify_die+0x88/0x100
-[18073.102101]  ? asm_exc_debug+0x23/0x30
-[18073.102101]  noist_exc_debug+0xec/0x110
-[18073.102101]  asm_exc_debug+0x2b/0x30
+The only remaining effect of the async flag is to cause (some)
+WB_SYNC_NONE writes to be skipped.
 
-The &sighand->siglock => css_set_lock locking sequence is caused by a 
-task holding sighand->siglock and call kmem_cache_alloc(GFP_ATOMIC) and 
-the release of the obj_cgroup originally from an offlined memcg in 
-percpu stock leading to the call of obj_cgroup_release() which takes the 
-cs_set_lock. The chance of hitting that is very small, but it can still 
-happen. So do you think addressing this possible deadlock scenario is 
-worth the possible slower release of an offlined memcg?
+So instead of setting the flag, set an internal flag and change:
+ - .writepages to do nothing if WB_SYNC_NONE and the flag is set
+ - .writepage to return AOP_WRITEPAGE_ACTIVATE if WB_SYNC_NONE
+    and the flag is set.
 
-Cheers,
-Longman
+The writepages change causes a behavioural change in that pageout() can
+now return PAGE_ACTIVATE instead of PAGE_KEEP, so SetPageActive() will
+be called on the page which (I think) wil further delay the next attempt
+at writeout.  This might be a good thing.
 
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   mm/memcontrol.c | 16 +++++++++++-----
->>   1 file changed, 11 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->> index 4b32896d87a2..4568363062c1 100644
->> --- a/mm/memcontrol.c
->> +++ b/mm/memcontrol.c
->> @@ -2167,6 +2167,8 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
->>   	return ret;
->>   }
->>   
->> +static void cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages);
->> +
->>   /*
->>    * Returns stocks cached in percpu and reset cached information.
->>    */
->> @@ -2178,9 +2180,7 @@ static void drain_stock(struct memcg_stock_pcp *stock)
->>   		return;
->>   
->>   	if (stock->nr_pages) {
->> -		page_counter_uncharge(&old->memory, stock->nr_pages);
->> -		if (do_memsw_account())
->> -			page_counter_uncharge(&old->memsw, stock->nr_pages);
->> +		cancel_charge(old, stock->nr_pages);
->>   		stock->nr_pages = 0;
->>   	}
->>   
->> @@ -2219,6 +2219,14 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
->>   	struct memcg_stock_pcp *stock;
->>   	unsigned long flags;
->>   
->> +	/*
->> +	 * An offlined memcg shouldn't be put into stock.
->> +	 */
->> +	if (unlikely(memcg->kmem_state != KMEM_ONLINE)) {
->> +		cancel_charge(memcg, nr_pages);
->> +		return;
->> +	}
->> +
->>   	local_irq_save(flags);
->>   
->>   	stock = this_cpu_ptr(&memcg_stock);
->> @@ -2732,7 +2740,6 @@ static inline int try_charge(struct mem_cgroup *memcg, gfp_t gfp_mask,
->>   	return try_charge_memcg(memcg, gfp_mask, nr_pages);
->>   }
->>   
->> -#if defined(CONFIG_MEMCG_KMEM) || defined(CONFIG_MMU)
->>   static void cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
->>   {
->>   	if (mem_cgroup_is_root(memcg))
->> @@ -2742,7 +2749,6 @@ static void cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
->>   	if (do_memsw_account())
->>   		page_counter_uncharge(&memcg->memsw, nr_pages);
->>   }
->> -#endif
->>   
->>   static void commit_charge(struct folio *folio, struct mem_cgroup *memcg)
->>   {
->> -- 
->> 2.18.1
->>
+Signed-off-by: NeilBrown <neilb@suse.de>
+---
+ fs/ceph/addr.c  |   22 +++++++++++++---------
+ fs/ceph/super.c |    1 +
+ fs/ceph/super.h |    1 +
+ 3 files changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+index c98e5238a1b6..dc7af34640dd 100644
+--- a/fs/ceph/addr.c
++++ b/fs/ceph/addr.c
+@@ -563,7 +563,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+ 
+ 	if (atomic_long_inc_return(&fsc->writeback_count) >
+ 	    CONGESTION_ON_THRESH(fsc->mount_options->congestion_kb))
+-		set_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
++		fsc->write_congested = true;
+ 
+ 	req = ceph_osdc_new_request(osdc, &ci->i_layout, ceph_vino(inode), page_off, &len, 0, 1,
+ 				    CEPH_OSD_OP_WRITE, CEPH_OSD_FLAG_WRITE, snapc,
+@@ -623,7 +623,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+ 
+ 	if (atomic_long_dec_return(&fsc->writeback_count) <
+ 	    CONGESTION_OFF_THRESH(fsc->mount_options->congestion_kb))
+-		clear_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
++		fsc->write_congested = false;
+ 
+ 	return err;
+ }
+@@ -635,6 +635,10 @@ static int ceph_writepage(struct page *page, struct writeback_control *wbc)
+ 	BUG_ON(!inode);
+ 	ihold(inode);
+ 
++	if (wbc->sync_mode == WB_SYNC_NONE &&
++	    ceph_inode_to_client(inode)->write_congested)
++		return AOP_WRITEPAGE_ACTIVATE;
++
+ 	wait_on_page_fscache(page);
+ 
+ 	err = writepage_nounlock(page, wbc);
+@@ -707,8 +711,7 @@ static void writepages_finish(struct ceph_osd_request *req)
+ 			if (atomic_long_dec_return(&fsc->writeback_count) <
+ 			     CONGESTION_OFF_THRESH(
+ 					fsc->mount_options->congestion_kb))
+-				clear_bdi_congested(inode_to_bdi(inode),
+-						    BLK_RW_ASYNC);
++				fsc->write_congested = false;
+ 
+ 			ceph_put_snap_context(detach_page_private(page));
+ 			end_page_writeback(page);
+@@ -760,6 +763,10 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 	bool done = false;
+ 	bool caching = ceph_is_cache_enabled(inode);
+ 
++	if (wbc->sync_mode == WB_SYNC_NONE &&
++	    fsc->write_congested)
++		return 0;
++
+ 	dout("writepages_start %p (mode=%s)\n", inode,
+ 	     wbc->sync_mode == WB_SYNC_NONE ? "NONE" :
+ 	     (wbc->sync_mode == WB_SYNC_ALL ? "ALL" : "HOLD"));
+@@ -954,11 +961,8 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 
+ 			if (atomic_long_inc_return(&fsc->writeback_count) >
+ 			    CONGESTION_ON_THRESH(
+-				    fsc->mount_options->congestion_kb)) {
+-				set_bdi_congested(inode_to_bdi(inode),
+-						  BLK_RW_ASYNC);
+-			}
+-
++				    fsc->mount_options->congestion_kb))
++				fsc->write_congested = true;
+ 
+ 			pages[locked_pages++] = page;
+ 			pvec.pages[i] = NULL;
+diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+index bf79f369aec6..4a3b77d049c7 100644
+--- a/fs/ceph/super.c
++++ b/fs/ceph/super.c
+@@ -802,6 +802,7 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
+ 	fsc->have_copy_from2 = true;
+ 
+ 	atomic_long_set(&fsc->writeback_count, 0);
++	fsc->write_congested = false;
+ 
+ 	err = -ENOMEM;
+ 	/*
+diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+index 67f145e1ae7a..0bd97aea2319 100644
+--- a/fs/ceph/super.h
++++ b/fs/ceph/super.h
+@@ -121,6 +121,7 @@ struct ceph_fs_client {
+ 	struct ceph_mds_client *mdsc;
+ 
+ 	atomic_long_t writeback_count;
++	bool write_congested;
+ 
+ 	struct workqueue_struct *inode_wq;
+ 	struct workqueue_struct *cap_wq;
+
 

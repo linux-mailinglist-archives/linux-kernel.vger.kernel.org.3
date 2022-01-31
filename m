@@ -2,139 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D234A3F8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E704A3F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbiAaJw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 04:52:29 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:40737 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiAaJw0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:52:26 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6669B100005;
-        Mon, 31 Jan 2022 09:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643622744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HR7lv1T/atYm0h435spzd7hIdETqddhxHf3ercKSY/E=;
-        b=DzNdOWCmYphISup4FHoUxnP+Y0rM3AcJduH72xPTeetXuaDyW6CpnnOy2gWw7jwNSnwhDw
-        hmmE6rrLvNVmSmIAWvJpuMoHM9tQNpLb+zNxxqdqMSkgRozdXHmWHHL4ErZGqgWomZf3Eb
-        c1/R0olzTVt7FqaHwo6yyB00Wa4Ixm2rSx9wNhn4ozVAZYkRNqlSav/9dwmVLDDV4rnE0T
-        1Tm+ij2vAbmdcsKHSHI+Arh5YZ3I4jbxvXrCEQT/NeAQbMDppHzeT1+wAxVM3v9GPgmMnj
-        JvlMkvH7l/KS8coCouqQCZ8dbjNK6DMuhfho1FBn5+AT8m0VgadRosascbuzVw==
-Date:   Mon, 31 Jan 2022 10:52:20 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Sricharan Ramabadhran <sricharan@codeaurora.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdalam@codeaurora.org
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
- on READID
-Message-ID: <20220131105220.167bacaf@xps13>
-In-Reply-To: <a6fcc533-e7cd-7b55-4db0-cec80c07b46a@codeaurora.org>
-References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
-        <20220114082718.32a2fc83@xps13>
-        <20220126111613.3ab0021e@xps13>
-        <20220126103316.GA212068@thinkpad>
-        <20220126114200.4cc3c21b@xps13>
-        <fc80a6e7-bd44-3b3e-fca2-1316a76d65f5@codeaurora.org>
-        <a6fcc533-e7cd-7b55-4db0-cec80c07b46a@codeaurora.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S242234AbiAaJyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 04:54:22 -0500
+Received: from mga07.intel.com ([134.134.136.100]:52494 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232052AbiAaJyU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:54:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643622860; x=1675158860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dGdu6BNETMJJIPnryMKcNJujVe5VAQ7gKMhy5tod+K4=;
+  b=VpSj/tgKxQStUEWM1itgyWi397pnub4JBHGZy/GOipfuz1zQU4B1KvTL
+   v8jCkzpJmtCeZvXkw1RI86xNRfdyvBoZxeAKx4f4aijhGPn2qLGEuDN6s
+   /AvrRKxbCGrkXSTpSCg1gm5g8UJ84Be/aIoS7Z4I09bd9z4nwcQag/44b
+   po4tE6HoGEAnr5InrjSiaytEGUgHpwoqodMpGj0TQfKUtTE3VKSvcCHHb
+   ZDIzDXcqOxXDoFYfc+R0RgTj/rRAvbbe9asC3WZZbw7FImOPpN+PdcPT+
+   0mVTkmyJBTX1LJTV/XLu0sE4UtM/cct5eaQNaqt82kV8SYicA1nSTWJdp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="310741459"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="310741459"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 01:54:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="629956376"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2022 01:54:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nETO5-000Rki-7a; Mon, 31 Jan 2022 09:54:17 +0000
+Date:   Mon, 31 Jan 2022 17:53:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        john.stultz@linaro.org, sboyd@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, tangmeng <tangmeng@uniontech.com>
+Subject: Re: [PATCH v4] kernel/time: move timer sysctls to its own file
+Message-ID: <202201311703.8ZHlxEUI-lkp@intel.com>
+References: <20220131065728.6823-1-tangmeng@uniontech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131065728.6823-1-tangmeng@uniontech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sricharan,
+Hi tangmeng,
 
-sricharan@codeaurora.org wrote on Fri, 28 Jan 2022 23:20:04 +0530:
+Thank you for the patch! Yet something to improve:
 
-> Hi Konrad,
->=20
-> On 1/28/2022 9:55 AM, Sricharan Ramabadhran wrote:
-> > Hi Miquel,
-> >
-> > On 1/26/2022 4:12 PM, Miquel Raynal wrote: =20
-> >> Hi Mani,
-> >>
-> >> mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
-> >> =20
-> >>> On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote: =20
-> >>>> Hello,
-> >>>>
-> >>>> miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100: =
-=20
-> >>>>> Hi Konrad,
-> >>>>>
-> >>>>> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 >>>=
->> +0100: =20
-> >>>>>> While I have absolutely 0 idea why and how, running >>>>>> clear_b=
-am_transaction
-> >>>>>> when READID is issued makes the DMA totally clog up and refuse to =
->>>>>> function
-> >>>>>> at all on mdm9607. In fact, it is so bad that all the data gets >>=
->>>> garbled
-> >>>>>> and after a short while in the nand probe flow, the CPU decides th=
-at
-> >>>>>> sepuku is the only option.
-> >>>>>>
-> >>>>>> Removing _READID from the if condition makes it work like a >>>>>>=
- charm, I can
-> >>>>>> read data and mount partitions without a problem.
-> >>>>>>
-> >>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> >>>>>> ---
-> >>>>>> This is totally just an observation which took me an inhumane >>>>=
->> amount of
-> >>>>>> debug prints to find.. perhaps there's a better reason behind >>>>=
->> this, but
-> >>>>>> I can't seem to find any answers.. Therefore, this is a BIG RFC! =
-=20
-> >>>>> I'm adding two people from codeaurora who worked a lot on this >>>>=
-> driver.
-> >>>>> Hopefully they will have an idea :) =20
-> >>>> Sadre, I've spent a significant amount of time reviewing your patche=
-s,
-> >>>> now it's your turn to not take a month to answer to your peers
-> >>>> proposals.
-> >>>>
-> >>>> Please help reviewing this patch. =20
-> >>> Sorry. I was hoping that Qcom folks would chime in as I don't have >>=
-> any idea
-> >>> about the mdm9607 platform. It could be that the mail server >>> migr=
-ation from
-> >>> codeaurora to quicinc put a barrier here.
-> >>>
-> >>> Let me ping them internally. =20
-> >> Oh, ok, I didn't know. Thanks! =20
-> >
-> > =C2=A0=C2=A0 Sorry Miquel, somehow we did not get this email in our inb=
-ox.
-> > =C2=A0=C2=A0 Thanks to Mani for pinging us, we will test this up today =
-and get > back.
-> > =20
->  =C2=A0 =C2=A0 =C2=A0 While we could not reproduce this issue on our ipq =
-boards (do not have a mdm9607 right now) and
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 issue does not look any obvious.
->  =C2=A0 =C2=A0 =C2=A0 can you please give the debug logs that you did for=
- the above stage by stage ?
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks for stepping up, it is really appreciated, good luck both for
-the debugging.
+url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-145847
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: arc-randconfig-r043-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311703.8ZHlxEUI-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/f32d255b81d227c1491a06a5d7b016eb9bd54087
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-145847
+        git checkout f32d255b81d227c1491a06a5d7b016eb9bd54087
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash kernel/time/
 
-Thanks,
-Miqu=C3=A8l
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/time/timer.c: In function 'timer_sysctl_init':
+>> kernel/time/timer.c:284:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'timer_sysctl_init'? [-Werror=implicit-function-declaration]
+     284 |         register_sysctl_init("kernel", timer_sysctl);
+         |         ^~~~~~~~~~~~~~~~~~~~
+         |         timer_sysctl_init
+   In file included from include/linux/perf_event.h:25,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/time/timer.c:35:
+   At top level:
+   arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' defined but not used [-Wunused-const-variable=]
+     126 | static const unsigned int arc_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
+         |                           ^~~~~~~~~~~~~~~~~
+   arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' defined but not used [-Wunused-const-variable=]
+      91 | static const char * const arc_pmu_ev_hw_map[] = {
+         |                           ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +284 kernel/time/timer.c
+
+   281	
+   282	static int __init timer_sysctl_init(void)
+   283	{
+ > 284		register_sysctl_init("kernel", timer_sysctl);
+   285		return 0;
+   286	}
+   287	__initcall(timer_sysctl_init);
+   288	#endif
+   289	static inline bool is_timers_nohz_active(void)
+   290	{
+   291		return static_branch_unlikely(&timers_nohz_active);
+   292	}
+   293	#else
+   294	static inline bool is_timers_nohz_active(void) { return false; }
+   295	#endif /* NO_HZ_COMMON */
+   296	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

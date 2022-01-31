@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9873E4A455A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A834A42D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 12:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377617AbiAaLkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 06:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S240585AbiAaLOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 06:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379412AbiAaLaR (ORCPT
+        with ESMTP id S1377567AbiAaLKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:30:17 -0500
+        Mon, 31 Jan 2022 06:10:12 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764EAC0617B0;
-        Mon, 31 Jan 2022 03:20:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62627C06173E;
+        Mon, 31 Jan 2022 03:09:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166FD611DB;
-        Mon, 31 Jan 2022 11:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB95C340EF;
-        Mon, 31 Jan 2022 11:20:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00B7E61149;
+        Mon, 31 Jan 2022 11:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8323C340EE;
+        Mon, 31 Jan 2022 11:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643628020;
-        bh=gPfYO25pBQ890bf6IYPhQq4gJPP7maXQ4xUx5LxBVQE=;
+        s=korg; t=1643627353;
+        bh=41Bn7dpcwKdRVGJAeUT3KkBCidaikRKvL17gJkZ77QY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b1AH2Kvy6bZr6WV7KobalnxRzyBNi4/XRXYupAI3ask6QJW6gG8ryUdTG5ys6Gh7m
-         HktvbCNU3qOHce9SzgwZ9fQx2wqWLDnYDFUJ0LC51BT00o7Z+xTqeW1Wts7bMkMNd2
-         XaTzkRHwMW/j1W/sv2qaUHQt3GIckbfxzw1SGpAI=
+        b=jbJ12bLKMGREBxpd67EQdIUDBDqkf9ovMSzgzmo5c/x2RLqv+Ly6pmwiisQxGL+tG
+         iuW0tQWw615BCMUTXJDOrHfYca6o4bKQsxDpTk/UTqF6iStUHg2Da+5AktHuoTEsld
+         E5hJuMTRGHrtnun7uf3tB6tOSE2X0ra1glaUg3Us=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 056/200] KVM: x86: Keep MSR_IA32_XSS unchanged for INIT
-Date:   Mon, 31 Jan 2022 11:55:19 +0100
-Message-Id: <20220131105235.468652901@linuxfoundation.org>
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH 5.15 055/171] usb: common: ulpi: Fix crash in ulpi_match()
+Date:   Mon, 31 Jan 2022 11:55:20 +0100
+Message-Id: <20220131105231.889707764@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-References: <20220131105233.561926043@linuxfoundation.org>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+References: <20220131105229.959216821@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,42 +47,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoyao Li <xiaoyao.li@intel.com>
+From: Jon Hunter <jonathanh@nvidia.com>
 
-commit be4f3b3f82271c3193ce200a996dc70682c8e622 upstream.
+commit 2e3dd4a6246945bf84ea6f478365d116e661554c upstream.
 
-It has been corrected from SDM version 075 that MSR_IA32_XSS is reset to
-zero on Power up and Reset but keeps unchanged on INIT.
+Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+on the Tegra20 Ventana platform in the ulpi_match() function.
 
-Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
-Cc: stable@vger.kernel.org
-Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220126172226.2298529-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+registers a ulpi_driver but this driver does not provide an 'id_table',
+so when ulpi_match() is called on the Tegra20 Ventana platform, it
+crashes when attempting to deference the id_table pointer which is not
+valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+ULPI driver with the device and so fix this crash by using device-tree
+for matching if the id_table is not valid.
+
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+Link: https://lore.kernel.org/r/20220117150039.44058-1-jonathanh@nvidia.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/common/ulpi.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11065,6 +11065,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcp
- 		vcpu->arch.msr_misc_features_enables = 0;
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev
+ 	struct ulpi *ulpi = to_ulpi_dev(dev);
+ 	const struct ulpi_device_id *id;
  
- 		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
-+		vcpu->arch.ia32_xss = 0;
- 	}
+-	/* Some ULPI devices don't have a vendor id so rely on OF match */
+-	if (ulpi->id.vendor == 0)
++	/*
++	 * Some ULPI devices don't have a vendor id
++	 * or provide an id_table so rely on OF match.
++	 */
++	if (ulpi->id.vendor == 0 || !drv->id_table)
+ 		return of_driver_match_device(dev, driver);
  
- 	/* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
-@@ -11081,8 +11082,6 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcp
- 	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
- 	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
- 
--	vcpu->arch.ia32_xss = 0;
--
- 	static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
- 
- 	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
+ 	for (id = drv->id_table; id->vendor; id++)
 
 

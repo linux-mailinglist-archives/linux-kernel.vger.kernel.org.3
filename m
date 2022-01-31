@@ -2,355 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 583EF4A46A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86884A46AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 13:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376596AbiAaMKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 07:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376627AbiAaMKN (ORCPT
+        id S1359355AbiAaMN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 07:13:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35578 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359140AbiAaMNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:10:13 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A13C06174A
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:10:13 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id e9so12079954pgb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:10:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/4FIhrzPl2pkQFAAhaZP7iIv/6qR95SaVWHtftnRGBs=;
-        b=05zQRZk3/8/Zb9Roy3RfNfi4qT5k7S7AOipuFtI6WtOtGTjspmvO7tlg3c2klgCKHz
-         WFNfFMbZWdyEI7DrNsn5UgaGNRDqgM20I4ETc7qQjCw65G7KqyVpJI9b05LHVtWA6YJF
-         K/gQaD1qtTB8+20RCKBYHbMjxgTpHD4ctEix1eNtsZIFUy9faEjaLEMW1tK1ImMSUfh7
-         6NU1796vQlWrKPQD/oOvh5HU8y4VgoHPn2+tsHtica0muSsGYES+UwyBI9S63If0vg5w
-         /+L9jdI2osyP31IaTAMDd9j/O1jOvKefcpcuQcMtGZIM4/MI29C/KYLiEpAripzriByH
-         tVYQ==
+        Mon, 31 Jan 2022 07:13:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643631233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qY7y58M4Z9dUeNje0RD9EQDvDaWgy0c7Wz/zTz2kkX4=;
+        b=RAhJik0bBdj+IUv4bGSk8quy71Ivc/92emIzsMiiDruqQj7gcYBUtDoUyGnk4q2OLC6d4o
+        2tyGr/8k35K1DyppizZWgB5I1bt8su/skBU6XSy5vVuB1cye1R7/pQ3OKiJyKNPTToCB8J
+        R3IKIlFCWrmqWWhvRDipBNBs65lQ+aI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-597-bBVhutlrMTegSQlyAE2KNg-1; Mon, 31 Jan 2022 07:13:52 -0500
+X-MC-Unique: bBVhutlrMTegSQlyAE2KNg-1
+Received: by mail-ed1-f69.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso6782790edk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 04:13:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/4FIhrzPl2pkQFAAhaZP7iIv/6qR95SaVWHtftnRGBs=;
-        b=oaEo6nhFrAlmGN0+UKsRvAjrTUpmSBRrzBvmBw22NsFNVUgyY85HGB+4XhyCtlvquz
-         LxJ+FwvmQunIayoTFFa+eDks6J3b1XdIBNiG3xsAcnL+oIpIGI799Q2e1NeMZIa/wV/z
-         IItpOY9XtYOEo9ocqHUyN0Cw6+gPqsrzlS5ByavsVYjSGCue9t/NOX4G0vL1he9YoLMV
-         bQ28Y7RMaVFi+29loM6VpjkocPzAnWyvKYxAG9FUGmXgWzTEKHDUzn5U14OKJAZAcYX7
-         WLcREPVHeNKUlfClyNXjNKM2pG99Cnasm6IQ2llb0nV8yy+M+8R+FrWUIe4umljCAirK
-         YjIw==
-X-Gm-Message-State: AOAM533PEmaVgmBF9vwDSWtUQ6QPjVwgWuA+ZjIPvrAnNAXBxWpefT27
-        84fIj9QAi04XWB+9wXaR/h9h9iMZiVNBUxWt3HbisQ==
-X-Google-Smtp-Source: ABdhPJwbMuoHiV/E9jScimyKN6AuHFyCiLezfF1K9b4UTdf4G0bJ2QPrIHpO8qYDcPPMl1BF2HDvuBsI+TxTFZ9vCq0=
-X-Received: by 2002:a05:6a00:2408:: with SMTP id z8mr18846694pfh.68.1643631012444;
- Mon, 31 Jan 2022 04:10:12 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=qY7y58M4Z9dUeNje0RD9EQDvDaWgy0c7Wz/zTz2kkX4=;
+        b=JIUexGcVOXB9Nxq5UT5F11S9IiiQoZzbUIfC2R+nGdbixWJbozCPsxRiXMpiNXuPFu
+         w9dMApbUWqCcADbP0nfFLmjBCN/HUZKjlvI5iLoKFfzmigv7LZDQfDNO//AauBWgWqiY
+         /xKEFu1mNaRo21LnP3bQqgKwTtSwjOWZhRiyPwSE9PXj8XDul1+sj4X9xdIx2NsAjgwF
+         yoogDMTDeqcFK1rDtmtQkt9biCSV0HX7k+gR4/QIIGcX77TS28I+HN9wy2Voszkhn0tR
+         6Hf7/92Xav3ulqorGzwQsaSS6+6aZiZDTunh8xyiXXwJinioSwOyP40JqVbYD/x/tRIs
+         Wogw==
+X-Gm-Message-State: AOAM5309xPAX4vKF8Kg/+KTWDik+OoEvTC3i03YbnWElPhyCSyUnP/KQ
+        xTRaCDE5mElDIvcocwHGXyl+3Y4S/UcOPJqgEytd1UNyG+BoKCRaApyeYqQTvoByeUsjCV/rEAw
+        efiOyK2vZr3SCBUAX2xkgVN6j
+X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr13862934edz.206.1643631231502;
+        Mon, 31 Jan 2022 04:13:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzACLQH+N8dJfW+/bzLKkdD1VbwpDi/uzAqTCLL0kVJw2L9Gr70F8Y3XECH+bTM+vezdbLMGg==
+X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr13862903edz.206.1643631231261;
+        Mon, 31 Jan 2022 04:13:51 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:b200:f007:5a26:32e7:8ef5? (p200300cbc709b200f0075a2632e78ef5.dip0.t-ipconnect.de. [2003:cb:c709:b200:f007:5a26:32e7:8ef5])
+        by smtp.gmail.com with ESMTPSA id m12sm3786247ejr.218.2022.01.31.04.13.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 04:13:50 -0800 (PST)
+Message-ID: <acc12d73-a7d1-014c-9c07-33251d7d07ee@redhat.com>
+Date:   Mon, 31 Jan 2022 13:13:49 +0100
 MIME-Version: 1.0
-References: <20220120001621.705352-2-jsd@semihalf.com> <20220128144811.783279-1-jsd@semihalf.com>
- <20220128144811.783279-3-jsd@semihalf.com> <CAOtMz3MnM6knabs0kF6urpE+Thm6rj++6Yy9G=ky2r9uOByH5Q@mail.gmail.com>
- <YfQQeWdciv/JtqLD@smile.fi.intel.com>
-In-Reply-To: <YfQQeWdciv/JtqLD@smile.fi.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 31 Jan 2022 13:10:01 +0100
-Message-ID: <CAOtMz3P4rOuoLdMjQjAASkvF00XX73geyv9Zzo9-JTZEUhLDig@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: designware: Add AMD PSP I2C bus support
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        rppt@kernel.org
+Cc:     ak@linux.intel.com, akpm@linux-foundation.org, ardb@kernel.org,
+        bp@alien8.de, brijesh.singh@amd.com, dave.hansen@intel.com,
+        dfaggioli@suse.com, jroedel@suse.de, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org, rientjes@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, thomas.lendacky@amd.com, varad.gautam@suse.com,
+        vbabka@suse.cz, x86@kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+References: <YfZJQedck2YxZcWA@kernel.org>
+ <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCHv3.1 1/7] mm: Add support for unaccepted memory
+In-Reply-To: <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aargh.. so if this won't be enough to use wrong email address in v2 -
-I not used plain text above. Mailing list (understandably) aren't
-happy with this, thus resending my answers to Andy.. Again sorry for
-noise.
+On 30.01.22 17:45, Kirill A. Shutemov wrote:
+> UEFI Specification version 2.9 introduces the concept of memory
+> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
+> SEV-SNP, requiring memory to be accepted before it can be used by the
+> guest. Accepting happens via a protocol specific for the Virtual Machine
+> platform.
+> 
+> Accepting memory is costly and it makes VMM allocate memory for the
+> accepted guest physical address range. It's better to postpone memory
+> acceptance until memory is needed. It lowers boot time and reduces
+> memory overhead.
+> 
+> Support of such memory requires a few changes in core-mm code:
+> 
+>   - memblock has to accept memory on allocation;
+> 
+>   - page allocator has to accept memory on the first allocation of the
+>     page;
+> 
+> Memblock change is trivial.
+> 
+> The page allocator is modified to accept pages on the first allocation.
+> PageBuddyUnaccepted() is used to indicate that the page requires acceptance.
+> 
+> Kernel only need to accept memory once after boot, so during the boot
+> and warm up phase there will be a lot of memory acceptance. After things
+> are settled down the only price of the feature if couple of checks for
+> PageBuddyUnaccepted() in alloc and free paths. The check refers a hot
+> variable (that also encodes PageBuddy()), so it is cheap and not visible
+> on profiles.
+> 
+> Architecture has to provide three helpers if it wants to support
+> unaccepted memory:
+> 
+>  - accept_memory() makes a range of physical addresses accepted.
+> 
+>  - maybe_mark_page_unaccepted() marks a page PageBuddyUnaccepted() if it
+>    requires acceptance. Used during boot to put pages on free lists.
+> 
+>  - accept_page() makes a page accepted and clears PageBuddyUnaccepted().
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
 
 
-pt., 28 sty 2022 o 16:50 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Fri, Jan 28, 2022 at 03:59:40PM +0100, Jan D=C4=85bro=C5=9B wrote:
-> > Hi,
-> >
-> > Adding proper Andy's email address (and removing wrong one) in the
-> > whole patchset. Sorry for noise!
->
-> Thanks!
->
-> > pt., 28 sty 2022 o 15:48 Jan Dabros <jsd@semihalf.com> napisa=C5=82(a):
-> > >
-> > > Implement an I2C controller sharing mechanism between the host (kerne=
-l)
-> > > and PSP co-processor on some platforms equipped with AMD Cezanne SoC.
-> > >
-> > > On these platforms we need to implement "software" i2c arbitration.
-> > > Default arbitration owner is PSP and kernel asks for acquire as well
-> > > as inform about release of the i2c bus via mailbox mechanism.
-> > >
-> > >             +---------+
-> > >  <- ACQUIRE |         |
-> > >   +---------|   CPU   |\
-> > >   |         |         | \      +----------+  SDA
-> > >   |         +---------+  \     |          |-------
-> > > MAILBOX                   +--> |  I2C-DW  |  SCL
-> > >   |         +---------+        |          |-------
-> > >   |         |         |        +----------+
-> > >   +---------|   PSP   |
-> > >    <- ACK   |         |
-> > >             +---------+
-> > >
-> > >             +---------+
-> > >  <- RELEASE |         |
-> > >   +---------|   CPU   |
-> > >   |         |         |        +----------+  SDA
-> > >   |         +---------+        |          |-------
-> > > MAILBOX                   +--> |  I2C-DW  |  SCL
-> > >   |         +---------+  /     |          |-------
-> > >   |         |         | /      +----------+
-> > >   +---------|   PSP   |/
-> > >    <- ACK   |         |
-> > >             +---------+
-> > >
-> > > The solution is similar to i2c-designware-baytrail.c implementation, =
-where
-> > > we are using a generic i2c-designware-* driver with a small "wrapper"=
-.
-> > >
-> > > In contrary to baytrail semaphore implementation, beside internal
-> > > acquire_lock() and release_lock() methods we are also applying quirks=
- to
-> > > lock_bus() and unlock_bus() global adapter methods. With this in plac=
-e
-> > > all i2c clients drivers may lock i2c bus for a desired number of i2c
-> > > transactions (e.g. write-wait-read) without being aware of that such =
-bus
-> > > is shared with another entity.
-> > >
-> > > Modify i2c_dw_probe_lock_support() to select correct semaphore
-> > > implementation at runtime, since now we have more than one available.
-> > >
-> > > Configure new matching ACPI ID "AMDI0019" and register
-> > > ARBITRATION_SEMAPHORE flag in order to distinguish setup with PSP
-> > > arbitration.
-> > >
-> > > Add myself as a reviewer for I2C DesignWare in order to help with rev=
-iewing
-> > > and testing possible changes touching new i2c-designware-amdpsp.c mod=
-ule.
-> > >
-> > > Signed-off-by: Jan Dabros <jsd@semihalf.com>
->
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Reported-by: kernel test robot <lkp@intel.com>
->
-> New feature can't be reported.
-> If you want to give a credit to CI, do it in changelog.
+You should somehow document+check+enforce that page poisoning cannot be
+enabled concurrently, because it cannot possibly work IIUC.
 
-OK, will remove this.
+[...]
 
-> ...
->
-> > > +       depends on X86_64
->
-> Not sure if it's better than using non-atomic IO helpers.
+> + /*
+> +  * PageBuddyUnaccepted() indicates that the page has to be "accepted" before
+> +  * it can be used. Page allocator has to call accept_page() before returning
+> +  * the page to the caller.
+> +  *
+> +  * PageBuddyUnaccepted() encoded with the same bit as PageOffline().
+> +  * PageOffline() pages are never on free list of buddy allocator, so there's
+> +  * not conflict.
+> +  */
+> +#ifdef CONFIG_UNACCEPTED_MEMORY
+> +PAGE_TYPE_OPS(BuddyUnaccepted, offline)
+> +#else
+> +PAGE_TYPE_OPS_FALSE(BuddyUnaccepted)
+> +#endif
 
-There are 2 issues reported by kernel robot for my patchset:
-1. Lack of <asm/msr.h>;
-2. Missing declaration for 'writeq'.
-Actually above was my idea to fix first issue, but please see below.
+Much better.
 
-> At least you can't run 32-bit kernels on that platforms
-> in order to get this functionality working. Doest it mean
-> those platforms do not have 32-bit compatibility mode
-> anymore?
+> +
+>  extern void page_offline_freeze(void);
+>  extern void page_offline_thaw(void);
+>  extern void page_offline_begin(void);
+> diff --git a/mm/internal.h b/mm/internal.h
+> index d80300392a19..26e5d7cb6aff 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -718,4 +718,19 @@ void vunmap_range_noflush(unsigned long start, unsigned long end);
+>  int numa_migrate_prep(struct page *page, struct vm_area_struct *vma,
+>  		      unsigned long addr, int page_nid, int *flags);
+>  
+> +#ifndef CONFIG_UNACCEPTED_MEMORY
+> +static inline void maybe_mark_page_unaccepted(struct page *page,
+> +					      unsigned int order)
+> +{
+> +}
+> +
+> +static inline void accept_page(struct page *page, unsigned int order)
+> +{
+> +}
+> +
+> +static inline void accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +}
+> +#endif
+> +
+>  #endif	/* __MM_INTERNAL_H */
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 1018e50566f3..6c109b3b2a02 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -1400,6 +1400,15 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
+>  		 */
+>  		kmemleak_alloc_phys(found, size, 0, 0);
+>  
+> +	/*
+> +	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
+> +	 * require memory to be accepted before it can be used by the
+> +	 * guest.
+> +	 *
+> +	 * Accept the memory of the allocated buffer.
+> +	 */
+> +	accept_memory(found, found + size);
+> +
+>  	return found;
+>  }
+>  
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 3589febc6d31..27b9bd20e675 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1077,6 +1077,7 @@ static inline void __free_one_page(struct page *page,
+>  	unsigned int max_order;
+>  	struct page *buddy;
+>  	bool to_tail;
+> +	bool unaccepted = PageBuddyUnaccepted(page);
+>  
+>  	max_order = min_t(unsigned int, MAX_ORDER - 1, pageblock_order);
+>  
+> @@ -1110,6 +1111,10 @@ static inline void __free_one_page(struct page *page,
+>  			clear_page_guard(zone, buddy, order, migratetype);
+>  		else
+>  			del_page_from_free_list(buddy, zone, order);
+> +
+> +		if (PageBuddyUnaccepted(buddy))
+> +			unaccepted = true;
+> +
+>  		combined_pfn = buddy_pfn & pfn;
+>  		page = page + (combined_pfn - pfn);
+>  		pfn = combined_pfn;
+> @@ -1143,6 +1148,10 @@ static inline void __free_one_page(struct page *page,
+>  done_merging:
+>  	set_buddy_order(page, order);
+>  
+> +	/* Mark page unaccepted if any of merged pages were unaccepted */
+> +	if (unaccepted)
+> +		__SetPageBuddyUnaccepted(page);
+> +
+>  	if (fpi_flags & FPI_TO_TAIL)
+>  		to_tail = true;
+>  	else if (is_shuffle_order(order))
+> @@ -1168,7 +1177,8 @@ static inline void __free_one_page(struct page *page,
+>  static inline bool page_expected_state(struct page *page,
+>  					unsigned long check_flags)
+>  {
+> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
+> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
+> +	    !PageBuddyUnaccepted(page))
+>  		return false;
+>  
+>  	if (unlikely((unsigned long)page->mapping |
+> @@ -1749,6 +1759,8 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+>  {
+>  	if (early_page_uninitialised(pfn))
+>  		return;
+> +
+> +	maybe_mark_page_unaccepted(page, order);
+>  	__free_pages_core(page, order);
 
-Correct, I was focusing too much on my use case, where I'm building
-only 64-bit. This isn't right. Furthermore I should rather use
-dependency on CONFIG_X86_MSR which is better suited for ensuring above
-msr.h header is present.
+You'll be setting the page as unaccepted even before it's actually
+PageBuddy(). While that works, I wonder why we call
+maybe_mark_page_unaccepted() at these points.
 
->
-> ...
->
-> > > +#include <linux/io-64-nonatomic-lo-hi.h>
->
-> Ah, this is not needed if you keep code running exclusively on 64-bit
-> platforms.
+Why are we not moving that deeper into the buddy? __free_pages_core() is
+used for any fresh pages that enter the buddy, used outside of
+page_alloc.c only for memory hot(un)plug, so I'd suggest moving it at
+least into there.
 
-Will keep this, since switching to "depends on X86_MSR".
+But maybe we'd even move it further down, to the place where we actually
+establish PageBuddy().
 
-> ...
->
-> > > +struct psp_mbox {
-> > > +       u32 cmd_fields;
->
-> > > +       phys_addr_t i2c_req_addr;
->
-> But phys_addr_t is platform-dependent type. Perhaps you meant to use u64 =
-here
-> always?
+One idea would be adding a new FPI_UNACCEPTED flag, passing it from
+__free_pages_core() only, and calling maybe_mark_page_unaccepted() from
+__free_one_page() after set_buddy_order().
 
-Once I remove the "depends on X86_64" I believe this should be left
-platform-dependent.
+If in-lining would do its job properly, we'd be left with the
+FPI_UNACCEPTED checks only when called via __free_pages_core(), and we'd
+have that call at a single place right where we mess with PageBuddy().
 
-> > > +} __packed;
->
-> ...
->
-> > > +       struct psp_mbox __iomem *mbox =3D (struct psp_mbox __iomem *)=
-mbox_iomem;
->
-> For void * pointers the cast is implied, i.o.w. it's not needed here.
+-- 
+Thanks,
 
-ACK.
+David / dhildenb
 
-> ...
->
-> > > +static int psp_send_check_i2c_req(struct psp_i2c_req *req)
-> > > +{
-> > > +       if (psp_send_cmd(req))
->
-> > > +               return -EIO;
->
-> Why is error code shadowed?
->
-> > > +       return check_i2c_req_sts(req);
-> > > +}
-
-Just as a side note - it wasn't modified in v2 when moving above to
-psp_send_check_i2c_req(), but let me explain why I have introduced
-this initially.
-
-We have two means of timeouts in the context of this driver:
-1. Timeout of internal mailbox, which means we cannot communicate with
-a PSP for a programmed timeout. This timeout is encountered inside
-psp_send_cmd().
-2. Timeout of i2c arbitration - which means that we can communicate
-with PSP, but PSP refuses to release i2c bus for too long. This
-timeout is returned by psp_send_i2c_req() in case of error.
-(side note: both error conditions are very unlikely to happen at runtime)
-
-I wanted to clearly distinguish between these two and thus put all
-errors around mailbox into "-EIO category", which is actually true.
-
-> ...
->
-> > > +cleanup:
-> > > +       mutex_unlock(&psp_i2c_access_mutex);
-> > > +       return 0;
->
-> Not sure I understand why we ignore all above errors here.
-
-Actually we are not ignoring them, since each error sets
-"psp_i2c_mbox_fail =3D true;". This means that if there is any error on
-x86-PSP interface, we are ignoring i2c-arbitration and just fall back
-to normal (that is no-quirk) operation.
-
-From the i2c-client perspective (who is eventually gathering error
-code from above) I think we can claim that everything is fine, since
-bus is granted to it. For developers there is an error message in case
-some debug will be necessary.
-
-> ...
->
-> > > +       if (!dev || !dev->dev)
-> > > +               return -ENODEV;
->
-> At which circumstances may we get
->         dev !=3D NULL
->         dev->dev =3D=3D NULL
-> ?
->
-> ...
->
-> > >         if (!dev || !dev->dev)
-> > > -               return 0;
-> > > +               return -ENODEV;
->
-> I see the same here, perhaps Hans knows the answer :-)
-
-Right, so I must admit that I simply used *-baytrail.c as a reference
-and thinking that additional check shouldn't hurt us (always better
-than not enough safety..). Looking more at this now -
-`dw_i2c_plat_probe()` will boil-out earlier if `dev->dev =3D=3D NULL`.
-Should I remove this extra check in *-baytrail.c in the same commit?
-
-> ...
->
-> > > +static int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
-> > > +{
-> > > +       const struct i2c_dw_semaphore_callbacks *ptr;
-> > > +       int i =3D 0;
-> > > +       int ret;
-> > > +
-> > > +       ptr =3D i2c_dw_semaphore_cb_table;
-> > > +
-> > > +       dev->semaphore_idx =3D -1;
-> > > +
-> > > +       while (ptr->probe) {
-> > > +               ret =3D ptr->probe(dev);
-> > > +               if (ret) {
->
-> > > +                       /*
-> > > +                        * If there is no semaphore device attached t=
-o this
-> > > +                        * controller, we shouldn't abort general i2c=
-_controller
-> > > +                        * probe.
-> > > +                        */
-> > > +                       if (ret =3D=3D -ENODEV) {
-> > > +                               i++;
-> > > +                               ptr++;
-> > > +                               continue;
-> > > +                       } else {
->
-> Redundant 'else', but see below.
->
-> > > +                               return ret;
-> > > +                       }
->
-> May it be
->
->             if (ret !=3D -ENODEV)
->                 return ret;
->
->             i++;
->             ptr++;
->             continue;
->
-> ?
-
-Yes, looks good. Thanks!
-
-Best Regards,
-Jan
-
->
-> > > +               }
-> > > +
-> > > +               dev->semaphore_idx =3D i;
-> > > +               break;
-> > > +       }
-> > > +
-> > > +       return 0;
-> > > +}
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->

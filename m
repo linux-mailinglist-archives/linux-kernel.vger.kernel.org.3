@@ -2,151 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4314A5120
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8123F4A50C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 22:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381332AbiAaVJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 16:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S1379468AbiAaVGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 16:06:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380665AbiAaVHN (ORCPT
+        with ESMTP id S231445AbiAaVGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:07:13 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B928C061773
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:55 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id e2so27978316wra.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:55 -0800 (PST)
+        Mon, 31 Jan 2022 16:06:08 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5911AC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:08 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so386144pjp.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 13:06:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FxNR4P5lDXdqDoRY6o7wMDtTBWXikuXUtP+0kdBf7FQ=;
-        b=Lo4AW9guvOF81u6WGQBXjsTZUvFuBcQIdzBj2fKuxIY0ijvWI/WKVVcAEew+wpAmNv
-         T9o5T51UXeGAC8PY0e/dJSsEAeJCL79CCkRMNfyQnjXBUsH8+RxF6XddMCurXVkMGdfT
-         UwQJSGBW+iiRzyYdMPsOrpy+yu64udBa1ILAk=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SU2C5Ut+6pVhWNusD7rQJSCoDPKXcj6KPViieB+X2lo=;
+        b=hoQPs3vvKd7f1xYDysO+MqUCq4Iv27DRIoE1LCB2rYcxtJxZsOpFbFs/dzUF4N+KB7
+         YOvrYpJQ6TEndtT426TWvnQaEdc8kuPAvKL1ohdSugHUSz5qDExR/NXy0vXMuNI258E+
+         TfjMsP0xEQN9+BRl5R2eCk8q0PFJoH0jSWOzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FxNR4P5lDXdqDoRY6o7wMDtTBWXikuXUtP+0kdBf7FQ=;
-        b=Zs7k2cumxjGybbH+asvNzk93p4ontH2a3ehSRi59G7vqgy3skKMMS3FbqH5AXnwHCk
-         eK+GujLipdSXXCSxYVXtW5CTKkVETGQlVjXYDz36cVKf7TTdTdr8bmoPV13yinw5XbW5
-         ELjvCGqgJH7RASTWOK/WTxL/hm+QG2ecNF+h1OaHEbJIDA17txNPUDHEZxuaXHChEOa8
-         urQJdNQgG0p2UMH0kJXLqIktal8S3c4WzpVTsEqTOtyxlESJa4NL9tb+/kP/HGR1mZqN
-         1TGla51iGq64aozPEHd25rbAQsODmlgEsMYvtpNFJcn10xpAeTRYYiPVQFn2Uy9b3+B8
-         OL6g==
-X-Gm-Message-State: AOAM530vxmv3XnXOs4/0sktNrvEdYWOiLDHR/thKtlAW79PaLN9mG6RX
-        LCgayFwKOmKBYNffOKhCIPUv9g==
-X-Google-Smtp-Source: ABdhPJwF2QvK4hmf/7QGpz8EsMBpbsf23W007iTEYAPXtLNPFXTESQvIlo2rylKpGsmivnZGCNYQaQ==
-X-Received: by 2002:adf:e8ce:: with SMTP id k14mr10214483wrn.284.1643663214293;
-        Mon, 31 Jan 2022 13:06:54 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id b11sm314961wmq.46.2022.01.31.13.06.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SU2C5Ut+6pVhWNusD7rQJSCoDPKXcj6KPViieB+X2lo=;
+        b=DERV8FSZ6Ukeg2XlyWUt6sE8i5blSsVSPvEFlHebVRIjgsiCWRkAuHaZUzv2Phjl4z
+         VwZdHJ6z3doO6EHhNjsoSh2ao8G5ZyhIvino1JoavPa/ex3IOd1P5pQkbBFI0lpVTm9Y
+         vFvnT2Krz4/rP3Zr+2CC6jz9H+rDnH7D2smHrozo+wqX2Z3KxU0Y6zVXjQZuNp4F17ZO
+         7gTBUwz9ce7Xc4wi9HJldmrZsK4zSc1hQKXFml6T6MxTULjwiWXs3Qezor3HlylC2+Zf
+         ofsAcsnKov+6fARIu5LRnEc+WyXiq8GWfi5AGS194RLD0OHvsVeeBHdWbrcRlFbvMg19
+         D3gQ==
+X-Gm-Message-State: AOAM532gnY515Py4WH9ROJAc3VCUiaQCuI3DDV63jSH7azM+HGHBKCBs
+        Jy8m9TAlzcq7Apel7SmuIAQ0PRyW9lRXbQ==
+X-Google-Smtp-Source: ABdhPJw3mk7g/0+d8ppkglsn7LnLQZW0nlmnZxQQxVqkVpoCYTS2/ssuThB0561M1pMoYV+W9kT4YA==
+X-Received: by 2002:a17:902:c215:: with SMTP id 21mr21063159pll.134.1643663167174;
+        Mon, 31 Jan 2022 13:06:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z6sm5913634pfb.171.2022.01.31.13.06.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:06:53 -0800 (PST)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 21/21] fbdev: Make registered_fb[] private to fbmem.c
-Date:   Mon, 31 Jan 2022 22:05:52 +0100
-Message-Id: <20220131210552.482606-22-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+        Mon, 31 Jan 2022 13:06:06 -0800 (PST)
+Date:   Mon, 31 Jan 2022 13:06:06 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Leon Romanovsky <leon@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201311300.39BE058A1@keescook>
+References: <20220131100954.74a2034f@canb.auug.org.au>
+ <202201302002.41A8DDA2@keescook>
+ <20220131155932.3f88ec71@canb.auug.org.au>
+ <202201302216.97F2691@keescook>
+ <20220131191019.fpa5sn5u4kuov5ub@sx1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131191019.fpa5sn5u4kuov5ub@sx1>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Well except when the olpc dcon fbdev driver is enabled, that thing
-digs around in there in rather unfixable ways.
+On Mon, Jan 31, 2022 at 11:10:19AM -0800, Saeed Mahameed wrote:
+> On 30 Jan 22:19, Kees Cook wrote:
+> > On Mon, Jan 31, 2022 at 03:59:32PM +1100, Stephen Rothwell wrote:
+> > > On Sun, 30 Jan 2022 20:04:00 -0800 Kees Cook <keescook@chromium.org> wrote:
+> > > > https://lore.kernel.org/linux-hardening/20220124172242.2410996-1-keescook@chromium.org/
 
-Cc oldc_dcon maintainers as fyi.
+Fixes: 34802a42b352 ("net/mlx5e: Do not modify the TX SKB")
 
-Cc: Jens Frederich <jfrederich@gmail.com>
-Cc: Jon Nettleton <jon.nettleton@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-staging@lists.linux.dev
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc: linux-fbdev@vger.kernel.org
-Cc: Zheyu Ma <zheyuma97@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
----
- drivers/video/fbdev/core/fbmem.c | 8 ++++++--
- include/linux/fb.h               | 7 +++----
- 2 files changed, 9 insertions(+), 6 deletions(-)
+> > > > https://lore.kernel.org/linux-hardening/20220124172028.2410761-1-keescook@chromium.org/
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 904ef1250677..dad6572942fa 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -48,10 +48,14 @@
- static DEFINE_MUTEX(registration_lock);
- 
- struct fb_info *registered_fb[FB_MAX] __read_mostly;
--EXPORT_SYMBOL(registered_fb);
--
- int num_registered_fb __read_mostly;
-+#if IS_ENABLED(CONFIG_OLPC_DCON)
-+EXPORT_SYMBOL(registered_fb);
- EXPORT_SYMBOL(num_registered_fb);
-+#endif
-+#define for_each_registered_fb(i)		\
-+	for (i = 0; i < FB_MAX; i++)		\
-+		if (!registered_fb[i]) {} else
- 
- bool fb_center_logo __read_mostly;
- 
-diff --git a/include/linux/fb.h b/include/linux/fb.h
-index a8a00d2ba1f3..e236817502c2 100644
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -622,16 +622,15 @@ extern int fb_get_color_depth(struct fb_var_screeninfo *var,
- extern int fb_get_options(const char *name, char **option);
- extern int fb_new_modelist(struct fb_info *info);
- 
-+#if IS_ENABLED(CONFIG_OLPC_DCON)
- extern struct fb_info *registered_fb[FB_MAX];
-+
- extern int num_registered_fb;
-+#endif
- extern bool fb_center_logo;
- extern int fb_logo_count;
- extern struct class *fb_class;
- 
--#define for_each_registered_fb(i)		\
--	for (i = 0; i < FB_MAX; i++)		\
--		if (!registered_fb[i]) {} else
--
- static inline void lock_fb_info(struct fb_info *info)
- {
- 	mutex_lock(&info->lock);
+Fixes: b5503b994ed5 ("net/mlx5e: XDP TX forwarding support")
+
+> > > yeah, neither has made it yet.  However, it would not have helped as I
+> > > am merging the kspp tree very early so that new bugs get fixed in the
+> > > trees that introduce them.  These 2 are in Linus tree (for a long time)
+> > > and so it would be better if these fixes went int the net tree and then
+> > > Linus' tree as bug fixes.
+> 
+> I need proper fixes tags to submit to net, can you provide ?
+
+Sure! See above.
+
+> another option is to use a shared branch with those fixes and pull it to
+> both net-next and kspp.
+
+It's just a handful left now, so I think we'll avoid this for now.
+
+Thanks!
+
 -- 
-2.33.0
-
+Kees Cook

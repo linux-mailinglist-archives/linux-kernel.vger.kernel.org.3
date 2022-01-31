@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F2D4A3FDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9BF4A3FEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 11:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348355AbiAaKHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 05:07:08 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58180 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiAaKHH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:07:07 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 18F56212C3;
-        Mon, 31 Jan 2022 10:07:06 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 08010A3B85;
-        Mon, 31 Jan 2022 10:07:06 +0000 (UTC)
+        id S1357977AbiAaKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 05:17:11 -0500
+Received: from elvis.franken.de ([193.175.24.41]:48627 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232024AbiAaKRH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 05:17:07 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nETk9-0001MI-00; Mon, 31 Jan 2022 11:17:05 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id EEB46C1DA8; Mon, 31 Jan 2022 11:08:45 +0100 (CET)
+Date:   Mon, 31 Jan 2022 11:08:45 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: octeon: Fix missed PTR->PTR_WD conversion
-Date:   Mon, 31 Jan 2022 11:07:02 +0100
-Message-Id: <20220131100702.57096-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix build error due to PTR used in more places
+Message-ID: <20220131100845.GA19252@alpha.franken.de>
+References: <20220125141946.54114-1-tsbogend@alpha.franken.de>
+ <20220130163725.GA2792319@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130163725.GA2792319@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: fa62f39dc7e2 ("MIPS: Fix build error due to PTR used in more places")
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/cavium-octeon/octeon-memcpy.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Jan 30, 2022 at 08:37:25AM -0800, Guenter Roeck wrote:
+> On Tue, Jan 25, 2022 at 03:19:44PM +0100, Thomas Bogendoerfer wrote:
+> > Use PTR_WD instead of PTR to avoid clashes with other parts.
+> > 
+> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> 
+> Building mips:cavium_octeon_defconfig ... failed
+> --------------
+> Error log:
+> arch/mips/cavium-octeon/octeon-memcpy.S: Assembler messages:
+> arch/mips/cavium-octeon/octeon-memcpy.S:187: Error: unrecognized opcode `ptr 9b,l_exc'
+> ...
+> 
+> Missed one place in Cavium assembler code.
+> 
+> arch/mips/cavium-octeon/octeon-memcpy.S:        PTR     9b, handler;
+> 
+> #regzbot introduced: fa62f39dc7e2
 
-diff --git a/arch/mips/cavium-octeon/octeon-memcpy.S b/arch/mips/cavium-octeon/octeon-memcpy.S
-index 0a515cde1c18..25860fba6218 100644
---- a/arch/mips/cavium-octeon/octeon-memcpy.S
-+++ b/arch/mips/cavium-octeon/octeon-memcpy.S
-@@ -74,7 +74,7 @@
- #define EXC(inst_reg,addr,handler)		\
- 9:	inst_reg, addr;				\
- 	.section __ex_table,"a";		\
--	PTR	9b, handler;			\
-+	PTR_WD	9b, handler;			\
- 	.previous
- 
- /*
+d'oh, fix sent.
+
+Thomas.
+
 -- 
-2.29.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

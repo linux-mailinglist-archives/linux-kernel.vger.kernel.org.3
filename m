@@ -2,156 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A227E4A3E55
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4914A3E5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 08:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238456AbiAaHtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 02:49:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39545 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237965AbiAaHtB (ORCPT
+        id S240146AbiAaHuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 02:50:15 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:52087 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237965AbiAaHuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:49:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643615340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZAt16hzi0jARVC2SH2tfH/9B/mqcxkzoEuuB90n1AMk=;
-        b=DLNgAquRIbUZTcV6FsD5ygfGUQ5xtsO4FBrARcgfAJzBD3fJ8B+VGw/YqlADGy9tt7PXZp
-        7efpEfocNzPCn2ioe1ow3QnAT2/he84B3OcuQaGMgdXoqL+vYrHpVQ1M7G4OPLl0qDDlbB
-        sOq6wP8BgOlE2DOgLUmJ/UtqfL5HQhw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-M94Lr8mTPT6vXmGQmkKU7w-1; Mon, 31 Jan 2022 02:48:58 -0500
-X-MC-Unique: M94Lr8mTPT6vXmGQmkKU7w-1
-Received: by mail-wm1-f70.google.com with SMTP id bg23-20020a05600c3c9700b0034bb19dfdc0so2648748wmb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 23:48:58 -0800 (PST)
+        Mon, 31 Jan 2022 02:50:09 -0500
+Received: by mail-il1-f197.google.com with SMTP id z11-20020a056e0217cb00b002bab54d8254so8909097ilu.18
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Jan 2022 23:50:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZAt16hzi0jARVC2SH2tfH/9B/mqcxkzoEuuB90n1AMk=;
-        b=c6hJAVGL5zPUrbEAkj3JpomU0V1dLGqp9YqWz6v82uRVCMot+ZHiPVPShv4d2pgdR1
-         vTwfCigIAbM8rDWX8dijTmGenpoJ305+NG+E7ekxjg3gmDODhO2/70sA8Uniq9kdL8bz
-         yn4wUhBiG1cj5Lhe26TwlUGpzD62NBDQkhZd/VE8yWQ/5vucOoIYeQkNweg0ByCghjBO
-         Hi59cmLnxR+eCxosik54W0t7rF3qDzG6OU6Iwiet+t717IoS4Jpz5yrKXsUOmNhM59HT
-         HIL+NpqX5bu2F9elRYpc2U59Jodd4U7NRoBR0nWK4MWZHFouLuO+8ROtlJIrDITL60JG
-         ahcQ==
-X-Gm-Message-State: AOAM5306RnYCAfk8l/SLFvKvFt9gVl3VgKdIp4QHtOx8hhIfVx+Y9RnI
-        v4HGtHhME3u0NpG+Detyq0kbGVGX7T9kY5NHaeW/3rwQkpbO/Ggx2ADtrIhrKdcHNh9vFISPIgR
-        5Qo7KlvqX11Y3NTRGx96wAr5L
-X-Received: by 2002:a05:6000:1008:: with SMTP id a8mr15911198wrx.563.1643615337602;
-        Sun, 30 Jan 2022 23:48:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJziNLNeLdU3x1hO5PuIt8mvz7fg18Pv6lGvSgHdK7fS7xha3a7EYrVkbUytI3CwE4ViZc3ZTg==
-X-Received: by 2002:a05:6000:1008:: with SMTP id a8mr15911171wrx.563.1643615337390;
-        Sun, 30 Jan 2022 23:48:57 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:b200:f007:5a26:32e7:8ef5? (p200300cbc709b200f0075a2632e78ef5.dip0.t-ipconnect.de. [2003:cb:c709:b200:f007:5a26:32e7:8ef5])
-        by smtp.gmail.com with ESMTPSA id y6sm5081791wrl.46.2022.01.30.23.48.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Jan 2022 23:48:56 -0800 (PST)
-Message-ID: <3be2e20c-f0b9-c080-adf4-b0e17c046eb0@redhat.com>
-Date:   Mon, 31 Jan 2022 08:48:54 +0100
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mUUhKABASSDYvCUsc04M7XBtQBbnsrCUfjP/FgUZhxY=;
+        b=2CcvpozFzPyMIG4au0H/gLdHtf+fps6Q9YUM8cDpLJNVCzPWKjr8j/dCZ1ssFDBc6Q
+         m5jK7gfagD6B8aU35nSztd6XoOEgkFJS1to8wfCZGC5f3CcgJGplpsQoLKRvRHc6cCSd
+         MEwlmOJ2TABM97VKQTI9gSVf6m6N1mWxi3Xc0sbKQzg9zqkyoatUjAj2aYl5ZirAYVl8
+         ppM599x9gG8fi0lqVnw3qAWN4Nla7sPv0bDwYwerfuvHIzuaStiQodOEORj2sjGhE6f6
+         DXAuk805bSv3WSaK342uJWWyys1+voOmQaOaFyWZsf8x+TVyVp5iZl64tgaE7+58Qhph
+         j5fQ==
+X-Gm-Message-State: AOAM530xad/qUiE9Pbm3ug6zcK0k4I9MecY4/zcU3x8LAOM+mHvNKRPn
+        1sXnXmRW9R707zg3QTjche3fYZtoBpAybcgoqUcMKHMf8Ma4
+X-Google-Smtp-Source: ABdhPJymwJlS8JsUdlrCW9lOYpIn2UaIQaZW0hA0lpGtEyFOwecg2a8tRTfuM68f+RfkiiN+E5hX3nWx76izWqmI0UiryQoaAMBM
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH RFC v1] drivers/base/node: consolidate node device
- subsystem initialization in node_dev_init()
-Content-Language: en-US
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-References: <20220128151540.164759-1-david@redhat.com>
- <YfeARpenqPii1WQH@localhost.localdomain>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YfeARpenqPii1WQH@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a6b:d90c:: with SMTP id r12mr10512979ioc.99.1643615408629;
+ Sun, 30 Jan 2022 23:50:08 -0800 (PST)
+Date:   Sun, 30 Jan 2022 23:50:08 -0800
+In-Reply-To: <0000000000008a7a1c05c9e53c87@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000942c2205d6dc0896@google.com>
+Subject: Re: [syzbot] WARNING in drm_gem_shmem_vm_open
+From:   syzbot <syzbot+91525b2bd4b5dff71619@syzkaller.appspotmail.com>
+To:     airlied@linux.ie, bugs-a21@moonlit-rail.com,
+        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
+        daniel.vetter@intel.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, javierm@redhat.com,
+        linaro-mm-sig-owner@lists.linaro.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+        maxime@cerno.tech, melissa.srw@gmail.com, mripard@kernel.org,
+        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
+        tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.22 07:23, Oscar Salvador wrote:
-> On Fri, Jan 28, 2022 at 04:15:40PM +0100, David Hildenbrand wrote:
->> ... and call node_dev_init() after memory_dev_init() from driver_init(),
->> so before any of the existing arch/subsys calls. All online nodes should
->> be known at that point.
->>
->> This is in line with memory_dev_init(), which initializes the memory
->> device subsystem and creates all memory block devices.
->>
->> Similar to memory_dev_init(), panic() if anything goes wrong, we don't
->> want to continue with such basic initialization errors.
->>
->> The important part is that node_dev_init() gets called after
->> memory_dev_init() and after cpu_dev_init(), but before any of the
->> relevant archs call register_cpu() to register the new cpu device under
->> the node device. The latter should be the case for the current users
->> of topology_init().
-> 
+syzbot suspects this issue was fixed by commit:
 
-Hi Oscar,
+commit 0499f419b76f94ede08304aad5851144813ac55c
+Author: Javier Martinez Canillas <javierm@redhat.com>
+Date:   Mon Jan 10 09:56:25 2022 +0000
 
-> So, before this change we had something like this:
-> 
-> do_basic_setup
->  driver_init
->   memory_dev_init
->  do_init_calls
->   ...
->    topology_init
->     register_nodes/register_one_node
-> 
-> And after the patch all happens in driver_init()
-> 
-> driver_init
->  memory_dev_init
->  node_dev_init
-> 
-> I guess this is fine as we do not have any ordering problems (aka: none
-> of the functions we used to call before expect the nodes not to be
-> there for some weird reason).
-> 
-> So, no functional change, right?
-> 
+    video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
 
-Right, and the idea is that the online state of nodes (+ node/zone
-ranges) already has to be known at that point in time, because
-otherwise, we'd be in bigger trouble.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=126571e0700000
+start commit:   5d6ab0bb408f Merge tag 'xtensa-20211008' of git://github.c..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=32e6048063923b7b
+dashboard link: https://syzkaller.appspot.com/bug?extid=91525b2bd4b5dff71619
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11073300b00000
 
-Thanks!
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
 
--- 
-Thanks,
-
-David / dhildenb
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

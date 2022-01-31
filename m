@@ -2,154 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630EB4A3F7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3812B4A3F80
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 10:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbiAaJpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 04:45:31 -0500
-Received: from mail-eopbgr140042.outbound.protection.outlook.com ([40.107.14.42]:17915
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237067AbiAaJp3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:45:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X0NZr30cx5KhMVZY5HNQp5nbpLbmLzrS77C8TGeFpWBV7HLyiayb7vC3OhY5EXZ0+zewIUkY1Xlm5RfPSpJ+/2D056H8n1mP/v6WFWiM8pNpOoJXC4a847Bu7QPjYItLLHsa30WEs6p9zIfZxSbpYGYY1KTulmGCqMXc1DOBVef5bi8fFhcTFBkD8ox54pBvnbC6EnwwTCtjRfry1AOf1ye5h4jLOVFVSQ3n7mY8EH+VbwkOjE7gwgVs9iD/4oJQwiBrJsqYGVf8R0UL27+vBNdqXEgK6ZYPpiDc3dTr2PNt1Wk9nC80znd2fIK/4Je8Rp/5QF54KItwTzrvdoswiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jOWvio7s9XAQKQgBO74aZuGa8UXYgQEgpXMZc4Y+teM=;
- b=getpDuYLB5u7fr3ZK/TnGK08m5Ys917JFGh3WJsT2AflNY9umDkWQmaEi1dJ+HxhImTJ8PGoS0bFp9pRmcyU5DtucCVPtABPqJ/PJZDZOK7gg88hkLBUY/8umPqMRSY/2S7N9fNaqKL3ynyUx3yKloStjd2yOgu7IzIa6x9j/IaIO8G0RQRPAQCITv8nIL6kEWaw8kq5V0yX7WvIIKPdhqiQOfYobv6T6QUDYidFITa3bcuReVYVxZZjhACI/KAL4z0JOeXUupheqnP94U3mwKWque6+pXjsY74P1TxQUZ14L7hSyrWsLgeY6aJTo4GCRP36C8c6VVpTaE6VprFFRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.72) smtp.rcpttodomain=abv.bg smtp.mailfrom=siemens.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=siemens.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jOWvio7s9XAQKQgBO74aZuGa8UXYgQEgpXMZc4Y+teM=;
- b=cLKrJginMimnTuaNw1h5mErUDBD7rFX9JoIOYKCqmO85kffYryHahCgiE1Z3emeT5Jwsb5BUv9bVC1sal2jF57eWm5obd5YX6txi8JzRprs8XgM7OdVeovajhEFY7Tezfge56k5jcEnTU8l8c3V94VApRUHr58khq3+1hyRJTB5LpQRNENuCKkc22U4WBZ8MxusLQl/2Y7562jBn408UVeyjxVw1pgwt1Iz0QfXL5wK9lVd+jAj9QJapXdRKeqvi796W/ZWvpf4fhurqA1VxHbIzPz5XkGAwvTnpq7UMsmqdYZTy/tkupyjWP04t+YYmR1t36/z+RjKHyiduab8UqQ==
-Received: from DB6PR0802CA0028.eurprd08.prod.outlook.com (2603:10a6:4:a3::14)
- by PAXPR10MB4874.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:201::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Mon, 31 Jan
- 2022 09:45:26 +0000
-Received: from DB5EUR01FT046.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:4:a3:cafe::bc) by DB6PR0802CA0028.outlook.office365.com
- (2603:10a6:4:a3::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15 via Frontend
- Transport; Mon, 31 Jan 2022 09:45:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.72)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.72 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.72; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.72) by
- DB5EUR01FT046.mail.protection.outlook.com (10.152.5.231) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4930.15 via Frontend Transport; Mon, 31 Jan 2022 09:45:26 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SMA.ad011.siemens.net (194.138.21.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Mon, 31 Jan 2022 10:45:26 +0100
-Received: from [167.87.32.84] (167.87.32.84) by DEMCHDC8A0A.ad011.siemens.net
- (139.25.226.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 31 Jan
- 2022 10:45:24 +0100
-Message-ID: <80a13e9b-e026-1238-39ed-32deb5ff17b0@siemens.com>
-Date:   Mon, 31 Jan 2022 10:45:23 +0100
+        id S242062AbiAaJpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 04:45:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44312 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241929AbiAaJpu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:45:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643622349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MS/uqP/Od1Nlu6Xgt3P/am5tNhPsIAozU+ROOQPNswY=;
+        b=jDkqT5e51+M22iUPbXZrbIvBpMNsAC1etlOuHh3uvJkN+Gh5wjZHPSc9oteYz5C9BP6I9U
+        5SxgE4sQ+0UcSxhpW2A18IvA4+IazFO4/+HXpJPiKLdkpYHBGDPeBdmnJvj+77uOx54iby
+        IdmJz9+QHeZoMyVCwt8uiQU698UbYc0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-T_ZKkpZ0MVaX-36-NXQAng-1; Mon, 31 Jan 2022 04:45:48 -0500
+X-MC-Unique: T_ZKkpZ0MVaX-36-NXQAng-1
+Received: by mail-ej1-f72.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso4739404ejc.21
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 01:45:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MS/uqP/Od1Nlu6Xgt3P/am5tNhPsIAozU+ROOQPNswY=;
+        b=A20wVzd/TZXgKlB8vSx2c54C3+LZIA57kMzjkcNwnsHDPIN+sCjqnr06/sfFZ56W7t
+         sOmrM7AFLEtdS51zf1IaTCtYaOrnrUyNViNDk3qqFF3eGabqAIZxxvJ8w64mOzKaX+fH
+         dNUfX2/66XcxD6Vnf5rXGOWFspw4LI3cAg7IEEISR4tyqlJ7UQF3HOOPdL2LyLu1wV5z
+         lXJwY1MKw4mV6IW3c/Wwefzewhu+1g4MlwaF3t0cvR5Zil6z2lNJTGi2+milGa+CJMzV
+         tiZ3sJ+n4UvlESly8J/KOPdXhtQP1DFtojfg54U/3pUrbSMRCYOkqwxbJu0u6C/FH7Fg
+         dn5A==
+X-Gm-Message-State: AOAM5326VDAiWCe7Sa76q/MBdvLtBFMg6C1hF+eoPv1q11yIw7F7RChY
+        KzusFfCZ2wVVpK+zM1j7afoRlicwGZaFV+0YaqNfuhGGnxRNcNXtlq53lCrmcXGV7QmJyv1Mq9t
+        p5xXF1zsm1ZkyODY3LQx6He1y
+X-Received: by 2002:a17:906:4789:: with SMTP id cw9mr16417611ejc.250.1643622347054;
+        Mon, 31 Jan 2022 01:45:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw/EY6ZaH5hwm0kmvPneK0n45X4YN/TXoMl7+aRZg1eI1bhcDIZTx2UL87/mgth0TSdDZhAWw==
+X-Received: by 2002:a17:906:4789:: with SMTP id cw9mr16417600ejc.250.1643622346875;
+        Mon, 31 Jan 2022 01:45:46 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id b16sm13263370eja.211.2022.01.31.01.45.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 01:45:46 -0800 (PST)
+Message-ID: <f5a96b96-d9e2-2381-3673-632ae85c8b24@redhat.com>
+Date:   Mon, 31 Jan 2022 10:45:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+ Thunderbird/91.4.0
+Subject: Re: [PATCH RESEND 0/4] hwmon: (sch56xx) Automatically load on
+ supported hardware
 Content-Language: en-US
-To:     Georgi Valkov <gvalkov@abv.bg>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     Jakub Kicinski <kuba@kernel.org>, <davem@davemloft.net>,
-        <mhabets@solarflare.com>, <luc.vanoostenryck@gmail.com>,
-        <snelson@pensando.io>, <mst@redhat.com>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <corsac@corsac.net>,
-        <matti.vuorela@bitfactor.fi>, <stable@vger.kernel.org>
-References: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
- <20210720122215.54abaf53@cakuba>
- <5D0CFF83-439B-4A10-A276-D2D17B037704@abv.bg> <YPa4ZelG2k8Z826E@kroah.com>
- <C6AA954F-8382-461D-835F-E5CA03363D84@abv.bg> <YPbHoScEo8ZJyox6@kroah.com>
- <AEC79E3B-FA7F-4A36-95CE-B6D0F3063DF8@abv.bg>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <AEC79E3B-FA7F-4A36-95CE-B6D0F3063DF8@abv.bg>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220131093756.8075-1-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220131093756.8075-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.87.32.84]
-X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d0674e9f-0fa2-4e45-3905-08d9e49e68fa
-X-MS-TrafficTypeDiagnostic: PAXPR10MB4874:EE_
-X-Microsoft-Antispam-PRVS: <PAXPR10MB48746A89756D8D24003C242E95259@PAXPR10MB4874.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tm8AHexnv+FkLCylnETfbx8eQJIx4R0WAP3FjD5Y24u1R3aPowUsThc7jMSmZNvUyWcs/q0/Ufzj85wzyxLnQAQ7MpCRLxu1ULuOgljOUwd3QNJI51tBW/hxDnwPTg276VY0FF+SigrwRs0k0AODNsMPGxAhRdLjAdpFUmmH0mUq888oa37aaANgNpfLkLWXyux6JN6fYZ9Gcr6G7ITQj0LUfC2aoSEPEvg126C8X3kNcAJN8h7VzLjeJZTE55UeMehLfp737Kjbs2EDtD3ukKzOgt24QwJezdh8MsPlUuCtfHsxS6RsIRlkfooj+vBpDTaAGv2yimsDMpyBFNg4BWKrBwGNpY6enwxqz2ytbIzfUmfcA8qv6uXp5EvHcHhCTFmrqbMMoJE0El73rHW7aIaeIIQfM4I5nJH2NyKzcmmWr5D1X3+coj5tnHSNgVsySzf+LzUbVE+jEe98RtaYDkloqYCh69qLi29sxhCxKJur+EGN++Ehjc1MyTXNtOcv45+EB9cSfV4w1qJeFv2UDvDYgmvNY9JH9pRrYEuTTo4oPeDx+Z3KXJ/R6XLLUsEUlQ1iJzQRF4oulDwMjju33IT3Q8iBBWIdoyTsD3/HHcia9Ef3KQc46Lx68eT522kBTMD2JIx+j+z8KoH9TguIboRZweByS6dQHJ0Xe7kitpxeDom3jlYqByyblLFlm/1FLgn5xqSLI/XqoF2ZJfUy3EiKHlNrg0lkISRtsFey/b2IgTokq6b/7zQFL4hxdk4KOgvXt+y4TDaE5MGIMfGdiA==
-X-Forefront-Antispam-Report: CIP:194.138.21.72;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(81166007)(6706004)(54906003)(110136005)(31686004)(508600001)(356005)(336012)(40460700003)(16576012)(82960400001)(316002)(36756003)(86362001)(31696002)(47076005)(36860700001)(4326008)(44832011)(5660300002)(7416002)(16526019)(186003)(83380400001)(8676002)(70206006)(70586007)(82310400004)(53546011)(2906002)(956004)(2616005)(26005)(8936002)(3940600001)(36900700001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2022 09:45:26.6086
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0674e9f-0fa2-4e45-3905-08d9e49e68fa
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.72];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT046.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB4874
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Georgi,
+Hi Armin,
 
-On 20.07.21 15:12, Georgi Valkov wrote:
-> Thank you, Greg!
+On 1/31/22 10:37, Armin Wolf wrote:
+> The hardware monitoring solutions supported by the sch5627 and
+> sch5636 drivers are Fujitsu-specific.
+> After some online searching, i found out that the solution used
+> with the SCH5627 is called "Antiope" by Fujitsu, just like the
+> "Theseus" solution inside the SCH5636.
+> I also found out that "Antiope" and "Theseus" are listed as
+> DMI onboard devices on supported Fujitsu devices, so the
+> sch56xx_common module can be loaded automatically an check
+> for the DMI devices. However some devices like the Esprimo C700
+> have both devices, so after verifying that at least one onboard
+> device is present, sch56xx_common still has to detect which chip
+> is present.
+> This is safe however if at least one device is present.
 > 
-> git send-email drivers/net/0001-ipheth-fix-EOVERFLOW-in-ipheth_rcvbulk_callback.patch
-> ...
-> Result: OK
+> Tested on a Fujitsu Esprimo P720.
 > 
-> I hope I got right. I added most of the e-mail addresses, and also tried adding Message-Id.
-> I have not received the e-mail yet, so I cannot confirm if it worked or not.
+> Armin Wolf (4):
+>   hwmon: (sch56xx) Autoload modules on platform device creation
+>   hwmon: (sch56xx-common) Add automatic module loading on supported
+>     devices
+>   hwmon: (sch56xx-common) Replace msleep() with usleep_range()
+>   hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
+
+Not sure why you did a resend? I received the original just fine ?
+
+With that said the entire series looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+for the series.
+
+Regards,
+
+Hans
+
 > 
-
-What happened here afterwards?
-
-I just found out the hard way that this patch is still not in mainline 
-but really needed.
-
-Thanks,
-Jan
-
->> On 2021-07-20, at 3:54 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
->>
->> On Tue, Jul 20, 2021 at 03:46:11PM +0300, Georgi Valkov wrote:
->>> Yes, I read it, and before my previous e-mail that I also read the link from Jakub,
->>> which essentially provides the same information.
->>>
->>> There is only one patch 0001-ipheth-fix-EOVERFLOW-in-ipheth_rcvbulk_callback.patch
->>
->> Great, send that using 'git send-email' and all is good.
->>
->>> The command I used from the example also generated a 0000-cover-letter, so
->>> I included it as well.
->>
->> Why do you need a cover letter for 1 patch?
->>
->> thanks,
->>
->> greg k-h
->>
+>  drivers/hwmon/sch5627.c        |  9 +++++++
+>  drivers/hwmon/sch5636.c        |  9 +++++++
+>  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++++++----
+>  3 files changed, 58 insertions(+), 4 deletions(-)
+> 
+> --
+> 2.30.2
 > 
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux

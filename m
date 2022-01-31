@@ -2,268 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9314C4A3D22
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 06:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF054A3D27
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 06:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239006AbiAaFDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 00:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357745AbiAaFCn (ORCPT
+        id S1347922AbiAaFEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 00:04:31 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:9634 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233527AbiAaFE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:02:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BF9C06173B;
-        Sun, 30 Jan 2022 21:02:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44E16B80ADD;
-        Mon, 31 Jan 2022 05:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA649C340E8;
-        Mon, 31 Jan 2022 05:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643605346;
-        bh=oB3OHV7PT9qKuceHnY4r/cZGELfQzY+D6DiCbhHAX1w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=stcJQUVqdMu01XowloYJx3Jf29eO7j7FCgn1lX2GsQ7/cHHT0NujCfEXtOmgP659G
-         Ngy1ZmZGe/OqEATUU0m7h0ds1iBWLYFrgOI8cxNc2yH/TwRJpZrECzng/2iALrnnTl
-         w90Nd54DmZCigZPJ44EA72wRG6H4yfMaMxBudidrs2TTVnDAQ48JVbgomLozAJFs0l
-         SOE/PEH2YU6vSX6XuH/QPaEqA5EBLM2d9rbvk0j/3KVEL4UsgkgM0gBqbHiqFjSYfI
-         Uw0F3L0yQGe3rVufvzzt8bug3IOetbS+18ek4W91VraGFlZb9r4SYDx+vCl/XE6Bdm
-         cP1wK4cfvkCNQ==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v7 10/10] docs: fprobe: Add fprobe description to ftrace-use.rst
-Date:   Mon, 31 Jan 2022 14:02:20 +0900
-Message-Id: <164360534036.65877.17482125933683080.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164360522462.65877.1891020292202285106.stgit@devnote2>
-References: <164360522462.65877.1891020292202285106.stgit@devnote2>
-User-Agent: StGit/0.19
+        Mon, 31 Jan 2022 00:04:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643605467; x=1675141467;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DRVzS+ZJxQe/0b9mt46yJXaWTFVnqVFcY+WutzAm4W0=;
+  b=aPLrpy4loMx+b57mnAerhVjZnYrMs9vs3zOT+ZONVoMQ1YHFM+4ww7cq
+   3/m8n1vBFyStDq4Npvxn+6JXyTiNaNgQg0QxvEQI/xc4cFCBTYUfgdcCL
+   0h/WeY1JYTRym3Z5sMVaeKylfgaG9HRTGwXqSC9l8V4/Cnm2v8ySq3+OK
+   w=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Jan 2022 21:04:27 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:04:25 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 30 Jan 2022 21:04:25 -0800
+Received: from [10.216.60.245] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 30 Jan
+ 2022 21:04:18 -0800
+Message-ID: <36dce74e-f2c8-bd5b-f75e-be4d80537535@quicinc.com>
+Date:   Mon, 31 Jan 2022 10:34:15 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
+ for dwc3 qcom
+Content-Language: en-US
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+CC:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>
+References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
+ <YXcBK7zqny0s4gd4@ripper>
+ <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
+ <YXck+xCJQBRGqTCw@ripper>
+ <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
+ <YXdsYlLWnjopyMn/@ripper>
+ <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
+ <YXjbs3Bv6Y3d87EC@yoga>
+ <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
+ <da877712-dac9-e9d0-0bfc-25bef450eb65@codeaurora.org>
+ <0153c297-f648-25d1-7f0f-2114f07ef12b@quicinc.com>
+ <7514ff7f-9979-e308-486e-def51ca8e943@quicinc.com>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+In-Reply-To: <7514ff7f-9979-e308-486e-def51ca8e943@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a documentation of fprobe for the user who needs
-this interface.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v7:
-  - Clarify unregister_fprobe() guarantee the callbacks will no
-    longer being called after that.
-  - Fix some wording.
- Changes in v6:
-  - Update document according to the latest spec.
----
- Documentation/trace/fprobe.rst |  171 ++++++++++++++++++++++++++++++++++++++++
- Documentation/trace/index.rst  |    1 
- 2 files changed, 172 insertions(+)
- create mode 100644 Documentation/trace/fprobe.rst
+On 1/19/2022 4:31 PM, Rajendra Nayak wrote:
+>
+>
+> On 1/17/2022 11:33 AM, Sandeep Maheswaram wrote:
+>> Hi Rajendra,
+>>
+>> On 10/28/2021 9:26 AM, Rajendra Nayak wrote:
+>>>
+>>>
+>>> On 10/27/2021 7:54 PM, Ulf Hansson wrote:
+>>>> On Wed, 27 Oct 2021 at 06:55, Bjorn Andersson
+>>>> <bjorn.andersson@linaro.org> wrote:
+>>>>>
+>>>>> On Tue 26 Oct 19:48 CDT 2021, Stephen Boyd wrote:
+>>>>>
+>>>>>> +Rajendra
+>>>>>>
+>>>>>> Quoting Bjorn Andersson (2021-10-25 19:48:02)
+>>>>>>> On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
+>>>>>>>
+>>>>>>>>
+>>>>>>>> When the binding was introduced I recall we punted on the 
+>>>>>>>> parent child
+>>>>>>>> conversion stuff. One problem at a time. There's also the 
+>>>>>>>> possibility
+>>>>>>>> for a power domain to be parented by multiple power domains so
+>>>>>>>> translation tables need to account for that.
+>>>>>>>>
+>>>>>>>
+>>>>>>> But for this case - and below display case - the subdomain (the 
+>>>>>>> device's
+>>>>>>> power-domain) is just a dumb gate. So there is no translation, 
+>>>>>>> the given
+>>>>>>> performance_state applies to the parent. Or perhaps such 
+>>>>>>> implicitness
+>>>>>>> will come back and bite us?
+>>>>>>
+>>>>>> In the gate case I don't see how the implicitness will ever be a
+>>>>>> problem.
+>>>>>>
+>>>>>>>
+>>>>>>> I don't think we allow a power-domain to be a subdomain of two
+>>>>>>> power-domains - and again it's not applicable to USB or display 
+>>>>>>> afaict.
+>>>>>>
+>>>>>> Ah maybe. I always confuse power domains and genpd.
+>>>>>>
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>>> Or we may need to make another part of the OPP binding to 
+>>>>>>>>>> indicate the
+>>>>>>>>>> relationship between the power domain and the OPP and the 
+>>>>>>>>>> parent of
+>>>>>>>>>> the power domain.
+>>>>>>>>>
+>>>>>>>>> I suspect this would be useful if a power-domain provider 
+>>>>>>>>> needs to
+>>>>>>>>> translate a performance_state into a different 
+>>>>>>>>> supply-performance_state.
+>>>>>>>>> Not sure if we have such case currently; these examples are 
+>>>>>>>>> all an
+>>>>>>>>> adjustable power-domain with "gating" subdomains.
+>>>>>>>>
+>>>>>>>> Even for this case, we should be able to have the GDSC map the 
+>>>>>>>> on state
+>>>>>>>> to some performance state in the parent domain. Maybe we need 
+>>>>>>>> to add
+>>>>>>>> some code to the gdsc.c file to set a performance state on the 
+>>>>>>>> parent
+>>>>>>>> domain when it is turned on. I'm not sure where the value for 
+>>>>>>>> that perf
+>>>>>>>> state comes from. I guess we can hardcode it in the driver for 
+>>>>>>>> now and
+>>>>>>>> if it needs to be multiple values based on the clk frequency we 
+>>>>>>>> can push
+>>>>>>>> it out to an OPP table or something like that.
+>>>>>>>>
+>>>>>>>
+>>>>>>> For the GDSC I believe we only have 1:1 mapping, so implementing
+>>>>>>> set_performance_state to just pass that on to the parent might 
+>>>>>>> do the
+>>>>>>> trick (although I haven't thought this through).
+>>>>>>>
+>>>>>>> Conceptually I guess this would be like calling clk_set_rate() on a
+>>>>>>> clock gate, relying on it being propagated upwards. The problem 
+>>>>>>> here is
+>>>>>>> that the performance_state is just a "random" integer without a 
+>>>>>>> well
+>>>>>>> defined unit.
+>>>>>>>
+>>>>>>
+>>>>>> Right. Ideally it would be in the core code somehow so that if there
+>>>>>> isn't a set_performance_state function we go to the parent or some
+>>>>>> special return value from the function says "call it on my 
+>>>>>> parent". The
+>>>>>> translation scheme could come later so we can translate the "random"
+>>>>>> integer between parent-child domains.
+>>>>>
+>>>>> As a proof of concept it should be sufficient to just add an
+>>>>> implementation of sc->pd.set_performance_state in gdsc.c. But I agree
+>>>>> that it would be nice to push this into some framework code, perhaps
+>>>>> made opt-in by some GENPD_FLAG_xyz.
+>>>>>
+>>>>>> At the end of the day the device
+>>>>>> driver wants to set a frequency or runtime pm get the device and 
+>>>>>> let the
+>>>>>> OPP table or power domain code figure out what the level is 
+>>>>>> supposed to
+>>>>>> be.
+>>>>>>
+>>>>>
+>>>>> Yes and this is already working for the non-nested case - where the
+>>>>> single power-domain jumps between performance states as the opp code
+>>>>> switches from one opp to another.
+>>>>>
+>>>>> So if we can list only the child power-domain (i.e. the GDSC) and 
+>>>>> have
+>>>>> the performance_stat requests propagate up to the parent rpmhpd 
+>>>>> resource
+>>>>> I think we're good.
+>>>>>
+>>>>>
+>>>>> Let's give this a spin and confirm that this is the case...
+>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> The one case where I believe we talked about having different 
+>>>>>>> mapping
+>>>>>>> between the performance_state levels was in the relationship 
+>>>>>>> between CX
+>>>>>>> and MX. But I don't think we ever did anything about that...
+>>>>>>
+>>>>>> Hmm alright. I think there's a constraint but otherwise nobody 
+>>>>>> really
+>>>>>> wants to change both at the same time.
+>>>>>>
+>>>>>>>>
+>>>>>>>> Yes, a GDSC is really a gate on a parent power domain like CX 
+>>>>>>>> or MMCX,
+>>>>>>>> etc. Is the display subsystem an example of different clk 
+>>>>>>>> frequencies
+>>>>>>>> wanting to change the perf state of CX? If so it's a good place 
+>>>>>>>> to work
+>>>>>>>> out the translation scheme for devices that aren't listing the 
+>>>>>>>> CX power
+>>>>>>>> domain in DT.
+>>>>>>>
+>>>>>>> Yes, the various display components sits in MDSS_GDSC but the 
+>>>>>>> opp-tables
+>>>>>>> needs to change the performance_state of MDSS_GDSC->parent (i.e. 
+>>>>>>> CX or
+>>>>>>> MMCX, depending on platform).
+>>>>>>>
+>>>>>>> As I said, today we hack this by trusting that the base drm/msm 
+>>>>>>> driver
+>>>>>>> will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain 
+>>>>>>> for each
+>>>>>>> of these components.
+>>>>>>>
+>>>>>>>
+>>>>>>> So if we solve this, then that seems to directly map to the 
+>>>>>>> static case
+>>>>>>> for USB as well.
+>>>>>>>
+>>>>>>
+>>>>>> Got it. So in this case we could have the various display components
+>>>>>> that are in the mdss gdsc domain set their frequency via OPP and 
+>>>>>> then
+>>>>>> have that translate to a level in CX or MMCX. How do we parent 
+>>>>>> the power
+>>>>>> domains outside of DT? I'm thinking that we'll need to do that if 
+>>>>>> MMCX
+>>>>>> is parented by CX or something like that and the drivers for 
+>>>>>> those two
+>>>>>> power domains are different. Is it basic string matching?
+>>>>>
+>>>>> In one way or another we need to invoke pm_genpd_add_subdomain() 
+>>>>> to link
+>>>>> the two power-domains (actually genpds) together, like what was 
+>>>>> done in
+>>>>> 3652265514f5 ("clk: qcom: gdsc: enable optional power domain 
+>>>>> support").
+>>>>>
+>>>>> In the case of MMCX and CX, my impression of the documentation is 
+>>>>> that
+>>>>> they are independent - but if we need to express that CX is parent of
+>>>>> MMCX, they are both provided by rpmhpd which already supports this by
+>>>>> just specifying .parent on mmcx to point to cx.
+>>>>
+>>>> I was trying to follow the discussion, but it turned out to be a bit
+>>>> complicated to catch up and answer all things. In any case, let me
+>>>> just add a few overall comments, perhaps that can help to move things
+>>>> forward.
+>>>>
+>>>> First, one domain can have two parent domains. Both from DT and from
+>>>> genpd point of view, just to make this clear.
+>>>>
+>>>> Although, it certainly looks questionable to me, to hook up the USB
+>>>> device to two separate power domains, one to control power and one to
+>>>> control performance. Especially, if it's really the same piece of HW
+>>>> that is managing both things. 
+>>> []..
+>>>> Additionally, if it's correct to model
+>>>> the USB GDSC power domain as a child to the CX power domain from HW
+>>>> point of view, we should likely do that.
+>>>
+>>> I think this would still require a few things in genpd, since
+>>> CX and USB GDSC are power domains from different providers.
+>>> Perhaps a pm_genpd_add_subdomain_by_name()?
+>>>
+>> Tried with the changes provided by you  where USB GDSC power domains 
+>> added as a child to the CX power domain
+>>
+>> But cx shutdown is not happening  during sytem suspend as we need to 
+>> keep USB GDSC active in host mode .
+>
+> In the USB driver suspend when you check for this condition, in order 
+> to keep the GDSC active, you would
+> perhaps have to drop the performance state vote and re-vote in resume.
+> I don;t think the genpd core can handle this in any way.
+>
+CX shutdown is not happening even after dropping the performance state 
+in USB driver suspend.
 
-diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
-new file mode 100644
-index 000000000000..4275e95e16bc
---- /dev/null
-+++ b/Documentation/trace/fprobe.rst
-@@ -0,0 +1,171 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==================================
-+Fprobe - Function entry/exit probe
-+==================================
-+
-+.. Author: Masami Hiramatsu <mhiramat@kernel.org>
-+
-+Introduction
-+============
-+
-+Instead of using ftrace full feature, if you only want to attach callbacks
-+on function entry and exit, similar to the kprobes and kretprobes, you can
-+use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
-+instrumentation for multiple functions with single handler. This document
-+describes how to use fprobe.
-+
-+The usage of fprobe
-+===================
-+
-+The fprobe is a wrapper of ftrace (+ kretprobe-like return callback) to
-+attach callbacks to multiple function entry and exit. User needs to set up
-+the `struct fprobe` and pass it to `register_fprobe()`.
-+
-+Typically, `fprobe` data structure is initialized with the `entry_handler`
-+and/or `exit_handler` as below.
-+
-+.. code-block:: c
-+
-+ struct fprobe fp = {
-+        .entry_handler  = my_entry_callback,
-+        .exit_handler   = my_exit_callback,
-+ };
-+
-+To enable the fprobe, call one of register_fprobe(), register_fprobe_ips(), and
-+register_fprobe_syms(). These register the fprobe with different type of
-+parameters.
-+
-+The register_fprobe() enables a fprobe by function-name filters.
-+E.g. this enables @fp on "func*()" function except "func2()".::
-+
-+  register_fprobe(&fp, "func*", "func2");
-+
-+The register_fprobe_ips() enables a fprobe by ftrace-location addresses.
-+E.g.
-+
-+.. code-block:: c
-+
-+  unsigned long ips[] = { 0x.... };
-+
-+  register_fprobe_ips(&fp, ips, ARRAY_SIZE(ips));
-+
-+And the register_fprobe_syms() enables a fprobe by symbol names.
-+E.g.
-+
-+.. code-block:: c
-+
-+  char syms[] = {"func1", "func2", "func3"};
-+
-+  register_fprobe_syms(&fp, syms, ARRAY_SIZE(syms));
-+
-+To disable (remove from functions) this fprobe, call::
-+
-+  unregister_fprobe(&fp);
-+
-+You can temporally (soft) disable the fprobe by::
-+
-+  disable_fprobe(&fp);
-+
-+and resume by::
-+
-+  enable_fprobe(&fp);
-+
-+The above is defined by including the header::
-+
-+  #include <linux/fprobe.h>
-+
-+Same as ftrace, the registered callback will start being called some time
-+after the register_fprobe() is called and before it returns. See
-+:file:`Documentation/trace/ftrace.rst`.
-+
-+Also, the unregister_fprobe() will guarantee that the both enter and exit
-+handlers are no longer being called by functions after unregister_fprobe()
-+returns as same as unregister_ftrace_function().
-+
-+The fprobe entry/exit handler
-+=============================
-+
-+The prototype of the entry/exit callback function is as follows:
-+
-+.. code-block:: c
-+
-+ void callback_func(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
-+
-+Note that both entry and exit callback has same ptototype. The @entry_ip is
-+saved at function entry and passed to exit handler.
-+
-+@fp
-+        This is the address of `fprobe` data structure related to this handler.
-+        You can embed the `fprobe` to your data structure and get it by
-+        container_of() macro from @fp. The @fp must not be NULL.
-+
-+@entry_ip
-+        This is the entry address of the traced function (both entry and exit).
-+
-+@regs
-+        This is the `pt_regs` data structure at the entry and exit. Note that
-+        the instruction pointer of @regs may be different from the @entry_ip
-+        in the entry_handler. If you need traced instruction pointer, you need
-+        to use @entry_ip. On the other hand, in the exit_handler, the instruction
-+        pointer of @regs is set to the currect return address.
-+
-+Share the callbacks with kprobes
-+================================
-+
-+Since the recursion safety of the fprobe (and ftrace) is a bit different
-+from the kprobes, this may cause an issue if user wants to run the same
-+code from the fprobe and the kprobes.
-+
-+The kprobes has per-cpu 'current_kprobe' variable which protects the
-+kprobe handler from recursion in any case. On the other hand, the fprobe
-+uses only ftrace_test_recursion_trylock(), which will allow interrupt
-+context calls another (or same) fprobe during the fprobe user handler is
-+running.
-+
-+This is not a matter in cases if the common callback shared among the
-+kprobes and the fprobe has its own recursion detection, or it can handle
-+the recursion in the different contexts (normal/interrupt/NMI.)
-+But if it relies on the 'current_kprobe' recursion lock, it has to check
-+kprobe_running() and use kprobe_busy_*() APIs.
-+
-+Fprobe has FPROBE_FL_KPROBE_SHARED flag to do this. If your common callback
-+code will be shared with kprobes, please set FPROBE_FL_KPROBE_SHARED
-+*before* registering the fprobe, like:
-+
-+.. code-block:: c
-+
-+ fprobe.flags = FPROBE_FL_KPROBE_SHARED;
-+
-+ register_fprobe(&fprobe, "func*", NULL);
-+
-+This will protect your common callback from the nested call.
-+
-+The missed counter
-+==================
-+
-+The `fprobe` data structure has `fprobe::nmissed` counter field as same as
-+kprobes.
-+This counter counts up when;
-+
-+ - fprobe fails to take ftrace_recursion lock. This usually means that a function
-+   which is traced by other ftrace users is called from the entry_handler.
-+
-+ - fprobe fails to setup the function exit because of the shortage of rethook
-+   (the shadow stack for hooking the function return.)
-+
-+Since `fprobe::nmissed` field is counted up in both case, the former case
-+will skip both of entry and exit callback, and the latter case will skip exit
-+callback, but in both case the counter is just increased by 1.
-+
-+Note that if you set the FTRACE_OPS_FL_RECURSION and/or FTRACE_OPS_FL_RCU to
-+`fprobe::ops::flags` (ftrace_ops::flags) when registering the fprobe, this
-+counter may not work correctly, because those will skip fprobe's callback.
-+
-+
-+Functions and structures
-+========================
-+
-+.. kernel-doc:: include/linux/fprobe.h
-+.. kernel-doc:: kernel/trace/fprobe.c
-+
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index 3769b9b7aed8..b9f3757f8269 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -9,6 +9,7 @@ Linux Tracing Technologies
-    tracepoint-analysis
-    ftrace
-    ftrace-uses
-+   fprobe
-    kprobes
-    kprobetrace
-    uprobetracer
+Tried even without USB nodes in device tree cx shutdown is not happening
+
+Adding CX as a power-domain for GCC  along with below patch
+
+https://lore.kernel.org/all/20210829154757.784699-6-dmitry.baryshkov@linaro.org/ 
+preventing CX shutdown.
+
+
+Regards
+
+Sandeep
+
 

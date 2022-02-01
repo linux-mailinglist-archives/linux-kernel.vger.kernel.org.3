@@ -2,387 +2,449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793CE4A6783
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165DC4A6788
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236981AbiBAWFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:05:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60897 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236920AbiBAWFe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:05:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643753134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R+PF+Jmgwz02XcLrLQyKWVtKMoZYNCPV2hRCDrmkX+U=;
-        b=GeN7IsFuNBW5nGlOe3rrdKmaXC3qOOTjmWWv8CAqKHQG312DhGhNpDDxlGCRDNlVHBMTym
-        PmyH9/GL6i9V2qDgxu+1oBT+qhueGdtlP1V2e+JFBKwkZ1QLUAHZKvNHiOhNGDXd8h8QuM
-        nIT/i8xAOcwWnTELPgctCNPWIYkOR/c=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-60-yEQLP_WiNkiYQiss5yJ8gg-1; Tue, 01 Feb 2022 17:05:33 -0500
-X-MC-Unique: yEQLP_WiNkiYQiss5yJ8gg-1
-Received: by mail-wm1-f72.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so2459193wmb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:05:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R+PF+Jmgwz02XcLrLQyKWVtKMoZYNCPV2hRCDrmkX+U=;
-        b=AMlKM4uAtxGtwpbgC1FT/RGpfnn1x96qHzrCLeYlwt1VQnv1MlZuR1YIYaSC+m5zQ3
-         ufv50PCWl2SUYlWiquhwn1K8ITKV9ue7nfVaRqrttgBRDC2j81dfX7A6D46ahc9b8Ocv
-         SYAE4deSvvuH3NAUwQ8mvPzkpqUjCPMhowjJkrYbnDCwh+qDB+vyKE3NkmMJrP1kFU2S
-         V0IUi0f2BdEBJO2j7Ei02mkKmrtw3dz10zBldqhjJAFMcsnoo5PyjEzAuXZ+lTtvEROo
-         9fBXByv7ga+NHZMn8ny5eo/CFxOvjd2u3NN4DHXvz53ETCr4dTwY3MVxwiYXlsjiws+i
-         81CA==
-X-Gm-Message-State: AOAM533AwolhuxTR1RnJ6CpljR7RZyUDN37ndaKXZFWrVfcWSXQhNCmw
-        yONSKwKN6r+lUBtgtZwSpnB6pIWrf5U8xEZToxRf/acX6PmQxzouKFgusLlqJCjVw2gYwxDONPr
-        Y2HYIpB14O+4TZse2LchrmD6Z
-X-Received: by 2002:a7b:c08b:: with SMTP id r11mr3541838wmh.111.1643753131856;
-        Tue, 01 Feb 2022 14:05:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwMfMCE7dPkT2LWjrlDLo+rPCcb6cQo5NqhccAHmiLNCvv4S+IfI7Xeb2PxwV5fism+ziv1fA==
-X-Received: by 2002:a7b:c08b:: with SMTP id r11mr3541823wmh.111.1643753131629;
-        Tue, 01 Feb 2022 14:05:31 -0800 (PST)
-Received: from redhat.com ([2.52.5.34])
-        by smtp.gmail.com with ESMTPSA id e13sm18813272wrq.35.2022.02.01.14.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 14:05:31 -0800 (PST)
-Date:   Tue, 1 Feb 2022 17:05:27 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
-        igor.skalkin@opensynergy.com
-Subject: Re: [PATCH v2 1/9] firmware: arm_scmi: Add a virtio channel refcount
-Message-ID: <20220201165947-mutt-send-email-mst@kernel.org>
-References: <20220201171601.53316-1-cristian.marussi@arm.com>
- <20220201171601.53316-2-cristian.marussi@arm.com>
+        id S237184AbiBAWIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:08:48 -0500
+Received: from mga06.intel.com ([134.134.136.31]:64703 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231178AbiBAWIq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:08:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643753326; x=1675289326;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=fkaetyVO8iO1u83Q8FYzd7x9Y1NS9dL3LkWYVXa+5qo=;
+  b=W9Zoc5QhsFU41wr0I8M6AVTFZOwOVcR0bH6Ipxs6B9ZWnxl9cg/UHceN
+   VZMtZR0JfQ2OUyR8R4CEDlRMntrWWAoUSa6ZosG2aWJJAyi9IcvvrggVx
+   Rnso8A+s4SHa6YP2adIwdGXgr+Ejm1PDoT0zzTSsoNn4qFKyn5TfRM1Fe
+   JshCulodxYFENjqqmvGB6eLOaUYoYmqlrym/6M6Io8MuqjGVqtgiPJnBU
+   H2XGiQ8VOe8WBICigNUsfTjc4i8U2QIvaIScdNzrPgAsvq+60XjIXrfvU
+   t5ZYHDEQXfHhkOjMceGPVDNi1nehO5cTxBrED57iIn99PZbrN0i21DTvJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="308537185"
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="308537185"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:08:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="534671583"
+Received: from manojbab-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.43.7])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:08:45 -0800
+Date:   Tue, 1 Feb 2022 14:08:44 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     airlied@linux.ie, daniel.vetter@ffwll.ch,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        srinivas.kandagatla@linaro.org, tzimmermann@suse.de,
+        gregkh@linuxfoundation.org, nouveau@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 00/14] Rename dma-buf-map
+Message-ID: <20220201220844.qznncx2wxepny3q3@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220128083626.3012259-1-lucas.demarchi@intel.com>
+ <a45a8cef-f5e7-604c-64f1-e893ec9ba8af@amd.com>
+ <20220128091213.qaq6v4vbeerzvd3f@ldmartin-desk2>
+ <27870484-6d16-5bd4-aa06-0ec513111d99@amd.com>
+ <20220128094018.m7pixeznedoa47gb@ldmartin-desk2>
+ <36a08a90-3614-27b4-166b-9d113b644af3@amd.com>
+ <20220201003647.djakrmdebqigpz3j@ldmartin-desk2>
+ <7a6533ae-9a42-06aa-3da6-0986a72c3392@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220201171601.53316-2-cristian.marussi@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7a6533ae-9a42-06aa-3da6-0986a72c3392@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 05:15:53PM +0000, Cristian Marussi wrote:
-> Currently SCMI VirtIO channels are marked with a ready flag and related
-> lock to track channel lifetime and support proper synchronization at
-> shutdown when virtqueues have to be stopped.
-> 
-> This leads to some extended spinlocked sections with IRQs off on the RX
-> path to keep hold of the ready flag and does not scale well especially when
-> SCMI VirtIO polling mode will be introduced.
-> 
-> Add an SCMI VirtIO channel dedicated refcount to track active users on both
-> the TX and the RX path and properly enforce synchronization and cleanup at
-> shutdown, inhibiting further usage of the channel once freed.
-> 
-> Cc: Igor Skalkin <igor.skalkin@opensynergy.com>
-> Cc: Peter Hilber <peter.hilber@opensynergy.com>
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
->  drivers/firmware/arm_scmi/virtio.c | 148 +++++++++++++++++++----------
->  1 file changed, 100 insertions(+), 48 deletions(-)
-> 
-> diff --git a/drivers/firmware/arm_scmi/virtio.c b/drivers/firmware/arm_scmi/virtio.c
-> index fd0f6f91fc0b..536e46eab462 100644
-> --- a/drivers/firmware/arm_scmi/virtio.c
-> +++ b/drivers/firmware/arm_scmi/virtio.c
-> @@ -17,7 +17,9 @@
->   * virtqueue. Access to each virtqueue is protected by spinlocks.
->   */
->  
-> +#include <linux/completion.h>
->  #include <linux/errno.h>
-> +#include <linux/refcount.h>
->  #include <linux/slab.h>
->  #include <linux/virtio.h>
->  #include <linux/virtio_config.h>
-> @@ -27,6 +29,7 @@
->  
->  #include "common.h"
->  
-> +#define VIRTIO_MAX_RX_TIMEOUT_MS	60000
->  #define VIRTIO_SCMI_MAX_MSG_SIZE 128 /* Value may be increased. */
->  #define VIRTIO_SCMI_MAX_PDU_SIZE \
->  	(VIRTIO_SCMI_MAX_MSG_SIZE + SCMI_MSG_MAX_PROT_OVERHEAD)
-> @@ -39,23 +42,21 @@
->   * @cinfo: SCMI Tx or Rx channel
->   * @free_list: List of unused scmi_vio_msg, maintained for Tx channels only
->   * @is_rx: Whether channel is an Rx channel
-> - * @ready: Whether transport user is ready to hear about channel
->   * @max_msg: Maximum number of pending messages for this channel.
-> - * @lock: Protects access to all members except ready.
-> - * @ready_lock: Protects access to ready. If required, it must be taken before
-> - *              lock.
-> + * @lock: Protects access to all members except users.
-> + * @shutdown_done: A reference to a completion used when freeing this channel.
-> + * @users: A reference count to currently active users of this channel.
->   */
->  struct scmi_vio_channel {
->  	struct virtqueue *vqueue;
->  	struct scmi_chan_info *cinfo;
->  	struct list_head free_list;
->  	bool is_rx;
-> -	bool ready;
->  	unsigned int max_msg;
-> -	/* lock to protect access to all members except ready. */
-> +	/* lock to protect access to all members except users. */
->  	spinlock_t lock;
-> -	/* lock to rotects access to ready flag. */
-> -	spinlock_t ready_lock;
-> +	struct completion *shutdown_done;
-> +	refcount_t users;
->  };
->  
->  /**
-> @@ -76,6 +77,71 @@ struct scmi_vio_msg {
->  /* Only one SCMI VirtIO device can possibly exist */
->  static struct virtio_device *scmi_vdev;
->  
-> +static void scmi_vio_channel_ready(struct scmi_vio_channel *vioch,
-> +				   struct scmi_chan_info *cinfo)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&vioch->lock, flags);
-> +	cinfo->transport_info = vioch;
-> +	/* Indirectly setting channel not available any more */
-> +	vioch->cinfo = cinfo;
-> +	spin_unlock_irqrestore(&vioch->lock, flags);
-> +
-> +	refcount_set(&vioch->users, 1);
-> +}
-> +
-> +static inline bool scmi_vio_channel_acquire(struct scmi_vio_channel *vioch)
-> +{
-> +	return refcount_inc_not_zero(&vioch->users);
-> +}
-> +
-> +static inline void scmi_vio_channel_release(struct scmi_vio_channel *vioch)
-> +{
-> +	if (refcount_dec_and_test(&vioch->users)) {
-> +		unsigned long flags;
-> +
-> +		spin_lock_irqsave(&vioch->lock, flags);
-> +		if (vioch->shutdown_done) {
-> +			vioch->cinfo = NULL;
-> +			complete(vioch->shutdown_done);
-> +		}
-> +		spin_unlock_irqrestore(&vioch->lock, flags);
-> +	}
-> +}
-> +
-> +static void scmi_vio_channel_cleanup_sync(struct scmi_vio_channel *vioch)
-> +{
-> +	int timeout;
-> +	char *vq_name;
-> +	unsigned long flags;
-> +	struct device *dev;
-> +	DECLARE_COMPLETION_ONSTACK(vioch_shutdown_done);
-> +
-> +	/*
-> +	 * Prepare to wait for the last release if not already released
-> +	 * or in progress.
-> +	 */
-> +	spin_lock_irqsave(&vioch->lock, flags);
-> +	if (!vioch->cinfo || vioch->shutdown_done) {
-> +		spin_unlock_irqrestore(&vioch->lock, flags);
-> +		return;
-> +	}
-> +	vioch->shutdown_done = &vioch_shutdown_done;
-> +	vq_name = vioch->is_rx ? "RX" : "TX";
-> +	/* vioch->cinfo could be NULLified after the release */
-> +	dev = vioch->cinfo->dev;
-> +	spin_unlock_irqrestore(&vioch->lock, flags);
-> +
-> +	scmi_vio_channel_release(vioch);
-> +
-> +	timeout = msecs_to_jiffies(VIRTIO_MAX_RX_TIMEOUT_MS + 10);
-> +	/* Let any possibly concurrent RX path release the channel */
-> +	if (!wait_for_completion_timeout(vioch->shutdown_done, timeout))
-> +		dev_warn(dev,
-> +			 "Timeout shutting down %s VQ.\n", vq_name);
-> +}
-> +
+On Tue, Feb 01, 2022 at 08:46:15AM +0100, Christian König wrote:
+>Am 01.02.22 um 01:36 schrieb Lucas De Marchi:
+>>On Fri, Jan 28, 2022 at 10:48:42AM +0100, Christian König wrote:
+>>>Am 28.01.22 um 10:40 schrieb Lucas De Marchi:
+>>>>On Fri, Jan 28, 2022 at 10:22:00AM +0100, Christian König wrote:
+>>>>>Am 28.01.22 um 10:12 schrieb Lucas De Marchi:
+>>>>>>On Fri, Jan 28, 2022 at 09:41:14AM +0100, Christian König wrote:
+>>>>>>>Rule #1 is to never ever break the build.
+>>>>>>>
+>>>>>>>Because of this all those patches needs to be squashed 
+>>>>>>>into a single one as far as I can see.
+>>>>>>
+>>>>>>what config are you building on?
+>>>>>
+>>>>>Well I'm not building at all, I'm just looking at the patches 
+>>>>>as an engineer with 25 years of experience with Linux patches.
+>>>>>
+>>>>>Just take a look at patch number 2:
+>>>>>
+>>>>>-static int fastrpc_vmap(struct dma_buf *dmabuf, struct 
+>>>>>dma_buf_map *map)
+>>>>>+static int fastrpc_vmap(struct dma_buf *dmabuf, struct 
+>>>>>iosys_map *map)
+>>>>>
+>>>>>You are changing the functions signature without changing any 
+>>>>>of the callers.
+>>>>>
+>>>>>At bare minimum that causes a warning and on runtime this only 
+>>>>>works by coincident now because the structure pointers just 
+>>>>>happen to have the same layout. This is not something we 
+>>>>>usually do.
+>>>>
+>>>>you missed the magic/hack on patch 1:
+>>>>
+>>>>1) dma-buf-map.h includes iosys-map.h _at the end_
+>>>>2) iosys-map.h includes dma-buf-map.h at the beginning
+>>>>   and initially does a "define iosys_map dma_buf_map".
+>>>>
+>>>>So, it doesn't work by coincidence, It's because it was done to allow
+>>>>converting it piecemeal.
+>>>
+>>>Oh, my. Please never do stuff like that again.
+>>
+>>It's not uncommon approach to be required by other subsystems. Even
+>>drm-intel already used similar approach for macro conversions crossing
+>>drm-intel-next and drm-intel-gt-next branches recently.  As I said, I
+>>don't mind one way or the other.
+>
+>The key point is that you seemed to have a misunderstanding why we 
+>separate changes into functional independent patches.
+>
+>The goal of that is *not* to reduce the number of lines in a patch, 
+>but rather to reduce the complexity of the review.
+>
+>When you do an automated renamed with a cocci or sed script you can 
+>have a 100k line patch as result, which is perfectly fine to send out 
+>like this as long as you include the script/commands used to 
+>autogenerate the patch.
+>
+>The background is that everybody on the planet can generate the patch 
+>with those commands himself and see if the results matches your patch 
 
-Hmm. So if it times out then what? It's ok to corrupt memory then?
-Why? I suspect if you want to recover from this you need to mark device
-as broken, synchronize with all callbacks (we don't have an API
-for that but we really should). Only then you will know it's
-not doing anything.
+no, as I said in the cover letter there were tweaks needed.
+
+>or not. The maintainer of the component can then just puts an Acked-by 
+>on the patch and move on, but separating the patch causes additional 
+>work for both you as well as the reviewers.
+>
+>Separating the change into individual patches as much as possible is 
+>nice to have when you do a functional change and want or need a review 
+>from each individual driver maintainer. This is usually the default 
+>case, so sticking with separated changes as much as possible is 
+>usually still the best practice.
+
+Not sure if I should continue replying on why I split these specific
+patches.  I even mentioned in this cover letter about squashing
+everything in a single patch, and I'm fine with that.
+
+Anyway, there are other reasons to split the patches when it crosses
+branches you don't seem to acknowledge. It's harder for maintainers of
+the specific branches to review/ack only the changes on their part. It's
+harder to find the best timing to merge it. The mega patch doesn't apply
+to *any* specific branch, potentially leaving silent conflicts behind.
+You may notice the patch was split by branch boundary for these very
+reasons.
+
+If maintainers prefer to have a single patch, I'm fine, I had already
+said that.
 
 
->  static bool scmi_vio_have_vq_rx(struct virtio_device *vdev)
->  {
->  	return virtio_has_feature(vdev, VIRTIO_SCMI_F_P2A_CHANNELS);
-> @@ -119,7 +185,7 @@ static void scmi_finalize_message(struct scmi_vio_channel *vioch,
->  
->  static void scmi_vio_complete_cb(struct virtqueue *vqueue)
->  {
-> -	unsigned long ready_flags;
-> +	unsigned long flags;
->  	unsigned int length;
->  	struct scmi_vio_channel *vioch;
->  	struct scmi_vio_msg *msg;
-> @@ -130,27 +196,27 @@ static void scmi_vio_complete_cb(struct virtqueue *vqueue)
->  	vioch = &((struct scmi_vio_channel *)vqueue->vdev->priv)[vqueue->index];
->  
->  	for (;;) {
-> -		spin_lock_irqsave(&vioch->ready_lock, ready_flags);
-> -
-> -		if (!vioch->ready) {
-> +		if (!scmi_vio_channel_acquire(vioch)) {
->  			if (!cb_enabled)
->  				(void)virtqueue_enable_cb(vqueue);
-> -			goto unlock_ready_out;
-> +			return;
->  		}
->  
-> -		/* IRQs already disabled here no need to irqsave */
-> -		spin_lock(&vioch->lock);
-> +		spin_lock_irqsave(&vioch->lock, flags);
->  		if (cb_enabled) {
->  			virtqueue_disable_cb(vqueue);
->  			cb_enabled = false;
->  		}
->  		msg = virtqueue_get_buf(vqueue, &length);
->  		if (!msg) {
-> -			if (virtqueue_enable_cb(vqueue))
-> -				goto unlock_out;
-> +			if (virtqueue_enable_cb(vqueue)) {
-> +				spin_unlock_irqrestore(&vioch->lock, flags);
-> +				scmi_vio_channel_release(vioch);
-> +				return;
-> +			}
->  			cb_enabled = true;
->  		}
-> -		spin_unlock(&vioch->lock);
-> +		spin_unlock_irqrestore(&vioch->lock, flags);
->  
->  		if (msg) {
->  			msg->rx_len = length;
-> @@ -161,19 +227,14 @@ static void scmi_vio_complete_cb(struct virtqueue *vqueue)
->  		}
->  
->  		/*
-> -		 * Release ready_lock and re-enable IRQs between loop iterations
-> -		 * to allow virtio_chan_free() to possibly kick in and set the
-> -		 * flag vioch->ready to false even in between processing of
-> -		 * messages, so as to force outstanding messages to be ignored
-> -		 * when system is shutting down.
-> +		 * Release vio channel between loop iterations to allow
-> +		 * virtio_chan_free() to eventually fully release it when
-> +		 * shutting down; in such a case, any outstanding message will
-> +		 * be ignored since this loop will bail out at the next
-> +		 * iteration.
->  		 */
-> -		spin_unlock_irqrestore(&vioch->ready_lock, ready_flags);
-> +		scmi_vio_channel_release(vioch);
->  	}
-> -
-> -unlock_out:
-> -	spin_unlock(&vioch->lock);
-> -unlock_ready_out:
-> -	spin_unlock_irqrestore(&vioch->ready_lock, ready_flags);
->  }
->  
->  static const char *const scmi_vio_vqueue_names[] = { "tx", "rx" };
-> @@ -273,35 +334,20 @@ static int virtio_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
->  		}
->  	}
->  
-> -	spin_lock_irqsave(&vioch->lock, flags);
-> -	cinfo->transport_info = vioch;
-> -	/* Indirectly setting channel not available any more */
-> -	vioch->cinfo = cinfo;
-> -	spin_unlock_irqrestore(&vioch->lock, flags);
-> -
-> -	spin_lock_irqsave(&vioch->ready_lock, flags);
-> -	vioch->ready = true;
-> -	spin_unlock_irqrestore(&vioch->ready_lock, flags);
-> +	scmi_vio_channel_ready(vioch, cinfo);
->  
->  	return 0;
->  }
->  
->  static int virtio_chan_free(int id, void *p, void *data)
->  {
-> -	unsigned long flags;
->  	struct scmi_chan_info *cinfo = p;
->  	struct scmi_vio_channel *vioch = cinfo->transport_info;
->  
-> -	spin_lock_irqsave(&vioch->ready_lock, flags);
-> -	vioch->ready = false;
-> -	spin_unlock_irqrestore(&vioch->ready_lock, flags);
-> +	scmi_vio_channel_cleanup_sync(vioch);
->  
->  	scmi_free_channel(cinfo, data, id);
->  
-> -	spin_lock_irqsave(&vioch->lock, flags);
-> -	vioch->cinfo = NULL;
-> -	spin_unlock_irqrestore(&vioch->lock, flags);
-> -
->  	return 0;
->  }
->  
-> @@ -316,10 +362,14 @@ static int virtio_send_message(struct scmi_chan_info *cinfo,
->  	int rc;
->  	struct scmi_vio_msg *msg;
->  
-> +	if (!scmi_vio_channel_acquire(vioch))
-> +		return -EINVAL;
-> +
->  	spin_lock_irqsave(&vioch->lock, flags);
->  
->  	if (list_empty(&vioch->free_list)) {
->  		spin_unlock_irqrestore(&vioch->lock, flags);
-> +		scmi_vio_channel_release(vioch);
->  		return -EBUSY;
->  	}
->  
-> @@ -342,6 +392,8 @@ static int virtio_send_message(struct scmi_chan_info *cinfo,
->  
->  	spin_unlock_irqrestore(&vioch->lock, flags);
->  
-> +	scmi_vio_channel_release(vioch);
-> +
->  	return rc;
->  }
->  
-> @@ -416,7 +468,6 @@ static int scmi_vio_probe(struct virtio_device *vdev)
->  		unsigned int sz;
->  
->  		spin_lock_init(&channels[i].lock);
-> -		spin_lock_init(&channels[i].ready_lock);
->  		INIT_LIST_HEAD(&channels[i].free_list);
->  		channels[i].vqueue = vqs[i];
->  
-> @@ -503,7 +554,8 @@ const struct scmi_desc scmi_virtio_desc = {
->  	.transport_init = virtio_scmi_init,
->  	.transport_exit = virtio_scmi_exit,
->  	.ops = &scmi_virtio_ops,
-> -	.max_rx_timeout_ms = 60000, /* for non-realtime virtio devices */
-> +	/* for non-realtime virtio devices */
-> +	.max_rx_timeout_ms = VIRTIO_MAX_RX_TIMEOUT_MS,
->  	.max_msg = 0, /* overridden by virtio_get_max_msg() */
->  	.max_msg_size = VIRTIO_SCMI_MAX_MSG_SIZE,
->  };
-> -- 
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+>
+>>
+>>Before I go and respin this into a single mega patch, I'd like to gather
+>>some feedback on the following topics:
+>>
+>>1) Daniel Vetter and Thomas Zimmermann seemed to be ok with staying with
+>>the current name, dma_buf_map, while you prefer it renamed. Or at
+>>least not make the rename a pre-requisite for the API additions in
+>>https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220126203702.1784589-1-lucas.demarchi%40intel.com%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C01142fa3ce484040ade008d9e51aef5d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637792726123940514%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=ieMZ9Jiwo%2FQpT5kyyQgHNlepiusN%2Fkfff1Op6TVQ%2BaA%3D&amp;reserved=0
+>>
+>>
+>>One thing I like about the rename is that it makes clear the separation
+>>between this small shim and dma-buf. There are also some APIs
+>>that are really dma-buf API (e.g. dma_buf_map_attachment()), but if you
+>>don't look carefully you may think it's from dma_buf_map.
+>
+>Exactly that's the reason why I see this rename as mandatory.
+>
+>Adding the functionality goes beyond the inter driver interface 
+>DMA-buf provides into driver internal territory and I want to make 
+>sure that people understand just from the name alone that this is not 
+>part of DMA-buf but rather an independent functionality.
 
+yep, agreed.
+
+>
+>>
+>>2) If renaming, would it still keep the same entry in
+>>MAINTAINERS? Thomas suggested drivers core, but this all seem to be used
+>>mainly on drm/, with just one exception.
+>
+>I would just add a complete new entry for this and use Thomas as 
+>maintainer (with his permission of course) and dri as mailing list.
+
+ack. I will do that since he acked on doing this in his reply.
+
+thanks
+Lucas De Marchi
+
+>
+>>
+>>3) If renaming, do we have another preferred name?
+>
+>Nope, as Daniel said the name itself is only bikesheed. What is 
+>important is that we see this as functionality separated from the 
+>inter driver interface.
+>
+>Regards,
+>Christian.
+>
+>>
+>>
+>>thanks
+>>Lucas De Marchi
+>>
+>>>
+>>>>
+>>>>But as I said, I don't really have a preference. When crossing
+>>>>subsystems one thing that is hard is that different people have 
+>>>>different
+>>>>preferences on these things. At least squashing now is much easier than
+>>>>if I had to split it
+>>>>
+>>>>Try to imagine how much complain I received on going the other way in
+>>>>25985edcedea6396277003854657b5f3cb31a628 with
+>>>>2463 files changed, 4252 insertions(+), 4252 deletions(-)
+>>>
+>>>Well exactly that is perfectly fine.
+>>>
+>>>What you do here is applying your personal hack which is 
+>>>absolutely not welcomed.
+>>>
+>>>Regards,
+>>>Christian.
+>>>
+>>>>:)
+>>>>
+>>>>
+>>>>Lucas De Marchi
+>>>>
+>>>>>
+>>>>>Regards,
+>>>>>Christian.
+>>>>>
+>>>>>>I built this series, full config with
+>>>>>>CONFIG_COMPILE_TEST and doing:
+>>>>>>
+>>>>>>    git rebase -i <base> -x "make -j$(nproc)"
+>>>>>>
+>>>>>>I split these patches in a way that wouldn't break the build 
+>>>>>>on purpose.
+>>>>>>There were a couple that I couldn't build without cross 
+>>>>>>compiling: tegra
+>>>>>>and rockchip. The others were ok.
+>>>>>>
+>>>>>>I'm not really against squashing everything in one to merge, though.
+>>>>>>It will be hard on the conflicts later, but should get the 
+>>>>>>job done much
+>>>>>>quicker.
+>>>>>>
+>>>>>>Lucas De Marchi
+>>>>>>
+>>>>>>>
+>>>>>>>Regards,
+>>>>>>>Christian.
+>>>>>>>
+>>>>>>>Am 28.01.22 um 09:36 schrieb Lucas De Marchi:
+>>>>>>>>Motivation for this started in
+>>>>>>>>https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20220126203702.1784589-1-lucas.demarchi%40intel.com%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C01142fa3ce484040ade008d9e51aef5d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637792726123940514%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=p8rR28Hn0yMTbwy%2F7bpiGyG9fAu9kG1VUzX2MF44mcs%3D&amp;reserved=0
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>when trying to extend the dma-buf-map API to cover new 
+>>>>>>>>use cases: help a
+>>>>>>>>single driver with allocations and sharing code paths 
+>>>>>>>>for IO and system
+>>>>>>>>memory. I'm leaving the API additions aside and first renaming the
+>>>>>>>>interface as requested.
+>>>>>>>>
+>>>>>>>>There are already some users in tree outside the context of dma-buf
+>>>>>>>>importer/exporter. So before extending the API, let's 
+>>>>>>>>dissociate it from
+>>>>>>>>dma-buf.
+>>>>>>>>
+>>>>>>>>The iosys-map.h is introduced in the first patch in a 
+>>>>>>>>way that allows
+>>>>>>>>the conversion of each driver to happen separately. After all the
+>>>>>>>>conversions are done we can remove the old one, which is 
+>>>>>>>>the last patch.
+>>>>>>>>Another possible way is to squash everything and merge together,
+>>>>>>>>but I believe this would make much harder for review.
+>>>>>>>>
+>>>>>>>>The conversion was done with the following semantic patch:
+>>>>>>>>
+>>>>>>>>    @r1@
+>>>>>>>>    @@
+>>>>>>>>    - struct dma_buf_map
+>>>>>>>>    + struct iosys_map
+>>>>>>>>
+>>>>>>>>    @r2@
+>>>>>>>>    @@
+>>>>>>>>    (
+>>>>>>>>    - DMA_BUF_MAP_INIT_VADDR
+>>>>>>>>    + IOSYS_MAP_INIT_VADDR
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_set_vaddr
+>>>>>>>>    + iosys_map_set_vaddr
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_set_vaddr_iomem
+>>>>>>>>    + iosys_map_set_vaddr_iomem
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_is_equal
+>>>>>>>>    + iosys_map_is_equal
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_is_null
+>>>>>>>>    + iosys_map_is_null
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_is_set
+>>>>>>>>    + iosys_map_is_set
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_clear
+>>>>>>>>    + iosys_map_clear
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_memcpy_to
+>>>>>>>>    + iosys_map_memcpy_to
+>>>>>>>>    |
+>>>>>>>>    - dma_buf_map_incr
+>>>>>>>>    + iosys_map_incr
+>>>>>>>>    )
+>>>>>>>>
+>>>>>>>>    @@
+>>>>>>>>    @@
+>>>>>>>>    - #include <linux/dma-buf-map.h>
+>>>>>>>>    + #include <linux/iosys-map.h>
+>>>>>>>>
+>>>>>>>>and then some files had their includes adjusted so we can build
+>>>>>>>>everything on each commit in this series. Also some 
+>>>>>>>>comments were update
+>>>>>>>>to remove mentions to dma-buf-map. Simply doing a sed to 
+>>>>>>>>rename didn't
+>>>>>>>>work as dma-buf has some APIs using the dma_buf_map prefix.
+>>>>>>>>
+>>>>>>>>Once finalized, I think most of this, if not all, could 
+>>>>>>>>go through the
+>>>>>>>>drm-misc-next branch. I split i915, msm, nouveau, and 
+>>>>>>>>radeon in their
+>>>>>>>>own patches in case it's preferred to take those through their own
+>>>>>>>>trees.
+>>>>>>>>
+>>>>>>>>Lucas De Marchi
+>>>>>>>>
+>>>>>>>>Lucas De Marchi (14):
+>>>>>>>>  iosys-map: Introduce renamed dma-buf-map
+>>>>>>>>  misc: fastrpc: Replace dma-buf-map with iosys-map
+>>>>>>>>  dma-buf: Replace dma-buf-map with iosys-map
+>>>>>>>>  media: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm/ttm: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm: Replace dma-buf-map with iosys-map in drivers
+>>>>>>>>  drm/i915: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm/msm: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm/nouveau: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm/tegra: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm/radeon: Replace dma-buf-map with iosys-map
+>>>>>>>>  drm: Replace dma-buf-map with iosys-map in common code
+>>>>>>>>  Documentation: Refer to iosys-map instead of dma-buf-map
+>>>>>>>>  dma-buf-map: Remove API in favor of iosys-map
+>>>>>>>>
+>>>>>>>> Documentation/driver-api/dma-buf.rst          |   4 +-
+>>>>>>>> Documentation/gpu/todo.rst                    |  20 +-
+>>>>>>>> MAINTAINERS                                   |   2 +-
+>>>>>>>> drivers/dma-buf/dma-buf.c                     |  22 +-
+>>>>>>>> drivers/dma-buf/heaps/cma_heap.c              |  10 +-
+>>>>>>>> drivers/dma-buf/heaps/system_heap.c           |  10 +-
+>>>>>>>> drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
+>>>>>>>> drivers/gpu/drm/ast/ast_mode.c                |   8 +-
+>>>>>>>> drivers/gpu/drm/drm_cache.c                   |  18 +-
+>>>>>>>> drivers/gpu/drm/drm_client.c                  |   9 +-
+>>>>>>>> drivers/gpu/drm/drm_fb_helper.c               |  12 +-
+>>>>>>>> drivers/gpu/drm/drm_gem.c                     |  12 +-
+>>>>>>>> drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
+>>>>>>>> drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
+>>>>>>>> drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
+>>>>>>>> drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
+>>>>>>>> drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
+>>>>>>>> drivers/gpu/drm/drm_internal.h                |   6 +-
+>>>>>>>> drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
+>>>>>>>> drivers/gpu/drm/drm_prime.c                   |   4 +-
+>>>>>>>> drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
+>>>>>>>> drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
+>>>>>>>> drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
+>>>>>>>> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
+>>>>>>>> drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
+>>>>>>>> .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
+>>>>>>>> .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
+>>>>>>>> drivers/gpu/drm/lima/lima_gem.c               |   3 +-
+>>>>>>>> drivers/gpu/drm/lima/lima_sched.c             |   4 +-
+>>>>>>>> drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
+>>>>>>>> drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
+>>>>>>>> drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
+>>>>>>>> drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
+>>>>>>>> drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
+>>>>>>>> drivers/gpu/drm/nouveau/nouveau_gem.c         |   2 +
+>>>>>>>> drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
+>>>>>>>> drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
+>>>>>>>> drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
+>>>>>>>> drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
+>>>>>>>> drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
+>>>>>>>> drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
+>>>>>>>> drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
+>>>>>>>> drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
+>>>>>>>> drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
+>>>>>>>> drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
+>>>>>>>> drivers/gpu/drm/tegra/gem.c                   |  10 +-
+>>>>>>>> drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
+>>>>>>>> drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
+>>>>>>>> drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
+>>>>>>>> drivers/gpu/drm/ttm/ttm_resource.c            |  26 +-
+>>>>>>>> drivers/gpu/drm/ttm/ttm_tt.c                  |   6 +-
+>>>>>>>> drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
+>>>>>>>> drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
+>>>>>>>> drivers/gpu/drm/virtio/virtgpu_prime.c        |   1 +
+>>>>>>>> drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
+>>>>>>>> drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
+>>>>>>>> drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
+>>>>>>>> drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
+>>>>>>>> drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
+>>>>>>>> drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
+>>>>>>>> .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
+>>>>>>>> .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
+>>>>>>>> .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
+>>>>>>>> drivers/misc/fastrpc.c                        |   4 +-
+>>>>>>>> include/drm/drm_cache.h                       |   6 +-
+>>>>>>>> include/drm/drm_client.h                      |   7 +-
+>>>>>>>> include/drm/drm_gem.h                         |   6 +-
+>>>>>>>> include/drm/drm_gem_atomic_helper.h           |   6 +-
+>>>>>>>> include/drm/drm_gem_cma_helper.h              |   6 +-
+>>>>>>>> include/drm/drm_gem_framebuffer_helper.h      |   8 +-
+>>>>>>>> include/drm/drm_gem_shmem_helper.h            |  12 +-
+>>>>>>>> include/drm/drm_gem_ttm_helper.h              |   6 +-
+>>>>>>>> include/drm/drm_gem_vram_helper.h             |   9 +-
+>>>>>>>> include/drm/drm_prime.h                       |   6 +-
+>>>>>>>> include/drm/ttm/ttm_bo_api.h                  |  10 +-
+>>>>>>>> include/drm/ttm/ttm_kmap_iter.h               |  10 +-
+>>>>>>>> include/drm/ttm/ttm_resource.h                |   6 +-
+>>>>>>>> include/linux/dma-buf-map.h                   | 266 
+>>>>>>>>------------------
+>>>>>>>> include/linux/dma-buf.h                       |  12 +-
+>>>>>>>> include/linux/iosys-map.h                     | 257 
+>>>>>>>>+++++++++++++++++
+>>>>>>>> 80 files changed, 579 insertions(+), 552 deletions(-)
+>>>>>>>> delete mode 100644 include/linux/dma-buf-map.h
+>>>>>>>> create mode 100644 include/linux/iosys-map.h
+>>>>>>>>
+>>>>>>>
+>>>>>
+>>>
+>

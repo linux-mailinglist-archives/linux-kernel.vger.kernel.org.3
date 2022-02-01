@@ -2,161 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B61B84A63D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE3D4A63D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbiBASa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
+        id S237474AbiBASbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236692AbiBASa1 (ORCPT
+        with ESMTP id S234686AbiBASbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:30:27 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4D0C061714;
-        Tue,  1 Feb 2022 10:30:26 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id r7so13403516wmq.5;
-        Tue, 01 Feb 2022 10:30:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jm8BXyrfEZYc6+12yNeq6/HE2c+1ykfSUn6L7kkAGNc=;
-        b=kba2yhGKR008LSm2zIRBWihztOVyxS1jpNzGWAUoCJay5eQRO7+iYOcABLRPMPtBmH
-         WOBTy6NpsTxS9oTyNy/zAOjW/FO/Mh0JZFMAa7nPp0QGXMPLO59ovrsVLVb6vy0nWfwi
-         irPPGDWY4TTZaOSzgZdJsJxIgo363FbWQLL7B4yKfHuS66r7uAAiOcNN1oUCORiFU7fT
-         quO9sw17p18/6T4NRsISB9nVeScFuQgDsRXDcEpSqI/MmS7ox5gX8ovf1qYAZUnUVYEI
-         YmPhmuvS46vw2Jpe6aqSy9qsoiHjUH9Hi3f95BlMznXPaEYhcNfJ5DLqrekFcjTwugha
-         2gWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jm8BXyrfEZYc6+12yNeq6/HE2c+1ykfSUn6L7kkAGNc=;
-        b=mkSGZxB6wk+Xrix2XowjvHi4Qw00LIN4V534HudBA1oKTKH59Bh1qiAPS5iGYMEXlk
-         vGWnHe3YMs+2v1ZdHM4olJKXFD/p6hIuaLAE5tdG+LKe8rRUl/A46KlWo1v6rIH+AHT9
-         AJuqDC8LhGHlIGz0P1DxJYrY7JNPKw/7E3yUgltyqLtyHzdMBz9iY0sm0q6ichh780Mp
-         Jzj/VRF9Uy6NJTrThLISE6osCItp2US4ia5i/ZjGFeBA6Xz+N16eMfuW8gzYMX4aCKtQ
-         949lXn5fbYUtqGZLuEThrWmUSHZqlLY0cZTKsgKAo5kse7J9Mg5TGz6HE5t6MXvbAslQ
-         ydVQ==
-X-Gm-Message-State: AOAM532r0nFqy1WDA9TXUjmgr3K89idaX4OSvD5Vzd8XaBeWowMIzayf
-        WyQBeAASVpUNJeppLX2D13s=
-X-Google-Smtp-Source: ABdhPJyE5/RPRLYHIpK88MfiP/ehaCuXpmDBMFR7kByf7iHxYHR0rjEQkuskK/WR7/4VuefAhM/ABA==
-X-Received: by 2002:a7b:cbd9:: with SMTP id n25mr2938176wmi.141.1643740225043;
-        Tue, 01 Feb 2022 10:30:25 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id 44sm15238098wrm.103.2022.02.01.10.30.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 10:30:24 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <66bcd1bf-0df4-8f02-9c0d-f71cecef71f4@redhat.com>
-Date:   Tue, 1 Feb 2022 19:30:23 +0100
+        Tue, 1 Feb 2022 13:31:02 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B7C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:31:01 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 60A7C1EC0513;
+        Tue,  1 Feb 2022 19:30:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643740256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SelJnsO3AI+ddNI4mpxmGVzS4kYycs/voWIlYXQsR6c=;
+        b=MkB9SXbeyDNgeqM0WeSGqg8Xv9ksewonLwTSCjuAT5FuM8zjbys8kwBL+IIQwoAk44NsWg
+        Re0J289D0PTENYTO30XUnlqrGmsJKvZKNkibHmOtxLaOwvIFVuOPMxRMqbnPZQtDCdqALD
+        CTWsRxSY0ELzQVIfT1Hs6Bu1jmcV7Pk=
+Date:   Tue, 1 Feb 2022 19:30:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 09/29] x86/tdx: Detect TDX at early kernel
+ decompression time
+Message-ID: <Yfl8XKSq5uhHbfiu@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-10-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/5] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap for
- Hyper-V-on-KVM and fix it for KVM-on-Hyper-V
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-References: <20211220152139.418372-1-vkuznets@redhat.com>
- <35f06589-d300-c356-dc17-2c021ac97281@redhat.com> <87sft2bqup.fsf@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87sft2bqup.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220124150215.36893-10-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 15:31, Vitaly Kuznetsov wrote:
-> Paolo Bonzini <pbonzini@redhat.com> writes:
+On Mon, Jan 24, 2022 at 06:01:55PM +0300, Kirill A. Shutemov wrote:
+> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 > 
->> On 12/20/21 16:21, Vitaly Kuznetsov wrote:
->>> Enlightened MSR-Bitmap feature implements a PV protocol for L0 and L1
->>> hypervisors to collaborate and skip unneeded updates to MSR-Bitmap.
->>> KVM implements the feature for KVM-on-Hyper-V but it seems there was
->>> a flaw in the implementation and the feature may not be fully functional.
->>> PATCHes 1-2 fix the problem. The rest of the series implements the same
->>> feature for Hyper-V-on-KVM.
->>>
->>> Vitaly Kuznetsov (5):
->>>     KVM: SVM: Drop stale comment from
->>>       svm_hv_vmcb_dirty_nested_enlightenments()
->>>     KVM: SVM: hyper-v: Enable Enlightened MSR-Bitmap support for real
->>>     KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be
->>>       rebuilt
->>>     KVM: x86: Make kvm_hv_hypercall_enabled() static inline
->>>     KVM: nSVM: Implement Enlightened MSR-Bitmap feature
->>>
->>>    arch/x86/kvm/hyperv.c           | 12 +--------
->>>    arch/x86/kvm/hyperv.h           |  6 ++++-
->>>    arch/x86/kvm/svm/nested.c       | 47 ++++++++++++++++++++++++++++-----
->>>    arch/x86/kvm/svm/svm.c          |  3 ++-
->>>    arch/x86/kvm/svm/svm.h          | 16 +++++++----
->>>    arch/x86/kvm/svm/svm_onhyperv.h | 12 +++------
->>>    6 files changed, 63 insertions(+), 33 deletions(-)
->>>
->>
->> Queued 3-5 now, but it would be nice to have some testcases.
+> The early decompression code does port I/O for its console output. But,
+> handling the decompression-time port I/O demands a different approach
+> from normal runtime because the IDT required to support #VE based port
+> I/O emulation is not yet set up. Paravirtualizing I/O calls during
+> the decompression step is acceptable because the decompression code size is
+> small enough and hence patching it will not bloat the image size a lot.
+> 
+> To support port I/O in decompression code, TDX must be detected before
+> the decompression code might do port I/O. Add support to detect for
+> TDX guest support before console_init() in the extract_kernel().
 
-Hmm, it fails to compile with CONFIG_HYPERV disabled, and a trivial
-#if also fails due to an unused goto label.  Does this look good to you?
+s/Add support to detect for TDX guest support before console_init() in the extract_kernel()./Detect whether the kernel runs in a TDX guest./
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index e3759a79d39a..a2b5267b3e73 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -173,9 +173,16 @@ void recalc_intercepts(struct vcpu_svm *svm)
-   */
-  static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
-  {
-+	int i;
-+
-+	if (!(vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_MSR_PROT)))
-+		return true;
-+
-+	svm->vmcb->control.msrpm_base_pa = __sme_set(__pa(svm->nested.msrpm));
-+
-+#if IS_ENABLED(CONFIG_HYPERV)
-  	struct hv_enlightenments *hve =
-  		(struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
--	int i;
-  
-  	/*
-  	 * MSR bitmap update can be skipped when:
-@@ -185,10 +192,8 @@ static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
-  	    kvm_hv_hypercall_enabled(&svm->vcpu) &&
-  	    hve->hv_enlightenments_control.msr_bitmap &&
-  	    (svm->nested.ctl.clean & VMCB_HV_NESTED_ENLIGHTENMENTS))
--		goto set_msrpm_base_pa;
--
--	if (!(vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_MSR_PROT)))
-  		return true;
-+#endif
-  
-  	for (i = 0; i < MSRPM_OFFSETS; i++) {
-  		u32 value, p;
-@@ -213,10 +216,6 @@ static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
-  	}
-  
-  	svm->nested.force_msr_bitmap_recalc = false;
--
--set_msrpm_base_pa:
--	svm->vmcb->control.msrpm_base_pa = __sme_set(__pa(svm->nested.msrpm));
--
-  	return true;
-  }
-  
+Simple.
 
+> Detecting it above the console_init() is early enough for patching
+> port I/O.
 
-Thanks,
+No need for that sentence - there's already a comment above the call
+below.
 
-Paolo
+> 
+> Add an early_is_tdx_guest() interface to get the cached TDX guest
+
+s/get/query/
+
+> status in the decompression code.
+
+...
+
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index a4339cb2d247..d8373d766672 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -370,6 +370,14 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>  	lines = boot_params->screen_info.orig_video_lines;
+>  	cols = boot_params->screen_info.orig_video_cols;
+>  
+> +	/*
+> +	 * Detect TDX guest environment.
+> +	 *
+> +	 * It has to be done before console_init() in order to use
+> +	 * paravirtualized port I/O oprations if needed.
+
+Unknown word [oprations] in comment.
+Suggestions: ['orations', 'operations', 'op rations', 'op-rations', 'preparations', 'reparations', 'inspirations', 'operation']
+
+> +	 */
+> +	early_tdx_detect();
+> +
+>  	console_init();
+>  
+>  	/*
+
+...
+
+> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+> new file mode 100644
+> index 000000000000..12bede46d048
+> --- /dev/null
+> +++ b/arch/x86/include/asm/shared/tdx.h
+> @@ -0,0 +1,7 @@
+> +#ifndef _ASM_X86_SHARED_TDX_H
+> +#define _ASM_X86_SHARED_TDX_H
+
+WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+#232: FILE: arch/x86/include/asm/shared/tdx.h:1:
++#ifndef _ASM_X86_SHARED_TDX_H
+
+Why isn't checkpatch part of your patch creation workflow?
+
+> +
+> +#define TDX_CPUID_LEAF_ID	0x21
+> +#define TDX_IDENT		"IntelTDX    "
+> +
+> +#endif
+	  ^
+	 /* _ASM_X86_SHARED_TDX_H */
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,132 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4704A646A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088C14A646E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235621AbiBATAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:00:13 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:57641 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S242174AbiBATAJ (ORCPT
+        id S242215AbiBATAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:00:37 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:44758 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241471AbiBATAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:00:09 -0500
-Received: (qmail 316474 invoked by uid 1000); 1 Feb 2022 14:00:08 -0500
-Date:   Tue, 1 Feb 2022 14:00:08 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: [PATCH v2] tools/memory-model: Explain syntactic and semantic
- dependencies
-Message-ID: <YfmDOF2/2n0eMu+Y@rowland.harvard.edu>
+        Tue, 1 Feb 2022 14:00:36 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4F95C1F383;
+        Tue,  1 Feb 2022 19:00:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643742035; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HbN/Qhq59Hjn7h6M4AmKs0sToifuwhxMJ9496sm61tc=;
+        b=sVFu4RdWIZOtT44IWIylWARf4S3FmTbZsTCDRAKoZIgTdBXvn2enCoUmVK8/sx2BxrwEf3
+        HXR+3YwGB9GKN50LhWnSqw8GiZCuS1/Px6hpfIxtmq/S/5HIhYnSrNBHh1JtPZCcbvIBtl
+        HDTmtbKdZVmqQ+tvGMstq27vE6ExP5Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643742035;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HbN/Qhq59Hjn7h6M4AmKs0sToifuwhxMJ9496sm61tc=;
+        b=DeC/+9bJZdsx+3RSKykixvR4uVWATp1BIn8wJ/FD+WLJZA8S6Tj3ejcO187rIO1RyuUKex
+        +OcZvg85+XY44jAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F283F13B6A;
+        Tue,  1 Feb 2022 19:00:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eJnzOVKD+WFrFAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 01 Feb 2022 19:00:34 +0000
+Message-ID: <19ed72ef-373f-3ec5-54db-9125ffae4738@suse.de>
+Date:   Tue, 1 Feb 2022 20:00:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfMKlLInsK0Qr77f@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
+ <YfEG2qVO9K9G+g1d@kroah.com>
+ <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
+ <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
+ <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
+ <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+ <YfFV4EJosayH+e6C@smile.fi.intel.com> <YfFWPmG2D093gz4N@smile.fi.intel.com>
+ <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com>
+ <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
+ <ddb0f354-be19-92fe-20b3-56b00c9304ab@suse.de>
+ <840ec74d-60c6-9480-709c-8cd597c6f5b0@redhat.com>
+ <e7fbef3c-2f87-15f9-b24d-34ffaa5a2853@suse.de>
+ <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------dMcQQ2HTCLBZfDqvILpeTDuc"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Heidekrüger pointed out that the Linux Kernel Memory Model
-documentation doesn't mention the distinction between syntactic and
-semantic dependencies.  This is an important difference, because the
-compiler can easily break dependencies that are only syntactic, not
-semantic.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------dMcQQ2HTCLBZfDqvILpeTDuc
+Content-Type: multipart/mixed; boundary="------------UwleEWpIBjE3KuaLFPSuYrBU";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Andy Shevchenko <andy@kernel.org>,
+ Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+ Lee Jones <lee.jones@linaro.org>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Helge Deller
+ <deller@gmx.de>, linux-staging@lists.linux.dev,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Carlis <zhangxuezhi1@yulong.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Phillip Potter <phil@philpotter.co.uk>,
+ Heiner Kallweit <hkallweit1@gmail.com>
+Message-ID: <19ed72ef-373f-3ec5-54db-9125ffae4738@suse.de>
+Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
+ <YfEG2qVO9K9G+g1d@kroah.com>
+ <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
+ <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
+ <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
+ <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+ <YfFV4EJosayH+e6C@smile.fi.intel.com> <YfFWPmG2D093gz4N@smile.fi.intel.com>
+ <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com>
+ <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
+ <ddb0f354-be19-92fe-20b3-56b00c9304ab@suse.de>
+ <840ec74d-60c6-9480-709c-8cd597c6f5b0@redhat.com>
+ <e7fbef3c-2f87-15f9-b24d-34ffaa5a2853@suse.de>
+ <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
+In-Reply-To: <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
 
-This patch adds a few paragraphs to the LKMM documentation explaining
-these issues and illustrating how they can matter.
+--------------UwleEWpIBjE3KuaLFPSuYrBU
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Suggested-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+SGkNCg0KQW0gMDEuMDIuMjIgdW0gMTg6MDAgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQo+IEhpIFRob21hcywNCj4gDQo+IE9uIFR1ZSwgRmViIDEsIDIwMjIgYXQgNToxNiBQTSBU
+aG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+PiBBbSAz
+MS4wMS4yMiB1bSAxMToxOCBzY2hyaWViIEphdmllciBNYXJ0aW5leiBDYW5pbGxhczoNCj4+
+PiBBbm90aGVyIHRoaW5nIHRoYXQncyBtaXNzaW5nIGlzIGEgRFJNX01PREVfQ09OTkVDVE9S
+X0kyQywgYmVjYXVzZSBJIHVzZWQgZm9yDQo+Pj4gbm93IGEgRFJNX01PREVfQ09OTkVDVE9S
+X1Vua25vd24uDQo+Pg0KPj4gVGhhdCBtaWdodCBoYXZlIGltcGxpY2F0aW9ucyBvbiB1c2Vy
+c3BhY2UuIE1heWJlIGFzayBhcm91bmQuIChOb3QgdGhhdA0KPj4gd2UgYWN0dWFsbHkgcnVu
+IHVzZXJzcGFjZSBvbiB0aGUgZGV2aWNlKS4NCj4gDQo+IExvb2tpbmcgYXQgdGhlIGxpc3Qg
+b2YgY29ubmVjdG9yIHR5cGVzIChhbmQgd29uZGVyaW5nIGlmIHdlJ3JlIGdvbm5hDQo+IG5l
+ZWQgbW9yZSB3aGVuIGNvbnZlcnRpbmcgZXhpc3RpbmcgZmJkZXYgZHJpdmVycyB0byBkcm0g
+ZHJpdmVycyksDQo+IHRoZXJlIHNlZW0gdG8gYmUgdHdvIGRpZmZlcmVudCBmYW1pbGllcyBv
+ZiBjb25uZWN0b3IgdHlwZXMsIGZvcg0KPiAgICAxLiB0cmFuc3BvcnRzIGJldHdlZW4gQ1JU
+QyBhbmQgZGlzcGxheSAoZS5nLiBWR0EsIERWSUQsIEhETUkpLA0KPiAgICAyLiB0cmFuc3Bv
+cnRzIGJldHdlZW4gQ1BVIGFuZCBDUlRDIChlLmcuIFNQSSwgcG9zc2libHkgVVNCLCBhbmQN
+Cj4gICAgICAgdGhlIHByb3Bvc2VkIEkyQyk/DQoNCkkgdGhpbmsgSSBoYWQgYSBzaW1pbGFy
+IGRpc2N1c3Npb24gd2hlbiB3ZSBtZXJnZWQgdGhlIGd1ZCBkcml2ZXIuIGd1ZCBpcyANCmEg
+ZHJpdmVyIGZvciBhIFJhc1BpLWJhc2VkIHVzYiBkaXNwbGF5IGFkYXB0ZXIuICBNeSBwb2lu
+dCB3YXMgdGhhdCBVU0IgDQppcyBqdXN0IGFuIGludGVybmFsIHRyYW5zcG9ydCBidXMsIGxp
+a2UgUENJLiBCdXQgdGhhdCB3YXNuJ3QgY29udmluY2luZy4gDQpTbyBub3cgd2UgaGF2ZSBV
+U0IgYW5kIG90aGVyIGJ1c3NlcyBhcyBjb25uZWN0b3IgdHlwZXMuDQoNCk15IHByZWZlcmVu
+Y2Ugd291bGQgYmUgdG8gdXNlIGEgcGFuZWwgdHlwZSBhcyBEYW5pZWwgc3VnZ2VzdGVkOyBh
+bmQgDQptYXliZSAnVW5rbm93bicgZm9yIGEgZmV3IHNwZWNpYWwgY2FzZXMuDQoNCkJlc3Qg
+cmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEdye29ldGplLGVldGluZ31zLA0KPiANCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0KPiAtLQ0KPiBHZWVydCBVeXR0ZXJo
+b2V2ZW4gLS0gVGhlcmUncyBsb3RzIG9mIExpbnV4IGJleW9uZCBpYTMyIC0tIGdlZXJ0QGxp
+bnV4LW02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBjb252ZXJzYXRpb25zIHdpdGggdGVj
+aG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhhY2tlci4gQnV0DQo+IHdoZW4gSSdt
+IHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNheSAicHJvZ3JhbW1lciIgb3Igc29t
+ZXRoaW5nIGxpa2UgdGhhdC4NCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+LS0gTGludXMgVG9ydmFsZHMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
+IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
----
+--------------UwleEWpIBjE3KuaLFPSuYrBU--
 
-v2:	Incorporate changes suggested by Paul McKenney, along with a few
-	other minor edits.
- 
+--------------dMcQQ2HTCLBZfDqvILpeTDuc
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-[as1970b]
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH5g1IFAwAAAAAACgkQlh/E3EQov+Cb
+xRAAwqg0tsulrU2Cng3tcNKrMlSOKc2IWYiKebphbBgA8eEuECYVu6b2So0ga2HUs8OBY+8uZxIo
+Q1nePdqWVxYBIuc4X4yV7WRd3lIP6NOnLKcwLhydL2Ji4Rq6gMnVApNQBt9Ln7D4V8M2beSeQl3a
+XTCFy/00qtTfpIij9ePIXcHB2TXwOmLgT8JDo78GWTIaH0OK205QSz3vvucBM2/POhRCk9LV5LnN
+Hh4EFytGoPaZzWhmSfnlZL63kaDwzh+UtRtJmFpPmGcrhO+VG1SLbcUM9xaOh58kfzmTextLFxik
+cE3SE2zM50vR7Q3kaglX3rZlus7eYJPHZE6Q7ueQrZfOVODAOaD7ybI5FhSpsBIU28l4kkJd94Q2
+1YsF1NBQGgzbj4YGdgx14XVeoHiJNpixDY34MemYsl6pHmOFeL0qIH2yS/QiIvoHfBx93mow6oCk
+at8JrRrJcB4zUlHQUe39KMNTcVaxkJYkXiz6anb96LTLVbkwVMLPq8X4AkwI/YJ5d+vtr5XMDoLC
+bFe1HqKZkpigIYKv4Ofc83kK+y2oZxj0vz0KblsSx9vixzpIrhE2bNBfy1Kn55bA3EIXhFJRo5hq
+9/NGXjI+nWSlbTrR4rUxm8gfE5OfMRLZ9LVFew4A1ia7OlbcGgHn33ukSsqTXEPiaQ0OoGx7mwnl
+aSo=
+=FEt0
+-----END PGP SIGNATURE-----
 
- tools/memory-model/Documentation/explanation.txt |   51 +++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
-
-Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-===================================================================
---- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-+++ usb-devel/tools/memory-model/Documentation/explanation.txt
-@@ -485,6 +485,57 @@ have R ->po X.  It wouldn't make sense f
- somehow on a value that doesn't get loaded from shared memory until
- later in the code!
- 
-+Here's a trick question: When is a dependency not a dependency?  Answer:
-+When it is purely syntactic rather than semantic.  We say a dependency
-+between two accesses is purely syntactic if the second access doesn't
-+actually depend on the result of the first.  Here is a trivial example:
-+
-+	r1 = READ_ONCE(x);
-+	WRITE_ONCE(y, r1 * 0);
-+
-+There appears to be a data dependency from the load of x to the store
-+of y, since the value to be stored is computed from the value that was
-+loaded.  But in fact, the value stored does not really depend on
-+anything since it will always be 0.  Thus the data dependency is only
-+syntactic (it appears to exist in the code) but not semantic (the
-+second access will always be the same, regardless of the value of the
-+first access).  Given code like this, a compiler could simply discard
-+the value returned by the load from x, which would certainly destroy
-+any dependency.  (The compiler is not permitted to eliminate entirely
-+the load generated for a READ_ONCE() -- that's one of the nice
-+properties of READ_ONCE() -- but it is allowed to ignore the load's
-+value.)
-+
-+It's natural to object that no one in their right mind would write
-+code like the above.  However, macro expansions can easily give rise
-+to this sort of thing, in ways that often are not apparent to the
-+programmer.
-+
-+Another mechanism that can lead to purely syntactic dependencies is
-+related to the notion of "undefined behavior".  Certain program
-+behaviors are called "undefined" in the C language specification,
-+which means that when they occur there are no guarantees at all about
-+the outcome.  Consider the following example:
-+
-+	int a[1];
-+	int i;
-+
-+	r1 = READ_ONCE(i);
-+	r2 = READ_ONCE(a[r1]);
-+
-+Access beyond the end or before the beginning of an array is one kind
-+of undefined behavior.  Therefore the compiler doesn't have to worry
-+about what will happen if r1 is nonzero, and it can assume that r1
-+will always be zero regardless of the value actually loaded from i.
-+(If the assumption turns out to be wrong the resulting behavior will
-+be undefined anyway, so the compiler doesn't care!)  Thus the value
-+from the load can be discarded, breaking the address dependency.
-+
-+The LKMM is unaware that purely syntactic dependencies are different
-+from semantic dependencies and therefore mistakenly predicts that the
-+accesses in the two examples above will be ordered.  This is another
-+example of how the compiler can undermine the memory model.  Be warned.
-+
- 
- THE READS-FROM RELATION: rf, rfi, and rfe
- -----------------------------------------
+--------------dMcQQ2HTCLBZfDqvILpeTDuc--

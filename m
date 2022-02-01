@@ -2,128 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557214A689A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BD64A689C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242912AbiBAXjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 18:39:55 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:42796 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiBAXjy (ORCPT
+        id S242924AbiBAXk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 18:40:58 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:46985 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230039AbiBAXk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 18:39:54 -0500
-Received: by mail-oi1-f181.google.com with SMTP id v67so36520761oie.9;
-        Tue, 01 Feb 2022 15:39:54 -0800 (PST)
+        Tue, 1 Feb 2022 18:40:56 -0500
+Received: by mail-oi1-f179.google.com with SMTP id y23so36452197oia.13;
+        Tue, 01 Feb 2022 15:40:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OQTTLf8kyfb5UwqPhCNrDroHE+/FDw4cB4fcGA5iy3A=;
-        b=ySxuYzwxq1yqPiz/pWSIDOp0Z03vtRxKVyX7KSSc/CtFM7KZZjC/m7fFoPMxUTcBVE
-         K/iyMQr5TmKIonBeZdhGbpAa234sb/bgCDrdR0uLsFZS0uwn1BH4SWifJcj4KFfJCezA
-         8B3gyS11JVcLWhMX5CKIRbG2fQ24LjZXmXsq1Yp/CvkvyX7KbRKNnZxUgMt3W2A+XH4Z
-         fUNpC9R5foELOjkVPQCoXeYrG3m2pDKtHiHrXnoQCa9pUD1WY+jHKO8sxLgd6XKWPVsz
-         A2z/HX0Q7lQVmmceF5dF5Our8zSizh61y1g2eGS5bz18H8+KrsWCz6piI4itYW0HFfmw
-         6aEQ==
-X-Gm-Message-State: AOAM531oa892RMmZ06+DOT09kzzSCfGkIWtFNsnv62gcrXB54igAF+xa
-        GNifu0R9/zIsLspOrRDN08LWPY1cug==
-X-Google-Smtp-Source: ABdhPJwMgJEUGbtkBhJ1gxMnlJ0kD6R/QjV+sZxQmIAlKteFcFF0G42vTA4LVkTnvLRJDBKq4ylqNg==
-X-Received: by 2002:a05:6808:e81:: with SMTP id k1mr2927611oil.214.1643758793867;
-        Tue, 01 Feb 2022 15:39:53 -0800 (PST)
+        bh=ee57DHmj5dnuP+LBJd/K38nnzdPSCpMAb2DQvjNUIqo=;
+        b=AmD7xoJ0KEyoUbXGpfmzGhQ5KNVhZk53iRsYSMhQdzkilNJS2wYOZoqCKIwyK8NNyQ
+         QAMpnv4Kfi5dSOT60Bb9Y7rrwZlngxx2D+lDGBqPwR75kh0tND6K3cm+EddGcmlvHIPM
+         yMmKXb5G2sma0Ppj9CwkzzEmZ4fmukfg28ITzRKmRp4pEXwJoWMh02bkpQjWStEg1L9t
+         eo7Juoxw0sc7uRrDad673fVW61INQolYUZPk65lQkZZWW2ZCAWgOzPA5NKKa9olAxmbC
+         DSAnOfwY8Wiq+459jQdHHu2MeE0eoYw//gKHAhudboLjtp4qBNDN44R8QIKc7dCGUljL
+         noeA==
+X-Gm-Message-State: AOAM531SvJWc3KT+hTYR/f2VEp2wbNAMBZjocBn4YJxQRqySVHn4bzGZ
+        AKbwOu4yJUoUCCfEEjiE3Q==
+X-Google-Smtp-Source: ABdhPJzKGe8aH8cwKkyPsDTKRydI1q7bfkfX/247BTUn16n0WJN8xDEVsRoo0CVaEQQiea9VxzrldQ==
+X-Received: by 2002:a54:4018:: with SMTP id x24mr2813412oie.222.1643758856152;
+        Tue, 01 Feb 2022 15:40:56 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w20sm14694490otu.12.2022.02.01.15.39.52
+        by smtp.gmail.com with ESMTPSA id r8sm17915906oia.19.2022.02.01.15.40.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 15:39:52 -0800 (PST)
-Received: (nullmailer pid 980162 invoked by uid 1000);
-        Tue, 01 Feb 2022 23:39:52 -0000
-Date:   Tue, 1 Feb 2022 17:39:52 -0600
+        Tue, 01 Feb 2022 15:40:55 -0800 (PST)
+Received: (nullmailer pid 981764 invoked by uid 1000);
+        Tue, 01 Feb 2022 23:40:54 -0000
+Date:   Tue, 1 Feb 2022 17:40:54 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     David Brazdil <dbrazdil@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v7 1/2] dt-bindings: reserved-memory: Open Profile for
- DICE
-Message-ID: <YfnEyB6ZlAj/QI8n@robh.at.kernel.org>
-References: <20220126231237.529308-1-dbrazdil@google.com>
- <20220126231237.529308-2-dbrazdil@google.com>
- <YfHW7GcINVlB/3Ur@google.com>
+To:     Roger Lu <roger.lu@mediatek.com>
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Nishanth Menon <nm@ti.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Fan Chen <fan.chen@mediatek.com>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nicolas Boichat <drinkcat@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Angus Lin <Angus.Lin@mediatek.com>
+Subject: Re: [PATCH v22 1/7] dt-bindings: soc: mediatek: add mtk svs
+ dt-bindings
+Message-ID: <YfnFBirxSnCqRDem@robh.at.kernel.org>
+References: <20220127033956.24585-1-roger.lu@mediatek.com>
+ <20220127033956.24585-2-roger.lu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfHW7GcINVlB/3Ur@google.com>
+In-Reply-To: <20220127033956.24585-2-roger.lu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:19:08PM +0000, David Brazdil wrote:
-> Hi Rob,
+On Thu, 27 Jan 2022 11:39:50 +0800, Roger Lu wrote:
+> Document the binding for enabling mtk svs on MediaTek SoC.
 > 
-> On Wed, Jan 26, 2022 at 11:12:36PM +0000, David Brazdil wrote:
-> > Add DeviceTree bindings for Open Profile for DICE, an open protocol for
-> > measured boot. Firmware uses DICE to measure the hardware/software
-> > combination and generates Compound Device Identifier (CDI) certificates.
-> > These are stored in memory and the buffer is described in the DT as
-> > a reserved memory region compatible with 'google,open-dice'.
-> > 
-> > 'no-map' is required to ensure the memory region is never treated by
-> > the kernel as system memory.
-> > 
-> > Signed-off-by: David Brazdil <dbrazdil@google.com>
-> > ---
-> >  .../reserved-memory/google,open-dice.yaml     | 46 +++++++++++++++++++
-> >  1 file changed, 46 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-> > new file mode 100644
-> > index 000000000000..257a0b51994a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-> > @@ -0,0 +1,46 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/reserved-memory/google,open-dice.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Open Profile for DICE Device Tree Bindings
-> > +
-> > +description: |
-> > +  This binding represents a reserved memory region containing data
-> > +  generated by the Open Profile for DICE protocol.
-> > +
-> > +  See https://pigweed.googlesource.com/open-dice/
-> > +
-> > +maintainers:
-> > +  - David Brazdil <dbrazdil@google.com>
-> > +
-> > +allOf:
-> > +  - $ref: "reserved-memory.yaml"
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: google,open-dice
-> > +
-> > +  reg:
-> > +    description: page-aligned region of memory containing DICE data
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - no-map
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> ---
+>  .../bindings/soc/mediatek/mtk-svs.yaml        | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
 > 
-> You already gave this a Reviewed-by in v6. Just want to mention that I
-> didn't pick it up because I added a required no-map here. It was always
-> included in our DTs but I made it required because the kernel should
-> never treat that region as system memory. The kernel will warn when the
-> driver tries to wipe the memory otherwise.
 
-That's small enough change to keep tags.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
+
+If a tag was not added on purpose, please state why and what changed.
 

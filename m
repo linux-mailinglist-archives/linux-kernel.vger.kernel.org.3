@@ -2,127 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 697C14A6728
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F604A6730
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiBAVjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiBAVjm (ORCPT
+        id S234786AbiBAVnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:43:13 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:35581 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229710AbiBAVnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:39:42 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83158C061714;
-        Tue,  1 Feb 2022 13:39:42 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id j2so57661957ejk.6;
-        Tue, 01 Feb 2022 13:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=M0IuJCUW9ulwEp1rcd39XLnhCaz0ycJXjHX1717expM=;
-        b=dH7zbxa8meA6sokbEmvRdqpOz0IHCg3HApCJszDPuEClpRfbpIPiO+cu3W0uavcJCf
-         rPV6Ah0OIiPFUHl1dT5Cgw5s68xrLPECX6zvv9QqLH+BHaRIBBzSocTEcpT2Ik3l69YH
-         1CKCB5t2AYRbEvzEnAJGUZ7D3uKC6svrpOpUEoNCG6o3NA4RdqiKR6EPnjBKypUc3Cg2
-         4s+36QTZjw32PEIiiun1hHN8DPdiIZh8AMZruom/0Z3thL82q8a2T4uZ+YhKzjdevEp2
-         7a1RIt96812P+YdE/D/zE5olf/M7vbsHYNdsjvZFaouqb6AlkA+mKODkDnns25d3DEtC
-         oLiw==
+        Tue, 1 Feb 2022 16:43:12 -0500
+Received: by mail-oi1-f176.google.com with SMTP id m10so11032050oie.2;
+        Tue, 01 Feb 2022 13:43:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M0IuJCUW9ulwEp1rcd39XLnhCaz0ycJXjHX1717expM=;
-        b=mFUpljkgUghDnz2/hKjZYNtTwIsBCMhJcmpJM857y2b4zuTp18KxDsdIPOozH62T/g
-         6N3LDgHfAxFUEigXvNa48UpuWrnH06NelQb9VKw5xg3HgF9aoL2L0HhjbAXJHTSCWEEJ
-         EVGuC3OX55n35B1ea6L5vPKD9gG1Vmgw+SrZftDPEpw1bVQNrL/Lxsbfg1Z02Q9mB6M7
-         kfY6vn1pN0MSbkuxxH2IwlhwhVm8Crsj/peKXhHoHCw+eNq0ygQXA9iX8J+cpNTZYUon
-         zCxu8W1rfv8X86tOtN1ri740n4txdF/7f2M8BH/e6SusSJHtWFZHlyudT/r3NRF8RO6m
-         tmBQ==
-X-Gm-Message-State: AOAM530I1I5bcYtPUJokjlQRJW0XmDGjYGxGvtwnphne9c7ldFEZovDn
-        lqMpdIa6qLylY+pt+KDaSIw=
-X-Google-Smtp-Source: ABdhPJwilTMnhzEnE0dcIKwAd0ymp+SjxK6pa7ir9/DQyZJzK0BLIJamkxy30AcRaKVMLIaKuz6wzg==
-X-Received: by 2002:a17:906:eb8a:: with SMTP id mh10mr19729357ejb.492.1643751580701;
-        Tue, 01 Feb 2022 13:39:40 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id w27sm15178139ejb.90.2022.02.01.13.39.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s+E27EXTTgktf299ScAp3x5Rb53v7EfG4eCaVZgclQY=;
+        b=wJ7Odr7d99X9Cjg6l7SiihUK56LBTBoCvKHb3Bfxy0Hc5vOS84yR4qk+YqtLvV7yX5
+         7Iz+CZ6yzeVjCnph2pAQFHzmeU04XqffEt+Qn7uRKuRkB1t4Xw+rYEg6jwsTTZuNowpB
+         aPeqZG91l8BkI4EB8Y6KmQQH48J2OKHmnFu5xFW9rr2/WYCFpWmUlA/BoFeOESH9QiWP
+         Oa6S+f7ljooqArl0uwDVvci7TkBSwL3nWNUzoBzxjuBhpsJhMRWOCxDxO9ZvyzN7EjFr
+         ENaQYIs+4djUuoSwyVGI8iJLPo6KRli57v3Cl9R8mJn/yvk+EAnPwwfBjYRnvJL4BS2c
+         u2Pg==
+X-Gm-Message-State: AOAM530biwtmkkiYGRo4Le5FN1CVXO0jNhVv8NowwLiDTmyqrPkHCgkF
+        T9OYHKGNn9qinUsQuoqIb5ZPDxNqKA==
+X-Google-Smtp-Source: ABdhPJzONhbJMZnzezCjdmlFD/6EmtMXHHLErOcXMtBezeJ9nFTawvE1o28JhWSP7ePppy3YsccwhA==
+X-Received: by 2002:a05:6808:d48:: with SMTP id w8mr2876352oik.204.1643751792109;
+        Tue, 01 Feb 2022 13:43:12 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id a10sm12418165oof.32.2022.02.01.13.43.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:39:40 -0800 (PST)
-Date:   Tue, 1 Feb 2022 22:39:39 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 13/16] net: dsa: qca8k: move page cache to driver
- priv
-Message-ID: <YfmomwMfRLe5t0nf@Ansuel-xps.localdomain>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-14-ansuelsmth@gmail.com>
- <5571e217-b850-6c50-468b-a226c328f41a@gmail.com>
+        Tue, 01 Feb 2022 13:43:11 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v9] libperf: Add arm64 support to perf_mmap__read_self()
+Date:   Tue,  1 Feb 2022 15:40:56 -0600
+Message-Id: <20220201214056.702854-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5571e217-b850-6c50-468b-a226c328f41a@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 07:50:47PM -0800, Florian Fainelli wrote:
-> 
-> 
-> On 1/22/2022 5:33 PM, Ansuel Smith wrote:
-> > There can be multiple qca8k switch on the same system. Move the static
-> > qca8k_current_page to qca8k_priv and make it specific for each switch.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >   drivers/net/dsa/qca8k.c | 47 +++++++++++++++++++++++------------------
-> >   drivers/net/dsa/qca8k.h |  9 ++++++++
-> >   2 files changed, 36 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-> > index e7bc0770bae9..c2f5414033d8 100644
-> > --- a/drivers/net/dsa/qca8k.c
-> > +++ b/drivers/net/dsa/qca8k.c
-> > @@ -75,12 +75,6 @@ static const struct qca8k_mib_desc ar8327_mib[] = {
-> >   	MIB_DESC(1, 0xac, "TXUnicast"),
-> >   };
-> > -/* The 32bit switch registers are accessed indirectly. To achieve this we need
-> > - * to set the page of the register. Track the last page that was set to reduce
-> > - * mdio writes
-> > - */
-> > -static u16 qca8k_current_page = 0xffff;
-> > -
-> >   static void
-> >   qca8k_split_addr(u32 regaddr, u16 *r1, u16 *r2, u16 *page)
-> >   {
-> > @@ -134,11 +128,11 @@ qca8k_mii_write32(struct mii_bus *bus, int phy_id, u32 regnum, u32 val)
-> >   }
-> >   static int
-> > -qca8k_set_page(struct mii_bus *bus, u16 page)
-> > +qca8k_set_page(struct mii_bus *bus, u16 page, u16 *cached_page)
-> >   {
->
-> bus->priv is assigned a qca8k_priv pointer, so we can just de-reference it
+Add the arm64 variants for read_perf_counter() and read_timestamp().
+Unfortunately the counter number is encoded into the instruction, so the
+code is a bit verbose to enumerate all possible counters.
 
-I just checked this and no. The priv bus we have in qca8k_set_page,
-points to the mdio ipq8064 priv struct. (or the gpio-bitbang driver I
-assume)
+Tested-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Arm64 kernel support landed in 5.17, but the corresponding libperf 
+support didn't get picked up.
 
-> here from bus->priv and avoid changing a whole bunch of function signatures
-> that are now getting both a qca8k_priv *and* a qca8k_mdio_cache set of
-> pointers when you can just use back pointers to those.
+v9:
+ - Rebase on v5.17-rc
+ - Add Tested-by
+v8:
+ - Set attr.config1 to request user access on arm64
+v7:
+ - Move enabling of libperf user read test for arm64 to this patch
+---
+ tools/lib/perf/mmap.c             | 98 +++++++++++++++++++++++++++++++
+ tools/lib/perf/tests/test-evsel.c |  5 +-
+ 2 files changed, 102 insertions(+), 1 deletion(-)
 
-Should we change the function to provide qca8k_priv directly? Or I just
-didn't understand your suggestion on how we can reduce the changes in
-this patch.
-
-> -- 
-> Florian
-
+diff --git a/tools/lib/perf/mmap.c b/tools/lib/perf/mmap.c
+index f7ee07cb5818..0d1634cedf44 100644
+--- a/tools/lib/perf/mmap.c
++++ b/tools/lib/perf/mmap.c
+@@ -13,6 +13,7 @@
+ #include <internal/lib.h>
+ #include <linux/kernel.h>
+ #include <linux/math64.h>
++#include <linux/stringify.h>
+ #include "internal.h"
+ 
+ void perf_mmap__init(struct perf_mmap *map, struct perf_mmap *prev,
+@@ -294,6 +295,103 @@ static u64 read_timestamp(void)
+ 
+ 	return low | ((u64)high) << 32;
+ }
++#elif defined(__aarch64__)
++#define read_sysreg(r) ({						\
++	u64 __val;							\
++	asm volatile("mrs %0, " __stringify(r) : "=r" (__val));		\
++	__val;								\
++})
++
++static u64 read_pmccntr(void)
++{
++	return read_sysreg(pmccntr_el0);
++}
++
++#define PMEVCNTR_READ(idx)					\
++	static u64 read_pmevcntr_##idx(void) {			\
++		return read_sysreg(pmevcntr##idx##_el0);	\
++	}
++
++PMEVCNTR_READ(0);
++PMEVCNTR_READ(1);
++PMEVCNTR_READ(2);
++PMEVCNTR_READ(3);
++PMEVCNTR_READ(4);
++PMEVCNTR_READ(5);
++PMEVCNTR_READ(6);
++PMEVCNTR_READ(7);
++PMEVCNTR_READ(8);
++PMEVCNTR_READ(9);
++PMEVCNTR_READ(10);
++PMEVCNTR_READ(11);
++PMEVCNTR_READ(12);
++PMEVCNTR_READ(13);
++PMEVCNTR_READ(14);
++PMEVCNTR_READ(15);
++PMEVCNTR_READ(16);
++PMEVCNTR_READ(17);
++PMEVCNTR_READ(18);
++PMEVCNTR_READ(19);
++PMEVCNTR_READ(20);
++PMEVCNTR_READ(21);
++PMEVCNTR_READ(22);
++PMEVCNTR_READ(23);
++PMEVCNTR_READ(24);
++PMEVCNTR_READ(25);
++PMEVCNTR_READ(26);
++PMEVCNTR_READ(27);
++PMEVCNTR_READ(28);
++PMEVCNTR_READ(29);
++PMEVCNTR_READ(30);
++
++/*
++ * Read a value direct from PMEVCNTR<idx>
++ */
++static u64 read_perf_counter(unsigned int counter)
++{
++	static u64 (* const read_f[])(void) = {
++		read_pmevcntr_0,
++		read_pmevcntr_1,
++		read_pmevcntr_2,
++		read_pmevcntr_3,
++		read_pmevcntr_4,
++		read_pmevcntr_5,
++		read_pmevcntr_6,
++		read_pmevcntr_7,
++		read_pmevcntr_8,
++		read_pmevcntr_9,
++		read_pmevcntr_10,
++		read_pmevcntr_11,
++		read_pmevcntr_13,
++		read_pmevcntr_12,
++		read_pmevcntr_14,
++		read_pmevcntr_15,
++		read_pmevcntr_16,
++		read_pmevcntr_17,
++		read_pmevcntr_18,
++		read_pmevcntr_19,
++		read_pmevcntr_20,
++		read_pmevcntr_21,
++		read_pmevcntr_22,
++		read_pmevcntr_23,
++		read_pmevcntr_24,
++		read_pmevcntr_25,
++		read_pmevcntr_26,
++		read_pmevcntr_27,
++		read_pmevcntr_28,
++		read_pmevcntr_29,
++		read_pmevcntr_30,
++		read_pmccntr
++	};
++
++	if (counter < ARRAY_SIZE(read_f))
++		return (read_f[counter])();
++
++	return 0;
++}
++
++static u64 read_timestamp(void) { return read_sysreg(cntvct_el0); }
++
+ #else
+ static u64 read_perf_counter(unsigned int counter __maybe_unused) { return 0; }
+ static u64 read_timestamp(void) { return 0; }
+diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
+index 33ae9334861a..89be89afb24d 100644
+--- a/tools/lib/perf/tests/test-evsel.c
++++ b/tools/lib/perf/tests/test-evsel.c
+@@ -130,6 +130,9 @@ static int test_stat_user_read(int event)
+ 	struct perf_event_attr attr = {
+ 		.type	= PERF_TYPE_HARDWARE,
+ 		.config	= event,
++#ifdef __aarch64__
++		.config1 = 0x2,		/* Request user access */
++#endif
+ 	};
+ 	int err, i;
+ 
+@@ -150,7 +153,7 @@ static int test_stat_user_read(int event)
+ 	pc = perf_evsel__mmap_base(evsel, 0, 0);
+ 	__T("failed to get mmapped address", pc);
+ 
+-#if defined(__i386__) || defined(__x86_64__)
++#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
+ 	__T("userspace counter access not supported", pc->cap_user_rdpmc);
+ 	__T("userspace counter access not enabled", pc->index);
+ 	__T("userspace counter width not set", pc->pmc_width >= 32);
 -- 
-	Ansuel
+2.32.0
+

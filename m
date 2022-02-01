@@ -2,214 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8484A4A5746
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFE04A573F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiBAGe2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 01:34:28 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37924 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234309AbiBAGeM (ORCPT
+        id S234141AbiBAGdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233754AbiBAGdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:34:12 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21111Ra8007814
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:34:11 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxq3gakcf-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:34:11 -0800
-Received: from twshared19733.18.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 31 Jan 2022 22:34:07 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id CB44D290EC913; Mon, 31 Jan 2022 22:28:23 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        <iii@linux.ibm.com>, Song Liu <song@kernel.org>
-Subject: [PATCH v8 bpf-next 7/9] bpf: introduce bpf_prog_pack allocator
-Date:   Mon, 31 Jan 2022 22:28:01 -0800
-Message-ID: <20220201062803.2675204-8-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
-References: <20220201062803.2675204-1-song@kernel.org>
+        Tue, 1 Feb 2022 01:33:41 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF27C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:33:41 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id j23so31929325edp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:33:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JrzOIwB/15hXdxo9+BD6kYpDhXtGeAQrIT7/EdNyUC8=;
+        b=KiOB8OZmozPHe204e845yU6DhE2s2Wii7ARJYDMRtL14WMcLChXIhgUC8V7Sc6qv3c
+         ygZAa9odMWs+SHECpaMYcYiFX2RKQgy2gueKBEfcNJ2YNd06zKBuVOk2+wzrG2OV99vd
+         4sLfTzxmDxzPh4V6Wq2X0aTg65IbvVqX02+Ez5Ubeld3riS+YfNItXkYYbyoFQQRp4tO
+         dNJSQ0LVj5ZatkwM46bWaMzeU3p9gwsJVctEqK2BJvWb2IIzwTsTNzmGniU3pC1eR8hP
+         3aQWB6BGEjSe11DSbIpQAn7imGk3yayzkeSqRzjHIs5hxqewKmSPM4FEPgPLBrc2wHZy
+         rOhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JrzOIwB/15hXdxo9+BD6kYpDhXtGeAQrIT7/EdNyUC8=;
+        b=YhAkelgNO0J2aso88eyW14OJXWVgo0ji/dt3VInqfcI2lwOgAx3IJ9CuiSMqbKix2p
+         E93FCnIcZ20WBmWAo42B36oAn8+2LQ1GH4fw/VxQNBHU1qaIece9FuVM7eDEOyNsKmcp
+         vqqK0eD3tA4Dr9zpO4saB3o6DKZT2wKc75qE7OVQ+03+aekqTjxQKpp8vCrItfIP0N2t
+         dEvUgBhG0ZjsWKQcf1TchN/t8xyBfZm7uytGMW5D8GSgDlunEv9JiNPMHqG4I+jTNUTR
+         EsvIm27wdyeFIj/RXZQ5HyJ8caGQa1QH8u3Hj5gkZRR7630lO9ZKEhq5h2ZWR5NTNi1s
+         Q7QQ==
+X-Gm-Message-State: AOAM532J2PL8KCH2S3S0qWkQDzKM4wFfUEAPJlwaiSjYE6GrlrgLCEk/
+        KZnJVV+UAXYVB0PWIwm3pCY=
+X-Google-Smtp-Source: ABdhPJz0L77NhTpN2CaRbV3UMUQngiAZFds2CfrdJ3MxZAJnDbRhUE2zdRKHZYmco5hzlmHATJSNsw==
+X-Received: by 2002:a50:eb82:: with SMTP id y2mr23327756edr.133.1643697219722;
+        Mon, 31 Jan 2022 22:33:39 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id fh23sm14300698ejc.176.2022.01.31.22.33.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 31 Jan 2022 22:33:39 -0800 (PST)
+Date:   Tue, 1 Feb 2022 06:33:38 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
+        mgorman@techsingularity.net, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/memory_hotplug: build zonelist for managed_zone
+Message-ID: <20220201063338.u4ux2jsgctuo7tex@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220127012023.18095-1-richard.weiyang@gmail.com>
+ <YfJXoSVkQ3X5u44F@dhcp22.suse.cz>
+ <20220129002628.2cwr35glahq5f5md@master>
+ <Yfe48O7eBWSe0LjK@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: ah96XMFba1owZk4g2k5aW35LKhfk05eQ
-X-Proofpoint-ORIG-GUID: ah96XMFba1owZk4g2k5aW35LKhfk05eQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_02,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
- clxscore=1015 spamscore=0 impostorscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=909 mlxscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202010033
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yfe48O7eBWSe0LjK@dhcp22.suse.cz>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most BPF programs are small, but they consume a page each. For systems
-with busy traffic and many BPF programs, this could add significant
-pressure to instruction TLB.
+On Mon, Jan 31, 2022 at 11:24:48AM +0100, Michal Hocko wrote:
+>> >> This patch restore the original behavior by using the same criteria to
+>> >> add a zone in zonelist during memory hotplug.
+>> >
+>> >Why?
+>> >
+>> 
+>> In case we online a populated zone, but not managed. Then this zone will not
+>> be in zonelist. Right?
+>
+>yeah. We can theoretically end up with a zone without any managed menory
+>on the zonelists. But my primary question is why do we need this change?
 
-Introduce bpf_prog_pack allocator to pack multiple BPF programs in a huge
-page. The memory is then allocated in 64 byte chunks.
+Currently I don't see a real case for this.
 
-Memory allocated by bpf_prog_pack allocator is RO protected after initial
-allocation. To write to it, the user (jit engine) need to use text poke
-API.
+>Does it fix any existing problem? Does it make the code easier to
+>read/understand? Does it improve performance? Every patch should have a
+>justification. Your changelog merely lists the history and then states
+>the new behavior without any explanation of why that is needed or
+>desired. See?
 
-Signed-off-by: Song Liu <song@kernel.org>
----
- kernel/bpf/core.c | 127 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+I don't have such reason now.
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a5ec480f9862..7ae590897b73 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -805,6 +805,133 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
- 	return slot;
- }
- 
-+/*
-+ * BPF program pack allocator.
-+ *
-+ * Most BPF programs are pretty small. Allocating a hole page for each
-+ * program is sometime a waste. Many small bpf program also adds pressure
-+ * to instruction TLB. To solve this issue, we introduce a BPF program pack
-+ * allocator. The prog_pack allocator uses HPAGE_PMD_SIZE page (2MB on x86)
-+ * to host BPF programs.
-+ */
-+#define BPF_PROG_PACK_SIZE	HPAGE_PMD_SIZE
-+#define BPF_PROG_CHUNK_SHIFT	6
-+#define BPF_PROG_CHUNK_SIZE	(1 << BPF_PROG_CHUNK_SHIFT)
-+#define BPF_PROG_CHUNK_MASK	(~(BPF_PROG_CHUNK_SIZE - 1))
-+#define BPF_PROG_CHUNK_COUNT	(BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE)
-+
-+struct bpf_prog_pack {
-+	struct list_head list;
-+	void *ptr;
-+	unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
-+};
-+
-+#define BPF_PROG_MAX_PACK_PROG_SIZE	HPAGE_PMD_SIZE
-+#define BPF_PROG_SIZE_TO_NBITS(size)	(round_up(size, BPF_PROG_CHUNK_SIZE) / BPF_PROG_CHUNK_SIZE)
-+
-+static DEFINE_MUTEX(pack_mutex);
-+static LIST_HEAD(pack_list);
-+
-+static struct bpf_prog_pack *alloc_new_pack(void)
-+{
-+	struct bpf_prog_pack *pack;
-+
-+	pack = kzalloc(sizeof(*pack), GFP_KERNEL);
-+	if (!pack)
-+		return NULL;
-+	pack->ptr = module_alloc(BPF_PROG_PACK_SIZE);
-+	if (!pack->ptr) {
-+		kfree(pack);
-+		return NULL;
-+	}
-+	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
-+	list_add_tail(&pack->list, &pack_list);
-+
-+	set_vm_flush_reset_perms(pack->ptr);
-+	set_memory_ro((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	set_memory_x((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	return pack;
-+}
-+
-+static void *bpf_prog_pack_alloc(u32 size)
-+{
-+	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
-+	struct bpf_prog_pack *pack;
-+	unsigned long pos;
-+	void *ptr = NULL;
-+
-+	if (size > BPF_PROG_MAX_PACK_PROG_SIZE) {
-+		size = round_up(size, PAGE_SIZE);
-+		ptr = module_alloc(size);
-+		if (ptr) {
-+			set_vm_flush_reset_perms(ptr);
-+			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
-+			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
-+		}
-+		return ptr;
-+	}
-+	mutex_lock(&pack_mutex);
-+	list_for_each_entry(pack, &pack_list, list) {
-+		pos = bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
-+						 nbits, 0);
-+		if (pos < BPF_PROG_CHUNK_COUNT)
-+			goto found_free_area;
-+	}
-+
-+	pack = alloc_new_pack();
-+	if (!pack)
-+		goto out;
-+
-+	pos = 0;
-+
-+found_free_area:
-+	bitmap_set(pack->bitmap, pos, nbits);
-+	ptr = (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
-+
-+out:
-+	mutex_unlock(&pack_mutex);
-+	return ptr;
-+}
-+
-+static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
-+{
-+	struct bpf_prog_pack *pack = NULL, *tmp;
-+	unsigned int nbits;
-+	unsigned long pos;
-+	void *pack_ptr;
-+
-+	if (hdr->size > BPF_PROG_MAX_PACK_PROG_SIZE) {
-+		module_memfree(hdr);
-+		return;
-+	}
-+
-+	pack_ptr = (void *)((unsigned long)hdr & ~(BPF_PROG_PACK_SIZE - 1));
-+	mutex_lock(&pack_mutex);
-+
-+	list_for_each_entry(tmp, &pack_list, list) {
-+		if (tmp->ptr == pack_ptr) {
-+			pack = tmp;
-+			break;
-+		}
-+	}
-+
-+	if (WARN_ONCE(!pack, "bpf_prog_pack bug\n"))
-+		goto out;
-+
-+	nbits = BPF_PROG_SIZE_TO_NBITS(hdr->size);
-+	pos = ((unsigned long)hdr - (unsigned long)pack_ptr) >> BPF_PROG_CHUNK_SHIFT;
-+
-+	bitmap_clear(pack->bitmap, pos, nbits);
-+	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
-+				       BPF_PROG_CHUNK_COUNT, 0) == 0) {
-+		list_del(&pack->list);
-+		module_memfree(pack->ptr);
-+		kfree(pack);
-+	}
-+out:
-+	mutex_unlock(&pack_mutex);
-+}
-+
- static atomic_long_t bpf_jit_current;
- 
- /* Can be overridden by an arch's JIT compiler if it has a custom,
+>-- 
+>Michal Hocko
+>SUSE Labs
+
 -- 
-2.30.2
-
+Wei Yang
+Help you, Help me

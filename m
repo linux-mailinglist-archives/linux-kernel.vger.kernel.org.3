@@ -2,141 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D088C4A6711
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B6B4A6716
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbiBAV2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:28:51 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:59112 "EHLO mail.skyhub.de"
+        id S232793AbiBAVaY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 16:30:24 -0500
+Received: from albireo.enyo.de ([37.24.231.21]:55702 "EHLO albireo.enyo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232463AbiBAV2u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:28:50 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB1171EC04AD;
-        Tue,  1 Feb 2022 22:28:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643750924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=7l7vocFxdezL9X3EUKTSMo+nYjMem25yARKYTuyX8jo=;
-        b=UqY6/pu2Ue28uGppx/YJY4gkORX0RykPUqAdSDRchnnYt4NjKqnkwxUmhNgCRs7FckxK7f
-        1pzKGK6KEJUNmRbkUwTZape/D5jU3FBobXFz22E3nxw6f5eTL9EmNgVU99rgmM7c7b816l
-        I+PJ5mEE7Bl4LDHK9aNUF7u8RSHEypM=
-Date:   Tue, 1 Feb 2022 22:28:39 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        id S232084AbiBAVaX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 16:30:23 -0500
+Received: from [172.17.203.2] (port=60055 helo=deneb.enyo.de)
+        by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        id 1nF0j8-00HVPD-Hm; Tue, 01 Feb 2022 21:30:14 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.94.2)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1nF0j8-000Qtd-63; Tue, 01 Feb 2022 22:30:14 +0100
+From:   Florian Weimer <fw@deneb.enyo.de>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 05/43] x86/compressed/64: Detect/setup SEV/SME
- features earlier in boot
-Message-ID: <YfmmBykN2s0HsiAJ@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-6-brijesh.singh@amd.com>
- <Yfl3FaTGPxE7qMCq@zn.tnic>
- <20220201203507.goibbaln6dxyoogv@amd.com>
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
+Subject: Re: [RFC PATCH 2/3] rseq: extend struct rseq with per thread group
+ vcpu id
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
+        <20220201192540.10439-2-mathieu.desnoyers@efficios.com>
+        <87bkzqz75q.fsf@mid.deneb.enyo.de>
+        <1075473571.25688.1643746930751.JavaMail.zimbra@efficios.com>
+        <87sft2xr7w.fsf@mid.deneb.enyo.de>
+        <1339477886.25835.1643750440726.JavaMail.zimbra@efficios.com>
+Date:   Tue, 01 Feb 2022 22:30:14 +0100
+In-Reply-To: <1339477886.25835.1643750440726.JavaMail.zimbra@efficios.com>
+        (Mathieu Desnoyers's message of "Tue, 1 Feb 2022 16:20:40 -0500
+        (EST)")
+Message-ID: <87o83qxok9.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220201203507.goibbaln6dxyoogv@amd.com>
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 02:35:07PM -0600, Michael Roth wrote:
-> Unfortunately rdmsr()/wrmsr()/__rdmsr()/__wrmsr() etc. definitions are all
-> already getting pulled in via:
-> 
->   misc.h:
->     #include linux/elf.h
->       #include linux/thread_info.h
->         #include linux/cpufeature.h
->           #include linux/processor.h
->             #include linux/msr.h
-> 
-> Those definitions aren't usable in boot/compressed because of __ex_table
-> and possibly some other dependency hellishness.
+* Mathieu Desnoyers:
 
-And they should not be. Mixing kernel proper and decompressor code needs
-to stop and untangling that is a multi-year effort, unfortunately. ;-\
+> ----- On Feb 1, 2022, at 3:32 PM, Florian Weimer fw@deneb.enyo.de wrote:
+> [...]
+>> 
+>>>> Is the switch really useful?  I suspect it's faster to just write as
+>>>> much as possible all the time.  The switch should be well-predictable
+>>>> if running uniform userspace, but still …
+>>>
+>>> The switch ensures the kernel don't try to write to a memory area beyond
+>>> the rseq size which has been registered by user-space. So it seems to be
+>>> useful to ensure we don't corrupt user-space memory. Or am I missing your
+>>> point ?
+>> 
+>> Due to the alignment, I think you'd only ever see 32 and 64 bytes for
+>> now?
+>
+> Yes, but I would expect the rseq registration arguments to have a rseq_len
+> of offsetofend(struct rseq, tg_vcpu_id) when userspace wants the tg_vcpu_id
+> feature to be supported (but not the following features).
 
-> Would read_msr()/write_msr() be reasonable alternative names for these new
-> helpers, or something else that better distinguishes them from the
-> kernel proper definitions?
+But if rseq is managed by libc, it really has to use the full size
+unconditionally.  I would even expect that eventually, the kernel only
+supports the initial 32, maybe 64 for a few early extension, and the
+size indicated by the auxiliary vector.
 
-Nah, just call them rdmsr/wrmsr(). There is already {read,write}_msr()
-tracepoint symbols in kernel proper and there's no point in keeping them
-apart using different names - that ship has long sailed.
+Not all of that area would be ABI, some of it would be used by the
+vDSO only and opaque to userspace application (with applications/libcs
+passing __rseq_offset as an argument to these functions).
 
-> It doesn't look like anything in boot/ pulls in boot/compressed/
-> headers. It seems to be the other way around, with boot/compressed
-> pulling in headers and whole C files from boot/.
-> 
-> So perhaps these new definitions should be added to a small boot/msr.h
-> header and pulled in from there?
+>> I'd appreciate if you could put the maximm supported size and possibly
+>> the alignment in the auxiliary vector, so that we don't have to rseq
+>> system calls in a loop on process startup.
+>
+> Yes, it's a good idea. I'm not too familiar with the auxiliary vector.
+> Are we talking about the kernel's
+>
+> fs/binfmt_elf.c:fill_auxv_note()
+>
+> ?
 
-That sounds good too.
-
-> Should we introduce something like this as well for cpucheck.c? Or
-> re-write cpucheck.c to make use of the u64 versions? Or just set the
-> cpucheck.c rework aside for now? (but still introduce the above helpers
-> as boot/msr.h in preparation)?
-
-How about you model it after
-
-static int msr_read(u32 msr, struct msr *m)
-
-from arch/x86/lib/msr.c which takes struct msr from which you can return
-either u32s or a u64?
-
-The stuff you share between the decompressor and kernel proper you put
-in a arch/x86/include/asm/shared/ folder, for an example, see what we do
-there in the TDX patchset:
-
-https://lore.kernel.org/r/20220124150215.36893-11-kirill.shutemov@linux.intel.com
-
-I.e., you move struct msr in such a shared header and then you include
-it everywhere needed.
-
-The arch/x86/boot/ msr helpers are then plain and simple, without
-tracepoints and exception fixups and you define them in ...boot/msr.c or
-so.
-
-If the patch gets too big, make sure to split it in a couple so that it
-is clear what happens at each step.
-
-How does that sound?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Indeed.

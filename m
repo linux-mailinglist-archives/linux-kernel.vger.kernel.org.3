@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4124A5CA7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A68A4A5CAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238264AbiBAM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:57:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29310 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233789AbiBAM5H (ORCPT
+        id S238276AbiBAM6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233789AbiBAM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:57:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643720226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KQ6uizHs+T+wChsJ+DeQUo8BHktCkFmAePt89tVO1n8=;
-        b=ADMKW1aG1TCJFDOZ01rveUJzNJcUF8cscxkn08cC7LI2DiX3TwISSm73vBYWKk1eOfaZRk
-        5iZB4/1vm1wnHE0au+jn2goEWd7vDS19Euh01jL42jniGfuhAvhmKWh/ITOrgmScUky2Bw
-        GZPmQAzaid8Ykxurd9Ldu0bcssPdo3g=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-l1QI40yOOkiuBFDck7CYdw-1; Tue, 01 Feb 2022 07:57:05 -0500
-X-MC-Unique: l1QI40yOOkiuBFDck7CYdw-1
-Received: by mail-ej1-f69.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so6450914ejw.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 04:57:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KQ6uizHs+T+wChsJ+DeQUo8BHktCkFmAePt89tVO1n8=;
-        b=hTyB3STC9iyhlz60HgfHjL7uYX7IWq3p22f5/Irzetl3IxpF0fNKxx6mGKSonxWlXm
-         e+GJGlOfABOpFVKTFy6sLBgjh578LF7/+KFygfkhtI3tXYqaMRTd9ph/Wx/ce86464K4
-         csPD5DI8I6CnQdwFWW9dVXJbJ+Ck6Vl5+F3wQOd+IPPuxsX8gN9CGhDThkex/nj2LVBs
-         QR1x1sIiKuT1m1h+3DOz7H9ipWjaXX8PhzKoGjqKc68k3hX04C7J0elEhyCejCkfmca5
-         T28nKZIsXS8fOQbK7SBFNSgUsrlB/PrPH43RXknyNwnacZsultrEqVG3xNwTBiNZokUJ
-         z6qg==
-X-Gm-Message-State: AOAM532XAmmcolod06U+rqvVBcJ+mY7ojKiUdAUwgDQDUupj5zvgibde
-        Ipk5jhw3WKoFVtAQ9dWH1WOGcJK3wT0HBFpinNrf3O/32z3mzWPIDkG2cEOqatNC9N3otjyqhgW
-        a77hadvssWU6GYmdTpT7/MD+7
-X-Received: by 2002:a17:907:9816:: with SMTP id ji22mr12429456ejc.749.1643720224025;
-        Tue, 01 Feb 2022 04:57:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWjr5Jp9grpxqx8hkic0kbma5PCsPcdjCNZZ93EtP+eq3QIEt7zcDM5f5WOomgiSu9D2jh4A==
-X-Received: by 2002:a17:907:9816:: with SMTP id ji22mr12429451ejc.749.1643720223833;
-        Tue, 01 Feb 2022 04:57:03 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id lm6sm14439602ejb.46.2022.02.01.04.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 04:57:02 -0800 (PST)
-Message-ID: <01e51bfa-5107-fbd0-6a0b-82bca6c78e8e@redhat.com>
-Date:   Tue, 1 Feb 2022 13:57:02 +0100
+        Tue, 1 Feb 2022 07:58:24 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A291C061714;
+        Tue,  1 Feb 2022 04:58:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=HCuPWo35iIHW6bwAsEpQu9KIym1ffHCR2MBVlEBOvsc=; b=I9DJhd2nWqYJk96O9DFM5j9ogj
+        Q6xUhXwDUUvPgPtN1A4nVnzXAK2P7UbBcG2pQI9b4XFLRdzVQ9rMpnXv39ep7R4wenyhb6NMeK702
+        /MSYUEj17cv70b9KcKZQv6C+eHG3XL5LQb0F54nBYwkW7B0PSHMGMQjcjvva8Fxda/uucp9ohnNXo
+        LyhAsBru/gD8+phe8VBd/KehESFmYxKKBAPD8tXsuBEjIic3PFJJtUpMh1rOXsfYerCi7YsCouH1L
+        hxLtBX0M5hI/bqQWFKUb7kj+ntV1IUQsN9kaIwYi9yEECUB4QNKQNfPBQOOrDJ5jWSKc3Ec5zHcNu
+        y0y5Q8eg==;
+Received: from [2a01:799:95e:a400:5d05:6ef3:cded:ad3] (port=53808)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1nEsjk-0001CN-9z; Tue, 01 Feb 2022 13:58:20 +0100
+Message-ID: <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
+Date:   Tue, 1 Feb 2022 13:58:16 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 0/4] hwmon: (sch56xx) Automatically load on supported
- hardware
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220131211935.3656-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220131211935.3656-1-W_Armin@gmx.de>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/4] drm: Add I2C connector type
+To:     Sam Ravnborg <sam@ravnborg.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+References: <20220131201225.2324984-1-javierm@redhat.com>
+ <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <YfhMESTylI1NTKDg@ravnborg.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 1/31/22 22:19, Armin Wolf wrote:
-> The hardware monitoring solutions supported by the sch5627 and
-> sch5636 drivers are Fujitsu-specific.
-> After some online searching, i found out that the solution used
-> with the SCH5627 is called "Antiope" by Fujitsu, just like the
-> "Theseus" solution inside the SCH5636.
-> I also found out that "Antiope" and "Theseus" are listed as
-> DMI onboard devices on supported Fujitsu devices, so the
-> sch56xx_common module can be loaded automatically an check
-> for the DMI devices. However some devices like the Esprimo C700
-> have both devices, so after verifying that at least one onboard
-> device is present, sch56xx_common still has to detect which chip
-> is present.
-> This is safe however if at least one device is present.
+
+Den 31.01.2022 21.52, skrev Sam Ravnborg:
+> On Mon, Jan 31, 2022 at 09:12:21PM +0100, Javier Martinez Canillas wrote:
+>> There isn't a connector type for display controllers accesed through I2C,
+>> most drivers use DRM_MODE_CONNECTOR_Unknown or DRM_MODE_CONNECTOR_VIRTUAL.
+>>
+>> Add an I2C connector type to match the actual connector.
+>>
+>> As Noralf Trønnes mentions in commit fc06bf1d76d6 ("drm: Add SPI connector
+>> type"), user-space should be able to cope with a connector type that does
+>> not yet understand.
+>>
+
+It turned out that I wasn't entirely correct here, mpv didn't cope with
+unknown types. In the PR to add support Emil Velikov wondered if libdrm
+should handle these connector names:
+https://github.com/mpv-player/mpv/pull/8989#issuecomment-879187711
+
+>> Tested with `modetest -M ssd1307 -c` and shows the connector as unknown-1.
+> I had expected unknown-21??
 > 
-> Tested on a Fujitsu Esprimo P720.
+>>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
-Thanks, the new version of the entire series looks good to me:
+Sam, didn't you and Laurent discuss adding DRM_MODE_CONNECTOR_PANEL for
+such a use case?
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+If someone adds parallel bus support to the MIPI DBI helper, there will
+be one more connector type (I wonder what that one will be called).
 
-for the series.
+Noralf.
 
-Regards,
-
-Hans
-
-> 
-> ---
-> Changes in v3:
-> - fix usleep_range using the same value as msleep
-> 
-> Changes in v2:
-> - fix unused variable issue reported by the kernel test robot
-> by assinging the platform device id list in sch5627/sch5636
-> to platform_driver->id_table.
-> 
-> Armin Wolf (4):
->   hwmon: (sch56xx) Autoload modules on platform device creation
->   hwmon: (sch56xx-common) Add automatic module loading on supported
->     devices
->   hwmon: (sch56xx-common) Replace msleep() with usleep_range()
->   hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-> 
->  drivers/hwmon/sch5627.c        | 10 ++++++++
->  drivers/hwmon/sch5636.c        | 10 ++++++++
->  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++++++----
->  3 files changed, 60 insertions(+), 4 deletions(-)
-> 
-> --
-> 2.30.2
-> 
-
+>> ---
+>>
+>>  drivers/gpu/drm/drm_connector.c | 1 +
+>>  include/uapi/drm/drm_mode.h     | 1 +
+>>  2 files changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+>> index a50c82bc2b2f..975a7525a508 100644
+>> --- a/drivers/gpu/drm/drm_connector.c
+>> +++ b/drivers/gpu/drm/drm_connector.c
+>> @@ -105,6 +105,7 @@ static struct drm_conn_prop_enum_list drm_connector_enum_list[] = {
+>>  	{ DRM_MODE_CONNECTOR_WRITEBACK, "Writeback" },
+>>  	{ DRM_MODE_CONNECTOR_SPI, "SPI" },
+>>  	{ DRM_MODE_CONNECTOR_USB, "USB" },
+>> +	{ DRM_MODE_CONNECTOR_I2C, "I2C" },
+>>  };
+>>  
+>>  void drm_connector_ida_init(void)
+>> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
+>> index e1e351682872..d6d6288242db 100644
+>> --- a/include/uapi/drm/drm_mode.h
+>> +++ b/include/uapi/drm/drm_mode.h
+>> @@ -421,6 +421,7 @@ enum drm_mode_subconnector {
+>>  #define DRM_MODE_CONNECTOR_WRITEBACK	18
+>>  #define DRM_MODE_CONNECTOR_SPI		19
+>>  #define DRM_MODE_CONNECTOR_USB		20
+>> +#define DRM_MODE_CONNECTOR_I2C		21
+>>  
+>>  /**
+>>   * struct drm_mode_get_connector - Get connector metadata.
+>> -- 
+>> 2.34.1

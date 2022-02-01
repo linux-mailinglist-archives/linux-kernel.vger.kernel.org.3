@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6052B4A62E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0F14A62EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241702AbiBARsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:48:06 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39442 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241711AbiBARsE (ORCPT
+        id S241741AbiBARsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241743AbiBARsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:48:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4E4461348
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 17:48:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0F9C340EB;
-        Tue,  1 Feb 2022 17:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643737684;
-        bh=nk8f/RSRJKhKmKK0/NCNxsE6dgNrPNi9rG2tUzLAhys=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FHC87mn5z2aKErqIwWdABGMgrUJTQ11Ez46+Pxjw+rGr/+Y6hBSocQ22TmhJWQIh8
-         g0t8Kdb9y4lEDy30oB4WeFSz22ZjpeOLxvjSBfrnRpxgvNLOo5IQyid8LFZFMCHUq6
-         j0aGFLjSh3SpBBpv7VzjE1/Qb+y9+LwX+xn4uOumdpK9iXy6dVg/r4TdZyKGz/fP4H
-         mKam9a3Ai84gbmWahp82u71xBooVdyglUyhB+Rg6yYQQTQjnwO4TThRm7keAKfA/Oa
-         pecou5h9qzIU87dV9g2CyUZxrjQbKB0nEKczio4f2nmZrMsX1Am2rzTOARLDcTa95E
-         NW+zL0Wx/79FA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        Tue, 1 Feb 2022 12:48:37 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E60C06173B;
+        Tue,  1 Feb 2022 09:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xJjdKO+w4KNIcTldRLc+m4pi8LsT5xMjo6sZOkgNjrs=; b=YpEeb5rxmcXyef8rWQs/BHg9PF
+        GUx11+Ygka7ZBf8LOy5fqVGa6j5NN5f9ISBIzCsMS8KIQFi+hPy+JAud3eP3vcj0AJaFbtXv4hMC+
+        N/wy6/p0xFZO3u5U30Ngv6RZQd0UXgGfuCwjmMlwhHU41N/2mqwqmKpn4131pLlO9JQN2WfN4Rxp8
+        cceXa/inVYk+9NjnUwdOsYt6fm5nDlHARiU1k4dCWWiMrwwJREg39kJQ5i42VG2JuT+kLw00hEort
+        iC7FchAQa+zHsdTWv/iyHfoUQFhPXuCI8fPNhDq/wd04Vwla+7R3V1D1tGioJwVM6uGggzNVb6bnO
+        fU+lNEUg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56976)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nExG6-004hw8-5S; Tue, 01 Feb 2022 17:48:02 +0000
-Date:   Tue, 01 Feb 2022 17:48:01 +0000
-Message-ID: <87czk65vhq.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
-        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, frederic@kernel.org,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, mingo@redhat.com, mpe@ellerman.id.au,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com,
-        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH v3 0/5] kvm: fix latent guest entry/exit bugs
-In-Reply-To: <c1371392-70ff-0a14-68cd-aa253998d271@redhat.com>
-References: <20220201132926.3301912-1-mark.rutland@arm.com>
-        <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
-        <YfleTYWIW1sBbMNn@FVFF77S0Q05N>
-        <c1371392-70ff-0a14-68cd-aa253998d271@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, mark.rutland@arm.com, linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com, anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org, benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org, dave.hansen@linux.intel.com, frederic@kernel.org, hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com, joro@8bytes.org, mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com, wanpengli@tencent.com, will@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nExGV-0000uP-Oh; Tue, 01 Feb 2022 17:48:27 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nExGR-0002GH-Mq; Tue, 01 Feb 2022 17:48:23 +0000
+Date:   Tue, 1 Feb 2022 17:48:23 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+Message-ID: <YflyZytGG49kbvV9@shell.armlinux.org.uk>
+References: <20220201150339.1028032-1-arnd@kernel.org>
+ <90333cef-9ad1-bbf5-5c46-86083c1f5b24@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90333cef-9ad1-bbf5-5c46-86083c1f5b24@arm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Feb 2022 17:10:35 +0000,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
-> On 2/1/22 17:22, Mark Rutland wrote:
-> > On Tue, Feb 01, 2022 at 04:59:47PM +0100, Paolo Bonzini wrote:
-> >> On 2/1/22 14:29, Mark Rutland wrote:
-> >>> I've pushed the series (based on v5.17-rc2) to my kvm/entry-rework branch:
-> >>> 
-> >>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
-> >>>     git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
-> >> 
-> >> Thanks!  I cherry-picked the basic, x86 and mips patches to kvm.git's master
-> >> branch (I did not use your branch in order to leave arm64 and riscv to the
-> >> respective maintainers).
+On Tue, Feb 01, 2022 at 05:10:38PM +0000, Robin Murphy wrote:
+> On 2022-02-01 15:02, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
 > > 
-> > Since everything's dependent upon that core patch, IIUC that's going to make it
-> > a pain for them to queue things.
+> > The sa1111 platform is one of the two remaining users of the old Arm
+> > specific "dmabounce" code, which is an earlier implementation of the
+> > generic swiotlb.
 > > 
-> > How are you expecting the arm64 and riscv maintainers to queue things? Queue
-> > their own copies of that core patch?
+> > Linus Walleij submitted a patch that removes dmabounce support from
+> > the ixp4xx, and I had a look at the other user, which is the sa1111
+> > companion chip.
+> > 
+> > Looking at how dmabounce is used, I could narrow it down to one driver
+> > one one machine:
+> > 
+> >   - dmabounce is only initialized on assabet and pfs168, but not on
+> >     any other sa1100 or pxa platform using sa1111.
 > 
-> The kvm.git master branch has a stable commit id, so the KVM/ARM and
-> KVM/RISCV maintainers can just base their pull request to me on
-> it. Alternatively, if they prefer it that way, I can get it quickly to
-> Linus.
+> Hmm, my reading of it was different. AFAICS it should affect all platforms
+> with CONFIG_ARCH_SA1100 + CONFIG_SA1111 - the bus notifier from
+> sa1111_init() will initialise dmabounce for everything where
+> sa1111_configure_smc() has punched a hole in the DMA mask to handle the
+> addressing erratum. sa1111_needs_bounce() looks to be a further
+> consideration for platforms where DMA *additionally* cannot target an entire
+> bank of memory at all.
 
-In which case, please add the arm64 patch to the mix. I'm not rebasing
-my current queue.
+Correct. The SA1111 companion can only access one SDRAM bank, whereas
+the SA1110 SoC can address up to four SDRAM banks. On platforms where
+there is only one bank of SDRAM, there is no issue. However, on the
+Assabet there is one SDRAM bank, and on the Neponset daughter board
+with the SA1111, there is a second bank. As explained in the commentry,
+the SA1111 can be hardware-configured via resistive jumpers to access
+either bank, but we only support the factory-shipped configuration,
+which is bank 0 (the lowest addressable bank.)
 
-	M.
+The SA1111 also has an issue that one of its address lines doesn't
+behave correctly, and depending on the SDRAM columns/rows, this
+punches multiple holes in the SDRAM address space it can access,
+which is what the sa1111_dma_mask[] array is about, and we end up
+with every alternate megabyte of physical address space being
+inaccessible.
+
+The DMA mask, along with the logic in dmabounce (which truely uses the
+DMA mask as, erm, a *mask* rather than the misnamed *limit* that it
+has been) know about both of these issues.
 
 -- 
-Without deviation from the norm, progress is not possible.
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

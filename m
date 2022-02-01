@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E59924A6658
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA464A665E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242522AbiBAUtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:49:42 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:38076 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231629AbiBAUtl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:49:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=GfcG5XCj3A/ORARzsiKJEsAfW7hdPTM5S0U/fpp6p/g=; b=nAKXo/zlrHykd0L+mHF0gdkZwg
-        g1xKj0DrxxcJwhHCZ+RUcTB8p8rce1ujKp36K39mGRvpJX39io8eb3994qjoaSJ4jvC/bIvJGTZBi
-        JVD+dNMGSoNTAnGM6/lNmH3KMXKXPbQdEG7V9LO5O44AkAhsVj1naCybvwwIcnyqkQ4Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nF05b-003rcB-M6; Tue, 01 Feb 2022 21:49:23 +0100
-Date:   Tue, 1 Feb 2022 21:49:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Martin Schiller <ms@dev.tdt.de>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
-Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
- delay configuration
-Message-ID: <Yfmc02MKT7swgFfZ@lunn.ch>
-References: <20210719082756.15733-1-ms@dev.tdt.de>
- <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
- <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de>
- <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
- <Yd7bsbvLyIquY5jn@shell.armlinux.org.uk>
- <CAJ+vNU1R8fGssHjfoz-jN1zjBLPz4Kg8XEUsy4z4bByKS1PqQA@mail.gmail.com>
- <81cce37d4222bbbd941fcc78ff9cacca@dev.tdt.de>
- <CAJ+vNU3NXAgfJ4t3c8RBsZVLLY_OXkZLFDhro8X84x0DAuNEdw@mail.gmail.com>
+        id S231145AbiBAUvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229538AbiBAUvr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 15:51:47 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AE6C06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:51:47 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id z199so22807717iof.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:51:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=W3kshkXSjFyAo5fKHkF6jY1Kyw1sUOZVskQ3JpC65vs=;
+        b=V5iYbe2qJpMtymUf/ZHlGT2NO/BkndvVXw2rPPzAhIqrQm74FRQ+j9knJyRJn3kE/a
+         miQmToRT3phiAF9vGiOy7QlQBccxtdXhCWe8UnqfQVZXZcUilfkgEaqvokBuH6UyMDri
+         HUwZzzzdBMfy2w5KvqH3hTajihoJm+cDcp4Lw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=W3kshkXSjFyAo5fKHkF6jY1Kyw1sUOZVskQ3JpC65vs=;
+        b=nAw+D71x1OpGYyaUj+fkExMBmmFYswyBQfLQ9PXZ5f+7EBKICZUC9I5CijCrghsWc+
+         a605U/yqTvuUogFh3xzejm2VdLSkK3fgh0whwIyux4Vm9obD7I4qnXf2set0gvDujEsy
+         v0uk3N6vE5IvwxtGsCRvkt2PKcpYNn9WVbh/lm3M4fvEmwdwT/UzjiaJL7fx2wSaRL4v
+         Q9E2HTZRK0TASgW7pevyokDwSI7dsdZ1U5jLvHurwon2e1ZzePzdlgrUicEnWFU9pIpX
+         NNrFSL1Pq4xTOru4A/bR5ZIBQx11n1XE+OihfOXTn4Twq0UgEU2nCaCQUPDZ6ZZvV9za
+         rK5g==
+X-Gm-Message-State: AOAM533EH4EBajgys6TJa8zFVKklaCnXRDsnwzPR+YWKRktTd4G/bAZX
+        Uc0STg1tsIpYuEGc4LHVTHdjGA==
+X-Google-Smtp-Source: ABdhPJxu1I3Vyj/HdszpsA6P4xRqhZNdX1lbLFND5kN/jA7H1BBqOQTN8XFouRW/a99/KgMLGNlaWQ==
+X-Received: by 2002:a05:6602:2b89:: with SMTP id r9mr15003576iov.167.1643748705439;
+        Tue, 01 Feb 2022 12:51:45 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id a7sm1397941ilq.88.2022.02.01.12.51.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 12:51:45 -0800 (PST)
+Subject: Re: [PATCH 4.4 00/25] 4.4.302-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220201180822.148370751@linuxfoundation.org>
+ <8ef32c1a-2123-522a-bb65-9e421fe07a7e@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <829a4846-1e65-ffa7-2543-95a9177002b3@linuxfoundation.org>
+Date:   Tue, 1 Feb 2022 13:51:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU3NXAgfJ4t3c8RBsZVLLY_OXkZLFDhro8X84x0DAuNEdw@mail.gmail.com>
+In-Reply-To: <8ef32c1a-2123-522a-bb65-9e421fe07a7e@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> However, I don't at all like the fact that this
-> particular patch defaults the delays to 2ns if 'rx-internal-delay-ps'
-> and 'tx-internal-delay-ps' is missing from the dt.
+On 2/1/22 12:46 PM, Shuah Khan wrote:
+> On 2/1/22 11:16 AM, Greg Kroah-Hartman wrote:
+>> NOTE!  This is the proposed LAST 4.4.y kernel release to happen under
+>> the rules of the normal stable kernel releases.  After this one, it will
+>> be marked End-Of-Life as it has been 6 years and you really should know
+>> better by now and have moved to a newer kernel tree.  After this one, no
+>> more security fixes will be backported and you will end up with an
+>> insecure system over time.
+>>
+>> --------------------------
+>>
+>> This is the start of the stable review cycle for the 4.4.302 release.
+>> There are 25 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Thu, 03 Feb 2022 18:08:10 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.302-rc1.gz
+> 
+> Couldn't find the patch. Didn't get pushed perhaps.
+> 
 
-How does this work in combination with phy-mode 'rgmii', 'rgmii-id'
-etc? Using 2ns as a default for rgmii-id is sensible, however i would
-say it is wrong for rgmii.
+Found it. All set.
 
-> The issue I have here is that if dt's have not been updated to add the
-> common delay properties this code will override what the boot firmware
-> may have configured them to. I feel that if these common delay
-> properties are not found in the device tree, then no changes to the
-> delays should be made at all.
-
-If you don't want the PHY driver to touch the delays at all because
-you know something else has set it up, you can use phy-mode="", which
-should be interpreted as PHY_INTERFACE_MODE_NA.
-
-       Andrew
+thanks,
+-- Shuah

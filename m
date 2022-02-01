@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FB54A6290
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76C04A6294
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241484AbiBARgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S241537AbiBARhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiBARgg (ORCPT
+        with ESMTP id S233776AbiBARhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:36:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33DFC061714;
-        Tue,  1 Feb 2022 09:36:35 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x23so35530257lfc.0;
-        Tue, 01 Feb 2022 09:36:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t8XM8YQCdnrLqQjmIyPCS1pWQ5VZ3HXbW2LziRHl1vs=;
-        b=YWvHVpTFLXjM7CMAt/cmK/9psyjeYenHbFmBcQ4eU1F9o5cspuXVcnUtF6Mh9JBr1i
-         0U5EWSgCdkKapxIzP5hSIl/a6gfCzAx8cFd8iau1ziztRiGD1XWVbFQhD7xstUyNz8DN
-         eha73qWqQmSxOPVGQqmGzXUVndUMsVWcvECG31Rw/BSC0+RhO7gPtE00vJAQQayPmnQW
-         rEbboEZn5WEdB5MNQP7ReNtF2yliG1GNpo26i8V5X/7IE1qPnaeGCEyiGtQ6b4EnJfMn
-         qrZskt6pBIQRtf0ycfb0HiSIMfO9lQ+VM0p/wi8bGm9/oswG42Hgklz+aiVT7/81lqQP
-         XDUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t8XM8YQCdnrLqQjmIyPCS1pWQ5VZ3HXbW2LziRHl1vs=;
-        b=WNWpYeqaEl+TokG4dBAlZu1zB8D6ncD1WQRh4qyg0mnc60vTbvv4b7RSv0YGAZLRUB
-         TWZi2BzhNTYDT539uw4+sLkQPfKn6krPcIpVz8GFfvq67bl5tgPO6kvRu9Q/25QPT4NX
-         OZefBh/eoXZFW+b+UA/GH+aGSj8LCzc48g0olK7nHky322k4qS/eJ39RGqwPMw5QzbVg
-         1s6AagJDZAi1zFUbPeRGpxmwgJ5s2V7Klg9s2bLZ/dMthX03fn8BwZA48FFnlIocB6nm
-         9flPX5cbij4Kn01YxPiQylN37/IDrSLpcyDCG4cHeUD2PZbGJ3ClAvAteoEwM5wgcm0y
-         pm4g==
-X-Gm-Message-State: AOAM533r9mrVsfnqAoylOoWBR1tINd3b5KSVKLNGe6AKAwCEuzd0F4Lh
-        Fyhb9lvEiN7zSMKR+iHs/D0Qn9HPUTs=
-X-Google-Smtp-Source: ABdhPJy8Ovc8oU3X4U9kL7+78QiRAmLbHyZwiQjIlu9wftg3u56zQFLHxcB0YPyn0Qt2w32Y0kjsmw==
-X-Received: by 2002:a05:6512:2620:: with SMTP id bt32mr19282799lfb.311.1643736993869;
-        Tue, 01 Feb 2022 09:36:33 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.74.140])
-        by smtp.gmail.com with ESMTPSA id q12sm2098831lfc.155.2022.02.01.09.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 09:36:32 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: ata: convert ata/cortina,gemini-sata-bridge
- to yaml
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220129204004.1009571-1-clabbe@baylibre.com>
- <CACRpkdb9R-BwdVzyeaQOjagsQU=2-06VNqKPG9fMa7C93eDC7A@mail.gmail.com>
- <2b0fa854-16e7-3d0b-a04a-971249646fab@opensource.wdc.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <bc80cd49-c95e-6b9a-1210-7d3832766b02@gmail.com>
-Date:   Tue, 1 Feb 2022 20:36:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 1 Feb 2022 12:37:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684F5C061714;
+        Tue,  1 Feb 2022 09:37:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0508A612E5;
+        Tue,  1 Feb 2022 17:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC84BC340EB;
+        Tue,  1 Feb 2022 17:37:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643737034;
+        bh=5+e2/1ovVlkoJZG7HnhqfG3Xn95vLy9k+cqRL0uJ2do=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sxW1qIGED3bDGK2mg5prOpEGSfiWe7+fT3a7V37OfTRi8YAXEE6+hyhVVbNrLuA32
+         mznzf9FkC9qKTCzrAUGCn4of/W1v78w5mW1Vl9gJGJz5Xlvq6Y1bSCXTlXVH0IH7rP
+         5yLlePfUTRbmaGnMsFHH3yUcK3EQq1nfxEOdr7zwk8+5+/dNtynakmCuofnjDoXTWW
+         Yy8Lvzhk0TTU+hKzLjKb1/btwnyYv0ICzYMniyYyT/wvq/RjgUkmTHnG4e/dD6IbWP
+         FP3pgRbqa9hJxOzvX2vwfNJpj8BAMyY/TkaGnp7t7wJP6uE2I+p4plxj1Jlzaw82We
+         hzxMb/hloQWPw==
+Date:   Tue, 1 Feb 2022 17:37:08 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     'Hans de Goede' <hdegoede@redhat.com>,
+        "'Rafael J . Wysocki'" <rafael@kernel.org>,
+        'Len Brown' <lenb@kernel.org>,
+        'Mark Gross' <markgross@kernel.org>,
+        'Jaroslav Kysela' <perex@perex.cz>,
+        'Takashi Iwai' <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH v6 2/9] spi: Create helper API to lookup ACPI info for
+ spi device
+Message-ID: <YflvxPmiwL0TbjPM@sirena.org.uk>
+References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
+ <20220121172431.6876-3-sbinding@opensource.cirrus.com>
+ <36df02cc-d164-eb6a-4ce7-54d2ee916650@redhat.com>
+ <001101d81791$23f56090$6be021b0$@opensource.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <2b0fa854-16e7-3d0b-a04a-971249646fab@opensource.wdc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NYU0R5j8dZiNHmNm"
+Content-Disposition: inline
+In-Reply-To: <001101d81791$23f56090$6be021b0$@opensource.cirrus.com>
+X-Cookie: All's well that ends.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 2:56 AM, Damien Le Moal wrote:
 
->> Thanks for doing this Corentin!
->>
->> On Sat, Jan 29, 2022 at 9:40 PM Corentin Labbe <clabbe@baylibre.com> wrote:
->>
->>> This patch converts ata/cortina,gemini-sata-bridge binding to yaml
->>>
->>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->>
->> Knowing that drivers/ata is a bit sparsely maintained I suggest that Rob apply
->> this patch when he feels it looks good.
-> 
-> What do you mean ? I am doing my best here to maintain ata !
-> But I definitely do not have all the hardware supported for testing :)
+--NYU0R5j8dZiNHmNm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   I can probably help reviewing the PATA drivers if you want, just like Bart Z. did.
-But I don't have much of the PATA hardware (what I have is in my old PCs I haven't
-booted in a long while)...
+On Tue, Feb 01, 2022 at 05:28:34PM +0000, Stefan Binding wrote:
 
-[...]
+> I was just fixing this, however, I just noticed that a subset of this chain - including
+> this patch - just got applied. Do you want me to fix this in a separate patch?
 
-MBR, Sergey
+Quoting from the mail you got saying that the series was applied:
+
+| If any updates are required or you are submitting further changes they
+| should be sent as incremental updates against current git, existing
+| patches will not be replaced.
+
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
+
+Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
+
+--NYU0R5j8dZiNHmNm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH5b8MACgkQJNaLcl1U
+h9Dzzgf/Qaojnc1Tj+koHQ+yotSwO0JMyuM6KElApYmMkU67dQwQgn79wFstjmqU
+I0QX8F3k8rDQaYuS7MjeWCee4raTsSQ3eQb3k0ORuUGE96RWPcsrK4MgpwIR+K/D
+uR7Bvva58ALZI0Y9u2nLwQGfcOeXt3TmUIIsmIgdBu0e3KAOfKcFD+98x/AOWGON
+/TiklP8RFuqYiMDAij6vS7RflZ3zlN1yR/aGqYgfgiH9UXBIpgJd8mZ42Nb3sCQg
+IbILq+R6RyR6bVUODSdegfsizQLkTRFK0EWQlgVtDNkmn8feOxPC0erAhCbI1kaK
+ukivFigIPevnB5Phdi5brz3lda3nGw==
+=z7h3
+-----END PGP SIGNATURE-----
+
+--NYU0R5j8dZiNHmNm--

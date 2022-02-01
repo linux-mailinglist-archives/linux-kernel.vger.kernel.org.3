@@ -2,174 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDB84A6241
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6494A6247
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241454AbiBARWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:22:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S241462AbiBARXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiBARWV (ORCPT
+        with ESMTP id S229836AbiBARXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:22:21 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C8CC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:22:21 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 133so15944648pgb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:22:21 -0800 (PST)
+        Tue, 1 Feb 2022 12:23:09 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E90C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:23:09 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id 9so22178193iou.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:23:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VG6m0yGSKpFG4q+Uc9WqsHQnQC10ZbIeInL9q9ZvJP4=;
-        b=Z59AWVextX0bLU1YwItgjLla2IDdnIhdNx61ujWPh3oF5IQSXKrK+CIngzOv1pmp/z
-         BnGo8ycDeivDlCmc6skyHGhjq+vmmloQ8Cj+SC99shLtUSEMKhIgdF1sqsdBHhOr1I66
-         bo11+Lna5pgOAd4oJxsgT5imhMdmbBakhYGeY=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7VueRVXUIZ4PLuv+jNKqynr+SXNuvNQ3b0auGVgVeb4=;
+        b=m9EHAA2Qyy592ZIy/XyoM+shRkpriwg9tXfgTsIAFpgsIJZ6PEVHmKGEhQtH8CuFWi
+         I5lzavI/NRKex8bSa4P9FxykKScpxo6lin4p2aginO7Mzy7ysR1E1N42NzOXHrt+Cw1z
+         a0hGA7YIw7XXMX0D7gxuLwEQKPa9jDNy8sU3g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VG6m0yGSKpFG4q+Uc9WqsHQnQC10ZbIeInL9q9ZvJP4=;
-        b=mw2+M2k+cCZHe0HDe8DsbbvHe9ZS9JWUndDdgEi0IUn/F5aHGuCsuDY+HGKHajxdNi
-         92nrnSBqi58uhqU5HTfMaXUYYOeyDoo3jFEFICxkrTMKLJLKHV1BqGfoQ+gIIrZVD2ga
-         66zLhW3GGg+JrOdMBG2Lr65RfY85dQ1kpdKVYSxFyv25bbil+Z+L5tc5sR8I65CJNNsJ
-         IbN3zBnNCXB5exblyLvSRoEjms5e0pHYdlKYo1cE5jMUCeLxC+/VJLye2XhDRN280lgZ
-         5W1wvn+O9i+tBFdXYOciOACg1vt5zS1e5jEou0JSyUZjy7xFBeO03suwU7h4DTt3vOIK
-         3ztA==
-X-Gm-Message-State: AOAM531Y5zWXghtMROsDRWhBTET86WRH+VirHqZ0bCnh1Y+J6BOs3tRC
-        wozaJzrGgIKJArgSyip9URn1QQ==
-X-Google-Smtp-Source: ABdhPJwXfiKI3nFqn6/pTkWSkhtXry13WyUFnS4GLyA22EFm8qelW/dao6QZBnEvV3MAjoEEFkooaQ==
-X-Received: by 2002:a63:884a:: with SMTP id l71mr19755054pgd.589.1643736140943;
-        Tue, 01 Feb 2022 09:22:20 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:c148:8249:fae1:2404])
-        by smtp.gmail.com with ESMTPSA id 19sm3304400pjb.42.2022.02.01.09.22.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:22:20 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7VueRVXUIZ4PLuv+jNKqynr+SXNuvNQ3b0auGVgVeb4=;
+        b=LA9QkvyDyMxkRmKyf63H8VPUH5Iro3MFfeieHtXMcDxA7tL4N/8wiVhQYMXw/AV8cd
+         lSX4zgdiNd5KaC3fFpSWFlLMFQQoaTKHU/75SUgBOtnxReCjgCOgDQs7sibxpQIPeypq
+         RH3ATo0BuIfgEczkoZsqDbwgqyH4j3nNkTDj+mTVeXl3IojxZC2ck9gKEpX6GWedhx0B
+         1U7DoMkSXUt9SdyFM00nclFEgTK9k7m0ZUYlSPAvqMMLuGuxVWO6sVawkJtVdCm1baKu
+         Ct4LEuTut0JJEjzs+n1yV6b0B9f3+iC5HfW7XUKZiby7vcgQzq5RXwTJAE1G3avLY9La
+         jrgQ==
+X-Gm-Message-State: AOAM531d4MGCkPQjSjkAdptmtOa6kkwGSuIK+xtGLuU4EXzq6ajg1StS
+        42ekJZXsSyBuSgDYil3e/5ixYmFxIm6CkA==
+X-Google-Smtp-Source: ABdhPJx774kS75ntlXG9WRSciV9pFd87cnCVmPaLzgz47H4n+CMkq8/KpWMr5p9R+1N8PWkLHgOiZA==
+X-Received: by 2002:a05:6638:2642:: with SMTP id n2mr10819788jat.47.1643736188599;
+        Tue, 01 Feb 2022 09:23:08 -0800 (PST)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id j14sm19545692ilc.62.2022.02.01.09.23.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 09:23:08 -0800 (PST)
+Received: by mail-il1-f174.google.com with SMTP id w5so14892378ilo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:23:07 -0800 (PST)
+X-Received: by 2002:a05:6e02:1809:: with SMTP id a9mr15721637ilv.27.1643736187426;
+ Tue, 01 Feb 2022 09:23:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20220125135406.1.I62322abf81dbc1a1b72392a093be0c767da9bf51@changeid>
+ <e89dbc7b-b3ae-c334-b704-f5633725c29f@redhat.com> <CAD=FV=U8VGnRXv8MgofKzZF22_x0_X3M+AMfyPQ1u=yTXnFBQA@mail.gmail.com>
+ <6fdcfbcf-0546-6b4f-b50f-cf2382ad746f@redhat.com> <CAD=FV=U3YHt=+cr8c39zMxFWMeo4Pr=R3BBPMKanpySPhsYh9w@mail.gmail.com>
+ <CAKMK7uEiUxPJ7F+F33YVdq6d9WxzxTKzoxTyiZnvceM2CHEkVw@mail.gmail.com>
+In-Reply-To: <CAKMK7uEiUxPJ7F+F33YVdq6d9WxzxTKzoxTyiZnvceM2CHEkVw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 1 Feb 2022 09:22:55 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WqL9gP3Lmr5ORvNXeUis1b58cOvDXKGeq-j9Q6=EMXbQ@mail.gmail.com>
+Message-ID: <CAD=FV=WqL9gP3Lmr5ORvNXeUis1b58cOvDXKGeq-j9Q6=EMXbQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel-edp: Allow querying the detected panel via sysfs
 To:     Daniel Vetter <daniel@ffwll.ch>
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
         David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "drm/panel-edp: Allow querying the detected panel via sysfs"
-Date:   Tue,  1 Feb 2022 09:21:58 -0800
-Message-Id: <20220201092152.1.Ibc65ec6fa05017e9856ba9ef557310268429c3ce@changeid>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>, jjsu@chromium.org,
+        lschyi@chromium.org, Sam Ravnborg <sam@ravnborg.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 363c4c3811db330dee9ce27dd3cee6f590d44e4c.
+Hi,
 
-Since the point of this attribute is for a test, this should be done
-in debugfs, not sysfs. Let's revert and a new patch can be added later
-doing it in debugfs.
+On Tue, Feb 1, 2022 at 9:02 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Tue, Feb 1, 2022 at 5:42 PM Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, Jan 26, 2022 at 12:25 AM Javier Martinez Canillas
+> > <javierm@redhat.com> wrote:
+> > >
+> > > On 1/26/22 00:25, Doug Anderson wrote:
+> > > > On Tue, Jan 25, 2022 at 2:55 PM Javier Martinez Canillas
+> > > > <javierm@redhat.com> wrote:
+> > >
+> > > [snip]
+> > >
+> > > >> Should this new sysfs entry be documented in Documentation/ABI/ ?
+> > > >
+> > > > I'm not sure what the policy is here. I actually don't know that I'm
+> > > > too worried about this being an ABI. For the purposes of our tests
+> > > > then if something about this file changed (path changed or something
+> > > > like that) it wouldn't be a huge deal. Presumably the test itself
+> > > > would just "fail" in this case and that would clue us in that the ABI
+> > > > changed and we could adapt to whatever new way was needed to discover
+> > > > this.
+> > > >
+> > > > That being said, if the policy is that everything in sysfs is supposed
+> > > > to be ABI then I can add documentation for this...
+> > > >
+> > >
+> > > I also don't know the policy, hence the question. But in any case, I
+> > > think that it could even be done as a follow-up if is needed.
+> >
+> > Sounds good. Since it's been pretty silent and I had your review I
+> > pushed this to drm-misc-next. If there are comments or someone has an
+> > opinion documenting this as a stable ABI then please yell.
+> >
+> > 363c4c3811db drm/panel-edp: Allow querying the detected panel via sysfs
+>
+> Generally stuff for tests should be put into debugfs. We print
+> everything there in various files.
+>
+> sysfs is uapi, and so come with the full baggage of you need open
+> userspace (which for some sysfs stuff might just be a script), and
+> explicitly not for tests (because that just opens the door to merge
+> anything binary blobs might want and just slide it all in). So please
+> retcon at least some plausible deniability here :-)
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+OK, fair enough. It really is just for a test. Let me post a revert
+then while we discuss more. If someone can add a Reviewed-by to the
+revert then I'll push that just so we're not in an awkward situation.
 
- drivers/gpu/drm/panel/panel-edp.c | 39 ++++---------------------------
- 1 file changed, 5 insertions(+), 34 deletions(-)
+https://lore.kernel.org/r/20220201092152.1.Ibc65ec6fa05017e9856ba9ef557310268429c3ce@changeid
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 23da4040e263..a394a15dc3fb 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -222,8 +222,6 @@ struct panel_edp {
- 	struct gpio_desc *enable_gpio;
- 	struct gpio_desc *hpd_gpio;
- 
--	const struct edp_panel_entry *detected_panel;
--
- 	struct edid *edid;
- 
- 	struct drm_display_mode override_mode;
-@@ -668,6 +666,7 @@ static const struct edp_panel_entry *find_edp_panel(u32 panel_id);
- 
- static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- {
-+	const struct edp_panel_entry *edp_panel;
- 	struct panel_desc *desc;
- 	u32 panel_id;
- 	char vend[4];
-@@ -706,14 +705,14 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- 	}
- 	drm_edid_decode_panel_id(panel_id, vend, &product_id);
- 
--	panel->detected_panel = find_edp_panel(panel_id);
-+	edp_panel = find_edp_panel(panel_id);
- 
- 	/*
- 	 * We're using non-optimized timings and want it really obvious that
- 	 * someone needs to add an entry to the table, so we'll do a WARN_ON
- 	 * splat.
- 	 */
--	if (WARN_ON(!panel->detected_panel)) {
-+	if (WARN_ON(!edp_panel)) {
- 		dev_warn(dev,
- 			 "Unknown panel %s %#06x, using conservative timings\n",
- 			 vend, product_id);
-@@ -735,14 +734,12 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- 		 */
- 		desc->delay.unprepare = 2000;
- 		desc->delay.enable = 200;
--
--		panel->detected_panel = ERR_PTR(-EINVAL);
- 	} else {
- 		dev_info(dev, "Detected %s %s (%#06x)\n",
--			 vend, panel->detected_panel->name, product_id);
-+			 vend, edp_panel->name, product_id);
- 
- 		/* Update the delay; everything else comes from EDID */
--		desc->delay = *panel->detected_panel->delay;
-+		desc->delay = *edp_panel->delay;
- 	}
- 
- 	ret = 0;
-@@ -753,28 +750,6 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- 	return ret;
- }
- 
--static ssize_t detected_panel_show(struct device *dev,
--				   struct device_attribute *attr, char *buf)
--{
--	struct panel_edp *p = dev_get_drvdata(dev);
--
--	if (IS_ERR(p->detected_panel))
--		return sysfs_emit(buf, "UNKNOWN\n");
--	else if (!p->detected_panel)
--		return sysfs_emit(buf, "HARDCODED\n");
--	else
--		return sysfs_emit(buf, "%s\n", p->detected_panel->name);
--}
--
--static const DEVICE_ATTR_RO(detected_panel);
--
--static void edp_panel_remove_detected_panel(void *data)
--{
--	struct panel_edp *p = data;
--
--	device_remove_file(p->base.dev, &dev_attr_detected_panel);
--}
--
- static int panel_edp_probe(struct device *dev, const struct panel_desc *desc,
- 			   struct drm_dp_aux *aux)
- {
-@@ -874,10 +849,6 @@ static int panel_edp_probe(struct device *dev, const struct panel_desc *desc,
- 
- 	drm_panel_add(&panel->base);
- 
--	err = device_create_file(dev, &dev_attr_detected_panel);
--	if (!err)
--		devm_add_action_or_reset(dev, edp_panel_remove_detected_panel, panel);
--
- 	return 0;
- 
- err_finished_pm_runtime:
--- 
-2.35.0.rc2.247.g8bbb082509-goog
 
+> But if it's really only for a test then maybe dumping this into a
+> debugfs file (we do have connector directories already) would be much
+> better. That doable?
+
+I did spend a little time looking at how to do this in debugfs and it
+wasn't at all obvious to me without plumbing in a lot of extra code,
+but I can spend more time on it if it's a requirement. If you think
+this is something that should just be easy, I certainly wouldn't say
+no to a pointer to what I should look at! ;-)
+
+-Doug

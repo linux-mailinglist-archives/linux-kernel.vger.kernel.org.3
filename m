@@ -2,195 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9024A55EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 05:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D324A55E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 05:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiBAE2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 23:28:34 -0500
-Received: from mga02.intel.com ([134.134.136.20]:58773 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233454AbiBAE2c (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 23:28:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643689712; x=1675225712;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iCvCBXFwVh4rfU0ePz9WJ+8ysGL//LLmUCfDhbDs8IY=;
-  b=ipjAsx9VJi+BCmf025rN5k89/Q/zIDnW/bmIFPSTNyEAwGDUjtRg6OPK
-   WqIFk+NVyYK5P1LifTNB0OF4Q2EcTp2Qz6ZEqMBfpOT7nTWMhfe4IC365
-   JwfgpX7uKttYyHNfVi/yWzTeT+rVFeL56KFrPAIwGCoRMbBs04/ok/MYL
-   U2gtql7UY06s7DDcbwdCCHTW94gsyi8LnluHcGzS5iDYchte7v39EpCGi
-   E8CPuwB4MLMfIvmktYIAio9vgrPQ/Dk7xgiM7OMgoLWY/llhOiP+93BSz
-   nwJdaPJRk1trWPoXs2LHl7j8XcJ9oLOxAdDKq1Ccyup12HZHJH8GlrkOm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="235010659"
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="235010659"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 20:28:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="537635941"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 31 Jan 2022 20:28:17 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEkm8-000SmE-AS; Tue, 01 Feb 2022 04:28:16 +0000
-Date:   Tue, 1 Feb 2022 12:27:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_sbi_hsm_suspend_v10 6/8]
- drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of
- function 'cpuid_to_hartid_map'
-Message-ID: <202202011242.WZ5PCuUn-lkp@intel.com>
+        id S233437AbiBAE1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 23:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232890AbiBAE1p (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 23:27:45 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90136C061714;
+        Mon, 31 Jan 2022 20:27:45 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so15054620oth.12;
+        Mon, 31 Jan 2022 20:27:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pJiPgkMTX6YOjxiBVK+eiXXSZiz0nrv/hnN63/Hbt/0=;
+        b=CBoTSrVhIFU0lAKcgIHNq3oAM4gY6KIulQhcSsDTItv/Bg7ycomGDSAdS+0k4GHMxc
+         pjFWwJcPupsZgQkhuBXfitQWvGKWYaRI//GOIvE9qkjkDwS3hq49Pqwf47P2UCMgkWD5
+         CrKVeQZyNCPFTSbaO8ER0pbFHOhXmqviwCCbh7zZLUl3aw4PTN2LCUMZ+Wvx4M4FPIso
+         DhjveD09feJy8gTejV2kJSjN9qYceMmrJAAPtrFFH7x5Sup907it59fX6+36rG00ZwRV
+         x59GRTyS4nYKWYAtEDjGPVypPloKFZHVGP/7o3ohUqVw7PmNbbgt/b0QDRCRlpU+HaGt
+         dJQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=pJiPgkMTX6YOjxiBVK+eiXXSZiz0nrv/hnN63/Hbt/0=;
+        b=B3AISph5dbvNH4xQP7nT9tlC4RGvnKbYB6Sqzlb2GUKh8A3jputVqZSfXcGJ1WXSUI
+         nBUNFNpV60/SMLKz7MDvKDPaVr8Z/pptZ98xD51lnS8yCChajSxTV1dcfPhwzomf12yw
+         OtqbuKns+jinxhkElv+LTAQctQ9arcHT3P6I56CjC0SEJ0tGIfOe6U52Fth5hrGYqKrK
+         Kkk5116vGhzSWpgop2pBjyArelBkVkk6pVFw1jqE0c2cdwcSMB+i/zuuerD4Q1lliXp6
+         VDMsulYLwxbLDFQScPARfgMNYynd+D73Xt+RBt89SvbL2zy0KC9tiWatzCgsV/fCYVYF
+         1B6g==
+X-Gm-Message-State: AOAM532Vy2RfLlcj8K+lbCfk2EgLKgDNWSB86cD67ZTzJIlccd1HFNk4
+        KvCq4WcMvIlnUmW98GhS9Ok8DsTeGfC4Sg==
+X-Google-Smtp-Source: ABdhPJwqDX/PNKwGbcUw3dn9gffRgot5+UhBqzXwjcCg8+KQcGyBYRA9Yw0CF/V+AGrcUc75Bbhiow==
+X-Received: by 2002:a9d:7856:: with SMTP id c22mr13495252otm.192.1643689664981;
+        Mon, 31 Jan 2022 20:27:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j3sm11868201oig.37.2022.01.31.20.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 20:27:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 31 Jan 2022 20:27:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Subject: Re: [PATCH 5.15 000/171] 5.15.19-rc1 review
+Message-ID: <20220201042743.GC2556037@roeck-us.net>
+References: <20220131105229.959216821@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_hsm_suspend_v10
-head:   3d5df67e3863058a28bd4abc35fa3a358ea51fea
-commit: 3064fc6c122b51e6c7933fed24135d3e8ef8bf74 [6/8] cpuidle: Add RISC-V SBI CPU idle driver
-config: riscv-randconfig-c006-20220201 (https://download.01.org/0day-ci/archive/20220201/202202011242.WZ5PCuUn-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/3064fc6c122b51e6c7933fed24135d3e8ef8bf74
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_hsm_suspend_v10
-        git checkout 3064fc6c122b51e6c7933fed24135d3e8ef8bf74
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/
+On Mon, Jan 31, 2022 at 11:54:25AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.19 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Build results:
+	total: 156 pass: 155 fail: 1
+Failed builds:
+	powerpc:ppc32_allmodconfig
+Qemu test results:
+	total: 488 pass: 488 fail: 0
 
-All error/warnings (new ones prefixed by >>):
+The build failure is not new; I did not build powerpc:ppc32_allmodconfig
+before. The build error is:
 
->> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                            cpuid_to_hartid_map(cpu));
-                            ^
->> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                            cpuid_to_hartid_map(cpu));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                          cpuid_to_hartid_map(cpu));
-                          ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                          cpuid_to_hartid_map(cpu));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   3 warnings and 3 errors generated.
+drivers/mtd/nand/raw/mpc5121_nfc.c: In function 'ads5121_select_chip':
+drivers/mtd/nand/raw/mpc5121_nfc.c:294:26: error: unused variable 'mtd'
 
+Fix is upstream commit 33a0da68fb07 ("mtd: rawnand: mpc5121: Remove unused
+variable in ads5121_select_chip()") which needs to be applied to v5.15.y
+and v5.16.y.
 
-vim +/cpuid_to_hartid_map +350 drivers/cpuidle/cpuidle-riscv-sbi.c
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-   317	
-   318	static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
-   319	{
-   320		struct cpuidle_driver *drv;
-   321		unsigned int state_count = 0;
-   322		int ret = 0;
-   323	
-   324		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-   325		if (!drv)
-   326			return -ENOMEM;
-   327	
-   328		drv->name = "sbi_cpuidle";
-   329		drv->owner = THIS_MODULE;
-   330		drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-   331	
-   332		/* RISC-V architectural WFI to be represented as state index 0. */
-   333		drv->states[0].enter = sbi_cpuidle_enter_state;
-   334		drv->states[0].exit_latency = 1;
-   335		drv->states[0].target_residency = 1;
-   336		drv->states[0].power_usage = UINT_MAX;
-   337		strcpy(drv->states[0].name, "WFI");
-   338		strcpy(drv->states[0].desc, "RISC-V WFI");
-   339	
-   340		/*
-   341		 * If no DT idle states are detected (ret == 0) let the driver
-   342		 * initialization fail accordingly since there is no reason to
-   343		 * initialize the idle driver if only wfi is supported, the
-   344		 * default archictectural back-end already executes wfi
-   345		 * on idle entry.
-   346		 */
-   347		ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
-   348		if (ret <= 0) {
-   349			pr_debug("HART%ld: failed to parse DT idle states\n",
- > 350				 cpuid_to_hartid_map(cpu));
-   351			return ret ? : -ENODEV;
-   352		}
-   353		state_count = ret + 1; /* Include WFI state as well */
-   354	
-   355		/* Initialize idle states from DT. */
-   356		ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
-   357		if (ret) {
-   358			pr_err("HART%ld: failed to init idle states\n",
-   359			       cpuid_to_hartid_map(cpu));
-   360			return ret;
-   361		}
-   362	
-   363		ret = cpuidle_register(drv, NULL);
-   364		if (ret)
-   365			goto deinit;
-   366	
-   367		cpuidle_cooling_register(drv);
-   368	
-   369		return 0;
-   370	deinit:
-   371		sbi_cpuidle_deinit_cpu(cpu);
-   372		return ret;
-   373	}
-   374	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Guenter

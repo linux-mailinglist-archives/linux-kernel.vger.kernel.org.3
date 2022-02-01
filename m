@@ -2,260 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C96E84A6273
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5B04A626E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241521AbiBAR3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:29:34 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:14862 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230437AbiBAR3d (ORCPT
+        id S241510AbiBAR3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:29:07 -0500
+Received: from mail-oo1-f46.google.com ([209.85.161.46]:42708 "EHLO
+        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230437AbiBAR3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:29:33 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2117KbE7014216;
-        Tue, 1 Feb 2022 11:28:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- references : in-reply-to : subject : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=952efIhSlZ3TVuH9E0mXPjBSblS+dfL5mu3ba5cMD9c=;
- b=LypIW3UKHaSaflDClwAKMuOmrBFbWx7FwaA/mf7GRUVZQaCskkog4akMbniphWitpqPI
- JXzlHSW6oHCYzNLL5YtO0JiwwwP7LICytuq2vXb6qgVuZvye6rrZBIzry6GpM0EZ5ZAE
- hajDtpcNsBfKNviNCdFu7T0ApG7OjTI/gucRpo213HsKfh8CFsE2SadMWCVP3j2P7kpl
- G2/8VS0FQWPrTbwvtAA/FHykiVtvNcadVyVdLRbyku+tXahG8lr2YLbj0Sqn94ocG8yC
- 0BxOizyEh0bvYA3bUEohvDNYz1BoYLzuQsAxVVFz6F84JL0IAkOf0Nb3WQ1wkqQKiI2Y tw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dxksx1xau-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 01 Feb 2022 11:28:36 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 1 Feb
- 2022 17:28:34 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 1 Feb 2022 17:28:34 +0000
-Received: from LONN2DGDQ73 (unknown [198.90.238.134])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 980C3459;
-        Tue,  1 Feb 2022 17:28:34 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     'Hans de Goede' <hdegoede@redhat.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        "'Rafael J . Wysocki'" <rafael@kernel.org>,
-        'Len Brown' <lenb@kernel.org>,
-        'Mark Gross' <markgross@kernel.org>,
-        'Jaroslav Kysela' <perex@perex.cz>,
-        'Takashi Iwai' <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20220121172431.6876-1-sbinding@opensource.cirrus.com> <20220121172431.6876-3-sbinding@opensource.cirrus.com> <36df02cc-d164-eb6a-4ce7-54d2ee916650@redhat.com>
-In-Reply-To: <36df02cc-d164-eb6a-4ce7-54d2ee916650@redhat.com>
-Subject: RE: [PATCH v6 2/9] spi: Create helper API to lookup ACPI info for spi device
-Date:   Tue, 1 Feb 2022 17:28:34 +0000
-Message-ID: <001101d81791$23f56090$6be021b0$@opensource.cirrus.com>
+        Tue, 1 Feb 2022 12:29:06 -0500
+Received: by mail-oo1-f46.google.com with SMTP id w5-20020a4a9785000000b0030956914befso114372ooi.9;
+        Tue, 01 Feb 2022 09:29:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iMYzAJDNaV/gptZ3or49lK9EJLg7H9JXnTy+JftInwE=;
+        b=V2XxgBmKCXqn4L7X20maCj1r/2OKIFYwgv3Sve0WVc5IRfXqWaIjxn2jgakqP5BsiF
+         MEWT2yIBqJZPZOPvDJ+k616tUkQ/pvqecx18FlnuTHVYosA+pGN0COpY13sIiql5Yi5B
+         EouKG9+/QcirgKCh2yU0uf4x/dFV7rgKBcOiuaMYlQXCtjonULe3pLxyv/qj8EodqdGI
+         q50LbDq6aYw5PqmgKhRvdHPU1arq50Ac6p5eNRPNpJa58BwtlFySZvfyGl0O4pDNJ+9u
+         sErghFLqfNllrKE89nFSv+PwrGNUq7FiWfXG/M3E0lxmknxNsEihKuEvc2qy7ipj9vAi
+         /0xg==
+X-Gm-Message-State: AOAM530ETtj1UubVdVS5tm5vJ/PkW6VkrIgmeSo5BufH+sFw7UlsXl3i
+        0P9X3Qca35jtIDOTQltJxneBpNjXzA==
+X-Google-Smtp-Source: ABdhPJxaDofsHCoDc63WiBgkP6sKeiud4f2oJ4Ih7vvph+GKzrueFLxq7DJxC6JjxnQAG3WR7HrTHw==
+X-Received: by 2002:a4a:ddc1:: with SMTP id i1mr13006229oov.96.1643736545500;
+        Tue, 01 Feb 2022 09:29:05 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id d22sm14160141otp.79.2022.02.01.09.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 09:29:04 -0800 (PST)
+Received: (nullmailer pid 243935 invoked by uid 1000);
+        Tue, 01 Feb 2022 17:29:03 -0000
+Date:   Tue, 1 Feb 2022 11:29:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: gpio-fan: convert to YAML
+Message-ID: <Yflt302QEqs5gabI@robh.at.kernel.org>
+References: <20220126200350.3633576-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQI3MpywMNCpYcMrzvtt+VeZtzYOngLs94vFAiNmdv6rmDmlEA==
-X-Proofpoint-ORIG-GUID: fc1BznT_2vBEkCcSo3Mrt0p79QgZa1GM
-X-Proofpoint-GUID: fc1BznT_2vBEkCcSo3Mrt0p79QgZa1GM
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126200350.3633576-1-clabbe@baylibre.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jan 26, 2022 at 08:03:50PM +0000, Corentin Labbe wrote:
+> Converts hwmon/gpio-fan.txt to YAML
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> 
+> I didnt found any clear maintainer and since DT yaml mandates a
+> maintainer section, I set devicetree@vger.kernel.org.
+> 
+>  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 --------
+>  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 96 +++++++++++++++++++
+>  2 files changed, 96 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+> deleted file mode 100644
+> index f4cfa350f6a1..000000000000
+> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -Bindings for fan connected to GPIO lines
+> -
+> -Required properties:
+> -- compatible : "gpio-fan"
+> -
+> -Optional properties:
+> -- gpios: Specifies the pins that map to bits in the control value,
+> -  ordered MSB-->LSB.
+> -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
+> -  control value that should be set to achieve them. This array
+> -  must have the RPM values in ascending order.
+> -- alarm-gpios: This pin going active indicates something is wrong with
+> -  the fan, and a udev event will be fired.
+> -- #cooling-cells: If used as a cooling device, must be <2>
+> -  Also see:
+> -  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> -  min and max states are derived from the speed-map of the fan.
+> -
+> -Note: At least one the "gpios" or "alarm-gpios" properties must be set.
+> -
+> -Examples:
+> -
+> -	gpio_fan {
+> -		compatible = "gpio-fan";
+> -		gpios = <&gpio1 14 1
+> -			 &gpio1 13 1>;
+> -		gpio-fan,speed-map = <0    0
+> -				      3000 1
+> -				      6000 2>;
+> -		alarm-gpios = <&gpio1 15 1>;
+> -	};
+> -	gpio_fan_cool: gpio_fan {
+> -		compatible = "gpio-fan";
+> -		gpios = <&gpio2 14 1
+> -			 &gpio2 13 1>;
+> -		gpio-fan,speed-map =	<0    0>,
+> -					<3000 1>,
+> -					<6000 2>;
+> -		alarm-gpios = <&gpio2 15 1>;
+> -		#cooling-cells = <2>; /* min followed by max */
+> -	};
+> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> new file mode 100644
+> index 000000000000..15bb5efd3cb4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bindings for fan connected to GPIO lines
+> +
+> +maintainers:
+> +  - OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetree@vger.kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: gpio-fan
+> +
+> +  gpios:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Specifies the pins that map to bits in the control value,
+> +      ordered MSB-->LSB.
+> +
+> +  gpio-fan,speed-map:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description: A mapping of possible fan RPM speeds and the
+> +      control value that should be set to achieve them. This array
+> +      must have the RPM values in ascending order.
+> +
+> +  alarm-gpios:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: This pin going active indicates something is wrong with
+> +      the fan, and a udev event will be fired.
+> +
+> +  "#cooling-cells":
+> +    const: 2
+> +    description: If used as a cooling device, must be <2>
+> +      Also see Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> +      min and max states are derived from the speed-map of the fan.
+> +
+> +anyOf:
+> +  - required:
+> +      - gpios
+> +  - required:
+> +      - alarm-gpios
+> +
+> +additionalProperties: False
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
+> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    gpio1: gpio@4d000000 {
+> +      compatible = "cortina,gemini-gpio", "faraday,ftgpio010";
+> +      reg = <0x4d000000 0x100>;
+> +      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
+> +      resets = <&syscon GEMINI_RESET_GPIO0>;
+> +      clocks = <&syscon GEMINI_CLK_APB>;
+> +      gpio-controller;
+> +      #gpio-cells = <2>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +    };
 
-> -----Original Message-----
-> From: Hans de Goede <hdegoede@redhat.com>
-> Sent: 01 February 2022 14:28
-> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
-> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len =
-Brown
-> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>; Jaroslav Kysela
-> <perex@perex.cz>; Takashi Iwai <tiwai@suse.com>
-> Cc: alsa-devel@alsa-project.org; linux-kernel@vger.kernel.org; linux-
-> spi@vger.kernel.org; linux-acpi@vger.kernel.org; platform-driver-
-> x86@vger.kernel.org; patches@opensource.cirrus.com
-> Subject: Re: [PATCH v6 2/9] spi: Create helper API to lookup ACPI info =
-for spi
-> device
->=20
-> Hi,
->=20
-> On 1/21/22 18:24, Stefan Binding wrote:
-> > This can then be used to find a spi resource inside an
-> > ACPI node, and allocate a spi device.
-> >
-> > Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> > ---
-> >  drivers/spi/spi.c       | 46 =
-++++++++++++++++++++++++++++++++---------
-> >  include/linux/spi/spi.h |  6 ++++++
-> >  2 files changed, 42 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index 1eb84101c4ad..13f4701f0694 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -2410,8 +2410,18 @@ static int acpi_spi_add_resource(struct
-> acpi_resource *ares, void *data)
-> >  	return 1;
-> >  }
-> >
-> > -static acpi_status acpi_register_spi_device(struct spi_controller =
-*ctlr,
-> > -					    struct acpi_device *adev)
-> > +/**
-> > + * acpi_spi_device_alloc - Allocate a spi device, and fill it in =
-with ACPI
-> information
-> > + * @ctlr: controller to which the spi device belongs
-> > + * @adev: ACPI Device for the spi device
-> > + *
-> > + * This should be used to allocate a new spi device from and ACPI =
-Node.
-> > + * The caller is responsible for calling spi_add_device to register =
-the spi
-> device.
-> > + *
-> > + * Return: a pointer to the new device, or ERR_PTR on error.
-> > + */
-> > +struct spi_device *acpi_spi_device_alloc(struct spi_controller =
-*ctlr,
-> > +					 struct acpi_device *adev)
-> >  {
-> >  	acpi_handle parent_handle =3D NULL;
-> >  	struct list_head resource_list;
-> > @@ -2419,10 +2429,6 @@ static acpi_status
-> acpi_register_spi_device(struct spi_controller *ctlr,
-> >  	struct spi_device *spi;
-> >  	int ret;
-> >
-> > -	if (acpi_bus_get_status(adev) || !adev->status.present ||
-> > -	    acpi_device_enumerated(adev))
-> > -		return AE_OK;
-> > -
-> >  	lookup.ctlr		=3D ctlr;
-> >  	lookup.irq		=3D -1;
-> >
-> > @@ -2433,7 +2439,7 @@ static acpi_status =
-acpi_register_spi_device(struct
-> spi_controller *ctlr,
-> >
-> >  	if (ret < 0)
-> >  		/* found SPI in _CRS but it points to another controller */
-> > -		return AE_OK;
-> > +		return ERR_PTR(-ENODEV);
-> >
-> >  	if (!lookup.max_speed_hz &&
-> >  	    ACPI_SUCCESS(acpi_get_parent(adev->handle, &parent_handle))
-> &&
-> > @@ -2443,16 +2449,15 @@ static acpi_status
-> acpi_register_spi_device(struct spi_controller *ctlr,
-> >  	}
-> >
-> >  	if (!lookup.max_speed_hz)
-> > -		return AE_OK;
-> > +		return ERR_PTR(-ENODEV);
-> >
-> >  	spi =3D spi_alloc_device(ctlr);
-> >  	if (!spi) {
-> >  		dev_err(&ctlr->dev, "failed to allocate SPI device for %s\n",
-> >  			dev_name(&adev->dev));
-> > -		return AE_NO_MEMORY;
-> > +		return ERR_PTR(-ENOMEM);
-> >  	}
-> >
-> > -
-> >  	ACPI_COMPANION_SET(&spi->dev, adev);
-> >  	spi->max_speed_hz	=3D lookup.max_speed_hz;
-> >  	spi->mode		|=3D lookup.mode;
-> > @@ -2460,6 +2465,27 @@ static acpi_status
-> acpi_register_spi_device(struct spi_controller *ctlr,
-> >  	spi->bits_per_word	=3D lookup.bits_per_word;
-> >  	spi->chip_select	=3D lookup.chip_select;
-> >
-> > +	return spi;
-> > +}
-> > +EXPORT_SYMBOL_GPL(acpi_spi_device_alloc);
-> > +
-> > +static acpi_status acpi_register_spi_device(struct spi_controller =
-*ctlr,
-> > +					    struct acpi_device *adev)
-> > +{
-> > +	struct spi_device *spi;
-> > +
-> > +	if (acpi_bus_get_status(adev) || !adev->status.present ||
-> > +	    acpi_device_enumerated(adev))
-> > +		return AE_OK;
-> > +
-> > +	spi =3D acpi_spi_device_alloc(ctlr, adev);
-> > +	if (IS_ERR(spi)) {
-> > +		if (PTR_ERR(spi) =3D=3D -ENOMEM)
-> > +			return AE_NO_MEMORY;
-> > +		else
-> > +			return AE_OK;
-> > +	}
-> > +
-> >  	acpi_set_modalias(adev, acpi_device_hid(adev), spi->modalias,
-> >  			  sizeof(spi->modalias));
-> >
-> > diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> > index 0346a3ff27fd..d159cef12f1a 100644
-> > --- a/include/linux/spi/spi.h
-> > +++ b/include/linux/spi/spi.h
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/gpio/consumer.h>
-> >
-> >  #include <uapi/linux/spi/spi.h>
-> > +#include <linux/acpi.h>
-> >
-> >  struct dma_chan;
-> >  struct software_node;
-> > @@ -759,6 +760,11 @@ extern int devm_spi_register_controller(struct
-> device *dev,
-> >  					struct spi_controller *ctlr);
-> >  extern void spi_unregister_controller(struct spi_controller *ctlr);
-> >
-> > +#if IS_ENABLED(CONFIG_ACPI)
-> > +extern struct spi_device *acpi_spi_device_alloc(struct =
-spi_controller *ctlr,
-> > +						struct acpi_device *adev);
-> > +#endif
-> > +
->=20
-> There is no need to add a #ifdef about something which is just a
-> function prototype. Having this declared when CONFIG_ACPI is not set =
-is
-> harmless, please drop the #ifdef.
->=20
-> With that fixed, please add my R-b to the next version:
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> Regards,
->=20
-> Hans
+No need to show providers in examples.
 
-I was just fixing this, however, I just noticed that a subset of this =
-chain - including
-this patch - just got applied. Do you want me to fix this in a separate =
-patch?
+And one example is probably sufficient here.
 
-Thanks,
-Stefan
-
->=20
->=20
->=20
-> >  /*
-> >   * SPI resource management while processing a SPI message
-> >   */
-> >
-
-
+> +    gpio_fan {
+> +      compatible = "gpio-fan";
+> +        gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+> +        gpio-fan,speed-map = <0    0>,
+> +                             <3000 1>,
+> +                             <6000 2>;
+> +        alarm-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+> +    };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
+> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    gpio2: gpio@4d000000 {
+> +      compatible = "cortina,gemini-gpio", "faraday,ftgpio010";
+> +      reg = <0x4d000000 0x100>;
+> +      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
+> +      resets = <&syscon GEMINI_RESET_GPIO0>;
+> +      clocks = <&syscon GEMINI_CLK_APB>;
+> +      gpio-controller;
+> +      #gpio-cells = <2>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +    };
+> +    gpio_fan_cool: gpio_fan {
+> +      compatible = "gpio-fan";
+> +      gpios = <&gpio2 8 GPIO_ACTIVE_HIGH
+> +               &gpio2 1 GPIO_ACTIVE_HIGH>;
+> +      gpio-fan,speed-map = <0    0
+> +                           3000 1
+> +                           6000 2>;
+> +      alarm-gpios = <&gpio2 15 GPIO_ACTIVE_HIGH>;
+> +      #cooling-cells = <2>; /* min followed by max */
+> +    };
+> -- 
+> 2.34.1
+> 
+> 

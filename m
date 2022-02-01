@@ -2,167 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5F74A5BF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C564A5BF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237842AbiBAMMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:12:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29620 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237870AbiBAMMD (ORCPT
+        id S238040AbiBAMMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:12:54 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:59258 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237936AbiBAMMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:12:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643717523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 1 Feb 2022 07:12:44 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 73FAE2177B;
+        Tue,  1 Feb 2022 12:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643717563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2CxPyuHcSSMfylbMraAFLznZLkw0l2GAqkTDlOgQsho=;
-        b=Ky1Nq/9180lqha6dIvdc3w9JpCEnBT7YwLYCNti5hopmmMVG3gL5WPpZKOKXgqFFk4gacS
-        YO8kLALXm5W65v2QMRWF+BPQzCAmkEYb0wDhFrg1REUDkEUl22qxpUPG0pQ3xRkYwG+vDb
-        SDBGKAQ2fSvrleF1OYev3+FurTUQbhI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-658--IY5cIVYO--Grv970cn_rA-1; Tue, 01 Feb 2022 07:12:02 -0500
-X-MC-Unique: -IY5cIVYO--Grv970cn_rA-1
-Received: by mail-ed1-f72.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so8565911edt.15
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 04:12:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2CxPyuHcSSMfylbMraAFLznZLkw0l2GAqkTDlOgQsho=;
-        b=Ak5fxmkdSzCDuxOLGqifYLW23+LGq86LYZ1iBWvqqdxYxV0eNO8J1yAhV5V09Aa3cv
-         99uQpNOeBz3v0/1wGukvhhkxNFJyMWF9bebfxsjKyrowLs1TIkBNdRwxZRCyY0jbhyac
-         /w8tBatBl++KtfrVARnQUNJrOIe5eqQ1ickgjFoK7tfTljnQSWc6hVsUfmADoRtE61/a
-         1hXSRfHInDGDB8AdbWOL9zx6lJBpa7mGkzA7NCVjiUBlEAluqktbkUjweAsODVbdcUf+
-         dQkyRs24oJUFYdwSC9h3c9/sJ728su7C4AgW/QocxcnjC8gi8T8FMJtNMJTuABX946gZ
-         ndHg==
-X-Gm-Message-State: AOAM531sh+WfwE665S5Y8D054w7GLFBUQms/FGNdSVcZ77YFWgyoxeTY
-        x1ye8laVU/7zcjpHq+bxBIyIuEanQqy8oso23iKEdnEdWKPXxvAXhYm+2Caf3sy+qWFizfa+LNq
-        T+ZgO+sL3OzuVpgm7Rcs7yE73
-X-Received: by 2002:a05:6402:2688:: with SMTP id w8mr24569148edd.393.1643717520906;
-        Tue, 01 Feb 2022 04:12:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyC1pnh27oYwvF+9hq/zLGRDe9+J3vYXiCA9VPB+SkOVhI51PZeXci7q2hk7BuWi9N/7Y2xzQ==
-X-Received: by 2002:a05:6402:2688:: with SMTP id w8mr24569133edd.393.1643717520681;
-        Tue, 01 Feb 2022 04:12:00 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id gr24sm14313941ejb.185.2022.02.01.04.11.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 04:12:00 -0800 (PST)
-Message-ID: <ac5ff45b-ba7d-6548-e133-a3c77ea7c713@redhat.com>
-Date:   Tue, 1 Feb 2022 13:11:59 +0100
+        bh=WCyHQiKbzyMEje3YXH4+RB6o4TjGzAk2IiiVc0ZLa6w=;
+        b=rAmc4E6ec+0h0h6u4NfHnAj5D8vpFV3M4H77Jrn0zJtcCTOJipA2JCGvzzzaQ/+ihSLtlX
+        iJD6oaA9BFK6P3ITWiD5cbxXmCeUYLqtb3g7JvptuvRDjihTAAeeZt3EkSSqgEydXvnsI8
+        g+KmEk+8dmkx5fH4rdATG6kxHiXVhZY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643717563;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WCyHQiKbzyMEje3YXH4+RB6o4TjGzAk2IiiVc0ZLa6w=;
+        b=hQO6PgcwBK4YuFXwg1DcfCoRjwZf6JljaT2rbVYSu8JgHejMgHZOLMN9j3LxKJyyN1wH+P
+        0QTCSpcUTQ4BdjBw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 590E3A3B84;
+        Tue,  1 Feb 2022 12:12:43 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 1A047A05B1; Tue,  1 Feb 2022 13:12:43 +0100 (CET)
+Date:   Tue, 1 Feb 2022 13:12:43 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH v2 4/4] mm/gup: remove get_user_pages_locked()
+Message-ID: <20220201121243.zlj66znl64nrnclo@quack3.lan>
+References: <20220201101108.306062-1-jhubbard@nvidia.com>
+ <20220201101108.306062-5-jhubbard@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RESEND v2] KVM: VMX: Dont' send posted IRQ if vCPU == this
- vCPU and vCPU is IN_GUEST_MODE
-Content-Language: en-US
-To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <1643111979-36447-1-git-send-email-wanpengli@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <1643111979-36447-1-git-send-email-wanpengli@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201101108.306062-5-jhubbard@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 12:59, Wanpeng Li wrote:
-> From: Wanpeng Li <wanpengli@tencent.com>
+On Tue 01-02-22 02:11:08, John Hubbard wrote:
+> There is only one caller of get_user_pages_locked(). The purpose of
+> get_user_pages_locked() is to allow for unlocking the mmap_lock when
+> reading a page from the disk during a page fault (hidden behind
+> VM_FAULT_RETRY). The idea is to reduce contention on the heavily-used
+> mmap_lock. (Thanks to Jan Kara for clearly pointing that out, and in
+> fact I've used some of his wording here.)
 > 
-> When delivering a virtual interrupt, don't actually send a posted interrupt
-> if the target vCPU is also the currently running vCPU and is IN_GUEST_MODE,
-> in which case the interrupt is being sent from a VM-Exit fastpath and the
-> core run loop in vcpu_enter_guest() will manually move the interrupt from
-> the PIR to vmcs.GUEST_RVI.  IRQs are disabled while IN_GUEST_MODE, thus
-> there's no possibility of the virtual interrupt being sent from anything
-> other than KVM, i.e. KVM won't suppress a wake event from an IRQ handler
-> (see commit fdba608f15e2, "KVM: VMX: Wake vCPU when delivering posted IRQ
-> even if vCPU == this vCPU").
+> However, it is unlikely for lookup_node() to take a page fault. With
+> that in mind, change over to calling get_user_pages_fast(). This
+> simplifies the code, runs a little faster in the expected case, and
+> allows removing get_user_pages_locked() entirely.
 > 
-> Eliding the posted interrupt restores the performance provided by the
-> combination of commits 379a3c8ee444 ("KVM: VMX: Optimize posted-interrupt
-> delivery for timer fastpath") and 26efe2fd92e5 ("KVM: VMX: Handle
-> preemption timer fastpath").
-> 
-> Thanks Sean for better comments.
-> 
-> Suggested-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> Cc: Jan Kara <jack@suse.cz>
+> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+
+Looks good to me. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->   arch/x86/kvm/vmx/vmx.c | 40 +++++++++++++++++++++-------------------
->   1 file changed, 21 insertions(+), 19 deletions(-)
+>  include/linux/mm.h |  2 --
+>  mm/gup.c           | 59 ----------------------------------------------
+>  mm/mempolicy.c     | 21 +++++++----------
+>  3 files changed, 9 insertions(+), 73 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index fe06b02994e6..e06377c9a4cf 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -3908,31 +3908,33 @@ static inline void kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
->   #ifdef CONFIG_SMP
->   	if (vcpu->mode == IN_GUEST_MODE) {
->   		/*
-> -		 * The vector of interrupt to be delivered to vcpu had
-> -		 * been set in PIR before this function.
-> +		 * The vector of the virtual has already been set in the PIR.
-> +		 * Send a notification event to deliver the virtual interrupt
-> +		 * unless the vCPU is the currently running vCPU, i.e. the
-> +		 * event is being sent from a fastpath VM-Exit handler, in
-> +		 * which case the PIR will be synced to the vIRR before
-> +		 * re-entering the guest.
->   		 *
-> -		 * Following cases will be reached in this block, and
-> -		 * we always send a notification event in all cases as
-> -		 * explained below.
-> +		 * When the target is not the running vCPU, the following
-> +		 * possibilities emerge:
->   		 *
-> -		 * Case 1: vcpu keeps in non-root mode. Sending a
-> -		 * notification event posts the interrupt to vcpu.
-> +		 * Case 1: vCPU stays in non-root mode. Sending a notification
-> +		 * event posts the interrupt to the vCPU.
->   		 *
-> -		 * Case 2: vcpu exits to root mode and is still
-> -		 * runnable. PIR will be synced to vIRR before the
-> -		 * next vcpu entry. Sending a notification event in
-> -		 * this case has no effect, as vcpu is not in root
-> -		 * mode.
-> +		 * Case 2: vCPU exits to root mode and is still runnable. The
-> +		 * PIR will be synced to the vIRR before re-entering the guest.
-> +		 * Sending a notification event is ok as the host IRQ handler
-> +		 * will ignore the spurious event.
->   		 *
-> -		 * Case 3: vcpu exits to root mode and is blocked.
-> -		 * vcpu_block() has already synced PIR to vIRR and
-> -		 * never blocks vcpu if vIRR is not cleared. Therefore,
-> -		 * a blocked vcpu here does not wait for any requested
-> -		 * interrupts in PIR, and sending a notification event
-> -		 * which has no effect is safe here.
-> +		 * Case 3: vCPU exits to root mode and is blocked. vcpu_block()
-> +		 * has already synced PIR to vIRR and never blocks the vCPU if
-> +		 * the vIRR is not empty. Therefore, a blocked vCPU here does
-> +		 * not wait for any requested interrupts in PIR, and sending a
-> +		 * notification event also results in a benign, spurious event.
->   		 */
->   
-> -		apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
-> +		if (vcpu != kvm_get_running_vcpu())
-> +			apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
->   		return;
->   	}
->   #endif
-
-Queued, thanks.
-
-Paolo
-
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 80c540c17d83..528ef1cb4f3a 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1916,8 +1916,6 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
+>  long pin_user_pages(unsigned long start, unsigned long nr_pages,
+>  		    unsigned int gup_flags, struct page **pages,
+>  		    struct vm_area_struct **vmas);
+> -long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
+> -		    unsigned int gup_flags, struct page **pages, int *locked);
+>  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+>  		    struct page **pages, unsigned int gup_flags);
+>  long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 58d01a96ab30..4a43c79f0972 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2119,65 +2119,6 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
+>  }
+>  EXPORT_SYMBOL(get_user_pages);
+>  
+> -/**
+> - * get_user_pages_locked() - variant of get_user_pages()
+> - *
+> - * @start:      starting user address
+> - * @nr_pages:   number of pages from start to pin
+> - * @gup_flags:  flags modifying lookup behaviour
+> - * @pages:      array that receives pointers to the pages pinned.
+> - *              Should be at least nr_pages long. Or NULL, if caller
+> - *              only intends to ensure the pages are faulted in.
+> - * @locked:     pointer to lock flag indicating whether lock is held and
+> - *              subsequently whether VM_FAULT_RETRY functionality can be
+> - *              utilised. Lock must initially be held.
+> - *
+> - * It is suitable to replace the form:
+> - *
+> - *      mmap_read_lock(mm);
+> - *      do_something()
+> - *      get_user_pages(mm, ..., pages, NULL);
+> - *      mmap_read_unlock(mm);
+> - *
+> - *  to:
+> - *
+> - *      int locked = 1;
+> - *      mmap_read_lock(mm);
+> - *      do_something()
+> - *      get_user_pages_locked(mm, ..., pages, &locked);
+> - *      if (locked)
+> - *          mmap_read_unlock(mm);
+> - *
+> - * We can leverage the VM_FAULT_RETRY functionality in the page fault
+> - * paths better by using either get_user_pages_locked() or
+> - * get_user_pages_unlocked().
+> - *
+> - */
+> -long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
+> -			   unsigned int gup_flags, struct page **pages,
+> -			   int *locked)
+> -{
+> -	/*
+> -	 * FIXME: Current FOLL_LONGTERM behavior is incompatible with
+> -	 * FAULT_FLAG_ALLOW_RETRY because of the FS DAX check requirement on
+> -	 * vmas.  As there are no users of this flag in this call we simply
+> -	 * disallow this option for now.
+> -	 */
+> -	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
+> -		return -EINVAL;
+> -	/*
+> -	 * FOLL_PIN must only be set internally by the pin_user_pages*() APIs,
+> -	 * never directly by the caller, so enforce that:
+> -	 */
+> -	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
+> -		return -EINVAL;
+> -
+> -	return __get_user_pages_locked(current->mm, start, nr_pages,
+> -				       pages, NULL, locked,
+> -				       gup_flags | FOLL_TOUCH);
+> -}
+> -EXPORT_SYMBOL(get_user_pages_locked);
+> -
+>  /*
+>   * get_user_pages_unlocked() is suitable to replace the form:
+>   *
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 028e8dd82b44..3f8dc58da3e8 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -907,17 +907,14 @@ static void get_policy_nodemask(struct mempolicy *p, nodemask_t *nodes)
+>  static int lookup_node(struct mm_struct *mm, unsigned long addr)
+>  {
+>  	struct page *p = NULL;
+> -	int err;
+> +	int ret;
+>  
+> -	int locked = 1;
+> -	err = get_user_pages_locked(addr & PAGE_MASK, 1, 0, &p, &locked);
+> -	if (err > 0) {
+> -		err = page_to_nid(p);
+> +	ret = get_user_pages_fast(addr & PAGE_MASK, 1, 0, &p);
+> +	if (ret > 0) {
+> +		ret = page_to_nid(p);
+>  		put_page(p);
+>  	}
+> -	if (locked)
+> -		mmap_read_unlock(mm);
+> -	return err;
+> +	return ret;
+>  }
+>  
+>  /* Retrieve NUMA policy */
+> @@ -968,14 +965,14 @@ static long do_get_mempolicy(int *policy, nodemask_t *nmask,
+>  	if (flags & MPOL_F_NODE) {
+>  		if (flags & MPOL_F_ADDR) {
+>  			/*
+> -			 * Take a refcount on the mpol, lookup_node()
+> -			 * will drop the mmap_lock, so after calling
+> -			 * lookup_node() only "pol" remains valid, "vma"
+> -			 * is stale.
+> +			 * Take a refcount on the mpol, because we are about to
+> +			 * drop the mmap_lock, after which only "pol" remains
+> +			 * valid, "vma" is stale.
+>  			 */
+>  			pol_refcount = pol;
+>  			vma = NULL;
+>  			mpol_get(pol);
+> +			mmap_read_unlock(mm);
+>  			err = lookup_node(mm, addr);
+>  			if (err < 0)
+>  				goto out;
+> -- 
+> 2.35.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

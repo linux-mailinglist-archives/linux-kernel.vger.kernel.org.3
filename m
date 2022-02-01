@@ -2,133 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0649F4A542C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492B44A5406
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiBAAfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S230384AbiBAA0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiBAAfk (ORCPT
+        with ESMTP id S229945AbiBAA0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:35:40 -0500
-X-Greylist: delayed 555 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Jan 2022 16:35:40 PST
-Received: from mail.crtified.me (mail.crtified.me [IPv6:2a01:4f8:c0c:4b18::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91AC06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:35:40 -0800 (PST)
-From:   Carl Richard Theodor Schneider <dev.linux@crtified.me>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crtified.me; s=mail;
-        t=1643675181; bh=JeNXq18UbQzuvreRzNfiLaQ6jV89JRgSNEv4N1KLBKQ=;
-        h=From:To:Cc:Subject:Date;
-        b=QTDjFfgZ1VB3Cwl9rvkzGrkr2/fh2ru+1oP6mEX6olQsfVSugY1H+TmfWO5mduBZj
-         OJEG3T+k6FPLcOeTXcM4nxceJiwGoTsbtYi8RcVKXcxTVahUTH3ZASS4CG3rW2EuqW
-         tVZe4RMAHz26HvGFp6rzRxQ2/JmZj6xDsr4LfuNk=
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     microcaicai@gmail.com,
-        Carl Richard Theodor Schneider <dev.linux@crtified.me>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [PATCH] mtd: spi-nor: Init xtx flash xt25f32b, xt25f128b
-Date:   Tue,  1 Feb 2022 01:25:34 +0100
-Message-Id: <20220201002535.2186484-1-dev.linux@crtified.me>
+        Mon, 31 Jan 2022 19:26:06 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F8DC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:26:06 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id q11so4752013ild.11
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H3VxRYbGvbQmOkoOvdDDUnMRfNKUl+fKq9ZDlxS97Ok=;
+        b=DhSjWhhfrOxlRlaFxeRFZmLiGI2hLkWhe4j92lj9v3XYbXVBK2Aa7rfg/Qw4ji0G2p
+         u4G0yHtzbcJac2yoRp5NEe7bT/x0pnm+gmYuytH34YBvFWK8oPtVG3fB768kQimVTtBP
+         AqRWnF7iUjG2PccI/RzVh1iLKU9EwFQmUg/7g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H3VxRYbGvbQmOkoOvdDDUnMRfNKUl+fKq9ZDlxS97Ok=;
+        b=WiJ81KOPxql7AIOJgprqHnjixQAfwBlRRmX0cw/LI46hzKCyeD1VyTQG94iPvzncCu
+         jSjIw1LU+JlBjRCcifCEd+3jDGW/2IyaMsX68B1AJ2MX9XdbVgKp08IB7I9gQvDVarsC
+         tle04b1EsP1S/RFhbbX6cwwx4e/sDD5gizAA9tZLWJHcfkNbIY5bmBdDmaWF/c0ksf1V
+         hnMhqIB4bk3LRjMBdgW1agj+1ylcb7YH0aLuZV2gGr+zOPrN6ASEj338+PLP2zkPN7wy
+         8jxepz8QK1Wr6LjcSwH9I0r4aA+pPXX6lC5k3MtAFOvD8SomGTQbUD9hX6yd/4DFlGAu
+         ETsg==
+X-Gm-Message-State: AOAM531kP4OZu5bX8B8uwpDrBMWaQXW+zjsFx7/ZOgDhdeObwlOcAKzK
+        UcNpBmX+kbEDBf2lpsdyV8Lg/lRIZU/mRw==
+X-Google-Smtp-Source: ABdhPJwjKjOKYM5xSQAGrJJZRqgCF0cfIASKBkRCDddjF61URcgPVCNMepml/5gPblt0UQhsnMBruQ==
+X-Received: by 2002:a92:8748:: with SMTP id d8mr13523606ilm.186.1643675165601;
+        Mon, 31 Jan 2022 16:26:05 -0800 (PST)
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com. [209.85.166.54])
+        by smtp.gmail.com with ESMTPSA id k1sm18947464iov.6.2022.01.31.16.26.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 16:26:04 -0800 (PST)
+Received: by mail-io1-f54.google.com with SMTP id i62so19204380ioa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:26:04 -0800 (PST)
+X-Received: by 2002:a6b:7908:: with SMTP id i8mr12340835iop.168.1643675163670;
+ Mon, 31 Jan 2022 16:26:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220201001042.3724523-1-dianders@chromium.org> <20220131161034.4.I79baad7f52351aafb470f8b21a9fa79d7031ad6a@changeid>
+In-Reply-To: <20220131161034.4.I79baad7f52351aafb470f8b21a9fa79d7031ad6a@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 31 Jan 2022 16:25:52 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U4oma5qeoboczmKf6Qx7hpuwFbU-wi51p=owaKgZCQtg@mail.gmail.com>
+Message-ID: <CAD=FV=U4oma5qeoboczmKf6Qx7hpuwFbU-wi51p=owaKgZCQtg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] arm64: dts: qcom: sc7280: Clean up sdc1 / sdc2 pinctrl
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the JEDEC identifiers for xt25f32b and xt25f128b.
-Based on the referenced previous patch from microcai.
+Hi,
 
-Only xt25f32b was verified in hardware (On both Radxa RockPi 4A and 4C),
-but the ID of the xt25f128b can also be found in u-boot patches from
-Armbian.
+On Mon, Jan 31, 2022 at 4:11 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 40cb414bc377..dc98a87e2871 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -616,6 +616,9 @@ qfprom: efuse@784000 {
+>
+>                 sdhc_1: sdhci@7c4000 {
+>                         compatible = "qcom,sc7280-sdhci", "qcom,sdhci-msm-v5";
+> +                       pinctrl-names = "default", "sleep";
+> +                       pinctrl-0 = <&sdc1_clk>, <&sdc1_cmd>, <&sdc1_data>, <&sdc1_rclk>;
+> +                       pinctrl-1 = <&sdc1_clk_sleep>, <&sdc1_cmd_sleep>, <&sdc1_data_sleep>, <&sdc1_rclk_sleep>;
+>                         status = "disabled";
+>
+>                         reg = <0 0x007c4000 0 0x1000>,
+> @@ -2425,6 +2428,9 @@ apss_merge_funnel_in: endpoint {
+>
+>                 sdhc_2: sdhci@8804000 {
+>                         compatible = "qcom,sc7280-sdhci", "qcom,sdhci-msm-v5";
+> +                       pinctrl-names = "default", "sleep";
+> +                       pinctrl-0 = <&sdc2_clk>, <&sdc2_cmd>, <&sdc2_data>;
+> +                       pinctrl-1 = <&sdc2_clk_sleep>, <&sdc2_cmd_sleep>, <&sdc2_data_sleep>;
+>                         status = "disabled";
+>
+>                         reg = <0 0x08804000 0 0x1000>;
+> @@ -3943,81 +3949,76 @@ qup_uart15_rx: qup-uart15-rx {
+>                                 function = "qup17";
+>                         };
+>
+> -                       sdc1_on: sdc1-on {
+> -                               clk {
+> -                                       pins = "sdc1_clk";
+> -                               };
+>
+> -                               cmd {
+> -                                       pins = "sdc1_cmd";
+> -                               };
+>
+> -                               data {
+> -                                       pins = "sdc1_data";
+> -                               };
+> +                       sdc1_clk: sdc1-clk {
 
-Link: https://lore.kernel.org/lkml/CAMgqO2y9MYDj6antOaWLBRKU8vGEwqCB-Y1TkXTSWsmsed+W6A@mail.gmail.com/
-Link: https://datasheet.lcsc.com/szlcsc/2005251035_XTX-XT25F32BSOIGU-S_C558851.pdf
-Link: https://datasheet.lcsc.com/szlcsc/2005251034_XTX-XT25F128BSSIGT_C558844.pdf
-Link: https://github.com/armbian/build/blob/master/patch/u-boot/u-boot-rockchip64/general-add-xtx-spi-nor-chips.patch
+Ugh. I just noticed that there are way too many blank lines here in
+the output. Happy to have this fixed when applying or I can post a v2.
 
-Signed-off-by: Carl Richard Theodor Schneider <dev.linux@crtified.me>
----
- drivers/mtd/spi-nor/Makefile |  1 +
- drivers/mtd/spi-nor/core.c   |  1 +
- drivers/mtd/spi-nor/core.h   |  1 +
- drivers/mtd/spi-nor/xtx.c    | 25 +++++++++++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 drivers/mtd/spi-nor/xtx.c
-
-diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
-index 6b904e439372..e344077e3054 100644
---- a/drivers/mtd/spi-nor/Makefile
-+++ b/drivers/mtd/spi-nor/Makefile
-@@ -17,6 +17,7 @@ spi-nor-objs			+= sst.o
- spi-nor-objs			+= winbond.o
- spi-nor-objs			+= xilinx.o
- spi-nor-objs			+= xmc.o
-+spi-nor-objs			+= xtx.o
- obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
- 
- obj-$(CONFIG_MTD_SPI_NOR)	+= controllers/
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 04ea180118e3..44017ab54726 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1846,6 +1846,7 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
- 	&spi_nor_winbond,
- 	&spi_nor_xilinx,
- 	&spi_nor_xmc,
-+	&spi_nor_xtx,
- };
- 
- static const struct flash_info *
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 2afb610853a9..8adac5da6851 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -536,6 +536,7 @@ extern const struct spi_nor_manufacturer spi_nor_sst;
- extern const struct spi_nor_manufacturer spi_nor_winbond;
- extern const struct spi_nor_manufacturer spi_nor_xilinx;
- extern const struct spi_nor_manufacturer spi_nor_xmc;
-+extern const struct spi_nor_manufacturer spi_nor_xtx;
- 
- extern const struct attribute_group *spi_nor_sysfs_groups[];
- 
-diff --git a/drivers/mtd/spi-nor/xtx.c b/drivers/mtd/spi-nor/xtx.c
-new file mode 100644
-index 000000000000..2c9028e5d719
---- /dev/null
-+++ b/drivers/mtd/spi-nor/xtx.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2005, Intec Automation Inc.
-+ * Copyright (C) 2014, Freescale Semiconductor, Inc.
-+ */
-+
-+#include <linux/mtd/spi-nor.h>
-+
-+#include "core.h"
-+
-+static const struct flash_info xtx_parts[] = {
-+	/* XTX (Shenzhen Xin Tian Xia Tech) */
-+	{ "xt25f32b", INFO(0x0b4016, 0, 64 * 1024, 64)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			SPI_NOR_QUAD_READ) },
-+	{ "xt25f128b", INFO(0x0b4018, 0, 64 * 1024, 256)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			SPI_NOR_QUAD_READ) },
-+};
-+
-+const struct spi_nor_manufacturer spi_nor_xtx = {
-+	.name = "xtx",
-+	.parts = xtx_parts,
-+	.nparts = ARRAY_SIZE(xtx_parts),
-+};
--- 
-2.34.1
-
+-Doug

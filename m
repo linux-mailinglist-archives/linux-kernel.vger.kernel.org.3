@@ -2,74 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B22694A5DF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03D14A5DF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239085AbiBAOGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:06:34 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:38610 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiBAOGc (ORCPT
+        id S239096AbiBAOH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235891AbiBAOH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:06:32 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id AB0F31F37F;
-        Tue,  1 Feb 2022 14:06:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643724391;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M5hp9VL4wv0jZCM16FJnuiDkZjEsCZ05FrYmJce5e9k=;
-        b=k5pOFVczRC0/ClsElZNf98FsVc2PGJnLzUKq3xcuKA/IpE2MV2T770qnibosCW0u8+I55J
-        JYeYyOW0lQbIj0OsKFPQch4JPplpyFFmKKwSWSlNDw94rLxufyELJeIDwmDI8iuhAoaRMv
-        NqG2PMxDf9n/uvbMohYFYUEMIc24lyc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643724391;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M5hp9VL4wv0jZCM16FJnuiDkZjEsCZ05FrYmJce5e9k=;
-        b=BmYhM/saeXzPT3qeqPdmcywwzwmfJxQ7abfHtmxArXP/Tnnem4cLdfavQ69/vn45vEmO9h
-        QbSNvqvf7J/KW4Dg==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 7DB24A3B84;
-        Tue,  1 Feb 2022 14:06:31 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 7C1AADA7A9; Tue,  1 Feb 2022 15:05:47 +0100 (CET)
-Date:   Tue, 1 Feb 2022 15:05:47 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
-        kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: Remove dead code
-Message-ID: <20220201140547.GO14046@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
-        kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220128115027.1170373-1-usama.anjum@collabora.com>
+        Tue, 1 Feb 2022 09:07:28 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF35C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 06:07:28 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id c188so21298753iof.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:07:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jE7i/45ZN4yQfoK8ALMqe4UBbhhVgSudWp2g9UDwE9c=;
+        b=spDwLyL2L5jJZInLzDJOx9fN23OKbt/8qSnko2v/3YXEzKCUJs4f8VNwfAqXa5GIKt
+         upn7j7A8OpyFRvyGiKSfwDj28Z6es5tIdaQQu/W8JohsWpgPtONLj9ObnClXIMRhJCBf
+         55ZKzrZ107eU0+PukEOzjwPVg9l0wb0X9sHIOs5PCgR9lBOKH5RUdKVvwXC73SomUFa0
+         oFrwXyFkQNofhj3X0OqAwmi15SPHQrWIi+T08/Nh7dtQJvPLJ/j6AJz8GKagVC5aDplD
+         M4iMhyGVUkYRul1K1QZdqBZuwXNMgiX7chPmKaJAOAm4w6Qaf3iRKviX7RkrAwIwIHbq
+         LrVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jE7i/45ZN4yQfoK8ALMqe4UBbhhVgSudWp2g9UDwE9c=;
+        b=SPW1hjzLZvbiIPkrGIN0UkQ9Y/9gb3knvwMWo/fsOkd2fCB6axp4njAoidwPIXvrAK
+         VQxvAVsk2Ecgs6WJBlsk6jWjceLzH59awi911NjSV5CzH6Je3uZAJRkQF5lsr5mKsKOC
+         p33GR24dB60WqKmB1K5LrSxQr+9r6y0x3mKKc+LzWNK/PF7yRR2ijph6rAvHxIf7CoDG
+         zTwIRlpSimkgMtvaJ//I6r7Xjq/0q+mxaWQxufkKD+vYBV9WHfrY6jnn/nycG8EEnBpZ
+         j0nXHClVmfpKqGCplab1mvkr/rITIdM+uVHmVDl0GYFc4IWHuF6V/mYi10IT6RU0wggk
+         Yskg==
+X-Gm-Message-State: AOAM531CuJWN3vOUTFIQSL8ahGq+HHs4xlhBJCoO0Jv5AORCgj6Sds2j
+        yNOpBx5ehm59EXzb9vnT0skwag==
+X-Google-Smtp-Source: ABdhPJy5ZVgUEgsNb+EEn6bsYx+QID1EFyGStYPvKLXl7Kwy3rMkx1FnTIjPI3ojR4qk6eC+AUQFfQ==
+X-Received: by 2002:a05:6602:1652:: with SMTP id y18mr13414248iow.101.1643724447619;
+        Tue, 01 Feb 2022 06:07:27 -0800 (PST)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id m4sm19228887iln.48.2022.02.01.06.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 06:07:26 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, mka@chromium.org,
+        evgreen@chromium.org, cpratapa@codeaurora.org,
+        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
+        subashab@codeaurora.org, elder@kernel.org,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: add IPA qcom,qmp property
+Date:   Tue,  1 Feb 2022 08:07:23 -0600
+Message-Id: <20220201140723.467431-1-elder@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128115027.1170373-1-usama.anjum@collabora.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:50:27PM +0500, Muhammad Usama Anjum wrote:
-> Local variable stop_loop is assigned only once, to a constant value 0,
-> making it effectively constant through out its scope. This constant
-> variable is guarding deadcode. The two if conditions can never be true.
-> Remove the variable and make the logic simple.
-> 
-> Fixes: 585f784357d8 ("btrfs: use scrub_simple_mirror() to handle RAID56 data stripe scrub")
+At least three platforms require the "qcom,qmp" property to be
+specified, so the IPA driver can request register retention across
+power collapse.  Update DTS files accordingly.
 
-Thanks, this patch is still only in for-next so the change can be folded
-into it.
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+
+Dave, Jakub, please let Bjorn take this through the Qualcomm tree.
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 ++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 2151cd8c8c7ab..e1c46b80f14a0 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -1459,6 +1459,8 @@ ipa: ipa@1e40000 {
+ 					     "imem",
+ 					     "config";
+ 
++			qcom,qmp = <&aoss_qmp>;
++
+ 			qcom,smem-states = <&ipa_smp2p_out 0>,
+ 					   <&ipa_smp2p_out 1>;
+ 			qcom,smem-state-names = "ipa-clock-enabled-valid",
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 937c2e0e93eb9..fe5792e7e8d7a 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -1714,6 +1714,8 @@ ipa: ipa@1e40000 {
+ 			interconnect-names = "memory",
+ 					     "config";
+ 
++			qcom,qmp = <&aoss_qmp>;
++
+ 			qcom,smem-states = <&ipa_smp2p_out 0>,
+ 					   <&ipa_smp2p_out 1>;
+ 			qcom,smem-state-names = "ipa-clock-enabled-valid",
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 53b39e718fb66..5c2866355e352 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1425,6 +1425,8 @@ ipa: ipa@1e40000 {
+ 			interconnect-names = "memory",
+ 					     "config";
+ 
++			qcom,qmp = <&aoss_qmp>;
++
+ 			qcom,smem-states = <&ipa_smp2p_out 0>,
+ 					   <&ipa_smp2p_out 1>;
+ 			qcom,smem-state-names = "ipa-clock-enabled-valid",
+-- 
+2.32.0
+

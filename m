@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCCB4A6547
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACDA4A654B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbiBAUCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:02:02 -0500
-Received: from mail-lf1-f51.google.com ([209.85.167.51]:34434 "EHLO
-        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234665AbiBAUCB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:02:01 -0500
-Received: by mail-lf1-f51.google.com with SMTP id p27so36203515lfa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:02:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v6FMf2eJSEGsi+8SBS2ozN59klWZb5hsA929bkPzCfQ=;
-        b=3goaKCHzZCli4wCk4XslloVJc3hZyx8tpPgqMJ3YOIApe+GmNVTbMqycr1FTAD/NDK
-         XXZ7U6RUekEcKbQ5T9YGbtmA6Y9ZT82oPH+pYG8EPXoAhucvPUX2QC/pcljqdLwrCdiC
-         6Qiya1izYIjpJcbrIljLX0JdeK5TZW+EfZzWnTy9UBF4QtJc/O+Gj8EFrhVnQy+gXC5n
-         ZvuQT5hl77PbB1auZM9IvxZeWdwyFd4d1ghy+x4e86GSuuA1p5FeFLJkDJVAb0169GGl
-         KEjbdrYsZuXHUU9KC2hIQk3BHj0fvt1Ruj86Js8F9JVHtbzFQMa1PlCLpJd5T+w9BpjN
-         V9Vg==
-X-Gm-Message-State: AOAM533z772jQPwAuZfdMUq3kEn2lDKnE+DRbt2g5pvyO5/pklgQUXpD
-        m2TOtGeVOa+2ibjxGhmN2tsWVM45tUw3uPOmbfg=
-X-Google-Smtp-Source: ABdhPJxZ+JP5tT/NWsTIoeods89D1TOizT7rG3ewudn4gANR5Lwa9gIC1HSqZtkmTA19iuXP/e8pE167RxgYG+r9nk4=
-X-Received: by 2002:a05:6512:ba4:: with SMTP id b36mr8717947lfv.481.1643745720259;
- Tue, 01 Feb 2022 12:02:00 -0800 (PST)
+        id S235448AbiBAUDY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 15:03:24 -0500
+Received: from albireo.enyo.de ([37.24.231.21]:53550 "EHLO albireo.enyo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234665AbiBAUDW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 15:03:22 -0500
+Received: from [172.17.203.2] (port=47847 helo=deneb.enyo.de)
+        by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        id 1nEzMv-00H7gd-QZ; Tue, 01 Feb 2022 20:03:13 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.94.2)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1nEzMv-000OiE-CV; Tue, 01 Feb 2022 21:03:13 +0100
+From:   Florian Weimer <fw@deneb.enyo.de>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David.Laight@ACULAB.COM, carlos@redhat.com,
+        Peter Oskolkov <posk@posk.io>
+Subject: Re: [RFC PATCH 2/3] rseq: extend struct rseq with per thread group
+ vcpu id
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
+        <20220201192540.10439-2-mathieu.desnoyers@efficios.com>
+Date:   Tue, 01 Feb 2022 21:03:13 +0100
+In-Reply-To: <20220201192540.10439-2-mathieu.desnoyers@efficios.com> (Mathieu
+        Desnoyers's message of "Tue, 1 Feb 2022 14:25:39 -0500")
+Message-ID: <87bkzqz75q.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
-References: <20220128203950.3371061-1-namhyung@kernel.org> <2db9fab4-0aff-b8b0-5012-13556ea496af@linux.intel.com>
-In-Reply-To: <2db9fab4-0aff-b8b0-5012-13556ea496af@linux.intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 1 Feb 2022 12:01:49 -0800
-Message-ID: <CAM9d7ciUqaZ02AV4xiknhyAKx0U-4GYKNGJWCa0P=5_CdpxoLg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Handle chroot tasks properly (v1)
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andi,
+* Mathieu Desnoyers:
 
-On Mon, Jan 31, 2022 at 5:16 PM Andi Kleen <ak@linux.intel.com> wrote:
->
->
-> On 1/28/2022 12:39 PM, Namhyung Kim wrote:
-> > Hello,
-> >
-> > I found that perf tools don't work well with tasks in a chroot.  The
-> > filenames in MMAP record are from the root directory of the task so
-> > it's different than what it sees from outside.
->
->
-> While that's a real problem, and for chroot it can be fixed, it's much
-> more complicated for the more complex container namespace case with
-> custom mounts, including loop back, etc.
+> If a thread group has fewer threads than cores, or is limited to run on
+> few cores concurrently through sched affinity or cgroup cpusets, the
+> virtual cpu ids will be values close to 0, thus allowing efficient use
+> of user-space memory for per-cpu data structures.
 
-Probably.  Note that perf tool can handle namespaces (to some extent)
-but missed chroot support.  I have a bug report because of this issue.
-Let's fix the simple case first.
+From a userspace programmer perspective, what's a good way to obtain a
+reasonable upper bound for the possible tg_vcpu_id values?
 
->
-> It seems it really need some kind of agent to handle all cases. For
-> example the agent could understand container metadata formats and then
-> do the right thing.
+I believe not all users of cgroup cpusets change the affinity mask.
 
-Sounds like a good idea for a long term solution.
+> diff --git a/kernel/rseq.c b/kernel/rseq.c
+> index 13f6d0419f31..37b43735a400 100644
+> --- a/kernel/rseq.c
+> +++ b/kernel/rseq.c
+> @@ -86,10 +86,14 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
+>  	struct rseq __user *rseq = t->rseq;
+>  	u32 cpu_id = raw_smp_processor_id();
+>  	u32 node_id = cpu_to_node(cpu_id);
+> +	u32 tg_vcpu_id = task_tg_vcpu_id(t);
+>  
+>  	if (!user_write_access_begin(rseq, t->rseq_len))
+>  		goto efault;
+>  	switch (t->rseq_len) {
+> +	case offsetofend(struct rseq, tg_vcpu_id):
+> +		unsafe_put_user(tg_vcpu_id, &rseq->tg_vcpu_id, efault_end);
+> +		fallthrough;
+>  	case offsetofend(struct rseq, node_id):
+>  		unsafe_put_user(node_id, &rseq->node_id, efault_end);
+>  		fallthrough;
 
-Thanks,
-Namhyung
+Is the switch really useful?  I suspect it's faster to just write as
+much as possible all the time.  The switch should be well-predictable
+if running uniform userspace, but still …

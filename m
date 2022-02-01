@@ -2,234 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCE64A6597
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7314A6599
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234368AbiBAUWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiBAUWB (ORCPT
+        id S235202AbiBAUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:22:13 -0500
+Received: from mail.efficios.com ([167.114.26.124]:44348 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234644AbiBAUWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:22:01 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E94C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:22:00 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id z20so25769199ljo.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=G0oCZMu217/ki1S16h4/FaCOqstgzPK5PitKLqVB4GI=;
-        b=qCbRjXCBmrWXNO40eBUCVKSHZY+HsAYvBvpVOHOelK6aqTwpbJWQLNElJ/jF533g3o
-         jmH8456QEdbZboMX0AaDls/S0xM44tK4l9H1JEhL/B+r4PMul0ow7OIszwCgXbyykpUc
-         3dYXDeWFJ1JIyxJij/ftOIqTdSUTlH2unh10wi3tauPNTwsMmYh/A7to3iLZWP73/epC
-         xFSEqG5gFzZuYOF32fyHlgRNfNiSOyXwKEj0793+vWzTl9QNUBk4g6NW2/gOohd9JJUI
-         g8CxDVAjiHZzAdVvM7wVOLcxin58bnJ82BrBuldQIs0zrJ6g+/yr+HMBiMo9fc0MrkYx
-         WKIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=G0oCZMu217/ki1S16h4/FaCOqstgzPK5PitKLqVB4GI=;
-        b=KPedtsDKwYJOgb5iN8sfS8PCF69tn6r/ycweqLEHxONTdoiyaTm7ntEOZpubSK8VIP
-         bqor2oe2yUz0aGvZu6mw8d9SR5pQguV2mJHkmjgJYT9AgffJswSiKu0f9g0JPCvvM81o
-         vWIUxYm52SZslyFx3uz0ASCWmSm3vJCt2tmlTL31JdOaqV8bqX1Kw28jSm+JiZ9BQW2h
-         fqoyz4NNC+jLnTBpKcExQvzbP6L5g6iOa6K9M+eHI1F26vAW+Jb8SxkjVPLlQG6o6Ia9
-         hrQhyRqWHa7J6fFbK9CFJjhXKiZxdQ9KUoszU/VpwxvxjeKThs1gq4/9sG9KjiNtsCsi
-         XuyQ==
-X-Gm-Message-State: AOAM530onRkG3DuJr+/1H47iCDXxJ3TDaqpbHCE/BYh+AgVnKXNrufRT
-        k/Bpjbexd5omdqpXZ+BminoO1SfEGre9nayqdtid3Q==
-X-Google-Smtp-Source: ABdhPJxViziF/mIbCEXRWkWFi0lsbcqCh9RniknQHSnF1iFdRY2ZEW83U4dSdJf2AwwGRFeeH0sukrADhPIhUKwO21U=
-X-Received: by 2002:a2e:a781:: with SMTP id c1mr16377411ljf.527.1643746919071;
- Tue, 01 Feb 2022 12:21:59 -0800 (PST)
+        Tue, 1 Feb 2022 15:22:12 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 830A9348349;
+        Tue,  1 Feb 2022 15:22:11 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id KY2d6z-Wntep; Tue,  1 Feb 2022 15:22:11 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id ECA35348346;
+        Tue,  1 Feb 2022 15:22:10 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com ECA35348346
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643746931;
+        bh=v91rrTgNrdyWSt2/uNOesVvcG4ff1f/IjsdFmDxvw2I=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=qXDonx4SjnLlO4MImf6cNmrj80Nwepd2KokiMjD/223eJJGtgq084HwGVdsTgQXGa
+         KeGbbKsygZW0/JYwMvPZw+9uKunJ4KgD3JKudeh/qyPYWTin7SgsGL6AKUJDhb848N
+         5oOfQw2j2zllCGbeROQLvVby6mavG/0o6cgkp+QQXnQhdRXTL3FRAXW7ZxPxQWso0/
+         ysxBWfpwQ/U3zQaAXRVEPHZU1wPA5k470XdCNKrlvVadg5/mghxu3ncO+iTW2QheNo
+         dKbNYKF+f3VK+ZxZBk9D1l9nrofznik1Cg2caQuG+WOviwImGwiym++YrbQpzNdK3Z
+         3RetqtxLYa4CQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id C06nrz-eLqu1; Tue,  1 Feb 2022 15:22:10 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id D9D0F348063;
+        Tue,  1 Feb 2022 15:22:10 -0500 (EST)
+Date:   Tue, 1 Feb 2022 15:22:10 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fw@deneb.enyo.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
+Message-ID: <1075473571.25688.1643746930751.JavaMail.zimbra@efficios.com>
+In-Reply-To: <87bkzqz75q.fsf@mid.deneb.enyo.de>
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com> <20220201192540.10439-2-mathieu.desnoyers@efficios.com> <87bkzqz75q.fsf@mid.deneb.enyo.de>
+Subject: Re: [RFC PATCH 2/3] rseq: extend struct rseq with per thread group
+ vcpu id
 MIME-Version: 1.0
-References: <20220128171804.569796-1-brijesh.singh@amd.com> <20220128171804.569796-41-brijesh.singh@amd.com>
-In-Reply-To: <20220128171804.569796-41-brijesh.singh@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 1 Feb 2022 13:21:47 -0700
-Message-ID: <CAMkAt6rfTbQB8kZp1Nkh7GpEsWXETAPNoEOhqiMx7o68ZHgjww@mail.gmail.com>
-Subject: Re: [PATCH v9 40/43] x86/sev: Register SEV-SNP guest request platform device
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: rseq: extend struct rseq with per thread group vcpu id
+Thread-Index: uYaG4pyeANMXZzoDJBt8q438TTkSZw==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:19 AM Brijesh Singh <brijesh.singh@amd.com> wrot=
-e:
->
-> Version 2 of GHCB specification provides Non Automatic Exit (NAE) that ca=
-n
-> be used by the SEV-SNP guest to communicate with the PSP without risk fro=
-m
-> a malicious hypervisor who wishes to read, alter, drop or replay the
-> messages sent.
->
-> SNP_LAUNCH_UPDATE can insert two special pages into the guest=E2=80=99s m=
-emory:
-> the secrets page and the CPUID page. The PSP firmware populate the conten=
-ts
-> of the secrets page. The secrets page contains encryption keys used by th=
-e
-> guest to interact with the firmware. Because the secrets page is encrypte=
-d
-> with the guest=E2=80=99s memory encryption key, the hypervisor cannot rea=
-d the
-> keys. See SEV-SNP firmware spec for further details on the secrets page
-> format.
->
-> Create a platform device that the SEV-SNP guest driver can bind to get th=
-e
-> platform resources such as encryption key and message id to use to
-> communicate with the PSP. The SEV-SNP guest driver provides a userspace
-> interface to get the attestation report, key derivation, extended
-> attestation report etc.
->
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/include/asm/sev.h |  4 +++
->  arch/x86/kernel/sev.c      | 61 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 65 insertions(+)
->
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index 9830ee1d6ef0..ca977493eb72 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -95,6 +95,10 @@ struct snp_req_data {
->         unsigned int data_npages;
->  };
->
-> +struct snp_guest_platform_data {
-> +       u64 secrets_gpa;
-> +};
-> +
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
->  extern struct static_key_false sev_es_enable_key;
->  extern void __sev_es_ist_enter(struct pt_regs *regs);
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 1d3ac83226fc..1e56ab00d1f4 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -19,6 +19,9 @@
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
->  #include <linux/cpumask.h>
-> +#include <linux/efi.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/io.h>
->
->  #include <asm/cpu_entry_area.h>
->  #include <asm/stacktrace.h>
-> @@ -34,6 +37,7 @@
->  #include <asm/cpu.h>
->  #include <asm/apic.h>
->  #include <asm/cpuid.h>
-> +#include <asm/setup.h>
->
->  #define DR7_RESET_VALUE        0x400
->
-> @@ -2177,3 +2181,60 @@ int snp_issue_guest_request(u64 exit_code, struct =
-snp_req_data *input, unsigned
->         return ret;
->  }
->  EXPORT_SYMBOL_GPL(snp_issue_guest_request);
-> +
-> +static struct platform_device guest_req_device =3D {
-> +       .name           =3D "snp-guest",
-> +       .id             =3D -1,
-> +};
-> +
-> +static u64 get_secrets_page(void)
-> +{
-> +       u64 pa_data =3D boot_params.cc_blob_address;
-> +       struct cc_blob_sev_info info;
-> +       void *map;
-> +
-> +       /*
-> +        * The CC blob contains the address of the secrets page, check if=
- the
-> +        * blob is present.
-> +        */
-> +       if (!pa_data)
-> +               return 0;
-> +
-> +       map =3D early_memremap(pa_data, sizeof(info));
-> +       memcpy(&info, map, sizeof(info));
-> +       early_memunmap(map, sizeof(info));
-> +
-> +       /* smoke-test the secrets page passed */
-> +       if (!info.secrets_phys || info.secrets_len !=3D PAGE_SIZE)
-> +               return 0;
+----- On Feb 1, 2022, at 3:03 PM, Florian Weimer fw@deneb.enyo.de wrote:
 
-This seems like an error condition worth noting. If no cc_blob_address
-is passed it makes sense not to log but what if the address passed
-fails this smoke test, why not log?
+> * Mathieu Desnoyers:
+>=20
+>> If a thread group has fewer threads than cores, or is limited to run on
+>> few cores concurrently through sched affinity or cgroup cpusets, the
+>> virtual cpu ids will be values close to 0, thus allowing efficient use
+>> of user-space memory for per-cpu data structures.
+>=20
+> From a userspace programmer perspective, what's a good way to obtain a
+> reasonable upper bound for the possible tg_vcpu_id values?
 
-> +
-> +       return info.secrets_phys;
-> +}
-> +
-> +static int __init init_snp_platform_device(void)
-> +{
-> +       struct snp_guest_platform_data data;
-> +       u64 gpa;
-> +
-> +       if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> +               return -ENODEV;
-> +
-> +       gpa =3D get_secrets_page();
-> +       if (!gpa)
-> +               return -ENODEV;
-> +
-> +       data.secrets_gpa =3D gpa;
-> +       if (platform_device_add_data(&guest_req_device, &data, sizeof(dat=
-a)))
-> +               goto e_fail;
-> +
-> +       if (platform_device_register(&guest_req_device))
-> +               goto e_fail;
-> +
-> +       pr_info("SNP guest platform device initialized.\n");
-> +       return 0;
-> +
-> +e_fail:
-> +       pr_err("Failed to initialize SNP guest device\n");
-> +       return -ENODEV;
-> +}
-> +device_initcall(init_snp_platform_device);
-> --
-> 2.25.1
->
+Some effective upper bounds:
+
+- sysconf(3) _SC_NPROCESSORS_CONF,
+- the number of threads which exist concurrently in the process,
+- the number of cpus in the cpu affinity mask applied by sched_setaffinity,
+  except in corner-case situations such as cpu hotplug removing all cpus fr=
+om
+  the affinity set,
+- cgroup cpuset "partition" limits,
+
+Note that AFAIR non-partition cgroup cpusets allow a cgroup to "borrow"
+additional cores from the rest of the system if they are idle, therefore
+allowing the number of concurrent threads to go beyond the specified limit.
+
+>=20
+> I believe not all users of cgroup cpusets change the affinity mask.
+
+AFAIR the sched affinity mask is tweaked independently of the cgroup cpuset=
+.
+Those are two mechanisms both affecting the scheduler task placement.
+
+I would expect the user-space code to use some sensible upper bound as a
+hint about how many per-vcpu data structure elements to expect (and how man=
+y
+to pre-allocate), but have a "lazy initialization" fall-back in case the
+vcpu id goes up to the number of configured processors - 1. And I suspect
+that even the number of configured processors may change with CRIU.
+
+>=20
+>> diff --git a/kernel/rseq.c b/kernel/rseq.c
+>> index 13f6d0419f31..37b43735a400 100644
+>> --- a/kernel/rseq.c
+>> +++ b/kernel/rseq.c
+>> @@ -86,10 +86,14 @@ static int rseq_update_cpu_node_id(struct task_struc=
+t *t)
+>>  =09struct rseq __user *rseq =3D t->rseq;
+>>  =09u32 cpu_id =3D raw_smp_processor_id();
+>>  =09u32 node_id =3D cpu_to_node(cpu_id);
+>> +=09u32 tg_vcpu_id =3D task_tg_vcpu_id(t);
+>> =20
+>>  =09if (!user_write_access_begin(rseq, t->rseq_len))
+>>  =09=09goto efault;
+>>  =09switch (t->rseq_len) {
+>> +=09case offsetofend(struct rseq, tg_vcpu_id):
+>> +=09=09unsafe_put_user(tg_vcpu_id, &rseq->tg_vcpu_id, efault_end);
+>> +=09=09fallthrough;
+>>  =09case offsetofend(struct rseq, node_id):
+>>  =09=09unsafe_put_user(node_id, &rseq->node_id, efault_end);
+>>  =09=09fallthrough;
+>=20
+> Is the switch really useful?  I suspect it's faster to just write as
+> much as possible all the time.  The switch should be well-predictable
+> if running uniform userspace, but still =E2=80=A6
+
+The switch ensures the kernel don't try to write to a memory area beyond
+the rseq size which has been registered by user-space. So it seems to be
+useful to ensure we don't corrupt user-space memory. Or am I missing your
+point ?
+
+Thanks,
+
+Mathieu
+
+--=20
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

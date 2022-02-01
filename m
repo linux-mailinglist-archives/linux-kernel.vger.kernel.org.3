@@ -2,61 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA94D4A599F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C190F4A59A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236297AbiBAKI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:08:26 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:46210 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiBAKIZ (ORCPT
+        id S236307AbiBAKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:11:09 -0500
+Received: from mail-4323.proton.ch ([185.70.43.23]:19935 "EHLO
+        mail-4323.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235410AbiBAKLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:08:25 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5B8F821114;
-        Tue,  1 Feb 2022 10:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643710104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DCA+JZm9s4Y+NL2l66Ugb6RicCc4duY6MT2ld79kHUk=;
-        b=XqaksSA/uQnO0VhdLSfdZHpryRJ8prc/2icV8vVanQh+9nNBiJbv5ZU2/nESDUprEPIW0a
-        7NAqlMiSkca22eChfKW8OcdrhUWWQopv9YfxO5dxOtXGnEJbKzf4r7Rfvic3HKtzg95R7R
-        17V4TLJ/yAdZ4QcNUjtg9ZwjNgIRqK8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643710104;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DCA+JZm9s4Y+NL2l66Ugb6RicCc4duY6MT2ld79kHUk=;
-        b=VuS6Vzzju9PFruLAp3ocbwHKoI4+IxsNPMSTrAExDT13FYeory9AOmnEEZDMImUSHyPKdz
-        y3FAIT4422WAVQCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F18B013B3D;
-        Tue,  1 Feb 2022 10:08:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6/+BOZcG+WEgBQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 01 Feb 2022 10:08:23 +0000
-Message-ID: <ce283de9-7412-472e-f72c-cb6a35ede426@suse.de>
-Date:   Tue, 1 Feb 2022 11:08:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Simon Ser <contact@emersion.fr>
-Cc:     Linux PWM List <linux-pwm@vger.kernel.org>,
+        Tue, 1 Feb 2022 05:11:08 -0500
+Date:   Tue, 01 Feb 2022 10:11:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail2; t=1643710266;
+        bh=Cj1qxOlZvMvcG0id2FOYw/2KPREH0TiCSehxgo3VmiU=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=m5MZah3Rwj/cERTecrIm+SliL8b9cYACUr65ayL0BavnHMDJ2u7DQiCkKeDYDIc1s
+         sdi/2df/Ej34+Q/PHdhyOBKdWQRj6g3HMgmxoo6tq/ZxzobYrSx1Z8P5P7taBEKbSg
+         kg4RhcWnjYuSzEvWKGwtTGmP3zczQYnbitF9RQhRe0WdGa/5rCGEhroZaeNf+KMkpr
+         Z4YXxC1I3Iw/5boMPEMHOIXCstJ3P2PHWLsgq2IhsuaOTXwzlxhJI25RgRIyoUBUhz
+         vZYi5qYQGfmHgYyRI1hnI9mNmEzqJG6defBTDf0TMqV+TdCw+XZ8TYOxi3xlNvycAE
+         SPOlFDlPso4Ng==
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
         Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
@@ -66,105 +39,35 @@ Cc:     Linux PWM List <linux-pwm@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Lee Jones <lee.jones@linaro.org>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <tIMIWqepcZGntnez-1ss4Kn4K8btXnzDRL7EWd19-745WK90YIC19E_4di9RNvB3gtx-PzWEjBEGQLPNJE_x0T1yyyaWFCoFcCiG4StR9RU=@emersion.fr>
- <wuXPJN-K-rvjoV51c4EBmTBScov8rcJTPoYmlfHe04_-4wD1khVxo9HnUsP7UFd5m4AkzGSw2hXe_c77jbSRhjEJ0JZIYwuvuIkcv_KsR-Y=@emersion.fr>
- <CAMuHMdXKZ=BkvVqdpiNPNJgxm9SzQ3Z0n4SqV2-4oPRveybd6g@mail.gmail.com>
- <qmhzv6kqs6QdAOP3bNB39glOpc8eeJ6flgjfjcaBniT-shDKZkxo5uB71weGOUKxPE6dq_WBhtHmY5vMmuYwqMoHgtMWnX0ESE5R1Y5g5F8=@emersion.fr>
- <CAMuHMdUHhUkPhq8M0d=p5EgH8bBz6EtH4drajKtQHE0121V1uQ@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAMuHMdUHhUkPhq8M0d=p5EgH8bBz6EtH4drajKtQHE0121V1uQ@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------kkmck2qcm4CR4C2hZrjhoXfZ"
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED displays
+Message-ID: <csqnu2U_Kr-XE5p7ObjXsYbWDrfxh-j9CQE60lMJSxK0tF0SjlbZQkdjmAWpPRKYJoRLOCKtBgY-0AeIGdbr-SKjuyDKUTOTcI_PPV_bsWk=@emersion.fr>
+In-Reply-To: <ce283de9-7412-472e-f72c-cb6a35ede426@suse.de>
+References: <20220131201225.2324984-1-javierm@redhat.com> <tIMIWqepcZGntnez-1ss4Kn4K8btXnzDRL7EWd19-745WK90YIC19E_4di9RNvB3gtx-PzWEjBEGQLPNJE_x0T1yyyaWFCoFcCiG4StR9RU=@emersion.fr> <wuXPJN-K-rvjoV51c4EBmTBScov8rcJTPoYmlfHe04_-4wD1khVxo9HnUsP7UFd5m4AkzGSw2hXe_c77jbSRhjEJ0JZIYwuvuIkcv_KsR-Y=@emersion.fr> <CAMuHMdXKZ=BkvVqdpiNPNJgxm9SzQ3Z0n4SqV2-4oPRveybd6g@mail.gmail.com> <qmhzv6kqs6QdAOP3bNB39glOpc8eeJ6flgjfjcaBniT-shDKZkxo5uB71weGOUKxPE6dq_WBhtHmY5vMmuYwqMoHgtMWnX0ESE5R1Y5g5F8=@emersion.fr> <CAMuHMdUHhUkPhq8M0d=p5EgH8bBz6EtH4drajKtQHE0121V1uQ@mail.gmail.com> <ce283de9-7412-472e-f72c-cb6a35ede426@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,T_SCC_BODY_TEXT_LINE
+        shortcircuit=no autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------kkmck2qcm4CR4C2hZrjhoXfZ
-Content-Type: multipart/mixed; boundary="------------RFHxz4jZDwnaz9HrrasPkvDS";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>, Simon Ser <contact@emersion.fr>
-Cc: Linux PWM List <linux-pwm@vger.kernel.org>,
- Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Liam Girdwood <lgirdwood@gmail.com>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel.vetter@ffwll.ch>,
- Javier Martinez Canillas <javierm@redhat.com>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Mark Brown <broonie@kernel.org>, Thierry Reding <thierry.reding@gmail.com>,
- Maxime Ripard <maxime@cerno.tech>,
- =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Lee Jones <lee.jones@linaro.org>
-Message-ID: <ce283de9-7412-472e-f72c-cb6a35ede426@suse.de>
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <tIMIWqepcZGntnez-1ss4Kn4K8btXnzDRL7EWd19-745WK90YIC19E_4di9RNvB3gtx-PzWEjBEGQLPNJE_x0T1yyyaWFCoFcCiG4StR9RU=@emersion.fr>
- <wuXPJN-K-rvjoV51c4EBmTBScov8rcJTPoYmlfHe04_-4wD1khVxo9HnUsP7UFd5m4AkzGSw2hXe_c77jbSRhjEJ0JZIYwuvuIkcv_KsR-Y=@emersion.fr>
- <CAMuHMdXKZ=BkvVqdpiNPNJgxm9SzQ3Z0n4SqV2-4oPRveybd6g@mail.gmail.com>
- <qmhzv6kqs6QdAOP3bNB39glOpc8eeJ6flgjfjcaBniT-shDKZkxo5uB71weGOUKxPE6dq_WBhtHmY5vMmuYwqMoHgtMWnX0ESE5R1Y5g5F8=@emersion.fr>
- <CAMuHMdUHhUkPhq8M0d=p5EgH8bBz6EtH4drajKtQHE0121V1uQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUHhUkPhq8M0d=p5EgH8bBz6EtH4drajKtQHE0121V1uQ@mail.gmail.com>
+On Tuesday, February 1st, 2022 at 11:08, Thomas Zimmermann <tzimmermann@sus=
+e.de> wrote:
 
---------------RFHxz4jZDwnaz9HrrasPkvDS
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> Am 01.02.22 um 09:36 schrieb Geert Uytterhoeven:
+>
+> > I'd expect 8-bit grayscale to be Y8 instead.
+>
+> I like this naming, but DRM_FORMAT_R8 is uapi already. :/ If anything,
+> we could add Yn formats in addition to existing Rn formats.
 
-SGkNCg0KQW0gMDEuMDIuMjIgdW0gMDk6MzYgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
-DQo+IEhpIFNpbW9uLA0KPiANCj4gT24gVHVlLCBGZWIgMSwgMjAyMiBhdCA5OjM0IEFNIFNp
-bW9uIFNlciA8Y29udGFjdEBlbWVyc2lvbi5mcj4gd3JvdGU6DQo+PiBPbiBUdWVzZGF5LCBG
-ZWJydWFyeSAxc3QsIDIwMjIgYXQgMDk6MjYsIEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRA
-bGludXgtbTY4ay5vcmc+IHdyb3RlOg0KPj4+IFdoYXQncyB0aGUgc3Rvcnkgd2l0aCB0aGUg
-Um4gZm9ybWF0cz8NCj4+Pg0KPj4+IFRoZSBjb21tZW50cyBzYXkgIm4gYnBwIFJlZCIsIHdo
-aWxlIHRoaXMgaXMgYSBtb25vY2hyb21lIChldmVuDQo+Pj4gaW52ZXJ0ZWQpIGRpc3BsYXk/
-DQo+Pg0KPj4gSSBkb24ndCB0aGluayB0aGUgY29sb3IgbWF0dGVycyB0aGF0IG11Y2guICJS
-ZWQiIHdhcyBwaWNrZWQganVzdCBiZWNhdXNlIGl0IHdhcw0KPj4gYW4gYXJiaXRyYXJ5IGNv
-bG9yLCB0byBtYWtlIHRoZSBkaWZmZXJlbmNlIHdpdGggZS5nLiBDOC4gT3IgYW0gSSBtaXN0
-YWtlbj8NCj4gDQo+IEknZCBleHBlY3QgOC1iaXQgZ3JheXNjYWxlIHRvIGJlIFk4IGluc3Rl
-YWQuDQoNCkkgbGlrZSB0aGlzIG5hbWluZywgYnV0IERSTV9GT1JNQVRfUjggaXMgdWFwaSBh
-bHJlYWR5LiA6LyBJZiBhbnl0aGluZywgDQp3ZSBjb3VsZCBhZGQgWW4gZm9ybWF0cyBpbiBh
-ZGRpdGlvbiB0byBleGlzdGluZyBSbiBmb3JtYXRzLg0KDQpCZXN0IHJlZ2FyZHMNClRob21h
-cw0KDQo+IA0KPiBHcntvZXRqZSxlZXRpbmd9cywNCj4gDQo+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICBHZWVydA0KPiANCj4gLS0NCj4gR2VlcnQgVXl0dGVyaG9ldmVuIC0tIFRoZXJl
-J3MgbG90cyBvZiBMaW51eCBiZXlvbmQgaWEzMiAtLSBnZWVydEBsaW51eC1tNjhrLm9yZw0K
-PiANCj4gSW4gcGVyc29uYWwgY29udmVyc2F0aW9ucyB3aXRoIHRlY2huaWNhbCBwZW9wbGUs
-IEkgY2FsbCBteXNlbGYgYSBoYWNrZXIuIEJ1dA0KPiB3aGVuIEknbSB0YWxraW5nIHRvIGpv
-dXJuYWxpc3RzIEkganVzdCBzYXkgInByb2dyYW1tZXIiIG9yIHNvbWV0aGluZyBsaWtlIHRo
-YXQuDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC0tIExpbnVzIFRvcnZh
-bGRzDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9w
-ZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4g
-NSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcp
-DQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
-
---------------RFHxz4jZDwnaz9HrrasPkvDS--
-
---------------kkmck2qcm4CR4C2hZrjhoXfZ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH5BpcFAwAAAAAACgkQlh/E3EQov+Bk
-GQ//T1ahtrQidsFFYc8qj2Z41/7hEKgM/FKi2/2++8j/TQnA7uQZof4nRc8C5ugGLT8ICH5DP87J
-voya1mlsEMvLp4YQq5BhFWh4JgON4R5z06HKD9k5jMHy4zBotqJ7c1SXOIQk1SzA8chlChPKbyuy
-S4Nk2IH2nP8dPhOysAPiyA7tQMijJ+ZQI0UTwFcXUIxGArjAs0SxtewzrMlN8vRvH0ZITOwo3CkU
-qEcOqdD2QcCGBn6amYLqFXBMu54L81HOJg5KqVh3xAUyHRTN+SLgXh3tGErYoavrhvceLHskC6yz
-DPabj7sQ49VNFcNp9JrUxGWgg+ynRnE5sM7Ly6uUE2ITL48scmS2dMZRQHJUTKN5ZqBltxy6bPFV
-rap9fi+uX8wVhmOtMoRsbW5woDjEZSd9YnrBmwFm+WmAnHr122xBcv3vn0tJ+Bst7qWPWhSKW4Wm
-+VWSIFFJZs/Hi7ob4bmY9J6DVyuuIu4NJIjBrIJzWPvQSSRmAuknD3HjcjUS/fhqm0zrmZoKJpJV
-6BXuXrvb2FzYicMemy2ukUTASxGTXysDHJNbEZ7Rdbsc8fO7Rspt3hoUgUUp8BqId9kRpKgfhp/V
-osvxuMi1tIQcNitHw+BynitGtbEpduQgwlwz09r9QbcYQQkp4hsMBQXGa/aaDFh2dDcIVgEeEhir
-l88=
-=KK8i
------END PGP SIGNATURE-----
-
---------------kkmck2qcm4CR4C2hZrjhoXfZ--
+Need to be a bit careful, e.g. Y210 exists and isn't a grayscale format.
+This could be confusing.

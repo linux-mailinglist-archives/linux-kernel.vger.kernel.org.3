@@ -2,110 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4B74A6528
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724A94A652B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiBATr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:47:56 -0500
-Received: from mout.gmx.net ([212.227.17.21]:46979 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229779AbiBATrz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:47:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643744868;
-        bh=6dETGNc8tOx9qyOBIiW32FnU/euninP5MXdRcl9TR3k=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Tf6tuYmMDdGmNXQS+QUp3oh/2jHb9mbycZ5gKz3zvhkhL+z2v0fL2gQ8uGmKXOsTM
-         FOCGtiA1RITXgMddu8zqQjxjozh/LndLHh7GHJe+qsaVpzajDegmwCoCXpu2+Dd4+e
-         S8ZMCarmt7TGDIC920bMhn3tAEpZHd3dcZzkFvi0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.146.124]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuDXp-1mMjW50K69-00ubTt; Tue, 01
- Feb 2022 20:47:48 +0100
-Message-ID: <f19c3e3d-f26e-3e89-7539-5c50fa2a1bf6@gmx.de>
-Date:   Tue, 1 Feb 2022 20:47:45 +0100
+        id S232627AbiBATtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231716AbiBATtJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 14:49:09 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07368C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:49:09 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id a24so1416002uat.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=posk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V/WPOEcziH5UqRqb9sJkjk1z/koQumE1byOHgxdtZ+w=;
+        b=SYyqNdbtLzWD2UqR4sfFq/sVfh265WAYGg1UOqq9DF3ddTpIa844ih2iWoCCPyOKy/
+         4JSFHDfuqSZMZW1Ma9UrjzLM2GstD+KcgbTKwmq1JM+849BdKMgVLrl8f41FGsMhFpvm
+         kNeIvQpe1l1eYqJqv0lTUE7rcQ1pCsnqHCT74BFDt6tPldxCfCNS5EyUFpuoSI32sMS0
+         YW2AiPrGTG3yUGdusVkQM1GBT0rNR/ighzI8R+vvFdCYTwT9jdsnBrBRXeLiaOFALyDB
+         rx/juLpHNubUCFOjSI3rPSjW4OIB4JLr0xbXfRfoGqbCxUk3TpRjOCLIQEMrHPOZPOWd
+         zSnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V/WPOEcziH5UqRqb9sJkjk1z/koQumE1byOHgxdtZ+w=;
+        b=A8y6Af/RM53WY99L6uRkjjE7kOL07FEvx22Wbl22FuuKxuY7m11rJD6kbc7jbyAGZl
+         iaaUi2cPAkU3DHGyfUFTCQCP89Z1yFbPDBvnYgCBcCY7RUxM/YJJYLHX2a5C/VYgJgoW
+         6yKcVu/p/J6bt/x72M918B+4gswIARJdbQzmRlhddCZsO9fo0OK3x0pZytORwC/TVO7R
+         YY88aMHxqFpwl6MTpNdjN+AiavssTPA8f11qm5nukCvJVInFQnmPydaBm6r1/dzSOv48
+         G3RpZWvlBB7S3I60BfIKmTX/KW1YzYrdNpKjC3InlcBg3MiR/ljsVrAjfpoaru4LHu6V
+         FgIQ==
+X-Gm-Message-State: AOAM530FIPHOHIgIfokCHJFKyFPWW9Npt2Bh4alzfckcEpubIV+kYBk9
+        ESxTfUq+fIowXDd9D9osbgmC4lZ/QUlUseq/IMopzw==
+X-Google-Smtp-Source: ABdhPJyz7aVnac5n2RcM5g7ZcOY1vF6bKGu67s1QXuQrr3Mo/KffqpQw9xndsiHg+XY6+iPew8iA9NodHFIcGjgWh1E=
+X-Received: by 2002:a67:ab43:: with SMTP id k3mr10625892vsh.60.1643744948073;
+ Tue, 01 Feb 2022 11:49:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH -next 1/2 v2] video: fbdev: pxa168fb: Remove unnecessary
- print function dev_err()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220201123202.95055-1-yang.lee@linux.alibaba.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220201123202.95055-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:P0O8w4mueeB2YQ2V6D1Q5t5hIBTe2tcDQlCSuH/dkYTXWINI0bm
- 372+pusaAjBH22M5izyEvjE73Pgbj+Jvhg4BNbBgiGOansG79ouhKLYb5TEphaiX88Nhvlh
- RknvaW6xUoLdCz6V9YJBNKqw5MDE3YjQD/Rc7FO1DZO8wvsrdiOTFlQKrNaHU1m/pOY334Q
- 5PDTPNyGkv9NXyHFQzaow==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eN6+SjDvE+Y=:RX/19qHPU7/f8s0hrRFvZU
- 9yct+1Hdk8A8yxRtk/aopG7aFPKgajm/ELRu+MjQo7K5b58b14mwrN3BMJuHdvM5hqq6yNpwp
- wIL6IdbyJHhMmzCoPXvtkBVJS/eQjBvRLO7TsZOJbw60wHVDCsUHqeii3dmyiaxEP3qWdyo9D
- k6K1zIqmA3IA6nCe7QyNisTbWnjUeb7JKFTZQQqN6PtIN7nfVCTGtrlKr3jD/LhcMJZj8/toS
- kr03U+pQhLykIpNcGKWFcXJ7r7hc9IQ8smQsOYbzLpPLPKZv3/eb9HC7T1GjcVByf54SuUdho
- P9KgbxCNRZp2WiGQaVOJWQmTz3H7bVkvjVx4VJQ5FJf3ySzVC+HVd26iunmjfIE7NpEAGdOBw
- yM8tISv5Ms7D6HXQC8qm2vccV5uJ+nSADABqa48feHBGVurSsZkQutUqMB9fHgayQAVT2mSGJ
- d9FJeF6X/IWIQLzzTSCdD43DT0BLIYQSJr3NdFiWRJrMVAHrp4A+zXkhpJh2cZNhko16MtiTU
- d4DkwxQkuufFto9+1IL9XiP6H9hVB/pFQilJy2TkBPq/wkzCt+rhQF4rszkFC/E0eelIQlDQw
- L3CoWDUXaK5ltKxRB++iYUBp5d+0IG6fyostbsqLhonlLNwCy5Kqhecu95gopGzfEOT0pO+jA
- WOO4QuL9ljKmRj3xZpj76QEnENWMhdbecTLylPS3VrlA4jIYHdi8qygX165WXdEe/J9cZk7M1
- jyk0oquAD3M3iSAjNfW2Lz2LhkLfZSJXXBJhMgovb5HGlVltn/J4yW2N1e8S5AvxdqZtUz3JF
- A1YgSdEuD6r9T5jLU8GG3jZrmtZ7Jl16eNTWoAy7zjqy0UzqEVcvBOCfE8Kicy36lZas4w3Rb
- NwJ67kRC3HR9ZW67Bks8Vf0qjs0kVJt3e7ERcxrsy+I+RbTgUkoVNY4Vs102S0UHXSAHvU+la
- ItTTgbJhQ+sp9sFS0S5rByLwhpocEP7RXC0iZamnZPr6JXd5Jd1vVgalEpCub5bRz8Bg61n+0
- tH/L3gt4hJ7EDC1J+XtBosjdh+A5tnbG2bzS06jkAf4wQeES8dmqTAAHPBXBkX9Hwis8MGhwY
- IiM/6HC05agMBM=
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
+From:   Peter Oskolkov <posk@posk.io>
+Date:   Tue, 1 Feb 2022 11:49:05 -0800
+Message-ID: <CAFTs51XYWqN6bPbVYh8a9ta+VxS4iBbiWWNO7n1t-4_VLpKGXQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] Introduce per thread group current virtual cpu id
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Chris Kennelly <ckennelly@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 13:32, Yang Li wrote:
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
+On Tue, Feb 1, 2022 at 11:26 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
-> Eliminate the follow coccicheck warning:
-> ./drivers/video/fbdev/pxa168fb.c:621:2-9: line 621 is redundant because
-> platform_get_irq() already prints an error
+> This feature allows the scheduler to expose a current virtual cpu id
+> to user-space. This virtual cpu id is within the possible cpus range,
+> and is temporarily (and uniquely) assigned while threads are actively
+> running within a thread group. If a thread group has fewer threads than
+> cores, or is limited to run on few cores concurrently through sched
+> affinity or cgroup cpusets, the virtual cpu ids will be values close
+> to 0, thus allowing efficient use of user-space memory for per-cpu
+> data structures.
+
+Why per thread group and not per mm? The main use case is for
+per-(v)cpu memory allocation logic, so it seems having this feature
+per mm is more appropriate?
+
 >
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> This feature is meant to be exposed by a new rseq thread area field.
+>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
+>  fs/exec.c                    |  4 +++
+>  include/linux/sched.h        |  4 +++
+>  include/linux/sched/signal.h | 49 ++++++++++++++++++++++++++++++++++++
+>  init/Kconfig                 | 14 +++++++++++
+>  kernel/sched/core.c          |  2 ++
+>  5 files changed, 73 insertions(+)
 >
-> -Change in v2:
-> drop the surrounding braces
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 79f2c9483302..bc9a8c5f17f4 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1153,6 +1153,10 @@ static int de_thread(struct task_struct *tsk)
+>         sig->group_exec_task = NULL;
+>         sig->notify_count = 0;
+>
+> +       /* Release possibly high vcpu id, get vcpu id 0. */
+> +       tg_vcpu_put(tsk);
+> +       tg_vcpu_get(tsk);
+> +
+>  no_thread_group:
+>         /* we have changed execution domain */
+>         tsk->exit_signal = SIGCHLD;
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 838c9e0b4cae..0f199daed26a 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1300,6 +1300,10 @@ struct task_struct {
+>         unsigned long rseq_event_mask;
+>  #endif
+>
+> +#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
+> +       int                             tg_vcpu;        /* Current vcpu in thread group */
+> +#endif
+> +
+>         struct tlbflush_unmap_batch     tlb_ubc;
+>
+>         union {
+> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+> index b6ecb9fc4cd2..c87e7ad5a1ea 100644
+> --- a/include/linux/sched/signal.h
+> +++ b/include/linux/sched/signal.h
+> @@ -244,6 +244,12 @@ struct signal_struct {
+>                                                  * and may have inconsistent
+>                                                  * permissions.
+>                                                  */
+> +#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
+> +       /*
+> +        * Mask of allocated vcpu ids within the thread group.
+> +        */
+> +       cpumask_t                       vcpu_mask;
 
-Both applied to fbdev-next tree.
+We use a pointer for the mask (in struct mm). Adds complexity around
+alloc/free, though. Just FYI.
 
-Thanks,
-Helge
+> +#endif
+>  } __randomize_layout;
+>
+>  /*
+> @@ -742,4 +748,47 @@ static inline unsigned long rlimit_max(unsigned int limit)
+>         return task_rlimit_max(current, limit);
+>  }
+>
+> +#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
+> +static inline void tg_vcpu_get(struct task_struct *t)
+> +{
+> +       struct cpumask *cpumask = &t->signal->vcpu_mask;
+> +       unsigned int vcpu;
+> +
+> +       if (t->flags & PF_KTHREAD)
+> +               return;
+> +       /* Atomically reserve lowest available vcpu number. */
+> +       do {
+> +               vcpu = cpumask_first_zero(cpumask);
+> +               WARN_ON_ONCE(vcpu >= nr_cpu_ids);
+> +       } while (cpumask_test_and_set_cpu(vcpu, cpumask));
+> +       t->tg_vcpu = vcpu;
+> +}
+> +
+> +static inline void tg_vcpu_put(struct task_struct *t)
+> +{
+> +       if (t->flags & PF_KTHREAD)
+> +               return;
+> +       cpumask_clear_cpu(t->tg_vcpu, &t->signal->vcpu_mask);
+> +       t->tg_vcpu = 0;
+> +}
+> +
+> +static inline int task_tg_vcpu_id(struct task_struct *t)
+> +{
+> +       return t->tg_vcpu;
+> +}
+> +#else
+> +static inline void tg_vcpu_get(struct task_struct *t) { }
+> +static inline void tg_vcpu_put(struct task_struct *t) { }
+> +static inline int task_tg_vcpu_id(struct task_struct *t)
+> +{
+> +       /*
+> +        * Use the processor id as a fall-back when the thread group vcpu
+> +        * feature is disabled. This provides functional per-cpu data structure
+> +        * accesses in user-space, althrough it won't provide the memory usage
+> +        * benefits.
+> +        */
+> +       return raw_smp_processor_id();
+> +}
+> +#endif
+> +
+>  #endif /* _LINUX_SCHED_SIGNAL_H */
+> diff --git a/init/Kconfig b/init/Kconfig
+> index e9119bf54b1f..5f72b4212a33 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1023,6 +1023,20 @@ config RT_GROUP_SCHED
+>
+>  endif #CGROUP_SCHED
+>
+> +config SCHED_THREAD_GROUP_VCPU
+> +       bool "Provide per-thread-group virtual cpu id"
+> +       depends on SMP
+> +       default n
+> +       help
+> +         This feature allows the scheduler to expose a current virtual cpu id
+> +         to user-space. This virtual cpu id is within the possible cpus range,
+> +         and is temporarily (and uniquely) assigned while threads are actively
+> +         running within a thread group. If a thread group has fewer threads than
+> +         cores, or is limited to run on few cores concurrently through sched
+> +         affinity or cgroup cpusets, the virtual cpu ids will be values close
+> +         to 0, thus allowing efficient use of user-space memory for per-cpu
+> +         data structures.
+> +
+>  config UCLAMP_TASK_GROUP
+>         bool "Utilization clamping per group of tasks"
+>         depends on CGROUP_SCHED
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 2e4ae00e52d1..2690e80977b1 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4795,6 +4795,8 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
+>         sched_info_switch(rq, prev, next);
+>         perf_event_task_sched_out(prev, next);
+>         rseq_preempt(prev);
+> +       tg_vcpu_put(prev);
+> +       tg_vcpu_get(next);
 
+Doing this for all tasks on all context switches will most likely be
+too expensive. We do it only for tasks that explicitly asked for this
+feature during their rseq registration, and still the tight loop in
+our equivalent of tg_vcpu_get() is occasionally noticeable (lots of
+short wakeups can lead to the loop thrashing around).
 
->
->  drivers/video/fbdev/pxa168fb.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/video/fbdev/pxa168fb.c b/drivers/video/fbdev/pxa168=
-fb.c
-> index c25739f6934d..e943300d23e8 100644
-> --- a/drivers/video/fbdev/pxa168fb.c
-> +++ b/drivers/video/fbdev/pxa168fb.c
-> @@ -617,10 +617,8 @@ static int pxa168fb_probe(struct platform_device *p=
-dev)
->  	}
->
->  	irq =3D platform_get_irq(pdev, 0);
-> -	if (irq < 0) {
-> -		dev_err(&pdev->dev, "no IRQ defined\n");
-> +	if (irq < 0)
->  		return -ENOENT;
-> -	}
->
->  	info =3D framebuffer_alloc(sizeof(struct pxa168fb_info), &pdev->dev);
->  	if (info =3D=3D NULL) {
->
+Again, our approach is more complicated as a result.
 
+>         fire_sched_out_preempt_notifiers(prev, next);
+>         kmap_local_sched_out();
+>         prepare_task(next);
+> --
+> 2.17.1
+>

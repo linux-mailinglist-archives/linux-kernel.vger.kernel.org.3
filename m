@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D914A65A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156BB4A65A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbiBAUZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S235131AbiBAU01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiBAUZx (ORCPT
+        with ESMTP id S229793AbiBAU0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:25:53 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFD0C061714;
-        Tue,  1 Feb 2022 12:25:53 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 132so5409965pga.5;
-        Tue, 01 Feb 2022 12:25:53 -0800 (PST)
+        Tue, 1 Feb 2022 15:26:24 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FF0C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:26:23 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id a28so36223970lfl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:26:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ExdrZIgp39XVpTkA829D6pTDC2kNpI9DYEfWRWuVVbU=;
-        b=ITc9Q24cgjgfgZIRPMUETmA1BvsoPuDTxd8akeVWC6NEkNr5mwgVfkTYcLFmbMbZ8W
-         pyiO7xU2fLRPcNVKQ3o1N4+zzRWyjhUf+Vcaa4e1+8OjJOHEFGAXSujp/zo6rnD1g/zL
-         QlEe0OP66UsZK0/9jwRVsB102DGV6VLSPYMbb2D4QfIBhOumzCEJsSFJXtkHDsn2c/LK
-         9qolP4HxL1Ty1zxhk0TB+/KmY+9XlG7Alsrq/MeLK0v5XSnG8rruw879bv0WYQQYCVsn
-         HZmPL8cv9HcJRmll17chuNrjnLe24BPDwcHjHgvr3fVxsBXwpuWolwqRWzlkkbt/ANhO
-         9tSg==
+        bh=ltsemEE7HoLIKHkXcNlB0CpyePLR2S+8XYoTKvHdxwY=;
+        b=ILkxG8/cjLZ6qIh6DnpralN/7qPYJkgLY+jsRisfd/5RIxS+tiPGowEFvFcFCmoom2
+         rOFOao7QsK1hqJb/iBbG5OlCnuwCLIOXNte8Uzmfp4w1C5NiHSQj18qKISohu3dzkpgG
+         zFyaeh67n/77ciUQerZgJrjWe4ZAC/VOSE8tHPji7NH4YcGU9yMg6fMbgjT2T7l8JIwH
+         XNdimVFcCkjEYZcw2BWwPWhbBAeOUju8ARI30snW8sNsQOH0uHWWDwwtbTZ8TvlLOp+a
+         Z9FoLYNJfFXuRGf4TR5GhbG7zriw5+Ioi3cmcZjVwQzAFsEpYEJI/8bCmnL0p4vVc6JV
+         K7pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ExdrZIgp39XVpTkA829D6pTDC2kNpI9DYEfWRWuVVbU=;
-        b=US7D3np/sjN7X3UUlrWjuqeHstvg5EAVfcax7Y/DqAR6TG+ZztxpL0NC2DIIsPHBu/
-         mcAoenlW4dubGKpTPaMl+oa/EDBM1sx/B4EJpVgRFvN2hO6R5+DyV37YjQbpM7rHA5ER
-         gkzkY+OhqmVAh3HfQ9oytwGbqDDeFdw+a9DlONaJVtdFB17jstAXDrCNSATR/3YOGDBg
-         kOAvB2cpCuoNFXBcqehRLAteEq9PLcaCA0pEcJTMxrka4mN2etE/1+OTuSlhYo8SSvxx
-         C+Vng5U7gcoDW/S1BnZpgZ1kkDWJF51nir21423byUYIheG8SNVW3GJWzC9B/koJxXLq
-         qnXg==
-X-Gm-Message-State: AOAM532lrep4A1jmguI+7BVuqi5trdVEHIHTLsn3uHsU/7ozmD0wkDXY
-        d3G6TH+ZQtOFb9LT/XAcT/8i8yg5h6lnfmkW4ac=
-X-Google-Smtp-Source: ABdhPJy0q73D2jETQlZoAmIweTsGb4uPIiFseF1cAdCI2gLgedABAXPmVvU8fXTFwpCRy5HnbjEWYEaeEDiJ1HOoBhU=
-X-Received: by 2002:aa7:888e:: with SMTP id z14mr26785456pfe.46.1643747152532;
- Tue, 01 Feb 2022 12:25:52 -0800 (PST)
+        bh=ltsemEE7HoLIKHkXcNlB0CpyePLR2S+8XYoTKvHdxwY=;
+        b=EdlPd656+AOWeI3f8VlzyqQKeJL0mhFvEErhyHNCdkhp5fk+ELZ/9sXsSw+2BaVlmp
+         nhm4STLqx5g7MlMrisdKeNmhq7rKqA28gpue/PJUuDrxJ0uadVoEYNHHp9Wz13hBdbw9
+         zBpTlE4thtoyu1/YfX219NnI+VQAxuwIgsDuSTEiRYxhodaPIiG/ss3r1cRlas2or8IH
+         bAM91OGR7hkJMccx98sfDY/v5lmf2SyuJUwu3oroz953FieiKJx0d9peBi2y458n+p5H
+         Kf+W1WchBF1J8m643JjI8K7n9nw6w8evdFCQw/0UdY/EfNW7N2e5Q5EpaByr6aufPjVR
+         MlcA==
+X-Gm-Message-State: AOAM532C31YgsyCIw9ua2PE3L3JoH/HcqV70UJ9G/M5KqDJfGvy0efP0
+        8qNX7cxP4K/0xXvNeZWrU1j+vO2kPNgyS7tmIRDQC5nKIS0=
+X-Google-Smtp-Source: ABdhPJw22635Ta+Khv9rQ+AvtU1mFH5u0oayx/EL5nr72sUDUyiFwIzrAqFLdDvtpHDR9Iedp4BlfRx3TN537PHx6bM=
+X-Received: by 2002:ac2:43ad:: with SMTP id t13mr20760851lfl.8.1643747181742;
+ Tue, 01 Feb 2022 12:26:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20220130030352.2710479-1-hefengqing@huawei.com>
- <CAADnVQLsom4MQq2oonzfCqrHbhfg9y7YMPCk6Wg6r4bp3Su03g@mail.gmail.com> <87zgndqukg.fsf@cloudflare.com>
-In-Reply-To: <87zgndqukg.fsf@cloudflare.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 1 Feb 2022 12:25:41 -0800
-Message-ID: <CAADnVQKAeP3RB_F-isOdRJNaKns5RBEfs1aYw=_fCtBro64Amw@mail.gmail.com>
-Subject: Re: [bpf-next] bpf: Add CAP_NET_ADMIN for sk_lookup program type
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     He Fengqing <hefengqing@huawei.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>
+References: <20220201200823.3283171-1-yosryahmed@google.com>
+In-Reply-To: <20220201200823.3283171-1-yosryahmed@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 1 Feb 2022 12:26:10 -0800
+Message-ID: <CALvZod5GrC9jgiLUBf9WVwmjPaRx-pKFTrnpZHswqpqKgT5BuQ@mail.gmail.com>
+Subject: Re: [PATCH] memcg: add per-memcg total kernel memory stat
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 4:25 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+On Tue, Feb 1, 2022 at 12:08 PM Yosry Ahmed <yosryahmed@google.com> wrote:
 >
-> On Sun, Jan 30, 2022 at 04:24 AM CET, Alexei Starovoitov wrote:
-> > On Sat, Jan 29, 2022 at 6:16 PM He Fengqing <hefengqing@huawei.com> wrote:
-> >>
-> >> SK_LOOKUP program type was introduced in commit e9ddbb7707ff
-> >> ("bpf: Introduce SK_LOOKUP program type with a dedicated attach point"),
-> >> but the commit did not add SK_LOOKUP program type in net admin prog type.
-> >> I think SK_LOOKUP program type should need CAP_NET_ADMIN, so add SK_LOOKUP
-> >> program type in net_admin_prog_type.
-> >
-> > I'm afraid it's too late to change.
-> >
-> > Jakub, Marek, wdyt?
+> Currently memcg stats show several types of kernel memory:
+> kernel stack, page tables, sock, vmalloc, and slab.
+> However, there are other allocations with __GFP_ACCOUNT
+> (or supersets such as GFP_KERNEL_ACCOUNT) that are not accounted
+> in any of those stats, a few examples are:
+> - various kvm allocations (e.g. allocated pages to create vcpus)
+> - io_uring
+> - tmp_page in pipes during pipe_write()
+> - bpf ringbuffers
+> - unix sockets
 >
-> That's definitely an oversight on my side, considering that CAP_BPF came
-> in 5.8, and sk_lookup program first appeared in 5.9.
+> Keeping track of the total kernel memory is essential for the ease of
+> migration from cgroup v1 to v2 as there are large discrepancies between
+> v1's kmem.usage_in_bytes and the sum of the available kernel memory stats
+> in v2. Adding separate memcg stats for all __GFP_ACCOUNT kernel
+> allocations is an impractical maintenance burden as there a lot of those
+> all over the kernel code, with more use cases likely to show up in the
+> future.
 >
-> Today it's possible to build a usable sk_lookup program without
-> CAP_NET_ADMIN if you go for REUSEPORT_SOCKARRAY map instead of
-> SOCKMAP/HASH.
+> Therefore, add a "kernel" memcg stat that is analogous to kmem
+> page counter, with added benefits such as using rstat infrastructure
+> which aggregates stats more efficiently. Additionally, this provides a
+> lighter alternative in case the legacy kmem is deprecated in the future
 >
-> Best I can come up is a "phase it out" approach. Put the CAP_NET_ADMIN
-> load-time check behind a config option, defaulting to true?, and wait
-> for it to become obsolete.
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-I would keep it as-is then. The trouble doesn't feel worth it.
+Thanks Yosry. Just to emphasize further, in our gradual migration to
+v2 (exposing v2 interfaces in v1 and removing v1-only interfaces), the
+difference between kernel memory from v1 and v2 is very prominent for
+some workloads. This patch will definitely ease the v2 migration.
+
+Acked-by: Shakeel Butt <shakeelb@google.com>

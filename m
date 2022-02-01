@@ -2,259 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D77A04A677F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793CE4A6783
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236919AbiBAWDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:03:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiBAWDU (ORCPT
+        id S236981AbiBAWFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:05:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236920AbiBAWFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:03:20 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3668C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 14:03:20 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id c19so26438232ybf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KkrfiRtyMaJqqJdjrzkMV83DUGlyweqGta4SJAJDkXw=;
-        b=IGttW2G58AVMdCJ+ZQFSiRfakMSISnO8rp5qj+HW196XjZf2cYHtnTkTPBiXxF08zQ
-         ePpEX0EyvCsK9dd6pSO/+E2OirT+DdcWmZ4xfVhtOrkrfG5JdtLAtZoI2vR2XROZ3YgR
-         uk/hjaLxBx7257IVlCZFC6RpGOzYwiQ2fpUqhb0w6NnH/2a/+EBEIaMhneESxylO19fd
-         /DgMGpq3/4N/uRONAKCYH5TbeRhP5bcmnGHafDaVwSrOtM53I9vZcVMihuHUd1mM81Gb
-         4jEl5JvKWEhuyks+jQJeBUvjK9rw5RK1X0GP6KxL+BwkFMa2OyRyIVoNbZeX3wT+zNPw
-         JxkA==
+        Tue, 1 Feb 2022 17:05:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643753134;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R+PF+Jmgwz02XcLrLQyKWVtKMoZYNCPV2hRCDrmkX+U=;
+        b=GeN7IsFuNBW5nGlOe3rrdKmaXC3qOOTjmWWv8CAqKHQG312DhGhNpDDxlGCRDNlVHBMTym
+        PmyH9/GL6i9V2qDgxu+1oBT+qhueGdtlP1V2e+JFBKwkZ1QLUAHZKvNHiOhNGDXd8h8QuM
+        nIT/i8xAOcwWnTELPgctCNPWIYkOR/c=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-60-yEQLP_WiNkiYQiss5yJ8gg-1; Tue, 01 Feb 2022 17:05:33 -0500
+X-MC-Unique: yEQLP_WiNkiYQiss5yJ8gg-1
+Received: by mail-wm1-f72.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so2459193wmb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:05:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KkrfiRtyMaJqqJdjrzkMV83DUGlyweqGta4SJAJDkXw=;
-        b=SYm7pS0W2m+MqvNJlbdE4+WzPTI+5mKGNywgObCPy7RkN4B6dzSy+LC7YaUMDX83+T
-         uKPKHbJmxT0Qq99lMo2VCbjFaT3nLsq/6RExzdx3iKv4TXNfnJ3wVtL5EgclE3jCQZT+
-         ZqgnwtjszGZpbtebwE9LMVj7/I4DHWDu7EQLCXcYD6JSwjcKqMJjVDcgZ5vYy0gKOHlM
-         enhBej8QaSowWRHNHkZPWl4Bn7ovnY9h+DBaq+hUKEW838HjqrJ2v4c4AsWLvmUE532s
-         E8jmeZj6DlAcs4iI5J77pkwdxWrgYg7bx/xSf3F40sDv+/W4mFI2Oime9F+3GQWYpZXb
-         50qA==
-X-Gm-Message-State: AOAM533WIOctBDTaM5rmAoNLi2DrOUSQzkhrCBKd2EqtAtI0UUdP44b1
-        9uAGqjpO/OeHfCjqsannpqGucVOrAP16KRDvyaKuUnTfLHOzxw==
-X-Google-Smtp-Source: ABdhPJyoB+XDP74+DoHXoM1KcCJ6c5iLjHOXoJwPJl/3dkSP3VWhODVzE2FQgbdDwy5YS0yj5v9c78vqz8CjNv2CaDM=
-X-Received: by 2002:a25:c401:: with SMTP id u1mr25600903ybf.190.1643752999816;
- Tue, 01 Feb 2022 14:03:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R+PF+Jmgwz02XcLrLQyKWVtKMoZYNCPV2hRCDrmkX+U=;
+        b=AMlKM4uAtxGtwpbgC1FT/RGpfnn1x96qHzrCLeYlwt1VQnv1MlZuR1YIYaSC+m5zQ3
+         ufv50PCWl2SUYlWiquhwn1K8ITKV9ue7nfVaRqrttgBRDC2j81dfX7A6D46ahc9b8Ocv
+         SYAE4deSvvuH3NAUwQ8mvPzkpqUjCPMhowjJkrYbnDCwh+qDB+vyKE3NkmMJrP1kFU2S
+         V0IUi0f2BdEBJO2j7Ei02mkKmrtw3dz10zBldqhjJAFMcsnoo5PyjEzAuXZ+lTtvEROo
+         9fBXByv7ga+NHZMn8ny5eo/CFxOvjd2u3NN4DHXvz53ETCr4dTwY3MVxwiYXlsjiws+i
+         81CA==
+X-Gm-Message-State: AOAM533AwolhuxTR1RnJ6CpljR7RZyUDN37ndaKXZFWrVfcWSXQhNCmw
+        yONSKwKN6r+lUBtgtZwSpnB6pIWrf5U8xEZToxRf/acX6PmQxzouKFgusLlqJCjVw2gYwxDONPr
+        Y2HYIpB14O+4TZse2LchrmD6Z
+X-Received: by 2002:a7b:c08b:: with SMTP id r11mr3541838wmh.111.1643753131856;
+        Tue, 01 Feb 2022 14:05:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwMfMCE7dPkT2LWjrlDLo+rPCcb6cQo5NqhccAHmiLNCvv4S+IfI7Xeb2PxwV5fism+ziv1fA==
+X-Received: by 2002:a7b:c08b:: with SMTP id r11mr3541823wmh.111.1643753131629;
+        Tue, 01 Feb 2022 14:05:31 -0800 (PST)
+Received: from redhat.com ([2.52.5.34])
+        by smtp.gmail.com with ESMTPSA id e13sm18813272wrq.35.2022.02.01.14.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 14:05:31 -0800 (PST)
+Date:   Tue, 1 Feb 2022 17:05:27 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
+        igor.skalkin@opensynergy.com
+Subject: Re: [PATCH v2 1/9] firmware: arm_scmi: Add a virtio channel refcount
+Message-ID: <20220201165947-mutt-send-email-mst@kernel.org>
+References: <20220201171601.53316-1-cristian.marussi@arm.com>
+ <20220201171601.53316-2-cristian.marussi@arm.com>
 MIME-Version: 1.0
-References: <20220112224342.958358-1-quic_eberman@quicinc.com>
- <20220201213542.2808035-1-quic_eberman@quicinc.com> <CAKwvOdmZHmihbf_mLyi=Ncf7FZjjSxxTsHZeaqxk4LKhMHs_iA@mail.gmail.com>
-In-Reply-To: <CAKwvOdmZHmihbf_mLyi=Ncf7FZjjSxxTsHZeaqxk4LKhMHs_iA@mail.gmail.com>
-From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date:   Tue, 1 Feb 2022 14:03:08 -0800
-Message-ID: <CAFP8O3K_=QytpY8h0vGtpNNC5JWLdoyqbtG1bcVuT-iauD_DHA@mail.gmail.com>
-Subject: Re: [PATCH v3] kbuild: Add environment variables for userprogs flags
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Matthias Maennich <maennich@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201171601.53316-2-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 1:38 PM Nick Desaulniers <ndesaulniers@google.com> w=
-rote:
->
-> On Tue, Feb 1, 2022 at 1:36 PM Elliot Berman <quic_eberman@quicinc.com> w=
-rote:
-> >
-> > Allow additional arguments be passed to userprogs compilation.
-> > Reproducible clang builds need to provide a sysroot and gcc path to
-> > ensure same toolchain is used across hosts. KCFLAGS is not currently
->
-> ^ ensure the same (maybe Masahiro can fix that up locally when applying)
->
-> > used for any user programs compilation, so add new USERCFLAGS and
-> > USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
-> >
-> > Clang 13+ might detect GCC installation on hosts which have it installe=
-d
-> > to a default location in /. With addition of these environment
-> > variables, you can specify flags such as:
+On Tue, Feb 01, 2022 at 05:15:53PM +0000, Cristian Marussi wrote:
+> Currently SCMI VirtIO channels are marked with a ready flag and related
+> lock to track channel lifetime and support proper synchronization at
+> shutdown when virtqueues have to be stopped.
+> 
+> This leads to some extended spinlocked sections with IRQs off on the RX
+> path to keep hold of the ready flag and does not scale well especially when
+> SCMI VirtIO polling mode will be introduced.
+> 
+> Add an SCMI VirtIO channel dedicated refcount to track active users on both
+> the TX and the RX path and properly enforce synchronization and cleanup at
+> shutdown, inhibiting further usage of the channel once freed.
+> 
+> Cc: Igor Skalkin <igor.skalkin@opensynergy.com>
+> Cc: Peter Hilber <peter.hilber@opensynergy.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+>  drivers/firmware/arm_scmi/virtio.c | 148 +++++++++++++++++++----------
+>  1 file changed, 100 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/virtio.c b/drivers/firmware/arm_scmi/virtio.c
+> index fd0f6f91fc0b..536e46eab462 100644
+> --- a/drivers/firmware/arm_scmi/virtio.c
+> +++ b/drivers/firmware/arm_scmi/virtio.c
+> @@ -17,7 +17,9 @@
+>   * virtqueue. Access to each virtqueue is protected by spinlocks.
+>   */
+>  
+> +#include <linux/completion.h>
+>  #include <linux/errno.h>
+> +#include <linux/refcount.h>
+>  #include <linux/slab.h>
+>  #include <linux/virtio.h>
+>  #include <linux/virtio_config.h>
+> @@ -27,6 +29,7 @@
+>  
+>  #include "common.h"
+>  
+> +#define VIRTIO_MAX_RX_TIMEOUT_MS	60000
+>  #define VIRTIO_SCMI_MAX_MSG_SIZE 128 /* Value may be increased. */
+>  #define VIRTIO_SCMI_MAX_PDU_SIZE \
+>  	(VIRTIO_SCMI_MAX_MSG_SIZE + SCMI_MSG_MAX_PROT_OVERHEAD)
+> @@ -39,23 +42,21 @@
+>   * @cinfo: SCMI Tx or Rx channel
+>   * @free_list: List of unused scmi_vio_msg, maintained for Tx channels only
+>   * @is_rx: Whether channel is an Rx channel
+> - * @ready: Whether transport user is ready to hear about channel
+>   * @max_msg: Maximum number of pending messages for this channel.
+> - * @lock: Protects access to all members except ready.
+> - * @ready_lock: Protects access to ready. If required, it must be taken before
+> - *              lock.
+> + * @lock: Protects access to all members except users.
+> + * @shutdown_done: A reference to a completion used when freeing this channel.
+> + * @users: A reference count to currently active users of this channel.
+>   */
+>  struct scmi_vio_channel {
+>  	struct virtqueue *vqueue;
+>  	struct scmi_chan_info *cinfo;
+>  	struct list_head free_list;
+>  	bool is_rx;
+> -	bool ready;
+>  	unsigned int max_msg;
+> -	/* lock to protect access to all members except ready. */
+> +	/* lock to protect access to all members except users. */
+>  	spinlock_t lock;
+> -	/* lock to rotects access to ready flag. */
+> -	spinlock_t ready_lock;
+> +	struct completion *shutdown_done;
+> +	refcount_t users;
+>  };
+>  
+>  /**
+> @@ -76,6 +77,71 @@ struct scmi_vio_msg {
+>  /* Only one SCMI VirtIO device can possibly exist */
+>  static struct virtio_device *scmi_vdev;
+>  
+> +static void scmi_vio_channel_ready(struct scmi_vio_channel *vioch,
+> +				   struct scmi_chan_info *cinfo)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&vioch->lock, flags);
+> +	cinfo->transport_info = vioch;
+> +	/* Indirectly setting channel not available any more */
+> +	vioch->cinfo = cinfo;
+> +	spin_unlock_irqrestore(&vioch->lock, flags);
+> +
+> +	refcount_set(&vioch->users, 1);
+> +}
+> +
+> +static inline bool scmi_vio_channel_acquire(struct scmi_vio_channel *vioch)
+> +{
+> +	return refcount_inc_not_zero(&vioch->users);
+> +}
+> +
+> +static inline void scmi_vio_channel_release(struct scmi_vio_channel *vioch)
+> +{
+> +	if (refcount_dec_and_test(&vioch->users)) {
+> +		unsigned long flags;
+> +
+> +		spin_lock_irqsave(&vioch->lock, flags);
+> +		if (vioch->shutdown_done) {
+> +			vioch->cinfo = NULL;
+> +			complete(vioch->shutdown_done);
+> +		}
+> +		spin_unlock_irqrestore(&vioch->lock, flags);
+> +	}
+> +}
+> +
+> +static void scmi_vio_channel_cleanup_sync(struct scmi_vio_channel *vioch)
+> +{
+> +	int timeout;
+> +	char *vq_name;
+> +	unsigned long flags;
+> +	struct device *dev;
+> +	DECLARE_COMPLETION_ONSTACK(vioch_shutdown_done);
+> +
+> +	/*
+> +	 * Prepare to wait for the last release if not already released
+> +	 * or in progress.
+> +	 */
+> +	spin_lock_irqsave(&vioch->lock, flags);
+> +	if (!vioch->cinfo || vioch->shutdown_done) {
+> +		spin_unlock_irqrestore(&vioch->lock, flags);
+> +		return;
+> +	}
+> +	vioch->shutdown_done = &vioch_shutdown_done;
+> +	vq_name = vioch->is_rx ? "RX" : "TX";
+> +	/* vioch->cinfo could be NULLified after the release */
+> +	dev = vioch->cinfo->dev;
+> +	spin_unlock_irqrestore(&vioch->lock, flags);
+> +
+> +	scmi_vio_channel_release(vioch);
+> +
+> +	timeout = msecs_to_jiffies(VIRTIO_MAX_RX_TIMEOUT_MS + 10);
+> +	/* Let any possibly concurrent RX path release the channel */
+> +	if (!wait_for_completion_timeout(vioch->shutdown_done, timeout))
+> +		dev_warn(dev,
+> +			 "Timeout shutting down %s VQ.\n", vq_name);
+> +}
+> +
 
-s/Clang 13+/Clang/.
-
-Clang has been detecting GCC installation for a long time.
-Clang 13 just improved some detection, but may not be worth mentioning
-in the message.
-
-> > $ make USERCFLAGS=3D--sysroot=3D/path/to/sysroot
-> >
-> > This can also be used to specify different sysroots such as musl or
-> > bionic which may be installed on the host in paths that the compiler
-> > may not search by default.
-> >
-> > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->
-> Thanks for the patch!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-LGTM.
-
-Reviewed-by: Fangrui Song <maskray@google.com>
-
-> > ---
-> >
-> > Changes since v2:
-> >  - Incorporated Nick's suggestions:
-> >    - Addressed docs and commit text comments
-> >    - Introduced KBUILD_USERHOSTCFLAGS as suggested
-> >
-> >  Documentation/kbuild/kbuild.rst    | 11 +++++++++++
-> >  Documentation/kbuild/makefiles.rst |  2 ++
-> >  Makefile                           | 10 ++++++----
-> >  init/Kconfig                       |  8 ++++----
-> >  usr/include/Makefile               |  3 +++
-> >  5 files changed, 26 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbu=
-ild.rst
-> > index 2d1fc03d346e..ef19b9c13523 100644
-> > --- a/Documentation/kbuild/kbuild.rst
-> > +++ b/Documentation/kbuild/kbuild.rst
-> > @@ -77,6 +77,17 @@ HOSTLDLIBS
-> >  ----------
-> >  Additional libraries to link against when building host programs.
-> >
-> > +.. _userkbuildflags:
-> > +
-> > +USERCFLAGS
-> > +----------
-> > +Additional options used for $(CC) when compiling userprogs.
-> > +
-> > +USERLDFLAGS
-> > +-----------
-> > +Additional options used for $(LD) when linking userprogs. userprogs ar=
-e linked
-> > +with CC, so $(USERLDFLAGS) should include "-Wl," prefix as applicable.
-> > +
-> >  KBUILD_KCONFIG
-> >  --------------
-> >  Set the top-level Kconfig file to the value of this environment
-> > diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/=
-makefiles.rst
-> > index b008b90b92c9..11a296e52d68 100644
-> > --- a/Documentation/kbuild/makefiles.rst
-> > +++ b/Documentation/kbuild/makefiles.rst
-> > @@ -982,6 +982,8 @@ The syntax is quite similar. The difference is to u=
-se "userprogs" instead of
-> >
-> >         When linking bpfilter_umh, it will be passed the extra option -=
-static.
-> >
-> > +       From command line, :ref:`USERCFLAGS and USERLDFLAGS <userkbuild=
-flags>` will also be used.
-> > +
-> >  5.4 When userspace programs are actually built
-> >  ----------------------------------------------
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 45278d508d81..1d0172449355 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -431,11 +431,12 @@ HOSTCC    =3D gcc
-> >  HOSTCXX        =3D g++
-> >  endif
-> >
-> > -export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prot=
-otypes \
-> > -                             -O2 -fomit-frame-pointer -std=3Dgnu89
-> > -export KBUILD_USERLDFLAGS :=3D
-> > +KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototy=
-pes \
-> > +                        -O2 -fomit-frame-pointer -std=3Dgnu89
-> > +KBUILD_USERCFLAGS  :=3D $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
-> > +KBUILD_USERLDFLAGS :=3D $(USERLDFLAGS)
-> >
-> > -KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOS=
-TCFLAGS)
-> > +KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERHOSTCFLAGS) $(HOST_LFS_CFLAGS) $=
-(HOSTCFLAGS)
-> >  KBUILD_HOSTCXXFLAGS :=3D -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
-> >  KBUILD_HOSTLDFLAGS  :=3D $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
-> >  KBUILD_HOSTLDLIBS   :=3D $(HOST_LFS_LIBS) $(HOSTLDLIBS)
-> > @@ -530,6 +531,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHO=
-LE RESOLVE_BTFIDS LEX YACC AW
-> >  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
-> >  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
-> >  export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAG=
-S_MODULE
-> > +export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
-> >
-> >  export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD=
-_LDFLAGS
-> >  export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index f2ae41e6717f..164706c38e8b 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -62,13 +62,13 @@ config LLD_VERSION
-> >
-> >  config CC_CAN_LINK
-> >         bool
-> > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(m64-flag)) if 64BIT
-> > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(m32-flag))
-> > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
-> > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
-> >
-> >  config CC_CAN_LINK_STATIC
-> >         bool
-> > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(m64-flag) -static) if 64BIT
-> > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(m32-flag) -static)
-> > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
-> > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLA=
-NG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
-> >
-> >  config CC_HAS_ASM_GOTO
-> >         def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> > diff --git a/usr/include/Makefile b/usr/include/Makefile
-> > index 1c2ae1368079..0322e567dc1e 100644
-> > --- a/usr/include/Makefile
-> > +++ b/usr/include/Makefile
-> > @@ -12,6 +12,9 @@ UAPI_CFLAGS :=3D -std=3Dc90 -Wall -Werror=3Dimplicit-=
-function-declaration
-> >  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m=
-64.
-> >  UAPI_CFLAGS +=3D $(filter -m32 -m64, $(KBUILD_CFLAGS))
-> >
-> > +# USERCFLAGS might contain sysroot location for CC.
-> > +UAPI_CFLAGS +=3D $(USERCFLAGS)
-> > +
-> >  override c_flags =3D $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/u=
-sr/include
-> >
-> >  # The following are excluded for now because they fail to build.
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+Hmm. So if it times out then what? It's ok to corrupt memory then?
+Why? I suspect if you want to recover from this you need to mark device
+as broken, synchronize with all callbacks (we don't have an API
+for that but we really should). Only then you will know it's
+not doing anything.
 
 
+>  static bool scmi_vio_have_vq_rx(struct virtio_device *vdev)
+>  {
+>  	return virtio_has_feature(vdev, VIRTIO_SCMI_F_P2A_CHANNELS);
+> @@ -119,7 +185,7 @@ static void scmi_finalize_message(struct scmi_vio_channel *vioch,
+>  
+>  static void scmi_vio_complete_cb(struct virtqueue *vqueue)
+>  {
+> -	unsigned long ready_flags;
+> +	unsigned long flags;
+>  	unsigned int length;
+>  	struct scmi_vio_channel *vioch;
+>  	struct scmi_vio_msg *msg;
+> @@ -130,27 +196,27 @@ static void scmi_vio_complete_cb(struct virtqueue *vqueue)
+>  	vioch = &((struct scmi_vio_channel *)vqueue->vdev->priv)[vqueue->index];
+>  
+>  	for (;;) {
+> -		spin_lock_irqsave(&vioch->ready_lock, ready_flags);
+> -
+> -		if (!vioch->ready) {
+> +		if (!scmi_vio_channel_acquire(vioch)) {
+>  			if (!cb_enabled)
+>  				(void)virtqueue_enable_cb(vqueue);
+> -			goto unlock_ready_out;
+> +			return;
+>  		}
+>  
+> -		/* IRQs already disabled here no need to irqsave */
+> -		spin_lock(&vioch->lock);
+> +		spin_lock_irqsave(&vioch->lock, flags);
+>  		if (cb_enabled) {
+>  			virtqueue_disable_cb(vqueue);
+>  			cb_enabled = false;
+>  		}
+>  		msg = virtqueue_get_buf(vqueue, &length);
+>  		if (!msg) {
+> -			if (virtqueue_enable_cb(vqueue))
+> -				goto unlock_out;
+> +			if (virtqueue_enable_cb(vqueue)) {
+> +				spin_unlock_irqrestore(&vioch->lock, flags);
+> +				scmi_vio_channel_release(vioch);
+> +				return;
+> +			}
+>  			cb_enabled = true;
+>  		}
+> -		spin_unlock(&vioch->lock);
+> +		spin_unlock_irqrestore(&vioch->lock, flags);
+>  
+>  		if (msg) {
+>  			msg->rx_len = length;
+> @@ -161,19 +227,14 @@ static void scmi_vio_complete_cb(struct virtqueue *vqueue)
+>  		}
+>  
+>  		/*
+> -		 * Release ready_lock and re-enable IRQs between loop iterations
+> -		 * to allow virtio_chan_free() to possibly kick in and set the
+> -		 * flag vioch->ready to false even in between processing of
+> -		 * messages, so as to force outstanding messages to be ignored
+> -		 * when system is shutting down.
+> +		 * Release vio channel between loop iterations to allow
+> +		 * virtio_chan_free() to eventually fully release it when
+> +		 * shutting down; in such a case, any outstanding message will
+> +		 * be ignored since this loop will bail out at the next
+> +		 * iteration.
+>  		 */
+> -		spin_unlock_irqrestore(&vioch->ready_lock, ready_flags);
+> +		scmi_vio_channel_release(vioch);
+>  	}
+> -
+> -unlock_out:
+> -	spin_unlock(&vioch->lock);
+> -unlock_ready_out:
+> -	spin_unlock_irqrestore(&vioch->ready_lock, ready_flags);
+>  }
+>  
+>  static const char *const scmi_vio_vqueue_names[] = { "tx", "rx" };
+> @@ -273,35 +334,20 @@ static int virtio_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
+>  		}
+>  	}
+>  
+> -	spin_lock_irqsave(&vioch->lock, flags);
+> -	cinfo->transport_info = vioch;
+> -	/* Indirectly setting channel not available any more */
+> -	vioch->cinfo = cinfo;
+> -	spin_unlock_irqrestore(&vioch->lock, flags);
+> -
+> -	spin_lock_irqsave(&vioch->ready_lock, flags);
+> -	vioch->ready = true;
+> -	spin_unlock_irqrestore(&vioch->ready_lock, flags);
+> +	scmi_vio_channel_ready(vioch, cinfo);
+>  
+>  	return 0;
+>  }
+>  
+>  static int virtio_chan_free(int id, void *p, void *data)
+>  {
+> -	unsigned long flags;
+>  	struct scmi_chan_info *cinfo = p;
+>  	struct scmi_vio_channel *vioch = cinfo->transport_info;
+>  
+> -	spin_lock_irqsave(&vioch->ready_lock, flags);
+> -	vioch->ready = false;
+> -	spin_unlock_irqrestore(&vioch->ready_lock, flags);
+> +	scmi_vio_channel_cleanup_sync(vioch);
+>  
+>  	scmi_free_channel(cinfo, data, id);
+>  
+> -	spin_lock_irqsave(&vioch->lock, flags);
+> -	vioch->cinfo = NULL;
+> -	spin_unlock_irqrestore(&vioch->lock, flags);
+> -
+>  	return 0;
+>  }
+>  
+> @@ -316,10 +362,14 @@ static int virtio_send_message(struct scmi_chan_info *cinfo,
+>  	int rc;
+>  	struct scmi_vio_msg *msg;
+>  
+> +	if (!scmi_vio_channel_acquire(vioch))
+> +		return -EINVAL;
+> +
+>  	spin_lock_irqsave(&vioch->lock, flags);
+>  
+>  	if (list_empty(&vioch->free_list)) {
+>  		spin_unlock_irqrestore(&vioch->lock, flags);
+> +		scmi_vio_channel_release(vioch);
+>  		return -EBUSY;
+>  	}
+>  
+> @@ -342,6 +392,8 @@ static int virtio_send_message(struct scmi_chan_info *cinfo,
+>  
+>  	spin_unlock_irqrestore(&vioch->lock, flags);
+>  
+> +	scmi_vio_channel_release(vioch);
+> +
+>  	return rc;
+>  }
+>  
+> @@ -416,7 +468,6 @@ static int scmi_vio_probe(struct virtio_device *vdev)
+>  		unsigned int sz;
+>  
+>  		spin_lock_init(&channels[i].lock);
+> -		spin_lock_init(&channels[i].ready_lock);
+>  		INIT_LIST_HEAD(&channels[i].free_list);
+>  		channels[i].vqueue = vqs[i];
+>  
+> @@ -503,7 +554,8 @@ const struct scmi_desc scmi_virtio_desc = {
+>  	.transport_init = virtio_scmi_init,
+>  	.transport_exit = virtio_scmi_exit,
+>  	.ops = &scmi_virtio_ops,
+> -	.max_rx_timeout_ms = 60000, /* for non-realtime virtio devices */
+> +	/* for non-realtime virtio devices */
+> +	.max_rx_timeout_ms = VIRTIO_MAX_RX_TIMEOUT_MS,
+>  	.max_msg = 0, /* overridden by virtio_get_max_msg() */
+>  	.max_msg_size = VIRTIO_SCMI_MAX_MSG_SIZE,
+>  };
+> -- 
+> 2.17.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF

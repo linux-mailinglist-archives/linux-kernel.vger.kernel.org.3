@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E244A5783
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E514A5785
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbiBAHJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiBAHJo (ORCPT
+        id S234577AbiBAHL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:11:27 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60070 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230420AbiBAHL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:09:44 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554A8C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:09:44 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 132so3508226pga.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=30OxmrfKBbCG4hj/X3lsJFFvPMa8rJcIl2RH+GTl1+c=;
-        b=mhDV0XtJlte0Om1SvFzaHSKspJpOm4zs+iaK7pwkTbq02CRjXk7keFp0VG1dgt3NAQ
-         HhZlEK8n/5JsdmEiiQgaYAyhBJ8QJOSOQknTuBXjZ5oj0+MtTPh8fVsqxVLFjWWxuW/v
-         wQ59egONKIocS0nvyFlCnlLGT1yIaPO14HhFbVcCyQVsX0TqGvo+HUCSJcXUOnI2pC10
-         WNBa763RKmq7xot14B/U2BzflA796QfH98wCFvmBVEmtiQ7VnCtqIvoblsjaW236AAgf
-         shU7DLKubnotSnFp/70OkQBgfj8DGsLOwm5y2os0E/SHhZpxFpX6lMq6hMmvbIRKOdOD
-         TMnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=30OxmrfKBbCG4hj/X3lsJFFvPMa8rJcIl2RH+GTl1+c=;
-        b=N17oqmJdJTJ7trhr9Iy89kyJGNdS+GqTjw+sxYd8cZnL0/RywwDu2ZmpwFBW46Wlul
-         aKJzWF03Q3wRXwxPy1aT4PbeW9Tt7bfC8muhlNAA+dM5QTdBy2QThe05UuOgZ/8eo6q2
-         RXYmBMidUHzYx/LB5OCw4aDEXqAOkDBEobOCjg6EcHvYDDYy8G06TiY/EspvCBsnyhS+
-         63exZNg4xQVtUAMj/iFQtsd7/eAAln7do61YYqQJd4aQdsdETeSYQrYQCKDkwsEbg6lh
-         9YdrHe0DP/BhwImIGpPnZgT60S5zFxfXEzRryIn0+CAcRgSzGiBmnDBq9N7a4blsukP4
-         b/1Q==
-X-Gm-Message-State: AOAM53049Uj1htpNJp8wBjZEhxwVPxa05DeTUQOD0wzaB5yAwxovNq8h
-        xUCaFklWyEBeZjTnyaVk/Zwz7VfyQA0=
-X-Google-Smtp-Source: ABdhPJziuKz49mS+l3/gxjF2ulHnmtnYWYPEnlwQpCgJgPtp9ORDVwZExaGCW2JC7ubPOPU27LhpOQ==
-X-Received: by 2002:a63:f30e:: with SMTP id l14mr19357924pgh.410.1643699383259;
-        Mon, 31 Jan 2022 23:09:43 -0800 (PST)
-Received: from [10.59.0.6] ([85.203.23.80])
-        by smtp.gmail.com with ESMTPSA id q19sm19964158pfn.159.2022.01.31.23.09.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 23:09:42 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] staging: wfx: possible deadlock in wfx_conf_tx() and
- wfx_add_interface()
-To:     jerome.pouiller@silabs.com, Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <6f489bf2-bac0-8030-7ea5-6f5c12daa568@gmail.com>
-Date:   Tue, 1 Feb 2022 15:09:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        Tue, 1 Feb 2022 02:11:26 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E732921101;
+        Tue,  1 Feb 2022 07:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643699484; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQEYJ6FNj/22aeWfdUN39j4pVPrOKKMvEUtIZ9fV/yM=;
+        b=L4tqzH/0Thft58FFZVEi9/28etlOp9nAx0vIzL7GFLK/eV++KXuSIn3DwcPJeboZmt18ZU
+        K29Q7S13OfmVYeBX1c8LmY/EQUf3faHReu2FvTXrmeV+mS0GNP/r2LHlG2Ibblvs/k7aHx
+        tNgf6POduAqsrxV4c89wqTpgZUox3jA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643699484;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQEYJ6FNj/22aeWfdUN39j4pVPrOKKMvEUtIZ9fV/yM=;
+        b=yxjZR4zkyq5Dysj3QRI9ru+MGE9Pf1d/i1glzRzysh7iLTQeUQtp9a7Vi5iUzyOhhrcxO6
+        U04sHwUWv/MKSZCA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id D9A75A3B81;
+        Tue,  1 Feb 2022 07:11:24 +0000 (UTC)
+Date:   Tue, 01 Feb 2022 08:11:24 +0100
+Message-ID: <s5hzgnb83j7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] sound: Replace acpi_bus_get_device()
+In-Reply-To: <2828205.e9J7NaK4W3@kreacher>
+References: <2828205.e9J7NaK4W3@kreacher>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 26 Jan 2022 20:48:49 +0100,
+Rafael J. Wysocki wrote:
+> 
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-My static analysis tool reports a possible deadlock in the wfx driver in 
-Linux 5.16:
+Thanks, applied now to for-linus branch.
 
-wfx_conf_tx()
-   mutex_lock(&wdev->conf_mutex); --> Line 225 (Lock A)
-   wfx_update_pm()
-     wait_for_completion_timeout(&wvif->set_pm_mode_complete, ...); --> 
-Line 3019 (Wait X)
-
-wfx_add_interface()
-   mutex_lock(&wdev->conf_mutex); --> Line 737 (Lock A)
-   complete(&wvif->set_pm_mode_complete); --> Line 758 (Wake X)
-
-When wfx_conf_tx() is executed, "Wait X" is performed by holding "Lock 
-A". If wfx_add_interface() is executed at this time, "Wake X" cannot be 
-performed to wake up "Wait X" in wfx_conf_tx(), because "Lock A" has 
-been already hold by wfx_conf_tx(), causing a possible deadlock.
-I find that "Wait X" is performed with a timeout, to relieve the 
-possible deadlock; but I think this timeout can cause inefficient execution.
-
-I am not quite sure whether this possible problem is real and how to fix 
-it if it is real.
-Any feedback would be appreciated, thanks :)
+Mark, JFYI, this touches an ASoC code slightly, too.
 
 
-Best wishes,
-Jia-Ju Bai
+Takashi
 
+> ---
+>  sound/hda/intel-sdw-acpi.c |    7 +++----
+>  sound/soc/soc-acpi.c       |    7 ++-----
+>  2 files changed, 5 insertions(+), 9 deletions(-)
+> 
+> Index: linux-pm/sound/hda/intel-sdw-acpi.c
+> ===================================================================
+> --- linux-pm.orig/sound/hda/intel-sdw-acpi.c
+> +++ linux-pm/sound/hda/intel-sdw-acpi.c
+> @@ -50,11 +50,11 @@ static bool is_link_enabled(struct fwnod
+>  static int
+>  sdw_intel_scan_controller(struct sdw_intel_acpi_info *info)
+>  {
+> -	struct acpi_device *adev;
+> +	struct acpi_device *adev = acpi_fetch_acpi_dev(info->handle);
+>  	int ret, i;
+>  	u8 count;
+>  
+> -	if (acpi_bus_get_device(info->handle, &adev))
+> +	if (!adev)
+>  		return -EINVAL;
+>  
+>  	/* Found controller, find links supported */
+> @@ -119,7 +119,6 @@ static acpi_status sdw_intel_acpi_cb(acp
+>  				     void *cdata, void **return_value)
+>  {
+>  	struct sdw_intel_acpi_info *info = cdata;
+> -	struct acpi_device *adev;
+>  	acpi_status status;
+>  	u64 adr;
+>  
+> @@ -127,7 +126,7 @@ static acpi_status sdw_intel_acpi_cb(acp
+>  	if (ACPI_FAILURE(status))
+>  		return AE_OK; /* keep going */
+>  
+> -	if (acpi_bus_get_device(handle, &adev)) {
+> +	if (!acpi_fetch_acpi_dev(handle)) {
+>  		pr_err("%s: Couldn't find ACPI handle\n", __func__);
+>  		return AE_NOT_FOUND;
+>  	}
+> Index: linux-pm/sound/soc/soc-acpi.c
+> ===================================================================
+> --- linux-pm.orig/sound/soc/soc-acpi.c
+> +++ linux-pm/sound/soc/soc-acpi.c
+> @@ -55,16 +55,13 @@ EXPORT_SYMBOL_GPL(snd_soc_acpi_find_mach
+>  static acpi_status snd_soc_acpi_find_package(acpi_handle handle, u32 level,
+>  					     void *context, void **ret)
+>  {
+> -	struct acpi_device *adev;
+> +	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+>  	acpi_status status;
+>  	struct snd_soc_acpi_package_context *pkg_ctx = context;
+>  
+>  	pkg_ctx->data_valid = false;
+>  
+> -	if (acpi_bus_get_device(handle, &adev))
+> -		return AE_OK;
+> -
+> -	if (adev->status.present && adev->status.functional) {
+> +	if (adev && adev->status.present && adev->status.functional) {
+>  		struct acpi_buffer buffer = {ACPI_ALLOCATE_BUFFER, NULL};
+>  		union acpi_object  *myobj = NULL;
+>  
+> 
+> 
+> 

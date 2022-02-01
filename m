@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCB84A645F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C284A645E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242133AbiBAS7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbiBAS7k (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:59:40 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DADC06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:59:39 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ah7so56920188ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J+6/JTvSQO/Z1ymdKLCb+WYJq0+43v8HNMzB8JVyjj8=;
-        b=Xgs2Eb9H29ppazYKAkLV3REJkGUYm32LVTOgyr5qeb+rxykyfHyqV+trlCRNnd50/w
-         GrmtgHGLQl1AL+SWr2NgzGCc+DFYqNgOqLb+bL0oeO7K555tBtcRRfMmtt2RSEDqZRTs
-         7zqSN6XQjIymFA9+VKMrttu3o6/ZNSnSESguQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J+6/JTvSQO/Z1ymdKLCb+WYJq0+43v8HNMzB8JVyjj8=;
-        b=WTZCBZYsA2Nta3cMXj5Az+XWkSqvV2suBZinoJPV0IJQ+d85ILYghAMgOcmrqOmUov
-         oNhFOFgIZowl4WhvFIkqUDHSyC+VVEPm/mL/Roz3TRDeoOPkYOhd+AYAflUPIb/3m3Jr
-         0P9cWVEEVlGcReQzvrRMmV/tk9Qk5ygXySIJhsgkkZ5OBOfaLiXDIT1aCSp8DgDffSbs
-         LXxgDMjAV+gtJEz3su72JQVebkNQ5FyEFcl4bhv+qs34SklqXgLGeLChaww+NB1mHOyf
-         z496+1wh6oMqNZhHFE6USRSePexjgdvIWcQebzK8+7TKRLMWgkEtQ92LfYk1RUBCvMHT
-         QRxA==
-X-Gm-Message-State: AOAM532OHZNF0I/qV7aGTnaSueWddoSqzgjlsy4Y4+LifUa8ZDtE0xg0
-        V6qPRx6bArAsCq5iRPE2EjyFuL9MgPd5Mznm
-X-Google-Smtp-Source: ABdhPJw//MLxl+r7ELdOj18nI1KblGReSyyyGCg459VsnxHEoVtBG8KcJcbBPcbeJvmzof44T9MjpA==
-X-Received: by 2002:a17:906:58c8:: with SMTP id e8mr21367549ejs.706.1643741978236;
-        Tue, 01 Feb 2022 10:59:38 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id j19sm3911981ejm.111.2022.02.01.10.59.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 10:59:37 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id f80-20020a1c1f53000000b0035399b8bedcso2452406wmf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:59:36 -0800 (PST)
-X-Received: by 2002:a05:600c:2245:: with SMTP id a5mr3017640wmm.8.1643741976571;
- Tue, 01 Feb 2022 10:59:36 -0800 (PST)
+        id S242059AbiBAS7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:59:33 -0500
+Received: from mga18.intel.com ([134.134.136.126]:60494 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229565AbiBAS7b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 13:59:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643741971; x=1675277971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gktx86xlN/ZBVuVz8/vY09Ew+iIHrktJgCYkPO84vf4=;
+  b=CMMrxA7vydm47D1YpKfUe1zUT5+P/5IPKLaV3RTNrs4nZEwAkom8zsiw
+   uYpVqp1dyQr9u8kWcLy6NNlzvt4vyOW2ESiiz/5hDN7JME2rIbEJ4z7lB
+   28TLctWBbQ0pRys6hvOGlHfh5BmZZX36+A525mzO4uBdvmTkO7yTb8hm6
+   peIDnjctdNF7NalSs7z87leJzC093A7xBQl2WVtwTyOEbeIe/OKqSHB+2
+   xRItH7XE0aKzSM/dMS8tE754Lj8xPC513QKkAD0+TKe+r9MZcUUsEFQxZ
+   YdsjH5mrAOwPoGv5bu8jBlxzuXd/xH01xOvdnzXmbTTGf+HSnLwEAttqh
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="231333675"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="231333675"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:59:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="599312058"
+Received: from rashmigh-mobl.amr.corp.intel.com (HELO intel.com) ([10.252.132.8])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:59:30 -0800
+Date:   Tue, 1 Feb 2022 10:59:28 -0800
+From:   Ben Widawsky <ben.widawsky@intel.com>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 09/10] cxl/mem: Retry reading CDAT on failure
+Message-ID: <20220201185928.ffdgvnn6mcmo7by7@intel.com>
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+ <20220201071952.900068-10-ira.weiny@intel.com>
 MIME-Version: 1.0
-References: <20220131162940.210846-1-david@redhat.com>
-In-Reply-To: <20220131162940.210846-1-david@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Feb 2022 10:59:20 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgtzz8kY=cgY0NbVHDSuS8piMtfycb44CihgKjtJSaL+A@mail.gmail.com>
-Message-ID: <CAHk-=wgtzz8kY=cgY0NbVHDSuS8piMtfycb44CihgKjtJSaL+A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] mm: COW fixes part 1: fix the COW security issue
- for THP and swap
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Linux-MM <linux-mm@kvack.org>, Nadav Amit <nadav.amit@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201071952.900068-10-ira.weiny@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 8:31 AM David Hildenbrand <david@redhat.com> wrote:
->
->  7 files changed, 98 insertions(+), 241 deletions(-)
+On 22-01-31 23:19:51, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The CDAT read may fail for a number of reasons but mainly it is possible
+> to get different parts of a valid state.  The checksum in the CDAT table
+> protects against this.
+> 
+> Now that the checksum is validated issue a retry if the CDAT read fails.
+> For now 2 retries are implemented.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> 
+> ---
+> NOTE: Is 2 enough?  Should this just be delayed until the time when the
+> data is actually needed and not there?
 
-The series looks sane to me, and I love that diffstat..
+I can't speak to retries at all, but one small issue below. It might make sense
+if we keep this to make it a modparam.
 
-               Linus
+> 
+> Changes from V5:
+> 	New patch -- easy to push off or drop.
+> ---
+>  drivers/cxl/core/memdev.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> index a01068e98333..11d721c56f08 100644
+> --- a/drivers/cxl/core/memdev.c
+> +++ b/drivers/cxl/core/memdev.c
+> @@ -356,7 +356,8 @@ static const struct file_operations cxl_memdev_fops = {
+>  	.llseek = noop_llseek,
+>  };
+>  
+> -static int read_cdat_data(struct cxl_memdev *cxlmd, struct cxl_dev_state *cxlds)
+> +static int __read_cdat_data(struct cxl_memdev *cxlmd,
+> +			    struct cxl_dev_state *cxlds)
+>  {
+>  	struct device *dev = &cxlmd->dev;
+>  	size_t cdat_length;
+> @@ -371,6 +372,20 @@ static int read_cdat_data(struct cxl_memdev *cxlmd, struct cxl_dev_state *cxlds)
+>  	return cxl_mem_cdat_read_table(cxlds, &cxlmd->cdat);
+>  }
+>  
+> +static int read_cdat_data(struct cxl_memdev *cxlmd,
+> +			  struct cxl_dev_state *cxlds)
+> +{
+> +	int retries = 2;
+> +	int rc;
+> +
+> +	while (--retries) {
+
+You either want retries--, or retries = 3...
+
+> +		rc = __read_cdat_data(cxlmd, cxlds);
+> +		if (!rc)
+> +			break;
+> +	}
+> +	return rc;
+> +}
+> +
+>  struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
+>  {
+>  	struct cxl_memdev *cxlmd;
+> -- 
+> 2.31.1
+> 

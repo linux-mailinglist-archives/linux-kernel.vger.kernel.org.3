@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5424A56A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B41874A56A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbiBAFXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 00:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S234309AbiBAFXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 00:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbiBAFU6 (ORCPT
+        with ESMTP id S234078AbiBAFU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 00:20:58 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEF2C06177D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:51 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id e21-20020a9d0195000000b005a3cd7c1e09so8466023ote.6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:51 -0800 (PST)
+        Tue, 1 Feb 2022 00:20:59 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30281C0617A9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:52 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso15145652ott.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=dAgRdlbtzfDJA3fxDZWwcXLHlGsqMKwkA2c7On9l7mY=;
-        b=EegnhEj9MYuo4VjqxEZMT4nrpVI8IQpnJd2TdoGSACTswGSco3YdYly9NgkXffOvaC
-         QOx0z4TmADBEDlzMD4ytBLRKU+RzILggcxQ+Kd6rjarmCy6QnJdkMgaS6f8nh/qB0I/a
-         gF4VS6QFDY3+wq7asipqFZ0ekGWCap3xd4TpMTEspnqM45rjFX8uGIxAI5iN9r7AtSNA
-         FhTwyjPER9+1w1ijtv5Sh/09S3TZzSFlLPhzx30qBoIKQL0bJYf2QKTtqO4JK6C8vpRK
-         4ETGeiLOhdV2+ITaRwPh3vH4ZBb73HzU4BcDxzWlppdRNJolwKvtIbHe1RGR2sYkBoH8
-         B5aw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QCCppAscP/KIGwl1JCLJN5liCcMT30u1TqUecRLuuZk=;
+        b=ICVa3ObG2poOxz2N8URYem+JfD02Eg4WelUkOiUAbodduvFbvIxPp3WAemXDKMNwJu
+         aO0ea+0TBaq4itnPydmKaNU/YmzwjGXZaQq7XowAlX4jvJ2hSLB9QAl/Fk2r2oADjPnU
+         5yAQ0uKlaSvxM0JgsYOZIymJn32lrz/5ug2Qtox/NrADlOXLZ94Hb6KDKRgl6q9SJFxR
+         EjzLOeWYpSUBdz/voXZUAlMq+l2nTO6gEJ4Spm6Wy3Em/1cDL62Fov0gmhXZcUb4f2gQ
+         7HIY7XcOK9RUCVOkIEYNACckDEBuCJNP5NNyWeKat0DoN5D3IwC3DMgjr1KqYM+vkCEa
+         dTZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dAgRdlbtzfDJA3fxDZWwcXLHlGsqMKwkA2c7On9l7mY=;
-        b=gHpJrUjrEANJDTVrC4BYQqFu5KeoMBP3+ybTd/XYF1mWf8hF+6d49SGGUtxvq8bGIO
-         AiSGqo0cSl39YrzrNgFyna0yby+UWwCDJBvPJtBb+aDGTNrqRCHS9b6SNN9MQmliLdoD
-         AI8Ow3LbFIRH+l/eH3HZjmG8pngV6J/GzL5WjbAt3BsYOyb63jApgDRiLfp3rK8CeVZs
-         Feds/ybbY2XXfrpyegD44G+1KYAkgaRRuM/kkENBg20ut6oUeeXrZfABmJg/8Brmxprl
-         aEpdTBkSK6f58FQ+3B3j3VqzOZg+FqpXVSIJiHI4E/6ZlIYXMMMqRZa+fuCJD3N0IveY
-         V5aQ==
-X-Gm-Message-State: AOAM531D1n1J4HF2mtDigvK/qTwDyCiNBn2saeRu8Mqp1C9/j/oaJg6p
-        w2YhdGyrRLWiUBDtR7U/We+cvA==
-X-Google-Smtp-Source: ABdhPJw6kXuZp3tSgSWyM4P90f/w4AkE856R/zJMf+1nAa0zqoHaYjyHf2ujG9/TtZA/XxPgKq7tsw==
-X-Received: by 2002:a9d:7097:: with SMTP id l23mr13773313otj.190.1643692850692;
-        Mon, 31 Jan 2022 21:20:50 -0800 (PST)
+        bh=QCCppAscP/KIGwl1JCLJN5liCcMT30u1TqUecRLuuZk=;
+        b=TLrjJJzpZiMOh7Smbk6VtFdZWF9W+MZFgKctipqR0kZdK3eOrAYfH3QhAdDoQlhdU8
+         DbkvMvGIdQoKx3Oxie76XFMT12SQLaTuqHnD/AhqMPUFtdt46tIE+1pzyRGEpx4Gb0sv
+         SGwJVpn3SNHTQtSViDed/FifAE0mN0HqOGIsHmhDN8KbT2EbvGFlaqjMrB/EWISGpdCQ
+         fUY4MZCIWVwoEPPEsX43Lt6cDbrIsvhCCivryvC1hJ7DLREgNX2WMLRHNEyb+drpflvX
+         T5H7S2FUWijJS9Rq4vHYN8s6EjSOeTNJkp8xF9MlaWQnoRDnAy7DQf9fl2AcUpc85BVV
+         o3og==
+X-Gm-Message-State: AOAM530hzcfMPy4ZDY0NnzkBVa1eMkK57SUj83uJSiKV72/Ak2hVuzfw
+        JakRf3c2CIfdQ/i4HCBRmy2kMQ==
+X-Google-Smtp-Source: ABdhPJx+TBtU7wXSTDxavLIS3+39W1LCovnJUUwk64VK0Zthdm4jh6mS5bTZwW6JIiQDUCvfhDDX7Q==
+X-Received: by 2002:a9d:6f11:: with SMTP id n17mr5920242otq.228.1643692851587;
+        Mon, 31 Jan 2022 21:20:51 -0800 (PST)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id u3sm8193107ooh.19.2022.01.31.21.20.49
+        by smtp.gmail.com with ESMTPSA id u3sm8193107ooh.19.2022.01.31.21.20.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 21:20:50 -0800 (PST)
+        Mon, 31 Jan 2022 21:20:51 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Mauro Carvalho <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, Robert Foss <robert.foss@linaro.org>,
-        agross@kernel.org, Andrey Konovalov <andrey.konovalov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH v4 0/2] Remove clock-lanes DT property from device trees
-Date:   Mon, 31 Jan 2022 23:20:00 -0600
-Message-Id: <164369277342.3095904.5682243255804634032.b4-ty@linaro.org>
+To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH] arm64: dts: qcom: Fix msm8998 cache nodes
+Date:   Mon, 31 Jan 2022 23:20:01 -0600
+Message-Id: <164369277343.3095904.13862409515453016955.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211206154003.39892-1-robert.foss@linaro.org>
-References: <20211206154003.39892-1-robert.foss@linaro.org>
+In-Reply-To: <20211217211136.3536443-1-robh@kernel.org>
+References: <20211217211136.3536443-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,22 +65,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 16:40:01 +0100, Robert Foss wrote:
-> This series depends on the below series being merged.
-> https://lore.kernel.org/all/20211206151811.39271-1-robert.foss@linaro.org/
+On Fri, 17 Dec 2021 15:11:36 -0600, Rob Herring wrote:
+> The msm8998 cache nodes have some issues. First, L1 caches are described
+> within cpu nodes, not as separate nodes. The 'next-level-cache' property
+> is of course in the correct location, otherwise the cache hierarchy
+> walking would not work. Remove all the L1 cache nodes.
 > 
-> Changes since v3:
->  - Bjorn: Added RBs for both patches
->  - Split series into two series for the ARM64 & Media trees
+> Second, 'arm,arch-cache' is not a documented compatible string. "cache"
+> is a sufficient compatible string for the Arm architected caches.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] arm64: dts: qcom: apq8016-sbc: Remove clock-lanes property from &camss node
-      commit: 015bbdd314110ad20d440bec4d8483f73f4a8b58
-[2/2] arm64: dts: qcom: sdm845-db845c: Remove clock-lanes property from &camss node
-      commit: 6bf3c1895f5848977ab3912eb76fd996bc4d2768
+[1/1] arm64: dts: qcom: Fix msm8998 cache nodes
+      commit: fad35efa75a22050bb4b7cace8c1c9dd4fc70d16
 
 Best regards,
 -- 

@@ -2,123 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843E84A5E9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD454A5EA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239507AbiBAOxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:53:32 -0500
-Received: from brightrain.aerifal.cx ([216.12.86.13]:58246 "EHLO
-        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239511AbiBAOx2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:53:28 -0500
-Date:   Tue, 1 Feb 2022 09:53:25 -0500
-From:   Rich Felker <dalias@libc.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] exec: Force single empty string when argv is empty
-Message-ID: <20220201145324.GA29634@brightrain.aerifal.cx>
-References: <20220201000947.2453721-1-keescook@chromium.org>
+        id S239524AbiBAOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:54:02 -0500
+Received: from mail.zju.edu.cn ([61.164.42.155]:32874 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239520AbiBAOyA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 09:54:00 -0500
+Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 1 Feb 2022 22:53:45
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.72.55]
+Date:   Tue, 1 Feb 2022 22:53:45 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5ZGo5aSa5piO?= <22021233@zju.edu.cn>
+To:     "Dan Carpenter" <dan.carpenter@oracle.com>
+Cc:     linux-hams@vger.kernel.org, jreuter@yaina.de, ralf@linux-mips.org,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH 2/2] ax25: add refcount in ax25_dev to avoid UAF
+ bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220131132241.GK1951@kadam>
+References: <cover.1643343397.git.duoming@zju.edu.cn>
+ <855641b37699b6ff501c4bae8370d26f59da9c81.1643343397.git.duoming@zju.edu.cn>
+ <20220131132241.GK1951@kadam>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Message-ID: <387eb6ac.8e2c7.17eb5c703d1.Coremail.22021233@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgDnX_N5Sflh41WHDA--.61194W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgUIAVZdtYB9BgABsK
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:09:47PM -0800, Kees Cook wrote:
-> Quoting[1] Ariadne Conill:
-> 
-> "In several other operating systems, it is a hard requirement that the
-> second argument to execve(2) be the name of a program, thus prohibiting
-> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
-> but it is not an explicit requirement[2]:
-> 
->     The argument arg0 should point to a filename string that is
->     associated with the process being started by one of the exec
->     functions.
-> ....
-> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
-> but there was no consensus to support fixing this issue then.
-> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
-> of this bug in a shellcode, we can reconsider.
-> 
-> This issue is being tracked in the KSPP issue tracker[5]."
-> 
-> While the initial code searches[6][7] turned up what appeared to be
-> mostly corner case tests, trying to that just reject argv == NULL
-> (or an immediately terminated pointer list) quickly started tripping[8]
-> existing userspace programs.
-> 
-> The next best approach is forcing a single empty string into argv and
-> adjusting argc to match. The number of programs depending on argc == 0
-> seems a smaller set than those calling execve with a NULL argv.
-> 
-> Account for the additional stack space in bprm_stack_limits(). Inject an
-> empty string when argc == 0 (and set argc = 1). Warn about the case so
-> userspace has some notice about the change:
-> 
->     process './argc0' launched './argc0' with NULL argv: empty string added
-> 
-> Additionally WARN() and reject NULL argv usage for kernel threads.
-> 
-> [1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
-> [2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
-> [3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
-> [4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-> [5] https://github.com/KSPP/linux/issues/176
-> [6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
-> [7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
-> [8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
-> 
-> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
-> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  fs/exec.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 79f2c9483302..bbf3aadf7ce1 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -495,8 +495,14 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
->  	 * the stack. They aren't stored until much later when we can't
->  	 * signal to the parent that the child has run out of stack space.
->  	 * Instead, calculate it here so it's possible to fail gracefully.
-> +	 *
-> +	 * In the case of argc = 0, make sure there is space for adding a
-> +	 * empty string (which will bump argc to 1), to ensure confused
-> +	 * userspace programs don't start processing from argv[1], thinking
-> +	 * argc can never be 0, to keep them from walking envp by accident.
-> +	 * See do_execveat_common().
->  	 */
-> -	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
-> +	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
-
-From #musl:
-
-<mixi> kees: shouldn't the min(bprm->argc, 1) be max(...) in your patch?
-
-I'm pretty sure without fixing that, you're introducing a giant vuln
-here. I believe this is the second time a patch attempting to fix this
-non-vuln has proposed adding a new vuln...
-
-Rich
+VGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91ciB0aW1lIGFuZCBwb2ludGluZyBvdXQgcHJvYmxl
+bXMgaW4gbXkgcGF0Y2guCkFub3RoZXIgdHdvIHF1ZXN0aW9ucyB5b3UgYXNrZWQgaXMgc2hvd24g
+YmVsb3c6Cgo+IEBAIC0xMTIsMjAgKzExNSwyMiBAQCB2b2lkIGF4MjVfZGV2X2RldmljZV9kb3du
+KHN0cnVjdCBuZXRfZGV2aWNlICpkZXYpCj4gIAo+ICAJaWYgKChzID0gYXgyNV9kZXZfbGlzdCkg
+PT0gYXgyNV9kZXYpIHsKPiAgCQlheDI1X2Rldl9saXN0ID0gcy0+bmV4dDsKPiArCQlheDI1X2Rl
+dl9wdXQoYXgyNV9kZXYpOwoKRG8gd2Ugbm90IGhhdmUgdG8gY2FsbCBheDI1X2Rldl9ob2xkKHMt
+Pm5leHQpPwoKPiAgCQlzcGluX3VubG9ja19iaCgmYXgyNV9kZXZfbG9jayk7Cj4gIAkJZGV2LT5h
+eDI1X3B0ciA9IE5VTEw7Cj4gIAkJZGV2X3B1dF90cmFjayhkZXYsICZheDI1X2Rldi0+ZGV2X3Ry
+YWNrZXIpOwo+IC0JCWtmcmVlKGF4MjVfZGV2KTsKPiArCQlheDI1X2Rldl9wdXQoYXgyNV9kZXYp
+Owo+ICAJCXJldHVybjsKPiAgCX0KPiAgCj4gIAl3aGlsZSAocyAhPSBOVUxMICYmIHMtPm5leHQg
+IT0gTlVMTCkgewo+ICAJCWlmIChzLT5uZXh0ID09IGF4MjVfZGV2KSB7Cj4gIAkJCXMtPm5leHQg
+PSBheDI1X2Rldi0+bmV4dDsKPiArCQkJYXgyNV9kZXZfcHV0KGF4MjVfZGV2KTsKCmF4MjVfZGV2
+X2hvbGQoYXgyNV9kZXYtPm5leHQpPwoKQW5zd2VyOgpXZSBkb24ndCBoYXZlIHRvIGNhbGwgYXgy
+NV9kZXZfaG9sZChzLT5uZXh0KSBvciBheDI1X2Rldl9ob2xkKGF4MjVfZGV2LT5uZXh0KQppbiBh
+eDI1X2Rldl9kZXZpY2VfZG93bigpIGJlY2F1c2Ugd2UgaGF2ZSBhbHJlYWR5IGluY3JlYXNlZCB0
+aGUgcmVmY291bnQgd2hlbiAKd2UgaW5zZXJ0IGF4MjVfZGV2IGludG8gdGhlIGxpbmtlZCBsaXN0
+IGluIGF4MjVfZGV2X2RldmljZV91cCgpLgoKPiBAQCAtODMsNiArODUsNyBAQCB2b2lkIGF4MjVf
+ZGV2X2RldmljZV91cChzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQo+ICAJc3Bpbl9sb2NrX2JoKCZh
+eDI1X2Rldl9sb2NrKTsKPiAgCWF4MjVfZGV2LT5uZXh0ID0gYXgyNV9kZXZfbGlzdDsKPiAgCWF4
+MjVfZGV2X2xpc3QgID0gYXgyNV9kZXY7Cj4gKwlheDI1X2Rldl9ob2xkKGF4MjVfZGV2KTsKPiAg
+CXNwaW5fdW5sb2NrX2JoKCZheDI1X2Rldl9sb2NrKTsKCkJlc3Qgd2lzaGVzLApEdW9taW5nIFpo
+b3UK

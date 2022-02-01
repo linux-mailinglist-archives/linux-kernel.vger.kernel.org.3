@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7A94A578A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF1C4A5796
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiBAHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234592AbiBAHMp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:12:45 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E605FC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:12:44 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id q127so22788603ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PVW92HDoC/XVNlQ/sBgLb71ANKolpSb9a+lR1z7DyS0=;
-        b=CPLDx7KNeK82j2UI56J1LCuggSFeS3B2lH5X9mR4iWGhggCJZ7rZFSdvibZncDYfeL
-         3aGqJjr05O4+vnzjbsQBaM8wljY2rHeBMdnMAjqAfYWCw9vb8EqAzVHJ+/2/S2VQDaA7
-         Up2Jqz0gcUyuHx7md+lYW8pzmwH4plPXMFItE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PVW92HDoC/XVNlQ/sBgLb71ANKolpSb9a+lR1z7DyS0=;
-        b=R+zIEvEJb132RNmjuWOVkxwWRjdOuYtit0KXXolXO85s2EdF2GKFwQ6uUG8BG5TjVo
-         OdJJE0FiImjJ9z1fghuBqRi1s6ysX7uNtL/nGmMEzCBeapU1JgJOsENomQBR4LeOwfeq
-         hmUQmcHGKkcTxchiEnOH01qyOe6Pj17PQRIqHwzNcs3FghC30LQOAS2oEuFSLCD+fPf3
-         oV8COTezZRjlvFsJaDF46AD1+wxry/iDDw4weJpybsnxciuKkin/54Qr/9mjNNgyeolA
-         sEoXiEn5RZPLk+KXlEUCTXe6nVQ10s6Yxgx0RZCqMrcK6PsjBHS6YwJIxxuZ7xTdev9c
-         FKCw==
-X-Gm-Message-State: AOAM530MCMUjhBj5Hv17hXZOasu7AjvVankvwFz/Aqs16fRTexTosv3c
-        or8qVkAeiZ01+jo/rP9uOm45wg==
-X-Google-Smtp-Source: ABdhPJyAdQ4Gv3Z2Qodv0TvVsi1PTC193vemFm9wBX541IgG+fveE5li4PdKDLfvw6DSY9tWIOAXzg==
-X-Received: by 2002:a2e:890a:: with SMTP id d10mr6847738lji.29.1643699563231;
-        Mon, 31 Jan 2022 23:12:43 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id j18sm749488lfr.253.2022.01.31.23.12.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 23:12:42 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] lib/vsprintf: Avoid redundant work with 0 size
-To:     Waiman Long <longman@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Rientjes <rientjes@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Rafael Aquini <aquini@redhat.com>
-References: <20220129205315.478628-1-longman@redhat.com>
- <20220129205315.478628-2-longman@redhat.com>
- <d99b3c4b-7b6e-529-6e4b-b91b65c92d81@google.com>
- <Yfe5Bb3U6Uil7Y6g@smile.fi.intel.com> <Yfe6SfG4CqzWSaMM@smile.fi.intel.com>
- <Yfe7Q5cx+MoaOev/@smile.fi.intel.com>
- <c33b6435-1b27-32af-b14c-0f3a0318dcca@redhat.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <f3bcf541-e77b-ca93-ef5c-862f4de99366@rasmusvillemoes.dk>
-Date:   Tue, 1 Feb 2022 08:12:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234651AbiBAHQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:16:34 -0500
+Received: from mail-eopbgr30062.outbound.protection.outlook.com ([40.107.3.62]:29925
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234551AbiBAHQc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 02:16:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z+HBwXzHXB2B3Mzeex1Qk5XFoBO4khm6gf80k0sFOL0tPaZ5StGCjZgAGKUo3szh+9BCjGW01qviLYquI9WNwo4MeHAKRwM98+x/e2/A7SwD7HeLx/KpgEn2vkEeA/3xyJW7aUcTmXD5UZoYJD0Nvr4MdT2q0TG99BQzlwHeqgXggevswkHSwzwFOcqL+NxK35DVAAvQIY4twpUbUxvBDU84v9T5Pq1P5OyqMxDlBZAIyCuPI+XRSxy9lV1EAefHBiP/d9zrGXlJt1cJZwSU9WmlFPbbYrgkqqHgdKG0froveEhT7tQC8n/BbUHDxSTihqtPQqIxC0YTqDgXOUBTmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qktoBEk+PBVVfcIFKrSYG+XBLORJezyLPV01s1TU3fk=;
+ b=CvmD2t0sjcUPM0k+XXaIJel2DVpWm9j4RgMofN/0dk2Mr8wRc2E43WEqukGv6lZ0iUq90Y6M3Hr35Su6SE2eamndG9zZvSRPmZFAaCiCn9oVrkJsAb4STmTzXjMeFeOuYDeyp2y0J8Wuk40HyfBuTC4y91I4nJwBNReFHX97enXcqne+tL6oZN5VwrEpDhSv3gy7KrrgmT3IIEyxoFjua25VUt9MWphXfS7VBVMVpIbOLIsxmQz2TWt+6k4WWVlEKUiUug2OS0U6CQ1/kMZDI3DnnNfkXL3qUOrtTLs93yJ/dPsAzRT/LB5LdCfdBnw+Galw4PddmJZii/z/u4RaPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.71) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qktoBEk+PBVVfcIFKrSYG+XBLORJezyLPV01s1TU3fk=;
+ b=KL7/+zUB6t7PhXaTtG/44u0OQU8QrFwA9GLTyrfQDSupkS6D2hUhi4qPxjaw2q1UzAsEA3TYrw31FJyMHVDqAX03K4MJY5HRq3OlnAzWygy9SqdJv42yOli450q7D8p8dYNh182TkUyEIhEyA/WJwu7/6ST/iPE7TlRYDHfOTl88jnnnf+zZm8ff29CurKq2R03Uj82+mSkY7114V6ojm4TeI7s+RmFpUV+EhyhchdWHi9dx/3HF3KBwkURj1WsMjbeMi24TSVkJGSCC+GrNq4Kc/nz81ybutMkT3zurRODMf/ZdVlOX1HIvkYTBqcJsYe6cSPzY2SrqxTYiuLH2NQ==
+Received: from AM6PR08CA0018.eurprd08.prod.outlook.com (2603:10a6:20b:b2::30)
+ by DB8PR10MB3241.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:115::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Tue, 1 Feb
+ 2022 07:16:30 +0000
+Received: from HE1EUR01FT056.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:20b:b2:cafe::f4) by AM6PR08CA0018.outlook.office365.com
+ (2603:10a6:20b:b2::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
+ Transport; Tue, 1 Feb 2022 07:16:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.71)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.71 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.71; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.71) by
+ HE1EUR01FT056.mail.protection.outlook.com (10.152.0.229) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4930.15 via Frontend Transport; Tue, 1 Feb 2022 07:16:29 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SKA.ad011.siemens.net (194.138.21.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Tue, 1 Feb 2022 08:16:29 +0100
+Received: from md1q0hnc.ad001.siemens.net (167.87.32.84) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 1 Feb 2022 08:16:28 +0100
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Georgi Valkov <gvalkov@abv.bg>
+CC:     linux-usb <linux-usb@vger.kernel.org>,
+        Linux Netdev List <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "stable @ vger . kernel . org" <stable@vger.kernel.org>,
+        Yves-Alexis Perez <corsac@corsac.net>
+Subject: [PATCH v2 0/1] ipheth URB overflow fix
+Date:   Tue, 1 Feb 2022 08:16:17 +0100
+Message-ID: <cover.1643699778.git.jan.kiszka@siemens.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <c33b6435-1b27-32af-b14c-0f3a0318dcca@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [167.87.32.84]
+X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: de7e0cbd-c1f3-4d6e-2b55-08d9e552c4b2
+X-MS-TrafficTypeDiagnostic: DB8PR10MB3241:EE_
+X-Microsoft-Antispam-PRVS: <DB8PR10MB324192F64AA6C0B35EDDEB9A95269@DB8PR10MB3241.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3r5r24gCFgcpBIyHeGIijTRiXM9aneQYWKPbm5tTb9B/H7kcdXh5qovnwK40C2AIGmohwYEmtYdMu3YElh67hVfx+pQ6diITkd75JqbUyeDxRBrg/VHNBv8T5Sz2QOQf0/qouusDTjSPijYcyNOcb5XmIAn56rxtPuFJH0fMmuqcfwIuext1zMiEW4B298mW/Gqq9gXEc/S3zBoDW0M5sLdJ+4aQDHQ87JeBh7+4mklHVV9ApKJ1kpDUPvXMEphWBCVjcaLSVlDdCtol+EO/rhRyZ+1ST7VUPma5fuqyr1/Q29sQ6F0zWnyfX6mDTv3URmCouhCxb08Ltx8ka0wTiOjVGjxt4cVyp3BQ5J8+MUtnhT5PDwebwsWSAhzcI8ZidOBOfDFVDwJ3j67hKTazazP722OOqPErTSh546Pqf2/DKewflJQuAtep4KW70PxXgdhB40Z557+oCPzAB4YSPdZ6tRKTeXAwuDivjTtbyVd9hzudjb6v3cJ3/zdfze/TH3cbcLt8VWyk10RaA/pRY5kfReMqa7k0gXfnOpdE8CdaJkRjAT+z2VcXUMpcmZ/6cKXPwIIWkoyhDwVNTt68e3dUDlxr4qHClFSAIKSa8Q02uKRVyhDP/Hx4I5QawfixSN5L+/GnGYUrEvfoPxBzLE3xN0k41BE5BYtmTFCXQFBibGEVKXv12beKoYywAAt7xJ+mrZgiqub7pdiX704htQ==
+X-Forefront-Antispam-Report: CIP:194.138.21.71;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(336012)(54906003)(83380400001)(558084003)(6666004)(82310400004)(110136005)(8676002)(86362001)(508600001)(186003)(16526019)(26005)(8936002)(70586007)(4326008)(316002)(70206006)(956004)(2616005)(36756003)(82960400001)(81166007)(356005)(40460700003)(5660300002)(44832011)(47076005)(2906002)(36860700001)(36900700001)(20210929001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 07:16:29.6391
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: de7e0cbd-c1f3-4d6e-2b55-08d9e552c4b2
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.71];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT056.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3241
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2022 19.48, Waiman Long wrote:
-> On 1/31/22 05:34, Andy Shevchenko wrote:
+Resent (v1 was mangled).
 
->> Also it seems currently the kernel documentation is not aligned with
->> the code
->>
->>    "If @size is == 0 the function returns 0."
->>
->> It should mention the (theoretical?) possibility of getting negative
->> value,
->> if vsnprintf() returns negative value.
-> 
-> AFAICS, the kernel's vsnprintf() function will not return -1.
+Note that the "Fixes:" tag is a strong assumption of mine. Speak up if
+you think that is wrong.
 
-Even if it did, the "i < size" comparison in vscnprintf() is "int v
-size_t", so integer promotion says that even if i were negative, that
-comparison would be false, so we wouldn't forward that negative value
-anyway.
+Jan
 
-> So in that
-> sense it is not fully POSIX compliant. 
+Georgi Valkov (1):
+  ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
 
-Of course it's not, but not because it doesn't return -1. POSIX just
-says to return that in case of an error, and as a matter of QoI, the
-kernel's implementation simply can't (and must not) fail. There are
-other cases where we don't follow POSIX/C, e.g. in some corner cases
-around field length and precision (documented in test_printf.c), and the
-non-support of %n (and floating point and handling of wchar_t*), and the
-whole %p<> extension etc.
+ drivers/net/usb/ipheth.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Rasmus
+-- 
+2.34.1
+

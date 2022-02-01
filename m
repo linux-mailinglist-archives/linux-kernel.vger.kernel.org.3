@@ -2,149 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71EB4A5DAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A304A5DB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238902AbiBANu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:50:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43292 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiBANuz (ORCPT
+        id S238915AbiBANwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230073AbiBANwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:50:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41A3B6159D;
-        Tue,  1 Feb 2022 13:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01212C340EB;
-        Tue,  1 Feb 2022 13:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643723454;
-        bh=ldq7bhd25XbE5kFzQtjZQM2k7oQhrQBRZZi85C+Hwts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tyE+zUDJSrEZ9Q9Ye/QchpMFVu3J7iYkahV+mZ0c7QZkEIvj2dBruxSK+UOLi5C/k
-         ag0aaGZJOEII5ShkiuXppByTUhWhl6dz2R1JtCzomHDB+99o2Z3tUlJ7I/OJXNOTQ/
-         YvTkN25TEpK6wGiq/MTQsMCRWlaNzHUKKXixfLD8=
-Date:   Tue, 1 Feb 2022 14:50:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dov Murik <dovmurik@linux.ibm.com>
-Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/5] Allow guest access to EFI confidential computing
- secret area
-Message-ID: <Yfk6vEuZFtgtA+G+@kroah.com>
-References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+        Tue, 1 Feb 2022 08:52:12 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368AC061714;
+        Tue,  1 Feb 2022 05:52:11 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 64B9B100002;
+        Tue,  1 Feb 2022 13:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1643723529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9wWj1va3LmxR7uptoK225JjVfSAKX5gP2e5O2jvKmFs=;
+        b=FolHXnBTaVk5XuRbTsW0DHX9gYw9CMcJbrjgFF4wiTfKl2KYiL7HuQbhq7Mi+UDXj6jrPl
+        m4SZGAaMeRPJyg51mND/9QvniCge/K1OBcfJPLVBHrbtWqwxXYrBVltNvhbhPyUQumb6Sj
+        fUkh89Orf94sEUL+u8UBtI5MFRzHhtcQc7fS5/GNJqbeGa5+ZrvKzbJgnhx22Hk8agp20O
+        FeTPGPilihUAJRzFPeZbCyu9Kz9BLq7AshbdfvQdgakW6JGpJ00dnlMzdSi2dCsTxn/TrD
+        g4iipY2XrNCbpMEc4VBMcBcT1IGszN4Vn6x0Q9XaC8+FGNrKp/XZC6KPr/vJUg==
+Date:   Tue, 1 Feb 2022 14:52:04 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Sricharan Ramabadhran <sricharan@codeaurora.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        pragalla@codeaurora.org, ~postmarketos/upstreaming@lists.sr.ht,
+        martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdalam@codeaurora.org
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
+ on READID
+Message-ID: <20220201145204.54646475@xps13>
+In-Reply-To: <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
+References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
+        <20220114082718.32a2fc83@xps13>
+        <20220126111613.3ab0021e@xps13>
+        <20220126103316.GA212068@thinkpad>
+        <20220126114200.4cc3c21b@xps13>
+        <fc80a6e7-bd44-3b3e-fca2-1316a76d65f5@codeaurora.org>
+        <a6fcc533-e7cd-7b55-4db0-cec80c07b46a@codeaurora.org>
+        <0a8d6550-aa19-0af1-abae-66bf34c91ea8@somainline.org>
+        <be779ed9-bd80-8f01-fe7f-d3c07d3d85aa@codeaurora.org>
+        <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 12:44:08PM +0000, Dov Murik wrote:
-> Confidential computing (coco) hardware such as AMD SEV (Secure Encrypted
-> Virtualization) allows guest owners to inject secrets into the VMs
-> memory without the host/hypervisor being able to read them.  In SEV,
-> secret injection is performed early in the VM launch process, before the
-> guest starts running.
-> 
-> OVMF already reserves designated area for secret injection (in its
-> AmdSev package; see edk2 commit 01726b6d23d4 "OvmfPkg/AmdSev: Expose the
-> Sev Secret area using a configuration table" [1]), but the secrets were
-> not available in the guest kernel.
-> 
-> The patch series keeps the address of the EFI-provided memory for
-> injected secrets, and exposes the secrets to userspace via securityfs
-> using a new efi_secret kernel module.  The module is autoloaded (by the
-> EFI driver) if the secret area is populated.
-> 
-> The first patch in EFI keeps the address of the secret area as passed in
-> the EFI configuration table.  The second patch is a quirk fix for older
-> firmwares didn't mark the secrets page as EFI_RESERVED_TYPE.  The third
-> patch introduces the new efi_secret module that exposes the content of
-> the secret entries as securityfs files, and allows clearing out secrets
-> with a file unlink interface.  The fourth patch auto-loads the
-> efi_secret module during startup if the injected secrets area is
-> populated.  The last patch documents the data flow of confidential
-> computing secret injection.
-> 
-> As a usage example, consider a guest performing computations on
-> encrypted files.  The Guest Owner provides the decryption key (= secret)
-> using the secret injection mechanism.  The guest application reads the
-> secret from the efi_secret filesystem and proceeds to decrypt the files
-> into memory and then performs the needed computations on the content.
-> 
-> In this example, the host can't read the files from the disk image
-> because they are encrypted.  Host can't read the decryption key because
-> it is passed using the secret injection mechanism (= secure channel).
-> Host can't read the decrypted content from memory because it's a
-> confidential (memory-encrypted) guest.
-> 
-> This has been tested with AMD SEV and SEV-ES guests, but the kernel side
-> of handling the secret area has no SEV-specific dependencies, and
-> therefore might be usable (perhaps with minor changes) for any
-> confidential computing hardware that can publish the secret area via the
-> standard EFI config table entry.
-> 
-> To enable this functionality, set CONFIG_EFI_SECRET=m when building the
-> guest kernel.
-> 
-> Here is a simple example for usage of the efi_secret module in a guest
-> to which an EFI secret area with 4 secrets was injected during launch:
-> 
-> # ls -la /sys/kernel/security/coco/efi_secret
-> total 0
-> drwxr-xr-x 2 root root 0 Jun 28 11:54 .
-> drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
-> -r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-06879ce3da0b
-> -r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-d3a0b54312c6
-> -r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-ff17f78864d2
-> -r--r----- 1 root root 0 Jun 28 11:54 e6f5a162-d67f-4750-a67c-5d065f2a9910
-> 
-> # xxd /sys/kernel/security/coco/efi_secret/e6f5a162-d67f-4750-a67c-5d065f2a9910
-> 00000000: 7468 6573 652d 6172 652d 7468 652d 6b61  these-are-the-ka
-> 00000010: 7461 2d73 6563 7265 7473 0001 0203 0405  ta-secrets......
-> 00000020: 0607                                     ..
-> 
-> # rm /sys/kernel/security/coco/efi_secret/e6f5a162-d67f-4750-a67c-5d065f2a9910
-> 
-> # ls -la /sys/kernel/security/coco/efi_secret
-> total 0
-> drwxr-xr-x 2 root root 0 Jun 28 11:55 .
-> drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
-> -r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-06879ce3da0b
-> -r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-d3a0b54312c6
-> -r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-ff17f78864d2
+Hi Konrad,
 
-Please see my comments on the powerpc version of this type of thing:
-	https://lore.kernel.org/r/20220122005637.28199-1-nayna@linux.ibm.com
+konrad.dybcio@somainline.org wrote on Mon, 31 Jan 2022 20:54:12 +0100:
+
+> On 31/01/2022 15:13, Sricharan Ramabadhran wrote:
+> > Hi Konrad,
+> >
+> > On 1/31/2022 3:39 PM, Konrad Dybcio wrote: =20
+> >>
+> >> On 28/01/2022 18:50, Sricharan Ramabadhran wrote: =20
+> >>> Hi Konrad,
+> >>>
+> >>> On 1/28/2022 9:55 AM, Sricharan Ramabadhran wrote: =20
+> >>>> Hi Miquel,
+> >>>>
+> >>>> On 1/26/2022 4:12 PM, Miquel Raynal wrote: =20
+> >>>>> Hi Mani,
+> >>>>>
+> >>>>> mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
+> >>>>> =20
+> >>>>>> On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote: =20
+> >>>>>>> Hello,
+> >>>>>>>
+> >>>>>>> miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +010=
+0: =20
+> >>>>>>>> Hi Konrad,
+> >>>>>>>>
+> >>>>>>>> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 =
+>>>>>>>> +0100: =20
+> >>>>>>>>> While I have absolutely 0 idea why and how, running >>>>>>>>> c=
+lear_bam_transaction
+> >>>>>>>>> when READID is issued makes the DMA totally clog up and refuse =
+>>>>>>>>> to function
+> >>>>>>>>> at all on mdm9607. In fact, it is so bad that all the data >>>>=
+>>>>> gets garbled
+> >>>>>>>>> and after a short while in the nand probe flow, the CPU >>>>>>>=
+>> decides that
+> >>>>>>>>> sepuku is the only option.
+> >>>>>>>>>
+> >>>>>>>>> Removing _READID from the if condition makes it work like a >>>=
+>>>>>> charm, I can
+> >>>>>>>>> read data and mount partitions without a problem.
+> >>>>>>>>>
+> >>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> >>>>>>>>> ---
+> >>>>>>>>> This is totally just an observation which took me an inhumane >=
+>>>>>>>> amount of
+> >>>>>>>>> debug prints to find.. perhaps there's a better reason behind >=
+>>>>>>>> this, but
+> >>>>>>>>> I can't seem to find any answers.. Therefore, this is a BIG RFC=
+! =20
+> >>>>>>>> I'm adding two people from codeaurora who worked a lot on this >=
+>>>>>>> driver.
+> >>>>>>>> Hopefully they will have an idea :) =20
+> >>>>>>> Sadre, I've spent a significant amount of time reviewing your >>>=
+>>>> patches,
+> >>>>>>> now it's your turn to not take a month to answer to your peers
+> >>>>>>> proposals.
+> >>>>>>>
+> >>>>>>> Please help reviewing this patch. =20
+> >>>>>> Sorry. I was hoping that Qcom folks would chime in as I don't >>>>=
+>> have any idea
+> >>>>>> about the mdm9607 platform. It could be that the mail server >>>>>=
+> migration from
+> >>>>>> codeaurora to quicinc put a barrier here.
+> >>>>>>
+> >>>>>> Let me ping them internally. =20
+> >>>>> Oh, ok, I didn't know. Thanks! =20
+> >>>>
+> >>>> =C2=A0=C2=A0 Sorry Miquel, somehow we did not get this email in our =
+inbox.
+> >>>> =C2=A0=C2=A0 Thanks to Mani for pinging us, we will test this up tod=
+ay and >>>> get back.
+> >>>> =20
+> >>> =C2=A0 =C2=A0 =C2=A0 While we could not reproduce this issue on our i=
+pq boards (do >>> not have a mdm9607 right now) and
+> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 issue does not look any obvious.
+> >>> =C2=A0 =C2=A0 =C2=A0 can you please give the debug logs that you did =
+for the above >>> stage by stage ? =20
+> >>
+> >> I won't have access to the board for about two weeks, sorry.
+> >>
+> >> When I get to it, I'll surely try to send you the logs, though there
+> >>
+> >> wasn't much more than just something jumping to who-knows-where
+> >>
+> >> after clear_bam_transaction was called, resulting in values >> associa=
+ted with
+> >>
+> >> the NAND being all zeroed out in pr_err/_debug/etc.
+> >>
+> >> =20
+> > =C2=A0=C2=A0=C2=A0 Ok sure. So was the READID command itself failing (o=
+r) the > subsequent one ?
+> > =C2=A0=C2=A0 We can check which parameter reset by the clear_bam_transa=
+ction is > causing the
+> > =C2=A0=C2=A0 failure.=C2=A0 Meanwhile, looping in Pradeep who has acces=
+s to the > board, so in a better
+> > =C2=A0=C2=A0 position to debug. =20
+>=20
+> I'm sorry I have so few details on hand, and no kernel tree (no access to=
+ that machine either, for now).
+>=20
+>=20
+> I will try to describe to the best of my abilities what I recall.
+>=20
+>=20
+> My methodology of making sure things don't go haywire was to print the oo=
+b size
+>=20
+> of our NAND basically every two lines of code (yes, i was very desperate =
+at one point),
+>=20
+> as that was zeroed out when *the bug* happened,
+
+This does look like a pointer error at some point and some kernel data
+has been corrupted very badly by the driver.
+
+> leading to a kernel bug/panic/stall
+>=20
+> (can't recall what exactly it was, but it said something along the lines =
+of "no support for
+>=20
+> oob size 0" and then it didn't fail graceully, leading to some bad jumps =
+and ultimately
+>=20
+> a dead platform..)
+>=20
+>=20
+> after hours of digging, I found out that everything goes fine until clear=
+_bam_transaction is called,
+
+Do you remember if this function was called for the first time when
+this happened?
+
+> after that gets executed every nand op starts reading all zeroes (for exa=
+mple in JEDEC ID check)
+>=20
+> so I added the changes from this patch, and things magically started work=
+ing... My suspicion is
+>=20
+> that the underlying FIFO isn't fully drained (is it a FIFO on 9607? bah, =
+i work on too many socs at once)
+
+I don't see it in the list of supported devices, what's the exact
+compatible used?
+
+>=20
+> and this function only makes Linux think it is, without actually draining=
+ it, and the leftover
+>=20
+> commands get executed with some parts of them getting overwritten, result=
+ing in the
+>=20
+> famous garbage in - garbage out situation, but that's only a guesstimate..
+
+I would bet for a non allocated bam-ish pointer that is reset to zero
+in the clear_bam_transaction() helper.
+
+Can you get your hands on the board again?
+It would be nice to check if the allocation always occurs before use,
+and if yes on how much bytes.
+
+If the pointer is not dangling, then perhaps something else smashes
+that pointer.
+
+> Do note this somehow worked fine on 5.11 and then broke on 5.12/13. I wen=
+t as far as replacing most
+>=20
+> of the kernel with the updated/downgraded parts via git checkout (i tried=
+ many combinations),
+>=20
+> to no avail.. I even tried different compilers and optimization levels, t=
+hinking it could have been
+>=20
+> a codegen issue, but no luck either.
+>=20
+>=20
+> I.. do understand this email is a total mess to read, as much as it was t=
+o write, but
+>=20
+> without access to my code and the machine itself I can't give you solid d=
+etails, and
+>=20
+> the fact this situation is far from ordinary doesn't help either..
+>=20
+>=20
+> The latest (ancient, not quite pretty, but probably working if my memory =
+is correct) version of my patches
+>=20
+> for the mdm9607 is available at [1], I will push the new revision after I=
+ get access to the workstation.
+>=20
+>=20
+> Konrad
+>=20
+>=20
+> [1] https://github.com/SoMainline/linux/commits/konrad/pinemodem
+>=20
+>=20
+> >
+> > Regards,
+> > =C2=A0=C2=A0 Sricharan
+> >
+> > =20
 
 
-You all need to work together to come up with a unified place for this
-and stop making it platform-specific.
-
-Until then, we can't take this.
-
-sorry,
-
-greg k-h
+Thanks,
+Miqu=C3=A8l

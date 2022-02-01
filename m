@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B3F4A5482
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823FB4A548A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiBABJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiBABJE (ORCPT
+        id S231694AbiBABOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:14:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43482 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231540AbiBABOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:09:04 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0ABC06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:09:03 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id z20-20020aa791d4000000b004bd024eaf19so8234401pfa.16
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:09:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=bL3FT8k/Xb3BcGI4WIfdGnBaIJMFJqmCvBuj1gJGH44=;
-        b=qfjP1xUS1KlVS/IMykXefKvK1qQTncFnnytcKJMuNz7cZ6izT1HFdUafvswOgJug6w
-         fUu2gRE/sPO/gMGaQJHy1cu/gikzlTFd+dwYsScIQ2aSEr19oNQfPZGlCSgrgT+A/ptb
-         /BmWw9Q/5FLUgVtaJXFmF+ufSdVc0dVArOlkXmwriEDJ5vmsdUA1krlC7d3M4dgj/hAk
-         ZH38ahZRKwAFuq+7rfQkwCiebPXcQlBJDlblbvkGBTV3eebX1oiryLzUoQsHW5mONR+9
-         1uIdR6azhY2x3J/pkEG8jDjFnokQdpdQEl+iLKEku7fanF+2DkTtHnGCKT2OvwN8+DmO
-         kjOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=bL3FT8k/Xb3BcGI4WIfdGnBaIJMFJqmCvBuj1gJGH44=;
-        b=4yPGtJCK2JUnnkZINpIfBUBQdtQoSfQG+AhiszIAfVedUaglBVzUyVsxJrfUEhOVBY
-         D2aWfW5iCjkd08nh6owij3pVUQGLeJf0BzNadRD9h+e2BOtpOJ0PvDqrVj41IYGNr518
-         EVgC05E86pDE4bwrz/H9WrDbUIDyRf5gu+4M1L2Ib0gdoaUFlZxAj1+a+4YBQTNDaVd3
-         0idTBnTLoLbCJI0QhELijL+k9mNAATBiGvLuX0zISY8Ev1MhCM+TifZGUtdWApGslBjJ
-         In4POO6sm4lFwEO9zax4va9/fu1npP359X8NLr3A0LObiei4nQ3Cjygzab1n3nvc58vZ
-         +I4w==
-X-Gm-Message-State: AOAM532HBiTq5mpZ0JYATxy7uzU6spC3HMebi52/3yUIPDLg2xP/r255
-        ztb6MVFp6BebXRzl7qpP2bz2oYLkpq0=
-X-Google-Smtp-Source: ABdhPJyr1xQ8ILXqOSdU52v8l3fst3RJPIJ4yAP+ddUL0kFfLBBG3IGhmHWreArnTTL96e8JdujXax4R5iE=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:7784:: with SMTP id
- o4mr23247435pll.173.1643677743484; Mon, 31 Jan 2022 17:09:03 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  1 Feb 2022 01:08:38 +0000
-In-Reply-To: <20220201010838.1494405-1-seanjc@google.com>
-Message-Id: <20220201010838.1494405-6-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220201010838.1494405-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH 5/5] KVM: x86: Bail to userspace if emulation of atomic user
- access faults
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mon, 31 Jan 2022 20:14:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0E36B82CD0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 01:14:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 919CAC340EC;
+        Tue,  1 Feb 2022 01:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1643678076;
+        bh=iDZ+K89IPcIeDF2+KSlI8ytWO8Ygxgu09Pw+Zwf1JDA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oSO9eAErVKISl9lFXT7Y6DX6NTzAX76VfwBTdjHjefW0x52T8Suv9AAlzX3jlgArX
+         1AA4Gx0j4h3uXhg9NvAUYxU1SXFWURyt0fWQy2LA7SM3YCbK4DF5Z2zbjYL6kMFz+n
+         kb+85H0UUhtMzSraRMLKk6GGeVMHQ77zW89WOj94=
+Date:   Mon, 31 Jan 2022 17:14:34 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Michel Lespinasse <michel@lespinasse.org>
+Cc:     Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Laurent Dufour <ldufour@linux.ibm.com>,
+        Jerome Glisse <jglisse@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Rik van Riel <riel@surriel.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2 00/35] Speculative page faults
+Message-Id: <20220131171434.89870a8f1ae294912e7ff19e@linux-foundation.org>
+In-Reply-To: <20220128131006.67712-1-michel@lespinasse.org>
+References: <20220128131006.67712-1-michel@lespinasse.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exit to userspace when emulating an atomic guest access if the CMPXCHG on
-the userspace address faults.  Emulating the access as a write and thus
-likely treating it as emulated MMIO is wrong, as KVM has already
-confirmed there is a valid, writable memslot.
+On Fri, 28 Jan 2022 05:09:31 -0800 Michel Lespinasse <michel@lespinasse.org> wrote:
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Patchset summary:
+> 
+> Classical page fault processing takes the mmap read lock in order to
+> prevent races with mmap writers. In contrast, speculative fault
+> processing does not take the mmap read lock, and instead verifies,
+> when the results of the page fault are about to get committed and
+> become visible to other threads, that no mmap writers have been
+> running concurrently with the page fault. If the check fails,
+> speculative updates do not get committed and the fault is retried
+> in the usual, non-speculative way (with the mmap read lock held).
+> 
+> The concurrency check is implemented using a per-mm mmap sequence count.
+> The counter is incremented at the beginning and end of each mmap write
+> operation. If the counter is initially observed to have an even value,
+> and has the same value later on, the observer can deduce that no mmap
+> writers have been running concurrently with it between those two times.
+> This is similar to a seqlock, except that readers never spin on the
+> counter value (they would instead revert to taking the mmap read lock),
+> and writers are allowed to sleep. One benefit of this approach is that
+> it requires no writer side changes, just some hooks in the mmap write
+> lock APIs that writers already use.
+> 
+> The first step of a speculative page fault is to look up the vma and
+> read its contents (currently by making a copy of the vma, though in
+> principle it would be sufficient to only read the vma attributes that
+> are used in page faults). The mmap sequence count is used to verify
+> that there were no mmap writers concurrent to the lookup and copy steps.
+> Note that walking rbtrees while there may potentially be concurrent
+> writers is not an entirely new idea in linux, as latched rbtrees
+> are already doing this. This is safe as long as the lookup is
+> followed by a sequence check to verify that concurrency did not
+> actually occur (and abort the speculative fault if it did).
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 37064d565bbc..66c5410dd4c3 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -7217,7 +7217,7 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
- 	}
- 
- 	if (r < 0)
--		goto emul_write;
-+		return X86EMUL_UNHANDLEABLE;
- 	if (r)
- 		return X86EMUL_CMPXCHG_FAILED;
- 
--- 
-2.35.0.rc2.247.g8bbb082509-goog
+I'm surprised that descending the rbtree locklessly doesn't flat-out
+oops the kernel.  How are we assured that every pointer which is
+encountered actually points at the right thing?  Against things
+which tear that tree down?
+
+> The next step is to walk down the existing page table tree to find the
+> current pte entry. This is done with interrupts disabled to avoid
+> races with munmap().
+
+Sebastian, could you please comment on this from the CONFIG_PREEMPT_RT
+point of view?
+
+> Again, not an entirely new idea, as this repeats
+> a pattern already present in fast GUP. Similar precautions are also
+> taken when taking the page table lock.
+> 
+> Breaking COW on an existing mapping may require firing MMU notifiers.
+> Some care is required to avoid racing with registering new notifiers.
+> This patchset adds a new per-cpu rwsem to handle this situation.
 

@@ -2,124 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFED4A61E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441944A61E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241438AbiBARGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S241428AbiBARGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241434AbiBARGq (ORCPT
+        with ESMTP id S231877AbiBARGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:06:46 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC2EC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:06:45 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id m9so34493567oia.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:06:45 -0800 (PST)
+        Tue, 1 Feb 2022 12:06:39 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A15CC061714;
+        Tue,  1 Feb 2022 09:06:38 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id me13so56303977ejb.12;
+        Tue, 01 Feb 2022 09:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RdQTcqQ9Qr4h0L2NlLlM99qGIKmmmXyVpgAfVQlyXvw=;
-        b=aBXJGsBy39GcwPGw1gQwRkkKV6thDHpcyarDrmkoubQM6M8m7KheFYLmVcR/iba2MT
-         ++t5VYXBHifuxfZgt0rPdm2eEQIi4to/6t4QII6YDcjxIphQkcY9ydqlzF1HGNKaSs9V
-         IvfM1MNQmBgOqUNJRefzdJIahGbbWzxTo2tEE=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8e+cxsOAoD4wNMf4OwhcmsqMgJkqG3wiGoLyD7fqu/g=;
+        b=InNOyM08H7YL/I26IDo0bEZ6tgouuU9ALxGxDQzuD4qXtdUfY2pkwg5V8ZMPuCr5xD
+         PATNvojFwuEcr9N/sdfAsKHqDk6c5NL9C+EMErHZ2QxepE+9C1v1fCrAg+2Hj2lXCBQR
+         O+wvg5NI56u/QikA51uNhJnasmMuI+Se0dRrx3cX2RlRplC4Ct2ZqcmsUiO1bMRNv1C+
+         hMeNBTCkg+bEX8wVlFFrpLB5XL4jTUZp+/R0lRS5H0eSbuNK17XVFwaW6Ei4I6juvvnk
+         dAeIHFJqssmrGWDsP6TXtM/I/OJ7188kuml9qRAdAdIRDbYKW/pKOtPSVhNhwztCvnZq
+         3FWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RdQTcqQ9Qr4h0L2NlLlM99qGIKmmmXyVpgAfVQlyXvw=;
-        b=u2CbEYxl9ZpNbGvYMaDDR20aicM8TQ2kGNAemwuNcdNLs+UyVgvrKYilmyogogRdP7
-         xQ9xhLNmYzZCV9OgDKkTQZm3ieS41ZkLvuRZcwjYNIB8V4XwVVRjdM+vvFmP4OmOiJMa
-         XQ39oP5kxf5Eu5xb1XLpVnsnHMAozAbiVwIzFyFTFZfS0M4KMJ+pRFPevgjQ8re8N1jH
-         yuARQlLsLnsvwTQi5E1Aj2Bab8FLd2DT/DiTRoq1Vupkv+4Vbi4Sw/uBqhoCGqca7umm
-         bFRpyF//fvP4TbTdmy+e5CWN2ugFxu7GACTJDptgI4A+qzNuN36VJKv6HiqEgBWiinfr
-         8KYw==
-X-Gm-Message-State: AOAM531SIcKmeeKZk6S3AA/T6oJV7ZqT6fmdCozwYmsX8DXJMen1w9cS
-        qYIh9xLXq6E14c7EeU/qN2Xe+ZFqPlnnpyyhH0k5pQ==
-X-Google-Smtp-Source: ABdhPJxmJTT10BhmESxaD9wSsaXi2TyqjKpx8TF/TQp9so++NA/uk65aK3wvzaI2XbQCX3/1SL7QYNE/AkpMguwVMkA=
-X-Received: by 2002:a05:6808:1641:: with SMTP id az1mr1928959oib.278.1643735204982;
- Tue, 01 Feb 2022 09:06:44 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8e+cxsOAoD4wNMf4OwhcmsqMgJkqG3wiGoLyD7fqu/g=;
+        b=W9spf5zxwkX9Sfy6q6jZ74Tx+77BYqIa4w8il+atCEXZIuvp+LX8OhvbciaW/giq2I
+         7KbSZsSdG/DDZSio91Ijg1t1dxBvqBWzd8qy5y2yX9T3oh/NYrsTKOz6iLvpAnSxPEfV
+         JWWZ1FGiXx8Kw1Og86QOOud6EwKWac8ouiQtbICuwZ5tlW2+OzpV1rO9G6iS0ZBUly/Q
+         HbbNtfgsUQEat8j4CSfUTAL95h8o17AIgdFUVvz33X4R1fNWevLQo5YtHGdCwBD2tHpv
+         Q6GGZ7+kSB4AbNayQmyiTU8Wo+tOjk5HLX9Hq++Ge0s0JAg3ICOS3Gasn7ToxWQxADLI
+         R/fg==
+X-Gm-Message-State: AOAM532+aLu6phx+WuPr6SuNJn0PULiS44TER+1xQH+S7k0egGvyMUaJ
+        npPEm1OzeAsWdLufWiI0WZYPcsD9QzI=
+X-Google-Smtp-Source: ABdhPJymqnXI4V9i32WmqWx4KQk5uxFdvNeXHzg6ysgfcqGCLOeyZe4YosHk7AnSKGnlo0qjefuOUg==
+X-Received: by 2002:a17:907:629f:: with SMTP id nd31mr5838675ejc.693.1643735196655;
+        Tue, 01 Feb 2022 09:06:36 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id r10sm14947171ejy.148.2022.02.01.09.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 09:06:36 -0800 (PST)
+Date:   Tue, 1 Feb 2022 19:06:34 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/5] net: dsa: mv88e6xxx: Improve isolation of
+ standalone ports
+Message-ID: <20220201170634.wnxy3s7f6jnmt737@skbuf>
+References: <20220131154655.1614770-1-tobias@waldekranz.com>
+ <20220131154655.1614770-2-tobias@waldekranz.com>
 MIME-Version: 1.0
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
- <YfEG2qVO9K9G+g1d@kroah.com> <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
- <YfFIpBb7lL4ukWjm@smile.fi.intel.com> <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
- <YfFV4EJosayH+e6C@smile.fi.intel.com> <YfFWPmG2D093gz4N@smile.fi.intel.com>
- <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com> <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
- <ddb0f354-be19-92fe-20b3-56b00c9304ab@suse.de> <840ec74d-60c6-9480-709c-8cd597c6f5b0@redhat.com>
- <e7fbef3c-2f87-15f9-b24d-34ffaa5a2853@suse.de> <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
-In-Reply-To: <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 1 Feb 2022 18:06:33 +0100
-Message-ID: <CAKMK7uEPuw1+-=h7gvSyCxW4zNuTK3UNZP6yjpP6MPV17sAasQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131154655.1614770-2-tobias@waldekranz.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 6:01 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Thomas,
->
-> On Tue, Feb 1, 2022 at 5:16 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> > Am 31.01.22 um 11:18 schrieb Javier Martinez Canillas:
-> > > Another thing that's missing is a DRM_MODE_CONNECTOR_I2C, because I used for
-> > > now a DRM_MODE_CONNECTOR_Unknown.
-> >
-> > That might have implications on userspace. Maybe ask around. (Not that
-> > we actually run userspace on the device).
->
-> Looking at the list of connector types (and wondering if we're gonna
-> need more when converting existing fbdev drivers to drm drivers),
-> there seem to be two different families of connector types, for
->   1. transports between CRTC and display (e.g. VGA, DVID, HDMI),
->   2. transports between CPU and CRTC (e.g. SPI, possibly USB, and
->      the proposed I2C)?
+Hi Tobias,
 
-I was trying to argue for a panel connector type and stop doing all
-these internal things because like you point out, it kinda doesn't,
-only the external connectors are relevant to users. But it didn't
-stick anywhere yet, we keep adding more connector types and then
-having to update userspace, which should map these all to "it's the
-panel" or something like that. But also since various technicolor
-abbreviations are about as useful to end-users as "unknown" it really
-doesn't matter, so I'm happy to let this bikeshed get a tad fancier
-every year :-)
--Daniel
+On Mon, Jan 31, 2022 at 04:46:51PM +0100, Tobias Waldekranz wrote:
+> Clear MapDA on standalone ports to bypass any ATU lookup that might
+> point the packet in the wrong direction. This means that all packets
+> are flooded using the PVT config. So make sure that standalone ports
+> are only allowed to communicate with the CPU port.
 
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Actually "CPU port" != "upstream port" (the latter can be an
+upstream-facing DSA port). The distinction is quite important.
 
+> 
+> Here is a scenario in which this is needed:
+> 
+>    CPU
+>     |     .----.
+> .---0---. | .--0--.
+> |  sw0  | | | sw1 |
+> '-1-2-3-' | '-1-2-'
+>       '---'
+> 
+> - sw0p1 and sw1p1 are bridged
 
+Do sw0p1 and sw1p1 even matter?
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> - sw0p2 and sw1p2 are in standalone mode
+> - Learning must be enabled on sw0p3 in order for hardware forwarding
+>   to work properly between bridged ports
+> 
+> 1. A packet with SA :aa comes in on sw1p2
+>    1a. Egresses sw1p0
+>    1b. Ingresses sw0p3, ATU adds an entry for :aa towards port 3
+>    1c. Egresses sw0p0
+> 
+> 2. A packet with DA :aa comes in on sw0p2
+>    2a. If an ATU lookup is done at this point, the packet will be
+>        incorrectly forwarded towards sw0p3. With this change in place,
+>        the ATU is pypassed and the packet is forwarded in accordance
+
+s/pypassed/bypassed/
+
+>        whith the PVT, which only contains the CPU port.
+
+s/whith/with/
+
+What you describe is a bit convoluted, so let me try to rephrase it.
+The mv88e6xxx driver configures all standalone ports to use the same
+DefaultVID(0)/FID(0), and configures standalone user ports with no
+learning via the Port Association Vector. Shared (cascade + CPU) ports
+have learning enabled so that cross-chip bridging works without floods.
+But since learning is per port and not per FID, it means that we enable
+learning in FID 0, the one where the ATU was supposed to be always empty.
+So we may end up taking wrong forwarding decisions for standalone ports,
+notably when we should do software forwarding between ports of different
+switches. By clearing MapDA, we force standalone ports to bypass any ATU
+entries that might exist.
+
+Question: can we disable learning per FID? I searched for this in the
+limited documentation that I have, but I didn't see such option.
+Doing this would be advantageous because we'd end up with a bit more
+space in the ATU. With your solution we're just doing damage control.
+
+> 
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>  drivers/net/dsa/mv88e6xxx/chip.c | 32 +++++++++++++++++++++++++-------
+>  drivers/net/dsa/mv88e6xxx/port.c |  7 +++++--
+>  drivers/net/dsa/mv88e6xxx/port.h |  2 +-
+>  include/net/dsa.h                | 12 ++++++++++++
+>  4 files changed, 43 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+> index 1023e4549359..dde6a8d0ca36 100644
+> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> @@ -1290,8 +1290,15 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+>  
+>  	pvlan = 0;
+>  
+> -	/* Frames from user ports can egress any local DSA links and CPU ports,
+> -	 * as well as any local member of their bridge group.
+> +	/* Frames from standalone user ports can only egress on the
+> +	 * CPU port.
+> +	 */
+> +	if (!dsa_port_bridge_dev_get(dp))
+> +		return BIT(dsa_switch_upstream_port(ds));
+> +
+> +	/* Frames from bridged user ports can egress any local DSA
+> +	 * links and CPU ports, as well as any local member of their
+> +	 * bridge group.
+>  	 */
+>  	dsa_switch_for_each_port(other_dp, ds)
+>  		if (other_dp->type == DSA_PORT_TYPE_CPU ||
+> @@ -2487,6 +2494,10 @@ static int mv88e6xxx_port_bridge_join(struct dsa_switch *ds, int port,
+>  	if (err)
+>  		goto unlock;
+>  
+> +	err = mv88e6xxx_port_set_map_da(chip, port, true);
+> +	if (err)
+> +		return err;
+> +
+>  	err = mv88e6xxx_port_commit_pvid(chip, port);
+>  	if (err)
+>  		goto unlock;
+> @@ -2521,6 +2532,12 @@ static void mv88e6xxx_port_bridge_leave(struct dsa_switch *ds, int port,
+>  	    mv88e6xxx_port_vlan_map(chip, port))
+>  		dev_err(ds->dev, "failed to remap in-chip Port VLAN\n");
+>  
+> +	err = mv88e6xxx_port_set_map_da(chip, port, false);
+> +	if (err)
+> +		dev_err(ds->dev,
+> +			"port %d failed to restore map-DA: %pe\n",
+> +			port, ERR_PTR(err));
+> +
+>  	err = mv88e6xxx_port_commit_pvid(chip, port);
+>  	if (err)
+>  		dev_err(ds->dev,
+> @@ -2918,12 +2935,13 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
+>  		return err;
+>  
+>  	/* Port Control 2: don't force a good FCS, set the MTU size to
+> -	 * 10222 bytes, disable 802.1q tags checking, don't discard tagged or
+> -	 * untagged frames on this port, do a destination address lookup on all
+> -	 * received packets as usual, disable ARP mirroring and don't send a
+> -	 * copy of all transmitted/received frames on this port to the CPU.
+> +	 * 10222 bytes, disable 802.1q tags checking, don't discard
+> +	 * tagged or untagged frames on this port, skip destination
+> +	 * address lookup on user ports, disable ARP mirroring and don't
+> +	 * send a copy of all transmitted/received frames on this port
+> +	 * to the CPU.
+>  	 */
+> -	err = mv88e6xxx_port_set_map_da(chip, port);
+> +	err = mv88e6xxx_port_set_map_da(chip, port, !dsa_is_user_port(ds, port));
+>  	if (err)
+>  		return err;
+>  
+> diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
+> index ab41619a809b..ceb450113f88 100644
+> --- a/drivers/net/dsa/mv88e6xxx/port.c
+> +++ b/drivers/net/dsa/mv88e6xxx/port.c
+> @@ -1278,7 +1278,7 @@ int mv88e6xxx_port_drop_untagged(struct mv88e6xxx_chip *chip, int port,
+>  	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL2, new);
+>  }
+>  
+> -int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port)
+> +int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port, bool map)
+>  {
+>  	u16 reg;
+>  	int err;
+> @@ -1287,7 +1287,10 @@ int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port)
+>  	if (err)
+>  		return err;
+>  
+> -	reg |= MV88E6XXX_PORT_CTL2_MAP_DA;
+> +	if (map)
+> +		reg |= MV88E6XXX_PORT_CTL2_MAP_DA;
+> +	else
+> +		reg &= ~MV88E6XXX_PORT_CTL2_MAP_DA;
+>  
+>  	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL2, reg);
+>  }
+> diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
+> index 03382b66f800..5c347cc58baf 100644
+> --- a/drivers/net/dsa/mv88e6xxx/port.h
+> +++ b/drivers/net/dsa/mv88e6xxx/port.h
+> @@ -425,7 +425,7 @@ int mv88e6185_port_get_cmode(struct mv88e6xxx_chip *chip, int port, u8 *cmode);
+>  int mv88e6352_port_get_cmode(struct mv88e6xxx_chip *chip, int port, u8 *cmode);
+>  int mv88e6xxx_port_drop_untagged(struct mv88e6xxx_chip *chip, int port,
+>  				 bool drop_untagged);
+> -int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port);
+> +int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port, bool map);
+>  int mv88e6095_port_set_upstream_port(struct mv88e6xxx_chip *chip, int port,
+>  				     int upstream_port);
+>  int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
+> diff --git a/include/net/dsa.h b/include/net/dsa.h
+> index 57b3e4e7413b..30f3192616e5 100644
+> --- a/include/net/dsa.h
+> +++ b/include/net/dsa.h
+> @@ -581,6 +581,18 @@ static inline bool dsa_is_upstream_port(struct dsa_switch *ds, int port)
+>  	return port == dsa_upstream_port(ds, port);
+>  }
+>  
+> +/* Return the local port used to reach the CPU port */
+> +static inline unsigned int dsa_switch_upstream_port(struct dsa_switch *ds)
+> +{
+> +	int p;
+> +
+> +	for (p = 0; p < ds->num_ports; p++)
+> +		if (!dsa_is_unused_port(ds, p))
+> +			return dsa_upstream_port(ds, p);
+
+dsa_switch_for_each_available_port
+
+Although to be honest, the caller already has a dp, I wonder why you
+need to complicate things and don't just call dsa_upstream_port(ds,
+dp->index) directly.
+
+> +
+> +	return ds->num_ports;
+> +}
+> +
+>  /* Return true if @upstream_ds is an upstream switch of @downstream_ds, meaning
+>   * that the routing port from @downstream_ds to @upstream_ds is also the port
+>   * which @downstream_ds uses to reach its dedicated CPU.
+> -- 
+> 2.25.1
+> 
+

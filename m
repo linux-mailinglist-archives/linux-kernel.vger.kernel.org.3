@@ -2,97 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F654A60FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7ED4A60F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240829AbiBAQHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:07:37 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:50404 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240806AbiBAQHf (ORCPT
+        id S240801AbiBAQG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234704AbiBAQG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:07:35 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 211FZhqi014100;
-        Tue, 1 Feb 2022 17:05:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=6PYg5Hhedg4uaQloxJmFy2l1dVuPmR6nR41VJNfEuyw=;
- b=oqT9bxTBsdPQbWEw8zRCkvHS7d0ZOGjZRvt4F1frv3tzh4HMDqo7Xjm5to0uQiRRSrlV
- lZ+vzDo4K+QpqdupZGDv7+WxhRfia63lXIPuWGtMIMWni2K8q9ZmNiodZ1L+LmPx/USz
- 9Ws35zLakxRjWrKivI9k4DolcyFKYitA+/+wohyg0ym/Pfm72IxM/PUe1N47n9OPBSLX
- rurQLGg9a8e/GxSpNcHh14qCFMzgJK7Y0ytP/3rGrSw5lEAw/ZuERIJ0HW1mchvrcYFa
- hlLFCWlx+dL2URgyiBgl5XNZs+OrMCEKKYl4THKyAYZmyt9QBhctc7kPCssFo1B9W1JT /A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dy1xm1uw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 17:05:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D757410002A;
-        Tue,  1 Feb 2022 17:05:16 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CF7072248DE;
-        Tue,  1 Feb 2022 17:05:16 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 1 Feb 2022 17:05:15
- +0100
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH 2/2] ARM: dts: stm32: add MDMA on STM32MP13x SoC family
-Date:   Tue, 1 Feb 2022 17:05:06 +0100
-Message-ID: <20220201160506.348701-3-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220201160506.348701-1-amelie.delaunay@foss.st.com>
-References: <20220201160506.348701-1-amelie.delaunay@foss.st.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
+        Tue, 1 Feb 2022 11:06:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B57C061714;
+        Tue,  1 Feb 2022 08:06:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E4CF61708;
+        Tue,  1 Feb 2022 16:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1936C340EB;
+        Tue,  1 Feb 2022 16:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643731615;
+        bh=wCusUGW69do8zdL1IFraRPrsU9+EHiNfdech3A1Xt2E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GCqkp12U2d1lF6WZIlwueos5RFb44pInCD9Ah+1yNj2GV3INPhYcyQywpz3GlB04Y
+         Da8ubuViEBrES19LuGvR0owKJPw+xTWzJJ0CT7lJBsLkFX7Q1czcIf6ZlVVTJwa72b
+         r41fBP1DPGVupupZsCLMnJM6VCEdXBtdCt09lUmfhW3zP1CtNTqU2XiGTbOmDibx+/
+         ptzJPQpcaQKmAT8lASTyf7oRO8DxDEXHV2ODKnGdwwKpzpX6737Hfn3u0Kzk4tLnDP
+         iSC7Ine/0Uq1dYRL3rjObK3NIGOq9sooCiwC9Ryj0x70edt3tQ9sFT3P4SY9vlTVaQ
+         9oHhaaA7de+lg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nEvgD-004gZY-KM; Tue, 01 Feb 2022 16:06:53 +0000
+Date:   Tue, 01 Feb 2022 16:06:53 +0000
+Message-ID: <87fsp2606a.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-omap@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>
+Subject: Re: [PATCH 11/12] pinctrl: starfive: Move PM device over to irq domain
+In-Reply-To: <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
+References: <20220201120310.878267-1-maz@kernel.org>
+        <20220201120310.878267-12-maz@kernel.org>
+        <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kernel@esmil.dk, linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tglx@linutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de, avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MDMA on STM32MP13x SoCs is the same than on STM32MP15x SoCs: it offers up
-to 32 channels and supports 48 requests.
+On Tue, 01 Feb 2022 15:16:39 +0000,
+Emil Renner Berthing <kernel@esmil.dk> wrote:
+> 
+> On Tue, 1 Feb 2022 at 13:19, Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > Move the reference to the device over to the irq domain.
+> >
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  drivers/pinctrl/pinctrl-starfive.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
+> > index 0b912152a405..5be9866c2b3c 100644
+> > --- a/drivers/pinctrl/pinctrl-starfive.c
+> > +++ b/drivers/pinctrl/pinctrl-starfive.c
+> > @@ -1307,7 +1307,6 @@ static int starfive_probe(struct platform_device *pdev)
+> >         sfp->gc.base = -1;
+> >         sfp->gc.ngpio = NR_GPIOS;
+> >
+> > -       starfive_irq_chip.parent_device = dev;
+> >         starfive_irq_chip.name = sfp->gc.label;
+> >
+> >         sfp->gc.irq.chip = &starfive_irq_chip;
+> > @@ -1330,6 +1329,8 @@ static int starfive_probe(struct platform_device *pdev)
+> >         if (ret)
+> >                 return dev_err_probe(dev, ret, "could not register gpiochip\n");
+> >
+> > +       irq_domain_set_pm_device(sfp->gc.irq.domain, dev);
+> > +
+> 
+> The gpio framework uses the irq_domain at sfp->gc.irq.domain, so
+> shouldn't this be set before registering the gpio_chip with
+> devm_gpiochip_add_data above?
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- arch/arm/boot/dts/stm32mp131.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+It is devm_gpiochip_add_data() that create the domain, so there is
+nothing to set before.
 
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index e64fa10ac245..b2377a22b511 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -165,6 +165,16 @@ syscfg: syscon@50020000 {
- 			clocks = <&clk_pclk3>;
- 		};
- 
-+		mdma: dma-controller@58000000 {
-+			compatible = "st,stm32h7-mdma";
-+			reg = <0x58000000 0x1000>;
-+			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk_pclk4>;
-+			#dma-cells = <5>;
-+			dma-channels = <32>;
-+			dma-requests = <48>;
-+		};
-+
- 		sdmmc1: mmc@58005000 {
- 			compatible = "arm,pl18x", "arm,primecell";
- 			arm,primecell-periphid = <0x00253180>;
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.

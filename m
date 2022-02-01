@@ -2,133 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2573A4A61D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B974A61DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241373AbiBARDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:03:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61778 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241354AbiBARDW (ORCPT
+        id S241397AbiBARFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:05:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26728 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241390AbiBARFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:03:22 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211EcbE5023486;
-        Tue, 1 Feb 2022 17:03:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=7jOF3oJAsyVkVlHQcrq5VZ83DvUv+afgF4joD2GsMNA=;
- b=O5lHmYFTW2e8IyUoPCrfolv/5/GCp7M2a6lVW9LFcGE0RRJW0SqugaaDlnJn0lQ0mZ3l
- eIwolerf5fGNQp/EPqrz/1TsObTnpU+btYr1aE0ySBWgSjtlkQHlSdF6QyoEcADhgbfa
- nGn+1Ck235wOjVJhRgPGqgxOS90qZQ0mk/aUWcBASlxk+HRQqEqB7gbxyX4PDGXZ6q2J
- Nnyl0vDm1kcdO8h9Gz7v+ShxjlToGkfACwKoa5wVi1M+LhEehdNizUDMYMEro+7OCmso
- /8CxIlpy6Ot7bGHsG4kX3zRdXlrhTfUGjB/rnuPLRr2HhdMSU0KqBZrhU8bi9fH7iIfI DQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxvkk6wns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 17:03:21 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211GmkQ9000472;
-        Tue, 1 Feb 2022 17:03:18 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dvw79pkxy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 17:03:18 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211H3GNi31981952
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Feb 2022 17:03:16 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84E77A4054;
-        Tue,  1 Feb 2022 17:03:16 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91681A405F;
-        Tue,  1 Feb 2022 17:03:15 +0000 (GMT)
-Received: from sig-9-65-72-103.ibm.com (unknown [9.65.72.103])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Feb 2022 17:03:15 +0000 (GMT)
-Message-ID: <51d294703f69ab05252c85437be668e25bab08f3.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 7/8] ima: support fs-verity file digest based version
- 3 signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 01 Feb 2022 12:03:14 -0500
-In-Reply-To: <YfiHrMU5tOsg5DMi@sol.localdomain>
-References: <20220126000658.138345-1-zohar@linux.ibm.com>
-         <20220126000658.138345-8-zohar@linux.ibm.com>
-         <YfiHrMU5tOsg5DMi@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 1 Feb 2022 12:05:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643735100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TY77IUnmcjlPl9SuFqRvGDrAyTyCZ/Kegm3l73B1jHg=;
+        b=YpnbUJqwMH2OtRzX7GVCtI3eYEuHKtqdn2XKgrsWzSifdTHmZPrT54JX+dNEuEo4mMDvOz
+        4qxnXkkEgYUPIUXKbWwf+NpI8keLxBrlzP4Tr6NDaTUsc/77efMj8vZCj14JDFenpvx9QZ
+        Pfn65AjSaOw/iDGVtPnoMsuIbmeUaA0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-451-S5ylN3w3NlmVkr_Icycf9A-1; Tue, 01 Feb 2022 12:04:57 -0500
+X-MC-Unique: S5ylN3w3NlmVkr_Icycf9A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B1DA68143EA;
+        Tue,  1 Feb 2022 17:04:54 +0000 (UTC)
+Received: from [10.22.19.61] (unknown [10.22.19.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7634B78AB0;
+        Tue,  1 Feb 2022 17:04:38 +0000 (UTC)
+Message-ID: <33be132c-874d-1061-9003-50942275b221@redhat.com>
+Date:   Tue, 1 Feb 2022 12:04:37 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 3/4] mm/page_owner: Print memcg information
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
+References: <20220131192308.608837-1-longman@redhat.com>
+ <20220131192308.608837-4-longman@redhat.com>
+ <YfkRS75D3xcqLT85@dhcp22.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YfkRS75D3xcqLT85@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lCgScqy4fTDLDFsniwuImqElnm4JAUd4
-X-Proofpoint-ORIG-GUID: lCgScqy4fTDLDFsniwuImqElnm4JAUd4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- spamscore=0 priorityscore=1501 adultscore=0 clxscore=1015 malwarescore=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202010095
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-31 at 17:06 -0800, Eric Biggers wrote:
-> On Tue, Jan 25, 2022 at 07:06:57PM -0500, Mimi Zohar wrote:
-> > Instead of calculating a file hash and verifying the signature stored
-> > in the security.ima xattr against the calculated file hash, verify
-> > fs-verity's signature (version 3).
-> > 
-> > To differentiate between a regular file hash and an fs-verity file digest
-> > based signature stored as security.ima xattr, define a new signature type
-> > named IMA_VERITY_DIGSIG.
-> > 
-> > Update the 'ima-sig' template field to display the new fs-verity signature
-> > type as well.
-> > 
-> > For example:
-> >   appraise func=BPRM_CHECK digest_type=hash|verity
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  Documentation/ABI/testing/ima_policy      | 10 +++++
-> >  Documentation/security/IMA-templates.rst  |  4 +-
-> >  security/integrity/ima/ima_appraise.c     | 49 ++++++++++++++++++++++-
-> >  security/integrity/ima/ima_template_lib.c |  3 +-
-> >  security/integrity/integrity.h            |  5 ++-
-> >  5 files changed, 65 insertions(+), 6 deletions(-)
-> 
-> All this IMA-specific stuff is confusing to me, so let me ask a question about
-> what the end result actually is.  Let's say I want to use IMA to authenticate
-> ("appraise") a file.  I've signed its fs-verity digest with a key.  I put only
-> that one key in the IMA keyring, and that key was only ever used to sign that
-> one fs-verity digest.  Can an attacker (who controls the file's contents and IMA
-> xattr) replace the file with one with a different contents and still pass the
-> IMA check?  For example, could they replace the file's contents with the
-> ima_file_id of the authentic file, and then downgrade the signature version to
-> v2?  If they can do that, then the goal of authentication wasn't met.  It might
-> be necessary to enforce that only one signature version is used at a time, to
-> avoid this kind of ambiguity.
+On 2/1/22 05:54, Michal Hocko wrote:
+> On Mon 31-01-22 14:23:07, Waiman Long wrote:
+>> It was found that a number of offlined memcgs were not freed because
+>> they were pinned by some charged pages that were present. Even "echo
+>> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
+>> offlined but not freed memcgs tend to increase in number over time with
+>> the side effect that percpu memory consumption as shown in /proc/meminfo
+>> also increases over time.
+>>
+>> In order to find out more information about those pages that pin
+>> offlined memcgs, the page_owner feature is extended to print memory
+>> cgroup information especially whether the cgroup is offlined or not.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> Acked-by: David Rientjes <rientjes@google.com>
+>> ---
+>>   mm/page_owner.c | 39 +++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 39 insertions(+)
+>>
+>> diff --git a/mm/page_owner.c b/mm/page_owner.c
+>> index 28dac73e0542..a471c74c7fe0 100644
+>> --- a/mm/page_owner.c
+>> +++ b/mm/page_owner.c
+>> @@ -10,6 +10,7 @@
+>>   #include <linux/migrate.h>
+>>   #include <linux/stackdepot.h>
+>>   #include <linux/seq_file.h>
+>> +#include <linux/memcontrol.h>
+>>   #include <linux/sched/clock.h>
+>>   
+>>   #include "internal.h"
+>> @@ -325,6 +326,42 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
+>>   	seq_putc(m, '\n');
+>>   }
+>>   
+>> +#ifdef CONFIG_MEMCG
+>> +/*
+>> + * Looking for memcg information and print it out
+>> + */
+>> +static inline void print_page_owner_memcg(char *kbuf, size_t count, int *pret,
+>> +					  struct page *page)
+>> +{
+>> +	unsigned long memcg_data = READ_ONCE(page->memcg_data);
+>> +	struct mem_cgroup *memcg;
+>> +	bool onlined;
+>> +	char name[80];
+>> +
+>> +	if (!memcg_data)
+>> +		return;
+>> +
+>> +	if (memcg_data & MEMCG_DATA_OBJCGS)
+>> +		*pret += scnprintf(kbuf + *pret, count - *pret,
+>> +				"Slab cache page\n");
+>> +
+>> +	memcg = page_memcg_check(page);
+>> +	if (!memcg)
+>> +		return;
+>> +
+>> +	onlined = (memcg->css.flags & CSS_ONLINE);
+>> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
+>> +	*pret += scnprintf(kbuf + *pret, count - *pret,
+>> +			"Charged %sto %smemcg %s\n",
+>> +			PageMemcgKmem(page) ? "(via objcg) " : "",
+>> +			onlined ? "" : "offlined ",
+>> +			name);
+> I have asked in the previous version already but what makes the memcg
+> stable (why it cannot go away and be reallocated for something else)
+> while you are trying to get its name?
 
-Instead of only allowing a single signature version, the signature
-verification could be based on policy rules.   "ima: include fsverity's
-file digests in the IMA measurement list" defines the new policy rule
-'digest_type=' option, which currently permits either IMA or fsverity
-signatures to match.  Instead only allow IMA or fsverity signatures,
-not both, on a per policy rule basis.
+The memcg is not going away as long as the page isn't freed unless if it 
+is indirectly connected via objcg. Of course, there can be a race 
+between the page is going to be freed while the page_owner information 
+is being displayed. One solution is to add a simple bit lock to each of 
+the page_owner structure and acquire the lock when it is being written 
+to or read from. Anyway a lot of these debugging aids or tools don't 
+eliminate all the race conditions that affect the accuracy of the 
+displayed information. I can add a patch to eliminate this direct memcg 
+race if you think this is necessary.
 
-From an IMA perspective, this would be safe since the builtin policies
-do not support fs-verity signatures.  After loading a custom policy,
-additional rules can only extend the custom policy.
-
-thanks,
-
-Mimi
+Cheers,
+Longman
 

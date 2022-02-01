@@ -2,382 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7A4A5EDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B97C4A5EF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239681AbiBAPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:02:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44331 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239648AbiBAPCp (ORCPT
+        id S239751AbiBAPED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:04:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60532 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239671AbiBAPEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:02:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643727765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZXW4ikWwqlgBCRGnwXxFczGKcuCYa2j1IpHwO1T0Pw=;
-        b=M+0wwcGElErVlbJduQ4LZhuo9/FY5vdijoEdWKyefkp2zM0+4NvBGFUGPjolg7bR01pmnL
-        2wjEZn3najrPuLSZIm+2T3psnF7yyPsmWghYLiyPnP2sYuXUr+IuWtdPAZ031iBgBVTQcm
-        pWuntAnlhIYjsUr3rVYVRI0C0a66WrI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-Xw47Py86OdifK4N_jTtyKw-1; Tue, 01 Feb 2022 10:02:44 -0500
-X-MC-Unique: Xw47Py86OdifK4N_jTtyKw-1
-Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so8835357edb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 07:02:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oZXW4ikWwqlgBCRGnwXxFczGKcuCYa2j1IpHwO1T0Pw=;
-        b=GhdlpCJ4lhX7qEMh0rOSTYN00YBUkH388Za1AbfNnrO6YtIiYdU2GvoAX+EGL8QNp/
-         Wm5c8X1LXs8GLAzyaO/ovGxtnXWBIo1hmMqvqrggFnLxt7rYEBvnJIUdZ1ap/ft8I9PY
-         kgxoQzU8T+7kuU1QTS3LtmKJeCCrYRGJ5pS/ROJSHygtiNb2a1spjBMR97Fu15tfMau8
-         6LY+qC4XkGWNEgq2H0NinZXricHZLcz61Ok6IelviyyVcEvCCuPvk2Bq1rk1aofC7XP4
-         5HGedHve++xvzLho7eMcdiDQleiFM35NjSH9oIb2FEd5lKr4HQG6hxymGHSnhWWjDx5j
-         1YJg==
-X-Gm-Message-State: AOAM531m0TTPYsEiZwhAknP7lI/tFZxZFmmaecgaTTOg+sPD1uzXtxg2
-        /grS/sylJlhpEHrbBA+HFFXZZsMvy/oMp1zm22M7lgA8j/cZDp1p934ZtrpioNA9/PGNy2HdTwO
-        Q8fpecJ8dw0/zeEb/NwctR6/x
-X-Received: by 2002:a05:6402:16cf:: with SMTP id r15mr25756611edx.406.1643727762667;
-        Tue, 01 Feb 2022 07:02:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyvCpVCBTZrtA2YZxbuCtFtMF8gZFN+tTu4VLRzWngSgADBV/xCYwrHYjRoBuJPzr957Nv0tA==
-X-Received: by 2002:a05:6402:16cf:: with SMTP id r15mr25756583edx.406.1643727762415;
-        Tue, 01 Feb 2022 07:02:42 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id pg25sm14900182ejb.174.2022.02.01.07.02.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 07:02:41 -0800 (PST)
-Message-ID: <71094091-56ca-0f75-a9c7-fa1cabf2af22@redhat.com>
-Date:   Tue, 1 Feb 2022 16:02:40 +0100
+        Tue, 1 Feb 2022 10:04:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDF7E6166B;
+        Tue,  1 Feb 2022 15:04:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B26C340EB;
+        Tue,  1 Feb 2022 15:03:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643727840;
+        bh=P3ELywhSVBmEVQdQn/ljrCLDXNS7QWSSiXRIpiKVzrM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uvFQFCgibmuX/fIG2xX+NEXNJ7Z4dEdzdev+g4oesoxXQxV1yFBhA7CCWGRR8KeeI
+         3NgTATMUqfi2SzOfjhrKeSowI0wyQmke7BJxl5145xUB+Ml8WzzKch8UdLYjfqaIw+
+         NSlL//GVLCknNYoepVBHXq5imq3/gDU2ftf2xhlWAqgQT3gdFtqMSvhbhV49NJg/PJ
+         17MyfD3xZqKSeOwUV44Jb1EwrOGUFs39i8fPeuOeYweA+hyYx5KTTW/jg+bLYMhlHo
+         6v55/jsq1Bv6mkc+vzLSjzcq2NUHpnuNfYMnq2CMmE9kdNWx90aBcCR54awhr7p5l2
+         QYs6tFKaTT0Ew==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+Date:   Tue,  1 Feb 2022 16:02:48 +0100
+Message-Id: <20220201150339.1028032-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v6 7/9] platform/x86: serial-multi-instantiate: Add SPI
- support
-Content-Language: en-US
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
-References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
- <20220121172431.6876-8-sbinding@opensource.cirrus.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220121172431.6876-8-sbinding@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Arnd Bergmann <arnd@arndb.de>
 
-On 1/21/22 18:24, Stefan Binding wrote:
-> Add support for spi bus in serial-multi-instantiate driver
-> 
-> Some peripherals can have either a I2C or a SPI connection
-> to the host (but not both) but use the same HID for both
-> types. So it is not possible to use the HID to determine
-> whether it is I2C or SPI. The driver must check the node
-> to see if it contains I2cSerialBus or SpiSerialBus entries.
-> 
-> For backwards-compatibility with the existing nodes I2C is
-> checked first and if such entries are found ONLY I2C devices
-> are created. Since some existing nodes that were already
-> handled by this driver could also contain unrelated
-> SpiSerialBus nodes that were previously ignored, and this
-> preserves that behavior. If there is ever a need to handle
-> a node where both I2C and SPI devices must be instantiated
-> this can be added in future.
-> 
-> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> ---
->  drivers/platform/x86/Kconfig                  |   2 +-
->  .../platform/x86/serial-multi-instantiate.c   | 174 +++++++++++++++---
->  2 files changed, 151 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index 2e656909a866..8d1eec208854 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -992,7 +992,7 @@ config TOPSTAR_LAPTOP
->  
->  config SERIAL_MULTI_INSTANTIATE
->  	tristate "Serial bus multi instantiate pseudo device driver"
-> -	depends on I2C && ACPI
-> +	depends on I2C && SPI && ACPI
->  	help
->  	  Some ACPI-based systems list multiple devices in a single ACPI
->  	  firmware-node. This driver will instantiate separate clients
-> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
-> index 4cd6d72a0741..3f05385ca2cf 100644
-> --- a/drivers/platform/x86/serial-multi-instantiate.c
-> +++ b/drivers/platform/x86/serial-multi-instantiate.c
-> @@ -14,6 +14,7 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
-> +#include <linux/spi/spi.h>
->  #include <linux/types.h>
->  
->  #define IRQ_RESOURCE_TYPE	GENMASK(1, 0)
-> @@ -21,15 +22,28 @@
->  #define IRQ_RESOURCE_GPIO	1
->  #define IRQ_RESOURCE_APIC	2
->  
-> +enum smi_bus_type {
-> +	SMI_I2C,
-> +	SMI_SPI,
-> +	SMI_AUTO_DETECT,
-> +};
-> +
->  struct smi_instance {
->  	const char *type;
->  	unsigned int flags;
->  	int irq_idx;
->  };
->  
-> +struct smi_node {
-> +	enum smi_bus_type bus_type;
-> +	struct smi_instance instances[];
-> +};
-> +
->  struct smi {
->  	int i2c_num;
-> +	int spi_num;
->  	struct i2c_client **i2c_devs;
-> +	struct spi_device **spi_devs;
->  };
->  
->  static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
-> @@ -59,6 +73,95 @@ static void smi_devs_unregister(struct smi *smi)
->  {
->  	while (smi->i2c_num > 0)
->  		i2c_unregister_device(smi->i2c_devs[--smi->i2c_num]);
-> +
-> +	while (smi->spi_num > 0)
-> +		spi_unregister_device(smi->spi_devs[--smi->spi_num]);
-> +}
-> +
-> +/**
-> + * smi_spi_probe - Instantiate multiple SPI devices from inst array
-> + * @pdev:	Platform device
-> + * @adev:	ACPI device
-> + * @smi:	Internal struct for Serial multi instantiate driver
-> + * @inst_array:	Array of instances to probe
-> + *
-> + * Returns the number of SPI devices instantiate, Zero if none is found or a negative error code.
-> + */
-> +static int smi_spi_probe(struct platform_device *pdev, struct acpi_device *adev, struct smi *smi,
-> +			 const struct smi_instance *inst_array)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct spi_controller *ctlr;
-> +	struct spi_device *spi_dev;
-> +	char name[50];
-> +	int i, ret, count;
-> +
-> +	ret = acpi_spi_count_resources(adev);
-> +	if (ret < 0)
-> +		return ret;
-> +	else if (!ret)
-> +		return -ENODEV;
-> +
-> +	count = ret;
-> +
-> +	smi->spi_devs = devm_kcalloc(dev, count, sizeof(*smi->spi_devs), GFP_KERNEL);
-> +	if (!smi->spi_devs)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < count && inst_array[i].type; i++) {
-> +
-> +		spi_dev = acpi_spi_device_alloc(NULL, adev, i);
-> +		if (IS_ERR(spi_dev)) {
-> +			ret = PTR_ERR(spi_dev);
-> +			dev_err_probe(dev, ret, "failed to allocate SPI device %s from ACPI: %d\n",
-> +				      dev_name(&adev->dev), ret);
-> +			goto error;
-> +		}
-> +
-> +		ctlr = spi_dev->controller;
-> +
-> +		strscpy(spi_dev->modalias, inst_array[i].type, sizeof(spi_dev->modalias));
-> +
-> +		ret = smi_get_irq(pdev, adev, &inst_array[i]);
-> +		if (ret < 0) {
-> +			spi_dev_put(spi_dev);
-> +			goto error;
-> +		}
-> +		spi_dev->irq = ret;
-> +
-> +		snprintf(name, sizeof(name), "%s-%s-%s.%d", dev_name(&ctlr->dev), dev_name(dev),
-> +			 inst_array[i].type, i);
-> +		spi_dev->dev.init_name = name;
-> +
-> +		ret = spi_add_device(spi_dev);
-> +		if (ret) {
-> +			dev_err_probe(&ctlr->dev, ret,
-> +				      "failed to add SPI device %s from ACPI: %d\n",
-> +				      dev_name(&adev->dev), ret);
-> +			spi_dev_put(spi_dev);
-> +			goto error;
-> +		}
-> +
-> +		dev_dbg(dev, "SPI device %s using chip select %u", name, spi_dev->chip_select);
-> +
-> +		smi->spi_devs[i] = spi_dev;
-> +		smi->spi_num++;
-> +	}
-> +
-> +	if (smi->spi_num < count) {
-> +		dev_dbg(dev, "Error finding driver, idx %d\n", i);
-> +		ret = -ENODEV;
-> +		goto error;
-> +	}
-> +
-> +	dev_info(dev, "Instantiated %d SPI devices.\n", smi->spi_num);
-> +
-> +	return 0;
-> +error:
-> +	smi_devs_unregister(smi);
-> +
-> +	return ret;
-> +
->  }
->  
->  /**
-> @@ -126,8 +229,8 @@ static int smi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev,
->  
->  static int smi_probe(struct platform_device *pdev)
->  {
-> -	const struct smi_instance *inst_array;
->  	struct device *dev = &pdev->dev;
-> +	const struct smi_node *node;
->  	struct acpi_device *adev;
->  	struct smi *smi;
->  
-> @@ -135,8 +238,8 @@ static int smi_probe(struct platform_device *pdev)
->  	if (!adev)
->  		return -ENODEV;
->  
-> -	inst_array = device_get_match_data(dev);
-> -	if (!inst_array) {
-> +	node = device_get_match_data(dev);
-> +	if (!node) {
->  		dev_dbg(dev, "Error ACPI match data is missing\n");
->  		return -ENODEV;
->  	}
-> @@ -147,7 +250,21 @@ static int smi_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, smi);
->  
-> -	return smi_i2c_probe(pdev, adev, smi, inst_array);
-> +	switch (node->bus_type) {
-> +	case SMI_I2C:
-> +		return smi_i2c_probe(pdev, adev, smi, node->instances);
-> +	case SMI_SPI:
-> +		return smi_spi_probe(pdev, adev, smi, node->instances);
-> +	case SMI_AUTO_DETECT:
-> +		if (i2c_acpi_client_count(adev) > 0)
-> +			return smi_i2c_probe(pdev, adev, smi, node->instances);
-> +		else
-> +			return smi_spi_probe(pdev, adev, smi, node->instances);
-> +	default:
-> +		break;
+The sa1111 platform is one of the two remaining users of the old Arm
+specific "dmabounce" code, which is an earlier implementation of the
+generic swiotlb.
 
-Please replace this break with : "return -EINVAL" (since we really
-should never hit this default case).
+Linus Walleij submitted a patch that removes dmabounce support from
+the ixp4xx, and I had a look at the other user, which is the sa1111
+companion chip.
 
-With that fixed, please add my R-b to the next version:
+Looking at how dmabounce is used, I could narrow it down to one driver
+one one machine:
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+ - dmabounce is only initialized on assabet and pfs168, but not on
+   any other sa1100 or pxa platform using sa1111.
 
-Regards,
+ - pfs168 is not supported in mainline Linux.
 
-Hans
+ - only the OHCI and audio devices on sa1111 support DMA
 
+ - There is no audio driver for this hardware
 
-> +	}
-> +
-> +	return 0; /* never reached */
->  }
->  
->  static int smi_remove(struct platform_device *pdev)
-> @@ -159,27 +276,36 @@ static int smi_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static const struct smi_instance bsg1160_data[]  = {
-> -	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
-> -	{ "bmc150_magn" },
-> -	{ "bmg160" },
-> -	{}
-> +static const struct smi_node bsg1160_data = {
-> +	.instances = {
-> +		{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
-> +		{ "bmc150_magn" },
-> +		{ "bmg160" },
-> +		{}
-> +	},
-> +	.bus_type = SMI_I2C,
->  };
->  
-> -static const struct smi_instance bsg2150_data[]  = {
-> -	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
-> -	{ "bmc150_magn" },
-> -	/* The resources describe a 3th client, but it is not really there. */
-> -	{ "bsg2150_dummy_dev" },
-> -	{}
-> +static const struct smi_node bsg2150_data = {
-> +	.instances = {
-> +		{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
-> +		{ "bmc150_magn" },
-> +		/* The resources describe a 3th client, but it is not really there. */
-> +		{ "bsg2150_dummy_dev" },
-> +		{}
-> +	},
-> +	.bus_type = SMI_I2C,
->  };
->  
-> -static const struct smi_instance int3515_data[]  = {
-> -	{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
-> -	{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
-> -	{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
-> -	{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
-> -	{}
-> +static const struct smi_node int3515_data = {
-> +	.instances = {
-> +		{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
-> +		{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
-> +		{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
-> +		{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
-> +		{}
-> +	},
-> +	.bus_type = SMI_I2C,
->  };
->  
->  /*
-> @@ -187,9 +313,9 @@ static const struct smi_instance int3515_data[]  = {
->   * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
->   */
->  static const struct acpi_device_id smi_acpi_ids[] = {
-> -	{ "BSG1160", (unsigned long)bsg1160_data },
-> -	{ "BSG2150", (unsigned long)bsg2150_data },
-> -	{ "INT3515", (unsigned long)int3515_data },
-> +	{ "BSG1160", (unsigned long)&bsg1160_data },
-> +	{ "BSG2150", (unsigned long)&bsg2150_data },
-> +	{ "INT3515", (unsigned long)&int3515_data },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(acpi, smi_acpi_ids);
-> 
+In the OHCI code, I noticed that two other platforms already have
+a local bounce buffer support in the form of the "local_mem"
+allocator. Specifically, TMIO and SM501 use this on a few other ARM
+boards with 16KB or 128KB of local SRAM that can be accessed from the
+OHCI and from the CPU.
+
+While this is not the same problem as on sa1111, I could not find a
+reason why we can't re-use the existing implementation but replace the
+physical SRAM address mapping with a locally allocated DMA buffer.
+
+There are two main downsides:
+
+ - rather than using a dynamically sized pool, this buffer needs
+   to be allocated at probe time using a fixed size. Without
+   having any idea of what it should be, I picked a size of
+   64KB, which is between what the other two OHCI front-ends use
+   in their SRAM. If anyone has a better idea what that size
+   is reasonable, this can be trivially changed.
+
+ - Previously, only USB transfers to the second memory bank
+   on Assabet needed to go through the bounce buffer, now all
+   of them do, which may impact runtime performance, depending
+   on what type of device is attached.
+
+On the upside, the local_mem support uses write-combining
+buffers, which should be a bit faster for transfers to the device
+compared to normal uncached coherent memory as used in dmabounce.
+
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I don't have this hardware, so the patch is not tested at all.
+---
+ arch/arm/common/Kconfig        |  1 -
+ arch/arm/common/sa1111.c       | 64 ----------------------------------
+ drivers/usb/core/hcd.c         | 17 +++++++--
+ drivers/usb/host/ohci-sa1111.c | 16 +++++++++
+ 4 files changed, 30 insertions(+), 68 deletions(-)
+
+diff --git a/arch/arm/common/Kconfig b/arch/arm/common/Kconfig
+index c8e198631d41..286ea014c015 100644
+--- a/arch/arm/common/Kconfig
++++ b/arch/arm/common/Kconfig
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config SA1111
+ 	bool
+-	select DMABOUNCE if !ARCH_PXA
+ 
+ config DMABOUNCE
+ 	bool
+diff --git a/arch/arm/common/sa1111.c b/arch/arm/common/sa1111.c
+index 7df003b149c6..a00915883f78 100644
+--- a/arch/arm/common/sa1111.c
++++ b/arch/arm/common/sa1111.c
+@@ -1391,70 +1391,9 @@ void sa1111_driver_unregister(struct sa1111_driver *driver)
+ }
+ EXPORT_SYMBOL(sa1111_driver_unregister);
+ 
+-#ifdef CONFIG_DMABOUNCE
+-/*
+- * According to the "Intel StrongARM SA-1111 Microprocessor Companion
+- * Chip Specification Update" (June 2000), erratum #7, there is a
+- * significant bug in the SA1111 SDRAM shared memory controller.  If
+- * an access to a region of memory above 1MB relative to the bank base,
+- * it is important that address bit 10 _NOT_ be asserted. Depending
+- * on the configuration of the RAM, bit 10 may correspond to one
+- * of several different (processor-relative) address bits.
+- *
+- * This routine only identifies whether or not a given DMA address
+- * is susceptible to the bug.
+- *
+- * This should only get called for sa1111_device types due to the
+- * way we configure our device dma_masks.
+- */
+-static int sa1111_needs_bounce(struct device *dev, dma_addr_t addr, size_t size)
+-{
+-	/*
+-	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
+-	 * User's Guide" mentions that jumpers R51 and R52 control the
+-	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
+-	 * SDRAM bank 1 on Neponset). The default configuration selects
+-	 * Assabet, so any address in bank 1 is necessarily invalid.
+-	 */
+-	return (machine_is_assabet() || machine_is_pfs168()) &&
+-		(addr >= 0xc8000000 || (addr + size) >= 0xc8000000);
+-}
+-
+-static int sa1111_notifier_call(struct notifier_block *n, unsigned long action,
+-	void *data)
+-{
+-	struct sa1111_dev *dev = to_sa1111_device(data);
+-
+-	switch (action) {
+-	case BUS_NOTIFY_ADD_DEVICE:
+-		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL) {
+-			int ret = dmabounce_register_dev(&dev->dev, 1024, 4096,
+-					sa1111_needs_bounce);
+-			if (ret)
+-				dev_err(&dev->dev, "failed to register with dmabounce: %d\n", ret);
+-		}
+-		break;
+-
+-	case BUS_NOTIFY_DEL_DEVICE:
+-		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL)
+-			dmabounce_unregister_dev(&dev->dev);
+-		break;
+-	}
+-	return NOTIFY_OK;
+-}
+-
+-static struct notifier_block sa1111_bus_notifier = {
+-	.notifier_call = sa1111_notifier_call,
+-};
+-#endif
+-
+ static int __init sa1111_init(void)
+ {
+ 	int ret = bus_register(&sa1111_bus_type);
+-#ifdef CONFIG_DMABOUNCE
+-	if (ret == 0)
+-		bus_register_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
+-#endif
+ 	if (ret == 0)
+ 		platform_driver_register(&sa1111_device_driver);
+ 	return ret;
+@@ -1463,9 +1402,6 @@ static int __init sa1111_init(void)
+ static void __exit sa1111_exit(void)
+ {
+ 	platform_driver_unregister(&sa1111_device_driver);
+-#ifdef CONFIG_DMABOUNCE
+-	bus_unregister_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
+-#endif
+ 	bus_unregister(&sa1111_bus_type);
+ }
+ 
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 3c7c64ff3c0a..5f2fa46c7958 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
+ EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
+ 
+ /*
+- * Some usb host controllers can only perform dma using a small SRAM area.
++ * Some usb host controllers can only perform dma using a small SRAM area,
++ * or that have restrictions in addressable DRAM.
+  * The usb core itself is however optimized for host controllers that can dma
+  * using regular system memory - like pci devices doing bus mastering.
+  *
+@@ -3095,8 +3096,18 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+ 	if (IS_ERR(hcd->localmem_pool))
+ 		return PTR_ERR(hcd->localmem_pool);
+ 
+-	local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
+-				  size, MEMREMAP_WC);
++	/*
++	 * if a physical SRAM address was passed, map it, otherwise
++	 * allocate system memory as a buffer.
++	 */
++	if (phys_addr)
++		local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
++					  size, MEMREMAP_WC);
++	else
++		local_mem = dmam_alloc_attrs(hcd->self.sysdev, size, &dma,
++					     GFP_KERNEL,
++					     DMA_ATTR_WRITE_COMBINE);
++
+ 	if (IS_ERR(local_mem))
+ 		return PTR_ERR(local_mem);
+ 
+diff --git a/drivers/usb/host/ohci-sa1111.c b/drivers/usb/host/ohci-sa1111.c
+index 137f66f6977f..488033f2e144 100644
+--- a/drivers/usb/host/ohci-sa1111.c
++++ b/drivers/usb/host/ohci-sa1111.c
+@@ -206,6 +206,22 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
+ 		goto err1;
+ 	}
+ 
++	/*
++	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
++	 * User's Guide" mentions that jumpers R51 and R52 control the
++	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
++	 * SDRAM bank 1 on Neponset). The default configuration selects
++	 * Assabet, so any address in bank 1 is necessarily invalid.
++	 *
++	 * As a workaround, use a bounce buffer in addressable memory
++	 * as local_mem.
++	 */
++	if (machine_is_assabet()) {
++		ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
++		if (ret)
++			goto out_err1;
++	}
++
+ 	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+ 		dev_dbg(&dev->dev, "request_mem_region failed\n");
+ 		ret = -EBUSY;
+-- 
+2.29.2
 

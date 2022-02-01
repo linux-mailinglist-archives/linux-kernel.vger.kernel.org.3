@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D705C4A647E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED46D4A647B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240764AbiBATBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:01:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52062 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242227AbiBATBi (ORCPT
+        id S242275AbiBATBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:01:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41054 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238402AbiBATBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:01:38 -0500
+        Tue, 1 Feb 2022 14:01:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDDEF61615;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 938D3B82F71;
+        Tue,  1 Feb 2022 19:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8C5C340ED;
         Tue,  1 Feb 2022 19:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683C7C340F1;
-        Tue,  1 Feb 2022 19:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643742097;
-        bh=I5Ksu7TSv5OlmgMa0WaJLxD3mrYm2dJm/MON3Czbzb4=;
+        s=k20201202; t=1643742098;
+        bh=X74BnOg4IqWFvwMGEZm0zB6g12VahyiocXPpi50JsKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jQ82qm84m11Nng41jofXckgW27OfA/w2Hm4edQErKgZLb4z6UpZyBy+n5cVpzibpp
-         Abi8XyCVEp2+PtlRd+6iNXAh9Yvs9mQjFJcnANc9zg/XJVm7BcFu60Ga68e0YiZ/Xi
-         ngxXYR5CsuKYtPtG0lr+hvr5D+s5ZbFCe6/STaqkdtEnqyzdxPP5A3tk1sFZOuUdXv
-         Cke9uxy8QG9Fm8Tkeyw+HUQdaPc+DoZvrdE0oQN/K5jfvjdm/3kWUQwA99uaUJqL5E
-         6hczOpd6kOuAYY5gmz0QKjT1Wx5Vu0pixs4oHmuqrDS6Gzg49FiAJ4uNa03yKrfgMx
-         bCm5frnH6HIgQ==
+        b=CRRqNDjjYZhgwQtE7XZ8/vIlNgBt61b7qpm9gneiXK9qdpGcBLMPfVDTOZ27iu10C
+         skPHcuhlFXf138w4PoPrdQpoieVNduSp8u/oogwSVSGqRTiEusEqA+ctk/n4rzvUH4
+         8if3/XAjqjmHzZt1Bb/LI+u3YCf6FKHMIDenJWG8FKlsLumZtYf/1hRi5AkqVXGYRu
+         T/OKzDUxMWFWu8xo+mTsU+zrU5cAqIB3VQf3T89lvViTFGJoCpqwnxSh6iEC1C26sW
+         ZwMm0Ss0Bz62DxQzS8yS4lJ/t4XZ6ykuESW7ERDtGCUUDC5E3BAfeWfWLQ/Q6B8/tp
+         1ZSqV4gIZ0+NQ==
 From:   Keith Busch <kbusch@kernel.org>
 To:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-block@vger.kernel.org
 Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
-        colyli@suse.de, Keith Busch <kbusch@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCHv2 5/7] asm-generic: introduce be48 unaligned accessors
-Date:   Tue,  1 Feb 2022 11:01:26 -0800
-Message-Id: <20220201190128.3075065-6-kbusch@kernel.org>
+        colyli@suse.de, Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv2 6/7] block: add pi for nvme enhanced integrity
+Date:   Tue,  1 Feb 2022 11:01:27 -0800
+Message-Id: <20220201190128.3075065-7-kbusch@kernel.org>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20220201190128.3075065-1-kbusch@kernel.org>
 References: <20220201190128.3075065-1-kbusch@kernel.org>
@@ -47,51 +46,272 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NVMe protocol extended the data integrity fields with unaligned
-48-bit reference tags. Provide some helper accessors in
-preparation for these.
+The NVMe specification defines larger data integrity formats beyond the
+t10 tuple. Add support for the specification defined CRC64 formats,
+assuming the reference tag does not need to be split with the "storage
+tag".
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- include/asm-generic/unaligned.h | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ block/Kconfig          |   1 +
+ block/t10-pi.c         | 194 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/t10-pi.h |  20 +++++
+ 3 files changed, 215 insertions(+)
 
-diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
-index 1c4242416c9f..8fc637379899 100644
---- a/include/asm-generic/unaligned.h
-+++ b/include/asm-generic/unaligned.h
-@@ -126,4 +126,30 @@ static inline void put_unaligned_le24(const u32 val, void *p)
- 	__put_unaligned_le24(val, p);
- }
+diff --git a/block/Kconfig b/block/Kconfig
+index 205f8d01c695..e3ce9196ad07 100644
+--- a/block/Kconfig
++++ b/block/Kconfig
+@@ -75,6 +75,7 @@ config BLK_DEV_INTEGRITY_T10
+ 	tristate
+ 	depends on BLK_DEV_INTEGRITY
+ 	select CRC_T10DIF
++	select CRC64
  
-+static inline void __put_unaligned_be48(const u64 val, __u8 *p)
+ config BLK_DEV_ZONED
+ 	bool "Zoned block device support"
+diff --git a/block/t10-pi.c b/block/t10-pi.c
+index 758a76518854..7bfefe970bc5 100644
+--- a/block/t10-pi.c
++++ b/block/t10-pi.c
+@@ -7,8 +7,10 @@
+ #include <linux/t10-pi.h>
+ #include <linux/blk-integrity.h>
+ #include <linux/crc-t10dif.h>
++#include <linux/crc64.h>
+ #include <linux/module.h>
+ #include <net/checksum.h>
++#include <asm/unaligned.h>
+ 
+ typedef __be16 (csum_fn) (void *, unsigned int);
+ 
+@@ -278,4 +280,196 @@ const struct blk_integrity_profile t10_pi_type3_ip = {
+ };
+ EXPORT_SYMBOL(t10_pi_type3_ip);
+ 
++static __be64 nvme_pi_crc64(void *data, unsigned int len)
 +{
-+	*p++ = val >> 40;
-+	*p++ = val >> 32;
-+	*p++ = val >> 24;
-+	*p++ = val >> 16;
-+	*p++ = val >> 8;
-+	*p++ = val;
++	return cpu_to_be64(crc64_rocksoft(~0ULL, data, len));
 +}
 +
-+static inline void put_unaligned_be48(const u64 val, void *p)
++static blk_status_t nvme_crc64_generate(struct blk_integrity_iter *iter,
++					enum t10_dif_type type)
 +{
-+	__put_unaligned_be48(val, p);
++	unsigned int i;
++
++	for (i = 0 ; i < iter->data_size ; i += iter->interval) {
++		struct nvme_crc64_pi_tuple *pi = iter->prot_buf;
++
++		pi->guard_tag = nvme_pi_crc64(iter->data_buf, iter->interval);
++		pi->app_tag = 0;
++
++		if (type == T10_PI_TYPE1_PROTECTION)
++			put_unaligned_be48(iter->seed, pi->ref_tag);
++		else
++			put_unaligned_be48(0ULL, pi->ref_tag);
++
++		iter->data_buf += iter->interval;
++		iter->prot_buf += iter->tuple_size;
++		iter->seed++;
++	}
++
++	return BLK_STS_OK;
 +}
 +
-+static inline u64 __get_unaligned_be48(const u8 *p)
++static bool nvme_crc64_ref_escape(u8 *ref_tag)
 +{
-+	return (u64)p[0] << 40 | (u64)p[1] << 32 | p[2] << 24 |
-+		p[3] << 16 | p[4] << 8 | p[5];
++	static u8 ref_escape[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
++
++	return memcmp(ref_tag, ref_escape, sizeof(ref_escape)) == 0;
 +}
 +
-+static inline u64 get_unaligned_be48(const void *p)
++static blk_status_t nvme_crc64_verify(struct blk_integrity_iter *iter,
++				      enum t10_dif_type type)
 +{
-+	return __get_unaligned_be48(p);
++	unsigned int i;
++
++	for (i = 0; i < iter->data_size; i += iter->interval) {
++		struct nvme_crc64_pi_tuple *pi = iter->prot_buf;
++		u64 ref, seed;
++		__be64 csum;
++
++		if (type == T10_PI_TYPE1_PROTECTION) {
++			if (pi->app_tag == T10_PI_APP_ESCAPE)
++				goto next;
++
++			ref = get_unaligned_be48(pi->ref_tag);
++			seed = iter->seed & 0xffffffffffffull;
++			if (ref != seed) {
++				pr_err("%s: ref tag error at location %llu (rcvd %llu)\n",
++					iter->disk_name, seed, ref);
++				return BLK_STS_PROTECTION;
++			}
++		} else if (type == T10_PI_TYPE3_PROTECTION) {
++			if (pi->app_tag == T10_PI_APP_ESCAPE &&
++			    nvme_crc64_ref_escape(pi->ref_tag))
++				goto next;
++		}
++
++		csum = nvme_pi_crc64(iter->data_buf, iter->interval);
++		if (pi->guard_tag != csum) {
++			pr_err("%s: guard tag error at sector %llu " \
++			       "(rcvd %016llx, want %016llx)\n",
++				iter->disk_name, (unsigned long long)iter->seed,
++				be64_to_cpu(pi->guard_tag), be64_to_cpu(csum));
++			return BLK_STS_PROTECTION;
++		}
++
++next:
++		iter->data_buf += iter->interval;
++		iter->prot_buf += iter->tuple_size;
++		iter->seed++;
++	}
++
++	return BLK_STS_OK;
 +}
 +
- #endif /* __ASM_GENERIC_UNALIGNED_H */
++static blk_status_t nvme_pi_type1_verify_crc(struct blk_integrity_iter *iter)
++{
++	return nvme_crc64_verify(iter, T10_PI_TYPE1_PROTECTION);
++}
++
++static blk_status_t nvme_pi_type1_generate_crc(struct blk_integrity_iter *iter)
++{
++	return nvme_crc64_generate(iter, T10_PI_TYPE1_PROTECTION);
++}
++
++static void nvme_pi_type1_prepare(struct request *rq)
++{
++	const int tuple_sz = rq->q->integrity.tuple_size;
++	u64 ref_tag = nvme_pi_extended_ref_tag(rq);
++	struct bio *bio;
++
++	__rq_for_each_bio(bio, rq) {
++		struct bio_integrity_payload *bip = bio_integrity(bio);
++		u64 virt = bip_get_seed(bip) & 0xffffffffffffull;
++		struct bio_vec iv;
++		struct bvec_iter iter;
++
++		/* Already remapped? */
++		if (bip->bip_flags & BIP_MAPPED_INTEGRITY)
++			break;
++
++		bip_for_each_vec(iv, bip, iter) {
++			unsigned int j;
++			void *p;
++
++			p = bvec_kmap_local(&iv);
++			for (j = 0; j < iv.bv_len; j += tuple_sz) {
++				struct nvme_crc64_pi_tuple *pi = p;
++				u64 ref = get_unaligned_be48(pi->ref_tag);
++
++				if (ref == virt)
++					put_unaligned_be48(ref_tag, pi->ref_tag);
++				virt++;
++				ref_tag++;
++				p += tuple_sz;
++			}
++			kunmap_local(p);
++		}
++
++		bip->bip_flags |= BIP_MAPPED_INTEGRITY;
++	}
++}
++
++static void nvme_pi_type1_complete(struct request *rq, unsigned int nr_bytes)
++{
++	unsigned intervals = nr_bytes >> rq->q->integrity.interval_exp;
++	const int tuple_sz = rq->q->integrity.tuple_size;
++	u64 ref_tag = nvme_pi_extended_ref_tag(rq);
++	struct bio *bio;
++
++	__rq_for_each_bio(bio, rq) {
++		struct bio_integrity_payload *bip = bio_integrity(bio);
++		u64 virt = bip_get_seed(bip) & 0xffffffffffffull;
++		struct bio_vec iv;
++		struct bvec_iter iter;
++
++		bip_for_each_vec(iv, bip, iter) {
++			unsigned int j;
++			void *p;
++
++			p = bvec_kmap_local(&iv);
++			for (j = 0; j < iv.bv_len && intervals; j += tuple_sz) {
++				struct nvme_crc64_pi_tuple *pi = p;
++				u64 ref = get_unaligned_be48(pi->ref_tag);
++
++				if (ref == ref_tag)
++					put_unaligned_be48(virt, pi->ref_tag);
++				virt++;
++				ref_tag++;
++				intervals--;
++				p += tuple_sz;
++			}
++			kunmap_local(p);
++		}
++	}
++}
++
++static blk_status_t nvme_pi_type3_verify_crc(struct blk_integrity_iter *iter)
++{
++	return nvme_crc64_verify(iter, T10_PI_TYPE3_PROTECTION);
++}
++
++static blk_status_t nvme_pi_type3_generate_crc(struct blk_integrity_iter *iter)
++{
++	return nvme_crc64_generate(iter, T10_PI_TYPE3_PROTECTION);
++}
++
++const struct blk_integrity_profile nvme_pi_type1_crc64 = {
++	.name			= "NVME-DIF-TYPE1-CRC64",
++	.generate_fn		= nvme_pi_type1_generate_crc,
++	.verify_fn		= nvme_pi_type1_verify_crc,
++	.prepare_fn		= nvme_pi_type1_prepare,
++	.complete_fn		= nvme_pi_type1_complete,
++};
++EXPORT_SYMBOL(nvme_pi_type1_crc64);
++
++const struct blk_integrity_profile nvme_pi_type3_crc64 = {
++	.name			= "NVME-DIF-TYPE3-CRC64",
++	.generate_fn		= nvme_pi_type3_generate_crc,
++	.verify_fn		= nvme_pi_type3_verify_crc,
++	.prepare_fn		= t10_pi_type3_prepare,
++	.complete_fn		= t10_pi_type3_complete,
++};
++EXPORT_SYMBOL(nvme_pi_type3_crc64);
++
++MODULE_LICENSE("GPL");
+ MODULE_LICENSE("GPL");
+diff --git a/include/linux/t10-pi.h b/include/linux/t10-pi.h
+index c635c2e014e3..fd3a9b99500a 100644
+--- a/include/linux/t10-pi.h
++++ b/include/linux/t10-pi.h
+@@ -53,4 +53,24 @@ extern const struct blk_integrity_profile t10_pi_type1_ip;
+ extern const struct blk_integrity_profile t10_pi_type3_crc;
+ extern const struct blk_integrity_profile t10_pi_type3_ip;
+ 
++struct nvme_crc64_pi_tuple {
++	__be64 guard_tag;
++	__be16 app_tag;
++	__u8   ref_tag[6];
++};
++
++static inline u64 nvme_pi_extended_ref_tag(struct request *rq)
++{
++	unsigned int shift = ilog2(queue_logical_block_size(rq->q));
++
++#ifdef CONFIG_BLK_DEV_INTEGRITY
++	if (rq->q->integrity.interval_exp)
++		shift = rq->q->integrity.interval_exp;
++#endif
++	return blk_rq_pos(rq) >> (shift - SECTOR_SHIFT) & 0xffffffffffffull;
++}
++
++extern const struct blk_integrity_profile nvme_pi_type1_crc64;
++extern const struct blk_integrity_profile nvme_pi_type3_crc64;
++
+ #endif
 -- 
 2.25.4
 

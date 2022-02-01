@@ -2,66 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5004A5774
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E244A5783
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbiBAHEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S234551AbiBAHJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiBAHEL (ORCPT
+        with ESMTP id S233870AbiBAHJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:04:11 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF55C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:04:10 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id k31so48043371ybj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:04:10 -0800 (PST)
+        Tue, 1 Feb 2022 02:09:44 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554A8C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:09:44 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 132so3508226pga.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xKTZjq0rYBRX7jLEx/my6WSeAz3d0OUlj7PP/EtNSi8=;
-        b=kNsKpABc32DrxgKMkS01XDkfcSQEYa0LpCiFxaG55cgMkEp3QdTWH+cirFEFKFYRuq
-         eB81JAvp5LrPKbio5eG2B/jK0IaGSF+lmxrxre/8ccsZrKNnKqipyIJmXiCM3IzP5ebi
-         E9x3ikj9aR3Ot3vDlCMmtJotJTolEboFD0tEcK/G5DgkOZlyU2TqI5IyvXPCrcaH4RWm
-         xk3HyN/eS5MQr/I/ldWUkQmybe67WfyRD9MLfbbk5tLzKakZ7EqDQuAQBhJLPFxTAt1B
-         BjsTEkztTo8vt2qzWVfXYAEgy3SRLszA7quyRkyDXt5I0pQHmUTLzRzoWGHBBzDB8SJx
-         S02Q==
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=30OxmrfKBbCG4hj/X3lsJFFvPMa8rJcIl2RH+GTl1+c=;
+        b=mhDV0XtJlte0Om1SvFzaHSKspJpOm4zs+iaK7pwkTbq02CRjXk7keFp0VG1dgt3NAQ
+         HhZlEK8n/5JsdmEiiQgaYAyhBJ8QJOSOQknTuBXjZ5oj0+MtTPh8fVsqxVLFjWWxuW/v
+         wQ59egONKIocS0nvyFlCnlLGT1yIaPO14HhFbVcCyQVsX0TqGvo+HUCSJcXUOnI2pC10
+         WNBa763RKmq7xot14B/U2BzflA796QfH98wCFvmBVEmtiQ7VnCtqIvoblsjaW236AAgf
+         shU7DLKubnotSnFp/70OkQBgfj8DGsLOwm5y2os0E/SHhZpxFpX6lMq6hMmvbIRKOdOD
+         TMnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xKTZjq0rYBRX7jLEx/my6WSeAz3d0OUlj7PP/EtNSi8=;
-        b=RdnMFC9PHu88wxIx7BqnVteD1YDGCnWFRy1ptwUU7p/BrxKJe3Y0EeZ7kFtVf7JYSs
-         opgVNiwAAMarHAUtJGgutxM+I1L48zSpClQW2hBgS8w2NO+FUGuVxRz0XWmzwK/CjXS2
-         dh1fbs7XE6qQz/NfAtnrurtnTQMO2A7HXQB3OCQlARl4NSWbLWAAwP27WZiiBm2r4sNb
-         1D7W0O6IwVoqixua7vU3odp/0BcFt7gJOzMPqKhRn/1y3MOOO1hdaYjKXDo6ssyVD5lS
-         JxUHKDYGyzw/8/MXzzNDXGwaR3rjqx9wt9uc1qwRwwwHcvirARCpmN6Zcs3tbiXqPLKg
-         T9Kw==
-X-Gm-Message-State: AOAM5305j8erzSzHbJV9j3vm1IjXXj+WocBIDLTstUX97pCAWdyAJ+pI
-        M56lCmZSDjUMseq0I/izZgfr+doVOyU1DPxM788=
-X-Google-Smtp-Source: ABdhPJxhnvwf9yNUBvtsldKaWn7QC4J4wDckaFSwI0KpPhL6MBzOWWOqiuUG8EuUetjAaLJOSatz8ovTLIhaWWox3fc=
-X-Received: by 2002:a25:9004:: with SMTP id s4mr35039671ybl.648.1643699049974;
- Mon, 31 Jan 2022 23:04:09 -0800 (PST)
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=30OxmrfKBbCG4hj/X3lsJFFvPMa8rJcIl2RH+GTl1+c=;
+        b=N17oqmJdJTJ7trhr9Iy89kyJGNdS+GqTjw+sxYd8cZnL0/RywwDu2ZmpwFBW46Wlul
+         aKJzWF03Q3wRXwxPy1aT4PbeW9Tt7bfC8muhlNAA+dM5QTdBy2QThe05UuOgZ/8eo6q2
+         RXYmBMidUHzYx/LB5OCw4aDEXqAOkDBEobOCjg6EcHvYDDYy8G06TiY/EspvCBsnyhS+
+         63exZNg4xQVtUAMj/iFQtsd7/eAAln7do61YYqQJd4aQdsdETeSYQrYQCKDkwsEbg6lh
+         9YdrHe0DP/BhwImIGpPnZgT60S5zFxfXEzRryIn0+CAcRgSzGiBmnDBq9N7a4blsukP4
+         b/1Q==
+X-Gm-Message-State: AOAM53049Uj1htpNJp8wBjZEhxwVPxa05DeTUQOD0wzaB5yAwxovNq8h
+        xUCaFklWyEBeZjTnyaVk/Zwz7VfyQA0=
+X-Google-Smtp-Source: ABdhPJziuKz49mS+l3/gxjF2ulHnmtnYWYPEnlwQpCgJgPtp9ORDVwZExaGCW2JC7ubPOPU27LhpOQ==
+X-Received: by 2002:a63:f30e:: with SMTP id l14mr19357924pgh.410.1643699383259;
+        Mon, 31 Jan 2022 23:09:43 -0800 (PST)
+Received: from [10.59.0.6] ([85.203.23.80])
+        by smtp.gmail.com with ESMTPSA id q19sm19964158pfn.159.2022.01.31.23.09.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 23:09:42 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] staging: wfx: possible deadlock in wfx_conf_tx() and
+ wfx_add_interface()
+To:     jerome.pouiller@silabs.com, Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <6f489bf2-bac0-8030-7ea5-6f5c12daa568@gmail.com>
+Date:   Tue, 1 Feb 2022 15:09:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Received: by 2002:a05:7010:480c:b0:202:bad6:9888 with HTTP; Mon, 31 Jan 2022
- 23:04:09 -0800 (PST)
-Reply-To: sulemansolomonkante@gmail.com
-From:   "Mr, solomon sulaman Kante" <mr.aminuaruna565@gmail.com>
-Date:   Tue, 1 Feb 2022 07:04:09 +0000
-Message-ID: <CAJndhsdztcxtLA9Ua=S0DiD6Qp4+bPJgLVgTJTMbaDrpmK_4Vw@mail.gmail.com>
-Subject: Good Day To You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Good Day To You
+Hello,
 
-Please i need your kind Assistance. I will be very glad if you can
-assist me to receive this sum of ( $22. Million US dollars.) into your
-bank account for the benefit of our both families, reply me if you are
-ready to receive this fund.
-sulaman Kante
+My static analysis tool reports a possible deadlock in the wfx driver in 
+Linux 5.16:
+
+wfx_conf_tx()
+   mutex_lock(&wdev->conf_mutex); --> Line 225 (Lock A)
+   wfx_update_pm()
+     wait_for_completion_timeout(&wvif->set_pm_mode_complete, ...); --> 
+Line 3019 (Wait X)
+
+wfx_add_interface()
+   mutex_lock(&wdev->conf_mutex); --> Line 737 (Lock A)
+   complete(&wvif->set_pm_mode_complete); --> Line 758 (Wake X)
+
+When wfx_conf_tx() is executed, "Wait X" is performed by holding "Lock 
+A". If wfx_add_interface() is executed at this time, "Wake X" cannot be 
+performed to wake up "Wait X" in wfx_conf_tx(), because "Lock A" has 
+been already hold by wfx_conf_tx(), causing a possible deadlock.
+I find that "Wait X" is performed with a timeout, to relieve the 
+possible deadlock; but I think this timeout can cause inefficient execution.
+
+I am not quite sure whether this possible problem is real and how to fix 
+it if it is real.
+Any feedback would be appreciated, thanks :)
+
+
+Best wishes,
+Jia-Ju Bai
+

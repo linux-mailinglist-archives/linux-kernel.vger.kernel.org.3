@@ -2,211 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A714A675F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8EE4A6760
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236840AbiBAVxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbiBAVxb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:53:31 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD8C061714;
-        Tue,  1 Feb 2022 13:53:31 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id a13so34633254wrh.9;
-        Tue, 01 Feb 2022 13:53:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xO39BmkI2FGjUMBOjrgQHT01JzWS5Ploj3Qtkh1kqM8=;
-        b=LbtPvwiUa0ZBOZVtQKYrWwxUBVRuktbH/zhVkCPg1VMuhzoiQlij0/4WvK4duTmS/J
-         pwfS5qbR3InvFv8va8K9f5Axvm+dNkAnrUTaW+gAgWqMzNiVwYINEV3fX9y9kgriqcKa
-         vDVFUhSZPE84JQtm0mJEc9jUmVE621/5BvhcTuiUWMDTeuLlImcTjo8ySxAdoQ2ioC35
-         nOz+bCYrCxq8m3Shd9Ljj5tqQaqf/eg0Ygp+rndTW8VTzPtMZapDR0hUC+hhUcNg9Uk7
-         AOnJM611js4IISbS/sUguO3WksWXpslAGVAanuNc6YSbcmvILqvH04Yz+j4UeBh0VGza
-         eM7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xO39BmkI2FGjUMBOjrgQHT01JzWS5Ploj3Qtkh1kqM8=;
-        b=LXdAbVIMELJ9WFbWW78MT1+vljg2zysl9wpnzJcf4hhql5FAZhmdYEDs313nnsXj+m
-         i5sd9gH1dn1cuTBm+LS1WO+zIuuw/b+RTnCZs4uHToX5TW/rV8nCQ6HiiycKYg385rV6
-         QoU14ORb/T0nyPjyQiYwL1ilRkvOo9bAV9Gvr2LTB1c9DX/TmkweWXzm2zwNUWqlKbz2
-         wn94Pjjq/3R1hEq3Gl3K/s5BNpyIx0sStscpSqi0nZZhDGglNx9bXVZA1znPUUu5B8WX
-         k8+QOeOJ6zZWyp7crLPv44MPSp7mLctv85iW6yglnJA4GQhf6BO71LVEfSnIM95sFeyN
-         M0rQ==
-X-Gm-Message-State: AOAM532fb9p7Q197ZMHcMhxAk42PQ7m1nPOARuI+cfuOxc2/X7sHtvMs
-        yriq99CSG9lAjBXJLtOvTAA=
-X-Google-Smtp-Source: ABdhPJzEkqh/6jLqdmWjCaDnCRG8wWWukjaLy2m4mvM9Bt8sevDDg82ArhnDf23q8Ji3zwt1tCW5hQ==
-X-Received: by 2002:adf:ffce:: with SMTP id x14mr23213863wrs.128.1643752408921;
-        Tue, 01 Feb 2022 13:53:28 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id l4sm16808867wrs.6.2022.02.01.13.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:53:28 -0800 (PST)
-Date:   Tue, 1 Feb 2022 22:53:26 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/15] dt-bindings: clock: split qcom,gcc.yaml to
- common and specific schema
-Message-ID: <Yfmr1kNGIN9OMiz5@Ansuel-xps.localdomain>
-References: <20220121210340.32362-1-ansuelsmth@gmail.com>
- <20220121210340.32362-2-ansuelsmth@gmail.com>
- <YfhssKqI5U8X+Akn@builder.lan>
+        id S235481AbiBAVyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:54:14 -0500
+Received: from mga17.intel.com ([192.55.52.151]:60954 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235804AbiBAVyN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 16:54:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643752453; x=1675288453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g3HuC/825ly1scS+giALZEgJq+wpKotE5+YV5VwCumM=;
+  b=SJ7sMlPb13bk0nb5sCTQ5mftOs1UsrzoH+EuiOmJxcEm+NA7L/l3E9To
+   MHUSnVlmFs74uiz9Wohmj5ugl6b6MTUyk2iyAc8yEa1976zz9hjwJQQom
+   sw7wksEouysz9xNODJBG/e3ghGWYolwZw9wblcHbDedt2YK1eXblgPnUK
+   l3Dovg2q0X42SHwBtVcRmXXRMlOrACMh9rY+uhIcHGnlnRQ4wXaKxuKdi
+   1z67FnOF8GQzwjfP+KhHuurSZwAAUEdQgaNJooV/Esm2YnUr8jlwlBZBB
+   LSZ6eN3IoL6oo1l18TKA8Mp8hASMrlCE6IJtJyL4xkLFTYcAICwgaoQWB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="228460160"
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="228460160"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 13:54:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="619953319"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Feb 2022 13:54:11 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nF16J-000TkO-A3; Tue, 01 Feb 2022 21:54:11 +0000
+Date:   Wed, 2 Feb 2022 05:53:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johannes Berg <johannes.berg@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Luca Coelho <luciano.coelho@intel.com>
+Subject: [iwlwifi-next:pending 40/42] net/mac80211/agg-rx.c:505:22: error:
+ 'struct ieee80211_sta' has no member named 'eht_cap'; did you mean 'ht_cap'?
+Message-ID: <202202020537.3IFRQCXk-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfhssKqI5U8X+Akn@builder.lan>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 05:11:44PM -0600, Bjorn Andersson wrote:
-> On Fri 21 Jan 15:03 CST 2022, Ansuel Smith wrote:
-> 
-> > Split qcom,gcc.yaml to common and specific schema to use it as a
-> > template for schema that needs to use the gcc bindings and require
-> > to add additional bindings.
-> > 
-> 
-> Nice!
-> 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/clock/qcom,gcc-common.yaml       | 42 +++++++++++++++++++
-> >  .../devicetree/bindings/clock/qcom,gcc.yaml   | 25 ++---------
-> >  2 files changed, 46 insertions(+), 21 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-common.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-common.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-common.yaml
-> > new file mode 100644
-> > index 000000000000..ea1dd94d8bf1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-common.yaml
-> 
-> It seems reasonable to expect that qcom,gcc.yaml should be split out in
-> a number of trivial qcom,gcc-platform.yaml files to define input clock
-> etc. So how about using qcom,gcc.yaml for the common properties and for
-> now rename the existing file to something like qcom,gcc-others.yaml
-> ?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git pending
+head:   b15caa03d4e21e9e8dbc81f6ac09171a2871af1d
+commit: 7c8b580893d9c8858b60fec31cb5b55336667ac1 [40/42] mac80211: fix NULL-ptr-deref in ADDBA extended element
+config: nds32-buildonly-randconfig-r002-20220201 (https://download.01.org/0day-ci/archive/20220202/202202020537.3IFRQCXk-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git/commit/?id=7c8b580893d9c8858b60fec31cb5b55336667ac1
+        git remote add iwlwifi-next https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git
+        git fetch --no-tags iwlwifi-next pending
+        git checkout 7c8b580893d9c8858b60fec31cb5b55336667ac1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash net/mac80211/
 
-Ok, just to make sure.
-gcc-common.yaml -> gcc.yaml (the template)
-gcc.yaml -> gcc-others.yaml (the generic gcc schema)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Correct?
+All errors (new ones prefixed by >>):
 
-> > @@ -0,0 +1,42 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/qcom,gcc-common.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm Global Clock & Reset Controller Binding Common Bindings
-> > +
-> > +maintainers:
-> > +  - Stephen Boyd <sboyd@kernel.org>
-> > +  - Taniya Das <tdas@codeaurora.org>
-> > +
-> > +description: |
-> 
-> No need to preserve the formatting here, so the pipe can go.
-> 
-> Regards,
-> Bjorn
-> 
-> > +  Common bindings for Qualcomm global clock control module which supports
-> > +  the clocks, resets and power domains.
-> > +
-> > +properties:
-> > +  '#clock-cells':
-> > +    const: 1
-> > +
-> > +  '#reset-cells':
-> > +    const: 1
-> > +
-> > +  '#power-domain-cells':
-> > +    const: 1
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  protected-clocks:
-> > +    description:
-> > +      Protected clock specifier list as per common clock binding.
-> > +
-> > +required:
-> > +  - reg
-> > +  - '#clock-cells'
-> > +  - '#reset-cells'
-> > +  - '#power-domain-cells'
-> > +
-> > +additionalProperties: true
-> > +
-> > +...
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> > index f66d703bd913..73e3ff4979c6 100644
-> > --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> > @@ -34,6 +34,9 @@ description: |
-> >    - dt-bindings/reset/qcom,gcc-mdm9615.h
-> >    - dt-bindings/clock/qcom,gcc-sdm660.h  (qcom,gcc-sdm630 and qcom,gcc-sdm660)
-> >  
-> > +allOf:
-> > +  - $ref: "qcom,gcc-common.yaml#"
-> > +
-> >  properties:
-> >    compatible:
-> >      enum:
-> > @@ -55,30 +58,10 @@ properties:
-> >        - qcom,gcc-sdm630
-> >        - qcom,gcc-sdm660
-> >  
-> > -  '#clock-cells':
-> > -    const: 1
-> > -
-> > -  '#reset-cells':
-> > -    const: 1
-> > -
-> > -  '#power-domain-cells':
-> > -    const: 1
-> > -
-> > -  reg:
-> > -    maxItems: 1
-> > -
-> > -  protected-clocks:
-> > -    description:
-> > -      Protected clock specifier list as per common clock binding.
-> > -
-> >  required:
-> >    - compatible
-> > -  - reg
-> > -  - '#clock-cells'
-> > -  - '#reset-cells'
-> > -  - '#power-domain-cells'
-> >  
-> > -additionalProperties: false
-> > +unevaluatedProperties: false
-> >  
-> >  examples:
-> >    # Example for GCC for MSM8960:
-> > -- 
-> > 2.33.1
-> > 
+   net/mac80211/agg-rx.c: In function 'ieee80211_process_addba_request':
+>> net/mac80211/agg-rx.c:505:22: error: 'struct ieee80211_sta' has no member named 'eht_cap'; did you mean 'ht_cap'?
+     505 |         if (sta->sta.eht_cap.has_eht && elems && elems->addba_ext_ie) {
+         |                      ^~~~~~~
+         |                      ht_cap
+>> net/mac80211/agg-rx.c:507:46: error: 'IEEE80211_ADDBA_EXT_BUF_SIZE_MASK' undeclared (first use in this function); did you mean 'IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK'?
+     507 |                                              IEEE80211_ADDBA_EXT_BUF_SIZE_MASK);
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                              IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK
+   net/mac80211/agg-rx.c:507:46: note: each undeclared identifier is reported only once for each function it appears in
+>> net/mac80211/agg-rx.c:509:44: error: 'IEEE80211_ADDBA_EXT_BUF_SIZE_SHIFT' undeclared (first use in this function); did you mean 'IEEE80211_ADDBA_EXT_FRAG_LEVEL_SHIFT'?
+     509 |                 buf_size |= buf_size_1k << IEEE80211_ADDBA_EXT_BUF_SIZE_SHIFT;
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                            IEEE80211_ADDBA_EXT_FRAG_LEVEL_SHIFT
 
--- 
-	Ansuel
+
+vim +505 net/mac80211/agg-rx.c
+
+   474	
+   475	void ieee80211_process_addba_request(struct ieee80211_local *local,
+   476					     struct sta_info *sta,
+   477					     struct ieee80211_mgmt *mgmt,
+   478					     size_t len)
+   479	{
+   480		u16 capab, tid, timeout, ba_policy, buf_size, start_seq_num;
+   481		struct ieee802_11_elems *elems = NULL;
+   482		u8 dialog_token;
+   483		int ies_len;
+   484	
+   485		/* extract session parameters from addba request frame */
+   486		dialog_token = mgmt->u.action.u.addba_req.dialog_token;
+   487		timeout = le16_to_cpu(mgmt->u.action.u.addba_req.timeout);
+   488		start_seq_num =
+   489			le16_to_cpu(mgmt->u.action.u.addba_req.start_seq_num) >> 4;
+   490	
+   491		capab = le16_to_cpu(mgmt->u.action.u.addba_req.capab);
+   492		ba_policy = (capab & IEEE80211_ADDBA_PARAM_POLICY_MASK) >> 1;
+   493		tid = (capab & IEEE80211_ADDBA_PARAM_TID_MASK) >> 2;
+   494		buf_size = (capab & IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK) >> 6;
+   495	
+   496		ies_len = len - offsetof(struct ieee80211_mgmt,
+   497					 u.action.u.addba_req.variable);
+   498		if (ies_len) {
+   499			elems = ieee802_11_parse_elems(mgmt->u.action.u.addba_req.variable,
+   500						       ies_len, true, mgmt->bssid, NULL);
+   501			if (!elems || elems->parse_error)
+   502				goto free;
+   503		}
+   504	
+ > 505		if (sta->sta.eht_cap.has_eht && elems && elems->addba_ext_ie) {
+   506			u8 buf_size_1k = u8_get_bits(elems->addba_ext_ie->data,
+ > 507						     IEEE80211_ADDBA_EXT_BUF_SIZE_MASK);
+   508	
+ > 509			buf_size |= buf_size_1k << IEEE80211_ADDBA_EXT_BUF_SIZE_SHIFT;
+   510		}
+   511	
+   512		__ieee80211_start_rx_ba_session(sta, dialog_token, timeout,
+   513						start_seq_num, ba_policy, tid,
+   514						buf_size, true, false,
+   515						elems ? elems->addba_ext_ie : NULL);
+   516	free:
+   517		kfree(elems);
+   518	}
+   519	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

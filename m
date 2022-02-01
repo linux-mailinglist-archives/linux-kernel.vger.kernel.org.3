@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7650A4A62E2
+	by mail.lfdr.de (Postfix) with ESMTP id BFED64A62E3
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241683AbiBARrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S241684AbiBARr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241714AbiBARrs (ORCPT
+        with ESMTP id S241736AbiBARrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:47:48 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B281C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:47:48 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v13so33440212wrv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:47:48 -0800 (PST)
+        Tue, 1 Feb 2022 12:47:49 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBE3C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:47:49 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id k18so33554670wrg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:47:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=US/OKgVIq7RQTvUVVDRe6xDQAKQFvgSJ0bC4ZgbJ/HE=;
-        b=MYlzl6pGX5ozr5W0N8tzLgaoBaN7ZxAxMZrYHi1p9AMu45EI6sVmQjAh5LOzqZMZGn
-         A26oIIkNc9Hb3em44A15yWRmAxlv2YJy/wSzcMI+TRimEmqiTu7jV4xSM5H9Xdruqn8W
-         I41sDYM0ZJhdV+fycMWw99ORNq4UzOQwWJLFUhDisj7MSPt7hJooGByquusV3D78x5Lv
-         nf3S3iJ50zUvejLNPg5C7KJ7o3a02xx6vbYwHZT4Ab8GxX0OzLyOZP+SswKKtbk+2zJT
-         fwsVZD0lBkcVxYKQede0BS5A/ZoP3vVBaQB6HQsgBWpIAZdYk6JtrMWBXqVHjnXYYQOh
-         L3ng==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R75JAp3M1abKRfmniOJ5Fuzudqh5/VKktmnzYEpT+SA=;
+        b=oc9p+IVnBHLB7LZf1r+Ni3OD5gI1bzBxGsS5LT4cHBQaWFBb8jmm09tcie0gM8UUXm
+         ibm81fKzJqBSY+FMLvG73EWI84K2BM1YX13xch+ZfGy/lkyDQmUlKPdd5ATMe4tP2qAY
+         q2LLC47PesQHEdn+4fhjytGJiJ8lZaxKwWYKNVKC7mTuna62YxR4MvheG0z2k8wcTm5P
+         y4irdy/vhh7Ze/iNid4lRN7TC6PRVv/3sRnZvxcMK59xmIrHUgLW9gCH7CvxL5r6bJsZ
+         846qFCxExqndxRykCeG3S3C3H6tO3V8aBmYYve9TYbeFxWYiQ4I32VVGSXqXVIdVuoOC
+         Tc3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=US/OKgVIq7RQTvUVVDRe6xDQAKQFvgSJ0bC4ZgbJ/HE=;
-        b=ajOCfzi4as299x9C7W8q2cilLrC8mXwMfF7RSJb4chLqllv1Bvx7CnGIgpjGWgUrv5
-         0k+A2VkpLEnePodcS99w6Hi1DSw9xQs7ZdldGRhDteS0po+B58fTaYU/BeY8FNJ0Ow/T
-         itzCVV/zYGldwed2lZgdNkm87riOGLk7DPDledcFzQnqXpqtUhanHN5P6sqEMnAw/G/N
-         5vPEmK4ch/WDmAzu/jnJU3JbdSRDhenSVaBrP9ar9m63HwrrpVJTJiTHdme9vbdg996q
-         Fao50sWta55oPF+zcnxwYxVQmfk8M9CX6cWi/8R//o4ibnu4wuGju7FiGU/TIvINYeOM
-         8JdQ==
-X-Gm-Message-State: AOAM530c3AvM3xlo+e363CoLPSobNaqmMW8CRL6bCH9RYDytpr0QCAJe
-        eJcms7O2kEpebB/CS2SEIA04yAwktcwqSt9e
-X-Google-Smtp-Source: ABdhPJyv91uAdSZ2+/CfoH19SZ7LhCK1uLFNm/z3HHrAL22Qmg4Ltwk+rufuf/oFeWKR6aywDtXvFA==
-X-Received: by 2002:adf:e386:: with SMTP id e6mr2424961wrm.542.1643737666682;
-        Tue, 01 Feb 2022 09:47:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R75JAp3M1abKRfmniOJ5Fuzudqh5/VKktmnzYEpT+SA=;
+        b=c+NJ0Yra9PHrGfd55lhBy2oQ9CzkR3S/xkjsSLmhROtplGBwEalWhEYw+9wjNYFaJ3
+         aHm2ccikOH9ZmNOWSRsxSSzt730U0vk36T78+ZDL/jJKaR7fcgPF+qNIPseU5ShG6Wul
+         MXlSTihUyqmvhbMynkXsX7Y6lk0YNfrji+PICPSpW9YDnP87WsJ4ZLzcL8xiiwAAZ3bB
+         AZqNaPEBpvOcZHymgcYdFRupKaJtFWSknUTQRQ7GR7dy6GnQ32191O/u8S0LB5aKZbHN
+         JnI3vQe84hDXt6ibADCEX7sUTfSEbOUQzLGzfisN+VScNX4d73+JKhvrh4FvrZMbwArW
+         26tg==
+X-Gm-Message-State: AOAM530gzIzhrVNT5RynBm2BxyNNSpe1LP2Le5bx5GGydZLhgThu6GRA
+        JdsKVIwWVPzvppecqCV+Iuy/eg==
+X-Google-Smtp-Source: ABdhPJz+0uF1t9U/iG6eoJW1NBuaJp+mrqnVdnHAzVxmlbZS8+iIV8r1hEW+Y3SrEIxDg2ACIbSF1Q==
+X-Received: by 2002:adf:f141:: with SMTP id y1mr22073899wro.104.1643737667624;
+        Tue, 01 Feb 2022 09:47:47 -0800 (PST)
 Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id r2sm3392332wmq.24.2022.02.01.09.47.45
+        by smtp.gmail.com with ESMTPSA id r2sm3392332wmq.24.2022.02.01.09.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:47:46 -0800 (PST)
+        Tue, 01 Feb 2022 09:47:47 -0800 (PST)
 From:   Daniel Thompson <daniel.thompson@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>
@@ -56,42 +56,51 @@ Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
         Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] drm/msm: Remove spurious IRQF_ONESHOT flags from dsi & hdmi
-Date:   Tue,  1 Feb 2022 17:47:31 +0000
-Message-Id: <20220201174734.196718-1-daniel.thompson@linaro.org>
+Subject: [PATCH v2 1/2] drm/msm/dsi: Remove spurious IRQF_ONESHOT flag
+Date:   Tue,  1 Feb 2022 17:47:32 +0000
+Message-Id: <20220201174734.196718-2-daniel.thompson@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220201174734.196718-1-daniel.thompson@linaro.org>
+References: <20220201174734.196718-1-daniel.thompson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series corrects incorrect calls to
-request_irq(..., IRQF_ONESHOT, ...). These anomalies are harmless on
-regular kernels but cause odd behaviour on threadirq kernels and
-break entirely on PREEMPT_RT kernels
+Quoting the header comments, IRQF_ONESHOT is "Used by threaded interrupts
+which need to keep the irq line disabled until the threaded handler has
+been run.". When applied to an interrupt that doesn't request a threaded
+irq then IRQF_ONESHOT has a lesser known (undocumented?) side effect,
+which it to disable the forced threading of irqs (and for "normal" kernels
+it is a nop). In this case I can find no evidence that suppressing forced
+threading is intentional. Had it been intentional then a driver must adopt
+the raw_spinlock API in order to avoid deadlocks on PREEMPT_RT kernels
+(and avoid calling any kernel API that uses regular spinlocks).
 
-I'm pretty certain these problems would also provoke lockdep splats on
-kernels with CONFIG_PROVE_RAW_LOCK_NESTING enabled (because that is
-intended to find code that breaks entirely on PREEMPT_RT kernels ;-) ).
+Fix this by removing the spurious additional flag.
 
-Finally, and just in case anybody asks, yes! I did use coccinelle to do
-a quick scan for similar issues. I didn't find any other instances in
-drivers/drm/ .
+This change is required for my Snapdragon 7cx Gen2 tablet to boot-to-GUI
+with PREEMPT_RT enabled.
 
-Changes in v2:
- - Split into separate patches (Dmitry B)
-
-Daniel Thompson (2):
-  drm/msm/dsi: Remove spurious IRQF_ONESHOT flag
-  drm/msm/hdmi: Remove spurious IRQF_ONESHOT flag
-
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+---
  drivers/gpu/drm/msm/dsi/dsi_host.c | 2 +-
- drivers/gpu/drm/msm/hdmi/hdmi.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
---
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index 6b3ced4aaaf5d..3a3f53f0c8ae1 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1877,7 +1877,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 
+ 	/* do not autoenable, will be enabled later */
+ 	ret = devm_request_irq(&pdev->dev, msm_host->irq, dsi_host_irq,
+-			IRQF_TRIGGER_HIGH | IRQF_ONESHOT | IRQF_NO_AUTOEN,
++			IRQF_TRIGGER_HIGH | IRQF_NO_AUTOEN,
+ 			"dsi_isr", msm_host);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to request IRQ%u: %d\n",
+-- 
 2.34.1
 

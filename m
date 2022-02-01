@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E0E4A54B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740A04A54B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiBABdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiBABdG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:33:06 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3BDC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:33:06 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id s1so14364qtw.9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MoWm32zvhEyqRVmUpa5LXZEYybwAAQFRmq/wU8a+Gt4=;
-        b=EgGzc5rt8LRF5c2Eif2fVlYrh9HTecIoACGjTA6wXsMIE5Cq6qPShWc2VkeRIbLQLJ
-         NzdWdQo2IAl4ibTNTDpXspNbyJX8M4MXNhOrJdH7s1L6p52qZ4QQmdA9tPnPO84GtTBx
-         t7MPx8RQAxDA9goxsppgIVZ+UrbAWYJM/6BsuBOZkSZXcDSdMWpTIxG/j+/nhuMs3Lqj
-         3/1dB0rzc7uOB2csLmqRxJfM1rzyDgXH68UG9wViOR32SdzStDiwpIWGxdl9ILrg8+5K
-         qn0HtVvCShbOisPior89CQpUSaHiw49SefIEMrjQqmB2DRVai7BMhol9HGp4yJaVyAvZ
-         B1yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MoWm32zvhEyqRVmUpa5LXZEYybwAAQFRmq/wU8a+Gt4=;
-        b=6H7YPR+tj4ZrSyqoJ/7nEOeWTVx7hr2FtBqvNDvOe0qQFa/um9yYk4KshooTIsjFLd
-         mK3W1ikCFIL2Jv3DaszDliua9DhU7IoXg/rmO3b0tClHuwvaC25mrO5RojcUBzQJE41v
-         bGYRakCdsQjYBs0V47e61wI8xuwiw1oNuhFgCO36d6xb32u7OOUum+aOd9G+tB2iwneq
-         FPK0/craCDrD8Kz42gxNPNQeRxzyNVgPduLx2csJUev/uM121rUqPfb1uoWvq52ird+0
-         83QE1xKley/rKfjsNHAMBmN8s4zdVPHS35Ksot7tLIVhFB2Vuls6m40jqBhu7A3Q0c6N
-         NHcQ==
-X-Gm-Message-State: AOAM531KkH7kCpzRA4UIyE4QFcH6dIvY7j4uzaz2ws2TMh2DH/m4Qjvd
-        3+mUQysStLAmGimGas3bhPiFOGSWJM6hPOVk
-X-Google-Smtp-Source: ABdhPJx9XbvUrAI3Emn6dngj5AmQ9NNxFJ3HrnmEE5AIo9Ak4wHhNAJY3XZGyeDXTS4yuiTX27NoKw==
-X-Received: by 2002:a05:622a:1881:: with SMTP id v1mr17345340qtc.683.1643679185259;
-        Mon, 31 Jan 2022 17:33:05 -0800 (PST)
-Received: from WRT-WX9.. ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id v73sm9272458qkb.51.2022.01.31.17.33.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 17:33:04 -0800 (PST)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
-Date:   Tue,  1 Feb 2022 09:32:57 +0800
-Message-Id: <20220201013257.17926-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        id S231933AbiBABfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:35:09 -0500
+Received: from mga02.intel.com ([134.134.136.20]:14774 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231946AbiBABfH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 20:35:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643679307; x=1675215307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aOVQsa3Cf2iiuataLA74N4rYxQcp2Lqz/FkUO5X7/GQ=;
+  b=lrh7cs5ENOCG/6flbcu7pVQBpZ3pu0rgTW4GhUAg1di6MzAH32JpVCUJ
+   ZsebYtfT8/CqweLHGm0h8/ugEouYdu11ui4FqmcVPyOpaJ0Ys/sko7JWR
+   dHNOgzioWgI0bnXjZ54WnYPHDEGKoMnWD6cYo9ZjuUuuU8UhZuJMGi/al
+   vcJEYHwPkGuuaEPTVf34pPhPK/RDFVlIm/jckL2JVuqPGyFffHs1SChXD
+   fKBbFTUUZCXcwM7Oj6cvltqp6Iy4mPuZvTJv0y4Q9SQ8cuhgzPJFUzvoG
+   SJvbKm9QtVF+91XYnrP9QwT8EsPHDjn5p98kwBSH18JCwgcEZyk9zgTyK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="234993956"
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="234993956"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 17:35:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="565433895"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2022 17:35:05 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEi4W-000SZL-Un; Tue, 01 Feb 2022 01:35:04 +0000
+Date:   Tue, 1 Feb 2022 09:34:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:iommufd 23/29] include/linux/overflow.h:66:22: warning:
+ comparison of distinct pointer types lacks a cast
+Message-ID: <202202010939.dIipJCeV-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
-'.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
-And they might overlap with handwritten symbols.
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   086f3f78da96ed1f11c2ac71115bb46e940e141e
+commit: b944c7f08293cd7b049be615e67622f5d0d74cfb [23/29] iommufd: Data structure to provide IOVA to PFN mapping
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220201/202202010939.dIipJCeV-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jgunthorpe/linux/commit/b944c7f08293cd7b049be615e67622f5d0d74cfb
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout b944c7f08293cd7b049be615e67622f5d0d74cfb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/iommu/iommufd/ fs/nfs/
 
-Before this change, a dumpstack shows a local symbol for epc:
-[    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-[    0.040452][    T0]  ra : restore_all+0x12/0x6e
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The simple solution is that we can ignore all local labels prefixed by '.L'.
-For handwritten symbols which need to be preserved should drop the '.L'
-prefix.
+All warnings (new ones prefixed by >>):
 
-After this change, the C defined symbol is shown so we can locate the
-problematical code immediately:
-[    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-[    0.036567][    T0]  ra : restore_all+0x12/0x6e
+   In file included from include/linux/mm.h:30,
+                    from include/linux/scatterlist.h:8,
+                    from include/linux/iommu.h:10,
+                    from drivers/iommu/iommufd/io_pagetable.c:27:
+   drivers/iommu/iommufd/io_pagetable.c: In function 'iopt_access_pages':
+>> include/linux/overflow.h:66:22: warning: comparison of distinct pointer types lacks a cast
+      66 |         (void) (&__a == &__b);                  \
+         |                      ^~
+   drivers/iommu/iommufd/io_pagetable.c:488:13: note: in expansion of macro 'check_add_overflow'
+     488 |         if (check_add_overflow(iova, length - 1, &last_iova))
+         |             ^~~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/include/asm/bug.h:149,
+                    from include/linux/bug.h:5,
+                    from arch/powerpc/include/asm/cmpxchg.h:8,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/cpumask.h:13,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from drivers/iommu/iommufd/io_pagetable.c:26:
+   drivers/iommu/iommufd/io_pagetable.c: In function 'iopt_unaccess_pages':
+>> include/linux/overflow.h:66:22: warning: comparison of distinct pointer types lacks a cast
+      66 |         (void) (&__a == &__b);                  \
+         |                      ^~
+   include/asm-generic/bug.h:121:32: note: in definition of macro 'WARN_ON'
+     121 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   drivers/iommu/iommufd/io_pagetable.c:548:21: note: in expansion of macro 'check_add_overflow'
+     548 |             WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
+         |                     ^~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
+
+vim +66 include/linux/overflow.h
+
+9b80e4c4ddaca3 Kees Cook        2020-08-12  53  
+f0907827a8a915 Rasmus Villemoes 2018-05-08  54  /*
+f0907827a8a915 Rasmus Villemoes 2018-05-08  55   * For simplicity and code hygiene, the fallback code below insists on
+f0907827a8a915 Rasmus Villemoes 2018-05-08  56   * a, b and *d having the same type (similar to the min() and max()
+f0907827a8a915 Rasmus Villemoes 2018-05-08  57   * macros), whereas gcc's type-generic overflow checkers accept
+f0907827a8a915 Rasmus Villemoes 2018-05-08  58   * different types. Hence we don't just make check_add_overflow an
+f0907827a8a915 Rasmus Villemoes 2018-05-08  59   * alias for __builtin_add_overflow, but add type checks similar to
+f0907827a8a915 Rasmus Villemoes 2018-05-08  60   * below.
+f0907827a8a915 Rasmus Villemoes 2018-05-08  61   */
+9b80e4c4ddaca3 Kees Cook        2020-08-12  62  #define check_add_overflow(a, b, d) __must_check_overflow(({	\
+f0907827a8a915 Rasmus Villemoes 2018-05-08  63  	typeof(a) __a = (a);			\
+f0907827a8a915 Rasmus Villemoes 2018-05-08  64  	typeof(b) __b = (b);			\
+f0907827a8a915 Rasmus Villemoes 2018-05-08  65  	typeof(d) __d = (d);			\
+f0907827a8a915 Rasmus Villemoes 2018-05-08 @66  	(void) (&__a == &__b);			\
+f0907827a8a915 Rasmus Villemoes 2018-05-08  67  	(void) (&__a == __d);			\
+f0907827a8a915 Rasmus Villemoes 2018-05-08  68  	__builtin_add_overflow(__a, __b, __d);	\
+9b80e4c4ddaca3 Kees Cook        2020-08-12  69  }))
+f0907827a8a915 Rasmus Villemoes 2018-05-08  70  
+
+:::::: The code at line 66 was first introduced by commit
+:::::: f0907827a8a9152aedac2833ed1b674a7b2a44f2 compiler.h: enable builtin overflow checkers and add fallback code
+
+:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+:::::: CC: Kees Cook <keescook@chromium.org>
+
 ---
- scripts/kallsyms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 54ad86d13784..8caabddf817c 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
- 	/* Symbol names that begin with the following are ignored.*/
- 	static const char * const ignored_prefixes[] = {
- 		"$",			/* local symbols for ARM, MIPS, etc. */
--		".LASANPC",		/* s390 kasan local symbols */
-+		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
- 		"__crc_",		/* modversions */
- 		"__efistub_",		/* arm64 EFI stub namespace */
- 		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

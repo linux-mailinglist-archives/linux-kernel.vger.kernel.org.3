@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F50A4A64FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F1A4A64FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242394AbiBAT00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:26:26 -0500
-Received: from mail.efficios.com ([167.114.26.124]:53264 "EHLO
+        id S242402AbiBAT01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:26:27 -0500
+Received: from mail.efficios.com ([167.114.26.124]:53316 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbiBAT0Y (ORCPT
+        with ESMTP id S242307AbiBAT0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Feb 2022 14:26:24 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id DF04933F866;
-        Tue,  1 Feb 2022 14:26:23 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id 4D45533F96E;
+        Tue,  1 Feb 2022 14:26:24 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zKDloQarj2oE; Tue,  1 Feb 2022 14:26:23 -0500 (EST)
+        with ESMTP id VrV2YAhxAGfy; Tue,  1 Feb 2022 14:26:24 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id DBB9033F8F9;
-        Tue,  1 Feb 2022 14:26:22 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DBB9033F8F9
+        by mail.efficios.com (Postfix) with ESMTP id EE50133F86C;
+        Tue,  1 Feb 2022 14:26:23 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com EE50133F86C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643743582;
-        bh=9E3Ighgjw9m12iC/P0bbBT1+B/3Uw1GcX37hKU7hT1E=;
+        s=default; t=1643743583;
+        bh=rEcaRT8dIno2/eBG6LV6mWsx2wF4F5Y+L7Tkkj+balg=;
         h=From:To:Date:Message-Id;
-        b=SnSnJ7PLCjW4p/E1891s+36iyUFJrNU/OIwXrZZDfr39U0iTBEEpxH+DGOPR9R5GV
-         DG+4u2YZNwN+RkiepmvRH4RqtyPF0Aijx4LTDquIbS90ErBme87YicjlCqgv3afLGV
-         vc74L/VUveHGcofZH1HCeaA/QZnj0qHFXLogtATCcvCqnmyBNWu9G7mFW5xQWCb91D
-         HBVrGRIBQgl+yE2xPuFIwpF3uNb4sf0wVGDRMGeytKuouWm6WzSXNzogoMweItC/Pw
-         DFLEHpgnwSvMFmdA+ybJDWltaOb7e17fT/laVbvZ3HFo7AiAMioPFAeXOIvZBW5ENh
-         6twK1NJIHaJVQ==
+        b=oTBovS2zWHStxJT2hoDmis1LZCdTC2aa3YLR1d4qTeFpkFNQopz1zQ/zXTECCAcGg
+         cRnMg8q2y4hrx/uoZqaP2MLNRCbAr9F/47I/Vk6F3i3Xq4kjBJkZi2BVc9+vVhxJWw
+         PVB9sQdQBGkN2eKOOpHJJ2L6XtBdtbRGEsfszqknTFsK1yA5G2ZwUFqTUe2LFS3KOT
+         2r7PAW5HiMtumbWo9ufZjDDRLGJMTsZvmslDnF69tHuINfdDKAMwINdUkLBNVe0Yye
+         REDIpAfVvrP6rtLi98fwykrkrH0MpOVQ/lmGis1JW1rfC2bELXWMW0/3P2GlUFPkfD
+         M3VDGJ7D5v+yA==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id X-Sc6Y3AlOlp; Tue,  1 Feb 2022 14:26:22 -0500 (EST)
+        with ESMTP id kOYVXgk4cM8O; Tue,  1 Feb 2022 14:26:23 -0500 (EST)
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id 5D4CF33FBA1;
+        by mail.efficios.com (Postfix) with ESMTPSA id C703F33FA40;
         Tue,  1 Feb 2022 14:26:22 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
@@ -50,167 +50,100 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
         carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH 1/3] Introduce per thread group current virtual cpu id
-Date:   Tue,  1 Feb 2022 14:25:38 -0500
-Message-Id: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH 2/3] rseq: extend struct rseq with per thread group vcpu id
+Date:   Tue,  1 Feb 2022 14:25:39 -0500
+Message-Id: <20220201192540.10439-2-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This feature allows the scheduler to expose a current virtual cpu id
-to user-space. This virtual cpu id is within the possible cpus range,
-and is temporarily (and uniquely) assigned while threads are actively
-running within a thread group. If a thread group has fewer threads than
-cores, or is limited to run on few cores concurrently through sched
-affinity or cgroup cpusets, the virtual cpu ids will be values close
-to 0, thus allowing efficient use of user-space memory for per-cpu
-data structures.
-
-This feature is meant to be exposed by a new rseq thread area field.
+If a thread group has fewer threads than cores, or is limited to run on
+few cores concurrently through sched affinity or cgroup cpusets, the
+virtual cpu ids will be values close to 0, thus allowing efficient use
+of user-space memory for per-cpu data structures.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- fs/exec.c                    |  4 +++
- include/linux/sched.h        |  4 +++
- include/linux/sched/signal.h | 49 ++++++++++++++++++++++++++++++++++++
- init/Kconfig                 | 14 +++++++++++
- kernel/sched/core.c          |  2 ++
- 5 files changed, 73 insertions(+)
+ include/uapi/linux/rseq.h | 15 +++++++++++++++
+ kernel/rseq.c             | 16 +++++++++++++++-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 79f2c9483302..bc9a8c5f17f4 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1153,6 +1153,10 @@ static int de_thread(struct task_struct *tsk)
- 	sig->group_exec_task = NULL;
- 	sig->notify_count = 0;
- 
-+	/* Release possibly high vcpu id, get vcpu id 0. */
-+	tg_vcpu_put(tsk);
-+	tg_vcpu_get(tsk);
+diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+index 386c25b5bbdb..d687ac79e62c 100644
+--- a/include/uapi/linux/rseq.h
++++ b/include/uapi/linux/rseq.h
+@@ -154,6 +154,21 @@ struct rseq {
+ 	 * rseq_len. Use the offset immediately after the node_id field as
+ 	 * rseq_len.
+ 	 */
 +
- no_thread_group:
- 	/* we have changed execution domain */
- 	tsk->exit_signal = SIGCHLD;
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 838c9e0b4cae..0f199daed26a 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1300,6 +1300,10 @@ struct task_struct {
- 	unsigned long rseq_event_mask;
- #endif
- 
-+#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
-+	int				tg_vcpu;	/* Current vcpu in thread group */
-+#endif
-+
- 	struct tlbflush_unmap_batch	tlb_ubc;
- 
- 	union {
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index b6ecb9fc4cd2..c87e7ad5a1ea 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -244,6 +244,12 @@ struct signal_struct {
- 						 * and may have inconsistent
- 						 * permissions.
- 						 */
-+#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
 +	/*
-+	 * Mask of allocated vcpu ids within the thread group.
++	 * Restartable sequences tg_vcpu_id field. Updated by the kernel. Read by
++	 * user-space with single-copy atomicity semantics. This field should
++	 * only be read by the thread which registered this data structure.
++	 * Aligned on 32-bit. Contains the current thread's virtual CPU ID
++	 * (allocated uniquely within thread group).
 +	 */
-+	cpumask_t			vcpu_mask;
-+#endif
- } __randomize_layout;
- 
- /*
-@@ -742,4 +748,47 @@ static inline unsigned long rlimit_max(unsigned int limit)
- 	return task_rlimit_max(current, limit);
- }
- 
-+#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
-+static inline void tg_vcpu_get(struct task_struct *t)
-+{
-+	struct cpumask *cpumask = &t->signal->vcpu_mask;
-+	unsigned int vcpu;
++	__u32 tg_vcpu_id;
 +
-+	if (t->flags & PF_KTHREAD)
-+		return;
-+	/* Atomically reserve lowest available vcpu number. */
-+	do {
-+		vcpu = cpumask_first_zero(cpumask);
-+		WARN_ON_ONCE(vcpu >= nr_cpu_ids);
-+	} while (cpumask_test_and_set_cpu(vcpu, cpumask));
-+	t->tg_vcpu = vcpu;
-+}
-+
-+static inline void tg_vcpu_put(struct task_struct *t)
-+{
-+	if (t->flags & PF_KTHREAD)
-+		return;
-+	cpumask_clear_cpu(t->tg_vcpu, &t->signal->vcpu_mask);
-+	t->tg_vcpu = 0;
-+}
-+
-+static inline int task_tg_vcpu_id(struct task_struct *t)
-+{
-+	return t->tg_vcpu;
-+}
-+#else
-+static inline void tg_vcpu_get(struct task_struct *t) { }
-+static inline void tg_vcpu_put(struct task_struct *t) { }
-+static inline int task_tg_vcpu_id(struct task_struct *t)
-+{
 +	/*
-+	 * Use the processor id as a fall-back when the thread group vcpu
-+	 * feature is disabled. This provides functional per-cpu data structure
-+	 * accesses in user-space, althrough it won't provide the memory usage
-+	 * benefits.
++	 * This is a valid end of rseq ABI for the purpose of rseq registration
++	 * rseq_len. Use the offset immediately after the tg_vcpu_id field as
++	 * rseq_len.
 +	 */
-+	return raw_smp_processor_id();
-+}
-+#endif
-+
- #endif /* _LINUX_SCHED_SIGNAL_H */
-diff --git a/init/Kconfig b/init/Kconfig
-index e9119bf54b1f..5f72b4212a33 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1023,6 +1023,20 @@ config RT_GROUP_SCHED
+ } __attribute__((aligned(4 * sizeof(__u64))));
  
- endif #CGROUP_SCHED
+ #endif /* _UAPI_LINUX_RSEQ_H */
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index 13f6d0419f31..37b43735a400 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -86,10 +86,14 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
+ 	struct rseq __user *rseq = t->rseq;
+ 	u32 cpu_id = raw_smp_processor_id();
+ 	u32 node_id = cpu_to_node(cpu_id);
++	u32 tg_vcpu_id = task_tg_vcpu_id(t);
  
-+config SCHED_THREAD_GROUP_VCPU
-+	bool "Provide per-thread-group virtual cpu id"
-+	depends on SMP
-+	default n
-+	help
-+	  This feature allows the scheduler to expose a current virtual cpu id
-+	  to user-space. This virtual cpu id is within the possible cpus range,
-+	  and is temporarily (and uniquely) assigned while threads are actively
-+	  running within a thread group. If a thread group has fewer threads than
-+	  cores, or is limited to run on few cores concurrently through sched
-+	  affinity or cgroup cpusets, the virtual cpu ids will be values close
-+	  to 0, thus allowing efficient use of user-space memory for per-cpu
-+	  data structures.
-+
- config UCLAMP_TASK_GROUP
- 	bool "Utilization clamping per group of tasks"
- 	depends on CGROUP_SCHED
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 2e4ae00e52d1..2690e80977b1 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4795,6 +4795,8 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
- 	sched_info_switch(rq, prev, next);
- 	perf_event_task_sched_out(prev, next);
- 	rseq_preempt(prev);
-+	tg_vcpu_put(prev);
-+	tg_vcpu_get(next);
- 	fire_sched_out_preempt_notifiers(prev, next);
- 	kmap_local_sched_out();
- 	prepare_task(next);
+ 	if (!user_write_access_begin(rseq, t->rseq_len))
+ 		goto efault;
+ 	switch (t->rseq_len) {
++	case offsetofend(struct rseq, tg_vcpu_id):
++		unsafe_put_user(tg_vcpu_id, &rseq->tg_vcpu_id, efault_end);
++		fallthrough;
+ 	case offsetofend(struct rseq, node_id):
+ 		unsafe_put_user(node_id, &rseq->node_id, efault_end);
+ 		fallthrough;
+@@ -112,9 +116,17 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
+ 
+ static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
+ {
+-	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
++	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0,
++	    tg_vcpu_id = 0;
+ 
+ 	switch (t->rseq_len) {
++	case offsetofend(struct rseq, tg_vcpu_id):
++		/*
++		 * Reset tg_vcpu_id to its initial state (0).
++		 */
++		if (put_user(tg_vcpu_id, &t->rseq->tg_vcpu_id))
++			return -EFAULT;
++		fallthrough;
+ 	case offsetofend(struct rseq, node_id):
+ 		/*
+ 		 * Reset node_id to its initial state (0).
+@@ -396,6 +408,8 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 	if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)))
+ 		return -EINVAL;
+ 	switch (rseq_len) {
++	case offsetofend(struct rseq, tg_vcpu_id):
++		fallthrough;
+ 	case offsetofend(struct rseq, node_id):
+ 		fallthrough;
+ 	case offsetofend(struct rseq, padding1):
 -- 
 2.17.1
 

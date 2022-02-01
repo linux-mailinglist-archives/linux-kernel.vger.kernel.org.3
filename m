@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 897724A6525
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4B74A6528
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiBATqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiBATql (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:46:41 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E50EC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:46:41 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id r144so22591704iod.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:46:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=shWzrMOdzXk8dl6SzVhCHa0A4LhonoVByHBdkG2UtXU=;
-        b=L2iPu7KHT5U3KiH3kV6Fpbak6OEdL4ghq3fdLNC5DK2NbdUMdugEAmICmHQ6tY0zZQ
-         0CeWkWrnZ8+u6CxznmwUbQXtmcsYvogFchevImPiZjLE/kFIgRiNWdPnqRzEVybW6CGc
-         dwwVqWMMe2ZubGNKQlOJTIS2V0Q1Vovcm4c0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=shWzrMOdzXk8dl6SzVhCHa0A4LhonoVByHBdkG2UtXU=;
-        b=mrZGSGY7l5nIDuJi/Z7An7zADrW7k3SBJZZ3GvD52MW0+Jh8e0gFmdZVyDsKUMfkxf
-         R4OQ963Kwht4rmlL/VAke0DwvNq5AHXOshVvdgatm6v8dRScrAA3jr7GPfkCzB7E3G+I
-         o/C9uqc+9t0KkocMln1ER4rnP+5zX0otFWL7m/d1foFsc3lotLfIqHpmsHloxhRF/FrS
-         IOhCb/MqStSyolT+CPOZjqZjZsBZ+QLPHq9RELdL+H35ma8DGzlc1FBRaShCTav0ej/x
-         kRc0YOhxZUntED3Jkh1rKywI6VViQaVEaWKaaTQ4z8hzf9vtCrdXTBKjWEzqLWDwX8qA
-         KQdw==
-X-Gm-Message-State: AOAM5303gWC4v309fp6fXzskBXQFGwNdnFXLcN0ZncfTv00eID/1xVt4
-        QhXEFP/Nxxn8xJaXltvxKERVbQ==
-X-Google-Smtp-Source: ABdhPJyKVFhZsu9u898JQhGfmjZGmzxEdox5fSdXSRy3JQnXw0uQuHDsI+blU6tX3DrGjlTpABPqbw==
-X-Received: by 2002:a02:b10e:: with SMTP id r14mr13984036jah.226.1643744800937;
-        Tue, 01 Feb 2022 11:46:40 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id f4sm7766091iow.53.2022.02.01.11.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 11:46:40 -0800 (PST)
-Subject: Re: [PATCH 4.4 00/25] 4.4.302-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220201180822.148370751@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8ef32c1a-2123-522a-bb65-9e421fe07a7e@linuxfoundation.org>
-Date:   Tue, 1 Feb 2022 12:46:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232050AbiBATr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:47:56 -0500
+Received: from mout.gmx.net ([212.227.17.21]:46979 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229779AbiBATrz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 14:47:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643744868;
+        bh=6dETGNc8tOx9qyOBIiW32FnU/euninP5MXdRcl9TR3k=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Tf6tuYmMDdGmNXQS+QUp3oh/2jHb9mbycZ5gKz3zvhkhL+z2v0fL2gQ8uGmKXOsTM
+         FOCGtiA1RITXgMddu8zqQjxjozh/LndLHh7GHJe+qsaVpzajDegmwCoCXpu2+Dd4+e
+         S8ZMCarmt7TGDIC920bMhn3tAEpZHd3dcZzkFvi0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.146.124]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuDXp-1mMjW50K69-00ubTt; Tue, 01
+ Feb 2022 20:47:48 +0100
+Message-ID: <f19c3e3d-f26e-3e89-7539-5c50fa2a1bf6@gmx.de>
+Date:   Tue, 1 Feb 2022 20:47:45 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220201180822.148370751@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH -next 1/2 v2] video: fbdev: pxa168fb: Remove unnecessary
+ print function dev_err()
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220201123202.95055-1-yang.lee@linux.alibaba.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220201123202.95055-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P0O8w4mueeB2YQ2V6D1Q5t5hIBTe2tcDQlCSuH/dkYTXWINI0bm
+ 372+pusaAjBH22M5izyEvjE73Pgbj+Jvhg4BNbBgiGOansG79ouhKLYb5TEphaiX88Nhvlh
+ RknvaW6xUoLdCz6V9YJBNKqw5MDE3YjQD/Rc7FO1DZO8wvsrdiOTFlQKrNaHU1m/pOY334Q
+ 5PDTPNyGkv9NXyHFQzaow==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eN6+SjDvE+Y=:RX/19qHPU7/f8s0hrRFvZU
+ 9yct+1Hdk8A8yxRtk/aopG7aFPKgajm/ELRu+MjQo7K5b58b14mwrN3BMJuHdvM5hqq6yNpwp
+ wIL6IdbyJHhMmzCoPXvtkBVJS/eQjBvRLO7TsZOJbw60wHVDCsUHqeii3dmyiaxEP3qWdyo9D
+ k6K1zIqmA3IA6nCe7QyNisTbWnjUeb7JKFTZQQqN6PtIN7nfVCTGtrlKr3jD/LhcMJZj8/toS
+ kr03U+pQhLykIpNcGKWFcXJ7r7hc9IQ8smQsOYbzLpPLPKZv3/eb9HC7T1GjcVByf54SuUdho
+ P9KgbxCNRZp2WiGQaVOJWQmTz3H7bVkvjVx4VJQ5FJf3ySzVC+HVd26iunmjfIE7NpEAGdOBw
+ yM8tISv5Ms7D6HXQC8qm2vccV5uJ+nSADABqa48feHBGVurSsZkQutUqMB9fHgayQAVT2mSGJ
+ d9FJeF6X/IWIQLzzTSCdD43DT0BLIYQSJr3NdFiWRJrMVAHrp4A+zXkhpJh2cZNhko16MtiTU
+ d4DkwxQkuufFto9+1IL9XiP6H9hVB/pFQilJy2TkBPq/wkzCt+rhQF4rszkFC/E0eelIQlDQw
+ L3CoWDUXaK5ltKxRB++iYUBp5d+0IG6fyostbsqLhonlLNwCy5Kqhecu95gopGzfEOT0pO+jA
+ WOO4QuL9ljKmRj3xZpj76QEnENWMhdbecTLylPS3VrlA4jIYHdi8qygX165WXdEe/J9cZk7M1
+ jyk0oquAD3M3iSAjNfW2Lz2LhkLfZSJXXBJhMgovb5HGlVltn/J4yW2N1e8S5AvxdqZtUz3JF
+ A1YgSdEuD6r9T5jLU8GG3jZrmtZ7Jl16eNTWoAy7zjqy0UzqEVcvBOCfE8Kicy36lZas4w3Rb
+ NwJ67kRC3HR9ZW67Bks8Vf0qjs0kVJt3e7ERcxrsy+I+RbTgUkoVNY4Vs102S0UHXSAHvU+la
+ ItTTgbJhQ+sp9sFS0S5rByLwhpocEP7RXC0iZamnZPr6JXd5Jd1vVgalEpCub5bRz8Bg61n+0
+ tH/L3gt4hJ7EDC1J+XtBosjdh+A5tnbG2bzS06jkAf4wQeES8dmqTAAHPBXBkX9Hwis8MGhwY
+ IiM/6HC05agMBM=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 11:16 AM, Greg Kroah-Hartman wrote:
-> NOTE!  This is the proposed LAST 4.4.y kernel release to happen under
-> the rules of the normal stable kernel releases.  After this one, it will
-> be marked End-Of-Life as it has been 6 years and you really should know
-> better by now and have moved to a newer kernel tree.  After this one, no
-> more security fixes will be backported and you will end up with an
-> insecure system over time.
-> 
-> --------------------------
-> 
-> This is the start of the stable review cycle for the 4.4.302 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 03 Feb 2022 18:08:10 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.302-rc1.gz
+On 2/1/22 13:32, Yang Li wrote:
+> The print function dev_err() is redundant because platform_get_irq()
+> already prints an error.
+>
+> Eliminate the follow coccicheck warning:
+> ./drivers/video/fbdev/pxa168fb.c:621:2-9: line 621 is redundant because
+> platform_get_irq() already prints an error
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>
+> -Change in v2:
+> drop the surrounding braces
 
-Couldn't find the patch. Didn't get pushed perhaps.
+Both applied to fbdev-next tree.
 
-thanks,
--- Shuah
-  
+Thanks,
+Helge
 
 
+>
+>  drivers/video/fbdev/pxa168fb.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/pxa168fb.c b/drivers/video/fbdev/pxa168=
+fb.c
+> index c25739f6934d..e943300d23e8 100644
+> --- a/drivers/video/fbdev/pxa168fb.c
+> +++ b/drivers/video/fbdev/pxa168fb.c
+> @@ -617,10 +617,8 @@ static int pxa168fb_probe(struct platform_device *p=
+dev)
+>  	}
+>
+>  	irq =3D platform_get_irq(pdev, 0);
+> -	if (irq < 0) {
+> -		dev_err(&pdev->dev, "no IRQ defined\n");
+> +	if (irq < 0)
+>  		return -ENOENT;
+> -	}
+>
+>  	info =3D framebuffer_alloc(sizeof(struct pxa168fb_info), &pdev->dev);
+>  	if (info =3D=3D NULL) {
+>
 

@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B85084A634D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76EB4A6351
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241859AbiBASNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:13:43 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:62358 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiBASLm (ORCPT
+        id S241832AbiBASOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241829AbiBASMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:11:42 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 67adb7ded8a5fe1d; Tue, 1 Feb 2022 19:11:41 +0100
-Received: from kreacher.localnet (unknown [213.134.162.64])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id CD86966B390;
-        Tue,  1 Feb 2022 19:11:40 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org
-Subject: [PATCH] IOMMU: Intel: DMAR: Replace acpi_bus_get_device()
-Date:   Tue, 01 Feb 2022 19:11:40 +0100
-Message-ID: <1807113.tdWV9SEqCh@kreacher>
+        Tue, 1 Feb 2022 13:12:44 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E48BC061749
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:12:44 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso2656473wmj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:12:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=dY71NLd2odIGCqoV5Xs6eXVkEoQhnfK5Y92j96KZ6U4=;
+        b=WNZlggPqi+mcyn6CtHhFvi90Qy9rbenquOQ8+cMfPWnJCY6ppZPEBZjCGNOimAnNjp
+         RAMXNXAWOoGwq5pz8Gzhi9fwRiObOKoEEm9OhJTaukJim9rjChe9D1Rq8QusJ7dcbeFc
+         pS3jLIIQV08Uc7zDf5YhWR4AcXsQshQqTo53n4jFIH6maUEtr0Hf9cirLCmbGL7mMBNt
+         QSUAHexfNt7ydRZgZImN14l/h7lnJNzJUPpOeZjF9GYPyVHGnKJwSLiAj/kYHhnlrius
+         HSKoEuiJKxLgcrm/3nuUTzcIvu7E9rlUC/oFggE0r6ucDQV7/q294oPmPdu/0i+r/Qq2
+         lk0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=dY71NLd2odIGCqoV5Xs6eXVkEoQhnfK5Y92j96KZ6U4=;
+        b=6j8cPIxnPmcEl9U48/FUrFcaWNgdsFLGyu6hu4bmeNCzk5J4rScB2p1ipGbm3Fz0ty
+         m1u1byqJ5vIIFZaOZW3gJiqj087ly5TfTOtIeyx5SiAWVYzLjPtT1Ti3JhE5O/G5nUkL
+         GaxkZm6g2/eiqg/oBH6gFR7xSCOHJwxvWFWHmi+9robVPNCxBbxGA6Msgw3mmJuoZc2c
+         KMCsxvdoVpQn8BOr7NPrWcwwrwT1ifExYOXZKQBi4z+ia2l9X+q+492JG60kdBG+IaB9
+         5S4GUidyxzQOVOySoiNlJuIAXsSgkKE85TCPRpkdkezbigug0WcJvGoDwe+kBx+Wq5H5
+         XR8g==
+X-Gm-Message-State: AOAM532v386UmedbMVtW1jVfvC5uIJB2YSS4k8n8uL9BDZWHOXbjKpbl
+        bwgtwm3DzGZ0GRDukVKBtz1IaQXzPCWZ32c8/Og=
+X-Google-Smtp-Source: ABdhPJyOjuBfQpYrK7GejPA936VIMD75H+qFkYQKzA270Gq/3NXrS4C7dVrOucVlpZDJIL5NgvNLJvtkHdYeIxdrXfU=
+X-Received: by 2002:a05:600c:a4c:: with SMTP id c12mr2842205wmq.48.1643739162610;
+ Tue, 01 Feb 2022 10:12:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Sender: 1joypeters@gmail.com
+Received: by 2002:a5d:610f:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 10:12:42 -0800 (PST)
+From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
+Date:   Tue, 1 Feb 2022 18:12:42 +0000
+X-Google-Sender-Auth: QMdJbinimWG0RG9dtsdvyTNIhxw
+Message-ID: <CA+F+MbZeY2Ff=hzwG9fiaaWJOBcKhM_LzS_C1SsSW=YQHR=n5w@mail.gmail.com>
+Subject: Investment offer,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.64
-X-CLIENT-HOSTNAME: 213.134.162.64
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepugifmhifvdesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegsrgholhhurdhluheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhr
- oheskegshihtvghsrdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehiohhmmhhusehlihhsthhsrdhlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hello Dear Friend,
 
-Replace acpi_bus_get_device() that is going to be dropped with
-acpi_fetch_acpi_dev().
+With due respect to your person and much sincerity of purpose I wish
+to write to you today for our mutual benefit in this investment
+transaction..
+I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
+Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
+single Mother and a widow with three Children. I am the only
+biological Daughter of the late Libyan President (Late Colonel Muammar
+Gaddafi). I have an investment funds worth Twenty Seven Million Five
+Hundred Thousand United State Dollars ($27.500.000.00 ) and i need an
+investment Manager/Partner and because of my Asylum Status I will
+authorize you the ownership of the investment funds, However, I am
+interested in you for investment project assistance in your country,
+may be from there,. we can build a business relationship in the
+nearest future..
 
-No intentional functional impact.
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits. If you are
+willing to handle this project kindly reply urgently to enable me to
+provide you more information about the investment funds.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/iommu/intel/dmar.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Index: linux-pm/drivers/iommu/intel/dmar.c
-===================================================================
---- linux-pm.orig/drivers/iommu/intel/dmar.c
-+++ linux-pm/drivers/iommu/intel/dmar.c
-@@ -789,7 +789,8 @@ static int __init dmar_acpi_dev_scope_in
- 				       andd->device_name);
- 				continue;
- 			}
--			if (acpi_bus_get_device(h, &adev)) {
-+			adev = acpi_fetch_acpi_dev(h);
-+			if (!adev) {
- 				pr_err("Failed to get device for ACPI object %s\n",
- 				       andd->device_name);
- 				continue;
-
-
-
+Your urgent reply will be appreciated if only you are interested in
+this investment project.
+Best Regards
+Mrs. Aisha Al-Gaddafi.

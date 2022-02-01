@@ -2,149 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 120464A58D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243734A58D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235443AbiBAIyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 03:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbiBAIyx (ORCPT
+        id S235777AbiBAI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 03:58:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47068 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231912AbiBAI6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 03:54:53 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB35BC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 00:54:52 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E38851F438FB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643705690;
-        bh=cX6n8y9xqw3fyjvPkbflYeNt2MpCla3htWHQ0GpzOts=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GJGaCITCXqQz2ChA2swrnHl7qatLEV8wEXtJMTwWsdv+EbNZdVsXrQaOBpKyzB/gG
-         XFGiuUG15jZovcZOSwY+YpHwTzCfGZEqqii2d/XJ+mVOwXqhdpYQv5MKYL2VBcGZjt
-         xWEUJXgYXAvHdUaRo0FzkyREoCsgX6ylFDKkTqOFN0Phw3Y5LFbxVXZJcZb6RRNhNP
-         EuQD844FmkVOzuMuVbMNeZdKfhaEY+1mFpi1cx5jbZT+Ni+8xiuzFB+U9Y6J1EbwJL
-         /mbkmWn7Ymg2Avlze52JoA1NcGLX04LY1pV3LQGSrCTWCghynYBVvCjlTnf1dU/dJF
-         HSqOCN2bhAeVw==
-Message-ID: <90ec652d-6df7-3e7b-dd81-7ced053e1dcf@collabora.com>
-Date:   Tue, 1 Feb 2022 09:54:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v11] drm/bridge: add it6505 driver
-Content-Language: en-US
-To:     Robert Foss <robert.foss@linaro.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     allen <allen.chen@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Tue, 1 Feb 2022 03:58:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E938B829FF;
+        Tue,  1 Feb 2022 08:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DCAC340EB;
+        Tue,  1 Feb 2022 08:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643705885;
+        bh=LJC9n48OTYLp63zl+exwNah6LkVop56GME45IY3BMi8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fIyx4WxNNVEXVLk59f/rhXF1OskrwHehVQ/uiBgXfDkxSWC28qHfoCuo32ZdPZIup
+         PH/+qCMHCt7OEQ10bCaoOMnjXcGCIhf5xYnN/nwdS1KNvwoyVThqCcBj4pBObozPI1
+         UF0qUANT0A4nkVbkvOk9NnY7JvKxfhxLjrUJ3/MxA/HKZByHw70vq+gBJ5XDhR9jaE
+         13VvHn/1gEknI6TC2aISYAbrXHAAnt1QkOwFlj8up2XHAITP5Qs8eioVuSxP8DN95q
+         TN3s9dP8bi51bPvGzhNyIp758G5dm1qJzAJWBtyfYPw1300wt0mzSIdQ5jl0THB4GW
+         ysMV9eZksg/qA==
+Date:   Tue, 1 Feb 2022 10:58:01 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Hisashi T Fujinaka <htodd@twofifty.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        David Awogbemila <awogbemila@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>, rafal@milecki.pl,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Edwin Peer <edwin.peer@broadcom.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-sunxi@lists.linux.dev, Jiri Pirko <jiri@resnulli.us>,
+        l.stelmach@samsung.com, Shay Agroskin <shayagr@amazon.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, Jon Mason <jdmason@kudzu.us>,
+        Shannon Nelson <snelson@pensando.io>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Rain River <rain.1986.08.12@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Shai Malin <smalin@marvell.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>, drivers@pensando.io,
+        Omkar Kulkarni <okulkarni@marvell.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Catherine Sullivan <csully@google.com>,
+        linux-hyperv@vger.kernel.org, oss-drivers@corigine.com,
+        Noam Dagan <ndagan@amazon.com>, Rob Herring <robh@kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Dexuan Cui <decui@microsoft.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Hsin-Yi Wang <hsinyi@google.com>
-References: <20220114091502.333083-1-allen.chen@ite.com.tw>
- <f4696a8d-5c1d-1007-7814-b2e6cbe334ae@collabora.com>
- <CAG3jFytN9iu0BteAxFCLVRorxM20Q3Zrfn1T4k8bnDYy5oL7bg@mail.gmail.com>
- <CAJMQK-i6M1hwESSA5OJ6TpdBBBEG8K9esSbLv-Xjb_zqCoB5ug@mail.gmail.com>
- <CAG3jFyvgvfjo-HgL8wWWXtaoJvUupd2zJt=neVJZn5uVESyZFA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAG3jFyvgvfjo-HgL8wWWXtaoJvUupd2zJt=neVJZn5uVESyZFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Chen-Yu Tsai <wens@csie.org>, Joel Stanley <joel@jms.id.au>,
+        Simon Horman <simon.horman@corigine.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Saeed Mahameed <saeed@kernel.org>,
+        Liming Sun <limings@nvidia.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Mark Einon <mark.einon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Slark Xiao <slark_xiao@163.com>, Gary Guo <gary@garyguo.net>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        netdev@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Stephen Hemminger <stephen@networkplumber.org>
+Subject: Re: [Intel-wired-lan] [PATCH net-next] net: kbuild: Don't default
+ net vendor configs to y
+Message-ID: <Yfj2GTH3tHraprl0@unreal>
+References: <20220131172450.4905-1-saeed@kernel.org>
+ <20220131095905.08722670@hermes.local>
+ <CAMuHMdU17cBzivFm9q-VwF9EG5MX75Qct=is=F2h+Kc+VddZ4g@mail.gmail.com>
+ <20220131183540.6ekn3z7tudy5ocdl@sx1>
+ <30ed8220-e24d-4b40-c7a6-4b09c84f9a1f@gmail.com>
+ <09c97169-5f9a-fc8f-dea5-5423e7bfef34@twofifty.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <09c97169-5f9a-fc8f-dea5-5423e7bfef34@twofifty.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 31/01/22 19:36, Robert Foss ha scritto:
-> On Mon, 31 Jan 2022 at 17:55, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->>
->> On Tue, Feb 1, 2022 at 12:37 AM Robert Foss <robert.foss@linaro.org> wrote:
->>>
->>> On Thu, 20 Jan 2022 at 16:25, AngeloGioacchino Del Regno
->>> <angelogioacchino.delregno@collabora.com> wrote:
->>>>
->>>> Il 14/01/22 10:14, allen ha scritto:
->>>>> This adds support for the iTE IT6505.
->>>>> This device can convert DPI signal to DP output.
->>>>>
->>>>> From: Allen Chen <allen.chen@ite.com.tw>
->>>>> Tested-by: Hsin-yi Wang <hsinyi@chromium.org>
->>>>> Signed-off-by: Hermes Wu <hermes.wu@ite.com.tw>
->>>>> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
->>>>> ---
->>>>> v10 -> v11 : remove drm_bridge_new_crtc_state
->>>>> ---
->>>>>    drivers/gpu/drm/bridge/Kconfig      |    8 +
->>>>>    drivers/gpu/drm/bridge/Makefile     |    1 +
->>>>>    drivers/gpu/drm/bridge/ite-it6505.c | 3352 +++++++++++++++++++++++++++
->>>>>    3 files changed, 3361 insertions(+)
->>>>>    create mode 100644 drivers/gpu/drm/bridge/ite-it6505.c
->>>>>
->>>>
->>>> ...snip...
->>>>
->>>>> +static const struct of_device_id it6505_of_match[] = {
->>>>> +     { .compatible = "ite,it6505" },
->>>>> +     { }
->>>>> +};
->>>>
->>>> If you want to have a DT compatible and DT properties, you have to also add
->>>> dt-bindings (yaml) for this driver, otherwise, any SoC/device DT will fail
->>>> the dt binding check.... So, please, add that.
->>>
->>> Let me second this. A dt-binding is needed for this driver to be
->>> complete, it functions as both documentation and a way to test the DTS
->>> that use this device, so it is really important.
->>>
->> The binding seems to be accepted before the driver:
->> https://elixir.bootlin.com/linux/v5.16.4/source/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+On Mon, Jan 31, 2022 at 10:55:14AM -0800, Hisashi T Fujinaka wrote:
+> On Mon, 31 Jan 2022, Florian Fainelli wrote:
 > 
-> I completely missed that. In that case we're only missing the
-> reviewed-by tag from someone.
+> > On 1/31/2022 10:35 AM, Saeed Mahameed wrote:
+> > > On 31 Jan 19:30, Geert Uytterhoeven wrote:
+> > > > On Mon, Jan 31, 2022 at 6:59 PM Stephen Hemminger
+> > > > <stephen@networkplumber.org> wrote:
+> > > > > On Mon, 31 Jan 2022 09:24:50 -0800
+> > > > > Saeed Mahameed <saeed@kernel.org> wrote:
+> > > > > 
+> > > > > > From: Saeed Mahameed <saeedm@nvidia.com>
+> > > > > >
+> > > > > > NET_VENDOR_XYZ were defaulted to 'y' for no technical reason.
+> > > > > >
+> > > > > > Since all drivers belonging to a vendor are supposed to default to 'n',
+> > > > > > defaulting all vendors to 'n' shouldn't be an issue, and aligns well
+> > > > > > with the 'no new drivers' by default mentality.
+> > > > > >
+> > > > > > Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+> > > > > 
+> > > > > This was done back when vendors were introduced in the
+> > > > > network drivers tree.
+> > > > > The default of Y allowed older configurations to just work.
+> > > > 
+> > > > And changing the defaults means all defconfigs must be updated first,
+> > > > else the user's configs will end up without drivers needed.
+> > > > 
+> > > 
+> > > As I understand correctly, at least for most common net drivers,
+> > > having NET_VENDOR_XYZ=y doesn't actually build anything, we have
+> > > flags per
+> > > module for each vendor and those are defaulted to N.
+> > 
+> > Right, but once you start hiding NET_VENDOR_DRIVER_XYZ under a
+> > NET_VENDOR_XYZ Kconfig symbol dependency, if NET_VENDOR_XYZ is not set
+> > to Y, then you have no way to select NET_VENDOR_DRIVER_XYZ and so your
+> > old defconfig breaks.
+> > 
+> > > 
+> > > > > So there was a reason, not sure if it matters anymore.
+> > > > > But it seems like useless repainting to change it now.
+> > > > 
+> > > > It might make sense to tune some of the defaults (i.e. change to
+> > > > "default y if ARCH_*") for drivers with clear platform dependencies.
+> > > > 
+> > > 
+> > > either set hard default to 'n' or just keep it as is, anything else is just
+> > > more confusion.
+> > 
+> > Maybe the rule should go like this: any new driver vendor defaults to n,
+> > and existing ones remain set to y, until we deprecate doing that and
+> > switching them all off to n by 5.18?
 > 
+> Forgive my ignorance, but isn't it a regression if things quit working
+> even if it's just a configuration change?
 
-You have mine... the intention was to give a Reviewed-by, not a Acked-by - I'm
-sorry for that, I was sending more than one email and the wrong tag slipped
-through.
+No, kernel configs never were declared as ABI as "regular" users are not
+supposed to touch it. They use something provided by the distro.
 
-So, please change my Acked-by tag to
+> 
+> From a user perspective I like having everything turned on initially so
+> it just works. Pruning things down is a lot easier than trying to figure
+> out what all to turn on. Especially in graphics.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I have completely opposite view here and prefer to have minimal config
+for my CI, and for my working machines as well. 
 
->>
->>>>
->>>> For the driver by itself, though:
->>>>
->>>> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>>
->>>>> +
->>>>> +static struct i2c_driver it6505_i2c_driver = {
->>>>> +     .driver = {
->>>>> +             .name = "it6505",
->>>>> +             .of_match_table = it6505_of_match,
->>>>> +             .pm = &it6505_bridge_pm_ops,
->>>>> +     },
->>>>> +     .probe = it6505_i2c_probe,
->>>>> +     .remove = it6505_i2c_remove,
->>>>> +     .shutdown = it6505_shutdown,
->>>>> +     .id_table = it6505_id,
->>>>> +};
->>>>> +
->>>>> +module_i2c_driver(it6505_i2c_driver);
->>>>> +
->>>>> +MODULE_AUTHOR("Allen Chen <allen.chen@ite.com.tw>");
->>>>> +MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
->>>>> +MODULE_LICENSE("GPL v2");
->>>>>
->>>>
+Thanks
 
-
+> 
+> -- 
+> Hisashi T Fujinaka - htodd@twofifty.com

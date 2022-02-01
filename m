@@ -2,199 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D294A5852
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFE04A5858
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235333AbiBAINb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 03:13:31 -0500
-Received: from mga14.intel.com ([192.55.52.115]:24972 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234578AbiBAINa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 03:13:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643703211; x=1675239211;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nPSQKuIXYlxkx1AwqzWrUCeAbzqbk2COfYDFVttPyDI=;
-  b=GzhoM2rxh0GpdM3a8vV9THRQXL7+Br2DGGzjzcOjlCpd8Bib3Bjq1ypr
-   zZ+sC/4u0YuNF3zRD41bZFtckRimhBiHq8AY6RvXFr4xXIbB/bWs9/A70
-   XdaqJWVApd3Ld+wn7lMBAL8vBCrpqFKG5FIgX4zSkyPwA/L1ivrLp7AUb
-   5m48YzCcdnaM5f3ezRzbUk5oTQqoSVVP3yIIYfIPQa5JRxsdkI3hTcTmP
-   znpWkbjoOWHBWtdur+gAgtrsvYWMlaAhz89Q9W9HIpepg/YQBV9/ZgegV
-   bRQIao9JfpbdEbIVtSnWFajxht7S7ij1idpY15BjbFtnKKpa7TmeDaPWR
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247859643"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="247859643"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 00:13:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="537709080"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2022 00:13:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEoI3-000T0T-0G; Tue, 01 Feb 2022 08:13:27 +0000
-Date:   Tue, 1 Feb 2022 16:13:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     kbuild-all@lists.01.org, linux-fbdev@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-staging@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [Intel-gfx] [PATCH 21/21] fbdev: Make registered_fb[] private to
- fbmem.c
-Message-ID: <202202011603.vczWPod7-lkp@intel.com>
-References: <20220131210552.482606-22-daniel.vetter@ffwll.ch>
+        id S235348AbiBAIO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 03:14:59 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56566
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234578AbiBAIO6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 03:14:58 -0500
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C97913F1E0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:14:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643703297;
+        bh=boQfkEd/Axzz4Ha9OlxxnWi1WdYV8vP07YnaJvP+r/8=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=N+w3AMJdUgRA0k5Xz9NwgTMUjSFzfDuw4Qg4vvrVULaQW1IG81UezMEdsPGbCNz/0
+         VgU+qAc2LCgXzj04WqrjgYqZ0mVKrIXPVN2J87jve+wtxCe+p8FyLWtrb8vdukLaLE
+         RNAUHWMR9sqfXq+vxs7hn5ns9U933MlGlWz57Y/1HCkvrtCxPCaWDiStJv4VEYRYVb
+         RMRRBWpG7vd/9JIoqCw9vuMN3SLX51OGlGSQRLaYmaEwKUiU2CTDWtW2PZ5LfUXpXl
+         d/MUQ4rzi2SQ/IapGvr9IiwUoa08TpyYs+w7jo2X3Gft3IBhHUA0+BqGeoTn5ah2fJ
+         ufBgg/FJ2cFSQ==
+Received: by mail-ej1-f69.google.com with SMTP id gb4-20020a170907960400b0069d1ebc4538so6186951ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 00:14:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=boQfkEd/Axzz4Ha9OlxxnWi1WdYV8vP07YnaJvP+r/8=;
+        b=OuW2bj9s0uZKBU35/aCa70TimXnPnGf4J/d0jeM8DDA6lk45I4Xn/Nmqh6cR8D7KJF
+         qRt0gZnu1tPQ9ULSln0mhENc8ohYw4R82OOyG9zIuHE5qSs1VYfEu88v+Nak7sjiEi1+
+         tUFITbIjtgQMJhxCQJe9SNfVhOwqWke/a9002bm34UGvFp95kpTmb2B9Uy2q3WIcFpsQ
+         O1qEsORjAz3T/rRwborQ9mZKB/p5/Nr3quhcEZfjTkTuGx7aDnZyr/lb2OuVXPlpBuBL
+         PQryMM78p7MyGPRICBkoT+pLqGfuCTHHvjN0LLR5NCt2imNkr/wpRiZhCeiY0s+8cK2/
+         JEIA==
+X-Gm-Message-State: AOAM532GTUK7GmK8r6+NewblLzF0Gs01jYfmah/jKTrNCEtMohrup0Eq
+        GCxHubUtKmL10d+hAyDeYumZAkqZZDCUMwZa/9QSJJhnJj1JGYwA4uXr0b3CNB2DvYuttu8KUHj
+        dROCM7TpSBp1yNgalUvOmHXsf5S6w7hJUgKHMBmsGUA==
+X-Received: by 2002:a05:6402:2754:: with SMTP id z20mr24075549edd.235.1643703297529;
+        Tue, 01 Feb 2022 00:14:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzgfi4y9EhHDRDWpF0JFjBFlkVKbHHjVy1Mb8dmncTyyzB+oiFhGTButtSrBYmktoLV7QbEVw==
+X-Received: by 2002:a05:6402:2754:: with SMTP id z20mr24075530edd.235.1643703297366;
+        Tue, 01 Feb 2022 00:14:57 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id g12sm19113517edv.89.2022.02.01.00.14.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 00:14:56 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH] pinctrl: samsung: improve wake irq info on console
+Date:   Tue,  1 Feb 2022 09:14:21 +0100
+Message-Id: <164370325802.11962.5143419688902708508.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220130232122.GA119248@adroid>
+References: <20220130232122.GA119248@adroid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131210552.482606-22-daniel.vetter@ffwll.ch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, 31 Jan 2022 00:21:22 +0100, Martin Jücker wrote:
+> Improve the wake irq message by also printing the bank name and hwirq
+> number that matches this irq number.
+> 
+> 
 
-I love your patch! Yet something to improve:
+Applied, thanks!
 
-[auto build test ERROR on tegra-drm/drm/tegra/for-next]
-[also build test ERROR on drm/drm-next linus/master v5.17-rc2 next-20220131]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[1/1] pinctrl: samsung: improve wake irq info on console
+      commit: 3652dc070bad335d6feb31402bb4ab1ad58d5cb6
 
-url:    https://github.com/0day-ci/linux/commits/Daniel-Vetter/some-fbcon-patches-mostly-locking/20220201-050907
-base:   git://anongit.freedesktop.org/tegra/linux.git drm/tegra/for-next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220201/202202011603.vczWPod7-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/245da5ab93b17c0cf1521713d5bde655a72efb65
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Daniel-Vetter/some-fbcon-patches-mostly-locking/20220201-050907
-        git checkout 245da5ab93b17c0cf1521713d5bde655a72efb65
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/staging/olpc_dcon/olpc_dcon.c: In function 'dcon_probe':
->> drivers/staging/olpc_dcon/olpc_dcon.c:605:6: error: 'num_registered_fb' undeclared (first use in this function); did you mean 'WB_registered'?
-     605 |  if (num_registered_fb < 1) {
-         |      ^~~~~~~~~~~~~~~~~
-         |      WB_registered
-   drivers/staging/olpc_dcon/olpc_dcon.c:605:6: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/staging/olpc_dcon/olpc_dcon.c:610:17: error: 'registered_fb' undeclared (first use in this function)
-     610 |  dcon->fbinfo = registered_fb[0];
-         |                 ^~~~~~~~~~~~~
-
-
-vim +605 drivers/staging/olpc_dcon/olpc_dcon.c
-
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  584  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  585  static int dcon_probe(struct i2c_client *client, const struct i2c_device_id *id)
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  586  {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  587  	struct dcon_priv *dcon;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  588  	int rc, i, j;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  589  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  590  	if (!pdata)
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  591  		return -ENXIO;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  592  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  593  	dcon = kzalloc(sizeof(*dcon), GFP_KERNEL);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  594  	if (!dcon)
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  595  		return -ENOMEM;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  596  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  597  	dcon->client = client;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  598  	init_waitqueue_head(&dcon->waitq);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  599  	INIT_WORK(&dcon->switch_source, dcon_source_switch);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  600  	dcon->reboot_nb.notifier_call = dcon_reboot_notify;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  601  	dcon->reboot_nb.priority = -1;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  602  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  603  	i2c_set_clientdata(client, dcon);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  604  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04 @605  	if (num_registered_fb < 1) {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  606  		dev_err(&client->dev, "DCON driver requires a registered fb\n");
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  607  		rc = -EIO;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  608  		goto einit;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  609  	}
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04 @610  	dcon->fbinfo = registered_fb[0];
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  611  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  612  	rc = dcon_hw_init(dcon, 1);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  613  	if (rc)
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  614  		goto einit;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  615  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  616  	/* Add the DCON device */
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  617  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  618  	dcon_device = platform_device_alloc("dcon", -1);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  619  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  620  	if (!dcon_device) {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  621  		pr_err("Unable to create the DCON device\n");
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  622  		rc = -ENOMEM;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  623  		goto eirq;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  624  	}
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  625  	rc = platform_device_add(dcon_device);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  626  	platform_set_drvdata(dcon_device, dcon);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  627  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  628  	if (rc) {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  629  		pr_err("Unable to add the DCON device\n");
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  630  		goto edev;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  631  	}
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  632  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  633  	for (i = 0; i < ARRAY_SIZE(dcon_device_files); i++) {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  634  		rc = device_create_file(&dcon_device->dev,
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  635  					&dcon_device_files[i]);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  636  		if (rc) {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  637  			dev_err(&dcon_device->dev, "Cannot create sysfs file\n");
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  638  			goto ecreate;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  639  		}
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  640  	}
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  641  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  642  	dcon->bl_val = dcon_read(dcon, DCON_REG_BRIGHT) & 0x0F;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  643  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  644  	/* Add the backlight device for the DCON */
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  645  	dcon_bl_props.brightness = dcon->bl_val;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  646  	dcon->bl_dev = backlight_device_register("dcon-bl", &dcon_device->dev,
-848d9eabcaebf21 Zebulon McCorkle   2017-11-21  647  						 dcon, &dcon_bl_ops,
-848d9eabcaebf21 Zebulon McCorkle   2017-11-21  648  						 &dcon_bl_props);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  649  	if (IS_ERR(dcon->bl_dev)) {
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  650  		dev_err(&client->dev, "cannot register backlight dev (%ld)\n",
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  651  			PTR_ERR(dcon->bl_dev));
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  652  		dcon->bl_dev = NULL;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  653  	}
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  654  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  655  	register_reboot_notifier(&dcon->reboot_nb);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  656  	atomic_notifier_chain_register(&panic_notifier_list, &dcon_panic_nb);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  657  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  658  	return 0;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  659  
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  660   ecreate:
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  661  	for (j = 0; j < i; j++)
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  662  		device_remove_file(&dcon_device->dev, &dcon_device_files[j]);
-4996b4610767064 Jing Xiangfeng     2020-11-20  663  	platform_device_del(dcon_device);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  664   edev:
-4996b4610767064 Jing Xiangfeng     2020-11-20  665  	platform_device_put(dcon_device);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  666  	dcon_device = NULL;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  667   eirq:
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  668  	free_irq(DCON_IRQ, dcon);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  669   einit:
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  670  	kfree(dcon);
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  671  	return rc;
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  672  }
-53c43c5ca13328a Greg Kroah-Hartman 2016-04-04  673  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

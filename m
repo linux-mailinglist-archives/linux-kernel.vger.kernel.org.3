@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D744A649E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329764A64A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbiBATHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242298AbiBATHD (ORCPT
+        id S242313AbiBATHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:07:14 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:45970 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241933AbiBATHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:07:03 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C91CC06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:07:03 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id v3so16237515pgc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:07:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vWJtc/jz3NoYF9uCthXFk67SqjsIB7RJSbGEFvTN/iM=;
-        b=iSJDkJ5OdDeFbxyOzdLekrR3/0rd6TUS2SxZz0WxjzfyJ94UgxhHoPvQJpGVCTtcdH
-         s4biQFpPJRStBBHkAjwh/5vF6XXyRe8YFOtvSRhYOwfsQLjsntoTM4O+MnVZSkzSnVWt
-         UKB2j9qLI0kmTsN3HaBBD0AO7GEeyk79bF/ko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vWJtc/jz3NoYF9uCthXFk67SqjsIB7RJSbGEFvTN/iM=;
-        b=5alNRbXcIv8Hm6p+pxtCMRKRHL06eLb/Ke/VuxkbkI61N2NCKFgw9IA/TUmHkhyqcR
-         kBgAfrS3XjGjcT4DBZgk0rQi4X5DpIPRjtTBZQdvgajc+Swe4sCGQ5NoUB1uoPgWDoME
-         5Tuo3I0vA+VYparOIlC90pdzPd7pEEr/1p3xaqPVVGcXTekV/lVqGcom0GHvNXP0PM2V
-         mXhKeaANc3h+tQjLsR5NqqW+fcAJQrm3+3hr8gfG1WoYznQs6Sp7HFerDbBPGW4c3zOW
-         H9AnUVYIem62RkB44BzXwK3koImmH0nxDP5/+Y3QQKO8reHVlZGwGpoJbiCX1YWKyQQW
-         7kbA==
-X-Gm-Message-State: AOAM5333ykr/h/2srO7LKA3E6nITAEaRR64Y8rThI8YG+73wQ7ZDDX9b
-        X93ntTgcSuZGy/n6cvcErV6vpn3Yx5IP7A==
-X-Google-Smtp-Source: ABdhPJzi1szkx68ooZCj+rN//sH6e7I3nmqujxk9Bk4xfgJGsNuh6IWI1ON2C8vwZ1OHES4iTJHhoA==
-X-Received: by 2002:a63:496:: with SMTP id 144mr22280682pge.380.1643742422709;
-        Tue, 01 Feb 2022 11:07:02 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 30sm393263pgq.39.2022.02.01.11.07.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 11:07:02 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] exec: Fix min/max typo in stack space calculation
-Date:   Tue,  1 Feb 2022 11:07:00 -0800
-Message-Id: <20220201190700.3147041-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 1 Feb 2022 14:07:12 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
+ id 21f654da68e8f2ef; Tue, 1 Feb 2022 20:07:10 +0100
+Received: from kreacher.localnet (unknown [213.134.162.64])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 7735366B3BC;
+        Tue,  1 Feb 2022 20:07:09 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Sunil Goutham <sgoutham@marvell.com>,
+        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Keyur Chudgar <keyur@os.amperecomputing.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: [PATCH] drivers: net: Replace acpi_bus_get_device()
+Date:   Tue, 01 Feb 2022 20:07:08 +0100
+Message-ID: <3151721.aeNJFYEL58@kreacher>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=893; h=from:subject; bh=AyfN0zm5xZ0Db6oIPqup3ab4ouMbc0RRClkxyP2qBeg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+YTTKrxw/Oaf72PaFCDQWBpcuw+xIFQ/0i2ikcAr 2xFRrmCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfmE0wAKCRCJcvTf3G3AJhseD/ 9zYuF7jyAPi2L0v81MP3RDf7VIrJ4xgGyoaLiTYxpwk+qOAW9CkBkCV9WopgBo1vMsSCOfN+W2RLnO Pimv6mvRjgSDzwChg9PLzh42NrShTKqoPtkkdjHvVDJ2wOzwcIGcv6qP1KuvRw4ay3slqiVYTt4zPv Mt6H4rml8ElelCkMo1WiqbAugm2gcwOuLxXfEAPCQxTCSz5ajAUH7n/Iqgolu5wzKQP6uRDx/j4y/r rXLERVtMJBcmAVab+49RBXKRmpwcAIv5yYXZQaqEzlt872qcf3UijCEse7hN08365czgY4gpoX5+7P mEjRbZRG+HIU4oupbKJoPgrSIILQxJCID9/7L4L/KtDCs7ENGw27QFtuCI2X6ArtGhFPNvaIbYsU8P CkLa0JmjY1MPJulCQWS8Y6MhrPAc7Sk+VNH/tTrIoSDY+5DwKFczRXckh6jERSLUdAX5aaHTyX/nFk Tb2kLrgqwus7rdlx62zYCGPdJ+nyhGb5W01UVRY9VsrorM/mkOQDqoClWlfmDKirHE4lyEdoHHO4z4 Pz1H4fLS9psYmGX4VjQE0gUJfRTt1qogXkvsTO5TnuhCP91I6jGXl4JFJPRxBA/Gkgh8dpOTpfMgoT fn5FGSVh2Zq+SDEVeK0URl2AKzSH5vsa8I7fi4SspI/OLR0oxOYaAwnGqHFA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.162.64
+X-CLIENT-HOSTNAME: 213.134.162.64
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgdduvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehsghhouhhthhgrmhesmhgrrhhvvghllhdrtghomhdprhgtphhtthhopehihigrphhprghnsehoshdrrghmphgvrhgvtghomhhpuhhtihhnghdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopehkvgihuhhrsehoshdrrghmphgvrhgvtghomhhpuhhtihhnghdrtghomhdprhgtphhtthhopehquhgrnhesohhsrdgrmhhpvghrvggtohhmphhuthhinhhgrdgtohhmpdhrtghpthhtohephhhkrghllhifvghithdusehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When handling the argc == 0 case, the stack space calculation should be
-using max() not min().
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-This is a fix for exec-force-single-empty-string-when-argv-is-empty.patch
-https://lore.kernel.org/mm-commits/20220201004100.BF6D6C340E8@smtp.kernel.org/
----
- fs/exec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Replace acpi_bus_get_device() that is going to be dropped with
+acpi_fetch_acpi_dev().
 
-diff --git a/fs/exec.c b/fs/exec.c
-index bbf3aadf7ce1..40b1008fb0f7 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -502,7 +502,7 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
- 	 * argc can never be 0, to keep them from walking envp by accident.
- 	 * See do_execveat_common().
- 	 */
--	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
-+	ptr_size = (max(bprm->argc, 1) + bprm->envc) * sizeof(void *);
- 	if (limit <= ptr_size)
- 		return -E2BIG;
- 	limit -= ptr_size;
--- 
-2.30.2
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/net/ethernet/cavium/thunder/thunder_bgx.c |    4 ++--
+ drivers/net/fjes/fjes_main.c                      |   10 +++-------
+ drivers/net/mdio/mdio-xgene.c                     |    8 +++-----
+ 3 files changed, 8 insertions(+), 14 deletions(-)
+
+Index: linux-pm/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
+===================================================================
+--- linux-pm.orig/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
++++ linux-pm/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
+@@ -1407,9 +1407,9 @@ static acpi_status bgx_acpi_register_phy
+ {
+ 	struct bgx *bgx = context;
+ 	struct device *dev = &bgx->pdev->dev;
+-	struct acpi_device *adev;
++	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+ 
+-	if (acpi_bus_get_device(handle, &adev))
++	if (!adev)
+ 		goto out;
+ 
+ 	acpi_get_mac_address(dev, adev, bgx->lmac[bgx->acpi_lmac_idx].mac);
+Index: linux-pm/drivers/net/fjes/fjes_main.c
+===================================================================
+--- linux-pm.orig/drivers/net/fjes/fjes_main.c
++++ linux-pm/drivers/net/fjes/fjes_main.c
+@@ -1512,15 +1512,11 @@ static acpi_status
+ acpi_find_extended_socket_device(acpi_handle obj_handle, u32 level,
+ 				 void *context, void **return_value)
+ {
+-	struct acpi_device *device;
++	struct acpi_device *device = acpi_fetch_acpi_dev(obj_handle);
+ 	bool *found = context;
+-	int result;
+ 
+-	result = acpi_bus_get_device(obj_handle, &device);
+-	if (result)
+-		return AE_OK;
+-
+-	if (strcmp(acpi_device_hid(device), ACPI_MOTHERBOARD_RESOURCE_HID))
++	if (!device ||
++	    strcmp(acpi_device_hid(device), ACPI_MOTHERBOARD_RESOURCE_HID))
+ 		return AE_OK;
+ 
+ 	if (!is_extended_socket_device(device))
+Index: linux-pm/drivers/net/mdio/mdio-xgene.c
+===================================================================
+--- linux-pm.orig/drivers/net/mdio/mdio-xgene.c
++++ linux-pm/drivers/net/mdio/mdio-xgene.c
+@@ -280,15 +280,13 @@ static acpi_status acpi_register_phy(acp
+ 				     void *context, void **ret)
+ {
+ 	struct mii_bus *mdio = context;
+-	struct acpi_device *adev;
++	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+ 	struct phy_device *phy_dev;
+ 	const union acpi_object *obj;
+ 	u32 phy_addr;
+ 
+-	if (acpi_bus_get_device(handle, &adev))
+-		return AE_OK;
+-
+-	if (acpi_dev_get_property(adev, "phy-channel", ACPI_TYPE_INTEGER, &obj))
++	if (!adev ||
++	    acpi_dev_get_property(adev, "phy-channel", ACPI_TYPE_INTEGER, &obj))
+ 		return AE_OK;
+ 	phy_addr = obj->integer.value;
+ 
+
+
 

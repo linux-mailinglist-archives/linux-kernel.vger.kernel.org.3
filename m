@@ -2,180 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BB44A572A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE3E4A574A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbiBAGYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:24:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56600 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiBAGYf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:24:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48790614A0;
-        Tue,  1 Feb 2022 06:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035C9C340EB;
-        Tue,  1 Feb 2022 06:23:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643696601;
-        bh=HfcgLdgc3B7KCIDeYVDCOGK+3kcF0wgKikBnzg+bTCw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hkLUp/IB2GCcNukU/n/SN3b4hGrNAVgSg9olTqdDrlQh72GPdsAAVGRf0TV8xX057
-         qFFxIfxMqcDSpcR4vUWfClWa+KHHdR0nJfmXPM09CDY4QLolTZLqehrDSkIWngO+s9
-         r0ezCld7Bnw/YR4G7Rzgpjk8S7tyOWf9en8aAW1dKA09kMoohjG5KCMG+QiHpzVtzN
-         UgegvrFmT6sm501g8kg1Xm84rV9G5XmIzK0CBNRLfSHV7D7s2Kaw2R60x7P8M6hWCr
-         f6hIiAGIHpVsMk9NsXdCgaQZYKGZxXJcOYv7BQ9EHrfnZ57lIdjJTFBgG7/YYvdQFd
-         SQZxnXbIRRgYA==
-Date:   Tue, 1 Feb 2022 08:23:10 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v3 3/4] mm/page_owner: Print memcg information
-Message-ID: <YfjRzobwtv7wn2Gt@kernel.org>
-References: <20220131192308.608837-1-longman@redhat.com>
- <20220131192308.608837-4-longman@redhat.com>
- <YfhLzI+RLRGgexmr@kernel.org>
- <4234fc60-5d65-1089-555a-734218aa6f9c@redhat.com>
+        id S234292AbiBAGeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:34:37 -0500
+Received: from mail.zju.edu.cn ([61.164.42.155]:5170 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234377AbiBAGe3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 01:34:29 -0500
+X-Greylist: delayed 467 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Feb 2022 01:34:27 EST
+Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 1 Feb 2022 14:26:23
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.67.66]
+Date:   Tue, 1 Feb 2022 14:26:23 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5ZGo5aSa5piO?= <22021233@zju.edu.cn>
+To:     "Dan Carpenter" <dan.carpenter@oracle.com>
+Cc:     linux-hams@vger.kernel.org, jreuter@yaina.de, ralf@linux-mips.org,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH 2/2] ax25: add refcount in ax25_dev to avoid UAF
+ bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220131173729.GN1951@kadam>
+References: <cover.1643343397.git.duoming@zju.edu.cn>
+ <855641b37699b6ff501c4bae8370d26f59da9c81.1643343397.git.duoming@zju.edu.cn>
+ <20220131173729.GN1951@kadam>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4234fc60-5d65-1089-555a-734218aa6f9c@redhat.com>
+Message-ID: <70763230.8debd.17eb3f680eb.Coremail.22021233@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgCHODyP0vhhKmSDDA--.6799W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgEIAVZdtYB1zAABsM
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:43:32PM -0500, Waiman Long wrote:
-> 
-> On 1/31/22 15:51, Mike Rapoport wrote:
-> > On Mon, Jan 31, 2022 at 02:23:07PM -0500, Waiman Long wrote:
-> > > It was found that a number of offlined memcgs were not freed because
-> > > they were pinned by some charged pages that were present. Even "echo
-> > > 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
-> > > offlined but not freed memcgs tend to increase in number over time with
-> > > the side effect that percpu memory consumption as shown in /proc/meminfo
-> > > also increases over time.
-> > > 
-> > > In order to find out more information about those pages that pin
-> > > offlined memcgs, the page_owner feature is extended to print memory
-> > > cgroup information especially whether the cgroup is offlined or not.
-> > > 
-> > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > Acked-by: David Rientjes <rientjes@google.com>
-> > > ---
-> > >   mm/page_owner.c | 39 +++++++++++++++++++++++++++++++++++++++
-> > >   1 file changed, 39 insertions(+)
-> > > 
-> > > diff --git a/mm/page_owner.c b/mm/page_owner.c
-> > > index 28dac73e0542..a471c74c7fe0 100644
-> > > --- a/mm/page_owner.c
-> > > +++ b/mm/page_owner.c
-> > > @@ -10,6 +10,7 @@
-> > >   #include <linux/migrate.h>
-> > >   #include <linux/stackdepot.h>
-> > >   #include <linux/seq_file.h>
-> > > +#include <linux/memcontrol.h>
-> > >   #include <linux/sched/clock.h>
-> > >   #include "internal.h"
-> > > @@ -325,6 +326,42 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
-> > >   	seq_putc(m, '\n');
-> > >   }
-> > > +#ifdef CONFIG_MEMCG
-> > > +/*
-> > > + * Looking for memcg information and print it out
-> > > + */
-> > > +static inline void print_page_owner_memcg(char *kbuf, size_t count, int *pret,
-> > > +					  struct page *page)
-> > > +{
-> > > +	unsigned long memcg_data = READ_ONCE(page->memcg_data);
-> > > +	struct mem_cgroup *memcg;
-> > > +	bool onlined;
-> > > +	char name[80];
-> > > +
-> > > +	if (!memcg_data)
-> > > +		return;
-> > > +
-> > > +	if (memcg_data & MEMCG_DATA_OBJCGS)
-> > > +		*pret += scnprintf(kbuf + *pret, count - *pret,
-> > > +				"Slab cache page\n");
-> > Don't we need to check for overflow here?
-> 
-> See my previous patch 2 and the reason I used scnprintf() is that it never
-> return a length that is >= the given size. So overflow won't happen. The
-> final snprintf() in print_page_owner() will detect buffer overflow.
- 
-Right, I've missed that 
- 
-> > > +
-> > > +	memcg = page_memcg_check(page);
-> > > +	if (!memcg)
-> > > +		return;
-> > > +
-> > > +	onlined = (memcg->css.flags & CSS_ONLINE);
-> > > +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
-> > > +	*pret += scnprintf(kbuf + *pret, count - *pret,
-> > > +			"Charged %sto %smemcg %s\n",
-> > > +			PageMemcgKmem(page) ? "(via objcg) " : "",
-> > > +			onlined ? "" : "offlined ",
-> > > +			name);
-> > Ditto
-> > 
-> > > +}
-> > > +#else /* CONFIG_MEMCG */
-> > > +static inline void print_page_owner_memcg(char *kbuf, size_t count, int *pret,
-> > > +					  struct page *page) { }
-
-> > I think #ifdef inside the print_page_owner_memcg() functions will be
-> > simpler and clearer.
->
-> Yes, I see both styles used in kernel code though this style is probably
-> more common. I will keep this unless there is a good reason to do otherwise.
-
-Having #ifdef inside the function is safer wrt future updates. It's often
-happens that non-default arm of #ifdef is forgotten. Besides, it's several
-lines less.
- 
-> > > +#endif /* CONFIG_MEMCG */
-> > > +
-> > >   static ssize_t
-> > >   print_page_owner(char __user *buf, size_t count, unsigned long pfn,
-> > >   		struct page *page, struct page_owner *page_owner,
-> > > @@ -365,6 +402,8 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
-> > >   			migrate_reason_names[page_owner->last_migrate_reason]);
-> > >   	}
-> > > +	print_page_owner_memcg(kbuf, count, &ret, page);
-> > > +
-> > ret can go over count here.
-> > Why not make print_page_owner_memcg() an int so that the call will be
-> > consistent with other calls in print_page_owner():
-> > 
-> > 	ret += print_page_owner_memcg(kbuf, count, page);
-> > 	if (ret >= count)
-> > 		goto err;
-
-I still think that 'int print_page_owner_memcg()' is clearer and more
-readable.
- 
-> See my comments above.
-> 
-> Cheers,
-> Longman
-> 
-
--- 
-Sincerely yours,
-Mike.
+VGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91ciB0aW1lIGFuZCBwb2ludGluZyBvdXQgcHJvYmxl
+bXMgaW4gbXkgcGF0Y2guCgpUaGUgZGVjcmVtZW50IG9mIGF4MjVfYmluZCgpIGlzIGluIGF4MjVf
+a2lsbF9ieV9kZXZpY2UoKS4gSWYgd2UgZG9uJ3QKY2FsbCBheDI1X2JpbmQoKSBiZWZvcmUgYXgy
+NV9raWxsX2J5X2RldmljZSgpLCB0aGUgYXgyNV9saXN0IHdpbGwgYmUKZW1wdHkgYW5kIGF4MjVf
+ZGV2X3B1dCgpIGluIGF4MjVfa2lsbF9ieV9kZXZpY2UoKSB3aWxsIG5vdCBleGVjdXRlLgoKPiBA
+QCAtOTEsNiArOTEsNyBAQCBzdGF0aWMgdm9pZCBheDI1X2tpbGxfYnlfZGV2aWNlKHN0cnVjdCBu
+ZXRfZGV2aWNlICpkZXYpCj4gIAkJCXNwaW5fdW5sb2NrX2JoKCZheDI1X2xpc3RfbG9jayk7Cj4g
+IAkJCWxvY2tfc29jayhzayk7Cj4gIAkJCXMtPmF4MjVfZGV2ID0gTlVMTDsKPiArCQkJYXgyNV9k
+ZXZfcHV0KGF4MjVfZGV2KTsKPiAgCQkJcmVsZWFzZV9zb2NrKHNrKTsKPiAgCQkJYXgyNV9kaXNj
+b25uZWN0KHMsIEVORVRVTlJFQUNIKTsKPiAgCQkJc3Bpbl9sb2NrX2JoKCZheDI1X2xpc3RfbG9j
+ayk7CgpJIHdpbGwgc2VuZCB0aGUgaW1wcm92ZWQgcGF0Y2ggYXMgc29vbiBhcyBwb3NzaWJsZS4K
+CgpCZXN0IHdpc2hlcywKRHVvbWluZyBaaG91Cg==

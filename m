@@ -2,156 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 827174A676A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3554A6773
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbiBAV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S236676AbiBAV64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbiBAV6C (ORCPT
+        with ESMTP id S236439AbiBAV6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:58:02 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66608C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:58:02 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id a8so17075212pfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 13:58:02 -0800 (PST)
+        Tue, 1 Feb 2022 16:58:55 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56379C061714;
+        Tue,  1 Feb 2022 13:58:55 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id h21so34659202wrb.8;
+        Tue, 01 Feb 2022 13:58:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ltjF8d5F9x1GgyN29xq25R53ErC8uPxRhu4AGyyM9y4=;
-        b=cmJgpg0t93ZTq37e52YSl1WdM61IEHRAVm9N0bLgmydloJWktxnqq1gzaQaVT3kNuH
-         yxtTUembz+YViRgIGF1K0LucVHYx12NimPAMTl5sxbXUomHerJyoPCJtyxdCFOpNl32D
-         9rZI34Zs4H/yZl38SNvcH5OfxxRc20MyDcYsYDx/Alg55hVVBLMbos2REb5lgyVJP5LW
-         w8nZOZSRJAFePucr7ko54yhIF9mRSSg0GtQfWnxGUCpXsvxzVC/bGG1eZBE1Ct4k/gev
-         Ua0I8gc+YdFC3B4iechxGb8tdS1TdRp/Nvl05ggoPyKWqNNGG5txVg7ba72VY/TUCKrr
-         qd0w==
+        bh=6B/NWvJqrE/2wlY9LkJWv0Qob6wwHCO8chgqhXbR0zk=;
+        b=E4GbTk/oDhOn38qWb5tJo2V9+CFFpwvqqZQdx1Td8gmSzjzm9Nari+TxomndUFQxQ8
+         u8r63Zzr1w0Okpseq8Vhgjxhh8k1iZ6fEQDXQM250ePHH0ybkv4c6hvgKamNE7FBZ8dF
+         MbGha3XnVEzltJWNlckiYRtiTulKDVMnHnDfAdcQI39JYbiOfCxKM+mALyRri6Gd31TK
+         yg9sgIrch5v59o+IGm0WNQljVHwHXLKifqM+kvWMk4R2kU8RVJEiWeth1yp3xv1owM6i
+         rvboomBXjN/1D7YxxIsJp6rrf94nk4lHqWpAqN80G6t2R/Zu4R/woxcFJSP481b578V0
+         +KTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ltjF8d5F9x1GgyN29xq25R53ErC8uPxRhu4AGyyM9y4=;
-        b=oyv97os/PfBNjBtkWeih3OdjOwQSuYgzlBQnvI0Ua7C5qGR5Qt4lWpAaF1on51cMd3
-         Wq26XZ0sg5sjhkgXje5Fnvwwbnowp2tuu5QY0N8ohmo1+VmieO/ALmoA4oRw2GP22C3Z
-         bM5eyw7cpcS7Ker3imdhAb7z3EZrlHoGeFflRWWo1MBIE2z/G66YvITz70fhA+kmDAfo
-         5DGw0Yqi8nX00LjzzEAmKp87uvHOUUoOVSdQ+kw284WUdk3CZzdLeRDFzJDwpHgSgxM1
-         beyXQ2INnVZmwjyG20M5jkzLF6X3r/SZAuBUjGHPCRcXgEmjTFAoyzyLTItQ+jNg+ril
-         8eng==
-X-Gm-Message-State: AOAM532CJQ1oO1OwHI87zeEaCkA9M6zi+JHcy5HQELc512YXagiqf17+
-        3iqQ351pc+fVwSjFXfGEaHfp7A==
-X-Google-Smtp-Source: ABdhPJwUYUmjATCCR09YewooMx3240UOnyinweW9dy971jFx83HnD9dHa4UJh4yNWaC8bz26ZlWpyw==
-X-Received: by 2002:a05:6a00:1494:: with SMTP id v20mr26687004pfu.82.1643752681672;
-        Tue, 01 Feb 2022 13:58:01 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id lp17sm4202784pjb.25.2022.02.01.13.58.00
+        bh=6B/NWvJqrE/2wlY9LkJWv0Qob6wwHCO8chgqhXbR0zk=;
+        b=18GZ+dZAHNuD0uXevleKCJ0BNx6jbyYi2JbyN9WyLvnqGClmUWOEAVNI2OGRCYSTXt
+         Au7W9GJt6NrT/KyAAYerErRsFrFxb7/kbS/np2jgeNJpDovp5muC/mH3ddb/FDpDDYD4
+         L9fF0cjiapUSHXPYpFykMMGuHGzFos7kkpCeyskEbj0hXrdRybhUcfexBCd2oYoyv2n9
+         iTzwHJeK2BYTLhKPRmjgJpOGmsJahKFFi0aanGJ/IeXAjLu7yUt/9RJyhzDq+sI+uLO1
+         JoagRwUeLooN0sky5Wqij1jlmq6/xqL2jIGhUbyOQM9+7gIAr0ZQjaGDAD+yQcuiefjB
+         g1Qw==
+X-Gm-Message-State: AOAM533URqRIvA7hMwFh/XLO5yew3zddF0q3dAzJPcD3HvMcMS3rHVgv
+        oKakN4uHBmI6zRkLZtTw5K0=
+X-Google-Smtp-Source: ABdhPJzxB0aa7zd/vnW0gEX8lz85w3lIstMpkMfA2FLKYH87q2cgPIp2gDI/ocrzLcNCozNCREbMVQ==
+X-Received: by 2002:adf:ed42:: with SMTP id u2mr22804655wro.519.1643752733696;
+        Tue, 01 Feb 2022 13:58:53 -0800 (PST)
+Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id b2sm17994310wri.88.2022.02.01.13.58.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:58:00 -0800 (PST)
-Date:   Tue, 1 Feb 2022 21:57:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
-        pbonzini@redhat.com, joro@8bytes.org, mlevitsk@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
-        jon.grimm@amd.com
-Subject: Re: [PATCH v3 3/3] KVM: SVM: Extend host physical APIC ID field to
- support more than 8-bit
-Message-ID: <Yfms5evHbN8JVbVX@google.com>
-References: <20211213113110.12143-1-suravee.suthikulpanit@amd.com>
- <20211213113110.12143-4-suravee.suthikulpanit@amd.com>
- <Yc3qt/x1YPYKe4G0@google.com>
- <34a47847-d80d-e93d-a3fe-c22382977c1c@amd.com>
+        Tue, 01 Feb 2022 13:58:53 -0800 (PST)
+Date:   Tue, 1 Feb 2022 22:58:52 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/17] ARM: dts: qcom: add missing rpm regulators and
+ cells for ipq8064
+Message-ID: <YfmtHFfW00Qr2cLc@Ansuel-xps.localdomain>
+References: <20220118012051.21691-1-ansuelsmth@gmail.com>
+ <20220118012051.21691-4-ansuelsmth@gmail.com>
+ <Yfhmum8BnB1JIALP@builder.lan>
+ <YflGGM45F3TqERNj@earth.li>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <34a47847-d80d-e93d-a3fe-c22382977c1c@amd.com>
+In-Reply-To: <YflGGM45F3TqERNj@earth.li>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022, Suthikulpanit, Suravee wrote:
-> > That implies that an APIC ID > 255 on older hardware what ignores bits 11:8 even
-> > in x2APIC will silently fail, and the whole point of this mask is to avoid exactly
-> > that.
+On Tue, Feb 01, 2022 at 02:39:20PM +0000, Jonathan McDowell wrote:
+> On Mon, Jan 31, 2022 at 04:46:18PM -0600, Bjorn Andersson wrote:
+> > On Mon 17 Jan 19:20 CST 2022, Ansuel Smith wrote:
+> > 
+> > > Add cells definition for rpm node and add missing regulators for the 4
+> > > regulator present on ipq8064. There regulators are controlled by rpm and
+> > > to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
+> > > reject any regulator change request.
+> > > 
+> > 
+> > Is the SMB208 mandatory on all ipq8064 designs, or should this be pushed
+> > out to the device dts?
 > 
-> On current AMD system w/ x2APIC and 256 cpus (e.g. max APIC ID is 255), it would only
-> need 8 bits in the physical APIC ID table entry, and the bit 11:9 are reserved.
-> For newer system, it could take upto 12 bits to represent APIC ID.
+> It's not; the RB3011 uses a different regulator (a TPS563900).
+>
 
-But x2APIC IDs are 32-bit values that, from the APM, are model specific:
+Fact is that that's a special case. We have 20 devices based on ipq806x
+and they all have smb208 regulators.
 
-  The x2APIC_ID is a concatenation of several fields such as socket ID, core ID
-  and thread ID.
+Is the TPS563900 also controlled by rpm? 
 
-  Because the number of sockets, cores and threads may differ for each SOC, the
-  format of x2APIC ID is model-dependent.
+Anyway should we use a dedicated dtsi to declare the correct regulators?
 
-In other words, there's nothing that _architecturally_ guarantees 8 bits are
-sufficient to hold the x2APIC ID.
-
-> > But at least one APM blurb appears to have been wrong (or the architecture is broken)
-> > prior to the larger AVIC width:
-> > 
-> >    Since a destination of FFh is used to specify a broadcast, physical APIC ID FFh
-> >    is reserved.
-> > 
-> > We have Rome systems with 256 CPUs and thus an x2APIC ID for a CPU of FFh.  So
-> > either the APM is wrong or AVIC is broken on older large systems.
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > ---
+> > >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 35 +++++++++++++++++++++++++++++
+> > >  1 file changed, 35 insertions(+)
+> > > 
+> > > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > > index 094125605bea..824cf13dd037 100644
+> > > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > > @@ -829,10 +829,45 @@ rpm: rpm@108000 {
+> > >  			clocks = <&gcc RPM_MSG_RAM_H_CLK>;
+> > >  			clock-names = "ram";
+> > >  
+> > > +			#address-cells = <1>;
+> > > +			#size-cells = <0>;
+> > > +
+> > >  			rpmcc: clock-controller {
+> > >  				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
+> > >  				#clock-cells = <1>;
+> > >  			};
+> > > +
+> > > +			regulators {
+> > > +				compatible = "qcom,rpm-smb208-regulators";
+> > > +
+> > > +				smb208_s1a: s1a {
+> > > +					regulator-min-microvolt = <1050000>;
+> > > +					regulator-max-microvolt = <1150000>;
+> > > +
+> > > +					qcom,switch-mode-frequency = <1200000>;
+> > > +				};
+> > > +
+> > > +				smb208_s1b: s1b {
+> > > +					regulator-min-microvolt = <1050000>;
+> > > +					regulator-max-microvolt = <1150000>;
+> > > +
+> > > +					qcom,switch-mode-frequency = <1200000>;
+> > > +				};
+> > > +
+> > > +				smb208_s2a: s2a {
+> > > +					regulator-min-microvolt = < 800000>;
+> > > +					regulator-max-microvolt = <1250000>;
+> > > +
+> > > +					qcom,switch-mode-frequency = <1200000>;
+> > > +				};
+> > > +
+> > > +				smb208_s2b: s2b {
+> > > +					regulator-min-microvolt = < 800000>;
+> > > +					regulator-max-microvolt = <1250000>;
+> > > +
+> > > +					qcom,switch-mode-frequency = <1200000>;
+> > > +				};
+> > > +			};
+> > >  		};
+> > >  
+> > >  		tcsr: syscon@1a400000 {
+> > > -- 
+> > > 2.33.1
+> > > 
 > 
-> Actually, the statement is referred to the guest physical APIC ID, which is used to
-> index the per-vm physical APIC table in the host. So, it should be correct in the case
-> of AVIC, which only support APIC mode in the guest.
-
-Ah.  If you have the ear of the APM writers, can you ask that they insert a "guest",
-e.g. so that it reads:
-
-  Since a destination of FFh is used to specify a broadcast, guest physical APIC ID FFh is reserved.
- 
-> > Anyways, for the new larger mask, IMO dynamically computing the mask based on what
-> > APIC IDs were enumerated to the kernel is pointless.  If the AVIC doesn't support
-> > using bits 11:0 to address APIC IDs then KVM is silently hosed no matter what if
-> > any APIC ID is >255.
+> J.
 > 
-> The reason for dynamic mask is to protect the reserved bits, which varies between
-> the current platform (i.e 11:8) vs. newer platform (i.e. 11:10), in which
-> there is no good way to tell except to check the max_physical_apicid (see below).
+> -- 
+> ... "There's no money, there's no weed. It's all been replaced by a fucking
+>     big pile of corpses."  -- Lock, Stock and Two Smoking Barrels
 
-...
-
-> > Ideally, there would be a feature flag enumerating the larger AVIC support so we
-> > could do:
-> > 
-> > 	if (!x2apic_mode || !boot_cpu_has(X86_FEATURE_FANCY_NEW_AVIC))
-> > 		avic_host_physical_id_mask = GENMASK(7:0);
-> > 	else
-> > 		avic_host_physical_id_mask = GENMASK(11:0);
-> > 
-> > but since it sounds like that's not the case, and presumably hardware is smart
-> > enough not to assign APIC IDs it can't address, this can simply be
-> > 
-> > 	if (!x2apic_mode)
-> > 		avic_host_physical_id_mask = GENMASK(7:0);
-> > 	else
-> > 		avic_host_physical_id_mask = GENMASK(11:0);
-> > 
-> > and patch 01 to add+export apic_get_max_phys_apicid() goes away.
-> 
-> Unfortunately, we do not have the "X86_FEATURE_FANCY_NEW_AVIC" CPUID bit :(
-> 
-> Also, based on the previous comment, we can't use the x2APIC mode in the host
-> to determine such condition. Hence, the need for dynamic mask based on
-> the max_physical_apicid.
-
-I don't get this.  The APM literally says bits 11:8 are:
-
-  Reserved/SBZ for legacy APIC; extension of Host Physical APIC ID when
-  x2APIC is enabled.
-
-so we absolutely should be able to key off x2APIC mode.  IMO, defining the mask
-based on apic_get_max_phys_apicid() is pointless and misleading.  The only thing
-it really protects is passing in a completely bogus value, e.g. -1.  If for some
-reason bits 11:8 are ignored/reserved by older CPUs even in x2APIC, and the CPU
-assigns an x2APIC ID with bits 11:8!=0, then KVM is hosed no matter what as the
-dynamic calculation will also allow the "bad" ID.
+-- 
+	Ansuel

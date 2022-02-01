@@ -2,148 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1904A6897
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 557214A689A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242901AbiBAXhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 18:37:21 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:36594 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiBAXhU (ORCPT
+        id S242912AbiBAXjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 18:39:55 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:42796 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230039AbiBAXjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 18:37:20 -0500
-Received: by mail-oi1-f180.google.com with SMTP id s185so36558874oie.3;
-        Tue, 01 Feb 2022 15:37:20 -0800 (PST)
+        Tue, 1 Feb 2022 18:39:54 -0500
+Received: by mail-oi1-f181.google.com with SMTP id v67so36520761oie.9;
+        Tue, 01 Feb 2022 15:39:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1wzPNNppKnRmG7GhdaVHcFdeObKPyXncbl2olgh+vYk=;
-        b=mA5s93Tog9xUVZEv2R90wAlFVxmYEGBAjUCbTIeJa3sGzK3dI2a6L8B1wtDTO97a3h
-         t52zJMgNHiaQ5NxOUX9xgUFz1G7FsWryQww7RIcUxFff/PZ+WhoZTAfZwpH1veq+VubC
-         Aygp1bYS8Iakbej+kJo40XdKhHqs46Tty61YEVQn4G0LIqwQEVAilWN7k7/7qv9xVzQq
-         JRqGsA9gjP5ZFbvVuKY1UV5DUp8ajkaYPqvH8lQd3LmSZxQ1ICKWsAvxlDJRv9mMwhoe
-         XjTgH7IQ5CzMdUNSoCnKUS0+JZQZr6MlU2MDWOMjOGbUxnX5YkjknJT6ZQHD+y+6IzH6
-         rxjw==
-X-Gm-Message-State: AOAM532NUIfL5TZj1+ao/Nyl3yY5RczLn+TazpghaphL+ZyG3aVcLZeV
-        n70VA0zfSU8+lizXTRvKgA==
-X-Google-Smtp-Source: ABdhPJxLSN6/Tsa9g3DSUOocW9OA1MD7EGtHI9BNYU9duePeHbY2ZHUOdFd/pN4CgpfQRCO1NKorOA==
-X-Received: by 2002:a05:6808:1522:: with SMTP id u34mr2990481oiw.158.1643758639943;
-        Tue, 01 Feb 2022 15:37:19 -0800 (PST)
+        bh=OQTTLf8kyfb5UwqPhCNrDroHE+/FDw4cB4fcGA5iy3A=;
+        b=ySxuYzwxq1yqPiz/pWSIDOp0Z03vtRxKVyX7KSSc/CtFM7KZZjC/m7fFoPMxUTcBVE
+         K/iyMQr5TmKIonBeZdhGbpAa234sb/bgCDrdR0uLsFZS0uwn1BH4SWifJcj4KFfJCezA
+         8B3gyS11JVcLWhMX5CKIRbG2fQ24LjZXmXsq1Yp/CvkvyX7KbRKNnZxUgMt3W2A+XH4Z
+         fUNpC9R5foELOjkVPQCoXeYrG3m2pDKtHiHrXnoQCa9pUD1WY+jHKO8sxLgd6XKWPVsz
+         A2z/HX0Q7lQVmmceF5dF5Our8zSizh61y1g2eGS5bz18H8+KrsWCz6piI4itYW0HFfmw
+         6aEQ==
+X-Gm-Message-State: AOAM531oa892RMmZ06+DOT09kzzSCfGkIWtFNsnv62gcrXB54igAF+xa
+        GNifu0R9/zIsLspOrRDN08LWPY1cug==
+X-Google-Smtp-Source: ABdhPJwMgJEUGbtkBhJ1gxMnlJ0kD6R/QjV+sZxQmIAlKteFcFF0G42vTA4LVkTnvLRJDBKq4ylqNg==
+X-Received: by 2002:a05:6808:e81:: with SMTP id k1mr2927611oil.214.1643758793867;
+        Tue, 01 Feb 2022 15:39:53 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j9sm15051021otp.23.2022.02.01.15.37.18
+        by smtp.gmail.com with ESMTPSA id w20sm14694490otu.12.2022.02.01.15.39.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 15:37:19 -0800 (PST)
-Received: (nullmailer pid 969883 invoked by uid 1000);
-        Tue, 01 Feb 2022 23:37:18 -0000
-Date:   Tue, 1 Feb 2022 17:37:18 -0600
+        Tue, 01 Feb 2022 15:39:52 -0800 (PST)
+Received: (nullmailer pid 980162 invoked by uid 1000);
+        Tue, 01 Feb 2022 23:39:52 -0000
+Date:   Tue, 1 Feb 2022 17:39:52 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        andrew@lunn.ch, leon@kernel.org
-Subject: Re: [PATCH v13, 1/2] yaml: Add dm9051 SPI network yaml file
-Message-ID: <YfnELnLfr6K0fNVY@robh.at.kernel.org>
-References: <20220125085837.10357-1-josright123@gmail.com>
- <20220125085837.10357-2-josright123@gmail.com>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v7 1/2] dt-bindings: reserved-memory: Open Profile for
+ DICE
+Message-ID: <YfnEyB6ZlAj/QI8n@robh.at.kernel.org>
+References: <20220126231237.529308-1-dbrazdil@google.com>
+ <20220126231237.529308-2-dbrazdil@google.com>
+ <YfHW7GcINVlB/3Ur@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125085837.10357-2-josright123@gmail.com>
+In-Reply-To: <YfHW7GcINVlB/3Ur@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 04:58:36PM +0800, Joseph CHAMG wrote:
-> From: JosephCHANG <josright123@gmail.com>
+On Wed, Jan 26, 2022 at 11:19:08PM +0000, David Brazdil wrote:
+> Hi Rob,
+> 
+> On Wed, Jan 26, 2022 at 11:12:36PM +0000, David Brazdil wrote:
+> > Add DeviceTree bindings for Open Profile for DICE, an open protocol for
+> > measured boot. Firmware uses DICE to measure the hardware/software
+> > combination and generates Compound Device Identifier (CDI) certificates.
+> > These are stored in memory and the buffer is described in the DT as
+> > a reserved memory region compatible with 'google,open-dice'.
+> > 
+> > 'no-map' is required to ensure the memory region is never treated by
+> > the kernel as system memory.
+> > 
+> > Signed-off-by: David Brazdil <dbrazdil@google.com>
+> > ---
+> >  .../reserved-memory/google,open-dice.yaml     | 46 +++++++++++++++++++
+> >  1 file changed, 46 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
+> > new file mode 100644
+> > index 000000000000..257a0b51994a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
+> > @@ -0,0 +1,46 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/reserved-memory/google,open-dice.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Open Profile for DICE Device Tree Bindings
+> > +
+> > +description: |
+> > +  This binding represents a reserved memory region containing data
+> > +  generated by the Open Profile for DICE protocol.
+> > +
+> > +  See https://pigweed.googlesource.com/open-dice/
+> > +
+> > +maintainers:
+> > +  - David Brazdil <dbrazdil@google.com>
+> > +
+> > +allOf:
+> > +  - $ref: "reserved-memory.yaml"
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: google,open-dice
+> > +
+> > +  reg:
+> > +    description: page-aligned region of memory containing DICE data
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - no-map
+> 
+> You already gave this a Reviewed-by in v6. Just want to mention that I
+> didn't pick it up because I added a required no-map here. It was always
+> included in our DTs but I made it required because the kernel should
+> never treat that region as system memory. The kernel will warn when the
+> driver tries to wipe the memory otherwise.
 
-Follow the naming convention of the subsystem for the subject line (use 
-'git log --oneline'):
+That's small enough change to keep tags.
 
-dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> 
-> This is a new yaml base data file for configure davicom dm9051 with
-> device tree
-> 
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: JosephCHANG <josright123@gmail.com>
-> ---
->  .../bindings/net/davicom,dm9051.yaml          | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/davicom,dm9051.yaml b/Documentation/devicetree/bindings/net/davicom,dm9051.yaml
-> new file mode 100644
-> index 000000000000..52e852fef753
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/davicom,dm9051.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/davicom,dm9051.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Davicom DM9051 SPI Ethernet Controller
-> +
-> +maintainers:
-> +  - Joseph CHANG <josright123@gmail.com>
-> +
-> +description: |
-> +  The DM9051 is a fully integrated and cost-effective low pin count single
-> +  chip Fast Ethernet controller with a Serial Peripheral Interface (SPI).
-> +
-> +allOf:
-> +  - $ref: ethernet-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: davicom,dm9051
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  spi-max-frequency:
-> +    maximum: 45000000
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  local-mac-address: true
-> +
-> +  mac-address: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - spi-max-frequency
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # Raspberry Pi platform
-> +  - |
-> +    /* for Raspberry Pi with pin control stuff for GPIO irq */
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ethernet@0 {
-> +            compatible = "davicom,dm9051";
-> +            reg = <0>; /* spi chip select */
-> +            local-mac-address = [00 00 00 00 00 00];
-> +            interrupt-parent = <&gpio>;
-> +            interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-> +            spi-max-frequency = <31200000>;
-> +        };
-> +    };
-> -- 
-> 2.20.1
-> 
-> 

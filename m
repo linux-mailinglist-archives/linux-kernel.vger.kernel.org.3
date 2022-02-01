@@ -2,235 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D7D4A5A1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B691F4A5A20
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbiBAKfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:35:36 -0500
-Received: from mga11.intel.com ([192.55.52.93]:29580 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236363AbiBAKfd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:35:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643711733; x=1675247733;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dR+QOJxnkE6GVHwgAPs37bLNEhZ4Eqned8O/rWJz3FM=;
-  b=Yj7NHm7YHWWtzFVfjhzSAihpFIqRVuFmTj80w+mPzEnnGRzrHi0lkk5X
-   YOE+capjXZxc3F3XtpiZsPVacLsRiyht3sE8G05q4ZBdYLSTl1h8Maapf
-   T20IUxZ1XZqbYb5wmmGW6SJBBuunSacDYBPW9o6sxKUlGY1cehlgYaKPG
-   agi88FhWmXy9smA6VJOpfEDd9zZsHjl7UGaZJKRZ5Yz9XK7cPFlKLd9ou
-   r1GY2KCIAxMN50642/4onDT94s4qNZQOPsRfcUib7s5tJnLZt3Pf7pZnK
-   emDFCYMkEM9KbmYv+EmNki/X/BTt/9C3020qGdCnRxCv1BiB8MBVQF+qZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="245256287"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="245256287"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:35:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="619755407"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Feb 2022 02:35:31 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEqVW-000T8V-Kp; Tue, 01 Feb 2022 10:35:30 +0000
-Date:   Tue, 01 Feb 2022 18:34:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.01.26b] BUILD SUCCESS
- e3e3a2353a263f709be2817bf9d5b43b728921fe
-Message-ID: <61f90cb5.LE+q1zeIIdN7ZgzX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236707AbiBAKg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:36:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236705AbiBAKg4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 05:36:56 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D2FC06173D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 02:36:56 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id m10so7337199oie.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 02:36:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=thQSKAMpg3vonVejk+upRRfxFVRMJlvDC8QT1+vvLTE=;
+        b=BjysRH1/UjWKl4SwTWns+a3iySdYESImlXYI7dzIfcW5U3YKan1zfT4PIm9Yg1CO+i
+         UeBzRv66NeNKkAxDGEvzfZAO0hDDWZu37G4sPsJ0qidfgez8DuvVdkYwSyJc/ruD4Unm
+         v10dtEg3+JZQA08R+oq5qhyMzzEa33iBiE/uo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=thQSKAMpg3vonVejk+upRRfxFVRMJlvDC8QT1+vvLTE=;
+        b=WLYiEqJgdnKtFNiyxLATw9dCXZwmlv8ORUn68xCjS7A1cijEOu6ndWpukuvGWK2zmh
+         HhKNH37zo+BqlqNRnR5IEohpNsy68WBFisH2EAHk/U4ORA4Gp2RLy0fcnfK0LX+ve6CX
+         AuLZXAN1c7FDRQLsbtBG4iSkk0jbcZnXeU17f1Pawf7gScIG4UAKI7L9CdPY1fACaAP4
+         KQPr3a8s1bY02I8DGqrCiHouh/2jq7wFBi/NdhwlZdC/AIp17YEqBOgTnIfkpitWCcTU
+         UqMvlxVSdt5bAvrCTfzkSqBnjqaMXeR7ZSfpQZvSX1Yk8MNella7KRwQjquPtN/9dezv
+         jPcA==
+X-Gm-Message-State: AOAM530s3rfOIFCriBQndVueRjoxSYo6lloFZKEwC9/OzBMmgNtlhjOq
+        xgsjrtHyfF/eu5SmqzgWoJisytxGL8KiRDQLX5Hoiw==
+X-Google-Smtp-Source: ABdhPJyRYjaTjIpRbmzrzjkG0kQCosoH7kxsVtTm5JDqQlhuefr1UAJQF2kq5O9RD6DgxMJ94sRyCMJm8h5u3PghwEM=
+X-Received: by 2002:a54:4803:: with SMTP id j3mr745297oij.279.1643711816234;
+ Tue, 01 Feb 2022 02:36:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-4-daniel.vetter@ffwll.ch> <9c22b709-cbcf-6a29-a45e-5a57ba0b9c14@gmx.de>
+In-Reply-To: <9c22b709-cbcf-6a29-a45e-5a57ba0b9c14@gmx.de>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Tue, 1 Feb 2022 11:36:44 +0100
+Message-ID: <CAKMK7uGvOVe8kkJCTkQBEFw+3i2iAMANsyG9vGqZkcROZ9he4A@mail.gmail.com>
+Subject: Re: [PATCH 03/21] fbcon: Restore fbcon scrolling acceleration
+To:     Helge Deller <deller@gmx.de>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Claudio Suarez <cssk@net-c.es>,
+        Dave Airlie <airlied@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.01.26b
-branch HEAD: e3e3a2353a263f709be2817bf9d5b43b728921fe  fixup! srcu: Automatically determine size-transition strategy at boot
+On Tue, Feb 1, 2022 at 11:16 AM Helge Deller <deller@gmx.de> wrote:
+>
+> On 1/31/22 22:05, Daniel Vetter wrote:
+> > This functionally undoes 39aead8373b3 ("fbcon: Disable accelerated
+> > scrolling"), but behind the FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+> > option.
+>
+> you have two trivial copy-n-paste errors in this patch which still prevent the
+> console acceleration.
 
-elapsed time: 732m
+Duh :-(
 
-configs tested: 160
-configs skipped: 3
+But before we dig into details I think the big picture would be
+better. I honestly don't like the #ifdef pile here that much. I wonder
+whether your approach, also with GETVX/YRES adjusted somehow, wouldn't
+look cleaner? Like I said in the cover letter I got mostly distracted
+with fbcon locking last week, not really with this one here at all, so
+maybe going with your 4 (or 2 if we squash them like I did here)
+patches is neater?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Cheers, Daniel
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220131
-powerpc              randconfig-c003-20220131
-i386                          randconfig-c001
-sh                          rsk7203_defconfig
-mips                           xway_defconfig
-um                               alldefconfig
-powerpc                 mpc834x_mds_defconfig
-sh                          urquell_defconfig
-arm                       imx_v6_v7_defconfig
-arc                            hsdk_defconfig
-powerpc                     taishan_defconfig
-sh                            titan_defconfig
-m68k                           sun3_defconfig
-sh                        sh7763rdp_defconfig
-mips                         mpc30x_defconfig
-sh                          rsk7269_defconfig
-powerpc                    klondike_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                 mpc837x_rdb_defconfig
-parisc                           alldefconfig
-m68k                       m5208evb_defconfig
-xtensa                           allyesconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                 mpc837x_mds_defconfig
-riscv                    nommu_k210_defconfig
-mips                      fuloong2e_defconfig
-powerpc                      arches_defconfig
-arm                           stm32_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                     asp8347_defconfig
-arm                      footbridge_defconfig
-sh                          kfr2r09_defconfig
-sh                           se7724_defconfig
-ia64                        generic_defconfig
-sh                           se7343_defconfig
-sh                             shx3_defconfig
-arm                          gemini_defconfig
-xtensa                       common_defconfig
-h8300                            allyesconfig
-powerpc                       eiger_defconfig
-powerpc                        cell_defconfig
-microblaze                      mmu_defconfig
-arc                                 defconfig
-sh                               alldefconfig
-m68k                          sun3x_defconfig
-mips                      maltasmvp_defconfig
-powerpc                      bamboo_defconfig
-mips                        jmr3927_defconfig
-openrisc                         alldefconfig
-mips                         db1xxx_defconfig
-arm                  randconfig-c002-20220130
-arm                  randconfig-c002-20220131
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20220131
-x86_64               randconfig-a003-20220131
-x86_64               randconfig-a001-20220131
-x86_64               randconfig-a006-20220131
-x86_64               randconfig-a005-20220131
-x86_64               randconfig-a002-20220131
-i386                 randconfig-a006-20220131
-i386                 randconfig-a005-20220131
-i386                 randconfig-a003-20220131
-i386                 randconfig-a002-20220131
-i386                 randconfig-a001-20220131
-i386                 randconfig-a004-20220131
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+>
+> > diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+> > index 2ff90061c7f3..39dc18a5de86 100644
+> > --- a/drivers/video/fbdev/core/fbcon.c
+> > +++ b/drivers/video/fbdev/core/fbcon.c
+> > @@ -1125,13 +1125,15 @@ static void fbcon_init(struct vc_data *vc, int init)
+> >
+> >       ops->graphics = 0;
+> >
+> > -     /*
+> > -      * No more hw acceleration for fbcon.
+> > -      *
+> > -      * FIXME: Garbage collect all the now dead code after sufficient time
+> > -      * has passed.
+> > -      */
+> > +#ifdef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
+>
+> should be:
+> #ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+>
+>
+> > +     if ((info->flags & FBINFO_HWACCEL_COPYAREA) &&
+> > +         !(info->flags & FBINFO_HWACCEL_DISABLED))
+> > +             p->scrollmode = SCROLL_MOVE;
+> > +     else /* default to something safe */
+> > +             p->scrollmode = SCROLL_REDRAW;
+> > +#else
+> >       p->scrollmode = SCROLL_REDRAW;
+> > +#endif
+> >
+> >       /*
+> >        *  ++guenther: console.c:vc_allocate() relies on initializing
+> > @@ -1971,15 +1973,49 @@ static void updatescrollmode(struct fbcon_display *p,
+> >  {
+> >       struct fbcon_ops *ops = info->fbcon_par;
+> >       int fh = vc->vc_font.height;
+> > +     int cap = info->flags;
+> > +     u16 t = 0;
+> > +     int ypan = FBCON_SWAP(ops->rotate, info->fix.ypanstep,
+> > +                           info->fix.xpanstep);
+> > +     int ywrap = FBCON_SWAP(ops->rotate, info->fix.ywrapstep, t);
+> >       int yres = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
+> >       int vyres = FBCON_SWAP(ops->rotate, info->var.yres_virtual,
+> >                                  info->var.xres_virtual);
+> > +     int good_pan = (cap & FBINFO_HWACCEL_YPAN) &&
+> > +             divides(ypan, vc->vc_font.height) && vyres > yres;
+> > +     int good_wrap = (cap & FBINFO_HWACCEL_YWRAP) &&
+> > +             divides(ywrap, vc->vc_font.height) &&
+> > +             divides(vc->vc_font.height, vyres) &&
+> > +             divides(vc->vc_font.height, yres);
+> > +     int reading_fast = cap & FBINFO_READS_FAST;
+> > +     int fast_copyarea = (cap & FBINFO_HWACCEL_COPYAREA) &&
+> > +             !(cap & FBINFO_HWACCEL_DISABLED);
+> > +     int fast_imageblit = (cap & FBINFO_HWACCEL_IMAGEBLIT) &&
+> > +             !(cap & FBINFO_HWACCEL_DISABLED);
+> >
+> >       p->vrows = vyres/fh;
+> >       if (yres > (fh * (vc->vc_rows + 1)))
+> >               p->vrows -= (yres - (fh * vc->vc_rows)) / fh;
+> >       if ((yres % fh) && (vyres % fh < yres % fh))
+> >               p->vrows--;
+> > +
+> > +     if (good_wrap || good_pan) {
+> > +             if (reading_fast || fast_copyarea)
+> > +                     p->scrollmode = good_wrap ?
+> > +                             SCROLL_WRAP_MOVE : SCROLL_PAN_MOVE;
+> > +             else
+> > +                     p->scrollmode = good_wrap ? SCROLL_REDRAW :
+> > +                             SCROLL_PAN_REDRAW;
+> > +     } else {
+> > +             if (reading_fast || (fast_copyarea && !fast_imageblit))
+> > +                     p->scrollmode = SCROLL_MOVE;
+> > +             else
+> > +                     p->scrollmode = SCROLL_REDRAW;
+> > +     }
+> > +
+> > +#ifndef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
+>
+> same here... it needs to be:
+> #ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+>
+>
+> > +     p->scrollmode = SCROLL_REDRAW;
+> > +#endif
+> >  }
+> >
+> >  #define PITCH(w) (((w) + 7) >> 3)
+> >
+>
+> still reviewing the other patches...
+>
+> Helge
 
-clang tested configs:
-riscv                randconfig-c006-20220130
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220130
-powerpc              randconfig-c003-20220130
-mips                 randconfig-c004-20220130
-i386                          randconfig-c001
-riscv                randconfig-c006-20220201
-powerpc              randconfig-c003-20220201
-mips                 randconfig-c004-20220201
-arm                  randconfig-c002-20220201
-powerpc                          allyesconfig
-arm                             mxs_defconfig
-arm                        spear3xx_defconfig
-powerpc                        fsp2_defconfig
-arm                           spitz_defconfig
-powerpc                          allmodconfig
-arm                  colibri_pxa270_defconfig
-arm                       versatile_defconfig
-arm                         orion5x_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                        vexpress_defconfig
-mips                       lemote2f_defconfig
-mips                          rm200_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a013-20220131
-x86_64               randconfig-a015-20220131
-x86_64               randconfig-a014-20220131
-x86_64               randconfig-a016-20220131
-x86_64               randconfig-a011-20220131
-x86_64               randconfig-a012-20220131
-i386                 randconfig-a011-20220131
-i386                 randconfig-a013-20220131
-i386                 randconfig-a014-20220131
-i386                 randconfig-a012-20220131
-i386                 randconfig-a015-20220131
-i386                 randconfig-a016-20220131
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20220131
-hexagon              randconfig-r045-20220130
-hexagon              randconfig-r045-20220131
-hexagon              randconfig-r041-20220130
-hexagon              randconfig-r041-20220131
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

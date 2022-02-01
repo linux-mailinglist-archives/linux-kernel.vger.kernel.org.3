@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7464A5BED
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37A64A5BF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237816AbiBAMLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:11:15 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:53580 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237805AbiBAMLO (ORCPT
+        id S237838AbiBAML6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:11:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28739 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236377AbiBAML5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:11:14 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DB5481F383;
-        Tue,  1 Feb 2022 12:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643717473; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 1 Feb 2022 07:11:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643717516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=waTSXVBuauKX5YnIa/Qo7/CVnbpIOue+UFyeuExs0gY=;
-        b=hNJhJH1i2ZicjCdh5dcouWfJ4t3wurHaTB8N9eASUJgI+bv1w9u0NDFacQILWhK69y7sE+
-        R1CydIbT1KdbAlXKRW4gwb1yZa7pdwYZUBj8bMNIs+aGgce+a4fvnGmEYnb4+LL3ccXnW5
-        od8ZYIZ/FhWRGt97afnwYV1pLqFTYRw=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C426EA3B85;
-        Tue,  1 Feb 2022 12:11:13 +0000 (UTC)
-Date:   Tue, 1 Feb 2022 13:11:13 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH v1] drivers/base/memory: add memory block to memory group
- after registration succeeded
-Message-ID: <YfkjYZK5EsYjg57Z@dhcp22.suse.cz>
-References: <20220128144540.153902-1-david@redhat.com>
+        bh=lsdysZ548rZ3tzqzcEGKcgNZBJ//Jtgmjh673Jd5TCs=;
+        b=UHqRFchFXpZL5Ha+0FtJZwS5zpaBTQNJpVxCYcLsKC5xzfFZMiN8b/dW5iIfk84v0PGnWN
+        23Jkfqp7EHF5XuDp9vMaTYkLz/852TZZvqT+cZ4q/CafVPoUFVAx7tA6cJlLWRzni7qtnm
+        Y+hNuspwr23LRQrLv6svSVZNWN0VfKI=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-226-Puev7iVCMjSskDn4aFSNPg-1; Tue, 01 Feb 2022 07:11:53 -0500
+X-MC-Unique: Puev7iVCMjSskDn4aFSNPg-1
+Received: by mail-ej1-f72.google.com with SMTP id i21-20020a1709063c5500b006b4c7308c19so6439603ejg.14
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 04:11:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lsdysZ548rZ3tzqzcEGKcgNZBJ//Jtgmjh673Jd5TCs=;
+        b=H+MpgEd722ItNHJAc5VoZit6cpT1+bIMFb8UrPxvwbIPOl8EseMREDU1Pow8XPeJHL
+         fdJEuliwTBPeUMSKn9IsUd0hfXWhXxkwUXv01rUR/pvSBvYT7JfcnTSyTUsWSUg4clvv
+         bEOtwO8ePTtv/3yY7u1ygdr/00V/KYXVk3vZ6bXyMXz4Dzwz9mYA8by1djWSQr+dfVrC
+         urwc6BeTLsam962Ml8IQ5Bj6LwAs9XXHhKjq8eP7hJRyUYZ2Tb5V68qp8NQsqT4K2G+t
+         cNaRnqqJA6gV4nicYeoULGRXJ+L9pXjeynrN0YshZszEJ/mn9UcuB9Dm6ozhZx9OPvYv
+         U08g==
+X-Gm-Message-State: AOAM530DmCH+tXRRGMt1EIFKC1blkas7rNM+8sJ9q+X7WyMxdOuj5CGL
+        4HQS0N6SllSX6y7PPS3fX2BI7A+cgVXaFWNQUmmk+u5DdI/YPHUc0NlROJgTKp5zcXXDsdQwI0H
+        S6sxJCJd+Wa9BTlHp71jcX5n0
+X-Received: by 2002:a05:6402:344d:: with SMTP id l13mr3567080edc.448.1643717512402;
+        Tue, 01 Feb 2022 04:11:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz0KghrMv3/uj5R2TJQ7Eav9ORWV+tDOc9zzVirCQrQPDIm1zadhl+F3wCRz4HFr1kek9V8fA==
+X-Received: by 2002:a05:6402:344d:: with SMTP id l13mr3567059edc.448.1643717512215;
+        Tue, 01 Feb 2022 04:11:52 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id q12sm1188934edv.99.2022.02.01.04.11.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 04:11:51 -0800 (PST)
+Message-ID: <ae828eca-40bd-60f3-263f-5b3de637a9aa@redhat.com>
+Date:   Tue, 1 Feb 2022 13:11:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128144540.153902-1-david@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RESEND v2] KVM: LAPIC: Enable timer posted-interrupt when
+ mwait/hlt is advertised
+Content-Language: en-US
+To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Aili Yao <yaoaili@kingsoft.com>
+References: <1643112538-36743-1-git-send-email-wanpengli@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <1643112538-36743-1-git-send-email-wanpengli@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 28-01-22 15:45:40, David Hildenbrand wrote:
-> If register_memory() fails, we freed the memory block but already added
-> the memory block to the group list, not good. Let's defer adding the
-> block to the memory group to after registering the memory block device.
-> 
-> We do handle it properly during unregister_memory(), but that's not
-> called when the registration fails.
-> 
-> Fixes: 028fc57a1c36 ("drivers/base/memory: introduce "memory groups" to logically group memory blocks")
-> Cc: stable@vger.kernel.org # v5.15+
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+On 1/25/22 13:08, Wanpeng Li wrote:
+> As commit 0c5f81dad46 (KVM: LAPIC: Inject timer interrupt via posted interrupt)
+> mentioned that the host admin should well tune the guest setup, so that vCPUs
+> are placed on isolated pCPUs, and with several pCPUs surplus for*busy*  housekeeping.
+> It is better to disable mwait/hlt/pause vmexits to keep the vCPUs in non-root
+> mode. However, we may isolate pCPUs for other purpose like DPDK or we can make
+> some guests isolated and others not, we may lose vmx preemption timer/timer fastpath
+> due to not well tuned setup, and the checking in kvm_can_post_timer_interrupt()
+> is not enough. Let's guarantee mwait/hlt is advertised before enabling posted-interrupt
+> interrupt. vmx preemption timer/timer fastpath can continue to work if both of them
+> are not advertised.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+Is this the same thing that you meant?
 
-Thanks!
+--------
+As commit 0c5f81dad46 ("KVM: LAPIC: Inject timer interrupt via posted interrupt")
+mentioned that the host admin should well tune the guest setup, so that vCPUs
+are placed on isolated pCPUs, and with several pCPUs surplus for *busy* housekeeping.
+In this setup, it is preferrable to disable mwait/hlt/pause vmexits to
+keep the vCPUs in non-root mode.
 
-> ---
->  drivers/base/memory.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-> index 365cd4a7f239..60c38f9cf1a7 100644
-> --- a/drivers/base/memory.c
-> +++ b/drivers/base/memory.c
-> @@ -663,14 +663,16 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
->  	mem->nr_vmemmap_pages = nr_vmemmap_pages;
->  	INIT_LIST_HEAD(&mem->group_next);
->  
-> +	ret = register_memory(mem);
-> +	if (ret)
-> +		return ret;
-> +
->  	if (group) {
->  		mem->group = group;
->  		list_add(&mem->group_next, &group->memory_blocks);
->  	}
->  
-> -	ret = register_memory(mem);
-> -
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int add_memory_block(unsigned long base_section_nr)
-> -- 
-> 2.34.1
+However, if only some guests isolated and others not, they would not have
+any benefit from posted timer interrupts, and at the same time lose
+VMX preemption timer fast paths because kvm_can_post_timer_interrupt()
+returns true and therefore forces kvm_can_use_hv_timer() to false.
 
--- 
-Michal Hocko
-SUSE Labs
+By guaranteeing that posted-interrupt timer is only used if MWAIT or HLT
+are done without vmexit, KVM can make a better choice and use the
+VMX preemption timer and the corresponding fast paths.
+--------
+
+Thanks,
+
+Paolo
+

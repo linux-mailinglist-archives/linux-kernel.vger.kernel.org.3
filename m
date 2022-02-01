@@ -2,163 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E674A65BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 655604A65C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiBAUeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:34:15 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62386 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231571AbiBAUeM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:34:12 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211IP47A002332;
-        Tue, 1 Feb 2022 20:34:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=CwFsW2ri/mvjy0B2QvLA7o77HnoLp7B5KW2hO7Z2Pws=;
- b=cvtmwBZEvEtmM+HLoVNVhdqmB5MQt8lRhw9FeQgB3tiB9prgm+54EWveFcyAW//vpXkF
- BGxN65JeDGr8GVHdl54mtUJaGn1XV3cn2ikaA3rDfW5u/SughYZDxKFIbLi/qiOf0PzW
- HHXyiYWlzd+PvxPXHssXk9MwA79VItjIFTc/BLdYm8b3m2OKZ3HhP7uMMWfRawjWalcW
- ZRZYF9M/bj3QVbWQqCAr7I0AWizDewl9QepLUBWKHmDznjY0O0kvsIS3pYTf82N8RqVV
- uuF/6c5tSB6uRF7SfnNes0nQAlMUfgPau0ByU06AgcJ2kg/0fN4TAlXXZBdxKW7iM25g PA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dya47a646-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 20:34:07 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 211KJe78010622;
-        Tue, 1 Feb 2022 20:34:06 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dya47a63q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 20:34:06 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211KWLcA016858;
-        Tue, 1 Feb 2022 20:34:04 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3dvw79epy2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 20:34:04 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211KY1gM24576310
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Feb 2022 20:34:01 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9718352063;
-        Tue,  1 Feb 2022 20:34:01 +0000 (GMT)
-Received: from localhost (unknown [9.43.35.18])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EA64352050;
-        Tue,  1 Feb 2022 20:34:00 +0000 (GMT)
-Date:   Wed, 2 Feb 2022 02:03:59 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     harshadshirwadkar@gmail.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] ext4: use ext4_ext_remove_space() for fast commit
- replay delete range
-Message-ID: <20220201203359.owrnrfqydjloy7oq@riteshh-domain>
-References: <20211223032337.5198-1-yinxin.x@bytedance.com>
- <20211223032337.5198-2-yinxin.x@bytedance.com>
+        id S238986AbiBAUfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:35:33 -0500
+Received: from mail-mw2nam10on2056.outbound.protection.outlook.com ([40.107.94.56]:6048
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229702AbiBAUfa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 15:35:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gWT4pzn9r7IKr0xW0KpVtMcU/ypjB+LlyTSSaC2X/ZxLzXYSCnBWl4VIiSncZ+qZlwnmQzll5HeYegoFtezXOX2JcmIV9iE9BdG41HAMTWRMa2kjcLC4jcFDRRvDpYmO+iySqqLTH3z4cYalvSaOd2dLDWQMhAL8P+pjRbNwVeknxY9uGK043o/Up1S5nzmJrDMtpH63kaXwMiUH2z/fySF5ZGAJpSanPnOSx9CDHQEOQhsupw2n00hyMOtUQzHKHhCQtrRNVlSc8gy0sB4LvqRUEYcMXKXI7j2UmmtKQpi9fzm2H/++UOeUMjHct4g+uQmrjN1jZrfvXLmV173a6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v1cWBqOIXa7ardxwCFEaPnr5lv2sy+HvYwvTKBY+L3U=;
+ b=HzaiSwcDDOjai2WK7SAR62r4QFlThjvCX9fUt5HRHWrccBHSwX5d1cRx2iIME/zX4k0Y4WATFEukv3C7uV7yOpztPmlCnAZsKRS+eUdit4aB72+uOUxbHdJxAhrGbDNexMiSu2TKr7tGzNFdN89Gg1fWFVnunjnqZolZQja1t4WXetSl7O7XGPAyWfQn4iFvG1FuCylko8OeeLUbIsZkyQ4gJCQ3OWQo0kGBjwvKZxSjeC/2e8LlerdQk7SsTpINuYWkMaGqL+hgVAb/aa0kNyMy3Fq+WMuDcYj22Pd8UzPaMdgu+ojpITZEaO5ZALE1ycaVE/1UJoCw1SCHoOdh2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v1cWBqOIXa7ardxwCFEaPnr5lv2sy+HvYwvTKBY+L3U=;
+ b=ROo/lJbjEBL+j0pSK9ekysY4tG+2hPZ0xxX+7/Od4QAIxO+CSEmTDKR/ISOZRIsKE8HrrxshyCX80dJij4FAFZI8wVo8258mrde6yfHlZvwD3ofCCK5OqOzbcjF3ocd5g8mDnA6YSQXHGKGFeE1YTIrYqwytQEvpwgDXvjbOuog=
+Received: from MW4PR04CA0175.namprd04.prod.outlook.com (2603:10b6:303:85::30)
+ by DM5PR12MB1836.namprd12.prod.outlook.com (2603:10b6:3:114::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Tue, 1 Feb
+ 2022 20:35:28 +0000
+Received: from CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::9a) by MW4PR04CA0175.outlook.office365.com
+ (2603:10b6:303:85::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
+ Transport; Tue, 1 Feb 2022 20:35:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT041.mail.protection.outlook.com (10.13.174.217) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Tue, 1 Feb 2022 20:35:26 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 1 Feb
+ 2022 14:35:25 -0600
+Date:   Tue, 1 Feb 2022 14:35:07 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
+        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v9 05/43] x86/compressed/64: Detect/setup SEV/SME
+ features earlier in boot
+Message-ID: <20220201203507.goibbaln6dxyoogv@amd.com>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-6-brijesh.singh@amd.com>
+ <Yfl3FaTGPxE7qMCq@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211223032337.5198-2-yinxin.x@bytedance.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: elR4ZXcgA9CjqbndA3W0kBSkvDdpIn_R
-X-Proofpoint-ORIG-GUID: pSvyokNSDB2fgqESvRW446i1ztkiWVdJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_09,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
- clxscore=1015 mlxscore=0 suspectscore=0 phishscore=0 bulkscore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202010114
+In-Reply-To: <Yfl3FaTGPxE7qMCq@zn.tnic>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ce8c51c-11f0-492d-5319-08d9e5c26168
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1836:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB183658D8FAC3A10AA6E93A5695269@DM5PR12MB1836.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xMY8/u+KwN9O6JsVkbpMbU++NQqVAHPuUDLFJ9QFEQ7Z8UIxWF8+/FaZ343gYNrlLhNCal1+KV5UaI7es1sIFW9D0mEFZwUghuC6jUnTJFkIn0keXl723MfRavYAAB6n3bN1MfNik+vr3CRNqUExgo5pObjRiYHS70a4DiTPd4RPHTCpUjD7j68mxN2b6TbUAPyqUAKFOF1ZU6VXOlG95MNTfyFhUpbE3jT42Jyj9JYWXIczDG4KKdMoJtoSBw+LupWefuxoQkl9Z4tjFQbQvCg3b27kkWmfX6V3xHDa2OIkdlOXz9tmssPKda4XjRy6gDZlKUn0VAWLSUO9wph1DgMSOee1GUhMlbDZWKdM2/RjNS4Ya7hS3PDMSDvoY5LkMe/tUKX9QQl6QLE1UVmXDIl6OuZ/UmOwclkUPjAd+LvCzGOMIK1R1SE+dxX9/IGJord2N8Zkk+xtlTbCxqEPvT1jLZuLMk0kSVXGdUjBVqhZru2E63UMOCUCY/Uc2zgVaeZo/hIQisCEmr7GOCq5Fy7KBn6scpCUD0tKnA43ZR4AwSDvNIpx8BjO1MibGAzKIODAlQUwTz/stLv8Op4Phr2f2m+Qoob76G3U16IA6QDrLdznTELNRDUuVDWsfY36tfkxwidJYuoN9ZBrowhrLx4s98S6oW61GKucu+7VeyMm69lhn+FYdXKSJSO9AvE+4/p3Np9JtDL+GK0zQcsDO4xgao2S0UWIWs+PGfl2Yfg/nuU2ZeWlck8oRg6pPWuPuYzHQvEKzYvyHppKaWhhkXP4MIoEoGqIbwYS3blEw3M=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(70206006)(70586007)(508600001)(81166007)(8676002)(8936002)(6666004)(4326008)(316002)(36756003)(6916009)(40460700003)(54906003)(47076005)(966005)(356005)(82310400004)(336012)(186003)(2906002)(7416002)(7406005)(16526019)(26005)(2616005)(44832011)(36860700001)(5660300002)(86362001)(1076003)(45080400002)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 20:35:26.8404
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ce8c51c-11f0-492d-5319-08d9e5c26168
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1836
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Xin,
+On Tue, Feb 01, 2022 at 07:08:21PM +0100, Borislav Petkov wrote:
+> On Fri, Jan 28, 2022 at 11:17:26AM -0600, Brijesh Singh wrote:
+> > diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> > index fd9441f40457..49064a9f96e2 100644
+> > --- a/arch/x86/boot/compressed/head_64.S
+> > +++ b/arch/x86/boot/compressed/head_64.S
+> > @@ -191,9 +191,8 @@ SYM_FUNC_START(startup_32)
+> >  	/*
+> >  	 * Mark SEV as active in sev_status so that startup32_check_sev_cbit()
+> >  	 * will do a check. The sev_status memory will be fully initialized
+> 
+> That "sev_status memory" formulation is just weird. Pls fix it while
+> you're touching that comment.
 
-Sorry about revisiting this thread so late :(
-Recently when I was working on one of the fast_commit issue, I got interested
-in looking into some of those recent fast_commit fixes.
+Will do.
 
-Hence some of these queries.
+> 
+> > +static inline u64 rd_sev_status_msr(void)
+> > +{
+> > +	unsigned long low, high;
+> > +
+> > +	asm volatile("rdmsr" : "=a" (low), "=d" (high) :
+> > +			"c" (MSR_AMD64_SEV));
+> > +
+> > +	return ((high << 32) | low);
+> > +}
+> 
+> Don't you see sev_es_rd_ghcb_msr() in that same file above? Do a common
+> rdmsr() helper and call it where needed, pls, instead of duplicating
+> code.
 
-On 21/12/23 11:23AM, Xin Yin wrote:
-> For now ,we use ext4_punch_hole() during fast commit replay delete range
-> procedure. But it will be affected by inode->i_size, which may not
-> correct during fast commit replay procedure. The following test will
-> failed.
->
-> -create & write foo (len 1000K)
-> -falloc FALLOC_FL_ZERO_RANGE foo (range 400K - 600K)
-> -create & fsync bar
-^^^^ do you mean "fsync foo" or is this actually a new file create and fsync
-bar?
+Unfortunately rdmsr()/wrmsr()/__rdmsr()/__wrmsr() etc. definitions are all
+already getting pulled in via:
 
+  misc.h:
+    #include linux/elf.h
+      #include linux/thread_info.h
+        #include linux/cpufeature.h
+          #include linux/processor.h
+            #include linux/msr.h
 
-> -falloc FALLOC_FL_PUNCH_HOLE foo (range 300K-500K)
-> -fsync foo
-> -crash before a full commit
->
-> After the fast_commit reply procedure, the range 400K-500K will not be
-> removed. Because in this case, when calling ext4_punch_hole() the
-> inode->i_size is 0, and it just retruns with doing nothing.
+Those definitions aren't usable in boot/compressed because of __ex_table
+and possibly some other dependency hellishness.
 
-I tried looking into this, but I am not able to put my head around that when
-will the inode->i_size will be 0?
+Would read_msr()/write_msr() be reasonable alternative names for these new
+helpers, or something else that better distinguishes them from the
+kernel proper definitions?
 
-So, what I think should happen is when you are doing falocate/fsync foo in your
-above list of operations then, anyways the inode i_disksize will be updated
-using ext4_mark_inode_dirty() and during replay phase inode->i_size will hold
-the right value no?
+> 
+> misc.h looks like a good place.
 
-Could you please help understand when, where and how will inode->i_size will be
-0?
+It doesn't look like anything in boot/ pulls in boot/compressed/
+headers. It seems to be the other way around, with boot/compressed
+pulling in headers and whole C files from boot/.
 
-Also - it would be helpful if you have some easy reproducer of this issue you
-mentioned.
+So perhaps these new definitions should be added to a small boot/msr.h
+header and pulled in from there?
 
--ritesh
+> 
+> Extra bonus points will be given if you unify callers in
+> arch/x86/boot/cpucheck.c too but you don't have to - I can do that
+> ontop.
 
->
-> Change to use ext4_ext_remove_space() instead of ext4_punch_hole()
-> to remove blocks of inode directly.
->
-> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-> ---
->  fs/ext4/fast_commit.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index aa05b23f9c14..3deb97b22ca4 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -1708,11 +1708,14 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
->  		}
->  	}
->
-> -	ret = ext4_punch_hole(inode,
-> -		le32_to_cpu(lrange.fc_lblk) << sb->s_blocksize_bits,
-> -		le32_to_cpu(lrange.fc_len) <<  sb->s_blocksize_bits);
-> -	if (ret)
-> -		jbd_debug(1, "ext4_punch_hole returned %d", ret);
-> +	down_write(&EXT4_I(inode)->i_data_sem);
-> +	ret = ext4_ext_remove_space(inode, lrange.fc_lblk,
-> +				lrange.fc_lblk + lrange.fc_len - 1);
-> +	up_write(&EXT4_I(inode)->i_data_sem);
-> +	if (ret) {
-> +		iput(inode);
-> +		return 0;
-> +	}
->  	ext4_ext_replay_shrink_inode(inode,
->  		i_size_read(inode) >> sb->s_blocksize_bits);
->  	ext4_mark_inode_dirty(NULL, inode);
-> --
-> 2.20.1
->
+I have these new helpers defined with similar signatures to
+__rdmsr/__wrmsr:
+
+  /* rdmsr/wrmsr helpers */
+  static inline u64 read_msr(unsigned int msr)
+  {
+         u64 low, high;
+  
+         asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
+  
+         return ((high << 32) | low);
+  }
+  
+  static inline void write_msr(unsigned int msr, u32 low, u32 high)
+  {
+         asm volatile("wrmsr" : : "c" (msr), "a"(low), "d" (high) : "memory");
+  }
+
+but cpucheck.c code flow really lends itself to having a read_msr()
+variant that loads into 2 separate high/low u32 values, like what
+native_rdmsr does:
+
+  #define native_rdmsr(msr, val1, val2)                   \
+  do {                                                    \
+          u64 __val = __rdmsr((msr));                     \
+          (void)((val1) = (u32)__val);                    \
+          (void)((val2) = (u32)(__val >> 32));            \
+  } while (0)
+
+Should we introduce something like this as well for cpucheck.c? Or
+re-write cpucheck.c to make use of the u64 versions? Or just set the
+cpucheck.c rework aside for now? (but still introduce the above helpers
+as boot/msr.h in preparation)?
+
+Thanks,
+
+Mike
+
+> 
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=04%7C01%7Cmichael.roth%40amd.com%7Cec7f8621a6934039cfff08d9e5addaca%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637793357136301050%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=FMoP5ZskuxwanWTe5DxMnIYNPBSi%2FhRrOExp9hIHaCo%3D&amp;reserved=0

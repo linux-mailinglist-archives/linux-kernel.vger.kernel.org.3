@@ -2,139 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAF54A6276
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A0E4A628B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241529AbiBAR3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241524AbiBAR3r (ORCPT
+        id S241149AbiBARgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:36:18 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:33565 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233776AbiBARgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:29:47 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD14C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:29:46 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso2546487wmh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1up9Iuvtlk/iyAkaowMrPN9aJld0zeiBLUkLL04DY6A=;
-        b=QWs0wLi0831HmP/LvqHWVwVANAT7rANQll4UtSe0l1qRMJfkYwUAlKC3MvzM9LY59m
-         jmirGQcKXR2hKtxGaZX6Az0HBlznNCAt81xhDClcfIpnqSk13VYqNycCy0XzFjBCU8y+
-         9+lem5hhoqyNL3tQXojrP7IHE2wBlqnqwYaFh9k63vA91VEWklbrE2Do21974PHp3HPL
-         r1uDWYNx165mRiOBob23AYLyRCknUOLHWb/R//K6lz4j+1aU/xNrgpfEx0Qs2nGmuKGl
-         yqRWPDr3oPvupXdGUcXBR1+8kd3f2tUAhIzklDg7pSJuKT6T45EHtBwQEq15U83al5Tf
-         5pwQ==
+        Tue, 1 Feb 2022 12:36:16 -0500
+Received: by mail-oi1-f175.google.com with SMTP id x193so34848949oix.0;
+        Tue, 01 Feb 2022 09:36:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1up9Iuvtlk/iyAkaowMrPN9aJld0zeiBLUkLL04DY6A=;
-        b=1glulh9K1lsUwRM0Qrfj3D1KOqOj0B9HgXXKQ7VSPR+CxW61Cs4CZNEEoqztC9xKtg
-         t/riQV9yLcc7/QezcSl01QOddH/ieKjdlbvDMd2ItZ9xOzmBLaeUbKIi71/r2kiiT8Eo
-         iJKjH3UdVbsy7ZW6AqT2Ug1KmOOg1CN3uVxHmKSldjGpQ9e8FkWeFFYuJh4CQ/tygLgL
-         +VGcDFaq0x4Evfh5qlAX85Hmmgrf9NteL63Tmc8G8Xlb/EYRFq0KYXadxnbIrPVj98OD
-         jHKCCGtww0/7WuHV7QHzmbK0ilSPCeJwdZlkgO8DwtwNk3PrTsUYkRV3oEDME/slm6Ct
-         5IcA==
-X-Gm-Message-State: AOAM53334aq25RQDVAQmuH7lkBUyz9bXpt5fmCZ3WaZmQac/NxTrgKf6
-        0vrDyUjSiloCLq7CEwoqy4iVsA==
-X-Google-Smtp-Source: ABdhPJy5hC8TD6/VJePvsLep/Uc4MjPl96ghWdUNl7PHJFXrPu8m3WGr6PFKiyFJDLT/ez1xu4zycQ==
-X-Received: by 2002:a05:600c:5c1:: with SMTP id p1mr2710329wmd.31.1643736585242;
-        Tue, 01 Feb 2022 09:29:45 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id l29sm3800651wms.1.2022.02.01.09.29.43
+        bh=DbjyS1SU0OOrgkQcW0sX0PE+YVKxs+Zqjrqu7xDG60Y=;
+        b=epmKWqtekntGwFkBfa442Ly7mf0aX1lh0flwmD/5aBKJZPKWEnLGzLD9+wSM4b2kkb
+         MzoSFh8DUKjsXtayjm3bIQ6onL22CuqlUH+zSDfVy5l1B32QAeOzA/VTaoOEcDeqFqYJ
+         yNRzvxH1u1SKJ9hXBmtKrQanSx5VdwAnfF1ZFWzW6YvyGkNCELFzuoBwJBVTUzXlX/FK
+         AfABrSSl8tviSbmQA81XDGX3KMhMEq1QB8YLSjsCAM2taWKGzyjNWz0eG4EMSuTNexPO
+         Qs/p4d+UoUCO/K6v01s7/3hbAsVpgTJa9MejIZMml3H9f3sO0Arww0Am9lnhT86/d8Pl
+         udiA==
+X-Gm-Message-State: AOAM5320pZMSgS2i24sXZwaw00+WQxsuHnfbzn7fR/WUVLCfhQi63fyR
+        J/E8gtPlSONeTYbozCIkuA==
+X-Google-Smtp-Source: ABdhPJwceg72bbuf7VG/Ghn6k1y6nUaJQxvEwmZ2eCiNVWBDLHF8YxYua/a027qU1v9nRYXGFVYLfw==
+X-Received: by 2002:a54:4812:: with SMTP id j18mr1862557oij.276.1643736976189;
+        Tue, 01 Feb 2022 09:36:16 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h2sm9172995ots.51.2022.02.01.09.36.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:29:44 -0800 (PST)
-Date:   Tue, 1 Feb 2022 17:29:42 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
-Message-ID: <20220201172942.nxop6cjr3xfa4237@maple.lan>
-References: <20210726141141.2839385-1-arnd@kernel.org>
- <20210726141141.2839385-9-arnd@kernel.org>
- <Yd8P37V/N9EkwmYq@wychelm>
- <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
- <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
- <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
+        Tue, 01 Feb 2022 09:36:15 -0800 (PST)
+Received: (nullmailer pid 254693 invoked by uid 1000);
+        Tue, 01 Feb 2022 17:36:14 -0000
+Date:   Tue, 1 Feb 2022 11:36:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH 5/5] dt-bindings: serial: samsung_uart: Document
+ Exynos5433 compatible
+Message-ID: <Yflvjt9TcuTvIMqA@robh.at.kernel.org>
+References: <20220129175332.298666-1-krzysztof.kozlowski@canonical.com>
+ <20220129175332.298666-5-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
+In-Reply-To: <20220129175332.298666-5-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 12:14:50PM +0100, Arnd Bergmann wrote:
-> On Thu, Jan 13, 2022 at 10:47 AM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> > On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) wrote:
-> >
-> > > The kernel attempted to access an address that is in the userspace
-> > > domain (NULL pointer) and took an exception.
-> > >
-> > > I suppose we should handle a domain fault more gracefully - what are
-> > > the required semantics if the kernel attempts a userspace access
-> > > using one of the _nofault() accessors?
-> >
-> > I think the best answer might well be that, if the arch provides
-> > implementations of hooks such as copy_from_kernel_nofault_allowed()
-> > then the kernel should never attempt a userspace access using the
-> > _nofault() accessors. That means they can do whatever they like!
-> >
-> > In other words something like the patch below looks like a promising
-> > approach.
+On Sat, Jan 29, 2022 at 06:53:32PM +0100, Krzysztof Kozlowski wrote:
+> Document the Exynos5433 UART compatible, supported since commit
+> 31ec77aca72e ("serial: samsung: Add the support for Exynos5433 SoC").
 > 
-> Right, it seems this is the same as on x86.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Hmnn...
-
-Looking a bit deeper into copy_from_kernel_nofault() there is an odd
-asymmetry between copy_to_kernel_nofault(). Basically there is
-copy_from_kernel_nofault_allowed() but no corresponding
-copy_to_kernel_nofault_allowed() which means we cannot defend memory
-pokes using a helper function.
-
-I checked the behaviour of copy_to_kernel_nofault() on arm, arm64, mips,
-powerpc, riscv, x86 kernels (which is pretty much everything where I
-know how to fire up qemu). All except arm gracefully handle an
-attempt to write to userspace (well, NULL actually) with
-copy_to_kernel_nofault() so I think there still a few more changes
-to fully fix this.
-
-Looks like we would need a slightly more assertive change, either adding
-a copy_to_kernel_nofault_allowed() or modifying the arm dabt handlers to
-avoid faults on userspace access.
-
-Any views on which is better?
-
-
-Daniel.
-
-> 
-> > From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 2001
-> > From: Daniel Thompson <daniel.thompson@linaro.org>
-> > Date: Thu, 13 Jan 2022 09:34:45 +0000
-> > Subject: [PATCH] arm: mm: Implement copy_from_kernel_nofault_allowed()
-> >
-> > Currently copy_from_kernel_nofault() can actually fault (due to software
-> > PAN) if we attempt userspace access. In any case, the documented
-> > behaviour for this function is to return -ERANGE if we attempt an access
-> > outside of kernel space.
-> >
-> > Implementing copy_from_kernel_nofault_allowed() solves both these
-> > problems.
-> >
-> > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Rob Herring <robh@kernel.org>

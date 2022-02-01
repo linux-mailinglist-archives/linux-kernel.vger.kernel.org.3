@@ -2,309 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694EE4A5B86
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE7B4A5B85
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiBALst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 06:48:49 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:56576
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237442AbiBALsi (ORCPT
+        id S237562AbiBALso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 06:48:44 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:37357 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237466AbiBALsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 06:48:38 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 112633F20A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643716116;
-        bh=T/Y7vvIm1vNgiOBuzuvlSLr7bPQM9EpmEANjJNIACK4=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=SMKIN3z/AyrQV1MFE3GprgpKZXqSIlgm4CvuVzD4bHgktYGR0JPkjrNj7iONZmu3L
-         HL3StAhAO/K8fpadHJurRCO9mUcZM3z0NDWBPIqpS6Lgn9YxKl0YoAv9qPpIMZFGPC
-         rfMZLsSJLBMK1gNQl6Cfcuc4emmDZP0FQIjJeHsPm9cEUSO/WQ3iJpZqNrRxqxkB1V
-         ruGZch2RMQssIoopnaR4hKrgyEfdlq2I9zJao45d8bWSct6IYxZWI6ScBDGp2gORBR
-         vY2oRfALYdl5ODaA3jVXtxPzfzqmJ6PlODiOIZYpLFlZLwd8Bme8ctnzlNsc3fB6aR
-         +y8ZPvZVn5qzg==
-Received: by mail-ed1-f72.google.com with SMTP id w15-20020a056402268f00b00408234dc1dfso8551166edd.16
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 03:48:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T/Y7vvIm1vNgiOBuzuvlSLr7bPQM9EpmEANjJNIACK4=;
-        b=nUX/cEvjh1wR02imD95FgKiU06hpfFHKzzGv2zw88/k8LMpiHX3CeEIiFMWJjdOZR0
-         64nJA7pmqCAEVgyHGfl29CsuE4xUNob6aRTM331QX2oS8vWW+gGSfWRMs0ctUoQa3/Jb
-         bIsqIa8XBCvER59Lr+FYMitFzCDgq8Jhj9s2bMzifT3bbTMQ1kHnrPNS8DOHvQ0QBkew
-         EcypeCPnoRnBG1r99ONeY/sK+Y+/VJ+o1CsZcPKO9fXC18X+dI+YhTgW8dYoGkXWiDG5
-         HQepdYKyBSx2GBg0jo3lN1Kf7FFbNhkRBLUKRAiZ8qd8BtXFL562bwIShswzgbPpIqn1
-         N4uA==
-X-Gm-Message-State: AOAM533TH42jDcrpG4d5Js/GS3LWgRRNqn850cZNZ5lR1OKJNydYt64s
-        V8WKHra1E9sKLn5/F09IfpRo2rJDt5Lq44Jp2JFpNVsWyv2z8JdDUY1BptsonoV7s9OpqpJqqF5
-        Mgyli25EVOg6wERKtzM/dDNVTclIZe1aci+HhBgtuTA==
-X-Received: by 2002:a17:907:7ea3:: with SMTP id qb35mr20935342ejc.553.1643716114004;
+        Tue, 1 Feb 2022 06:48:37 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MDhpZ-1n7T8P3yYJ-00AlK4; Tue, 01 Feb 2022 12:48:35 +0100
+Received: by mail-wr1-f48.google.com with SMTP id l25so31377552wrb.13;
         Tue, 01 Feb 2022 03:48:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxBVg7XQAKdtCkCWKY7svrC9N0kglErPiZRvcZ3T1qESNacpBeH/7PKHB+m0oeeHfjiu1i0cQ==
-X-Received: by 2002:a17:907:7ea3:: with SMTP id qb35mr20935333ejc.553.1643716113773;
-        Tue, 01 Feb 2022 03:48:33 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id bo19sm17954484edb.56.2022.02.01.03.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 03:48:33 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 6/6] dt-bindings: memory: lpddr2-timings: convert to dtschema
-Date:   Tue,  1 Feb 2022 12:47:49 +0100
-Message-Id: <20220201114749.88500-6-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220201114749.88500-1-krzysztof.kozlowski@canonical.com>
-References: <20220201114749.88500-1-krzysztof.kozlowski@canonical.com>
+X-Gm-Message-State: AOAM5337alSkHOso8ztb04LTIOhfOC1iQM7mobRii/cqdBpOli0/c8A3
+        GaGePdroAOl43B6NTbk4+LBSmelS/noDGQCsHWo=
+X-Google-Smtp-Source: ABdhPJxO+OGO5lnSmsts+k8ffbEmh9/UtuFXn1dLVr5xpmsd+BH7cbCu5DpyTRvWDXlXMwgE6rWgsvPUd5Lt6roAGEM=
+X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr20737860wrg.317.1643716114442;
+ Tue, 01 Feb 2022 03:48:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org>
+ <YffVZZg9GNcjgVdm@infradead.org> <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
+ <20220201074457.GC29119@lst.de> <CAJF2gTTc=zwD__zXwYbO8vmup5evWJtzyiAF9Pm-UVHLJRc5hQ@mail.gmail.com>
+ <CAK8P3a2C7nDGQvopYzi1fe_LWyosp8t9dcBsduYK5k_s_OrCaA@mail.gmail.com> <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com>
+In-Reply-To: <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 1 Feb 2022 12:48:18 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3u8zo+MOOpDXaX8PY2ukN3J2VHnV8uDXQwc=0WgV6qFw@mail.gmail.com>
+Message-ID: <CAK8P3a3u8zo+MOOpDXaX8PY2ukN3J2VHnV8uDXQwc=0WgV6qFw@mail.gmail.com>
+Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:UHJ91nYLgPvR3a1MTHODyCBRwHF+deKXorwP1xEbisGwDO0n+Qb
+ iTyqI5iseg8msHay8+QxiRnmyagqpN7ZkkkKtvPxw1rCw0HADq0vjhWZ+bP2DoYqTgL/MUH
+ 0HCSWDUn+UqcdaZUCBURIhhkeSyTorJ0HyNtf15/sTfSovq76hlantcKsoDKuSYI6U1vQ0O
+ OkRAIr8H0kFsGUBy15Psg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2q7iO32AAxM=:pbXre7T28QFWAizJwLyszf
+ 7xM+xQFpAnph5GWOxrBqbA9OKjamzUbluXgESzxds1fXOf5TcPRaTis2jiiR86DAt5FONkho2
+ xfTUfD+dkWxbvHUUsnu1jaGEWVx9pGLnl57V+Qz6DraHtSfZR4hv7ij5tF4HoFe2DHvYLYtqs
+ 3kI26JDNoRHqHJdVJGcBjDjUPmRtv9jMcTu3E9JgyJiFd+ROWziGO7S62cNOKPYxWycUGdTGt
+ +b9Stszi6ArRQNohK8TURusOBGJusX8gFlF+lUUG6fdokLgGdGAYy8oba3pIO/32+dTygTWDL
+ yppQ6lyHaNRv8p/51O8ZIVIOSh4XALNa+15Og7cOd5042c1j1mBjdnaMfg7l9yceBGb1kqJ/M
+ zl2NkQWCpmINIdLaZVpR0GckoH0+MFbwg3vyB59YMGZFc5gndtMFsVF4dnkeX2e5Nr1I83uzq
+ 8DNrEjICPzyQSgppxJTnNQF17QOmXWlW976mNYc53GVz3aETC2riMTGHtP4RU6RRc59g1sTJN
+ LeGGDL+bV6jlkrlmqPRGOxqn+YTRr7Vrb4SGuR3nevIIb3Ro/bGCauoGGJ59N4DF6hUaKRbR8
+ 1+T03MZ6hdekdbvMmMRiieaFyo29JLy9yjV79VeYrqJgWAW3YI9/g2RXr5e99POm+VP/jxxUD
+ iN7VTKPFuH44OG1BeY3GRRbTJFBaO38nVcZD3pKrC77jF1ymZfxsPRV0wQv5OozO5fa+wONje
+ xESluvKC2E4jyrV4Hom6cp57FmkUbjdVI1wszq5z4XK7fdYPdsgjN9aOaOYJ8ma2hyX/OhLYG
+ wE0heEFMTKjA6ml6NZeQnAFs9byV9eUs/iqrw8Gd9J1sk2Bsvg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the LPDDR2 memory timings bindings to DT schema format.
+On Tue, Feb 1, 2022 at 11:26 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> Hi Arnd & Christoph,
+>
+> The UXL field controls the value of XLEN for U-mode, termed UXLEN,
+> which may differ from the
+> value of XLEN for S-mode, termed SXLEN. The encoding of UXL is the
+> same as that of the MXL
+> field of misa, shown in Table 3.1.
+>
+> Here is the patch. (We needn't exception helper, because we are in
+> S-mode and UXL wouldn't affect.)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../ddr/jedec,lpddr2-timings.yaml             | 135 ++++++++++++++++++
- .../memory-controllers/ddr/jedec,lpddr2.yaml  |   6 +-
- .../memory-controllers/ddr/lpddr2-timings.txt |  52 -------
- 3 files changed, 137 insertions(+), 56 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
- delete mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
+Looks good to me, just a few details that could be improved
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
-new file mode 100644
-index 000000000000..7cc3021decfe
---- /dev/null
-+++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
-@@ -0,0 +1,135 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr2-timings.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LPDDR2 SDRAM AC timing parameters for a given speed-bin
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+properties:
-+  compatible:
-+    const: jedec,lpddr2-timings
-+
-+  max-freq:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Maximum DDR clock frequency for the speed-bin, in Hz.
-+
-+  min-freq:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Minimum DDR clock frequency for the speed-bin, in Hz.
-+
-+  tCKESR:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      CKE minimum pulse width during SELF REFRESH (low pulse width during
-+      SELF REFRESH) in pico seconds.
-+
-+  tDQSCK-max:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      DQS output data access time from CK_t/CK_c in pico seconds.
-+
-+  tDQSCK-max-derated:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      DQS output data access time from CK_t/CK_c, temperature de-rated, in pico
-+      seconds.
-+
-+  tFAW:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Four-bank activate window in pico seconds.
-+
-+  tRAS-max-ns:
-+    description: |
-+      Row active time in nano seconds.
-+
-+  tRAS-min:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Row active time in pico seconds.
-+
-+  tRCD:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      RAS-to-CAS delay in pico seconds.
-+
-+  tRPab:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Row precharge time (all banks) in pico seconds.
-+
-+  tRRD:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Active bank A to active bank B in pico seconds.
-+
-+  tRTP:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Internal READ to PRECHARGE command delay in pico seconds.
-+
-+  tWR:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      WRITE recovery time in pico seconds.
-+
-+  tWTR:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Internal WRITE-to-READ command delay in pico seconds.
-+
-+  tXP:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Exit power-down to next valid command delay in pico seconds.
-+
-+  tZQCL:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      SELF REFRESH exit to next valid command delay in pico seconds.
-+
-+  tZQCS:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      SELF REFRESH exit to next valid command delay in pico seconds.
-+
-+  tZQinit:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      SELF REFRESH exit to next valid command delay in pico seconds.
-+
-+required:
-+  - compatible
-+  - min-freq
-+  - max-freq
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timings {
-+        compatible = "jedec,lpddr2-timings";
-+        min-freq = <10000000>;
-+        max-freq = <400000000>;
-+        tCKESR = <15000>;
-+        tDQSCK-max = <5500>;
-+        tFAW = <50000>;
-+        tRAS-max-ns = <70000>;
-+        tRAS-min = <42000>;
-+        tRPab = <21000>;
-+        tRCD = <18000>;
-+        tRRD = <10000>;
-+        tRTP = <7500>;
-+        tWR = <15000>;
-+        tWTR = <7500>;
-+        tXP = <7500>;
-+        tZQCL = <360000>;
-+        tZQCS = <90000>;
-+        tZQinit = <1000000>;
-+    };
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-index 25ed0266f6dd..2d8a701e2a05 100644
---- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-@@ -142,14 +142,12 @@ properties:
- 
- patternProperties:
-   "^lpddr2-timings":
--    type: object
-+    $ref: jedec,lpddr2-timings.yaml
-     description: |
-       The lpddr2 node may have one or more child nodes of type "lpddr2-timings".
-       "lpddr2-timings" provides AC timing parameters of the device for
-       a given speed-bin. The user may provide the timings for as many
--      speed-bins as is required. Please see Documentation/devicetree/
--      bindings/memory-controllers/ddr/lpddr2-timings.txt for more information
--      on "lpddr2-timings".
-+      speed-bins as is required.
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt b/Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
-deleted file mode 100644
-index 9ceb19e0c7fd..000000000000
---- a/Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
-+++ /dev/null
-@@ -1,52 +0,0 @@
--* AC timing parameters of LPDDR2(JESD209-2) memories for a given speed-bin
--
--Required properties:
--- compatible : Should be "jedec,lpddr2-timings"
--- min-freq : minimum DDR clock frequency for the speed-bin. Type is <u32>
--- max-freq : maximum DDR clock frequency for the speed-bin. Type is <u32>
--
--Optional properties:
--
--The following properties represent AC timing parameters from the memory
--data-sheet of the device for a given speed-bin. All these properties are
--of type <u32> and the default unit is ps (pico seconds). Parameters with
--a different unit have a suffix indicating the unit such as 'tRAS-max-ns'
--- tRCD
--- tWR
--- tRAS-min
--- tRRD
--- tWTR
--- tXP
--- tRTP
--- tDQSCK-max
--- tFAW
--- tZQCS
--- tZQinit
--- tRPab
--- tZQCL
--- tCKESR
--- tRAS-max-ns
--- tDQSCK-max-derated
--
--Example:
--
--timings_elpida_ECB240ABACN_400mhz: lpddr2-timings@0 {
--	compatible	= "jedec,lpddr2-timings";
--	min-freq	= <10000000>;
--	max-freq	= <400000000>;
--	tRPab		= <21000>;
--	tRCD		= <18000>;
--	tWR		= <15000>;
--	tRAS-min	= <42000>;
--	tRRD		= <10000>;
--	tWTR		= <7500>;
--	tXP		= <7500>;
--	tRTP		= <7500>;
--	tCKESR		= <15000>;
--	tDQSCK-max	= <5500>;
--	tFAW		= <50000>;
--	tZQCS		= <90000>;
--	tZQCL		= <360000>;
--	tZQinit		= <1000000>;
--	tRAS-max-ns	= <70000>;
--};
--- 
-2.32.0
+> -#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+> +#ifdef CONFIG_COMPAT
+> +#define compat_elf_check_arch compat_elf_check_arch
+> +extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
+> +#endif
 
+No need for the #ifdef
+> +}
+
+> +void compat_mode_detect(void)
+
+__init
+
+> +{
+> + unsigned long tmp = csr_read(CSR_STATUS);
+> + csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
+> +
+> + if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
+> + csr_write(CSR_STATUS, tmp);
+> + return;
+> + }
+> +
+> + csr_write(CSR_STATUS, tmp);
+> + compat_mode_support = true;
+> +
+> + pr_info("riscv: compat: 32bit U-mode applications support\n");
+> +}
+
+I think an entry in /proc/cpuinfo would be more helpful than the pr_info at
+boot time. Maybe a follow-up patch though, as there is no obvious place
+to put it. On other architectures, you typically have a set of space
+separated feature names, but riscv has a single string that describes
+the ISA, and this feature is technically the support for a second ISA.
+
+         Arnd

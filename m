@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7520B4A6725
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868C34A6726
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbiBAVjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:39:21 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:46935 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiBAVjU (ORCPT
+        id S234349AbiBAVji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:39:38 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:41988 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232965AbiBAVjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:39:20 -0500
-Received: by mail-ot1-f50.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso9445613otv.13;
-        Tue, 01 Feb 2022 13:39:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6CeauCX3KKYXQgJfgtEO1x40f/OGRoNcTeAllHgSNFA=;
-        b=ohwaP4t94vdm2WD7azEQ9ht3i2Dcn9ixzaihoetlgpB/9hJZL+dSOcakqSqdhtJj+9
-         P6Da0/t5SxIIhm01JLUmauw3z788D3gWOYUEfMHXZuRwxXyLFDCn9/CywAK0iR4+zMGy
-         e1mQDwff9VQKAOzhQvrmpw9kW/GBKL84IZKwghnRDH0atIIWTQ5PHxvoZ6otA0SYSCvh
-         yuMldMcUGCbeV/r1UpeDwbKQY9m7Ky+KBDkRTc3W46esAy9Rt5iVH1pmLmpGdKcdFoiG
-         A9N391a67Eiu/y6FLuwAiIRmxHXUbkKG9KbZtWQIeFJxXYKB1yh0FvqwVEZCuNd73CJm
-         MFzA==
-X-Gm-Message-State: AOAM530lGfoeeWW8FI0E+CWrgHzR3OTndTY0RYDmLAIfZTV3fPy5kyzL
-        ukEdxAwTO17kxxkkSWr74g==
-X-Google-Smtp-Source: ABdhPJw5svoe0oy61D+R6mAPdcxjyth+fO1q8ohAhwUUNfmHTxBFlzp+pxqN/TparTAnbB1u3lLUeQ==
-X-Received: by 2002:a9d:450c:: with SMTP id w12mr13037609ote.217.1643751559613;
-        Tue, 01 Feb 2022 13:39:19 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id p5sm11258872oou.39.2022.02.01.13.39.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:39:18 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] libperf: Fix 32-bit build for tests uint64_t printf
-Date:   Tue,  1 Feb 2022 15:39:03 -0600
-Message-Id: <20220201213903.699656-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 1 Feb 2022 16:39:37 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643751576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jcHaf3e/6oiN1KcirjfqMmosPqy3ruXHMgDwkzeKAZQ=;
+        b=H7zLdTKdeI1edCC5U0hN+tUz+JROOtfgspgeUL+peO4efjz2oiXaeLskyQUgYG5RRlf8g6
+        EVyknW6ICLVSJ2oh03rRN0gLY04eNrUSCqUOpPUlj8d6HG3TS90SHziEvVyLw1uthgmG9m
+        O+AswFbh0Y9PK/TGkPc3wg/+YZHqudNRskbHoy1Nu29MVdz6H4MnLR8NJaYlKt2vfcbS5k
+        07LDf+T2YQjaopJqYCS8XxsO85WKyrQmwK9XtBbrf4SiTVcbHu3328pnxz1baaHSeWmjpB
+        irV3SMAoC3G+IjEUuYYc+8lRp+SlQXApRIcemITVRNq3blZGjyPiIif94pgZKw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643751576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jcHaf3e/6oiN1KcirjfqMmosPqy3ruXHMgDwkzeKAZQ=;
+        b=Uf9hijGOx+1w8I62Exu2JJy88jsMMaGH5MOfbgHwPSIhVDrd4JtRrX1GtS0e7zP42Uw1dO
+        9VgsXNun7OBhtgCA==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCHv2 07/29] x86/tdx: Handle CPUID via #VE
+In-Reply-To: <20220124150215.36893-8-kirill.shutemov@linux.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-8-kirill.shutemov@linux.intel.com>
+Date:   Tue, 01 Feb 2022 22:39:35 +0100
+Message-ID: <87y22uxo4o.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a7f3713f6bf2 ("libperf tests: Add test_stat_multiplexing test")
-added printf's of 64-bit ints using %lu which doesn't work on 32-bit
-builds:
+On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> +static bool tdx_handle_cpuid(struct pt_regs *regs)
+> +{
+> +	struct tdx_hypercall_output out;
+> +
+> +	/*
+> +	 * Emulate the CPUID instruction via a hypercall. More info about
+> +	 * ABI can be found in TDX Guest-Host-Communication Interface
+> +	 * (GHCI), section titled "VP.VMCALL<Instruction.CPUID>".
+> +	 */
+> +	if (_tdx_hypercall(EXIT_REASON_CPUID, regs->ax, regs->cx, 0, 0, &out))
+> +		return false;
+> +
+> +	/*
+> +	 * As per TDX GHCI CPUID ABI, r12-r15 registers contain contents of
+> +	 * EAX, EBX, ECX, EDX registers after the CPUID instruction execution.
+> +	 * So copy the register contents back to pt_regs.
+> +	 */
+> +	regs->ax = out.r12;
+> +	regs->bx = out.r13;
+> +	regs->cx = out.r14;
+> +	regs->dx = out.r15;
+> +
+> +	return true;
+> +}
 
-tests/test-evlist.c:529:29: error: format ‘%lu’ expects argument of type \
-  ‘long unsigned int’, but argument 4 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Werror=format=]
+Ack.
 
-Use PRIu64 instead which works on both 32-bit and 64-bit systems.
+>  bool tdx_get_ve_info(struct ve_info *ve)
+>  {
+>  	struct tdx_module_output out;
+> @@ -157,8 +182,18 @@ bool tdx_get_ve_info(struct ve_info *ve)
+>   */
+>  static bool tdx_virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+>  {
+> -	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> -	return false;
+> +	bool ret = false;
+> +
+> +	switch (ve->exit_reason) {
+> +	case EXIT_REASON_CPUID:
+> +		ret = tdx_handle_cpuid(regs);
+> +		break;
 
-Fixes: a7f3713f6bf2 ("libperf tests: Add test_stat_multiplexing test")
-Cc: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- tools/lib/perf/tests/test-evlist.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Comment about ret and break applies accordingly.
 
-diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
-index b3479dfa9a1c..fa854c83b7e7 100644
---- a/tools/lib/perf/tests/test-evlist.c
-+++ b/tools/lib/perf/tests/test-evlist.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #define _GNU_SOURCE // needed for sched.h to get sched_[gs]etaffinity and CPU_(ZERO,SET)
-+#include <inttypes.h>
- #include <sched.h>
- #include <stdio.h>
- #include <stdarg.h>
-@@ -526,12 +527,12 @@ static int test_stat_multiplexing(void)
- 
- 	min = counts[0].val;
- 	for (i = 0; i < EVENT_NUM; i++) {
--		__T_VERBOSE("Event %2d -- Raw count = %lu, run = %lu, enable = %lu\n",
-+		__T_VERBOSE("Event %2d -- Raw count = %" PRIu64 ", run = %" PRIu64 ", enable = %" PRIu64 "\n",
- 			    i, counts[i].val, counts[i].run, counts[i].ena);
- 
- 		perf_counts_values__scale(&counts[i], true, &scaled);
- 		if (scaled == 1) {
--			__T_VERBOSE("\t Scaled count = %lu (%.2lf%%, %lu/%lu)\n",
-+			__T_VERBOSE("\t Scaled count = %" PRIu64 " (%.2lf%%, %" PRIu64 "/%" PRIu64 ")\n",
- 				    counts[i].val,
- 				    (double)counts[i].run / (double)counts[i].ena * 100.0,
- 				    counts[i].run, counts[i].ena);
--- 
-2.32.0
+Thanks,
 
+        tglx

@@ -2,137 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC624A53FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0649F4A542C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiBAAVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:21:09 -0500
-Received: from www62.your-server.de ([213.133.104.62]:57544 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiBAAVI (ORCPT
+        id S231154AbiBAAfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231138AbiBAAfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:21:08 -0500
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nEguw-0007qv-C9; Tue, 01 Feb 2022 01:21:06 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nEguw-000PnY-1l; Tue, 01 Feb 2022 01:21:06 +0100
-Subject: Re: [PATCH v7 bpf-next 8/9] bpf: introduce
- bpf_jit_binary_pack_[alloc|finalize|free]
-To:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, kernel-team@fb.com,
-        peterz@infradead.org, x86@kernel.org, iii@linux.ibm.com,
-        Song Liu <songliubraving@fb.com>
-References: <20220128234517.3503701-1-song@kernel.org>
- <20220128234517.3503701-9-song@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <c5100e9a-3e8a-a554-1d77-50d7b296340b@iogearbox.net>
-Date:   Tue, 1 Feb 2022 01:21:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 31 Jan 2022 19:35:40 -0500
+X-Greylist: delayed 555 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Jan 2022 16:35:40 PST
+Received: from mail.crtified.me (mail.crtified.me [IPv6:2a01:4f8:c0c:4b18::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91AC06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:35:40 -0800 (PST)
+From:   Carl Richard Theodor Schneider <dev.linux@crtified.me>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crtified.me; s=mail;
+        t=1643675181; bh=JeNXq18UbQzuvreRzNfiLaQ6jV89JRgSNEv4N1KLBKQ=;
+        h=From:To:Cc:Subject:Date;
+        b=QTDjFfgZ1VB3Cwl9rvkzGrkr2/fh2ru+1oP6mEX6olQsfVSugY1H+TmfWO5mduBZj
+         OJEG3T+k6FPLcOeTXcM4nxceJiwGoTsbtYi8RcVKXcxTVahUTH3ZASS4CG3rW2EuqW
+         tVZe4RMAHz26HvGFp6rzRxQ2/JmZj6xDsr4LfuNk=
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     microcaicai@gmail.com,
+        Carl Richard Theodor Schneider <dev.linux@crtified.me>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: [PATCH] mtd: spi-nor: Init xtx flash xt25f32b, xt25f128b
+Date:   Tue,  1 Feb 2022 01:25:34 +0100
+Message-Id: <20220201002535.2186484-1-dev.linux@crtified.me>
 MIME-Version: 1.0
-In-Reply-To: <20220128234517.3503701-9-song@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26439/Mon Jan 31 10:24:40 2022)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/29/22 12:45 AM, Song Liu wrote:
-[...]
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 25e34caa9a95..ff0c51ef1cb7 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1031,6 +1031,109 @@ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
->   	bpf_jit_uncharge_modmem(size);
->   }
->   
-> +/* Allocate jit binary from bpf_prog_pack allocator.
-> + * Since the allocated meory is RO+X, the JIT engine cannot write directly
+Add the JEDEC identifiers for xt25f32b and xt25f128b.
+Based on the referenced previous patch from microcai.
 
-nit: meory
+Only xt25f32b was verified in hardware (On both Radxa RockPi 4A and 4C),
+but the ID of the xt25f128b can also be found in u-boot patches from
+Armbian.
 
-> + * to the memory. To solve this problem, a RW buffer is also allocated at
-> + * as the same time. The JIT engine should calculate offsets based on the
-> + * RO memory address, but write JITed program to the RW buffer. Once the
-> + * JIT engine finishes, it calls bpf_jit_binary_pack_finalize, which copies
-> + * the JITed program to the RO memory.
-> + */
-> +struct bpf_binary_header *
-> +bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
-> +			  unsigned int alignment,
-> +			  struct bpf_binary_header **rw_header,
-> +			  u8 **rw_image,
-> +			  bpf_jit_fill_hole_t bpf_fill_ill_insns)
-> +{
-> +	struct bpf_binary_header *ro_header;
-> +	u32 size, hole, start;
-> +
-> +	WARN_ON_ONCE(!is_power_of_2(alignment) ||
-> +		     alignment > BPF_IMAGE_ALIGNMENT);
-> +
-> +	/* add 16 bytes for a random section of illegal instructions */
-> +	size = round_up(proglen + sizeof(*ro_header) + 16, BPF_PROG_CHUNK_SIZE);
-> +
-> +	if (bpf_jit_charge_modmem(size))
-> +		return NULL;
-> +	ro_header = bpf_prog_pack_alloc(size);
-> +	if (!ro_header) {
-> +		bpf_jit_uncharge_modmem(size);
-> +		return NULL;
-> +	}
-> +
-> +	*rw_header = kvmalloc(size, GFP_KERNEL);
-> +	if (!*rw_header) {
-> +		bpf_prog_pack_free(ro_header);
-> +		bpf_jit_uncharge_modmem(size);
-> +		return NULL;
-> +	}
-> +
-> +	/* Fill space with illegal/arch-dep instructions. */
-> +	bpf_fill_ill_insns(*rw_header, size);
-> +	(*rw_header)->size = size;
-> +
-> +	hole = min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
-> +		     BPF_PROG_CHUNK_SIZE - sizeof(*ro_header));
-> +	start = (get_random_int() % hole) & ~(alignment - 1);
-> +
-> +	*image_ptr = &ro_header->image[start];
-> +	*rw_image = &(*rw_header)->image[start];
-> +
-> +	return ro_header;
-> +}
-> +
-> +/* Copy JITed text from rw_header to its final location, the ro_header. */
-> +int bpf_jit_binary_pack_finalize(struct bpf_prog *prog,
-> +				 struct bpf_binary_header *ro_header,
-> +				 struct bpf_binary_header *rw_header)
-> +{
-> +	void *ptr;
-> +
-> +	ptr = bpf_arch_text_copy(ro_header, rw_header, rw_header->size);
+Link: https://lore.kernel.org/lkml/CAMgqO2y9MYDj6antOaWLBRKU8vGEwqCB-Y1TkXTSWsmsed+W6A@mail.gmail.com/
+Link: https://datasheet.lcsc.com/szlcsc/2005251035_XTX-XT25F32BSOIGU-S_C558851.pdf
+Link: https://datasheet.lcsc.com/szlcsc/2005251034_XTX-XT25F128BSSIGT_C558844.pdf
+Link: https://github.com/armbian/build/blob/master/patch/u-boot/u-boot-rockchip64/general-add-xtx-spi-nor-chips.patch
 
-Does this need to be wrapped with a text_mutex lock/unlock pair given
-text_poke_copy() internally relies on __text_poke() ?
+Signed-off-by: Carl Richard Theodor Schneider <dev.linux@crtified.me>
+---
+ drivers/mtd/spi-nor/Makefile |  1 +
+ drivers/mtd/spi-nor/core.c   |  1 +
+ drivers/mtd/spi-nor/core.h   |  1 +
+ drivers/mtd/spi-nor/xtx.c    | 25 +++++++++++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 drivers/mtd/spi-nor/xtx.c
 
-> +	kvfree(rw_header);
-> +
-> +	if (IS_ERR(ptr)) {
-> +		bpf_prog_pack_free(ro_header);
-> +		return PTR_ERR(ptr);
-> +	}
-> +	prog->aux->use_bpf_prog_pack = true;
-> +	return 0;
-> +}
-> +
-[...]
+diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
+index 6b904e439372..e344077e3054 100644
+--- a/drivers/mtd/spi-nor/Makefile
++++ b/drivers/mtd/spi-nor/Makefile
+@@ -17,6 +17,7 @@ spi-nor-objs			+= sst.o
+ spi-nor-objs			+= winbond.o
+ spi-nor-objs			+= xilinx.o
+ spi-nor-objs			+= xmc.o
++spi-nor-objs			+= xtx.o
+ obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
+ 
+ obj-$(CONFIG_MTD_SPI_NOR)	+= controllers/
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 04ea180118e3..44017ab54726 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1846,6 +1846,7 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
+ 	&spi_nor_winbond,
+ 	&spi_nor_xilinx,
+ 	&spi_nor_xmc,
++	&spi_nor_xtx,
+ };
+ 
+ static const struct flash_info *
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 2afb610853a9..8adac5da6851 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -536,6 +536,7 @@ extern const struct spi_nor_manufacturer spi_nor_sst;
+ extern const struct spi_nor_manufacturer spi_nor_winbond;
+ extern const struct spi_nor_manufacturer spi_nor_xilinx;
+ extern const struct spi_nor_manufacturer spi_nor_xmc;
++extern const struct spi_nor_manufacturer spi_nor_xtx;
+ 
+ extern const struct attribute_group *spi_nor_sysfs_groups[];
+ 
+diff --git a/drivers/mtd/spi-nor/xtx.c b/drivers/mtd/spi-nor/xtx.c
+new file mode 100644
+index 000000000000..2c9028e5d719
+--- /dev/null
++++ b/drivers/mtd/spi-nor/xtx.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2005, Intec Automation Inc.
++ * Copyright (C) 2014, Freescale Semiconductor, Inc.
++ */
++
++#include <linux/mtd/spi-nor.h>
++
++#include "core.h"
++
++static const struct flash_info xtx_parts[] = {
++	/* XTX (Shenzhen Xin Tian Xia Tech) */
++	{ "xt25f32b", INFO(0x0b4016, 0, 64 * 1024, 64)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
++			SPI_NOR_QUAD_READ) },
++	{ "xt25f128b", INFO(0x0b4018, 0, 64 * 1024, 256)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
++			SPI_NOR_QUAD_READ) },
++};
++
++const struct spi_nor_manufacturer spi_nor_xtx = {
++	.name = "xtx",
++	.parts = xtx_parts,
++	.nparts = ARRAY_SIZE(xtx_parts),
++};
+-- 
+2.34.1
+

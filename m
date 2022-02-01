@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1AF4A5B59
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7544A5B5B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237352AbiBALlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 06:41:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45446 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233560AbiBALlB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 06:41:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643715660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7n48rOVqWezIHqWx+2qepywQmYqWs41wlRyqhhm8ye8=;
-        b=FOMXSp36NRAkjC4bAljQYIZl0j1AkpcxoXIeTDkWn5hQ8tMueoWZiX6HmnQzJHrVSvgyuU
-        dkbn9WoDJ6OZpKCjRS3kwAx8gvFQ/JP/OYy0tqJ83CcqySmYPQ1IZbiAjKMu9A7+0NMdQb
-        uqu/3sXzsHAtblDeBlakVHpRXfKh9Z0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-300-D2576zIXM3mY6l-dUfMqLQ-1; Tue, 01 Feb 2022 06:40:59 -0500
-X-MC-Unique: D2576zIXM3mY6l-dUfMqLQ-1
-Received: by mail-wr1-f71.google.com with SMTP id t14-20020adfa2ce000000b001e1ad2deb3dso772328wra.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 03:40:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7n48rOVqWezIHqWx+2qepywQmYqWs41wlRyqhhm8ye8=;
-        b=wc7GE7cWGbDgZfinnDU70Vgi232rB5H5lcZjIBTQ0UI4XuK6IlFUVQ6+6VA18ES/zf
-         KZ9ciS1pWW5KbmFT8ecnfXXdwzQ33UKKhKpR+ZE8IHQxHYqdxSuEHFjEGFMDC4oPoFbN
-         4yRwjvre+xBl+TXj/5LPJH/k8vojy8XNvZvp991DtPYGoIXC3pJtYpLIlC1e88/nyqGS
-         QFUn9bdGQAC2HLFICYf7bgxEVdpyzsHzSLlOUbYt50MDUGq8BwRGeU7/LEdu026JY2+5
-         6nwF8s3HgidVqvKhRXM+r4SbdqssiB/tjdjjq9rDdcm2ps6SUk1LV9pcaIDkGgCLbwsx
-         394w==
-X-Gm-Message-State: AOAM532CF6YUz0n0RWnYadY5vB+wFxXzkH9aPWCIEJmQ1b5mC+cdRf3h
-        3imR2A2+WoH0DfO7jnHcoAq8O0syUwlk8YhRSDoJstRkzobELM+Y1AzJagz1ZBm3RDsXYc41IiU
-        t3em7/YIHh6ez+r2JCqaO+5iW
-X-Received: by 2002:a05:600c:2948:: with SMTP id n8mr1423321wmd.61.1643715657861;
-        Tue, 01 Feb 2022 03:40:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJytv6sGg27WWm9E+KaEvFVIzBmnh6PhhKvD74OMrypWaCif9Pxmpddbk3kfATQH4MU5jJX8rw==
-X-Received: by 2002:a05:600c:2948:: with SMTP id n8mr1423309wmd.61.1643715657640;
-        Tue, 01 Feb 2022 03:40:57 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id c13sm14555734wrv.24.2022.02.01.03.40.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 03:40:57 -0800 (PST)
-Message-ID: <7f4569d5-2b67-fd98-9a0e-03a2025ddcce@redhat.com>
-Date:   Tue, 1 Feb 2022 12:40:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>
-References: <20220131202916.2374502-1-javierm@redhat.com>
- <YfhVBtv1UIA7bJja@ravnborg.org> <YfkAOiSlIMZrKXyl@smile.fi.intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YfkAOiSlIMZrKXyl@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        id S237354AbiBALoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 06:44:14 -0500
+Received: from foss.arm.com ([217.140.110.172]:33770 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233560AbiBALoM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 06:44:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C457113E;
+        Tue,  1 Feb 2022 03:44:11 -0800 (PST)
+Received: from entos-thunderx2-desktop.shanghai.arm.com (entos-thunderx2-desktop.shanghai.arm.com [10.169.212.232])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A64993F73B;
+        Tue,  1 Feb 2022 03:44:07 -0800 (PST)
+From:   Jianyong Wu <jianyong.wu@arm.com>
+To:     catalin.marinas@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, akpm@linux-foundation.org,
+        david@redhat.com, ardb@kernel.org
+Cc:     quic_qiancai@quicinc.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, gshan@redhat.com,
+        justin.he@arm.com, jianyong.wu@arm.com, nd@arm.com
+Subject: [PATCH] [PATCH v4] arm64/mm: avoid fixmap race condition when create pud mapping
+Date:   Tue,  1 Feb 2022 19:44:00 +0800
+Message-Id: <20220201114400.56885-1-jianyong.wu@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 10:41, Andy Shevchenko wrote:
-> On Mon, Jan 31, 2022 at 10:30:46PM +0100, Sam Ravnborg wrote:
->> On Mon, Jan 31, 2022 at 09:29:16PM +0100, Javier Martinez Canillas wrote:
-> 
-> ...
-> 
->>> +config TINYDRM_SSD1307
->>> +	tristate "DRM support for Solomon SSD1307 OLED displays"
->> Use SSD130X here - so SSD1306 users can find it.
-> 
-> It's better to list them all in the "help". How user would grep this?
-> 
-> `git grep -n -i ssd1306` ==> no match.
->
+The 'fixmap' is a global resource and is used recursively by
+create pud mapping(), leading to a potential race condition in the
+presence of a concurrent call to alloc_init_pud():
 
-That's already the case :)
+kernel_init thread                          virtio-mem workqueue thread
+==================                          ===========================
 
-$ git grep -n -i ssd1306 drivers/gpu/drm/
-drivers/gpu/drm/tiny/Kconfig:167:         DRM driver for the SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
-drivers/gpu/drm/tiny/ssd1307.c:922:static struct ssd1307_deviceinfo ssd1307_ssd1306_deviceinfo = {
-drivers/gpu/drm/tiny/ssd1307.c:948:             .compatible = "solomon,ssd1306fb-i2c",
-drivers/gpu/drm/tiny/ssd1307.c:949:             .data = (void *)&ssd1307_ssd1306_deviceinfo,
+  alloc_init_pud(...)                       alloc_init_pud(...)
+  pudp = pud_set_fixmap_offset(...)         pudp = pud_set_fixmap_offset(...)
+  READ_ONCE(*pudp)
+  pud_clear_fixmap(...)
+                                            READ_ONCE(*pudp) // CRASH!
+
+As kernel may sleep during creating pud mapping, introduce a mutex lock to
+serialise use of the fixmap entries by alloc_init_pud(). However, there is
+no need for locking in early boot stage and it doesn't work well with
+KASLR enabled when early boot. So, enable lock when system_state doesn't
+equal to "SYSTEM_BOOTING".
+
+Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+---
+
+Change log:
+
+from v3 to v4:
+     conditionally enable lock as we doesn't need lock when early boot.
+
+from v2 to v3:
+     change spin lock to mutex lock as kernel may sleep when create pud
+map.
+---
+ arch/arm64/mm/mmu.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index acfae9b41cc8..1681430ecab7 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -63,6 +63,7 @@ static pmd_t bm_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
+ static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
  
-Best regards,
+ static DEFINE_SPINLOCK(swapper_pgdir_lock);
++static DEFINE_MUTEX(fixmap_lock);
+ 
+ void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+ {
+@@ -329,6 +330,12 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 	}
+ 	BUG_ON(p4d_bad(p4d));
+ 
++	/*
++	 * No need for locking during early boot. And it doesn't work as
++	 * expected with KASLR enabled.
++	 */
++	if (system_state != SYSTEM_BOOTING)
++		mutex_lock(&fixmap_lock);
+ 	pudp = pud_set_fixmap_offset(p4dp, addr);
+ 	do {
+ 		pud_t old_pud = READ_ONCE(*pudp);
+@@ -359,6 +366,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 	} while (pudp++, addr = next, addr != end);
+ 
+ 	pud_clear_fixmap();
++	if (system_state != SYSTEM_BOOTING)
++		mutex_unlock(&fixmap_lock);
+ }
+ 
+ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
 -- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.17.1
 

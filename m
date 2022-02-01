@@ -2,146 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0744A5D89
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB12F4A5D8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238803AbiBANjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:39:41 -0500
-Received: from mail-eopbgr120050.outbound.protection.outlook.com ([40.107.12.50]:50496
-        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238753AbiBANjk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:39:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nFlLGtWe8C689zZvtk3+W54DHX5MjXWBBW4H8kXsObMksBOtG5iY1iRXbQXaRmyN4DNup04ozJNSjUiHfrj2c6Az3apRuyFY2NGaibvTICNWz1faSvKxXkJ/ZxtupoZI+V31Jxo+IYRIOJyp9aUxz/HKhMsKeyNeCiWu7O7U5J58xcT7ZYGttTvwlUQvW/17oKJ07nYTLkob9yzX3oVqO2aq0ootzxrjzAlCaFKFTnEq0Lvueq0zxOBLrxGI6sisL56orUYAXsmfL0Kmd8T8dvJ8XL5mvxss83A1dMGafNTksUE0uMfMaBQnu12CWTEGtoAdipMAqH1MIloNBarnJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Kp0HI3yF37L10ysUCoPuc8MqA73HIRhTke9gVA76EA=;
- b=QKP9wyW3Kjrunb09GMWXtAaiodoAAmDGQz5l1Bl841jbXM5EukjXyp6EGxoA+R+H0MGT4iE6d9Nc/xZOidrJXsg9oxamOQQW0sYgmfAiIm2F/p6d4XJQQw0Jw8gLJyYL5lNsy1BK1/DTZCK4uEEeoJFC3rrKS8+ZaKFtUafXmxZJ0u8cXdqSzy15wkv5t4DZ7tAvbUtaoGYMKhAFoZ3oNrBWewGojB4qZdD1gCf5MYsa2oKVRlRm2YTZPFBoc20aO4Bf5IFrC2F1PXQA0F6ZOxcC1HkF8+UeTfZbJgxf7big9OkPTcAOgEeyvC4vV+4S1U0pmDRRQ56XnJS1UK5EqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB4111.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:259::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Tue, 1 Feb
- 2022 13:39:38 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%6]) with mapi id 15.20.4930.022; Tue, 1 Feb 2022
- 13:39:37 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "allison@lohutok.net" <allison@lohutok.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "clg@kaod.org" <clg@kaod.org>, "groug@kaod.org" <groug@kaod.org>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc/xive: Add some error handling code to
- 'xive_spapr_init()'
-Thread-Topic: [PATCH] powerpc/xive: Add some error handling code to
- 'xive_spapr_init()'
-Thread-Index: AQHYF19nCm4XBW90q06ptXN1Sv+uT6x+oOkAgAASpgA=
-Date:   Tue, 1 Feb 2022 13:39:37 +0000
-Message-ID: <c66aab06-f805-f591-0d08-31319885b912@csgroup.eu>
-References: <20190801110956.8517-1-christophe.jaillet@wanadoo.fr>
- <1ea13a2a-90fd-07d3-2031-19e81ea349b4@csgroup.eu>
- <7c34009b-0d34-baa8-f4ff-68f2203422c5@wanadoo.fr>
-In-Reply-To: <7c34009b-0d34-baa8-f4ff-68f2203422c5@wanadoo.fr>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 555d11d9-8cdc-4ab3-2735-08d9e5884a88
-x-ms-traffictypediagnostic: PR0P264MB4111:EE_
-x-microsoft-antispam-prvs: <PR0P264MB41115D1D6BE75DA41CD1E169ED269@PR0P264MB4111.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xkouHlxsYfd030Ukbk3Hm0HbQezL5CzyNWgvg4s1FhZngJJvl1DPoTjp2ABa2gvNJ/6ClELodhwlukN+SZ3/p36xMsqR5EvoYoc1z/mDI+xk3uZH7D1gIJdaFvObfWn/SCQV8mR9UD7mlv9piNyYE6TrvCrWoZf9+suiVhbeRqgi7a/2pW2Fh/wvnbt1l1dDpWwHagpRgdj60rjVx8Ry6GNYmlD0sKwPzYPr4bHWPfj1f30IERNzSrWYTzXtkavOeZzFryQQMSGcD97en1yICbfPAtHPz6ml2wz665qodGM0tCqYikxEqqrHAufc0BFPGqI0OPy86T//vjMdeZ5z/TU8QS9v6gZGv9TLtmwsABHLNRHzA9oQDpwP1zmUN0IADXb2WNA6PwrabfCNU9iYvigVob5mGp/NnLjLX5jPIUBuo12Asoc3EDnjSY2AmcEQUVW4vG24DnQCwD83sva3rnMhH2AyI5G0d9xbcwp6HjiI3d8Lhb+qrADx7MzcrQilvEMmDd08cLeNYqYWKx3v+zlQDQ7Iqt8LRj7+2jHNUyecVj5MYJGo8nsJkyzfuUFztUVHV/YB4YZfo43AZwupYHpx1E8O+RtC8YLP+JLkqWKVPhZHRrULFqWJciz0F3yt7qJLS1gLlIy/+C6IRAMvnhOY3xkMSqgIM44K1uFMbDQqAFwfxiZgWiN+LLwJCmAi8n5cvK1vIyDPYbExmMK+uFg8hkwiDaBVjY7TTtqdB/J9OmVjoni28hH1wXnHmsS413SYNSjrN0hvbfQA1lrOMjIC37tYmdnmyAuC/4/2SFkFDGd2yovFdR1j9B2uCg88o7/6gY3yloYPn2mFe0foi3yPGNwN/rxvfSEEsyuK21PGJamJiPoKlzK2d53ERaXqgWhNWkIJ/1ZTkEH4Z9+xmQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(31686004)(31696002)(86362001)(110136005)(122000001)(38100700002)(508600001)(91956017)(71200400001)(8936002)(76116006)(4326008)(8676002)(66446008)(66556008)(38070700005)(66946007)(66476007)(64756008)(316002)(6486002)(966005)(36756003)(6506007)(5660300002)(6512007)(4744005)(7416002)(2906002)(186003)(26005)(2616005)(44832011)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VHV2c21PbE95cnA3U2hxS3F1YzYrZ3hPSGhwaWJhbkdHS1pqVlVpY0V2SHF1?=
- =?utf-8?B?d01TQlhONlJ4aDdSdHpUTVcxRUtFc2ZaYis5b3hHWDFtbTAySnBaY1BkVXo4?=
- =?utf-8?B?QitBSjJRR3ozMUhmMGtWRjdHSHh5cEZQb1hZcnI4NFhRQitZZlpGMm9hQXZq?=
- =?utf-8?B?aUgzM0RMWFNPVTA0dG9vRnVqNkYyWnpZSVJmQlZIMzNSMFhUMk9qcXRQZm84?=
- =?utf-8?B?UFhrcTdBWE1zeTMwT0hUeC9UdFlVUUNwb1p6THV4MUM1TFErUE01TEkvNUZB?=
- =?utf-8?B?VGZJZ0RaaVpaYUFPclJpYzJaN3dkanB0VURlN2gybnVqMDErZ3h0SEVoVFlu?=
- =?utf-8?B?N2VuOWkxeUpCam1oekowekFvUWEwRDlpZTI4UDJkRUJWc2Z2Vm5BU2pWYWtC?=
- =?utf-8?B?QTRzaEhmYmd3ditiTkxUd0tRRHJXVWdHdDRvTndsNk9palJrT0ptNFF1Wkpy?=
- =?utf-8?B?M25NQmJQZW1MMjU1bmRUbHB1bmU2eS9lY3R4Q1ZYZ3dZbFlKRlRhaTlxbUZh?=
- =?utf-8?B?b28vT2p6Y3VxbWtCREdPdXBtWERBeTB5N2xwak5PV2RjK0NWSmRMU2ZicHZL?=
- =?utf-8?B?eXl4SCt3Zkk5UXk0SXVmcitMQWs3YzFsN1lUTmErUmdmaDcwbzJieVR6ajJU?=
- =?utf-8?B?WU5RZjcwT0NhNWd0VUQ0YVZUaGozNFNleGpIQUx5VE9heDFiWE1hbHJyQXFz?=
- =?utf-8?B?QUpCdUtsK3VIRW1QVlpXeDlpWnc0ZTEvczRXaXFjNndyN1BUdHM2alg3ZWtu?=
- =?utf-8?B?K3lDLzdYNkpwWExWSU1Ob3BlbGtycDJxbUdRNVdhemJRaXZzbmNPZHFXbFhj?=
- =?utf-8?B?UCt3Y2FhUTVKb2NXQ0I5WmNteHBzN0ZRV1UwTjVYdCszL3F4NXdWSjlXdC9N?=
- =?utf-8?B?U0RRdTUrczJSQ0k0MzE5cnpxNHU1MmJzNklQdUZvbjV1RS9waGs3U2dNR1lw?=
- =?utf-8?B?NGdzbk1zMU90aStqSTdzZ2V1SXBabVlwRjR2UGZCclhaU2pialpDc1JUSW1M?=
- =?utf-8?B?QUVVZEhTSWxYYTRROHVqd1Vib3BBaWJ1VC9ZWG1WdlFwNmxyWnhrWkYzSmlo?=
- =?utf-8?B?VTZtVGFXTWF0MS9ubXVNU0hwdEl0U1B4NncrZENZaXlKTjROTE5CVjdCTEox?=
- =?utf-8?B?L1JiZUkrUjd1OVZDczJuYWhRK3k2dXlwdld6TGxpV2k5R2p0dGd2VWJjN2R0?=
- =?utf-8?B?MzB2b2RCRFc5M1V2Y0hSQzkrc2plLzkycXJZWnd5OE02Q3ZtSG9RZC92SVFM?=
- =?utf-8?B?UVkrRE4wR2orcWpnZmlVRjZNNW93dEpsL01ZamZzOUhQVk9OUGx2OE5ZZlly?=
- =?utf-8?B?Y2FGbGkyRTNVWHF5c1FXd0lwekppVzJMZEhGd2Vnem5FYWJ3Y0twdVhHYVdO?=
- =?utf-8?B?ei9DNHUrQ1dwbDdGeGcwY2ZQNk9RVXgzUG5MOFVUbktQRXRBTVk3VjlRTGlo?=
- =?utf-8?B?NGNqS0RSOU1UMEprM1pkd2N4NzZ2b3dmZDljMytJRzhrdjhveGIwbHZFZFJt?=
- =?utf-8?B?cVlGRG5UTHBTdGp0eVBIRW9HMEtVRll0QjY0bzR0MWJRTDJvQnRORGwzYmht?=
- =?utf-8?B?bXY2MzFnR25aYlRETVh4NHN3MktUYmpuWlZ2WTFFMStsUUZHSDZScWtkSWdD?=
- =?utf-8?B?dGZwMjJzdi9FTEZqeEQ0bklzalpHT28rRlhYalBYY0N2VlZ3SkIrZ2h4Y0tX?=
- =?utf-8?B?T1lOcFk1WVY5dEpUTFE5OGcxcXV1ZzRxa0JnQTI5OUNTQVhMVEdHMDc0V1F4?=
- =?utf-8?B?QzMxZ0FWcU1GNHVRTnRST2hJZzhUMit0a2h5bTJCRVdrVVkwOHUxcFZaZGFx?=
- =?utf-8?B?Tk1TVnI5T1VQaWorZzhMMnhwUHI2UFFFVlR6L3lhYTdZdnBMTmNSRjdYNjl4?=
- =?utf-8?B?VnRWdWEzanV4ajJHL0pwWHNHdGxjTEQ5Rk1kR2ErSy9xUEdCbGtka2lhblpn?=
- =?utf-8?B?Z1dLK29Ia2NJZktPekFSeUwycndxK1NvUHo4RTBtbkVuZExEWGZwcUxtSnFK?=
- =?utf-8?B?VUk3eXM2bUJaYTU4Yk1ubFFkaDFNemRudG84Q2dTMTNrLzFXdDkzbmR5aTdl?=
- =?utf-8?B?ZlJKM3g1TFVqRUJGaUdpTmtraCtyVi8wR2RmSExOcGYwM2JVbCtOWXBOYXUw?=
- =?utf-8?B?L0p2NUVKdE4xSEFKeFc3YjRWbXRxRHhyQ1pFQzRvSVVVUEpQd3lGS2VsNWdD?=
- =?utf-8?B?b0Z0VHFrTkI4WkwzS3JrOVM0TTJzUXIyVmQzYmxpSDBrMy9MOTNia3ZWZ2NR?=
- =?utf-8?Q?gz58iiuWq7tJZQbqNqgoIixJG+TxLz9Oh1zJrjaKVE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2564B4EDC351AC44AE6FFEF7B82E6239@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S238813AbiBANkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234365AbiBANke (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 08:40:34 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFFDC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 05:40:34 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id g2so15311643pgo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:40:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vx2vjMlyUXttsNTU/sc6P+/T6SMZYpnVRGM83+IEnII=;
+        b=kirnkQeZkeipuwVGTmeRoiNmR+fw3OankYxS5AXzlx+jExadifRtb4y62bwOq4LB6V
+         y8PiPkDAgmRFKIghZO0BwJeNgOTyssyULiwdMM3fiGw0Blsg68mfTtu7nnjjO1j5FDAT
+         OSjaIUFD5rSOreQr5pD9PmRhz7DkhxEo8eyjBr/iRKwmPmgMhBv1Jk9ueJ3RztTmdYua
+         ikw5I+VujZ9FGwJUpvolpOvvYB2GUarBH7o4ezJ6r6v8Wd1PHsQdhZxil5Gkk0e9qBGr
+         3IqT+xh2/Cel2T+ucEmfGFbuC8DJ5IgG1T6UXE8ABGOyrQAd3PjjWhf5/VDU0LCM1wa+
+         SFQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vx2vjMlyUXttsNTU/sc6P+/T6SMZYpnVRGM83+IEnII=;
+        b=YHAp5QhLfmISR/rtmA0VzCPXojuMHeQ8frlwbjY4VNjFfytcKwQBHM+zhmV6WQmacv
+         8wK3GUZtV9I1TdnCrDhR4X4ZI7/QJ+2k1+0UIK7SxulbDTXFkgycjVFV3iCr1tbJSB4q
+         5Xt4sZhVMj68NY2vw9ZKfoR/BdWq8kVznOHFrX7Se6h4Zb0fcw/FOVpTE3oStywk0kIW
+         dVkZIUtryHwkoZ5ak8BCtfmoIy/dwWJyBV5MYKUXQnwn38liACHER9jd5Fy8xgWbzAwY
+         /oI0LEf0jdppaocyi5GAP5CsKJinr46KzydTVW8/ds7Eyy7k3IOtIEzTG60KdkmTj6tC
+         gKFg==
+X-Gm-Message-State: AOAM5333d0NWUUM14CvpJL09dSjr2adWdr5jKPv0ohs68+cSJOzSfLaS
+        DTF3WyLOTU5hrVYQn15SfWlDP/1sEEdBK2B2cIg=
+X-Google-Smtp-Source: ABdhPJwq0sW0/6OaoNprXkKm7m4z7yfd02IU4Q/RV4jwOkWH0olc7S1kF/p1VLGHiwUeoVvMxUydMvbIwL8BNAC1VQU=
+X-Received: by 2002:a63:3e8b:: with SMTP id l133mr20407349pga.210.1643722833675;
+ Tue, 01 Feb 2022 05:40:33 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 555d11d9-8cdc-4ab3-2735-08d9e5884a88
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Feb 2022 13:39:37.7604
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: V2MYMIE8HULClWNVi13ZTuC+9smHiskoFWJODYq0CWblDK20//IG+uU5oPdjWMpcWoANCtctKCLNkCJ7KSWdTbUUYcg4xDJaiSqugLJ/vGE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB4111
+References: <20220131201716.5198-1-a3at.mail@gmail.com> <CAMe9rOqoPy6jsWrodnc41M4+b2onwkfbfr=pZ9qRWzOU2Uisgg@mail.gmail.com>
+ <20220201061832.yatgwglxvi7ho4yr@carbon.azat> <CAMe9rOptn2vpY90yY3HuGmmMdj4Hpaba2PRhp4d033XBDgL_5w@mail.gmail.com>
+ <20220201132807.m7xtogotjlg54pzl@carbon.azat>
+In-Reply-To: <20220201132807.m7xtogotjlg54pzl@carbon.azat>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Tue, 1 Feb 2022 05:39:57 -0800
+Message-ID: <CAMe9rOpkHm7juB6f_z+osG28dGxe=4SSVN+8SHsxatVnwGQ5xA@mail.gmail.com>
+Subject: Re: [PATCH] fs/binfmt_elf: use ELF_ET_DYN_BASE for PIE (ET_DYN with
+ INTERP) binaries
+To:     Azat Khuzhin <a3at.mail@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Chris Kennelly <ckennelly@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Song Liu <songliubraving@fb.com>,
+        David Rientjes <rientjes@google.com>,
+        Ian Rogers <irogers@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDAxLzAyLzIwMjIgw6AgMTM6MzIsIENocmlzdG9waGUgSkFJTExFVCBhIMOpY3JpdMKg
-Og0KPiBMZSAwMS8wMi8yMDIyIMOgIDEyOjMxLCBDaHJpc3RvcGhlIExlcm95IGEgw6ljcml0wqA6
-DQo+PiBIaSwNCj4+DQo+PiBMZSAwMS8wOC8yMDE5IMOgIDEzOjA5LCBDaHJpc3RvcGhlIEpBSUxM
-RVQgYSDDqWNyaXTCoDoNCj4+PiAneGl2ZV9pcnFfYml0bWFwX2FkZCgpJyBjYW4gcmV0dXJuIC1F
-Tk9NRU0uDQo+Pj4gSW4gdGhpcyBjYXNlLCB3ZSBzaG91bGQgZnJlZSB0aGUgbWVtb3J5IGFscmVh
-ZHkgYWxsb2NhdGVkIGFuZCByZXR1cm4NCj4+PiAnZmFsc2UnIHRvIHRoZSBjYWxsZXIuDQo+Pj4N
-Cj4+PiBBbHNvIGFkZCBhbiBlcnJvciBwYXRoIHdoaWNoIHVuZG9lcyB0aGUgJ3RpbWEgPSBpb3Jl
-bWFwKC4uLiknDQo+Pg0KPj4gVGhpcyBvbGQgcGF0Y2ggZG9lc24ndCBhcHBseSwgaWYgaXQgaXMg
-c3RpbGwgcmVsZXZhbnQgY2FuIHlvdSBwbGVhc2UgDQo+PiByZWJhc2UgPw0KPj4NCj4+IFRoYW5r
-cw0KPj4gQ2hyaXN0b3BoZQ0KPj4NCj4gDQo+IEhpLCBmdW5ueSB0byBzZWUgYSAyIDEvMiB5ZWFy
-cyBvbGQgcGF0Y2ggdG8gcG9wLXVwIGxpa2UgdGhhdCA6KQ0KPiBJdCBzdGlsbCBsb29rcyByZWxl
-dmFudCB0byBtZS4NCg0KWWVhaCBJJ20gdHJ5aW5nIHRvIGNsZWFuIHNvbWUgZHVzdCBpbiBQYXRj
-aHdvcmsuDQoNCj4gDQo+IFYyIHNlbnQuDQo+IFN0aWxsIG5vdCBjb21waWxlIHRlc3RlZC4NCj4g
-DQoNCkF0IGxlYXN0IGl0J3MgYWxsIGdyZWVuIGF0IA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJz
-Lm9yZy9wcm9qZWN0L2xpbnV4cHBjLWRldi9wYXRjaC81NjQ5OTgxMDE4MDQ4ODZiMTUxMjM1Yzhh
-OWY5MzAyMDkyM2JmZDJjLjE2NDM3MTgzMjQuZ2l0LmNocmlzdG9waGUuamFpbGxldEB3YW5hZG9v
-LmZyLw0KDQpDaHJpc3RvcGhl
+On Tue, Feb 1, 2022 at 5:28 AM Azat Khuzhin <a3at.mail@gmail.com> wrote:
+>
+> On Tue, Feb 01, 2022 at 05:15:38AM -0800, H.J. Lu wrote:
+> > On Mon, Jan 31, 2022 at 10:18 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
+> > >
+> > > On Mon, Jan 31, 2022 at 01:30:38PM -0800, H.J. Lu wrote:
+> > > > On Mon, Jan 31, 2022 at 12:17 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
+> > > > >
+> > > > > Since 9630f0d60fec ELF_ET_DYN_BASE is not used as a load_bias anymore
+> > > > > and this breaks PIE binaries, since after this change data segment
+> > > > > became too nearby the stack:
+> > > > >
+> > > > > Before 9630f0d60fec:
+> > > > >
+> > > > >     $ strace -febrk /tmp/test-stack |& head
+> > > > >     brk(NULL)                               = 0x555555559000
+> > > > >     $ /tmp/test-stack
+> > > > >     bottom_of_stack = 0x7fffffffc5c0
+> > > > >     recursion depth: 1 (stack diff: 32)
+> > > > >     ...
+> > > > >     recursion depth: 7690 (stack diff: 8365664)
+> > > > >     Segmentation fault (core dumped)
+> > > > >
+> > > > > After 9630f0d60fec:
+> > > > >
+> > > > >     $ strace -ebrk /tmp/test-stack  |& head
+> > > > >     brk(NULL)                               = 0x7ffff7fff000
+> > > > >
+> > > > >     $ /tmp/test-stack
+> > > > >     bottom_of_stack = 0x7fffffffc640
+> > > > >     recursion depth: 1 (stack diff: 32)
+> > > > >     ...
+> > > > >     recursion depth: 146 (stack diff: 157792)
+> > > > >     Segmentation fault (core dumped)
+> > > > >
+> > > > > Found this during compiling with clang, that started to randomly
+> > > > > SIGSEGV when it eats some heap.
+> > > >
+> > > > How do I reproduce it on x86-64?
+> > >
+> > > It fails for me for pretty big C++ unit, so I don't have a simple
+> > > reproducer with clang, but the attached reproducer below should show the
+> > > problem.
+> >
+> > The reproducer doesn't fail for me under 5.17-rc2 on Fedora 35/x86-64
+> > with 32GB RAM.  Did you turn off PF_RANDOMIZE?
+>
+> Oh, yep, forgot to mention that I have kernel.randomize_va_space=0.
+
+PIE with interpreter and PIE with alignment > ELF_MIN_ALIGN
+should always be loaded from ELF_ET_DYN_BASE.  Otherwise,
+either PIE is loaded at an address which is too low or isn't properly
+aligned.
+
+-- 
+H.J.

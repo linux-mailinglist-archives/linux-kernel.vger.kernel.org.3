@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF6F4A6425
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1664A6428
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242022AbiBASnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbiBASnR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:43:17 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB494C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:43:17 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id c3so16112429pls.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=6fPJFl5vrGTy5wN+6iyLxqMIH5fB+nup+utSNi7xCFI=;
-        b=JFoC8kCvrk6PVaxIzJ3yNULiqngFgKPktXk6Uy8wQFysm1RKVZ1yng4MaoFknXvCl5
-         w50qhHlMbRZ8qg5eKV6q+aY5S+AexzLC726J3dITlnzwKwKhUY767Yiyu26rk+dQR4El
-         iZvrQ5OXzLrsR3koSAnpyPb59rfDdrSWlYmb60GBs2NxZFkpnfsPJzTJ8DtB93E6/SBN
-         QkNs0I0nrAyVRUHmTRYTQzBWuI3eXJm22L+kdU283/sdSJsaqA8Df8BqbkfppInv6RoC
-         uAXJAXYBK/e8ighPrDnAm3bCLsXg0Bcl5Wd5q2oUbLpOXMUV0ZRNnJukZqWzHkdHX9cL
-         4FCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=6fPJFl5vrGTy5wN+6iyLxqMIH5fB+nup+utSNi7xCFI=;
-        b=qWHqvxSfp0TGy8ZWFQfPb9/z2dCHzne/fbprM/Ph5oLut2mYE7jl4VMYF4KyeHNBc+
-         V9cVcbIn2ifRpZptqPka0OefOMHhYpLcepBRPPTy4rhQF2PVlLIuldow9Rjt0DVJY91V
-         JCYlv/h9x/ZwNBW7czDbeS06KTDuBIpc0a7tcsXN6Ud9TAASi6TVaNKeArOdkfC5kLmN
-         WORufC8qh8QW5taBWFLKFggB0trt94Hxr8VYGPL3gtUTnEd6Y82NqLUzEBfM/aVl0oFe
-         Zol3Po1nQj0pTrwDewJz4ms6Bi6/9rxYXNyThtpGdOSP26WPjq2Qj25/BwpuXOFdu7rI
-         mDmQ==
-X-Gm-Message-State: AOAM5315u3VQTdrbb1dI0PrwgHTqdmAzXgkaeC1kqx2jA25V0E0ezlZt
-        QSuOyb/7tzKqeVWr64xh2QRhHA==
-X-Google-Smtp-Source: ABdhPJyaOJVKaHFfRhEGAmObqlO5/p6vKN4OSc6RYhmsGbTY9lg7Dx448+JitmRXoD1gp5a8X4QMsw==
-X-Received: by 2002:a17:902:710c:: with SMTP id a12mr26847513pll.108.1643740997274;
-        Tue, 01 Feb 2022 10:43:17 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id s19sm9183477pfu.34.2022.02.01.10.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 10:43:16 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ben.tseng@mediatek.com, Matthias Kaehlcke <mka@chromium.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Subject: Re: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
-In-Reply-To: <CAJZ5v0iX=SSaPzZNBX8gNMDPCUewiQA_bHxka2pxvtFHxmPxww@mail.gmail.com>
-References: <20220111103346.2660639-1-abailon@baylibre.com>
- <7hilu9xe7n.fsf@baylibre.com>
- <CAJZ5v0gZFBEKDt6S0H91F5xCjC3qtT6B+cTnv6u1nijMHkc8jA@mail.gmail.com>
- <7h35lcygin.fsf@baylibre.com>
- <CAJZ5v0iX=SSaPzZNBX8gNMDPCUewiQA_bHxka2pxvtFHxmPxww@mail.gmail.com>
-Date:   Tue, 01 Feb 2022 10:43:16 -0800
-Message-ID: <7hbkzqmnqz.fsf@baylibre.com>
+        id S242028AbiBASoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:44:30 -0500
+Received: from mga05.intel.com ([192.55.52.43]:6067 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234947AbiBASo1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 13:44:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643741067; x=1675277067;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BSdILmVVdhlYiW3scvmJUorltIkQzLWqnyPe6L5Sra8=;
+  b=hJg+W8Nt3G3p+gyTjtY3bSAYp3yuVtSFCFAcAkS1R5mlJ+h7TMpy66nt
+   4KiVBvNk91ziTkdmqd11faTouumEgI2T3ihEsNjM5spIRpk8Ks3dL11CH
+   DRl+c+pykhBYI1n/hWDCM/7tlXkClrn4jEv6VpIIstwVZXqm8D2ESvqRo
+   vpSU9C+bPuiOm+0tnc5DlJE2bPmGdicpq5RZPTKdXM50ht/hrxVJZXo7/
+   2tAya9Wsbd2VIVsQtiTT/zYH965ubFk83alQRV6yNWouOHR6+EAV/KIhz
+   iOKeJzmuIs1WiBRRramfCntyqfp95idQW0ruARdKTy6Y0DPqWVRy9wG1E
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="334118357"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="334118357"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:44:27 -0800
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="565686935"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:44:25 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nEy7e-00HQrv-Tt;
+        Tue, 01 Feb 2022 20:43:22 +0200
+Date:   Tue, 1 Feb 2022 20:43:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Wolfram Sang <wsa@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: ACPI: Replace acpi_bus_get_device()
+Message-ID: <Yfl/Sneg9/HPOjBe@smile.fi.intel.com>
+References: <4374434.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4374434.LvFx2qVVIh@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Rafael J. Wysocki" <rafael@kernel.org> writes:
+On Tue, Feb 01, 2022 at 07:00:42PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
 
-> On Mon, Jan 24, 2022 at 10:23 PM Kevin Hilman <khilman@baylibre.com> wrote:
->>
->> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->>
->> > On Mon, Jan 24, 2022 at 5:58 PM Kevin Hilman <khilman@baylibre.com> wrote:
->> >>
->> >> Daniel, Amit,
->> >>
->> >> Alexandre Bailon <abailon@baylibre.com> writes:
->> >>
->> >> > This series add a virtual thermal sensor.
->> >> > It could be used to get a temperature using some thermal sensors.
->> >> > Currently, the supported operations are max, min and avg.
->> >> > The virtual sensor could be easily extended to support others operations.
->> >> >
->> >> > Changes in v2:
->> >> > - Fix some warnings / errors reported by kernel test robot
->> >> > - rename some struct and functions with a more accurate name
->> >> > - update the dt bindings: rename type attribute to aggregation-function
->> >> > - factorize a little bit the aggregation functions
->> >> > Changes in v3:
->> >> > - Aggregate thermal zone instead of thermal sensors
->> >> > - Use try_get_module / put_module to prevent thermal providers to be removed
->> >> > - Update the bindings, to be more accurate
->> >> > Changes in v4:
->> >> > - Fix two warnings reported by kernel test robot
->> >>
->> >> Any more feedback on this series?
->> >
->> > Hopefully, I'll get to it this week and I'll let you know.
->>
->> Thanks Rafael,
->
-> Done, please see
-> https://lore.kernel.org/linux-pm/CAJZ5v0jejFG76OfewYg3kmKv4xwLdRBpC+zRpJ9Jom+tqo7qyg@mail.gmail.com/
+...
 
-Thank you.
+> +	if (!adev || i2c_acpi_get_info(adev, &info, adapter, NULL))
+
+AFAICS the !adev check is redundant since acpi_device_enumerated() does it.
+
+>  		return AE_OK;
+
+...
+
+> +	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+>  
+> -	if (i2c_acpi_do_lookup(adev, lookup))
+> +	if (!adev || i2c_acpi_do_lookup(adev, lookup))
+>  		return AE_OK;
+
+Here we need it indeed.
+Dunno, if acpi_dev_ready_for_enumeration() can gain the check itself.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

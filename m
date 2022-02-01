@@ -2,129 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C24C14A53C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6274B4A53CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiBAAIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S230052AbiBAAJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiBAAIK (ORCPT
+        with ESMTP id S229491AbiBAAJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:08:10 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A41C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:08:10 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id z5so13940117plg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:08:10 -0800 (PST)
+        Mon, 31 Jan 2022 19:09:44 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E34C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:09:44 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id q186so30064186oih.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e3ZZiAySqbprwvaDG1hs3CTP647cwZT0Jm9kr093E2Q=;
-        b=SxiR2jAqx0RJdUj6gsKJ1LebXy+pOqEh08q6cYfYiO702h1SKnnV1x0ynw3JMlZecC
-         JolizYnsCAPRLPwes8Bf7aXuxRI8Oz9bxryv1w5pzifcOfAbOy5YVqqeKNtXJVna3lL9
-         srnpX4jhy0Goq+9glObT1FL7WDSNCNQcVwzaI=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pPpIi5w9W/mHGl9gvj7pAydSd9Upe0NYLYSjf6SNmGI=;
+        b=yOCpgFpAmJBPY+ah6VrkXhKzLEm1/ycMzK2Okai47RXkQDeBdVZse8DqJ7tHoj2f9P
+         7+p6hf7zI+mL/rWg+t7j2wPhYbXaZpBeXlMpUL1H9o3WJxsve9uzAQNmoYjZ+XlguiRi
+         LiQVx6DYfD6VXkfFqrQQRztqB9n/OhvG/0lA0aFdZzscGg50nj6RYYxYmKm1TVI2WSkw
+         FlbJ+NOaO+6g06pQ7CSjhtznTvwTW1BYW12/fefFmcFhPb6/Pt3wqj+QkgQ/jUpLZzPG
+         763QAM+VbJ0mZsyNz9ZyTJL6n0sTWObqhIvKdjGba2XPcHm/9GJPsCLq9/YPHdA7jl9S
+         T5sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e3ZZiAySqbprwvaDG1hs3CTP647cwZT0Jm9kr093E2Q=;
-        b=EGimnKFLlz62MdjSsa+Mb9E0J45ob+jX2pydJ55zSgHKSFqfDhxY0MDLnPz0cJxxp/
-         EutsQ414Jn1Rv4bR/vXI7g+4GMRWrDGMTDh2IjuX+83gkY1TcaiOefXd4WY/uSaNMZUI
-         X8i4R3MRmpcdTTObWe1kb0NJhdPI0rzIjZuUXnhZHOyUJA4IBVgRAVLCz6ghPr5SWy0v
-         VTQJLltUD2fbTgsX7m2BIft2UTOoKaoK0vQdyh2O4wNIzShOFTJpxca5qh2yNe34AKdV
-         YSI7ci5Tj5xA001utg7Mp8Y0vgsaePj+Yh4Ucmua94U07ykIJQUpADA2lnHM/8Iy+kKL
-         uZdA==
-X-Gm-Message-State: AOAM531xjYfm/R72vUCrAc75+4yGJz52DdTFTQ3scxCcK3xGwwqlSHuH
-        0Az2Jj2pcYFbo6kko0Tkn9GrDLciOOfJbw==
-X-Google-Smtp-Source: ABdhPJxwYE9PC8R37lm+lBDVeiw1SZtmTs7c4tULNsg43zULgWEpHvM+K7Xyew2GTFG/Lxvgrwak3w==
-X-Received: by 2002:a17:90a:17a5:: with SMTP id q34mr37012466pja.1.1643674089650;
-        Mon, 31 Jan 2022 16:08:09 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c8sm13008520pfv.57.2022.01.31.16.08.09
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pPpIi5w9W/mHGl9gvj7pAydSd9Upe0NYLYSjf6SNmGI=;
+        b=QxjxyNM4fcc59IByiXTgecjvCHWGsI+8feyCxl882FiDXXvtz/BMJ8paGzQybGShOc
+         pxUxjheBzvb92NtLOG/gxVMes0iNr16AuevuzSzHKG17h4+/pDzKNxlxGKq6E4fFDkOn
+         dVNhVjqpXEor8ppvi2iJjHSMyRWuOrNFU1osCEGJt0YsFvh84KlkSb1uf4zRoiKUYO7d
+         Adw51Ys/f+x3TSxKIgQ383e71oFkB+S9/+IHUX0INz6pnfQ89kPpteEybNgNls3QgkmI
+         oZZagd0h50i0lMP0XbKbPh/YaLyaoqmG181gIviW1vUcRYo/U4Ok9T/7Ej2OAvNG8/CR
+         qMfA==
+X-Gm-Message-State: AOAM533pGvNp1E1iG+XmSTOSuA6C+QVCrUHNNnbvYpame6h2qO2Yx0qq
+        Un4pPX8gAQcRC9GPoY4vz576qw==
+X-Google-Smtp-Source: ABdhPJzWXq0v30SY2G1ZDmV6zl2mHlBTYpH44vyYkuwf8i2o47oSV5DE6SKMq469Uw1k23FhtpyMZg==
+X-Received: by 2002:a05:6808:f0d:: with SMTP id m13mr9140694oiw.141.1643674184137;
+        Mon, 31 Jan 2022 16:09:44 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id h9sm6642619otk.42.2022.01.31.16.09.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 16:08:09 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Eric Biederman <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] selftests/exec: Avoid future NULL argv execve warning
-Date:   Mon, 31 Jan 2022 16:08:07 -0800
-Message-Id: <20220201000807.2453486-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 31 Jan 2022 16:09:43 -0800 (PST)
+Date:   Mon, 31 Jan 2022 18:09:41 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
+        tdas@codeaurora.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, davem@davemloft.net,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 3/8] clk: qcom: gcc: Add PCIe, EMAC and UFS GDSCs for
+ SM8150
+Message-ID: <Yfh6RSTegg2n5xuy@builder.lan>
+References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
+ <20220126221725.710167-4-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1671; h=from:subject; bh=kZ/95lJt1ZckoQR1fzytjDeCsJ6t+JUzBzL4AXqKzBw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+HnnrFbzy50opMtbIN5Zhx1Vt1/4BuI9rimKtphI EOflI3KJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfh55wAKCRCJcvTf3G3AJuNmD/ 4zEKZlGO0q21CWKrd8Pgq07v+XlK2pgyM5OURLUmezdnK6c52l5MOfne0FQzmVI82VAe3pbH9Xs3t+ onxh8VaeE98j6Piha+gWfzLdJbl9nfyEk31eFVmEc16LszHaZX17HTQOJp6YfGEZHKJ2TDf44yFm3h 91kFGjWCcukncS7qU1JGXMaAySbnBHIQoo0RU1yFybRmf7Py9K87qhnQpheBsNYSCnJxIytKdFq+4I 44DUOYLKG5GgCIr6pL5lRfgUVL61S4zyShmygXC7+1TIaCKbfJ4rFU3pBlildZzNCLgIh8Bbmu49Qz ZWZHwBR41kxe7yu28/UnISs/LFah8xlvgONHasmUfN5aXlhOhWxPmAaiyykEhskthNLTOcGnrBrquJ ID+KFH9vViv1dWu08C9L+vUhqicXSceHridIW1uaN9zw4eLE/3TJNiC5brlBzZD73TKLkbee3YGjSZ V1pzxgmT+k74qnautdNFJXCbZe3BK8U5+OAFD5xKKjLnz4MYCXIrLyS/x4xSp1LaPCkCTcyMGxmTVU BM5WCrB711+JxunG621R8KaVhugjS8yUA6XlZIB2yPbavj41Yo+n2rS5JbdkvwqHr48aLSS7f756bm MbQkSKWqGGGjIlt64oicdOWRocPvU+SlSkO36NXJcPgBfYhLAvOIas0uatFA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126221725.710167-4-bhupesh.sharma@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Build actual argv for launching recursion test to avoid future warning
-about using an empty argv in execve().
+On Wed 26 Jan 16:17 CST 2022, Bhupesh Sharma wrote:
 
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/exec/recursion-depth.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+> This adds the PCIe, EMAC and UFS GDSC structures for
+> SM8150. The GDSC will allow the respective system to be
+> brought out of reset.
+> 
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  drivers/clk/qcom/gcc-sm8150.c               | 74 +++++++++++++++++----
+>  include/dt-bindings/clock/qcom,gcc-sm8150.h |  9 ++-
+>  2 files changed, 69 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
+> index 245794485719..ada755ad55f7 100644
+> --- a/drivers/clk/qcom/gcc-sm8150.c
+> +++ b/drivers/clk/qcom/gcc-sm8150.c
+> @@ -3448,22 +3448,67 @@ static struct clk_branch gcc_video_xo_clk = {
+>  	},
+>  };
+>  
+> +static struct gdsc emac_gdsc = {
+> +	.gdscr = 0x6004,
+> +	.pd = {
+> +		.name = "emac_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+> +};
+> +
+> +static struct gdsc pcie_0_gdsc = {
+> +	.gdscr = 0x6b004,
+> +	.pd = {
+> +		.name = "pcie_0_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+> +};
+> +
+> +static struct gdsc pcie_1_gdsc = {
+> +	.gdscr = 0x8d004,
+> +	.pd = {
+> +		.name = "pcie_1_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+> +};
+> +
+> +static struct gdsc ufs_card_gdsc = {
+> +	.gdscr = 0x75004,
+> +	.pd = {
+> +		.name = "ufs_card_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+> +};
+> +
+> +static struct gdsc ufs_phy_gdsc = {
+> +	.gdscr = 0x77004,
+> +	.pd = {
+> +		.name = "ufs_phy_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+> +};
+> +
+>  static struct gdsc usb30_prim_gdsc = {
+> -		.gdscr = 0xf004,
+> -		.pd = {
+> -			.name = "usb30_prim_gdsc",
+> -		},
+> -		.pwrsts = PWRSTS_OFF_ON,
+> -		.flags = POLL_CFG_GDSCR,
+> +	.gdscr = 0xf004,
+> +	.pd = {
+> +		.name = "usb30_prim_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+>  };
+>  
+>  static struct gdsc usb30_sec_gdsc = {
+> -		.gdscr = 0x10004,
+> -		.pd = {
+> -			.name = "usb30_sec_gdsc",
+> -		},
+> -		.pwrsts = PWRSTS_OFF_ON,
+> -		.flags = POLL_CFG_GDSCR,
+> +	.gdscr = 0x10004,
+> +	.pd = {
+> +		.name = "usb30_sec_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = POLL_CFG_GDSCR,
+>  };
+>  
+>  static struct clk_regmap *gcc_sm8150_clocks[] = {
+> @@ -3714,6 +3759,11 @@ static const struct qcom_reset_map gcc_sm8150_resets[] = {
+>  };
+>  
+>  static struct gdsc *gcc_sm8150_gdscs[] = {
+> +	[EMAC_GDSC] = &emac_gdsc,
+> +	[PCIE_0_GDSC] = &pcie_0_gdsc,
+> +	[PCIE_1_GDSC] = &pcie_1_gdsc,
+> +	[UFS_CARD_GDSC] = &ufs_card_gdsc,
+> +	[UFS_PHY_GDSC] = &ufs_phy_gdsc,
+>  	[USB30_PRIM_GDSC] = &usb30_prim_gdsc,
+>  	[USB30_SEC_GDSC] = &usb30_sec_gdsc,
+>  };
+> diff --git a/include/dt-bindings/clock/qcom,gcc-sm8150.h b/include/dt-bindings/clock/qcom,gcc-sm8150.h
+> index 3e1a91876610..35d80ae411a0 100644
+> --- a/include/dt-bindings/clock/qcom,gcc-sm8150.h
+> +++ b/include/dt-bindings/clock/qcom,gcc-sm8150.h
+> @@ -241,7 +241,12 @@
+>  #define GCC_USB_PHY_CFG_AHB2PHY_BCR				28
+>  
+>  /* GCC GDSCRs */
+> -#define USB30_PRIM_GDSC                     4
+> -#define USB30_SEC_GDSC						5
 
-diff --git a/tools/testing/selftests/exec/recursion-depth.c b/tools/testing/selftests/exec/recursion-depth.c
-index 2dbd5bc45b3e..35348db00c52 100644
---- a/tools/testing/selftests/exec/recursion-depth.c
-+++ b/tools/testing/selftests/exec/recursion-depth.c
-@@ -24,8 +24,14 @@
- #include <sys/mount.h>
- #include <unistd.h>
- 
-+#define FILENAME "/tmp/1"
-+#define HASHBANG "#!" FILENAME "\n"
-+
- int main(void)
- {
-+	char * const argv[] = { FILENAME, NULL };
-+	int rv;
-+
- 	if (unshare(CLONE_NEWNS) == -1) {
- 		if (errno == ENOSYS || errno == EPERM) {
- 			fprintf(stderr, "error: unshare, errno %d\n", errno);
-@@ -44,21 +50,19 @@ int main(void)
- 		return 1;
- 	}
- 
--#define FILENAME "/tmp/1"
- 
- 	int fd = creat(FILENAME, 0700);
- 	if (fd == -1) {
- 		fprintf(stderr, "error: creat, errno %d\n", errno);
- 		return 1;
- 	}
--#define S "#!" FILENAME "\n"
--	if (write(fd, S, strlen(S)) != strlen(S)) {
-+	if (write(fd, HASHBANG, strlen(HASHBANG)) != strlen(HASHBANG)) {
- 		fprintf(stderr, "error: write, errno %d\n", errno);
- 		return 1;
- 	}
- 	close(fd);
- 
--	int rv = execve(FILENAME, NULL, NULL);
-+	rv = execve(FILENAME, argv, NULL);
- 	if (rv == -1 && errno == ELOOP) {
- 		return 0;
- 	}
--- 
-2.30.2
+These constants goes into .dtb files as numbers (4 and 5), changing them
+will cause annoying-to-debug bugs in the transition while people still
+are testing a new kernel with last weeks dtb.
 
+So please add the new constants without affecting these numbers.
+
+Rest looks good.
+
+Regards,
+Bjorn
+
+> +#define EMAC_GDSC						0
+> +#define PCIE_0_GDSC						1
+> +#define	PCIE_1_GDSC						2
+> +#define UFS_CARD_GDSC						3
+> +#define UFS_PHY_GDSC						4
+> +#define USB30_PRIM_GDSC						5
+> +#define USB30_SEC_GDSC						6
+>  
+>  #endif
+> -- 
+> 2.34.1
+> 

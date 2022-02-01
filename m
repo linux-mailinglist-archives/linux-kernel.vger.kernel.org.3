@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987D34A578D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7A94A578A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbiBAHOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:14:09 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:36961 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234592AbiBAHOI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:14:08 -0500
-Received: from localhost.localdomain (unknown [77.235.169.38])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6C26961E6478B;
-        Tue,  1 Feb 2022 08:14:04 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] ata: ahci: Skip 200 ms debounce delay for Marvell 88SE9235
-Date:   Tue,  1 Feb 2022 08:12:23 +0100
-Message-Id: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.34.1
+        id S234600AbiBAHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234592AbiBAHMp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 02:12:45 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E605FC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:12:44 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id q127so22788603ljq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:12:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PVW92HDoC/XVNlQ/sBgLb71ANKolpSb9a+lR1z7DyS0=;
+        b=CPLDx7KNeK82j2UI56J1LCuggSFeS3B2lH5X9mR4iWGhggCJZ7rZFSdvibZncDYfeL
+         3aGqJjr05O4+vnzjbsQBaM8wljY2rHeBMdnMAjqAfYWCw9vb8EqAzVHJ+/2/S2VQDaA7
+         Up2Jqz0gcUyuHx7md+lYW8pzmwH4plPXMFItE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PVW92HDoC/XVNlQ/sBgLb71ANKolpSb9a+lR1z7DyS0=;
+        b=R+zIEvEJb132RNmjuWOVkxwWRjdOuYtit0KXXolXO85s2EdF2GKFwQ6uUG8BG5TjVo
+         OdJJE0FiImjJ9z1fghuBqRi1s6ysX7uNtL/nGmMEzCBeapU1JgJOsENomQBR4LeOwfeq
+         hmUQmcHGKkcTxchiEnOH01qyOe6Pj17PQRIqHwzNcs3FghC30LQOAS2oEuFSLCD+fPf3
+         oV8COTezZRjlvFsJaDF46AD1+wxry/iDDw4weJpybsnxciuKkin/54Qr/9mjNNgyeolA
+         sEoXiEn5RZPLk+KXlEUCTXe6nVQ10s6Yxgx0RZCqMrcK6PsjBHS6YwJIxxuZ7xTdev9c
+         FKCw==
+X-Gm-Message-State: AOAM530MCMUjhBj5Hv17hXZOasu7AjvVankvwFz/Aqs16fRTexTosv3c
+        or8qVkAeiZ01+jo/rP9uOm45wg==
+X-Google-Smtp-Source: ABdhPJyAdQ4Gv3Z2Qodv0TvVsi1PTC193vemFm9wBX541IgG+fveE5li4PdKDLfvw6DSY9tWIOAXzg==
+X-Received: by 2002:a2e:890a:: with SMTP id d10mr6847738lji.29.1643699563231;
+        Mon, 31 Jan 2022 23:12:43 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id j18sm749488lfr.253.2022.01.31.23.12.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 23:12:42 -0800 (PST)
+Subject: Re: [PATCH v2 1/3] lib/vsprintf: Avoid redundant work with 0 size
+To:     Waiman Long <longman@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Rientjes <rientjes@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-2-longman@redhat.com>
+ <d99b3c4b-7b6e-529-6e4b-b91b65c92d81@google.com>
+ <Yfe5Bb3U6Uil7Y6g@smile.fi.intel.com> <Yfe6SfG4CqzWSaMM@smile.fi.intel.com>
+ <Yfe7Q5cx+MoaOev/@smile.fi.intel.com>
+ <c33b6435-1b27-32af-b14c-0f3a0318dcca@redhat.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <f3bcf541-e77b-ca93-ef5c-862f4de99366@rasmusvillemoes.dk>
+Date:   Tue, 1 Feb 2022 08:12:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <c33b6435-1b27-32af-b14c-0f3a0318dcca@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
-not needed for the Marvell 88SE9235.
+On 31/01/2022 19.48, Waiman Long wrote:
+> On 1/31/22 05:34, Andy Shevchenko wrote:
 
-    $ lspci -nn -s 0021:0e:00.0
-    0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Ltd. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11)
+>> Also it seems currently the kernel documentation is not aligned with
+>> the code
+>>
+>>    "If @size is == 0 the function returns 0."
+>>
+>> It should mention the (theoretical?) possibility of getting negative
+>> value,
+>> if vsnprintf() returns negative value.
+> 
+> AFAICS, the kernel's vsnprintf() function will not return -1.
 
-So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
+Even if it did, the "i < size" comparison in vscnprintf() is "int v
+size_t", so integer promotion says that even if i were negative, that
+comparison would be false, so we wouldn't forward that negative value
+anyway.
 
-Currently, without this patch (with 200 ms delay), device probe for ata1
-takes 485 ms:
+> So in that
+> sense it is not fully POSIX compliant. 
 
-    [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000100 irq 39
-    [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000180 irq 39
-    [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000200 irq 39
-    [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000280 irq 39
-    […]
-    [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
-    [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
-    [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.841796] ata2.00: configured for UDMA/133
-    [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.846043] ata1.00: configured for UDMA/133
+Of course it's not, but not because it doesn't return -1. POSIX just
+says to return that in case of an error, and as a matter of QoI, the
+kernel's implementation simply can't (and must not) fail. There are
+other cases where we don't follow POSIX/C, e.g. in some corner cases
+around field length and precision (documented in test_printf.c), and the
+non-support of %n (and floating point and handling of wchar_t*), and the
+whole %p<> extension etc.
 
-With this patch (no delay) device probe for ata1 takes 273 ms:
-
-    [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000100 irq 39
-    [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000180 irq 39
-    [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000200 irq 39
-    [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000280 irq 39
-    […]
-    [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
-    [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
-    [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
-    [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
-    [    3.900070] ata1.00: configured for UDMA/133
-    [    3.900166] ata2.00: configured for UDMA/133
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
-v2: address comments for commit message (but forgot v2 tag)
-v3: resend with v3 tag in subject line/commit message summary
-
- drivers/ata/ahci.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index ab5811ef5a53..edca4e8fd44e 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	  .driver_data = board_ahci_yes_fbs },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
- 	  .driver_data = board_ahci_yes_fbs },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
-+	  .driver_data = board_ahci_no_debounce_delay },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 642L */
- 	  .driver_data = board_ahci_yes_fbs },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 644L */
--- 
-2.34.1
-
+Rasmus

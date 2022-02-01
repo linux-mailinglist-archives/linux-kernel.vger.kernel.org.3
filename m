@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0364A61CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500A54A61C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241352AbiBARC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:02:59 -0500
-Received: from mga04.intel.com ([192.55.52.120]:35498 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230115AbiBARC6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:02:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643734978; x=1675270978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3XO2RCLpUwqg2gMhv4lmheHfD3ysoJ5vEX8G/1igDeg=;
-  b=OiYNZFrOd8cX0Sf9yZt25h12cxqfeGC05f/7lioWGOuHUevrco2A2kQo
-   A5kN/kA1z4UFWuNGfkbBHJUIJnz+VtJE44Y4oW++XOC77bpapDS0Gfjqh
-   BraeIDkaayAinL4f++ss4gT+AKFX4yjup842Sn7JXk7cdmn15vdmSCVlS
-   gN5ck0vwOutQushUnBUxVptAHkt00HXuVXyeei0hkIxrOjxMT97Uo/4qi
-   SHcoSRMBHraB7dxWDForgnYqple8w7OT0pDMyTwPK3GfjJAz72Xsx6RX1
-   FJB59NhXqWCYxnHAwJlSZr2vZHHZMtOzqbW8/QVVP680VUxUknckvgLmc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="246569033"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="246569033"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 09:00:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="537881840"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2022 09:00:55 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEwWV-000TVn-1z; Tue, 01 Feb 2022 17:00:55 +0000
-Date:   Wed, 2 Feb 2022 01:00:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [dvyukov:dvyukov-sigtrap-arm64 1/1]
- arch/arm64/kernel/signal.c:566:32: error: use of undeclared identifier 'sf'
-Message-ID: <202202020023.4C6dVeTR-lkp@intel.com>
+        id S230079AbiBARA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229651AbiBARA2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 12:00:28 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5700AC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:00:28 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id g20so15819005pgn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hjKjHV9jnubwu+acQPJiuHlQvZVGX3FfOdn2hBSEEIg=;
+        b=wWsrHSI4TFapagsKin/t7I8V5DxVRf4KxL09EtZobtavB0WyT+/h9YbDxpsS9dfAh9
+         4pJlN+uE6qXk5OaPIZDhm4jIRBWsUfaNkB9NZQdlKF1vlhcB+PTq6yCBXBmHwDtvaPkS
+         eRFN1xO9UEvfOqH9kV5ONONZ1MXEdV3ModvL1Qbe8mvFzLupyytljN6Sc2rESRXQUJ8T
+         TKZ0GzBp4P8u6jidrGYUQHHweanphnXK06LQbRgRVT+aYFaHSNmO1sUHoITMZ9ELKxfj
+         BVPeUVn6GLo/Jh/2iYcMBi3sO+7UN8Da4C5Vaz8Jq2rLe4uP0gFi+6+K7M3elxj7imAZ
+         ga+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hjKjHV9jnubwu+acQPJiuHlQvZVGX3FfOdn2hBSEEIg=;
+        b=tDGeqK+AEugJm/Tnt3A9iI4YyZzhGo+B3GrsHxt2NmlvIeTRLcNC0H6LuvzgSHlkKq
+         Nya92x1/KZUNPUMJbSes8uk3j04qvxeD4a7TwZz+2Xb6X8rMTynENXoz3o3nyI/HJJYS
+         K4UH3eKjkMVZiCeaPnC7JTwsOMCtlg2kN9EqwMimSYFp6eA0RoZRwQl5zTIKxw0L248x
+         wBBb0VPf0EX9Z5EtavJL2tgXbPSpwz3z4jStY1m4lpAUZxLCeGRM7RLszhDWUUBnuh6w
+         trCO5Dcqdzk/grQ6nfVCkHzgfSzMYjr0pzayxCb/zMdixkBNrPqedMOGxBMZxCBZsJjb
+         fczw==
+X-Gm-Message-State: AOAM530KtQeWlx2hbMN8AGMO3IeK3np3A0ftoIW8an7S0Qcu7pUpYEth
+        KtcbZhdn+kY4LaQ8v0J42IXMU2XSGnbLqQ==
+X-Google-Smtp-Source: ABdhPJzttNxVYjZaJe1dgUCltOYJ1fvIsjiIHcV6+nOXXp/1rIMiSoHkylDOKHr9pJy5EJUEGWs9Bg==
+X-Received: by 2002:a63:cf0b:: with SMTP id j11mr21178673pgg.5.1643734827655;
+        Tue, 01 Feb 2022 09:00:27 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id s14sm23347006pfk.174.2022.02.01.09.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 09:00:25 -0800 (PST)
+Date:   Tue, 1 Feb 2022 10:00:23 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, mike.leach@linaro.org,
+        suzuki.poulose@arm.com, leo.yan@linaro.com,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] coresight: Fix TRCCONFIGR.QE sysfs interface
+Message-ID: <20220201170023.GA2490199@p14s>
+References: <20220120113047.2839622-1-james.clark@arm.com>
+ <20220120113047.2839622-2-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220120113047.2839622-2-james.clark@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/dvyukov/linux dvyukov-sigtrap-arm64
-head:   dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
-commit: dfd6903d9c6538e3ad792c1df6ffbcce2072b12b [1/1] arm64: try to fix arm64 watchpoints
-config: arm64-randconfig-r001-20220130 (https://download.01.org/0day-ci/archive/20220202/202202020023.4C6dVeTR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/dvyukov/linux/commit/dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
-        git remote add dvyukov https://github.com/dvyukov/linux
-        git fetch --no-tags dvyukov dvyukov-sigtrap-arm64
-        git checkout dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On Thu, Jan 20, 2022 at 11:30:47AM +0000, James Clark wrote:
+> It's impossible to program a valid value for TRCCONFIGR.QE
+> when TRCIDR0.QSUPP==0b10. In that case the following is true:
+> 
+>   Q element support is implemented, and only supports Q elements without
+>   instruction counts. TRCCONFIGR.QE can only take the values 0b00 or 0b11.
+> 
+> Currently the low bit of QSUPP is checked to see if the low bit of QE can
+> be written to, but as you can see when QSUPP==0b10 the low bit is cleared
+> making it impossible to ever write the only valid value of 0b11 to QE.
+> 0b10 would be written instead, which is a reserved QE value even for all
+> values of QSUPP.
+> 
+> The fix is to allow writing the low bit of QE for any non zero value of
+> QSUPP.
+> 
+> This change also ensures that the low bit is always set, even when the
+> user attempts to only set the high bit.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
+> Reviewed-by: Mike Leach <mike.leach@linaro.org>
+> ---
+>  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> index a0640fa5c55b..57e94424a8d6 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> @@ -367,8 +367,12 @@ static ssize_t mode_store(struct device *dev,
+>  	mode = ETM_MODE_QELEM(config->mode);
+>  	/* start by clearing QE bits */
+>  	config->cfg &= ~(BIT(13) | BIT(14));
+> -	/* if supported, Q elements with instruction counts are enabled */
+> -	if ((mode & BIT(0)) && (drvdata->q_support & BIT(0)))
+> +	/*
+> +	 * if supported, Q elements with instruction counts are enabled.
+> +	 * Always set the low bit for any requested mode. Valid combos are
+> +	 * 0b00, 0b01 and 0b11.
+> +	 */
+> +	if (mode && drvdata->q_support)
+>  		config->cfg |= BIT(13);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Interesting brain gymnastic - applied.
 
-All error/warnings (new ones prefixed by >>):
+Thanks,
+Mathieu
 
->> arch/arm64/kernel/signal.c:566:32: error: use of undeclared identifier 'sf'
-           if (!__copy_from_user(&info, &sf->info, sizeof(info)) &&
-                                         ^
-   arch/arm64/kernel/signal.c:930:6: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
-   void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
-        ^
-   arch/arm64/kernel/signal.c:930:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
-   ^
-   static 
-   1 warning and 1 error generated.
---
->> arch/arm64/kernel/hw_breakpoint.c:754:6: warning: no previous prototype for function 'hw_bp_single_step' [-Wmissing-prototypes]
-   void hw_bp_single_step(struct pt_regs *regs)
-        ^
-   arch/arm64/kernel/hw_breakpoint.c:754:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hw_bp_single_step(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/sf +566 arch/arm64/kernel/signal.c
-
-   536	
-   537	SYSCALL_DEFINE0(rt_sigreturn)
-   538	{
-   539		struct pt_regs *regs = current_pt_regs();
-   540		struct rt_sigframe __user *frame;
-   541		struct siginfo info;
-   542	
-   543		/* Always make any pending restarted system calls return -EINTR */
-   544		current->restart_block.fn = do_no_restart_syscall;
-   545	
-   546		/*
-   547		 * Since we stacked the signal on a 128-bit boundary, then 'sp' should
-   548		 * be word aligned here.
-   549		 */
-   550		if (regs->sp & 15)
-   551			goto badframe;
-   552	
-   553		frame = (struct rt_sigframe __user *)regs->sp;
-   554	
-   555		if (!access_ok(frame, sizeof (*frame)))
-   556			goto badframe;
-   557	
-   558		if (restore_sigframe(regs, frame))
-   559			goto badframe;
-   560	
-   561		if (restore_altstack(&frame->uc.uc_stack))
-   562			goto badframe;
-   563	
-   564		// TODO: memorize the original return PC in setup_rt_frame
-   565		// and ensure we are returning to the same PC.
- > 566		if (!__copy_from_user(&info, &sf->info, sizeof(info)) &&
-   567			info.si_signo == SIGTRAP && info.si_code == TRAP_PERF &&
-   568			info.si_perf_type == PERF_TYPE_BREAKPOINT)
-   569			hw_bp_single_step(regs);
-   570	
-   571		return regs->regs[0];
-   572	
-   573	badframe:
-   574		arm64_notify_segfault(regs->sp);
-   575		return 0;
-   576	}
-   577	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  	/*
+>  	 * if supported, Q elements with and without instruction
+> -- 
+> 2.28.0
+> 

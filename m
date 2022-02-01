@@ -2,75 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFB14A62B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483C74A62B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241598AbiBARka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:40:30 -0500
-Received: from mga02.intel.com ([134.134.136.20]:11335 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241596AbiBARkX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:40:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643737224; x=1675273224;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=w8HMLRlvFY4B4RAgkNDRGRRjjPKUPof7Fu2+mcJLrrs=;
-  b=S0Fma3YH2Vn64uO76yjzMn5aQT/EYA+ostS20wnq4Bcu6ptkKI/wryzB
-   RuVeM29V1P6ntnJiCFKiatesom8UKinwfw0u9XqI7FsDbTpS2KuEk3ST9
-   wr164hStx9v7+RU4Z4sxt3U22ehfJoUShMK4vfK74ChGHUSP6PM16gOuN
-   MDlNlRxHgnP8X2B8TQYXWZN3db8KW31q+Gidpu1N99b5Y6E2Lfms0feOc
-   JmWmMO2p6yNHmDW84Gln+x730RIZlQjRsCvokjBtkvEYpHvNRQGJK3o/l
-   wbzeFUbx4wguCrJTOFJ5NwkZnVEWSD4CIK/YUdlWRtTpcmTXais7ZGc1M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235142146"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="235142146"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 09:40:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="583109790"
-Received: from kssimha-mobl1.amr.corp.intel.com (HELO [10.212.228.15]) ([10.212.228.15])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 09:40:09 -0800
-Message-ID: <87f171f1-c44b-5103-f9e5-20a6b5c257dd@intel.com>
-Date:   Tue, 1 Feb 2022 09:40:06 -0800
+        id S241606AbiBARl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:41:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35890 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230345AbiBARl2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 12:41:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E5C6123B;
+        Tue,  1 Feb 2022 17:41:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF857C340EB;
+        Tue,  1 Feb 2022 17:41:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643737287;
+        bh=xqurn0aMLg9LPORst7+QOsFe67TLB0BWbKrD5lJaEUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XhHJogGxV9fLNWcbgdHNbs4+6IXOssN8O5a+LqiuEY6P07FpWmF/V00NmNuNAgUqO
+         kKdSLwkI8CmW+4H9dbwuJc+ABJUEQvo2E2N/uoDRkYkT3ZPJuyFbZu43Q3gd+OnsQw
+         fYB5RWS7G5erqCaqn5LNsGO0YnZun6GjONge/RFt/ej5tHy1NHmWd1yfxfTooCHPMQ
+         OxurKPbSFYwaXOqklMaETsz+0+Y70jMdTuHpjFJfqSEenTNQhmwiodDdNrv1FlQKH+
+         p+tQhFU0RQ6NVojA19GGX4+lq6bNYZvNCDlQ1qGcjiwQmqywzurGJ5DlSKTLTiV7w0
+         tKZYDzdCKiHyw==
+Date:   Tue, 1 Feb 2022 17:41:21 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH v6 0/9] Support Spi in i2c-multi-instantiate driver
+Message-ID: <YflwwWD85CmSzlgT@sirena.org.uk>
+References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     ira.weiny@intel.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-17-ira.weiny@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH V8 16/44] mm/pkeys: Introduce pks_mk_readwrite()
-In-Reply-To: <20220127175505.851391-17-ira.weiny@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f9iEEYctSRFMQhBo"
+Content-Disposition: inline
+In-Reply-To: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
+X-Cookie: All's well that ends.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> +static inline void pks_mk_readwrite(int pkey)
-> +{
-> +	pks_update_protection(pkey, PKEY_READ_WRITE);
-> +}
 
-I don't really like the "mk" terminology in here.  Maybe it's from
-dealing with the PTE helpers, but "mk" to me means that it won't do
-anything observable by itself.  We're also not starved for space here,
-and it's really odd to abbreviate "make->mk" but not do "readwrite->rw".
+--f9iEEYctSRFMQhBo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This really is going off and changing a register value.  I think:
+On Fri, Jan 21, 2022 at 05:24:22PM +0000, Stefan Binding wrote:
+> Add support for SPI bus in the i2c-multi-instantiate driver as
+> upcoming laptops will need to multi instantiate SPI devices from
+> a single device node, which has multiple SpiSerialBus entries at
+> the ACPI table.
 
-	pks_set_readwrite()
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-would be fine.  This starts to get a bit redundant, but looks fine too:
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-	pks_set_key_readwrite()
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-acpi-helpers
+
+for you to fetch changes up to e612af7acef2459f1afd885f4107748995a05963:
+
+  spi: Add API to count spi acpi resources (2022-02-01 17:38:48 +0000)
+
+----------------------------------------------------------------
+spi: ACPI helpers
+
+This patch series enhances the ACPI helpers to cope with multiple
+resources being available and exports them for use.
+
+----------------------------------------------------------------
+Stefan Binding (4):
+      spi: Make spi_alloc_device and spi_add_device public again
+      spi: Create helper API to lookup ACPI info for spi device
+      spi: Support selection of the index of the ACPI Spi Resource before alloc
+      spi: Add API to count spi acpi resources
+
+ drivers/spi/spi.c       | 137 ++++++++++++++++++++++++++++++++++++++++++------
+ include/linux/spi/spi.h |  20 +++++++
+ 2 files changed, 141 insertions(+), 16 deletions(-)
+
+--f9iEEYctSRFMQhBo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH5cMEACgkQJNaLcl1U
+h9Ck2gf9GYw5kRyywJi8CHAE4s6w7WHL0sKrCSwxkn0svqktdSthmB1eYeKBXKma
+PaNBJ6aN6PwmUTN7O3qaw03HbPbXX6m7/6B3nYLCm7DV2GcCK/eGhvVeOQfPeAvj
+Ydh1Xv7G6BYCPpAy4gYTQb8qZ4okCpe/bAhvqjFE44I04psrXSaByp502BJ32o7G
+DfAZa6Tp2OwOmdtveUBFyu7KciNDLre9taSfKd6yaCnWrAJIuwWxdmgFlSXUqAg2
+J4x2i0/tCvxCyDBa4XlGpAJ+56QCMIQLakeJruDF7lSA5qOe36MLDwJ8ONRMClNw
+5NmIEME3mIGVUtw43zzwdmAoBezAjQ==
+=zFNW
+-----END PGP SIGNATURE-----
+
+--f9iEEYctSRFMQhBo--

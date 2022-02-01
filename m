@@ -2,151 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 447964A5410
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FB44A5414
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiBAAaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:30:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60394 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230387AbiBAAac (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:30:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643675431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4ZXnMqMTjhCODrzBX/cYgLVFu6C0QMPhSVx3vFBSQE4=;
-        b=JO/HFS7xGMkPssQ3q16o5YDXip7IrDF1DRdEHij6lsjzb5UKMJUsxOat3T+0XQ3GQg4O1+
-        e2Alrv4PRMRt1PFcWQT6+X7U+i6sApWWvnaF15Qu8Ig3Ur6LoQGn1J5PRpPXjX8C7m5+b2
-        viyd4fZa/kZzqQNuCDho09s616Ic7W0=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-8ZdFm2WXNSitfosDXjfjKQ-1; Mon, 31 Jan 2022 19:30:30 -0500
-X-MC-Unique: 8ZdFm2WXNSitfosDXjfjKQ-1
-Received: by mail-qt1-f199.google.com with SMTP id l15-20020ac84ccf000000b002cf9424cfa5so11703306qtv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:30:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4ZXnMqMTjhCODrzBX/cYgLVFu6C0QMPhSVx3vFBSQE4=;
-        b=cDziiqt1kbWNGechfYowJrmSzOWUsBh82ykLnhmE7eXHrimbKzFvxXekD545VgE++n
-         KHWz57s6vESDKApdvth783cSd3j0ZL7Yf9hG4uRZ6r1wyADjSNM56jNarPZPILQFSdz8
-         iNMbgGTzuNkIoYZ5xP8//FolR7pqbgZPEuKI0RQb4dRZ6a4YZbiePegFNVwg40xqSZK6
-         KqsKl6Hi2flhOX8qv0wEeYN2e9INbcTOKjgF91CEznQw4CLzsnhF3nq8LWw1v1MzdGss
-         Lv6SHeFc3q/JdNWa7/LtpOxboeT/J6mjmlO2Gcbll9LUBKLKKE5e+5ohzuqoyOxigAR3
-         wPlQ==
-X-Gm-Message-State: AOAM531pjsfTN/nCz1OMoERrsiiMpJMtGCSzXyliTsfbGtOnhLyghi8e
-        x4hIcXwPzyXaQ0ReyPZW83MobD6hBTM5MEf8ZCvyWSiKrQFmsVqARlKkDysQlWzB7apIR/qlhAD
-        BzH486OcRPBw+nnVAuAL7Twte
-X-Received: by 2002:a05:622a:1350:: with SMTP id w16mr16932720qtk.320.1643675429591;
-        Mon, 31 Jan 2022 16:30:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxcU6Q/Ar+1PORDMHeHdSkYIDRol8TVKqlIFKIp6y3P1Nu6cTI+jdY7B1NUgfXzyplagNS42w==
-X-Received: by 2002:a05:622a:1350:: with SMTP id w16mr16932710qtk.320.1643675429332;
-        Mon, 31 Jan 2022 16:30:29 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id e9sm8990768qtx.37.2022.01.31.16.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 16:30:28 -0800 (PST)
-Date:   Mon, 31 Jan 2022 16:30:25 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [RFC PATCH] x86/dumpstack: Fix unwind failure due to
- off-by-one-frame
-Message-ID: <20220201003025.yb2wpmw4dprmsdww@treble>
-References: <20220127005555.2766254-1-jannh@google.com>
+        id S230180AbiBAAdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:33:06 -0500
+Received: from mga05.intel.com ([192.55.52.43]:25904 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229598AbiBAAdF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 19:33:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643675585; x=1675211585;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3gXTiCamqHVXaLC8ysYKx/Z9ei0LS6DfwZIZuPqX7sc=;
+  b=eAgC8FcgvDZ/mJsYhQHJwjzPJmmSOdxbL1iTGRvK6suY/XtWCLXBKfOJ
+   a+cO2RULVlnAae2W4e9GIWFNvngLuBVSAjqgJSpmvfpTvVzNE0+I6BBnJ
+   eQlDJQspI2qIrKlFAn7bT7uwsKJpSVfCYo7m3z314qQx4Zo4X8yybnZuG
+   wDj8prdu+PjdkfSN8FhKYD22oUUuVfCid7lVbeOApDeyFNjrBf5AWSUlN
+   jznX7wDz12F7nfyMNaLNwEQnsId0uW6Vx6tl47WrthrpULtOG8XKd2dOS
+   YqDp0Nt5DBXYPn7kX1IZvgc7xPumtblsI8OAbA3tfBXgmdhXNeCEGfny0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="333946544"
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="333946544"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 16:33:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="497150674"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2022 16:33:03 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEh6U-000SWM-W7; Tue, 01 Feb 2022 00:33:02 +0000
+Date:   Tue, 1 Feb 2022 08:32:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: arch/x86/kvm/x86.c:4342:31: sparse: sparse: incorrect type in return
+ expression (different address spaces)
+Message-ID: <202202010807.z1MJQYQ1-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127005555.2766254-1-jannh@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 01:55:55AM +0100, Jann Horn wrote:
-> (emphasis on the "RFC", not the "PATCH"...)
-> 
-> I've hit a bug where __dump_stack() ends up printing a stack trace that
-> consists purely of guesses (all printed frames start with "? ").
-> 
-> Debugging the issue, I found that show_trace_log_lvl() is looking at a
-> stack that looks like this:
-> 
->     function             stored value    pointer in show_trace_log_lvl()
->     ====================================================================
->             show_stack   saved RIP
->             show_stack   saved RBP       <-- stack
->     show_trace_log_lvl   saved RIP       <-- unwind_get_return_address_ptr(...)
->     show_trace_log_lvl   ...
->     show_trace_log_lvl   ...
-> 
-> show_trace_log_lvl() then iterates up the stack with its `stack`
-> variable; but because `unwind_get_return_address_ptr(&state)` is below the
-> starting point, the two never compile equal, and so `reliable` is never
-> set to 1.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   26291c54e111ff6ba87a164d85d4a4e134b7315c
+commit: 56f289a8d23addfa4408a08f07f42fcfe2a7bd69 KVM: x86: Add a helper to retrieve userspace address from kvm_device_attr
+date:   4 days ago
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220201/202202010807.z1MJQYQ1-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=56f289a8d23addfa4408a08f07f42fcfe2a7bd69
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 56f289a8d23addfa4408a08f07f42fcfe2a7bd69
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Thanks for reporting!  If I understand correctly, this only happens
-when show_stack() has an 8-byte stack size.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Poking around a bit, I see two issues.
-> 
-> The first issue is that __unwind_start() tries to figure out whether
-> `first_frame` is inside the current frame before even having looked up
-> the ORC entry that determines where the current frame ends.
-> That can't work and results in being off-by-one-frame in some cases no
-> matter how we twist the comparison between `state->sp` and `first_frame`.
 
-> The second issue is that show_trace_log_lvl() asks __unwind_start() to
-> stop when it finds the frame containing `stack`, but then tries
-> comparing `unwind_get_return_address_ptr(&state)` (which has to be below
-> `stack`, since it is part of the lower frame) with `stack`.
-> That can't work if __unwind_start() is working properly - we'll have to
-> unwind up another frame.
->
-> This patch is an attempt to fix that, but I guess there might still be
-> issues with it in the interaction with show_regs_if_on_stack() in
-> show_trace_log_lvl(), or something like that?
-> 
-> Another option might be to rework even more how ORC stack walking works,
-> and always compute the location of the next frame in __unwind_start()
-> and unwind_next(), such that it becomes possible to query for the top
-> of the current frame?
-> 
-> Or a completely different approach, do more special-casing of different
-> unwinding scenarios in __unwind_start(), such that unwinding a remote
-> task doesn't go through the skip-ahead loop, and unwinding the current
-> task from a starting point is always guaranteed to skip the given frame
-> and stop at the following one? Or something along those lines?
->
-> That would also make it more obviously correct what happens if a
-> function specifies its own frame as the starting point wrt to changes to
-> that frame's contents before the call to unwind_next()... now that I'm
-> typing this out, I think that might be the best option?
+sparse warnings: (new ones prefixed by >>)
+   arch/x86/kvm/x86.c:235:47: sparse: sparse: array of flexible structures
+   arch/x86/kvm/x86.c: note: in included file:
+   include/linux/kvm_host.h:1761:54: sparse: sparse: array of flexible structures
+   arch/x86/kvm/x86.c:261:49: sparse: sparse: array of flexible structures
+   include/linux/kvm_host.h:1763:56: sparse: sparse: array of flexible structures
+   arch/x86/kvm/x86.c:2833:9: sparse: sparse: context imbalance in '__kvm_start_pvclock_update' - wrong count at exit
+   arch/x86/kvm/x86.c:2844:13: sparse: sparse: context imbalance in 'kvm_end_pvclock_update' - unexpected unlock
+>> arch/x86/kvm/x86.c:4342:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __user * @@     got void * @@
+   arch/x86/kvm/x86.c:4342:31: sparse:     expected void [noderef] __user *
+   arch/x86/kvm/x86.c:4342:31: sparse:     got void *
+>> arch/x86/kvm/x86.c:4342:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __user * @@     got void * @@
+   arch/x86/kvm/x86.c:4342:31: sparse:     expected void [noderef] __user *
+   arch/x86/kvm/x86.c:4342:31: sparse:     got void *
+   arch/x86/kvm/x86.c: note: in included file (through include/linux/notifier.h, arch/x86/include/asm/uprobes.h, include/linux/uprobes.h, ...):
+   include/linux/srcu.h:188:9: sparse: sparse: context imbalance in 'vcpu_enter_guest' - unexpected unlock
 
-If I understand correctly, this last proposal is what the current
-__unwind_start() code already attempts to do (but obviously fails in the
-above off-by-one case).  It tries to start at the first frame it finds
-*beyond* the given 'first_frame' pointer, rather than the frame
-including it.  That makes the logic simpler, since you don't have to
-find the size of the frame.
+vim +4342 arch/x86/kvm/x86.c
 
-So I think this bug could be fixed by reverting commit f1d9a2abff66
-("x86/unwind/orc: Don't skip the first frame for inactive tasks").
+  4336	
+  4337	static inline void __user *kvm_get_attr_addr(struct kvm_device_attr *attr)
+  4338	{
+  4339		void __user *uaddr = (void __user*)(unsigned long)attr->addr;
+  4340	
+  4341		if ((u64)(unsigned long)uaddr != attr->addr)
+> 4342			return ERR_PTR(-EFAULT);
+  4343		return uaddr;
+  4344	}
+  4345	
 
-Can you confirm?
-
-If that fixes it, we may need to do a little more special-casing like
-you suggest to get the expected results for the different use cases.
-
--- 
-Josh
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

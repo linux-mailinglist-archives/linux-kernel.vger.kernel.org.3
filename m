@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299134A5DC9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0654A5DCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238941AbiBAN5S convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 08:57:18 -0500
-Received: from mail-yb1-f177.google.com ([209.85.219.177]:45691 "EHLO
-        mail-yb1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbiBAN5Q (ORCPT
+        id S238959AbiBAN5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237337AbiBAN5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:57:16 -0500
-Received: by mail-yb1-f177.google.com with SMTP id w81so28907853ybg.12;
-        Tue, 01 Feb 2022 05:57:16 -0800 (PST)
+        Tue, 1 Feb 2022 08:57:30 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964AFC061714;
+        Tue,  1 Feb 2022 05:57:30 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id r65so51086903ybc.11;
+        Tue, 01 Feb 2022 05:57:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gmPaQg3ZV/NzjWszRhN/vx7xYoj6dJ6Nz9nhp20TkY0=;
+        b=kxws1Bm7isRqI/ht4fr4+gcveANEX49JWqnYr8dQe7mNzd+IDdPb5AmSwscJwZ6Ona
+         qbIhviualk8JNHmt5RwpviIdNsuOAJxoQ3Gcs7UJnuzqiB9XPwUAZeJSv21PCc9/JLQn
+         WtHo1LKNcmbc/M90TAUUx7pBQ4Zw1pkjUOoOJ25sjwYonIGGXCtXcbT74gfw8o406Eg+
+         UyvxoAEQNjK2yATWp0pn+c7uIynv/ohql2a3DY1H2g9DdhquMvJV3JlMlQODBYDmhrP9
+         RCGAaVGOjY56g0NQtBx2iHYGBp/qv6t4aGaAe1hI3b1sxTQLt2rm6oWtcHN3R89dLHl6
+         R4Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cxZAumcJuLiwqLQLmbuj01UQ98nceFhPCqwJGs4n/8E=;
-        b=s11Ht9ScQLIqCvcZtPNay70w1++z670vfGn8Js1sUkCEpAYxayfCw6gFrSj2E0Jwur
-         mudiigbUa4fAzD9opBGcP6EIu4/X2CaKZ8Ar1XoRZz75+9nyCMCnev0bqdhcfg+RNLsd
-         aINz3EJTyotynjkY1sfWZ9FGISSJQwbV83Quw4l1nckicFOEM63yXbRkYZSLf8BvVvP3
-         MVMItIs9NJBueMboYFj5p7jMuTyyUFx8Ct1ZzoBy6AzgGt19xQJ5mXLEUAZUn5FGhLVe
-         Q89ALHYsju39BAY9RIy57H+mZR8rQQXBCmaOV3/565FStC5W51/oF/WaMWbLuSgfj/iA
-         bmaw==
-X-Gm-Message-State: AOAM530Kqan1LPhy9DrzM+8brqq4+ee5sZnKy7JmYjFgZ8+kbBV3hza9
-        kDEGTx9tThkdMoH59naKyK6aI9OlZZKZGCOIbHI=
-X-Google-Smtp-Source: ABdhPJxy1AxzzrLoxM0IIRnSEh35W34PwsOn6LOwMVWbdd95KFpYr12dqhFgEyOQHXkg+Lmi+2MtnRaRKUb7hlUs0pU=
-X-Received: by 2002:a25:b114:: with SMTP id g20mr21276348ybj.259.1643723835720;
- Tue, 01 Feb 2022 05:57:15 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=gmPaQg3ZV/NzjWszRhN/vx7xYoj6dJ6Nz9nhp20TkY0=;
+        b=2+NmE9aQeDCRgteaPZL37+O0vbmefkgEguml+afe7rm0BWAo+pFxHaIkZureURBFYV
+         oYXpdfqLAPjEyFMirpE0MEiLIK7PV+haEuJ8cFxpLSFYJ/y+5iKpljNSssq5Q83+UXYg
+         EiiZtZ9NjJC1SMjqnFfYcA1tuYY/2+CZcqEO5r1YqB8Chn1ET77QF8wsJCsMaP9BnRdt
+         Vb7xJEFGVeKr3+760kjp1Rat5JpLArejaWonmpp99kMhneKDm+/8CyXtvB41oWD/2V0q
+         MBkhKufJdQQ9UUk8De45SMbSwygVtW5tD1OVp288lgA2RuOMUtaLazfKXM3A31r6y15e
+         fRPg==
+X-Gm-Message-State: AOAM532J0IaQyr5fBdhVOGGkhJ3JO7+6hTJRbg0sSSQG8p+KYmt2kEoU
+        0JFIzbUYMFGEHBX4D74usX9/FwP+CNVZIax0dD8=
+X-Google-Smtp-Source: ABdhPJzjYusBJzMKzp9/ffPXRWGG1NuJJEOzMtRtLfKO4XOKtBQ+gSH59XiC/T+N89ZGmQS5monA5MJTw7+LJ+ZDVso=
+X-Received: by 2002:a25:b88:: with SMTP id 130mr34680074ybl.199.1643723849842;
+ Tue, 01 Feb 2022 05:57:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220128230922.2047140-1-j.neuschaefer@gmx.net> <20220128230922.2047140-3-j.neuschaefer@gmx.net>
-In-Reply-To: <20220128230922.2047140-3-j.neuschaefer@gmx.net>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Tue, 1 Feb 2022 14:57:03 +0100
-Message-ID: <CAAdtpL5xVjiKSFVcdFiMQHrki2bDSbDppP65QDC5ybBp3u-kMw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] clk: loongson1: Terminate clk_div_table with sentinel element
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
+References: <1643112538-36743-1-git-send-email-wanpengli@tencent.com> <ae828eca-40bd-60f3-263f-5b3de637a9aa@redhat.com>
+In-Reply-To: <ae828eca-40bd-60f3-263f-5b3de637a9aa@redhat.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Tue, 1 Feb 2022 21:57:19 +0800
+Message-ID: <CANRm+CwkYJAsv=VngY6m1uQtCLa+WqOJwSJzx95dO7LRAkbsbg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2] KVM: LAPIC: Enable timer posted-interrupt when
+ mwait/hlt is advertised
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Aili Yao <yaoaili@kingsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:48 PM Jonathan Neuschäfer
-<j.neuschaefer@gmx.net> wrote:
+On Tue, 1 Feb 2022 at 20:11, Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> In order that the end of a clk_div_table can be detected, it must be
-> terminated with a sentinel element (.div = 0).
+> On 1/25/22 13:08, Wanpeng Li wrote:
+> > As commit 0c5f81dad46 (KVM: LAPIC: Inject timer interrupt via posted interrupt)
+> > mentioned that the host admin should well tune the guest setup, so that vCPUs
+> > are placed on isolated pCPUs, and with several pCPUs surplus for*busy*  housekeeping.
+> > It is better to disable mwait/hlt/pause vmexits to keep the vCPUs in non-root
+> > mode. However, we may isolate pCPUs for other purpose like DPDK or we can make
+> > some guests isolated and others not, we may lose vmx preemption timer/timer fastpath
+> > due to not well tuned setup, and the checking in kvm_can_post_timer_interrupt()
+> > is not enough. Let's guarantee mwait/hlt is advertised before enabling posted-interrupt
+> > interrupt. vmx preemption timer/timer fastpath can continue to work if both of them
+> > are not advertised.
 >
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> ---
->  drivers/clk/loongson1/clk-loongson1c.c | 1 +
->  1 file changed, 1 insertion(+)
+> Is this the same thing that you meant?
 >
-> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-> index 703f87622cf5f..6b29ae9ede3e5 100644
-> --- a/drivers/clk/loongson1/clk-loongson1c.c
-> +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> @@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] = {
->         [1] = { .val = 1, .div = 4 },
->         [2] = { .val = 2, .div = 3 },
->         [3] = { .val = 3, .div = 3 },
-> +       [4] = { .val = 0, .div = 0 },
-
-Easier to review when self-explicit:
-
-        [4] = { /* sentinel */ }
-
-Preferably updated:
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-
-And eventually:
-Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-
->  };
+> --------
+> As commit 0c5f81dad46 ("KVM: LAPIC: Inject timer interrupt via posted interrupt")
+> mentioned that the host admin should well tune the guest setup, so that vCPUs
+> are placed on isolated pCPUs, and with several pCPUs surplus for *busy* housekeeping.
+> In this setup, it is preferrable to disable mwait/hlt/pause vmexits to
+> keep the vCPUs in non-root mode.
 >
->  void __init ls1x_clk_init(void)
-> --
-> 2.34.1
+> However, if only some guests isolated and others not, they would not have
+> any benefit from posted timer interrupts, and at the same time lose
+> VMX preemption timer fast paths because kvm_can_post_timer_interrupt()
+> returns true and therefore forces kvm_can_use_hv_timer() to false.
 >
+> By guaranteeing that posted-interrupt timer is only used if MWAIT or HLT
+> are done without vmexit, KVM can make a better choice and use the
+> VMX preemption timer and the corresponding fast paths.
+> --------
+
+Looks better, thanks Paolo! :)
+
+    Wanpeng

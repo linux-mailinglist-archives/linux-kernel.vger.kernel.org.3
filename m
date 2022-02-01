@@ -2,111 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 642504A59F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA1A4A59FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiBAK0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbiBAK0n (ORCPT
+        id S236605AbiBAK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:27:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54086 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236655AbiBAK1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:26:43 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5FCC06173D;
-        Tue,  1 Feb 2022 02:26:43 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=truhe.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1nEqMy-0002pB-5Q; Tue, 01 Feb 2022 11:26:40 +0100
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     linux-doc@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        regressions@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v4 0/3] docs: add two texts covering regressions
-Date:   Tue,  1 Feb 2022 11:26:36 +0100
-Message-Id: <cover.1643710947.git.linux@leemhuis.info>
-X-Mailer: git-send-email 2.31.1
+        Tue, 1 Feb 2022 05:27:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 735F5614C6;
+        Tue,  1 Feb 2022 10:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48603C340FA;
+        Tue,  1 Feb 2022 10:26:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643711209;
+        bh=YpNRNg5/ihQ4PP48BMlGgoh7uAQDP7LsHHGYiX5QI0o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=g7mEjtgirOS2Zivm7Bm9R3ebuvol2S+TsbQ41/4gKPs5b7l3SaQRLA7OfWhuBfh+r
+         ZsMv6Gx0LVyeoYf6Xw9b8FXf+4zN71F68WAL3NJIoc5v+3ZO3cePjYb5mxR/sqNKvw
+         5W/tmf2gXB6rLPPozNKA/T7oMkoB9a2+e0N7AXblHqLEKhrp2fAjL+hpdg5FJfbGjx
+         1MvghQ0dvPxKarNL6/Hk3zSGP0X647C+hEoYSiHMeJYECu/KJP1YKZ6gNCfsHUlquW
+         KjB21XgD60/n2rSLeJDQgjhx27CSgJIRFvMa1IIHQqKmprAgwQIaJuOjURhfycG0ri
+         OLVKaiaLRszLQ==
+Received: by mail-vk1-f178.google.com with SMTP id z15so10093733vkp.13;
+        Tue, 01 Feb 2022 02:26:49 -0800 (PST)
+X-Gm-Message-State: AOAM533VsQzJLklKhtjvZgX7sUlDW/hAPltX5MLOGpSc7on7/lgst8j+
+        FtPFmiu5GAHMQtoh9xyRexxYlfai8VEjxVCzoIE=
+X-Google-Smtp-Source: ABdhPJwLhW//fixKVbaTjokrn8h3L9Q3pUBjKK03Q8LXfMtVREM4+ggbuel+/v83NuiYDPmVXHHyZJPscKX3YUkbjfo=
+X-Received: by 2002:a05:6122:91d:: with SMTP id j29mr9618418vka.8.1643711208229;
+ Tue, 01 Feb 2022 02:26:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643711203;661d3094;
-X-HE-SMSGID: 1nEqMy-0002pB-5Q
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org>
+ <YffVZZg9GNcjgVdm@infradead.org> <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
+ <20220201074457.GC29119@lst.de> <CAJF2gTTc=zwD__zXwYbO8vmup5evWJtzyiAF9Pm-UVHLJRc5hQ@mail.gmail.com>
+ <CAK8P3a2C7nDGQvopYzi1fe_LWyosp8t9dcBsduYK5k_s_OrCaA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2C7nDGQvopYzi1fe_LWyosp8t9dcBsduYK5k_s_OrCaA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 1 Feb 2022 18:26:37 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com>
+Message-ID: <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com>
+Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"We don't cause regressions" might be the first rule of Linux kernel
-development, but it and other aspects of regressions nevertheless are hardly
-described in the Linux kernel's documentation. The following patches change
-this by creating two documents dedicated to the topic.
+Hi Arnd & Christoph,
 
-The second patch could easily be folded into the first one, but was kept
-separate, as it might be a bit controversial. This also allows the patch
-description to explain some backgrounds for this part of the document.
-Additionally, ACKs and Reviewed-by tags can be collected separately this way.
+The UXL field controls the value of XLEN for U-mode, termed UXLEN,
+which may differ from the
+value of XLEN for S-mode, termed SXLEN. The encoding of UXL is the
+same as that of the MXL
+field of misa, shown in Table 3.1.
 
-v4 (this version):
-- countless small and medium changes after review feedback from Jon (thx), which
-  also lead to a big change:
-- split the document into two, one for users and one for developers (both added
-  by the first patch, as they are interlinked)
-- fixed and improved a bunch of areas I stumbled upon while checking the text
-  again after the split
-- add a third patch to get one of the user-centric document on regressions
-  mentioned in Documentation/admin-guide/reporting-issues.rst
-- note: the content added by the second patch did not change significantly,
-  that's why I left an earlier reviewed-by for the patch and an ACK for the
-  series in place there, but dropped the ACK for the first patch of the series
+Here is the patch. (We needn't exception helper, because we are in
+S-mode and UXL wouldn't affect.)
 
-v3 (https://lore.kernel.org/regressions/cover.1643110442.git.linux@leemhuis.info/):
-- drop RFC tag
-- heavily reshuffled and slightly adjusted the text in the sections "The
-  important bits for people fixing regressions" and "How to add a regression to
-  regzbot's tracking somebody else reported?" to make them easier to grasp
-- a few small fixes and improvements
-- add ACK for the series from Greg (now for real)
+ arch/riscv/include/asm/elf.h       |  5 ++++-
+ arch/riscv/include/asm/processor.h |  1 +
+ arch/riscv/kernel/process.c        | 22 ++++++++++++++++++++++
+ arch/riscv/kernel/setup.c          |  5 +++++
+ 4 files changed, 32 insertions(+), 1 deletion(-)
 
-v2/RFC (https://lore.kernel.org/linux-doc/cover.1641565030.git.linux@leemhuis.info/):
-- a lot of small fixes, most are for spelling mistakes and grammar
-  errors/problems pointed out in the review feedback I got so far
-- add ACK for the series from Greg
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index 37f1cbdaa242..6baa49c4fba1 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -35,7 +35,10 @@
+  */
+ #define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
 
-v1/RFC (https://lore.kernel.org/linux-doc/cover.1641203216.git.linux@leemhuis.info/):
-- initial version
+-#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++#ifdef CONFIG_COMPAT
++#define compat_elf_check_arch compat_elf_check_arch
++extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
++#endif
 
----
+ #define CORE_DUMP_USE_REGSET
+ #define ELF_EXEC_PAGESIZE (PAGE_SIZE)
+diff --git a/arch/riscv/include/asm/processor.h
+b/arch/riscv/include/asm/processor.h
+index 9544c138d9ce..8b288ac0d704 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -64,6 +64,7 @@ extern void start_thread(struct pt_regs *regs,
+ #ifdef CONFIG_COMPAT
+ extern void compat_start_thread(struct pt_regs *regs,
+  unsigned long pc, unsigned long sp);
++extern void compat_mode_detect(void);
 
-Hi! Here is a updated version of my patch-set adding documentation regarding
-regression. This bring bigger changes after Jon took a look and suggested
-splitting the text up. I did that and changed a bunch of other things along the
-way. But I for now decided against splitting off the regression tracking stuff
-into one or two other documents, as suggested by Jon, as that IMHO distributes
-the information over too many places.
+ #define DEFAULT_MAP_WINDOW_64 TASK_SIZE_64
+ #else
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 9ebf9a95e5ea..496d09c5d384 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -101,6 +101,28 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+ }
 
-Ciao, Thorsten
+ #ifdef CONFIG_COMPAT
++static bool compat_mode_support __read_mostly = false;
++
++bool compat_elf_check_arch(Elf32_Ehdr *hdr)
++{
++ if (compat_mode_support && (hdr->e_machine == EM_RISCV))
++ return true;
++
++ return false;
++}
++
++void compat_mode_detect(void)
++{
++ unsigned long tmp = csr_read(CSR_STATUS);
++ csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
++
++ if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
++ csr_write(CSR_STATUS, tmp);
++ return;
++ }
++
++ csr_write(CSR_STATUS, tmp);
++ compat_mode_support = true;
++
++ pr_info("riscv: compat: 32bit U-mode applications support\n");
++}
++
+ void compat_start_thread(struct pt_regs *regs, unsigned long pc,
+  unsigned long sp)
+ {
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index b42bfdc67482..be131219d549 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -12,6 +12,7 @@
+ #include <linux/mm.h>
+ #include <linux/memblock.h>
+ #include <linux/sched.h>
++#include <linux/compat.h>
+ #include <linux/console.h>
+ #include <linux/screen_info.h>
+ #include <linux/of_fdt.h>
+@@ -294,6 +295,10 @@ void __init setup_arch(char **cmdline_p)
+  setup_smp();
+ #endif
 
-Thorsten Leemhuis (3):
-  docs: add two documents about regression handling
-  docs: regressions*rst: rules of thumb for handling regressions
-  docs: reporting-issues.rst: link new document about regressions
++#ifdef CONFIG_COMPAT
++ compat_mode_detect();
++#endif
++
+  riscv_fill_hwcap();
+ }
+On Tue, Feb 1, 2022 at 5:36 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Feb 1, 2022 at 10:13 AM Guo Ren <guoren@kernel.org> wrote:
+> > On Tue, Feb 1, 2022 at 3:45 PM Christoph Hellwig <hch@lst.de> wrote:
+> > > On Mon, Jan 31, 2022 at 09:50:58PM +0800, Guo Ren wrote:
+> > > > On Mon, Jan 31, 2022 at 8:26 PM Christoph Hellwig <hch@infradead.org> wrote:
+> > > > >
+> > > > > Given that most rv64 implementations can't run in rv32 mode, what is the
+> > > > > failure mode if someone tries it with the compat mode enabled?
+> > > > A static linked simple hello_world could still run on a non-compat
+> > > > support hardware. But most rv32 apps would meet different userspace
+> > > > segment faults.
+> > > >
+> > > > Current code would let the machine try the rv32 apps without detecting
+> > > > whether hw support or not.
+> > >
+> > > Hmm, we probably want some kind of check for not even offer running
+> > > rv32 binaries.  I guess trying to write UXL some time during early
+> > > boot and catching the resulting exception would be the way to go?
+> >
+> > Emm... I think it's unnecessary. Free rv32 app running won't cause
+> > system problem, just as a wrong elf running. They are U-mode
+> > privileged.
+>
+> While it's not a security issue, I think it would be helpful to get a
+> user-readable error message and a machine-readable /proc/cpuinfo
+> flag to see if a particular system can run rv32 binaries rather than
+> relying on SIGILL to kill a process.
+--
+2.25.1
 
- Documentation/admin-guide/index.rst           |   1 +
- .../admin-guide/regressions-users.rst         | 448 +++++++++++
- .../admin-guide/reporting-issues.rst          |  60 +-
- Documentation/process/index.rst               |   1 +
- Documentation/process/regressions-devs.rst    | 753 ++++++++++++++++++
- MAINTAINERS                                   |   2 +
- 6 files changed, 1234 insertions(+), 31 deletions(-)
- create mode 100644 Documentation/admin-guide/regressions-users.rst
- create mode 100644 Documentation/process/regressions-devs.rst
+
+>
+>         Arnd
 
 
-base-commit: b8f4eee6a630ef8c5f00594e25c377463b4f299c
--- 
-2.31.1
 
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

@@ -2,216 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6939C4A5ABD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD94D4A5ACC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiBAK5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:57:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37975 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237023AbiBAK5X (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:57:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643713043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AvlNVXABWeHw4gpYnmoaoySXybSLgHqyGniZWPgVn1s=;
-        b=YG9gJ+7ZAVMj4Dc/zqcInq0S1JwMZGzqj4B3RboEJkVGx0NaCDRePdusaNkmzTIajfVGI/
-        TmEZeHNatIcuv8bk3+6IqU0nF/Qa4+Iqn2/VKkhqSF2xr3zDqMlJ4BugxurI16Goi2O8xJ
-        JdVby/38wHtvy3/BEECd5TkWsEifOiM=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-151-fmW_sSuiNbKhu1UwIW3LOw-1; Tue, 01 Feb 2022 05:57:21 -0500
-X-MC-Unique: fmW_sSuiNbKhu1UwIW3LOw-1
-Received: by mail-ej1-f69.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso6349864ejc.21
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 02:57:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=AvlNVXABWeHw4gpYnmoaoySXybSLgHqyGniZWPgVn1s=;
-        b=Fupkk57Io7aE9UTZGkd8vTLmkNX/gK4xVp/3V2CDU1llAh8tcix9K4cfFRZ+Ruq5XZ
-         9xUsK9sUWQkeLpf2Af2QTJ/KU81h5uVk2RnIOciENj+gihXxfaikwWtMDnuMWetU4mby
-         059AgUe+33E/H1yFYrjr7JTpHce3ftJ2qFP1h0J54Ml/kOGZK3nPfY4gn4WxFcZOk6on
-         Lv+yhXepgDt4AgxSLFAszeOhPMjVWY/zzsVEoJysf5jMBg0cRY24m/sWGY6zkfjp57hb
-         5TOwSoDspOOS5AdvnHvh1NTSJKKL+URlWih92Qunqcv4cIT/q7TfIFSqVEgVLmDw8Qmb
-         MHoQ==
-X-Gm-Message-State: AOAM533s7pLDsutXcX3WNWLk/y/NHRYQVeEkLV1iEd5dc+nHxdyVK5FQ
-        ItpKfuXOTgGP2i1yB3VtCjOM6qdAM+L/ORPXgQtcrbEdbrZGvX1ty5WxIauZNQBve3ALPN7lm04
-        K4/ez4P/4N+sHHNdSGbav7m4j
-X-Received: by 2002:aa7:da8c:: with SMTP id q12mr24834144eds.81.1643713040795;
-        Tue, 01 Feb 2022 02:57:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwUrP62z4YI3xIllj+ZnBGCvXCO+D81q7RQ5ccoK4hgtp0NvEFZbCTfVey66a0Izz8vG22M8g==
-X-Received: by 2002:aa7:da8c:: with SMTP id q12mr24834131eds.81.1643713040486;
-        Tue, 01 Feb 2022 02:57:20 -0800 (PST)
-Received: from ?IPV6:2003:cb:c711:ba00:67b6:a3ab:b0a8:9517? (p200300cbc711ba0067b6a3abb0a89517.dip0.t-ipconnect.de. [2003:cb:c711:ba00:67b6:a3ab:b0a8:9517])
-        by smtp.gmail.com with ESMTPSA id f18sm14390425ejh.97.2022.02.01.02.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 02:57:19 -0800 (PST)
-Message-ID: <9c979e5a-91ae-413d-f2a9-168c9c37e5ab@redhat.com>
-Date:   Tue, 1 Feb 2022 11:57:18 +0100
+        id S237050AbiBALCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 06:02:06 -0500
+Received: from mout.gmx.net ([212.227.17.21]:49843 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236807AbiBALCF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 06:02:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643713298;
+        bh=Kp5E+5zaimcSjWgRA4B80Sup1tIxJqfJENoYg4VfU6U=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=RNKVE4/zfr6slOkQOzhNETrvVgV9+bPJa76AGJwEVNC2Q3UTqrfhyzJ+gQuBcEToE
+         rQhrk3t+TfPQxSP3Q2VmSdXXSo8Vnl2RPYxPG/8DzXxXYQSV3kI7LBtDNhVZ95sNao
+         7SFFOQnVK4ZKiMJSLZc+YTCsv5BiTWe+9qCKK62U=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.146.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTzb8-1mp6bQ1BLe-00QyQM; Tue, 01
+ Feb 2022 12:01:38 +0100
+Message-ID: <63018892-68e8-01b6-1e8f-853892e15c97@gmx.de>
+Date:   Tue, 1 Feb 2022 12:01:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 03/21] fbcon: Restore fbcon scrolling acceleration
 Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        rppt@kernel.org, ak@linux.intel.com, akpm@linux-foundation.org,
-        ardb@kernel.org, bp@alien8.de, brijesh.singh@amd.com,
-        dave.hansen@intel.com, dfaggioli@suse.com, jroedel@suse.de,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        rientjes@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        varad.gautam@suse.com, vbabka@suse.cz, x86@kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <YfZJQedck2YxZcWA@kernel.org>
- <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
- <acc12d73-a7d1-014c-9c07-33251d7d07ee@redhat.com>
- <20220131193041.xuagyispia77ak2g@box.shutemov.name>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCHv3.1 1/7] mm: Add support for unaccepted memory
-In-Reply-To: <20220131193041.xuagyispia77ak2g@box.shutemov.name>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Claudio Suarez <cssk@net-c.es>,
+        Dave Airlie <airlied@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-4-daniel.vetter@ffwll.ch>
+ <9c22b709-cbcf-6a29-a45e-5a57ba0b9c14@gmx.de>
+ <CAKMK7uGvOVe8kkJCTkQBEFw+3i2iAMANsyG9vGqZkcROZ9he4A@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAKMK7uGvOVe8kkJCTkQBEFw+3i2iAMANsyG9vGqZkcROZ9he4A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:SP0hRz1pWzc7F2C4ZUe6LHY4QjV17NNxG+kMA+dzBcfbm6cEv3f
+ OD7SVmW2xvmsal6nByY8VbSgXzXsSGQ/29cgn3HU30QknR8a/gTpVu+L6o/KYaXCVbOc9Et
+ QtbNJbC4rsJeZC7HMNleVE+TwErGIk2xYG5Q8zybXnU1bt/5RimsjAp/jZvapqQvK2NICq2
+ dpzf31K7qBL4dRnPxjmBg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4Gmuif59hFM=:FJ5WYWz0nO2pwe/3zyQdBE
+ NvtiK0xhPUwCqrrEhF5/k6MTor8BnhdxmGHmUW03UI8qpCnIEzWefbae3FGEKMNAzXkDy0sRS
+ 8/JY/L+5IXlI6ORjpRvjew2/XVdfoqIU5crukO3+CgQ7E9ACK18Vu4EV2bbK5Su19dob7cYfx
+ 6UoR6Fx4IUk/LLB1Dvt3q6K+C3AAJmWLnBLinn2rMTq2YbsYuFHUUlsd0n4Nbo8qn/mGvybCf
+ xSDpChJWPuE73+rA/WI9J5eHbjo4dhX05drxCF1jLbkgYdp3aKF8Y8Tj5AXBIis6xeHLkgPz4
+ QMm8kWSDQxmoThR5dhH77PNiB44wBIjfk8Fwf4KJS++e6EO0dpIJEpBvTwUpjL59oi2ZUJhsz
+ mlgXAU3zudur0YPJ6YPxA9vXa7Zc30QAfPNbgCcsJpZ5lW2lsg6246cOaKAGxBlSZ9PoIlEHS
+ OnxM0ZPTzBNlI1/Za6iHr9oUxls8FqkfoIOw4SjhbJB/uXwEWQEh7GSGehGrQEhLzWNB09J9V
+ DJPnTLo8hOjUEzRmarAstGCUxwySCpw1lkWW5OLdTXhQhjIuB0fI6f/wUQ5mBYUpBzOccdv9o
+ ZU9wb46d8kml0AWeVdbtbNOuW7Gv8O6tB+VjSxolpP5ErJcW3LRk07jdVRx/EA79XR0+DREtx
+ 0cU4qW50eQkd2kdOK7lSxDL3ia5MLhwLvPfqcAjoaqnyvhSXxtqdj0+Ruj6SetBky/LwTu2dI
+ 6TYlCsAIpSkqvFGaxoDrFoPReEBSXGB01Ao24ErKy+bmH5PqpSvjtZj2yh3u4lllqvJZ5gdh7
+ mcHogBRaN2o4Jz4/arht0lT1UNF6retxR35lZKJtiNYJnd8vVUKhOoaoiQhHMcCWYw1CBZOa3
+ oWsxp/hK30iUAP3Tc345mpZxtmNC3KWXy05IGr3Km99YCre+WxvkYj0BQiucdi/nef9HBP9sc
+ YlCSmmuMFQ0wM9z30RPYxitlCIMFVS3k3WG+0YJmaeHy7ec2qlauB9nPhIUNSf+ufKMMIIslr
+ Rq09cOeqhzxm0V4TfEsYmuGVZF13h8fH2EN64xx1x/h6z83JEM/yynONTa4fdGZ9Dcol/x70C
+ Ubfe6iB6RhBxjg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.22 20:30, Kirill A. Shutemov wrote:
-> On Mon, Jan 31, 2022 at 01:13:49PM +0100, David Hildenbrand wrote:
->> On 30.01.22 17:45, Kirill A. Shutemov wrote:
->>> UEFI Specification version 2.9 introduces the concept of memory
->>> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
->>> SEV-SNP, requiring memory to be accepted before it can be used by the
->>> guest. Accepting happens via a protocol specific for the Virtual Machine
->>> platform.
->>>
->>> Accepting memory is costly and it makes VMM allocate memory for the
->>> accepted guest physical address range. It's better to postpone memory
->>> acceptance until memory is needed. It lowers boot time and reduces
->>> memory overhead.
->>>
->>> Support of such memory requires a few changes in core-mm code:
->>>
->>>   - memblock has to accept memory on allocation;
->>>
->>>   - page allocator has to accept memory on the first allocation of the
->>>     page;
->>>
->>> Memblock change is trivial.
->>>
->>> The page allocator is modified to accept pages on the first allocation.
->>> PageBuddyUnaccepted() is used to indicate that the page requires acceptance.
->>>
->>> Kernel only need to accept memory once after boot, so during the boot
->>> and warm up phase there will be a lot of memory acceptance. After things
->>> are settled down the only price of the feature if couple of checks for
->>> PageBuddyUnaccepted() in alloc and free paths. The check refers a hot
->>> variable (that also encodes PageBuddy()), so it is cheap and not visible
->>> on profiles.
->>>
->>> Architecture has to provide three helpers if it wants to support
->>> unaccepted memory:
->>>
->>>  - accept_memory() makes a range of physical addresses accepted.
->>>
->>>  - maybe_mark_page_unaccepted() marks a page PageBuddyUnaccepted() if it
->>>    requires acceptance. Used during boot to put pages on free lists.
->>>
->>>  - accept_page() makes a page accepted and clears PageBuddyUnaccepted().
->>>
->>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->>> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+On 2/1/22 11:36, Daniel Vetter wrote:
+> On Tue, Feb 1, 2022 at 11:16 AM Helge Deller <deller@gmx.de> wrote:
 >>
+>> On 1/31/22 22:05, Daniel Vetter wrote:
+>>> This functionally undoes 39aead8373b3 ("fbcon: Disable accelerated
+>>> scrolling"), but behind the FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+>>> option.
 >>
->> You should somehow document+check+enforce that page poisoning cannot be
->> enabled concurrently, because it cannot possibly work IIUC.
-> 
-> Looking at code again, I now think that sharing the bit with PageOffline()
-> is wrong. Previously I convinced myself that there's no conflict on the
-> bit. In the initial version of the patchset, the page acceptance happened
-> inside del_page_from_free_list() so any removal from the free list lead to
-> clearing the bit. It is not the case now when acceptance moved to
-> post_alloc_hook(). __isolate_free_page() and __offline_isolated_pages()
-> look problematic now.
+>> you have two trivial copy-n-paste errors in this patch which still prev=
+ent the
+>> console acceleration.
+>
+> Duh :-(
+>
+> But before we dig into details I think the big picture would be
+> better. I honestly don't like the #ifdef pile here that much.
 
-Both grab the zone lock. So as long as you'd perform the update of both
-bits (PageOffline+PageBuddy) in one go under the zone lock, you could
-handle it accordingly. But IIRC we don't want to accept memory while
-holding the zone lock ...
+Me neither.
+The ifdefs give a better separation, but prevents that the compiler
+checks the various paths when building.
 
-Of course, you could clear the flag under the zone lock and forward the
-requirement to prep_new_page(). For example, using alloc_flags.
+> I wonder whether your approach, also with GETVX/YRES adjusted
+> somehow, wouldn't look cleaner?
+I think so.
+You wouldn't even need to touch GETVX/YRES because the compiler
+will optimize/reduce it from
 
-We could have a new ALLOC_UNACCEPTED that will result in
-prep_new_page()->post_alloc_hook() calling accept_page().
+#define GETVYRES(s,i) ({                           \
+        (s =3D=3D SCROLL_REDRAW || s =3D=3D SCROLL_MOVE) ? \
+        (i)->var.yres : (i)->var.yres_virtual; })
 
-Relevant functions (e.g., rmqueue()) would consume *alloc_flags instead
-of alloc_flags and simply clear+set the bit while updating *alloc_flags.
+to just become:
 
-* __alloc_pages_bulk()->__rmqueue_pcplist() shouldn't need care because
-  unaccepted pages shouldn't be on a pcp list (iow, previously
-  allocated)
-* Not sure if we'd have to touch try_to_compact_pages(), because we can
-  only stumble over unnaccepted pages if these pages were never
-  allocated, would require some thought.
+#define GETVYRES(s,i) ((i)->var.yres)
 
-So maybe it would boil down to rmqueue() only.
+> Like I said in the cover letter I got mostly distracted with fbcon
+> locking last week, not really with this one here at all, so maybe
+> going with your 4 (or 2 if we squash them like I did here) patches is
+> neater?
 
-> 
-> I will use brand new bit for the flag and rename BuddyUnaccepted to just
-> Unaccepted, since it can be set with Buddy cleared.
-> 
-> Sounds okay?
+The benefit of my patch series was, that it could be easily backported fir=
+st,
+and then cleaned up afterwards. Even a small additional backport patch to =
+disable
+the fbcon acceleration for DRM in the old releases would be easy.
+But I'm not insisting on backporting the patches, if we find good way forw=
+ard.
 
-Fine with me, having something restricted to PageBuddy() might be
-conceptually nicer, though.
+So, either with the 4 (or 2) patches would be OK for me (or even your appr=
+oach).
 
-[...]
-
->>
->> You'll be setting the page as unaccepted even before it's actually
->> PageBuddy(). While that works, I wonder why we call
->> maybe_mark_page_unaccepted() at these points.
->>
->> Why are we not moving that deeper into the buddy? __free_pages_core() is
->> used for any fresh pages that enter the buddy, used outside of
->> page_alloc.c only for memory hot(un)plug, so I'd suggest moving it at
->> least into there.
->>
->> But maybe we'd even move it further down, to the place where we actually
->> establish PageBuddy().
->>
->> One idea would be adding a new FPI_UNACCEPTED flag, passing it from
->> __free_pages_core() only, and calling maybe_mark_page_unaccepted() from
->> __free_one_page() after set_buddy_order().
->>
->> If in-lining would do its job properly, we'd be left with the
->> FPI_UNACCEPTED checks only when called via __free_pages_core(), and we'd
->> have that call at a single place right where we mess with PageBuddy().
-> 
-> Okay, this approach looks neat. See fixup below.
-> 
-> But there's down side: maybe_mark_page_unaccepted() cannot be __init
-> anymore, since it is called from __free_one_page().
-
-Good point, do we care?
-
-> 
-> Any comments?
-
-LGTM
-
--- 
-Thanks,
-
-David / dhildenb
-
+Helge

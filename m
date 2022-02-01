@@ -2,187 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6754A653F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180BC4A6543
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiBAT7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:59:03 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:41286 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiBAT7B (ORCPT
+        id S234719AbiBAT7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234295AbiBAT7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:59:01 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643745540;
+        Tue, 1 Feb 2022 14:59:10 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C925C06173B;
+        Tue,  1 Feb 2022 11:59:10 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DCFE21EC0523;
+        Tue,  1 Feb 2022 20:59:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643745545;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=klPixv6/72wnTPtFYXz1v5gh5a58fePNQYPjDZleMIE=;
-        b=OA5gr6otPC8nfYbW7xx25hTsjLGF1qkQsLb++dHpp6qeM8kYiyPxU5I+CgAutuD1trD18+
-        gdfwdWUfVqn5eBVZgt1gJTFvmyataqBfunk+HHYh0SKMdV/Kvx3URUViT9K+o3ASm2xrsr
-        /dhkQB52cyCSUhe2fQKEOOI5Jbspn3YK1BEIwv1NiZ6S90RAuNOxCHjmdQ0kZsBsejHEwn
-        DD8rD92tmqfcEfx5T2DzCFolxrlzqekWu7sApxdTdjvpXQHx3H99mrUUOEXlZ8jkanazb/
-        est0nWouI/t3JxzydJqTnWIuE607k6ZvIvA9NTrIlGk0YiVgghSL0xbFK3XVcA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643745540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=klPixv6/72wnTPtFYXz1v5gh5a58fePNQYPjDZleMIE=;
-        b=dTM5/GV0vzYtNLkS10p3HpzdIfrX6HqxRcO8tKhUINyiYMk+Yf/IWeKjnu1hlvU/Gcb/x7
-        pCsX2VohIUfszfCQ==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kai Huang <kai.huang@linux.intel.com>
-Subject: Re: [PATCHv2 03/29] x86/tdx: Add __tdx_module_call() and
- __tdx_hypercall() helper functions
-In-Reply-To: <20220124150215.36893-4-kirill.shutemov@linux.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-4-kirill.shutemov@linux.intel.com>
-Date:   Tue, 01 Feb 2022 20:58:59 +0100
-Message-ID: <87a6faz7cs.ffs@tglx>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NQq1a82TXHHJ9pRBeQutIGcbAsj9VD5Dy+Q6arLSFXA=;
+        b=L98AlkeczP73F/Jv8YwWRWtrvYwE65aWamuUFqY5IDXPh0lG4oEq0oxMObNPRQXEdkx2Mc
+        WvV22P5Q4uqcERSjHp1+7ARhC+z1jhebpsQ/Ljh/7Of+wDcf296nXtS9bItOxUaq8lJ3ab
+        YqBIr81ua3MfzJQ6epfu/TAf/exu0es=
+Date:   Tue, 1 Feb 2022 20:59:01 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 10/43] x86/sev: Check SEV-SNP features support
+Message-ID: <YfmRBUtoWNb9BkuL@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-11-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-11-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kirill,
-
-On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -8,11 +8,51 @@
->  #define TDX_CPUID_LEAF_ID	0x21
->  #define TDX_IDENT		"IntelTDX    "
+On Fri, Jan 28, 2022 at 11:17:31AM -0600, Brijesh Singh wrote:
+> diff --git a/arch/x86/boot/compressed/idt_64.c b/arch/x86/boot/compressed/idt_64.c
+> index 9b93567d663a..63e9044ab1d6 100644
+> --- a/arch/x86/boot/compressed/idt_64.c
+> +++ b/arch/x86/boot/compressed/idt_64.c
+> @@ -39,7 +39,15 @@ void load_stage1_idt(void)
+>  	load_boot_idt(&boot_idt_desc);
+>  }
 >  
-> +#define TDX_HYPERCALL_STANDARD  0
+> -/* Setup IDT after kernel jumping to  .Lrelocated */
+> +/*
+> + * Setup IDT after kernel jumping to  .Lrelocated
+> + *
+> + * initialize_identity_maps() needs a PF handler setup. The PF handler setup
+> + * needs to happen in load_stage2_idt() where the IDT is loaded and there the
+> + * VC IDT entry gets setup too in order to handle VCs, one needs a GHCB which
+> + * gets setup with an already setup table which is done in
+> + * initialize_identity_maps() and this is where the circle is complete.
+> + */
+
+I've beefed it up more, please use this one instead:
+
+/*
+ * Setup IDT after kernel jumping to  .Lrelocated.
+ *
+ * initialize_identity_maps() needs a #PF handler to be setup
+ * in order to be able to fault-in identity mapping ranges; see
+ * do_boot_page_fault().
+ *
+ * This #PF handler setup needs to happen in load_stage2_idt() where the
+ * IDT is loaded and there the #VC IDT entry gets setup too.
+ *
+ * In order to be able to handle #VCs, one needs a GHCB which
+ * gets setup with an already set up pagetable, which is done in
+ * initialize_identity_maps(). And there's the catch 22: the boot #VC
+ * handler do_boot_stage2_vc() needs to call early_setup_ghcb() itself
+ * (and, especially set_page_decrypted()) because the SEV-ES setup code
+ * cannot initialize a GHCB as there's no #PF handler yet...
+ */
+
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 19ad09712902..24df739c9c05 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -43,6 +43,9 @@ static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
+>   */
+>  static struct ghcb __initdata *boot_ghcb;
+>  
+> +/* Bitmap of SEV features supported by the hypervisor */
+> +static u64 sev_hv_features __ro_after_init;
 > +
-> +/*
-> + * Used in __tdx_module_call() to gather the output registers'
-> + * values of the TDCALL instruction when requesting services from
-> + * the TDX module. This is a software only structure and not part
-> + * of the TDX module/VMM ABI
-> + */
-> +struct tdx_module_output {
-> +	u64 rcx;
-> +	u64 rdx;
-> +	u64 r8;
-> +	u64 r9;
-> +	u64 r10;
-> +	u64 r11;
-> +};
+>  /* #VC handler runtime per-CPU data */
+>  struct sev_es_runtime_data {
+>  	struct ghcb ghcb_page;
+> @@ -766,6 +769,18 @@ void __init sev_es_init_vc_handling(void)
+>  	if (!sev_es_check_cpu_features())
+>  		panic("SEV-ES CPU Features missing");
+>  
+> +	/*
+> +	 * SEV-SNP is supported in v2 of the GHCB spec which mandates support for HV
+> +	 * features. If SEV-SNP is enabled, then check if the hypervisor supports
+> +	 * the SEV-SNP features.
 
-I've seen exactly the same struct named seamcall_regs_out in the TDX
-host series. I assume that's not coincidence which begs the question why
-this is required twice with different names.
+You guys have been completely brainwashed by marketing. I say:
 
-> +#ifdef CONFIG_INTEL_TDX_GUEST
-> +	BLANK();
-> +	/* Offset for fields in tdx_module_output */
-> +	OFFSET(TDX_MODULE_rcx, tdx_module_output, rcx);
-> +	OFFSET(TDX_MODULE_rdx, tdx_module_output, rdx);
-> +	OFFSET(TDX_MODULE_r8,  tdx_module_output, r8);
-> +	OFFSET(TDX_MODULE_r9,  tdx_module_output, r9);
-> +	OFFSET(TDX_MODULE_r10, tdx_module_output, r10);
-> +	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
+"s/SEV-SNP/SNP/g
 
-Which obviously duplicates the above part as well.
+And please do that everywhere in sev-specific files."
 
-> + *-------------------------------------------------------------------------
-> + * TDCALL ABI:
-> + *-------------------------------------------------------------------------
-> + * Input Registers:
-> + *
-> + * RAX                 - TDCALL Leaf number.
-> + * RCX,RDX,R8-R9       - TDCALL Leaf specific input registers.
-> + *
-> + * Output Registers:
-> + *
-> + * RAX                 - TDCALL instruction error code.
-> + * RCX,RDX,R8-R11      - TDCALL Leaf specific output registers.
-> + *
-> + *-------------------------------------------------------------------------
-> + *
-> + * __tdx_module_call() function ABI:
-> + *
-> + * @fn  (RDI)          - TDCALL Leaf ID,    moved to RAX
-> + * @rcx (RSI)          - Input parameter 1, moved to RCX
-> + * @rdx (RDX)          - Input parameter 2, moved to RDX
-> + * @r8  (RCX)          - Input parameter 3, moved to R8
-> + * @r9  (R8)           - Input parameter 4, moved to R9
-> + *
-> + * @out (R9)           - struct tdx_module_output pointer
-> + *                       stored temporarily in R12 (not
-> + *                       shared with the TDX module). It
-> + *                       can be NULL.
-> + *
-> + * Return status of TDCALL via RAX.
-> + */
+and you go and slap that "SEV-" thing everywhere instead. Why? That file
+is already called sev.c so it must be SEV-something. Lemme simplify that
+comment for ya:
 
-And unsurprisingly this function and __seamcall of the other patch set
-are very similar aside of the calling convention (__seamcall has a
-struct for the input parameters) and the obvious difference that one
-issues TDCALL and the other SEAMCALL.
+	/*
+	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
+	 * features.
+	 */
 
-So can we please have _one_ implementation and the same struct(s) for
-the module call which is exactly the same for host and guest except for
-the instruction used.
+That's it, no more needed - the rest should be visible from the code.
 
-IOW, this begs a macro implementation
+Thx.
 
-.macro TDX_MODULE_CALL host:req
+-- 
+Regards/Gruss,
+    Boris.
 
-       ....
-
-        .if \host
-        seamcall
-        .else
-	tdcall
-        .endif
-
-       ....
-
-So the actual functions become:
-
-SYM_FUNC_START(__tdx_module_call)
-        FRAME_BEGIN
-        TDX_MODULE_CALL host=0
-        FRAME_END
-        ret
-SYM_FUNC_END(__tdx_module_call)
-
-SYM_FUNC_START(__tdx_seam_call)
-        FRAME_BEGIN
-        TDX_MODULE_CALL host=1
-        FRAME_END
-        ret
-SYM_FUNC_END(__tdx_seam_call)
-
-Hmm?
-
-> +/*
-> + * Wrapper for standard use of __tdx_hypercall with panic report
-> + * for TDCALL error.
-> + */
-> +static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14,
-> +				 u64 r15, struct tdx_hypercall_output
-> *out)
-
-This begs the question whether having a struct hypercall_input similar
-to the way how seamcall input parameters are implemented makes more
-sense than 7 function arguments. Hmm?
-
-Thanks,
-
-        tglx
+https://people.kernel.org/tglx/notes-about-netiquette

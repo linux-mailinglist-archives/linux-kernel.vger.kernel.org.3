@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30224A60E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A714A60ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240772AbiBAQBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:01:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27281 "EHLO
+        id S240786AbiBAQCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:02:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37129 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240755AbiBAQBA (ORCPT
+        by vger.kernel.org with ESMTP id S235398AbiBAQCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:01:00 -0500
+        Tue, 1 Feb 2022 11:02:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643731260;
+        s=mimecast20190719; t=1643731351;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9TOgZSvYLjnxXgPMR3aA+UnxenzdhiCu/Ec4ih921w8=;
-        b=DXSklULSxOGUrGHaoR8WfDOrGoeJv3PujW5GzQowRLju8Xsefu/JKXgUv8Ox7FJiMY/zoV
-        5BdYDmUL5ZhGsljrPZfTNEsv65cjVOhoVKNs8CdIhgpg8GxUsNvLwadSjMGFbASmGEDE/F
-        MeIUNTbMh4aSphpCmx8pCfFKsz3bkJU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=0lOsjYnjuXJjkQQPkdLRQ4+5wRRHj/4IS9YqFDRMAvI=;
+        b=Anw2DN4MVE9HwvRI69CsHJuNcovHkFg9GbRP6qf8YA8cGlDIKlj9kLZKfjDTZPQnU5AhLG
+        9K4Hf8pvyyHHW7QYqWlzHPl3Kg1p3+9/o1PIQU4niuBwJHrW4GBySIUrVwlJJ5XRirr7h1
+        66RaGKKlO5CbyvM9W9z5vDrb1kdVrPk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-467-qDA4APOaN8OnafwsywEBWQ-1; Tue, 01 Feb 2022 11:00:58 -0500
-X-MC-Unique: qDA4APOaN8OnafwsywEBWQ-1
-Received: by mail-ed1-f72.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so8923134eds.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 08:00:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9TOgZSvYLjnxXgPMR3aA+UnxenzdhiCu/Ec4ih921w8=;
-        b=7402EseYRra/i0fynMRwES2Ba8Wel2VGmB8gn1WjNjxkrWT7uYP6630VFzFpB1rHaa
-         JQfW6/JULq2vwWc2qKO7yN+GGz0BIEI0c0sYGV9waLBDvs3Jnln924f6QVDtz3EgVbIF
-         xF3xDUX7E9l9QHKTbi8HFXNKkUVfChZsVMKS+YNLW5taq1bStIw1RsSJl9dsoUOut1hD
-         d67Xk+yzYxwiWtsZhjWxLqITrK0RFIWNvMKNTEUhjlxJ3UYlDbnEm2ji1Qam1g4Lh10z
-         55I/D5L3XVsyDQ/DaCR4cxzqDjV48H1pNYkJd0CvK86MEJTXiYQIGMInb/N0mLHlMWLt
-         8F3Q==
-X-Gm-Message-State: AOAM533BJu6RwtuN6VpMyQv3knaKji1avs0EESt15FPA+AveN0gyvWSG
-        UoL3hKLmhULNZgKpAZsEmpFuCKR85ZKuthR+IidDTqbZW2bHtV7iwmcLnroHeCZWtgon/Zymj0K
-        AhliV6b5ZRPI1myK24fHr8H9Z
-X-Received: by 2002:a17:907:72d6:: with SMTP id du22mr21767230ejc.179.1643731257022;
-        Tue, 01 Feb 2022 08:00:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyi6gqf6sTZV2adqJ/EwU8K0kh4yabr0HjJDqz0uGv4IXAxFUKBb//nn4tH0Br/W6v0yRG1zw==
-X-Received: by 2002:a17:907:72d6:: with SMTP id du22mr21767209ejc.179.1643731256826;
-        Tue, 01 Feb 2022 08:00:56 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id gh33sm14883510ejc.17.2022.02.01.08.00.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 08:00:56 -0800 (PST)
-Message-ID: <f8359e15-412a-03d6-1b0c-a9f253816497@redhat.com>
-Date:   Tue, 1 Feb 2022 17:00:54 +0100
+ us-mta-75-WqDDEl3dPKOc7sq2HX2xEg-1; Tue, 01 Feb 2022 11:02:27 -0500
+X-MC-Unique: WqDDEl3dPKOc7sq2HX2xEg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A3211966320;
+        Tue,  1 Feb 2022 16:02:14 +0000 (UTC)
+Received: from [10.22.19.61] (unknown [10.22.19.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 00CF772FA2;
+        Tue,  1 Feb 2022 16:01:51 +0000 (UTC)
+Message-ID: <a4a3366e-1e7b-7d2b-5e05-46a308d09978@redhat.com>
+Date:   Tue, 1 Feb 2022 11:01:51 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V5 21/21] KVM: compat: riscv: Prevent KVM_COMPAT from
- being selected
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 1/3] lib/vsprintf: Avoid redundant work with 0 size
 Content-Language: en-US
-To:     Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>
-References: <20220201150545.1512822-1-guoren@kernel.org>
- <20220201150545.1512822-22-guoren@kernel.org>
- <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Rientjes <rientjes@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-2-longman@redhat.com>
+ <d99b3c4b-7b6e-529-6e4b-b91b65c92d81@google.com>
+ <Yfe5Bb3U6Uil7Y6g@smile.fi.intel.com> <Yfe6SfG4CqzWSaMM@smile.fi.intel.com>
+ <Yfe7Q5cx+MoaOev/@smile.fi.intel.com>
+ <c33b6435-1b27-32af-b14c-0f3a0318dcca@redhat.com>
+ <f3bcf541-e77b-ca93-ef5c-862f4de99366@rasmusvillemoes.dk>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <f3bcf541-e77b-ca93-ef5c-862f4de99366@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 16:44, Anup Patel wrote:
-> +Paolo
-> 
-> On Tue, Feb 1, 2022 at 8:38 PM <guoren@kernel.org> wrote:
->>
->> From: Guo Ren <guoren@linux.alibaba.com>
->>
->> Current riscv doesn't support the 32bit KVM API. Let's make it
->> clear by not selecting KVM_COMPAT.
->>
->> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> Signed-off-by: Guo Ren <guoren@kernel.org>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Anup Patel <anup@brainfault.org>
-> 
-> This looks good to me.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
+On 2/1/22 02:12, Rasmus Villemoes wrote:
+> On 31/01/2022 19.48, Waiman Long wrote:
+>> On 1/31/22 05:34, Andy Shevchenko wrote:
+>>> Also it seems currently the kernel documentation is not aligned with
+>>> the code
+>>>
+>>>     "If @size is == 0 the function returns 0."
+>>>
+>>> It should mention the (theoretical?) possibility of getting negative
+>>> value,
+>>> if vsnprintf() returns negative value.
+>> AFAICS, the kernel's vsnprintf() function will not return -1.
+> Even if it did, the "i < size" comparison in vscnprintf() is "int v
+> size_t", so integer promotion says that even if i were negative, that
+> comparison would be false, so we wouldn't forward that negative value
+> anyway.
+>
+>> So in that
+>> sense it is not fully POSIX compliant.
+> Of course it's not, but not because it doesn't return -1. POSIX just
+> says to return that in case of an error, and as a matter of QoI, the
+> kernel's implementation simply can't (and must not) fail. There are
+> other cases where we don't follow POSIX/C, e.g. in some corner cases
+> around field length and precision (documented in test_printf.c), and the
+> non-support of %n (and floating point and handling of wchar_t*), and the
+> whole %p<> extension etc.
+>
+> Rasmus
+>
+Thanks for the clarification.
 
-Hi Anup,
-
-feel free to send this via a pull request (perhaps together with Mark 
-Rutland's entry/exit rework).
-
-Paolo
+Cheers,
+Longman
 

@@ -2,139 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 268CE4A571A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5ED4A571E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbiBAGAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:00:37 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33766 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229866AbiBAGAf (ORCPT
+        id S233868AbiBAGHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:07:49 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49722 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229866AbiBAGHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:00:35 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21131W8X026998;
-        Tue, 1 Feb 2022 05:59:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=PfWUM0BudvC81uDbHwxTnnZVr0fNZVVI7VdKqD4BRfE=;
- b=coXmY++iX4+Q5toi0fduXuVwpf18bmc0C1bNK3ZneqMPCc2y1TRzN568LqTjYkJLUTwP
- UBxq3YSJm76byko+mAgxcsJdfdj+1SJHWZQFUEogxh12zlj3xhEc5qWD4+H7AfAVRE7f
- wk0SCCX8fSnHyLgm8/tTZKVd3GXHxbjbM1S7+jHZE5AS4dH7PSG+nxQzD9fJF4v4ewNQ
- DNXgAbCU36pNgmOPnSZT3R/+kCiLrOng1hI4Sh3KZ1hqggw/cjMrJ6141uHaOTmFVG/1
- CejrhrBGduvVsf9G6zVG8eT1fwSgq89KF80qSUMukHE6Pu78H4AZRjq8JAMiadJqM1RG 2A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxvkjtdch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 05:59:12 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2115lR60008755;
-        Tue, 1 Feb 2022 05:59:12 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxvkjtdc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 05:59:12 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2115wgSv029582;
-        Tue, 1 Feb 2022 05:59:10 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dvw79h1d9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 05:59:09 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2115nJqS49611108
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Feb 2022 05:49:19 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD9A34C044;
-        Tue,  1 Feb 2022 05:59:07 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12CDA4C040;
-        Tue,  1 Feb 2022 05:59:06 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue,  1 Feb 2022 05:59:05 +0000 (GMT)
-Date:   Tue, 1 Feb 2022 11:29:04 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Rik van Riel <riel@surriel.com>
-Subject: Re: [RFC PATCH 2/2] NUMA balancing: avoid to migrate task to
- CPU-less node
-Message-ID: <20220201055904.GD618915@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20220128023842.1946583-1-ying.huang@intel.com>
- <20220128023842.1946583-2-ying.huang@intel.com>
- <20220128053341.GB618915@linux.vnet.ibm.com>
- <877dakti0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 1 Feb 2022 01:07:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3CBF71F380;
+        Tue,  1 Feb 2022 06:07:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643695666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hTVk5J06TLwx7tCeGGEC8EKM9vOZdWrFyC4m7J//Ixo=;
+        b=QrMfcfMBfQDRKBcmtBAAAbUT3IWfCcx137h+cdL2PRXP1lrkeDugMwLgQUyYCf18JZiUxT
+        Qsc7BtIVCG74K/GwsTSoB/P4dSs8Mv0YO1/8QjApxzSaLShXtlnsT7UeylLbDEtmn3F5uO
+        Noa8LIPVRJ2g1cu60wC7mRf8RXxIUmE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0635F13AE0;
+        Tue,  1 Feb 2022 06:07:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w79xOzHO+GHwGQAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 01 Feb 2022 06:07:45 +0000
+Message-ID: <370e3874-d547-acad-924c-87ad8ef00a1d@suse.com>
+Date:   Tue, 1 Feb 2022 07:07:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <877dakti0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: v0cnSmcYxlSrcYTk9rHbtJVP4V1TErlv
-X-Proofpoint-ORIG-GUID: qjniIMwVW5IKqw9eLIXE2ErgGGRQCk6Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_01,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- spamscore=0 priorityscore=1501 adultscore=0 clxscore=1015 malwarescore=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202010029
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2] Improve docs for IOCTL_GNTDEV_MAP_GRANT_REF
+Content-Language: en-US
+To:     Demi Marie Obenour <demiobenour@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+References: <f66c5a4e-2034-00b5-a635-6983bd999c07@gmail.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <f66c5a4e-2034-00b5-a635-6983bd999c07@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------4J9FN0TPV6jB8XqXvFNBoDJB"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Huang, Ying <ying.huang@intel.com> [2022-01-28 15:51:36]:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------4J9FN0TPV6jB8XqXvFNBoDJB
+Content-Type: multipart/mixed; boundary="------------VRXR2dHFRLehSpEMOdAQ14S7";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Demi Marie Obenour <demiobenour@gmail.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Stefano Stabellini <sstabellini@kernel.org>
+Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Message-ID: <370e3874-d547-acad-924c-87ad8ef00a1d@suse.com>
+Subject: Re: [PATCH v2] Improve docs for IOCTL_GNTDEV_MAP_GRANT_REF
+References: <f66c5a4e-2034-00b5-a635-6983bd999c07@gmail.com>
+In-Reply-To: <f66c5a4e-2034-00b5-a635-6983bd999c07@gmail.com>
 
-> Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
-> 
-> > * Huang Ying <ying.huang@intel.com> [2022-01-28 10:38:42]:
-> >
-> This sounds reasonable.  How about the following solution?  If a
-> CPU-less node is selected as migration target, we select a nearest node
-> with CPU instead?  That is, something like the below patch.
-> 
-> Best Regards,
-> Huang, Ying
-> 
-> ------------------------------8<---------------------------------
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5146163bfabb..52d926d8cbdb 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -2401,6 +2401,23 @@ static void task_numa_placement(struct task_struct *p)
->  		}
->  	}
-> 
-> +	/* Cannot migrate task to CPU-less node */
-> +	if (!node_state(max_nid, N_CPU)) {
-> +		int near_nid = max_nid;
-> +		int distance, near_distance = INT_MAX;
-> +
-> +		for_each_online_node(nid) {
-> +			if (!node_state(nid, N_CPU))
-> +				continue;
-> +			distance = node_distance(max_nid, nid);
-> +			if (distance < near_distance) {
-> +				near_nid = nid;
-> +				near_distance = distance;
-> +			}
-> +		}
-> +		max_nid = near_nid;
-> +	}
-> +
+--------------VRXR2dHFRLehSpEMOdAQ14S7
+Content-Type: multipart/mixed; boundary="------------ru0kpdTjRIZZya5rqkMmSBLG"
 
+--------------ru0kpdTjRIZZya5rqkMmSBLG
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-This looks good. but should we move this into preferred_group_nid()?
-i.e should we care for !ng case, since those would mean only private faults.
+T24gMzEuMDEuMjIgMTg6MjMsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gVGhlIGN1
+cnJlbnQgaW1wbGVtZW50YXRpb24gb2YgZ250ZGV2IGd1YXJhbnRlZXMgdGhhdCB0aGUgZmly
+c3QgY2FsbCB0bw0KPiBJT0NUTF9HTlRERVZfTUFQX0dSQU5UX1JFRiB3aWxsIHNldCBAaW5k
+ZXggdG8gMC4gIFRoaXMgaXMgcmVxdWlyZWQgdG8NCj4gdXNlIGdudGRldiBmb3IgV2F5bGFu
+ZCwgd2hpY2ggaXMgYSBmdXR1cmUgZGVzaXJlIG9mIFF1YmVzIE9TLg0KPiBBZGRpdGlvbmFs
+bHksIHJlcXVlc3RpbmcgemVybyBncmFudHMgcmVzdWx0cyBpbiBhbiBlcnJvciwgYnV0IHRo
+aXMgd2FzDQo+IG5vdCBkb2N1bWVudGVkIGVpdGhlci4gIERvY3VtZW50IGJvdGggb2YgdGhl
+c2UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBEZW1pIE1hcmllIE9iZW5vdXIgPGRlbWlvYmVu
+b3VyQGdtYWlsLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0Bz
+dXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
+--------------ru0kpdTjRIZZya5rqkMmSBLG
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
->  	if (ng) {
->  		numa_group_count_active_nodes(ng);
->  		spin_unlock_irq(group_lock);
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
--- 
-Thanks and Regards
-Srikar Dronamraju
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------ru0kpdTjRIZZya5rqkMmSBLG--
+
+--------------VRXR2dHFRLehSpEMOdAQ14S7--
+
+--------------4J9FN0TPV6jB8XqXvFNBoDJB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmH4zjEFAwAAAAAACgkQsN6d1ii/Ey+/
+mwf9Ezqdxdv2UQugbuRD2aFgWkdL316BYADmg13TnOsfox+VYZuCouUiqTya5q4xJC7tR/iambvf
+rphc+dCv/oBRuWWbWuHNWlDLyDC/WEhhkJgQdk69SnbmfQzJM5VZ8Z81rUwhd1SWgv+BMtsuE++C
+1w85cxqD//gCDgIHB035k1Yir4MgRX+DL3ubVuLDs65x+DiQNk14J0Lo2DfJl9iwa6XIkRgRZQBA
+BbyQtA3UiNI0MC9zs5wdggoWd2+dLwHmfO9RIZIncqpbXZVYW2aRLzQ0A421KnWeFQjs9MwLV77n
+A1JjcnQI2bCxy2eZzvFwahNRVBWy8/Cup6Zfn45CGQ==
+=fpr+
+-----END PGP SIGNATURE-----
+
+--------------4J9FN0TPV6jB8XqXvFNBoDJB--

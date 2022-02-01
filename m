@@ -2,129 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989474A63D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0563D4A63D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbiBASaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S236727AbiBASa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiBAS37 (ORCPT
+        with ESMTP id S231827AbiBASaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:29:59 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44109C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:29:59 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id p5so53505972ybd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:29:59 -0800 (PST)
+        Tue, 1 Feb 2022 13:30:23 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000A4C061714;
+        Tue,  1 Feb 2022 10:30:22 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id l13so7404717plg.9;
+        Tue, 01 Feb 2022 10:30:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=I7jVNfxfiR6L9cpor2lIeHYS68RLOhT6ui7FFhcZWz8=;
-        b=DE+IbdQ63PDvuuuh9gJIWrSsywRKD8r77zIfVu8whigf/Ly1xuNWc66zIh1s30fhb5
-         dJinz/fjR2Eno8I8Mm6DoNhea7xR51a5wbnq4XVYC2VAvphzzzIJVJKyIHlZ/VqTfE0e
-         w8/+D7iv7bwBy4BKrKOGSoR3LxqqyLNZVFP+c=
+         :cc;
+        bh=UxjgGOUhkR1dbEpwd0qsIng+RbhHC9RNemQtqTU19N8=;
+        b=pg5Tb+20bkyKjmC+o21iLE5v9XZRrW8/cB6DArErSAu9C6iVQ4nD62RNucCbaMLRYg
+         QFs8YC/MApzO/EI6/eJqsRbwfxoHu8xhaa/4rYQwzhUsUnfWPkp0wxucMQOqzVYpahVx
+         z/vPksF3sLgDXsEkK/zAb0Svm/dr7KnIdKrLXgPhV/I6yoFR2PeldRpZHZ9EyVVDujEm
+         lyN6iX/c4xax37yQY+LiMD7FARApqEzhlk8fEz0vRhT5ytcXkuKVujdWIs3p5PFJS59f
+         8AFIKenty/jMu94FMKJXqjgydLGwHKy5jNFYfxz7VnTgQ3qw2MigEstL+17aRe1lZFfU
+         S/pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=I7jVNfxfiR6L9cpor2lIeHYS68RLOhT6ui7FFhcZWz8=;
-        b=PkJDmumbI+aHN8KnKldBfk6M+Q1GB2Qz4a8BvDbKHWav8CcCiRYoPazaNSgs0EzZVR
-         kAC3WM/Uck0KOzvLdkVOzYzpJ4iOI3V24ovRKHKpnDJvPrIJwMmFU9GkSYUOoNZumveh
-         ya1wM84qaDeKCducWnDTLI7BkJHLndmtTSzek1irdwUrXsu9gW/EL9RRvmsPJN6chh7n
-         qsLs3x4yylgqkT7bUDCAzj+3AFPMHaEmi/ahxQiv9aIbt94QswZPkTeNnUcmrURFVWa8
-         qIWUKuT7tv7TzKxCSmRnETQvUceD4HjAUNah3bgea0DPWXgJ9GkdaoTrJQDdrtoXFpJL
-         7UCg==
-X-Gm-Message-State: AOAM533eIrZMMyMMzo8cnlKUFIbLG6sOMleuytO2rL/HX2IPrjMOyopz
-        yAyGGXG79mZ1iv2BLvm+BvVGDfLqUt6qhsOgtndcRM4O7S0=
-X-Google-Smtp-Source: ABdhPJwPxuDKdBHh2HvzjmJlvoYFjqoLZkyj4AU5NDzGKsornYRfx+d/FQCt96plRhZ/ajyaShJX1vAIstG2jAjhfXE=
-X-Received: by 2002:a25:ad14:: with SMTP id y20mr28247979ybi.155.1643740198548;
- Tue, 01 Feb 2022 10:29:58 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=UxjgGOUhkR1dbEpwd0qsIng+RbhHC9RNemQtqTU19N8=;
+        b=SiDAS6OWm5YPWwqA768/qFUtcj0bUMacQss0Hwlk2aTBqO59hoiS6s2zlBaZkDalg2
+         RLdMAm2Dt+Fsw55RhmNKsxeqpw3AWP+XqKj2FIEWcucfDm+YtF6ajsA6VBiAhmgNQK0u
+         +XcfxaOQddy+ct8oBP5Q0BUA7g+c9Biq15R/3lqPjaP+Z0uGmuDvnQpREKzCROOfvC1T
+         dqhOggvQlOv2KDsGu/4JVbPNbZDszUnjuUsoDHyG39LYA7x0/XnHpbj0IGdPXi710c94
+         TP7KfwemZaIQtQe2Hse4Mq498pGvVt+f/RD9XiqqieAzvDrcGkkSoh8VDGg6OQz1R+N0
+         DwQg==
+X-Gm-Message-State: AOAM5328kNUmjONpo4YsLJBH9Ej1kc0IANH8Cw0f2V4jPWzZZDJ+K/rx
+        Jek2Ooddk3H5cZdWrcLPzJLDvzkXQigdtquIIAU=
+X-Google-Smtp-Source: ABdhPJwQVsTtMhWmzsDmYJZ7J4Q5haZNJf+WRuiv/JpU+o6VSACuvm7GT+W7nxgCGpA0Dni/1nf0Wld441wZfyyOHV8=
+X-Received: by 2002:a17:90a:141:: with SMTP id z1mr3775429pje.87.1643740222430;
+ Tue, 01 Feb 2022 10:30:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126190219.3095419-1-pmalani@chromium.org>
- <20220126230411.nn2illij4wbpdm4q@eve> <YfHUXtJPU77wtCPb@chromium.org> <20220201121745.r4dbilp3fpqhjuty@eve>
-In-Reply-To: <20220201121745.r4dbilp3fpqhjuty@eve>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 1 Feb 2022 10:29:47 -0800
-Message-ID: <CACeCKadF3Yn-DvE+fgVPDq84K0VO-L-5j8UxOEk3zZGpkDFixg@mail.gmail.com>
-Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: Check for EC device
-To:     Alyssa Ross <hi@alyssa.is>
-Cc:     linux-kernel@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        chrome-platform@lists.linux.dev
+References: <20220131014648.941629-1-yury.norov@gmail.com> <YffF3e+uUIDVO7hm@FVFF7649Q05P>
+In-Reply-To: <YffF3e+uUIDVO7hm@FVFF7649Q05P>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Tue, 1 Feb 2022 10:30:22 -0800
+Message-ID: <CAAH8bW_y4+edCY9viJayfmfvAFuJ1A7jqwDQCL++_Qv2Bo5Kew@mail.gmail.com>
+Subject: Re: [PATCH] kernel/cpu.c: fix init_cpu_online
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alyssa,
+On Mon, Jan 31, 2022 at 3:20 AM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
+>
+> Hi Yury,
+>
+> On Sun, Jan 30, 2022 at 05:46:48PM -0800, Yury Norov wrote:
+> > cpu_online_mask has an associate counter of online cpus, which must be
+> > initialized in init_cpu_online().
+> >
+> > Fixes: 0c09ab96fc82010 (cpu/hotplug: Cache number of online CPUs)
+>
+> Aren't the increments/decrements from set_cpu_online() enough?
 
-On Tue, Feb 1, 2022 at 4:17 AM Alyssa Ross <hi@alyssa.is> wrote:
->
-> Hi Prashant,
->
-> On Wed, Jan 26, 2022 at 11:08:14PM +0000, Prashant Malani wrote:
-> > Hi Alyssa,
-> >
-> > On Jan 26 23:04, Alyssa Ross wrote:
-> > > On Wed, Jan 26, 2022 at 07:02:20PM +0000, Prashant Malani wrote:
-> > > > The Type C ACPI device on older Chromebooks is not generated correc=
-tly
-> > > > (since their EC firmware doesn't support the new commands required)=
-. In
-> > > > such cases, the crafted ACPI device doesn't have an EC parent, and =
-it is
-> > > > therefore not useful (it shouldn't be generated in the first place =
-since
-> > > > the EC firmware doesn't support any of the Type C commands).
-> > > >
-> > > > To handle devices which use these older firmware revisions, check f=
-or
-> > > > the parent EC device handle, and fail the probe if it's not found.
-> > > >
-> > > > Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class d=
-river")
-> > > > Reported-by: Alyssa Ross <hi@alyssa.is>
-> > > > Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> > > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > > > ---
-> > > > Hi Alyssa, could you kindly test this with your existing setup? Tha=
-nks!
-> > >
-> > > Hi Prashant, I'm happy to test, but I'm on vacation until the end of =
-the
-> > > week so probably won't get a chance before Monday.
-> >
-> > No worries, whenever you get the chance is fine.
-> >
-> > >
-> > > I'm guessing I should be testing with latest upstream coreboot (now t=
-hat
-> > > your fix there has been applied)?
-> >
-> > You should use the coreboot with which you discovered the crash, so the
-> > one which *doesn't* contain the fix.
->
-> I applied this patch to Linux 5.17-rc2 and tested with the
-> coreboot_tiano-eve-mrchromebox-20210806.rom firmware.
->
-> The Oops has been replaced with
-> "cros-ec-typec: GOOG0014:00: couldn't find parent EC device".
-> My laptop now reboots correctly =E2=80=94 the hang on reboot is gone.
->
-> The cros_ec_typec driver ends up being loaded, but no devices are bound
-> to it.  This differs from the behaviour with upstream coreboot
-> (cabf9e33a7), where cros_ec_typec does not end up being loaded.
->
-> Assuming all that's the intended behaviour:
+It will only count cpus onlined by this function . Those onlined before will
+never be counted.
 
-Yep, that's WAI. Thanks a lot for testing this, and yes, we'll be sure
-to reach out
-for future help with validating changes.
+> I guess we could argue that this isn't a private function and the
+> num_online_cpus should be updated here. But unless I missed something,
+> init_cpu_online() is only called in ia64 arch, in the !SMP case.
 
-Best regards,
+Yes, this looks weird. In !SMP case this counter and function are not needed
+at all, and this is  the only case when the function is used.
+
+In SMP case, things work just because the cpu_online_mask and
+num_online_cpus are both initialized to 0. If this is the intentional behavior,
+and it would be like this forever, then the init_cpu_online() must be dropped,
+otherwise it needs to be fixed. Isn't?
+
+> Is this the problem you're trying to tackle?
+
+It was initially a part of a bigger series that added 3 more counters like this:
+
+https://lkml.org/lkml/2021/12/18/253
+
+But now it's postponed.
+
+> If not, I'm not sure that warrants a "Fixes:" tag
+
+The patch 0c09ab96fc82010 adds the counter but does not initialize it properly.
+For me it sounds like a fix.
+
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  kernel/cpu.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/kernel/cpu.c b/kernel/cpu.c
+> > index 407a2568f35e..cd7605204d4d 100644
+> > --- a/kernel/cpu.c
+> > +++ b/kernel/cpu.c
+> > @@ -2616,6 +2616,7 @@ void init_cpu_possible(const struct cpumask *src)
+> >  void init_cpu_online(const struct cpumask *src)
+> >  {
+> >       cpumask_copy(&__cpu_online_mask, src);
+> > +     atomic_set(&__num_online_cpus, cpumask_weight(cpu_online_mask));
+> >  }
+> >
+> >  void set_cpu_online(unsigned int cpu, bool online)
+> > --
+> > 2.30.2
+> >

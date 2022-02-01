@@ -2,135 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740A04A54B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEEC4A54B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbiBABfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:35:09 -0500
-Received: from mga02.intel.com ([134.134.136.20]:14774 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231946AbiBABfH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:35:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643679307; x=1675215307;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aOVQsa3Cf2iiuataLA74N4rYxQcp2Lqz/FkUO5X7/GQ=;
-  b=lrh7cs5ENOCG/6flbcu7pVQBpZ3pu0rgTW4GhUAg1di6MzAH32JpVCUJ
-   ZsebYtfT8/CqweLHGm0h8/ugEouYdu11ui4FqmcVPyOpaJ0Ys/sko7JWR
-   dHNOgzioWgI0bnXjZ54WnYPHDEGKoMnWD6cYo9ZjuUuuU8UhZuJMGi/al
-   vcJEYHwPkGuuaEPTVf34pPhPK/RDFVlIm/jckL2JVuqPGyFffHs1SChXD
-   fKBbFTUUZCXcwM7Oj6cvltqp6Iy4mPuZvTJv0y4Q9SQ8cuhgzPJFUzvoG
-   SJvbKm9QtVF+91XYnrP9QwT8EsPHDjn5p98kwBSH18JCwgcEZyk9zgTyK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="234993956"
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="234993956"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 17:35:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="565433895"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2022 17:35:05 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEi4W-000SZL-Un; Tue, 01 Feb 2022 01:35:04 +0000
-Date:   Tue, 1 Feb 2022 09:34:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 23/29] include/linux/overflow.h:66:22: warning:
- comparison of distinct pointer types lacks a cast
-Message-ID: <202202010939.dIipJCeV-lkp@intel.com>
+        id S231925AbiBABfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231888AbiBABfA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 20:35:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755A5C061714;
+        Mon, 31 Jan 2022 17:35:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 396016127D;
+        Tue,  1 Feb 2022 01:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A967C36AE2;
+        Tue,  1 Feb 2022 01:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643679298;
+        bh=dp5GfBZlWK/76zAgmaghbi69RmaTVYKP8oGHHjSzkZ4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b0avxoBngR0FmyTguj/RtEqHknqkae7nkG2PrXaktcLoGHFtCJuGy61fsbTwQpdlU
+         64s+VbLb+iGAbHqmuUWadGrZSwG3vjDMLwXAQ591GnkTFkpZp+YY+vNVpTkLC2MXLI
+         ArydQmcQAybaHbwyWz5//R/3wGh1CfCaNxiAlMqn33asJx/pjuO4LhpFGbeY8EaV7D
+         8HHAuh8PV4zHwJLt6pP/9JEtt+8s+RUQ13/EvDpcz2L67qEAMtt6BPNE4gmJ5hso7+
+         sRdfDDp4SHD3XV8Q1ElpVgI0ohc8CLcHDQ3ZeKZoBc65JbGti6fxpCFUJHDayuHUAA
+         RKWOxvuVwgEKQ==
+Received: by mail-yb1-f174.google.com with SMTP id c19so17423815ybf.2;
+        Mon, 31 Jan 2022 17:34:58 -0800 (PST)
+X-Gm-Message-State: AOAM533QI8Ll7+AiCQIZqXRrKAmnTj0aXs2jemOr1rTQireZ2gija4/Q
+        pl5HP0Sc1uq4GBR6XvhqYQ8Jg5kI9925tU4qXeE=
+X-Google-Smtp-Source: ABdhPJxPhm2qvy5gh/yC1btwsle5xpf0Wt1yKVdXcinI8Y201wkaXJfl3Kozi0DqByBzNY8FOkGw7JcWk12iVTG4iZ0=
+X-Received: by 2002:a05:6902:1208:: with SMTP id s8mr35728901ybu.654.1643679297710;
+ Mon, 31 Jan 2022 17:34:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220128234517.3503701-1-song@kernel.org> <20220128234517.3503701-8-song@kernel.org>
+ <ab7e0a98-fced-23b3-6876-01ce711bd579@iogearbox.net>
+In-Reply-To: <ab7e0a98-fced-23b3-6876-01ce711bd579@iogearbox.net>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 31 Jan 2022 17:34:46 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5Pfvn8GNfuuuEGzdyugGDLF_g-V3T7RihBrxoQLxNb5g@mail.gmail.com>
+Message-ID: <CAPhsuW5Pfvn8GNfuuuEGzdyugGDLF_g-V3T7RihBrxoQLxNb5g@mail.gmail.com>
+Subject: Re: [PATCH v7 bpf-next 7/9] bpf: introduce bpf_prog_pack allocator
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   086f3f78da96ed1f11c2ac71115bb46e940e141e
-commit: b944c7f08293cd7b049be615e67622f5d0d74cfb [23/29] iommufd: Data structure to provide IOVA to PFN mapping
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220201/202202010939.dIipJCeV-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/b944c7f08293cd7b049be615e67622f5d0d74cfb
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout b944c7f08293cd7b049be615e67622f5d0d74cfb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/iommu/iommufd/ fs/nfs/
+On Mon, Jan 31, 2022 at 4:06 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 1/29/22 12:45 AM, Song Liu wrote:
+> > Most BPF programs are small, but they consume a page each. For systems
+> > with busy traffic and many BPF programs, this could add significant
+> > pressure to instruction TLB.
+> >
+> > Introduce bpf_prog_pack allocator to pack multiple BPF programs in a huge
+> > page. The memory is then allocated in 64 byte chunks.
+> >
+> > Memory allocated by bpf_prog_pack allocator is RO protected after initial
+> > allocation. To write to it, the user (jit engine) need to use text poke
+> > API.
+>
+> Did you benchmark the program load times under this API, e.g. how much
+> overhead is expected for very large programs?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For the two scale tests in test_verifier:
 
-All warnings (new ones prefixed by >>):
+./test_verifier 965 966
+#965/p scale: scale test 1 OK
+#966/p scale: scale test 2 OK
 
-   In file included from include/linux/mm.h:30,
-                    from include/linux/scatterlist.h:8,
-                    from include/linux/iommu.h:10,
-                    from drivers/iommu/iommufd/io_pagetable.c:27:
-   drivers/iommu/iommufd/io_pagetable.c: In function 'iopt_access_pages':
->> include/linux/overflow.h:66:22: warning: comparison of distinct pointer types lacks a cast
-      66 |         (void) (&__a == &__b);                  \
-         |                      ^~
-   drivers/iommu/iommufd/io_pagetable.c:488:13: note: in expansion of macro 'check_add_overflow'
-     488 |         if (check_add_overflow(iova, length - 1, &last_iova))
-         |             ^~~~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/bug.h:149,
-                    from include/linux/bug.h:5,
-                    from arch/powerpc/include/asm/cmpxchg.h:8,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/cpumask.h:13,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from drivers/iommu/iommufd/io_pagetable.c:26:
-   drivers/iommu/iommufd/io_pagetable.c: In function 'iopt_unaccess_pages':
->> include/linux/overflow.h:66:22: warning: comparison of distinct pointer types lacks a cast
-      66 |         (void) (&__a == &__b);                  \
-         |                      ^~
-   include/asm-generic/bug.h:121:32: note: in definition of macro 'WARN_ON'
-     121 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   drivers/iommu/iommufd/io_pagetable.c:548:21: note: in expansion of macro 'check_add_overflow'
-     548 |             WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-         |                     ^~~~~~~~~~~~~~~~~~
+The runtime is about 0.6 second before the set and 0.7 second after.
 
+Is this a good benchmark?
 
-vim +66 include/linux/overflow.h
+>
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > ---
+> >   kernel/bpf/core.c | 127 ++++++++++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 127 insertions(+)
+> >
+[...]
+> > +     }
+> > +     mutex_lock(&pack_mutex);
+> > +     list_for_each_entry(pack, &pack_list, list) {
+> > +             pos = bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
+> > +                                              nbits, 0);
+> > +             if (pos < BPF_PROG_CHUNK_COUNT)
+> > +                     goto found_free_area;
+> > +     }
+> > +
+> > +     pack = alloc_new_pack();
+> > +     if (!pack)
+> > +             goto out;
+>
+> Will this effectively disable the JIT for all bpf_prog_pack_alloc requests <=
+> BPF_PROG_MAX_PACK_PROG_SIZE when vmap_allow_huge is false (e.g. boot param via
+> nohugevmalloc) ?
 
-9b80e4c4ddaca3 Kees Cook        2020-08-12  53  
-f0907827a8a915 Rasmus Villemoes 2018-05-08  54  /*
-f0907827a8a915 Rasmus Villemoes 2018-05-08  55   * For simplicity and code hygiene, the fallback code below insists on
-f0907827a8a915 Rasmus Villemoes 2018-05-08  56   * a, b and *d having the same type (similar to the min() and max()
-f0907827a8a915 Rasmus Villemoes 2018-05-08  57   * macros), whereas gcc's type-generic overflow checkers accept
-f0907827a8a915 Rasmus Villemoes 2018-05-08  58   * different types. Hence we don't just make check_add_overflow an
-f0907827a8a915 Rasmus Villemoes 2018-05-08  59   * alias for __builtin_add_overflow, but add type checks similar to
-f0907827a8a915 Rasmus Villemoes 2018-05-08  60   * below.
-f0907827a8a915 Rasmus Villemoes 2018-05-08  61   */
-9b80e4c4ddaca3 Kees Cook        2020-08-12  62  #define check_add_overflow(a, b, d) __must_check_overflow(({	\
-f0907827a8a915 Rasmus Villemoes 2018-05-08  63  	typeof(a) __a = (a);			\
-f0907827a8a915 Rasmus Villemoes 2018-05-08  64  	typeof(b) __b = (b);			\
-f0907827a8a915 Rasmus Villemoes 2018-05-08  65  	typeof(d) __d = (d);			\
-f0907827a8a915 Rasmus Villemoes 2018-05-08 @66  	(void) (&__a == &__b);			\
-f0907827a8a915 Rasmus Villemoes 2018-05-08  67  	(void) (&__a == __d);			\
-f0907827a8a915 Rasmus Villemoes 2018-05-08  68  	__builtin_add_overflow(__a, __b, __d);	\
-9b80e4c4ddaca3 Kees Cook        2020-08-12  69  }))
-f0907827a8a915 Rasmus Villemoes 2018-05-08  70  
+This won't disable JIT. It will just allocate 512x 4k pages for a 2MB pack. We
+will mark the whole 2MB RO, same as a 2MB huge page. We still benefit
+from this as this avoids poking the linear mapping (1GB pages) to 4kB pages
+with set_memory_ro().
 
-:::::: The code at line 66 was first introduced by commit
-:::::: f0907827a8a9152aedac2833ed1b674a7b2a44f2 compiler.h: enable builtin overflow checkers and add fallback code
-
-:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-:::::: CC: Kees Cook <keescook@chromium.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Song

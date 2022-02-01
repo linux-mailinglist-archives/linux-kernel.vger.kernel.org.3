@@ -2,197 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E19674A5C2B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6154A5C2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235695AbiBAMZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiBAMZT (ORCPT
+        id S237979AbiBAM0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:26:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22529 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236574AbiBAM0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:25:19 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45F2C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 04:25:19 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jp3zd47dzz4xRB;
-        Tue,  1 Feb 2022 23:25:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1643718318;
-        bh=Eo0VMNs93fqn5QtpRNO6vn2uRm7WoC7mDC/GIQ51f0A=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=i4K5yKyp07XRnPGRReWiS76W4XMGCUwlQtDgD2ynHm612NOghGzevhEdamEjFHOyE
-         VhgQJIBvLqMMmAdkmQAfzcWw88FFn8AB6r8BkPF21PUOrtkotTo60PLlR4X1yb1bhP
-         rqR3BhkDPn6vbiC/XarQVYOj0iDnR+QNjcw6sU4Mvc2zUUnaqVzSTZ3TfScTYAL9b9
-         CXS1o6CWmnV2AVXj7uw2kFjN+Z9PeaAxMfgabHcOLMg//9FPSMYYpAhax5ZXBC6aXY
-         kWgIDCyhuTuqDWpjR6/AZeSi4TqNVifVBZVT66hImSxVAi699V/JT/0sw8ZU6YQyrJ
-         KEW7xJstS9Egw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] powerpc/ptdump: Fix sparse warning in hashpagetable.c
-In-Reply-To: <bbc196451dd34521d239023ccca488db35b8fff1.1643567900.git.christophe.leroy@csgroup.eu>
-References: <bbc196451dd34521d239023ccca488db35b8fff1.1643567900.git.christophe.leroy@csgroup.eu>
-Date:   Tue, 01 Feb 2022 23:25:16 +1100
-Message-ID: <87k0een58z.fsf@mpe.ellerman.id.au>
+        Tue, 1 Feb 2022 07:26:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643718369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZOsQ7tCjggbyJsap3yPkhYLBomgSptsnuwvSsGz14Vk=;
+        b=hmmAluwcTx2cd2SyXrjyv3T18yfHpKTQLNISVAzb2jmRQKK9qWNgvc3Nj/KgEWxrpz5Nm4
+        v8A5mbWCABKWNNYxkQAM6GYyCsw4ZwKyxl93bHL3W1zW2xeyy/XLBxuFKOpmd6BDzpgDoy
+        YEzUbgUdjdAZei3+8oRx0fpXLMER1a0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-48-twnniAk5NjeJWpIFl5y92w-1; Tue, 01 Feb 2022 07:26:08 -0500
+X-MC-Unique: twnniAk5NjeJWpIFl5y92w-1
+Received: by mail-ej1-f71.google.com with SMTP id q3-20020a17090676c300b006a9453c33b0so6405835ejn.13
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 04:26:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZOsQ7tCjggbyJsap3yPkhYLBomgSptsnuwvSsGz14Vk=;
+        b=vAxB1tbKBp3FiexGYYzJXZEoQ+k79ylZwwazD0K3FDdjNVxohpbR6j2Kjk5o2aXqhY
+         /zANXfe17+iVKFefp9MeGgA55IVLttKm6bU4LnQ0VfgOhxv84Aft2NyGrQKJ2IVGljza
+         hd8uU6I+jkR9ksjULJP9vsps6wgheKEi4xCF4HK1NeLYX1K3zRBj/UBY44iCJ418/cFl
+         A+qBMMA7b0bakoeVn35vUJ3N8NA9CwBzsTdYqAunohJLX5QqIk2fwGQt2MNPZQwHxqfv
+         nNpAd687mM5il/t4WGBXJ+wd0gsdV5kHRElBD2+8bG2fJjrcAklkG5C90ogecDY14JiL
+         kEDA==
+X-Gm-Message-State: AOAM532MhvoaDtgQkg5sCd9Dbb1fCk0xNGRX4gww4sNfreoevEaFoovm
+        He5hs6J06scztXFCfReTmUCv0Ot6Bjc8NEWSYLlsYtczOexPMpD3DsdUax6v8NNH862LJNDGgXc
+        ge7juryvAOg72/YDctdY2rbGr
+X-Received: by 2002:a17:906:cc54:: with SMTP id mm20mr19996349ejb.313.1643718367518;
+        Tue, 01 Feb 2022 04:26:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxHXhxwLpXav5KTYsLp1XBTl+8R3PESRejFZhEZXppgLCXd4Ex7CZ9M9KE024cKby9FudzbrQ==
+X-Received: by 2002:a17:906:cc54:: with SMTP id mm20mr19996335ejb.313.1643718367349;
+        Tue, 01 Feb 2022 04:26:07 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id d5sm14481372ejr.200.2022.02.01.04.26.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 04:26:06 -0800 (PST)
+Message-ID: <6690a921-5df7-5c31-e115-96b89cc5057e@redhat.com>
+Date:   Tue, 1 Feb 2022 13:26:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH kvm/queue v2 1/3] KVM: x86/pmu: Replace
+ pmu->available_event_types with a new BITMAP
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-2-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220117085307.93030-2-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->   arch/powerpc/mm/ptdump/hashpagetable.c:264:29: warning: restricted __be64 degrades to integer
->   arch/powerpc/mm/ptdump/hashpagetable.c:265:49: warning: restricted __be64 degrades to integer
->   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: warning: incorrect type in assignment (different base types)
->   arch/powerpc/mm/ptdump/hashpagetable.c:267:36:    expected unsigned long long [usertype]
->   arch/powerpc/mm/ptdump/hashpagetable.c:267:36:    got restricted __be64 [usertype] v
->   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: warning: incorrect type in assignment (different base types)
->   arch/powerpc/mm/ptdump/hashpagetable.c:268:36:    expected unsigned long long [usertype]
->   arch/powerpc/mm/ptdump/hashpagetable.c:268:36:    got restricted __be64 [usertype] r
->
-> struct hash_pte fields have type __be64. Convert them to
-> regular long before using them.
+On 1/17/22 09:53, Like Xu wrote:
+> +/* Mapping between CPUID 0x0A.EBX bit vector and enum perf_hw_id. */
+> +static inline int map_unavail_bit_to_perf_hw_id(int bit)
+> +{
+> +	switch (bit) {
+> +	case 0:
+> +	case 1:
+> +		return bit;
+> +	case 2:
+> +		return PERF_COUNT_HW_BUS_CYCLES;
+> +	case 3:
+> +	case 4:
+> +	case 5:
+> +	case 6:
+> +		return --bit;
+> +	}
+> +
+> +	return PERF_COUNT_HW_MAX;
+> +}
+> +
 
-Your patch changes one side of the comparison but not the other, which
-implies the code doesn't work at the moment, ie. it should never be
-matching.
+Please use an array here (e.g. cpuid_event_to_perf_hw_id_map[]).
 
-But it does work at the moment, so there must be something else going on.
-
-> diff --git a/arch/powerpc/mm/ptdump/hashpagetable.c b/arch/powerpc/mm/ptdump/hashpagetable.c
-> index c7f824d294b2..bf60ab1bedb9 100644
-> --- a/arch/powerpc/mm/ptdump/hashpagetable.c
-> +++ b/arch/powerpc/mm/ptdump/hashpagetable.c
-> @@ -261,11 +261,11 @@ static int pseries_find(unsigned long ea, int psize, bool primary, u64 *v, u64 *
-
-Expanding the context a little:
-
-	for (i = 0; i < HPTES_PER_GROUP; i += 4, hpte_group += 4) {
-		lpar_rc = plpar_pte_read_4(0, hpte_group, (void *)ptes);
-
->  		if (lpar_rc)
->  			continue;
->  		for (j = 0; j < 4; j++) {
-> -			if (HPTE_V_COMPARE(ptes[j].v, want_v) &&
-> -					(ptes[j].v & HPTE_V_VALID)) {
-> +			if (HPTE_V_COMPARE(be64_to_cpu(ptes[j].v), want_v) &&
-> +			    (be64_to_cpu(ptes[j].v) & HPTE_V_VALID)) {
->  				/* HPTE matches */
-> -				*v = ptes[j].v;
-> -				*r = ptes[j].r;
-> +				*v = be64_to_cpu(ptes[j].v);
-> +				*r = be64_to_cpu(ptes[j].r);
->  				return 0;
->  			}
->  		}
-
-Turns out the values returned from plpar_pte_read_4() are already in CPU
-endian.
-
-We pass an on-stack buffer to plpar_pte_read_4():
-
-  plpar_pte_read_4(0, hpte_group, (void *)ptes);
-
-Which makes it look like the hypercall is writing to memory (our
-buffer), so we'd expect the values to need an endian swap.
-
-But plpar_pte_read_4() writes into that buffer from another on-stack
-buffer:
-
-static inline long plpar_pte_read_4(unsigned long flags, unsigned long ptex,
-				    unsigned long *ptes)
-
-{
-	long rc;
-	unsigned long retbuf[PLPAR_HCALL9_BUFSIZE];
-
-	rc = plpar_hcall9(H_READ, retbuf, flags | H_READ_4, ptex);
-
-	memcpy(ptes, retbuf, 8*sizeof(unsigned long));
-
-	return rc;
-}
-
-
-And the values in that stack buffer are actually returned from the
-hypervisor in registers, r4-r11, and written into retbuf by the asm
-wrapper:
-
-_GLOBAL_TOC(plpar_hcall9)
-	HMT_MEDIUM
-
-	mfcr	r0
-	stw	r0,8(r1)
-
-	HCALL_BRANCH(plpar_hcall9_trace)
-
-	std     r4,STK_PARAM(R4)(r1)     /* Save ret buffer */ 		<- this is retbuf
-
-	mr	r4,r5
-	mr	r5,r6
-	mr	r6,r7
-	mr	r7,r8
-	mr	r8,r9
-	mr	r9,r10
-	ld	r10,STK_PARAM(R11)(r1)	 /* put arg7 in R10 */
-	ld	r11,STK_PARAM(R12)(r1)	 /* put arg8 in R11 */
-	ld	r12,STK_PARAM(R13)(r1)    /* put arg9 in R12 */
-
-	HVSC				/* invoke the hypervisor */
-
-	mr	r0,r12
-	ld	r12,STK_PARAM(R4)(r1)		<- reload retbuf into r12
-	std	r4,  0(r12)
-	std	r5,  8(r12)
-	std	r6, 16(r12)
-	std	r7, 24(r12)
-	std	r8, 32(r12)
-	std	r9, 40(r12)
-	std	r10,48(r12)
-	std	r11,56(r12)
-	std	r0, 64(r12)
-
-
-Although the values are BE in memory in the actual HPT, they're read by
-the hypervisor which does the byte swap for us, and then when the
-hypervisor returns they're returned in the registers. So there's no
-extra byte swap needed.
-
-Possibly we should move struct hash_pte into hash_native.c, which is
-where it's almost exclusively used, and is used to point to actual HPTEs
-in memory.
-
-But for now I think the patch below is a minimal fix for this sparse
-warning, it's what other callers of plpar_pte_read_4() are doing.
-
-cheers
-
-
-diff --git a/arch/powerpc/mm/ptdump/hashpagetable.c b/arch/powerpc/mm/ptdump/hashpagetable.c
-index c7f824d294b2..9a601587836b 100644
---- a/arch/powerpc/mm/ptdump/hashpagetable.c
-+++ b/arch/powerpc/mm/ptdump/hashpagetable.c
-@@ -238,7 +238,10 @@ static int native_find(unsigned long ea, int psize, bool primary, u64 *v, u64
- 
- static int pseries_find(unsigned long ea, int psize, bool primary, u64 *v, u64 *r)
- {
--	struct hash_pte ptes[4];
-+	struct {
-+		unsigned long v;
-+		unsigned long r;
-+	} ptes[4];
- 	unsigned long vsid, vpn, hash, hpte_group, want_v;
- 	int i, j, ssize = mmu_kernel_ssize;
- 	long lpar_rc = 0;
-
+Paolo
 

@@ -2,94 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E550D4A614D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879624A611B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241061AbiBAQWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:22:50 -0500
-Received: from foss.arm.com ([217.140.110.172]:50024 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241080AbiBAQWo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:22:44 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83D4D113E;
-        Tue,  1 Feb 2022 08:22:44 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.8.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AA4F3F40C;
-        Tue,  1 Feb 2022 08:22:39 -0800 (PST)
-Date:   Tue, 1 Feb 2022 16:22:37 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup@brainfault.org,
-        aou@eecs.berkeley.edu, atishp@atishpatra.org,
-        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, frederic@kernel.org,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
-        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH v3 0/5] kvm: fix latent guest entry/exit bugs
-Message-ID: <YfleTYWIW1sBbMNn@FVFF77S0Q05N>
-References: <20220201132926.3301912-1-mark.rutland@arm.com>
- <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
+        id S240904AbiBAQMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:12:51 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:45874 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240848AbiBAQMu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 11:12:50 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 211FVMX8032227;
+        Tue, 1 Feb 2022 11:12:43 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dx8jbvvnv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 11:12:42 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 211GCf0Y045166
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 1 Feb 2022 11:12:41 -0500
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 1 Feb 2022 11:12:40 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 1 Feb 2022 11:12:40 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 1 Feb 2022 11:12:40 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 211GCWGa019228;
+        Tue, 1 Feb 2022 11:12:34 -0500
+From:   Cristian Pop <cristian.pop@analog.com>
+To:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <jic23@kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>, Cristian Pop <cristian.pop@analog.com>
+Subject: [PATCH v2 1/2] dt:bindings:iio:frequency: Add ADMV4420 doc
+Date:   Tue, 1 Feb 2022 18:23:50 +0200
+Message-ID: <20220201162351.53520-1-cristian.pop@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: vm1ni3cvA7FvzkoUTE-YRYnD4eucenw_
+X-Proofpoint-ORIG-GUID: vm1ni3cvA7FvzkoUTE-YRYnD4eucenw_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202010092
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 04:59:47PM +0100, Paolo Bonzini wrote:
-> On 2/1/22 14:29, Mark Rutland wrote:
-> > I've pushed the series (based on v5.17-rc2) to my kvm/entry-rework branch:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
-> 
-> Thanks!  I cherry-picked the basic, x86 and mips patches to kvm.git's master
-> branch (I did not use your branch in order to leave arm64 and riscv to the
-> respective maintainers).
+Add device tree bindings for the ADMV4420 K band downconverter.
 
-Since everything's dependent upon that core patch, IIUC that's going to make it
-a pain for them to queue things.
+Signed-off-by: Cristian Pop <cristian.pop@analog.com>
+---
+changes in v2:
+ - Fix indentation
+ - Remove '|', there is no formatting to persevere
+ - Add plank line before 'properties:'
+ - replace '_' with '-' in property names
+ .../bindings/iio/frequency/adi,admv4420.yaml  | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
 
-How are you expecting the arm64 and riscv maintainers to queue things? Queue
-their own copies of that core patch?
+diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
+new file mode 100644
+index 000000000000..43a27d8e5da1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/frequency/adi,admv4420.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ADMV4420 K Band Downconverter
++
++maintainers:
++  - Cristian Pop <cristian.pop@analog.com>
++
++description:
++    The ADMV4420 is a highly integrated, double balanced, active
++    mixer with an integrated fractional-N synthesizer, ideally suited
++    for next generation K band satellite communications
++
++properties:
++  compatible:
++    enum:
++      - adi,admv4420
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 1000000
++
++  adi,lo-freq-hz:
++    description: LO Frequency
++
++  adi,ref-ext-single-ended-en:
++    description: External reference selected.
++    type: boolean
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      admv4420@0 {
++        compatible = "adi,admv4420";
++        reg = <0>;
++        spi-max-frequency = <1000000>;
++        adi,lo-freq-hz = /bits/ 64 <16743700000>;
++        adi,ref-ext-single-ended-en;
++      };
++    };
++...
+-- 
+2.17.1
 
-Thanks,
-Mark.
-
-> Paolo
-> 
-> > This version of the series is tagged as kvm-entry-rework-20220201.
-> > 
-> > [1] https://lore.kernel.org/r/20220111153539.2532246-1-mark.rutland@arm.com/
-> > [2] https://lore.kernel.org/r/20220119105854.3160683-1-mark.rutland@arm.com/
-> > 
-> > Thanks,
-> > 
-> > 
-> > Mark Rutland (5):
-> >    kvm: add guest_state_{enter,exit}_irqoff()
-> >    kvm/arm64: rework guest entry logic
-> >    kvm/x86: rework guest entry logic
-> >    kvm/riscv: rework guest entry logic
-> >    kvm/mips: rework guest entry logic
-> > 
-> >   arch/arm64/kvm/arm.c     |  51 +++++++++++-------
-> >   arch/mips/kvm/mips.c     |  50 +++++++++++++++--
-> >   arch/riscv/kvm/vcpu.c    |  44 +++++++++------
-> >   arch/x86/kvm/svm/svm.c   |   4 +-
-> >   arch/x86/kvm/vmx/vmx.c   |   4 +-
-> >   arch/x86/kvm/x86.c       |   4 +-
-> >   arch/x86/kvm/x86.h       |  45 ----------------
-> >   include/linux/kvm_host.h | 112 +++++++++++++++++++++++++++++++++++++--
-> >   8 files changed, 222 insertions(+), 92 deletions(-)
-> > 
-> 

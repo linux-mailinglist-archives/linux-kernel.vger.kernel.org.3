@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A24A4A5CA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4124A5CA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbiBAM4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:56:14 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:41570 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238238AbiBAM4M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:56:12 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 552CB1EC0441;
-        Tue,  1 Feb 2022 13:56:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643720166;
+        id S238264AbiBAM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:57:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29310 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233789AbiBAM5H (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 07:57:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643720226;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nGtniP/ZuSvnwnPoaU4PQX/0piWBb9dVWe0n763a2eI=;
-        b=W1yRP06VZIG2iZVXxUMtaGrrFhFQiW9wFWg8S4RXC5N+aRmQIUqZiNxIFGkx6dKsMT0jfG
-        aF5AULNAcU9t7T7RhPGRrkoz3FAd9/2uMMNiKZdw3STZssNex4aZxo6UjNAJHN0qoW0B3F
-        nYJF+mbZ+9U/S97CTSfM8kwokK9Um58=
-Date:   Tue, 1 Feb 2022 13:56:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
-        "luolongjun@huawei.com" <luolongjun@huawei.com>,
-        "hejingxian@huawei.com" <hejingxian@huawei.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH v3 6/9] x86/smpboot: Support parallel startup of
- secondary CPUs
-Message-ID: <Yfkt4sX094so/Kub@zn.tnic>
-References: <20211215145633.5238-7-dwmw2@infradead.org>
- <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
- <f25c6ad00689fee6ce3e294393c13f3dcdd5985f.camel@infradead.org>
- <3d8e2d0d-1830-48fb-bc2d-995099f39ef0@amd.com>
- <e742473935bf81be84adea6fa8061ce0846cc630.camel@infradead.org>
- <330bedfee12022c1180d8752fb4abe908dac08d1.camel@infradead.org>
- <YffrVMiO/NalRZjL@zn.tnic>
- <3bc401a9f110a24a429316371c767507b493025a.camel@infradead.org>
- <YfkRyLV/auNzczfF@zn.tnic>
- <c83673d74bc161b8e5bfcc3049ccfecf5c9e96f5.camel@infradead.org>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KQ6uizHs+T+wChsJ+DeQUo8BHktCkFmAePt89tVO1n8=;
+        b=ADMKW1aG1TCJFDOZ01rveUJzNJcUF8cscxkn08cC7LI2DiX3TwISSm73vBYWKk1eOfaZRk
+        5iZB4/1vm1wnHE0au+jn2goEWd7vDS19Euh01jL42jniGfuhAvhmKWh/ITOrgmScUky2Bw
+        GZPmQAzaid8Ykxurd9Ldu0bcssPdo3g=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-l1QI40yOOkiuBFDck7CYdw-1; Tue, 01 Feb 2022 07:57:05 -0500
+X-MC-Unique: l1QI40yOOkiuBFDck7CYdw-1
+Received: by mail-ej1-f69.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so6450914ejw.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 04:57:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KQ6uizHs+T+wChsJ+DeQUo8BHktCkFmAePt89tVO1n8=;
+        b=hTyB3STC9iyhlz60HgfHjL7uYX7IWq3p22f5/Irzetl3IxpF0fNKxx6mGKSonxWlXm
+         e+GJGlOfABOpFVKTFy6sLBgjh578LF7/+KFygfkhtI3tXYqaMRTd9ph/Wx/ce86464K4
+         csPD5DI8I6CnQdwFWW9dVXJbJ+Ck6Vl5+F3wQOd+IPPuxsX8gN9CGhDThkex/nj2LVBs
+         QR1x1sIiKuT1m1h+3DOz7H9ipWjaXX8PhzKoGjqKc68k3hX04C7J0elEhyCejCkfmca5
+         T28nKZIsXS8fOQbK7SBFNSgUsrlB/PrPH43RXknyNwnacZsultrEqVG3xNwTBiNZokUJ
+         z6qg==
+X-Gm-Message-State: AOAM532XAmmcolod06U+rqvVBcJ+mY7ojKiUdAUwgDQDUupj5zvgibde
+        Ipk5jhw3WKoFVtAQ9dWH1WOGcJK3wT0HBFpinNrf3O/32z3mzWPIDkG2cEOqatNC9N3otjyqhgW
+        a77hadvssWU6GYmdTpT7/MD+7
+X-Received: by 2002:a17:907:9816:: with SMTP id ji22mr12429456ejc.749.1643720224025;
+        Tue, 01 Feb 2022 04:57:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWjr5Jp9grpxqx8hkic0kbma5PCsPcdjCNZZ93EtP+eq3QIEt7zcDM5f5WOomgiSu9D2jh4A==
+X-Received: by 2002:a17:907:9816:: with SMTP id ji22mr12429451ejc.749.1643720223833;
+        Tue, 01 Feb 2022 04:57:03 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id lm6sm14439602ejb.46.2022.02.01.04.57.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 04:57:02 -0800 (PST)
+Message-ID: <01e51bfa-5107-fbd0-6a0b-82bca6c78e8e@redhat.com>
+Date:   Tue, 1 Feb 2022 13:57:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c83673d74bc161b8e5bfcc3049ccfecf5c9e96f5.camel@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 0/4] hwmon: (sch56xx) Automatically load on supported
+ hardware
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220131211935.3656-1-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220131211935.3656-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 12:39:17PM +0000, David Woodhouse wrote:
-> In the top of my git tree, you can see a half-baked 'parallel part 2'
-> commit which introduces a new x86/cpu:wait-init cpuhp state that would
-> invoke do_wait_cpu_initialized() for each CPU in turn, which *would*
-> release them all into load_ucode_bsp() at the same time and have
-> precisely the problem you're describing.
+Hi,
 
-The load_ucode_bsp() is the variant that runs on the boot CPU but
-yeah...
+On 1/31/22 22:19, Armin Wolf wrote:
+> The hardware monitoring solutions supported by the sch5627 and
+> sch5636 drivers are Fujitsu-specific.
+> After some online searching, i found out that the solution used
+> with the SCH5627 is called "Antiope" by Fujitsu, just like the
+> "Theseus" solution inside the SCH5636.
+> I also found out that "Antiope" and "Theseus" are listed as
+> DMI onboard devices on supported Fujitsu devices, so the
+> sch56xx_common module can be loaded automatically an check
+> for the DMI devices. However some devices like the Esprimo C700
+> have both devices, so after verifying that at least one onboard
+> device is present, sch56xx_common still has to detect which chip
+> is present.
+> This is safe however if at least one device is present.
+> 
+> Tested on a Fujitsu Esprimo P720.
 
-> I'll commit a FIXME comment now so that it doesn't slip my mind.
+Thanks, the new version of the entire series looks good to me:
 
-Yap, thank Cooper for pointing out that whole thing about how microcode
-loading is special and can't always handle parallelism. :)
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-> Hm, not sure I see how that's protecting itself from someone
-> simultaneously echoing 1 > /sys/devices/system/cpu/cpu${SIBLING}/online
+for the series.
 
-So
+Regards,
 
-echo 1 > ../online
+Hans
 
-means onlining the sibling.
+> 
+> ---
+> Changes in v3:
+> - fix usleep_range using the same value as msleep
+> 
+> Changes in v2:
+> - fix unused variable issue reported by the kernel test robot
+> by assinging the platform device id list in sch5627/sch5636
+> to platform_driver->id_table.
+> 
+> Armin Wolf (4):
+>   hwmon: (sch56xx) Autoload modules on platform device creation
+>   hwmon: (sch56xx-common) Add automatic module loading on supported
+>     devices
+>   hwmon: (sch56xx-common) Replace msleep() with usleep_range()
+>   hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
+> 
+>  drivers/hwmon/sch5627.c        | 10 ++++++++
+>  drivers/hwmon/sch5636.c        | 10 ++++++++
+>  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++++++----
+>  3 files changed, 60 insertions(+), 4 deletions(-)
+> 
+> --
+> 2.30.2
+> 
 
-But reload_store() grabs the CPU hotplug lock *first* and *then* runs
-check_online_cpus() to see if all CPUs are online. It doesn't do the
-update if even one CPU is missing. You can't offline any CPU for the
-duration of the update...
-
-So I guess you'd need to explain in more detail what protection hole
-you're seeing because I might be missing something here.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

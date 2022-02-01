@@ -2,116 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F204A5878
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7914A587B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbiBAIYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 03:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S235479AbiBAIYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 03:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235586AbiBAIYL (ORCPT
+        with ESMTP id S235383AbiBAIYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 03:24:11 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D22C061741
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 00:24:11 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id k25so51273379ejp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 00:24:11 -0800 (PST)
+        Tue, 1 Feb 2022 03:24:44 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14917C061401
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 00:24:44 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id u14so32135669lfo.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 00:24:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GHl1OHNEBsppykLL0FZwPbFOi9foYqykYD+EcFet6qM=;
-        b=a7BBFEww46WyfPzbomNQG+Oqq2IlwS7J9fIC6wz4AdhnC7RyJpr/rJWZYYt2vAhObW
-         iKEwMUG4feE/X4hSNAxQoRtiComrQv51VvEEYRla9+kWV86j1LQbU6kx+vhGqEd61/cy
-         G2t3i2xZvnCqkVzIfZzQU2C62mnetTUKDAhzxiaYd34pcr2HvKXqAO0uOCOFqYacHePO
-         vs923UsYq5I2ob+UgyHh5m1WF0yrD59QYadBvnneQAQcj857TlY7IXviNdvZDwFw7Noa
-         sOmaqrashQAOt4ECeqnuo5hVWsTR85qX0g8Zx9Gh9fKZdbFMM1vrATkT2ORx5IRqOcsY
-         mpJQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=02qCsJMd/Qw+tzewIH8FBMwDC4vihqf0hW0clvJ/c+8=;
+        b=uBcqRsmm3g98X+qlI/ExrASREBFgHY/y9plhtW+HUz1g8cEnsOqcntsJrJxERTZ8xy
+         cnewujR8OpUNZa7XX0OHdS6M3/VG9UZ9ZMSMbkI0m34bb7JLSqNOcfp9gXYfo/Xn4Pty
+         Ih+wEcHNpbsC7QzkUAjg9xFpbzm+064DJ3++V6BrZfncAroVEKghBMYXCt+cIaKaIs71
+         iv8iGFciN2YQ9U5mIpoELrxA74vDVqVblzerf0tJ8rqJ9VJ+x/soc3nRu9cTtBOl3op/
+         gpOXlBGGsHlN9s8wXZbfWGTNx/pC5wba5eITIuHErHsigEKL3+XYu+7xegF33oSb7NIX
+         gC4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GHl1OHNEBsppykLL0FZwPbFOi9foYqykYD+EcFet6qM=;
-        b=qq4cUf09Htmo1laPCL3Pm5OiIGU5EubdRwOXPOM2K26nLV8Fl0V9bXEg2iY7RJjJb2
-         U9wiG0W2w4b28Fd+F2ql1v4tNwHutJFp+AcVyNne8oL4oFgnx2hb3equbiHS/SIziUJQ
-         T7QvJeoGYKz64yIVTP2r6HCcg/r/h49wDTUcAUJjhXxa9FoeoghTaRINcj8W1J0r0lz0
-         /pz/w2gpJIvo2SyE8+KrEcz0s6yf1oqvcg9JC68ExQsOu9Thf4FO65nka502Fh4yJBPw
-         MIJRMlK1d0LTKLTUN7bKQmvsQWcrG/RkvW+2t6pGR6n7wgaPTzIjT8claTdhiX/01+kR
-         c+6A==
-X-Gm-Message-State: AOAM532qZe2dzV2jz8pIXycsntMoqS6Teb2GJ0cI0T1aUS4MnnaBKRZc
-        vccY5mvLXVR8F57u6JDOfn2A7Q==
-X-Google-Smtp-Source: ABdhPJzCelwQYB0QuYOqiku+n7scTy7gUb/hHhHhs6GEaaroLB9AmfUKIaKTwSM1jvGPR/SYoABrkA==
-X-Received: by 2002:a17:906:58c6:: with SMTP id e6mr19318243ejs.733.1643703849679;
-        Tue, 01 Feb 2022 00:24:09 -0800 (PST)
-Received: from localhost.localdomain ([122.179.76.38])
-        by smtp.gmail.com with ESMTPSA id w8sm14312133ejq.220.2022.02.01.00.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 00:24:09 -0800 (PST)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 6/6] RISC-V: KVM: Implement SBI HSM suspend call
-Date:   Tue,  1 Feb 2022 13:52:27 +0530
-Message-Id: <20220201082227.361967-7-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220201082227.361967-1-apatel@ventanamicro.com>
-References: <20220201082227.361967-1-apatel@ventanamicro.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=02qCsJMd/Qw+tzewIH8FBMwDC4vihqf0hW0clvJ/c+8=;
+        b=eUnVR0k3KdufXMueZSQOF57kUovyuYPu8AvR+KbqAz/1YXFdPOKkq2BefbGI3XZq2b
+         tia1H09ENBMbyw6O/OY3H86aeLPXjV7xfy909rPwnGN1dJKqqY3gnPf0pEJcHoV6OiTx
+         9hzke9VzTMCfyeecJi9KS/rrvCGqdStWAJp7LoT2IiWozyFZqIeNhi9i+MEu0bRZL8TX
+         hZX2Qa1XUheiqZ5yQrgo8nd6niKvASp9VcIUAAoZVQ+buBcsXZu1ZSADNO7n6ASsL2Gd
+         rB32bc21Eshz0C4KfX/c4yOMnxCuKJefOQ9FLDWZ9x6qUyWHweVsobpIvbQweEC+Bh6f
+         mFaQ==
+X-Gm-Message-State: AOAM530JfSzkyMQWNqHOF4NaK6WuHvY28MOD0VCd8vCtXElNN6W66k7n
+        kFw10VEP17uBVnFoBEMMqqHrAWHeH0wXW0K+99n38LYhnk3ULQ==
+X-Google-Smtp-Source: ABdhPJydVmJZJJqnrsxbGNdSJfgAZbgMKyRPvGeBfMnl6MzLe1H1ulkKn7LpGV9XQ04MpiucaNSNhqyLfVE7c5m/Eu0=
+X-Received: by 2002:a05:6512:3e10:: with SMTP id i16mr3859555lfv.184.1643703882410;
+ Tue, 01 Feb 2022 00:24:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAGETcx_4ATDk3nNfu6kBwUVN4nfxcHHUMnCKYsLTDoA1TFLmrw@mail.gmail.com>
+ <CAPDyKFqUiydk3hHiKZ92e-W2tC4yv-XhGSz20KYYsTuZu0rWuQ@mail.gmail.com> <CAGETcx9fz31x20ZAcwtvmnBcfswv2O=5UNCQhZngT2BEzm6ShQ@mail.gmail.com>
+In-Reply-To: <CAGETcx9fz31x20ZAcwtvmnBcfswv2O=5UNCQhZngT2BEzm6ShQ@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 1 Feb 2022 09:24:05 +0100
+Message-ID: <CAPDyKFr1OhTCsgu64_3sBPdOaCk0HLHrhj+PJH_NB-ZY8srkNg@mail.gmail.com>
+Subject: Re: Relation between MMC_CAP_WAIT_WHILE_BUSY and card_busy()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jaehoon Chung <jh80.chung@samsung.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SBI v0.3 specification extends SBI HSM extension by adding SBI HSM
-suspend call and related HART states. This patch extends the KVM RISC-V
-HSM implementation to provide KVM guest a minimal SBI HSM suspend call
-which is equivalent to a WFI instruction.
+On Mon, 31 Jan 2022 at 21:15, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Jan 31, 2022 at 7:46 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Wed, 26 Jan 2022 at 04:46, Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > I'm trying to understand the MMC suspend path a bit.
+> > >
+> > > I looked at the commit message of 6fa79651cc808f68db6f6f297be5a950ccd5dffb.
+> > >
+> > > IIUC, if MMC_CAP_WAIT_WHILE_BUSY is set then the mmc framework is
+> > > going to depend on the card_busy() op to ensure correctness instead of
+> > > using the S_A_TIMEOUT value from the card.
+> >
+> > MMC_CAP_WAIT_WHILE_BUSY indicates whether the mmc controller supports
+> > IRQ based busy detection completion. In other words, the mmc host
+> > driver can receive an IRQ when busy signaling is completed on DAT0 by
+> > the eMMC card.
+> >
+> > However, to avoid waiting for the IRQ forever, there is a maximum
+> > timeout that is specified by the mmc core, for the particular command
+> > in question. For eMMC sleep, the S_A_TIMEOUT.
+>
+> Ah ok, thanks for the explanation.
+>
+> >
+> > >
+> > > But I see a lot of mmc host drivers that implement card_busy() but
+> > > don't set the MMC_CAP_WAIT_WHILE_BUSY flag. That doesn't seem right to
+> > > me if my understanding is correct.
+> >
+> > That's perfectly okay. MMC_CAP_WAIT_WHILE_BUSY is IRQ based, while the
+> > ->card_busy() ops is used to poll for busy completion.
+>
+> Yeah, it makes sense now.
+>
+> One thing I noticed when playing with some hardware is that during
+> suspend, when MMC_CAP_WAIT_WHILE_BUSY isn't set and we have a
+> card_busy() implementation, we don't seem to be using card_busy() op
+> and just always using the timeout from S_A_TIMEOUT. To be more
+> specific, I'm talking about this code path:
+> _mmc_suspend() -> mmc_sleep() -> mmc_delay() -> msleep()
+>
+> I'd think card_busy() could be used here if it's implemented. Is there
+> a reason for not using it in this path?
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/kvm/vcpu_sbi_hsm.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+That was exactly what commit 6fa79651cc80 ("mmc: core: Enable eMMC
+sleep commands to use HW busy polling") implemented. The commit was
+introduced in v5.14.
 
-diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
-index 1ac4b2e8e4ec..239dec0a628a 100644
---- a/arch/riscv/kvm/vcpu_sbi_hsm.c
-+++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
-@@ -61,6 +61,8 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
- 		return -EINVAL;
- 	if (!target_vcpu->arch.power_off)
- 		return SBI_HSM_STATE_STARTED;
-+	else if (vcpu->stat.generic.blocking)
-+		return SBI_HSM_STATE_SUSPENDED;
- 	else
- 		return SBI_HSM_STATE_STOPPED;
- }
-@@ -91,6 +93,18 @@ static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 			ret = 0;
- 		}
- 		break;
-+	case SBI_EXT_HSM_HART_SUSPEND:
-+		switch (cp->a0) {
-+		case SBI_HSM_SUSPEND_RET_DEFAULT:
-+			kvm_riscv_vcpu_wfi(vcpu);
-+			break;
-+		case SBI_HSM_SUSPEND_NON_RET_DEFAULT:
-+			ret = -EOPNOTSUPP;
-+			break;
-+		default:
-+			ret = -EINVAL;
-+		}
-+		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 	}
--- 
-2.25.1
+If it doesn't work, there is a bug somewhere.
 
+[...]
+
+Kind regards
+Uffe

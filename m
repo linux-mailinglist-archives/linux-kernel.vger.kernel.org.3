@@ -2,214 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6274B4A53CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236184A53D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiBAAJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S230172AbiBAAJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiBAAJo (ORCPT
+        with ESMTP id S230159AbiBAAJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:09:44 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E34C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:09:44 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id q186so30064186oih.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:09:44 -0800 (PST)
+        Mon, 31 Jan 2022 19:09:52 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD21C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:09:52 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 133so13787277pgb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:09:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pPpIi5w9W/mHGl9gvj7pAydSd9Upe0NYLYSjf6SNmGI=;
-        b=yOCpgFpAmJBPY+ah6VrkXhKzLEm1/ycMzK2Okai47RXkQDeBdVZse8DqJ7tHoj2f9P
-         7+p6hf7zI+mL/rWg+t7j2wPhYbXaZpBeXlMpUL1H9o3WJxsve9uzAQNmoYjZ+XlguiRi
-         LiQVx6DYfD6VXkfFqrQQRztqB9n/OhvG/0lA0aFdZzscGg50nj6RYYxYmKm1TVI2WSkw
-         FlbJ+NOaO+6g06pQ7CSjhtznTvwTW1BYW12/fefFmcFhPb6/Pt3wqj+QkgQ/jUpLZzPG
-         763QAM+VbJ0mZsyNz9ZyTJL6n0sTWObqhIvKdjGba2XPcHm/9GJPsCLq9/YPHdA7jl9S
-         T5sw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5qwLaEIOYlijwyduplYEjWelGWybvaxEnn7HYTpgP70=;
+        b=mfBat4L77tKMTAhNSuJn3palyMkxYAKXtUo2345uF66a7Zve1Wh63z06waYxMc2JmJ
+         pZjftdSTxVUeocBOulxZral26pOzB1DWdXI6lPmlB/a8tUT7xwF1mYM+qJ8fa7naBVXd
+         X/mJpi59esp4KSFZZF7Je3D9jfUS7CyDLVq2M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pPpIi5w9W/mHGl9gvj7pAydSd9Upe0NYLYSjf6SNmGI=;
-        b=QxjxyNM4fcc59IByiXTgecjvCHWGsI+8feyCxl882FiDXXvtz/BMJ8paGzQybGShOc
-         pxUxjheBzvb92NtLOG/gxVMes0iNr16AuevuzSzHKG17h4+/pDzKNxlxGKq6E4fFDkOn
-         dVNhVjqpXEor8ppvi2iJjHSMyRWuOrNFU1osCEGJt0YsFvh84KlkSb1uf4zRoiKUYO7d
-         Adw51Ys/f+x3TSxKIgQ383e71oFkB+S9/+IHUX0INz6pnfQ89kPpteEybNgNls3QgkmI
-         oZZagd0h50i0lMP0XbKbPh/YaLyaoqmG181gIviW1vUcRYo/U4Ok9T/7Ej2OAvNG8/CR
-         qMfA==
-X-Gm-Message-State: AOAM533pGvNp1E1iG+XmSTOSuA6C+QVCrUHNNnbvYpame6h2qO2Yx0qq
-        Un4pPX8gAQcRC9GPoY4vz576qw==
-X-Google-Smtp-Source: ABdhPJzWXq0v30SY2G1ZDmV6zl2mHlBTYpH44vyYkuwf8i2o47oSV5DE6SKMq469Uw1k23FhtpyMZg==
-X-Received: by 2002:a05:6808:f0d:: with SMTP id m13mr9140694oiw.141.1643674184137;
-        Mon, 31 Jan 2022 16:09:44 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id h9sm6642619otk.42.2022.01.31.16.09.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5qwLaEIOYlijwyduplYEjWelGWybvaxEnn7HYTpgP70=;
+        b=FBJe+jdtf+ScuAhoyqW6pVlV//Sy5zVWHcNa2Pwq9RNMoyhUukLK/SK34T1B+Yyy5x
+         BsCCpLeQZHa4XurcyNgvBGLCEJ+WbWAqItTN14Z83IWGLHT4X8UiLvBxVh6sXbSRkmZq
+         OlQ9ZtEk4y/NdMz85jhUhoikyK/hiSrsfohJndEnxJwHN4zvXssfaNiagxV/LYv97rvV
+         0znZVuyZyKC9SAKPuZ9P1FVJLNURFXv8JulWVwRPhzgnyeFgUJLBUgfmI1lbd3e6y/Nw
+         e5zS4Vn3kCwhjcTfWOcA8vorpD/9CBil0rCJRNzQT3BRW03+JzmnGkcFeNBKo3pKgoK8
+         I+3g==
+X-Gm-Message-State: AOAM530ZpjXSPC6+0ziUmDlWfkBXG7+wFUupTOxa/eZpIAWkFxa0HLyT
+        O2LKqgolA42ZaKCGv+T+9JXCsg==
+X-Google-Smtp-Source: ABdhPJxLkBuK1RGXLbnoqpApwiPt4eSLFw4uUzc1mr036KSTiU6DRnWMP5a/gRdhrOLhYs/aSMcDhQ==
+X-Received: by 2002:a63:86c8:: with SMTP id x191mr18864852pgd.248.1643674191512;
+        Mon, 31 Jan 2022 16:09:51 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c18sm2021208pfp.181.2022.01.31.16.09.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 16:09:43 -0800 (PST)
-Date:   Mon, 31 Jan 2022 18:09:41 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
-        tdas@codeaurora.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 3/8] clk: qcom: gcc: Add PCIe, EMAC and UFS GDSCs for
- SM8150
-Message-ID: <Yfh6RSTegg2n5xuy@builder.lan>
-References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
- <20220126221725.710167-4-bhupesh.sharma@linaro.org>
+        Mon, 31 Jan 2022 16:09:51 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] exec: Force single empty string when argv is empty
+Date:   Mon, 31 Jan 2022 16:09:47 -0800
+Message-Id: <20220201000947.2453721-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126221725.710167-4-bhupesh.sharma@linaro.org>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4766; h=from:subject; bh=gaATF+4EbtmlAe3Nasp9+LtjYlIXpznex7XqhlI1JLg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+HpKpuM0Z7w1vc/DKue58FoVRYdahszqKEUikyKs LkopZsyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfh6SgAKCRCJcvTf3G3AJkQwD/ 9gaH8XIr+oEzkggBsQWnCKXTzVmALVe4Zgbuh4C1rNxscXB+aeb4/KQKr3K6vvJ2l/fkh70QW+Pn7u gIJ269Ql3ilTvYMn4HXVyAftwmN3ReDuZJeWNXj4y8gu7ACcVdP4DJh0sfA83KqkhOsgAf9y4DJ8iP OCGZIYAtkcZ+f/KxXM2BDfRb9ddLfwTJn9jHsMftdAK+Yn1zDj17kaeVxZ0W/d65OjCPd6tGgZ3s1c PlXZkeb4CHB7Oav2IKW6lx+21mDFSdm39f9LFCxm+vkzRsLN7rNIJXtdYnvmDgp3BiiEN59pAnk4LM b3tUHI2SsF2nwRpgeVXNUvPYyQvhSiEwC+oY7A16TzgvXU/bF78NmoWUa++albTJtNIeclGpUY63jE v/gCI2FvzFJ6AQBKO5k4pYdUY2/9xPW0b5P6lBvZJyiNFq29tSe1Hiug56G71uztL142LyKBpY1kLG MNpkEp5mybjnAWfXuO5CJNWOaqu3nWYwWqp+3C3AoJP1ftEZo4D4d8jYJLvL/1oyLriS3Y8T5p+LNE zjwsDh7xTQmmr/+sCcnGH3Elw7u2oOGxfZoP24E+ZhWsr4d3NzZ56dxWxYswOkMITolnGYZsne/Zj9 RHyBi5T2aGJ2C2EM0GgBZxw0rpfMuR5J/mTN8WYHLei3px/8432HbTf+5lkQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26 Jan 16:17 CST 2022, Bhupesh Sharma wrote:
+Quoting[1] Ariadne Conill:
 
-> This adds the PCIe, EMAC and UFS GDSC structures for
-> SM8150. The GDSC will allow the respective system to be
-> brought out of reset.
-> 
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/clk/qcom/gcc-sm8150.c               | 74 +++++++++++++++++----
->  include/dt-bindings/clock/qcom,gcc-sm8150.h |  9 ++-
->  2 files changed, 69 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-> index 245794485719..ada755ad55f7 100644
-> --- a/drivers/clk/qcom/gcc-sm8150.c
-> +++ b/drivers/clk/qcom/gcc-sm8150.c
-> @@ -3448,22 +3448,67 @@ static struct clk_branch gcc_video_xo_clk = {
->  	},
->  };
->  
-> +static struct gdsc emac_gdsc = {
-> +	.gdscr = 0x6004,
-> +	.pd = {
-> +		.name = "emac_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
-> +};
-> +
-> +static struct gdsc pcie_0_gdsc = {
-> +	.gdscr = 0x6b004,
-> +	.pd = {
-> +		.name = "pcie_0_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
-> +};
-> +
-> +static struct gdsc pcie_1_gdsc = {
-> +	.gdscr = 0x8d004,
-> +	.pd = {
-> +		.name = "pcie_1_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
-> +};
-> +
-> +static struct gdsc ufs_card_gdsc = {
-> +	.gdscr = 0x75004,
-> +	.pd = {
-> +		.name = "ufs_card_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
-> +};
-> +
-> +static struct gdsc ufs_phy_gdsc = {
-> +	.gdscr = 0x77004,
-> +	.pd = {
-> +		.name = "ufs_phy_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
-> +};
-> +
->  static struct gdsc usb30_prim_gdsc = {
-> -		.gdscr = 0xf004,
-> -		.pd = {
-> -			.name = "usb30_prim_gdsc",
-> -		},
-> -		.pwrsts = PWRSTS_OFF_ON,
-> -		.flags = POLL_CFG_GDSCR,
-> +	.gdscr = 0xf004,
-> +	.pd = {
-> +		.name = "usb30_prim_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
->  };
->  
->  static struct gdsc usb30_sec_gdsc = {
-> -		.gdscr = 0x10004,
-> -		.pd = {
-> -			.name = "usb30_sec_gdsc",
-> -		},
-> -		.pwrsts = PWRSTS_OFF_ON,
-> -		.flags = POLL_CFG_GDSCR,
-> +	.gdscr = 0x10004,
-> +	.pd = {
-> +		.name = "usb30_sec_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +	.flags = POLL_CFG_GDSCR,
->  };
->  
->  static struct clk_regmap *gcc_sm8150_clocks[] = {
-> @@ -3714,6 +3759,11 @@ static const struct qcom_reset_map gcc_sm8150_resets[] = {
->  };
->  
->  static struct gdsc *gcc_sm8150_gdscs[] = {
-> +	[EMAC_GDSC] = &emac_gdsc,
-> +	[PCIE_0_GDSC] = &pcie_0_gdsc,
-> +	[PCIE_1_GDSC] = &pcie_1_gdsc,
-> +	[UFS_CARD_GDSC] = &ufs_card_gdsc,
-> +	[UFS_PHY_GDSC] = &ufs_phy_gdsc,
->  	[USB30_PRIM_GDSC] = &usb30_prim_gdsc,
->  	[USB30_SEC_GDSC] = &usb30_sec_gdsc,
->  };
-> diff --git a/include/dt-bindings/clock/qcom,gcc-sm8150.h b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> index 3e1a91876610..35d80ae411a0 100644
-> --- a/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> +++ b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> @@ -241,7 +241,12 @@
->  #define GCC_USB_PHY_CFG_AHB2PHY_BCR				28
->  
->  /* GCC GDSCRs */
-> -#define USB30_PRIM_GDSC                     4
-> -#define USB30_SEC_GDSC						5
+"In several other operating systems, it is a hard requirement that the
+second argument to execve(2) be the name of a program, thus prohibiting
+a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+but it is not an explicit requirement[2]:
 
-These constants goes into .dtb files as numbers (4 and 5), changing them
-will cause annoying-to-debug bugs in the transition while people still
-are testing a new kernel with last weeks dtb.
+    The argument arg0 should point to a filename string that is
+    associated with the process being started by one of the exec
+    functions.
+...
+Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
+but there was no consensus to support fixing this issue then.
+Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
+of this bug in a shellcode, we can reconsider.
 
-So please add the new constants without affecting these numbers.
+This issue is being tracked in the KSPP issue tracker[5]."
 
-Rest looks good.
+While the initial code searches[6][7] turned up what appeared to be
+mostly corner case tests, trying to that just reject argv == NULL
+(or an immediately terminated pointer list) quickly started tripping[8]
+existing userspace programs.
 
-Regards,
-Bjorn
+The next best approach is forcing a single empty string into argv and
+adjusting argc to match. The number of programs depending on argc == 0
+seems a smaller set than those calling execve with a NULL argv.
 
-> +#define EMAC_GDSC						0
-> +#define PCIE_0_GDSC						1
-> +#define	PCIE_1_GDSC						2
-> +#define UFS_CARD_GDSC						3
-> +#define UFS_PHY_GDSC						4
-> +#define USB30_PRIM_GDSC						5
-> +#define USB30_SEC_GDSC						6
->  
->  #endif
-> -- 
-> 2.34.1
-> 
+Account for the additional stack space in bprm_stack_limits(). Inject an
+empty string when argc == 0 (and set argc = 1). Warn about the case so
+userspace has some notice about the change:
+
+    process './argc0' launched './argc0' with NULL argv: empty string added
+
+Additionally WARN() and reject NULL argv usage for kernel threads.
+
+[1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
+[2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+[3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
+[4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+[5] https://github.com/KSPP/linux/issues/176
+[6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
+[7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
+[8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
+
+Reported-by: Ariadne Conill <ariadne@dereferenced.org>
+Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ fs/exec.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 79f2c9483302..bbf3aadf7ce1 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -495,8 +495,14 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
+ 	 * the stack. They aren't stored until much later when we can't
+ 	 * signal to the parent that the child has run out of stack space.
+ 	 * Instead, calculate it here so it's possible to fail gracefully.
++	 *
++	 * In the case of argc = 0, make sure there is space for adding a
++	 * empty string (which will bump argc to 1), to ensure confused
++	 * userspace programs don't start processing from argv[1], thinking
++	 * argc can never be 0, to keep them from walking envp by accident.
++	 * See do_execveat_common().
+ 	 */
+-	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
++	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
+ 	if (limit <= ptr_size)
+ 		return -E2BIG;
+ 	limit -= ptr_size;
+@@ -1897,6 +1903,9 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	}
+ 
+ 	retval = count(argv, MAX_ARG_STRINGS);
++	if (retval == 0)
++		pr_warn_once("process '%s' launched '%s' with NULL argv: empty string added\n",
++			     current->comm, bprm->filename);
+ 	if (retval < 0)
+ 		goto out_free;
+ 	bprm->argc = retval;
+@@ -1923,6 +1932,19 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	if (retval < 0)
+ 		goto out_free;
+ 
++	/*
++	 * When argv is empty, add an empty string ("") as argv[0] to
++	 * ensure confused userspace programs that start processing
++	 * from argv[1] won't end up walking envp. See also
++	 * bprm_stack_limits().
++	 */
++	if (bprm->argc == 0) {
++		retval = copy_string_kernel("", bprm);
++		if (retval < 0)
++			goto out_free;
++		bprm->argc = 1;
++	}
++
+ 	retval = bprm_execve(bprm, fd, filename, flags);
+ out_free:
+ 	free_bprm(bprm);
+@@ -1951,6 +1973,8 @@ int kernel_execve(const char *kernel_filename,
+ 	}
+ 
+ 	retval = count_strings_kernel(argv);
++	if (WARN_ON_ONCE(retval == 0))
++		retval = -EINVAL;
+ 	if (retval < 0)
+ 		goto out_free;
+ 	bprm->argc = retval;
+-- 
+2.30.2
+

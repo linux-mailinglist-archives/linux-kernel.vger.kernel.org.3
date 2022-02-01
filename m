@@ -2,201 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66E64A679F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FCD4A67A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238023AbiBAWP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:15:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54974 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiBAWPz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:15:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22B93B82FB9;
-        Tue,  1 Feb 2022 22:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B313BC340F4;
-        Tue,  1 Feb 2022 22:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643753751;
-        bh=j9fLPxs1iagx6L4etF2ktFreBgCWfItK2kWeSLCYSCk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nkdDHrmwIRn2HYguSi4pW+DkBxu48GmWWyRrGpMstneLQLoVzX0is3xr4x/hZ1Bjr
-         f0OKsRYXqfu3n2C6rjytpesqZGVDOcDzYTghblYzOjlIdDMncDSD2Ny3FmKPowH64U
-         BFQfcWha4HmkfMPAFI90yhtGGxm58EwW35Lf16FPiCHq3l9P11sJg9TNUVNgbkA9v/
-         j5LGvy1N7qVpiWdF0sRsDp2BCafgUYbJH4Kq6om6ukxpaoN7S6PSf7VYwxSAdJI9x3
-         xf4JN41D4i/Ij4GuhQX7r2KYAB9rbguf8yzGhsC5EUblAviqz+CQFIe6/vWvPSuQAx
-         RQBTWHYl+if9g==
-Received: by mail-wr1-f44.google.com with SMTP id l25so34604837wrb.13;
-        Tue, 01 Feb 2022 14:15:51 -0800 (PST)
-X-Gm-Message-State: AOAM5323TqFjEN1SuimdPmsXdLc+N/0tXDj1Kx79yuX+gD1BUcj81Pr1
-        Ru86kE9JlF4uSb75CjcH/sHLfWAZ017OCHeURwY=
-X-Google-Smtp-Source: ABdhPJzgPe6aAtYkFuRrcOMkkoNw3wzWRiYmrDgSz2pBPUpj52vklxmCWt3eMMJS7MOAni2N89aSZPc1EcT+TZVos4I=
-X-Received: by 2002:a05:6000:1c9:: with SMTP id t9mr23503888wrx.550.1643753749810;
- Tue, 01 Feb 2022 14:15:49 -0800 (PST)
+        id S238163AbiBAWSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:18:43 -0500
+Received: from mga14.intel.com ([192.55.52.115]:9058 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229971AbiBAWSm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:18:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643753922; x=1675289922;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N1pYMtoifGkvk1GZdHfarNxiC8SwrZB1coh6JHcccJ8=;
+  b=egsyWGMhSvIaqxjejdNiZJeyRzqTxDFviczJg0eBexq5VLhRV6A3A732
+   /fNuTP50QycvT8mMQoBxX7Qze4sV2TUcQFIfpy6y0NmE0j0yMp8WKUAO8
+   Og18DC4x/aLkSmzlSYjVkWvInt6ioZCYgVX3nfhg93YOEUrXjPX/u1Aeq
+   PPJv2o4P41IqYAaxBec34nYyoSWpP3TPbQBoLzVenqSTtgSRu+gt1fcOC
+   xduHVs78IKQbN/+itU/ibpui3EbFOxDMA0we3zHdZ9Fp/sERX5MHvfamO
+   3xAXgwRM6qrYwMCgPJtWA0z/8YRjOoxQKA/COx9oMpup8284jgporrtW8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="248028749"
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="248028749"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:18:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="482557745"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:18:41 -0800
+Date:   Tue, 1 Feb 2022 14:18:41 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ben Widawsky <ben.widawsky@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 06/10] cxl/pci: Find the DOE mailbox which supports
+ CDAT
+Message-ID: <20220201221841.GO785175@iweiny-DESK2.sc.intel.com>
+Mail-Followup-To: Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+ <20220201071952.900068-7-ira.weiny@intel.com>
+ <20220201184947.5yx4l74nruyoapvr@intel.com>
 MIME-Version: 1.0
-References: <20220131225250.409564-1-ndesaulniers@google.com>
- <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com> <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 1 Feb 2022 23:15:37 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com>
-Message-ID: <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com>
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-        Kees Cook <keescook@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Len Baker <len.baker@gmx.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201184947.5yx4l74nruyoapvr@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 at 20:40, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Tue, Feb 1, 2022 at 1:32 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > >
-> > > Add text to memory-barriers.txt and deprecated.rst to denote that
-> > > volatile-qualifying an asm statement is not a substitute for either a
-> > > compiler barrier (``barrier();``) or a clobber list.
-> > >
-> > > This way we can point to this in code that strengthens existing
-> > > volatile-qualified asm statements to use a compiler barrier.
-> > >
-> > > Suggested-by: Kees Cook <keescook@chromium.org>
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > > Example: https://godbolt.org/z/8PW549zz9
-> > >
-> > >  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
-> > >  Documentation/process/deprecated.rst | 17 +++++++++++++++++
-> > >  2 files changed, 41 insertions(+)
-> > >
-> > > diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> > > index b12df9137e1c..f3908c0812da 100644
-> > > --- a/Documentation/memory-barriers.txt
-> > > +++ b/Documentation/memory-barriers.txt
-> > > @@ -1726,6 +1726,30 @@ of optimizations:
-> > >       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
-> > >       though the CPU of course need not do so.
-> > >
-> > > + (*) Similarly, the compiler is within its rights to reorder instructions
-> >
-> > Similar to what? Was this intended to be the second bullet point
-> > rather than the first?
->
-> Similar to the previous bullet point. This isn't the first use of
-> `Similarly, ` in this document.
->
+On Tue, Feb 01, 2022 at 10:49:47AM -0800, Widawsky, Ben wrote:
+> On 22-01-31 23:19:48, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > Memory devices need the CDAT data from the device.  This data is read
+> > from a DOE mailbox which supports the CDAT protocol.
+> > 
+> > Search the DOE auxiliary devices for the one which supports the CDAT
+> > protocol.  Cache that device to be used for future queries.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Ah right, I misread the context and thought you were inserting this
-bullet point at the start. Sorry for the noise.
+[snip]
 
-> >
-> > > +     around an asm statement so long as clobbers are not violated. For example,
-> > > +
-> > > +       asm volatile ("");
-> > > +       flag = true;
-> > > +
-> > > +     May be modified by the compiler to:
-> > > +
-> > > +       flag = true;
-> > > +       asm volatile ("");
-> > > +
-> > > +     Marking an asm statement as volatile is not a substitute for barrier(),
-> > > +     and is implicit for asm goto statements and asm statements that do not
-> > > +     have outputs (like the above example). Prefer either:
-> > > +
-> > > +       asm ("":::"memory");
-> > > +       flag = true;
-> > > +
-> > > +     Or:
-> > > +
-> > > +       asm ("");
-> > > +       barrier();
-> > > +       flag = true;
-> > > +
-> >
-> > I would expect the memory clobber to only hazard against the
-> > assignment of flag if it results in a store, but looking at your
-> > Godbolt example, this appears to apply even if flag is kept in a
-> > register.
-> >
-> > Is that behavior documented/codified anywhere? Or are we relying on
-> > compiler implementation details here?
->
-> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-> "Note that the compiler can move even volatile asm instructions
-> relative to other code, including across jump instructions."
->
+> >  
+> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> > index d4ae79b62a14..dcc55c4efd85 100644
+> > --- a/drivers/cxl/pci.c
+> > +++ b/drivers/cxl/pci.c
+> > @@ -536,12 +536,53 @@ static int cxl_dvsec_ranges(struct cxl_dev_state *cxlds)
+> >  	return rc;
+> >  }
+> >  
+> > +static int cxl_match_cdat_doe_device(struct device *dev, const void *data)
+> > +{
+> > +	const struct cxl_dev_state *cxlds = data;
+> > +	struct auxiliary_device *adev;
+> > +	struct pci_doe_dev *doe_dev;
+> > +
+> > +	/* First determine if this auxiliary device belongs to the cxlds */
+> > +	if (cxlds->dev != dev->parent)
+> > +		return 0;
+> 
+> I don't understand auxiliary bus but I'm wondering why it's checking the parent
+> of the device?
 
-That doesn't really answer my question. We are documenting here that
-asm volatile does not prevent reordering but non-volatile asm with a
-"memory" clobber does, and even prevents reordering of instructions
-that do not modify memory to begin with.
+auxiliary_find_device() iterates all the auxiliary devices in the system.  This
+check was a way for the match function to know if the auxiliary device belongs
+to the cxlds we are interested in...
 
-Why is it justified to rely on this undocumented behavior?
+But now that I think about it we could have other auxiliary devices attached
+which are not DOE...  :-/  So this check is not complete.
 
+FWIW I'm not thrilled with the way auxiliary_find_device() is defined.  And now
+that I look at it I think the only user of it currently is wrong.  They too
+have a check like this but it is after another check...  :-/
 
-> >
-> >
-> > >   (*) The compiler is within its rights to invent stores to a variable,
-> > >       as in the following example:
-> > >
-> > > diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-> > > index 388cb19f5dbb..432816e2f79e 100644
-> > > --- a/Documentation/process/deprecated.rst
-> > > +++ b/Documentation/process/deprecated.rst
-> > > @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
-> > >          instance->count = count;
-> > >
-> > >          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
-> > > +
-> > > +Volatile Qualified asm Statements
-> > > +=================================
-> > > +
-> > > +According to `the GCC docs on inline asm
-> > > +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
-> > > +
-> > > +  asm statements that have no output operands and asm goto statements,
-> > > +  are implicitly volatile.
-> > > +
-> > > +For many uses of asm statements, that means adding a volatile qualifier won't
-> > > +hurt (making the implicit explicit), but it will not strengthen the semantics
-> > > +for such cases where it would have been implied. Care should be taken not to
-> > > +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
-> > > +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
-> > > +
-> > > +.. [memory-barriers] Documentation/memory-barriers.txt
-> > > --
-> > > 2.35.0.rc2.247.g8bbb082509-goog
-> > >
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+I was hoping to avoid having a list of DOE devices in the cxlds and simply let
+the auxiliary bus infrastructure do that somehow.  IIRC Jonathan was thinking
+along the same lines.  I think he actually suggested auxiliary_find_device()...
+
+It would be nice if I could have an aux_find_child() or something which
+iterated the auxiliary devices attached to a particular parent device.  I've
+just not figured out exactly how to implement that better than what I did here.
+
+> 
+> > +
+> > +	adev = to_auxiliary_dev(dev);
+> > +	doe_dev = container_of(adev, struct pci_doe_dev, adev);
+> > +
+> > +	/* If it is one of ours check for the CDAT protocol */
+> > +	if (pci_doe_supports_prot(doe_dev, PCI_DVSEC_VENDOR_ID_CXL,
+> > +				  CXL_DOE_PROTOCOL_TABLE_ACCESS))
+> > +		return 1;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
+> >  {
+> >  	struct device *dev = cxlds->dev;
+> >  	struct pci_dev *pdev = to_pci_dev(dev);
+> > +	struct auxiliary_device *adev;
+> > +	int rc;
+> >  
+> > -	return pci_doe_create_doe_devices(pdev);
+> > +	rc = pci_doe_create_doe_devices(pdev);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	adev = auxiliary_find_device(NULL, cxlds, &cxl_match_cdat_doe_device);
+> > +
+> > +	if (adev) {
+> > +		struct pci_doe_dev *doe_dev = container_of(adev,
+> > +							   struct pci_doe_dev,
+> > +							   adev);
+> > +
+> > +		/*
+> > +		 * No reference need be taken.  The DOE device lifetime is
+> > +		 * longer that the CXL device state lifetime
+> > +		 */
+> 
+> You're holding a reference to the adev here. Did you mean to drop it?
+
+Does find device get a reference? ...  Ah shoot I did not see that.
+
+Yea the reference should be dropped somewhere.
+
+Thanks,
+Ira
+
+> 
+> > +		cxlds->cdat_doe = doe_dev;
+> > +	}
+> > +
+> > +	return 0;
+> >  }
+> >  
+> >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> > -- 
+> > 2.31.1
+> > 

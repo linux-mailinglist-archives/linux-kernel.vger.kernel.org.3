@@ -2,86 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 520184A6493
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E28D4A6495
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242283AbiBATEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238994AbiBATEb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:04:31 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8EEC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:04:31 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso3563381pjm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:04:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=wIaENBg/7AsUHJDq4OgnIPqvHUp4Vts4+P8qgAxYW1s=;
-        b=Y95dzwDrfydpWDBxj30R2ZccMBa6llxL8kVA34F+lHigePxpWyJM1muhJRfbeXA5Go
-         0eKhAoQ5DrDBUxYRj46MLXMjhW9WDqWO27hhkKB2VbeNmYWnn9cZlLdSJaeqyf6SxhGT
-         /LlkOBZ5N4r4rO0KCSZBCZnVLl8x14f9/mLfR8Kn+8/6hUl2mDVGUxiftpPgUsXYB2j/
-         oXkjyEfIeIZ1UFp4r2Sm5StQhyJCU0JqxolSVYYoTW8lHIMWUj0In0Uk5kzWAPPF8orv
-         RKz8F8zPEtTNamxib0Pz+00rphknQEOZBAIQtn9LxZUEQH6vC14znFQ61HUsIKVnG0PO
-         9bHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=wIaENBg/7AsUHJDq4OgnIPqvHUp4Vts4+P8qgAxYW1s=;
-        b=p4ihhcxg9F66gxX4fHqkeaXck/NwChV394gSzamVxgH8w/A+ekMEInZBhUC0HwuPsD
-         ZE7zAhxutHSOJMHhXTlRsmhIlSDqpBZmQYTuDcFMrmtQAimcXmXf6T/zpagKYLbbWGWG
-         Rc3YSZV7+VdRZOXujYdD+qYz/8BbPrsoI1Pg43uqNYYZoeb708vmzl4OYoYkJQXfMn4P
-         l4AwX06/gA+6qnlO9oiLYS/8MWSqevKZeuuNcj1e727GLJMxViozioX0F0JMc70LGFR5
-         BRpVuk0Dn7DEoQQ8KnVq056XN+X30FNUg2nuQ6wjKn4PDMBNn7LTK9Dj8PyddhgEs8O2
-         ao/A==
-X-Gm-Message-State: AOAM531bGpeZQvh/zO6+Q7vgUimCkGEJ2eqv9GF1hZKo2tV9RV10r5ye
-        EPYQ/WO2Xk5dEMIFOVfFD/4KAQ==
-X-Google-Smtp-Source: ABdhPJygCi8b1yCmG8oqZZPB+iH/tseA+EFVP6QFMDH3+XAyTEM1OWhw4r4ydzfW6NVUYlCesgahMA==
-X-Received: by 2002:a17:902:d2c3:: with SMTP id n3mr27222538plc.45.1643742270670;
-        Tue, 01 Feb 2022 11:04:30 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id d32sm33229135pgb.46.2022.02.01.11.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 11:04:30 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: Re: [PATCH 0/3] arm64: dts: meson: add ATF BL32 reserved-memory
- regions
-In-Reply-To: <20220126044954.19069-1-christianshewitt@gmail.com>
-References: <20220126044954.19069-1-christianshewitt@gmail.com>
-Date:   Tue, 01 Feb 2022 11:04:29 -0800
-Message-ID: <7hr18m9znm.fsf@baylibre.com>
+        id S242278AbiBATFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:05:37 -0500
+Received: from mga06.intel.com ([134.134.136.31]:48322 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234438AbiBATFf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 14:05:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643742335; x=1675278335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nme2HohwG4cYQY68sjZJc5W1kNylfqbOIi5QZOKqZi4=;
+  b=jTqali7wIZx5ZCL56vE/rnkTLoUFnK8kau1MnOJUnpgEHJgdnIMEqiQS
+   I6ymebVMc73S8wHKKupOY+uowfHYhUiF2fH3/8F0wn0XatYO1gcCJSIuA
+   Qpe/Tns0mOVzMxDjZJN/6Xt+BZi5kwgDXGmgWVrjZetQIHmdAZKaFTUhm
+   rYZ8jesfgzB6+9go1kfcTyGxpYQ6s1ZpTduHK/v50ELiJg/fSITQRnbNV
+   oGs5GGpuno3qvEyXj3EmbZHsZyWX5yIKk7GY6/KLP9zlYkmsFQVn5YIWY
+   pI7fKpYbNckCA9afF1j96udpRuZ0EXtei2ioCtVM0QuQi/edN1Sgs8kZc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="308495751"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="308495751"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 11:05:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="497449689"
+Received: from rashmigh-mobl.amr.corp.intel.com (HELO intel.com) ([10.252.132.8])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 11:05:34 -0800
+Date:   Tue, 1 Feb 2022 11:05:32 -0800
+From:   Ben Widawsky <ben.widawsky@intel.com>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 10/10] cxl/cdat: Parse out DSMAS data from CDAT table
+Message-ID: <20220201190532.ynwr73ninobqx7bm@intel.com>
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+ <20220201071952.900068-11-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201071952.900068-11-ira.weiny@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Hewitt <christianshewitt@gmail.com> writes:
+On 22-01-31 23:19:52, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> CXL memory devices need the information in the Device Scoped Memory
+> Affinity Structure (DSMAS).  This information is contained within the
+> CDAT table buffer which is already read and cached.
+> 
+> Parse and cache DSMAS data from the CDAT table.  Store this data in
+> unmarshaled struct dsmas data structures for ease of use.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> 
+> ---
+> Changes from V5
+> 	Fix up sparse warnings
+> 	Split out cdat_hdr_valid()
+> 	Update cdat_hdr_valid()
+> 		Remove revision and cs field parsing
+> 			There is no point in these
+> 		Add seq check and debug print.
+> 	From Jonathan
+> 		Add spaces around '+' and '/'
+> 		use devm_krealloc() for dmas_ary
+> 
+> Changes from V4
+> 	New patch
+> ---
+>  drivers/cxl/cdat.h        | 21 ++++++++++++
+>  drivers/cxl/core/memdev.c | 70 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 91 insertions(+)
+> 
+> diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
+> index a7725d26f2d2..f8c126190d18 100644
+> --- a/drivers/cxl/cdat.h
+> +++ b/drivers/cxl/cdat.h
+> @@ -83,17 +83,38 @@
+>  #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
+>  #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
+>  
+> +/**
+> + * struct cxl_dsmas - host unmarshaled version of DSMAS data
+> + *
+> + * As defined in the Coherent Device Attribute Table (CDAT) specification this
+> + * represents a single DSMAS entry in that table.
+> + *
+> + * @dpa_base: The lowest DPA address associated with this DSMAD
+> + * @dpa_length: Length in bytes of this DSMAD
+> + * @non_volatile: If set, the memory region represents Non-Volatile memory
+> + */
+> +struct cxl_dsmas {
+> +	u64 dpa_base;
+> +	u64 dpa_length;
+> +	/* Flags */
+> +	u8 non_volatile:1;
+> +};
+> +
+>  /**
+>   * struct cxl_cdat - CXL CDAT data
+>   *
+>   * @table: cache of CDAT table
+>   * @length: length of cached CDAT table
+>   * @seq: Last read Sequence number of the CDAT table
+> + * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
+> + * @nr_dsmas: Number of entries in dsmas_ary
+>   */
+>  struct cxl_cdat {
+>  	void *table;
+>  	size_t length;
+>  	u32 seq;
+> +	struct cxl_dsmas *dsmas_ary;
+> +	int nr_dsmas;
+>  };
+>  
+>  #endif /* !__CXL_CDAT_H__ */
+> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> index 11d721c56f08..32342a15e991 100644
+> --- a/drivers/cxl/core/memdev.c
+> +++ b/drivers/cxl/core/memdev.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/idr.h>
+>  #include <linux/pci.h>
+>  #include <cxlmem.h>
+> +#include "cdat.h"
+>  #include "core.h"
+>  
+>  static DECLARE_RWSEM(cxl_memdev_rwsem);
+> @@ -386,6 +387,71 @@ static int read_cdat_data(struct cxl_memdev *cxlmd,
+>  	return rc;
+>  }
+>  
+> +static int parse_dsmas(struct cxl_memdev *cxlmd)
+> +{
+> +	struct cxl_dsmas *dsmas_ary = NULL;
+> +	u32 *data = cxlmd->cdat.table;
+> +	int bytes_left = cxlmd->cdat.length;
+> +	int nr_dsmas = 0;
+> +
+> +	if (!data)
+> +		return -ENXIO;
+> +
+> +	/* Skip header */
+> +	data += CDAT_HEADER_LENGTH_DW;
+> +	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
+> +
+> +	while (bytes_left > 0) {
+> +		u32 *cur_rec = data;
+> +		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
+> +		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
+> +
+> +		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
+> +			struct cxl_dsmas *new_ary;
+> +			u8 flags;
+> +
+> +			new_ary = devm_krealloc(&cxlmd->dev, dsmas_ary,
+> +					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
+> +					   GFP_KERNEL);
+> +			if (!new_ary) {
+> +				dev_err(&cxlmd->dev,
+> +					"Failed to allocate memory for DSMAS data\n");
+> +				return -ENOMEM;
+> +			}
 
-> This series supersedes [0] which fixed a long-running kernel panic issue
-> seen with Beelink G12B devices booted from Amlogic vendor firmware. The
-> same issue exists with a wider set of devices from GXBB to SM1, although
-> it is not often seen due to my kernel fork including 'catch-all' patches
-> for some time (the meson-gx patch was suggested by Matheusz in 2019) and
-> many distros actively supporting Amlogic hardware consuming some or all
-> of my regular patchset.
->
-> I've also included a cleanup to the SEI510/SEI610 board files. If that's
-> not desirable feel free to ignore that patch. I also dropped the fixes
-> tagging as I'm not sure what original commits could be targetted. If you
-> think fixes are good please provide some guidance and I'll be happy to
-> send a revised series.
+One thought here - it looks like there are at most 256 DSMAS entries. You could
+allocate the full 256 up front, and then realloc *down* to the actual number.
 
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+> +			dsmas_ary = new_ary;
+> +
+> +			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
+> +
+> +			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
+> +			dsmas_ary[nr_dsmas].dpa_length = CDAT_DSMAS_DPA_LEN(cur_rec);
+> +			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
+> +
+> +			dev_dbg(&cxlmd->dev, "DSMAS %d: %llx:%llx %s\n",
+> +				nr_dsmas,
+> +				dsmas_ary[nr_dsmas].dpa_base,
+> +				dsmas_ary[nr_dsmas].dpa_base +
+> +					dsmas_ary[nr_dsmas].dpa_length,
+> +				(dsmas_ary[nr_dsmas].non_volatile ?
+> +					"Persistent" : "Volatile")
+> +				);
+> +
+> +			nr_dsmas++;
+> +		}
+> +
+> +		data += (length / sizeof(u32));
+> +		bytes_left -= length;
+> +	}
+> +
+> +	if (nr_dsmas == 0)
+> +		return -ENXIO;
+
+Hmm is there documentation that suggests a DSMAS must be implemented? Could this
+just return 0? I'd put maybe dev_dbg here if it's unexpected but not a failure
+and return success.
+
+> +
+> +	dev_dbg(&cxlmd->dev, "Found %d DSMAS entries\n", nr_dsmas);
+> +	cxlmd->cdat.dsmas_ary = dsmas_ary;
+> +	cxlmd->cdat.nr_dsmas = nr_dsmas;
+> +
+> +	return 0;
+> +}
+> +
+>  struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
+>  {
+>  	struct cxl_memdev *cxlmd;
+> @@ -407,6 +473,10 @@ struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
+>  	if (rc)
+>  		goto err;
+>  
+> +	rc = parse_dsmas(cxlmd);
+> +	if (rc)
+> +		dev_warn(dev, "No DSMAS data found: %d\n", rc);
+> +
+>  	/*
+>  	 * Activate ioctl operations, no cxl_memdev_rwsem manipulation
+>  	 * needed as this is ordered with cdev_add() publishing the device.
+> -- 
+> 2.31.1
+> 

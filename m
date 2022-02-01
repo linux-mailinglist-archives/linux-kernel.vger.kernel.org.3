@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA9A4A5C12
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676654A5C15
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbiBAMTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:19:52 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52172 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiBAMTu (ORCPT
+        id S237616AbiBAMTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236263AbiBAMTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:19:50 -0500
+        Tue, 1 Feb 2022 07:19:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BC7C061714;
+        Tue,  1 Feb 2022 04:19:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 638D5CE184A;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8FE7ECE1854;
+        Tue,  1 Feb 2022 12:19:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA996C340F3;
         Tue,  1 Feb 2022 12:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8302C340ED;
-        Tue,  1 Feb 2022 12:19:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643717985;
-        bh=+7A+L+w5D1pGgc4Wh+XA6cQlBW2FRlxn/MDMdKfdJp4=;
+        s=k20201202; t=1643717987;
+        bh=CPBUZ3CFf4sfa2zR3if6mfs1ReZrPgfwhV5ghh58fY4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K9lhHORpYGC7nlkKk05SPJydm6YLBNMTDXkfDmbKCcr8gfekTiWrQwUUoiub+gIYP
-         8AAPLw4osatBrveJdhWJskJamUGZ7RFgwELhI/3yLYf720+IP8Ya0FQnd11WYsw/wq
-         CpCs2+xhZDcNXA5JBbRHE5qCb1mzyA5Hy/MYDRlNbxXs0UWSnty7UYb0tXO+llVHxC
-         Kj5U72kTXhmVwmOE39qFuaMxHYiHss9CgMYDiDvrwpik8uT6zaGkS3KDk96Er2SogM
-         zobtEAGcCt6yjSvI1IpS/UKxdv2vx7OQjPL6obQrmwLJIrsvxSSz6uathXLKPxWwC3
-         3HhCTOoXhUAWQ==
+        b=r4+flIaHvJaTGho4NBH+FPjMytcOnJViax8MHEyeI1NzlrmnL8NprDAoJVeSKMu+d
+         4bWuk1I0CULtDF++2pBTeYlLWsCZSgJ1I4W/cTVcy+P9xMb3WKL9yREISKH12GwRqz
+         3vA1qDsIgGcRd02hOh5WVPa2NavAtzDOfrQD1jVcpjv1/9Z5hFe2VPJxcHzIeGEcAR
+         DXoO8r8cSd/Xkml0NhcfhrdBMCWzNR+iFxlKYn/4GLslyOylrhr3omY8/+46Ag2LES
+         6j5BHPYaOu/IsUENfCl9Dz4uSMky72yjEc8k2FggksqOtxK2d7+VTQ6QovlOITfDOw
+         oTE/yO3jfFFZw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nErsj-004d46-0x; Tue, 01 Feb 2022 12:03:33 +0000
+        id 1nErsj-004d46-Em; Tue, 01 Feb 2022 12:03:33 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -51,9 +54,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>
-Subject: [PATCH 10/12] pinctrl: npcm: Fix broken references to chip->parent_device
-Date:   Tue,  1 Feb 2022 12:03:08 +0000
-Message-Id: <20220201120310.878267-11-maz@kernel.org>
+Subject: [PATCH 11/12] pinctrl: starfive: Move PM device over to irq domain
+Date:   Tue,  1 Feb 2022 12:03:09 +0000
+Message-Id: <20220201120310.878267-12-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220201120310.878267-1-maz@kernel.org>
 References: <20220201120310.878267-1-maz@kernel.org>
@@ -67,116 +70,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The npcm driver has a bunch of references to the irq_chip parent_device
-field, but never sets it.
-
-Fix it by fishing that reference from somewhere else, but it is
-obvious that these debug statements were never used. Also remove
-an unused field in a local data structure.
+Move the reference to the device over to the irq domain.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 25 +++++++++++------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ drivers/pinctrl/pinctrl-starfive.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-index 4d81908d6725..3995e5f7f115 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-@@ -78,7 +78,6 @@ struct npcm7xx_gpio {
- 	struct gpio_chip	gc;
- 	int			irqbase;
- 	int			irq;
--	void			*priv;
- 	struct irq_chip		irq_chip;
- 	u32			pinctrl_id;
- 	int (*direction_input)(struct gpio_chip *chip, unsigned offset);
-@@ -226,7 +225,7 @@ static void npcmgpio_irq_handler(struct irq_desc *desc)
- 	chained_irq_enter(chip, desc);
- 	sts = ioread32(bank->base + NPCM7XX_GP_N_EVST);
- 	en  = ioread32(bank->base + NPCM7XX_GP_N_EVEN);
--	dev_dbg(chip->parent_device, "==> got irq sts %.8x %.8x\n", sts,
-+	dev_dbg(bank->gc.parent, "==> got irq sts %.8x %.8x\n", sts,
- 		en);
+diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
+index 0b912152a405..5be9866c2b3c 100644
+--- a/drivers/pinctrl/pinctrl-starfive.c
++++ b/drivers/pinctrl/pinctrl-starfive.c
+@@ -1307,7 +1307,6 @@ static int starfive_probe(struct platform_device *pdev)
+ 	sfp->gc.base = -1;
+ 	sfp->gc.ngpio = NR_GPIOS;
  
- 	sts &= en;
-@@ -241,33 +240,33 @@ static int npcmgpio_set_irq_type(struct irq_data *d, unsigned int type)
- 		gpiochip_get_data(irq_data_get_irq_chip_data(d));
- 	unsigned int gpio = BIT(d->hwirq);
+-	starfive_irq_chip.parent_device = dev;
+ 	starfive_irq_chip.name = sfp->gc.label;
  
--	dev_dbg(d->chip->parent_device, "setirqtype: %u.%u = %u\n", gpio,
-+	dev_dbg(bank->gc.parent, "setirqtype: %u.%u = %u\n", gpio,
- 		d->irq, type);
- 	switch (type) {
- 	case IRQ_TYPE_EDGE_RISING:
--		dev_dbg(d->chip->parent_device, "edge.rising\n");
-+		dev_dbg(bank->gc.parent, "edge.rising\n");
- 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_EVBE, gpio);
- 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
- 		break;
- 	case IRQ_TYPE_EDGE_FALLING:
--		dev_dbg(d->chip->parent_device, "edge.falling\n");
-+		dev_dbg(bank->gc.parent, "edge.falling\n");
- 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_EVBE, gpio);
- 		npcm_gpio_set(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
- 		break;
- 	case IRQ_TYPE_EDGE_BOTH:
--		dev_dbg(d->chip->parent_device, "edge.both\n");
-+		dev_dbg(bank->gc.parent, "edge.both\n");
- 		npcm_gpio_set(&bank->gc, bank->base + NPCM7XX_GP_N_EVBE, gpio);
- 		break;
- 	case IRQ_TYPE_LEVEL_LOW:
--		dev_dbg(d->chip->parent_device, "level.low\n");
-+		dev_dbg(bank->gc.parent, "level.low\n");
- 		npcm_gpio_set(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
- 		break;
- 	case IRQ_TYPE_LEVEL_HIGH:
--		dev_dbg(d->chip->parent_device, "level.high\n");
-+		dev_dbg(bank->gc.parent, "level.high\n");
- 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
- 		break;
- 	default:
--		dev_dbg(d->chip->parent_device, "invalid irq type\n");
-+		dev_dbg(bank->gc.parent, "invalid irq type\n");
- 		return -EINVAL;
- 	}
+ 	sfp->gc.irq.chip = &starfive_irq_chip;
+@@ -1330,6 +1329,8 @@ static int starfive_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "could not register gpiochip\n");
  
-@@ -289,7 +288,7 @@ static void npcmgpio_irq_ack(struct irq_data *d)
- 		gpiochip_get_data(irq_data_get_irq_chip_data(d));
- 	unsigned int gpio = d->hwirq;
- 
--	dev_dbg(d->chip->parent_device, "irq_ack: %u.%u\n", gpio, d->irq);
-+	dev_dbg(bank->gc.parent, "irq_ack: %u.%u\n", gpio, d->irq);
- 	iowrite32(BIT(gpio), bank->base + NPCM7XX_GP_N_EVST);
++	irq_domain_set_pm_device(sfp->gc.irq.domain, dev);
++
+ out_pinctrl_enable:
+ 	return pinctrl_enable(sfp->pctl);
  }
- 
-@@ -301,7 +300,7 @@ static void npcmgpio_irq_mask(struct irq_data *d)
- 	unsigned int gpio = d->hwirq;
- 
- 	/* Clear events */
--	dev_dbg(d->chip->parent_device, "irq_mask: %u.%u\n", gpio, d->irq);
-+	dev_dbg(bank->gc.parent, "irq_mask: %u.%u\n", gpio, d->irq);
- 	iowrite32(BIT(gpio), bank->base + NPCM7XX_GP_N_EVENC);
- }
- 
-@@ -313,7 +312,7 @@ static void npcmgpio_irq_unmask(struct irq_data *d)
- 	unsigned int gpio = d->hwirq;
- 
- 	/* Enable events */
--	dev_dbg(d->chip->parent_device, "irq_unmask: %u.%u\n", gpio, d->irq);
-+	dev_dbg(bank->gc.parent, "irq_unmask: %u.%u\n", gpio, d->irq);
- 	iowrite32(BIT(gpio), bank->base + NPCM7XX_GP_N_EVENS);
- }
- 
-@@ -323,7 +322,7 @@ static unsigned int npcmgpio_irq_startup(struct irq_data *d)
- 	unsigned int gpio = d->hwirq;
- 
- 	/* active-high, input, clear interrupt, enable interrupt */
--	dev_dbg(d->chip->parent_device, "startup: %u.%u\n", gpio, d->irq);
-+	dev_dbg(gc_parent, "startup: %u.%u\n", gpio, d->irq);
- 	npcmgpio_direction_input(gc, gpio);
- 	npcmgpio_irq_ack(d);
- 	npcmgpio_irq_unmask(d);
 -- 
 2.30.2
 
